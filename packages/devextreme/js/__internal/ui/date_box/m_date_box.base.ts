@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import config from '@js/core/config';
@@ -6,18 +7,24 @@ import type { DefaultOptionsRule } from '@js/core/options/utils';
 import browser from '@js/core/utils/browser';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { createTextElementHiddenCopy } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import { inputType } from '@js/core/utils/support';
 import { isDate as isDateType, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import type {
-  DatePickerType, DateType, Properties,
+  DateLike,
+  DatePickerType,
+  DateType,
+  Properties,
 } from '@js/ui/date_box';
+import type { ToolbarItem } from '@js/ui/popup';
 import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 
+import type { ValueChangedEvent } from '../editor/editor';
 import type { PopupProperties } from '../popup/m_popup';
 import Calendar from './m_date_box.strategy.calendar';
 import CalendarWithTime from './m_date_box.strategy.calendar_with_time';
@@ -65,6 +72,7 @@ const STRATEGY_CLASSES = {
 };
 
 export interface DateBoxBaseProperties extends Omit<Properties, 'onClosed' | 'onOpened'> {
+  emptyDateValue?: Date;
   _showValidationIcon?: boolean;
 }
 
@@ -77,8 +85,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
 
   _userOptions?: DateBoxBaseProperties;
 
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | void> {
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
     return {
       ...super._supportedKeys(),
       ...this._strategy.supportedKeys(),
@@ -86,8 +93,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
   }
 
   _renderButtonContainers(): void {
-    // @ts-expect-error ts-error
-    super._renderButtonContainers.apply(this, arguments);
+    super._renderButtonContainers();
     this._strategy.customizeButtons();
   }
 
@@ -194,7 +200,6 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     super._init();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _toLowerCaseFirstLetter(string: string): string {
     return string.charAt(0).toLowerCase() + string.substr(1);
   }
@@ -209,26 +214,23 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     }
   }
 
-  _getFormatType() {
-    const currentType = this.option('type');
-    // @ts-expect-error ts-error
-    const isTime = /h|m|s/g.test(currentType);
-    // @ts-expect-error ts-error
-    const isDate = /d|M|Y/g.test(currentType);
-    let type = '';
+  _getFormatType(): DateType {
+    const { type = 'date' } = this.option();
+    const isTime = /h|m|s/g.test(type);
+    const isDate = /d|M|Y/g.test(type);
 
-    if (isDate) {
-      type += TYPE.date;
+    if (isDate && isTime) {
+      return TYPE.datetime;
     }
 
     if (isTime) {
-      type += TYPE.time;
+      return TYPE.time;
     }
 
-    return type;
+    return TYPE.date;
   }
 
-  _getStrategyName(type) {
+  _getStrategyName(type: DateType): string {
     const pickerType = this._pickerType;
 
     if (pickerType === PICKER_TYPE.rollers) {
@@ -267,7 +269,8 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
 
   _renderDimensions(): void {
     super._renderDimensions();
-    this.$element().toggleClass(DX_AUTO_WIDTH_CLASS, !this.option('width'));
+    const { width } = this.option();
+    this.$element().toggleClass(DX_AUTO_WIDTH_CLASS, !width);
 
     this._updatePopupWidth();
     this._updatePopupHeight();
@@ -280,16 +283,16 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
   }
 
   _updatePopupHeight(): void {
-    if (this._popup) {
-      // @ts-expect-error ts-error
-      this._strategy._updatePopupHeight?.();
+    if (this._popup && this._strategy instanceof List) {
+      this._strategy._updatePopupHeight();
     }
   }
 
   _refreshFormatClass(): void {
     const $element = this.$element();
+    const types = Object.values(TYPE);
 
-    each(TYPE, (_, item) => {
+    types.forEach((item) => {
       $element.removeClass(`${DATEBOX_CLASS}-${item}`);
     });
 
@@ -300,8 +303,9 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
 
   _refreshPickerTypeClass(): void {
     const $element = this.$element();
+    const pickerTypes = Object.values(PICKER_TYPE);
 
-    each(PICKER_TYPE, (_, item) => {
+    pickerTypes.forEach((item) => {
       $element.removeClass(`${DATEBOX_CLASS}-${item}`);
     });
 
@@ -313,33 +317,40 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
       return;
     }
 
-    const inputElement = this._input().get(0);
-    const isRtlEnabled = this.option('rtlEnabled');
+    const inputElement = this._input().get(0) as HTMLElement;
+    const { rtlEnabled } = this.option();
     const clearButtonWidth = this._getClearButtonWidth();
     const longestElementDimensions = this._getLongestElementDimensions();
     const curWidth = parseFloat(window.getComputedStyle(inputElement).width) - clearButtonWidth;
     const shouldHideValidationIcon = longestElementDimensions.width > curWidth;
-    // @ts-expect-error ts-error
     const { style } = inputElement;
 
     const { _showValidationIcon: showValidationIcon } = this.option();
 
-    this.$element().toggleClass(DX_INVALID_BADGE_CLASS, !shouldHideValidationIcon && showValidationIcon);
+    this.$element()
+      .toggleClass(DX_INVALID_BADGE_CLASS, !shouldHideValidationIcon && showValidationIcon);
 
     if (shouldHideValidationIcon) {
-      if (this._storedPadding === undefined) {
-        this._storedPadding = isRtlEnabled ? longestElementDimensions.leftPadding : longestElementDimensions.rightPadding;
+      this._storedPadding ??= rtlEnabled
+        ? longestElementDimensions.leftPadding
+        : longestElementDimensions.rightPadding;
+      if (rtlEnabled) {
+        style.paddingLeft = '0';
+      } else {
+        style.paddingRight = '0';
       }
-      isRtlEnabled ? style.paddingLeft = 0 : style.paddingRight = 0;
+    } else if (rtlEnabled) {
+      style.paddingLeft = `${this._storedPadding}px`;
     } else {
-      isRtlEnabled ? style.paddingLeft = `${this._storedPadding}px` : style.paddingRight = `${this._storedPadding}px`;
+      style.paddingRight = `${this._storedPadding}px`;
     }
   }
 
-  _getClearButtonWidth() {
+  _getClearButtonWidth(): number {
     let clearButtonWidth = 0;
-    // @ts-expect-error ts-error
-    if (this._isClearButtonVisible() && this._input().val() === '') {
+    const input = this._input().get(0) as HTMLInputElement;
+
+    if (this._isClearButtonVisible() && input.value === '') {
       const clearButtonElement = this.$element().find(`.${DX_CLEAR_BUTTON_CLASS}`).get(0);
       clearButtonWidth = parseFloat(window.getComputedStyle(clearButtonElement).width);
     }
@@ -347,20 +358,30 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     return clearButtonWidth;
   }
 
-  _getLongestElementDimensions() {
-    const format = this._strategy.getDisplayFormat(this.option('displayFormat'));
-    const longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
+  _getLongestElementDimensions(): {
+    width: number;
+    leftPadding: number;
+    rightPadding: number;
+  } {
+    const { displayFormat } = this.option();
+    const format = this._strategy.getDisplayFormat(displayFormat);
+    const longestValue = dateLocalization.format(
+      uiDateUtils.getLongestDate(
+        format,
+        dateLocalization.getMonthNames(),
+        dateLocalization.getDayNames(),
+      ),
+      format,
+    );
     const $input = this._input();
     const inputElement = $input.get(0);
     const $longestValueElement = createTextElementHiddenCopy($input, longestValue);
-    const isPaddingStored = this._storedPadding !== undefined;
-    const storedPadding = !isPaddingStored ? 0 : this._storedPadding;
+    const storedPadding = this._storedPadding ?? 0;
 
     $longestValueElement.appendTo(this.$element());
     const elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width);
     const rightPadding = parseFloat(window.getComputedStyle(inputElement).paddingRight);
     const leftPadding = parseFloat(window.getComputedStyle(inputElement).paddingLeft);
-    // @ts-expect-error ts-error
     const necessaryWidth = elementWidth + leftPadding + rightPadding + storedPadding;
     $longestValueElement.remove();
 
@@ -371,7 +392,8 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     };
   }
 
-  _getKeyboardListeners() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _getKeyboardListeners(): any[] {
     return super._getKeyboardListeners().concat([this._strategy?.getKeyboardListener()]);
   }
 
@@ -381,10 +403,10 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     this._renderPopupWrapper();
   }
 
-  _getPopupToolbarItems() {
+  _getPopupToolbarItems(): ToolbarItem[] {
     const defaultItems = super._getPopupToolbarItems();
-    // @ts-expect-error ts-error
-    return this._strategy._getPopupToolbarItems?.(defaultItems) ?? defaultItems;
+
+    return this._strategy._getPopupToolbarItems(defaultItems);
   }
 
   _popupConfig(): PopupProperties {
@@ -402,9 +424,9 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     }
 
     const $element = this.$element();
-    const classPostfixes = extend({}, TYPE, PICKER_TYPE);
+    const classPostfixes = [...Object.values(TYPE), ...Object.values(PICKER_TYPE)];
 
-    each(classPostfixes, (_, item) => {
+    classPostfixes.forEach((item) => {
       $element.removeClass(`${DATEBOX_WRAPPER_CLASS}-${item}`);
     });
 
@@ -437,13 +459,13 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     this._strategy.popupHiddenHandler();
   }
 
-  _visibilityChanged(visible): void {
+  _visibilityChanged(visible: boolean): void {
     if (visible) {
       this._formatValidationIcon();
     }
   }
 
-  _clearValueHandler(e): void {
+  _clearValueHandler(e: DxEvent): void {
     this.option('text', '');
     super._clearValueHandler(e);
   }
@@ -457,8 +479,8 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     const isCustomValueDisabled = this._isNativeType() && (platform === 'ios' || platform === 'android');
 
     if (isCustomValueDisabled) {
-      const { readOnly } = this.option();
-      // @ts-expect-error ts-error
+      const { readOnly = false } = this.option();
+
       return readOnly;
     }
 
@@ -469,8 +491,8 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     return super._isClearButtonVisible() && !this._isNativeType();
   }
 
-  _renderValue() {
-    const value = this.dateOption('value');
+  _renderValue(): DeferredObj<unknown> {
+    const value = this.getDateOption('value');
 
     this.option('text', this._getDisplayedText(value));
     this._strategy.renderValue();
@@ -478,43 +500,41 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     return super._renderValue();
   }
 
-  _setSubmitValue() {
-    const value = this.dateOption('value');
-    const { type, dateSerializationFormat } = this.option();
-    // @ts-expect-error ts-error
+  _setSubmitValue(): void {
+    const value = this.getDateOption('value');
+    const { type = 'date', dateSerializationFormat } = this.option();
     const submitFormat = uiDateUtils.SUBMIT_FORMATS_MAP[type];
-    const submitValue = dateSerializationFormat ? dateSerialization.serializeDate(value, dateSerializationFormat) : uiDateUtils.toStandardDateFormat(value, submitFormat);
+    const submitValue = dateSerializationFormat
+      ? dateSerialization.serializeDate(value, dateSerializationFormat)
+      : uiDateUtils.toStandardDateFormat(value, submitFormat);
 
     this._getSubmitElement().val(submitValue);
   }
 
-  _getDisplayedText(value) {
-    const { mode } = this.option();
-    let displayedText;
+  _getDisplayedText(value?: DateLike): string {
+    const { mode = 'text', displayFormat: displayFormatOption } = this.option();
 
     if (mode === 'text') {
-      const displayFormat = this._strategy.getDisplayFormat(this.option('displayFormat'));
-      displayedText = dateLocalization.format(value, displayFormat);
-    } else {
-      const format = this._getFormatByMode(mode);
-
-      if (format) {
-        displayedText = dateLocalization.format(value, format);
-      } else {
-        displayedText = uiDateUtils.toStandardDateFormat(value, mode);
-      }
+      const displayFormat = this._strategy.getDisplayFormat(displayFormatOption);
+      return dateLocalization.format(value, displayFormat) as string;
     }
+    const format = this._getFormatByMode(mode);
 
-    return displayedText;
+    if (format) {
+      return dateLocalization.format(value, format) as string;
+    }
+    return uiDateUtils.toStandardDateFormat(value, mode);
   }
 
-  _getFormatByMode(mode) {
-    return inputType(mode) ? null : uiDateUtils.FORMATS_MAP[mode];
+  _getFormatByMode(mode: string): string | null {
+    return inputType(mode)
+      ? null
+      : uiDateUtils.FORMATS_MAP[mode] as string | null;
   }
 
-  _valueChangeEventHandler(e) {
-    const { text, type, validationError } = this.option();
-    const currentValue = this.dateOption('value');
+  _valueChangeEventHandler(e: ValueChangedEvent): void {
+    const { text, type = 'date', validationError } = this.option();
+    const currentValue = this.getDateOption('value');
 
     if (text === this._getDisplayedText(currentValue)) {
       this._recallInternalValidation(currentValue, validationError);
@@ -537,39 +557,50 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     }
   }
 
-  _recallInternalValidation(value, validationError) {
+  _recallInternalValidation(
+    value: Date | null,
+    validationError: { editorSpecific?: boolean },
+  ): void {
     if (!validationError || validationError.editorSpecific) {
       this._applyInternalValidation(value);
       this._applyCustomValidation(value);
     }
   }
 
-  _getDateByDefault() {
-    return this._strategy.useCurrentDateByDefault() && this._strategy.getDefaultDate();
+  _getDateByDefault(): Date | undefined {
+    if (this._strategy.useCurrentDateByDefault()) {
+      return this._strategy.getDefaultDate();
+    }
+
+    return undefined;
   }
 
-  _getParsedDate(text) {
-    const displayFormat = this._strategy.getDisplayFormat(this.option('displayFormat'));
-    const parsedText = this._strategy.getParsedText(text, displayFormat);
+  _getParsedDate(text?: string): Date | undefined {
+    const { displayFormat } = this.option();
+    const strategyDisplayFormat = this._strategy.getDisplayFormat(displayFormat);
+    const parsedText = this._strategy.getParsedText(text, strategyDisplayFormat);
 
     return parsedText ?? undefined;
   }
 
-  _applyInternalValidation(value) {
-    const text = this.option('text');
+  _applyInternalValidation(value?: Date | null): { isValid: boolean; isDate: boolean } {
+    const { text, type } = this.option();
     const hasText = !!text && value !== null;
     const isDate = !!value && isDateType(value) && !isNaN(value.getTime());
-    const isDateInRange = isDate && dateUtils.dateInRange(value, this.dateOption('min'), this.dateOption('max'), this.option('type'));
-    const isValid = !hasText && !value || isDateInRange;
+    const isDateInRange = isDate && dateUtils.dateInRange(
+      value,
+      this.getDateOption('min'),
+      this.getDateOption('max'),
+      type,
+    );
+    const isValid = (!hasText && !value) || isDateInRange;
     let validationMessage = '';
 
-    const { invalidDateMessage, dateOutOfRangeMessage } = this.option();
+    const { invalidDateMessage = '', dateOutOfRangeMessage = '' } = this.option();
 
     if (!isDate) {
-      // @ts-expect-error ts-error
       validationMessage = invalidDateMessage;
     } else if (!isDateInRange) {
-      // @ts-expect-error ts-error
       validationMessage = dateOutOfRangeMessage;
     }
 
@@ -581,7 +612,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     };
   }
 
-  _updateInternalValidationState(isValid, validationMessage): void {
+  _updateInternalValidationState(isValid: boolean, validationMessage: string): void {
     this.option({
       isValid,
       validationError: isValid ? null : {
@@ -591,15 +622,15 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     });
   }
 
-  _applyCustomValidation(value): void {
+  _applyCustomValidation(value: DateLike): void {
     this.validationRequest.fire({
       editor: this,
       value: this._serializeDate(value),
     });
   }
 
-  _isValueChanged(newValue): boolean {
-    const oldValue = this.dateOption('value');
+  _isValueChanged(newValue: Date | null): boolean {
+    const oldValue = this.getDateOption('value');
 
     const oldTime = oldValue && oldValue.getTime();
     const newTime = newValue && newValue.getTime();
@@ -607,9 +638,9 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     return oldTime !== newTime;
   }
 
-  _isTextChanged(newValue): boolean {
-    const oldText = this.option('text');
-    const newText = newValue && this._getDisplayedText(newValue) || '';
+  _isTextChanged(newValue: DateLike): boolean {
+    const { text: oldText } = this.option();
+    const newText = (newValue && this._getDisplayedText(newValue)) ?? '';
 
     return oldText !== newText;
   }
@@ -656,7 +687,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     this._refresh();
   }
 
-  _applyButtonHandler(e): void {
+  _applyButtonHandler(e: { event: ValueChangedEvent }): void {
     const value = this._strategy.getValue();
     this.dateValue(value, e.event);
 
@@ -680,8 +711,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     switch (args.name) {
       case 'showClearButton':
       case 'buttons':
-        // @ts-expect-error ts-error
-        super._optionChanged.apply(this, arguments);
+        super._optionChanged(args);
         this._formatValidationIcon();
         break;
       case 'pickerType':
@@ -699,16 +729,15 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
         this._updateValue();
         break;
       case 'placeholder':
-        // @ts-expect-error ts-error
-        super._optionChanged.apply(this, arguments);
+        super._optionChanged(args);
         this._updatePopupTitle();
         break;
       case 'min':
       case 'max': {
         const isValid = this.option('isValid');
-        this._applyInternalValidation(this.dateOption('value'));
+        this._applyInternalValidation(this.getDateOption('value'));
         if (!isValid) {
-          this._applyCustomValidation(this.dateOption('value'));
+          this._applyCustomValidation(this.getDateOption('value'));
         }
         this._invalidate();
         break;
@@ -721,28 +750,23 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
         this._invalidate();
         break;
       case 'displayFormat':
-        this.option('text', this._getDisplayedText(this.dateOption('value')));
+        this.option('text', this._getDisplayedText(this.getDateOption('value')));
         this._renderInputValue();
         break;
       case 'text':
-        // @ts-expect-error ts-error
-        this._strategy.textChangedHandler(args.value);
-        // @ts-expect-error ts-error
-        super._optionChanged.apply(this, arguments);
+        this._strategy.textChangedHandler();
+        super._optionChanged(args);
         break;
       case 'isValid':
-        // @ts-expect-error ts-error
-        super._optionChanged.apply(this, arguments);
+        super._optionChanged(args);
         this._formatValidationIcon();
         break;
       case 'showDropDownButton':
         this._formatValidationIcon();
-        // @ts-expect-error ts-error
-        super._optionChanged.apply(this, arguments);
+        super._optionChanged(args);
         break;
       case 'readOnly':
-        // @ts-expect-error ts-error
-        super._optionChanged.apply(this, arguments);
+        super._optionChanged(args);
         this._formatValidationIcon();
         break;
       case 'invalidDateMessage':
@@ -752,16 +776,15 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
       case '_showValidationIcon':
         break;
       default:
-        // @ts-expect-error ts-error
-        super._optionChanged.apply(this, arguments);
+        super._optionChanged(args);
     }
   }
 
-  _getSerializationFormat() {
-    const { value } = this.option();
+  _getSerializationFormat(): string | undefined {
+    const { value, dateSerializationFormat } = this.option();
 
-    if (this.option('dateSerializationFormat') && config().forceIsoDateParsing) {
-      return this.option('dateSerializationFormat');
+    if (dateSerializationFormat && config().forceIsoDateParsing) {
+      return dateSerializationFormat;
     }
 
     if (isNumeric(value)) {
@@ -769,18 +792,18 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     }
 
     if (!isString(value) || value === '') {
-      return;
+      return undefined;
     }
 
-    return dateSerialization.getDateSerializationFormat(value);
+    return dateSerialization.getDateSerializationFormat(value) as string | undefined;
   }
 
-  _updateValue(value?) {
+  _updateValue(value?: Date | null): void {
     super._updateValue();
-    this._applyInternalValidation(value ?? this.dateOption('value'));
+    this._applyInternalValidation(value ?? this.getDateOption('value'));
   }
 
-  dateValue(value, dxEvent) {
+  dateValue(value: Date | null, dxEvent?: ValueChangedEvent): void {
     const isValueChanged = this._isValueChanged(value);
 
     if (isValueChanged && dxEvent) {
@@ -797,24 +820,27 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
       }
     }
 
-    return this.dateOption('value', value);
+    this.setDateOption('value', value);
   }
 
-  dateOption(optionName, value?) {
-    if (arguments.length === 1) {
-      return dateSerialization.deserializeDate(this.option(optionName));
-    }
+  getDateOption(optionName: 'value' | 'min' | 'max'): Date | null {
+    const { [optionName]: optionValue } = this.option();
 
+    return dateSerialization.deserializeDate(optionValue) as Date | null;
+  }
+
+  setDateOption(optionName: 'value' | 'min' | 'max', value: DateLike | undefined): void {
     this.option(optionName, this._serializeDate(value));
   }
 
-  _serializeDate(date) {
+  _serializeDate(date?: DateLike): Date | string | null {
     const serializationFormat = this._getSerializationFormat();
-    return dateSerialization.serializeDate(date, serializationFormat);
+
+    return dateSerialization.serializeDate(date, serializationFormat) as Date | string | null;
   }
 
   _clearValue(): void {
-    const value = this.option('value');
+    const { value } = this.option();
 
     super._clearValue();
     if (value === null) {
@@ -823,7 +849,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
   }
 
   clear(): void {
-    const value = this.option('value');
+    const { value } = this.option();
 
     super.clear();
     if (value === null) {
