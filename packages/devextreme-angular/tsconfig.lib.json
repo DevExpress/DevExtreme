@@ -22,6 +22,7 @@
     "useDefineForClassFields": false,
     "strictNullChecks": false,
     "module": "ES2022",
+    "verbatimModuleSyntax": false,
     "lib": [
       "ES2022",
       "dom",
