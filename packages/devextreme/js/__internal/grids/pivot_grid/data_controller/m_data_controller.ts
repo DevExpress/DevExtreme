@@ -143,6 +143,7 @@ class DataController {
     that.scrollChanged = Callbacks();
 
     if (that._isSharedDataSource) {
+      that._handleFieldsPrepared(that._dataSource.fields());
       that._update();
     } else {
       that.load();
