@@ -122,8 +122,8 @@ class DateViewStrategy extends DateBoxStrategy {
     return {
       value: this.dateBoxValue() || new Date(),
       type: this.dateBox.option('type'),
-      minDate: this.dateBox.dateOption('min') || new Date(1900, 0, 1),
-      maxDate: this.dateBox.dateOption('max') || new Date(Date.now() + 50 * dateUtils.ONE_YEAR),
+      minDate: this.dateBox.getDateOption('min') || new Date(1900, 0, 1),
+      maxDate: this.dateBox.getDateOption('max') || new Date(Date.now() + 50 * dateUtils.ONE_YEAR),
       onDisposing: function () {
         this._widget = null;
       }.bind(this),
