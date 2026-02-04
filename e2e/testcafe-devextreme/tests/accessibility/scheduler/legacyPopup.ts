@@ -6,11 +6,7 @@ import { a11yCheck } from '../../../helpers/accessibility/utils';
 fixture.disablePageReloads`Scheduler - Popup`
   .page(url(__dirname, '../../container.html'));
 
-const checkOptions = {
-  rules: {
-    'color-contrast': { enabled: false },
-  },
-};
+const a11yCheckConfig = {};
 
 test('Scheduler edit appointment is accessible', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -18,7 +14,7 @@ test('Scheduler edit appointment is accessible', async (t) => {
   await t.doubleClick(scheduler.getAppointmentByIndex(0).element());
   await t.expect(scheduler.legacyAppointmentPopup.isVisible()).ok();
 
-  await a11yCheck(t, checkOptions, '#container');
+  await a11yCheck(t, a11yCheckConfig, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     timeZone: 'America/Los_Angeles',

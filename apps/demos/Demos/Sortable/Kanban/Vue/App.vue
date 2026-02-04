@@ -127,7 +127,7 @@ function getPriorityClass(task: Task) {
 }
 
 .card-assignee {
-  opacity: 0.6;
+  color: var(--dx-color-icon);
 }
 
 .card-priority {

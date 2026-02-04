@@ -55,10 +55,7 @@ const buttonsCreated = async (t: TestController): Promise<void> => {
     .wait(TIME_TO_WAIT);
 };
 
-const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: false } },
-};
+const a11yCheckConfig = {};
 
 const configuration: Configuration = {
   component: 'dxTagBox',

@@ -1,7 +1,9 @@
+/* eslint-disable class-methods-use-this */
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
 import Class from '@js/core/class';
 import $ from '@js/core/renderer';
+import type { ToolbarItem } from '@js/ui/popup';
 
 import type { PopupProperties } from '../popup/m_popup';
 
@@ -59,10 +61,8 @@ class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
   customizeButtons() {}
 
   getParsedText(text, format) {
-    // @ts-expect-error
     const value = dateLocalization.parse(text, format);
-    // @ts-expect-error
-    return value || dateLocalization.parse(text);
+    return value ?? dateLocalization.parse(text);
   }
 
   renderInputMinMax(): void {}
@@ -71,17 +71,15 @@ class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
     this._updateValue();
   }
 
-  // @ts-expect-error ts-error
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   popupConfig(popupConfig: PopupProperties): PopupProperties {
-    Class.abstract();
+    return popupConfig;
   }
 
   _dimensionChanged(): void {
     this._getPopup()?.repaint();
   }
 
-  renderPopupContent() {
+  renderPopupContent(): void {
     const popup = this._getPopup();
     this._renderWidget();
 
@@ -106,14 +104,19 @@ class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
 
   popupHiddenHandler() {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _updateValue(preventDefaultValue?: boolean) {
+  _updateValue() {
     this._widget?.option('value', this.dateBoxValue());
   }
 
-  useCurrentDateByDefault() {}
+  _getPopupToolbarItems(toolbarItems: ToolbarItem[]): ToolbarItem[] {
+    return toolbarItems;
+  }
 
-  getDefaultDate() {
+  useCurrentDateByDefault(): boolean {
+    return false;
+  }
+
+  getDefaultDate(): Date {
     return new Date();
   }
 
@@ -146,7 +149,7 @@ class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
     if (arguments.length) {
       return this.dateBox.dateValue.apply(this.dateBox, arguments);
     }
-    return this.dateBox.dateOption.apply(this.dateBox, ['value']);
+    return this.dateBox.getDateOption.apply(this.dateBox, ['value']);
   }
 }
 
