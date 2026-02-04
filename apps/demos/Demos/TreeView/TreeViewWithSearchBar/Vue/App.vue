@@ -42,6 +42,7 @@ const searchMode = ref(options[0]);
   right: 0;
   width: 260px;
   top: 0;
+  background-color: var(--dx-datagrid-row-alternation-bg);
 }
 
 .caption {
