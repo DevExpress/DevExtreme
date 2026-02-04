@@ -89,7 +89,6 @@ const startEditAction = ref<DxDataGridTypes.StartEditAction>('click');
 .options {
   margin-top: 20px;
   padding: 20px;
-  background: #f5f5f5;
 }
 
 .options .caption {

@@ -132,7 +132,7 @@ const mentions = ref([{
 }
 
 .date {
-  opacity: 0.5;
+  color: var(--dx-color-icon);
 }
 
 .photo {

@@ -2,7 +2,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { checkOptions } from './axe_options';
+import { a11yCheckConfig } from './axe_options';
 
 fixture.disablePageReloads`Scheduler - Appointment`
   .page(url(__dirname, '../../container.html'));
@@ -26,7 +26,7 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
       .expect(await appointment.hasAriaDescription())
       .notOk();
 
-    await a11yCheck(t, checkOptions, '#container');
+    await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       timeZone: 'UTC',
@@ -46,7 +46,7 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
       .expect(await appointment.hasAriaDescription())
       .notOk();
 
-    await a11yCheck(t, checkOptions, '#container');
+    await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       timeZone: 'UTC',
@@ -67,7 +67,7 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
       .expect(await appointment.getAriaDescription())
       .eql('Group: resource1; Group 1: resource1');
 
-    await a11yCheck(t, checkOptions, '#container');
+    await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       timeZone: 'UTC',
@@ -101,7 +101,7 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
       .expect(await appointment.getAriaDescription())
       .eql('Group: resource1; Group 1: resource1');
 
-    await a11yCheck(t, checkOptions, '#container');
+    await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       timeZone: 'UTC',
@@ -136,7 +136,7 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
       .expect(await appointment.getAriaDescription())
       .eql('Group: resource11, resource21; Group 1: resource11; Group 2: resource21, resource22');
 
-    await a11yCheck(t, checkOptions, '#container');
+    await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       timeZone: 'UTC',
@@ -180,7 +180,7 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
       .expect(recurrenceIcon.getAttribute('aria-label'))
       .eql('Recurring appointment');
 
-    await a11yCheck(t, checkOptions, '#container');
+    await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       timeZone: 'America/Los_Angeles',
@@ -210,7 +210,7 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
       .expect(appt.element.getAttribute('aria-activedescendant'))
       .eql(null);
 
-    await a11yCheck(t, checkOptions, '#container');
+    await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       timeZone: 'America/Los_Angeles',
@@ -266,7 +266,7 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
     await t.expect(apptLabels[1]).eql(labels[1]);
     await t.expect(apptLabels[2]).eql(labels[2]);
 
-    await a11yCheck(t, checkOptions, '#container');
+    await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       timeZone: 'UTC',
@@ -336,7 +336,7 @@ test('appointments & collector buttons can be navigated', async (t) => {
     scheduler.appointmentTooltip.element.count,
   ).eql(1);
 
-  await a11yCheck(t, checkOptions, '#container');
+  await a11yCheck(t, a11yCheckConfig, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [
@@ -387,7 +387,7 @@ test('Scheduler a11y: Disabled time ranges are not supported', async (t) => {
     .expect(actualNextAriaLabel)
     .eql(expectedAriaLabels.next);
 
-  await a11yCheck(t, checkOptions, '#container');
+  await a11yCheck(t, a11yCheckConfig, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [
@@ -410,7 +410,7 @@ test('Scheduler a11y: appointments does not have info about reccurence', async (
     .expect(recurrenceIcon.getAttribute('aria-label'))
     .eql('Recurring appointment');
 
-  await a11yCheck(t, checkOptions, '#container');
+  await a11yCheck(t, a11yCheckConfig, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     timeZone: 'America/Los_Angeles',
@@ -440,7 +440,7 @@ test('Scheduler a11y: Appointment collector button doesn\'t have info about date
     .expect(schedulerCollector.element().getAttribute('aria-roledescription'))
     .contains(dateText);
 
-  await a11yCheck(t, checkOptions, '#container');
+  await a11yCheck(t, a11yCheckConfig, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     timeZone: 'America/Los_Angeles',
@@ -479,7 +479,7 @@ test('appointment aria label should contain date with right timezone', async (t)
     .expect(appointment.getAriaLabel())
     .eql('Install New Router in Dev Room: March 29, 2021, 2:30 PM - 3:30 PM');
 
-  await a11yCheck(t, checkOptions, '#container');
+  await a11yCheck(t, a11yCheckConfig, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     timeZone: 'America/Los_Angeles',
