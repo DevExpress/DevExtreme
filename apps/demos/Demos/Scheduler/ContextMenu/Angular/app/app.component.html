@@ -12,7 +12,9 @@
   [width]="200"
 >
   <div *dxTemplate="let e of 'item'">
-    <ng-container *ngTemplateOutlet="contextMenuItemTemplate; context: { $implicit: e }"></ng-container>
+    <ng-container
+      *ngTemplateOutlet="contextMenuItemTemplate; context: { $implicit: e }"
+    ></ng-container>
   </div>
 </dx-context-menu>
 <dx-context-menu
@@ -22,7 +24,9 @@
   [width]="200"
 >
   <div *dxTemplate="let e of 'item'">
-    <ng-container *ngTemplateOutlet="contextMenuItemTemplate; context: { $implicit: e }"></ng-container>
+    <ng-container
+      *ngTemplateOutlet="contextMenuItemTemplate; context: { $implicit: e }"
+    ></ng-container>
   </div>
 </dx-context-menu>
 
