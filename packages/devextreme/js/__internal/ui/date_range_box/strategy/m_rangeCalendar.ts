@@ -253,10 +253,10 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
     if (arguments.length) {
       // @ts-expect-error
-      return dateBox.dateValue.apply(dateBox, arguments);
+      return dateBox.setDateOption.apply(dateBox, arguments);
     }
     // @ts-expect-error
-    return dateBox.dateOption.apply(dateBox, ['value']);
+    return dateBox.getDateOption.apply(dateBox, ['value']);
   }
 
   _cellClickHandler(): void { }
