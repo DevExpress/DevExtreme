@@ -100,3 +100,40 @@ test('Common appointments should be deleted by click on \'delete\' button and pr
     .expect(scheduler.getAppointmentCount())
     .eql(0);
 }).before(async () => createScheduler(createSimpleData()));
+
+test('Appointment should be deleted by Delete key when focused in tooltip from collector', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const collector = scheduler.collectors.find('2 more');
+  const { appointmentTooltip } = scheduler;
+  const tooltipItem = appointmentTooltip.getListItem('Text');
+
+  await t
+    .expect(scheduler.getAppointmentCount()).eql(3)
+    .click(collector.element)
+    .expect(appointmentTooltip.isVisible())
+    .ok()
+    .click(tooltipItem.element)
+    .pressKey('delete')
+    .expect(scheduler.getAppointmentCount())
+    .eql(2);
+}).before(async () => createWidget('dxScheduler', {
+  dataSource: [{
+    text: 'Text',
+    startDate: new Date(2017, 4, 22, 1, 30, 0, 0),
+    endDate: new Date(2017, 4, 22, 2, 30, 0, 0),
+  }, {
+    text: 'Text2',
+    startDate: new Date(2017, 4, 22, 1, 30, 0, 0),
+    endDate: new Date(2017, 4, 22, 2, 30, 0, 0),
+  }, {
+    text: 'Text3',
+    startDate: new Date(2017, 4, 22, 1, 30, 0, 0),
+    endDate: new Date(2017, 4, 22, 2, 30, 0, 0),
+  }],
+  views: [{
+    type: 'week',
+    maxAppointmentsPerCell: 1,
+  }],
+  currentView: 'week',
+  currentDate: new Date(2017, 4, 22),
+}));
