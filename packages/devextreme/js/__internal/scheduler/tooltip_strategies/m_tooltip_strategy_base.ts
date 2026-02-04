@@ -72,6 +72,21 @@ export class TooltipStrategyBase {
         this.hide();
         this._tooltip.option('target').focus();
       });
+      this._list.registerKeyHandler?.('del', (e) => {
+        const { focusedElement } = this._list.option();
+
+        if (!focusedElement || !this._options.allowDelete) {
+          return;
+        }
+
+        const { appointment, targetedAppointment } = this._list._getItemData(focusedElement);
+
+        if (appointment) {
+          e.preventDefault();
+          this.hide();
+          this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
+        }
+      });
     };
   }
 
@@ -226,6 +241,7 @@ export class TooltipStrategyBase {
     this._options.createComponent($deleteButton, Button, {
       icon: 'trash',
       stylingMode: 'text',
+      tabIndex: -1,
       onClick: (e) => {
         this.hide();
         e.event.stopPropagation();
