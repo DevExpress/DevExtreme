@@ -103,7 +103,7 @@ function getImagePath(taskId: number) {
 }
 
 .custom-task-color-5 {
-  background-color: #DD2C00 ;
+  background-color: #DD2C00;
 }
 
 .custom-task-color-6 {

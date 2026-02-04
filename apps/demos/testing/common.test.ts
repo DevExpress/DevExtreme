@@ -41,11 +41,10 @@ const getIgnoredRules = (testName) => {
       'Accordion-Overview',
       'TagBox-Overview',
       'TreeList-StatePersistence',
-      // False positive:contrast rules do not apply to custom orange color
+      // False positive: contrast rules do not apply to custom orange color
       'CardView-FieldTemplate',
       // False positive: contrast rules do not apply to read-only editors on the custom option panel background
       'VectorMap-DynamicViewport',
-      'TreeList-StatePersistence',
     ].includes(testName)
   ) {
     ignoredRules.push('color-contrast');
