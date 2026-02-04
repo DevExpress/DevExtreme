@@ -80,7 +80,7 @@ import { weekData } from './data.ts';
 }
 
 #gridContainer .inc .diff {
-  color: #2ab71b;
+  color: var(--dx-color-success);
 }
 
 #gridContainer .inc .diff::before {
@@ -92,7 +92,7 @@ import { weekData } from './data.ts';
 }
 
 #gridContainer .dec .diff {
-  color: #f00;
+  color: var(--dx-color-danger);
 }
 
 #gridContainer .inc .diff::after,

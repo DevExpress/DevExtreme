@@ -108,7 +108,7 @@ function onUploadStarted() {
 #dropzone-external {
   width: 350px;
   height: 350px;
-  background-color: rgb(183 183 183 / 10%);
+  background-color: rgba(0,0,0,0.08);
   border-width: 2px;
   border-style: dashed;
   padding: 10px;
@@ -133,11 +133,6 @@ function onUploadStarted() {
 #dropzone-image {
   max-width: 100%;
   max-height: 100%;
-}
-
-#dropzone-text > span {
-  font-weight: 100;
-  opacity: 0.5;
 }
 
 #upload-progress {

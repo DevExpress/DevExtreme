@@ -18,12 +18,7 @@ const options: Options<Properties> = {
   disabled: [true, false],
 };
 
-const a11yCheckConfig = {
-  rules: {
-    // NOTE: color-contrast issues
-    'color-contrast': { enabled: false },
-  },
-};
+const a11yCheckConfig = {};
 
 const noSplitButtonConfiguration: Configuration = {
   component: 'dxDropDownButton',

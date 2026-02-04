@@ -24,12 +24,7 @@ const optionsWithSimpleItems: Options<Properties> = {
   // type: ['danger', 'default', 'normal', 'success'],
 };
 
-const a11yCheckConfig = {
-  rules: {
-    // NOTE: color-contrast issues
-    'color-contrast': { enabled: false },
-  },
-};
+const a11yCheckConfig = {};
 
 const configurationWithSimpleItems: Configuration = {
   component: 'dxButtonGroup',

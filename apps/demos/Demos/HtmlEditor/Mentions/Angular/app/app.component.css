@@ -29,7 +29,7 @@
 }
 
 ::ng-deep .date {
-  opacity: 0.5;
+  color: var(--dx-color-icon);
 }
 
 ::ng-deep .photo {
