@@ -188,8 +188,7 @@ class DateBoxMask extends DateBoxBase {
     const isValueChanged = oldInputValue !== this._input().val();
 
     if (isValueChanged) {
-      // @ts-expect-error update events_engine interface to support trigger method
-      eventsEngine.trigger(this._input(), 'input');
+      eventsEngine.triggerHandler(this._input(), { type: 'input' });
     }
   }
 
@@ -488,7 +487,7 @@ class DateBoxMask extends DateBoxBase {
 
   _onMouseWheel(e: DxMouseWheelEvent): void {
     if (this._useMaskBehavior()) {
-      this._partIncrease(e.delta > 0 ? FORWARD : BACKWARD, !!e);
+      this._partIncrease(e.delta > 0 ? FORWARD : BACKWARD, Boolean(e));
     }
   }
 
@@ -703,8 +702,7 @@ class DateBoxMask extends DateBoxBase {
     this._clearSearchValue();
 
     if (this._isValueDirty()) {
-      // @ts-expect-error update events_engine interface to support trigger method
-      eventsEngine.trigger(this._input(), 'change');
+      eventsEngine.triggerHandler(this._input(), { type: 'change' });
     }
   }
 

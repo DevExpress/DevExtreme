@@ -276,7 +276,8 @@ class DateView extends Editor<DateViewProperties> {
       currentValue[setValue](rollerValue);
 
       const normalizedDate = dateUtils.normalizeDate(currentValue, minDate, maxDate);
-      currentValue = uiDateUtils.mergeDates(normalizedDate, currentValue, 'time') as Date;
+      // @ts-expect-error ts-error
+      currentValue = uiDateUtils.mergeDates(normalizedDate, currentValue, 'time');
       currentValue = dateUtils.normalizeDate(currentValue, minDate, maxDate);
 
       this.option('value', currentValue);
