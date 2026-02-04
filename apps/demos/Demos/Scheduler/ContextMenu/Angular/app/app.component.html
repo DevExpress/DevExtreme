@@ -5,10 +5,12 @@
   [width]="200"
 >
   <div *dxTemplate="let e of 'item'">
-    @if(e.color) {
-    <div class="item-badge" [style.background-color]="e.color"></div>
-    }
-    <div class="item-text">{{ e.text }}</div>
+    <div>
+      @if(e.color) {
+      <div class="item-badge" [style.background-color]="e.color"></div>
+      }
+      {{ e.text }}
+    </div>
   </div>
 </dx-context-menu>
 <dx-context-menu
@@ -18,10 +20,12 @@
   [width]="200"
 >
   <div *dxTemplate="let e of 'item'">
-    @if(e.color) {
-    <div class="item-badge" [style.background-color]="e.color"></div>
-    }
-    <div class="item-text">{{ e.text }}</div>
+    <div>
+      @if(e.color) {
+      <div class="item-badge" [style.background-color]="e.color"></div>
+      }
+      {{ e.text }}
+    </div>
   </div>
 </dx-context-menu>
 

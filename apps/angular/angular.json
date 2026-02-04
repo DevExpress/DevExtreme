@@ -23,7 +23,7 @@
             "tsConfig": "src/tsconfig.app.json",
             "styles": [
               "node_modules/devextreme/dist/css/dx.common.css",
-              "node_modules/devextreme/dist/css/dx.light.css"
+              "node_modules/devextreme/dist/css/dx.fluent.blue.light.css"
             ],
             "scripts": [],
             "browser": "src/main.ts"
