@@ -128,6 +128,25 @@ export class AppComponent {
           true,
         ),
       },
+      {
+        text: 'Group by Room/Ungroup',
+        beginGroup: true,
+        onItemClick: () => {
+          if (this.groups.length) {
+            this.crossScrollingEnabled = false;
+            this.groups = [];
+          } else {
+            this.crossScrollingEnabled = true;
+            this.groups = ['roomId'];
+          }
+        },
+      },
+      {
+        text: 'Go to Today',
+        onItemClick: () => {
+          this.currentDate = new Date();
+        },
+      },
     ] as unknown as ContextMenuItem[];
   }
 }
