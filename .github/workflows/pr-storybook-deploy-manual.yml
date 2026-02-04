@@ -87,7 +87,7 @@ jobs:
           pnpx nx build devextreme-react-storybook
 
       - name: Deploy/remove PR preview
-        uses: rossjrw/pr-preview-action@6f3a89d9ff1b752c6e781d91eacd27d9952188b0 # v1
+        uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1.8.1
         with:
           action: ${{ inputs.action }}
           pr-number: ${{ inputs.pr_number }}
