@@ -72,6 +72,7 @@ const STRATEGY_CLASSES = {
 };
 
 export interface DateBoxBaseProperties extends Omit<Properties, 'onClosed' | 'onOpened'> {
+  emptyDateValue?: Date;
   _showValidationIcon?: boolean;
 }
 

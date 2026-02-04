@@ -210,6 +210,7 @@ class DateViewRoller extends Scrollable<DateViewRollerProperties> {
   }
 
   _moveTo(targetLocation: { top: number; }): void {
+    // @ts-expect-error scrollable types should be extended
     const { top = 0, left = 0 } = convertToLocation(targetLocation);
 
     const location = this.scrollOffset();

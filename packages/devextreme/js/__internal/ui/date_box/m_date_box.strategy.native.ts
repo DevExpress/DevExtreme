@@ -82,8 +82,8 @@ class NativeStrategy extends DateBoxStrategy {
     }[type] ?? defaultFormat;
 
     $input.attr({
-      min: dateSerialization.serializeDate(this.dateBox.dateOption('min'), format),
-      max: dateSerialization.serializeDate(this.dateBox.dateOption('max'), format),
+      min: dateSerialization.serializeDate(this.dateBox.getDateOption('min'), format),
+      max: dateSerialization.serializeDate(this.dateBox.getDateOption('max'), format),
     });
   }
 }
