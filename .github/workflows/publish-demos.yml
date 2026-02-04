@@ -38,9 +38,7 @@ jobs:
         pnpm install --frozen-lockfile
 
     - name: DevExtreme - Build-all
-      env:
-        BUILD_TEST_INTERNAL_PACKAGE: true
-      run: pnpm run all:build-dev
+      run: pnpm nx all:build-testing workflows
 
     - name: Move packages
       run: |
