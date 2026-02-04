@@ -147,17 +147,19 @@ const getCellContextMenuItems = (
       text: 'Group by Room/Ungroup',
       beginGroup: true,
       onItemClick: () => {
-        if (scheduler.option('groups')?.length) {
-          scheduler.option({ crossScrollingEnabled: false, groups: [] });
+        if (groups.value.length) {
+          groups.value = [];
+          crossScrollingEnabled.value = false;
         } else {
-          scheduler.option({ crossScrollingEnabled: true, groups: ['roomId'] });
+          groups.value = ['roomId'];
+          crossScrollingEnabled.value = true;
         }
       },
     },
     {
       text: 'Go to Today',
       onItemClick: () => {
-        scheduler.option('currentDate', new Date());
+        currentDate.value = new Date();
       },
     },
   ];

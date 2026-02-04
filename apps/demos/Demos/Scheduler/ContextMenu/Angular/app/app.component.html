@@ -1,3 +1,31 @@
+<ng-template #contextMenuItemTemplate let-e>
+  @if(e.color) {
+  <div class="item-badge" [style.background-color]="e.color"></div>
+  }
+  <div class="item-text">{{ e.text }}</div>
+</ng-template>
+
+<dx-context-menu
+  [items]="appointmentContextMenuItems"
+  target=".dx-scheduler-appointment"
+  (onItemClick)="onContextMenuItemClick($event)"
+  [width]="200"
+>
+  <div *dxTemplate="let e of 'item'">
+    <ng-container *ngTemplateOutlet="contextMenuItemTemplate; context: { $implicit: e }"></ng-container>
+  </div>
+</dx-context-menu>
+<dx-context-menu
+  [items]="cellContextMenuItems"
+  target=".dx-scheduler-date-table-cell"
+  (onItemClick)="onContextMenuItemClick($event)"
+  [width]="200"
+>
+  <div *dxTemplate="let e of 'item'">
+    <ng-container *ngTemplateOutlet="contextMenuItemTemplate; context: { $implicit: e }"></ng-container>
+  </div>
+</dx-context-menu>
+
 <dx-scheduler
   timeZone="America/Los_Angeles"
   [crossScrollingEnabled]="crossScrollingEnabled"
@@ -19,17 +47,3 @@
     icon="conferenceroomoutline"
   ></dxi-scheduler-resource>
 </dx-scheduler>
-<dx-context-menu
-  [items]="contextMenuItems"
-  [disabled]="disabled"
-  [target]="target"
-  (onItemClick)="onContextMenuItemClick($event)"
-  [width]="200"
->
-  <div *dxTemplate="let e of 'item'">
-    @if(e.color) {
-    <div class="item-badge" [style.background-color]="e.color"></div>
-    }
-    <div class="item-text">{{ e.text }}</div>
-  </div>
-</dx-context-menu>
