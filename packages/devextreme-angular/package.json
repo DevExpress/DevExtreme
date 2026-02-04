@@ -39,7 +39,7 @@
     "@eslint/eslintrc": "catalog:",
     "@eslint-stylistic/metadata": "catalog:",
     "@stylistic/eslint-plugin": "catalog:",
-    "@types/jasmine": "2.8.23",
+    "@types/jasmine": "2.8.24",
     "@types/node": "20.11.17",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",

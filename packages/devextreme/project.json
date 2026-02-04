@@ -7,10 +7,252 @@
     "devextreme-scss"
   ],
   "targets": {
-    "build": {
-      "executor": "nx:run-script",
+    "clean:artifacts": {
+      "executor": "devextreme-nx-infra-plugin:clean",
       "options": {
-        "script": "build"
+        "targetDirectory": "./artifacts",
+        "excludePatterns": [
+          "./artifacts/css",
+          "./artifacts/npm/devextreme/package.json",
+          "./artifacts/npm/devextreme-dist/package.json"
+        ]
+      }
+    },
+    "clean:cldr-data": {
+      "executor": "devextreme-nx-infra-plugin:clean",
+      "options": {
+        "targetDirectory": "./js/__internal/core/localization/cldr-data"
+      }
+    },
+    "build:localization:generate": {
+      "executor": "devextreme-nx-infra-plugin:localization",
+      "options": {
+        "messagesDir": "./js/localization/messages",
+        "messageTemplate": "./build/gulp/localization-template.jst",
+        "messageOutputDir": "./artifacts/js/localization",
+        "generatedTemplate": "./build/gulp/generated_js.jst",
+        "cldrDataOutputDir": "./js/__internal/core/localization/cldr-data",
+        "defaultMessagesOutputDir": "./js/__internal/core/localization"
+      },
+      "inputs": [
+        "{projectRoot}/js/localization/messages/**/*.json",
+        "{projectRoot}/build/gulp/localization-template.jst",
+        "{projectRoot}/build/gulp/generated_js.jst"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/localization",
+        "{projectRoot}/js/__internal/core/localization/default_messages.ts",
+        "{projectRoot}/js/__internal/core/localization/cldr-data"
+      ],
+      "cache": true
+    },
+    "build:localization:headers": {
+      "executor": "devextreme-nx-infra-plugin:add-license-headers",
+      "options": {
+        "targetDirectory": "./artifacts/js/localization",
+        "licenseTemplateFile": "./build/gulp/license-header.txt",
+        "eulaUrl": "https://js.devexpress.com/Licensing/",
+        "prependAfterLicense": "\"use strict\";\n\n",
+        "separatorBetweenBannerAndContent": "",
+        "includePatterns": ["**/*.js"]
+      },
+      "inputs": [
+        "{projectRoot}/artifacts/js/localization/**/*.js",
+        "{projectRoot}/build/gulp/license-header.txt"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/localization"
+      ],
+      "cache": true
+    },
+    "build:localization": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm nx clean:cldr-data devextreme",
+          "pnpm nx build:localization:generate devextreme",
+          "pnpm nx build:localization:headers devextreme"
+        ],
+        "parallel": false
+      },
+      "inputs": [
+        "{projectRoot}/js/localization/messages/**/*.json",
+        "{projectRoot}/build/gulp/localization-template.jst",
+        "{projectRoot}/build/gulp/generated_js.jst",
+        "{projectRoot}/build/gulp/license-header.txt"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/localization",
+        "{projectRoot}/js/__internal/core/localization/default_messages.ts",
+        "{projectRoot}/js/__internal/core/localization/cldr-data"
+      ],
+      "cache": true
+    },
+    "build:transpile": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env BUILD_ESM_PACKAGE=true gulp transpile",
+        "cwd": "{projectRoot}"
+      },
+      "inputs": [
+        "{projectRoot}/js/**/*.js",
+        "{projectRoot}/build/gulp/transpile.js",
+        "{projectRoot}/babel.config.cjs"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/transpiled",
+        "{projectRoot}/artifacts/transpiled-esm-npm",
+        "{projectRoot}/artifacts/transpiled-renovation-npm"
+      ],
+      "cache": true
+    },
+    "bundle:debug": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gulp js-bundles-debug",
+        "cwd": "{projectRoot}"
+      },
+      "inputs": [
+        { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
+        "{projectRoot}/artifacts/transpiled/**/*",
+        "{projectRoot}/artifacts/transpiled-esm/**/*",
+        "{projectRoot}/build/gulp/js-bundles.js",
+        "{projectRoot}/webpack.config.js"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/dx.all.debug.js",
+        "{projectRoot}/artifacts/js/dx.all.debug.js.map"
+      ],
+      "cache": true
+    },
+    "bundle:prod": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gulp js-bundles-prod",
+        "cwd": "{projectRoot}"
+      },
+      "inputs": [
+        { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
+        "{projectRoot}/artifacts/transpiled/**/*",
+        "{projectRoot}/artifacts/transpiled-esm/**/*",
+        "{projectRoot}/build/gulp/js-bundles.js",
+        "{projectRoot}/webpack.config.js"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/dx.all.js",
+        "{projectRoot}/artifacts/js/dx.all.js.map"
+      ],
+      "cache": true
+    },
+    "build:vectormap": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gulp vectormap",
+        "cwd": "{projectRoot}"
+      },
+      "inputs": [
+        "{projectRoot}/build/gulp/vectormap.js"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/vectormap-data"
+      ],
+      "cache": true
+    },
+    "build:aspnet": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gulp aspnet",
+        "cwd": "{projectRoot}"
+      },
+      "inputs": [
+        "{projectRoot}/build/gulp/aspnet.js"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/aspnet"
+      ],
+      "cache": true
+    },
+    "build:declarations": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gulp ts",
+        "cwd": "{projectRoot}"
+      },
+      "inputs": [
+        "{projectRoot}/ts/**/*.d.ts",
+        "{projectRoot}/build/gulp/ts.js"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/ts"
+      ],
+      "cache": true
+    },
+    "verify:licenses": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gulp check-license-notices",
+        "cwd": "{projectRoot}"
+      },
+      "cache": false
+    },
+    "copy:vendor": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "gulp vendor",
+        "cwd": "{projectRoot}"
+      },
+      "inputs": [
+        "{projectRoot}/build/gulp/vendor.js"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/vectormap-utils",
+        "{projectRoot}/artifacts/js/cldr"
+      ],
+      "cache": true
+    },
+    "pack:devextreme-npm": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm pack",
+        "cwd": "{projectRoot}/artifacts/npm/devextreme"
+      }
+    },
+    "pack:devextreme-dist-npm": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm pack",
+        "cwd": "{projectRoot}/artifacts/npm/devextreme-dist"
+      }
+    },
+    "build:npm": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cross-env BUILD_ESM_PACKAGE=true gulp npm",
+        "cwd": "{projectRoot}"
+      },
+      "inputs": [
+        { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
+        "{projectRoot}/artifacts/transpiled/**/*",
+        "{projectRoot}/artifacts/transpiled-esm-npm/**/*"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/npm/devextreme",
+        "{projectRoot}/artifacts/npm/devextreme-dist"
+      ],
+      "cache": true
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm nx clean:artifacts devextreme",
+          "pnpm nx build:localization devextreme",
+          "pnpm nx build:transpile devextreme",
+          "pnpm nx run-many --targets=bundle:debug,bundle:prod,build:vectormap,copy:vendor,build:aspnet,build:declarations --projects=devextreme --parallel",
+          "pnpm nx build:npm devextreme",
+          "pnpm nx verify:licenses devextreme"
+        ],
+        "parallel": false
       },
       "inputs": [
         { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
@@ -19,10 +261,18 @@
       ],
       "outputs": [
         "{projectRoot}/artifacts",
-        "{projectRoot}/js/bundles/dx.custom.js",
-        "{projectRoot}/js/common/core/localization/cldr-data",
-        "{projectRoot}/js/common/core/localization/default_messages.js"
-      ]
+        "{projectRoot}/build/bundle-templates/dx.custom.js",
+        "{projectRoot}/js/__internal/core/localization/cldr-data",
+        "{projectRoot}/js/__internal/core/localization/default_messages.ts"
+      ],
+      "cache": true,
+      "configurations": {
+        "testing": {
+          "env": {
+            "BUILD_TEST_INTERNAL_PACKAGE": "true"
+          }
+        }
+      }
     },
     "build-dist": {
       "executor": "nx:run-script",
@@ -58,9 +308,9 @@
       ],
       "outputs": [
         "{projectRoot}/artifacts",
-        "{projectRoot}/js/bundles/dx.custom.js",
-        "{projectRoot}/js/common/core/localization/cldr-data",
-        "{projectRoot}/js/common/core/localization/default_messages.js"
+        "{projectRoot}/build/bundle-templates/dx.custom.js",
+        "{projectRoot}/js/__internal/core/localization/cldr-data",
+        "{projectRoot}/js/__internal/core/localization/default_messages.ts"
       ],
       "cache": true
     },

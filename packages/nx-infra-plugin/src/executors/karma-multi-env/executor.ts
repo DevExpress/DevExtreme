@@ -203,7 +203,7 @@ async function executeSingleRun(
       return (exitCode: number) => {
         const duration = Date.now() - startTime;
 
-        logger.info(
+        logger.verbose(
           `[${environment.toUpperCase()}] Karma callback called with exit code: ${exitCode}`,
         );
 
@@ -231,7 +231,7 @@ async function executeSingleRun(
               };
 
         if (testResult.success) {
-          logger.info(`\n[${environment.toUpperCase()}] Tests completed successfully`);
+          logger.verbose(`\n[${environment.toUpperCase()}] Tests completed successfully`);
         } else {
           errorHandler.logError(testResult.error!);
         }
@@ -319,7 +319,7 @@ const createWatchModeCallback = (
 
     try {
       if (server && server.stop) {
-        logger.info(`[${environment.toUpperCase()}] Stopping Karma server...`);
+        logger.verbose(`[${environment.toUpperCase()}] Stopping Karma server...`);
         server.stop();
       }
     } catch (cleanupError) {
@@ -343,7 +343,7 @@ const createWatchModeCallback = (
 
 const setupSignalHandlers = (server: any): void => {
   const handleExit = (signal: string) => {
-    logger.info(`\n${STATUS_ICONS.STOP} Received ${signal} - stopping watch mode...`);
+    logger.verbose(`\n${STATUS_ICONS.STOP} Received ${signal} - stopping watch mode...`);
     if (server && server.stop) {
       server.stop();
     }
@@ -403,18 +403,18 @@ const createExecutionResult = (
 const logExecutionStart = (plan: ExecutionPlan, options: KarmaMultiEnvExecutorSchema): void => {
   if (options.watch) return;
 
-  logger.info(`Running tests in environments: ${plan.executionOrder.join(', ')}`);
+  logger.verbose(`Running tests in environments: ${plan.executionOrder.join(', ')}`);
   if (options.verbose) {
-    logger.info(`Karma config: ${options.karmaConfig}`);
-    logger.info(`Timeout: ${plan.timeout}ms`);
+    logger.verbose(`Karma config: ${options.karmaConfig}`);
+    logger.verbose(`Timeout: ${plan.timeout}ms`);
   }
 };
 
 const logEnvironmentStart = (environment: KarmaEnvironment): void =>
-  logger.info(`\n[${environment.toUpperCase()}] Starting tests...`);
+  logger.verbose(`\n[${environment.toUpperCase()}] Starting tests...`);
 
 const logWatchModeStart = (environment: KarmaEnvironment): void =>
-  logger.info(`[${environment.toUpperCase()}] Watch mode enabled - starting Karma server...`);
+  logger.verbose(`[${environment.toUpperCase()}] Watch mode enabled - starting Karma server...`);
 
 const logTestResults = (
   summary: TestSummary,
@@ -422,27 +422,31 @@ const logTestResults = (
   options: KarmaMultiEnvExecutorSchema,
 ): void => {
   if (options.watch) {
-    logger.info(`\n${STATUS_ICONS.WATCH} Watch mode active for: ${plan.executionOrder.join(', ')}`);
+    logger.verbose(
+      `\n${STATUS_ICONS.WATCH} Watch mode active for: ${plan.executionOrder.join(', ')}`,
+    );
     if (options.verbose) {
-      logger.info(`Karma config: ${options.karmaConfig}`);
-      logger.info('Watching file changes...');
+      logger.verbose(`Karma config: ${options.karmaConfig}`);
+      logger.verbose('Watching file changes...');
     }
-    logger.info('Press CTRL+C to stop watching...');
+    logger.verbose('Press CTRL+C to stop watching...');
     return;
   }
 
-  logger.info('\n' + '='.repeat(50));
-  logger.info(`${STATUS_ICONS.DOCUMENTATION} TEST RESULTS SUMMARY`);
-  logger.info('='.repeat(50));
-  logger.info(`\n${STATUS_ICONS.SUCCESS} Environments tested: ${plan.executionOrder.join(', ')}`);
-  logger.info(`${STATUS_ICONS.CLOCK} Total duration: ${summary.totalDuration}ms`);
+  logger.verbose('\n' + '='.repeat(50));
+  logger.verbose(`${STATUS_ICONS.DOCUMENTATION} TEST RESULTS SUMMARY`);
+  logger.verbose('='.repeat(50));
+  logger.verbose(
+    `\n${STATUS_ICONS.SUCCESS} Environments tested: ${plan.executionOrder.join(', ')}`,
+  );
+  logger.verbose(`${STATUS_ICONS.CLOCK} Total duration: ${summary.totalDuration}ms`);
 
   summary.results.forEach((result) => {
     const statusIcon = result.success ? STATUS_ICONS.SUCCESS : STATUS_ICONS.FAILURE;
     const durationText = `${result.duration}ms`;
     const statusText = result.success ? 'PASS' : 'FAIL';
 
-    logger.info(
+    logger.verbose(
       `\n${statusIcon} ${result.environment.toUpperCase()}: ${statusText} (${durationText})`,
     );
     if (!result.success && result.error) {
@@ -451,7 +455,7 @@ const logTestResults = (
   });
 
   if (summary.summary.failed === 0) {
-    logger.info(`\n${STATUS_ICONS.CELEBRATION} SUCCESS: All tests passed`);
+    logger.verbose(`\n${STATUS_ICONS.CELEBRATION} SUCCESS: All tests passed`);
   } else {
     logger.error(`\n${STATUS_ICONS.ERROR} FAILURE: Some tests failed`);
   }
@@ -461,7 +465,7 @@ const setupWatchModeEvents = (environment: KarmaEnvironment, server: any): void 
   if (!server.on || typeof server.on !== 'function') return;
 
   server.on('browsers_ready', () => {
-    logger.info(
+    logger.verbose(
       `\n${STATUS_ICONS.WATCH} Watch mode active - browsers ready and watching for file changes...`,
     );
   });
@@ -470,13 +474,15 @@ const setupWatchModeEvents = (environment: KarmaEnvironment, server: any): void 
     const statusIcon = results.success ? STATUS_ICONS.SUCCESS : STATUS_ICONS.FAILURE;
     const statusText = results.success ? 'All tests passed' : 'Some tests failed';
 
-    logger.info(`\n[${environment.toUpperCase()}] Test run completed. Success: ${results.success}`);
-    logger.info(`${statusIcon} ${statusText} in watch mode - continuing to watch...`);
-    logger.info('Press CTRL+C to stop watching...');
+    logger.verbose(
+      `\n[${environment.toUpperCase()}] Test run completed. Success: ${results.success}`,
+    );
+    logger.verbose(`${statusIcon} ${statusText} in watch mode - continuing to watch...`);
+    logger.verbose('Press CTRL+C to stop watching...');
   });
 
   server.on('file_list_modified', () => {
-    logger.info(`\n${STATUS_ICONS.REFRESH} File changes detected, re-running tests...`);
+    logger.verbose(`\n${STATUS_ICONS.REFRESH} File changes detected, re-running tests...`);
   });
 };
 
@@ -496,7 +502,7 @@ async function executeWatchMode(
     setupWatchModeEvents(environment, server);
     setupSignalHandlers(server);
 
-    logger.info(`\n${STATUS_ICONS.START} Starting Karma server in watch mode...`);
+    logger.verbose(`\n${STATUS_ICONS.START} Starting Karma server in watch mode...`);
     server.start();
   });
 }
@@ -529,10 +535,10 @@ const setupDebugModeEvents = (environment: KarmaEnvironment, server: any): void 
   if (!server.on || typeof server.on !== 'function') return;
 
   server.on('browsers_ready', () => {
-    logger.info(
+    logger.verbose(
       `\n${STATUS_ICONS.DEBUG} Debug mode for the ${environment} environment is active. Click the "DEBUG" button in the opened browser window to start debugging.`,
     );
-    logger.info('Press CTRL+C to stop debugging...');
+    logger.verbose('Press CTRL+C to stop debugging...');
   });
 };
 
@@ -549,7 +555,7 @@ async function launchDebugMode(
     setupDebugModeEvents(environment, server);
     setupSignalHandlers(server);
 
-    logger.info(`\n${STATUS_ICONS.START} Starting Karma server in debug mode...`);
+    logger.verbose(`\n${STATUS_ICONS.START} Starting Karma server in debug mode...`);
     server.start();
   });
 }

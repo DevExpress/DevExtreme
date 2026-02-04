@@ -337,3 +337,35 @@ test.meta({ browserSize: [1500, 1500] })('Recurrence settings button should have
     currentDate: new Date(2021, 2, 25),
   });
 });
+
+test.meta({ browserSize: [1500, 1500] })('appointment form with labelMode=static', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, undefined, false);
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__appointment__main-form__with-labelMode-static.png',
+    { element: appointmentPopup.contentElement },
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [],
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 25),
+    resources: getResources(true),
+    editing: {
+      allowUpdating: true,
+      form: {
+        labelMode: 'static',
+      },
+    },
+  });
+});

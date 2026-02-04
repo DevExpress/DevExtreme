@@ -28,7 +28,7 @@ import {
 import { hasWindow } from '@js/core/utils/window';
 import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
-import type { Appointment, AppointmentTooltipShowingEvent } from '@js/ui/scheduler';
+import type { Appointment, AppointmentTooltipShowingEvent, FirstDayOfWeek } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
@@ -2036,7 +2036,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       allDayValue = groupValuesOrOptions.allDay;
       align = groupValuesOrOptions.alignInView ?? 'center';
     } else {
-      errors.log('W0002', 'dxScheduler', 'scrollTo', '26.1', 'Use an object with "group", "allDay" and "alignInView" properties instead of separate parameters.');
+      if (isDefined(groupValuesOrOptions) || isDefined(allDay)) {
+        errors.log('W0002', 'dxScheduler', 'scrollTo', '26.1', 'Use an object with "group", "allDay" and "alignInView" properties instead of separate parameters.');
+      }
+
       groupValues = groupValuesOrOptions;
       allDayValue = allDay;
     }
@@ -2157,10 +2160,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  getFirstDayOfWeek() {
+  getFirstDayOfWeek(): FirstDayOfWeek {
     return isDefined(this.getViewOption('firstDayOfWeek'))
-      ? this.getViewOption('firstDayOfWeek')
-      : dateLocalization.firstDayOfWeekIndex();
+      ? this.getViewOption('firstDayOfWeek') as FirstDayOfWeek
+      : dateLocalization.firstDayOfWeekIndex() as FirstDayOfWeek;
   }
 
   _validateKeyFieldIfAgendaExist() {
