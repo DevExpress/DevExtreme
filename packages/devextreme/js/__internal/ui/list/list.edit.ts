@@ -61,7 +61,18 @@ class ListEdit extends ListBase {
 
       if (e.shiftKey && itemDragging?.allowReordering) {
         const nextItemIndex = focusedItemIndex + (moveUp ? -1 : 1);
+
+        if (nextItemIndex < 0
+          || nextItemIndex === NOT_EXISTING_INDEX
+          || nextItemIndex > this._getLastItemIndex()) {
+          return;
+        }
+
         const $nextItem = editStrategy.getItemElement(nextItemIndex);
+
+        if (!$nextItem) {
+          return;
+        }
 
         const isMoveFromGroup = grouped
           && $(focusedElement).parent().get(0) !== $nextItem.parent().get(0);

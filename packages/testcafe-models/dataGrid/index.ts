@@ -18,6 +18,8 @@ import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
 import ColumnChooser from './columnChooser';
 import TextBox from '../textBox';
+import DateBox from '../dateBox';
+import NumberBox from '../numberBox';
 import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
@@ -36,6 +38,8 @@ export const CLASS = {
   focusedRow: 'dx-row-focused',
   filterRow: 'filter-row',
   filterRangeOverlay: 'filter-range-overlay',
+  filterRangeStartEditor: 'filter-range-start',
+  filterRangeEndEditor: 'filter-range-end',
   focusOverlay: 'focus-overlay',
   editFormRow: 'edit-form',
   button: 'dx-button',
@@ -71,6 +75,7 @@ export const CLASS = {
   summaryTotal: 'dx-datagrid-summary-item',
   scrollableContainer: 'dx-scrollable-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
+  sortableDragging: 'dx-sortable-dragging',
 };
 
 const E2E_ATTRIBUTES = {
@@ -236,6 +241,19 @@ export default class DataGrid extends GridCore {
   getFilterRangeOverlay(): Selector {
     return this.getHeadersContainer().child(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
   }
+
+  getFilterRangeStartEditor(): DateBox;
+  getFilterRangeStartEditor(EditorType?: typeof DateBox | typeof NumberBox): DateBox | NumberBox {
+    const Editor = EditorType ?? DateBox;
+    return new Editor(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeStartEditor)}`));
+  }
+
+  getFilterRangeEndEditor(): DateBox;
+  getFilterRangeEndEditor(EditorType?: typeof DateBox | typeof NumberBox): DateBox | NumberBox {
+    const Editor = EditorType ?? DateBox;
+    return new Editor(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeEndEditor)}`));
+  }
+
   getFocusOverlay() {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.focusOverlay)}`);
   }
@@ -552,6 +570,7 @@ export default class DataGrid extends GridCore {
       return dataGrid.getVisibleRows().map((r) => ({
         key: r.key,
         rowType: r.rowType,
+        rowIndex: r.rowIndex,
       }));
     }, { dependencies: { getInstance } })();
   }
@@ -731,6 +750,21 @@ export default class DataGrid extends GridCore {
         },
       },
     )();
+  }
+
+  dropRow(): Promise<void> {
+    return ClientFunction((sortableDraggingClass) => {
+        const $dragElement = $(`.${sortableDraggingClass}`);
+        const dragOffset = $dragElement.offset();
+
+        triggerPointerUp($dragElement, dragOffset.left, dragOffset.top);
+      },
+      {
+        dependencies: {
+          triggerPointerUp,
+        },
+      },
+    )(CLASS.sortableDragging);
   }
 
   resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void> {

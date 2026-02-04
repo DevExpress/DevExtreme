@@ -17,14 +17,16 @@ runManualTest('DataGrid', 'RemoteGrouping', (test) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await $('.dx-scrollable-container')();
+
+    await testScreenshot(t, takeScreenshot, 'datagrid_remote_grouping_initial.png');
+
     await scroll(5000);
 
-    await testScreenshot(t, takeScreenshot, 'datagrid_remote_grouping_2_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_remote_grouping_scrolled.png');
 
-    await t
-      .click($('.dx-group-row td').withText('Madrid Store').prevSibling());
+    await t.click($('.dx-group-row').nth(2).child('.dx-datagrid-expand'));
 
-    await testScreenshot(t, takeScreenshot, 'datagrid_remote_grouping_3_desktop.png');
+    await testScreenshot(t, takeScreenshot, 'datagrid_remote_grouping_expanded.png');
 
     await t
       .expect(compareResults.isValid())

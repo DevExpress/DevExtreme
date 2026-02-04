@@ -4814,6 +4814,10 @@ if(devices.real().deviceType === 'desktop') {
                     role: 'listbox',
                     'aria-label': 'Items',
                 };
+                this.expectedItemsContainerMultipleModeAttrs = {
+                    ...this.expectedItemsContainerAttrs,
+                    'aria-multiselectable': 'true',
+                };
             },
             afterEach: function() {
                 this.clock.restore();
@@ -4858,7 +4862,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.createWidget({ selectedItemKeys: ['Item_1', 'Item_3'], keyExpr: 'text', selectionMode: 'multiple' });
 
                 helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
-                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerMultipleModeAttrs);
                 helper.checkItemsAttributes([0, 2], { attributes: ['aria-selected'], role: 'option' });
 
                 const $item_1 = $(helper.getItems().eq(1));
@@ -4867,7 +4871,7 @@ if(devices.real().deviceType === 'desktop') {
                 this.clock.tick(10);
 
                 helper.checkAttributes(helper.$itemContainer, { ...this.expectedContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
-                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerMultipleModeAttrs);
                 helper.checkItemsAttributes([0, 1, 2], { attributes: ['aria-selected'], focusedItemIndex: 1, role: 'option' });
             });
         });
