@@ -1,7 +1,29 @@
 <template>
   <div>
+    <DxContextMenu
+      :data-source="appointmentContextMenuItems"
+      :width="200"
+      target=".dx-scheduler-appointment"
+      :on-item-click="onContextMenuItemClick"
+      item-template="itemTemplateSlot"
+    >
+      <template #itemTemplateSlot="{ data: itemData }">
+        <ItemTemplate :item-data="itemData"/>
+      </template>
+    </DxContextMenu>
+    <DxContextMenu
+      :data-source="cellContextMenuItems"
+      :width="200"
+      target=".dx-scheduler-date-table-cell"
+      :on-item-click="onContextMenuItemClick"
+      item-template="itemTemplateSlot"
+    >
+      <template #itemTemplateSlot="{ data: itemData }">
+        <ItemTemplate :item-data="itemData"/>
+      </template>
+    </DxContextMenu>
+
     <DxScheduler
-      ref="schedulerRef"
       time-zone="America/Los_Angeles"
       :groups="groups"
       :data-source="dataSource"
@@ -22,18 +44,6 @@
         icon="conferenceroomoutline"
       />
     </DxScheduler>
-    <DxContextMenu
-      :items="contextMenuItems"
-      :width="200"
-      :disabled="disabled"
-      :target="target"
-      :on-item-click="onContextMenuItemClick"
-      item-template="itemTemplateSlot"
-    >
-      <template #itemTemplateSlot="{ data: itemData }">
-        <ItemTemplate :item-data="itemData"/>
-      </template>
-    </DxContextMenu>
   </div>
 </template>
 
@@ -46,99 +56,113 @@ import { resourcesData, data } from './data.ts';
 import type { ContextMenuItem } from './types';
 
 const views = ['day', 'month'];
-const appointmentClassName = '.dx-scheduler-appointment';
-const cellClassName = '.dx-scheduler-date-table-cell';
 const currentDate = ref(new Date(2020, 10, 25));
 const dataSource = data;
-const groups = ref<string[]>();
+const groups = ref<string[]>([]);
 const crossScrollingEnabled = ref(false);
-const disabled = ref(true);
-const contextMenuItems = ref<ContextMenuItem[]>([]);
-const target = ref<string>(appointmentClassName);
-const schedulerRef = ref<DxScheduler>();
+const appointmentContextMenuItems = ref<ContextMenuItem[]>([]);
+const cellContextMenuItems = ref<ContextMenuItem[]>([]);
 
-function onAppointmentContextMenu(
-  { appointmentData, targetedAppointmentData }: DxSchedulerTypes.AppointmentContextMenuEvent,
-) {
-  const scheduler = schedulerRef.value!.instance!;
-  const resourceItems = resourcesData.map((item) => ({
-    ...item,
-    onItemClick: (
-      { itemData }: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>,
-    ) => scheduler?.updateAppointment(appointmentData, {
-      ...appointmentData,
-      ...{ roomId: [itemData?.id] },
-    }),
-  }));
-  target.value = appointmentClassName;
-  disabled.value = false;
-  contextMenuItems.value = [
+function onAppointmentContextMenu(e: DxSchedulerTypes.AppointmentContextMenuEvent) {
+  const items = getAppointmentContextMenuItems(e);
+  appointmentContextMenuItems.value = items;
+}
+
+function onCellContextMenu(e: DxSchedulerTypes.CellContextMenuEvent) {
+  const items = getCellContextMenuItems(e);
+  cellContextMenuItems.value = items;
+}
+
+function onContextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
+  e.itemData?.onItemClick?.(e);
+}
+
+function getAppointmentContextMenuItems(
+  e: DxSchedulerTypes.AppointmentContextMenuEvent,
+): ContextMenuItem[] {
+  const scheduler = e.component;
+  const { appointmentData: appointment, targetedAppointmentData: targetedAppointment } = e;
+
+  return [
     {
       text: 'Open',
-      onItemClick: () => scheduler.showAppointmentPopup(appointmentData),
+      onItemClick: () => { scheduler.showAppointmentPopup(appointment); },
     },
     {
       text: 'Delete',
-      onItemClick: () => scheduler.deleteAppointment(appointmentData),
+      onItemClick: () => { scheduler.deleteAppointment(appointment); },
     },
     {
       text: 'Repeat Weekly',
       beginGroup: true,
-      onItemClick: () => scheduler.updateAppointment(appointmentData, {
-        startDate: targetedAppointmentData?.startDate,
-        recurrenceRule: 'FREQ=WEEKLY',
-      }),
+      onItemClick: () => {
+        scheduler.updateAppointment(appointment, {
+          ...appointment,
+          startDate: targetedAppointment.startDate,
+          recurrenceRule: 'FREQ=WEEKLY',
+        });
+      },
     },
-    { text: 'Set Room', beginGroup: true, disabled: true },
-    ...resourceItems,
+    {
+      text: 'Set Room',
+      beginGroup: true,
+      disabled: true,
+    },
+    ...resourcesData.map((item) => ({
+      ...item,
+      onItemClick: (clickEvent: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) => {
+        scheduler.updateAppointment(appointment, {
+          ...appointment,
+          roomId: [clickEvent.itemData?.id],
+        });
+      },
+    })),
   ];
 }
-function onCellContextMenu({ cellData }: DxSchedulerTypes.CellContextMenuEvent) {
-  const scheduler = schedulerRef.value!.instance!;
-  target.value = cellClassName;
-  disabled.value = false;
-  contextMenuItems.value = [
+
+function getCellContextMenuItems(
+  e: DxSchedulerTypes.CellContextMenuEvent,
+): ContextMenuItem[] {
+  const scheduler = e.component;
+
+  return [
     {
       text: 'New Appointment',
-      onItemClick: () => scheduler.showAppointmentPopup(
-        { startDate: cellData.startDateUTC },
-        true,
-      ),
+      onItemClick: () => {
+        scheduler.showAppointmentPopup({
+          startDate: e.cellData.startDateUTC,
+        }, true);
+      },
     },
     {
       text: 'New Recurring Appointment',
-      onItemClick: () => scheduler.showAppointmentPopup(
-        {
-          startDate: cellData.startDateUTC,
+      onItemClick: () => {
+        scheduler.showAppointmentPopup({
+          startDate: e.cellData.startDateUTC,
           recurrenceRule: 'FREQ=DAILY',
-        },
-        true,
-      ),
+        }, true);
+      },
     },
     {
       text: 'Group by Room/Ungroup',
       beginGroup: true,
       onItemClick: () => {
-        if (groups.value) {
-          crossScrollingEnabled.value = false;
-          groups.value = undefined;
+        if (scheduler.option('groups')?.length) {
+          scheduler.option({ crossScrollingEnabled: false, groups: [] });
         } else {
-          crossScrollingEnabled.value = true;
-          groups.value = ['roomId'];
+          scheduler.option({ crossScrollingEnabled: true, groups: ['roomId'] });
         }
       },
     },
     {
       text: 'Go to Today',
       onItemClick: () => {
-        currentDate.value = new Date();
+        scheduler.option('currentDate', new Date());
       },
     },
   ];
 }
-function onContextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
-  e.itemData?.onItemClick?.(e);
-}
+
 </script>
 
 <style scoped>
