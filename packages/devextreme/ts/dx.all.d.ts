@@ -25875,6 +25875,7 @@ declare module DevExpress.ui {
     hideAppointmentTooltip(): void;
     /**
      * [descr:dxScheduler.scrollTo(date, group, allDay)]
+     * @deprecated [depNote:dxScheduler.scrollTo(date, group, allDay)]
      */
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**

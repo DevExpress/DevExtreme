@@ -1308,6 +1308,7 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
      * @param2 group:Object|undefined
      * @param3 allDay:Boolean|undefined
      * @public
+     * @deprecated
      */
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
