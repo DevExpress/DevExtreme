@@ -39,13 +39,13 @@ export class AppComponent {
 
   resourcesData: Resource[];
 
-  groups: string[];
+  groups: string[] = [];
 
   crossScrollingEnabled = false;
 
-  appointmentContextMenuItems = [];
+  appointmentContextMenuItems: ContextMenuItem[] = [];
 
-  cellContextMenuItems = [];
+  cellContextMenuItems: ContextMenuItem[] = [];
 
   constructor(service: Service) {
     this.resourcesData = service.getResources();
@@ -66,7 +66,11 @@ export class AppComponent {
     this.cellContextMenuItems = items;
   }
 
-  getAppointmentContextMenuItems({ appointmentData: appointment, targetedAppointmentData: targetedAppointment }: DxSchedulerTypes.AppointmentContextMenuEvent) {
+  getAppointmentContextMenuItems(e: DxSchedulerTypes.AppointmentContextMenuEvent): ContextMenuItem[] {
+    const {
+      appointmentData: appointment,
+      targetedAppointmentData: targetedAppointment,
+    } = e;
     const scheduler = this.scheduler.instance;
 
     return [
@@ -87,7 +91,11 @@ export class AppComponent {
           recurrenceRule: 'FREQ=WEEKLY',
         }),
       },
-      { text: 'Set Room', beginGroup: true, disabled: true },
+      {
+        text: 'Set Room',
+        beginGroup: true,
+        disabled: true,
+      },
       ...this.resourcesData.map((item) => ({
         ...item,
         onItemClick: ({ itemData }: DxContextMenuTypes.ItemClickEvent<Resource>) => scheduler.updateAppointment(appointment, {
@@ -95,10 +103,11 @@ export class AppComponent {
           roomId: [itemData.id],
         }),
       })),
-    ];
+    ] as ContextMenuItem[];
   }
 
-  getCellContextMenuItems({ cellData }: DxSchedulerTypes.CellContextMenuEvent) {
+  getCellContextMenuItems(e: DxSchedulerTypes.CellContextMenuEvent): ContextMenuItem[] {
+    const { cellData } = e;
     const scheduler = this.scheduler.instance;
 
     return [
@@ -119,26 +128,7 @@ export class AppComponent {
           true,
         ),
       },
-      {
-        text: 'Group by Room/Ungroup',
-        beginGroup: true,
-        onItemClick: () => {
-          if (this.groups) {
-            this.crossScrollingEnabled = false;
-            this.groups = null;
-          } else {
-            this.crossScrollingEnabled = true;
-            this.groups = ['roomId'];
-          }
-        },
-      },
-      {
-        text: 'Go to Today',
-        onItemClick: () => {
-          this.currentDate = new Date();
-        },
-      },
-    ];
+    ] as unknown as ContextMenuItem[];
   }
 }
 
