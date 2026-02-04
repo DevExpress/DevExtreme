@@ -7,7 +7,7 @@ import {
 
 import { TextEditorButtonLocation } from 'devextreme/common';
 import { Properties as dxButtonOptions } from 'devextreme/ui/button';
-import { ColumnButtonClickEvent, DataGridPredefinedColumnButton } from 'devextreme/ui/data_grid';
+import { DataGridPredefinedColumnButton } from 'devextreme/ui/data_grid';
 import { TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
 
 @Component({
@@ -61,13 +61,6 @@ export abstract class DxiTextEditorButton extends CollectionNestedOption {
     }
     set icon(value: string) {
         this._setOption('icon', value);
-    }
-
-    get onClick(): ((e: ColumnButtonClickEvent) => void) {
-        return this._getOption('onClick');
-    }
-    set onClick(value: ((e: ColumnButtonClickEvent) => void)) {
-        this._setOption('onClick', value);
     }
 
     get template(): any {
