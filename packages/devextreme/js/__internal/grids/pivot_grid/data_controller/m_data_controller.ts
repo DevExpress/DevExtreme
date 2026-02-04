@@ -142,8 +142,12 @@ class DataController {
     that.progressChanged = Callbacks();
     that.scrollChanged = Callbacks();
 
-    that.load();
-    that._update();
+    if (that._isSharedDataSource) {
+      that._update();
+    } else {
+      that.load();
+      that._update();
+    }
     that.changed = Callbacks();
   }
 
@@ -1062,6 +1066,48 @@ class DataController {
     this._options.onFieldsPrepared?.(e);
   }
 
+  _initEventHandlers() {
+    const that: any = this;
+
+    that._expandValueChangingHandler = that._handleExpandValueChanging.bind(that);
+    that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
+    that._fieldsPreparedHandler = that._handleFieldsPrepared.bind(that);
+    that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
+    that._changedHandler = function () {
+      that._update();
+      that.dataSourceChanged.fire();
+    };
+    that._progressChangedHandler = function (progress) {
+      that._handleProgressChanged(progress * 0.8);
+    };
+  }
+
+  _subscribeToDataSource(dataSource) {
+    const that: any = this;
+
+    dataSource.on('changed', that._changedHandler);
+    dataSource.on('expandValueChanging', that._expandValueChangingHandler);
+    dataSource.on('loadingChanged', that._loadingChangedHandler);
+    dataSource.on('progressChanged', that._progressChangedHandler);
+    dataSource.on('fieldsPrepared', that._fieldsPreparedHandler);
+    dataSource.on('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
+  }
+
+  _unsubscribeFromDataSource() {
+    const that: any = this;
+
+    if (!that._dataSource || that._dataSource.isDisposed()) {
+      return;
+    }
+
+    that._dataSource.off('changed', that._changedHandler);
+    that._dataSource.off('expandValueChanging', that._expandValueChangingHandler);
+    that._dataSource.off('loadingChanged', that._loadingChangedHandler);
+    that._dataSource.off('progressChanged', that._progressChangedHandler);
+    that._dataSource.off('fieldsPrepared', that._fieldsPreparedHandler);
+    that._dataSource.off('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
+  }
+
   _createDataSource(options) {
     const that: any = this;
     const dataSourceOptions = options.dataSource;
@@ -1075,24 +1121,8 @@ class DataController {
       dataSource = new PivotGridDataSource(dataSourceOptions);
     }
 
-    that._expandValueChangingHandler = that._handleExpandValueChanging.bind(that);
-    that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
-    that._fieldsPreparedHandler = that._handleFieldsPrepared.bind(that);
-    that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
-    that._changedHandler = function () {
-      that._update();
-      that.dataSourceChanged.fire();
-    };
-    that._progressChangedHandler = function (progress) {
-      that._handleProgressChanged(progress * 0.8);
-    };
-
-    dataSource.on('changed', that._changedHandler);
-    dataSource.on('expandValueChanging', that._expandValueChangingHandler);
-    dataSource.on('loadingChanged', that._loadingChangedHandler);
-    dataSource.on('progressChanged', that._progressChangedHandler);
-    dataSource.on('fieldsPrepared', that._fieldsPreparedHandler);
-    dataSource.on('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
+    that._initEventHandlers();
+    that._subscribeToDataSource(dataSource);
 
     return dataSource;
   }
@@ -1354,14 +1384,9 @@ class DataController {
 
   dispose() {
     const that: any = this;
-    if (that._isSharedDataSource) {
-      that._dataSource.off('changed', that._changedHandler);
-      that._dataSource.off('expandValueChanging', that._expandValueChangingHandler);
-      that._dataSource.off('loadingChanged', that._loadingChangedHandler);
-      that._dataSource.off('progressChanged', that._progressChangedHandler);
-      that._dataSource.off('fieldsPrepared', that._fieldsPreparedHandler);
-      that._dataSource.off('customizeStoreLoadOptions', that._customizeStoreLoadOptionsHandler);
-    } else {
+
+    that._unsubscribeFromDataSource();
+    if (!that._isSharedDataSource && that._dataSource) {
       that._dataSource.dispose();
     }
 
