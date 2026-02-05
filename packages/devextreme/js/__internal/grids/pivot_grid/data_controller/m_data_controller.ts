@@ -142,13 +142,8 @@ class DataController {
     that.progressChanged = Callbacks();
     that.scrollChanged = Callbacks();
 
-    if (that._isSharedDataSource) {
-      that._handleFieldsPrepared(that._dataSource.fields());
-      that._update();
-    } else {
-      that.load();
-      that._update();
-    }
+    that.load();
+    that._update();
     that.changed = Callbacks();
   }
 
@@ -1130,6 +1125,25 @@ class DataController {
 
   getDataSource() {
     return this._dataSource;
+  }
+
+  updateDataSource(options) {
+    const that: any = this;
+
+    that._unsubscribeFromDataSource();
+    if (!that._isSharedDataSource && that._dataSource) {
+      that._dataSource.dispose();
+    }
+
+    that._options = options;
+    that._dataSource = that._createDataSource(options);
+
+    if (that._isSharedDataSource) {
+      that._handleFieldsPrepared(that._dataSource.fields());
+      that._update();
+    } else {
+      that.load();
+    }
   }
 
   isLoading() {

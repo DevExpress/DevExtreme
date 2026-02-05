@@ -330,7 +330,8 @@ class PivotGrid extends Widget {
     const that = this;
 
     if (that._dataController) {
-      that._dataController.dispose();
+      that._dataController.updateDataSource(that._getDataControllerOptions());
+      return;
     }
 
     that._dataController = new DataControllerImport
