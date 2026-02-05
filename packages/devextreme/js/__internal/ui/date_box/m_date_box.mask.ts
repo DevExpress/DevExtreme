@@ -161,8 +161,8 @@ class DateBoxMask extends DateBoxBase {
 
   _isSingleCharKey(
     { originalEvent, alt }: {
-      originalEvent: { data: string, key: string, ctrlKey: boolean, metaKey: boolean };
-      alt?: boolean
+      originalEvent: { data: string; key: string; ctrlKey: boolean; metaKey: boolean };
+      alt?: boolean;
     },
   ): boolean {
     const key = originalEvent.data ?? originalEvent.key;
@@ -549,7 +549,7 @@ class DateBoxMask extends DateBoxBase {
     const limits = this._getActivePartLimits();
     const maxLimitLength = String(limits.max).length;
 
-    return (((zeroes?.[0]) ?? '') + String(value)).substr(-maxLimitLength);
+    return ((zeroes?.[0] ?? '') + String(value)).substr(-maxLimitLength);
   }
 
   _setActivePartValue(value: number | string, dateValue?: Date): void {
@@ -640,7 +640,7 @@ class DateBoxMask extends DateBoxBase {
 
   _applyLimits(
     newValue: number,
-    { limitBase, limitClosest, max }: { limitBase: number, limitClosest: number, max: number },
+    { limitBase, limitClosest, max }: { limitBase: number; limitClosest: number; max: number },
   ): number {
     const delta = (newValue - limitClosest) % max;
     return delta ? limitBase + delta - 1 * sign(delta) : limitClosest;

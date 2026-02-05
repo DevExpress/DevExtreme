@@ -209,7 +209,7 @@ class DateViewRoller extends Scrollable<DateViewRollerProperties> {
     return Boolean(devices.real().deviceType === 'desktop' && this._isWheelScrolled);
   }
 
-  _moveTo(targetLocation: { top: number; }): void {
+  _moveTo(targetLocation: { top: number }): void {
     // @ts-expect-error scrollable types should be extended
     const { top = 0, left = 0 } = convertToLocation(targetLocation);
 
