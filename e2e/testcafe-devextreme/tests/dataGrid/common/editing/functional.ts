@@ -2,6 +2,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import SelectBox from 'devextreme-testcafe-models/selectBox';
 import url from '../../../../helpers/getPageUrl';
+import { getData } from '../../helpers/generateDataSourceData';
 import { createWidget } from '../../../../helpers/createWidget';
 
 fixture.disablePageReloads`Editing.Functional`
