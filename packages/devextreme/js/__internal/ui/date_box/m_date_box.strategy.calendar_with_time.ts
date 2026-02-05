@@ -8,9 +8,9 @@ import Box from '@ts/ui/box';
 import TimeView from '@ts/ui/date_box/time_view';
 
 import type { PopupProperties } from '../popup/m_popup';
-import type DateBox from './m_date_box.base';
+import type DateBox from './date_box.base';
+import uiDateUtils from './date_utils';
 import CalendarStrategy from './m_date_box.strategy.calendar';
-import uiDateUtils from './m_date_utils';
 
 const window = getWindow();
 
