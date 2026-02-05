@@ -26,12 +26,12 @@ import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 
 import type { ValueChangedEvent } from '../editor/editor';
 import type { PopupProperties } from '../popup/m_popup';
+import uiDateUtils from './date_utils';
 import Calendar from './m_date_box.strategy.calendar';
 import CalendarWithTime from './m_date_box.strategy.calendar_with_time';
 import DateView from './m_date_box.strategy.date_view';
 import List from './m_date_box.strategy.list';
 import Native from './m_date_box.strategy.native';
-import uiDateUtils from './m_date_utils';
 
 const window = getWindow();
 
@@ -632,8 +632,8 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
   _isValueChanged(newValue: Date | null): boolean {
     const oldValue = this.getDateOption('value');
 
-    const oldTime = oldValue && oldValue.getTime();
-    const newTime = newValue && newValue.getTime();
+    const oldTime = oldValue?.getTime();
+    const newTime = newValue?.getTime();
 
     return oldTime !== newTime;
   }
