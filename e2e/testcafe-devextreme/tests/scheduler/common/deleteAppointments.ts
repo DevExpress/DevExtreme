@@ -108,27 +108,30 @@ test('Appointment should be deleted by Delete key when focused in tooltip from c
   const tooltipItem = appointmentTooltip.getListItem('Text');
 
   await t
-    .expect(scheduler.getAppointmentCount()).eql(3)
+    .expect(collector.element.exists).ok()
+    .expect(scheduler.getAppointmentCount()).eql(1)
     .click(collector.element)
     .expect(appointmentTooltip.isVisible())
     .ok()
     .click(tooltipItem.element)
     .pressKey('delete')
     .expect(scheduler.getAppointmentCount())
-    .eql(2);
+    .eql(1)
+    .expect(scheduler.collectors.find('1 more').element.exists)
+    .ok();
 }).before(async () => createWidget('dxScheduler', {
   dataSource: [{
     text: 'Text',
-    startDate: new Date(2017, 4, 22, 1, 30, 0, 0),
-    endDate: new Date(2017, 4, 22, 2, 30, 0, 0),
+    startDate: new Date(2017, 4, 22, 9, 30, 0, 0),
+    endDate: new Date(2017, 4, 22, 10, 30, 0, 0),
   }, {
     text: 'Text2',
-    startDate: new Date(2017, 4, 22, 1, 30, 0, 0),
-    endDate: new Date(2017, 4, 22, 2, 30, 0, 0),
+    startDate: new Date(2017, 4, 22, 9, 30, 0, 0),
+    endDate: new Date(2017, 4, 22, 10, 30, 0, 0),
   }, {
     text: 'Text3',
-    startDate: new Date(2017, 4, 22, 1, 30, 0, 0),
-    endDate: new Date(2017, 4, 22, 2, 30, 0, 0),
+    startDate: new Date(2017, 4, 22, 9, 30, 0, 0),
+    endDate: new Date(2017, 4, 22, 10, 30, 0, 0),
   }],
   views: [{
     type: 'week',
@@ -136,4 +139,5 @@ test('Appointment should be deleted by Delete key when focused in tooltip from c
   }],
   currentView: 'week',
   currentDate: new Date(2017, 4, 22),
+  startDayHour: 9,
 }));
