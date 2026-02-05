@@ -1862,7 +1862,7 @@ importers:
         version: 2.6.12
       css-loader:
         specifier: 6.10.0
-        version: 6.10.0(webpack@5.104.1(@swc/core@1.15.3))
+        version: 6.10.0(webpack@5.105.0(@swc/core@1.15.3))
       devextreme-metadata:
         specifier: workspace:*
         version: link:../devextreme-metadata
@@ -1895,7 +1895,7 @@ importers:
         version: 2.0.1(karma@6.4.4)
       karma-webpack:
         specifier: 5.0.1
-        version: 5.0.1(webpack@5.104.1(@swc/core@1.15.3))
+        version: 5.0.1(webpack@5.105.0(@swc/core@1.15.3))
       ng-packagr:
         specifier: catalog:angular
         version: 19.2.2(@angular/compiler-cli@19.2.18(@angular/compiler@19.2.18)(typescript@5.5.4))(tslib@2.6.3)(typescript@5.5.4)
@@ -1913,7 +1913,7 @@ importers:
         version: 3.0.0
       style-loader:
         specifier: 3.3.4
-        version: 3.3.4(webpack@5.104.1(@swc/core@1.15.3))
+        version: 3.3.4(webpack@5.105.0(@swc/core@1.15.3))
       tslib:
         specifier: 2.6.3
         version: 2.6.3
@@ -1921,8 +1921,8 @@ importers:
         specifier: catalog:angular
         version: 5.5.4
       webpack:
-        specifier: 5.104.1
-        version: 5.104.1(@swc/core@1.15.3)
+        specifier: 5.105.0
+        version: 5.105.0(@swc/core@1.15.3)
       yargs:
         specifier: 17.7.2
         version: 17.7.2
@@ -29365,19 +29365,6 @@ snapshots:
       utrie: 1.0.2
     optional: true
 
-  css-loader@6.10.0(webpack@5.104.1(@swc/core@1.15.3)):
-    dependencies:
-      icss-utils: 5.1.0(postcss@8.4.38)
-      postcss: 8.4.38
-      postcss-modules-extract-imports: 3.1.0(postcss@8.4.38)
-      postcss-modules-local-by-default: 4.1.0(postcss@8.4.38)
-      postcss-modules-scope: 3.2.1(postcss@8.4.38)
-      postcss-modules-values: 4.0.0(postcss@8.4.38)
-      postcss-value-parser: 4.2.0
-      semver: 7.6.3
-    optionalDependencies:
-      webpack: 5.104.1(@swc/core@1.15.3)
-
   css-loader@6.10.0(webpack@5.104.1):
     dependencies:
       icss-utils: 5.1.0(postcss@8.4.38)
@@ -29390,6 +29377,19 @@ snapshots:
       semver: 7.6.3
     optionalDependencies:
       webpack: 5.104.1(@swc/core@1.15.3)(webpack-cli@5.1.4)
+
+  css-loader@6.10.0(webpack@5.105.0(@swc/core@1.15.3)):
+    dependencies:
+      icss-utils: 5.1.0(postcss@8.4.38)
+      postcss: 8.4.38
+      postcss-modules-extract-imports: 3.1.0(postcss@8.4.38)
+      postcss-modules-local-by-default: 4.1.0(postcss@8.4.38)
+      postcss-modules-scope: 3.2.1(postcss@8.4.38)
+      postcss-modules-values: 4.0.0(postcss@8.4.38)
+      postcss-value-parser: 4.2.0
+      semver: 7.6.3
+    optionalDependencies:
+      webpack: 5.105.0(@swc/core@1.15.3)
 
   css-loader@7.1.2(webpack@5.102.1(@swc/core@1.15.3)(esbuild@0.26.0)):
     dependencies:
@@ -35085,11 +35085,11 @@ snapshots:
     dependencies:
       source-map-support: 0.5.21
 
-  karma-webpack@5.0.1(webpack@5.104.1(@swc/core@1.15.3)):
+  karma-webpack@5.0.1(webpack@5.105.0(@swc/core@1.15.3)):
     dependencies:
       glob: 7.2.3
       minimatch: 9.0.5
-      webpack: 5.104.1(@swc/core@1.15.3)
+      webpack: 5.105.0(@swc/core@1.15.3)
       webpack-merge: 4.2.2
 
   karma@6.4.4:
@@ -39720,13 +39720,13 @@ snapshots:
       minimist: 1.2.8
       through: 2.3.8
 
-  style-loader@3.3.4(webpack@5.104.1(@swc/core@1.15.3)):
-    dependencies:
-      webpack: 5.104.1(@swc/core@1.15.3)
-
   style-loader@3.3.4(webpack@5.104.1):
     dependencies:
       webpack: 5.104.1(@swc/core@1.15.3)(webpack-cli@5.1.4)
+
+  style-loader@3.3.4(webpack@5.105.0(@swc/core@1.15.3)):
+    dependencies:
+      webpack: 5.105.0(@swc/core@1.15.3)
 
   style-loader@4.0.0(webpack@5.105.0(@swc/core@1.15.3)(esbuild@0.26.0)):
     dependencies:
@@ -40310,7 +40310,6 @@ snapshots:
       webpack: 5.105.0(@swc/core@1.15.3)
     optionalDependencies:
       '@swc/core': 1.15.3
-    optional: true
 
   terser@3.17.0:
     dependencies:
@@ -42496,7 +42495,6 @@ snapshots:
       - '@swc/core'
       - esbuild
       - uglify-js
-    optional: true
 
   webpack@5.105.0(@swc/core@1.15.3)(esbuild@0.26.0):
     dependencies:
