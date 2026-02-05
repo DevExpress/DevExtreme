@@ -22,6 +22,19 @@ const testMessages = {
     'dxFilterBuilder-or': 'xx - Or',
     'dxFilterBuilder-notAnd': 'xx - Not And',
     'dxFilterBuilder-notOr': 'xx - Not Or',
+    'dxFilterBuilder-filterOperationBetween': 'xx - Between',
+    'dxFilterBuilder-filterOperationEquals': 'xx - Equals',
+    'dxFilterBuilder-filterOperationNotEquals': 'xx - Not Equals',
+    'dxFilterBuilder-filterOperationLess': 'xx - Less',
+    'dxFilterBuilder-filterOperationLessOrEquals': 'xx - Less Or Equals',
+    'dxFilterBuilder-filterOperationGreater': 'xx - Greater',
+    'dxFilterBuilder-filterOperationGreaterOrEquals': 'xx - Greater Or Equals',
+    'dxFilterBuilder-filterOperationStartsWith': 'xx - Starts With',
+    'dxFilterBuilder-filterOperationContains': 'xx - Contains',
+    'dxFilterBuilder-filterOperationNotContains': 'xx - Not Contains',
+    'dxFilterBuilder-filterOperationEndsWith': 'xx - Ends With',
+    'dxFilterBuilder-filterOperationIsBlank': 'xx - Is Blank',
+    'dxFilterBuilder-filterOperationIsNotBlank': 'xx - Is Not Blank',
   },
 };
 
@@ -256,6 +269,95 @@ describe('CardView', () => {
       expect(treeView.getNodeByText('xx - Or')).not.toBeNull();
       expect(treeView.getNodeByText('xx - Not And')).not.toBeNull();
       expect(treeView.getNodeByText('xx - Not Or')).not.toBeNull();
+    });
+
+    it('should localize FilterBuilder filterOperationDescriptions for string fields', async () => {
+      loadMessages(testMessages);
+      locale(testLocale);
+
+      const { component } = await createCardView({
+        dataSource: [
+          { id: 1, name: 'Test', age: 25 },
+        ],
+        columns: ['id', 'name', 'age'],
+        filterPanel: {
+          visible: true,
+        },
+        filterValue: ['name', 'contains', ''],
+      });
+
+      await flushAsync();
+
+      const filterPanel = component.getFilterPanel();
+      const createFilterButton = filterPanel.getCreateFilterButton();
+      createFilterButton.click();
+
+      await flushAsync();
+
+      const filterBuilder = component.getFilterBuilder();
+
+      expect(filterBuilder.isVisible()).toBe(true);
+
+      const operationButton = filterBuilder.getOperationButton();
+      operationButton.click();
+
+      await flushAsync();
+
+      const operationTreeView = filterBuilder.getTreeView();
+
+      expect(operationTreeView.getNodeByText('xx - Equals')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Not Equals')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Contains')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Not Contains')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Starts With')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Ends With')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Is Blank')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Is Not Blank')).not.toBeNull();
+    });
+
+    it('should localize FilterBuilder filterOperationDescriptions for number fields', async () => {
+      loadMessages(testMessages);
+      locale(testLocale);
+
+      const { component } = await createCardView({
+        dataSource: [
+          { id: 1, name: 'Test', age: 25 },
+        ],
+        columns: ['id', 'name', 'age'],
+        filterPanel: {
+          visible: true,
+        },
+        filterValue: ['age', '=', 25],
+      });
+
+      await flushAsync();
+
+      const filterPanel = component.getFilterPanel();
+      const createFilterButton = filterPanel.getCreateFilterButton();
+      createFilterButton.click();
+
+      await flushAsync();
+
+      const filterBuilder = component.getFilterBuilder();
+
+      expect(filterBuilder.isVisible()).toBe(true);
+
+      const operationButton = filterBuilder.getOperationButton();
+      operationButton.click();
+
+      await flushAsync();
+
+      const operationTreeView = filterBuilder.getTreeView();
+
+      expect(operationTreeView.getNodeByText('xx - Equals')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Not Equals')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Less')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Less Or Equals')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Greater')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Greater Or Equals')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Between')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Is Blank')).not.toBeNull();
+      expect(operationTreeView.getNodeByText('xx - Is Not Blank')).not.toBeNull();
     });
   });
 });

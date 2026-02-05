@@ -6,6 +6,8 @@ const CLASSES = {
   groupOperation: 'dx-filterbuilder-group-operation',
   treeView: 'dx-treeview',
   popupWrapper: 'dx-popup-wrapper',
+  itemField: 'dx-filterbuilder-item-field',
+  itemOperation: 'dx-filterbuilder-item-operation',
 };
 
 export class FilterBuilderModel extends PopupModel {
@@ -17,6 +19,16 @@ export class FilterBuilderModel extends PopupModel {
   public getGroupOperationButton(): HTMLElement {
     const element = this.getElement();
     return element.querySelector<HTMLElement>(`.${CLASSES.groupOperation}`) as HTMLElement;
+  }
+
+  public getFieldButton(): HTMLElement {
+    const element = this.getElement();
+    return element.querySelector<HTMLElement>(`.${CLASSES.itemField}`) as HTMLElement;
+  }
+
+  public getOperationButton(): HTMLElement {
+    const element = this.getElement();
+    return element.querySelector<HTMLElement>(`.${CLASSES.itemOperation}`) as HTMLElement;
   }
 
   public getTreeView(): TreeViewModel {

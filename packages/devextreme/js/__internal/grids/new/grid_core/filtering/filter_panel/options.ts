@@ -1,5 +1,4 @@
 import type { FilterPanel } from '@js/common/grids';
-import messageLocalization from '@js/localization/message';
 import type { Properties as FilterBuilderProperties } from '@js/ui/filter_builder';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 
@@ -19,19 +18,19 @@ export const defaultOptions = {
       notOr: undefined,
     },
     filterOperationDescriptions: {
-      between: messageLocalization.format('dxFilterBuilder-filterOperationBetween'),
-      equal: messageLocalization.format('dxFilterBuilder-filterOperationEquals'),
-      notEqual: messageLocalization.format('dxFilterBuilder-filterOperationNotEquals'),
-      lessThan: messageLocalization.format('dxFilterBuilder-filterOperationLess'),
-      lessThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationLessOrEquals'),
-      greaterThan: messageLocalization.format('dxFilterBuilder-filterOperationGreater'),
-      greaterThanOrEqual: messageLocalization.format('dxFilterBuilder-filterOperationGreaterOrEquals'),
-      startsWith: messageLocalization.format('dxFilterBuilder-filterOperationStartsWith'),
-      contains: messageLocalization.format('dxFilterBuilder-filterOperationContains'),
-      notContains: messageLocalization.format('dxFilterBuilder-filterOperationNotContains'),
-      endsWith: messageLocalization.format('dxFilterBuilder-filterOperationEndsWith'),
-      isBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
-      isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank'),
+      between: undefined,
+      equal: undefined,
+      notEqual: undefined,
+      lessThan: undefined,
+      lessThanOrEqual: undefined,
+      greaterThan: undefined,
+      greaterThanOrEqual: undefined,
+      startsWith: undefined,
+      contains: undefined,
+      notContains: undefined,
+      endsWith: undefined,
+      isBlank: undefined,
+      isNotBlank: undefined,
     },
   },
 
