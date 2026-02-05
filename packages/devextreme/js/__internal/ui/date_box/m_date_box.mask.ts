@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
 import defaultDateNames from '@js/common/core/localization/default_date_names';
@@ -12,9 +13,14 @@ import {
   isDate, isDefined, isFunction, isString,
 } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
-import type { Properties } from '@js/ui/date_box';
+import type { DateLike, Properties } from '@js/ui/date_box';
 import dateLocalization from '@ts/core/localization/date';
+import type { OptionChanged } from '@ts/core/widget/types';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 
+import type { ValueChangedEvent } from '../editor/editor';
+import type { DxMouseWheelEvent } from '../scroll_view/types';
+import type { DateBoxBaseProperties } from './m_date_box.base';
 import DateBoxBase from './m_date_box.base';
 import { getDatePartIndexByPosition, renderDateParts } from './m_date_box.mask.parts';
 
@@ -30,26 +36,26 @@ class DateBoxMask extends DateBoxBase {
 
   _maskValue?: Date | null;
 
-  _dateParts!: Record<string, unknown>[];
+  _dateParts!: { caret: { start: number; end: number }; isStub: boolean }[];
 
   _maskInputHandler?: (() => void) | null;
 
-  _initialMaskValue?: Date;
+  _initialMaskValue?: Date | null;
 
   _searchValue!: string;
 
-  _regExpInfo?: Record<string, unknown>;
+  _regExpInfo!: { regexp: RegExp; patterns: string[] };
 
-  _formatPattern?: unknown;
+  _formatPattern?: string | null;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean> {
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => unknown> {
     const originalHandlers = super._supportedKeys();
-    const callOriginalHandler = (e) => {
-      // @ts-expect-error ts-error
-      const originalHandler = originalHandlers[normalizeKeyName(e)];
+    const callOriginalHandler = (e: KeyboardEvent): unknown => {
+      const normalizedKeyName = normalizeKeyName(e);
+      const originalHandler = normalizedKeyName ? originalHandlers[normalizedKeyName] : undefined;
       return originalHandler?.apply(this, [e]);
     };
-    const applyHandler = (e, maskHandler) => {
+    const applyHandler = (e: KeyboardEvent, maskHandler: (e: KeyboardEvent) => void): unknown => {
       if (this._shouldUseOriginalHandler(e)) {
         return callOriginalHandler.apply(this, [e]);
       }
@@ -60,17 +66,21 @@ class DateBoxMask extends DateBoxBase {
       ...originalHandlers,
       del: (e) => applyHandler(e, (event) => {
         this._revertPart(FORWARD);
-        this._isAllSelected() || event.preventDefault();
+        if (!this._isAllSelected()) {
+          event.preventDefault();
+        }
       }),
       backspace: (e) => applyHandler(e, (event) => {
         this._revertPart(BACKWARD);
-        this._isAllSelected() || event.preventDefault();
+        if (!this._isAllSelected()) {
+          event.preventDefault();
+        }
       }),
-      home: (e) => applyHandler(e, (event) => {
+      home: (e) => applyHandler(e, (event): void => {
         this._selectFirstPart();
         event.preventDefault();
       }),
-      end: (e) => applyHandler(e, (event) => {
+      end: (e) => applyHandler(e, (event): void => {
         this._selectLastPart();
         event.preventDefault();
       }),
@@ -99,15 +109,15 @@ class DateBoxMask extends DateBoxBase {
     };
   }
 
-  _shouldUseOriginalHandler(e) {
+  _shouldUseOriginalHandler(e: KeyboardEvent): boolean {
     const keysToHandleByMask = ['backspace', 'del'];
-    // @ts-expect-error
-    const isNotDeletingInCalendar = this.option('opened') && e && !keysToHandleByMask.includes(normalizeKeyName(e));
+    const { opened = false } = this.option();
+    const isNotDeletingInCalendar = opened && e && !keysToHandleByMask.includes(normalizeKeyName(e) ?? '');
 
     return !this._useMaskBehavior() || isNotDeletingInCalendar || (e && e.altKey);
   }
 
-  _upDownArrowHandler(step): void {
+  _upDownArrowHandler(step: number): void {
     this._setNewDateIfEmpty();
 
     const originalValue = this._getActivePartValue(this._initialMaskValue);
@@ -119,7 +129,7 @@ class DateBoxMask extends DateBoxBase {
     this._changePartValue(delta + step, true);
   }
 
-  _changePartValue(step, lockOtherParts?) {
+  _changePartValue(step: number, lockOtherParts?: boolean): void {
     const activePartPattern = this._getActivePartProp('pattern');
     const isAmPmPartActive = /^a{1,5}$/.test(activePartPattern);
 
@@ -132,8 +142,11 @@ class DateBoxMask extends DateBoxBase {
 
   _toggleAmPm(): void {
     const currentValue = this._getActivePartProp('text');
-    // @ts-expect-error ts-error
-    const indexOfCurrentValue = defaultDateNames.getPeriodNames().indexOf(currentValue);
+    const indexOfCurrentValue = defaultDateNames
+    // @ts-expect-error getPeriodNames type should be fixed
+      .getPeriodNames(this._formatPattern)
+      .indexOf(currentValue);
+    // eslint-disable-next-line no-bitwise
     const newValue = indexOfCurrentValue ^ 1;
     this._setActivePartValue(newValue);
   }
@@ -146,30 +159,40 @@ class DateBoxMask extends DateBoxBase {
     };
   }
 
-  _isSingleCharKey({ originalEvent, alt }) {
-    const key = originalEvent.data || originalEvent.key;
+  _isSingleCharKey(
+    { originalEvent, alt }: {
+      originalEvent: { data: string; key: string; ctrlKey: boolean; metaKey: boolean };
+      alt?: boolean;
+    },
+  ): boolean {
+    const key = originalEvent.data ?? originalEvent.key;
     return typeof key === 'string' && key.length === 1 && !alt && !isCommandKeyPressed(originalEvent);
   }
 
-  _isSingleDigitKey(e) {
+  _isSingleDigitKey(e: {
+    originalEvent: InputEvent;
+    alt?: boolean;
+  }): boolean {
     const data = e.originalEvent?.data;
-    return data?.length === 1 && parseInt(data, 10);
+    return data?.length === 1 && Boolean(parseInt(data, 10));
   }
 
-  _useBeforeInputEvent() {
-    return devices.real().android;
+  _useBeforeInputEvent(): boolean {
+    return Boolean(devices.real().android);
   }
 
-  _keyInputHandler(e, key): void {
+  _keyInputHandler(e: DxEvent, key: string): void {
     const oldInputValue = this._input().val();
     this._processInputKey(key);
     e.preventDefault();
     const isValueChanged = oldInputValue !== this._input().val();
-    // @ts-expect-error ts-error
-    isValueChanged && eventsEngine.trigger(this._input(), 'input');
+
+    if (isValueChanged) {
+      eventsEngine.triggerHandler(this._input(), { type: 'input' });
+    }
   }
 
-  _keyboardHandler(e) {
+  _keyboardHandler(e: KeyboardKeyDownEvent): boolean {
     let { key } = e.originalEvent;
 
     const result = super._keyboardHandler(e);
@@ -178,10 +201,10 @@ class DateBoxMask extends DateBoxBase {
       return result;
     }
 
-    if (browser.chrome && e.key === 'Process' && e.code.indexOf('Digit') === 0) {
+    if (browser.chrome && e.key === 'Process' && e.code.startsWith('Digit')) {
       key = e.code.replace('Digit', '');
       this._processInputKey(key);
-      this._maskInputHandler = () => {
+      this._maskInputHandler = (): void => {
         this._renderSelectedPart();
       };
     } else if (this._isSingleCharKey(e)) {
@@ -191,13 +214,13 @@ class DateBoxMask extends DateBoxBase {
     return result;
   }
 
-  _maskBeforeInputHandler(e) {
+  _maskBeforeInputHandler(e: DxEvent<KeyboardKeyDownEvent & InputEvent>): boolean {
     this._maskInputHandler = null;
 
     const { inputType } = e.originalEvent;
 
     if (inputType === 'insertCompositionText') {
-      this._maskInputHandler = () => {
+      this._maskInputHandler = (): void => {
         this._renderSelectedPart();
       };
     }
@@ -206,26 +229,26 @@ class DateBoxMask extends DateBoxBase {
     const isForwardDeletion = inputType === 'deleteContentForward';
     if (isBackwardDeletion || isForwardDeletion) {
       const direction = isBackwardDeletion ? BACKWARD : FORWARD;
-      this._maskInputHandler = () => {
+      this._maskInputHandler = (): void => {
         this._revertPart();
         this._selectNextPart(direction);
       };
     }
 
     if (!this._useMaskBehavior() || !this._isSingleCharKey(e)) {
-      return;
+      return false;
     }
 
-    const key = e.originalEvent.data;
+    const key = e.originalEvent.data ?? '';
     this._keyInputHandler(e, key);
 
     return true;
   }
 
-  _keyPressHandler(e) {
+  _keyPressHandler(e: { originalEvent: InputEvent & KeyboardEvent }): void {
     const { originalEvent: event } = e;
     if (event?.inputType === 'insertCompositionText' && this._isSingleDigitKey(e)) {
-      this._processInputKey(event.data);
+      this._processInputKey(event.data ?? '');
       this._renderDisplayText(this._getDisplayedText(this._maskValue));
       this._selectNextPart();
     }
@@ -245,8 +268,8 @@ class DateBoxMask extends DateBoxBase {
       this._clearSearchValue();
     }
     this._setNewDateIfEmpty();
-    // eslint-disable-next-line radix
-    if (isNaN(parseInt(key))) {
+
+    if (isNaN(parseInt(key, 10))) {
       this._searchString(key);
     } else {
       this._searchNumber(key);
@@ -255,58 +278,59 @@ class DateBoxMask extends DateBoxBase {
 
   _isAllSelected(): boolean {
     const caret = this._caret();
-    const { text } = this.option();
-    // @ts-expect-error ts-error
+    const { text = '' } = this.option();
+
     return caret.end - caret.start === text.length;
   }
 
-  _getFormatPattern() {
+  _getFormatPattern(): string {
     if (this._formatPattern) {
       return this._formatPattern;
     }
 
-    const format = this._strategy.getDisplayFormat(this.option('displayFormat'));
+    const { displayFormat } = this.option();
+    const format = this._strategy.getDisplayFormat(displayFormat);
     const isLDMLPattern = isString(format) && !dateLocalization._getPatternByFormat(format);
 
     if (isLDMLPattern) {
       this._formatPattern = format;
     } else {
-      this._formatPattern = getFormat((value) => dateLocalization.format(value, format));
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      this._formatPattern = getFormat((value) => dateLocalization.format(value, format)) as string;
     }
 
     return this._formatPattern;
   }
 
-  _setNewDateIfEmpty() {
+  _setNewDateIfEmpty(): void {
     if (!this._maskValue) {
       const { type } = this.option();
-      // @ts-expect-error ts-error
-      const value = type === 'time' ? new Date(null) : new Date();
+      const value = type === 'time' ? new Date(0) : new Date();
+
       this._maskValue = value;
       this._initialMaskValue = value;
       this._renderDateParts();
     }
   }
 
-  _partLimitsReached(max) {
+  _partLimitsReached(max: number): boolean {
     const maxLimitLength = String(max).length;
     const formatLength = this._getActivePartProp('pattern').length;
     const isShortFormat = formatLength === 1;
     const maxSearchLength = isShortFormat ? maxLimitLength : Math.min(formatLength, maxLimitLength);
     const isLengthExceeded = this._searchValue.length === maxSearchLength;
-    // eslint-disable-next-line radix
-    const isValueOverflowed = parseInt(`${this._searchValue}0`) > max;
+    const isValueOverflowed = parseInt(`${this._searchValue}0`, 10) > max;
 
     return isLengthExceeded || isValueOverflowed;
   }
 
-  _searchNumber(char): void {
+  _searchNumber(char: string): void {
     const { max } = this._getActivePartLimits();
     const maxLimitLength = String(max).length;
 
     this._searchValue = (this._searchValue + char).substr(-maxLimitLength);
-    // @ts-expect-error ts-error
-    if (isNaN(this._searchValue)) {
+
+    if (isNaN(parseInt(this._searchValue, 10))) {
       this._searchValue = char;
     }
 
@@ -317,7 +341,7 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
-  _searchString(char) {
+  _searchString(char: string): void {
     const text = this._getActivePartProp('text');
     const convertedText = numberLocalization.convertDigits(text, true);
 
@@ -325,16 +349,16 @@ class DateBoxMask extends DateBoxBase {
       return;
     }
 
-    const limits = this._getActivePartProp('limits')(this._maskValue);
+    const limits = this._getActivePartProp('limits')(this._maskValue as Date);
     const startString = this._searchValue + char.toLowerCase();
     const endLimit = limits.max - limits.min;
 
-    for (let i = 0; i <= endLimit; i++) {
+    for (let i = 0; i <= endLimit; i += 1) {
       this._loadMaskValue(this._initialMaskValue);
 
       this._changePartValue(i + 1);
 
-      if (this._getActivePartProp('text').toLowerCase().indexOf(startString) === 0) {
+      if (this._getActivePartProp('text').toLowerCase().startsWith(startString)) {
         this._searchValue = startString;
         return;
       }
@@ -352,9 +376,10 @@ class DateBoxMask extends DateBoxBase {
     this._searchValue = '';
   }
 
-  _revertPart(direction?): void {
+  _revertPart(direction?: number): void {
     if (!this._isAllSelected()) {
-      const actual = this._getActivePartValue(this.option('emptyDateValue'));
+      const { emptyDateValue } = this.option();
+      const actual = this._getActivePartValue(emptyDateValue);
       this._setActivePartValue(actual);
 
       this._selectNextPart(direction);
@@ -368,12 +393,9 @@ class DateBoxMask extends DateBoxBase {
   }
 
   _prepareRegExpInfo(): void {
-    // @ts-expect-error ts-error
     this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
     const { regexp } = this._regExpInfo;
-    // @ts-expect-error ts-error
     const { source } = regexp;
-    // @ts-expect-error ts-error
     const { flags } = regexp;
     const quantifierRegexp = new RegExp(/(\{[0-9]+,?[0-9]*\})/);
 
@@ -381,7 +403,7 @@ class DateBoxMask extends DateBoxBase {
       .split(quantifierRegexp)
       .map((sourcePart) => (quantifierRegexp.test(sourcePart)
         ? sourcePart
-        : numberLocalization.convertDigits(sourcePart, false)))
+        : numberLocalization.convertDigits(sourcePart, false)) as string)
       .join('');
     this._regExpInfo.regexp = new RegExp(convertedSource, flags);
   }
@@ -410,10 +432,12 @@ class DateBoxMask extends DateBoxBase {
       return;
     }
 
-    const text = this.option('text') || this._getDisplayedText(this._maskValue);
+    const { text } = this.option();
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const newText = text || this._getDisplayedText(this._maskValue);
 
-    if (text) {
-      this._dateParts = renderDateParts(text, this._regExpInfo);
+    if (newText) {
+      this._dateParts = renderDateParts(newText, this._regExpInfo);
       if (!this._input().is(':hidden')) {
         this._selectNextPart();
       }
@@ -461,9 +485,9 @@ class DateBoxMask extends DateBoxBase {
     return true;
   }
 
-  _onMouseWheel(e): void {
+  _onMouseWheel(e: DxMouseWheelEvent): void {
     if (this._useMaskBehavior()) {
-      this._partIncrease(e.delta > 0 ? FORWARD : BACKWARD, e);
+      this._partIncrease(e.delta > 0 ? FORWARD : BACKWARD, Boolean(e));
     }
   }
 
@@ -473,22 +497,23 @@ class DateBoxMask extends DateBoxBase {
     }
 
     if (step) {
-      // @ts-expect-error ts-error
-      this._initialMaskValue = new Date(this._maskValue);
+      this._initialMaskValue = new Date(this._maskValue as Date);
     }
-    // @ts-expect-error ts-error
-    let index = fitIntoRange(this._activePartIndex + step, 0, this._dateParts.length - 1);
+
+    const activePartIndex = this._activePartIndex ?? 0;
+    let index = fitIntoRange(activePartIndex + step, 0, this._dateParts.length - 1);
     if (this._dateParts[index].isStub) {
-      const isBoundaryIndex = index === 0 && step < 0 || index === this._dateParts.length - 1 && step > 0;
+      const isBoundaryIndex = (index === 0 && step < 0)
+        || (index === this._dateParts.length - 1 && step > 0);
       if (!isBoundaryIndex) {
         this._selectNextPart(step >= 0 ? step + 1 : step - 1);
         return;
       }
-      // @ts-expect-error ts-error
-      index = this._activePartIndex;
+
+      index = activePartIndex;
     }
 
-    if (this._activePartIndex !== index) {
+    if (activePartIndex !== index) {
       this._clearSearchValue();
     }
 
@@ -496,60 +521,77 @@ class DateBoxMask extends DateBoxBase {
     this._caret(this._getActivePartProp('caret'));
   }
 
-  // @ts-expect-error
-  _getRealLimitsPattern() {
-    if (this._getActivePartProp('pattern')[0] === 'd') {
+  _getRealLimitsPattern(): string | undefined {
+    if (this._getActivePartProp('pattern').startsWith('d')) {
       return 'dM';
     }
+
+    return undefined;
   }
 
-  _getActivePartLimits(lockOtherParts?) {
+  _getActivePartLimits(lockOtherParts = false): { min: number; max: number } {
     const limitFunction = this._getActivePartProp('limits');
-    return limitFunction(this._maskValue, lockOtherParts && this._getRealLimitsPattern());
+    return limitFunction(
+      this._maskValue as Date,
+      lockOtherParts ? this._getRealLimitsPattern() : undefined,
+    );
   }
 
-  _getActivePartValue(dateValue?) {
-    dateValue = dateValue || this._maskValue;
+  _getActivePartValue(dateValue?: Date | null): number {
+    const date = dateValue ?? this._maskValue as Date;
     const getter = this._getActivePartProp('getter');
-    return isFunction(getter) ? getter(dateValue) : dateValue[getter]();
+
+    return isFunction(getter) ? getter(date) : date[getter]() as number;
   }
 
-  _addLeadingZeroes(value) {
+  _addLeadingZeroes(value: number): string {
     const zeroes = /^0+/.exec(this._searchValue);
     const limits = this._getActivePartLimits();
     const maxLimitLength = String(limits.max).length;
 
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return ((zeroes && zeroes[0] || '') + String(value)).substr(-maxLimitLength);
+    return ((zeroes?.[0] ?? '') + String(value)).substr(-maxLimitLength);
   }
 
-  _setActivePartValue(value, dateValue?) {
-    dateValue = dateValue || this._maskValue;
+  _setActivePartValue(value: number | string, dateValue?: Date): void {
+    let newValue: number | string = +value;
+    const newDateValue = dateValue ?? this._maskValue as Date;
     const setter = this._getActivePartProp('setter');
     const limits = this._getActivePartLimits();
 
-    value = inRange(value, limits.min, limits.max) ? value : value % 10;
-    value = this._addLeadingZeroes(fitIntoRange(value, limits.min, limits.max));
+    newValue = inRange(newValue, limits.min, limits.max) ? newValue : newValue % 10;
+    newValue = this._addLeadingZeroes(fitIntoRange(newValue, limits.min, limits.max));
 
-    isFunction(setter) ? setter(dateValue, value) : dateValue[setter](value);
-    this._renderDisplayText(this._getDisplayedText(dateValue));
+    if (isFunction(setter)) {
+      setter(newDateValue, newValue);
+    } else {
+      newDateValue[setter](newValue);
+    }
+    this._renderDisplayText(this._getDisplayedText(newDateValue));
 
     this._renderDateParts();
   }
 
-  _getActivePartProp(property) {
-    // @ts-expect-error ts-error
-
-    if (!this._dateParts || !this._dateParts[this._activePartIndex]) {
+  _getActivePartProp(property: 'caret'): { start: number; end: number };
+  _getActivePartProp(property: 'isStub'): boolean;
+  _getActivePartProp(property: 'pattern' | 'text'): string;
+  _getActivePartProp(property: 'limits'): (date: Date, forcedPattern?: string) => { min: number; max: number };
+  _getActivePartProp(property: 'setter'): string | ((date: Date, value: number | string) => void);
+  _getActivePartProp(property: 'getter'): string | ((date: Date) => number);
+  _getActivePartProp(property: 'caret' | 'isStub' | 'pattern' | 'text' | 'limits' | 'setter' | 'getter'): unknown {
+    if (!isDefined(this._activePartIndex)) {
       return undefined;
     }
-    // @ts-expect-error ts-error
-    return this._dateParts[this._activePartIndex][property];
+
+    if (!this._dateParts?.[this._activePartIndex]) {
+      return undefined;
+    }
+
+    return this._dateParts[this._activePartIndex][property] as unknown;
   }
 
-  _loadMaskValue(value = this.dateOption('value')) {
-    this._maskValue = value && new Date(value);
-    this._initialMaskValue = value && new Date(value);
+  _loadMaskValue(value: Date | null | string = this.getDateOption('value')): void {
+    this._maskValue = value ? new Date(value) : null;
+    this._initialMaskValue = value ? new Date(value) : null;
   }
 
   _saveMaskValue(): void {
@@ -563,7 +605,7 @@ class DateBoxMask extends DateBoxBase {
     this._initialMaskValue = new Date(value);
 
     if (this._applyInternalValidation(value).isValid) {
-      this.dateOption('value', value);
+      this.setDateOption('value', value);
     }
   }
 
@@ -573,14 +615,14 @@ class DateBoxMask extends DateBoxBase {
     this._renderDateParts();
   }
 
-  _renderDisplayText(text): void {
+  _renderDisplayText(text?: string): void {
     super._renderDisplayText(text);
     if (this._useMaskBehavior()) {
       this.option('text', text);
     }
   }
 
-  _partIncrease(step, lockOtherParts): void {
+  _partIncrease(step: number, lockOtherParts?: boolean): void {
     this._setNewDateIfEmpty();
 
     const { max, min } = this._getActivePartLimits(lockOtherParts);
@@ -596,14 +638,18 @@ class DateBoxMask extends DateBoxBase {
     this._setActivePartValue(newValue);
   }
 
-  _applyLimits(newValue, { limitBase, limitClosest, max }) {
+  _applyLimits(
+    newValue: number,
+    { limitBase, limitClosest, max }: { limitBase: number; limitClosest: number; max: number },
+  ): number {
     const delta = (newValue - limitClosest) % max;
     return delta ? limitBase + delta - 1 * sign(delta) : limitClosest;
   }
 
-  _maskClickHandler() {
+  _maskClickHandler(): void {
     this._loadMaskValue(this._maskValue);
-    if (this.option('text')) {
+    const { text } = this.option();
+    if (text) {
       this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
 
       if (!this._isAllSelected()) {
@@ -618,18 +664,18 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _maskCompositionEndHandler(e): void {
+  _maskCompositionEndHandler(): void {
     this._input().val(this._getDisplayedText(this._maskValue));
     this._selectNextPart();
 
-    this._maskInputHandler = () => {
+    this._maskInputHandler = (): void => {
       this._renderSelectedPart();
     };
   }
 
-  _maskPasteHandler(e): void {
-    const newText = this._replaceSelectedText(this.option('text'), this._caret(), clipboardText(e));
+  _maskPasteHandler(e: DxEvent): void {
+    const { text } = this.option();
+    const newText = this._replaceSelectedText(text, this._caret(), clipboardText(e));
     const date = dateLocalization.parse(newText, this._getFormatPattern());
 
     if (date && this._isDateValid(date)) {
@@ -642,23 +688,21 @@ class DateBoxMask extends DateBoxBase {
     e.preventDefault();
   }
 
-  _isDateValid(date): boolean {
-    // @ts-expect-error ts-error
-    return isDate(date) && !isNaN(date);
+  _isDateValid(date: DateLike): boolean {
+    return isDate(date) && !isNaN(date.getTime());
   }
 
-  _isValueDirty() {
-    const value = this.dateOption('value');
+  _isValueDirty(): boolean {
+    const value = this.getDateOption('value');
 
-    return (this._maskValue && this._maskValue.getTime()) !== (value && value.getTime());
+    return this._maskValue?.getTime() !== value?.getTime();
   }
 
-  _fireChangeEvent() {
+  _fireChangeEvent(): void {
     this._clearSearchValue();
 
     if (this._isValueDirty()) {
-      // @ts-expect-error
-      eventsEngine.trigger(this._input(), 'change');
+      eventsEngine.triggerHandler(this._input(), { type: 'change' });
     }
   }
 
@@ -683,8 +727,8 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
-  _valueChangeEventHandler(e) {
-    const text = this.option('text');
+  _valueChangeEventHandler(e: ValueChangedEvent): void {
+    const { text } = this.option();
 
     if (this._useMaskBehavior()) {
       this._saveValueChangeEvent(e);
@@ -699,7 +743,7 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
-  _optionChanged(args): void {
+  _optionChanged(args: OptionChanged<DateBoxBaseProperties>): void {
     switch (args.name) {
       case 'useMaskBehavior':
         this._renderMask();

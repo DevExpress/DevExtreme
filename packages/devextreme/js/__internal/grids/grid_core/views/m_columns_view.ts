@@ -371,7 +371,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
       if (browser.safari) {
         // T198380, T809552
-        // @ts-expect-error
         $table.append($('<thead>').append('<tr>'));
       }
 
