@@ -9,8 +9,8 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import Editor from '@ts/ui/editor/editor';
 
 import type { EditorProperties } from '../editor/editor';
-import uiDateUtils from './m_date_utils';
-import DateViewRoller from './m_date_view_roller';
+import uiDateUtils from './date_utils';
+import DateViewRoller from './date_view_roller';
 
 const DATEVIEW_CLASS = 'dx-dateview';
 const DATEVIEW_COMPACT_CLASS = 'dx-dateview-compact';

@@ -11,8 +11,8 @@ import { getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
 import List from '@ts/ui/list/list.edit.search';
 
 import type { PopupProperties } from '../popup/m_popup';
+import dateUtils from './date_utils';
 import DateBoxStrategy from './m_date_box.strategy';
-import dateUtils from './m_date_utils';
 
 const window = getWindow();
 
