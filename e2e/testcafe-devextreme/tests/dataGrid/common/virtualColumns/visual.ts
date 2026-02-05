@@ -5,6 +5,7 @@ import type { Column } from 'devextreme/ui/data_grid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/themeUtils';
+import { isScrollAtEnd } from '../../helpers/rowDraggingHelpers';
 
 const showDataGrid = ClientFunction(() => {
   $('#wrapperContainer').css('display', '');
@@ -481,8 +482,8 @@ test('Virtual columns should render correctly with repaintChangesOnly and groupi
   await t
     .expect(dataGrid.getDataCell(1, 50).element.textContent)
     .eql('1-50')
-    .expect(dataGrid.getScrollLeft())
-    .eql(4430);
+    .expect(isScrollAtEnd('horizontal'))
+    .ok();
 
   await testScreenshot(t, takeScreenshot, 'T1319173__datagrid__virtual-columns__repaintChangesOnly=true.png', { element: dataGrid.element });
 
