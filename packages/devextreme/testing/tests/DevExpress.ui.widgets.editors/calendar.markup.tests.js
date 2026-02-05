@@ -19,6 +19,8 @@ const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
 const CALENDAR_RANGE_CLASS = 'dx-calendar-range';
 
+const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
+
 const ARIA_LABEL_DATE_FORMAT = 'date';
 
 const getFormattedDate = (date) => {
@@ -258,6 +260,25 @@ QUnit.module('showWeekNumbers', {
         const $firstHeaderCell = this.$headerRow.children().eq(0);
 
         assert.ok($firstHeaderCell.hasClass(CALENDAR_WEEK_NUMBER_HEADER_CLASS));
+    });
+
+    QUnit.test('week number header cell should contain element with "dx-screen-reader-only" class when showWeekNumbers=true', function(assert) {
+        this.reinit({ showWeekNumbers: true });
+        this.cacheTableElements();
+        const $firstHeaderCell = this.$headerRow.children().eq(0);
+        const $textElement = $firstHeaderCell.find(`.${SCREEN_READER_ONLY_CLASS}`);
+
+        assert.strictEqual($textElement.length, 1, 'text element is rendered');
+        assert.ok($textElement.hasClass(SCREEN_READER_ONLY_CLASS), 'text element has correct class');
+    });
+
+    QUnit.test('week number header text element should contain "WeekNumber" text when showWeekNumbers=true', function(assert) {
+        this.reinit({ showWeekNumbers: true });
+        this.cacheTableElements();
+        const $firstHeaderCell = this.$headerRow.children().eq(0);
+        const $textElement = $firstHeaderCell.find(`.${SCREEN_READER_ONLY_CLASS}`);
+
+        assert.strictEqual($textElement.text(), 'WeekNumber', 'text element contains correct text');
     });
 
     QUnit.test('first cell in tbody should have "dx-calendar-week-number-cell" class when showWeekNumbers=true', function(assert) {
