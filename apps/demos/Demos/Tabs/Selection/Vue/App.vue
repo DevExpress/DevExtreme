@@ -114,7 +114,7 @@ const selectedItemId = ref(employees[0].id);
 
   .demo-info {
     padding-left: 8px;
-    opacity: 0.6;
+    color: var(--dx-color-icon);
   }
 
   .icon-container {

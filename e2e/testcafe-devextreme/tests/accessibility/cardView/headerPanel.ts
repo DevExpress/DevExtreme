@@ -8,9 +8,7 @@ fixture.disablePageReloads`CardView - HeaderPanel`
 
 const CARD_VIEW_SELECTOR = '#container';
 const HEADER_PANEL_SELECTOR = `${CARD_VIEW_SELECTOR} .dx-cardview-headers`;
-const a11yCheckConfig = {
-  rules: { 'color-contrast': { enabled: false } },
-};
+const a11yCheckConfig = {};
 
 test('Default render', async (t) => {
   await a11yCheck(t, a11yCheckConfig, HEADER_PANEL_SELECTOR);

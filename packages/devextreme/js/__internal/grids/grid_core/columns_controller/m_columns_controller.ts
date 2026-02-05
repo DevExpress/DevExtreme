@@ -1703,7 +1703,6 @@ export class ColumnsController extends modules.Controller {
                 result = false;
               }
             } else if (gridCoreUtils.isDateType(column.dataType)) {
-              // @ts-expect-error
               parsedValue = dateLocalization.parse(text, column.format);
               if (parsedValue) {
                 result = parsedValue;

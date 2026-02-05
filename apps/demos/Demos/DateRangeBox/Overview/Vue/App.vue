@@ -114,7 +114,7 @@ function convertRangeToDays([startDate, endDate]: Date[]) {
 
 .selected-days-wrapper {
   font-size: 12px;
-  opacity: 0.5;
+  color: var(--dx-color-icon);
 }
 
 .multiline-label {

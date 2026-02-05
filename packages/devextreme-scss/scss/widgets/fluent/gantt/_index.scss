@@ -90,7 +90,7 @@ $gantt-successor-background-color: white;
 
       .dx-gantt-tPrg {
         border-radius: $base-border-radius;
-        background-color: rgba(0, 0, 0, 0.2);
+        background-color: $gantt-task-progress-background-color;
       }
 
       &.dx-gantt-smallTask {
@@ -112,7 +112,7 @@ $gantt-successor-background-color: white;
         border-bottom-left-radius: 0;
 
         &:not(.dx-gantt-noPrg) .dx-gantt-tPrg {
-          background-color: rgba(255, 255, 255, 0.2);
+          background-color: $gantt-task-progress-background-color;
         }
 
         &:not(.dx-gantt-smallTask)::before,
@@ -134,8 +134,8 @@ $gantt-successor-background-color: white;
         }
 
         &:not(.dx-gantt-noPrg) .dx-gantt-tPrg::before {
-          border-left-color: rgba(255, 255, 255, 0.2);
-          border-top-color: rgba(255, 255, 255, 0.2);
+          border-left-color: $gantt-task-progress-background-color;
+          border-top-color: $gantt-task-progress-background-color;
         }
 
         &::after,
@@ -146,8 +146,8 @@ $gantt-successor-background-color: white;
         }
 
         &.dx-gantt-cmpl::after {
-          border-right-color: rgba(255, 255, 255, 0.2);
-          border-top-color: rgba(255, 255, 255, 0.2);
+          border-right-color: $gantt-task-progress-background-color;
+          border-top-color: $gantt-task-progress-background-color;
         }
 
         &.dx-gantt-cmpl .dx-gantt-tPrg::after {
@@ -162,7 +162,7 @@ $gantt-successor-background-color: white;
     }
 
     .dx-gantt-titleIn {
-      color: #fff;
+      color: $gantt-task-color;
       padding: 0 $gantt-task-title-padding-left;
     }
   }
@@ -170,8 +170,8 @@ $gantt-successor-background-color: white;
   .dx-gantt-taskRes {
     height: $gantt-task-height;
     line-height: $gantt-task-height;
-    color: #fff;
-    background-color: #999;
+    color: $gantt-task-color;
+    background-color: $gantt-task-background-color;
     border-radius: $base-border-radius;
     margin-left: 21px;
     padding-left: 4px;
