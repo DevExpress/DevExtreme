@@ -631,8 +631,8 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
   _isValueChanged(newValue: Date | null): boolean {
     const oldValue = this.getDateOption('value');
 
-    const oldTime = oldValue?.getTime();
-    const newTime = newValue?.getTime();
+    const oldTime = oldValue && oldValue.getTime();
+    const newTime = newValue && newValue.getTime();
 
     return oldTime !== newTime;
   }
