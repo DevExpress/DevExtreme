@@ -604,7 +604,7 @@ importers:
         version: 5.4.0(eslint@9.26.0(hono@4.11.4)(jiti@2.6.1))
       '@testcafe-community/axe':
         specifier: 3.5.0
-        version: 3.5.0(axe-core@4.11.1)(testcafe@3.7.2)
+        version: 3.5.0(axe-core@4.11.1)(testcafe@3.7.4)
       '@types/eslint':
         specifier: 8.56.12
         version: 8.56.12
@@ -652,7 +652,7 @@ importers:
         version: 7.0.3
       devextreme-screenshot-comparer:
         specifier: 2.0.17
-        version: 2.0.17(testcafe@3.7.2)
+        version: 2.0.17(testcafe@3.7.4)
       eslint:
         specifier: 'catalog:'
         version: 9.26.0(hono@4.11.4)(jiti@2.6.1)
@@ -747,8 +747,8 @@ importers:
         specifier: 0.16.15
         version: 0.16.15
       testcafe:
-        specifier: 3.7.2
-        version: 3.7.2
+        specifier: 3.7.4
+        version: 3.7.4
       testcafe-reporter-spec-time:
         specifier: 4.0.0
         version: 4.0.0
@@ -1078,7 +1078,7 @@ importers:
         version: 5.4.0(eslint@9.26.0(hono@4.11.4)(jiti@2.6.1))
       '@testcafe-community/axe':
         specifier: 3.5.0
-        version: 3.5.0(axe-core@4.11.1)(testcafe@3.7.2)
+        version: 3.5.0(axe-core@4.11.1)(testcafe@3.7.4)
       '@types/jquery':
         specifier: 'catalog:'
         version: 3.5.33
@@ -1096,7 +1096,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-screenshot-comparer:
         specifier: 2.0.17
-        version: 2.0.17(testcafe@3.7.2)
+        version: 2.0.17(testcafe@3.7.4)
       devextreme-testcafe-models:
         specifier: workspace:*
         version: link:../../packages/testcafe-models
@@ -1131,8 +1131,8 @@ importers:
         specifier: 0.12.1
         version: 0.12.1
       testcafe:
-        specifier: 3.7.2
-        version: 3.7.2
+        specifier: 3.7.4
+        version: 3.7.4
       testcafe-reporter-spec-time:
         specifier: 4.0.0
         version: 4.0.0
@@ -1300,8 +1300,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0(jasmine-core@5.6.0)(karma-jasmine@5.1.0(karma@6.4.4))(karma@6.4.4)
       testcafe:
-        specifier: 3.7.2
-        version: 3.7.2
+        specifier: 3.7.4
+        version: 3.7.4
       typescript:
         specifier: 5.8.3
         version: 5.8.3
@@ -1395,7 +1395,7 @@ importers:
         version: 5.4.0(eslint@9.26.0(hono@4.11.4)(jiti@2.6.1))
       '@testcafe-community/axe':
         specifier: 3.5.0
-        version: 3.5.0(axe-core@4.11.1)(testcafe@3.7.2)
+        version: 3.5.0(axe-core@4.11.1)(testcafe@3.7.4)
       '@types/enzyme':
         specifier: 3.10.19
         version: 3.10.19
@@ -1464,7 +1464,7 @@ importers:
         version: 4.4.5
       devextreme-screenshot-comparer:
         specifier: 2.0.17
-        version: 2.0.17(testcafe@3.7.2)
+        version: 2.0.17(testcafe@3.7.4)
       enzyme:
         specifier: 3.11.0
         version: 3.11.0
@@ -9836,6 +9836,10 @@ packages:
     resolution: {integrity: sha512-uIFDxqpRZGZ6ThOk84hEfqWoHx2devRFvpTZcTHur85vImfaxUbTW9Ryh4CpCuDnToOP1CEtXKIgytHBPVff5A==}
     engines: {node: '>=0.3.1'}
 
+  diff@8.0.3:
+    resolution: {integrity: sha512-qejHi7bcSD4hQAZE0tNAawRK1ZtafHDmMTMkrrIGgSLl7hTnQHmKCeB45xAcbfTqK2zowkM3j3bHt/4b/ARbYQ==}
+    engines: {node: '>=0.3.1'}
+
   diffie-hellman@5.0.3:
     resolution: {integrity: sha512-kqag/Nl+f3GwyK25fhUMYj81BUOrZ9IuJsjIcDE5icNM9FJHAVm3VcUDxdLPoQtTuUylWm6ZIknYJwwaPxsUzg==}
 
@@ -17117,12 +17121,12 @@ packages:
   tar@6.2.1:
     resolution: {integrity: sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==}
     engines: {node: '>=10'}
-    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exhorbitant rates) by contacting i@izs.me
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   tar@7.5.2:
     resolution: {integrity: sha512-7NyxrTE4Anh8km8iEy7o0QYPs+0JKBTj5ZaqHg6B39erLg0qYXN3BijtShwbsNSvQ+LN75+KV+C4QR/f6Gwnpg==}
     engines: {node: '>=18'}
-    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exhorbitant rates) by contacting i@izs.me
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   teex@1.0.1:
     resolution: {integrity: sha512-eYE6iEI62Ni1H8oIa7KlDU6uQBtqr4Eajni3wX7rpfXD8ysFx8z0+dri+KWEPWpBsxXfxu58x/0jvTVT1ekOSg==}
@@ -17208,6 +17212,10 @@ packages:
     resolution: {integrity: sha512-XnDtvrpiwoxMPhC9A3eFOPeE0erDF0iae5t23yaYB4lVQCRuEoNfg5Lv4vGvDhbJ2n2fpzOre4Lhvz12mac0tw==}
     engines: {node: '>=14.0.0'}
 
+  testcafe-hammerhead@31.7.7:
+    resolution: {integrity: sha512-vSI/ak8MTuDENCMLGNyPS+tsf7hLisQfaBDYB6NCY5y/arz26cad86P6+eIrm3ncH3SsnFcm+BmkmNjJxzPyoQ==}
+    engines: {node: '>=14.0.0'}
+
   testcafe-legacy-api@5.1.8:
     resolution: {integrity: sha512-Jp/8xPQ+tjr2iS569Og8fFRaSx/7h/N/t6DVzhWpVNO3D5AtPkGmSjCAABh7tHkUwrKfBI7sLuVaxekiT5PWTA==}
 
@@ -17235,6 +17243,11 @@ packages:
 
   testcafe@3.7.2:
     resolution: {integrity: sha512-1XNc764DlIfmev7JHwzVP2l7ZHQin9nTsM9fBB0yd3naAJn+VUR9kUe7J1PSxk+nJkhkBvsSmQSlppj527JGAA==}
+    engines: {node: '>=16.0.0'}
+    hasBin: true
+
+  testcafe@3.7.4:
+    resolution: {integrity: sha512-RADoEWAfGCQ1q08zr4kRQ+bEOhOiI3hmzF2s5dFv835ndERdE44V14DVqeOWGEFm0o+x6IYHyWhmQp0g9mz4ZQ==}
     engines: {node: '>=16.0.0'}
     hasBin: true
 
@@ -17329,6 +17342,10 @@ packages:
 
   tmp@0.2.3:
     resolution: {integrity: sha512-nZD7m9iCPC5g0pYmcaxogYKggSfLsdxl8of3Q/oIbqCqLLIO9IAF0GWjX1z9NZRHPiXv8Wex4yDCaZsgEw0Y8w==}
+    engines: {node: '>=14.14'}
+
+  tmp@0.2.5:
+    resolution: {integrity: sha512-voyz6MApa1rQGUxT3E+BK7/ROe8itEx7vD8/HEvt4xwXucvQ5G5oeEiHkmHZJuBO21RpOf+YYm9MOivj709jow==}
     engines: {node: '>=14.14'}
 
   tmpl@1.0.5:
@@ -20461,7 +20478,7 @@ snapshots:
   '@babel/plugin-proposal-decorators@7.25.9(@babel/core@7.28.6)':
     dependencies:
       '@babel/core': 7.28.6
-      '@babel/helper-create-class-features-plugin': 7.25.9(@babel/core@7.28.6)
+      '@babel/helper-create-class-features-plugin': 7.28.6(@babel/core@7.28.6)
       '@babel/helper-plugin-utils': 7.28.6
       '@babel/plugin-syntax-decorators': 7.25.9(@babel/core@7.28.6)
     transitivePeerDependencies:
@@ -25579,11 +25596,11 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
-  '@testcafe-community/axe@3.5.0(axe-core@4.11.1)(testcafe@3.7.2)':
+  '@testcafe-community/axe@3.5.0(axe-core@4.11.1)(testcafe@3.7.4)':
     dependencies:
       axe-core: 4.11.1
       chalk: 2.4.2
-      testcafe: 3.7.2
+      testcafe: 3.7.4
 
   '@testing-library/dom@10.4.0':
     dependencies:
@@ -29831,12 +29848,12 @@ snapshots:
     transitivePeerDependencies:
       - chokidar
 
-  devextreme-screenshot-comparer@2.0.17(testcafe@3.7.2):
+  devextreme-screenshot-comparer@2.0.17(testcafe@3.7.4):
     dependencies:
       color-diff: 1.3.0
       looks-same: 7.3.0
       pngjs: 6.0.0
-      testcafe: 3.7.2
+      testcafe: 3.7.4
       tslib: 2.6.3
 
   device-specs@1.0.1: {}
@@ -29852,6 +29869,8 @@ snapshots:
   diff@4.0.2: {}
 
   diff@5.2.0: {}
+
+  diff@8.0.3: {}
 
   diffie-hellman@5.0.3:
     dependencies:
@@ -40434,6 +40453,38 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  testcafe-hammerhead@31.7.7:
+    dependencies:
+      '@adobe/css-tools': 4.4.1
+      '@electron/asar': 3.2.17
+      acorn-hammerhead: 0.6.2
+      bowser: 1.6.0
+      crypto-md5: 1.0.0
+      debug: 4.3.1
+      esotope-hammerhead: 0.6.9
+      http-cache-semantics: 4.1.1
+      httpntlm: 1.8.13
+      iconv-lite: 0.5.1
+      lodash: 4.17.23
+      lru-cache: 11.0.2
+      match-url-wildcard: 0.0.4
+      merge-stream: 1.0.1
+      mime: 1.4.1
+      mustache: 2.3.2
+      nanoid: 3.3.11
+      os-family: 1.1.0
+      parse5: 7.2.1
+      pinkie: 2.0.4
+      read-file-relative: 1.2.0
+      semver: 7.5.3
+      tough-cookie: 4.1.3
+      tunnel-agent: 0.6.0
+      ws: 7.5.10
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
   testcafe-legacy-api@5.1.8:
     dependencies:
       async: 3.2.3
@@ -40448,7 +40499,7 @@ snapshots:
       pinkie: 2.0.4
       read-file-relative: 1.2.0
       strip-bom: 2.0.0
-      testcafe-hammerhead: 31.7.5
+      testcafe-hammerhead: 31.7.7
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -40572,6 +40623,110 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  testcafe@3.7.4:
+    dependencies:
+      '@babel/core': 7.28.6
+      '@babel/plugin-proposal-decorators': 7.25.9(@babel/core@7.28.6)
+      '@babel/plugin-syntax-dynamic-import': 7.8.3(@babel/core@7.28.6)
+      '@babel/plugin-syntax-import-meta': 7.10.4(@babel/core@7.28.6)
+      '@babel/plugin-transform-async-generator-functions': 7.28.6(@babel/core@7.28.6)
+      '@babel/plugin-transform-async-to-generator': 7.28.6(@babel/core@7.28.6)
+      '@babel/plugin-transform-class-properties': 7.28.6(@babel/core@7.28.6)
+      '@babel/plugin-transform-class-static-block': 7.28.6(@babel/core@7.28.6)
+      '@babel/plugin-transform-exponentiation-operator': 7.28.6(@babel/core@7.28.6)
+      '@babel/plugin-transform-for-of': 7.27.1(@babel/core@7.28.6)
+      '@babel/plugin-transform-object-rest-spread': 7.28.6(@babel/core@7.28.6)
+      '@babel/plugin-transform-private-methods': 7.28.6(@babel/core@7.28.6)
+      '@babel/plugin-transform-runtime': 7.23.3(@babel/core@7.28.6)
+      '@babel/preset-env': 7.28.6(@babel/core@7.28.6)
+      '@babel/preset-flow': 7.25.9(@babel/core@7.28.6)
+      '@babel/preset-react': 7.28.5(@babel/core@7.28.6)
+      '@babel/runtime': 7.28.4
+      '@devexpress/bin-v8-flags-filter': 1.3.0
+      '@devexpress/callsite-record': 4.1.7
+      '@types/node': 20.14.5
+      address: 2.0.3
+      async-exit-hook: 1.1.2
+      babel-plugin-module-resolver: 5.0.0
+      babel-plugin-syntax-trailing-function-commas: 6.22.0
+      bowser: 2.11.0
+      callsite: 1.0.0
+      chai: 4.3.4
+      chalk: 2.4.2
+      chrome-remote-interface: 0.32.2
+      coffeescript: 2.7.0
+      commander: 8.3.0
+      debug: 4.4.3
+      dedent: 0.4.0
+      del: 3.0.0
+      device-specs: 1.0.1
+      devtools-protocol: 0.0.1109433
+      diff: 8.0.3
+      elegant-spinner: 1.0.1
+      email-validator: 2.0.4
+      emittery: 0.4.1
+      error-stack-parser: 2.1.4
+      execa: 4.1.0
+      get-os-info: 1.0.2
+      globby: 11.1.0
+      graceful-fs: 4.2.11
+      graphlib: 2.1.8
+      http-status-codes: 2.3.0
+      humanize-duration: 3.32.1
+      import-lazy: 3.1.0
+      indent-string: 1.2.2
+      is-ci: 1.2.1
+      is-docker: 2.2.1
+      is-glob: 2.0.1
+      is-podman: 1.0.1
+      is-stream: 2.0.1
+      json5: 2.2.3
+      lodash: 4.17.23
+      log-update-async-hook: 2.0.7
+      make-dir: 3.1.0
+      mime-db: 1.54.0
+      moment: 2.30.1
+      moment-duration-format-commonjs: 1.0.1
+      mustache: 2.3.2
+      nanoid: 3.3.11
+      os-family: 1.1.0
+      parse5: 1.5.1
+      pify: 2.3.0
+      pinkie: 2.0.4
+      pngjs: 3.4.0
+      pretty-hrtime: 1.0.3
+      promisify-event: 1.0.0
+      prompts: 2.4.2
+      qrcode-terminal: 0.10.0
+      read-file-relative: 1.2.0
+      replicator: 1.0.5
+      resolve-cwd: 1.0.0
+      resolve-from: 4.0.0
+      sanitize-filename: 1.6.3
+      semver: 7.7.3
+      set-cookie-parser: 2.7.1
+      source-map-support: 0.5.21
+      strip-bom: 2.0.0
+      testcafe-browser-tools: 2.0.26
+      testcafe-hammerhead: 31.7.7
+      testcafe-legacy-api: 5.1.8
+      testcafe-reporter-json: 2.2.0
+      testcafe-reporter-list: 2.2.0
+      testcafe-reporter-minimal: 2.2.0
+      testcafe-reporter-spec: 2.2.0
+      testcafe-reporter-xunit: 2.2.3
+      testcafe-selector-generator: 0.1.0
+      time-limit-promise: 1.0.4
+      tmp: 0.2.5
+      tree-kill: 1.2.2
+      typescript: 4.7.4
+      unquote: 1.1.1
+      url-to-options: 2.0.0
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
   text-decoder@1.2.1: {}
 
   text-hex@1.0.0: {}
@@ -40659,6 +40814,8 @@ snapshots:
       os-tmpdir: 1.0.2
 
   tmp@0.2.3: {}
+
+  tmp@0.2.5: {}
 
   tmpl@1.0.5: {}
 
