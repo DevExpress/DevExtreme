@@ -3,6 +3,7 @@ import {
   afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
 import { formatMessage, loadMessages, locale } from '@js/localization';
+import ruMessages from '@js/localization/messages/ru.json';
 
 import {
   afterTest,
@@ -111,6 +112,7 @@ describe('CardView', () => {
     });
 
     it('should localize columnChooser title', async () => {
+      loadMessages(ruMessages);
       locale('ru');
 
       const { instance, component } = await createCardView({
