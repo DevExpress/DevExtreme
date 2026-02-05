@@ -3,9 +3,9 @@ import $ from '@js/core/renderer';
 import { inputType } from '@js/core/utils/support';
 import { getWindow } from '@js/core/utils/window';
 
+import dateUtils from './date_utils';
 import DateView from './date_view';
 import DateBoxStrategy from './m_date_box.strategy';
-import dateUtils from './m_date_utils';
 
 const window = getWindow();
 
