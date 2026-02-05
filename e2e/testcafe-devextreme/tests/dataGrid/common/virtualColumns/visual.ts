@@ -471,7 +471,7 @@ test('Virtual columns should render correctly with repaintChangesOnly and groupi
   await t
     .expect(dataGrid.isReady())
     .ok()
-    .expect(dataGrid.getDataCell(0, 1).element.textContent)
+    .expect(dataGrid.getDataCell(1, 1).element.textContent)
     .eql('0');
 
   // act
