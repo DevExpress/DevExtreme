@@ -716,8 +716,12 @@ jobs:
       if: matrix.STRATEGY == 'accessibility'
       working-directory: apps/demos
       run: |
-        message=$(cat $ACCESSIBILITY_TESTCAFE_REPORT_PATH)
-        echo "::warning ::$message"
+        if [ -f "$ACCESSIBILITY_TESTCAFE_REPORT_PATH" ]; then
+          message=$(cat $ACCESSIBILITY_TESTCAFE_REPORT_PATH)
+          echo "::warning ::$message"
+        else
+          echo "Accessibility report not found. Skipping warning generation."
+        fi
 
     - name: Sanitize job name
       if: ${{ failure() }}
