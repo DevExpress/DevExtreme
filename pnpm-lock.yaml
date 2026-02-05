@@ -386,8 +386,8 @@ importers:
         specifier: 40.0.0
         version: 40.0.0
       cldr-data:
-        specifier: 36.0.4
-        version: 36.0.4
+        specifier: 36.0.5
+        version: 36.0.5
       cldr-dates-full:
         specifier: 40.0.0
         version: 40.0.0(cldr-numbers-full@40.0.0(cldr-core@40.0.0))
@@ -8890,8 +8890,8 @@ packages:
     resolution: {integrity: sha512-xg1GKFP4FOe4GEDkANb8ATz67e1tqJ6GGaRMTYJNNgRwr/9WL+qvlDU4nW9/Iw8gA6NISEfd/+XFNOFkuimaOQ==}
     hasBin: true
 
-  cldr-data@36.0.4:
-    resolution: {integrity: sha512-uwxRy5QwNdHF9nFEJmagLVwsNJG5IXDbv1b7teKnDUakyxvRrHcpEp1fU/bTvwR365wqGCC94rXCC9YMLJIi+A==}
+  cldr-data@36.0.5:
+    resolution: {integrity: sha512-+SVRkiHCKQcd1Qp3XgIMrwR35TFuExw/BCeAVMmcN9wNH8gmgl+kGL2Pho8jaoNGgr9A4oNUAMJOG4cXQxr0Og==}
 
   cldr-dates-full@40.0.0:
     resolution: {integrity: sha512-AqsXdzaga/kN2+Gbtj72ztWjFG+JdnZd2Yu5SNZb7ZwWR6zESGXOdymPaR3phKosIpsNrDsye1RQC33pv+fOAw==}
@@ -28758,7 +28758,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  cldr-data@36.0.4:
+  cldr-data@36.0.5:
     dependencies:
       cldr-data-downloader: 1.1.0
       glob: 10.5.0
