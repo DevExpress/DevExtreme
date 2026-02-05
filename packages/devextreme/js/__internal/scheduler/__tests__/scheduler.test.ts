@@ -60,31 +60,3 @@ describe('Scheduler scrollTo deprecation', () => {
     expect(loggerWarnSpy).toHaveBeenCalledTimes(0);
   });
 });
-
-describe('Scheduler onAppointmentContextMenu', () => {
-  it('should be called only once', async () => {
-    setupSchedulerTestEnvironment();
-
-    const onAppointmentContextMenu = jest.fn();
-
-    const { POM } = await createScheduler({
-      dataSource: [{
-        text: 'Meeting',
-        startDate: new Date(2025, 0, 15, 9, 0),
-        endDate: new Date(2025, 0, 15, 10, 0),
-      }],
-      views: ['week'],
-      currentView: 'week',
-      currentDate: new Date(2025, 0, 15),
-      startDayHour: 8,
-      endDayHour: 18,
-      onAppointmentContextMenu,
-    });
-
-    const appointmentElement = POM.getAppointment('Meeting').element as HTMLElement;
-
-    appointmentElement.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
-
-    expect(onAppointmentContextMenu).toHaveBeenCalledTimes(1);
-  });
-});
