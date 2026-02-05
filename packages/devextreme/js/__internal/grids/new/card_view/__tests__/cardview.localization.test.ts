@@ -35,6 +35,7 @@ const testMessages = {
     'dxFilterBuilder-filterOperationEndsWith': 'xx - Ends With',
     'dxFilterBuilder-filterOperationIsBlank': 'xx - Is Blank',
     'dxFilterBuilder-filterOperationIsNotBlank': 'xx - Is Not Blank',
+    'dxPagination-ariaLabel': 'xx - Page navigation',
   },
 };
 
@@ -358,6 +359,24 @@ describe('CardView', () => {
       expect(operationTreeView.getNodeByText('xx - Between')).not.toBeNull();
       expect(operationTreeView.getNodeByText('xx - Is Blank')).not.toBeNull();
       expect(operationTreeView.getNodeByText('xx - Is Not Blank')).not.toBeNull();
+    });
+
+    it('should localize Pager aria-label', async () => {
+      loadMessages(testMessages);
+      locale(testLocale);
+
+      const { component } = await createCardView({
+        dataSource: Array.from({ length: 50 }, (_, i) => ({ id: i + 1, name: `Item ${i + 1}` })),
+        columns: ['id', 'name'],
+      });
+
+      await flushAsync();
+
+      const pager = component.getPager();
+      const pagerElement = pager.getElement();
+
+      expect(pagerElement).not.toBeNull();
+      expect(pagerElement?.getAttribute('aria-label')).toBe('xx - Page navigation');
     });
   });
 });

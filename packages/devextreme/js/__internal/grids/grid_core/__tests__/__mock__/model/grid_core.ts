@@ -3,6 +3,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type CardView from '@js/ui/card_view';
 import { FilterBuilderModel } from '@ts/filter_builder/__tests__/__mock__/model/filter_builder';
+import { PagerModel } from '@ts/pagination/__tests__/__mock__/model/pager';
 import { LoadPanelModel } from '@ts/ui/__tests__/__mock__/model/load_panel';
 import { ToastModel } from '@ts/ui/__tests__/__mock__/model/toast';
 
@@ -139,6 +140,10 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
 
   public getFilterBuilder(): FilterBuilderModel {
     return new FilterBuilderModel();
+  }
+
+  public getPager(): PagerModel {
+    return new PagerModel(this.root);
   }
 
   public apiOption(name: string): unknown;
