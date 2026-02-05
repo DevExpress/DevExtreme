@@ -548,7 +548,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     if (this._applyInternalValidation(date).isValid) {
       const displayedText = this._getDisplayedText(newValue);
 
-      if (value && value.getTime() === newValue?.getTime() && displayedText !== text) {
+      if (value && newValue && value.getTime() === newValue.getTime() && displayedText !== text) {
         this._renderValue();
       } else {
         this.dateValue(newValue, e);
