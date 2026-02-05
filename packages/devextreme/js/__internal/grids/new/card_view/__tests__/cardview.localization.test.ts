@@ -18,6 +18,10 @@ const testMessages = {
     'dxDataGrid-filterPanelCreateFilter': 'xx - Create Filter',
     'dxDataGrid-filterPanelClearFilter': 'xx - Clear',
     'dxDataGrid-filterPanelFilterEnabledHint': 'xx - Enable the filter',
+    'dxFilterBuilder-and': 'xx - And',
+    'dxFilterBuilder-or': 'xx - Or',
+    'dxFilterBuilder-notAnd': 'xx - Not And',
+    'dxFilterBuilder-notOr': 'xx - Not Or',
   },
 };
 
@@ -213,6 +217,45 @@ describe('CardView', () => {
 
       expect(filterPanel.isVisible()).toBe(true);
       expect(checkbox.getInstance().$element().attr('title')).toBe('xx - Enable the filter');
+    });
+
+    it('should localize FilterBuilder groupOperationDescriptions', async () => {
+      loadMessages(testMessages);
+      locale(testLocale);
+
+      const { component } = await createCardView({
+        dataSource: [
+          { id: 1, name: 'Test' },
+        ],
+        columns: ['id', 'name'],
+        filterPanel: {
+          visible: true,
+        },
+      });
+
+      await flushAsync();
+
+      const filterPanel = component.getFilterPanel();
+      const createFilterButton = filterPanel.getCreateFilterButton();
+      createFilterButton.click();
+
+      await flushAsync();
+
+      const filterBuilder = component.getFilterBuilder();
+
+      expect(filterBuilder.isVisible()).toBe(true);
+      expect(filterBuilder.getGroupOperationButton().textContent?.trim()).toBe('xx - And');
+
+      filterBuilder.getGroupOperationButton().click();
+
+      await flushAsync();
+
+      const treeView = filterBuilder.getTreeView();
+
+      expect(treeView.getNodeByText('xx - And')).not.toBeNull();
+      expect(treeView.getNodeByText('xx - Or')).not.toBeNull();
+      expect(treeView.getNodeByText('xx - Not And')).not.toBeNull();
+      expect(treeView.getNodeByText('xx - Not Or')).not.toBeNull();
     });
   });
 });

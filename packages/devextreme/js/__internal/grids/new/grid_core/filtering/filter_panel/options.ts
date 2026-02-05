@@ -13,10 +13,10 @@ export interface Options {
 export const defaultOptions = {
   filterBuilder: {
     groupOperationDescriptions: {
-      and: messageLocalization.format('dxFilterBuilder-and'),
-      or: messageLocalization.format('dxFilterBuilder-or'),
-      notAnd: messageLocalization.format('dxFilterBuilder-notAnd'),
-      notOr: messageLocalization.format('dxFilterBuilder-notOr'),
+      and: undefined,
+      or: undefined,
+      notAnd: undefined,
+      notOr: undefined,
     },
     filterOperationDescriptions: {
       between: messageLocalization.format('dxFilterBuilder-filterOperationBetween'),

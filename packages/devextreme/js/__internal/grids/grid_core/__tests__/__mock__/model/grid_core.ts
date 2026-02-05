@@ -2,6 +2,7 @@ import type { GridBase } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type CardView from '@js/ui/card_view';
+import { FilterBuilderModel } from '@ts/filter_builder/__tests__/__mock__/model/filter_builder';
 import { LoadPanelModel } from '@ts/ui/__tests__/__mock__/model/load_panel';
 import { ToastModel } from '@ts/ui/__tests__/__mock__/model/toast';
 
@@ -136,10 +137,13 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
     return new FilterPanelModel(this.root, this.getFilterPanelPrefix());
   }
 
+  public getFilterBuilder(): FilterBuilderModel {
+    return new FilterBuilderModel();
+  }
+
   public apiOption(name: string): unknown;
   public apiOption(name: string, value: unknown): void;
   public apiOption(name: string, value?: unknown): unknown {
-    // Both GridBase and CardView have option() method
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const instance = this.getInstance() as any;
 
