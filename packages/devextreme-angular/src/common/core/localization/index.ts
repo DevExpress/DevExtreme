@@ -1,5 +1,4 @@
 export {
-    Format,
     formatDate,
     formatMessage,
     formatNumber,
@@ -8,3 +7,4 @@ export {
     parseDate,
     parseNumber,
 } from 'devextreme/common/core/localization';
+export type { Format } from 'devextreme/common/core/localization';

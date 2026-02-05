@@ -1,8 +1,7 @@
-export {
+export { exportDataGrid, exportPivotGrid } from 'devextreme/common/export/excel';
+export type {
     DataGridCell,
     DataGridExportOptions,
-    exportDataGrid,
-    exportPivotGrid,
     PivotGridCell,
     PivotGridExportOptions,
 } from 'devextreme/common/export/excel';

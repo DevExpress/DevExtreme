@@ -1,11 +1,11 @@
-export {
+export { config, Guid, setTemplateEngine } from 'devextreme/common';
+export type {
     ApplyValueMode,
     AsyncRule,
     ButtonStyle,
     ButtonType,
     CompareRule,
     ComparisonOperator,
-    config,
     CustomRule,
     DataStructure,
     DataType,
@@ -24,7 +24,6 @@ export {
     FloatingActionButtonDirection,
     Format,
     GlobalConfig,
-    Guid,
     HorizontalAlignment,
     HorizontalEdge,
     LabelMode,
@@ -45,7 +44,6 @@ export {
     ScrollMode,
     SearchMode,
     SelectAllMode,
-    setTemplateEngine,
     SimplifiedSearchMode,
     SingleMultipleAllOrNone,
     SingleMultipleOrNone,
