@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import { fx } from '@js/common/core/animation';
 import { resetPosition } from '@js/common/core/animation/translator';
 import { name as clickEventName } from '@js/common/core/events/click';
