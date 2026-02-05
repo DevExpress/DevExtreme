@@ -39,9 +39,9 @@ export const defaultOptions = {
     visible: false,
     filterEnabled: true,
     texts: {
-      createFilter: messageLocalization.format('dxDataGrid-filterPanelCreateFilter'),
-      clearFilter: messageLocalization.format('dxDataGrid-filterPanelClearFilter'),
-      filterEnabledHint: messageLocalization.format('dxDataGrid-filterPanelFilterEnabledHint'),
+      createFilter: undefined,
+      clearFilter: undefined,
+      filterEnabledHint: undefined,
     },
   },
 

@@ -10,6 +10,10 @@ const CLASSES = {
 export class CardViewModel extends GridCoreModel<CardView> {
   protected NAME = 'dxCardView';
 
+  protected getFilterPanelPrefix(): string {
+    return 'datagrid';
+  }
+
   public getInstance(): CardView {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return ($(this.root) as any).dxCardView('instance') as CardView;

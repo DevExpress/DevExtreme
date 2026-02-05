@@ -104,7 +104,9 @@ export class FilterPanelView extends modules.View {
         that.option('filterPanel.filterEnabled', e.value);
       },
     });
-    $element.attr('title', this.option('filterPanel.texts.filterEnabledHint')!);
+    const filterEnabledHint = this.option('filterPanel.texts.filterEnabledHint')
+      || messageLocalization.format('dxDataGrid-filterPanelFilterEnabledHint');
+    $element.attr('title', filterEnabledHint);
     return $element;
   }
 
@@ -142,7 +144,8 @@ export class FilterPanelView extends modules.View {
         $textElement.text(filterText);
       });
     } else {
-      filterText = that.option('filterPanel.texts.createFilter');
+      filterText = that.option('filterPanel.texts.createFilter')
+        || messageLocalization.format('dxDataGrid-filterPanelCreateFilter');
       $textElement.text(filterText);
     }
 
@@ -163,9 +166,11 @@ export class FilterPanelView extends modules.View {
     const that = this;
     // @ts-expect-error
     const clearFilterValue = () => that.option('filterValue', null);
+    const clearFilterText = that.option('filterPanel.texts.clearFilter')
+      || messageLocalization.format('dxDataGrid-filterPanelClearFilter');
     const $element = $('<div>')
       .addClass(that.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS))
-      .text(that.option('filterPanel.texts.clearFilter')!);
+      .text(clearFilterText);
 
     eventsEngine.on($element, 'click', clearFilterValue);
 
@@ -318,9 +323,9 @@ export const filterPanelModule = {
         visible: false,
         filterEnabled: true,
         texts: {
-          createFilter: messageLocalization.format('dxDataGrid-filterPanelCreateFilter'),
-          clearFilter: messageLocalization.format('dxDataGrid-filterPanelClearFilter'),
-          filterEnabledHint: messageLocalization.format('dxDataGrid-filterPanelFilterEnabledHint'),
+          createFilter: undefined,
+          clearFilter: undefined,
+          filterEnabledHint: undefined,
         },
       },
     };

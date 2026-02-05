@@ -3,7 +3,6 @@ import {
   afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
 import { formatMessage, loadMessages, locale } from '@js/localization';
-import ruMessages from '@js/localization/messages/ru.json';
 
 import {
   afterTest,
@@ -11,6 +10,16 @@ import {
   createCardView,
   flushAsync,
 } from './__mock__/helpers/utils';
+
+const testLocale = 'xx';
+const testMessages = {
+  [testLocale]: {
+    'dxDataGrid-columnChooserTitle': 'xx - Column Chooser',
+    'dxDataGrid-filterPanelCreateFilter': 'xx - Create Filter',
+    'dxDataGrid-filterPanelClearFilter': 'xx - Clear',
+    'dxDataGrid-filterPanelFilterEnabledHint': 'xx - Enable the filter',
+  },
+};
 
 describe('CardView', () => {
   beforeEach(beforeTest);
@@ -112,8 +121,8 @@ describe('CardView', () => {
     });
 
     it('should localize columnChooser title', async () => {
-      loadMessages(ruMessages);
-      locale('ru');
+      loadMessages(testMessages);
+      locale(testLocale);
 
       const { instance, component } = await createCardView({
         dataSource: [
@@ -133,7 +142,77 @@ describe('CardView', () => {
       const columnChooser = component.getColumnChooser();
 
       expect(columnChooser.isVisible()).toBe(true);
-      expect(columnChooser.getTitle()).toBe('Выбор столбцов');
+      expect(columnChooser.getTitle()).toBe('xx - Column Chooser');
+    });
+
+    it('should localize FilterPanel create filter button', async () => {
+      loadMessages(testMessages);
+      locale(testLocale);
+
+      const { component } = await createCardView({
+        dataSource: [
+          { id: 1, name: 'Test' },
+        ],
+        columns: ['id', 'name'],
+        filterPanel: {
+          visible: true,
+        },
+      });
+
+      await flushAsync();
+
+      const filterPanel = component.getFilterPanel();
+
+      expect(filterPanel.isVisible()).toBe(true);
+      expect(filterPanel.getCreateFilterButton().textContent).toBe('xx - Create Filter');
+    });
+
+    it('should localize FilterPanel clear filter button', async () => {
+      loadMessages(testMessages);
+      locale(testLocale);
+
+      const { instance, component } = await createCardView({
+        dataSource: [
+          { id: 1, name: 'Test' },
+        ],
+        columns: ['id', 'name'],
+        filterPanel: {
+          visible: true,
+        },
+      });
+
+      instance.option('filterValue', ['id', '=', 1]);
+
+      await flushAsync();
+
+      const filterPanel = component.getFilterPanel();
+
+      expect(filterPanel.isVisible()).toBe(true);
+      expect(filterPanel.getClearFilterButton().textContent).toBe('xx - Clear');
+    });
+
+    it('should localize FilterPanel checkbox hint', async () => {
+      loadMessages(testMessages);
+      locale(testLocale);
+
+      const { component } = await createCardView({
+        dataSource: [
+          { id: 1, name: 'Test' },
+        ],
+        columns: ['id', 'name'],
+        filterPanel: {
+          visible: true,
+        },
+        filterValue: ['id', '=', 1],
+      });
+
+      await flushAsync();
+
+      const filterPanel = component.getFilterPanel();
+      const checkbox = filterPanel.getEnableFilterCheckbox();
+
+      expect(filterPanel.isVisible()).toBe(true);
+      expect(checkbox.getInstance().$element().attr('title')).toBe('xx - Enable the filter');
     });
   });
 });

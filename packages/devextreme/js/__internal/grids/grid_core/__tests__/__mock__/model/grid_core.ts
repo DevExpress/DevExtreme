@@ -11,6 +11,7 @@ import { DataCellModel } from './cell/data_cell';
 import { HeaderCellModel } from './cell/header_cell';
 import { ColumnChooserModel } from './column_chooser';
 import { EditFormModel } from './edit_form';
+import { FilterPanelModel } from './filter_panel';
 import { DataRowModel } from './row/data_row';
 
 const SELECTORS = {
@@ -34,6 +35,10 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
 
   private getWidgetName(): string {
     return this.NAME.slice(2).toLowerCase();
+  }
+
+  protected getFilterPanelPrefix(): string {
+    return this.getWidgetName();
   }
 
   private getPromptEditorContainer(): HTMLElement {
@@ -125,6 +130,10 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
 
   public getColumnChooser(): ColumnChooserModel {
     return new ColumnChooserModel(this.getWidgetName());
+  }
+
+  public getFilterPanel(): FilterPanelModel {
+    return new FilterPanelModel(this.root, this.getFilterPanelPrefix());
   }
 
   public apiOption(name: string): unknown;
