@@ -75,7 +75,7 @@
         "remark-rehype": "10.1.0",
         "remark-stringify": "10.0.3",
         "rrule": "2.6.4",
-        "rxjs": "7.8.1",
+        "rxjs": "7.8.2",
         "signalr": "2.4.3",
         "systemjs": "0.19.41",
         "systemjs-plugin-babel": "0.0.25",
