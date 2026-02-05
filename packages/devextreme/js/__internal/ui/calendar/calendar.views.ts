@@ -15,7 +15,11 @@ import BaseView from './calendar.base_view';
 const CALENDAR_OTHER_MONTH_CLASS = 'dx-calendar-other-month';
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
+const CALENDAR_WEEK_NUMBER_HEADER_CELL_CLASS = 'dx-week-number-header';
+const CALENDAR_WEEK_NUMBER_HEADER_CELL_TEXT_CLASS = 'dx-week-number-header-text';
 const CALENDAR_WEEK_SELECTION_CLASS = 'dx-calendar-week-selection';
+
+const WEEK_NUMBER_TEXT = 'WeekNumber';
 
 export interface MonthViewProperties extends BaseViewProperties {
   showWeekNumbers: boolean;
@@ -100,9 +104,14 @@ export class MonthView extends BaseView<MonthViewProperties> {
       // @ts-expect-error ts-error
       .attr({
         scope: 'col',
-        abbr: 'WeekNumber',
-        class: 'dx-week-number-header',
+        abbr: WEEK_NUMBER_TEXT,
+        class: CALENDAR_WEEK_NUMBER_HEADER_CELL_CLASS,
       });
+
+    $('<div>')
+      .text(WEEK_NUMBER_TEXT)
+      .addClass(CALENDAR_WEEK_NUMBER_HEADER_CELL_TEXT_CLASS)
+      .appendTo($weekNumberHeaderCell);
 
     $headerRow.prepend($weekNumberHeaderCell);
   }
