@@ -6,8 +6,8 @@ import { logger } from '@ts/core/utils/m_console';
 import { createScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
-describe('Scheduler scrollTo deprecation', () => {
-  it('should log deprecation warning when using old scrollTo API', async () => {
+describe('Scheduler scrollTo', () => {
+  it('should not log warnings when using scrollTo API', async () => {
     setupSchedulerTestEnvironment();
     const loggerWarnSpy = jest.spyOn(logger, 'warn');
 
@@ -29,9 +29,6 @@ describe('Scheduler scrollTo deprecation', () => {
 
     scheduler.scrollTo(testDate, undefined, false);
 
-    expect(loggerWarnSpy).toHaveBeenCalledTimes(1);
-    expect(loggerWarnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('W0002'),
-    );
+    expect(loggerWarnSpy).toHaveBeenCalledTimes(0);
   });
 });
