@@ -1326,6 +1326,13 @@ class EditingControllerImpl extends modules.ViewController {
     this._internalState.delete(getKeyHash(key));
   }
 
+  private updateInternalDataKey(oldKey, newKey) {
+    const internalData = this._getInternalData(oldKey) ?? {};
+
+    this._removeInternalData(oldKey);
+    this._addInternalData({ ...internalData, key: newKey });
+  }
+
   private _updateInsertAfterOrBeforeKeys(changes, index) {
     const removeChange = changes[index];
 
@@ -1612,7 +1619,10 @@ class EditingControllerImpl extends modules.ViewController {
           params = { data, cancel: false };
           deferred = this._executeEditingAction('onRowInserting', params, () => store.insert(params.data).done((data, key) => {
             if (isDefined(key)) {
+              const initialKey = changeCopy.key;
+
               changeCopy.key = key;
+              this.updateInternalDataKey(initialKey, key);
             }
             if (data && isObject(data) && data !== params.data) {
               changeCopy.data = data;
@@ -1715,17 +1725,17 @@ class EditingControllerImpl extends modules.ViewController {
 
   private _fireSaveEditDataEvents(changes) {
     each(changes, (_, { data, key, type }) => {
-      const internalData = this._addInternalData({ key });
+      const internalData = this._getInternalData(key);
       const params: any = { key, data };
 
-      if (internalData.error) {
+      if (internalData?.error) {
         params.error = internalData.error;
       }
 
       // eslint-disable-next-line default-case
       switch (type) {
         case DATA_EDIT_DATA_REMOVE_TYPE:
-          this.executeAction('onRowRemoved', extend({}, params, { data: internalData.oldData }));
+          this.executeAction('onRowRemoved', extend({}, params, { data: internalData?.oldData }));
           break;
         case DATA_EDIT_DATA_INSERT_TYPE:
           this.executeAction('onRowInserted', params);
@@ -1734,6 +1744,8 @@ class EditingControllerImpl extends modules.ViewController {
           this.executeAction('onRowUpdated', params);
           break;
       }
+
+      this._removeInternalData(key);
     });
 
     this.executeAction('onSaved', { changes });
@@ -2485,6 +2497,12 @@ class EditingControllerImpl extends modules.ViewController {
                   || !parameters.row.isEditing
               );
   }
+
+  /// #DEBUG
+  public getInternalStateSize(): number {
+    return this._internalState.size;
+  }
+  /// #ENDDEBUG
 }
 
 export type EditingController = EditingControllerImpl
