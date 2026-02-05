@@ -1,9 +1,8 @@
 import type { Column } from '@js/ui/data_grid';
 import DataGrid from '@js/ui/data_grid';
+import { DataGridBaseModel } from '@ts/grids/grid_core/__tests__/__mock__/model/data_grid_base';
 
-import { GridCoreModel } from '../../../../grid_core/__tests__/__mock__/model/grid_core';
-
-export class DataGridModel extends GridCoreModel<DataGrid> {
+export class DataGridModel extends DataGridBaseModel<DataGrid> {
   protected NAME = 'dxDataGrid';
 
   public getInstance(): DataGrid {

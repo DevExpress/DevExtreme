@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { GridBase } from '@js/common/grids';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type CardView from '@js/ui/card_view';
 import { LoadPanelModel } from '@ts/ui/__tests__/__mock__/model/load_panel';
 import { ToastModel } from '@ts/ui/__tests__/__mock__/model/toast';
 
@@ -28,10 +27,14 @@ const SELECTORS = {
   revertButton: 'dx-revert-button',
 };
 
-export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
+export abstract class GridCoreModel<TInstance = GridBase | CardView> {
   protected abstract NAME: string;
 
   constructor(protected readonly root: HTMLElement) {}
+
+  private getWidgetName(): string {
+    return this.NAME.slice(2).toLowerCase();
+  }
 
   private getPromptEditorContainer(): HTMLElement {
     return this.root.querySelector(`.${SELECTORS.aiPromptEditor}`) as HTMLElement;
@@ -107,29 +110,9 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
   }
 
   public addWidgetPrefix(classNames: string): string {
-    const componentName = this.NAME;
+    const widgetName = this.getWidgetName();
 
-    return `dx-${componentName.slice(2).toLowerCase()}${classNames ? `-${classNames}` : ''}`;
-  }
-
-  public apiColumnOption(id: string, name?: string, value?: any): any {
-    switch (arguments.length) {
-      case 1:
-        return this.getInstance().columnOption(id);
-      case 2:
-        return this.getInstance().columnOption(id, name);
-      default:
-        this.getInstance().columnOption(id, name as string, value);
-        return undefined;
-    }
-  }
-
-  public async apiRefresh(): Promise<void> {
-    await this.getInstance().refresh();
-  }
-
-  public apiAbortAIColumnRequest(columnName: string): void {
-    this.getInstance().abortAIColumnRequest(columnName);
+    return `dx-${widgetName}${classNames ? `-${classNames}` : ''}`;
   }
 
   public getLoadPanel(): LoadPanelModel {
@@ -141,7 +124,22 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
   }
 
   public getColumnChooser(): ColumnChooserModel {
-    return new ColumnChooserModel(this.root);
+    return new ColumnChooserModel(this.getWidgetName());
+  }
+
+  public apiOption(name: string): unknown;
+  public apiOption(name: string, value: unknown): void;
+  public apiOption(name: string, value?: unknown): unknown {
+    // Both GridBase and CardView have option() method
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const instance = this.getInstance() as any;
+
+    if (arguments.length === 1) {
+      return instance.option(name);
+    }
+
+    instance.option(name, value);
+    return undefined;
   }
 
   public abstract getInstance(): TInstance;
