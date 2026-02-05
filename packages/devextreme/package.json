@@ -131,7 +131,7 @@
     "fancy-log": "2.0.0",
     "file-saver": "2.0.5",
     "glob": "11.1.0",
-    "globalize": "1.7.0",
+    "globalize": "1.7.1",
     "globals": "catalog:",
     "gulp": "4.0.2",
     "gulp-autoprefixer": "10.0.0",
