@@ -43,9 +43,7 @@ export class AppComponent {
 
   crossScrollingEnabled = false;
 
-  appointmentContextMenuItems: ContextMenuItem[] = [];
-
-  cellContextMenuItems: ContextMenuItem[] = [];
+  contextMenuItems: ContextMenuItem[] = [];
 
   constructor(service: Service) {
     this.resourcesData = service.getResources();
@@ -58,12 +56,16 @@ export class AppComponent {
 
   onAppointmentContextMenu(e: DxSchedulerTypes.AppointmentContextMenuEvent) {
     const items = this.getAppointmentContextMenuItems(e);
-    this.appointmentContextMenuItems = items;
+    this.contextMenuItems = items;
   }
 
   onCellContextMenu(e: DxSchedulerTypes.CellContextMenuEvent) {
     const items = this.getCellContextMenuItems(e);
-    this.cellContextMenuItems = items;
+    this.contextMenuItems = items;
+  }
+
+  onContextMenuHiding() {
+    this.contextMenuItems = [];
   }
 
   getAppointmentContextMenuItems(e: DxSchedulerTypes.AppointmentContextMenuEvent): ContextMenuItem[] {

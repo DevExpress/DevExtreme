@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 import { Scheduler, Resource } from 'devextreme-react/scheduler';
-import type { SchedulerTypes } from 'devextreme-react/scheduler';
+import type { SchedulerRef, SchedulerTypes } from 'devextreme-react/scheduler';
 import { ContextMenu } from 'devextreme-react/context-menu';
 import type { ContextMenuTypes } from 'devextreme-react/context-menu';
 
@@ -16,9 +16,9 @@ const onContextMenuItemClick = (e: ContextMenuTypes.ItemClickEvent<ContextMenuIt
 };
 
 const App = () => {
+  const schedulerRef = useRef<SchedulerRef>(null);
   const [currentDate, setCurrentDate] = useState(new Date(2020, 10, 25));
-  const [appointmentContextMenuItems, setAppointmentContextMenuItems] = useState<ContextMenuItem[]>([]);
-  const [cellContextMenuItems, setCellContextMenuItems] = useState<ContextMenuItem[]>([]);
+  const [contextMenuItems, setContextMenuItems] = useState<ContextMenuItem[]>([]);
   const [groups, setGroups] = useState<string[]>([]);
   const [crossScrollingEnabled, setCrossScrollingEnabled] = useState(false);
 
@@ -110,31 +110,22 @@ const App = () => {
 
   const onAppointmentContextMenu = useCallback((e: SchedulerTypes.AppointmentContextMenuEvent) => {
     const items = getAppointmentContextMenuItems(e);
-    setAppointmentContextMenuItems(items);
+    setContextMenuItems(items);
   }, [getAppointmentContextMenuItems]);
 
   const onCellContextMenu = useCallback((e: SchedulerTypes.CellContextMenuEvent) => {
     const items = getCellContextMenuItems(e);
-    setCellContextMenuItems(items);
+    setContextMenuItems(items);
   }, [getCellContextMenuItems]);
+
+  const onContextMenuHiding = useCallback(() => {
+    setContextMenuItems([]);
+  }, []);
 
   return (
     <>
-      <ContextMenu
-        dataSource={appointmentContextMenuItems}
-        width={200}
-        target=".dx-scheduler-appointment"
-        onItemClick={onContextMenuItemClick}
-        itemComponent={ItemTemplate}
-      />
-      <ContextMenu
-        dataSource={cellContextMenuItems}
-        width={200}
-        target=".dx-scheduler-date-table-cell"
-        onItemClick={onContextMenuItemClick}
-        itemComponent={ItemTemplate}
-      />
       <Scheduler
+        ref={schedulerRef}
         timeZone="America/Los_Angeles"
         dataSource={data}
         views={views}
@@ -155,6 +146,14 @@ const App = () => {
           icon="conferenceroomoutline"
         />
       </Scheduler>
+      <ContextMenu
+        dataSource={contextMenuItems}
+        width={200}
+        target='.dx-scheduler'
+        onItemClick={onContextMenuItemClick}
+        onHiding={onContextMenuHiding}
+        itemComponent={ItemTemplate}
+      />
     </>
   );
 };
