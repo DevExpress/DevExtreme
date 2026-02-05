@@ -10,7 +10,7 @@ interface DateLocalization {
   formatUsesMonthName(format: string): boolean;
   getDayNames(format?: Format): string[];
   getMonthNames(format?: Format): string[];
-  parse(text: string, format?: Format | string): Date | null | undefined
+  parse(text: string, format?: Format | string): Date | null | undefined;
 }
 declare const dateLocalization: DateLocalization;
 export default dateLocalization;
