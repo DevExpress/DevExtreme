@@ -16,8 +16,9 @@ const CALENDAR_OTHER_MONTH_CLASS = 'dx-calendar-other-month';
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
 const CALENDAR_WEEK_NUMBER_HEADER_CELL_CLASS = 'dx-week-number-header';
-const CALENDAR_WEEK_NUMBER_HEADER_CELL_TEXT_CLASS = 'dx-week-number-header-text';
 const CALENDAR_WEEK_SELECTION_CLASS = 'dx-calendar-week-selection';
+
+const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
 
 const WEEK_NUMBER_TEXT = 'WeekNumber';
 
@@ -110,7 +111,7 @@ export class MonthView extends BaseView<MonthViewProperties> {
 
     $('<div>')
       .text(WEEK_NUMBER_TEXT)
-      .addClass(CALENDAR_WEEK_NUMBER_HEADER_CELL_TEXT_CLASS)
+      .addClass(SCREEN_READER_ONLY_CLASS)
       .appendTo($weekNumberHeaderCell);
 
     $headerRow.prepend($weekNumberHeaderCell);

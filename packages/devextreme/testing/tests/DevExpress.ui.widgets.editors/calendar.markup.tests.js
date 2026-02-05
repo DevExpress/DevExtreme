@@ -10,7 +10,6 @@ import 'ui/calendar';
 const CALENDAR_CLASS = 'dx-calendar';
 const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
 const CALENDAR_WEEK_NUMBER_HEADER_CLASS = 'dx-week-number-header';
-const CALENDAR_WEEK_NUMBER_HEADER_CELL_TEXT_CLASS = 'dx-week-number-header-text';
 const CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator';
 const CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS = 'dx-calendar-navigator-previous-view';
 const CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS = 'dx-calendar-navigator-next-view';
@@ -19,6 +18,8 @@ const CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
 const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
 const CALENDAR_RANGE_CLASS = 'dx-calendar-range';
+
+const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
 
 const ARIA_LABEL_DATE_FORMAT = 'date';
 
@@ -261,21 +262,21 @@ QUnit.module('showWeekNumbers', {
         assert.ok($firstHeaderCell.hasClass(CALENDAR_WEEK_NUMBER_HEADER_CLASS));
     });
 
-    QUnit.test('week number header cell should contain element with "dx-week-number-header-text" class when showWeekNumbers=true', function(assert) {
+    QUnit.test('week number header cell should contain element with "dx-screen-reader-only" class when showWeekNumbers=true', function(assert) {
         this.reinit({ showWeekNumbers: true });
         this.cacheTableElements();
         const $firstHeaderCell = this.$headerRow.children().eq(0);
-        const $textElement = $firstHeaderCell.find(`.${CALENDAR_WEEK_NUMBER_HEADER_CELL_TEXT_CLASS}`);
+        const $textElement = $firstHeaderCell.find(`.${SCREEN_READER_ONLY_CLASS}`);
 
         assert.strictEqual($textElement.length, 1, 'text element is rendered');
-        assert.ok($textElement.hasClass(CALENDAR_WEEK_NUMBER_HEADER_CELL_TEXT_CLASS), 'text element has correct class');
+        assert.ok($textElement.hasClass(SCREEN_READER_ONLY_CLASS), 'text element has correct class');
     });
 
     QUnit.test('week number header text element should contain "WeekNumber" text when showWeekNumbers=true', function(assert) {
         this.reinit({ showWeekNumbers: true });
         this.cacheTableElements();
         const $firstHeaderCell = this.$headerRow.children().eq(0);
-        const $textElement = $firstHeaderCell.find(`.${CALENDAR_WEEK_NUMBER_HEADER_CELL_TEXT_CLASS}`);
+        const $textElement = $firstHeaderCell.find(`.${SCREEN_READER_ONLY_CLASS}`);
 
         assert.strictEqual($textElement.text(), 'WeekNumber', 'text element contains correct text');
     });
