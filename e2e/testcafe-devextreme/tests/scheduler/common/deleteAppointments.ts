@@ -105,7 +105,6 @@ test('Appointment should be deleted by Delete key when focused in tooltip from c
   const scheduler = new Scheduler('#container');
   const collector = scheduler.collectors.find('2 more');
   const { appointmentTooltip } = scheduler;
-  const tooltipItem = appointmentTooltip.getListItem('Text');
 
   await t
     .expect(collector.element.exists).ok()
@@ -113,7 +112,7 @@ test('Appointment should be deleted by Delete key when focused in tooltip from c
     .click(collector.element)
     .expect(appointmentTooltip.isVisible())
     .ok()
-    .click(tooltipItem.element)
+    .pressKey('tab')
     .pressKey('delete')
     .expect(scheduler.getAppointmentCount())
     .eql(1)
@@ -134,10 +133,9 @@ test('Appointment should be deleted by Delete key when focused in tooltip from c
     endDate: new Date(2017, 4, 22, 10, 30, 0, 0),
   }],
   views: [{
-    type: 'week',
+    type: 'month',
     maxAppointmentsPerCell: 1,
   }],
-  currentView: 'week',
+  currentView: 'month',
   currentDate: new Date(2017, 4, 22),
-  startDayHour: 9,
 }));
