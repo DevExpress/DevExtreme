@@ -25874,10 +25874,6 @@ declare module DevExpress.ui {
      */
     hideAppointmentTooltip(): void;
     /**
-     * [descr:dxScheduler.scrollTo(date, group, allDay)]
-     */
-    scrollTo(date: Date, group?: object, allDay?: boolean): void;
-    /**
      * [descr:dxScheduler.scrollTo(date, options)]
      */
     scrollTo(
@@ -25888,6 +25884,11 @@ declare module DevExpress.ui {
         alignInView?: DevExpress.ui.dxScheduler.SchedulerScrollToAlign;
       }
     ): void;
+    /**
+     * [descr:dxScheduler.scrollTo(date, group, allDay)]
+     * @deprecated [depNote:dxScheduler.scrollTo(date, group, allDay)]
+     */
+    scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
