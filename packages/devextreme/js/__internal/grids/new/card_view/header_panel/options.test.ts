@@ -116,7 +116,6 @@ describe('Options', () => {
   });
 });
 
-// TODO: update after related column props are extracted from columns_controller
 describe('ColumnProperties', () => {
   describe('headerItemTemplate', () => {
     it('should override content of headerPanel item', () => {
