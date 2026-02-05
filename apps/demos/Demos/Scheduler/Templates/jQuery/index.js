@@ -136,7 +136,7 @@ $(() => {
     return $(`
       <div class='movie-preview'>
         <div class='movie-preview-image'>
-          <img src='${movie.image}' />
+          <img src='${movie.image}' alt='${movie.text}'/>
         </div>
         <div class='movie-details'>
           <div class='title'>${movie.text}</div>
@@ -154,7 +154,7 @@ $(() => {
     return $(`
       <div class='movie-info'>
         <div class='movie-preview-image'>
-          <img src='${movie.image}' />
+          <img src='${movie.image}' alt='${movie.text}'/>
         </div>
         <div class='movie-details'>
           <div class='title'>${movie.text} (${movie.year})</div>
