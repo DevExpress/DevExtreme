@@ -2150,7 +2150,7 @@ test('The onEditorPreparing event should be called once after clicking on a cell
 });
 
 fixture`Editing - ShowEditorAlways`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
   const dataGrid = new DataGrid('#container');
