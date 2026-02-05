@@ -1,24 +1,4 @@
 $(() => {
-  const appointmentContextMenuInstance = $('#appointment-context-menu').dxContextMenu({
-    width: 200,
-    dataSource: [],
-    target: '.dx-scheduler-appointment',
-    itemTemplate: contextMenuItemTemplate,
-    onItemClick: (e) => {
-      e.itemData.onItemClick(e);
-    },
-  }).dxContextMenu('instance');
-
-  const cellContextMenuInstance = $('#cell-context-menu').dxContextMenu({
-    width: 200,
-    dataSource: [],
-    target: '.dx-scheduler-date-table-cell',
-    itemTemplate: contextMenuItemTemplate,
-    onItemClick: (e) => {
-      e.itemData.onItemClick(e);
-    },
-  }).dxContextMenu('instance');
-
   $('#scheduler').dxScheduler({
     timeZone: 'America/Los_Angeles',
     dataSource: data,
@@ -30,11 +10,11 @@ $(() => {
     groups: [],
     onAppointmentContextMenu(e) {
       const items = getAppointmentContextMenuItems(e);
-      appointmentContextMenuInstance.option('dataSource', items);
+      contextMenuInstance.option('dataSource', items);
     },
     onCellContextMenu(e) {
       const items = getCellContextMenuItems(e);
-      cellContextMenuInstance.option('dataSource', items);
+      contextMenuInstance.option('dataSource', items);
     },
     resources: [{
       fieldExpr: 'roomId',
@@ -44,6 +24,19 @@ $(() => {
     }],
     height: 730,
   });
+
+  const contextMenuInstance = $('#context-menu').dxContextMenu({
+    width: 200,
+    dataSource: [],
+    target: '#scheduler',
+    itemTemplate: contextMenuItemTemplate,
+    onItemClick: (e) => {
+      e.itemData.onItemClick(e);
+    },
+    onHiding: (e) => {
+      e.component.option('dataSource', []);
+    },
+  }).dxContextMenu('instance');
 
   function contextMenuItemTemplate(itemData) {
     const template = $('<div></div>');

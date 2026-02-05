@@ -1,28 +1,5 @@
 <template>
   <div>
-    <DxContextMenu
-      :data-source="appointmentContextMenuItems"
-      :width="200"
-      target=".dx-scheduler-appointment"
-      :on-item-click="onContextMenuItemClick"
-      item-template="itemTemplateSlot"
-    >
-      <template #itemTemplateSlot="{ data: itemData }">
-        <ItemTemplate :item-data="itemData"/>
-      </template>
-    </DxContextMenu>
-    <DxContextMenu
-      :data-source="cellContextMenuItems"
-      :width="200"
-      target=".dx-scheduler-date-table-cell"
-      :on-item-click="onContextMenuItemClick"
-      item-template="itemTemplateSlot"
-    >
-      <template #itemTemplateSlot="{ data: itemData }">
-        <ItemTemplate :item-data="itemData"/>
-      </template>
-    </DxContextMenu>
-
     <DxScheduler
       time-zone="America/Los_Angeles"
       :groups="groups"
@@ -44,6 +21,19 @@
         icon="conferenceroomoutline"
       />
     </DxScheduler>
+
+    <DxContextMenu
+      :data-source="contextMenuItems"
+      :width="200"
+      target=".dx-scheduler"
+      :on-item-click="onContextMenuItemClick"
+      :on-hiding="onContextMenuHiding"
+      item-template="itemTemplateSlot"
+    >
+      <template #itemTemplateSlot="{ data: itemData }">
+        <ItemTemplate :item-data="itemData"/>
+      </template>
+    </DxContextMenu>
   </div>
 </template>
 
@@ -60,21 +50,24 @@ const currentDate = ref(new Date(2020, 10, 25));
 const dataSource = data;
 const groups = ref<string[]>([]);
 const crossScrollingEnabled = ref(false);
-const appointmentContextMenuItems = ref<ContextMenuItem[]>([]);
-const cellContextMenuItems = ref<ContextMenuItem[]>([]);
+const contextMenuItems = ref<ContextMenuItem[]>([]);
 
 const onAppointmentContextMenu = (e: DxSchedulerTypes.AppointmentContextMenuEvent) => {
   const items = getAppointmentContextMenuItems(e);
-  appointmentContextMenuItems.value = items;
+  contextMenuItems.value = items;
 };
 
 const onCellContextMenu = (e: DxSchedulerTypes.CellContextMenuEvent) => {
   const items = getCellContextMenuItems(e);
-  cellContextMenuItems.value = items;
+  contextMenuItems.value = items;
 };
 
 const onContextMenuItemClick = (e: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) => {
   e.itemData?.onItemClick?.(e);
+};
+
+const onContextMenuHiding = () => {
+  contextMenuItems.value = [];
 };
 
 const getAppointmentContextMenuItems = (
