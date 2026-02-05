@@ -53,8 +53,6 @@ const getIgnoredRules = (testName) => {
   const specificRules = {
     'Accordion-Overview': ['nested-interactive'],
 
-    'Calendar-MultipleSelection': ['empty-table-header'],
-
     'Charts-AreaSparklines': ['empty-table-header'],
     'Charts-BarSparklines': ['empty-table-header'],
     'Charts-SimpleBullets': ['empty-table-header'],
