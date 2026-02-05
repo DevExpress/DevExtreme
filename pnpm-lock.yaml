@@ -793,8 +793,8 @@ importers:
         specifier: 3.3.4
         version: 3.3.4(webpack@5.94.0)
       ts-loader:
-        specifier: 9.5.1
-        version: 9.5.1(typescript@5.9.3)(webpack@5.94.0)
+        specifier: 9.5.4
+        version: 9.5.4(typescript@5.9.3)(webpack@5.94.0)
       tsconfig-paths-webpack-plugin:
         specifier: 4.1.0
         version: 4.1.0
@@ -897,8 +897,8 @@ importers:
         specifier: 3.3.4
         version: 3.3.4(webpack@5.94.0)
       ts-loader:
-        specifier: 9.5.1
-        version: 9.5.1(typescript@4.9.5)(webpack@5.94.0)
+        specifier: 9.5.4
+        version: 9.5.4(typescript@4.9.5)(webpack@5.94.0)
       tsconfig-paths-webpack-plugin:
         specifier: 4.1.0
         version: 4.1.0
@@ -17511,8 +17511,8 @@ packages:
       esbuild:
         optional: true
 
-  ts-loader@9.5.1:
-    resolution: {integrity: sha512-rNH3sK9kGZcH9dYzC7CewQm4NtxJTjSEVRJ2DyBZR7f8/wcta+iV44UPCXc5+nzDzivKtlzV6c9P4e+oFhDLYg==}
+  ts-loader@9.5.4:
+    resolution: {integrity: sha512-nCz0rEwunlTZiy6rXFByQU1kVVpCIgUpc/psFiKVrUwrizdnIbRFu8w7bxhUF0X613DYwT4XzrZHpVyMe758hQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       typescript: '*'
@@ -41040,23 +41040,23 @@ snapshots:
       '@jest/types': 29.6.3
       babel-jest: 29.7.0(@babel/core@7.28.6)
 
-  ts-loader@9.5.1(typescript@4.9.5)(webpack@5.94.0):
+  ts-loader@9.5.4(typescript@4.9.5)(webpack@5.94.0):
     dependencies:
       chalk: 4.1.2
-      enhanced-resolve: 5.17.1
+      enhanced-resolve: 5.18.3
       micromatch: 4.0.8
-      semver: 7.6.3
-      source-map: 0.7.4
+      semver: 7.7.3
+      source-map: 0.7.6
       typescript: 4.9.5
       webpack: 5.94.0(@swc/core@1.15.3)(webpack-cli@5.1.4)
 
-  ts-loader@9.5.1(typescript@5.9.3)(webpack@5.94.0):
+  ts-loader@9.5.4(typescript@5.9.3)(webpack@5.94.0):
     dependencies:
       chalk: 4.1.2
-      enhanced-resolve: 5.17.1
+      enhanced-resolve: 5.18.3
       micromatch: 4.0.8
-      semver: 7.6.3
-      source-map: 0.7.4
+      semver: 7.7.3
+      source-map: 0.7.6
       typescript: 5.9.3
       webpack: 5.94.0(@swc/core@1.15.3)(webpack-cli@5.1.4)
 
