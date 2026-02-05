@@ -376,6 +376,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-work-space.dx-scheduler-work-space-month {
+  .dx-scheduler-date-table-other-month {
+    color: $scheduler-workspace-other-month-text-color;
+  }
+
   .dx-scheduler-appointment-content {
     padding-top: 3px;
     font-size: $material-scheduler-appointment-month-text-size;

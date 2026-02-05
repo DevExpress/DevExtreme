@@ -68,12 +68,7 @@ const optionsWithSimpleItems: Options<Properties> = {
   selectionMode: ['all', 'multiple', 'none', 'single'],
 };
 
-const a11yCheckConfig = {
-  rules: {
-    // NOTE: color-contrast issues
-    'color-contrast': { enabled: false },
-  },
-};
+const a11yCheckConfig = {};
 
 const groupedConfiguration: Configuration = {
   component: 'dxList',

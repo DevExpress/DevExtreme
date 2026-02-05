@@ -9,7 +9,7 @@ import fx from 'common/core/animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { getActiveElement } from '../../helpers/shadowDom.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import uiDateUtils from '__internal/ui/date_box/m_date_utils';
+import uiDateUtils from '__internal/ui/date_box/date_utils';
 import { noop } from 'core/utils/common';
 import { logger } from 'core/utils/console';
 

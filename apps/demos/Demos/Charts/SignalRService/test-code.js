@@ -1,7 +1,8 @@
 testUtils.importAnd(() => 'devextreme/viz/chart', () => DevExpress.viz.dxChart, (dxChart) => {
   let isReady = false;
   return testUtils
-    .postponeUntilFound('#chart', 100, 3000)
+    .postponeUntilFound('#chart', 100, 20000)
+    .then(() => testUtils.postpone(1000))
     .then(() => {
       const chart = dxChart.getInstance(document.querySelector('#chart'));
 

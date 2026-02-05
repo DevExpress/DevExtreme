@@ -9,12 +9,9 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, InitializedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent, dxGanttContextMenuItem, GanttPredefinedContextMenuItem, dxGanttFilterRowOperationDescriptions, dxGanttHeaderFilterTexts, GanttPredefinedToolbarItem, GanttScaleType, dxGanttToolbarItem } from "devextreme/ui/gantt";
-import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as TextBoxDisposingEvent, InitializedEvent as TextBoxInitializedEvent, dxTextBoxOptions, TextBoxType, ChangeEvent, CopyEvent, CutEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
-import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, OptionChangedEvent as ButtonOptionChangedEvent, ClickEvent } from "devextreme/ui/button";
-import type { AIIntegration } from "devextreme/common/ai-integration";
-import type { AIColumnMode, ColumnAIOptions, FilterOperation, FilterType, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from "devextreme/common/grids";
-import type { TextEditorButtonLocation, HorizontalAlignment, template, DataType, Format as CommonFormat, SortOrder, SearchMode, TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorStyle, ValidationMessageMode, Position, ValidationStatus, ToolbarItemLocation, ToolbarItemComponent, ButtonStyle, ButtonType, SingleMultipleOrNone } from "devextreme/common";
+import type { HorizontalAlignment, template, DataType, Format as CommonFormat, SortOrder, SearchMode, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone } from "devextreme/common";
 import type { dxTreeListColumn, dxTreeListRowObject } from "devextreme/ui/tree_list";
+import type { FilterOperation, FilterType, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from "devextreme/common/grids";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
@@ -148,61 +145,8 @@ const Gantt = memo(
 
 
 // owners:
-// Column
-type IAIProps = React.PropsWithChildren<{
-  aiIntegration?: AIIntegration | undefined;
-  editorOptions?: dxTextBoxOptions<any>;
-  emptyText?: string;
-  mode?: AIColumnMode;
-  noDataText?: string;
-  popup?: Record<string, any>;
-  prompt?: string;
-  showHeaderMenu?: boolean;
-}>
-const _componentAI = (props: IAIProps) => {
-  return React.createElement(NestedOption<IAIProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "ai",
-      ExpectedChildren: {
-        editorOptions: { optionName: "editorOptions", isCollectionItem: false }
-      },
-    },
-  });
-};
-
-const AI = Object.assign<typeof _componentAI, NestedComponentMeta>(_componentAI, {
-  componentType: "option",
-});
-
-// owners:
-// EditorOptions
-type IButtonProps = React.PropsWithChildren<{
-  location?: TextEditorButtonLocation;
-  name?: string | undefined;
-  options?: dxButtonOptions | undefined;
-}>
-const _componentButton = (props: IButtonProps) => {
-  return React.createElement(NestedOption<IButtonProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "buttons",
-      IsCollectionItem: true,
-      ExpectedChildren: {
-        options: { optionName: "options", isCollectionItem: false }
-      },
-    },
-  });
-};
-
-const Button = Object.assign<typeof _componentButton, NestedComponentMeta>(_componentButton, {
-  componentType: "option",
-});
-
-// owners:
 // Gantt
 type IColumnProps = React.PropsWithChildren<{
-  ai?: ColumnAIOptions;
   alignment?: HorizontalAlignment | undefined;
   allowFiltering?: boolean;
   allowHeaderFiltering?: boolean;
@@ -270,7 +214,6 @@ const _componentColumn = (props: IColumnProps) => {
         defaultVisibleIndex: "visibleIndex"
       },
       ExpectedChildren: {
-        ai: { optionName: "ai", isCollectionItem: false },
         columnHeaderFilter: { optionName: "headerFilter", isCollectionItem: false },
         format: { optionName: "format", isCollectionItem: false },
         headerFilter: { optionName: "headerFilter", isCollectionItem: false }
@@ -491,86 +434,6 @@ const Editing = Object.assign<typeof _componentEditing, NestedComponentMeta>(_co
 });
 
 // owners:
-// AI
-type IEditorOptionsProps = React.PropsWithChildren<{
-  accessKey?: string | undefined;
-  activeStateEnabled?: boolean;
-  buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
-  disabled?: boolean;
-  elementAttr?: Record<string, any>;
-  focusStateEnabled?: boolean;
-  height?: number | string | undefined;
-  hint?: string | undefined;
-  hoverStateEnabled?: boolean;
-  inputAttr?: any;
-  isDirty?: boolean;
-  isValid?: boolean;
-  label?: string;
-  labelMode?: LabelMode;
-  mask?: string;
-  maskChar?: string;
-  maskInvalidMessage?: string;
-  maskRules?: any;
-  maxLength?: number | string;
-  mode?: TextBoxType;
-  name?: string;
-  onChange?: ((e: ChangeEvent) => void);
-  onContentReady?: ((e: TextBoxContentReadyEvent) => void);
-  onCopy?: ((e: CopyEvent) => void);
-  onCut?: ((e: CutEvent) => void);
-  onDisposing?: ((e: TextBoxDisposingEvent) => void);
-  onEnterKey?: ((e: EnterKeyEvent) => void);
-  onFocusIn?: ((e: FocusInEvent) => void);
-  onFocusOut?: ((e: FocusOutEvent) => void);
-  onInitialized?: ((e: TextBoxInitializedEvent) => void);
-  onInput?: ((e: InputEvent) => void);
-  onKeyDown?: ((e: KeyDownEvent) => void);
-  onKeyUp?: ((e: KeyUpEvent) => void);
-  onOptionChanged?: ((e: OptionChangedEvent) => void);
-  onPaste?: ((e: PasteEvent) => void);
-  onValueChanged?: ((e: ValueChangedEvent) => void);
-  placeholder?: string;
-  readOnly?: boolean;
-  rtlEnabled?: boolean;
-  showClearButton?: boolean;
-  showMaskMode?: MaskMode;
-  spellcheck?: boolean;
-  stylingMode?: EditorStyle;
-  tabIndex?: number;
-  text?: string;
-  useMaskedValue?: boolean;
-  validationError?: any;
-  validationErrors?: Array<any>;
-  validationMessageMode?: ValidationMessageMode;
-  validationMessagePosition?: Position;
-  validationStatus?: ValidationStatus;
-  value?: string;
-  valueChangeEvent?: string;
-  visible?: boolean;
-  width?: number | string | undefined;
-  defaultValue?: string;
-  onValueChange?: (value: string) => void;
-}>
-const _componentEditorOptions = (props: IEditorOptionsProps) => {
-  return React.createElement(NestedOption<IEditorOptionsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "editorOptions",
-      DefaultsProps: {
-        defaultValue: "value"
-      },
-      ExpectedChildren: {
-        button: { optionName: "buttons", isCollectionItem: true }
-      },
-    },
-  });
-};
-
-const EditorOptions = Object.assign<typeof _componentEditorOptions, NestedComponentMeta>(_componentEditorOptions, {
-  componentType: "option",
-});
-
-// owners:
 // Gantt
 type IFilterRowProps = React.PropsWithChildren<{
   betweenEndText?: string;
@@ -786,54 +649,6 @@ const _componentOperationDescriptions = (props: IOperationDescriptionsProps) => 
 };
 
 const OperationDescriptions = Object.assign<typeof _componentOperationDescriptions, NestedComponentMeta>(_componentOperationDescriptions, {
-  componentType: "option",
-});
-
-// owners:
-// Button
-type IOptionsProps = React.PropsWithChildren<{
-  accessKey?: string | undefined;
-  activeStateEnabled?: boolean;
-  disabled?: boolean;
-  elementAttr?: Record<string, any>;
-  focusStateEnabled?: boolean;
-  height?: number | string | undefined;
-  hint?: string | undefined;
-  hoverStateEnabled?: boolean;
-  icon?: string;
-  onClick?: ((e: ClickEvent) => void);
-  onContentReady?: ((e: ButtonContentReadyEvent) => void);
-  onDisposing?: ((e: ButtonDisposingEvent) => void);
-  onInitialized?: ((e: ButtonInitializedEvent) => void);
-  onOptionChanged?: ((e: ButtonOptionChangedEvent) => void);
-  rtlEnabled?: boolean;
-  stylingMode?: ButtonStyle;
-  tabIndex?: number;
-  template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
-  text?: string;
-  type?: ButtonType | string;
-  useSubmitBehavior?: boolean;
-  validationGroup?: string | undefined;
-  visible?: boolean;
-  width?: number | string | undefined;
-  render?: (...params: any) => React.ReactNode;
-  component?: React.ComponentType<any>;
-}>
-const _componentOptions = (props: IOptionsProps) => {
-  return React.createElement(NestedOption<IOptionsProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "options",
-      TemplateProps: [{
-        tmplOption: "template",
-        render: "render",
-        component: "component"
-      }],
-    },
-  });
-};
-
-const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_componentOptions, {
   componentType: "option",
 });
 
@@ -1101,10 +916,6 @@ export {
   Gantt,
   IGanttOptions,
   GanttRef,
-  AI,
-  IAIProps,
-  Button,
-  IButtonProps,
   Column,
   IColumnProps,
   ColumnHeaderFilter,
@@ -1121,8 +932,6 @@ export {
   IDependenciesProps,
   Editing,
   IEditingProps,
-  EditorOptions,
-  IEditorOptionsProps,
   FilterRow,
   IFilterRowProps,
   Format,
@@ -1137,8 +946,6 @@ export {
   IItemProps,
   OperationDescriptions,
   IOperationDescriptionsProps,
-  Options,
-  IOptionsProps,
   ResourceAssignments,
   IResourceAssignmentsProps,
   Resources,

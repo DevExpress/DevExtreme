@@ -8,16 +8,23 @@
 $gantt-collapsable-row-bg: null !default;
 $gantt-icon-color: $datagrid-columnchooser-item-color !default;
 $gantt-parent-task-background-color: null !default;
+$gantt-task-color: $base-inverted-text-color !default;
+$gantt-task-background-color: null !default;
+$gantt-task-progress-background-color: null !default;
 
 @if $color == "blue" {
-  $gantt-parent-task-background-color: #8bc34a !default;
+  $gantt-parent-task-background-color: $base-success !default;
 }
 
 @if $mode == "light" {
   $gantt-collapsable-row-bg: color.adjust($base-bg, $lightness: -5%, $space: hsl) !default;
+  $gantt-task-background-color: color.adjust($base-bg, $lightness: -60%) !default;
+  $gantt-task-progress-background-color: rgba(0, 0, 0, 0.2) !default;
 }
 
 @if $mode == "dark" {
   $gantt-collapsable-row-bg: color.adjust($base-bg, $lightness: 5%, $space: hsl) !default;
+  $gantt-task-background-color: color.adjust($base-bg, $lightness: 60%) !default;
+  $gantt-task-progress-background-color: rgba(255, 255, 255, 0.2) !default;
 }
 

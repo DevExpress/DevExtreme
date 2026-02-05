@@ -8,13 +8,37 @@
 $gantt-collapsable-row-bg: null !default;
 $gantt-icon-color: $datagrid-columnchooser-item-color !default;
 $gantt-parent-task-background-color: null !default;
+$gantt-task-progress-background-color: null !default;
+$gantt-task-color: null !default;
+$gantt-task-background-color: null !default;
 
 @if $color == "lime" {
   $gantt-parent-task-background-color: #f44336 !default;
+  $gantt-task-progress-background-color: rgba(0, 0, 0, 0.2) !default;
+  $gantt-task-color: #fff;
+  $gantt-task-background-color: #999;
 }
 
-@if $color == "blue" or $color == "orange" or $color == "purple" or $color == "teal" {
+@if $color == "blue" {
+  $gantt-parent-task-background-color: $base-success !default;
+  $gantt-task-color: $base-inverted-text-color !default;
+
+  @if $mode == "light" {
+    $gantt-task-progress-background-color: rgba(0, 0, 0, 0.2) !default;
+    $gantt-task-background-color: color.adjust($base-bg, $lightness: -60%, $space: hsl) !default;
+  }
+
+  @if $mode == "dark" {
+    $gantt-task-progress-background-color: rgba(255, 255, 255, 0.32) !default;
+    $gantt-task-background-color: color.adjust($base-bg, $lightness: 60%, $space: hsl) !default;
+  }
+}
+
+@if $color == "orange" or $color == "purple" or $color == "teal" {
   $gantt-parent-task-background-color: #8bc34a !default;
+  $gantt-task-progress-background-color: rgba(0, 0, 0, 0.2) !default;
+  $gantt-task-color: #fff;
+  $gantt-task-background-color: #999;
 }
 
 @if $mode == "light" {

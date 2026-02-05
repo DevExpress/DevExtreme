@@ -4,7 +4,6 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { isMaterialBased } from '../../../helpers/themeUtils';
 
 fixture`TreeList - Status`
   .page(url(__dirname, '../../container.html'));
@@ -30,13 +29,12 @@ const DATA_SOURCE = [
 ];
 
 test('Accessibility: TreeList general status should contains correct text (rows expanded)', async (t) => {
-  const expectedStatusText = 'Tree list with 3 rows and 2 columns';
   const treeList = new TreeList('#container');
 
   const statusText = await treeList.getGeneralStatusContainer().textContent;
 
   await a11yCheck(t);
-  await t.expect(statusText).eql(isMaterialBased() ? '' : expectedStatusText);
+  await t.expect(statusText).eql('');
 }).before(async () => createWidget('dxTreeList', {
   dataSource: DATA_SOURCE,
   rootValue: -1,
@@ -47,13 +45,12 @@ test('Accessibility: TreeList general status should contains correct text (rows 
 }));
 
 test('Accessibility: TreeList general status should contains correct text (rows collapsed)', async (t) => {
-  const expectedStatusText = 'Tree list with 1 rows and 2 columns';
   const treeList = new TreeList('#container');
 
   const statusText = await treeList.getGeneralStatusContainer().textContent;
 
   await a11yCheck(t);
-  await t.expect(statusText).eql(isMaterialBased() ? '' : expectedStatusText);
+  await t.expect(statusText).eql('');
 }).before(async () => createWidget('dxTreeList', {
   dataSource: DATA_SOURCE,
   rootValue: -1,

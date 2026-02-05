@@ -40,7 +40,7 @@ import DxFileUploader from 'devextreme-vue/file-uploader';
 
 .note {
   font-size: 10pt;
-  color: #484848;
+  color: var(--dx-texteditor-color-label);
   margin-left: 9px;
 }
 
