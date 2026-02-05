@@ -68,8 +68,4 @@ describe('PendingPromises', () => {
     await jest.runAllTimersAsync();
     expect(flag).toBe(true);
   });
-
-  it.skip('should not wait for promised added after waiting', async () => {
-    // TODO: write test
-  });
 });
