@@ -103,7 +103,7 @@ export class AppComponent {
           roomId: [itemData.id],
         }),
       })),
-    ] as ContextMenuItem[];
+    ];
   }
 
   getCellContextMenuItems(e: DxSchedulerTypes.CellContextMenuEvent): ContextMenuItem[] {
@@ -147,7 +147,7 @@ export class AppComponent {
           this.currentDate = new Date();
         },
       },
-    ] as unknown as ContextMenuItem[];
+    ];
   }
 }
 
