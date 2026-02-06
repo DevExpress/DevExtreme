@@ -591,8 +591,8 @@ importers:
         specifier: 'catalog:'
         version: 3.3.3
       '@rollup/plugin-babel':
-        specifier: 6.0.4
-        version: 6.0.4(@babel/core@7.28.6)(@types/babel__core@7.20.5)(rollup@4.22.4)
+        specifier: 6.1.0
+        version: 6.1.0(@babel/core@7.28.6)(@types/babel__core@7.20.5)(rollup@4.22.4)
       '@rollup/plugin-node-resolve':
         specifier: 15.2.3
         version: 15.2.3(rollup@4.22.4)
@@ -2925,10 +2925,6 @@ packages:
 
   '@babel/helper-member-expression-to-functions@7.28.5':
     resolution: {integrity: sha512-cwM7SBRZcPCLgl8a7cY0soT1SptSzAlMH39vwiRpOQkJlh53r5hdHwLSCZpQdVLT39sZt+CRpNwYG4Y2v77atg==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/helper-module-imports@7.25.9':
-    resolution: {integrity: sha512-tnUA4RsrmflIM6W6RFTLFSXITtl0wKjgpnLgXyowocVPrbYrLUXSBXDgTs8BlbmIzIdlBySRQjINYs2BAkiLtw==}
     engines: {node: '>=6.9.0'}
 
   '@babel/helper-module-imports@7.27.1':
@@ -6064,8 +6060,8 @@ packages:
     peerDependencies:
       rollup: ^4.53.3
 
-  '@rollup/plugin-babel@6.0.4':
-    resolution: {integrity: sha512-YF7Y52kFdFT/xVSuVdjkV5ZdX/3YtmX0QulG+x0taQOtJdHYzVU61aSSkAgVJ7NOv6qPkIYiJSgSWWN/DM5sGw==}
+  '@rollup/plugin-babel@6.1.0':
+    resolution: {integrity: sha512-dFZNuFD2YRcoomP4oYf+DvQNSUA9ih+A3vUqopQx5EdtPGo3WBnQcI/S8pwpz91UsGfL0HsMSOlaMld8HrbubA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@babel/core': ^7.0.0
@@ -20145,13 +20141,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/helper-module-imports@7.25.9':
-    dependencies:
-      '@babel/traverse': 7.28.6
-      '@babel/types': 7.28.6
-    transitivePeerDependencies:
-      - supports-color
-
   '@babel/helper-module-imports@7.27.1':
     dependencies:
       '@babel/traverse': 7.28.6
@@ -20704,7 +20693,7 @@ snapshots:
   '@babel/plugin-transform-async-to-generator@7.27.1(@babel/core@7.26.10)':
     dependencies:
       '@babel/core': 7.26.10
-      '@babel/helper-module-imports': 7.27.1
+      '@babel/helper-module-imports': 7.28.6
       '@babel/helper-plugin-utils': 7.28.6
       '@babel/helper-remap-async-to-generator': 7.27.1(@babel/core@7.26.10)
     transitivePeerDependencies:
@@ -20713,7 +20702,7 @@ snapshots:
   '@babel/plugin-transform-async-to-generator@7.27.1(@babel/core@7.28.4)':
     dependencies:
       '@babel/core': 7.28.4
-      '@babel/helper-module-imports': 7.27.1
+      '@babel/helper-module-imports': 7.28.6
       '@babel/helper-plugin-utils': 7.28.6
       '@babel/helper-remap-async-to-generator': 7.27.1(@babel/core@7.28.4)
     transitivePeerDependencies:
@@ -21622,7 +21611,7 @@ snapshots:
   '@babel/plugin-transform-runtime@7.28.3(@babel/core@7.28.4)':
     dependencies:
       '@babel/core': 7.28.4
-      '@babel/helper-module-imports': 7.27.1
+      '@babel/helper-module-imports': 7.28.6
       '@babel/helper-plugin-utils': 7.28.6
       babel-plugin-polyfill-corejs2: 0.4.14(@babel/core@7.28.4)
       babel-plugin-polyfill-corejs3: 0.13.0(@babel/core@7.28.4)
@@ -25008,10 +24997,10 @@ snapshots:
       rollup: 4.22.4
       slash: 3.0.0
 
-  '@rollup/plugin-babel@6.0.4(@babel/core@7.28.6)(@types/babel__core@7.20.5)(rollup@4.22.4)':
+  '@rollup/plugin-babel@6.1.0(@babel/core@7.28.6)(@types/babel__core@7.20.5)(rollup@4.22.4)':
     dependencies:
       '@babel/core': 7.28.6
-      '@babel/helper-module-imports': 7.25.9
+      '@babel/helper-module-imports': 7.28.6
       '@rollup/pluginutils': 5.1.3(rollup@4.22.4)
     optionalDependencies:
       '@types/babel__core': 7.20.5
@@ -25073,7 +25062,7 @@ snapshots:
 
   '@rollup/pluginutils@5.1.3(rollup@4.22.4)':
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.8
       estree-walker: 2.0.2
       picomatch: 4.0.3
     optionalDependencies:
@@ -25081,7 +25070,7 @@ snapshots:
 
   '@rollup/pluginutils@5.1.3(rollup@4.53.3)':
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.8
       estree-walker: 2.0.2
       picomatch: 4.0.3
     optionalDependencies:
