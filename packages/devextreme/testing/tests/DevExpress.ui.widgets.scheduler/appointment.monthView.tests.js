@@ -52,7 +52,7 @@ const createInstanceBase = async(options) => {
 
 module('T712431', () => {
     // TODO: there is a test for T712431 bug, when replace table layout on div layout, the test will also be useless
-    const APPOINTMENT_WIDTH = 928;
+    const APPOINTMENT_WIDTH = 941;
 
     test(`Appointment width should be not less ${APPOINTMENT_WIDTH}px with width control 1100px`, async function(assert) {
         const data = [
