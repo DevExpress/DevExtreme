@@ -8,6 +8,7 @@ import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactPerf from 'eslint-plugin-react-perf';
 import jest from 'eslint-plugin-jest';
+import vuePlugin from 'eslint-plugin-vue';
 import vueParser from 'vue-eslint-parser';
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
@@ -369,7 +370,7 @@ export default [
   },
 
   // Vue demos
-  ...compat.extends('plugin:vue/vue3-recommended').map(config => ({
+  ...vuePlugin.configs['flat/recommended'].map(config => ({
     ...config,
     files: [
       'Demos/**/Vue/*.vue',
