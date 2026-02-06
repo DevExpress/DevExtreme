@@ -20,9 +20,9 @@ import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor'
 
 import type { ValueChangedEvent } from '../editor/editor';
 import type { DxMouseWheelEvent } from '../scroll_view/types';
-import type { DateBoxBaseProperties } from './m_date_box.base';
-import DateBoxBase from './m_date_box.base';
-import { getDatePartIndexByPosition, renderDateParts } from './m_date_box.mask.parts';
+import type { DateBoxBaseProperties } from './date_box.base';
+import DateBoxBase from './date_box.base';
+import { getDatePartIndexByPosition, renderDateParts } from './date_box.mask.parts';
 
 const MASK_EVENT_NAMESPACE = 'dateBoxMask';
 const FORWARD = 1;
@@ -114,7 +114,7 @@ class DateBoxMask extends DateBoxBase {
     const { opened = false } = this.option();
     const isNotDeletingInCalendar = opened && e && !keysToHandleByMask.includes(normalizeKeyName(e) ?? '');
 
-    return !this._useMaskBehavior() || isNotDeletingInCalendar || (e && e.altKey);
+    return !this._useMaskBehavior() || isNotDeletingInCalendar || e?.altKey;
   }
 
   _upDownArrowHandler(step: number): void {
