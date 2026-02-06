@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 
 import '__internal/scheduler/workspaces/m_work_space_month';
@@ -55,14 +55,14 @@ module('API', () => {
 
         test('All day row', async function(assert) {
             this.createInstance('Week', { width: 800, height: 800 });
-            let index = this.instance.getCellIndexByCoordinates({ left: 298, top: 0 });
+            let index = this.instance.getCellIndexByCoordinates({ left: 350, top: 0 });
 
             assert.equal(index, 3, 'Index is OK');
 
-            index = this.instance.getCellIndexByCoordinates({ left: 298, top: 45 });
+            index = this.instance.getCellIndexByCoordinates({ left: 350, top: 25 });
             assert.equal(index, 3, 'Index is OK');
 
-            index = this.instance.getCellIndexByCoordinates({ left: 298, top: 77 });
+            index = this.instance.getCellIndexByCoordinates({ left: 350, top: 45 });
             assert.equal(index, 10, 'Index is OK');
         });
 
@@ -105,7 +105,7 @@ module('API', () => {
                 width: 800,
                 height: 500
             });
-            const index = this.instance.getCellIndexByCoordinates({ left: 228, top: 91 });
+            const index = this.instance.getCellIndexByCoordinates({ left: 320, top: 100 });
 
             assert.equal(index, 9, 'Index is OK');
         });
