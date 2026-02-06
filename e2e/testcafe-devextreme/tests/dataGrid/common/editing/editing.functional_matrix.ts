@@ -285,10 +285,10 @@ const focusNextCellEditor = async (
   return { nextColumnIndex };
 };
 
-const getSaveButton = async (
+const getSaveButton = (
   mode: string,
   form: EditForm | null,
-): Promise<Selector | undefined> => {
+): Selector | undefined => {
   switch (mode) {
     case 'batch':
       return dataGrid.getHeaderPanel().getSaveButton();
@@ -411,7 +411,7 @@ editingModes.forEach((mode) => {
           await setEditorValue(t, mode, columnInfo, editor, false, useMask);
         }
 
-        const saveButton = await getSaveButton(mode, form);
+        const saveButton = getSaveButton(mode, form);
 
         if (saveButton) {
           await t.click(saveButton, { offsetX: 5, offsetY: 5 });
@@ -445,7 +445,7 @@ editingModes.forEach((mode) => {
         await clickCellEditor(t, mode, columnInfo, form, cell, editor);
         await setEditorValue(t, mode, columnInfo, editor);
 
-        const saveButton = await getSaveButton(mode, form);
+        const saveButton = getSaveButton(mode, form);
 
         if (saveButton) {
           if (!repaintChangesOnly && (mode === 'row' || mode === 'form')) {
@@ -515,7 +515,7 @@ editingModes.forEach((mode) => {
         await t.pressKey('enter');
 
         if (mode === 'batch' || mode === 'popup') {
-          const saveButton = await getSaveButton(mode, form);
+          const saveButton = getSaveButton(mode, form);
 
           if (saveButton) {
             await t.click(saveButton, { offsetX: 5, offsetY: 5 });
