@@ -753,12 +753,12 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiPageIndex(pageIndex?: number): Promise<number> {
+  apiPageIndex(pageIndex?: number): Promise<number | void> {
     const { getInstance } = this;
 
     return ClientFunction(
       () => {
-        if(pageIndex === undefined) {
+        if (pageIndex === undefined) {
           return (getInstance() as any).pageIndex();
         }
 
