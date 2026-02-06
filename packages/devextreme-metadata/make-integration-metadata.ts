@@ -63,6 +63,7 @@ Imd.makeMetadata({
 
     addMetadata(/\.dataSource$/, { omitConfigComponents: ['*'] }),
 
+    // Do not generate configuration components for specified members
     addMetadata(
       [
         'ui/box:dxBoxItem.box',
@@ -74,6 +75,9 @@ Imd.makeMetadata({
       ],
       { omitConfigComponents: ['*'] },
     ),
+
+    // Do not generate configuration component for Member within parent Component
+    /* addMetadata([ Member ], { omitConfigComponents: ['Component'] }), */
 
     [
       ['common:AsyncRule', 'async'],
@@ -95,6 +99,7 @@ Imd.makeMetadata({
       ['ui/form:dxFormTabbedItem', 'tabbed'],
     ].map(([uid, alias]) => addMetadata(uid, { itemTypeAlias: alias })),
 
+    // Force name FormGroupItem for dxFormGroupItem alias (GroupItem) within DxDataGrid parent component
     addMetadata('ui/form:dxFormGroupItem', {
       forcedName: 'FormGroupItem',
       parentComponents: ['DxDataGrid'],
