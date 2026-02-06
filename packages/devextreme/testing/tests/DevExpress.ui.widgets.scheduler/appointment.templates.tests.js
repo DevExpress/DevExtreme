@@ -310,7 +310,10 @@ QUnit.module('Integration: Appointment templates', {
             data: recurrenceAndCompactData,
             appointmentTooltip: createTestForRecurrenceData,
             name: 'recurrence in collector',
-            testCollector: true
+            testCollector: true,
+            options: {
+                maxAppointmentsPerCell: 2
+            }
         },
         {
             data: hourlyRecurrenceData,
