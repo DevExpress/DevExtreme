@@ -94,8 +94,6 @@ const getIgnoredRules = (testName) => {
     'PivotGrid-FieldPanel': ['aria-allowed-attr'],
     'PivotGrid-ExcelJsHeaderAndFooter': ['aria-allowed-attr'],
 
-    'Scheduler-Templates': ['image-alt'],
-
     'Gantt-Appearance': ['aria-toggle-field-name'],
     'Gantt-ExportToPDF': ['aria-toggle-field-name'],
     'Gantt-StripLines': ['aria-required-parent', 'aria-valid-attr-value'],
