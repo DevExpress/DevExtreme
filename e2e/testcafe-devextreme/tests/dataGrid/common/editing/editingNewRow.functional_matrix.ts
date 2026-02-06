@@ -125,10 +125,10 @@ const checkCellFocused = async (
     .eql(true);
 };
 
-const getSaveButton = async (
+const getSaveButton = (
   mode: string,
   form: EditForm | null,
-): Promise<Selector | undefined> => {
+): Selector | undefined => {
   switch (mode) {
     case 'batch':
       return dataGrid.getHeaderPanel().getSaveButton();
@@ -186,7 +186,7 @@ modes.forEach((mode) => {
 
         await t.typeText(editor.element, columnInfo.newValue, { replace: true });
 
-        const saveButton = await getSaveButton(mode, form);
+        const saveButton = getSaveButton(mode, form);
 
         if (saveButton) {
           await t.click(saveButton, { offsetX: 5, offsetY: 5 });
@@ -214,7 +214,7 @@ modes.forEach((mode) => {
           await t.click('body');
         }
 
-        const saveButton = await getSaveButton(mode, form);
+        const saveButton = getSaveButton(mode, form);
 
         if (saveButton) {
           await t.click(saveButton, { offsetX: 5, offsetY: 5 });
