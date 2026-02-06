@@ -1,14 +1,12 @@
 import type { NativeEventInfo } from '@js/common/core/events';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { InteractionEvent } from '@js/events';
-import type { Properties as ButtonGroupProperties } from '@js/ui/button_group';
-import type { Attachment, Suggestion } from '@js/ui/chat';
+import type { Attachment } from '@js/ui/chat';
 import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
 import type { InputEvent } from '@js/ui/text_area';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
-import ButtonGroup from '@ts/ui/button_group';
 import type {
   Properties as ChatTextAreaProperties,
   SendEvent,
@@ -18,7 +16,6 @@ import EditingPreview from '@ts/ui/chat/message_box/editing_preview';
 
 export const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
 export const CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS = 'dx-chat-messagebox-textarea-container';
-export const CHAT_MESSAGEBOX_SUGGESTIONS_CLASS = 'dx-chat-messagebox-suggestions';
 
 export const TYPING_END_DELAY = 2000;
 const ESCAPE_KEY = 'escape';
@@ -43,10 +40,6 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 
   text?: string;
 
-  suggestions?: Suggestion[];
-
-  textAreaValue?: string;
-
   onMessageEntered?: (e: MessageEnteredEvent) => void;
 
   onTypingStart?: (e: TypingStartEvent) => void;
@@ -56,16 +49,12 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
   onMessageEditCanceled?: () => void;
 
   onMessageUpdating?: (e: { text: string }) => void;
-
-  onSuggestionClick?: (e: { suggestion: Suggestion }) => void;
 }
 
 class MessageBox extends DOMComponent<MessageBox, Properties> {
   _textArea!: ChatTextArea;
 
   _editingPreview!: EditingPreview | null;
-
-  _suggestionsButtonGroup?: ButtonGroup;
 
   _messageEnteredAction?: (e: Partial<MessageEnteredEvent>) => void;
 
@@ -84,13 +73,11 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       hoverStateEnabled: true,
       fileUploaderOptions: undefined,
       text: '',
-      suggestions: [],
       onMessageEntered: undefined,
       onMessageEditCanceled: undefined,
       onMessageUpdating: undefined,
       onTypingStart: undefined,
       onTypingEnd: undefined,
-      onSuggestionClick: undefined,
     };
   }
 
@@ -110,8 +97,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     if (this.option('text')) {
       this._renderEditingPreview();
     }
-
-    this._renderSuggestions();
 
     this._renderTextAreaContainer();
   }
@@ -169,23 +154,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     });
   }
 
-  _renderSuggestions(): void {
-    const { suggestions } = this.option();
-    if (!suggestions?.length) {
-      return;
-    }
-
-    const $buttonGroup = $('<div>')
-      .addClass(CHAT_MESSAGEBOX_SUGGESTIONS_CLASS)
-      .appendTo(this.element());
-
-    this._suggestionsButtonGroup = this._createComponent(
-      $buttonGroup,
-      ButtonGroup,
-      this._getSuggestionsButtonGroupOptions(suggestions),
-    );
-  }
-
   _getTextAreaOptions(): ChatTextAreaProperties {
     const {
       activeStateEnabled,
@@ -211,47 +179,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     };
 
     return options as ChatTextAreaProperties;
-  }
-
-  _removeSuggestions(): void {
-    this._suggestionsButtonGroup?.dispose();
-    this._suggestionsButtonGroup = undefined;
-  }
-
-  _handleSuggestionsOptionChanged(): void {
-    const { suggestions } = this.option();
-
-    if (this._suggestionsButtonGroup) {
-      if (suggestions?.length) {
-        this._suggestionsButtonGroup.option('items', suggestions);
-      } else {
-        this._removeSuggestions();
-      }
-    } else if (suggestions?.length) {
-      this._renderSuggestions();
-    }
-  }
-
-  _getSuggestionsButtonGroupOptions(suggestions: Suggestion[]): ButtonGroupProperties {
-    const {
-      activeStateEnabled,
-      focusStateEnabled,
-      hoverStateEnabled,
-      onSuggestionClick,
-    } = this.option();
-
-    return {
-      activeStateEnabled,
-      focusStateEnabled,
-      hoverStateEnabled,
-      items: suggestions,
-      displayExpr: 'text',
-      selectionMode: 'none',
-      stylingMode: 'outlined',
-      onItemClick: (e: { itemData: Suggestion }) => {
-        onSuggestionClick?.({ suggestion: e.itemData });
-      },
-    } as ButtonGroupProperties;
   }
 
   _createMessageEnteredAction(): void {
@@ -358,14 +285,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         this._textArea.option('value', value);
         break;
 
-      case 'suggestions':
-        this._handleSuggestionsOptionChanged();
-        break;
-
-      case 'textAreaValue':
-        this._textArea.option('value', value);
-        break;
-
       default:
         super._optionChanged(args);
     }
@@ -373,7 +292,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _clean(): void {
     this._clearTypingEndTimeout();
-    this._removeSuggestions();
 
     super._clean();
   }

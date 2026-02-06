@@ -211,7 +211,6 @@ export * from './strip-line-dxi';
 export * from './strip-style';
 export * from './subtitle';
 export * from './subvalue-indicator';
-export * from './suggestion-dxi';
 export * from './summary';
 export * from './tab-dxi';
 export * from './tab-panel-options';

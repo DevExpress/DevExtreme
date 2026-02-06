@@ -8,7 +8,7 @@ import dxChat, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, SuggestionClickEvent, TypingEndEvent, TypingStartEvent, Attachment as ChatAttachment, User as ChatUser } from "devextreme/ui/chat";
+import type { Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, Attachment as ChatAttachment, User as ChatUser } from "devextreme/ui/chat";
 import type { DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, BeforeSendEvent, ContentReadyEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, ValueChangedEvent, UploadHttpMethod, FileUploadMode } from "devextreme/ui/file_uploader";
 import type { Format, ValidationStatus } from "devextreme/common";
 
@@ -29,7 +29,6 @@ type IChatOptionsNarrowedEvents = {
   onMessageEntered?: ((e: MessageEnteredEvent) => void) | undefined;
   onMessageUpdated?: ((e: MessageUpdatedEvent) => void) | undefined;
   onMessageUpdating?: ((e: MessageUpdatingEvent) => void) | undefined;
-  onSuggestionClick?: ((e: SuggestionClickEvent) => void) | undefined;
   onTypingEnd?: ((e: TypingEndEvent) => void) | undefined;
   onTypingStart?: ((e: TypingStartEvent) => void) | undefined;
 }
@@ -61,7 +60,7 @@ const Chat = memo(
       ), []);
 
       const subscribableOptions = useMemo(() => (["items"]), []);
-      const independentEvents = useMemo(() => (["onAttachmentDownloadClick","onDisposing","onInitialized","onMessageDeleted","onMessageDeleting","onMessageEditCanceled","onMessageEditingStart","onMessageEntered","onMessageUpdated","onMessageUpdating","onSuggestionClick","onTypingEnd","onTypingStart"]), []);
+      const independentEvents = useMemo(() => (["onAttachmentDownloadClick","onDisposing","onInitialized","onMessageDeleted","onMessageDeleting","onMessageEditCanceled","onMessageEditingStart","onMessageEntered","onMessageUpdated","onMessageUpdating","onTypingEnd","onTypingStart"]), []);
 
       const defaults = useMemo(() => ({
         defaultItems: "items",
@@ -74,7 +73,6 @@ const Chat = memo(
         fileUploaderOptions: { optionName: "fileUploaderOptions", isCollectionItem: false },
         item: { optionName: "items", isCollectionItem: true },
         messageTimestampFormat: { optionName: "messageTimestampFormat", isCollectionItem: false },
-        suggestion: { optionName: "suggestions", isCollectionItem: true },
         typingUser: { optionName: "typingUsers", isCollectionItem: true },
         user: { optionName: "user", isCollectionItem: false }
       }), []);
@@ -355,25 +353,6 @@ const MessageTimestampFormat = Object.assign<typeof _componentMessageTimestampFo
 
 // owners:
 // Chat
-type ISuggestionProps = React.PropsWithChildren<{
-  text?: string;
-}>
-const _componentSuggestion = (props: ISuggestionProps) => {
-  return React.createElement(NestedOption<ISuggestionProps>, {
-    ...props,
-    elementDescriptor: {
-      OptionName: "suggestions",
-      IsCollectionItem: true,
-    },
-  });
-};
-
-const Suggestion = Object.assign<typeof _componentSuggestion, NestedComponentMeta>(_componentSuggestion, {
-  componentType: "option",
-});
-
-// owners:
-// Chat
 type ITypingUserProps = React.PropsWithChildren<{
   avatarAlt?: string;
   avatarUrl?: string;
@@ -436,8 +415,6 @@ export {
   IItemProps,
   MessageTimestampFormat,
   IMessageTimestampFormatProps,
-  Suggestion,
-  ISuggestionProps,
   TypingUser,
   ITypingUserProps,
   User,

@@ -17,8 +17,6 @@ import type {
   MessageUpdatedEvent,
   MessageUpdatingEvent,
   Properties,
-  Suggestion,
-  SuggestionClickEvent,
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
@@ -78,8 +76,6 @@ class Chat extends Widget<Properties> {
 
   _attachmentDownloadAction?: (e: Partial<AttachmentDownloadClickEvent>) => void;
 
-  _suggestionClickAction?: (e: Partial<SuggestionClickEvent>) => void;
-
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
@@ -134,7 +130,6 @@ class Chat extends Widget<Properties> {
     this._createTypingStartAction();
     this._createTypingEndAction();
     this._createAttachmentDownloadAction();
-    this._createSuggestionClickAction();
   }
 
   _dataSourceLoadErrorHandler(): void {
@@ -447,10 +442,6 @@ class Chat extends Widget<Properties> {
     );
   }
 
-  _suggestionClickHandler(e: { suggestion: Suggestion }): void {
-    this._suggestionClickAction?.(e);
-  }
-
   _renderAlertList(): void {
     const $errors = $('<div>');
 
@@ -469,7 +460,6 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
-      suggestions,
     } = this.option();
 
     const $messageBox = $('<div>');
@@ -481,7 +471,6 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
-      suggestions,
       onMessageEntered: (e) => {
         this._messageEnteredHandler(e);
       },
@@ -496,9 +485,6 @@ class Chat extends Widget<Properties> {
       },
       onMessageUpdating: (e) => {
         this._messageUpdatingHandler(e);
-      },
-      onSuggestionClick: (e) => {
-        this._suggestionClickHandler(e);
       },
     };
 
@@ -590,13 +576,6 @@ class Chat extends Widget<Properties> {
     );
   }
 
-  _createSuggestionClickAction(): void {
-    this._suggestionClickAction = this._createActionByOption(
-      'onSuggestionClick',
-      { excludeValidators: ['disabled'] },
-    );
-  }
-
   _messageEnteredHandler(e: MessageBoxMessageEnteredEvent): void {
     const { text, event, attachments } = e;
     const { user } = this.option();
@@ -677,12 +656,6 @@ class Chat extends Widget<Properties> {
       case 'alerts':
         this._alertList.option('items', value ?? []);
         break;
-      case 'suggestions':
-        this._messageBox.option('suggestions', value);
-        break;
-      case 'messageBoxValue':
-        this._messageBox.option('textAreaValue', value);
-        break;
       case 'onMessageEntered':
         this._createMessageEnteredAction();
         break;
@@ -713,9 +686,6 @@ class Chat extends Widget<Properties> {
       case 'onAttachmentDownloadClick':
         this._createAttachmentDownloadAction();
         this._updateAttachmentDownloadHandler();
-        break;
-      case 'onSuggestionClick':
-        this._createSuggestionClickAction();
         break;
       case 'showDayHeaders':
       case 'showAvatar':
