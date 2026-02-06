@@ -75,10 +75,6 @@ Imd.makeMetadata({
       { omitConfigComponents: ['*'] },
     ),
 
-    addMetadata(['ui/form:dxFormOptions.items'], {
-      omitConfigComponents: ['DxDataGrid', 'DxTreeList'],
-    }),
-
     [
       ['common:AsyncRule', 'async'],
       ['common:CompareRule', 'compare'],
@@ -98,6 +94,18 @@ Imd.makeMetadata({
       ['ui/form:dxFormSimpleItem', 'simple'],
       ['ui/form:dxFormTabbedItem', 'tabbed'],
     ].map(([uid, alias]) => addMetadata(uid, { itemTypeAlias: alias })),
+
+    addMetadata('ui/form:dxFormGroupItem', {
+      forcedName: 'FormGroupItem',
+      parentComponents: ['DxDataGrid'],
+    }),
+
+    addMetadata('ui/data_grid:Toolbar.items', {
+      forcedName: 'dataGridToolbarItem',
+    }),
+    addMetadata('ui/tree_list:Toolbar.items', {
+      forcedName: 'treeListToolbarItem',
+    }),
 
     replaceTypes(/.+/, ['core/element:UserDefinedElement'], ['any']),
 
