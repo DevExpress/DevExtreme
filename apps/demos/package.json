@@ -98,7 +98,7 @@
         "@eslint/compat": "1.4.1",
         "@eslint/eslintrc": "catalog:",
         "@rollup/plugin-babel": "6.1.0",
-        "@rollup/plugin-node-resolve": "15.2.3",
+        "@rollup/plugin-node-resolve": "15.3.1",
         "@rollup/plugin-replace": "5.0.7",
         "@stylistic/eslint-plugin": "catalog:",
         "@testcafe-community/axe": "3.5.0",
