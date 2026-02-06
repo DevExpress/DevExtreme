@@ -97,6 +97,8 @@ export interface TreeViewBaseProperties extends Properties<TreeViewNode>, Omit<
   deferRendering?: boolean;
 
   _supportItemUrl?: boolean;
+
+  allowDisabledNodeSelection?: boolean;
 }
 
 class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, TreeViewNode> {
@@ -281,6 +283,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       createChildren: null,
       onSelectAllValueChanged: null,
       _supportItemUrl: false,
+      allowDisabledNodeSelection: true,
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -436,6 +439,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
         break;
       case 'expandIcon':
       case 'collapseIcon':
+        this.repaint();
+        break;
+      case 'allowDisabledNodeSelection':
+        this._initDataAdapter();
         this.repaint();
         break;
       default:
@@ -688,6 +695,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       expandNodesRecursive = true,
       selectionRequired = false,
       dataStructure = 'tree',
+      allowDisabledNodeSelection,
     } = this.option();
 
     return {
@@ -700,6 +708,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       dataType: dataStructure,
       sort: this._dataSource?.sort(),
       langParams: this._dataSource?.loadOptions?.()?.langParams,
+      allowDisabledNodeSelection,
     };
   }
 

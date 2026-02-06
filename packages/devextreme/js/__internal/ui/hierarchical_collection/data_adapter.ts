@@ -51,6 +51,8 @@ export interface DataAdapterOptions {
   onNodeChanged: (node: InternalNode) => void;
 
   searchMode: SearchMode;
+
+  allowDisabledNodeSelection: boolean;
 }
 
 SearchBoxController.setEditorClass(TextBox);
@@ -69,6 +71,7 @@ class DataAdapter {
     dataConverter: new HierarchicalDataConverter(),
     onNodeChanged: noop,
     sort: null,
+    allowDisabledNodeSelection: true,
   };
 
   _selectedNodesKeys: ItemKey[] = [];
@@ -162,8 +165,12 @@ class DataAdapter {
     return this.options.multipleSelection ? this.getData() : this.getFullData();
   }
 
-  _isNodeVisible(node: InternalNode): boolean {
-    return node.internalFields.item.visible !== false;
+  _isNodeVisible(node?: InternalNode): boolean {
+    return node?.internalFields.item.visible !== false;
+  }
+
+  _isNodeDisabled(node?: InternalNode): boolean {
+    return node?.internalFields.item.disabled === true;
   }
 
   _getByKey(data: (InternalNode | null)[], key: ItemKey): InternalNode | null {
@@ -432,6 +439,10 @@ class DataAdapter {
     return this.options.dataConverter.getItemsCount();
   }
 
+  _getDisabledItemsCount(): number {
+    return this.options.dataConverter.getDisabledItemsCount();
+  }
+
   getVisibleItemsCount(): number {
     return this.options.dataConverter.getVisibleItemsCount();
   }
@@ -509,7 +520,16 @@ class DataAdapter {
       : this._dataStructure;
 
     each(dataStructure, (_index: number, node: InternalNode) => {
-      if (node && this._isNodeVisible(node)) {
+      if (!this._isNodeVisible(node)) {
+        return;
+      }
+
+      if (this.options.allowDisabledNodeSelection) {
+        this._setFieldState(node, SELECTED, state);
+        return;
+      }
+
+      if (!this._isNodeDisabled(node)) {
         this._setFieldState(node, SELECTED, state);
       }
     });
@@ -522,10 +542,14 @@ class DataAdapter {
   }
 
   isAllSelected(): boolean | undefined {
-    if (this.getSelectedNodesKeys().length) {
-      return this.getSelectedNodesKeys().length === this.getVisibleItemsCount() ? true : undefined;
+    if (!this.getSelectedNodesKeys().length) {
+      return false;
     }
-    return false;
+
+    const countedNodesAmount = this.getVisibleItemsCount()
+      - (!this.options.allowDisabledNodeSelection ? this._getDisabledItemsCount() : 0);
+
+    return this.getSelectedNodesKeys().length === countedNodesAmount ? true : undefined;
   }
 
   toggleExpansion(key: ItemKey, state: boolean): void {

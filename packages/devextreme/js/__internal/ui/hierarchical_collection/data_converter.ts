@@ -72,6 +72,8 @@ class DataConverter {
 
   private _visibleItemsCount = 0;
 
+  private _disabledItemsCount = 0;
+
   _indexByKey: Record<string | number, number> = {};
 
   private _dataAccessors!: DataAccessors;
@@ -126,6 +128,10 @@ class DataConverter {
     this._itemsCount += 1;
     if (item.visible !== false) {
       this._visibleItemsCount += 1;
+    }
+
+    if (item.disabled === true) {
+      this._disabledItemsCount += 1;
     }
 
     const { items, ...itemWithoutItems } = item;
@@ -265,6 +271,10 @@ class DataConverter {
     return this._itemsCount;
   }
 
+  getDisabledItemsCount(): number {
+    return this._disabledItemsCount;
+  }
+
   getVisibleItemsCount(): number {
     return this._visibleItemsCount;
   }
@@ -302,6 +312,7 @@ class DataConverter {
   ): (InternalNode | null)[] {
     this._itemsCount = 0;
     this._visibleItemsCount = 0;
+    this._disabledItemsCount = 0;
     this._rootValue = rootValue;
     this._dataType = dataType;
     this._indexByKey = {};
