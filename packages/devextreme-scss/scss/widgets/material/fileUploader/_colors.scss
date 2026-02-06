@@ -15,7 +15,7 @@ $fileuploader-file-icon-color: $base-icon-color !default;
 * $name 20. File status text color
 * $type color
 */
-$fileuploader-falename-status-color: color.adjust($fileuploader-filename-color, $lightness: 40%, $space: hsl) !default;
+$fileuploader-falename-status-color: $base-label-color !default;
 
 /**
 * $name 30. Drag-and-drop border color

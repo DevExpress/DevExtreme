@@ -34,6 +34,6 @@ function itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent<ContextMenuIt
 }
 
 .label {
-  color: #767676;
+  color: var(--dx-texteditor-color-label);
 }
 </style>

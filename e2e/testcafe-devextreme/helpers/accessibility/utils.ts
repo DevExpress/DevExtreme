@@ -6,11 +6,7 @@ export interface A11yCheckOptions extends RunOptions {
   runOnly?: any;
 }
 
-const defaultOptions = {
-  rules: {
-    'color-contrast': { enabled: false },
-  },
-};
+const defaultOptions = {};
 
 const createFullReport = (results, configuration) => {
   let report = createReport(results.violations);

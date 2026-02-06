@@ -11,7 +11,7 @@ $menu-item-hover-bg: $base-hover-bg !default;
 * $name 10. Text color
 * $type color
 */
-$menu-color: color.adjust($base-text-color, $lightness: 46%, $space: hsl) !default;
+$menu-color: $base-text-color !default;
 $menu-item-expanded-color: $menu-color !default;
 
 

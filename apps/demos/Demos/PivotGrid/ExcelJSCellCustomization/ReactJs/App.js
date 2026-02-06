@@ -66,7 +66,7 @@ const getConditionalAppearance = (cell) => {
   if (value > 50000) {
     return { font: '006100', fill: 'C6EFCE' };
   }
-  return { font: '9C6500', fill: 'FFEB9C' };
+  return { font: '6E4600', fill: 'FFEB9C' };
 };
 const onExporting = (e) => {
   const workbook = new Workbook();
