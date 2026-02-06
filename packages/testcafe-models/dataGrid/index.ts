@@ -24,6 +24,7 @@ import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
 import { AIPromptEditor } from './aiPromptEditor';
+import EditPopup from './editPopup';
 
 export const CLASS = {
   ...CLASS_BASE,
@@ -444,6 +445,10 @@ export default class DataGrid extends GridCore {
     return new EditForm(element, buttons);
   }
 
+  getEditPopup(): EditPopup {
+    return new EditPopup(this.element.find(`.${this.addWidgetPrefix(CLASS.popupEdit)}`));
+  }
+
   getToolbar(): Toolbar {
     return new Toolbar(this.element.find(`.${CLASS.toolbar}`));
   }
@@ -748,12 +753,18 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiPageIndex(): Promise<number> {
+  apiPageIndex(pageIndex?: number): Promise<number> {
     const { getInstance } = this;
 
     return ClientFunction(
-      () => (getInstance() as any).pageIndex(),
-      { dependencies: { getInstance } },
+      () => {
+        if(pageIndex === undefined) {
+          return (getInstance() as any).pageIndex();
+        }
+
+        (getInstance() as any).pageIndex(pageIndex);
+      },
+      { dependencies: { getInstance, pageIndex } },
     )();
   }
 
