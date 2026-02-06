@@ -83,7 +83,8 @@ module('All day appointments common', config, () => {
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     startDayHour: 6,
-                    currentView: 'week'
+                    currentView: 'week',
+                    maxAppointmentsPerCell: 'unlimited'
                 });
 
                 const $appointments = $(scheduler.instance.$element()).find('.dx-scheduler-appointment');
@@ -494,17 +495,18 @@ module('All day appointments common', config, () => {
                 await waitForAsync(() => scheduler.appointments.getAppointments().length === 10);
 
                 scheduler.appointments.compact.click();
-                assert.equal(scheduler.tooltip.getItemCount(), 3, 'There are 3 drop down appts in 1st group');
+                assert.equal(scheduler.tooltip.getItemCount(), 4, 'There are 4 drop down appts in 1st group');
 
                 scheduler.appointments.compact.click(1);
-                assert.equal(scheduler.tooltip.getItemCount(), 3, 'There are 3 drop down appts in 2d group');
+                assert.equal(scheduler.tooltip.getItemCount(), 4, 'There are 4 drop down appts in 2d group');
             });
 
             test('DropDown appointment should be removed correctly when needed', async function(assert) {
                 const scheduler = await createInstance({
                     currentDate: new Date(2015, 4, 25),
                     views: ['week'],
-                    currentView: 'week'
+                    currentView: 'week',
+                    maxAppointmentsPerCell: 2,
                 });
 
                 const items = [
@@ -515,6 +517,7 @@ module('All day appointments common', config, () => {
 
                 scheduler.instance.option('dataSource', items);
                 await waitForAsync(() => scheduler.appointments.getAppointments().length === 3);
+                // moveSchedulerToMainBlock();
 
                 let $dropDown = scheduler.instance.$element().find('.dx-scheduler-appointment-collector');
                 assert.equal($dropDown.length, 1, 'Dropdown appointment was rendered');

@@ -4820,7 +4820,6 @@ QUnit.module('Field Panel', {
             }
         });
 
-        debugger;
         const newDataAreaHeight = getHeight(pivotGrid.$element().find('.dx-pivotgrid-area-data'));
         const newRowsAreaHeight = getHeight(
             pivotGrid.$element().find('.dx-pivotgrid-vertical-headers.dx-pivotgrid-area')
