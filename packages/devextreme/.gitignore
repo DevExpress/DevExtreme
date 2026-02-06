@@ -4,7 +4,7 @@ node_modules
 /testing/testcafe/artifacts
 /testing/LastSuiteTime.txt
 /dotnet_packages
-/js/bundles/dx.custom.js
+/build/bundle-templates/dx.custom.js
 /js/__internal/core/localization/default_messages.ts
 /js/__internal/core/localization/cldr-data
 /scss/bundles/*.scss
