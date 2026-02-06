@@ -616,7 +616,7 @@ importers:
         version: 8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3)
       '@vue/eslint-config-typescript':
         specifier: 12.0.0
-        version: 12.0.0(eslint-plugin-vue@10.6.2(@stylistic/eslint-plugin@2.13.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.18.0(jiti@2.6.1))(vue-eslint-parser@10.2.0(eslint@9.18.0(jiti@2.6.1))))(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3)
+        version: 12.0.0(eslint-plugin-vue@10.7.0(@stylistic/eslint-plugin@2.13.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.18.0(jiti@2.6.1))(vue-eslint-parser@10.2.0(eslint@9.18.0(jiti@2.6.1))))(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3)
       '@vue/tsconfig':
         specifier: ^0.7.0
         version: 0.7.0(typescript@5.9.3)(vue@3.4.27(typescript@5.9.3))
@@ -662,6 +662,9 @@ importers:
       eslint-plugin-react-perf:
         specifier: 3.3.2
         version: 3.3.2(eslint@9.18.0(jiti@2.6.1))
+      eslint-plugin-vue:
+        specifier: ^10.7.0
+        version: 10.7.0(@stylistic/eslint-plugin@2.13.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.18.0(jiti@2.6.1))(vue-eslint-parser@10.2.0(eslint@9.18.0(jiti@2.6.1)))
       express:
         specifier: 4.21.2
         version: 4.21.2
@@ -707,6 +710,9 @@ importers:
       open:
         specifier: 8.4.2
         version: 8.4.2
+      postcss-html:
+        specifier: ^1.8.1
+        version: 1.8.1
       rollup:
         specifier: 4.22.4
         version: 4.22.4
@@ -719,12 +725,9 @@ importers:
       stylelint:
         specifier: 16.5.0
         version: 16.5.0(typescript@5.9.3)
-      stylelint-config-recommended-vue:
-        specifier: 1.5.0
-        version: 1.5.0(postcss-html@1.7.0)(stylelint@16.5.0(typescript@5.9.3))
       stylelint-config-standard:
-        specifier: 35.0.0
-        version: 35.0.0(stylelint@16.5.0(typescript@5.9.3))
+        specifier: 34.0.0
+        version: 34.0.0(stylelint@16.5.0(typescript@5.9.3))
       systemjs-builder:
         specifier: 0.16.15
         version: 0.16.15
@@ -1398,7 +1401,7 @@ importers:
         version: 0.14.2
       autoprefixer:
         specifier: 10.4.21
-        version: 10.4.21(postcss@8.4.38)
+        version: 10.4.21(postcss@8.5.6)
       axe-core:
         specifier: 'catalog:'
         version: 4.11.1
@@ -1808,7 +1811,7 @@ importers:
         version: 19.2.18(@angular/common@19.2.18(@angular/core@19.2.18(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/compiler@19.2.18)(@angular/core@19.2.18(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@19.2.18(@angular/common@19.2.18(@angular/core@19.2.18(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@19.2.18(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)
       '@babel/eslint-parser':
         specifier: 'catalog:'
-        version: 7.26.5(@babel/core@7.28.6)(eslint@9.18.0(jiti@2.6.1))
+        version: 7.26.5(@babel/core@7.26.9)(eslint@9.18.0(jiti@2.6.1))
       '@eslint-stylistic/metadata':
         specifier: 'catalog:'
         version: 2.13.0
@@ -2039,7 +2042,7 @@ importers:
         version: 15.11.0(typescript@5.9.3)
       stylelint-config-standard-scss:
         specifier: 9.0.0
-        version: 9.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@5.9.3))
+        version: 9.0.0(postcss@8.4.38)(stylelint@15.11.0(typescript@5.9.3))
       stylelint-scss:
         specifier: 6.10.0
         version: 6.10.0(stylelint@15.11.0(typescript@5.9.3))
@@ -10702,8 +10705,8 @@ packages:
     peerDependencies:
       eslint: '>=9.29.0'
 
-  eslint-plugin-vue@10.6.2:
-    resolution: {integrity: sha512-nA5yUs/B1KmKzvC42fyD0+l9Yd+LtEpVhWRbXuDj0e+ZURcTtyRbMDWUeJmTAh2wC6jC83raS63anNM2YT3NPw==}
+  eslint-plugin-vue@10.7.0:
+    resolution: {integrity: sha512-r2XFCK4qlo1sxEoAMIoTTX0PZAdla0JJDt1fmYiworZUX67WeEGqm+JbyAg3M+pGiJ5U6Mp5WQbontXWtIW7TA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       '@stylistic/eslint-plugin': ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
@@ -11489,11 +11492,13 @@ packages:
 
   glob@10.5.0:
     resolution: {integrity: sha512-DfXN8DfhJ7NH3Oe7cFmu3NCu1wKbkReJ8TorzSAFbSKrlNaQSKfIzqYqVY8zlbs2NLBbWpRiU52GX2PbaBVNkg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@11.1.0:
     resolution: {integrity: sha512-vuNwKSaKiqm7g0THUBu2x7ckSs3XJLXE+2ssL7/MfTGPLLcrJQ/4Uq1CjPTtO5cCIiRxqvN6Twy1qOwhL0Xjcw==}
     engines: {node: 20 || >=22}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@13.0.0:
@@ -11502,16 +11507,16 @@ packages:
 
   glob@5.0.15:
     resolution: {integrity: sha512-c9IPMazfRITpmAAKi22dK1VKxGDX9ehhqfABDriL/lzO92xcUKEJPQHrVA/2YHSNFB4iFlykVmWvwo48nr3OxA==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   glob@8.1.0:
     resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
     engines: {node: '>=12'}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   global-modules@1.0.0:
     resolution: {integrity: sha512-sKzpEkf11GpOFuw0Zzjzmt4B4UZwjOcG757PPvrfhxcLFbq0wpsgpOqxpxtxFiCG4DtG93M6XRVbF2oGdev7bg==}
@@ -15174,8 +15179,8 @@ packages:
     resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
     engines: {node: '>= 0.4'}
 
-  postcss-html@1.7.0:
-    resolution: {integrity: sha512-MfcMpSUIaR/nNgeVS8AyvyDugXlADjN9AcV7e5rDfrF1wduIAGSkL4q2+wgrZgA3sHVAHLDO9FuauHhZYW2nBw==}
+  postcss-html@1.8.1:
+    resolution: {integrity: sha512-OLF6P7qctfAWayOhLpcVnTGqVeJzu2W3WpIYelfz2+JV5oGxfkcEvweN9U4XpeqE0P98dcD9ssusGwlF0TK0uQ==}
     engines: {node: ^12 || >=14}
 
   postcss-loader@8.1.1:
@@ -17052,13 +17057,6 @@ packages:
   style-to-object@1.0.8:
     resolution: {integrity: sha512-xT47I/Eo0rwJmaXC4oilDGDWLohVhR6o/xAQcPQN8q6QBuZVL8qMYL85kLmST5cPjAorwvqIA4qXTRQoYHaL6g==}
 
-  stylelint-config-html@1.1.0:
-    resolution: {integrity: sha512-IZv4IVESjKLumUGi+HWeb7skgO6/g4VMuAYrJdlqQFndgbj6WJAXPhaysvBiXefX79upBdQVumgYcdd17gCpjQ==}
-    engines: {node: ^12 || >=14}
-    peerDependencies:
-      postcss-html: ^1.0.0
-      stylelint: '>=14.0.0'
-
   stylelint-config-recommended-scss@11.0.0:
     resolution: {integrity: sha512-EDghTDU7aOv2LTsRZvcT1w8mcjUaMhuy+t38iV5I/0Qiu6ixdkRwhLEMul3K/fnB2v9Nwqvb3xpvJfPH+HduDw==}
     peerDependencies:
@@ -17068,23 +17066,16 @@ packages:
       postcss:
         optional: true
 
-  stylelint-config-recommended-vue@1.5.0:
-    resolution: {integrity: sha512-65TAK/clUqkNtkZLcuytoxU0URQYlml+30Nhop7sRkCZ/mtWdXt7T+spPSB3KMKlb+82aEVJ4OrcstyDBdbosg==}
-    engines: {node: ^12 || >=14}
-    peerDependencies:
-      postcss-html: ^1.0.0
-      stylelint: '>=14.0.0'
-
   stylelint-config-recommended@12.0.0:
     resolution: {integrity: sha512-x6x8QNARrGO2sG6iURkzqL+Dp+4bJorPMMRNPScdvaUK8PsynriOcMW7AFDKqkWAS5wbue/u8fUT/4ynzcmqdQ==}
     peerDependencies:
       stylelint: ^15.5.0
 
-  stylelint-config-recommended@14.0.1:
-    resolution: {integrity: sha512-bLvc1WOz/14aPImu/cufKAZYfXs/A/owZfSMZ4N+16WGXLoX5lOir53M6odBxvhgmgdxCVnNySJmZKx73T93cg==}
-    engines: {node: '>=18.12.0'}
+  stylelint-config-recommended@13.0.0:
+    resolution: {integrity: sha512-EH+yRj6h3GAe/fRiyaoO2F9l9Tgg50AOFhaszyfov9v6ayXJ1IkSHwTxd7lB48FmOeSGDPLjatjO11fJpmarkQ==}
+    engines: {node: ^14.13.1 || >=16.0.0}
     peerDependencies:
-      stylelint: ^16.1.0
+      stylelint: ^15.10.0
 
   stylelint-config-recommended@16.0.0:
     resolution: {integrity: sha512-4RSmPjQegF34wNcK1e1O3Uz91HN8P1aFdFzio90wNK9mjgAI19u5vsU868cVZboKzCaa5XbpvtTzAAGQAxpcXA==}
@@ -17106,11 +17097,11 @@ packages:
     peerDependencies:
       stylelint: ^15.5.0
 
-  stylelint-config-standard@35.0.0:
-    resolution: {integrity: sha512-JyQrNZk2BZwVKFauGGxW2U6RuhIfQ4XoHHo+rBzMHcAkLnwI/knpszwXjzxiMgSfcxbZBckM7Vq4LHoANTR85g==}
-    engines: {node: '>=18.12.0'}
+  stylelint-config-standard@34.0.0:
+    resolution: {integrity: sha512-u0VSZnVyW9VSryBG2LSO+OQTjN7zF9XJaAJRX/4EwkmU0R2jYwmBSN10acqZisDitS0CLiEiGjX7+Hrq8TAhfQ==}
+    engines: {node: ^14.13.1 || >=16.0.0}
     peerDependencies:
-      stylelint: ^16.0.0
+      stylelint: ^15.10.0
 
   stylelint-config-standard@38.0.0:
     resolution: {integrity: sha512-uj3JIX+dpFseqd/DJx8Gy3PcRAJhlEZ2IrlFOc4LUxBX/PNMEQ198x7LCOE2Q5oT9Vw8nyc4CIL78xSqPr6iag==}
@@ -20104,6 +20095,14 @@ snapshots:
   '@babel/eslint-parser@7.26.5(@babel/core@7.23.9)(eslint@9.18.0(jiti@2.6.1))':
     dependencies:
       '@babel/core': 7.23.9
+      '@nicolo-ribaudo/eslint-scope-5-internals': 5.1.1-v1
+      eslint: 9.18.0(jiti@2.6.1)
+      eslint-visitor-keys: 2.1.0
+      semver: 6.3.1
+
+  '@babel/eslint-parser@7.26.5(@babel/core@7.26.9)(eslint@9.18.0(jiti@2.6.1))':
+    dependencies:
+      '@babel/core': 7.26.9
       '@nicolo-ribaudo/eslint-scope-5-internals': 5.1.1-v1
       eslint: 9.18.0(jiti@2.6.1)
       eslint-visitor-keys: 2.1.0
@@ -27209,12 +27208,12 @@ snapshots:
 
   '@vue/devtools-api@6.6.4': {}
 
-  '@vue/eslint-config-typescript@12.0.0(eslint-plugin-vue@10.6.2(@stylistic/eslint-plugin@2.13.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.18.0(jiti@2.6.1))(vue-eslint-parser@10.2.0(eslint@9.18.0(jiti@2.6.1))))(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3)':
+  '@vue/eslint-config-typescript@12.0.0(eslint-plugin-vue@10.7.0(@stylistic/eslint-plugin@2.13.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.18.0(jiti@2.6.1))(vue-eslint-parser@10.2.0(eslint@9.18.0(jiti@2.6.1))))(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3)':
     dependencies:
       '@typescript-eslint/eslint-plugin': 6.21.0(@typescript-eslint/parser@6.21.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3)
       '@typescript-eslint/parser': 6.21.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3)
       eslint: 9.18.0(jiti@2.6.1)
-      eslint-plugin-vue: 10.6.2(@stylistic/eslint-plugin@2.13.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.18.0(jiti@2.6.1))(vue-eslint-parser@10.2.0(eslint@9.18.0(jiti@2.6.1)))
+      eslint-plugin-vue: 10.7.0(@stylistic/eslint-plugin@2.13.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.18.0(jiti@2.6.1))(vue-eslint-parser@10.2.0(eslint@9.18.0(jiti@2.6.1)))
       vue-eslint-parser: 9.4.3(eslint@9.18.0(jiti@2.6.1))
     optionalDependencies:
       typescript: 5.9.3
@@ -28033,16 +28032,6 @@ snapshots:
       normalize-range: 0.1.2
       picocolors: 1.1.1
       postcss: 8.5.2
-      postcss-value-parser: 4.2.0
-
-  autoprefixer@10.4.21(postcss@8.4.38):
-    dependencies:
-      browserslist: 4.28.1
-      caniuse-lite: 1.0.30001763
-      fraction.js: 4.3.7
-      normalize-range: 0.1.2
-      picocolors: 1.1.1
-      postcss: 8.4.38
       postcss-value-parser: 4.2.0
 
   autoprefixer@10.4.21(postcss@8.5.6):
@@ -31796,7 +31785,7 @@ snapshots:
       semver: 7.7.3
       strip-indent: 4.0.0
 
-  eslint-plugin-vue@10.6.2(@stylistic/eslint-plugin@2.13.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.18.0(jiti@2.6.1))(vue-eslint-parser@10.2.0(eslint@9.18.0(jiti@2.6.1))):
+  eslint-plugin-vue@10.7.0(@stylistic/eslint-plugin@2.13.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/parser@8.23.0(eslint@9.18.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.18.0(jiti@2.6.1))(vue-eslint-parser@10.2.0(eslint@9.18.0(jiti@2.6.1))):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.18.0(jiti@2.6.1))
       eslint: 9.18.0(jiti@2.6.1)
@@ -38091,12 +38080,12 @@ snapshots:
 
   possible-typed-array-names@1.0.0: {}
 
-  postcss-html@1.7.0:
+  postcss-html@1.8.1:
     dependencies:
       htmlparser2: 8.0.2
       js-tokens: 9.0.1
-      postcss: 8.4.38
-      postcss-safe-parser: 6.0.0(postcss@8.4.38)
+      postcss: 8.5.6
+      postcss-safe-parser: 6.0.0(postcss@8.5.6)
 
   postcss-loader@8.1.1(postcss@8.5.2)(typescript@5.5.4)(webpack@5.98.0(@swc/core@1.15.3)(esbuild@0.25.4)):
     dependencies:
@@ -38141,13 +38130,13 @@ snapshots:
     dependencies:
       icss-utils: 5.1.0(postcss@8.4.38)
       postcss: 8.4.38
-      postcss-selector-parser: 7.0.0
+      postcss-selector-parser: 7.1.1
       postcss-value-parser: 4.2.0
 
   postcss-modules-scope@3.2.1(postcss@8.4.38):
     dependencies:
       postcss: 8.4.38
-      postcss-selector-parser: 7.0.0
+      postcss-selector-parser: 7.1.1
 
   postcss-modules-values@4.0.0(postcss@8.4.38):
     dependencies:
@@ -38160,6 +38149,10 @@ snapshots:
     dependencies:
       postcss: 8.4.38
 
+  postcss-safe-parser@6.0.0(postcss@8.5.6):
+    dependencies:
+      postcss: 8.5.6
+
   postcss-safe-parser@7.0.1(postcss@8.4.38):
     dependencies:
       postcss: 8.4.38
@@ -38168,9 +38161,9 @@ snapshots:
     dependencies:
       postcss: 8.5.6
 
-  postcss-scss@4.0.9(postcss@8.5.6):
+  postcss-scss@4.0.9(postcss@8.4.38):
     dependencies:
-      postcss: 8.5.6
+      postcss: 8.4.38
 
   postcss-selector-parser@6.1.2:
     dependencies:
@@ -40388,33 +40381,20 @@ snapshots:
     dependencies:
       inline-style-parser: 0.2.4
 
-  stylelint-config-html@1.1.0(postcss-html@1.7.0)(stylelint@16.5.0(typescript@5.9.3)):
+  stylelint-config-recommended-scss@11.0.0(postcss@8.4.38)(stylelint@15.11.0(typescript@5.9.3)):
     dependencies:
-      postcss-html: 1.7.0
-      stylelint: 16.5.0(typescript@5.9.3)
-
-  stylelint-config-recommended-scss@11.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@5.9.3)):
-    dependencies:
-      postcss-scss: 4.0.9(postcss@8.5.6)
+      postcss-scss: 4.0.9(postcss@8.4.38)
       stylelint: 15.11.0(typescript@5.9.3)
       stylelint-config-recommended: 12.0.0(stylelint@15.11.0(typescript@5.9.3))
       stylelint-scss: 4.7.0(stylelint@15.11.0(typescript@5.9.3))
     optionalDependencies:
-      postcss: 8.5.6
-
-  stylelint-config-recommended-vue@1.5.0(postcss-html@1.7.0)(stylelint@16.5.0(typescript@5.9.3)):
-    dependencies:
-      postcss-html: 1.7.0
-      semver: 7.7.3
-      stylelint: 16.5.0(typescript@5.9.3)
-      stylelint-config-html: 1.1.0(postcss-html@1.7.0)(stylelint@16.5.0(typescript@5.9.3))
-      stylelint-config-recommended: 16.0.0(stylelint@16.5.0(typescript@5.9.3))
+      postcss: 8.4.38
 
   stylelint-config-recommended@12.0.0(stylelint@15.11.0(typescript@5.9.3)):
     dependencies:
       stylelint: 15.11.0(typescript@5.9.3)
 
-  stylelint-config-recommended@14.0.1(stylelint@16.5.0(typescript@5.9.3)):
+  stylelint-config-recommended@13.0.0(stylelint@16.5.0(typescript@5.9.3)):
     dependencies:
       stylelint: 16.5.0(typescript@5.9.3)
 
@@ -40434,27 +40414,23 @@ snapshots:
     dependencies:
       stylelint: 16.22.0(typescript@5.9.3)
 
-  stylelint-config-recommended@16.0.0(stylelint@16.5.0(typescript@5.9.3)):
-    dependencies:
-      stylelint: 16.5.0(typescript@5.9.3)
-
-  stylelint-config-standard-scss@9.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@5.9.3)):
+  stylelint-config-standard-scss@9.0.0(postcss@8.4.38)(stylelint@15.11.0(typescript@5.9.3)):
     dependencies:
       stylelint: 15.11.0(typescript@5.9.3)
-      stylelint-config-recommended-scss: 11.0.0(postcss@8.5.6)(stylelint@15.11.0(typescript@5.9.3))
+      stylelint-config-recommended-scss: 11.0.0(postcss@8.4.38)(stylelint@15.11.0(typescript@5.9.3))
       stylelint-config-standard: 33.0.0(stylelint@15.11.0(typescript@5.9.3))
     optionalDependencies:
-      postcss: 8.5.6
+      postcss: 8.4.38
 
   stylelint-config-standard@33.0.0(stylelint@15.11.0(typescript@5.9.3)):
     dependencies:
       stylelint: 15.11.0(typescript@5.9.3)
       stylelint-config-recommended: 12.0.0(stylelint@15.11.0(typescript@5.9.3))
 
-  stylelint-config-standard@35.0.0(stylelint@16.5.0(typescript@5.9.3)):
+  stylelint-config-standard@34.0.0(stylelint@16.5.0(typescript@5.9.3)):
     dependencies:
       stylelint: 16.5.0(typescript@5.9.3)
-      stylelint-config-recommended: 14.0.1(stylelint@16.5.0(typescript@5.9.3))
+      stylelint-config-recommended: 13.0.0(stylelint@16.5.0(typescript@5.9.3))
 
   stylelint-config-standard@38.0.0(stylelint@15.11.0(typescript@4.9.5)):
     dependencies:
@@ -41007,7 +40983,7 @@ snapshots:
       schema-utils: 4.3.3
       serialize-javascript: 6.0.2
       terser: 5.44.1
-      webpack: 5.94.0(@swc/core@1.15.3)(webpack-cli@5.1.4)
+      webpack: 5.94.0(@swc/core@1.15.3)(webpack-cli@4.10.0)
     optionalDependencies:
       '@swc/core': 1.15.3
 
