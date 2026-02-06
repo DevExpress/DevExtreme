@@ -51,14 +51,6 @@ const getIgnoredRules = (testName) => {
   }
 
   const specificRules = {
-    'Accordion-Overview': ['nested-interactive'],
-
-    'Charts-AreaSparklines': ['empty-table-header'],
-    'Charts-BarSparklines': ['empty-table-header'],
-    'Charts-SimpleBullets': ['empty-table-header'],
-    'Charts-SimpleSparklines': ['empty-table-header'],
-    'Charts-WinlossSparklines': ['empty-table-header'],
-
     'DataGrid-EditStateManagement': ['aria-required-parent'],
     'DataGrid-RemoteCRUDOperations': ['scrollable-region-focusable'],
 
