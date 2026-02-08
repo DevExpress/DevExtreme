@@ -19,6 +19,7 @@ import {
 import { Font } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -26,8 +27,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-circular-gauge-loading-indicator',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoCircularGaugeLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -78,7 +81,6 @@ export class DxoCircularGaugeLoadingIndicatorComponent extends NestedOption impl
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'showChange' }
         ]);
@@ -100,7 +102,7 @@ export class DxoCircularGaugeLoadingIndicatorComponent extends NestedOption impl
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCircularGaugeLoadingIndicatorComponent
   ],
   exports: [

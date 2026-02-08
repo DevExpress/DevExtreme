@@ -26,7 +26,6 @@
 
   &.dx-scrollable-wrapper > .dx-scrollable-container,
   > div.dx-scrollable-wrapper > .dx-scrollable-container {
-    -webkit-overflow-scrolling: touch;
     position: relative;
     height: 100%;
   }

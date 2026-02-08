@@ -4,6 +4,7 @@ import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilt
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
+import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Header Filter`
   .page(url(__dirname, '../../../container.html'));
@@ -59,9 +60,8 @@ test('HeaderFilter icon should be grayed out after the clearFilter call (T119364
   await dataGrid.apiClearFilter();
 
   // assert
+  await testScreenshot(t, takeScreenshot, 'header-filter-icon-clear-filter.png', { element: dataGrid.element });
   await t
-    .expect(await takeScreenshot('header-filter-icon-clear-filter.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -90,13 +90,12 @@ test('The header filter should fit inside the viewport if the grid is scrolled h
   const filterIconElement = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon();
 
   // act
-  await dataGrid.scrollBy({ x: 100 });
+  await dataGrid.scrollBy(t, { x: 100 });
   await t.click(filterIconElement);
 
   // assert
+  await testScreenshot(t, takeScreenshot, 'grid-header-filter-popup-T1156848.png', { element: '#container' });
   await t
-    .expect(await takeScreenshot('grid-header-filter-popup-T1156848', '#container'))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -114,11 +113,12 @@ test('HeaderFilter popup screenshot', async (t) => {
   const filterIconElement = headerCell.getFilterIcon();
 
   await t
-    .click(filterIconElement)
-    // act
-    .expect(await takeScreenshot('header-filter-popup.png', dataGrid.element))
-    .ok()
-    // assert
+    .click(filterIconElement);
+  // act
+  await testScreenshot(t, takeScreenshot, 'header-filter-popup.png', { element: dataGrid.element });
+
+  // assert
+  await t
     .expect(new HeaderFilter().element.exists)
     .ok()
     .expect(compareResults.isValid())
@@ -215,10 +215,10 @@ test('DataGrid - Column Header filter does not properly work if the column capti
   const dataGrid = new DataGrid(GRID_CONTAINER);
   const filterIconElement = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon();
 
+  await t.click(filterIconElement);
+
+  await testScreenshot(t, takeScreenshot, 'T1251768-header-filter-double-quotes.png', { element: dataGrid.element });
   await t
-    .click(filterIconElement)
-    .expect(await takeScreenshot('T1251768-header-filter-double-quotes.png', dataGrid.element))
-    .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxDataGrid', {
@@ -251,7 +251,7 @@ test('Data should be filtered if True is selected in the header filter when case
     .click(list.getItem(0).element) // Select first item with value 'true'
     .click(buttons.nth(0)); // Click OK
 
-  await takeScreenshot('T1273020-header-filter-with-case-sensitive-1.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1273020-header-filter-with-case-sensitive-1.png', { element: dataGrid.element });
 
   // act
   await t
@@ -260,7 +260,7 @@ test('Data should be filtered if True is selected in the header filter when case
     .click(list.getItem(1).element) // Select second item with value 'True'
     .click(buttons.nth(0)); // Click OK
 
-  await takeScreenshot('T1273020-header-filter-with-case-sensitive-2.png', dataGrid.element);
+  await testScreenshot(t, takeScreenshot, 'T1273020-header-filter-with-case-sensitive-2.png', { element: dataGrid.element });
 
   // assert
   await t
@@ -282,4 +282,76 @@ test('Data should be filtered if True is selected in the header filter when case
   keyExpr: 'ID',
   showBorders: true,
   headerFilter: { visible: true },
+}));
+
+test('Header filter search input loses focus on first key in datetime columns (T1284663)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const headerCell = dataGrid.getHeaders()
+    .getHeaderRow(0)
+    .getHeaderCell(0);
+  const filterIconElement = headerCell.getFilterIcon();
+  const headerFilter = new HeaderFilter();
+
+  await t
+    .click(filterIconElement)
+    .pressKey('1');
+
+  await t.wait(1500);
+
+  const searchInput = headerFilter.getSearchInput();
+
+  await t
+    .expect(searchInput.focused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    id: 1,
+    DeliveryDate: '2017/04/13 9:00',
+  }],
+  headerFilter: {
+    visible: true,
+  },
+  keyExpr: 'id',
+  columns: [{
+    dataField: 'DeliveryDate',
+    dataType: 'date',
+    headerFilter: {
+      dataSource: [
+        { text: 'March 11, 2025', value: '2025-03-11T00:00:00' },
+        { text: 'March 2, 2025', value: '2025-03-02T00:00:00' },
+        { text: 'February 3, 2025', value: '2025-02-03T00:00:00' },
+      ],
+      search: { enabled: true },
+    },
+  }],
+}));
+
+test('DataGrid – Header filters show "No data to display" when "not and" or "not or" operations are used in the filter panel (T1291737)', async (t) => {
+  const dataGrid = new DataGrid(GRID_CONTAINER);
+  const headerFilterButton = dataGrid.getHeaders()
+    .getHeaderRow(0)
+    .getHeaderCell(0)
+    .getFilterIcon();
+  const headerFilter = new HeaderFilter();
+  const listCount = headerFilter.getList().getItems();
+
+  await dataGrid.isReady();
+  await t.click(headerFilterButton);
+
+  await t
+    .expect(listCount.count)
+    .eql(9);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 1),
+  keyExpr: 'field_0',
+  filterValue: [
+    '!',
+    [['field_0', '=', 'val_0_0']],
+  ],
+  filterPanel: {
+    visible: true,
+  },
+  headerFilter: {
+    visible: true,
+  },
 }));

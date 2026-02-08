@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets/resizable.markup.tests.js');
+import '../DevExpress.ui.widgets/resizable.markup.tests.js';

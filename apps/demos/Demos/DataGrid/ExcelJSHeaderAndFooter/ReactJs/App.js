@@ -1,8 +1,8 @@
 import React from 'react';
 import DataGrid, { Column, Export } from 'devextreme-react/data-grid';
-import { Workbook } from 'exceljs';
+import { Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
-import { exportDataGrid } from 'devextreme/excel_exporter';
+import { exportDataGrid } from 'devextreme-react/common/export/excel';
 import { countries } from './data.js';
 
 const gdpFormat = {

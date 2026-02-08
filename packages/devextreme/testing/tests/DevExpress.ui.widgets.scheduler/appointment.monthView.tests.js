@@ -13,9 +13,11 @@ import {
     createWrapper,
     supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
+import 'generic_light.css!';
 
 const {
     module,
@@ -35,14 +37,13 @@ const getAppointmentColor = ($task, checkedProperty) => {
     return new Color($task.css(checkedProperty)).toHex();
 };
 
-const createInstanceBase = (options, clock) => {
-    const scheduler = createWrapper({
+const createInstanceBase = async(options) => {
+    const scheduler = await createWrapper({
         height: 600,
         width: 800,
         ...options,
     });
 
-    clock.tick(300);
     scheduler.instance.focus();
 
     return scheduler;
@@ -52,7 +53,7 @@ module('T712431', () => {
     // TODO: there is a test for T712431 bug, when replace table layout on div layout, the test will also be useless
     const APPOINTMENT_WIDTH = 941;
 
-    test(`Appointment width should be not less ${APPOINTMENT_WIDTH}px with width control 1100px`, function(assert) {
+    test(`Appointment width should be not less ${APPOINTMENT_WIDTH}px with width control 1100px`, async function(assert) {
         const data = [
             {
                 text: 'Website Re-Design Plan 2',
@@ -61,7 +62,7 @@ module('T712431', () => {
             }
         ];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: data,
             views: ['month'],
             currentView: 'month',
@@ -79,7 +80,6 @@ module('T712431', () => {
 module('Integration: Appointments in Month view', {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
         this.tasks = [
             {
                 text: 'Task 1',
@@ -95,17 +95,16 @@ module('Integration: Appointments in Month view', {
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 }, () => {
     module('Scrolling mode standard', () => {
-        test('Appointments should be rendered correctly when resourses store is asynchronous', function(assert) {
+        test('Appointments should be rendered correctly when resourses store is asynchronous', async function(assert) {
             const appointments = [
                 { startDate: new Date(2015, 2, 4), text: 'a', endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
                 { startDate: new Date(2015, 2, 4), text: 'b', endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
             ];
 
-            const scheduler = createInstanceBase({
+            const scheduler = await createInstanceBase({
                 currentDate: new Date(2015, 2, 4),
                 views: ['month'],
                 dataSource: appointments,
@@ -135,16 +134,15 @@ module('Integration: Appointments in Month view', {
                         })
                     }
                 ]
-            }, this.clock);
+            });
 
-            this.clock.tick(300);
             assert.deepEqual(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2, 'Appointments are rendered');
         });
     });
 
     supportedScrollingModes.forEach(scrollingMode => {
         module(`Scrolling mode ${scrollingMode}`, () => {
-            const createInstance = (options, clock) => {
+            const createInstance = async(options) => {
                 options = options || {};
                 $.extend(
                     true,
@@ -156,7 +154,7 @@ module('Integration: Appointments in Month view', {
                     }
                 );
 
-                const scheduler = createInstanceBase(options, clock);
+                const scheduler = await createInstanceBase(options);
 
                 if(scrollingMode === 'virtual') {
                     const workspace = scheduler.instance.getWorkSpace();
@@ -165,13 +163,13 @@ module('Integration: Appointments in Month view', {
 
                 return scheduler;
             };
-            test('Scheduler tasks should have a right dimensions for month view', function(assert) {
+            test('Scheduler tasks should have a right dimensions for month view', async function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual scrolling not support month view');
                     return;
                 }
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     dataSource: [
                         { text: 'Task 1', startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 10) }
                     ],
@@ -179,8 +177,7 @@ module('Integration: Appointments in Month view', {
                     views: ['month'],
                     currentView: 'month',
                     height: 800
-                }, this.clock);
-                this.clock.tick(10);
+                });
 
                 const cellHeight = scheduler.workSpace.getCellHeight();
                 const cellWidth = scheduler.workSpace.getCellWidth();
@@ -189,22 +186,22 @@ module('Integration: Appointments in Month view', {
                 assert.roughEqual(scheduler.appointments.getAppointmentWidth(0), cellWidth, 1.001, 'Task has a right width');
             });
 
-            test('Scheduler tasks should have a right height when currentView is changed', function(assert) {
+            test('Scheduler tasks should have a right height when currentView is changed', async function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual scrolling not support month view');
                     return;
                 }
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     dataSource: [
                         { text: 'Task 1', startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 10) }
                     ],
                     currentDate: new Date(2015, 1, 9),
                     views: ['day', 'week', 'month'],
                     height: 800
-                }, this.clock);
-                this.clock.tick(10);
+                });
 
                 scheduler.instance.option('currentView', 'month');
+                await waitAsync(10);
 
                 const cellHeight = scheduler.workSpace.getCellHeight();
                 const cellWidth = scheduler.workSpace.getCellWidth();
@@ -213,13 +210,13 @@ module('Integration: Appointments in Month view', {
                 assert.roughEqual(scheduler.appointments.getAppointmentWidth(0), cellWidth, 1.001, 'Task has a right width');
             });
 
-            test('Two not rival appointments with fractional coordinates should have correct positions(ie)', function(assert) {
+            test('Two not rival appointments with fractional coordinates should have correct positions(ie)', async function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual scrolling not support month view');
                     return;
                 }
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     dataSource: [
                         { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 10) },
                         { text: 'Appointment 2', startDate: new Date(2015, 1, 11, 8), endDate: new Date(2015, 1, 11, 10) },
@@ -230,7 +227,7 @@ module('Integration: Appointments in Month view', {
                     currentView: 'month',
                     height: 600,
                     width: 720
-                }, this.clock);
+                });
 
                 const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
 
@@ -239,8 +236,8 @@ module('Integration: Appointments in Month view', {
                 assert.equal(translator.locate($appointment.eq(1)).top, translator.locate($appointment.eq(2)).top, 'appointment is rendered in right place');
             });
 
-            test('Month appointment inside grouped view should have a right resizable area', function(assert) {
-                const scheduler = createInstance({
+            test('Month appointment inside grouped view should have a right resizable area', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,
                     views: ['month'],
@@ -267,7 +264,7 @@ module('Integration: Appointments in Month view', {
                         }
                     ],
                     width: 1000
-                }, this.clock);
+                });
 
                 const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
                 const area1 = $appointments.eq(0).dxResizable('instance').option('area');
@@ -282,8 +279,8 @@ module('Integration: Appointments in Month view', {
                 assert.roughEqual(area2.right, $cells.eq(13).offset().left + halfOfCellWidth * 3, 1.001);
             });
 
-            test('Rival appointments should have correct positions on month view, rtl mode', function(assert) {
-                const scheduler = createInstance({
+            test('Rival appointments should have correct positions on month view, rtl mode', async function(assert) {
+                const scheduler = await createInstance({
                     rtlEnabled: true,
                     currentDate: new Date(2015, 2, 4),
                     views: ['month'],
@@ -292,7 +289,7 @@ module('Integration: Appointments in Month view', {
                     dataSource: [
                         { startDate: new Date(2015, 2, 4), endDate: new Date(2015, 2, 7), text: 'long' },
                         { startDate: new Date(2015, 2, 5), endDate: new Date(2015, 2, 5, 1), text: 'short' }]
-                }, this.clock);
+                });
 
                 const $longAppointment = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).eq(0);
                 const $shortAppointment = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).eq(1);
@@ -300,7 +297,7 @@ module('Integration: Appointments in Month view', {
                 assert.notEqual($longAppointment.position().top, $shortAppointment.position().top, 'Appointments positions are correct');
             });
 
-            test('Recurrence appointment should be rendered correctly when currentDate was changed: month view', function(assert) {
+            test('Recurrence appointment should be rendered correctly when currentDate was changed: month view', async function(assert) {
                 const appointment = {
                     startDate: new Date(2015, 1, 14, 0),
                     endDate: new Date(2015, 1, 14, 0, 30),
@@ -308,13 +305,13 @@ module('Integration: Appointments in Month view', {
                     recurrenceRule: 'FREQ=MONTHLY'
                 };
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 1, 14),
                     dataSource: [appointment],
                     views: ['month'],
                     currentView: 'month',
                     width: 600
-                }, this.clock);
+                });
 
                 scheduler.instance.option('currentDate', new Date(2015, 2, 14));
 
@@ -323,7 +320,7 @@ module('Integration: Appointments in Month view', {
                 assert.equal($appointment.length, 1, 'Appointment is rendered');
             });
 
-            test('Recurrence long appointment should be rendered correctly when currentDate was changed: month view', function(assert) {
+            test('Recurrence long appointment should be rendered correctly when currentDate was changed: month view', async function(assert) {
                 const appointment = {
                     text: 'Website Re-Design Plan',
                     priorityId: 2,
@@ -332,12 +329,12 @@ module('Integration: Appointments in Month view', {
                     recurrenceRule: 'FREQ=DAILY;INTERVAL=5'
                 };
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 4, 25),
                     dataSource: [appointment],
                     views: ['month'],
                     currentView: 'month'
-                }, this.clock);
+                });
 
                 scheduler.instance.option('currentDate', new Date(2015, 5, 25));
 
@@ -346,7 +343,7 @@ module('Integration: Appointments in Month view', {
                 assert.equal($appointment.length, 10, 'Appointments were rendered');
             });
 
-            test('Recurrence icon position should be correct (T718691)', function(assert) {
+            test('Recurrence icon position should be correct (T718691)', async function(assert) {
                 const data = [{
                     text: 'Book Flights to San Fran for Sales Trip',
                     startDate: new Date(2017, 4, 29, 12, 0),
@@ -354,14 +351,14 @@ module('Integration: Appointments in Month view', {
                     allDay: true,
                     recurrenceRule: 'FREQ=WEEKLY;BYDAY=TU;COUNT=10'
                 }];
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     dataSource: data,
                     views: ['month'],
                     currentView: 'month',
                     currentDate: new Date(2017, 4, 25),
                     startDayHour: 9,
                     height: 600
-                }, this.clock);
+                });
 
                 const $appointment = $(scheduler.instance.$element()).find('.dx-scheduler-appointment');
                 const $appointmentContent = $appointment.find('.dx-scheduler-appointment-content');
@@ -372,22 +369,22 @@ module('Integration: Appointments in Month view', {
                 assert.equal($appointmentRecurringIcon.eq(2).css('right'), '20px', 'Icon position is OK');
             });
 
-            test('Appointment startDate should be preprocessed before position calculating', function(assert) {
+            test('Appointment startDate should be preprocessed before position calculating', async function(assert) {
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     dataSource: [{ 'text': 'a', 'allDay': true, 'startDate': '2017-03-13T09:05:00Z', 'endDate': '2017-03-20T09:05:00Z' }],
                     currentDate: new Date(2017, 2, 13),
                     currentView: 'month',
                     views: ['month'],
                     height: 600
-                }, this.clock);
+                });
 
                 const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointment.length, 2, 'appointment is rendered');
             });
 
-            test('Scheduler appointment popup should be opened correctly for recurrence appointments after multiple opening(T710140)', function(assert) {
+            test('Scheduler appointment popup should be opened correctly for recurrence appointments after multiple opening(T710140)', async function(assert) {
                 const tasks = [{
                     text: 'Recurrence task',
                     start: new Date(2017, 2, 13),
@@ -395,14 +392,14 @@ module('Integration: Appointments in Month view', {
                     recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10'
                 }];
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     dataSource: tasks,
                     currentDate: new Date(2017, 2, 13),
                     currentView: 'month',
                     views: ['month'],
                     startDateExpr: 'start',
                     endDateExpr: 'end'
-                }, this.clock);
+                });
 
                 scheduler.instance.showAppointmentPopup(tasks[0]);
                 $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
@@ -422,7 +419,7 @@ module('Integration: Appointments in Month view', {
                 assert.deepEqual($buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys');
             });
 
-            test('Scheduler appointment popup should be opened correctly for recurrence appointments after opening for ordinary appointments(T710140)', function(assert) {
+            test('Scheduler appointment popup should be opened correctly for recurrence appointments after opening for ordinary appointments(T710140)', async function(assert) {
                 const tasks = [{
                     text: 'Task',
                     start: new Date(2017, 2, 13),
@@ -434,14 +431,14 @@ module('Integration: Appointments in Month view', {
                     recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10'
                 }];
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     dataSource: tasks,
                     currentDate: new Date(2017, 2, 13),
                     currentView: 'month',
                     views: ['month'],
                     startDateExpr: 'start',
                     endDateExpr: 'end'
-                }, this.clock);
+                });
 
                 scheduler.instance.showAppointmentPopup(tasks[0]);
 
@@ -468,7 +465,7 @@ module('Integration: Appointments in Month view', {
                 assert.equal(form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence).visible, false, 'Recurrence editor is hidden. Popup is correct');
             });
 
-            test('Long term appoinment inflict index shift in other appointments (T737780)', function(assert) {
+            test('Long term appoinment inflict index shift in other appointments (T737780)', async function(assert) {
                 const data = [
                     {
                         text: 'Website Re-Design Plan',
@@ -486,23 +483,57 @@ module('Integration: Appointments in Month view', {
                     }
                 ];
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     dataSource: data,
                     views: ['month'],
                     currentView: 'month',
                     currentDate: new Date(2017, 4, 25),
                     startDayHour: 9,
                     height: 600
-                }, this.clock);
+                });
 
                 const appointments = scheduler.instance._getAppointmentsToRepaint();
-                assert.strictEqual(appointments[0].settings[1].index, 0, 'Long term appointment tail has right index');
-                assert.strictEqual(appointments[1].settings[0].index, 1, 'Appointment next to long term appointment head has right index');
-                assert.strictEqual(appointments[2].settings[0].index, 1, 'Appointment next to long term appointment tail has right index');
+                const parts = appointments.map((item) => ({
+                    level: item.level,
+                    maxLevel: item.maxLevel,
+                    partIndex: item.partIndex,
+                    partTotalCount: item.partTotalCount,
+                    reduced: item.reduced,
+                }));
+                assert.deepEqual(parts, [
+                    {
+                        level: 0,
+                        maxLevel: 2,
+                        partIndex: 0,
+                        partTotalCount: 2,
+                        reduced: 'head',
+                    },
+                    {
+                        level: 1,
+                        maxLevel: 2,
+                        partIndex: undefined,
+                        partTotalCount: undefined,
+                        reduced: null,
+                    },
+                    {
+                        level: 0,
+                        maxLevel: 2,
+                        partIndex: 1,
+                        partTotalCount: 2,
+                        reduced: 'tail',
+                    },
+                    {
+                        level: 1,
+                        maxLevel: 2,
+                        partIndex: undefined,
+                        partTotalCount: undefined,
+                        reduced: null,
+                    }
+                ], 'Parts  should be correct');
             });
 
-            test('Appointment should be rendered correctly after changing view (T593699)', function(assert) {
-                const scheduler = createInstance({
+            test('Appointment should be rendered correctly after changing view (T593699)', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 6, 10),
                     views: ['month', 'week'],
                     currentView: 'month',
@@ -514,13 +545,14 @@ module('Integration: Appointments in Month view', {
                         ownerId: { id: 1 }
                     }],
                     height: 300
-                }, this.clock);
+                });
 
                 scheduler.instance.option('currentView', 'week');
+                await waitAsync(10);
                 assert.notOk(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0).data('dxItemData').settings, 'Item hasn\'t excess settings');
             });
 
-            test('Appointments should be rendered correctly, Month view with intervalCount and startDate', function(assert) {
+            test('Appointments should be rendered correctly, Month view with intervalCount and startDate', async function(assert) {
                 const tasks = [
                     { text: 'One', startDate: new Date(2017, 5, 22, 4), endDate: new Date(2017, 5, 22, 4, 30) },
                     { text: 'Two', startDate: new Date(2017, 5, 26, 0), endDate: new Date(2017, 5, 26, 0, 30) },
@@ -531,7 +563,7 @@ module('Integration: Appointments in Month view', {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2017, 5, 26),
                     dataSource: dataSource,
                     views: [{
@@ -542,16 +574,16 @@ module('Integration: Appointments in Month view', {
                     currentView: 'month',
                     firstDayOfWeek: 1,
                     height: 800
-                }, this.clock);
+                });
 
                 const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointments.length, 3, 'Appointments were rendered correctly');
             });
 
-            test('Appointments should be rendered correctly in vertical grouped workspace Month', function(assert) {
+            test('Appointments should be rendered correctly in vertical grouped workspace Month', async function(assert) {
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     dataSource: [{
                         text: 'a',
                         startDate: new Date(2018, 2, 16, 9),
@@ -579,7 +611,7 @@ module('Integration: Appointments in Month view', {
                             ]
                         }
                     ]
-                }, this.clock);
+                });
 
                 const $appointments = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS);
                 assert.equal($appointments.length, 2, 'two appointments is rendered');
@@ -593,8 +625,8 @@ module('Integration: Appointments in Month view', {
                 assert.roughEqual($appointments.eq(1).position().left, cellPosition, 1.5, 'correct left position');
             });
 
-            test('Appointment should be resized correctly to left side in horizontal grouped workspace Month', function(assert) {
-                const scheduler = createInstance({
+            test('Appointment should be resized correctly to left side in horizontal grouped workspace Month', async function(assert) {
+                const scheduler = await createInstance({
                     dataSource: [{
                         text: 'a',
                         startDate: new Date(2018, 2, 5, 12),
@@ -618,7 +650,7 @@ module('Integration: Appointments in Month view', {
                             ]
                         }
                     ]
-                }, this.clock);
+                });
 
                 const $element = $(scheduler.instance.$element());
                 const cellWidth = getOuterWidth($element.find('.' + DATE_TABLE_CELL_CLASS).eq(0));
@@ -632,11 +664,11 @@ module('Integration: Appointments in Month view', {
                 assert.roughEqual($appointment.position().left, 0, 1.1, 'Left coordinate is correct');
             });
 
-            test('Long appointment should have correct parts count(T854740)', function(assert) {
+            test('Long appointment should have correct parts count(T854740)', async function(assert) {
 
                 const data = [{ text: 'Two Weeks App (Jan 6 - Jan 19)', startDate: new Date(2020, 0, 6), endDate: new Date(2020, 0, 19, 12), typeId: 1 }];
 
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     dataSource: data,
                     views: ['month'],
                     firstDayOfWeek: 1,
@@ -647,13 +679,13 @@ module('Integration: Appointments in Month view', {
                     },
                     height: 500,
                     width: 250
-                }, this.clock);
+                });
 
                 assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointment parts are ok');
             });
 
-            test('Long appt parts should have correct coordinates if duration > week in vertical grouped workspace Month', function(assert) {
-                const scheduler = createInstance({
+            test('Long appt parts should have correct coordinates if duration > week in vertical grouped workspace Month', async function(assert) {
+                const scheduler = await createInstance({
                     dataSource: [{
                         text: 'a',
                         startDate: new Date(2018, 2, 11, 12),
@@ -676,7 +708,7 @@ module('Integration: Appointments in Month view', {
                             ]
                         }
                     ]
-                }, this.clock);
+                });
 
                 const $firstPart = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
                 const $secondPart = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(1);
@@ -685,7 +717,7 @@ module('Integration: Appointments in Month view', {
                 assert.roughEqual($secondPart.position().left, 0, 1.1, 'correct left position');
             });
 
-            test('Long appointment should have correct parts count if widget is zoomed (T854740)', function(assert) {
+            test('Long appointment should have correct parts count if widget is zoomed (T854740)', async function(assert) {
 
                 if(!browser.webkit) {
                     assert.ok(true, 'Browser zooming is enabled in webkit');
@@ -701,7 +733,7 @@ module('Integration: Appointments in Month view', {
                     typeId: 1
                 }];
 
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     dataSource: data,
                     views: ['month'],
                     firstDayOfWeek: 1,
@@ -713,12 +745,12 @@ module('Integration: Appointments in Month view', {
                     },
                     height: 500,
                     width: 250
-                }, this.clock);
+                });
 
                 assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointment parts are ok');
             });
 
-            test('Appointments from neighbor cells should not overlap each other if widget is zoomed (T885595)', function(assert) {
+            test('Appointments from neighbor cells should not overlap each other if widget is zoomed (T885595)', async function(assert) {
                 if(!browser.webkit) {
                     assert.ok(true, 'Browser zooming is enabled in webkit');
                     return;
@@ -736,7 +768,7 @@ module('Integration: Appointments in Month view', {
                     endDate: new Date(2017, 4, 23, 13, 15)
                 }];
 
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     dataSource: data,
                     width: 1023.1,
                     views: [{
@@ -750,7 +782,7 @@ module('Integration: Appointments in Month view', {
                         mode: scrollingMode
                     },
                     height: 650
-                }, this.clock);
+                });
 
                 assert.equal(scheduler.appointments.getAppointmentPosition(0).top, scheduler.appointments.getAppointmentPosition(1).top, 'Appointment positions are correct');
             });
@@ -764,11 +796,11 @@ module('Integration: Appointments in Month view', {
                 expected: [
                     {
                         color: '#ff0000',
-                        indices: [0, 1, 4]
+                        indices: [0, 2, 3]
                     },
                     {
                         color: '#0000ff',
-                        indices: [2, 3, 5]
+                        indices: [1, 4, 5]
                     }
                 ]
             }, {
@@ -776,17 +808,17 @@ module('Integration: Appointments in Month view', {
                 expected: [
                     {
                         color: '#ff0000',
-                        indices: [0, 1, 2]
+                        indices: [0, 2, 3]
                     },
                     {
                         color: '#0000ff',
-                        indices: [3, 4, 5]
+                        indices: [1, 4, 5]
                     }
                 ]
             }
         ].forEach(({ scrollingMode, expected }) => {
-            test(`Grouped recurrence tasks should have a correct color in ${scrollingMode} scrolling mode`, function(assert) {
-                const scheduler = createInstanceBase({
+            test(`Grouped recurrence tasks should have a correct color in ${scrollingMode} scrolling mode`, async function(assert) {
+                const scheduler = await createInstanceBase({
                     currentDate: new Date(2015, 11, 10),
                     currentView: 'month',
                     dataSource: [{
@@ -812,7 +844,7 @@ module('Integration: Appointments in Month view', {
                     },
                     width: 800,
                     height: 600
-                }, this.clock);
+                });
 
                 const task = scheduler.instance.$element().find(`.${APPOINTMENT_CLASS}`);
 

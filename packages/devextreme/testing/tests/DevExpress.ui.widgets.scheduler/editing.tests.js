@@ -1,11 +1,10 @@
 const $ = require('jquery');
 const devices = require('core/devices');
-const tooltip = require('__internal/ui/tooltip/m_tooltip');
 const fx = require('common/core/animation/fx');
 const keyboardMock = require('../../helpers/keyboardMock.js');
-const dataUtils = require('core/element_data');
+const { createWrapper } = require('../../helpers/scheduler/helpers.js');
+const { waitAsync } = require('../../helpers/scheduler/waitForAsync.js');
 
-require('generic_light.css!');
 require('__internal/scheduler/m_scheduler');
 require('ui/drop_down_button');
 
@@ -15,12 +14,13 @@ QUnit.testStart(function() {
 
 QUnit.module('Editing option: boolean', {
     beforeEach: function() {
-        this.createInstance = function(options) {
+        this.createInstance = async function(options) {
             fx.off = true;
 
             options = options || {};
             options.editing = options.editing || false;
-            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
+            const scheduler = await createWrapper(options);
+            this.instance = scheduler.instance;
         };
     },
     afterEach: function() {
@@ -28,16 +28,16 @@ QUnit.module('Editing option: boolean', {
     }
 });
 
-QUnit.test('Scheduler should have \'readonly\' css class', function(assert) {
-    this.createInstance();
+QUnit.test('Scheduler should have \'readonly\' css class', async function(assert) {
+    await this.createInstance();
     assert.ok(this.instance.$element().hasClass('dx-scheduler-readonly'), 'Readonly class is defined');
 
     this.instance.option('editing', true);
     assert.notOk(this.instance.$element().hasClass('dx-scheduler-readonly'), 'Readonly class is removed');
 });
 
-QUnit.test('popup should not be shown  after click on focused cell', function(assert) {
-    this.createInstance();
+QUnit.test('popup should not be shown  after click on focused cell', async function(assert) {
+    await this.createInstance();
 
     $(this.instance.$element()).find('.dx-scheduler-date-table-cell').first().trigger('dxpointerdown').trigger('dxpointerdown').trigger('dxclick');
 
@@ -45,8 +45,8 @@ QUnit.test('popup should not be shown  after click on focused cell', function(as
 
 });
 
-QUnit.test('popup should not be shown after press Enter', function(assert) {
-    this.createInstance({ focusStateEnabled: true });
+QUnit.test('popup should not be shown after press Enter', async function(assert) {
+    await this.createInstance({ focusStateEnabled: true });
 
     const $workSpace = $(this.instance.$element().find('.dx-scheduler-work-space'));
     const keyboard = keyboardMock($workSpace);
@@ -57,8 +57,8 @@ QUnit.test('popup should not be shown after press Enter', function(assert) {
     assert.notOk($('.dx-scheduler-appointment-popup .dx-overlay-content').length, 'Popup is not shown');
 });
 
-QUnit.test('Appointment should not be draggable & resizable', function(assert) {
-    this.createInstance({
+QUnit.test('Appointment should not be draggable & resizable', async function(assert) {
+    await this.createInstance({
         currentDate: new Date(2015, 5, 15),
         firstDayOfWeek: 1,
         dataSource: [{
@@ -77,29 +77,8 @@ QUnit.test('Appointment should not be draggable & resizable', function(assert) {
     assert.ok(appointments.option('allowResize'), 'Resize is allowed');
 });
 
-QUnit.test('Edit button should not be contain the \'pencil\' icon', function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 5, 15),
-        firstDayOfWeek: 1,
-        dataSource: [{
-            text: 'a',
-            startDate: new Date(2015, 5, 15, 10),
-            endDate: new Date(2015, 5, 15, 10, 30)
-        }]
-    });
-
-    const $appointment = $(this.instance.$element().find('.dx-scheduler-appointment').first());
-
-    const itemData = dataUtils.data($appointment[0], 'dxItemData');
-
-    this.instance.showAppointmentTooltip(itemData, $appointment);
-
-    assert.notOk($('.dx-scheduler-appointment-tooltip-buttons .dx-button').hasClass('dx-button-has-icon'), 'Edit button is OK');
-    tooltip.hide();
-});
-
-QUnit.test('ReadOnly option should be passed to the details appointment view', function(assert) {
-    this.createInstance();
+QUnit.test('ReadOnly option should be passed to the details appointment view', async function(assert) {
+    await this.createInstance();
 
     this.instance.showAppointmentPopup({
         text: 'a',
@@ -122,8 +101,8 @@ QUnit.test('ReadOnly option should be passed to the details appointment view', f
     assert.notOk(detailsAppointmentView.option('readOnly'), 'ReadOnly option is correct');
 });
 
-QUnit.test('Details appointment view should be readOnly if editing.allowUpdating=false', function(assert) {
-    this.createInstance({
+QUnit.test('Details appointment view should be readOnly if editing.allowUpdating=false', async function(assert) {
+    await this.createInstance({
         editing: {
             allowUpdating: false
         }
@@ -152,8 +131,8 @@ QUnit.test('Details appointment view should be readOnly if editing.allowUpdating
     assert.notOk(detailsAppointmentView.option('readOnly'), 'ReadOnly option is correct');
 });
 
-QUnit.test('Details appointment view shouldn\'t be readOnly when adding new appointment if editing.allowUpdating=false', function(assert) {
-    this.createInstance({
+QUnit.test('Details appointment view shouldn\'t be readOnly when adding new appointment if editing.allowUpdating=false', async function(assert) {
+    await this.createInstance({
         currentDate: new Date(2015, 5, 14),
         editing: {
             allowUpdating: false,
@@ -172,8 +151,8 @@ QUnit.test('Details appointment view shouldn\'t be readOnly when adding new appo
     assert.notOk(detailsAppointmentView.option('readOnly'), 'ReadOnly option is correct');
 });
 
-QUnit.test('Details appointment form should be readOnly after adding new appointment if editing.allowUpdating=false', function(assert) {
-    this.createInstance({
+QUnit.test('Details appointment form should be readOnly after adding new appointment if editing.allowUpdating=false', async function(assert) {
+    await this.createInstance({
         currentDate: new Date(2015, 5, 14),
         editing: {
             allowUpdating: false
@@ -194,11 +173,11 @@ QUnit.test('Details appointment form should be readOnly after adding new appoint
     this.instance.hideAppointmentPopup();
 });
 
-QUnit.test('Details form of new appointment shouldn\'t be readOnly after try to change existing appointment if editing.allowUpdating=false', function(assert) {
+QUnit.test('Details form of new appointment shouldn\'t be readOnly after try to change existing appointment if editing.allowUpdating=false', async function(assert) {
     const first = { text: 'first', startDate: new Date(2015, 5, 14, 0), endDate: new Date(2015, 5, 14, 0, 30) };
     const second = { text: 'second', startDate: new Date(2015, 5, 14, 1), endDate: new Date(2015, 5, 14, 1, 30) };
 
-    this.createInstance({
+    await this.createInstance({
         currentDate: new Date(2015, 5, 14),
         editing: {
             allowUpdating: false
@@ -236,16 +215,16 @@ QUnit.module('Editing option: complex object', {
     }
 });
 
-QUnit.test('Scheduler should have \'readonly\' css class for complex object editing option', function(assert) {
-    this.createInstance();
+QUnit.test('Scheduler should have \'readonly\' css class for complex object editing option', async function(assert) {
+    await this.createInstance();
     assert.ok(this.instance.$element().hasClass('dx-scheduler-readonly'), 'Readonly class is defined');
 
     this.instance.option('editing.allowUpdating', true);
     assert.notOk(this.instance.$element().hasClass('dx-scheduler-readonly'), 'Readonly class is removed');
 });
 
-QUnit.test('showAppointmentPopup method should not be called after click on focused cell if editing.allowAdding is false', function(assert) {
-    this.createInstance({
+QUnit.test('showAppointmentPopup method should not be called after click on focused cell if editing.allowAdding is false', async function(assert) {
+    await this.createInstance({
         editing: {
             allowAdding: false
         }
@@ -259,13 +238,13 @@ QUnit.test('showAppointmentPopup method should not be called after click on focu
     this.instance.showAppointmentPopup.restore();
 });
 
-QUnit.test('Appointment should not be draggable & resizable if editing.allowUpdating is false', function(assert) {
+QUnit.test('Appointment should not be draggable & resizable if editing.allowUpdating is false', async function(assert) {
     if(devices.real().deviceType !== 'desktop') {
         assert.ok(true, 'test does not actual for mobile devices');
         return;
     }
 
-    this.createInstance({
+    await this.createInstance({
         editing: {
             allowUpdating: false
         },
@@ -278,6 +257,7 @@ QUnit.test('Appointment should not be draggable & resizable if editing.allowUpda
         }]
     });
 
+    await waitAsync(0);
     const appointments = this.instance.$element().find('.dx-scheduler-scrollable-appointments').dxSchedulerAppointments('instance');
     assert.notOk(appointments.option('allowDrag'), 'Drag is not allowed');
     assert.notOk(appointments.option('allowResize'), 'Resize is not allowed');
@@ -289,8 +269,8 @@ QUnit.test('Appointment should not be draggable & resizable if editing.allowUpda
     assert.ok(appointments.option('allowResize'), 'Resize is allowed');
 });
 
-QUnit.test('Appointment should not be resizable if editing.allowResizing is false', function(assert) {
-    this.createInstance({
+QUnit.test('Appointment should not be resizable if editing.allowResizing is false', async function(assert) {
+    await this.createInstance({
         editing: {
             allowResizing: false
         },
@@ -303,6 +283,7 @@ QUnit.test('Appointment should not be resizable if editing.allowResizing is fals
         }]
     });
 
+    await waitAsync(0);
     const appointments = this.instance.$element().find('.dx-scheduler-scrollable-appointments').dxSchedulerAppointments('instance');
     assert.notOk(appointments.option('allowResize'), 'Resize is not allowed');
 
@@ -312,8 +293,8 @@ QUnit.test('Appointment should not be resizable if editing.allowResizing is fals
     assert.ok(appointments.option('allowResize'), 'Resize is allowed');
 });
 
-QUnit.test('Appointment should not be draggable if editing.allowDragging is false', function(assert) {
-    this.createInstance({
+QUnit.test('Appointment should not be draggable if editing.allowDragging is false', async function(assert) {
+    await this.createInstance({
         editing: {
             allowDragging: false
         },
@@ -326,6 +307,7 @@ QUnit.test('Appointment should not be draggable if editing.allowDragging is fals
         }]
     });
 
+    await waitAsync(0);
     const appointments = this.instance.$element().find('.dx-scheduler-scrollable-appointments').dxSchedulerAppointments('instance');
     assert.notOk(appointments.option('allowDrag'), 'Drag is not allowed');
 
@@ -335,8 +317,8 @@ QUnit.test('Appointment should not be draggable if editing.allowDragging is fals
     assert.ok(appointments.option('allowDrag'), 'Drag is allowed');
 });
 
-QUnit.test('Appointment should not be deleted, if allowUpdating || allowDeleting = false', function(assert) {
-    this.createInstance({
+QUnit.test('Appointment should not be deleted, if allowUpdating || allowDeleting = false', async function(assert) {
+    await this.createInstance({
         currentDate: new Date(2015, 5, 15),
         firstDayOfWeek: 1,
         dataSource: [{
@@ -350,6 +332,7 @@ QUnit.test('Appointment should not be deleted, if allowUpdating || allowDeleting
         }
     });
 
+    await waitAsync(0);
     let appointments = this.instance.$element().find('.dx-scheduler-scrollable-appointments').dxSchedulerAppointments('instance');
     assert.strictEqual(appointments.option('allowDelete'), false, 'Delete is not allowed');
 

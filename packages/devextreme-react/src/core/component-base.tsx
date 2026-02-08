@@ -33,6 +33,7 @@ import {
   RestoreTreeContext,
   TemplateRenderingContext,
 } from './contexts';
+import { UNITLESS_NUMBERS_SET } from './const';
 
 const DX_REMOVE_EVENT = 'dxremove';
 
@@ -79,6 +80,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const [, setForceUpdateToken] = useState(Symbol('initial force update token'));
     const removalLocker = useContext(RemovalLockerContext);
     const restoreParentLink = useContext(RestoreTreeContext);
+    const restoreParentLinkRef = useRef(restoreParentLink);
     const instance = useRef<any>();
     const element = useRef<HTMLDivElement>();
     const portalContainer = useRef<HTMLElement | null>();
@@ -97,6 +99,10 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const childrenContainerRef = useRef<HTMLDivElement>(null);
 
     const { parentType } = useContext(NestedOptionContext);
+
+    if (parentType === 'option') {
+      return React.createElement('div');
+    }
 
     const [widgetConfig, context] = useOptionScanning(
       {
@@ -122,15 +128,10 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         childElementsDetached.current = false;
       }
 
-      if (restoreParentLink && element.current && !element.current.isConnected) {
-        restoreParentLink();
+      if (restoreParentLinkRef.current && element.current && !element.current.isConnected) {
+        restoreParentLinkRef.current();
       }
-    }, [
-      childNodes.current,
-      element.current,
-      childElementsDetached.current,
-      restoreParentLink,
-    ]);
+    }, []);
 
     const updateCssClasses = useCallback((prevProps: (P & ComponentBaseProps) | undefined, newProps: P & ComponentBaseProps) => {
       const prevClassName = prevProps ? getClassName(prevProps) : undefined;
@@ -151,7 +152,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
           element.current?.classList.add(...classNames);
         }
       }
-    }, [element.current]);
+    }, []);
 
     const setInlineStyles = useCallback((styles) => {
       if (element.current) {
@@ -159,11 +160,15 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
         Object.entries(styles).forEach(
           ([name, value]) => {
-            el.style[name] = value;
+            if (typeof value === 'number' && !UNITLESS_NUMBERS_SET.has(name)) {
+              el.style[name] = `${value}px`;
+            } else {
+              el.style[name] = value;
+            }
           },
         );
       }
-    }, [element.current]);
+    }, []);
 
     const setTemplateManagerHooks = useCallback(({
       createDXTemplates: createDXTemplatesFn,
@@ -173,11 +178,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       createDXTemplates.current = createDXTemplatesFn;
       clearInstantiationModels.current = clearInstantiationModelsFn;
       updateTemplates.current = updateTemplatesFn;
-    }, [
-      createDXTemplates.current,
-      clearInstantiationModels.current,
-      updateTemplates.current,
-    ]);
+    }, []);
 
     const getElementProps = useCallback(() => {
       const elementProps: Record<string, any> = {
@@ -194,7 +195,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         }
       });
       return elementProps;
-    }, [element.current]);
+    }, [props]);
 
     const scheduleTemplatesUpdate = useCallback(() => {
       if (guardsUpdateScheduled.current) {
@@ -212,11 +213,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       });
 
       unscheduleGuards();
-    }, [
-      guardsUpdateScheduled.current,
-      useDeferUpdateForTemplates.current,
-      updateTemplates.current,
-    ]);
+    }, []);
 
     const createWidget = useCallback((el?: Element) => {
       beforeCreateWidget();
@@ -257,14 +254,8 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     }, [
       beforeCreateWidget,
       afterCreateWidget,
-      element.current,
-      optionsManager.current,
-      createDXTemplates.current,
-      clearInstantiationModels.current,
       WidgetClass,
       useRequestAnimationFrameFlag,
-      useDeferUpdateForTemplates.current,
-      instance.current,
       subscribableOptions,
       independentEvents,
       widgetConfig,
@@ -275,13 +266,9 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         instance.current.focus();
         shouldRestoreFocus.current = false;
       }
-    }, [shouldRestoreFocus.current, instance.current]);
+    }, []);
 
     const onComponentUpdated = useCallback(() => {
-      if (parentType === 'option') {
-        return;
-      }
-
       if (!optionsManager.current?.isInstanceSet) {
         return;
       }
@@ -296,9 +283,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       prevPropsRef.current = props;
     }, [
-      optionsManager.current,
-      prevPropsRef.current,
-      createDXTemplates.current,
       scheduleTemplatesUpdate,
       updateCssClasses,
       props,
@@ -306,10 +290,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     ]);
 
     const onComponentMounted = useCallback(() => {
-      if (parentType === 'option') {
-        return;
-      }
-
       const { style } = props;
 
       if (childElementsDetached.current) {
@@ -325,9 +305,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       prevPropsRef.current = props;
     }, [
-      childNodes.current,
-      element.current,
-      childElementsDetached.current,
       updateCssClasses,
       setInlineStyles,
       props,
@@ -357,15 +334,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       optionsManager.current.dispose();
 
       removalLocker?.unlock();
-    }, [
-      removalLocker,
-      instance.current,
-      childNodes.current,
-      element.current,
-      optionsManager.current,
-      childElementsDetached.current,
-      shouldRestoreFocus.current,
-    ]);
+    }, [removalLocker]);
 
     useLayoutEffect(() => {
       onComponentMounted();
@@ -376,8 +345,18 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     }, []);
 
     useLayoutEffect(() => {
+      restoreParentLinkRef.current = restoreParentLink;
+    }, [restoreParentLink]);
+
+    useLayoutEffect(() => {
       onComponentUpdated();
     });
+
+    const createWidgetRef = useRef(createWidget);
+
+    useLayoutEffect(() => {
+      createWidgetRef.current = createWidget;
+    }, [createWidget]);
 
     useImperativeHandle(ref, () => (
       {
@@ -388,10 +367,10 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
           return element.current;
         },
         createWidget(el) {
-          createWidget(el);
+          createWidgetRef.current?.(el);
         },
       }
-    ), [instance.current, element.current, createWidget]);
+    ), []);
 
     const _renderChildren = useCallback(() => {
       if (renderChildren) {
@@ -405,7 +384,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const renderPortal = useCallback(() => portalContainer.current && createPortal(
       _renderChildren(),
       portalContainer.current,
-    ), [portalContainer.current, _renderChildren]);
+    ), [_renderChildren]);
 
     const renderContent = useCallback(() => {
       const { children } = props;
@@ -424,7 +403,6 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     }, [
       props,
       isPortalComponent,
-      portalContainer.current,
       _renderChildren,
     ]);
 

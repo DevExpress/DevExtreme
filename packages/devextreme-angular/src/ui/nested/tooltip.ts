@@ -21,6 +21,7 @@ import { UserDefinedElement } from 'devextreme/core/element';
 import { ChartTooltipLocation } from 'devextreme/viz/chart';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -28,8 +29,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tooltip',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoTooltipComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -275,7 +278,7 @@ export class DxoTooltipComponent extends NestedOption implements OnDestroy, OnIn
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTooltipComponent
   ],
   exports: [

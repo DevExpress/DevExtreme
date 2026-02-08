@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -22,20 +21,36 @@ import { Format } from 'devextreme/common/core/localization';
 import { SummaryType } from 'devextreme/common/grids';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiGroupItemComponent } from './group-item-dxi';
-import { DxiTotalItemComponent } from './total-item-dxi';
 
+import {
+    PROPERTY_TOKEN_groupItems,
+    PROPERTY_TOKEN_totalItems,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-summary',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_groupItems)
+    set _groupItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groupItems', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_totalItems)
+    set _totalItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('totalItems', value);
+    }
+    
     @Input()
     get calculateCustomSummary(): Function {
         return this._getOption('calculateCustomSummary');
@@ -90,22 +105,6 @@ export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnIn
     }
 
 
-    @ContentChildren(forwardRef(() => DxiGroupItemComponent))
-    get groupItemsChildren(): QueryList<DxiGroupItemComponent> {
-        return this._getOption('groupItems');
-    }
-    set groupItemsChildren(value) {
-        this.setChildren('groupItems', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiTotalItemComponent))
-    get totalItemsChildren(): QueryList<DxiTotalItemComponent> {
-        return this._getOption('totalItems');
-    }
-    set totalItemsChildren(value) {
-        this.setChildren('totalItems', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -126,7 +125,7 @@ export class DxoSummaryComponent extends NestedOption implements OnDestroy, OnIn
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSummaryComponent
   ],
   exports: [

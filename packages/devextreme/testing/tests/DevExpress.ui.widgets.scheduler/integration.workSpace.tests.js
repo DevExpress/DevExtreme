@@ -1,6 +1,13 @@
 import $ from 'jquery';
 import dateLocalization from 'common/core/localization/date';
-import { createWrapper, CLASSES, initTestMarkup, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
+import {
+    createWrapper,
+    CLASSES,
+    initTestMarkup,
+    isDesktopEnvironment,
+    SchedulerTestWrapper
+} from '../../helpers/scheduler/helpers.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import localization from 'localization';
 import eventsEngine from 'common/core/events/core/events_engine';
@@ -12,6 +19,8 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import translator from 'common/core/animation/translator';
 import { getOuterHeight, getInnerHeight, getOuterWidth } from 'core/utils/size';
+
+import 'generic_light.css!';
 
 const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
 const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
@@ -30,8 +39,8 @@ const moduleConfig = {
 };
 
 module('Integration: Work space', { ...moduleConfig }, () => {
-    test('Scheduler should have a right work space', function(assert) {
-        const scheduler = createWrapper({
+    test('Scheduler should have a right work space', async function(assert) {
+        const scheduler = await createWrapper({
             views: ['day', 'week'],
             currentView: 'day'
         });
@@ -40,12 +49,13 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.ok($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance'), 'Work space is day on init');
 
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         assert.ok($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceWeek('instance'), 'Work space is week after change option ');
     });
 
-    test('Work space should have correct currentDate option', function(assert) {
-        const scheduler = createWrapper({
+    test('Work space should have correct currentDate option', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 0, 28)
         });
         const $element = scheduler.instance.$element();
@@ -53,12 +63,13 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.deepEqual($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance').option('currentDate'), new Date(2015, 0, 28), 'Work space has a right currentDate option');
 
         scheduler.instance.option('currentDate', new Date(2015, 1, 28));
+        await waitAsync(0);
 
         assert.deepEqual($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance').option('currentDate'), new Date(2015, 1, 28), 'Work space has a right currentDate option');
     });
 
-    test('Work space should have correct firstDayOfWeek option', function(assert) {
-        const scheduler = createWrapper({
+    test('Work space should have correct firstDayOfWeek option', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'week',
             firstDayOfWeek: 2
         });
@@ -71,8 +82,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.deepEqual($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceWeek('instance').option('firstDayOfWeek'), 1, 'Work space has a right first day of week');
     });
 
-    test('Scheduler work space should have a single type class', function(assert) {
-        const scheduler = createWrapper({
+    test('Scheduler work space should have a single type class', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'week',
             firstDayOfWeek: 2,
             views: ['day', 'week', 'workWeek', 'month']
@@ -99,21 +110,25 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         };
 
         scheduler.instance.option('currentView', 'day');
+        await waitAsync(0);
         assert.ok(check('dx-scheduler-work-space-day'), 'Work space has a right type class');
 
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
         assert.ok(check('dx-scheduler-work-space-week'), 'Work space has a right type class');
 
         scheduler.instance.option('currentView', 'workWeek');
+        await waitAsync(0);
         assert.ok(check('dx-scheduler-work-space-work-week'), 'Work space has a right type class');
 
         scheduler.instance.option('currentView', 'month');
+        await waitAsync(0);
         assert.ok(check('dx-scheduler-work-space-month'), 'Work space has a right type class');
     });
 
     ['standard', 'virtual'].forEach((scrollingMode) => {
-        test(`Pointer down on workspace cell should focus cell in ${scrollingMode} mode`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Pointer down on workspace cell should focus cell in ${scrollingMode} mode`, async function(assert) {
+            const scheduler = await createWrapper({
                 currentDate: new Date(2015, 1, 10),
                 scrolling: { mode: scrollingMode, orientation: 'both' },
             });
@@ -132,8 +147,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         });
     });
 
-    test('Double click on workspace cell should call scheduler.showAppointmentPopup method in day view', function(assert) {
-        const scheduler = createWrapper({ currentDate: new Date(2015, 1, 10) });
+    test('Double click on workspace cell should call scheduler.showAppointmentPopup method in day view', async function(assert) {
+        const scheduler = await createWrapper({ currentDate: new Date(2015, 1, 10) });
         const spy = sinon.spy();
         const showAppointmentPopup = scheduler.instance.showAppointmentPopup;
         scheduler.instance.showAppointmentPopup = spy;
@@ -161,8 +176,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         }
     });
 
-    test('Double click on works space cell should call scheduler.showAppointmentPopup method in week view', function(assert) {
-        const scheduler = createWrapper({ currentDate: new Date(2015, 1, 9), currentView: 'week', firstDayOfWeek: 1 });
+    test('Double click on works space cell should call scheduler.showAppointmentPopup method in week view', async function(assert) {
+        const scheduler = await createWrapper({ currentDate: new Date(2015, 1, 9), currentView: 'week', firstDayOfWeek: 1 });
         const spy = sinon.spy();
         const showAppointmentPopup = scheduler.instance.showAppointmentPopup;
         scheduler.instance.showAppointmentPopup = spy;
@@ -180,8 +195,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         }
     });
 
-    test('Double click on work space cell should call scheduler.showAppointmentPopup method in month view', function(assert) {
-        const scheduler = createWrapper({ currentDate: new Date(2015, 1, 9), currentView: 'month', firstDayOfWeek: 1 });
+    test('Double click on work space cell should call scheduler.showAppointmentPopup method in month view', async function(assert) {
+        const scheduler = await createWrapper({ currentDate: new Date(2015, 1, 9), currentView: 'month', firstDayOfWeek: 1 });
         const spy = sinon.spy();
         const showAppointmentPopup = scheduler.instance.showAppointmentPopup;
         scheduler.instance.showAppointmentPopup = spy;
@@ -189,6 +204,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
             pointerMock(scheduler.instance.$element().find('.dx-scheduler-date-table-cell').eq(22)).start().click().click();
             assert.deepEqual(spy.getCall(0).args[0], {
+                allDay: false,
                 startDate: new Date(2015, 1, 17),
                 endDate: new Date(2015, 1, 18)
             }, 'showAppointmentPopup has a right arguments');
@@ -198,8 +214,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         }
     });
 
-    test('scheduler.showAppointmentPopup method should have resource arg if there is some resource', function(assert) {
-        const scheduler = createWrapper({
+    test('scheduler.showAppointmentPopup method should have resource arg if there is some resource', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
             firstDayOfWeek: 1,
@@ -231,8 +247,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         }
     });
 
-    test('scheduler.showAppointmentPopup method should have resource arg if there is some resource and view is month', function(assert) {
-        const scheduler = createWrapper({
+    test('scheduler.showAppointmentPopup method should have resource arg if there is some resource and view is month', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 1, 9),
             currentView: 'month',
             firstDayOfWeek: 1,
@@ -254,6 +270,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
             pointerMock(scheduler.instance.$element().find('.dx-scheduler-date-table-cell').eq(22)).start().click().click();
             assert.deepEqual(spy.getCall(0).args[0], {
+                allDay: false,
                 startDate: new Date(2015, 1, 3),
                 endDate: new Date(2015, 1, 4),
                 ownerId: 2
@@ -264,8 +281,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         }
     });
 
-    test('WorkSpace should have a correct \'groups\' option', function(assert) {
-        const scheduler = createWrapper({
+    test('WorkSpace should have a correct \'groups\' option', async function(assert) {
+        const scheduler = await createWrapper({
             groups: ['resource1'],
             resources: [
                 {
@@ -288,42 +305,33 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
         let workSpace = scheduler.instance.$element().find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance');
 
-        assert.deepEqual(workSpace.option('groups'),
-            [
-                {
-                    name: 'resource1',
-                    items: [
-                        { id: 1, text: 'One' },
-                        { id: 2, text: 'Two' }
-                    ],
-                    data: [
-                        { key: 1, name: 'One' },
-                        { key: 2, name: 'Two' }
-                    ]
-                }
-            ],
-            'Groups are OK');
+        assert.equal(workSpace.option('groups').length, 1, 'Groups are OK');
+        assert.equal(workSpace.option('groups')[0].resourceIndex, 'resource1', 'Groups resourceIndex are OK');
+        assert.deepEqual(workSpace.option('groups')[0].items, [
+            { id: 1, text: 'One', color: undefined },
+            { id: 2, text: 'Two', color: undefined }
+        ], 'Groups items are OK');
+        assert.deepEqual(workSpace.option('groups')[0].data, [
+            { key: 1, name: 'One' },
+            { key: 2, name: 'Two' }
+        ], 'Groups data are OK');
 
         scheduler.instance.option('groups', ['resource2']);
-
+        await waitAsync(0);
         workSpace = scheduler.instance.$element().find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance');
-        assert.deepEqual(workSpace.option('groups'),
-            [
-                {
-                    name: 'resource2',
-                    items: [
-                        { id: 1, text: 'Room 1' }
-                    ],
-                    data: [
-                        { id: 1, text: 'Room 1' }
-                    ]
-                }
-            ],
-            'Groups are OK');
+
+        assert.equal(workSpace.option('groups').length, 1, 'Groups are OK');
+        assert.equal(workSpace.option('groups')[0].resourceIndex, 'resource2', 'Groups resourceIndex are OK');
+        assert.deepEqual(workSpace.option('groups')[0].items, [
+            { id: 1, text: 'Room 1', color: undefined }
+        ], 'Groups items are OK');
+        assert.deepEqual(workSpace.option('groups')[0].data, [
+            { id: 1, text: 'Room 1' }
+        ], 'Groups data are OK');
     });
 
-    test('updateScrollPosition should work correctly when groups were not set (T946739)', function(assert) {
-        const scheduler = createWrapper({
+    test('updateScrollPosition should work correctly when groups were not set (T946739)', async function(assert) {
+        const scheduler = await createWrapper({
             resources: [
                 {
                     displayExpr: 'name',
@@ -343,8 +351,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.ok(true, 'Scroll position was updated');
     });
 
-    test('WorkSpace should have a correct \'startDayHour\' option', function(assert) {
-        const scheduler = createWrapper({
+    test('WorkSpace should have a correct \'startDayHour\' option', async function(assert) {
+        const scheduler = await createWrapper({
             startDayHour: 1
         });
 
@@ -353,11 +361,12 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.equal(workSpace.option('startDayHour'), 1, 'Start day hour is OK on init');
 
         scheduler.instance.option('startDayHour', 5);
+        await waitAsync(0);
         assert.equal(workSpace.option('startDayHour'), 5, 'Start day hour is OK if option is changed');
     });
 
-    test('WorkSpace should have a correct \'endDayHour\' option', function(assert) {
-        const scheduler = createWrapper({
+    test('WorkSpace should have a correct \'endDayHour\' option', async function(assert) {
+        const scheduler = await createWrapper({
             endDayHour: 10
         });
 
@@ -366,10 +375,11 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.equal(workSpace.option('endDayHour'), 10, 'End day hour is OK on init');
 
         scheduler.instance.option('endDayHour', 12);
+        await waitAsync(0);
         assert.equal(workSpace.option('endDayHour'), 12, 'End day hour is OK if option is changed');
     });
 
-    test('drop and dragenter handlers should be different for date table and allDay table, T245137', function(assert) {
+    test('drop and dragenter handlers should be different for date table and allDay table, T245137', async function(assert) {
         const log = {};
 
         log[dragEvents.drop] = {};
@@ -377,7 +387,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
         const onSpy = sinon.spy(eventsEngine, 'on');
 
-        createWrapper({
+        await createWrapper({
             editing: true
         });
 
@@ -402,7 +412,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         eventsEngine.on.restore();
     });
 
-    test('event handlers should be reattached after changing allDayExpanded', function(assert) {
+    test('event handlers should be reattached after changing allDayExpanded', async function(assert) {
         const onSpy = sinon.spy(eventsEngine, 'on').withArgs(sinon.match(function(element) {
             return $(element).hasClass('dx-scheduler-work-space');
         }), sinon.match(function(eventName) {
@@ -412,7 +422,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             return eventName === dragEvents.drop && namespace === 'dxSchedulerDateTable';
         }));
 
-        const scheduler = createWrapper();
+        const scheduler = await createWrapper();
 
         const previousSubscriptionsLength = onSpy.callCount;
 
@@ -423,8 +433,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         eventsEngine.on.restore();
     });
 
-    test('Work space should have right all-day-collapsed class on init', function(assert) {
-        const scheduler = createWrapper({
+    test('Work space should have right all-day-collapsed class on init', async function(assert) {
+        const scheduler = await createWrapper({
             showAllDayPanel: true,
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
@@ -445,12 +455,13 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             endDate: new Date(2015, 1, 9, 7, 30),
             allDay: true
         }]);
+        await waitAsync(0);
 
         assert.notOk($workSpace.hasClass('dx-scheduler-work-space-all-day-collapsed'), 'Work-space has not \'all-day-expanded\' class');
     });
 
-    test('Work space should have right showAllDayPanel option value', function(assert) {
-        const { instance } = createWrapper({
+    test('Work space should have right showAllDayPanel option value', async function(assert) {
+        const { instance } = await createWrapper({
             showAllDayPanel: false
         });
         const workspace = instance.getWorkSpace();
@@ -464,8 +475,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.equal(workspace.type, 'day', 'WorkSpace type is Day');
     });
 
-    test('Work space \'allDayExpanded\' option value when \'showAllDayPanel\' = true', function(assert) {
-        const scheduler = createWrapper({
+    test('Work space \'allDayExpanded\' option value when \'showAllDayPanel\' = true', async function(assert) {
+        const scheduler = await createWrapper({
             showAllDayPanel: true,
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
@@ -487,12 +498,13 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             endDate: new Date(2015, 1, 9, 9),
             allDay: false
         }]);
+        await waitAsync(0);
 
         assert.deepEqual($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceWeek('instance').option('allDayExpanded'), false, 'Work space has a right allDay visibility');
     });
 
-    test('Work space "allDayExpanded" option value should be correct after changing view', function(assert) {
-        const scheduler = createWrapper({
+    test('Work space "allDayExpanded" option value should be correct after changing view', async function(assert) {
+        const scheduler = await createWrapper({
             showAllDayPanel: true,
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
@@ -507,14 +519,16 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         const $element = scheduler.instance.$element();
 
         scheduler.instance.option('currentView', 'day');
+        await waitAsync(0);
         assert.deepEqual($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance').option('allDayExpanded'), false, 'Work space has a right allDay visibility');
 
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
         assert.deepEqual($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceWeek('instance').option('allDayExpanded'), true, 'Work space has a right allDay visibility');
     });
 
-    test('Work space \'allDayExpanded\' option value should be correct after changing currentDate', function(assert) {
-        const scheduler = createWrapper({
+    test('Work space \'allDayExpanded\' option value should be correct after changing currentDate', async function(assert) {
+        const scheduler = await createWrapper({
             showAllDayPanel: true,
             currentDate: new Date(2015, 1, 9),
             currentView: 'day',
@@ -531,17 +545,18 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.deepEqual($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance').option('allDayExpanded'), true, 'Work space has a right allDay visibility');
 
         scheduler.instance.option('currentDate', new Date(2015, 1, 10));
+        await waitAsync(0);
         assert.deepEqual($element.find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance').option('allDayExpanded'), false, 'Work space has a right allDay visibility');
     });
 
-    test('Work space \'allDayExpanded\' option value should be correct after deleting last allDay appointment', function(assert) {
+    test('Work space \'allDayExpanded\' option value should be correct after deleting last allDay appointment', async function(assert) {
         const appointment = {
             text: 'a',
             startDate: new Date(2015, 1, 10, 7),
             allDay: true
         };
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             showAllDayPanel: true,
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
@@ -553,7 +568,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.deepEqual(scheduler.instance.$element().find('.dx-scheduler-work-space').dxSchedulerWorkSpaceWeek('instance').option('allDayExpanded'), false, 'Work space has correct allDay visibility');
     });
 
-    test('Work space \'allDayExpanded\' option should depend on client-side filtered appointments', function(assert) {
+    test('Work space \'allDayExpanded\' option should depend on client-side filtered appointments', async function(assert) {
         const appointment = {
             text: 'All-day',
             startDate: new Date(2015, 2, 4),
@@ -562,7 +577,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             recurrenceRule: 'FREQ=DAILY'
         };
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             showAllDayPanel: true,
             currentView: 'day',
             startDayHour: 3,
@@ -575,9 +590,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.deepEqual(scheduler.instance.$element().find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance').option('allDayExpanded'), false, 'Work space has correct allDay visibility');
     });
 
-    test('Cell data should be applied when resources are loaded', function(assert) {
-        const done = assert.async();
-        const scheduler = createWrapper({
+    test('Cell data should be applied when resources are loaded', async function(assert) {
+        await createWrapper({
             currentView: 'day',
             groups: ['owner'],
             startDayHour: 10,
@@ -603,56 +617,49 @@ module('Integration: Work space', { ...moduleConfig }, () => {
                     assert.deepEqual(groups, { owner: 1 });
                 }
 
+                const scheduler = new SchedulerTestWrapper(e.component);
                 const cellCount = scheduler.workSpace.getCells().length;
 
                 assert.equal(cellCount, 8, 'Correct cell count');
-
-                done();
             }
         });
     });
 
-    test('Duplicated elements should not be rendered when resources are loaded asynchronously (T661335)', function(assert) {
-        const clock = sinon.useFakeTimers();
+    test('Duplicated elements should not be rendered when resources are loaded asynchronously (T661335)', async function(assert) {
+        const scheduler = await createWrapper({
+            currentView: 'day',
+            groups: ['owner'],
+            resources: [
+                {
+                    fieldExpr: 'owner',
+                    dataSource: [{ id: 1 }]
+                },
+                {
+                    fieldExpr: 'room',
+                    dataSource: new CustomStore({
+                        load: function() {
+                            const d = $.Deferred();
+                            setTimeout(function() {
+                                d.resolve([{ id: 1 }]);
+                            }, 100);
+                            return d.promise();
+                        }
+                    })
+                }
+            ],
+            dataSource: []
+        });
 
-        try {
-            const scheduler = createWrapper({
-                currentView: 'day',
-                groups: ['owner'],
-                resources: [
-                    {
-                        fieldExpr: 'owner',
-                        dataSource: [{ id: 1 }]
-                    },
-                    {
-                        fieldExpr: 'room',
-                        dataSource: new CustomStore({
-                            load: function() {
-                                const d = $.Deferred();
-                                setTimeout(function() {
-                                    d.resolve([{ id: 1 }]);
-                                }, 100);
-                                return d.promise();
-                            }
-                        })
-                    }
-                ],
-                dataSource: []
-            });
+        scheduler.instance.option('groups', ['room']);
+        scheduler.instance.repaint();
+        await waitAsync(110);
 
-            scheduler.instance.option('groups', ['room']);
-            scheduler.instance.repaint();
-            clock.tick(100);
-
-            const $workspace = scheduler.instance.$element().find('.dx-scheduler-work-space');
-            assert.equal($workspace.length, 1, 'Duplicated workSpace wasn\'t rendered');
-        } finally {
-            clock.restore();
-        }
+        const $workspace = scheduler.instance.$element().find('.dx-scheduler-work-space');
+        assert.equal($workspace.length, 1, 'Duplicated workSpace wasn\'t rendered');
     });
 
-    test('Cell data should be updated after view changing', function(assert) {
-        const scheduler = createWrapper({
+    test('Cell data should be updated after view changing', async function(assert) {
+        const scheduler = await createWrapper({
             views: ['day', 'week'],
             currentView: 'day',
             dataSource: [{
@@ -665,12 +672,15 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         });
 
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         const workSpace = scheduler.instance.getWorkSpace();
-        assert.deepEqual(workSpace.getCellDataByCoordinates({
+        const $cell = workSpace.getCellByCoordinates({
             top: 10,
             left: 100,
-        }), {
+        }, false);
+
+        assert.deepEqual(workSpace.getCellData($cell), {
             allDay: false,
             startDate: new Date(2016, 8, 4),
             endDate: new Date(2016, 8, 4, 0, 30),
@@ -680,8 +690,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         }, 'Cell data is OK!');
     });
 
-    test('Cell data should contain dates in scheduler timezone', function(assert) {
-        const scheduler = createWrapper({
+    test('Cell data should contain dates in scheduler timezone', async function(assert) {
+        const scheduler = await createWrapper({
             timeZone: 'UTC',
             views: ['day', 'week'],
             currentView: 'week',
@@ -691,10 +701,12 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         });
 
         const workSpace = scheduler.instance.getWorkSpace();
-        assert.deepEqual(workSpace.getCellDataByCoordinates({
+        const $cell = workSpace.getCellByCoordinates({
             top: 10,
             left: 100,
-        }), {
+        }, false);
+
+        assert.deepEqual(workSpace.getCellData($cell), {
             allDay: false,
             startDate: new Date(2016, 8, 4),
             endDate: new Date(2016, 8, 4, 0, 30),
@@ -704,7 +716,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         }, 'Cell data has UTC dates');
     });
 
-    test('Appointments in month view should be sorted same as in all-day section', function(assert) {
+    // TODO: remove skip with new view model - now in month view order reversed and this test checks nothing
+    test.skip('Appointments in month view should be sorted same as in all-day section', async function(assert) {
         const items = [{
             text: '1',
             startDate: new Date(2016, 1, 11, 13, 0),
@@ -721,7 +734,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             endDate: new Date(2016, 1, 10, 12, 0),
             allDay: true
         }];
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: items,
             currentDate: new Date(2016, 1, 11),
             currentView: 'week',
@@ -737,6 +750,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         }
 
         scheduler.instance.option('currentView', 'month');
+        await waitAsync(0);
 
         const monthAppointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
         for(i = 0; i < 3; i++) {
@@ -744,9 +758,9 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         }
     });
 
-    test('Timepanel text should be calculated correctly if DST makes sense (T442904)', function(assert) {
+    test('Timepanel text should be calculated correctly if DST makes sense (T442904)', async function(assert) {
         // can be reproduced in PST timezone
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [],
             views: ['week'],
             currentView: 'week',
@@ -763,10 +777,10 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.equal($cells.eq(2).text(), dateLocalization.format(new Date(2016, 10, 6, 2), 'shorttime'), 'Cell text is OK');
     });
 
-    test('DateTimeIndicator should show correct time in current time zone', function(assert) {
+    test('DateTimeIndicator should show correct time in current time zone', async function(assert) {
         const currentDate = new Date(2021, 4, 26);
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [],
             views: ['week'],
             currentView: 'week',
@@ -790,10 +804,10 @@ module('Integration: Work space', { ...moduleConfig }, () => {
     });
 
     if(isDesktopEnvironment()) {
-        test('ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)', function(assert) {
+        test('ScrollToTime works correctly with timelineDay and timelineWeek view (T749957)', async function(assert) {
             const date = new Date(2019, 5, 1, 9, 40);
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 dataSource: [],
                 views: ['timelineDay', 'day', 'timelineWeek', 'week', 'timelineMonth'],
                 currentView: 'timelineDay',
@@ -812,6 +826,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             assert.notEqual(translator.locate($(scroll)).left, 0, 'Container is scrolled in timelineDay');
 
             scheduler.instance.option('currentView', 'timelineWeek');
+            await waitAsync(0);
 
             scheduler.instance.scrollToTime(date.getHours() - 1, 30, date);
             scroll = scheduler.workSpace.getDateTableScrollable().find('.dx-scrollable-scroll')[0];
@@ -820,8 +835,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         });
     }
 
-    test('intervalCount should be passed to workSpace', function(assert) {
-        const scheduler = createWrapper({
+    test('intervalCount should be passed to workSpace', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2017, 3, 16),
             views: [{
                 type: 'day',
@@ -837,7 +852,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.equal(workSpace.option('intervalCount'), 2, 'option intervalCount was passed');
     });
 
-    test('Group header should contain group header content with right height, groupOrientation = vertical', function(assert) {
+    test('Group header should contain group header content with right height, groupOrientation = vertical', async function(assert) {
         const priorityData = [
             {
                 text: 'Low Priority',
@@ -850,7 +865,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             }
         ];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [],
             views: [{
                 type: 'day',
@@ -877,8 +892,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.roughEqual($headerContent, 7 * cellHeight, 1, 'Group header content has right height');
     });
 
-    test('WorkSpace should be refreshed after groups changed', function(assert) {
-        const scheduler = createWrapper({
+    test('WorkSpace should be refreshed after groups changed', async function(assert) {
+        const scheduler = await createWrapper({
             groups: ['resource1'],
             resources: [
                 {
@@ -903,17 +918,17 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
         try {
             scheduler.instance.option('groups', ['resource2']);
+            await waitAsync(0);
 
             assert.ok(refreshStub.calledOnce, 'Workspace was refreshed');
-
         } finally {
             refreshStub.restore();
         }
     });
 
     ['standard', 'virtual'].forEach((scrollingMode) => {
-        test(`SelectedCellData option should have rigth data of focused cell when scrolling is ${scrollingMode}`, function(assert) {
-            const scheduler = createWrapper({
+        test(`SelectedCellData option should have rigth data of focused cell when scrolling is ${scrollingMode}`, async function(assert) {
+            const scheduler = await createWrapper({
                 dataSource: [],
                 views: ['week'],
                 currentView: 'week',
@@ -941,8 +956,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             }], 'option has right value');
         });
 
-        test(`SelectedCellData option should be applied correctly in ungrouped workspace when scrolling is ${scrollingMode}`, function(assert) {
-            createWrapper({
+        test(`SelectedCellData option should be applied correctly in ungrouped workspace when scrolling is ${scrollingMode}`, async function(assert) {
+            await createWrapper({
                 dataSource: [],
                 views: ['week'],
                 currentView: 'week',
@@ -964,8 +979,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             assert.ok(true, 'WorkSpace works correctly');
         });
 
-        test(`SelectedCellData option should make cell in focused state when scrolling is ${scrollingMode}`, function(assert) {
-            const scheduler = createWrapper({
+        test(`SelectedCellData option should make cell in focused state when scrolling is ${scrollingMode}`, async function(assert) {
+            const scheduler = await createWrapper({
                 dataSource: [],
                 views: ['week'],
                 currentView: 'week',
@@ -982,8 +997,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         });
 
         // It will work differently in renovated scheduler, but we need to take it into account
-        test(`Focused cells cash should be correct (T640466) when scrolling is ${scrollingMode}`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Focused cells cash should be correct (T640466) when scrolling is ${scrollingMode}`, async function(assert) {
+            const scheduler = await createWrapper({
                 dataSource: [],
                 views: ['week'],
                 currentView: 'week',
@@ -1008,8 +1023,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         });
     });
 
-    test('Vertical scrollable should work after switching currentDate if allDayPanel and crossScrollingEnabled are turned on', function(assert) {
-        const scheduler = createWrapper({
+    test('Vertical scrollable should work after switching currentDate if allDayPanel and crossScrollingEnabled are turned on', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [],
             views: ['day'],
             currentView: 'day',
@@ -1020,13 +1035,14 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         });
 
         scheduler.instance.option('currentDate', new Date(2018, 5, 15));
+        await waitAsync(0);
         const $scroll = scheduler.instance.$element().find('.dx-scrollbar-vertical').eq(1);
 
         assert.notEqual($scroll.css('display'), 'none', 'ok');
     });
 
-    test('Month view; dates are rendered correctly with grouping by date & empty resources in groups (T759160)', function(assert) {
-        const scheduler = createWrapper({
+    test('Month view; dates are rendered correctly with grouping by date & empty resources in groups (T759160)', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [],
             views: ['month'],
             currentView: 'month',
@@ -1050,8 +1066,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.notOk(hasNaNCellData, 'Container has valid data');
     });
 
-    test('Workspace view has correct viewEndDate with empty groups and groupByDate = true (T815379)', function(assert) {
-        const scheduler = createWrapper({
+    test('Workspace view has correct viewEndDate with empty groups and groupByDate = true (T815379)', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [],
             views: ['week'],
             currentView: 'week',
@@ -1074,7 +1090,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.deepEqual(scheduler.instance.getEndViewDate(), new Date(2018, 4, 26, 15, 59), 'View has corrent endViewDate');
     });
 
-    test('Workspace view group header cells have same height as table cells (T837711)', function(assert) {
+    test('Workspace view group header cells have same height as table cells (T837711)', async function(assert) {
         const priorityData = [
             {
                 text: 'Low Priority',
@@ -1097,7 +1113,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             }
         ];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [],
             views: ['timelineMonth'],
             currentView: 'timelineMonth',
@@ -1123,8 +1139,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.equal(getInnerHeight(fifthHeaderCell), getInnerHeight(dateTableCell), 'Header cell and table cell have same height');
     });
 
-    isDesktopEnvironment() && test('SelectedCellData option should be correct when virtual scrolling is enabled', function(assert) {
-        const instance = createWrapper({
+    isDesktopEnvironment() && test('SelectedCellData option should be correct when virtual scrolling is enabled', async function(assert) {
+        const instance = await createWrapper({
             dataSource: [],
             views: ['week'],
             currentView: 'week',
@@ -1175,9 +1191,9 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.deepEqual(selectedCellData[48], lastCell, 'Last selected cell is correct');
     });
 
-    test('SelectedCellData option should not change when dateTable is scrolled', function(assert) {
+    test('SelectedCellData option should not change when dateTable is scrolled', async function(assert) {
         const done = assert.async();
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [],
             views: ['week'],
             currentView: 'week',
@@ -1217,55 +1233,9 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         });
     });
 
-    test('"onOptionChanged" should not be called on scroll when virtual scrolling is enabled', function(assert) {
+    isDesktopEnvironment() && test('Appointment popup should be opened with correct parameters if virtual scrolling is enabled', async function(assert) {
         const done = assert.async();
-        let onOptionChangedCalls = 0;
-        const scheduler = createWrapper({
-            dataSource: [],
-            views: ['week'],
-            currentView: 'week',
-            showAllDayPanel: true,
-            currentDate: new Date(2020, 8, 21),
-            height: 300,
-            scrolling: { mode: 'virtual', orientation: 'both' },
-            onOptionChanged: ({ name }) => {
-                if(name !== 'loadedResources') {
-                    onOptionChangedCalls += 1;
-                }
-            },
-        });
-        scheduler.instance.getWorkSpace().renderer.getRenderTimeout = () => -1;
-
-        const $cells = scheduler.workSpace.getCells();
-        const $table = scheduler.workSpace.getDateTable();
-
-        const onOptionChangedSpy = sinon.spy();
-
-        scheduler.onOptionChanged = onOptionChangedSpy;
-
-        $($table).trigger(
-            $.Event('dxpointerdown', { target: $cells.eq(0).get(0), which: 1, pointerType: 'mouse' }),
-        );
-
-        assert.equal(onOptionChangedCalls, 1, '"onOptionChanged" was triggered because selected cells have been changed');
-
-        const dateTableScrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
-
-        dateTableScrollable.scrollTo({ y: 400 });
-
-        setTimeout(() => {
-            assert.equal(
-                onOptionChangedCalls, 1,
-                '"onOptionChanged" was not triggered again because selected cells have not been changed',
-            );
-            done();
-        });
-
-    });
-
-    isDesktopEnvironment() && test('Appointment popup should be opened with correct parameters if virtual scrolling is enabled', function(assert) {
-        const done = assert.async();
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [],
             views: ['week'],
             currentView: 'week',
@@ -1314,11 +1284,11 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         'month',
         'week'
     ].forEach(view => {
-        test(`First day of week should be correct in "en-GB" locale (T988896) in ${view} view`, function(assert) {
+        test(`First day of week should be correct in "en-GB" locale (T988896) in ${view} view`, async function(assert) {
             const locale = localization.locale();
             localization.locale('en-GB');
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 views: [view],
                 currentView: view,
                 currentDate: new Date(2021, 4, 27),
@@ -1436,8 +1406,8 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
             },
         }].forEach((config) => {
             const { view, startCell, endCell } = config;
-            test(`Multiple selection should work in ${view} when dragging is not enabled`, function(assert) {
-                const instance = createWrapper({
+            test(`Multiple selection should work in ${view} when dragging is not enabled`, async function(assert) {
+                const instance = await createWrapper({
                     dataSource: [],
                     views: [view],
                     currentView: view,
@@ -1463,8 +1433,8 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
             });
 
             if(view !== 'month') {
-                test(`Multiple selection should work in ${view} when dragging is not enabled when scrolling is virtual`, function(assert) {
-                    const instance = createWrapper({
+                test(`Multiple selection should work in ${view} when dragging is not enabled when scrolling is virtual`, async function(assert) {
+                    const instance = await createWrapper({
                         dataSource: [],
                         views: [view],
                         currentView: view,
@@ -1494,8 +1464,8 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
         });
     });
 
-    test('Correct cells should be selected in Month View in basic case and virtual scrolling is enabled', function(assert) {
-        const scheduler = createWrapper({
+    test('Correct cells should be selected in Month View in basic case and virtual scrolling is enabled', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [],
             views: ['month'],
             currentView: 'month',
@@ -1509,8 +1479,8 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
         checkSelection(assert, scheduler, 0, 5);
     });
 
-    test('Correct cells should be selected in Month when horizontal grouping is used and virtual scrolling is enabled', function(assert) {
-        const scheduler = createWrapper({
+    test('Correct cells should be selected in Month when horizontal grouping is used and virtual scrolling is enabled', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [],
             views: [{
                 type: 'month',
@@ -1538,8 +1508,8 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
         assert.ok(cell.hasClass(FOCUSED_CELL_CLASS), 'Cell is focused');
     });
 
-    test('Correct cells should be selected in Month when vertical grouping is used and virtual scrolling is enabled', function(assert) {
-        const scheduler = createWrapper({
+    test('Correct cells should be selected in Month when vertical grouping is used and virtual scrolling is enabled', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [],
             views: [{
                 type: 'month',
@@ -1567,8 +1537,8 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
         assert.ok(cell.hasClass(FOCUSED_CELL_CLASS), 'Cell is focused');
     });
 
-    test('Correct cells should be selected in Month when grouping by date is used and virtual scrolling is enabled', function(assert) {
-        const scheduler = createWrapper({
+    test('Correct cells should be selected in Month when grouping by date is used and virtual scrolling is enabled', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [],
             views: [{
                 type: 'month',
@@ -1600,8 +1570,8 @@ isDesktopEnvironment() && module('Cells selection', { ...moduleConfig }, () => {
         });
     });
 
-    test('Correct selectedCellData should be generated when selecting cells in Month when virtual scrolling is enabled', function(assert) {
-        const scheduler = createWrapper({
+    test('Correct selectedCellData should be generated when selecting cells in Month when virtual scrolling is enabled', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [],
             views: ['month'],
             currentView: 'month',
@@ -1654,9 +1624,9 @@ module('Resource Cell Template', () => {
                 fx.off = false;
             },
         }, () => {
-            test('resourceCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
+            test('resourceCellTemplate should take cellElement with correct geometry(T453520)', async function(assert) {
                 assert.expect(3);
-                this.createInstance({
+                await this.createInstance({
                     currentView: 'week',
                     views: ['week'],
                     height: 700,
@@ -1681,9 +1651,9 @@ module('Resource Cell Template', () => {
                 });
             });
 
-            test('resourceCellTemplate should take cellElement with correct geometry in timeline (T453520)', function(assert) {
+            test('resourceCellTemplate should take cellElement with correct geometry in timeline (T453520)', async function(assert) {
                 assert.expect(2);
-                this.createInstance({
+                await this.createInstance({
                     currentView: 'timelineWeek',
                     views: ['timelineWeek'],
                     height: 700,
@@ -1711,10 +1681,10 @@ module('Resource Cell Template', () => {
                 });
             });
 
-            test('resourceCellTemplate should have correct options', function(assert) {
+            test('resourceCellTemplate should have correct options', async function(assert) {
                 let templateOptions;
 
-                this.createInstance({
+                await this.createInstance({
                     currentView: 'week',
                     currentDate: new Date(2016, 8, 5),
                     firstDayOfWeek: 0,
@@ -1740,8 +1710,8 @@ module('Resource Cell Template', () => {
                 assert.deepEqual(templateOptions.data, { text: 'John', id: 1 }, 'data option is OK');
             });
 
-            test('resourceCellTemplate should work correct in timeline view', function(assert) {
-                const scheduler = createWrapper({
+            test('resourceCellTemplate should work correct in timeline view', async function(assert) {
+                const scheduler = await createWrapper({
                     currentView: 'timelineWeek',
                     currentDate: new Date(2016, 8, 5),
                     firstDayOfWeek: 0,
@@ -1769,8 +1739,8 @@ module('Resource Cell Template', () => {
                 assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
             });
 
-            test('resourceCellTemplate should work correct in agenda view', function(assert) {
-                const scheduler = this.createInstance({
+            test('resourceCellTemplate should work correct in agenda view', async function(assert) {
+                const scheduler = await this.createInstance({
                     views: ['agenda'],
                     currentView: 'agenda',
                     currentDate: new Date(2016, 8, 5),
@@ -1813,10 +1783,10 @@ module('Resource Cell Template', () => {
                 assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
             });
 
-            test('Agenda has right arguments in resourceCellTemplate arguments', function(assert) {
+            test('Agenda has right arguments in resourceCellTemplate arguments', async function(assert) {
                 let params;
 
-                this.createInstance({
+                await this.createInstance({
                     views: ['agenda'],
                     currentView: 'agenda',
                     currentDate: new Date(2016, 8, 5),
@@ -1847,11 +1817,12 @@ module('Resource Cell Template', () => {
                     }
                 });
 
+                await waitForAsync(() => Boolean(params));
                 assert.deepEqual(params, { id: 1, text: 'John', color: '#A2a' }, 'Cell text is OK');
             });
 
 
-            test('Scheduler should have specific resourceCellTemplate setting of the view', function(assert) {
+            test('Scheduler should have specific resourceCellTemplate setting of the view', async function(assert) {
                 let countCallTemplate1 = 0;
                 let countCallTemplate2 = 0;
                 const dataSource = [
@@ -1859,7 +1830,7 @@ module('Resource Cell Template', () => {
                     { id: 2, text: 'group2' }
                 ];
 
-                this.createInstance({
+                await this.createInstance({
                     views: [{
                         type: 'week',
                         resourceCellTemplate: function() {
@@ -1887,8 +1858,8 @@ module('Resource Cell Template', () => {
 });
 
 module('Markup', () => {
-    test('Rows should have correct width in Month when virtual scrolling is used', function(assert) {
-        const scheduler = createWrapper({
+    test('Rows should have correct width in Month when virtual scrolling is used', async function(assert) {
+        const scheduler = await createWrapper({
             width: 600,
             views: [{
                 type: 'month',

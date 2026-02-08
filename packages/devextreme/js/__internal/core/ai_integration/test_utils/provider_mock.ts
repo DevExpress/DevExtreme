@@ -1,0 +1,19 @@
+import type { AIProvider, Response } from '@js/common/ai-integration';
+import type { RequestManagerParams } from '@ts/core/ai_integration/core/request_manager';
+
+export class Provider implements AIProvider {
+  sendRequest(params: RequestManagerParams): Response {
+    const { onChunk } = params;
+
+    const promise = new Promise<string>((resolve) => {
+      onChunk?.('AI');
+      onChunk?.(' response');
+
+      resolve('AI response');
+    });
+
+    const abort = (): void => {};
+
+    return { promise, abort };
+  }
+}

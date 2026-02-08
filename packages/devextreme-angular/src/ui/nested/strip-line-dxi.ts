@@ -14,16 +14,26 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiGanttStripLine } from './base/gantt-strip-line-dxi';
 
+import { PROPERTY_TOKEN_stripLines } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-strip-line',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost],
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_stripLines,
+           useExisting: DxiStripLineComponent,
+        }
+    ],
     inputs: [
         'cssClass',
         'end',
@@ -54,7 +64,7 @@ export class DxiStripLineComponent extends DxiGanttStripLine {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiStripLineComponent
   ],
   exports: [

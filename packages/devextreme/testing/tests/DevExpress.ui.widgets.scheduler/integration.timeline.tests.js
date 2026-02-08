@@ -7,33 +7,26 @@ QUnit.testStart(() => {
             </div>');
 });
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 import devices from '__internal/core/m_devices';
 
 import '__internal/scheduler/m_scheduler';
-import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';
-
-const createInstance = options => {
-    const instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
-    return new SchedulerTestWrapper(instance);
-};
+import { createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.module('Integration: Timeline', {
     beforeEach: function() {
         fx.off = true;
-        this.createInstance = function(options) {
-            this.instance = $('#scheduler').dxScheduler(options).dxScheduler('instance');
-        };
     },
     afterEach: function() {
         fx.off = false;
     }
 });
 
-QUnit.test('Special classes should be applied in grouped timeline', function(assert) {
+QUnit.test('Special classes should be applied in grouped timeline', async function(assert) {
     const $style = $('<style nonce="qunit-test">').text(`
         #scheduler .dx-scheduler-cell-sizes-vertical {
             height: 100px
@@ -51,7 +44,7 @@ QUnit.test('Special classes should be applied in grouped timeline', function(ass
             { text: 'Five', id: 6 }
         ];
 
-        const scheduler = createInstance({
+        const scheduler = await createWrapper({
             views: ['timelineWeek'],
             currentView: 'timelineWeek',
             crossScrollingEnabled: true,
@@ -69,8 +62,8 @@ QUnit.test('Special classes should be applied in grouped timeline', function(ass
     }
 });
 
-QUnit.test('Scheduler should have a right timeline work space', function(assert) {
-    const scheduler = createInstance({
+QUnit.test('Scheduler should have a right timeline work space', async function(assert) {
+    const scheduler = await createWrapper({
         views: ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'],
         currentView: 'timelineDay'
     });
@@ -78,17 +71,20 @@ QUnit.test('Scheduler should have a right timeline work space', function(assert)
     assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineDay('instance'), 'Work space is timelineDay on init');
 
     scheduler.instance.option('currentView', 'timelineWeek');
+    await waitAsync(0);
     assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWeek('instance'), 'Work space is timelineWeek after change option ');
 
     scheduler.instance.option('currentView', 'timelineWorkWeek');
+    await waitAsync(0);
     assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWorkWeek('instance'), 'Work space is timelineWorkWeek after change option ');
 
     scheduler.instance.option('currentView', 'timelineMonth');
+    await waitAsync(0);
     assert.ok(scheduler.workSpace.getWorkSpace().dxSchedulerTimelineMonth('instance'), 'Work space is timelineMonth after change option ');
 });
 
-QUnit.test('Scheduler should not update scroll position if appointment is visible, timeline day view ', function(assert) {
-    const scheduler = createInstance({
+QUnit.test('Scheduler should not update scroll position if appointment is visible, timeline day view ', async function(assert) {
+    const scheduler = await createWrapper({
         currentDate: new Date(2015, 1, 9),
         dataSource: new DataSource({
             store: []
@@ -112,8 +108,8 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
     }
 });
 
-QUnit.test('Scheduler should not update scroll position if appointment is visible, timeline week view ', function(assert) {
-    const scheduler = createInstance({
+QUnit.test('Scheduler should not update scroll position if appointment is visible, timeline week view ', async function(assert) {
+    const scheduler = await createWrapper({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
         dataSource: new DataSource({
@@ -143,8 +139,8 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
     }
 });
 
-QUnit.test('Scheduler should update scroll position if appointment is not visible, timeline week view ', function(assert) {
-    const scheduler = createInstance({
+QUnit.test('Scheduler should update scroll position if appointment is not visible, timeline week view ', async function(assert) {
+    const scheduler = await createWrapper({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
         dataSource: new DataSource({
@@ -173,8 +169,8 @@ QUnit.test('Scheduler should update scroll position if appointment is not visibl
     }
 });
 
-QUnit.test('getEndViewDate should return correct value on timelineMonth view DST date (T720694)', function(assert) {
-    const scheduler = createInstance({
+QUnit.test('getEndViewDate should return correct value on timelineMonth view DST date (T720694)', async function(assert) {
+    const scheduler = await createWrapper({
         currentDate: new Date(2019, 2, 5),
         views: ['timelineMonth'],
         currentView: 'timelineMonth',
@@ -186,8 +182,8 @@ QUnit.test('getEndViewDate should return correct value on timelineMonth view DST
     assert.deepEqual(workSpace.getEndViewDate(), new Date(2019, 2, 31, 23, 59), 'End view date is OK');
 });
 
-QUnit.test('Scheduler should not update scroll position if appointment is visible, timeline month view ', function(assert) {
-    const scheduler = createInstance({
+QUnit.test('Scheduler should not update scroll position if appointment is visible, timeline month view ', async function(assert) {
+    const scheduler = await createWrapper({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
         dataSource: new DataSource({
@@ -217,8 +213,8 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
     }
 });
 
-QUnit.test('Scheduler should update scroll position if appointment is not visible, timeline month view ', function(assert) {
-    const scheduler = createInstance({
+QUnit.test('Scheduler should update scroll position if appointment is not visible, timeline month view ', async function(assert) {
+    const scheduler = await createWrapper({
         firstDayOfWeek: 1,
         currentDate: new Date(2015, 2, 2),
         dataSource: new DataSource({
@@ -247,8 +243,8 @@ QUnit.test('Scheduler should update scroll position if appointment is not visibl
     }
 });
 
-QUnit.test('Appointments should have a right order on timeline month', function(assert) {
-    const scheduler = createInstance({
+QUnit.test('Appointments should have a right order on timeline month', async function(assert) {
+    const scheduler = await createWrapper({
         currentDate: new Date(2016, 1, 2),
         dataSource: new DataSource([
             {
@@ -273,7 +269,7 @@ QUnit.test('Appointments should have a right order on timeline month', function(
     assert.equal($appointments.eq(1).data('dxItemData').text, 'a', 'Appointment data is OK');
 });
 
-QUnit.test('Scheduler timeline dateTable should have right height after changing size if crossScrollingEnabled = true (T644407)', function(assert) {
+QUnit.test('Scheduler timeline dateTable should have right height after changing size if crossScrollingEnabled = true (T644407)', async function(assert) {
     const resourcesData = [
         { text: 'One', id: 2 },
         { text: 'Two', id: 3 },
@@ -282,7 +278,7 @@ QUnit.test('Scheduler timeline dateTable should have right height after changing
         { text: 'Five', id: 6 }
     ];
 
-    const scheduler = createInstance({
+    const scheduler = await createWrapper({
         dataSource: [],
         views: ['timelineDay'],
         currentView: 'timelineDay',
@@ -306,7 +302,7 @@ QUnit.test('Scheduler timeline dateTable should have right height after changing
     assert.equal(scheduler.workSpace.getCell(0).height(), cellHeight, 'Cells has correct height');
 });
 
-QUnit.test('Scheduler timeline groupTable should have right height if widget has auto-height', function(assert) {
+QUnit.test('Scheduler timeline groupTable should have right height if widget has auto-height', async function(assert) {
     const resourcesData = [
         { text: 'One', id: 2 },
         { text: 'Two', id: 3 },
@@ -315,7 +311,7 @@ QUnit.test('Scheduler timeline groupTable should have right height if widget has
         { text: 'Five', id: 6 }
     ];
 
-    const scheduler = createInstance({
+    const scheduler = await createWrapper({
         dataSource: [],
         views: ['timelineDay'],
         currentView: 'timelineDay',
@@ -337,14 +333,14 @@ QUnit.test('Scheduler timeline groupTable should have right height if widget has
     assert.roughEqual(groupHeight, dateTableHeight, 1.5, 'Group table has correct height');
 });
 
-QUnit.test('Appointment has correct render with timelineWeek view & endHour outside of view bounds (T754362)', function(assert) {
+QUnit.test('Appointment has correct render with timelineWeek view & endHour outside of view bounds (T754362)', async function(assert) {
     const data = [{
         startDate: new Date('2014-07-14T09:00:00.000Z'),
         endDate: new Date('2014-07-14T23:01:00.000Z'),
         text: 'blah',
     }];
 
-    const scheduler = createInstance({
+    const scheduler = await createWrapper({
         dataSource: data,
         views: [{
             type: 'timelineWeek',
@@ -400,8 +396,8 @@ if(devices.real().deviceType === 'desktop') {
             },
         }].forEach((config) => {
             const { view, startCell, endCell } = config;
-            QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled`, function(assert) {
-                const instance = createWrapper({
+            QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled`, async function(assert) {
+                const instance = await createWrapper({
                     dataSource: [],
                     views: [view],
                     currentView: view,

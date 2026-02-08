@@ -1,10 +1,10 @@
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const loadingIndicatorModule = require('viz/core/loading_indicator');
+import { noop } from 'core/utils/common';
+import { Renderer } from '../../helpers/vizMocks.js';
+import loadingIndicatorModule from 'viz/core/loading_indicator';
 
 QUnit.module('Common', {
     beforeEach: function() {
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.eventTrigger = sinon.spy();
         this.notify = sinon.spy();
         this.loadingIndicator = new loadingIndicatorModule.LoadingIndicator({ renderer: this.renderer, eventTrigger: this.eventTrigger, notify: this.notify });
@@ -146,7 +146,7 @@ QUnit.module('Scheduling', {
     beforeEach: function() {
         const that = this;
         that.loadingIndicator = new loadingIndicatorModule.LoadingIndicator({
-            renderer: new vizMocks.Renderer(),
+            renderer: new Renderer(),
             eventTrigger: noop,
             notify: function() {
                 that.notify && that.notify.apply(that, arguments);

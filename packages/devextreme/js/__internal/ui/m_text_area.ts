@@ -16,14 +16,17 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import TextBox from '@ts/ui/text_box/m_text_box';
 import { allowScroll, prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
 
-const TEXTAREA_CLASS = 'dx-textarea';
+export const TEXTAREA_CLASS = 'dx-textarea';
 const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';
 
 export interface TextAreaProperties extends Omit<Properties,
 'onChange' | 'onCopy' | 'onCut' | 'onEnterKey' | 'onFocusIn' | 'onFocusOut' | 'onInput' |
 'onKeyDown' | 'onKeyUp' | 'onPaste' | 'onValueChanged' | 'onContentReady' | 'onDisposing' |
 'onOptionChanged' | 'onInitialized'
-> {}
+> {
+  _shouldAttachKeyboardEvents?: boolean;
+}
+
 class TextArea extends TextBox<TextAreaProperties> {
   _eventY!: number;
 
@@ -32,7 +35,18 @@ class TextArea extends TextBox<TextAreaProperties> {
       ...super._getDefaultOptions(),
       spellcheck: true,
       autoResizeEnabled: false,
+      _shouldAttachKeyboardEvents: false,
     };
+  }
+
+  _shouldAttachKeyboardEvents(): boolean {
+    const {
+      _shouldAttachKeyboardEvents: shouldAttachKeyboardEvents,
+      readOnly,
+    } = this.option();
+
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return shouldAttachKeyboardEvents || !readOnly;
   }
 
   _initMarkup(): void {
@@ -218,6 +232,7 @@ class TextArea extends TextBox<TextAreaProperties> {
     const { name, value } = args;
 
     switch (name) {
+      case '_shouldAttachKeyboardEvents':
       case 'autoResizeEnabled':
         this._updateInputAutoResizeAppearance(this._input(), value);
         this._refreshEvents();

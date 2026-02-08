@@ -13,6 +13,7 @@
 @use "./validation";
 @use "./textBox";
 @use "./dropDownBox";
+@use "./informer";
 @use "./list";
 @use "./textArea";
 @use "./numberBox";
@@ -61,3 +62,4 @@
 @use "./sortable";
 @use "./deferRendering";
 @use "./map";
+@use "./cardView";

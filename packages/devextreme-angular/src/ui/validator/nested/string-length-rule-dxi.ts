@@ -15,16 +15,26 @@ import {
 import { ValidationRuleType } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-validator-string-length-rule',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_validationRules,
+           useExisting: DxiValidatorStringLengthRuleComponent,
+        }
+    ]
 })
 export class DxiValidatorStringLengthRuleComponent extends CollectionNestedOption {
     @Input()
@@ -86,6 +96,8 @@ export class DxiValidatorStringLengthRuleComponent extends CollectionNestedOptio
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'stringLength';
+    
     }
 
 
@@ -97,7 +109,7 @@ export class DxiValidatorStringLengthRuleComponent extends CollectionNestedOptio
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiValidatorStringLengthRuleComponent
   ],
   exports: [

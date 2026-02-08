@@ -76,6 +76,10 @@ class Editor<
 
   _$validationMessage?: dxElementWrapper;
 
+  static isEditor(instance: unknown): instance is Editor {
+    return instance instanceof Editor;
+  }
+
   ctor(element: Element, options: TProperties): void {
     this.showValidationMessageTimeout = undefined;
     this.validationRequest = Callbacks();
@@ -129,8 +133,14 @@ class Editor<
     };
   }
 
+  _shouldAttachKeyboardEvents(): boolean {
+    const { readOnly } = this.option();
+
+    return !readOnly;
+  }
+
   _attachKeyboardEvents(): void {
-    if (!this.option('readOnly')) {
+    if (this._shouldAttachKeyboardEvents()) {
       super._attachKeyboardEvents();
     }
   }
@@ -484,6 +494,4 @@ class Editor<
   }
 }
 
-// @ts-expect-error ts-error
-Editor.isEditor = (instance): boolean => instance instanceof Editor;
 export default Editor;

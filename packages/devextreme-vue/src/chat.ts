@@ -3,12 +3,19 @@ import { defineComponent } from "vue";
 import { prepareComponentConfig } from "./core/index";
 import Chat, { Properties } from "devextreme/ui/chat";
 import  DataSource from "devextreme/data/data_source";
+import  dxChat from "devextreme/ui/chat";
 import {
  Alert,
  Message,
  DisposingEvent,
  InitializedEvent,
+ MessageDeletedEvent,
+ MessageDeletingEvent,
+ MessageEditCanceledEvent,
+ MessageEditingStartEvent,
  MessageEnteredEvent,
+ MessageUpdatedEvent,
+ MessageUpdatingEvent,
  OptionChangedEvent,
  TypingEndEvent,
  TypingStartEvent,
@@ -35,6 +42,7 @@ type AccessibleOptions = Pick<Properties,
   "dataSource" |
   "dayHeaderFormat" |
   "disabled" |
+  "editing" |
   "elementAttr" |
   "focusStateEnabled" |
   "height" |
@@ -45,7 +53,13 @@ type AccessibleOptions = Pick<Properties,
   "messageTimestampFormat" |
   "onDisposing" |
   "onInitialized" |
+  "onMessageDeleted" |
+  "onMessageDeleting" |
+  "onMessageEditCanceled" |
+  "onMessageEditingStart" |
   "onMessageEntered" |
+  "onMessageUpdated" |
+  "onMessageUpdating" |
   "onOptionChanged" |
   "onTypingEnd" |
   "onTypingStart" |
@@ -73,9 +87,10 @@ const componentConfig = {
     dataSource: [Array, Object, String] as PropType<Array<Message> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     dayHeaderFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     disabled: Boolean,
+    editing: Object as PropType<Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     items: Array as PropType<Array<Message>>,
@@ -83,7 +98,13 @@ const componentConfig = {
     messageTimestampFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onMessageDeleted: Function as PropType<((e: MessageDeletedEvent) => void)>,
+    onMessageDeleting: Function as PropType<((e: MessageDeletingEvent) => void)>,
+    onMessageEditCanceled: Function as PropType<((e: MessageEditCanceledEvent) => void)>,
+    onMessageEditingStart: Function as PropType<((e: MessageEditingStartEvent) => void)>,
     onMessageEntered: Function as PropType<((e: MessageEnteredEvent) => void)>,
+    onMessageUpdated: Function as PropType<((e: MessageUpdatedEvent) => void)>,
+    onMessageUpdating: Function as PropType<((e: MessageUpdatingEvent) => void)>,
     onOptionChanged: Function as PropType<((e: OptionChangedEvent) => void)>,
     onTypingEnd: Function as PropType<((e: TypingEndEvent) => void)>,
     onTypingStart: Function as PropType<((e: TypingStartEvent) => void)>,
@@ -96,7 +117,7 @@ const componentConfig = {
     typingUsers: Array as PropType<Array<User>>,
     user: Object as PropType<User | Record<string, any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,
@@ -107,6 +128,7 @@ const componentConfig = {
     "update:dataSource": null,
     "update:dayHeaderFormat": null,
     "update:disabled": null,
+    "update:editing": null,
     "update:elementAttr": null,
     "update:focusStateEnabled": null,
     "update:height": null,
@@ -117,7 +139,13 @@ const componentConfig = {
     "update:messageTimestampFormat": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
+    "update:onMessageDeleted": null,
+    "update:onMessageDeleting": null,
+    "update:onMessageEditCanceled": null,
+    "update:onMessageEditingStart": null,
     "update:onMessageEntered": null,
+    "update:onMessageUpdated": null,
+    "update:onMessageUpdating": null,
     "update:onOptionChanged": null,
     "update:onTypingEnd": null,
     "update:onTypingStart": null,
@@ -143,6 +171,7 @@ const componentConfig = {
     (this as any).$_expectedChildren = {
       alert: { isCollectionItem: true, optionName: "alerts" },
       dayHeaderFormat: { isCollectionItem: false, optionName: "dayHeaderFormat" },
+      editing: { isCollectionItem: false, optionName: "editing" },
       item: { isCollectionItem: true, optionName: "items" },
       messageTimestampFormat: { isCollectionItem: false, optionName: "messageTimestampFormat" },
       typingUser: { isCollectionItem: true, optionName: "typingUsers" },
@@ -226,20 +255,49 @@ const DxDayHeaderFormat = defineComponent(DxDayHeaderFormatConfig);
 
 (DxDayHeaderFormat as any).$_optionName = "dayHeaderFormat";
 
+const DxEditingConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:allowDeleting": null,
+    "update:allowUpdating": null,
+  },
+  props: {
+    allowDeleting: [Boolean, Function] as PropType<boolean | (((options: { component: dxChat, message: Message }) => boolean))>,
+    allowUpdating: [Boolean, Function] as PropType<boolean | (((options: { component: dxChat, message: Message }) => boolean))>
+  }
+};
+
+prepareConfigurationComponentConfig(DxEditingConfig);
+
+const DxEditing = defineComponent(DxEditingConfig);
+
+(DxEditing as any).$_optionName = "editing";
+
 const DxItemConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
+    "update:alt": null,
     "update:author": null,
     "update:id": null,
+    "update:isDeleted": null,
+    "update:isEdited": null,
+    "update:src": null,
     "update:text": null,
     "update:timestamp": null,
+    "update:type": null,
   },
   props: {
+    alt: String,
     author: Object as PropType<User | Record<string, any>>,
     id: [Number, String],
+    isDeleted: Boolean,
+    isEdited: Boolean,
+    src: String,
     text: String,
-    timestamp: [Date, Number, String]
+    timestamp: [Date, Number, String],
+    type: String
   }
 };
 
@@ -333,6 +391,7 @@ export {
   DxAlert,
   DxAuthor,
   DxDayHeaderFormat,
+  DxEditing,
   DxItem,
   DxMessageTimestampFormat,
   DxTypingUser,

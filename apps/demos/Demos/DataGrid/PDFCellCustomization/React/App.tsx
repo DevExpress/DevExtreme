@@ -3,7 +3,7 @@ import DataGrid, {
   Column, Summary, GroupPanel, Grouping, SortByGroupSummaryInfo, TotalItem, Export, type DataGridTypes,
 } from 'devextreme-react/data-grid';
 import { jsPDF } from 'jspdf';
-import { exportDataGrid } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme-react/common/export/pdf';
 
 import { companies } from './data.ts';
 

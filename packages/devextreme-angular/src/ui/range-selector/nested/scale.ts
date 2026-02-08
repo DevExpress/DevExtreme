@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -22,27 +21,30 @@ import { Format } from 'devextreme/common/core/localization';
 import { AxisScale } from 'devextreme/viz/range_selector';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiRangeSelectorBreakComponent } from './break-dxi';
 
+import {
+    PROPERTY_TOKEN_breaks,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-range-selector-scale',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDestroy, OnInit  {
-    @Input()
-    get aggregateByCategory(): boolean {
-        return this._getOption('aggregateByCategory');
+    @ContentChildren(PROPERTY_TOKEN_breaks)
+    set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('breaks', value);
     }
-    set aggregateByCategory(value: boolean) {
-        this._setOption('aggregateByCategory', value);
-    }
-
+    
     @Input()
     get aggregationGroupWidth(): number | undefined {
         return this._getOption('aggregationGroupWidth');
@@ -281,14 +283,6 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
     }
 
 
-    @ContentChildren(forwardRef(() => DxiRangeSelectorBreakComponent))
-    get breaksChildren(): QueryList<DxiRangeSelectorBreakComponent> {
-        return this._getOption('breaks');
-    }
-    set breaksChildren(value) {
-        this.setChildren('breaks', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -309,7 +303,7 @@ export class DxoRangeSelectorScaleComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorScaleComponent
   ],
   exports: [

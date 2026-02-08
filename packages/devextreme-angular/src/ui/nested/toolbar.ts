@@ -10,7 +10,6 @@ import {
     Host,
     SkipSelf,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -19,17 +18,23 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoDataGridToolbar } from './base/data-grid-toolbar';
-import { DxiItemComponent } from './item-dxi';
-import { DxiFileSelectionItemComponent } from './file-selection-item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_fileSelectionItems,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'disabled',
@@ -41,27 +46,21 @@ import { DxiFileSelectionItemComponent } from './file-selection-item-dxi';
     ]
 })
 export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_fileSelectionItems)
+    set _fileSelectionItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('fileSelectionItems', value);
+    }
+    
 
     protected get _optionPath() {
         return 'toolbar';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiFileSelectionItemComponent))
-    get fileSelectionItemsChildren(): QueryList<DxiFileSelectionItemComponent> {
-        return this._getOption('fileSelectionItems');
-    }
-    set fileSelectionItemsChildren(value) {
-        this.setChildren('fileSelectionItems', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -83,7 +82,7 @@ export class DxoToolbarComponent extends DxoDataGridToolbar implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoToolbarComponent
   ],
   exports: [

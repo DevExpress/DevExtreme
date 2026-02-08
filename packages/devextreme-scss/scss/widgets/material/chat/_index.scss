@@ -23,8 +23,6 @@
   $chat-alerts-padding-inline,
   $chat-alert-padding-block,
   $chat-alerts-row-gap,
-  $chat-alert-icon-size,
-  $chat-alert-content-column-gap,
 );
 @include chat-messagebox(
   $chat-messagebox-padding,
@@ -41,6 +39,8 @@
   $chat-bubble-color-primary,
   $chat-bubble-background-color-primary,
   $chat-bubble-container-gap,
+  $chat-bubble-delete-gap,
+  $chat-bubble-delete-icon-size,
 );
 @include chat-messagegroup(
   $chat-messagegroup-gap,
@@ -51,6 +51,8 @@
   $chat-information-author-name-color,
   $chat-information-timestamp-color,
   $chat-information-gap,
+  $chat-information-icon-size,
+  $chat-information-edited-gap,
 );
 @include chat-messagelist-empty(
   $chat-messagelist-padding,
@@ -72,6 +74,11 @@
   $chat-messagelist-day-header-first-padding-top,
   $chat-messagelist-day-header-font-size,
 );
+@include chat-messagelist-contextmenu(
+  $chat-messagelist-contextmenu-delete-button-color,
+  $chat-messagelist-contextmenu-delete-button-focused-color,
+  $chat-messagelist-contextmenu-delete-button-focused-bg,
+);
 @include chat-typingindicator(
   $chat-typingindicator-template,
   $chat-typingindicator-padding,
@@ -88,4 +95,20 @@
   $chat-typingindicator-circle-border-radius,
   $chat-typingindicator-circle-bg-color,
   $chat-typingindicator-circle-bg-color-center,
+);
+@include message-editing-preview(
+  $chat-message-editing-preview-content-padding-inline,
+  $chat-message-editing-preview-content-row-gap,
+  $chat-message-editing-preview-accent-color,
+  $chat-message-editing-preview-caption-font-size,
+  $chat-messagebox-padding,
+  $chat-message-editing-preview-border-width,
+  $chat-message-editing-preview-cancel-button-color,
+);
+@include chat-confirmation-popup(
+  $chat-border-radius,
+  $chat-confirmation-popup-content-padding,
+  $chat-confirmation-popup-toolbar-padding-block,
+  $chat-confirmation-popup-toolbar-padding-inline,
+  $chat-confirmation-popup-toolbar-gap,
 );

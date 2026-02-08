@@ -1,12 +1,11 @@
-import { getWidth, getHeight, getOuterHeight, getOuterWidth } from 'core/utils/size';
+import { getWidth, getHeight, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'common/core/animation/fx';
 import { value as setViewPort } from 'core/utils/view_port';
 import Toast from 'ui/toast';
-import devices from 'core/devices.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const TOAST_CLASS = 'dx-toast';
 const TOAST_CLASS_PREFIX = TOAST_CLASS + '-';
@@ -14,8 +13,6 @@ const TOAST_WRAPPER_CLASS = TOAST_CLASS_PREFIX + 'wrapper';
 const TOAST_CONTENT_CLASS = TOAST_CLASS_PREFIX + 'content';
 const TOAST_MESSAGE_CLASS = TOAST_CLASS_PREFIX + 'message';
 const TOAST_ICON_CLASS = TOAST_CLASS_PREFIX + 'icon';
-
-const DEFAULT_MARGIN = 20;
 
 const moduleConfig = {
     beforeEach: function() {
@@ -86,30 +83,6 @@ QUnit.module('general', moduleConfig, () => {
 
         const $content = this.instance.$content();
         assert.roughEqual($content.offset().top + getOuterHeight($content), getHeight($(window)), 1.01);
-    });
-
-    QUnit.test('position on mobile devices', function(assert) {
-        if(devices.real().deviceType !== 'phone') {
-            assert.ok(true, 'not mobile device');
-            return;
-        }
-
-        const done = assert.async();
-        fx.off = false;
-
-        this.instance = this.$element.dxToast({
-            onShown: function(e) {
-                const $content = e.component.$content();
-
-                assert.roughEqual($content.offset().top + getOuterHeight($content), window.visualViewport.height - DEFAULT_MARGIN, 1.01);
-                assert.roughEqual(getOuterWidth($content), window.visualViewport.width - (DEFAULT_MARGIN * 2), 1.01);
-
-                done();
-            }
-        }).dxToast('instance');
-
-        this.instance.show();
-        this.clock.tick(5000);
     });
 
     QUnit.test('displayTime', function(assert) {
@@ -256,49 +229,74 @@ QUnit.module('regression', moduleConfig, () => {
     });
 
     QUnit.test('animation option should not contain window object if it was not set (T228805)', function(assert) {
-        const instance = this.instance;
-        const animationConfig = {
-            show: { type: 'pop', from: { opacity: 1, scale: 0 }, to: { scale: 1 } },
-            hide: { type: 'pop', from: { scale: 1 }, to: { scale: 0 } }
-        };
+        const animateSpy = sinon.spy(fx, 'animate');
 
-        instance.option('animation', animationConfig);
+        try {
+            const animationConfig = {
+                show: {
+                    type: 'pop',
+                    from: {
+                        opacity: 1,
+                        scale: 0,
+                    },
+                    to: {
+                        scale: 1,
+                    },
+                },
+                hide: {
+                    type: 'pop',
+                    from: { scale: 1 },
+                    to: { scale: 0 },
+                }
+            };
 
-        instance.show();
+            this.instance.option('animation', animationConfig);
+            this.instance.show();
 
-        assert.equal(animationConfig.show.to.position.of, null);
+            const initialPositionOf = animationConfig.show.to.position.of;
+            const normalizedPositionOf = animateSpy.firstCall.args[1].to.position.of;
+            const positionOfOptionValue = this.instance.option('animation').show.to.position.of;
 
-        instance.option('animation.show.to.position.of', window);
-        assert.equal(animationConfig.show.to.position.of, window);
+            this.instance.option('animation.show.to.position.of', window);
+
+            const positionOfOptionValueAfterOptionChange = this.instance.option('animation').show.to.position.of;
+            const initialPositionOfAfterOptionChange = animationConfig.show.to.position.of;
+
+            assert.strictEqual(initialPositionOf, null, 'initial position.of on init is undefined');
+            assert.strictEqual(normalizedPositionOf, null, 'position.of of show animation is correctly normalized');
+            assert.strictEqual(positionOfOptionValue, null, 'position.of from option of show animation is null');
+            assert.strictEqual(initialPositionOfAfterOptionChange, window, 'initial position.of is window after option change');
+            assert.strictEqual(positionOfOptionValueAfterOptionChange, window, 'position.of from option of show animation is window after option change');
+        } finally {
+            fx.animate.restore();
+        }
     });
 });
 
 QUnit.module('overlay integration', moduleConfig, () => {
-    ['closeOnOutsideClick', 'hideOnOutsideClick'].forEach(closeOnOutsideClickOptionName => {
-        QUnit.test(`toast should be closed on outside click if ${closeOnOutsideClickOptionName} is true`, function(assert) {
-            this.instance.option(closeOnOutsideClickOptionName, true);
-            this.instance.show();
+    QUnit.test('toast should be closed on outside click if hideOnOutsideClick is true', function(assert) {
+        this.instance.option('hideOnOutsideClick', true);
+        this.instance.show();
 
-            $('#qunit-fixture').trigger('dxpointerdown');
+        $('#qunit-fixture').trigger('dxpointerdown');
 
-            assert.equal(this.instance.option('visible'), false, 'toast was hidden should be hiding');
-        });
+        assert.equal(this.instance.option('visible'), false, 'toast was hidden should be hiding');
+    });
 
-        QUnit.test(`toast does not prevent ${closeOnOutsideClickOptionName} handler of other overlays`, function(assert) {
-            const $overlay = $('<div>').appendTo(viewPort);
+    QUnit.test('toast does not prevent hideOnOutsideClick handler of other overlays', function(assert) {
+        const $overlay = $('<div>').appendTo(viewPort);
 
-            const overlay = $overlay.dxOverlay({
-                [closeOnOutsideClickOptionName]: true
-            }).dxOverlay('instance');
+        const overlay = $overlay.dxOverlay({
+            hideOnOutsideClick: true
+        }).dxOverlay('instance');
 
 
-            overlay.show();
-            this.instance.show();
+        overlay.show();
+        this.instance.show();
 
-            $('#qunit-fixture').trigger('dxpointerdown');
+        $('#qunit-fixture').trigger('dxpointerdown');
 
-            assert.equal(overlay.option('visible'), false, 'dxOverlay should be hiding');
-        });
+        assert.equal(overlay.option('visible'), false, 'dxOverlay should be hiding');
     });
 
     QUnit.test('it should be possible to select a message in the toast by the mouse', function(assert) {

@@ -30,7 +30,7 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -54,16 +54,16 @@ import { DxoDeferRenderingPositionModule } from 'devextreme-angular/ui/defer-ren
 import { DxoDeferRenderingToModule } from 'devextreme-angular/ui/defer-rendering/nested';
 
 
-
-
 /**
  * [descr:dxDeferRendering]
 
  */
 @Component({
     selector: 'dx-defer-rendering',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -71,6 +71,7 @@ import { DxoDeferRenderingToModule } from 'devextreme-angular/ui/defer-rendering
     ]
 })
 export class DxDeferRenderingComponent extends DxComponent implements OnDestroy {
+
     instance: DxDeferRendering = null;
 
     /**
@@ -156,10 +157,10 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -273,10 +274,10 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -375,7 +376,7 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -438,11 +439,7 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -496,6 +493,7 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
 
 @NgModule({
   imports: [
+    DxDeferRenderingComponent,
     DxoAnimationModule,
     DxoFromModule,
     DxoPositionModule,
@@ -516,9 +514,6 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     DxoDeferRenderingToModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDeferRenderingComponent
   ],
   exports: [
     DxDeferRenderingComponent,
@@ -544,6 +539,8 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
   ]
 })
 export class DxDeferRenderingModule { }
+
+export * from 'devextreme-angular/ui/defer-rendering/nested';
 
 import type * as DxDeferRenderingTypes from "devextreme/ui/defer_rendering_types";
 export { DxDeferRenderingTypes };

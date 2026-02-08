@@ -1,0 +1,51 @@
+{
+  "name": "devextreme-wrappers-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "e2e/wrappers/examples",
+  "projectType": "application",
+  "targets": {
+    "build:react": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build:react19"
+      },
+      "inputs": [
+        "{projectRoot}/examples/react19/**/*",
+        "{projectRoot}/tsconfig.json"
+      ],
+      "outputs": [
+        "{projectRoot}/dist/react19/**/*"
+      ],
+      "cache": true
+    },
+    "build:vue": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build:vue3"
+      },
+      "inputs": [
+        "{projectRoot}/examples/vue/**/*",
+        "{projectRoot}/tsconfig.json"
+      ],
+      "outputs": [
+        "{projectRoot}/dist/vue/**/*"
+      ],
+      "cache": true
+    },
+    "build:angular": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build:angular19"
+      },
+      "inputs": [
+        "{projectRoot}/examples/angular/**/*",
+        "{projectRoot}/tsconfig.json"
+      ],
+      "outputs": [
+        "{projectRoot}/dist/angular/**/*"
+      ],
+      "cache": true
+    }
+  },
+  "tags": []
+}

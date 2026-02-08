@@ -1,24 +1,23 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const vizMocks = require('../../helpers/vizMocks.js');
-const seriesModule = require('viz/series/base_series');
-const pointModule = require('viz/series/points/base_point');
-const axisModule = require('viz/axes/base_axis');
-const titleModule = require('viz/core/title');
-const dataValidatorModule = require('viz/components/data_validator');
-const legendModule = require('viz/components/legend');
-const errors = require('core/errors.js');
-const rangeModule = require('viz/translators/range');
-const layoutManagerModule = require('viz/chart_components/layout_manager');
-const LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager);
-const Legend = vizMocks.Legend;
-const ChartTitle = vizMocks.Title;
-const Axis = vizMocks.stubClass(axisModule.Axis);
-const Range = vizMocks.stubClass(rangeModule.Range);
-const DataSource = require('common/data/data_source/data_source').DataSource;
-const DataSourceMock = vizMocks.stubClass(DataSource);
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import { stubClass, Legend, Title as ChartTitle, Series, Point } from '../../helpers/vizMocks.js';
+import seriesModule from 'viz/series/base_series';
+import pointModule from 'viz/series/points/base_point';
+import axisModule from 'viz/axes/base_axis';
+import titleModule from 'viz/core/title';
+import dataValidatorModule from 'viz/components/data_validator';
+import legendModule from 'viz/components/legend';
+import rangeModule from 'viz/translators/range';
+import layoutManagerModule from 'viz/chart_components/layout_manager';
+import { DataSource } from 'common/data/data_source/data_source';
 
-require('viz/chart');
+import 'viz/chart';
+
+const LayoutManager = stubClass(layoutManagerModule.LayoutManager);
+// Legend and ChartTitle imported from vizMocks
+const Axis = stubClass(axisModule.Axis);
+const Range = stubClass(rangeModule.Range);
+const DataSourceMock = stubClass(DataSource);
 
 const environment = {
     beforeEach: function() {
@@ -115,13 +114,12 @@ const environment = {
     },
     _stubSeriesAndPoint: function() {
         sinon.stub(seriesModule, 'Series').callsFake(function() {
-            const series = new vizMocks.Series();
-
+            const series = new Series();
             return series;
         });
 
         sinon.stub(pointModule, 'Point').callsFake(function() {
-            return new vizMocks.Point();
+            return new Point();
         });
     },
     _stubValidateData: function() {
@@ -139,59 +137,6 @@ QUnit.test('Create', function(assert) {
 
     assert.equal(this.LayoutManager.callCount, 1);
     assert.ok(this.LayoutManager.calledWithNew());
-});
-
-QUnit.test('Chart should have default value of the aggregateByCategory = true', function(assert) {
-    this.createChart();
-    const argumentAxisOptions = this.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0];
-
-    assert.strictEqual(argumentAxisOptions.aggregateByCategory, true);
-});
-
-QUnit.test('Chart should be able to change the aggregateByCategory setting', function(assert) {
-    this.options = {
-        argumentAxis: {
-            aggregateByCategory: false
-        }
-    };
-    this.createChart();
-    const axisOptions = this.Axis.getCall(0).returnValue.updateOptions.getCall(0).args[0];
-
-    assert.strictEqual(axisOptions.aggregateByCategory, false);
-});
-
-QUnit.test('Chart should change the aggregateByCategory value when the value was updated', function(assert) {
-    const chart = this.createChart();
-
-    chart.option('argumentAxis', { aggregateByCategory: false });
-
-    const axisOptions = this.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0];
-
-    assert.strictEqual(axisOptions.aggregateByCategory, false);
-});
-
-QUnit.test('Should show warning if deprecated "argumentAxis.aggregateByCategory" option is used', function(assert) {
-    sinon.spy(errors, 'log');
-
-    try {
-        this.options = {
-            argumentAxis: {
-                aggregateByCategory: true
-            }
-        };
-        this.createChart();
-
-        assert.deepEqual(errors.log.lastCall.args,
-            [
-                'W0001',
-                'dxChart',
-                'argumentAxis.aggregateByCategory',
-                '23.1',
-                'Use the aggregation.enabled property'
-            ]);
-    } finally {
-        errors.log.restore();
-    }
 });
 
 QUnit.test('Set adaptive layout options', function(assert) {

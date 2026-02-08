@@ -17,6 +17,7 @@ import {
 import { SingleMultipleOrNone } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-gantt-sorting',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoGanttSortingComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -95,7 +98,7 @@ export class DxoGanttSortingComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoGanttSortingComponent
   ],
   exports: [

@@ -1,5 +1,5 @@
 import React, { useCallback, useState, FC } from 'react';
-import Button from 'devextreme-react/button';
+import { Button, type ButtonTypes } from 'devextreme-react/button';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
@@ -7,7 +7,6 @@ import rehypeMinifyWhitespace from 'rehype-minify-whitespace';
 import rehypeStringify from 'rehype-stringify';
 import HTMLReactParser from 'html-react-parser';
 
-import { Properties as dxButtonProperties } from 'devextreme/ui/button';
 import { REGENERATION_TEXT } from './data.ts';
 
 function convertToHtml(value: string): string {
@@ -24,7 +23,7 @@ function convertToHtml(value: string): string {
 
 interface MessageProps {
   text: string;
-  onRegenerateButtonClick: dxButtonProperties['onClick'];
+  onRegenerateButtonClick: ButtonTypes.Properties['onClick'];
 }
 
 const Message: FC<MessageProps> = ({ text, onRegenerateButtonClick }) => {
@@ -45,10 +44,10 @@ const Message: FC<MessageProps> = ({ text, onRegenerateButtonClick }) => {
 
   return (
     <React.Fragment>
-      <div className='dx-chat-messagebubble-text'>
+      <div className='chat-messagebubble-text'>
         {HTMLReactParser(convertToHtml(text))}
       </div>
-      <div className='dx-bubble-button-container'>
+      <div className='bubble-button-container'>
         <Button
           icon={icon}
           stylingMode='text'

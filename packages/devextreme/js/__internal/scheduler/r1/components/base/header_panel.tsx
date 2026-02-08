@@ -1,9 +1,9 @@
 import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { JSXTemplate } from '@ts/core/r1/types';
-import { getTemplate } from '@ts/core/r1/utils/index';
+import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
 
-import type { DateHeaderData } from '../../types';
+import type { DateHeaderData } from '../../../types';
 import { isHorizontalGroupingApplied } from '../../utils/index';
 import type { DateTimeCellTemplateProps } from '../types';
 import type { DateHeaderProps } from './date_header';
@@ -44,11 +44,7 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
       resourceCellTemplate,
       timeCellTemplate,
     } = this.props;
-    const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation);
-    const DateCellTemplateComponent = getTemplate(dateCellTemplate);
-    const DateHeaderTemplateComponent = getTemplate(dateHeaderTemplate);
-    const ResourceCellTemplateComponent = getTemplate(resourceCellTemplate);
-    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
+    const isHorizontalGrouping = isHorizontalGroupingApplied(groups.length, groupOrientation);
 
     return (
       <thead>
@@ -60,20 +56,24 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
             groups={groups}
             groupByDate={groupByDate}
             groupOrientation={groupOrientation}
-            resourceCellTemplate={ResourceCellTemplateComponent}
+            resourceCellTemplate={resourceCellTemplate}
           />
         )
       }
       {
-        isRenderDateHeader && DateHeaderTemplateComponent({
-          viewContext,
-          groupByDate,
-          dateHeaderData,
-          groupOrientation,
-          groups,
-          dateCellTemplate: DateCellTemplateComponent,
-          timeCellTemplate: TimeCellTemplateComponent,
-        })
+        isRenderDateHeader
+        && <PublicTemplate
+          template={dateHeaderTemplate}
+          templateProps={{
+            viewContext,
+            groupByDate,
+            dateHeaderData,
+            groupOrientation,
+            groups,
+            dateCellTemplate,
+            timeCellTemplate,
+          }}
+        />
       }
       {
         groupByDate && (
@@ -83,7 +83,7 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
             groups={groups}
             groupByDate={groupByDate}
             groupOrientation={groupOrientation}
-            resourceCellTemplate={ResourceCellTemplateComponent}
+            resourceCellTemplate={resourceCellTemplate}
           />
         )
       }

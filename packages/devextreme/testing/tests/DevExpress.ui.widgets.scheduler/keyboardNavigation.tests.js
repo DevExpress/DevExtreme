@@ -7,16 +7,14 @@ QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Keyboard Navigation', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
     afterEach: function() {
-        this.clock.restore();
         fx.off = false;
     }
 }, () => {
-    QUnit.test('Focus options should be passed to scheduler parts', function(assert) {
-        const scheduler = createWrapper({ focusStateEnabled: true, tabIndex: 1, currentView: 'day' });
+    QUnit.test('Focus options should be passed to scheduler parts', async function(assert) {
+        const scheduler = await createWrapper({ focusStateEnabled: true, tabIndex: 1, currentView: 'day' });
         const header = scheduler.instance.getHeader();
         const workspace = scheduler.instance.getWorkSpace();
         const appointments = scheduler.instance.getAppointmentsInstance();
@@ -33,8 +31,8 @@ QUnit.module('Keyboard Navigation', {
 
     });
 
-    QUnit.test('Focus options should be passed to scheduler parts after option changed', function(assert) {
-        const scheduler = createWrapper({ focusStateEnabled: true, tabIndex: 1, currentView: 'day' });
+    QUnit.test('Focus options should be passed to scheduler parts after option changed', async function(assert) {
+        const scheduler = await createWrapper({ focusStateEnabled: true, tabIndex: 1, currentView: 'day' });
         const header = scheduler.instance.getHeader();
         const workspace = scheduler.instance.getWorkSpace();
         const appointments = scheduler.instance.getAppointmentsInstance();
@@ -53,8 +51,8 @@ QUnit.module('Keyboard Navigation', {
 
     });
 
-    QUnit.test('AllowMultipleCellSelection option should be passed to scheduler workspace', function(assert) {
-        const scheduler = createWrapper({ focusStateEnabled: true, allowMultipleCellSelection: false });
+    QUnit.test('AllowMultipleCellSelection option should be passed to scheduler workspace', async function(assert) {
+        const scheduler = await createWrapper({ focusStateEnabled: true, allowMultipleCellSelection: false });
         const workspace = scheduler.instance.getWorkSpace();
 
         assert.equal(workspace.option('allowMultipleCellSelection'), false, 'allowMultipleCellSelection');
@@ -65,8 +63,8 @@ QUnit.module('Keyboard Navigation', {
 
     });
 
-    QUnit.test('focusedStateEnabled option value should be passed to ddAppointments', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('focusedStateEnabled option value should be passed to ddAppointments', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 24, 9, 10),
                 endDate: new Date(2015, 4, 24, 11, 1),
@@ -99,8 +97,8 @@ QUnit.module('Keyboard Navigation', {
         assert.ok(scheduler.instance._appointmentTooltip._list.option('focusStateEnabled'), 'focusStateEnabled was passed correctly');
     });
 
-    QUnit.test('Workspace navigation by arrows should work correctly with opened dropDown appointments', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Workspace navigation by arrows should work correctly with opened dropDown appointments', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 24, 9, 10),
                 endDate: new Date(2015, 4, 24, 11, 1),

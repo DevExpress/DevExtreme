@@ -70,10 +70,10 @@ export abstract class DxoTabPanelOptions extends NestedOption {
         this._setOption('focusStateEnabled', value);
     }
 
-    get height(): number | Function | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -124,6 +124,13 @@ export abstract class DxoTabPanelOptions extends NestedOption {
     }
     set itemTitleTemplate(value: any) {
         this._setOption('itemTitleTemplate', value);
+    }
+
+    get keyExpr(): Function | string {
+        return this._getOption('keyExpr');
+    }
+    set keyExpr(value: Function | string) {
+        this._setOption('keyExpr', value);
     }
 
     get loop(): boolean {
@@ -315,10 +322,10 @@ export abstract class DxoTabPanelOptions extends NestedOption {
         this._setOption('visible', value);
     }
 
-    get width(): number | Function | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 }

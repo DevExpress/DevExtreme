@@ -1,0 +1,22 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector as $ } from 'testcafe';
+import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
+
+fixture('Charts.LegendMarkersCustomization')
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 600];
+  });
+
+runManualTest('Charts', 'LegendMarkersCustomization', (test) => {
+  test('LegendMarkersCustomization', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t.hover($('.dxl-marker').nth(1));
+    await testScreenshot(t, takeScreenshot, 'charts_custom_legend_marker.png', '.dxc-legend');
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  });
+});

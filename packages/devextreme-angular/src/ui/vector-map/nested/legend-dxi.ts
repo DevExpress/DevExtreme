@@ -17,16 +17,26 @@ import { VectorMapLegendItem, VectorMapMarkerShape } from 'devextreme/viz/vector
 import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_legends } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-vector-map-legend',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_legends,
+           useExisting: DxiVectorMapLegendComponent,
+        }
+    ]
 })
 export class DxiVectorMapLegendComponent extends CollectionNestedOption {
     @Input()
@@ -251,7 +261,7 @@ export class DxiVectorMapLegendComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiVectorMapLegendComponent
   ],
   exports: [

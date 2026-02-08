@@ -17,6 +17,7 @@ import {
 import { Font } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-vector-map-label',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoVectorMapLabelComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -79,7 +82,7 @@ export class DxoVectorMapLabelComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoVectorMapLabelComponent
   ],
   exports: [

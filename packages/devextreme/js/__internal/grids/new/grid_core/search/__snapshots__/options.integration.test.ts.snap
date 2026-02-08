@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Options searchPanel.highlightCaseSensitive = false 1`] = `
+<div
+  class="dx-cardview-card-content"
+  id="guidmock"
+>
+  <div
+    class="dx-cardview-field-caption"
+  >
+    Name
+    :
+  </div>
+  <div
+    class="dx-cardview-field-value dx-cardview-field-value--text-align-left"
+  >
+    <span
+      class="dx-cardview-field-value__text-part--highlighted"
+    >
+      John
+    </span>
+    <span>
+       Doe 
+    </span>
+    <span
+      class="dx-cardview-field-value__text-part--highlighted"
+    >
+      john
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Options searchPanel.highlightCaseSensitive = true 1`] = `
+<div
+  class="dx-cardview-card-content"
+  id="guidmock"
+>
+  <div
+    class="dx-cardview-field-caption"
+  >
+    Name
+    :
+  </div>
+  <div
+    class="dx-cardview-field-value dx-cardview-field-value--text-align-left"
+  >
+    <span>
+      John Doe 
+    </span>
+    <span
+      class="dx-cardview-field-value__text-part--highlighted"
+    >
+      john
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Options searchPanel.highlightSearchText = false 1`] = `
+<div
+  class="dx-cardview-card-content"
+  id="guidmock"
+>
+  <div
+    class="dx-cardview-field-caption"
+  >
+    Name
+    :
+  </div>
+  <div
+    class="dx-cardview-field-value dx-cardview-field-value--text-align-left"
+  >
+    John Doe john
+  </div>
+</div>
+`;
+
+exports[`Options searchPanel.text (card contains match) 1`] = `
+<div
+  class="dx-cardview-card-content"
+  id="guidmock"
+>
+  <div
+    class="dx-cardview-field-caption"
+  >
+    Name
+    :
+  </div>
+  <div
+    class="dx-cardview-field-value dx-cardview-field-value--text-align-left"
+  >
+    <span
+      class="dx-cardview-field-value__text-part--highlighted"
+    >
+      John
+    </span>
+    <span>
+       Doe
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Options searchPanel.text (card not contains match) 1`] = `null`;

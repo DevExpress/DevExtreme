@@ -26,7 +26,7 @@ import dxScheduler from 'devextreme/ui/scheduler';
 import dxSortable from 'devextreme/ui/sortable';
 import dxDraggable from 'devextreme/ui/draggable';
 import DataSource from 'devextreme/data/data_source';
-import { AllDayPanelMode, ViewType, dxSchedulerAppointment, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, dxSchedulerScrolling } from 'devextreme/ui/scheduler';
+import { AllDayPanelMode, ViewType, dxSchedulerAppointment, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, dxSchedulerScrolling, dxSchedulerToolbar } from 'devextreme/ui/scheduler';
 import { event } from 'devextreme/events/events.types';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -42,7 +42,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAppointmentDraggingModule } from 'devextreme-angular/ui/nested';
@@ -53,15 +54,19 @@ import { DxiViewModule } from 'devextreme-angular/ui/nested';
 
 import { DxoSchedulerAppointmentDraggingModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerEditingModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerItemModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerOptionsModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerOptionsItemModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerResourceModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxoSchedulerScrollingModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoSchedulerToolbarModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiSchedulerToolbarItemModule } from 'devextreme-angular/ui/scheduler/nested';
 import { DxiSchedulerViewModule } from 'devextreme-angular/ui/scheduler/nested';
-
-import { DxiResourceComponent } from 'devextreme-angular/ui/nested';
-import { DxiViewComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiSchedulerResourceComponent } from 'devextreme-angular/ui/scheduler/nested';
-import { DxiSchedulerViewComponent } from 'devextreme-angular/ui/scheduler/nested';
+import { 
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_resources,
+           PROPERTY_TOKEN_views,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -70,8 +75,10 @@ import { DxiSchedulerViewComponent } from 'devextreme-angular/ui/scheduler/neste
  */
 @Component({
     selector: 'dx-scheduler',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -80,6 +87,22 @@ import { DxiSchedulerViewComponent } from 'devextreme-angular/ui/scheduler/neste
     ]
 })
 export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_resources)
+    set _resourcesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('resources', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_views)
+    set _viewsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('views', value);
+    }
+
     instance: DxScheduler = null;
 
     /**
@@ -466,10 +489,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -813,6 +836,19 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
 
     /**
+     * [descr:dxSchedulerOptions.toolbar]
+    
+     */
+    @Input()
+    get toolbar(): dxSchedulerToolbar | undefined {
+        return this._getOption('toolbar');
+    }
+    set toolbar(value: dxSchedulerToolbar | undefined) {
+        this._setOption('toolbar', value);
+    }
+
+
+    /**
      * [descr:dxSchedulerOptions.useDropDownViewSwitcher]
     
      */
@@ -856,10 +892,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -1215,7 +1251,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -1404,6 +1440,13 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() toolbarChange: EventEmitter<dxSchedulerToolbar | undefined>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() useDropDownViewSwitcherChange: EventEmitter<boolean>;
 
     /**
@@ -1425,43 +1468,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiSchedulerResourceComponent)
-    get resourcesChildren(): QueryList<DxiSchedulerResourceComponent> {
-        return this._getOption('resources');
-    }
-    set resourcesChildren(value) {
-        this._setChildren('resources', value, 'DxiSchedulerResourceComponent');
-    }
-
-    @ContentChildren(DxiSchedulerViewComponent)
-    get viewsChildren(): QueryList<DxiSchedulerViewComponent> {
-        return this._getOption('views');
-    }
-    set viewsChildren(value) {
-        this._setChildren('views', value, 'DxiSchedulerViewComponent');
-    }
-
-
-    @ContentChildren(DxiResourceComponent)
-    get resourcesLegacyChildren(): QueryList<DxiResourceComponent> {
-        return this._getOption('resources');
-    }
-    set resourcesLegacyChildren(value) {
-        this._setChildren('resources', value, 'DxiResourceComponent');
-    }
-
-    @ContentChildren(DxiViewComponent)
-    get viewsLegacyChildren(): QueryList<DxiViewComponent> {
-        return this._getOption('views');
-    }
-    set viewsLegacyChildren(value) {
-        this._setChildren('views', value, 'DxiViewComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -1550,6 +1557,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
             { emit: 'textExprChange' },
             { emit: 'timeCellTemplateChange' },
             { emit: 'timeZoneChange' },
+            { emit: 'toolbarChange' },
             { emit: 'useDropDownViewSwitcherChange' },
             { emit: 'viewsChange' },
             { emit: 'visibleChange' },
@@ -1608,6 +1616,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
 
 @NgModule({
   imports: [
+    DxSchedulerComponent,
     DxoAppointmentDraggingModule,
     DxoEditingModule,
     DxiResourceModule,
@@ -1615,14 +1624,16 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiViewModule,
     DxoSchedulerAppointmentDraggingModule,
     DxoSchedulerEditingModule,
+    DxiSchedulerItemModule,
+    DxoSchedulerOptionsModule,
+    DxiSchedulerOptionsItemModule,
     DxiSchedulerResourceModule,
     DxoSchedulerScrollingModule,
+    DxoSchedulerToolbarModule,
+    DxiSchedulerToolbarItemModule,
     DxiSchedulerViewModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSchedulerComponent
   ],
   exports: [
     DxSchedulerComponent,
@@ -1633,13 +1644,20 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     DxiViewModule,
     DxoSchedulerAppointmentDraggingModule,
     DxoSchedulerEditingModule,
+    DxiSchedulerItemModule,
+    DxoSchedulerOptionsModule,
+    DxiSchedulerOptionsItemModule,
     DxiSchedulerResourceModule,
     DxoSchedulerScrollingModule,
+    DxoSchedulerToolbarModule,
+    DxiSchedulerToolbarItemModule,
     DxiSchedulerViewModule,
     DxTemplateModule
   ]
 })
 export class DxSchedulerModule { }
+
+export * from 'devextreme-angular/ui/scheduler/nested';
 
 import type * as DxSchedulerTypes from "devextreme/ui/scheduler_types";
 export { DxSchedulerTypes };

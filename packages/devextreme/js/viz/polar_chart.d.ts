@@ -9,7 +9,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     Format,
@@ -58,6 +58,7 @@ import {
     SeriesHoverMode,
     SeriesSelectionMode,
     TimeIntervalConfig,
+    ValueAxisVisualRangeUpdateMode,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
     VisualRange,
@@ -89,6 +90,7 @@ export {
     RelativePosition,
     SeriesHoverMode,
     SeriesSelectionMode,
+    ValueAxisVisualRangeUpdateMode,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
     ZoomPanAction,
@@ -96,8 +98,6 @@ export {
 
 /** @public */
 export type PolarChartSeriesType = 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
-/** @public */
-export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
 
 /**
  * @docid _viz_polar_chart_ArgumentAxisClickEvent
@@ -199,7 +199,7 @@ export type OptionChangedEvent = EventInfo<dxPolarChart> & ChangedOptionInfo;
  * @type object
  * @inherits Cancelable,NativeEventInfo,PointInteractionInfo
  */
-export type PointClickEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & PointInteractionInfo;
+export type PointClickEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & PointInteractionInfo<polarPointObject>;
 
 /**
  * @docid _viz_polar_chart_PointHoverChangedEvent
@@ -207,7 +207,7 @@ export type PointClickEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEv
  * @type object
  * @inherits EventInfo,PointInteractionInfo
  */
-export type PointHoverChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo;
+export type PointHoverChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo<polarPointObject>;
 
 /**
  * @docid _viz_polar_chart_PointSelectionChangedEvent
@@ -215,7 +215,7 @@ export type PointHoverChangedEvent = EventInfo<dxPolarChart> & PointInteractionI
  * @type object
  * @inherits EventInfo,PointInteractionInfo
  */
-export type PointSelectionChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo;
+export type PointSelectionChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo<polarPointObject>;
 
 /**
  * @docid _viz_polar_chart_SeriesClickEvent
@@ -250,7 +250,7 @@ export type SeriesSelectionChangedEvent = EventInfo<dxPolarChart> & SeriesIntera
  * @type object
  * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
-export type TooltipHiddenEvent = EventInfo<dxPolarChart> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxPolarChart> & TooltipInfo<polarPointObject>;
 
 /**
  * @docid _viz_polar_chart_TooltipShownEvent
@@ -258,7 +258,7 @@ export type TooltipHiddenEvent = EventInfo<dxPolarChart> & TooltipInfo;
  * @type object
  * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
-export type TooltipShownEvent = EventInfo<dxPolarChart> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxPolarChart> & TooltipInfo<polarPointObject>;
 
 /**
  * @docid _viz_polar_chart_ZoomEndEvent
@@ -333,7 +333,7 @@ export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChar
  * @namespace DevExpress.viz
  * @docid
  */
-export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
+export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart, polarPointObject> {
     /**
      * @docid
      * @type object

@@ -55,91 +55,297 @@ describe('DxForm', () => {
   }
 
   // spec
-  it('should be able to accept items via nested dxi components (T459714)', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
+  [
+    {
+      testName: 'legacy',
+      formSimpleItem: 'dxi-item',
+      formGroupItem: 'dxi-item',
+      formGroupItemType: 'itemType="group"',
+      formValidationItem: 'dxi-validation-rule',
+      formValidationRequiredItemType: 'type="required"',
+      formValidationCustomItemType: 'type="custom"',
+    },
+    {
+      testName: 'new',
+      formSimpleItem: 'dxi-form-simple-item',
+      formGroupItem: 'dxi-form-group-item',
+      formGroupItemType: '',
+      formValidationItem: 'dxi-form-required-rule',
+      formValidationRequiredItemType: '',
+      formValidationCustomItemType: '',
+    },
+  ].forEach(({
+    testName,
+    formSimpleItem,
+    formGroupItem,
+    formGroupItemType,
+    formValidationItem,
+    formValidationRequiredItemType,
+    formValidationCustomItemType,
+  }) => {
+    it(`should be able to accept items via nested dxi components (T459714) (with ${testName} nested items)`, () => {
+      TestBed.overrideComponent(TestContainerComponent, {
+        set: {
+          template: `
                     <dx-form id="form" [formData]="formData">
-                        <dxi-item dataField="name" editorType="dxTextBox"></dxi-item>
+                        <${formSimpleItem} dataField="name" editorType="dxTextBox"></${formSimpleItem}>
                     </dx-form>
                 `,
-      },
+        },
+      });
+      const fixture = TestBed.createComponent(TestContainerComponent);
+      fixture.detectChanges();
+
+      const instance = getWidget(fixture);
+      expect(instance.element().querySelectorAll('.dx-textbox').length).toBe(1);
     });
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
 
-    const instance = getWidget(fixture);
-    expect(instance.element().querySelectorAll('.dx-textbox').length).toBe(1);
-  });
-
-  it('should be able to accept items recursively', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
+    it(`should be able to accept items recursively (with ${testName} nested items)`, () => {
+      TestBed.overrideComponent(TestContainerComponent, {
+        set: {
+          template: `
                     <dx-form id="form" [formData]="formData">
-                        <dxi-item caption="Root Group" itemType="group">
-                            <dxi-item dataField="name" editorType="dxTextBox"></dxi-item>
-                            <dxi-item caption="Inner Group" itemType="group">
-                                <dxi-item dataField="name" editorType="dxTextBox"></dxi-item>
-                            </dxi-item>
-                        </dxi-item>
+                        <${formGroupItem} caption="Root Group" ${formGroupItemType}>
+                            <${formSimpleItem} dataField="name" editorType="dxTextBox"></${formSimpleItem}>
+                            <${formGroupItem} caption="Inner Group" ${formGroupItemType}>
+                                <${formSimpleItem} dataField="name" editorType="dxTextBox"></${formSimpleItem}>
+                            </${formGroupItem}>
+                        </${formGroupItem}>
                     </dx-form>
                 `,
-      },
+        },
+      });
+      const fixture = TestBed.createComponent(TestContainerComponent);
+      fixture.detectChanges();
+
+      const instance = getWidget(fixture);
+      expect(instance.element().querySelectorAll('.dx-textbox').length).toBe(2);
     });
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
 
-    const instance = getWidget(fixture);
-    expect(instance.element().querySelectorAll('.dx-textbox').length).toBe(2);
-  });
-
-  it('should be able to accept items via nested dxi components with comment from ngIf directive (#440)', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
+    it(`should be able to accept items via nested dxi components with comment from ngIf directive (#440) (with ${testName} nested items)`, () => {
+      TestBed.overrideComponent(TestContainerComponent, {
+        set: {
+          template: `
                     <dx-form id="form" [formData]="formData">
-                        <dxi-item dataField="name" editorType="dxTextBox">
-                            <dxi-validation-rule
+                        <${formSimpleItem} dataField="name" editorType="dxTextBox">
+                            <${formValidationItem}
                                 *ngIf="true"
-                                type="required"
+                                ${formValidationRequiredItemType}
                                 message="item is required."
-                            ></dxi-validation-rule>
-                        </dxi-item>
+                            ></${formValidationItem}>
+                        </${formSimpleItem}>
                     </dx-form>
                 `,
-      },
+        },
+      });
+      const fixture = TestBed.createComponent(TestContainerComponent);
+      fixture.detectChanges();
+
+      const instance = getWidget(fixture);
+      expect(instance.element().querySelectorAll('.dx-textbox').length).toBe(1);
     });
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
 
-    const instance = getWidget(fixture);
-    expect(instance.element().querySelectorAll('.dx-textbox').length).toBe(1);
-  });
-
-  it('should update model after editor value was changed', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
+    it(`should update model after editor value was changed (with ${testName} nested items)`, () => {
+      TestBed.overrideComponent(TestContainerComponent, {
+        set: {
+          template: `
                     <dx-form [formData]="formData">
-                        <dxi-item dataField="name" editorType="dxTextBox">
-                        </dxi-item>
+                        <${formSimpleItem} dataField="name" editorType="dxTextBox">
+                        </${formSimpleItem}>
                     </dx-form>
                     <span id="text">{{formData.name}}<span>
                 `,
-      },
+        },
+      });
+
+      const fixture = TestBed.createComponent(TestContainerComponent);
+      fixture.autoDetectChanges();
+
+      const instance = getWidget(fixture);
+      const input = instance.element().querySelector('input');
+      input.value = 'test value';
+      input?.dispatchEvent(new Event('change'));
+
+      expect(document.getElementById('text').innerText.trim()).toBe('test value');
+      fixture.autoDetectChanges(false);
     });
 
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.autoDetectChanges();
+    it(`should work with custom validation and ngIf (with ${testName} nested items)`, () => {
+      TestBed.overrideComponent(TestContainerComponent, {
+        set: {
+          template: `
+                    <dx-form [formData]="{ text: 1 }">
+                        <${formGroupItem} ${formGroupItemType} *ngIf="true">
+                            <${formSimpleItem} dataField="text">
+                                <${formValidationItem} ${formValidationCustomItemType} [validationCallback]="validateForm">
+                                </${formValidationItem}>
+                            </${formSimpleItem}>
+                        </${formGroupItem}>
+                    </dx-form>
+                `,
+        },
+      });
 
-    const instance = getWidget(fixture);
-    const input = instance.element().querySelector('input');
-    input.value = 'test value';
-    input?.dispatchEvent(new Event('change'));
+      const fixture = TestBed.createComponent(TestContainerComponent);
+      fixture.detectChanges();
 
-    expect(document.getElementById('text').innerText.trim()).toBe('test value');
-    fixture.autoDetectChanges(false);
+      const formInstance = getWidget(fixture);
+      expect(formInstance.validate()).toBeDefined();
+    });
+
+    it(`should not call resetOption for rerendered nested collection components (with ${testName} nested items)`, () => {
+      TestBed.overrideComponent(TestContainerComponent, {
+        set: {
+          template: `
+                    <dx-form [formData]="formData1">
+                        <${formGroupItem} ${formGroupItemType}
+                            name="label-container">
+                            <${formSimpleItem} [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValues; let i = index">
+                                <dxo-label [text]="labelValue.name"></dxo-label>
+                            </${formSimpleItem}>
+                        </${formGroupItem}>
+                    </dx-form>
+                `,
+        },
+      });
+
+      const fixture = TestBed.createComponent(TestContainerComponent);
+      fixture.detectChanges();
+      const formInstance = getWidget(fixture);
+      const spy = spyOn(formInstance, 'resetOption');
+
+      fixture.componentInstance.labelValues = [{ name: 'label1' }, { name: 'label2' }, { name: 'label3' }];
+      fixture.detectChanges();
+
+      expect(spy.calls.count()).toBe(0);
+      expect(formInstance.option('items[0].items[0].label.text')).toBe('label1');
+    });
+
+    it(`should not call resetOption for rerendered nested components (with ${testName} nested items)`, () => {
+      TestBed.overrideComponent(TestContainerComponent, {
+        set: {
+          template: `
+                    <dx-form [formData]="formData1">
+                        <${formSimpleItem} [dataField]="'labels[' + i + ']'"  *ngFor="let labelValue of labelValues; let i = index">
+                            <dxo-label [text]="labelValue.name"></dxo-label>
+                        </${formSimpleItem}>
+                    </dx-form>
+                `,
+        },
+      });
+
+      const fixture = TestBed.createComponent(TestContainerComponent);
+      fixture.detectChanges();
+
+      const formInstance = getWidget(fixture);
+      const spy = spyOn(formInstance, 'resetOption');
+
+      fixture.componentInstance.labelValues = [{ name: 'label1' }, { name: 'label2' }, { name: 'label3' }];
+      fixture.detectChanges();
+
+      expect(spy.calls.count()).toBe(0);
+      expect(formInstance.option('items[0].label.text')).toBe('label1');
+    });
+
+    it(`should not call resetOption for rerendered nested components (delete item) (with ${testName} nested items)`, () => {
+      TestBed.overrideComponent(TestContainerComponent, {
+        set: {
+          template: `
+                    <dx-form [formData]="{}">
+                        <${formSimpleItem} [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValuesSecond; let i = index">
+                            <dxo-label text="{{ labelValue.name }}"></dxo-label>
+                        </${formSimpleItem}>
+                    </dx-form>
+                `,
+        },
+      });
+
+      const fixture = TestBed.createComponent(TestContainerComponent);
+      fixture.detectChanges();
+
+      const formInstance = getWidget(fixture);
+      const spy = spyOn(formInstance, 'resetOption');
+
+      fixture.componentInstance.labelValuesSecond.splice(1, 1);
+      fixture.detectChanges();
+
+      expect(spy.calls.count()).toBe(0);
+      expect(formInstance.option('items[1].label.text')).toBe('label3');
+    });
+
+    it(`should delete collection nested item with ordinary nested (with ${testName} nested items)`, () => {
+      TestBed.overrideComponent(TestContainerComponent, {
+        set: {
+          template: `
+                    <dx-form [formData]="{}">
+                        <${formSimpleItem} [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValuesSecond; let i = index">
+                            <dxo-label text="{{ labelValue.name }}"></dxo-label>
+                        </${formSimpleItem}>
+                        <${formSimpleItem} [dataField]="'labels[4]'">
+                            <dxo-label text="label4" *ngIf="condition"></dxo-label>
+                        </${formSimpleItem}>
+                    </dx-form>
+                `,
+        },
+      });
+
+      const fixture = TestBed.createComponent(TestContainerComponent);
+      fixture.detectChanges();
+
+      const formInstance = getWidget(fixture);
+      const spy = spyOn(formInstance, 'resetOption').and.callThrough();
+
+      fixture.componentInstance.labelValuesSecond.splice(1, 1);
+      fixture.componentInstance.condition = false;
+      fixture.detectChanges();
+
+      expect(spy.calls.count()).toBe(1);
+      expect(formInstance.option('items[1].label.text')).toBe('label3');
+      expect(formInstance.option('items[2].label.text')).toBe(undefined);
+    });
+
+    it(`should delete collection nested item with ordinary nested in two groups (with ${testName} nested items)`, () => {
+      TestBed.overrideComponent(TestContainerComponent, {
+        set: {
+          template: `
+                    <dx-form [formData]="{}">
+                        <${formGroupItem} caption="First Group" ${formGroupItemType}>
+                            <${formSimpleItem} [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValues; let i = index">
+                                <dxo-label text="{{ labelValue.name }}"></dxo-label>
+                            </${formSimpleItem}>
+                            <${formSimpleItem} [dataField]="'labels[3]'">
+                                <dxo-label text="label3" *ngIf="condition"></dxo-label>
+                            </${formSimpleItem}>
+                        </${formGroupItem}>
+                        <${formGroupItem} caption="Second Group" ${formGroupItemType}>
+                            <${formSimpleItem} [dataField]="'labels[0]'">
+                                <dxo-label text="label0" *ngIf="condition"></dxo-label>
+                            </${formSimpleItem}>
+                            <${formSimpleItem} [dataField]="'labels[' + i++ + ']'" *ngFor="let labelValue of labelValuesSecond; let i = index">
+                                <dxo-label text="{{ labelValue.name }}"></dxo-label>
+                            </${formSimpleItem}>
+                        </${formGroupItem}>
+                    </dx-form>
+                `,
+        },
+      });
+
+      const fixture = TestBed.createComponent(TestContainerComponent);
+      fixture.detectChanges();
+
+      const formInstance = getWidget(fixture);
+      const spy = spyOn(formInstance, 'resetOption').and.callThrough();
+
+      fixture.componentInstance.labelValues.splice(1, 1);
+      fixture.componentInstance.labelValuesSecond.splice(1, 1);
+      fixture.componentInstance.condition = false;
+      fixture.detectChanges();
+
+      expect(spy.calls.count()).toBe(2);
+      expect(formInstance.option('items[0].items[1].label.text')).toBe(undefined);
+      expect(formInstance.option('items[1].items[2].label.text')).toBe('label3');
+      expect(formInstance.option('items[1].items[3].label.text')).toBe(undefined);
+    });
   });
 
   it('should work with dxTagBox', () => {
@@ -170,183 +376,6 @@ describe('DxForm', () => {
     fixture.detectChanges();
 
     expect(formInstance.option('formData.name')).toEqual([2]);
-  });
-
-  it('should work with custom validation and ngIf', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
-                    <dx-form [formData]="{ text: 1 }">
-                        <dxi-item itemType="group" *ngIf="true">
-                            <dxi-item dataField="text">
-                                <dxi-validation-rule type="custom" [validationCallback]="validateForm">
-                                </dxi-validation-rule>
-                            </dxi-item>
-                        </dxi-item>
-                    </dx-form>
-                `,
-      },
-    });
-
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
-
-    const formInstance = getWidget(fixture);
-    expect(formInstance.validate()).toBeDefined();
-  });
-
-  it('should not call resetOption for rerendered nested collection components', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
-                    <dx-form [formData]="formData1">
-                        <dxi-item itemType="group"
-                            name="label-container">
-                            <dxi-item [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValues; let i = index">
-                                <dxo-label [text]="labelValue.name"></dxo-label>
-                            </dxi-item>
-                        </dxi-item>
-                    </dx-form>
-                `,
-      },
-    });
-
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
-    const formInstance = getWidget(fixture);
-    const spy = spyOn(formInstance, 'resetOption');
-
-    fixture.componentInstance.labelValues = [{ name: 'label1' }, { name: 'label2' }, { name: 'label3' }];
-    fixture.detectChanges();
-
-    expect(spy.calls.count()).toBe(0);
-    expect(formInstance.option('items[0].items[0].label.text')).toBe('label1');
-  });
-
-  it('should not call resetOption for rerendered nested components', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
-                    <dx-form [formData]="formData1">
-                        <dxi-item [dataField]="'labels[' + i + ']'"  *ngFor="let labelValue of labelValues; let i = index">
-                            <dxo-label [text]="labelValue.name"></dxo-label>
-                        </dxi-item>
-                    </dx-form>
-                `,
-      },
-    });
-
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
-
-    const formInstance = getWidget(fixture);
-    const spy = spyOn(formInstance, 'resetOption');
-
-    fixture.componentInstance.labelValues = [{ name: 'label1' }, { name: 'label2' }, { name: 'label3' }];
-    fixture.detectChanges();
-
-    expect(spy.calls.count()).toBe(0);
-    expect(formInstance.option('items[0].label.text')).toBe('label1');
-  });
-
-  it('should not call resetOption for rerendered nested components (delete item)', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
-                    <dx-form [formData]="{}">
-                        <dxi-item [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValuesSecond; let i = index">
-                            <dxo-label text="{{ labelValue.name }}"></dxo-label>
-                        </dxi-item>
-                    </dx-form>
-                `,
-      },
-    });
-
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
-
-    const formInstance = getWidget(fixture);
-    const spy = spyOn(formInstance, 'resetOption');
-
-    fixture.componentInstance.labelValuesSecond.splice(1, 1);
-    fixture.detectChanges();
-
-    expect(spy.calls.count()).toBe(0);
-    expect(formInstance.option('items[1].label.text')).toBe('label3');
-  });
-
-  it('should delete collection nested item with ordinary nested', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
-                    <dx-form [formData]="{}">
-                        <dxi-item [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValuesSecond; let i = index">
-                            <dxo-label text="{{ labelValue.name }}"></dxo-label>
-                        </dxi-item>
-                        <dxi-item [dataField]="'labels[4]'">
-                            <dxo-label text="label4" *ngIf="condition"></dxo-label>
-                        </dxi-item>
-                    </dx-form>
-                `,
-      },
-    });
-
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
-
-    const formInstance = getWidget(fixture);
-    const spy = spyOn(formInstance, 'resetOption').and.callThrough();
-
-    fixture.componentInstance.labelValuesSecond.splice(1, 1);
-    fixture.componentInstance.condition = false;
-    fixture.detectChanges();
-
-    expect(spy.calls.count()).toBe(1);
-    expect(formInstance.option('items[1].label.text')).toBe('label3');
-    expect(formInstance.option('items[2].label.text')).toBe(undefined);
-  });
-
-  it('should delete collection nested item with ordinary nested in two groups', () => {
-    TestBed.overrideComponent(TestContainerComponent, {
-      set: {
-        template: `
-                    <dx-form [formData]="{}">
-                        <dxi-item caption="First Group" itemType="group">
-                            <dxi-item [dataField]="'labels[' + i + ']'" *ngFor="let labelValue of labelValues; let i = index">
-                                <dxo-label text="{{ labelValue.name }}"></dxo-label>
-                            </dxi-item>
-                            <dxi-item [dataField]="'labels[3]'">
-                                <dxo-label text="label3" *ngIf="condition"></dxo-label>
-                            </dxi-item>
-                        </dxi-item>
-                        <dxi-item caption="Second Group" itemType="group">
-                            <dxi-item [dataField]="'labels[0]'">
-                                <dxo-label text="label0" *ngIf="condition"></dxo-label>
-                            </dxi-item>
-                            <dxi-item [dataField]="'labels[' + i++ + ']'" *ngFor="let labelValue of labelValuesSecond; let i = index">
-                                <dxo-label text="{{ labelValue.name }}"></dxo-label>
-                            </dxi-item>
-                        </dxi-item>
-                    </dx-form>
-                `,
-      },
-    });
-
-    const fixture = TestBed.createComponent(TestContainerComponent);
-    fixture.detectChanges();
-
-    const formInstance = getWidget(fixture);
-    const spy = spyOn(formInstance, 'resetOption').and.callThrough();
-
-    fixture.componentInstance.labelValues.splice(1, 1);
-    fixture.componentInstance.labelValuesSecond.splice(1, 1);
-    fixture.componentInstance.condition = false;
-    fixture.detectChanges();
-
-    expect(spy.calls.count()).toBe(2);
-    expect(formInstance.option('items[0].items[1].label.text')).toBe(undefined);
-    expect(formInstance.option('items[1].items[2].label.text')).toBe('label3');
-    expect(formInstance.option('items[1].items[3].label.text')).toBe(undefined);
   });
 
   it('should change the value of dxDateBox', () => {

@@ -63,7 +63,8 @@ const App = () => {
       />
       <div className="log-container">
         <div>
-          <i className="icon dx-icon-clock"></i>&nbsp;Operations log:
+          <i className="icon dx-icon-clock"></i>
+          <span>&nbsp;Operations log:</span>
         </div>
         <List
           id="log"

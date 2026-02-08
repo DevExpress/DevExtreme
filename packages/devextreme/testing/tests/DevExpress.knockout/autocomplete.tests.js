@@ -35,5 +35,5 @@ QUnit.test('autocomplete should delegate templates to child widgets (T131530)', 
 
     kb.type('T');
 
-    assert.equal($.trim(popupContent.find('.dx-list-item').text()), 'TemplateTemplate');
+    assert.equal(popupContent.find('.dx-list-item').text().trim(), 'TemplateTemplate');
 });

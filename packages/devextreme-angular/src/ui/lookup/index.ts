@@ -46,7 +46,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
@@ -81,10 +82,10 @@ import { DxoLookupShowModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupShowEventModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxoLookupToModule } from 'devextreme-angular/ui/lookup/nested';
 import { DxiLookupToolbarItemModule } from 'devextreme-angular/ui/lookup/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiLookupItemComponent } from 'devextreme-angular/ui/lookup/nested';
+import { 
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_toolbarItems,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -99,8 +100,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-lookup',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -110,6 +113,17 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxLookupComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
+    }
+
     instance: DxLookup = null;
 
     /**
@@ -334,21 +348,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
 
     /**
-     * [descr:dxLookupOptions.fullScreen]
-    
-     * @deprecated [depNote:dxLookupOptions.fullScreen]
-    
-     */
-    @Input()
-    get fullScreen(): boolean {
-        return this._getOption('fullScreen');
-    }
-    set fullScreen(value: boolean) {
-        this._setOption('fullScreen', value);
-    }
-
-
-    /**
      * [descr:dxLookupOptions.grouped]
     
      */
@@ -379,10 +378,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -960,9 +959,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
 
     /**
-     * [descr:dxLookupOptions.valueChangeEvent]
-    
-     * @deprecated [depNote:dxLookupOptions.valueChangeEvent]
+     * [descr:dxDropDownListOptions.valueChangeEvent]
     
      */
     @Input()
@@ -1005,10 +1002,10 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -1245,13 +1242,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() fullScreenChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() groupedChange: EventEmitter<boolean>;
 
     /**
@@ -1266,7 +1256,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -1602,7 +1592,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -1622,26 +1612,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-    @ContentChildren(DxiLookupItemComponent)
-    get itemsChildren(): QueryList<DxiLookupItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiLookupItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
@@ -1683,7 +1653,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
             { emit: 'elementAttrChange' },
             { emit: 'fieldTemplateChange' },
             { emit: 'focusStateEnabledChange' },
-            { emit: 'fullScreenChange' },
             { emit: 'groupedChange' },
             { emit: 'groupTemplateChange' },
             { emit: 'heightChange' },
@@ -1809,6 +1778,7 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
 
 @NgModule({
   imports: [
+    DxLookupComponent,
     DxoDropDownOptionsModule,
     DxoAnimationModule,
     DxoHideModule,
@@ -1842,9 +1812,6 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
     DxiLookupToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxLookupComponent
   ],
   exports: [
     DxLookupComponent,
@@ -1883,6 +1850,8 @@ export class DxLookupComponent extends DxComponent implements OnDestroy, Control
   ]
 })
 export class DxLookupModule { }
+
+export * from 'devextreme-angular/ui/lookup/nested';
 
 import type * as DxLookupTypes from "devextreme/ui/lookup_types";
 export { DxLookupTypes };

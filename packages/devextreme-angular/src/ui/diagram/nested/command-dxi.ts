@@ -8,7 +8,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -19,19 +18,36 @@ import { Command, CustomCommand } from 'devextreme/ui/diagram';
 import { ToolbarItemLocation } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiDiagramItemComponent } from './item-dxi';
 
+import { PROPERTY_TOKEN_commands } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-diagram-command',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_commands,
+           useExisting: DxiDiagramCommandComponent,
+        }
+    ]
 })
 export class DxiDiagramCommandComponent extends CollectionNestedOption {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get icon(): string {
         return this._getOption('icon');
@@ -78,14 +94,6 @@ export class DxiDiagramCommandComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDiagramItemComponent))
-    get itemsChildren(): QueryList<DxiDiagramItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -102,7 +110,7 @@ export class DxiDiagramCommandComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDiagramCommandComponent
   ],
   exports: [

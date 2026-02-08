@@ -69,7 +69,7 @@ const componentConfig = {
     dataSource: [Array, Object, String] as PropType<Array<dxSplitterItem> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hoverStateEnabled: Boolean,
     items: Array as PropType<Array<dxSplitterItem>>,
     itemTemplate: {},
@@ -89,7 +89,7 @@ const componentConfig = {
     rtlEnabled: Boolean,
     separatorSize: Number,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

@@ -1,7 +1,7 @@
 import React from 'react';
 import PivotGrid, { FieldChooser, Export } from 'devextreme-react/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import { Workbook } from 'exceljs';
+import { Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.
@@ -38,8 +38,7 @@ const dataSource = new PivotGridDataSource({
   ],
   store: sales,
 });
-const isDataCell = (cell) =>
-  cell.area === 'data' && cell.rowType === 'D' && cell.columnType === 'D';
+const isDataCell = (cell) => cell.rowType === 'D' && cell.columnType === 'D';
 const isTotalCell = (cell) =>
   cell.type === 'T'
   || cell.type === 'GT'
@@ -94,8 +93,7 @@ const onExporting = (e) => {
     });
   });
 };
-const onCellPrepared = ({ cell, area, cellElement }) => {
-  cell.area = area;
+const onCellPrepared = ({ cell, cellElement }) => {
   if (isDataCell(cell) || isTotalCell(cell)) {
     const appearance = getConditionalAppearance(cell);
     Object.assign(cellElement.style, getCssStyles(appearance));

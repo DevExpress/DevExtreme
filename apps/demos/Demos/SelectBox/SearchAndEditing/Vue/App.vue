@@ -109,7 +109,7 @@ import { type SimplifiedSearchMode } from 'devextreme-vue/common';
 import { DxSelectBox, type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { DxNumberBox } from 'devextreme-vue/number-box';
 import { DxCheckBox } from 'devextreme-vue/check-box';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-vue/common/data';
 import { products, simpleProducts } from './data.ts';
 
 const productsDataSource = new DataSource({
@@ -137,7 +137,7 @@ const searchExprItems = [
   },
 ];
 
-function customItemCreating(data) {
+function customItemCreating(data: DxSelectBoxTypes.CustomItemCreatingEvent) {
   if (!data.text) {
     data.customItem = null;
     return;

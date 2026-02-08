@@ -1,14 +1,13 @@
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
-import Class from '@js/core/class';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isString } from '@js/core/utils/type';
+import { capitalize } from '@ts/core/utils/capitalize';
 
 import pivotGridUtils, {
-  capitalizeFirstLetter,
   getExpandedLevel,
   getFiltersByPath,
   setDefaultFieldValueFormatting,
@@ -38,7 +37,7 @@ function getFieldFilterSelector(field) {
     if (groupInterval.toLowerCase() === 'quarter') {
       groupInterval = 'Month';
     }
-    selector = `${selector}.${capitalizeFirstLetter(groupInterval)}`;
+    selector = `${selector}.${capitalize(groupInterval)}`;
   }
 
   return selector;
@@ -99,7 +98,7 @@ function createFieldFilterExpressions(field, operation?) {
     let currentExpression: any = [];
 
     if (Array.isArray(filterValue)) {
-      const parseLevelsRecursive = field.levels && field.levels.length;
+      const parseLevelsRecursive = field.levels?.length;
 
       if (parseLevelsRecursive) {
         currentExpression = createFieldFilterExpressions({
@@ -249,7 +248,7 @@ function parseResult(data, total, descriptions, result) {
   const { rowHash } = result;
   const { columnHash } = result;
 
-  if (total && total.summary) {
+  if (total?.summary) {
     each(total.summary, (index, summary) => {
       setValue(
         result.values,
@@ -331,10 +330,10 @@ function parseResult(data, total, descriptions, result) {
       result.rows.push({});
     }
 
-    const currentRowIndex = rowItem && rowItem.index || result.grandTotalRowIndex;
-    const currentColumnIndex = columnItem && columnItem.index || result.grandTotalColumnIndex;
+    const currentRowIndex = rowItem?.index || result.grandTotalRowIndex;
+    const currentColumnIndex = columnItem?.index || result.grandTotalColumnIndex;
 
-    each(item && item.summary || [], (i, summary) => {
+    each(item?.summary || [], (i, summary) => {
       setValue(result.values, summary, currentRowIndex, currentColumnIndex, i);
     });
   });
@@ -544,124 +543,126 @@ function prepareFields(fields) {
   });
 }
 
-const RemoteStore = Class.inherit((function () {
-  return {
-    ctor(options) {
-      this._dataSource = new DataSource(options);
-      this._store = this._dataSource.store();
-    },
+class RemoteStore {
+  _dataSource: any;
 
-    getFields(fields) {
+  _store: any;
+
+  constructor(options) {
+    this._dataSource = new DataSource(options);
+    this._store = this._dataSource.store();
+  }
+
+  getFields(fields) {
+    // @ts-expect-error
+    const d = new Deferred();
+
+    this._store.load({
+      skip: 0,
+      take: 20,
+    }).done((data) => {
       // @ts-expect-error
-      const d = new Deferred();
+      const normalizedArguments = normalizeLoadResult(data);
+      d.resolve(pivotGridUtils.discoverObjectFields(normalizedArguments.data, fields));
+    }).fail(d.reject);
 
-      this._store.load({
-        skip: 0,
-        take: 20,
-      }).done((data) => {
-        // @ts-expect-error
-        const normalizedArguments = normalizeLoadResult(data);
-        d.resolve(pivotGridUtils.discoverObjectFields(normalizedArguments.data, fields));
-      }).fail(d.reject);
+    return d;
+  }
 
-      return d;
-    },
+  key() {
+    return this._store.key();
+  }
 
-    key() {
-      return this._store.key();
-    },
+  load(options) {
+    const that: any = this;
+    // @ts-expect-error
+    const d = new Deferred();
+    const result = {
+      rows: [],
+      columns: [],
+      values: [],
+      grandTotalRowIndex: 0,
+      grandTotalColumnIndex: 0,
 
-    load(options) {
-      const that: any = this;
-      // @ts-expect-error
-      const d = new Deferred();
-      const result = {
-        rows: [],
-        columns: [],
-        values: [],
-        grandTotalRowIndex: 0,
-        grandTotalColumnIndex: 0,
+      rowHash: {},
+      columnHash: {},
+      rowIndex: 1,
+      columnIndex: 1,
+    };
+    const requestsOptions = createRequestsOptions(options);
+    const deferreds: any = [];
 
-        rowHash: {},
-        columnHash: {},
-        rowIndex: 1,
-        columnIndex: 1,
-      };
-      const requestsOptions = createRequestsOptions(options);
-      const deferreds: any = [];
+    prepareFields(options.rows);
+    prepareFields(options.columns);
+    prepareFields(options.filters);
 
-      prepareFields(options.rows);
-      prepareFields(options.columns);
-      prepareFields(options.filters);
+    each(requestsOptions, (_, requestOptions) => {
+      const loadOptions = createLoadOptions(requestOptions, that.filter(), options.rows.length);
+      const loadDeferred = that._store.load(loadOptions);
 
-      each(requestsOptions, (_, requestOptions) => {
-        const loadOptions = createLoadOptions(requestOptions, that.filter(), options.rows.length);
-        const loadDeferred = that._store.load(loadOptions);
+      deferreds.push(loadDeferred);
+    });
 
-        deferreds.push(loadDeferred);
+    when.apply(null, deferreds).done(function () {
+      const args = deferreds.length > 1 ? arguments : [arguments];
+
+      each(args, (index, argument) => {
+        const normalizedArguments = normalizeLoadResult(argument[0], argument[1]);
+        parseResult(
+          normalizedArguments.data,
+          normalizedArguments.extra,
+          requestsOptions[index],
+          result,
+        );
       });
 
-      when.apply(null, deferreds).done(function () {
-        const args = deferreds.length > 1 ? arguments : [arguments];
-
-        each(args, (index, argument) => {
-          const normalizedArguments = normalizeLoadResult(argument[0], argument[1]);
-          parseResult(
-            normalizedArguments.data,
-            normalizedArguments.extra,
-            requestsOptions[index],
-            result,
-          );
-        });
-
-        d.resolve({
-          rows: result.rows,
-          columns: result.columns,
-          values: result.values,
-          grandTotalRowIndex: result.grandTotalRowIndex,
-          grandTotalColumnIndex: result.grandTotalColumnIndex,
-        });
-      }).fail(d.reject);
-
-      return d;
-    },
-
-    filter() {
-      return this._dataSource.filter.apply(this._dataSource, arguments);
-    },
-
-    supportPaging() {
-      return false;
-    },
-
-    createDrillDownDataSource(loadOptions, params): any {
-      loadOptions = loadOptions || {};
-      params = params || {};
-
-      const store = this._store;
-      const filters = getFiltersByPath(loadOptions.rows, params.rowPath)
-        .concat(getFiltersByPath(loadOptions.columns, params.columnPath))
-        .concat(getFiltersForDimension(loadOptions.rows))
-        .concat(loadOptions.filters || [])
-        .concat(getFiltersForDimension(loadOptions.columns));
-
-      const filterExp = createFilterExpressions(filters);
-
-      return new DataSource({
-        load(loadOptions) {
-          const filter = mergeFilters([filterExp, loadOptions.filter]);
-
-          const extendedLoadOptions = extend({}, loadOptions, {
-            filter: filter.length === 0 ? undefined : filter,
-            select: params.customColumns,
-          });
-
-          return store.load(extendedLoadOptions);
-        },
+      d.resolve({
+        rows: result.rows,
+        columns: result.columns,
+        values: result.values,
+        grandTotalRowIndex: result.grandTotalRowIndex,
+        grandTotalColumnIndex: result.grandTotalColumnIndex,
       });
-    },
-  };
-})());
+    }).fail(d.reject);
+
+    return d;
+  }
+
+  filter(...args: any[]) {
+    return this._dataSource.filter.apply(this._dataSource, args);
+  }
+
+  supportPaging() {
+    return false;
+  }
+
+  createDrillDownDataSource(loadOptions, params): any {
+    loadOptions = loadOptions || {};
+    params = params || {};
+
+    const store = this._store;
+    const filters = getFiltersByPath(loadOptions.rows, params.rowPath)
+      .concat(getFiltersByPath(loadOptions.columns, params.columnPath))
+      .concat(getFiltersForDimension(loadOptions.rows))
+      .concat(loadOptions.filters || [])
+      .concat(getFiltersForDimension(loadOptions.columns));
+
+    const filterExp = createFilterExpressions(filters);
+
+    return new DataSource({
+      load(loadOptions) {
+        const filter = mergeFilters([filterExp, loadOptions.filter]);
+
+        const extendedLoadOptions = extend({}, loadOptions, {
+          filter: filter.length === 0 ? undefined : filter,
+          select: params.customColumns,
+        });
+
+        return store.load(extendedLoadOptions);
+      },
+    });
+  }
+}
 
 export default { RemoteStore };
 export { RemoteStore };

@@ -14,8 +14,6 @@ QUnit.testStart(function() {
     $('#widthRootStyle').css('width', '300px');
 });
 
-import 'generic_light.css!';
-
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const DATEBOX_CLASS = 'dx-datebox';
 const DATEBOX_LIST_CLASS = 'dx-datebox-list';
@@ -135,7 +133,7 @@ QUnit.module('Rendering input', moduleConfig, () => {
     });
 
     QUnit.test('format should be correct when pickerType is calendar', function(assert) {
-        const date = new Date($.now());
+        const date = new Date(Date.now());
 
         this.createInstance({
             type: 'datetime',

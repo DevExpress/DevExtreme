@@ -16,11 +16,11 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
-import { DisplayMode } from 'devextreme/common';
+import { DisplayMode, Mode } from 'devextreme/common';
 import { EventInfo } from 'devextreme/common/core/events';
 
 import DxPagination from 'devextreme/ui/pagination';
@@ -33,10 +33,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
-
-
 
 
 
@@ -47,8 +45,10 @@ import {
  */
 @Component({
     selector: 'dx-pagination',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -57,6 +57,7 @@ import {
     ]
 })
 export class DxPaginationComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
     instance: DxPagination = null;
 
     /**
@@ -155,10 +156,10 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -298,10 +299,10 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get showPageSizeSelector(): boolean {
+    get showPageSizeSelector(): boolean | Mode {
         return this._getOption('showPageSizeSelector');
     }
-    set showPageSizeSelector(value: boolean) {
+    set showPageSizeSelector(value: boolean | Mode) {
         this._setOption('showPageSizeSelector', value);
     }
 
@@ -337,10 +338,10 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -430,7 +431,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -507,7 +508,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() showPageSizeSelectorChange: EventEmitter<boolean>;
+    @Output() showPageSizeSelectorChange: EventEmitter<boolean | Mode>;
 
     /**
     
@@ -528,11 +529,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -619,11 +616,9 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
 
 @NgModule({
   imports: [
+    DxPaginationComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPaginationComponent
   ],
   exports: [
     DxPaginationComponent,
@@ -631,6 +626,7 @@ export class DxPaginationComponent extends DxComponent implements OnDestroy, OnC
   ]
 })
 export class DxPaginationModule { }
+
 
 import type * as DxPaginationTypes from "devextreme/ui/pagination_types";
 export { DxPaginationTypes };

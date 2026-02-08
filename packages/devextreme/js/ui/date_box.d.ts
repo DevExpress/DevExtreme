@@ -1,10 +1,14 @@
 /* eslint-disable max-classes-per-file */
 import {
+    DateLike,
+} from '../common';
+
+import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     ComponentDisabledDate,
@@ -18,6 +22,7 @@ import dxDropDownEditor, {
 
 import {
     ValueChangedInfo,
+    EditorOptionsWithValue,
 } from './editor/editor';
 
 import {
@@ -27,6 +32,10 @@ import {
 import {
     Properties as PopupProperties,
 } from './popup';
+
+export {
+    DateLike,
+};
 
 /** @public */
 export type DateType = 'date' | 'datetime' | 'time';
@@ -275,9 +284,10 @@ export interface dxDateBoxOptions extends DateBoxBaseOptions<dxDateBox> {
     /**
      * @docid
      * @default null
+     * @type Date|number|string|null
      * @public
      */
-    value?: Date | number | string;
+    value?: DateLike;
 }
 
 /**
@@ -318,16 +328,18 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
     displayFormat?: Format;
     /**
      * @docid
+     * @type Date|number|string|null|undefined
      * @default undefined
      * @public
      */
-    max?: Date | number | string | undefined;
+    max?: DateLike | undefined;
     /**
      * @docid
+     * @type Date|number|string|null|undefined
      * @default undefined
      * @public
      */
-    min?: Date | number | string | undefined;
+    min?: DateLike | undefined;
     /**
      * @docid
      * @default "Today"
@@ -355,7 +367,9 @@ export interface DateBoxBaseOptions<TComponent> extends dxDropDownEditorOptions<
  * @hidden
  * @options DateBoxBaseOptions
  */
-export class DateBoxBase<TProperties = Properties> extends dxDropDownEditor<TProperties> {
+export class DateBoxBase<
+    TProperties extends EditorOptionsWithValue = Properties,
+> extends dxDropDownEditor<TProperties> {
     /**
      * @docid
      * @publicName close()
@@ -382,8 +396,9 @@ export default class dxDateBox extends DateBoxBase<Properties> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:Date | number | string | null
      */
-    reset(value?: Date | number | string | null): void;
+    reset(value?: Properties['value']): void;
 }
 
 /**

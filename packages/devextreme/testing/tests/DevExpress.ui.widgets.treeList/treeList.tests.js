@@ -263,10 +263,6 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
 
     QUnit.testInActiveWindow('Ctrl + left/right keys should collapse/expand row', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
-            return;
-        }
         const treeList = createTreeList({
             columns: ['name', 'age'],
             dataSource: [
@@ -283,14 +279,14 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         this.clock.tick(10);
 
         // act
-        navigationController._rowsViewKeyDownHandler({ keyName: 'rightArrow', key: 'ArrowRight', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
+        navigationController.keyDownHandler({ keyName: 'rightArrow', key: 'ArrowRight', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
         this.clock.tick(10);
 
         // assert
         assert.ok(treeList.isRowExpanded(2), 'second row is expanded');
 
         // act
-        navigationController._rowsViewKeyDownHandler({ keyName: 'leftArrow', key: 'ArrowLeft', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
+        navigationController.keyDownHandler({ keyName: 'leftArrow', key: 'ArrowLeft', ctrl: true, originalEvent: $.Event('keydown', { target: treeList.getCellElement(1, 0), ctrlKey: true }) });
         this.clock.tick(10);
 
         // assert
@@ -299,10 +295,6 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
     // T917248
     QUnit.testInActiveWindow('Row should be selected via space key press on check box', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
-            return;
-        }
         const treeList = createTreeList({
             columns: ['name', 'age'],
             dataSource: [
@@ -1173,8 +1165,10 @@ QUnit.module('Option Changed', defaultModuleConfig, () => {
         assert.strictEqual($rowElements.eq(2).children().first().text(), '4', 'third node - first cell text');
 
         const $expandIcon = $rowElements.eq(2).children().first().find('.dx-treelist-collapsed');
+        const $checkbox = $expandIcon.next().children().eq(0);
+
         assert.strictEqual($expandIcon.length, 1, 'third node has an expand icon');
-        assert.ok($expandIcon.next().hasClass('dx-select-checkbox'), 'third node has a select checkbox');
+        assert.ok($checkbox.hasClass('dx-select-checkbox'), 'third node has a select checkbox');
     });
 
     // T861052

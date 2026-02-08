@@ -31,8 +31,8 @@ testStart(() => initTestMarkup());
 
 module('Virtual scrolling Month View', () => {
     module('Regular appointments', () => {
-        test('Regular appointments should be rendered correctly if horizontal grouping', function(assert) {
-            const scheduler = createWrapper({
+        test('Regular appointments should be rendered correctly if horizontal grouping', async function(assert) {
+            const scheduler = await createWrapper({
                 dataSource: [{
                     text: 'Test-S00',
                     startDate: new Date(2021, 0, 31, 16),
@@ -122,8 +122,8 @@ module('Virtual scrolling Month View', () => {
             });
         });
 
-        test('Regular appointments should be rendered correctly if vertical grouping', function(assert) {
-            const scheduler = createWrapper({
+        test('Regular appointments should be rendered correctly if vertical grouping', async function(assert) {
+            const scheduler = await createWrapper({
                 dataSource: [{
                     text: 'Test-S00',
                     startDate: new Date(2021, 0, 31, 16),
@@ -215,8 +215,8 @@ module('Virtual scrolling Month View', () => {
             });
         });
 
-        test('Multi week regular appointment should be rendered correctly if horizontal grouping', function(assert) {
-            const scheduler = createWrapper({
+        test('Multi week regular appointment should be rendered correctly if horizontal grouping', async function(assert) {
+            const scheduler = await createWrapper({
                 dataSource: [{
                     text: 'Test-L00',
                     startDate: new Date(2021, 1, 1, 16),
@@ -282,29 +282,29 @@ module('Virtual scrolling Month View', () => {
                             top: -9837,
                             width: 150
                         }, {
-                            left: -10324,
-                            top: -9762,
-                            width: 150
-                        }, {
-                            left: -10324,
-                            top: -9687,
-                            width: 150
-                        }, {
-                            left: -10324,
-                            top: -9612,
-                            width: 75
-                        }, {
                             left: -9574,
                             top: -9837,
                             width: 450
                         }, {
+                            left: -10324,
+                            top: -9762,
+                            width: 150
+                        }, {
                             left: -9649,
                             top: -9762,
                             width: 525
                         }, {
+                            left: -10324,
+                            top: -9687,
+                            width: 150
+                        }, {
                             left: -9649,
                             top: -9687,
                             width: 525
+                        }, {
+                            left: -10324,
+                            top: -9612,
+                            width: 75
                         }, {
                             left: -9649,
                             top: -9612,
@@ -381,8 +381,8 @@ module('Virtual scrolling Month View', () => {
             });
         });
 
-        test('Multi week regular appointment should be rendered correctly if vertical grouping', function(assert) {
-            const scheduler = createWrapper({
+        test('Multi week regular appointment should be rendered correctly if vertical grouping', async function(assert) {
+            const scheduler = await createWrapper({
                 dataSource: [{
                     text: 'Test-L00',
                     startDate: new Date(2021, 1, 17, 16),
@@ -512,12 +512,12 @@ module('Virtual scrolling Month View', () => {
         });
 
         ['horizontal', 'vertical'].forEach(groupOrientation => {
-            test(`Appointment should be correctly croped if Month view  and "${groupOrientation}" group orientation`, function(assert) {
+            test(`Appointment should be correctly croped if Month view  and "${groupOrientation}" group orientation`, async function(assert) {
                 const longAppointment = {
                     startDate: new Date(2015, 2, 4, 0, 10),
                     endDate: new Date(2015, 2, 4, 23, 50)
                 };
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     currentDate: new Date(2015, 2, 4),
                     scrolling: {
                         mode: 'virtual'
@@ -578,7 +578,7 @@ module('Virtual scrolling Month View', () => {
         });
 
         module('Group by date', () => {
-            test('Regular appointment should be rendered correctly if grouped by date', function(assert) {
+            test('Regular appointment should be rendered correctly if grouped by date', async function(assert) {
                 const resources = [{
                     id: 0,
                     text: 'David Carter',
@@ -602,7 +602,7 @@ module('Virtual scrolling Month View', () => {
                     endDate: new Date('2021-02-26T15:36:00.000Z'),
                     humanId: 1
                 };
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     width: 400,
                     currentDate: new Date(2021, 1, 2),
                     dataSource: [appointment],
@@ -664,8 +664,8 @@ module('Virtual scrolling Month View', () => {
     });
 
     module('Recurrent appointments', () => {
-        test('Regular recurrent appointment should be rendered correctly if horizontal grouping', function(assert) {
-            const scheduler = createWrapper({
+        test('Regular recurrent appointment should be rendered correctly if horizontal grouping', async function(assert) {
+            const scheduler = await createWrapper({
                 dataSource: [{
                     text: 'Test-REC00',
                     startDate: new Date(2021, 1, 1, 16),
@@ -768,8 +768,8 @@ module('Virtual scrolling Month View', () => {
             });
         });
 
-        test('Regular recurrent appointment should be rendered correctly if vertical grouping', function(assert) {
-            const scheduler = createWrapper({
+        test('Regular recurrent appointment should be rendered correctly if vertical grouping', async function(assert) {
+            const scheduler = await createWrapper({
                 dataSource: [{
                     text: 'Test-REC00',
                     startDate: new Date(2021, 1, 1, 16),
@@ -871,8 +871,8 @@ module('Virtual scrolling Month View', () => {
             });
         });
 
-        test('Multi week recurrent appointment should be rendered correctly if horizontal grouping', function(assert) {
-            const scheduler = createWrapper({
+        test('Multi week recurrent appointment should be rendered correctly if horizontal grouping', async function(assert) {
+            const scheduler = await createWrapper({
                 dataSource: [{
                     text: 'Test-R00',
                     startDate: new Date(2021, 1, 1, 16),
@@ -1001,8 +1001,8 @@ module('Virtual scrolling Month View', () => {
             });
         });
 
-        test('Multi week recurrent appointment should be rendered correctly if vertical grouping', function(assert) {
-            const scheduler = createWrapper({
+        test('Multi week recurrent appointment should be rendered correctly if vertical grouping', async function(assert) {
+            const scheduler = await createWrapper({
                 dataSource: [{
                     text: 'Test-R00',
                     startDate: new Date(2021, 1, 1, 16),
@@ -1132,7 +1132,7 @@ module('Virtual scrolling Month View', () => {
             });
         });
 
-        test('Long appointments should be rendered correctly when style is custom', function(assert) {
+        test('Long appointments should be rendered correctly when style is custom', async function(assert) {
             const $style = $('<style>');
             const styleBefore = $style.text();
 
@@ -1140,7 +1140,7 @@ module('Virtual scrolling Month View', () => {
                 .text('#scheduler .dx-scheduler-cell-sizes-horizontal { width: 150px } ')
                 .appendTo('head');
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 height: 600,
                 currentDate: new Date(2021, 1, 2),
                 dataSource: [{

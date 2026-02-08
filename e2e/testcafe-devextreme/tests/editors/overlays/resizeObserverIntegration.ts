@@ -1,6 +1,5 @@
 import { Selector, ClientFunction } from 'testcafe';
 import Popup from 'devextreme-testcafe-models/popup';
-import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
 import asyncForEach from '../../../helpers/asyncForEach';
 import { createWidget } from '../../../helpers/createWidget';
@@ -14,6 +13,7 @@ test('Popup should be centered regarding the container even if content dimension
 
   await popup.show();
   await setStyleAttribute(Selector('#content'), 'width: 300px; height: 300px;');
+  await t.wait(100);
 
   const wrapper = popup.getWrapper();
   const content = popup.getContent();
@@ -45,7 +45,7 @@ test('Popup should be centered regarding the container even if content dimension
 }).before(async () => createWidget('dxPopup', {
   width: 'auto',
   height: 'auto',
-  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
+  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: '100px', height: '100px' }),
 }, undefined, { disableFxAnimation: false }));
 
 test('Popup should be centered regarding the container even if popup dimension option is changed during animation', async (t) => {
@@ -53,6 +53,7 @@ test('Popup should be centered regarding the container even if popup dimension o
 
   await popup.show();
   await setStyleAttribute(Selector('#content'), 'width: 300px; height: 300px;');
+  await t.wait(100);
 
   const wrapper = popup.getWrapper();
   const content = popup.getContent();
@@ -84,7 +85,7 @@ test('Popup should be centered regarding the container even if popup dimension o
 }).before(async () => createWidget('dxPopup', {
   width: 'auto',
   height: 'auto',
-  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
+  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: '100px', height: '100px' }),
 }, undefined, { disableFxAnimation: false }));
 
 test('Popup should be centered regarding the container even if content dimension is changed', async (t) => {
@@ -92,6 +93,7 @@ test('Popup should be centered regarding the container even if content dimension
 
   await popup.show();
   await setStyleAttribute(Selector('#content'), 'width: 300px; height: 300px;');
+  await t.wait(100);
 
   const wrapper = popup.getWrapper();
   const content = popup.getContent();
@@ -123,11 +125,11 @@ test('Popup should be centered regarding the container even if content dimension
 }).before(async () => createWidget('dxPopup', {
   width: 'auto',
   height: 'auto',
-  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
+  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: '100px', height: '100px' }),
   animation: null,
 }, undefined, { disableFxAnimation: false }));
 
-safeSizeTest('popup should be repositioned after window resize', async (t) => {
+test.meta({ browserSize: [200, 200] })('popup should be repositioned after window resize', async (t) => {
   const popup = new Popup('#container');
 
   const wrapper = popup.getWrapper();
@@ -157,7 +159,7 @@ safeSizeTest('popup should be repositioned after window resize', async (t) => {
   await t
     .expect(wrapperHorizontalCenter)
     .within(contentHorizontalCenter - 0.5, contentHorizontalCenter + 0.5);
-}, [200, 200]).before(async () => createWidget('dxPopup', {
+}).before(async () => createWidget('dxPopup', {
   animation: null,
   visible: true,
   width: 100,
@@ -225,7 +227,7 @@ test('Showing and shown events should be raised only once even after resize duri
 }).before(async () => createWidget('dxPopup', {
   width: 'auto',
   height: 'auto',
-  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: 100, height: 100 }),
+  contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: '100px', height: '100px' }),
 }, undefined, { disableFxAnimation: false })).after(async () => {
   await ClientFunction(() => {
     delete (window as any).shownCallCount;

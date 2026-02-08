@@ -15,16 +15,26 @@ import {
 import { ValidationRuleType } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-validator-custom-rule',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_validationRules,
+           useExisting: DxiValidatorCustomRuleComponent,
+        }
+    ]
 })
 export class DxiValidatorCustomRuleComponent extends CollectionNestedOption {
     @Input()
@@ -60,10 +70,10 @@ export class DxiValidatorCustomRuleComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get validationCallback(): ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean) {
+    get validationCallback(): ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean) {
         return this._getOption('validationCallback');
     }
-    set validationCallback(value: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)) {
+    set validationCallback(value: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)) {
         this._setOption('validationCallback', value);
     }
 
@@ -78,6 +88,8 @@ export class DxiValidatorCustomRuleComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'custom';
+    
     }
 
 
@@ -89,7 +101,7 @@ export class DxiValidatorCustomRuleComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiValidatorCustomRuleComponent
   ],
   exports: [

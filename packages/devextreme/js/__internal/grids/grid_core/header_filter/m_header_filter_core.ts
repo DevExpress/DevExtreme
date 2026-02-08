@@ -1,24 +1,32 @@
 /* eslint-disable max-classes-per-file */
-import '@ts/ui/list/modules/m_search';
-import '@ts/ui/list/modules/m_selection';
+import '@ts/ui/list/modules/search';
+import '@ts/ui/list/modules/selection';
 
+import type { ChangedOptionInfo, NativeEventInfo } from '@js/common/core/events';
 import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
-import List from '@js/ui/list_light';
+import type dxCheckBox from '@js/ui/check_box';
+import type { ValueChangedInfo } from '@js/ui/editor/editor';
+import type dxList from '@js/ui/list';
 import Popup from '@js/ui/popup/ui.popup';
-import TreeView from '@js/ui/tree_view';
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
+import List from '@ts/ui/list/list.edit.search';
+import TreeView from '@ts/ui/tree_view/tree_view.search';
 
 import gridCoreUtils from '../m_utils';
+
+type CheckBoxValueChangedEvent = NativeEventInfo<dxCheckBox> & ValueChangedInfo;
+type CheckBoxValueChangedHandler = (event: CheckBoxValueChangedEvent) => void;
 
 const HEADER_FILTER_CLASS = 'dx-header-filter';
 const HEADER_FILTER_MENU_CLASS = 'dx-header-filter-menu';
 
 const DEFAULT_SEARCH_EXPRESSION = 'text';
+const HANDLER_DECORATED_KEY = Symbol('HANDLER_DECORATED_KEY');
 
 function resetChildrenItemSelection(items) {
   items = items || [];
@@ -28,19 +36,71 @@ function resetChildrenItemSelection(items) {
   }
 }
 
-function getSelectAllCheckBox(listComponent) {
+function getSelectAllCheckBox(listComponent): dxCheckBox {
   const selector = listComponent.NAME === 'dxTreeView' ? '.dx-treeview-select-all-item' : '.dx-list-select-all-checkbox';
 
   return listComponent.$element().find(selector).dxCheckBox('instance');
 }
 
-function updateListSelectAllState(e, filterValues) {
-  if (e.component.option('searchValue')) {
+function getListSelectAllValueChangedHandler(
+  selectAllCheckBox: dxCheckBox,
+  listComponent: dxList,
+): CheckBoxValueChangedHandler {
+  const originalHandler = selectAllCheckBox.option('onValueChanged') as CheckBoxValueChangedHandler;
+
+  if (originalHandler?.[HANDLER_DECORATED_KEY]) {
+    return originalHandler;
+  }
+
+  const handler = (originalEvent: CheckBoxValueChangedEvent): void => {
+    const { event, value } = originalEvent;
+    const isEventFromUI = !!event;
+
+    event?.stopPropagation();
+
+    switch (true) {
+      case isEventFromUI && value === true:
+        listComponent.selectAll();
+        return;
+      case isEventFromUI && value === false:
+        listComponent.unselectAll();
+        return;
+      default:
+        originalHandler?.(originalEvent);
+    }
+  };
+  handler[HANDLER_DECORATED_KEY] = true;
+
+  return handler;
+}
+
+// NOTE: T1284200 fix + after T1293295 regression fix
+// We take control of list's select all checkbox on our side
+// It's temporary solution, in future we should implement this functionality in list
+// or change our HeaderFilter UX behavior
+function decorateListSelectAllValueChanged(
+  listComponent: dxList,
+): void {
+  const selectAllCheckBox = getSelectAllCheckBox(listComponent);
+  if (!selectAllCheckBox) {
     return;
   }
-  const selectAllCheckBox = getSelectAllCheckBox(e.component);
 
-  if (selectAllCheckBox && filterValues && filterValues.length) {
+  const handler = getListSelectAllValueChangedHandler(selectAllCheckBox, listComponent);
+  selectAllCheckBox.option('onValueChanged', handler);
+}
+
+function updateListSelectAllState(
+  listComponent: dxList,
+  filterValues: any[],
+): void {
+  if (listComponent.option('searchValue')) {
+    return;
+  }
+
+  const selectAllCheckBox = getSelectAllCheckBox(listComponent);
+
+  if (selectAllCheckBox && filterValues?.length) {
     selectAllCheckBox.option('value', undefined);
   }
 }
@@ -213,6 +273,7 @@ export class HeaderFilterView extends Modules.View {
     const $element = that.element();
 
     const headerFilterOptions = this._normalizeHeaderFilterOptions(options);
+    const { hidePopupCallback } = options;
     const { height, width } = headerFilterOptions;
 
     const dxPopupOptions = {
@@ -247,6 +308,7 @@ export class HeaderFilterView extends Modules.View {
             text: headerFilterOptions.texts.cancel,
             onClick() {
               that.hideHeaderFilterMenu();
+              hidePopupCallback?.();
             },
           },
         },
@@ -291,7 +353,7 @@ export class HeaderFilterView extends Modules.View {
       },
       itemTemplate(data, _, element) {
         const $element = $(element);
-        if (options.encodeHtml) {
+        if (options.encodeHtml !== false) {
           return $element.text(data.text);
         }
 
@@ -299,16 +361,44 @@ export class HeaderFilterView extends Modules.View {
       },
     };
 
-    function onOptionChanged(e) {
-      // T835492, T833015
-      if (e.fullName === 'searchValue' && needShowSelectAllCheckbox && that.option('headerFilter.hideSelectAllOnSearch') !== false) {
-        if (options.type === 'tree') {
-          e.component.option('showCheckBoxesMode', e.value ? 'normal' : 'selectAll');
-        } else {
-          e.component.option('selectionMode', e.value ? 'multiple' : 'all');
-        }
+    const shouldChangeSelectAllCheckBoxVisibility = (): boolean => needShowSelectAllCheckbox
+      && that.option('headerFilter.hideSelectAllOnSearch') !== false;
+
+    const onTreeViewOptionChanged = (
+      event: ChangedOptionInfo & {
+        component: TreeView;
+      },
+    ): void => {
+      switch (true) {
+        case event.fullName === 'searchValue' && shouldChangeSelectAllCheckBoxVisibility():
+          event.component.option('showCheckBoxesMode', event.value ? 'normal' : 'selectAll');
+          break;
+        // TODO TreeView: remove this WA after Navigation squad re-render fix
+        // NOTE: WA for TreeView re-render after changing the "showCheckBoxesMode" option
+        // After this option change the whole TreeView re-render and search input loose the focus
+        case event.fullName === 'showCheckBoxesMode':
+          // NOTE: the TreeView render is async
+          // So we should focus the searchEditor only after render will be completed
+          Promise.resolve()
+            .then(() => {
+              event.component.getSearchBoxController().focus();
+            })
+            .catch(() => {});
+          break;
+        default:
+          break;
       }
-    }
+    };
+
+    const onListOptionChanged = (
+      event: ChangedOptionInfo & {
+        component: dxList;
+      },
+    ): void => {
+      if (event.fullName === 'searchValue' && shouldChangeSelectAllCheckBoxVisibility()) {
+        event.component.option('selectionMode', event.value ? 'multiple' : 'all');
+      }
+    };
 
     if (options.type === 'tree') {
       that._listComponent = that._createComponent(
@@ -316,7 +406,7 @@ export class HeaderFilterView extends Modules.View {
         TreeView,
         extend(widgetOptions, {
           showCheckBoxesMode: needShowSelectAllCheckbox ? 'selectAll' : 'normal',
-          onOptionChanged,
+          onOptionChanged: onTreeViewOptionChanged,
           keyExpr: 'id',
         }),
       );
@@ -329,12 +419,13 @@ export class HeaderFilterView extends Modules.View {
           pageLoadMode: 'scrollBottom',
           showSelectionControls: true,
           selectionMode: needShowSelectAllCheckbox ? 'all' : 'multiple',
-          onOptionChanged,
-          onSelectionChanged(e) {
-            const items = e.component.option('items');
-            const selectedItems = e.component.option('selectedItems');
+          onOptionChanged: onListOptionChanged,
+          onSelectionChanged(event) {
+            const { component: listComponent } = event;
+            const items = listComponent.option('items');
+            const selectedItems = listComponent.option('selectedItems');
 
-            if (!e.component._selectedItemsUpdating && !e.component.option('searchValue') && !options.isFilterBuilder) {
+            if (!listComponent._selectedItemsUpdating && !listComponent.option('searchValue') && !options.isFilterBuilder) {
               const filterValues = options.filterValues || [];
               const isExclude = options.filterType === 'exclude';
               if (selectedItems.length === 0 && items.length && (filterValues.length <= 1 || isExclude && filterValues.length === items.length - 1)) {
@@ -366,11 +457,11 @@ export class HeaderFilterView extends Modules.View {
               }
             });
 
-            updateListSelectAllState(e, options.filterValues);
+            updateListSelectAllState(listComponent, options.filterValues);
           },
           onContentReady(e) {
-            const { component } = e;
-            const items = component.option('items');
+            const { component: listComponent } = e;
+            const items = listComponent.option('items');
             const selectedItems: any = [];
 
             each(items, function () {
@@ -378,11 +469,13 @@ export class HeaderFilterView extends Modules.View {
                 selectedItems.push(this);
               }
             });
-            component._selectedItemsUpdating = true;
-            component.option('selectedItems', selectedItems);
-            component._selectedItemsUpdating = false;
 
-            updateListSelectAllState(e, options.filterValues);
+            listComponent._selectedItemsUpdating = true;
+            listComponent.option('selectedItems', selectedItems);
+            listComponent._selectedItemsUpdating = false;
+
+            decorateListSelectAllValueChanged(listComponent);
+            updateListSelectAllState(listComponent, options.filterValues);
           },
         }),
       );
@@ -449,9 +542,9 @@ export const headerFilterMixin = <T extends ModuleType<any>>(Base: T) => class H
 
         const indicatorLabel = (messageLocalization.format as any)('dxDataGrid-headerFilterIndicatorLabel', column.caption);
 
-        $headerFilterIndicator.attr('aria-label', indicatorLabel);
-        $headerFilterIndicator.attr('aria-haspopup', 'dialog');
-        $headerFilterIndicator.attr('role', 'button');
+        this.setAria('label', indicatorLabel, $headerFilterIndicator);
+        this.setAria('haspopup', 'dialog', $headerFilterIndicator);
+        this.setAria('role', 'button', $headerFilterIndicator);
       }
 
       return $headerFilterIndicator;

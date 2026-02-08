@@ -1,15 +1,6 @@
-$recurrence-count-number-box-right-margin: 11px;
-$recurrence-count-number-box-left-margin: 16px;
-$recurrence-until-date-box-box-margin: 28px;
-$recurrence-label-line-height-margin: 36px;
-
-$recurrence-interval-number-box-margin-top: 25px;
+$recurrence-interval-number-box-margin-bottom: 6px;
 $recurrence-radio-group-item-padding: 10px;
 $recurrence-button-group-item-padding: 8px;
-
-.dx-recurrence-repeat-end-wrapper {
-  display: flex;
-}
 
 .dx-recurrence-repeat-on,
 .dx-recurrence-numberbox-interval-wrapper {
@@ -35,11 +26,11 @@ $recurrence-button-group-item-padding: 8px;
 }
 
 .dx-recurrence-numberbox-interval-label {
-  margin-top: $recurrence-interval-number-box-margin-top;
+  margin-bottom: $recurrence-interval-number-box-margin-bottom;
 }
 
-.dx-recurrence-repeat-end-label {
-  line-height: $recurrence-label-line-height-margin;
+.dx-recurrence-numberbox-interval-wrapper .dx-box-item:last-child .dx-box-item-content {
+  justify-content: flex-end;
 }
 
 .dx-recurrence-radiogroup-repeat-type {
@@ -48,15 +39,6 @@ $recurrence-button-group-item-padding: 8px;
   .dx-item {
     padding-bottom: $recurrence-radio-group-item-padding;
   }
-}
-
-.dx-recurrence-datebox-until-date {
-  margin-left: $recurrence-until-date-box-box-margin;
-}
-
-.dx-recurrence-numberbox-repeat-count {
-  margin-left: $recurrence-count-number-box-left-margin;
-  margin-right: $recurrence-count-number-box-right-margin;
 }
 
 .dx-recurrence-button-group {

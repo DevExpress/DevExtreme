@@ -1,7 +1,6 @@
-import { createWrapper, initTestMarkup, CLASSES } from '../../helpers/scheduler/helpers.js';
+import { createWrapperFakeClock, initTestMarkup, CLASSES } from '../../helpers/scheduler/helpers.js';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
 
-import 'generic_light.css!';
 import '__internal/scheduler/m_scheduler';
 
 const { testStart, module, test } = QUnit;
@@ -107,19 +106,19 @@ module('Current Time Cell Indication Updating', {
     };
 
     basicViewsConfig.forEach(view => {
-        test(`Current Time Panel Cell indication should work correctly in simple case in ${view} view`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Current Time Panel Cell indication should work correctly in simple case in ${view} view`, async function(assert) {
+            const scheduler = await createWrapperFakeClock({
                 ...getBaseConfig({ type: view }),
-            });
+            }, this.clock);
 
             testBasicView(assert, scheduler, this.clock, 2, [3, 4]);
         });
 
-        test(`Current Time Panel Cell indication should work correctly when it starts from the first cell in ${view} view`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Current Time Panel Cell indication should work correctly when it starts from the first cell in ${view} view`, async function(assert) {
+            const scheduler = await createWrapperFakeClock({
                 ...getBaseConfig({ type: view }),
                 startDayHour: 12,
-            });
+            }, this.clock);
 
             let timePanelCells = scheduler.workSpace.getTimePanelCells();
             let firstCell = timePanelCells.eq(0);
@@ -142,10 +141,10 @@ module('Current Time Cell Indication Updating', {
     });
 
     timelineViewsConfig.forEach(({ view, cellIndices, timeDifference }) => {
-        test(`Current Header Panel Cell indication should work correctly in simple case in ${view} view`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Current Header Panel Cell indication should work correctly in simple case in ${view} view`, async function(assert) {
+            const scheduler = await createWrapperFakeClock({
                 ...getBaseConfig({ type: view }),
-            });
+            }, this.clock);
 
             const highlightedCellsCount = view === 'timelineMonth' ? 1 : 8;
             testTimelineView(assert, scheduler, this.clock, timeDifference, highlightedCellsCount, cellIndices);
@@ -153,15 +152,15 @@ module('Current Time Cell Indication Updating', {
     });
 
     basicViewsConfig.forEach(view => {
-        test(`Current Time Panel Cell indication should work correctly when horizontal grouping is used in ${view} view`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Current Time Panel Cell indication should work correctly when horizontal grouping is used in ${view} view`, async function(assert) {
+            const scheduler = await createWrapperFakeClock({
                 ...getBaseConfig({
                     type: view,
                     groupOrientation: 'horizontal',
                     groupByDate: false,
                 }),
                 groups: ['priorityId'],
-            });
+            }, this.clock);
 
             testBasicView(assert, scheduler, this.clock, 2, [3, 4]);
         });
@@ -183,30 +182,30 @@ module('Current Time Cell Indication Updating', {
         timeDifference: HOUR * 48,
         highlightedCellsCount: 2,
     }].forEach(({ view, cellIndices, timeDifference, highlightedCellsCount }) => {
-        test(`Current Header Panel Cell indication should work correctly when horizontal grouping is used in ${view} view`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Current Header Panel Cell indication should work correctly when horizontal grouping is used in ${view} view`, async function(assert) {
+            const scheduler = await createWrapperFakeClock({
                 ...getBaseConfig({
                     type: view,
                     groupOrientation: 'horizontal',
                     groupByDate: false,
                 }),
                 groups: ['priorityId'],
-            });
+            }, this.clock);
 
             testTimelineView(assert, scheduler, this.clock, timeDifference, highlightedCellsCount, cellIndices);
         });
     });
 
     timelineViewsConfig.forEach(({ view, cellIndices, timeDifference, highlightedCellsCount }) => {
-        test(`Current Header Panel Cell indication should work correctly when grouping by date is used in ${view} view`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Current Header Panel Cell indication should work correctly when grouping by date is used in ${view} view`, async function(assert) {
+            const scheduler = await createWrapperFakeClock({
                 ...getBaseConfig({
                     type: view,
                     groupOrientation: 'horizontal',
                     groupByDate: true,
                 }),
                 groups: ['priorityId'],
-            });
+            }, this.clock);
 
             testTimelineView(assert, scheduler, this.clock, timeDifference, highlightedCellsCount, cellIndices);
         });
@@ -219,39 +218,39 @@ module('Current Time Cell Indication Updating', {
         view: 'day',
         cellIndices: [3, 4, 11, 12],
     }].forEach(({ view, cellIndices }) => {
-        test(`Current Time Panel Cell indication should work correctly when vertical grouping is used in ${view} view`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Current Time Panel Cell indication should work correctly when vertical grouping is used in ${view} view`, async function(assert) {
+            const scheduler = await createWrapperFakeClock({
                 ...getBaseConfig({
                     type: view,
                     groupOrientation: 'vertical',
                 }),
                 groups: ['priorityId'],
-            });
+            }, this.clock);
 
             testBasicView(assert, scheduler, this.clock, 4, cellIndices);
         });
     });
 
     timelineViewsConfig.forEach(({ view, cellIndices, timeDifference, highlightedCellsCount }) => {
-        test(`Current Header Panel Cell indication should work correctly when vertical is used in ${view} view`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Current Header Panel Cell indication should work correctly when vertical is used in ${view} view`, async function(assert) {
+            const scheduler = await createWrapperFakeClock({
                 ...getBaseConfig({
                     type: view,
                     groupOrientation: 'vertical',
                 }),
                 groups: ['priorityId'],
-            });
+            }, this.clock);
 
             testTimelineView(assert, scheduler, this.clock, timeDifference, highlightedCellsCount, cellIndices);
         });
     });
 
     basicViewsConfig.forEach(view => {
-        test(`Current Time Panel Cell indication should be updated if it was invisible in ${view} view`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Current Time Panel Cell indication should be updated if it was invisible in ${view} view`, async function(assert) {
+            const scheduler = await createWrapperFakeClock({
                 ...getBaseConfig({ type: view }),
                 startDayHour: 13,
-            });
+            }, this.clock);
 
             let timePanelCells = scheduler.workSpace.getTimePanelCells();
             let currentTimeCells = scheduler.workSpace.getTimePanelCurrentTimeCells();
@@ -278,11 +277,11 @@ module('Current Time Cell Indication Updating', {
         cellIndex: 6,
         timeDifference: HOUR,
     }].forEach(({ view, cellIndex, timeDifference }) => {
-        test(`Current Header Panel Cell indication should work correctly in simple case in ${view} view`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Current Header Panel Cell indication should work correctly in simple case in ${view} view`, async function(assert) {
+            const scheduler = await createWrapperFakeClock({
                 ...getBaseConfig({ type: view }),
                 startDayHour: 13,
-            });
+            }, this.clock);
 
             let currentTimeCells = scheduler.workSpace.getHeaderPanelCurrentTimeCells();
 
@@ -308,8 +307,8 @@ module('Integration with Virtual Scrolling', {
         this.clock.restore();
     },
 }, () => {
-    test('Scheduler should display correct number of indicators', function(assert) {
-        const scheduler = createWrapper({
+    test('Scheduler should display correct number of indicators', async function(assert) {
+        const scheduler = await createWrapperFakeClock({
             currentDate: NOW,
             views: ['timelineDay', 'timelineWeek', 'timelineMonth'],
             currentView: 'timelineDay',
@@ -326,7 +325,7 @@ module('Integration with Virtual Scrolling', {
                 ],
             }],
             scrolling: { mode: 'virtual' },
-        });
+        }, this.clock);
 
         const actualNumberOfIndicators = scheduler.workSpace.getCurrentTimeIndicatorCount();
 
@@ -335,10 +334,10 @@ module('Integration with Virtual Scrolling', {
 });
 
 module('Common cases', () => {
-    test('Current time indicator calculates position correctly with workWeek view (T750252)', function(assert) {
+    test('Current time indicator calculates position correctly with workWeek view (T750252)', async function(assert) {
         const clock = sinon.useFakeTimers((new Date(2021, 0, 20, 20)).getTime());
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapperFakeClock({
             views: [{
                 name: '2 Work Weeks',
                 type: 'workWeek',
@@ -348,7 +347,7 @@ module('Common cases', () => {
             currentView: 'workWeek',
             currentDate: new Date(),
             height: 580,
-        });
+        }, clock);
 
         const $dateTimeIndicator = scheduler.workSpace.getCurrentTimeIndicator()[0];
         const position = { top: $dateTimeIndicator.style.top, left: $dateTimeIndicator.style.left };
@@ -358,15 +357,15 @@ module('Common cases', () => {
         clock.restore();
     });
 
-    test('Current time indicator should be visible in period between 23.59 and 24.00', function(assert) {
+    test('Current time indicator should be visible in period between 23.59 and 24.00', async function(assert) {
         const clock = sinon.useFakeTimers((new Date(2021, 0, 20, 23, 59, 58)).getTime());
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapperFakeClock({
             views: ['week'],
             currentView: 'week',
             currentDate: new Date(),
             height: 580,
-        });
+        }, clock);
 
         const currentTimeIndicator = scheduler.workSpace.getCurrentTimeIndicator();
 

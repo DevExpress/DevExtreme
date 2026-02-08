@@ -8,9 +8,9 @@ import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
-
-import { DxEvent } from '../events';
+    DxEvent,
+    PointerInteractionEvent,
+} from '../events';
 
 import dxOverlay, {
     dxOverlayAnimation,
@@ -104,14 +104,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     closeOnClick?: boolean;
     /**
      * @docid
-     * @deprecated dxToastOptions.hideOnOutsideClick
-     * @type_function_param1 event:event
-     * @default true &for(Android)
-     * @public
-     */
-    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
-    /**
-     * @docid
      * @default true
      * @public
      */
@@ -131,20 +123,20 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @default true &for(Android)
      * @public
      */
-    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    hideOnOutsideClick?: boolean | ((event: DxEvent<PointerInteractionEvent>) => boolean);
     /**
      * @docid
      * @default 'auto'
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * @docid
      * @default 568 &for(Material)
      * @default 568 &for(Fluent)
      * @public
      */
-    maxWidth?: number | string | (() => number | string);
+    maxWidth?: number | string;
     /**
      * @docid
      * @default ""
@@ -157,7 +149,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @default 344 &for(Fluent)
      * @public
      */
-    minWidth?: number | string | (() => number | string);
+    minWidth?: number | string;
     /**
      * @docid
      * @default "bottom center"
@@ -185,7 +177,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @default '100vw' &for(phones_on_Android)
      * @public
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
 }
 /**
  * @docid

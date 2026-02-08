@@ -132,6 +132,7 @@ class PopupDrag {
     e.stopPropagation();
 
     const offset = this._fitOffsetIntoAllowedRange(top, left);
+
     this._moveByOffset(offset);
     this._dragEndHandler(e);
   }

@@ -2,8 +2,10 @@ import fx from 'common/core/animation/fx';
 import dxScheduler from '__internal/scheduler/m_scheduler';
 import { DataSource } from 'common/data/data_source/data_source';
 import dateUtils from 'core/utils/date';
-import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
+import { AppointmentDataSource } from '__internal/scheduler/view_model/generate_view_model/data_provider/m_appointment_data_source';
+
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.testStart(() => {
     initTestMarkup();
@@ -31,95 +33,93 @@ const tasks = [
 
 const moduleConfig = {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
     afterEach: function() {
-        this.clock.restore();
         fx.off = false;
     }
 };
 
 QUnit.module('Scheduler markup', moduleConfig, () => {
-    QUnit.test('Scheduler should be initialized', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('Scheduler should be initialized', async function(assert) {
+        const scheduler = await createWrapper();
 
         assert.ok(scheduler.instance instanceof dxScheduler, 'Scheduler was initialized');
     });
 
-    QUnit.test('Scheduler should have a right css classes', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('Scheduler should have a right css classes', async function(assert) {
+        const scheduler = await createWrapper();
 
         assert.ok(scheduler.instance.$element().hasClass('dx-scheduler'), 'Scheduler has \'dx-scheduler\' css class');
         assert.ok(scheduler.instance.$element().hasClass('dx-widget'), 'Scheduler has \'dx-widget\' css class');
     });
 
-    QUnit.test('Scheduler should not fail when dataSource is set', function(assert) {
+    QUnit.test('Scheduler should not fail when dataSource is set', async function(assert) {
         const data = new DataSource({
             store: tasks
         });
 
-        const { instance } = createWrapper({
+        const { instance } = await createWrapper({
             dataSource: data,
             views: ['day'],
             currentView: 'day',
             currentDate: new Date(2015, 1, 9)
         });
 
-        assert.ok(instance.appointmentDataProvider instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
-        assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
+        assert.ok(instance.appointmentDataSource instanceof AppointmentDataSource, 'Task model is initialized on scheduler init');
+        assert.ok(instance.appointmentDataSource.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
-    QUnit.test('Scheduler should not fail when dataSource is set, timelineView', function(assert) {
+    QUnit.test('Scheduler should not fail when dataSource is set, timelineView', async function(assert) {
         const data = new DataSource({
             store: tasks
         });
 
-        const { instance } = createWrapper({
+        const { instance } = await createWrapper({
             dataSource: data,
             views: ['timelineDay'],
             currentView: 'timelineDay',
             currentDate: new Date(2015, 1, 9)
         });
 
-        assert.ok(instance.appointmentDataProvider instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
-        assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
+        assert.ok(instance.appointmentDataSource instanceof AppointmentDataSource, 'Task model is initialized on scheduler init');
+        assert.ok(instance.appointmentDataSource.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
-    QUnit.test('Scheduler should not fail when dataSource is set, timelineWeek', function(assert) {
+    QUnit.test('Scheduler should not fail when dataSource is set, timelineWeek', async function(assert) {
         const data = new DataSource({
             store: tasks
         });
 
-        const { instance } = createWrapper({
+        const { instance } = await createWrapper({
             dataSource: data,
             views: ['timelineWeek'],
             currentView: 'timelineWeek',
             currentDate: new Date(2015, 1, 9)
         });
 
-        assert.ok(instance.appointmentDataProvider instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
-        assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
+        assert.ok(instance.appointmentDataSource instanceof AppointmentDataSource, 'Task model is initialized on scheduler init');
+        assert.ok(instance.appointmentDataSource.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
-    QUnit.test('Scheduler should not fail when dataSource is set, agenda', function(assert) {
+    QUnit.test('Scheduler should not fail when dataSource is set, agenda', async function(assert) {
         const data = new DataSource({
             store: tasks
         });
 
-        const { instance } = createWrapper({
+        const { instance } = await createWrapper({
             dataSource: data,
             views: ['agenda'],
             currentView: 'agenda',
             currentDate: new Date(2015, 1, 9)
         });
 
-        assert.ok(instance.appointmentDataProvider instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
-        assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
+        assert.ok(instance.appointmentDataSource instanceof AppointmentDataSource, 'Task model is initialized on scheduler init');
+        assert.ok(instance.appointmentDataSource.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
-    QUnit.test('Header & work space currentDate should not contain information about hours, minutes, seconds', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('Header & work space currentDate should not contain information about hours, minutes, seconds', async function(assert) {
+        const scheduler = await createWrapper();
 
         let currentDate = scheduler.instance.option('currentDate');
         const header = scheduler.instance.getHeader();
@@ -143,25 +143,19 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
     });
 });
 
-QUnit.module('Scheduler with config', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-}, () => {
-    QUnit.test('Scheduler should not fail when crossScrollingEnabled is set', function(assert) {
-        const scheduler = createWrapper();
+QUnit.module('Scheduler with config', () => {
+    QUnit.test('Scheduler should not fail when crossScrollingEnabled is set', async function(assert) {
+        const scheduler = await createWrapper();
 
         assert.strictEqual(scheduler.instance.getWorkSpace().option('crossScrollingEnabled'), false, 'option is OK');
 
         scheduler.instance.option('crossScrollingEnabled', true);
+        await waitAsync(10);
         assert.strictEqual(scheduler.instance.getWorkSpace().option('crossScrollingEnabled'), true, 'option is OK');
     });
 
-    QUnit.test('Scheduler should not fail when crossScrollingEnabled is set, agenda view', function(assert) {
-        createWrapper({
+    QUnit.test('Scheduler should not fail when crossScrollingEnabled is set, agenda view', async function(assert) {
+        await createWrapper({
             crossScrollingEnabled: true,
             currentView: 'agenda'
         });

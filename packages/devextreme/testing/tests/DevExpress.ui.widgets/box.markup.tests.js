@@ -2,8 +2,6 @@ import $ from 'jquery';
 import Box from 'ui/box';
 import registerComponent from 'core/component_registrator';
 
-import 'generic_light.css!';
-
 import 'ui/scroll_view/ui.scrollable';
 
 QUnit.testStart(function() {
@@ -104,7 +102,7 @@ QUnit.module('template rendering', () => {
             ]
         });
 
-        assert.equal($.trim($box.text()), 'test', 'inner box rendered with template');
+        assert.equal($box.text().trim(), 'test', 'inner box rendered with template');
     });
 
     QUnit.test('innerBox with item renderer', function(assert) {
@@ -119,13 +117,13 @@ QUnit.module('template rendering', () => {
             itemTemplate: (item) => 'test' + item.test()
         });
 
-        assert.equal($.trim($box.text()), 'test1test2', 'inner box rendered');
+        assert.equal($box.text().trim(), 'test1test2', 'inner box rendered');
     });
 
     QUnit.test('innerBox with nested box item', function(assert) {
         const $box = $('#nestedBox').dxBox({});
 
-        assert.equal($.trim($box.text()), 'Box1', 'inner box rendered');
+        assert.equal($box.text().trim(), 'Box1', 'inner box rendered');
     });
 });
 

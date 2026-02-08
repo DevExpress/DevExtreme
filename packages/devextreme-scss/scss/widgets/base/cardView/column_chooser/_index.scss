@@ -1,0 +1,24 @@
+@use './variables' as *;
+
+.dx-cardview-column-chooser-list {
+  .dx-empty-message {
+    text-align: center;
+    left: 0;
+    right: 0;
+    bottom: 50%;
+    position: absolute;
+    color: $cardview-columnchooser--empty__message-color;
+    padding: 0 $cardview-column-chooser--empty__message-horizontal-padding;
+  }
+}
+
+.dx-cardview-column-chooser-plain {
+  .dx-treeview-expander-icon-stub {
+    display: none;
+  }
+
+  .dx-treeview-select-all-item {
+    padding-left: $cardview-column-chooser__select-all-item-horizontal-padding;
+    padding-right: $cardview-column-chooser__select-all-item-horizontal-padding;
+  }
+}

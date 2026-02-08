@@ -4,7 +4,7 @@ export interface BaseWidgetProps {
   activeStateEnabled?: boolean;
   disabled?: boolean ;
   focusStateEnabled?: boolean;
-  height?: string | number | (() => (string | number));
+  height?: string | number;
   hint?: string;
   hoverStateEnabled?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,7 +14,7 @@ export interface BaseWidgetProps {
   rtlEnabled?: boolean;
   tabIndex?: number;
   visible?: boolean;
-  width?: string | number | (() => (string | number));
+  width?: string | number;
 }
 
 export const BaseWidgetDefaultProps: BaseWidgetProps = {

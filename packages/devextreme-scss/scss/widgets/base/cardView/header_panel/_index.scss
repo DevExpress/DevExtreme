@@ -1,0 +1,104 @@
+
+@use './item';
+@use './variables' as *;
+
+/*
+  NOTE: Maximal space needed:
+  2px maximal right header item padding + 4px maximal dxSortable placeholder (drop indicator) width
+  We can increase this number up to the CardView root padding without issues
+*/
+$sortable-side-offset: 6px;
+
+.dx-cardview-header-item-sorting {
+  display: flex;
+}
+
+.dx-cardview-headers {
+  margin: $cardview-header-panel-vertical-margin 0;
+}
+
+.dx-cardview-sortable {
+  position: relative;
+  overflow: visible;
+
+  /*
+    NOTE: We need negative margin here for dxSortable indicator
+    when placeholder position is first or last item.
+    Because it shown outside the container
+  */
+  margin: 0 (-$sortable-side-offset);
+
+  .dx-cardview-dropzone {
+    width: calc(100% - (2 * $sortable-side-offset));
+    height: $cardview-header-panel__dropzone-height;
+    margin: 0 $sortable-side-offset;
+    background-color: $cardview-header-panel__dropzone-bg-color;
+    text-align: center;
+    position: absolute;
+    top: $cardview-header-panel__dropzone-top;
+    left: 0;
+    border-width: $cardview-header-panel__dropzone-border-width;
+    border-style: dashed;
+    border-color: $cardview-header-panel__dropzone-border-color;
+    border-radius: $cardview-header-panel__dropzone-border-radius;
+    pointer-events: none;
+    opacity: 0.0;
+    transition: opacity 0.3s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    .dx-icon {
+      color: $cardview-header-panel__dropzone__icon-color;
+    }
+
+    span {
+      color: $cardview-header-panel__dropzone-text-color;
+    }
+  }
+
+  .dx-cardview-dropzone-visible {
+    opacity: 1.0;
+    pointer-events: auto;
+  }
+}
+
+.dx-cardview-headerpanel-text-empty {
+  line-height: $cardview-header-panel--empty-line-height;
+}
+
+.dx-cardview-headerpanel-content {
+  display: flex;
+
+  /*
+    NOTE: We compensate negative margin from dxSortable here
+    Please note, that header-item-container paddings taken into account here
+ */
+  &--with-header-items {
+    margin: 0 ($sortable-side-offset - $cardview-header-item__right-padding) 0 ($sortable-side-offset - $cardview-header-item__left-padding);
+  }
+
+  &--empty {
+    margin: 0 $sortable-side-offset;
+  }
+}
+
+/*
+  NOTE: This paddings needed for align the dxSortable placeholder (drop indicator)
+  in the middle between elements
+ */
+.dx-cardview-header-item-container {
+  min-width: fit-content;
+  padding: 0 $cardview-header-item__right-padding 0 $cardview-header-item__left-padding;
+
+  &:first-child {
+    padding: 0 $cardview-header-item__right-padding 0 $cardview-header-item__left-padding;
+  }
+}
+
+.dx-cardview-header-item-sort-indicator {
+  border: $cardview-header-item__sort-indicator__border-size solid $cardview-header-item__sort-indicator__border-color;
+  border-radius: $cardview-header-item__sort-indicator__border-radius;
+}
+

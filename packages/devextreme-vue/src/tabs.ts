@@ -84,7 +84,7 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     iconPosition: String as PropType<TabsIconPosition>,
@@ -117,7 +117,7 @@ const componentConfig = {
     stylingMode: String as PropType<TabsStyle>,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

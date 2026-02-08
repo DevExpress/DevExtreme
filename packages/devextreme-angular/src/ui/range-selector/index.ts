@@ -18,13 +18,15 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList
 } from '@angular/core';
 
 
 import DataSource from 'devextreme/data/data_source';
 import * as CommonChartTypes from 'devextreme/common/charts';
-import { BackgroundImageLocation, ValueChangedCallMode, ChartAxisScale, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, AxisScale } from 'devextreme/viz/range_selector';
+import { BackgroundImageLocation, ChartAxisScale, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, AxisScale } from 'devextreme/viz/range_selector';
 import { SliderValueChangeMode, ExportFormat, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 import { dxChartCommonSeriesSettings } from 'devextreme/viz/chart';
 import { Palette, PaletteExtensionMode, ChartsDataType, Font, TimeInterval, ScaleBreak, ScaleBreakLineStyle, DiscreteAxisDivisionMode, LabelOverlap, VisualRangeUpdateMode, Theme, TextOverflow, WordWrap } from 'devextreme/common/charts';
@@ -47,7 +49,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoBackgroundModule } from 'devextreme-angular/ui/nested';
@@ -181,8 +184,10 @@ import { DxoRangeSelectorValueModule } from 'devextreme-angular/ui/range-selecto
 import { DxoRangeSelectorValueAxisModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorValueErrorBarModule } from 'devextreme-angular/ui/range-selector/nested';
 import { DxoRangeSelectorWidthModule } from 'devextreme-angular/ui/range-selector/nested';
-
-
+import { 
+           PROPERTY_TOKEN_breaks,
+           PROPERTY_TOKEN_series,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -197,9 +202,11 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-range-selector',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -209,6 +216,17 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_breaks)
+    set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('breaks', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_series)
+    set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('series', value);
+    }
+
     instance: DxRangeSelector = null;
 
     /**
@@ -229,10 +247,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get behavior(): { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: ValueChangedCallMode, manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: SliderValueChangeMode } {
+    get behavior(): { allowSlidersSwap?: boolean, animationEnabled?: boolean, manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: SliderValueChangeMode } {
         return this._getOption('behavior');
     }
-    set behavior(value: { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: ValueChangedCallMode, manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: SliderValueChangeMode }) {
+    set behavior(value: { allowSlidersSwap?: boolean, animationEnabled?: boolean, manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: SliderValueChangeMode }) {
         this._setOption('behavior', value);
     }
 
@@ -411,10 +429,10 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get scale(): { aggregateByCategory?: boolean, aggregationGroupWidth?: number | undefined, aggregationInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> } {
+    get scale(): { aggregationGroupWidth?: number | undefined, aggregationInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> } {
         return this._getOption('scale');
     }
-    set scale(value: { aggregateByCategory?: boolean, aggregationGroupWidth?: number | undefined, aggregationInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> }) {
+    set scale(value: { aggregationGroupWidth?: number | undefined, aggregationInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> }) {
         this._setOption('scale', value);
     }
 
@@ -619,7 +637,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() behaviorChange: EventEmitter<{ allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: ValueChangedCallMode, manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: SliderValueChangeMode }>;
+    @Output() behaviorChange: EventEmitter<{ allowSlidersSwap?: boolean, animationEnabled?: boolean, manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean, valueChangeMode?: SliderValueChangeMode }>;
 
     /**
     
@@ -717,7 +735,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() scaleChange: EventEmitter<{ aggregateByCategory?: boolean, aggregationGroupWidth?: number | undefined, aggregationInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> }>;
+    @Output() scaleChange: EventEmitter<{ aggregationGroupWidth?: number | undefined, aggregationInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, allowDecimals?: boolean | undefined, breaks?: Array<ScaleBreak> | { endValue?: Date | number | string | undefined, startValue?: Date | number | string | undefined }[], breakStyle?: { color?: string, line?: ScaleBreakLineStyle, width?: number }, categories?: Array<Date | number | string>, discreteAxisDivisionMode?: DiscreteAxisDivisionMode, endOnTick?: boolean, endValue?: Date | number | string | undefined, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string), font?: Font, format?: Format | undefined, overlappingBehavior?: LabelOverlap, topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string), format?: Format | undefined }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number | undefined, minorTickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, minRange?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, placeholderHeight?: number | undefined, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: Date | number | string | undefined, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | TimeInterval | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number }, type?: AxisScale | undefined, valueType?: ChartsDataType | undefined, workdaysOnly?: boolean, workWeek?: Array<number> }>;
 
     /**
     
@@ -793,10 +811,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
@@ -908,6 +922,7 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
 
 @NgModule({
   imports: [
+    DxRangeSelectorComponent,
     DxoBackgroundModule,
     DxoImageModule,
     DxoBehaviorModule,
@@ -1040,9 +1055,6 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
     DxoRangeSelectorWidthModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxRangeSelectorComponent
   ],
   exports: [
     DxRangeSelectorComponent,
@@ -1180,6 +1192,8 @@ export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, 
   ]
 })
 export class DxRangeSelectorModule { }
+
+export * from 'devextreme-angular/ui/range-selector/nested';
 
 import type * as DxRangeSelectorTypes from "devextreme/viz/range_selector_types";
 export { DxRangeSelectorTypes };

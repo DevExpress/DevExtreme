@@ -9,7 +9,7 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, PointClickEvent, SeriesClickEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, dxChartAnnotationConfig, AggregatedPointsPosition, ChartLabelDisplayMode, FinancialChartReductionLevel, chartPointObject, ChartTooltipLocation, ChartZoomAndPanMode, EventKeyModifier } from "devextreme/viz/chart";
-import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, TimeInterval, ChartsDataType, ScaleBreak, ScaleBreakLineStyle, RelativePosition, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, ChartsAxisLabelOverlap, AxisScaleType, VisualRangeUpdateMode, ChartsColor, SeriesHoverMode, HatchDirection, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType, LegendItem, LegendHoverMode } from "devextreme/common/charts";
+import type { AnimationEaseMode, DashStyle, Font as ChartsFont, TextOverflow, AnnotationType, WordWrap, TimeInterval, ChartsDataType, ScaleBreak, ScaleBreakLineStyle, RelativePosition, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, ChartsAxisLabelOverlap, AxisScaleType, VisualRangeUpdateMode, ChartsColor, SeriesHoverMode, HatchDirection, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType, LegendItem, LegendHoverMode, ValueAxisVisualRangeUpdateMode } from "devextreme/common/charts";
 import type { template, HorizontalAlignment, VerticalAlignment, Format as CommonFormat, Position, VerticalEdge, ExportFormat, Orientation } from "devextreme/common";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { ChartSeries } from "devextreme/viz/common";
@@ -63,9 +63,9 @@ const Chart = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
-      const subscribableOptions = useMemo(() => (["argumentAxis","argumentAxis.categories","argumentAxis.visualRange","loadingIndicator","loadingIndicator.show","valueAxis","valueAxis.categories","valueAxis.visualRange"]), []);
+      const subscribableOptions = useMemo(() => (["argumentAxis","argumentAxis.categories","argumentAxis.visualRange","loadingIndicator","loadingIndicator.show","valueAxis","valueAxis.categories","valueAxis.visualRange","argumentAxis.visualRange.endValue","valueAxis.visualRange.endValue","argumentAxis.visualRange.startValue","valueAxis.visualRange.startValue","argumentAxis.wholeRange.endValue","valueAxis.wholeRange.endValue","argumentAxis.wholeRange.startValue","valueAxis.wholeRange.startValue"]), []);
       const independentEvents = useMemo(() => (["onArgumentAxisClick","onDisposing","onDone","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onLegendClick","onPointClick","onSeriesClick","onTooltipHidden","onTooltipShown","onZoomEnd","onZoomStart"]), []);
 
       const defaults = useMemo(() => ({
@@ -343,7 +343,6 @@ const AnnotationImage = Object.assign<typeof _componentAnnotationImage, NestedCo
 // owners:
 // Chart
 type IArgumentAxisProps = React.PropsWithChildren<{
-  aggregateByCategory?: boolean;
   aggregatedPointsPosition?: AggregatedPointsPosition;
   aggregationGroupWidth?: number | undefined;
   aggregationInterval?: number | Record<string, any> | TimeInterval | {
@@ -3692,7 +3691,7 @@ type IValueAxisProps = React.PropsWithChildren<{
   valueType?: ChartsDataType | undefined;
   visible?: boolean;
   visualRange?: Array<Date | number | string> | CommonChartTypes.VisualRange;
-  visualRangeUpdateMode?: VisualRangeUpdateMode;
+  visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode;
   wholeRange?: Array<Date | number | string> | undefined | CommonChartTypes.VisualRange;
   width?: number;
   defaultCategories?: Array<Date | number | string>;

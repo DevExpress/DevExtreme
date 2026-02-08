@@ -29,8 +29,8 @@ export default {
         width: 2,
         color: WHITE,
       },
-      customizeText(info: { title: string }): string {
-        return info.title;
+      customizeText(info: { label: string }): string {
+        return info.label;
       },
       shadow: {
         opacity: 0.2,

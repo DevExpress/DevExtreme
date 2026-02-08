@@ -17,7 +17,8 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../common/core/events';
+    PointerInteractionEvent,
+} from '../events';
 
 import CollectionWidget, {
     SelectionChangeInfo,
@@ -49,6 +50,8 @@ export interface TabPanelItemInfo<TItem extends ItemLike> {
     readonly itemData?: TItem;
     /** @docid */
     readonly itemElement?: DxElement;
+    /** @docid */
+    readonly itemIndex: number;
 }
 
 /**
@@ -89,7 +92,7 @@ export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEve
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_tab_panel_ItemHoldEvent
@@ -97,7 +100,7 @@ export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = Nat
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_tab_panel_ItemRenderedEvent
@@ -145,7 +148,7 @@ export type TitleClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEv
  * @type object
  * @inherits NativeEventInfo,TabPanelItemInfo
  */
-export type TitleHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & TabPanelItemInfo<TItem>;
+export type TitleHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>, PointerInteractionEvent> & TabPanelItemInfo<TItem>;
 
 /**
  * @docid _ui_tab_panel_TitleRenderedEvent
@@ -208,6 +211,11 @@ export interface dxTabPanelOptions<
      * @public
      */
     items?: Array<TItem>;
+    /**
+     * @docid
+     * @public
+     */
+    keyExpr?: string | Function;
     /**
      * @docid
      * @default null

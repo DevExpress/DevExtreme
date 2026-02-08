@@ -2,15 +2,14 @@ import $ from 'jquery';
 import renderer from 'core/renderer';
 import { noop } from 'core/utils/common';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
-import animationFrame from 'common/core/animation/frame';
+import animationFrame from '__internal/common/core/animation/frameModule';
 import devices from '__internal/core/m_devices';
 import eventsEngine from 'common/core/events/core/events_engine';
-import messageLocalization from 'common/core/localization/message';
 import themes from 'ui/themes';
 import pointerMock from '../../helpers/pointerMock.js';
 
-import 'generic_light.css!';
-import ScrollView from 'ui/scroll_view';
+import 'fluent_blue_light.css!';
+import 'ui/scroll_view';
 
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
@@ -36,6 +35,7 @@ const SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-
 
 const PULLDOWN_HEIGHT = 160;
 const SCROLL_INIT_EVENT = 'dxscrollinit';
+const DX_STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
 const getScrollOffset = function($scrollView) {
     const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
@@ -48,8 +48,6 @@ const getScrollOffset = function($scrollView) {
     };
 };
 
-const isRenovatedScrollView = !!ScrollView.IS_RENOVATED_WIDGET;
-
 themes.setDefaultTimeout(0);
 
 devices.current('iPhone');
@@ -57,15 +55,14 @@ devices.current('iPhone');
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-        this._originalRequestAnimationFrame = animationFrame.requestAnimationFrame;
-        animationFrame.requestAnimationFrame = function(callback) {
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
             callback();
-        };
+        });
         return new Promise((resolve) => themes.initialized(resolve));
     },
     afterEach: function() {
         this.clock.restore();
-        animationFrame.requestAnimationFrame = this._originalRequestAnimationFrame;
+        this.requestAnimationFrameStub.restore();
     }
 };
 
@@ -144,10 +141,10 @@ QUnit.module('render', moduleConfig, () => {
         const pullDownText = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_TEXT_CLASS);
         const scrollBottomText = $scrollView.find('.' + SCROLLVIEW_REACHBOTTOM_TEXT_CLASS);
 
-        assert.equal(pullDownText.children().eq(0).text(), messageLocalization.format('dxScrollView-pullingDownText'));
-        assert.equal(pullDownText.children().eq(1).text(), messageLocalization.format('dxScrollView-pulledDownText'));
-        assert.equal(pullDownText.children().eq(2).text(), messageLocalization.format('dxScrollView-refreshingText'));
-        assert.equal(scrollBottomText.text(), 'Loading...');
+        assert.equal(pullDownText.children().eq(0).text(), '');
+        assert.equal(pullDownText.children().eq(1).text(), '');
+        assert.equal(pullDownText.children().eq(2).text(), '');
+        assert.equal(scrollBottomText.text(), '');
     });
 
     QUnit.test('scrollView scrollbottom markup', function(assert) {
@@ -420,7 +417,7 @@ QUnit.module('actions', moduleConfig, () => {
 
         $scrollView.dxScrollView('option', 'onPullDown', noop);
 
-        assert.ok($scrollView.find('.' + SCROLLVIEW_PULLDOWN_CLASS).is(':visible'), 'pull down element is visible');
+        assert.strictEqual($scrollView.find(`.${SCROLLVIEW_PULLDOWN_CLASS}`).eq(0).hasClass(DX_STATE_INVISIBLE_CLASS), false, 'pull down element is visible');
     });
 
     QUnit.test('pullDown behavior turns off when pullDown is undefined', function(assert) {
@@ -458,8 +455,8 @@ QUnit.module('actions', moduleConfig, () => {
         const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
-        assert.equal(location.top, isRenovatedScrollView ? -($topPocket.height() - offset) : 0, 'translate top position is right');
-        assert.equal($container.scrollTop(), isRenovatedScrollView ? 0 : $topPocket.height() - offset, 'scroll top position is right');
+        assert.equal(location.top, 0, 'translate top position is right');
+        assert.equal($container.scrollTop(), $topPocket.height() - offset, 'scroll top position is right');
     });
 
     QUnit.test('onReachBottom action', function(assert) {
@@ -1009,12 +1006,7 @@ QUnit.module('dynamic', moduleConfig, () => {
             },
             onEnd: function() {
                 const location = getScrollOffset($scrollView);
-                if(isRenovatedScrollView) {
-                    const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
-                    assert.roughEqual(location.top, $container.height() - $content.height() + $bottomPocket.height(), 1, 'scrollview bounced');
-                } else {
-                    assert.roughEqual(location.top, $container.height() - $content.height(), 1, 'scrollview bounced');
-                }
+                assert.roughEqual(location.top, $container.height() - $content.height(), 1, 'scrollview bounced');
             }
         });
 
@@ -1286,7 +1278,7 @@ QUnit.module('api', moduleConfig, () => {
 
         this.clock.tick(10);
 
-        assert.equal(onUpdatedHandler.callCount, isRenovatedScrollView ? 0 : 1, 'update fired');
+        assert.equal(onUpdatedHandler.callCount, 1, 'update fired');
     });
 
     QUnit.test('release calls update', function(assert) {
@@ -1725,11 +1717,6 @@ QUnit.module('native pullDown strategy', {
     });
 
     QUnit.test('pulled down adds ready state', function(assert) {
-        if(isRenovatedScrollView) {
-            assert.ok(true);
-            return;
-        }
-
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: true,
             refreshStrategy: 'pullDown',
@@ -1755,11 +1742,6 @@ QUnit.module('native pullDown strategy', {
     });
 
     QUnit.test('onPullDown action', function(assert) {
-        if(isRenovatedScrollView) {
-            assert.ok(true);
-            return;
-        }
-
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: true,
             refreshStrategy: 'pullDown',
@@ -1861,7 +1843,7 @@ QUnit.module('native pullDown strategy', {
 
         $scrollView.dxScrollView('release');
         this.clock.tick(400);
-        assert.equal(onUpdatedHandler.callCount, isRenovatedScrollView ? 0 : 1, 'update fired');
+        assert.equal(onUpdatedHandler.callCount, 1, 'update fired');
     });
 
     QUnit.test('scroll fires with correct arguments', function(assert) {
@@ -2175,7 +2157,7 @@ QUnit.module('native swipeDown strategy', {
 
         $scrollView.dxScrollView('instance').release();
         this.clock.tick(800);
-        assert.equal(onUpdatedHandler.callCount, isRenovatedScrollView ? 0 : 1, 'update fired');
+        assert.equal(onUpdatedHandler.callCount, 1, 'update fired');
     });
 
     QUnit.test('scroll fires with correct arguments', function(assert) {
@@ -2252,93 +2234,25 @@ QUnit.module('default value', {
         devices.current(this.originalCurrentDevice);
     }
 }, () => {
-    if(!isRenovatedScrollView) {
-        QUnit.test('refreshStrategy for ios set by real device', function(assert) {
-            devices.real({ platform: 'ios' });
-            devices.current({ platform: 'android' });
+    QUnit.test('refreshStrategy for ios set by real device', function(assert) {
+        devices.real({ platform: 'ios' });
+        devices.current({ platform: 'android' });
 
-            const scrollView = $('#scrollView').dxScrollView().dxScrollView('instance');
-            assert.equal(scrollView.option('refreshStrategy'), 'pullDown');
-        });
+        const scrollView = $('#scrollView').dxScrollView().dxScrollView('instance');
+        assert.equal(scrollView.option('refreshStrategy'), 'pullDown');
+    });
 
-        QUnit.test('refreshStrategy for android set by real device', function(assert) {
-            devices.real({ platform: 'android', version: '4' });
-            devices.current({ platform: 'ios' });
+    QUnit.test('refreshStrategy for android set by real device', function(assert) {
+        devices.real({ platform: 'android', version: '4' });
+        devices.current({ platform: 'ios' });
 
-            const scrollView = $('#scrollView').dxScrollView().dxScrollView('instance');
+        const scrollView = $('#scrollView').dxScrollView().dxScrollView('instance');
 
-            assert.equal(scrollView.option('refreshStrategy'), 'swipeDown');
-        });
-    }
+        assert.equal(scrollView.option('refreshStrategy'), 'swipeDown');
+    });
 });
 
 QUnit.module('pullDown, reachBottom events', moduleConfig, () => {
-    if(isRenovatedScrollView) {
-        [true, false].forEach((useNative) => {
-            QUnit.test(`useNative: ${useNative}, pullDownEnabled, reachBottomEnabled prop value after initialization`, function(assert) {
-                const scrollView = $('#scrollView').dxScrollView({ useNative }).dxScrollView('instance');
-
-                assert.equal(scrollView.option('pullDownEnabled'), false, 'scrollview.pullDownEnabled');
-                assert.equal(scrollView.option('reachBottomEnabled'), false, 'scrollview.reachBottomEnabled');
-            });
-
-            QUnit.test(`useNative: ${useNative}, pullDownEnabled, reachBottomEnabled prop value after initialization`, function(assert) {
-                const scrollView = $('#scrollView').dxScrollView({
-                    useNative,
-                    onReachBottom: () => {},
-                    onPullDown: () => {},
-                }).dxScrollView('instance');
-
-                assert.equal(scrollView.option('pullDownEnabled'), true, 'scrollview.pullDownEnabled');
-                assert.equal(scrollView.option('reachBottomEnabled'), true, 'scrollview.reachBottomEnabled');
-            });
-
-            QUnit.test(`useNative: ${useNative}, pullDownEnabled prop value after change via option() method`, function(assert) {
-                const scrollView = $('#scrollView').dxScrollView({ useNative }).dxScrollView('instance');
-
-                assert.equal(scrollView.option('pullDownEnabled'), false, 'scrollview.pullDownEnabled');
-
-                scrollView.option('onPullDown', () => {});
-                assert.equal(scrollView.option('pullDownEnabled'), true, 'scrollview.pullDownEnabled');
-
-                scrollView.option('onPullDown', null);
-                assert.equal(scrollView.option('pullDownEnabled'), false, 'scrollview.pullDownEnabled');
-            });
-
-            QUnit.test(`useNative: ${useNative}, reachBottomEnabled prop value after change via option() method`, function(assert) {
-                const scrollView = $('#scrollView').dxScrollView({ useNative }).dxScrollView('instance');
-
-                assert.equal(scrollView.option('reachBottomEnabled'), false, 'scrollview.reachBottomEnabled');
-
-                scrollView.option('onReachBottom', () => {});
-                assert.equal(scrollView.option('reachBottomEnabled'), true, 'scrollview.reachBottomEnabled');
-
-                scrollView.option('onReachBottom', null);
-                assert.equal(scrollView.option('reachBottomEnabled'), false, 'scrollview.reachBottomEnabled');
-            });
-
-            QUnit.test(`useNative: ${useNative}, pullDownEnabled prop value after change via on() method`, function(assert) {
-                const scrollView = $('#scrollView').dxScrollView({ useNative }).dxScrollView('instance');
-
-                assert.equal(scrollView.option('pullDownEnabled'), false, 'scrollview.pullDownEnabled');
-
-                const handler = () => {};
-                scrollView.on('pullDown', handler);
-                assert.equal(scrollView.option('pullDownEnabled'), true, 'scrollview.pullDownEnabled');
-            });
-
-            QUnit.test(`useNative: ${useNative}, reachBottomEnabled prop value after change via on() method`, function(assert) {
-                const scrollView = $('#scrollView').dxScrollView({ useNative }).dxScrollView('instance');
-
-                assert.equal(scrollView.option('reachBottomEnabled'), false, 'scrollview.reachBottomEnabled');
-
-                const handler = () => {};
-                scrollView.on('reachBottom', handler);
-                assert.equal(scrollView.option('reachBottomEnabled'), true, 'scrollview.reachBottomEnabled');
-            });
-        });
-    }
-
     QUnit.test('topPocket visibility depends on pullDown event', function(assert) {
         const $scrollView = $('#scrollView').dxScrollView({ useNative: false });
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_PULLDOWN_CLASS);
@@ -2384,11 +2298,6 @@ QUnit.module('pullDown, reachBottom events', moduleConfig, () => {
     });
 
     ['config', 'onInitialized'].forEach(assignMethod => {
-        if(isRenovatedScrollView && assignMethod === 'onInitialized') {
-            // onInitialized function used to save the UI component instance
-            return;
-        }
-
         QUnit.test('Check pullDown event handler - ' + assignMethod, function(assert) {
             const config = {};
             const pullDownHandler = sinon.stub();

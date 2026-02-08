@@ -269,13 +269,13 @@ QUnit.module('regressions', {
 }, () => {
     test('B231277', function(assert) {
         this.instance.option('items', [{ location: 'center' }]);
-        assert.equal($.trim(this.element.text()), '');
+        assert.equal(this.element.text().trim(), '');
 
         this.instance.option('items', [{ location: 'center', text: undefined }]);
-        assert.equal($.trim(this.element.text()), '');
+        assert.equal(this.element.text().trim(), '');
 
         this.instance.option('items', [{ location: 'center', text: null }]);
-        assert.equal($.trim(this.element.text()), '');
+        assert.equal(this.element.text().trim(), '');
     });
 });
 
@@ -352,19 +352,19 @@ QUnit.module('default template', () => {
     test('template should be rendered correctly with boolean', function(assert) {
         const $content = prepareItemTest(true);
 
-        assert.equal($.trim($content.text()), 'true');
+        assert.equal($content.text().trim(), 'true');
     });
 
     test('template should be rendered correctly with number', function(assert) {
         const $content = prepareItemTest(1);
 
-        assert.equal($.trim($content.text()), '1');
+        assert.equal($content.text().trim(), '1');
     });
 
     test('template should be rendered correctly with object that contains the "text" property', function(assert) {
         const $content = prepareItemTest({ text: 'custom' });
 
-        assert.equal($.trim($content.text()), 'custom');
+        assert.equal($content.text().trim(), 'custom');
     });
 
     test('template should be rendered correctly with html', function(assert) {
@@ -409,7 +409,7 @@ QUnit.module('default template', () => {
 
         const button = $content.filter('.dx-button');
         assert.equal(button.length, 1);
-        assert.equal($.trim(button.text()), 'test');
+        assert.equal(button.text().trim(), 'test');
     });
 
     test('template should be rendered correctly with dxtabs', function(assert) {
@@ -419,7 +419,7 @@ QUnit.module('default template', () => {
 
         assert.strictEqual(tabs.length, 1);
         assert.strictEqual(tabs.find('.dx-tab').length, 1);
-        assert.strictEqual($.trim(tabs.text()), 'testtest');
+        assert.strictEqual(tabs.text().trim(), 'testtest');
     });
 
     test('template should be rendered correctly with tabs', function(assert) {
@@ -429,6 +429,6 @@ QUnit.module('default template', () => {
 
         assert.strictEqual(tabs.length, 1);
         assert.strictEqual(tabs.find('.dx-tab').length, 1);
-        assert.strictEqual($.trim(tabs.text()), 'testtest');
+        assert.strictEqual(tabs.text().trim(), 'testtest');
     });
 });

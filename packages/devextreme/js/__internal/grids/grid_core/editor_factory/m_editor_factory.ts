@@ -2,7 +2,6 @@
 import positionUtils from '@js/common/core/animation/position';
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
 import domAdapter from '@js/core/dom_adapter';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -15,6 +14,7 @@ import {
   getOuterWidth, setOuterHeight, setOuterWidth,
 } from '@js/core/utils/size';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
@@ -40,7 +40,7 @@ const CONTENT_CLASS = 'content';
 const FOCUSED_ELEMENT_CLASS = 'dx-focused';
 const ROW_CLASS = 'dx-row';
 const MODULE_NAMESPACE = 'dxDataGridEditorFactory';
-const UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, 'focusin', clickEventName].join(' '), MODULE_NAMESPACE);
+const UPDATE_FOCUS_EVENTS = addNamespace([clickEventName, 'focusin'].join(' '), MODULE_NAMESPACE);
 const DX_HIDDEN = 'dx-hidden';
 
 interface EditorFactoryMixinType {
@@ -50,7 +50,7 @@ interface EditorFactoryMixinType {
 
 }
 
-const ViewControllerWithMixin: ModuleType<ViewController & EditorFactoryMixinType> = EditorFactoryMixin(modules.ViewController) as any;
+const ViewControllerWithMixin: ModuleType<ViewController & EditorFactoryMixinType> = EditorFactoryMixin(modules.ViewController);
 
 export class EditorFactory extends ViewControllerWithMixin {
   private _isFocusOverlay: any;
@@ -79,6 +79,8 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   protected _validatingController!: ValidatingController;
 
+  protected _columnHeadersView!: ColumnHeadersView;
+
   private _subscribedContainerRoot!: Node;
 
   public init() {
@@ -90,6 +92,7 @@ export class EditorFactory extends ViewControllerWithMixin {
     this._keyboardNavigationController = this.getController('keyboardNavigation');
     this._columnsController = this.getController('columns');
     this._validatingController = this.getController('validating');
+    this._columnHeadersView = this.getView('columnHeadersView');
     this._rowsView = this.getView('rowsView');
 
     this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));

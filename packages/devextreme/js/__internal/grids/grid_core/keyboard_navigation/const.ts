@@ -52,3 +52,28 @@ export const FOCUS_TYPE_CELL = 'cell';
 export const COLUMN_HEADERS_VIEW = 'columnHeadersView';
 export const ROWS_VIEW = 'rowsView';
 export const FUNCTIONAL_KEYS = ['shift', 'control', 'alt'];
+export const DRAG_COLUMN_NAME = 'drag';
+
+export enum Direction {
+  Next = 'next',
+  Previous = 'previous',
+}
+
+export enum ViewName {
+  Group = 'group',
+  Headers = 'headers',
+}
+
+export const KEY_CODES = {
+  G: 71,
+};
+
+export interface FocusedCellPosition {
+  columnIndex: number;
+  rowIndex: number;
+}
+
+export interface ScrollOffset {
+  left?: number;
+  top?: number;
+}

@@ -1,5 +1,3 @@
-import 'generic_light.css!';
-import fx from 'common/core/animation/fx';
 import { createWrapper, initTestMarkup, CLASSES, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 
 const { test, module, testStart } = QUnit;
@@ -8,16 +6,7 @@ const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
 
 testStart(() => initTestMarkup());
 
-module('Cells Selection', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-        fx.off = true;
-    },
-    afterEach: function() {
-        this.clock.restore();
-        fx.off = false;
-    },
-}, () => {
+module('Cells Selection', () => {
     if(isDesktopEnvironment()) {
         ['standard', 'virtual'].forEach((scrollingMode) => {
             [{
@@ -45,8 +34,8 @@ module('Cells Selection', {
                 startCell, endCell, intermediateCells,
                 selectedCellsAmount, cellFromAnotherGroup, view,
             }) => {
-                test(`Mouse Multiselection should work correctly with ${view} when it is grouped by date when scrolling is ${scrollingMode}`, function(assert) {
-                    const scheduler = createWrapper({
+                test(`Mouse Multiselection should work correctly with ${view} when it is grouped by date when scrolling is ${scrollingMode}`, async function(assert) {
+                    const scheduler = await createWrapper({
                         views: [{
                             type: view,
                             groupOrientation: 'horizontal',
@@ -97,8 +86,8 @@ module('Cells Selection', {
             });
         });
 
-        test('Header should not rerender while selection', function(assert) {
-            const scheduler = createWrapper({
+        test('Header should not rerender while selection', async function(assert) {
+            const scheduler = await createWrapper({
                 views: ['week'],
                 currentView: 'week',
                 currentDate: new Date(2021, 0, 11),

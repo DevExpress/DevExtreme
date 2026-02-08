@@ -1,5 +1,5 @@
 import React from 'react';
-import 'devextreme/data/odata/store';
+import 'devextreme-react/common/data';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
 
 const dataSourceOptions = {

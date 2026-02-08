@@ -1,5 +1,7 @@
-import macroTaskArray from '@ts/scheduler/utils/macro_task_array/index';
+import type { IFieldExpr } from './data_accessor/types';
+import macroTaskArray from './macro_task_array/index';
 
 export {
+  type IFieldExpr,
   macroTaskArray,
 };

@@ -1,5 +1,4 @@
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
-import { getTemplate } from '@ts/core/r1/utils/index';
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import type { DateTableCellBaseProps } from '../base/date_table_cell_base';
@@ -49,24 +48,23 @@ export class DateTableMonthCell extends BaseInfernoComponent<DateTableCellBasePr
       startDate,
       text,
       className,
-      firstDayOfMonth,
+      isFirstDayMonthHighlighting,
       otherMonth,
       today,
     } = this.props;
     const classes = combineClasses({
-      'dx-scheduler-date-table-other-month': !!otherMonth,
-      'dx-scheduler-date-table-current-date': !!today,
-      'dx-scheduler-date-table-first-of-month': !!firstDayOfMonth,
-      [className ?? '']: !!className,
+      'dx-scheduler-date-table-other-month': Boolean(otherMonth),
+      'dx-scheduler-date-table-current-date': Boolean(today),
+      'dx-scheduler-date-table-first-of-month': Boolean(isFirstDayMonthHighlighting),
+      [className ?? '']: Boolean(className),
     });
     const contentTemplateProps = this.getContentTemplateProps();
-    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
       <DateTableCellBase
         className={classes}
         viewContext={viewContext}
-        dataCellTemplate={DataCellTemplateComponent}
+        dataCellTemplate={dataCellTemplate}
         startDate={startDate}
         endDate={endDate}
         text={text}

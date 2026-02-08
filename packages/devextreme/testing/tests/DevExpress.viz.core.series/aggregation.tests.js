@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import * as vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 
 import { Series } from 'viz/series/base_series';
 
@@ -14,7 +16,7 @@ function checkResult(assert, result, fusionPoints, num) {
 
 const createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
-    const renderer = renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
+    const renderer = renderSettings.renderer = renderSettings.renderer || new Renderer();
 
     options = $.extend(true, {
         widgetType: 'chart',
@@ -95,37 +97,6 @@ QUnit.module('Sampler points, discrete', {
     }
 });
 
-QUnit.test('T382881, Series is not sorted', function(assert) {
-    const points = [
-        { arg: 9, val: 3 },
-        { arg: 10, val: 2 },
-        { arg: 1, val: 1 },
-        { arg: 2, val: 4 },
-        { arg: 3, val: 5 },
-        { arg: 7, val: 6 },
-        { arg: 8, val: 3 },
-        { arg: 4, val: 4 },
-        { arg: 5, val: 1 },
-        { arg: 6, val: 8 }
-    ];
-    const fusionPoints = [
-        { arg: 9, val: 3 },
-        { arg: 1, val: 1 },
-        { arg: 3, val: 5 },
-        { arg: 8, val: 3 },
-        { arg: 5, val: 1 }
-    ];
-
-    this.argumentAxis.getAggregationInfo = () => { return { interval: 2 }; };
-
-    this.series.updateData(points);
-    // Act
-    this.series.createPoints();
-
-    // Assert
-    checkResult(assert, this.series.getPoints(), fusionPoints, 5);
-});
-
 QUnit.test('10 points -> 5 points. All points. ValueAxisType = discrete', function(assert) {
     const options = {
         argument: {
@@ -152,28 +123,6 @@ QUnit.test('10 points -> 5 points. All points. ValueAxisType = discrete', functi
     this.series.createPoints();
 
     checkResult(assert, this.series.getPoints(), fusionPoints, 5);
-});
-
-QUnit.test('10 points -> 10 points.', function(assert) {
-    const options = {
-        argument: {
-            startValue: 0,
-            endValue: 10,
-            interval: 1
-        },
-        values: [{
-            startValue: 100,
-            interval: 100
-        }]
-    };
-    const points = this.createFusionPoints(options, true);
-
-    this.argumentAxis.getAggregationInfo = () => { return { interval: 1 }; };
-    this.series.updateData(points);
-
-    this.series.createPoints();
-
-    checkResult(assert, this.series.getPoints(), points, 10);
 });
 
 QUnit.test('Custom aggregation', function(assert) {
@@ -447,7 +396,6 @@ QUnit.test('Skip points with undefined and NaN values, Range series', function(a
     });
     assert.equal(points.length, 0);
 });
-
 
 QUnit.test('Skip points with undefined and NaN values, Financial series', function(assert) {
     const points = this.aggregateData('custom', this.data, 'candlestick', {
@@ -922,26 +870,6 @@ QUnit.test('Take into account argumentRange on aggregation', function(assert) {
     assert.deepEqual(this.argumentAxis.getAggregationInfo.lastCall.args[1], { min: 0, max: 8, interval: 1 });
 });
 
-QUnit.test('Skip argumentRange on aggregation for discrete data', function(assert) {
-    this.getBusinessRange = function() {
-        return {
-            minVisible: 0,
-            maxVisible: 10,
-            categories: []
-        };
-    };
-    this.argumentAxis.getAggregationInfo = sinon.spy(() => {
-        return { interval: 5, ticks: [10, 15] };
-    });
-
-
-    this.aggregateData('avg', [
-        { arg: 8, val1: 4, val2: 9 }
-    ], 'rangebar', undefined, undefined, 'discrete');
-
-    assert.deepEqual(this.argumentAxis.getAggregationInfo.lastCall.args[1], {});
-});
-
 QUnit.test('Aggregation methods when one point has undefined value', function(assert) {
     this.data[1].val = undefined;
     assert.strictEqual(this.aggregateData('avg', this.data)[0].value, 550, 'avg should skip the point');
@@ -1016,12 +944,9 @@ QUnit.test('Aggregation methods when all points values are undefined', function(
     assert.strictEqual(this.aggregateData('count', this.data)[0].value, 0, 'count should return a point with 0 value');
 });
 
-QUnit.test('Aggregate by category', function(assert) {
+QUnit.test('Discrete aggregation', function(assert) {
     this.getBusinessRange = () => { return { categories: ['A', 'B', 'C'] }; };
     this.argumentAxis.getOptions = () => { return { type: 'discrete' }; };
-    this.argumentAxis.getAggregationInfo = sinon.spy(() => {
-        return { aggregateByCategory: true };
-    });
 
     const points = this.aggregateData('sum', [
         { arg: 'A', val: 2 },
@@ -1042,9 +967,6 @@ QUnit.test('Discrete datetime aggregation', function(assert) {
     const date = '2020-08-31T12:45:00Z';
     this.getBusinessRange = () => { return { categories: [new Date(date)] }; };
     this.argumentAxis.getOptions = () => { return { type: 'discrete' }; };
-    this.argumentAxis.getAggregationInfo = sinon.spy(() => {
-        return { aggregateByCategory: true };
-    });
 
     const points = this.aggregateData('sum', [
         { val: 30.00, arg: new Date(date) },
@@ -1055,13 +977,9 @@ QUnit.test('Discrete datetime aggregation', function(assert) {
     assert.equal(points[0].value, 60);
 });
 
-QUnit.test('Aggregate by category. Check aggregation info', function(assert) {
+QUnit.test('Discrete aggregation. Check aggregation info', function(assert) {
     this.getBusinessRange = () => { return { categories: ['A', 'B'] }; };
     this.argumentAxis.getOptions = () => { return { type: 'discrete' }; };
-    this.argumentAxis.getAggregationInfo = sinon.spy(() => {
-        return { aggregateByCategory: true };
-    });
-
     const calculate = sinon.spy(() => []);
 
     this.aggregateData('custom', [

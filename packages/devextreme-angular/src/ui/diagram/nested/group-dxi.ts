@@ -8,7 +8,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -18,19 +17,36 @@ import {
 import { Command, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType } from 'devextreme/ui/diagram';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiDiagramCommandComponent } from './command-dxi';
 
+import { PROPERTY_TOKEN_groups } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_commands,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-diagram-group',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_groups,
+           useExisting: DxiDiagramGroupComponent,
+        }
+    ]
 })
 export class DxiDiagramGroupComponent extends CollectionNestedOption {
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+    
     @Input()
     get commands(): Array<Command | CustomCommand> {
         return this._getOption('commands');
@@ -85,14 +101,6 @@ export class DxiDiagramGroupComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDiagramCommandComponent))
-    get commandsChildren(): QueryList<DxiDiagramCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -109,7 +117,7 @@ export class DxiDiagramGroupComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDiagramGroupComponent
   ],
   exports: [

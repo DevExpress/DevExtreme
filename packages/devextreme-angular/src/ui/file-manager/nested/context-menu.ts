@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -20,20 +19,30 @@ import {
 import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem } from 'devextreme/ui/file_manager';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiFileManagerContextMenuItemComponent } from './context-menu-item-dxi';
-import { DxiFileManagerItemComponent } from './item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-file-manager-context-menu',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoFileManagerContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get items(): Array<dxFileManagerContextMenuItem | FileManagerPredefinedContextMenuItem> {
         return this._getOption('items');
@@ -47,22 +56,6 @@ export class DxoFileManagerContextMenuComponent extends NestedOption implements 
         return 'contextMenu';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiFileManagerContextMenuItemComponent))
-    get contextMenuItemsChildren(): QueryList<DxiFileManagerContextMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set contextMenuItemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiFileManagerItemComponent))
-    get itemsChildren(): QueryList<DxiFileManagerItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -84,7 +77,7 @@ export class DxoFileManagerContextMenuComponent extends NestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFileManagerContextMenuComponent
   ],
   exports: [

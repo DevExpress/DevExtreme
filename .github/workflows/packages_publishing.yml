@@ -43,6 +43,11 @@ jobs:
           version: 9
           run_install: false
 
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.0.x
+
       - name: Get pnpm store directory
         shell: bash
         run: |
@@ -113,12 +118,6 @@ jobs:
     steps:
       - name: Get sources
         uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            /tools
-            /packages/devextreme-monorepo-tools
-            package.json
-          sparse-checkout-cone-mode: false
 
       - name: Download artifacts
         uses: actions/download-artifact@v4

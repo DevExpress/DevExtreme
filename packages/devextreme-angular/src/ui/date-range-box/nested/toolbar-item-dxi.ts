@@ -21,20 +21,31 @@ import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import { ToolbarLocation } from 'devextreme/ui/popup';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_toolbarItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-date-range-box-toolbar-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_toolbarItems,
+           useExisting: DxiDateRangeBoxToolbarItemComponent,
+        }
+    ]
 })
 export class DxiDateRangeBoxToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -176,7 +187,7 @@ export class DxiDateRangeBoxToolbarItemComponent extends CollectionNestedOption 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDateRangeBoxToolbarItemComponent
   ],
   exports: [

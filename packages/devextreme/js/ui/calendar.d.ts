@@ -8,11 +8,13 @@ import {
     EventInfo,
     InitializedEventInfo,
     NativeEventInfo,
-} from '../common/core/events';
+    InteractionEvent,
+} from '../events';
 
 import {
     template,
     FirstDayOfWeek,
+    DateLike,
 } from '../common';
 
 import Editor, {
@@ -22,6 +24,7 @@ import Editor, {
 
 export {
     FirstDayOfWeek,
+    DateLike,
 };
 
 export interface ComponentDisabledDate<T> {
@@ -72,11 +75,11 @@ export type OptionChangedEvent = EventInfo<dxCalendar> & ChangedOptionInfo;
  * @type object
  * @inherits NativeEventInfo,ValueChangedInfo
  */
-export type ValueChangedEvent = NativeEventInfo<dxCalendar, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxCalendar, InteractionEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type CellTemplateData = {
-    readonly date: Date;
+    readonly date?: Date;
     readonly view: string;
     readonly text?: string;
 };
@@ -141,10 +144,11 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     hoverStateEnabled?: boolean;
     /**
      * @docid
+     * @type Date|number|string|null
      * @default new Date(3000, 0)
      * @public
      */
-    max?: Date | number | string;
+    max?: DateLike;
     /**
      * @docid
      * @default 'month'
@@ -153,10 +157,11 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     maxZoomLevel?: CalendarZoomLevel;
     /**
      * @docid
+     * @type Date|number|string|null
      * @default new Date(1000, 0)
      * @public
      */
-    min?: Date | number | string;
+    min?: DateLike;
     /**
      * @docid
      * @default 'century'
@@ -201,10 +206,11 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     weekNumberRule?: WeekNumberRule;
     /**
      * @docid
+     * @type Date|number|string|null|Array<Date|number|string|null>
      * @default null
      * @public
      */
-    value?: Date | number | string | Array<Date | number | string>;
+    value?: DateLike | DateLike[];
     /**
      * @docid
      * @default 'month'
@@ -225,8 +231,9 @@ export default class dxCalendar extends Editor<dxCalendarOptions> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:Date | number | string | Array<Date | number | string | null> | null
      */
-    reset(value?: Date | number | string | Array<Date | number | string> | null): void;
+    reset(value?: Properties['value']): void;
 }
 
 /** @public */

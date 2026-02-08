@@ -58,7 +58,7 @@
                     _y = params.y;
                     _scrollTop = params.scrollTop || 0;
                     _scrollLeft = params.scrollLeft || 0;
-                    _clock = params.clock || $.now();
+                    _clock = params.clock || Date.now();
                     _shiftKey = params.shiftKey || false;
                     _cancelable = params.cancelable;
                     _pointerType = params.pointerType || _pointerType;
@@ -67,7 +67,7 @@
                     _y = 0;
                     _scrollTop = 0;
                     _scrollLeft = 0;
-                    _clock = $.now();
+                    _clock = Date.now();
                     _shiftKey = false;
                     _pointerType = params || _pointerType;
                 }
@@ -87,7 +87,7 @@
             },
 
             move: function(x, y) {
-                if($.isArray(x)) {
+                if(Array.isArray(x)) {
                     this.move.apply(this, x);
                 } else {
                     _x += x || 0;

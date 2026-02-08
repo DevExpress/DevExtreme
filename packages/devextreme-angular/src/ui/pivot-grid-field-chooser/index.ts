@@ -16,7 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -35,7 +35,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
@@ -49,16 +49,16 @@ import { DxoPivotGridFieldChooserSearchModule } from 'devextreme-angular/ui/pivo
 import { DxoPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
 
 
-
-
 /**
  * [descr:dxPivotGridFieldChooser]
 
  */
 @Component({
     selector: 'dx-pivot-grid-field-chooser',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -67,6 +67,7 @@ import { DxoPivotGridFieldChooserTextsModule } from 'devextreme-angular/ui/pivot
     ]
 })
 export class DxPivotGridFieldChooserComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
     instance: DxPivotGridFieldChooser = null;
 
     /**
@@ -204,10 +205,10 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     
      */
     @Input()
-    get height(): (() => number | string) | number | string {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
@@ -334,10 +335,10 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -456,7 +457,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() heightChange: EventEmitter<number | string>;
 
     /**
     
@@ -526,11 +527,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -617,6 +614,7 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
 
 @NgModule({
   imports: [
+    DxPivotGridFieldChooserComponent,
     DxoHeaderFilterModule,
     DxoSearchModule,
     DxoTextsModule,
@@ -627,9 +625,6 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
     DxoPivotGridFieldChooserTextsModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPivotGridFieldChooserComponent
   ],
   exports: [
     DxPivotGridFieldChooserComponent,
@@ -645,6 +640,8 @@ export class DxPivotGridFieldChooserComponent extends DxComponent implements OnD
   ]
 })
 export class DxPivotGridFieldChooserModule { }
+
+export * from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
 
 import type * as DxPivotGridFieldChooserTypes from "devextreme/ui/pivot_grid_field_chooser_types";
 export { DxPivotGridFieldChooserTypes };

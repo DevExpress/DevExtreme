@@ -1,6 +1,6 @@
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { JSXTemplate } from '@ts/core/r1/types';
-import { getTemplate } from '@ts/core/r1/utils/index';
+import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import { renderUtils } from '../../utils/index';
@@ -56,36 +56,42 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
       [cellSizeHorizontalClass]: true,
       'dx-scheduler-header-panel-current-time-cell': today,
       'dx-scheduler-header-panel-week-cell': isWeekDayCell,
-      [className ?? '']: !!className,
+      [className ?? '']: Boolean(className),
     });
     const classes = renderUtils
       .getGroupCellClasses(isFirstGroupCell, isLastGroupCell, cellClasses);
-    const useTemplate = (!isTimeCellTemplate && !!dateCellTemplate)
-      || (isTimeCellTemplate && !!timeCellTemplate);
-    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
-    const DateCellTemplateComponent = getTemplate(dateCellTemplate);
+    const useTemplate = (!isTimeCellTemplate && Boolean(dateCellTemplate))
+      || (isTimeCellTemplate && Boolean(timeCellTemplate));
 
     const children = useTemplate ? (
         // this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
         <>
-          {isTimeCellTemplate && TimeCellTemplateComponent?.({
-            data: {
-              date: startDate,
-              text,
-              groups,
-              groupIndex,
-            },
-            index,
-          })}
-          {!isTimeCellTemplate && DateCellTemplateComponent?.({
-            data: {
-              date: startDate,
-              text,
-              groups,
-              groupIndex,
-            },
-            index,
-          })}
+          {isTimeCellTemplate
+            && <PublicTemplate
+              template={timeCellTemplate}
+              templateProps={{
+                data: {
+                  date: startDate,
+                  text,
+                  groups,
+                  groupIndex,
+                },
+                index,
+              } as DateTimeCellTemplateProps}
+            />}
+          {!isTimeCellTemplate
+            && <PublicTemplate
+              template={dateCellTemplate}
+              templateProps={{
+                data: {
+                  date: startDate,
+                  text,
+                  groups,
+                  groupIndex,
+                },
+                index,
+              } as DateTimeCellTemplateProps}
+            />}
         </>
     )
       : (

@@ -3,6 +3,7 @@ import { EdmLiteral } from 'common/data/odata/utils';
 import ODataStore from 'common/data/odata/store';
 import ODataContext from 'common/data/odata/context';
 import Guid from 'core/guid';
+import { isDate } from 'core/utils/type';
 import config from 'core/config';
 import ErrorHandlingHelper from '../../helpers/data.errorHandlingHelper.js';
 import ajaxMock from '../../helpers/ajaxMock.js';
@@ -1798,7 +1799,7 @@ QUnit.test('Dates, disableable, ODataContext', function(assert) {
 
         ctx.Y.load()
             .done(function(r) {
-                assert.strictEqual($.type(r[0].dateProperty), 'date');
+                assert.ok(isDate(r[0].dateProperty));
             })
     ];
 

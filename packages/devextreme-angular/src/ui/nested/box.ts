@@ -12,7 +12,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -22,16 +21,22 @@ import {
 import { Properties as dxBoxOptions } from 'devextreme/ui/box';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoBoxOptions } from './base/box-options';
-import { DxiItemComponent } from './item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-box',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'align',
@@ -59,6 +64,11 @@ import { DxiItemComponent } from './item-dxi';
     ]
 })
 export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
 
     /**
     
@@ -71,18 +81,9 @@ export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit 
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'itemsChange' }
         ]);
@@ -104,7 +105,7 @@ export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoBoxComponent
   ],
   exports: [

@@ -18,6 +18,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-grid-size',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoGridSizeComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -61,7 +64,6 @@ export class DxoGridSizeComponent extends NestedOption implements OnDestroy, OnI
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);
@@ -83,7 +85,7 @@ export class DxoGridSizeComponent extends NestedOption implements OnDestroy, OnI
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoGridSizeComponent
   ],
   exports: [

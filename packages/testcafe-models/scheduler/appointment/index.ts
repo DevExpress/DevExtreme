@@ -29,7 +29,7 @@ const CLASS = {
 export default class Appointment {
   element: Selector;
 
-  date: { time: Promise<string>; roleDescription: Promise<string | null> };
+  date: { time: Promise<string> };
 
   resizableHandle: { left: Selector; right: Selector; top: Selector; bottom: Selector };
 
@@ -63,7 +63,6 @@ export default class Appointment {
 
     this.date = {
       time: appointmentContentDate.nth(0).innerText,
-      roleDescription: this.element.getAttribute('aria-roledescription'),
     };
 
     this.resizableHandle = {
@@ -112,7 +111,29 @@ export default class Appointment {
       .innerText;
   }
 
+  getResourceElement(label: string): Selector {
+    return this.resourcesItems
+      .find('div').withText(label)
+      .parent(0).find(`.${CLASS.resources.value}`);
+  }
+
   getRecurrenceElement(): Selector {
     return this.element.find(`.${CLASS.appoinmentRecurrenceIcon}`);
+  }
+
+  getAriaLabel(): Promise<string | null> {
+    return this.element.getAttribute('aria-label');
+  }
+
+  async hasAriaDescription(): Promise<boolean> {
+    const id = await this.element.getAttribute('aria-describedby');
+
+    return Boolean(id);
+  }
+
+  async getAriaDescription(): Promise<string> {
+    const id = await this.element.getAttribute('aria-describedby');
+
+    return this.element.find(`#${id}`).innerText;
   }
 }

@@ -53,7 +53,7 @@ const Stepper = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["items","selectedIndex","selectedItem"]), []);
       const independentEvents = useMemo(() => (["onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemRendered","onSelectionChanging"]), []);
@@ -100,10 +100,10 @@ type IItemProps = React.PropsWithChildren<{
   hint?: string;
   icon?: string;
   isValid?: boolean;
+  label?: string;
   optional?: boolean;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
-  title?: string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>

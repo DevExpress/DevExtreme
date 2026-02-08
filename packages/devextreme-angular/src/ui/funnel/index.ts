@@ -16,7 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -38,7 +38,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -90,17 +90,17 @@ import { DxoFunnelTooltipModule } from 'devextreme-angular/ui/funnel/nested';
 import { DxoFunnelTooltipBorderModule } from 'devextreme-angular/ui/funnel/nested';
 
 
-
-
 /**
  * [descr:dxFunnel]
 
  */
 @Component({
     selector: 'dx-funnel',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -109,6 +109,7 @@ import { DxoFunnelTooltipBorderModule } from 'devextreme-angular/ui/funnel/neste
     ]
 })
 export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
     instance: DxFunnel = null;
 
     /**
@@ -809,10 +810,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
 
 
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -913,6 +910,7 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
 
 @NgModule({
   imports: [
+    DxFunnelComponent,
     DxoAdaptiveLayoutModule,
     DxoExportModule,
     DxoItemModule,
@@ -961,9 +959,6 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     DxoFunnelTooltipBorderModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxFunnelComponent
   ],
   exports: [
     DxFunnelComponent,
@@ -1017,6 +1012,8 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
   ]
 })
 export class DxFunnelModule { }
+
+export * from 'devextreme-angular/ui/funnel/nested';
 
 import type * as DxFunnelTypes from "devextreme/viz/funnel_types";
 export { DxFunnelTypes };

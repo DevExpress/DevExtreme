@@ -1,4 +1,12 @@
 $(() => {
+  $.type = $.type || function (obj) {
+    if (obj == null) {
+      return obj + '';
+    }
+
+    return typeof obj;
+  };
+
   const hubConnection = new signalR.HubConnectionBuilder()
     .withUrl('https://js.devexpress.com/Demos/NetCore/stockTickDataHub', {
       skipNegotiation: true,

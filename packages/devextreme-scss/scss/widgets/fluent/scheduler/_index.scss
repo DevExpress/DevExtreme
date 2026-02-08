@@ -6,7 +6,7 @@
 @use "../sizes" as *;
 @use '../../base/scheduler/layout/header' as *;
 @use "../../base/mixins" as *;
-@use "../../base/icons" as *;
+@use "../../base/icon_fonts" as *;
 @use "../../base/scheduler" as baseScheduler with (
   $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
@@ -118,7 +118,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 .dx-scheduler-all-day-title {
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
   height: $fluent-scheduler-all-day-table-cell-height;
   font-size: $fluent-scheduler-all-day-title-font-size;
   border-bottom: baseScheduler.$scheduler-base-border;
@@ -441,8 +441,8 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 .dx-scheduler-header {
   @include header-sizes(
     $fluent-scheduler-header-height,
+    $fluent-scheduler-header-offset,
     $fluent-scheduler-toolbar-item-offset,
-    baseScheduler.$scheduler-base-border,
   );
 
   .dx-scheduler-navigator-next,

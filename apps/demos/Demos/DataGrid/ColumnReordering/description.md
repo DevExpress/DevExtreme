@@ -1,7 +1,16 @@
-DevExtreme DataGrid columns use the same display order as fields in data objects. You can use the [columns](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/) array to specify a different display order. To reorder a column at runtime, change the **column**.[visibleIndex](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#visibleIndex) property.
-
-Users can drag and drop column headers to reorder columns as needed. To activate this feature, set the [allowColumnReordering](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#allowColumnReordering) property to **true**. If you wish to prevent reorder operations for a given column, disable its **column**.[allowReordering](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#allowReordering) property.
+DevExtreme DataGrid columns use the same display order as fields in the component's [dataSource](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#dataSource). You can specify a different display order with the [columns[]](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/) array. To reorder a column at runtime, change the **columns[]**.[visibleIndex](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#visibleIndex) property.
 <!--split-->
+
+To allow users to reorder columns, set [allowColumnReordering](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#allowColumnReordering) to `true`. To disable reordering operations for a specific column, assign `false` to its [allowReordering](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#allowReordering) property.
+
+Users can reorder columns with mouse drag-and-drop operations or with keyboard shortcuts:
+
+- **Ctrl/Cmd+Left Arrow**    
+Move the focused column to the left.
+- **Ctrl/Cmd+Right Arrow**    
+Move the focused column to the right.
+
+Reordering operations are also available in the component's context menu.
 
 This demo illustrates [fixed](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#fixed) column behavior during user-initiated column reorder operations. Users can drag & drop columns within the following areas (but not between them):
 

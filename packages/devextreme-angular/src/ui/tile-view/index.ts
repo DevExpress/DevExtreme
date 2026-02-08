@@ -39,16 +39,16 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiTileViewItemModule } from 'devextreme-angular/ui/tile-view/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiTileViewItemComponent } from 'devextreme-angular/ui/tile-view/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -57,8 +57,10 @@ import { DxiTileViewItemComponent } from 'devextreme-angular/ui/tile-view/nested
  */
 @Component({
     selector: 'dx-tile-view',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -67,6 +69,12 @@ import { DxiTileViewItemComponent } from 'devextreme-angular/ui/tile-view/nested
     ]
 })
 export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxTileView<TItem, TKey> = null;
 
     /**
@@ -191,10 +199,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get height(): (() => number | string) | number | string {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
@@ -347,10 +355,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -486,7 +494,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() heightChange: EventEmitter<number | string>;
 
     /**
     
@@ -570,27 +578,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiTileViewItemComponent)
-    get itemsChildren(): QueryList<DxiTileViewItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiTileViewItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -683,13 +671,11 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
 
 @NgModule({
   imports: [
+    DxTileViewComponent,
     DxiItemModule,
     DxiTileViewItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTileViewComponent
   ],
   exports: [
     DxTileViewComponent,
@@ -699,6 +685,8 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
   ]
 })
 export class DxTileViewModule { }
+
+export * from 'devextreme-angular/ui/tile-view/nested';
 
 import type * as DxTileViewTypes from "devextreme/ui/tile_view_types";
 export { DxTileViewTypes };

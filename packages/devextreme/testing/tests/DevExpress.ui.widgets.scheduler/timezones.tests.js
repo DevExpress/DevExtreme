@@ -7,6 +7,7 @@ import {
     initTestMarkup,
     isDesktopEnvironment
 } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import dateUtils from 'core/utils/date';
 import dateLocalization from 'common/core/localization/date';
@@ -16,6 +17,8 @@ import { DataSource } from 'common/data/data_source/data_source';
 import ArrayStore from 'common/data/array_store';
 import dragEvents from 'common/core/events/drag';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
+
+import 'generic_light.css!';
 
 const { testStart, test, module } = QUnit;
 
@@ -54,12 +57,10 @@ const moduleConfig = {
 const moduleConfigWithClock = {
     beforeEach() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
 
     afterEach() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
@@ -81,14 +82,14 @@ const data = [{
     endDate: new Date('2017-05-22T16:30:00.000Z')
 }];
 
-const createScheduler = (options = {}, clock) => {
+const createScheduler = (options = {}) => {
     return createWrapper($.extend({
         dataSource: data,
         views: ['week', 'month'],
         currentView: 'week',
         currentDate: new Date(2017, 4, 22),
         height: 600
-    }, options), clock);
+    }, options));
 };
 
 module('Common', moduleConfig, () => {
@@ -177,8 +178,8 @@ module('Common', moduleConfig, () => {
                 stubClientTimeZone: false
             }];
 
-            const runTest = (config, assert) => {
-                const scheduler = createWrapper({
+            const runTest = async(config, assert) => {
+                const scheduler = await createWrapper({
                     currentDate: new Date(2020, 1, 4),
                     views: ['day'],
                     currentView: 'day',
@@ -200,21 +201,21 @@ module('Common', moduleConfig, () => {
             };
 
             cases.forEach(config => {
-                test(`Appointment should have correct size, position and popup content if ${config.caseName}`, function(assert) {
+                test(`Appointment should have correct size, position and popup content if ${config.caseName}`, async function(assert) {
                     if(config.stubClientTimeZone) {
                         const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
                         try {
-                            runTest(config, assert);
+                            await runTest(config, assert);
                         } finally {
                             tzOffsetStub.restore();
                         }
                     } else {
-                        runTest(config, assert);
+                        await runTest(config, assert);
                     }
                 });
             });
 
-            test('Appointments should be filtered correctly when remoteFiltering is enabled', function(assert) {
+            test('Appointments should be filtered correctly when remoteFiltering is enabled', async function(assert) {
                 const dataSource = new DataSource({
                     store: new ArrayStore({
                         key: 'id',
@@ -223,7 +224,7 @@ module('Common', moduleConfig, () => {
                     pushAggregationTimeout: 0
                 });
 
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     dataSource,
                     timeZone: 'America/Los_Angeles',
                     remoteFiltering: true,
@@ -234,7 +235,7 @@ module('Common', moduleConfig, () => {
                     startDayHour: 9,
                     endDayHour: 20,
                     height: 1000
-                }, this.clock);
+                });
 
                 dataSource.store().push([
                     {
@@ -274,7 +275,7 @@ module('Common', moduleConfig, () => {
         [undefined, timeZones.LosAngeles]
             .forEach(timeZone => {
                 test(`After drag element to scheduler, dates from elements should be valid,
-                    if timeZone=${timeZone}(T924224)`, function(assert) {
+                    if timeZone=${timeZone}(T924224)`, async function(assert) {
                     const draggingGroupName = 'appointmentsGroup';
 
                     const expectedStartDate = new Date(2017, 4, 22, 2, 0);
@@ -298,7 +299,7 @@ module('Common', moduleConfig, () => {
                             }
                         });
 
-                    const scheduler = createScheduler({
+                    const scheduler = await createScheduler({
                         dataSource: [],
                         views: ['day'],
                         currentView: 'day',
@@ -340,8 +341,8 @@ module('Common', moduleConfig, () => {
 });
 
 module('API', moduleConfig, () => {
-    test('onAppointmentAdding event args should be consistent with adding appointment when custom timezone (T686572)', function(assert) {
-        const scheduler = createWrapper({
+    test('onAppointmentAdding event args should be consistent with adding appointment when custom timezone (T686572)', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2016, 4, 7),
             dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ',
             timeZone: timeZones.UTC,
@@ -366,8 +367,8 @@ module('API', moduleConfig, () => {
         assert.expect(2);
     });
 
-    test('New added appointment should be rendered correctly in specified timeZone', function(assert) {
-        const scheduler = createWrapper({
+    test('New added appointment should be rendered correctly in specified timeZone', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [],
             currentDate: new Date(2018, 4, 25),
             views: ['week'],
@@ -391,7 +392,7 @@ module('API', moduleConfig, () => {
         assert.equal(startDate.getTime(), appointment.startDate.getTime() + timezoneOffset, 'appointment starts in 8AM');
     });
 
-    test('Appointment date correction should be rollback after closing popup, if custom timeZone was set', function(assert) {
+    test('Appointment date correction should be rollback after closing popup, if custom timeZone was set', async function(assert) {
         const updatedItem = {
             text: 'Task 1',
             startDate: new Date(2015, 1, 7, 1),
@@ -401,7 +402,7 @@ module('API', moduleConfig, () => {
             store: [updatedItem]
         });
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentView: 'week',
             currentDate: new Date(2015, 1, 7),
             dataSource: data,
@@ -427,8 +428,8 @@ module('API', moduleConfig, () => {
 
 module('Not native date DST', moduleConfigWithClock, () => {
     module('summer time', () => {
-        test('Exclude appointment from series in case DST start in prev visible view range', function(assert) {
-            const scheduler = createScheduler({
+        test('Exclude appointment from series in case DST start in prev visible view range', async function(assert) {
+            const scheduler = await createScheduler({
                 dataSource: [{
                     startDate: new Date('2020-03-01T10:00:00.000Z'),
                     endDate: new Date('2020-03-01T11:00:00.000Z'),
@@ -438,9 +439,12 @@ module('Not native date DST', moduleConfigWithClock, () => {
                 recurrenceEditMode: 'occurrence',
                 timeZone: timeZones.LosAngeles,
                 currentDate: new Date(2020, 2, 16)
-            }, this.clock);
+            });
 
+            const clock = sinon.useFakeTimers();
             scheduler.appointmentList[3].click();
+            await clock.tickAsync(300);
+            clock.restore();
             scheduler.tooltip.clickOnDeleteButton();
 
             assert.equal(scheduler.appointmentList.length, 6);
@@ -495,8 +499,8 @@ module('Not native date DST', moduleConfigWithClock, () => {
                 return;
             }
 
-            test(testCase.text, function(assert) {
-                const scheduler = createScheduler({
+            test(testCase.text, async function(assert) {
+                const scheduler = await createScheduler({
                     dataSource: [{
                         startDate: testCase.startDate,
                         endDate: testCase.endDate,
@@ -507,18 +511,27 @@ module('Not native date DST', moduleConfigWithClock, () => {
                     firstDayOfWeek: 4,
                     timeZone: timeZones.LosAngeles,
                     currentDate: new Date(2020, 2, 8)
-                }, this.clock);
-
-                [1, 2, 3].forEach(index => {
-                    scheduler.appointmentList[index].click();
-                    scheduler.tooltip.clickOnDeleteButton();
                 });
 
-                scheduler.appointmentList.forEach((appointment, index) => {
+                const clock = sinon.useFakeTimers();
+                scheduler.appointmentList[1].click();
+                await clock.tickAsync(300);
+                scheduler.tooltip.clickOnDeleteButton();
+                scheduler.appointmentList[2].click();
+                await clock.tickAsync(300);
+                scheduler.tooltip.clickOnDeleteButton();
+                scheduler.appointmentList[3].click();
+                await clock.tickAsync(300);
+                scheduler.tooltip.clickOnDeleteButton();
+
+                for(let index = 0; index < scheduler.appointmentList.length; index++) {
+                    const appointment = scheduler.appointmentList[index];
                     appointment.click();
+                    await clock.tickAsync(300);
                     const tooltipText = scheduler.tooltip.getDateText();
                     assert.equal(tooltipText, testCase.expectedText, `date text should be right in ${index}'th appointment`);
-                });
+                }
+                clock.restore();
 
                 const dataSource = scheduler.option('dataSource');
                 const recurrenceExceptions = dataSource[0].recurrenceException.split(',');
@@ -592,8 +605,8 @@ module('Not native date DST', moduleConfigWithClock, () => {
         };
 
         [from1amTo2amCase, from1amTo3amCase, from2amTo3amCase, from6amTo7amCase].forEach(testCase => {
-            test(testCase.text, function(assert) {
-                const scheduler = createScheduler({
+            test(testCase.text, async function(assert) {
+                const scheduler = await createScheduler({
                     dataSource: [{
                         startDate: testCase.startDate,
                         endDate: testCase.endDate,
@@ -603,21 +616,23 @@ module('Not native date DST', moduleConfigWithClock, () => {
                     firstDayOfWeek: 4,
                     timeZone: timeZones.LosAngeles,
                     currentDate: new Date(2020, 2, 8)
-                }, this.clock);
+                });
 
+                const clock = sinon.useFakeTimers();
                 const count = scheduler.appointments.getAppointmentCount();
                 for(let i = 0; i < count; i++) {
                     const expectedText = testCase.expectedTexts[i];
                     const appointmentText = scheduler.appointments.getDateText(i);
                     assert.equal(appointmentText, expectedText, `appointment date text should be equal ${expectedText}`);
 
-                    scheduler.appointments.click(i);
+                    await scheduler.appointments.click(i, clock);
 
                     const tooltipText = scheduler.tooltip.getDateText();
                     assert.equal(tooltipText, expectedText, `tooltip date text should be equal ${expectedText}`);
 
                     scheduler.instance.hideAppointmentTooltip();
                 }
+                clock.restore();
 
                 assert.expect(testCase.expectedTexts.length * 2);
             });
@@ -684,8 +699,8 @@ module('Not native date DST', moduleConfigWithClock, () => {
         };
 
         [from1amTo2amMonthCase, from1amTo3amMonthCase, from2amTo3amMonthCase, from6amTo7amMonthCase].forEach(testCase => {
-            test(`${testCase.text}, month view type`, function(assert) {
-                const scheduler = createScheduler({
+            test(`${testCase.text}, month view type`, async function(assert) {
+                const scheduler = await createScheduler({
                     dataSource: [{
                         startDate: testCase.startDate,
                         endDate: testCase.endDate,
@@ -695,18 +710,20 @@ module('Not native date DST', moduleConfigWithClock, () => {
                     currentView: 'month',
                     timeZone: timeZones.LosAngeles,
                     currentDate: new Date(2020, 2, 8)
-                }, this.clock);
+                });
 
+                const clock = sinon.useFakeTimers();
                 for(let i = 0; i < testCase.expectedTexts.length; i++) {
                     const expectedText = testCase.expectedTexts[i];
 
-                    scheduler.appointments.click(i);
+                    await scheduler.appointments.click(i, clock);
 
                     const tooltipText = scheduler.tooltip.getDateText();
                     assert.equal(tooltipText, expectedText, `tooltip date text should be equal ${expectedText}`);
 
                     scheduler.instance.hideAppointmentTooltip();
                 }
+                clock.restore();
 
                 assert.expect(testCase.expectedTexts.length);
             });
@@ -756,8 +773,8 @@ module('Not native date DST', moduleConfigWithClock, () => {
             from2amTo3amRecurrenceExceptionCase,
             from6amTo7amRecurrenceExceptionCase
         ].forEach(testCase => {
-            test(testCase.text, function(assert) {
-                const scheduler = createScheduler({
+            test(testCase.text, async function(assert) {
+                const scheduler = await createScheduler({
                     dataSource: [{
                         startDate: testCase.startDate,
                         endDate: testCase.endDate,
@@ -768,18 +785,27 @@ module('Not native date DST', moduleConfigWithClock, () => {
                     firstDayOfWeek: 4,
                     timeZone: timeZones.LosAngeles,
                     currentDate: new Date(2020, 10, 1)
-                }, this.clock);
-
-                [1, 2, 3].forEach(index => {
-                    scheduler.appointmentList[index].click();
-                    scheduler.tooltip.clickOnDeleteButton();
                 });
 
-                scheduler.appointmentList.forEach((appointment, index) => {
+                const clock = sinon.useFakeTimers();
+                scheduler.appointmentList[1].click();
+                await clock.tickAsync(300);
+                scheduler.tooltip.clickOnDeleteButton();
+                scheduler.appointmentList[2].click();
+                await clock.tickAsync(300);
+                scheduler.tooltip.clickOnDeleteButton();
+                scheduler.appointmentList[3].click();
+                await clock.tickAsync(300);
+                scheduler.tooltip.clickOnDeleteButton();
+
+                for(let index = 0; index < scheduler.appointmentList.length; index++) {
+                    const appointment = scheduler.appointmentList[index];
                     appointment.click();
+                    await clock.tickAsync(300);
                     const tooltipText = scheduler.tooltip.getDateText();
                     assert.equal(tooltipText, testCase.expectedText, `date text should be right in ${index}'th appointment`);
-                });
+                }
+                clock.restore();
 
                 const dataSource = scheduler.option('dataSource');
                 const recurrenceExceptions = dataSource[0].recurrenceException.split(',');
@@ -853,8 +879,8 @@ module('Not native date DST', moduleConfigWithClock, () => {
         };
 
         [from1amTo2amCase, from2amTo3amCase, from1amTo3amCase, from6amTo7amCase].forEach(testCase => {
-            test(testCase.text, function(assert) {
-                const scheduler = createScheduler({
+            test(testCase.text, async function(assert) {
+                const scheduler = await createScheduler({
                     dataSource: [{
                         startDate: testCase.startDate,
                         endDate: testCase.endDate,
@@ -864,21 +890,23 @@ module('Not native date DST', moduleConfigWithClock, () => {
                     firstDayOfWeek: 4,
                     timeZone: timeZones.LosAngeles,
                     currentDate: new Date(2020, 10, 1),
-                }, this.clock);
+                });
 
+                const clock = sinon.useFakeTimers();
                 const count = scheduler.appointments.getAppointmentCount();
                 for(let i = 0; i < count; i++) {
                     const expectedText = testCase.expectedTexts[i];
                     const appointmentText = scheduler.appointments.getDateText(i);
                     assert.equal(appointmentText, expectedText, `appointment date text should be equal ${expectedText}`);
 
-                    scheduler.appointments.click(i);
+                    await scheduler.appointments.click(i, clock);
 
                     const tooltipText = scheduler.tooltip.getDateText();
                     assert.equal(tooltipText, expectedText, `tooltip date text should be equal ${expectedText}`);
 
                     scheduler.instance.hideAppointmentTooltip();
                 }
+                clock.restore();
 
                 assert.expect(testCase.expectedTexts.length * 2);
             });
@@ -945,8 +973,8 @@ module('Not native date DST', moduleConfigWithClock, () => {
         };
 
         [from1amTo2amWinterCase, from2amTo3amWinterCase, from1amTo3amWinterCase, from6amTo7amWinterCase].forEach(testCase => {
-            test(`${testCase.text}, month view type`, function(assert) {
-                const scheduler = createScheduler({
+            test(`${testCase.text}, month view type`, async function(assert) {
+                const scheduler = await createScheduler({
                     dataSource: [{
                         startDate: testCase.startDate,
                         endDate: testCase.endDate,
@@ -957,18 +985,20 @@ module('Not native date DST', moduleConfigWithClock, () => {
                     firstDayOfWeek: 4,
                     timeZone: timeZones.LosAngeles,
                     currentDate: new Date(2020, 10, 1),
-                }, this.clock);
+                });
 
+                const clock = sinon.useFakeTimers();
                 for(let i = 0; i < testCase.expectedTexts.length; i++) {
                     const expectedText = testCase.expectedTexts[i];
 
-                    scheduler.appointments.click(i);
+                    await scheduler.appointments.click(i, clock);
 
                     const tooltipText = scheduler.tooltip.getDateText();
                     assert.equal(tooltipText, expectedText, `tooltip date text should be equal ${expectedText}`);
 
                     scheduler.instance.hideAppointmentTooltip();
                 }
+                clock.restore();
 
                 assert.expect(testCase.expectedTexts.length);
             });
@@ -978,8 +1008,8 @@ module('Not native date DST', moduleConfigWithClock, () => {
 
 module('Scheduler grid and appointment time zone', moduleConfig, () => {
     if(isDesktopEnvironment()) {
-        test('Appointment time zone has DST(T983264)', function(assert) {
-            const scheduler = createWrapper({
+        test('Appointment time zone has DST(T983264)', async function(assert) {
+            const scheduler = await createWrapper({
                 _draggingMode: 'default',
                 recurrenceEditMode: 'occurrence',
                 timeZone: timeZones.Phoenix,
@@ -1027,11 +1057,11 @@ module('Scheduler grid', moduleConfigWithClock, () => {
     };
 
     if(isDesktopEnvironment()) {
-        test('Local DST shouldn\'t effect on for the set timezone', function(assert) {
+        test('Local DST shouldn\'t effect on for the set timezone', async function(assert) {
             // TODO Los Angeles and Sydney timezones have local DST
             const etalonDateText = '12:30 PM - 2:00 PM';
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 timeZone: timeZones.Berlin,
                 dataSource: [{
                     text: 'Website Re-Design Plan',
@@ -1045,14 +1075,15 @@ module('Scheduler grid', moduleConfigWithClock, () => {
                 firstDayOfWeek: 5,
                 startDayHour: 11,
                 height: 600
-            }, this.clock);
+            });
 
-            scheduler.appointmentList.forEach(appointment => {
+            for(let i = 0; i < scheduler.appointmentList.length; i++) {
+                const appointment = scheduler.appointmentList[i];
                 assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
-                appointment.click();
+                await appointment.click();
 
                 assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
-            });
+            }
 
             scheduler.header.navigator.nextButton.click();
             assert.equal(scheduler.header.navigator.caption.getText(), '19-25 March 2021');
@@ -1063,12 +1094,13 @@ module('Scheduler grid', moduleConfigWithClock, () => {
             scheduler.header.navigator.nextButton.click();
             assert.equal(scheduler.header.navigator.caption.getText(), '2-8 April 2021');
 
-            scheduler.appointmentList.forEach(appointment => {
+            for(let i = 0; i < scheduler.appointmentList.length; i++) {
+                const appointment = scheduler.appointmentList[i];
                 assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
-                appointment.click();
+                await appointment.click();
 
                 assert.equal(scheduler.tooltip.getDateText(), etalonDateText, `date of tooltip should be equal '${etalonDateText}'`);
-            });
+            }
 
             assert.expect(31);
         });
@@ -1083,18 +1115,21 @@ module('Scheduler grid', moduleConfigWithClock, () => {
             times: ['10:00 PM - 10:30 PM', '5:00 AM - 5:30 AM', '9:00 AM - 9:30 AM']
         }
     ].forEach(testCase => {
-        test(`startDate and endDate of appointments should valid in ${testCase.timeZone}`, function(assert) {
-            const scheduler = createScheduler({ timeZone: testCase.timeZone }, this.clock);
+        test(`startDate and endDate of appointments should valid in ${testCase.timeZone}`, async function(assert) {
+            const scheduler = await createScheduler({ timeZone: testCase.timeZone });
 
-            testCase.times.forEach((expected, index) => {
+            const clock = sinon.useFakeTimers();
+            for(let index = 0; index < testCase.times.length; index++) {
+                const expected = testCase.times[index];
                 const gridDateText = scheduler.appointments.getDateText(index);
                 assert.equal(gridDateText, expected, 'Appointment date text should be valid');
 
-                scheduler.appointments.click(index);
+                await scheduler.appointments.click(index, clock);
 
                 const tooltipDateText = scheduler.tooltip.getDateText();
                 assert.equal(gridDateText, tooltipDateText, 'Tooltip date text should be valid');
-            });
+            }
+            clock.restore();
         });
     });
 
@@ -1108,8 +1143,8 @@ module('Scheduler grid', moduleConfigWithClock, () => {
             startDate: '2015-12-23T09:00:00.000Z',
             endDate: '2015-12-23T10:00:00.000Z'
         }].forEach(({ timeZone, startDate, endDate }) => {
-            test(`Drag n drop should work right in week view if timezone='${timeZone}'`, function(assert) {
-                const scheduler = createWrapper({
+            test(`Drag n drop should work right in week view if timezone='${timeZone}'`, async function(assert) {
+                const scheduler = await createWrapper({
                     _draggingMode: 'default',
                     currentDate: new Date(2015, 11, 23),
                     views: ['week'],
@@ -1121,7 +1156,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
                         startDate,
                         endDate
                     }]
-                }, this.clock);
+                });
 
                 const appointment = scheduler.appointmentList[0];
                 const initialPosition = appointment.rectangle;
@@ -1164,8 +1199,8 @@ module('Scheduler grid', moduleConfigWithClock, () => {
                 startDayHour: 8,
                 endDayHour: 15,
             }].forEach(({ startDayHour, endDayHour }) => {
-                test(`Drag n drop should work right in month view if timezone='${timeZone}' and startDayHour=${startDayHour}, endDayHour=${endDayHour}`, function(assert) {
-                    const scheduler = createWrapper({
+                test(`Drag n drop should work right in month view if timezone='${timeZone}' and startDayHour=${startDayHour}, endDayHour=${endDayHour}`, async function(assert) {
+                    const scheduler = await createWrapper({
                         _draggingMode: 'default',
                         currentDate: new Date(2015, 11, 23),
                         views: ['month'],
@@ -1179,36 +1214,36 @@ module('Scheduler grid', moduleConfigWithClock, () => {
                             startDate,
                             endDate
                         }]
-                    }, this.clock);
+                    });
 
                     const appointment = scheduler.appointmentList[0];
                     const initialPosition = appointment.rectangle;
 
-                    appointment.click();
+                    await appointment.click();
                     assert.equal(scheduler.tooltip.getDateText(), 'December 23 8:00 AM - 1:00 PM', 'appointment date\'s should be right on init');
 
                     appointment.drag.toCell(25);
                     assert.ok(appointment.rectangle.x > initialPosition.x, 'drag to left: current X position should be larger than initial X');
 
-                    appointment.click();
+                    await appointment.click();
                     assert.equal(scheduler.tooltip.getDateText(), 'December 24 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to right cell');
 
                     appointment.drag.toCell(24);
                     assert.equal(appointment.rectangle.x, initialPosition.x, 'drag to right: current X position should be equal initial X');
 
-                    appointment.click();
+                    await appointment.click();
                     assert.equal(scheduler.tooltip.getDateText(), 'December 23 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to lefy cell');
 
                     appointment.drag.toCell(17);
                     assert.ok(appointment.rectangle.y < initialPosition.y, 'drag to top: current Y position should be smaller than initial Y');
 
-                    appointment.click();
+                    await appointment.click();
                     assert.equal(scheduler.tooltip.getDateText(), 'December 16 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to top cell');
 
                     appointment.drag.toCell(24);
                     assert.equal(appointment.rectangle.y, initialPosition.y, 'drag to bottom: current Y position should be equal initial Y');
 
-                    appointment.click();
+                    await appointment.click();
                     assert.equal(scheduler.tooltip.getDateText(), 'December 23 8:00 AM - 1:00 PM', 'appointment date\'s should be right after drag to bottom cell');
                 });
             });
@@ -1216,10 +1251,10 @@ module('Scheduler grid', moduleConfigWithClock, () => {
     }
 
     [true, false].forEach((renovateRender) => {
-        test(`Recurrence appointment with 'Etc/UTC' tz should be updated correctly via drag when renovateRender is ${renovateRender} (T394991)`, function(assert) {
+        test(`Recurrence appointment with 'Etc/UTC' tz should be updated correctly via drag when renovateRender is ${renovateRender} (T394991)`, async function(assert) {
             const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date('2015-12-25T17:00:00.000Z').getTimezoneOffset() * 60000);
             try {
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     _draggingMode: 'default',
                     currentDate: new Date(2015, 11, 25),
                     startDayHour: 16,
@@ -1265,7 +1300,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         });
     });
 
-    test('Task dragging when custom timeZone is set', function(assert) {
+    test('Task dragging when custom timeZone is set', async function(assert) {
         const timezone = -5;
         const etcTimezone = 'Etc/GMT+5';
         const timezoneDifference = getDeltaTz(timezone, new Date(2015, 1, 9));
@@ -1282,7 +1317,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
             ]
         });
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             _draggingMode: 'default',
             currentDate: new Date(2015, 1, 9),
             dataSource: data,
@@ -1311,10 +1346,10 @@ module('Scheduler grid', moduleConfigWithClock, () => {
     });
 
     [true, false].forEach((renovateRender) => {
-        test(`Appointment with 'Etc/UTC' tz should be rendered correctly when renovateRender is ${renovateRender} (T394991)`, function(assert) {
+        test(`Appointment with 'Etc/UTC' tz should be rendered correctly when renovateRender is ${renovateRender} (T394991)`, async function(assert) {
             const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date('2016-06-25T17:00:00.000Z').getTimezoneOffset() * 60000);
             try {
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     _draggingMode: 'default',
                     currentDate: new Date(2016, 5, 25),
                     startDayHour: 16,
@@ -1362,8 +1397,8 @@ module('Scheduler grid', moduleConfigWithClock, () => {
     });
 
     ['Etc/GMT-5', 'Asia/Calcutta'].forEach(timeZone => {
-        test(`Appts should be filtered correctly with custom timeZone='${timeZone}'`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Appts should be filtered correctly with custom timeZone='${timeZone}'`, async function(assert) {
+            const scheduler = await createWrapper({
                 timeZone,
                 dataSource: [{
                     startDate: new Date(Date.UTC(2016, 4, 4, 15)),
@@ -1383,10 +1418,10 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         });
     });
 
-    test('Appointment should have a correct template with custom timezone(T387040)', function(assert) {
+    test('Appointment should have a correct template with custom timezone(T387040)', async function(assert) {
         const clientTzOffset = new Date(2016, 4, 7).getTimezoneOffset() * 60000;
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2016, 4, 7),
             views: ['week'],
             currentView: 'week',
@@ -1400,6 +1435,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
             endDate: new Date(Date.UTC(2016, 4, 7, 1, 30)),
             text: 'new Date sample'
         }]);
+        await waitAsync(0);
 
         const $appt = scheduler.getElement().find(CLASSES.appointment);
         const $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
@@ -1410,8 +1446,8 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         assert.equal($contentDates.first().text(), assertText, 'Date is correct');
     });
 
-    test('Appointment with custom tz should be resized correctly if the scheduler tz is empty(T392414)', function(assert) {
-        const scheduler = createWrapper({
+    test('Appointment with custom tz should be resized correctly if the scheduler tz is empty(T392414)', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 11, 25),
             views: ['day'],
             currentView: 'day',
@@ -1442,8 +1478,8 @@ module('Scheduler grid', moduleConfigWithClock, () => {
     });
 
     [true, false].forEach((renovateRender) => {
-        test(`Appointment with custom tz that isn't equal to scheduler tz should be dragged correctly when renovateRender is ${renovateRender} (T392414)`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Appointment with custom tz that isn't equal to scheduler tz should be dragged correctly when renovateRender is ${renovateRender} (T392414)`, async function(assert) {
+            const scheduler = await createWrapper({
                 _draggingMode: 'default',
                 currentDate: new Date(2015, 4, 25),
                 startDayHour: 6,
@@ -1488,8 +1524,8 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         });
     });
 
-    test('Scheduler should not update scroll position if appointment is visible, when timeZone is set ', function(assert) {
-        const scheduler = createWrapper({
+    test('Scheduler should not update scroll position if appointment is visible, when timeZone is set ', async function(assert) {
+        const scheduler = await createWrapper({
             startDayHour: 3,
             endDayHour: 10,
             currentDate: new Date(Date.UTC(2015, 1, 9)).toJSON(),
@@ -1522,8 +1558,8 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         }
     });
 
-    test('Scheduler should update scroll position if appointment was added to invisible bottom area, timezone is set', function(assert) {
-        const scheduler = createWrapper({
+    test('Scheduler should update scroll position if appointment was added to invisible bottom area, timezone is set', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 1, 9),
             dataSource: new DataSource({
                 store: []
@@ -1551,8 +1587,8 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         }
     });
 
-    test('Appts should be filtered correctly if there is a custom tz and start day hour is not 0', function(assert) {
-        const scheduler = createWrapper({
+    test('Appts should be filtered correctly if there is a custom tz and start day hour is not 0', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: '2015-05-27T23:00:00+01:00',
                 endDate: '2015-05-28T00:00:00+01:00',
@@ -1573,7 +1609,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         const $element = scheduler.getElement();
         let $appt = $element.find(CLASSES.appointment);
         const cellHeight = $element.find(CLASSES.dateTableCell).eq(0).get(0).getBoundingClientRect().height;
-        const apptPosition = translator.locate($appt.eq(0));
+        const apptPosition = translator.locate($appt.eq(1));
         const clientTzOffset = new Date('2015-05-27T23:00:00+01:00').getTimezoneOffset() / 60;
 
         const cellsCount = (new Date(
@@ -1587,13 +1623,14 @@ module('Scheduler grid', moduleConfigWithClock, () => {
             currentView: 'day',
             currentDate: new Date(2015, 4, 26)
         });
+        await waitAsync(0);
 
         $appt = $element.find(CLASSES.appointment);
         assert.equal($appt.length, 1, 'Appts are OK on the Day view');
     });
 
-    test('Recurring appointment icon should be visible on the month view', function(assert) {
-        const scheduler = createWrapper({
+    test('Recurring appointment icon should be visible on the month view', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: 'Appt',
@@ -1615,11 +1652,11 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         assert.ok($recurringIcon.parent().hasClass('dx-scheduler-appointment-content'), 'Recurring icon is visible');
     });
 
-    test('Appointment should have a correct template with custom timezone', function(assert) {
+    test('Appointment should have a correct template with custom timezone', async function(assert) {
         const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
 
         try {
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 currentDate: new Date(2016, 4, 7),
                 startDayHour: 7,
                 views: ['day'],
@@ -1665,7 +1702,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         timeZone: 'Asia/Qyzylorda',
         timeZoneNumber: 6
     }].forEach(({ startDate, endDate, timeZone, startDateTimezone, recurrenceRule, timeZoneNumber }) => {
-        test('Appointment should be rendered correctly when custom timezone was set', function(assert) {
+        test('Appointment should be rendered correctly when custom timezone was set', async function(assert) {
             const appointments = [{
                 startDate: startDate.toString(),
                 endDate: endDate.toString(),
@@ -1674,7 +1711,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
                 recurrenceRule
             }];
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 timeZone,
                 currentDate: new Date(2015, 1, 4),
                 views: ['day'],
@@ -1696,13 +1733,13 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         });
     });
 
-    test('All-day Appointment should be rendered correctly when custom timezone was set', function(assert) {
+    test('All-day Appointment should be rendered correctly when custom timezone was set', async function(assert) {
         const timezone = 5;
         const timezoneDifference = getDeltaTz(timezone, new Date(2016, 4, 4));
         const startDate = new Date(new Date(2016, 4, 4).getTime() - timezoneDifference);
         const endDate = new Date(new Date(2016, 4, 5).getTime() - timezoneDifference);
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             views: ['week'],
             currentView: 'week',
             currentDate: new Date(2016, 4, 3),
@@ -1740,8 +1777,8 @@ module('Appointment popup', moduleConfig, () => {
         }];
 
         cases.forEach((testCase, index) => {
-            test('StartDate and endDate should be valid', function(assert) {
-                const scheduler = createScheduler({ timeZone: timeZones.NewYork }); // -4 offset
+            test('StartDate and endDate should be valid', async function(assert) {
+                const scheduler = await createScheduler({ timeZone: timeZones.NewYork }); // -4 offset
 
                 scheduler.appointments.dblclick(index);
 
@@ -1768,8 +1805,8 @@ module('Appointment popup', moduleConfig, () => {
         }];
 
         cases.forEach((testCase, index) => {
-            test('StartDate and endDate should be valid', function(assert) {
-                const scheduler = createScheduler();
+            test('StartDate and endDate should be valid', async function(assert) {
+                const scheduler = await createScheduler();
 
                 scheduler.appointments.dblclick(index);
 
@@ -1785,7 +1822,7 @@ module('Appointment popup', moduleConfig, () => {
 
     ['Etc/GMT-5', 'Asia/Ashkhabad'].forEach(timeZone => {
         test(`Appointment startDate and endDate should be correct in the details view, if custom timeZone='${timeZone}' is setting`,
-            function(assert) {
+            async function(assert) {
                 const startDate = new Date(2015, 3, 11, 11);
                 const endDate = new Date(2015, 3, 11, 11, 30);
 
@@ -1795,7 +1832,7 @@ module('Appointment popup', moduleConfig, () => {
                     End: endDate
                 };
 
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     timeZone,
                     dataSource: new DataSource({
                         store: [appointment]
@@ -1818,8 +1855,8 @@ module('Appointment popup', moduleConfig, () => {
     });
 
     test('Appointment startDate and endDate should be correct in the details view for new appointment, if custom timeZone was set',
-        function(assert) {
-            const scheduler = createWrapper({
+        async function(assert) {
+            const scheduler = await createWrapper({
                 dataSource: new DataSource({
                     store: []
                 }),
@@ -1838,7 +1875,7 @@ module('Appointment popup', moduleConfig, () => {
             assert.deepEqual(formData.End, new Date(2015, 3, 23, 11, 30), 'end date is correct');
         });
 
-    test('Appointment date correction should be rollback after closing popup, if custom timeZone was set as string', function(assert) {
+    test('Appointment date correction should be rollback after closing popup, if custom timeZone was set as string', async function(assert) {
         const updatedItem = {
             text: 'Task 1',
             startDate: new Date(2015, 1, 7, 1),
@@ -1848,7 +1885,7 @@ module('Appointment popup', moduleConfig, () => {
             store: [updatedItem]
         });
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentView: 'week',
             currentDate: new Date(2015, 1, 7),
             dataSource: data,
@@ -1873,19 +1910,17 @@ module('Appointment popup', moduleConfig, () => {
 
 module('Fixed client time zone offset', {
     beforeEach() {
-        this.clock = sinon.useFakeTimers();
         this.tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
         fx.off = true;
     },
 
     afterEach() {
-        this.clock.restore();
         this.tzOffsetStub.restore();
         fx.off = false;
     }
 }, () => {
-    test('Appointment should have right width in workspace with timezone', function(assert) {
-        const scheduler = createWrapper({
+    test('Appointment should have right width in workspace with timezone', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [],
             currentDate: new Date(2017, 4, 1),
             currentView: 'month',
@@ -1909,8 +1944,8 @@ module('Fixed client time zone offset', {
         assert.roughEqual(getOuterWidth($appointment), getOuterWidth($cell) * 2, 2.001, 'Task has a right width');
     });
 
-    test('Appointments should have correct size with custom time zone & hourly bounds', function(assert) {
-        const scheduler = createWrapper({
+    test('Appointments should have correct size with custom time zone & hourly bounds', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 4, 25),
             startDayHour: 8,
             endDayHour: 18,
@@ -1947,14 +1982,14 @@ module('Fixed client time zone offset', {
         assert.equal($second.find('.dx-scheduler-appointment-content-date').eq(0).text(), '4:00 PM - 6:00 PM', 'Second appointment is correct');
     });
 
-    test('Appointment should be rendered correctly if timeZones is changed', function(assert) {
+    test('Appointment should be rendered correctly if timeZones is changed', async function(assert) {
         const appointments = [{
             startDate: new Date(2015, 1, 4, 5).toString(),
             endDate: new Date(2015, 1, 4, 6).toString(),
             text: 'abc'
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 1, 4),
             views: ['day'],
             currentView: 'day',
@@ -1973,7 +2008,7 @@ module('Fixed client time zone offset', {
         assert.roughEqual($appointment.position().top, cellHeight * 2, 2.001, 'Appointment top is correct');
     });
 
-    test('Appointment should be rendered correctly when appointment timeZone was set', function(assert) {
+    test('Appointment should be rendered correctly when appointment timeZone was set', async function(assert) {
         const appointments = [{
             startDate: new Date(2015, 1, 4, 5).toString(),
             startDateTimeZone: 'Asia/Calcutta', // +05:30
@@ -1982,7 +2017,7 @@ module('Fixed client time zone offset', {
             text: 'abc'
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 1, 4),
             views: ['day'],
             currentView: 'day',
@@ -1999,8 +2034,8 @@ module('Fixed client time zone offset', {
         }, 'Appointment is rendered in right cell');
     });
 
-    test('AllDay appointment with custom timezone should be resized correctly', function(assert) {
-        const scheduler = createWrapper({
+    test('AllDay appointment with custom timezone should be resized correctly', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 5, 12),
             views: ['week'],
             currentView: 'week',
@@ -2030,7 +2065,7 @@ module('Fixed client time zone offset', {
         assert.roughEqual(getOuterWidth($appointment), cellWidth * 3, 2.001, 'Appointment width is OK');
     });
 
-    test('Arguments in event args should be correct when timezone is set(T579457)', function(assert) {
+    test('Arguments in event args should be correct when timezone is set(T579457)', async function(assert) {
         const appointment = {
             startDate: new Date('2017-11-22T14:30:00.000Z'),
             endDate: new Date('2017-11-22T15:00:00.000Z'),
@@ -2039,7 +2074,7 @@ module('Fixed client time zone offset', {
             text: ''
         };
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2017, 10, 22),
             views: ['week'],
             currentView: 'week',
@@ -2056,8 +2091,8 @@ module('Fixed client time zone offset', {
         $appointment.trigger('dxclick');
     });
 
-    test('Recurrence appointment with custom tz that isn\'t equal to scheduler tz should be resized correctly(T390801)', function(assert) {
-        const scheduler = createWrapper({
+    test('Recurrence appointment with custom tz that isn\'t equal to scheduler tz should be resized correctly(T390801)', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 5, 12),
             views: ['week'],
             currentView: 'week',
@@ -2089,8 +2124,8 @@ module('Fixed client time zone offset', {
         $appointments = rootElement.find(CLASSES.appointment);
 
         assert.equal($appointments.length, 2, 'Appointment count is OK');
-        assert.equal($appointments.eq(1).position().top, initialAppointmentTop, 'Appointment top is OK');
-        assert.roughEqual(getOuterHeight($appointments.eq(1)), cellHeight * 5, 2.001, 'Appointment height is OK');
+        assert.equal($appointments.eq(0).position().top, initialAppointmentTop, 'Appointment top is OK');
+        assert.roughEqual(getOuterHeight($appointments.eq(0)), cellHeight * 5, 2.001, 'Appointment height is OK');
     });
 
     [{
@@ -2116,8 +2151,8 @@ module('Fixed client time zone offset', {
         currentDate: new Date(2015, 4, 25),
         text: 'Recurrence appointment with the same custom timezones should be opened correctly'
     }].forEach(({ appointment, text, currentDate }) => {
-        test(`${text}(T390801)`, function(assert) {
-            const scheduler = createWrapper({
+        test(`${text}(T390801)`, async function(assert) {
+            const scheduler = await createWrapper({
                 currentDate,
                 views: ['week'],
                 currentView: 'week',
@@ -2149,8 +2184,8 @@ module('Fixed client time zone offset', {
         appointmentTimeZone: timeZones.Lima,
         text: 'Appointment with custom tz that is equal to scheduler tz should be resized correctly'
     }].forEach(testCase => {
-        test(`${testCase.text}(T392414)`, function(assert) {
-            const scheduler = createWrapper({
+        test(`${testCase.text}(T392414)`, async function(assert) {
+            const scheduler = await createWrapper({
                 currentDate: new Date(2015, 4, 25),
                 views: ['week'],
                 currentView: 'week',
@@ -2184,7 +2219,7 @@ module('Fixed client time zone offset', {
         });
     });
 
-    test('DropDown appointment should be rendered correctly when timezone is set', function(assert) {
+    test('DropDown appointment should be rendered correctly when timezone is set', async function(assert) {
         const data = [
             {
                 schedule: 'Appointment 1',
@@ -2218,7 +2253,7 @@ module('Fixed client time zone offset', {
             }
         ];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: data,
             views: ['month'],
             currentView: 'month',
@@ -2234,8 +2269,8 @@ module('Fixed client time zone offset', {
         assert.equal(scheduler.tooltip.getDateText(), 'September 16 10:00 PM - 11:00 PM', 'Dates are correct');
     });
 
-    test('Appts should be filtered correctly if there is a custom tz and start day hour is not 0(T396719)', function(assert) {
-        const scheduler = createWrapper({
+    test('Appts should be filtered correctly if there is a custom tz and start day hour is not 0(T396719)', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 text: 'Stand-up meeting',
                 startDate: new Date(2015, 4, 25, 17),
@@ -2258,7 +2293,7 @@ module('Fixed client time zone offset', {
 });
 
 module('Simple appointment in local DST time (T1078292)', () => {
-    test('should correctly display appointment in Los Angeles DST summer time', function(assert) {
+    test('should correctly display appointment in Los Angeles DST summer time', async function(assert) {
         const appointmentText = 'Simple appointment';
         const data = [
             {
@@ -2270,7 +2305,7 @@ module('Simple appointment in local DST time (T1078292)', () => {
             },
         ];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: data,
             views: ['week'],
             currentView: 'week',
@@ -2286,7 +2321,7 @@ module('Simple appointment in local DST time (T1078292)', () => {
         assert.ok(!!appointmentHeight, 'appointment height greater than zero');
     });
 
-    test('should correctly display appointment in Los Angeles DST winter time', function(assert) {
+    test('should correctly display appointment in Los Angeles DST winter time', async function(assert) {
         const appointmentText = 'Simple appointment';
         const data = [
             {
@@ -2298,7 +2333,7 @@ module('Simple appointment in local DST time (T1078292)', () => {
             },
         ];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: data,
             views: ['week'],
             currentView: 'week',

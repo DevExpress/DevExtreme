@@ -12,7 +12,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -26,20 +25,30 @@ import { Store } from 'devextreme/data/store';
 import { TabsIconPosition, TabsStyle, Position } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiFormItemComponent } from './item-dxi';
-import { DxiFormTabPanelOptionsItemComponent } from './tab-panel-options-item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-form-tab-panel-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -105,10 +114,10 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -166,6 +175,14 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
     }
     set itemTitleTemplate(value: any) {
         this._setOption('itemTitleTemplate', value);
+    }
+
+    @Input()
+    get keyExpr(): Function | string {
+        return this._getOption('keyExpr');
+    }
+    set keyExpr(value: Function | string) {
+        this._setOption('keyExpr', value);
     }
 
     @Input()
@@ -385,10 +402,10 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -418,26 +435,9 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
     }
 
 
-    @ContentChildren(forwardRef(() => DxiFormItemComponent))
-    get itemsChildren(): QueryList<DxiFormItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiFormTabPanelOptionsItemComponent))
-    get tabPanelOptionsItemsChildren(): QueryList<DxiFormTabPanelOptionsItemComponent> {
-        return this._getOption('items');
-    }
-    set tabPanelOptionsItemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'itemsChange' },
             { emit: 'selectedIndexChange' },
@@ -461,7 +461,7 @@ export class DxoFormTabPanelOptionsComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFormTabPanelOptionsComponent
   ],
   exports: [

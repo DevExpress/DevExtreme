@@ -312,6 +312,30 @@ describe('element attrs management', () => {
     expect(element.style.color).toEqual('red');
   });
 
+  it('element inline styles that should convert to px in strict mode (T1289861)', () => {
+    const { container } = testingLib.render(
+        <React.StrictMode>
+          <TestComponent style={{ maxWidth: 300 }} />
+        </React.StrictMode>,
+    );
+
+    const element: HTMLElement = container?.firstChild as HTMLElement;
+
+    expect(element.style.maxWidth).toEqual('300px');
+  });
+
+  it('element inline styles that should not convert to px in strict mode (T1289861)', () => {
+    const { container } = testingLib.render(
+        <React.StrictMode>
+          <TestComponent style={{ zIndex: 1000 }} />
+        </React.StrictMode>,
+    );
+
+    const element: HTMLElement = container?.firstChild as HTMLElement;
+
+    expect(element.style.zIndex).toEqual('1000');
+  });
+
   it('updates id, className and style', () => {
     const { container, rerender } = testingLib.render(
       <TestComponent id="id1" className="class1" style={{ background: 'red' }} />,

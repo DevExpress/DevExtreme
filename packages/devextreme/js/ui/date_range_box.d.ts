@@ -1,9 +1,13 @@
 import {
+  DateLike,
+} from '../common';
+
+import {
   EventInfo,
   NativeEventInfo,
   InitializedEventInfo,
   ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
   DxElement,
@@ -19,6 +23,10 @@ import { DateBoxBase, DateBoxBaseOptions } from './date_box';
 import {
   ValueChangedInfo,
 } from './editor/editor';
+
+export {
+  DateLike,
+};
 
 /**
  * @docid _ui_date_range_box_ChangeEvent
@@ -176,11 +184,12 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
     disableOutOfRangeSelection?: boolean;
     /**
      * @docid dxDateRangeBoxOptions.endDate
+     * @type Date|number|string|null
      * @default null
      * @public
      * @fires dxDateRangeBoxOptions.onOptionChanged
      */
-    endDate?: Date | number | string;
+    endDate?: DateLike;
     /**
      * @docid dxDateRangeBoxOptions.endDateInputAttr
      * @default {}
@@ -245,11 +254,12 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
     openOnFieldClick?: boolean;
     /**
      * @docid dxDateRangeBoxOptions.startDate
+     * @type Date|number|string|null
      * @default null
      * @public
      * @fires dxDateRangeBoxOptions.onOptionChanged
      */
-    startDate?: Date | number | string;
+    startDate?: DateLike;
     /**
      * @docid dxDateRangeBoxOptions.startDateInputAttr
      * @default {}
@@ -288,10 +298,11 @@ export type Properties = Omit<DateBoxBaseOptions<dxDateRangeBox>, 'inputAttr' | 
     startDateText?: string;
     /**
      * @docid dxDateRangeBoxOptions.value
+     * @type Array<Date | number | string | null>
      * @default [null,null]
      * @public
      */
-    value?: Array<Date | number | string>;
+    value?: DateLike[];
 };
 
 /**
@@ -324,8 +335,9 @@ export default class dxDateRangeBox extends DateRangeBoxBase {
    * @docid
    * @publicName reset(value)
    * @public
+   * @param1 value:Array<Date | number | string | null>
    */
-  reset(value?: Array<Date | number | string | null>): void;
+  reset(value?: Properties['value']): void;
 }
 
 /// #DEBUG

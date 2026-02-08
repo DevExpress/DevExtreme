@@ -1,7 +1,11 @@
 import $ from 'jquery';
-import { Appointment } from '__internal/scheduler/appointments/m_appointment';
+import { Appointment } from '__internal/scheduler/appointments/appointment/m_appointment';
 import { Deferred } from 'core/utils/deferred';
 import fx from 'common/core/animation/fx';
+
+import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
+
+import 'fluent_blue_light.css!';
 
 const { module, test, testStart } = QUnit;
 
@@ -14,12 +18,8 @@ testStart(function() {
 });
 
 const createInstance = () => {
-    const dataAccessorsMock = {
-        getter: {},
-        setter: {}
-    };
-    const observer = {
-        fire: (command) => {
+    const notifyScheduler = {
+        invoke: (command) => {
             switch(command) {
                 case 'getCellHeight':
                     return CELL_HEIGHT;
@@ -34,9 +34,15 @@ const createInstance = () => {
     };
 
     return $('#scheduler-appointment').dxSchedulerAppointment({
-        observer,
+        notifyScheduler,
         getAppointmentColor: () => new Deferred(),
-        dataAccessors: dataAccessorsMock
+        dataAccessors: {
+            get(prop, obj) {
+                return obj[prop];
+            },
+        },
+        getResourceManager: getEmptyResourceManager,
+        groupTexts: [],
     }).dxSchedulerAppointment('instance');
 };
 
@@ -51,12 +57,12 @@ const moduleOptions = {
 
 
 module('Appointments', moduleOptions, () => {
-    test('Scheduler appointment should be initialized', function(assert) {
+    test('Scheduler appointment should be initialized', async function(assert) {
         const instance = createInstance();
         assert.ok(instance instanceof Appointment, 'dxSchedulerAppointment was initialized');
     });
 
-    test('Scheduler appointment has right direction css-class', function(assert) {
+    test('Scheduler appointment has right direction css-class', async function(assert) {
         const instance = createInstance();
 
         assert.notOk(instance.$element().hasClass('dx-scheduler-appointment-horizontal'), 'appointment doesn\'t have css-class');
@@ -66,7 +72,7 @@ module('Appointments', moduleOptions, () => {
         assert.ok(instance.$element().hasClass('dx-scheduler-appointment-horizontal'), 'appointment has right class');
     });
 
-    test('Scheduler appointment has right resizable config for vertical direction', function(assert) {
+    test('Scheduler appointment has right resizable config for vertical direction', async function(assert) {
         const instance = createInstance();
 
         instance.option({
@@ -84,7 +90,7 @@ module('Appointments', moduleOptions, () => {
         assert.equal(resizableInstance.option('minHeight'), CELL_HEIGHT, 'Resizable has a right minHeight');
     });
 
-    test('Scheduler appointment has right resizable config for horizontal direction', function(assert) {
+    test('Scheduler appointment has right resizable config for horizontal direction', async function(assert) {
         const instance = createInstance();
 
         instance.option({
@@ -103,7 +109,7 @@ module('Appointments', moduleOptions, () => {
         assert.equal(resizableInstance.option('minHeight'), 0, 'Resizable has a right minHeight');
     });
 
-    test('Scheduler appointment has right resizing handles, horizontal direction', function(assert) {
+    test('Scheduler appointment has right resizing handles, horizontal direction', async function(assert) {
         const instance = createInstance();
 
         instance.option({
@@ -124,7 +130,7 @@ module('Appointments', moduleOptions, () => {
         assert.equal(resizableInstance.option('handles'), 'right', 'Appointment has right resizing handle');
     });
 
-    test('Scheduler appointment has right resizing handles, horizontal direction, RTL', function(assert) {
+    test('Scheduler appointment has right resizing handles, horizontal direction, RTL', async function(assert) {
         const instance = createInstance();
 
         instance.option({
@@ -146,7 +152,7 @@ module('Appointments', moduleOptions, () => {
         assert.equal(resizableInstance.option('handles'), 'left', 'Appointment has right resizing handle');
     });
 
-    test('Appointment should process "isDragSource" property', function(assert) {
+    test('Appointment should process "isDragSource" property', async function(assert) {
         const instance = createInstance();
 
         assert.ok(

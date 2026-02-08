@@ -18,7 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -40,7 +40,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoLabelModule } from 'devextreme-angular/ui/nested';
@@ -50,8 +50,6 @@ import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoSliderFormatModule } from 'devextreme-angular/ui/slider/nested';
 import { DxoSliderLabelModule } from 'devextreme-angular/ui/slider/nested';
 import { DxoSliderTooltipModule } from 'devextreme-angular/ui/slider/nested';
-
-
 
 
 
@@ -66,8 +64,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-slider',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -77,6 +77,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxSliderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
     instance: DxSlider = null;
 
     /**
@@ -149,10 +150,10 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -461,10 +462,10 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -548,7 +549,7 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -716,7 +717,7 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -729,10 +730,6 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
@@ -847,6 +844,7 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
 
 @NgModule({
   imports: [
+    DxSliderComponent,
     DxoLabelModule,
     DxoFormatModule,
     DxoTooltipModule,
@@ -855,9 +853,6 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
     DxoSliderTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSliderComponent
   ],
   exports: [
     DxSliderComponent,
@@ -871,6 +866,8 @@ export class DxSliderComponent extends DxComponent implements OnDestroy, Control
   ]
 })
 export class DxSliderModule { }
+
+export * from 'devextreme-angular/ui/slider/nested';
 
 import type * as DxSliderTypes from "devextreme/ui/slider_types";
 export { DxSliderTypes };

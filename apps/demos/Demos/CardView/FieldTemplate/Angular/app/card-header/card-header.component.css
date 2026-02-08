@@ -1,0 +1,9 @@
+.header {
+  padding: 18px 24px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

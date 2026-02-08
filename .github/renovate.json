@@ -14,6 +14,20 @@
     "rebaseWhen": "conflicted",
     "packageRules": [
         {
+            "matchPackageNames": [
+                "openai",
+                "rehype-minify-whitespace",
+                "rehype-parse",
+                "rehype-remark",
+                "rehype-stringify",
+                "remark-parse",
+                "remark-rehype",
+                "remark-stringify",
+                "unified"
+            ],
+            "enabled": false
+        },
+        {
             "groupName": "CLDR",
             "matchPackageNames": [
                 "cldr-{/,}**"

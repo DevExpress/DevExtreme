@@ -1,0 +1,45 @@
+@use "../icon_fonts" as *;
+
+@mixin informer(
+  $error-color,
+  $error-background-color,
+  $info-color,
+  $info-background-color,
+  $border-radius,
+  $icon-size,
+  $padding-inline,
+  $padding-block,
+  $column-gap,
+) {
+  .dx-informer {
+    padding-inline: $padding-inline;
+    padding-block: $padding-block;
+    column-gap: $column-gap;
+  }
+
+  .dx-informer-bg {
+    border-radius: $border-radius;
+  }
+
+  .dx-informer-error {
+    color: $error-color;
+
+    &.dx-informer-bg {
+      background-color: $error-background-color;
+    }
+  }
+
+  .dx-informer-info {
+    color: $info-color;
+
+    &.dx-informer-bg {
+      background-color: $info-background-color;
+    }
+  }
+
+  .dx-informer-icon {
+    & * {
+      @include dx-icon-sizing($icon-size);
+    }
+  }
+}

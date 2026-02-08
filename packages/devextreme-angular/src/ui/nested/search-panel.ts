@@ -1,5 +1,6 @@
 /* tslint:disable:max-line-length */
 
+/* tslint:disable:use-input-property-decorator */
 
 import {
     Component,
@@ -8,7 +9,6 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input,
     Output,
     EventEmitter
 } from '@angular/core';
@@ -18,74 +18,30 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { NestedOption } from 'devextreme-angular/core';
+import { DxoSearchPanel } from './base/search-panel';
 
 
 @Component({
     selector: 'dxo-search-panel',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [NestedOptionHost],
+    inputs: [
+        'highlightCaseSensitive',
+        'highlightSearchText',
+        'placeholder',
+        'searchVisibleColumnsOnly',
+        'text',
+        'visible',
+        'width'
+    ]
 })
-export class DxoSearchPanelComponent extends NestedOption implements OnDestroy, OnInit  {
-    @Input()
-    get highlightCaseSensitive(): boolean {
-        return this._getOption('highlightCaseSensitive');
-    }
-    set highlightCaseSensitive(value: boolean) {
-        this._setOption('highlightCaseSensitive', value);
-    }
-
-    @Input()
-    get highlightSearchText(): boolean {
-        return this._getOption('highlightSearchText');
-    }
-    set highlightSearchText(value: boolean) {
-        this._setOption('highlightSearchText', value);
-    }
-
-    @Input()
-    get placeholder(): string {
-        return this._getOption('placeholder');
-    }
-    set placeholder(value: string) {
-        this._setOption('placeholder', value);
-    }
-
-    @Input()
-    get searchVisibleColumnsOnly(): boolean {
-        return this._getOption('searchVisibleColumnsOnly');
-    }
-    set searchVisibleColumnsOnly(value: boolean) {
-        this._setOption('searchVisibleColumnsOnly', value);
-    }
-
-    @Input()
-    get text(): string {
-        return this._getOption('text');
-    }
-    set text(value: string) {
-        this._setOption('text', value);
-    }
-
-    @Input()
-    get visible(): boolean {
-        return this._getOption('visible');
-    }
-    set visible(value: boolean) {
-        this._setOption('visible', value);
-    }
-
-    @Input()
-    get width(): number | string {
-        return this._getOption('width');
-    }
-    set width(value: number | string) {
-        this._setOption('width', value);
-    }
-
+export class DxoSearchPanelComponent extends DxoSearchPanel implements OnDestroy, OnInit  {
 
     /**
     
@@ -101,7 +57,6 @@ export class DxoSearchPanelComponent extends NestedOption implements OnDestroy, 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'textChange' }
         ]);
@@ -123,7 +78,7 @@ export class DxoSearchPanelComponent extends NestedOption implements OnDestroy, 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSearchPanelComponent
   ],
   exports: [

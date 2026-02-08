@@ -144,7 +144,6 @@ const parseConfig = (config: ConfigSettings): void => {
   [
     (key: string): string => key.replace(/@treelist/, '@datagrid'),
     (key: string): string => key.replace(/@/, '$'),
-    (key: string): string => key.toLowerCase().replace(/_/g, '-'),
   ].forEach((processor) => {
     processItemKeys(config, processor);
   });

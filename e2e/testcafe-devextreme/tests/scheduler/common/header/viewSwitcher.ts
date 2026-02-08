@@ -15,10 +15,16 @@ test('it should correctly switch a differently typed views (T1080992)', async (t
   } = scheduler;
 
   await t
+    .click(viewSwitcher.getButton('Day').element)
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('enter')
     .click(viewSwitcher.getButton('Some week').element)
     .expect(scheduler.checkViewType('week'))
     .ok()
-    .click(viewSwitcher.getButton('Day').element)
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('enter')
     .expect(scheduler.checkViewType('day'))
     .ok();
 }).before(async () => createWidget('dxScheduler', {
@@ -41,10 +47,18 @@ test('Changing view does not reset toolbar items state', async (t) => {
 
   await selectBox.open();
   const list = await selectBox.getList();
+
   await t
     .click(list.getItem(0).element)
     .expect(selectBox.value)
     .eql(defaultSelectBoxValue);
+
+  await t
+    .pressKey('tab')
+    .pressKey('enter')
+    .pressKey('down')
+    .pressKey('down')
+    .pressKey('enter');
 
   await t.click(scheduler.toolbar.viewSwitcher.getButton('Month').element)
     .expect(scheduler.checkViewType('month'))

@@ -16,7 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -38,7 +38,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoColorizerModule } from 'devextreme-angular/ui/nested';
@@ -82,17 +82,17 @@ import { DxoTreeMapTooltipBorderModule } from 'devextreme-angular/ui/tree-map/ne
 import { DxoTreeMapTreeMapborderModule } from 'devextreme-angular/ui/tree-map/nested';
 
 
-
-
 /**
  * [descr:dxTreeMap]
 
  */
 @Component({
     selector: 'dx-tree-map',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -101,6 +101,7 @@ import { DxoTreeMapTreeMapborderModule } from 'devextreme-angular/ui/tree-map/ne
     ]
 })
 export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
     instance: DxTreeMap = null;
 
     /**
@@ -757,10 +758,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
 
 
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -858,6 +855,7 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
 
 @NgModule({
   imports: [
+    DxTreeMapComponent,
     DxoColorizerModule,
     DxoExportModule,
     DxoGroupModule,
@@ -898,9 +896,6 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
     DxoTreeMapTreeMapborderModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTreeMapComponent
   ],
   exports: [
     DxTreeMapComponent,
@@ -946,6 +941,8 @@ export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChan
   ]
 })
 export class DxTreeMapModule { }
+
+export * from 'devextreme-angular/ui/tree-map/nested';
 
 import type * as DxTreeMapTypes from "devextreme/viz/tree_map_types";
 export { DxTreeMapTypes };

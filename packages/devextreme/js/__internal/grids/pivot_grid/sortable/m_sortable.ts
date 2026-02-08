@@ -10,7 +10,6 @@ import {
 import { addNamespace } from '@js/common/core/events/utils/index';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
-import DOMComponent from '@js/core/dom_component';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -19,7 +18,8 @@ import {
   setWidth,
 } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
-import swatchContainer from '@js/ui/widget/swatch_container';
+import swatchContainer from '@ts/core/utils/swatch_container';
+import DOMComponent from '@ts/core/widget/dom_component';
 
 const { getSwatchContainer } = swatchContainer;
 
@@ -165,9 +165,13 @@ function getScrollWrapper(scrollable) {
   };
 }
 
-const Sortable = (DOMComponent as any).inherit({
+class Sortable extends DOMComponent<Sortable> {
+  _indicator: any;
+
+  _$draggable: any;
+
   _getDefaultOptions() {
-    return extend(this.callBase(), {
+    return extend(super._getDefaultOptions(), {
       onChanged: null,
       onDragging: null,
       itemRender: null,
@@ -182,13 +186,14 @@ const Sortable = (DOMComponent as any).inherit({
       groupFilter: null,
       useIndicator: false,
     });
-  },
+  }
 
   _renderItem($sourceItem, target) {
     const itemRender = this.option('itemRender');
     let $item;
 
     if (itemRender) {
+      // @ts-expect-error ts-error
       $item = itemRender($sourceItem, target);
     } else {
       $item = $sourceItem.clone();
@@ -198,7 +203,7 @@ const Sortable = (DOMComponent as any).inherit({
       });
     }
     return $item;
-  },
+  }
 
   _renderIndicator($item, isVertical, $targetGroup, isLast) {
     const height = getOuterHeight($item, true);
@@ -224,7 +229,7 @@ const Sortable = (DOMComponent as any).inherit({
     } else {
       setHeight(this._indicator, height);
     }
-  },
+  }
 
   _renderDraggable($sourceItem) {
     this._$draggable && this._$draggable.remove();
@@ -235,7 +240,7 @@ const Sortable = (DOMComponent as any).inherit({
         zIndex: 1000000,
         position: 'absolute',
       });
-  },
+  }
 
   _detachEventHandlers() {
     const dragEventsString = [dragEventMove, dragEventStart, dragEventEnd, dragEventEnter, dragEventLeave, dragEventDrop].join(' ');
@@ -244,7 +249,7 @@ const Sortable = (DOMComponent as any).inherit({
       addNamespace(dragEventsString, SORTABLE_NAMESPACE),
       undefined,
     );
-  },
+  }
 
   _getItemOffset(isVertical, itemsOffset, e) {
     for (let i = 0; i < itemsOffset.length; i += 1) {
@@ -267,14 +272,15 @@ const Sortable = (DOMComponent as any).inherit({
     }
 
     return undefined;
-  },
+  }
 
   _getEventListener() {
     const groupSelector = this.option('groupSelector');
     const element = this.$element();
 
+    // @ts-expect-error ts-error
     return groupSelector ? element.find(groupSelector) : element;
-  },
+  }
 
   _attachEventHandlers() {
     const that = this;
@@ -304,13 +310,16 @@ const Sortable = (DOMComponent as any).inherit({
     };
 
     const createGroups = function () {
+      // @ts-expect-error ts-error
       const root: any = domAdapter.getRootNode(that.$element().get(0));
 
       if (!groupSelector) {
         return element;
       }
       return groupFilter
+        // @ts-expect-error ts-error
         ? $(root).find(groupSelector).filter(groupFilter)
+        // @ts-expect-error ts-error
         : element.find(groupSelector);
     };
 
@@ -328,6 +337,7 @@ const Sortable = (DOMComponent as any).inherit({
         targetIndex: $targetGroup.find(itemSelector).index($targetItem),
       };
 
+      // @ts-expect-error ts-error
       onDragging && onDragging(draggingArgs);
 
       if (draggingArgs.cancel) {
@@ -493,6 +503,7 @@ const Sortable = (DOMComponent as any).inherit({
           $targetGroup.removeClass(targetClass);
           changedArgs.targetGroup = $targetGroup.attr('group');
           if (sourceGroup !== changedArgs.targetGroup || targetIndex > -1) {
+            // @ts-expect-error ts-error
             onChanged && onChanged(changedArgs);
             changedArgs.removeSourceElement && $sourceItem.remove();
           }
@@ -510,26 +521,26 @@ const Sortable = (DOMComponent as any).inherit({
         $targetItem = null;
       });
     }
-  },
+  }
 
   _init() {
-    this.callBase();
+    super._init();
     this._attachEventHandlers();
-  },
+  }
 
   _render() {
-    this.callBase();
+    super._render();
     this.$element().addClass(SORTABLE_CLASS);
-  },
+  }
 
   _dispose() {
     const that = this;
 
-    that.callBase.apply(that, arguments);
+    super._dispose();
 
     that._$draggable && that._$draggable.detach();
     that._indicator && that._indicator.detach();
-  },
+  }
 
   _optionChanged(args) {
     const that = this;
@@ -551,16 +562,17 @@ const Sortable = (DOMComponent as any).inherit({
       case 'direction':
         break;
       default:
-        that.callBase(args);
+        super._optionChanged(args);
     }
-  },
+  }
 
   _useTemplates() {
     return false;
-  },
-});
+  }
+}
 
 /// #DEBUG
+// @ts-expect-error ts-error
 Sortable.prototype.__SCROLL_STEP = SCROLL_STEP;
 /// #ENDDEBUG
 

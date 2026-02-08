@@ -57,7 +57,7 @@ const componentConfig = {
     elementAttr: Object as PropType<Record<string, any>>,
     group: String,
     handle: String,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onDragEnd: Function as PropType<((e: DragEndEvent) => void)>,
     onDragMove: Function as PropType<((e: DragMoveEvent) => void)>,
@@ -67,7 +67,7 @@ const componentConfig = {
     rtlEnabled: Boolean,
     scrollSensitivity: Number,
     scrollSpeed: Number,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

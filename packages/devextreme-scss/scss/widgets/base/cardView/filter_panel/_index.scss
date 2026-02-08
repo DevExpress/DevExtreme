@@ -1,0 +1,17 @@
+@use './variables' as *;
+
+.dx-cardview {
+  .dx-datagrid-filter-panel {
+    background-color: $cardview-filter-panel-bg-color;
+    border-radius: $cardview-filter-panel-border-radius;
+    border-top-color: $cardview-filter-panel-border-color;
+
+    .dx-icon-filter {
+      color: $cardview-filter-panel__icon-color;
+    }
+
+    .dx-datagrid-filter-panel-text, .dx-datagrid-filter-panel-clear-filter {
+      color: $cardview-filter-panel-text-color;
+    }
+  }
+}

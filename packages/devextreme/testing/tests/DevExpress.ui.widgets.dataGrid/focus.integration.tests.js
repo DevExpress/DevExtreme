@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import typeUtils from 'core/utils/type';
-import devices from '__internal/core/m_devices';
 import pointerEvents from 'common/core/events/pointer';
 import fx from 'common/core/animation/fx';
 import commonUtils from 'core/utils/common';
@@ -12,6 +11,8 @@ import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.j
 import ArrayStore from 'common/data/array_store';
 import DataGrid from 'ui/data_grid';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
+
+import 'generic_light.css!';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
@@ -111,11 +112,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     });
 
     QUnit.test('Enable rows hover, row position and focused row', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'hover is disabled for not desktop devices');
-            return;
-        }
-
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [],
@@ -657,7 +653,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $(dataGrid.getRowElement(0)).find('.dx-command-edit > .dx-link-edit').trigger(pointerEvents.up).click();
         this.clock.tick(10);
 
-        navigationController._rowsViewKeyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)) }) });
+        navigationController.keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input').get(0) }) });
 
         $(dataGrid.getCellElement(0, 1)).trigger(pointerEvents.up);
         this.clock.tick(10);
@@ -1038,7 +1034,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // act
         dataGrid.focus(dataGrid.getCellElement(1, 2));
         const keyboardController = dataGrid.getController('keyboardNavigation');
-        keyboardController._rowsViewKeyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(':focus').get(0) }) });
+        keyboardController.keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(':focus').get(0) }) });
         this.clock.tick(10);
 
         const $cell = $(dataGrid.element()).find('.dx-focused');
@@ -1786,11 +1782,6 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
     // T872126
     QUnit.test('Incorrect cell should not be focused after editing boolean column in cell edit mode', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test is not actual for mobile devices');
-            return;
-        }
-
         // arrange
         const store = [];
 
@@ -2144,7 +2135,7 @@ QUnit.module('View\'s focus', {
 
         // act
         const navigationController = this.dataGrid.getController('keyboardNavigation');
-        navigationController._rowsViewKeyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(this.dataGrid.getCellElement(0, 0)) }) });
+        navigationController.keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(this.dataGrid.getCellElement(0, 0)) }) });
         this.clock.tick(10);
 
         // assert
@@ -2839,10 +2830,6 @@ QUnit.module('View\'s focus', {
 
     ['Batch', 'Cell'].forEach(editMode => {
         QUnit.testInActiveWindow(`${editMode} - Date cell should have correct text when the useMaskBehavior and editOnKeyPress options are enabled (T976144)`, function(assert) {
-            if(devices.real().deviceType !== 'desktop') {
-                assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
-                return;
-            }
             // arrange
             this.dataGrid.dispose();
             const dataGrid = createDataGrid({
@@ -2937,57 +2924,7 @@ QUnit.module('View\'s focus', {
         const keyboard = keyboardMock($cell1_0);
         keyboard.keyDown('tab', { shiftKey: true });
         this.clock.tick(10);
-
-        const $lastCell = $(dataGrid.getRowElement(0)).children().last();
-        const $editButton = $lastCell.find('.dx-link-edit');
-
-        // assert
-        assert.ok($lastCell.hasClass('dx-command-edit'), 'command cell');
-        assert.notOk($lastCell.hasClass('dx-focused'), 'cell is not focused');
-        assert.ok($editButton.is(':focus'), 'edit button is focused');
-    });
-
-    QUnit.testInActiveWindow('Edit command button should be focused in the last column when virtual column rendering mode and fixed columns are used', function(assert) {
-        // arrange
-        this.dataGrid.dispose();
-        const generateData = function() {
-            const items = [];
-            for(let i = 0; i < 2; i += 1) {
-                const item = {};
-                for(let j = 0; j < 17; j += 1) {
-                    item[`field${j}`] = `${i}-${j}`;
-                }
-                items.push(item);
-            }
-            return items;
-        };
-        const dataGrid = createDataGrid({
-            width: 500,
-            columnWidth: 70,
-            dataSource: generateData(),
-            columnFixing: { legacyMode: true },
-            customizeColumns: function(columns) {
-                columns[0].fixed = true;
-                columns[16].fixedPosition = 'right';
-                columns[16].fixed = true;
-            },
-            scrolling: {
-                columnRenderingMode: 'virtual',
-            },
-            editing: {
-                mode: 'row',
-                allowUpdating: true,
-            }
-        });
-
-        this.clock.tick(10);
-
-        const $cell1_0 = $(dataGrid.getCellElement(1, 0));
-        $cell1_0.trigger(CLICK_EVENT).trigger('dxclick');
-
-        const keyboard = keyboardMock($cell1_0);
-        keyboard.keyDown('tab', { shiftKey: true });
-        this.clock.tick(10);
+        $(dataGrid.getScrollable().container()).trigger('scroll');
 
         const $lastCell = $(dataGrid.getRowElement(0)).children().last();
         const $editButton = $lastCell.find('.dx-link-edit');
@@ -3091,6 +3028,8 @@ QUnit.module('View\'s focus', {
         const keyboard = keyboardMock($firstCell);
         keyboard.keyDown('tab');
         this.clock.tick(10);
+        $(scrollable.container()).trigger('scroll');
+
         const $secondCell = $(this.dataGrid.getCellElement(0, 1));
         const maxScrollOffset = this.keyboardNavigationController._getMaxHorizontalOffset();
 
@@ -4143,7 +4082,7 @@ QUnit.module('View\'s focus', {
             assert.strictEqual($firstCellInput.val(), 'a', 'correct editor value');
 
             // act
-            keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)));
+            keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input'));
             keyboard.keyDown('tab');
             this.clock.tick(25);
             const $secondCellInput = $(this.dataGrid.getCellElement(0, 1)).find('.dx-texteditor-input');
@@ -4156,11 +4095,6 @@ QUnit.module('View\'s focus', {
     });
 
     QUnit.testInActiveWindow('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRenderingMode: virtual', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
-            return;
-        }
-
         // arrange
         const generateData = (rowCount, columnCount) => {
             const items = [];
@@ -4414,11 +4348,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T460276
     QUnit.testInActiveWindow('Tab key should open editor in next cell when virtual scrolling enabled and editing mode is cell', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
-            return;
-        }
-
         const array = [];
 
         for(let i = 0; i < 100; i++) {
@@ -4451,7 +4380,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         this.clock.tick(10);
 
         $(dataGrid.$element()).find('.dx-textbox').dxTextBox('instance').option('value', 'Test');
-        navigationController._rowsViewKeyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.$element()).find('input').get(0) }) });
+        navigationController.keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.$element()).find('input').get(0) }) });
         this.clock.tick(10);
 
         // assert
@@ -4463,10 +4392,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
     // T460276
     QUnit.testInActiveWindow('Tab key should open editor in next cell when virtual scrolling enabled and editing mode is cell at the end of table', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
-            return;
-        }
         const array = [];
 
         for(let i = 0; i < 200; i++) {
@@ -4498,7 +4423,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         this.clock.tick(10);
 
         $(dataGrid.$element()).find('.dx-textbox').dxTextBox('instance').option('value', 'Test');
-        navigationController._rowsViewKeyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.$element()).find('input').get(0) }) });
+        navigationController.keyDownHandler({ key: 'Tab', keyName: 'tab', originalEvent: $.Event('keydown', { target: $(dataGrid.$element()).find('input').get(0) }) });
         this.clock.tick(10);
 
         // assert
@@ -4563,7 +4488,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         });
         const keyboardNavigationController = dataGrid.getController('keyboardNavigation');
         const triggerTabPress = function($target, isShiftPressed) {
-            keyboardNavigationController._rowsViewKeyDownHandler({
+            keyboardNavigationController.keyDownHandler({
                 key: 'Tab',
                 keyName: 'tab',
                 shift: !!isShiftPressed,
@@ -4636,7 +4561,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         });
         const keyboardNavigationController = dataGrid.getController('keyboardNavigation');
         const triggerTabPress = function($target, isShiftPressed) {
-            keyboardNavigationController._rowsViewKeyDownHandler({
+            keyboardNavigationController.keyDownHandler({
                 key: 'Tab',
                 keyName: 'tab',
                 shift: !!isShiftPressed,
@@ -4723,7 +4648,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
                 }, 'lastName']
         });
         const triggerTabPress = function(target) {
-            const keyboardListenerId = dataGrid.getController('keyboardNavigation')._rowsViewKeyDownListener;
+            const keyboardListenerId = dataGrid.getController('keyboardNavigation').keyDownListener;
 
             keyboard._getProcessor(keyboardListenerId).process({
                 key: 'Tab',
@@ -4830,11 +4755,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.testInActiveWindow('DataGrid should not focus command cell after edit canceling', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test should not be run on mobile');
-            return;
-        }
-
         // arrange, act
         const dataGrid = createDataGrid({
             editing: {
@@ -4955,10 +4875,6 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
 
     // T882682
     QUnit.test('focus overlay should be shown again after resizing', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test is not actual for mobile devices');
-            return;
-        }
         // arrange
         const $dataGrid = $('#dataGrid').dxDataGrid({
             width: 1000,
@@ -5039,11 +4955,6 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
     });
 
     QUnit.testInActiveWindow('Scroll position should not be changed after click on button element (T945907)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
-            return;
-        }
-
         // arrange
         const dataGrid = createDataGrid({
             height: 50,

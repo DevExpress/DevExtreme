@@ -24,13 +24,13 @@
   }
 }
 
-.dx-tabpanel-tabs .dx-tabs:not(.dx-tabs-vertical) {
+.dx-tabpanel-tabs .dx-tabs.dx-tabs-horizontal {
   .dx-tabpanel-tab {
     max-width: $generic-tabpanel-tabs-item-width;
   }
 }
 
-.dx-tabs-nav-buttons:not(.dx-tabs-vertical) {
+.dx-tabs-nav-buttons.dx-tabs-horizontal {
   .dx-tabpanel-tab {
     width: $generic-tabpanel-tabs-item-width;
     max-width: unset;

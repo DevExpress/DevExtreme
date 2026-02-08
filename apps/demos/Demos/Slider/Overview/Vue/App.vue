@@ -112,7 +112,7 @@ import { DxSlider } from 'devextreme-vue/slider';
 import { DxNumberBox } from 'devextreme-vue/number-box';
 
 const sliderValue = ref(10);
-const format = (value) => `${value}%`;
+const format = (value: number) => `${value}%`;
 
 const label = {
   visible: true,

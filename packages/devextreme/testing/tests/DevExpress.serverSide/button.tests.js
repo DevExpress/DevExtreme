@@ -1,1 +1,1 @@
-require('../DevExpress.ui.widgets/button.markup.tests.js');
+import '../DevExpress.ui.widgets/button.markup.tests.js';

@@ -2,15 +2,15 @@
   "author": "Developer Express Inc.",
   "name": "devextreme-react-playground",
   "private": true,
-  "version": "25.1.0",
+  "version": "25.1.8",
   "description": "DevExtreme React UI and Visualization Components Sandbox",
   "repository": {
     "type": "git",
     "url": "https://github.com/DevExpress/devextreme-react.git"
   },
   "dependencies": {
-    "devextreme": "workspace:~",
-    "devextreme-react": "workspace:~",
+    "devextreme": "workspace:*",
+    "devextreme-react": "workspace:*",
     "react": "~18.0.0",
     "react-dom": "~18.0.0"
   },
@@ -24,7 +24,7 @@
     "tsconfig-paths-webpack-plugin": "4.1.0",
     "webpack": "5.94.0",
     "webpack-cli": "5.1.4",
-    "webpack-dev-server": "4.15.1"
+    "webpack-dev-server": "5.2.1"
   },
   "scripts": {
     "test": "node runner.js",

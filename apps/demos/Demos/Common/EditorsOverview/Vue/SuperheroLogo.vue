@@ -189,12 +189,10 @@ withDefaults(defineProps<{
 <style>
 .picture-container {
   text-align: center;
-  margin: 20px 2px 5px 2px;
+  margin: 20px 2px 5px;
   padding-top: 20px;
   overflow: hidden;
-  outline-width: 2px;
-  outline-style: none;
-  outline-color: #f05b41;
+  outline: #f05b41 none 2px;
 }
 
 .picture {

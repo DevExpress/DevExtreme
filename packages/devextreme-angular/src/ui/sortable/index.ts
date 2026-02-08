@@ -29,14 +29,12 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
 
 import { DxoSortableCursorOffsetModule } from 'devextreme-angular/ui/sortable/nested';
-
-
 
 
 /**
@@ -45,8 +43,10 @@ import { DxoSortableCursorOffsetModule } from 'devextreme-angular/ui/sortable/ne
  */
 @Component({
     selector: 'dx-sortable',
+    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -54,6 +54,7 @@ import { DxoSortableCursorOffsetModule } from 'devextreme-angular/ui/sortable/ne
     ]
 })
 export class DxSortableComponent extends DxComponent implements OnDestroy {
+
     instance: DxSortable = null;
 
     /**
@@ -243,10 +244,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -321,10 +322,10 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -511,7 +512,7 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -553,11 +554,7 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -620,13 +617,11 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxSortableComponent,
     DxoCursorOffsetModule,
     DxoSortableCursorOffsetModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSortableComponent
   ],
   exports: [
     DxSortableComponent,
@@ -636,6 +631,8 @@ export class DxSortableComponent extends DxComponent implements OnDestroy {
   ]
 })
 export class DxSortableModule { }
+
+export * from 'devextreme-angular/ui/sortable/nested';
 
 import type * as DxSortableTypes from "devextreme/ui/sortable_types";
 export { DxSortableTypes };

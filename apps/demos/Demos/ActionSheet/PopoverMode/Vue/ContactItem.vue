@@ -9,6 +9,6 @@
 import { type ContactInfo } from './data';
 
 defineProps<{
-  itemData?: ContactInfo
+  itemData: ContactInfo
 }>();
 </script>

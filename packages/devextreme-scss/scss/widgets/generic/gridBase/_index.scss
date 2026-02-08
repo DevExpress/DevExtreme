@@ -4,7 +4,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/icons" as *;
+@use "../../base/icon_fonts" as *;
 @use "../../base/checkBox/mixins" as *;
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
@@ -143,8 +143,6 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
   }
 
   .dx-#{$widget-name} {
-    line-height: inherit;
-
     .dx-row-alt {
       & > td,
       & > tr > td {
@@ -522,6 +520,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
     .dx-menu-item {
       &.dx-state-focused {
         background-color: transparent;
+        color: $datagrid-menu-icon-color;
 
         &::after {
           border: 2px solid $datagrid-focused-border-color;
@@ -710,6 +709,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       > .dx-master-detail-cell {
         padding: $grid-masterdetail-padding;
       }
+
       > .dx-#{$widget-name}-group-space,
       .dx-master-detail-cell:not(.dx-row-lines) {
         border-top: $datagrid-border;
@@ -770,6 +770,11 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
       color: $datagrid-cell-removed-text-color;
     }
 
+    .dx-row-removed:not(.dx-row-lines) > td {
+      border-top-color: $datagrid-row-removed-bg;
+      border-bottom-width: 0;
+    }
+
     @include dx-set-checkbox-border-color-as-background();
 
     .dx-adaptive-detail-row {
@@ -806,7 +811,6 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
         & > td:not(.dx-focused),
         & > tr > td:not(.dx-focused),
         & .dx-command-edit:not(.dx-focused) .dx-link {
-          background-color: $datagrid-row-focused-bg;
           color: $datagrid-row-focused-color;
 
           .dx-texteditor-input {
@@ -817,6 +821,11 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
           & .dx-#{$widget-name}-group-closed {
             color: $datagrid-row-focused-color;
           }
+        }
+
+        & > td:not(.dx-focused),
+        & > tr > td:not(.dx-focused) {
+          background-color: $datagrid-row-focused-bg;
         }
 
         & .dx-command-edit .dx-link:focus {
@@ -1019,7 +1028,7 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
   }
 
   .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns {
-    .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+    .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
       padding-top: $generic-grid-base-cell-padding + 1px;
     }
 
@@ -1045,6 +1054,22 @@ $generic-grid-base-cell-input-height: round($generic-base-line-height * $generic
 
     .dx-row.dx-row-lines.dx-edit-row > td {
       border-top-width: 0;
+    }
+
+    .dx-row-removed:not(.dx-row-lines) > td {
+      border-bottom-width: 0;
+    }
+
+    .dx-row-removed.dx-row-lines > td {
+      border-top-width: 0;
+    }
+
+    .dx-master-detail-row > .dx-master-detail-cell {
+      padding: 0;
+
+      > .dx-#{$widget-name}-master-detail-container {
+        padding: $grid-masterdetail-padding;
+      }
     }
   }
 

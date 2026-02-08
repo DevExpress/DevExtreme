@@ -3,8 +3,9 @@ import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import Draggable from '@js/ui/draggable';
 
-import { LIST_ITEM_DATA_KEY } from './m_constants';
+import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_DATA_KEY } from './constants';
 import { isSchedulerComponent } from './utils/is_scheduler_component';
+import type { AppointmentViewModelPlain } from './view_model/generate_view_model/types';
 
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 
@@ -26,7 +27,7 @@ export default class AppointmentDragBehavior {
   }
 
   isAllDay(appointment) {
-    return appointment.data('dxAppointmentSettings').allDay;
+    return appointment.data(APPOINTMENT_SETTINGS_KEY).allDay;
   }
 
   onDragStart(e) {
@@ -85,15 +86,20 @@ export default class AppointmentDragBehavior {
     return itemDataFromTooltip || itemDataFromGrid;
   }
 
-  getItemSettings(appointment) {
+  getItemSettings(appointment): AppointmentViewModelPlain | undefined {
     const itemData: any = $(appointment).data(LIST_ITEM_DATA_KEY);
-    return itemData?.settings || [];
+    return itemData?.settings;
   }
 
   createDragStartHandler(options, appointmentDragging) {
     return (e) => {
       e.itemData = this.getItemData(e.itemElement);
       e.itemSettings = this.getItemSettings(e.itemElement);
+
+      if (this.scheduler._isAppointmentBeingUpdated(e.itemData)) {
+        e.cancel = true;
+        return;
+      }
 
       appointmentDragging.onDragStart?.(e);
 
@@ -105,6 +111,16 @@ export default class AppointmentDragBehavior {
 
   createDragMoveHandler(options, appointmentDragging) {
     return (e) => {
+      if (!this.appointmentInfo) {
+        e.cancel = true;
+        return;
+      }
+
+      if (this.scheduler._isAppointmentBeingUpdated(this.appointmentInfo.appointment)) {
+        e.cancel = true;
+        return;
+      }
+
       appointmentDragging.onDragMove?.(e);
 
       if (!e.cancel) {
@@ -115,6 +131,11 @@ export default class AppointmentDragBehavior {
 
   createDragEndHandler(options, appointmentDragging) {
     return (e) => {
+      if (!this.appointmentInfo) {
+        e.cancel = true;
+        return;
+      }
+
       const updatedData = this.appointments.invoke('getUpdatedData', e.itemData);
 
       this.appointmentInfo = null;

@@ -39,16 +39,16 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiTabPanelItemModule } from 'devextreme-angular/ui/tab-panel/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiTabPanelItemComponent } from 'devextreme-angular/ui/tab-panel/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -57,8 +57,10 @@ import { DxiTabPanelItemComponent } from 'devextreme-angular/ui/tab-panel/nested
  */
 @Component({
     selector: 'dx-tab-panel',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -67,6 +69,12 @@ import { DxiTabPanelItemComponent } from 'devextreme-angular/ui/tab-panel/nested
     ]
 })
 export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxTabPanel<TItem, TKey> = null;
 
     /**
@@ -178,10 +186,10 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -274,6 +282,19 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     }
     set itemTitleTemplate(value: any) {
         this._setOption('itemTitleTemplate', value);
+    }
+
+
+    /**
+     * [descr:dxTabPanelOptions.keyExpr]
+    
+     */
+    @Input()
+    get keyExpr(): Function | string {
+        return this._getOption('keyExpr');
+    }
+    set keyExpr(value: Function | string) {
+        this._setOption('keyExpr', value);
     }
 
 
@@ -464,10 +485,10 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -636,7 +657,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -686,6 +707,13 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Output() itemTitleTemplateChange: EventEmitter<any>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() keyExprChange: EventEmitter<Function | string>;
 
     /**
     
@@ -790,27 +818,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiTabPanelItemComponent)
-    get itemsChildren(): QueryList<DxiTabPanelItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiTabPanelItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -854,6 +862,7 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
             { emit: 'itemsChange' },
             { emit: 'itemTemplateChange' },
             { emit: 'itemTitleTemplateChange' },
+            { emit: 'keyExprChange' },
             { emit: 'loopChange' },
             { emit: 'noDataTextChange' },
             { emit: 'repaintChangesOnlyChange' },
@@ -917,13 +926,11 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
 
 @NgModule({
   imports: [
+    DxTabPanelComponent,
     DxiItemModule,
     DxiTabPanelItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTabPanelComponent
   ],
   exports: [
     DxTabPanelComponent,
@@ -933,6 +940,8 @@ export class DxTabPanelComponent<TItem = any, TKey = any> extends DxComponent im
   ]
 })
 export class DxTabPanelModule { }
+
+export * from 'devextreme-angular/ui/tab-panel/nested';
 
 import type * as DxTabPanelTypes from "devextreme/ui/tab_panel_types";
 export { DxTabPanelTypes };

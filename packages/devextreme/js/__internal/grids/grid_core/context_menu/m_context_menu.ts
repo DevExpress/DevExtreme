@@ -7,12 +7,13 @@ import ContextMenu from '@js/ui/context_menu';
 import modules from '../m_modules';
 
 const CONTEXT_MENU = 'dx-context-menu';
+const GROUP_ROW_CLASS = 'dx-group-row';
 
 const viewName = {
   columnHeadersView: 'header',
   rowsView: 'content',
   footerView: 'footer',
-  headerPanel: 'headerPanel',
+  headerPanel: 'toolbar',
 };
 const VIEW_NAMES = ['columnHeadersView', 'rowsView', 'footerView', 'headerPanel'] as const;
 
@@ -28,20 +29,26 @@ export class ContextMenuController extends modules.ViewController {
 
     const that = this;
     const $targetElement = $(dxEvent.target);
-    let $element;
-    let $targetRowElement;
-    let $targetCellElement;
     let menuItems;
 
     each(VIEW_NAMES, function () {
       const view = that.getView(this);
-      $element = view && view.element();
 
-      if ($element && ($element.is($targetElement) || $element.find($targetElement).length)) {
-        $targetCellElement = $targetElement.closest('.dx-row > td, .dx-row > tr');
-        $targetRowElement = $targetCellElement.parent();
+      if (!view) {
+        return;
+      }
+
+      const $viewElement = view.element();
+      const isTargetElementInsideView = $viewElement?.is($targetElement) || $viewElement?.find($targetElement).length;
+
+      if (isTargetElementInsideView) {
+        const isGroupRow = $targetElement.hasClass(GROUP_ROW_CLASS);
+        const $targetCellElement = isGroupRow
+          ? $targetElement.find('.dx-group-cell').first()
+          : $targetElement.closest('.dx-row > td, .dx-row > tr');
+        const $targetRowElement = $targetCellElement.parent();
         const rowIndex = view.getRowIndex($targetRowElement);
-        const columnIndex = $targetCellElement[0] && $targetCellElement[0].cellIndex;
+        const columnIndex = $targetCellElement[0]?.cellIndex;
         const rowOptions = $targetRowElement.data('options');
         const options: any = {
           event: dxEvent,
@@ -50,10 +57,11 @@ export class ContextMenuController extends modules.ViewController {
           rowIndex,
           row: view._getRows()[rowIndex],
           columnIndex,
+          // @ts-expect-error
           column: rowOptions?.cells?.[columnIndex]?.column,
         };
 
-        options.items = view.getContextMenuItems && view.getContextMenuItems(options);
+        options.items = view.getContextMenuItems?.(options);
 
         that.executeAction('onContextMenuPreparing', options);
         that._contextMenuPrepared(options);
@@ -111,7 +119,6 @@ export class ContextMenuView extends modules.View {
         onItemClick(params) {
           params.itemData?.onItemClick?.(params);
         },
-
         cssClass: this.getWidgetContainerClass(),
         // @ts-expect-error
         target: this.component.$element(),

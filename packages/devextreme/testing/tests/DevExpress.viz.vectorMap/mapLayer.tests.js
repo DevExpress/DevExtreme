@@ -1,8 +1,17 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const mapLayerModule = require('viz/vector_map/map_layer');
-const trackerModule = require('viz/vector_map/tracker');
-const dataExchangerModule = require('viz/vector_map/data_exchanger');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import mapLayerModule from 'viz/vector_map/map_layer';
+import trackerModule from 'viz/vector_map/tracker';
+import dataExchangerModule from 'viz/vector_map/data_exchanger';
+import projectionModule from 'viz/vector_map/projection.main';
+import { DataSource } from 'common/data/data_source/data_source';
+import baseThemeManagerModule from 'viz/core/base_theme_manager';
+import {
+    stubClass,
+    Renderer,
+    Element,
+} from '../../helpers/vizMocks.js';
+
 let StubProjection;
 let StubThemeManager;
 let StubDataExchanger;
@@ -10,24 +19,20 @@ let StubTracker;
 let stubSelectStrategy;
 let StubMapLayerElement;
 let StubProxy;
-const projectionModule = require('viz/vector_map/projection.main');
-const DataSource = require('common/data/data_source/data_source').DataSource;
-const baseThemeManagerModule = require('viz/core/base_theme_manager');
-const vizMocks = require('../../helpers/vizMocks.js');
 
 QUnit.begin(function() {
-    StubProjection = vizMocks.stubClass(projectionModule.Projection, {
+    StubProjection = stubClass(projectionModule.Projection, {
         on: function() {
             return sinon.spy();
         }
     });
-    StubThemeManager = vizMocks.stubClass(baseThemeManagerModule.BaseThemeManager, {
+    StubThemeManager = stubClass(baseThemeManagerModule.BaseThemeManager, {
         theme: function() {
             return { label: {} };
         }
     });
-    StubDataExchanger = vizMocks.stubClass(dataExchangerModule.DataExchanger);
-    StubTracker = vizMocks.stubClass(trackerModule.Tracker);
+    StubDataExchanger = stubClass(dataExchangerModule.DataExchanger);
+    StubTracker = stubClass(trackerModule.Tracker);
 
     stubSelectStrategy = sinon.spy(function() {
         return {
@@ -43,7 +48,7 @@ QUnit.begin(function() {
     });
     mapLayerModule._TESTS_stub_selectStrategy(stubSelectStrategy);
 
-    StubMapLayerElement = vizMocks.stubClass(mapLayerModule._TESTS_MapLayerElement, null, {
+    StubMapLayerElement = stubClass(mapLayerModule._TESTS_MapLayerElement, null, {
         $constructor: function() {
             StubMapLayerElement.items.push(this);
             this.proxy = new StubProxy();
@@ -51,7 +56,7 @@ QUnit.begin(function() {
     });
     mapLayerModule._TESTS_stub_MapLayerElement(StubMapLayerElement);
 
-    StubProxy = vizMocks.stubClass(mapLayerModule._TESTS_createProxy());
+    StubProxy = stubClass(mapLayerModule._TESTS_createProxy());
 });
 
 QUnit.testStart(function() {
@@ -62,7 +67,7 @@ QUnit.testStart(function() {
 const baseEnvironment = {
     beforeEach: function() {
         this.widget = { tag: 'widget' };
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.projection = new StubProjection();
         this.themeManager = new StubThemeManager();
         this.dataExchanger = new StubDataExchanger();
@@ -70,7 +75,7 @@ const baseEnvironment = {
         this.notifyDirty = sinon.spy();
         this.notifyReady = sinon.spy();
         this.eventTrigger = sinon.spy();
-        this.container = new vizMocks.Element();
+        this.container = new Element();
         this.layer = new mapLayerModule._TESTS_MapLayer({
             widget: this.widget,
             renderer: this.renderer,
@@ -116,7 +121,7 @@ QUnit.test('Construct', function(assert) {
 });
 
 QUnit.test('Dispose', function(assert) {
-    this.context.labelRoot = new vizMocks.Element();
+    this.context.labelRoot = new Element();
     this.context.str.reset = sinon.spy();
     this.context.grouping = { g1: 1, g2: 2 };
     this.layer.dispose();
@@ -195,7 +200,7 @@ QUnit.test('Set options without data', function(assert) {
 
 QUnit.test('Set option with data', function(assert) {
     const reset = this.context.str.reset = sinon.spy();
-    const labelRoot = this.context.labelRoot = new vizMocks.Element();
+    const labelRoot = this.context.labelRoot = new Element();
     this.context.grouping = { g1: 1, g2: 2 };
 
     this.layer.setOptions({
@@ -222,10 +227,10 @@ QUnit.test('Set option with data', function(assert) {
 
 QUnit.test('Set options with data, load error', function(assert) {
     const reset = this.context.str.reset = sinon.spy();
-    const labelRoot = this.context.labelRoot = new vizMocks.Element();
+    const labelRoot = this.context.labelRoot = new Element();
     this.context.grouping = { g1: 1, g2: 2 };
 
-    const DataSourceMock = vizMocks.stubClass(DataSource);
+    const DataSourceMock = stubClass(DataSource);
     const ds = new DataSourceMock();
     ds.store = sinon.stub().returns({ _loadMode: '' });
     this.layer.setOptions({
@@ -270,7 +275,7 @@ QUnit.test('Set options when data is set', function(assert) {
     const items = StubMapLayerElement.items;
     StubMapLayerElement.items = [];
     this.context.root.clear.resetHistory();
-    const labelRoot = this.context.labelRoot = new vizMocks.Element();
+    const labelRoot = this.context.labelRoot = new Element();
     this.themeManager.theme.resetHistory();
 
     this.layer.setOptions({ tag: 'tag' });
@@ -306,7 +311,7 @@ QUnit.test('Set options when data is set and type is changed', function(assert) 
     strategy.updateGrouping.resetHistory();
     StubMapLayerElement.items = [];
     this.context.root.clear.resetHistory();
-    const labelRoot = this.context.labelRoot = new vizMocks.Element();
+    const labelRoot = this.context.labelRoot = new Element();
     this.themeManager.theme.resetHistory();
 
     this.layer.setOptions({ tag: 'tag', type: 'test-type-2' });
@@ -341,7 +346,7 @@ QUnit.test('Set options when data is set and element type is changed', function(
     strategy.updateGrouping.resetHistory();
     StubMapLayerElement.items = [];
     this.context.root.clear.resetHistory();
-    const labelRoot = this.context.labelRoot = new vizMocks.Element();
+    const labelRoot = this.context.labelRoot = new Element();
     this.themeManager.theme.resetHistory();
 
     this.layer.setOptions({ tag: 'tag', elementType: 'test-element-type-2' });
@@ -379,7 +384,7 @@ QUnit.test('Set options with same data when data is set', function(assert) {
     const items = StubMapLayerElement.items;
     StubMapLayerElement.items = [];
     this.context.root.clear.resetHistory();
-    const labelRoot = this.context.labelRoot = new vizMocks.Element();
+    const labelRoot = this.context.labelRoot = new Element();
     this.themeManager.theme.resetHistory();
 
     this.layer.setOptions({ dataSource: ds });
@@ -614,7 +619,7 @@ QUnit.test('Projection.engine', function(assert) {
 QUnit.test('Projection.screen', function(assert) {
     const context = this.context;
     const transform = { tag: 'transform' };
-    context.labelRoot = new vizMocks.Element();
+    context.labelRoot = new Element();
     this.projection.stub('getTransform').returns(transform);
 
     this.projection.on.lastCall.args[0].screen();
@@ -630,7 +635,7 @@ QUnit.test('Projection.screen', function(assert) {
 QUnit.test('Projection.center', function(assert) {
     const context = this.context;
     const transform = { tag: 'transform' };
-    context.labelRoot = new vizMocks.Element();
+    context.labelRoot = new Element();
     this.projection.stub('getTransform').returns(transform);
 
     this.projection.on.lastCall.args[0].center();
@@ -643,7 +648,7 @@ QUnit.test('Projection.center', function(assert) {
 QUnit.test('Projection.zoom', function(assert) {
     const context = this.context;
     const transform = { tag: 'transform' };
-    context.labelRoot = new vizMocks.Element();
+    context.labelRoot = new Element();
     this.projection.stub('getTransform').returns(transform);
 
     this.projection.on.lastCall.args[0].zoom();

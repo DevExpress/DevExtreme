@@ -38,7 +38,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiColumnModule } from 'devextreme-angular/ui/nested';
@@ -87,12 +88,11 @@ import { DxoGanttTextsModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttToolbarModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxiGanttToolbarItemModule } from 'devextreme-angular/ui/gantt/nested';
 import { DxoGanttValidationModule } from 'devextreme-angular/ui/gantt/nested';
-
-import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
-import { DxiStripLineComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiGanttColumnComponent } from 'devextreme-angular/ui/gantt/nested';
-import { DxiGanttStripLineComponent } from 'devextreme-angular/ui/gantt/nested';
+import { 
+           PROPERTY_TOKEN_columns,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_stripLines,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -101,8 +101,10 @@ import { DxiGanttStripLineComponent } from 'devextreme-angular/ui/gantt/nested';
  */
 @Component({
     selector: 'dx-gantt',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -111,6 +113,22 @@ import { DxiGanttStripLineComponent } from 'devextreme-angular/ui/gantt/nested';
     ]
 })
 export class DxGanttComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_columns)
+    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('columns', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_stripLines)
+    set _stripLinesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('stripLines', value);
+    }
+
     instance: DxGantt = null;
 
     /**
@@ -300,10 +318,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -638,10 +656,10 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -996,7 +1014,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -1178,43 +1196,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiGanttColumnComponent)
-    get columnsChildren(): QueryList<DxiGanttColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsChildren(value) {
-        this._setChildren('columns', value, 'DxiGanttColumnComponent');
-    }
-
-    @ContentChildren(DxiGanttStripLineComponent)
-    get stripLinesChildren(): QueryList<DxiGanttStripLineComponent> {
-        return this._getOption('stripLines');
-    }
-    set stripLinesChildren(value) {
-        this._setChildren('stripLines', value, 'DxiGanttStripLineComponent');
-    }
-
-
-    @ContentChildren(DxiColumnComponent)
-    get columnsLegacyChildren(): QueryList<DxiColumnComponent> {
-        return this._getOption('columns');
-    }
-    set columnsLegacyChildren(value) {
-        this._setChildren('columns', value, 'DxiColumnComponent');
-    }
-
-    @ContentChildren(DxiStripLineComponent)
-    get stripLinesLegacyChildren(): QueryList<DxiStripLineComponent> {
-        return this._getOption('stripLines');
-    }
-    set stripLinesLegacyChildren(value) {
-        this._setChildren('stripLines', value, 'DxiStripLineComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -1349,6 +1331,7 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
 
 @NgModule({
   imports: [
+    DxGanttComponent,
     DxiColumnModule,
     DxoFormatModule,
     DxoHeaderFilterModule,
@@ -1396,9 +1379,6 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
     DxoGanttValidationModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxGanttComponent
   ],
   exports: [
     DxGanttComponent,
@@ -1451,6 +1431,8 @@ export class DxGanttComponent extends DxComponent implements OnDestroy, OnChange
   ]
 })
 export class DxGanttModule { }
+
+export * from 'devextreme-angular/ui/gantt/nested';
 
 import type * as DxGanttTypes from "devextreme/ui/gantt_types";
 export { DxGanttTypes };

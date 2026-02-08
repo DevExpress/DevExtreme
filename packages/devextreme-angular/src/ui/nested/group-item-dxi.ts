@@ -16,16 +16,26 @@ import { Format } from 'devextreme/common/core/localization';
 import { SummaryType } from 'devextreme/common/grids';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_groupItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-group-item',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_groupItems,
+           useExisting: DxiGroupItemComponent,
+        }
+    ]
 })
 export class DxiGroupItemComponent extends CollectionNestedOption {
     @Input()
@@ -130,7 +140,7 @@ export class DxiGroupItemComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiGroupItemComponent
   ],
   exports: [

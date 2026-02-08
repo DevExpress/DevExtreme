@@ -24,8 +24,8 @@ import {
 
 import DataSource from 'devextreme/data/data_source';
 import * as CommonChartTypes from 'devextreme/common/charts';
-import { AnimationEaseMode, ChartsDataType, DashStyle, Font, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, LabelOverlap, TimeInterval, AxisScaleType, ChartsColor, SeriesHoverMode, HatchDirection, RelativePosition, PointInteractionMode, PointSymbol, SeriesSelectionMode, ValueErrorBarDisplayMode, ValueErrorBarType, SeriesLabel, SeriesPoint, LegendItem, LegendHoverMode, Palette, PaletteExtensionMode, Theme, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { dxPolarChartAnnotationConfig, dxPolarChartCommonAnnotationConfig, PolarChartSeriesType, ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, PolarChartSeries, ValueAxisVisualRangeUpdateMode } from 'devextreme/viz/polar_chart';
+import { AnimationEaseMode, ChartsDataType, DashStyle, Font, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, LabelOverlap, TimeInterval, AxisScaleType, ChartsColor, SeriesHoverMode, HatchDirection, RelativePosition, PointInteractionMode, PointSymbol, SeriesSelectionMode, ValueErrorBarDisplayMode, ValueErrorBarType, SeriesLabel, SeriesPoint, LegendItem, LegendHoverMode, Palette, PaletteExtensionMode, Theme, TextOverflow, WordWrap, ValueAxisVisualRangeUpdateMode } from 'devextreme/common/charts';
+import { dxPolarChartAnnotationConfig, dxPolarChartCommonAnnotationConfig, PolarChartSeriesType, ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, PolarChartSeries } from 'devextreme/viz/polar_chart';
 import { Format } from 'devextreme/common/core/localization';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
@@ -41,7 +41,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -164,12 +165,12 @@ import { DxoPolarChartValueAxisModule } from 'devextreme-angular/ui/polar-chart/
 import { DxoPolarChartValueErrorBarModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartVisualRangeModule } from 'devextreme-angular/ui/polar-chart/nested';
 import { DxoPolarChartWholeRangeModule } from 'devextreme-angular/ui/polar-chart/nested';
-
-import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
-import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiPolarChartAnnotationComponent } from 'devextreme-angular/ui/polar-chart/nested';
-import { DxiPolarChartSeriesComponent } from 'devextreme-angular/ui/polar-chart/nested';
+import { 
+           PROPERTY_TOKEN_annotations,
+           PROPERTY_TOKEN_constantLines,
+           PROPERTY_TOKEN_series,
+           PROPERTY_TOKEN_strips,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -178,9 +179,11 @@ import { DxiPolarChartSeriesComponent } from 'devextreme-angular/ui/polar-chart/
  */
 @Component({
     selector: 'dx-polar-chart',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -189,6 +192,27 @@ import { DxiPolarChartSeriesComponent } from 'devextreme-angular/ui/polar-chart/
     ]
 })
 export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_annotations)
+    set _annotationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('annotations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_constantLines)
+    set _constantLinesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('constantLines', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_series)
+    set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('series', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_strips)
+    set _stripsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('strips', value);
+    }
+
     instance: DxPolarChart = null;
 
     /**
@@ -1121,42 +1145,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
 
 
 
-    @ContentChildren(DxiPolarChartAnnotationComponent)
-    get annotationsChildren(): QueryList<DxiPolarChartAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsChildren(value) {
-        this._setChildren('annotations', value, 'DxiPolarChartAnnotationComponent');
-    }
-
-    @ContentChildren(DxiPolarChartSeriesComponent)
-    get seriesChildren(): QueryList<DxiPolarChartSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesChildren(value) {
-        this._setChildren('series', value, 'DxiPolarChartSeriesComponent');
-    }
-
-
-    @ContentChildren(DxiAnnotationComponent)
-    get annotationsLegacyChildren(): QueryList<DxiAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsLegacyChildren(value) {
-        this._setChildren('annotations', value, 'DxiAnnotationComponent');
-    }
-
-    @ContentChildren(DxiSeriesComponent)
-    get seriesLegacyChildren(): QueryList<DxiSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesLegacyChildren(value) {
-        this._setChildren('series', value, 'DxiSeriesComponent');
-    }
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -1278,6 +1266,7 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
 
 @NgModule({
   imports: [
+    DxPolarChartComponent,
     DxoAdaptiveLayoutModule,
     DxoAnimationModule,
     DxiAnnotationModule,
@@ -1399,9 +1388,6 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
     DxoPolarChartWholeRangeModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPolarChartComponent
   ],
   exports: [
     DxPolarChartComponent,
@@ -1528,6 +1514,8 @@ export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnC
   ]
 })
 export class DxPolarChartModule { }
+
+export * from 'devextreme-angular/ui/polar-chart/nested';
 
 import type * as DxPolarChartTypes from "devextreme/viz/polar_chart_types";
 export { DxPolarChartTypes };

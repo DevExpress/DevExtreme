@@ -30,7 +30,7 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoMarginModule } from 'devextreme-angular/ui/nested';
@@ -50,17 +50,17 @@ import { DxoBulletSizeModule } from 'devextreme-angular/ui/bullet/nested';
 import { DxoBulletTooltipModule } from 'devextreme-angular/ui/bullet/nested';
 
 
-
-
 /**
  * [descr:dxBullet]
 
  */
 @Component({
     selector: 'dx-bullet',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -68,6 +68,7 @@ import { DxoBulletTooltipModule } from 'devextreme-angular/ui/bullet/nested';
     ]
 })
 export class DxBulletComponent extends DxComponent implements OnDestroy {
+
     instance: DxBullet = null;
 
     /**
@@ -492,10 +493,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
 
 
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -550,6 +547,7 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxBulletComponent,
     DxoMarginModule,
     DxoSizeModule,
     DxoTooltipModule,
@@ -566,9 +564,6 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
     DxoBulletTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxBulletComponent
   ],
   exports: [
     DxBulletComponent,
@@ -590,6 +585,8 @@ export class DxBulletComponent extends DxComponent implements OnDestroy {
   ]
 })
 export class DxBulletModule { }
+
+export * from 'devextreme-angular/ui/bullet/nested';
 
 import type * as DxBulletTypes from "devextreme/viz/bullet_types";
 export { DxBulletTypes };

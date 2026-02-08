@@ -19,6 +19,7 @@ import {
 import { Mode } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -26,8 +27,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-group-panel',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDataGridGroupPanelComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -70,7 +73,6 @@ export class DxoDataGridGroupPanelComponent extends NestedOption implements OnDe
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'visibleChange' }
         ]);
@@ -92,7 +94,7 @@ export class DxoDataGridGroupPanelComponent extends NestedOption implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridGroupPanelComponent
   ],
   exports: [

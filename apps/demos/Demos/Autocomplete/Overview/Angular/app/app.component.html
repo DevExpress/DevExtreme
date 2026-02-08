@@ -54,13 +54,13 @@
       <div class="dx-field-value">
         <dx-autocomplete
           placeholder="Type state name..."
-          valueExpr="State_Long"
+          valueExpr="Name"
           [dataSource]="states"
           [(value)]="state"
           (onValueChanged)="updateEmployeeInfo()"
         >
           <div *dxTemplate="let item of 'item'">
-            <span>{{ item.State_Long }} ({{ item.State_Short }})</span>
+            <span>{{ item.Name }} ({{ item.Short }})</span>
           </div>
         </dx-autocomplete>
       </div>

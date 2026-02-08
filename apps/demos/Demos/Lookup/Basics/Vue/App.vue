@@ -32,8 +32,7 @@
 </template>
 <script setup lang="ts">
 import { DxLookup, DxDropDownOptions } from 'devextreme-vue/lookup';
-import DataSource from 'devextreme/data/data_source';
-import ArrayStore from 'devextreme/data/array_store';
+import { DataSource, ArrayStore } from 'devextreme-vue/common/data';
 import { employeesList, employeesTasks } from './data.ts';
 
 const dataSource = new DataSource({

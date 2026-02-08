@@ -18,17 +18,17 @@ import {
     FIELD_ITEM_LABEL_ALIGN_CLASS,
     LABEL_VERTICAL_ALIGNMENT_CLASS,
     LABEL_HORIZONTAL_ALIGNMENT_CLASS,
-} from '__internal/ui/form/components/m_field_item';
+} from '__internal/ui/form/components/field_item';
 
 import {
     FIELD_ITEM_OPTIONAL_MARK_CLASS,
     FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_REQUIRED_MARK_CLASS,
-} from '__internal/ui/form/components/m_label';
+} from '__internal/ui/form/components/label';
 
 import {
     FIELD_EMPTY_ITEM_CLASS,
-} from '__internal/ui/form/components/m_empty_item';
+} from '__internal/ui/form/components/empty_item';
 
 import config from 'core/config';
 import { isFunction, isDefined, isRenderer } from 'core/utils/type';
@@ -272,8 +272,8 @@ QUnit.module('Layout manager', () => {
         const $requiredItem = $items.eq(0);
         const $optionalItem = $items.eq(1);
 
-        assert.equal($.trim($requiredItem.find('.' + FIELD_ITEM_REQUIRED_MARK_CLASS).text()), '+', 'custom required mark');
-        assert.equal($.trim($optionalItem.find('.' + FIELD_ITEM_OPTIONAL_MARK_CLASS).text()), '-', 'custom optional mark');
+        assert.equal($requiredItem.find('.' + FIELD_ITEM_REQUIRED_MARK_CLASS).text().trim(), '+', 'custom required mark');
+        assert.equal($optionalItem.find('.' + FIELD_ITEM_OPTIONAL_MARK_CLASS).text().trim(), '-', 'custom optional mark');
     });
 
     test('Change marks', function(assert) {
@@ -297,8 +297,8 @@ QUnit.module('Layout manager', () => {
         const $requiredItem = $items.eq(0);
         const $optionalItem = $items.eq(1);
 
-        assert.equal($.trim($requiredItem.find('.' + FIELD_ITEM_REQUIRED_MARK_CLASS).text()), '+', 'custom required mark');
-        assert.equal($.trim($optionalItem.find('.' + FIELD_ITEM_OPTIONAL_MARK_CLASS).text()), '-', 'custom optional mark');
+        assert.equal($requiredItem.find('.' + FIELD_ITEM_REQUIRED_MARK_CLASS).text().trim(), '+', 'custom required mark');
+        assert.equal($optionalItem.find('.' + FIELD_ITEM_OPTIONAL_MARK_CLASS).text().trim(), '-', 'custom optional mark');
     });
 
     test('Change marks visibility', function(assert) {

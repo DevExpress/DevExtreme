@@ -18,7 +18,7 @@
 import { ref } from 'vue';
 import { DxDataGrid, type DxDataGridTypes } from 'devextreme-vue/data-grid';
 import DxTagBox, { type DxTagBoxTypes } from 'devextreme-vue/tag-box';
-import CustomStore from 'devextreme/data/custom_store';
+import { CustomStore } from 'devextreme-vue/common/data';
 
 const props = defineProps<{
   cellInfo: DxDataGridTypes.ColumnEditCellTemplateData,
@@ -29,7 +29,7 @@ const props = defineProps<{
 const currentValue = ref(props.cellInfo.value);
 
 const onSelectionChanged = () => {
-  props.dataGridComponent.updateDimensions();
+  props.dataGridComponent?.updateDimensions();
 };
 
 const onValueChanged = (e: DxTagBoxTypes.ValueChangedEvent) => {

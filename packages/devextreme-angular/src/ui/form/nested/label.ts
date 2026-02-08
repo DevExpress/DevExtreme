@@ -22,19 +22,22 @@ import { HorizontalAlignment } from 'devextreme/common';
 import { LabelLocation } from 'devextreme/ui/form';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-form-label',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoFormLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
@@ -125,7 +128,7 @@ export class DxoFormLabelComponent extends NestedOption implements AfterViewInit
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFormLabelComponent
   ],
   exports: [

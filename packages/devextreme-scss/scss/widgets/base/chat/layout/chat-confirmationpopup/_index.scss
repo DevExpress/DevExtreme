@@ -1,0 +1,30 @@
+.dx-chat-confirmation-popup-wrapper {
+  .dx-toolbar-items-container {
+    display: flex;
+    width: 100%;
+
+    .dx-toolbar-item {
+      flex-grow: 1;
+    }
+
+    .dx-button {
+      width: 100%;
+    }
+  }
+
+  .dx-toolbar {
+    &.dx-popup-bottom {
+      .dx-toolbar-before {
+        position: unset;
+        flex-grow: 1;
+        padding-inline-end: 0;
+      }
+
+      .dx-toolbar-after {
+        position: unset;
+        flex-grow: 1;
+        padding-inline-start: 0;
+      }
+    }
+  }
+}

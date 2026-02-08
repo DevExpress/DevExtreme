@@ -16,7 +16,7 @@ import { ItemClickEvent } from 'devextreme/ui/drop_down_button';
 import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
 import { ButtonItem, EmptyItem, FormItemComponent, FormItemType, GroupItem, LabelLocation, SimpleItem, TabbedItem } from 'devextreme/ui/form';
 import { GanttPredefinedContextMenuItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
-import { HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
+import { AICommand, AICommandName, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 import { dxMenuItem } from 'devextreme/ui/menu';
 import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
 import { Properties as dxTabPanelOptions } from 'devextreme/ui/tab_panel';
@@ -98,10 +98,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('stylingMode', value);
     }
 
-    get type(): ButtonType {
+    get type(): ButtonType | string | undefined {
         return this._getOption('type');
     }
-    set type(value: ButtonType) {
+    set type(value: ButtonType | string | undefined) {
         this._setOption('type', value);
     }
 
@@ -147,6 +147,13 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('hint', value);
     }
 
+    get alt(): string {
+        return this._getOption('alt');
+    }
+    set alt(value: string) {
+        this._setOption('alt', value);
+    }
+
     get author(): User {
         return this._getOption('author');
     }
@@ -159,6 +166,27 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set id(value: number | string | undefined) {
         this._setOption('id', value);
+    }
+
+    get isDeleted(): boolean {
+        return this._getOption('isDeleted');
+    }
+    set isDeleted(value: boolean) {
+        this._setOption('isDeleted', value);
+    }
+
+    get isEdited(): boolean {
+        return this._getOption('isEdited');
+    }
+    set isEdited(value: boolean) {
+        this._setOption('isEdited', value);
+    }
+
+    get src(): string {
+        return this._getOption('src');
+    }
+    set src(value: string) {
+        this._setOption('src', value);
     }
 
     get timestamp(): Date | number | string {
@@ -448,18 +476,11 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('acceptedValues', value);
     }
 
-    get formatName(): HtmlEditorPredefinedToolbarItem | string {
-        return this._getOption('formatName');
+    get commands(): Array<AICommandName | AICommand> {
+        return this._getOption('commands');
     }
-    set formatName(value: HtmlEditorPredefinedToolbarItem | string) {
-        this._setOption('formatName', value);
-    }
-
-    get formatValues(): Array<string | number | boolean> {
-        return this._getOption('formatValues');
-    }
-    set formatValues(value: Array<string | number | boolean>) {
-        this._setOption('formatValues', value);
+    set commands(value: Array<AICommandName | AICommand>) {
+        this._setOption('commands', value);
     }
 
     get key(): string {
@@ -544,20 +565,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set splitter(value: dxSplitterOptions | undefined) {
         this._setOption('splitter', value);
-    }
-
-    get isValid(): boolean {
-        return this._getOption('isValid');
-    }
-    set isValid(value: boolean) {
-        this._setOption('isValid', value);
-    }
-
-    get optional(): boolean {
-        return this._getOption('optional');
-    }
-    set optional(value: boolean) {
-        this._setOption('optional', value);
     }
 
     get heightRatio(): number {

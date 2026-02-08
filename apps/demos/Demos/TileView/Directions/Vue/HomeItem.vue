@@ -1,7 +1,7 @@
 <template>
   <div
     :style="{backgroundImage: 'url(' + itemData.ImageSrc + ')'}"
-    class="dx-tile-image"
+    class="tile-image"
   />
 </template>
 <script setup lang="ts">
@@ -12,7 +12,7 @@ withDefaults(defineProps<{
 });
 </script>
 <style scoped>
-  .dx-tile-image {
+  .tile-image {
     height: 100%;
     width: 100%;
     background-position: center;

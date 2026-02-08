@@ -15,16 +15,26 @@ import {
 import { ChartsColor } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_ranges } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-linear-gauge-range',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_ranges,
+           useExisting: DxiLinearGaugeRangeComponent,
+        }
+    ]
 })
 export class DxiLinearGaugeRangeComponent extends CollectionNestedOption {
     @Input()
@@ -73,7 +83,7 @@ export class DxiLinearGaugeRangeComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiLinearGaugeRangeComponent
   ],
   exports: [

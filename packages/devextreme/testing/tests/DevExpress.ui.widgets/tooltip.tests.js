@@ -4,8 +4,6 @@ import Tooltip from 'ui/tooltip';
 import renderer from 'core/renderer';
 import uiErrors from 'ui/widget/ui.errors';
 
-import 'generic_light.css!';
-
 const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
 const DX_INVISIBILITY_CLASS = 'dx-state-invisible';
@@ -124,34 +122,32 @@ QUnit.module('overlay integration', {
         fx.off = false;
     }
 }, () => {
-    ['closeOnOutsideClick', 'hideOnOutsideClick'].forEach(closeOnOutsideClickOptionName => {
-        QUnit.test(`tooltip should be closed on outside click if ${closeOnOutsideClickOptionName} is true`, function(assert) {
-            const $tooltip = $('#tooltip').dxTooltip({
-                [closeOnOutsideClickOptionName]: true
-            });
-            const instance = $tooltip.dxTooltip('instance');
-
-            instance.show();
-            $('#qunit-fixture').trigger('dxpointerdown');
-
-            assert.equal(instance.option('visible'), false, 'toast was hidden should be hiding');
+    QUnit.test('tooltip should be closed on outside click if hideOnOutsideClick is true', function(assert) {
+        const $tooltip = $('#tooltip').dxTooltip({
+            hideOnOutsideClick: true
         });
+        const instance = $tooltip.dxTooltip('instance');
 
-        QUnit.test(`tooltip should not prevent ${closeOnOutsideClickOptionName} handler of other overlays`, function(assert) {
-            const tooltip = new Tooltip($('#tooltip'));
-            const $overlay = $('<div>').appendTo('.dx-viewport');
+        instance.show();
+        $('#qunit-fixture').trigger('dxpointerdown');
 
-            const overlay = $overlay.dxOverlay({
-                [closeOnOutsideClickOptionName]: true
-            }).dxOverlay('instance');
+        assert.equal(instance.option('visible'), false, 'toast was hidden should be hiding');
+    });
 
-            overlay.show();
-            tooltip.show();
+    QUnit.test('tooltip should not prevent hideOnOutsideClick handler of other overlays', function(assert) {
+        const tooltip = new Tooltip($('#tooltip'));
+        const $overlay = $('<div>').appendTo('.dx-viewport');
 
-            $('#qunit-fixture').trigger('dxpointerdown');
+        const overlay = $overlay.dxOverlay({
+            hideOnOutsideClick: true
+        }).dxOverlay('instance');
 
-            assert.equal(overlay.option('visible'), false, 'dxOverlay should be hiding');
-        });
+        overlay.show();
+        tooltip.show();
+
+        $('#qunit-fixture').trigger('dxpointerdown');
+
+        assert.equal(overlay.option('visible'), false, 'dxOverlay should be hiding');
     });
 });
 

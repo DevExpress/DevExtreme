@@ -1,0 +1,37 @@
+<p>
+  Enter the number of adults, children, and pets staying in the room. This
+  information help us suggest suitable room types, number of beds, and included
+  amenities.
+</p>
+<dx-form
+  #formComponent
+  [(formData)]="formData"
+  [validationGroup]="validationGroup"
+  [colCount]="3"
+>
+  <dxi-form-item
+    [isRequired]="true"
+    dataField="adultsCount"
+    editorType="dxNumberBox"
+    [editorOptions]="numberBoxOptions"
+    [label]="adultsLabelOptions"
+  >
+    <dxi-form-validation-rule type="range" [min]="1"></dxi-form-validation-rule>
+  </dxi-form-item>
+
+  <dxi-form-item
+    dataField="childrenCount"
+    editorType="dxNumberBox"
+    [editorOptions]="numberBoxOptions"
+    [label]="childrenLabelOptions"
+  >
+  </dxi-form-item>
+
+  <dxi-form-item
+    dataField="petsCount"
+    editorType="dxNumberBox"
+    [editorOptions]="numberBoxOptions"
+    [label]="petsLabelOptions"
+  >
+  </dxi-form-item>
+</dx-form>

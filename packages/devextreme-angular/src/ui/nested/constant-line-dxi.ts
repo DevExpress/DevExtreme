@@ -16,16 +16,26 @@ import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_constantLines } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-constant-line',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_constantLines,
+           useExisting: DxiConstantLineComponent,
+        }
+    ]
 })
 export class DxiConstantLineComponent extends CollectionNestedOption {
     @Input()
@@ -122,7 +132,7 @@ export class DxiConstantLineComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiConstantLineComponent
   ],
   exports: [

@@ -4,7 +4,7 @@ import { DataSource } from 'common/data/data_source/data_source';
 import visibilityChange from 'common/core/events/visibility_change';
 import ArrayStore from 'common/data/array_store';
 import fx from 'common/core/animation/fx';
-import animationFrame from 'common/core/animation/frame';
+import animationFrame from '__internal/common/core/animation/frameModule';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
@@ -14,7 +14,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 import 'ui/gallery';
 import 'ui/button';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -1144,7 +1144,6 @@ QUnit.module('options changed callbacks', {
 
     },
     afterEach() {
-        executeAsyncMock.teardown();
         fx.off = false;
         this.clock.restore();
     }
@@ -1177,6 +1176,7 @@ QUnit.module('options changed callbacks', {
         const store = new ArrayStore([11, 22]);
         this.instance.option('dataSource', new DataSource(store));
         assert.equal(getImageSources(this.$element), '1122');
+        executeAsyncMock.teardown();
     });
 
     QUnit.test('selectedIndex', function(assert) {
@@ -2176,11 +2176,9 @@ QUnit.module('api', {
     QUnit.test('animationDuration', function(assert) {
         fx.off = false;
 
-        const oldRAF = animationFrame.requestAnimationFrame;
-
-        animationFrame.requestAnimationFrame = callback => {
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
             return window.setTimeout(callback, 10);
-        };
+        });
 
         try {
             const $element = $('#gallerySimple').dxGallery({ items: [0, 1, 2] });
@@ -2213,7 +2211,7 @@ QUnit.module('api', {
             this.clock.tick(5000);
             assert.equal($container.position().left, -800, 'animation is completed');
         } finally {
-            animationFrame.requestAnimationFrame = oldRAF;
+            this.requestAnimationFrameStub.restore();
         }
     });
 });

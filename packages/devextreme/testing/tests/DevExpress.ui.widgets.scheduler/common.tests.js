@@ -5,27 +5,21 @@ import dataUtils from 'core/element_data';
 import { isRenderer } from 'core/utils/type';
 import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
-import timeZoneDataUtils from '__internal/scheduler/timezones/m_utils_timezones_data';
-
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 import { getTimeZones } from 'time_zone_utils';
-import themes from 'ui/themes';
-import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
-import Scrollable from 'ui/scroll_view/ui.scrollable.js';
 
-const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
+import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Loading', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
     afterEach: function() {
-        this.clock.restore();
         fx.off = false;
     }
 }, () => {
@@ -35,14 +29,16 @@ QUnit.module('Loading', {
         showCurrentTimeIndicator: false,
     };
 
-    QUnit.test('Loading panel should be shown while datasource is reloading', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Loading panel should be shown while datasource is reloading', async function(assert) {
+        let count = 0;
+        const scheduler = await createWrapper({
             ...baseProps,
             dataSource: new DataSource({
                 store: new CustomStore({
                     load: function() {
                         const d = $.Deferred();
                         setTimeout(function() {
+                            count++;
                             d.resolve([]);
                         }, 100);
 
@@ -52,21 +48,23 @@ QUnit.module('Loading', {
             })
         });
 
-        this.clock.tick(100);
-
+        await waitForAsync(() => count === 1);
         scheduler.instance.option('currentView', 'week');
-
+        await waitAsync(0);
         assert.equal(scheduler.instance.$element().find('.dx-loadpanel-wrapper').length, 1, 'loading panel is shown');
+        await waitForAsync(() => count === 2);
     });
 
-    QUnit.test('Loading panel should hide', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Loading panel should hide', async function(assert) {
+        let count = 0;
+        const scheduler = await createWrapper({
             ...baseProps,
             dataSource: new DataSource({
                 store: new CustomStore({
                     load: function() {
                         const d = $.Deferred();
                         setTimeout(function() {
+                            count++;
                             d.resolve([]);
                         }, 100);
 
@@ -76,23 +74,23 @@ QUnit.module('Loading', {
             })
         });
 
-        this.clock.tick(100);
-
+        await waitForAsync(() => count === 1);
         scheduler.instance.option('currentView', 'week');
-
-        this.clock.tick(100);
+        await waitForAsync(() => count === 2);
 
         assert.equal($('.dx-loadpanel-wrapper').length, 0, 'loading panel hide');
     });
 
-    QUnit.test('Loading panel should be shown in centre of scheduler', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Loading panel should be shown in centre of scheduler', async function(assert) {
+        let count = 0;
+        const scheduler = await createWrapper({
             ...baseProps,
             dataSource: new DataSource({
                 store: new CustomStore({
                     load: function() {
                         const d = $.Deferred();
                         setTimeout(function() {
+                            count++;
                             d.resolve([]);
                         }, 100);
 
@@ -102,16 +100,17 @@ QUnit.module('Loading', {
             })
         });
 
-        this.clock.tick(100);
-
+        await waitForAsync(() => count === 1);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
         const loadingInstance = $('.dx-loadpanel').last().dxLoadPanel('instance');
         assert.deepEqual(loadingInstance.option('position.of').get(0), scheduler.instance.$element().get(0), 'loading panel is shown in right place');
+        await waitForAsync(() => count === 2);
     });
 });
 
 QUnit.module('Filtering', () => {
-    QUnit.test('Start view date & end view date should be passed to the load method as filter expression', function(assert) {
+    QUnit.test('Start view date & end view date should be passed to the load method as filter expression', async function(assert) {
         const dataSource = new DataSource({
             load: function(options) {
 
@@ -119,7 +118,7 @@ QUnit.module('Filtering', () => {
                 const dateFilter = filter[0][0];
                 const zeroDurationFilter = filter[0][4];
 
-                assert.ok($.isArray(filter), 'Filter is array');
+                assert.ok(Array.isArray(filter), 'Filter is array');
 
                 assert.equal(filter[0].length, 5, 'Filter size is OK');
 
@@ -138,7 +137,7 @@ QUnit.module('Filtering', () => {
         const startViewDate = new Date(2015, 11, 7);
         const endViewDate = new Date(2015, 11, 14);
 
-        createWrapper({
+        await createWrapper({
             currentDate: new Date(2015, 11, 12),
             firstDayOfWeek: 1,
             currentView: 'week',
@@ -148,7 +147,7 @@ QUnit.module('Filtering', () => {
 
     });
 
-    QUnit.test('Recurrent appointments should be always loaded, if recurrenceRuleExpr !=null', function(assert) {
+    QUnit.test('Recurrent appointments should be always loaded, if recurrenceRuleExpr !=null', async function(assert) {
         const dataSource = new DataSource({
             load: function(options) {
                 const filter = options.filter;
@@ -156,7 +155,7 @@ QUnit.module('Filtering', () => {
                 assert.deepEqual(filter[0][2], ['recurrenceRule', 'startswith', 'freq']);
             }
         });
-        createWrapper({
+        await createWrapper({
             currentDate: new Date(2015, 11, 12),
             firstDayOfWeek: 1,
             currentView: 'week',
@@ -166,14 +165,14 @@ QUnit.module('Filtering', () => {
 
     });
 
-    QUnit.test('There is no filter expression by recurrenceRule, if recurrenceRuleExpr is null', function(assert) {
+    QUnit.test('There is no filter expression by recurrenceRule, if recurrenceRuleExpr is null', async function(assert) {
         const dataSource = new DataSource({
             load: function(options) {
                 const filter = options.filter;
                 assert.equal(filter[0].length, 3, 'recurrenceRule expression is absent');
             }
         });
-        createWrapper({
+        await createWrapper({
             currentDate: new Date(2015, 11, 12),
             firstDayOfWeek: 1,
             currentView: 'week',
@@ -185,7 +184,7 @@ QUnit.module('Filtering', () => {
 
     });
 
-    QUnit.test('Internal scheduler filter should be merged with user\'s filter if it exists', function(assert) {
+    QUnit.test('Internal scheduler filter should be merged with user\'s filter if it exists', async function(assert) {
         const userFilter = ['someField', 'contains', 'abc'];
         const dataSource = new DataSource({
             filter: ['someField', 'contains', 'abc'],
@@ -197,7 +196,7 @@ QUnit.module('Filtering', () => {
             }
         });
 
-        createWrapper({
+        await createWrapper({
             currentDate: new Date(2015, 11, 12),
             firstDayOfWeek: 1,
             currentView: 'week',
@@ -207,13 +206,13 @@ QUnit.module('Filtering', () => {
 
     });
 
-    QUnit.test('Scheduler should filter data on client side if the remoteFiltering option is false', function(assert) {
+    QUnit.test('Scheduler should filter data on client side if the remoteFiltering option is false', async function(assert) {
         const dataSource = new DataSource([
             { StartDate: new Date(2015, 11, 23).toString(), EndDate: new Date(2015, 11, 23, 0, 30).toString() },
             { StartDate: new Date(2015, 11, 19).toString(), EndDate: new Date(2015, 11, 19, 0, 30).toString() }
         ]);
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 11, 24),
             firstDayOfWeek: 1,
             currentView: 'week',
@@ -229,7 +228,7 @@ QUnit.module('Filtering', () => {
         assert.deepEqual(dataUtils.data($appointments[0], 'dxItemData'), { StartDate: new Date(2015, 11, 23).toString(), EndDate: new Date(2015, 11, 23, 0, 30).toString() }, 'Appointment data is OK');
     });
 
-    QUnit.test('Scheduler should filter data on client side if the remoteFiltering option is false and forceIsoDateParsing', function(assert) {
+    QUnit.test('Scheduler should filter data on client side if the remoteFiltering option is false and forceIsoDateParsing', async function(assert) {
         const defaultForceIsoDateParsing = config().forceIsoDateParsing;
         config().forceIsoDateParsing = true;
         try {
@@ -238,7 +237,7 @@ QUnit.module('Filtering', () => {
                 { StartDate: new Date(2015, 11, 19).toString(), EndDate: new Date(2015, 11, 19, 0, 30).toString() }
             ]);
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 currentDate: new Date(2015, 11, 24),
                 firstDayOfWeek: 1,
                 currentView: 'week',
@@ -257,13 +256,13 @@ QUnit.module('Filtering', () => {
         }
     });
 
-    QUnit.test('Scheduler should filter data on server side if the remoteFiltering option is true', function(assert) {
+    QUnit.test('Scheduler should filter data on server side if the remoteFiltering option is true', async function(assert) {
         const dataSource = new DataSource([
             { StartDate: '2015-12-23T00:00', EndDate: '2015-12-23T00:30' },
             { StartDate: '2015-12-19T00:00', EndDate: '2015-12-19T00:30' }
         ]);
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 11, 24),
             firstDayOfWeek: 1,
             currentView: 'week',
@@ -276,7 +275,7 @@ QUnit.module('Filtering', () => {
         assert.equal(scheduler.instance.option('dataSource').items().length, 0, 'Appointments are filtered correctly');
     });
 
-    QUnit.test('Scheduler should filter data on client side depends on user filter', function(assert) {
+    QUnit.test('Scheduler should filter data on client side depends on user filter', async function(assert) {
         const dataSource = new DataSource({
             filter: ['UserId', 1],
             store: [
@@ -285,7 +284,7 @@ QUnit.module('Filtering', () => {
             ]
         });
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 11, 24),
             firstDayOfWeek: 1,
             currentView: 'week',
@@ -298,7 +297,7 @@ QUnit.module('Filtering', () => {
         assert.deepEqual(scheduler.instance.option('dataSource').items(), [{ StartDate: new Date(2015, 11, 23).toString(), EndDate: new Date(2015, 11, 23, 0, 30).toString(), UserId: 1 }], 'Appointments are filtered correctly');
     });
 
-    QUnit.test('Date filter should be used everytime before render', function(assert) {
+    QUnit.test('Date filter should be used everytime before render', async function(assert) {
         const dataSource = new DataSource({
             store: new CustomStore({
                 load: function() {
@@ -310,7 +309,7 @@ QUnit.module('Filtering', () => {
             })
         });
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 11, 24),
             firstDayOfWeek: 1,
             currentView: 'week',
@@ -324,24 +323,17 @@ QUnit.module('Filtering', () => {
     });
 });
 
-QUnit.module('Small size', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-}, () => {
-    QUnit.test('Scheduler should have a small css class on init', function(assert) {
-        const scheduler = createWrapper({
+QUnit.module('Small size', () => {
+    QUnit.test('Scheduler should have a small css class on init', async function(assert) {
+        const scheduler = await createWrapper({
             width: 300
         });
 
         assert.ok(scheduler.instance.$element().hasClass('dx-scheduler-small'), 'Scheduler has \'dx-scheduler-small\' css class');
     });
 
-    QUnit.test('Scheduler should have adaptive css class depend on adaptivityEnabled option', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Scheduler should have adaptive css class depend on adaptivityEnabled option', async function(assert) {
+        const scheduler = await createWrapper({
             width: 300,
             adaptivityEnabled: true
         });
@@ -353,8 +345,8 @@ QUnit.module('Small size', {
         assert.notOk(scheduler.instance.$element().hasClass('dx-scheduler-adaptive'), 'Scheduler hasn\'t \'dx-scheduler-adaptive\' css class');
     });
 
-    QUnit.test('Scheduler should have a small css class', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Scheduler should have a small css class', async function(assert) {
+        const scheduler = await createWrapper({
             width: 600
         });
 
@@ -364,10 +356,10 @@ QUnit.module('Small size', {
         assert.notOk(scheduler.instance.$element().hasClass('dx-scheduler-small'), 'Scheduler has no \'dx-scheduler-small\' css class');
     });
 
-    QUnit.test('Rendering small scheduler inside invisible element', function(assert) {
+    QUnit.test('Rendering small scheduler inside invisible element', async function(assert) {
         try {
             triggerHidingEvent($('#scheduler'));
-            createWrapper({
+            await createWrapper({
                 width: 300,
                 currentView: 'week',
                 dataSource: [{
@@ -383,7 +375,6 @@ QUnit.module('Small size', {
             triggerShownEvent($('#scheduler'));
             const schedulerInstance = $('#scheduler').dxScheduler('instance');
             schedulerInstance.option('width', 600);
-            this.clock.tick(10);
 
             const $appointment = $(schedulerInstance.$element().find('.dx-scheduler-appointment'));
             assert.roughEqual($appointment.position().left, 0, 1.001, 'Appointment is rendered correctly');
@@ -391,17 +382,10 @@ QUnit.module('Small size', {
     });
 });
 
-QUnit.module('View with configuration', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-}, () => {
-    QUnit.test('Scheduler should have specific cellDuration setting of the view', function(assert) {
+QUnit.module('View with configuration', () => {
+    QUnit.test('Scheduler should have specific cellDuration setting of the view', async function(assert) {
         const viewCellDuration = 60;
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             views: [{
                 type: 'day',
                 cellDuration: viewCellDuration
@@ -415,6 +399,7 @@ QUnit.module('View with configuration', {
         assert.equal(workSpace.option('hoursInterval') * 60, viewCellDuration, 'value of the cellDuration');
 
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(10);
 
         workSpace = scheduler.instance.getWorkSpace();
 
@@ -422,8 +407,8 @@ QUnit.module('View with configuration', {
 
     });
 
-    QUnit.test('Scheduler should have specific startDayHour setting of the view', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Scheduler should have specific startDayHour setting of the view', async function(assert) {
+        const scheduler = await createWrapper({
             views: [{
                 type: 'day',
                 startDayHour: 10
@@ -435,8 +420,8 @@ QUnit.module('View with configuration', {
         assert.equal(scheduler.instance._workSpace.option('startDayHour'), 10, 'value of the startDayHour');
     });
 
-    QUnit.test('Scheduler should have specific endDayHour setting of the view', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Scheduler should have specific endDayHour setting of the view', async function(assert) {
+        const scheduler = await createWrapper({
             views: [{
                 type: 'day',
                 endDayHour: 20
@@ -448,8 +433,8 @@ QUnit.module('View with configuration', {
         assert.equal(scheduler.instance._workSpace.option('endDayHour'), 20, 'value of the endDayHour');
     });
 
-    QUnit.test('Scheduler should have specific firstDayOfWeek setting of the view', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Scheduler should have specific firstDayOfWeek setting of the view', async function(assert) {
+        const scheduler = await createWrapper({
             views: [{
                 type: 'workWeek',
                 firstDayOfWeek: 0
@@ -462,17 +447,17 @@ QUnit.module('View with configuration', {
         assert.equal(scheduler.instance._header.option('firstDayOfWeek'), 0, 'value of the firstDayOfWeek in header');
     });
 
-    QUnit.test('Scheduler should have specific groups setting of the view', function(assert) {
+    QUnit.test('Scheduler should have specific groups setting of the view', async function(assert) {
         const dataSource1 = [
             { id: 1, text: 'group1' },
             { id: 2, text: 'group2' }
         ];
         const dataSource2 = [
-            { id: 1, text: 'group3' },
-            { id: 2, text: 'group4' }
+            { id: 1, text: 'group3', color: 'red' },
+            { id: 2, text: 'group4', color: 'red' }
         ];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             views: [{
                 type: 'workWeek',
                 groups: ['test2']
@@ -491,15 +476,15 @@ QUnit.module('View with configuration', {
             currentView: 'workWeek'
         });
 
-        assert.deepEqual(scheduler.instance._workSpace.option('groups'), [{
-            data: dataSource2,
-            items: dataSource2,
-            name: 'test2'
-        }], 'value of the groups');
+        const groups = scheduler.instance._workSpace.option('groups');
+        assert.equal(groups.length, 1, 'only one grouped resource');
+        assert.deepEqual(groups[0].data, dataSource2, 'data is correct');
+        assert.deepEqual(groups[0].items, dataSource2, 'items is correct');
+        assert.equal(groups[0].resourceIndex, 'test2', 'index is correct');
     });
 
-    QUnit.test('Scheduler should have specific agendaDuration setting of the view', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Scheduler should have specific agendaDuration setting of the view', async function(assert) {
+        const scheduler = await createWrapper({
             views: [{
                 type: 'agenda',
                 agendaDuration: 4
@@ -511,11 +496,11 @@ QUnit.module('View with configuration', {
         assert.equal(scheduler.instance._workSpace.option('agendaDuration'), 4, 'value of the agendaDuration');
     });
 
-    QUnit.test('Scheduler should have specific appointmentTemplate setting of the view', function(assert) {
+    QUnit.test('Scheduler should have specific appointmentTemplate setting of the view', async function(assert) {
         let countCallTemplate1 = 0;
         let countCallTemplate2 = 0;
 
-        createWrapper({
+        await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 24, 9, 10),
                 endDate: new Date(2015, 4, 24, 11, 1)
@@ -538,11 +523,11 @@ QUnit.module('View with configuration', {
         assert.notEqual(countCallTemplate2, 0, 'count call second template');
     });
 
-    QUnit.test('Scheduler should have specific appointmentTemplate setting of the view after current view changing', function(assert) {
+    QUnit.test('Scheduler should have specific appointmentTemplate setting of the view after current view changing', async function(assert) {
         let countCallTemplate1 = 0;
         let countCallTemplate2 = 0;
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 26, 9, 10),
                 endDate: new Date(2015, 4, 26, 11, 1)
@@ -567,16 +552,17 @@ QUnit.module('View with configuration', {
         });
 
         scheduler.instance.option('currentView', 'WorkWeek');
+        await waitAsync(10);
 
         assert.notEqual(countCallTemplate1, 0, 'count call first template');
         assert.notEqual(countCallTemplate2, 0, 'count call second template');
     });
 
-    QUnit.test('Scheduler should have specific appointmentTooltipTemplate setting of the view', function(assert) {
+    QUnit.test('Scheduler should have specific appointmentTooltipTemplate setting of the view', async function(assert) {
         let countCallTemplate1 = 0;
         let countCallTemplate2 = 0;
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 24, 9, 10),
                 endDate: new Date(2015, 4, 24, 11, 1),
@@ -613,11 +599,11 @@ QUnit.module('View with configuration', {
         assert.notEqual(countCallTemplate2, 0, 'count call second template');
     });
 
-    QUnit.test('Scheduler should have specific appointmentCollectorTemplate setting of the view', function(assert) {
+    QUnit.test('Scheduler should have specific appointmentCollectorTemplate setting of the view', async function(assert) {
         let countCallTemplate1 = 0;
         let countCallTemplate2 = 0;
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 24, 9, 10),
                 endDate: new Date(2015, 4, 24, 11, 1),
@@ -653,11 +639,11 @@ QUnit.module('View with configuration', {
         assert.notEqual(countCallTemplate2, 0, 'count call second template');
     });
 
-    QUnit.test('Scheduler should have specific appointmentTooltipTemplate setting of the view', function(assert) {
+    QUnit.test('Scheduler should have specific appointmentTooltipTemplate setting of the view', async function(assert) {
         let countCallTemplate1 = 0;
         let countCallTemplate2 = 0;
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 24, 9, 10),
                 endDate: new Date(2015, 4, 24, 11, 1)
@@ -677,14 +663,14 @@ QUnit.module('View with configuration', {
         });
 
         $(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)).trigger('dxclick');
-        this.clock.tick(300);
+        await waitAsync(300);
 
         assert.equal(countCallTemplate1, 0, 'count call first template');
         assert.notEqual(countCallTemplate2, 0, 'count call second template');
     });
 
-    QUnit.test('Check appointment takes all day by certain startDayHour and endDayHour', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Check appointment takes all day by certain startDayHour and endDayHour', async function(assert) {
+        const scheduler = await createWrapper({
             startDayHour: 9,
             endDayHour: 18,
             views: [{
@@ -719,10 +705,10 @@ QUnit.module('View with configuration', {
 
 
     ['day', 'week', 'month'].forEach(viewName => {
-        QUnit.test(`Cell should have default height if view: '${viewName}'`, function(assert) {
+        QUnit.test(`Cell should have default height if view: '${viewName}'`, async function(assert) {
             const DEFAULT_CELL_HEIGHT = 50;
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 views: [viewName],
                 currentView: viewName
             });
@@ -733,8 +719,8 @@ QUnit.module('View with configuration', {
     });
 
     ['timelineDay', 'timelineWeek', 'timelineMonth'].forEach(viewName => {
-        QUnit.test(`Group header height should be equals to the grouping cell height if view: '${viewName}'`, function(assert) {
-            const scheduler = createWrapper({
+        QUnit.test(`Group header height should be equals to the grouping cell height if view: '${viewName}'`, async function(assert) {
+            const scheduler = await createWrapper({
                 views: [viewName],
                 currentView: viewName,
                 groups: ['any'],
@@ -760,8 +746,8 @@ QUnit.module('View with configuration', {
     ['day', 'week', 'month'].forEach(viewName => {
         [undefined, 2, 3].forEach(intervalCount => {
             [undefined, 200, 300, 800].forEach(height => {
-                QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if view: '${viewName}', view.intervalCount: ${intervalCount}, height: ${height}`, function(assert) {
-                    const scheduler = createWrapper({
+                QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if view: '${viewName}', view.intervalCount: ${intervalCount}, height: ${height}`, async function(assert) {
+                    const scheduler = await createWrapper({
                         height: height,
                         views: [{
                             type: viewName,
@@ -777,8 +763,8 @@ QUnit.module('View with configuration', {
                 });
 
                 [true, false].forEach((renovateRender) => {
-                    QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if grouping, view: '${viewName}', view.intervalCount=${intervalCount}, height: ${height}`, function(assert) {
-                        const scheduler = createWrapper({
+                    QUnit.test(`Workspace vertical scroll should be equal to the dataTable height if grouping, view: '${viewName}', view.intervalCount=${intervalCount}, height: ${height}, renovateRender: ${renovateRender}`, async function(assert) {
+                        const scheduler = await createWrapper({
                             height: height,
                             views: [{
                                 type: viewName,
@@ -807,14 +793,8 @@ QUnit.module('View with configuration', {
         });
     });
 
-    QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is greater than default', function(assert) {
-        if(isRenovatedScrollable) {
-            // this scenario doesn't relevant for renovated widget
-            assert.ok(true, 'skip test');
-            return;
-        }
-
-        const scheduler = createWrapper({
+    QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is greater than default', async function(assert) {
+        const scheduler = await createWrapper({
             height: 1500,
             views: ['month'],
             currentView: 'month',
@@ -831,14 +811,8 @@ QUnit.module('View with configuration', {
         assert.equal(scrollableHeight, scrollHeight, 'Correct scroll content height');
     });
 
-    QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is equal to default', function(assert) {
-        if(isRenovatedScrollable) {
-            // this scenario doesn't relevant for renovated widget
-            assert.ok(true, 'skip test');
-            return;
-        }
-
-        const scheduler = createWrapper({
+    QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is equal to default', async function(assert) {
+        const scheduler = await createWrapper({
             height: 500,
             views: [{
                 type: 'month',
@@ -859,55 +833,12 @@ QUnit.module('View with configuration', {
     });
 });
 
-QUnit.module('Options for Material-based themes in components', {
-    beforeEach: function() {
-        this.origIsMaterialBased = themes.isMaterialBased;
-        themes.isMaterialBased = function() { return true; };
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-        themes.isMaterialBased = this.origIsMaterialBased;
-    }
-}, () => {
-    QUnit.test('_collectorOffset option should be passed to SchedulerAppointments depending on the view', function(assert) {
-        const scheduler = createWrapper({
-            currentView: 'month',
-            showCurrentTimeIndicator: false
-        });
-
-        const appointments = scheduler.instance.getAppointmentsInstance();
-
-        assert.equal(appointments.option('_collectorOffset'), 20, 'SchedulerAppointments has correct _collectorOffset');
-
-        scheduler.instance.option('currentView', 'week');
-        assert.equal(appointments.option('_collectorOffset'), 0, 'SchedulerAppointments has correct _collectorOffset');
-    });
-
-    QUnit.test('Real _collectorOffset option should be passed to SchedulerAppointments depending on the adaptivityEnabled', function(assert) {
-        const scheduler = createWrapper({
-            currentView: 'month',
-            showCurrentTimeIndicator: false,
-            adaptivityEnabled: false
-        });
-
-        let appointments = scheduler.instance.getAppointmentsInstance();
-
-        assert.equal(appointments.option('_collectorOffset'), 20, 'SchedulerAppointments has correct _collectorOffset');
-
-        scheduler.instance.option('adaptivityEnabled', true);
-        appointments = scheduler.instance.getAppointmentsInstance();
-
-        assert.equal(appointments.option('_collectorOffset'), 0, 'SchedulerAppointments has correct _collectorOffset');
-    });
-});
-
 QUnit.module('Getting timezones', {}, () => {
     const findTimeZone = (timeZones, id) => {
         return timeZones.filter((timeZone) => timeZone.id === id)[0];
 
     };
-    QUnit.test('getTimeZones method should return accepted timezones with correct format', function(assert) {
+    QUnit.test('getTimeZones method should return accepted timezones with correct format', async function(assert) {
         const date = new Date(2020, 5, 1);
         const timeZones = getTimeZones(date);
         const firstTimeZone = timeZones[0];
@@ -918,7 +849,7 @@ QUnit.module('Getting timezones', {}, () => {
         assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'title'), 'returned timeZone has a title');
     });
 
-    QUnit.test('getTimeZones should take into account custom timezones', function(assert) {
+    QUnit.test('getTimeZones should take into account custom timezones', async function(assert) {
         try {
             const timezone = 'America/Los_Angeles';
             config({
@@ -947,7 +878,7 @@ QUnit.module('Getting timezones', {}, () => {
         }
     });
 
-    QUnit.test('getTimeZones method should work properly without date passing', function(assert) {
+    QUnit.test('getTimeZones method should work properly without date passing', async function(assert) {
         const timeZones = getTimeZones();
         const timeZone = findTimeZone(timeZones, 'Europe/Moscow');
 
@@ -958,7 +889,7 @@ QUnit.module('Getting timezones', {}, () => {
         }, 'some of returned timeZone is ok');
     });
 
-    QUnit.test('getTimeZones method should return correct offsets depending on the date', function(assert) {
+    QUnit.test('getTimeZones method should return correct offsets depending on the date', async function(assert) {
         const winter = '2020-03-08T01:00:00-08:00';
         const summer = '2020-03-08T02:00:00-08:00';
 
@@ -975,8 +906,8 @@ QUnit.module('Getting timezones', {}, () => {
         assert.equal(timeZone.title, '(GMT -07:00) America - Los Angeles', 'returned title for timeZone with DST is OK');
     });
 
-    QUnit.test('Appointment should process resource names with spaces', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointment should process resource names with spaces', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [
                 {
                     text: 'Appointment 1',

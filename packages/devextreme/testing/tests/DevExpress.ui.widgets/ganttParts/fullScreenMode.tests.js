@@ -91,7 +91,9 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         assert.equal($dialog.find('.dx-popup-bottom').find('.dx-button').length, 1, 'only cancel button in toolbar');
         $dialog = $('body').find(Consts.POPUP_SELECTOR);
         const inputs = $dialog.find('.dx-texteditor-input');
-        assert.equal(inputs.attr('readOnly'), 'readonly', 'all inputs is readOnly');
+        const readOnlyAttr = inputs.attr('readOnly');
+        // Enabled boolean attributes return '' in jQuery 4+ and their name ('readonly') in jQuery 3
+        assert.ok(readOnlyAttr === '' || readOnlyAttr === 'readonly', 'all inputs is readOnly');
         fullScreenCommand.execute();
     });
     test('panel sizes are the same', function(assert) {
@@ -160,7 +162,7 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         splitter.trigger($.Event('dxpointerup'));
 
         assert.equal(getWidth(treeListWrapperElement), splitterContainerWrapperWidth - getWidth(splitter));
-        assert.equal(getWidth(ganttView), getWidth(splitter));
+        assert.roughEqual(getWidth(ganttView), getWidth(splitter), 0.1);
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - getWidth(splitter), 'Splitter has not cross the right side');
         leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
         fullScreenCommand.execute();

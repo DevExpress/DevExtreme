@@ -3,11 +3,14 @@ import $ from 'jquery';
 import MessageGroup from '__internal/ui/chat/messagegroup';
 import ChatAvatar from '__internal/ui/chat/avatar';
 import dateLocalization from 'common/core/localization/date';
+import localization from 'localization';
 
 const AVATAR_CLASS = 'dx-avatar';
 const CHAT_MESSAGEGROUP_TIME_CLASS = 'dx-chat-messagegroup-time';
 const CHAT_MESSAGEBUBBLE_CLASS = 'dx-chat-messagebubble';
+const CHAT_MESSAGEGROUP_CONTENT_CLASS = 'dx-chat-messagegroup-content';
 const CHAT_MESSAGEGROUP_AUTHOR_NAME_CLASS = 'dx-chat-messagegroup-author-name';
+const CHAT_MESSAGE_EDITED_TEXT_CLASS = 'dx-chat-message-edited-text';
 
 const getStringTime = (time) => {
     return dateLocalization.format(time, 'shorttime');
@@ -295,6 +298,9 @@ QUnit.module('MessageGroup', moduleConfig, () => {
                 text: 'CustomText',
                 timestamp: 1234567,
                 author: { name: 'someName', id: 'someId' },
+                alt: undefined,
+                src: undefined,
+                type: undefined
             };
 
             this.reinit({
@@ -304,6 +310,48 @@ QUnit.module('MessageGroup', moduleConfig, () => {
 
             assert.strictEqual(messageTemplate.callCount, 1, 'messageTemplate function was called on bubble template render');
             assert.deepEqual(messageTemplate.lastCall.args[0], message, 'messageTemplate function was called with correct data');
+        });
+
+        QUnit.test('Group content and bubble elements should be attached to DOM before template is rendrered (T1304688)', function(assert) {
+            assert.expect(2);
+
+            this.reinit({
+                items: [{ text: 'some text' }],
+                messageTemplate: () => {
+                    const $groupContent = this.$element.find(`.${CHAT_MESSAGEGROUP_CONTENT_CLASS}`);
+                    const $bubble = this.$element.find(`.${CHAT_MESSAGEBUBBLE_CLASS}`);
+
+                    assert.strictEqual($groupContent.length, 1, 'group content element exists');
+                    assert.strictEqual($bubble.length, 1, 'bubble element exists');
+                },
+            });
+        });
+    });
+
+    QUnit.module('localization', moduleConfig, () => {
+        QUnit.test('Edited text should be localized', function(assert) {
+            const defaultLocale = localization.locale();
+
+            const localizedEmptyListMessageText = 'edytowany';
+
+            try {
+                localization.loadMessages({
+                    'pl': {
+                        'dxChat-editedMessageText': localizedEmptyListMessageText,
+                    }
+                });
+                localization.locale('pl');
+
+                this.reinit({
+                    items: [{ isEdited: true }]
+                });
+
+                const $editedText = this.$element.find(`.${CHAT_MESSAGE_EDITED_TEXT_CLASS}`);
+
+                assert.strictEqual($editedText.text(), 'edytowany', 'edited text is localized');
+            } finally {
+                localization.locale(defaultLocale);
+            }
         });
     });
 });

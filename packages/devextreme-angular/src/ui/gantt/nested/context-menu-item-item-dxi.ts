@@ -10,7 +10,9 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -19,23 +21,41 @@ import { DOCUMENT } from '@angular/common';
 import { dxContextMenuItem } from 'devextreme/ui/context_menu';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-gantt-context-menu-item-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiGanttContextMenuItemItemComponent,
+        }
+    ]
 })
 export class DxiGanttContextMenuItemItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get beginGroup(): boolean {
         return this._getOption('beginGroup');
@@ -150,7 +170,7 @@ export class DxiGanttContextMenuItemItemComponent extends CollectionNestedOption
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiGanttContextMenuItemItemComponent
   ],
   exports: [

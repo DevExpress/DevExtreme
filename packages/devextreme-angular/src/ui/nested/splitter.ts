@@ -12,7 +12,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -22,16 +21,22 @@ import {
 import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoSplitterOptions } from './base/splitter-options';
-import { DxiItemComponent } from './item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-splitter',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'allowKeyboardNavigation',
@@ -62,6 +67,11 @@ import { DxiItemComponent } from './item-dxi';
     ]
 })
 export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
 
     /**
     
@@ -74,18 +84,9 @@ export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestro
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'itemsChange' }
         ]);
@@ -107,7 +108,7 @@ export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSplitterComponent
   ],
   exports: [

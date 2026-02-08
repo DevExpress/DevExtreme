@@ -1,0 +1,137 @@
+<dx-card-view
+  [dataSource]="employees"
+  keyExpr="id"
+  cardsPerRow="auto"
+  [cardMinWidth]="350"
+  [height]="840"
+>
+  <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
+  <dxo-card-view-card-cover
+    [imageExpr]="imageExpr"
+    [altExpr]="altExpr"
+  ></dxo-card-view-card-cover>
+  <dxo-card-view-editing
+    [allowAdding]="true"
+    [allowUpdating]="true"
+    [allowDeleting]="true"
+    [popup]="popupConfig"
+  >
+    <dxo-card-view-form>
+      <dxi-card-view-item
+        caption="Personal Data"
+        itemType="group"
+        [colCount]="2"
+        [colSpan]="2"
+      >
+        <dxi-card-view-item dataField="firstName"></dxi-card-view-item>
+        <dxi-card-view-item dataField="lastName"></dxi-card-view-item>
+        <dxi-card-view-item dataField="birthDate"></dxi-card-view-item>
+        <dxi-card-view-item dataField="picture"></dxi-card-view-item>
+      </dxi-card-view-item>
+      <dxi-card-view-item
+        caption="Main Info"
+        itemType="group"
+        [colCount]="2"
+        [colSpan]="2"
+      >
+        <dxi-card-view-item dataField="hireDate"></dxi-card-view-item>
+        <dxi-card-view-item dataField="title"></dxi-card-view-item>
+        <dxi-card-view-item dataField="department"></dxi-card-view-item>
+        <dxi-card-view-item
+          dataField="notes"
+          editorType="dxTextArea"
+          [colSpan]="2"
+          [editorOptions]="{ height: 100 }"
+        ></dxi-card-view-item>
+        <dxi-card-view-item dataField="picture"></dxi-card-view-item>
+      </dxi-card-view-item>
+      <dxi-card-view-item
+        caption="Contacts"
+        itemType="group"
+        [colCount]="2"
+        [colSpan]="2"
+      >
+        <dxi-card-view-item
+          dataField="address"
+          [colSpan]="2"
+        ></dxi-card-view-item>
+        <dxi-card-view-item dataField="city"></dxi-card-view-item>
+        <dxi-card-view-item dataField="zipcode"></dxi-card-view-item>
+        <dxi-card-view-item
+          dataField="mobilePhone"
+          [editorOptions]="{
+            mask: '+1 (000) 000-0000',
+            useMaskedValue: true,
+          }"
+        ></dxi-card-view-item>
+        <dxi-card-view-item dataField="email"></dxi-card-view-item>
+      </dxi-card-view-item>
+    </dxo-card-view-form>
+  </dxo-card-view-editing>
+  <dxi-card-view-column
+    caption="Full Name"
+    [calculateFieldValue]="calculateFullName"
+  ></dxi-card-view-column>
+  <dxi-card-view-column dataField="birthDate" dataType="date">
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
+  </dxi-card-view-column>
+  <dxi-card-view-column dataField="hireDate" dataType="date">
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
+    <dxi-card-view-validation-rule
+      type="custom"
+      message="Hire date cannot be earlier than birth date"
+      [validationCallback]="hireDateValidationCallback"
+    ></dxi-card-view-validation-rule>
+  </dxi-card-view-column>
+  <dxi-card-view-column caption="Position" dataField="title">
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
+  </dxi-card-view-column>
+  <dxi-card-view-column dataField="department"></dxi-card-view-column>
+  <dxi-card-view-column dataField="address"></dxi-card-view-column>
+  <dxi-card-view-column dataField="mobilePhone">
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
+  </dxi-card-view-column>
+  <dxi-card-view-column dataField="email">
+    <dxi-card-view-validation-rule type="email"></dxi-card-view-validation-rule>
+    <dxi-card-view-validation-rule
+      type="async"
+      message="Email address is not unique"
+      [ignoreEmptyValue]="true"
+      [validationCallback]="emailValidationCallback"
+    ></dxi-card-view-validation-rule>
+  </dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="notes"
+    [visible]="false"
+  ></dxi-card-view-column>
+  <dxi-card-view-column dataField="firstName" [visible]="false">
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
+  </dxi-card-view-column>
+  <dxi-card-view-column dataField="lastName" [visible]="false">
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
+  </dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="city"
+    [visible]="false"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="zipcode"
+    [visible]="false"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="picture"
+    [visible]="false"
+  ></dxi-card-view-column>
+</dx-card-view>

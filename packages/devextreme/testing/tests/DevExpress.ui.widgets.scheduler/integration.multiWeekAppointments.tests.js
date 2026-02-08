@@ -1,6 +1,7 @@
 import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import translator from 'common/core/animation/translator';
 import Color from 'color';
 import fx from 'common/core/animation/fx';
@@ -30,8 +31,8 @@ const mockWorkSpaceRendering = function(schedulerInst, cellSize, bounds) {
 QUnit.module('Integration: Multi-Week appointments', {
     beforeEach: function() {
         fx.off = true;
-        this.createInstance = function(options = {}) {
-            this.scheduler = createWrapper({
+        this.createInstance = async function(options = {}) {
+            this.scheduler = await createWrapper({
                 ...options,
                 height: 600,
             });
@@ -43,8 +44,8 @@ QUnit.module('Integration: Multi-Week appointments', {
     }
 });
 
-QUnit.test('Appointment width should be decreased if it greater than work space width', function(assert) {
-    this.createInstance({
+QUnit.test('Appointment width should be decreased if it greater than work space width', async function(assert) {
+    await this.createInstance({
         currentDate: new Date(2015, 4, 6),
         views: ['month'],
         currentView: 'month',
@@ -58,8 +59,8 @@ QUnit.test('Appointment width should be decreased if it greater than work space 
     assert.roughEqual(getOuterWidth($appointment), Math.floor(getOuterWidth($cell)), 1.001, 'Appointment width is OK');
 });
 
-QUnit.test('Appointment width should be decreased if it greater than work space width (rtl mode)', function(assert) {
-    this.createInstance({
+QUnit.test('Appointment width should be decreased if it greater than work space width (rtl mode)', async function(assert) {
+    await this.createInstance({
         currentDate: new Date(2015, 4, 6),
         views: ['month'],
         currentView: 'month',
@@ -79,8 +80,8 @@ QUnit.test('Appointment width should be decreased if it greater than work space 
     assert.roughEqual(getOuterWidth($appointment2), Math.floor(getOuterWidth($cell)), 1.001, 'Appointment width is OK');
 });
 
-QUnit.test('Appointment width should be decreased if it greater than work space width (grouped mode)', function(assert) {
-    this.createInstance({
+QUnit.test('Appointment width should be decreased if it greater than work space width (grouped mode)', async function(assert) {
+    await this.createInstance({
         currentDate: new Date(2015, 4, 6),
         views: ['month'],
         currentView: 'month',
@@ -126,8 +127,8 @@ QUnit.test('Appointment width should be decreased if it greater than work space 
     assert.roughEqual(getOuterWidth($appointment2), Math.floor(getOuterWidth($cell)), 1.001, 'Appointment width is OK');
 });
 
-QUnit.test('Max allowed position of appointment should be calculated correctly (grouped mode)', function(assert) {
-    this.createInstance({
+QUnit.test('Max allowed position of appointment should be calculated correctly (grouped mode)', async function(assert) {
+    await this.createInstance({
         currentDate: new Date(2015, 4, 25),
         views: ['month'],
         currentView: 'month',
@@ -177,8 +178,8 @@ QUnit.test('Max allowed position of appointment should be calculated correctly (
     assert.roughEqual(getOuterWidth($appointment), Math.floor(getOuterWidth($cell)), 1.001, 'Appointment width is OK');
 });
 
-QUnit.test('Appointment should have a special icon and class if it greater than work space width', function(assert) {
-    this.createInstance({
+QUnit.test('Appointment should have a special icon and class if it greater than work space width', async function(assert) {
+    await this.createInstance({
         currentDate: new Date(2015, 4, 6),
         views: ['month'],
         currentView: 'month',
@@ -192,8 +193,8 @@ QUnit.test('Appointment should have a special icon and class if it greater than 
     assert.ok($appointment.hasClass('dx-scheduler-appointment-reduced'), 'Appointment has right class');
 });
 
-QUnit.test('Each cloned appointment should have a special icon if it greater than work space width', function(assert) {
-    this.createInstance({
+QUnit.test('Each cloned appointment should have a special icon if it greater than work space width', async function(assert) {
+    await this.createInstance({
         currentDate: new Date(2015, 4, 6),
         views: ['month'],
         currentView: 'month',
@@ -228,8 +229,8 @@ QUnit.test('Each cloned appointment should have a special icon if it greater tha
     assert.equal($clonedAppointment.find('.dx-scheduler-appointment-reduced-icon').length, 1, 'Cloned appointment has an arrow icon');
 });
 
-QUnit.test('Multi-week appointments should be split by several parts', function(assert) {
-    this.createInstance({ width: 700 });
+QUnit.test('Multi-week appointments should be split by several parts', async function(assert) {
+    await this.createInstance({ width: 700 });
 
     this.instance.option({
         views: ['month'],
@@ -242,6 +243,7 @@ QUnit.test('Multi-week appointments should be split by several parts', function(
             endDate: new Date(2015, 2, 4)
         }]
     });
+    await waitAsync(0);
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
     const rowHeight = getOuterHeight(
@@ -267,8 +269,8 @@ QUnit.test('Multi-week appointments should be split by several parts', function(
     assert.roughEqual(fourthAppointmentTop, rowHeight * 5 + appointmentTopOffsetInsideCell + 1, 3.51, 'The fourth appointment height is OK');
 });
 
-QUnit.test('Multi-week appointments should have a correct left coordinate', function(assert) {
-    this.createInstance({
+QUnit.test('Multi-week appointments should have a correct left coordinate', async function(assert) {
+    await this.createInstance({
         width: 700,
         views: ['month'],
         currentView: 'month',
@@ -287,8 +289,8 @@ QUnit.test('Multi-week appointments should have a correct left coordinate', func
     assert.roughEqual(translator.locate($appointments.eq(2)).left, 1, 1.001, 'Left coordinate is OK');
 });
 
-QUnit.test('Multi-week appointments should have a correct left coordinate, rtl mode', function(assert) {
-    this.createInstance({
+QUnit.test('Multi-week appointments should have a correct left coordinate, rtl mode', async function(assert) {
+    await this.createInstance({
         width: 700,
         views: ['month'],
         currentView: 'month',
@@ -309,7 +311,7 @@ QUnit.test('Multi-week appointments should have a correct left coordinate, rtl m
     assert.roughEqual(translator.locate($appointments.eq(2)).left, 500, 2.001, 'Left coordinate is OK');
 });
 
-QUnit.test('Multi-week appointments with resources should have a correct left coordinate on timeline view', function(assert) {
+QUnit.test('Multi-week appointments with resources should have a correct left coordinate on timeline view', async function(assert) {
     const data = [{
         text: 'Task',
         roomId: [1, 2],
@@ -348,7 +350,7 @@ QUnit.test('Multi-week appointments with resources should have a correct left co
         }
     ];
 
-    this.createInstance({
+    await this.createInstance({
         height: 300,
         views: ['timelineDay'],
         currentView: 'timelineDay',
@@ -369,8 +371,7 @@ QUnit.test('Multi-week appointments with resources should have a correct left co
     assert.roughEqual(translator.locate($appointments.eq(3)).left, 400, 1.001, 'Left coordinate is OK');
 });
 
-QUnit.test('Multi-week appointments with resources should have a correct left coordinate on timeline view, rtl mode', function(assert) {
-    const clock = sinon.useFakeTimers();
+QUnit.test('Multi-week appointments with resources should have a correct left coordinate on timeline view, rtl mode', async function(assert) {
     const data = [{
         text: 'Task',
         roomId: [1, 2],
@@ -409,35 +410,31 @@ QUnit.test('Multi-week appointments with resources should have a correct left co
         }
     ];
 
-    try {
-        this.createInstance({
-            rtlEnabled: true,
-            views: ['timelineDay'],
-            currentView: 'timelineDay',
-            dataSource: data,
-            firstDayOfWeek: 1,
-            currentDate: new Date(2015, 2, 4),
-            groups: ['roomId', 'ownerId'],
-            resources: resources
-        });
+    await this.createInstance({
+        rtlEnabled: true,
+        views: ['timelineDay'],
+        currentView: 'timelineDay',
+        dataSource: data,
+        firstDayOfWeek: 1,
+        currentDate: new Date(2015, 2, 4),
+        groups: ['roomId', 'ownerId'],
+        resources: resources
+    });
 
-        mockWorkSpaceRendering.call(this, this.instance, 100, [700]);
+    mockWorkSpaceRendering.call(this, this.instance, 100, [700]);
 
-        const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
-        const $dateTable = $(this.instance.$element()).find('.dx-scheduler-date-table');
-        const expectedLeft = getOuterWidth($dateTable) - getOuterWidth($appointments.eq(0)) - 400;
+    const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
+    const $dateTable = $(this.instance.$element()).find('.dx-scheduler-date-table');
+    const expectedLeft = getOuterWidth($dateTable) - getOuterWidth($appointments.eq(0)) - 400;
 
-        assert.roughEqual(translator.locate($appointments.eq(0)).left, expectedLeft, 1.001, 'Left coordinate is OK');
-        assert.roughEqual(translator.locate($appointments.eq(1)).left, expectedLeft, 1.001, 'Left coordinate is OK');
-        assert.roughEqual(translator.locate($appointments.eq(2)).left, expectedLeft, 1.001, 'Left coordinate is OK');
-        assert.roughEqual(translator.locate($appointments.eq(3)).left, expectedLeft, 1.001, 'Left coordinate is OK');
-    } finally {
-        clock.restore();
-    }
+    assert.roughEqual(translator.locate($appointments.eq(0)).left, expectedLeft, 1.001, 'Left coordinate is OK');
+    assert.roughEqual(translator.locate($appointments.eq(1)).left, expectedLeft, 1.001, 'Left coordinate is OK');
+    assert.roughEqual(translator.locate($appointments.eq(2)).left, expectedLeft, 1.001, 'Left coordinate is OK');
+    assert.roughEqual(translator.locate($appointments.eq(3)).left, expectedLeft, 1.001, 'Left coordinate is OK');
 });
 
-QUnit.test('Multi-week appointments should have correct resizable handles', function(assert) {
-    this.createInstance({ width: 700, editing: true });
+QUnit.test('Multi-week appointments should have correct resizable handles', async function(assert) {
+    await this.createInstance({ width: 700, editing: true });
 
     mockWorkSpaceRendering.call(this, this.instance, 100, [700]);
 
@@ -452,6 +449,7 @@ QUnit.test('Multi-week appointments should have correct resizable handles', func
             endDate: new Date(2015, 1, 25)
         }]
     });
+    await waitAsync(0);
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
@@ -460,8 +458,8 @@ QUnit.test('Multi-week appointments should have correct resizable handles', func
     assert.equal($appointments.eq(2).dxResizable('instance').option('handles'), 'right', 'Appointment tail has a right resizable handles');
 });
 
-QUnit.test('Multi-week appointments should have correct resizable handles in rtl mode', function(assert) {
-    this.createInstance({ width: 700, editing: true });
+QUnit.test('Multi-week appointments should have correct resizable handles in rtl mode', async function(assert) {
+    await this.createInstance({ width: 700, editing: true });
 
     this.instance.option({
         views: ['month'],
@@ -475,6 +473,7 @@ QUnit.test('Multi-week appointments should have correct resizable handles in rtl
         }],
         rtlEnabled: true
     });
+    await waitAsync(0);
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
@@ -483,8 +482,8 @@ QUnit.test('Multi-week appointments should have correct resizable handles in rtl
     assert.equal($appointments.eq(2).dxResizable('instance').option('handles'), 'left', 'Appointment tail has a right resizable handles');
 });
 
-QUnit.test('Multi-week appointments should have correct CSS classes', function(assert) {
-    this.createInstance({ width: 700 });
+QUnit.test('Multi-week appointments should have correct CSS classes', async function(assert) {
+    await this.createInstance({ width: 700 });
 
     mockWorkSpaceRendering.call(this, this.instance, 100, [700]);
 
@@ -499,6 +498,7 @@ QUnit.test('Multi-week appointments should have correct CSS classes', function(a
             endDate: new Date(2015, 1, 25)
         }]
     });
+    await waitAsync(0);
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
@@ -507,8 +507,8 @@ QUnit.test('Multi-week appointments should have correct CSS classes', function(a
     assert.ok($appointments.eq(2).hasClass('dx-scheduler-appointment-tail'), 'Appointment tail has a right CSS class');
 });
 
-QUnit.test('Multi-week appointments should be duplicated depend on resource count', function(assert) {
-    this.createInstance({
+QUnit.test('Multi-week appointments should be duplicated depend on resource count', async function(assert) {
+    await this.createInstance({
         width: 800,
         views: ['month'],
         currentView: 'month',
@@ -536,8 +536,8 @@ QUnit.test('Multi-week appointments should be duplicated depend on resource coun
     assert.equal($appointments.length, 6, 'Appointment count is OK');
 });
 
-QUnit.test('Grouped multi-week appointments should have a correct left offset', function(assert) {
-    this.createInstance({
+QUnit.test('Grouped multi-week appointments should have a correct left offset', async function(assert) {
+    await this.createInstance({
         width: 700,
         views: ['month'],
         currentView: 'month',
@@ -564,19 +564,18 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
     assert.roughEqual(translator.locate($appointments.eq(0)).left, 50, 2.001);
-    assert.roughEqual(translator.locate($appointments.eq(1)).left, 0, 1.001);
+    assert.roughEqual(translator.locate($appointments.eq(1)).left, 399, 1.001);
     assert.roughEqual(translator.locate($appointments.eq(2)).left, 0, 1.001);
-
-    assert.roughEqual(translator.locate($appointments.eq(3)).left, 399, 1.001);
-    assert.roughEqual(translator.locate($appointments.eq(4)).left, 349, 1.001);
+    assert.roughEqual(translator.locate($appointments.eq(3)).left, 349, 1.001);
+    assert.roughEqual(translator.locate($appointments.eq(4)).left, 0, 1.001);
     assert.roughEqual(translator.locate($appointments.eq(5)).left, 349, 1.001);
 
 });
 
 [true, false].forEach((renovateRender) => {
-    QUnit.test(`Grouped multi-week appointments should have a correct left offset in rtl mode when renovateRender is ${renovateRender}`, function(assert) {
+    QUnit.test(`Grouped multi-week appointments should have a correct left offset in rtl mode when renovateRender is ${renovateRender}`, async function(assert) {
 
-        this.createInstance({ width: 1052 });
+        await this.createInstance({ width: 1052 });
 
         const cellWidth = 50;
 
@@ -602,6 +601,7 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
             groups: ['roomId'],
             renovateRender,
         });
+        await waitAsync(0);
 
         this.instance.option('dataSource', [{
             text: 'a',
@@ -609,22 +609,22 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
             endDate: new Date(2015, 1, 25),
             roomId: [1, 2]
         }]);
+        await waitAsync(0);
 
         const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
-        assert.roughEqual(translator.locate($appointments.eq(0)).left, cellWidth * 14, 2.001, 'The first head is OK');
-        assert.roughEqual(translator.locate($appointments.eq(1)).left, cellWidth * 14, 1.001, 'The first body is OK');
-        assert.roughEqual(translator.locate($appointments.eq(2)).left, cellWidth * 19, 2.001, 'The first tail is OK');
-
-        assert.roughEqual(translator.locate($appointments.eq(3)).left, cellWidth * 7, 1.001, 'The second head is OK');
-        assert.roughEqual(translator.locate($appointments.eq(4)).left, cellWidth * 7, 1.001, 'The second body is OK');
-        assert.roughEqual(translator.locate($appointments.eq(5)).left, cellWidth * 12, 2.001, 'The second tail is OK');
+        assert.roughEqual(translator.locate($appointments.eq(0)).left, cellWidth * 7, 1.001, 'The second head is OK');
+        assert.roughEqual(translator.locate($appointments.eq(1)).left, cellWidth * 14, 2.001, 'The first head is OK');
+        assert.roughEqual(translator.locate($appointments.eq(2)).left, cellWidth * 7, 1.001, 'The second body is OK');
+        assert.roughEqual(translator.locate($appointments.eq(3)).left, cellWidth * 14, 1.001, 'The first body is OK');
+        assert.roughEqual(translator.locate($appointments.eq(4)).left, cellWidth * 12, 2.001, 'The second tail is OK');
+        assert.roughEqual(translator.locate($appointments.eq(5)).left, cellWidth * 19, 2.001, 'The first tail is OK');
 
     });
 });
 
-QUnit.test('Multi-week grouped appointments should be painted correctly', function(assert) {
-    this.createInstance({
+QUnit.test('Multi-week grouped appointments should be painted correctly', async function(assert) {
+    await this.createInstance({
         width: 700,
         views: ['month'],
         currentView: 'month',
@@ -652,20 +652,20 @@ QUnit.test('Multi-week grouped appointments should be painted correctly', functi
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
     assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
-    assert.equal(new Color($appointments.eq(1).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
-    assert.equal(new Color($appointments.eq(2).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
+    assert.equal(new Color($appointments.eq(1).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
+    assert.equal(new Color($appointments.eq(2).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
 
-    assert.equal(new Color($appointments.eq(3).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
+    assert.equal(new Color($appointments.eq(3).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
     assert.equal(new Color($appointments.eq(4).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
-    assert.equal(new Color($appointments.eq(5).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
+    assert.equal(new Color($appointments.eq(5).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
 
-    assert.equal(new Color($appointments.eq(6).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
-    assert.equal(new Color($appointments.eq(7).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
+    assert.equal(new Color($appointments.eq(6).css('backgroundColor')).toHex(), '#8bb6ff', 'Color is OK');
+    assert.equal(new Color($appointments.eq(7).css('backgroundColor')).toHex(), '#ff8b8b', 'Color is OK');
     assert.equal(new Color($appointments.eq(8).css('backgroundColor')).toHex(), '#8bffa6', 'Color is OK');
 });
 
-QUnit.test('Multi-week appointments should have a correct left offset on day view, rtl mode', function(assert) {
-    this.createInstance({
+QUnit.test('Multi-week appointments should have a correct left offset on day view, rtl mode', async function(assert) {
+    await this.createInstance({
         width: 700,
         views: ['day'],
         currentView: 'day',
@@ -684,7 +684,7 @@ QUnit.test('Multi-week appointments should have a correct left offset on day vie
     assert.roughEqual(translator.locate($appointments.eq(0)).left, 0, 2.001);
 });
 
-QUnit.test('Multi week task dragging on month view', function(assert) {
+QUnit.test('Multi week task dragging on month view', async function(assert) {
     const data = new DataSource({
         store: [
             {
@@ -695,7 +695,7 @@ QUnit.test('Multi week task dragging on month view', function(assert) {
         ]
     });
 
-    this.createInstance({
+    await this.createInstance({
         currentDate: new Date(2015, 2, 4),
         dataSource: data,
         currentView: 'month',
@@ -722,7 +722,7 @@ QUnit.test('Multi week task dragging on month view', function(assert) {
     assert.deepEqual(updatedMultiWeekItem.endDate, updatedItem.endDate, 'New data is correct');
 });
 
-QUnit.test('Multi week allDay task dragging on month view', function(assert) {
+QUnit.test('Multi week allDay task dragging on month view', async function(assert) {
     const data = new DataSource({
         store: [
             {
@@ -734,7 +734,7 @@ QUnit.test('Multi week allDay task dragging on month view', function(assert) {
         ]
     });
 
-    this.createInstance({
+    await this.createInstance({
         currentDate: new Date(2015, 2, 4),
         dataSource: data,
         currentView: 'month',

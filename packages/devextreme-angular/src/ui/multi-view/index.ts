@@ -38,16 +38,16 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiMultiViewItemModule } from 'devextreme-angular/ui/multi-view/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiMultiViewItemComponent } from 'devextreme-angular/ui/multi-view/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -56,8 +56,10 @@ import { DxiMultiViewItemComponent } from 'devextreme-angular/ui/multi-view/nest
  */
 @Component({
     selector: 'dx-multi-view',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -66,6 +68,12 @@ import { DxiMultiViewItemComponent } from 'devextreme-angular/ui/multi-view/nest
     ]
 })
 export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxMultiView<TItem, TKey> = null;
 
     /**
@@ -177,10 +185,10 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -359,10 +367,10 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -499,7 +507,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -597,27 +605,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiMultiViewItemComponent)
-    get itemsChildren(): QueryList<DxiMultiViewItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiMultiViewItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -712,13 +700,11 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
 
 @NgModule({
   imports: [
+    DxMultiViewComponent,
     DxiItemModule,
     DxiMultiViewItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxMultiViewComponent
   ],
   exports: [
     DxMultiViewComponent,
@@ -728,6 +714,8 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
   ]
 })
 export class DxMultiViewModule { }
+
+export * from 'devextreme-angular/ui/multi-view/nested';
 
 import type * as DxMultiViewTypes from "devextreme/ui/multi_view_types";
 export { DxMultiViewTypes };

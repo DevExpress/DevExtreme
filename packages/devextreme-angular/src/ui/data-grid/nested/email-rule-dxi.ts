@@ -15,16 +15,26 @@ import {
 import { ValidationRuleType } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_validationRules } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-data-grid-email-rule',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_validationRules,
+           useExisting: DxiDataGridEmailRuleComponent,
+        }
+    ]
 })
 export class DxiDataGridEmailRuleComponent extends CollectionNestedOption {
     @Input()
@@ -62,6 +72,8 @@ export class DxiDataGridEmailRuleComponent extends CollectionNestedOption {
         super();
         parentOptionHost.setNestedOption(this);
         optionHost.setHost(this, this._fullOptionPath.bind(this));
+        this.type = 'email';
+    
     }
 
 
@@ -73,7 +85,7 @@ export class DxiDataGridEmailRuleComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDataGridEmailRuleComponent
   ],
   exports: [

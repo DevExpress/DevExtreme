@@ -13,7 +13,7 @@ import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import TreeView from '@js/ui/tree_view';
 import Widget from '@js/ui/widget/ui.widget';
-import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
+import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
 
 import {
   addItem, convertToInnerStructure,
@@ -50,6 +50,8 @@ const ACTIVE_CLASS = 'dx-state-active';
 const FILTER_BUILDER_MENU_CUSTOM_OPERATION_CLASS = `${FILTER_BUILDER_CLASS}-menu-custom-operation`;
 const SOURCE = 'filterBuilder';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const TREEVIEW_NODE_CONTAINER = 'dx-treeview-node-container';
 
 const TAB_KEY = 'tab';
 const ENTER_KEY = 'enter';
@@ -255,7 +257,7 @@ class FilterBuilder extends Widget<any> {
     // @ts-expect-error
     super._initMarkup();
 
-    this._addAriaAttributes(this.$element(), messageLocalization.format('dxFilterBuilder-filterAriaRootElement'), 'tree');
+    this._addAriaAttributes(this.$element(), messageLocalization.format('dxFilterBuilder-filterAriaRootElement'), 'group');
     this._createGroupElementByCriteria(this._model)
       .appendTo(this.$element());
   }
@@ -292,7 +294,8 @@ class FilterBuilder extends Widget<any> {
   _createConditionElement(condition, parent, groupLevel?) {
     return $('<div>')
       .addClass(FILTER_BUILDER_GROUP_CLASS)
-      .append(this._createConditionItem(condition, parent, groupLevel));
+      .append(this._createConditionItem(condition, parent, groupLevel))
+      .attr('role', 'group');
   }
 
   _createGroupElementByCriteria(criteria, parent?, groupLevel = 0) {
@@ -327,8 +330,21 @@ class FilterBuilder extends Widget<any> {
       }, 'group').appendTo($groupItem);
     }
 
-    this._addAriaAttributes($groupItem, messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'), 'treeitem', null, null, `${groupLevel + 1}`);
-    this._addAriaAttributes($groupContent, '', 'group');
+    let groupItemLevel = groupLevel;
+
+    if (groupLevel === 0) {
+      this._addAriaAttributes($group, '', 'tree');
+      groupItemLevel += 1;
+    }
+
+    this._addAriaAttributes(
+      $groupItem,
+      messageLocalization.format('dxFilterBuilder-filterAriaGroupItem'),
+      'treeitem',
+      null,
+      null,
+      groupItemLevel,
+    );
     $groupItem.attr('aria-owns', `${$guid}`);
 
     this._createGroupOperationButton(criteria).appendTo($groupItem);
@@ -405,8 +421,11 @@ class FilterBuilder extends Widget<any> {
     };
     const position = rtlEnabled ? 'right' : 'left';
     const $button = this._createButton(options.caption);
+    const $guid = new Guid();
+    $button.attr('aria-controls', `${$guid}`);
 
     extend(options.menu, {
+      id: $guid,
       focusStateEnabled: true,
       selectionMode: 'single',
       onItemClick: menuOnItemClickWrapper(options.menu.onItemClick),
@@ -426,9 +445,13 @@ class FilterBuilder extends Widget<any> {
 
     options.popup = {
       onShown(info) {
-        const treeViewElement = $(info.component.content()).find('.dx-treeview');
-        // @ts-expect-error dxElementWrapper doesn't contain widget creation methods types
-        const treeView = treeViewElement.dxTreeView('instance');
+        const treeViewContentElement = $(info.component.content());
+        const treeViewElement = treeViewContentElement.find('.dx-treeview');
+
+        if (treeViewElement.length) {
+          that._applyAccessibilityAttributes(treeViewElement);
+        }
+
         eventsEngine.on(treeViewElement, 'keyup keydown', (e) => {
           const keyName = normalizeKeyName(e);
 
@@ -439,6 +462,9 @@ class FilterBuilder extends Widget<any> {
             eventsEngine.trigger(options.menu.position.of, 'focus');
           }
         });
+
+        // @ts-expect-error dxElementWrapper doesn't contain widget creation methods types
+        const treeView = treeViewElement.dxTreeView('instance');
 
         treeView.focus();
         treeView.option('focusedElement', null);
@@ -855,6 +881,8 @@ class FilterBuilder extends Widget<any> {
         const $menuContainer = $('<div>').appendTo(contentElement);
         // @ts-expect-error
         that._createComponent($menuContainer, TreeView, options.menu);
+
+        $menuContainer.attr('id', `${options.menu.id}`);
         // T852701
         this.repaint();
       },
@@ -865,7 +893,8 @@ class FilterBuilder extends Widget<any> {
       visible: true,
       focusStateEnabled: false,
       preventScrollEvents: false,
-      container: $popup,
+      hideOnParentScroll: this.option('closePopupOnTargetScroll'),
+      _hideOnParentScrollTarget: $popup,
       hideOnOutsideClick: true,
       onShown: options.popup.onShown,
       shading: false,
@@ -884,6 +913,18 @@ class FilterBuilder extends Widget<any> {
         handler(e);
       }
     });
+  }
+
+  _applyAccessibilityAttributes($element) {
+    const treeViewPopup = $element.closest(`.${OVERLAY_CONTENT_CLASS}`);
+    treeViewPopup?.removeAttr('role');
+
+    const treeViewNode = treeViewPopup?.find?.(`.${TREEVIEW_NODE_CONTAINER}`);
+    treeViewNode?.attr('role', 'presentation');
+  }
+
+  addWidgetPrefix(className: string): string {
+    return `${FILTER_BUILDER_CLASS}-${className}`;
   }
 }
 

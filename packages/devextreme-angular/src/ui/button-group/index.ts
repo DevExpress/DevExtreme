@@ -35,16 +35,16 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiButtonGroupItemModule } from 'devextreme-angular/ui/button-group/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiButtonGroupItemComponent } from 'devextreme-angular/ui/button-group/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -53,8 +53,10 @@ import { DxiButtonGroupItemComponent } from 'devextreme-angular/ui/button-group/
  */
 @Component({
     selector: 'dx-button-group',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -63,6 +65,12 @@ import { DxiButtonGroupItemComponent } from 'devextreme-angular/ui/button-group/
     ]
 })
 export class DxButtonGroupComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxButtonGroup = null;
 
     /**
@@ -148,10 +156,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -304,10 +312,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -406,7 +414,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -490,27 +498,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiButtonGroupItemComponent)
-    get itemsChildren(): QueryList<DxiButtonGroupItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiButtonGroupItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -600,13 +588,11 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
 
 @NgModule({
   imports: [
+    DxButtonGroupComponent,
     DxiItemModule,
     DxiButtonGroupItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxButtonGroupComponent
   ],
   exports: [
     DxButtonGroupComponent,
@@ -616,6 +602,8 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
   ]
 })
 export class DxButtonGroupModule { }
+
+export * from 'devextreme-angular/ui/button-group/nested';
 
 import type * as DxButtonGroupTypes from "devextreme/ui/button_group_types";
 export { DxButtonGroupTypes };

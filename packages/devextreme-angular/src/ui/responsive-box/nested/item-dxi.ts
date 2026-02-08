@@ -12,7 +12,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -21,24 +20,42 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiResponsiveBoxLocationComponent } from './location-dxi';
 
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_location,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-responsive-box-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiResponsiveBoxItemComponent,
+        }
+    ]
 })
 export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_location)
+    set _locationContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('location', value);
+    }
+    
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -93,14 +110,6 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
     }
 
 
-    @ContentChildren(forwardRef(() => DxiResponsiveBoxLocationComponent))
-    get locationsChildren(): QueryList<DxiResponsiveBoxLocationComponent> {
-        return this._getOption('location');
-    }
-    set locationsChildren(value) {
-        this.setChildren('location', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -129,7 +138,7 @@ export class DxiResponsiveBoxItemComponent extends CollectionNestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiResponsiveBoxItemComponent
   ],
   exports: [

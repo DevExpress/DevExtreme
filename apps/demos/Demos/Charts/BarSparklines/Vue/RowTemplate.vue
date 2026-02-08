@@ -60,13 +60,13 @@ const props = withDefaults(defineProps<{
   source: () => ({}),
 });
 
-const getValueField = (name) => name + props.year;
+const getValueField = (name: string): string => name + props.year;
 </script>
 <style>
 .rows-content td {
   font-weight: 400;
   width: 200px;
-  padding: 25px 10px 5px 10px;
+  padding: 25px 10px 5px;
   border: 1px solid #c2c2c2;
 }
 

@@ -30,8 +30,8 @@ window.config = {
       'esModule': true,
     },
     /**/
-    /** exceljs&file-saver */
-    'exceljs': {
+    /** devextreme-exceljs-fork&file-saver */
+    'devextreme-exceljs-fork': {
       'esModule': true,
     },
     /**/
@@ -68,8 +68,8 @@ window.config = {
     'cldr': 'npm:cldrjs/dist/cldr',
     /**/
 
-    /** exceljs&file-saver */
-    'exceljs': 'npm:exceljs/dist/exceljs.min.js',
+    /** devextreme-exceljs-fork&file-saver */
+    'devextreme-exceljs-fork': 'npm:devextreme-exceljs-fork/dist/dx-exceljs-fork.min.js',
     'file-saver-es': 'npm:file-saver-es/dist/FileSaver.min.js',
     /**/
 
@@ -139,6 +139,7 @@ window.config = {
     'inferno-clone-vnode': 'npm:inferno-clone-vnode/dist/inferno-clone-vnode.min.js',
     'inferno-create-class': 'npm:inferno-create-class/dist/inferno-create-class.min.js',
     'inferno-extras': 'npm:inferno-extras/dist/inferno-extras.min.js',
+    '@preact/signals-core': 'npm:@preact/signals-core/dist/signals-core.min.js',
 
     'plugin-babel': 'npm:systemjs-plugin-babel/plugin-babel.js',
     'systemjs-babel-build': 'npm:systemjs-plugin-babel/systemjs-babel-browser.js',
@@ -149,6 +150,9 @@ window.config = {
   },
   packages: {
     'devextreme-vue': {
+      main: 'index.js',
+    },
+    'devextreme-vue/common': {
       main: 'index.js',
     },
     'devextreme': {
@@ -162,7 +166,11 @@ window.config = {
     },
     'devextreme/events': {
       main: 'index',
-    }/**//** globalize */,
+    }/** globalize */,
+    'devextreme-cldr-data': {
+      format: 'json',
+      defaultExtension: 'json',
+    },
     'globalize': {
       main: '../globalize.js',
       defaultExtension: 'js',
@@ -190,3 +198,5 @@ window.config = {
 };
 
 System.config(window.config);
+// eslint-disable-next-line
+const useTgzInCSB = ['openai'];

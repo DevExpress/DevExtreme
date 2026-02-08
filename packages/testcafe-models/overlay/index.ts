@@ -23,7 +23,8 @@ export default class Overlay extends Widget {
 
   // eslint-disable-next-line class-methods-use-this
   getWrapper(): Selector {
-    return Selector(`.${CLASS.wrapper}`);
+    // NOTE: Returns the last found wrapper if multiple popups opened
+    return Selector(`.${CLASS.wrapper}`).nth(-1);
   }
 
   // eslint-disable-next-line class-methods-use-this

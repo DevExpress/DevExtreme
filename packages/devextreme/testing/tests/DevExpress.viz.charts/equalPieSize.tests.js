@@ -1,16 +1,11 @@
 
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const commons = require('./chartParts/commons.js');
-const dataValidatorModule = require('viz/components/data_validator');
-const layoutManagerModule = require('viz/chart_components/layout_manager');
-const dxPieChart = require('viz/pie_chart');
-const chartMocks = require('../../helpers/chartMocks.js');
-const MockSeries = chartMocks.MockSeries;
-const MockPoint = chartMocks.MockPoint;
-const insertMockFactory = chartMocks.insertMockFactory;
-const restoreMockFactory = chartMocks.restoreMockFactory;
-const resetMockFactory = chartMocks.resetMockFactory;
+import $ from 'jquery';
+import { Renderer } from '../../helpers/vizMocks.js';
+import dataValidatorModule from 'viz/components/data_validator';
+import layoutManagerModule from 'viz/chart_components/layout_manager';
+import dxPieChart from 'viz/pie_chart';
+import { MockSeries, MockPoint, insertMockFactory, restoreMockFactory, resetMockFactory, seriesMockData } from '../../helpers/chartMocks.js';
+import { rendererModule, resetModules } from './chartParts/commons.js';
 
 function getContainer(hidden) {
     const div = $('<div>').appendTo('#qunit-fixture');
@@ -65,8 +60,8 @@ const dataSourceTemplate = [
     { cat: 'Third', val: 300 }
 ];
 
-commons.rendererModule.Renderer = sinon.spy(function(parameters) {
-    return new vizMocks.Renderer(parameters);
+rendererModule.Renderer = sinon.spy(function(parameters) {
+    return new Renderer(parameters);
 });
 
 const environment = {
@@ -84,7 +79,7 @@ const environment = {
         this.LayoutManager.restore();
         this.validateData.restore();
 
-        commons.resetModules();
+        resetModules();
         resetMockFactory();
         restoreMockFactory();
     },
@@ -107,8 +102,8 @@ QUnit.module('Get layout from LayoutManagers', environment);
 QUnit.test('Create pies without groups. Get individual layout', function(assert) {
     const done = assert.async(2);
 
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     this.createPieChart({
         dataSource: dataSourceTemplate,
@@ -140,8 +135,8 @@ QUnit.test('Create pies without groups. Get individual layout', function(assert)
 QUnit.test('Create pies with group. Get common layout', function(assert) {
     const done = assert.async(2);
 
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     this.createPieChart({
         sizeGroup: 'group1',
@@ -185,8 +180,8 @@ QUnit.module('Pass common layout to LayoutManagers', environment);
 QUnit.test('Create pies without groups. Do not ask for common layout', function(assert) {
     const done = assert.async(2);
 
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     this.createPieChart({
         dataSource: dataSourceTemplate,
@@ -210,8 +205,8 @@ QUnit.test('Create pies without groups. Do not ask for common layout', function(
 QUnit.test('Create pies with same group. Ask for common layout', function(assert) {
     const checkPie = getPieChecker(150, 250, 200, assert, assert.async(2));
 
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     this.createPieChart({
         sizeGroup: 'group1',
@@ -235,8 +230,8 @@ QUnit.test('Create pies with same group, but one pie is hidden. Do not ask hidde
     const done = assert.async(1);
     const checkPie = getPieChecker(150, 250, 200, assert, done);
 
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     this.createPieChart({
         hidden: true,
@@ -260,10 +255,10 @@ QUnit.test('Create pies with same group, but one pie is hidden. Do not ask hidde
 QUnit.test('Create two sets of pies with different groups. Ask corresponding common layout', function(assert) {
     const done = assert.async(4);
 
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     this.createPieChart({
         sizeGroup: 'group1',
@@ -303,9 +298,9 @@ QUnit.test('Create two sets of pies with different groups. Ask corresponding com
 QUnit.test('Have pies with group. Add new pie to the same group. Ask common layout for all pies', function(assert) {
     const checkPie = getPieChecker(200, 300, 100, assert, assert.async(3));
 
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     const skipFirstCallAndCreateNewPie = function(that) {
         let firstCall = true;
@@ -358,7 +353,7 @@ QUnit.test('Have pies with group. Change group of one pie. Redraw only changed p
     const done = assert.async(2);
     assert.expect(0);
 
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     const changeGroupOnFirstCall = (function() {
         let firstCall = true;
@@ -385,8 +380,8 @@ QUnit.test('Do not touch disposed pies', function(assert) {
     const done = assert.async(3);
     assert.expect(0);
 
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     const killPieAndChangeGroupOnFirstCall = function(pieToKill) {
         let firstCall = true;
@@ -422,7 +417,7 @@ QUnit.test('Do not touch disposed pies', function(assert) {
 QUnit.test('Create pies with group. Series should be animated', function(assert) {
     const done = assert.async(1);
 
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     this.createPieChart({
         sizeGroup: 'group1',
@@ -441,11 +436,11 @@ QUnit.test('Create pies with group. Series should be animated', function(assert)
 
 QUnit.test('Hide labes after first measuring render', function(assert) {
     const series1 = new MockSeries({ points: this.stubPoints });
-    chartMocks.seriesMockData.series.push(series1);
+    seriesMockData.series.push(series1);
 
     series1.drawLabelsWOPoints = sinon.spy(function() { return true; });
 
-    chartMocks.seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
+    seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
 
     const pie = this.createPieChart({
         dataSource: dataSourceTemplate,
@@ -460,7 +455,6 @@ QUnit.test('Hide labes after first measuring render', function(assert) {
     assert.equal(series.drawLabelsWOPoints.callCount, 1);
     assert.equal(series.hideLabels.callCount, 1);
     assert.ok(series.hideLabels.lastCall.calledAfter(pie.layoutManager.applyPieChartSeriesLayout.lastCall));
-
 });
 
 QUnit.test('Create pie with group but w/o series. Do not ask for common layout. T602149', function(assert) {

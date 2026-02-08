@@ -1,6 +1,6 @@
 {
   "name": "devextreme-react-storybook",
-  "version": "25.1.0",
+  "version": "25.1.8",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,23 +11,22 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "devextreme": "workspace:~",
-    "devextreme-react": "workspace:~",
+    "devextreme": "workspace:*",
+    "devextreme-react": "workspace:*",
     "inferno": "catalog:",
     "html-react-parser": "^5.2.2"
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "7.6.19",
-    "@storybook/addon-interactions": "7.6.19",
-    "@storybook/addon-links": "7.6.19",
-    "@storybook/blocks": "7.6.19",
-    "@storybook/react": "7.6.19",
-    "@storybook/react-webpack5": "7.6.19",
-    "@storybook/test": "7.6.19",
+    "@types/react": "18.0.0",
+    "@types/react-dom": "18.0.0",
+    "@storybook/addon-docs": "10.1.9",
+    "@storybook/addon-links": "10.1.9",
+    "@storybook/addon-webpack5-compiler-swc": "^4.0.2",
+    "@storybook/react-webpack5": "10.1.9",
     "prop-types": "15.8.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "storybook": "7.6.19",
-    "typescript": "4.9.5"
+    "storybook": "10.1.9",
+    "typescript": "^5.9.3"
   }
 }

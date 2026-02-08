@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/method-signature-style */
 import ArrayStore from '@js/common/data/array_store';
 import { CustomStore } from '@js/common/data/custom_store';
 import $ from '@js/core/renderer';
@@ -73,9 +72,11 @@ interface HandleDataChangedArguments {
 
 type UserData = Record<string, unknown>;
 
-interface Item {
+export interface Item {
   rowType: 'data' | 'group' | 'groupFooter' | 'detailAdaptive';
   data: UserData;
+  key: unknown;
+  oldData?: UserData;
   dataIndex?: number;
   values?: unknown[];
   visible?: boolean;
@@ -85,8 +86,8 @@ interface Item {
   rowIndex?: number;
   cells?: unknown[];
   loadIndex?: number;
-  key: unknown;
   isSelected?: boolean;
+  removed?: boolean;
 }
 
 export type Filter = any;
@@ -607,7 +608,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this.pushed.fire(changes);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public fireError(...args: any[]) {
     this.dataErrorOccurred.fire(errors.Error.apply(errors, args));
   }
@@ -1069,7 +1069,12 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       item.rowIndex = index;
     });
 
-    const result = findChanges(oldItems, change.items, getRowKey, isItemEquals);
+    const result = findChanges({
+      oldItems,
+      newItems: change.items,
+      getKey: getRowKey,
+      isItemEquals,
+    });
 
     if (!result) {
       this._applyChangeFull(change);
@@ -1218,6 +1223,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   public updateItems(change?, isDataChanged?) {
     change = change || {};
     const that = this;
+    change.isFirstRender = !that.changed.fired();
 
     if (that._repaintChangesOnly !== undefined) {
       change.repaintChangesOnly = change.repaintChangesOnly ?? that._repaintChangesOnly;
@@ -1542,6 +1548,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return gridCoreUtils.getIndexByKey(key, this.items(byLoaded));
   }
 
+  public getRowByKey(key: unknown): Item | undefined {
+    return this.items()?.[this.getRowIndexByKey(key)];
+  }
+
   public keyOf(data) {
     const store = this.store();
     if (store) {
@@ -1630,7 +1640,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     if (options === true) {
       options = { reload: true, changesOnly: true };
     } else if (!options) {
-      options = { lookup: true, selection: true, reload: true };
+      options = { reload: true, lookup: true };
     }
 
     const that = this;
@@ -1722,7 +1732,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   /**
    * @extended: editing, virtual_scrolling
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   public reload(reload?, changesOnly?): any {
     return this._dataSource?.reload(reload, changesOnly);
   }

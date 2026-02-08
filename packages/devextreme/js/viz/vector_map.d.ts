@@ -17,7 +17,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     Format,
@@ -903,13 +903,6 @@ export default class dxVectorMap extends BaseWidget<dxVectorMapOptions> {
      * @public
      */
     clearSelection(): void;
-    /**
-     * @docid
-     * @publicName convertCoordinates(x, y)
-     * @deprecated dxVectorMap.convertToGeo
-     * @public
-     */
-    convertCoordinates(x: number, y: number): Array<number>;
     /**
      * @docid
      * @publicName convertToGeo(x, y)

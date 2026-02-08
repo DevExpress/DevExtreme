@@ -59,7 +59,7 @@ import {
 } from 'devextreme-vue/data-grid';
 
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import CustomStore from 'devextreme/data/custom_store';
+import { CustomStore } from 'devextreme-vue/common/data';
 
 defineProps<{
   dataSource: CustomStore

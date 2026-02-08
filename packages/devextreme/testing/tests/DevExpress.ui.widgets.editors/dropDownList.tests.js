@@ -14,7 +14,7 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 
 import 'ui/drop_down_editor/ui.drop_down_list';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -72,11 +72,6 @@ QUnit.module('focus policy', {
     }
 }, () => {
     QUnit.test('focus removed from list on type some text', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
-            return;
-        }
-
         this.instance.option('opened', true);
         this.clock.tick(TIME_TO_WAIT);
         this.keyboard.keyDown('down');
@@ -139,10 +134,6 @@ QUnit.module('focus policy', {
     });
 
     QUnit.test('setFocusPolicy should correctly renew subscription', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
-            return;
-        }
         const setFocusPolicySpy = sinon.spy(this.instance, '_setFocusPolicy');
 
         this.instance.option('onChange', noop);
@@ -531,7 +522,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
 
         this.clock.tick(10);
 
-        assert.equal($.trim($('.dx-list-item').text()), 'test', 'template rendered');
+        assert.equal($('.dx-list-item').text().trim(), 'test', 'template rendered');
     });
 
     QUnit.test('dataSource with Guid key', function(assert) {
@@ -688,7 +679,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         const instance = $element.dxDropDownList('instance');
         instance.option('opened', true);
 
-        assert.equal($.trim($('.dx-list-item').text()), '<None>', 'template rendered');
+        assert.equal($('.dx-list-item').text().trim(), '<None>', 'template rendered');
     });
 
     QUnit.test('searchTimeout should be refreshed after next symbol entered', function(assert) {
@@ -990,6 +981,21 @@ QUnit.module('items & dataSource', moduleConfig, () => {
 
             assert.strictEqual(this.dropDownList.option('selectedItem'), null, 'byKey result is ignored');
         });
+    });
+
+    QUnit.test('_getPlainItems should return correct items when they have nested items field and grouping is disabled (T1292151)', function(assert) {
+        const nestedItems = [{ id: 1, text: 'unexpected text' }];
+        const items = [{ id: 1, text: 'item 1', items: nestedItems }];
+
+        const dropDownList = $('#dropDownList').dxDropDownList({
+            items,
+            displayExpr: 'text',
+            valueExpr: 'id',
+        }).dxDropDownList('instance');
+
+        const plainItems = dropDownList._getPlainItems();
+
+        assert.deepEqual(plainItems, items, 'items are correct');
     });
 });
 
@@ -1455,6 +1461,32 @@ QUnit.module('popup', moduleConfig, () => {
         $input.trigger(wheelEvent);
 
         assert.ok(wheelEvent.originalEvent.isDefaultPrevented());
+    });
+
+    QUnit.test('Popup should not be disabled after runtime change of disabled, dropDownOptions and option that triggers invalidate (T1279637)', function(assert) {
+        const dropDownList = $('#dropDownList').dxDropDownList({
+            items: [1, 2, 3],
+            opened: true,
+            disabled: false,
+            searchEnabled: true,
+        }).dxDropDownList('instance');
+
+        dropDownList.option({
+            disabled: true,
+            dropDownOptions: { width: 200 },
+            searchEnabled: false,
+        });
+        let popupDisabled = $('.dx-dropdowneditor-overlay.dx-popup').dxPopup('instance').option('disabled');
+
+        assert.strictEqual(popupDisabled, true, 'popup is disabled');
+
+        dropDownList.option({
+            disabled: false,
+            searchEnabled: true,
+        });
+        popupDisabled = $('.dx-dropdowneditor-overlay.dx-popup').dxPopup('instance').option('disabled');
+
+        assert.strictEqual(popupDisabled, false, 'popup is not disabled');
     });
 });
 

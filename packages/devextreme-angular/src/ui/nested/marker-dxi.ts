@@ -8,7 +8,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -17,19 +16,36 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiLocationComponent } from './location-dxi';
 
+import { PROPERTY_TOKEN_markers } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_location,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-marker',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_markers,
+           useExisting: DxiMarkerComponent,
+        }
+    ]
 })
 export class DxiMarkerComponent extends CollectionNestedOption {
+    @ContentChildren(PROPERTY_TOKEN_location)
+    set _locationContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('location', value);
+    }
+    
     @Input()
     get iconSrc(): string {
         return this._getOption('iconSrc');
@@ -68,14 +84,6 @@ export class DxiMarkerComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiLocationComponent))
-    get locationChildren(): QueryList<DxiLocationComponent> {
-        return this._getOption('location');
-    }
-    set locationChildren(value) {
-        this.setChildren('location', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -92,7 +100,7 @@ export class DxiMarkerComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiMarkerComponent
   ],
   exports: [

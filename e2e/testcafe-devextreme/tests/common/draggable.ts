@@ -3,27 +3,27 @@ import Scrollable from 'devextreme-testcafe-models/scrollView/scrollable';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 
-fixture.disablePageReloads`Draggable`
+fixture`Draggable`
   .page(url(__dirname, '../container.html'));
 
 const init = ClientFunction(() => {
   $('<div>', {
     id: 'scrollview',
-    width: 400,
-    height: 400,
+    width: '400px',
+    height: '400px',
   })
     .css({
       position: 'absolute',
       top: 0,
-      padding: 20,
+      padding: '20px',
       background: '#f18787',
     })
     .appendTo('#container');
 
   $('<div>', {
     id: 'scrollview-content',
-    height: 500,
-    width: 500,
+    height: '500px',
+    width: '500px',
   }).appendTo('#scrollview');
 
   $('<div>', {

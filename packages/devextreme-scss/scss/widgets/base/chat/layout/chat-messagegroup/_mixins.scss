@@ -1,3 +1,5 @@
+@use "../../../icon_fonts" as *;
+
 @mixin chat-messagegroup(
   $messagegroup-gap,
   $messagegroup-start-template,
@@ -6,7 +8,9 @@
   $information-font-size,
   $information-author-name-color,
   $information-timestamp-color,
-  $information-gap
+  $information-gap,
+  $information-icon-size,
+  $information-edited-gap,
 ) {
   .dx-chat-messagegroup {
     row-gap: $messagegroup-gap;
@@ -37,5 +41,16 @@
   .dx-chat-messagegroup-author-name {
     font-size: $information-font-size;
     color: $information-author-name-color;
+  }
+
+  .dx-chat-message-edited {
+    font-size: $information-font-size;
+    color: $information-author-name-color;
+    column-gap: $information-edited-gap;
+
+    .dx-chat-message-edited-icon {
+      @include dx-icon(edit);
+      @include dx-icon-sizing($information-icon-size);
+    }
   }
 }

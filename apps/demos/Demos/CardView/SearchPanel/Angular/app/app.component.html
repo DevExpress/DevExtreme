@@ -1,0 +1,35 @@
+<dx-card-view
+  [dataSource]="tasks"
+  keyExpr="Task_ID"
+  cardsPerRow="auto"
+  [cardMinWidth]="310"
+  [wordWrapEnabled]="true"
+>
+  <dxo-card-view-search-panel
+    [visible]="true"
+    text="an"
+  ></dxo-card-view-search-panel>
+  <dxo-card-view-header-filter [visible]="true"></dxo-card-view-header-filter>
+  <dxi-card-view-column
+    dataField="Task_Subject"
+    caption="Subject"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Task_Start_Date"
+    caption="Start Date"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Task_Due_Date"
+    caption="Due Date"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Task_Priority"
+    caption="Priority"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Task_Status"
+    caption="Status"
+  ></dxi-card-view-column>
+</dx-card-view>

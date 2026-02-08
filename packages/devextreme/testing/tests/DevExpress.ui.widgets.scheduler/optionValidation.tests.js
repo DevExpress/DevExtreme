@@ -2,6 +2,8 @@ import $ from 'jquery';
 import consoleUtils from 'core/utils/console';
 
 import '__internal/scheduler/m_scheduler';
+import { createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitGlobalFailure } from '../../helpers/scheduler/waitForAsync.js';
 
 const {
     test,
@@ -14,10 +16,13 @@ const SELECTORS = {
     scheduler: '#dx-scheduler',
 };
 
-const createScheduler = (options) => $(SELECTORS.scheduler).dxScheduler({
-    dateSource: [],
-    ...options,
-}).dxScheduler('instance');
+const createScheduler = async(options) => {
+    const { instance } = await createWrapper({
+        dateSource: [],
+        ...options,
+    }, SELECTORS.scheduler);
+    return instance;
+};
 
 const setupConsoleSpy = () => {
     const errors = [];
@@ -212,11 +217,18 @@ module('Initialization', () => {
     GENERAL_TEST_CASES
         .concat(COMPLEX_CASES)
         .forEach(({ options, expectedErrors }) => {
-            test(`Should log option validation errors (options: ${JSON.stringify(options)}, errors: ${JSON.stringify(expectedErrors)}).`, function(assert) {
+            test(`Should log option validation errors (options: ${JSON.stringify(options)}, errors: ${JSON.stringify(expectedErrors)}).`, async function(assert) {
                 const [stub, consoleErrors] = setupConsoleSpy();
 
                 try {
-                    createScheduler(options);
+                    if(expectedErrors.length) {
+                        const promise = waitGlobalFailure();
+
+                        await createScheduler(options);
+                        consoleErrors.push(await promise);
+                    } else {
+                        await createScheduler(options);
+                    }
                 } catch(error) {
                     consoleErrors.push(error.message);
                 }
@@ -229,9 +241,9 @@ module('Initialization', () => {
 
 module('Change options', () => {
     GENERAL_TEST_CASES.forEach(({ options, expectedErrors }) => {
-        test(`Should log option validation errors (options: ${JSON.stringify(options)}, errors: ${JSON.stringify(expectedErrors)}).`, function(assert) {
+        test(`Should log option validation errors (options: ${JSON.stringify(options)}, errors: ${JSON.stringify(expectedErrors)}).`, async function(assert) {
             const [stub, consoleErrors] = setupConsoleSpy();
-            const scheduler = createScheduler();
+            const scheduler = await createScheduler();
 
             try {
                 Object.entries(options).forEach(([name, value]) => {
@@ -248,10 +260,10 @@ module('Change options', () => {
 });
 
 module('Runtime', () => {
-    test('Should validate only current view options', function(assert) {
+    test('Should validate only current view options', async function(assert) {
         const expectedErrors = ['E1061', 'E1058', 'E1062'];
         const [stub, consoleErrors] = setupConsoleSpy();
-        const scheduler = createScheduler({
+        const scheduler = await createScheduler({
             views: [
                 'week',
                 {
@@ -282,13 +294,13 @@ module('Runtime', () => {
         stub.restore();
     });
 
-    test('Should validate views nested options if this view is current', function(assert) {
+    test('Should validate views nested options if this view is current', async function(assert) {
         const expectedErrors = ['E1061'];
         const [stub, consoleErrors] = setupConsoleSpy();
-
+        const promise = waitGlobalFailure();
 
         try {
-            createScheduler({
+            await createScheduler({
                 views: [
                     'week',
                     {
@@ -303,6 +315,7 @@ module('Runtime', () => {
                 cellDuration: 30,
                 offset: 120,
             });
+            consoleErrors.push(await promise);
         } catch(error) {
             consoleErrors.push(error.message);
         }

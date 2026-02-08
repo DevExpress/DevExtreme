@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { name as clickEvent } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import { normalizeLoadResult } from '@js/common/data/data_source/utils';
 import registerComponent from '@js/core/component_registrator';
@@ -34,12 +34,12 @@ function xor(a: boolean, b: boolean): boolean {
 }
 
 const TAGBOX_TAG_DATA_KEY = 'dxTagData';
+const TAGBOX_TAG_DISPLAY_VALUE = 'dxTagDisplayValue';
 
 const TAGBOX_CLASS = 'dx-tagbox';
 const TAGBOX_TAG_CONTAINER_CLASS = 'dx-tag-container';
 const TAGBOX_TAG_CLASS = 'dx-tag';
 const TAGBOX_MULTI_TAG_CLASS = 'dx-tagbox-multi-tag';
-const TAGBOX_CUSTOM_TAG_CLASS = 'dx-tag-custom';
 const TAGBOX_TAG_REMOVE_BUTTON_CLASS = 'dx-tag-remove-button';
 const TAGBOX_ONLY_SELECT_CLASS = 'dx-tagbox-only-select';
 const TAGBOX_SINGLE_LINE_CLASS = 'dx-tagbox-single-line';
@@ -147,7 +147,7 @@ class TagBox<
         delete this._preserveFocusedTag;
       },
       enter(e, options): void {
-        const isListItemFocused = this._list && this._list.option('focusedElement') !== null;
+        const isListItemFocused = this._list?.option('focusedElement') !== null && this.option('opened') === true;
         const isCustomItem = this.option('acceptCustomValue') && !isListItemFocused;
 
         if (isCustomItem) {
@@ -792,7 +792,7 @@ class TagBox<
 
   _multiTagRequired(): boolean {
     const values = this._getValue();
-    const maxDisplayedTags = this.option('maxDisplayedTags');
+    const { maxDisplayedTags } = this.option();
 
     return isDefined(maxDisplayedTags) && values.length > maxDisplayedTags;
   }
@@ -1070,12 +1070,14 @@ class TagBox<
 
   _renderTagsImpl(): void {
     this._renderField();
-    // @ts-expect-error ts-error
-    this.option('selectedItems', this._selectedItems.slice());
-    this._cleanTags();
+    if (this._shouldUpdateSelectedItems()) {
+      // @ts-expect-error ts-error
+      this.option('selectedItems', this._selectedItems.slice());
+    }
 
     const fieldTemplate = this._getFieldTemplate();
     if (!fieldTemplate) {
+      this._cleanTags();
       this._renderTagsCore();
     }
   }
@@ -1097,7 +1099,7 @@ class TagBox<
   }
 
   _getSelectedItemsFromList(values) {
-    const listSelectedItems = this._list?.option('selectedItems');
+    const { selectedItems: listSelectedItems } = this._list ? this._list.option() : { selectedItems: [] };
 
     let selectedItems = [];
     if (values.length === listSelectedItems?.length) {
@@ -1154,6 +1156,22 @@ class TagBox<
     }
 
     this._popup?.refreshPosition();
+  }
+
+  _shouldUpdateSelectedItems(): boolean {
+    const { selectedItems } = this.option();
+
+    if (isDefined(selectedItems) && selectedItems.length !== this._selectedItems?.length) {
+      return true;
+    }
+
+    const intersection = getIntersection(selectedItems, this._selectedItems);
+
+    if (intersection.length !== this._selectedItems?.length) {
+      return true;
+    }
+
+    return false;
   }
 
   _renderTagsElements(items): void {
@@ -1243,24 +1261,23 @@ class TagBox<
     const itemModel = this._getItemModel(item, displayValue);
 
     if ($tag) {
-      if (isDefined(displayValue)) {
+      const tagDisplayValue = $tag.data(TAGBOX_TAG_DISPLAY_VALUE);
+
+      if (isDefined(displayValue) && !equalByValue(tagDisplayValue, displayValue)) {
         $tag.empty();
         this._applyTagTemplate(itemModel, $tag);
       }
-
-      $tag.removeClass(TAGBOX_CUSTOM_TAG_CLASS);
       this._updateElementAria($tag.attr('id'));
     } else {
       const tagId = `dx-${new Guid()}`;
 
-      $tag = this._createTag(value, $input, tagId);
+      $tag = this._createTag(value, $input, tagId, displayValue);
 
       this._setTagAria($tag, isDefined(displayValue) ? displayValue : value);
 
       if (isDefined(item)) {
         this._applyTagTemplate(itemModel, $tag);
       } else {
-        $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
         this._applyTagTemplate(value, $tag);
       }
 
@@ -1303,11 +1320,12 @@ class TagBox<
     return result;
   }
 
-  _createTag(value, $input, tagId): dxElementWrapper {
+  _createTag(value, $input, tagId, displayValue): dxElementWrapper {
     return $('<div>')
       .attr('id', tagId)
       .addClass(TAGBOX_TAG_CLASS)
       .data(TAGBOX_TAG_DATA_KEY, value)
+      .data(TAGBOX_TAG_DISPLAY_VALUE, displayValue)
       .insertBefore($input);
   }
 
@@ -1414,6 +1432,7 @@ class TagBox<
     }
   }
 
+  // @ts-expect-error ts-error
   _fieldRenderData() {
     // @ts-expect-error ts-error
     return this._selectedItems.slice();
@@ -1435,7 +1454,9 @@ class TagBox<
     const useButtons = applyValueMode === 'useButtons';
     const valueIndex = this._valueIndex(value);
 
-    const values = (useButtons ? this._list?.option('selectedItemKeys') || [] : this._getValue()).slice();
+    const { selectedItemKeys } = this._list?.option() || { selectedItemKeys: [] };
+
+    const values = (useButtons ? selectedItemKeys ?? [] : this._getValue()).slice();
 
     if (valueIndex >= 0) {
       values.splice(valueIndex, 1);
@@ -1519,6 +1540,7 @@ class TagBox<
   }
 
   _refreshSelected(): void {
+    // @ts-expect-error ts-error
     this._list?.getDataSource() && this._list.option('selectedItems', this._selectedItems);
   }
 

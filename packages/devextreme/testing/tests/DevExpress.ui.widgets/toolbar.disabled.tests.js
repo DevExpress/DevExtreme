@@ -7,15 +7,12 @@ import eventsEngine from 'common/core/events/core/events_engine';
 import 'ui/button_group';
 import 'ui/text_box';
 
-import 'generic_light.css!';
 import 'ui/button';
 import 'ui/drop_down_button';
 import 'ui/tabs';
 import 'ui/autocomplete';
 import 'ui/date_box';
 import 'ui/menu';
-
-import devices from '__internal/core/m_devices';
 
 import fx from 'common/core/animation/fx';
 
@@ -60,11 +57,6 @@ const openDropDownMenuIfExist = (toolbar) => {
 };
 
 ['never', 'always'].forEach((locateInMenu) => {
-    if(devices.real().deviceType !== 'desktop') {
-        // there is no specific for devices in these tests
-        return;
-    }
-
     [
         { widget: 'dxButton', focusableElementSelector: '.dx-button:not(.dx-dropdownmenu-button)' },
         { widget: 'dxTextBox', focusableElementSelector: '.dx-textbox .dx-texteditor-input' },

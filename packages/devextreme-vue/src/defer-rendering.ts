@@ -63,7 +63,7 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
@@ -78,7 +78,7 @@ const componentConfig = {
     staggerItemSelector: String,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

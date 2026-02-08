@@ -14,16 +14,26 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiChartAnnotationConfig } from './base/chart-annotation-config-dxi';
 
+import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-annotation',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost],
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_annotations,
+           useExisting: DxiAnnotationComponent,
+        }
+    ],
     inputs: [
         'allowDragging',
         'argument',
@@ -86,7 +96,7 @@ export class DxiAnnotationComponent extends DxiChartAnnotationConfig {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiAnnotationComponent
   ],
   exports: [

@@ -38,16 +38,16 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiToolbarItemModule } from 'devextreme-angular/ui/toolbar/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiToolbarItemComponent } from 'devextreme-angular/ui/toolbar/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -56,8 +56,10 @@ import { DxiToolbarItemComponent } from 'devextreme-angular/ui/toolbar/nested';
  */
 @Component({
     selector: 'dx-toolbar',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -66,6 +68,12 @@ import { DxiToolbarItemComponent } from 'devextreme-angular/ui/toolbar/nested';
     ]
 })
 export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxToolbar<TItem, TKey> = null;
 
     /**
@@ -242,10 +250,10 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -409,27 +417,7 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiToolbarItemComponent)
-    get itemsChildren(): QueryList<DxiToolbarItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiToolbarItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -514,13 +502,11 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
 
 @NgModule({
   imports: [
+    DxToolbarComponent,
     DxiItemModule,
     DxiToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxToolbarComponent
   ],
   exports: [
     DxToolbarComponent,
@@ -530,6 +516,8 @@ export class DxToolbarComponent<TItem = any, TKey = any> extends DxComponent imp
   ]
 })
 export class DxToolbarModule { }
+
+export * from 'devextreme-angular/ui/toolbar/nested';
 
 import type * as DxToolbarTypes from "devextreme/ui/toolbar_types";
 export { DxToolbarTypes };

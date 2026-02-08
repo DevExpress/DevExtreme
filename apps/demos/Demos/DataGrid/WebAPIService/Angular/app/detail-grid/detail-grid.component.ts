@@ -1,5 +1,5 @@
 import { Component, Input, AfterViewInit } from '@angular/core';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-angular/common/data';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 let modulePrefix = '';
@@ -10,8 +10,7 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'detail-grid',
-  templateUrl: `.${modulePrefix && (modulePrefix + '/detail-grid')}/detail-grid.component.html`,
-  styleUrls: [`.${modulePrefix && (modulePrefix + '/detail-grid')}/detail-grid.component.css`],
+  templateUrl: `.${modulePrefix}/detail-grid/detail-grid.component.html`,
   providers: [],
 })
 export class DetailGridComponent implements AfterViewInit {

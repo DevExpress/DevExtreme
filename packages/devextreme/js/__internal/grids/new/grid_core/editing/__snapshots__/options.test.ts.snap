@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColumnProperties setFieldValue should be used as callback for setting editor value 1`] = `
+[
+  {
+    "mycustomfield": "qwe",
+  },
+  "qwe",
+  {
+    "field1": "value1",
+    "id": 1,
+  },
+]
+`;
+
+exports[`ColumnProperties setFieldValue should be used as callback for setting editor value 2`] = `
+[
+  {
+    "data": {
+      "mycustomfield": "qwe",
+    },
+    "key": 1,
+    "type": "update",
+  },
+]
+`;
+
+exports[`Options editing allowAdding should add "add" button to toolbar 1`] = `
+[
+  {
+    "location": "after",
+    "name": "addCardButton",
+    "options": {
+      "icon": "add",
+      "onClick": [Function],
+    },
+    "widget": "dxButton",
+  },
+]
+`;
+
+exports[`Options editing changes should contain unsaved changes 1`] = `
+[
+  {
+    "data": {
+      "some_field": "qwe",
+    },
+    "key": 1,
+    "type": "update",
+  },
+]
+`;

@@ -14,16 +14,26 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiFilterBuilderField } from './base/filter-builder-field-dxi';
 
+import { PROPERTY_TOKEN_fields } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-field',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost],
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_fields,
+           useExisting: DxiFieldComponent,
+        }
+    ],
     inputs: [
         'calculateFilterExpression',
         'caption',
@@ -63,7 +73,7 @@ export class DxiFieldComponent extends DxiFilterBuilderField {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFieldComponent
   ],
   exports: [

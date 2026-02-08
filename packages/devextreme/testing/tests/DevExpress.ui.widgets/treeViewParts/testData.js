@@ -99,6 +99,15 @@ export const DATA = (function() {
     ];
 })();
 
+export const internals = {
+    NODE_CONTAINER_CLASS: 'dx-treeview-node-container',
+    OPENED_NODE_CONTAINER_CLASS: 'dx-treeview-node-container-opened',
+    NODE_CLASS: 'dx-treeview-node',
+    ITEM_CLASS: 'dx-treeview-item',
+    TOGGLE_ITEM_VISIBILITY_CLASS: 'dx-treeview-toggle-item-visibility',
+    TOGGLE_ITEM_VISIBILITY_OPENED_CLASS: 'dx-treeview-toggle-item-visibility-opened',
+};
+
 export const data2 = [
     { id: 1, parentId: 0, text: 'Animals' },
     { id: 2, parentId: 1, text: 'Cat' },

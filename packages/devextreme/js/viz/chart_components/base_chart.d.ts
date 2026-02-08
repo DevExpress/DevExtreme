@@ -49,18 +49,24 @@ import {
  * @docid
  * @hidden
  */
-export interface PointInteractionInfo {
-    /** @docid */
-    readonly target: basePointObject;
+export interface PointInteractionInfo<TPoint extends basePointObject = basePointObject> {
+    /**
+     * @docid
+     * @type object
+     */
+    readonly target: TPoint;
 }
 
 /**
  * @docid _viz_chart_components_base_chart_TooltipInfo
  * @hidden
  */
-export interface TooltipInfo {
-    /** @docid _viz_chart_components_base_chart_TooltipInfo.target */
-    target?: basePointObject | dxChartAnnotationConfig | any;
+export interface TooltipInfo<TPoint extends basePointObject = basePointObject> {
+    /**
+     * @docid _viz_chart_components_base_chart_TooltipInfo.target
+     * @type object
+     */
+    target?: TPoint | dxChartAnnotationConfig | any;
 }
 
 /**
@@ -68,7 +74,10 @@ export interface TooltipInfo {
  * @docid
  * @type object
  */
-export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TComponent> {
+export interface BaseChartOptions<
+  TComponent,
+  TPoint extends basePointObject = basePointObject,
+> extends BaseWidgetOptions<TComponent> {
     /**
      * @docid
      * @type object
@@ -144,51 +153,56 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
      * @type_function_param1_field event:event
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
      */
-    onPointClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent> & PointInteractionInfo) => void) | string;
+    onPointClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent> & PointInteractionInfo<TPoint>) => void) | string;
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field component:object
      * @type_function_param1_field element:object
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
      */
-    onPointHoverChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo) => void);
+    onPointHoverChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo<TPoint>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
      * @type_function_param1_field component:object
      * @type_function_param1_field element:object
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
      */
-    onPointSelectionChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo) => void);
+    onPointSelectionChanged?: ((e: EventInfo<TComponent> & PointInteractionInfo<TPoint>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
      */
-    onTooltipHidden?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
+    onTooltipHidden?: ((e: EventInfo<TComponent> & TooltipInfo<TPoint>) => void);
     /**
      * @docid
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field component:this
+     * @type_function_param1_field target:object
      * @notUsedInTheme
      * @action
      * @public
      */
-    onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo) => void);
+    onTooltipShown?: ((e: EventInfo<TComponent> & TooltipInfo<TPoint>) => void);
     /**
      * @docid
      * @default "Material"

@@ -1,6 +1,5 @@
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/common/core/events/utils/index';
-import dateLocalization from '@js/common/core/localization/date';
 import defaultDateNames from '@js/common/core/localization/default_date_names';
 import { getFormat } from '@js/common/core/localization/ldml/date.format';
 import { getRegExpInfo } from '@js/common/core/localization/ldml/date.parser';
@@ -12,7 +11,9 @@ import { fitIntoRange, inRange, sign } from '@js/core/utils/math';
 import {
   isDate, isDefined, isFunction, isString,
 } from '@js/core/utils/type';
+import type { DxEvent } from '@js/events';
 import type { Properties } from '@js/ui/date_box';
+import dateLocalization from '@ts/core/localization/date';
 
 import DateBoxBase from './m_date_box.base';
 import { getDatePartIndexByPosition, renderDateParts } from './m_date_box.mask.parts';
@@ -103,7 +104,6 @@ class DateBoxMask extends DateBoxBase {
     // @ts-expect-error
     const isNotDeletingInCalendar = this.option('opened') && e && !keysToHandleByMask.includes(normalizeKeyName(e));
 
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     return !this._useMaskBehavior() || isNotDeletingInCalendar || (e && e.altKey);
   }
 
@@ -132,6 +132,7 @@ class DateBoxMask extends DateBoxBase {
 
   _toggleAmPm(): void {
     const currentValue = this._getActivePartProp('text');
+    // @ts-expect-error ts-error
     const indexOfCurrentValue = defaultDateNames.getPeriodNames().indexOf(currentValue);
     const newValue = indexOfCurrentValue ^ 1;
     this._setActivePartValue(newValue);
@@ -236,9 +237,12 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
-  _processInputKey(key) {
-    if (this._isAllSelected()) {
+  _processInputKey(key: string): void {
+    const hasMultipleParts = this._dateParts?.length > 1;
+
+    if (this._isAllSelected() && hasMultipleParts) {
       this._activePartIndex = 0;
+      this._clearSearchValue();
     }
     this._setNewDateIfEmpty();
     // eslint-disable-next-line radix
@@ -262,7 +266,6 @@ class DateBoxMask extends DateBoxBase {
     }
 
     const format = this._strategy.getDisplayFormat(this.option('displayFormat'));
-    // @ts-expect-error ts-error
     const isLDMLPattern = isString(format) && !dateLocalization._getPatternByFormat(format);
 
     if (isLDMLPattern) {
@@ -315,8 +318,10 @@ class DateBoxMask extends DateBoxBase {
   }
 
   _searchString(char) {
-    // eslint-disable-next-line radix
-    if (!isNaN(parseInt(this._getActivePartProp('text')))) {
+    const text = this._getActivePartProp('text');
+    const convertedText = numberLocalization.convertDigits(text, true);
+
+    if (!isNaN(parseInt(convertedText, 10))) {
       return;
     }
 
@@ -363,6 +368,7 @@ class DateBoxMask extends DateBoxBase {
   }
 
   _prepareRegExpInfo(): void {
+    // @ts-expect-error ts-error
     this._regExpInfo = getRegExpInfo(this._getFormatPattern(), dateLocalization);
     const { regexp } = this._regExpInfo;
     // @ts-expect-error ts-error
@@ -451,6 +457,10 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
+  _hasMouseWheelHandler(): boolean {
+    return true;
+  }
+
   _onMouseWheel(e): void {
     if (this._useMaskBehavior()) {
       this._partIncrease(e.delta > 0 ? FORWARD : BACKWARD, e);
@@ -509,7 +519,7 @@ class DateBoxMask extends DateBoxBase {
     const limits = this._getActivePartLimits();
     const maxLimitLength = String(limits.max).length;
 
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/prefer-nullish-coalescing
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return ((zeroes && zeroes[0] || '') + String(value)).substr(-maxLimitLength);
   }
 
@@ -529,7 +539,7 @@ class DateBoxMask extends DateBoxBase {
 
   _getActivePartProp(property) {
     // @ts-expect-error ts-error
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
     if (!this._dateParts || !this._dateParts[this._activePartIndex]) {
       return undefined;
     }
@@ -545,12 +555,16 @@ class DateBoxMask extends DateBoxBase {
   _saveMaskValue(): void {
     const value = this._maskValue && new Date(this._maskValue);
     const { type } = this.option();
+
     if (value && type === 'date') {
       value.setHours(0, 0, 0, 0);
     }
     // @ts-expect-error ts-error
     this._initialMaskValue = new Date(value);
-    this.dateOption('value', value);
+
+    if (this._applyInternalValidation(value).isValid) {
+      this.dateOption('value', value);
+    }
   }
 
   _revertChanges(): void {
@@ -616,7 +630,6 @@ class DateBoxMask extends DateBoxBase {
 
   _maskPasteHandler(e): void {
     const newText = this._replaceSelectedText(this.option('text'), this._caret(), clipboardText(e));
-    // @ts-expect-error ts-error
     const date = dateLocalization.parse(newText, this._getFormatPattern());
 
     if (date && this._isDateValid(date)) {
@@ -636,7 +649,7 @@ class DateBoxMask extends DateBoxBase {
 
   _isValueDirty() {
     const value = this.dateOption('value');
-    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
     return (this._maskValue && this._maskValue.getTime()) !== (value && value.getTime());
   }
 
@@ -649,18 +662,22 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
-  _enterHandler() {
+  _enterHandler(): void {
     this._fireChangeEvent();
-    this._selectNextPart(FORWARD);
+
+    if (this._useMaskBehavior() && this._isAllSelected()) {
+      this._selectFirstPart();
+    } else {
+      this._selectNextPart(FORWARD);
+    }
   }
 
-  _focusOutHandler(e) {
+  _focusOutHandler(e: DxEvent): void {
     const shouldFireChangeEvent = this._useMaskBehavior() && !e.isDefaultPrevented();
 
     if (shouldFireChangeEvent) {
       this._fireChangeEvent();
       super._focusOutHandler(e);
-      this._selectFirstPart();
     } else {
       super._focusOutHandler(e);
     }

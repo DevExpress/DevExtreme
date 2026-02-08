@@ -16,16 +16,26 @@ import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import { Font } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_strips } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-strip',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_strips,
+           useExisting: DxiStripComponent,
+        }
+    ]
 })
 export class DxiStripComponent extends CollectionNestedOption {
     @Input()
@@ -98,7 +108,7 @@ export class DxiStripComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiStripComponent
   ],
   exports: [

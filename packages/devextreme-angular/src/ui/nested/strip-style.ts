@@ -18,6 +18,7 @@ import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
 import { Font } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-strip-style',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoStripStyleComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -80,7 +83,7 @@ export class DxoStripStyleComponent extends NestedOption implements OnDestroy, O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoStripStyleComponent
   ],
   exports: [

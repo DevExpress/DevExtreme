@@ -12,7 +12,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -21,16 +20,22 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoTabPanelOptions } from './base/tab-panel-options';
-import { DxiItemComponent } from './item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-tab-panel-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'accessKey',
@@ -49,6 +54,7 @@ import { DxiItemComponent } from './item-dxi';
         'items',
         'itemTemplate',
         'itemTitleTemplate',
+        'keyExpr',
         'loop',
         'noDataText',
         'onContentReady',
@@ -80,6 +86,11 @@ import { DxiItemComponent } from './item-dxi';
     ]
 })
 export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
 
     /**
     
@@ -106,18 +117,9 @@ export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements O
     }
 
 
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'itemsChange' },
             { emit: 'selectedIndexChange' },
@@ -141,7 +143,7 @@ export class DxoTabPanelOptionsComponent extends DxoTabPanelOptions implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTabPanelOptionsComponent
   ],
   exports: [

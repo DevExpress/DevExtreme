@@ -16,6 +16,7 @@ const inputs = {
     'devextreme-angular': `${baseDir}devextreme-angular.mjs`,
     'devextreme-angular-core': `${baseDir}devextreme-angular-core.mjs`,
     'devextreme-angular-http': `${baseDir}devextreme-angular-http.mjs`,
+    'devextreme-angular-core-tokens': `${baseDir}devextreme-angular-core-tokens.mjs`,
     ...fileNames.reduce((acc, name) => {
         acc[name] = `${baseDir}${name}.mjs`;
 
@@ -25,6 +26,12 @@ const inputs = {
 
 const getLibName =  (file) => file
     .replace(/^devextreme-angular-ui-/,'devextreme-angular/ui/')
+    .replace(/^devextreme-angular-common-ai-integration-/,'devextreme-angular-common-ai-integration/')
+    .replace(/^devextreme-angular-common-core-events-/,'devextreme-angular/common/core/events/')
+    .replace(/^devextreme-angular-common-core-/,'devextreme-angular/common/core/')
+    .replace(/^devextreme-angular-common-data-/,'devextreme-angular/common/data/')
+    .replace(/^devextreme-angular-common-export-/,'devextreme-angular/common/export/')
+    .replace(/^devextreme-angular-common-/,'devextreme-angular/common/')
     .replace(/^devextreme-angular-/,'devextreme-angular/');
 
 export default Object.entries(inputs).map(([module, file]) =>

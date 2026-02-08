@@ -425,24 +425,26 @@ function getDateIntervalByString(intervalString) {
   return result;
 }
 
-function sameDate(date1, date2) {
+function sameDate(date1, date2): boolean {
   return sameMonthAndYear(date1, date2) && date1.getDate() === date2.getDate();
 }
 
-function sameMonthAndYear(date1, date2) {
+function sameMonthAndYear(date1, date2): boolean {
   return sameYear(date1, date2) && date1.getMonth() === date2.getMonth();
 }
 
-function sameYear(date1, date2) {
+function sameYear(date1, date2): boolean {
   return date1 && date2 && date1.getFullYear() === date2.getFullYear();
 }
 
-function sameHoursAndMinutes(date1, date2) {
+function sameHoursAndMinutes(date1, date2): boolean {
   return date1 && date2 && date1.getHours() === date2.getHours() && date1.getMinutes() === date2.getMinutes();
 }
 
-const sameDecade = function (date1, date2) {
-  if (!isDefined(date1) || !isDefined(date2)) return;
+const sameDecade = function (date1, date2): boolean {
+  if (!isDefined(date1) || !isDefined(date2)) {
+    return false;
+  }
 
   const startDecadeDate1 = date1.getFullYear() - date1.getFullYear() % 10;
   const startDecadeDate2 = date2.getFullYear() - date2.getFullYear() % 10;
@@ -450,8 +452,10 @@ const sameDecade = function (date1, date2) {
   return date1 && date2 && startDecadeDate1 === startDecadeDate2;
 };
 
-const sameCentury = function (date1, date2) {
-  if (!isDefined(date1) || !isDefined(date2)) return;
+const sameCentury = function (date1, date2): boolean {
+  if (!isDefined(date1) || !isDefined(date2)) {
+    return false;
+  }
 
   const startCenturyDate1 = date1.getFullYear() - date1.getFullYear() % 100;
   const startCenturyDate2 = date2.getFullYear() - date2.getFullYear() % 100;
@@ -540,20 +544,27 @@ function getLastDateInYear(year) {
 
 function getDayWeekNumber(date, firstDayOfWeek) {
   let day = date.getDay() - firstDayOfWeek + 1;
-  if (day <= 0) { day += DAYS_IN_WEEK; }
+  if (day <= 0) {
+    day += DAYS_IN_WEEK;
+  }
 
   return day;
 }
 
-function getWeekNumber(date, firstDayOfWeek, rule) {
-  const firstWeekDayInYear = getDayWeekNumber(getFirstDateInYear(date.getFullYear()), firstDayOfWeek);
+function getWeekNumber(date, firstDayOfWeek, rule): number {
+  const firstWeekDayInYear = getDayWeekNumber(
+    getFirstDateInYear(date.getFullYear()),
+    firstDayOfWeek,
+  );
   const lastWeekDayInYear = getDayWeekNumber(getLastDateInYear(date.getFullYear()), firstDayOfWeek);
   const daysInFirstWeek = DAYS_IN_WEEK - firstWeekDayInYear + 1;
 
   let weekNumber = Math.ceil((getDayNumber(date) - daysInFirstWeek) / 7);
   switch (rule) {
     case 'fullWeek': {
-      if (daysInFirstWeek === DAYS_IN_WEEK) { weekNumber++; }
+      if (daysInFirstWeek === DAYS_IN_WEEK) {
+        weekNumber += 1;
+      }
       if (weekNumber === 0) {
         const lastDateInPreviousYear = getLastDateInYear(date.getFullYear() - 1);
         return getWeekNumber(lastDateInPreviousYear, firstDayOfWeek, rule);
@@ -561,20 +572,28 @@ function getWeekNumber(date, firstDayOfWeek, rule) {
       return weekNumber;
     }
     case 'firstDay': {
-      if (daysInFirstWeek > 0) { weekNumber++; }
+      if (daysInFirstWeek > 0) {
+        weekNumber += 1;
+      }
 
       const isSunday = firstWeekDayInYear === SUNDAY_WEEK_NUMBER
                 || lastWeekDayInYear === SUNDAY_WEEK_NUMBER;
-      if ((weekNumber > USUAL_WEEK_COUNT_IN_YEAR && !isSunday) || weekNumber === 54) { weekNumber = 1; }
+      if ((weekNumber > USUAL_WEEK_COUNT_IN_YEAR && !isSunday) || weekNumber === 54) {
+        weekNumber = 1;
+      }
 
       return weekNumber;
     }
     case 'firstFourDays': {
-      if (daysInFirstWeek > 3) { weekNumber++; }
+      if (daysInFirstWeek > 3) {
+        weekNumber += 1;
+      }
 
       const isThursday = firstWeekDayInYear === THURSDAY_WEEK_NUMBER
                 || lastWeekDayInYear === THURSDAY_WEEK_NUMBER;
-      if (weekNumber > USUAL_WEEK_COUNT_IN_YEAR && !isThursday) { weekNumber = 1; }
+      if (weekNumber > USUAL_WEEK_COUNT_IN_YEAR && !isThursday) {
+        weekNumber = 1;
+      }
 
       if (weekNumber === 0) {
         const lastDateInPreviousYear = getLastDateInYear(date.getFullYear() - 1);
@@ -583,6 +602,7 @@ function getWeekNumber(date, firstDayOfWeek, rule) {
       return weekNumber;
     }
     default:
+      return weekNumber;
       break;
   }
 }
@@ -623,7 +643,7 @@ const intervalsOverlap = function (options) {
 
 const dateTimeFromDecimal = function (number) {
   const hours = Math.floor(number);
-  const minutes = (number % 1) * 60;
+  const minutes = Math.round((number % 1) * 60);
 
   return {
     hours,
@@ -699,7 +719,7 @@ const makeDate = function (date) {
 };
 
 const getDatesOfInterval = function (startDate, endDate, step) {
-  const result: any[] = [];
+  const result: Date[] = [];
   let currentDate = new Date(startDate.getTime());
 
   while (currentDate < endDate) {

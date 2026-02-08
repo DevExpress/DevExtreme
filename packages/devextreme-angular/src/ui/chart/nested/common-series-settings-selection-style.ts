@@ -17,6 +17,7 @@ import {
 import { DashStyle, ChartsColor, HatchDirection } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-common-series-settings-selection-style',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoChartCommonSeriesSettingsSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -103,7 +106,7 @@ export class DxoChartCommonSeriesSettingsSelectionStyleComponent extends NestedO
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartCommonSeriesSettingsSelectionStyleComponent
   ],
   exports: [

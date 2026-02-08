@@ -40,7 +40,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
@@ -56,12 +57,10 @@ import { DxoFilterBuilderFilterOperationDescriptionsModule } from 'devextreme-an
 import { DxoFilterBuilderFormatModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { DxoFilterBuilderGroupOperationDescriptionsModule } from 'devextreme-angular/ui/filter-builder/nested';
 import { DxoFilterBuilderLookupModule } from 'devextreme-angular/ui/filter-builder/nested';
-
-import { DxiCustomOperationComponent } from 'devextreme-angular/ui/nested';
-import { DxiFieldComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiFilterBuilderCustomOperationComponent } from 'devextreme-angular/ui/filter-builder/nested';
-import { DxiFilterBuilderFieldComponent } from 'devextreme-angular/ui/filter-builder/nested';
+import { 
+           PROPERTY_TOKEN_customOperations,
+           PROPERTY_TOKEN_fields,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -76,8 +75,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-filter-builder',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -87,6 +88,17 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_customOperations)
+    set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('customOperations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_fields)
+    set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('fields', value);
+    }
+
     instance: DxFilterBuilder = null;
 
     /**
@@ -237,10 +249,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -341,10 +353,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -486,7 +498,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -542,7 +554,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -555,42 +567,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-    @ContentChildren(DxiFilterBuilderCustomOperationComponent)
-    get customOperationsChildren(): QueryList<DxiFilterBuilderCustomOperationComponent> {
-        return this._getOption('customOperations');
-    }
-    set customOperationsChildren(value) {
-        this._setChildren('customOperations', value, 'DxiFilterBuilderCustomOperationComponent');
-    }
-
-    @ContentChildren(DxiFilterBuilderFieldComponent)
-    get fieldsChildren(): QueryList<DxiFilterBuilderFieldComponent> {
-        return this._getOption('fields');
-    }
-    set fieldsChildren(value) {
-        this._setChildren('fields', value, 'DxiFilterBuilderFieldComponent');
-    }
-
-
-    @ContentChildren(DxiCustomOperationComponent)
-    get customOperationsLegacyChildren(): QueryList<DxiCustomOperationComponent> {
-        return this._getOption('customOperations');
-    }
-    set customOperationsLegacyChildren(value) {
-        this._setChildren('customOperations', value, 'DxiCustomOperationComponent');
-    }
-
-    @ContentChildren(DxiFieldComponent)
-    get fieldsLegacyChildren(): QueryList<DxiFieldComponent> {
-        return this._getOption('fields');
-    }
-    set fieldsLegacyChildren(value) {
-        this._setChildren('fields', value, 'DxiFieldComponent');
-    }
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
@@ -672,6 +648,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this.setupChanges('customOperations', changes);
         this.setupChanges('fields', changes);
         this.setupChanges('groupOperations', changes);
+        this.setupChanges('value', changes);
     }
 
     setupChanges(prop: string, changes: SimpleChanges) {
@@ -684,6 +661,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
         this._idh.doCheck('customOperations');
         this._idh.doCheck('fields');
         this._idh.doCheck('groupOperations');
+        this._idh.doCheck('value');
         this._watcherHelper.checkWatchers();
         super.ngDoCheck();
         super.clearChangedOptions();
@@ -701,6 +679,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
 
 @NgModule({
   imports: [
+    DxFilterBuilderComponent,
     DxiCustomOperationModule,
     DxiFieldModule,
     DxoFormatModule,
@@ -715,9 +694,6 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     DxoFilterBuilderLookupModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxFilterBuilderComponent
   ],
   exports: [
     DxFilterBuilderComponent,
@@ -737,6 +713,8 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
   ]
 })
 export class DxFilterBuilderModule { }
+
+export * from 'devextreme-angular/ui/filter-builder/nested';
 
 import type * as DxFilterBuilderTypes from "devextreme/ui/filter_builder_types";
 export { DxFilterBuilderTypes };

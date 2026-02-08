@@ -352,6 +352,32 @@ $transparent-border: 1px solid transparent;
   min-width: 360px;
 }
 
+.dx-aidialog {
+  .dx-toolbar-after .dx-toolbar-item:nth-last-child(2) {
+    padding-inline-end: 0;
+  }
+}
+
+.dx-aidialog-controls {
+  display: flex;
+
+  .dx-selectbox {
+    flex: 1 0 0;
+  }
+}
+
+.dx-aidialog-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.dx-aidialog-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
 .dx-overlay-content {
   &.dx-popup-fullscreen {
     .dx-formdialog-form {

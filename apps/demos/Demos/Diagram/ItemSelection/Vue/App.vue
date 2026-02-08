@@ -32,7 +32,7 @@ import { ref } from 'vue';
 import {
   DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel, type DxDiagramTypes,
 } from 'devextreme-vue/diagram';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-vue/common/data';
 import service from './data.ts';
 
 const dataSource = new ArrayStore({
@@ -53,11 +53,11 @@ function onContentReady(e: DxDiagramTypes.ContentReadyEvent) {
     diagram.focus();
   }
 }
-function onSelectionChanged({ items }) {
+function onSelectionChanged({ items }: DxDiagramTypes.SelectionChangedEvent) {
   selectedItemNames.value = 'Nobody has been selected';
   const filteredItems = items
     .filter((item) => item.itemType === 'shape')
-    .map((item) => item.text);
+    .map(({text}: Record<string, any>) => text);
   if (filteredItems.length > 0) {
     selectedItemNames.value = filteredItems.join(', ');
   }

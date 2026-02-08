@@ -1,8 +1,9 @@
-const $ = require('jquery');
-const themeModule = require('viz/themes');
-const BaseThemeManager = require('viz/core/base_theme_manager').BaseThemeManager;
+import $ from 'jquery';
+import themeModule from 'viz/themes';
+import { BaseThemeManager } from 'viz/core/base_theme_manager';
+import paletteModule from '__internal/viz/paletteModule';
+
 const currentTheme = themeModule.currentTheme();
-const paletteModule = require('viz/palette');
 
 themeModule.registerTheme({
     name: 'custom',
@@ -110,11 +111,9 @@ QUnit.test('Adding and removing', function(assert) {
 QUnit.module('Themes', environment);
 
 QUnit.test('default theme', function(assert) {
-    // act
     this.themeManager.setTheme();
     const theme = this.themeManager.theme();
 
-    // assert
     assert.equal(this.themeManager.themeName(), 'generic.light');
     assert.ok(theme);
     assert.equal(theme.name, 'generic.light');
@@ -125,12 +124,10 @@ QUnit.test('default theme', function(assert) {
 });
 
 QUnit.test('default theme with groupName', function(assert) {
-    // act
     this.themeManager._themeSection = 'rangeSelector';
     this.themeManager.setTheme('generic');
     const theme = this.themeManager.theme();
 
-    // assert
     assert.equal(this.themeManager.themeName(), 'generic.light');
     assert.ok(theme);
     assert.ok(theme.sliderMarker);
@@ -139,12 +136,10 @@ QUnit.test('default theme with groupName', function(assert) {
 });
 
 QUnit.test('default theme with complex groupName', function(assert) {
-    // act
     this.themeManager._themeSection = 'rangeSelector.scale';
     this.themeManager.setTheme('generic.light');
     const theme = this.themeManager.theme();
 
-    // assert
     assert.equal(this.themeManager.themeName(), 'generic.light');
     assert.ok(theme);
     assert.ok(theme.tick);
@@ -152,7 +147,6 @@ QUnit.test('default theme with complex groupName', function(assert) {
 });
 
 QUnit.test('customize default theme', function(assert) {
-    // act
     this.themeManager.setTheme({
         chart: {
             legend: {
@@ -162,7 +156,6 @@ QUnit.test('customize default theme', function(assert) {
     });
     const theme = this.themeManager.theme();
 
-    // assert
     assert.equal(this.themeManager.themeName(), 'generic.light');
     assert.ok(theme);
     assert.equal(theme.name, 'generic.light');
@@ -171,7 +164,6 @@ QUnit.test('customize default theme', function(assert) {
 });
 
 QUnit.test('customize theme with groupName', function(assert) {
-    // act
     this.themeManager._themeSection = 'chart';
     this.themeManager.setTheme({
         legend: {
@@ -180,7 +172,6 @@ QUnit.test('customize theme with groupName', function(assert) {
     });
     const theme = this.themeManager.theme();
 
-    // assert
     assert.equal(this.themeManager.themeName(), 'generic.light');
     assert.ok(theme);
     assert.equal(theme.legend.borderWidth, 1);
@@ -188,7 +179,6 @@ QUnit.test('customize theme with groupName', function(assert) {
 });
 
 QUnit.test('customize custom theme', function(assert) {
-    // act
     this.themeManager._themeSection = 'chart';
     this.themeManager.setTheme({
         name: 'custom',
@@ -200,7 +190,6 @@ QUnit.test('customize custom theme', function(assert) {
 
     const theme = this.themeManager.theme();
 
-    // assert
     assert.equal(this.themeManager.themeName(), 'custom');
     assert.ok(theme);
     assert.ok(theme.isCustomTheme);
@@ -210,14 +199,12 @@ QUnit.test('customize custom theme', function(assert) {
 });
 
 QUnit.test('global customized theme', function(assert) {
-    // act
     themeModule.getTheme('custom').chart.isGlobalCustomized = true;
 
     this.themeManager._themeSection = 'chart';
     this.themeManager.setTheme('custom');
     const theme = this.themeManager.theme();
 
-    // assert
     assert.equal(this.themeManager.themeName(), 'custom');
     assert.ok(theme);
     assert.ok(theme.isCustomTheme);
@@ -225,12 +212,10 @@ QUnit.test('global customized theme', function(assert) {
 });
 
 QUnit.test('theme by name', function(assert) {
-    // act
     this.themeManager._themeSection = 'chart';
     this.themeManager.setTheme('custom');
     const theme = this.themeManager.theme();
 
-    // assert
     assert.equal(this.themeManager.themeName(), 'custom');
     assert.ok(theme);
     assert.ok(theme.isCustomTheme);
@@ -248,12 +233,10 @@ QUnit.test('initializeFont', function(assert) {
         }
     });
 
-    // act
     this.themeManager._initializeFont(this.themeManager.theme().testLabel.font);
 
     const theme = this.themeManager.theme();
 
-    // assert
     assert.equal(this.themeManager.themeName(), 'generic.light');
     assert.ok(theme);
     assert.ok(theme.testLabel);
@@ -276,12 +259,10 @@ QUnit.test('initializeFont from customized font', function(assert) {
         }
     });
 
-    // act
     this.themeManager._initializeFont(this.themeManager.theme().testLabel);
 
     const theme = this.themeManager.theme();
 
-    // assert
     assert.equal(this.themeManager.themeName(), 'generic.light');
     assert.ok(theme);
     assert.ok(theme.testLabel);
@@ -307,12 +288,10 @@ QUnit.test('initializeFont from customized font with groupName', function(assert
         }
     }, 'chart');
 
-    // act
     this.themeManager._initializeFont(this.themeManager.theme().legend.testLabel);
 
     const theme = this.themeManager.theme();
 
-    // assert
     assert.equal(this.themeManager.themeName(), 'custom');
     assert.ok(theme);
     assert.ok(theme.legend.testLabel);
@@ -362,7 +341,6 @@ QUnit.test('theme getter', function(assert) {
 });
 
 QUnit.test('initializeFont via font fields', function(assert) {
-    // act
     this.themeManager = new BaseThemeManager({ fontFields: ['testLabel1.font', 'testObject2.testLabel2.font'] });
     this.themeManager.setCallback(this.callback);
     this.themeManager.setTheme({
@@ -380,7 +358,6 @@ QUnit.test('initializeFont via font fields', function(assert) {
         }
     });
 
-    // assert
     assert.deepEqual(this.themeManager.theme('testLabel1.font'), {
         size: 12, cursor: 'default', weight: 400, color: 'white',
         family: '\'Segoe UI\', \'Helvetica Neue\', \'Trebuchet MS\', Verdana, sans-serif'

@@ -8,6 +8,7 @@ import url from '../../helpers/getPageUrl';
 import {
   appendElementTo,
 } from '../../helpers/domUtils';
+import { Themes } from '../../helpers/themes';
 
 const ICON_CLASS = 'dx-icon';
 const iconSet = {
@@ -281,12 +282,26 @@ const iconSet = {
   checkmarkcircle: '\f183',
   clipboardtasklist: '\f184',
   today: '\f185',
+  daterangepicker: '\f186',
+  cardcontent: '\f187',
+  cursormove: '\f188',
+  cursorprohibition: '\f189',
+  arrowsortup: '\f190',
+  arrowsortdown: '\f191',
+  imagethumbnail: '\f192',
+  sparkle: '\f193',
+  servicebell: '\f194',
+  dropzone: '\f195',
+  restore: '\f196',
+  groupbycolumn: '\f197',
+  ungroupcolumn: '\f198',
+  ungroupallcolumns: '\f199',
 };
 
 fixture.disablePageReloads`Icons`
   .page(url(__dirname, '../container.html'));
 
-test('Icon set', async (t) => {
+test.meta({ themes: [Themes.materialBlue, Themes.genericLight] })('Icon set', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'Icon set.png');
@@ -295,32 +310,49 @@ test('Icon set', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  for (const [iconName, glyph] of Object.entries(iconSet)) {
-    const id = `dx-${new Guid()}`;
+  const icons = Object.entries(iconSet).map(([iconName, glyph]) => ({
+    id: `dx-${new Guid()}`,
+    iconName,
+    glyph,
+  }));
 
-    await appendElementTo('#container', 'div', id, {
-      display: 'inline-flex',
-      padding: '3px',
-      border: '1px solid black',
-      alignItems: 'center',
-      flexDirection: 'column',
-      fontSize: '10px',
-    });
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  await ClientFunction((icons, ICON_CLASS) => {
+    const container = document.querySelector('#container');
+    if (!container) return;
 
-    await ClientFunction(() => {
-      $(`#${id}`)
-        .append($('<div>').addClass(ICON_CLASS).addClass(`${ICON_CLASS}-${iconName}`))
-        .append($('<div>').text(`${iconName}`))
-        .append($('<div>').text(`${glyph.replace('\f', '\\f')}`));
-    }, {
-      dependencies: {
-        ICON_CLASS, id, iconName, glyph,
-      },
-    })();
-  }
+    const fragment = document.createDocumentFragment();
+
+    for (const { id, iconName, glyph } of icons) {
+      const element = document.createElement('div');
+      element.id = id;
+      Object.assign(element.style, {
+        display: 'inline-flex',
+        padding: '3px',
+        border: '1px solid black',
+        alignItems: 'center',
+        flexDirection: 'column',
+        fontSize: '10px',
+      });
+
+      const iconDiv = document.createElement('div');
+      iconDiv.classList.add(ICON_CLASS, `${ICON_CLASS}-${iconName}`);
+
+      const nameDiv = document.createElement('div');
+      nameDiv.textContent = iconName;
+
+      const glyphDiv = document.createElement('div');
+      glyphDiv.textContent = glyph.replace('\f', '\\f');
+
+      element.append(iconDiv, nameDiv, glyphDiv);
+      fragment.append(element);
+    }
+
+    container.append(fragment);
+  }, { dependencies: { iconSet, ICON_CLASS } })(icons, ICON_CLASS);
 });
 
-test('SVG icon set', async (t) => {
+test.meta({ themes: [Themes.materialBlue, Themes.genericLight] })('SVG icon set', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'SVG icon set.png');
@@ -329,28 +361,35 @@ test('SVG icon set', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  for (const [iconName, glyph] of Object.entries(iconSet)) {
-    const id = `dx-${new Guid()}`;
+  const themeName = getThemeName();
+  const icons = Object.keys(iconSet).map((iconName) => ({
+    id: `dx-${new Guid()}`,
+    iconName,
+    src: `../../../packages/devextreme-scss/images/icons/${themeName}/${iconName}.svg`,
+  }));
 
-    await appendElementTo('#container', 'div', id, {
-      display: 'inline-flex',
-      padding: '3px',
-      border: '1px solid black',
-      alignItems: 'center',
-      flexDirection: 'column',
-      fontSize: '10px',
-    });
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  await ClientFunction((icons, appendElementTo) => {
+    for (const { id, iconName, src } of icons) {
+      appendElementTo('#container', 'div', id, {
+        display: 'inline-flex',
+        padding: '3px',
+        border: '1px solid black',
+        alignItems: 'center',
+        flexDirection: 'column',
+        fontSize: '10px',
+      });
 
-    const themeName = getThemeName();
+      const el = document.getElementById(id);
+      if (el) {
+        const img = document.createElement('img');
+        img.src = src;
 
-    await ClientFunction(() => {
-      $(`#${id}`)
-        .append($(`<img src="../../../packages/devextreme-scss/images/icons/${themeName}/${iconName}.svg">`))
-        .append($('<div>').text(`${iconName}`));
-    }, {
-      dependencies: {
-        ICON_CLASS, id, iconName, glyph, themeName,
-      },
-    })();
-  }
+        const nameDiv = document.createElement('div');
+        nameDiv.textContent = iconName;
+
+        el.append(img, nameDiv);
+      }
+    }
+  }, { dependencies: { appendElementTo } })(icons, appendElementTo);
 });

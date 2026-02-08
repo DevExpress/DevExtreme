@@ -4,7 +4,7 @@ import $ from 'jquery';
 import 'ui/resizable';
 import pointerMock from '../../helpers/pointerMock.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(function() {
     const markup = `

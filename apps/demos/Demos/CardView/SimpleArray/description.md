@@ -1,0 +1,4 @@
+You can use the DevExtreme CardView to display/edit data from an array of objects. Use the [dataSource](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#dataSource) and [keyExpr](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#keyExpr) properties to specify the bound array and its associated key field.
+
+Use the [columns](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/columns/) property to specify a list of data fields to display within the CardView as fields. If the **columns** property is not specified, the component creates columns for all data fields available in objects from the bound array.
+<!--split-->

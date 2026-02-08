@@ -1,10 +1,9 @@
 import type { InfernoEffect } from '@ts/core/r1/runtime/inferno/index';
 import { createReRenderEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { RefObject } from '@ts/core/r1/types';
-import { getTemplate } from '@ts/core/r1/utils/index';
 
-import { VERTICAL_GROUP_ORIENTATION } from '../../const';
-import type { Group, GroupOrientation } from '../../types';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../constants';
+import type { Group, GroupOrientation } from '../../../types';
 import { isVerticalGroupingApplied } from '../../utils/index';
 import type { DefaultProps } from '../types';
 import { GroupPanelHorizontal } from './group_panel_horizontal';
@@ -41,10 +40,7 @@ export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
       groups,
       styles,
     } = this.props;
-    const ResourceCellTemplateComponent = getTemplate(
-      resourceCellTemplate,
-    );
-    const isVerticalLayout = isVerticalGroupingApplied(groups, groupOrientation);
+    const isVerticalLayout = isVerticalGroupingApplied(groups.length, groupOrientation);
 
     const Layout = isVerticalLayout ? GroupPanelVertical : GroupPanelHorizontal;
 
@@ -52,7 +48,7 @@ export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
      <Layout
        viewContext={viewContext}
        height={height}
-       resourceCellTemplate={ResourceCellTemplateComponent}
+       resourceCellTemplate={resourceCellTemplate}
        className={className}
        groupPanelData={groupPanelData}
        elementRef={elementRef}

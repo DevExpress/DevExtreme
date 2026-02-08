@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 import DataGrid, { Column, Editing, FilterRow } from 'devextreme-react/data-grid';
 import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 
-import 'devextreme/localization/globalize/number';
-import 'devextreme/localization/globalize/date';
-import 'devextreme/localization/globalize/currency';
-import 'devextreme/localization/globalize/message';
+import 'devextreme/common/core/localization/globalize/number';
+import 'devextreme/common/core/localization/globalize/date';
+import 'devextreme/common/core/localization/globalize/currency';
+import 'devextreme/common/core/localization/globalize/message';
 
 import deMessages from 'devextreme/localization/messages/de.json';
 import ruMessages from 'devextreme/localization/messages/ru.json';

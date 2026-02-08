@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -23,8 +24,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-filter-builder-filter-operation-descriptions',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoFilterBuilderFilterOperationDescriptionsComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -158,7 +161,7 @@ export class DxoFilterBuilderFilterOperationDescriptionsComponent extends Nested
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFilterBuilderFilterOperationDescriptionsComponent
   ],
   exports: [

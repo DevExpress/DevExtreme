@@ -1,4 +1,4 @@
-The PivotGrid allows you to customize a header and a footer in the exported Excel file. The <a href="https://github.com/exceljs/exceljs" target="_blank">ExcelJS</a> library allows you to customize worksheets outside of exported cell regions. This, in turns, allows you to add a header (a title before exported data) and a footer (a note after exported data).
+The PivotGrid allows you to customize a header and a footer in the exported Excel file. The <a href="https://github.com/DevExpress/devextreme-exceljs-fork" target="_blank">DevExtreme ExcelJS</a> library allows you to customize worksheets outside of exported cell regions. This, in turns, allows you to add a header (a title before exported data) and a footer (a note after exported data).
 <!--split-->
 
 Follow the steps below to configure a header/footer:
@@ -19,10 +19,10 @@ Follow the steps below to configure a header/footer:
 
 4. Execute a promise after the [exportPivotGrid(options)](/Documentation/ApiReference/Common/Utils/excelExporter/#exportPivotGridoptions) method. In this promise, specify the position, appearance, and content of the header/footer. The functions used to generate header and footer sections utilize the following PivotGrid customization features:
 
-    - <a href="https://github.com/exceljs/exceljs#merged-cells" target="_blank">Merged cells</a>
+    - <a href="https://github.com/DevExpress/devextreme-exceljs-fork#merged-cells" target="_blank">Merged cells</a>
 
-    - <a href="https://github.com/exceljs/exceljs#value-types" target="_blank">Cell values</a> formatting
+    - <a href="https://github.com/DevExpress/devextreme-exceljs-fork#value-types" target="_blank">Cell values</a> formatting
 
-    - <a href="https://github.com/exceljs/exceljs#fonts" target="_blank">Font properties</a>
+    - <a href="https://github.com/DevExpress/devextreme-exceljs-fork#fonts" target="_blank">Font properties</a>
 
-    - Text <a href="https://github.com/exceljs/exceljs#alignment" target="_blank">alignment</a>
+    - Text <a href="https://github.com/DevExpress/devextreme-exceljs-fork#alignment" target="_blank">alignment</a>

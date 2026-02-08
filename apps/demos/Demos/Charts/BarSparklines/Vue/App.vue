@@ -39,8 +39,7 @@
 
 <script setup lang="ts">
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
-import DataSource from 'devextreme/data/data_source';
-import CustomStore from 'devextreme/data/custom_store';
+import { DataSource, CustomStore } from 'devextreme-vue/common/data';
 import RowTemplate from './RowTemplate.vue';
 
 const months = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
@@ -77,12 +76,12 @@ function onValueChanged({ value }: DxSelectBoxTypes.ValueChangedEvent) {
 .demo-table td {
   font-weight: 400;
   width: 200px;
-  padding: 25px 10px 5px 10px;
+  padding: 25px 10px 5px;
   border: 1px solid #c2c2c2;
 }
 
 .demo-table th {
-  padding: 25px 15px 20px 15px;
+  padding: 25px 15px 20px;
   border: 1px solid #c2c2c2;
 }
 

@@ -153,12 +153,12 @@ $(() => {
 
   function renderMessageContent(message, element) {
     $('<div>')
-      .addClass('dx-chat-messagebubble-text')
+      .addClass('chat-messagebubble-text')
       .html(convertToHtml(message.text))
       .appendTo(element);
 
     const $buttonContainer = $('<div>')
-      .addClass('dx-bubble-button-container');
+      .addClass('bubble-button-container');
 
     $('<div>')
       .dxButton({

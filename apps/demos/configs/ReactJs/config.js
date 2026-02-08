@@ -33,8 +33,8 @@ window.config = {
       'esModule': true,
     },
     /**/
-    /** exceljs&file-saver */
-    'exceljs': {
+    /** devextreme-exceljs-fork&file-saver */
+    'devextreme-exceljs-fork': {
       'esModule': true,
     },
     /**/
@@ -43,7 +43,7 @@ window.config = {
     },
   },
   paths: {
-    'npm:': '../../../node_modules/',
+    'npm:': '../../../../node_modules/',
     'bundles:': '../../../../bundles/',
     'externals:': '../../../../bundles/externals/',
   },
@@ -51,10 +51,10 @@ window.config = {
   map: {
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
+    'jszip': 'npm:jszip/dist/jszip.min.js',
     'react': 'npm:react/umd/react.development.js',
     'react-dom': 'npm:react-dom/umd/react-dom.development.js',
     'prop-types': 'npm:prop-types/prop-types.js',
-    'sha-1': 'npm:sha-1/dist/sha1.cjs.js',
 
     /** signalr */
     '@aspnet/signalr': 'npm:@aspnet/signalr/dist/cjs',
@@ -75,8 +75,8 @@ window.config = {
     'cldr': 'npm:cldrjs/dist/cldr',
     /**/
 
-    /** exceljs&file-saver */
-    'exceljs': 'npm:exceljs/dist/exceljs.min.js',
+    /** devextreme-exceljs-fork&file-saver */
+    'devextreme-exceljs-fork': 'npm:devextreme-exceljs-fork/dist/dx-exceljs-fork.min.js',
     'file-saver-es': 'npm:file-saver-es/dist/FileSaver.min.js',
     /**/
 
@@ -114,10 +114,6 @@ window.config = {
     'devextreme': 'npm:devextreme/cjs',
     'devextreme-react': 'npm:devextreme-react/cjs',
 
-    /** jszip */
-    'jszip': 'npm:jszip/dist/jszip.min.js',
-    /**/
-
     /** unified */
     'unified': 'externals:unified/unified.bundle.js',
     'remark-parse': 'externals:unified/remark-parse.bundle.js',
@@ -144,6 +140,7 @@ window.config = {
     'inferno-clone-vnode': 'npm:inferno-clone-vnode/dist/inferno-clone-vnode.min.js',
     'inferno-create-class': 'npm:inferno-create-class/dist/inferno-create-class.min.js',
     'inferno-extras': 'npm:inferno-extras/dist/inferno-extras.min.js',
+    '@preact/signals-core': 'npm:@preact/signals-core/dist/signals-core.min.js',
     'devextreme-cldr-data': 'npm:devextreme-cldr-data',
 
     // SystemJS plugins
@@ -161,6 +158,9 @@ window.config = {
     'devextreme-react': {
       main: 'index.js',
     },
+    'devextreme-react/common': {
+      main: 'index.js',
+    },
     'devextreme/events/utils': {
       main: 'index',
     },
@@ -169,14 +169,14 @@ window.config = {
     },
     'devextreme/localization/messages': {
       format: 'json',
-      defaultExtension: '',
+      defaultExtension: 'json',
     },
     'devextreme/events': {
       main: 'index',
     }/** globalize */,
     'devextreme-cldr-data': {
       format: 'json',
-      defaultExtension: '',
+      defaultExtension: 'json',
     }/**//** globalize */,
     'globalize': {
       main: '../globalize.js',
@@ -206,3 +206,5 @@ window.config = {
 };
 
 System.config(window.config);
+// eslint-disable-next-line
+const useTgzInCSB = ['openai'];

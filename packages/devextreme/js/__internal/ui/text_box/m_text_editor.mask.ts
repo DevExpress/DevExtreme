@@ -6,14 +6,14 @@ import {
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isEmpty } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
-import { focused } from '@js/ui/widget/selectors';
+import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
+import type { SupportedKeys } from '@ts/core/widget/widget';
 
 import type { TextEditorBaseProperties } from './m_text_editor.base';
 import TextEditorBase from './m_text_editor.base';
@@ -104,7 +104,7 @@ class TextEditorMask<
     };
   }
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
+  _supportedKeys(): SupportedKeys {
     const that = this;
 
     const keyHandlerMap = {
@@ -144,9 +144,7 @@ class TextEditorMask<
   }
 
   _attachMouseWheelEventHandlers(): void {
-    const hasMouseWheelHandler = this._onMouseWheel !== noop;
-
-    if (!hasMouseWheelHandler) {
+    if (!this._hasMouseWheelHandler()) {
       return;
     }
 
@@ -167,6 +165,10 @@ class TextEditorMask<
     eventsEngine.on(input, eventName, (e) => {
       mouseWheelAction({ event: e });
     });
+  }
+
+  _hasMouseWheelHandler(): boolean {
+    return false;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

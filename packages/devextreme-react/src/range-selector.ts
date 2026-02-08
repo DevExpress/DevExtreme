@@ -8,7 +8,7 @@ import dxRangeSelector, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, ValueChangedEvent, BackgroundImageLocation, ValueChangedCallMode, ChartAxisScale, AxisScale } from "devextreme/viz/range_selector";
+import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, ValueChangedEvent, BackgroundImageLocation, ChartAxisScale, AxisScale } from "devextreme/viz/range_selector";
 import type { chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, dxChartCommonSeriesSettings, FinancialChartReductionLevel } from "devextreme/viz/chart";
 import type { Format as CommonFormat, SliderValueChangeMode, HorizontalAlignment, ExportFormat, VerticalEdge } from "devextreme/common";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
@@ -54,9 +54,9 @@ const RangeSelector = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
-      const subscribableOptions = useMemo(() => (["loadingIndicator","loadingIndicator.show","value"]), []);
+      const subscribableOptions = useMemo(() => (["loadingIndicator","loadingIndicator.show","value","value.endValue","value.startValue"]), []);
       const independentEvents = useMemo(() => (["onDisposing","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onValueChanged"]), []);
 
       const defaults = useMemo(() => ({
@@ -218,7 +218,6 @@ const BackgroundImage = Object.assign<typeof _componentBackgroundImage, NestedCo
 type IBehaviorProps = React.PropsWithChildren<{
   allowSlidersSwap?: boolean;
   animationEnabled?: boolean;
-  callValueChanged?: ValueChangedCallMode;
   manualRangeSelectionEnabled?: boolean;
   moveSelectedRangeByClick?: boolean;
   snapToTicks?: boolean;
@@ -1470,7 +1469,6 @@ const Reduction = Object.assign<typeof _componentReduction, NestedComponentMeta>
 // owners:
 // RangeSelector
 type IScaleProps = React.PropsWithChildren<{
-  aggregateByCategory?: boolean;
   aggregationGroupWidth?: number | undefined;
   aggregationInterval?: number | Record<string, any> | TimeInterval | {
     days?: number;

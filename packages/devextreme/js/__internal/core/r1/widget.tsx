@@ -37,6 +37,8 @@ import {
   subscribeToDxInactiveEvent,
 } from './utils/subscribe_to_event';
 
+export const WIDGET_CLASS = 'dx-widget';
+
 const DEFAULT_FEEDBACK_HIDE_TIMEOUT = 400;
 const DEFAULT_FEEDBACK_SHOW_TIMEOUT = 30;
 
@@ -555,7 +557,9 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
   getStyles(): Record<string, string | number> {
     const { width, height } = this.props;
     const style = this.props.style as Record<string, string | number> || {};
+    // @ts-expect-error ts-error
     const computedWidth = normalizeStyleProp('width', isFunction(width) ? width() : width);
+    // @ts-expect-error ts-error
     const computedHeight = normalizeStyleProp('height', isFunction(height) ? height() : height);
 
     return {
@@ -582,7 +586,7 @@ export class Widget extends InfernoWrapperComponent<WidgetProps> {
     const isHoverable = !!hoverStateEnabled && !disabled;
     const canBeActive = !!activeStateEnabled && !disabled;
     const classesMap = {
-      'dx-widget': !!addWidgetClass,
+      [WIDGET_CLASS]: !!addWidgetClass,
       [String(classes)]: !!classes,
       [String(className)]: !!className,
       'dx-state-disabled': !!disabled,

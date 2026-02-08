@@ -5,7 +5,6 @@ import 'generic_light.css!';
 
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
-import { getOuterHeight } from 'core/utils/size';
 import { CustomStore } from 'common/data/custom_store';
 import Color from 'color';
 import translator from 'common/core/animation/translator';
@@ -13,25 +12,24 @@ import translator from 'common/core/animation/translator';
 import '__internal/scheduler/m_scheduler';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-import { getOrLoadResourceItem } from '__internal/scheduler/resources/m_utils';
+const getHexColor = ($appointment) => new Color($appointment.css('backgroundColor')).toHex();
 
 QUnit.testStart(() => initTestMarkup());
 
 const moduleConfig = {
     beforeEach() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
 
     afterEach() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
 QUnit.module('Integration: Resources', moduleConfig, () => {
-    QUnit.test('Grouping by value = 0 in case nested groups shouldn\'t ignore(T821935)', function(assert) {
+    QUnit.test('Grouping by value = 0 in case nested groups shouldn\'t ignore(T821935)', async function(assert) {
         const views = ['timelineDay', 'day'];
         const expectedValues = [
             {
@@ -91,7 +89,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             endDate: new Date(2015, 4, 25, 11, 30)
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: data,
             views: views,
             currentView: views[0],
@@ -109,9 +107,9 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                 dataSource: bookingResource
             }]
         });
-
-        views.forEach((view, index) => {
+        const viewTest = async(view, index) => {
             scheduler.option('currentView', view);
+            await waitAsync(0);
 
             const expectedValue = expectedValues[index];
             ['appointment1', 'appointment2'].forEach(appointmentName => {
@@ -121,10 +119,13 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                 assert.roughEqual(position.top, expectedPosition.top, 2, `top position of ${appointmentName} should be valid in ${view}`);
                 assert.roughEqual(position.left, expectedPosition.left, 2, `left position of ${appointmentName} should be valid in ${view}`);
             });
-        });
+        };
+
+        await viewTest(views[0], 0);
+        await viewTest(views[1], 1);
     });
 
-    QUnit.test('Resource editors should have valid value after show appointment form', function(assert) {
+    QUnit.test('Resource editors should have valid value after show appointment form', async function(assert) {
         const dataSource = [{
             text: 'Task 1',
             ownerId: 1,
@@ -161,7 +162,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
         let onAppointmentFormOpeningRaised = false;
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             onAppointmentFormOpening: e => {
                 const form = e.form;
 
@@ -179,16 +180,18 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             resources: resources,
             dataSource: dataSource,
             currentDate: new Date(2015, 1, 9)
-        }, this.clock);
+        });
 
-        scheduler.appointments.click();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
         scheduler.tooltip.clickOnItem();
+        clock.restore();
 
         assert.equal(scheduler.option('dataSource')[0].ownerId, 1, 'ownerId property shouldn\'t change after show appointment form');
         assert.ok(onAppointmentFormOpeningRaised, 'onAppointmentFormOpening event should be raised');
     });
 
-    QUnit.test('Editor for resource should be passed to details view', function(assert) {
+    QUnit.test('Editor for resource should be passed to details view', async function(assert) {
         const task1 = {
             text: 'Task 1',
             ownerId: 1,
@@ -231,7 +234,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                 dataSource: new DataSource(roomResource)
             }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             resources: resources,
             dataSource: new DataSource({
                 store: [task1, task2]
@@ -239,13 +242,12 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             currentDate: new Date(2015, 1, 9)
         });
 
-        this.clock.tick(10);
         scheduler.instance.showAppointmentPopup(task1);
 
         let taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
 
         const ownerEditor = taskDetailsView.option('items')[0].items[6];
-        ownerEditor.editorOptions.dataSource.load();
+        await ownerEditor.editorOptions.dataSource.load();
 
         assert.ok(taskDetailsView.getEditor('ownerId'), 'Editor is exist');
         assert.equal(ownerEditor.editorType, 'dxTagBox', 'Editor is dxTagBox');
@@ -267,7 +269,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         assert.deepEqual(roomEditor.editorOptions.dataSource.items(), roomResource, 'Data source is OK');
     });
 
-    QUnit.test('Editor for resource should be passed to details view for scheduler with groups', function(assert) {
+    QUnit.test('Editor for resource should be passed to details view for scheduler with groups', async function(assert) {
         const task = {
             text: 'Task 1',
             ownerId: 1,
@@ -277,22 +279,15 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         const resources = [{
             field: 'ownerId',
             allowMultiple: true,
+            valueExpr: 'uid',
             displayExpr: 'name',
             dataSource: [
-                {
-                    name: 'Jack',
-                    id: 1,
-                    color: '#606060'
-                },
-                {
-                    name: 'Mike',
-                    id: 2,
-                    color: '#ff0000'
-                }
+                { uid: 1, name: 'Jack', color: '#606060' },
+                { uid: 2, name: 'Mike', color: '#ff0000' },
             ]
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             resources: resources,
             groups: ['ownerId'],
             dataSource: new DataSource({
@@ -301,19 +296,18 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             currentDate: new Date(2015, 1, 9)
         });
 
-        this.clock.tick(10);
         scheduler.instance.showAppointmentPopup(task);
 
         const taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
         const ownerEditor = taskDetailsView.option('items')[0].items[6];
 
-
         assert.equal(ownerEditor.editorType, 'dxTagBox', 'Editor is dxTagBox');
-        assert.deepEqual(ownerEditor.editorOptions.dataSource, resources[0].dataSource, 'Data source is OK');
+        assert.deepEqual(ownerEditor.editorOptions.dataSource.items(), resources[0].dataSource, 'Data source is OK');
+        assert.equal(ownerEditor.editorOptions.valueExpr, resources[0].valueExpr, 'valueExpr is OK');
         assert.equal(ownerEditor.editorOptions.displayExpr, resources[0].displayExpr, 'displayExpr is OK');
     });
 
-    QUnit.test('Editor for resource with right value should be passed to details view when fieldExpr is used', function(assert) {
+    QUnit.test('Editor for resource with right value should be passed to details view when fieldExpr is used', async function(assert) {
         const appointment = {
             'Price': 10,
             'startDate': new Date(2015, 4, 24, 9, 10, 0, 0),
@@ -346,13 +340,12 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             }]
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             resources: resources,
             dataSource: [appointment],
             currentDate: new Date(2015, 4, 24)
         });
 
-        this.clock.tick(10);
         scheduler.instance.showAppointmentPopup(appointment);
 
         const taskDetailsView = scheduler.instance.getAppointmentDetailsForm();
@@ -364,40 +357,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         assert.strictEqual(taskDetailsView.option('formData').Movie.ID, 3, 'Value is OK');
     });
 
-    QUnit.test('Alias for getOrLoadResourceItem method', function(assert) {
-        const { instance } = createWrapper({
-            resources: [{
-                field: 'ownerId',
-                dataSource: [
-                    {
-                        text: 'Jack',
-                        id: 1,
-                        color: '#606060'
-                    }
-                ]
-            }]
-        });
-
-        const done = assert.async();
-
-        getOrLoadResourceItem(
-            instance.option('resources'),
-            instance.option('resourceLoaderMap'),
-            'ownerId',
-            1
-        ).done(function(resource) {
-            assert.deepEqual(resource, {
-                text: 'Jack',
-                id: 1,
-                color: '#606060'
-            }, 'Resource was found');
-
-            done();
-        });
-    });
-
-    QUnit.test('Appointments should be repainted if \'groups\' option is changed', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointments should be repainted if \'groups\' option is changed', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: new DataSource({
                 store: [{ text: 'a', startDate: new Date(2015, 4, 26, 5), endDate: new Date(2015, 4, 26, 5, 30), ownerId: [1, 2], roomId: [1, 2] }]
             }),
@@ -423,16 +384,17 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment').length, 4, 'Appointments are OK');
 
         scheduler.instance.option('groups', ['ownerId']);
+        await waitAsync(0);
         assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment').length, 2, 'Appointments are OK');
     });
 
-    QUnit.test('Resources should be loaded only once to calculate appts color', function(assert) {
+    QUnit.test('Resources should be loaded only once to calculate appts color and aria-description', async function(assert) {
         const loadStub = sinon.stub().returns([
             { text: 'o1', id: 1 },
             { text: 'o2', id: 2 }
         ]);
 
-        createWrapper({
+        await createWrapper({
             dataSource: new DataSource({
                 store: [{
                     text: 'a',
@@ -443,6 +405,11 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                     text: 'b',
                     startDate: new Date(2015, 4, 26, 5),
                     endDate: new Date(2015, 4, 26, 5, 30),
+                    ownerId: 2
+                }, {
+                    text: 'c',
+                    startDate: new Date(2015, 4, 26, 6),
+                    endDate: new Date(2015, 4, 26, 6, 30),
                     ownerId: 2
                 }]
             }),
@@ -460,8 +427,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         assert.equal(loadStub.callCount, 1, 'Resources are loaded only once');
     });
 
-    QUnit.test('Paint appts if groups array don\'t contain all resources', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Paint appts if groups array don\'t contain all resources', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: new DataSource({
                 store: [{
                     text: 'a',
@@ -499,11 +466,12 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
         const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
 
-        assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#ff0000', 'Color is OK');
-        assert.equal(new Color($appointments.eq(1).css('backgroundColor')).toHex(), '#0000ff', 'Color is OK');
+        await waitForAsync(() => getHexColor($appointments.eq(0)) === '#ff0000');
+        assert.equal(getHexColor($appointments.eq(0)), '#ff0000', 'Color is OK');
+        assert.equal(getHexColor($appointments.eq(1)), '#0000ff', 'Color is OK');
     });
 
-    QUnit.test('Resources should not be reloaded when details popup is opening', function(assert) {
+    QUnit.test('Resources should not be reloaded when details popup is opening', async function(assert) {
         const loadStub = sinon.stub().returns([
             { text: 'o1', id: 1 },
             { text: 'o2', id: 2 }
@@ -520,7 +488,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             endDate: new Date(2015, 4, 26, 5, 30),
             ownerId: 2
         }];
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: new DataSource({
                 store: data
             }),
@@ -536,17 +504,20 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             }]
         });
 
+        assert.equal(loadStub.callCount, 1, 'Resources are loaded only once');
+
         scheduler.instance.showAppointmentPopup(data[0]);
 
-        assert.equal(loadStub.callCount, 1, 'Resources are loaded only once');
+        // TODO: replace with 2 after edit form refactor
+        assert.equal(loadStub.callCount, 3, 'Store requested in select box');
         assert.equal(byKeyStub.callCount, 0, 'Resources are loaded only once');
     });
 
     [true, false].forEach((renovateRender) => {
-        QUnit.test(`Resources should be set correctly is the resources[].dataSource option is changed(T396746) when renovateRender is ${renovateRender}`, function(assert) {
+        QUnit.test(`Resources should be set correctly is the resources[].dataSource option is changed(T396746) when renovateRender is ${renovateRender}`, async function(assert) {
             const resourceData = [{ id: 1, text: 'John', color: 'red' }];
 
-            const { instance } = createWrapper({
+            const { instance } = await createWrapper({
                 dataSource: [],
                 currentDate: new Date(2015, 4, 26),
                 groups: ['ownerId'],
@@ -558,6 +529,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             });
 
             instance.option('resources[0].dataSource', resourceData);
+            await waitAsync(0);
 
             assert.deepEqual(instance.option('resources'), [{
                 fieldExpr: 'ownerId',
@@ -566,8 +538,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Appointment should have correct color after resources option changing', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointment should have correct color after resources option changing', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: new DataSource({
                 store: [{
                     text: 'a',
@@ -588,9 +560,11 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                     { text: 'o2', id: 2, color: 'blue' }
                 ]
             }]);
+        await waitAsync(0);
 
         const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
-        assert.equal(new Color($appointments.eq(0).css('backgroundColor')).toHex(), '#ff0000', 'Color is OK');
+        await waitForAsync(() => getHexColor($appointments.eq(0)) === '#ff0000');
+        assert.equal(getHexColor($appointments.eq(0)), '#ff0000', 'Color is OK');
     });
 });
 

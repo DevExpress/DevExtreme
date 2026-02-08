@@ -317,11 +317,6 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     W1014: 'The Floating Action Button exceeds the recommended speed dial action count. If you need to display more speed dial actions, increase the maxSpeedDialActionCount option value in the global config.',
 
     /**
-    * @name ErrorsUIWidgets.W1016
-    */
-    W1016: 'The \'{0}\' field in the HTML Editor toolbar item configuration was renamed to \'{1}\'. Please make a corresponding change in your code.',
-
-    /**
     * @name ErrorsUIWidgets.W1017
     */
     W1017: 'The \'key\' property is not specified for a lookup data source. Please specify it to prevent requests for the entire dataset when users filter data.',
@@ -365,4 +360,16 @@ export default errorUtils(errors.ERROR_MESSAGES, {
      * @name ErrorsUIWidgets.W1025
      */
     W1025: '\'scrolling.mode\' is set to \'virtual\' or \'infinite\'. Specify the height of the component.',
+    /**
+     * @name ErrorsUIWidgets.W1026
+     */
+    W1026: 'The \'ai\' toolbar item is defined, but aiIntegration is missing.',
+    /**
+     * @name ErrorsUIWidgets.W1027
+     */
+    W1027: 'A prompt should be specified for a custom command.',
+    /**
+     * @name ErrorsUIWidgets.W1028
+     */
+    W1028: 'Nested/banded columns do not support the following properties: {0}.',
 });

@@ -25,6 +25,7 @@ const bundleConfig = {
       'devextreme/viz/*',
       'devextreme/viz/vector_map/*',
       'devextreme/common/*',
+      'devextreme/common/ai-integration/*',
       'devextreme/common/data/*',
       'devextreme/common/data/odata/*',
       'devextreme/common/export/*',
@@ -33,12 +34,14 @@ const bundleConfig = {
       'devextreme/common/core/environment/*',
       'devextreme/common/core/events/*',
       'devextreme/common/core/localization/*',
+      'devextreme/common/core/localization/globalize/*',
       'devextreme-angular',
       'devextreme-angular/*',
-      'devextreme-angular/core/*',
       'devextreme-angular/common/*',
       'devextreme-angular/common/core/*',
       'devextreme-angular/common/export/*',
+      'devextreme-angular/core/*',
+      'devextreme-angular/core/tokens/*',
       'devexpress-gantt',
       'devexpress-diagram',
       'rxjs/*',
@@ -69,14 +72,14 @@ function useBundle() {
       'devexpress-gantt',
       'devexpress-diagram',
       'rxjs',
-      'devextreme/bundles/dx.all',
     ].forEach((pkg) => delete window.config.map[pkg]);
-
+    /*
     Object.keys(window.config.map).forEach((pkg) => {
       if (pkg.startsWith('devextreme-angular/')) {
         delete window.config.map[pkg];
       }
     });
+    */
   }
 }
 

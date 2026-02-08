@@ -14,16 +14,26 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiChartSeries } from './base/chart-series-dxi';
 
+import { PROPERTY_TOKEN_series } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-series',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost],
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_series,
+           useExisting: DxiSeriesComponent,
+        }
+    ],
     inputs: [
         'aggregation',
         'argumentField',
@@ -94,7 +104,7 @@ export class DxiSeriesComponent extends DxiChartSeries {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiSeriesComponent
   ],
   exports: [

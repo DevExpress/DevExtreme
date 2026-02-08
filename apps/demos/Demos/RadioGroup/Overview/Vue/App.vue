@@ -71,7 +71,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import DxRadioGroup from 'devextreme-vue/radio-group';
+import DxRadioGroup, { type DxRadioGroupTypes } from 'devextreme-vue/radio-group';
 import { priorities, priorityEntities, tasks } from './data.ts';
 
 const colorPriority = ref(priorities[2]);
@@ -81,7 +81,7 @@ const selectedTasks = computed(
   () => tasks.filter((task) => task.priority === selectionPriority.value),
 );
 
-function changeSelectionPriority(e) {
+function changeSelectionPriority(e: DxRadioGroupTypes.ValueChangedEvent) {
   selectionPriority.value = e.value;
 }
 </script>

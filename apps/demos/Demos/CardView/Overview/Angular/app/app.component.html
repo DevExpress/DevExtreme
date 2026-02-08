@@ -1,0 +1,79 @@
+<div class="demo-container">
+  <dx-card-view
+    [dataSource]="employees"
+    keyExpr="ID"
+    [cardMinWidth]="300"
+    cardsPerRow="auto"
+    cardFooterTemplate="footerTemplate"
+  >
+    <dxo-card-view-paging [pageSize]="4"></dxo-card-view-paging>
+    <dxo-card-view-header-filter [visible]="true"></dxo-card-view-header-filter>
+    <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
+
+    <dxo-card-view-selection mode="multiple"></dxo-card-view-selection>
+
+    <dxo-card-view-card-cover
+      [imageExpr]="imageExpr"
+      [altExpr]="altExpr"
+    ></dxo-card-view-card-cover>
+
+    <dxi-card-view-column
+      dataField="Status"
+      fieldValueTemplate="statusTemplate"
+      [allowSearch]="false"
+    ></dxi-card-view-column>
+    <dxi-card-view-column
+      caption="Full Name"
+      [calculateFieldValue]="calculateFullName"
+      [allowFiltering]="true"
+      [allowSorting]="true"
+    ></dxi-card-view-column>
+    <dxi-card-view-column
+      caption="Position"
+      dataField="Title"
+    ></dxi-card-view-column>
+    <dxi-card-view-column dataField="Department"></dxi-card-view-column>
+    <dxi-card-view-column dataField="Mobile_Phone"></dxi-card-view-column>
+    <dxi-card-view-column
+      dataField="Email"
+      fieldValueTemplate="emailTemplate"
+      [allowSearch]="false"
+    ></dxi-card-view-column>
+    <dxi-card-view-column
+      caption="Address"
+      [calculateFieldValue]="calculateAddress"
+      [allowFiltering]="true"
+      [allowSorting]="true"
+    ></dxi-card-view-column>
+
+    <div
+      *dxTemplate="let params of 'statusTemplate'"
+      class="status"
+      [class.status--salaried]="params.field.value === 'Salaried'"
+      [class.status--commission]="params.field.value === 'Commission'"
+      [class.status--terminated]="params.field.value === 'Terminated'"
+    >
+      <span class="indicator"></span>
+      <span>{{ params.field.value }}</span>
+    </div>
+    <div *dxTemplate="let params of 'emailTemplate'">
+      <a href="mailto:{{ params.field.value }}">{{ params.field.text }}</a>
+    </div>
+    <div *dxTemplate="let params of 'footerTemplate'" class="card-footer">
+      <dx-button
+        text="Call"
+        icon="tel"
+        type="default"
+        stylingMode="contained"
+        (onClick)="showNotify('Call')"
+      ></dx-button>
+      <dx-button
+        text="Send Email"
+        icon="message"
+        type="default"
+        stylingMode="contained"
+        (onClick)="showNotify('Send Email')"
+      ></dx-button>
+    </div>
+  </dx-card-view>
+</div>

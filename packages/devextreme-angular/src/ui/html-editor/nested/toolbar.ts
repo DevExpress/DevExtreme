@@ -10,30 +10,39 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
 
 
 
-import { dxHtmlEditorToolbarItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
+import { AIToolbarItem, dxHtmlEditorToolbarItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiHtmlEditorItemComponent } from './item-dxi';
-import { DxiHtmlEditorToolbarItemComponent } from './toolbar-item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-html-editor-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get container(): any | string {
         return this._getOption('container');
@@ -43,10 +52,10 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get items(): Array<dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem> {
+    get items(): Array<AIToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>) {
+    set items(value: Array<AIToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>) {
         this._setOption('items', value);
     }
 
@@ -63,22 +72,6 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
         return 'toolbar';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
-    get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiHtmlEditorToolbarItemComponent))
-    get toolbarItemsChildren(): QueryList<DxiHtmlEditorToolbarItemComponent> {
-        return this._getOption('items');
-    }
-    set toolbarItemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -100,7 +93,7 @@ export class DxoHtmlEditorToolbarComponent extends NestedOption implements OnDes
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoHtmlEditorToolbarComponent
   ],
   exports: [

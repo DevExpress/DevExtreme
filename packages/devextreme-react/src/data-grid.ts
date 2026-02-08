@@ -10,8 +10,8 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent, dxDataGridColumnButton, DataGridCommandColumnType, SelectionSensitivity, DataGridExportFormat, DataGridPredefinedToolbarItem, DataGridScrollMode, dxDataGridToolbarItem } from "devextreme/ui/data_grid";
-import type { DataChange, DataChangeType, FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterSearchConfig, SelectionColumnDisplayMode, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, GridBase, ApplyFilterMode, GroupExpandMode, SummaryType, EnterKeyAction, EnterKeyDirection, PagerPageSize, DataRenderMode, StateStoreType } from "devextreme/common/grids";
-import type { Mode, ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, DataType, Format as CommonFormat, SearchMode, SortOrder, ComparisonOperator, SingleMultipleOrNone, SelectAllMode, PositionAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent, DisplayMode, DragDirection, DragHighlight, ScrollbarMode } from "devextreme/common";
+import type { DataChange, DataChangeType, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig, HeaderFilterTexts, SelectionColumnDisplayMode, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, ApplyFilterMode, GroupExpandMode, SummaryType, EnterKeyAction, EnterKeyDirection, PagerPageSize, GridBase, DataRenderMode, StateStoreType } from "devextreme/common/grids";
+import type { Mode, ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, DataType, Format as CommonFormat, SortOrder, SearchMode, ComparisonOperator, SingleMultipleOrNone, SelectAllMode, PositionAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent, DisplayMode, DragDirection, DragHighlight, ScrollbarMode } from "devextreme/common";
 import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, FieldInfo, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation, OptionChangedEvent, ValueChangedEvent } from "devextreme/ui/filter_builder";
 import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, dxFormSimpleItem, dxFormOptions, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, FormItemComponent, FormItemType } from "devextreme/ui/form";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
@@ -85,26 +85,22 @@ type IDataGridOptions<TRowData = any, TKey = any> = React.PropsWithChildren<Repl
   rowComponent?: React.ComponentType<any>;
   defaultColumns?: Array<dxDataGridColumn | string>;
   defaultEditing?: Record<string, any>;
-  defaultFilterPanel?: Record<string, any>;
   defaultFilterValue?: Array<any> | (() => any) | string;
   defaultFocusedColumnIndex?: number;
   defaultFocusedRowIndex?: number;
   defaultFocusedRowKey?: any | undefined;
   defaultGroupPanel?: Record<string, any>;
   defaultPaging?: Record<string, any>;
-  defaultSearchPanel?: Record<string, any>;
   defaultSelectedRowKeys?: Array<any>;
   defaultSelectionFilter?: Array<any> | (() => any) | string;
   onColumnsChange?: (value: Array<dxDataGridColumn | string>) => void;
   onEditingChange?: (value: Record<string, any>) => void;
-  onFilterPanelChange?: (value: Record<string, any>) => void;
   onFilterValueChange?: (value: Array<any> | (() => any) | string) => void;
   onFocusedColumnIndexChange?: (value: number) => void;
   onFocusedRowIndexChange?: (value: number) => void;
   onFocusedRowKeyChange?: (value: any | undefined) => void;
   onGroupPanelChange?: (value: Record<string, any>) => void;
   onPagingChange?: (value: Record<string, any>) => void;
-  onSearchPanelChange?: (value: Record<string, any>) => void;
   onSelectedRowKeysChange?: (value: Array<any>) => void;
   onSelectionFilterChange?: (value: Array<any> | (() => any) | string) => void;
 }>
@@ -124,22 +120,20 @@ const DataGrid = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
-      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","filterPanel","filterPanel.filterEnabled","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","groupPanel","groupPanel.visible","paging","paging.pageIndex","paging.pageSize","searchPanel","searchPanel.text","selectedRowKeys","selectionFilter"]), []);
+      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","groupPanel","groupPanel.visible","paging","paging.pageIndex","paging.pageSize","selectedRowKeys","selectionFilter","filterBuilder.value","filterBuilderPopup.height","filterBuilderPopup.position","filterBuilderPopup.visible","filterBuilderPopup.width","filterPanel.filterEnabled","editing.form.formData","editing.popup.height","editing.popup.position","editing.popup.visible","editing.popup.width","searchPanel.text"]), []);
       const independentEvents = useMemo(() => (["onAdaptiveDetailRowPreparing","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onExporting","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"]), []);
 
       const defaults = useMemo(() => ({
         defaultColumns: "columns",
         defaultEditing: "editing",
-        defaultFilterPanel: "filterPanel",
         defaultFilterValue: "filterValue",
         defaultFocusedColumnIndex: "focusedColumnIndex",
         defaultFocusedRowIndex: "focusedRowIndex",
         defaultFocusedRowKey: "focusedRowKey",
         defaultGroupPanel: "groupPanel",
         defaultPaging: "paging",
-        defaultSearchPanel: "searchPanel",
         defaultSelectedRowKeys: "selectedRowKeys",
         defaultSelectionFilter: "selectionFilter",
       }), []);
@@ -239,7 +233,7 @@ type IAsyncRuleProps = React.PropsWithChildren<{
   message?: string;
   reevaluate?: boolean;
   type?: ValidationRuleType;
-  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any);
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => any);
 }>
 const _componentAsyncRule = (props: IAsyncRuleProps) => {
   return React.createElement(NestedOption<IAsyncRuleProps>, {
@@ -437,16 +431,7 @@ type IColumnProps = React.PropsWithChildren<{
   groupCellTemplate?: ((cellElement: any, cellInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid, data: Record<string, any>, displayValue: any, groupContinuedMessage: string, groupContinuesMessage: string, row: dxDataGridRowObject, rowIndex: number, summaryItems: Array<any>, text: string, value: any }) => any) | template;
   groupIndex?: number | undefined;
   headerCellTemplate?: ((columnHeader: any, headerInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid }) => any) | template;
-  headerFilter?: Record<string, any> | {
-    allowSearch?: boolean;
-    allowSelectAll?: boolean;
-    dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
-    groupInterval?: HeaderFilterGroupInterval | number | undefined;
-    height?: number | string | undefined;
-    search?: ColumnHeaderFilterSearchConfig;
-    searchMode?: SearchMode;
-    width?: number | string | undefined;
-  };
+  headerFilter?: GridsColumnHeaderFilter | undefined;
   hidingPriority?: number | undefined;
   isBand?: boolean | undefined;
   lookup?: Record<string, any> | {
@@ -855,7 +840,7 @@ type ICustomRuleProps = React.PropsWithChildren<{
   message?: string;
   reevaluate?: boolean;
   type?: ValidationRuleType;
-  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean);
 }>
 const _componentCustomRule = (props: ICustomRuleProps) => {
   return React.createElement(NestedOption<ICustomRuleProps>, {
@@ -882,11 +867,7 @@ type IDataGridHeaderFilterProps = React.PropsWithChildren<{
   height?: number | string;
   search?: HeaderFilterSearchConfig;
   searchTimeout?: number;
-  texts?: Record<string, any> | {
-    cancel?: string;
-    emptyValue?: string;
-    ok?: string;
-  };
+  texts?: HeaderFilterTexts;
   visible?: boolean;
   width?: number | string;
 }>
@@ -1213,7 +1194,6 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
   allowHierarchicalFields?: boolean;
-  bindingOptions?: Record<string, any>;
   customOperations?: Array<dxFilterBuilderCustomOperation>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
@@ -1241,7 +1221,7 @@ type IFilterBuilderProps = React.PropsWithChildren<{
     or?: string;
   };
   groupOperations?: Array<GroupOperation>;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   maxGroupLevel?: number | undefined;
@@ -1256,7 +1236,7 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   tabIndex?: number;
   value?: Array<any> | (() => any) | string;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   defaultValue?: Array<any> | (() => any) | string;
   onValueChange?: (value: Array<any> | (() => any) | string) => void;
 }>
@@ -1290,8 +1270,6 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
-  bindingOptions?: Record<string, any>;
-  closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
@@ -1302,15 +1280,15 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   enableBodyScroll?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;
-  height?: (() => number | string) | number | string;
+  height?: number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
   hideOnParentScroll?: boolean;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
-  maxHeight?: (() => number | string) | number | string;
-  maxWidth?: (() => number | string) | number | string;
-  minHeight?: (() => number | string) | number | string;
-  minWidth?: (() => number | string) | number | string;
+  maxHeight?: number | string;
+  maxWidth?: number | string;
+  minHeight?: number | string;
+  minWidth?: number | string;
   onContentReady?: ((e: EventInfo<any>) => void);
   onDisposing?: ((e: EventInfo<any>) => void);
   onHidden?: ((e: EventInfo<any>) => void);
@@ -1336,16 +1314,16 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   titleTemplate?: ((titleElement: any) => string | any) | template;
   toolbarItems?: Array<dxPopupToolbarItem>;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: number | string;
   wrapperAttr?: any;
-  defaultHeight?: (() => number | string) | number | string;
-  onHeightChange?: (value: (() => number | string) | number | string) => void;
+  defaultHeight?: number | string;
+  onHeightChange?: (value: number | string) => void;
   defaultPosition?: (() => void) | PositionAlignment | PositionConfig;
   onPositionChange?: (value: (() => void) | PositionAlignment | PositionConfig) => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
-  defaultWidth?: (() => number | string) | number | string;
-  onWidthChange?: (value: (() => number | string) | number | string) => void;
+  defaultWidth?: number | string;
+  onWidthChange?: (value: number | string) => void;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
   titleRender?: (...params: any) => React.ReactNode;
@@ -1417,13 +1395,9 @@ const FilterOperationDescriptions = Object.assign<typeof _componentFilterOperati
 // owners:
 // DataGrid
 type IFilterPanelProps = React.PropsWithChildren<{
-  customizeText?: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string);
+  customizeText?: ((e: { component: GridsFilterPanel, filterValue: Record<string, any>, text: string }) => string);
   filterEnabled?: boolean;
-  texts?: Record<string, any> | {
-    clearFilter?: string;
-    createFilter?: string;
-    filterEnabledHint?: string;
-  };
+  texts?: GridsFilterPanelTexts;
   visible?: boolean;
   defaultFilterEnabled?: boolean;
   onFilterEnabledChange?: (value: boolean) => void;
@@ -1516,7 +1490,6 @@ type IFormProps = React.PropsWithChildren<{
   activeStateEnabled?: boolean;
   alignItemLabels?: boolean;
   alignItemLabelsInAllGroups?: boolean;
-  bindingOptions?: Record<string, any>;
   colCount?: Mode | number;
   colCountByScreen?: Record<string, any> | {
     lg?: number | undefined;
@@ -1529,7 +1502,7 @@ type IFormProps = React.PropsWithChildren<{
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
   formData?: any;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   isDirty?: boolean;
@@ -1557,7 +1530,7 @@ type IFormProps = React.PropsWithChildren<{
   tabIndex?: number;
   validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   defaultFormData?: any;
   onFormDataChange?: (value: any) => void;
 }>
@@ -1832,11 +1805,7 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   searchMode?: SearchMode;
   width?: number | string | undefined;
   searchTimeout?: number;
-  texts?: Record<string, any> | {
-    cancel?: string;
-    emptyValue?: string;
-    ok?: string;
-  };
+  texts?: HeaderFilterTexts;
   visible?: boolean;
 }>
 const _componentHeaderFilter = (props: IHeaderFilterProps) => {
@@ -2181,7 +2150,7 @@ type IPagerProps = React.PropsWithChildren<{
   label?: string;
   showInfo?: boolean;
   showNavigationButtons?: boolean;
-  showPageSizeSelector?: boolean;
+  showPageSizeSelector?: boolean | Mode;
   visible?: boolean | Mode;
 }>
 const _componentPager = (props: IPagerProps) => {
@@ -2259,8 +2228,6 @@ type IPopupProps = React.PropsWithChildren<{
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
-  bindingOptions?: Record<string, any>;
-  closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
@@ -2271,15 +2238,15 @@ type IPopupProps = React.PropsWithChildren<{
   enableBodyScroll?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;
-  height?: (() => number | string) | number | string;
+  height?: number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
   hideOnParentScroll?: boolean;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
-  maxHeight?: (() => number | string) | number | string;
-  maxWidth?: (() => number | string) | number | string;
-  minHeight?: (() => number | string) | number | string;
-  minWidth?: (() => number | string) | number | string;
+  maxHeight?: number | string;
+  maxWidth?: number | string;
+  minHeight?: number | string;
+  minWidth?: number | string;
   onContentReady?: ((e: EventInfo<any>) => void);
   onDisposing?: ((e: EventInfo<any>) => void);
   onHidden?: ((e: EventInfo<any>) => void);
@@ -2305,16 +2272,16 @@ type IPopupProps = React.PropsWithChildren<{
   titleTemplate?: ((titleElement: any) => string | any) | template;
   toolbarItems?: Array<dxPopupToolbarItem>;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: number | string;
   wrapperAttr?: any;
-  defaultHeight?: (() => number | string) | number | string;
-  onHeightChange?: (value: (() => number | string) | number | string) => void;
+  defaultHeight?: number | string;
+  onHeightChange?: (value: number | string) => void;
   defaultPosition?: (() => void) | PositionAlignment | PositionConfig;
   onPositionChange?: (value: (() => void) | PositionAlignment | PositionConfig) => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
-  defaultWidth?: (() => number | string) | number | string;
-  onWidthChange?: (value: (() => number | string) | number | string) => void;
+  defaultWidth?: number | string;
+  onWidthChange?: (value: number | string) => void;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
   titleRender?: (...params: any) => React.ReactNode;
@@ -3047,7 +3014,7 @@ type IValidationRuleProps = React.PropsWithChildren<{
   max?: Date | number | string;
   min?: Date | number | string;
   reevaluate?: boolean;
-  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
+  validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean);
   comparisonTarget?: (() => any);
   comparisonType?: ComparisonOperator;
   pattern?: RegExp | string;

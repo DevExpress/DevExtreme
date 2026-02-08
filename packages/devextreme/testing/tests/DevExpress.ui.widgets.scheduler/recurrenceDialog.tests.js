@@ -1,5 +1,5 @@
 import fx from 'common/core/animation/fx';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import {
     createWrapper,
     initTestMarkup,
@@ -19,8 +19,8 @@ module('Recurrence Dialog', {
     },
 }, () => {
     if(isDesktopEnvironment()) {
-        test('Recurrence dialog should be disposed of after it is closed', function(assert) {
-            const scheduler = createWrapper({
+        test('Recurrence dialog should be disposed of after it is closed', async function(assert) {
+            const scheduler = await createWrapper({
                 _draggingMode: 'default',
                 currentDate: new Date(2021, 2, 22),
                 currentView: 'week',
@@ -42,8 +42,8 @@ module('Recurrence Dialog', {
             assert.equal(scheduler.appointmentPopup.getRecurrenceDialog().length, 0, 'There are no dialogs');
         });
 
-        test('Recurrence dialog should be disposed of after scheduler is removed from DOM', function(assert) {
-            const scheduler = createWrapper({
+        test('Recurrence dialog should be disposed of after scheduler is removed from DOM', async function(assert) {
+            const scheduler = await createWrapper({
                 _draggingMode: 'default',
                 currentDate: new Date(2021, 2, 22),
                 currentView: 'week',
@@ -65,14 +65,14 @@ module('Recurrence Dialog', {
             assert.equal(scheduler.appointmentPopup.getRecurrenceDialog().length, 0, 'There are no dialogs');
         });
 
-        test('Appointments should not be updated after scheduler\'s disposal', function(assert) {
+        test('Appointments should not be updated after scheduler\'s disposal', async function(assert) {
             const dataSource = [{
                 startDate: new Date(2021, 2, 22),
                 endDate: new Date(2021, 2, 22, 0, 30),
                 recurrenceRule: 'FREQ=DAILY',
             }];
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 _draggingMode: 'default',
                 currentDate: new Date(2021, 2, 22),
                 currentView: 'week',

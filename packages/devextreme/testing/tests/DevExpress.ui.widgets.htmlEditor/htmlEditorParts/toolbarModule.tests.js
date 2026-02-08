@@ -1,12 +1,13 @@
 import $ from 'jquery';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import 'ui/select_box';
 import '__internal/ui/color_box/m_color_view';
+import 'ui/drop_down_button';
 
 import Toolbar from '__internal/ui/html_editor/modules/m_toolbar';
-import FormDialog from '__internal/ui/html_editor/ui/m_formDialog';
+import FormDialog from '__internal/ui/html_editor/ui/formDialog';
 import { noop } from 'core/utils/common';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import fx from 'common/core/animation/fx';
@@ -116,7 +117,7 @@ const simpleModuleConfig = {
                 },
                 _saveValueChangeEvent: noop,
                 option: noop,
-                on: noop
+                on: noop,
             }
         };
     },
@@ -190,7 +191,7 @@ const dialogModuleConfig = {
             }
         };
 
-        this.formDialog = new FormDialog(this.options.editorInstance, { container: this.$element, position: null });
+        this.formDialog = new FormDialog(this.$element, { container: this.$element, position: null });
     },
     afterEach: function() {
         fx.off = false;
@@ -244,40 +245,6 @@ testModule('Toolbar module', simpleModuleConfig, () => {
 
         assert.equal($formatWidgets.length, 2, 'There are 2 format widgets');
         assert.ok($formatWidgets.first().hasClass('dx-button'), 'Change simple format via Button');
-    });
-
-    [{
-        optionName: 'formatName',
-        item: {
-            formatName: 'undo'
-        }
-    }, {
-        optionName: 'formatValues',
-        item: {
-            name: 'size',
-            formatValues: ['10px']
-        }
-    }, {
-        optionName: 'formatValues',
-        item: {
-            name: 'size',
-            formatValues: null
-        }
-    }].forEach(optionInfo => {
-        test(`should show 'W1016' warning if deprecated ${optionInfo.optionName} toolbar item field is used`, function(assert) {
-            const originalLog = errors.log;
-            let warning = null;
-            this.options.items = [optionInfo.item];
-
-            errors.log = (loggedWarning) => warning = loggedWarning;
-
-            try {
-                new Toolbar(this.quillMock, this.options);
-                assert.strictEqual(warning, 'W1016');
-            } finally {
-                errors.log = originalLog;
-            }
-        });
     });
 
     test('Simple format handling', function(assert) {

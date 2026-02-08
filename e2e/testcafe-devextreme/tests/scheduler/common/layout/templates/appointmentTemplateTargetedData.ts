@@ -243,7 +243,7 @@ testOptions.forEach(({
         const { groupId: targetedId } = model.targetedAppointmentData;
         const { groupId } = model.appointmentData;
 
-        if (groupId !== targetedId) {
+        if (groupId !== targetedId[0]) {
           throw new Error('Group ID and targeted ID are mismatched');
         }
 

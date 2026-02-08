@@ -1,9 +1,8 @@
-require('viz/tree_map/tree_map');
-
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const loadingIndicatorModule = require('viz/core/loading_indicator');
-const DataSource = require('common/data/data_source/data_source').DataSource;
+import '__internal/viz/tree_map/tree_map';
+import $ from 'jquery';
+import { LoadingIndicator as MockLoadingIndicator } from '../../helpers/vizMocks.js';
+import loadingIndicatorModule from 'viz/core/loading_indicator';
+import { DataSource } from 'common/data/data_source/data_source';
 
 $('#qunit-fixture').append('<div id="test-container"></div>');
 
@@ -14,7 +13,7 @@ $('#test-container').css({
 
 QUnit.module('Loading indicator', {
     beforeEach: function() {
-        const loadingIndicator = this.loadingIndicator = new vizMocks.LoadingIndicator();
+        const loadingIndicator = this.loadingIndicator = new MockLoadingIndicator();
         loadingIndicatorModule.DEBUG_set_LoadingIndicator(sinon.spy(function() { return loadingIndicator; }));
 
         this.$container = $('#test-container');

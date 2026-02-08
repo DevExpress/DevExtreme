@@ -18,6 +18,7 @@ export {
   SeriesSelectionMode,
   SeriesType,
   TextOverflow,
+  ValueAxisVisualRangeUpdateMode,
   ValueErrorBarDisplayMode,
   ValueErrorBarType,
   VerticalAlignment,

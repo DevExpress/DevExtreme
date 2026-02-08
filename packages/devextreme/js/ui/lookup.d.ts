@@ -15,7 +15,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     ValueChangedInfo,
@@ -195,14 +195,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     focusStateEnabled?: boolean;
     /**
      * @docid
-     * @default false
-     * @default true &for(iPhone)
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    fullScreen?: boolean;
-    /**
-     * @docid
      * @default "group"
      * @type_function_param1 itemData:object
      * @type_function_return string|Element|jQuery
@@ -345,13 +337,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      */
     usePopover?: boolean;
-    /**
-     * @docid
-     * @deprecated
-     * @default "input change keyup"
-     * @public
-     */
-    valueChangeEvent?: string;
     /**
      * @docid
      * @default false

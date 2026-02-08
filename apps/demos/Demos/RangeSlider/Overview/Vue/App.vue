@@ -133,7 +133,7 @@ import DxNumberBox from 'devextreme-vue/number-box';
 
 const start = ref(10);
 const end = ref(90);
-const format = (value) => `${value}%`;
+const format = (value: number) => `${value}%`;
 const label = {
   visible: true,
   format,

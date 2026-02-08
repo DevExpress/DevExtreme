@@ -81,7 +81,7 @@ module('Virtual Scrolling', {
 () => {
     module('Initialization', function() {
         module('Vertical', () => {
-            test('Init', function(assert) {
+            test('Init', async function(assert) {
                 this.prepareInstance();
 
                 const { verticalVirtualScrolling } = this;
@@ -92,7 +92,7 @@ module('Virtual Scrolling', {
                 assert.equal(verticalVirtualScrolling.bottomVirtualRowCount, 91, 'Bottom virtual row count');
             });
 
-            test('"viewportHeight" should be correct if heigth option is undefined', function(assert) {
+            test('"viewportHeight" should be correct if heigth option is undefined', async function(assert) {
                 this.prepareInstance({ height: null });
 
                 const { viewportHeight } = this.virtualScrollingDispatcher;
@@ -100,7 +100,7 @@ module('Virtual Scrolling', {
                 assert.equal(viewportHeight, 500, 'viewport height is correct');
             });
 
-            test('document scroll event should be subscribed correctly if heigth option is undefined', function(assert) {
+            test('document scroll event should be subscribed correctly if heigth option is undefined', async function(assert) {
                 const SCROLL_EVENT_NAME = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
 
                 const spyEventsOn = sinon.spy(eventsEngine, 'on');
@@ -112,7 +112,7 @@ module('Virtual Scrolling', {
                 assert.equal(spyEventsOn.args[0][1], SCROLL_EVENT_NAME, 'scroll event name is correct');
             });
 
-            test('document scroll event should be unsubscribed correctly if heigth option is undefined', function(assert) {
+            test('document scroll event should be unsubscribed correctly if heigth option is undefined', async function(assert) {
                 const SCROLL_EVENT_NAME = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
                 const spyEventsOff = sinon.spy(eventsEngine, 'off');
 
@@ -127,7 +127,7 @@ module('Virtual Scrolling', {
                 spyEventsOff.restore();
             });
 
-            test('It should call getTotalRowCount with correct parameters', function(assert) {
+            test('It should call getTotalRowCount with correct parameters', async function(assert) {
                 this.prepareInstance();
 
                 const getTotalRowCountSpy = sinon.spy(this.verticalVirtualScrolling.options, 'getTotalRowCount');
@@ -144,7 +144,7 @@ module('Virtual Scrolling', {
         });
 
         module('Horizontal', function() {
-            test('Init', function(assert) {
+            test('Init', async function(assert) {
                 this.prepareInstance();
 
                 const { horizontalVirtualScrolling } = this;
@@ -156,7 +156,7 @@ module('Virtual Scrolling', {
                 assert.equal(state.virtualItemCountAfter, 194, 'Virtual item count after viewport');
             });
 
-            test('Init with RTL', function(assert) {
+            test('Init with RTL', async function(assert) {
                 this.prepareInstance(
                     { },
                     { isRTL: () => true }
@@ -171,7 +171,7 @@ module('Virtual Scrolling', {
                 assert.equal(state.virtualItemSizeAfter, 0, 'Virtual item size after viewport');
             });
 
-            test('Viewport width should be correct if the "width" option is undefined', function(assert) {
+            test('Viewport width should be correct if the "width" option is undefined', async function(assert) {
                 this.prepareInstance({ width: null });
 
                 const { viewportWidth } = this.virtualScrollingDispatcher;
@@ -179,7 +179,7 @@ module('Virtual Scrolling', {
                 assert.equal(viewportWidth, 600, 'Viewport width is correct');
             });
 
-            test('document scroll event should not been subscribed if the "width" option is not defined', function(assert) {
+            test('document scroll event should not been subscribed if the "width" option is not defined', async function(assert) {
                 const spyEventsOn = sinon.spy(eventsEngine, 'on');
 
                 this.prepareInstance({ width: null });
@@ -187,7 +187,7 @@ module('Virtual Scrolling', {
                 assert.notOk(spyEventsOn.calledOnce, 'scroll event subscribed once');
             });
 
-            test('It should call getTotalCellCount with correct parameters', function(assert) {
+            test('It should call getTotalCellCount with correct parameters', async function(assert) {
                 this.prepareInstance();
 
                 const getTotalCellCountSpy = sinon.spy(this.horizontalVirtualScrolling.options, 'getTotalCellCount');
@@ -230,7 +230,7 @@ module('Virtual Scrolling', {
                     }
                 },
             ].forEach(option => {
-                test(`Virtual scrolling objects should be created correctly if scrolling.orientation is ${option.scrolling.orientation || option.scrolling.mode} `, function(assert) {
+                test(`Virtual scrolling objects should be created correctly if scrolling.orientation is ${option.scrolling.orientation || option.scrolling.mode} `, async function(assert) {
                     this.prepareInstance({
                         scrolling: option.scrolling,
                     });
@@ -278,7 +278,7 @@ module('Virtual Scrolling', {
                 }
             }
         ].forEach(({ orientation, expectedRenderState }) => {
-            test(`it should return correct render state if scrolling orientation: ${orientation}`, function(assert) {
+            test(`it should return correct render state if scrolling orientation: ${orientation}`, async function(assert) {
                 this.prepareInstance({
                     scrolling: {
                         orientation
@@ -304,7 +304,7 @@ module('Virtual Scrolling', {
             verticalAllowed: true,
             horizontalAllowed: true
         }].forEach(({ orientation, verticalAllowed, horizontalAllowed }) => {
-            test(`it should correctly create virtual scrolling instances if scrolling orientation is ${orientation}`, function(assert) {
+            test(`it should correctly create virtual scrolling instances if scrolling orientation is ${orientation}`, async function(assert) {
                 this.prepareInstance({
                     scrolling: {
                         orientation
@@ -338,7 +338,7 @@ module('Virtual Scrolling', {
                 NaN,
                 null
             ].forEach(testValue => {
-                test(`it should get correct cell sizes if virtual scrolling orientation: ${orientation} and testValue: ${testValue}`, function(assert) {
+                test(`it should get correct cell sizes if virtual scrolling orientation: ${orientation} and testValue: ${testValue}`, async function(assert) {
                     this.prepareInstance({
                         scrolling: {
                             orientation
@@ -358,7 +358,7 @@ module('Virtual Scrolling', {
         });
 
         [null, undefined].forEach(offset => {
-            test(`it should not call virtual scrolling instances if scrollOffset is "${offset}"`, function(assert) {
+            test(`it should not call virtual scrolling instances if scrollOffset is "${offset}"`, async function(assert) {
                 this.prepareInstance();
 
                 const spyUpdateVerticalState = sinon.spy(this.verticalVirtualScrolling, 'updateState');
@@ -374,7 +374,7 @@ module('Virtual Scrolling', {
             });
         });
 
-        test('it should not update render if scroll position has not been changed', function(assert) {
+        test('it should not update render if scroll position has not been changed', async function(assert) {
             this.prepareInstance();
 
             const spy = sinon.spy(this.options, 'updateRender');
@@ -394,7 +394,7 @@ module('Virtual Scrolling', {
             assert.equal(this.horizontalVirtualScrolling.position, scrollOffset.left, 'Horizontal scroll position is correct');
         });
 
-        test('it should reinitialize vertical virtual scrolling state if virtualization is allowed', function(assert) {
+        test('it should reinitialize vertical virtual scrolling state if virtualization is allowed', async function(assert) {
             this.prepareInstance({
                 scrolling: { orientation: 'vertical' }
             });
@@ -407,7 +407,7 @@ module('Virtual Scrolling', {
             assert.ok(spy.calledOnce, 'reinitState called once');
         });
 
-        test('it should reinitialize horizontal virtual scrolling state if virtualization is allowed', function(assert) {
+        test('it should reinitialize horizontal virtual scrolling state if virtualization is allowed', async function(assert) {
             this.prepareInstance({
                 scrolling: { orientation: 'horizontal' }
             });
@@ -420,7 +420,7 @@ module('Virtual Scrolling', {
             assert.ok(spy.calledOnce, 'reinitState called once');
         });
 
-        test('it should reinitialize virtual scrolling state on "updateDimensions" if virtualization is allowed', function(assert) {
+        test('it should reinitialize virtual scrolling state on "updateDimensions" if virtualization is allowed', async function(assert) {
             this.prepareInstance({
                 scrolling: { orientation: 'both' }
             });
@@ -446,7 +446,7 @@ module('Virtual Scrolling', {
             assert.ok(spyVerticalReinit.calledOnce, 'Vertical scrolling reinitState called once');
         });
 
-        test('it should correctly round up cellHeight and cellWidth', function(assert) {
+        test('it should correctly round up cellHeight and cellWidth', async function(assert) {
             this.prepareInstance();
 
             this.options.getCellHeight = () => 100.123;
@@ -462,13 +462,13 @@ module('Virtual Scrolling', {
             assert.equal(this.virtualScrollingDispatcher.getCellWidth(), 200, 'Cell width is correct');
         });
 
-        test('it should return correct leftVirtualCellsCount if RTL', function(assert) {
+        test('it should return correct leftVirtualCellsCount if RTL', async function(assert) {
             this.prepareInstance({}, { isRTL: () => true });
 
             assert.equal(this.virtualScrollingDispatcher.leftVirtualCellsCount, 1, 'leftVirtualCellsCount is correct');
         });
 
-        test('update dimensions should updatee viewPort height and width', function(assert) {
+        test('update dimensions should updatee viewPort height and width', async function(assert) {
             this.prepareInstance();
 
             const nextOptions = {
@@ -488,7 +488,7 @@ module('Virtual Scrolling', {
     });
 
     module('API', () => {
-        test('reinitState', function(assert) {
+        test('reinitState', async function(assert) {
             this.prepareInstance({
                 scrolling: { orientation: 'both' }
             });
@@ -540,7 +540,7 @@ module('Virtual Scrolling', {
             );
         });
 
-        test('reinitState if RTL', function(assert) {
+        test('reinitState if RTL', async function(assert) {
             this.prepareInstance({
                 scrolling: { orientation: 'both' }
             }, {
@@ -594,7 +594,7 @@ module('Virtual Scrolling', {
             );
         });
 
-        test('reinitState if outlineCount is set', function(assert) {
+        test('reinitState if outlineCount is set', async function(assert) {
             this.prepareInstance({
                 scrolling: { outlineCount: 1 }
             });
@@ -650,7 +650,7 @@ module('Virtual Scrolling', {
             );
         });
 
-        test('setViewOptions should chenge dispatcher\'s options', function(assert) {
+        test('setViewOptions should chenge dispatcher\'s options', async function(assert) {
             this.prepareInstance();
 
             const nextOptions = {
@@ -669,7 +669,7 @@ module('Virtual Scrolling', {
 
     module('Scrolling', () => {
         module('Vertical', () => {
-            test('State should be correct on scrolling Down', function(assert) {
+            test('State should be correct on scrolling Down', async function(assert) {
                 this.prepareInstance();
 
                 [
@@ -696,7 +696,7 @@ module('Virtual Scrolling', {
                 });
             });
 
-            test('State should be correct on scrolling Up', function(assert) {
+            test('State should be correct on scrolling Up', async function(assert) {
                 this.prepareInstance({ scrolling: { orientation: 'vertical' } });
 
                 [
@@ -724,7 +724,7 @@ module('Virtual Scrolling', {
                 });
             });
 
-            test('Check virtual rows height', function(assert) {
+            test('Check virtual rows height', async function(assert) {
                 this.prepareInstance();
 
                 [
@@ -747,7 +747,7 @@ module('Virtual Scrolling', {
                 });
             });
 
-            test('State should be updated after change itemSize', function(assert) {
+            test('State should be updated after change itemSize', async function(assert) {
                 this.prepareInstance();
 
                 this.verticalVirtualScrolling.itemSize = 123;
@@ -764,7 +764,7 @@ module('Virtual Scrolling', {
                 assert.equal(virtualItemSizeAfter, 11808, 'virtualItemSizeAfter count is correct');
             });
 
-            test('Scroll event position should be checked correctly before update state', function(assert) {
+            test('Scroll event position should be checked correctly before update state', async function(assert) {
                 this.prepareInstance();
                 const spy = sinon.spy(this.verticalVirtualScrolling, 'needUpdateState');
 
@@ -789,7 +789,7 @@ module('Virtual Scrolling', {
         });
 
         module('Horizontal', () => {
-            test('Check state while scrolling to the Right', function(assert) {
+            test('Check state while scrolling to the Right', async function(assert) {
                 this.prepareInstance();
 
                 [
@@ -819,7 +819,7 @@ module('Virtual Scrolling', {
                 });
             });
 
-            test('Check state while scrolling to the Left', function(assert) {
+            test('Check state while scrolling to the Left', async function(assert) {
                 this.prepareInstance();
 
                 [
@@ -850,7 +850,7 @@ module('Virtual Scrolling', {
                 });
             });
 
-            test('Check virtual cells width', function(assert) {
+            test('Check virtual cells width', async function(assert) {
                 this.prepareInstance();
 
                 [
@@ -874,7 +874,7 @@ module('Virtual Scrolling', {
                 });
             });
 
-            test('Scroll event position should be checked correctly before update state11', function(assert) {
+            test('Scroll event position should be checked correctly before update state11', async function(assert) {
 
                 this.prepareInstance();
 
@@ -905,7 +905,7 @@ module('Virtual Scrolling', {
     module('Validation', function() {
         module('Vertical', function() {
             [5, 15, 25, 50, 100, 150, 200].forEach(totalRowCount => {
-                test(`Check virtual scrolling state where totalRowCount: ${totalRowCount}`, function(assert) {
+                test(`Check virtual scrolling state where totalRowCount: ${totalRowCount}`, async function(assert) {
                     let offset;
 
                     this.prepareInstance({ totalRowCount });
@@ -933,7 +933,7 @@ module('Virtual Scrolling', {
 
         module('Horizontal', function() {
             [5, 15, 25, 50, 100].forEach(totalCellCount => {
-                test(`Check virtual scrolling state where totalCellCount: ${totalCellCount}`, function(assert) {
+                test(`Check virtual scrolling state where totalCellCount: ${totalCellCount}`, async function(assert) {
                     let offset;
 
                     this.prepareInstance({ totalCellCount });

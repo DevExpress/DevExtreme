@@ -1,11 +1,17 @@
 import { getOuterHeight } from 'core/utils/size';
 import dragEvents from 'common/core/events/drag';
-import 'generic_light.css!';
 import $ from 'jquery';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import dateLocalization from 'common/core/localization/date';
 
 import '__internal/scheduler/workspaces/m_work_space_day';
+
+import {
+    applyWorkspaceGroups,
+    getEmptyResourceManager,
+    getWorkspaceResourceConfig
+} from '../../helpers/scheduler/mockResourceManager.js';
+
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
 
@@ -22,12 +28,14 @@ testStart(function() {
 
 module('Work Space Day', {
     beforeEach: function() {
-        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({}).dxSchedulerWorkSpaceDay('instance');
+        this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
+            getResourceManager: getEmptyResourceManager,
+        }).dxSchedulerWorkSpaceDay('instance');
         this.instance.initDragBehavior();
         this.instance._attachTablesEvents();
     }
 }, () => {
-    test('Workspace getAllDayHeight() should return 0 or allDayPanel-height depending on the showAllDayPanel option', function(assert) {
+    test('Workspace getAllDayHeight() should return 0 or allDayPanel-height depending on the showAllDayPanel option', async function(assert) {
         this.instance.option('showAllDayPanel', true);
         assert.ok(this.instance.getAllDayHeight() > 0, 'Return value is correct');
 
@@ -35,7 +43,7 @@ module('Work Space Day', {
         assert.equal(this.instance.getAllDayHeight(), 0, 'Return value is correct');
     });
 
-    skip('Work space should find cell coordinates by date', function(assert) {
+    skip('Work space should find cell coordinates by date', async function(assert) {
         const $element = this.instance.$element();
 
         this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -59,7 +67,7 @@ module('Work Space Day', {
         assert.equal(coords.left, position.left, 'Cell coordinates are right');
     });
 
-    skip('Workspace should find cell coordinates by date with second precision', function(assert) {
+    skip('Workspace should find cell coordinates by date with second precision', async function(assert) {
         const $element = this.instance.$element();
 
         this.instance.option('currentDate', new Date(2017, 5, 16));
@@ -73,7 +81,7 @@ module('Work Space Day', {
         assert.equal(coords.left, $cell.position().left, 'Cell coordinates are right');
     });
 
-    skip('Work space should find cell coordinates by date depend on start day hour', function(assert) {
+    skip('Work space should find cell coordinates by date depend on start day hour', async function(assert) {
         const $element = this.instance.$element();
 
         this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -85,7 +93,7 @@ module('Work Space Day', {
         assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(2).position().left, 'Cell coordinates are right');
     });
 
-    skip('Work space should find cell coordinates by date depend on fractional start day hour', function(assert) {
+    skip('Work space should find cell coordinates by date depend on fractional start day hour', async function(assert) {
         const $element = this.instance.$element();
 
         this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -97,7 +105,7 @@ module('Work Space Day', {
         assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(1).position().left, 'Cell coordinates are right');
     });
 
-    skip('Work space should find cell coordinates by date depend on end day hour', function(assert) {
+    skip('Work space should find cell coordinates by date depend on end day hour', async function(assert) {
         const $element = this.instance.$element();
 
         this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -109,14 +117,13 @@ module('Work Space Day', {
         assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(12).position().left, 'Cell coordinates are right');
     });
 
-    test('getDataByDroppableCell should work right with the single group', function(assert) {
+    test('getDataByDroppableCell should work right with the single group', async function(assert) {
         this.instance.option('currentDate', new Date(2015, 1, 18));
-        this.instance.option('groups', [
+        await applyWorkspaceGroups(this.instance, [
             {
-                name: 'res',
-                items: [
-                    { id: 1, text: 'one' }, { id: 2, text: 'two' }
-                ]
+                label: 'res',
+                fieldExpr: 'res',
+                dataSource: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }],
             }
         ]);
 
@@ -133,24 +140,27 @@ module('Work Space Day', {
         }, 'Data is OK');
     });
 
-    test('getDataByDroppableCell should work right with many groups', function(assert) {
+    test('getDataByDroppableCell should work right with many groups', async function(assert) {
         this.instance.option('currentDate', new Date(2015, 1, 18));
-        this.instance.option('groups', [
+        await applyWorkspaceGroups(this.instance, [
             {
-                name: 'one',
-                items: [
+                label: 'one',
+                fieldExpr: 'one',
+                dataSource: [
                     { id: 1, text: 'a' }, { id: 2, text: 'b' }
                 ]
             },
             {
-                name: 'two',
-                items: [
+                label: 'two',
+                fieldExpr: 'two',
+                dataSource: [
                     { id: 1, text: 'c' }, { id: 2, text: 'd' }
                 ]
             },
             {
-                name: 'three',
-                items: [
+                label: 'three',
+                fieldExpr: 'three',
+                dataSource: [
                     { id: 1, text: 'e' }, { id: 2, text: 'f' }, { id: 3, text: 'g' }
                 ]
             }
@@ -171,20 +181,20 @@ module('Work Space Day', {
         }, 'Data is OK');
     });
 
-    test('droppable class should be added on dxdragenter', function(assert) {
+    test('droppable class should be added on dxdragenter', async function(assert) {
         const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(2);
 
         $($cell).trigger(dragEvents.enter);
         assert.ok($cell.hasClass(DROPPABLE_CELL_CLASS), 'cell has droppable class');
     });
 
-    test('Get date range', function(assert) {
+    test('Get date range', async function(assert) {
         this.instance.option('currentDate', new Date(2015, 2, 16));
 
         assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 16, 23, 59)], 'Range is OK');
     });
 
-    test('Each cell should contain jQuery dxCellData', function(assert) {
+    test('Each cell should contain jQuery dxCellData', async function(assert) {
         this.instance.option('renovateRender', false);
 
         this.instance.option('currentDate', new Date(2015, 2, 16));
@@ -210,15 +220,16 @@ module('Work Space Day', {
         assert.strictEqual($element.find('.' + CELL_CLASS).first().data('dxCellData').cellCustomField, undefined, 'Cell data is not affected');
     });
 
-    test('Cells have right cellData in vertical grouped WorkSpace Day view', function(assert) {
+    test('Cells have right cellData in vertical grouped WorkSpace Day view', async function(assert) {
         this.instance.option('renovateRender', false);
 
+        await applyWorkspaceGroups(this.instance, [{
+            label: 'one',
+            fieldExpr: 'one',
+            dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+        }]);
         this.instance.option({
             currentDate: new Date(2018, 2, 16),
-            groups: [{
-                name: 'one',
-                items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-            }],
             groupOrientation: 'vertical',
             startDayHour: 9,
             showAllDayPanel: false
@@ -236,20 +247,22 @@ module('Work Space Day', {
 
 module('Work Space Day with grouping by date', () => {
     module('Default', {
-        beforeEach: function() {
+        beforeEach: async function() {
+            const resourceConfig = await getWorkspaceResourceConfig([{
+                label: 'one',
+                fieldExpr: 'one',
+                dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+            }]);
             this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
                 currentDate: new Date(2018, 2, 1),
                 groupByDate: true,
                 intervalCount: 2,
                 showCurrentTimeIndicator: false,
-                groups: [{
-                    name: 'one',
-                    items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                }],
+                ...resourceConfig,
             }).dxSchedulerWorkSpaceDay('instance');
         }
     }, () => {
-        test('Get date range', function(assert) {
+        test('Get date range', async function(assert) {
             assert.deepEqual(this.instance.getDateRange(), [new Date(2018, 2, 1, 0, 0), new Date(2018, 2, 2, 23, 59)], 'Range is OK');
 
             this.instance.option('intervalCount', 3);
@@ -257,7 +270,7 @@ module('Work Space Day with grouping by date', () => {
             assert.deepEqual(this.instance.getDateRange(), [new Date(2018, 2, 1, 0, 0), new Date(2018, 2, 3, 23, 59)], 'Range is OK');
         });
 
-        test('Group header should be rendered correct, groupByDate = true', function(assert) {
+        test('Group header should be rendered correct, groupByDate = true', async function(assert) {
             const $groupRow = this.instance.$element().find('.dx-scheduler-group-row');
             const $groupHeaderCells = $groupRow.find('.dx-scheduler-group-header');
 
@@ -270,7 +283,7 @@ module('Work Space Day with grouping by date', () => {
             assert.roughEqual(getOuterHeight($groupHeaderContents.eq(3)), 19, 5, 'Group header content height is OK');
         });
 
-        test('Date table cells shoud have right cellData, groupByDate = true', function(assert) {
+        test('Date table cells shoud have right cellData, groupByDate = true', async function(assert) {
             this.instance.option('renovateRender', false);
 
             this.instance.option('intervalCount', 3);
@@ -337,9 +350,10 @@ module('Work Space Day with grouping by date', () => {
             });
         });
 
-        test('Date table cells should have right cellData, groupByDate = true without groups', function(assert) {
+        test('Date table cells should have right cellData, groupByDate = true without groups', async function(assert) {
             this.instance.option('renovateRender', false);
 
+            this.instance.option('getResourceManager', getEmptyResourceManager);
             this.instance.option('groups', []);
             const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
 
@@ -372,7 +386,7 @@ module('Work Space Day with grouping by date', () => {
             });
         });
 
-        test('Date table cells should have right cellData, groupByDate = true', function(assert) {
+        test('Date table cells should have right cellData, groupByDate = true', async function(assert) {
             const $groupRow = this.instance.$element().find('.dx-scheduler-group-row');
             const $groupHeaderCells = $groupRow.find('.dx-scheduler-group-header');
 
@@ -382,7 +396,7 @@ module('Work Space Day with grouping by date', () => {
             assert.equal($groupHeaderCells.eq(3).text(), 'b', 'Group header content height is OK');
         });
 
-        skip('Work space should find cell coordinates by date, groupByDate = true', function(assert) {
+        skip('Work space should find cell coordinates by date, groupByDate = true', async function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -397,7 +411,7 @@ module('Work Space Day with grouping by date', () => {
             assert.equal(coords.left, $element.find('.dx-scheduler-date-table tbody td').eq(19).position().left, 'Left cell coordinates are right');
         });
 
-        skip('Work space should find cell coordinates by date in allDay row, groupByDate = true', function(assert) {
+        skip('Work space should find cell coordinates by date in allDay row, groupByDate = true', async function(assert) {
             const $element = this.instance.$element();
 
             this.instance.option('currentDate', new Date(2015, 2, 4));
@@ -418,11 +432,14 @@ module('Work Space Day with grouping by date', () => {
     module('it with intervalCount', {
         beforeEach: function() {
             this.createInstance = function(options) {
-                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay(options).dxSchedulerWorkSpaceDay('instance');
+                this.instance = $('#scheduler-work-space').dxSchedulerWorkSpaceDay({
+                    ...options,
+                    getResourceManager: getEmptyResourceManager,
+                }).dxSchedulerWorkSpaceDay('instance');
             };
         }
     }, () => {
-        test('WorkSpace Day view cells have right cellData with view option intervalCount=2', function(assert) {
+        test('WorkSpace Day view cells have right cellData with view option intervalCount=2', async function(assert) {
             this.createInstance({
                 intervalCount: 2,
                 currentDate: new Date(2017, 5, 29),
@@ -439,7 +456,7 @@ module('Work Space Day with grouping by date', () => {
             assert.deepEqual(secondCellData.endDate, new Date(2017, 5, 31, 0), 'cell has right endtDate');
         });
 
-        test('WorkSpace Day view cells have right cellData with view option intervalCount = 3 and startDate < currentDate', function(assert) {
+        test('WorkSpace Day view cells have right cellData with view option intervalCount = 3 and startDate < currentDate', async function(assert) {
             this.createInstance({
                 intervalCount: 3,
                 currentDate: new Date(2017, 5, 28),
@@ -457,7 +474,7 @@ module('Work Space Day with grouping by date', () => {
             assert.deepEqual(secondCellData.endDate, new Date(2017, 5, 30, 0), 'cell has right endtDate');
         });
 
-        test('WorkSpace Day view cells have right cellData with view option intervalCount = 3 and startDate > currentDate', function(assert) {
+        test('WorkSpace Day view cells have right cellData with view option intervalCount = 3 and startDate > currentDate', async function(assert) {
             this.createInstance({
                 intervalCount: 3,
                 currentDate: new Date(2017, 5, 25),
@@ -475,7 +492,7 @@ module('Work Space Day with grouping by date', () => {
             assert.deepEqual(secondCellData.endDate, new Date(2017, 5, 27, 0), 'cell has right endtDate');
         });
 
-        test('Get date range', function(assert) {
+        test('Get date range', async function(assert) {
             this.createInstance({
                 intervalCount: 2,
                 currentDate: new Date(2015, 2, 16)
@@ -487,7 +504,7 @@ module('Work Space Day with grouping by date', () => {
             assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 19, 23, 59)], 'Range is OK');
         });
 
-        test('WorkSpace Day view with option intervalCount = 3 should have right header', function(assert) {
+        test('WorkSpace Day view with option intervalCount = 3 should have right header', async function(assert) {
             this.createInstance({
                 intervalCount: 3,
                 currentDate: new Date(2017, 5, 25),

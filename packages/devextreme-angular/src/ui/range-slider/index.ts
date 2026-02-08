@@ -18,7 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -40,7 +40,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoLabelModule } from 'devextreme-angular/ui/nested';
@@ -50,8 +50,6 @@ import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
 import { DxoRangeSliderFormatModule } from 'devextreme-angular/ui/range-slider/nested';
 import { DxoRangeSliderLabelModule } from 'devextreme-angular/ui/range-slider/nested';
 import { DxoRangeSliderTooltipModule } from 'devextreme-angular/ui/range-slider/nested';
-
-
 
 
 
@@ -66,8 +64,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-range-slider',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -77,6 +77,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxRangeSliderComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
     instance: DxRangeSlider = null;
 
     /**
@@ -175,10 +176,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -500,10 +501,10 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -601,7 +602,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -776,7 +777,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -789,10 +790,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
@@ -912,6 +909,7 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
 
 @NgModule({
   imports: [
+    DxRangeSliderComponent,
     DxoLabelModule,
     DxoFormatModule,
     DxoTooltipModule,
@@ -920,9 +918,6 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
     DxoRangeSliderTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxRangeSliderComponent
   ],
   exports: [
     DxRangeSliderComponent,
@@ -936,6 +931,8 @@ export class DxRangeSliderComponent extends DxComponent implements OnDestroy, Co
   ]
 })
 export class DxRangeSliderModule { }
+
+export * from 'devextreme-angular/ui/range-slider/nested';
 
 import type * as DxRangeSliderTypes from "devextreme/ui/range_slider_types";
 export { DxRangeSliderTypes };

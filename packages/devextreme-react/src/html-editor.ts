@@ -8,7 +8,7 @@ import dxHtmlEditor, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, ValueChangedEvent, HtmlEditorImageUploadMode, dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadTab, dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem, dxHtmlEditorToolbarItem } from "devextreme/ui/html_editor";
+import type { ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, ValueChangedEvent, AICommandNameExtended, HtmlEditorImageUploadMode, dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadTab, dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem, AICommand, AICommandName, AIToolbarItem, dxHtmlEditorToolbarItem } from "devextreme/ui/html_editor";
 import type { ContentReadyEvent as FileUploaderContentReadyEvent, DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, ValueChangedEvent as FileUploaderValueChangedEvent, BeforeSendEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, UploadHttpMethod, FileUploadMode, dxFileUploaderOptions } from "devextreme/ui/file_uploader";
 import type { ValidationStatus, template, ToolbarItemLocation, ToolbarItemComponent } from "devextreme/common";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
@@ -52,7 +52,7 @@ const HtmlEditor = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["value"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onFocusIn","onFocusOut","onInitialized","onValueChanged"]), []);
@@ -89,6 +89,28 @@ const HtmlEditor = memo(
 
 
 // owners:
+// ToolbarItem
+type ICommandProps = React.PropsWithChildren<{
+  name?: AICommandNameExtended;
+  options?: any;
+  prompt?: ((param: string) => string);
+  text?: string;
+}>
+const _componentCommand = (props: ICommandProps) => {
+  return React.createElement(NestedOption<ICommandProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "commands",
+      IsCollectionItem: true,
+    },
+  });
+};
+
+const Command = Object.assign<typeof _componentCommand, NestedComponentMeta>(_componentCommand, {
+  componentType: "option",
+});
+
+// owners:
 // HtmlEditor
 type IConverterProps = React.PropsWithChildren<{
   fromHtml?: ((value: string) => string);
@@ -116,14 +138,13 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   activeStateEnabled?: boolean;
   allowCanceling?: boolean;
   allowedFileExtensions?: Array<string>;
-  bindingOptions?: Record<string, any>;
   chunkSize?: number;
   dialogTrigger?: any | string | undefined;
   disabled?: boolean;
   dropZone?: any | string | undefined;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   inputAttr?: any;
@@ -174,7 +195,7 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   validationStatus?: ValidationStatus;
   value?: Array<any>;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   defaultValue?: Array<any>;
   onValueChange?: (value: Array<any>) => void;
 }>
@@ -237,9 +258,8 @@ type IItemProps = React.PropsWithChildren<{
   text?: string;
   visible?: boolean;
   acceptedValues?: Array<boolean | number | string>;
+  commands?: Array<AICommand | AICommandName>;
   cssClass?: string | undefined;
-  formatName?: HtmlEditorPredefinedToolbarItem | string;
-  formatValues?: Array<boolean | number | string>;
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
@@ -259,6 +279,7 @@ const _componentItem = (props: IItemProps) => {
       OptionName: "items",
       IsCollectionItem: true,
       ExpectedChildren: {
+        command: { optionName: "commands", isCollectionItem: true },
         item: { optionName: "items", isCollectionItem: true }
       },
       TemplateProps: [{
@@ -443,7 +464,7 @@ const TableResizing = Object.assign<typeof _componentTableResizing, NestedCompon
 // HtmlEditor
 type IToolbarProps = React.PropsWithChildren<{
   container?: any | string;
-  items?: Array<dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>;
+  items?: Array<AIToolbarItem | dxHtmlEditorToolbarItem | HtmlEditorPredefinedToolbarItem>;
   multiline?: boolean;
 }>
 const _componentToolbar = (props: IToolbarProps) => {
@@ -467,15 +488,14 @@ const Toolbar = Object.assign<typeof _componentToolbar, NestedComponentMeta>(_co
 // Toolbar
 type IToolbarItemProps = React.PropsWithChildren<{
   acceptedValues?: Array<boolean | number | string>;
+  commands?: Array<AICommand | AICommandName>;
   cssClass?: string | undefined;
   disabled?: boolean;
-  formatName?: HtmlEditorPredefinedToolbarItem | string;
-  formatValues?: Array<boolean | number | string>;
   html?: string;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
-  name?: HtmlEditorPredefinedToolbarItem | string;
+  name?: HtmlEditorPredefinedToolbarItem | string | string;
   options?: any;
   showText?: ShowTextMode;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
@@ -493,6 +513,9 @@ const _componentToolbarItem = (props: IToolbarItemProps) => {
     elementDescriptor: {
       OptionName: "items",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        command: { optionName: "commands", isCollectionItem: true }
+      },
       TemplateProps: [{
         tmplOption: "menuItemTemplate",
         render: "menuItemRender",
@@ -534,6 +557,8 @@ export {
   HtmlEditor,
   IHtmlEditorOptions,
   HtmlEditorRef,
+  Command,
+  ICommandProps,
   Converter,
   IConverterProps,
   FileUploaderOptions,

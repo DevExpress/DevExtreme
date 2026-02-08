@@ -204,7 +204,7 @@ const componentConfig = {
     dropDownOptions: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
@@ -214,9 +214,9 @@ const componentConfig = {
     isValid: Boolean,
     label: String,
     labelMode: String as PropType<LabelMode>,
-    max: [Date, Number, String],
+    max: [Date, Number, String] as PropType<Date | null | number | string>,
     maxLength: [Number, String],
-    min: [Date, Number, String],
+    min: [Date, Number, String] as PropType<Date | null | number | string>,
     name: String,
     onChange: Function as PropType<((e: ChangeEvent) => void)>,
     onClosed: Function as PropType<((e: ClosedEvent) => void)>,
@@ -256,10 +256,10 @@ const componentConfig = {
     validationMessageMode: String as PropType<ValidationMessageMode>,
     validationMessagePosition: String as PropType<Mode | Position>,
     validationStatus: String as PropType<ValidationStatus>,
-    value: [Date, Number, String],
+    value: [Date, Number, String] as PropType<Date | null | number | string>,
     valueChangeEvent: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,
@@ -455,7 +455,6 @@ const DxCalendarOptionsConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
-    "update:bindingOptions": null,
     "update:cellTemplate": null,
     "update:dateSerializationFormat": null,
     "update:disabled": null,
@@ -498,7 +497,6 @@ const DxCalendarOptionsConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     cellTemplate: {},
     dateSerializationFormat: String,
     disabled: Boolean,
@@ -506,14 +504,14 @@ const DxCalendarOptionsConfig = {
     elementAttr: Object as PropType<Record<string, any>>,
     firstDayOfWeek: Number as PropType<FirstDayOfWeek>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
     isValid: Boolean,
-    max: [Date, Number, String],
+    max: [Date, Number, String] as PropType<Date | null | number | string>,
     maxZoomLevel: String as PropType<CalendarZoomLevel>,
-    min: [Date, Number, String],
+    min: [Date, Number, String] as PropType<Date | null | number | string>,
     minZoomLevel: String as PropType<CalendarZoomLevel>,
     name: String,
     onDisposing: Function as PropType<((e: CalendarDisposingEvent) => void)>,
@@ -532,10 +530,10 @@ const DxCalendarOptionsConfig = {
     validationMessageMode: String as PropType<ValidationMessageMode>,
     validationMessagePosition: String as PropType<Position>,
     validationStatus: String as PropType<ValidationStatus>,
-    value: [Array, Date, Number, String] as PropType<(Array<Date | number | string>) | Date | number | string>,
+    value: [Array, Date, Number, String] as PropType<(Array<Date | null | number | string>) | Date | null | number | string>,
     visible: Boolean,
     weekNumberRule: String as PropType<WeekNumberRule>,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     zoomLevel: String as PropType<CalendarZoomLevel>
   }
 };
@@ -598,8 +596,6 @@ const DxDropDownOptionsConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:animation": null,
-    "update:bindingOptions": null,
-    "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,
@@ -650,8 +646,6 @@ const DxDropDownOptionsConfig = {
   props: {
     accessKey: String,
     animation: Object as PropType<Record<string, any>>,
-    bindingOptions: Object as PropType<Record<string, any>>,
-    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -662,15 +656,15 @@ const DxDropDownOptionsConfig = {
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    maxWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    minHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    minWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    maxHeight: [Number, String],
+    maxWidth: [Number, String],
+    minHeight: [Number, String],
+    minWidth: [Number, String],
     onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
     onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
     onHidden: Function as PropType<((e: EventInfo<any>) => void)>,
@@ -696,7 +690,7 @@ const DxDropDownOptionsConfig = {
     titleTemplate: {},
     toolbarItems: Array as PropType<Array<dxPopupToolbarItem>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     wrapperAttr: {}
   }
 };
@@ -823,7 +817,6 @@ const DxOptionsConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
-    "update:bindingOptions": null,
     "update:disabled": null,
     "update:elementAttr": null,
     "update:focusStateEnabled": null,
@@ -850,11 +843,10 @@ const DxOptionsConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
@@ -872,7 +864,7 @@ const DxOptionsConfig = {
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   }
 };
 

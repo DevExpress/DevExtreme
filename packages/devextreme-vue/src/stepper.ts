@@ -69,7 +69,7 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     items: Array as PropType<Array<dxStepperItem>>,
@@ -90,7 +90,7 @@ const componentConfig = {
     selectOnFocus: Boolean,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,
@@ -151,20 +151,20 @@ const DxItemConfig = {
     "update:hint": null,
     "update:icon": null,
     "update:isValid": null,
+    "update:label": null,
     "update:optional": null,
     "update:template": null,
     "update:text": null,
-    "update:title": null,
   },
   props: {
     disabled: Boolean,
     hint: String,
     icon: String,
     isValid: Boolean,
+    label: String,
     optional: Boolean,
     template: {},
-    text: String,
-    title: String
+    text: String
   }
 };
 

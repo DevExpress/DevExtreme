@@ -17,6 +17,7 @@ import {
 import { StateStoreType } from 'devextreme/common/grids';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-state-storing',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDataGridStateStoringComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -103,7 +106,7 @@ export class DxoDataGridStateStoringComponent extends NestedOption implements On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridStateStoringComponent
   ],
   exports: [

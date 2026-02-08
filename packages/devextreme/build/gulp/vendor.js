@@ -13,7 +13,7 @@ const DESTINATION_CSS_PATH = './artifacts/css';
 
 const JS_VENDORS = [
     {
-        path: 'exceljs/dist/exceljs.js'
+        path: 'devextreme-exceljs-fork/dist/dx-exceljs-fork.js'
     },
     {
         path: 'file-saver/dist/FileSaver.js'
@@ -33,49 +33,6 @@ const JS_VENDORS = [
     {
         path: 'knockout/build/output/knockout-latest.js',
         suffix: 'debug'
-    },
-    {
-        path: 'cldrjs/dist/cldr.js',
-        noUglyFile: true
-    },
-    {
-        path: 'globalize/dist/globalize.js',
-        noUglyFile: true
-    },
-    {
-        path: 'cldrjs/dist/cldr/event.js',
-        dir: 'cldr',
-        noUglyFile: true
-    },
-    {
-        path: 'cldrjs/dist/cldr/supplemental.js',
-        dir: 'cldr',
-        noUglyFile: true
-    },
-    {
-        path: 'cldrjs/dist/cldr/unresolved.js',
-        dir: 'cldr',
-        noUglyFile: true
-    },
-    {
-        path: 'globalize/dist/globalize/number.js',
-        dir: 'globalize',
-        noUglyFile: true
-    },
-    {
-        path: 'globalize/dist/globalize/currency.js',
-        dir: 'globalize',
-        noUglyFile: true
-    },
-    {
-        path: 'globalize/dist/globalize/date.js',
-        dir: 'globalize',
-        noUglyFile: true
-    },
-    {
-        path: 'globalize/dist/globalize/message.js',
-        dir: 'globalize',
-        noUglyFile: true
     },
     {
         path: 'devexpress-diagram/dist/dx-diagram.js'

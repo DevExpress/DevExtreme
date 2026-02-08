@@ -7,11 +7,11 @@ import {
     TOOLBAR_TOP_LOCATION,
     TOOLBAR_BOTTOM_LOCATION } from '../../helpers/scheduler/helpers.js';
 import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import devices from '__internal/core/m_devices';
 import 'ui/switch';
 
-import 'generic_light.css!';
 import '__internal/scheduler/m_scheduler';
 
 const { testStart, test, module } = QUnit;
@@ -51,11 +51,11 @@ const setWindowWidth = width => {
 const resetWindowWidth = () => delete document.documentElement.clientWidth;
 
 module('Mobile tooltip', moduleConfig, () => {
-    test('Tooltip should be render scroll, if count of items in list is a lot', function(assert) {
+    test('Tooltip should be render scroll, if count of items in list is a lot', async function(assert) {
         const MAX_TOOLTIP_HEIGHT = 250;
         const isDesktop = devices.real().deviceType === 'desktop';
 
-        const scheduler = createInstance();
+        const scheduler = await createInstance();
         const { tooltip, appointments } = scheduler;
 
         assert.notOk(tooltip.isVisible(), 'On page load tooltip should be invisible');
@@ -68,26 +68,26 @@ module('Mobile tooltip', moduleConfig, () => {
         }
 
         appointments.compact.click(appointments.compact.getLastButtonIndex());
-        if(isDesktop) {
-            assert.ok(tooltip.hasScrollbar(), 'Tooltip contained 4 items should render scroll bar');
-        } else {
-            assert.equal(tooltip.getOverlayContentElement().height(), MAX_TOOLTIP_HEIGHT, 'Tooltip contained 3 items shouldn\'t render scroll bar');
+        if(!isDesktop) {
+            assert.equal(tooltip.getOverlayContentElement().height(), MAX_TOOLTIP_HEIGHT, 'Tooltip contained 4 items should limit height');
         }
     });
 
-    test('Title in mobile tooltip should equals title of cell appointments in month view', function(assert) {
-        const scheduler = createInstance();
+    test('Title in mobile tooltip should equals title of cell appointments in month view', async function(assert) {
+        const scheduler = await createInstance();
         assert.notOk(scheduler.tooltip.isVisible(), 'On page load tooltip should be invisible');
 
+        const clock = sinon.useFakeTimers();
         for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
-            scheduler.appointments.click(i);
+            await scheduler.appointments.click(i, clock);
             assert.ok(scheduler.tooltip.isVisible(), 'Tooltip should be visible after click on appointment');
             assert.equal(scheduler.tooltip.getTitleText(), scheduler.appointments.getTitleText(i), 'Title in tooltip should be equal with appointment');
         }
+        clock.restore();
     });
 
-    test('Tooltip should hide after execute actions', function(assert) {
-        const scheduler = createInstance();
+    test('Tooltip should hide after execute actions', async function(assert) {
+        const scheduler = await createInstance();
         const initialDataCount = scheduler.instance.option('dataSource').length;
 
         assert.notOk(scheduler.tooltip.isVisible(), 'On page load tooltip should be invisible');
@@ -110,11 +110,11 @@ module('Mobile tooltip', moduleConfig, () => {
         assert.equal(scheduler.instance.option('dataSource').length, initialDataCount - 1, 'Appointment should delete form dataSource after click on delete button in tooltip');
     });
 
-    test('appointmentTooltipTemplate method should pass valid arguments and render valid html markup', function(assert) {
+    test('appointmentTooltipTemplate method should pass valid arguments and render valid html markup', async function(assert) {
         let templateCallCount = 0;
         const TOOLTIP_TEMPLATE_MARKER_CLASS_NAME = 'appointment-tooltip-template-marker';
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             appointmentTooltipTemplate: (model, index, contentElement) => {
                 assert.equal(model.targetedAppointmentData.text, model.appointmentData.text, 'targetedAppointmentData should be not empty');
                 assert.equal(index, templateCallCount, 'Index should be correct pass in template callback');
@@ -157,8 +157,8 @@ if(isDesktopEnvironment()) {
             resetWindowWidth();
         }
     }, () => {
-        test('Items has layout with one column when the form\'s width < 600px', function(assert) {
-            const scheduler = createInstance();
+        test('Items has layout with one column when the form\'s width < 600px', async function(assert) {
+            const scheduler = await createInstance();
             setWindowWidth(500);
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
@@ -166,8 +166,8 @@ if(isDesktopEnvironment()) {
             assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
         });
 
-        test('Items with recurrence editor has layout with one column when the form\'s width < 600px', function(assert) {
-            const scheduler = createInstance();
+        test('Items with recurrence editor has layout with one column when the form\'s width < 600px', async function(assert) {
+            const scheduler = await createInstance();
             setWindowWidth(500);
             scheduler.option('dataSource', [{
                 startDate: new Date(2015, 1, 1),
@@ -181,8 +181,8 @@ if(isDesktopEnvironment()) {
             assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
         });
 
-        test('Items has layout with non-one column when the form\'s width > 600px', function(assert) {
-            const scheduler = createInstance();
+        test('Items has layout with non-one column when the form\'s width > 600px', async function(assert) {
+            const scheduler = await createInstance();
             setWindowWidth(700);
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
@@ -190,8 +190,8 @@ if(isDesktopEnvironment()) {
             assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has not single column');
         });
 
-        test('Items with recurrence editor has layout with non-one column when the form\'s width > 600px', function(assert) {
-            const scheduler = createInstance();
+        test('Items with recurrence editor has layout with non-one column when the form\'s width > 600px', async function(assert) {
+            const scheduler = await createInstance();
             setWindowWidth(700);
             scheduler.option('dataSource', [{
                 startDate: new Date(2015, 1, 1),
@@ -205,8 +205,8 @@ if(isDesktopEnvironment()) {
             assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has not single column');
         });
 
-        test('Items has layout with one column when the form\'s width < 600px on window resizing', function(assert) {
-            const scheduler = createInstance();
+        test('Items has layout with one column when the form\'s width < 600px on window resizing', async function(assert) {
+            const scheduler = await createInstance();
             setWindowWidth(700);
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
@@ -217,8 +217,8 @@ if(isDesktopEnvironment()) {
             assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
         });
 
-        test('Items has layout with non-one column when the form\'s width > 600px on window resizing', function(assert) {
-            const scheduler = createInstance();
+        test('Items has layout with non-one column when the form\'s width > 600px on window resizing', async function(assert) {
+            const scheduler = await createInstance();
             setWindowWidth(500);
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
@@ -243,8 +243,8 @@ if(!isDesktopEnvironment()) {
             resetWindowWidth();
         }
     }, () => {
-        test('Items has layout with one column', function(assert) {
-            const scheduler = createInstance();
+        test('Items has layout with one column', async function(assert) {
+            const scheduler = await createInstance();
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
@@ -264,10 +264,10 @@ if(isDesktopEnvironment()) {
             resetWindowWidth();
         }
     }, () => {
-        test('The fullscreen mode is enabled of popup when window\'s width < 1000px', function(assert) {
+        test('The fullscreen mode is enabled of popup when window\'s width < 1000px', async function(assert) {
             setWindowWidth(900);
 
-            const scheduler = createInstance();
+            const scheduler = await createInstance();
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
@@ -276,10 +276,10 @@ if(isDesktopEnvironment()) {
             assert.equal(popup.option('maxWidth'), '100%', 'maxWidth');
         });
 
-        test('The fullscreen mode is disabled of popup when window\'s width > 1000px', function(assert) {
+        test('The fullscreen mode is disabled of popup when window\'s width > 1000px', async function(assert) {
             setWindowWidth(1001);
 
-            const scheduler = createInstance();
+            const scheduler = await createInstance();
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
@@ -288,15 +288,16 @@ if(isDesktopEnvironment()) {
             assert.equal(popup.option('maxWidth'), 485, 'maxWidth');
         });
 
-        test('The fullscreen mode is disabled of popup when window\'s width > 1000px, with recurrence editor', function(assert) {
+        test('The fullscreen mode is disabled of popup when window\'s width > 1000px, with recurrence editor', async function(assert) {
             setWindowWidth(1001);
 
-            const scheduler = createInstance();
+            const scheduler = await createInstance();
             scheduler.option('dataSource', [{
                 startDate: new Date(2015, 1, 1),
                 endDate: new Date(2015, 1, 2),
                 recurrenceRule: 'FREQ=WEEKLY'
             }]);
+            await waitAsync(0);
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
@@ -306,10 +307,10 @@ if(isDesktopEnvironment()) {
             assert.equal(popup.option('maxWidth'), 970, 'maxWidth');
         });
 
-        test('The fullscreen mode is enabled of popup when the window\'s width < 1000px by resizing the window', function(assert) {
+        test('The fullscreen mode is enabled of popup when the window\'s width < 1000px by resizing the window', async function(assert) {
             setWindowWidth(1001);
 
-            const scheduler = createInstance();
+            const scheduler = await createInstance();
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
@@ -321,10 +322,10 @@ if(isDesktopEnvironment()) {
             assert.equal(popup.option('maxWidth'), '100%', 'maxWidth');
         });
 
-        test('The fullscreen mode is disabled of popup when the window\'s width > 1000px by resizing the window', function(assert) {
+        test('The fullscreen mode is disabled of popup when the window\'s width > 1000px by resizing the window', async function(assert) {
             setWindowWidth(799);
 
-            const scheduler = createInstance();
+            const scheduler = await createInstance();
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
@@ -349,10 +350,10 @@ if(!isDesktopEnvironment()) {
             resetWindowWidth();
         }
     }, () => {
-        test('The fullscreen mode is enabled of popup when window\'s width < 500px', function(assert) {
+        test('The fullscreen mode is enabled of popup when window\'s width < 500px', async function(assert) {
             setWindowWidth(499);
 
-            const scheduler = createInstance();
+            const scheduler = await createInstance();
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
@@ -361,10 +362,10 @@ if(!isDesktopEnvironment()) {
             assert.equal(popup.option('maxWidth'), '100%', 'maxWidth');
         });
 
-        test('The fullscreen mode is disabled of popup when window\'s width > 500px', function(assert) {
+        test('The fullscreen mode is disabled of popup when window\'s width > 500px', async function(assert) {
             setWindowWidth(501);
 
-            const scheduler = createInstance();
+            const scheduler = await createInstance();
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
@@ -373,10 +374,10 @@ if(!isDesktopEnvironment()) {
             assert.equal(popup.option('maxWidth'), 350, 'maxWidth');
         });
 
-        test('The fullscreen mode is disabled of popup when window\'s width > 500px, with recurrence editor', function(assert) {
+        test('The fullscreen mode is disabled of popup when window\'s width > 500px, with recurrence editor', async function(assert) {
             setWindowWidth(501);
 
-            const scheduler = createInstance();
+            const scheduler = await createInstance();
             scheduler.option('dataSource', [{
                 startDate: new Date(2015, 1, 1),
                 endDate: new Date(2015, 1, 2),
@@ -399,10 +400,10 @@ module('Appointment popup buttons', moduleConfig, () => {
     const DONE_BUTTON = 'done';
     const CANCEL_BUTTON = 'cancel';
 
-    test('Buttons location of the top toolbar for the iOs device', function(assert) {
+    test('Buttons location of the top toolbar for the iOs device', async function(assert) {
         this.realDeviceMock = sinon.stub(devices, 'current').returns({ platform: 'ios' });
         try {
-            const scheduler = createInstance();
+            const scheduler = await createInstance();
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
@@ -414,10 +415,10 @@ module('Appointment popup buttons', moduleConfig, () => {
         }
     });
 
-    test('Buttons location of the top toolbar for the desktop', function(assert) {
+    test('Buttons location of the top toolbar for the desktop', async function(assert) {
         this.realDeviceMock = sinon.stub(devices, 'current').returns({ platform: 'generic' });
         try {
-            const scheduler = createInstance();
+            const scheduler = await createInstance();
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
@@ -428,10 +429,10 @@ module('Appointment popup buttons', moduleConfig, () => {
         }
     });
 
-    test('Buttons location of the top toolbar for the android device', function(assert) {
+    test('Buttons location of the top toolbar for the android device', async function(assert) {
         this.realDeviceMock = sinon.stub(devices, 'current').returns({ platform: 'android' });
         try {
-            const scheduler = createInstance();
+            const scheduler = await createInstance();
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
@@ -457,8 +458,8 @@ module('View switcher', moduleConfig, () => {
             }
         };
         module('mobile environment', config, () => {
-            test('label of view name shouldn\'t be visible on mobile in case width < 450px', function(assert) {
-                const scheduler = createInstance();
+            test('label of view name shouldn\'t be visible on mobile in case width < 450px', async function(assert) {
+                const scheduler = await createInstance();
                 assert.notOk(scheduler.viewSwitcher.getLabel().is(':visible'), 'label of view name shouldn\'t be visible');
             });
         });

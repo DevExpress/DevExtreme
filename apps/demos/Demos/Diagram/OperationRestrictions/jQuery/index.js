@@ -50,7 +50,7 @@ $(() => {
       }
     },
     onRequestEditOperation(e) {
-      const diagram = $('#diagram').dxDiagram().dxDiagram('instance');
+      const diagram = e.component.instance();
       if (e.operation === 'addShape') {
         if (e.args.shape.type !== 'employee' && e.args.shape.type !== 'team') {
           if (e.reason !== 'checkUIElementAvailability') { showToast("You can add only a 'Team' or 'Employee' shape."); }

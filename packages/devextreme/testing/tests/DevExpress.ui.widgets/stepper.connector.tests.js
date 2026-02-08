@@ -2,9 +2,10 @@ import $ from 'jquery';
 
 import Connector, {
     STEPPER_CONNECTOR_VALUE_CLASS,
+    STEPPER_CONNECTOR_CONTAINER_CLASS,
 } from '__internal/ui/stepper/connector';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 
 QUnit.testStart(() => {
@@ -20,7 +21,7 @@ QUnit.testStart(() => {
             transition: none !important;
         }
     </style>
-    
+
     <div id="container">
         <div id="connector"></div>
     </div>`;
@@ -41,6 +42,10 @@ const moduleConfig = {
             this.instance.dispose();
 
             init(options, selector);
+        };
+
+        this.getContainer = () => {
+            return this.$element.find(`.${STEPPER_CONNECTOR_CONTAINER_CLASS}`);
         };
 
         this.getConnectorValue = () => {
@@ -81,13 +86,13 @@ QUnit.module('Size option', moduleConfig, () => {
                 size: 75,
             });
 
-            assert.strictEqual(this.$element.css(dimension), '300px');
-            assert.strictEqual(this.$element.css(newDimension), '2px');
+            assert.strictEqual(this.getContainer().css(dimension), '300px');
+            assert.strictEqual(this.getContainer().css(newDimension), '2px');
 
             this.instance.option('orientation', newOrientation);
 
-            assert.strictEqual(this.$element.css(dimension), '2px');
-            assert.strictEqual(this.$element.css(newDimension), '300px');
+            assert.strictEqual(this.getContainer().css(dimension), '2px');
+            assert.strictEqual(this.getContainer().css(newDimension), '300px');
         });
     });
 });

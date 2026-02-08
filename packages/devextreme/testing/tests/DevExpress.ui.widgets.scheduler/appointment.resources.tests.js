@@ -7,7 +7,7 @@ import {
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const {
     module,
@@ -21,11 +21,9 @@ const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 module('Integration: Appointment resources', {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 }, () => {
     [
@@ -33,7 +31,7 @@ module('Integration: Appointment resources', {
         'virtual'
     ].forEach(scrollingMode => {
         module(`Scrolling mode ${scrollingMode}`, () => {
-            test('Task with resources should contain a right data attr', function(assert) {
+            test('Task with resources should contain a right data attr', async function(assert) {
                 const data = new DataSource({
                     store: [
                         { text: 'Item 1', ownerId: 2, roomId: 1, startDate: new Date(2015, 1, 8), endDate: new Date(2015, 1, 8, 0, 30) },
@@ -42,7 +40,7 @@ module('Integration: Appointment resources', {
                     ]
                 });
 
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     currentDate: new Date(2015, 1, 9),
                     currentView: 'week',
                     resources: [{
@@ -58,7 +56,6 @@ module('Integration: Appointment resources', {
                     scrolling: { mode: scrollingMode },
                 });
 
-                this.clock.tick(300);
                 scheduler.instance.focus();
 
                 const tasks = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
@@ -75,14 +72,14 @@ module('Integration: Appointment resources', {
                 assert.ok(!tasks.eq(2).attr('data-roomid-2'));
             });
 
-            test('Task with resources should contain a right data attr if field contains a space', function(assert) {
+            test('Task with resources should contain a right data attr if field contains a space', async function(assert) {
                 const data = new DataSource({
                     store: [
                         { text: 'Item 1', 'owner  Id': 2, startDate: new Date(2015, 1, 8), endDate: new Date(2015, 1, 8, 0, 30) },
                     ]
                 });
 
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     currentDate: new Date(2015, 1, 9),
                     currentView: 'week',
                     resources: [{
@@ -95,7 +92,6 @@ module('Integration: Appointment resources', {
                     scrolling: { mode: scrollingMode },
                 });
 
-                this.clock.tick(300);
                 scheduler.instance.focus();
 
                 const tasks = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);

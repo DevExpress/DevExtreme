@@ -1,4 +1,4 @@
-In this demo, the DataGrid allows users to select only one row at a time. To enable this mode, set the **selection**.[mode](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/selection/#mode) property to *"single"*. Press Ctrl to unselect a row.
+In this demo, the DataGrid allows users to select only one row at a time. To enable this mode, set the **selection**.[mode](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/selection/#mode) property to *"single"*. You can click a row to select it, and **Ctrl+Click** to unselect it. Focus the component's data cells with the arrow keys, **Tab**, **Shift+Tab**, **Home**, and **End**, and press **Space** to select a row. Use **Ctrl+Space** to unselect the selected row.
 
 You can access the selected row data from the [onSelectionChanged](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#onSelectionChanged) function. In this demo, this function fetches the selected row's information and displays it under the grid.
 <!--split-->

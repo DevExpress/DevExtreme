@@ -1,1 +1,1 @@
-export { default } from '../common/core/localization/currency';
+export { default } from '../__internal/core/localization/currency';

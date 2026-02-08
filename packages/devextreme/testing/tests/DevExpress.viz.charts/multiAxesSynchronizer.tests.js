@@ -1,14 +1,11 @@
-const $ = require('jquery');
-const vizMocks = require('../../helpers/vizMocks.js');
-const translator2DModule = require('viz/translators/translator2d');
-const rangeModule = require('viz/translators/range');
-const multiAxesSynchronizer = require('viz/chart_components/multi_axes_synchronizer');
-const chartMocks = require('../../helpers/chartMocks.js');
-const MockAxis = chartMocks.MockAxis;
-const insertMockFactory = chartMocks.insertMockFactory;
-const restoreMockFactory = chartMocks.restoreMockFactory;
+import $ from 'jquery';
+import { Renderer } from '../../helpers/vizMocks.js';
+import translator2DModule from 'viz/translators/translator2d';
+import rangeModule from 'viz/translators/range';
+import multiAxesSynchronizer from '__internal/viz/chart_components/multi_axes_synchronizer';
+import { MockAxis, insertMockFactory, restoreMockFactory } from '../../helpers/chartMocks.js';
 
-require('viz/chart');
+import 'viz/chart';
 
 QUnit.testStart(function() {
     const markup = '<div id="chartContainer"></div>';
@@ -44,7 +41,7 @@ function checkAxesSynchronization(assert, options) {
                 height: 400
             };
             const range = new rangeModule.Range(options.range);
-            const axis = new MockAxis({ renderer: new vizMocks.Renderer() });
+            const axis = new MockAxis({ renderer: new Renderer() });
             const translator = new translator2DModule.Translator2D({}, canvas, { shiftZeroValue: true });
             translator.updateBusinessRange(range);
             const visibleArea = translator.getCanvasVisibleArea();
@@ -91,10 +88,8 @@ function checkAxesSynchronization(assert, options) {
 
     const axes = createAxes(axesOptions);
 
-    // act
     multiAxesSynchronizer.synchronize(axes);
 
-    // assert
     $.each(axes, function(i, axis) {
         if(axesOptionsAfterSync[i].minorTickValues) {
             assert.deepEqual(axis.getTicksValues().minorTicksValues, axesOptionsAfterSync[i].minorTickValues, 'minorTicks after synchronization for axis ' + i);
@@ -318,7 +313,6 @@ QUnit.test('No syncronize axis if viewport have field \'action\' with value \'zo
                     maxVisible: 10
                 },
                 tickValues: [2, 4, 6, 8]
-
             },
             {
                 range: {
@@ -363,7 +357,6 @@ QUnit.test('No syncronize axis if viewport action is "pan"', function(assert) {
                     maxVisible: 10
                 },
                 tickValues: [2, 4, 6, 8]
-
             },
             {
                 range: {
@@ -1097,7 +1090,6 @@ QUnit.test('Synchronization for 2 axis with paddings and with different tickValu
     });
 });
 
-
 QUnit.test('Synchronization for 3 axis with paddings and with different tickValues count', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -1536,7 +1528,6 @@ QUnit.test('No synchronization for 2 axis. Both axis has discrete type', functio
                     categories: ['5', '6', '7', '8', '9', '10', '11']
                 },
                 tickValues: ['5', '6', '7', '8', '9', '10', '11']
-
             },
             {
                 range: {
@@ -1833,6 +1824,60 @@ QUnit.test('Synchronization two axis with paddins, inverted axis, non zero paddi
                     maxVisible: 200200
                 },
                 tickValues: [50000, 100000, 150000, 200000]
+            }
+        ],
+        syncIndexes: [[0, 0]]
+    });
+});
+
+QUnit.test('Synchronization two axis with synchronizedValue and not overlapped values for 2 axis, not correct zero value (T1295525)', function(assert) {
+    checkAxesSynchronization(assert, {
+        axesOptions: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    max: 425000,
+                    maxVisible: 425000,
+                    min: 0,
+                    minVisible: 280000
+                },
+                tickValues: [250000, 300000, 325000, 350000, 375000, 400000, 425000],
+                tickInterval: 25000,
+                synchronizedValue: 0,
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    max: 28,
+                    maxVisible: 28,
+                    min: 0,
+                    minVisible: 0
+                },
+                tickValues: [0, 5, 10, 15, 20, 25, 30],
+                tickInterval: 5,
+                synchronizedValue: 0,
+            }
+        ],
+        axesOptionsAfterSync: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 0,
+                    minVisible: 0,
+                    max: 425000,
+                    maxVisible: 425000
+                },
+                tickValues: [0, 25000, 50000, 75000, 100000, 125000, 150000, 175000, 200000, 225000, 250000, 275000, 300000, 325000, 350000, 375000, 400000, 425000]
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    min: 0,
+                    minVisible: 0,
+                    max: 85,
+                    maxVisible: 85,
+                },
+                tickValues: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85]
             }
         ],
         syncIndexes: [[0, 0]]

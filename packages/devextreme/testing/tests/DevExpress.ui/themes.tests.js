@@ -3,6 +3,7 @@
 import $ from 'jquery';
 import themes from 'ui/themes';
 import viewPortUtils from 'core/utils/view_port';
+import { uiLayerInitialized } from '__internal/core/utils/m_common';
 
 const viewPortChanged = viewPortUtils.changeCallback;
 
@@ -65,7 +66,7 @@ QUnit.module('Selector check', () => {
         selectorText = selectorText.replace(/[+~>]/g, '');
 
         // normalize whitespace
-        selectorText = $.trim(selectorText).replace(/\s+/g, ' ');
+        selectorText = selectorText.trim().replace(/\s+/g, ' ');
 
         return selectorText;
     }
@@ -80,7 +81,7 @@ QUnit.module('Selector check', () => {
         }
 
         for(i = 0; i < parts.length; i++) {
-            part = $.trim(parts[i]);
+            part = parts[i].trim();
 
             if(part === '') {
                 continue;
@@ -250,6 +251,7 @@ QUnit.module('dx-theme links', (hooks) => {
     let $frame;
     const frames = [];
     hooks.beforeEach(() => {
+        uiLayerInitialized.resolve();
         themes.setDefaultTimeout(100);
         $frame = $('<iframe></iframe>').appendTo('body');
         frames.push($frame);
@@ -605,7 +607,11 @@ QUnit.module('dx-theme links', (hooks) => {
     });
 });
 
-QUnit.module('misc', () => {
+QUnit.module('misc', (hooks) => {
+    hooks.beforeEach(() => {
+        uiLayerInitialized.resolve();
+    });
+
     const DX_HAIRLINES_CLASS = 'dx-hairlines';
 
     test('attachCssClasses', function(assert) {
@@ -817,5 +823,41 @@ QUnit.module('initialized method', (hooks) => {
             assert.ok(true);
             themes.setDefaultTimeout(defaultTimeout);
         });
+    });
+});
+
+QUnit.module('readThemeMarker error handling', () => {
+    test('readThemeMarker returns null when getComputedStyle throws an error', function(assert) {
+        const done = assert.async();
+        const originalGetComputedStyle = window.getComputedStyle;
+        window.getComputedStyle = undefined;
+
+        try {
+            themes.resetTheme();
+            const value = themes.current();
+            assert.strictEqual(value, null, 'current() returns null on getComputedStyle being undefined');
+        } finally {
+            window.getComputedStyle = originalGetComputedStyle;
+            done();
+        }
+    });
+
+    test('waitForThemeLoad resolves even if getComputedStyle continuously throws', function(assert) {
+        const done = assert.async();
+        const originalGetComputedStyle = window.getComputedStyle;
+        window.getComputedStyle = undefined;
+
+        const TEST_TIMEOUT = 30;
+        themes.resetTheme();
+        themes.setDefaultTimeout(TEST_TIMEOUT);
+
+        themes.ready(() => {
+            assert.strictEqual(themes.current(), null, 'theme remains null after timeout');
+            window.getComputedStyle = originalGetComputedStyle;
+            themes.setDefaultTimeout(defaultTimeout);
+            done();
+        });
+
+        themes.waitForThemeLoad('some.nonexistent.theme');
     });
 });

@@ -1,0 +1,4 @@
+To access a Web API service from the client, use the <a href="https://github.com/DevExpress/DevExtreme.AspNet.Data/blob/master/docs/client-side-with-jquery.md#api-reference" target="_blank">createStore</a> method which is part of the <a href="https://github.com/DevExpress/DevExtreme.AspNet.Data#devextreme-aspnet-data" target="_blank">DevExtreme.AspNet.Data</a> extension. This extension also allows you to process data for DevExtreme components <a href="https://github.com/DevExpress/DevExtreme.AspNet.Data/blob/master/docs/server-side-configuration.md" target="_blank">on the server</a>. 
+ 
+To notify our CardView that data is processed on the server, set the [remoteOperations](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/remoteOperations/) property to `true`.
+<!--split-->

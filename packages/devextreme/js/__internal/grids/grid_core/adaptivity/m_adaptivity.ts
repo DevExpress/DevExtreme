@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/method-signature-style */
 /* eslint-disable max-classes-per-file */
 import { name as clickEventName } from '@js/common/core/events/click';
 import eventsEngine from '@js/common/core/events/core/events_engine';
@@ -20,11 +19,13 @@ import { isMaterial } from '@js/ui/themes';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import type { ExportController } from '../../data_grid/export/m_export';
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
 import type { ColumnsResizerViewController, DraggingHeaderViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { DataController } from '../data_controller/m_data_controller';
 import type { EditingController } from '../editing/m_editing';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
+import type { Direction } from '../keyboard_navigation/const';
+import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import modules from '../m_modules';
 import type { Module, ModuleType } from '../m_types';
@@ -504,6 +505,28 @@ export class AdaptiveColumnsController extends modules.ViewController {
     }
   }
 
+  public _toggleGroupAdaptiveRowVisibility(isBestFit: boolean) {
+    const hasHiddenColumns = this.hasHiddenColumns() || this.getHidingColumnsQueue().length > 0;
+
+    if (!hasHiddenColumns) {
+      return;
+    }
+
+    const rowsView = this.getView(ROWS_VIEW);
+    const items = this._dataController.items();
+
+    if (!items || items.length === 0) {
+      return;
+    }
+
+    items.forEach((item, index) => {
+      if (item.rowType === ADAPTIVE_ROW_TYPE) {
+        const $row = $(rowsView.getRowElement(index));
+        $row.css('display', isBestFit ? 'none' : '');
+      }
+    });
+  }
+
   private _isCellValid($cell) {
     return $cell && $cell.length && !$cell.hasClass(MASTER_DETAIL_CELL_CLASS) && !$cell.hasClass(GROUP_CELL_CLASS);
   }
@@ -806,7 +829,6 @@ export class AdaptiveColumnsController extends modules.ViewController {
       return;
     }
 
-    // @ts-expect-errors
     const $row = $(this.component.getRowElement(rowIndex));
 
     this.setCommandAdaptiveAriaLabel($row, label);
@@ -814,7 +836,10 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
   public setCommandAdaptiveAriaLabel($row, labelName) {
     const $adaptiveCommand = $row.find('.dx-command-adaptive');
-    $adaptiveCommand.attr('aria-label', messageLocalization.format(labelName));
+
+    if ($adaptiveCommand.length) {
+      this.setAria('label', messageLocalization.format(labelName), $adaptiveCommand);
+    }
   }
 }
 
@@ -847,6 +872,10 @@ const keyboardNavigation = (
       // @ts-expect-error
       eventsEngine.trigger($cell, 'focus');
     }
+  }
+
+  protected isFocusableColumn(column: Column): boolean {
+    return super.isFocusableColumn(column) && column.visibleWidth !== HIDDEN_COLUMNS_WIDTH;
   }
 
   public _isCellElement($cell) {
@@ -967,8 +996,8 @@ const exportExtender = (
 const columnsResizer = (
   Base: ModuleType<ColumnsResizerViewController>,
 ) => class AdaptivityColumnsResizerExtender extends Base {
-  protected _pointCreated(point, cellsLength, columns) {
-    const result = super._pointCreated(point, cellsLength, columns);
+  protected _pointCreated(point, columns, cells?: dxElementWrapper) {
+    const result = super._pointCreated(point, columns, cells);
     const currentColumn = columns[point.columnIndex] || {};
     const nextColumnIndex = this._getNextColumnIndex(point.columnIndex);
     const nextColumn = columns[nextColumnIndex] || {};
@@ -993,8 +1022,12 @@ const columnsResizer = (
 const draggingHeader = (
   Base: ModuleType<DraggingHeaderViewController>,
 ) => class AdaptivityDraggingHeaderExtender extends Base {
-  protected _pointCreated(point, columns, location, sourceColumn) {
-    const result = super._pointCreated(point, columns, location, sourceColumn);
+  protected _pointCreated({
+    point, columns, location, sourceColumn, cells,
+  }) {
+    const result = super._pointCreated({
+      point, columns, location, sourceColumn, cells,
+    });
     const column = columns[point.columnIndex - 1] || {};
     const hasAdaptiveHiddenWidth = column.visibleWidth === HIDDEN_COLUMNS_WIDTH;
 
@@ -1294,6 +1327,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
   }
 
   protected _toggleBestFitMode(isBestFit) {
+    this._adaptiveColumnsController._toggleGroupAdaptiveRowVisibility(isBestFit);
     isBestFit && this._adaptiveColumnsController._showHiddenColumns();
     super._toggleBestFitMode(isBestFit);
   }
@@ -1301,6 +1335,40 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
   protected _needStretch() {
     const adaptiveColumnsController = this._adaptiveColumnsController;
     return super._needStretch.apply(this, arguments as any) || adaptiveColumnsController.getHidingColumnsQueue().length || adaptiveColumnsController.hasHiddenColumns();
+  }
+};
+
+const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationController>) => class AdaptivityHeadersKeyboardNavigationExtender extends Base {
+  protected getColumnVisibleIndexCorrection(
+    visibleIndex: number,
+    rowIndex: number,
+    direction: Direction,
+  ): number {
+    let indexCorrection = super.getColumnVisibleIndexCorrection(visibleIndex, rowIndex, direction);
+    let visibleColumns = this._columnsController.getVisibleColumns(rowIndex);
+
+    visibleColumns = direction === 'next'
+      ? visibleColumns.slice(visibleIndex + 1)
+      : visibleColumns.slice(0, visibleIndex).reverse();
+
+    while (visibleColumns?.shift()?.visibleWidth === HIDDEN_COLUMNS_WIDTH) {
+      indexCorrection += direction === 'next' ? 1 : -1;
+    }
+
+    return indexCorrection;
+  }
+
+  protected getFocusableColumns(rowIndex?: number, bandColumnId?: number): Column[] {
+    return super.getFocusableColumns(rowIndex, bandColumnId)
+      .filter((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
+  }
+
+  protected getDraggableColumns(
+    column,
+    rowIndex: number,
+  ): any[] {
+    return super.getDraggableColumns(column, rowIndex)
+      .filter((col) => col.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
   }
 };
 
@@ -1329,6 +1397,7 @@ export const adaptivityModule: Module = {
       editorFactory,
       columns,
       keyboardNavigation,
+      headersKeyboardNavigation,
     },
   },
 };

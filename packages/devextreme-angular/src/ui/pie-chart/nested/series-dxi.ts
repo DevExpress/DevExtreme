@@ -17,16 +17,26 @@ import { PieChartSeriesInteractionMode, SmallValuesGroupingMode } from 'devextre
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_series } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-pie-chart-series',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_series,
+           useExisting: DxiPieChartSeriesComponent,
+        }
+    ]
 })
 export class DxiPieChartSeriesComponent extends CollectionNestedOption {
     @Input()
@@ -179,7 +189,7 @@ export class DxiPieChartSeriesComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiPieChartSeriesComponent
   ],
   exports: [

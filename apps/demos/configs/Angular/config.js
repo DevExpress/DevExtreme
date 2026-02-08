@@ -12,6 +12,7 @@ const componentNames = [
   'button-group',
   'button',
   'calendar',
+  'card-view',
   'chart',
   'chat',
   'check-box',
@@ -119,8 +120,8 @@ window.config = {
     'devextreme/viz/palette.js': {
       'esModule': true,
     },
-    /** exceljs&file-saver */
-    'exceljs': {
+    /** devextreme-exceljs-fork&file-saver */
+    'devextreme-exceljs-fork': {
       'esModule': true,
     },
     /**/
@@ -172,15 +173,29 @@ window.config = {
 
     /* devextreme */
     'devextreme': 'npm:devextreme/cjs',
-    'devextreme/bundles/dx.all': 'npm:devextreme/bundles/dx.all.js',
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram',
     'devexpress-gantt': 'npm:devexpress-gantt',
 
     /* devextreme-angular umd maps */
     'devextreme-angular': 'bundles:devextreme-angular/devextreme-angular.umd.js',
+    'devextreme-angular/common/ai-integration': 'bundles:devextreme-angular/devextreme-angular-common-ai-integration.umd.js',
     'devextreme-angular/core': 'bundles:devextreme-angular/devextreme-angular-core.umd.js',
+    'devextreme-angular/common/charts': 'bundles:devextreme-angular/devextreme-angular-common-charts.umd.js',
+    'devextreme-angular/common/core/animation': 'bundles:devextreme-angular/devextreme-angular-common-core-animation.umd.js',
+    'devextreme-angular/common/core/environment': 'bundles:devextreme-angular/devextreme-angular-common-core-environment.umd.js',
+    'devextreme-angular/common/core/events': 'bundles:devextreme-angular/devextreme-angular-common-core-events.umd.js',
+    'devextreme-angular/common/core/localization': 'bundles:devextreme-angular/devextreme-angular-common-core-localization.umd.js',
+    'devextreme-angular/common/core': 'bundles:devextreme-angular/devextreme-angular-common-core.umd.js',
+    'devextreme-angular/common/data/custom-store': 'bundles:devextreme-angular/devextreme-angular-common-data-custom-store.umd.js',
+    'devextreme-angular/common/data': 'bundles:devextreme-angular/devextreme-angular-common-data.umd.js',
+    'devextreme-angular/common/export/excel': 'bundles:devextreme-angular/devextreme-angular-common-export-excel.umd.js',
+    'devextreme-angular/common/export/pdf': 'bundles:devextreme-angular/devextreme-angular-common-export-pdf.umd.js',
+    'devextreme-angular/common/export': 'bundles:devextreme-angular/devextreme-angular-common-export.umd.js',
+    'devextreme-angular/common/grids': 'bundles:devextreme-angular/devextreme-angular-common-grids.umd.js',
+    'devextreme-angular/common': 'bundles:devextreme-angular/devextreme-angular-common.umd.js',
     'devextreme-angular/http': 'bundles:devextreme-angular/devextreme-angular-http.umd.js',
+    'devextreme-angular/core/tokens': 'bundles:devextreme-angular/devextreme-angular-core-tokens.umd.js',
     ...componentNames.reduce((acc, name) => {
       acc[`devextreme-angular/ui/${name}`] = `bundles:devextreme-angular/devextreme-angular-ui-${name}.umd.js`;
       acc[`devextreme-angular/ui/${name}/nested`] = `bundles:devextreme-angular/devextreme-angular-ui-${name}-nested.umd.js`;
@@ -220,8 +235,8 @@ window.config = {
     'cldr': 'npm:cldrjs/dist/cldr',
     /**/
 
-    /** exceljs&file-saver */
-    'exceljs': 'npm:exceljs/dist/exceljs.min.js',
+    /** devextreme-exceljs-fork&file-saver */
+    'devextreme-exceljs-fork': 'npm:devextreme-exceljs-fork/dist/dx-exceljs-fork.min.js',
     'file-saver-es': 'npm:file-saver-es/dist/FileSaver.min.js',
     /**/
 
@@ -260,6 +275,7 @@ window.config = {
     'inferno-clone-vnode': 'npm:inferno-clone-vnode/dist/inferno-clone-vnode.min.js',
     'inferno-create-class': 'npm:inferno-create-class/dist/inferno-create-class.min.js',
     'inferno-extras': 'npm:inferno-extras/dist/inferno-extras.min.js',
+    '@preact/signals-core': 'npm:@preact/signals-core/dist/signals-core.min.js',
 
     // Prettier
     'prettier/standalone': 'npm:prettier/standalone.js',
@@ -316,3 +332,5 @@ window.config = {
 
 System.config(window.config);
 System.import('@angular/compiler').catch(console.error.bind(console));
+// eslint-disable-next-line
+const useTgzInCSB = ['openai'];

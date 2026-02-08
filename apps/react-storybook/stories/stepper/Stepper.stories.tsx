@@ -1,8 +1,10 @@
 import React from 'react';
 import { Stepper, Item, IStepperOptions, IItemProps } from 'devextreme-react/stepper'
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { defaultItems, itemsWithTitle, itemsWithIcon, itemsWithIconAndTitle } from './data';
+import SingleFormIntegrationExample from './samples/formIntegration/SingleFormIntegration';
+import MultipleFormIntegrationExample from './samples/formIntegration/MultipleFormIntegration';
 
 const meta: Meta<typeof Stepper> = {
     title: 'Navigation/Stepper',
@@ -99,4 +101,14 @@ export const Step: StoryObj<typeof Item> = {
             </Stepper>
         );
     }
+}
+
+export const SingleFormIntegration: StoryObj<typeof Stepper> = {
+    args: {},
+    render: () => <SingleFormIntegrationExample />,
+}
+
+export const MultipleFormIntegration: StoryObj<typeof Stepper> = {
+    args: {},
+    render: () => <MultipleFormIntegrationExample />,
 }

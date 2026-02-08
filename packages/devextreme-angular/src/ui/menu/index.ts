@@ -40,7 +40,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -74,10 +75,9 @@ import { DxoMenuShowModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuShowFirstSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuShowSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
 import { DxoMenuToModule } from 'devextreme-angular/ui/menu/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiMenuItemComponent } from 'devextreme-angular/ui/menu/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -86,8 +86,10 @@ import { DxiMenuItemComponent } from 'devextreme-angular/ui/menu/nested';
  */
 @Component({
     selector: 'dx-menu',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -96,6 +98,12 @@ import { DxiMenuItemComponent } from 'devextreme-angular/ui/menu/nested';
     ]
 })
 export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxMenu<TKey> = null;
 
     /**
@@ -246,10 +254,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -480,10 +488,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -665,7 +673,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -791,27 +799,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiMenuItemComponent)
-    get itemsChildren(): QueryList<DxiMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiMenuItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -916,6 +904,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
 
 @NgModule({
   imports: [
+    DxMenuComponent,
     DxoAnimationModule,
     DxoHideModule,
     DxoFromModule,
@@ -948,9 +937,6 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     DxoMenuToModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxMenuComponent
   ],
   exports: [
     DxMenuComponent,
@@ -988,6 +974,8 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
   ]
 })
 export class DxMenuModule { }
+
+export * from 'devextreme-angular/ui/menu/nested';
 
 import type * as DxMenuTypes from "devextreme/ui/menu_types";
 export { DxMenuTypes };

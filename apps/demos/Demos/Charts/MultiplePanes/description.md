@@ -1,2 +1,7 @@
-The Chart component allows you to&nbsp;create charts with multiple panes stacked vertically. Each pane can plot one or&nbsp;more series and can share the argument axis with other plots.
+The DevExtreme Chart component allows you to display data across multiple panes. DevExtreme Chart stacks panes vertically (or horizontally when Chart axes are [rotated](/Documentation/ApiReference/UI_Components/dxChart/Configuration/#rotated)). To create a multi-pane chart, add items to the [panes[]](/Documentation/ApiReference/UI_Components/dxChart/Configuration/panes/) array.
+
 <!--split-->
+
+The Chart renders multiple [value axes](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/) and a shared [argument axis](/Documentation/ApiReference/UI_Components/dxChart/Configuration/argumentAxis/). To create multiple value axes, add a **valueAxis[]** object for each value axis. To assign a value axis to a pane, pass the pane [name](/Documentation/ApiReference/UI_Components/dxChart/Configuration/panes/#name) to the **valueAxis**.[pane](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/#pane) property.
+
+DevExtreme Chart can display multiple [series](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/) within a single pane. Specify the **series**.[pane](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#pane) property to display a series in a specific pane.

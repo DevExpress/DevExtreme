@@ -41,8 +41,12 @@ class CreateConfig {
 
     baseContent += fs.readFileSync(path.join(this.configDir, approach, 'config.js'), 'utf8');
     if (this.useBundles) {
+      // removes ending non bundle config.js call, config.bundle.js calls its own (single per merged file)
       baseContent = baseContent.replace('System.config(window.config);', '');
-      baseContent = baseContent.replace('System.import(\'@angular/compiler\').catch(console.error.bind(console));', '');
+      if (approach === 'Angular') {
+        // removes ending non bundle Angular call, config.bundle.js calls its own (single per merged file)
+        baseContent = baseContent.replace('System.import(\'@angular/compiler\').catch(console.error.bind(console));', '');
+      }
       baseContent += fs.readFileSync(path.join(this.configDir, approach, 'config.bundle.js'), 'utf8');
     }
 
@@ -52,9 +56,15 @@ class CreateConfig {
   getDemosWithExtraModules() {
     const result = {};
 
-    const handleGroup = (group) => group.Demos && group.Demos.forEach((demo) => {
-      if (demo.Modules) result[this.getKey(demo.Widget, demo.Name)] = demo.Modules;
-    });
+    const handleGroup = (group) => {
+      if (group.Demos) {
+        group.Demos.forEach((demo) => {
+          if (demo.Modules) result[this.getKey(demo.Widget, demo.Name)] = demo.Modules;
+        })
+      } else if(group.Groups) {
+        group.Groups.forEach(handleGroup);
+      }
+    };
 
     this.meta.forEach((section) => {
       if (section.Groups) {

@@ -1,7 +1,7 @@
-import '@ts/ui/list/modules/m_selection';
+import '@ts/ui/list/modules/selection';
 
 import type { SingleOrMultiple } from '@js/common';
-import { normalizeKeyName } from '@js/common/core/events/utils/index';
+import { normalizeKeyName } from '@js/common/core/events/utils';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
@@ -26,7 +26,7 @@ import type { ValueChangedEvent } from './editor/editor';
 // STYLE selectBox
 
 const DISABLED_STATE_SELECTOR = '.dx-state-disabled';
-const SELECTBOX_CLASS = 'dx-selectbox';
+export const SELECTBOX_CLASS = 'dx-selectbox';
 const SELECTBOX_POPUP_CLASS = 'dx-selectbox-popup';
 const SELECTBOX_CONTAINER_CLASS = 'dx-selectbox-container';
 const SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
@@ -206,7 +206,6 @@ class SelectBox<
       placeholder: messageLocalization.format('Select'),
       fieldTemplate: null,
       customItemCreateEvent: 'change',
-      valueChangeEvent: 'change',
       acceptCustomValue: false,
       onCustomItemCreating(e): void {
         if (!isDefined(e.customItem)) {
@@ -246,13 +245,6 @@ class SelectBox<
 
   _popupWrapperClass(): string {
     return `${super._popupWrapperClass()} ${SELECTBOX_POPUP_WRAPPER_CLASS}`;
-  }
-
-  _setDeprecatedOptions(): void {
-    super._setDeprecatedOptions();
-    extend(this._deprecatedOptions, {
-      valueChangeEvent: { since: '22.2', alias: 'customItemCreateEvent' },
-    });
   }
 
   _cancelEditing(): void {
@@ -299,7 +291,6 @@ class SelectBox<
       this._focusListElement(null);
       return;
     }
-    // @ts-expect-error ts-error
     const $listItems = this._list._itemElements();
     const focusedElement = $listItems.not(DISABLED_STATE_SELECTOR).eq(0);
 
@@ -313,8 +304,13 @@ class SelectBox<
     delete this._preventInputValueRender;
   }
 
-  _scrollToSelectedItem() {
-    this._list?.scrollToItem(this._list.option('selectedItem'));
+  _scrollToSelectedItem(): void {
+    if (!this._list) {
+      return;
+    }
+
+    const { selectedItem } = this._list.option();
+    this._list.scrollToItem(selectedItem);
   }
 
   _listContentReadyHandler(): void {

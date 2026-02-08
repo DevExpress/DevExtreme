@@ -41,7 +41,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -49,10 +50,9 @@ import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
 
 import { DxiTextBoxButtonModule } from 'devextreme-angular/ui/text-box/nested';
 import { DxoTextBoxOptionsModule } from 'devextreme-angular/ui/text-box/nested';
-
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiTextBoxButtonComponent } from 'devextreme-angular/ui/text-box/nested';
+import { 
+           PROPERTY_TOKEN_buttons,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -67,8 +67,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-text-box',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -78,6 +80,12 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxTextBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+
     instance: DxTextBox = null;
 
     /**
@@ -163,10 +171,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -592,10 +600,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -766,7 +774,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -997,7 +1005,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -1010,26 +1018,6 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-    @ContentChildren(DxiTextBoxButtonComponent)
-    get buttonsChildren(): QueryList<DxiTextBoxButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiTextBoxButtonComponent');
-    }
-
-
-    @ContentChildren(DxiButtonComponent)
-    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
-    }
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
@@ -1166,15 +1154,13 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
 
 @NgModule({
   imports: [
+    DxTextBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxiTextBoxButtonModule,
     DxoTextBoxOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTextBoxComponent
   ],
   exports: [
     DxTextBoxComponent,
@@ -1186,6 +1172,8 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
   ]
 })
 export class DxTextBoxModule { }
+
+export * from 'devextreme-angular/ui/text-box/nested';
 
 import type * as DxTextBoxTypes from "devextreme/ui/text_box_types";
 export { DxTextBoxTypes };

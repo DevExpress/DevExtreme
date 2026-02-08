@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -20,20 +19,30 @@ import {
 import { ShapeCategory, ToolboxDisplayMode, ShapeType, PanelVisibility } from 'devextreme/ui/diagram';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDiagramGroupComponent } from './group-dxi';
-import { DxiDiagramToolboxGroupComponent } from './toolbox-group-dxi';
 
+import {
+    PROPERTY_TOKEN_groups,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-diagram-toolbox',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDiagramToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_groups)
+    set _groupsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groups', value);
+    }
+    
     @Input()
     get groups(): { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType>, title?: string }[] {
         return this._getOption('groups');
@@ -80,22 +89,6 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDiagramGroupComponent))
-    get groupsChildren(): QueryList<DxiDiagramGroupComponent> {
-        return this._getOption('groups');
-    }
-    set groupsChildren(value) {
-        this.setChildren('groups', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiDiagramToolboxGroupComponent))
-    get toolboxGroupsChildren(): QueryList<DxiDiagramToolboxGroupComponent> {
-        return this._getOption('groups');
-    }
-    set toolboxGroupsChildren(value) {
-        this.setChildren('groups', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -116,7 +109,7 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDiagramToolboxComponent
   ],
   exports: [

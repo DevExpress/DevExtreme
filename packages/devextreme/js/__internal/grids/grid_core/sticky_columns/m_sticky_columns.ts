@@ -6,7 +6,6 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { getWidth, setWidth } from '@js/core/utils/size';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
-import { getElementLocationInternal } from '@ts/ui/scroll_view/utils/get_element_location_internal';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
@@ -14,7 +13,7 @@ import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
-import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
+import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
 import {
   isAdaptiveItem,
   isGroupFooterRow,
@@ -23,6 +22,7 @@ import {
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import { CLASSES as MASTER_DETAIL_CLASSES } from '../master_detail/const';
+import { isDetailRow } from '../master_detail/utils';
 import type { ColumnsView } from '../views/m_columns_view';
 import type { RowsView } from '../views/m_rows_view';
 import { isGroupRow } from '../views/m_rows_view';
@@ -342,7 +342,6 @@ const columnHeadersView = (
           });
         }
 
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         items = items || [];
         items.push(
           {
@@ -380,19 +379,26 @@ const rowsView = (
     const $detailCell: dxElementWrapper = super._renderMasterDetailCell($row, row, options);
 
     if (this.hasStickyColumns()) {
-      $detailCell.addClass(this.addWidgetPrefix(CLASSES.stickyColumnLeft));
-      setWidth($detailCell, this._getMasterDetailWidth());
+      const detailContainerSelector = `.${this.addWidgetPrefix(MASTER_DETAIL_CLASSES.detailContainer)}`;
+      const $detailContainer = $detailCell.find(detailContainerSelector);
+
+      $detailContainer.addClass(this.addWidgetPrefix(CLASSES.stickyColumnLeft));
+
+      setWidth($detailContainer, this._getMasterDetailWidth());
     }
 
     return $detailCell;
   }
 
   private _updateMasterDetailWidths() {
+    const $detailContainers = this._getRowElements()
+      .children(`.${MASTER_DETAIL_CLASSES.detailCell}`)
+      .children(`.${this.addWidgetPrefix(MASTER_DETAIL_CLASSES.detailContainer)}`);
+
     const width = this._getMasterDetailWidth();
-    const $masterDetailCells = this._getRowElements().children('.dx-master-detail-cell');
 
     setWidth(
-      $masterDetailCells,
+      $detailContainers,
       `${width}px`,
     );
   }
@@ -447,12 +453,18 @@ const rowsView = (
   }
 
   protected _renderCellContent($cell, options, renderOptions) {
-    if (!isGroupRow(options) || !this.hasStickyColumns()) {
+    const hasStickyColumns = this.hasStickyColumns();
+    const isGroupRowResult = isGroupRow(options);
+    const isDetailRowResult = isDetailRow(options);
+    const needWrapContent = isGroupRowResult || isDetailRowResult;
+
+    if (!hasStickyColumns || !needWrapContent) {
       return super._renderCellContent($cell, options, renderOptions);
     }
 
     const $container = $('<div>')
-      .addClass(this.addWidgetPrefix(CLASSES.groupRowContainer))
+      .toggleClass(this.addWidgetPrefix(CLASSES.groupRowContainer), isGroupRowResult)
+      .toggleClass(this.addWidgetPrefix(MASTER_DETAIL_CLASSES.detailContainer), isDetailRowResult)
       .appendTo($cell);
 
     return super._renderCellContent($container, options, renderOptions);
@@ -589,10 +601,11 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     super._generatePointsByColumns(hasStickyColumns);
   }
 
-  protected _pointCreated(point, cellsLength, columns) {
+  protected _pointCreated(point, columns, cells?: dxElementWrapper) {
     // @ts-expect-error
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
-    const result = super._pointCreated(point, cellsLength, columns);
+    const result = super._pointCreated(point, columns, cells);
+    const cellsLength = cells?.length ?? columns.length;
     const needToCheckPoint = hasStickyColumns && cellsLength > 0;
 
     if (needToCheckPoint && !result) {
@@ -606,6 +619,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
           point,
           column,
           nextColumn,
+          cells,
         },
         this.addWidgetPrefix.bind(this),
       );
@@ -652,18 +666,21 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
     return super._generatePointsByColumns(options, hasStickyColumns);
   }
 
-  protected _pointCreated(point, columns, location, sourceColumn) {
+  protected _pointCreated({
+    point, columns, location, sourceColumn, cells,
+  }) {
     // @ts-expect-error
     const hasStickyColumns = this._columnHeadersView.hasStickyColumns();
-    const $cells = this._columnHeadersView.getColumnElements();
-    const needToCheckPoint = hasStickyColumns && location === 'headers' && $cells?.length
+    const needToCheckPoint = hasStickyColumns && location === 'headers' && cells?.length
         && (!sourceColumn.fixed || sourceColumn.fixedPosition === StickyPosition.Sticky);
-    const result = super._pointCreated(point, columns, location, sourceColumn);
+    const result = super._pointCreated({
+      point, columns, location, sourceColumn,
+    });
 
     if (needToCheckPoint && !result) {
       return GridCoreStickyColumnsDom.noNeedToCreateReorderingPoint(
         point,
-        $cells,
+        cells,
         $(this._columnHeadersView.getContent()),
         this.addWidgetPrefix.bind(this),
       );
@@ -795,52 +812,56 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingStickyC
   }
 };
 
-const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => class KeyboardNavigationStickyColumnsExtender extends Base {
+const headersKeyboardNavigation = (Base: ModuleType<HeadersKeyboardNavigationController>) => class HeadersKeyboardNavigationStickyColumnsExtender extends Base {
+  protected getContainerBoundingRect($container: dxElementWrapper) {
+    // @ts-expect-error columnHeadersView's method
+    const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
+
+    if (hasStickyColumns) {
+      const $cells = $(this._columnHeadersView.getColumnElements());
+
+      return GridCoreStickyColumnsDom.getNonFixedAreaBoundingRect(
+        $cells,
+        $container,
+        this.addWidgetPrefix.bind(this),
+      );
+    }
+
+    return super.getContainerBoundingRect($container);
+  }
+
   // TODO Salimov: Most likely, we will need to remove the subscription
   // for headers after we implement sticky headers (pqKdLLL1).
   // Perhaps the headers will be rendered in the same table with data cells.
   // And this code will no longer be needed.
-  protected headerTabKeyHandler({ originalEvent, shift }) {
+  protected tabKeyHandler({ originalEvent, shift }) {
     // @ts-expect-error columnHeadersView's method
     const hasStickyColumns = this._columnHeadersView?.hasStickyColumns();
-    const scrollable = this._rowsView?.getScrollable();
+    const scrollable = this.getView('rowsView')?.getScrollable();
 
-    if (hasStickyColumns && scrollable) {
-      const $cell = $(originalEvent.target).closest('td');
-      const $nextCell = GridCoreStickyColumnsDom.getNextHeaderCell(
-        $cell,
-        shift ? 'previous' : 'next',
-      );
-      const isFixedCell = GridCoreStickyColumnsDom
-        .isFixedCell($nextCell, this.addWidgetPrefix.bind(this));
+    if (!hasStickyColumns || !scrollable) {
+      return;
+    }
 
-      if ($nextCell.length && !isFixedCell) {
-        const $cells = $(this._columnHeadersView.getColumnElements());
-        const cellIsOutsideVisibleArea = GridCoreStickyColumnsDom.isOutsideVisibleArea(
-          $nextCell,
-          $cells,
-          $(this._columnHeadersView.getContent()),
-          this.addWidgetPrefix.bind(this),
-        );
+    const $cell = $(originalEvent.target).closest('td');
+    const $nextCell = GridCoreStickyColumnsDom.getNextHeaderCell(
+      $cell,
+      shift ? 'previous' : 'next',
+    );
+    const isFixedCell = GridCoreStickyColumnsDom
+      .isFixedCell($nextCell, this.addWidgetPrefix.bind(this));
 
-        if (cellIsOutsideVisibleArea) {
-          const scrollPadding = GridCoreStickyColumnsDom.getScrollPadding(
-            $cells,
-            $(scrollable.container()),
-            this.addWidgetPrefix.bind(this),
-          );
-          const scrollPosition = getElementLocationInternal(
-            $nextCell[0],
-            'horizontal',
-            $(this._columnHeadersView.getContent())[0],
-            scrollable.scrollOffset(),
-            scrollPadding,
-            this.addWidgetPrefix('table'),
-          );
+    if (isFixedCell) {
+      return;
+    }
 
-          scrollable.scrollTo({ x: scrollPosition });
-        }
-      }
+    const nextCellIsOutsideVisibleArea = $nextCell.length && this.isOutsideVisibleArea(
+      $nextCell,
+      $(this._columnHeadersView.getContent()),
+    );
+
+    if (nextCellIsOutsideVisibleArea) {
+      this.scrollToNextCell($nextCell);
     }
   }
 };
@@ -857,7 +878,7 @@ export const stickyColumnsModule = {
       draggingHeader,
       editorFactory,
       resizing,
-      keyboardNavigation,
+      headersKeyboardNavigation,
     },
   },
 };

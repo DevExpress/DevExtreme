@@ -1,19 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import Scrollable from 'devextreme-testcafe-models/scrollView/internal/scrollable';
-import { isMaterialBased } from '../../../helpers/themeUtils';
+import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo } from '../../../helpers/domUtils';
 
-const testFixture = () => {
-  if (isMaterialBased()) {
-    return fixture.disablePageReloads.skip;
-  }
-  return fixture.disablePageReloads;
-};
-
-testFixture()`Scrollable_visibility_integration`
+fixture.disablePageReloads`Scrollable_visibility_integration`
   .page(url(__dirname, '../../container.html'));
 type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
 
@@ -30,8 +23,10 @@ type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
           const expectedScrollOffsetValue = { left: 10, top: 20 };
           await t.expect(await scrollable.scrollOffset()).eql(expectedScrollOffsetValue);
 
+          await testScreenshot(t, takeScreenshot, `Scroll position before hide, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, { element: Selector('#scrollable') });
+
           await t
-            .expect(await takeScreenshot(`Scroll position before hide, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#scrollable')))
+            .expect(compareResults.isValid())
             .ok();
 
           await scrollable.triggerHidingEvent();
@@ -41,9 +36,7 @@ type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
           await scrollable.triggerShownEvent();
 
           await t.expect(await scrollable.scrollOffset()).eql(expectedScrollOffsetValue);
-          await t
-            .expect(await takeScreenshot(`Scroll position after show, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, Selector('#scrollable')))
-            .ok();
+          await testScreenshot(t, takeScreenshot, `Scroll position after show, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, { element: Selector('#scrollable') });
 
           await t
             .expect(compareResults.isValid())

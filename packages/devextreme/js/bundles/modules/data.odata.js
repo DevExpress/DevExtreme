@@ -17,9 +17,9 @@ DevExpress.data.utils.odata.serializeValue = ODataUtilsModule.serializeValue;
 DevExpress.data.utils.odata.serializeKey = ODataUtilsModule.serializeKey;
 DevExpress.data.utils.odata.sendRequest = ODataUtilsModule.sendRequest;
 
-///#DEBUG
+/// #DEBUG
 DevExpress.data.OData__internals = ODataUtilsModule.OData__internals;
-///#ENDDEBUG
+/// #ENDDEBUG
 
 DevExpress.data.queryAdapters = DevExpress.data.queryAdapters || {};
 DevExpress.data.queryAdapters.odata = require('../../common/data/odata/query_adapter').odata;

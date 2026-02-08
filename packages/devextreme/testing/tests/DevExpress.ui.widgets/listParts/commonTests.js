@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { DataSource } from 'common/data/data_source/data_source';
-import { isRenderer } from 'core/utils/type';
+import { isFunction, isRenderer } from 'core/utils/type';
 import { noop } from 'core/utils/common';
 import config from 'core/config';
 import devices from '__internal/core/m_devices';
@@ -18,11 +18,10 @@ import ArrayStore from 'common/data/array_store';
 import { CustomStore } from 'common/data/custom_store';
 import DOMComponent from 'core/dom_component';
 import List from 'ui/list';
-import { setScrollView } from '__internal/ui/list/m_list.base';
+import { setScrollView } from '__internal/ui/list/list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
-import { reorderingPointerMock } from './utils.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEMS_CLASS = 'dx-list-items';
@@ -46,24 +45,20 @@ const SWITCHABLE_DELETE_BUTTON_CLASS = 'dx-list-switchable-delete-button';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
-const isDeviceDesktop = function(assert) {
-    if(devices.real().deviceType !== 'desktop') {
-        assert.ok(true, 'skip this test on mobile devices');
-        return false;
-    }
-    return true;
-};
+const ROW_GAP = 2;
+const BLOCK_MARGIN = 4;
 
 const getListKeyboard = ($list) => {
     return keyboardMock($list.find('[tabindex=0]'));
 };
 
-const ScrollViewMock = DOMComponent.inherit({
+class ScrollViewMock extends DOMComponent {
+    ctor(element, options) {
+        this.NAME = 'dxScrollView';
+        this._contentHeight = 400;
 
-    NAME: 'dxScrollView',
-
-    _containerHeight: 300,
-    _contentHeight: 400,
+        super.ctor(element, options);
+    }
 
     _init() {
         const container = this.$element().find('.scroll-view-container');
@@ -71,89 +66,93 @@ const ScrollViewMock = DOMComponent.inherit({
             this._$scrollViewContainer = container;
             this._$scrollViewContent = container.children();
         } else {
-            this._$scrollViewContainer = $('<div />').addClass('scroll-view-container').height(this._containerHeight);
+            this._$scrollViewContainer = $('<div />').addClass('scroll-view-container').height(this.containerHeight);
             this._$scrollViewContent = $('<div />').addClass('scroll-view-content').height(this._contentHeight).appendTo(this._$scrollViewContainer);
             this.$element().append(this._$scrollViewContainer);
         }
 
-        this.callBase();
+        super._init();
 
         this._history = [];
         this._updateCount = 0;
         this._pageLoading = true;
         this._loading = false;
         this._pos = 0;
-    },
+    }
+
+    get containerHeight() {
+        return 300;
+    }
 
     container() {
         return this._$scrollViewContainer;
-    },
+    }
 
     content() {
         return this._$scrollViewContent;
-    },
+    }
 
     pullDown() {
         const pullDownHandler = this.option('onPullDown');
-        if($.isFunction(pullDownHandler)) {
+        if(isFunction(pullDownHandler)) {
             pullDownHandler();
         }
-    },
+    }
 
     scrollBottom() {
         const scrollBottomHandler = this.option('onReachBottom');
 
-        if($.isFunction(scrollBottomHandler)) {
+        if(isFunction(scrollBottomHandler)) {
             scrollBottomHandler();
         }
-    },
+    }
 
     release(hideOrShow) {
         this._history.push(new Date());
         this.toggleLoading(!hideOrShow);
         $(this.$element()).trigger('released');
-    },
+    }
 
     toggleLoading(showOrHide) {
         this._pageLoading = showOrHide;
-    },
+    }
 
     update() {
         this._updateCount++;
         return $.Deferred().resolve().promise();
-    },
+    }
 
     startLoading() {
         this._loading = true;
-    },
+    }
 
     finishLoading() {
         this._loading = false;
-    },
+    }
 
     scrollTo(pos) {
         this._pos = pos;
-    },
+    }
 
     scrollTop() {
         return this._pos;
-    },
+    }
 
     scrollOffset() {
         return { top: this._pos };
-    },
+    }
 
     _useTemplates() {
         return false;
-    },
+    }
 
     _createActions() {
         this._tryRefreshPocketState();
-    },
+    }
 
     _tryRefreshPocketState() {
         this._pageLoading = !!this.option('onReachBottom');
-    },
+    }
 
     _optionChanged(args) {
         switch(args.name) {
@@ -162,8 +161,8 @@ const ScrollViewMock = DOMComponent.inherit({
                 this._createActions();
                 break;
         }
-    },
-});
+    }
+}
 
 const showListSlideMenu = ($list) => {
     const $item = $list.find('.dx-list-item').eq(0);
@@ -205,6 +204,8 @@ const LIST_GROUP_COLLAPSED_CLASS = 'dx-list-group-collapsed';
 const LIST_COLLAPSIBLE_GROUPS_CLASS = 'dx-list-collapsible-groups';
 
 QUnit.module('collapsible groups', moduleSetup, () => {
+    const BOTTOM_PADDING = 4;
+
     QUnit.test('collapsible groups class should be present if groups can be collapsed', function(assert) {
         const $element = this.element.dxList({
             items: [{ key: 'a', items: ['0'] }],
@@ -362,6 +363,34 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         assert.ok(!$group.hasClass(LIST_GROUP_COLLAPSED_CLASS), 'collapsed class is not present');
     });
 
+    QUnit.test('group body should be correctly collapsed on fast multiple clicks on header (T1282693)', function(assert) {
+        this.clock.restore();
+        const done = assert.async();
+
+        const $element = this.element.dxList({
+            items: [{ key: 'a', items: ['0'] }],
+            grouped: true,
+            collapsibleGroups: true
+        });
+
+        const $group = $element.find('.' + LIST_GROUP_CLASS);
+        const $groupBody = $group.find('.' + LIST_GROUP_BODY_CLASS);
+        const $groupHeader = $element.find('.' + LIST_GROUP_HEADER_CLASS);
+
+        const animationDuration = 200;
+
+        for(let i = 0; i < 11; i++) {
+            $groupHeader.trigger('dxclick');
+        }
+
+        setTimeout(() => {
+            assert.strictEqual($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), true, 'collapsed class is present');
+            assert.strictEqual($groupBody.height(), 0, 'group items are hidden');
+
+            done();
+        }, 2 * animationDuration);
+    });
+
     const LIST_GROUP_HEADER_INDICATOR_CLASS = 'dx-list-group-header-indicator';
 
     QUnit.test('group header collapsed indicator element', function(assert) {
@@ -397,7 +426,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
             const args = animateSpy.getCall(0).args;
 
             assert.ok(animateSpy.calledOnce, 'fx.animate is executed');
-            assert.equal(args[0].get(0), $groupBody.get(0), 'fx.animate ran on correct element');
+            assert.equal(args[0], $groupBody.get(0), 'fx.animate ran on correct element');
             assert.equal(args[1].type, 'custom', 'fx.animate ran with correct animation type');
             assert.equal(args[1].from.height, groupBodyHeight, 'fx.animate ran with correct start height');
             assert.equal(args[1].to.height, 0, 'fx.animate ran with correct end height');
@@ -471,7 +500,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
                 assert.ok(fx.animate.calledOnce, 'fx.animate used');
                 assert.equal(args[1].type, 'custom', 'fx.animate ran with correct animation type');
-                assert.equal(args[1].from.height, groupBodyHeight, 'fx.animate ran with correct start height');
+                assert.equal(args[1].from.height - BOTTOM_PADDING, groupBodyHeight, 'fx.animate ran with correct start height');
                 assert.equal(args[1].to.height, 0, 'fx.animate ran with correct end height');
 
                 assert.equal(this, instance, 'resolved on list');
@@ -509,7 +538,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         }
     });
 
-    QUnit.test('group should be stay expanded by the expandGroup method', function(assert) {
+    QUnit.test('group should stay expanded by the expandGroup method', function(assert) {
         fx.off = true;
 
         try {
@@ -570,7 +599,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
                 assert.ok(fx.animate.calledOnce, 'fx.animate used');
                 assert.equal(args[1].type, 'custom', 'fx.animate ran with correct animation type');
                 assert.equal(args[1].from.height, 0, 'fx.animate ran with correct start height');
-                assert.equal(args[1].to.height, groupBodyHeight, 'fx.animate ran with correct end height');
+                assert.equal(args[1].to.height - BOTTOM_PADDING, groupBodyHeight, 'fx.animate ran with correct end height');
 
                 assert.equal(this, instance, 'resolved on list');
             });
@@ -694,13 +723,13 @@ QUnit.module('collapsible groups', moduleSetup, () => {
             instance.collapseGroup(2);
             this.clock.tick(50);
 
-            assert.strictEqual(releaseSpy.lastCall.args[0], false, 'The last call of \'release\' does not hide load indicator');
+            assert.strictEqual(releaseSpy.lastCall.args[0], false, 'The last call of release does not hide load indicator');
         } finally {
             fx.off = false;
         }
     });
 
-    QUnit.test('more button shouldn\'t disappear after group collapsed with array store', function(assert) {
+    QUnit.test('more button should not disappear after group collapsed with array store', function(assert) {
         try {
             setScrollView(this.originalScrollView);
             fx.off = true;
@@ -732,7 +761,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         }
     });
 
-    QUnit.test('more button shouldn\'t disappear after group collapsed with custom store', function(assert) {
+    QUnit.test('more button should not disappear after group collapsed with custom store', function(assert) {
         try {
             setScrollView(this.originalScrollView);
             fx.off = true;
@@ -1175,7 +1204,7 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.strictEqual(instance.itemElements().text(), 'New item text', 'item text was changed');
     });
 
-    QUnit.test('dxList shouldn\'t show \'Loading\' and \'No data\' at the same time than dataSource option changed', function(assert) {
+    QUnit.test('dxList should not show Loading and No data at the same time than dataSource option changed', function(assert) {
         const $list = $('#list').dxList({ pageLoadMode: 'scrollBottom' });
         const instance = $list.dxList('instance');
         const scrollView = $list.dxScrollView('instance');
@@ -1273,7 +1302,7 @@ QUnit.module('options changed', moduleSetup, () => {
         instance.option('searchEnabled', false);
 
         assert.notOk($element.hasClass('dx-list-with-search'), 'list without search');
-        assert.notOk($element.find('.dx-list-search').length, 'hasn\'t search editor');
+        assert.notOk($element.find('.dx-list-search').length, 'does not have search editor');
 
         instance.option('searchEnabled', true);
 
@@ -2073,10 +2102,6 @@ QUnit.module('events', moduleSetup, () => {
     });
 
     QUnit.test('item onClick handler should be fired on "enter" key press', function(assert) {
-        if(!isDeviceDesktop(assert)) {
-            return;
-        }
-
         const $element = this.element.dxList({
             items: [{
                 text: 'item 1',
@@ -2265,9 +2290,12 @@ QUnit.module('events', moduleSetup, () => {
 
 QUnit.module('dataSource integration', moduleSetup, () => {
     QUnit.test('pageLoading should be ordered for async dataSource (T233998)', function(assert) {
-        setScrollView(ScrollViewMock.inherit({
-            _containerHeight: 600
-        }));
+        class ScrollView extends ScrollViewMock {
+            get containerHeight() {
+                return 600;
+            }
+        }
+        setScrollView(ScrollView);
 
         const $list = $('#list').dxList({
             dataSource: {
@@ -2287,7 +2315,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
         this.clock.tick(400);
 
-        assert.equal($.trim($list.find('.dx-list-item').text()), '012');
+        assert.equal($list.find('.dx-list-item').text().trim(), '012');
     });
 
     QUnit.test('shared data source', function(assert) {
@@ -2299,7 +2327,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
         const widget = this.element.dxList('instance');
         const changedHandler = widget._proxiedDataSourceChangedHandler;
-        assert.ok($.isFunction(changedHandler));
+        assert.ok(isFunction(changedHandler));
         assert.ok(dataSource._eventsStrategy._events['changed'].has(changedHandler));
 
         widget._dispose();
@@ -2329,7 +2357,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.ok(!('_dataSource' in widget), 'source is unlinked');
     });
 
-    QUnit.test('list shouldn\'t load dataSource again after first request fail (B253304)', function(assert) {
+    QUnit.test('list should not load dataSource again after first request fail (B253304)', function(assert) {
         let loadCalled = 0;
 
         $('#list').dxList({
@@ -2394,7 +2422,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.equal(scrollView._loading, false, 'scrollview loading finished on data load');
     });
 
-    QUnit.test('list doesn\'t indicate loading during dataSource loading when indicateLoading = false', function(assert) {
+    QUnit.test('list does not indicate loading during dataSource loading when indicateLoading = false', function(assert) {
         const dataSourceLoadTime = 100;
 
         const dataSource = new DataSource({
@@ -2482,7 +2510,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         this.clock.tick(dataSourceLoadTime / 2);
         const scrollView = element.dxScrollView('instance');
 
-        assert.equal(scrollView._loading, false, 'scrollView doesn\'t in loading state');
+        assert.equal(scrollView._loading, false, 'scrollView is not in loading state');
     });
 
     QUnit.test('list should indicate loading during dataSource reload (T985917)', function(assert) {
@@ -2513,7 +2541,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         this.clock.tick(dataSourceLoadTime / 2);
         const scrollView = element.dxScrollView('instance');
 
-        assert.equal(scrollView._loading, true, 'scrollView doesn\'t in loading state');
+        assert.equal(scrollView._loading, true, 'scrollView is not in loading state');
     });
 
     QUnit.test('setting indicateLoading to false hides load panel at once', function(assert) {
@@ -2548,7 +2576,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.equal(scrollView._loading, false, 'scrollview loading not indicated');
     });
 
-    QUnit.test('list doesn\'t indicate loading when click more button', function(assert) {
+    QUnit.test('list does not indicate loading when click more button', function(assert) {
         const dataSourceLoadTime = 100;
 
         const element = this.element.dxList({
@@ -2642,9 +2670,12 @@ QUnit.module('dataSource integration', moduleSetup, () => {
     });
 
     QUnit.test('first item rendered when pageSize is 1 and dataSource set as array', function(assert) {
-        setScrollView(ScrollViewMock.inherit({
-            _containerHeight: 600
-        }));
+        class ScrollView extends ScrollViewMock {
+            get containerHeight() {
+                return 600;
+            }
+        }
+        setScrollView(ScrollView);
 
         const $list = this.element.dxList({
             pageLoadMode: 'scrollBottom',
@@ -2713,7 +2744,7 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
         assert.deepEqual(element.dxList('instance').option('items'), [1, 2, 3, 4], 'correct items presented in options');
     });
 
-    QUnit.test('scroll bottom action shouldn\'t load data if all items was loaded', function(assert) {
+    QUnit.test('scroll bottom action should not load data if all items was loaded', function(assert) {
         let count = 0;
         const element = this.element.dxList({
             pageLoadMode: 'scrollBottom',
@@ -2730,7 +2761,7 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
         assert.equal(count, 1, 'first page loaded');
 
         element.dxScrollView('instance').scrollBottom();
-        assert.equal(count, 1, 'data source loaded, shouldn\'t load another page');
+        assert.equal(count, 1, 'data source loaded, should not load another page');
     });
 
     QUnit.test('appending items on scroll bottom №2', function(assert) {
@@ -2761,7 +2792,7 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
         assert.equal(element.dxList('instance')._startIndexForAppendedItems, null, 'does not expecting appending items if all items rendered');
     });
 
-    QUnit.test('appending items on \'more\' button', function(assert) {
+    QUnit.test('appending items on more button', function(assert) {
         const element = this.element.dxList({
             dataSource: {
                 store: new ArrayStore([1, 2, 3, 4]),
@@ -2807,21 +2838,6 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
         assert.equal(button.option('type'), 'default', 'more button should have default type for the Material theme');
 
         themes.isMaterialBased = origIsMaterialBased;
-    });
-
-    QUnit.test('more button should have undefined type for the Generic theme', function(assert) {
-        const element = this.element.dxList({
-            dataSource: {
-                store: new ArrayStore([1, 2, 3, 4]),
-                pageSize: 2
-            },
-            pageLoadMode: 'nextButton',
-            scrollingEnabled: true
-        });
-
-        const button = element.find('.dx-list-next-button .dx-button').dxButton('instance');
-
-        assert.equal(button.option('type'), undefined, 'more button should have undefined type for the Generic theme');
     });
 
     QUnit.test('should not expect appending items if items were appended just now', function(assert) {
@@ -2880,9 +2896,12 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
     });
 
     QUnit.test('infinite loading should not happen if widget element is hidden', function(assert) {
-        setScrollView(ScrollViewMock.inherit({
-            _containerHeight: 600
-        }));
+        class ScrollView extends ScrollViewMock {
+            get containerHeight() {
+                return 600;
+            }
+        }
+        setScrollView(ScrollView);
 
         const $element = this.element.hide().dxList({
             pageLoadMode: 'scrollBottom',
@@ -2899,9 +2918,12 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
     });
 
     QUnit.test('infinite loading should happen when widget element is shown', function(assert) {
-        setScrollView(ScrollViewMock.inherit({
-            _containerHeight: 600
-        }));
+        class ScrollView extends ScrollViewMock {
+            get containerHeight() {
+                return 600;
+            }
+        }
+        setScrollView(ScrollView);
 
         const $element = this.element.hide().dxList({
             pageLoadMode: 'scrollBottom',
@@ -3188,10 +3210,11 @@ QUnit.module('scrollView integration', {
     });
 
     QUnit.test('update scroll after change items', function(assert) {
+        const initialItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
         const $list = $('#list')
             .dxList({
                 height: 50,
-                items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
+                items: initialItems,
                 useNativeScrolling: true
             });
 
@@ -3199,9 +3222,14 @@ QUnit.module('scrollView integration', {
         const list = $list.dxList('instance');
         const contentHeight = $(scrollView.content()).height();
 
-        list.option('items', [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
+        const newItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+        list.option('items', newItems);
         const newHeight = $(scrollView.content()).height();
-        assert.equal(newHeight, contentHeight * 2, 'update after items was changed');
+
+        const initialSpacingAdjustment = (initialItems.length - 1) * ROW_GAP + 2 * BLOCK_MARGIN;
+        const newSpacingAdjustment = (newItems.length - 1) * ROW_GAP + 2 * BLOCK_MARGIN;
+
+        assert.equal(newHeight, (contentHeight - initialSpacingAdjustment) * 2 + newSpacingAdjustment, 'update after items was changed');
     });
 
     QUnit.test('infinite sync data loading if scrollView is not full', function(assert) {
@@ -3411,7 +3439,7 @@ QUnit.module('scrollView integration', {
         assert.equal($(scrollToElementSpy.getCall(0).args[0]).text(), $item.text(), 'list scrolled to correct item');
     });
 
-    QUnit.test('list shouldn\'t be scrolled if item isn\'t specified', function(assert) {
+    QUnit.test('list should not be scrolled if item is not specified', function(assert) {
         const $list = $('#list').dxList({
             items: ['0']
         });
@@ -3422,7 +3450,7 @@ QUnit.module('scrollView integration', {
         $list.dxScrollView('instance').scrollToElement = scrollToElementSpy;
 
         list.scrollToItem($());
-        assert.equal(scrollToElementSpy.firstCall.args[0], null, 'list wasn\'t scrolled');
+        assert.equal(scrollToElementSpy.firstCall.args[0], null, 'list was not scrolled');
     });
 
     QUnit.test('list should not fail on scrollToItem if item is a string of the specific format (T381823)', function(assert) {
@@ -3763,6 +3791,68 @@ QUnit.module('regressions', moduleSetup, () => {
             done();
         });
     });
+
+    QUnit.test('custom properties should be preserved in grouped items (T1319741)', function(assert) {
+        const data = [
+            { key: 'Group 1', items: [{ text: 'Item 1' }], customProp: 'customValue' }
+        ];
+
+        const list = this.element.dxList({
+            dataSource: data,
+            grouped: true
+        }).dxList('instance');
+
+        const dataSourceItems = list.getDataSource().items();
+
+        assert.strictEqual(dataSourceItems.length, 1, 'One group loaded');
+        assert.strictEqual(dataSourceItems[0].key, 'Group 1', 'Key preserved');
+        assert.strictEqual(dataSourceItems[0].customProp, 'customValue', 'Custom property preserved');
+    });
+
+    QUnit.test('custom properties should be preserved in mixed grouped items (T1319741)', function(assert) {
+        const data = [
+            { key: 'Group 1', items: [{ text: 'Item 1' }] },
+            { key: 'Group 2', items: [{ text: 'Item 2' }], customProp: 'customValue' }
+        ];
+
+        const list = this.element.dxList({
+            dataSource: data,
+            grouped: true
+        }).dxList('instance');
+
+        const dataSourceItems = list.getDataSource().items();
+
+        assert.strictEqual(dataSourceItems.length, 2, 'Two groups loaded');
+
+        assert.strictEqual(dataSourceItems[0].key, 'Group 1');
+        assert.strictEqual(dataSourceItems[1].key, 'Group 2');
+        assert.strictEqual(dataSourceItems[1].customProp, 'customValue', 'Custom property preserved in second group');
+
+        const $groups = $(list.element()).find(`.${LIST_GROUP_CLASS}`);
+        assert.strictEqual($groups.length, 2, 'Two groups rendered');
+        assert.strictEqual($groups.eq(1).find(`.${LIST_ITEM_CLASS}`).text(), 'Item 2', 'Item in second group rendered');
+    });
+
+    QUnit.test('custom properties should be available in groupTemplate (T1319741)', function(assert) {
+        const data = [
+            { key: 'Group 1', customProp: 'customValue', items: [{ text: 'Item 1' }] }
+        ];
+
+        const groupTemplateStub = sinon.stub().returns($('<div>'));
+
+        this.element.dxList({
+            dataSource: data,
+            grouped: true,
+            groupTemplate: groupTemplateStub
+        });
+
+        assert.strictEqual(groupTemplateStub.callCount, 1, 'Template was called once');
+        const groupItem = groupTemplateStub.getCall(0).args[0];
+
+        assert.strictEqual(groupItem.key, 'Group 1', 'Key is correct in template');
+        assert.ok(Object.prototype.hasOwnProperty.call(groupItem, 'customProp'), 'Custom property is present in group item');
+        assert.strictEqual(groupItem.customProp, 'customValue', 'Custom property value is correct');
+    });
 });
 
 QUnit.module('widget sizing render', {}, () => {
@@ -4033,7 +4123,7 @@ QUnit.module('keyboard navigation', {
         const itemHeight = $item.outerHeight();
         this.clock.tick(10);
 
-        instance.option('height', itemHeight * 3);
+        instance.option('height', itemHeight * 3 + ROW_GAP * 3 + BLOCK_MARGIN);
 
         keyboard.keyDown('down');
         assert.equal(instance.scrollTop(), itemHeight, 'item scrolled to visible area at bottom when down arrow were pressed');
@@ -4043,13 +4133,10 @@ QUnit.module('keyboard navigation', {
         this.clock.tick(10);
         keyboard = getListKeyboard($element);
         keyboard.keyDown('up');
-        assert.equal(instance.scrollTop(), 0, 'item scrolled to visible area at top when up arrow were pressed');
+        assert.equal(instance.scrollTop(), BLOCK_MARGIN, 'item scrolled to visible area at top when up arrow were pressed');
     });
 
-    QUnit.test('\'enter\'/\'space\' keys pressing on selectAll checkbox', function(assert) {
-        if(!isDeviceDesktop(assert)) {
-            return;
-        }
+    QUnit.test('enter/space keys pressing on selectAll checkbox', function(assert) {
         assert.expect(3);
 
         const $element = $('#list').dxList({
@@ -4077,13 +4164,10 @@ QUnit.module('keyboard navigation', {
 
         keyboard.keyDown('space');
 
-        assert.ok(!$selectAllCheckBox.hasClass('dx-checkbox-checked'), 'selectAll checkbox isn\'t checked');
+        assert.ok(!$selectAllCheckBox.hasClass('dx-checkbox-checked'), 'selectAll checkbox is not checked');
     });
 
-    QUnit.test('focusing on selectAll checkbox after \'down\'/\'up\' pressing', function(assert) {
-        if(!isDeviceDesktop(assert)) {
-            return;
-        }
+    QUnit.test('focusing on selectAll checkbox after down/up pressing', function(assert) {
         assert.expect(6);
 
         const $element = $('#list').dxList({
@@ -4108,7 +4192,7 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('up');
         this.clock.tick(10);
 
-        assert.ok(!$selectAllCheckBox.hasClass(FOCUSED_STATE_CLASS), 'selectAll checkbox isn\'t focused');
+        assert.ok(!$selectAllCheckBox.hasClass(FOCUSED_STATE_CLASS), 'selectAll checkbox is not focused');
         assert.ok($lastItem.hasClass(FOCUSED_STATE_CLASS), 'last item is focused');
 
         keyboard.keyDown('down');
@@ -4118,7 +4202,7 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('down');
         this.clock.tick(10);
 
-        assert.ok(!$selectAllCheckBox.hasClass(FOCUSED_STATE_CLASS), 'selectAll checkbox isn\'t focused');
+        assert.ok(!$selectAllCheckBox.hasClass(FOCUSED_STATE_CLASS), 'selectAll checkbox is not focused');
         assert.ok($firstItem.hasClass(FOCUSED_STATE_CLASS), 'first item is focused');
     });
 
@@ -4175,13 +4259,13 @@ QUnit.module('keyboard navigation', {
         const itemHeight = $item.outerHeight();
 
         $element.trigger('focusin');
-        instance.option('height', itemHeight * 3);
+        instance.option('height', itemHeight * 3 + ROW_GAP * 3 + BLOCK_MARGIN);
 
         keyboard.keyDown('end');
-        assert.roughEqual(instance.scrollTop(), itemHeight * 2, 1.0001, 'item scrolled to visible area at bottom end arrow were pressed');
+        assert.roughEqual(instance.scrollTop(), itemHeight * 2 + ROW_GAP * 3, 1.0001, 'item scrolled to visible area at bottom end arrow were pressed');
 
         keyboard.keyDown('home');
-        assert.equal(instance.scrollTop(), 0, 'item scrolled to visible area at top when home were pressed');
+        assert.equal(instance.scrollTop(), BLOCK_MARGIN, 'item scrolled to visible area at top when home were pressed');
     });
 
     QUnit.test('list scroll to focused item after press pageDown', function(assert) {
@@ -4199,7 +4283,7 @@ QUnit.module('keyboard navigation', {
         const itemHeight = $item.outerHeight();
 
         $element.dxList('focus');
-        instance.option('height', itemHeight * 3);
+        instance.option('height', itemHeight * 3 + ROW_GAP * 3 + BLOCK_MARGIN);
 
         keyboard.keyDown('pageDown');
         const thirdItemIsFocused = $items.eq(2).hasClass(FOCUSED_STATE_CLASS);
@@ -4211,13 +4295,13 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('pageDown');
         const fifthItemIsFocused = $items.eq(4).hasClass(FOCUSED_STATE_CLASS);
 
-        assert.roughEqual(instance.scrollTop(), itemHeight * 2, 1.0001, 'list scrolled to next page');
+        assert.roughEqual(instance.scrollTop(), itemHeight * 2 + ROW_GAP * 2 + BLOCK_MARGIN, 1.0001, 'list scrolled to next page');
         assert.ok(fifthItemIsFocused, 'last item on new page obtained focus');
 
         keyboard.keyDown('pageDown');
         const sixthItemIsFocused = $items.eq(5).hasClass(FOCUSED_STATE_CLASS);
 
-        assert.roughEqual(instance.scrollTop(), itemHeight * 3, 1.0001, 'list scrolled to last page');
+        assert.roughEqual(instance.scrollTop(), itemHeight * 3 + ROW_GAP * 2 + BLOCK_MARGIN, 1.0001, 'list scrolled to last page');
         assert.ok(sixthItemIsFocused, 'last item on last page obtained focus');
     });
 
@@ -4236,7 +4320,7 @@ QUnit.module('keyboard navigation', {
         const itemHeight = $item.outerHeight();
 
         $element.trigger('focusin');
-        instance.option('height', itemHeight * 3);
+        instance.option('height', itemHeight * 3 + ROW_GAP * 3 + BLOCK_MARGIN);
         instance.option('focusedElement', $items.eq(3));
         instance.scrollToItem($items.first());
 
@@ -4245,7 +4329,7 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('pageDown');
         const sixthItemIsFocused = $items.eq(5).hasClass(FOCUSED_STATE_CLASS);
 
-        assert.roughEqual(instance.scrollTop(), itemHeight * 3, 1.0001, 'list scrolled to previous focusedItem');
+        assert.roughEqual(instance.scrollTop(), itemHeight * 3 + ROW_GAP * 3 + BLOCK_MARGIN, 1.0001, 'list scrolled to previous focusedItem');
         assert.ok(sixthItemIsFocused, 'focused item change to last visible item on new page');
     });
 
@@ -4264,14 +4348,14 @@ QUnit.module('keyboard navigation', {
         const itemHeight = $item.outerHeight();
 
         $element.trigger('focusin');
-        instance.option('height', itemHeight * 3);
+        instance.option('height', itemHeight * 3 + ROW_GAP * 3 + BLOCK_MARGIN);
         instance.option('focusedElement', $items.last());
         instance.scrollToItem($items.last());
 
         keyboard.keyDown('pageUp');
         const fourthItemIsFocused = $items.eq(3).hasClass(FOCUSED_STATE_CLASS);
 
-        assert.roughEqual(instance.scrollTop(), itemHeight * 3, 1.0001, 'list is not scrolled, when focusedItem is not first visible item on this page');
+        assert.roughEqual(instance.scrollTop(), itemHeight * 3 + ROW_GAP * 2 + BLOCK_MARGIN, 1.0001, 'list is not scrolled, when focusedItem is not first visible item on this page');
         assert.ok(fourthItemIsFocused, 'focused item change to first visible item on this page');
 
         keyboard.keyDown('pageUp');
@@ -4302,17 +4386,169 @@ QUnit.module('keyboard navigation', {
         const itemHeight = $item.outerHeight();
 
         $element.trigger('focusin');
-        instance.option('height', itemHeight * 3);
+        instance.option('height', itemHeight * 3 + ROW_GAP * 3 + BLOCK_MARGIN);
         instance.option('focusedElement', $items.eq(3));
         instance.scrollToItem($items.last());
 
-        assert.roughEqual(instance.scrollTop(), itemHeight * 4, 1.0001, 'list is not scrolled');
+        assert.roughEqual(instance.scrollTop(), itemHeight * 4 + ROW_GAP * 3 + BLOCK_MARGIN, 1.0001, 'list is not scrolled');
 
         keyboard.keyDown('pageUp');
         const secondItemIsFocused = $items.eq(1).hasClass(FOCUSED_STATE_CLASS);
 
         assert.roughEqual(instance.scrollTop(), itemHeight, 1.0001, 'list scrolled to previous focusedItem');
         assert.ok(secondItemIsFocused, 'focused item change to last visible item on new page');
+    });
+
+    ['pageUp', 'pageDown'].forEach((key) => {
+        const moveDown = key === 'pageDown';
+
+        [true, false].forEach((useNativeScrolling) => {
+            QUnit.test(`on list scroll with ${key} pressed original event prevented and propagation stopped if not ${moveDown ? 'last' : 'first'} item was focused, useNativeScrolling=${useNativeScrolling} (T1298074)`, function(assert) {
+                assert.expect(4);
+
+                const $list = $('#list').dxList({
+                    useNativeScrolling,
+                    focusStateEnabled: true,
+                    items: [0, 1, 2, 3, 4],
+                });
+
+                const instance = $list.dxList('instance');
+                const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+                const keyboard = getListKeyboard($list);
+                const itemHeight = $items.first().outerHeight();
+
+                instance.option('height', itemHeight * 3);
+                instance.option('focusedElement', $items.eq(3));
+                instance.scrollToItem(moveDown ? $items.last() : $items.first());
+
+                keyboard.keyDown(key);
+
+                assert.strictEqual(keyboard.event.isDefaultPrevented(), true, 'event is prevented');
+                assert.strictEqual(keyboard.event.isPropagationStopped(), true, 'propogation is stopped');
+
+                keyboard.keyDown(key);
+
+                assert.strictEqual(keyboard.event.isDefaultPrevented(), false, `event is not prevented when ${moveDown ? 'last' : 'first'} item is focused`);
+                assert.strictEqual(keyboard.event.isPropagationStopped(), false, `propogation is not stopped when ${moveDown ? 'last' : 'first'} item is focused`);
+            });
+        });
+    });
+
+    [true, false].forEach(useNativeScrolling => {
+        QUnit.test(`grouped list scroll to focused item after press pageDown, useNativeScrolling=${useNativeScrolling} (T1300059)`, function(assert) {
+            const $list = $('#list').dxList({
+                dataSource: [
+                    { key: 1, items: [10, 11] },
+                    { key: 2, items: [20, 21] },
+                ],
+                grouped: true,
+                useNativeScrolling,
+                focusStateEnabled: true,
+            });
+
+            const instance = $list.dxList('instance');
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+            const keyboard = getListKeyboard($list);
+            const itemHeight = $items.first().outerHeight();
+
+            $list.dxList('focus');
+            instance.option('height', itemHeight * 3 + ROW_GAP * 3 + BLOCK_MARGIN);
+
+            keyboard.keyDown('pageDown');
+            const secondItemFirstGroupIsFocused = $items.eq(1).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), 0, 1.0001, 'list is not scrolled, when focusedItem is not last visible item on this page');
+            assert.ok(secondItemFirstGroupIsFocused, 'second item in first group is focused');
+
+            keyboard.keyDown('pageDown');
+            const firstItemSecondGroupIsFocused = $items.eq(2).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), itemHeight * 2 + ROW_GAP, 1.0001, 'list scrolled to next page');
+            assert.ok(firstItemSecondGroupIsFocused, 'last item on new page obtained focus');
+
+            keyboard.keyDown('pageDown');
+            const lastItemIsFocused = $items.eq(3).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), itemHeight * 3 + ROW_GAP * 3, 1.0001, 'list scrolled to last page');
+            assert.ok(lastItemIsFocused, 'last item on last page obtained focus');
+        });
+    });
+
+    [true, false].forEach(useNativeScrolling => {
+        QUnit.test(`grouped list with collapsed group scroll to focused item after press pageDown, useNativeScrolling=${useNativeScrolling} (T1300059)`, function(assert) {
+            const $list = $('#list').dxList({
+                dataSource: [
+                    { key: 1, items: [10, 11] },
+                    { key: 2, items: [20, 21] },
+                ],
+                grouped: true,
+                collapsibleGroups: true,
+                useNativeScrolling,
+                focusStateEnabled: true,
+            });
+
+            const instance = $list.dxList('instance');
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+            const firstGroupHeader = $list.find(`.${LIST_GROUP_HEADER_CLASS}`)[0];
+            const keyboard = getListKeyboard($list);
+            const itemHeight = $items.first().outerHeight();
+
+            $list.trigger('focusin');
+            instance.option('height', itemHeight * 3 + ROW_GAP * 3 + BLOCK_MARGIN);
+            instance.option('focusedElement', firstGroupHeader);
+            $(firstGroupHeader).trigger('dxclick');
+            this.clock.tick(300);
+
+            keyboard.keyDown('pageDown');
+            const firstItemSecondGroupIsFocused = $items.eq(2).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), 0, 1.0001, 'list is not scrolled, when focusedItem is not last visible item on this page');
+            assert.ok(firstItemSecondGroupIsFocused, 'first item in second group is focused');
+
+            keyboard.keyDown('pageDown');
+            const lastItemIsFocused = $items.eq(3).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), itemHeight - ROW_GAP, 1.0001, 'list scrolled to next page');
+            assert.ok(lastItemIsFocused, 'last item on last page obtained focus');
+        });
+    });
+
+    [true, false].forEach((useNativeScrolling) => {
+        QUnit.test(`list scroll to focused item after press pageDown when SelectAll item focused, useNativeScrolling=${useNativeScrolling} (T1300059)`, function(assert) {
+            const $list = $('#list').dxList({
+                useNativeScrolling,
+                focusStateEnabled: true,
+                dataSource: [0, 1, 2, 3, 4],
+                showSelectionControls: true,
+                selectionMode: 'all',
+            });
+
+            const instance = $list.dxList('instance');
+            const $items = $list.find(`.${LIST_ITEM_CLASS}`);
+            const keyboard = getListKeyboard($list);
+            const itemHeight = $items.first().outerHeight();
+
+            $list.dxList('focus');
+            instance.option('height', itemHeight * 3 + ROW_GAP * 3 + BLOCK_MARGIN);
+
+            keyboard.keyDown('pageDown');
+            const secondItemIsFocused = $items.eq(1).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), 0, 1.0001, 'list is not scrolled, when focusedItem is not last visible item on this page');
+            assert.ok(secondItemIsFocused, 'second item in first group is focused');
+
+            keyboard.keyDown('pageDown');
+            const forthItemIsFocused = $items.eq(3).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), itemHeight * 2 - ROW_GAP * 3, 1.0001, 'list scrolled to next page');
+            assert.ok(forthItemIsFocused, 'last item on new page obtained focus');
+
+            keyboard.keyDown('pageDown');
+            const lastItemIsFocused = $items.eq(4).hasClass(FOCUSED_STATE_CLASS);
+
+            assert.roughEqual(instance.scrollTop(), itemHeight * 3 - ROW_GAP * 3, 1.0001, 'list scrolled to last page');
+            assert.ok(lastItemIsFocused, 'last item on last page obtained focus');
+        });
     });
 
     QUnit.test('focus should be moved to selectedItem after focusing of grouped list (T1278005)', function(assert) {
@@ -4355,7 +4591,7 @@ QUnit.module('keyboard navigation', {
         assert.strictEqual($items.eq(5).hasClass(FOCUSED_STATE_CLASS), true, 'next item is focused');
     });
 
-    QUnit.test('list should attach keyboard events even if focusStateEnabled is false when the widget\'s onKeyboardHandled is defined', function(assert) {
+    QUnit.test('list should attach keyboard events even if focusStateEnabled is false when the widget onKeyboardHandled is defined', function(assert) {
         const handler = sinon.stub();
         const $element = $('#list');
 
@@ -4513,8 +4749,7 @@ QUnit.module('Search', () => {
         assert.deepEqual(instance.option('items')[0], expectedValue, 'items');
     });
 
-    // T582179
-    QUnit.test('Selection should not be cleared after searching', function(assert) {
+    QUnit.test('Selection should not be cleared after searching (T582179)', function(assert) {
         const $element = $('#list').dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true,
@@ -4579,6 +4814,10 @@ if(devices.real().deviceType === 'desktop') {
                     role: 'listbox',
                     'aria-label': 'Items',
                 };
+                this.expectedItemsContainerMultipleModeAttrs = {
+                    ...this.expectedItemsContainerAttrs,
+                    'aria-multiselectable': 'true',
+                };
             },
             afterEach: function() {
                 this.clock.restore();
@@ -4623,7 +4862,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.createWidget({ selectedItemKeys: ['Item_1', 'Item_3'], keyExpr: 'text', selectionMode: 'multiple' });
 
                 helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
-                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerMultipleModeAttrs);
                 helper.checkItemsAttributes([0, 2], { attributes: ['aria-selected'], role: 'option' });
 
                 const $item_1 = $(helper.getItems().eq(1));
@@ -4632,63 +4871,9 @@ if(devices.real().deviceType === 'desktop') {
                 this.clock.tick(10);
 
                 helper.checkAttributes(helper.$itemContainer, { ...this.expectedContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
-                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerMultipleModeAttrs);
                 helper.checkItemsAttributes([0, 1, 2], { attributes: ['aria-selected'], focusedItemIndex: 1, role: 'option' });
             });
-        });
-    });
-}
-
-if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {
-    QUnit.module('ShadowDOM', {
-        beforeEach: function() {
-            this.clock = sinon.useFakeTimers();
-
-            this.$list = $('#list').dxList({
-                items: ['One', 'Two', 'Three'],
-                itemDragging: { allowReordering: true },
-                focusStateEnabled: true,
-            });
-
-            this.root = $('#list')[0].getRootNode();
-        },
-
-        afterEach: function() {
-            this.clock.restore();
-        },
-
-        getItems: function() {
-            return this.$list.find(`.${LIST_ITEM_CLASS}`);
-        },
-
-        createEvent: function(eventName) {
-            return $.Event(eventName, {
-                originalEvent: {
-                    type: eventName,
-                    target: { shadowRoot: this.root },
-                    path: [ this.getItems().eq(1)[0] ],
-                    changedTouches: [{}]
-                }
-            });
-        },
-    }, () => {
-        QUnit.test('drag item', function(assert) {
-            const pointer = reorderingPointerMock(this.getItems().first());
-
-            pointer.dragStart().drag(34).dragEnd();
-
-            const orderedItems = this.getItems().toArray().map(e => e.innerText.trim());
-
-            assert.deepEqual(orderedItems, ['Two', 'Three', 'One']);
-        });
-
-        QUnit.test('focus item', function(assert) {
-            $(this.root).trigger(this.createEvent('mousedown'));
-            $(this.root).trigger(this.createEvent('touchstart'));
-
-            this.clock.tick(10);
-
-            assert.ok(this.getItems().eq(1).hasClass(FOCUSED_STATE_CLASS));
         });
     });
 }
@@ -4826,10 +5011,6 @@ QUnit.module('Accessibility', () => {
         const itemDeleteMode = buttonClass === STATIC_DELETE_BUTTON_CLASS ? 'static' : 'toggle';
 
         QUnit.test(`List item ${itemDeleteMode} button should have a correct role, aria-label, tabindex`, function(assert) {
-            if(!isDeviceDesktop(assert)) {
-                return;
-            }
-
             $('#list').dxList({
                 itemDeleteMode,
                 dataSource: ['text 1', 'text 2'],
@@ -4847,10 +5028,6 @@ QUnit.module('Accessibility', () => {
     });
 
     QUnit.test('List item switchable button should have a correct role, aria-label, tabindex', function(assert) {
-        if(!isDeviceDesktop(assert)) {
-            return;
-        }
-
         const $list = $('#list').dxList({
             dataSource: ['text 1', 'text 2'],
             itemDeleteMode: 'slideButton',

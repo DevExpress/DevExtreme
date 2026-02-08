@@ -394,7 +394,9 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         const $dialog = $('body').find(Consts.POPUP_SELECTOR);
         assert.equal($dialog.length, 1, 'dialog is shown');
         const inputs = $dialog.find('.dx-texteditor-input');
-        assert.equal(inputs.attr('readOnly'), 'readonly', 'all inputs is readOnly');
+        const readOnlyAttr = inputs.attr('readOnly');
+        // Enabled boolean attributes return '' in jQuery 4+ and their name ('readonly') in jQuery 3
+        assert.ok(readOnlyAttr === '' || readOnlyAttr === 'readonly', 'all inputs is readOnly');
     });
     test('task dialog showing - hide fields', function(assert) {
         this.createInstance(options.allSourcesOptions);

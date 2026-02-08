@@ -1,4 +1,4 @@
-import FileUploader from '../__internal/ui/m_file_uploader';
+import FileUploader from '../__internal/ui/file_uploader';
 
 export default FileUploader;
 

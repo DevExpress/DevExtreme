@@ -1,0 +1,104 @@
+<div class="stepper-demo">
+  <div class="widget-container">
+    <div class="widget-wrapper" [ngClass]="'widget-wrapper-' + orientation">
+      <div class="stepper-wrapper">
+        <div id="iconsLabel" class="stepper-label">Icons and Labels</div>
+        <dx-stepper
+          id="icons"
+          [elementAttr]="{ 'aria-labelledby': 'iconsLabel' }"
+          [selectedIndex]="2"
+          [orientation]="orientation"
+          [linear]="navigationMode"
+          [selectOnFocus]="selectOnFocus"
+          [rtlEnabled]="rtlMode"
+        >
+          <dxi-stepper-item
+            *ngFor="let step of steps"
+            [label]="step.label"
+            [icon]="step.icon"
+            [optional]="step.optional"
+          ></dxi-stepper-item>
+        </dx-stepper>
+      </div>
+
+      <div class="stepper-wrapper">
+        <div id="numbersLabel" class="stepper-label">Numbers and Labels</div>
+        <dx-stepper
+          id="numbers"
+          [elementAttr]="{ 'aria-labelledby': 'numbersLabel' }"
+          [selectedIndex]="2"
+          [orientation]="orientation"
+          [linear]="navigationMode"
+          [selectOnFocus]="selectOnFocus"
+          [rtlEnabled]="rtlMode"
+        >
+          <dxi-stepper-item
+            *ngFor="let step of steps"
+            [label]="step.label"
+            [optional]="step.optional"
+          ></dxi-stepper-item>
+        </dx-stepper>
+      </div>
+
+      <div class="stepper-wrapper">
+        <div id="customTextLabel" class="stepper-label">Custom Text</div>
+        <dx-stepper
+          id="customText"
+          [elementAttr]="{ 'aria-labelledby': 'customTextLabel' }"
+          [selectedIndex]="2"
+          [orientation]="orientation"
+          [linear]="navigationMode"
+          [selectOnFocus]="selectOnFocus"
+          [rtlEnabled]="rtlMode"
+        >
+          <dxi-stepper-item
+            *ngFor="let step of steps"
+            [text]="step.text"
+          ></dxi-stepper-item>
+        </dx-stepper>
+      </div>
+    </div>
+  </div>
+
+  <div class="options">
+    <div class="caption">Options</div>
+
+    <div class="option">
+      <div>Orientation</div>
+      <dx-button-group
+        id="orientation"
+        keyExpr="value"
+        [items]="orientations"
+        [selectedItemKeys]="[orientation]"
+        (onItemClick)="onOrientationClick($event)"
+      />
+    </div>
+    <div class="option">
+      <div>Navigation Mode</div>
+      <dx-button-group
+        id="navigationMode"
+        keyExpr="value"
+        [items]="navigationModes"
+        [selectedItemKeys]="[navigationMode]"
+        (onItemClick)="onNavigationModeClick($event)"
+      />
+    </div>
+    <div class="option-separator"></div>
+    <div class="option">
+      <dx-check-box
+        id="selectOnFocus"
+        text="Select step on focus"
+        [value]="selectOnFocus"
+        (onValueChanged)="onSelectOnFocusChanged($event)"
+      />
+    </div>
+    <div class="option">
+      <dx-check-box
+        id="rtlMode"
+        text="Right-to-left mode"
+        [value]="rtlMode"
+        (onValueChanged)="onRtlModeChanged($event)"
+      />
+    </div>
+  </div>
+</div>

@@ -39,16 +39,16 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiTabsItemModule } from 'devextreme-angular/ui/tabs/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiTabsItemComponent } from 'devextreme-angular/ui/tabs/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -57,8 +57,10 @@ import { DxiTabsItemComponent } from 'devextreme-angular/ui/tabs/nested';
  */
 @Component({
     selector: 'dx-tabs',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -67,6 +69,12 @@ import { DxiTabsItemComponent } from 'devextreme-angular/ui/tabs/nested';
     ]
 })
 export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxTabs<TItem, TKey> = null;
 
     /**
@@ -139,10 +147,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -438,10 +446,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -565,7 +573,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -726,27 +734,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiTabsItemComponent)
-    get itemsChildren(): QueryList<DxiTabsItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiTabsItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -852,13 +840,11 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
 
 @NgModule({
   imports: [
+    DxTabsComponent,
     DxiItemModule,
     DxiTabsItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTabsComponent
   ],
   exports: [
     DxTabsComponent,
@@ -868,6 +854,8 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
   ]
 })
 export class DxTabsModule { }
+
+export * from 'devextreme-angular/ui/tabs/nested';
 
 import type * as DxTabsTypes from "devextreme/ui/tabs_types";
 export { DxTabsTypes };

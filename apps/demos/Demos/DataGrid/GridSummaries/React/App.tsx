@@ -2,7 +2,7 @@ import React from 'react';
 import DataGrid, {
   Column, Selection, Summary, TotalItem, Pager,
 } from 'devextreme-react/data-grid';
-import { formatDate } from 'devextreme/localization';
+import { formatDate } from 'devextreme-react/common/core/localization';
 import { orders } from './data.ts';
 
 const customizeDate = (itemInfo) => `First: ${formatDate(itemInfo.value, 'MMM dd, yyyy')}`;

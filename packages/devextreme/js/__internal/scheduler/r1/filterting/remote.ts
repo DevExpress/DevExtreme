@@ -3,7 +3,7 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
 import { isDefined, isString } from '@js/core/utils/type';
 
-import type { DataAccessorType } from '../types';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 import { getDatesWithoutTime } from '../utils/index';
 import type {
   CombineRemoteFilterType,
@@ -23,7 +23,7 @@ class RemoteFilterCombiner {
     this.options = options;
   }
 
-  get dataAccessors(): DataAccessorType { return this.options.dataAccessors; }
+  get dataAccessors(): AppointmentDataAccessor { return this.options.dataAccessors; }
 
   get dataSourceFilter(): unknown[] | undefined { return this.options.dataSourceFilter; }
 

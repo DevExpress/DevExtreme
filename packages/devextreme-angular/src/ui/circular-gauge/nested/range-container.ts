@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -21,19 +20,30 @@ import { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/ch
 import { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiCircularGaugeRangeComponent } from './range-dxi';
 
+import {
+    PROPERTY_TOKEN_ranges,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-circular-gauge-range-container',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoCircularGaugeRangeContainerComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_ranges)
+    set _rangesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('ranges', value);
+    }
+    
     @Input()
     get backgroundColor(): ChartsColor | string {
         return this._getOption('backgroundColor');
@@ -96,14 +106,6 @@ export class DxoCircularGaugeRangeContainerComponent extends NestedOption implem
     }
 
 
-    @ContentChildren(forwardRef(() => DxiCircularGaugeRangeComponent))
-    get rangesChildren(): QueryList<DxiCircularGaugeRangeComponent> {
-        return this._getOption('ranges');
-    }
-    set rangesChildren(value) {
-        this.setChildren('ranges', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -124,7 +126,7 @@ export class DxoCircularGaugeRangeContainerComponent extends NestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCircularGaugeRangeContainerComponent
   ],
   exports: [

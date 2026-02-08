@@ -6,7 +6,8 @@ import {
   InitializedEventInfo,
   ChangedOptionInfo,
   ItemInfo,
-} from '../common/core/events';
+  PointerInteractionEvent,
+} from '../events';
 
 import CollectionWidget, {
   CollectionWidgetItem,
@@ -61,7 +62,7 @@ export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEve
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxResponsiveBox<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxResponsiveBox<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_responsive_box_ItemHoldEvent
@@ -69,7 +70,7 @@ export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = Nat
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxResponsiveBox<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxResponsiveBox<TItem, TKey>, PointerInteractionEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_responsive_box_ItemRenderedEvent
@@ -135,7 +136,7 @@ export interface dxResponsiveBoxOptions<
      * @default '100%'
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * @docid
      * @type Array<string | dxResponsiveBoxItem | any>
@@ -186,7 +187,7 @@ export interface dxResponsiveBoxOptions<
      * @default '100%'
      * @public
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
 }
 /**
  * @docid

@@ -10,7 +10,6 @@ import {
     Host,
     SkipSelf,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -19,16 +18,22 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoHtmlEditorTableContextMenu } from './base/html-editor-table-context-menu';
-import { DxiItemComponent } from './item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-table-context-menu',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'enabled',
@@ -36,19 +41,16 @@ import { DxiItemComponent } from './item-dxi';
     ]
 })
 export class DxoTableContextMenuComponent extends DxoHtmlEditorTableContextMenu implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
 
     protected get _optionPath() {
         return 'tableContextMenu';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -70,7 +72,7 @@ export class DxoTableContextMenuComponent extends DxoHtmlEditorTableContextMenu 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTableContextMenuComponent
   ],
   exports: [

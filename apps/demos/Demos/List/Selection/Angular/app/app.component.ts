@@ -1,0 +1,58 @@
+import { NgModule, Component, enableProdMode } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { DataSource, ArrayStore } from 'devextreme-angular/common/data';
+import { DxSelectBoxModule, DxCheckBoxModule } from 'devextreme-angular';
+import { SingleMultipleAllOrNone } from 'devextreme-angular/common';
+import { DxListModule, DxListTypes } from 'devextreme-angular/ui/list';
+import { Service } from './app.service';
+
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
+}
+
+let modulePrefix = '';
+// @ts-ignore
+if (window && window.config?.packageConfigPaths) {
+  modulePrefix = '/app';
+}
+
+@Component({
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: `.${modulePrefix}/app.component.html`,
+  styleUrls: [`.${modulePrefix}/app.component.css`],
+  preserveWhitespaces: true,
+})
+export class AppComponent {
+  tasks: DataSource;
+
+  selectAllModeValue: DxListTypes.SelectAllMode = 'page';
+
+  selectionModeValue: SingleMultipleAllOrNone = 'all';
+
+  selectByClick = false;
+
+  constructor(service: Service) {
+    this.tasks = new DataSource({
+      store: new ArrayStore({
+        key: 'id',
+        data: service.getTasks(),
+      }),
+    });
+  }
+}
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    DxSelectBoxModule,
+    DxListModule,
+    DxCheckBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
+})
+export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);

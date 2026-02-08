@@ -28,10 +28,8 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
-
-
 
 
 
@@ -42,8 +40,10 @@ import {
  */
 @Component({
     selector: 'dx-speed-dial-action',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -51,6 +51,7 @@ import {
     ]
 })
 export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy {
+
     instance: DxSpeedDialAction = null;
 
     /**
@@ -335,10 +336,6 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
 
 
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             _watcherHelper: WatcherHelper,
             optionHost: NestedOptionHost,
@@ -383,11 +380,9 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
 
 @NgModule({
   imports: [
+    DxSpeedDialActionComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSpeedDialActionComponent
   ],
   exports: [
     DxSpeedDialActionComponent,
@@ -395,6 +390,7 @@ export class DxSpeedDialActionComponent extends DxComponent implements OnDestroy
   ]
 })
 export class DxSpeedDialActionModule { }
+
 
 import type * as DxSpeedDialActionTypes from "devextreme/ui/speed_dial_action_types";
 export { DxSpeedDialActionTypes };

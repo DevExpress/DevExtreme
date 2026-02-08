@@ -1,3 +1,8 @@
+$chat-messagebubble-padding-image: 4px !default;
+$chat-messagebubble-border-radius-image: 8px !default;
+$chat-messagebubble-max-width-image: 400px !default;
+$chat-messagebubble-max-height-image: 400px !default;
+
 .dx-chat-messagegroup-content {
   display: flex;
   flex-direction: column;
@@ -7,6 +12,18 @@
   width: auto;
   word-break: break-word;
   white-space: break-spaces;
+
+  &.dx-chat-messagebubble-deleted {
+    .dx-chat-messagebubble-content {
+      display: flex;
+      align-items: center;
+      font-style: italic;
+    }
+  }
+
+  &.dx-has-image {
+    padding: $chat-messagebubble-padding-image;
+  }
 }
 
 .dx-chat-messagegroup-alignment-start {
@@ -31,4 +48,12 @@
     border-start-end-radius: 0;
     border-end-end-radius: 0;
   }
+}
+
+.dx-chat-messagebubble-image {
+  border-radius: $chat-messagebubble-border-radius-image;
+  max-width: $chat-messagebubble-max-width-image;
+  max-height: $chat-messagebubble-max-height-image;
+  width: 100%;
+  display: block;
 }

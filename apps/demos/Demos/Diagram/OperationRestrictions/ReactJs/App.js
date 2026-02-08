@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback } from 'react';
 import Diagram, {
   CustomShape,
   Nodes,
@@ -9,7 +9,7 @@ import Diagram, {
   Group,
 } from 'devextreme-react/diagram';
 import notify from 'devextreme/ui/notify';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-react/common/data';
 import service from './data.js';
 
 const shapes = ['team', 'employee'];
@@ -49,9 +49,8 @@ function itemStyleExpr(obj) {
   return { fill: '#bbefcb' };
 }
 export default function App() {
-  const diagramRef = useRef(null);
   const onRequestEditOperation = useCallback((e) => {
-    const diagram = diagramRef.current.instance();
+    const diagram = e.component.instance();
     if (e.operation === 'addShape') {
       if (e.args.shape.type !== 'employee' && e.args.shape.type !== 'team') {
         if (e.reason !== 'checkUIElementAvailability') {
@@ -123,7 +122,6 @@ export default function App() {
   return (
     <Diagram
       id="diagram"
-      ref={diagramRef}
       onRequestEditOperation={onRequestEditOperation}
       onRequestLayoutUpdate={onRequestLayoutUpdate}
     >

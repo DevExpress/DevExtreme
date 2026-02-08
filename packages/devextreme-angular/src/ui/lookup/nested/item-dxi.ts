@@ -18,20 +18,31 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-lookup-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiLookupItemComponent,
+        }
+    ]
 })
 export class DxiLookupItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -109,7 +120,7 @@ export class DxiLookupItemComponent extends CollectionNestedOption implements Af
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiLookupItemComponent
   ],
   exports: [

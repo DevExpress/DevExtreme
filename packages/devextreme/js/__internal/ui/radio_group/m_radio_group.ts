@@ -9,6 +9,7 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Properties } from '@js/ui/radio_group';
+import type { OptionChanged } from '@ts/core/widget/types';
 import type { EditorProperties, UnresolvedEvents } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 
@@ -31,8 +32,19 @@ class RadioGroup extends Editor<RadioGroupProperties> {
 
   private _$submitElement!: dxElementWrapper;
 
-  _dataSourceOptions() {
+  // eslint-disable-next-line class-methods-use-this
+  _dataSourceOptions(): { paginate: boolean } {
     return { paginate: false };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  protected _activeStateUnit(): string {
+    return `.${RADIO_BUTTON_CLASS}`;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  protected _feedbackHideTimeout(): number {
+    return RADIO_FEEDBACK_HIDE_TIMEOUT;
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<RadioGroupProperties>[] {
@@ -87,8 +99,6 @@ class RadioGroup extends Editor<RadioGroupProperties> {
   _init(): void {
     super._init();
 
-    this._activeStateUnit = `.${RADIO_BUTTON_CLASS}`;
-    this._feedbackHideTimeout = RADIO_FEEDBACK_HIDE_TIMEOUT;
     // @ts-expect-error
     this._initDataExpressions();
   }
@@ -114,7 +124,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
     }
   }
 
-  _getSelectedItemKeys(value = this.option('value')) {
+  _getSelectedItemKeys(value) {
     // @ts-expect-error
     const isNullSelectable = this.option('valueExpr') !== 'this';
     const shouldSelectValue = isNullSelectable && value === null || isDefined(value);
@@ -135,7 +145,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
     this._validationMessage?.$content().attr('role', 'alert');
   }
 
-  _optionChanged(args: Record<string, unknown>): void {
+  _optionChanged(args: OptionChanged<RadioGroupProperties>): void {
     const { name, value } = args;
     // @ts-expect-error
     this._dataExpressionOptionChanged(args);
@@ -199,6 +209,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
       focusStateEnabled,
       itemTemplate,
       tabIndex,
+      value,
     } = this.option();
     this._createComponent($radios, RadioCollection, {
       onInitialized: ({ component }) => {
@@ -222,7 +233,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
       scrollingEnabled: false,
       selectByClick: false,
       selectionMode: 'single',
-      selectedItemKeys: this._getSelectedItemKeys(),
+      selectedItemKeys: this._getSelectedItemKeys(value),
       tabIndex,
     });
     this._areRadiosCreated.resolve();
@@ -255,7 +266,7 @@ class RadioGroup extends Editor<RadioGroupProperties> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _setCollectionWidgetOption(name: string, value: unknown): void {
     // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
     this._areRadiosCreated.done(this._setWidgetOption.bind(this, '_radios', arguments));
   }
 

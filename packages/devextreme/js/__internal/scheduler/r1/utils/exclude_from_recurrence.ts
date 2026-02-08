@@ -1,10 +1,8 @@
 import dateSerialization from '@js/core/utils/date_serialization';
 import type { Appointment } from '@js/ui/scheduler';
 
-import type AppointmentAdapter from '../../m_appointment_adapter';
-import { createAppointmentAdapter } from '../../m_appointment_adapter';
-import type { TimeZoneCalculator } from '../timezone_calculator';
-import type { DataAccessorType } from '../types';
+import { AppointmentAdapter } from '../../utils/appointment_adapter/appointment_adapter';
+import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
 
 const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
 const UTC_FULL_DATE_FORMAT = `${FULL_DATE_FORMAT}Z`;
@@ -13,7 +11,7 @@ const getSerializedDate = (
   date: Date,
   startDate: Date,
   isAllDay: boolean,
-): Date => {
+): string => {
   if (isAllDay) {
     date.setHours(
       startDate.getHours(),
@@ -26,14 +24,14 @@ const getSerializedDate = (
   return dateSerialization.serializeDate(
     date,
     UTC_FULL_DATE_FORMAT,
-  ) as Date;
+  ) as string;
 };
 
 const createRecurrenceException = (
   appointmentAdapter: AppointmentAdapter,
   exceptionDate: Date,
 ): string => {
-  const result: Date[] = [];
+  const result: string[] = [];
 
   if (appointmentAdapter.recurrenceException) {
     result.push(appointmentAdapter.recurrenceException);
@@ -53,13 +51,11 @@ const createRecurrenceException = (
 export const excludeFromRecurrence = (
   appointment: Appointment,
   exceptionDate: Date,
-  dataAccessors: DataAccessorType,
-  timeZoneCalculator: TimeZoneCalculator,
+  dataAccessors: AppointmentDataAccessor,
 ): AppointmentAdapter => {
-  const appointmentAdapter = createAppointmentAdapter(
+  const appointmentAdapter = new AppointmentAdapter(
     { ...appointment },
     dataAccessors,
-    timeZoneCalculator,
   );
 
   appointmentAdapter.recurrenceException = createRecurrenceException(

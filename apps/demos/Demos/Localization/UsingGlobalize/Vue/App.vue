@@ -63,10 +63,10 @@ import {
   DxDataGrid, DxColumn, DxEditing, DxFilterRow,
 } from 'devextreme-vue/data-grid';
 import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
-import 'devextreme/localization/globalize/number';
-import 'devextreme/localization/globalize/date';
-import 'devextreme/localization/globalize/currency';
-import 'devextreme/localization/globalize/message';
+import 'devextreme/common/core/localization/globalize/number';
+import 'devextreme/common/core/localization/globalize/date';
+import 'devextreme/common/core/localization/globalize/currency';
+import 'devextreme/common/core/localization/globalize/message';
 /* eslint-disable import/no-unresolved */
 /* eslint-disable import/no-webpack-loader-syntax */
 // @ts-ignore
@@ -79,7 +79,7 @@ import * as deCldrData from 'npm:devextreme-cldr-data/de.json!json';
 import * as ruCldrData from 'npm:devextreme-cldr-data/ru.json!json';
 // @ts-ignore
 import * as supplementalCldrData from 'npm:devextreme-cldr-data/supplemental.json!json';
-
+// @ts-ignore
 import * as Globalize from 'globalize';
 import service from './data.ts';
 
@@ -90,7 +90,7 @@ const locale: Locale = getLocale();
 const editPopupOptions = { width: 700, height: 345 };
 const amountEditorOptions = { format: 'currency', showClearButton: true };
 const selectBoxInputAttr = { id: 'selectInput' };
-const formatMessage = ref((msg) => msg);
+const formatMessage = ref((msg: string) => msg);
 
 onBeforeMount(() => {
   initGlobalize();

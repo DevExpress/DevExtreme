@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import { SeriesDataSource } from 'viz/range_selector/series_data_source';
 import { ThemeManager } from 'viz/components/chart_theme_manager';
 import { MockAxis, MockTranslator, setupSeriesFamily } from '../../helpers/chartMocks.js';
@@ -14,13 +16,13 @@ function createSeriesDataSource(options) {
 
 const environment = {
     beforeEach: function() {
-        this.argumentAxis = new MockAxis({ renderer: new vizMocks.Renderer() });
+        this.argumentAxis = new MockAxis({ renderer: new Renderer() });
         this.argumentAxis.calculateInterval = function(a, b) { return Math.abs(a - b); };
         this.argumentAxis.visualRange = noop;
 
         sinon.stub(this.argumentAxis, 'getTranslator').returns(new MockTranslator({}));
 
-        this.valueAxis = new MockAxis({ renderer: new vizMocks.Renderer() });
+        this.valueAxis = new MockAxis({ renderer: new Renderer() });
         this.valueAxis.setTypes = sinon.spy();
         this.valueAxis.validate = sinon.spy();
     }
@@ -44,7 +46,7 @@ QUnit.test('no draw points on creation', function(assert) {
                 valueField: 'y1'
             }
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -52,7 +54,6 @@ QUnit.test('no draw points on creation', function(assert) {
 });
 
 QUnit.test('one series', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { x: 10, y1: 0 },
@@ -74,7 +75,7 @@ QUnit.test('one series', function(assert) {
                 valueField: 'y1'
             }
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const series = seriesDataSource.getSeries();
@@ -93,7 +94,6 @@ QUnit.test('one series', function(assert) {
 });
 
 QUnit.test('B235735', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ x: 10, y1: 0 }],
         chart: {
@@ -106,7 +106,7 @@ QUnit.test('B235735', function(assert) {
                 valueField: 'y1'
             }
         },
-        renderer: new vizMocks.Renderer(), argumentAxis: this.argumentAxis
+        renderer: new Renderer(), argumentAxis: this.argumentAxis
     });
     const series = seriesDataSource.getSeries();
     assert.ok(!series[0].getOptions().rotated);// B235735
@@ -125,7 +125,7 @@ QUnit.test('theme manager', function(assert) {
                 valueField: 'y1'
             }
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -134,7 +134,6 @@ QUnit.test('theme manager', function(assert) {
 
 // B253717
 QUnit.test('datetime in chart valueAxis', function(assert) {
-    // arrange
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { y: new Date(1980, 5, 17), x: new Date(1980, 5, 18) },
@@ -150,11 +149,10 @@ QUnit.test('datetime in chart valueAxis', function(assert) {
             },
             valueAxis: { valueType: 'datetime' },
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
-    // act
     const range = seriesDataSource.getBoundRange();
 
     assert.strictEqual(range.val.min.toUTCString(), (new Date(1980, 5, 11)).toUTCString());
@@ -183,7 +181,7 @@ QUnit.test('seriesDateSource with categories', function(assert) {
             }
             ]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis,
         categories: ['a1', 'a2', 'a3']
     });
@@ -201,7 +199,7 @@ QUnit.test('argument categories', function(assert) {
         chart: {
             series: [{}]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -209,7 +207,6 @@ QUnit.test('argument categories', function(assert) {
 });
 
 QUnit.test('several series', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { x: 10, y1: 3, y2: 5 },
@@ -229,7 +226,7 @@ QUnit.test('several series', function(assert) {
             }
             ]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const series = seriesDataSource.getSeries();
@@ -252,7 +249,6 @@ QUnit.test('several series', function(assert) {
 });
 
 QUnit.test('several series. Set valueType', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { x: 10, y1: 3, y2: 5 },
@@ -263,7 +259,7 @@ QUnit.test('several series. Set valueType', function(assert) {
             series: [{ valueField: 'y1' }, { valueField: 'y2' }],
             valueAxis: { valueType: 'numeric' }
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const series = seriesDataSource.getSeries();
@@ -274,8 +270,6 @@ QUnit.test('several series. Set valueType', function(assert) {
 });
 
 QUnit.test('series theme', function(assert) {
-
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { x: 10, y1: 3, y2: 5 },
@@ -297,7 +291,7 @@ QUnit.test('series theme', function(assert) {
                 }
             }
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -309,8 +303,6 @@ QUnit.test('series theme', function(assert) {
 });
 
 QUnit.test('Pass series count to themeManager', function(assert) {
-
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { x: 10, y1: 3, y2: 5 },
@@ -336,7 +328,7 @@ QUnit.test('Pass series count to themeManager', function(assert) {
                 }
             }
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -349,7 +341,6 @@ QUnit.test('Pass series count to themeManager', function(assert) {
 });
 
 QUnit.test('getBoundRange with topIndent, bottomIndent', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
             { arg: 3, val: 200 },
@@ -362,10 +353,9 @@ QUnit.test('getBoundRange with topIndent, bottomIndent', function(assert) {
             topIndent: 0.2,
             bottomIndent: 0.1,
             series: {
-
             }
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
@@ -377,7 +367,6 @@ QUnit.test('getBoundRange with topIndent, bottomIndent', function(assert) {
 });
 
 QUnit.test('getBoundRange with topIndent>1, bottomIndent<0', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
             { arg: 3, val: 200 },
@@ -389,10 +378,9 @@ QUnit.test('getBoundRange with topIndent>1, bottomIndent<0', function(assert) {
             topIndent: 1.2,
             bottomIndent: -0.1,
             series: {
-
             }
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
@@ -404,7 +392,6 @@ QUnit.test('getBoundRange with topIndent>1, bottomIndent<0', function(assert) {
 });
 
 QUnit.test('getBoundRange if no series', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         chart: {
             commonSeriesSettings: {
@@ -423,7 +410,6 @@ QUnit.test('getBoundRange if no series', function(assert) {
 });
 
 QUnit.test('getBoundRange with topIndent, bottomIndent, valueAxis min', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
             { arg: 3, val: 200 },
@@ -438,10 +424,9 @@ QUnit.test('getBoundRange with topIndent, bottomIndent, valueAxis min', function
                 min: 100
             },
             series: {
-
             }
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
@@ -453,7 +438,6 @@ QUnit.test('getBoundRange with topIndent, bottomIndent, valueAxis min', function
 });
 
 QUnit.test('getBoundRange with topIndent, bottomIndent, valueAxis max', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
             { arg: 3, val: 200 },
@@ -469,7 +453,7 @@ QUnit.test('getBoundRange with topIndent, bottomIndent, valueAxis max', function
             },
             series: {}
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
@@ -482,7 +466,6 @@ QUnit.test('getBoundRange with topIndent, bottomIndent, valueAxis max', function
 
 // B230855
 QUnit.test('getBoundRange with valueAxis min/max', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
             { arg: 3, val: 200 },
@@ -499,7 +482,7 @@ QUnit.test('getBoundRange with valueAxis min/max', function(assert) {
             },
             series: {}
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
@@ -511,7 +494,6 @@ QUnit.test('getBoundRange with valueAxis min/max', function(assert) {
 });
 
 QUnit.test('getBoundRange valueAxis inverted', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 },
             { arg: 3, val: 200 },
@@ -525,7 +507,7 @@ QUnit.test('getBoundRange valueAxis inverted', function(assert) {
             },
             series: {}
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
@@ -536,7 +518,6 @@ QUnit.test('getBoundRange valueAxis inverted', function(assert) {
 });
 
 QUnit.test('getBoundRange with topIndent, bottomIndent, valueAxis inverted', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { arg: 1, val: 0 },
@@ -554,7 +535,7 @@ QUnit.test('getBoundRange with topIndent, bottomIndent, valueAxis inverted', fun
             },
             series: {}
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
@@ -565,7 +546,6 @@ QUnit.test('getBoundRange with topIndent, bottomIndent, valueAxis inverted', fun
 });
 
 QUnit.test('several series getBoundRange', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 3, arg1: 4, val1: 10 },
             { arg: 3, val: 6, arg1: 7, val1: 5 },
@@ -580,7 +560,7 @@ QUnit.test('several series getBoundRange', function(assert) {
                 valueField: 'val1'
             }]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
@@ -592,7 +572,6 @@ QUnit.test('several series getBoundRange', function(assert) {
 });
 
 QUnit.test('getBoundRange for simple dataSource', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ val: 1, arg: 100 }, { val: 2, arg: 5 }, { val: 3, arg: 16 }],
         chart: {
@@ -600,7 +579,7 @@ QUnit.test('getBoundRange for simple dataSource', function(assert) {
                 type: 'area'
             }
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
@@ -610,7 +589,6 @@ QUnit.test('getBoundRange for simple dataSource', function(assert) {
 });
 
 QUnit.test('getBoundRange for objects dataSource default dataSourceField', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { arg: 10, y1: 3, y2: 5 },
@@ -621,7 +599,7 @@ QUnit.test('getBoundRange for objects dataSource default dataSourceField', funct
                 type: 'area'
             }
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
@@ -631,7 +609,6 @@ QUnit.test('getBoundRange for objects dataSource default dataSourceField', funct
 });
 
 QUnit.test('getBoundRange for objects dataSource with dataSourceField', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { x: 10, y1: 3, y2: 5 },
@@ -643,7 +620,7 @@ QUnit.test('getBoundRange for objects dataSource with dataSourceField', function
             }
         },
         dataSourceField: 'y1',
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
@@ -672,7 +649,7 @@ QUnit.test('valueAxis minVisible/maxVisible should be defined when min/max is se
                 argumentField: 'arg1'
             }]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
@@ -682,7 +659,6 @@ QUnit.test('valueAxis minVisible/maxVisible should be defined when min/max is se
 });
 
 QUnit.test('several series getBoundRange with valueAxis min/max', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { arg: 1, val: 3, arg1: 4, val1: 10 },
@@ -702,7 +678,7 @@ QUnit.test('several series getBoundRange with valueAxis min/max', function(asser
                 argumentField: 'arg1'
             }]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
@@ -715,7 +691,6 @@ QUnit.test('several series getBoundRange with valueAxis min/max', function(asser
 
 // B253591
 QUnit.test('getBoundRange of Line series with equal values', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { arg: 1, val: 10 },
@@ -730,7 +705,7 @@ QUnit.test('getBoundRange of Line series with equal values', function(assert) {
             bottomIndent: 0.1,
             series: [{}]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     const boundRange = seriesDataSource.getBoundRange();
@@ -742,7 +717,6 @@ QUnit.test('getBoundRange of Line series with equal values', function(assert) {
 });
 
 QUnit.test('getBoundRange valueAxis has logarithmic type', function(assert) {
-    // arrange, act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [
             { arg: 1, val: 4 },
@@ -759,7 +733,7 @@ QUnit.test('getBoundRange valueAxis has logarithmic type', function(assert) {
             },
             series: {}
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis,
         valueAxis: this.valueAxis
     });
@@ -787,7 +761,7 @@ QUnit.test('Logarithmic value axis. \'Type\' option should be passed to the seri
             },
             series: {}
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -808,7 +782,7 @@ QUnit.test('\'valueType\' option should be passed to the series', function(asser
             },
             series: {}
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -829,7 +803,7 @@ QUnit.test('Set right types for valueAxis and validate it', function(assert) {
             },
             series: [{ }]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis,
         valueAxis: this.valueAxis
     });
@@ -839,7 +813,6 @@ QUnit.test('Set right types for valueAxis and validate it', function(assert) {
 });
 
 QUnit.test('dataSource is null or is empty', function(assert) {
-    // arrange, act
     let seriesDataSource = createSeriesDataSource({
         chart: {
             commonSeriesSettings: {
@@ -853,13 +826,12 @@ QUnit.test('dataSource is null or is empty', function(assert) {
             }]
         },
         incidentOccurred: noop,
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
     assert.ok(seriesDataSource.isEmpty());
 
-    // arrange, act
     seriesDataSource = createSeriesDataSource({
         chart: {
             commonSeriesSettings: {
@@ -879,7 +851,6 @@ QUnit.test('dataSource is null or is empty', function(assert) {
 
 // B253068
 QUnit.test('with dataSourceField', function(assert) {
-    // arrange,act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ x: 10, y: 0 }, { x: 15, y: 6 }],
         dataSourceField: 'x',
@@ -895,7 +866,7 @@ QUnit.test('with dataSourceField', function(assert) {
             }]
         },
         incidentOccurred: noop,
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -905,14 +876,13 @@ QUnit.test('with dataSourceField', function(assert) {
 
 // T612521
 QUnit.test('No chart, dataSourceField, arguments as string, valueType = datetime - pass datetime as value and argument types. T612521', function(assert) {
-    // arrange,act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ x: '2018-02-01T00:00:00' }, { x: '2018-03-01T00:00:00' }],
         dataSourceField: 'x',
         valueType: 'datetime',
         chart: {},
         incidentOccurred: noop,
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -922,7 +892,6 @@ QUnit.test('No chart, dataSourceField, arguments as string, valueType = datetime
 
 // B254994
 QUnit.test('argumentField in commonSeriesSettings', function(assert) {
-    // arrange,act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ x: 10, y: 0 }, { x: 15, y: 6 }],
         chart: {
@@ -940,7 +909,7 @@ QUnit.test('argumentField in commonSeriesSettings', function(assert) {
             }]
         },
         incidentOccurred: noop,
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -949,7 +918,6 @@ QUnit.test('argumentField in commonSeriesSettings', function(assert) {
 });
 
 QUnit.test('without dataSourceField, (valueField from commonSeriesSettings)', function(assert) {
-    // arrange,act
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ x: 10, y: 0 }, { x: 15, y: 6 }],
         chart: {
@@ -965,7 +933,7 @@ QUnit.test('without dataSourceField, (valueField from commonSeriesSettings)', fu
             }]
         },
         incidentOccurred: noop,
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -986,7 +954,6 @@ const seriesTemplateDataSource = [
     { series: '2001', x: 50, y: 82 }];
 
 QUnit.test('seriesTemplate', function(assert) {
-    // arrange,act
     const seriesDataSource = createSeriesDataSource({
         dataSource: seriesTemplateDataSource,
         chart: {
@@ -1000,7 +967,7 @@ QUnit.test('seriesTemplate', function(assert) {
                 customizeSeries: function() { return { type: 'spline' }; }
             }
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -1016,7 +983,6 @@ QUnit.test('seriesTemplate', function(assert) {
 });
 
 QUnit.test('seriesTemplate, incorrect nameField', function(assert) {
-    // arrange,act
     const seriesDataSource = createSeriesDataSource({
         dataSource: seriesTemplateDataSource,
         chart: {
@@ -1030,7 +996,7 @@ QUnit.test('seriesTemplate, incorrect nameField', function(assert) {
                 customizeSeries: function() { return { type: 'spline' }; }
             }
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -1057,7 +1023,7 @@ QUnit.test('Names to series', function(assert) {
                 valueField: 'y1'
             }
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -1080,7 +1046,7 @@ QUnit.test('empty dataSource', function(assert) {
             }
         },
         incidentOccurred: noop,
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -1103,7 +1069,7 @@ QUnit.test('one type for all series', function(assert) {
             }]
         },
         incidentOccurred: noop,
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     assert.deepEqual(seriesDataSource._series.length, 2);
@@ -1135,7 +1101,7 @@ QUnit.test('adjustSeriesDimensions', function(assert) {
                     argumentField: 'arg1'
                 }]
             },
-            renderer: new vizMocks.Renderer(),
+            renderer: new Renderer(),
             argumentAxis: this.argumentAxis
         });
     const series = seriesDataSource.getSeries();
@@ -1181,7 +1147,7 @@ QUnit.test('SeriesDataSource updates axes\' translator with argument range', fun
                     argumentField: 'arg1'
                 }]
             },
-            renderer: new vizMocks.Renderer(),
+            renderer: new Renderer(),
             argumentAxis: this.argumentAxis
         });
 
@@ -1216,7 +1182,7 @@ QUnit.test('several types for all series', function(assert) {
                 argumentField: 'arg2'
             }]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -1247,12 +1213,11 @@ QUnit.test('Calculated valueType - numeric', function(assert) {
                 type: 'line'
             }]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
     assert.equal(seriesDataSource.getCalculatedValueType(), 'numeric');
-
 });
 
 QUnit.test('Calculated valueType - datetime', function(assert) {
@@ -1270,12 +1235,11 @@ QUnit.test('Calculated valueType - datetime', function(assert) {
                 type: 'line'
             }]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
     assert.equal(seriesDataSource.getCalculatedValueType(), 'datetime');
-
 });
 
 QUnit.test('Calculated valueType - string', function(assert) {
@@ -1293,12 +1257,11 @@ QUnit.test('Calculated valueType - string', function(assert) {
                 type: 'line'
             }]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
     assert.equal(seriesDataSource.getCalculatedValueType(), 'string');
-
 });
 
 QUnit.test('seriesDataSource with bubbleSize option', function(assert) {
@@ -1318,7 +1281,7 @@ QUnit.test('seriesDataSource with bubbleSize option', function(assert) {
             }]
         },
         incidentOccurred: noop,
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -1335,7 +1298,7 @@ QUnit.test('seriesDataSource with barGroupPadding option', function(assert) {
                 type: 'line'
             }]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     assert.equal(seriesDataSource._seriesFamilies[0].options.barGroupPadding, 0.6);
@@ -1350,7 +1313,7 @@ QUnit.test('seriesDataSource with barGroupWidth option', function(assert) {
                 type: 'line'
             }]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     assert.equal(seriesDataSource._seriesFamilies[0].options.barGroupWidth, 300);
@@ -1370,7 +1333,7 @@ QUnit.test('seriesDataSource with negativesAsZeroes option', function(assert) {
                 type: 'line'
             }]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     assert.deepEqual(seriesDataSource._seriesFamilies[0].options.negativesAsZeroes, 'negativesAsZeroes-option-value');
@@ -1390,7 +1353,7 @@ QUnit.test('seriesDataSource with negativesAsZeros (misspelled) option', functio
                 type: 'line'
             }]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     assert.deepEqual(seriesDataSource._seriesFamilies[0].options.negativesAsZeroes, 'negativesAsZeroes-option-value');
@@ -1411,7 +1374,7 @@ QUnit.test('seriesDataSource with negativesAsZeroes (correct + misspelled) optio
                 type: 'line'
             }]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
     assert.deepEqual(seriesDataSource._seriesFamilies[0].options.negativesAsZeroes, 'correct-option');
@@ -1432,7 +1395,7 @@ QUnit.test('Create series points before series families processing', function(as
             }]
         },
         incidentOccurred: noop,
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
 
@@ -1442,7 +1405,6 @@ QUnit.test('Create series points before series families processing', function(as
 QUnit.module('Merge marginOptions', environment);
 
 QUnit.test('Return max size', function(assert) {
-    // arrange
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 }],
         chart: {
@@ -1457,10 +1419,10 @@ QUnit.test('Return max size', function(assert) {
                 { point: { size: 30 } }
             ]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
-    // act
+
     const marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 100 });
 
     assert.deepEqual(marginOptions, {
@@ -1472,7 +1434,6 @@ QUnit.test('Return max size', function(assert) {
 });
 
 QUnit.test('If there is bar series return checkInterval option', function(assert) {
-    // arrange
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0 }],
         chart: {
@@ -1487,10 +1448,10 @@ QUnit.test('If there is bar series return checkInterval option', function(assert
                 { type: 'bar' }
             ]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
-    // act
+
     const marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 100 });
 
     assert.deepEqual(marginOptions, {
@@ -1502,7 +1463,6 @@ QUnit.test('If there is bar series return checkInterval option', function(assert
 });
 
 QUnit.test('Calculate size for bubble - height < width', function(assert) {
-    // arrange
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0, size: 1 }],
         chart: {
@@ -1517,10 +1477,10 @@ QUnit.test('Calculate size for bubble - height < width', function(assert) {
                 { type: 'bubble' }
             ]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
-    // act
+
     const marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 50 });
 
     assert.deepEqual(marginOptions, {
@@ -1532,7 +1492,6 @@ QUnit.test('Calculate size for bubble - height < width', function(assert) {
 });
 
 QUnit.test('Calculate size for bubble - height > width', function(assert) {
-    // arrange
     const seriesDataSource = createSeriesDataSource({
         dataSource: [{ arg: 1, val: 0, size: 1 }],
         chart: {
@@ -1547,10 +1506,10 @@ QUnit.test('Calculate size for bubble - height > width', function(assert) {
                 { type: 'bubble' }
             ]
         },
-        renderer: new vizMocks.Renderer(),
+        renderer: new Renderer(),
         argumentAxis: this.argumentAxis
     });
-    // act
+
     const marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 150 });
 
     assert.deepEqual(marginOptions, {

@@ -10,11 +10,7 @@ const timeZoneLabel = { 'aria-label': 'Time zone' };
 const currentDate = new Date(2021, 3, 27);
 const views: SchedulerTypes.ViewType[] = ['workWeek'];
 
-const getTimeZones = (date: Date) => {
-  const timeZones = timeZoneUtils.getTimeZones(date);
-
-  return timeZones.filter((timeZone: { id: string; }) => locations.indexOf(timeZone.id) !== -1);
-};
+const getTimeZones = (date) => timeZoneUtils.getTimeZones(date, locations)
 
 const defaultTimeZones = getTimeZones(currentDate);
 

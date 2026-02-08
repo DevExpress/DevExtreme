@@ -41,7 +41,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoItemDraggingModule } from 'devextreme-angular/ui/nested';
@@ -59,12 +60,11 @@ import { DxoListItemDraggingModule } from 'devextreme-angular/ui/list/nested';
 import { DxiListMenuItemModule } from 'devextreme-angular/ui/list/nested';
 import { DxoListOptionsModule } from 'devextreme-angular/ui/list/nested';
 import { DxoListSearchEditorOptionsModule } from 'devextreme-angular/ui/list/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-import { DxiMenuItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiListItemComponent } from 'devextreme-angular/ui/list/nested';
-import { DxiListMenuItemComponent } from 'devextreme-angular/ui/list/nested';
+import { 
+           PROPERTY_TOKEN_buttons,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_menuItems,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -73,8 +73,10 @@ import { DxiListMenuItemComponent } from 'devextreme-angular/ui/list/nested';
  */
 @Component({
     selector: 'dx-list',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -83,6 +85,22 @@ import { DxiListMenuItemComponent } from 'devextreme-angular/ui/list/nested';
     ]
 })
 export class DxListComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_menuItems)
+    set _menuItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('menuItems', value);
+    }
+
     instance: DxList<TItem, TKey> = null;
 
     /**
@@ -246,10 +264,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -792,10 +810,10 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -1040,7 +1058,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -1334,43 +1352,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiListItemComponent)
-    get itemsChildren(): QueryList<DxiListItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiListItemComponent');
-    }
-
-    @ContentChildren(DxiListMenuItemComponent)
-    get menuItemsChildren(): QueryList<DxiListMenuItemComponent> {
-        return this._getOption('menuItems');
-    }
-    set menuItemsChildren(value) {
-        this._setChildren('menuItems', value, 'DxiListMenuItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
-
-    @ContentChildren(DxiMenuItemComponent)
-    get menuItemsLegacyChildren(): QueryList<DxiMenuItemComponent> {
-        return this._getOption('menuItems');
-    }
-    set menuItemsLegacyChildren(value) {
-        this._setChildren('menuItems', value, 'DxiMenuItemComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -1515,6 +1497,7 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
 
 @NgModule({
   imports: [
+    DxListComponent,
     DxoItemDraggingModule,
     DxoCursorOffsetModule,
     DxiItemModule,
@@ -1531,9 +1514,6 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
     DxoListSearchEditorOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxListComponent
   ],
   exports: [
     DxListComponent,
@@ -1555,6 +1535,8 @@ export class DxListComponent<TItem = any, TKey = any> extends DxComponent implem
   ]
 })
 export class DxListModule { }
+
+export * from 'devextreme-angular/ui/list/nested';
 
 import type * as DxListTypes from "devextreme/ui/list_types";
 export { DxListTypes };

@@ -2,6 +2,7 @@ const $ = require('jquery');
 const noop = require('core/utils/common').noop;
 const BaseStrategy = require('common/core/events/pointer/base');
 const registerEvent = require('common/core/events/core/event_registrator');
+const typeUtils = require('core/utils/type');
 const special = require('../../../helpers/eventHelper.js').special;
 
 
@@ -231,7 +232,7 @@ QUnit.test('event is triggered one time after refresh', function(assert) {
 });
 
 QUnit.test('pointer event base strategy should have \'setup\' implementation, because jQuery adds a browser event via addEventListener/attachEvent otherwise (T208653)', function(assert) {
-    assert.ok($.isFunction((new BaseStrategy('', '')).setup));
+    assert.ok(typeUtils.isFunction((new BaseStrategy('', '')).setup));
 });
 
 QUnit.test('pointer events should correctly unsubscribe events with target', function(assert) {

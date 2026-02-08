@@ -19,6 +19,7 @@ import {
 import { TimeInterval } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -26,8 +27,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-whole-range',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartWholeRangeComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -77,7 +80,6 @@ export class DxoPolarChartWholeRangeComponent extends NestedOption implements On
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'endValueChange' },
             { emit: 'startValueChange' }
@@ -100,7 +102,7 @@ export class DxoPolarChartWholeRangeComponent extends NestedOption implements On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartWholeRangeComponent
   ],
   exports: [

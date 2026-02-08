@@ -16,9 +16,10 @@ import {
 
 
 
-import { GridBase } from 'devextreme/common/grids';
+import { FilterPanel, FilterPanelTexts } from 'devextreme/common/grids';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -26,16 +27,18 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-filter-panel',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoTreeListFilterPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get customizeText(): ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string) {
+    get customizeText(): ((e: { component: FilterPanel, filterValue: Record<string, any>, text: string }) => string) {
         return this._getOption('customizeText');
     }
-    set customizeText(value: ((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string)) {
+    set customizeText(value: ((e: { component: FilterPanel, filterValue: Record<string, any>, text: string }) => string)) {
         this._setOption('customizeText', value);
     }
 
@@ -48,10 +51,10 @@ export class DxoTreeListFilterPanelComponent extends NestedOption implements OnD
     }
 
     @Input()
-    get texts(): { clearFilter?: string, createFilter?: string, filterEnabledHint?: string } {
+    get texts(): FilterPanelTexts {
         return this._getOption('texts');
     }
-    set texts(value: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }) {
+    set texts(value: FilterPanelTexts) {
         this._setOption('texts', value);
     }
 
@@ -78,7 +81,6 @@ export class DxoTreeListFilterPanelComponent extends NestedOption implements OnD
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'filterEnabledChange' }
         ]);
@@ -100,7 +102,7 @@ export class DxoTreeListFilterPanelComponent extends NestedOption implements OnD
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListFilterPanelComponent
   ],
   exports: [

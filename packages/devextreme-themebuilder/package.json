@@ -1,6 +1,6 @@
 {
   "name": "devextreme-themebuilder",
-  "version": "25.1.0",
+  "version": "25.1.8",
   "description": "DevExtreme ThemeBuilder",
   "keywords": [
     "devextreme",
@@ -21,10 +21,10 @@
     "pack": "cd dist && pnpm pack"
   },
   "peerDependencies": {
-    "bootstrap": "^5.3.3"
+    "bootstrap": "^5.3.7"
   },
   "dependencies": {
-    "autoprefixer": "^10.4.7",
+    "autoprefixer": "^10.4.21",
     "clean-css": "^5.3.0",
     "postcss": "^8.2.6",
     "sass-embedded": "1.66.0"
@@ -43,7 +43,7 @@
     "eslint-plugin-no-only-tests": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
-    "express": "4.21.1",
+    "express": "4.21.2",
     "filing-cabinet": "4.1.6",
     "fs-extra": "11.2.0",
     "immutable": "4.3.5",

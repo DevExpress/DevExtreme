@@ -1510,7 +1510,7 @@ QUnit.module('value', moduleConfig, () => {
 
         keyboard.type('x');
 
-        $input.trigger('blur');
+        $input.triggerHandler('blur');
 
         assert.equal(valueChangedFired, 1, 'change fired once on blur');
     });

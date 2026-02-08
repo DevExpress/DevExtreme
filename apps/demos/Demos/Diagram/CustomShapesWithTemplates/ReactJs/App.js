@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import Diagram, { CustomShape, Nodes, AutoLayout } from 'devextreme-react/diagram';
 import { Popup } from 'devextreme-react/popup';
-import ArrayStore from 'devextreme/data/array_store';
+import { ArrayStore } from 'devextreme-react/common/data';
 import CustomShapeTemplate from './CustomShapeTemplate.js';
 import service from './data.js';
 

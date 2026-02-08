@@ -28,10 +28,8 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
-
-
 
 
 
@@ -42,8 +40,10 @@ import {
  */
 @Component({
     selector: 'dx-load-indicator',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -51,6 +51,7 @@ import {
     ]
 })
 export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
+
     instance: DxLoadIndicator = null;
 
     /**
@@ -71,10 +72,10 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -136,10 +137,10 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -187,7 +188,7 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -222,11 +223,7 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -269,11 +266,9 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxLoadIndicatorComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxLoadIndicatorComponent
   ],
   exports: [
     DxLoadIndicatorComponent,
@@ -281,6 +276,7 @@ export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
   ]
 })
 export class DxLoadIndicatorModule { }
+
 
 import type * as DxLoadIndicatorTypes from "devextreme/ui/load_indicator_types";
 export { DxLoadIndicatorTypes };

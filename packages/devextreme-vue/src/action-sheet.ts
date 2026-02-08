@@ -71,7 +71,7 @@ const componentConfig = {
     dataSource: [Array, Object, String] as PropType<(Array<any | dxActionSheetItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
@@ -93,7 +93,7 @@ const componentConfig = {
     title: String,
     usePopover: Boolean,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,
@@ -164,7 +164,7 @@ const DxItemConfig = {
     stylingMode: String as PropType<ButtonStyle>,
     template: {},
     text: String,
-    type: String as PropType<ButtonType>
+    type: String as PropType<ButtonType | string>
   }
 };
 

@@ -1,0 +1,600 @@
+@use "sass:math";
+@use "sass:map";
+
+.dx-icon-plus,
+.dx-icon-overflow,
+.dx-icon-add,
+.dx-icon-airplane,
+.dx-icon-arrowleft,
+.dx-icon-arrowdown,
+.dx-icon-arrowright,
+.dx-icon-arrowup,
+.dx-icon-bookmark,
+.dx-icon-box,
+.dx-icon-car,
+.dx-icon-card,
+.dx-icon-cart,
+.dx-icon-chart,
+.dx-icon-clock,
+.dx-icon-close,
+.dx-icon-comment,
+.dx-icon-dataarea,
+.dx-icon-datapie,
+.dx-icon-datatrending,
+.dx-icon-datausage,
+.dx-icon-doc,
+.dx-icon-download,
+.dx-icon-edit,
+.dx-icon-email,
+.dx-icon-errorcircle,
+.dx-icon-event,
+.dx-icon-eventall,
+.dx-icon-favorites,
+.dx-icon-find,
+.dx-icon-folder,
+.dx-icon-food,
+.dx-icon-gift,
+.dx-icon-globe,
+.dx-icon-group,
+.dx-icon-help,
+.dx-icon-home,
+.dx-icon-image,
+.dx-icon-info,
+.dx-icon-key,
+.dx-icon-like,
+.dx-icon-map,
+.dx-icon-menu,
+.dx-icon-money,
+.dx-icon-music,
+.dx-icon-percent,
+.dx-icon-photo,
+.dx-icon-preferences,
+.dx-icon-product,
+.dx-icon-refresh,
+.dx-icon-remove,
+.dx-icon-runner,
+.dx-icon-tags,
+.dx-icon-tel,
+.dx-icon-tips,
+.dx-icon-todo,
+.dx-icon-toolbox,
+.dx-icon-user,
+.dx-icon-save,
+.dx-icon-clear,
+.dx-icon-search,
+.dx-icon-bold,
+.dx-icon-italic,
+.dx-icon-underline,
+.dx-icon-strike,
+.dx-icon-indent,
+.dx-icon-fontsize,
+.dx-icon-growfont,
+.dx-icon-shrinkfont,
+.dx-icon-color,
+.dx-icon-background,
+.dx-icon-superscript,
+.dx-icon-subscript,
+.dx-icon-header,
+.dx-icon-blockquote,
+.dx-icon-formula,
+.dx-icon-codeblock,
+.dx-icon-orderedlist,
+.dx-icon-bulletlist,
+.dx-icon-increaseindent,
+.dx-icon-decreaseindent,
+.dx-icon-alignleft,
+.dx-icon-alignright,
+.dx-icon-aligncenter,
+.dx-icon-alignjustify,
+.dx-icon-link,
+.dx-icon-video,
+.dx-icon-mention,
+.dx-icon-variable,
+.dx-icon-clearformat,
+.dx-icon-undo,
+.dx-icon-redo,
+.dx-icon-checklist,
+.dx-icon-verticalaligntop,
+.dx-icon-verticalaligncenter,
+.dx-icon-verticalalignbottom,
+.dx-icon-rowproperties,
+.dx-icon-columnproperties,
+.dx-icon-cellproperties,
+.dx-icon-tableproperties,
+.dx-icon-splitcells,
+.dx-icon-mergecells,
+.dx-icon-removerow,
+.dx-icon-removecolumn,
+.dx-icon-addrowabove,
+.dx-icon-addrowbelow,
+.dx-icon-addcolumnleft,
+.dx-icon-addcolumnright,
+.dx-icon-addtable,
+.dx-icon-removetable,
+.dx-icon-bell,
+.dx-icon-to,
+.dx-icon-taskcomplete,
+.dx-icon-taskrejected,
+.dx-icon-taskinprogress,
+.dx-icon-taskstop,
+.dx-icon-taskhelpneeded,
+.dx-icon-today,
+.dx-icon-clearcircle,
+.dx-icon-accountbox,
+.dx-icon-ordersbox,
+.dx-icon-arrowback,
+.dx-icon-pinmap,
+.dx-icon-handlevertical,
+.dx-icon-handlehorizontal,
+.dx-icon-triangleup,
+.dx-icon-triangledown,
+.dx-icon-triangleright,
+.dx-icon-triangleleft,
+.dx-icon-sendfilled,
+.dx-icon-chat,
+.dx-icon-fixcolumn,
+.dx-icon-fixcolumnleft,
+.dx-icon-fixcolumnright,
+.dx-icon-stickcolumn,
+.dx-icon-unfixcolumn,
+.dx-icon-packagebox,
+.dx-icon-checkmarkcircle,
+.dx-icon-clipboardtasklist,
+.dx-icon-daterangepicker,
+.dx-icon-cardcontent,
+.dx-icon-cursormove,
+.dx-icon-cursorprohibition,
+.dx-icon-arrowsortup,
+.dx-icon-arrowsortdown,
+.dx-icon-imagethumbnail,
+.dx-icon-sparkle,
+.dx-icon-servicebell,
+.dx-icon-dropzone,
+.dx-icon-restore
+.dx-icon-groupbycolumn,
+.dx-icon-ungroupcolumn,
+.dx-icon-ungroupallcolumns {
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+
+.dx-icon {
+  background-position: 50% 50%;
+}
+
+.dx-svg-icon svg {
+  pointer-events: none;
+}
+
+@mixin dx-icon-sizing($icon-size, $container-size: $icon-size, $borders-size: 0) {
+  $icon-paddings-dirty: $container-size - $icon-size;
+  $icon-paddings: $icon-paddings-dirty - $borders-size;
+  $icon-padding: floor(math.div($icon-paddings, 2));
+
+  // Geometry
+  width: $container-size;
+  height: $container-size;
+
+  // Icon as background sizing
+  background-position: $icon-padding $icon-padding;
+  background-size: $icon-size $icon-size;
+
+  // Icon as img src sizing
+  padding: $icon-padding;
+
+  // Icon as font
+  font-size: $icon-size;
+  text-align: center;
+  line-height: $container-size - $icon-paddings-dirty;
+}
+
+@mixin dx-icon-font-centered-sizing($icon-size, $position: absolute) {
+  font-size: $icon-size;
+  text-align: center;
+  line-height: $icon-size;
+
+  &::before {
+    position: $position;
+    display: block;
+    width: $icon-size;
+    top: 50%;
+    margin-top: math.div(-$icon-size, 2);
+    left: 50%;
+    margin-left: math.div(-$icon-size, 2);
+  }
+
+  @if $position == relative {
+    @at-root #{selector-append(".dx-rtl", &)},
+    .dx-rtl & {
+      &::before {
+        left: 0;
+        margin-left: 0;
+        right: 50%;
+        margin-right: math.div(-$icon-size, 2);
+      }
+    }
+  }
+}
+
+@mixin dx-icon-margin($size, $position: start) {
+  @if $position == start {
+    margin-inline-end: $size;
+    margin-inline-start: 0;
+  }
+
+  @if $position == end {
+    margin-inline-start: $size;
+    margin-inline-end: 0;
+  }
+}
+
+@mixin dx-font-icon($glyph) {
+  font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
+
+  &::before {
+    content: $glyph;
+  }
+}
+
+// stylelint-disable property-no-unknown
+$icons: (
+    "add": "\f00b",
+    "airplane": "\f000",
+    "bookmark": "\f017",
+    "chat": "\f17e",
+    "box": "\f018",
+    "car": "\f01b",
+    "card": "\f019",
+    "cart": "\f01a",
+    "chart": "\f01c",
+    "check": "\f005",
+    "clear": "\f008",
+    "clock": "\f01d",
+    "close": "\f00a",
+    "coffee": "\f02a",
+    "comment": "\f01e",
+    "doc": "\f021",
+    "file": "\f021",
+    "download": "\f022",
+    "dragvertical": "\f038",
+    "edit": "\f023",
+    "email": "\f024",
+    "event": "\f026",
+    "eventall": "\f043",
+    "favorites": "\f025",
+    "find": "\f027",
+    "filter": "\f050",
+    "folder": "\f028",
+    "activefolder": "\f028",
+    "food": "\f029",
+    "gift": "\f02b",
+    "globe": "\f02c",
+    "group": "\f02e",
+    "help": "\f02f",
+    "home": "\f030",
+    "image": "\f031",
+    "info": "\f032",
+    "key": "\f033",
+    "like": "\f034",
+    "map": "\f035",
+    "menu": "\f00c",
+    "message": "\f024",
+    "money": "\f036",
+    "music": "\f037",
+    "overflow": "\f00d",
+    "percent": "\f039",
+    "photo": "\f03a",
+    "plus": "\f00b",
+    "minus": "\f074",
+    "preferences": "\f03b",
+    "product": "\f03c",
+    "pulldown": "\f062",
+    "refresh": "\f03d",
+    "remove": "\f00a",
+    "revert": "\f04c",
+    "runner": "\f040",
+    "save": "\f041",
+    "search": "\f027",
+    "tags": "\f009",
+    "tel": "\f003",
+    "tips": "\f004",
+    "todo": "\f005",
+    "toolbox": "\f007",
+    "trash": "\f03e",
+    "user": "\f02d",
+    "upload": "\f006",
+    "floppy": "\f073",
+    "arrowleft": "\f011",
+    "arrowdown": "\f015",
+    "arrowback": "\f15a",
+    "arrowright": "\f00e",
+    "arrowup": "\f013",
+    "spinleft": "\f04f",
+    "spinprev": "\f04f",
+    "spinright": "\f04e",
+    "spinnext": "\f04e",
+    "spindown": "\f001",
+    "spinup": "\f002",
+    "chevronleft": "\f012",
+    "chevronprev": "\f012",
+    "back": "\f012",
+    "chevronright": "\f010",
+    "chevronnext": "\f010",
+    "chevrondown": "\f016",
+    "chevronup": "\f014",
+    "chevrondoubleleft": "\f042",
+    "chevrondoubleright": "\f03f",
+    "equal": "\f044",
+    "notequal": "\f045",
+    "less": "\f046",
+    "greater": "\f047",
+    "lessorequal": "\f048",
+    "greaterorequal": "\f049",
+    "isblank": "\f075",
+    "isnotblank": "\f076",
+    "sortup": "\f051",
+    "sortdown": "\f052",
+    "sortuptext": "\f053",
+    "sortdowntext": "\f054",
+    "sorted": "\f055",
+    "expand": "\f04a",
+    "collapse": "\f04b",
+    "columnfield": "\f057",
+    "rowfield": "\f058",
+    "datafield": "\f101",
+    "fields": "\f059",
+    "fieldchooser": "\f05a",
+    "columnchooser": "\f04d",
+    "pin": "\f05b",
+    "unpin": "\f05c",
+    "pinleft": "\f05d",
+    "pinright": "\f05e",
+    "contains": "\f063",
+    "startswith": "\f064",
+    "endswith": "\f065",
+    "doesnotcontain": "\f066",
+    "range": "\f06a",
+    "export": "\f05f",
+    "exportxlsx": "\f060",
+    "exportpdf": "\f061",
+    "exportselected": "\f06d",
+    "ordersbox": "\f06e",
+    "warning": "\f06b",
+    "taskhelpneeded": "\f06f",
+    "more": "\f06c",
+    "square": "\f067",
+    "clearsquare": "\f068",
+    "repeat": "\f069",
+    "selectall": "\f070",
+    "unselectall": "\f071",
+    "print": "\f072",
+    "bold": "\f077",
+    "italic": "\f078",
+    "underline": "\f079",
+    "strike": "\f07a",
+    "indent": "\f07b",
+    "increaselinespacing": "\f07b",
+    "font": "\f11b",
+    "fontsize": "\f07c",
+    "shrinkfont": "\f07d",
+    "growfont": "\f07e",
+    "color": "\f07f",
+    "background": "\f080",
+    "fill": "\f10d",
+    "palette": "\f120",
+    "superscript": "\f081",
+    "subscript": "\f082",
+    "header": "\f083",
+    "blockquote": "\f084",
+    "formula": "\f056",
+    "codeblock": "\f085",
+    "orderedlist": "\f086",
+    "bulletlist": "\f087",
+    "increaseindent": "\f088",
+    "decreaseindent": "\f089",
+    "decreaselinespacing": "\f106",
+    "alignleft": "\f08a",
+    "alignright": "\f08b",
+    "aligncenter": "\f08c",
+    "alignjustify": "\f08d",
+    "link": "\f08e",
+    "video": "\f08f",
+    "mention": "\f090",
+    "variable": "\f091",
+    "clearformat": "\f092",
+    "accountbox": "\f094",
+    "sendfilled": "\f09a",
+    "fullscreen": "\f11a",
+    "hierarchy": "\f124",
+    "docfile": "\f111",
+    "docxfile": "\f110",
+    "pdffile": "\f118",
+    "pptfile": "\f114",
+    "pptxfile": "\f115",
+    "rtffile": "\f112",
+    "txtfile": "\f113",
+    "xlsfile": "\f116",
+    "xlsxfile": "\f117",
+    "copy": "\f107",
+    "cut": "\f10a",
+    "paste": "\f108",
+    "share": "\f11f",
+    "inactivefolder": "\f105",
+    "newfolder": "\f123",
+    "movetofolder": "\f121",
+    "parentfolder": "\f122",
+    "rename": "\f109",
+    "detailslayout": "\f10b",
+    "contentlayout": "\f11e",
+    "smalliconslayout": "\f119",
+    "mediumiconslayout": "\f10c",
+    "undo": "\f04c",
+    "redo": "\f093",
+    "hidepanel": "\f11c",
+    "showpanel": "\f11d",
+    "checklist": "\f141",
+    "verticalaligntop": "\f14f",
+    "verticalaligncenter": "\f14e",
+    "verticalalignbottom": "\f14d",
+    "rowproperties": "\f14c",
+    "columnproperties": "\f14b",
+    "cellproperties": "\f14a",
+    "tableproperties": "\f140",
+    "splitcells": "\f139",
+    "mergecells": "\f138",
+    "deleterow": "\f137",
+    "deletecolumn": "\f136",
+    "insertrowabove": "\f135",
+    "insertrowbelow": "\f134",
+    "insertcolumnleft": "\f133",
+    "insertcolumnright": "\f132",
+    "inserttable": "\f130",
+    "deletetable": "\f131",
+    "edittableheader": "\f142",
+    "addtableheader": "\f143",
+    "pasteplaintext": "\f144",
+    "importselected": "\f145",
+    "import": "\f146",
+    "textdocument": "\f147",
+    "jpgfile": "\f148",
+    "bmpfile": "\f149",
+    "svgfile": "\f150",
+    "attach": "\f151",
+    "return": "\f152",
+    "indeterminatestate": "\f153",
+    "lock": "\f154",
+    "unlock": "\f155",
+    "imgarlock": "\f156",
+    "imgarunlock": "\f157",
+    "bell": "\f158",
+    "sun": "\f159",
+    "taskcomplete": "\f15b",
+    "taskrejected": "\f15c",
+    "taskinprogress": "\f15d",
+    "taskstop": "\f15e",
+    "clearcircle": "\f15f",
+    "send": "\f160",
+    "handlevertical":"\f161",
+    "photooutline": "\f162",
+    "panelright": "\f163",
+    "panelleft": "\f164",
+    "optionsgear": "\f165",
+    "moon": "\f166",
+    "login": "\f167",
+    "eyeopen": "\f168",
+    "eyeclose": "\f169",
+    "handlehorizontal":"\f16a",
+    "triangleup":"\f16b",
+    "triangledown":"\f16c",
+    "triangleright":"\f16d",
+    "triangleleft":"\f16e",
+    "fixcolumn":"\f16f",
+    "expandform": "\f170",
+    "description": "\f171",
+    "belloutline": "\f172",
+    "to": "\f173",
+    "errorcircle": "\f174",
+    "datatrending": "\f175",
+    "dataarea": "\f176",
+    "datausage": "\f177",
+    "datapie": "\f178",
+    "pinmap": "\f179",
+    "csv": "\f181",
+    "packagebox": "\f182",
+    "checkmarkcircle": "\f183",
+    "clipboardtasklist": "\f184",
+    "today": "\f185",
+    "daterangepicker": "\f186",
+    "cardcontent": "\f187",
+    "cursormove": "\f188",
+    "cursorprohibition": "\f189",
+    "arrowsortup": "\f190",
+    "arrowsortdown": "\f191",
+    "imagethumbnail": "\f192",
+    "sparkle": "\f193",
+    "servicebell": "\f194",
+    "unfixcolumn":"\f17a",
+    "fixcolumnleft":"\f17b",
+    "stickcolumn":"\f17c",
+    "fixcolumnright":"\f17d",
+    "dropzone":"\f195",
+    "restore":"\f196",
+    "groupbycolumn":"\f197",
+    "ungroupcolumn":"\f198",
+    "ungroupallcolumns":"\f199",
+);
+
+// stylelint-enable
+
+@mixin dx-icon($name) {
+  @include dx-font-icon(map.get($icons, $name));
+}
+
+@mixin dx-font-icons($font-file: "dxicons", $font-name: "DevExtreme Generic Icons", $font-name-safari: "devextreme_generic_icons", $text-rendering: auto) {
+  @font-face {
+    font-family: 'DXIcons';
+    src:
+      local("#{$font-name}"),
+      local("#{$font-name-safari}"),
+      url("icons/#{$font-file}.woff2") format('woff2'),
+      url("icons/#{$font-file}.woff") format('woff'),
+      url("icons/#{$font-file}.ttf") format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  .dx-icon {
+    display: inline-block;
+    font-size: inherit;
+    text-rendering: $text-rendering;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  %icon-font {
+    font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword, font-family-name-quotes
+  }
+
+  @each $key, $glyph in $icons {
+    .dx-icon-#{$key} { @extend %icon-font; }
+    .dx-icon-#{$key}:before {
+      content: $glyph;
+    }
+  }
+}
+
+.dx-rtl {
+  .dx-icon-spinnext::before {
+    content: "\f04f"; // .dx-icon-spinleft
+  }
+
+  .dx-icon-spinprev::before {
+    content: "\f04e"; // .dx-icon-spinright
+  }
+
+  .dx-icon-chevronnext::before {
+    content: "\f012"; // .dx-icon-chevronleft
+  }
+
+  .dx-icon-chevronprev::before,
+  .dx-icon-back::before {
+    content: "\f010"; // .dx-icon-chevronright
+  }
+
+  .dx-icon-undo::before {
+    content: "\f093"; // redo icon
+  }
+
+  .dx-icon-redo::before {
+    content: "\f04c"; // undo icon
+  }
+
+  .dx-icon-hidepanel::before {
+    content: "\f11d"; // showpanel icon
+  }
+
+  .dx-icon-showpanel::before {
+    content: "\f11c"; // hidepanel icon
+  }
+}
+

@@ -18,7 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -39,10 +39,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
-
-
 
 
 
@@ -59,8 +57,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-recurrence-editor',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -70,6 +70,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxRecurrenceEditorComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
     instance: DxRecurrenceEditor = null;
 
     /**
@@ -142,10 +143,10 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -337,10 +338,10 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -424,7 +425,7 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -529,7 +530,7 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -542,10 +543,6 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
@@ -651,11 +648,9 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
 
 @NgModule({
   imports: [
+    DxRecurrenceEditorComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxRecurrenceEditorComponent
   ],
   exports: [
     DxRecurrenceEditorComponent,
@@ -663,6 +658,7 @@ export class DxRecurrenceEditorComponent extends DxComponent implements OnDestro
   ]
 })
 export class DxRecurrenceEditorModule { }
+
 
 import type * as DxRecurrenceEditorTypes from "devextreme/ui/recurrence_editor_types";
 export { DxRecurrenceEditorTypes };

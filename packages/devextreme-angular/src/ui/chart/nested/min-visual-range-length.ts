@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -23,8 +24,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-min-visual-range-length',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoChartMinVisualRangeLengthComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -126,7 +129,7 @@ export class DxoChartMinVisualRangeLengthComponent extends NestedOption implemen
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartMinVisualRangeLengthComponent
   ],
   exports: [

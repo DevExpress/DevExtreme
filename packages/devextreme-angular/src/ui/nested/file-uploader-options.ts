@@ -18,6 +18,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoFileUploaderOptions } from './base/file-uploader-options';
@@ -25,8 +26,10 @@ import { DxoFileUploaderOptions } from './base/file-uploader-options';
 
 @Component({
     selector: 'dxo-file-uploader-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'abortUpload',
@@ -111,7 +114,6 @@ export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions impl
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);
@@ -133,7 +135,7 @@ export class DxoFileUploaderOptionsComponent extends DxoFileUploaderOptions impl
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFileUploaderOptionsComponent
   ],
   exports: [

@@ -7,7 +7,7 @@ import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     AnimationConfig,
@@ -125,7 +125,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @default 'auto' &for(Fluent)
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * @docid
      * @default ""
@@ -137,13 +137,13 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @default 60 &for(Material)
      * @public
      */
-    maxHeight?: number | string | (() => number | string);
+    maxHeight?: number | string;
     /**
      * @docid
      * @default 60 &for(Material)
      * @public
      */
-    maxWidth?: number | string | (() => number | string);
+    maxWidth?: number | string;
     /**
      * @docid
      * @default "Loading ..."
@@ -182,7 +182,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @default 'auto' &for(Fluent)
      * @public
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
 }
 /**
  * @docid

@@ -1,0 +1,2 @@
+Card templates allow you to display custom card content. This demo uses a [cardRender](/Documentation/ApiReference/UI_Components/dxCardView/Configuration/#cardRender) to display car images, car info, and a custom button within cards.
+<!--split-->

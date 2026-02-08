@@ -69,9 +69,7 @@ test('Item collection should be updated after direct option changing (T817436)',
 
       await insertStylesheetRulesToPage(`.${DROP_DOWN_BUTTON_CLASS}.dx-widget { display: inline-flex; vertical-align: middle; margin: 2px; } .${BUTTON_GROUP_CLASS} { vertical-align: middle; }`);
 
-      await testScreenshot(t, takeScreenshot, `DropDownButton render${width ? ' with fixed width' : ''}${type !== 'normal' ? `, type=${type}` : ''}.png`, {
-        shouldTestInCompact: true,
-      });
+      await testScreenshot(t, takeScreenshot, `DropDownButton render${width ? ' with fixed width' : ''}${type !== 'normal' ? `, type=${type}` : ''}.png`);
 
       await t
         .expect(compareResults.isValid())

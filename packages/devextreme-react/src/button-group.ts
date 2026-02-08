@@ -47,7 +47,7 @@ const ButtonGroup = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["selectedItemKeys","selectedItems"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick"]), []);
@@ -95,7 +95,7 @@ type IItemProps = React.PropsWithChildren<{
   icon?: string;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
-  type?: ButtonType;
+  type?: ButtonType | string;
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;

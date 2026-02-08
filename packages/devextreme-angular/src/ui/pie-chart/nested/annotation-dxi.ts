@@ -20,20 +20,31 @@ import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextr
 import { dxPieChartAnnotationConfig, PieChartAnnotationLocation } from 'devextreme/viz/pie_chart';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_annotations } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-pie-chart-annotation',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_annotations,
+           useExisting: DxiPieChartAnnotationComponent,
+        }
+    ]
 })
 export class DxiPieChartAnnotationComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -319,7 +330,7 @@ export class DxiPieChartAnnotationComponent extends CollectionNestedOption imple
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiPieChartAnnotationComponent
   ],
   exports: [

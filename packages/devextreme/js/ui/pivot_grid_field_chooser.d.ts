@@ -2,9 +2,8 @@ import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
-
-import { DxEvent } from '../events';
+    DxEvent,
+} from '../events';
 
 import PivotGridDataSource, {
     Field,
@@ -184,7 +183,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      * @default 400
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * @docid
      * @default 0

@@ -1,9 +1,12 @@
-import * as vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+    stubClass,
+} from '../../helpers/vizMocks.js';
 import { noop } from 'core/utils/common';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import { MockAngularTranslator } from '../../helpers/chartMocks.js';
-import { states as statesConsts } from 'viz/components/consts';
+import consts from '__internal/viz/components/consts';
 import tooltipModule from 'viz/core/tooltip';
 
 const originalLabel = labelModule.Label;
@@ -37,7 +40,7 @@ function createLabelWithConnector() {
 
 function environmentWithStubLabels() {
     const that = this;
-    this.renderer = new vizMocks.Renderer();
+    this.renderer = new Renderer();
     this.group = this.renderer.g();
     this.translateData = { 0: 300, 10: 270, 20: 240 };
     this.angleTranslator = new MockAngularTranslator({
@@ -419,7 +422,6 @@ QUnit.test('toAngle > fromAngle', function(assert) {
     assert.ok(!point.coordsIn(51, 40), 'out outerRadius');
     assert.ok(point.coordsIn(50, 40));
 
-
     const sinFrom = Math.sin(point.fromAngle * Math.PI / 180);
     const sinTo = Math.sin(point.toAngle * Math.PI / 180);
     const cosFrom = Math.cos(point.fromAngle * Math.PI / 180);
@@ -472,7 +474,6 @@ QUnit.test('circle point', function(assert) {
     assert.ok(point.coordsIn(30, 60));
 
     assert.ok(!point.coordsIn(51, 40), 'out outerRadius');
-
 });
 
 QUnit.test('getMarkerVisibility', function(assert) {
@@ -484,7 +485,7 @@ QUnit.test('getMarkerVisibility', function(assert) {
 QUnit.module('Draw Point', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.translateData = { 0: 300, 10: 270, 20: 240 };
         this.angleTranslator = new MockAngularTranslator({
@@ -679,7 +680,7 @@ QUnit.test('Draw point without state', function(assert) {
 
     assert.ok(!point.selectedState);
     assert.ok(!point.hoveredState);
-    assert.strictEqual(point.fullState, statesConsts.normalMark);
+    assert.strictEqual(point.fullState, consts.states.normalMark);
 });
 
 QUnit.test('Animation. Draw point when animation enabled. First drawing', function(assert) {
@@ -892,7 +893,7 @@ QUnit.module('Tooltip', {
             _argumentChecker: function() { return true; },
             _valueChecker: function() { return true; }
         };
-        const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
+        const StubTooltip = stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
                 return value || value === 0 ? value + ':' + specialFormat : value || '';
             }
@@ -1301,7 +1302,7 @@ QUnit.test('Inside. Label width more that visible area - fit in visible area', f
 QUnit.module('Connector', {
     beforeEach: function() {
         const that = this;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.group = this.renderer.g();
         this.translateData = { 0: 300, 10: 270, 20: 240 };
         this.angleTranslator = new MockAngularTranslator({
@@ -1393,7 +1394,6 @@ QUnit.module('show/hide API', {
                 return this._options;
             },
             _options: {
-
             },
             getLabelVisibility: function() { return false; },
             hidePointTooltip: function() { },
@@ -1413,7 +1413,6 @@ QUnit.module('show/hide API', {
                 legendStyles: {
                     isLegendStyles: true
                 }
-
             }
         };
         this.translateData = { 0: 100, 5: 150, 10: 200 };

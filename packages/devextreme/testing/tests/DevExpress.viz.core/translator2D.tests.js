@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import translator2DModule from 'viz/translators/translator2d';
 import { adjust } from 'core/utils/math';
+import { isFunction } from 'core/utils/type';
 
 function prepareScaleBreaks(array, breakSize) {
     const breaks = [];
@@ -110,9 +111,9 @@ QUnit.test('Create vertical translator', function(assert) {
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
     assert.deepEqual(getObjectData(translator._businessRange), { min: 0, minVisible: 10, max: 100, maxVisible: 90, interval: 20, axisType: 'continuous', dataType: 'numeric', invert: true });
 
-    assert.ok($.isFunction(translator.translate));
-    assert.ok($.isFunction(translator.from));
-    assert.ok($.isFunction(translator.getInterval));
+    assert.ok(isFunction(translator.translate));
+    assert.ok(isFunction(translator.from));
+    assert.ok(isFunction(translator.getInterval));
 
     assert.equal(translator._canvasOptions.rangeMin, 0);
     assert.equal(translator._canvasOptions.rangeMax, 100);
@@ -149,9 +150,9 @@ QUnit.test('Create horizontal translator', function(assert) {
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
     assert.deepEqual(getObjectData(translator._businessRange), { min: 0, minVisible: 10, max: 100, maxVisible: 90, interval: 20, axisType: 'continuous', dataType: 'numeric', invert: true });
 
-    assert.ok($.isFunction(translator.translate));
-    assert.ok($.isFunction(translator.from));
-    assert.ok($.isFunction(translator.getInterval));
+    assert.ok(isFunction(translator.translate));
+    assert.ok(isFunction(translator.from));
+    assert.ok(isFunction(translator.getInterval));
 
     assert.equal(translator._canvasOptions.rangeMin, 0);
     assert.equal(translator._canvasOptions.rangeMax, 100);
@@ -188,9 +189,9 @@ QUnit.test('Create numeric translator', function(assert) {
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
     assert.deepEqual(getObjectData(translator._businessRange), { min: 0, minVisible: 0, max: 100, maxVisible: 100, interval: 20, axisType: 'continuous', dataType: 'numeric' });
 
-    assert.ok($.isFunction(translator.translate));
-    assert.ok($.isFunction(translator.from));
-    assert.ok($.isFunction(translator.getInterval));
+    assert.ok(isFunction(translator.translate));
+    assert.ok(isFunction(translator.from));
+    assert.ok(isFunction(translator.getInterval));
 });
 
 QUnit.test('Create numeric translator when business range delta = 0, Min = max = minVisible = maxVisible != 0', function(assert) {
@@ -326,9 +327,9 @@ QUnit.test('Create datetime translator', function(assert) {
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
     assert.deepEqual(getObjectData(translator._businessRange), { min: new Date(2012, 9, 1), max: new Date(2012, 9, 2), minVisible: new Date(2012, 9, 1), maxVisible: new Date(2012, 9, 2), interval: new Date(2012, 9, 2) - new Date(2012, 9, 1), axisType: 'continuous', dataType: 'datetime' });
 
-    assert.ok($.isFunction(translator.translate));
-    assert.ok($.isFunction(translator.from));
-    assert.ok($.isFunction(translator.getInterval));
+    assert.ok(isFunction(translator.translate));
+    assert.ok(isFunction(translator.from));
+    assert.ok(isFunction(translator.getInterval));
 });
 
 QUnit.test('Create datetime translator when business range delta = 0. min = minVisible = maxVisible = max', function(assert) {
@@ -420,9 +421,9 @@ QUnit.test('Create discrete translator (Stick = false, invert = false)', functio
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
     assert.deepEqual(getObjectData(translator._businessRange), { categories: ['First', 'Second', 'Third', 'Fourth'], axisType: 'discrete', dataType: 'string' });
 
-    assert.ok($.isFunction(translator.translate));
-    assert.ok($.isFunction(translator.from));
-    assert.ok($.isFunction(translator.getInterval));
+    assert.ok(isFunction(translator.translate));
+    assert.ok(isFunction(translator.from));
+    assert.ok(isFunction(translator.getInterval));
 
     assert.deepEqual(translator._categories, ['First', 'Second', 'Third', 'Fourth']);
     assert.equal(translator._canvasOptions.interval, 127.5);
@@ -470,9 +471,9 @@ QUnit.test('Create logarithmic translator', function(assert) {
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
     assert.deepEqual(getObjectData(translator._businessRange), { min: 10, minVisible: 100, max: 10000, maxVisible: 1000, interval: 1, base: 10, axisType: 'logarithmic', dataType: 'numeric' });
 
-    assert.ok($.isFunction(translator.translate));
-    assert.ok($.isFunction(translator.from));
-    assert.ok($.isFunction(translator.getInterval));
+    assert.ok(isFunction(translator.translate));
+    assert.ok(isFunction(translator.from));
+    assert.ok(isFunction(translator.getInterval));
 
     assert.roughEqual(translator._canvasOptions.rangeMaxVisible, 3, 0.00001);
     assert.roughEqual(translator._canvasOptions.rangeMinVisible, 2, 0.00001);
@@ -493,9 +494,9 @@ QUnit.test('Create logarithmic translator. Min = max = minVisible = maxVisible =
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
     assert.deepEqual(getObjectData(translator._businessRange), { min: 10, minVisible: 10, max: 10, maxVisible: 10, interval: 1, base: 10, axisType: 'logarithmic', dataType: 'numeric' });
 
-    assert.ok($.isFunction(translator.translate));
-    assert.ok($.isFunction(translator.from));
-    assert.ok($.isFunction(translator.getInterval));
+    assert.ok(isFunction(translator.translate));
+    assert.ok(isFunction(translator.from));
+    assert.ok(isFunction(translator.getInterval));
 
     assert.equal(translator._canvasOptions.rangeMaxVisible, 1);
     assert.equal(translator._canvasOptions.rangeMinVisible, 1);
@@ -516,9 +517,9 @@ QUnit.test('Create logarithmic translator. Base = 2', function(assert) {
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
     assert.deepEqual(getObjectData(translator._businessRange), { min: 2, minVisible: 4, max: 32, maxVisible: 16, interval: 1, base: 2, axisType: 'logarithmic', dataType: 'numeric' });
 
-    assert.ok($.isFunction(translator.translate));
-    assert.ok($.isFunction(translator.from));
-    assert.ok($.isFunction(translator.getInterval));
+    assert.ok(isFunction(translator.translate));
+    assert.ok(isFunction(translator.from));
+    assert.ok(isFunction(translator.getInterval));
 
     assert.roughEqual(translator._canvasOptions.rangeMaxVisible, 4, 0.00001);
     assert.roughEqual(translator._canvasOptions.rangeMinVisible, 2, 0.00001);
@@ -539,7 +540,6 @@ QUnit.test('Can be reinited (recalculate canvas options)', function(assert) {
     canvas.left = 50;
     canvas.right = 150;
 
-    // act
     translator.reinit();
 
     assert.ok(translator);
@@ -564,9 +564,9 @@ QUnit.test('Update business range', function(assert) {
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
     assert.deepEqual(getObjectData(translator._businessRange), { min: -1000, minVisible: -600, maxVisible: -90, max: -10, invert: false, axisType: 'continuous', dataType: 'numeric' });
 
-    assert.ok($.isFunction(translator.translate));
-    assert.ok($.isFunction(translator.from));
-    assert.ok($.isFunction(translator.getInterval));
+    assert.ok(isFunction(translator.translate));
+    assert.ok(isFunction(translator.from));
+    assert.ok(isFunction(translator.getInterval));
 
     assert.equal(translator._canvasOptions.rangeMin, -1000);
     assert.equal(translator._canvasOptions.rangeMax, -10);
@@ -592,9 +592,9 @@ QUnit.test('Update canvas', function(assert) {
 
     assert.deepEqual(translator._canvas, { width: 333, height: 444, left: 13, top: 15, right: 14, bottom: 16 });
 
-    assert.ok($.isFunction(translator.translate));
-    assert.ok($.isFunction(translator.from));
-    assert.ok($.isFunction(translator.getInterval));
+    assert.ok(isFunction(translator.translate));
+    assert.ok(isFunction(translator.from));
+    assert.ok(isFunction(translator.getInterval));
 
     assert.equal(translator._canvasOptions.rangeMin, 0);
     assert.equal(translator._canvasOptions.rangeMax, 100);
@@ -926,7 +926,6 @@ QUnit.test('isValid', function(assert) {
     assert.strictEqual(translator.isValid(undefined), false, 'undefined');
     assert.strictEqual(translator.isValid({}), false, 'object');
 });
-
 
 QUnit.test('Default positioin when 0 is in break', function(assert) {
     const translator = createTranslatorWithScaleBreaks.call(this, { min: -200, max: 700, breaks: [{ from: -100, to: 100 }] });
@@ -2166,7 +2165,6 @@ QUnit.test('from.', function(assert) {
 
     assert.equal(translator.from(1500, -1), 30, 'Coord on the max. negative offset');
     assert.equal(translator.from(1500, 1), 30, 'Coord on the max. positive offset');
-
 });
 
 QUnit.test('from. DateTime', function(assert) {
@@ -2384,7 +2382,6 @@ QUnit.test('scroll', function(assert) {
     assert.equal(zoom.translate.toFixed(2), -10.00, 'negative scroll translate');
     assert.equal(zoom.scale.toFixed(2), 1.00, 'negative scroll scale');
 
-
     assert.deepEqual(translator.zoom(0, 1), {
         min: 10,
         max: 90,
@@ -2439,7 +2436,6 @@ QUnit.test('scroll. Logarithmic axis', function(assert) {
 
     assert.equal(zoom.translate.toFixed(2), -10.00, 'negative scroll translate');
     assert.equal(zoom.scale.toFixed(2), 1.00, 'negative scroll scale');
-
 
     zoom = translator.zoom(600, 1);
 
@@ -2513,7 +2509,6 @@ QUnit.test('scroll inverted range', function(assert) {
     assert.equal(zoom.translate.toFixed(2), -10.00, 'negative scroll translate');
     assert.equal(zoom.scale.toFixed(2), 1.00, 'negative scroll scale');
 
-
     assert.deepEqual(translator.zoom(0, 1), {
         min: 90,
         max: 10,
@@ -2535,7 +2530,6 @@ QUnit.test('scroll inverted range', function(assert) {
 
     assert.equal(zoom.translate.toFixed(2), -100, 'negative big scroll translate');
     assert.roughEqual(zoom.scale.toFixed(2), 1.00, 0.1, 'negative big scroll scale');
-
 });
 
 QUnit.test('zoom single point range', function(assert) {
@@ -2586,7 +2580,6 @@ QUnit.test('scale without scroll', function(assert) {
 
     assert.roughEqual(zoom.translate.toFixed(2), 0, 0.001, 'zoom in translate');
     assert.roughEqual(zoom.scale.toFixed(2), 2, 0.001, 'zoom in scale');
-
 
     zoom = translator.zoom(0, 0.98);
     assert.roughEqual(zoom.min.toFixed(2), 10.22, 0.1, 'zoom out min');
@@ -2902,7 +2895,6 @@ QUnit.test('Negative scroll. Horizontal Translator. Horizontal translator', func
     assert.equal(zoom.max, 'a4');
     assert.equal(zoom.translate, -250);
     assert.equal(zoom.scale, 1);
-
 });
 
 QUnit.test('Negative scroll. Horizontal Translator. Inverted', function(assert) {
@@ -2938,7 +2930,6 @@ QUnit.test('Negative scroll. Horizontal Translator. Inverted', function(assert) 
     assert.equal(zoom.max, 'a5');
     assert.equal(zoom.translate, -250);
     assert.equal(zoom.scale, 1);
-
 });
 
 QUnit.test('Negative scroll. Vertical Translator', function(assert) {
@@ -2974,7 +2965,6 @@ QUnit.test('Negative scroll. Vertical Translator', function(assert) {
     assert.equal(zoom.max, 'a5');
     assert.equal(zoom.translate, -250);
     assert.equal(zoom.scale, 1);
-
 });
 
 QUnit.test('Negative scroll. Vertical Translator. Inverted', function(assert) {
@@ -3010,7 +3000,6 @@ QUnit.test('Negative scroll. Vertical Translator. Inverted', function(assert) {
     assert.equal(zoom.max, 'a4');
     assert.equal(zoom.translate, -250);
     assert.equal(zoom.scale, 1);
-
 });
 
 QUnit.test('positive scroll. Horizontal Translator', function(assert) {
@@ -3229,7 +3218,6 @@ QUnit.test('scale with stick=true', function(assert) {
 
     assert.deepEqual(translator.visibleCategories, ['a1', 'a2', 'a3', 'a4']);
 
-
     zoom = translator.zoom(0, 0.75);
     assert.equal(zoom.min, 'a1');
     assert.equal(zoom.max, 'a5');
@@ -3250,7 +3238,6 @@ QUnit.test('scale with stick=true', function(assert) {
 });
 
 QUnit.test('getMinScale', function(assert) {
-
     const categories = [];
 
     for(let i = 0; i < 1000; i++) {
@@ -3271,7 +3258,6 @@ QUnit.test('getMinScale', function(assert) {
 
     assert.equal(this.createTranslator({ minVisible: 'a2', maxVisible: 'a4' }).getMinScale(true).toFixed(2), 3, 'visibleCategories zoom in');
     assert.equal(this.createTranslator({ minVisible: 'a2', maxVisible: 'a4' }).getMinScale(false).toFixed(2), 0.6, 'visibleCategories zoom out');
-
 });
 
 QUnit.test('get scale. stick=true', function(assert) {

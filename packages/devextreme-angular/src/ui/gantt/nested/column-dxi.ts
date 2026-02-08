@@ -14,23 +14,31 @@ import {
 
 
 
-import { HorizontalAlignment, DataType, SearchMode, SortOrder } from 'devextreme/common';
-import { FilterOperation, FilterType, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation } from 'devextreme/common/grids';
+import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
+import { FilterOperation, FilterType, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
 import { Format } from 'devextreme/common/core/localization';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_columns } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-gantt-column',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_columns,
+           useExisting: DxiGanttColumnComponent,
+        }
+    ]
 })
 export class DxiGanttColumnComponent extends CollectionNestedOption {
     @Input()
@@ -210,10 +218,10 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
+    get headerFilter(): ColumnHeaderFilter | undefined {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
+    set headerFilter(value: ColumnHeaderFilter | undefined) {
         this._setOption('headerFilter', value);
     }
 
@@ -346,7 +354,6 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'filterValueChange' },
             { emit: 'filterValuesChange' },
@@ -370,7 +377,7 @@ export class DxiGanttColumnComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiGanttColumnComponent
   ],
   exports: [

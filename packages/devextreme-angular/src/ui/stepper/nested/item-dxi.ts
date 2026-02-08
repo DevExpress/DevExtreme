@@ -18,20 +18,31 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-stepper-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiStepperItemComponent,
+        }
+    ]
 })
 export class DxiStepperItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -68,6 +79,14 @@ export class DxiStepperItemComponent extends CollectionNestedOption implements A
     }
 
     @Input()
+    get label(): string {
+        return this._getOption('label');
+    }
+    set label(value: string) {
+        this._setOption('label', value);
+    }
+
+    @Input()
     get optional(): boolean {
         return this._getOption('optional');
     }
@@ -89,14 +108,6 @@ export class DxiStepperItemComponent extends CollectionNestedOption implements A
     }
     set text(value: string) {
         this._setOption('text', value);
-    }
-
-    @Input()
-    get title(): string {
-        return this._getOption('title');
-    }
-    set title(value: string) {
-        this._setOption('title', value);
     }
 
 
@@ -133,7 +144,7 @@ export class DxiStepperItemComponent extends CollectionNestedOption implements A
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiStepperItemComponent
   ],
   exports: [

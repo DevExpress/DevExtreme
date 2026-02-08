@@ -14,16 +14,26 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_center } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-center',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_center,
+           useExisting: DxiCenterComponent,
+        }
+    ]
 })
 export class DxiCenterComponent extends CollectionNestedOption {
     @Input()
@@ -64,7 +74,7 @@ export class DxiCenterComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiCenterComponent
   ],
   exports: [

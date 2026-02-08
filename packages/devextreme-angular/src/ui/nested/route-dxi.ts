@@ -8,7 +8,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -18,19 +17,36 @@ import {
 import { RouteMode } from 'devextreme/ui/map';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiLocationComponent } from './location-dxi';
 
+import { PROPERTY_TOKEN_routes } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_locations,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-route',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_routes,
+           useExisting: DxiRouteComponent,
+        }
+    ]
 })
 export class DxiRouteComponent extends CollectionNestedOption {
+    @ContentChildren(PROPERTY_TOKEN_locations)
+    set _locationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('locations', value);
+    }
+    
     @Input()
     get color(): string {
         return this._getOption('color');
@@ -77,14 +93,6 @@ export class DxiRouteComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiLocationComponent))
-    get locationsChildren(): QueryList<DxiLocationComponent> {
-        return this._getOption('locations');
-    }
-    set locationsChildren(value) {
-        this.setChildren('locations', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -101,7 +109,7 @@ export class DxiRouteComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiRouteComponent
   ],
   exports: [

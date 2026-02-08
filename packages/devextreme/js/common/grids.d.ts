@@ -39,6 +39,8 @@ import {
   NativeEventInfo,
 } from './core/events';
 
+import { PointerInteractionEvent } from '../events';
+
 import {
   DxPromise,
 } from '../core/utils/deferred';
@@ -307,7 +309,6 @@ export interface ColumnBase<TRowData = any> {
   format?: Format;
   /**
    * @docid GridBaseColumn.headerFilter
-   * @type object
    * @default undefined
    * @public
    */
@@ -479,68 +480,68 @@ export interface ColumnButtonBase {
  */
 export type ColumnChooser = {
   /**
-   * @docid GridBaseOptions.columnChooser.allowSearch
+   * @docid
    * @default false
    * @deprecated
    */
   allowSearch?: boolean;
   /**
-     * @docid GridBaseOptions.columnChooser.container
+     * @docid
      * @default undefined
      * @public
      */
   container?: string | UserDefinedElement | undefined;
   /**
-   * @docid GridBaseOptions.columnChooser.emptyPanelText
+   * @docid
    * @default "Drag a column here to hide it"
    */
   emptyPanelText?: string;
   /**
-   * @docid GridBaseOptions.columnChooser.enabled
+   * @docid
    * @default false
    */
   enabled?: boolean;
   /**
-   * @docid GridBaseOptions.columnChooser.height
+   * @docid
    * @default 260
    */
   height?: number | string;
   /**
-   * @docid GridBaseOptions.columnChooser.mode
+   * @docid
    * @default "dragAndDrop"
    */
   mode?: ColumnChooserMode;
   /**
-   * @docid GridBaseOptions.columnChooser.position
+   * @docid
    * @default undefined
    */
   position?: PositionConfig | undefined;
   /**
-   * @docid GridBaseOptions.columnChooser.search
+   * @docid
    */
   search?: ColumnChooserSearchConfig;
   /**
-   * @docid GridBaseOptions.columnChooser.searchTimeout
+   * @docid
    * @default 500
    * @deprecated
    */
   searchTimeout?: number;
   /**
-   * @docid GridBaseOptions.columnChooser.selection
+   * @docid
    */
   selection?: ColumnChooserSelectionConfig;
   /**
-   * @docid GridBaseOptions.columnChooser.title
+   * @docid
    * @default "Column Chooser"
    */
   title?: string;
   /**
-   * @docid GridBaseOptions.columnChooser.width
+   * @docid
    * @default 250
    */
   width?: number | string;
   /**
-   * @docid GridBaseOptions.columnChooser.sortOrder
+   * @docid
    * @default undefined
    */
   sortOrder?: SortOrder | undefined;
@@ -553,8 +554,8 @@ export type ColumnChooser = {
 export type ColumnChooserMode = 'dragAndDrop' | 'select';
 
 /**
- * @public
  * @docid
+ * @public
  * @namespace DevExpress.common.grids
  */
 export type ColumnChooserSearchConfig = {
@@ -576,8 +577,8 @@ export type ColumnChooserSearchConfig = {
 };
 
 /**
- * @public
  * @docid
+ * @public
  * @namespace DevExpress.common.grids
  */
 export type ColumnChooserSelectionConfig = {
@@ -699,58 +700,59 @@ export type ColumnFixingIcons = {
 };
 
 /**
+ * @docid
  * @public
  * @namespace DevExpress.common.grids
  */
 export type ColumnHeaderFilter = {
   /**
-   * @docid GridBaseColumn.headerFilter.allowSearch
+   * @docid
    * @default false
    * @deprecated
    */
   allowSearch?: boolean;
   /**
-   * @docid GridBaseColumn.headerFilter.allowSelectAll
+   * @docid
    * @default true
    */
   allowSelectAll?: boolean;
   /**
-   * @docid GridBaseColumn.headerFilter.dataSource
+   * @docid
    * @type_function_param1_field component:object
    * @default undefined
    * @type Array<any>|Store|DataSourceOptions|Function|null|undefined
    */
   dataSource?: FilterLookupDataSource<any> | ((options: { component?: any; dataSource?: DataSourceOptions | null }) => void) | undefined;
   /**
-   * @docid GridBaseColumn.headerFilter.groupInterval
+   * @docid
    * @default undefined
    */
   groupInterval?: HeaderFilterGroupInterval | number | undefined;
   /**
-   * @docid GridBaseColumn.headerFilter.height
+   * @docid
    * @default undefined
    */
   height?: number | string | undefined;
   /**
-   * @docid GridBaseColumn.headerFilter.search
+   * @docid
    */
   search?: ColumnHeaderFilterSearchConfig;
   /**
-   * @docid GridBaseColumn.headerFilter.searchMode
+   * @docid
    * @default 'contains'
    * @deprecated
    */
   searchMode?: SearchMode;
   /**
-   * @docid GridBaseColumn.headerFilter.width
+   * @docid
    * @default undefined
    */
   width?: number | string | undefined;
 };
 
 /**
- * @public
  * @docid
+ * @public
  * @namespace DevExpress.common.grids
  * @inherits HeaderFilterSearchConfig
  */
@@ -896,8 +898,8 @@ export interface DragStartEventInfo<TRowData = any> {
 }
 
 /**
- * @hidden
  * @docid
+ * @hidden
  * @namespace DevExpress.common.grids
  */
 export interface EditingBase<TRowData = any, TKey = any> {
@@ -1089,17 +1091,17 @@ export interface FilterPanelCustomizeTextArg<TComponent> {
  */
 export type FilterPanelTexts = {
   /**
-   * @docid GridBaseOptions.filterPanel.texts.clearFilter
+   * @docid
    * @default "Clear"
    */
   clearFilter?: string;
   /**
-   * @docid GridBaseOptions.filterPanel.texts.createFilter
+   * @docid
    * @default "Create Filter"
    */
   createFilter?: string;
   /**
-   * @docid GridBaseOptions.filterPanel.texts.filterEnabledHint
+   * @docid
    * @default "Enable the filter"
    */
   filterEnabledHint?: string;
@@ -1109,28 +1111,28 @@ export type FilterPanelTexts = {
  * @docid
  * @namespace DevExpress.common.grids
  */
-export interface FilterPanel<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export interface FilterPanel<TComponent = any, TRowData = any, TKey = any> {
   /**
-   * @docid GridBaseOptions.filterPanel.customizeText
+   * @docid
    * @type_function_param1 e:object
    * @type_function_param1_field component:this
    * @type_function_param1_field filterValue:object
    */
   customizeText?: ((e: FilterPanelCustomizeTextArg<TComponent>) => string);
   /**
-   * @docid GridBaseOptions.filterPanel.filterEnabled
+   * @docid
    * @default true
    * @fires GridBaseOptions.onOptionChanged
    */
   filterEnabled?: boolean;
   /**
-   * @docid GridBaseOptions.filterPanel.texts
-   * @type object
+   * @docid
    * @default {}
    */
   texts?: FilterPanelTexts;
   /**
-   * @docid GridBaseOptions.filterPanel.visible
+   * @docid
    * @default false
    */
   visible?: boolean;
@@ -1265,45 +1267,44 @@ export type FilterType = 'exclude' | 'include';
  */
 export type HeaderFilter = {
   /**
-   * @docid GridBaseOptions.headerFilter.allowSearch
+   * @docid
    * @default false
    * @deprecated
    */
   allowSearch?: boolean;
   /**
-   * @docid GridBaseOptions.headerFilter.allowSelectAll
+   * @docid
    * @default true
    */
   allowSelectAll?: boolean;
   /**
-   * @docid GridBaseOptions.headerFilter.height
+   * @docid
    * @default 315 &for(Material)
    * @default 315 &for(Fluent)
    * @default 325
    */
   height?: number | string;
   /**
-   * @docid GridBaseOptions.headerFilter.search
+   * @docid
    */
   search?: HeaderFilterSearchConfig;
   /**
-   * @docid GridBaseOptions.headerFilter.searchTimeout
+   * @docid
    * @default 500
    * @deprecated
    */
   searchTimeout?: number;
   /**
-   * @docid GridBaseOptions.headerFilter.texts
-   * @type object
+   * @docid
    */
   texts?: HeaderFilterTexts;
   /**
-   * @docid GridBaseOptions.headerFilter.visible
+   * @docid
    * @default false
    */
   visible?: boolean;
   /**
-   * @docid GridBaseOptions.headerFilter.width
+   * @docid
    * @default 252
    */
   width?: number | string;
@@ -1316,8 +1317,8 @@ export type HeaderFilter = {
 export type HeaderFilterGroupInterval = 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year';
 
 /**
- * @public
  * @docid
+ * @public
  * @namespace DevExpress.common.grids
  */
 export type HeaderFilterSearchConfig = {
@@ -1350,17 +1351,17 @@ export type HeaderFilterSearchConfig = {
  */
 export type HeaderFilterTexts = {
   /**
-   * @docid GridBaseOptions.headerFilter.texts.cancel
+   * @docid
    * @default "Cancel"
    */
   cancel?: string;
   /**
-   * @docid GridBaseOptions.headerFilter.texts.emptyValue
+   * @docid
    * @default "(Blanks)"
    */
   emptyValue?: string;
   /**
-   * @docid GridBaseOptions.headerFilter.texts.ok
+   * @docid
    * @default "Ok"
    */
   ok?: string;
@@ -1846,9 +1847,7 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   columnAutoWidth?: boolean;
   /**
    * @docid
-   * @type object
    * @public
-   * @inherits ColumnChooser
    */
   columnChooser?: ColumnChooser;
   /**
@@ -1929,7 +1928,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   filterBuilderPopup?: PopupProperties;
   /**
    * @docid
-   * @type object
    * @default {}
    * @public
    */
@@ -1983,7 +1981,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   focusedRowKey?: TKey | undefined;
   /**
    * @docid
-   * @type object
    * @public
    */
   headerFilter?: HeaderFilter;
@@ -2281,7 +2278,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   scrolling?: ScrollingBase;
   /**
    * @docid
-   * @type object
    * @public
    */
   searchPanel?: SearchPanel;
@@ -2328,7 +2324,6 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
   showRowLines?: boolean;
   /**
    * @docid
-   * @type object
    * @public
    */
   sorting?: Sorting;
@@ -2357,6 +2352,12 @@ export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowDat
    */
   syncLookupFilterValues?: boolean;
 };
+
+/**
+ * @public
+ * @namespace DevExpress.common.grids
+ */
+export type GridsContextMenuTarget = 'toolbar' | 'header' | 'content' | 'footer';
 
 /**
  * @public
@@ -2553,7 +2554,7 @@ export interface PagingBase {
   pageSize?: number;
 }
 
-export type ReducedNativeEventInfo<TComponent extends GridBase> = Required<Pick<NativeEventInfo<TComponent, PointerEvent | MouseEvent | TouchEvent>, 'component' | 'event'>>;
+export type ReducedNativeEventInfo<TComponent extends GridBase> = Required<Pick<NativeEventInfo<TComponent, PointerInteractionEvent>, 'component' | 'event'>>;
 
 /**
  * @docid
@@ -2958,6 +2959,7 @@ export interface ScrollingBase {
   /**
    * @docid GridBaseOptions.scrolling.scrollByThumb
    * @default false
+   * @default true &for(desktop)
    * @public
    */
   scrollByThumb?: boolean;
@@ -2989,38 +2991,38 @@ export interface ScrollingBase {
  */
 export type SearchPanel = {
   /**
-   * @docid GridBaseOptions.searchPanel.highlightCaseSensitive
+   * @docid
    * @default false
    */
   highlightCaseSensitive?: boolean;
   /**
-   * @docid GridBaseOptions.searchPanel.highlightSearchText
+   * @docid
    * @default true
    */
   highlightSearchText?: boolean;
   /**
-   * @docid GridBaseOptions.searchPanel.placeholder
+   * @docid
    * @default "Search..."
    */
   placeholder?: string;
   /**
-   * @docid GridBaseOptions.searchPanel.searchVisibleColumnsOnly
+   * @docid
    * @default false
    */
   searchVisibleColumnsOnly?: boolean;
   /**
-   * @docid GridBaseOptions.searchPanel.text
+   * @docid
    * @default ""
    * @fires GridBaseOptions.onOptionChanged
    */
   text?: string;
   /**
-   * @docid GridBaseOptions.searchPanel.visible
+   * @docid
    * @default false
    */
   visible?: boolean;
   /**
-   * @docid GridBaseOptions.searchPanel.width
+   * @docid
    * @default 160
    */
   width?: string | number;
@@ -3093,27 +3095,27 @@ export type SelectionColumnDisplayMode = 'always' | 'none' | 'onClick' | 'onLong
  */
 export type Sorting = {
   /**
-   * @docid GridBaseOptions.sorting.ascendingText
+   * @docid
    * @default "Sort Ascending"
    */
   ascendingText?: string;
   /**
-   * @docid GridBaseOptions.sorting.clearText
+   * @docid
    * @default "Clear Sorting"
    */
   clearText?: string;
   /**
-   * @docid GridBaseOptions.sorting.descendingText
+   * @docid
    * @default "Sort Descending"
    */
   descendingText?: string;
   /**
-   * @docid GridBaseOptions.sorting.mode
+   * @docid
    * @default "single"
    */
   mode?: SingleMultipleOrNone;
   /**
-   * @docid GridBaseOptions.sorting.showSortIndexes
+   * @docid
    * @default true
    */
   showSortIndexes?: boolean;

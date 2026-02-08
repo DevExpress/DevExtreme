@@ -1,0 +1,51 @@
+<dx-card-view
+  [dataSource]="dataSource"
+  [remoteOperations]="true"
+  cardsPerRow="auto"
+  [cardMinWidth]="280"
+  [wordWrapEnabled]="true"
+>
+  <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
+  <dxo-card-view-header-filter [visible]="true"></dxo-card-view-header-filter>
+  <dxo-card-view-editing
+    [allowAdding]="true"
+    [allowUpdating]="true"
+    [allowDeleting]="true"
+    [popup]="{ width: 700, height: 400 }"
+  >
+    <dxo-card-view-form>
+      <dxi-card-view-item dataField="Task_Subject"></dxi-card-view-item>
+      <dxi-card-view-item dataField="Task_Start_Date"></dxi-card-view-item>
+      <dxi-card-view-item dataField="Task_Due_Date"></dxi-card-view-item>
+      <dxi-card-view-item
+        dataField="Task_Priority"
+        editorType="dxSelectBox"
+        [editorOptions]="{ dataSource: ['Low', 'Normal', 'High', 'Urgent'] }"
+      ></dxi-card-view-item>
+      <dxi-card-view-item dataField="Task_Status"></dxi-card-view-item>
+    </dxo-card-view-form>
+  </dxo-card-view-editing>
+  <dxi-card-view-column dataField="Task_Subject" caption="Subject">
+    <dxi-card-view-validation-rule
+      type="required"
+    ></dxi-card-view-validation-rule>
+  </dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Task_Start_Date"
+    caption="Start Date"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Task_Due_Date"
+    caption="Due Date"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Task_Priority"
+    caption="Priority"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Task_Status"
+    caption="Status"
+  ></dxi-card-view-column>
+</dx-card-view>

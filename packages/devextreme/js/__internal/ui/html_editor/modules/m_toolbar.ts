@@ -1,6 +1,7 @@
 import '@js/ui/select_box';
 import '@ts/ui/color_box/m_color_view';
 import '@js/ui/number_box';
+import '@js/ui/menu';
 
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
@@ -13,11 +14,22 @@ import { each } from '@js/core/utils/iterator';
 import {
   isDefined, isEmptyObject, isObject, isString,
 } from '@js/core/utils/type';
+import type { AICommandName, AICustomCommand, AIToolbarItem } from '@js/ui/html_editor';
+import type { ContentReadyEvent, ItemClickEvent } from '@js/ui/menu';
 import type { Item } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import errors from '@js/ui/widget/ui.errors';
+import { capitalize } from '@ts/core/utils/capitalize';
+import { DX_MENU_ITEM_CLASS } from '@ts/ui/menu/menu';
 import Quill from 'devextreme-quill';
 
+import type { CommandsMap } from '../utils/ai';
+import {
+  buildCommandsMap,
+  defaultCommandNames,
+  getDefaultOptionsByCommand,
+  hasInvalidCustomCommand,
+} from '../utils/ai';
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/m_table_helper';
 import {
   applyFormat, getDefaultClickHandler, getFormatHandlers, ICON_MAP,
@@ -54,6 +66,8 @@ if (Quill) {
     i: 73,
     u: 85,
   };
+
+  const TOOLBAR_AI_ITEM_NAME = 'ai';
 
   const localize = (name) => localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
 
@@ -120,13 +134,16 @@ if (Quill) {
         }
 
         this.quill.on('editor-change', (eventName, newValue, oldValue, eventSource) => {
-          const isSilentMode = eventSource === SILENT_ACTION && isEmptyObject(this.quill.getFormat());
+          const isSilentMode = eventSource === SILENT_ACTION
+            && isEmptyObject(this.quill.getFormat());
 
           if (!isSilentMode) {
             const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
 
             this._updateToolbar(isSelectionChanged);
           }
+
+          this._updateHeaderFormatWidget();
         });
       }
     }
@@ -227,24 +244,6 @@ if (Quill) {
       return $container;
     }
 
-    _detectRenamedOptions(item) {
-      const optionsInfo = [{
-        newName: 'name',
-        oldName: 'formatName',
-      }, {
-        newName: 'acceptedValues',
-        oldName: 'formatValues',
-      }];
-
-      if (isObject(item)) {
-        each(optionsInfo, (index, optionName) => {
-          if (Object.prototype.hasOwnProperty.call(item, optionName.oldName)) {
-            errors.log('W1016', optionName.oldName, optionName.newName);
-          }
-        });
-      }
-    }
-
     _subscribeFormatHotKeys() {
       this.quill.keyboard.addBinding({
         which: KEY_CODES.b,
@@ -285,9 +284,10 @@ if (Quill) {
 
       each(this.options.items, (index, item) => {
         let newItem;
-        this._detectRenamedOptions(item);
         if (isObject(item)) {
           newItem = this._handleObjectItem(item);
+        } else if (item === TOOLBAR_AI_ITEM_NAME) {
+          resultItems.push(this._getToolbarItem(this._prepareAIMenuItemConfig(item)));
         } else if (isString(item)) {
           const buttonItemConfig = this._prepareButtonItemConfig(item);
           newItem = this._getToolbarItem(buttonItemConfig);
@@ -301,16 +301,23 @@ if (Quill) {
     }
 
     _handleObjectItem(item) {
+      if (item.name === TOOLBAR_AI_ITEM_NAME) {
+        return this._getToolbarItem(this._prepareAIMenuItemConfig(item));
+      }
+
       if (item.name && item.acceptedValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
         const selectItemConfig = this._prepareSelectItemConfig(item);
 
         return this._getToolbarItem(selectItemConfig);
-      } if (item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
+      }
+
+      if (item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
         const defaultButtonItemConfig = this._prepareButtonItemConfig(item.name);
         const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
 
         return this._getToolbarItem(buttonItemConfig);
       }
+
       return this._getToolbarItem(item);
     }
 
@@ -356,6 +363,138 @@ if (Quill) {
           },
         },
       }, item);
+    }
+
+    private _createCommandMenuItem(
+      command: AICommandName,
+      text?: string,
+      commandOptions?: string[],
+    ) {
+      const options = commandOptions?.map(capitalize)
+        ?? getDefaultOptionsByCommand(command)?.map(capitalize);
+
+      const item = {
+        id: command,
+        name: command,
+        text: text ?? defaultCommandNames[command],
+        items: options?.map((option) => ({
+          id: option,
+          text: option,
+          parentCommand: command,
+          options: options?.map(capitalize),
+        })),
+      };
+
+      return item;
+    }
+
+    private _buildMenuItems(commands: AIToolbarItem['commands']) {
+      let customCommandIndex = 0;
+
+      const items = commands?.map((command) => {
+        if (typeof command === 'object') {
+          if (command.name === 'custom') {
+            const id = `custom${customCommandIndex}`;
+            const { prompt, options } = command as AICustomCommand;
+            const capitalized = options?.map(capitalize);
+
+            const item = {
+              id,
+              name: 'custom',
+              text: command.text,
+              items: command.options?.map((rawOptionName: string) => {
+                const option = capitalize(rawOptionName);
+
+                const result = {
+                  parentCommand: id,
+                  id: option,
+                  text: option,
+                  options: capitalized,
+                  prompt,
+                };
+
+                return result;
+              }),
+              disabled: !prompt,
+              prompt,
+            };
+
+            customCommandIndex += 1;
+
+            return item;
+          }
+
+          return this._createCommandMenuItem(command.name, command.text, command.options);
+        }
+
+        return this._createCommandMenuItem(command);
+      });
+
+      return items;
+    }
+
+    _validateAIToolbarItemConfig(commandsMap: CommandsMap): void {
+      const { aiIntegration } = this.editorInstance.option();
+
+      if (!aiIntegration) {
+        errors.log('W1026');
+      }
+
+      if (hasInvalidCustomCommand(commandsMap)) {
+        errors.log('W1027');
+      }
+    }
+
+    _prepareAIMenuItemConfig(item: AIToolbarItem) {
+      const {
+        name = TOOLBAR_AI_ITEM_NAME,
+        commands = Object.keys(defaultCommandNames) as AICommandName[],
+      } = item;
+
+      const commandsMap = buildCommandsMap(commands);
+      const menuItems = this._buildMenuItems(commands);
+
+      this._validateAIToolbarItemConfig(commandsMap);
+
+      const dataSource = [{
+        id: 'root',
+        icon: 'sparkle',
+        items: menuItems,
+      }];
+
+      const { aiIntegration } = this.editorInstance.option();
+      const isMenuDisabled = !dataSource[0].items?.length || !aiIntegration;
+
+      const options = {
+        dataSource,
+        disabled: isMenuDisabled,
+        onContentReady: (e: ContentReadyEvent): void => {
+          const $item = $(e.element).find(`.${DX_MENU_ITEM_CLASS}`).first();
+          $item.attr('aria-label', localizationMessage.format('dxHtmlEditor-aiToolbarItemAriaLabel'));
+        },
+        onItemClick: (e: ItemClickEvent): void => {
+          const { itemData } = e;
+
+          if (!itemData || itemData.items?.length) {
+            return;
+          }
+
+          const aiDialogOptions = {
+            command: itemData.id,
+            parentCommand: itemData.parentCommand,
+            commandsMap,
+            prompt: itemData.prompt,
+          };
+
+          this._formatHandlers[name](aiDialogOptions);
+        },
+      };
+
+      return extend(true, {
+        widget: 'dxMenu',
+        name,
+        options,
+      }, typeof item === 'string' ? {} : item);
     }
 
     _hideAdaptiveMenu() {
@@ -533,6 +672,18 @@ if (Quill) {
       }
 
       this._toggleClearFormatting(hasFormats || selection.length > 1);
+    }
+
+    _updateHeaderFormatWidget() {
+      const selection = this.quill.getSelection();
+      const formatName = 'header';
+      const formatWidget = this._toolbarWidgets.getByName(formatName);
+      const formats = this.quill.getFormat(selection);
+      if (!selection || !formatWidget) {
+        return;
+      }
+
+      this._markActiveFormatWidget(formatName, formatWidget, formats);
     }
 
     _markActiveFormatWidget(name, widget, formats) {

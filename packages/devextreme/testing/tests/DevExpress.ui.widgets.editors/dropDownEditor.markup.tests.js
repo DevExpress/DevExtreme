@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import { Deferred } from 'core/utils/deferred';
-import { hasWindow } from 'core/utils/window';
 
 import 'ui/drop_down_editor/ui.drop_down_editor';
 
@@ -96,7 +95,7 @@ module('DropDownEditor markup', {
         });
 
         assert.strictEqual($dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`).length, 1);
-        assert.equal($.trim($dropDownEditor.text()), 'testtest', 'field rendered');
+        assert.equal($dropDownEditor.text().trim(), 'testtest', 'field rendered');
     });
 
     test('field should be rendered after input value rendering', function(assert) {

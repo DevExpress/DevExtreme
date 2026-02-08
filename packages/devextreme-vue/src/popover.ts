@@ -45,7 +45,6 @@ import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
   "animation" |
-  "closeOnOutsideClick" |
   "container" |
   "contentTemplate" |
   "deferRendering" |
@@ -93,22 +92,21 @@ interface DxPopover extends AccessibleOptions {
 const componentConfig = {
   props: {
     animation: Object as PropType<Record<string, any>>,
-    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
     disabled: Boolean,
     enableBodyScroll: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hideEvent: [Object, String] as PropType<Record<string, any> | string>,
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    maxWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    minHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    minWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    maxHeight: [Number, String],
+    maxWidth: [Number, String],
+    minHeight: [Number, String],
+    minWidth: [Number, String],
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onHidden: Function as PropType<((e: HiddenEvent) => void)>,
@@ -130,14 +128,13 @@ const componentConfig = {
     titleTemplate: {},
     toolbarItems: Array as PropType<Array<dxPopupToolbarItem>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     wrapperAttr: {}
   },
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:animation": null,
-    "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,

@@ -1511,11 +1511,6 @@ QUnit.module('Focus', {
 
     // T454719
     QUnit.testInActiveWindow('Focus on dxLookup editor', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'if device is not desktop we do not test the case');
-            return;
-        }
-
         const that = this;
         let $cell;
         const $testElement = $('#container');
@@ -1559,11 +1554,6 @@ QUnit.module('Focus', {
 
     // T531176
     QUnit.testInActiveWindow('Focus on dxTextArea editor', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'if device is not desktop we do not test the case');
-            return;
-        }
-
         const that = this;
         let $cell;
         const $testElement = $('#container');

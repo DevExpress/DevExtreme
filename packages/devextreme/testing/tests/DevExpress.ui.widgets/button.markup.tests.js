@@ -48,7 +48,7 @@ QUnit.module('Button markup', function() {
         });
         const buttonContent = element.find('.' + BUTTON_CONTENT_CLASS);
 
-        assert.equal($.trim(buttonContent.find('.' + BUTTON_TEXT_CLASS).text()), 'text');
+        assert.equal(buttonContent.find('.' + BUTTON_TEXT_CLASS).text().trim(), 'text');
         assert.ok(element.hasClass(BUTTON_HAS_ICON_CLASS), 'button with icon has icon class');
         assert.ok(element.hasClass(BUTTON_HAS_TEXT_CLASS), 'button with text has text class');
     });
@@ -165,7 +165,7 @@ QUnit.module('Button markup', function() {
     QUnit.test('dxButton with anonymous template', function(assert) {
         const $button = $('#buttonWithAnonymousTemplate').dxButton();
 
-        assert.equal($.trim($button.text()), 'test', 'anonymous template rendered');
+        assert.equal($button.text().trim(), 'test', 'anonymous template rendered');
     });
 
     QUnit.test('anonymous content template rendering', function(assert) {

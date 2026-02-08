@@ -161,7 +161,7 @@ describe('component rendering', () => {
       const component = defineComponent({
         template:
                   `
-                    <test-component id="component" class="custom-class" :class="{'dx-chat-disabled': isDisabled}"></test-component>
+                    <test-component id="component" class="chat" :class="{'dx-chat-disabled': isDisabled}"></test-component>
                     <button @click="toggleDisabledState($event)">Click me</button>
                   `,
         components: { TestComponent },
@@ -182,11 +182,11 @@ describe('component rendering', () => {
 
       await wrapper.find('button').trigger('click');
 
-      expect(componentContainer.element.className).toBe('custom-class dx-chat-disabled');
+      expect(componentContainer.element.className).toBe('chat dx-chat-disabled');
 
       const attrsPassedToVNodeInRenderMethod = wrapper.vm.$.subTree?.children?.[0]?.component?.subTree?.props?.class;
 
-      const expectedClasses = 'custom-class dx-chat-disabled';
+      const expectedClasses = 'chat dx-chat-disabled';
 
       expect(attrsPassedToVNodeInRenderMethod).toBe(expectedClasses);
       expect(componentContainer.element.className).toBe(expectedClasses);
@@ -196,7 +196,7 @@ describe('component rendering', () => {
       const component = defineComponent({
         template:
                   `
-                    <test-component id="component" class="custom-class" :class="{'dx-chat-disabled': isDisabled}"></test-component>
+                    <test-component id="component" class="chat" :class="{'dx-chat-disabled': isDisabled}"></test-component>
                     <button @click="toggleDisabledState($event)">Click me</button>
                   `,
         components: { TestComponent },
@@ -219,11 +219,11 @@ describe('component rendering', () => {
 
       await wrapper.find('button').trigger('click');
 
-      expect(componentContainer.element.className).toBe('custom-class dx-chat dx-hover dx-chat-disabled');
+      expect(componentContainer.element.className).toBe('chat dx-chat dx-hover dx-chat-disabled');
 
       await wrapper.find('button').trigger('click');
 
-      expect(componentContainer.element.className).toBe('custom-class dx-chat dx-hover');
+      expect(componentContainer.element.className).toBe('chat dx-chat dx-hover');
     });
 
     it('forwards correct classes when only a dynamic attr was defined', async () => {

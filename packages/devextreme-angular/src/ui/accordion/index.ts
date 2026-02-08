@@ -38,16 +38,16 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiAccordionItemModule } from 'devextreme-angular/ui/accordion/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiAccordionItemComponent } from 'devextreme-angular/ui/accordion/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -56,8 +56,10 @@ import { DxiAccordionItemComponent } from 'devextreme-angular/ui/accordion/neste
  */
 @Component({
     selector: 'dx-accordion',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -66,6 +68,12 @@ import { DxiAccordionItemComponent } from 'devextreme-angular/ui/accordion/neste
     ]
 })
 export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxAccordion<TItem, TKey> = null;
 
     /**
@@ -190,10 +198,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -424,10 +432,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -579,7 +587,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -705,27 +713,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiAccordionItemComponent)
-    get itemsChildren(): QueryList<DxiAccordionItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiAccordionItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -830,13 +818,11 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
 
 @NgModule({
   imports: [
+    DxAccordionComponent,
     DxiItemModule,
     DxiAccordionItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxAccordionComponent
   ],
   exports: [
     DxAccordionComponent,
@@ -846,6 +832,8 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
   ]
 })
 export class DxAccordionModule { }
+
+export * from 'devextreme-angular/ui/accordion/nested';
 
 import type * as DxAccordionTypes from "devextreme/ui/accordion_types";
 export { DxAccordionTypes };

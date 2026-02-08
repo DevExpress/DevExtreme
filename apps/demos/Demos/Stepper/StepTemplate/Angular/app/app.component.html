@@ -1,0 +1,44 @@
+<div id="label-customStepShape" class="stepper-label">Custom Step Shape</div>
+<dx-stepper
+  id="customStepShape"
+  [dataSource]="steps"
+  [selectedIndex]="2"
+  [linear]="false"
+  [elementAttr]="{ 'aria-labelledby': 'label-customStepShape' }"
+>
+  <div *dxTemplate="let data of 'item'">
+    <div class="dx-step-indicator">
+      <i class="dx-icon" [ngClass]="'dx-icon-' + data.icon"></i>
+    </div>
+    <div class="dx-step-caption">
+      <div class="dx-step-label">{{ data.label }}</div>
+      <div class="dx-step-optional-mark" *ngIf="data.optional">(Optional)</div>
+    </div>
+  </div>
+</dx-stepper>
+<div id="label-labelOnly" class="stepper-label">Label Only</div>
+<dx-stepper
+  id="labelOnly"
+  [dataSource]="steps"
+  [selectedIndex]="2"
+  [linear]="false"
+  [elementAttr]="{ 'aria-labelledby': 'label-labelOnly' }"
+>
+  <div *dxTemplate="let data of 'item'">
+    <div class="dx-step-caption">
+      <div class="dx-step-label">{{ data.label }}</div>
+    </div>
+  </div>
+</dx-stepper>
+<div id="label-iconOnly" class="stepper-label">Icon Only</div>
+<dx-stepper
+  id="iconOnly"
+  [dataSource]="steps"
+  [selectedIndex]="2"
+  [linear]="false"
+  [elementAttr]="{ 'aria-labelledby': 'label-iconOnly' }"
+>
+  <div *dxTemplate="let data of 'item'">
+    <i class="dx-icon" [ngClass]="'dx-icon-' + data.icon"></i>
+  </div>
+</dx-stepper>

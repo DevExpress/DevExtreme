@@ -7,8 +7,8 @@ import { hasWindow } from '@js/core/utils/window';
 import { DateTableMonthComponent } from '@ts/scheduler/r1/components/index';
 import { formatWeekday, monthUtils } from '@ts/scheduler/r1/utils/index';
 
-import { VIEWS } from '../m_constants';
 import { utils } from '../m_utils';
+import { VIEWS } from '../utils/options/constants_view';
 import SchedulerWorkSpace from './m_work_space_indicator';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
@@ -51,7 +51,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
    *   when changing the layout, the test will also be useless
    */
   getCellWidth() {
-    return this.cache.get('cellWidth', () => {
+    return this.cache.memo('cellWidth', () => {
       const DAYS_IN_WEEK = 7;
 
       let averageWidth = 0;
@@ -156,9 +156,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
   }
 
-  _toggleAllDayVisibility() { return noop(); }
+  _updateAllDayVisibility() { return noop(); }
 
-  _changeAllDayVisibility() { return noop(); }
+  _updateAllDayHeight() { return noop(); }
 
   // --------------
   // These methods should be deleted when we get rid of old render
@@ -171,7 +171,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   _setMonthClassesToCell($cell, data) {
     $cell
       .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, data.isCurrentDate)
-      .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, data.firstDayOfMonth)
+      .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, data.isFirstDayMonthHighlighting)
       .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, data.otherMonth);
   }
 

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import { renderDateParts, getDatePartIndexByPosition } from '__internal/ui/date_box/m_date_box.mask.parts';
-import dateParser from 'common/core/localization/ldml/date.parser';
+import dateParser from '__internal/core/localization/ldml/dateParserModule';
 import dateLocalization from 'common/core/localization/date';
 import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -11,6 +11,7 @@ import devices from '__internal/core/m_devices';
 const { test, module } = QUnit;
 
 const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
+const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 const DROP_EVENT_NAME = 'drop';
 
@@ -1451,11 +1452,6 @@ module('Empty dateBox', {
     });
 
     test('space keydown event should be prevented', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'test does not actual for mobile devices');
-            return;
-        }
-
         const value = new Date(2020, 5, 5);
         this.instance.option({ value });
         this.keyboard.keyDown('space');
@@ -1578,6 +1574,22 @@ module('Options changed', setupModule, () => {
 });
 
 module('Regression', () => {
+    QUnit.test('onValueChanged should not be fired when input is invalid and useMaskBehavior is enabled (T1296990)', function(assert) {
+        const valueChangedHandler = sinon.spy();
+
+        const $element = $('#dateBox').dxDateBox({
+            useMaskBehavior: true,
+            onValueChanged: valueChangedHandler,
+            max: new Date('07/02/2025'),
+        });
+
+        const $input = $element.find('.dx-texteditor-input');
+
+        $input.val('10/10/2025').change();
+
+        assert.strictEqual(valueChangedHandler.callCount, 0, 'onValueChanged is not fired');
+    });
+
     QUnit.test('should paste text if value was not initialized (T715236)', function(assert) {
         const $input = $('#dateBox')
             .dxDateBox({
@@ -1632,6 +1644,33 @@ module('Regression', () => {
         }).dxDateBox('instance');
 
         instance.focus();
+    });
+
+    QUnit.test('mask for HH:mm should be reset after selecting all multiple times (T1308916)', function(assert) {
+        const $dateBox = $('#dateBox').dxDateBox({
+            value: new Date(2021, 9, 17, 16, 6),
+            displayFormat: 'HH:mm',
+            type: 'time',
+            useMaskBehavior: true,
+        });
+
+        const $input = $dateBox.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        const { length } = $input.val();
+
+        keyboard
+            .focus()
+            .caret({ start: 0, end: length })
+            .type('1234');
+
+        assert.strictEqual($input.val(), '12:34', 'text is correct after typing "1234" over full selection');
+
+        keyboard
+            .caret({ start: 0, end: length })
+            .type('12');
+
+        assert.strictEqual($input.val(), '12:34', 'both digits go to hours and minutes stay unchanged');
     });
 });
 
@@ -1826,6 +1865,24 @@ module('Caret moving', setupModule, () => {
         this.$input.trigger('dxclick');
 
         assert.deepEqual(this.keyboard.caret(), allSelectedCaret, 'no date part is selected');
+    });
+
+    test('should keep active part after focus out and focus in (T1318439)', function(assert) {
+        const caretYear = { start: 11, end: 15 };
+
+        this.instance.option({
+            useMaskBehavior: true,
+            mode: 'text',
+        });
+
+        this.keyboard.press('end');
+
+        assert.deepEqual(this.keyboard.caret(), caretYear, 'year is selected initially');
+
+        this.$input.trigger('focusout');
+        this.$input.trigger('focusin');
+
+        assert.deepEqual(this.keyboard.caret(), caretYear, 'year is selected after focus return');
     });
 });
 

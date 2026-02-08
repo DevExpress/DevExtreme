@@ -28,10 +28,8 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
-
-
 
 
 
@@ -42,8 +40,10 @@ import {
  */
 @Component({
     selector: 'dx-resizable',
+    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -51,6 +51,7 @@ import {
     ]
 })
 export class DxResizableComponent extends DxComponent implements OnDestroy {
+
     instance: DxResizable = null;
 
     /**
@@ -97,10 +98,10 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get height(): (() => number | string) | number | string {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
@@ -188,10 +189,10 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get width(): (() => number | string) | number | string {
+    get width(): number | string {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string) {
+    set width(value: number | string) {
         this._setOption('width', value);
     }
 
@@ -269,7 +270,7 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() heightChange: EventEmitter<number | string>;
 
     /**
     
@@ -318,11 +319,7 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
-
-
-
-
+    @Output() widthChange: EventEmitter<number | string>;
 
 
 
@@ -371,11 +368,9 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxResizableComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxResizableComponent
   ],
   exports: [
     DxResizableComponent,
@@ -383,6 +378,7 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
   ]
 })
 export class DxResizableModule { }
+
 
 import type * as DxResizableTypes from "devextreme/ui/resizable_types";
 export { DxResizableTypes };

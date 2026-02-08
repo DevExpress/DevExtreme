@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import SpinButton from '__internal/ui/number_box/m_number_box.spin';
 import config from 'core/config';
-import devices from '__internal/core/m_devices';
 import eventsEngine from 'common/core/events/core/events_engine';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import pointerMock from '../../../helpers/pointerMock.js';
@@ -634,11 +633,6 @@ QUnit.module('basics', {}, () => {
     });
 
     QUnit.test('T220209 - the \'displayValueFormatter\' option when value is changed using keyboard', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'this test is actual only for desktop ');
-            return;
-        }
-
         const $numberBox = $('#numberbox').dxNumberBox({
             value: 5,
             displayValueFormatter(value) {
@@ -2219,11 +2213,6 @@ QUnit.module('valueChanged should receive correct event parameter', {
 
     [['up', 10], ['down', -10]].forEach(([direction, delta]) => {
         QUnit.testInActiveWindow(`on mouse wheel ${direction}`, function(assert) {
-            if(devices.real().deviceType !== 'desktop') {
-                assert.ok(true, 'this test is actual only for desktop');
-                return;
-            }
-
             this.$input.focus();
             this.mouse.wheel(delta);
 

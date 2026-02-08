@@ -6,27 +6,20 @@ import { getWindow } from '@js/core/utils/window';
 const window = getWindow();
 
 function getMarkup(element, backgroundColor) {
-  const temp = domAdapter.createElement('div');
   const clone = element.cloneNode(true);
+  const serializer = new XMLSerializer();
+
   if (backgroundColor) {
     $(clone).css('backgroundColor', backgroundColor);
   }
-  temp.appendChild(clone);
-  return temp.innerHTML;
+
+  return serializer.serializeToString(clone);
 }
 
 function fixNamespaces(markup) {
-  let first = true;
-
   if (markup.indexOf('xmlns:xlink') === -1) {
     markup = markup.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
   }
-
-  markup = markup.replace(/xmlns="[\s\S]*?"/gi, function (match) {
-    if (!first) return '';
-    first = false;
-    return match;
-  });
 
   return markup.replace(/xmlns:NS1="[\s\S]*?"/gi, '')
     .replace(/NS1:xmlns:xlink="([\s\S]*?)"/gi, 'xmlns:xlink="$1"');
@@ -41,12 +34,14 @@ function decodeHtmlEntities(markup) {
     .replace(/&lt;/gi, '&#60;')
     .replace(/&gt;/gi, '&#62;')
     .replace(/&nbsp;/gi, '&#160;')
-    .replace(/&shy;/gi, '&#173;');
+    .replace(/\u00A0/g, '&#160;')
+    .replace(/&shy;/gi, '&#173;')
+    .replace(/\u00AD/g, '&#173;');
 }
 
 export const HIDDEN_FOR_EXPORT = 'hidden-for-export';
 
-export function getSvgMarkup(element, backgroundColor) {
+export function getSvgMarkup(element, backgroundColor?) {
   return fixNamespaces(decodeHtmlEntities(getMarkup(element, backgroundColor)));
 }
 

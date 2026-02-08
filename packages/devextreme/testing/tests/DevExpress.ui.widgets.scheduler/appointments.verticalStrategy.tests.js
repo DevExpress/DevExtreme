@@ -1,17 +1,13 @@
 import $ from 'jquery';
-import dataCoreUtils from 'core/utils/data';
-import typeUtils from 'core/utils/type';
 import { Deferred } from 'core/utils/deferred';
 import fx from 'common/core/animation/fx';
 
 import '__internal/scheduler/m_scheduler';
-import { ExpressionUtils } from '__internal/scheduler/m_expression_utils';
-import { createExpressions } from '__internal/scheduler/resources/m_utils';
+
+import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
+import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
 
 const { module, test, testStart } = QUnit;
-
-const compileGetter = dataCoreUtils.compileGetter;
-const compileSetter = dataCoreUtils.compileSetter;
 
 testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-appointments"></div>\
@@ -19,36 +15,9 @@ testStart(function() {
         <div id="fixedContainer"></div>');
 });
 
-const dataAccessors = {
-    getter: {
-        startDate: compileGetter('startDate'),
-        endDate: compileGetter('endDate'),
-        allDay: compileGetter('allDay'),
-        text: compileGetter('text'),
-        recurrenceRule: compileGetter('recurrenceRule')
-    },
-    setter: {
-        startDate: compileSetter('startDate'),
-        endDate: compileSetter('endDate'),
-        allDay: compileSetter('allDay'),
-        text: compileSetter('text'),
-        recurrenceRule: compileSetter('recurrenceRule')
-    }
-};
-
-ExpressionUtils.getField = (_, field, obj) => {
-    if(typeUtils.isDefined(dataAccessors.getter[field])) {
-        return dataAccessors.getter[field](obj);
-    }
-};
-
-ExpressionUtils.setField = (_, field, obj, value) => {
-    return dataAccessors.setter[field](obj, value);
-};
-
 const createInstance = (options) => {
-    const observer = {
-        fire: (command, field, obj, value) => {
+    const notifyScheduler = {
+        invoke: (command, field, obj, value) => {
             switch(command) {
                 case 'getAppointmentGeometry':
                     return {
@@ -65,12 +34,16 @@ const createInstance = (options) => {
     };
 
     return $('#scheduler-appointments').dxSchedulerAppointments({
-        observer,
+        notifyScheduler,
         ...options,
-        getResources: () => [],
+        dataAccessors: mockDataAccessor,
         getLoadedResources: () => [],
+        getResourceManager: getEmptyResourceManager,
         getAppointmentColor: () => new Deferred(),
-        getResourceDataAccessors: () => createExpressions([])
+        getAppointmentDataSource: () => ({
+            getUpdatedAppointment: () => false,
+            getUpdatedAppointmentKeys: () => [],
+        }),
     }).dxSchedulerAppointments('instance');
 };
 
@@ -86,7 +59,7 @@ const moduleOptions = {
 };
 
 module('Vertical Strategy', moduleOptions, () => {
-    test('Wide rival appointments should not have specific class', function(assert) {
+    test('Wide rival appointments should not have specific class', async function(assert) {
         const items = [{
             itemData: {
                 text: 'Appointment 1',
@@ -94,7 +67,8 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ width: 40, height: 100, allDay: true }]
+            sortedIndex: 0,
+            width: 40, height: 100, allDay: true,
         }, {
             itemData: {
                 text: 'Appointment 2',
@@ -102,7 +76,8 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ width: 40, height: 100, allDay: true }]
+            sortedIndex: 1,
+            width: 40, height: 100, allDay: true,
         }];
 
         const instance = createInstance({
@@ -115,7 +90,7 @@ module('Vertical Strategy', moduleOptions, () => {
     });
 
     // NOTE: integration test
-    test('Narrow rival appointments should have specific class', function(assert) {
+    test('Narrow rival appointments should have specific class', async function(assert) {
         const items = [{
             itemData: {
                 text: 'Appointment 1',
@@ -123,7 +98,8 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true, empty: true }]
+            sortedIndex: 0,
+            maxLevel: 1, level: 0, width: 35, height: 100, allDay: true, empty: true
         }, {
             itemData: {
                 text: 'Appointment 2',
@@ -131,7 +107,8 @@ module('Vertical Strategy', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 12),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true, empty: true }]
+            sortedIndex: 1,
+            maxLevel: 1, level: 0, width: 35, height: 100, allDay: true, empty: true
         }];
 
         const instance = createInstance({
@@ -145,7 +122,7 @@ module('Vertical Strategy', moduleOptions, () => {
 });
 
 module('Vertical All Day Strategy', moduleOptions, () => {
-    test('Scheduler appointments should be rendered in right containers', function(assert) {
+    test('Scheduler appointments should be rendered in right containers', async function(assert) {
         const instance = createInstance({
             fixedContainer: $('#fixedContainer'),
             allDayContainer: $('#allDayContainer')
@@ -157,13 +134,15 @@ module('Vertical All Day Strategy', moduleOptions, () => {
                 startDate: new Date(),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100, allDay: true }]
+            sortedIndex: 0,
+            maxLevel: 1, level: 0, width: 40, height: 100, allDay: true,
         }, {
             itemData: {
                 text: 'Appointment 2',
                 startDate: new Date()
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100 }]
+            sortedIndex: 1,
+            maxLevel: 1, level: 0, width: 40, height: 100,
         }];
 
         instance.option('items', items);
@@ -172,13 +151,14 @@ module('Vertical All Day Strategy', moduleOptions, () => {
         assert.equal($('#allDayContainer .dx-scheduler-appointment').length, 1, 'allDayContainer has 1 item');
     });
 
-    test('Scheduler appointments should have specific allDay class if needed', function(assert) {
+    test('Scheduler appointments should have specific allDay class if needed', async function(assert) {
         const items = [{
             itemData: {
                 text: 'Appointment 1',
                 startDate: new Date()
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100 }]
+            sortedIndex: 0,
+            maxLevel: 1, level: 0, width: 40, height: 100,
         }];
 
         const instance = createInstance({
@@ -196,7 +176,8 @@ module('Vertical All Day Strategy', moduleOptions, () => {
                 startDate: new Date(),
                 allDay: true
             },
-            settings: [{ count: 1, index: 0, width: 40, height: 100, allDay: true }]
+            sortedIndex: 0,
+            maxLevel: 1, level: 0, width: 40, height: 100, allDay: true,
         }]
         );
 

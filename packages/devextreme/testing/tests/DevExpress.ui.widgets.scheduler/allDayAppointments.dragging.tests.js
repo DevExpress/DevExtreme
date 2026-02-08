@@ -10,7 +10,7 @@ import {
     initTestMarkup
 } from '../../helpers/scheduler/helpers.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import '__internal/scheduler/m_scheduler';
 
 const { module, test, testStart } = QUnit;
@@ -31,7 +31,6 @@ const triggerDragEnter = ($element, $appointment) => {
 const config = {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
         this.tasks = [
             {
                 text: 'Task 1',
@@ -47,24 +46,22 @@ const config = {
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
 module('All day appointments dragging', config, () => {
-    test('Task dragging into the allDay container', function(assert) {
+    test('Task dragging into the allDay container', async function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
 
-        const scheduler = createInstanceBase({ currentDate: new Date(2015, 1, 9), dataSource: data, editing: true });
+        const scheduler = await createInstanceBase({ currentDate: new Date(2015, 1, 9), dataSource: data, editing: true });
         const $element = $(scheduler.instance.$element());
         const $appointment = $element.find('.dx-scheduler-appointment').eq(0);
 
         let pointer = pointerMock($appointment).start().down().move(10, 10);
         triggerDragEnter($element.find('.dx-scheduler-all-day-table-cell'), $appointment);
         pointer.up();
-        this.clock.tick(10);
 
         const $allDayAppointment = $element.find('.dx-scheduler-all-day-appointments .dx-scheduler-appointment');
 
@@ -80,7 +77,7 @@ module('All day appointments dragging', config, () => {
         assert.equal($element.find('.dx-scheduler-all-day-appointments .dx-scheduler-appointment').length, 0, 'allDayContainer is empty');
     });
 
-    test('Task dragging into the allDay container when allDay-cell is exactly top', function(assert) {
+    test('Task dragging into the allDay container when allDay-cell is exactly top', async function(assert) {
         const data = new DataSource({
             store: [{
                 text: 'Task 1',
@@ -89,14 +86,13 @@ module('All day appointments dragging', config, () => {
             }]
         });
 
-        const scheduler = createInstanceBase({ currentDate: new Date(2015, 2, 4), dataSource: data, currentView: 'week', editing: true });
+        const scheduler = await createInstanceBase({ currentDate: new Date(2015, 2, 4), dataSource: data, currentView: 'week', editing: true });
         const $element = $(scheduler.instance.$element());
         const $appointment = $element.find('.dx-scheduler-appointment').eq(0);
 
         let pointer = pointerMock($appointment).start().down().move(10, 10);
         triggerDragEnter($element.find('.dx-scheduler-all-day-table-cell').eq(3), $appointment);
         pointer.up();
-        this.clock.tick(10);
 
         const $allDayAppointment = $element.find('.dx-scheduler-all-day-appointments .dx-scheduler-appointment');
 
@@ -112,8 +108,8 @@ module('All day appointments dragging', config, () => {
         assert.equal($element.find('.dx-scheduler-all-day-appointments .dx-scheduler-appointment').length, 0, 'allDayContainer is empty');
     });
 
-    test('End date of appointment should be calculated if it\'s dragged off from the all day container', function(assert) {
-        const scheduler = createInstanceBase({
+    test('End date of appointment should be calculated if it\'s dragged off from the all day container', async function(assert) {
+        const scheduler = await createInstanceBase({
             currentDate: new Date(2015, 1, 9),
             editing: true,
             currentView: 'week',
@@ -131,19 +127,18 @@ module('All day appointments dragging', config, () => {
         triggerDragEnter($(scheduler.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0), $appointment);
         pointer.up();
 
-        this.clock.tick(10);
         const appointmentData = dataUtils.data($(scheduler.instance.$element()).find('.dx-scheduler-appointment').get(0), 'dxItemData');
 
         assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 8, 0, 0), 'Start date is correct');
         assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 8, 0, 30), 'End date is correct');
     });
 
-    test('allDayExpanded option of workspace should be updated after dragged into the all day container', function(assert) {
+    test('allDayExpanded option of workspace should be updated after dragged into the all day container', async function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
 
-        const scheduler = createInstanceBase({
+        const scheduler = await createInstanceBase({
             currentDate: new Date(2015, 1, 9),
             dataSource: data,
             currentView: 'week',
@@ -160,17 +155,16 @@ module('All day appointments dragging', config, () => {
         const pointer = pointerMock($appointment).start().down().move(10, 10);
         triggerDragEnter($element.find('.dx-scheduler-all-day-table-cell'), $appointment);
         pointer.up();
-        this.clock.tick(10);
 
         assert.equal(workspace.option('allDayExpanded'), true);
     });
 
-    test('Height of appointment should be correct after dragged into the all day container', function(assert) {
+    test('Height of appointment should be correct after dragged into the all day container', async function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
 
-        const scheduler = createInstanceBase({
+        const scheduler = await createInstanceBase({
             currentDate: new Date(2015, 1, 9),
             dataSource: data,
             currentView: 'week',
@@ -184,7 +178,6 @@ module('All day appointments dragging', config, () => {
         const pointer = pointerMock($appointment).start().down().move(10, 10);
         triggerDragEnter($element.find('.dx-scheduler-all-day-table-cell'), $appointment);
         pointer.up();
-        this.clock.tick(10);
 
         const $allDayCell = $(scheduler.instance.$element()).find('.dx-scheduler-all-day-table-cell').eq(0);
         const $allDayAppointment = $element.find('.dx-scheduler-all-day-appointment').eq(0);
@@ -192,8 +185,8 @@ module('All day appointments dragging', config, () => {
         assert.equal(getOuterHeight($allDayAppointment), getOuterHeight($allDayCell), 'Appointment has correct height');
     });
 
-    test('allDayExpanded option of workspace should be updated after dragged off from the all day container', function(assert) {
-        const scheduler = createInstanceBase({
+    test('allDayExpanded option of workspace should be updated after dragged off from the all day container', async function(assert) {
+        const scheduler = await createInstanceBase({
             showAllDayPanel: true,
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
@@ -212,14 +205,13 @@ module('All day appointments dragging', config, () => {
         triggerDragEnter($(scheduler.instance.$element()).find('.dx-scheduler-date-table-cell').eq(0), $appointment);
         pointer.up();
 
-        this.clock.tick(10);
         const workspace = $(scheduler.instance.$element()).find('.dx-scheduler-work-space').dxSchedulerWorkSpaceWeek('instance');
 
         assert.equal(workspace.option('allDayExpanded'), false);
     });
 
 
-    test('Appointment should have right position while dragging, after change allDay property', function(assert) {
+    test('Appointment should have right position while dragging, after change allDay property', async function(assert) {
         const appointment = {
             text: 'a',
             startDate: new Date(2015, 1, 9, 7),
@@ -232,7 +224,7 @@ module('All day appointments dragging', config, () => {
             allDay: false
         };
 
-        const scheduler = createInstanceBase({
+        const scheduler = await createInstanceBase({
             height: 500,
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
@@ -261,7 +253,7 @@ module('All day appointments dragging', config, () => {
         pointer.up();
     });
 
-    test('AllDay appointment should have right position while dragging from allDay panel', function(assert) {
+    test('AllDay appointment should have right position while dragging from allDay panel', async function(assert) {
         const appointment = {
             text: 'a',
             startDate: new Date(2015, 1, 9, 7),
@@ -269,7 +261,7 @@ module('All day appointments dragging', config, () => {
             allDay: true
         };
 
-        const scheduler = createInstanceBase({
+        const scheduler = await createInstanceBase({
             height: 500,
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',

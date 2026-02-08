@@ -8,7 +8,7 @@ import CheckBox from 'devextreme-react/check-box';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
-import sales from './data.ts';
+import { sales } from './data.ts';
 
 const setSummaryType = (args, sourceField) => {
   dataSource.field(sourceField.index, {

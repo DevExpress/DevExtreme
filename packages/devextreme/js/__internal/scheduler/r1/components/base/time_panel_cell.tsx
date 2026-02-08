@@ -1,6 +1,6 @@
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
 import type { JSXTemplate } from '@ts/core/r1/types';
-import { getTemplate } from '@ts/core/r1/utils/index';
+import { PublicTemplate } from '@ts/scheduler/r1/components/templates/index';
 
 import { combineClasses } from '../../../../core/r1/utils/render_utils';
 import { renderUtils } from '../../utils/index';
@@ -67,11 +67,10 @@ export class TimePanelCell extends BaseInfernoComponent<TimePanelCellProps> {
     const classes = combineClasses({
       'dx-scheduler-time-panel-cell': true,
       [cellSizeVerticalClass]: true,
-      'dx-scheduler-time-panel-current-time-cell': !!highlighted,
+      'dx-scheduler-time-panel-current-time-cell': Boolean(highlighted),
       [className ?? '']: true,
     });
     const timeCellTemplateProps = this.getTimeCellTemplateProps();
-    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
     return (
       <CellBase
@@ -84,11 +83,14 @@ export class TimePanelCell extends BaseInfernoComponent<TimePanelCellProps> {
         index={CellBaseDefaultProps.index}
       >
         {
-          TimeCellTemplateComponent
-            ? TimeCellTemplateComponent({
-              index: timeCellTemplateProps.index,
-              data: timeCellTemplateProps.data,
-            })
+          timeCellTemplate
+            ? <PublicTemplate
+              template={timeCellTemplate}
+              templateProps={{
+                index: timeCellTemplateProps.index,
+                data: timeCellTemplateProps.data,
+              }}
+              />
             : (
               <div>
                 {text}

@@ -6,10 +6,10 @@ import type { RefObject } from '@ts/core/r1/types';
 import { Widget } from '@ts/core/r1/widget';
 import { createRef as infernoCreateRef } from 'inferno';
 
-import { registerKeyboardAction } from '../../ui/shared/accessibility';
 import type { EventCallback } from '../core/r1/event_callback';
 import type { DisposeEffectReturn } from '../core/r1/utils/effect_return';
 import { combineClasses } from '../core/r1/utils/render_utils';
+import { registerKeyboardAction } from '../ui/shared/accessibility';
 import {
   LIGHT_MODE_CLASS,
   PAGER_CLASS,
@@ -33,6 +33,7 @@ export interface PaginationContentProps extends PaginationProps {
   allowedPageSizesRef?: RefObject<HTMLDivElement>;
   pagesRef?: RefObject<HTMLElement>;
   infoTextRef?: RefObject<HTMLDivElement>;
+  _getParentComponentRootNode?: () => void;
 }
 
 export const PaginationContentDefaultProps: PaginationContentProps = {
@@ -86,14 +87,32 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
     }
   }
 
+  private getWidgetRootElement(): HTMLElement {
+    return this.widgetRootElementRef?.current as HTMLElement;
+  }
+
   private createFakeInstance(): {
     option: () => boolean;
     element: () => HTMLElement | null;
+    component: any;
     _createActionByOption: () => (e: any) => void;
   } {
     return {
       option: (): boolean => false,
-      element: (): HTMLElement | null => this.widgetRootElementRef?.current as HTMLElement,
+      element: (): HTMLElement | null => this.getWidgetRootElement(),
+      // NOTE: Fix of the T1285596
+      //
+      // 1) For Pagination used inside the DataGrid
+      // In this case the instance element should be
+      // DataGrid for correct keyboard shortcuts handling.
+      //
+      // 2) For standalone Pagination pass the instance mock
+      // In this case the element should be Pagination root node
+      //
+      // See the ui/shared/accessibility.js "selectView" util function for more details.
+      component: this.props._getParentComponentRootNode
+        ? { element: () => this.props._getParentComponentRootNode?.() }
+        : { element: () => this.getWidgetRootElement() },
 
       _createActionByOption: () => (e: any) => {
         this.props.onKeyDown?.(e);
@@ -106,6 +125,7 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
       registerKeyboardAction:
         (element: HTMLElement, action: EventCallback): DisposeEffectReturn => {
           const fakePaginationInstance = this.createFakeInstance();
+          // TODO Pager: Get rid of this utils usage
           return registerKeyboardAction('pager', fakePaginationInstance, element, undefined, action);
         },
     };
@@ -139,10 +159,24 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
   }
 
   getPagesContainerVisibility(): 'hidden' | undefined {
-    if (this.props.pagesNavigatorVisible === 'auto' && this.props.pageCount === 1 && this.props.hasKnownLastPage) {
-      return 'hidden';
-    }
-    return undefined;
+    const {
+      pagesNavigatorVisible,
+      pageCount,
+      hasKnownLastPage,
+      showInfo,
+      showNavigationButtons,
+      showPageSizeSelector,
+    } = this.props;
+
+    const shouldHideBasedOnPageCount = pagesNavigatorVisible === 'auto' && pageCount === 1 && hasKnownLastPage;
+
+    const hasExplicitVisibleComponents = Boolean(showInfo) || Boolean(showNavigationButtons)
+    || showPageSizeSelector === true;
+
+    const shouldHide = shouldHideBasedOnPageCount && !hasExplicitVisibleComponents;
+    const result = shouldHide ? 'hidden' : undefined;
+
+    return result;
   }
 
   getIsLargeDisplayMode(): boolean {
@@ -224,8 +258,8 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
         visible={visible}
         aria={this.getAria()}
         style={style as Record<string, string | number> | undefined}
-        width={width as string | number | undefined}
-        height={height as string | number | undefined}
+        width={width}
+        height={height}
 
         hint={hint}
         disabled={disabled}
@@ -241,6 +275,7 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
           <PageSizeSelector
             rootElementRef={allowedPageSizesRef}
             isLargeDisplayMode={this.getIsLargeDisplayMode()}
+            itemCount={itemCount}
             pageSize={pageSize}
             pageSizeChangedInternal={pageSizeChangedInternal}
             allowedPageSizes={allowedPageSizes}

@@ -16,7 +16,7 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
     ItemInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     CollectionWidgetItem,
@@ -194,7 +194,7 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
      * @default 'normal'
      * @public
      */
-    type?: ButtonType;
+    type?: ButtonType | string;
 
     /**
      * @docid

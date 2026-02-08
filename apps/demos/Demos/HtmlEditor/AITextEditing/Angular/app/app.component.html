@@ -1,0 +1,28 @@
+<dx-html-editor
+  height="530px"
+  [value]="valueContent"
+  [aiIntegration]="aiIntegration"
+>
+  <dxo-html-editor-toolbar>
+    <dxi-html-editor-toolbar-item name="ai">
+      <dxi-html-editor-command name="summarize" />
+      <dxi-html-editor-command name="proofread" />
+      <dxi-html-editor-command name="expand" />
+      <dxi-html-editor-command name="shorten" />
+      <dxi-html-editor-command name="changeStyle" />
+      <dxi-html-editor-command name="changeTone" />
+      <dxi-html-editor-command name="translate" />
+      <dxi-html-editor-command name="askAI" />
+      <dxi-html-editor-command
+        name="custom"
+        text="Extract Keywords"
+        [prompt]="extractKeywordsPrompt"
+      />
+    </dxi-html-editor-toolbar-item>
+    <dxi-html-editor-toolbar-item
+      name="separator"
+    ></dxi-html-editor-toolbar-item>
+    <dxi-html-editor-toolbar-item name="undo"></dxi-html-editor-toolbar-item>
+    <dxi-html-editor-toolbar-item name="redo"></dxi-html-editor-toolbar-item>
+  </dxo-html-editor-toolbar>
+</dx-html-editor>

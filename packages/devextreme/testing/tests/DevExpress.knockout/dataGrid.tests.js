@@ -3,6 +3,7 @@ import ko from 'knockout';
 import { DataSource } from 'common/data/data_source/data_source';
 import { logger } from 'core/utils/console';
 import fx from 'common/core/animation/fx';
+import { isFunction } from 'core/utils/type';
 import dataSourceAdapter from '__internal/grids/data_grid/m_data_source_adapter';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 
@@ -51,7 +52,7 @@ const processColumnsForCompare = function(columns, parameterNames) {
                     delete this[propertyName];
                 }
             } else {
-                if($.isFunction(this[propertyName])) {
+                if(isFunction(this[propertyName])) {
                     delete this[propertyName];
                 }
                 if(propertyName === 'filterOperations' ||

@@ -1,10 +1,11 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 
 import {
     createWrapper,
     initTestMarkup,
 } from '../../helpers/scheduler/helpers.js';
+import { waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 const {
     testStart,
@@ -16,8 +17,8 @@ testStart(() => initTestMarkup());
 
 module('Renovated Views', () => {
     ['week', 'timelineWeek'].forEach((currentView) => {
-        test(`Group panel should not disappear on current date option change in ${currentView}`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Group panel should not disappear on current date option change in ${currentView}`, async function(assert) {
+            const scheduler = await createWrapper({
                 currentView,
                 views: [currentView],
                 groups: ['resourceId'],
@@ -38,11 +39,10 @@ module('Renovated Views', () => {
     });
 
     ['week', 'timelineWeek', 'timelineMonth'].forEach((currentView) => {
-        test(`Shader should be cleaned on options change in ${currentView}`, function(assert) {
-            const scheduler = createWrapper({
+        test(`Shader should be cleaned on options change in ${currentView}`, async function(assert) {
+            const scheduler = await createWrapper({
                 currentView,
                 views: [currentView],
-                groups: ['resourceId'],
                 currentDate: new Date(2020, 1, 20),
                 shadeUntilCurrentTime: true,
                 renovateRender: true,
@@ -59,8 +59,8 @@ module('Renovated Views', () => {
         });
     });
 
-    test('Virtual scrolling should be applied when renovated render is used', function(assert) {
-        const scheduler = createWrapper({
+    test('Virtual scrolling should be applied when renovated render is used', async function(assert) {
+        const scheduler = await createWrapper({
             views: [{
                 type: 'week',
                 intervalCount: 5,
@@ -89,8 +89,8 @@ module('Renovated Views', () => {
         view: 'week',
         cellCount: 7,
     }].forEach(({ view, cellCount }) => {
-        test(`It should be possible to change showAllDayPanel in runtime in ${view}`, function(assert) {
-            const scheduler = createWrapper({
+        test(`It should be possible to change showAllDayPanel in runtime in ${view}`, async function(assert) {
+            const scheduler = await createWrapper({
                 views: [view],
                 currentView: view,
                 showAllDayPanel: false,
@@ -99,13 +99,14 @@ module('Renovated Views', () => {
 
             scheduler.instance.option('showAllDayPanel', true);
 
+            await waitForAsync(() => scheduler.workSpace.getAllDayCells().length > 0);
             assert.equal(scheduler.workSpace.getAllDayCells().length, cellCount, 'Correct number of cells');
         });
     });
 
     ['timelineDay', 'timelineWeek', 'timelineMonth'].forEach((view) => {
-        test(`${view}'s cells should have correct height when current date changes`, function(assert) {
-            const scheduler = createWrapper({
+        test(`${view}'s cells should have correct height when current date changes`, async function(assert) {
+            const scheduler = await createWrapper({
                 views: [view],
                 currentView: view,
                 crossScrollingEnabled: true,
@@ -141,8 +142,8 @@ module('Renovated Views', () => {
         cellCount: 7,
         testDescription: 'Header cells in timeline\'s week row should have correct texts when vertical grouping is used',
     }].forEach(({ groupByDate, groupOrientation, cellCount, testDescription }) => {
-        test(testDescription, function(assert) {
-            const scheduler = createWrapper({
+        test(testDescription, async function(assert) {
+            const scheduler = await createWrapper({
                 height: 500,
                 views: [{
                     type: 'timelineWeek',
@@ -175,10 +176,10 @@ module('Renovated Views', () => {
         });
     });
 
-    QUnit.test('Time panel scrollable should update position if date scrollable position is changed', function(assert) {
+    QUnit.test('Time panel scrollable should update position if date scrollable position is changed', async function(assert) {
         const done = assert.async();
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             views: ['week'],
             currentView: 'week',
             crossScrollingEnabled: true,
@@ -196,10 +197,10 @@ module('Renovated Views', () => {
         }, 100);
     });
 
-    QUnit.test('Date table scrollable should update position if time panel position is changed', function(assert) {
+    QUnit.test('Date table scrollable should update position if time panel position is changed', async function(assert) {
         const done = assert.async();
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             views: ['week'],
             currentView: 'week',
             crossScrollingEnabled: true,

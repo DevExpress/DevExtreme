@@ -16,16 +16,26 @@ import { TextEditorButtonLocation } from 'devextreme/common';
 import { dxButtonOptions } from 'devextreme/ui/button';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-tag-box-button',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_buttons,
+           useExisting: DxiTagBoxButtonComponent,
+        }
+    ]
 })
 export class DxiTagBoxButtonComponent extends CollectionNestedOption {
     @Input()
@@ -74,7 +84,7 @@ export class DxiTagBoxButtonComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTagBoxButtonComponent
   ],
   exports: [

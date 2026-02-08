@@ -23,6 +23,7 @@ import type { RowsView } from '../../grid_core/views/m_rows_view';
 import AggregateCalculator from '../m_aggregate_calculator';
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
+import { getSummaryCellIndex } from './utils';
 
 const DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer';
 const DATAGRID_SUMMARY_ITEM_CLASS = 'dx-datagrid-summary-item';
@@ -36,25 +37,25 @@ const DATAGRID_CELL_DISABLED = 'dx-cell-focus-disabled';
 const DATAGRID_GROUP_FOOTER_ROW_TYPE = 'groupFooter';
 const DATAGRID_TOTAL_FOOTER_ROW_TYPE = 'totalFooter';
 
-export const renderSummaryCell = function (cell, options) {
+export const renderSummaryCell = function (cell, options, setAria) {
   const $cell = $(cell);
   const { column } = options;
   const { summaryItems } = options;
   const $summaryItems: any = [];
 
   if (!column.command && summaryItems) {
-    for (let i = 0; i < summaryItems.length; i++) {
-      const summaryItem = summaryItems[i];
+    for (const summaryItem of summaryItems) {
       const text = gridCore.getSummaryText(summaryItem, options.summaryTexts);
-
-      $summaryItems.push($('<div>')
+      const $summaryItemElement = $('<div>')
         .css('textAlign', summaryItem.alignment || column.alignment)
         .addClass(DATAGRID_SUMMARY_ITEM_CLASS)
         .addClass(DATAGRID_TEXT_CONTENT_CLASS)
         .addClass(summaryItem.cssClass)
         .toggleClass(DATAGRID_GROUP_TEXT_CONTENT_CLASS, options.rowType === 'group')
-        .text(text)
-        .attr('aria-label', `${column.caption} ${text}`));
+        .text(text);
+
+      setAria('label', `${column.caption ?? ''} ${text ?? ''}`, $summaryItemElement);
+      $summaryItems.push($summaryItemElement);
     }
     $cell.append($summaryItems);
   }
@@ -203,7 +204,7 @@ export class FooterView extends ColumnsView {
   }
 
   protected _renderCellContent($cell, options) {
-    renderSummaryCell($cell, options);
+    renderSummaryCell($cell, options, this.setAria.bind(this));
     // @ts-expect-error
     super._renderCellContent.apply(this, arguments);
   }
@@ -538,10 +539,12 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
         }
       }
     });
+
     if (!isEmptyObject(summaryCellsByColumns)) {
       visibleColumns.forEach((column, visibleIndex) => {
         const prevColumn = visibleColumns[visibleIndex - 1];
-        const columnIndex = isGroupRow && (prevColumn?.command === 'expand' || column.command === 'expand') ? prevColumn?.index : column.index;
+        const columnIndex = getSummaryCellIndex(column, prevColumn, isGroupRow);
+
         summaryCells.push(summaryCellsByColumns[columnIndex] || []);
       });
     }
@@ -908,7 +911,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
 
   protected _getCellTemplate(options) {
     if (!options.column.command && !isDefined(options.column.groupIndex) && options.summaryItems && options.summaryItems.length) {
-      return renderSummaryCell;
+      return (cell, options) => renderSummaryCell(cell, options, this.setAria.bind(this));
     }
     return super._getCellTemplate(options);
   }

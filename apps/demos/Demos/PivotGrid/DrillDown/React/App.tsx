@@ -6,7 +6,7 @@ import {
 } from 'devextreme-react/pivot-grid';
 import { DataGrid, Column, DataGridRef } from 'devextreme-react/data-grid';
 import { Popup } from 'devextreme-react/popup';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-react/common/data';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
 import { sales } from './data.ts';

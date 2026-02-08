@@ -1,15 +1,18 @@
 import $ from 'jquery';
-import vizMocks from '../../helpers/vizMocks.js';
+import {
+    Renderer,
+} from '../../helpers/vizMocks.js';
 import { noop } from 'core/utils/common';
 import pointModule from 'viz/series/points/base_point';
 import labelModule from 'viz/series/points/label';
 import SeriesModule from 'viz/series/base_series';
-const Series = SeriesModule.Series;
 import { insertMockFactory, MockAxis, restoreMockFactory } from '../../helpers/chartMocks.js';
+
+const Series = SeriesModule.Series;
 
 const createSeries = function(options, renderSettings) {
     renderSettings = renderSettings || {};
-    const renderer = renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
+    const renderer = renderSettings.renderer = renderSettings.renderer || new Renderer();
 
     options = $.extend(true, {
         containerBackgroundColor: 'containerColor',
@@ -79,7 +82,7 @@ const environment = {
     beforeEach: function() {
         insertMockFactory();
         let mockPointIndex = 0;
-        this.renderer = new vizMocks.Renderer();
+        this.renderer = new Renderer();
         this.seriesGroup = this.renderer.g();
         this.data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }];
         this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(series, data) {
@@ -121,7 +124,6 @@ const checkTwoGroups = function(assert, series) {
 const seriesType = 'scatter';
 
 (function ScatterSeries() {
-
     QUnit.module('Points creation', environment);
 
     QUnit.test('Creation simple point', function(assert) {
@@ -237,7 +239,6 @@ const seriesType = 'scatter';
         afterEach: function() {
             environment.afterEach.call(this);
         }
-
     });
 
     QUnit.test('Creation simple point with valueErrorBar', function(assert) {
@@ -446,9 +447,8 @@ const seriesType = 'scatter';
             renderer: this.renderer,
             seriesGroup: this.seriesGroup
         });
-        // act
+
         series.draw(false);
-        // assert
 
         checkGroups(assert, series);
     });
@@ -467,9 +467,9 @@ const seriesType = 'scatter';
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        // act
+
         series.draw(false);
-        // assert
+
         checkGroups(assert, series);
         assert.strictEqual(series._markersGroup._stored_settings.opacity, 1);
         $.each(series._points, function(i, p) {
@@ -492,9 +492,9 @@ const seriesType = 'scatter';
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        // act
+
         series.draw(true);
-        // assert
+
         checkGroups(assert, series);
 
         assert.equal(series._labelsGroup._stored_settings.opacity, 0.001);
@@ -529,9 +529,9 @@ const seriesType = 'scatter';
             pt.y = pt.value;
         });
         series._points[2].isInVisibleArea.returns(false);
-        // act
+
         series.draw(true);
-        // assert
+
         assert.ok(!series.getPointByPos(2).animate.called);
         assert.ok(series.getPointByPos(0).animate.called);
         assert.ok(series.getPointByPos(1).animate.called);
@@ -562,9 +562,7 @@ const seriesType = 'scatter';
 
         series.setClippingParams('clipId', 'wideClipId', false);
 
-        // act
         series.draw(false);
-        // assert
 
         assert.equal(this.renderer.stub('g').callCount, 4);
         assert.equal(this.renderer.stub('g').getCall(0).returnValue.stub('attr').firstCall.args[0]['class'], 'dxc-series');
@@ -578,7 +576,6 @@ const seriesType = 'scatter';
         assert.equal(parentGroup.children.length, 2, 'groups in series group');
         assert.equal(parentGroup.children[0], this.renderer.stub('g').getCall(1).returnValue);
         assert.equal(parentGroup.children[1], this.renderer.stub('g').getCall(3).returnValue);
-
 
         assert.deepEqual(errorBarGroup.attr.lastCall.args, [{
             'class': 'dxc-error-bars',
@@ -620,9 +617,7 @@ const seriesType = 'scatter';
 
         series.setClippingParams('clipId', 'wideClipId', false);
 
-        // act
         series.draw(true);
-        // assert
 
         assert.equal(this.renderer.stub('g').callCount, 4);
         assert.equal(this.renderer.stub('g').getCall(0).returnValue.stub('attr').firstCall.args[0]['class'], 'dxc-series');
@@ -636,7 +631,6 @@ const seriesType = 'scatter';
         assert.equal(parentGroup.children.length, 2, 'groups in series group');
         assert.equal(parentGroup.children[0], this.renderer.stub('g').getCall(1).returnValue);
         assert.equal(parentGroup.children[1], this.renderer.stub('g').getCall(3).returnValue);
-
 
         assert.deepEqual(errorBarGroup.attr.lastCall.args, [{
             'class': 'dxc-error-bars',
@@ -687,9 +681,7 @@ const seriesType = 'scatter';
 
         series.setClippingParams('clipId', 'wideClipId', false);
 
-        // act
         series.draw(true);
-        // assert
 
         assert.equal(this.renderer.stub('g').callCount, 4);
         assert.equal(this.renderer.stub('g').getCall(0).returnValue.stub('attr').firstCall.args[0]['class'], 'dxc-series');
@@ -703,7 +695,6 @@ const seriesType = 'scatter';
         assert.equal(parentGroup.children.length, 2, 'groups in series group');
         assert.equal(parentGroup.children[0], this.renderer.stub('g').getCall(1).returnValue);
         assert.equal(parentGroup.children[1], this.renderer.stub('g').getCall(3).returnValue);
-
 
         assert.deepEqual(errorBarGroup.attr.lastCall.args, [{
             'class': 'dxc-error-bars',
@@ -754,9 +745,7 @@ const seriesType = 'scatter';
 
         series.setClippingParams('clipId', 'wideClipId', false);
 
-        // act
         series.draw(false);
-        // assert
 
         assert.equal(this.renderer.stub('g').callCount, 4);
         assert.equal(this.renderer.stub('g').getCall(0).returnValue.stub('attr').firstCall.args[0]['class'], 'dxc-series');
@@ -770,7 +759,6 @@ const seriesType = 'scatter';
         assert.equal(parentGroup.children.length, 2, 'groups in series group');
         assert.equal(parentGroup.children[0], this.renderer.stub('g').getCall(1).returnValue);
         assert.equal(parentGroup.children[1], this.renderer.stub('g').getCall(3).returnValue);
-
 
         assert.deepEqual(errorBarGroup.attr.lastCall.args, [{
             'class': 'dxc-error-bars',
@@ -787,7 +775,6 @@ const seriesType = 'scatter';
             assert.equal(p.animate.callCount, 0, i + ' point draw without animate');
         });
     });
-
 
     QUnit.test('Draw series when errorBars enabled. forceClipping is true', function(assert) {
         const series = createSeries({
@@ -813,9 +800,7 @@ const seriesType = 'scatter';
 
         series.setClippingParams('clipId', 'wideClipId', true);
 
-        // act
         series.draw(false);
-        // assert
 
         assert.equal(this.renderer.stub('g').callCount, 4);
         assert.equal(this.renderer.stub('g').getCall(0).returnValue.stub('attr').firstCall.args[0]['class'], 'dxc-series');
@@ -829,7 +814,6 @@ const seriesType = 'scatter';
         assert.equal(parentGroup.children.length, 2, 'groups in series group');
         assert.equal(parentGroup.children[0], this.renderer.stub('g').getCall(1).returnValue);
         assert.equal(parentGroup.children[1], this.renderer.stub('g').getCall(3).returnValue);
-
 
         assert.deepEqual(errorBarGroup.attr.lastCall.args, [{
             'class': 'dxc-error-bars',
@@ -871,9 +855,7 @@ const seriesType = 'scatter';
         series.updateDataType({ valueAxisType: 'discrete' });
         series.setClippingParams('clipId', 'wideClipId', true);
 
-        // act
         series.draw(false);
-        // assert
 
         checkGroups(assert, series);
 
@@ -882,7 +864,6 @@ const seriesType = 'scatter';
             assert.equal(p.animate.callCount, 0, i + ' point draw without animate');
         });
     });
-
 
     QUnit.module('Scatter. Points animation', {
         beforeEach: function() {
@@ -901,9 +882,9 @@ const seriesType = 'scatter';
 
     QUnit.test('Draw without animation', function(assert) {
         const series = this.series;
-        // act
+
         series.draw(false);
-        // assert
+
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
             assert.equal(p.draw.firstCall.args[0], series._renderer, 'renderer pass to point ' + i);
@@ -914,9 +895,9 @@ const seriesType = 'scatter';
 
     QUnit.test('Draw with animation', function(assert) {
         const series = this.series;
-        // act
+
         series.draw(true);
-        // assert
+
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
             assert.equal(p.draw.firstCall.args[0], series._renderer, 'renderer pass to point ' + i);
@@ -1719,7 +1700,6 @@ const seriesType = 'scatter';
                             width: 's-b-width'
                         }
                     }
-
                 };
             }
         });
@@ -1961,7 +1941,6 @@ const seriesType = 'scatter';
         series.updateData(this.data);
         series.createPoints();
 
-
         const labels = this.createPoint.firstCall.args[2].label;
         assert.ok(labels);
         assert.ok(labels.visible);
@@ -2035,7 +2014,6 @@ const seriesType = 'scatter';
 
         series.updateData(this.data);
         series.createPoints();
-
 
         const labels = series._getPointOptions().label;
         assert.ok(labels);
@@ -2139,7 +2117,6 @@ const seriesType = 'scatter';
         const labels = series._getPointOptions().label;
         assert.equal(labels.customizeText, undefined);
     });
-
 
     QUnit.module('Scatter. Customize Label', {
         beforeEach: function() {
@@ -2656,7 +2633,6 @@ const seriesType = 'scatter';
             };
 
             return series;
-
         }
     });
 
@@ -2689,7 +2665,6 @@ const seriesType = 'scatter';
 
         assert.equal(series.getNeighborPoint(5, 200), null);
         assert.equal(series.getNeighborPoint(10, 100), null);
-
     });
 
     QUnit.test('getNeighborPoint when few point has equal coord', function(assert) {
@@ -2721,7 +2696,6 @@ const seriesType = 'scatter';
         assert.equal(series.getNeighborPoint(16, 300), series.getPointsByArg(20)[1]);
         assert.equal(series.getNeighborPoint(16, 400), series.getPointsByArg(20)[2], 'a');
         assert.equal(series.getNeighborPoint(16, 500), series.getPointsByArg(20)[2], 'b');
-
     });
 
     QUnit.test('getNeighborPoint when point coords non integer', function(assert) {

@@ -53,7 +53,7 @@ const TextBox = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["value"]), []);
       const independentEvents = useMemo(() => (["onChange","onContentReady","onCopy","onCut","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onKeyDown","onKeyUp","onPaste","onValueChanged"]), []);
@@ -111,11 +111,10 @@ const Button = Object.assign<typeof _componentButton, NestedComponentMeta>(_comp
 type IOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
@@ -133,7 +132,7 @@ type IOptionsProps = React.PropsWithChildren<{
   useSubmitBehavior?: boolean;
   validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>

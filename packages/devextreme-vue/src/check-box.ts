@@ -60,7 +60,7 @@ const componentConfig = {
     elementAttr: Object as PropType<Record<string, any>>,
     enableThreeStateBehavior: Boolean,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     iconSize: [Number, String],
@@ -83,7 +83,7 @@ const componentConfig = {
     validationStatus: String as PropType<ValidationStatus>,
     value: Boolean as PropType<boolean | null>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

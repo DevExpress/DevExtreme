@@ -17,6 +17,7 @@ import {
 import { ChartSeriesAggregationMethod } from 'devextreme/viz/chart';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-aggregation',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoAggregationComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -79,7 +82,7 @@ export class DxoAggregationComponent extends NestedOption implements OnDestroy, 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoAggregationComponent
   ],
   exports: [

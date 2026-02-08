@@ -19,6 +19,7 @@ import {
 import { CalendarZoomLevel } from 'devextreme/ui/calendar';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoCalendarOptions } from './base/calendar-options';
@@ -26,8 +27,10 @@ import { DxoCalendarOptions } from './base/calendar-options';
 
 @Component({
     selector: 'dxo-calendar-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'accessKey',
@@ -79,7 +82,7 @@ export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<Date | number | string | Array<Date | number | string>>;
+    @Output() valueChange: EventEmitter<Date | number | null | string | Array<Date | number | string | null>>;
 
     /**
     
@@ -95,7 +98,6 @@ export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements O
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' },
             { emit: 'zoomLevelChange' }
@@ -118,7 +120,7 @@ export class DxoCalendarOptionsComponent extends DxoCalendarOptions implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoCalendarOptionsComponent
   ],
   exports: [

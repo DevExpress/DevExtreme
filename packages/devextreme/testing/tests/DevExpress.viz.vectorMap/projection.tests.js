@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const eventEmitterModule = require('viz/vector_map/event_emitter');
-const projectionModule = require('viz/vector_map/projection.main');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import { _TESTS_eventEmitterMethods } from '__internal/viz/vector_map/event_emitter';
+import projectionModule from 'viz/vector_map/projection.main';
+import { projection } from 'viz/vector_map/projection';
+
 const Projection = projectionModule.Projection;
-const projectionEnginesModule = require('viz/vector_map/projection');
-const projection = projectionEnginesModule.projection;
 
 function returnValue(value) {
     return function() {
@@ -188,7 +188,7 @@ QUnit.test('setEngine / non invertible', function(assert) {
 
 QUnit.test('Event emitter methods are injected', function(assert) {
     const projection = this.projection;
-    $.each(eventEmitterModule._TESTS_eventEmitterMethods, function(name, method) {
+    $.each(_TESTS_eventEmitterMethods, function(name, method) {
         assert.strictEqual(projection[name], method, name);
     });
 });
@@ -917,7 +917,6 @@ QUnit.module('Mercator - project', {
     doTest: function(assert, arg, expected) {
         const actual = this.engine.project(arg);
         assert.arraysEqual(actual, expected, arg.join(' '));
-
     },
 
     bounds: function(bounds) {

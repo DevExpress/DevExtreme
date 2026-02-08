@@ -10,7 +10,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -19,26 +18,53 @@ import {
 
 import * as CommonChartTypes from 'devextreme/common/charts';
 import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
-import { ScaleBreak, ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap, TimeInterval, AxisScaleType, ChartsDataType, VisualRangeUpdateMode } from 'devextreme/common/charts';
+import { ScaleBreak, ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap, TimeInterval, AxisScaleType, ChartsDataType, ValueAxisVisualRangeUpdateMode } from 'devextreme/common/charts';
 import { HorizontalAlignment, VerticalAlignment, Position } from 'devextreme/common';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiChartBreakComponent } from './break-dxi';
-import { DxiChartConstantLineComponent } from './constant-line-dxi';
-import { DxiChartStripComponent } from './strip-dxi';
 
+import { PROPERTY_TOKEN_valueAxis } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_breaks,
+    PROPERTY_TOKEN_constantLines,
+    PROPERTY_TOKEN_strips,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-chart-value-axis',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_valueAxis,
+           useExisting: DxiChartValueAxisComponent,
+        }
+    ]
 })
 export class DxiChartValueAxisComponent extends CollectionNestedOption {
+    @ContentChildren(PROPERTY_TOKEN_breaks)
+    set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('breaks', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_constantLines)
+    set _constantLinesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('constantLines', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_strips)
+    set _stripsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('strips', value);
+    }
+    
     @Input()
     get aggregatedPointsPosition(): AggregatedPointsPosition {
         return this._getOption('aggregatedPointsPosition');
@@ -400,10 +426,10 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get visualRangeUpdateMode(): VisualRangeUpdateMode {
+    get visualRangeUpdateMode(): ValueAxisVisualRangeUpdateMode {
         return this._getOption('visualRangeUpdateMode');
     }
-    set visualRangeUpdateMode(value: VisualRangeUpdateMode) {
+    set visualRangeUpdateMode(value: ValueAxisVisualRangeUpdateMode) {
         this._setOption('visualRangeUpdateMode', value);
     }
 
@@ -442,34 +468,9 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiChartBreakComponent))
-    get breaksChildren(): QueryList<DxiChartBreakComponent> {
-        return this._getOption('breaks');
-    }
-    set breaksChildren(value) {
-        this.setChildren('breaks', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiChartConstantLineComponent))
-    get constantLinesChildren(): QueryList<DxiChartConstantLineComponent> {
-        return this._getOption('constantLines');
-    }
-    set constantLinesChildren(value) {
-        this.setChildren('constantLines', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiChartStripComponent))
-    get stripsChildren(): QueryList<DxiChartStripComponent> {
-        return this._getOption('strips');
-    }
-    set stripsChildren(value) {
-        this.setChildren('strips', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'categoriesChange' },
             { emit: 'visualRangeChange' }
@@ -488,7 +489,7 @@ export class DxiChartValueAxisComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiChartValueAxisComponent
   ],
   exports: [

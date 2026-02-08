@@ -59,7 +59,7 @@ const Diagram = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["gridSize","gridSize.value","pageSize","pageSize.height","pageSize.width","zoomLevel","zoomLevel.value"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onCustomCommand","onDisposing","onInitialized","onItemClick","onItemDblClick","onRequestEditOperation","onRequestLayoutUpdate"]), []);

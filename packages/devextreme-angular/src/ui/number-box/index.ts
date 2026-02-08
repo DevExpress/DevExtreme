@@ -42,7 +42,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -52,10 +53,9 @@ import { DxoFormatModule } from 'devextreme-angular/ui/nested';
 import { DxiNumberBoxButtonModule } from 'devextreme-angular/ui/number-box/nested';
 import { DxoNumberBoxFormatModule } from 'devextreme-angular/ui/number-box/nested';
 import { DxoNumberBoxOptionsModule } from 'devextreme-angular/ui/number-box/nested';
-
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiNumberBoxButtonComponent } from 'devextreme-angular/ui/number-box/nested';
+import { 
+           PROPERTY_TOKEN_buttons,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -70,8 +70,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-number-box',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -81,6 +83,12 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxNumberBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+
     instance: DxNumberBox = null;
 
     /**
@@ -179,10 +187,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -582,10 +590,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -763,7 +771,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -980,7 +988,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -993,26 +1001,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-    @ContentChildren(DxiNumberBoxButtonComponent)
-    get buttonsChildren(): QueryList<DxiNumberBoxButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiNumberBoxButtonComponent');
-    }
-
-
-    @ContentChildren(DxiButtonComponent)
-    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
-    }
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
@@ -1148,6 +1136,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
 
 @NgModule({
   imports: [
+    DxNumberBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoFormatModule,
@@ -1156,9 +1145,6 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     DxoNumberBoxOptionsModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxNumberBoxComponent
   ],
   exports: [
     DxNumberBoxComponent,
@@ -1172,6 +1158,8 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
   ]
 })
 export class DxNumberBoxModule { }
+
+export * from 'devextreme-angular/ui/number-box/nested';
 
 import type * as DxNumberBoxTypes from "devextreme/ui/number_box_types";
 export { DxNumberBoxTypes };

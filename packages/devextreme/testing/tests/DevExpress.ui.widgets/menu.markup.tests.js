@@ -1,12 +1,10 @@
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 
-import Menu from '__internal/ui/menu/m_menu';
-import '__internal/ui/menu/m_submenu';
+import Menu from '__internal/ui/menu/menu';
+import '__internal/ui/menu/submenu';
 
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
-
-import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -29,8 +27,6 @@ const createMenu = (options) => {
 
     return { instance: menuInstance, element: $menu };
 };
-
-const toSelector = cssClass => '.' + cssClass;
 
 QUnit.module('Menu rendering', {
     beforeEach: function() {
@@ -55,10 +51,10 @@ QUnit.module('Menu rendering', {
             itemsExpr: 'child',
             showFirstSubmenuMode: 'onClick'
         });
-        const $item1 = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(0);
+        const $item1 = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
 
         assert.equal($item1.text(), 'item 1', 'root item rendered correct');
-        assert.ok($item1.find(toSelector(DX_MENU_ITEM_POPOUT_CLASS)).length, 'popout was rendered');
+        assert.ok($item1.find(`.${DX_MENU_ITEM_POPOUT_CLASS}`).length, 'popout was rendered');
     });
 
     QUnit.test('Check default css class', function(assert) {
@@ -69,7 +65,7 @@ QUnit.module('Menu rendering', {
 
     QUnit.test('Do not render menu with empty items', function(assert) {
         const menu = createMenu({ items: [] });
-        const root = $(menu.element).find(toSelector(DX_MENU_HORIZONTAL));
+        const root = $(menu.element).find(`.${DX_MENU_HORIZONTAL}`);
 
         assert.ok(menu);
         assert.equal(root.length, 0, 'no root');
@@ -101,7 +97,7 @@ QUnit.module('Menu - selection', {
             items: [{ text: 'root', selected: true }],
             selectionMode: 'single'
         });
-        const item1 = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(0);
+        const item1 = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
         assert.ok(item1.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
     });
 });
@@ -131,7 +127,7 @@ QUnit.module('Menu with templates', {
             itemTemplate: $template
         };
         const menu = createMenu(options);
-        const $item = $(menu.element).find(toSelector(DX_MENU_ITEM_CLASS)).eq(1);
+        const $item = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(1);
 
         $($item).trigger('dxclick');
 

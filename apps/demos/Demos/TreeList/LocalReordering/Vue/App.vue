@@ -70,7 +70,7 @@ const expandedRowKeys = [1];
 
 const employees = ref(employeesData);
 
-function onDragChange(e) {
+function onDragChange(e: Record<string, any>) {
   const visibleRows = e.component.getVisibleRows();
   const sourceNode = e.component.getNodeByKey(e.itemData.ID);
   let targetNode = visibleRows[e.toIndex].node;
@@ -83,7 +83,7 @@ function onDragChange(e) {
     targetNode = targetNode.parent;
   }
 }
-function onReorder(e) {
+function onReorder(e: Record<string, any>) {
   const visibleRows = e.component.getVisibleRows();
 
   if (e.dropInsideItem) {

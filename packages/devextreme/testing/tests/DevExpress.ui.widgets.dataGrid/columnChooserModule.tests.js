@@ -1,17 +1,12 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/data_grid';
 
 import $ from 'jquery';
 import typeUtils from 'core/utils/type';
-import supportUtils from 'core/utils/support';
-import devices from '__internal/core/m_devices';
-import themes from 'ui/themes';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import publicComponentUtils from 'core/utils/public_component';
 import messageLocalization from 'common/core/localization/message';
 import { TreeViewSearchBoxWrapper } from '../../helpers/wrappers/searchBoxWrappers.js';
-
-const device = devices.real();
 
 QUnit.testStart(function() {
     const markup =
@@ -537,66 +532,6 @@ QUnit.module('Column chooser', {
 
         // assert
         assert.strictEqual(searchBoxWrapper.getEditorInput().attr('aria-label'), messageLocalization.format('Search'), 'Search box input aria-label attribute');
-    });
-
-    if(device.deviceType === 'desktop') {
-        QUnit.test('Close and cancel buttons for generic theme', function(assert) {
-            // arrange
-            const testElement = $('#container');
-            const columnChooserView = this.columnChooserView;
-
-            this.setTestElement(testElement);
-
-            // act
-            this.renderColumnChooser();
-            columnChooserView._popupContainer.toggle(true);
-
-            // assert
-            assert.ok($('.dx-closebutton').length, 'closebutton is shown');
-            assert.ok(!$('.dx-button-text').length, 'cancel button is hidden');
-        });
-    }
-
-    QUnit.test('Close and cancel buttons for mobile theme', function(assert) {
-        // arrange
-        const testElement = $('#container');
-        const origIsGeneric = themes.isGeneric;
-        const columnChooserView = this.columnChooserView;
-
-        this.setTestElement(testElement);
-
-        themes.isGeneric = function() { return false; };
-
-        // act
-        this.renderColumnChooser();
-        columnChooserView._popupContainer.toggle(true);
-
-        // assert
-        assert.ok(!$('.dx-closebutton').length, 'close button is hidden');
-        assert.ok($('.dx-button-text').length, 'cancel button is shown');
-        themes.isGeneric = origIsGeneric;
-    });
-
-
-    QUnit.test('Close and cancel buttons for material theme', function(assert) {
-        // arrange
-        const testElement = $('#container');
-        const origIsMaterial = themes.isMaterial;
-        const columnChooserView = this.columnChooserView;
-
-        this.setTestElement(testElement);
-
-        themes.isMaterial = function() { return true; };
-
-        // act
-        this.renderColumnChooser();
-        columnChooserView._popupContainer.toggle(true);
-
-        // assert
-        assert.ok($('.dx-closebutton').length, 'close button is shown');
-        assert.ok(!$('.dx-button-text').length, 'cancel button is hidden');
-
-        themes.isMaterial = origIsMaterial;
     });
 
     QUnit.test('Show column chooser via api method when it is disabled_T102451', function(assert) {

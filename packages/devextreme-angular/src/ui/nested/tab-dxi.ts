@@ -12,7 +12,6 @@ import {
     AfterViewInit,
     SkipSelf,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -21,23 +20,37 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxiHtmlEditorImageUploadTabItem } from './base/html-editor-image-upload-tab-item-dxi';
-import { DxiItemComponent } from './item-dxi';
-import { DxiCommandComponent } from './command-dxi';
-import { DxiGroupComponent } from './group-dxi';
 
+import { PROPERTY_TOKEN_tabs } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_items,
+    PROPERTY_TOKEN_commands,
+    PROPERTY_TOKEN_groups,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-tab',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost],
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_tabs,
+           useExisting: DxiTabComponent,
+        }
+    ],
     inputs: [
         'alignItemLabels',
         'badge',
@@ -56,35 +69,26 @@ import { DxiGroupComponent } from './group-dxi';
 })
 export class DxiTabComponent extends DxiHtmlEditorImageUploadTabItem implements AfterViewInit,
     IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_groups)
+    set _groupsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groups', value);
+    }
+    
 
     protected get _optionPath() {
         return 'tabs';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiCommandComponent))
-    get commandsChildren(): QueryList<DxiCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiGroupComponent))
-    get groupsChildren(): QueryList<DxiGroupComponent> {
-        return this._getOption('groups');
-    }
-    set groupsChildren(value) {
-        this.setChildren('groups', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
@@ -114,7 +118,7 @@ export class DxiTabComponent extends DxiHtmlEditorImageUploadTabItem implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTabComponent
   ],
   exports: [

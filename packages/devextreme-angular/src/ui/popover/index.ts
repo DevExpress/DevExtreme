@@ -38,7 +38,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -69,9 +70,9 @@ import { DxoPopoverShowModule } from 'devextreme-angular/ui/popover/nested';
 import { DxoPopoverShowEventModule } from 'devextreme-angular/ui/popover/nested';
 import { DxoPopoverToModule } from 'devextreme-angular/ui/popover/nested';
 import { DxiPopoverToolbarItemModule } from 'devextreme-angular/ui/popover/nested';
-
-
-import { DxiPopoverToolbarItemComponent } from 'devextreme-angular/ui/popover/nested';
+import { 
+           PROPERTY_TOKEN_toolbarItems,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -80,8 +81,10 @@ import { DxiPopoverToolbarItemComponent } from 'devextreme-angular/ui/popover/ne
  */
 @Component({
     selector: 'dx-popover',
+    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -90,6 +93,12 @@ import { DxiPopoverToolbarItemComponent } from 'devextreme-angular/ui/popover/ne
     ]
 })
 export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
+    }
+
     instance: DxPopover = null;
 
     /**
@@ -102,21 +111,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     }
     set animation(value: { hide?: AnimationConfig, show?: AnimationConfig }) {
         this._setOption('animation', value);
-    }
-
-
-    /**
-     * [descr:dxPopoverOptions.closeOnOutsideClick]
-    
-     * @deprecated [depNote:dxPopoverOptions.closeOnOutsideClick]
-    
-     */
-    @Input()
-    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
-        return this._getOption('closeOnOutsideClick');
-    }
-    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
-        this._setOption('closeOnOutsideClick', value);
     }
 
 
@@ -190,10 +184,10 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get height(): (() => number | string) | number | string {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
@@ -268,10 +262,10 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get maxHeight(): (() => number | string) | number | string {
+    get maxHeight(): number | string {
         return this._getOption('maxHeight');
     }
-    set maxHeight(value: (() => number | string) | number | string) {
+    set maxHeight(value: number | string) {
         this._setOption('maxHeight', value);
     }
 
@@ -281,10 +275,10 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get maxWidth(): (() => number | string) | number | string {
+    get maxWidth(): number | string {
         return this._getOption('maxWidth');
     }
-    set maxWidth(value: (() => number | string) | number | string) {
+    set maxWidth(value: number | string) {
         this._setOption('maxWidth', value);
     }
 
@@ -294,10 +288,10 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get minHeight(): (() => number | string) | number | string {
+    get minHeight(): number | string {
         return this._getOption('minHeight');
     }
-    set minHeight(value: (() => number | string) | number | string) {
+    set minHeight(value: number | string) {
         this._setOption('minHeight', value);
     }
 
@@ -307,10 +301,10 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get minWidth(): (() => number | string) | number | string {
+    get minWidth(): number | string {
         return this._getOption('minWidth');
     }
-    set minWidth(value: (() => number | string) | number | string) {
+    set minWidth(value: number | string) {
         this._setOption('minWidth', value);
     }
 
@@ -476,10 +470,10 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get width(): (() => number | string) | number | string {
+    get width(): number | string {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string) {
+    set width(value: number | string) {
         this._setOption('width', value);
     }
 
@@ -580,13 +574,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() closeOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() containerChange: EventEmitter<any | string | undefined>;
 
     /**
@@ -622,7 +609,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() heightChange: EventEmitter<number | string>;
 
     /**
     
@@ -664,28 +651,28 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxHeightChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() maxHeightChange: EventEmitter<number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxWidthChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() maxWidthChange: EventEmitter<number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minHeightChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() minHeightChange: EventEmitter<number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minWidthChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() minWidthChange: EventEmitter<number | string>;
 
     /**
     
@@ -776,7 +763,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() widthChange: EventEmitter<number | string>;
 
     /**
     
@@ -784,18 +771,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
-
-
-
-
-    @ContentChildren(DxiPopoverToolbarItemComponent)
-    get toolbarItemsChildren(): QueryList<DxiPopoverToolbarItemComponent> {
-        return this._getOption('toolbarItems');
-    }
-    set toolbarItemsChildren(value) {
-        this._setChildren('toolbarItems', value, 'DxiPopoverToolbarItemComponent');
-    }
-
 
 
 
@@ -820,7 +795,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
             { subscribe: 'shown', emit: 'onShown' },
             { subscribe: 'titleRendered', emit: 'onTitleRendered' },
             { emit: 'animationChange' },
-            { emit: 'closeOnOutsideClickChange' },
             { emit: 'containerChange' },
             { emit: 'contentTemplateChange' },
             { emit: 'deferRenderingChange' },
@@ -896,6 +870,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
 
 @NgModule({
   imports: [
+    DxPopoverComponent,
     DxoAnimationModule,
     DxoHideModule,
     DxoFromModule,
@@ -925,9 +900,6 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     DxiPopoverToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPopoverComponent
   ],
   exports: [
     DxPopoverComponent,
@@ -962,6 +934,8 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
   ]
 })
 export class DxPopoverModule { }
+
+export * from 'devextreme-angular/ui/popover/nested';
 
 import type * as DxPopoverTypes from "devextreme/ui/popover_types";
 export { DxPopoverTypes };

@@ -18,6 +18,7 @@ import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-title',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoChartTitleComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -136,7 +139,7 @@ export class DxoChartTitleComponent extends NestedOption implements OnDestroy, O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartTitleComponent
   ],
   exports: [

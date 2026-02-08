@@ -1,3 +1,4 @@
+import { AIIntegration } from '../common/ai-integration';
 import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
@@ -15,7 +16,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import Editor, {
     ValueChangedInfo,
@@ -46,7 +47,151 @@ export type HtmlEditorImageUploadTab = 'url' | 'file';
 /** @public */
 export type HtmlEditorPredefinedContextMenuItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'cellProperties' | 'tableProperties';
 /** @public */
-export type HtmlEditorPredefinedToolbarItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'cellProperties' | 'tableProperties' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable';
+export type HtmlEditorPredefinedToolbarItem = 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'cellProperties' | 'tableProperties' | 'insertTable' | 'insertHeaderRow' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | 'ai';
+
+/** @public */
+export type AICommandName = 'summarize' | 'proofread' | 'expand' | 'shorten' | 'changeStyle' | 'changeTone' | 'translate' | 'askAI';
+
+/** @public */
+export type AIChangeStyleOption =
+    | 'formal'
+    | 'informal'
+    | 'technical'
+    | 'business'
+    | 'creative'
+    | 'journalistic'
+    | 'academic'
+    | 'persuasive'
+    | 'narrative'
+    | 'expository'
+    | 'descriptive'
+    | 'conversational';
+
+/** @public */
+export type AIChangeToneOption =
+    | 'professional'
+    | 'casual'
+    | 'straightforward'
+    | 'confident'
+    | 'friendly';
+
+/** @public */
+export type AITranslateOption =
+    | 'arabic'
+    | 'chinese'
+    | 'english'
+    | 'french'
+    | 'german'
+    | 'japanese'
+    | 'spanish';
+
+/**
+ * @docid
+ * @public
+ */
+export type AICommandNameExtended = AICommandName | 'custom';
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export interface AICommandBase<
+    CommandName extends AICommandNameExtended, // eslint-disable-line @typescript-eslint/no-unused-vars
+    CommandOptions = undefined> {
+    /**
+     * @docid
+     * @public
+     */
+    name: AICommandNameExtended;
+    /**
+     * @docid
+     * @public
+     */
+    text?: string;
+    /**
+     * @docid
+     * @public
+     */
+    options?: CommandOptions;
+}
+
+/**
+ * @docid
+ * @public
+ * @inherits AICommandBase
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export type AIChangeStyleCommand = AICommandBase<'changeStyle', (AIChangeStyleOption | string)[]>;
+
+/**
+ * @docid
+ * @public
+ * @inherits AICommandBase
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export type AIChangeToneCommand = AICommandBase<'changeTone', (AIChangeToneOption | string)[]>;
+
+/**
+ * @docid
+ * @public
+ * @inherits AICommandBase
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export type AITranslateCommand = AICommandBase<'translate', (AITranslateOption | string)[]>;
+
+/**
+ * @docid
+ * @public
+ * @inherits AICommandBase
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export interface AICustomCommand extends AICommandBase<'custom', string[]> {
+    /**
+     * @docid
+     * @public
+     */
+    prompt: (param?: string) => string;
+    /**
+     * @docid
+     * @public
+     */
+    text: string;
+}
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.ui.dxHtmlEditor
+ * @inherits AIChangeStyleCommand,AIChangeToneCommand,AITranslateCommand,AICustomCommand
+ */
+export type AICommand =
+    | AICommandBase<'summarize', any>
+    | AICommandBase<'proofread', any>
+    | AICommandBase<'expand', any>
+    | AICommandBase<'shorten', any>
+    | AICommandBase<'askAI', any>
+    | AIChangeStyleCommand
+    | AIChangeToneCommand
+    | AITranslateCommand
+    | AICustomCommand;
+
+/**
+ * @docid
+ * @public
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export interface AIToolbarItem extends Omit<dxToolbarItem, 'menuItemTemplate' | 'showText' | 'widget' | 'options' | 'template' | 'html'> {
+    /**
+     * @docid
+     * @public
+     */
+    name: 'ai';
+    /**
+     * @docid
+     * @public
+     */
+    commands?: Array<AICommandName | AICommand>;
+}
 
 /**
  * @docid _ui_html_editor_ContentReadyEvent
@@ -135,6 +280,12 @@ export type Converter = {
  * @docid
  */
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    aiIntegration?: AIIntegration | undefined;
     /**
      * @docid
      * @default false
@@ -644,7 +795,7 @@ export interface dxHtmlEditorToolbar {
     container?: string | UserDefinedElement;
     /**
      * @docid
-     * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorPredefinedToolbarItem>
+     * @type Array<dxHtmlEditorToolbarItem,AIToolbarItem,Enums.HtmlEditorPredefinedToolbarItem>
      * @public
      */
     items?: Array<ToolbarItem | HtmlEditorPredefinedToolbarItem>;
@@ -660,7 +811,7 @@ export interface dxHtmlEditorToolbar {
  * @public
  * @namespace DevExpress.ui.dxHtmlEditor
  */
-export type ToolbarItem = dxHtmlEditorToolbarItem;
+export type ToolbarItem = dxHtmlEditorToolbarItem | AIToolbarItem;
 
 /**
  * @deprecated Use ToolbarItem instead
@@ -674,19 +825,9 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     name?: HtmlEditorPredefinedToolbarItem | string;
     /**
      * @docid
-     * @deprecated dxHtmlEditorToolbarItem.name
-     */
-    formatName?: HtmlEditorPredefinedToolbarItem | string;
-    /**
-     * @docid
      * @public
      */
     acceptedValues?: Array<string | number | boolean>;
-    /**
-     * @docid
-     * @deprecated dxHtmlEditorToolbarItem.acceptedValues
-     */
-    formatValues?: Array<string | number | boolean>;
     /**
      * @docid
      * @default "before"

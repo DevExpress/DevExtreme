@@ -1,8 +1,5 @@
-const common = require('./commonParts/common.js');
-const createSankey = common.createSankey;
-const environment = common.environment;
-const themeModule = require('viz/themes');
-const find = common.find;
+import { createSankey, environment, find } from './commonParts/common.js';
+import themeModule from 'viz/themes';
 
 themeModule.registerTheme({
     name: 'test-theme',
@@ -15,7 +12,6 @@ themeModule.registerTheme({
         }
     } }, 'generic.light');
 
-
 QUnit.module('Items: nodes', environment);
 
 QUnit.test('Creation', function(assert) {
@@ -24,19 +20,19 @@ QUnit.test('Creation', function(assert) {
     });
     const nodes = sankey.getAllNodes();
 
-    assert.equal(nodes[0].title, 'A');
+    assert.equal(nodes[0].label, 'A');
     assert.equal(nodes[0].linksIn.length, 0);
     assert.equal(nodes[0].linksOut.length, 1);
     assert.equal(nodes[0].linksOut[0].weight, 1);
     assert.equal(nodes[0].linksOut[0].node, 'Z');
 
-    assert.equal(nodes[1].title, 'B');
+    assert.equal(nodes[1].label, 'B');
     assert.equal(nodes[1].linksIn.length, 0);
     assert.equal(nodes[1].linksOut.length, 1);
     assert.equal(nodes[1].linksOut[0].weight, 1);
     assert.equal(nodes[1].linksOut[0].node, 'Z');
 
-    assert.equal(nodes[2].title, 'Z');
+    assert.equal(nodes[2].label, 'Z');
     assert.equal(nodes[2].linksIn.length, 2);
     assert.equal(nodes[2].linksIn[0].weight, 1);
     assert.equal(nodes[2].linksIn[0].node, 'A');
@@ -53,7 +49,7 @@ QUnit.test('Passing nodes[].rect coordinates to SVG', function(assert) {
     const nodesSVG = this.nodes();
 
     ['A', 'B', 'Z'].forEach(function(nodeName) {
-        const nodeItem = find(nodes, function(n) { return n.title === nodeName; });
+        const nodeItem = find(nodes, function(n) { return n.label === nodeName; });
         const nodeSVG = find(nodesSVG, function(node) { return node.attr.firstCall.args[0]._name === nodeName; });
         assert.deepEqual(nodeSVG.attr.firstCall.args[0], nodeItem.rect, 'Node ' + nodeName + ': rectangles match');
     });
@@ -300,7 +296,6 @@ QUnit.test('disable hover', function(assert) {
 
     assert.ok(!nodes[0].isHovered());
 });
-
 
 QUnit.test('isHovered method', function(assert) {
     const sankey = createSankey({

@@ -1,0 +1,89 @@
+<dx-stepper
+  [focusStateEnabled]="!isStepperReadonly"
+  [class.readonly]="isStepperReadonly"
+  [(selectedIndex)]="selectedIndex"
+  (onSelectionChanging)="onSelectionChanging($event)"
+>
+  <dxi-stepper-item
+    *ngFor="let step of steps"
+    [label]="step.label"
+    [icon]="step.icon"
+    [isValid]="step.isValid"
+    [hint]="step.hint"
+    [optional]="step.optional"
+  ></dxi-stepper-item>
+</dx-stepper>
+<div class="content">
+  <dx-multi-view
+    [(selectedIndex)]="selectedIndex"
+    [animationEnabled]="false"
+    [focusStateEnabled]="false"
+    [swipeEnabled]="false"
+    [height]="400"
+  >
+    <dxi-multi-view-item>
+      <div *dxTemplate>
+        <dates-form
+          [formData]="formData"
+          [validationGroup]="validationGroups[0]"
+        ></dates-form>
+      </div>
+    </dxi-multi-view-item>
+    <dxi-multi-view-item>
+      <div *dxTemplate>
+        <guests-form
+          [formData]="formData"
+          [validationGroup]="validationGroups[1]"
+        ></guests-form>
+      </div>
+    </dxi-multi-view-item>
+    <dxi-multi-view-item>
+      <div *dxTemplate>
+        <room-meal-plan-form
+          [formData]="formData"
+          [validationGroup]="validationGroups[2]"
+        ></room-meal-plan-form>
+      </div>
+    </dxi-multi-view-item>
+    <dxi-multi-view-item>
+      <div *dxTemplate>
+        <additional-form [formData]="formData"></additional-form>
+      </div>
+    </dxi-multi-view-item>
+    <dxi-multi-view-item>
+      <div *dxTemplate>
+        <confirmation
+          [formData]="formData"
+          [isConfirmed]="isConfirmed"
+        ></confirmation>
+      </div>
+    </dxi-multi-view-item>
+  </dx-multi-view>
+  <div class="nav-panel">
+    <div class="current-step">
+      <span *ngIf="!isConfirmed">
+        Step <span class="selected-index">{{ selectedIndex + 1 }}</span> of
+        {{ steps.length }}
+      </span>
+    </div>
+    <div class="nav-buttons">
+      <dx-button
+        id="prevButton"
+        [visible]="selectedIndex !== 0 && !isConfirmed"
+        text="Back"
+        type="normal"
+        (onClick)="onPrevButtonClick($event)"
+        [width]="100"
+      >
+      </dx-button>
+      <dx-button
+        id="nextButton"
+        [text]="getNextButtonText()"
+        type="default"
+        (onClick)="onNextButtonClick($event)"
+        [width]="100"
+      >
+      </dx-button>
+    </div>
+  </div>
+</div>

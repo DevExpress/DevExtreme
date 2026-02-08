@@ -1,13 +1,15 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { getData } from '../../helpers/generateDataSourceData';
 
-fixture`Accessibility bugs`
+fixture.disablePageReloads`Accessibility bugs`
   .page(url(__dirname, '../../../container.html'));
 
 test('T1187314 - DataGrid displays an incorrect row count in "aria-label" if there is no data after filtering', async (t) => {
   const dataGrid = new DataGrid('#container');
 
+  await dataGrid.apiFilter(['id', '=', '1']);
   await t
     .expect(dataGrid.getContainer().getAttribute('aria-label'))
     .eql('Data grid with 0 rows and 2 columns');
@@ -18,7 +20,6 @@ test('T1187314 - DataGrid displays an incorrect row count in "aria-label" if the
     data: 'A',
   }],
   filterRow: { visible: true },
-  filterValue: ['id', '=', '1'],
   scrolling: { mode: 'infinite' },
 }));
 
@@ -47,4 +48,17 @@ test('DataGrid - The \'aria-label\' attribute value is "Show filter options for 
       groupIndex: 0,
     },
   ],
+}));
+
+test('DataGrid - NVDA reads column information twice (T1286287)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const dataCell = dataGrid.getDataCell(1, 1).element;
+
+  await dataGrid.isReady();
+  await t
+    .expect(dataCell.hasAttribute('aria-describedby'))
+    .notOk();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(5, 5),
+  keyExpr: 'field_0',
 }));

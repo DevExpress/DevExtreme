@@ -10,6 +10,13 @@ interface IConfigChanges {
     currentOptions: Record<string, any>, prevOptions: Record<string, any>, path: string) => void;
 }
 
+function compareValues(
+  value1: unknown,
+  value2: unknown,
+): boolean {
+  return value1 === value2;
+}
+
 function compareTemplates(
   current: IConfigNode,
   currentFullName: string,
@@ -29,7 +36,7 @@ function compareTemplates(
   // appendRemovedValues(currentTemplates, prevTemplates, "", changesAccum.templates);
 
   Object.keys(currentTemplatesOptions).forEach((key) => {
-    if (currentTemplatesOptions[key] === prevTemplatesOptions[key]) {
+    if (compareValues(currentTemplatesOptions[key], prevTemplatesOptions[key])) {
       return;
     }
 
@@ -39,7 +46,7 @@ function compareTemplates(
   Object.keys(currentTemplates).forEach((key) => {
     const currentTemplate = currentTemplates[key];
     const prevTemplate = prevTemplates[key];
-    if (prevTemplate && currentTemplate.content === prevTemplate.content) {
+    if (prevTemplate && compareValues(currentTemplate.content, prevTemplate.content)) {
       return;
     }
 
@@ -75,7 +82,7 @@ function compare(current: IConfigNode, prev: IConfigNode, changesAccum: IConfigC
   });
 
   Object.keys(current.options).forEach((key) => {
-    if (current.options[key] === prev.options[key]) {
+    if (compareValues(current.options[key], prev.options[key])) {
       return;
     }
 
@@ -142,4 +149,5 @@ function compareCollections(
 
 export {
   getChanges,
+  compareValues,
 };

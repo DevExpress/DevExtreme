@@ -21,20 +21,31 @@ import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import { GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-gantt-toolbar-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiGanttToolbarItemComponent,
+        }
+    ]
 })
 export class DxiGanttToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -176,7 +187,7 @@ export class DxiGanttToolbarItemComponent extends CollectionNestedOption impleme
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiGanttToolbarItemComponent
   ],
   exports: [

@@ -4,6 +4,7 @@ export const CLASS = {
   appointmentPopup: 'dx-scheduler-appointment-popup',
   popup: 'dx-popup',
   popupWrapper: 'dx-popup-wrapper',
+  popupContent: 'dx-overlay-content',
   cancelButton: 'dx-popup-cancel.dx-button',
   stateInvisible: 'dx-state-invisible',
   recurrenceEditor: 'dx-recurrence-editor',
@@ -33,6 +34,8 @@ export const SELECTORS = {
   endDateTimeZoneInput: `.${CLASS.endDateTimeZoneEditor} .${CLASS.textEditorInput}`,
   allDaySwitch: `.${CLASS.allDaySwitch} .${CLASS.switch}`,
   recurrenceSwitch: `.${CLASS.recurrenceSwitch} .${CLASS.switch}`,
+  repeatUntilInput: '.dx-recurrence-datebox-until-date input[type="text"]',
+  repeatCountInput: '.dx-recurrence-numberbox-repeat-count input[type="text"]',
 };
 
 export default class AppointmentPopup {
@@ -41,6 +44,8 @@ export default class AppointmentPopup {
   form = Selector(`.${CLASS.form}`);
 
   wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
+
+  content = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup} .${CLASS.popupContent}`);
 
   subjectElement = this.wrapper.find(SELECTORS.textInput);
 
@@ -71,6 +76,10 @@ export default class AppointmentPopup {
   repeatEveryElement = this.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(1);
 
   fullScreen = this.wrapper.find(`.${CLASS.overlayWrapper} .${CLASS.fullScreen}`).exists;
+
+  repeatUntilElement = this.wrapper.find(SELECTORS.repeatUntilInput);
+
+  repeatCountElement = this.wrapper.find(SELECTORS.repeatCountInput);
 
   constructor(private readonly scheduler: Selector) {
   }

@@ -13,6 +13,7 @@ import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type MenuInternal from '@ts/ui/menu/menu';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsResizerViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
@@ -75,8 +76,6 @@ const FILTER_MODIFIED_CLASS = 'dx-filter-modified';
 const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
 
 const BETWEEN_OPERATION_DATA_TYPES = ['date', 'datetime', 'number'];
-
-const ARIA_SEARCH_BOX = messageLocalization.format('dxDataGrid-ariaSearchBox');
 
 function isOnClickApplyFilterMode(that) {
   return that.option('filterRow.applyFilter') === 'onClick';
@@ -299,7 +298,10 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       showTitle: false,
       focusStateEnabled: false,
       hideOnOutsideClick: true,
+      hideOnParentScroll: true,
+      _hideOnParentScrollTarget: $overlay,
       wrapperAttr: { class: filterRangeOverlayClass },
+      container: this.element(),
       animation: false,
       position: {
         my: 'top',
@@ -337,10 +339,13 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         that._renderEditor($editor, editorOptions);
         eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', (e) => {
           if (normalizeKeyName(e) === 'tab' && !e.shiftKey) {
-            e.preventDefault();
             that._hideFilterRange();
-            // @ts-expect-error
-            eventsEngine.trigger($cell.next().find('[tabindex]').first(), 'focus');
+
+            if ($cell.next().length) {
+              e.preventDefault();
+              // @ts-expect-error
+              eventsEngine.trigger($cell.next().find('[tabindex]').first(), 'focus');
+            }
           }
         });
 
@@ -579,6 +584,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     };
 
     const editorFactoryController = this._editorFactoryController;
+    const ariaSearchBox = messageLocalization.format('dxDataGrid-ariaSearchBox');
 
     that._createComponent($menu, Menu, {
       // @ts-expect-error
@@ -589,13 +595,17 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       showFirstSubmenuMode: 'onHover',
       hideSubmenuOnMouseLeave: true,
       items: [{
+        name: getColumnSelectedFilterOperation(that, column) || ariaSearchBox,
         disabled: !column.filterOperations?.length,
         icon: OPERATION_ICONS[getColumnSelectedFilterOperation(that, column) || 'default'],
         selectable: false,
         items: that._getFilterOperationMenuItems(column),
       }],
-      onItemRendered: ({ itemElement }) => {
-        this.setAria('label', ARIA_SEARCH_BOX, $(itemElement));
+      onItemRendered: ({ itemElement, itemData }) => {
+        if (itemData?.items && itemData?.name) {
+          const labelText = that._getOperationDescriptionFromDescriptor(itemData.name) || ariaSearchBox;
+          this.setAria('label', labelText, $(itemElement));
+        }
       },
       onItemClick(properties) {
         // @ts-expect-error
@@ -647,15 +657,11 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         editorFactoryController.loseFocus();
       },
       onSubmenuHiding() {
-        // @ts-expect-error
-        eventsEngine.trigger($menu, 'blur');
         restoreFocus();
       },
       onContentReady(e) {
         eventsEngine.on($menu, 'blur', () => {
-          const menu = e.component;
-          // @ts-expect-error
-          menu._hideSubmenuAfterTimeout();
+          (e.component as unknown as MenuInternal)._hideSubmenuAfterTimeout();
           restoreFocus();
         });
       },
@@ -688,21 +694,15 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     const that = this;
     let result: any = [{}];
     const filterRowOptions = that.option('filterRow');
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const operationDescriptions = filterRowOptions?.operationDescriptions || {};
 
     if (column.filterOperations?.length) {
       const availableFilterOperations = column.filterOperations.filter((value) => isDefined(OPERATION_DESCRIPTORS[value]));
-      result = map(availableFilterOperations, (value) => {
-        const descriptionName = OPERATION_DESCRIPTORS[value];
-
-        return {
-          name: value,
-          selected: (getColumnSelectedFilterOperation(that, column) || column.defaultFilterOperation) === value,
-          text: operationDescriptions[descriptionName],
-          icon: OPERATION_ICONS[value],
-        };
-      });
+      result = map(availableFilterOperations, (value) => ({
+        name: value,
+        selected: (getColumnSelectedFilterOperation(that, column) || column.defaultFilterOperation) === value,
+        text: that._getOperationDescriptionFromDescriptor(value),
+        icon: OPERATION_ICONS[value],
+      }));
 
       result.push({
         name: null,
@@ -712,6 +712,15 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
 
     return result;
+  }
+
+  private _getOperationDescriptionFromDescriptor(value) {
+    const filterRowOptions = this.option('filterRow');
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const operationDescriptions = filterRowOptions?.operationDescriptions || {};
+    const descriptionName = OPERATION_DESCRIPTORS[value];
+
+    return operationDescriptions[descriptionName];
   }
 
   protected _handleDataChanged(e) {
@@ -777,6 +786,10 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
 
     return super.getColumnElements(index, bandColumnIndex);
+  }
+
+  public isFilterRowCell($cell): boolean {
+    return !!$cell.closest(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)}`).length;
   }
 };
 
@@ -873,22 +886,23 @@ export class ApplyFilterViewController extends modules.ViewController {
 }
 
 const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class FilterRowColumnsResizerExtender extends Base {
-  protected _startResizing() {
-    const that = this;
-
+  protected _startResizing(): void {
     // @ts-expect-error
-    super._startResizing.apply(that, arguments);
+    super._startResizing.apply(this, arguments);
 
-    if (that.isResizing()) {
+    if (this.isResizing()) {
       // @ts-expect-error
-      const overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
+      const overlayInstance = this._columnHeadersView.getFilterRangeOverlayInstance();
 
-      if (overlayInstance) {
-        const cellIndex = overlayInstance.$element().closest('td').index();
+      if (!overlayInstance || !this._targetPoint) {
+        return;
+      }
 
-        if (cellIndex === that._targetPoint.columnIndex || cellIndex === that._targetPoint.columnIndex + 1) {
-          overlayInstance.$content().hide();
-        }
+      const cellIndex = overlayInstance.$element().closest('td').index();
+      const { columnIndex: resizingColumnIndex } = this._targetPoint;
+
+      if (cellIndex === resizingColumnIndex || cellIndex === resizingColumnIndex + 1) {
+        overlayInstance.$content().hide();
       }
     }
   }

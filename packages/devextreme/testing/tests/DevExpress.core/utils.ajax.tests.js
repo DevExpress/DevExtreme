@@ -427,13 +427,15 @@ QUnit.test('Accept headers for different dataTypes', function(assert) {
         { type: 'html', header: 'text/html, */*; q=0.01' },
         { type: 'json', header: 'application/json, text/javascript, */*; q=0.01' },
         { type: 'xml', header: 'application/xml, text/xml, */*; q=0.01' },
-        { type: 'script', header: 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01' },
-        { type: 'jsonp', header: 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01' }];
+        { type: 'script', header: 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01', async: false },
+        { type: 'jsonp', header: 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01' }
+    ];
 
     for(let i = 0; i < dataTypes.length; i++) {
         ajax.sendRequest({
             url: '/some-url',
-            dataType: dataTypes[i].type
+            dataType: dataTypes[i].type,
+            async: dataTypes[i].async !== undefined ? dataTypes[i].async : true
         });
     }
 
@@ -475,7 +477,7 @@ QUnit.test('Post process of data with different dataType (same domain)', functio
     const dataTypes = [
         { type: 'json', response: '{ \'value\': 1234 }', result: undefined },
         { type: 'json', response: '{ "value": 1234 }', result: { 'value': 1234 } },
-        { type: 'script', response: 'var variable = 10;', result: 'var variable = 10;' },
+        { type: 'script', async: false, response: 'var variable = 10;', result: 'var variable = 10;' },
         { type: 'text', response: 'text text', result: 'text text' }
     ];
     let error;
@@ -493,7 +495,8 @@ QUnit.test('Post process of data with different dataType (same domain)', functio
     for(i = 0; i < dataTypes.length; i++) {
         ajax.sendRequest({
             url: '/json-url',
-            dataType: dataTypes[i].type
+            dataType: dataTypes[i].type,
+            async: dataTypes[i].async !== undefined ? dataTypes[i].async : true
         }).done(setResult).fail(setError);
 
         this.requests[i].respond(200, { 'Content-Type': 'application/json' }, dataTypes[i].response);
@@ -640,7 +643,7 @@ QUnit.test('xhr is available in done', function(assert) {
 
     check('json', 200, '{}');
     check('jsonp', 200, 'cb({})', { jsonpCallback: 'cb' });
-    check('script', 200, ';');
+    check('script', 200, ';', { async: false });
     check('text', 200, '');
     check(null, 204, null);
 
@@ -713,7 +716,8 @@ QUnit.test('Script request (cross domain)', function(assert) {
 
     ajax.sendRequest({
         url: wrongRemoteUrl,
-        dataType: 'script'
+        dataType: 'script',
+        async: false
     }).fail(function(data, statusText) {
         assert.equal(statusText, 'error');
 

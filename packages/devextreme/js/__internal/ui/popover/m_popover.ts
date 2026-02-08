@@ -1,7 +1,7 @@
 import positionUtils from '@js/common/core/animation/position';
 import { move } from '@js/common/core/animation/translator';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace } from '@js/common/core/events/utils/index';
+import { addNamespace } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
@@ -22,7 +22,15 @@ import errors from '@js/ui/widget/ui.errors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Popup from '@ts/ui/popup/m_popup';
 
-import { POPOVER_POSITION_ALIASES, PopoverPositionController } from './m_popover_position_controller';
+import type {
+  PopoverControllerElements,
+  PopoverControllerProperties,
+  PopoverPositionControllerConstructor,
+} from './popover_position_controller';
+import {
+  POPOVER_POSITION_ALIASES,
+  PopoverPositionController,
+} from './popover_position_controller';
 
 // STYLE popover
 
@@ -39,81 +47,7 @@ const POSITION_FLIP_MAP = {
   center: 'center',
 };
 
-const getEventNameByOption = function (optionValue) {
-  // @ts-expect-error
-  return isObject(optionValue) ? optionValue.name : optionValue;
-};
-const getEventName = function (that, optionName) {
-  const optionValue = that.option(optionName);
-
-  return getEventNameByOption(optionValue);
-};
-const getEventDelay = function (that, optionName) {
-  const optionValue = that.option(optionName);
-  // @ts-expect-error
-  return isObject(optionValue) && optionValue.delay;
-};
-const attachEvent = function (that, name) {
-  const {
-    target, shading, disabled, hideEvent,
-  } = that.option();
-  const isSelector = isString(target);
-  const shouldIgnoreHideEvent = shading && name === 'hide';
-  const event = shouldIgnoreHideEvent ? null : getEventName(that, `${name}Event`);
-
-  if (shouldIgnoreHideEvent && hideEvent) {
-    errors.log('W1020');
-  }
-
-  if (!event || disabled) {
-    return;
-  }
-
-  const eventName = addNamespace(event, that.NAME);
-  const action = that._createAction(function () {
-    const delay = getEventDelay(that, `${name}Event`);
-    this._clearEventsTimeouts();
-
-    if (delay) {
-      this._timeouts[name] = setTimeout(() => {
-        that[name]();
-      }, delay);
-    } else {
-      that[name]();
-    }
-  }.bind(that), { validatingTargetName: 'target' });
-
-  const handler = function (e) {
-    action({ event: e, target: $(e.currentTarget) });
-  };
-
-  const EVENT_HANDLER_NAME = `_${name}EventHandler`;
-  if (isSelector) {
-    that[EVENT_HANDLER_NAME] = handler;
-    eventsEngine.on(domAdapter.getDocument(), eventName, target, handler);
-  } else {
-    const targetElement = getPublicElement($(target));
-    that[EVENT_HANDLER_NAME] = undefined;
-    eventsEngine.on(targetElement, eventName, handler);
-  }
-};
-const detachEvent = function (that, target, name, event?: unknown) {
-  let eventName = event || getEventName(that, `${name}Event`);
-
-  if (!eventName) {
-    return;
-  }
-
-  eventName = addNamespace(eventName, that.NAME);
-
-  const EVENT_HANDLER_NAME = `_${name}EventHandler`;
-  if (that[EVENT_HANDLER_NAME]) {
-    // @ts-expect-error ts-error
-    eventsEngine.off(domAdapter.getDocument(), eventName, target, that[EVENT_HANDLER_NAME]);
-  } else {
-    eventsEngine.off(getPublicElement($(target)), eventName);
-  }
-};
+type PopoverTarget = string | dxElementWrapper | Element | undefined;
 
 export interface PopoverProperties extends Omit<Properties,
 'onTitleRendered' | 'onHidden' | 'onHiding' | 'onShowing' | 'onShown'
@@ -129,7 +63,7 @@ export interface PopoverProperties extends Omit<Properties,
   preventScrollEvents?: boolean;
 }
 class Popover<
-TProperties extends PopoverProperties = PopoverProperties,
+  TProperties extends PopoverProperties = PopoverProperties,
 > extends Popup<TProperties> {
   // @ts-expect-error ts-error
   _positionController!: PopoverPositionController;
@@ -222,7 +156,7 @@ TProperties extends PopoverProperties = PopoverProperties,
     this._timeouts = {};
 
     this.$element().addClass(POPOVER_CLASS);
-    this.$wrapper().addClass(POPOVER_WRAPPER_CLASS);
+    this.$wrapper()?.addClass(POPOVER_WRAPPER_CLASS);
 
     const { toolbarItems } = this.option();
 
@@ -238,13 +172,101 @@ TProperties extends PopoverProperties = PopoverProperties,
   }
 
   _detachEvents(target): void {
-    detachEvent(this, target, 'show');
-    detachEvent(this, target, 'hide');
+    this._detachEvent(target, 'show');
+    this._detachEvent(target, 'hide');
   }
 
   _attachEvents(): void {
-    attachEvent(this, 'show');
-    attachEvent(this, 'hide');
+    this._attachEvent('show');
+    this._attachEvent('hide');
+  }
+
+  _createEventHandler(name) {
+    const action = this._createAction(() => {
+      const delay = this._getEventDelay(`${name}Event`);
+      this._clearEventsTimeouts();
+
+      if (delay) {
+        this._timeouts[name] = setTimeout(() => {
+          this[name]();
+        }, delay);
+      } else {
+        this[name]();
+      }
+    }, { validatingTargetName: 'target' });
+
+    return (e): void => {
+      action({ event: e, target: $(e.currentTarget) });
+    };
+  }
+
+  _attachEvent(name: string): void {
+    const {
+      target, shading, disabled, hideEvent,
+    } = this.option();
+
+    const shouldIgnoreHideEvent = shading && name === 'hide';
+    if (shouldIgnoreHideEvent && hideEvent) {
+      errors.log('W1020');
+    }
+
+    const event = shouldIgnoreHideEvent ? null : this._getEventName(`${name}Event`);
+    if (!event || disabled) {
+      return;
+    }
+
+    const EVENT_HANDLER_NAME = this._getEventHandlerName(name);
+    this[EVENT_HANDLER_NAME] = this._createEventHandler(name);
+
+    const eventName = addNamespace(event, this.NAME!);
+
+    const isSelector = isString(target);
+    if (isSelector) {
+      eventsEngine.on(domAdapter.getDocument(), eventName, target, this[EVENT_HANDLER_NAME]);
+    } else {
+      eventsEngine.on(getPublicElement($(target)), eventName, this[EVENT_HANDLER_NAME]);
+    }
+  }
+
+  _detachEvent(target: PopoverTarget, name: string, event?: unknown) {
+    let eventName: string = event || this._getEventName(`${name}Event`);
+
+    if (!eventName) {
+      return;
+    }
+
+    eventName = addNamespace(eventName, this.NAME!);
+
+    const EVENT_HANDLER_NAME = this._getEventHandlerName(name);
+
+    const isSelector = isString(target);
+    if (isSelector) {
+      // @ts-expect-error ts-error
+      eventsEngine.off(domAdapter.getDocument(), eventName, target, this[EVENT_HANDLER_NAME]);
+    } else {
+      eventsEngine.off(getPublicElement($(target)), eventName, this[EVENT_HANDLER_NAME]);
+    }
+  }
+
+  _getEventHandlerName(name: string): string {
+    return `_${name}EventHandler`;
+  }
+
+  _getEventNameByOption(optionValue) {
+    // @ts-expect-error
+    return isObject(optionValue) ? optionValue.name : optionValue;
+  }
+
+  _getEventName(optionName) {
+    const optionValue = this.option(optionName);
+
+    return this._getEventNameByOption(optionValue);
+  }
+
+  _getEventDelay(optionName) {
+    const optionValue = this.option(optionName);
+    // @ts-expect-error
+    return isObject(optionValue) && optionValue.delay;
   }
 
   _renderArrow(): void {
@@ -253,10 +275,11 @@ TProperties extends PopoverProperties = PopoverProperties,
       .prependTo(this.$overlayContent());
   }
 
-  _documentDownHandler(e): boolean | undefined {
+  _documentDownHandler(e): boolean {
     if (this._isOutsideClick(e)) {
       return super._documentDownHandler(e);
     }
+
     return true;
   }
 
@@ -281,15 +304,17 @@ TProperties extends PopoverProperties = PopoverProperties,
     super._stopAnimation.apply(this, arguments);
   }
 
-  _renderTitle(): void {
-    this.$wrapper().toggleClass(POPOVER_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
-    super._renderTitle();
+  _renderTopToolbar(): void {
+    this.$wrapper()?.toggleClass(POPOVER_WITHOUT_TITLE_CLASS, !this.option('showTitle'));
+    super._renderTopToolbar();
   }
 
   _renderPosition(shouldUpdateDimensions = true): void {
     super._renderPosition();
     this._renderOverlayPosition(shouldUpdateDimensions);
-    this._actions.onPositioned();
+
+    // @ts-expect-error should provide event
+    this._actions?.onPositioned?.();
   }
 
   _renderOverlayPosition(shouldUpdateDimensions: boolean): void {
@@ -348,38 +373,53 @@ TProperties extends PopoverProperties = PopoverProperties,
   }
 
   _getHideOnParentScrollTarget(): dxElementWrapper {
-    return $(this._positionController._position.of || super._getHideOnParentScrollTarget());
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return $(this._positionController._position?.of || super._getHideOnParentScrollTarget());
   }
 
   _getSideByLocation(location) {
     const isFlippedByVertical = location.v.flip;
     const isFlippedByHorizontal = location.h.flip;
 
-    return this._isVerticalSide() && isFlippedByVertical || this._isHorizontalSide() && isFlippedByHorizontal || this._isPopoverInside()
-      ? POSITION_FLIP_MAP[this._positionController._positionSide]
-      : this._positionController._positionSide;
+    const isVertical = this._isVerticalSide() && isFlippedByVertical;
+    const isHorizontal = this._isHorizontalSide() && isFlippedByHorizontal;
+    const isInside = this._isPopoverInside();
+
+    const condition = isVertical || isHorizontal || isInside;
+    const positionSide = this._positionController._positionSide;
+
+    if (condition && positionSide) {
+      return POSITION_FLIP_MAP[positionSide];
+    }
+
+    if (positionSide) {
+      return positionSide;
+    }
+
+    return undefined;
   }
 
   _togglePositionClass(positionClass) {
     this.$wrapper()
-      .removeClass('dx-position-left dx-position-right dx-position-top dx-position-bottom')
+      ?.removeClass('dx-position-left dx-position-right dx-position-top dx-position-bottom')
       .addClass(positionClass);
   }
 
   _toggleFlippedClass(isFlippedHorizontal, isFlippedVertical) {
     this.$wrapper()
-      .toggleClass('dx-popover-flipped-horizontal', isFlippedHorizontal)
+      ?.toggleClass('dx-popover-flipped-horizontal', isFlippedHorizontal)
       .toggleClass('dx-popover-flipped-vertical', isFlippedVertical);
   }
 
   _renderArrowPosition(side) {
     const arrowRect = getBoundingRect(this._$arrow.get(0));
     const arrowFlip = -(this._isVerticalSide(side) ? arrowRect.height : arrowRect.width);
+
     this._$arrow.css(POSITION_FLIP_MAP[side], arrowFlip);
 
     const axis = this._isVerticalSide(side) ? 'left' : 'top';
     const sizeProperty = this._isVerticalSide(side) ? 'width' : 'height';
-    const $target = $(this._positionController._position.of);
+    const $target = $(this._positionController._position?.of);
     const targetOffset = positionUtils.offset($target) ?? { top: 0, left: 0 };
     const contentOffset = positionUtils.offset(this.$overlayContent());
 
@@ -395,8 +435,11 @@ TProperties extends PopoverProperties = PopoverProperties,
 
     const min = Math.max(contentLocation, targetLocation);
     const max = Math.min(contentLocation + contentSize, targetLocation + targetSize);
+
     let arrowLocation;
+
     const { arrowPosition } = this.option();
+
     if (arrowPosition === 'start') {
       arrowLocation = min - contentLocation;
     } else if (arrowPosition === 'end') {
@@ -406,12 +449,15 @@ TProperties extends PopoverProperties = PopoverProperties,
     }
 
     const borderWidth = this._positionController._getContentBorderWidth(side);
+
     const { arrowOffset } = this.option();
+
     const finalArrowLocation = fitIntoRange(
       arrowLocation - borderWidth + arrowOffset,
       borderWidth,
       contentSize - arrowSize - borderWidth * 2,
     );
+
     this._$arrow.css(axis, finalArrowLocation);
   }
 
@@ -425,14 +471,29 @@ TProperties extends PopoverProperties = PopoverProperties,
     }
   }
 
-  _getPositionControllerConfig() {
+  // @ts-expect-error Override parent method with more specific type
+  _getPositionControllerConfig(): PopoverPositionControllerConstructor {
+    const superConfiguration = super._getPositionControllerConfig();
+
     const { shading, target } = this.option();
 
-    return extend({}, super._getPositionControllerConfig(), {
+    const properties: PopoverControllerProperties = {
+      ...superConfiguration.properties,
       target,
       shading,
+    };
+
+    const elements: PopoverControllerElements = {
+      ...superConfiguration.elements,
       $arrow: this._$arrow,
-    });
+    };
+
+    const configuration: PopoverPositionControllerConstructor = {
+      properties,
+      elements,
+    };
+
+    return configuration;
   }
 
   _initPositionController() {
@@ -443,7 +504,7 @@ TProperties extends PopoverProperties = PopoverProperties,
 
   _renderWrapperDimensions() {
     if (this.option('shading')) {
-      this.$wrapper().css({
+      this.$wrapper()?.css({
         width: '100%',
         height: '100%',
       });
@@ -474,33 +535,37 @@ TProperties extends PopoverProperties = PopoverProperties,
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
-    switch (args.name) {
+    const { name, value, previousValue } = args;
+    switch (name) {
       case 'arrowPosition':
       case 'arrowOffset':
         this._renderGeometry();
         break;
       case 'fullScreen':
-        if (args.value) {
+        if (value) {
           this.option('fullScreen', false);
         }
         break;
       case 'target':
-        args.previousValue && this._detachEvents(args.previousValue);
-        this._positionController.updateTarget(args.value);
+        if (previousValue) {
+          this._detachEvents(previousValue);
+        }
+        this._positionController.updateTarget(value as TProperties['target']);
         this._invalidate();
         break;
       case 'showEvent':
       case 'hideEvent': {
-        const name = args.name.substring(0, 4);
-        const event = getEventNameByOption(args.previousValue);
+        const eventName = name.substring(0, 4);
+        const event = this._getEventNameByOption(previousValue);
 
         this.hide();
-        detachEvent(this, this.option('target'), name, event);
-        attachEvent(this, name);
+        const { target } = this.option();
+        this._detachEvent(target, eventName, event);
+        this._attachEvent(eventName);
         break;
       }
       case 'visible':
-        this._clearEventTimeout(args.value ? 'show' : 'hide');
+        this._clearEventTimeout(value ? 'show' : 'hide');
         super._optionChanged(args);
         break;
       case 'disabled':
@@ -513,7 +578,7 @@ TProperties extends PopoverProperties = PopoverProperties,
     }
   }
 
-  show(target?): Promise<unknown> {
+  show(target?): Promise<boolean> {
     if (target) {
       this.option('target', target);
     }

@@ -20,19 +20,22 @@ import { DOCUMENT } from '@angular/common';
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-master-detail',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoMasterDetailComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
@@ -99,7 +102,7 @@ export class DxoMasterDetailComponent extends NestedOption implements AfterViewI
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoMasterDetailComponent
   ],
   exports: [

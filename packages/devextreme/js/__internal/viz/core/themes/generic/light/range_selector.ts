@@ -10,7 +10,6 @@ export default {
       color: BLACK,
       opacity: 0.1,
       showCustomBoundaryTicks: true,
-      aggregateByCategory: true,
       label: {
         overlappingBehavior: 'hide',
         alignment: CENTER,

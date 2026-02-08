@@ -31,6 +31,6 @@ QUnit.test('cellTemplate should have access to a $root model', function(assert) 
     const $calendar = $('#T354951');
     ko.applyBindings(viewModel, $calendar.get(0));
 
-    assert.equal($.trim($calendar.find('.root-model-data').first().text()), 'rootModelData', 'cellTemplate get access to $root model');
-    assert.notEqual($.trim($calendar.find('.model-data').first().text()), 'rootModelData', 'cellTemplate get access to model');
+    assert.equal($calendar.find('.root-model-data').first().text().trim(), 'rootModelData', 'cellTemplate get access to $root model');
+    assert.notEqual($calendar.find('.model-data').first().text().trim(), 'rootModelData', 'cellTemplate get access to model');
 });

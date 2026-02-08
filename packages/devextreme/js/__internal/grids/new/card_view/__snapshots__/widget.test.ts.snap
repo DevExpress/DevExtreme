@@ -1,0 +1,165 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`common initial render should be successfull 1`] = `
+<div
+  class="dx-widget dx-cardview"
+>
+  <div
+    aria-label="Card view with 0 cards. Each card has 0 fields"
+    class="dx-cardview-root-container"
+    role="group"
+  >
+    <div
+      class="dx-gridbase-a11y-status-container dx-cardview-exclude-flexbox"
+      role="status"
+    />
+    <div
+      class="dx-cardview-header-container"
+    >
+      
+      <div
+        class="dx-cardview-headers"
+      >
+        <div
+          class="dx-cardview-sortable dx-sortable"
+        >
+          <div
+            class="dx-scrollable dx-visibility-change-handler dx-scrollable-horizontal dx-scrollable-simulated"
+          >
+            <div
+              class="dx-scrollable-wrapper"
+            >
+              <div
+                class="dx-scrollable-container"
+              >
+                <div
+                  class="dx-scrollable-content"
+                  style="left: 0px; top: 0px; transform: none;"
+                >
+                  <div
+                    data-dx-focus-container="true"
+                  >
+                    <div
+                      data-dx-focus-decoy="true"
+                      tabindex="0"
+                    />
+                    <div
+                      class="dx-cardview-headerpanel-content dx-cardview-headerpanel-content--empty"
+                      role="menubar"
+                    >
+                      <span
+                        class="dx-cardview-headerpanel-text-empty"
+                        role="menuitem"
+                      >
+                        Use 
+                        <a
+                          class="dx-link"
+                        >
+                          column chooser
+                        </a>
+                         to display columns
+                      </span>
+                    </div>
+                    <div
+                      data-dx-focus-decoy="true"
+                      tabindex="0"
+                    />
+                  </div>
+                </div>
+                <div
+                  class="dx-scrollable-scrollbar dx-widget dx-scrollbar-horizontal"
+                  style="display: none;"
+                >
+                  <div
+                    class="dx-scrollable-scroll dx-state-invisible"
+                  >
+                    <div
+                      class="dx-scrollable-scroll-content"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div
+            class="dx-cardview-dropzone"
+          >
+            <div
+              class="dx-icon dx-icon-dropzone"
+            />
+            <span>
+              Drop the header item here
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="dx-gridcore-contentview"
+    >
+      <div
+        class="dx-overlay dx-widget dx-state-invisible dx-visibility-change-handler dx-loadpanel"
+      >
+        <div
+          class="dx-overlay-content"
+          style="width: 222px; height: 90px;"
+        />
+      </div>
+      <div
+        class="dx-gridcore-nodata-container"
+      >
+        <div
+          class="dx-gridcore-nodata-element"
+        >
+          <div
+            class="dx-gridcore-nodata-icon-container"
+          >
+            <div
+              class="dx-icon dx-icon-cardcontent"
+            />
+          </div>
+          <div
+            class="dx-gridcore-nodata-text"
+          >
+            No data
+          </div>
+        </div>
+      </div>
+      <div
+        class="dx-gridcore-error-row"
+      />
+    </div>
+    <div>
+      <div
+        class="dx-hidden"
+      />
+    </div>
+    <div
+      class="dx-cardview-exclude-flexbox"
+    >
+      <div />
+    </div>
+    <div>
+      
+    </div>
+    <div
+      class="dx-cardview-exclude-flexbox"
+    >
+      <div
+        class="dx-header-filter-menu"
+      />
+    </div>
+    
+    
+    <div
+      class="dx-cardview-exclude-flexbox"
+    >
+      <div
+        class="dx-context-menu dx-has-context-menu dx-widget dx-visibility-change-handler dx-collection"
+        role="presentation"
+      />
+    </div>
+  </div>
+</div>
+`;

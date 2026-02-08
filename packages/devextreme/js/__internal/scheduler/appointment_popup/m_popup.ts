@@ -5,20 +5,19 @@ import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { Deferred, when } from '@js/core/utils/deferred';
 import Popup from '@js/ui/popup/ui.popup';
-import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
 import {
   getMaxWidth,
   getPopupToolbarItems,
   isPopupFullScreenNeeded,
 } from '@ts/scheduler/r1/appointment_popup/index';
 
-import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { hide as hideLoading, show as showLoading } from '../m_loading';
-import { getNormalizedResources } from '../resources/m_utils';
+import { AppointmentAdapter } from '../utils/appointment_adapter/appointment_adapter';
+import { getAppointmentGroupValues, getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
-const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
+export const APPOINTMENT_POPUP_CLASS = 'dx-scheduler-appointment-popup';
 
 const DAY_IN_MS = toMs('day');
 
@@ -153,14 +152,16 @@ export class AppointmentPopup {
 
   _createFormData(rawAppointment) {
     const appointment = this._createAppointmentAdapter(rawAppointment);
-    const dataAccessors = this.scheduler.getDataAccessors();
-    const resources = this.scheduler.getResources();
-    const normalizedResources = getNormalizedResources(rawAppointment, dataAccessors, resources);
+    const resourceManager = this.scheduler.getResourceManager();
+    const rawAppointmentGroupValues = getRawAppointmentGroupValues(
+      rawAppointment,
+      resourceManager.resources,
+    );
 
     return {
       ...rawAppointment,
-      ...normalizedResources,
-      repeat: !!appointment.recurrenceRule,
+      ...rawAppointmentGroupValues,
+      repeat: Boolean(appointment.recurrenceRule),
     };
   }
 
@@ -186,26 +187,19 @@ export class AppointmentPopup {
   }
 
   _createAppointmentAdapter(rawAppointment) {
-    return createAppointmentAdapter(
+    return new AppointmentAdapter(
       rawAppointment,
       this.scheduler.getDataAccessors(),
-      this.scheduler.getTimeZoneCalculator(),
     );
   }
 
   _updateForm() {
     const { data } = this.state.appointment;
-    const appointment = this._createAppointmentAdapter(this._createFormData(data));
-
-    if (appointment.startDate) {
-      appointment.startDate = appointment.calculateStartDate('toAppointment');
-    }
-
-    if (appointment.endDate) {
-      appointment.endDate = appointment.calculateEndDate('toAppointment');
-    }
-
-    const formData = appointment.clone().source();
+    const appointment = this._createFormData(data);
+    const formData = this._createAppointmentAdapter(appointment)
+      .clone()
+      .calculateDates(this.scheduler.getTimeZoneCalculator(), 'toAppointment')
+      .source;
 
     this.form.readOnly = this._isReadOnly(formData);
     this.form.updateFormData(formData);
@@ -232,7 +226,7 @@ export class AppointmentPopup {
     if (this.form.dxForm && this.visible) { // TODO
       const { formData } = this.form;
       const dataAccessors = this.scheduler.getDataAccessors();
-      const isRecurrence = ExpressionUtils.getField(dataAccessors, 'recurrenceRule', formData);
+      const isRecurrence = dataAccessors.get('recurrenceRule', formData);
 
       this.changeSize(isRecurrence);
     }
@@ -245,7 +239,7 @@ export class AppointmentPopup {
 
     isShowLoadPanel && this._showLoadPanel();
 
-    when(validation && validation.complete || validation).done((validation) => {
+    when(validation?.complete || validation).done((validation) => {
       if (validation && !validation.isValid) {
         hideLoading();
         deferred.resolve(false);
@@ -254,8 +248,10 @@ export class AppointmentPopup {
 
       const { repeat } = this.form.formData;
       const adapter = this._createAppointmentAdapter(this.form.formData);
-      const clonedAdapter = adapter.clone({ pathTimeZone: 'fromAppointment' } as any); // TODO:
-      const shouldClearRecurrenceRule = !repeat && !!clonedAdapter.recurrenceRule;
+      const clonedAdapter = adapter
+        .clone()
+        .calculateDates(this.scheduler.getTimeZoneCalculator(), 'fromAppointment');
+      const shouldClearRecurrenceRule = !repeat && Boolean(clonedAdapter.recurrenceRule);
 
       this._addMissingDSTTime(adapter, clonedAdapter);
 
@@ -263,7 +259,7 @@ export class AppointmentPopup {
         clonedAdapter.recurrenceRule = '';
       }
 
-      const appointment = clonedAdapter.source();
+      const appointment = clonedAdapter.source;
       delete appointment.repeat; // TODO
 
       switch (this.state.action) {
@@ -310,13 +306,13 @@ export class AppointmentPopup {
           const endTime = endDate.getTime();
 
           const inAllDayRow = allDay || (endTime - startTime) >= DAY_IN_MS;
+          const resourceManager = this.scheduler.getResourceManager();
+          const appointmentGroupValues = getAppointmentGroupValues(
+            this.state.lastEditData,
+            resourceManager.resources,
+          );
 
-          const dataAccessors = this.scheduler.getDataAccessors();
-          const resourceList = this.scheduler.getResources();
-
-          const normalizedResources = getNormalizedResources(this.state.lastEditData, dataAccessors, resourceList);
-
-          this.scheduler.updateScrollPosition(startDate, normalizedResources, inAllDayRow);
+          this.scheduler.updateScrollPosition(startDate, appointmentGroupValues, inAllDayRow);
           this.state.lastEditData = null;
         }
 

@@ -2,7 +2,7 @@ import $ from 'jquery';
 import ko from 'knockout';
 import registerComponent from 'core/component_registrator';
 import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
-import CollectionWidgetItem from '__internal/ui/collection/m_item';
+import CollectionWidgetItem from '__internal/ui/collection/item';
 
 import 'integration/knockout';
 
@@ -12,27 +12,29 @@ const FIXTURE_ELEMENT = $('<div id=qunit-fixture></div>').appendTo('body');
 
 moduleWithoutCsp('observables', {
     beforeEach: function() {
-        const TestCollectionItem = this.TestCollectionItem = CollectionWidgetItem.inherit({
-            _renderWatchers: function() {
+        class TestCollectionItem extends CollectionWidgetItem {
+            _renderWatchers() {
                 this._startWatcher('value', this._renderValue.bind(this));
-            },
-            _renderValue: function(value) {
+            }
+            _renderValue(value) {
                 this._$element.data('value', value);
-            },
-            value: function(value) {
+            }
+            value(value) {
                 this._renderValue(value);
             }
-        });
+        }
 
-        const TestCollection = this.TestCollection = CollectionWidget.inherit({
-            _getDefaultOptions: function() {
-                return $.extend(this.callBase(), {
+        class TestCollection extends CollectionWidget {
+            static ItemClass = TestCollectionItem;
+            _getDefaultOptions() {
+                return {
+                    ...super._getDefaultOptions(),
                     valueExpr: 'value'
-                });
+                };
             }
-        });
-        TestCollection.ItemClass = TestCollectionItem;
+        }
 
+        this.TestCollection = TestCollection;
         registerComponent('dxTestCollection', TestCollection);
     }
 });

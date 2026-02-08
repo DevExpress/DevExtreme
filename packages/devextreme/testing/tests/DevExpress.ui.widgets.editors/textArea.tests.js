@@ -6,7 +6,7 @@ import devices from '__internal/core/m_devices';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { parseHeight } from 'core/utils/size.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/text_area';
 import 'ui/scroll_view/ui.scrollable';
 
@@ -41,6 +41,7 @@ const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const AUTO_RESIZE_CLASS = 'dx-texteditor-input-auto-resize';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
 QUnit.module('rendering', () => {
     QUnit.test('onContentReady fired after the widget is fully ready', function(assert) {
@@ -88,6 +89,17 @@ QUnit.module('rendering', () => {
         });
         pointerMock($input).start().down().move(0, 40).scroll(0, 40).up();
         $(document).off('.dxtestns');
+    });
+
+    QUnit.test('Wheel event inside focused TextArea should not trigger _onMouseWheel call (T1290309)', function(assert) {
+        const textArea = $('#textarea').dxTextArea({}).dxTextArea('instance');
+        const onMouseWheelSpy = sinon.spy(textArea, '_onMouseWheel');
+        const $input = textArea._input();
+
+        textArea.focus();
+        pointerMock($input).wheel(-10);
+
+        assert.strictEqual(onMouseWheelSpy.callCount, 0, '_onMouseWheel was not called');
     });
 });
 
@@ -210,7 +222,11 @@ QUnit.module('options changing', () => {
         const height = 500;
 
         instance.option('height', height);
-        assert.equal($element.find(`.${INPUT_CLASS}`).outerHeight(), $element.height(), 'input outer height should be equal widget height');
+
+        const inputContainerMargin = parseInt($element.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`).css('margin'));
+        const expectedInputHeight = $element.height() - 2 * (inputContainerMargin);
+
+        assert.equal($element.find(`.${INPUT_CLASS}`).outerHeight(), expectedInputHeight, 'input outer height should be equal widget height');
     });
 });
 
@@ -246,9 +262,10 @@ QUnit.module('widget sizing render', () => {
                 const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
                 const inputHeight = $input.outerHeight();
                 const borderHeight = parseInt($element.css('borderTopWidth'));
+                const inputContainerMargin = parseInt($element.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`).css('margin'));
                 const parsedMinHeight = typeof minHeight === 'number' ? minHeight : parseHeight(minHeight, $element.get(0).parentNode, $element.get(0));
 
-                assert.strictEqual(inputHeight + 2 * borderHeight, parsedMinHeight, 'height is ok');
+                assert.roughEqual(inputHeight + 2 * (borderHeight + inputContainerMargin), parsedMinHeight, 0.1, 'height is ok');
             });
         });
     });

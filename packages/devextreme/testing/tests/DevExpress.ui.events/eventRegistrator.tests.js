@@ -3,6 +3,7 @@ import registerEvent from 'common/core/events/core/event_registrator';
 import eventsEngine from 'common/core/events/core/events_engine';
 import registerEventCallbacks from 'common/core/events/core/event_registrator_callbacks';
 import Class from 'core/class';
+import { isFunction } from 'core/utils/type';
 
 import eventHelper from '../../helpers/eventHelper.js';
 
@@ -87,7 +88,7 @@ QUnit.test('\'setup\' method', function(assert) {
     assert.strictEqual(LOG.arguments[0], this.element[0], 'element');
     assert.strictEqual(LOG.arguments[1], data, 'data');
     assert.deepEqual(LOG.arguments[2], ['test1', 'test2'], 'namespaces');
-    assert.ok($.isFunction(LOG.arguments[3]), 'eventHandle');
+    assert.ok(isFunction(LOG.arguments[3]), 'eventHandle');
 });
 
 QUnit.test('\'teardown\' method', function(assert) {
@@ -103,7 +104,7 @@ QUnit.test('\'teardown\' method', function(assert) {
     assert.equal(LOG.arguments.length, 3, 'arguments count');
     assert.strictEqual(LOG.arguments[0], this.element[0], 'element');
     assert.deepEqual(LOG.arguments[1], ['test1', 'test2'], 'namespaces');
-    assert.ok($.isFunction(LOG.arguments[2]), 'eventHandle');
+    assert.ok(isFunction(LOG.arguments[2]), 'eventHandle');
 });
 
 QUnit.test('\'add\' method', function(assert) {

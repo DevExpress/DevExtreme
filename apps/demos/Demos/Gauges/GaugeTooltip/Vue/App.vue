@@ -37,7 +37,7 @@ import {
   DxCircularGauge, DxScale, DxTooltip, DxFont, DxExport, DxTitle,
 } from 'devextreme-vue/circular-gauge';
 
-const customizeTooltip = ({ valueText }) => ({
+const customizeTooltip = ({ valueText }: Record<string, any>) => ({
   text: `${valueText} ohm`,
 });
 </script>

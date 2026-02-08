@@ -36,7 +36,6 @@ type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "animation" |
   "closeOnClick" |
-  "closeOnOutsideClick" |
   "closeOnSwipe" |
   "contentTemplate" |
   "deferRendering" |
@@ -80,22 +79,21 @@ const componentConfig = {
     accessKey: String,
     animation: Object as PropType<Record<string, any>>,
     closeOnClick: Boolean,
-    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     closeOnSwipe: Boolean,
     contentTemplate: {},
     deferRendering: Boolean,
     displayTime: Number,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    maxWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    maxHeight: [Number, String],
+    maxWidth: [Number, String],
     message: String,
-    minHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    minWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    minHeight: [Number, String],
+    minWidth: [Number, String],
     onContentReady: Function as PropType<((e: ContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onHidden: Function as PropType<((e: HiddenEvent) => void)>,
@@ -111,7 +109,7 @@ const componentConfig = {
     tabIndex: Number,
     type: String as PropType<ToastType>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     wrapperAttr: {}
   },
   emits: {
@@ -120,7 +118,6 @@ const componentConfig = {
     "update:accessKey": null,
     "update:animation": null,
     "update:closeOnClick": null,
-    "update:closeOnOutsideClick": null,
     "update:closeOnSwipe": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,

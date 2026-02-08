@@ -4,7 +4,7 @@ import { homes } from './data.js';
 
 const HomeImage = (data) => (
   <div
-    className="dx-tile-image"
+    className="tile-image"
     style={{ backgroundImage: `url(${data.ImageSrc})` }}
   ></div>
 );

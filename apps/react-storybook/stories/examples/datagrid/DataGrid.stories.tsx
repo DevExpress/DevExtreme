@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import React, { useCallback, useState } from "react";
+import { countries, generateData } from './data';
 
 import DataGrid, {
     Column,
@@ -13,6 +14,129 @@ import DataGrid, {
 import DiscountCell from "./DiscountCell";
 import ODataStore from "devextreme/data/odata/store";
 
+const columnOptions = {
+    regularColumns: [
+        'ID',
+        'Country',
+        'Area',
+        'Population_Urban',
+        'Population_Rural',
+        'Population_Total',
+        'GDP_Agriculture',
+        'GDP_Industry',
+        'GDP_Services',
+        'GDP_Total',
+    ],
+    customCommandColumns: [
+        {
+            type: 'buttons',
+            fixedPosition: 'left',
+            buttons: [{ text: 'text' }],
+        },
+        'ID',
+        'Country',
+        'Area',
+        'Population_Urban',
+        'Population_Rural',
+        'Population_Total',
+        'GDP_Agriculture',
+        'GDP_Industry',
+        'GDP_Services',
+        'GDP_Total',
+    ],
+    fixedColumns: [
+        {
+            dataField: 'ID',
+            fixed: true,
+        },
+        {
+            dataField: 'Country',
+            fixed: true,
+        },
+        'Area',
+        'Population_Urban',
+        'Population_Rural',
+        'Population_Total',
+        'GDP_Agriculture',
+        'GDP_Industry',
+        {
+            dataField: 'GDP_Services',
+            fixed: true,
+            fixedPosition: 'right'
+        },
+        {
+            dataField: 'GDP_Total',
+            fixed: true,
+            fixedPosition: 'right'
+        },
+    ],
+    bandColumns: ['Country', 'Area', {
+        caption: 'Population',
+        columns: [{
+            caption: 'Total',
+            dataField: 'Population_Total',
+            format: 'fixedPoint',
+        }, {
+            caption: 'Urban',
+            dataField: 'Population_Urban',
+            format: 'percent',
+        }],
+        }, {
+        caption: 'Nominal GDP',
+        columns: [{
+            caption: 'Total, mln $',
+            dataField: 'GDP_Total',
+            format: 'fixedPoint',
+            sortOrder: 'desc',
+        }, {
+            caption: 'By Sector',
+            columns: [{
+            caption: 'Agriculture',
+            dataField: 'GDP_Agriculture',
+            width: 95,
+            format: {
+                type: 'percent',
+                precision: 1,
+            },
+            }, {
+            caption: 'Industry',
+            dataField: 'GDP_Industry',
+            width: 80,
+            format: {
+                type: 'percent',
+                precision: 1,
+            },
+            }, {
+            caption: 'Services',
+            dataField: 'GDP_Services',
+            width: 85,
+            format: {
+                type: 'percent',
+                precision: 1,
+            },
+            }],
+        }],
+    }],
+    groupColumns: [
+        'ID',
+        {
+            dataField: 'Country',
+            groupIndex: 0,
+        },
+        {
+            dataField: 'Area',
+            groupIndex: 1,
+        },
+        'Population_Urban',
+        'Population_Rural',
+        'Population_Total',
+        'GDP_Agriculture',
+        'GDP_Industry',
+        'GDP_Services',
+        'GDP_Total',
+    ],
+};
+
 const meta: Meta<typeof DataGrid> = {
     title: 'Example/DataGrid',
     component: DataGrid,
@@ -20,6 +144,13 @@ const meta: Meta<typeof DataGrid> = {
         // More on Story layout: https://storybook.js.org/docs/configure/story-layout
         layout: 'padded',
     },
+    argTypes: {
+      columns: {
+        options: Object.keys(columnOptions),
+        mapping: columnOptions,
+        control: { type: 'radio' },
+      },
+    }
 };
 
 export default meta;
@@ -101,3 +232,42 @@ export const Overview: Story = {
         );
     }
 }
+
+export const ColumnReordering: Story = {
+    args: {
+        allowColumnReordering: true,
+        rtlEnabled: false,
+        columnHidingEnabled: true,
+        dataSource: countries,
+        // @ts-expect-error
+        columns: 'regularColumns',
+        columnFixing: {
+            enabled: false
+        },
+        grouping: {
+            contextMenuEnabled: true,
+        },
+        groupPanel: {
+            visible: true,
+            allowColumnDragging: true,
+        },
+    }
+  }
+
+  const generatedData = generateData(10, 100);
+
+  export const ColumnReorderingWithVirtualColumns: Story = {
+    argTypes: {
+        columns: {
+            control: 'object',
+            mapping: null,
+        },
+    },
+    args: {
+        allowColumnReordering: true,
+        rtlEnabled: false,
+        columnWidth: 100,
+        dataSource: generatedData,
+        columns: Object.keys(generatedData[0]),
+    }
+  }

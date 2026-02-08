@@ -3,8 +3,12 @@ import $ from 'jquery';
 import fx from 'common/core/animation/fx';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { dateToMilliseconds } from 'core/utils/date';
+
+import { createWrapper, createWrapperFakeClock, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
+
+import 'generic_light.css!';
 
 const {
     module,
@@ -225,7 +229,7 @@ module('CellTemplate tests', moduleConfig, () => {
         };
     }
 
-    module('Data Cell template', {}, function() {
+    module('Data Cell template', function() {
         const allDayCells = [{
             data: {
                 startDate: new Date(2020, 7, 23),
@@ -298,11 +302,11 @@ module('CellTemplate tests', moduleConfig, () => {
             index: 6,
         }];
 
-        test('Scheduler should have specific dataCellTemplate setting of the view', function(assert) {
+        test('Scheduler should have specific dataCellTemplate setting of the view', async function(assert) {
             let countCallTemplate1 = 0;
             let countCallTemplate2 = 0;
 
-            createWrapper({
+            await createWrapper({
                 views: [{
                     type: 'day',
                     dataCellTemplate: function() {
@@ -319,8 +323,8 @@ module('CellTemplate tests', moduleConfig, () => {
             assert.notEqual(countCallTemplate2, 0, 'count call second template');
         });
 
-        test('allDayPanel cell with custom dataCellTemplate must open appointment popup when double-clicked (T737506)', function(assert) {
-            const scheduler = createWrapper({
+        test('allDayPanel cell with custom dataCellTemplate must open appointment popup when double-clicked (T737506)', async function(assert) {
+            const scheduler = await createWrapper({
                 currentDate: new Date(2015, 4, 25),
                 views: ['week'],
                 currentView: 'week',
@@ -338,17 +342,20 @@ module('CellTemplate tests', moduleConfig, () => {
                 { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 26), allDay: true },
                 { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 26), allDay: true },
             ]);
+            await waitAsync(0);
 
             const spy = sinon.spy(scheduler.instance, 'showAppointmentPopup');
 
-            const $allDayAppointment = $(scheduler.instance.$element()).find('.dx-scheduler-all-day-appointment').eq(0);
-            $allDayAppointment.trigger('dxdblclick');
+            const getAllDayAppointment = () => $(scheduler.instance.$element()).find('.dx-scheduler-all-day-appointment').eq(0);
+
+            await waitForAsync(() => getAllDayAppointment().length > 0);
+            getAllDayAppointment().trigger('dxdblclick');
 
             assert.ok(spy.calledOnce, 'Method was called');
         });
 
-        test('Data cell should has right content when dataCellTemplate option was change', function(assert) {
-            const scheduler = createWrapper({
+        test('Data cell should has right content when dataCellTemplate option was change', async function(assert) {
+            const scheduler = await createWrapper({
                 currentView: 'week',
                 currentDate: new Date(2016, 8, 5),
                 firstDayOfWeek: 0,
@@ -365,6 +372,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 $(container).addClass('new-custom-class');
             });
 
+            await waitForAsync(() => $element.find('.new-custom-class').length > 0);
             assert.ok($element.find('.new-custom-class').length > 0, 'class after option changing is ok');
         });
 
@@ -374,10 +382,10 @@ module('CellTemplate tests', moduleConfig, () => {
                 : 'Old Render';
 
             module(description, {}, () => {
-                test('dataCellTemplate should have correct options', function(assert) {
+                test('dataCellTemplate should have correct options', async function(assert) {
                     let templateOptions;
 
-                    createWrapper({
+                    await createWrapper({
                         currentView: 'week',
                         startDayHour: 5,
                         currentDate: new Date(2016, 8, 5),
@@ -400,9 +408,9 @@ module('CellTemplate tests', moduleConfig, () => {
                     }, 'Resources option is ok');
                 });
 
-                test('dataCellTemplate should take cellElement with correct geometry (T453520)', function(assert) {
+                test('dataCellTemplate should take cellElement with correct geometry (T453520)', async function(assert) {
                     assert.expect(4);
-                    createWrapper({
+                    await createWrapper({
                         currentView: 'week',
                         views: ['week'],
                         height: 700,
@@ -570,10 +578,10 @@ module('CellTemplate tests', moduleConfig, () => {
             }
         ].forEach(({ view, groupOrientation, expectedDates }) => {
             test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
-                    + ` with ${groupOrientation} groupping`, function(assert) {
+                    + ` with ${groupOrientation} groupping`, async function(assert) {
                 const actualDates = [];
 
-                createWrapper({
+                await createWrapper({
                     views: [
                         {
                             type: view,
@@ -625,10 +633,10 @@ module('CellTemplate tests', moduleConfig, () => {
             }
         ].forEach(({ view, expectedDates }) => {
             test(`dataCellTemplate should have correct startDate and endDate options in ${view} view`
-                    + ' with groupping by date', function(assert) {
+                    + ' with groupping by date', async function(assert) {
                 const actualDates = [];
 
-                createWrapper({
+                await createWrapper({
                     views: [
                         {
                             type: view,
@@ -702,10 +710,10 @@ module('CellTemplate tests', moduleConfig, () => {
             },
         ].forEach(({ view, expectedDates, currentDate }) => {
             test(`dataCellTemplate should provide correct options in ${view} view`
-                    + ' with intervalCount: 2', function(assert) {
+                    + ' with intervalCount: 2', async function(assert) {
                 const actualDates = [];
 
-                createWrapper({
+                await createWrapper({
                     views: [
                         {
                             type: view,
@@ -763,10 +771,10 @@ module('CellTemplate tests', moduleConfig, () => {
             },
         ].forEach(({ view, expectedDates }) => {
             test(`allDay cells should have correct options in ${view} view`
-                + 'with intervalCount: 2', function(assert) {
+                + 'with intervalCount: 2', async function(assert) {
                 const actualDates = [];
 
-                createWrapper({
+                await createWrapper({
                     views: [
                         {
                             type: view,
@@ -827,10 +835,10 @@ module('CellTemplate tests', moduleConfig, () => {
             },
         ].forEach(({ view, expectedDates, groupOrientation }) => {
             test(`allDay cells should have correct options in ${view} view`
-                + ` with ${groupOrientation} grouping`, function(assert) {
+                + ` with ${groupOrientation} grouping`, async function(assert) {
                 const actualDates = [];
 
-                createWrapper({
+                await createWrapper({
                     views: [
                         {
                             type: view,
@@ -877,10 +885,10 @@ module('CellTemplate tests', moduleConfig, () => {
                 expectedDates: horizontalDoubledWorkWeekAllDayCells,
             },
         ].forEach(({ view, expectedDates }) => {
-            test(`allDay cells should have correct options in ${view} view with grouping by date`, function(assert) {
+            test(`allDay cells should have correct options in ${view} view with grouping by date`, async function(assert) {
                 const actualDates = [];
 
-                createWrapper({
+                await createWrapper({
                     views: [
                         {
                             type: view,
@@ -961,10 +969,10 @@ module('CellTemplate tests', moduleConfig, () => {
                 firstCellDate: new Date(2021, 4, 30),
             }
         ].forEach(({ type, description, startDate, firstCellDate }) => {
-            test(`dataCellTemplate should have correct firstCell startDate in ${type} view when ${description}`, function(assert) {
+            test(`dataCellTemplate should have correct firstCell startDate in ${type} view when ${description}`, async function(assert) {
                 assert.expect(1);
 
-                createWrapper({
+                await createWrapper({
                     views: [
                         {
                             type,
@@ -1013,10 +1021,10 @@ module('CellTemplate tests', moduleConfig, () => {
                 index: 4,
             }],
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            test(`dataCellTemplate should have correct options in ${viewType} View in basic case`, function(assert) {
+            test(`dataCellTemplate should have correct options in ${viewType} View in basic case`, async function(assert) {
                 const templateOptions = [];
 
-                createWrapper({
+                await createWrapper({
                     dataSource: [],
                     views: [viewType],
                     currentView: viewType,
@@ -1075,10 +1083,10 @@ module('CellTemplate tests', moduleConfig, () => {
                 index: 4,
             }],
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            test(`dataCellTemplate should have correct options in ${viewType} when all-day panel is enabled`, function(assert) {
+            test(`dataCellTemplate should have correct options in ${viewType} when all-day panel is enabled`, async function(assert) {
                 const templateOptions = [];
 
-                createWrapper({
+                await createWrapper({
                     dataSource: [],
                     views: [viewType],
                     currentView: viewType,
@@ -1116,10 +1124,10 @@ module('CellTemplate tests', moduleConfig, () => {
                 index: index - 1,
             })),
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            test(`dataCellTemplate should have correct options in ${viewType} view when group orientation is vertical`, function(assert) {
+            test(`dataCellTemplate should have correct options in ${viewType} view when group orientation is vertical`, async function(assert) {
                 const templateOptions = [];
 
-                createWrapper({
+                await createWrapper({
                     dataSource: [],
                     views: [{
                         type: viewType,
@@ -1161,10 +1169,10 @@ module('CellTemplate tests', moduleConfig, () => {
                 index: index - 1,
             })),
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            test(`dataCellTemplate should have correct options in ${viewType} view when group orientation is horizontal`, function(assert) {
+            test(`dataCellTemplate should have correct options in ${viewType} view when group orientation is horizontal`, async function(assert) {
                 const templateOptions = [];
 
-                createWrapper({
+                await createWrapper({
                     dataSource: [],
                     views: [{
                         type: viewType,
@@ -1211,10 +1219,10 @@ module('CellTemplate tests', moduleConfig, () => {
                 index: index - 1,
             })),
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            test(`dataCellTemplate should have correct options in ${viewType} view when appointments are grouped by date`, function(assert) {
+            test(`dataCellTemplate should have correct options in ${viewType} view when appointments are grouped by date`, async function(assert) {
                 const templateOptions = [];
 
-                createWrapper({
+                await createWrapper({
                     dataSource: [],
                     views: [{
                         type: viewType,
@@ -1338,10 +1346,10 @@ module('CellTemplate tests', moduleConfig, () => {
             secondCellIndex,
             templatesNumber,
         }) => {
-            test(`dataCellTemplate should have correct options in ${view} view`, function(assert) {
+            test(`dataCellTemplate should have correct options in ${view} view`, async function(assert) {
                 const templateOptions = [];
 
-                createWrapper({
+                await createWrapper({
                     dataSource: [],
                     views: [view],
                     currentView: view,
@@ -1380,10 +1388,10 @@ module('CellTemplate tests', moduleConfig, () => {
                 index: index - 1,
             })),
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            test(`dataCellTemplate should have correct options in ${viewType} with grouping and virtual scrolling`, function(assert) {
+            test(`dataCellTemplate should have correct options in ${viewType} with grouping and virtual scrolling`, async function(assert) {
                 const templateOptions = [];
 
-                createWrapper({
+                await createWrapper({
                     dataSource: [],
                     views: [{
                         type: viewType,
@@ -1409,9 +1417,9 @@ module('CellTemplate tests', moduleConfig, () => {
         });
     });
 
-    module('Date Cell template', {}, function() {
-        test('dateCellTemplate should take cellElement with correct geometry (T453520)', function(assert) {
-            createWrapper({
+    module('Date Cell template', function() {
+        test('dateCellTemplate should take cellElement with correct geometry (T453520)', async function(assert) {
+            await createWrapper({
                 currentView: 'agenda',
                 views: ['agenda'],
                 height: 700,
@@ -1457,7 +1465,7 @@ module('CellTemplate tests', moduleConfig, () => {
             }]
         };
 
-        test('Date cell template should have correct data without grouping', function(assert) {
+        test('Date cell template should have correct data without grouping', async function(assert) {
             let currentTemplateIndex = 0;
             const rowsCount = 2;
             const expectedData = [{
@@ -1472,7 +1480,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 text: '25 Wed',
             }];
 
-            createWrapper({
+            await createWrapper({
                 ...basicOptions,
                 dateCellTemplate: (data) => {
                     assert.deepEqual(data, expectedData[currentTemplateIndex % rowsCount], 'Correct template data');
@@ -1481,7 +1489,7 @@ module('CellTemplate tests', moduleConfig, () => {
             });
         });
 
-        test('Date cell template should have correct data with grouping', function(assert) {
+        test('Date cell template should have correct data with grouping', async function(assert) {
             let currentTemplateIndex = 0;
             const rowsCount = 4;
             const expectedData = [{
@@ -1506,7 +1514,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 text: '25 Wed',
             }];
 
-            createWrapper({
+            await createWrapper({
                 ...basicOptions,
                 dateCellTemplate: (data) => {
                     assert.deepEqual(data, expectedData[currentTemplateIndex % rowsCount], 'Correct template data');
@@ -1525,8 +1533,8 @@ module('CellTemplate tests', moduleConfig, () => {
 
             module(description, {
                 beforeEach: function() {
-                    this.createInstance = (options = {}) => {
-                        this.scheduler = createWrapper({
+                    this.createInstance = async(options = {}) => {
+                        this.scheduler = await createWrapper({
                             renovateRender,
                             ...options,
                         });
@@ -1534,11 +1542,11 @@ module('CellTemplate tests', moduleConfig, () => {
                     };
                 },
             }, () => {
-                test('Scheduler should have specific dateCellTemplate setting of the view', function(assert) {
+                test('Scheduler should have specific dateCellTemplate setting of the view', async function(assert) {
                     let countCallTemplate1 = 0;
                     let countCallTemplate2 = 0;
 
-                    this.createInstance({
+                    await this.createInstance({
                         dataSource: [],
                         views: [{
                             type: 'week',
@@ -1557,9 +1565,9 @@ module('CellTemplate tests', moduleConfig, () => {
                     assert.notEqual(countCallTemplate2, 0, 'count call second template');
                 });
 
-                test('dateCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
+                test('dateCellTemplate should take cellElement with correct geometry(T453520)', async function(assert) {
                     assert.expect(3);
-                    this.createInstance({
+                    await this.createInstance({
                         currentView: 'week',
                         views: ['week'],
                         height: 700,
@@ -1575,8 +1583,8 @@ module('CellTemplate tests', moduleConfig, () => {
                     });
                 });
 
-                test('dateCellTemplate should work correctly', function(assert) {
-                    this.createInstance({
+                test('dateCellTemplate should work correctly', async function(assert) {
+                    await this.createInstance({
                         views: ['month'],
                         currentView: 'month',
                         currentDate: new Date(2016, 8, 5),
@@ -1598,9 +1606,9 @@ module('CellTemplate tests', moduleConfig, () => {
                     assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
                 });
 
-                test('dateCellTemplate should have unique date in data (T732376)', function(assert) {
-                    this.clock = sinon.useFakeTimers();
-                    this.createInstance({
+                test('dateCellTemplate should have unique date in data (T732376)', async function(assert) {
+                    const clock = sinon.useFakeTimers();
+                    const { instance } = await createWrapperFakeClock({
                         views: ['timelineWorkWeek'],
                         currentView: 'timelineWorkWeek',
                         currentDate: new Date(2016, 8, 5),
@@ -1611,6 +1619,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         cellDuration: 60,
                         groups: ['ownerId'],
                         resources,
+                        renovateRender,
                         dateCellTemplate: function(data, index, element) {
                             const d = data;
                             $('<div>').appendTo(element).dxButton({
@@ -1624,19 +1633,19 @@ module('CellTemplate tests', moduleConfig, () => {
 
                             return element;
                         }
-                    });
+                    }, clock);
 
-                    const $button = this.instance.$element().find('.dx-scheduler-header-panel-cell .dx-button').eq(2);
+                    const $button = instance.$element().find('.dx-scheduler-header-panel-cell .dx-button').eq(2);
 
                     $($button).trigger('dxclick');
-                    this.clock.tick(1000);
-                    this.clock.restore();
+                    await clock.tickAsync(1000);
+                    clock.restore();
                 });
 
-                test('dateCellTemplate should work correctly in workWeek view', function(assert) {
+                test('dateCellTemplate should work correctly in workWeek view', async function(assert) {
                     const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-                    this.createInstance({
+                    await this.createInstance({
                         views: ['workWeek'],
                         currentView: 'workWeek',
                         currentDate: new Date(2016, 8, 5),
@@ -1660,8 +1669,8 @@ module('CellTemplate tests', moduleConfig, () => {
                     assert.ok($headerPanel.text(), 'Mon5Tue6Wed7Thu8Fri9');
                 });
 
-                test('dateCellTemplate should work correctly in agenda view', function(assert) {
-                    this.createInstance({
+                test('dateCellTemplate should work correctly in agenda view', async function(assert) {
+                    await this.createInstance({
                         views: ['agenda'],
                         currentView: 'agenda',
                         currentDate: new Date(2016, 8, 5),
@@ -1694,10 +1703,10 @@ module('CellTemplate tests', moduleConfig, () => {
                     assert.notOk($cell2.hasClass('custom-group-cell-class'), 'second cell has no class');
                 });
 
-                test('dateCellTemplate should have correct options', function(assert) {
+                test('dateCellTemplate should have correct options', async function(assert) {
                     let templateOptions;
 
-                    this.createInstance({
+                    await this.createInstance({
                         currentView: 'month',
                         currentDate: new Date(2016, 8, 5),
                         dateCellTemplate: function(itemData, index, $container) {
@@ -1711,10 +1720,10 @@ module('CellTemplate tests', moduleConfig, () => {
                     assert.deepEqual(templateOptions.date.getTime(), new Date(2016, 7, 28).getTime(), 'date option is ok');
                 });
 
-                test('dateCellTemplate should have correct options in agenda view', function(assert) {
+                test('dateCellTemplate should have correct options in agenda view', async function(assert) {
                     let templateOptions;
 
-                    this.createInstance({
+                    await this.createInstance({
                         views: ['agenda'],
                         currentView: 'agenda',
                         currentDate: new Date(2016, 8, 5),
@@ -1748,14 +1757,14 @@ module('CellTemplate tests', moduleConfig, () => {
 
                 [
                     {
-                        description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate',
-                        expectedAsserts: totalDateCells * 2,
+                        description: '\'"groups" and "groupIndex" should be correct in dateCellTemplate',
+                        expectedAsserts: 18,
                         views: viewsBase,
                     },
                     {
-                        description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate'
-                            + 'when vertical grouping is used',
-                        expectedAsserts: totalDateCells * 2,
+                        description: '\'"groups" and "groupIndex" should be correct in dateCellTemplate'
+                            + ' when vertical grouping is used',
+                        expectedAsserts: 32,
                         views: viewsBase.map((view) => ({
                             ...view,
                             groupOrientation: 'vertical',
@@ -1763,9 +1772,9 @@ module('CellTemplate tests', moduleConfig, () => {
                         groups: ['ownerId']
                     },
                     {
-                        description: '\'"groups" and "groupIndex" shoud be correct in dateCellTemplate'
-                            + 'when grouping by date is used',
-                        expectedAsserts: totalDateCells * 2,
+                        description: '\'"groups" and "groupIndex" should be correct in dateCellTemplate'
+                            + ' when grouping by date is used',
+                        expectedAsserts: 32,
                         views: viewsBase.map((view) => ({
                             ...view,
                             groupOrientation: 'horizontal',
@@ -1774,26 +1783,26 @@ module('CellTemplate tests', moduleConfig, () => {
                         groups: ['ownerId']
                     }
                 ].forEach(({ description, expectedAsserts, views, groups }) => {
-                    test(description, function(assert) {
+                    test(description, async function(assert) {
                         assert.expect(expectedAsserts);
 
-                        const scheduler = createWrapper({
+                        const scheduler = await createWrapper({
                             ...baseConfig,
                             views,
                             dateCellTemplate: checkIfGroupsAreUndefined(assert),
                         });
 
                         if(groups) {
-                            scheduler.groups = groups;
+                            scheduler.instance.option('groups', groups);
                         }
 
-                        views.slice(1).forEach(({ type }) => {
-                            scheduler.instance.option('currentView', type);
-                        });
+                        scheduler.instance.option('currentView', views[0].type);
+                        scheduler.instance.option('currentView', views[1].type);
+                        await waitAsync(0);
                     });
                 });
 
-                test('\'"groups" and "groupIndex" shoud be correct in dateCellTemplate when horizontal grouping is used', function(assert) {
+                test('\'"groups" and "groupIndex" should be correct in dateCellTemplate when horizontal grouping is used', async function(assert) {
                     assert.expect(totalDateCells * 4);
                     const views = viewsBase.map(({ type, intervalCount }) => ({
                         type,
@@ -1803,7 +1812,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     let cellCountPerGroup = 2;
                     let currentCellIndex = 0;
 
-                    const scheduler = createWrapper({
+                    const scheduler = await createWrapper({
                         ...baseConfig,
                         views,
                         dateCellTemplate: ({ groups, groupIndex }) => {
@@ -1817,12 +1826,14 @@ module('CellTemplate tests', moduleConfig, () => {
                         groups: ['ownerId'],
                     });
 
-                    viewsBase.forEach(({ type, dateCellCount }) => {
+                    for(let i = 0; i < viewsBase.length; i++) {
+                        const { type, dateCellCount } = viewsBase[i];
                         cellCountPerGroup = dateCellCount;
                         currentCellIndex = 0;
 
                         scheduler.instance.option('currentView', type);
-                    });
+                        await waitAsync(0);
+                    }
                 });
             });
         });
@@ -1840,11 +1851,11 @@ module('CellTemplate tests', moduleConfig, () => {
         }];
 
 
-        test('Scheduler should have specific timeCellTemplate setting of the view', function(assert) {
+        test('Scheduler should have specific timeCellTemplate setting of the view', async function(assert) {
             let countCallTemplate1 = 0;
             let countCallTemplate2 = 0;
 
-            createWrapper({
+            await createWrapper({
                 dataSource: [],
                 views: [{
                     type: 'week',
@@ -1862,10 +1873,10 @@ module('CellTemplate tests', moduleConfig, () => {
             assert.notEqual(countCallTemplate2, 0, 'count call second template');
         });
 
-        test('timeCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
+        test('timeCellTemplate should take cellElement with correct geometry(T453520)', async function(assert) {
             assert.expect(3);
 
-            createWrapper({
+            await createWrapper({
                 currentView: 'week',
                 views: ['week'],
                 height: 700,
@@ -1881,10 +1892,10 @@ module('CellTemplate tests', moduleConfig, () => {
             });
         });
 
-        test('timeCellTemplate should have correct options', function(assert) {
+        test('timeCellTemplate should have correct options', async function(assert) {
             let templateOptions;
 
-            createWrapper({
+            await createWrapper({
                 currentView: 'week',
                 currentDate: new Date(2016, 8, 5),
                 firstDayOfWeek: 0,
@@ -1898,9 +1909,9 @@ module('CellTemplate tests', moduleConfig, () => {
             assert.equal(templateOptions.text, '3:00 AM', 'text options is ok');
         });
 
-        test('timeCellTemplate should contains the date field of data parameter in the Day view', function(assert) {
+        test('timeCellTemplate should contains the date field of data parameter in the Day view', async function(assert) {
             const resultDates = [];
-            createWrapper({
+            await createWrapper({
                 currentView: 'day',
                 views: ['day'],
                 currentDate: new Date(2016, 8, 5),
@@ -1919,9 +1930,9 @@ module('CellTemplate tests', moduleConfig, () => {
             assert.deepEqual(resultDates[3], new Date(2016, 8, 5, 3), 'date parameter for the fourth time cell');
         });
 
-        test('timeCellTemplate should contains the date field of data parameter in Week view', function(assert) {
+        test('timeCellTemplate should contains the date field of data parameter in Week view', async function(assert) {
             const resultDates = [];
-            createWrapper({
+            await createWrapper({
                 currentView: 'week',
                 views: ['week'],
                 currentDate: new Date(2016, 8, 5),
@@ -1941,9 +1952,9 @@ module('CellTemplate tests', moduleConfig, () => {
             assert.deepEqual(resultDates[3], new Date(2016, 8, 4, 3), 'date parameter for the fourth time cell');
         });
 
-        test('timeCellTemplate should contains the date field of data parameter in workWeek view', function(assert) {
+        test('timeCellTemplate should contains the date field of data parameter in workWeek view', async function(assert) {
             const resultDates = [];
-            createWrapper({
+            await createWrapper({
                 currentView: 'workWeek',
                 views: ['workWeek'],
                 currentDate: new Date(2016, 8, 5),
@@ -1975,10 +1986,10 @@ module('CellTemplate tests', moduleConfig, () => {
                 showAllDayPanel: true,
             }
         ].forEach(({ viewType, expectedTemplateOptions, showAllDayPanel }) => {
-            test(`timeCellTemplate should have correct options in ${viewType} view when all day panel is ${showAllDayPanel}`, function(assert) {
+            test(`timeCellTemplate should have correct options in ${viewType} view when all day panel is ${showAllDayPanel}`, async function(assert) {
                 const templateOptions = [];
 
-                createWrapper({
+                await createWrapper({
                     dataSource: [],
                     views: [viewType],
                     currentView: viewType,
@@ -2001,10 +2012,10 @@ module('CellTemplate tests', moduleConfig, () => {
             viewType: 'day',
             expectedTemplateOptions: [groupedCells[0], groupedCells[7]],
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            test(`timeCellTemplate should have correct options in ${viewType} view when group orientation is vertical`, function(assert) {
+            test(`timeCellTemplate should have correct options in ${viewType} view when group orientation is vertical`, async function(assert) {
                 const templateOptions = [];
 
-                createWrapper({
+                await createWrapper({
                     dataSource: [],
                     views: [{
                         type: viewType,
@@ -2035,10 +2046,10 @@ module('CellTemplate tests', moduleConfig, () => {
                 groups: undefined,
             }],
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            test(`timeCellTemplate should have correct options in ${viewType} view when group orientation is horizontal`, function(assert) {
+            test(`timeCellTemplate should have correct options in ${viewType} view when group orientation is horizontal`, async function(assert) {
                 const templateOptions = [];
 
-                createWrapper({
+                await createWrapper({
                     dataSource: [],
                     views: [{
                         type: viewType,
@@ -2065,10 +2076,10 @@ module('CellTemplate tests', moduleConfig, () => {
             viewType: 'day',
             expectedTemplateOptions: [groupedCells[0], groupedCells[7]],
         }].forEach(({ viewType, expectedTemplateOptions }) => {
-            test(`timeCellTemplate should have correct options in ${viewType} view with grouping and virtual scrolling`, function(assert) {
+            test(`timeCellTemplate should have correct options in ${viewType} view with grouping and virtual scrolling`, async function(assert) {
                 const templateOptions = [];
 
-                createWrapper({
+                await createWrapper({
                     dataSource: [],
                     views: [{
                         type: viewType,
@@ -2103,12 +2114,12 @@ module('CellTemplate tests', moduleConfig, () => {
             module(description, {}, () => {
                 [
                     {
-                        description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate',
-                        expectedAsserts: totalTimeCells * 2,
+                        description: '"groups" and "groupIndex" should be correct in timeCellTemplate',
+                        expectedAsserts: 16,
                         views: viewsBase,
                     },
                     {
-                        description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate '
+                        description: '"groups" and "groupIndex" should be correct in timeCellTemplate '
                             + 'when vertical grouping is used in timleine views',
                         expectedAsserts: 72,
                         views: viewsBase.slice(3, 6).map((view) => ({
@@ -2118,9 +2129,9 @@ module('CellTemplate tests', moduleConfig, () => {
                         groups: ['ownerId']
                     },
                     {
-                        description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate'
+                        description: '"groups" and "groupIndex" should be correct in timeCellTemplate'
                             + ' when grouping by date is used',
-                        expectedAsserts: totalTimeCells * 2,
+                        expectedAsserts: 16,
                         views: viewsBase.map((view) => ({
                             ...view,
                             groupOrientation: 'horizontal',
@@ -2129,7 +2140,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         groups: ['ownerId']
                     },
                     {
-                        description: '"groups" and "groupIndex" shoud be correct in timeCellTemplate'
+                        description: '"groups" and "groupIndex" should be correct in timeCellTemplate'
                             + ' when horizontal grouping is used in simple views',
                         expectedAsserts: 16,
                         views: viewsBase.slice(0, 3).map((view) => ({
@@ -2139,7 +2150,7 @@ module('CellTemplate tests', moduleConfig, () => {
                         groups: ['ownerId']
                     }
                 ].forEach(({ description, expectedAsserts, views, groups }) => {
-                    test(description, function(assert) {
+                    test(description, async function(assert) {
                         assert.expect(expectedAsserts);
 
                         const schedulerConfig = {
@@ -2153,16 +2164,16 @@ module('CellTemplate tests', moduleConfig, () => {
                             schedulerConfig.groups = groups;
                         }
 
-                        const scheduler = createWrapper(schedulerConfig);
+                        const scheduler = await createWrapper(schedulerConfig);
 
-                        views.slice(1).forEach(({ type }) => {
-                            scheduler.instance.option('currentView', type);
-                        });
+                        scheduler.instance.option('currentView', views[0].type);
+                        scheduler.instance.option('currentView', views[1].type);
+                        await waitAsync(0);
                     });
                 });
 
-                test('"groups" and "groupIndex" shoud be correct in timeCellTemplate '
-                    + 'when vertical grouping is used in simple views', function(assert) {
+                test('"groups" and "groupIndex" should be correct in timeCellTemplate '
+                    + 'when vertical grouping is used in simple views', async function(assert) {
                     assert.expect(32);
                     const views = viewsBase.map(({ type, intervalCount }) => ({
                         type,
@@ -2172,7 +2183,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     let cellCountPerGroup = 4;
                     let currentCellIndex = 0;
 
-                    const scheduler = createWrapper({
+                    const scheduler = await createWrapper({
                         ...baseConfig,
                         views,
                         timeCellTemplate: ({ groups, groupIndex }) => {
@@ -2186,16 +2197,18 @@ module('CellTemplate tests', moduleConfig, () => {
                         groups: ['ownerId'],
                     });
 
-                    viewsBase.slice(0, 3).forEach(({ type, timeCellCount }) => {
+                    for(let i = 0; i < 3; i++) {
+                        const { type, timeCellCount } = viewsBase[i];
                         cellCountPerGroup = timeCellCount;
                         currentCellIndex = 0;
 
                         scheduler.instance.option('currentView', type);
-                    });
+                        await waitAsync(0);
+                    }
                 });
 
-                test('"groups" and "groupIndex" shoud be correct in timeCellTemplate'
-                    + ' when horizontal grouping is used in timeline views', function(assert) {
+                test('"groups" and "groupIndex" should be correct in timeCellTemplate'
+                    + ' when horizontal grouping is used in timeline views', async function(assert) {
                     assert.expect((totalTimeCells - 8) * 4);
                     const views = viewsBase.map(({ type, intervalCount }) => ({
                         type,
@@ -2205,7 +2218,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     let cellCountPerGroup = 8;
                     let currentCellIndex = 0;
 
-                    const scheduler = createWrapper({
+                    const scheduler = await createWrapper({
                         ...baseConfig,
                         views,
                         currentView: 'timelineDay',
@@ -2220,11 +2233,13 @@ module('CellTemplate tests', moduleConfig, () => {
                         groups: ['ownerId'],
                     });
 
-                    viewsBase.slice(3, 6).forEach(({ type, timeCellCount }) => {
+                    for(let i = 3; i < 6; i++) {
+                        const { type, timeCellCount } = viewsBase[i];
                         cellCountPerGroup = timeCellCount;
                         currentCellIndex = 0;
                         scheduler.instance.option('currentView', type);
-                    });
+                        await waitAsync(0);
+                    }
                 });
             });
         });
@@ -2244,8 +2259,8 @@ module('CellTemplate tests', moduleConfig, () => {
             templateName: 'resourceCellTemplate',
             expectedTemplateCount: 2,
         }].forEach(({ templateName, expectedTemplateCount }) => {
-            test(`Scheduler should be rerendered once when ${templateName} is changed (T1028189)`, function(assert) {
-                const scheduler = createWrapper({
+            test(`Scheduler should be rerendered once when ${templateName} is changed (T1028189)`, async function(assert) {
+                const scheduler = await createWrapper({
                     views: ['week'],
                     currentView: 'week',
                     showAllDayPanel: false,
@@ -2267,6 +2282,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     templateCount++;
                 });
 
+                await waitForAsync(() => templateCount === expectedTemplateCount);
                 assert.equal(templateCount, expectedTemplateCount, 'Correct number of templates was rendered');
             });
         });

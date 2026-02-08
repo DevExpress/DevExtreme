@@ -1,0 +1,8 @@
+@use '../variables' as *;
+@use './content';
+@use './no_data';
+
+.dx-gridcore-contentview {
+  overflow: hidden;
+  flex-grow: 1;
+}

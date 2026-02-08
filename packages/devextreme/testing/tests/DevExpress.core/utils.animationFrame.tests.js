@@ -1,5 +1,6 @@
 const $ = require('jquery');
 const animationFrame = require('common/core/animation/frame');
+const coreUtilsType = require('core/utils/type');
 
 QUnit.module('animation frame');
 
@@ -8,7 +9,7 @@ QUnit.testInActiveWindow('request', function(assert) {
     const animationFrameID = animationFrame.requestAnimationFrame(function() {
         done();
     });
-    assert.ok($.isNumeric(animationFrameID));
+    assert.ok(coreUtilsType.isNumeric(animationFrameID));
 });
 
 QUnit.testInActiveWindow('cancel', function(assert) {

@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -20,20 +19,30 @@ import {
 import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem } from 'devextreme/ui/html_editor';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiHtmlEditorItemComponent } from './item-dxi';
-import { DxiHtmlEditorTableContextMenuItemComponent } from './table-context-menu-item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-html-editor-table-context-menu',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoHtmlEditorTableContextMenuComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get enabled(): boolean {
         return this._getOption('enabled');
@@ -56,22 +65,6 @@ export class DxoHtmlEditorTableContextMenuComponent extends NestedOption impleme
     }
 
 
-    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
-    get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiHtmlEditorTableContextMenuItemComponent))
-    get tableContextMenuItemsChildren(): QueryList<DxiHtmlEditorTableContextMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set tableContextMenuItemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -92,7 +85,7 @@ export class DxoHtmlEditorTableContextMenuComponent extends NestedOption impleme
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoHtmlEditorTableContextMenuComponent
   ],
   exports: [

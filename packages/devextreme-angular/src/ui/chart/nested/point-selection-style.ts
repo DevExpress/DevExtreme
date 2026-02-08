@@ -17,6 +17,7 @@ import {
 import { ChartsColor } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-point-selection-style',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoChartPointSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -79,7 +82,7 @@ export class DxoChartPointSelectionStyleComponent extends NestedOption implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartPointSelectionStyleComponent
   ],
   exports: [

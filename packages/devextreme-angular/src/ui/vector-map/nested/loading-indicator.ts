@@ -19,6 +19,7 @@ import {
 import { Font } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -26,8 +27,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-vector-map-loading-indicator',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoVectorMapLoadingIndicatorComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -86,7 +89,6 @@ export class DxoVectorMapLoadingIndicatorComponent extends NestedOption implemen
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'showChange' }
         ]);
@@ -108,7 +110,7 @@ export class DxoVectorMapLoadingIndicatorComponent extends NestedOption implemen
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoVectorMapLoadingIndicatorComponent
   ],
   exports: [

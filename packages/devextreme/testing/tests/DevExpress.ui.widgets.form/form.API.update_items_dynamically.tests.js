@@ -1,13 +1,12 @@
 import { getWidth } from 'core/utils/size';
 import $ from 'jquery';
 import 'ui/form';
-import '__internal/ui/form/m_form.layout_manager';
-import { renderLabel } from '__internal/ui/form/components/m_label';
-
-import 'generic_light.css!';
+import '__internal/ui/form/form.layout_manager';
+import { renderLabel } from '__internal/ui/form/components/label';
+import { TABPANEL_CONTAINER_CLASS } from '__internal/ui/tab_panel/tab_panel';
+import { TABS_ITEM_CLASS } from '__internal/ui/tabs/tabs';
 
 const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
-const TABPANEL_CONTAINER = 'dx-tabpanel-container';
 const FIELD_ITEM_LABEL_CONTENT_CLASS = 'dx-field-item-label-content';
 
 const { testStart, module, test } = QUnit;
@@ -139,7 +138,7 @@ class FormTestWrapper {
 
     checkTabTitle(tabSelector, expectedTitle) {
         QUnit.assert.strictEqual(
-            this._form.$element().find(`${tabSelector} .dx-tab-text`).text(),
+            this._form.$element().find(`${tabSelector} .${TABS_ITEM_CLASS}`).text(),
             `${expectedTitle}${expectedTitle}`,
             'caption of tab',
         );
@@ -152,7 +151,7 @@ class FormTestWrapper {
     }
 
     checkLabelsWidthInTab({ tabColumnIndex, etalonLabelText }) {
-        const $tabContainers = this._form.$element().find(`.${TABPANEL_CONTAINER}`);
+        const $tabContainers = this._form.$element().find(`.${TABPANEL_CONTAINER_CLASS}`);
         const $texts = this._findLabelTextsInColumn($tabContainers, tabColumnIndex);
         this._checkLabelTextsWidthByEtalon($texts, etalonLabelText);
     }
@@ -173,7 +172,7 @@ testStart(function() {
 });
 
 module('Group item. Use the option method', function() {
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[\'dataField2\']}] }, change visible of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:["dataField2"]}] }, change visible of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -202,7 +201,7 @@ module('Group item. Use the option method', function() {
         testWrapper.checkItemElement('.test-item', true);
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[\'dataField2\']}] }, change editorOptions of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:["dataField2"]}] }, change editorOptions of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -219,15 +218,15 @@ module('Group item. Use the option method', function() {
         });
 
         testWrapper.setOption('items[1].items[0]', 'editorOptions', { value: 'test value' });
-        testWrapper.checkLayoutManagerRendering([false, false], 'editorOptions: { value: \'test value\' }');
-        testWrapper.checkFormsReRender('editorOptions: { value: \'test value\' }');
+        testWrapper.checkLayoutManagerRendering([false, false], 'editorOptions: { value: "test value" }');
+        testWrapper.checkFormsReRender('editorOptions: { value: "test value" }');
 
         testWrapper.setOption('items[1].items[0]', 'editorOptions', { });
         testWrapper.checkLayoutManagerRendering([false, false], 'editorOptions: { }');
         testWrapper.checkFormsReRender('editorOptions: { }');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[\'dataField2\']}] }, change items of group)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:["dataField2"]}] }, change items of group)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -264,7 +263,7 @@ module('Group item. Use the option method', function() {
         testWrapper.checkEditorInstanceRemoved('dataField12');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[{itemType: \'group\', items: [\'dataField2\']}]}] }, change visible of first group)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:[{itemType: "group", items: ["dataField2"]}]}] }, change visible of first group)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -301,7 +300,7 @@ module('Group item. Use the option method', function() {
         testWrapper.checkItemElement('.test-item', true, 'simple item element');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[{itemType: \'group\', items: [\'dataField2\']}]}] }, change items of first group)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:[{itemType: "group", items: ["dataField2"]}]}] }, change items of first group)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -352,7 +351,7 @@ module('Group item. Use the option method', function() {
         testWrapper.checkEditorInstanceRemoved('dataField12');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[{itemType: \'group\', items: [\'dataField2\']}]}] }, change visible of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:[{itemType: "group", items: ["dataField2"]}]}] }, change visible of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -384,7 +383,7 @@ module('Group item. Use the option method', function() {
         testWrapper.checkItemElement('.test-item', true);
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[{itemType: \'group\', items: [\'dataField2\']}]}] }, change editorOptions of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:[{itemType: "group", items: ["dataField2"]}]}] }, change editorOptions of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -404,15 +403,15 @@ module('Group item. Use the option method', function() {
         });
 
         testWrapper.setOption('items[1].items[0].items[0]', 'editorOptions', { value: 'test value' });
-        testWrapper.checkLayoutManagerRendering([false, false, false], 'editorOptions: { value: \'test value\' }');
-        testWrapper.checkFormsReRender('editorOptions: { value: \'test value\' }');
+        testWrapper.checkLayoutManagerRendering([false, false, false], 'editorOptions: { value: "test value" }');
+        testWrapper.checkFormsReRender('editorOptions: { value: "test value" }');
 
         testWrapper.setOption('items[1].items[0].items[0]', 'editorOptions', { });
         testWrapper.checkLayoutManagerRendering([false, false, false], 'editorOptions: { }');
         testWrapper.checkFormsReRender('editorOptions: { }');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[{itemType: \'group\', items: [\'dataField2\']}]}] }, change items of last group)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:[{itemType: "group", items: ["dataField2"]}]}] }, change items of last group)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -451,7 +450,7 @@ module('Group item. Use the option method', function() {
         testWrapper.checkEditorInstanceRemoved('dataField12');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[\'dataField2\']}, {itemType: \'group\', items:[\'dataField3\']}] }, change visible of dataField2 and dataField3)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:["dataField2"]}, {itemType: "group", items:["dataField3"]}] }, change visible of dataField2 and dataField3)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -499,7 +498,7 @@ module('Group item. Use the option method', function() {
         testWrapper.checkItemElement('.test-item3', true);
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[\'dataField2\']}, {itemType: \'group\', items:[\'dataField3\']}] }, change items in the both groups)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:["dataField2"]}, {itemType: "group", items:["dataField3"]}] }, change items in the both groups)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -543,7 +542,7 @@ module('Group item. Use the option method', function() {
         testWrapper.checkEditorInstanceRemoved('dataField3');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[\'dataField2\']}, {itemType: \'group\', items:[\'dataField3\']}] }, change options of dataField2 and dataField3)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:["dataField2"]}, {itemType: "group", items:["dataField3"]}] }, change options of dataField2 and dataField3)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -588,7 +587,7 @@ module('Group item. Use the option method', function() {
         testWrapper.checkHelpText('.test-item3', 'Test help text 3');
     });
 
-    test('Set { items: [{itemType: \'group\', items:[{itemType: \'group\', items:[\'dataField2\']}, \'dataField1\']}] }, change required of dataField1 and change visible of dataField2)', function() {
+    test('Set { items: [{itemType: "group", items:[{itemType: "group", items:["dataField2"]}, "dataField1"]}] }, change required of dataField1 and change visible of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             items: [
                 {
@@ -625,7 +624,7 @@ module('Group item. Use the option method', function() {
 });
 
 module('Tabbed item. Use the option method', function() {
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'tabbed\', tabs:[{items: \'dataField2\'}]}] }, change visible of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "tabbed", tabs:[{items: "dataField2"}]}] }, change visible of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -656,7 +655,7 @@ module('Tabbed item. Use the option method', function() {
         testWrapper.checkItemElement('.test-item', true);
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'tabbed\', tabs:[{items: \'dataField2\'}]}] }, change items of tab)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "tabbed", tabs:[{items: "dataField2"}]}] }, change items of tab)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -695,7 +694,7 @@ module('Tabbed item. Use the option method', function() {
         testWrapper.checkEditorInstanceRemoved('dataField12');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'tabbed\', tabs:[{items: \'dataField2\'}]}] }, change editorOptions of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "tabbed", tabs:[{items: "dataField2"}]}] }, change editorOptions of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -714,15 +713,15 @@ module('Tabbed item. Use the option method', function() {
         });
 
         testWrapper.setOption('items[1].tabs[0].items[0]', 'editorOptions', { value: 'test value' });
-        testWrapper.checkLayoutManagerRendering([false, false], 'editorOptions: { value: \'test value\' }');
-        testWrapper.checkFormsReRender('editorOptions: { value: \'test value\' }');
+        testWrapper.checkLayoutManagerRendering([false, false], 'editorOptions: { value: "test value" }');
+        testWrapper.checkFormsReRender('editorOptions: { value: "test value" }');
 
         testWrapper.setOption('items[1].tabs[0].items[0]', 'editorOptions', { });
         testWrapper.checkLayoutManagerRendering([false, false], 'editorOptions: { }');
         testWrapper.checkFormsReRender('editorOptions: { }');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'tabbed\', tabs:[{items: [{itemType: \'group\', items:[\'dataField2\']}]}]}] }, change visible of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "tabbed", tabs:[{items: [{itemType: "group", items:["dataField2"]}]}]}] }, change visible of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -757,7 +756,7 @@ module('Tabbed item. Use the option method', function() {
         testWrapper.checkItemElement('.test-item', true);
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'tabbed\', tabs:[{items: [{itemType: \'group\', items:[\'dataField2\']}]}]}] }, change items of group)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "tabbed", tabs:[{items: [{itemType: "group", items:["dataField2"]}]}]}] }, change items of group)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -800,7 +799,7 @@ module('Tabbed item. Use the option method', function() {
         testWrapper.checkEditorInstanceRemoved('dataField12');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'tabbed\', tabs:[{items: [{itemType: \'group\', items:[\'dataField2\']}]}]}] }, change editorOptions of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "tabbed", tabs:[{items: [{itemType: "group", items:["dataField2"]}]}]}] }, change editorOptions of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -823,15 +822,15 @@ module('Tabbed item. Use the option method', function() {
 
         const id = 'items[1].tabs[0].items[0].items[0]';
         testWrapper.setOption(id, 'editorOptions', { value: 'test value' });
-        testWrapper.checkLayoutManagerRendering([false, false, false], 'editorOptions: { value: \'test value\' }');
-        testWrapper.checkFormsReRender('editorOptions: { value: \'test value\' }');
+        testWrapper.checkLayoutManagerRendering([false, false, false], 'editorOptions: { value: "test value" }');
+        testWrapper.checkFormsReRender('editorOptions: { value: "test value" }');
 
         testWrapper.setOption(id, 'editorOptions', { });
         testWrapper.checkLayoutManagerRendering([false, false, false], 'editorOptions: { }');
         testWrapper.checkFormsReRender('editorOptions: { }');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items: [{itemType: \'tabbed\', tabs:[{items: [\'dataField2\']}]}] }, change visible of tabbed item)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items: [{itemType: "tabbed", tabs:[{items: ["dataField2"]}]}] }, change visible of tabbed item)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -866,7 +865,7 @@ module('Tabbed item. Use the option method', function() {
         testWrapper.checkTabTitle('.test-tab', 'Test Title');
     });
 
-    test('Set { items: [{itemType: \'tabbed\', tabs[{items:[{itemType: \'group\', items:[\'dataField2\']}, \'dataField1\']}] }, change required of dataField1 and change visible of dataField2)', function() {
+    test('Set { items: [{itemType: "tabbed", tabs[{items:[{itemType: "group", items:["dataField2"]}, "dataField1"]}] }, change required of dataField1 and change visible of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             items: [
                 {
@@ -906,7 +905,7 @@ module('Tabbed item. Use the option method', function() {
 });
 
 module('Group item. Use the itemOption method', function() {
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[\'dataField2\']}] }, change visible of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:["dataField2"]}] }, change visible of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -935,7 +934,7 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkItemElement('.test-item', true);
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[\'dataField2\']}] }, change options of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:["dataField2"]}] }, change options of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -963,7 +962,7 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkHelpText('.test-item', 'Test help text');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[\'dataField2\']}] }, change editorOptions of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:["dataField2"]}] }, change editorOptions of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -980,15 +979,15 @@ module('Group item. Use the itemOption method', function() {
         });
 
         testWrapper.setItemOption('dataField2', 'editorOptions', { value: 'test value' });
-        testWrapper.checkLayoutManagerRendering([false, false], 'editorOptions: { value: \'test value\' }');
-        testWrapper.checkFormsReRender('editorOptions: { value: \'test value\' }');
+        testWrapper.checkLayoutManagerRendering([false, false], 'editorOptions: { value: "test value" }');
+        testWrapper.checkFormsReRender('editorOptions: { value: "test value" }');
 
         testWrapper.setItemOption('dataField2', 'editorOptions', { });
         testWrapper.checkLayoutManagerRendering([false, false], 'editorOptions: { }');
         testWrapper.checkFormsReRender('editorOptions: { }');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[\'dataField2\']}] }, change items of group)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:["dataField2"]}] }, change items of group)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1026,7 +1025,7 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkEditorInstanceRemoved('dataField12');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[\'dataField2\']}] }, change items of group, change visible of dataField12)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:["dataField2"]}] }, change items of group, change visible of dataField12)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1058,7 +1057,7 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkItemElement('.test-item12', false, 'item element of the dataField12');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[{itemType: \'group\', items: [\'dataField2\']}]}] }, change visible of first group)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:[{itemType: "group", items: ["dataField2"]}]}] }, change visible of first group)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1095,7 +1094,7 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkItemElement('.test-item', true, 'simple item element');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[{itemType: \'group\', items: [\'dataField2\']}]}] }, change items of first group)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:[{itemType: "group", items: ["dataField2"]}]}] }, change items of first group)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1147,7 +1146,7 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkEditorInstanceRemoved('dataField12');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[{itemType: \'group\', items: [\'dataField2\']}]}] }, change visible of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:[{itemType: "group", items: ["dataField2"]}]}] }, change visible of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1179,7 +1178,7 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkItemElement('.test-item', true);
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[{itemType: \'group\', items: [\'dataField2\']}]}] }, change items of second group, change visible of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:[{itemType: "group", items: ["dataField2"]}]}] }, change items of second group, change visible of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1216,7 +1215,7 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkItemElement('.test-item11', false, 'item element of the dataField11');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[{itemType: \'group\', items: [\'dataField2\']}]}] }, change editorOptions of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:[{itemType: "group", items: ["dataField2"]}]}] }, change editorOptions of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1236,15 +1235,15 @@ module('Group item. Use the itemOption method', function() {
         });
 
         testWrapper.setItemOption('dataField2', 'editorOptions', { value: 'test value' });
-        testWrapper.checkLayoutManagerRendering([false, false, false], 'editorOptions: { value: \'test value\' }');
-        testWrapper.checkFormsReRender('editorOptions: { value: \'test value\' }');
+        testWrapper.checkLayoutManagerRendering([false, false, false], 'editorOptions: { value: "test value" }');
+        testWrapper.checkFormsReRender('editorOptions: { value: "test value" }');
 
         testWrapper.setItemOption('dataField2', 'editorOptions', { });
         testWrapper.checkLayoutManagerRendering([false, false, false], 'editorOptions: { }');
         testWrapper.checkFormsReRender('editorOptions: { }');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[{itemType: \'group\', items: [\'dataField2\']}]}] }, change items of last group)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:[{itemType: "group", items: ["dataField2"]}]}] }, change items of last group)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1284,7 +1283,7 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkEditorInstanceRemoved('dataField12');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[\'dataField2\']}, {itemType: \'group\', items:[\'dataField3\']}] }, change visible of dataField2 and dataField3)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:["dataField2"]}, {itemType: "group", items:["dataField3"]}] }, change visible of dataField2 and dataField3)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1332,7 +1331,7 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkItemElement('.test-item3', true);
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[\'dataField2\']}, {itemType: \'group\', items:[\'dataField3\']}] }, change items in the both groups)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:["dataField2"]}, {itemType: "group", items:["dataField3"]}] }, change items in the both groups)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1378,7 +1377,7 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkEditorInstanceRemoved('dataField3');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items:[\'dataField2\']}, {itemType: \'group\', items:[\'dataField3\']}] }, change options of dataField2 and dataField3)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items:["dataField2"]}, {itemType: "group", items:["dataField3"]}] }, change options of dataField2 and dataField3)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1424,7 +1423,7 @@ module('Group item. Use the itemOption method', function() {
         testWrapper.checkHelpText('.test-item3', 'Test help text 3');
     });
 
-    test('Set { items: [{itemType: \'group\', items:[{itemType: \'group\', items:[\'dataField2\']}, \'dataField1\']}] }, change required of dataField1 and change visible of dataField2)', function() {
+    test('Set { items: [{itemType: "group", items:[{itemType: "group", items:["dataField2"]}, "dataField1"]}] }, change required of dataField1 and change visible of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             items: [
                 {
@@ -1540,7 +1539,7 @@ module('Group item. Use the itemOption method', function() {
 });
 
 module('Tabbed item. Use the itemOption method', function() {
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'tabbed\', tabs:[{items: \'dataField2\'}]}] }, change visible of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "tabbed", tabs:[{items: "dataField2"}]}] }, change visible of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1572,7 +1571,7 @@ module('Tabbed item. Use the itemOption method', function() {
         testWrapper.checkItemElement('.test-item', true);
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {temType: \'tabbed\', tabs:[{items: \'dataField2\'}]}] }, change items of tab)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {temType: "tabbed", tabs:[{items: "dataField2"}]}] }, change items of tab)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1612,7 +1611,7 @@ module('Tabbed item. Use the itemOption method', function() {
         testWrapper.checkEditorInstanceRemoved('dataField12');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'tabbed\', tabs:[{items: \'dataField2\'}]}] }, change editorOptions of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "tabbed", tabs:[{items: "dataField2"}]}] }, change editorOptions of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1632,15 +1631,15 @@ module('Tabbed item. Use the itemOption method', function() {
         });
 
         testWrapper.setItemOption('tab1.dataField2', 'editorOptions', { value: 'test value' });
-        testWrapper.checkLayoutManagerRendering([false, false], 'editorOptions: { value: \'test value\' }');
-        testWrapper.checkFormsReRender('editorOptions: { value: \'test value\' }');
+        testWrapper.checkLayoutManagerRendering([false, false], 'editorOptions: { value: "test value" }');
+        testWrapper.checkFormsReRender('editorOptions: { value: "test value" }');
 
         testWrapper.setItemOption('tab1.dataField2', 'editorOptions', { });
         testWrapper.checkLayoutManagerRendering([false, false], 'editorOptions: { }');
         testWrapper.checkFormsReRender('editorOptions: { }');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'tabbed\', tabs:[{items: [{itemType: \'group\', items:[\'dataField2\']}]}]}] }, change visible of dataField2)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "tabbed", tabs:[{items: [{itemType: "group", items:["dataField2"]}]}]}] }, change visible of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1676,7 +1675,7 @@ module('Tabbed item. Use the itemOption method', function() {
         testWrapper.checkItemElement('.test-item', true);
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'tabbed\', tabs:[{items: [{itemType: \'group\', items:[\'dataField2\']}]}]}] }, change items of group)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "tabbed", tabs:[{items: [{itemType: "group", items:["dataField2"]}]}]}] }, change items of group)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1720,7 +1719,7 @@ module('Tabbed item. Use the itemOption method', function() {
         testWrapper.checkEditorInstanceRemoved('dataField12');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'tabbed\', tabs:[{items: [{itemType: \'group\', items:[\'dataField2\']}]}]}] }, change editorOptions of dataField2")', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "tabbed", tabs:[{items: [{itemType: "group", items:["dataField2"]}]}]}] }, change editorOptions of dataField2")', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1744,15 +1743,15 @@ module('Tabbed item. Use the itemOption method', function() {
         });
 
         testWrapper.setItemOption('tab1.group1.dataField2', 'editorOptions', { value: 'test value' });
-        testWrapper.checkLayoutManagerRendering([false, false, false], 'editorOptions: { value: \'test value\' }');
-        testWrapper.checkFormsReRender('editorOptions: { value: \'test value\' }');
+        testWrapper.checkLayoutManagerRendering([false, false, false], 'editorOptions: { value: "test value" }');
+        testWrapper.checkFormsReRender('editorOptions: { value: "test value" }');
 
         testWrapper.setItemOption('tab1.group1.dataField2', 'editorOptions', { });
         testWrapper.checkLayoutManagerRendering([false, false, false], 'editorOptions: { }');
         testWrapper.checkFormsReRender('editorOptions: { }');
     });
 
-    test('Set { formData: {\'DataField1\', \'DataField2\'}, items: [\'dataField1\', {itemType: \'group\', items: [{itemType: \'tabbed\', tabs:[{items: [\'dataField2\']}]}] }, change visible of tabbed item)', function() {
+    test('Set { formData: {"DataField1", "DataField2"}, items: ["dataField1", {itemType: "group", items: [{itemType: "tabbed", tabs:[{items: ["dataField2"]}]}] }, change visible of tabbed item)', function() {
         const testWrapper = new FormTestWrapper({
             formData: {
                 dataField1: 'DataField1',
@@ -1788,7 +1787,7 @@ module('Tabbed item. Use the itemOption method', function() {
         testWrapper.checkTabTitle('.test-tab', 'Test Title');
     });
 
-    test('Set { items: [{itemType: \'tabbed\', tabs:[{items:[{itemType: \'group\', items:[\'dataField2\']}, \'dataField1\']}]}] }, change required of dataField1 and change visible of dataField2)', function() {
+    test('Set { items: [{itemType: "tabbed", tabs:[{items:[{itemType: "group", items:["dataField2"]}, "dataField1"]}]}] }, change required of dataField1 and change visible of dataField2)', function() {
         const testWrapper = new FormTestWrapper({
             items: [
                 {
@@ -2056,19 +2055,19 @@ module('Align labels', () => {
             }]
         });
 
-        testWrapper.setItemOption('title1.group1.description', 'visible', false);
+        testWrapper.setItemOption('title1.group2.description', 'visible', false);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Home Address' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Last Name' });
 
-        testWrapper.setItemOption('title1.group1.homeAddress', 'visible', false);
+        testWrapper.setItemOption('title1.group2.homeAddress', 'visible', false);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Name' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Last Name' });
 
-        testWrapper.setItemOption('title1.group1.description', 'visible', true);
+        testWrapper.setItemOption('title1.group2.description', 'visible', true);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Description' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Last Name' });
 
-        testWrapper.setItemOption('title1.group1.homeAddress', 'visible', true);
+        testWrapper.setItemOption('title1.group2.homeAddress', 'visible', true);
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 0, etalonLabelText: 'Description' });
         testWrapper.checkLabelsWidthInGroup({ columnIndex: 0, groupColumnIndex: 1, etalonLabelText: 'Home Address' });
     });

@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -24,19 +23,30 @@ import { CircularGaugeElementOrientation, CircularGaugeLabelOverlap } from 'deve
 import { AxisScale } from 'devextreme/viz/range_selector';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiBreakComponent } from './break-dxi';
 
+import {
+    PROPERTY_TOKEN_breaks,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-scale',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_breaks)
+    set _breaksContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('breaks', value);
+    }
+    
     @Input()
     get allowDecimals(): boolean | undefined {
         return this._getOption('allowDecimals');
@@ -147,14 +157,6 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
     set verticalOrientation(value: VerticalAlignment) {
         this._setOption('verticalOrientation', value);
-    }
-
-    @Input()
-    get aggregateByCategory(): boolean {
-        return this._getOption('aggregateByCategory');
-    }
-    set aggregateByCategory(value: boolean) {
-        this._setOption('aggregateByCategory', value);
     }
 
     @Input()
@@ -331,14 +333,6 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
 
-    @ContentChildren(forwardRef(() => DxiBreakComponent))
-    get breaksChildren(): QueryList<DxiBreakComponent> {
-        return this._getOption('breaks');
-    }
-    set breaksChildren(value) {
-        this.setChildren('breaks', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -359,7 +353,7 @@ export class DxoScaleComponent extends NestedOption implements OnDestroy, OnInit
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoScaleComponent
   ],
   exports: [

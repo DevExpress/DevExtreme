@@ -531,6 +531,12 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
                 if(columnIndex !== undefined) {
                     if(arguments.length === 1) {
+                        if(typeUtils.isString(columnIndex) && columnIndex.indexOf('groupIndex:') === 0) {
+                            const groupIndex = columnIndex.substr('groupIndex:'.length);
+
+                            return this.getGroupColumns()[groupIndex];
+                        }
+
                         return columns[columnIndex];
                     }
                     if(typeUtils.isString(columnIndex)) {
@@ -667,7 +673,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getHeaderContentAlignment: function(columnAlignment) {
                 return columnAlignment;
-            }
+            },
+
+            isCustomCommandColumn: commonUtils.noop,
         };
     };
 
@@ -944,6 +952,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
         that.NAME = 'dx' + nameWidget;
 
+        that.element = () => $('#container');
+
         that.focus = commonUtils.noop;
 
         that.setAria = function(name, value, $target) {
@@ -1046,7 +1056,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         if(options) {
             if(options.initDefaultOptions) {
                 $.each(modules, function() {
-                    if($.isFunction(this.defaultOptions)) {
+                    if(typeUtils.isFunction(this.defaultOptions)) {
                         that.option(this.defaultOptions());
                     }
                 });

@@ -1,5 +1,7 @@
-import { isFluent } from '@js/ui/themes';
+import { current, isFluent } from '@js/ui/themes';
+import type { Item as ToolbarItem } from '@js/ui/toolbar';
 
+import type { NormalizedView } from '../utils/options/types';
 import type { SchedulerHeader } from './m_header';
 import {
   formatViews,
@@ -7,97 +9,108 @@ import {
   isOneView,
 } from './m_utils';
 
-const VIEW_SWITCHER_CLASS = 'dx-scheduler-view-switcher';
-const VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS = 'dx-scheduler-view-switcher-dropdown-button';
-const VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS = 'dx-scheduler-view-switcher-dropdown-button-content';
-
-const getViewsAndSelectedView = (header: SchedulerHeader) => {
-  const views = formatViews(header.views);
-  let selectedView = getViewName(header.currentView);
-
-  const isSelectedViewInViews = views.some((view) => view.name === selectedView);
-
-  selectedView = isSelectedViewInViews ? selectedView : undefined;
-
-  return { selectedView, views };
+const ClASS = {
+  container: 'dx-scheduler-view-switcher',
+  dropDownButton: 'dx-scheduler-view-switcher-dropdown-button',
+  dropDownButtonContent: 'dx-scheduler-view-switcher-dropdown-button-content',
 };
 
-export const getTabViewSwitcher = (header: SchedulerHeader, item) => {
+const getViewsAndSelectedView = (header: SchedulerHeader):
+{
+  selectedView: string | undefined;
+  views: NormalizedView[];
+} => {
+  const { views, currentView } = header.option();
+  const formattedViews = formatViews(views);
+  const selectedView = getViewName(currentView);
+  const isSelectedViewInViews = formattedViews.some((view) => view.name === selectedView);
+
+  return {
+    selectedView: isSelectedViewInViews ? selectedView : undefined,
+    views: formattedViews,
+  };
+};
+
+export const getTabViewSwitcher = (
+  header: SchedulerHeader,
+  item: ToolbarItem,
+): ToolbarItem => {
   const { selectedView, views } = getViewsAndSelectedView(header);
 
-  // @ts-expect-error
-  const stylingMode = isFluent() ? 'outlined' : 'contained';
+  const stylingMode = isFluent(current()) ? 'outlined' : 'contained';
 
   return {
     widget: 'dxButtonGroup',
     locateInMenu: 'auto',
-    cssClass: VIEW_SWITCHER_CLASS,
+    location: 'after',
+    name: 'viewSwitcher',
+    cssClass: ClASS.container,
     options: {
       items: views,
       keyExpr: 'name',
       selectedItemKeys: [selectedView],
       stylingMode,
       onItemClick: (e) => {
-        const { view } = e.itemData;
-
-        header._updateCurrentView(view);
+        header._updateCurrentView(e.itemData);
       },
       onContentReady: (e) => {
         const viewSwitcher = e.component;
 
         header._addEvent('currentView', (view) => {
-          viewSwitcher.option('selectedItemKeys', [getViewName(view)]);
+          viewSwitcher.option('selectedItemKeys', [getViewName(view as NormalizedView)]);
         });
       },
     },
     ...item,
-  };
+  } as ToolbarItem;
 };
 
-export const getDropDownViewSwitcher = (header: SchedulerHeader, item) => {
+export const getDropDownViewSwitcher = (
+  header: SchedulerHeader,
+  item: ToolbarItem,
+): ToolbarItem => {
   const { selectedView, views } = getViewsAndSelectedView(header);
-
-  const oneView = isOneView(views, selectedView);
+  const isOnlyOneView = isOneView(views, selectedView);
 
   return {
     widget: 'dxDropDownButton',
     locateInMenu: 'never',
-    cssClass: VIEW_SWITCHER_CLASS,
+    location: 'after',
+    name: 'viewSwitcher',
+    cssClass: ClASS.container,
     options: {
       items: views,
       useSelectMode: true,
       keyExpr: 'name',
       selectedItemKey: selectedView,
       displayExpr: 'text',
-      showArrowIcon: !oneView,
+      showArrowIcon: !isOnlyOneView,
       elementAttr: {
-        class: VIEW_SWITCHER_DROP_DOWN_BUTTON_CLASS,
+        class: ClASS.dropDownButton,
       },
       onItemClick: (e) => {
-        const { view } = e.itemData;
-
-        header._updateCurrentView(view);
+        header._updateCurrentView(e.itemData);
       },
       onContentReady: (e) => {
         const viewSwitcher = e.component;
 
         header._addEvent('currentView', (view) => {
-          const currentViews = formatViews(header.views);
+          const { views: currentViews } = header.option();
 
-          viewSwitcher.option('showArrowIcon', !isOneView(currentViews, view));
-          viewSwitcher.option('selectedItemKey', getViewName(view));
+          viewSwitcher.option('showArrowIcon', !isOneView(currentViews, (view as NormalizedView).name));
+          viewSwitcher.option('selectedItemKey', getViewName(view as NormalizedView));
         });
       },
       dropDownOptions: {
         onShowing: (e) => {
-          if (oneView) {
+          if (isOnlyOneView) {
             e.cancel = true;
           }
         },
         width: 'max-content',
-        _wrapperClassExternal: VIEW_SWITCHER_DROP_DOWN_BUTTON_CONTENT_CLASS,
+        _wrapperClassExternal: ClASS.dropDownButtonContent,
       },
     },
     ...item,
-  };
+  } as ToolbarItem;
 };

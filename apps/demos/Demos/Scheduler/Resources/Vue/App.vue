@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxScheduler, { DxResource, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
-import DxRadioGroup from 'devextreme-vue/radio-group';
+import DxRadioGroup, { type DxRadioGroupTypes } from 'devextreme-vue/radio-group';
 import {
   resourcesList, data, priorities, assignees, rooms,
 } from './data.ts';
@@ -57,7 +57,7 @@ const currentResource = ref('Assignee');
 const dataSource = data;
 const resources = resourcesList;
 
-function onRadioGroupValueChanged(e) {
+function onRadioGroupValueChanged(e: DxRadioGroupTypes.ValueChangedEvent) {
   currentResource.value = e.value;
 }
 </script>

@@ -18,9 +18,9 @@ import {
 import {
     Cancelable,
     EventInfo,
-} from '../common/core/events';
-
-import { DxEvent } from '../events';
+    DxEvent,
+    PointerInteractionEvent,
+} from '../events';
 
 import Widget, {
     WidgetOptions,
@@ -39,14 +39,6 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @type object
      */
     animation?: dxOverlayAnimation;
-    /**
-     * @docid
-     * @deprecated dxOverlayOptions.hideOnOutsideClick
-     * @default false
-     * @type_function_param1 event:event
-     * @public
-     */
-    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
      * @default "content"
@@ -74,7 +66,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @type_function_param1 event:event
      * @public
      */
-    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    hideOnOutsideClick?: boolean | ((event: DxEvent<PointerInteractionEvent>) => boolean);
     /**
      * @docid
      * @default false
@@ -86,31 +78,31 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default '80vh'
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * @docid
      * @default null
      * @public
      */
-    maxHeight?: number | string | (() => number | string);
+    maxHeight?: number | string;
     /**
      * @docid
      * @default null
      * @public
      */
-    maxWidth?: number | string | (() => number | string);
+    maxWidth?: number | string;
     /**
      * @docid
      * @default null
      * @public
      */
-    minHeight?: number | string | (() => number | string);
+    minHeight?: number | string;
     /**
      * @docid
      * @default null
      * @public
      */
-    minWidth?: number | string | (() => number | string);
+    minWidth?: number | string;
     /**
      * @docid
      * @default null
@@ -177,7 +169,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @default '80vw'
      * @public
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
     /**
      * @docid
      * @default {}

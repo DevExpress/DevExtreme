@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { User, Message, MessageEnteredEvent } from 'devextreme/ui/chat';
+import { DxChatTypes } from 'devextreme-angular/ui/chat';
 
 @Injectable({
   providedIn: 'root',
@@ -8,12 +8,12 @@ import { User, Message, MessageEnteredEvent } from 'devextreme/ui/chat';
 export class AppService {
   date: Date;
 
-  currentUser: User = {
+  currentUser: DxChatTypes.User = {
     id: 'c94c0e76-fb49-4b9b-8f07-9f93ed93b4f3',
     name: 'John Doe',
   };
 
-  supportAgent: User = {
+  supportAgent: DxChatTypes.User = {
     id: 'd16d1a4c-5c67-4e20-b70e-2991c22747c3',
     name: 'Support Agent',
     avatarUrl: '../../../../images/petersmith.png',
@@ -27,9 +27,9 @@ export class AppService {
 
   dayHeaderLabel = { 'aria-label': 'Day Header Format' };
 
-  messages: Message[] = [];
+  messages: DxChatTypes.Message[] = [];
 
-  messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject([]);
+  messagesSubject: BehaviorSubject<DxChatTypes.Message[]> = new BehaviorSubject([]);
 
   constructor() {
     this.date = new Date();
@@ -71,11 +71,11 @@ export class AppService {
     this.messagesSubject.next(this.messages);
   }
 
-  get messages$(): Observable<Message[]> {
+  get messages$(): Observable<DxChatTypes.Message[]> {
     return this.messagesSubject.asObservable();
   }
 
-  getUsers(): User[] {
+  getUsers(): DxChatTypes.User[] {
     return [this.currentUser, this.supportAgent];
   }
 
@@ -83,7 +83,7 @@ export class AppService {
     return date.getTime() + offsetMinutes * 60000;
   }
 
-  onMessageEntered(event: MessageEnteredEvent) {
+  onMessageEntered(event: DxChatTypes.MessageEnteredEvent) {
     this.messages = [...this.messages, event.message];
     this.messagesSubject.next(this.messages);
   }

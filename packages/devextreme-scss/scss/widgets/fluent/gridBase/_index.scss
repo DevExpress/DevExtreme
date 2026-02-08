@@ -4,7 +4,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/icons" as *;
+@use "../../base/icon_fonts" as *;
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
 @use "../textEditor/sizes" as *;
@@ -92,9 +92,11 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       }
 
       .dx-texteditor {
-        .dx-texteditor-input,
-        .dx-placeholder::before {
-          padding-left: $fluent-grid-base-texteditor-input-padding;
+        .dx-texteditor-container {
+          .dx-texteditor-input,
+          .dx-placeholder::before {
+            padding-left: $fluent-grid-base-texteditor-input-padding;
+          }
         }
       }
     }
@@ -480,11 +482,11 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         font-size: $fluent-grid-base-cell-font-size;
         height: $fluent-grid-base-cell-height;
         line-height: $fluent-grid-base-cell-height;
-        padding-right: $fluent-grid-base-cell-horizontal-padding;
-        padding-left: $fluent-grid-base-cell-horizontal-padding;
-        padding-top: 0;
-        padding-bottom: 0;
         margin-top: 0;
+      }
+
+      &:not(.dx-tagbox):not(.dx-colorbox) .dx-texteditor-input {
+        padding: 0 $fluent-grid-base-cell-horizontal-padding;
       }
 
       .dx-placeholder::before {
@@ -733,6 +735,14 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
           }
         }
       }
+
+      .dx-row {
+        &.dx-header-row {
+          > td {
+            border-right: 1px solid $fluent-grid-base-border-color;
+          }
+        }
+      }
     }
 
     &.dx-header-multi-row:not(.dx-#{$widget-name}-sticky-columns) {
@@ -741,7 +751,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
           .dx-row {
             &.dx-header-row {
               > td {
-                border-right: 1px solid $fluent-grid-base-border-color;
                 border-left: 1px solid $fluent-grid-base-border-color;
 
                 &:first-child {
@@ -945,6 +954,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       > .dx-master-detail-cell {
         padding: $grid-masterdetail-padding;
       }
+
       > .dx-#{$widget-name}-group-space,
       .dx-master-detail-cell:not(.dx-row-lines) {
         border-top: $datagrid-border;
@@ -997,7 +1007,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-row-removed:not(.dx-row-lines) > td {
       border-top: 1px solid $datagrid-hover-bg;
-      border-bottom: 1px solid $datagrid-hover-bg;
     }
 
     .dx-adaptive-detail-row {
@@ -1039,13 +1048,16 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       &.dx-data-row {
         & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid),
         & .dx-command-edit .dx-link {
-          background-color: $datagrid-row-focused-bg;
           color: $datagrid-row-focused-color;
 
           & .dx-#{$widget-name}-group-opened,
           & .dx-#{$widget-name}-group-closed {
             color: $datagrid-row-focused-color;
           }
+        }
+
+        & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid) {
+          background-color: $datagrid-row-focused-bg;
         }
       }
 
@@ -1139,7 +1151,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     }
 
     &.dx-#{$widget-name}-sticky-columns {
-      .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+      .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
         padding-top: $fluent-grid-base-cell-vertical-padding + 1px;
       }
 
@@ -1163,8 +1175,17 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
         }
       }
 
-      .dx-row.dx-row-lines.dx-edit-row > td {
+      .dx-row.dx-row-lines.dx-edit-row > td,
+      .dx-row-removed.dx-row-lines > td {
         border-top-width: 0;
+      }
+
+      .dx-master-detail-row > .dx-master-detail-cell {
+        padding: 0;
+
+        > .dx-#{$widget-name}-master-detail-container {
+          padding: $grid-masterdetail-padding;
+        }
       }
     }
   }

@@ -25,7 +25,7 @@
         "{projectRoot}/helpers/**/*",
         "{projectRoot}/tests/**/*",
         "{projectRoot}/.testcaferc.json",
-        "{projectRoot}/runner.js",
+        "{projectRoot}/runner.ts",
         "{projectRoot}/tsconfig.json"
       ],
       "cache": true

@@ -12,7 +12,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -22,20 +21,36 @@ import {
 import { dxFilterBuilderCustomOperation, dxFilterBuilderField, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiTreeListCustomOperationComponent } from './custom-operation-dxi';
-import { DxiTreeListFieldComponent } from './field-dxi';
 
+import {
+    PROPERTY_TOKEN_customOperations,
+    PROPERTY_TOKEN_fields,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-tree-list-filter-builder',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoTreeListFilterBuilderComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_customOperations)
+    set _customOperationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('customOperations', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_fields)
+    set _fieldsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('fields', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -125,10 +140,10 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -245,10 +260,10 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
     }
 
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -264,26 +279,9 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
     }
 
 
-    @ContentChildren(forwardRef(() => DxiTreeListCustomOperationComponent))
-    get customOperationsChildren(): QueryList<DxiTreeListCustomOperationComponent> {
-        return this._getOption('customOperations');
-    }
-    set customOperationsChildren(value) {
-        this.setChildren('customOperations', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiTreeListFieldComponent))
-    get fieldsChildren(): QueryList<DxiTreeListFieldComponent> {
-        return this._getOption('fields');
-    }
-    set fieldsChildren(value) {
-        this.setChildren('fields', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);
@@ -305,7 +303,7 @@ export class DxoTreeListFilterBuilderComponent extends NestedOption implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListFilterBuilderComponent
   ],
   exports: [

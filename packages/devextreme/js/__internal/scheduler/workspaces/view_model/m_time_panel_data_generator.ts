@@ -5,6 +5,8 @@ import {
   getDisplayedRowCount, getIsGroupedAllDayPanel, getKeyByGroup, weekUtils,
 } from '@ts/scheduler/r1/utils/index';
 
+import type { ViewDataProviderExtendedOptions } from './m_types';
+
 const toMs = dateUtils.dateToMilliseconds;
 
 interface TimePanelGeneratorCellData {
@@ -25,7 +27,7 @@ export class TimePanelDataGenerator {
   constructor(public _viewDataGenerator) {
   }
 
-  getCompleteTimePanelMap(options, completeViewDataMap) {
+  getCompleteTimePanelMap(options: ViewDataProviderExtendedOptions, completeViewDataMap) {
     const {
       startViewDate,
       cellDuration,
@@ -166,7 +168,7 @@ export class TimePanelDataGenerator {
       if (currentGroupIndex !== previousGroupIndex) {
         previousGroupedData.push({
           dateTable: [],
-          isGroupedAllDayPanel: getIsGroupedAllDayPanel(!!cellData.allDay, isVerticalGrouping),
+          isGroupedAllDayPanel: getIsGroupedAllDayPanel(Boolean(cellData.allDay), isVerticalGrouping),
           groupIndex: currentGroupIndex,
           key: getKeyByGroup(currentGroupIndex, isVerticalGrouping),
         });

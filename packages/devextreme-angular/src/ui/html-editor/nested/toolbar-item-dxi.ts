@@ -10,40 +10,69 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
 
 
-import { HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
+import { AICommand, AICommandName, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_commands,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-html-editor-toolbar-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiHtmlEditorToolbarItemComponent,
+        }
+    ]
 })
 export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+    
     @Input()
     get acceptedValues(): Array<boolean | number | string> {
         return this._getOption('acceptedValues');
     }
     set acceptedValues(value: Array<boolean | number | string>) {
         this._setOption('acceptedValues', value);
+    }
+
+    @Input()
+    get commands(): Array<AICommand | AICommandName> {
+        return this._getOption('commands');
+    }
+    set commands(value: Array<AICommand | AICommandName>) {
+        this._setOption('commands', value);
     }
 
     @Input()
@@ -60,22 +89,6 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
     }
     set disabled(value: boolean) {
         this._setOption('disabled', value);
-    }
-
-    @Input()
-    get formatName(): HtmlEditorPredefinedToolbarItem | string {
-        return this._getOption('formatName');
-    }
-    set formatName(value: HtmlEditorPredefinedToolbarItem | string) {
-        this._setOption('formatName', value);
-    }
-
-    @Input()
-    get formatValues(): Array<boolean | number | string> {
-        return this._getOption('formatValues');
-    }
-    set formatValues(value: Array<boolean | number | string>) {
-        this._setOption('formatValues', value);
     }
 
     @Input()
@@ -111,10 +124,10 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
     }
 
     @Input()
-    get name(): HtmlEditorPredefinedToolbarItem | string {
+    get name(): HtmlEditorPredefinedToolbarItem | string | string {
         return this._getOption('name');
     }
-    set name(value: HtmlEditorPredefinedToolbarItem | string) {
+    set name(value: HtmlEditorPredefinedToolbarItem | string | string) {
         this._setOption('name', value);
     }
 
@@ -200,7 +213,7 @@ export class DxiHtmlEditorToolbarItemComponent extends CollectionNestedOption im
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiHtmlEditorToolbarItemComponent
   ],
   exports: [

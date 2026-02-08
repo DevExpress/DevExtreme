@@ -21,20 +21,31 @@ import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_mentions } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-html-editor-mention',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_mentions,
+           useExisting: DxiHtmlEditorMentionComponent,
+        }
+    ]
 })
 export class DxiHtmlEditorMentionComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -144,7 +155,7 @@ export class DxiHtmlEditorMentionComponent extends CollectionNestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiHtmlEditorMentionComponent
   ],
   exports: [

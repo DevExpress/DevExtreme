@@ -62,6 +62,8 @@ export default errorUtils({
 
   E0121: 'The \'customItem\' parameter of the \'onCustomItemCreating\' function is empty or contains invalid data. Assign a custom object or a Promise that is resolved after the item is created.',
 
+  E0122: 'AIIntegration: The sendRequest method is missing.',
+
   W0000: '\'{0}\' is deprecated in {1}. {2}',
 
   W0001: '{0} - \'{1}\' option is deprecated in {2}. {3}',
@@ -78,7 +80,7 @@ export default errorUtils({
 
   W0007: '\'{0}\' Globalize culture is not defined',
 
-  W0008: 'Invalid view name: \'{0}\'',
+  W0008: 'Invalid view type: {0}',
 
   W0009: 'Invalid time zone name: \'{0}\'',
 
@@ -126,4 +128,10 @@ export default errorUtils({
   W0023: 'DevExtreme: the following \'devextreme\' package version does not match versions of other DevExpress products used in this application:\n\n'
         + '{0}\n\n'
         + 'Interoperability between different versions of the products listed herein cannot be guaranteed.\n\n',
+
+  W0024: 'DevExtreme: Use Your DevExtreme License Key - Not Your DevExpress .NET License Key\n\n'
+        + 'Invalid/incorrect license key. You used your DevExpress .NET license key instead of your DevExtreme (React, Angular, Vue, JS) license key. Please copy your DevExtreme license key and try again. \n\n'
+        + 'Go to https://www.devexpress.com/ClientCenter/DownloadManager (navigate to the DevExtreme Subscription section) to obtain a valid DevExtreme license key. To validate your license, specify the correct key within GlobalConfig.\n\n'
+        + 'For detailed license/registration information, visit https://js.devexpress.com/Documentation/Licensing/.\n\n'
+        + 'If you have a valid license and the issue persists, submit a support ticket via the DevExpress Support Center. We will be happy to follow-up: https://supportcenter.devexpress.com/ticket/create.\n\n',
 });

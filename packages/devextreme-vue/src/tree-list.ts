@@ -11,12 +11,18 @@ import  dxPopup from "devextreme/ui/popup";
 import  dxSortable from "devextreme/ui/sortable";
 import  dxDraggable from "devextreme/ui/draggable";
 import {
+ ColumnChooser,
  ColumnResizeMode,
+ FilterPanel,
+ HeaderFilter,
  Pager,
+ SearchPanel,
+ Sorting,
  DataChangeType,
  FilterOperation,
  FilterType,
  FixedPosition,
+ ColumnHeaderFilter,
  SelectedFilterOperation,
  ColumnChooserMode,
  ColumnChooserSearchConfig,
@@ -28,11 +34,13 @@ import {
  GridsEditMode,
  GridsEditRefreshMode,
  StartEditAction,
- GridBase,
+ FilterPanelTexts,
  ApplyFilterMode,
+ HeaderFilterTexts,
  EnterKeyAction,
  EnterKeyDirection,
  PagerPageSize,
+ GridBase,
  DataRenderMode,
  StateStoreType,
 } from "devextreme/common/grids";
@@ -318,7 +326,7 @@ const componentConfig = {
     cacheEnabled: Boolean,
     cellHintEnabled: Boolean,
     columnAutoWidth: Boolean,
-    columnChooser: Object as PropType<Record<string, any>>,
+    columnChooser: Object as PropType<ColumnChooser | Record<string, any>>,
     columnFixing: Object as PropType<Record<string, any>>,
     columnHidingEnabled: Boolean,
     columnMinWidth: Number,
@@ -338,7 +346,7 @@ const componentConfig = {
     filterBuilder: Object as PropType<dxFilterBuilderOptions | Record<string, any>>,
     filterBuilderPopup: Object as PropType<dxPopupOptions<any> | Record<string, any>>,
     filterMode: String as PropType<TreeListFilterMode>,
-    filterPanel: Object as PropType<Record<string, any>>,
+    filterPanel: Object as PropType<FilterPanel>,
     filterRow: Object as PropType<Record<string, any>>,
     filterSyncEnabled: [Boolean, String] as PropType<boolean | Mode>,
     filterValue: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
@@ -347,8 +355,8 @@ const componentConfig = {
     focusedRowIndex: Number,
     focusedRowKey: {},
     hasItemsExpr: [Function, String] as PropType<((() => void)) | string>,
-    headerFilter: Object as PropType<Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    headerFilter: Object as PropType<HeaderFilter | Record<string, any>>,
+    height: [Number, String],
     highlightChanges: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
@@ -409,21 +417,21 @@ const componentConfig = {
     rowDragging: Object as PropType<Record<string, any>>,
     rtlEnabled: Boolean,
     scrolling: Object as PropType<Record<string, any>>,
-    searchPanel: Object as PropType<Record<string, any>>,
+    searchPanel: Object as PropType<SearchPanel | Record<string, any>>,
     selectedRowKeys: Array as PropType<Array<any>>,
     selection: Object as PropType<Record<string, any>>,
     showBorders: Boolean,
     showColumnHeaders: Boolean,
     showColumnLines: Boolean,
     showRowLines: Boolean,
-    sorting: Object as PropType<Record<string, any>>,
+    sorting: Object as PropType<Sorting | Record<string, any>>,
     stateStoring: Object as PropType<Record<string, any>>,
     syncLookupFilterValues: Boolean,
     tabIndex: Number,
     toolbar: Object as PropType<dxTreeListToolbar | Record<string, any>>,
     twoWayBindingEnabled: Boolean,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     wordWrapEnabled: Boolean
   },
   emits: {
@@ -625,7 +633,7 @@ const DxAsyncRuleConfig = {
     message: String,
     reevaluate: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => any)>
   }
 };
 
@@ -874,7 +882,7 @@ const DxColumnConfig = {
     format: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     formItem: Object as PropType<dxFormSimpleItem | Record<string, any>>,
     headerCellTemplate: {},
-    headerFilter: Object as PropType<Record<string, any>>,
+    headerFilter: Object as PropType<ColumnHeaderFilter | Record<string, any>>,
     hidingPriority: Number,
     isBand: Boolean,
     lookup: Object as PropType<Record<string, any>>,
@@ -1245,7 +1253,7 @@ const DxCustomRuleConfig = {
     message: String,
     reevaluate: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)>
   }
 };
 
@@ -1452,7 +1460,6 @@ const DxFilterBuilderConfig = {
     "update:accessKey": null,
     "update:activeStateEnabled": null,
     "update:allowHierarchicalFields": null,
-    "update:bindingOptions": null,
     "update:customOperations": null,
     "update:disabled": null,
     "update:elementAttr": null,
@@ -1482,7 +1489,6 @@ const DxFilterBuilderConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     allowHierarchicalFields: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     customOperations: Array as PropType<Array<dxFilterBuilderCustomOperation>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
@@ -1491,7 +1497,7 @@ const DxFilterBuilderConfig = {
     focusStateEnabled: Boolean,
     groupOperationDescriptions: Object as PropType<Record<string, any>>,
     groupOperations: Array as PropType<Array<GroupOperation>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     maxGroupLevel: Number,
@@ -1506,7 +1512,7 @@ const DxFilterBuilderConfig = {
     tabIndex: Number,
     value: [Array, Function, String] as PropType<Array<any> | ((() => any)) | string>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   }
 };
 
@@ -1528,8 +1534,6 @@ const DxFilterBuilderPopupConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:animation": null,
-    "update:bindingOptions": null,
-    "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,
@@ -1580,8 +1584,6 @@ const DxFilterBuilderPopupConfig = {
   props: {
     accessKey: String,
     animation: Object as PropType<Record<string, any>>,
-    bindingOptions: Object as PropType<Record<string, any>>,
-    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -1592,15 +1594,15 @@ const DxFilterBuilderPopupConfig = {
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    maxWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    minHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    minWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    maxHeight: [Number, String],
+    maxWidth: [Number, String],
+    minHeight: [Number, String],
+    minWidth: [Number, String],
     onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
     onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
     onHidden: Function as PropType<((e: EventInfo<any>) => void)>,
@@ -1626,7 +1628,7 @@ const DxFilterBuilderPopupConfig = {
     titleTemplate: {},
     toolbarItems: Array as PropType<Array<dxPopupToolbarItem>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     wrapperAttr: {}
   }
 };
@@ -1693,9 +1695,9 @@ const DxFilterPanelConfig = {
     "update:visible": null,
   },
   props: {
-    customizeText: Function as PropType<((e: { component: GridBase, filterValue: Record<string, any>, text: string }) => string)>,
+    customizeText: Function as PropType<((e: { component: FilterPanel, filterValue: Record<string, any>, text: string }) => string)>,
     filterEnabled: Boolean,
-    texts: Object as PropType<Record<string, any>>,
+    texts: Object as PropType<FilterPanelTexts | Record<string, any>>,
     visible: Boolean
   }
 };
@@ -1775,7 +1777,6 @@ const DxFormConfig = {
     "update:activeStateEnabled": null,
     "update:alignItemLabels": null,
     "update:alignItemLabelsInAllGroups": null,
-    "update:bindingOptions": null,
     "update:colCount": null,
     "update:colCountByScreen": null,
     "update:customizeItem": null,
@@ -1818,7 +1819,6 @@ const DxFormConfig = {
     activeStateEnabled: Boolean,
     alignItemLabels: Boolean,
     alignItemLabelsInAllGroups: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     colCount: [String, Number] as PropType<Mode | number>,
     colCountByScreen: Object as PropType<Record<string, any>>,
     customizeItem: Function as PropType<((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => void)>,
@@ -1826,7 +1826,7 @@ const DxFormConfig = {
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
     formData: {},
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     isDirty: Boolean,
@@ -1854,7 +1854,7 @@ const DxFormConfig = {
     tabIndex: Number,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   }
 };
 
@@ -2026,7 +2026,7 @@ const DxHeaderFilterConfig = {
     search: Object as PropType<ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig | Record<string, any>>,
     searchMode: String as PropType<SearchMode>,
     searchTimeout: Number,
-    texts: Object as PropType<Record<string, any>>,
+    texts: Object as PropType<HeaderFilterTexts | Record<string, any>>,
     visible: Boolean,
     width: [Number, String]
   }
@@ -2377,7 +2377,7 @@ const DxPagerConfig = {
     label: String,
     showInfo: Boolean,
     showNavigationButtons: Boolean,
-    showPageSizeSelector: Boolean,
+    showPageSizeSelector: [Boolean, String] as PropType<boolean | Mode>,
     visible: [Boolean, String] as PropType<boolean | Mode>
   }
 };
@@ -2442,8 +2442,6 @@ const DxPopupConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:animation": null,
-    "update:bindingOptions": null,
-    "update:closeOnOutsideClick": null,
     "update:container": null,
     "update:contentTemplate": null,
     "update:deferRendering": null,
@@ -2494,8 +2492,6 @@ const DxPopupConfig = {
   props: {
     accessKey: String,
     animation: Object as PropType<Record<string, any>>,
-    bindingOptions: Object as PropType<Record<string, any>>,
-    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     container: {},
     contentTemplate: {},
     deferRendering: Boolean,
@@ -2506,15 +2502,15 @@ const DxPopupConfig = {
     enableBodyScroll: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hideOnParentScroll: Boolean,
     hint: String,
     hoverStateEnabled: Boolean,
-    maxHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    maxWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    minHeight: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
-    minWidth: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    maxHeight: [Number, String],
+    maxWidth: [Number, String],
+    minHeight: [Number, String],
+    minWidth: [Number, String],
     onContentReady: Function as PropType<((e: EventInfo<any>) => void)>,
     onDisposing: Function as PropType<((e: EventInfo<any>) => void)>,
     onHidden: Function as PropType<((e: EventInfo<any>) => void)>,
@@ -2540,7 +2536,7 @@ const DxPopupConfig = {
     titleTemplate: {},
     toolbarItems: Array as PropType<Array<dxPopupToolbarItem>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     wrapperAttr: {}
   }
 };
@@ -3139,7 +3135,7 @@ const DxTreeListHeaderFilterConfig = {
     height: [Number, String],
     search: Object as PropType<HeaderFilterSearchConfig | Record<string, any>>,
     searchTimeout: Number,
-    texts: Object as PropType<Record<string, any>>,
+    texts: Object as PropType<HeaderFilterTexts | Record<string, any>>,
     visible: Boolean,
     width: [Number, String]
   }
@@ -3249,7 +3245,7 @@ const DxValidationRuleConfig = {
     reevaluate: Boolean,
     trim: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)>
   }
 };
 

@@ -1,4 +1,9 @@
-export const dataSource = [];
+interface DataPoint {
+  arg: number;
+  val: number;
+}
+
+export const dataSource: DataPoint[] = [];
 
 for (let i = 0; i < 600; i += 1) {
   const argument = i / 100;

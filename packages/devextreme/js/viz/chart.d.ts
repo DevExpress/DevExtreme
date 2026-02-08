@@ -9,7 +9,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     Format,
@@ -63,6 +63,7 @@ import {
     SeriesType,
     TextOverflow,
     TimeIntervalConfig,
+    ValueAxisVisualRangeUpdateMode,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
     VisualRange,
@@ -104,6 +105,7 @@ export {
     SeriesSelectionMode,
     SeriesType,
     TextOverflow,
+    ValueAxisVisualRangeUpdateMode,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
     VerticalAlignment,
@@ -235,7 +237,7 @@ export type OptionChangedEvent = EventInfo<dxChart> & ChangedOptionInfo;
  * @type object
  * @inherits Cancelable,NativeEventInfo,PointInteractionInfo
  */
-export type PointClickEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | PointerEvent> & PointInteractionInfo;
+export type PointClickEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | PointerEvent> & PointInteractionInfo<chartPointObject>;
 
 /**
  * @docid _viz_chart_PointHoverChangedEvent
@@ -243,7 +245,7 @@ export type PointClickEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent |
  * @type object
  * @inherits EventInfo,PointInteractionInfo
  */
-export type PointHoverChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
+export type PointHoverChangedEvent = EventInfo<dxChart> & PointInteractionInfo<chartPointObject>;
 
 /**
  * @docid _viz_chart_PointSelectionChangedEvent
@@ -251,7 +253,7 @@ export type PointHoverChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
  * @type object
  * @inherits EventInfo,PointInteractionInfo
  */
-export type PointSelectionChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
+export type PointSelectionChangedEvent = EventInfo<dxChart> & PointInteractionInfo<chartPointObject>;
 
 /**
  * @docid _viz_chart_SeriesClickEvent
@@ -286,7 +288,7 @@ export type SeriesSelectionChangedEvent = EventInfo<dxChart> & SeriesInteraction
  * @type object
  * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
-export type TooltipHiddenEvent = EventInfo<dxChart> & TooltipInfo;
+export type TooltipHiddenEvent = EventInfo<dxChart> & TooltipInfo<chartPointObject>;
 
 /**
  * @docid _viz_chart_TooltipShownEvent
@@ -294,7 +296,7 @@ export type TooltipHiddenEvent = EventInfo<dxChart> & TooltipInfo;
  * @type object
  * @inherits EventInfo,_viz_chart_components_base_chart_TooltipInfo
  */
-export type TooltipShownEvent = EventInfo<dxChart> & TooltipInfo;
+export type TooltipShownEvent = EventInfo<dxChart> & TooltipInfo<chartPointObject>;
 
 /**
  * @docid _viz_chart_ZoomEndEvent
@@ -766,7 +768,7 @@ export interface chartSeriesObject extends baseSeriesObject {
  * @namespace DevExpress.viz
  * @docid
  */
-export interface dxChartOptions extends BaseChartOptions<dxChart> {
+export interface dxChartOptions extends BaseChartOptions<dxChart, chartPointObject> {
     /**
      * @docid
      * @default true
@@ -1326,12 +1328,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
  * @type object
  */
 export type ArgumentAxis = CommonAxisSettings & {
-    /**
-     * @docid dxChartOptions.argumentAxis.aggregateByCategory
-     * @default true
-     * @deprecated dxChartSeriesTypes.CommonSeries.aggregation.enabled
-     */
-    aggregateByCategory?: boolean;
     /**
      * @docid dxChartOptions.argumentAxis.aggregationGroupWidth
      * @default undefined
@@ -2632,7 +2628,7 @@ export type ValueAxis = CommonAxisSettings & {
      * @default 'auto'
      * @public
      */
-    visualRangeUpdateMode?: VisualRangeUpdateMode;
+    visualRangeUpdateMode?: ValueAxisVisualRangeUpdateMode;
     /**
      * @docid dxChartOptions.valueAxis.wholeRange
      * @default undefined

@@ -1,7 +1,6 @@
 import config from 'core/config';
 import { noop } from 'core/utils/common';
 import { isRenderer } from 'core/utils/type';
-import 'generic_light.css!';
 import $ from 'jquery';
 
 import '__internal/scheduler/workspaces/m_work_space_day';
@@ -11,6 +10,11 @@ import '__internal/scheduler/workspaces/m_work_space_work_week';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
 import pointerMock from '../../helpers/pointerMock.js';
+import {
+    applyWorkspaceGroups,
+    getEmptyResourceManager,
+    getWorkspaceResourceConfig
+} from '../../helpers/scheduler/mockResourceManager.js';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const ALL_DAY_TABLE_CELL_CLASS = 'dx-scheduler-all-day-table-cell';
@@ -43,13 +47,14 @@ module('Workspace navigation', () => {
                             currentDate: new Date(2021, 0, 10),
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
                             renovateRender: true,
+                            getResourceManager: getEmptyResourceManager,
                             ...options,
                         });
                     };
 
                 },
             }, () => {
-                test('Month workspace navigation by arrows', function(assert) {
+                test('Month workspace navigation by arrows', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true
                     }, 'dxSchedulerWorkSpaceMonth');
@@ -81,7 +86,7 @@ module('Workspace navigation', () => {
                 });
 
 
-                test('Month workspace navigation by arrows, RTL mode', function(assert) {
+                test('Month workspace navigation by arrows, RTL mode', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         rtlEnabled: true
@@ -102,7 +107,7 @@ module('Workspace navigation', () => {
                     assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'new cell is focused');
                 });
 
-                test('Workspace should not lose focused cell after arrow key press', function(assert) {
+                test('Workspace should not lose focused cell after arrow key press', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true
                     }, 'dxSchedulerWorkSpaceMonth');
@@ -119,7 +124,7 @@ module('Workspace navigation', () => {
                 });
 
 
-                test('Workspace should scroll to focused cell during navigation', function(assert) {
+                test('Workspace should scroll to focused cell during navigation', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true
                     }, 'dxSchedulerWorkSpaceWeek');
@@ -142,7 +147,7 @@ module('Workspace navigation', () => {
                     scrollable.scrollToElement.restore();
                 });
 
-                test('Workspace should handle enter/space key', function(assert) {
+                test('Workspace should handle enter/space key', async function(assert) {
                     const onSelectedCellsClick = sinon.stub();
                     const $element = this.createInstance({
                         focusStateEnabled: true,
@@ -178,7 +183,7 @@ module('Workspace navigation', () => {
                     }, 'Arguments are OK');
                 });
 
-                test('Workspace should pass cellData with select through enter/space key', function(assert) {
+                test('Workspace should pass cellData with select through enter/space key', async function(assert) {
                     const updateSpy = sinon.spy(noop);
                     const $element = this.createInstance({
                         dataSource: [{
@@ -204,7 +209,7 @@ module('Workspace navigation', () => {
                     assert.deepEqual(cellData.endDate, new Date(2015, 2, 31), 'cellData endDate is passing right');
                 });
 
-                test('Workspace should handle enter/space key correctly if e.cancel=true', function(assert) {
+                test('Workspace should handle enter/space key correctly if e.cancel=true', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -228,7 +233,7 @@ module('Workspace navigation', () => {
                     assert.notOk(updateSpy.called, 'Observer method was not called if e.cancel = true');
                 });
 
-                test('Workspace should allow select several cells with shift & arrow', function(assert) {
+                test('Workspace should allow select several cells with shift & arrow', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -261,7 +266,7 @@ module('Workspace navigation', () => {
                     assert.equal(cells.slice(1, 10).filter('.dx-state-focused').length, 9, ' right cells are focused');
                 });
 
-                test('Event subscriptions should be detached on dispose', function(assert) {
+                test('Event subscriptions should be detached on dispose', async function(assert) {
                     const originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
 
                     const $element = this.createInstance({
@@ -282,7 +287,7 @@ module('Workspace navigation', () => {
                     assert.deepEqual(memoryLeaksHelper.getAllEventSubscriptions(), originalEventSubscriptions, 'Subscribes after dispose are OK');
                 });
 
-                test('Workspace should allow select/unselect cells with shift & right/left arrow', function(assert) {
+                test('Workspace should allow select/unselect cells with shift & right/left arrow', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -314,7 +319,7 @@ module('Workspace navigation', () => {
                     assert.equal(cells.slice(4, 11).filter('.dx-state-focused').length, 6, 'right cells are focused');
                 });
 
-                test('Workspace should allow select/unselect cells with shift & left/right arrow', function(assert) {
+                test('Workspace should allow select/unselect cells with shift & left/right arrow', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -342,7 +347,7 @@ module('Workspace navigation', () => {
                     assert.equal(cells.filter('.dx-state-focused').length, 6, 'right quantity of focused cells');
                 });
 
-                test('Workspace should allow unselect cells with shift & up/down arrow', function(assert) {
+                test('Workspace should allow unselect cells with shift & up/down arrow', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -379,7 +384,7 @@ module('Workspace navigation', () => {
                     assert.equal(cells.slice(7, 9).filter('.dx-state-focused').length, 1, 'right cells are focused');
                 });
 
-                test('Focus shouldn\'t disappear when select cells with shift & down/right arrow', function(assert) {
+                test('Focus shouldn\'t disappear when select cells with shift & down/right arrow', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -406,7 +411,7 @@ module('Workspace navigation', () => {
                     assert.equal(cells.slice(40, 42).filter('.dx-state-focused').length, 2, 'right cells are focused');
                 });
 
-                test('Workspace Week should allow select/unselect cells with shift & arrows', function(assert) {
+                test('Workspace Week should allow select/unselect cells with shift & arrows', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -439,7 +444,7 @@ module('Workspace navigation', () => {
                 });
 
 
-                test('Workspace Week should allow select/unselect cells with shift & arrows, RTL mode', function(assert) {
+                test('Workspace Week should allow select/unselect cells with shift & arrows, RTL mode', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         rtlEnabled: true,
@@ -466,7 +471,7 @@ module('Workspace navigation', () => {
                     assert.equal(cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
                 });
 
-                test('Workspace should handle enter/space key for several selected cells', function(assert) {
+                test('Workspace should handle enter/space key for several selected cells', async function(assert) {
                     const onSelectedCellsClick = sinon.stub();
                     const $element = this.createInstance({
                         focusStateEnabled: true,
@@ -500,7 +505,7 @@ module('Workspace navigation', () => {
                     }, 'Arguments are OK');
                 });
 
-                test('Workspace shouldn\'t unselect selected cells with no shift & arrows', function(assert) {
+                test('Workspace shouldn\'t unselect selected cells with no shift & arrows', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -519,13 +524,19 @@ module('Workspace navigation', () => {
                     assert.equal(cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
                 });
 
-                test('Workspace with groups should allow select cells within one group', function(assert) {
+                test('Workspace with groups should allow select cells within one group', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
                         currentDate: new Date(2015, 3, 1),
                         height: 400,
-                        groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
+                        ...(await getWorkspaceResourceConfig(
+                            [{
+                                label: 'a',
+                                fieldExpr: 'a',
+                                dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+                            }],
+                        )),
                     }, 'dxSchedulerWorkSpaceMonth');
                     const instance = $element.dxSchedulerWorkSpaceMonth('instance');
                     const keyboard = keyboardMock($element);
@@ -552,17 +563,21 @@ module('Workspace navigation', () => {
                     assert.equal(cells.filter('.dx-state-focused').last().index(), 7, 'right quantity of focused cells');
                 });
 
-                test('Workspace with groups should allow select cells within one group, RTL mode', function(assert) {
+                test('Workspace with groups should allow select cells within one group, RTL mode', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         rtlEnabled: true,
                         firstDayOfWeek: 1,
                         currentDate: new Date(2015, 3, 1),
-                        height: 400
+                        height: 400,
                     }, 'dxSchedulerWorkSpaceMonth');
                     const instance = $element.dxSchedulerWorkSpaceMonth('instance');
                     const keyboard = keyboardMock($element);
-                    instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+                    await applyWorkspaceGroups(instance, [{
+                        label: 'a',
+                        fieldExpr: 'a',
+                        dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+                    }]);
 
                     const cells = $element.find('.' + CELL_CLASS);
 
@@ -584,7 +599,7 @@ module('Workspace navigation', () => {
                     assert.equal(cells.filter('.dx-state-focused').last().index(), 0, 'right quantity of focused cells');
                 });
 
-                test('Workspace should select/unselect cells in allDay panel with shift & arrows', function(assert) {
+                test('Workspace should select/unselect cells in allDay panel with shift & arrows', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         showAllDayPanel: true,
@@ -621,7 +636,7 @@ module('Workspace navigation', () => {
                 });
 
 
-                test('Workspace Day should allow select/unselect cells with shift & arrows', function(assert) {
+                test('Workspace Day should allow select/unselect cells with shift & arrows', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         startDayHour: 3,
@@ -646,14 +661,20 @@ module('Workspace navigation', () => {
                     assert.equal(cells.slice(1, 3).filter('.dx-state-focused').length, 2, 'right cells are focused');
                 });
 
-                test('Workspace Day with groups should allow select/unselect', function(assert) {
+                test('Workspace Day with groups should allow select/unselect', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         startDayHour: 3,
                         endDayHour: 10,
                         hoursInterval: 0.5,
                         currentDate: new Date(2015, 3, 1),
-                        groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
+                        ...(await getWorkspaceResourceConfig(
+                            [{
+                                label: 'a',
+                                fieldExpr: 'a',
+                                dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+                            }],
+                        )),
                     }, 'dxSchedulerWorkSpaceDay');
                     const keyboard = keyboardMock($element);
 
@@ -681,7 +702,7 @@ module('Workspace navigation', () => {
                     assert.equal(cells.slice(0, 3).filter('.dx-state-focused').length, 2, 'right cells are focused');
                 });
 
-                test('Current focused cell should have \'dx-scheduler-focused-cell\' css class', function(assert) {
+                test('Current focused cell should have \'dx-scheduler-focused-cell\' css class', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -705,7 +726,7 @@ module('Workspace navigation', () => {
                     assert.notOk(cells.eq(1).hasClass('dx-scheduler-focused-cell'), 'right quantity of focused cells');
                 });
 
-                test('Focus should work right after focusout', function(assert) {
+                test('Focus should work right after focusout', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -722,7 +743,7 @@ module('Workspace navigation', () => {
                     assert.ok(cells.eq(10).hasClass('dx-scheduler-focused-cell'), 'right focused cell');
                 });
 
-                test('It should not be possible to select cells via keyboard if the allowMultipleCellSelection option is false', function(assert) {
+                test('It should not be possible to select cells via keyboard if the allowMultipleCellSelection option is false', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -739,7 +760,7 @@ module('Workspace navigation', () => {
                     assert.equal(cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
                 });
 
-                test('It should not be possible to select cells via mouse if the allowMultipleCellSelection option is false', function(assert) {
+                test('It should not be possible to select cells via mouse if the allowMultipleCellSelection option is false', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -758,7 +779,7 @@ module('Workspace navigation', () => {
                     assert.equal(cells.filter('.dx-state-focused').length, 1, 'right quantity of focused cells');
                 });
 
-                test('It should not be possible to select cells via mouse if scrollable \'scrollByContent\' is true', function(assert) {
+                test('It should not be possible to select cells via mouse if scrollable \'scrollByContent\' is true', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -784,7 +805,7 @@ module('Workspace navigation', () => {
                     assert.notOk(stub.calledOnce, 'Cells weren\'t selected');
                 });
 
-                test('Multiselection with left arrow should work in workspace day', function(assert) {
+                test('Multiselection with left arrow should work in workspace day', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         intervalCount: 3,
@@ -804,7 +825,7 @@ module('Workspace navigation', () => {
                     assert.ok(cells.eq(5).hasClass('dx-state-focused'), 'the last focused cell is correct');
                 });
 
-                test('Multiselection with right arrow should work in workspace day', function(assert) {
+                test('Multiselection with right arrow should work in workspace day', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         intervalCount: 3,
@@ -866,7 +887,7 @@ module('Workspace navigation', () => {
                         rtlEnabled, key, workSpace,
                     }) => {
                         test(`Multiselection with ${key} arrow should work correctly with groupByDate
-                            in ${workSpace.name} when rtlEnabled is equal to ${rtlEnabled}`, function(assert) {
+                            in ${workSpace.name} when rtlEnabled is equal to ${rtlEnabled}`, async function(assert) {
                             const $element = this.createInstance({
                                 focusStateEnabled: true,
                                 intervalCount: 2,
@@ -875,7 +896,13 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 rtlEnabled,
-                                groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]
+                                ...(await getWorkspaceResourceConfig(
+                                    [{
+                                        label: 'a',
+                                        fieldExpr: 'a',
+                                        dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+                                    }],
+                                )),
                             }, workSpace.class);
 
                             const keyboard = keyboardMock($element);
@@ -910,7 +937,7 @@ module('Workspace navigation', () => {
                         startCell, endCell, focusedCellsCount, rtlEnabled, key, workSpace,
                     }) => {
                         test(`Multiselection with ${key} arrow should work correctly with groupByDate
-                            in ${workSpace.name} when the next cell is in another row and rtlEnabled is ${rtlEnabled}`, function(assert) {
+                            in ${workSpace.name} when the next cell is in another row and rtlEnabled is ${rtlEnabled}`, async function(assert) {
                             const $element = this.createInstance({
                                 focusStateEnabled: true,
                                 intervalCount: 2,
@@ -919,7 +946,13 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 rtlEnabled,
-                                groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
+                                ...(await getWorkspaceResourceConfig(
+                                    [{
+                                        label: 'a',
+                                        fieldExpr: 'a',
+                                        dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+                                    }],
+                                )),
                             }, workSpace.class);
 
                             const keyboard = keyboardMock($element);
@@ -948,12 +981,13 @@ module('Workspace navigation', () => {
                             scrolling: { mode: scrollingMode, orientation: 'vertical' },
                             renovateRender: true,
                             currentDate: new Date(2021, 0, 10),
+                            getResourceManager: getEmptyResourceManager,
                             ...options,
                         });
                     };
                 },
             }, () => {
-                test('Pointer move propagation should be stopped', function(assert) {
+                test('Pointer move propagation should be stopped', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -966,7 +1000,8 @@ module('Workspace navigation', () => {
                             scrollable.option('scrollByContent', false);
                             e.component.initDragBehavior();
                             e.component._attachTablesEvents();
-                        }
+                        },
+                        getResourceManager: getEmptyResourceManager,
                     }, 'dxSchedulerWorkSpaceWeek');
 
                     const cells = $element.find('.' + CELL_CLASS);
@@ -982,7 +1017,7 @@ module('Workspace navigation', () => {
                     $element.trigger($.Event('dxpointermove', { target: cells.eq(16).get(0), which: 1 }));
                 });
 
-                test('Workspace should add/remove specific class while mouse selection', function(assert) {
+                test('Workspace should add/remove specific class while mouse selection', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -1010,7 +1045,7 @@ module('Workspace navigation', () => {
                     assert.notOk($element.hasClass('dx-scheduler-work-space-mouse-selection'), 'right first focused cell');
                 });
 
-                test('Workspace Week should allow select/unselect cells with mouse', function(assert) {
+                test('Workspace Week should allow select/unselect cells with mouse', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -1059,7 +1094,7 @@ module('Workspace navigation', () => {
                     $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
                 });
 
-                test('Multiple selected cells should have focused class in vertical grouped Workspace Week', function(assert) {
+                test('Multiple selected cells should have focused class in vertical grouped Workspace Week', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         currentDate: new Date(2018, 4, 21),
@@ -1072,7 +1107,13 @@ module('Workspace navigation', () => {
                             e.component._attachTablesEvents();
                         },
                         onSelectedCellsClick: () => {},
-                        groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
+                        ...(await getWorkspaceResourceConfig(
+                            [{
+                                label: 'a',
+                                fieldExpr: 'a',
+                                dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+                            }],
+                        )),
                     }, 'dxSchedulerWorkSpaceWeek');
 
                     const cells = $element.find('.' + CELL_CLASS);
@@ -1103,7 +1144,7 @@ module('Workspace navigation', () => {
                     assert.ok(cells.eq(42).hasClass('dx-state-focused'), 'right last focused cell');
                 });
 
-                test('Workspace with groups should allow select cells within one group via mouse', function(assert) {
+                test('Workspace with groups should allow select cells within one group via mouse', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         firstDayOfWeek: 1,
@@ -1118,7 +1159,13 @@ module('Workspace navigation', () => {
                             e.component.initDragBehavior();
                             e.component._attachTablesEvents();
                         },
-                        groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
+                        ...(await getWorkspaceResourceConfig(
+                            [{
+                                label: 'a',
+                                fieldExpr: 'a',
+                                dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+                            }],
+                        )),
                     }, 'dxSchedulerWorkSpaceMonth');
 
                     const cells = $element.find('.' + CELL_CLASS);
@@ -1144,7 +1191,7 @@ module('Workspace navigation', () => {
                     $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
                 });
 
-                test('Workspace should handle pointerdown by only left mouse key', function(assert) {
+                test('Workspace should handle pointerdown by only left mouse key', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true
                     }, 'dxSchedulerWorkSpaceMonth');
@@ -1161,7 +1208,7 @@ module('Workspace navigation', () => {
                     assert.ok(cells.eq(0).hasClass('dx-state-focused'), 'focused cell is not changed');
                 });
 
-                test('Workspace should prevent default for all mouse keys except left', function(assert) {
+                test('Workspace should prevent default for all mouse keys except left', async function(assert) {
                     assert.expect(2);
 
                     const $element = this.createInstance({
@@ -1186,7 +1233,7 @@ module('Workspace navigation', () => {
                     }
                 });
 
-                test('onCellClick should fires when cell is clicked', function(assert) {
+                test('onCellClick should fires when cell is clicked', async function(assert) {
                     assert.expect(3);
 
                     const $element = this.createInstance({
@@ -1207,7 +1254,7 @@ module('Workspace navigation', () => {
                     $($cell).trigger('dxclick');
                 });
 
-                test('onCellClick should fires when defines after option change', function(assert) {
+                test('onCellClick should fires when defines after option change', async function(assert) {
                     assert.expect(1);
 
                     const $element = this.createInstance({
@@ -1222,7 +1269,7 @@ module('Workspace navigation', () => {
                     $($cell).trigger('dxclick');
                 });
 
-                test('Popup should be shown when onCellClick', function(assert) {
+                test('Popup should be shown when onCellClick', async function(assert) {
                     assert.expect(1);
                     const onSelectedCellsClick = sinon.stub();
 
@@ -1240,7 +1287,7 @@ module('Workspace navigation', () => {
                     assert.notOk(onSelectedCellsClick.called, 'onSelectedCellsClick isn\'t called');
                 });
 
-                test('onCellContextMenu should be fired after trigger context menu event', function(assert) {
+                test('onCellContextMenu should be fired after trigger context menu event', async function(assert) {
                     assert.expect(4);
 
                     const $element = this.createInstance({
@@ -1262,7 +1309,7 @@ module('Workspace navigation', () => {
                     $($cell).trigger('dxcontextmenu');
                 });
 
-                test('Cells should be focused after onCellContextMenu event firing', function(assert) {
+                test('Cells should be focused after onCellContextMenu event firing', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         currentDate: new Date(2018, 2, 1),
@@ -1280,7 +1327,7 @@ module('Workspace navigation', () => {
                     assert.equal(cells.filter('.dx-state-focused').length, 5, 'right cells are focused');
                 });
 
-                test('Workspace Day should corrrectly select cells inside one horizontal group', function(assert) {
+                test('Workspace Day should corrrectly select cells inside one horizontal group', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         currentDate: new Date(2015, 3, 1),
@@ -1294,7 +1341,13 @@ module('Workspace navigation', () => {
                         groupOrientation: 'horizontal',
                         startDayHour: 0,
                         endDayHour: 4,
-                        groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
+                        ...(await getWorkspaceResourceConfig(
+                            [{
+                                label: 'a',
+                                fieldExpr: 'a',
+                                dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+                            }],
+                        )),
                     }, 'dxSchedulerWorkSpaceDay');
 
                     const cells = $element.find('.' + CELL_CLASS);
@@ -1322,7 +1375,7 @@ module('Workspace navigation', () => {
                     $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
                 });
 
-                test('Workspace Day should not select cells that belong to another group', function(assert) {
+                test('Workspace Day should not select cells that belong to another group', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         currentDate: new Date(2015, 3, 1),
@@ -1334,7 +1387,13 @@ module('Workspace navigation', () => {
                         },
                         intervalCount: 3,
                         groupOrientation: 'horizontal',
-                        groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
+                        ...(await getWorkspaceResourceConfig(
+                            [{
+                                label: 'a',
+                                fieldExpr: 'a',
+                                dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+                            }],
+                        )),
                     }, 'dxSchedulerWorkSpaceDay');
 
                     const cells = $element.find('.' + CELL_CLASS);
@@ -1393,7 +1452,7 @@ module('Workspace navigation', () => {
                         startCell, endCell, intermediateCells, intervalCount,
                         focusedCellsCount, cellFromAnotherGroup, workSpace,
                     }) => {
-                        test(`Mouse Multiselection should work correctly with ${workSpace.name} when it is grouped vertically`, function(assert) {
+                        test(`Mouse Multiselection should work correctly with ${workSpace.name} when it is grouped vertically`, async function(assert) {
                             const $element = this.createInstance({
                                 focusStateEnabled: true,
                                 onContentReady: function(e) {
@@ -1407,7 +1466,13 @@ module('Workspace navigation', () => {
                                 startDayHour: 0,
                                 endDayHour: 2,
                                 height: 500,
-                                groups: [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }],
+                                ...(await getWorkspaceResourceConfig(
+                                    [{
+                                        label: 'a',
+                                        fieldExpr: 'a',
+                                        dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+                                    }],
+                                )),
                             }, workSpace.class);
 
                             const cells = $element.find('.' + CELL_CLASS);
@@ -1444,7 +1509,7 @@ module('Workspace navigation', () => {
 
 
                 test('Mouse Multiselection should work correctly when appointments'
-                    + 'are grouped vertically by more than one resource and allDayPanel is enabled', function(assert) {
+                    + 'are grouped vertically by more than one resource and allDayPanel is enabled', async function(assert) {
                     const $element = this.createInstance({
                         focusStateEnabled: true,
                         onContentReady: function(e) {
@@ -1456,10 +1521,17 @@ module('Workspace navigation', () => {
                         startDayHour: 0,
                         endDayHour: 2,
                         showAllDayPanel: true,
-                        groups: [
-                            { name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] },
-                            { name: 'b', items: [{ id: 10, text: 'b.1' }, { id: 20, text: 'b.2' }] },
-                        ],
+                        ...(await getWorkspaceResourceConfig(
+                            [{
+                                label: 'a',
+                                fieldExpr: 'a',
+                                dataSource: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }]
+                            }, {
+                                label: 'b',
+                                fieldExpr: 'b',
+                                dataSource: [{ id: 10, text: 'b.1' }, { id: 20, text: 'b.2' }]
+                            }],
+                        )),
                     }, 'dxSchedulerWorkSpaceWeek');
 
                     const cells = $element.find('.' + CELL_CLASS);
@@ -1478,7 +1550,7 @@ module('Workspace navigation', () => {
                 });
 
                 [WORKSPACE_DAY, WORKSPACE_WEEK, WORKSPACE_MONTH].forEach((workSpace) => {
-                    test(`Cell hover should work correctly in ${workSpace.name}`, function(assert) {
+                    test(`Cell hover should work correctly in ${workSpace.name}`, async function(assert) {
                         const $element = this.createInstance({}, workSpace.class);
 
                         const cells = $element.find(`.${CELL_CLASS}`);
@@ -1490,7 +1562,7 @@ module('Workspace navigation', () => {
                 });
 
                 [WORKSPACE_DAY, WORKSPACE_WEEK].forEach((workSpace) => {
-                    test(`Cell hover should work correctly in ${workSpace.name} in all-day panel cells`, function(assert) {
+                    test(`Cell hover should work correctly in ${workSpace.name} in all-day panel cells`, async function(assert) {
                         const $element = this.createInstance({}, workSpace.class);
 
                         const cells = $element.find(`.${ALL_DAY_TABLE_CELL_CLASS}`);

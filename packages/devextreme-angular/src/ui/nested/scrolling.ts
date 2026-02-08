@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
@@ -23,8 +24,10 @@ import { DxoSchedulerScrolling } from './base/scheduler-scrolling';
 
 @Component({
     selector: 'dxo-scrolling',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'columnRenderingMode',
@@ -65,7 +68,7 @@ export class DxoScrollingComponent extends DxoSchedulerScrolling implements OnDe
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoScrollingComponent
   ],
   exports: [

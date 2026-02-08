@@ -94,6 +94,9 @@
     * @name ErrorsCore.E0121
     */
 /**
+    * @name ErrorsCore.E0122
+    */
+/**
     * @name ErrorsCore.W0000
     */
 /**
@@ -164,6 +167,9 @@
     */
 /**
     * @name ErrorsCore.W0023
+    */
+/**
+    * @name ErrorsCore.W0024
     */
 import errors from '../__internal/core/m_errors';
 export default errors;

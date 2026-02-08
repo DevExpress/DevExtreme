@@ -23,7 +23,7 @@ $(() => {
     text: 'Update profile',
     type: 'success',
     onClick() {
-      DevExpress.ui.dialog.alert('Uncomment the line to enable sending a form to the server.', 'Click Handler');
+      DevExpress.ui.dialog.alert('This demo only illustrates the form upload interface. Uploading to a server is not available.', 'Click Handler');
       // $("#form").submit();
     },
   });

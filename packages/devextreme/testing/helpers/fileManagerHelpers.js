@@ -130,6 +130,10 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.ITEMS_PANEL_CLASS}`);
     }
 
+    getContainer() {
+        return this._$element.find(`.${Consts.CONTAINER_CLASS}`);
+    }
+
     getFolderNodes(inDialog) {
         if(inDialog) {
             return this.getFolderChooserDialog().find(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_CLASS}`);
@@ -406,7 +410,7 @@ export class FileManagerWrapper {
     }
 
     getDetailsCellValue(rowIndex, columnIndex) {
-        columnIndex += isDesktopDevice() ? 1 : 0;
+        columnIndex += devices.real().deviceType === 'desktop' ? 1 : 0;
         return this.getRowInDetailsView(rowIndex)
             .find(`td:nth-child(${columnIndex})`)
             .text()
@@ -515,6 +519,10 @@ export class FileManagerWrapper {
 
     getNotificationPopup() {
         return $(`.${Consts.NOTIFICATION_POPUP_CLASS} .${Consts.POPUP_NORMAL_CLASS}`);
+    }
+
+    getNotificationPopupInstance() {
+        return this.getInstance()._notificationControl._notificationPopup;
     }
 
     getFolderChooserDialog() {
@@ -971,10 +979,6 @@ export const stubFileReader = object => {
     if(!(object['_createFileReader'].restore && object['_createFileReader'].restore.sinon)) {
         sinon.stub(object, '_createFileReader').callsFake(() => new FileReaderMock());
     }
-};
-
-export const isDesktopDevice = () => {
-    return devices.real().deviceType === 'desktop';
 };
 
 export const getDropFileEvent = file => $.Event($.Event('drop', { dataTransfer: { files: [file] } }));

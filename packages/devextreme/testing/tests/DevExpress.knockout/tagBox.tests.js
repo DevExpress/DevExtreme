@@ -86,5 +86,5 @@ QUnit.test('$parent should be correct for tag', function(assert) {
     ko.applyBindings(vm, $markup.get(0));
 
     const $tag = $markup.find('.dx-tag');
-    assert.equal($.trim($tag.text()), vm.someValue);
+    assert.equal($tag.text().trim(), vm.someValue);
 });

@@ -18,7 +18,7 @@ import {
     HostListener,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -39,10 +39,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
-
-
 
 
 
@@ -59,8 +57,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-calendar',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -70,6 +70,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxCalendarComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
     instance: DxCalendar = null;
 
     /**
@@ -194,10 +195,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -259,10 +260,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get max(): Date | number | string {
+    get max(): Date | null | number | string {
         return this._getOption('max');
     }
-    set max(value: Date | number | string) {
+    set max(value: Date | null | number | string) {
         this._setOption('max', value);
     }
 
@@ -285,10 +286,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get min(): Date | number | string {
+    get min(): Date | null | number | string {
         return this._getOption('min');
     }
-    set min(value: Date | number | string) {
+    set min(value: Date | null | number | string) {
         this._setOption('min', value);
     }
 
@@ -480,10 +481,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get value(): Array<Date | number | string> | Date | number | string {
+    get value(): Array<Date | null | number | string> | Date | null | number | string {
         return this._getOption('value');
     }
-    set value(value: Array<Date | number | string> | Date | number | string) {
+    set value(value: Array<Date | null | number | string> | Date | null | number | string) {
         this._setOption('value', value);
     }
 
@@ -519,10 +520,10 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -639,7 +640,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -674,7 +675,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxChange: EventEmitter<Date | number | string>;
+    @Output() maxChange: EventEmitter<Date | null | number | string>;
 
     /**
     
@@ -688,7 +689,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minChange: EventEmitter<Date | number | string>;
+    @Output() minChange: EventEmitter<Date | null | number | string>;
 
     /**
     
@@ -793,7 +794,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<Array<Date | number | string> | Date | number | string>;
+    @Output() valueChange: EventEmitter<Array<Date | null | number | string> | Date | null | number | string>;
 
     /**
     
@@ -814,7 +815,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -834,10 +835,6 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
@@ -961,11 +958,9 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
 
 @NgModule({
   imports: [
+    DxCalendarComponent,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxCalendarComponent
   ],
   exports: [
     DxCalendarComponent,
@@ -973,6 +968,7 @@ export class DxCalendarComponent extends DxComponent implements OnDestroy, Contr
   ]
 })
 export class DxCalendarModule { }
+
 
 import type * as DxCalendarTypes from "devextreme/ui/calendar_types";
 export { DxCalendarTypes };

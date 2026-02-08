@@ -18,6 +18,7 @@ import { Format } from 'devextreme/common/core/localization';
 import { DashStyle, Font, LabelPosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-pie-chart-label',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -168,7 +171,7 @@ export class DxoPieChartLabelComponent extends NestedOption implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPieChartLabelComponent
   ],
   exports: [

@@ -11,6 +11,8 @@ import '__internal/scheduler/workspaces/m_timeline_day';
 import '__internal/scheduler/workspaces/m_timeline_week';
 import '__internal/scheduler/workspaces/m_timeline_month';
 
+import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
+
 const {
     test,
     module
@@ -26,7 +28,7 @@ module('Work Space Base', {
         `);
     }
 }, () => {
-    test('Workspace week should set first day by firstDayOfWeek option if it is setted and this is different in localization', function(assert) {
+    test('Workspace week should set first day by firstDayOfWeek option if it is setted and this is different in localization', async function(assert) {
         const dateLocalizationSpy = sinon.spy(dateLocalization, 'firstDayOfWeekIndex');
 
         $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
@@ -34,6 +36,7 @@ module('Work Space Base', {
             currentView: 'week',
             currentDate: new Date(2017, 4, 25),
             firstDayOfWeek: 0,
+            getResourceManager: getEmptyResourceManager,
         }).dxSchedulerWorkSpaceWeek('instance');
 
         assert.notOk(dateLocalizationSpy.called, 'dateLocalization.firstDayOfWeekIndex wasn\'t called');
@@ -60,16 +63,18 @@ module('Work Space Base', {
     }].forEach(({ viewName, view }) => {
         QUnit.module(viewName, {
             beforeEach: function() {
-                this.instance = $('#scheduler-work-space')[view]({})[view]('instance');
+                this.instance = $('#scheduler-work-space')[view]({
+                    getResourceManager: getEmptyResourceManager,
+                })[view]('instance');
             }
         }, () => {
-            test('Scheduler workspace should have a right default intervalCount and startDate', function(assert) {
+            test('Scheduler workspace should have a right default intervalCount and startDate', async function(assert) {
                 assert.equal(this.instance.option('intervalCount'), 1, 'dxSchedulerWorkSpace intervalCount is right');
                 assert.deepEqual(this.instance.option('startDate'), null, 'dxSchedulerWorkSpace startDate is right');
             });
 
             if(viewName === 'Day' || viewName === 'Week') {
-                test('Scheduler workspace scrollables should be updated after allDayExpanded option changed', function(assert) {
+                test('Scheduler workspace scrollables should be updated after allDayExpanded option changed', async function(assert) {
                     this.instance.option('allDayExpanded', false);
                     const stub = sinon.stub(this.instance, '_updateScrollable');
 
@@ -78,7 +83,7 @@ module('Work Space Base', {
                     assert.ok(stub.calledOnce, 'Scrollables were updated');
                 });
 
-                test('Scheduler workspace scrollables should be updated after endDayHour option changed if allDayPanel is hided', function(assert) {
+                test('Scheduler workspace scrollables should be updated after endDayHour option changed if allDayPanel is hided', async function(assert) {
                     this.instance.option('showAllDayPanel', false);
                     this.instance.option('endDayHour', 18);
                     const stub = sinon.stub(this.instance, '_updateScrollable');
@@ -88,7 +93,7 @@ module('Work Space Base', {
                     assert.ok(stub.calledOnce, 'Scrollables were updated');
                 });
 
-                test('getWorkSpaceMinWidth should work correctly after width changing', function(assert) {
+                test('getWorkSpaceMinWidth should work correctly after width changing', async function(assert) {
                     this.instance.option('crossScrollingEnabled', true);
 
                     this.instance.option('width', 400);
@@ -99,7 +104,7 @@ module('Work Space Base', {
                 });
             }
 
-            test('Tables should be rerendered if dimension was changed and horizontal scrolling is enabled', function(assert) {
+            test('Tables should be rerendered if dimension was changed and horizontal scrolling is enabled', async function(assert) {
                 this.instance.option('crossScrollingEnabled', true);
                 const stub = sinon.stub(this.instance, '_setTableSizes');
 
@@ -108,7 +113,7 @@ module('Work Space Base', {
                 assert.ok(stub.calledOnce, 'Tables were updated');
             });
 
-            test('Tables should not be rerendered if dimension was changed and horizontal scrolling isn\'t enabled', function(assert) {
+            test('Tables should not be rerendered if dimension was changed and horizontal scrolling isn\'t enabled', async function(assert) {
                 this.instance.option('crossScrollingEnabled', false);
                 const stub = sinon.stub(this.instance, '_setTableSizes');
 
@@ -117,7 +122,7 @@ module('Work Space Base', {
                 assert.equal(stub.callCount, 0, 'Tables were not updated');
             });
 
-            test('Tables should be rerendered if width was changed and horizontal scrolling is enabled', function(assert) {
+            test('Tables should be rerendered if width was changed and horizontal scrolling is enabled', async function(assert) {
                 const stub = sinon.stub(this.instance, '_setTableSizes');
                 this.instance.option('crossScrollingEnabled', true);
                 this.instance.option('width', 777);
@@ -125,7 +130,7 @@ module('Work Space Base', {
                 assert.ok(stub.calledOnce, 'Tables were updated');
             });
 
-            test('Tables should not be rerendered if width was changed and horizontal scrolling isn\'t enabled', function(assert) {
+            test('Tables should not be rerendered if width was changed and horizontal scrolling isn\'t enabled', async function(assert) {
                 const stub = sinon.stub(this.instance, '_setTableSizes');
                 this.instance.option('crossScrollingEnabled', false);
                 this.instance.option('width', 777);
@@ -133,7 +138,7 @@ module('Work Space Base', {
                 assert.equal(stub.callCount, 0, 'Tables were not updated');
             });
 
-            test('dateUtils.getTimezonesDifference should be called when calculating interval between dates', function(assert) {
+            test('dateUtils.getTimezonesDifference should be called when calculating interval between dates', async function(assert) {
                 const stub = sinon.stub(dateUtils, 'getTimezonesDifference');
                 const minDate = new Date('Thu Mar 10 2016 00:00:00 GMT-0500');
                 const maxDate = new Date('Mon Mar 15 2016 00:00:00 GMT-0400');
@@ -144,32 +149,6 @@ module('Work Space Base', {
                 assert.ok(stub.calledOnce, 'getTimezonesDifference was called');
 
                 dateUtils.getTimezonesDifference.restore();
-            });
-
-            test('Global cache should be cleared on dimension changed', function(assert) {
-                const spy = sinon.spy(this.instance.cache, 'clear');
-
-                this.instance.cache.set('test', 'value');
-
-                this.instance._dimensionChanged();
-
-                assert.ok(spy.callCount > 0, 'Cache clear was invoked');
-
-                spy.restore();
-            });
-
-            test('Global cache should be cleared on _cleanView', function(assert) {
-                const spy = sinon.spy(this.instance.cache, 'clear');
-
-                this.instance.cache.set('test', 'value');
-
-                this.instance._cleanView();
-
-                assert.ok(spy.callCount > 0, 'Cache clear was invoked');
-
-                assert.notOk(this.instance.cache.size, 'Global cache is empty');
-
-                spy.restore();
             });
         });
     });

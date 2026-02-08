@@ -1,8 +1,7 @@
 import { useCallback, useState } from 'react';
 import { AzureOpenAI, OpenAI } from 'openai';
-import { ChatTypes } from 'devextreme-react/chat';
-import CustomStore from 'devextreme/data/custom_store';
-import DataSource from 'devextreme/data/data_source';
+import { type ChatTypes } from 'devextreme-react/chat';
+import { CustomStore, DataSource } from 'devextreme-react/common/data';
 import {
   ALERT_TIMEOUT, assistant,
   AzureOpenAIConfig, REGENERATION_TEXT,

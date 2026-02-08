@@ -3,8 +3,8 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import 'devextreme/data/odata/store';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
+
+import { DataSourceOptions } from 'devextreme-angular/common/data';
 import { DxDataGridComponent, DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
 
 if (!/localhost/.test(document.location.host)) {

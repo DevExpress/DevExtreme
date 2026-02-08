@@ -17,16 +17,26 @@ import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 import { FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_fileSelectionItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-file-manager-file-selection-item',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_fileSelectionItems,
+           useExisting: DxiFileManagerFileSelectionItemComponent,
+        }
+    ]
 })
 export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOption {
     @Input()
@@ -139,7 +149,7 @@ export class DxiFileManagerFileSelectionItemComponent extends CollectionNestedOp
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFileManagerFileSelectionItemComponent
   ],
   exports: [

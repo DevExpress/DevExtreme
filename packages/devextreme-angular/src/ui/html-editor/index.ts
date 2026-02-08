@@ -24,6 +24,7 @@ import {
 } from '@angular/core';
 
 
+import { AIIntegration } from 'devextreme/common/ai-integration';
 import { Converter, dxHtmlEditorImageUpload, dxHtmlEditorMediaResizing, dxHtmlEditorMention, ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, dxHtmlEditorTableContextMenu, dxHtmlEditorTableResizing, dxHtmlEditorToolbar, dxHtmlEditorVariables } from 'devextreme/ui/html_editor';
 import { EditorStyle, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
@@ -41,7 +42,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoConverterModule } from 'devextreme-angular/ui/nested';
@@ -54,8 +56,10 @@ import { DxoTableContextMenuModule } from 'devextreme-angular/ui/nested';
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoTableResizingModule } from 'devextreme-angular/ui/nested';
 import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
+import { DxiCommandModule } from 'devextreme-angular/ui/nested';
 import { DxoVariablesModule } from 'devextreme-angular/ui/nested';
 
+import { DxiHtmlEditorCommandModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorConverterModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorFileUploaderOptionsModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorImageUploadModule } from 'devextreme-angular/ui/html-editor/nested';
@@ -69,10 +73,12 @@ import { DxoHtmlEditorTableResizingModule } from 'devextreme-angular/ui/html-edi
 import { DxoHtmlEditorToolbarModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxiHtmlEditorToolbarItemModule } from 'devextreme-angular/ui/html-editor/nested';
 import { DxoHtmlEditorVariablesModule } from 'devextreme-angular/ui/html-editor/nested';
-
-import { DxiMentionComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiHtmlEditorMentionComponent } from 'devextreme-angular/ui/html-editor/nested';
+import { 
+           PROPERTY_TOKEN_commands,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_mentions,
+           PROPERTY_TOKEN_tabs,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -87,8 +93,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-html-editor',
+    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -98,6 +106,27 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_mentions)
+    set _mentionsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('mentions', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
+    }
+
     instance: DxHtmlEditor = null;
 
     /**
@@ -123,6 +152,19 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     }
     set activeStateEnabled(value: boolean) {
         this._setOption('activeStateEnabled', value);
+    }
+
+
+    /**
+     * [descr:dxHtmlEditorOptions.aiIntegration]
+    
+     */
+    @Input()
+    get aiIntegration(): AIIntegration | undefined {
+        return this._getOption('aiIntegration');
+    }
+    set aiIntegration(value: AIIntegration | undefined) {
+        this._setOption('aiIntegration', value);
     }
 
 
@@ -209,10 +251,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -534,10 +576,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -616,6 +658,13 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() aiIntegrationChange: EventEmitter<AIIntegration | undefined>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() allowSoftLineBreakChange: EventEmitter<boolean>;
 
     /**
@@ -658,7 +707,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -833,7 +882,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -846,26 +895,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-    @ContentChildren(DxiHtmlEditorMentionComponent)
-    get mentionsChildren(): QueryList<DxiHtmlEditorMentionComponent> {
-        return this._getOption('mentions');
-    }
-    set mentionsChildren(value) {
-        this._setChildren('mentions', value, 'DxiHtmlEditorMentionComponent');
-    }
-
-
-    @ContentChildren(DxiMentionComponent)
-    get mentionsLegacyChildren(): QueryList<DxiMentionComponent> {
-        return this._getOption('mentions');
-    }
-    set mentionsLegacyChildren(value) {
-        this._setChildren('mentions', value, 'DxiMentionComponent');
-    }
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
@@ -887,6 +916,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
             { subscribe: 'valueChanged', emit: 'onValueChanged' },
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
+            { emit: 'aiIntegrationChange' },
             { emit: 'allowSoftLineBreakChange' },
             { emit: 'converterChange' },
             { emit: 'customizeModulesChange' },
@@ -988,6 +1018,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
 
 @NgModule({
   imports: [
+    DxHtmlEditorComponent,
     DxoConverterModule,
     DxoImageUploadModule,
     DxoFileUploaderOptionsModule,
@@ -998,7 +1029,9 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     DxiItemModule,
     DxoTableResizingModule,
     DxoToolbarModule,
+    DxiCommandModule,
     DxoVariablesModule,
+    DxiHtmlEditorCommandModule,
     DxoHtmlEditorConverterModule,
     DxoHtmlEditorFileUploaderOptionsModule,
     DxoHtmlEditorImageUploadModule,
@@ -1015,9 +1048,6 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     DxIntegrationModule,
     DxTemplateModule
   ],
-  declarations: [
-    DxHtmlEditorComponent
-  ],
   exports: [
     DxHtmlEditorComponent,
     DxoConverterModule,
@@ -1030,7 +1060,9 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     DxiItemModule,
     DxoTableResizingModule,
     DxoToolbarModule,
+    DxiCommandModule,
     DxoVariablesModule,
+    DxiHtmlEditorCommandModule,
     DxoHtmlEditorConverterModule,
     DxoHtmlEditorFileUploaderOptionsModule,
     DxoHtmlEditorImageUploadModule,
@@ -1048,6 +1080,8 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
   ]
 })
 export class DxHtmlEditorModule { }
+
+export * from 'devextreme-angular/ui/html-editor/nested';
 
 import type * as DxHtmlEditorTypes from "devextreme/ui/html_editor_types";
 export { DxHtmlEditorTypes };

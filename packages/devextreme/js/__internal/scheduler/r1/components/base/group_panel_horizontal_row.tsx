@@ -1,5 +1,4 @@
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
-import { getTemplate } from '@ts/core/r1/utils/index';
 
 import { GroupPanelHorizontalCell, GroupPanelHorizontalCellDefaultProps } from './group_panel_horizontal_cell';
 import type { GroupPanelRowProps } from './group_panel_props';
@@ -12,7 +11,6 @@ export class GroupPanelHorizontalRow extends BaseInfernoComponent<GroupPanelRowP
       className,
       groupItems,
     } = this.props;
-    const CellTemplateComponent = getTemplate(cellTemplate);
 
     return (
       <tr className={`dx-scheduler-group-row ${className}`}>
@@ -34,9 +32,9 @@ export class GroupPanelHorizontalRow extends BaseInfernoComponent<GroupPanelRowP
             index={index}
             color={color}
             colSpan={colSpan ?? GroupPanelHorizontalCellDefaultProps.colSpan}
-            isFirstGroupCell={!!isFirstGroupCell}
-            isLastGroupCell={!!isLastGroupCell}
-            cellTemplate={CellTemplateComponent}
+            isFirstGroupCell={Boolean(isFirstGroupCell)}
+            isLastGroupCell={Boolean(isLastGroupCell)}
+            cellTemplate={cellTemplate}
           />)
         }
       </tr>

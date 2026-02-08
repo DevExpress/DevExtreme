@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList
 } from '@angular/core';
 
 
@@ -36,7 +38,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -90,8 +93,9 @@ import { DxoLinearGaugeTitleModule } from 'devextreme-angular/ui/linear-gauge/ne
 import { DxoLinearGaugeTooltipModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeValueIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
 import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/nested';
-
-
+import { 
+           PROPERTY_TOKEN_ranges,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -100,9 +104,11 @@ import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/ne
  */
 @Component({
     selector: 'dx-linear-gauge',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -111,6 +117,12 @@ import { DxoLinearGaugeWidthModule } from 'devextreme-angular/ui/linear-gauge/ne
     ]
 })
 export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_ranges)
+    set _rangesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('ranges', value);
+    }
+
     instance: DxLinearGauge = null;
 
     /**
@@ -615,10 +627,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
 
 
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -706,6 +714,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
 
 @NgModule({
   imports: [
+    DxLinearGaugeComponent,
     DxoAnimationModule,
     DxoExportModule,
     DxoGeometryModule,
@@ -758,9 +767,6 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     DxoLinearGaugeWidthModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxLinearGaugeComponent
   ],
   exports: [
     DxLinearGaugeComponent,
@@ -818,6 +824,8 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
   ]
 })
 export class DxLinearGaugeModule { }
+
+export * from 'devextreme-angular/ui/linear-gauge/nested';
 
 import type * as DxLinearGaugeTypes from "devextreme/viz/linear_gauge_types";
 export { DxLinearGaugeTypes };

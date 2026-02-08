@@ -1,3 +1,8 @@
-In our upcoming major release (v25.1) our Chat component will allow users to edit/delete messages once they’ve been sent. 
+The DevExtreme Chat UI component allows users to edit and delete messages as needs dictate.
+
+Use a [data source](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#dataSource) to allow users to edit and delete messages. DevExtreme Chat does not update the data source automatically. Implement a [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/) with CRUD operations to handle updates. Once you configured these operations, enable [editing](/Documentation/ApiReference/UI_Components/dxChat/Configuration/editing/).
 <!--split-->
-DevExtreme Chat is a client-side component that requires a backend solution. Message editing and delete operations will include relevant UI elements for end users and APIs to modify rendered messages. To edit and remove messages from a data source, you will need to use Push APIs. 
+
+The **editing** object includes [allowUpdating](/Documentation/ApiReference/UI_Components/dxChat/Configuration/editing/#allowUpdating) and [allowDeleting](/Documentation/ApiReference/UI_Components/dxChat/Configuration/editing/#allowDeleting) properties. These Boolean options are initially set to `false`. To edit and delete messages, set these Boolean options to `true` or assign functions with custom logic.
+
+Review this demo and learn how to delete/edit chat messages. First, ensure that "Options" are active in the panel next to the Chat component. Right-click (Control+Click on MacOS) or long-tap a message to open the context menu. Select "Delete" to remove the message; a marker is then displayed in place of the deleted message within the feed. Choose "Edit" to view the original message and update its content. Click "Send" to save changes; this will mark the message as edited.

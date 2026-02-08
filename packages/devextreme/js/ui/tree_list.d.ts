@@ -25,12 +25,14 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+    InteractionEvent,
+} from '../events';
 
 import {
     AdaptiveDetailRowPreparingInfo,
     ColumnBase,
     ColumnButtonBase,
+    GridsContextMenuTarget,
     DataChangeInfo,
     DataErrorOccurredInfo,
     DragDropInfo,
@@ -123,6 +125,7 @@ export {
     ColumnHeaderFilterSearchConfig,
     ColumnLookup,
     ColumnResizeMode,
+    GridsContextMenuTarget,
     DataChange,
     DataChangeType,
     DataRenderMode,
@@ -252,7 +255,7 @@ export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = EventInfo<dx
      */
     items?: Array<any>;
     /** @docid _ui_tree_list_ContextMenuPreparingEvent.target */
-    readonly target: string;
+    readonly target: GridsContextMenuTarget;
     /** @docid _ui_tree_list_ContextMenuPreparingEvent.targetElement */
     readonly targetElement: DxElement;
     /** @docid _ui_tree_list_ContextMenuPreparingEvent.columnIndex */
@@ -341,7 +344,7 @@ export type EditorPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeLi
     /** @docid _ui_tree_list_EditorPreparedEvent.setValue */
     readonly setValue?: any;
     /** @docid _ui_tree_list_EditorPreparedEvent.updateValueTimeout */
-    readonly updateValueTimeout?: number;
+    updateValueTimeout?: number;
     /** @docid _ui_tree_list_EditorPreparedEvent.width */
     readonly width?: number;
     /** @docid _ui_tree_list_EditorPreparedEvent.disabled */
@@ -433,7 +436,7 @@ export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTr
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, InteractionEvent> & {
     /** @docid _ui_tree_list_FocusedCellChangingEvent.cellElement */
     readonly cellElement: DxElement;
     /** @docid _ui_tree_list_FocusedCellChangingEvent.prevColumnIndex */
@@ -482,7 +485,7 @@ export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTre
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, InteractionEvent> & {
     /** @docid _ui_tree_list_FocusedRowChangingEvent.rowElement */
     readonly rowElement: DxElement;
     /** @docid _ui_tree_list_FocusedRowChangingEvent.prevRowIndex */

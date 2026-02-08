@@ -12,6 +12,8 @@ import importPlugin from 'eslint-plugin-import';
 import globals from 'globals';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
+import unicorn from 'eslint-plugin-unicorn';
+import customRules from './eslint_plugins/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,7 +41,6 @@ export default [
             '**/ts/',
             'js/common/core/localization/cldr-data/*',
             'js/common/core/localization/default_messages.js',
-            'js/renovation/*',
         ],
     },
     ...compat.extends('devextreme/spell-check'),
@@ -47,6 +48,8 @@ export default [
         plugins: {
             'no-only-tests': noOnlyTests,
             i18n: i18N,
+            unicorn,
+            'devextreme-custom': customRules,
         },
         settings: {
             'import/resolver': {
@@ -509,7 +512,7 @@ export default [
             '@typescript-eslint/restrict-plus-operands': 'warn',
             '@typescript-eslint/no-use-before-define': 'warn',
             '@typescript-eslint/no-unused-expressions': 'warn',
-            '@typescript-eslint/prefer-optional-chain': 'warn',
+            '@typescript-eslint/prefer-optional-chain': 'off',
             '@typescript-eslint/no-this-alias': 'warn',
             '@typescript-eslint/no-non-null-assertion': 'warn',
             '@typescript-eslint/explicit-module-boundary-types': 'warn',
@@ -518,6 +521,70 @@ export default [
             '@typescript-eslint/no-implied-eval': 'warn',
             '@typescript-eslint/ban-ts-comment': 'warn',
             '@typescript-eslint/prefer-for-of': 'warn',
+        },
+    },
+    // Rules for scheduler
+    {
+        files: ['js/__internal/scheduler/**/*.ts?(x)'],
+        languageOptions: {
+            parser: tsParser,
+            ecmaVersion: 5,
+            sourceType: 'script',
+            parserOptions: {
+                project: './tsconfig.json',
+                tsconfigRootDir: `${__dirname}/js/__internal`,
+            },
+        },
+        rules: {
+            'no-implicit-coercion': ['error'],
+            'no-extra-boolean-cast': 'error',
+            'unicorn/filename-case': ['error', { case: 'snakeCase' }],
+            '@typescript-eslint/naming-convention': [
+                'error',
+                {
+                    selector: ['variable', 'function', 'parameter'],
+                    format: null,
+                    leadingUnderscore: 'forbid',
+                    // allow only a single underscore identifier `_` to bypass this rule
+                    filter: {
+                        regex: '^_$',
+                        match: false,
+                    },
+                },
+                {
+                    selector: 'memberLike',
+                    format: null,
+                    leadingUnderscore: 'allow',
+                },
+            ],
+            'devextreme-custom/no-deferred': 'error',
+            'devextreme-custom/prefer-switch-true': ['error', { minBranches: 3 }],
+        },
+    },
+    // Allow Deferred in m_* scheduler files only
+    {
+        files: ['js/__internal/scheduler/**/m_*.ts?(x)'],
+        rules: {
+            'devextreme-custom/no-deferred': 'off',
+        },
+    },
+    // Strict TypeScript rules for scheduler/header
+    {
+        files: ['js/__internal/scheduler/header/**/*.ts?(x)'],
+        languageOptions: {
+            parser: tsParser,
+            ecmaVersion: 5,
+            sourceType: 'script',
+            parserOptions: {
+                project: './tsconfig.json',
+                tsconfigRootDir: `${__dirname}/js/__internal`,
+            },
+        },
+        rules: {
+            '@typescript-eslint/no-explicit-any': 'error',
+            '@typescript-eslint/explicit-function-return-type': 'error',
+            '@typescript-eslint/no-unsafe-return': 'error',
+            '@typescript-eslint/explicit-module-boundary-types': 'error',
         },
     },
     // Rules for grid controls

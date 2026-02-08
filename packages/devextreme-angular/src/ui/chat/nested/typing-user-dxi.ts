@@ -14,16 +14,26 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_typingUsers } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-chat-typing-user',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_typingUsers,
+           useExisting: DxiChatTypingUserComponent,
+        }
+    ]
 })
 export class DxiChatTypingUserComponent extends CollectionNestedOption {
     @Input()
@@ -80,7 +90,7 @@ export class DxiChatTypingUserComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiChatTypingUserComponent
   ],
   exports: [

@@ -185,7 +185,7 @@ const horizontalGroupingViewDataProviderMock = {
 };
 
 module('Cells Selection State', () => {
-    test('Focused cell should be set correctly', function(assert) {
+    test('Focused cell should be set correctly', async function(assert) {
         const cellsSelectionState = new CellsSelectionState(horizontalGroupingViewDataProviderMock);
 
         cellsSelectionState.setFocusedCell(1, 1, false);
@@ -199,12 +199,12 @@ module('Cells Selection State', () => {
         );
     });
 
-    test('"getFocusedCell" should work correctly', function(assert) {
+    test('"getFocusedCell" should work correctly', async function(assert) {
         const cellsSelectionState = new CellsSelectionState(horizontalGroupingViewDataProviderMock);
 
         cellsSelectionState.setFocusedCell(1, 1, false);
 
-        const focusedCell = cellsSelectionState.focusedCell;
+        const focusedCell = cellsSelectionState.getFocusedCell();
 
         assert.deepEqual(
             focusedCell,
@@ -216,7 +216,7 @@ module('Cells Selection State', () => {
         );
     });
 
-    test('"setSelectedCells" should work correctly', function(assert) {
+    test('"setSelectedCells" should work correctly', async function(assert) {
         const cellsSelectionState = new CellsSelectionState({
             ...horizontalGroupingViewDataProviderMock,
             getCellsBetween: () => [
@@ -248,7 +248,7 @@ module('Cells Selection State', () => {
         );
     });
 
-    test('"setSelectedCellsByData" should work correctly', function(assert) {
+    test('"setSelectedCellsByData" should work correctly', async function(assert) {
         const cellsSelectionState = new CellsSelectionState();
 
         cellsSelectionState.setSelectedCellsByData([{
@@ -274,7 +274,7 @@ module('Cells Selection State', () => {
         );
     });
 
-    test('"releaseSelectedAndFocusedCells" should save current values as previous', function(assert) {
+    test('"releaseSelectedAndFocusedCells" should save current values as previous', async function(assert) {
         const cellsSelectionState = new CellsSelectionState({
             ...horizontalGroupingViewDataProviderMock,
             getCellsBetween: () => [
@@ -326,7 +326,7 @@ module('Cells Selection State', () => {
         );
     });
 
-    test('"clearSelectedAndFocusedCells" should not save current values as previous', function(assert) {
+    test('"clearSelectedAndFocusedCells" should not save current values as previous', async function(assert) {
         const cellsSelectionState = new CellsSelectionState({
             ...horizontalGroupingViewDataProviderMock,
             getCellsBetween: () => [
@@ -378,7 +378,7 @@ module('Cells Selection State', () => {
         );
     });
 
-    test('"restoreSelectedAndFocusedCells" should restore cells correctly when previous state was saved', function(assert) {
+    test('"restoreSelectedAndFocusedCells" should restore cells correctly when previous state was saved', async function(assert) {
         const cellsSelectionState = new CellsSelectionState({
             ...horizontalGroupingViewDataProviderMock,
             getCellsBetween: () => [
@@ -406,7 +406,7 @@ module('Cells Selection State', () => {
         cellsSelectionState.restoreSelectedAndFocusedCells();
 
         assert.deepEqual(
-            cellsSelectionState.focusedCell.cellData,
+            cellsSelectionState.getFocusedCell().cellData,
             testViewDataMap.horizontalGrouping[1][1].cellData,
             'Correct focused cell data',
         );
@@ -420,7 +420,7 @@ module('Cells Selection State', () => {
         );
     });
 
-    test('"restoreSelectedAndFocusedCells" should restore cells correctly when previous state was not saved', function(assert) {
+    test('"restoreSelectedAndFocusedCells" should restore cells correctly when previous state was not saved', async function(assert) {
         const cellsSelectionState = new CellsSelectionState({
             ...horizontalGroupingViewDataProviderMock,
             getCellsBetween: () => [
@@ -447,7 +447,7 @@ module('Cells Selection State', () => {
         cellsSelectionState.restoreSelectedAndFocusedCells();
 
         assert.deepEqual(
-            cellsSelectionState.focusedCell.cellData,
+            cellsSelectionState.getFocusedCell().cellData,
             testViewDataMap.horizontalGrouping[1][1].cellData,
             'Correct focused cell data',
         );

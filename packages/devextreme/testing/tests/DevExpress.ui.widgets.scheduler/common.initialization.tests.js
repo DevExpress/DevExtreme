@@ -1,19 +1,20 @@
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
-
+import { CustomStore } from 'common/data/custom_store';
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
+import { isFunction } from 'core/utils/type';
 import $ from 'jquery';
-import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';
-import errors from 'ui/widget/ui.errors';
-import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { AppointmentDataSource } from '__internal/scheduler/view_model/generate_view_model/data_provider/m_appointment_data_source';
+
+import { createWrapper, initTestMarkup, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitForAsync, waitGlobalFailure } from '../../helpers/scheduler/waitForAsync.js';
+
+import 'generic_light.css!';
 
 QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Initialization', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-        sinon.spy(errors, 'log');
-
         fx.off = true;
         this.tasks = [
             {
@@ -29,35 +30,33 @@ QUnit.module('Initialization', {
         ];
     },
     afterEach: function() {
-        errors.log.restore();
-        this.clock.restore();
         fx.off = false;
     }
 }, () => {
-    QUnit.test('Scheduler should have task model instance', function(assert) {
+    QUnit.test('Scheduler should have task model instance', async function(assert) {
         const data = new DataSource({
             store: this.tasks
         });
 
-        const { instance } = createWrapper({ dataSource: data });
+        const { instance } = await createWrapper({ dataSource: data });
 
-        assert.ok(instance.appointmentDataProvider instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
-        assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
+        assert.ok(instance.appointmentDataSource instanceof AppointmentDataSource, 'Task model is initialized on scheduler init');
+        assert.ok(instance.appointmentDataSource.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
-    QUnit.test('Scheduler should work correctly when wrong timeZone was set', function(assert) {
-        createWrapper({ timeZone: 'Wrong/timeZone' });
+    QUnit.test('Scheduler should work correctly when wrong timeZone was set', async function(assert) {
+        await createWrapper({ timeZone: 'Wrong/timeZone' });
         assert.ok(true, 'Widget works correctly');
     });
 
-    QUnit.test('Scheduler shouldn\'t have paginate in default DataSource', function(assert) {
-        const { instance } = createWrapper({ dataSource: this.tasks });
+    QUnit.test('Scheduler shouldn\'t have paginate in default DataSource', async function(assert) {
+        const { instance } = await createWrapper({ dataSource: this.tasks });
 
-        assert.notOk(instance.appointmentDataProvider.dataSource.paginate(), 'Paginate is false');
+        assert.notOk(instance.appointmentDataSource.dataSource.paginate(), 'Paginate is false');
     });
 
-    QUnit.test('Rendering inside invisible element', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('Rendering inside invisible element', async function(assert) {
+        const scheduler = await createWrapper();
         try {
             triggerHidingEvent($('#scheduler'));
             $('#scheduler').hide();
@@ -73,13 +72,14 @@ QUnit.module('Initialization', {
         } finally {
             $('#scheduler').show();
             triggerShownEvent($('#scheduler'));
-            this.clock.tick(10);
-            assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment').length, 1, 'Appointment is rendered');
+            const isSchedulerShown = () => scheduler.instance.$element().find('.dx-scheduler-appointment').length === 1;
+            await waitForAsync(() => isSchedulerShown());
+            assert.ok(isSchedulerShown(), 'Appointment is rendered');
         }
     });
 
-    QUnit.test('Data expressions should be compiled on init', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('Data expressions should be compiled on init', async function(assert) {
+        const scheduler = await createWrapper();
         const dataAccessors = scheduler.instance._dataAccessors;
 
         $.each([
@@ -92,13 +92,13 @@ QUnit.module('Initialization', {
             'allDay',
             'recurrenceRule',
             'recurrenceException'], function(_, field) {
-            assert.ok($.isFunction(dataAccessors.getter[field]), '\'' + field + '\' getter is OK');
-            assert.ok($.isFunction(dataAccessors.setter[field]), '\'' + field + '\' setter is OK');
+            assert.ok(isFunction(dataAccessors.getter[field]), '\'' + field + '\' getter is OK');
+            assert.ok(isFunction(dataAccessors.setter[field]), '\'' + field + '\' setter is OK');
         });
     });
 
-    QUnit.test('RecurrenceRule expression should not be compiled, if recurrenceRuleExpr = null', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('RecurrenceRule expression should not be compiled, if recurrenceRuleExpr = null', async function(assert) {
+        const scheduler = await createWrapper({
             'startDateExpr': '_startDate',
             'endDateExpr': '_endDate',
             'textExpr': '_text',
@@ -113,8 +113,8 @@ QUnit.module('Initialization', {
         assert.strictEqual(dataAccessors.setter.recurrenceRule, undefined, 'setter for recurrenceRule is OK');
     });
 
-    QUnit.test('appointmentCollectorTemplate rendering args should be correct', function(assert) {
-        createWrapper({
+    QUnit.test('appointmentCollectorTemplate rendering args should be correct', async function(assert) {
+        await createWrapper({
             dataSource: [{
                 startDate: new Date(2015, 4, 24, 9, 10),
                 endDate: new Date(2015, 4, 24, 11, 1),
@@ -143,26 +143,29 @@ QUnit.module('Initialization', {
         { startDayHour: 0, endDayHour: 0 },
         { startDayHour: 2, endDayHour: 0 }
     ].forEach(dayHours => {
-        QUnit.test(`Generate error if startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, function(assert) {
-            assert.throws(
-                () => {
-                    createWrapper({
-                        currentDate: new Date(2015, 4, 24),
-                        views: ['day'],
-                        currentView: 'day',
-                        startDayHour: dayHours.startDayHour,
-                        endDayHour: dayHours.endDayHour
-                    });
-                },
-                e => /E1058/.test(e.message) || /E1062/.test(e.message),
-                'E1058 Error message'
-            );
-            this.clock.tick(1000);
+        QUnit.test(`Generate error if startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, async function(assert) {
+            const promise = waitGlobalFailure();
+            const consoleErrors = [];
+
+            try {
+                await createWrapper({
+                    currentDate: new Date(2015, 4, 24),
+                    views: ['day'],
+                    currentView: 'day',
+                    startDayHour: dayHours.startDayHour,
+                    endDayHour: dayHours.endDayHour
+                });
+                consoleErrors.push(await promise);
+            } catch(error) {
+                consoleErrors.push(error.message);
+            }
+
+            assert.ok(consoleErrors[0].startsWith('E1062'), 'E1062 Error message');
         });
     });
 
-    QUnit.test('Header panel should be visible in "Day" view with intervalCount > 1 if crossScrollingEnabled: true, showAllDayPanel: false (T895058)', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Header panel should be visible in "Day" view with intervalCount > 1 if crossScrollingEnabled: true, showAllDayPanel: false (T895058)', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [],
             views: [{
                 type: 'day',
@@ -176,5 +179,45 @@ QUnit.module('Initialization', {
         const headerHeight = scheduler.header.getElement().height();
 
         assert.ok(headerScrollableHeight >= headerHeight, 'HeaderScrollable height is correct');
+    });
+
+    QUnit.test('Option should apply before resource loaded', async function(assert) {
+        const done = assert.async();
+        const instance = $('#scheduler').dxScheduler({
+            timeZone: 'America/Los_Angeles',
+            dataSource: [],
+            startDayHour: 12,
+            currentView: 'week',
+            currentDate: new Date('2021-03-29T21:30:00.000Z'),
+            groups: ['Priority'],
+            resources: [{
+                fieldExpr: 'Priority',
+                allowMultiple: false,
+                label: 'Priority',
+                dataSource: new DataSource({
+                    store: new CustomStore({
+                        load: function() {
+                            const d = $.Deferred();
+                            setTimeout(function() {
+                                d.resolve([{ id: 1, text: 'Low' }]);
+                            }, 100);
+
+                            return d.promise();
+                        }
+                    })
+                })
+            }],
+            onContentReady: () => {
+                done();
+                assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'DataSource set correctly after resource rendered');
+            }
+        }).dxScheduler('instance');
+        const scheduler = new SchedulerTestWrapper(instance);
+        instance.option('dataSource', [{
+            text: 'Install New Router in Dev Room',
+            startDate: new Date('2021-03-29T21:30:00.000Z'),
+            endDate: new Date('2021-03-29T22:30:00.000Z'),
+            Priority: 1,
+        }]);
     });
 });

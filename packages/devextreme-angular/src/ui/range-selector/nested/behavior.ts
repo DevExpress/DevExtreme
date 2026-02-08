@@ -14,10 +14,10 @@ import {
 
 
 
-import { ValueChangedCallMode } from 'devextreme/viz/range_selector';
 import { SliderValueChangeMode } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-range-selector-behavior',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoRangeSelectorBehaviorComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -44,14 +46,6 @@ export class DxoRangeSelectorBehaviorComponent extends NestedOption implements O
     }
     set animationEnabled(value: boolean) {
         this._setOption('animationEnabled', value);
-    }
-
-    @Input()
-    get callValueChanged(): ValueChangedCallMode {
-        return this._getOption('callValueChanged');
-    }
-    set callValueChanged(value: ValueChangedCallMode) {
-        this._setOption('callValueChanged', value);
     }
 
     @Input()
@@ -112,7 +106,7 @@ export class DxoRangeSelectorBehaviorComponent extends NestedOption implements O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoRangeSelectorBehaviorComponent
   ],
   exports: [

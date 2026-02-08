@@ -36,16 +36,16 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiValidationSummaryItemModule } from 'devextreme-angular/ui/validation-summary/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiValidationSummaryItemComponent } from 'devextreme-angular/ui/validation-summary/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -54,8 +54,10 @@ import { DxiValidationSummaryItemComponent } from 'devextreme-angular/ui/validat
  */
 @Component({
     selector: 'dx-validation-summary',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -64,6 +66,12 @@ import { DxiValidationSummaryItemComponent } from 'devextreme-angular/ui/validat
     ]
 })
 export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxValidationSummary<TItem, TKey> = null;
 
     /**
@@ -208,26 +216,6 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
 
 
-    @ContentChildren(DxiValidationSummaryItemComponent)
-    get itemsChildren(): QueryList<DxiValidationSummaryItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiValidationSummaryItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -294,13 +282,11 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
 
 @NgModule({
   imports: [
+    DxValidationSummaryComponent,
     DxiItemModule,
     DxiValidationSummaryItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxValidationSummaryComponent
   ],
   exports: [
     DxValidationSummaryComponent,
@@ -310,6 +296,8 @@ export class DxValidationSummaryComponent<TItem = any, TKey = any> extends DxCom
   ]
 })
 export class DxValidationSummaryModule { }
+
+export * from 'devextreme-angular/ui/validation-summary/nested';
 
 import type * as DxValidationSummaryTypes from "devextreme/ui/validation_summary_types";
 export { DxValidationSummaryTypes };

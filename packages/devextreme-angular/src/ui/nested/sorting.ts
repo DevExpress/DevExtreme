@@ -16,15 +16,18 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoGanttSorting } from './base/gantt-sorting';
+import { DxoSorting } from './base/sorting';
 
 
 @Component({
     selector: 'dxo-sorting',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'ascendingText',
@@ -34,7 +37,7 @@ import { DxoGanttSorting } from './base/gantt-sorting';
         'showSortIndexes'
     ]
 })
-export class DxoSortingComponent extends DxoGanttSorting implements OnDestroy, OnInit  {
+export class DxoSortingComponent extends DxoSorting implements OnDestroy, OnInit  {
 
     protected get _optionPath() {
         return 'sorting';
@@ -61,7 +64,7 @@ export class DxoSortingComponent extends DxoGanttSorting implements OnDestroy, O
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoSortingComponent
   ],
   exports: [

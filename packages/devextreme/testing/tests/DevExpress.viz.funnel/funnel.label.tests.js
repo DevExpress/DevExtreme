@@ -645,7 +645,6 @@ QUnit.test('Connector strategy. left horizontalAlignment', function(assert) {
     }), [[14, 15], [14, 16], [14, 17], [54, 15], [54, 16], [54, 17]], 'prepareLabelPoints');
 });
 
-
 QUnit.test('Connector strategy. inverted', function(assert) {
     stubAlgorithm.getFigures.returns([
         [0, 0, 1, 0, 1, 0.5, 0, 0.5]
@@ -957,7 +956,6 @@ QUnit.test('Apply label ellipsis and correct label coordinates', function(assert
 });
 
 QUnit.test('Apply label ellipsis and correct label coordinates. Right horizontalAlignment', function(assert) {
-
     stubAlgorithm.getFigures.returns([[0.1, 0, 0.9, 1], [0.2, 0, 0.8, 1]]);
 
     createFunnel({
@@ -982,7 +980,6 @@ QUnit.test('Apply label ellipsis and correct label coordinates. Right horizontal
 });
 
 QUnit.test('Correct label pos if label out from left', function(assert) {
-
     stubAlgorithm.getFigures.returns([[0.1, 0, 0.9, 1], [0.2, 0, 0.8, 1]]);
 
     createFunnel({
@@ -1009,7 +1006,6 @@ QUnit.test('Correct label pos if label out from left', function(assert) {
 });
 
 QUnit.test('Correct label pos if label out from right', function(assert) {
-
     stubAlgorithm.getFigures.returns([[0.1, 0, 0.9, 1], [0.2, 0, 0.8, 1]]);
 
     createFunnel({
@@ -1035,7 +1031,6 @@ QUnit.test('Correct label pos if label out from right', function(assert) {
 });
 
 QUnit.test('Correct label pos if label out from top', function(assert) {
-
     stubAlgorithm.getFigures.returns([[0, 0, 1, 0, 1, 0.1, 0, 0.1]]);
 
     createFunnel({
@@ -1061,7 +1056,6 @@ QUnit.test('Correct label pos if label out from top', function(assert) {
 });
 
 QUnit.test('Correct label pos if label out from top', function(assert) {
-
     stubAlgorithm.getFigures.returns([[0, 0.9, 1, 0.9, 1, 1, 0, 1]]);
 
     createFunnel({

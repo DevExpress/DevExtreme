@@ -45,6 +45,11 @@ export default class ContextMenu extends Widget {
     return this.items.nth(index);
   }
 
+  // Note: It is needed to click on disabled elements
+  getItemWrapperByIndex(index: number): Selector {
+    return this.items.nth(index).parent();
+  }
+
   getItemCount(): Promise<number> {
     return this.items.count;
   }

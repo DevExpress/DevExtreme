@@ -1,0 +1,30 @@
+@use './header';
+@use './content';
+@use './cover';
+@use './variables' as *;
+
+.dx-cardview-card {
+  width: 100%;
+  min-width: var(--dx-cardview-card-min-width, $cardview-card-min-width);
+  max-width: var(--dx-cardview-card-max-width);
+  border: $cardview-card-border-width solid $cardview-card-border-color;
+  border-radius: $cardview-card-border-radius;
+  background-color: $cardview-card-bg-color;
+  color: $cardview-card-text-color;
+  overflow: hidden;
+
+  & > div > :nth-child(2) {
+    border-top: none;
+  }
+
+  &:focus-visible {
+    outline: 2px $cardview-card--focused-outline-color solid;
+    outline-offset: -2px;
+  }
+}
+
+.dx-cardview-card-selection {
+  background-color: $cardview-card--selected-bg-color;
+  border-color: $cardview-card--selected-border-color;
+  color: $cardview-card--selected-text-color;
+}

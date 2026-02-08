@@ -1,7 +1,5 @@
 import $ from 'jquery';
 
-import 'generic_light.css!';
-
 import 'ui/switch';
 
 QUnit.testStart(function() {
@@ -87,10 +85,10 @@ QUnit.module('Switch markup', () => {
         const inner = element.find(INNER_SELECTOR);
 
         const labelOnEl = inner.find(LABEL_ON_SELECTOR);
-        assert.equal($.trim(labelOnEl.text()), 'ON');
+        assert.equal(labelOnEl.text().trim(), 'ON');
 
         const labelOffEl = inner.find(LABEL_OFF_SELECTOR);
-        assert.equal($.trim(labelOffEl.text()), 'OFF');
+        assert.equal(labelOffEl.text().trim(), 'OFF');
     });
 
     QUnit.test('switchedOnText/switchedOffText on init', function(assert) {
@@ -102,10 +100,10 @@ QUnit.module('Switch markup', () => {
         const inner = element.find(INNER_SELECTOR);
 
         const textOnEl = inner.find(LABEL_ON_SELECTOR);
-        assert.equal($.trim(textOnEl.text()), 'customOn');
+        assert.equal(textOnEl.text().trim(), 'customOn');
 
         const textOffEl = inner.find(LABEL_OFF_SELECTOR);
-        assert.equal($.trim(textOffEl.text()), 'customOff');
+        assert.equal(textOffEl.text().trim(), 'customOff');
     });
 
     QUnit.test('default ui state', function(assert) {

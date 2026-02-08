@@ -2,7 +2,7 @@ import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Item } from '@js/ui/splitter';
-import CollectionWidgetItem from '@ts/ui/collection/m_item';
+import CollectionWidgetItem from '@ts/ui/collection/item';
 
 import ResizeHandle from './resize_handle';
 import type Splitter from './splitter';
@@ -66,8 +66,7 @@ class SplitterItem extends CollectionWidgetItem<Item> {
   }
 
   getIndex(): number {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this._owner._getIndexByItemData(this._rawData);
+    return this._owner._getIndexByItemData(this._rawData) as number;
   }
 
   getResizeHandle(): ResizeHandle | undefined {

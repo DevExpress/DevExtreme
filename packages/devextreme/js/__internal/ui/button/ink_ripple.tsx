@@ -1,5 +1,5 @@
-import { hideWave, initConfig, showWave } from '@js/ui/widget/utils.ink_ripple';
 import { BaseInfernoComponent } from '@ts/core/r1/runtime/inferno/index';
+import { hideWave, initConfig, showWave } from '@ts/core/utils/m_ink_ripple';
 
 export interface InkRippleConfig {
   isCentered?: boolean;
@@ -17,9 +17,12 @@ export interface InkRippleProps {
   config?: InkRippleConfig;
 }
 
+export const defaultInkRippleProps = {
+  config: {},
+};
+
 export class InkRipple extends BaseInfernoComponent<InkRippleProps> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private readonly __getterCache: any = {};
+  private readonly __getterCache: { getConfig?: InkRippleConfig } = {};
 
   constructor(props: InkRippleProps) {
     super(props);
@@ -29,22 +32,16 @@ export class InkRipple extends BaseInfernoComponent<InkRippleProps> {
   }
 
   get getConfig(): InkRippleConfig {
-    if (this.__getterCache.getConfig !== undefined) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return this.__getterCache.getConfig;
+    if (this.__getterCache.getConfig === undefined) {
+      this.__getterCache.getConfig = initConfig(this.props.config);
     }
-    // eslint-disable-next-line no-return-assign
-    return this.__getterCache.getConfig = ((): InkRippleConfig => {
-      const {
-        config,
-      } = this.props;
-      return initConfig(config);
-    })();
+
+    return this.__getterCache.getConfig;
   }
 
   get restAttributes(): Record<string, unknown> {
-    const restProps = { ...this.props };
-    delete restProps.config;
+    const { config, ...restProps } = this.props;
+
     return restProps;
   }
 
@@ -72,6 +69,4 @@ export class InkRipple extends BaseInfernoComponent<InkRippleProps> {
   }
 }
 
-InkRipple.defaultProps = {
-  config: {},
-};
+InkRipple.defaultProps = defaultInkRippleProps;

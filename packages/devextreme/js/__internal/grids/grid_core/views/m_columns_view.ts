@@ -26,6 +26,7 @@ import {
   isRenderer, isString,
 } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import supportUtils from '@ts/core/utils/m_support';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
@@ -78,6 +79,11 @@ const subscribeToRowEvents = function (that, $table) {
   }
 
   eventsEngine.on($table, 'touchstart touchend', '.dx-row', (e) => {
+    // NOTE: checking for target only for mocks in qunits
+    if (e?.event?.target && !gridCoreUtils.isElementInCurrentGrid(that, $(e.event.target))) {
+      return;
+    }
+
     clearTimeout(timeoutId);
     if (e.type === 'touchstart') {
       touchTarget = e.target;
@@ -90,6 +96,11 @@ const subscribeToRowEvents = function (that, $table) {
 
   eventsEngine.on($table, [clickEventName, dblclickEvent, pointerEvents.down].join(' '), '.dx-row', that.createAction((e) => {
     const { event } = e;
+
+    // NOTE: checking for target only for mocks in qunits
+    if (e?.event?.target && !gridCoreUtils.isElementInCurrentGrid(that, $(event.target))) {
+      return;
+    }
 
     if (touchTarget) {
       event.target = touchTarget;
@@ -299,12 +310,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     const $cell = $(cell);
 
-    if (options.rowType === 'data' && column.headerId && !column.type) {
-      if (this.component.option('showColumnHeaders')) {
-        this.setAria('describedby', column.headerId, $cell);
-      }
-    }
-
     if (column.cssClass) {
       $cell.addClass(column.cssClass);
     }
@@ -399,7 +404,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
         const visibleColumns = this._columnsController.getVisibleColumns();
         const rowOptions: any = $row.data('options');
         const columnIndex = $cell.index();
-        // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+
         const cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex];
         const column = cellOptions ? cellOptions.column : visibleColumns[columnIndex];
 
@@ -1078,6 +1083,14 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
+  protected handleScroll(e: DxEvent): void {
+    const scrollLeft = $(e.target).scrollLeft();
+
+    if (scrollLeft !== this._scrollLeft) {
+      this.scrollChanged.fire({ left: scrollLeft }, this.name);
+    }
+  }
+
   /**
    * @extended: column_fixing
    */
@@ -1088,14 +1101,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     if (useNative === false || (useNative === 'auto' && !supportUtils.nativeScrolling)) {
       $scrollContainer.addClass(this.addWidgetPrefix(SCROLLABLE_SIMULATED_CLASS));
     }
-
-    eventsEngine.on($scrollContainer, 'scroll', () => {
-      const scrollLeft = $scrollContainer.scrollLeft();
-
-      if (scrollLeft !== this._scrollLeft) {
-        this.scrollChanged.fire({ left: scrollLeft }, this.name);
-      }
-    });
+    eventsEngine.on($scrollContainer, 'scroll', this.handleScroll.bind(this));
 
     $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_CLASS))
       .addClass(this.addWidgetPrefix(SCROLL_CONTAINER_CLASS))
@@ -1108,7 +1114,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   private needWaitAsyncTemplates() {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
     return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
   }
 
@@ -1117,7 +1122,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const result = new Deferred();
     const needWaitAsyncTemplates = forceWaiting || this.needWaitAsyncTemplates();
 
-    if (!needWaitAsyncTemplates) {
+    if (!needWaitAsyncTemplates || !isDefined(this._templateDeferreds)) {
       return result.resolve();
     }
 
@@ -1158,11 +1163,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const result: number[] = [];
     const cellElements = $cellElements.toArray();
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     (cellElements as HTMLElement[]).forEach((cell) => {
       let width = cell.offsetWidth;
 
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       if ((cell as any).getBoundingClientRect) {
         const rect = getBoundingRect(cell);
 

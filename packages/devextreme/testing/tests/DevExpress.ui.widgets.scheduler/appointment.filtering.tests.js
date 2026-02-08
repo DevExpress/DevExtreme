@@ -5,12 +5,13 @@ import dataUtils from 'core/element_data';
 import {
     initTestMarkup,
     createWrapper,
-    asyncAssert,
     supportedScrollingModes
 } from '../../helpers/scheduler/helpers.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
+import 'fluent_blue_light.css!';
 
 const {
     module,
@@ -22,13 +23,12 @@ testStart(() => initTestMarkup());
 
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
-const createInstanceBase = (options, clock) => {
-    const scheduler = createWrapper({
+const createInstanceBase = async(options) => {
+    const scheduler = await createWrapper({
         height: 600,
         ...options,
     });
 
-    clock.tick(300);
     scheduler.instance.focus();
 
     return scheduler;
@@ -37,8 +37,6 @@ const createInstanceBase = (options, clock) => {
 module('Integration: Appointment filtering', {
     beforeEach: function() {
         fx.off = true;
-
-        this.clock = sinon.useFakeTimers();
         this.tasks = [
             {
                 text: 'Task 1',
@@ -54,11 +52,10 @@ module('Integration: Appointment filtering', {
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 }, () => {
     supportedScrollingModes.forEach(scrollingMode => {
-        const createInstance = (options, clock) => {
+        const createInstance = async(options) => {
             options = options || {};
             $.extend(
                 true,
@@ -70,7 +67,7 @@ module('Integration: Appointment filtering', {
                 }
             );
 
-            const scheduler = createInstanceBase(options, clock);
+            const scheduler = await createInstanceBase(options);
 
             if(scrollingMode === 'virtual') {
                 const workspace = scheduler.instance.getWorkSpace();
@@ -81,7 +78,7 @@ module('Integration: Appointment filtering', {
         };
 
         module(`Scrolling mode ${scrollingMode}`, () => {
-            test('Removed appointments should render, if appointment appeared after filtering (T903973)', function(assert) {
+            test('Removed appointments should render, if appointment appeared after filtering (T903973)', async function(assert) {
                 if(scrollingMode === 'virtual') {
                     assert.ok('Virtual scrolling not support month view');
                     return;
@@ -117,7 +114,7 @@ module('Integration: Appointment filtering', {
                     id: 3
                 }];
 
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     dataSource: dataSource,
                     views: ['month'],
                     currentView: 'month',
@@ -150,7 +147,7 @@ module('Integration: Appointment filtering', {
                 assert.equal(scheduler.appointments.getAppointmentCount(), 3, 'After filtering should be rendered appointments "A", "B", "C"');
             });
 
-            test('Remote filter should apply after change view type', function(assert) {
+            test('Remote filter should apply after change view type', async function(assert) {
                 const model = [{
                     text: 'New Brochures',
                     startDate: '2017-05-23T14:30:00',
@@ -194,7 +191,7 @@ module('Integration: Appointment filtering', {
                     store: model
                 });
 
-                const scheduler = createWrapper({
+                const scheduler = await createWrapper({
                     dataSource,
                     dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ss',
                     remoteFiltering: true,
@@ -223,13 +220,15 @@ module('Integration: Appointment filtering', {
                 assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered after call load method of dataSource');
 
                 scheduler.instance.option('currentView', 'workWeek');
+                await waitAsync(10);
                 assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered and rendered after change view on "Work Week"');
 
                 scheduler.instance.option('currentView', 'month');
+                await waitAsync(10);
                 assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments should be filtered and rendered after change view on "Month"');
             });
 
-            test('Tasks should be filtered by date before render', function(assert) {
+            test('Tasks should be filtered by date before render', async function(assert) {
                 const tasks = [
                     { text: 'One', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 1) },
                     { text: 'Two', startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 1) }
@@ -237,12 +236,12 @@ module('Integration: Appointment filtering', {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     currentView: 'day',
                     remoteFiltering: true
-                }, this.clock);
+                });
 
                 assert.deepEqual(dataSource.items(), [tasks[0]], 'Items are OK');
 
@@ -250,10 +249,11 @@ module('Integration: Appointment filtering', {
                 assert.deepEqual(dataSource.items(), [tasks[1]], 'Items are OK');
 
                 scheduler.instance.option('currentView', 'week');
+                await waitAsync(10);
                 assert.deepEqual(dataSource.items(), tasks, 'Items are OK');
             });
 
-            test('Tasks should be filtered by start day hour before render', function(assert) {
+            test('Tasks should be filtered by start day hour before render', async function(assert) {
                 const tasks = [
                     { text: 'One', startDate: new Date(2015, 2, 16, 5), endDate: new Date(2015, 2, 16, 5, 30) },
                     { text: 'Two', startDate: new Date(2015, 2, 16, 2), endDate: new Date(2015, 2, 16, 2, 30) },
@@ -263,12 +263,12 @@ module('Integration: Appointment filtering', {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     startDayHour: 4,
                     currentView: 'week'
-                }, this.clock);
+                });
 
                 let $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
@@ -279,12 +279,12 @@ module('Integration: Appointment filtering', {
                 $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointments.length, 3, 'There are three appointments');
-                assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[0], 'Appointment data is OK');
-                assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[1], 'Appointment data is OK');
+                assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[1], 'Appointment data is OK');
+                assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[0], 'Appointment data is OK');
                 assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData'), tasks[2], 'Appointment data is OK');
             });
 
-            test('Tasks should be filtered by end day hour before render', function(assert) {
+            test(`Tasks should be filtered by end day hour before render mode=${scrollingMode}`, async function(assert) {
                 const tasks = [
                     { text: 'One', startDate: new Date(2015, 2, 16, 7), endDate: new Date(2015, 2, 16, 7, 30) },
                     { text: 'Two', startDate: new Date(2015, 2, 16, 11), endDate: new Date(2015, 2, 16, 11, 30) },
@@ -292,35 +292,35 @@ module('Integration: Appointment filtering', {
                     { text: 'Five', startDate: new Date(2015, 2, 10, 15), endDate: new Date(2015, 2, 10, 15, 30) }
                 ];
 
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: tasks,
                     endDayHour: 10,
                     currentView: 'week',
-                    height: 600
-                }, this.clock);
+                    height: 600,
+                });
+                const getAppointments = () => scheduler.appointments.getAppointments();
 
-                let $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
+                let $appointments = getAppointments();
 
                 assert.equal($appointments.length, 1, 'There is only one appointment');
                 assert.deepEqual(dataUtils.data($appointments[0], 'dxItemData'), tasks[0], 'Appointment data is OK');
 
                 scheduler.instance.option('endDayHour', 14);
+                await waitAsync(0);
 
-                return asyncAssert(
-                    assert,
-                    () => {
-                        $appointments = scheduler.instance.$element().find(`.${APPOINTMENT_CLASS}`);
+                const scrollable = scheduler.workSpace.getScrollable();
+                scrollable.scrollTo({ top: 500 });
 
-                        assert.equal($appointments.length, 3, 'There are three appointments');
-
-                        assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[0], 'Appointment data is OK');
-                        assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[1], 'Appointment data is OK');
-                        assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData'), tasks[2], 'Appointment data is OK');
-                    });
+                await waitForAsync(() => getAppointments().length === 3);
+                $appointments = getAppointments();
+                assert.equal($appointments.length, 3, 'There are three appointments');
+                assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[0], 'Appointment data is OK');
+                assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[1], 'Appointment data is OK');
+                assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData'), tasks[2], 'Appointment data is OK');
             });
 
-            test('tasks should be filtered by resources before render', function(assert) {
+            test('tasks should be filtered by resources before render', async function(assert) {
                 const tasks = [
                     { text: 'a', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
                     { text: 'b', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
@@ -330,7 +330,7 @@ module('Integration: Appointment filtering', {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     groups: ['ownerId', 'roomId'],
@@ -351,18 +351,18 @@ module('Integration: Appointment filtering', {
                             dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                         }
                     ]
-                }, this.clock);
+                });
 
                 const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointments.length, 4, 'There are four appointment');
                 assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[1], 'The first appointment data is OK');
-                assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[1], 'The second appointment dat is OK');
-                assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData'), tasks[3], 'The first appointment data is OK');
+                assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData'), tasks[1], 'The second appointment dat is OK');
+                assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[3], 'The first appointment data is OK');
                 assert.deepEqual(dataUtils.data($appointments.get(3), 'dxItemData'), tasks[3], 'The second appointment dat is OK');
             });
 
-            test('Tasks should be filtered by resources if dataSource is changed', function(assert) {
+            test('Tasks should be filtered by resources if dataSource is changed', async function(assert) {
                 const tasks = [
                     { text: 'a', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
                     { text: 'b', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
@@ -372,7 +372,7 @@ module('Integration: Appointment filtering', {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 16),
                     groups: ['ownerId', 'roomId'],
                     resources: [
@@ -392,20 +392,21 @@ module('Integration: Appointment filtering', {
                             dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                         }
                     ]
-                }, this.clock);
+                });
 
                 scheduler.instance.option('dataSource', dataSource);
+                await waitAsync(10);
 
                 const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointments.length, 4, 'There are four appointment');
                 assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[1], 'The first appointment data is OK');
-                assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[1], 'The second appointment dat is OK');
-                assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData'), tasks[3], 'The first appointment data is OK');
+                assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData'), tasks[1], 'The second appointment dat is OK');
+                assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[3], 'The first appointment data is OK');
                 assert.deepEqual(dataUtils.data($appointments.get(3), 'dxItemData'), tasks[3], 'The second appointment dat is OK');
             });
 
-            test('Tasks should be filtered by resources if resources are changed', function(assert) {
+            test('Tasks should be filtered by resources if resources are changed', async function(assert) {
                 const tasks = [
                     { text: 'a', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
                     { text: 'b', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
@@ -415,11 +416,11 @@ module('Integration: Appointment filtering', {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     groups: ['ownerId', 'roomId']
-                }, this.clock);
+                });
 
                 scheduler.instance.option('resources', [
                     {
@@ -438,17 +439,18 @@ module('Integration: Appointment filtering', {
                         dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                     }
                 ]);
+                await waitAsync(0);
 
                 const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointments.length, 4, 'There are four appointment');
                 assert.deepEqual(dataUtils.data($appointments.get(0), 'dxItemData'), tasks[1], 'The first appointment data is OK');
-                assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[1], 'The second appointment data is OK');
-                assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData'), tasks[3], 'The first appointment data is OK');
+                assert.deepEqual(dataUtils.data($appointments.get(2), 'dxItemData'), tasks[1], 'The second appointment data is OK');
+                assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[3], 'The first appointment data is OK');
                 assert.deepEqual(dataUtils.data($appointments.get(3), 'dxItemData'), tasks[3], 'The second appointment data is OK');
             });
 
-            test('Tasks should be filtered by resources if groups are changed', function(assert) {
+            test('Tasks should be filtered by resources if groups are changed', async function(assert) {
                 const tasks = [
                     { text: 'a', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
                     { text: 'b', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 1 }, // true
@@ -458,7 +460,7 @@ module('Integration: Appointment filtering', {
                 const dataSource = new DataSource({
                     store: tasks
                 });
-                const scheduler = createInstance({
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     groups: ['ownerId', 'roomId'],
@@ -479,8 +481,9 @@ module('Integration: Appointment filtering', {
                             dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                         }
                     ]
-                }, this.clock);
+                });
                 scheduler.instance.option('groups', ['ownerId', 'roomId', 'managerId']);
+                await waitAsync(10);
                 const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
 
                 assert.equal($appointments.length, 2, 'There are two appointment');
@@ -488,8 +491,8 @@ module('Integration: Appointment filtering', {
                 assert.deepEqual(dataUtils.data($appointments.get(1), 'dxItemData'), tasks[1], 'The second appointment data is OK');
             });
 
-            test('Appointments should be filtered correctly by end day hour when current date was changed', function(assert) {
-                const scheduler = createInstance({
+            test('Appointments should be filtered correctly by end day hour when current date was changed', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 4, 6),
                     currentView: 'week',
                     endDayHour: 10,
@@ -499,7 +502,7 @@ module('Integration: Appointment filtering', {
                             startDate: new Date(2015, 4, 7, 11)
                         }
                     ]
-                }, this.clock);
+                });
 
                 let $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
                 assert.equal($appointments.length, 0, 'There are not appointments');

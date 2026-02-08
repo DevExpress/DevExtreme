@@ -7,10 +7,7 @@ import { data, locations } from './data.js';
 const timeZoneLabel = { 'aria-label': 'Time zone' };
 const currentDate = new Date(2021, 3, 27);
 const views = ['workWeek'];
-const getTimeZones = (date) => {
-  const timeZones = timeZoneUtils.getTimeZones(date);
-  return timeZones.filter((timeZone) => locations.indexOf(timeZone.id) !== -1);
-};
+const getTimeZones = (date) => timeZoneUtils.getTimeZones(date, locations);
 const defaultTimeZones = getTimeZones(currentDate);
 const onAppointmentFormOpening = (e) => {
   const { form } = e;

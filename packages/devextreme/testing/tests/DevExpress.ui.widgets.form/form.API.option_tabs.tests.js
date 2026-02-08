@@ -1,7 +1,8 @@
 import $ from 'jquery';
 import 'ui/form';
-
-import 'generic_light.css!';
+import { TABS_ITEM_CLASS } from '__internal/ui/tabs/tabs';
+import { TABS_ITEM_BADGE_CLASS } from '__internal/ui/tabs/item';
+import { TABPANEL_CLASS } from '__internal/ui/tab_panel/tab_panel';
 
 const { testStart, test, module, assert } = QUnit;
 
@@ -29,8 +30,8 @@ class FormTestWrapper {
         this._form.on('contentReady', this._contentReadyStub);
     }
 
-    _getTabsTextsElements() {
-        return this._form.$element().find('.dx-tab-content .dx-tab-text');
+    _getTabsElements() {
+        return this._form.$element().find(`.${TABS_ITEM_CLASS}`);
     }
 
     _getMultiViewItemsElements() {
@@ -46,7 +47,7 @@ class FormTestWrapper {
     }
 
     selectTab(tabIndex) {
-        $('.dx-tabpanel').dxTabPanel('instance').option('selectedIndex', tabIndex);
+        $(`.${TABPANEL_CLASS}`).dxTabPanel('instance').option('selectedIndex', tabIndex);
     }
 
     checkFormsReRender() {
@@ -55,16 +56,16 @@ class FormTestWrapper {
     }
 
     checkTabBadge(tabIndex, expectedText) {
-        assert.equal($('.dx-tabs-item-badge').eq(tabIndex).text(), expectedText, `${tabIndex} tab badge`);
+        assert.equal($(`.${TABS_ITEM_BADGE_CLASS}`).eq(tabIndex).text(), expectedText, `${tabIndex} tab badge`);
     }
 
     checkTabDisabled(tabIndex, expectedValue) {
-        const $tabItems = $('.dx-tab');
+        const $tabItems = $(`.${TABS_ITEM_CLASS}`);
         assert.equal($tabItems.eq(tabIndex).hasClass('dx-state-disabled'), expectedValue, `${tabIndex} tab disabled`);
     }
 
     checkTabIcon(tabIndex, expectedIcon) {
-        const $icon = $('.dx-tab .dx-icon').eq(tabIndex);
+        const $icon = $(`.${TABS_ITEM_CLASS} .dx-icon`).eq(tabIndex);
         assert.ok($icon.hasClass(`dx-icon-${expectedIcon}`), `${tabIndex} tab icon`);
     }
 
@@ -79,12 +80,12 @@ class FormTestWrapper {
     }
 
     checkTabTitle(tabIndex, expectedText) {
-        const $title = this._getTabsTextsElements().eq(tabIndex);
+        const $title = this._getTabsElements().eq(tabIndex);
         assert.strictEqual($title.text(), `${expectedText}${expectedText}`, `${tabIndex} tab title`);
     }
 
     checkTabsElements(expectedTabsCount) {
-        const $tabs = this._getTabsTextsElements();
+        const $tabs = this._getTabsElements();
         assert.equal($tabs.length, expectedTabsCount, 'count of tabs elements');
 
         const $multiViewItems = this._getMultiViewItemsElements();

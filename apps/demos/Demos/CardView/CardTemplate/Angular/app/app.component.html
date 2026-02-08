@@ -1,0 +1,55 @@
+<dx-card-view
+  [dataSource]="vehicles"
+  [height]="1120"
+  cardsPerRow="auto"
+  [cardMinWidth]="240"
+  cardTemplate="vehicleCardTemplate"
+>
+  <dxo-card-view-header-filter [visible]="true"></dxo-card-view-header-filter>
+  <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
+  <dxo-card-view-paging [pageSize]="12"></dxo-card-view-paging>
+
+  <dxi-card-view-column dataField="TrademarkName" caption="Trademark" />
+  <dxi-card-view-column dataField="Name" caption="Model" />
+  <dxi-card-view-column dataField="Price" format="currency">
+    <dxo-card-view-column-header-filter
+      [groupInterval]="20000"
+    ></dxo-card-view-column-header-filter>
+  </dxi-card-view-column>
+  <dxi-card-view-column dataField="CategoryName" caption="Category" />
+  <dxi-card-view-column dataField="Modification"></dxi-card-view-column>
+  <dxi-card-view-column dataField="BodyStyleName" caption="Body Style" />
+  <dxi-card-view-column dataField="Horsepower"></dxi-card-view-column>
+
+  <div *dxTemplate="let model of 'vehicleCardTemplate'">
+    <ng-container *ngIf="model.card?.data as data">
+      <vehicle-card
+        [id]="data.ID"
+        [model]="data.TrademarkName + ' ' + data.Name"
+        [price]="getFormattedPrice(model.card)"
+        [categoryName]="data.CategoryName"
+        [modification]="data.Modification"
+        [bodyStyleName]="data.BodyStyleName"
+        [horsepower]="data.Horsepower"
+        (showInfo)="showInfo(data)"
+      ></vehicle-card>
+    </ng-container>
+  </div>
+</dx-card-view>
+
+<dx-popup
+  [width]="360"
+  [height]="260"
+  [(visible)]="popupVisible"
+  [dragEnabled]="false"
+  [hideOnOutsideClick]="true"
+  title="Image Info"
+>
+  <dxo-position at="center" my="center" collision="fit"></dxo-position>
+  <div *dxTemplate="let _ of 'content'">
+    <license-info
+      *ngIf="currentVehicle"
+      [vehicle]="currentVehicle"
+    ></license-info>
+  </div>
+</dx-popup>

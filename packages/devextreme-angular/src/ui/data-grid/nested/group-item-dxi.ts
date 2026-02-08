@@ -16,16 +16,26 @@ import { SummaryType } from 'devextreme/common/grids';
 import { Format } from 'devextreme/common/core/localization';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_groupItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-data-grid-group-item',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_groupItems,
+           useExisting: DxiDataGridGroupItemComponent,
+        }
+    ]
 })
 export class DxiDataGridGroupItemComponent extends CollectionNestedOption {
     @Input()
@@ -130,7 +140,7 @@ export class DxiDataGridGroupItemComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiDataGridGroupItemComponent
   ],
   exports: [

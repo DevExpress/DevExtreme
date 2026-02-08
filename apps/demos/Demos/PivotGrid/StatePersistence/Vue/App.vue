@@ -34,12 +34,13 @@
 <script setup lang="ts">
 import DxPivotGrid, {
   DxFieldChooser,
-  DxFieldPanel,
+  DxFieldPanel, 
   DxStateStoring,
+  type DxPivotGridTypes,
 } from 'devextreme-vue/pivot-grid';
 import DxButton from 'devextreme-vue/button';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import sales from './data.ts';
+import { sales } from './data.ts';
 
 const gridDataSource = new PivotGridDataSource({
   fields: [{
@@ -76,23 +77,21 @@ const gridDataSource = new PivotGridDataSource({
 function onRefreshClick() {
   window.location.reload();
 }
-function onContextMenuPreparing(e) {
+function onContextMenuPreparing(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
   const dataSource = e.component.getDataSource();
-  const sourceField = e.field;
+  const sourceField: Record<string, any> | undefined = e.field;
 
   if (sourceField) {
     if (!sourceField.groupName || sourceField.groupIndex === 0) {
-      e.items.push({
+      e.items?.push({
         text: 'Hide field',
         onItemClick() {
-          let fieldIndex;
-          if (sourceField.groupName) {
-            fieldIndex = dataSource
-              .getAreaFields(sourceField.area, true)[sourceField.areaIndex]
-              .index;
-          } else {
-            fieldIndex = sourceField.index;
-          }
+          let fieldIndex: number;
+          const dataSourceField: Record<string, any> = sourceField.groupName
+          ? dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex]
+              : sourceField;
+          
+          fieldIndex = dataSourceField.index;
 
           dataSource.field(fieldIndex, {
             area: null,
@@ -103,7 +102,7 @@ function onContextMenuPreparing(e) {
     }
 
     if (sourceField.dataType === 'number') {
-      const setSummaryType = function(args) {
+      const setSummaryType = function(args: Record<string, any>) {
         dataSource.field(sourceField.index, {
           summaryType: args.itemData.value,
         });
@@ -112,7 +111,7 @@ function onContextMenuPreparing(e) {
       };
       const menuItems: Record<string, any>[] = [];
 
-      e.items.push({ text: 'Summary Type', items: menuItems });
+      e.items?.push({ text: 'Summary Type', items: menuItems });
 
       ['Sum', 'Avg', 'Min', 'Max'].forEach((summaryType) => {
         const summaryTypeValue = summaryType.toLowerCase();
@@ -121,7 +120,7 @@ function onContextMenuPreparing(e) {
           text: summaryType,
           value: summaryType.toLowerCase(),
           onItemClick: setSummaryType,
-          selected: e.field.summaryType === summaryTypeValue,
+          selected: e.field?.summaryType === summaryTypeValue,
         });
       });
     }

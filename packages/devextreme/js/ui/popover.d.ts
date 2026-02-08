@@ -13,12 +13,13 @@ import {
 
 import {
     Cancelable,
+    AsyncCancelable,
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
-
-import { DxEvent } from '../events';
+    DxEvent,
+    PointerInteractionEvent,
+} from '../events';
 
 import dxPopup, {
     dxPopupAnimation,
@@ -50,9 +51,9 @@ export type DisposingEvent = EventInfo<dxPopover>;
  * @docid _ui_popover_HidingEvent
  * @public
  * @type object
- * @inherits Cancelable,EventInfo
+ * @inherits AsyncCancelable,EventInfo
  */
-export type HidingEvent = Cancelable & EventInfo<dxPopover>;
+export type HidingEvent = AsyncCancelable & EventInfo<dxPopover>;
 
 /**
  * @docid _ui_popover_HiddenEvent
@@ -116,18 +117,10 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     animation?: dxPopoverAnimation;
     /**
      * @docid
-     * @deprecated dxPopoverOptions.hideOnOutsideClick
-     * @type_function_param1 event:event
-     * @default true
-     * @public
-     */
-    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
-    /**
-     * @docid
      * @default "auto"
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * @docid
      * @default undefined
@@ -152,7 +145,7 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      * @default true
      * @public
      */
-    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    hideOnOutsideClick?: boolean | ((event: DxEvent<PointerInteractionEvent>) => boolean);
     /**
      * @docid
      * @default true
@@ -205,7 +198,7 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      * @default "auto"
      * @public
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
 }
 /**
  * @docid

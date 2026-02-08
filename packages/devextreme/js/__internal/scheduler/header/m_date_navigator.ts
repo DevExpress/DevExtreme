@@ -2,34 +2,41 @@ import messageLocalization from '@js/common/core/localization/message';
 import dateUtils from '@js/core/utils/date';
 import type { ContentReadyEvent } from '@js/ui/button';
 import type { Item as ButtonGroupItem, ItemClickEvent, Properties as ButtonGroupOptions } from '@js/ui/button_group';
-import { isMaterialBased } from '@js/ui/themes';
+import { current, isMaterialBased } from '@js/ui/themes';
 import type { Item as ToolbarItem } from '@js/ui/toolbar';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { extend } from '@ts/core/utils/m_extend';
 import type { SchedulerHeader } from '@ts/scheduler/header/m_header';
 
-import {
-  CALENDAR_BUTTON_CLASS,
-  CALENDAR_BUTTON_NAME,
-  DATE_NAVIGATOR_CLASS,
-  DEFAULT_ITEMS,
-  Direction,
-  NEXT_BUTTON_CLASS,
-  NEXT_BUTTON_NAME,
-  PREVIOUS_BUTTON_CLASS,
-  PREVIOUS_BUTTON_NAME,
-} from './constants';
+import { Direction } from './constants';
+
+export const CLASS = {
+  container: 'dx-scheduler-navigator',
+  previousButton: 'dx-scheduler-navigator-previous',
+  calendarButton: 'dx-scheduler-navigator-caption',
+  nextButton: 'dx-scheduler-navigator-next',
+};
+export const ITEMS_NAME = {
+  previousButton: 'prev',
+  nextButton: 'next',
+  calendarButton: 'dateInterval',
+};
+export const DEFAULT_ITEMS = [
+  ITEMS_NAME.previousButton,
+  ITEMS_NAME.nextButton,
+  ITEMS_NAME.calendarButton,
+];
 
 const { trimTime } = dateUtils;
 
 interface DateNavigatorItem extends ButtonGroupItem {
   key: string;
-  clickHandler: (event: ItemClickEvent) => void;
+  clickHandler: (event: ItemClickEvent) => Promise<void> | void;
   onContentReady: (event: ContentReadyEvent) => void;
 }
 
 const isPreviousButtonDisabled = (header: SchedulerHeader): boolean => {
-  const minOption = header.option('min');
+  const minOption = header.option().min;
 
   if (!dateUtilsTs.isValidDate(minOption)) return false;
 
@@ -43,7 +50,7 @@ const isPreviousButtonDisabled = (header: SchedulerHeader): boolean => {
 };
 
 const isNextButtonDisabled = (header: SchedulerHeader): boolean => {
-  const maxOption = header.option('max');
+  const maxOption = header.option().max;
 
   if (!dateUtilsTs.isValidDate(maxOption)) return false;
 
@@ -60,10 +67,10 @@ const getPreviousButtonOptions = (header: SchedulerHeader): DateNavigatorItem =>
   const ariaMessage = messageLocalization.format('dxScheduler-navigationPrevious');
 
   return {
-    key: PREVIOUS_BUTTON_NAME,
+    key: ITEMS_NAME.previousButton,
     icon: 'chevronprev',
     elementAttr: {
-      class: PREVIOUS_BUTTON_CLASS,
+      class: CLASS.previousButton,
       'aria-label': ariaMessage,
     },
     clickHandler: () => header._updateDateByDirection(Direction.Left),
@@ -87,9 +94,9 @@ const getPreviousButtonOptions = (header: SchedulerHeader): DateNavigatorItem =>
 };
 
 const getCalendarButtonOptions = (header: SchedulerHeader): DateNavigatorItem => ({
-  key: CALENDAR_BUTTON_NAME,
+  key: ITEMS_NAME.calendarButton,
   text: header.captionText,
-  elementAttr: { class: CALENDAR_BUTTON_CLASS },
+  elementAttr: { class: CLASS.calendarButton },
   clickHandler: (event) => header._showCalendar(event),
   onContentReady: (event): void => {
     const calendarButton = event.component;
@@ -120,10 +127,10 @@ const getNextButtonOptions = (header: SchedulerHeader): DateNavigatorItem => {
   const ariaMessage = messageLocalization.format('dxScheduler-navigationNext');
 
   return {
-    key: NEXT_BUTTON_NAME,
+    key: ITEMS_NAME.nextButton,
     icon: 'chevronnext',
     elementAttr: {
-      class: NEXT_BUTTON_CLASS,
+      class: CLASS.nextButton,
       'aria-label': ariaMessage,
     },
     clickHandler: () => header._updateDateByDirection(Direction.Right),
@@ -147,12 +154,33 @@ const getNextButtonOptions = (header: SchedulerHeader): DateNavigatorItem => {
   };
 };
 
-export const getDateNavigator = (header: SchedulerHeader, item): ToolbarItem => {
-  // @ts-expect-error
-  const stylingMode = isMaterialBased() ? 'text' : 'contained';
+export const getTodayButtonOptions = (
+  header: SchedulerHeader,
+  item: ToolbarItem,
+): ToolbarItem => extend(true, {}, {
+  location: 'before',
+  locateInMenu: 'auto',
+  widget: 'dxButton',
+  cssClass: 'dx-scheduler-today',
+  options: {
+    text: messageLocalization.format('dxScheduler-navigationToday'),
+    icon: 'today',
+    stylingMode: 'outlined',
+    type: 'normal',
+    onClick() {
+      const headerOptions = header.option();
+      header._updateCurrentDate(headerOptions.indicatorTime ?? new Date());
+    },
+  },
+}, item) as ToolbarItem;
+
+export const getDateNavigator = (header: SchedulerHeader, item: ToolbarItem): ToolbarItem => {
+  const stylingMode = isMaterialBased(current()) ? 'text' : 'contained';
   const config: ToolbarItem = extend(true, {}, {
+    location: 'before',
+    name: 'dateNavigator',
     widget: 'dxButtonGroup',
-    cssClass: DATE_NAVIGATOR_CLASS,
+    cssClass: CLASS.container,
     options: {
       stylingMode,
       selectionMode: 'none',
@@ -161,16 +189,17 @@ export const getDateNavigator = (header: SchedulerHeader, item): ToolbarItem => 
   const options = config.options as ButtonGroupOptions;
   const { onItemClick } = options;
 
-  options.items = (options.items ?? DEFAULT_ITEMS).map((groupItem) => {
+  const items = options.items ?? DEFAULT_ITEMS;
+  options.items = items.map((groupItem: ButtonGroupItem | string) => {
     switch (groupItem) {
-      case PREVIOUS_BUTTON_NAME:
+      case ITEMS_NAME.previousButton:
         return getPreviousButtonOptions(header);
-      case NEXT_BUTTON_NAME:
+      case ITEMS_NAME.nextButton:
         return getNextButtonOptions(header);
-      case CALENDAR_BUTTON_NAME:
+      case ITEMS_NAME.calendarButton:
         return getCalendarButtonOptions(header);
       default:
-        return groupItem;
+        return groupItem as ButtonGroupItem;
     }
   });
   options.onItemClick = (event): void => {

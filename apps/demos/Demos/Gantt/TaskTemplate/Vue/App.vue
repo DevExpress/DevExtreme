@@ -71,8 +71,8 @@ import {
   resourceAssignments,
 } from './data.ts';
 
-const getTaskColor = (taskId) => `custom-task-color-${taskId % 6}`;
-function getImagePath(taskId) {
+const getTaskColor = (taskId: number) => `custom-task-color-${taskId % 6}`;
+function getImagePath(taskId: number) {
   const img = taskId < 10 ? `0${taskId}` : taskId;
   return `../../../../images/employees/${img}.png`;
 }

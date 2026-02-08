@@ -1,12 +1,9 @@
 import { ClientFunction, Selector } from 'testcafe';
 import DataGridInstance from 'devextreme/ui/data_grid';
 import type { SelectionSensitivity } from 'devextreme/ui/data_grid';
-import Widget from '../internal/widget';
 import Toolbar from '../toolbar';
 import DataRow from './data/row';
 import GroupRow from './groupRow';
-import FilterPanel from './filter/panel';
-import Pager from '../pagination';
 import EditForm from './editForm';
 import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
@@ -15,34 +12,43 @@ import ContextMenu from '../contextMenu';
 
 import type { WidgetName } from '../types';
 import { Overlay } from './overlay';
+import LoadPanel from '../loadPanel';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';
 import AdaptiveDetailRow from './adaptiveDetailRow';
 import ColumnChooser from './columnChooser';
 import TextBox from '../textBox';
+import DateBox from '../dateBox';
+import NumberBox from '../numberBox';
 import { GroupPanel } from './groupPanel';
+import GridCore from '../gridCore';
+import { CLASS as CLASS_BASE } from '../gridCore';
 
 export const CLASS = {
+  ...CLASS_BASE,
   dataGrid: 'dx-datagrid',
   headers: 'headers',
   headerPanel: 'header-panel',
   searchBox: 'dx-searchbox',
+  row: 'dx-row',
   dataRow: 'dx-data-row',
   groupRow: 'dx-group-row',
   groupPanel: 'group-panel',
   columnChooser: 'column-chooser',
   focusedRow: 'dx-row-focused',
-  filterPanel: 'filter-panel',
   filterRow: 'filter-row',
   filterRangeOverlay: 'filter-range-overlay',
+  filterRangeStartEditor: 'filter-range-start',
+  filterRangeEndEditor: 'filter-range-end',
   focusOverlay: 'focus-overlay',
-  pager: 'pager',
   editFormRow: 'edit-form',
   button: 'dx-button',
   formButtonsContainer: 'form-buttons-container',
   popupEdit: 'edit-popup',
   masterDetailRow: 'dx-master-detail-row',
   adaptiveDetailRow: 'dx-adaptive-detail-row',
+  adaptiveCommandCellHidden: 'dx-command-adaptive-hidden',
+  adaptiveColumnButton: 'dx-datagrid-adaptive-more',
   errorRow: 'dx-error-row',
 
   headerRow: 'dx-header-row',
@@ -69,6 +75,7 @@ export const CLASS = {
   summaryTotal: 'dx-datagrid-summary-item',
   scrollableContainer: 'dx-scrollable-container',
   columnsSeparator: 'dx-datagrid-columns-separator',
+  sortableDragging: 'dx-sortable-dragging',
 };
 
 const E2E_ATTRIBUTES = {
@@ -127,27 +134,28 @@ const moveElement = ($element: JQuery, x: number, y: number, isStart = false): v
   }
 };
 
-export default class DataGrid extends Widget {
+export default class DataGrid extends GridCore {
   dataRows: Selector;
-
-  body: Selector;
 
   constructor(id: string | Selector) {
     super(id);
 
+    /*
+      dataRows contains double collection of rows (two tables) when
+      columnFixing.legacyMode = true AND DataGrid has fixed columns
+    */
     this.dataRows = this.element.find(`.${CLASS.dataRow}`);
-    this.body = Selector('body');
   }
 
   // eslint-disable-next-line class-methods-use-this
   getName(): WidgetName { return 'dxDataGrid'; }
 
-  addWidgetPrefix(className = ''): string {
-    return Widget.addClassPrefix(this.getName(), className);
-  }
-
   getContainer(): Selector {
     return this.element.find(`.${CLASS.dataGrid}`);
+  }
+
+  getHeadersContainer(): Selector {
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`);
   }
 
   getHeaders(): Headers {
@@ -160,6 +168,18 @@ export default class DataGrid extends Widget {
 
   getScrollContainer(): Selector {
     return this.getRowsView().find(`.${CLASS.scrollableContainer}`);
+  }
+
+  /*
+    getRows() returns double collection of rows (two tables) when
+    columnFixing.legacyMode = true AND DataGrid has fixed columns
+  */
+  getRows(): Selector {
+    return this.getRowsView().find(`.${CLASS.row}`);
+  }
+
+  getCells(): Selector {
+    return this.getRowsView().find('td');
   }
 
   getDataRow(index: number): DataRow {
@@ -210,10 +230,6 @@ export default class DataGrid extends Widget {
     return this.element.find(`.${CLASS.errorRow}`);
   }
 
-  getFilterPanel(): FilterPanel {
-    return new FilterPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.filterPanel)}`), this.getName());
-  }
-
   getFilterRow(): Selector {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.filterRow)}`);
   }
@@ -223,15 +239,28 @@ export default class DataGrid extends Widget {
   }
 
   getFilterRangeOverlay(): Selector {
-    return this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
+    return this.getHeadersContainer().child(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
   }
+
+  getFilterRangeStartEditor(): DateBox;
+  getFilterRangeStartEditor(EditorType?: typeof DateBox | typeof NumberBox): DateBox | NumberBox {
+    const Editor = EditorType ?? DateBox;
+    return new Editor(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeStartEditor)}`));
+  }
+
+  getFilterRangeEndEditor(): DateBox;
+  getFilterRangeEndEditor(EditorType?: typeof DateBox | typeof NumberBox): DateBox | NumberBox {
+    const Editor = EditorType ?? DateBox;
+    return new Editor(this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeEndEditor)}`));
+  }
+
   getFocusOverlay() {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.focusOverlay)}`);
   }
 
   getFilterEditor<T>(
     columnIndex: number,
-    EditorType: new(mainElement: Selector) => T,
+    EditorType: new (mainElement: Selector) => T,
   ): T {
     return new EditorType(this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor());
   }
@@ -248,8 +277,8 @@ export default class DataGrid extends Widget {
     return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
   }
 
-  getLoadPanel(): Overlay {
-    return new Overlay(this.element.find(`.${CLASS.loadPanelWrapper}`));
+  getLoadPanel(): LoadPanel {
+    return new LoadPanel(this.element.find(`.${CLASS.loadPanelWrapper}`));
   }
 
   getConfirmDeletionButton(): Selector {
@@ -270,10 +299,6 @@ export default class DataGrid extends Widget {
 
   getInvalidMessageTooltip(): Selector {
     return this.body.find(`.dx-${CLASS.invalidMessage}.dx-${CLASS.invalidMessage}-always.${this.addWidgetPrefix(CLASS.invalidMessage)}`);
-  }
-
-  getPager(): Pager {
-    return new Pager(this.element.find(`.${this.addWidgetPrefix(CLASS.pager)}`));
   }
 
   getFooterRow(): Selector {
@@ -332,7 +357,9 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  scrollBy(options: { x?: number; y?: number; top?: number; left?: number }): Promise<void> {
+  async scrollBy(t: TestController, options: { x?: number; y?: number; top?: number; left?: number }): Promise<void> {
+    await t.expect(this.hasScrollable()).ok();
+
     const { getInstance } = this;
 
     return ClientFunction(
@@ -417,38 +444,16 @@ export default class DataGrid extends Widget {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
   }
 
-  apiFilter(filter: any[]): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).filter(filter),
-      { dependencies: { getInstance, filter } },
-    )();
+   getAdaptiveButtonSelector(): string {
+    return `.${CLASS.adaptiveColumnButton}`;
   }
 
-  apiClearFilter(): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => (getInstance() as any).clearFilter(),
-      { dependencies: { getInstance } },
-    )();
+  getAdaptiveButton(nth: number = 0): Selector {
+    return this.element.find(this.getAdaptiveButtonSelector()).nth(nth);
   }
 
-  apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => {
-        const dataGrid = getInstance() as any;
-        return value !== 'empty' ? dataGrid.columnOption(id, name, value === 'undefined' ? undefined : value) : dataGrid.columnOption(id, name);
-      },
-      {
-        dependencies: {
-          getInstance, id, name, value,
-        },
-      },
-    )();
+  isAdaptiveColumnHidden(): Promise<boolean> {
+    return this.element.find(`.${CLASS.adaptiveCommandCellHidden}`).exists;
   }
 
   apiAddRow(): Promise<void> {
@@ -565,6 +570,7 @@ export default class DataGrid extends Widget {
       return dataGrid.getVisibleRows().map((r) => ({
         key: r.key,
         rowType: r.rowType,
+        rowIndex: r.rowIndex,
       }));
     }, { dependencies: { getInstance } })();
   }
@@ -643,7 +649,7 @@ export default class DataGrid extends Widget {
     const { getInstance } = this;
     return ClientFunction(
       () => {
-        (getInstance() as DataGridInstance).refresh().catch(() => {});
+        (getInstance() as DataGridInstance).refresh().catch(() => { });
       },
       { dependencies: { getInstance } },
     )();
@@ -689,6 +695,42 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiNavigateToRow(key: any): Promise<any> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).navigateToRow(key),
+      {
+        dependencies: {
+          getInstance, key
+        },
+      },
+    )();
+  }
+
+  apiAddColumn(config: any): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).addColumn(config),
+      { dependencies: { getInstance, config } },
+    )();
+  }
+
+
+  apiFocus(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).focus(),
+      {
+        dependencies: {
+          getInstance,
+        },
+      },
+    )();
+  }
+
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 
@@ -710,7 +752,22 @@ export default class DataGrid extends Widget {
     )();
   }
 
-  resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void>  {
+  dropRow(): Promise<void> {
+    return ClientFunction((sortableDraggingClass) => {
+        const $dragElement = $(`.${sortableDraggingClass}`);
+        const dragOffset = $dragElement.offset();
+
+        triggerPointerUp($dragElement, dragOffset.left, dragOffset.top);
+      },
+      {
+        dependencies: {
+          triggerPointerUp,
+        },
+      },
+    )(CLASS.sortableDragging);
+  }
+
+  resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void> {
     const { getInstance } = this;
 
     return ClientFunction(
@@ -890,10 +947,10 @@ export default class DataGrid extends Widget {
   ): Promise<void> {
     const { getInstance } = this;
     return ClientFunction(
-        () => {
-          (getInstance() as DataGridInstance).option('selection.sensitivity', sensitivity);
-        },
-        { dependencies: { getInstance, sensitivity } },
+      () => {
+        (getInstance() as DataGridInstance).option('selection.sensitivity', sensitivity);
+      },
+      { dependencies: { getInstance, sensitivity } },
     )();
   }
 }

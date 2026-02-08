@@ -9,7 +9,7 @@ import Button from 'devextreme-react/button';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
-import sales from './data.ts';
+import { sales } from './data.ts';
 
 const onRefreshClick = () => {
   window.location.reload();

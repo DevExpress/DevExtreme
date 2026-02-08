@@ -1,8 +1,6 @@
 module.exports = {
   tools: {
     metadataGenerator: {
-      sourceMetadataFilePath: './metadata/NGMetaData.json',
-      imdMetadataFilePath: './metadata/integration-data.json',
       outputFolderPath: './metadata/generated',
       nestedPathPart: 'nested',
       basePathPart: 'base',
@@ -58,7 +56,6 @@ module.exports = {
       outputFileName: 'tests/src/server/component-names.ts',
     },
     commonReexportsGenerator: {
-      imdMetadataFilePath: './metadata/integration-data.json',
       outputPath: './src/',
     },
   },

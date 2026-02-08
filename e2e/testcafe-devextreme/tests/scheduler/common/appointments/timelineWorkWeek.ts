@@ -5,7 +5,7 @@ import url from '../../../../helpers/getPageUrl';
 const SCHEDULER_SELECTOR = '#container';
 const CELL_WIDTH = 200;
 
-fixture`Appointments in TimelineWorkWeek`
+fixture.disablePageReloads`Appointments in TimelineWorkWeek`
   .page(url(__dirname, '../../../container.html'));
 
 test('Appointments should have correct width', async (t) => {

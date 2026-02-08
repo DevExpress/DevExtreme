@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import DxToolbar, { DxItem } from 'devextreme-vue/toolbar';
 import DxList from 'devextreme-vue/list';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-vue/common/data';
 import notify from 'devextreme/ui/notify';
 import 'devextreme/ui/select_box';
 import { productTypes, products } from './data.ts';
@@ -79,7 +79,7 @@ const selectBoxOptions = {
   displayExpr: 'text',
   value: productTypes[0].id,
   inputAttr: { 'aria-label': 'Categories' },
-  onValueChanged: ({ value }) => {
+  onValueChanged: ({ value }: { value: number }) => {
     productsStore.filter(value > 1 ? ['type', '=', value] : null);
     productsStore.load();
   },

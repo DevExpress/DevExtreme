@@ -16,7 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -37,7 +37,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoMarginModule } from 'devextreme-angular/ui/nested';
@@ -57,17 +57,17 @@ import { DxoSparklineSizeModule } from 'devextreme-angular/ui/sparkline/nested';
 import { DxoSparklineTooltipModule } from 'devextreme-angular/ui/sparkline/nested';
 
 
-
-
 /**
  * [descr:dxSparkline]
 
  */
 @Component({
     selector: 'dx-sparkline',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -76,6 +76,7 @@ import { DxoSparklineTooltipModule } from 'devextreme-angular/ui/sparkline/neste
     ]
 })
 export class DxSparklineComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
     instance: DxSparkline = null;
 
     /**
@@ -760,10 +761,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
 
 
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -860,6 +857,7 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
 
 @NgModule({
   imports: [
+    DxSparklineComponent,
     DxoMarginModule,
     DxoSizeModule,
     DxoTooltipModule,
@@ -876,9 +874,6 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
     DxoSparklineTooltipModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSparklineComponent
   ],
   exports: [
     DxSparklineComponent,
@@ -900,6 +895,8 @@ export class DxSparklineComponent extends DxComponent implements OnDestroy, OnCh
   ]
 })
 export class DxSparklineModule { }
+
+export * from 'devextreme-angular/ui/sparkline/nested';
 
 import type * as DxSparklineTypes from "devextreme/viz/sparkline_types";
 export { DxSparklineTypes };

@@ -3,19 +3,17 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/loadIndicator";
+@use "../../base/loadIndicator" as *;
 
 // adduse
 
 .dx-loadindicator {
-  background-color: transparent;
   line-height: 100%;
 }
 
 .dx-loadindicator-content {
   height: 100%;
   width: 100%;
-  animation: dx-content-rotation 1568ms linear infinite;
 }
 
 .dx-loadindicator-image {
@@ -25,10 +23,8 @@
 }
 
 .dx-loadindicator-icon {
-  position: absolute;
   height: 100%;
   width: 100%;
-  animation: dx-icon-rotation 5332ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 }
 
 .dx-loadindicator-segment {
@@ -48,52 +44,69 @@
   border-radius: 50%;
 }
 
-.dx-loadindicator-segment2,
-.dx-loadindicator-segment0 {
-  width: 50%;
-  height: 100%;
-  overflow: hidden;
+.dx-loadindicator-content-circle {
+  &.dx-loadindicator-content {
+    animation: dx-content-rotation 1568ms linear infinite;
+  }
 
-  .dx-loadindicator-segment-inner {
-    width: 200%;
+  .dx-loadindicator-icon {
+    position: absolute;
+    animation: dx-icon-rotation 5332ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+  }
+
+  .dx-loadindicator-segment2,
+  .dx-loadindicator-segment0 {
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+
+    .dx-loadindicator-segment-inner {
+      width: 200%;
+    }
+  }
+
+  .dx-loadindicator-segment2 {
+    left: 0;
+
+    .dx-loadindicator-segment-inner {
+      border-right-color: transparent;
+      transform: rotate(-129deg);
+      animation: dx-left-segment-rotation 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+    }
+  }
+
+  .dx-loadindicator-segment0 {
+    right: 0;
+
+    .dx-loadindicator-segment-inner {
+      left: -100%;
+      border-left-color: transparent;
+      transform: rotate(129deg);
+      animation: dx-right-segment-rotation 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
+    }
+  }
+
+  .dx-loadindicator-segment1 {
+    position: absolute;
+    top: 0;
+    left: 45%;
+    width: 10%;
+    height: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+
+    .dx-loadindicator-segment-inner {
+      width: 1000%;
+      left: -450%;
+    }
   }
 }
 
-.dx-loadindicator-segment2 {
-  left: 0;
-
-  .dx-loadindicator-segment-inner {
-    border-right-color: transparent;
-    transform: rotate(-129deg);
-    animation: dx-left-segment-rotation 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
-  }
-}
-
-.dx-loadindicator-segment0 {
-  right: 0;
-
-  .dx-loadindicator-segment-inner {
-    left: -100%;
-    border-left-color: transparent;
-    transform: rotate(129deg);
-    animation: dx-right-segment-rotation 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
-  }
-}
-
-.dx-loadindicator-segment1 {
-  position: absolute;
-  top: 0;
-  left: 45%;
-  width: 10%;
-  height: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
-
-  .dx-loadindicator-segment-inner {
-    width: 1000%;
-    left: -450%;
-  }
-}
+@include loadindicator-animation-sparkle(
+  $load-indicator-animation-sparkle-bg-color1,
+  $load-indicator-animation-sparkle-bg-color2,
+  $load-indicator-animation-sparkle-bg-color3
+);
 
 @keyframes dx-content-rotation {
   to { transform: rotate(360deg); }

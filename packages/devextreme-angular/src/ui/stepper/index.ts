@@ -39,26 +39,24 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
 
 import { DxiStepperItemModule } from 'devextreme-angular/ui/stepper/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiStepperItemComponent } from 'devextreme-angular/ui/stepper/nested';
 
 
-/**
- * [descr:dxStepper]
-
- */
 @Component({
     selector: 'dx-stepper',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -67,12 +65,15 @@ import { DxiStepperItemComponent } from 'devextreme-angular/ui/stepper/nested';
     ]
 })
 export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxStepper<TItem, TKey> = null;
 
-    /**
-     * [descr:WidgetOptions.accessKey]
     
-     */
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -82,10 +83,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:dxStepperOptions.activeStateEnabled]
     
-     */
     @Input()
     get activeStateEnabled(): boolean {
         return this._getOption('activeStateEnabled');
@@ -95,10 +93,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:dxStepperOptions.dataSource]
     
-     */
     @Input()
     get dataSource(): Array<dxStepperItem> | DataSource | DataSourceOptions | null | Store | string {
         return this._getOption('dataSource');
@@ -108,10 +103,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:WidgetOptions.disabled]
     
-     */
     @Input()
     get disabled(): boolean {
         return this._getOption('disabled');
@@ -121,10 +113,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:DOMComponentOptions.elementAttr]
     
-     */
     @Input()
     get elementAttr(): Record<string, any> {
         return this._getOption('elementAttr');
@@ -134,10 +123,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:dxStepperOptions.focusStateEnabled]
     
-     */
     @Input()
     get focusStateEnabled(): boolean {
         return this._getOption('focusStateEnabled');
@@ -147,23 +133,17 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:DOMComponentOptions.height]
     
-     */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
 
-    /**
-     * [descr:WidgetOptions.hint]
     
-     */
     @Input()
     get hint(): string | undefined {
         return this._getOption('hint');
@@ -173,10 +153,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:dxStepperOptions.hoverStateEnabled]
     
-     */
     @Input()
     get hoverStateEnabled(): boolean {
         return this._getOption('hoverStateEnabled');
@@ -186,10 +163,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:dxStepperOptions.items]
     
-     */
     @Input()
     get items(): Array<dxStepperItem> {
         return this._getOption('items');
@@ -199,10 +173,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:CollectionWidgetOptions.itemTemplate]
     
-     */
     @Input()
     get itemTemplate(): any {
         return this._getOption('itemTemplate');
@@ -212,10 +183,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:dxStepperOptions.linear]
     
-     */
     @Input()
     get linear(): boolean {
         return this._getOption('linear');
@@ -225,10 +193,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:dxStepperOptions.orientation]
     
-     */
     @Input()
     get orientation(): Orientation {
         return this._getOption('orientation');
@@ -238,10 +203,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:DOMComponentOptions.rtlEnabled]
     
-     */
     @Input()
     get rtlEnabled(): boolean {
         return this._getOption('rtlEnabled');
@@ -251,10 +213,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:CollectionWidgetOptions.selectedIndex]
     
-     */
     @Input()
     get selectedIndex(): number {
         return this._getOption('selectedIndex');
@@ -264,10 +223,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:CollectionWidgetOptions.selectedItem]
     
-     */
     @Input()
     get selectedItem(): any {
         return this._getOption('selectedItem');
@@ -277,10 +233,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:dxStepperOptions.selectOnFocus]
     
-     */
     @Input()
     get selectOnFocus(): boolean {
         return this._getOption('selectOnFocus');
@@ -290,10 +243,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:WidgetOptions.tabIndex]
     
-     */
     @Input()
     get tabIndex(): number {
         return this._getOption('tabIndex');
@@ -303,10 +253,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:WidgetOptions.visible]
     
-     */
     @Input()
     get visible(): boolean {
         return this._getOption('visible');
@@ -316,21 +263,18 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
     }
 
 
-    /**
-     * [descr:DOMComponentOptions.width]
     
-     */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
     /**
     
-     * [descr:dxStepperOptions.onDisposing]
+     * [descr:undefined]
     
     
      */
@@ -338,7 +282,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
     
-     * [descr:dxStepperOptions.onInitialized]
+     * [descr:undefined]
     
     
      */
@@ -346,7 +290,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
     
-     * [descr:dxStepperOptions.onItemClick]
+     * [descr:undefined]
     
     
      */
@@ -354,7 +298,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
     
-     * [descr:dxStepperOptions.onItemContextMenu]
+     * [descr:undefined]
     
     
      */
@@ -362,7 +306,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
     
-     * [descr:dxStepperOptions.onItemRendered]
+     * [descr:undefined]
     
     
      */
@@ -370,7 +314,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
     
-     * [descr:dxStepperOptions.onOptionChanged]
+     * [descr:undefined]
     
     
      */
@@ -378,7 +322,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
     
-     * [descr:dxStepperOptions.onSelectionChanged]
+     * [descr:undefined]
     
     
      */
@@ -386,7 +330,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
     /**
     
-     * [descr:dxStepperOptions.onSelectionChanging]
+     * [descr:undefined]
     
     
      */
@@ -439,7 +383,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -530,27 +474,7 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiStepperItemComponent)
-    get itemsChildren(): QueryList<DxiStepperItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiStepperItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -641,22 +565,20 @@ export class DxStepperComponent<TItem = any, TKey = any> extends DxComponent imp
 
 @NgModule({
   imports: [
-    DxiItemModule,
+    DxStepperComponent,
     DxiStepperItemModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
-  declarations: [
-    DxStepperComponent
-  ],
   exports: [
     DxStepperComponent,
-    DxiItemModule,
     DxiStepperItemModule,
     DxTemplateModule
   ]
 })
 export class DxStepperModule { }
+
+export * from 'devextreme-angular/ui/stepper/nested';
 
 import type * as DxStepperTypes from "devextreme/ui/stepper_types";
 export { DxStepperTypes };

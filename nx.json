@@ -2,6 +2,13 @@
   "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "nxCloudAccessToken": "ZDFmMzkyZTYtZmU5MC00MDMyLWI3NDktYjhhYWUxZWM4YTg3fHJlYWQ=",
+  "namedInputs": {
+    "metadataToolsCommonInputs": [
+      "{projectRoot}/**/*.ts",
+      "{projectRoot}/tsconfig.json",
+      { "externalDependencies": [ "devextreme-internal-tools", "ts-node", "typescript"] }
+    ]
+  },
   "targetDefaults": {
     "build": {
       "dependsOn": [
@@ -19,21 +26,6 @@
         "^build"
       ],
       "cache": true
-    },
-    "angular:copy-metadata": {
-      "dependsOn": [
-        "tools:discover-metadata"
-      ]
-    },
-    "react:copy-metadata": {
-      "dependsOn": [
-        "tools:discover-metadata"
-      ]
-    },
-    "vue:copy-metadata": {
-      "dependsOn": [
-        "tools:discover-metadata"
-      ]
     },
     "lint": {
       "cache": true

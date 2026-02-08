@@ -69,7 +69,7 @@ import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import * as deMessages from 'npm:devextreme/localization/messages/de.json!json';
 // @ts-ignore
 import * as ruMessages from 'npm:devextreme/localization/messages/ru.json!json';
-import { locale as dxLocale, loadMessages, formatMessage as dxFormatMessage } from 'devextreme/localization';
+import { locale as dxLocale, loadMessages, formatMessage as dxFormatMessage } from 'devextreme-vue/common/core/localization';
 import service from './data.ts';
 
 type Locale = string;
@@ -86,7 +86,7 @@ const amountEditorOptions = {
   },
 };
 const selectBoxInputAttr = { id: 'selectInput' };
-const formatMessage = ref((msg) => msg);
+const formatMessage = ref((msg: string) => msg);
 
 onBeforeMount(() => {
   dxLocale(locale);

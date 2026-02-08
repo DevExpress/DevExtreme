@@ -3,6 +3,7 @@ const ko = require('knockout');
 
 require('integration/knockout');
 const Scheduler = require('ui/scheduler');
+const { waitAsync } = require('../../helpers/scheduler/waitForAsync.js');
 
 require('generic_light.css!');
 
@@ -14,7 +15,7 @@ if(QUnit.urlParams['nocsp']) {
 
 const isRenovatedScheduler = !!Scheduler.IS_RENOVATED_WIDGET;
 
-QUnit.test('Appointment should have right date format', function(assert) {
+QUnit.test('Appointment should have right date format', async function(assert) {
     const $element = $('<div data-bind=\'dxScheduler: {dataSource: schedulerDataSource, currentDate: new Date(2016, 6, 10)}\'></div>').appendTo('#qunit-fixture');
     const viewModel = {
         schedulerDataSource: [
@@ -27,6 +28,7 @@ QUnit.test('Appointment should have right date format', function(assert) {
     };
 
     ko.applyBindings(viewModel, $element.get(0));
+    await waitAsync(0);
 
     const startDate = $element.dxScheduler('instance').option('dataSource')[0].startDate;
     const endDate = $element.dxScheduler('instance').option('dataSource')[0].endDate;
@@ -35,7 +37,7 @@ QUnit.test('Appointment should have right date format', function(assert) {
     assert.deepEqual(endDate, new Date(2016, 6, 10, 3));
 });
 
-QUnit[isRenovatedScheduler ? 'skip' : 'test']('Appointment template should be render once(T947938)', function(assert) {
+QUnit[isRenovatedScheduler ? 'skip' : 'test']('Appointment template should be render once(T947938)', async function(assert) {
     const markupText = `<div class='dx-viewport demo-container'>
         <div id='scheduler-demo'>
             <div data-bind='dxScheduler: schedulerOptions'></div>
@@ -59,12 +61,13 @@ QUnit[isRenovatedScheduler ? 'skip' : 'test']('Appointment template should be re
     }
 
     ko.applyBindings(new PageViewModel(), $element.get(0));
+    await waitAsync(0);
 
     assert.equal($('.dx-scheduler-appointment-title').length, 1, 'title should be render once');
     assert.equal($('.dx-scheduler-appointment-content-details').length, 1, 'details should be render once');
 });
 
-QUnit[isRenovatedScheduler ? 'skip' : 'test']('Appointment DnD with disabled property (T1046067)', function(assert) {
+QUnit[isRenovatedScheduler ? 'skip' : 'test']('Appointment DnD with disabled property (T1046067)', async function(assert) {
     const markupText = `<div class='dx-viewport demo-container'>
         <div id='scheduler-demo'>
             <div data-bind='dxScheduler: schedulerOptions'></div>
@@ -89,12 +92,13 @@ QUnit[isRenovatedScheduler ? 'skip' : 'test']('Appointment DnD with disabled pro
     }
 
     ko.applyBindings(new PageViewModel(), $element.get(0));
+    await waitAsync(0);
 
     assert.equal($('.dx-scheduler-appointment-title').length, 1, 'title should be render once');
     assert.equal($('.dx-scheduler-appointment-content-details').length, 1, 'details should be render once');
 });
 
-QUnit.test('T1282055: appointment collector renders correct', function(assert) {
+QUnit.test('T1282055: appointment collector renders correct', async function(assert) {
     const markupText = `<div class='dx-viewport demo-container'>
         <div id='scheduler-demo'>
             <div data-bind='dxScheduler: schedulerOptions'></div>
@@ -125,6 +129,7 @@ QUnit.test('T1282055: appointment collector renders correct', function(assert) {
     }
 
     ko.applyBindings(new PageViewModel(), $element.get(0));
+    await waitAsync(0);
 
     assert.equal($('.dx-scheduler-appointment-collector').length, 1, 'appointment collector has rendered');
     assert.equal(

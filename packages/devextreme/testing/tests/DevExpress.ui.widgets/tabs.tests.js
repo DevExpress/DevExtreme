@@ -1,5 +1,4 @@
-import 'generic_light.css!';
-import themes from 'ui/themes';
+import 'fluent_blue_light.css!';
 import { extend } from 'core/utils/extend';
 import { DataSource } from 'common/data/data_source/data_source';
 import holdEvent from 'common/core/events/hold';
@@ -11,6 +10,25 @@ import pointerMock from '../../helpers/pointerMock.js';
 import { TestAsyncTabsWrapper, TestTabsWrapper } from '../../helpers/wrappers/tabsWrappers.js';
 import { getScrollLeftMax } from '__internal/ui/scroll_view/utils/get_scroll_left_max';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import pointerEvents from 'common/core/events/pointer';
+import resizeObserverSingleton from 'core/resize_observer';
+import {
+    TABS_ITEM_CLASS,
+    TABS_ITEM_SELECTED_CLASS,
+    TABS_SCROLLABLE_CLASS,
+    TABS_ORIENTATION_CLASS,
+    TABS_STYLING_MODE_CLASS,
+    TABS_INDICATOR_POSITION_CLASS,
+    TABS_WRAPPER_CLASS,
+    TABS_NAV_BUTTON_CLASS,
+    TABS_NAV_BUTTONS_CLASS,
+    TABS_LEFT_NAV_BUTTON_CLASS,
+    TABS_RIGHT_NAV_BUTTON_CLASS,
+    FOCUSED_DISABLED_NEXT_TAB_CLASS,
+    FOCUSED_DISABLED_PREV_TAB_CLASS,
+    TABS_SCROLLING_ENABLED_CLASS,
+    TABS_ICON_POSITION_CLASS,
+} from '__internal/ui/tabs/tabs';
 
 QUnit.testStart(function() {
     const markup =
@@ -35,48 +53,15 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-const TABS_ITEM_CLASS = 'dx-tab';
-const TAB_SELECTED_CLASS = 'dx-tab-selected';
 const FOCUS_STATE_CLASS = 'dx-state-focused';
-const TABS_SCROLLABLE_CLASS = 'dx-tabs-scrollable';
-const TABS_ORIENTATION_CLASS = {
-    vertical: 'dx-tabs-vertical',
-    horizontal: 'dx-tabs-horizontal',
-};
-const TABS_ICON_POSITION_CLASS = {
-    top: 'dx-tabs-icon-position-top',
-    end: 'dx-tabs-icon-position-end',
-    bottom: 'dx-tabs-icon-position-bottom',
-    start: 'dx-tabs-icon-position-start',
-};
-const TABS_STYLING_MODE_CLASS = {
-    primary: 'dx-tabs-styling-mode-primary',
-    secondary: 'dx-tabs-styling-mode-secondary',
-};
 const STYLING_MODE = {
     primary: 'primary',
     secondary: 'secondary',
 };
-const INDICATOR_POSITION_CLASS = {
-    top: 'dx-tab-indicator-position-top',
-    right: 'dx-tab-indicator-position-right',
-    bottom: 'dx-tab-indicator-position-bottom',
-    left: 'dx-tab-indicator-position-left',
-};
-const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
-const TABS_NAV_BUTTON_CLASS = 'dx-tabs-nav-button';
-const TABS_NAV_BUTTONS_CLASS = 'dx-tabs-nav-buttons';
-const TABS_LEFT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-left';
-const TABS_RIGHT_NAV_BUTTON_CLASS = 'dx-tabs-nav-button-right';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
-const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
-const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
-const TABS_SCROLLING_ENABLED_CLASS = 'dx-tabs-scrolling-enabled';
 const BUTTON_NEXT_ICON = 'chevronnext';
 const BUTTON_PREV_ICON = 'chevronprev';
 const TAB_OFFSET = 30;
-
-const toSelector = cssClass => `.${cssClass}`;
 
 QUnit.module('General', () => {
     QUnit.test('mouseup switch selected tab', function(assert) {
@@ -97,7 +82,7 @@ QUnit.module('General', () => {
                 const tab = $(this);
                 const isClickedTab = tabIndex === clickedTabIndex;
 
-                assert.ok(isClickedTab ? tab.hasClass(TAB_SELECTED_CLASS) : !tab.hasClass(TAB_SELECTED_CLASS), 'tab selected state');
+                assert.ok(isClickedTab ? tab.hasClass(TABS_ITEM_SELECTED_CLASS) : !tab.hasClass(TABS_ITEM_SELECTED_CLASS), 'tab selected state');
             });
 
             assert.equal(tabsInstance.option('selectedIndex'), clickedTabIndex, 'tabs selectedIndex');
@@ -119,11 +104,11 @@ QUnit.module('General', () => {
 
         tabElement.trigger('dxclick');
 
-        assert.ok(tabElement.hasClass(TAB_SELECTED_CLASS));
+        assert.ok(tabElement.hasClass(TABS_ITEM_SELECTED_CLASS));
         assert.equal(tabsInstance.option('selectedIndex'), 1);
 
         tabElement.trigger('dxclick');
-        assert.ok(tabElement.hasClass(TAB_SELECTED_CLASS));
+        assert.ok(tabElement.hasClass(TABS_ITEM_SELECTED_CLASS));
         assert.equal(tabsInstance.option('selectedIndex'), 1);
     });
 
@@ -144,15 +129,15 @@ QUnit.module('General', () => {
 
         tabElements.eq(2).trigger('dxclick');
 
-        assert.ok(tabElements.eq(2).hasClass(TAB_SELECTED_CLASS));
+        assert.ok(tabElements.eq(2).hasClass(TABS_ITEM_SELECTED_CLASS));
         assert.equal(tabsInstance.option('selectedIndex'), 2);
 
         tabElements.eq(1).trigger('dxclick');
-        assert.ok(!tabElements.eq(1).hasClass(TAB_SELECTED_CLASS));
+        assert.ok(!tabElements.eq(1).hasClass(TABS_ITEM_SELECTED_CLASS));
         assert.equal(tabsInstance.option('selectedIndex'), 2);
     });
 
-    QUnit.test('dxpointerup event should change focused tab', function(assert) {
+    QUnit.test('dxpointerdown event should change focused tab', function(assert) {
         const clock = sinon.useFakeTimers();
 
         const $tabs = $('#tabs').dxTabs({
@@ -162,15 +147,31 @@ QUnit.module('General', () => {
         const $secondTab = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
 
         try {
-            $secondTab.trigger('dxpointerdown');
+            $secondTab.trigger(pointerEvents.down);
             clock.tick(10);
-            assert.strictEqual($secondTab.hasClass(FOCUS_STATE_CLASS), false);
-            $secondTab.trigger('dxpointerup');
+            assert.strictEqual($secondTab.hasClass(FOCUS_STATE_CLASS), true);
+            $secondTab.trigger(pointerEvents.up);
             clock.tick(10);
             assert.strictEqual($secondTab.hasClass(FOCUS_STATE_CLASS), true);
         } finally {
             clock.restore();
         }
+    });
+
+    QUnit.test('focusedElement should be changed on pointerDown (T1297348)', function(assert) {
+        const tabs = $('#tabs').dxTabs({
+            focusStateEnabled: true,
+            items: [1, 2],
+        }).dxTabs('instance');
+
+        const $secondTab = $(tabs.$element()).find(`.${TABS_ITEM_CLASS}`).eq(1);
+
+        $secondTab.trigger(pointerEvents.down);
+        assert.strictEqual($secondTab.hasClass(FOCUS_STATE_CLASS), true);
+
+        const $focusedElement = $(tabs.option('focusedElement'));
+
+        assert.strictEqual($focusedElement.get(0), $secondTab.get(0), 'focusedElement is changed correctly');
     });
 
     QUnit.test('regression: wrong selectedIndex in tab mouseup handler', function(assert) {
@@ -223,7 +224,7 @@ QUnit.module('General', () => {
         keyboard.press('right');
         keyboard.press('right');
 
-        const $items = $element.find(toSelector(TABS_ITEM_CLASS));
+        const $items = $element.find(`.${TABS_ITEM_CLASS}`);
 
         assert.notOk($items.eq(0).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The first item does not have specific class');
         assert.ok($items.eq(1).hasClass(FOCUSED_DISABLED_NEXT_TAB_CLASS), 'The second item has specific class');
@@ -253,7 +254,7 @@ QUnit.module('General', () => {
         keyboard.press('right');
         keyboard.press('right');
 
-        const $items = $element.find(toSelector(TABS_ITEM_CLASS));
+        const $items = $element.find(`.${TABS_ITEM_CLASS}`);
 
         assert.notOk($items.eq(0).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The first item does not have specific class');
         assert.notOk($items.eq(3).hasClass(FOCUSED_DISABLED_PREV_TAB_CLASS), 'The fourth item does not have specific class');
@@ -346,7 +347,7 @@ QUnit.module('General', () => {
     QUnit.test('the tabs element must have a start icon position class by default', function(assert) {
         const $element = $('#tabs').dxTabs();
 
-        assert.ok($element.hasClass(TABS_ICON_POSITION_CLASS.start));
+        assert.ok($element.hasClass(TABS_ICON_POSITION_CLASS.top));
     });
 
     ['top', 'end', 'bottom'].forEach((iconPosition) => {
@@ -377,47 +378,27 @@ QUnit.module('General', () => {
         const $element = $('#tabs').dxTabs({ items: [1, 2, 3] });
         const instance = $element.dxTabs('instance');
 
-        assert.strictEqual(instance.option('stylingMode'), STYLING_MODE.primary);
-        assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.primary), true);
-        assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.secondary), false);
-
-        instance.option({ stylingMode: 'secondary' });
-
         assert.strictEqual(instance.option('stylingMode'), STYLING_MODE.secondary);
         assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.secondary), true);
         assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.primary), false);
+
+        instance.option({ stylingMode: 'primary' });
+
+        assert.strictEqual(instance.option('stylingMode'), STYLING_MODE.primary);
+        assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.primary), true);
+        assert.strictEqual($element.hasClass(TABS_STYLING_MODE_CLASS.secondary), false);
     });
 
-    QUnit.test('Tabs should show the navigation after stylingMode is changed from secondary to primary', function(assert) {
-        const isMaterialBased = themes.isMaterialBased();
+    QUnit.test('resize observer should be attached to the tabs', function(assert) {
+        const observeSpy = sinon.spy(resizeObserverSingleton, 'observe');
 
-        if(!isMaterialBased) {
-            assert.ok(true, 'not isMaterialBased');
-            return;
-        }
-
-        const $element = $('#scrollableTabs').dxTabs({
-            items: [
-                { text: 'item 1', icon: 'plus' },
-                { text: 'item 2', icon: 'plus' },
-                { text: 'item 3', icon: 'plus' },
-            ],
-            stylingMode: 'secondary',
-            scrollingEnabled: true,
-            visible: true,
-            showNavButtons: true,
-            width: 334,
+        $('#tabs').dxTabs({
+            items: [{ text: 'item 1' }],
         });
 
-        assert.strictEqual($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons was not rendered');
-        assert.strictEqual($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 0, 'scrollable was not rendered');
+        assert.strictEqual(observeSpy.callCount, 1, 'resize observer is connected');
 
-        const instance = $element.dxTabs('instance');
-
-        instance.option('stylingMode', 'primary');
-
-        assert.strictEqual($element.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons was rendered');
-        assert.strictEqual($element.find(`.${TABS_SCROLLABLE_CLASS}`).length, 1, 'scrollable was rendered');
+        observeSpy.restore();
     });
 });
 
@@ -648,7 +629,7 @@ QUnit.module('Tab select action', () => {
             }
         });
 
-        const $tab = $tabs.find(toSelector(TABS_ITEM_CLASS)).eq(1);
+        const $tab = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
 
         $tab
             .trigger('dxclick')
@@ -670,7 +651,7 @@ QUnit.module('Tab select action', () => {
             }
         });
 
-        const $tab = $tabs.find(toSelector(TABS_ITEM_CLASS)).eq(2);
+        const $tab = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(2);
 
         pointerMock($tab).click();
     });
@@ -723,7 +704,7 @@ QUnit.module('Tab select action', () => {
 
         assert.ok(!instance.option('selectOnFocus'), 'option selectOnFocus must be false with turn on multiple mode');
 
-        const $tab = $element.find(toSelector(TABS_ITEM_CLASS)).eq(3);
+        const $tab = $element.find(`.${TABS_ITEM_CLASS}`).eq(3);
         pointerMock($tab).click();
 
         assert.equal(instance.option('selectedItems').length, 2, 'selected two items in multiple mode');
@@ -742,20 +723,20 @@ QUnit.module('Tab select action', () => {
         });
         const tabs = $tabs.dxTabs('instance');
 
-        const tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
+        const $tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
 
-        tabsItemFirst.trigger('dxclick');
+        $tabsItemFirst.trigger('dxclick');
 
         const $focusedElementFirst = tabs.option('focusedElement');
 
-        assert.strictEqual($focusedElementFirst, tabsItemFirst[0]);
+        assert.strictEqual($focusedElementFirst, $tabsItemFirst[0]);
 
         tabs.option({ selectedIndex: 1 });
 
-        const tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+        const $tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
         const $focusedElementSecond = tabs.option('focusedElement');
 
-        assert.strictEqual($focusedElementSecond, tabItemSecond[0]);
+        assert.strictEqual($focusedElementSecond, $tabItemSecond[0]);
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedItem', function(assert) {
@@ -771,20 +752,20 @@ QUnit.module('Tab select action', () => {
         });
         const tabs = $tabs.dxTabs('instance');
 
-        const tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
+        const $tabsItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
 
-        tabsItemFirst.trigger('dxclick');
+        $tabsItemFirst.trigger('dxclick');
 
         const $focusedElementFirst = tabs.option('focusedElement');
 
-        assert.strictEqual($focusedElementFirst, tabsItemFirst[0]);
+        assert.strictEqual($focusedElementFirst, $tabsItemFirst[0]);
 
         tabs.option({ selectedItem: tabs.option('items[1]') });
 
-        const tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+        const $tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
         const $focusedElementSecond = tabs.option('focusedElement');
 
-        assert.strictEqual($focusedElementSecond, tabItemSecond[0]);
+        assert.strictEqual($focusedElementSecond, $tabItemSecond[0]);
     });
 
     QUnit.test('focusedElement must be changed after changing the selectedItems', function(assert) {
@@ -798,20 +779,51 @@ QUnit.module('Tab select action', () => {
         const $tabs = $('#tabs').dxTabs({ items, focusStateEnabled: true });
         const tabs = $tabs.dxTabs('instance');
 
-        const tabItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
+        const $tabItemFirst = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(0);
 
-        tabItemFirst.trigger('dxclick');
+        $tabItemFirst.trigger('dxclick');
 
         const $focusedElementFirst = tabs.option('focusedElement');
 
-        assert.strictEqual($focusedElementFirst, tabItemFirst[0]);
+        assert.strictEqual($focusedElementFirst, $tabItemFirst[0]);
 
         tabs.option({ selectedItems: [items[1], items[2]] });
 
-        const tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
+        const $tabItemSecond = $tabs.find(`.${TABS_ITEM_CLASS}`).eq(1);
         const $focusedElementSecond = tabs.option('focusedElement');
 
-        assert.strictEqual($focusedElementSecond, tabItemSecond[0]);
+        assert.strictEqual($focusedElementSecond, $tabItemSecond[0]);
+    });
+
+    QUnit.test('focusedElement should remain on the same selected tab after pressing Enter when multiple selection mode is used (T1285635)', function(assert) {
+        const items = [
+            { text: '0' },
+            { text: '1' },
+            { text: '2' },
+            { text: '3' },
+        ];
+
+        const $tabs = $('#tabs').dxTabs({
+            items,
+            focusStateEnabled: true
+        });
+        const tabs = $tabs.dxTabs('instance');
+
+        const $tabItems = $tabs.find(`.${TABS_ITEM_CLASS}`);
+        const $secondTab = $tabItems.eq(1);
+
+        $secondTab.trigger('dxclick');
+
+        const keyboard = keyboardMock($tabs);
+        keyboard
+            .press('right')
+            .press('right')
+            .press('enter');
+
+        const $fourthTab = $tabItems.eq(3);
+        const focusedElement = tabs.option('focusedElement');
+
+        assert.strictEqual(focusedElement, $fourthTab.get(0), 'focusedElement should match the selected tab');
     });
 });
 
@@ -1594,7 +1606,7 @@ QUnit.module('Async templates', {
     }
 }, () => {
     QUnit.test('render tabs', function() {
-        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290 });
+        const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 350 });
         this.clock.tick(10);
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
@@ -1679,7 +1691,7 @@ QUnit.module('Async templates', {
     QUnit.test('Remove scrollable and navigation buttons when width is changed from small to large', function() {
         const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 150, showNavButtons: true });
         this.clock.tick(10);
-        testWrapper.width = 290;
+        testWrapper.width = 350;
         testWrapper.checkTabsWithoutScrollable();
         testWrapper.checkNavigationButtons(false);
     });
@@ -1719,7 +1731,7 @@ QUnit.module('Async templates', {
         });
 
         QUnit.test(`Remove scrollable and navigation buttons when items are changed from 10 to 5, repaintChangesOnly: ${repaintChangesOnly}`, function() {
-            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 290, showNavButtons: true, repaintChangesOnly, itemsCount: 10 });
+            const testWrapper = new TestAsyncTabsWrapper($('#tabs'), { width: 350, showNavButtons: true, repaintChangesOnly, itemsCount: 10 });
 
             this.clock.tick(10);
             testWrapper.setItemsByCount(5);
@@ -1843,12 +1855,12 @@ QUnit.module('Indicator position', () => {
             });
             const tabsInstance = tabsElement.dxTabs('instance');
 
-            assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.bottom));
+            assert.ok(tabsElement.hasClass(TABS_INDICATOR_POSITION_CLASS.bottom));
 
             tabsInstance.option({ orientation: 'vertical' });
 
-            assert.notOk(tabsElement.hasClass(INDICATOR_POSITION_CLASS.bottom));
-            assert.ok(tabsElement.hasClass(rtlEnabled ? INDICATOR_POSITION_CLASS.left : INDICATOR_POSITION_CLASS.right));
+            assert.notOk(tabsElement.hasClass(TABS_INDICATOR_POSITION_CLASS.bottom));
+            assert.ok(tabsElement.hasClass(rtlEnabled ? TABS_INDICATOR_POSITION_CLASS.left : TABS_INDICATOR_POSITION_CLASS.right));
         });
     });
 
@@ -1859,36 +1871,36 @@ QUnit.module('Indicator position', () => {
         });
         const tabsInstance = tabsElement.dxTabs('instance');
 
-        assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.right));
+        assert.ok(tabsElement.hasClass(TABS_INDICATOR_POSITION_CLASS.right));
 
         tabsInstance.option({ rtlEnabled: true });
 
-        assert.notOk(tabsElement.hasClass(INDICATOR_POSITION_CLASS.right));
-        assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.left));
+        assert.notOk(tabsElement.hasClass(TABS_INDICATOR_POSITION_CLASS.right));
+        assert.ok(tabsElement.hasClass(TABS_INDICATOR_POSITION_CLASS.left));
     });
 
     QUnit.test('The element must have the correct indicator position class when rtlEnabled was changed in vertical horizontal', function(assert) {
         const tabsElement = $('#tabs').dxTabs({ items: [ 1, 2, 3 ] });
         const tabsInstance = tabsElement.dxTabs('instance');
 
-        assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.bottom));
+        assert.ok(tabsElement.hasClass(TABS_INDICATOR_POSITION_CLASS.bottom));
 
         tabsInstance.option({ rtlEnabled: true });
 
-        assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.bottom));
-        assert.notOk(tabsElement.hasClass(INDICATOR_POSITION_CLASS.top));
+        assert.ok(tabsElement.hasClass(TABS_INDICATOR_POSITION_CLASS.bottom));
+        assert.notOk(tabsElement.hasClass(TABS_INDICATOR_POSITION_CLASS.top));
     });
 
     QUnit.test('The element must have the correct indicator position class when _indicatorPosition was changed', function(assert) {
         const tabsElement = $('#tabs').dxTabs({ items: [ 1, 2, 3 ] });
         const tabsInstance = tabsElement.dxTabs('instance');
 
-        assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.bottom));
+        assert.ok(tabsElement.hasClass(TABS_INDICATOR_POSITION_CLASS.bottom));
 
         tabsInstance.option({ _indicatorPosition: 'top' });
 
-        assert.notOk(tabsElement.hasClass(INDICATOR_POSITION_CLASS.bottom));
-        assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.top));
+        assert.notOk(tabsElement.hasClass(TABS_INDICATOR_POSITION_CLASS.bottom));
+        assert.ok(tabsElement.hasClass(TABS_INDICATOR_POSITION_CLASS.top));
     });
 });
 

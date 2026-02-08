@@ -75,7 +75,7 @@
   }
 }
 
-.dx-tabs:not(.dx-tabs-vertical) .dx-tabs-scrollable .dx-tab {
+.dx-tabs.dx-tabs-horizontal .dx-tabs-scrollable .dx-tab {
   flex-basis: 100%;
   min-width: max-content;
 }
@@ -125,7 +125,7 @@
 }
 
 .dx-rtl {
-  &.dx-tabs:not(.dx-tabs-vertical) {
+  &.dx-tabs.dx-tabs-horizontal{
     flex-direction: row-reverse;
   }
 }

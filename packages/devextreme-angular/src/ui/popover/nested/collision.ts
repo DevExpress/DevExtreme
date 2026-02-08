@@ -17,6 +17,7 @@ import {
 import { CollisionResolution } from 'devextreme/common/core/animation';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-popover-collision',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPopoverCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -71,7 +74,7 @@ export class DxoPopoverCollisionComponent extends NestedOption implements OnDest
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPopoverCollisionComponent
   ],
   exports: [

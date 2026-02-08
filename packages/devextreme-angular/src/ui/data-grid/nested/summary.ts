@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -23,20 +22,36 @@ import { Format } from 'devextreme/common/core/localization';
 import { HorizontalAlignment } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDataGridGroupItemComponent } from './group-item-dxi';
-import { DxiDataGridTotalItemComponent } from './total-item-dxi';
 
+import {
+    PROPERTY_TOKEN_groupItems,
+    PROPERTY_TOKEN_totalItems,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-data-grid-summary',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDataGridSummaryComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_groupItems)
+    set _groupItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groupItems', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_totalItems)
+    set _totalItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('totalItems', value);
+    }
+    
     @Input()
     get calculateCustomSummary(): ((options: { component: dxDataGrid, groupIndex: number, name: string, summaryProcess: string, totalValue: any, value: any }) => void) {
         return this._getOption('calculateCustomSummary');
@@ -91,22 +106,6 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDataGridGroupItemComponent))
-    get groupItemsChildren(): QueryList<DxiDataGridGroupItemComponent> {
-        return this._getOption('groupItems');
-    }
-    set groupItemsChildren(value) {
-        this.setChildren('groupItems', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiDataGridTotalItemComponent))
-    get totalItemsChildren(): QueryList<DxiDataGridTotalItemComponent> {
-        return this._getOption('totalItems');
-    }
-    set totalItemsChildren(value) {
-        this.setChildren('totalItems', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
@@ -127,7 +126,7 @@ export class DxoDataGridSummaryComponent extends NestedOption implements OnDestr
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridSummaryComponent
   ],
   exports: [

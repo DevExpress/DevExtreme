@@ -3,7 +3,7 @@ import type { Appointment } from 'devextreme/ui/scheduler';
 import url from '../../../helpers/getPageUrl';
 import { getTimezoneTest, MACHINE_TIMEZONES, MachineTimezonesType } from '../../../helpers/machineTimezones';
 import { createWidget } from '../../../helpers/createWidget';
-import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
+import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import asyncForEach from '../../../helpers/asyncForEach';
 import { generateOptionMatrix } from '../../../helpers/generateOptionMatrix';
 
@@ -180,7 +180,5 @@ const OFFSET_TEST_CASES = generateOptionMatrix({
       cellDuration: 60,
       height: 800,
     });
-  }).after(async () => {
-    await removeStylesheetRulesFromPage();
   });
 });

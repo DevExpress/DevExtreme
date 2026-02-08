@@ -35,14 +35,14 @@ type IPopoverOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IPo
   contentComponent?: React.ComponentType<any>;
   titleRender?: (...params: any) => React.ReactNode;
   titleComponent?: React.ComponentType<any>;
-  defaultHeight?: (() => number | string) | number | string;
+  defaultHeight?: number | string;
   defaultPosition?: CommonPosition | PositionConfig;
   defaultVisible?: boolean;
-  defaultWidth?: (() => number | string) | number | string;
-  onHeightChange?: (value: (() => number | string) | number | string) => void;
+  defaultWidth?: number | string;
+  onHeightChange?: (value: number | string) => void;
   onPositionChange?: (value: CommonPosition | PositionConfig) => void;
   onVisibleChange?: (value: boolean) => void;
-  onWidthChange?: (value: (() => number | string) | number | string) => void;
+  onWidthChange?: (value: number | string) => void;
 }>
 
 interface PopoverRef {
@@ -60,7 +60,7 @@ const Popover = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["height","position","visible","width"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onHidden","onHiding","onInitialized","onShowing","onShown","onTitleRendered"]), []);

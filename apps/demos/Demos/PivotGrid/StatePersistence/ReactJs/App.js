@@ -2,7 +2,7 @@ import React from 'react';
 import PivotGrid, { FieldChooser, FieldPanel, StateStoring } from 'devextreme-react/pivot-grid';
 import Button from 'devextreme-react/button';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import sales from './data.js';
+import { sales } from './data.js';
 
 const onRefreshClick = () => {
   window.location.reload();

@@ -16,6 +16,7 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxoGanttFilterRowOperationDescriptions } from './base/gantt-filter-row-operation-descriptions';
@@ -23,8 +24,10 @@ import { DxoGanttFilterRowOperationDescriptions } from './base/gantt-filter-row-
 
 @Component({
     selector: 'dxo-operation-descriptions',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'between',
@@ -67,7 +70,7 @@ export class DxoOperationDescriptionsComponent extends DxoGanttFilterRowOperatio
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoOperationDescriptionsComponent
   ],
   exports: [

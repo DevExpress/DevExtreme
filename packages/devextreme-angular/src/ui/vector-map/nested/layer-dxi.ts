@@ -20,16 +20,26 @@ import { Font, Palette } from 'devextreme/common/charts';
 import { SingleMultipleOrNone } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_layers } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-vector-map-layer',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_layers,
+           useExisting: DxiVectorMapLayerComponent,
+        }
+    ]
 })
 export class DxiVectorMapLayerComponent extends CollectionNestedOption {
     @Input()
@@ -286,7 +296,7 @@ export class DxiVectorMapLayerComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiVectorMapLayerComponent
   ],
   exports: [

@@ -59,7 +59,7 @@ const componentConfig = {
     dataSource: [Array, Object, String] as PropType<(Array<any | dxResponsiveBoxItem | string>) | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hoverStateEnabled: Boolean,
     itemHoldTimeout: Number,
     items: Array as PropType<Array<any | dxResponsiveBoxItem | string>>,
@@ -77,7 +77,7 @@ const componentConfig = {
     screenByWidth: Function as PropType<(() => void)>,
     singleColumnScreen: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

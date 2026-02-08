@@ -3,12 +3,20 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import MessageBox, { TYPING_END_DELAY } from '__internal/ui/chat/messagebox';
+import MessageBox, {
+    TYPING_END_DELAY,
+    CHAT_MESSAGEBOX_TEXTAREA_CLASS,
+    CHAT_MESSAGEBOX_BUTTON_CLASS,
+} from '__internal/ui/chat/messagebox';
 import TextArea from '__internal/ui/m_text_area';
 import Button from 'ui/button';
-
-const CHAT_MESSAGEBOX_TEXTAREA_CLASS = 'dx-chat-messagebox-textarea';
-const CHAT_MESSAGEBOX_BUTTON_CLASS = 'dx-chat-messagebox-button';
+import EditingPreview, {
+    CHAT_EDITING_PREVIEW_CLASS,
+    CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS,
+} from '__internal/ui/chat/editing_preview';
+import {
+    FOCUSED_STATE_CLASS,
+} from '__internal/core/widget/widget';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
@@ -25,6 +33,12 @@ const moduleConfig = {
 
             this.$sendButton = this.$element.find(`.${CHAT_MESSAGEBOX_BUTTON_CLASS}`);
             this.sendButton = Button.getInstance(this.$sendButton);
+
+            this.getEditingPreview = () => this.$element.find(`.${CHAT_EDITING_PREVIEW_CLASS}`);
+            this.getEditingPreviewInstance = () => EditingPreview.getInstance(this.getEditingPreview());
+
+            this.getCancelButton = () => this.getEditingPreview().find(`.${CHAT_EDITING_PREVIEW_CANCEL_BUTTON_CLASS}`);
+            this.getCancelButtonInstance = () => Button.getInstance(this.getCancelButton());
         };
 
         this.reinit = (options) => {
@@ -294,6 +308,80 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
     });
 
+    QUnit.module('onMessageEditCanceled event', () => {
+        QUnit.test('should be fired when the Cancel button is clicked and editing is active', function(assert) {
+            const onMessageEditCanceled = sinon.stub();
+
+            this.reinit({ onMessageEditCanceled, text: 'editing text' });
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('new text message');
+
+            this.getCancelButton().trigger('dxclick');
+
+            assert.strictEqual(onMessageEditCanceled.callCount, 1, 'Event fired once on cancel');
+        });
+
+        QUnit.test('should not be fired when the Cancel button is clicked and text option is empty', function(assert) {
+            const onMessageEditCanceled = sinon.stub();
+
+            this.reinit({ onMessageEditCanceled });
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('new text message');
+
+            this.getCancelButton().trigger('dxclick');
+
+            assert.strictEqual(onMessageEditCanceled.callCount, 0, 'Event was not fired because text was not set');
+        });
+
+        QUnit.test('should be fired when Escape key is pressed during editing', function(assert) {
+            const onMessageEditCanceled = sinon.stub();
+
+            this.reinit({ onMessageEditCanceled });
+            this.instance.option('text', 'test');
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('some text')
+                .press('esc');
+
+            assert.strictEqual(onMessageEditCanceled.callCount, 1, 'Event fired once on Escape press');
+        });
+    });
+
+    QUnit.module('onMessageUpdating event', () => {
+        QUnit.test('should be fired when the Send button is clicked and text is defined', function(assert) {
+            const onMessageUpdating = sinon.stub();
+
+            this.reinit({ onMessageUpdating, text: 'edited text' });
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('new text message');
+
+            this.$sendButton.trigger('dxclick');
+
+            assert.strictEqual(onMessageUpdating.callCount, 1, 'Event fired once on send with defined text');
+        });
+
+        QUnit.test('should not be fired when the Send button is clicked and text option is empty', function(assert) {
+            const onMessageUpdating = sinon.stub();
+
+            this.reinit({ onMessageUpdating });
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('new text message');
+
+            this.$sendButton.trigger('dxclick');
+
+            assert.strictEqual(onMessageUpdating.callCount, 0, 'Event was not fired because text option was not set');
+        });
+    });
+
     QUnit.module('onTypingStart event', {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
@@ -556,11 +644,17 @@ QUnit.module('MessageBox', moduleConfig, () => {
                     hoverStateEnabled: value,
                 };
 
-                this.reinit(options);
+                this.reinit({
+                    ...options,
+                    text: 'message text'
+                });
+
+                const editingPreview = this.getEditingPreviewInstance();
 
                 Object.entries(options).forEach(([key, value]) => {
                     assert.deepEqual(value, this.sendButton.option(key), `button ${key} value is correct`);
                     assert.deepEqual(value, this.textArea.option(key), `textarea ${key} value is correct`);
+                    assert.deepEqual(value, editingPreview.option(key), `editing preview ${key} value is correct`);
                 });
             });
 
@@ -571,11 +665,17 @@ QUnit.module('MessageBox', moduleConfig, () => {
                     hoverStateEnabled: value,
                 };
 
-                this.instance.option(options);
+                this.instance.option({
+                    ...options,
+                    text: 'message text'
+                });
+
+                const editingPreview = this.getEditingPreviewInstance();
 
                 Object.entries(options).forEach(([key, value]) => {
                     assert.deepEqual(value, this.sendButton.option(key), `button ${key} value is correct`);
                     assert.deepEqual(value, this.textArea.option(key), `textarea ${key} value is correct`);
+                    assert.deepEqual(value, editingPreview.option(key), `editing preview ${key} value is correct`);
                 });
             });
         });
@@ -641,6 +741,77 @@ QUnit.module('MessageBox', moduleConfig, () => {
                 .keyUp('enter');
 
             assert.roughEqual(this.$textArea.height(), initialTextAreaHeight, 0.1, 'textarea height is restored');
+        });
+
+        QUnit.test('textarea should be cleared on escape key when some message is editing', function(assert) {
+            this.instance.option('text', 'test');
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('some text')
+                .press('esc');
+
+            assert.strictEqual(this.$input.val(), '');
+        });
+
+        QUnit.test('textarea should not be cleared on escape key when no message is editing', function(assert) {
+            keyboardMock(this.$input)
+                .focus()
+                .type('some text')
+                .press('esc');
+
+            assert.strictEqual(this.$input.val(), 'some text');
+        });
+
+        QUnit.test('Editing preview should be cleared when Escape key is pressed during editing', function(assert) {
+            this.instance.option('text', 'test');
+
+            const editingPreview = this.getEditingPreviewInstance();
+            assert.strictEqual(editingPreview.option('text'), 'test', 'Initial text is set in editing preview');
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('some text')
+                .press('esc');
+
+            assert.strictEqual(editingPreview.option('text'), '', 'Editing preview text is cleared after pressing Escape');
+        });
+
+        QUnit.test('Text option should update editing preview when changed at runtime', function(assert) {
+            this.instance.option('text', 'new text value');
+
+            const editingPreview = this.getEditingPreviewInstance();
+            assert.strictEqual(editingPreview.option('text'), 'new text value', 'Updated text is reflected in editing preview');
+        });
+
+        QUnit.testInActiveWindow('Textarea should be focused after pressing Escape key', function(assert) {
+            this.instance.option('text', 'test');
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('some text')
+                .press('esc');
+
+            assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'Textarea is focused after Escape press');
+        });
+
+        QUnit.testInActiveWindow('Textarea should not be focused after clicking Send button if text is not empty', function(assert) {
+            this.instance.option('text', 'test');
+
+            this.$sendButton.trigger('dxclick');
+
+            assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), false, 'Textarea is not focused after send');
+        });
+
+        QUnit.test('Editing preview and textarea should be cleared after clicking the cancel button', function(assert) {
+            this.reinit({ text: 'edited text' });
+
+            const editingPreview = this.getEditingPreviewInstance();
+
+            this.getCancelButton().trigger('dxclick');
+
+            assert.strictEqual(this.textArea.option('text'), '', 'Textarea is cleared after cancel');
+            assert.strictEqual(editingPreview.option('text'), '', 'Editing preview is cleared after cancel');
         });
     });
 });

@@ -29,7 +29,7 @@ const Pagination = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["pageIndex","pageSize"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized"]), []);

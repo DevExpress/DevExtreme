@@ -8,6 +8,7 @@ import {
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
+import 'generic_light.css!';
 
 const {
     module,
@@ -16,13 +17,12 @@ const {
 
 QUnit.testStart(() => initTestMarkup());
 
-const createInstanceBase = (options, clock) => {
-    const scheduler = createWrapper({
+const createInstanceBase = async(options) => {
+    const scheduler = await createWrapper({
         height: 600,
         ...options,
     });
 
-    clock.tick(300);
     scheduler.instance.focus();
 
     return scheduler;
@@ -31,11 +31,9 @@ const createInstanceBase = (options, clock) => {
 module('Integration: Appointment scroll', {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 }, () => {
     [
@@ -43,7 +41,7 @@ module('Integration: Appointment scroll', {
         'virtual'
     ].forEach(scrollingMode => {
         module(`Scrolling mode ${scrollingMode}`, () => {
-            const createInstance = (options, clock) => {
+            const createInstance = async(options) => {
                 options = options || {};
                 $.extend(
                     true,
@@ -55,7 +53,7 @@ module('Integration: Appointment scroll', {
                     }
                 );
 
-                const scheduler = createInstanceBase(options, clock);
+                const scheduler = await createInstanceBase(options);
 
                 if(scrollingMode === 'virtual') {
                     const workspace = scheduler.instance.getWorkSpace();
@@ -65,15 +63,15 @@ module('Integration: Appointment scroll', {
                 return scheduler;
             };
             module('Timeline views', () => {
-                test('Scheduler should update scroll position if appointment is not visible, timeline view ', function(assert) {
-                    const scheduler = createInstance({
+                test('Scheduler should update scroll position if appointment is not visible, timeline view ', async function(assert) {
+                    const scheduler = await createInstance({
                         currentDate: new Date(2015, 1, 9),
                         dataSource: new DataSource({
                             store: []
                         }),
                         currentView: 'timelineDay',
                         height: 500
-                    }, this.clock);
+                    });
 
                     const appointment = { startDate: new Date(2015, 1, 9, 7), endDate: new Date(2015, 1, 9, 1, 8), text: 'caption' };
                     const workSpace = scheduler.instance.$element().find('.dx-scheduler-work-space').dxSchedulerTimelineDay('instance');
@@ -89,8 +87,8 @@ module('Integration: Appointment scroll', {
                     }
                 });
 
-                test('Scheduler should update scroll position if appointment is not visible, timeline week view ', function(assert) {
-                    const scheduler = createInstance({
+                test('Scheduler should update scroll position if appointment is not visible, timeline week view ', async function(assert) {
+                    const scheduler = await createInstance({
                         currentDate: new Date(2015, 1, 9),
                         dataSource: new DataSource({
                             store: []
@@ -98,7 +96,7 @@ module('Integration: Appointment scroll', {
                         currentView: 'timelineWeek',
                         height: 500,
                         width: 500
-                    }, this.clock);
+                    });
 
                     const appointment = { startDate: new Date(2015, 1, 12, 7), endDate: new Date(2015, 1, 12, 1, 8), text: 'caption' };
                     const workSpace = scheduler.instance.getWorkSpace();
@@ -115,8 +113,8 @@ module('Integration: Appointment scroll', {
                 });
             });
 
-            test('Scheduler should not update scroll position if appointment is visible ', function(assert) {
-                const scheduler = createInstance({
+            test('Scheduler should not update scroll position if appointment is visible ', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
                         store: []
@@ -124,7 +122,7 @@ module('Integration: Appointment scroll', {
                     currentView: 'week',
                     height: 500,
                     width: 1000,
-                }, this.clock);
+                });
 
                 const appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption' };
                 const workSpace = scheduler.instance.getWorkSpace();
@@ -140,8 +138,8 @@ module('Integration: Appointment scroll', {
                 }
             });
 
-            test('Scheduler should update scroll position if appointment was added to invisible bottom area', function(assert) {
-                const scheduler = createInstance({
+            test('Scheduler should update scroll position if appointment was added to invisible bottom area', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
                         store: []
@@ -149,7 +147,7 @@ module('Integration: Appointment scroll', {
                     currentView: 'week',
                     height: 300,
                     width: 600
-                }, this.clock);
+                });
 
                 const appointment = { startDate: new Date(2015, 1, 9, 21), endDate: new Date(2015, 1, 9, 22), text: 'caption 2' };
                 const workSpace = scheduler.instance.getWorkSpace();
@@ -165,15 +163,15 @@ module('Integration: Appointment scroll', {
                 }
             });
 
-            test('Scheduler should update scroll position if appointment was added to invisible top area', function(assert) {
-                const scheduler = createInstance({
+            test('Scheduler should update scroll position if appointment was added to invisible top area', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
                         store: []
                     }),
                     currentView: 'week',
                     height: 300
-                }, this.clock);
+                });
 
                 scheduler.instance.getWorkSpaceScrollable().scrollBy(220);
 
@@ -191,8 +189,8 @@ module('Integration: Appointment scroll', {
                 }
             });
 
-            test('Scheduler should update scroll position if appointment was added to invisible top area: minutes case', function(assert) {
-                const scheduler = createInstance({
+            test('Scheduler should update scroll position if appointment was added to invisible top area: minutes case', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
                         store: []
@@ -202,7 +200,7 @@ module('Integration: Appointment scroll', {
                     scrolling: {
                         orientation: 'vertical'
                     }
-                }, this.clock);
+                });
 
                 scheduler.instance.getWorkSpaceScrollable().scrollBy(220);
 
@@ -220,8 +218,8 @@ module('Integration: Appointment scroll', {
                 }
             });
 
-            test('Scheduler should update scroll position if appointment was added to invisible bottom area: minutes case', function(assert) {
-                const scheduler = createInstance({
+            test('Scheduler should update scroll position if appointment was added to invisible bottom area: minutes case', async function(assert) {
+                const scheduler = await createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
                         store: []
@@ -230,7 +228,7 @@ module('Integration: Appointment scroll', {
                     height: 500,
                     showAllDayPanel: false,
                     width: 600
-                }, this.clock);
+                });
 
                 scheduler.instance.getWorkSpaceScrollable().scrollBy(140);
 

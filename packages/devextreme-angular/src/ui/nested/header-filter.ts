@@ -16,15 +16,18 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoGanttHeaderFilter } from './base/gantt-header-filter';
+import { DxoColumnHeaderFilter } from './base/column-header-filter';
 
 
 @Component({
     selector: 'dxo-header-filter',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'allowSearch',
@@ -41,7 +44,7 @@ import { DxoGanttHeaderFilter } from './base/gantt-header-filter';
         'showRelevantValues'
     ]
 })
-export class DxoHeaderFilterComponent extends DxoGanttHeaderFilter implements OnDestroy, OnInit  {
+export class DxoHeaderFilterComponent extends DxoColumnHeaderFilter implements OnDestroy, OnInit  {
 
     protected get _optionPath() {
         return 'headerFilter';
@@ -68,7 +71,7 @@ export class DxoHeaderFilterComponent extends DxoGanttHeaderFilter implements On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoHeaderFilterComponent
   ],
   exports: [

@@ -7,6 +7,7 @@ import devices from '__internal/core/m_devices';
 import themes from 'ui/themes';
 import support from '__internal/core/utils/m_support';
 import publicComponentUtils from '__internal/core/utils/m_public_component';
+import { isFunction } from 'core/utils/type';
 import { getNestedOptionValue } from 'core/options/utils';
 
 import ActionSheet from 'ui/action_sheet';
@@ -21,6 +22,7 @@ import ChatMessageGroup from '__internal/ui/chat/messagegroup';
 import ChatMessageList from '__internal/ui/chat/messagelist';
 import ChatAlertList from '__internal/ui/chat/alertlist';
 import ChatTypingIndicator from '__internal/ui/chat/typingindicator';
+import ChatEditingPreview from '__internal/ui/chat/editing_preview';
 import DataGrid from 'ui/data_grid';
 import DateBox from 'ui/date_box';
 import DateRangeBox from 'ui/date_range_box';
@@ -28,9 +30,10 @@ import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
 import DropDownBox from 'ui/drop_down_box';
 import DropDownButton from 'ui/drop_down_button';
 import DropDownList from 'ui/drop_down_editor/ui.drop_down_list';
-import DropDownMenu from '__internal/ui/toolbar/internal/m_toolbar.menu';
+import DropDownMenu from '__internal/ui/toolbar/internal/toolbar.menu';
 import TextEditor from 'ui/text_box/ui.text_editor';
 import Gallery from 'ui/gallery';
+import Informer from 'ui/informer';
 import Lookup from 'ui/lookup';
 import LoadIndicator from 'ui/load_indicator';
 import LoadPanel from 'ui/load_panel';
@@ -48,7 +51,7 @@ import RadioGroup from 'ui/radio_group';
 import Resizable from 'ui/resizable';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
 import Scheduler from '__internal/scheduler/m_scheduler';
-import Scrollable from '__internal/ui/scroll_view/m_scrollable';
+import Scrollable from '__internal/ui/scroll_view/scrollable';
 import ScrollView from 'ui/scroll_view';
 import SelectBox from 'ui/select_box';
 import SliderHandle from '__internal/ui/slider/m_slider_handle';
@@ -60,7 +63,7 @@ import TagBox from 'ui/tag_box';
 import Toast from 'ui/toast';
 import TreeList from 'ui/tree_list';
 import TreeView from 'ui/tree_view';
-import TileView from '__internal/ui/m_tile_view';
+import TileView from '__internal/ui/tile_view';
 import FileUploader from 'ui/file_uploader';
 import Form from 'ui/form';
 import ValidationMessage from 'ui/validation_message';
@@ -80,7 +83,7 @@ QUnit.module('widgets defaults');
 const testComponentDefaults = function(componentClass, forcedDevices, options, before, after) {
     const componentName = publicComponentUtils.name(componentClass);
 
-    forcedDevices = $.isArray(forcedDevices) ? forcedDevices : [forcedDevices];
+    forcedDevices = Array.isArray(forcedDevices) ? forcedDevices : [forcedDevices];
     before = before || noop;
     after = after || noop;
 
@@ -95,7 +98,7 @@ const testComponentDefaults = function(componentClass, forcedDevices, options, b
             }
             const $container = $('#cmp');
             const component = new componentClass($container);
-            options = $.isFunction(options) ? options.call(component) : options;
+            options = isFunction(options) ? options.call(component) : options;
 
             const defaults = component.option();
             checkOptions.apply(component, [options, defaults, JSON.stringify(device), assert]);
@@ -112,7 +115,7 @@ const checkOptions = function(expectedOptions, resultOptions, deviceString, asse
     $.each(expectedOptions, function(optionName, expectedValue) {
         let resultValue = getNestedOptionValue(resultOptions, optionName);
 
-        resultValue = $.isFunction(resultValue) ? resultValue.call(that) : resultValue;
+        resultValue = isFunction(resultValue) ? resultValue.call(that) : resultValue;
 
         if($.isPlainObject(expectedValue)) {
             checkOptions(expectedValue, resultValue, null, assert);
@@ -554,20 +557,6 @@ testComponentDefaults(List,
     }
 );
 
-if(!(/chrome/i.test(navigator.userAgent))) {
-    testComponentDefaults(LoadIndicator,
-        {},
-        { viaImage: true },
-        function() {
-            this._originalRealDevice = devices.real();
-            devices.real({ platform: 'android', version: [4, 0] });
-        },
-        function() {
-            devices.real(this._originalRealDevice);
-        }
-    );
-}
-
 
 testComponentDefaults(Lookup,
     {},
@@ -767,6 +756,20 @@ testComponentDefaults(Popup,
     }
 );
 
+testComponentDefaults(Informer,
+    {},
+    {
+        activeStateEnabled: false,
+        hoverStateEnabled: false,
+        focusStateEnabled: false,
+        contentAlignment: 'center',
+        icon: '',
+        showBackground: true,
+        text: '',
+        type: 'error',
+    }
+);
+
 testComponentDefaults(Overlay,
     {},
     {
@@ -864,7 +867,7 @@ testComponentDefaults(Scrollable,
     {
         useNative: false,
         // NOTE: useSimulatedScrollbar setting value doesn't affect on simulated strategy
-        useSimulatedScrollbar: Scrollable.IS_RENOVATED_WIDGET ? false : true
+        useSimulatedScrollbar: true,
     },
     function() {
         this._supportNativeScrolling = support.nativeScrolling;
@@ -966,19 +969,18 @@ testComponentDefaults(Scrollable,
     }
 );
 
-if(!Scrollable.IS_RENOVATED_WIDGET) {
-    testComponentDefaults(ScrollView,
-        {},
-        { refreshStrategy: 'swipeDown' },
-        function() {
-            this._originalRealDevice = devices.real();
-            devices.real({ platform: 'android' });
-        },
-        function() {
-            devices.real(this._originalRealDevice);
-        }
-    );
-}
+
+testComponentDefaults(ScrollView,
+    {},
+    { refreshStrategy: 'swipeDown' },
+    function() {
+        this._originalRealDevice = devices.real();
+        devices.real({ platform: 'android' });
+    },
+    function() {
+        devices.real(this._originalRealDevice);
+    }
+);
 
 testComponentDefaults(ScrollView,
     {},
@@ -1363,6 +1365,14 @@ testComponentDefaults(Chat,
         onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
+        onMessageEditingStart: undefined,
+        onMessageEditCanceled: undefined,
+        onMessageDeleting: undefined,
+        onMessageDeleted: undefined,
+        editing: {
+            allowUpdating: false,
+            allowDeleting: false,
+        }
     }
 );
 
@@ -1384,13 +1394,18 @@ testComponentDefaults(ChatMessageBox,
         onMessageEntered: undefined,
         onTypingStart: undefined,
         onTypingEnd: undefined,
+        onMessageEditCanceled: undefined,
+        onMessageUpdating: undefined,
     }
 );
 
 testComponentDefaults(ChatMessageBubble,
     {},
     {
-        text: '',
+        isDeleted: false,
+        isEdited: false,
+        template: null,
+        message: {},
     }
 );
 
@@ -1412,6 +1427,8 @@ testComponentDefaults(ChatMessageList,
         isLoading: false,
         dayHeaderFormat: 'shortdate',
         messageTimestampFormat: 'shorttime',
+        allowUpdating: false,
+        allowDeleting: false,
     }
 );
 
@@ -1426,6 +1443,17 @@ testComponentDefaults(ChatTypingIndicator,
     {},
     {
         typingUsers: [],
+    }
+);
+
+testComponentDefaults(ChatEditingPreview,
+    {},
+    {
+        activeStateEnabled: true,
+        focusStateEnabled: true,
+        hoverStateEnabled: true,
+        text: '',
+        onCancel: undefined,
     }
 );
 
@@ -1775,8 +1803,6 @@ testComponentDefaults(Scheduler,
     {},
     {
         useDropDownViewSwitcher: true,
-        _appointmentTooltipButtonsPosition: 'top',
-        _appointmentTooltipOpenButtonText: null,
         _appointmentCountPerCell: 1,
         _collectorOffset: 20,
         _appointmentOffset: 30

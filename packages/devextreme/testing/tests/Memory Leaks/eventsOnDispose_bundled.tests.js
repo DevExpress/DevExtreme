@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import GoogleProvider from '__internal/ui/map/m_provider.dynamic.google';
+import GoogleProvider from '__internal/ui/map/provider.dynamic.google';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
 
 import 'bundles/modules/parts/widgets-web';
@@ -21,7 +21,7 @@ QUnit.module('eventsOnDispose', {
 ].forEach((vue2disposing) => {
     $.each(DevExpress.ui, function(componentName) {
         if($.fn[componentName] && memoryLeaksHelper.componentCanBeTriviallyInstantiated(componentName)) {
-            QUnit.test(`${componentName} should not leak memory by not removing redundant event subscriptions after disposing (vue2 = ${vue2disposing})`, function(assert) {
+            QUnit.test(`${componentName} should not leak memory by not removing redundant event subscriptions after disposing (vue2 = ${vue2disposing})`, async function(assert) {
                 // NOTE: $.getScript() subscribes load and error event handlers on <script> element
                 const originalGetScript = $.fn.getScript;
                 $.getScript = function() {
@@ -34,13 +34,19 @@ QUnit.module('eventsOnDispose', {
 
                     const component = $(testNode)[componentName](memoryLeaksHelper.getComponentOptions(componentName))[componentName]('instance');
 
-                    this.clock.tick(0);
+                    if(memoryLeaksHelper.componentCanBeAsyncInstantiated(componentName)) {
+                        await this.clock.tickAsync(0);
+                    } else {
+                        this.clock.tick(0);
+                    }
+
                     if(vue2disposing) {
                         testNode.get(0).remove();
                         component.dispose();
                     } else {
                         memoryLeaksHelper.destroyTestNode(testNode);
                     }
+
                     const newEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
                     assert.deepEqual(newEventSubscriptions, originalEventSubscriptions, 'After a component is disposed, additional event subscriptions must be removed');
                 } finally {

@@ -17,6 +17,7 @@ import {
 import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-common-axis-settings-constant-line-style',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoChartCommonAxisSettingsConstantLineStyleComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -103,7 +106,7 @@ export class DxoChartCommonAxisSettingsConstantLineStyleComponent extends Nested
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartCommonAxisSettingsConstantLineStyleComponent
   ],
   exports: [

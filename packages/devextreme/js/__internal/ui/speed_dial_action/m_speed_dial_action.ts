@@ -3,7 +3,7 @@ import Guid from '@js/core/guid';
 import { extend } from '@js/core/utils/extend';
 import readyCallbacks from '@js/core/utils/ready_callbacks';
 import type { Properties } from '@js/ui/speed_dial_action';
-import swatchContainer from '@js/ui/widget/swatch_container';
+import swatchContainer from '@ts/core/utils/swatch_container';
 import Widget from '@ts/core/widget/widget';
 
 import { disposeAction, initAction } from './m_speed_dial_main_item';

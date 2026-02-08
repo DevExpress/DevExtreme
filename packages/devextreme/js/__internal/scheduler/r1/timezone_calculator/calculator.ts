@@ -2,8 +2,9 @@ import dateUtils from '@js/core/utils/date';
 import { isDefined } from '@js/core/utils/type';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
-import { PathTimeZoneConversion } from './const';
-import type { DateType, TimeZoneCalculatorOptions, TimeZoneOffsetsType } from './types';
+import type {
+  DateType, PathTimeZoneConversion, TimeZoneCalculatorOptions, TimeZoneOffsetsType,
+} from './types';
 
 const MS_IN_MINUTE = 60000;
 const MS_IN_HOUR = 60 * MS_IN_MINUTE;
@@ -18,23 +19,20 @@ export class TimeZoneCalculator {
 
   createDate(
     sourceDate: DateType,
-    info: { path: PathTimeZoneConversion; appointmentTimeZone?: string },
-  ): Date | undefined {
+    path: PathTimeZoneConversion,
+    appointmentTimeZone?: string,
+  ): Date {
     const date = new Date(sourceDate);
 
-    switch (info.path) {
-      case PathTimeZoneConversion.fromSourceToAppointment:
-        return this.getConvertedDate(date, info.appointmentTimeZone, false);
-
-      case PathTimeZoneConversion.fromAppointmentToSource:
-        return this.getConvertedDate(date, info.appointmentTimeZone, true);
-
-      case PathTimeZoneConversion.fromSourceToGrid:
+    switch (path) {
+      case 'toAppointment':
+        return this.getConvertedDate(date, appointmentTimeZone, false);
+      case 'fromAppointment':
+        return this.getConvertedDate(date, appointmentTimeZone, true);
+      case 'toGrid':
         return this.getConvertedDate(date, undefined, false);
-
-      case PathTimeZoneConversion.fromGridToSource:
+      case 'fromGrid':
         return this.getConvertedDate(date, undefined, true);
-
       default:
         throw new Error('not specified pathTimeZoneConversion');
     }
@@ -64,11 +62,11 @@ export class TimeZoneCalculator {
   protected getOffsetInHours(date: Date, timezone: string | undefined, isUTCDate: boolean): number {
     const { client, appointment, common } = this.getOffsets(date, timezone);
 
-    if (!!timezone && isUTCDate) {
+    if (Boolean(timezone) && isUTCDate) {
       return appointment - client;
     }
 
-    if (!!timezone && !isUTCDate) {
+    if (Boolean(timezone) && !isUTCDate) {
       return appointment - common;
     }
 

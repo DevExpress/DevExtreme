@@ -10,7 +10,7 @@ import {
   DxNumberBoxModule,
   DxDateBoxModule,
 } from 'devextreme-angular';
-import { exportGantt as exportGanttToPdf } from 'devextreme/pdf_exporter';
+import { exportGantt as exportGanttToPdf } from 'devextreme-angular/common/export/pdf';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';

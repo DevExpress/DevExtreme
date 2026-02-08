@@ -31,7 +31,7 @@ import {
     DxIntegrationModule,
     DxTemplateModule,
     NestedOptionHost,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -63,16 +63,16 @@ import { DxoTooltipShowEventModule } from 'devextreme-angular/ui/tooltip/nested'
 import { DxoTooltipToModule } from 'devextreme-angular/ui/tooltip/nested';
 
 
-
-
 /**
  * [descr:dxTooltip]
 
  */
 @Component({
     selector: 'dx-tooltip',
+    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -80,6 +80,7 @@ import { DxoTooltipToModule } from 'devextreme-angular/ui/tooltip/nested';
     ]
 })
 export class DxTooltipComponent extends DxComponent implements OnDestroy {
+
     instance: DxTooltip = null;
 
     /**
@@ -92,21 +93,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     }
     set animation(value: { hide?: AnimationConfig, show?: AnimationConfig }) {
         this._setOption('animation', value);
-    }
-
-
-    /**
-     * [descr:dxPopoverOptions.closeOnOutsideClick]
-    
-     * @deprecated [depNote:dxPopoverOptions.closeOnOutsideClick]
-    
-     */
-    @Input()
-    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
-        return this._getOption('closeOnOutsideClick');
-    }
-    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
-        this._setOption('closeOnOutsideClick', value);
     }
 
 
@@ -167,10 +153,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get height(): (() => number | string) | number | string {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
@@ -245,10 +231,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get maxHeight(): (() => number | string) | number | string {
+    get maxHeight(): number | string {
         return this._getOption('maxHeight');
     }
-    set maxHeight(value: (() => number | string) | number | string) {
+    set maxHeight(value: number | string) {
         this._setOption('maxHeight', value);
     }
 
@@ -258,10 +244,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get maxWidth(): (() => number | string) | number | string {
+    get maxWidth(): number | string {
         return this._getOption('maxWidth');
     }
-    set maxWidth(value: (() => number | string) | number | string) {
+    set maxWidth(value: number | string) {
         this._setOption('maxWidth', value);
     }
 
@@ -271,10 +257,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get minHeight(): (() => number | string) | number | string {
+    get minHeight(): number | string {
         return this._getOption('minHeight');
     }
-    set minHeight(value: (() => number | string) | number | string) {
+    set minHeight(value: number | string) {
         this._setOption('minHeight', value);
     }
 
@@ -284,10 +270,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get minWidth(): (() => number | string) | number | string {
+    get minWidth(): number | string {
         return this._getOption('minWidth');
     }
-    set minWidth(value: (() => number | string) | number | string) {
+    set minWidth(value: number | string) {
         this._setOption('minWidth', value);
     }
 
@@ -388,10 +374,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get width(): (() => number | string) | number | string {
+    get width(): number | string {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string) {
+    set width(value: number | string) {
         this._setOption('width', value);
     }
 
@@ -484,13 +470,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() closeOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() containerChange: EventEmitter<any | string | undefined>;
 
     /**
@@ -519,7 +498,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() heightChange: EventEmitter<number | string>;
 
     /**
     
@@ -561,28 +540,28 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxHeightChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() maxHeightChange: EventEmitter<number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxWidthChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() maxWidthChange: EventEmitter<number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minHeightChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() minHeightChange: EventEmitter<number | string>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minWidthChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() minWidthChange: EventEmitter<number | string>;
 
     /**
     
@@ -638,7 +617,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() widthChange: EventEmitter<number | string>;
 
     /**
     
@@ -646,10 +625,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() wrapperAttrChange: EventEmitter<any>;
-
-
-
-
 
 
 
@@ -672,7 +647,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
             { subscribe: 'showing', emit: 'onShowing' },
             { subscribe: 'shown', emit: 'onShown' },
             { emit: 'animationChange' },
-            { emit: 'closeOnOutsideClickChange' },
             { emit: 'containerChange' },
             { emit: 'contentTemplateChange' },
             { emit: 'deferRenderingChange' },
@@ -714,6 +688,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
 
 @NgModule({
   imports: [
+    DxTooltipComponent,
     DxoAnimationModule,
     DxoHideModule,
     DxoFromModule,
@@ -742,9 +717,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     DxoTooltipToModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxTooltipComponent
   ],
   exports: [
     DxTooltipComponent,
@@ -778,6 +750,8 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
   ]
 })
 export class DxTooltipModule { }
+
+export * from 'devextreme-angular/ui/tooltip/nested';
 
 import type * as DxTooltipTypes from "devextreme/ui/tooltip_types";
 export { DxTooltipTypes };

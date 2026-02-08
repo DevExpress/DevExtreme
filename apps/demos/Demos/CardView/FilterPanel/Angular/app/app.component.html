@@ -1,0 +1,37 @@
+<dx-card-view
+  id="cardView"
+  [dataSource]="orders"
+  keyExpr="ID"
+  [filterValue]="filterValue"
+  cardsPerRow="auto"
+  [cardMinWidth]="310"
+>
+  <dxo-card-view-header-filter [visible]="true"></dxo-card-view-header-filter>
+  <dxo-card-view-filter-panel [visible]="true"></dxo-card-view-filter-panel>
+  <dxo-card-view-filter-builder
+    [customOperations]="customOperations"
+  ></dxo-card-view-filter-builder>
+  <dxi-card-view-column dataField="OrderNumber">
+    <dxo-card-view-column-header-filter
+      [groupInterval]="10000"
+    ></dxo-card-view-column-header-filter>
+  </dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="OrderDate"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="DeliveryDate"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column dataField="SaleAmount" dataType="number">
+    <dxo-card-view-column-header-filter
+      [dataSource]="saleAmountHeaderFilterDataSource"
+    ></dxo-card-view-column-header-filter>
+  </dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="CustomerStoreCity"
+    caption="City"
+  ></dxi-card-view-column>
+  <dxi-card-view-column dataField="Employee"></dxi-card-view-column>
+</dx-card-view>

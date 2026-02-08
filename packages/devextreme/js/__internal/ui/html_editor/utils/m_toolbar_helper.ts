@@ -11,6 +11,7 @@ import Form from '@js/ui/form';
 import ScrollView from '@js/ui/scroll_view';
 
 import { getQuill } from '../m_quill_importer';
+import type { AIDialogResult, AIDialogShowPayload } from '../ui/aiDialog';
 import { ImageUploader } from './m_image_uploader_helper';
 import {
   getAutoSizedElements,
@@ -102,6 +103,70 @@ function getFormatHandlers(module) {
     deleteTable: getTableOperationHandler(module.quill, 'deleteTable'),
     cellProperties: prepareShowFormProperties(module, 'cell'),
     tableProperties: prepareShowFormProperties(module, 'table'),
+    ai: prepareAITextTrasformHandler(module),
+  };
+}
+
+function prepareAITextTrasformHandler(module) {
+  return (options): void => {
+    const {
+      command,
+      commandsMap,
+      parentCommand,
+      prompt,
+    } = options;
+
+    const { quill } = module;
+    const selection = quill.getSelection();
+    const hasSelection = selection?.length > 0;
+    const text = hasSelection ? quill.getText(selection) : quill.getText();
+
+    const aiDialogConfig: AIDialogShowPayload = {
+      currentCommand: parentCommand ?? command,
+      currentCommandOption: parentCommand ? command : undefined,
+      text,
+      commandsMap,
+      prompt,
+    };
+
+    const promise = module.editorInstance.showAIDialog(aiDialogConfig);
+
+    promise.done(({
+      resultText,
+      event: eventData,
+    }: AIDialogResult) => {
+      const insertionMode = eventData.itemData.id;
+      let insertIndex = 0;
+      let textToInsert = resultText;
+
+      switch (insertionMode) {
+        case 'replace': {
+          insertIndex = hasSelection ? selection.index : 0;
+          quill.deleteText(
+            insertIndex,
+            hasSelection ? selection.length : quill.getLength(),
+            SILENT_ACTION,
+          );
+          break;
+        }
+        case 'insertAbove': {
+          insertIndex = hasSelection ? selection.index : 0;
+          textToInsert = `${resultText}\n`;
+          break;
+        }
+        case 'insertBelow': {
+          insertIndex = hasSelection ? selection.index + selection.length : quill.getLength();
+          break;
+        }
+        default:
+          return;
+      }
+
+      module.saveValueChangeEvent(eventData.event);
+
+      quill.insertText(insertIndex, textToInsert, USER_ACTION);
+      quill.setSelection(insertIndex, textToInsert.length, USER_ACTION);
+    });
   };
 }
 
@@ -242,6 +307,7 @@ function prepareLinkHandler(module) {
       text: selection && !selectionHasEmbedContent ? module.quill.getText(selection) : '',
       target: Object.prototype.hasOwnProperty.call(formats, 'target') ? !!formats.target : true,
     };
+
     module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_LINK_CAPTION));
 
     const promise = module.editorInstance.showFormDialog({
@@ -303,7 +369,9 @@ function prepareColorClickHandler(module, name) {
   return () => {
     const formData = module.quill.getFormat();
     const caption = name === 'color' ? DIALOG_COLOR_CAPTION : DIALOG_BACKGROUND_CAPTION;
+
     module.editorInstance.formDialogOption('title', localizationMessage.format(caption));
+
     const promise = module.editorInstance.showFormDialog({
       formData,
       items: [{

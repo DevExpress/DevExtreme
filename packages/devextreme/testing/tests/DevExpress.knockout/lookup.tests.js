@@ -23,10 +23,6 @@ QUnit.testStart(function() {
 
 const LIST_CLASS = 'dx-list';
 
-const toSelector = function(val) {
-    return '.' + val;
-};
-
 const openPopupWithList = function(lookup) {
     $(lookup._$field).trigger('dxclick');
 };
@@ -52,9 +48,9 @@ QUnit.test('lookup should delegate templates to child widgets (T131530)', functi
 
     openPopupWithList(lookup);
 
-    const $list = $(toSelector(LIST_CLASS));
+    const $list = $(`.${LIST_CLASS}`);
 
-    assert.equal($.trim($list.find('.dx-list-item').text()), 'TemplateTemplate');
+    assert.equal($list.find('.dx-list-item').text().trim(), 'TemplateTemplate');
 });
 
 QUnit.test('lookup with item template', function(assert) {
@@ -65,7 +61,7 @@ QUnit.test('lookup with item template', function(assert) {
 
     openPopupWithList(lookup);
 
-    const $list = $(toSelector(LIST_CLASS));
+    const $list = $(`.${LIST_CLASS}`);
 
-    assert.equal($.trim($list.find('.dx-list-item').text()), 'Template');
+    assert.equal($list.find('.dx-list-item').text().trim(), 'Template');
 });

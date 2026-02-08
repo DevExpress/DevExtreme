@@ -12,7 +12,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -23,19 +22,30 @@ import { TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorS
 import { TextBoxType, ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/text_box';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiTreeViewButtonComponent } from './button-dxi';
 
+import {
+    PROPERTY_TOKEN_buttons,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-tree-view-search-editor-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -85,10 +95,10 @@ export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -469,10 +479,10 @@ export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implem
     }
 
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -488,18 +498,9 @@ export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implem
     }
 
 
-    @ContentChildren(forwardRef(() => DxiTreeViewButtonComponent))
-    get buttonsChildren(): QueryList<DxiTreeViewButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this.setChildren('buttons', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'valueChange' }
         ]);
@@ -521,7 +522,7 @@ export class DxoTreeViewSearchEditorOptionsComponent extends NestedOption implem
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeViewSearchEditorOptionsComponent
   ],
   exports: [

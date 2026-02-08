@@ -1,0 +1,111 @@
+@use '../../../icon_fonts' as *;
+@use './variables' as *;
+
+.dx-cardview-header-item {
+  display: flex;
+  align-items: center;
+  padding: $cardview-header-panel__item-padding-vertical $cardview-header-panel__item-padding-horizontal;
+  user-select: none;
+  gap: 4px;
+  border: solid $cardview-header-panel__item-border-width;
+  border-radius: $cardview-header-panel__item-border-radius;
+  line-height: $cardview-header-panel__item-line-height;
+  cursor: pointer;
+
+  .dx-icon {
+    font-size: $cardview-header-panel__item__icon-size;
+    color: $cardview-header-panel__item__icon-color;
+  }
+
+  background-color: $cardview-header-panel__item-bg-color;
+  border-color: $cardview-header-panel__item-border-color;
+  color: $cardview-header-panel__item-text-color;
+  font-weight: $cardview-header-panel__item-text-weight;
+
+  .dx-header-filter-icon--selected {
+    color: $cardview-header-panel__item__header-filter-icon--selected-color;
+  }
+
+  .dx-cardview-header-item-sorting-order {
+    color: $cardview-header-panel__item__sort-index-text-color;
+    font-weight: $cardview-header-panel__item__sort-index-text-weight;
+  }
+
+  &:hover {
+    background-color: $cardview-header-panel__item--hovered-bg-color;
+    border-color: $cardview-header-panel__item--hovered-border-color;
+    color: $cardview-header-panel__item--hovered-text-color;
+    font-weight: $cardview-header-panel__item--hovered-text-weight;
+
+    .dx-icon {
+      color: $cardview-header-panel__item--hovered__icon-color;
+    }
+
+    .dx-header-filter-icon--selected {
+      color: $cardview-header-panel__item--hovered__header-filter-icon--selected-color;
+    }
+
+    .dx-cardview-header-item-sorting-order {
+      color: $cardview-header-panel__item--hovered__sort-index-text-color;
+      font-weight: $cardview-header-panel__item--hovered__sort-index-text-weight;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px $cardview-header-panel__item--focused-outline-color solid;
+    outline-offset: -2px;
+  }
+
+  &.dx-sortable-source {
+    opacity: 1.0;
+    background-color: $cardview-header-panel__item--disabled-bg-color;
+    border-color: $cardview-header-panel__item--disabled-border-color;
+    color: $cardview-header-panel__item--disabled-text-color;
+    font-weight: $cardview-header-panel__item--disabled-text-weight;
+
+    .dx-icon {
+      color: $cardview-header-panel__item--disabled__icon-color;
+    }
+
+    .dx-header-filter-icon--selected {
+      color: $cardview-header-panel__item--disabled__header-filter-icon--selected-color;
+    }
+
+    .dx-cardview-header-item-sorting-order {
+      color: $cardview-header-panel__item--disabled__sort-index-text-color;
+      font-weight: $cardview-header-panel__item--disabled__sort-index-text-weight;
+    }
+  }
+
+  .dx-sortable-dragging > & {
+    background-color: $cardview-header-panel__item--dragged-bg-color;
+    border-color: $cardview-header-panel__item--dragged-border-color;
+    color: $cardview-header-panel__item--dragged-text-color;
+    font-weight: $cardview-header-panel__item--dragged-text-weight;
+    box-shadow:
+      0 1px 3px $cardview-header-panel__item--dragged-box-shadow-color,
+      0 6px 8px $cardview-header-panel__item--dragged-box-shadow-color;
+
+    .dx-icon {
+      color: $cardview-header-panel__item--dragged__allowance-icon-color;
+    }
+
+    .dx-icon-cursorprohibition {
+      color: $cardview-header-panel__item--dragged__prohibition-icon-color;
+    }
+  }
+}
+
+.dx-sortable-dragging.dx-cardview-column-sortable {
+  opacity: 1.0;
+}
+
+.dx-cardview {
+  .dx-header-filter-icon {
+    color: $cardview-header-panel__item__icon-color;
+
+    &--selected {
+      color: $cardview-header-panel__item__header-filter-icon--selected-color;
+    }
+  }
+}

@@ -40,7 +40,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -107,12 +108,10 @@ import { DxoPieChartSubtitleModule } from 'devextreme-angular/ui/pie-chart/neste
 import { DxoPieChartTitleModule } from 'devextreme-angular/ui/pie-chart/nested';
 import { DxoPieChartTooltipModule } from 'devextreme-angular/ui/pie-chart/nested';
 import { DxoPieChartTooltipBorderModule } from 'devextreme-angular/ui/pie-chart/nested';
-
-import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
-import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiPieChartAnnotationComponent } from 'devextreme-angular/ui/pie-chart/nested';
-import { DxiPieChartSeriesComponent } from 'devextreme-angular/ui/pie-chart/nested';
+import { 
+           PROPERTY_TOKEN_annotations,
+           PROPERTY_TOKEN_series,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -121,9 +120,11 @@ import { DxiPieChartSeriesComponent } from 'devextreme-angular/ui/pie-chart/nest
  */
 @Component({
     selector: 'dx-pie-chart',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -132,6 +133,17 @@ import { DxiPieChartSeriesComponent } from 'devextreme-angular/ui/pie-chart/nest
     ]
 })
 export class DxPieChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_annotations)
+    set _annotationsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('annotations', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_series)
+    set _seriesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('series', value);
+    }
+
     instance: DxPieChart = null;
 
     /**
@@ -976,42 +988,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
 
 
-    @ContentChildren(DxiPieChartAnnotationComponent)
-    get annotationsChildren(): QueryList<DxiPieChartAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsChildren(value) {
-        this._setChildren('annotations', value, 'DxiPieChartAnnotationComponent');
-    }
-
-    @ContentChildren(DxiPieChartSeriesComponent)
-    get seriesChildren(): QueryList<DxiPieChartSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesChildren(value) {
-        this._setChildren('series', value, 'DxiPieChartSeriesComponent');
-    }
-
-
-    @ContentChildren(DxiAnnotationComponent)
-    get annotationsLegacyChildren(): QueryList<DxiAnnotationComponent> {
-        return this._getOption('annotations');
-    }
-    set annotationsLegacyChildren(value) {
-        this._setChildren('annotations', value, 'DxiAnnotationComponent');
-    }
-
-    @ContentChildren(DxiSeriesComponent)
-    get seriesLegacyChildren(): QueryList<DxiSeriesComponent> {
-        return this._getOption('series');
-    }
-    set seriesLegacyChildren(value) {
-        this._setChildren('series', value, 'DxiSeriesComponent');
-    }
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -1125,6 +1101,7 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
 
 @NgModule({
   imports: [
+    DxPieChartComponent,
     DxoAdaptiveLayoutModule,
     DxoAnimationModule,
     DxiAnnotationModule,
@@ -1190,9 +1167,6 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
     DxoPieChartTooltipBorderModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxPieChartComponent
   ],
   exports: [
     DxPieChartComponent,
@@ -1263,6 +1237,8 @@ export class DxPieChartComponent extends DxComponent implements OnDestroy, OnCha
   ]
 })
 export class DxPieChartModule { }
+
+export * from 'devextreme-angular/ui/pie-chart/nested';
 
 import type * as DxPieChartTypes from "devextreme/viz/pie_chart_types";
 export { DxPieChartTypes };

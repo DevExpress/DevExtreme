@@ -1,0 +1,44 @@
+<dx-card-view [dataSource]="tasks" cardsPerRow="auto" [cardMinWidth]="240">
+  <dxo-card-view-paging [pageSize]="12" />
+  <dxo-card-view-card-header [visible]="true" template="headerTemplate" />
+
+  <dxi-card-view-column
+    dataField="Task_Priority"
+    caption="Priority"
+    fieldValueTemplate="priorityTemplate"
+  />
+  <dxi-card-view-column
+    dataField="Task_Start_Date"
+    caption="Start Date"
+    dataType="date"
+  />
+  <dxi-card-view-column
+    dataField="Task_Due_Date"
+    caption="End Date"
+    dataType="date"
+  />
+  <dxi-card-view-column
+    dataField="Task_Assigned_Employee_ID"
+    caption="Assigned to"
+    fieldValueTemplate="assignedToTemplate"
+  />
+  <dxi-card-view-column dataField="Task_Status" caption="Status" />
+  <dxi-card-view-column
+    dataField="Task_Completion"
+    caption="Completed"
+    fieldTemplate="progressTemplate"
+  />
+
+  <div *dxTemplate="let model of 'headerTemplate'">
+    <card-header [text]="model.card.data.Task_Subject" />
+  </div>
+  <div *dxTemplate="let model of 'priorityTemplate'">
+    <priority [priorityID]="model.field.value" />
+  </div>
+  <div *dxTemplate="let model of 'assignedToTemplate'">
+    <employee [employeeID]="model.field.value" />
+  </div>
+  <div *dxTemplate="let model of 'progressTemplate'">
+    <progress-bar [value]="model.field.value" />
+  </div>
+</dx-card-view>

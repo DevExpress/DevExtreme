@@ -119,6 +119,8 @@ QUnit.testStart(function() {
 
 QUnit.module('Rows view', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.items = [
             { data: { name: 'test1', id: 1, date: new Date(2001, 0, 1) }, values: ['test1', 1, '1/01/2001'], rowType: 'data', dataIndex: 0 },
             { data: { name: 'test2', id: 2, date: new Date(2002, 1, 2) }, values: ['test2', 2, '2/02/2002'], rowType: 'data', dataIndex: 1 },
@@ -131,6 +133,7 @@ QUnit.module('Rows view', {
     afterEach: function() {
         this.dataGrid && this.dataGrid.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -1373,11 +1376,6 @@ QUnit.module('Rows view', {
     });
 
     QUnit.test('Selection rows by space keydown on checkbox', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'Keyboard navigation is not worked by devices');
-            return;
-        }
-
         // arrange
         const rows = [{ values: [false, 'test1', 1, '1/01/2001'], rowType: 'data' }, { values: [false, 'test2', 2, '2/02/2002'], rowType: 'data' }, { values: [false, 'test3', 3, '3/03/2003'], rowType: 'data' }];
         const dataController = new MockDataController({ items: rows, selection: { mode: 'multiple', showCheckBoxesMode: 'always' } });
@@ -4086,6 +4084,8 @@ QUnit.module('Rows view', {
 
 QUnit.module('Rows view with real dataController and columnController', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.clock = sinon.useFakeTimers();
         this.items = [
             { name: 'Alex', age: 15 },
@@ -4120,6 +4120,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         this.clock.tick(1000);
         this.clock.restore();
         this.dispose && this.dispose();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -4166,11 +4167,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     });
 
     QUnit.test('Touch click on cell should raise rowClick with correct target arguments (T593150)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'The test is not actual for mobile devices');
-            return;
-        }
-
         let rowClickCount = 0;
 
         this.options.dataSource.group = 'name';
@@ -5731,6 +5727,8 @@ QUnit.module('Rows view with real dataController and columnController', {
 
 QUnit.module('Virtual scrolling', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.createRowsView = function(items, dataController) {
             const rowsView = createRowsView.apply(this, arguments);
             const x = new virtualScrollingCore.VirtualScrollController(this.dataGrid, { pageIndex: function() { } });
@@ -5763,6 +5761,7 @@ QUnit.module('Virtual scrolling', {
     },
     afterEach: function() {
         this.dataGrid && this.dataGrid.dispose();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -6848,10 +6847,13 @@ QUnit.module('Virtual scrolling', {
 
 QUnit.module('Scrollbar', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.createRowsView = createRowsView;
     },
     afterEach: function() {
         this.dataGrid && this.dataGrid.dispose();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -7152,10 +7154,13 @@ QUnit.module('Scrollbar', {
 
 QUnit.module('No data text', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.createRowsView = createRowsView;
     },
     afterEach: function() {
         this.dataGrid.dispose();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -7277,10 +7282,13 @@ QUnit.module('No data text', {
 
 QUnit.module('Bottom Load Panel', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.createRowsView = createRowsView;
     },
     afterEach: function() {
         this.dataGrid.dispose();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -7596,6 +7604,8 @@ QUnit.module('Bottom Load Panel', {
 
 QUnit.module('Custom Loading', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         const that = this;
         const testElement = $('#container');
 
@@ -7621,6 +7631,7 @@ QUnit.module('Custom Loading', {
     afterEach: function() {
         this.dataGrid.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
 
@@ -7734,6 +7745,8 @@ QUnit.module('Custom Loading', {
 // T1107403
 QUnit.module('Render templates with renderAsync and templatesRenderAsynchronously', {
     beforeEach: function() {
+        this.oldIsElementInCurrentGrid = gridCoreUtils.isElementInCurrentGrid;
+        gridCoreUtils.isElementInCurrentGrid = () => true;
         this.items = [
             { data: { name: 'test1', id: 1, date: new Date(2001, 0, 1) }, values: ['test1', 1, '1/01/2001'], rowType: 'data', dataIndex: 0 }
         ];
@@ -7749,6 +7762,7 @@ QUnit.module('Render templates with renderAsync and templatesRenderAsynchronousl
     afterEach: function() {
         this.dataGrid && this.dataGrid.dispose();
         this.clock.restore();
+        gridCoreUtils.isElementInCurrentGrid = this.oldIsElementInCurrentGrid;
     }
 }, () => {
     // T1138639

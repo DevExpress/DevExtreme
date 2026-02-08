@@ -21,7 +21,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     Item as dxToolbarItem,
@@ -143,7 +143,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @fires dxPopupOptions.onResize
      * @public
      */
-    height?: number | string | (() => number | string);
+    height?: number | string;
     /**
      * @docid
      * @default null
@@ -244,7 +244,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @fires dxPopupOptions.onResize
      * @public
      */
-    width?: number | string | (() => number | string);
+    width?: number | string;
 }
 /**
  * @docid

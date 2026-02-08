@@ -16,16 +16,26 @@ import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_resources } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-resource',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_resources,
+           useExisting: DxiResourceComponent,
+        }
+    ]
 })
 export class DxiResourceComponent extends CollectionNestedOption {
     @Input()
@@ -114,7 +124,7 @@ export class DxiResourceComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiResourceComponent
   ],
   exports: [

@@ -18,7 +18,7 @@ export interface BasePaginationProps extends BaseWidgetProps {
   visible?: boolean;
   hasKnownLastPage?: boolean;
   pagesNavigatorVisible?: boolean | 'auto';
-  showPageSizeSelector?: boolean;
+  showPageSizeSelector?: boolean | 'auto';
   allowedPageSizes: (number | PageSize)[];
   rtlEnabled?: boolean;
   showNavigationButtons?: boolean;
@@ -37,7 +37,7 @@ export const BasePaginationDefaultProps: BasePaginationProps = {
   visible: true,
   hasKnownLastPage: true,
   pagesNavigatorVisible: 'auto',
-  showPageSizeSelector: true,
+  showPageSizeSelector: 'auto',
   allowedPageSizes: [5, 10],
   showNavigationButtons: false,
   itemCount: 1,

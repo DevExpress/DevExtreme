@@ -10,7 +10,6 @@ import {
     Host,
     SkipSelf,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -19,17 +18,23 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoFileManagerContextMenu } from './base/file-manager-context-menu';
-import { DxiCommandComponent } from './command-dxi';
-import { DxiItemComponent } from './item-dxi';
 
+import {
+    PROPERTY_TOKEN_commands,
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-context-menu',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'commands',
@@ -38,27 +43,21 @@ import { DxiItemComponent } from './item-dxi';
     ]
 })
 export class DxoContextMenuComponent extends DxoFileManagerContextMenu implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
 
     protected get _optionPath() {
         return 'contextMenu';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiCommandComponent))
-    get commandsChildren(): QueryList<DxiCommandComponent> {
-        return this._getOption('commands');
-    }
-    set commandsChildren(value) {
-        this.setChildren('commands', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiItemComponent))
-    get itemsChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -80,7 +79,7 @@ export class DxoContextMenuComponent extends DxoFileManagerContextMenu implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoContextMenuComponent
   ],
   exports: [

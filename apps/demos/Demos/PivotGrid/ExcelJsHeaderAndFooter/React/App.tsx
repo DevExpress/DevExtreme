@@ -8,7 +8,7 @@ import PivotGrid, {
 } from 'devextreme-react/pivot-grid';
 import CheckBox from 'devextreme-react/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import { Workbook } from 'exceljs';
+import { Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'.
 // We recommend that you use the official 'file-saver' package in your applications.

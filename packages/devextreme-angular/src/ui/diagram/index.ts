@@ -38,7 +38,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoContextMenuModule } from 'devextreme-angular/ui/nested';
@@ -90,10 +91,14 @@ import { DxoDiagramToolboxModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxiDiagramToolboxGroupModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramViewToolbarModule } from 'devextreme-angular/ui/diagram/nested';
 import { DxoDiagramZoomLevelModule } from 'devextreme-angular/ui/diagram/nested';
-
-import { DxiCustomShapeComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiDiagramCustomShapeComponent } from 'devextreme-angular/ui/diagram/nested';
+import { 
+           PROPERTY_TOKEN_commands,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_connectionPoints,
+           PROPERTY_TOKEN_customShapes,
+           PROPERTY_TOKEN_groups,
+           PROPERTY_TOKEN_tabs,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -102,8 +107,10 @@ import { DxiDiagramCustomShapeComponent } from 'devextreme-angular/ui/diagram/ne
  */
 @Component({
     selector: 'dx-diagram',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -112,6 +119,37 @@ import { DxiDiagramCustomShapeComponent } from 'devextreme-angular/ui/diagram/ne
     ]
 })
 export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_connectionPoints)
+    set _connectionPointsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('connectionPoints', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_customShapes)
+    set _customShapesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('customShapes', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_groups)
+    set _groupsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('groups', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
+    }
+
     instance: DxDiagram = null;
 
     /**
@@ -314,10 +352,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -561,10 +599,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -771,7 +809,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -904,7 +942,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -912,26 +950,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Output() zoomLevelChange: EventEmitter<number | { items?: Array<number>, value?: number | undefined }>;
-
-
-
-
-    @ContentChildren(DxiDiagramCustomShapeComponent)
-    get customShapesChildren(): QueryList<DxiDiagramCustomShapeComponent> {
-        return this._getOption('customShapes');
-    }
-    set customShapesChildren(value) {
-        this._setChildren('customShapes', value, 'DxiDiagramCustomShapeComponent');
-    }
-
-
-    @ContentChildren(DxiCustomShapeComponent)
-    get customShapesLegacyChildren(): QueryList<DxiCustomShapeComponent> {
-        return this._getOption('customShapes');
-    }
-    set customShapesLegacyChildren(value) {
-        this._setChildren('customShapes', value, 'DxiCustomShapeComponent');
-    }
 
 
 
@@ -1038,6 +1056,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
 
 @NgModule({
   imports: [
+    DxDiagramComponent,
     DxoContextMenuModule,
     DxiCommandModule,
     DxiItemModule,
@@ -1088,9 +1107,6 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     DxoDiagramZoomLevelModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDiagramComponent
   ],
   exports: [
     DxDiagramComponent,
@@ -1146,6 +1162,8 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
   ]
 })
 export class DxDiagramModule { }
+
+export * from 'devextreme-angular/ui/diagram/nested';
 
 import type * as DxDiagramTypes from "devextreme/ui/diagram_types";
 export { DxDiagramTypes };

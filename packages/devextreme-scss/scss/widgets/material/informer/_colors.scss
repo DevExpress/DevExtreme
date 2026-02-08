@@ -1,0 +1,19 @@
+@use "../colors" as *;
+@use "sass:color";
+
+// adduse
+
+$informer-error-color: $base-danger !default;
+$informer-error-background-color: null !default;
+$informer-info-color: $base-text-color !default;
+$informer-info-background-color: null !default;
+
+@if $mode == "light" {
+  $informer-error-background-color: lighten(desaturate(adjust-hue($base-danger, 1), 24.92), 38.24);
+  $informer-info-background-color: lighten(desaturate(adjust-hue($base-text-color, -240), 100.00), 48.63);
+}
+
+@if $mode == "dark" {
+  $informer-error-background-color: darken(desaturate(adjust-hue($base-danger, 1), 41.80), 53.92);
+  $informer-info-background-color: darken(saturate(adjust-hue($base-text-color, 240), 6.04), 70.78);
+}

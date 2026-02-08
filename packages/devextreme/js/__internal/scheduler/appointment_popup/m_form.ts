@@ -11,13 +11,9 @@ import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
-import type AbstractStore from '@js/data/abstract_store';
 import Form from '@js/ui/form';
 import { current, isFluent } from '@js/ui/themes';
-import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
 
-import { createAppointmentAdapter } from '../m_appointment_adapter';
-import type { TimezoneLabel } from '../m_utils_time_zone';
 import timeZoneUtils from '../m_utils_time_zone';
 
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
@@ -42,18 +38,19 @@ const E2E_TEST_CLASSES = {
   recurrenceSwitch: 'e2e-dx-scheduler-form-recurrence-switch',
 };
 
-const DEFAULT_TIMEZONE_EDITOR_DATA_SOURCE_OPTIONS = {
+const createTimeZoneDataSource = () => new DataSource({
+  store: timeZoneUtils.getTimeZonesCache(),
   paginate: true,
   pageSize: 10,
-};
+});
 
 const getStylingModeFunc = (): string | undefined => (isFluent(current()) ? 'filled' : undefined);
 
 const getStartDateWithStartHour = (startDate, startDayHour) => new Date(new Date(startDate).setHours(startDayHour));
 
 const validateAppointmentFormDate = (editor, value, previousValue) => {
-  const isCurrentDateCorrect = value === null || !!value;
-  const isPreviousDateCorrect = previousValue === null || !!previousValue;
+  const isCurrentDateCorrect = value === null || Boolean(value);
+  const isPreviousDateCorrect = previousValue === null || Boolean(previousValue);
   if (!isCurrentDateCorrect && isPreviousDateCorrect) {
     editor.option('value', previousValue);
   }
@@ -102,7 +99,7 @@ export class AppointmentForm {
     const dataAccessors = this.scheduler.getDataAccessors();
     const { expr } = dataAccessors;
 
-    const isRecurrence = !!ExpressionUtils.getField(dataAccessors, 'recurrenceRule', formData);
+    const isRecurrence = Boolean(dataAccessors.get('recurrenceRule', formData));
     const colSpan = isRecurrence ? 1 : 2;
 
     const mainItems = [
@@ -155,13 +152,6 @@ export class AppointmentForm {
     });
   }
 
-  _createAppointmentAdapter(rawAppointment) {
-    return createAppointmentAdapter(
-      rawAppointment,
-      this.scheduler.getDataAccessors(),
-    );
-  }
-
   _dateBoxValueChanged(args, dateExpr, isNeedCorrect) {
     validateAppointmentFormDate(args.component, args.value, args.previousValue);
 
@@ -194,6 +184,7 @@ export class AppointmentForm {
         valueExpr: 'id',
         placeholder: noTzTitle,
         searchEnabled: true,
+        dataSource: createTimeZoneDataSource(),
         onValueChanged: (args) => {
           const { form } = this;
           const secondTimezoneEditor = form.getEditor(secondTimeZoneExpr);
@@ -387,7 +378,7 @@ export class AppointmentForm {
       editorOptions: {
         firstDayOfWeek: this.scheduler.getFirstDayOfWeek(),
         timeZoneCalculator: this.scheduler.getTimeZoneCalculator(),
-        getStartDateTimeZone: () => this._createAppointmentAdapter(this.formData).startDateTimeZone,
+        getStartDateTimeZone: () => this.scheduler.getDataAccessors().get('startDateTimeZone', this.formData),
       },
       label: {
         text: ' ',
@@ -429,59 +420,6 @@ export class AppointmentForm {
     editor && this.form.itemOption(editorPath, 'editorOptions', extend({}, editor.editorOptions, options));
   }
 
-  private scheduleTimezoneEditorDataSourceUpdate(
-    editorName: string,
-    dataSource: { store: () => AbstractStore; reload: () => void },
-    selectedTimezoneLabel: TimezoneLabel | null,
-    date: Date,
-  ): void {
-    timeZoneUtils.getTimeZoneLabelsAsyncBatch(date)
-      .catch(() => [] as TimezoneLabel[])
-      .then(async (timezones) => {
-        const store = dataSource.store();
-
-        await store.remove(selectedTimezoneLabel?.id);
-
-        // NOTE: Unfortunately, our store not support bulk operations
-        // So, we update it record-by-record
-        const insertPromises = timezones.reduce<Promise<void>[]>((result, timezone) => {
-          result.push(store.insert(timezone));
-          return result;
-        }, []);
-
-        // NOTE: We should wait for all insertions before reload
-        await Promise.all(insertPromises);
-
-        dataSource.reload();
-        // NOTE: We should re-assign dataSource to the editor
-        // to repaint this editor after dataSource update
-        this.setEditorOptions(editorName, 'Main', { dataSource });
-      }).catch(() => {});
-  }
-
-  private setupTimezoneEditorDataSource(
-    editorName: string,
-    selectedTimezoneId: string | null,
-    date: Date,
-  ): void {
-    const selectedTimezoneLabel = selectedTimezoneId
-      ? timeZoneUtils.getTimeZoneLabel(selectedTimezoneId, date)
-      : null;
-
-    const dataSource = new DataSource({
-      ...DEFAULT_TIMEZONE_EDITOR_DATA_SOURCE_OPTIONS,
-      store: selectedTimezoneLabel ? [selectedTimezoneLabel] : [],
-    });
-
-    this.setEditorOptions(editorName, 'Main', { dataSource });
-    this.scheduleTimezoneEditorDataSourceUpdate(
-      editorName,
-      dataSource,
-      selectedTimezoneLabel,
-      date,
-    );
-  }
-
   updateFormData(formData: Record<string, any>): void {
     this.isFormUpdating = true;
     this.form.option('formData', formData);
@@ -489,17 +427,10 @@ export class AppointmentForm {
     const dataAccessors = this.scheduler.getDataAccessors();
     const { expr } = dataAccessors;
 
-    const rawStartDate = ExpressionUtils.getField(dataAccessors, 'startDate', formData);
-    const rawEndDate = ExpressionUtils.getField(dataAccessors, 'endDate', formData);
-    const startDateTimezone = ExpressionUtils.getField(dataAccessors, 'startDateTimeZone', formData) ?? null;
-    const endDateTimezone = ExpressionUtils.getField(dataAccessors, 'endDateTimeZone', formData) ?? null;
+    const rawStartDate = dataAccessors.get('startDate', formData);
 
-    const allDay = ExpressionUtils.getField(dataAccessors, 'allDay', formData);
+    const allDay = dataAccessors.get('allDay', formData);
     const startDate = new Date(rawStartDate);
-    const endDate = new Date(rawEndDate);
-
-    this.setupTimezoneEditorDataSource(expr.startDateTimeZoneExpr, startDateTimezone, startDate);
-    this.setupTimezoneEditorDataSource(expr.endDateTimeZoneExpr, endDateTimezone, endDate);
 
     this.updateRecurrenceEditorStartDate(startDate, expr.recurrenceRuleExpr);
 
@@ -523,6 +454,7 @@ export class AppointmentForm {
       editorOptions: {
         stylingMode: getStylingModeFunc(),
         width: '100%',
+        applyValueMode: 'useButtons',
         calendarOptions: {
           firstDayOfWeek,
         },

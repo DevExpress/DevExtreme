@@ -25,10 +25,10 @@ export { ExplicitTypes } from 'devextreme/ui/context_menu';
 
 import DataSource from 'devextreme/data/data_source';
 import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
-import { event } from 'devextreme/events/events.types';
 import { dxContextMenuItem, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent, ContextSubmenuDirection } from 'devextreme/ui/context_menu';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
+import { event } from 'devextreme/events/events.types';
 import { SingleOrNone, SubmenuShowMode } from 'devextreme/common';
 
 import DxContextMenu from 'devextreme/ui/context_menu';
@@ -41,7 +41,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
@@ -75,10 +76,9 @@ import { DxoContextMenuShowModule } from 'devextreme-angular/ui/context-menu/nes
 import { DxoContextMenuShowEventModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoContextMenuShowSubmenuModeModule } from 'devextreme-angular/ui/context-menu/nested';
 import { DxoContextMenuToModule } from 'devextreme-angular/ui/context-menu/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiContextMenuItemComponent } from 'devextreme-angular/ui/context-menu/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -87,8 +87,10 @@ import { DxiContextMenuItemComponent } from 'devextreme-angular/ui/context-menu/
  */
 @Component({
     selector: 'dx-context-menu',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -97,6 +99,12 @@ import { DxiContextMenuItemComponent } from 'devextreme-angular/ui/context-menu/
     ]
 })
 export class DxContextMenuComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxContextMenu<TKey> = null;
 
     /**
@@ -135,21 +143,6 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     }
     set animation(value: { hide?: AnimationConfig, show?: AnimationConfig }) {
         this._setOption('animation', value);
-    }
-
-
-    /**
-     * [descr:dxContextMenuOptions.closeOnOutsideClick]
-    
-     * @deprecated [depNote:dxContextMenuOptions.closeOnOutsideClick]
-    
-     */
-    @Input()
-    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
-        return this._getOption('closeOnOutsideClick');
-    }
-    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
-        this._setOption('closeOnOutsideClick', value);
     }
 
 
@@ -249,10 +242,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -496,10 +489,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -633,13 +626,6 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() closeOnOutsideClickChange: EventEmitter<boolean | ((event: event) => boolean)>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() cssClassChange: EventEmitter<string>;
 
     /**
@@ -689,7 +675,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -822,27 +808,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiContextMenuItemComponent)
-    get itemsChildren(): QueryList<DxiContextMenuItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiContextMenuItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -873,7 +839,6 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
             { emit: 'accessKeyChange' },
             { emit: 'activeStateEnabledChange' },
             { emit: 'animationChange' },
-            { emit: 'closeOnOutsideClickChange' },
             { emit: 'cssClassChange' },
             { emit: 'dataSourceChange' },
             { emit: 'disabledChange' },
@@ -949,6 +914,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
 
 @NgModule({
   imports: [
+    DxContextMenuComponent,
     DxoAnimationModule,
     DxoHideModule,
     DxoFromModule,
@@ -981,9 +947,6 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     DxoContextMenuToModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxContextMenuComponent
   ],
   exports: [
     DxContextMenuComponent,
@@ -1021,6 +984,8 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
   ]
 })
 export class DxContextMenuModule { }
+
+export * from 'devextreme-angular/ui/context-menu/nested';
 
 import type * as DxContextMenuTypes from "devextreme/ui/context_menu_types";
 export { DxContextMenuTypes };

@@ -7,8 +7,6 @@ import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import 'ui/box';
 import 'ui/responsive_box';
 
-import 'generic_light.css!';
-
 QUnit.testStart(() => {
     const markup =
         '<div id="responsiveBox"></div>\
@@ -246,7 +244,7 @@ QUnit.module('layouting', moduleConfig, () => {
 
         this.setScreenSize(1000);
         responsiveBox.repaint();
-        assert.equal($.trim($responsiveBox.text()), 'md', 'md item apply');
+        assert.equal($responsiveBox.text().trim(), 'md', 'md item apply');
     });
 
     QUnit.test('singleColumnScreen render items in one column', function(assert) {
@@ -275,7 +273,7 @@ QUnit.module('layouting', moduleConfig, () => {
             const $items = $box.find('.' + BOX_ITEM_CLASS);
             assert.equal($items.length, expectedText.length, $items.length + ' items rendered');
 
-            assert.equal($.trim($responsiveBox.text()), expectedText, 'rendered only needed items');
+            assert.equal($responsiveBox.text().trim(), expectedText, 'rendered only needed items');
         }, this);
 
         // screen:   xs      sm           md          lg
@@ -432,7 +430,7 @@ QUnit.module('templates', () => {
             rows: [{}],
             cols: [{}]
         });
-        assert.equal($.trim($responsiveBox.text()), 'test', 'item template rendered');
+        assert.equal($responsiveBox.text().trim(), 'test', 'item template rendered');
     });
 
     QUnit.test('custom item renderer', function(assert) {
@@ -448,7 +446,7 @@ QUnit.module('templates', () => {
         });
 
         assert.equal(templateContext, 'dxResponsiveBox', 'Correct context');
-        assert.equal($.trim($responsiveBox.text()), 'test', 'item rendered');
+        assert.equal($responsiveBox.text().trim(), 'test', 'item rendered');
     });
 });
 
@@ -466,7 +464,7 @@ QUnit.module('template rendering', moduleConfig, () => {
             return $('<div>').text('after rendering');
         });
 
-        assert.equal($.trim($responsiveBox.text()), 'after rendering', 'item template was rendered');
+        assert.equal($responsiveBox.text().trim(), 'after rendering', 'item template was rendered');
     });
 
     QUnit.test('widget rendered correctly after rows option was changed', function(assert) {
@@ -475,7 +473,8 @@ QUnit.module('template rendering', moduleConfig, () => {
 
         this.updateScreenSize(1000);
 
-        registerComponent('dxWidget', Widget.inherit({}));
+        class DxWidget extends Widget {}
+        registerComponent('dxWidget', DxWidget);
 
         const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
             rows: [{}],
@@ -507,7 +506,7 @@ QUnit.module('collision', moduleConfig, () => {
             ]
         });
 
-        assert.equal($.trim($responsiveBox.text()), '02', 'the former item rendered');
+        assert.equal($responsiveBox.text().trim(), '02', 'the former item rendered');
     });
 
     QUnit.test('item located at spanning cell', function(assert) {
@@ -520,7 +519,7 @@ QUnit.module('collision', moduleConfig, () => {
             ]
         });
 
-        assert.equal($.trim($responsiveBox.text()), '0', 'the former item rendered');
+        assert.equal($responsiveBox.text().trim(), '0', 'the former item rendered');
     });
 
     QUnit.test('item spanning located at spanning of another item', function(assert) {
@@ -533,7 +532,7 @@ QUnit.module('collision', moduleConfig, () => {
             ]
         });
 
-        assert.equal($.trim($responsiveBox.text()), '0', 'the former item rendered');
+        assert.equal($responsiveBox.text().trim(), '0', 'the former item rendered');
     });
 
     QUnit.test('item spanning out of bounds', function(assert) {
@@ -546,6 +545,6 @@ QUnit.module('collision', moduleConfig, () => {
             ]
         });
 
-        assert.equal($.trim($responsiveBox.text()), '01', 'the former item rendered');
+        assert.equal($responsiveBox.text().trim(), '01', 'the former item rendered');
     });
 });

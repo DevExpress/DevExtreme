@@ -26,7 +26,8 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+    InteractionEvent,
+} from '../events';
 
 import {
     dxToolbarItem,
@@ -43,6 +44,7 @@ import {
     AdaptiveDetailRowPreparingInfo,
     ColumnBase as ComponentColumnBase,
     ColumnButtonBase as ComponentColumnButtonBase,
+    GridsContextMenuTarget,
     EditingBase as ComponentEditingBase,
     EditingTextsBase as ComponentEditingTextsBase,
     DataChangeInfo,
@@ -109,6 +111,7 @@ export {
     ColumnHeaderFilterSearchConfig,
     ColumnLookup,
     ColumnResizeMode,
+    GridsContextMenuTarget,
     DataChange,
     DataChangeType,
     DataRenderMode,
@@ -461,7 +464,7 @@ export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = EventInfo<dx
    */
   items?: Array<any>;
   /** @docid _ui_data_grid_ContextMenuPreparingEvent.target */
-  readonly target: string;
+  readonly target: GridsContextMenuTarget;
   /** @docid _ui_data_grid_ContextMenuPreparingEvent.targetElement */
   readonly targetElement: DxElement;
   /** @docid _ui_data_grid_ContextMenuPreparingEvent.columnIndex */
@@ -550,7 +553,7 @@ export type EditorPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGr
   /** @docid _ui_data_grid_EditorPreparedEvent.setValue */
   readonly setValue?: any;
   /** @docid _ui_data_grid_EditorPreparedEvent.updateValueTimeout */
-  readonly updateValueTimeout?: number;
+  updateValueTimeout?: number;
   /** @docid _ui_data_grid_EditorPreparedEvent.width */
   readonly width?: number;
   /** @docid _ui_data_grid_EditorPreparedEvent.disabled */
@@ -584,7 +587,7 @@ export type EditorPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxDataG
   /** @docid _ui_data_grid_EditorPreparingEvent.setValue */
   readonly setValue?: any;
   /** @docid _ui_data_grid_EditorPreparingEvent.updateValueTimeout */
-  readonly updateValueTimeout?: number;
+  updateValueTimeout?: number;
   /** @docid _ui_data_grid_EditorPreparingEvent.width */
   readonly width?: number;
   /** @docid _ui_data_grid_EditorPreparingEvent.disabled */
@@ -662,7 +665,7 @@ export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDa
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>, InteractionEvent> & {
   /** @docid _ui_data_grid_FocusedCellChangingEvent.cellElement */
   readonly cellElement: DxElement;
   /** @docid _ui_data_grid_FocusedCellChangingEvent.prevColumnIndex */
@@ -711,7 +714,7 @@ export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDat
  * @type object
  * @inherits Cancelable,NativeEventInfo
  */
-export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
+export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>, InteractionEvent> & {
   /** @docid _ui_data_grid_FocusedRowChangingEvent.rowElement */
   readonly rowElement: DxElement;
   /** @docid _ui_data_grid_FocusedRowChangingEvent.prevRowIndex */
@@ -1531,7 +1534,7 @@ export type Grouping = {
   autoExpandAll?: boolean;
   /**
    * @docid dxDataGridOptions.grouping.contextMenuEnabled
-   * @default false
+   * @default true
    */
   contextMenuEnabled?: boolean;
   /**

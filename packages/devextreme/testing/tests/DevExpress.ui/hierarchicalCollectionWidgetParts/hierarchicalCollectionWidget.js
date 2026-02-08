@@ -10,8 +10,10 @@ class TestComponent extends HierarchicalCollectionWidget {
     constructor(element, options) {
         super(element, options);
         this.NAME = 'TestComponent';
-        this._activeStateUnit = '.item';
     }
+
+    _activeStateUnit() { return '.item'; }
+
     _itemContainer() { return this.$element(); }
 
     _createActionByOption(optionName, config) {
@@ -43,9 +45,9 @@ module('render', {
         });
 
         assert.equal(this.element.children().length, 2);
-        assert.equal($.trim(this.element.children().eq(0).text()), 'item 1');
-        assert.ok($.trim(this.element.children().eq(0).hasClass(DISABLED_STATE_CLASS)));
-        assert.equal($.trim(this.element.children().eq(1).text()), 'item 2');
+        assert.equal(this.element.children().eq(0).text().trim(), 'item 1');
+        assert.ok(this.element.children().eq(0).hasClass(DISABLED_STATE_CLASS));
+        assert.equal(this.element.children().eq(1).text().trim(), 'item 2');
     });
 
     test('Default displayExpr: ', function(assert) {
@@ -53,7 +55,7 @@ module('render', {
             items: [{ text: 'item 1' }]
         });
 
-        assert.equal($.trim(this.element.children().eq(0).text()), 'item 1');
+        assert.equal(this.element.children().eq(0).text().trim(), 'item 1');
     });
 
     test('create item by custom model using expressions set as functions', function(assert) {
@@ -64,12 +66,12 @@ module('render', {
             items: [{ text: 'first item' }]
         });
 
-        assert.equal($.trim(this.element.children().eq(0).text()), 'text');
+        assert.equal(this.element.children().eq(0).text().trim(), 'text');
 
         condition = true;
         widget.option('items', newItems);
 
-        assert.equal($.trim(this.element.children().eq(0).text()), 'name');
+        assert.equal(this.element.children().eq(0).text().trim(), 'name');
     });
 
     test('DisplayExpr as function with parameter', function(assert) {
@@ -78,7 +80,7 @@ module('render', {
             items: [{ name: 'Item 1' }]
         });
 
-        assert.equal($.trim(this.element.children().eq(0).text()), 'Item 1!');
+        assert.equal(this.element.children().eq(0).text().trim(), 'Item 1!');
     });
 
     test('DisplayExpr as non existing property', function(assert) {
@@ -87,7 +89,7 @@ module('render', {
             items: [{ name: 'Item 1' }]
         });
 
-        assert.equal($.trim(this.element.children().eq(0).text()), '');
+        assert.equal(this.element.children().eq(0).text().trim(), '');
     });
 
     [null, undefined, '', {}].forEach((dataExprValue) => {

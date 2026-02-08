@@ -16,7 +16,7 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
 } from '@angular/core';
 
 
@@ -38,7 +38,7 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
 } from 'devextreme-angular/core';
 
 import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
@@ -80,17 +80,17 @@ import { DxoSankeyTooltipModule } from 'devextreme-angular/ui/sankey/nested';
 import { DxoSankeyTooltipBorderModule } from 'devextreme-angular/ui/sankey/nested';
 
 
-
-
 /**
  * [descr:dxSankey]
 
  */
 @Component({
     selector: 'dx-sankey',
+    standalone: true,
     template: '',
     styles: [ ' :host {  display: block; }'],
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -99,6 +99,7 @@ import { DxoSankeyTooltipBorderModule } from 'devextreme-angular/ui/sankey/neste
     ]
 })
 export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
     instance: DxSankey = null;
 
     /**
@@ -699,10 +700,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
 
 
-
-
-
-
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
             private _watcherHelper: WatcherHelper,
             private _idh: IterableDifferHelper,
@@ -800,6 +797,7 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
 
 @NgModule({
   imports: [
+    DxSankeyComponent,
     DxoAdaptiveLayoutModule,
     DxoExportModule,
     DxoLabelModule,
@@ -838,9 +836,6 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
     DxoSankeyTooltipBorderModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSankeyComponent
   ],
   exports: [
     DxSankeyComponent,
@@ -884,6 +879,8 @@ export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChang
   ]
 })
 export class DxSankeyModule { }
+
+export * from 'devextreme-angular/ui/sankey/nested';
 
 import type * as DxSankeyTypes from "devextreme/viz/sankey_types";
 export { DxSankeyTypes };

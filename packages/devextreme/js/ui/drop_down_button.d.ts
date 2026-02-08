@@ -20,7 +20,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import {
     Item as dxListItem,
@@ -291,7 +291,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default 'normal'
      * @public
      */
-    type?: ButtonType;
+    type?: ButtonType | string;
     /**
      * @docid
      * @default false

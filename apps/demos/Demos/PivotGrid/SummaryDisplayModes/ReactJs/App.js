@@ -1,7 +1,7 @@
 import React from 'react';
 import PivotGrid, { FieldChooser, FieldPanel } from 'devextreme-react/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import sales from './data.js';
+import { sales } from './data.js';
 
 const onContextMenuPreparing = (e) => {
   if (e.field && e.field.dataField === 'amount') {

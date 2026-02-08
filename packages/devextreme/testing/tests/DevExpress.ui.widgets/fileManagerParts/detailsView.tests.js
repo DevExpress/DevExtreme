@@ -4,9 +4,10 @@ import fx from 'common/core/animation/fx';
 import pointerEvents from 'common/core/events/pointer';
 import localization from 'localization';
 import messageLocalization from 'common/core/localization/message';
-import { FileManagerWrapper, createTestFileSystem, isDesktopDevice, createHugeFileSystem } from '../../../helpers/fileManagerHelpers.js';
+import { FileManagerWrapper, createTestFileSystem, createHugeFileSystem } from '../../../helpers/fileManagerHelpers.js';
 import { triggerCellClick } from '../../../helpers/fileManager/events.js';
 import { implementationsMap } from 'core/utils/size';
+import devices from '__internal/core/m_devices';
 
 const { test } = QUnit;
 
@@ -247,7 +248,7 @@ QUnit.module('Details View', moduleConfig, () => {
         const fileManager = prepareParentDirectoryTesting(this);
         const allNames = [ 'Folder 1.1', 'Folder 1.2', 'File 1-1.txt', 'File 1-2.jpg' ];
 
-        if(isDesktopDevice()) {
+        if(devices.real().deviceType === 'desktop') {
             assert.strictEqual(this.wrapper.getSelectAllCheckBoxState(), 'clear', 'select all is not checked');
         }
 
@@ -258,7 +259,7 @@ QUnit.module('Details View', moduleConfig, () => {
             this.clock.tick(400);
         }
 
-        if(isDesktopDevice()) {
+        if(devices.real().deviceType === 'desktop') {
             assert.strictEqual(this.wrapper.getSelectAllCheckBoxState(), 'checked', 'select all is checked');
         }
         assert.deepEqual(getSelectedItemNames(fileManager), allNames, 'all items in selection');
@@ -267,7 +268,7 @@ QUnit.module('Details View', moduleConfig, () => {
         e.ctrlKey = true;
         this.wrapper.getRowNameCellInDetailsView(1).trigger(pointerEvents.down).trigger(e);
 
-        if(isDesktopDevice()) {
+        if(devices.real().deviceType === 'desktop') {
             assert.strictEqual(this.wrapper.getSelectAllCheckBoxState(), 'checked', 'select all is checked');
         }
         assert.deepEqual(getSelectedItemNames(fileManager), allNames, 'all items in selection');
@@ -277,10 +278,6 @@ QUnit.module('Details View', moduleConfig, () => {
     });
 
     test('Select All check box ignore parent directory item when it is checked', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true);
-            return;
-        }
         const fileManager = prepareParentDirectoryTesting(this);
         const allNames = [ 'Folder 1.1', 'Folder 1.2', 'File 1-1.txt', 'File 1-2.jpg' ];
 
@@ -352,7 +349,7 @@ QUnit.module('Details View', moduleConfig, () => {
 
         assert.strictEqual(selectionSpy.callCount, 2, 'event not raised');
 
-        if(isDesktopDevice()) {
+        if(devices.real().deviceType === 'desktop') {
             this.wrapper.getSelectCheckBoxInDetailsView(2).trigger('dxclick');
         } else {
             triggerCellClick(this.wrapper.getRowNameCellInDetailsView(2));
@@ -369,7 +366,7 @@ QUnit.module('Details View', moduleConfig, () => {
         triggerCellClick(this.wrapper.getRowNameCellInDetailsView(1));
         this.clock.tick(400);
 
-        if(isDesktopDevice()) {
+        if(devices.real().deviceType === 'desktop') {
             assert.strictEqual(selectionSpy.callCount, 3, 'event not raised');
         } else {
             assert.strictEqual(selectionSpy.callCount, 4, 'event raised');
@@ -429,10 +426,6 @@ QUnit.module('Details View', moduleConfig, () => {
     });
 
     test('Raise the ContextMenuItemClick event', function(assert) {
-        if(!isDesktopDevice()) {
-            assert.ok(true, 'only on desktops');
-            return;
-        }
         const spy = sinon.spy();
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
@@ -805,7 +798,7 @@ QUnit.module('Details View', moduleConfig, () => {
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             width: 500,
-            height: 250,
+            height: 300,
             fileSystemProvider: createHugeFileSystem(),
             itemView: {
                 showParentFolder: true
@@ -846,7 +839,7 @@ QUnit.module('Details View', moduleConfig, () => {
         const fileManager = this.wrapper.getInstance();
         fileManager.option({
             width: 500,
-            height: 250,
+            height: 300,
             fileSystemProvider: createHugeFileSystem(),
             itemView: {
                 showParentFolder: true

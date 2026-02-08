@@ -1,6 +1,6 @@
-import TagBox from '../__internal/ui/m_tile_view';
+import TileView from '../__internal/ui/tile_view';
 
-export default TagBox;
+export default TileView;
 
 // STYLE tileView
 

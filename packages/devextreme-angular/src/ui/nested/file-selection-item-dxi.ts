@@ -14,16 +14,26 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiFileManagerToolbarItem } from './base/file-manager-toolbar-item-dxi';
 
+import { PROPERTY_TOKEN_fileSelectionItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-file-selection-item',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost],
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_fileSelectionItems,
+           useExisting: DxiFileSelectionItemComponent,
+        }
+    ],
     inputs: [
         'cssClass',
         'disabled',
@@ -61,7 +71,7 @@ export class DxiFileSelectionItemComponent extends DxiFileManagerToolbarItem {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiFileSelectionItemComponent
   ],
   exports: [

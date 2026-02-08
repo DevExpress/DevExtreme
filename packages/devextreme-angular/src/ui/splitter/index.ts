@@ -39,17 +39,17 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
 import { DxoSplitterModule } from 'devextreme-angular/ui/nested';
 
 import { DxiSplitterItemModule } from 'devextreme-angular/ui/splitter/nested';
-
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiSplitterItemComponent } from 'devextreme-angular/ui/splitter/nested';
+import { 
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -58,8 +58,10 @@ import { DxiSplitterItemComponent } from 'devextreme-angular/ui/splitter/nested'
  */
 @Component({
     selector: 'dx-splitter',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -68,6 +70,12 @@ import { DxiSplitterItemComponent } from 'devextreme-angular/ui/splitter/nested'
     ]
 })
 export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxSplitter<TItem, TKey> = null;
 
     /**
@@ -127,10 +135,10 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -231,10 +239,10 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -367,7 +375,7 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -423,27 +431,7 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
-    @ContentChildren(DxiSplitterItemComponent)
-    get itemsChildren(): QueryList<DxiSplitterItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiSplitterItemComponent');
-    }
-
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -531,14 +519,12 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
 @NgModule({
   imports: [
+    DxSplitterComponent,
     DxiItemModule,
     DxoSplitterModule,
     DxiSplitterItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxSplitterComponent
   ],
   exports: [
     DxSplitterComponent,
@@ -549,6 +535,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
   ]
 })
 export class DxSplitterModule { }
+
+export * from 'devextreme-angular/ui/splitter/nested';
 
 import type * as DxSplitterTypes from "devextreme/ui/splitter_types";
 export { DxSplitterTypes };

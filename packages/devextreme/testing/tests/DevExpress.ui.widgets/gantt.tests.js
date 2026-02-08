@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import 'generic_light.css!';
+import 'gantt.css!';
 import 'ui/gantt';
 
 import './ganttParts/markup.tests.js';
@@ -31,6 +32,8 @@ import './ganttParts/undo.tests.js';
 import './ganttParts/treeListExpanding.tests.js';
 import './ganttParts/scrolling.tests.js';
 import './ganttParts/selection.tests.js';
+import './ganttParts/milestone.tests.js';
+import './ganttParts/exportHelper.tests.js';
 
 QUnit.testStart(() => {
     const markup = '<div id="gantt"></div>';

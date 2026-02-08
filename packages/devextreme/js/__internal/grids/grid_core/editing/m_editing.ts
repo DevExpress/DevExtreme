@@ -92,6 +92,7 @@ import {
   isEditingCell,
   isEditingOrShowEditorAlwaysDataCell,
 } from './m_editing_utils';
+import type { NormalizedEditCellOptions } from './types';
 
 class EditingControllerImpl extends modules.ViewController {
   protected _columnsController!: Controllers['columns'];
@@ -652,17 +653,6 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  private _setEditRowKeyByIndex(rowIndex, silent) {
-    const key = this._dataController.getKeyByRowIndex(rowIndex);
-
-    if (key === undefined) {
-      this._dataController.fireError('E1043');
-      return;
-    }
-
-    this._setEditRowKey(key, silent);
-  }
-
   public getEditRowIndex() {
     return this._getVisibleEditRowIndex();
   }
@@ -928,11 +918,13 @@ class EditingControllerImpl extends modules.ViewController {
       case LAST_NEW_ROW_POSITION:
         break;
       case PAGE_TOP_NEW_ROW_POSITION:
+        if (allItems.length) {
+          change.insertBeforeKey = allItems[0].key;
+        }
+        break;
       case PAGE_BOTTOM_NEW_ROW_POSITION:
         if (allItems.length) {
-          const itemIndex = newRowPosition === PAGE_TOP_NEW_ROW_POSITION ? 0 : allItems.length - 1;
-
-          change[itemIndex === 0 ? 'insertBeforeKey' : 'insertAfterKey'] = allItems[itemIndex].key;
+          change.insertAfterKey = allItems[allItems.length - 1].key;
         }
         break;
       default: {
@@ -1354,13 +1346,17 @@ class EditingControllerImpl extends modules.ViewController {
   protected _removeChange(index) {
     if (index >= 0) {
       const changes = [...this.getChanges()];
-      const { key } = changes[index];
+      const { key, type } = changes[index];
 
       this._removeInternalData(key);
 
-      this._updateInsertAfterOrBeforeKeys(changes, index);
+      if (type !== DATA_EDIT_DATA_REMOVE_TYPE) {
+        this._updateInsertAfterOrBeforeKeys(changes, index);
+      }
+
       changes.splice(index, 1);
       this._silentOption(EDITING_CHANGES_OPTION_NAME, changes);
+
       if (equalByValue(this.option(EDITING_EDITROWKEY_OPTION_NAME), key)) {
         this._resetEditIndices();
       }
@@ -2306,7 +2302,10 @@ class EditingControllerImpl extends modules.ViewController {
         $container.addClass(COMMAND_EDIT_WITH_ICONS_CLASS);
 
         const localizationName = this.getButtonLocalizationNames()[button.name];
-        localizationName && $button.attr('aria-label', messageLocalization.format(localizationName));
+
+        if (localizationName) {
+          this.setAria('label', messageLocalization.format(localizationName), $button);
+        }
       } else {
         $button.text(button.text);
       }
@@ -2474,6 +2473,8 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   protected _isRowDeleteAllowed(): any {}
+
+  protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean { return false; }
 
   public shouldHighlightCell(parameters) {
     const cellModified = this.isCellModified(parameters);

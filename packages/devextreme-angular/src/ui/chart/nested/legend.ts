@@ -18,6 +18,7 @@ import { DashStyle, LegendItem, Font, LegendHoverMode, RelativePosition } from '
 import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -25,8 +26,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-chart-legend',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoChartLegendComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -248,7 +251,7 @@ export class DxoChartLegendComponent extends NestedOption implements OnDestroy, 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoChartLegendComponent
   ],
   exports: [

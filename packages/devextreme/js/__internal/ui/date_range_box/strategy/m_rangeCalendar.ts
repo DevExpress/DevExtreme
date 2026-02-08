@@ -133,8 +133,8 @@ class RangeCalendarStrategy extends CalendarStrategy {
       value,
       selectionMode: 'range',
       viewsCount: multiView ? 2 : 1,
-      _allowChangeSelectionOrder: true,
-      _currentSelection: this.getCurrentSelection(),
+      allowChangeSelectionOrder: true,
+      currentSelection: this.getCurrentSelection(),
     });
   }
 
@@ -234,11 +234,11 @@ class RangeCalendarStrategy extends CalendarStrategy {
   }
 
   getCurrentSelection() {
-    return this.getDateRangeBox().option('_currentSelection');
+    return this.getDateRangeBox().option('currentSelection');
   }
 
   _getCalendarCurrentSelection() {
-    return this.getWidget().option('_currentSelection');
+    return this.getWidget().option('currentSelection');
   }
 
   _closeDropDownByEnter(): boolean {

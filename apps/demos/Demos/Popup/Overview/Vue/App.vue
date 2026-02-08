@@ -116,7 +116,7 @@ const emailButtonOptions = {
   },
 };
 
-function showInfo(employee) {
+function showInfo(employee: Employee) {
   currentEmployee.value = employee;
   positionOf.value = `#image${employee.ID}`;
   popupVisible.value = true;

@@ -59,11 +59,6 @@ module('dialog', {
     }
 }, () => {
     test('should remove its markup after hiding by escape (T1154325)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
-            return;
-        }
-
         custom({
             messageHtml: 'text',
             buttons: [{ type: 'default', text: 'Ok' }]
@@ -102,11 +97,6 @@ module('dialog', {
         }
     }, () => {
         test('should remove its markup after hiding by escape only after hiding animation is finished', function(assert) {
-            if(devices.real().deviceType !== 'desktop') {
-                assert.ok(true, 'desktop specific test');
-                return;
-            }
-
             custom({
                 messageHtml: 'text',
                 buttons: [{ type: 'default', text: 'Ok' }],
@@ -141,11 +131,6 @@ module('dialog', {
     });
 
     test('dialog show/hide by Escape (T686065)', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'desktop specific test');
-            return;
-        }
-
         alert();
         assert.ok(this.thereIsDialog());
         keyboardMock(this.dialog().find(`.${DIALOG_BUTTON_CLASS}`).get(0)).keyDown('esc');
@@ -182,10 +167,6 @@ module('dialog', {
     });
 
     testInActiveWindow('first button in dialog obtained focus on shown', function(assert) {
-        if(devices.real().deviceType !== 'desktop') {
-            assert.ok(true, 'focus is absent on mobile devices');
-            return;
-        }
         alert('Sample message', 'Alert');
 
         assert.equal($('.dx-dialog-wrapper').find('.dx-state-focused').length, 1, 'button obtained focus');

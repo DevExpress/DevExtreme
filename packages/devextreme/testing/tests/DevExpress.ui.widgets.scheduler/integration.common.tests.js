@@ -1,6 +1,6 @@
 import { createWrapper, initTestMarkup, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import '__internal/scheduler/m_scheduler';
 
 const { testStart, module, test } = QUnit;
@@ -64,9 +64,9 @@ if(isDesktopEnvironment()) {
             ];
         };
 
-        test('Header scroll should do dateTable scroll', function(assert) {
+        test('Header scroll should do dateTable scroll', async function(assert) {
             const done = assert.async();
-            const scheduler = createScheduler();
+            const scheduler = await createScheduler();
 
             const [header, dateTable, sideBar] = getScrollableArray(scheduler);
 
@@ -82,9 +82,9 @@ if(isDesktopEnvironment()) {
             });
         });
 
-        test('DateTable vertical scroll should do sidebar scroll', function(assert) {
+        test('DateTable vertical scroll should do sidebar scroll', async function(assert) {
             const done = assert.async();
-            const scheduler = createScheduler();
+            const scheduler = await createScheduler();
 
             const [header, dateTable, sideBar] = getScrollableArray(scheduler);
 
@@ -100,9 +100,9 @@ if(isDesktopEnvironment()) {
             });
         });
 
-        test('DateTable horizontal scroll should do header scroll', function(assert) {
+        test('DateTable horizontal scroll should do header scroll', async function(assert) {
             const done = assert.async();
-            const scheduler = createScheduler();
+            const scheduler = await createScheduler();
 
             const [header, dateTable, sideBar] = getScrollableArray(scheduler);
 
@@ -118,9 +118,9 @@ if(isDesktopEnvironment()) {
             });
         });
 
-        test('DateTable vertical & horizontal scroll should do sidebar & header scroll', function(assert) {
+        test('DateTable vertical & horizontal scroll should do sidebar & header scroll', async function(assert) {
             const done = assert.async();
-            const scheduler = createScheduler();
+            const scheduler = await createScheduler();
 
             const [header, dateTable, sideBar] = getScrollableArray(scheduler);
 
@@ -136,9 +136,9 @@ if(isDesktopEnvironment()) {
             });
         });
 
-        test('Sidebar scroll should call dateTable scroll', function(assert) {
+        test('Sidebar scroll should call dateTable scroll', async function(assert) {
             const done = assert.async();
-            const scheduler = createScheduler();
+            const scheduler = await createScheduler();
 
             const [header, dateTable, sideBar] = getScrollableArray(scheduler);
 
@@ -159,7 +159,7 @@ if(isDesktopEnvironment()) {
 
 module('Views:startDate property', () => {
     module('Month', () => {
-        test('if set startDate shouldn\'t throw exception(T828646)', function(assert) {
+        test('if set startDate shouldn\'t throw exception(T828646)', async function(assert) {
             const data = [{
                 text: 'Google AdWords Strategy',
                 startDate: new Date(2019, 10, 1, 9, 0, 0),
@@ -170,7 +170,7 @@ module('Views:startDate property', () => {
                 endDate: new Date(2019, 11, 1, 14, 15, 0)
             }];
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 dataSource: data,
                 views: [{
                     type: 'month',

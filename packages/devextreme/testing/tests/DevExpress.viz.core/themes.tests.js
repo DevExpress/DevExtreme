@@ -1,6 +1,6 @@
-const $ = require('jquery');
-const themeModule = require('viz/themes');
-const uiThemeModule = require('ui/themes');
+import $ from 'jquery';
+import themeModule from 'viz/themes';
+import uiThemeModule from 'ui/themes';
 
 uiThemeModule.setDefaultTimeout(0);
 
@@ -125,10 +125,8 @@ QUnit.test('Patched properties on register theme', function(assert) {
     };
     themeModule.resetCurrentTheme();
 
-    // act
     themeModule.registerTheme(theme);
 
-    // assert
     theme = themeModule.getTheme('custom theme');
 
     // backgroundColor
@@ -424,7 +422,6 @@ QUnit.test('currentTheme returns theme from ui.themes', function(assert) {
     this.writeToFrame('<link rel=\'dx-theme\' href=\'style1.css\' data-theme=\'platform2\' />');
     uiThemeModule.init({ theme: 'platform2', context: this.frameDoc() });
 
-    // act
     const currentTheme = themeModule.currentTheme();
 
     assert.strictEqual(currentTheme, 'platform2');
@@ -435,7 +432,6 @@ QUnit.test('currentTheme returns previously set theme, regardles of what ui them
     uiThemeModule.init({ theme: 'platform2', context: this.frameDoc() });
     themeModule.currentTheme('generic');
 
-    // act
     const currentTheme = themeModule.currentTheme();
 
     assert.strictEqual(currentTheme, 'generic.light');
@@ -449,7 +445,6 @@ QUnit.test('currentTheme returns default theme if ui theme returns wrong theme',
         isDefault: true
     });
 
-    // act
     const currentTheme = themeModule.currentTheme();
 
     assert.strictEqual(currentTheme, 'viz default theme');

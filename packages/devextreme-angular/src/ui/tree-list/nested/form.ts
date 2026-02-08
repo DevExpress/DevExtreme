@@ -20,6 +20,7 @@ import { Mode } from 'devextreme/common';
 import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/form';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -27,8 +28,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-tree-list-form',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoTreeListFormComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -121,10 +124,10 @@ export class DxoTreeListFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -345,10 +348,10 @@ export class DxoTreeListFormComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -367,7 +370,6 @@ export class DxoTreeListFormComponent extends NestedOption implements OnDestroy,
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'formDataChange' }
         ]);
@@ -389,7 +391,7 @@ export class DxoTreeListFormComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoTreeListFormComponent
   ],
   exports: [

@@ -54,7 +54,7 @@ const ActionSheet = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["items","visible"]), []);
       const independentEvents = useMemo(() => (["onCancelClick","onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"]), []);
@@ -102,7 +102,7 @@ type IItemProps = React.PropsWithChildren<{
   stylingMode?: ButtonStyle;
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
-  type?: ButtonType;
+  type?: ButtonType | string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>

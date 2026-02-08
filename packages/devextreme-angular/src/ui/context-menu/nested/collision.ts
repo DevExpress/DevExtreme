@@ -17,6 +17,7 @@ import {
 import { CollisionResolution } from 'devextreme/common/core/animation';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-context-menu-collision',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoContextMenuCollisionComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -71,7 +74,7 @@ export class DxoContextMenuCollisionComponent extends NestedOption implements On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoContextMenuCollisionComponent
   ],
   exports: [

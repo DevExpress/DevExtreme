@@ -1,7 +1,6 @@
 {
     "plugins": [
-        "stylelint-scss",
-        "stylelint-devextreme"
+        "stylelint-scss"
     ],
     "extends": "stylelint-config-standard-scss",
     "ignoreFiles": "!**/*.{css,scss}",
@@ -52,7 +51,7 @@
         "scss/dollar-variable-colon-space-before": "never",
         "scss/dollar-variable-empty-line-before": null,
         "scss/dollar-variable-no-missing-interpolation": true,
-        "scss/dollar-variable-pattern": "^[a-z][0-9a-z-]*$",
+        "scss/dollar-variable-pattern": "^[a-z][0-9a-z_-]*$",
         "scss/double-slash-comment-empty-line-before": "always",
         "scss/double-slash-comment-whitespace-inside": "always",
         "scss/map-keys-quotes": "always",
@@ -61,9 +60,6 @@
         "scss/no-global-function-names": null,
         "scss/operator-no-newline-before": true,
         "scss/operator-no-unspaced": true,
-        "scss/operator-no-newline-after": null,
-
-        "devextreme/at-use-no-public-components": true,
-        "devextreme/no-division-slash": true
+        "scss/operator-no-newline-after": null
     }
 }

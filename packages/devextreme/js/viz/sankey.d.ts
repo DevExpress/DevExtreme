@@ -15,7 +15,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import BaseWidget, {
     BaseWidgetOptions,
@@ -748,12 +748,6 @@ export interface dxSankeyNode {
      * @public
      */
     showTooltip(): void;
-    /**
-     * @docid
-     * @deprecated dxSankeyNode.label
-     * @public
-     */
-    title?: string;
 }
 
 /** @public */

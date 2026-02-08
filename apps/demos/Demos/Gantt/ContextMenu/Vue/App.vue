@@ -67,7 +67,7 @@ import {
   DxContextMenu,
   type DxGanttTypes
 } from 'devextreme-vue/gantt';
-import DxCheckBox from 'devextreme-vue/check-box';
+import DxCheckBox, { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import {
   tasks,
   dependencies,
@@ -85,19 +85,19 @@ const contextMenuItems = [
     name: 'ToggleDisplayOfResources',
     text: 'Toggle Display of Resources',
   },
-] as DxGanttTypes.GanttPredefinedContextMenuItem[];
-const contextMenuActualItems = ref(contextMenuItems);
+] as DxGanttTypes.ContextMenuItem[];
+const contextMenuActualItems = ref<DxGanttTypes.ContextMenuItem[] | undefined>(contextMenuItems);
 
-function onContextMenuPreparing(e) {
+function onContextMenuPreparing(e: DxGanttTypes.ContextMenuPreparingEvent) {
   e.cancel = disableContextMenu.value;
 }
-function onCustomizeContextMenu(e) {
-  contextMenuActualItems.value = e.value ? contextMenuItems : null;
+function onCustomizeContextMenu(e: DxCheckBoxTypes.ValueChangedEvent) {
+  contextMenuActualItems.value = e.value ? contextMenuItems : undefined;
 }
-function onPreventContextMenuShowing(e) {
+function onPreventContextMenuShowing(e: DxCheckBoxTypes.ValueChangedEvent) {
   disableContextMenu.value = e.value;
 }
-function onCustomCommandClick(e) {
+function onCustomCommandClick(e: DxGanttTypes.CustomCommandEvent) {
   if (e.name === 'ToggleDisplayOfResources') {
     showResources.value = !showResources.value;
   }

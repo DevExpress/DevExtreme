@@ -16,16 +16,26 @@ import { dxFilterBuilderField, FieldInfo } from 'devextreme/ui/filter_builder';
 import { DataType } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_customOperations } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-tree-list-custom-operation',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_customOperations,
+           useExisting: DxiTreeListCustomOperationComponent,
+        }
+    ]
 })
 export class DxiTreeListCustomOperationComponent extends CollectionNestedOption {
     @Input()
@@ -114,7 +124,7 @@ export class DxiTreeListCustomOperationComponent extends CollectionNestedOption 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTreeListCustomOperationComponent
   ],
   exports: [

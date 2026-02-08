@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import DxDataGrid, { DxColumn, DxExport, type DxDataGridTypes } from 'devextreme-vue/data-grid';
 import { jsPDF } from 'jspdf';
-import { exportDataGrid } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme-vue/common/export/pdf';
 import { countries } from './data.ts';
 
 const gdpFormat = {
@@ -79,12 +79,14 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
     component: e.component,
     topLeft: { x: 1, y: 15 },
     columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
-    customDrawCell({ rect }) {
-      if (lastPoint.x < rect.x + rect.w) {
-        lastPoint.x = rect.x + rect.w;
-      }
-      if (lastPoint.y < rect.y + rect.h) {
-        lastPoint.y = rect.y + rect.h;
+    customDrawCell({ rect }: { rect?: { x: number; y: number; h: number; w: number }}) {
+      if (rect) {
+        if (lastPoint.x < rect.x + rect.w) {
+          lastPoint.x = rect.x + rect.w;
+        }
+        if (lastPoint.y < rect.y + rect.h) {
+          lastPoint.y = rect.y + rect.h;
+        }
       }
     },
   }).then(() => {

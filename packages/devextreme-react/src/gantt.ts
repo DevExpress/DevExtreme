@@ -9,9 +9,9 @@ import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponent
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, InitializedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent, dxGanttContextMenuItem, GanttPredefinedContextMenuItem, dxGanttFilterRowOperationDescriptions, dxGanttHeaderFilterTexts, GanttPredefinedToolbarItem, GanttScaleType, dxGanttToolbarItem } from "devextreme/ui/gantt";
-import type { HorizontalAlignment, template, DataType, Format as CommonFormat, SearchMode, SortOrder, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone } from "devextreme/common";
+import type { HorizontalAlignment, template, DataType, Format as CommonFormat, SortOrder, SearchMode, ToolbarItemLocation, ToolbarItemComponent, SingleMultipleOrNone } from "devextreme/common";
 import type { dxTreeListColumn, dxTreeListRowObject } from "devextreme/ui/tree_list";
-import type { FilterOperation, FilterType, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation, HeaderFilterSearchConfig } from "devextreme/common/grids";
+import type { FilterOperation, FilterType, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from "devextreme/common/grids";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
@@ -84,7 +84,7 @@ const Gantt = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const independentEvents = useMemo(() => (["onContentReady","onContextMenuPreparing","onCustomCommand","onDependencyDeleted","onDependencyDeleting","onDependencyInserted","onDependencyInserting","onDisposing","onInitialized","onResourceAssigned","onResourceAssigning","onResourceDeleted","onResourceDeleting","onResourceInserted","onResourceInserting","onResourceManagerDialogShowing","onResourceUnassigned","onResourceUnassigning","onScaleCellPrepared","onTaskClick","onTaskDblClick","onTaskDeleted","onTaskDeleting","onTaskEditDialogShowing","onTaskInserted","onTaskInserting","onTaskMoving","onTaskUpdated","onTaskUpdating"]), []);
 
@@ -169,16 +169,7 @@ type IColumnProps = React.PropsWithChildren<{
   filterValues?: Array<any>;
   format?: LocalizationFormat;
   headerCellTemplate?: ((columnHeader: any, headerInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList }) => any) | template;
-  headerFilter?: Record<string, any> | {
-    allowSearch?: boolean;
-    allowSelectAll?: boolean;
-    dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined;
-    groupInterval?: HeaderFilterGroupInterval | number | undefined;
-    height?: number | string | undefined;
-    search?: ColumnHeaderFilterSearchConfig;
-    searchMode?: SearchMode;
-    width?: number | string | undefined;
-  };
+  headerFilter?: GridsColumnHeaderFilter | undefined;
   minWidth?: number | undefined;
   selectedFilterOperation?: SelectedFilterOperation | undefined;
   sortIndex?: number | undefined;

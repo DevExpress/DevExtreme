@@ -35,7 +35,7 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
 
   _renderShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader) {
     for (let i = 0; i < groupCount; i++) {
-      const shaderWidth = this._getShaderWidth(i);
+      const shaderWidth = this._getShaderWidth();
       this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
 
       !isSolidShader && this._renderBottomShader(this._$shader, maxHeight, shaderHeight, shaderWidth, i);
@@ -45,7 +45,7 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
   }
 
   _renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader) {
-    const shaderWidth = this._getShaderWidth(0);
+    const shaderWidth = this._getShaderWidth();
     let bottomShaderWidth = shaderWidth - this._workSpace.getCellWidth();
 
     if (shaderHeight < 0) {
@@ -116,8 +116,8 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
     return this._workSpace.getGroupedStrategy().getShaderMaxHeight();
   }
 
-  _getShaderWidth(i) {
-    return this._workSpace.getGroupedStrategy().getShaderWidth(i);
+  _getShaderWidth() {
+    return this._workSpace.getGroupedStrategy().getShaderWidth();
   }
 
   clean() {

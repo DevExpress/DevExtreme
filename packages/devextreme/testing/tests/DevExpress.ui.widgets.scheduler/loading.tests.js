@@ -15,14 +15,14 @@ QUnit.module('loading tests', {
     }
 });
 
-QUnit.test('show loadPanel', function(assert) {
+QUnit.test('show loadPanel', async function(assert) {
     loading.show();
 
     assert.equal($('.dx-loadpanel-wrapper').length, 1);
     assert.ok($('.dx-loadpanel').dxLoadPanel('instance') instanceof LoadPanel, 'instance is ok');
 });
 
-QUnit.test('hide loadPanel', function(assert) {
+QUnit.test('hide loadPanel', async function(assert) {
     loading.show({
         position: { at: 'center' }
     });
@@ -31,7 +31,7 @@ QUnit.test('hide loadPanel', function(assert) {
     assert.equal($('.dx-loadpanel').length, 0);
 });
 
-QUnit.test('loadPanel options are right', function(assert) {
+QUnit.test('loadPanel options are right', async function(assert) {
     loading.show({
         position: { at: 'center' },
         width: 222,
@@ -46,7 +46,7 @@ QUnit.test('loadPanel options are right', function(assert) {
     assert.equal(loadingInstance.option('message'), 'Loading ...');
 });
 
-QUnit.test('loadPanel can be attached to container', function(assert) {
+QUnit.test('loadPanel can be attached to container', async function(assert) {
     const $container = $('<div class="container">');
 
     loading.show({

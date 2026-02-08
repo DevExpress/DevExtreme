@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PivotGrid, { FieldChooser, FieldPanel } from 'devextreme-react/pivot-grid';
 import CheckBox from 'devextreme-react/check-box';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import sales from './data.js';
+import { sales } from './data.js';
 
 const setSummaryType = (args, sourceField) => {
   dataSource.field(sourceField.index, {

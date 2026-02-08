@@ -9,7 +9,10 @@
       @item-context-menu="treeViewItemContextMenu"
     />
     <div class="log-container">
-      <div><i class="icon dx-icon-clock"/>&nbsp;Operations log:</div>
+      <div>
+        <i class="icon dx-icon-clock"/>
+        <span>&nbsp;Operations log:</span>
+      </div>
       <DxList
         id="log"
         show-scrollbar="always"
@@ -28,36 +31,40 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue';
-import DxTreeView from 'devextreme-vue/tree-view';
+import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import DxList from 'devextreme-vue/list';
-import DxContextMenu from 'devextreme-vue/context-menu';
+import DxContextMenu, { type DxContextMenuTypes } from 'devextreme-vue/context-menu';
 import service from './data.ts';
 
 const products = ref(service.getProducts());
 const menuItems = ref(service.getMenuItems());
-const logItems = ref([]);
-const selectedTreeItem = ref(undefined);
+const logItems = ref<string[]>([]);
+const selectedTreeItem = ref<Record<string, any>>();
 const treeViewRef = ref();
 const contextMenuRef = ref();
 
-function treeViewItemContextMenu(e) {
+function treeViewItemContextMenu(e: DxTreeViewTypes.ItemContextMenuEvent) {
   selectedTreeItem.value = e.itemData;
   const contextMenu = contextMenuRef.value.instance;
-  const isProduct = e.itemData.price !== undefined;
+  const isProduct = e.itemData?.price !== undefined;
 
   contextMenu.option('items[0].visible', !isProduct);
   contextMenu.option('items[1].visible', !isProduct);
   contextMenu.option('items[2].visible', isProduct);
   contextMenu.option('items[3].visible', isProduct);
 
-  contextMenu.option('items[0].disabled', e.node.expanded);
-  contextMenu.option('items[1].disabled', !e.node.expanded);
+  contextMenu.option('items[0].disabled', e.node?.expanded);
+  contextMenu.option('items[1].disabled', !e.node?.expanded);
 }
-function contextMenuItemClick(e) {
+function contextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent) {
   const treeView = treeViewRef.value.instance;
   let logEntry = '';
-
-  switch (e.itemData.id) {
+  
+  if(!selectedTreeItem.value) {
+    return;
+  }
+ 
+  switch (e.itemData?.id) {
     case 'expand': {
       logEntry = `The '${selectedTreeItem.value.text}' group was expanded`;
       treeView.expandItem(selectedTreeItem.value.id);
@@ -79,7 +86,7 @@ function contextMenuItemClick(e) {
     default:
       break;
   }
-  logItems.value = logItems.value.concat(logEntry);
+  logItems.value = logItems.value.concat([logEntry]);
 }
 </script>
 <style scoped>
@@ -97,19 +104,18 @@ function contextMenuItemClick(e) {
   padding: 20px;
   margin-left: 20px;
   background-color: rgba(191, 191, 191, 0.15);
-  font-size: 115%;
-  font-weight: bold;
+  font-weight: 600;
   position: relative;
-  height: 100%;
+}
+
+.log-container > div:first-child {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .log-container .dx-icon-clock {
-  position: relative;
-  top: 1px;
-}
-
-#log {
-  margin-top: 10px;
+  font-size: var(--dx-font-size-icon);
 }
 
 #log .dx-empty-message {

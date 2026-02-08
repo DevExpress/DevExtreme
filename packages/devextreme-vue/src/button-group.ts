@@ -58,7 +58,7 @@ const componentConfig = {
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     items: Array as PropType<Array<dxButtonGroupItem>>,
@@ -76,7 +76,7 @@ const componentConfig = {
     stylingMode: String as PropType<ButtonStyle>,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,
@@ -146,7 +146,7 @@ const DxItemConfig = {
     icon: String,
     template: {},
     text: String,
-    type: String as PropType<ButtonType>,
+    type: String as PropType<ButtonType | string>,
     visible: Boolean
   }
 };

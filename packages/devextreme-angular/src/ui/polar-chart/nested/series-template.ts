@@ -17,6 +17,7 @@ import {
 import { PolarChartSeries } from 'devextreme/viz/polar_chart';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -24,8 +25,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-polar-chart-series-template',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoPolarChartSeriesTemplateComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -71,7 +74,7 @@ export class DxoPolarChartSeriesTemplateComponent extends NestedOption implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoPolarChartSeriesTemplateComponent
   ],
   exports: [

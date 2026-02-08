@@ -166,6 +166,458 @@
 
 /apps/demos/Demos/Pagination/** @DevExpress/devextreme-scheduler
 
+# Navigation
+
+/e2e/testcafe-devextreme/tests/navigation/**                   @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/Common/ActionAndListsOverview/**             @DevExpress/devextreme-navigation
+/apps/demos/Demos/Common/FormsAndMultiPurposeOverview/**       @DevExpress/devextreme-navigation
+/apps/demos/Demos/Common/FormsOverview/**                      @DevExpress/devextreme-navigation
+/apps/demos/Demos/Common/ListsOverview/**                      @DevExpress/devextreme-navigation
+/apps/demos/Demos/Common/NavigationOverview/**                 @DevExpress/devextreme-navigation
+/apps/demos/Demos/Common/NavigationRightToLeftSupport/**       @DevExpress/devextreme-navigation
+
+## accordion
+/packages/devextreme/js/ui/accordion.js                        @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/accordion/**             @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/accordion.ts             @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/accordion/**                 @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_accordion.scss    @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/Accordion/**                                 @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/accordion/**                         @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/accordion.ts    @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/accordion.*              @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/accordionParts/**   @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/accordion_types.d.ts                @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/accordion.d.ts                      @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## action_sheet
+/packages/devextreme/js/ui/action_sheet.js                     @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/action_sheet.ts          @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/actionSheet/**               @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_actionSheet.scss  @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/ActionSheet/**                               @DevExpress/devextreme-navigation
+
+/e2e/testcafe-devextreme/tests/accessibility/actionSheet.ts  @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/actionSheet.*            @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/action_sheet_types.d.ts             @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/action_sheet.d.ts                   @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## box
+/packages/devextreme/js/ui/box.js                              @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/box.ts                   @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/box/**                       @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_box.scss          @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/Box/**                                       @DevExpress/devextreme-navigation
+
+/packages/devextreme/testing/tests/**/box.*                    @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/box_types.d.ts                      @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/box.d.ts                            @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+
+## button
+/packages/devextreme/js/ui/button.js                           @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/button/**                @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/button/**                    @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/Button/**                                    @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/button.ts                            @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/button.ts  @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/button.*                 @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/button_types.d.ts                   @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/button.d.ts                         @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## button_group
+/packages/devextreme/js/ui/button_group.js                     @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/button_group.ts          @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/buttonGroup/**               @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/ButtonGroup/**                               @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/buttonGroup/**                       @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/buttonGroup.ts  @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/buttonGroup.*            @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/button_group_types.d.ts             @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/button_group.d.ts                   @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## collection
+/packages/devextreme/js/ui/collection/**                       @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/collection/**            @DevExpress/devextreme-navigation
+
+/packages/devextreme/testing/tests/**/collectionWidget*.*      @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/DevExpress.ui/collectionWidgetParts/**   @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/collection/**/*.d.ts                @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## context_menu
+/packages/devextreme/js/ui/context_menu.js                     @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/context_menu/**                     @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/context_menu/**          @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/contextMenu/**               @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_contextMenu.scss  @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/ContextMenu/**                               @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/contextMenu/**                       @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/contextMenu.ts  @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/contextMenu.*            @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/context_menu_types.d.ts             @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/context_menu.d.ts                   @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/context_menu/**/*.d.ts              @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## drawer
+/packages/devextreme/js/ui/drawer.js                           @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/drawer/**                @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/drawer/**                    @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_drawer.scss       @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/Drawer/**                                    @DevExpress/devextreme-navigation
+
+/e2e/testcafe-devextreme/tests/accessibility/drawer.ts  @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/DevExpress.serverSide/drawer.tests.js   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/drawer.*                 @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/drawer_types.d.ts                   @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/drawer.d.ts                         @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## form
+/packages/devextreme/js/ui/form.js                             @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/form/**                             @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/form/**                  @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/form/**                      @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_form.scss         @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/Form/**                                      @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/form/**                              @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/form/**           @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/DevExpress.ui.widgets.form/**  @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/form*                    @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/form_types.d.ts                     @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/form.d.ts                           @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/form/**/*.d.ts                      @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## gallery
+/packages/devextreme/js/ui/gallery.js                          @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/gallery/**               @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/gallery.ts               @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/gallery/**                   @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_gallery.scss      @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/Gallery/**                                   @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/gallery/**                           @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/gallery.ts @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/gallery.*                @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/gallery_types.d.ts                  @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/gallery.d.ts                        @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## hierarchial_collection
+/packages/devextreme/js/ui/hierarchial_collection/**           @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/hierarchial_collection/**   @DevExpress/devextreme-navigation
+
+/packages/devextreme/testing/tests/DevExpress.ui/hierarchicalCollectionWidgetParts/**   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/hierarchicalCollectionWidget.*   @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/hierarchial_collection/**/*.d.ts    @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## list
+/packages/devextreme/js/ui/list.js                             @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/list/**                  @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/list/**                      @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/List/**                                      @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/list/**                              @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/list/**    @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/list.*                   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/listItem.*               @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/listParts/**   @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/list_types.d.ts                     @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/list.d.ts                           @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## load_indicator
+/packages/devextreme/js/ui/load_indicator.js                   @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/load_indicator/**        @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/load_indicator.ts        @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/loadIndicator/**             @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_loadIndicator.scss   @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/LoadIndicator/**                             @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/loadIndicator.ts                     @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/loadIndicator.ts   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/loadIndicator.*   @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/load_indicator_types.d.ts           @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/load_indicator.d.ts                 @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## menu
+/packages/devextreme/js/ui/menu.js                             @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/menu/**                  @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/menu.ts                  @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/menu/**                      @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_menu.scss         @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/Menu/**                                      @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/menu/**                              @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/menu.ts    @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/menu.*                   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/menuBase.*               @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/menu_types.d.ts                     @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/menu.d.ts                           @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## multi_view
+/packages/devextreme/js/ui/multi_view.js                       @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/multi_view/**            @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/multi_view.ts            @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/multiView/**                 @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_multiView.scss    @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/MultiView/**                                 @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/multiView/**                         @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/multiView.ts   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/multiView.*              @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/multi_view_types.d.ts               @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/multi_view.d.ts                     @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## radio_group
+/packages/devextreme/js/ui/radio_group.js                      @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/radio_group/**                      @DevExpress/devextreme-editors
+/packages/devextreme/js/__internal/ui/radio_group/**           @DevExpress/devextreme-editors
+
+/packages/devextreme-scss/scss/**/radioGroup/**                @DevExpress/devextreme-editors
+
+/apps/demos/Demos/RadioGroup/**                                @DevExpress/devextreme-editors
+
+/packages/testcafe-models/radioGroup/**                        @DevExpress/devextreme-editors
+/e2e/testcafe-devextreme/tests/accessibility/radioGroup.ts   @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/**/radioGroup.*             @DevExpress/devextreme-editors
+/packages/devextreme/testing/tests/**/radioButton.*            @DevExpress/devextreme-editors
+
+/packages/devextreme/js/ui/radio_group_types.d.ts              @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/radio_group.d.ts                    @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/radio_group/**/*.d.ts               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+
+## resizable
+/packages/devextreme/js/ui/resizable.js                        @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/resizable/**             @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/resizable/**                 @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_resizable.scss    @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/Resizable/**                                 @DevExpress/devextreme-navigation
+
+/packages/devextreme/testing/tests/**/resizable.*              @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/resizable_types.d.ts                @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/resizable.d.ts                      @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## responsive_box
+/packages/devextreme/js/ui/responsive_box.js                   @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/responsive_box.ts        @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/responsiveBox/**             @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/ResponsiveBox/**                             @DevExpress/devextreme-navigation
+
+/packages/devextreme/testing/tests/**/responsiveBox.*          @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/responsive_box_types.d.ts           @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/responsive_box.d.ts                 @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## scroll_view
+/packages/devextreme/js/ui/scroll_view.js                      @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/scroll_view/**                      @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/scroll_view/**           @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/scrollView/**                @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_scrollView.scss   @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/ScrollView/**                                @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/scrollView/**                        @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/scrollView.*             @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/scrollable.*             @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/scrollableParts/**   @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/scroll_view_types.d.ts              @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/scroll_view.d.ts                    @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/scroll_view/**/*.d.ts               @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## selection
+/packages/devextreme/js/__internal/ui/selection/**             @DevExpress/devextreme-navigation
+
+/packages/devextreme/testing/tests/DevExpress.ui.widgets/selection.*   @DevExpress/devextreme-navigation
+
+## splitter
+/packages/devextreme/js/ui/splitter.js                         @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/splitter/**              @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/splitter/**                  @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/Splitter/**                                  @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/splitter/**                          @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/splitter.ts   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/splitter.*               @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/resizeHandle.*           @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/splitter_types.d.ts                 @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/splitter.d.ts                       @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## stepper
+/packages/devextreme/js/ui/stepper.js                          @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/stepper/**               @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/stepper/**                   @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/Stepper/**                                   @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/stepper/**                           @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/stepper.ts   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/stepper.*                @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/stepper_types.d.ts                  @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/stepper.d.ts                        @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## tab_panel
+/packages/devextreme/js/ui/tab_panel.js                        @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/tab_panel/**             @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/tabPanel/**                  @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_tabPanel.scss     @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/TabPanel/**                                  @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/tabPanel.ts                          @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/tabPanel.ts   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/tabPanel.*               @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/tab_panel_types.d.ts                @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/tab_panel.d.ts                      @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## tabs
+/packages/devextreme/js/ui/tabs.js                             @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/tabs/**                  @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/tabs/**                      @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_tabs.scss         @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/Tabs/**                                      @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/tabs/**                              @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/tabs.ts    @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/tabs.*                   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/tabsItem.*               @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/tabs_types.d.ts                     @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/tabs.d.ts                           @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## tile_view
+/packages/devextreme/js/ui/tile_view.js                        @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/tile_view.ts             @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/tileView/**                  @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_tileView.scss     @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/TileView/**                                  @DevExpress/devextreme-navigation
+
+/e2e/testcafe-devextreme/tests/accessibility/tileView.ts   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/tileView.*   @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/tile_view_types.d.ts                @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/tile_view.d.ts                      @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## toolbar
+/packages/devextreme/js/ui/toolbar.js                          @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/toolbar/**                          @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/toolbar/**               @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/toolbar/**                   @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_toolbar.scss      @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/Toolbar/**                                   @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/toolbar/**                           @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/toolbar.ts   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/toolbar.*   @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/toolbar_types.d.ts                  @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/toolbar.d.ts                        @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/toolbar/**/*.d.ts                   @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## tree_view
+/packages/devextreme/js/ui/tree_view.js                        @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/ui/tree_view/**             @DevExpress/devextreme-navigation
+
+/packages/devextreme-scss/scss/**/treeView/**                  @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/TreeView/**                                  @DevExpress/devextreme-navigation
+
+/packages/testcafe-models/treeView/**                          @DevExpress/devextreme-navigation
+/e2e/testcafe-devextreme/tests/accessibility/treeView.ts   @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/**/treeView.*   @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/ui/tree_view_types.d.ts                @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/tree_view.d.ts                      @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
+## fieldset
+
+/packages/devextreme-scss/scss/**/fieldset/**                  @DevExpress/devextreme-navigation
+/packages/devextreme-scss/scss/widgets/base/_fieldset.scss     @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/FieldSet/**                                  @DevExpress/devextreme-navigation
+
+/packages/devextreme/testing/tests/DevExpress.knockout/fieldsetParts   @DevExpress/devextreme-navigation
+
+##viz
+/packages/devextreme/js/viz/**                                 @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/common/m_charts.ts          @DevExpress/devextreme-navigation
+/packages/devextreme/js/__internal/viz/**                      @DevExpress/devextreme-navigation
+
+/apps/demos/Demos/Charts/**                                    @DevExpress/devextreme-navigation
+/apps/demos/Demos/Gauges/**                                    @DevExpress/devextreme-navigation
+/apps/demos/Demos/RangeSelector/**                             @DevExpress/devextreme-navigation
+/apps/demos/Demos/VectorMap/**                                 @DevExpress/devextreme-navigation
+
+/packages/devextreme/testing/tests/DevExpress.common/charts.tests.js/**  @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/Memory\ Leaks/vizWidgets.tests.js/**  @DevExpress/devextreme-navigation
+/packages/devextreme/testing/tests/DevExpress.viz.*/**       @DevExpress/devextreme-navigation
+
+/packages/devextreme/js/viz/**/*.d.ts                          @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+
 # DevOps
 
 /.github/**             @DevExpress/devextreme-devops

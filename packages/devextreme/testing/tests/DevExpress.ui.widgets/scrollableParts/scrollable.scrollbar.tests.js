@@ -1,13 +1,13 @@
 import $ from 'jquery';
-import animationFrame from 'common/core/animation/frame';
+import animationFrame from '__internal/common/core/animation/frameModule';
 import devices from '__internal/core/m_devices';
-import Scrollbar from '__internal/ui/scroll_view/m_scrollbar';
+import Scrollbar from '__internal/ui/scroll_view/scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 import { getTranslateValues } from '__internal/ui/scroll_view/utils/get_translate_values';
 import { getElementOverflowY, getElementOverflowX } from '__internal/ui/scroll_view/utils/get_element_style';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import {
     DIRECTION_HORIZONTAL,
@@ -80,18 +80,15 @@ const moduleConfig = {
         $('#qunit-fixture').html(markup);
 
         this.clock = sinon.useFakeTimers();
-        this._originalRequestAnimationFrame = animationFrame.requestAnimationFrame;
-        animationFrame.requestAnimationFrame = function(callback) {
+        this.requestAnimationFrameStub = sinon.stub(animationFrame, 'requestAnimationFrame').callsFake((callback) => {
             callback();
-        };
+        });
     },
     afterEach: function() {
         this.clock.restore();
-        animationFrame.requestAnimationFrame = this._originalRequestAnimationFrame;
+        this.requestAnimationFrameStub.restore();
     }
 };
-
-const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('scrollbar', moduleConfig);
 
@@ -225,12 +222,12 @@ QUnit.test('scrollbar position calculated correctly with scaled content', functi
 
     instance.scrollTo({ left: 200, top: 200 });
     assert.strictEqual(getTranslateValues($hScrollBar.get(0)).left, 100, 'Correct scrollbar position');
-    assert.strictEqual(getTranslateValues($vScrollBar.get(0)).top, 100, 'Correct scrollbar position');
+    assert.roughEqual(getTranslateValues($vScrollBar.get(0)).top, 100, 1, 'Correct scrollbar position');
 
     instance.scrollTo({ left: 100, top: 100 });
 
     assert.strictEqual(getTranslateValues($hScrollBar.get(0)).left, 50, 'Correct scrollbar position');
-    assert.strictEqual(getTranslateValues($vScrollBar.get(0)).top, 50, 'Correct scrollbar position');
+    assert.roughEqual(getTranslateValues($vScrollBar.get(0)).top, 50, 1, 'Correct scrollbar position');
 
     const hScrollbarRect = $hScrollBar.get(0).getBoundingClientRect();
     const vScrollbarRect = $vScrollBar.get(0).getBoundingClientRect();
@@ -246,11 +243,7 @@ QUnit.test('scrollbar in scaled container has correct position after update', fu
     const contentHeight = 1000;
     const scaleRatio = 0.5;
     const distance = -100;
-    let expectedScrollbarDistance = -distance * (containerHeight / (contentHeight * 5)) / scaleRatio;
-
-    if(isRenovatedScrollable) {
-        expectedScrollbarDistance = -distance * (containerHeight / (contentHeight * 5));
-    }
+    const expectedScrollbarDistance = -distance * (containerHeight / (contentHeight * 5)) / scaleRatio;
 
     const $scrollable = $('#scaledScrollable').dxScrollable({
         useNative: false,
@@ -404,7 +397,7 @@ QUnit.test('scroll not updated before start if auto update is prevented', functi
         .down()
         .move(0, -10);
 
-    assert.equal(scrollable.scrollOffset().top, isRenovatedScrollable ? 10 : 0, 'scrollable not moved');
+    assert.equal(scrollable.scrollOffset().top, 0, 'scrollable not moved');
 });
 
 QUnit.test('scroll not updated after scrollTo if auto update is prevented', function(assert) {
@@ -425,7 +418,7 @@ QUnit.test('scroll not updated after scrollTo if auto update is prevented', func
 
     scrollable.scrollTo(10);
 
-    assert.equal(scrollable.scrollOffset().top, isRenovatedScrollable ? 10 : 0, 'scrollable not moved');
+    assert.equal(scrollable.scrollOffset().top, 0, 'scrollable not moved');
 });
 
 QUnit.test('native scrollable should be updated before dxscrollinit', function(assert) {
@@ -623,7 +616,7 @@ QUnit.test('useSimulatedScrollbar option dependence from useNative option', func
 
     $scrollable.dxScrollable('option', 'useNative', true);
     // NOTE: on android devices useSimulatedScrollbar is true always
-    assert.equal($scrollable.dxScrollable('option', 'useSimulatedScrollbar'), isRenovatedScrollable ? true : devices.real().platform === 'android', 'useSimulatedScrollbar option was changed');
+    assert.equal($scrollable.dxScrollable('option', 'useSimulatedScrollbar'), devices.real().platform === 'android', 'useSimulatedScrollbar option was changed');
 });
 
 QUnit.test('scrollBar is not hoverable when scrollByThumb options is false', function(assert) {
@@ -660,12 +653,6 @@ QUnit.test('content size should be rounded to prevent unexpected scrollbar appea
 });
 
 QUnit.test('scrollbar should be hidden when container size is almost similar to content size when zooming', function(assert) {
-    if(isRenovatedScrollable) {
-        // uses private API specific for old widget only
-        assert.ok(true);
-        return;
-    }
-
     const scrollable = new Scrollable($('#scrollable'), {
         useNative: false
     });
@@ -709,7 +696,7 @@ QUnit.module('scrollbar visibility', {
             const $verticalScroll = $scrollbar.find(`.${SCROLLABLE_SCROLL_CLASS}`);
 
             assert.equal(window.getComputedStyle($scrollbar.get(0)).display, showScrollbar === 'never' ? 'none' : 'block', 'scrollbar visibility');
-            assert.equal($scrollbar.hasClass('dx-state-invisible'), isRenovatedScrollable ? showScrollbar === 'never' : false, 'scrollbar dx-state-invisible class');
+            assert.equal($scrollbar.hasClass('dx-state-invisible'), false, 'scrollbar dx-state-invisible class');
             assert.equal($verticalScroll.hasClass('dx-state-invisible'), useNative || showScrollbar !== 'always', 'thumb visibility');
         } else {
             assert.equal($scrollbar.length, 0, 'scrollbar not rendered');

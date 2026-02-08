@@ -110,7 +110,7 @@ const componentConfig = {
     dropZone: {},
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
@@ -161,7 +161,7 @@ const componentConfig = {
     validationStatus: String as PropType<ValidationStatus>,
     value: Array as PropType<Array<any>>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

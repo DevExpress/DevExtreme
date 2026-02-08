@@ -3,7 +3,8 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+    InteractionEvent,
+} from '../events';
 
 import {
     ValueChangedInfo,
@@ -66,7 +67,7 @@ export type OptionChangedEvent = EventInfo<dxSlider> & ChangedOptionInfo;
  * @type object
  * @inherits NativeEventInfo,ValueChangedInfo
  */
-export type ValueChangedEvent = NativeEventInfo<dxSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxSlider, InteractionEvent | UIEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated Use /common/SliderValueChangeMode instead
@@ -98,8 +99,9 @@ export default class dxSlider extends dxTrackBar<dxSliderOptions> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:number
      */
-    reset(value?: number): void;
+    reset(value?: Properties['value']): void;
 }
 
 /**

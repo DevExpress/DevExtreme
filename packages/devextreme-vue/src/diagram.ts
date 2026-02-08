@@ -109,7 +109,7 @@ const componentConfig = {
     fullScreen: Boolean,
     gridSize: [Number, Object] as PropType<number | Record<string, any>>,
     hasChanges: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     historyToolbar: Object as PropType<Record<string, any>>,
     mainToolbar: Object as PropType<Record<string, any>>,
     nodes: Object as PropType<Record<string, any>>,
@@ -138,7 +138,7 @@ const componentConfig = {
     viewToolbar: Object as PropType<Record<string, any>>,
     viewUnits: String as PropType<Units>,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    width: [Number, String],
     zoomLevel: [Number, Object] as PropType<number | Record<string, any>>
   },
   emits: {

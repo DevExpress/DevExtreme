@@ -75,10 +75,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('focusStateEnabled', value);
     }
 
-    get height(): number | Function | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number | Function | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -110,10 +110,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('isValid', value);
     }
 
-    get max(): Date | number | string {
+    get max(): Date | number | null | string {
         return this._getOption('max');
     }
-    set max(value: Date | number | string) {
+    set max(value: Date | number | null | string) {
         this._setOption('max', value);
     }
 
@@ -124,10 +124,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('maxZoomLevel', value);
     }
 
-    get min(): Date | number | string {
+    get min(): Date | number | null | string {
         return this._getOption('min');
     }
-    set min(value: Date | number | string) {
+    set min(value: Date | number | null | string) {
         this._setOption('min', value);
     }
 
@@ -257,10 +257,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('validationStatus', value);
     }
 
-    get value(): Date | number | string | Array<Date | number | string> {
+    get value(): Date | number | null | string | Array<Date | number | string | null> {
         return this._getOption('value');
     }
-    set value(value: Date | number | string | Array<Date | number | string>) {
+    set value(value: Date | number | null | string | Array<Date | number | string | null>) {
         this._setOption('value', value);
     }
 
@@ -278,10 +278,10 @@ export abstract class DxoCalendarOptions extends NestedOption {
         this._setOption('weekNumberRule', value);
     }
 
-    get width(): number | Function | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: number | Function | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 

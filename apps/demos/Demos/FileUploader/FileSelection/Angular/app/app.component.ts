@@ -27,7 +27,7 @@ export class AppComponent {
   @ViewChild('form') form: NgForm;
 
   updateClick() {
-    notify('Uncomment the line to enable sending a form to the server.');
+    notify('This demo only illustrates the form upload interface. Uploading to a server is not available.');
     // form.submit();
   }
 }

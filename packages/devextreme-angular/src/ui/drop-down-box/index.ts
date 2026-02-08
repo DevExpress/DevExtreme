@@ -46,7 +46,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -80,11 +81,11 @@ import { DxoDropDownBoxPositionModule } from 'devextreme-angular/ui/drop-down-bo
 import { DxoDropDownBoxShowModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxoDropDownBoxToModule } from 'devextreme-angular/ui/drop-down-box/nested';
 import { DxiDropDownBoxToolbarItemModule } from 'devextreme-angular/ui/drop-down-box/nested';
-
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiDropDownBoxButtonComponent } from 'devextreme-angular/ui/drop-down-box/nested';
+import { 
+           PROPERTY_TOKEN_buttons,
+           PROPERTY_TOKEN_toolbarItems,
+           PROPERTY_TOKEN_items,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -99,8 +100,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-drop-down-box',
+    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -110,6 +113,22 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     instance: DxDropDownBox = null;
 
     /**
@@ -312,10 +331,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -702,10 +721,10 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -947,7 +966,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -1157,7 +1176,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -1170,34 +1189,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-    @ContentChildren(DxiDropDownBoxButtonComponent)
-    get buttonsChildren(): QueryList<DxiDropDownBoxButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiDropDownBoxButtonComponent');
-    }
-
-
-    @ContentChildren(DxiButtonComponent)
-    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
-    }
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
@@ -1345,6 +1336,7 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
 
 @NgModule({
   imports: [
+    DxDropDownBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoDropDownOptionsModule,
@@ -1377,9 +1369,6 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
     DxiDropDownBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDropDownBoxComponent
   ],
   exports: [
     DxDropDownBoxComponent,
@@ -1417,6 +1406,8 @@ export class DxDropDownBoxComponent extends DxComponent implements OnDestroy, Co
   ]
 })
 export class DxDropDownBoxModule { }
+
+export * from 'devextreme-angular/ui/drop-down-box/nested';
 
 import type * as DxDropDownBoxTypes from "devextreme/ui/drop_down_box_types";
 export { DxDropDownBoxTypes };

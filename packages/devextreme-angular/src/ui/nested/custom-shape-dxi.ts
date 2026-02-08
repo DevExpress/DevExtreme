@@ -12,7 +12,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -22,24 +21,42 @@ import { DOCUMENT } from '@angular/common';
 import { ShapeType } from 'devextreme/ui/diagram';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiConnectionPointComponent } from './connection-point-dxi';
 
+import { PROPERTY_TOKEN_customShapes } from 'devextreme-angular/core/tokens';
+import {
+    PROPERTY_TOKEN_connectionPoints,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-custom-shape',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_customShapes,
+           useExisting: DxiCustomShapeComponent,
+        }
+    ]
 })
 export class DxiCustomShapeComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_connectionPoints)
+    set _connectionPointsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('connectionPoints', value);
+    }
+    
     @Input()
     get allowEditImage(): boolean {
         return this._getOption('allowEditImage');
@@ -350,14 +367,6 @@ export class DxiCustomShapeComponent extends CollectionNestedOption implements A
     }
 
 
-    @ContentChildren(forwardRef(() => DxiConnectionPointComponent))
-    get connectionPointsChildren(): QueryList<DxiConnectionPointComponent> {
-        return this._getOption('connectionPoints');
-    }
-    set connectionPointsChildren(value) {
-        this.setChildren('connectionPoints', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -386,7 +395,7 @@ export class DxiCustomShapeComponent extends CollectionNestedOption implements A
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiCustomShapeComponent
   ],
   exports: [

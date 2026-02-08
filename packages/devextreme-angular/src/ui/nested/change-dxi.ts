@@ -14,16 +14,26 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiDataChange } from './base/data-change-dxi';
 
+import { PROPERTY_TOKEN_changes } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-change',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost],
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_changes,
+           useExisting: DxiChangeComponent,
+        }
+    ],
     inputs: [
         'data',
         'insertAfterKey',
@@ -55,7 +65,7 @@ export class DxiChangeComponent extends DxiDataChange {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiChangeComponent
   ],
   exports: [

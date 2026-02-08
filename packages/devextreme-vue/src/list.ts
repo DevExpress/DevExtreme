@@ -192,7 +192,7 @@ const componentConfig = {
     focusStateEnabled: Boolean,
     grouped: Boolean,
     groupTemplate: {},
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     indicateLoading: Boolean,
@@ -253,7 +253,7 @@ const componentConfig = {
     tabIndex: Number,
     useNativeScrolling: Boolean,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,
@@ -438,7 +438,6 @@ const DxItemDraggingConfig = {
     "update:allowDropInsideItem": null,
     "update:allowReordering": null,
     "update:autoScroll": null,
-    "update:bindingOptions": null,
     "update:boundary": null,
     "update:container": null,
     "update:cursorOffset": null,
@@ -472,7 +471,6 @@ const DxItemDraggingConfig = {
     allowDropInsideItem: Boolean,
     allowReordering: Boolean,
     autoScroll: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     boundary: {},
     container: {},
     cursorOffset: [Object, String] as PropType<Record<string, any> | string>,
@@ -484,7 +482,7 @@ const DxItemDraggingConfig = {
     filter: String,
     group: String,
     handle: String,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     itemOrientation: String as PropType<Orientation>,
     moveItemOnDrop: Boolean,
     onAdd: Function as PropType<((e: AddEvent) => void)>,
@@ -500,7 +498,7 @@ const DxItemDraggingConfig = {
     rtlEnabled: Boolean,
     scrollSensitivity: Number,
     scrollSpeed: Number,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   }
 };
 
@@ -539,7 +537,6 @@ const DxOptionsConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
-    "update:bindingOptions": null,
     "update:disabled": null,
     "update:elementAttr": null,
     "update:focusStateEnabled": null,
@@ -566,11 +563,10 @@ const DxOptionsConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     icon: String,
@@ -588,7 +584,7 @@ const DxOptionsConfig = {
     useSubmitBehavior: Boolean,
     validationGroup: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   }
 };
 
@@ -604,7 +600,6 @@ const DxSearchEditorOptionsConfig = {
     "update:hoveredElement": null,
     "update:accessKey": null,
     "update:activeStateEnabled": null,
-    "update:bindingOptions": null,
     "update:buttons": null,
     "update:disabled": null,
     "update:elementAttr": null,
@@ -662,12 +657,11 @@ const DxSearchEditorOptionsConfig = {
   props: {
     accessKey: String,
     activeStateEnabled: Boolean,
-    bindingOptions: Object as PropType<Record<string, any>>,
     buttons: Array as PropType<Array<string | TextBoxPredefinedButton | TextEditorButton>>,
     disabled: Boolean,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     inputAttr: {},
@@ -715,7 +709,7 @@ const DxSearchEditorOptionsConfig = {
     value: String,
     valueChangeEvent: String,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   }
 };
 

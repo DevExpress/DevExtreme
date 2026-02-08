@@ -5,9 +5,6 @@ import { prepareComponentConfig } from "./core/index";
 import ContextMenu, { Properties } from "devextreme/ui/context_menu";
 import  DataSource from "devextreme/data/data_source";
 import {
- event,
-} from "devextreme/events/events.types";
-import {
  dxContextMenuItem,
  ContentReadyEvent,
  DisposingEvent,
@@ -31,6 +28,9 @@ import {
  Store,
 } from "devextreme/data/store";
 import {
+ event,
+} from "devextreme/events/events.types";
+import {
  PositionConfig,
  AnimationConfig,
  CollisionResolution,
@@ -52,7 +52,6 @@ type AccessibleOptions = Pick<Properties,
   "accessKey" |
   "activeStateEnabled" |
   "animation" |
-  "closeOnOutsideClick" |
   "cssClass" |
   "dataSource" |
   "disabled" |
@@ -104,7 +103,6 @@ const componentConfig = {
     accessKey: String,
     activeStateEnabled: Boolean,
     animation: Object as PropType<Record<string, any>>,
-    closeOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     cssClass: String,
     dataSource: [Array, Object, String] as PropType<Array<dxContextMenuItem> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     disabled: Boolean,
@@ -112,7 +110,7 @@ const componentConfig = {
     displayExpr: [Function, String] as PropType<(((item: any) => string)) | string>,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
     hint: String,
     hoverStateEnabled: Boolean,
@@ -144,7 +142,7 @@ const componentConfig = {
     tabIndex: Number,
     target: {},
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,
@@ -152,7 +150,6 @@ const componentConfig = {
     "update:accessKey": null,
     "update:activeStateEnabled": null,
     "update:animation": null,
-    "update:closeOnOutsideClick": null,
     "update:cssClass": null,
     "update:dataSource": null,
     "update:disabled": null,

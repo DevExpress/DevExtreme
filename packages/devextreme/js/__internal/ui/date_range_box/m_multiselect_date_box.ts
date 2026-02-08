@@ -3,9 +3,9 @@ import eventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import type { DateBoxBase, Properties } from '@js/ui/date_box';
 import DateBox from '@js/ui/date_box';
+import type { DateLike } from '@js/ui/date_range_box_types';
 import type Popup from '@js/ui/popup';
 
 import { getDeserializedDate, monthDifference } from './m_date_range.utils';
@@ -21,7 +21,7 @@ export interface MultiselectDateBoxProperties extends Properties {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 declare class ExtendedDateBox extends DateBoxBase<MultiselectDateBoxProperties> {
-  reset(value?: Date | number | string | null): void;
+  reset(value?: DateLike): void;
 }
 
 const TypedDateBox: typeof ExtendedDateBox = DateBox as any;
@@ -159,10 +159,10 @@ class MultiselectDateBox extends TypedDateBox {
     const dateRangeBox = this._getDateRangeBox();
     const [startDateInput, endDateInput] = dateRangeBox.field();
     if ($(target).is($(startDateInput))) {
-      dateRangeBox.option('_currentSelection', 'startDate');
+      dateRangeBox.option('currentSelection', 'startDate');
     }
     if ($(target).is($(endDateInput))) {
-      dateRangeBox.option('_currentSelection', 'endDate');
+      dateRangeBox.option('currentSelection', 'endDate');
     }
 
     if (!dateRangeBox.getStartDateBox().getStrategy().getWidget()) {
@@ -181,7 +181,7 @@ class MultiselectDateBox extends TypedDateBox {
         calendar.option('currentDate', startDate);
       }
       this.getStrategy().setActiveStartDateBox();
-      calendar.option('_currentSelection', 'startDate');
+      calendar.option('currentSelection', 'startDate');
 
       if (dateRangeBox.option('disableOutOfRangeSelection')) {
         // @ts-expect-error
@@ -203,7 +203,7 @@ class MultiselectDateBox extends TypedDateBox {
         calendar.option('currentDate', endDate);
       }
       dateRangeBox.getStartDateBox().getStrategy().setActiveEndDateBox();
-      calendar.option('_currentSelection', 'endDate');
+      calendar.option('currentSelection', 'endDate');
 
       if (dateRangeBox.option('disableOutOfRangeSelection')) {
         // @ts-expect-error

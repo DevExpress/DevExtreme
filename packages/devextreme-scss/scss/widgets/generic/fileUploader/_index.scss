@@ -83,7 +83,9 @@ $generic-fileuploader-file-wrapper-border-size: 3px;
 }
 
 .dx-fileuploader-files-container {
-  padding: 12px 3px 0;
+  .dx-fileuploader-show-file-list & {
+    padding: 22px 3px 0;
+  }
 
   .dx-fileuploader-empty & {
     padding: 0;

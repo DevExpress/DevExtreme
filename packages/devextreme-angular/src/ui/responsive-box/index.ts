@@ -38,7 +38,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiColModule } from 'devextreme-angular/ui/nested';
@@ -50,14 +51,12 @@ import { DxiResponsiveBoxColModule } from 'devextreme-angular/ui/responsive-box/
 import { DxiResponsiveBoxItemModule } from 'devextreme-angular/ui/responsive-box/nested';
 import { DxiResponsiveBoxLocationModule } from 'devextreme-angular/ui/responsive-box/nested';
 import { DxiResponsiveBoxRowModule } from 'devextreme-angular/ui/responsive-box/nested';
-
-import { DxiColComponent } from 'devextreme-angular/ui/nested';
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-import { DxiRowComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiResponsiveBoxColComponent } from 'devextreme-angular/ui/responsive-box/nested';
-import { DxiResponsiveBoxItemComponent } from 'devextreme-angular/ui/responsive-box/nested';
-import { DxiResponsiveBoxRowComponent } from 'devextreme-angular/ui/responsive-box/nested';
+import { 
+           PROPERTY_TOKEN_cols,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_location,
+           PROPERTY_TOKEN_rows,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -66,8 +65,10 @@ import { DxiResponsiveBoxRowComponent } from 'devextreme-angular/ui/responsive-b
  */
 @Component({
     selector: 'dx-responsive-box',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -76,6 +77,27 @@ import { DxiResponsiveBoxRowComponent } from 'devextreme-angular/ui/responsive-b
     ]
 })
 export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_cols)
+    set _colsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('cols', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_location)
+    set _locationContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('location', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_rows)
+    set _rowsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('rows', value);
+    }
+
     instance: DxResponsiveBox<TItem, TKey> = null;
 
     /**
@@ -135,10 +157,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get height(): (() => number | string) | number | string {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
@@ -265,10 +287,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get width(): (() => number | string) | number | string {
+    get width(): number | string {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string) {
+    set width(value: number | string) {
         this._setOption('width', value);
     }
 
@@ -369,7 +391,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() heightChange: EventEmitter<number | string>;
 
     /**
     
@@ -439,59 +461,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
-
-
-
-
-    @ContentChildren(DxiResponsiveBoxColComponent)
-    get colsChildren(): QueryList<DxiResponsiveBoxColComponent> {
-        return this._getOption('cols');
-    }
-    set colsChildren(value) {
-        this._setChildren('cols', value, 'DxiResponsiveBoxColComponent');
-    }
-
-    @ContentChildren(DxiResponsiveBoxItemComponent)
-    get itemsChildren(): QueryList<DxiResponsiveBoxItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this._setChildren('items', value, 'DxiResponsiveBoxItemComponent');
-    }
-
-    @ContentChildren(DxiResponsiveBoxRowComponent)
-    get rowsChildren(): QueryList<DxiResponsiveBoxRowComponent> {
-        return this._getOption('rows');
-    }
-    set rowsChildren(value) {
-        this._setChildren('rows', value, 'DxiResponsiveBoxRowComponent');
-    }
-
-
-    @ContentChildren(DxiColComponent)
-    get colsLegacyChildren(): QueryList<DxiColComponent> {
-        return this._getOption('cols');
-    }
-    set colsLegacyChildren(value) {
-        this._setChildren('cols', value, 'DxiColComponent');
-    }
-
-    @ContentChildren(DxiItemComponent)
-    get itemsLegacyChildren(): QueryList<DxiItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsLegacyChildren(value) {
-        this._setChildren('items', value, 'DxiItemComponent');
-    }
-
-    @ContentChildren(DxiRowComponent)
-    get rowsLegacyChildren(): QueryList<DxiRowComponent> {
-        return this._getOption('rows');
-    }
-    set rowsLegacyChildren(value) {
-        this._setChildren('rows', value, 'DxiRowComponent');
-    }
+    @Output() widthChange: EventEmitter<number | string>;
 
 
 
@@ -581,6 +551,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
 
 @NgModule({
   imports: [
+    DxResponsiveBoxComponent,
     DxiColModule,
     DxiItemModule,
     DxiLocationModule,
@@ -591,9 +562,6 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     DxiResponsiveBoxRowModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxResponsiveBoxComponent
   ],
   exports: [
     DxResponsiveBoxComponent,
@@ -609,6 +577,8 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
   ]
 })
 export class DxResponsiveBoxModule { }
+
+export * from 'devextreme-angular/ui/responsive-box/nested';
 
 import type * as DxResponsiveBoxTypes from "devextreme/ui/responsive_box_types";
 export { DxResponsiveBoxTypes };

@@ -6,13 +6,8 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import rehypeMinifyWhitespace from 'rehype-minify-whitespace';
-import {
-  User,
-  Alert,
-  MessageEnteredEvent,
-} from 'devextreme/ui/chat';
-import DataSource from 'devextreme/data/data_source';
-import CustomStore from 'devextreme/data/custom_store';
+import { type DxChatTypes } from 'devextreme-angular/ui/chat';
+import { DataSource, CustomStore } from 'devextreme-angular/common/data';
 
 @Injectable({
   providedIn: 'root',
@@ -33,11 +28,11 @@ export class AppService {
 
   ALERT_TIMEOUT = 1000 * 60;
 
-  user: User = {
+  user: DxChatTypes.User = {
     id: 'user',
   };
 
-  assistant: User = {
+  assistant: DxChatTypes.User = {
     id: 'assistant',
     name: 'Virtual Assistant',
   };
@@ -45,16 +40,15 @@ export class AppService {
   store: any[] = [];
 
   messages: any[] = [];
-
-  alerts: Alert[] = [];
+  alerts: DxChatTypes.Alert[] = [];
 
   customStore: CustomStore;
 
   dataSource: DataSource;
 
-  typingUsersSubject: BehaviorSubject<User[]> = new BehaviorSubject([]);
+  typingUsersSubject: BehaviorSubject<DxChatTypes.User[]> = new BehaviorSubject([]);
 
-  alertsSubject: BehaviorSubject<Alert[]> = new BehaviorSubject([]);
+  alertsSubject: BehaviorSubject<DxChatTypes.Alert[]> = new BehaviorSubject([]);
 
   constructor() {
     this.chatService = new AzureOpenAI(this.AzureOpenAIConfig);
@@ -63,11 +57,11 @@ export class AppService {
     this.alertsSubject.next([]);
   }
 
-  get typingUsers$(): Observable<User[]> {
+  get typingUsers$(): Observable<DxChatTypes.User[]> {
     return this.typingUsersSubject.asObservable();
   }
 
-  get alerts$(): Observable<Alert[]> {
+  get alerts$(): Observable<DxChatTypes.Alert[]> {
     return this.alertsSubject.asObservable();
   }
 
@@ -168,7 +162,7 @@ export class AppService {
     }, this.ALERT_TIMEOUT);
   }
 
-  setAlerts(alerts: Alert[]) {
+  setAlerts(alerts: DxChatTypes.Alert[]) {
     this.alerts = alerts;
     this.alertsSubject.next(alerts);
   }
@@ -197,7 +191,7 @@ export class AppService {
     return result;
   }
 
-  async onMessageEntered({ message, event }: MessageEnteredEvent) {
+  async onMessageEntered({ message, event }: DxChatTypes.MessageEnteredEvent) {
     this.dataSource.store().push([{ type: 'insert', data: { id: Date.now(), ...message } }]);
 
     if (!this.alerts.length) {

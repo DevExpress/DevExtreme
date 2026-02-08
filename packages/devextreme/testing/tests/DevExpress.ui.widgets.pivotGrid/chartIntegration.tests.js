@@ -2,6 +2,7 @@
 import '../../helpers/noIntl.js';
 
 import $ from 'jquery';
+import { isFunction } from 'core/utils/type';
 import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/m_data_source';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
@@ -9,10 +10,9 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 /* global orders */
 import '../../content/orders.js';
 
-import 'ui/pivot_grid/ui.pivot_grid.field_chooser';
+import '__internal/grids/pivot_grid/field_chooser/m_field_chooser';
 import 'ui/pivot_grid/ui.pivot_grid';
 
-import 'generic_light.css!';
 import 'viz/chart';
 
 $('<div id="pivotGridContainer">').appendTo('#qunit-fixture');
@@ -79,7 +79,7 @@ QUnit.module('Chart Binding', {
         const pivotGrid = createPivotGrid();
 
         assert.ok(pivotGrid);
-        assert.ok($.isFunction(pivotGrid.bindChart));
+        assert.ok(isFunction(pivotGrid.bindChart));
     });
 
     QUnit.test('Call bind chart without arguments', function(assert) {

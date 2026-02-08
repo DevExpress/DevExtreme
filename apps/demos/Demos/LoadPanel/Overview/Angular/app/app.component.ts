@@ -1,4 +1,4 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
+import { NgModule, Component, enableProdMode, ChangeDetectorRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxButtonModule, DxLoadPanelModule, DxCheckBoxModule } from 'devextreme-angular';
@@ -30,7 +30,7 @@ export class AppComponent {
 
   loadingVisible = false;
 
-  constructor(service: Service) {
+  constructor(private cdr: ChangeDetectorRef, service: Service) {
     this.employee = service.getEmployee();
   }
 
@@ -42,6 +42,7 @@ export class AppComponent {
 
   onHidden() {
     this.employeeInfo = this.employee;
+    this.cdr.detectChanges();
   }
 
   showLoadPanel() {

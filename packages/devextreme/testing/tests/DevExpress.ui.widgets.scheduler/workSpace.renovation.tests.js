@@ -1,6 +1,6 @@
 import { getOuterWidth } from 'core/utils/size';
 import { noop } from 'core/utils/common';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 
 import { supportedScrollingModes } from '../../helpers/scheduler/helpers.js';
@@ -14,7 +14,7 @@ import '__internal/scheduler/workspaces/m_timeline_month';
 import '__internal/scheduler/workspaces/m_timeline_week';
 
 import keyboardMock from '../../helpers/keyboardMock.js';
-import { extend } from 'core/utils/extend';
+import { applyWorkspaceGroups, getEmptyResourceManager } from '../../helpers/scheduler/mockResourceManager.js';
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
@@ -25,6 +25,11 @@ const WORKSPACE_MONTH = { class: 'dxSchedulerWorkSpaceMonth', name: 'Month View'
 const TIMELINE_DAY = { class: 'dxSchedulerTimelineDay', name: 'Timeline Day View' };
 const TIMELINE_WEEK = { class: 'dxSchedulerTimelineWeek', name: 'Timeline Week View' };
 const TIMELINE_MONTH = { class: 'dxSchedulerTimelineMonth', name: 'Timeline Month View' };
+const resources = [{
+    label: 'res',
+    fieldExpr: 'res',
+    dataSource: [{ id: 1, text: 'one' }, { id: 2, text: 'two' }]
+}];
 
 QUnit.dump.maxDepth = 10;
 
@@ -45,18 +50,20 @@ module('Renovated Render', {
     },
     beforeEach() {
         this.createInstance = (options = {}, workSpace = 'dxSchedulerWorkSpaceDay') => {
-            this.instance = $('#scheduler-work-space')[workSpace](extend({
+            this.instance = $('#scheduler-work-space')[workSpace]({
                 renovateRender: true,
                 currentDate: new Date(2020, 6, 29),
                 startDayHour: 0,
                 endDayHour: 1,
                 focusStateEnabled: true,
+                getResourceManager: getEmptyResourceManager,
                 onContentReady: function(e) {
                     const scrollable = e.component.getScrollable();
                     scrollable.option('scrollByContent', false);
                     e.component._attachTablesEvents();
-                }
-            }, options))[workSpace]('instance');
+                },
+                ...options,
+            })[workSpace]('instance');
         };
     },
     after() {
@@ -65,7 +72,7 @@ module('Renovated Render', {
 }, () => {
     module('Generate View Data', () => {
         module('Standard Scrolling', () => {
-            test('should work in basic case', function(assert) {
+            test('should work in basic case', async function(assert) {
                 this.createInstance();
 
                 this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
@@ -170,18 +177,12 @@ module('Renovated Render', {
                 assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct view data map');
             });
 
-            test('should work with horizontal grouping', function(assert) {
+            test('should work with horizontal grouping', async function(assert) {
                 this.createInstance({
                     groupOrientation: 'horizontal',
+                    getResourceManager: getEmptyResourceManager,
                 });
-                this.instance.option('groups', [
-                    {
-                        name: 'res',
-                        items: [
-                            { id: 1, text: 'one' }, { id: 2, text: 'two' }
-                        ]
-                    }
-                ]);
+                await applyWorkspaceGroups(this.instance, resources);
 
                 this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
@@ -364,20 +365,14 @@ module('Renovated Render', {
                 assert.deepEqual(viewDataMap, expectedViewDataMap, 'correct viewDataMap');
             });
 
-            test('should work with grouping by date', function(assert) {
+            test('should work with grouping by date', async function(assert) {
                 this.createInstance({
                     groupOrientation: 'horizontal',
                     groupByDate: true,
                     intervalCount: 2,
+                    getResourceManager: getEmptyResourceManager,
                 });
-                this.instance.option('groups', [
-                    {
-                        name: 'res',
-                        items: [
-                            { id: 1, text: 'one' }, { id: 2, text: 'two' }
-                        ]
-                    }
-                ]);
+                await applyWorkspaceGroups(this.instance, resources);
 
                 this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
 
@@ -531,16 +526,11 @@ module('Renovated Render', {
                 assert.deepEqual(viewData, expectedViewData, 'correct view data');
             });
 
-            test('should work with vertical grouping', function(assert) {
-                this.createInstance();
-                this.instance.option('groups', [
-                    {
-                        name: 'res',
-                        items: [
-                            { id: 1, text: 'one' }, { id: 2, text: 'two' }
-                        ]
-                    }
-                ]);
+            test('should work with vertical grouping', async function(assert) {
+                this.createInstance({
+                    getResourceManager: getEmptyResourceManager,
+                });
+                await applyWorkspaceGroups(this.instance, resources);
                 this.instance.option('groupOrientation', 'vertical');
 
                 this.instance.viewDataProvider.update(this.instance.generateRenderOptions());
@@ -730,7 +720,7 @@ module('Renovated Render', {
         });
     });
 
-    test('should generate correct data for month view', function(assert) {
+    test('should generate correct data for month view', async function(assert) {
         this.createInstance({
             startDayHour: 0,
             endDayHour: 0
@@ -745,7 +735,7 @@ module('Renovated Render', {
             allDay: undefined,
             startDate: new Date(2020, 5, 28, 0, 0),
             endDate: new Date(2020, 5, 28, 0, 0),
-            firstDayOfMonth: false,
+            isFirstDayMonthHighlighting: false,
             groupIndex: 0,
             index: 0,
             isFirstGroupCell: true,
@@ -759,7 +749,7 @@ module('Renovated Render', {
             allDay: undefined,
             startDate: new Date(2020, 6, 1, 0, 0),
             endDate: new Date(2020, 6, 1, 0, 0),
-            firstDayOfMonth: false,
+            isFirstDayMonthHighlighting: false,
             groupIndex: 0,
             index: 3,
             isFirstGroupCell: false,
@@ -773,7 +763,7 @@ module('Renovated Render', {
             allDay: undefined,
             startDate: new Date(2020, 7, 1, 0, 0),
             endDate: new Date(2020, 7, 1, 0, 0),
-            firstDayOfMonth: false,
+            isFirstDayMonthHighlighting: false,
             groupIndex: 0,
             index: 34,
             isFirstGroupCell: false,
@@ -789,7 +779,7 @@ module('Renovated Render', {
         assert.deepEqual(dateTable[4].cells[6], firstDayOfNextMonthCell, 'Correct first cell of the next month');
     });
 
-    test('should not generate all-day panel in month view', function(assert) {
+    test('should not generate all-day panel in month view', async function(assert) {
         this.createInstance({
             showAllDayPanel: true,
             startDayHour: 0,
@@ -806,7 +796,7 @@ module('Renovated Render', {
 
     module('getCellData', () => {
         supportedScrollingModes.forEach(scrollingMode => {
-            test(`should return cell data in basic case if ${scrollingMode} scrolling mode`, function(assert) {
+            test(`should return cell data in basic case if ${scrollingMode} scrolling mode`, async function(assert) {
                 this.createInstance({
                     showAllDayPanel: false,
                     scrolling: {
@@ -825,7 +815,7 @@ module('Renovated Render', {
                 assert.deepEqual(result, expected, 'correct cell data');
             });
 
-            test(`should return cell data when all-day-panel is enabled if ${scrollingMode} scrolling mode`, function(assert) {
+            test(`should return cell data when all-day-panel is enabled if ${scrollingMode} scrolling mode`, async function(assert) {
                 this.createInstance({
                     showAllDayPanel: true,
                     scrolling: {
@@ -844,22 +834,16 @@ module('Renovated Render', {
                 assert.deepEqual(result, expected, 'correct cell data');
             });
 
-            test(`should return cell data when appointments are grouped horizontally if ${scrollingMode} scrolling mode`, function(assert) {
+            test(`should return cell data when appointments are grouped horizontally if ${scrollingMode} scrolling mode`, async function(assert) {
                 this.createInstance({
                     groupOrientation: 'horizontal',
                     scrolling: {
                         mode: scrollingMode
                     },
-                    width: 800
+                    width: 800,
+                    getResourceManager: getEmptyResourceManager,
                 });
-                this.instance.option('groups', [
-                    {
-                        name: 'res',
-                        items: [
-                            { id: 1, text: 'one' }, { id: 2, text: 'two' }
-                        ]
-                    }
-                ]);
+                await applyWorkspaceGroups(this.instance, resources);
                 const $cell = this.instance.$element().find(`.${CELL_CLASS}`).eq(1);
                 const result = this.instance.getCellData($cell);
                 const expected = {
@@ -873,22 +857,16 @@ module('Renovated Render', {
                 assert.deepEqual(result, expected, 'correct cell data');
             });
 
-            test(`should return cell data when appointments are grouped vertically if ${scrollingMode} scrolling mode`, function(assert) {
+            test(`should return cell data when appointments are grouped vertically if ${scrollingMode} scrolling mode`, async function(assert) {
                 this.createInstance({
                     groupOrientation: 'vertical',
                     showAllDayPanel: false,
                     scrolling: {
                         mode: scrollingMode
-                    }
+                    },
+                    getResourceManager: getEmptyResourceManager,
                 });
-                this.instance.option('groups', [
-                    {
-                        name: 'res',
-                        items: [
-                            { id: 1, text: 'one' }, { id: 2, text: 'two' }
-                        ]
-                    }
-                ]);
+                await applyWorkspaceGroups(this.instance, resources);
                 const $cell = this.instance.$element().find('.' + CELL_CLASS).eq(1);
                 const result = this.instance.getCellData($cell);
                 const expected = {
@@ -904,7 +882,7 @@ module('Renovated Render', {
         });
     });
 
-    test('should call onSelectedCellsClick with correct parameters', function(assert) {
+    test('should call onSelectedCellsClick with correct parameters', async function(assert) {
         const onSelectedCellsClick = sinon.stub();
         this.createInstance({
             groupOrientation: 'vertical',
@@ -928,7 +906,7 @@ module('Renovated Render', {
         }, 'onSelectedCellsClick has been called with correct parameters');
     });
 
-    test('getDataByDroppableCell should work correctly', function(assert) {
+    test('getDataByDroppableCell should work correctly', async function(assert) {
         this.createInstance();
 
         this.instance.$element().find('.' + CELL_CLASS).eq(0).addClass('dx-scheduler-date-table-droppable-cell');
@@ -942,7 +920,7 @@ module('Renovated Render', {
     });
 
     module('Renovated Components Disposing', () => {
-        test('Renovated Comonents should not be disposed on currentDate change', function(assert) {
+        test('Renovated Comonents should not be disposed on currentDate change', async function(assert) {
             this.createInstance({
                 currentDate: new Date(2020, 8, 1),
             });
@@ -956,19 +934,13 @@ module('Renovated Render', {
             assert.notOk(disposeRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');
         });
 
-        test('Renovated Comonents should be disposed on showAllDayPanel change when vertical grouping is used', function(assert) {
+        test('Renovated Comonents should be disposed on showAllDayPanel change when vertical grouping is used', async function(assert) {
             this.createInstance({
                 showAllDayPanel: false,
                 groupOrientation: 'vertical',
+                getResourceManager: getEmptyResourceManager,
             });
-            this.instance.option('groups', [
-                {
-                    name: 'res',
-                    items: [
-                        { id: 1, text: 'one' }, { id: 2, text: 'two' }
-                    ]
-                }
-            ]);
+            await applyWorkspaceGroups(this.instance, resources);
 
             const disposeRenovatedComponentsStub = sinon.spy(noop);
 
@@ -979,28 +951,21 @@ module('Renovated Render', {
             assert.ok(disposeRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');
         });
 
-        test('Renovated Comonents should be disposed on groups change', function(assert) {
+        test('Renovated Comonents should be disposed on groups change', async function(assert) {
             this.createInstance({
                 groupOrientation: 'vertical',
+                getResourceManager: getEmptyResourceManager,
             });
 
             const disposeRenovatedComponentsStub = sinon.spy(noop);
             this.instance._disposeRenovatedComponents = disposeRenovatedComponentsStub;
-
-            this.instance.option('groups', [
-                {
-                    name: 'res',
-                    items: [
-                        { id: 1, text: 'one' }, { id: 2, text: 'two' }
-                    ]
-                }
-            ]);
+            await applyWorkspaceGroups(this.instance, resources);
 
             assert.ok(disposeRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');
         });
     });
 
-    test('Workspace should not have dx-scheduler-work-space-odd-cells class when scrolling mode is "virtual"', function(assert) {
+    test('Workspace should not have dx-scheduler-work-space-odd-cells class when scrolling mode is "virtual"', async function(assert) {
         this.createInstance({
             scrolling: { mode: 'virtual' },
         });
@@ -1008,7 +973,7 @@ module('Renovated Render', {
         assert.notOk(this.instance.$element().hasClass('dx-scheduler-work-space-odd-cells'), 'Workspace does not have odd-cells class');
     });
 
-    test('Cells should not differ in width when crossscrolling and virtual scrolling are enabled', function(assert) {
+    test('Cells should not differ in width when crossscrolling and virtual scrolling are enabled', async function(assert) {
         this.createInstance({
             scrolling: { mode: 'virtual' },
             width: 800,
@@ -1027,7 +992,7 @@ module('Renovated Render', {
         });
     });
 
-    test('AllDayTable should be initialized', function(assert) {
+    test('AllDayTable should be initialized', async function(assert) {
         this.createInstance({
             showAllDayPanel: true,
         }, 'dxSchedulerWorkSpaceWeek');
@@ -1044,7 +1009,7 @@ module('Renovated Render', {
         TIMELINE_WEEK,
         TIMELINE_MONTH,
     ].forEach(({ class: component, name }) => {
-        test(`Cache should be cleared on rerender in ${name}`, function(assert) {
+        test(`Cache should be cleared on rerender in ${name}`, async function(assert) {
             this.createInstance({}, component);
 
             const cacheClearSpy = sinon.spy(this.instance.cache, 'clear');

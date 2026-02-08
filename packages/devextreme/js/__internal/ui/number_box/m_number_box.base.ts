@@ -182,6 +182,10 @@ class NumberBoxBase<
     this._keyPressed = true;
   }
 
+  _hasMouseWheelHandler(): boolean {
+    return true;
+  }
+
   _onMouseWheel(dxEvent): void {
     dxEvent.delta > 0 ? this._spinValueChange(1, dxEvent) : this._spinValueChange(-1, dxEvent);
   }

@@ -1,20 +1,23 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-// eslint-disable-next-line import/named
+import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import { getImageSourceType } from '@js/core/utils/icon';
+import type { ClickEvent } from '@js/ui/button';
 import ValidationEngine from '@js/ui/validation_engine';
 import { ComponentWrapper } from '@ts/core/r1/component_wrapper';
 import type { Option } from '@ts/core/r1/types';
+import type { ActionConfig } from '@ts/core/widget/component';
 
-import type { Button } from './button';
+import type { ButtonProps } from './button';
+import { Button as ButtonComponent, buttonComponentProps, defaultOptions } from './button';
 
-export default class ButtonWrapper extends ComponentWrapper {
-  _clickAction!: (...args) => unknown;
+// STYLE button
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  get _validationGroupConfig(): any {
+export default class Button extends ComponentWrapper {
+  _clickAction!: (event?: Record<string, unknown>) => void;
+
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+  get _validationGroupConfig() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return ValidationEngine.getGroupConfig(this._findGroup());
   }
@@ -27,12 +30,14 @@ export default class ButtonWrapper extends ComponentWrapper {
     return ['space', 'enter'];
   }
 
-  getProps(): Record<string, unknown> {
-    const props = super.getProps();
+  getProps(): ButtonProps {
+    const props = super.getProps() as unknown as ButtonProps;
 
-    props.onClick = ({ event }): void => {
+    props.onClick = ({ event }: ClickEvent): void => {
       this._clickAction({ event, validationGroup: this._validationGroupConfig });
     };
+
+    props.onKeyDown = this._wrapKeyDownHandler(props.onKeyDown as Function) as ButtonProps['onKeyDown'];
 
     const iconType = getImageSourceType(props.icon);
     if (iconType === 'svg') {
@@ -42,22 +47,28 @@ export default class ButtonWrapper extends ComponentWrapper {
     return props;
   }
 
+  get viewRef(): ButtonComponent | undefined {
+    return super.viewRef as ButtonComponent | undefined;
+  }
+
   get _templatesInfo(): Record<string, string> {
     return { template: 'content' };
   }
 
   _toggleActiveState(_: HTMLElement, value: boolean): void {
-    const button = this.viewRef as Button;
-    value ? button.activate() : button.deactivate();
+    if (value) {
+      this.viewRef?.activate();
+    } else {
+      this.viewRef?.deactivate();
+    }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _getSubmitAction(): any {
+  _getSubmitAction(): (e) => void {
     let needValidate = true;
     let validationStatus = 'valid';
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (this as any)._createAction(({ event, submitInput }) => {
+    // @ts-expect-error badly typed base class
+    return this._createAction(({ event, submitInput }) => {
       if (needValidate) {
         const validationGroup = this._validationGroupConfig;
 
@@ -74,16 +85,22 @@ export default class ButtonWrapper extends ComponentWrapper {
               this.option('disabled', false);
 
               validationStatus = status;
-              validationStatus === 'valid' && submitInput.click();
+
+              if (validationStatus === 'valid') {
+                submitInput.click();
+              }
+
               needValidate = true;
             });
           }
         }
       }
 
-      validationStatus !== 'valid' && event.preventDefault();
+      if (validationStatus !== 'valid') {
+        event.preventDefault();
+      }
       event.stopPropagation();
-    });
+    }) as (e) => void;
   }
 
   _initializeComponent(): void {
@@ -114,17 +131,18 @@ export default class ButtonWrapper extends ComponentWrapper {
   _findGroup(): any {
     const $element = this.$element();
     const validationGroup = this.option('validationGroup');
+
     return validationGroup !== undefined && validationGroup !== ''
       ? validationGroup
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      : (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
+      // @ts-expect-error badly typed base class and ValidationEngine
+      : ValidationEngine.findGroup($element, this._modelByElement($element));
   }
 
-  _createClickAction(): (...args) => unknown {
-    // @ts-expect-error
+  _createClickAction(): (event?: Record<string, unknown>) => void {
+    // @ts-expect-error badly typed base class
     return this._createActionByOption('onClick', {
       excludeValidators: ['readOnly'],
-    });
+    }) as (event?: Record<string, unknown>) => void;
   }
 
   _optionChanged(option: Option): void {
@@ -138,5 +156,50 @@ export default class ButtonWrapper extends ComponentWrapper {
 
     super._optionChanged(option);
   }
+
+  focus(): void {
+    this.viewRef?.focus();
+  }
+
+  activate(): void {
+    this.viewRef?.activate();
+  }
+
+  deactivate(): void {
+    this.viewRef?.deactivate();
+  }
+
+  _getActionConfigs(): Record<string, ActionConfig> {
+    return {
+      onClick: {
+        excludeValidators: ['readOnly'],
+      },
+      onSubmit: {},
+    };
+  }
+
+  get _propsInfo(): {
+    allowNull: string[];
+    twoWay: [string, string, string][];
+    elements: string[];
+    templates: string[];
+    props: string[];
+  } {
+    return {
+      twoWay: [],
+      allowNull: [],
+      elements: ['onSubmit'],
+      templates: ['template', 'iconTemplate'],
+      props: buttonComponentProps,
+    };
+  }
+
+  // @ts-expect-error types error in R1
+  get _viewComponent(): typeof ButtonComponent {
+    return ButtonComponent;
+  }
 }
-/* eslint-enable @typescript-eslint/no-unsafe-member-access */
+registerComponent('dxButton', Button);
+
+// @ts-expect-error types error in R1
+Button.defaultOptions = defaultOptions;

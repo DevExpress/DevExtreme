@@ -12,6 +12,7 @@ import { extend } from '@js/core/utils/extend';
 import {
   isDefined, isRenderer, isString,
 } from '@js/core/utils/type';
+import type { ActionConfig } from '@ts/core/widget/component';
 import type { Component, RefObject, VNode } from 'inferno';
 import {
   createRef,
@@ -264,7 +265,7 @@ export class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
     return this._elementAttr;
   }
 
-  _getAdditionalActionConfigs(): Record<string, Record<string, unknown>> {
+  _getAdditionalActionConfigs(): Record<string, ActionConfig> {
     return {
       onContentReady: {
         excludeValidators: ['disabled', 'readOnly'],
@@ -367,11 +368,11 @@ export class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
     });
   }
 
-  _getActionConfigs(): Record<string, Record<string, unknown>> {
+  _getActionConfigs(): Record<string, ActionConfig> {
     return {};
   }
 
-  _getActionConfigsFull(): Record<string, Record<string, unknown>> {
+  _getActionConfigsFull(): Record<string, ActionConfig> {
     return {
       ...this._getActionConfigs(),
       ...this._getAdditionalActionConfigs(),

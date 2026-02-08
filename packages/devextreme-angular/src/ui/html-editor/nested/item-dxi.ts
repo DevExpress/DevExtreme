@@ -12,35 +12,58 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
+import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem, AICommand, AICommandName } from 'devextreme/ui/html_editor';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import {
+    PROPERTY_TOKEN_commands,
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-html-editor-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiHtmlEditorItemComponent,
+        }
+    ]
 })
 export class DxiHtmlEditorItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
+    @ContentChildren(PROPERTY_TOKEN_commands)
+    set _commandsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('commands', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get beginGroup(): boolean {
         return this._getOption('beginGroup');
@@ -138,27 +161,19 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
 
     @Input()
+    get commands(): Array<AICommand | AICommandName> {
+        return this._getOption('commands');
+    }
+    set commands(value: Array<AICommand | AICommandName>) {
+        this._setOption('commands', value);
+    }
+
+    @Input()
     get cssClass(): string | undefined {
         return this._getOption('cssClass');
     }
     set cssClass(value: string | undefined) {
         this._setOption('cssClass', value);
-    }
-
-    @Input()
-    get formatName(): HtmlEditorPredefinedToolbarItem | string {
-        return this._getOption('formatName');
-    }
-    set formatName(value: HtmlEditorPredefinedToolbarItem | string) {
-        this._setOption('formatName', value);
-    }
-
-    @Input()
-    get formatValues(): Array<boolean | number | string> {
-        return this._getOption('formatValues');
-    }
-    set formatValues(value: Array<boolean | number | string>) {
-        this._setOption('formatValues', value);
     }
 
     @Input()
@@ -223,14 +238,6 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
     }
 
 
-    @ContentChildren(forwardRef(() => DxiHtmlEditorItemComponent))
-    get itemsChildren(): QueryList<DxiHtmlEditorItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,
             private renderer: Renderer2,
@@ -259,7 +266,7 @@ export class DxiHtmlEditorItemComponent extends CollectionNestedOption implement
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiHtmlEditorItemComponent
   ],
   exports: [

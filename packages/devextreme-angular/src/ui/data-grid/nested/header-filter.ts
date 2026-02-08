@@ -16,10 +16,11 @@ import {
 
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
-import { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig, HeaderFilterTexts } from 'devextreme/common/grids';
 import { SearchMode } from 'devextreme/common';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
@@ -27,8 +28,10 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-data-grid-header-filter',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDataGridHeaderFilterComponent extends NestedOption implements OnDestroy, OnInit  {
@@ -105,10 +108,10 @@ export class DxoDataGridHeaderFilterComponent extends NestedOption implements On
     }
 
     @Input()
-    get texts(): { cancel?: string, emptyValue?: string, ok?: string } {
+    get texts(): HeaderFilterTexts {
         return this._getOption('texts');
     }
-    set texts(value: { cancel?: string, emptyValue?: string, ok?: string }) {
+    set texts(value: HeaderFilterTexts) {
         this._setOption('texts', value);
     }
 
@@ -146,7 +149,7 @@ export class DxoDataGridHeaderFilterComponent extends NestedOption implements On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDataGridHeaderFilterComponent
   ],
   exports: [

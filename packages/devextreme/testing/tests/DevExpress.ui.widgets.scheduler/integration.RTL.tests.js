@@ -1,5 +1,6 @@
 import fx from 'common/core/animation/fx';
 import { createWrapper, initTestMarkup, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import translator from 'common/core/animation/translator';
 
 import '__internal/scheduler/m_scheduler';
@@ -12,50 +13,48 @@ testStart(() => initTestMarkup());
 const moduleConfig = {
     beforeEach() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
     afterEach() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
 module('RTL', moduleConfig, () => {
     if(isDesktopEnvironment()) {
-        test('Appointment should have correct position with multiple resources if rtlEnabled is true (T803275)', function(assert) {
+        test('Appointment should have correct position with multiple resources if rtlEnabled is true (T803275)', async function(assert) {
             const views = ['month', 'week', 'day'];
 
             const expectedValues = {
                 month: [
                     {
-                        top: 260,
-                        left: 599
-                    }, {
-                        top: 260,
+                        top: 256,
                         left: 250
+                    }, {
+                        top: 256,
+                        left: 599
                     }
                 ],
                 week: [
                     {
                         top: 0,
-                        left: 539
+                        left: 241
                     }, {
                         top: 0,
-                        left: 241
+                        left: 539
                     }
                 ],
                 day: [
                     {
                         top: 0,
-                        left: 324
+                        left: 25
                     }, {
                         top: 0,
-                        left: 25
+                        left: 324
                     }
                 ]
             };
 
-            const scheduler = createWrapper({
+            const scheduler = await createWrapper({
                 views: views,
                 currentView: views[0],
                 rtlEnabled: true,
@@ -83,11 +82,13 @@ module('RTL', moduleConfig, () => {
                 height: 600
             });
 
-            views.forEach(view => {
+            for(let i = 0; i < views.length; i++) {
+                const view = views[i];
                 const { getAppointment } = scheduler.appointments;
                 const expectedValue = expectedValues[view];
 
                 scheduler.option('currentView', view);
+                await waitAsync(0);
 
                 [getAppointment(0), getAppointment(1)].forEach((appointment, index) => {
                     const position = translator.locate(appointment);
@@ -95,7 +96,7 @@ module('RTL', moduleConfig, () => {
                     assert.roughEqual(Math.round(position.left), expectedValue[index].left, 3.01, `left position of ${index} appointment should be correct in ${view} view`);
                     assert.roughEqual(Math.round(position.top), expectedValue[index].top, 3.01, `top position of ${index} appointment should be correct in ${view} view`);
                 });
-            });
+            }
         });
     }
 
@@ -114,8 +115,8 @@ module('RTL', moduleConfig, () => {
             });
         };
 
-        test('Day view', function(assert) {
-            const scheduler = createScheduler('day');
+        test('Day view', async function(assert) {
+            const scheduler = await createScheduler('day');
 
             const cell = scheduler.workSpace.getCell(8);
             const appointment = scheduler.appointments.getAppointment();
@@ -123,8 +124,8 @@ module('RTL', moduleConfig, () => {
             assert.roughEqual(appointment.position().left + appointment.outerWidth(), cell.position().left + cell.outerWidth(), 1.1, 'task position is correct');
         });
 
-        test('Week view', function(assert) {
-            const scheduler = createScheduler('week');
+        test('Week view', async function(assert) {
+            const scheduler = await createScheduler('week');
 
             const cell = scheduler.workSpace.getCell(1);
             const appointment = scheduler.appointments.getAppointment();
@@ -132,8 +133,8 @@ module('RTL', moduleConfig, () => {
             assert.roughEqual(Math.round(appointment.position().left + appointment.outerWidth()), Math.round(cell.position().left + cell.outerWidth()), 1.1, 'task position is correct');
         });
 
-        test('Month view', function(assert) {
-            const scheduler = createScheduler('month');
+        test('Month view', async function(assert) {
+            const scheduler = await createScheduler('month');
 
             const cell = scheduler.workSpace.getCell(1);
             const appointment = scheduler.appointments.getAppointment();

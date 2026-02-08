@@ -10,7 +10,6 @@ import {
     SkipSelf,
     Input,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -20,20 +19,30 @@ import {
 import { dxGanttToolbarItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiGanttItemComponent } from './item-dxi';
-import { DxiGanttToolbarItemComponent } from './toolbar-item-dxi';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-gantt-toolbar',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get items(): Array<dxGanttToolbarItem | GanttPredefinedToolbarItem> {
         return this._getOption('items');
@@ -47,22 +56,6 @@ export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy,
         return 'toolbar';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiGanttItemComponent))
-    get itemsChildren(): QueryList<DxiGanttItemComponent> {
-        return this._getOption('items');
-    }
-    set itemsChildren(value) {
-        this.setChildren('items', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiGanttToolbarItemComponent))
-    get toolbarItemsChildren(): QueryList<DxiGanttToolbarItemComponent> {
-        return this._getOption('items');
-    }
-    set toolbarItemsChildren(value) {
-        this.setChildren('items', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -84,7 +77,7 @@ export class DxoGanttToolbarComponent extends NestedOption implements OnDestroy,
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoGanttToolbarComponent
   ],
   exports: [

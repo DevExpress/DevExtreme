@@ -69,7 +69,7 @@ const List = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["items","selectedItemKeys","selectedItems"]), []);
       const independentEvents = useMemo(() => (["onContentReady","onDisposing","onGroupRendered","onInitialized","onItemClick","onItemContextMenu","onItemDeleted","onItemDeleting","onItemHold","onItemRendered","onItemReordered","onItemSwipe","onPageLoading","onPullRefresh","onScroll","onSelectAllValueChanged","onSelectionChanging"]), []);
@@ -200,7 +200,6 @@ type IItemDraggingProps = React.PropsWithChildren<{
   allowDropInsideItem?: boolean;
   allowReordering?: boolean;
   autoScroll?: boolean;
-  bindingOptions?: Record<string, any>;
   boundary?: any | string | undefined;
   container?: any | string | undefined;
   cursorOffset?: Record<string, any> | string | {
@@ -215,7 +214,7 @@ type IItemDraggingProps = React.PropsWithChildren<{
   filter?: string;
   group?: string | undefined;
   handle?: string;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   itemOrientation?: Orientation;
   moveItemOnDrop?: boolean;
   onAdd?: ((e: AddEvent) => void);
@@ -231,7 +230,7 @@ type IItemDraggingProps = React.PropsWithChildren<{
   rtlEnabled?: boolean;
   scrollSensitivity?: number;
   scrollSpeed?: number;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   dragRender?: (...params: any) => React.ReactNode;
   dragComponent?: React.ComponentType<any>;
 }>
@@ -281,11 +280,10 @@ const MenuItem = Object.assign<typeof _componentMenuItem, NestedComponentMeta>(_
 type IOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
@@ -303,7 +301,7 @@ type IOptionsProps = React.PropsWithChildren<{
   useSubmitBehavior?: boolean;
   validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>
@@ -330,12 +328,11 @@ const Options = Object.assign<typeof _componentOptions, NestedComponentMeta>(_co
 type ISearchEditorOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   buttons?: Array<string | TextBoxPredefinedButton | TextEditorButton>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   inputAttr?: any;
@@ -383,7 +380,7 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   value?: string;
   valueChangeEvent?: string;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
 }>

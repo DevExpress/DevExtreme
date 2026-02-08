@@ -45,7 +45,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -82,10 +83,10 @@ import { DxoDateRangeBoxPositionModule } from 'devextreme-angular/ui/date-range-
 import { DxoDateRangeBoxShowModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxoDateRangeBoxToModule } from 'devextreme-angular/ui/date-range-box/nested';
 import { DxiDateRangeBoxToolbarItemModule } from 'devextreme-angular/ui/date-range-box/nested';
-
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiDateRangeBoxButtonComponent } from 'devextreme-angular/ui/date-range-box/nested';
+import { 
+           PROPERTY_TOKEN_buttons,
+           PROPERTY_TOKEN_toolbarItems,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -100,8 +101,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-date-range-box',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -111,6 +114,17 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
+    }
+
     instance: DxDateRangeBox = null;
 
     /**
@@ -326,10 +340,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get endDate(): Date | number | string {
+    get endDate(): Date | null | number | string {
         return this._getOption('endDate');
     }
-    set endDate(value: Date | number | string) {
+    set endDate(value: Date | null | number | string) {
         this._setOption('endDate', value);
     }
 
@@ -430,10 +444,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -534,10 +548,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get max(): Date | number | string | undefined {
+    get max(): Date | null | number | string | undefined {
         return this._getOption('max');
     }
-    set max(value: Date | number | string | undefined) {
+    set max(value: Date | null | number | string | undefined) {
         this._setOption('max', value);
     }
 
@@ -547,10 +561,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get min(): Date | number | string | undefined {
+    get min(): Date | null | number | string | undefined {
         return this._getOption('min');
     }
-    set min(value: Date | number | string | undefined) {
+    set min(value: Date | null | number | string | undefined) {
         this._setOption('min', value);
     }
 
@@ -664,10 +678,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get startDate(): Date | number | string {
+    get startDate(): Date | null | number | string {
         return this._getOption('startDate');
     }
-    set startDate(value: Date | number | string) {
+    set startDate(value: Date | null | number | string) {
         this._setOption('startDate', value);
     }
 
@@ -872,10 +886,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get value(): Array<Date | number | string> {
+    get value(): Array<Date | null | number | string> {
         return this._getOption('value');
     }
-    set value(value: Array<Date | number | string>) {
+    set value(value: Array<Date | null | number | string>) {
         this._setOption('value', value);
     }
 
@@ -911,10 +925,10 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -1171,7 +1185,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() endDateChange: EventEmitter<Date | number | string>;
+    @Output() endDateChange: EventEmitter<Date | null | number | string>;
 
     /**
     
@@ -1227,7 +1241,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -1283,14 +1297,14 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxChange: EventEmitter<Date | number | string | undefined>;
+    @Output() maxChange: EventEmitter<Date | null | number | string | undefined>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minChange: EventEmitter<Date | number | string | undefined>;
+    @Output() minChange: EventEmitter<Date | null | number | string | undefined>;
 
     /**
     
@@ -1353,7 +1367,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() startDateChange: EventEmitter<Date | number | string>;
+    @Output() startDateChange: EventEmitter<Date | null | number | string>;
 
     /**
     
@@ -1465,7 +1479,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<Array<Date | number | string>>;
+    @Output() valueChange: EventEmitter<Array<Date | null | number | string>>;
 
     /**
     
@@ -1486,7 +1500,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -1499,26 +1513,6 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-    @ContentChildren(DxiDateRangeBoxButtonComponent)
-    get buttonsChildren(): QueryList<DxiDateRangeBoxButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiDateRangeBoxButtonComponent');
-    }
-
-
-    @ContentChildren(DxiButtonComponent)
-    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
-    }
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
@@ -1681,6 +1675,7 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
 
 @NgModule({
   imports: [
+    DxDateRangeBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoCalendarOptionsModule,
@@ -1716,9 +1711,6 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
     DxiDateRangeBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDateRangeBoxComponent
   ],
   exports: [
     DxDateRangeBoxComponent,
@@ -1759,6 +1751,8 @@ export class DxDateRangeBoxComponent extends DxComponent implements OnDestroy, C
   ]
 })
 export class DxDateRangeBoxModule { }
+
+export * from 'devextreme-angular/ui/date-range-box/nested';
 
 import type * as DxDateRangeBoxTypes from "devextreme/ui/date_range_box_types";
 export { DxDateRangeBoxTypes };

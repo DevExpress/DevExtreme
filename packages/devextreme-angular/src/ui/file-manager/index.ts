@@ -16,7 +16,9 @@ import {
     EventEmitter,
     OnChanges,
     DoCheck,
-    SimpleChanges
+    SimpleChanges,
+    ContentChildren,
+    QueryList
 } from '@angular/core';
 
 
@@ -34,7 +36,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxoContextMenuModule } from 'devextreme-angular/ui/nested';
@@ -60,8 +63,11 @@ import { DxoFileManagerPermissionsModule } from 'devextreme-angular/ui/file-mana
 import { DxoFileManagerToolbarModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxiFileManagerToolbarItemModule } from 'devextreme-angular/ui/file-manager/nested';
 import { DxoFileManagerUploadModule } from 'devextreme-angular/ui/file-manager/nested';
-
-
+import { 
+           PROPERTY_TOKEN_columns,
+           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_fileSelectionItems,
+     } from 'devextreme-angular/core/tokens';
 
 
 /**
@@ -70,8 +76,10 @@ import { DxoFileManagerUploadModule } from 'devextreme-angular/ui/file-manager/n
  */
 @Component({
     selector: 'dx-file-manager',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -80,6 +88,22 @@ import { DxoFileManagerUploadModule } from 'devextreme-angular/ui/file-manager/n
     ]
 })
 export class DxFileManagerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_columns)
+    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('columns', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_fileSelectionItems)
+    set _fileSelectionItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('fileSelectionItems', value);
+    }
+
     instance: DxFileManager = null;
 
     /**
@@ -256,10 +280,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -438,10 +462,10 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -741,7 +765,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -839,11 +863,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
-
-
-
-
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
 
 
@@ -961,6 +981,7 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
 
 @NgModule({
   imports: [
+    DxFileManagerComponent,
     DxoContextMenuModule,
     DxiItemModule,
     DxoItemViewModule,
@@ -985,9 +1006,6 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
     DxoFileManagerUploadModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxFileManagerComponent
   ],
   exports: [
     DxFileManagerComponent,
@@ -1017,6 +1035,8 @@ export class DxFileManagerComponent extends DxComponent implements OnDestroy, On
   ]
 })
 export class DxFileManagerModule { }
+
+export * from 'devextreme-angular/ui/file-manager/nested';
 
 import type * as DxFileManagerTypes from "devextreme/ui/file_manager_types";
 export { DxFileManagerTypes };

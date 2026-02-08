@@ -1,16 +1,17 @@
 import { getOuterHeight } from 'core/utils/size';
-import config from 'core/config';
 import devices from '__internal/core/m_devices';
 import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 
+import 'generic_light.css!';
+
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
 import dxSchedulerWorkSpaceDay from '__internal/scheduler/workspaces/m_work_space_day';
-import errors from 'ui/widget/ui.errors';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -32,18 +33,9 @@ const checkDate = function(instance, assert) {
     assert.equal(headerCurrentDate.getDate(), 13, 'Date is OK');
 };
 
-QUnit.module('Options', {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-        sinon.spy(errors, 'log');
-    },
-    afterEach: function() {
-        this.clock.restore();
-        errors.log.restore();
-    }
-}, () => {
-    QUnit.test('Data expressions should be recompiled on optionChanged', function(assert) {
-        const scheduler = createWrapper();
+QUnit.module('Options', () => {
+    QUnit.test('Data expressions should be recompiled on optionChanged', async function(assert) {
+        const scheduler = await createWrapper();
 
         const repaintStub = sinon.stub(scheduler.instance, 'repaint');
 
@@ -89,7 +81,7 @@ QUnit.module('Options', {
             const dataAccessors = scheduler.instance._dataAccessors;
 
             $.each(dataAccessors.getter, function(name, getter) {
-                assert.equal(dataAccessors.getter[name](appointment), data[name], 'getter for ' + name + ' is OK');
+                assert.deepEqual(dataAccessors.getter[name](appointment), data[name], 'getter for ' + name + ' is OK');
             });
 
             $.each(dataAccessors.setter, function(name, getter) {
@@ -101,38 +93,8 @@ QUnit.module('Options', {
         }
     });
 
-    QUnit.test('Data expressions should be recompiled on optionChanged and passed to appointmentDataProvider', function(assert) {
-        const { instance } = createWrapper();
-        const repaintStub = sinon.stub(instance, 'repaint');
-
-        try {
-            const { appointmentDataProvider } = instance;
-
-            instance.option({
-                'startDateExpr': '_startDate',
-                'endDateExpr': '_endDate',
-                'startDateTimeZoneExpr': '_startDateTimeZone',
-                'endDateTimeZoneExpr': '_endDateTimeZone',
-                'textExpr': '_text',
-                'descriptionExpr': '_description',
-                'allDayExpr': '_allDay',
-                'recurrenceRuleExpr': '_recurrenceRule',
-                'recurrenceExceptionExpr': '_recurrenceException'
-            });
-
-            const dataAccessors = instance._dataAccessors;
-
-            assert.deepEqual(dataAccessors.getter, appointmentDataProvider.dataAccessors.getter, 'dataAccessors getters were passed to appointmentDataProvider');
-            assert.deepEqual(dataAccessors.setter, appointmentDataProvider.dataAccessors.setter, 'dataAccessors setters were passed to appointmentDataProvider');
-            assert.deepEqual(dataAccessors.expr, appointmentDataProvider.dataAccessors.expr, 'dataExpressions were passed to appointmentDataProvider');
-            assert.deepEqual(dataAccessors.resources, appointmentDataProvider.dataAccessors.resources, 'resources were passed to appointmentDataProvider');
-        } finally {
-            repaintStub.restore();
-        }
-    });
-
-    QUnit.test('Appointment should be rendered correctly after expression changing', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointment should be rendered correctly after expression changing', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 text: 'a',
                 StartDate: new Date(2015, 6, 8, 8, 0),
@@ -143,12 +105,11 @@ QUnit.module('Options', {
         });
 
         scheduler.instance.option('startDateExpr', 'StartDate');
-        this.clock.tick(10);
         assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment').length, 1, 'Appointment is rendered');
     });
 
-    QUnit.test('Sheduler should be repainted after data expression option changing', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('Sheduler should be repainted after data expression option changing', async function(assert) {
+        const scheduler = await createWrapper();
         const repaintStub = sinon.stub(scheduler.instance, 'repaint');
 
         try {
@@ -170,8 +131,8 @@ QUnit.module('Options', {
         }
     });
 
-    QUnit.test('Sheduler should have correct default template after data expression option changing', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Sheduler should have correct default template after data expression option changing', async function(assert) {
+        const scheduler = await createWrapper({
             dataSource: [{
                 text: 'a',
                 TEXT: 'New Text',
@@ -189,8 +150,8 @@ QUnit.module('Options', {
         assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment-title').eq(0).text(), 'New Text', 'Appointment template is correct');
     });
 
-    QUnit.test('Changing of \'currentView\' option after initializing should work correctly', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Changing of \'currentView\' option after initializing should work correctly', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2018, 0, 30),
             views: ['day', 'week'],
             currentView: 'week',
@@ -202,25 +163,25 @@ QUnit.module('Options', {
         assert.ok(scheduler.instance.getWorkSpace() instanceof dxSchedulerWorkSpaceDay, 'correct view');
     });
 
-    QUnit.test('It should be possible to init currentDate as timestamp', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('It should be possible to init currentDate as timestamp', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: 1431515985596
         });
 
         checkDate(scheduler.instance, assert);
     });
 
-    QUnit.test('It should be possible to change currentDate using timestamp', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('It should be possible to change currentDate using timestamp', async function(assert) {
+        const scheduler = await createWrapper();
 
         scheduler.instance.option('currentDate', 1431515985596);
         checkDate(scheduler.instance, assert);
     });
 
-    QUnit.test('Custom store should be loaded only once on the first rendering', function(assert) {
+    QUnit.test('Custom store should be loaded only once on the first rendering', async function(assert) {
         let counter = 0;
 
-        createWrapper({
+        await createWrapper({
             dataSource: new DataSource({
                 store: new CustomStore({
                     load: function() {
@@ -236,15 +197,15 @@ QUnit.module('Options', {
             })
         });
 
-        this.clock.tick(200);
+        await waitAsync(110);
 
         assert.equal(counter, 1);
     });
 
-    QUnit.test('Custom store should be loaded only once on dataSource option change', function(assert) {
+    QUnit.test('Custom store should be loaded only once on dataSource option change', async function(assert) {
         let counter = 0;
 
-        const scheduler = createWrapper();
+        const scheduler = await createWrapper();
 
         scheduler.instance.option('dataSource', new DataSource({
             store: new CustomStore({
@@ -259,25 +220,25 @@ QUnit.module('Options', {
                 }
             })
         }));
-
-        this.clock.tick(200);
+        await waitAsync(110);
 
         assert.equal(counter, 1);
     });
 
-    QUnit.test('allowAllDayResize option should be updated when current view is changed', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('allowAllDayResize option should be updated when current view is changed', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'day'
         });
 
         assert.notOk(scheduler.instance.getAppointmentsInstance().option('allowAllDayResize'));
 
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(10);
         assert.ok(scheduler.instance.getAppointmentsInstance().option('allowAllDayResize'));
     });
 
-    QUnit.test('allowAllDayResize option should depend on intervalCount', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('allowAllDayResize option should depend on intervalCount', async function(assert) {
+        const scheduler = await createWrapper({
             views: [{ type: 'week', name: 'WEEK' }, { type: 'day', name: 'DAY' }, { type: 'day', name: 'DAY1', intervalCount: 3 } ],
             currentView: 'DAY'
         });
@@ -285,23 +246,24 @@ QUnit.module('Options', {
         assert.notOk(scheduler.instance.getAppointmentsInstance().option('allowAllDayResize'));
 
         scheduler.instance.option('currentView', 'DAY1');
+        await waitAsync(10);
         assert.ok(scheduler.instance.getAppointmentsInstance().option('allowAllDayResize'));
     });
 
-    QUnit.test('showAllDayPanel option value = true on init', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('showAllDayPanel option value = true on init', async function(assert) {
+        const scheduler = await createWrapper();
 
         assert.equal(scheduler.instance.option('showAllDayPanel'), true, 'showAllDayPanel option value is right on init');
     });
 
-    QUnit.test('showCurrentTimeIndicator should have right default', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('showCurrentTimeIndicator should have right default', async function(assert) {
+        const scheduler = await createWrapper();
 
         assert.equal(scheduler.instance.option('showCurrentTimeIndicator'), true, 'showCurrentTimeIndicator option value is right on init');
     });
 
-    QUnit.test('customizeDateNavigatorText should be passed to header & navigator', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('customizeDateNavigatorText should be passed to header & navigator', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'week',
             currentDate: new Date(2017, 10, 25),
             customizeDateNavigatorText: function() {
@@ -313,8 +275,8 @@ QUnit.module('Options', {
         assert.equal(scheduler.header.navigator.caption.getText(), 'abc', 'option is passed correctly');
     });
 
-    QUnit.test('groupByDate option should be passed to workSpace', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('groupByDate option should be passed to workSpace', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'week',
             groupByDate: false
         });
@@ -328,8 +290,8 @@ QUnit.module('Options', {
         assert.equal(workSpaceWeek.option('groupByDate'), true, 'workspace has correct groupByDate');
     });
 
-    QUnit.test('showCurrentTimeIndicator option should be passed to workSpace', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('showCurrentTimeIndicator option should be passed to workSpace', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'week',
             showCurrentTimeIndicator: false
         });
@@ -343,8 +305,8 @@ QUnit.module('Options', {
         assert.equal(workSpaceWeek.option('showCurrentTimeIndicator'), true, 'workspace has correct showCurrentTimeIndicator');
     });
 
-    QUnit.test('indicatorTime option should be passed to workSpace', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('indicatorTime option should be passed to workSpace', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'week',
             indicatorTime: new Date(2017, 8, 19)
         });
@@ -358,16 +320,16 @@ QUnit.module('Options', {
         assert.deepEqual(workSpaceWeek.option('indicatorTime'), new Date(2017, 8, 20), 'workspace has correct indicatorTime');
     });
 
-    QUnit.test('indicatorUpdateInterval should have right default', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('indicatorUpdateInterval should have right default', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'week'
         });
 
         assert.equal(scheduler.instance.option('indicatorUpdateInterval'), 300000, 'workspace has correct indicatorUpdateInterval');
     });
 
-    QUnit.test('indicatorUpdateInterval option should be passed to workSpace', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('indicatorUpdateInterval option should be passed to workSpace', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'week',
             indicatorUpdateInterval: 2000
         });
@@ -381,16 +343,16 @@ QUnit.module('Options', {
         assert.equal(workSpaceWeek.option('indicatorUpdateInterval'), 3000, 'workspace has correct indicatorUpdateInterval');
     });
 
-    QUnit.test('shadeUntilCurrentTime should have right default', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('shadeUntilCurrentTime should have right default', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'week'
         });
 
         assert.equal(scheduler.instance.option('shadeUntilCurrentTime'), false, 'workspace has correct shadeUntilCurrentTime');
     });
 
-    QUnit.test('shadeUntilCurrentTime option should be passed to workSpace', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('shadeUntilCurrentTime option should be passed to workSpace', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'week',
             shadeUntilCurrentTime: false
         });
@@ -404,12 +366,12 @@ QUnit.module('Options', {
         assert.equal(workSpaceWeek.option('shadeUntilCurrentTime'), true, 'workspace has correct shadeUntilCurrentTime');
     });
 
-    QUnit.test('appointments should be repainted after scheduler dimensions changing', function(assert) {
+    QUnit.test('appointments should be repainted after scheduler dimensions changing', async function(assert) {
         const data = [{
             id: 1, text: 'abc', startDate: new Date(2015, 1, 9, 10), endDate: new Date(2015, 1, 9, 10, 30)
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 1, 9),
             currentView: 'month',
             dataSource: data,
@@ -420,17 +382,16 @@ QUnit.module('Options', {
         const initialAppointmentHeight = getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0));
 
         scheduler.instance.option('height', 200);
-        this.clock.tick(10);
 
         assert.notEqual(getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)), initialAppointmentHeight, 'Appointment was repainted');
     });
 
-    QUnit.test('appointments should be repainted after scheduler hiding/showing and dimensions changing', function(assert) {
+    QUnit.test('appointments should be repainted after scheduler hiding/showing and dimensions changing', async function(assert) {
         const data = [{
             id: 1, text: 'abc', startDate: new Date(2015, 1, 9, 10), endDate: new Date(2015, 1, 9, 10, 30)
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 1, 9),
             currentView: 'month',
             dataSource: data,
@@ -446,13 +407,12 @@ QUnit.module('Options', {
         scheduler.instance.option('height', 400);
         $('#scheduler').show();
         triggerShownEvent($('#scheduler'));
-        this.clock.tick(10);
 
         assert.notEqual(getOuterHeight(scheduler.instance.$element().find('.dx-scheduler-appointment').eq(0)), initialAppointmentHeight, 'Appointment was repainted');
     });
 
-    QUnit.test('view.intervalCount is passed to workspace & header', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('view.intervalCount is passed to workspace & header', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'week',
             views: [{
                 type: 'week',
@@ -465,11 +425,11 @@ QUnit.module('Options', {
         const header = scheduler.instance.getHeader();
 
         assert.equal(workSpaceWeek.option('intervalCount'), 3, 'workspace has correct count');
-        assert.equal(header.option('intervalCount'), 3, 'header has correct count');
+        assert.equal(header.option('currentView').intervalCount, 3, 'header has correct count');
     });
 
-    QUnit.test('view.intervalCount is passed to workspace & header, currentView is set by view.name', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('view.intervalCount is passed to workspace & header, currentView is set by view.name', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'WEEK1',
             views: [{
                 type: 'day',
@@ -486,10 +446,10 @@ QUnit.module('Options', {
         const header = scheduler.instance.getHeader();
 
         assert.equal(workSpaceWeek.option('intervalCount'), 3, 'workspace has correct count');
-        assert.equal(header.option('intervalCount'), 3, 'header has correct count');
+        assert.equal(header.option('currentView').intervalCount, 3, 'header has correct count');
     });
 
-    QUnit.test('view.intervalCount is passed to workspace & header, currentView is set by view.type', function(assert) {
+    QUnit.test('view.intervalCount is passed to workspace & header, currentView is set by view.type', async function(assert) {
         const views = [{
             type: 'day',
             name: 'DAY1',
@@ -500,7 +460,7 @@ QUnit.module('Options', {
             intervalCount: 3
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentView: 'week',
             views: views,
             useDropDownViewSwitcher: false
@@ -510,13 +470,13 @@ QUnit.module('Options', {
         const header = scheduler.instance.getHeader();
 
         assert.equal(workSpaceWeek.option('intervalCount'), 3, 'workspace has correct count');
-        assert.equal(header.option('intervalCount'), 3, 'header has correct count');
+        assert.equal(header.option('currentView').intervalCount, 3, 'header has correct count');
     });
 
-    QUnit.test('view.startDate is passed to workspace & header', function(assert) {
+    QUnit.test('view.startDate is passed to workspace & header', async function(assert) {
         const date = new Date(2017, 3, 4);
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentView: 'week',
             currentDate: new Date(2017, 2, 10),
             views: [{
@@ -531,11 +491,11 @@ QUnit.module('Options', {
         const header = scheduler.instance.getHeader();
 
         assert.deepEqual(workSpaceWeek.option('startDate'), date, 'workspace has correct startDate');
-        assert.deepEqual(header.option('startDate'), date, 'header has correct startDate');
+        assert.deepEqual(header.option('currentView').startDate, date, 'header has correct startDate');
     });
 
-    QUnit.test('view.groupByDate is passed to workspace', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('view.groupByDate is passed to workspace', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'Week',
             views: [{
                 type: 'week',
@@ -553,12 +513,13 @@ QUnit.module('Options', {
 
         assert.ok(workSpace.option('groupByDate'), 'workspace has correct groupByDate');
         scheduler.instance.option('currentView', 'day');
+        await waitAsync(10);
         workSpace = scheduler.instance.getWorkSpace();
         assert.notOk(workSpace.option('groupByDate'), 'workspace has correct groupByDate');
     });
 
-    QUnit.test('maxAppointmentsPerCell should have correct default', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('maxAppointmentsPerCell should have correct default', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'Week',
             views: [{
                 type: 'week',
@@ -569,8 +530,8 @@ QUnit.module('Options', {
         assert.equal(scheduler.instance.option('maxAppointmentsPerCell'), 'auto', 'Default Option value is right');
     });
 
-    QUnit.test('cellDuration is passed to workspace', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('cellDuration is passed to workspace', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'week',
             cellDuration: 60
         });
@@ -584,8 +545,8 @@ QUnit.module('Options', {
         assert.equal(workSpaceWeek.option('hoursInterval') * 60, scheduler.instance.option('cellDuration'), 'workspace has correct cellDuration after change');
     });
 
-    QUnit.test('accessKey is passed to workspace', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('accessKey is passed to workspace', async function(assert) {
+        const scheduler = await createWrapper({
             currentView: 'month',
             accessKey: 'o'
         });
@@ -597,23 +558,23 @@ QUnit.module('Options', {
         assert.equal(workSpaceMonth.option('accessKey'), scheduler.instance.option('accessKey'), 'workspace has correct accessKey afterChange');
     });
 
-    QUnit.test('the \'width\' option should be passed to work space on option changed if horizontal scrolling is enabled', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('the \'width\' option should be passed to work space on option changed if horizontal scrolling is enabled', async function(assert) {
+        const scheduler = await createWrapper();
         scheduler.instance.option('crossScrollingEnabled', true);
         scheduler.instance.option('width', 777);
 
         assert.equal(scheduler.instance.getWorkSpace().option('width'), 777, 'option is OK');
     });
 
-    QUnit.test('the \'width\' option should not be passed to work space on option changed if horizontal scrolling is not enabled', function(assert) {
-        const scheduler = createWrapper();
+    QUnit.test('the \'width\' option should not be passed to work space on option changed if horizontal scrolling is not enabled', async function(assert) {
+        const scheduler = await createWrapper();
         scheduler.instance.option('crossScrollingEnabled', false);
         scheduler.instance.option('width', 777);
 
         assert.strictEqual(scheduler.instance.getWorkSpace().option('width'), undefined, 'option is OK');
     });
 
-    QUnit.test('Editing default option value', function(assert) {
+    QUnit.test('Editing default option value', async function(assert) {
         const defaultEditing = {
             allowAdding: true,
             allowUpdating: true,
@@ -628,14 +589,14 @@ QUnit.module('Options', {
             defaultEditing.allowResizing = false;
         }
 
-        const scheduler = createWrapper();
+        const scheduler = await createWrapper();
         const editing = scheduler.instance.option('editing');
 
         assert.deepEqual(editing, defaultEditing);
     });
 
-    QUnit.test('Scheduler should be repainted after currentTime indication toggling', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Scheduler should be repainted after currentTime indication toggling', async function(assert) {
+        const scheduler = await createWrapper({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 11, 18),
             indicatorTime: new Date(2017, 11, 18, 16, 45),
@@ -650,7 +611,7 @@ QUnit.module('Options', {
         assert.ok(repaintStub.calledOnce, 'Sheduler was repainted');
     });
 
-    QUnit.test('Appointment popup form should be recreated after changing resources', function(assert) {
+    QUnit.test('Appointment popup form should be recreated after changing resources', async function(assert) {
         const resources = [{
             fieldExpr: 'TestResources',
             dataSource: [
@@ -660,7 +621,7 @@ QUnit.module('Options', {
                 }
             ]
         }];
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2017, 11, 18),
             indicatorTime: new Date(2017, 11, 18, 16, 45),
             views: ['timelineWeek'],
@@ -673,12 +634,13 @@ QUnit.module('Options', {
         );
 
         scheduler.instance.option('resources', resources);
+        await waitAsync(10);
 
         assert.ok(spyAppointmentPopupForm.calledOnce, 'Appointment form was recreated');
     });
 
-    QUnit.test('Filter options should be updated when dataSource is changed', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Filter options should be updated when dataSource is changed', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2016, 2, 15),
             views: ['week'],
             currentView: 'week',
@@ -691,12 +653,13 @@ QUnit.module('Options', {
             { startDate: new Date(2016, 2, 15, 1).toString(), endDate: new Date(2016, 2, 15, 2).toString() },
             { startDate: new Date(2016, 2, 15, 3).toString(), endDate: new Date(2016, 2, 15, 4).toString() }
         ]);
+        await waitAsync(10);
 
         assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment').length, 2, 'Appointments are rendered');
     });
 
-    QUnit.test('Appointments should be deleted from DOM when needed', function(assert) {
-        const scheduler = createWrapper({
+    QUnit.test('Appointments should be deleted from DOM when needed', async function(assert) {
+        const scheduler = await createWrapper({
             currentDate: new Date(2016, 2, 15),
             views: ['week', 'month'],
             currentView: 'week',
@@ -708,13 +671,14 @@ QUnit.module('Options', {
         scheduler.instance.option('currentDate', new Date(2016, 2, 23));
         scheduler.instance.option('currentView', 'month');
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(10);
 
         assert.equal(scheduler.instance.$element().find('.dx-scheduler-appointment').length, 0, 'Appointments were removed');
     });
 
     ['virtual', 'standard'].forEach((scrollingMode) => {
-        QUnit.test(`selectedCellData option should be updated after view changing when scrolling is ${scrollingMode}`, function(assert) {
-            const scheduler = createWrapper({
+        QUnit.test(`selectedCellData option should be updated after view changing when scrolling is ${scrollingMode}`, async function(assert) {
+            const scheduler = await createWrapper({
                 currentDate: new Date(2018, 4, 10),
                 views: ['week', 'month'],
                 currentView: 'week',
@@ -746,11 +710,12 @@ QUnit.module('Options', {
             }], 'correct cell data');
 
             scheduler.instance.option('currentView', 'month');
+            await waitAsync(10);
             assert.deepEqual(scheduler.instance.option('selectedCellData'), [], 'selectedCellData was cleared');
         });
 
-        QUnit.test(`selectedCellData option should be updated after currentDate changing when scrolling is ${scrollingMode}`, function(assert) {
-            const scheduler = createWrapper({
+        QUnit.test(`selectedCellData option should be updated after currentDate changing when scrolling is ${scrollingMode}`, async function(assert) {
+            const scheduler = await createWrapper({
                 currentDate: new Date(2018, 4, 10),
                 views: ['week', 'month'],
                 currentView: 'week',
@@ -786,10 +751,9 @@ QUnit.module('Options', {
         });
     });
 
-    QUnit.test('Multiple reloading should be avoided after some options changing (T656320)', function(assert) {
+    QUnit.test('Multiple reloading should be avoided after some options changing (T656320)', async function(assert) {
         let counter = 0;
-
-        const scheduler = createWrapper();
+        const scheduler = await createWrapper();
 
         scheduler.instance.option('dataSource', new DataSource({
             store: new CustomStore({
@@ -799,18 +763,20 @@ QUnit.module('Options', {
                 }
             })
         }));
+        await waitAsync(10);
         assert.equal(counter, 1, 'Data source was reloaded after dataSource option changing');
         scheduler.instance.beginUpdate();
         scheduler.instance.option('startDayHour', 10);
         scheduler.instance.option('endDayHour', 18);
         scheduler.instance.endUpdate();
+        await waitAsync(100);
         assert.equal(counter, 2, 'Data source was reloaded one more time after some options changing');
     });
 
-    QUnit.test('Multiple reloading should be avoided after repaint (T737181)', function(assert) {
+    QUnit.test('Multiple reloading should be avoided after repaint (T737181)', async function(assert) {
         let counter = 0;
 
-        const scheduler = createWrapper();
+        const scheduler = await createWrapper();
 
         scheduler.instance.option('dataSource', new DataSource({
             store: new CustomStore({
@@ -820,16 +786,17 @@ QUnit.module('Options', {
                 }
             })
         }));
+        await waitAsync(10);
         assert.equal(counter, 1, 'Data source was reloaded after dataSource option changing');
         scheduler.instance.repaint();
         assert.equal(counter, 1, 'Data source was not reloaded after repaint');
     });
 
-    QUnit.test('Multiple reloading should be avoided after some currentView options changing (T656320)', function(assert) {
+    QUnit.test('Multiple reloading should be avoided after some currentView options changing (T656320)', async function(assert) {
         let counter = 0;
         let resourceCounter = 0;
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: new DataSource({
                 store: new CustomStore({
                     load: function() {
@@ -857,14 +824,13 @@ QUnit.module('Options', {
                 })
             }],
         });
-        this.clock.tick(100);
         assert.equal(resourceCounter, 1, 'Resources was reloaded after dataSource option changing');
         scheduler.instance.beginUpdate();
         scheduler.instance.option('currentView', 'timelineDay');
         scheduler.instance.option('currentView', 'timelineMonth');
         scheduler.instance.endUpdate();
-        this.clock.tick(100);
-        assert.equal(resourceCounter, 2, 'Resources was reloaded one more time after dataSource option changing');
+        await waitAsync(300);
+        assert.equal(resourceCounter, 1, 'Resources was reloaded only once because resources didn\'t changed');
     });
 
 
@@ -872,27 +838,28 @@ QUnit.module('Options', {
         { startDayHour: 0, endDayHour: 0 },
         { startDayHour: 2, endDayHour: 0 }
     ].forEach(dayHours => {
-        QUnit.test(`Generate error if option changed to startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, function(assert) {
-            const scheduler = createWrapper({
+        QUnit.test(`Generate error if option changed to startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, async function(assert) {
+            const scheduler = await createWrapper({
                 currentDate: new Date(2015, 4, 24),
                 views: ['day'],
                 currentView: 'day',
                 startDayHour: 8,
                 endDayHour: 12
             });
+            let consoleError = '';
 
-            assert.throws(
-                () => {
-                    scheduler.instance.option('startDayHour', dayHours.startDayHour);
-                    scheduler.instance.option('endDayHour', dayHours.endDayHour);
-                },
-                e => /E1058/.test(e.message) || /E1062/.test(e.message),
-                'E1058 or E1062 Error message'
-            );
+            try {
+                scheduler.instance.option('startDayHour', dayHours.startDayHour);
+                scheduler.instance.option('endDayHour', dayHours.endDayHour);
+            } catch(error) {
+                consoleError = error.message;
+            }
+
+            assert.ok(consoleError.startsWith('E1062'), 'E1062 Error message');
         });
 
-        QUnit.test(`Generate error if workSpace option changed to startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, function(assert) {
-            const scheduler = createWrapper({
+        QUnit.test(`Generate error if workSpace option changed to startDayHour: ${dayHours.startDayHour} >= endDayHour: ${dayHours.endDayHour}`, async function(assert) {
+            const scheduler = await createWrapper({
                 currentDate: new Date(2015, 4, 24),
                 views: [{
                     name: 'day',
@@ -902,20 +869,20 @@ QUnit.module('Options', {
                 startDayHour: 8,
                 endDayHour: 12
             });
+            let consoleError = '';
 
-            assert.throws(
-                () => {
-                    const instance = scheduler.instance;
-                    instance.option('views[0].startDayHour', dayHours.startDayHour);
-                    instance.option('views[0].endDayHour', dayHours.endDayHour);
-                },
-                e => /E1058/.test(e.message) || /E1062/.test(e.message),
-                'E1058 or E1062 Error message'
-            );
+            try {
+                scheduler.instance.option('views[0].startDayHour', dayHours.startDayHour);
+                scheduler.instance.option('views[0].endDayHour', dayHours.endDayHour);
+            } catch(error) {
+                consoleError = error.message;
+            }
+
+            assert.ok(consoleError.startsWith('E1062'), 'E1062 Error message');
         });
 
-        QUnit.test(`Generate error if currentView changed to view.startDayHour: ${dayHours.startDayHour} >= view.endDayHour: ${dayHours.endDayHour}`, function(assert) {
-            const scheduler = createWrapper({
+        QUnit.test(`Generate error if currentView changed to view.startDayHour: ${dayHours.startDayHour} >= view.endDayHour: ${dayHours.endDayHour}`, async function(assert) {
+            const scheduler = await createWrapper({
                 currentDate: new Date(2015, 4, 24),
                 dataSource: [
                     {
@@ -937,22 +904,23 @@ QUnit.module('Options', {
                 startDayHour: 8,
                 endDayHour: 12
             });
+            let consoleError = '';
 
-            assert.throws(
-                () => {
-                    scheduler.instance.option('currentView', 'week');
-                },
-                e => /E1058/.test(e.message) || /E1062/.test(e.message),
-                'E1058 or E1062 Error message'
-            );
+            try {
+                scheduler.instance.option('currentView', 'week');
+            } catch(error) {
+                consoleError = error.message;
+            }
+
+            assert.ok(consoleError.startsWith('E1062'), 'E1062 Error message');
         });
     });
 
-    QUnit.test('Data source should not be loaded on option change if it is already being loaded (T916558)', function(assert) {
+    QUnit.test('Data source should not be loaded on option change if it is already being loaded (T916558)', async function(assert) {
         const dataSource = new DataSource({
             store: []
         });
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             currentDate: new Date(2015, 4, 24),
             views: ['day', 'workWeek', { type: 'week' }],
             currentView: 'day',
@@ -961,14 +929,16 @@ QUnit.module('Options', {
 
         const initMarkupSpy = sinon.spy(scheduler.instance, '_initMarkup');
         const reloadDataSourceSpy = sinon.spy(scheduler.instance, '_reloadDataSource');
+        let count = 0;
 
         const nextDataSource = new DataSource({
             store: new CustomStore({
                 load: function() {
                     const d = $.Deferred();
                     setTimeout(function() {
+                        count++;
                         d.resolve([]);
-                    }, 300);
+                    }, 100);
 
                     return d.promise();
                 }
@@ -981,14 +951,13 @@ QUnit.module('Options', {
             'views[2].intervalCount': 2,
             'views[2].startDate': new Date(),
         });
+        await waitForAsync(() => count === 2);
 
-        this.clock.tick(400);
-
-        assert.ok(initMarkupSpy.calledTwice, 'Init markup was called on the second and third option change');
-        assert.ok(reloadDataSourceSpy.calledOnce, '_reloadDataSource was not called on init mark up');
+        assert.equal(initMarkupSpy.callCount, 2, 'Init markup was called on each dataSource changes');
+        assert.equal(reloadDataSourceSpy.callCount, 2, '_reloadDataSource was called on each changes');
     });
 
-    QUnit.test('It should be possible to change views option when view names are specified (T995794)', function(assert) {
+    QUnit.test('It should be possible to change views option when view names are specified (T995794)', async function(assert) {
         const baseViews = [{
             type: 'day',
             name: 'Custom Day',
@@ -1003,12 +972,13 @@ QUnit.module('Options', {
             type: 'timelineWeek',
             name: 'Custom Timeline Week',
         }];
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             views: baseViews,
             currentView: 'Custom Week',
         });
 
         scheduler.instance.option('views', timelineViews);
+        await waitAsync(10);
 
         assert.equal(scheduler.workSpace.getCells().length, 48, 'Everything is correct');
     });

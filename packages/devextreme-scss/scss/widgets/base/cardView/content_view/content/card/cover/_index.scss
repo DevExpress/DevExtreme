@@ -1,0 +1,43 @@
+@use './variables' as *;
+@use '../variables' as *;
+
+.dx-card-cover {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  border-top: $cardview-card-border-width solid $cardview-card-divider-color;
+  max-height: var(--dx-cardview-card-cover-max-height);
+  aspect-ratio: var(--dx-cardview-card-cover-ratio);
+  width: 100%;
+  background-color: $cardview-card__cover-bg-color;
+
+  &-noimage {
+    background-color: $cardview-card__cover--noimage-bg-color;
+    align-items: center;
+
+    .dx-icon-imagethumbnail {
+      font-size: $cardview-card__cover--noimage__icon-size;
+      color: $cardview-card__cover--noimage__icon-color;
+    }
+  }
+}
+
+.dx-cardview-card-selection .dx-card-cover {
+  border-top-color: $cardview-card--selected-divider-color;
+  background-color: $cardview-card--selected__cover-bg-color;
+
+  &-noimage {
+    background-color: $cardview-card--selected__cover--noimage-bg-color;
+
+    .dx-icon-imagethumbnail {
+      color: $cardview-card--selected__cover--noimage__icon-color;
+    }
+  }
+}
+
+.dx-card-cover-image {
+  object-fit: scale-down;
+  width: 100%;
+  height: 100%;
+}
+

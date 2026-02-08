@@ -1,0 +1,48 @@
+<dx-card-view
+  id="cardView"
+  [dataSource]="orders"
+  keyExpr="OrderNumber"
+  cardsPerRow="auto"
+  [cardMinWidth]="280"
+  [wordWrapEnabled]="true"
+>
+  <dxo-card-view-header-filter [visible]="true"></dxo-card-view-header-filter>
+  <dxi-card-view-column dataField="OrderNumber">
+    <dxo-card-view-column-header-filter
+      [groupInterval]="10000"
+    ></dxo-card-view-column-header-filter>
+  </dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="OrderDate"
+    dataType="date"
+    [calculateFilterExpression]="calculateOrderDateFilterExpression"
+  >
+    <dxo-card-view-column-header-filter
+      [dataSource]="orderDateHeaderFilterDataSource"
+    ></dxo-card-view-column-header-filter>
+  </dxi-card-view-column>
+  <dxi-card-view-column dataField="SaleAmount" dataType="number">
+    <dxo-card-view-column-header-filter
+      [dataSource]="saleAmountHeaderFilterDataSource"
+    ></dxo-card-view-column-header-filter>
+  </dxi-card-view-column>
+  <dxi-card-view-column dataField="StoreCity">
+    <dxo-card-view-column-header-filter>
+      <dxo-card-view-column-header-filter-search
+        [enabled]="true"
+        [editorOptions]="{ placeholder: 'Search city or state' }"
+        [searchExpr]="['StoreCity', 'StoreState']"
+      ></dxo-card-view-column-header-filter-search>
+    </dxo-card-view-column-header-filter>
+  </dxi-card-view-column>
+  <dxi-card-view-column dataField="StoreState">
+    <dxo-card-view-column-header-filter>
+      <dxo-card-view-column-header-filter-search
+        [enabled]="true"
+        [editorOptions]="{ placeholder: 'Search state or city' }"
+        [searchExpr]="['StoreState', 'StoreCity']"
+      ></dxo-card-view-column-header-filter-search>
+    </dxo-card-view-column-header-filter>
+  </dxi-card-view-column>
+  <dxi-card-view-column dataField="Employee"></dxi-card-view-column>
+</dx-card-view>

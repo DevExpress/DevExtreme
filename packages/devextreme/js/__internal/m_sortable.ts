@@ -1,5 +1,6 @@
 import { fx } from '@js/common/core/animation';
 import { resetPosition } from '@js/common/core/animation/translator';
+import type { ChangedOptionInfo } from '@js/common/core/events';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
@@ -94,6 +95,7 @@ class Sortable extends Draggable {
       onRemove: null,
       onReorder: null,
       onPlaceholderPrepared: null,
+      placeholderClassName: '',
       animation: {
         type: 'slide',
         duration: 300,
@@ -295,7 +297,8 @@ class Sortable extends Draggable {
     const $sourceElement = this._getSourceElement();
     const sourceDraggable = this._getSourceDraggable();
     const isSourceDraggable = sourceDraggable.NAME !== this.NAME;
-    const toIndex = this.option('toIndex');
+    // @ts-expect-error bad options type
+    const toIndex: number = this.option('toIndex');
     const { event } = sourceEvent;
     const allowDrop = this._allowDrop(event);
 
@@ -358,23 +361,25 @@ class Sortable extends Draggable {
     }
   }
 
-  _isIndicateMode() {
-    // @ts-expect-error ts-error
+  private _isIndicateMode(): boolean {
+    // @ts-expect-error bad option type
     return this.option('dropFeedbackMode') === 'indicate' || this.option('allowDropInsideItem');
   }
 
-  _createPlaceholder() {
-    let $placeholderContainer;
-
-    if (this._isIndicateMode()) {
-      $placeholderContainer = $('<div>')
-        .addClass(this._addWidgetPrefix(PLACEHOLDER_CLASS))
-        .insertBefore(this._getSourceDraggable()._$dragElement);
+  private _createPlaceholder(): dxElementWrapper | undefined {
+    if (!this._isIndicateMode()) {
+      return undefined;
     }
 
-    this._$placeholderElement = $placeholderContainer;
+    // @ts-expect-error bad options type
+    const customCssClass: string = this.option('placeholderClassName');
 
-    return $placeholderContainer;
+    this._$placeholderElement = $('<div>')
+      .addClass(this._addWidgetPrefix(PLACEHOLDER_CLASS))
+      .addClass(customCssClass ?? '')
+      .insertBefore(this._getSourceDraggable()._$dragElement);
+
+    return this._$placeholderElement;
   }
 
   _getItems() {
@@ -581,24 +586,26 @@ class Sortable extends Draggable {
     return width;
   }
 
-  _updatePlaceholderSizes($placeholderElement, itemElement) {
-    const that = this;
-    const dropInsideItem = that.option('dropInsideItem');
-    const $item = $(itemElement);
-    const isVertical = that._isVerticalOrientation();
+  private _updatePlaceholderSizes(
+    $placeholderElement: dxElementWrapper,
+    $itemElement: dxElementWrapper,
+  ): void {
+    // @ts-expect-error bad options type
+    const dropInsideItem: boolean = this.option('dropInsideItem');
+    const isVertical = this._isVerticalOrientation();
     let width = '';
     let height = '';
 
-    $placeholderElement.toggleClass(that._addWidgetPrefix('placeholder-inside'), dropInsideItem);
+    $placeholderElement.toggleClass(this._addWidgetPrefix('placeholder-inside'), dropInsideItem);
 
     if (isVertical || dropInsideItem) {
-      width = getOuterWidth($item);
+      width = getOuterWidth($itemElement);
     }
     if (!isVertical || dropInsideItem) {
-      height = getOuterHeight($item);
+      height = getOuterHeight($itemElement);
     }
 
-    width = that._makeWidthCorrection($item, width);
+    width = this._makeWidthCorrection($itemElement, width);
 
     $placeholderElement.css({ width, height });
   }
@@ -651,7 +658,7 @@ class Sortable extends Draggable {
     });
   }
 
-  _optionChanged(args) {
+  public _optionChanged(args: ChangedOptionInfo): void {
     const { name } = args;
 
     switch (name) {
@@ -660,19 +667,8 @@ class Sortable extends Draggable {
       case 'onAdd':
       case 'onRemove':
       case 'onReorder':
+        // @ts-expect-error ts-error
         this[`_${name}Action`] = this._createActionByOption(name);
-        break;
-      case 'itemOrientation':
-      case 'allowDropInsideItem':
-      case 'moveItemOnDrop':
-      case 'dropFeedbackMode':
-      case 'itemPoints':
-      case 'animation':
-      case 'allowReordering':
-      case 'fromIndexOffset':
-      case 'offset':
-      case 'draggableElementSize':
-      case 'autoUpdate':
         break;
       case 'fromIndex':
         [false, true].forEach((isDragSource) => {
@@ -690,6 +686,19 @@ class Sortable extends Draggable {
       case 'toIndex':
         this._optionChangedToIndex(args);
         break;
+      case 'itemOrientation':
+      case 'allowDropInsideItem':
+      case 'moveItemOnDrop':
+      case 'dropFeedbackMode':
+      case 'itemPoints':
+      case 'animation':
+      case 'allowReordering':
+      case 'fromIndexOffset':
+      case 'offset':
+      case 'draggableElementSize':
+      case 'autoUpdate':
+      case 'placeholderClassName':
+        break;
       default:
         super._optionChanged(args);
     }
@@ -704,13 +713,11 @@ class Sortable extends Draggable {
   _isPositionVisible(position) {
     const $element = this.$element();
     let scrollContainer;
-    // @ts-expect-error ts-error
     if ($element.css('overflow') !== 'hidden') {
       scrollContainer = $element.get(0);
     } else {
       // @ts-expect-error ts-error
       $element.parents().each(function () {
-        // @ts-expect-error
         if ($(this).css('overflow') !== 'visible') {
           scrollContainer = this;
           return false;
@@ -828,7 +835,7 @@ class Sortable extends Draggable {
       }
     }
 
-    that._updatePlaceholderSizes($placeholderElement, itemElement);
+    that._updatePlaceholderSizes($placeholderElement, $(itemElement));
 
     if (position && !that._isPositionVisible(position)) {
       position = null;

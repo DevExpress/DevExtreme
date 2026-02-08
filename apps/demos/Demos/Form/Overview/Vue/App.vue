@@ -100,7 +100,7 @@ const showColon = ref(true);
 const minColWidth = ref(300);
 const colCount = ref(2);
 const companyName = ref(companies[0].Name);
-const width = ref(null);
+const width = ref();
 
 const company = computed(() => companies.find(({ Name }) => Name === companyName.value));
 

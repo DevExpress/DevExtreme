@@ -13,7 +13,6 @@
 .color-block {
   width: 360px;
   height: 254px;
-  background-color: #f05b41;
   position: relative;
 }
 
@@ -24,7 +23,8 @@
   top: 110px;
 }
 
-.color-block .superhero {
+.superhero,
+.brush {
   position: absolute;
   height: 100%;
   width: 100%;
@@ -34,34 +34,6 @@
   position: relative;
 }
 
-.superhero {
-  background-image: url("../../../../images/hero_white.png");
-}
-
-::ng-deep .dx-color-scheme-dark .superhero {
-  background-image: url("../../../../images/hero_black.png");
-}
-
-::ng-deep .dx-color-scheme-darkmoon .superhero {
-  background-image: url("../../../../images/hero_darkmoon.png");
-}
-
-::ng-deep .dx-color-scheme-darkviolet .superhero {
-  background-image: url("../../../../images/hero_darkviolet.png");
-}
-
-::ng-deep .dx-color-scheme-greenmist .superhero {
-  background-image: url("../../../../images/hero_greenmist.png");
-}
-
-::ng-deep .dx-color-scheme-contrast .superhero {
-  background-image: url("../../../../images/hero_contrast.png");
-}
-
-::ng-deep .dx-color-scheme-blue-dark .superhero,
-::ng-deep .dx-color-scheme-orange-dark .superhero,
-::ng-deep .dx-color-scheme-teal-dark .superhero,
-::ng-deep .dx-color-scheme-lime-dark .superhero,
-::ng-deep .dx-color-scheme-purple-dark .superhero {
-  background-image: url("../../../../images/hero_material_dark.png");
+.brush {
+  color: #f05b41;
 }

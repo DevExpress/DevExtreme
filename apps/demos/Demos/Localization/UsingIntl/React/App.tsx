@@ -6,7 +6,7 @@ import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 
 import deMessages from 'devextreme/localization/messages/de.json';
 import ruMessages from 'devextreme/localization/messages/ru.json';
-import { locale, loadMessages, formatMessage } from 'devextreme/localization';
+import { locale, loadMessages, formatMessage } from 'devextreme-react/common/core/localization';
 
 import service from './data.ts';
 

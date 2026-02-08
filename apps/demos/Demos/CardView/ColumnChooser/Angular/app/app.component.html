@@ -1,0 +1,89 @@
+<div class="options-panel">
+  <div class="caption">Options</div>
+  <div class="options-container">
+    <div class="option">
+      <span>Column Chooser Mode:</span>
+      <dx-select-box
+        [inputAttr]="{ 'aria-label': 'Column Chooser Mode' }"
+        [dataSource]="['dragAndDrop', 'select']"
+        [(value)]="columnChooserMode"
+      ></dx-select-box>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Search Enabled"
+        [(value)]="searchEnabled"
+      ></dx-check-box>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Allow Select All"
+        [(value)]="allowSelectAll"
+        [disabled]="columnChooserMode !== 'select'"
+      ></dx-check-box>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Select By Click On Item"
+        [(value)]="selectByClick"
+        [disabled]="columnChooserMode !== 'select'"
+      ></dx-check-box>
+    </div>
+    <div class="option">
+      <dx-check-box
+        text="Allow Column Reordering"
+        [(value)]="allowColumnReordering"
+      ></dx-check-box>
+    </div>
+  </div>
+</div>
+<dx-card-view
+  [dataSource]="employees"
+  keyExpr="ID"
+  cardsPerRow="auto"
+  [cardMinWidth]="300"
+  [allowColumnReordering]="allowColumnReordering"
+>
+  <dxo-card-view-search-panel [visible]="true"></dxo-card-view-search-panel>
+  <dxo-card-view-column-chooser
+    [enabled]="true"
+    [mode]="columnChooserMode"
+    height="340px"
+  >
+    <dxo-card-view-column-chooser-search [enabled]="searchEnabled">
+    </dxo-card-view-column-chooser-search>
+    <dxo-card-view-column-chooser-selection
+      [allowSelectAll]="allowSelectAll"
+      [selectByClick]="selectByClick"
+    ></dxo-card-view-column-chooser-selection>
+  </dxo-card-view-column-chooser>
+  <dxo-card-view-card-cover
+    [altExpr]="altExpr"
+    [imageExpr]="imageExpr"
+  ></dxo-card-view-card-cover>
+  <dxi-card-view-column
+    dataField="FullName"
+    [calculateFieldValue]="calculateFullName"
+    [allowHiding]="false"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Birth_Date"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Hire_Date"
+    dataType="date"
+  ></dxi-card-view-column>
+  <dxi-card-view-column dataField="Position"></dxi-card-view-column>
+  <dxi-card-view-column dataField="Department"></dxi-card-view-column>
+  <dxi-card-view-column dataField="State"></dxi-card-view-column>
+  <dxi-card-view-column dataField="City"></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Phone"
+    [allowHiding]="false"
+  ></dxi-card-view-column>
+  <dxi-card-view-column
+    dataField="Email"
+    [visible]="false"
+  ></dxi-card-view-column>
+</dx-card-view>

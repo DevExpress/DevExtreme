@@ -13,8 +13,9 @@ $datagrid-text-stub-background-image-path: null !default;
 
 @use "sass:color";
 @use "../mixins" as *;
-@use "../icons" as *;
+@use "../icon_fonts" as *;
 @use "./common";
+@use "./variables" as *;
 
 .dx-datagrid-borders {
   > .dx-datagrid-headers,
@@ -46,10 +47,15 @@ $datagrid-text-stub-background-image-path: null !default;
   border-color: $datagrid-drag-header-border-color;
 }
 
-@mixin dx-datagrid-error-message() {
-  background-color: $datagrid-row-error-bg;
+@mixin dx-datagrid-error-popup() {
   white-space: normal;
   word-wrap: break-word;
+}
+
+@mixin dx-datagrid-error-message() {
+  background-color: $datagrid-row-error-bg;
+
+  @include dx-datagrid-error-popup();
 }
 
 .dx-datagrid {
@@ -200,6 +206,26 @@ $datagrid-text-stub-background-image-path: null !default;
     }
   }
 
+  .dx-datagrid-total-footer {
+    .dx-row.dx-footer-row {
+      td.dx-command-expand {
+        &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
+          background-color: $datagrid-base-background-color;
+        }
+      }
+
+      .dx-datagrid-sticky-column,
+      .dx-datagrid-sticky-column-left,
+      .dx-datagrid-sticky-column-right {
+        padding-inline: 0;
+
+        .dx-datagrid-summary-item {
+          padding-inline: $datagrid-cell-padding;
+        }
+      }
+    }
+  }
+
   .dx-datagrid-filter-row .dx-filter-range-content {
     color: $datagrid-base-color;
   }
@@ -212,6 +238,12 @@ $datagrid-text-stub-background-image-path: null !default;
 
     .dx-error-message {
       @include dx-datagrid-error-message();
+    }
+  }
+
+  .dx-invalid-message {
+    .dx-overlay-content {
+      @include dx-datagrid-error-popup();
     }
   }
 
@@ -388,13 +420,15 @@ $datagrid-text-stub-background-image-path: null !default;
 }
 
 .dx-datagrid, .dx-rtl .dx-datagrid {
-  .dx-datagrid-sticky-columns .dx-datagrid-table .dx-row {
-    td.dx-datagrid-sticky-column-border-right {
-      border-right: 2px solid $datagrid-border-color;
-    }
+  .dx-datagrid-sticky-columns .dx-datagrid-table {
+    .dx-row {
+      td.dx-datagrid-sticky-column-border-right {
+        border-right: 2px solid $datagrid-border-color;
+      }
 
-    td.dx-datagrid-sticky-column-border-left {
-      border-left: 2px solid $datagrid-border-color;
+      td.dx-datagrid-sticky-column-border-left {
+        border-left: 2px solid $datagrid-border-color;
+      }
     }
   }
 }
@@ -418,8 +452,18 @@ $datagrid-text-stub-background-image-path: null !default;
     outline: none;
   }
 
-  &:focus-within {
+  &:focus-within::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     outline: 2px solid $datagrid-focused-border-color;
-    outline-offset: -2px;
+    outline-offset: -1px;
+    z-index: 4; // should overlap sticky column cells
+    pointer-events: none;
+    background-color: transparent;
   }
 }

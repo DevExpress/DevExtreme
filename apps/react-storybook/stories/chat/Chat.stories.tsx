@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { Chat, ChatTypes } from 'devextreme-react/chat'
-import { Button } from "devextreme-react";
-import type { Meta, StoryObj } from '@storybook/react';
+import { Button, Toast } from 'devextreme-react';
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
 import {
@@ -17,10 +17,12 @@ import {
     regenerationMessage, 
     assistant,
 } from './data';
-import { Popup } from 'devextreme-react/popup';
+import { Popup, ToolbarItem } from 'devextreme-react/popup';
 import HTMLReactParser from 'html-react-parser';
 
 import './styles.css';
+import { Guid } from 'devextreme-react/cjs/common';
+import { Message } from 'devextreme/artifacts/npm/devextreme/ui/chat';
 
 const meta: Meta<typeof Chat> = {
     title: 'Components/Chat',
@@ -99,7 +101,7 @@ export const Overview: Story = {
         focusStateEnabled,
     }) => {
         const [messages, setMessages] = useState(items);
-        
+
         const onMessageEntered = useCallback(({ message }) => {
             const updatedMessages = [...messages, message];
 
@@ -344,11 +346,15 @@ export const PopupIntegration: Story = {
                 visible={true}
                 showCloseButton={false}
                 title="Chat title"
+                wrapperAttr={{
+                    class: 'chat-popup-integration'
+                }}
                 position={{
                     my: 'right bottom',
                     at: 'right bottom',
                     offset: '-20 -20',
                 }}
+                wrapperAttr={{ class: 'chat-popup-wrapper' }}
             >
                 <Chat
                     width={width}
@@ -587,3 +593,200 @@ export const AIBotIntegration: Story = {
         );
     }
 }
+
+export const Editing: Story = {
+    args: {
+        user: firstAuthor,
+        activeStateEnabled: true,
+        hoverStateEnabled: true,
+        focusStateEnabled: true,
+        width: "600px",
+        height: "600px",
+        allowDeleting: true,
+        allowUpdating: true,
+        useCustomMessageRender: false,
+        cancelMessageEditingStart: false,
+        cancelMessageDeleting: false,
+        allowOnlyLatinTextOnEdit: false,
+    },
+    argTypes: {
+        user: {
+            control: 'select',
+            options: [firstAuthor.name, secondAuthor.name],
+            mapping: {
+                [firstAuthor.name]: firstAuthor,
+                [secondAuthor.name]: secondAuthor,
+            },
+            defaultValue: firstAuthor.name,
+        },
+        useCustomMessageRender: {
+            control: 'boolean',
+            name: 'Use Custom Message Renderer',
+        },
+        cancelMessageEditingStart: {
+            control: 'boolean',
+            name: 'Emulate Message Editing Cancellation',
+        },
+        cancelMessageDeleting: {
+            control: 'boolean',
+            name: 'Emulate Message Deleting Cancellation',
+        },
+        allowOnlyLatinTextOnEdit: {
+            control: 'boolean',
+            name: 'Allow only latin letters in message editing',
+        }
+    },
+    render: ({
+        width,
+        height,
+        user,
+        activeStateEnabled,
+        hoverStateEnabled,
+        focusStateEnabled,
+        allowDeleting,
+        allowUpdating,
+        useCustomMessageRender,
+        cancelMessageEditingStart,
+        cancelMessageDeleting,
+        allowOnlyLatinTextOnEdit,
+    }) => {
+        const messages = useMemo(() => {
+            const initial = initialMessages.map(item => ({
+                ...item,
+                id: `dx-${new Guid()}`,
+            }));
+            initial[4].isDeleted = true;
+            initial[5].isDeleted = true;
+            initial[6].isDeleted = true;
+            return initial;
+        }, [initialMessages]);
+
+        const [toastConfig, setToastConfig] = useState({
+            visible: false,
+            message: '',
+        });
+
+        const messagesRef = React.useRef([...messages]);
+
+        const dataSource = useMemo(() => new DataSource({
+            store: new CustomStore({
+                load: () => new Promise(resolve => setTimeout(() => resolve([...messagesRef.current]), 500)),
+                insert: (message) => {
+                    message.id = `dx-${new Guid()}`;
+                    if (message.author.id === user?.id) {
+                        message.author = {
+                            ...message.author,
+                            ...user,
+                        }
+                    }
+                    messagesRef.current.push(message);
+                    return new Promise<void>(resolve => setTimeout(resolve, 200));
+                },
+                key: 'id',
+            }),
+            paginate: false,
+        }), [user]);
+
+        const onUndoClick = useCallback((message: Message) => {
+            const store = dataSource.store();
+            store.push([{ type: 'update', key: message.id, data: { isDeleted: false } }]);
+        }, [dataSource]);
+
+        const messageRender = useCallback(({ message }) => {
+            if(message.isDeleted === true) {
+                return (
+                    <div
+                        className="dx-chat-messagebubble-content dx-chat-messagebubble-deleted"
+                        style={{
+                            display: 'flex',
+                            gap: 4,
+                            alignItems: 'center',
+                            fontStyle: 'italic',
+                        }}
+                    >
+                        <div className="dx-icon dx-icon-cursorprohibition"></div>
+                        <div>This message was deleted</div>
+                        { user?.id === message.author.id &&
+                            <a href="#" onClick={(e) => {
+                                e.preventDefault();
+                                onUndoClick(message);
+                            }}>Undo</a>
+                        }
+                    </div>
+                );
+            }
+
+            return <div>{message.text}</div>;
+        }, [user]);
+
+        const showToast = useCallback((message: string) => {
+            setToastConfig({
+                visible: true,
+                message,
+            });
+        }, []);
+
+        const onToastHiding = useCallback(() => {
+            setToastConfig({
+                visible: false,
+                message: '',
+            });
+        }, []);
+
+        const validateMessage = (message: string) => message.match(/^[a-zA-Z0-9.,!? ]+$/);
+
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    editing={{ allowDeleting, allowUpdating }}
+                    width={width}
+                    height={height}
+                    dataSource={dataSource}
+                    reloadOnChange={false}
+                    user={user}
+                    onMessageEntered={(e) => {
+                        e.component.getDataSource().store().push([{ type: 'insert', data: e.message }]);
+                    }}
+                    onMessageEditingStart={async (e) => {
+                        if (cancelMessageEditingStart) {
+                            showToast('Message editing not allowed');
+                            e.cancel = true;
+                        }
+                    }}
+                    onMessageEditCanceled={() => {
+                        showToast('Message editing is canceled');
+                    }}
+                    onMessageDeleting={(e) => {
+                        if (cancelMessageDeleting) {
+                            showToast('Message deleting was canceled');
+                            e.cancel = true;
+                        }
+                    }}
+                    onMessageDeleted={(e) => {
+                        e.component.getDataSource().store().push([{ type: 'update', key: e.message.id, data: { isDeleted: true } }]);
+                    }}
+                    onMessageUpdating={async (e) => {
+                        if (allowOnlyLatinTextOnEdit) {
+                            if (!validateMessage(e.text ?? '')) {
+                                showToast('Only latin allowed in message');
+                                e.cancel = true;
+                            }
+                        }
+                    }}
+                    onMessageUpdated={(e) => {
+                        e.component.getDataSource().store().push([{ type: 'update', key: e.message.id, data: { text: e.text, isEdited: true } }]);
+                    }}
+                    activeStateEnabled={activeStateEnabled}
+                    focusStateEnabled={focusStateEnabled}
+                    hoverStateEnabled={hoverStateEnabled}
+                    {...(useCustomMessageRender && { messageRender })} 
+                />
+                <Toast
+                    {...toastConfig}
+                    onHiding={onToastHiding}
+                    displayTime={600}
+                />
+            </div>
+        );
+    }
+};

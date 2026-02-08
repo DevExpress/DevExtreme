@@ -1,7 +1,7 @@
 import React from 'react';
 import DataGrid, { Column, Export } from 'devextreme-react/data-grid';
 import { jsPDF } from 'jspdf';
-import { exportDataGrid } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme-react/common/export/pdf';
 import { countries } from './data.js';
 
 const gdpFormat = {

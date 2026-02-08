@@ -46,7 +46,8 @@ import {
     DxTemplateModule,
     NestedOptionHost,
     IterableDifferHelper,
-    WatcherHelper
+    WatcherHelper,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 
 import { DxiButtonModule } from 'devextreme-angular/ui/nested';
@@ -83,10 +84,10 @@ import { DxoDateBoxPositionModule } from 'devextreme-angular/ui/date-box/nested'
 import { DxoDateBoxShowModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxoDateBoxToModule } from 'devextreme-angular/ui/date-box/nested';
 import { DxiDateBoxToolbarItemModule } from 'devextreme-angular/ui/date-box/nested';
-
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
-
-import { DxiDateBoxButtonComponent } from 'devextreme-angular/ui/date-box/nested';
+import { 
+           PROPERTY_TOKEN_buttons,
+           PROPERTY_TOKEN_toolbarItems,
+     } from 'devextreme-angular/core/tokens';
 
 
 
@@ -101,8 +102,10 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-date-box',
+    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
+    imports: [ DxIntegrationModule ],
     providers: [
         DxTemplateHost,
         WatcherHelper,
@@ -112,6 +115,17 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxDateBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
+
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
+    }
+
     instance: DxDateBox = null;
 
     /**
@@ -366,10 +380,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get height(): (() => number | string) | number | string | undefined {
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string | undefined) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
@@ -496,10 +510,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get max(): Date | number | string | undefined {
+    get max(): Date | null | number | string | undefined {
         return this._getOption('max');
     }
-    set max(value: Date | number | string | undefined) {
+    set max(value: Date | null | number | string | undefined) {
         this._setOption('max', value);
     }
 
@@ -522,10 +536,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get min(): Date | number | string | undefined {
+    get min(): Date | null | number | string | undefined {
         return this._getOption('min');
     }
-    set min(value: Date | number | string | undefined) {
+    set min(value: Date | null | number | string | undefined) {
         this._setOption('min', value);
     }
 
@@ -821,10 +835,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get value(): Date | number | string {
+    get value(): Date | null | number | string {
         return this._getOption('value');
     }
-    set value(value: Date | number | string) {
+    set value(value: Date | null | number | string) {
         this._setOption('value', value);
     }
 
@@ -860,10 +874,10 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get width(): (() => number | string) | number | string | undefined {
+    get width(): number | string | undefined {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string | undefined) {
+    set width(value: number | string | undefined) {
         this._setOption('width', value);
     }
 
@@ -1141,7 +1155,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() heightChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -1211,7 +1225,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() maxChange: EventEmitter<Date | number | string | undefined>;
+    @Output() maxChange: EventEmitter<Date | null | number | string | undefined>;
 
     /**
     
@@ -1225,7 +1239,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() minChange: EventEmitter<Date | number | string | undefined>;
+    @Output() minChange: EventEmitter<Date | null | number | string | undefined>;
 
     /**
     
@@ -1386,7 +1400,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueChange: EventEmitter<Date | number | string>;
+    @Output() valueChange: EventEmitter<Date | null | number | string>;
 
     /**
     
@@ -1407,7 +1421,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string | undefined>;
+    @Output() widthChange: EventEmitter<number | string | undefined>;
 
     /**
     
@@ -1420,26 +1434,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
     @HostListener('valueChange', ['$event']) change(_) { }
     @HostListener('onBlur', ['$event']) touched = (_) => {};
-
-
-    @ContentChildren(DxiDateBoxButtonComponent)
-    get buttonsChildren(): QueryList<DxiDateBoxButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this._setChildren('buttons', value, 'DxiDateBoxButtonComponent');
-    }
-
-
-    @ContentChildren(DxiButtonComponent)
-    get buttonsLegacyChildren(): QueryList<DxiButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsLegacyChildren(value) {
-        this._setChildren('buttons', value, 'DxiButtonComponent');
-    }
-
-
 
 
     constructor(elementRef: ElementRef, ngZone: NgZone, templateHost: DxTemplateHost,
@@ -1598,6 +1592,7 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
 
 @NgModule({
   imports: [
+    DxDateBoxComponent,
     DxiButtonModule,
     DxoOptionsModule,
     DxoCalendarOptionsModule,
@@ -1633,9 +1628,6 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
     DxiDateBoxToolbarItemModule,
     DxIntegrationModule,
     DxTemplateModule
-  ],
-  declarations: [
-    DxDateBoxComponent
   ],
   exports: [
     DxDateBoxComponent,
@@ -1676,6 +1668,8 @@ export class DxDateBoxComponent extends DxComponent implements OnDestroy, Contro
   ]
 })
 export class DxDateBoxModule { }
+
+export * from 'devextreme-angular/ui/date-box/nested';
 
 import type * as DxDateBoxTypes from "devextreme/ui/date_box_types";
 export { DxDateBoxTypes };

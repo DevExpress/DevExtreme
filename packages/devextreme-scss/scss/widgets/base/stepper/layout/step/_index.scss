@@ -6,19 +6,6 @@
   &.dx-state-hover {
     cursor: pointer;
   }
-
-  &.dx-step-completed,
-  &.dx-step-selected {
-    .dx-step-text {
-      font-weight: 600;
-    }
-  }
-
-  &.dx-step-selected {
-    .dx-step-label {
-      font-weight: 600;
-    }
-  }
 }
 
 .dx-step-indicator {
@@ -27,10 +14,10 @@
   justify-content: center;
   flex-shrink: 0;
   transition-property: color, background-color, border-color;
-  transition-duration: .4s;
   transition-timing-function: ease-in-out;
   border-style: solid;
   border-radius: 999em;
+  border-width: 1px;
 }
 
 .dx-step-content {
@@ -39,14 +26,14 @@
   flex-direction: column;
 }
 
-.dx-step-label {
+.dx-step-caption {
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.dx-step-title,
+.dx-step-label,
 .dx-step-optional-mark {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -64,7 +51,7 @@
     width: 100%;
   }
 
-  .dx-step-title,
+  .dx-step-label,
   .dx-step-optional-mark {
     text-align: start;
   }

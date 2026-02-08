@@ -1,5 +1,6 @@
-/* global internals, initTree */
 import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
+import { internals } from './testData.js';
+import { initTree } from './testUtils.js';
 const createInstance = (options) => new TreeViewTestWrapper(options);
 
 QUnit.module('Lazy rendering');

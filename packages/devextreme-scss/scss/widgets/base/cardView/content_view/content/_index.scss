@@ -1,0 +1,13 @@
+@use './variables' as *;
+@use './card';
+
+.dx-cardview-content {
+  display: grid;
+  justify-items: center;
+  column-gap: $cardview-cards-column-gap;
+  row-gap: $cardview-cards-row-gap;
+  grid-template-columns: repeat(var(--dx-cardview-cardsperrow), 1fr);
+
+  // NOTE: This is default value for the cardCover.maxHeight option
+  --dx-cardview-card-cover-max-height: #{$cardview-card__cover-max-height};
+}

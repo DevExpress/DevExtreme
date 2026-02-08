@@ -1,4 +1,4 @@
-import Box from '../__internal/ui/m_box';
+import Box from '../__internal/ui/box';
 
 export default Box;
 

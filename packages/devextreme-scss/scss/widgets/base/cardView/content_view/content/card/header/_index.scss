@@ -1,0 +1,57 @@
+@use './variables' as *;
+@use '../variables' as *;
+
+.dx-cardview-card-header {
+  display: flex;
+  align-items: center;
+  height: $cardview-card__header-height;
+
+  .dx-toolbar {
+    padding: 0 12px;
+    border-radius: $cardview-card-border-radius $cardview-card-border-radius 0 0;
+    background-color: transparent;
+
+    .dx-toolbar-label {
+      font-size: $cardview-card__header-text-size;
+    }
+
+    .dx-toolbar-items-container {
+      /* NOTE: height override set only in material "default" */
+      height: $cardview-card__header__toolbar-override-height;
+    }
+  }
+
+  .dx-cardview-select-checkbox {
+    padding-right: $cardview-card__header__selection-checkbox-padding-right;
+  }
+}
+
+.dx-cardview-card-selection {
+  .dx-toolbar {
+    background-color: $cardview-card--selected-bg-color;
+  }
+}
+
+.dx-cardview-select-checkboxes-hidden .dx-cardview-card:not(.dx-cardview-card-selection) .dx-cardview-select-checkbox {
+  .dx-checkbox {
+    display: none;
+  }
+
+  .dx-toolbar-item-content::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    pointer-events: none;
+  }
+
+  .dx-toolbar-item-content:hover {
+    &::before {
+      display: none;
+    }
+
+    .dx-checkbox {
+      display: inline-block;
+    }
+  }
+}

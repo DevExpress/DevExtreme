@@ -1320,6 +1320,10 @@ export const resizing = (Base: ModuleType<ResizingController>) => class VirtualS
     return isDefined(this._resizeTimeout);
   }
 
+  public resetLastResizeTime(): void {
+    this._lastTime = undefined;
+  }
+
   public resize(): DeferredObj<unknown> {
     let result;
 
@@ -1604,7 +1608,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     return correctedRowHeights;
   }
 
-  private _updateContentPosition(isRender?) {
+  protected _updateContentPosition(isRender?) {
     const rowHeight = this._rowHeight || 20;
 
     this._dataController

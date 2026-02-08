@@ -5,6 +5,7 @@ import Pagination, { Properties } from "devextreme/ui/pagination";
 import  DOMComponent from "devextreme/core/dom_component";
 import {
  DisplayMode,
+ Mode,
 } from "devextreme/common";
 import {
  EventInfo,
@@ -55,7 +56,7 @@ const componentConfig = {
     displayMode: String as PropType<DisplayMode>,
     elementAttr: Object as PropType<Record<string, any>>,
     focusStateEnabled: Boolean,
-    height: [Function, Number, String] as PropType<((() => number | string)) | number | string>,
+    height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
     infoText: String,
@@ -70,10 +71,10 @@ const componentConfig = {
     rtlEnabled: Boolean,
     showInfo: Boolean,
     showNavigationButtons: Boolean,
-    showPageSizeSelector: Boolean,
+    showPageSizeSelector: [Boolean, String] as PropType<boolean | Mode>,
     tabIndex: Number,
     visible: Boolean,
-    width: [Function, Number, String] as PropType<((() => number | string)) | number | string>
+    width: [Number, String]
   },
   emits: {
     "update:isActive": null,

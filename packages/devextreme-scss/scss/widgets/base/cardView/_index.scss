@@ -1,0 +1,42 @@
+@use './content_view';
+@use './header_panel';
+@use './filter_panel';
+@use './column_chooser';
+@use './variables' as *;
+
+// adduse
+
+.dx-cardview {
+  padding: $cardview-padding;
+  background-color: $cardview-bg-color;
+  border-radius: $cardview-border-radius;
+  color: $cardview-text-color;
+  font-weight: $cardview-text-weight;
+
+  .dx-link {
+    text-decoration: underline;
+    cursor: pointer;
+    color: $cardview-link-color;
+  }
+}
+
+.dx-cardview-root-container {
+  display: flex;
+  flex-direction: column;
+  gap: $cardview-gap;
+  height: 100%;
+}
+
+.dx-cardview-header-container {
+  display: flex;
+  flex-direction: column;
+  gap: $cardview-header-gap;
+
+  .dx-toolbar {
+    background-color: transparent;
+  }
+}
+
+.dx-cardview-exclude-flexbox {
+  position: absolute;
+}

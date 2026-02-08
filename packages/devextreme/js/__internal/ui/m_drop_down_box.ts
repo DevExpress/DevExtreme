@@ -17,9 +17,9 @@ import { isDefined, isObject } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/drop_down_box';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import type { Properties as PopupProperties } from '@js/ui/popup';
-import { tabbable } from '@js/ui/widget/selectors';
+import { tabbable } from '@ts/core/utils/m_selectors';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
-import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
+import { getElementMaxHeightByWindow } from '@ts/ui/overlay/utils';
 
 const { getActiveElement } = domAdapter;
 
@@ -65,7 +65,6 @@ class DropDownBox<
   }
 
   _getElements(): dxElementWrapper {
-    // @ts-expect-error ts-error
     return $(this.content()).find('*');
   }
 
@@ -226,8 +225,13 @@ class DropDownBox<
     if (!(contentTemplate && this.option('contentTemplate'))) {
       return;
     }
-    // @ts-expect-error ts-error
-    const $popupContent = this._popup.$content();
+
+    const $popupContent = this._popup?.$content();
+
+    if (!$popupContent) {
+      return;
+    }
+
     const templateData = {
       value: this._fieldRenderData(),
       component: this,
@@ -293,6 +297,7 @@ class DropDownBox<
         of: this.$element(),
       }),
       _ignoreFunctionValueDeprecation: true,
+      // @ts-expect-error ts-error
       maxHeight: function () {
         const popupLocation = this._popupPosition?.v.location;
 

@@ -10,7 +10,6 @@ import {
     Host,
     SkipSelf,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -19,16 +18,22 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { DxoFormSimpleItem } from './base/form-simple-item';
-import { DxiValidationRuleComponent } from './validation-rule-dxi';
 
+import {
+    PROPERTY_TOKEN_validationRules,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-form-item',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost],
     inputs: [
         'colSpan',
@@ -48,19 +53,16 @@ import { DxiValidationRuleComponent } from './validation-rule-dxi';
     ]
 })
 export class DxoFormItemComponent extends DxoFormSimpleItem implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+    
 
     protected get _optionPath() {
         return 'formItem';
     }
 
-
-    @ContentChildren(forwardRef(() => DxiValidationRuleComponent))
-    get validationRulesChildren(): QueryList<DxiValidationRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setChildren('validationRules', value);
-    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
@@ -82,7 +84,7 @@ export class DxoFormItemComponent extends DxoFormSimpleItem implements OnDestroy
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoFormItemComponent
   ],
   exports: [

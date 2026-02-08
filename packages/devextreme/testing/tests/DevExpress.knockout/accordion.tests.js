@@ -74,8 +74,8 @@ QUnit.test('item should be rendered correctly with dxitem syntax', function(asse
     const $title = $item.find('.' + ACCORDION_ITEM_TITLE_CLASS);
     const $content = $item.find('.' + ACCORDION_ITEM_BODY_CLASS);
 
-    assert.equal($.trim($title.text()), 'title', 'title rendered correctly');
-    assert.equal($.trim($content.text()), 'custom', 'content rendered correctly');
+    assert.equal($title.text().trim(), 'title', 'title rendered correctly');
+    assert.equal($content.text().trim(), 'custom', 'content rendered correctly');
 });
 
 QUnit.test('itemTitleTemplate option', function(assert) {

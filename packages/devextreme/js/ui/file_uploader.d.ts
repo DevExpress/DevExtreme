@@ -8,7 +8,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-} from '../common/core/events';
+} from '../events';
 
 import Editor, {
     EditorOptions,
@@ -272,7 +272,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
      * @docid
      * @default "or Drop file here"
-     * @default "" &for(InternetExplorer|desktop)
+     * @default "" &for(mobile_devices)
      * @public
      */
     labelText?: string;
@@ -548,8 +548,9 @@ export default class dxFileUploader extends Editor<dxFileUploaderOptions> {
      * @docid
      * @publicName reset(value)
      * @public
+     * @param1 value:Array<File>
      */
-    reset(value?: Array<File>): void;
+    reset(value?: Properties['value']): void;
 }
 
 /** @public */

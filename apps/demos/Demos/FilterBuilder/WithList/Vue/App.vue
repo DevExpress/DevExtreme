@@ -29,11 +29,11 @@ import { ref, onMounted } from 'vue';
 import DxFilterBuilder from 'devextreme-vue/filter-builder';
 import DxButton from 'devextreme-vue/button';
 import DxList from 'devextreme-vue/list';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-vue/common/data';
 import CustomItem from './CustomItem.vue';
 import { filter, fields, products } from './data.ts';
 
-const filterBuilderRef = ref(null);
+const filterBuilderRef = ref<DxFilterBuilder>();
 const dataSource = new DataSource({
   store: products,
 });
@@ -43,8 +43,10 @@ onMounted(() => {
 });
 
 function refreshDataSource() {
-  dataSource.filter(filterBuilderRef.value.instance.getFilterExpression());
-  dataSource.load();
+  if (filterBuilderRef.value?.instance) {
+    dataSource.filter(filterBuilderRef.value.instance.getFilterExpression());
+    dataSource.load();  
+  }
 }
 </script>
 <style scoped>

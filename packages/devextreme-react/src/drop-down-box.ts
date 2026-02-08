@@ -71,7 +71,7 @@ const DropDownBox = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["opened"]), []);
       const independentEvents = useMemo(() => (["onChange","onClosed","onCopy","onCut","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onKeyDown","onKeyUp","onOpened","onPaste","onValueChanged"]), []);
@@ -232,8 +232,6 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
     hide?: AnimationConfig;
     show?: AnimationConfig;
   };
-  bindingOptions?: Record<string, any>;
-  closeOnOutsideClick?: boolean | ((event: event) => boolean);
   container?: any | string | undefined;
   contentTemplate?: ((contentElement: any) => string | any) | template;
   deferRendering?: boolean;
@@ -244,15 +242,15 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   enableBodyScroll?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;
-  height?: (() => number | string) | number | string;
+  height?: number | string;
   hideOnOutsideClick?: boolean | ((event: event) => boolean);
   hideOnParentScroll?: boolean;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
-  maxHeight?: (() => number | string) | number | string;
-  maxWidth?: (() => number | string) | number | string;
-  minHeight?: (() => number | string) | number | string;
-  minWidth?: (() => number | string) | number | string;
+  maxHeight?: number | string;
+  maxWidth?: number | string;
+  minHeight?: number | string;
+  minWidth?: number | string;
   onContentReady?: ((e: EventInfo<any>) => void);
   onDisposing?: ((e: EventInfo<any>) => void);
   onHidden?: ((e: EventInfo<any>) => void);
@@ -278,16 +276,16 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   titleTemplate?: ((titleElement: any) => string | any) | template;
   toolbarItems?: Array<dxPopupToolbarItem>;
   visible?: boolean;
-  width?: (() => number | string) | number | string;
+  width?: number | string;
   wrapperAttr?: any;
-  defaultHeight?: (() => number | string) | number | string;
-  onHeightChange?: (value: (() => number | string) | number | string) => void;
+  defaultHeight?: number | string;
+  onHeightChange?: (value: number | string) => void;
   defaultPosition?: (() => void) | PositionAlignment | PositionConfig;
   onPositionChange?: (value: (() => void) | PositionAlignment | PositionConfig) => void;
   defaultVisible?: boolean;
   onVisibleChange?: (value: boolean) => void;
-  defaultWidth?: (() => number | string) | number | string;
-  onWidthChange?: (value: (() => number | string) | number | string) => void;
+  defaultWidth?: number | string;
+  onWidthChange?: (value: number | string) => void;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
   titleRender?: (...params: any) => React.ReactNode;
@@ -426,11 +424,10 @@ const Offset = Object.assign<typeof _componentOffset, NestedComponentMeta>(_comp
 type IOptionsProps = React.PropsWithChildren<{
   accessKey?: string | undefined;
   activeStateEnabled?: boolean;
-  bindingOptions?: Record<string, any>;
   disabled?: boolean;
   elementAttr?: Record<string, any>;
   focusStateEnabled?: boolean;
-  height?: (() => number | string) | number | string | undefined;
+  height?: number | string | undefined;
   hint?: string | undefined;
   hoverStateEnabled?: boolean;
   icon?: string;
@@ -448,7 +445,7 @@ type IOptionsProps = React.PropsWithChildren<{
   useSubmitBehavior?: boolean;
   validationGroup?: string | undefined;
   visible?: boolean;
-  width?: (() => number | string) | number | string | undefined;
+  width?: number | string | undefined;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
 }>

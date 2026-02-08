@@ -1,8 +1,5 @@
-const common = require('./commonParts/common.js');
-const createSankey = common.createSankey;
-const environment = common.environment;
-const themeModule = require('viz/themes');
-const find = common.find;
+import { createSankey, environment, find } from './commonParts/common.js';
+import themeModule from 'viz/themes';
 
 themeModule.registerTheme({
     name: 'test-theme',
@@ -15,7 +12,6 @@ themeModule.registerTheme({
         }
     }
 }, 'generic.light');
-
 
 QUnit.module('Items: links', environment);
 
@@ -293,7 +289,6 @@ QUnit.test('disable hover', function(assert) {
 
     assert.ok(!links[0].isHovered());
 });
-
 
 QUnit.test('isHovered method', function(assert) {
     const sankey = createSankey({

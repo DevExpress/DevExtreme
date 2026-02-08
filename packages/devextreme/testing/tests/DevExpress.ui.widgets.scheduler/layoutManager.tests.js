@@ -3,19 +3,18 @@ import 'generic_light.css!';
 import '__internal/scheduler/m_scheduler';
 
 import $ from 'jquery';
-import keyboardMock from '../../helpers/keyboardMock.js';
-import pointerMock from '../../helpers/pointerMock.js';
 import translator from 'common/core/animation/translator';
 
-import AppointmentLayoutManager from '__internal/scheduler/m_appointments_layout_manager';
-import BaseAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_base';
-import VerticalAppointmentStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_vertical';
-import HorizontalAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_horizontal';
-import HorizontalMonthLineAppointmentsStrategy from '__internal/scheduler/appointments/rendering_strategies/m_strategy_horizontal_month_line';
-import Color from 'color';
+import AppointmentLayoutManager from '__internal/scheduler/view_model/m_appointments_layout_manager';
+import BaseAppointmentsStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_base';
+import VerticalAppointmentStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_vertical';
+import HorizontalAppointmentsStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_horizontal';
+import HorizontalMonthLineAppointmentsStrategy from '__internal/scheduler/view_model/generate_view_model/rendering_strategies/m_strategy_horizontal_month_line';
 import dataUtils from 'core/element_data';
-import { CustomStore } from 'common/data/custom_store';
-import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
+import pointerMock from '../../helpers/pointerMock.js';
+import { createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 const APPOINTMENT_DEFAULT_LEFT_OFFSET = 26;
 
@@ -31,9 +30,10 @@ QUnit.testStart(function() {
 
 const moduleOptions = {
     beforeEach: function() {
-        this.createInstance = options => {
-            this.instance = $('#scheduler').dxScheduler($.extend(options, { editing: true, height: options && options.height || 600 })).dxScheduler('instance');
-            this.scheduler = new SchedulerTestWrapper(this.instance);
+        this.createInstance = async(options) => {
+            const scheduler = await createWrapper($.extend(options, { editing: true, height: options && options.height || 600 }));
+            this.instance = scheduler.instance;
+            this.scheduler = scheduler;
         };
     },
     afterEach: function() {
@@ -42,18 +42,18 @@ const moduleOptions = {
 
 QUnit.module('LayoutManager', moduleOptions);
 
-QUnit.test('LayoutManager should be initialized', function(assert) {
-    this.createInstance();
+QUnit.test('LayoutManager should be initialized', async function(assert) {
+    await this.createInstance();
     assert.ok(this.instance.getLayoutManager() instanceof AppointmentLayoutManager, 'AppointmentLayoutManager was initialized');
 });
 
-QUnit.test('RenderingStrategy should be initialized', function(assert) {
-    this.createInstance();
+QUnit.test('RenderingStrategy should be initialized', async function(assert) {
+    await this.createInstance();
     assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof BaseAppointmentsStrategy, 'AppointmentLayoutManager was initialized');
 });
 
-QUnit.test('Scheduler should have a right rendering strategy for timeline views', function(assert) {
-    this.createInstance({
+QUnit.test('Scheduler should have a right rendering strategy for timeline views', async function(assert) {
+    await this.createInstance({
         views: ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'],
         currentView: 'timelineDay',
         currentDate: new Date(2021, 7, 30),
@@ -64,20 +64,23 @@ QUnit.test('Scheduler should have a right rendering strategy for timeline views'
         }]
     });
 
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineDay strategy is OK');
+    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineDay strategy is OK');
 
     this.instance.option('currentView', 'timelineWeek');
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineWeek strategy is OK');
+    await waitAsync(0);
+    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineWeek strategy is OK');
 
     this.instance.option('currentView', 'timelineWorkWeek');
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineWorkWeek strategy is OK');
+    await waitAsync(0);
+    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'timelineWorkWeek strategy is OK');
 
     this.instance.option('currentView', 'timelineMonth');
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalMonthLineAppointmentsStrategy, 'timelineMonth strategy is OK');
+    await waitAsync(0);
+    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalMonthLineAppointmentsStrategy, 'timelineMonth strategy is OK');
 });
 
-QUnit.test('Scheduler should have a right rendering strategy for views with config', function(assert) {
-    this.createInstance({
+QUnit.test('Scheduler should have a right rendering strategy for views with config', async function(assert) {
+    await this.createInstance({
         views: [ {
             name: 'MonthView',
             type: 'month'
@@ -94,52 +97,17 @@ QUnit.test('Scheduler should have a right rendering strategy for views with conf
         }]
     });
 
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof VerticalAppointmentStrategy, 'Strategy is OK');
+    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof VerticalAppointmentStrategy, 'Strategy is OK');
 
     this.instance.option('currentView', 'MonthView');
-    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'Strategy is OK');
+    await waitAsync(0);
+    assert.ok(this.instance.getLayoutManager().getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, 'Strategy is OK');
 });
 
 QUnit.module('Appointments', moduleOptions);
 
-QUnit.test('Exception should be thrown if appointment has no start date', function(assert) {
-    this.createInstance();
-
-    const layoutManager = this.instance.getLayoutManager();
-
-    assert.throws(
-        function() {
-            layoutManager.createAppointmentsMap([{
-                text: 'Appointment 1'
-            }]);
-        },
-        function(e) {
-            return /E1032/.test(e.message);
-        },
-        'Exception messages should be correct'
-    );
-});
-
-QUnit.test('Exception should be thrown if appointment has a broken start date', function(assert) {
-    this.createInstance();
-
-    const layoutManager = this.instance.getLayoutManager();
-
-    assert.throws(
-        function() {
-            layoutManager.createAppointmentsMap([{
-                text: 'Appointment 1', startDate: 'Invalid date format'
-            }]);
-        },
-        function(e) {
-            return /E1032/.test(e.message);
-        },
-        'Exception messages should be correct'
-    );
-});
-
-QUnit.test('Default appointment duration should be equal to 30 minutes', function(assert) {
-    this.createInstance({
+QUnit.test('Default appointment duration should be equal to 30 minutes', async function(assert) {
+    await this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: [{ text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8) }]
     });
@@ -147,8 +115,8 @@ QUnit.test('Default appointment duration should be equal to 30 minutes', functio
     assert.deepEqual(this.instance.option('dataSource')[0].endDate, new Date(2015, 1, 9, 8, 30), 'End date of appointment is 30 minutes');
 });
 
-QUnit.test('Appointment duration should be equal to 30 minutes if end date lower than start date', function(assert) {
-    this.createInstance({
+QUnit.test('Appointment duration should be equal to 30 minutes if end date lower than start date', async function(assert) {
+    await this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: [
             { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 7) }
@@ -158,8 +126,8 @@ QUnit.test('Appointment duration should be equal to 30 minutes if end date lower
     assert.deepEqual(this.instance.option('dataSource')[0].endDate, new Date(2015, 1, 9, 8, 30), 'End date is correct');
 });
 
-QUnit.test('Appointment duration should not change if end date equal to start date', function(assert) {
-    this.createInstance({
+QUnit.test('Appointment duration should not change if end date equal to start date', async function(assert) {
+    await this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: [
             { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 8) },
@@ -169,8 +137,8 @@ QUnit.test('Appointment duration should not change if end date equal to start da
     assert.deepEqual(this.instance.option('dataSource')[0].endDate, new Date(2015, 1, 9, 8, 0), 'End date is correct');
 });
 
-QUnit.test('AllDay appointment without endDate shoud be rendered correctly', function(assert) {
-    this.createInstance({
+QUnit.test('AllDay appointment without endDate shoud be rendered correctly', async function(assert) {
+    await this.createInstance({
         currentDate: new Date(2015, 1, 9),
         dataSource: [
             { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), AllDay: true }
@@ -185,8 +153,8 @@ QUnit.test('AllDay appointment without endDate shoud be rendered correctly', fun
     assert.equal($appointment.length, 1, 'AllDay appointment was rendered');
 });
 
-QUnit.test('Appointment should have right default height', function(assert) {
-    this.createInstance(
+QUnit.test('Appointment should have right default height', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2016, 2, 1),
             dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
@@ -198,8 +166,8 @@ QUnit.test('Appointment should have right default height', function(assert) {
     assert.equal(getOuterHeight($appointment), 100, 'Appointment has a right height');
 });
 
-QUnit.test('Appointment should have a correct height when dates are defined as not Date objects', function(assert) {
-    this.createInstance(
+QUnit.test('Appointment should have a correct height when dates are defined as not Date objects', async function(assert) {
+    await this.createInstance(
         {
             currentDate: 1423458000000,
             dataSource: [{ text: 'Appointment 1', startDate: 1423458000000, endDate: 1423461600000 }]
@@ -211,8 +179,8 @@ QUnit.test('Appointment should have a correct height when dates are defined as n
     assert.equal(getOuterHeight($appointment), 100, 'Appointment has a right height');
 });
 
-QUnit.test('Appointment should have a correct min height', function(assert) {
-    this.createInstance(
+QUnit.test('Appointment should have a correct min height', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9, 8),
             dataSource: [
@@ -229,8 +197,8 @@ QUnit.test('Appointment should have a correct min height', function(assert) {
     assert.equal(getOuterHeight($appointment), 4, 'Appointment has a right height');
 });
 
-QUnit.test('Appointment should have a correct min width', function(assert) {
-    this.createInstance(
+QUnit.test('Appointment should have a correct min width', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9, 8),
             views: ['timelineWeek'],
@@ -250,8 +218,8 @@ QUnit.test('Appointment should have a correct min width', function(assert) {
     assert.equal(getOuterWidth($appointment), 4, 'Appointment has a right width');
 });
 
-QUnit.test('Long appointment tail should have a correct min height', function(assert) {
-    this.createInstance(
+QUnit.test('Long appointment tail should have a correct min height', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9, 8),
             views: ['week'],
@@ -270,8 +238,8 @@ QUnit.test('Long appointment tail should have a correct min height', function(as
     assert.equal(getOuterHeight($appointment), 4, 'Appointment-tail has a right height');
 });
 
-QUnit.test('Appointment has right sortedIndex', function(assert) {
-    this.createInstance(
+QUnit.test('Appointment has right sortedIndex', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2015, 9, 16),
             currentView: 'month',
@@ -294,8 +262,8 @@ QUnit.test('Appointment has right sortedIndex', function(assert) {
     assert.equal(dataUtils.data($appointments.get(3), 'dxAppointmentSettings').sortedIndex, 3, 'app has right sortedIndex');
 });
 
-QUnit.test('AllDay appointment should be displayed right when endDate > startDate and duration < 24', function(assert) {
-    this.createInstance(
+QUnit.test('AllDay appointment should be displayed right when endDate > startDate and duration < 24', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 5),
             currentView: 'week',
@@ -311,8 +279,8 @@ QUnit.test('AllDay appointment should be displayed right when endDate > startDat
     assert.roughEqual(getOuterWidth($appointment.eq(0)), getOuterWidth($allDayCell.eq(0)) * 2, 1.001, 'appointment has right width');
 });
 
-QUnit.test('Two rival appointments should have correct positions', function(assert) {
-    this.createInstance(
+QUnit.test('Two rival appointments should have correct positions', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'month',
@@ -333,8 +301,8 @@ QUnit.test('Two rival appointments should have correct positions', function(asse
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(1), this.scheduler.workSpace.getCellWidth(), 1.1, 'appointment has a right size');
 });
 
-QUnit.test('Four rival appointments should have correct positions', function(assert) {
-    this.createInstance(
+QUnit.test('Four rival appointments should have correct positions', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'month',
@@ -360,17 +328,17 @@ QUnit.test('Four rival appointments should have correct positions', function(ass
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(1), this.scheduler.workSpace.getCellWidth(), 1.1, 'appointment has a right size');
 
     assert.equal(this.scheduler.appointments.getAppointmentPosition(2).left, 0, 'appointment is rendered in right place');
-    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(2).top, 68, 1.5, 'appointment is rendered in right place');
+    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(2).top, 54, 1.5, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(2), this.scheduler.workSpace.getCellWidth(), 1.1, 'appointment has a right size');
 
     assert.equal(this.scheduler.appointments.getAppointmentPosition(3).left, 0, 'appointment is rendered in right place');
-    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(3).top, 54, 1.5, 'appointment is rendered in right place');
+    assert.roughEqual(this.scheduler.appointments.getAppointmentPosition(3).top, 68, 1.5, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(3), this.scheduler.workSpace.getCellWidth(), 1.1, 'appointment has a right size');
 
 });
 
-QUnit.test('Rival duplicated appointments should have correct positions', function(assert) {
-    this.createInstance(
+QUnit.test('Rival duplicated appointments should have correct positions', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'month',
@@ -398,8 +366,8 @@ QUnit.test('Rival duplicated appointments should have correct positions', functi
     assert.roughEqual(getOuterWidth($appointment.eq(1)), getOuterWidth($tableCell) * 2, 1.5, 'appointment has a right size');
 });
 
-QUnit.test('Appointments should be rendered without errors (T816873)', function(assert) {
-    this.createInstance(
+QUnit.test('Appointments should be rendered without errors (T816873)', async function(assert) {
+    await this.createInstance(
         {
             dataSource: [
                 {
@@ -437,11 +405,11 @@ QUnit.test('Appointments should be rendered without errors (T816873)', function(
 
 QUnit.module('Horizontal Month Line Strategy', moduleOptions);
 
-QUnit.test('Start date of appointment should be changed when resize is finished', function(assert) {
+QUnit.test('Start date of appointment should be changed when resize is finished', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 4, 0), endDate: new Date(2015, 1, 5, 0) };
     const updatedItem = $.extend({}, item, { startDate: new Date(2015, 1, 3, 0) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 4),
             currentView: 'timelineMonth',
@@ -468,11 +436,11 @@ QUnit.test('Start date of appointment should be changed when resize is finished'
     });
 });
 
-QUnit.test('End date of appointment should be changed when resize is finished', function(assert) {
+QUnit.test('End date of appointment should be changed when resize is finished', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 4, 0), endDate: new Date(2015, 1, 5, 0) };
     const updatedItem = $.extend({}, item, { endDate: new Date(2015, 1, 6, 0) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 4),
             currentView: 'timelineMonth',
@@ -500,11 +468,11 @@ QUnit.test('End date of appointment should be changed when resize is finished', 
     });
 });
 
-QUnit.test('End date of appointment should be changed when resize is finished, RTL mode', function(assert) {
+QUnit.test('End date of appointment should be changed when resize is finished, RTL mode', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 4, 0), endDate: new Date(2015, 1, 5, 0) };
     const updatedItem = $.extend({}, item, { endDate: new Date(2015, 1, 6, 0) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 4),
             currentView: 'timelineMonth',
@@ -532,11 +500,11 @@ QUnit.test('End date of appointment should be changed when resize is finished, R
     });
 });
 
-QUnit.test('Start date of appointment should be changed when resize is finished, RTL mode', function(assert) {
+QUnit.test('Start date of appointment should be changed when resize is finished, RTL mode', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 4, 0), endDate: new Date(2015, 1, 5, 0) };
     const updatedItem = $.extend({}, item, { startDate: new Date(2015, 1, 3, 0) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 4),
             currentView: 'timelineMonth',
@@ -569,22 +537,20 @@ QUnit.test('Start date of appointment should be changed when resize is finished,
 QUnit.module('Horizontal Month Strategy', {
     beforeEach: function() {
         moduleOptions.beforeEach.apply(this);
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         moduleOptions.afterEach.apply(this);
-        this.clock.restore();
     }
 });
 
-QUnit.test('Start date of the long-time reduced appointment should be changed correctly when resize is finished', function(assert) {
+QUnit.test('Start date of the long-time reduced appointment should be changed correctly when resize is finished', async function(assert) {
     const items = [{
         text: 'Appointment 1',
         startDate: new Date(2015, 2, 11, 0),
         endDate: new Date(2015, 2, 23, 0)
     }];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 15),
             currentView: 'month',
@@ -612,7 +578,7 @@ QUnit.test('Start date of the long-time reduced appointment should be changed co
     });
 });
 
-QUnit.test('More than 3 cloned appointments should be grouped', function(assert) {
+QUnit.test('More than 3 cloned appointments should be grouped', async function(assert) {
     const items = [];
     let i = 10;
 
@@ -621,7 +587,7 @@ QUnit.test('More than 3 cloned appointments should be grouped', function(assert)
         i--;
     }
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'month',
@@ -640,7 +606,7 @@ QUnit.test('More than 3 cloned appointments should be grouped', function(assert)
     assert.equal(this.scheduler.tooltip.getItemCount(), 8, 'DropDown menu has correct items');
 });
 
-QUnit.test('Grouped appointments should be reinitialized if datasource is changed', function(assert) {
+QUnit.test('Grouped appointments should be reinitialized if datasource is changed', async function(assert) {
     const items = [];
     let i = 7;
     while(i > 0) {
@@ -648,7 +614,7 @@ QUnit.test('Grouped appointments should be reinitialized if datasource is change
         i--;
     }
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'month',
@@ -659,6 +625,7 @@ QUnit.test('Grouped appointments should be reinitialized if datasource is change
     );
     items.push({ text: 'a', startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1) });
     this.instance.option('dataSource', items);
+    await waitAsync(0);
     const $dropDownMenu = $(this.instance.$element().find('.dx-scheduler-appointment-collector'));
 
     assert.equal($dropDownMenu.length, 1, 'DropDown appointments are refreshed');
@@ -666,11 +633,11 @@ QUnit.test('Grouped appointments should be reinitialized if datasource is change
 
 QUnit.module('Horizontal Strategy', moduleOptions);
 
-QUnit.test('Start date of appointment should be changed when resize is finished', function(assert) {
+QUnit.test('Start date of appointment should be changed when resize is finished', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 2, 0) };
     const updatedItem = $.extend({}, item, { startDate: new Date(2015, 1, 1, 0, 30) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 1),
             views: ['timelineWeek'],
@@ -699,11 +666,11 @@ QUnit.test('Start date of appointment should be changed when resize is finished'
     });
 });
 
-QUnit.test('Start date of the long-time reduced appointment should be changed correctly when resize is finished', function(assert) {
+QUnit.test('Start date of the long-time reduced appointment should be changed correctly when resize is finished', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 2, 15, 2), endDate: new Date(2015, 2, 23, 0) };
     const updatedItem = $.extend({}, item, { startDate: new Date(2015, 2, 15, 0) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 15),
             views: ['timelineWeek'],
@@ -731,11 +698,11 @@ QUnit.test('Start date of the long-time reduced appointment should be changed co
     });
 });
 
-QUnit.test('End date of appointment should be changed when resize is finished', function(assert) {
+QUnit.test('End date of appointment should be changed when resize is finished', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 4, 0), endDate: new Date(2015, 1, 5, 0) };
     const updatedItem = $.extend({}, item, { endDate: new Date(2015, 1, 5, 0, 30) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 4),
             views: ['timelineWeek'],
@@ -764,11 +731,11 @@ QUnit.test('End date of appointment should be changed when resize is finished', 
     });
 });
 
-QUnit.test('End date of appointment should be changed when resize is finished, RTL mode', function(assert) {
+QUnit.test('End date of appointment should be changed when resize is finished, RTL mode', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 4, 0), endDate: new Date(2015, 1, 5, 0) };
     const updatedItem = $.extend({}, item, { endDate: new Date(2015, 1, 5, 0, 30) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 4),
             views: ['timelineWeek'],
@@ -798,11 +765,11 @@ QUnit.test('End date of appointment should be changed when resize is finished, R
     });
 });
 
-QUnit.test('Start date of appointment should be changed when resize is finished, RTL mode', function(assert) {
+QUnit.test('Start date of appointment should be changed when resize is finished, RTL mode', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 4, 10), endDate: new Date(2015, 1, 5, 0) };
     const updatedItem = $.extend({}, item, { startDate: new Date(2015, 1, 4, 9, 30) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 4),
             views: ['timelineWeek'],
@@ -833,11 +800,11 @@ QUnit.test('Start date of appointment should be changed when resize is finished,
     });
 });
 
-QUnit.test('End date of appointment should be changed considering endDayHour and startDayHour when resize is finished', function(assert) {
+QUnit.test('End date of appointment should be changed considering endDayHour and startDayHour when resize is finished', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 18), endDate: new Date(2015, 1, 9, 19) };
     const updatedItem = $.extend({}, item, { endDate: new Date(2015, 1, 10, 10) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             views: ['timelineWeek'],
@@ -870,11 +837,11 @@ QUnit.test('End date of appointment should be changed considering endDayHour and
     });
 });
 
-QUnit.test('Start date of appointment should be changed considering endDayHour and startDayHour when resize is finished', function(assert) {
+QUnit.test('Start date of appointment should be changed considering endDayHour and startDayHour when resize is finished', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 9), endDate: new Date(2015, 1, 9, 10) };
     const updatedItem = $.extend({}, item, { startDate: new Date(2015, 1, 8, 19) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             views: ['timelineWeek'],
@@ -906,11 +873,11 @@ QUnit.test('Start date of appointment should be changed considering endDayHour a
     });
 });
 
-QUnit.test('Start date of long multiday appointment should be changed considering endDayHour and startDayHour when resize is finished', function(assert) {
+QUnit.test('Start date of long multiday appointment should be changed considering endDayHour and startDayHour when resize is finished', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 9), endDate: new Date(2015, 1, 9, 10) };
     const updatedItem = $.extend({}, item, { startDate: new Date(2015, 1, 7, 18) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             views: ['timelineWeek'],
@@ -945,11 +912,11 @@ QUnit.test('Start date of long multiday appointment should be changed considerin
     });
 });
 
-QUnit.test('End date of long multiday appointment should be changed considering endDayHour and startDayHour when resize is finished', function(assert) {
+QUnit.test('End date of long multiday appointment should be changed considering endDayHour and startDayHour when resize is finished', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 18), endDate: new Date(2015, 1, 9, 19) };
     const updatedItem = $.extend({}, item, { endDate: new Date(2015, 1, 11, 10) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             views: ['timelineWeek'],
@@ -984,13 +951,13 @@ QUnit.test('End date of long multiday appointment should be changed considering 
     });
 });
 
-QUnit.test('Four rival appointments should have correct positions', function(assert) {
+QUnit.test('Four rival appointments should have correct positions', async function(assert) {
     const items = [{ text: 'Appointment 1', startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
         { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
         { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
         { text: 'Appointment 4', startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) }];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'timelineDay',
@@ -1015,13 +982,13 @@ QUnit.test('Four rival appointments should have correct positions', function(ass
     assert.equal(translator.locate($appointment.eq(3)).left, 0, 'appointment is rendered in right place');
 });
 
-QUnit.test('Four rival appointments should have correct sizes', function(assert) {
+QUnit.test('Four rival appointments should have correct sizes', async function(assert) {
     const items = [{ text: 'Appointment 1', startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
         { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
         { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) },
         { text: 'Appointment 4', startDate: new Date(2015, 1, 9, 1), endDate: new Date(2015, 1, 9, 2) }];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'timelineDay',
@@ -1047,7 +1014,7 @@ QUnit.test('Four rival appointments should have correct sizes', function(assert)
     assert.roughEqual(getOuterHeight($appointment.eq(3)), 123, 1, 'appointment has a right size');
 });
 
-QUnit.test('Recurrence appointment should be rendered correctly on timelineWeek (T701534)', function(assert) {
+QUnit.test('Recurrence appointment should be rendered correctly on timelineWeek (T701534)', async function(assert) {
     const items = [{
         allDay: false,
         endDate: new Date(2018, 11, 12, 2),
@@ -1055,7 +1022,7 @@ QUnit.test('Recurrence appointment should be rendered correctly on timelineWeek 
         startDate: new Date(2018, 11, 11, 2)
     }];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2018, 11, 10),
             currentView: 'timelineWeek',
@@ -1073,8 +1040,8 @@ QUnit.test('Recurrence appointment should be rendered correctly on timelineWeek 
 
 QUnit.module('Vertical Strategy', moduleOptions);
 
-QUnit.test('AllDay recurrent appointments count should be correct if recurrenceException is set', function(assert) {
-    this.createInstance(
+QUnit.test('AllDay recurrent appointments count should be correct if recurrenceException is set', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2016, 6, 25),
             currentView: 'week',
@@ -1098,13 +1065,13 @@ QUnit.test('AllDay recurrent appointments count should be correct if recurrenceE
     assert.equal($appointments.length, 4, 'Appointments count is OK');
 });
 
-QUnit.test('Four rival all day appointments should have correct sizes', function(assert) {
+QUnit.test('Four rival all day appointments should have correct sizes', async function(assert) {
     const items = [{ text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 10), allDay: true },
         { text: 'Appointment 2', startDate: new Date(2015, 1, 9, 9), endDate: new Date(2015, 1, 9, 10), allDay: true },
         { text: 'Appointment 3', startDate: new Date(2015, 1, 9, 10), endDate: new Date(2015, 1, 9, 12), allDay: true },
         { text: 'Appointment 4', startDate: new Date(2015, 1, 9, 12), endDate: new Date(2015, 1, 9, 14), allDay: true }];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'day',
@@ -1125,7 +1092,7 @@ QUnit.test('Four rival all day appointments should have correct sizes', function
     assert.roughEqual(getOuterHeight($appointments.eq(1)), 24, 2, 'appointment has a right height');
 });
 
-QUnit.test('Dates of allDay appointment should be changed when resize is finished, week view RTL mode', function(assert) {
+QUnit.test('Dates of allDay appointment should be changed when resize is finished, week view RTL mode', async function(assert) {
     const item = {
         text: 'Appointment 1',
         startDate: new Date(2015, 1, 9, 8),
@@ -1136,7 +1103,7 @@ QUnit.test('Dates of allDay appointment should be changed when resize is finishe
         endDate: new Date(2015, 1, 10, 0)
     });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
@@ -1167,11 +1134,11 @@ QUnit.test('Dates of allDay appointment should be changed when resize is finishe
     });
 });
 
-QUnit.test('Start date of appointment should be changed when resize is finished', function(assert) {
+QUnit.test('Start date of appointment should be changed when resize is finished', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) };
     const updatedItem = $.extend({}, item, { startDate: new Date(2015, 1, 9, 7) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'day',
@@ -1199,11 +1166,11 @@ QUnit.test('Start date of appointment should be changed when resize is finished'
     });
 });
 
-QUnit.test('End date of appointment should be changed when resize is finished', function(assert) {
+QUnit.test('End date of appointment should be changed when resize is finished', async function(assert) {
     const item = { text: 'Appointment 1', startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 9) };
     const updatedItem = $.extend({}, item, { endDate: new Date(2015, 1, 9, 10) });
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'day',
@@ -1233,8 +1200,8 @@ QUnit.test('End date of appointment should be changed when resize is finished', 
     });
 });
 
-QUnit.test('Two rival appointments should have correct positions, vertical strategy', function(assert) {
-    this.createInstance(
+QUnit.test('Two rival appointments should have correct positions, vertical strategy', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
@@ -1267,8 +1234,8 @@ QUnit.test('Two rival appointments should have correct positions, vertical strat
     assert.roughEqual(getOuterWidth($appointment.eq(1)), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 });
 
-QUnit.test('Three rival appointments with two columns should have correct positions, vertical strategy', function(assert) {
-    this.createInstance(
+QUnit.test('Three rival appointments with two columns should have correct positions, vertical strategy', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
@@ -1288,25 +1255,28 @@ QUnit.test('Three rival appointments with two columns should have correct positi
     const cellWidth = $tableCell.get(0).getBoundingClientRect().width;
     const offset = APPOINTMENT_DEFAULT_LEFT_OFFSET;
     const firstAppointmentPosition = translator.locate($appointment.eq(0));
-    const secondAppointmentPosition = translator.locate($appointment.eq(1));
-    const thirdAppointmentPosition = translator.locate($appointment.eq(2));
+    const secondAppointmentPosition = translator.locate($appointment.eq(2));
+    const thirdAppointmentPosition = translator.locate($appointment.eq(1));
 
     assert.equal($appointment.length, 3, 'All appointments are rendered');
+    assert.equal($appointment.eq(0).find('.dx-scheduler-appointment-title').text(), 'Appointment 1');
     assert.equal(firstAppointmentPosition.top, 0, 'appointment is rendered in right place');
     assert.roughEqual(firstAppointmentPosition.left, cellWidth, 1, 'appointment is rendered in right place');
     assert.roughEqual(getOuterWidth($appointment.eq(0)), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 
+    assert.equal($appointment.eq(2).find('.dx-scheduler-appointment-title').text(), 'Appointment 2');
     assert.equal(secondAppointmentPosition.top, 2 * cellHeight, 'appointment is rendered in right place');
     assert.roughEqual(secondAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth(), 1, 'appointment is rendered in right place');
-    assert.roughEqual(getOuterWidth($appointment.eq(1)), (cellWidth - offset) / 2, 1, 'appointment has a right size');
+    assert.roughEqual(getOuterWidth($appointment.eq(2)), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 
+    assert.equal($appointment.eq(1).find('.dx-scheduler-appointment-title').text(), 'Appointment 3');
     assert.equal(thirdAppointmentPosition.top, 0, 'appointment is rendered in right place');
     assert.roughEqual(thirdAppointmentPosition.left, cellWidth + $appointment.eq(0).outerWidth(), 1, 'appointment is rendered in right place');
     assert.roughEqual(getOuterWidth($appointment.eq(1)), (cellWidth - offset) / 2, 1, 'appointment has a right size');
 });
 
-QUnit.test('Four rival appointments with three columns should have correct positions, vertical strategy', function(assert) {
-    this.createInstance(
+QUnit.test('Four rival appointments with three columns should have correct positions, vertical strategy', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
@@ -1332,18 +1302,18 @@ QUnit.test('Four rival appointments with three columns should have correct posit
     assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(0), { top: 0, left: cellWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(0), expectedAppWidth, 1, 'appointment has a right size');
 
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(1), { top: 2 * cellHeight, left: cellWidth + 2 * expectedAppWidth }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(1), { top: 0, left: cellWidth + expectedAppWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(1), expectedAppWidth, 1, 'appointment has a right size');
 
-    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(2), { top: 0, left: cellWidth + expectedAppWidth }, 'appointment is rendered in right place');
+    assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(2), { top: 2 * cellHeight, left: cellWidth + 2 * expectedAppWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(2), expectedAppWidth, 1, 'appointment has a right size');
 
     assert.deepEqual(this.scheduler.appointments.getAppointmentPosition(3), { top: 4 * cellHeight, left: cellWidth + expectedAppWidth }, 'appointment is rendered in right place');
     assert.roughEqual(this.scheduler.appointments.getAppointmentWidth(3), expectedAppWidth, 1, 'appointment has a right size');
 });
 
-QUnit.test('Rival duplicated appointments should have correct positions', function(assert) {
-    this.createInstance(
+QUnit.test('Rival duplicated appointments should have correct positions', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
@@ -1371,7 +1341,7 @@ QUnit.test('Rival duplicated appointments should have correct positions', functi
     assert.equal(this.scheduler.appointments.compact.getButtonCount(), 1, 'Compact button is rendered');
 });
 
-QUnit.test('More than 3 all-day appointments should be grouped', function(assert) {
+QUnit.test('More than 3 all-day appointments should be grouped', async function(assert) {
     const items = [];
     let i = 12;
     while(i > 0) {
@@ -1379,7 +1349,7 @@ QUnit.test('More than 3 all-day appointments should be grouped', function(assert
         i--;
     }
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
@@ -1394,8 +1364,8 @@ QUnit.test('More than 3 all-day appointments should be grouped', function(assert
     assert.equal($appointment.length, 2, 'Small appointments are grouped');
 });
 
-QUnit.test('Two rival all day appointments should have correct sizes and positions, vertical strategy', function(assert) {
-    this.createInstance(
+QUnit.test('Two rival all day appointments should have correct sizes and positions, vertical strategy', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
@@ -1426,8 +1396,8 @@ QUnit.test('Two rival all day appointments should have correct sizes and positio
     assert.roughEqual(getOuterHeight($appointment.eq(1)), 24.5, 1.1, 'appointment has a right height');
 });
 
-QUnit.test('All day appointments should have correct left position, vertical strategy, rtl mode', function(assert) {
-    this.createInstance(
+QUnit.test('All day appointments should have correct left position, vertical strategy, rtl mode', async function(assert) {
+    await this.createInstance(
         {
             currentDate: new Date(2015, 1, 9),
             currentView: 'week',
@@ -1452,16 +1422,14 @@ QUnit.test('All day appointments should have correct left position, vertical str
 QUnit.module('Appointments Keyboard Navigation', {
     beforeEach: function() {
         moduleOptions.beforeEach.apply(this);
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         moduleOptions.afterEach.apply(this);
-        this.clock.restore();
     }
 });
 
-QUnit.test('Focus shouldn\'t be prevent when last appointment is reached', function(assert) {
-    this.createInstance({
+QUnit.test('Focus shouldn\'t be prevent when last appointment is reached', async function(assert) {
+    await this.createInstance({
         focusStateEnabled: true,
         currentView: 'month',
         currentDate: new Date(2015, 9, 16),
@@ -1473,7 +1441,6 @@ QUnit.test('Focus shouldn\'t be prevent when last appointment is reached', funct
 
     const $appointments = $(this.instance.$element().find('.dx-scheduler-appointment'));
     $($appointments.eq(3)).trigger('focusin');
-    this.clock.tick(10);
 
     const keyboard = keyboardMock($appointments.eq(3));
 
@@ -1486,8 +1453,8 @@ QUnit.test('Focus shouldn\'t be prevent when last appointment is reached', funct
     $($appointments).off('keydown');
 });
 
-QUnit.testInActiveWindow('Apps should be focused in right order', function(assert) {
-    this.createInstance({
+QUnit.testInActiveWindow('Apps should be focused in right order', async function(assert) {
+    await this.createInstance({
         focusStateEnabled: true,
         currentView: 'week',
         startDayHour: 8,
@@ -1502,7 +1469,6 @@ QUnit.testInActiveWindow('Apps should be focused in right order', function(asser
     const apptInstance = this.instance.getAppointmentsInstance();
 
     $($appointments.eq(0)).trigger('focusin');
-    this.clock.tick(10);
 
     const keyboard = keyboardMock($appointments.eq(0));
     keyboard.keyDown('tab');
@@ -1515,8 +1481,8 @@ QUnit.testInActiveWindow('Apps should be focused in right order', function(asser
     assert.deepEqual($appointments.get(3), $(apptInstance.option('focusedElement')).get(0), 'app 3 in focus');
 });
 
-QUnit.testInActiveWindow('Apps should be focused in right order on month view with ddAppointments', function(assert) {
-    this.createInstance({
+QUnit.testInActiveWindow('Apps should be focused in right order on month view with ddAppointments', async function(assert) {
+    await this.createInstance({
         focusStateEnabled: true,
         currentView: 'month',
         views: [{
@@ -1536,7 +1502,6 @@ QUnit.testInActiveWindow('Apps should be focused in right order on month view wi
     const apptInstance = this.instance.getAppointmentsInstance();
 
     $($appointments.eq(0)).trigger('focusin');
-    this.clock.tick(10);
 
     const keyboard = keyboardMock($appointments.eq(0));
     keyboard.keyDown('tab');
@@ -1546,8 +1511,8 @@ QUnit.testInActiveWindow('Apps should be focused in right order on month view wi
     assert.deepEqual($appointments.get(2), $(apptInstance.option('focusedElement')).get(0), 'app 0 in focus');
 });
 
-QUnit.testInActiveWindow('Apps should be focused in back order while press shift+tab', function(assert) {
-    this.createInstance({
+QUnit.testInActiveWindow('Apps should be focused in back order while press shift+tab', async function(assert) {
+    await this.createInstance({
         focusStateEnabled: true,
         currentView: 'month',
         currentDate: new Date(2015, 9, 16),
@@ -1562,7 +1527,6 @@ QUnit.testInActiveWindow('Apps should be focused in back order while press shift
     const keyboard = keyboardMock($appointments.eq(0));
 
     $($appointments.eq(3)).trigger('focusin');
-    this.clock.tick(10);
 
     keyboard.keyDown('tab', { shiftKey: true });
     assert.deepEqual($appointments.get(2), $(apptInstance.option('focusedElement')).get(0), 'app 1 in focus');
@@ -1576,13 +1540,13 @@ QUnit.testInActiveWindow('Apps should be focused in back order while press shift
 
 QUnit.module('Appointment overlapping, month view and allDay panel', moduleOptions);
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
         { text: 'Task 3', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0) },
         { text: 'Task 4', startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'month',
@@ -1609,13 +1573,13 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '1 more', 'DropDown menu has correct text');
 });
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'auto\' mode', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'auto\' mode', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
         { text: 'Task 3', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0) },
         { text: 'Task 4', startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'month',
@@ -1647,13 +1611,13 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.roughEqual(getOuterWidth($appointment.eq(3)), tableCellWidth, 1.5, 'appointment is full-size');
 });
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, height is small "auto" mode', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, height is small "auto" mode', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
         { text: 'Task 3', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0) },
         { text: 'Task 4', startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'month',
@@ -1673,13 +1637,13 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal(dropDownMenuText, '3 more', 'DropDown menu has correct text');
 });
 
-QUnit.test('Full-size appointment should have correct height, "auto" mode', function(assert) {
+QUnit.test('Full-size appointment should have correct height, "auto" mode', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
         { text: 'Task 3', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0) },
         { text: 'Task 4', startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'month',
@@ -1704,11 +1668,11 @@ QUnit.test('Full-size appointment should have correct height, "auto" mode', func
     assert.roughEqual(getOuterHeight($appointment.eq(1)), 21, 1.1, 'appointment height is ok');
 });
 
-QUnit.test('Full-size appointment should not have empty class in "auto" mode', function(assert) {
+QUnit.test('Full-size appointment should not have empty class in "auto" mode', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'month',
@@ -1721,12 +1685,13 @@ QUnit.test('Full-size appointment should not have empty class in "auto" mode', f
         }
     );
 
-    const getHeightStub = sinon.stub(this.instance.getRenderingStrategyInstance(), '_getAppointmentDefaultHeight').callsFake(function() {
+    const getHeightStub = sinon.stub(this.instance.getLayoutManager().getRenderingStrategyInstance(), '_getAppointmentDefaultHeight').callsFake(function() {
         return 18;
     });
 
     try {
         this.instance.option('dataSource', items);
+        await waitAsync(0);
 
         const $firstAppointment = $(this.instance.$element().find('.dx-scheduler-appointment')).eq(0);
         const $secondAppointment = $(this.instance.$element().find('.dx-scheduler-appointment')).eq(1);
@@ -1738,11 +1703,11 @@ QUnit.test('Full-size appointment should not have empty class in "auto" mode', f
     }
 });
 
-QUnit.test('Full-size appointment should not have empty class in \'auto\' mode, week view', function(assert) {
+QUnit.test('Full-size appointment should not have empty class in \'auto\' mode, week view', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'week',
@@ -1756,6 +1721,7 @@ QUnit.test('Full-size appointment should not have empty class in \'auto\' mode, 
     );
 
     this.instance.option('dataSource', items);
+    await waitAsync(0);
 
     const $firstAppointment = $(this.instance.$element().find('.dx-scheduler-appointment')).eq(0);
     const $secondAppointment = $(this.instance.$element().find('.dx-scheduler-appointment')).eq(1);
@@ -1764,13 +1730,13 @@ QUnit.test('Full-size appointment should not have empty class in \'auto\' mode, 
     assert.ok(!$secondAppointment.eq(1).hasClass('dx-scheduler-appointment-empty'), 'appointment has not the class');
 });
 
-QUnit.test('Full-size appointment should have correct height, \'numeric\' mode', function(assert) {
+QUnit.test('Full-size appointment should have correct height, \'numeric\' mode', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
         { text: 'Task 3', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0) },
         { text: 'Task 4', startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'month',
@@ -1797,7 +1763,7 @@ QUnit.test('Full-size appointment should have correct height, \'numeric\' mode',
     assert.roughEqual(getOuterHeight($appointment.eq(2)), 35.5, 1, 'appointment height is ok');
 });
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'unlimited\' mode', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'unlimited\' mode', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
         { text: 'Task 3', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0) },
@@ -1805,7 +1771,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
         { text: 'Task 5', startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0) },
         { text: 'Task 5', startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'month',
@@ -1829,13 +1795,13 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.roughEqual(getOuterWidth($appointment.eq(5)), tableCellWidth, 1.5, 'appointment is full-size');
 });
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, Day view', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, Day view', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true },
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0), allDay: true },
         { text: 'Task 3', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0), allDay: true },
         { text: 'Task 4', startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0), allDay: true } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'day',
@@ -1866,14 +1832,14 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '1 more', 'DropDown menu has correct text');
 });
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, Day view, \'auto\' mode', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, Day view, \'auto\' mode', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true },
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0), allDay: true },
         { text: 'Task 3', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0), allDay: true },
         { text: 'Task 4', startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0), allDay: true },
         { text: 'Task 5', startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0), allDay: true } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'day',
@@ -1904,10 +1870,10 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '3 more', 'DropDown menu has correct text');
 });
 
-QUnit.test('Appointment should have an unchangeable height, Day view, \'auto\' mode', function(assert) {
+QUnit.test('Appointment should have an unchangeable height, Day view, \'auto\' mode', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'day',
@@ -1933,10 +1899,10 @@ QUnit.test('Appointment should have an unchangeable height, Day view, \'auto\' m
     assert.roughEqual(getOuterHeight($appointment.eq(1)), appointmentHeight, 1.5, 'appointment has a correct height');
 });
 
-QUnit.test('Appointment should have a right top position, Day view, \'auto\' mode', function(assert) {
+QUnit.test('Appointment should have a right top position, Day view, \'auto\' mode', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'day',
@@ -1960,14 +1926,14 @@ QUnit.test('Appointment should have a right top position, Day view, \'auto\' mod
     assert.roughEqual($appointment.eq(1).position().top, 0 + $appointment.outerHeight(), 1.5, 'appointment has a correct position');
 });
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, Week view, \'unlimited\' mode', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, Week view, \'unlimited\' mode', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true },
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0), allDay: true },
         { text: 'Task 3', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0), allDay: true },
         { text: 'Task 4', startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0), allDay: true },
         { text: 'Task 5', startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0), allDay: true } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'week',
@@ -1993,10 +1959,10 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     }
 });
 
-QUnit.test('One full-size appointment should have a correct height, Week view, \'unlimited\' mode', function(assert) {
+QUnit.test('One full-size appointment should have a correct height, Week view, \'unlimited\' mode', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'week',
@@ -2018,7 +1984,7 @@ QUnit.test('One full-size appointment should have a correct height, Week view, \
 
 QUnit.module('Appointment overlapping, timeline view', moduleOptions);
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'numeric\' mode', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'numeric\' mode', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 1, 2, 0), endDate: new Date(2015, 2, 1, 4, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
         { text: 'Task 3', startDate: new Date(2015, 2, 1, 2, 0), endDate: new Date(2015, 2, 1, 5, 0) },
@@ -2026,7 +1992,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
         { text: 'Task 5', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) },
         { text: 'Task 6', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'timelineWeek',
@@ -2055,7 +2021,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '2 more', 'DropDown menu has correct text');
 });
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'auto\' mode', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'auto\' mode', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 1, 2, 0), endDate: new Date(2015, 2, 1, 4, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
         { text: 'Task 3', startDate: new Date(2015, 2, 1, 2, 0), endDate: new Date(2015, 2, 1, 5, 0) },
@@ -2063,7 +2029,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
         { text: 'Task 5', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) },
         { text: 'Task 6', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'timelineWeek',
@@ -2091,7 +2057,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '1 more', 'DropDown menu has correct text');
 });
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'auto\' mode, narrow height', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'auto\' mode, narrow height', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 1, 2, 0), endDate: new Date(2015, 2, 1, 4, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
         { text: 'Task 3', startDate: new Date(2015, 2, 1, 2, 0), endDate: new Date(2015, 2, 1, 5, 0) },
@@ -2099,7 +2065,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
         { text: 'Task 5', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) },
         { text: 'Task 6', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'timelineWeek',
@@ -2127,7 +2093,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '3 more', 'DropDown menu has correct text');
 });
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'unlimited\' mode', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'unlimited\' mode', async function(assert) {
     const items = [ { text: 'Task 1', startDate: new Date(2015, 2, 1, 2, 0), endDate: new Date(2015, 2, 1, 4, 0) },
         { text: 'Task 2', startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
         { text: 'Task 3', startDate: new Date(2015, 2, 1, 2, 0), endDate: new Date(2015, 2, 1, 5, 0) },
@@ -2135,7 +2101,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
         { text: 'Task 5', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) },
         { text: 'Task 6', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'timelineWeek',
@@ -2155,6 +2121,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.roughEqual(appointmentHeight, tableCellHeight, 1.5, 'appointment is full-size');
 
     this.instance.option('dataSource', items);
+    await waitAsync(0);
     $appointment = $(this.instance.$element().find('.dx-scheduler-appointment')),
     tableCellHeight = getOuterHeight(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
 
@@ -2172,12 +2139,12 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
 
 QUnit.module('Appointment overlapping, vertical view', moduleOptions);
 
-QUnit.test('Full-size appointment should have minWidth, narrow width', function(assert) {
+QUnit.test('Full-size appointment should have minWidth, narrow width', async function(assert) {
     const items = [
         { text: 'Task 2', startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
         { text: 'Task 4', startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) }];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'week',
@@ -2196,12 +2163,12 @@ QUnit.test('Full-size appointment should have minWidth, narrow width', function(
     assert.roughEqual($appointments.eq(1).get(0).getBoundingClientRect().width, 5, 1.1, 'Appointment has min width');
 });
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'auto\' mode, narrow width', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'auto\' mode, narrow width', async function(assert) {
     const items = [
         { text: 'Task 2', startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
         { text: 'Task 4', startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) }];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'week',
@@ -2220,14 +2187,14 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '1', 'DropDown menu has correct text');
 });
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'numeric\' mode', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'numeric\' mode', async function(assert) {
     const items = [
         { text: 'Task 2', startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
         { text: 'Task 4', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 2, 0) },
         { text: 'Task 5', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) },
         { text: 'Task 6', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'week',
@@ -2255,11 +2222,11 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '1', 'DropDown menu has correct text');
 });
 
-QUnit.test('Full-size appointment should have correct size, \'auto\' mode', function(assert) {
+QUnit.test('Full-size appointment should have correct size, \'auto\' mode', async function(assert) {
     const items = [
         { text: 'Task 2', startDate: new Date(2015, 2, 4, 0, 0), endDate: new Date(2015, 2, 4, 2, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'day',
@@ -2278,14 +2245,14 @@ QUnit.test('Full-size appointment should have correct size, \'auto\' mode', func
     assert.roughEqual(appointmentWidth, tableCellWidth - offset, 1.5, 'appointment is full-size');
 });
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell and width option, \'auto\' mode', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell and width option, \'auto\' mode', async function(assert) {
     const items = [
         { text: 'Task 2', startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
         { text: 'Task 4', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 2, 0) },
         { text: 'Task 5', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) },
         { text: 'Task 6', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'week',
@@ -2329,14 +2296,14 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell and wi
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '3', 'DropDown menu has correct text');
 });
 
-QUnit.test('DropDown appointments button should have correct width on week view', function(assert) {
+QUnit.test('DropDown appointments button should have correct width on week view', async function(assert) {
     const items = [
         { text: 'Task 2', startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
         { text: 'Task 4', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 2, 0) },
         { text: 'Task 5', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) },
         { text: 'Task 6', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'week',
@@ -2355,14 +2322,14 @@ QUnit.test('DropDown appointments button should have correct width on week view'
     assert.roughEqual(getOuterWidth($dropDownMenu), 24, 0.5, 'ddAppointment has correct width');
 });
 
-QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'unlimited\' mode', function(assert) {
+QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'unlimited\' mode', async function(assert) {
     const items = [
         { text: 'Task 2', startDate: new Date(2015, 2, 1, 0, 0), endDate: new Date(2015, 2, 1, 2, 0) },
         { text: 'Task 4', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 2, 0) },
         { text: 'Task 5', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) },
         { text: 'Task 6', startDate: new Date(2015, 2, 1, 1, 0), endDate: new Date(2015, 2, 1, 3, 0) } ];
 
-    this.createInstance(
+    await this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
             currentView: 'week',
@@ -2389,23 +2356,25 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal($dropDownMenu.length, 0, 'ddAppointment isn\'t rendered');
 });
 
-QUnit.test('_isAppointmentEmpty should work correctly in different strategies', function(assert) {
-    this.createInstance({
+QUnit.test('_isAppointmentEmpty should work correctly in different strategies', async function(assert) {
+    await this.createInstance({
         views: ['timelineDay', 'week'],
         currentView: 'timelineDay'
     });
 
-    const renderingStrategy = this.instance.getRenderingStrategyInstance();
+    const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
 
     assert.ok(renderingStrategy._isAppointmentEmpty(34, 41), 'Appointment is empty');
     assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');
 
     this.instance.option('currentView', 'week');
+    await waitAsync(0);
 
     assert.ok(renderingStrategy._isAppointmentEmpty(34, 39), 'Appointment is empty');
     assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');
 
     this.instance.option('currentView', 'month');
+    await waitAsync(0);
 
     assert.ok(renderingStrategy._isAppointmentEmpty(19, 50), 'Appointment is empty');
     assert.notOk(renderingStrategy._isAppointmentEmpty(36, 41), 'Appointment isn\'t empty');

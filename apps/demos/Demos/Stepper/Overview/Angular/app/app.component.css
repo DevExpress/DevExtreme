@@ -1,0 +1,98 @@
+::ng-deep demo-app {
+  display: flex;
+  flex-direction: column;
+}
+
+::ng-deep .stepper-demo {
+  display: flex;
+  height: 580px;
+  gap: 20px;
+}
+
+::ng-deep .widget-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% - 280px);
+  min-width: 320px;
+  overflow: clip;
+  gap: 20px;
+}
+
+::ng-deep .widget-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 80px;
+  width: 100%;
+  height: 100%;
+}
+
+::ng-deep .widget-wrapper-vertical {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+::ng-deep .widget-wrapper-vertical .stepper-wrapper {
+  width: auto;
+  max-width: 33%;
+}
+
+::ng-deep .widget-wrapper-vertical .stepper-label {
+  text-align: center;
+  white-space: nowrap;
+}
+
+::ng-deep .widget-wrapper-vertical #customText {
+  width: auto;
+}
+
+::ng-deep .dx-stepper-vertical {
+  height: 400px;
+  width: 100%;
+}
+
+::ng-deep .stepper-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+::ng-deep .stepper-label {
+  font-weight: 600;
+}
+
+::ng-deep .options {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 300px;
+  box-sizing: border-box;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  gap: 16px;
+  height: 100%;
+}
+
+::ng-deep .caption {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+::ng-deep .option {
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+}
+
+::ng-deep .option-separator {
+  border-bottom: 1px solid var(--dx-color-border);
+}
+
+::ng-deep .dx-buttongroup .dx-button {
+  width: 50%;
+}

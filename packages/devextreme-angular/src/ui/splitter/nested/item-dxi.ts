@@ -19,20 +19,31 @@ import { DOCUMENT } from '@angular/common';
 import { dxSplitterOptions } from 'devextreme/ui/splitter';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_items } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-splitter-item',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
-    providers: [NestedOptionHost, DxTemplateHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        DxTemplateHost,
+        {
+           provide: PROPERTY_TOKEN_items,
+           useExisting: DxiSplitterItemComponent,
+        }
+    ]
 })
 export class DxiSplitterItemComponent extends CollectionNestedOption implements AfterViewInit,
     IDxTemplateHost {
@@ -158,7 +169,7 @@ export class DxiSplitterItemComponent extends CollectionNestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiSplitterItemComponent
   ],
   exports: [

@@ -17,16 +17,26 @@ import { Format } from 'devextreme/common/core/localization';
 import { SummaryType } from 'devextreme/common/grids';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
 
+import { PROPERTY_TOKEN_totalItems } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-total-item',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_totalItems,
+           useExisting: DxiTotalItemComponent,
+        }
+    ]
 })
 export class DxiTotalItemComponent extends CollectionNestedOption {
     @Input()
@@ -131,7 +141,7 @@ export class DxiTotalItemComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTotalItemComponent
   ],
   exports: [

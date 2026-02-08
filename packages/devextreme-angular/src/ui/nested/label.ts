@@ -26,19 +26,22 @@ import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
 import { CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
     extractTemplate,
     DxTemplateDirective,
     IDxTemplateHost,
-    DxTemplateHost
+    DxTemplateHost,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
 
 @Component({
     selector: 'dxo-label',
+    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost, DxTemplateHost]
 })
 export class DxoLabelComponent extends NestedOption implements AfterViewInit, OnDestroy, OnInit,
@@ -401,7 +404,7 @@ export class DxoLabelComponent extends NestedOption implements AfterViewInit, On
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoLabelComponent
   ],
   exports: [

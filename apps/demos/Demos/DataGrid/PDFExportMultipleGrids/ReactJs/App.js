@@ -2,30 +2,25 @@ import React, { useCallback, useRef } from 'react';
 import Button from 'devextreme-react/button';
 import TabPanel, { Item } from 'devextreme-react/tab-panel';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
-import { exportDataGrid } from 'devextreme/pdf_exporter';
+import { exportDataGrid } from 'devextreme-react/common/export/pdf';
+import { ArrayStore, DataSource } from 'devextreme-react/common/data';
 import { jsPDF } from 'jspdf';
-import 'devextreme/data/odata/store';
+import { products } from './data.js';
 
-const priceDataSource = {
-  store: {
-    type: 'odata',
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-    key: 'Product_ID',
-  },
+const store = new ArrayStore({
+  data: products,
+  key: 'Product_ID',
+});
+const priceDataSource = new DataSource({
+  store,
   select: ['Product_ID', 'Product_Name', 'Product_Sale_Price', 'Product_Retail_Price'],
   filter: ['Product_ID', '<', 10],
-};
-const ratingDataSource = {
-  store: {
-    type: 'odata',
-    version: 2,
-    url: 'https://js.devexpress.com/Demos/DevAV/odata/Products',
-    key: 'Product_ID',
-  },
+});
+const ratingDataSource = new DataSource({
+  store,
   select: ['Product_ID', 'Product_Name', 'Product_Consumer_Rating', 'Product_Category'],
   filter: ['Product_ID', '<', 10],
-};
+});
 const setAlternatingRowsBackground = (dataGrid, gridCell, pdfCell) => {
   if (gridCell.rowType === 'data') {
     const rowIndex = dataGrid.instance().getRowIndexByKey(gridCell.data.Product_ID);

@@ -12,7 +12,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -24,27 +23,30 @@ import { Properties as dxFormOptions } from 'devextreme/ui/form';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiChangeComponent } from './change-dxi';
 
+import {
+    PROPERTY_TOKEN_changes,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-editing',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoEditingComponent extends NestedOption implements OnDestroy, OnInit  {
-    @Input()
-    get allowAdding(): boolean | Function {
-        return this._getOption('allowAdding');
+    @ContentChildren(PROPERTY_TOKEN_changes)
+    set _changesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('changes', value);
     }
-    set allowAdding(value: boolean | Function) {
-        this._setOption('allowAdding', value);
-    }
-
+    
     @Input()
     get allowDeleting(): boolean | Function {
         return this._getOption('allowDeleting');
@@ -59,6 +61,14 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
     }
     set allowUpdating(value: boolean | Function) {
         this._setOption('allowUpdating', value);
+    }
+
+    @Input()
+    get allowAdding(): boolean | Function {
+        return this._getOption('allowAdding');
+    }
+    set allowAdding(value: boolean | Function) {
+        this._setOption('allowAdding', value);
     }
 
     @Input()
@@ -367,18 +377,9 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
     }
 
 
-    @ContentChildren(forwardRef(() => DxiChangeComponent))
-    get changesChildren(): QueryList<DxiChangeComponent> {
-        return this._getOption('changes');
-    }
-    set changesChildren(value) {
-        this.setChildren('changes', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'changesChange' },
             { emit: 'editColumnNameChange' },
@@ -402,7 +403,7 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoEditingComponent
   ],
   exports: [

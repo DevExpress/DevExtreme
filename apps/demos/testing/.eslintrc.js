@@ -18,5 +18,8 @@ module.exports = {
       'multi-line',
     ],
     'spellcheck/spell-checker': spellcheckRule,
+    'import/extensions': 0,
+    '@typescript-eslint/no-extra-parens': 0,
+    'no-unused-vars': 0,
   },
 };

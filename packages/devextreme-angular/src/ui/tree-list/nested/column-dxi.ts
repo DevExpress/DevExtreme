@@ -10,7 +10,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -18,38 +17,56 @@ import {
 
 
 import * as CommonTypes from 'devextreme/common';
-import { HorizontalAlignment, DataType, SearchMode, SortOrder } from 'devextreme/common';
+import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
 import { dxTreeListColumnButton, TreeListPredefinedColumnButton, dxTreeListColumn, TreeListCommandColumnType } from 'devextreme/ui/tree_list';
-import { FilterOperation, FilterType, FixedPosition, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, SelectedFilterOperation } from 'devextreme/common/grids';
+import { FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
 import { Format } from 'devextreme/common/core/localization';
 import { dxFormSimpleItem } from 'devextreme/ui/form';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
-import { DxiTreeListAsyncRuleComponent } from './async-rule-dxi';
-import { DxiTreeListButtonComponent } from './button-dxi';
-import { DxiTreeListCompareRuleComponent } from './compare-rule-dxi';
-import { DxiTreeListCustomRuleComponent } from './custom-rule-dxi';
-import { DxiTreeListEmailRuleComponent } from './email-rule-dxi';
-import { DxiTreeListNumericRuleComponent } from './numeric-rule-dxi';
-import { DxiTreeListPatternRuleComponent } from './pattern-rule-dxi';
-import { DxiTreeListRangeRuleComponent } from './range-rule-dxi';
-import { DxiTreeListRequiredRuleComponent } from './required-rule-dxi';
-import { DxiTreeListStringLengthRuleComponent } from './string-length-rule-dxi';
-import { DxiTreeListValidationRuleComponent } from './validation-rule-dxi';
 
+import {
+    PROPERTY_TOKEN_validationRules,
+    PROPERTY_TOKEN_buttons,
+    PROPERTY_TOKEN_columns,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-tree-list-column',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost]
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_columns,
+           useExisting: DxiTreeListColumnComponent,
+        }
+    ]
 })
 export class DxiTreeListColumnComponent extends CollectionNestedOption {
+    @ContentChildren(PROPERTY_TOKEN_validationRules)
+    set _validationRulesContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('validationRules', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_buttons)
+    set _buttonsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('buttons', value);
+    }
+    
+    @ContentChildren(PROPERTY_TOKEN_columns)
+    set _columnsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('columns', value);
+    }
+    
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');
@@ -331,10 +348,10 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
+    get headerFilter(): ColumnHeaderFilter | undefined {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store | undefined, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
+    set headerFilter(value: ColumnHeaderFilter | undefined) {
         this._setOption('headerFilter', value);
     }
 
@@ -552,98 +569,9 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption {
     }
 
 
-    @ContentChildren(forwardRef(() => DxiTreeListAsyncRuleComponent))
-    get asyncRulesChildren(): QueryList<DxiTreeListAsyncRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set asyncRulesChildren(value) {
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiTreeListButtonComponent))
-    get buttonsChildren(): QueryList<DxiTreeListButtonComponent> {
-        return this._getOption('buttons');
-    }
-    set buttonsChildren(value) {
-        this.setChildren('buttons', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiTreeListCompareRuleComponent))
-    get compareRulesChildren(): QueryList<DxiTreeListCompareRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set compareRulesChildren(value) {
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiTreeListCustomRuleComponent))
-    get customRulesChildren(): QueryList<DxiTreeListCustomRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set customRulesChildren(value) {
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiTreeListEmailRuleComponent))
-    get emailRulesChildren(): QueryList<DxiTreeListEmailRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set emailRulesChildren(value) {
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiTreeListNumericRuleComponent))
-    get numericRulesChildren(): QueryList<DxiTreeListNumericRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set numericRulesChildren(value) {
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiTreeListPatternRuleComponent))
-    get patternRulesChildren(): QueryList<DxiTreeListPatternRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set patternRulesChildren(value) {
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiTreeListRangeRuleComponent))
-    get rangeRulesChildren(): QueryList<DxiTreeListRangeRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set rangeRulesChildren(value) {
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiTreeListRequiredRuleComponent))
-    get requiredRulesChildren(): QueryList<DxiTreeListRequiredRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set requiredRulesChildren(value) {
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiTreeListStringLengthRuleComponent))
-    get stringLengthRulesChildren(): QueryList<DxiTreeListStringLengthRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set stringLengthRulesChildren(value) {
-        this.setChildren('validationRules', value);
-    }
-
-    @ContentChildren(forwardRef(() => DxiTreeListValidationRuleComponent))
-    get validationRulesChildren(): QueryList<DxiTreeListValidationRuleComponent> {
-        return this._getOption('validationRules');
-    }
-    set validationRulesChildren(value) {
-        this.setChildren('validationRules', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'filterValueChange' },
             { emit: 'filterValuesChange' },
@@ -667,7 +595,7 @@ export class DxiTreeListColumnComponent extends CollectionNestedOption {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiTreeListColumnComponent
   ],
   exports: [

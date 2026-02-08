@@ -21,17 +21,16 @@ readdirSync(rootDemosFolder, { withFileTypes: true }).forEach((widgetFolder) => 
   });
 });
 
+const collectDemos = (group) => {
+  if (group.Demos) {
+    group.Demos.forEach((demo) => demos.push(demo));
+  } else if(group.Groups) {
+    group.Groups.forEach(collectDemos);
+  }
+};
+
 meta.forEach((section) => {
-  section.Groups.forEach((group) => {
-    if (group.Groups) {
-      group.Groups.forEach((nestedGroup) => {
-        nestedGroup.Demos.forEach((demo) => demos.push(demo));
-      });
-    }
-    if (group.Demos) {
-      group.Demos.forEach((demo) => demos.push(demo));
-    }
-  });
+  section.Groups.forEach(collectDemos);
 });
 
 describe('All demos has corresponding folders', () => {

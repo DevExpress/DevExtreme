@@ -6,7 +6,7 @@ import PivotGrid, {
 } from 'devextreme-react/pivot-grid';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import sales from './data.ts';
+import { sales } from './data.ts';
 
 const App = () => (
   <PivotGrid

@@ -22,10 +22,10 @@ type IResizableOptionsNarrowedEvents = {
 }
 
 type IResizableOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IResizableOptionsNarrowedEvents> & IHtmlOptions & {
-  defaultHeight?: (() => number | string) | number | string;
-  defaultWidth?: (() => number | string) | number | string;
-  onHeightChange?: (value: (() => number | string) | number | string) => void;
-  onWidthChange?: (value: (() => number | string) | number | string) => void;
+  defaultHeight?: number | string;
+  defaultWidth?: number | string;
+  onHeightChange?: (value: number | string) => void;
+  onWidthChange?: (value: number | string) => void;
 }>
 
 interface ResizableRef {
@@ -43,7 +43,7 @@ const Resizable = memo(
             return baseRef.current?.getInstance();
           }
         }
-      ), [baseRef.current]);
+      ), []);
 
       const subscribableOptions = useMemo(() => (["height","width"]), []);
       const independentEvents = useMemo(() => (["onDisposing","onInitialized","onResize","onResizeEnd","onResizeStart"]), []);

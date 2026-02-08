@@ -1,0 +1,496 @@
+@use "../sizes" as *;
+@use '../../base/cardView/variables' as *;
+@use '../../base/cardView/header_panel/variables' as *;
+@use '../../base/cardView/header_panel/item/variables' as *;
+@use '../../base/cardView/content_view/content/card/variables' as *;
+@use '../../base/cardView/content_view/content/card/header/variables' as *;
+@use '../../base/cardView/content_view/content/card/cover/variables' as *;
+@use '../../base/cardView/content_view/content/card/content/variables' as *;
+@use '../../base/cardView/content_view/content/variables' as *;
+@use '../../base/cardView/content_view/no_data/variables' as *;
+@use '../../base/cardView/column_chooser/variables' as *;
+@use '../../base/cardView/filter_panel/variables' as *;
+
+// adduse
+
+// #region COMMON SETTINGS
+
+/**
+* $name 101. Border radius
+* $type text
+*/
+$cardview-generic-common-border-radius: null !default;
+
+/**
+* $name 104. Text weight
+* $type select
+* $type-values 100|200|300|400|500|600|700|800|900
+*/
+$cardview-generic-common-text-weight: null !default;
+
+/**
+* $name 105. Vertical gap between cards
+* $type text
+*/
+$cardview-generic-common-cards-row-gap: null !default;
+
+/**
+* $name 106. Horizontal gap between cards
+* $type text
+*/
+$cardview-generic-common-cards-column-gap: null !default;
+
+$cardview-generic-common-gap: null !default;
+
+$cardview-generic-common-padding: null !default;
+
+// #endregion
+
+// #region CARD
+
+$cardview-generic-card-min-width: null !default;
+
+$cardview-generic-card-border-width: null !default;
+
+/**
+* $name 202. Border radius
+* $type text
+*/
+$cardview-generic-card-border-radius: null !default;
+
+$cardview-generic-card__header-height: null !default;
+
+$cardview-generic-card__header-text-size: null !default;
+
+$cardview-generic-card__header__selection-checkbox-padding-right: null !default;
+
+/**
+* $name 205. Field name text weight
+* $type select
+* $type-values 100|200|300|400|500|600|700|800|900
+*/
+$cardview-generic-card__field-caption-weight: null !default;
+
+$cardview-generic-card__cover-max-height: null !default;
+
+$cardview-generic-card__cover--noimage__icon-size: null !default;
+
+$cardview-generic-card__content-padding: null !default;
+
+$cardview-generic-card__content-row-gap: null !default;
+
+$cardview-generic-card__content__cell-padding-vertical: null !default;
+
+$cardview-generic-card__content__cell-padding-horizontal: null !default;
+
+// #endregion
+
+// #region CARD (SELECTED)
+
+/**
+* $name 304. Field name text weight
+* $type select
+* $type-values 100|200|300|400|500|600|700|800|900
+*/
+$cardview-generic-card--selected__field-caption-weight: null !default;
+
+// #endregion
+
+// #region HEADER
+
+$cardview-generic-header-gap: null !default;
+
+// #endregion
+
+// #region HEADER PANEL
+
+$cardview-generic-header-panel-vertical-margin: null !default;
+
+$cardview-generic-header-panel--empty-line-height: null !default;
+
+// #endregion
+
+// #region HEADER PANEL ITEM
+
+$cardview-generic-header-panel__item-border-width: null !default;
+
+/**
+* $name 402. Border radius
+* $type text
+*/
+$cardview-generic-header-panel__item-border-radius: null !default;
+
+$cardview-generic-header-panel__item-padding-vertical: null !default;
+
+$cardview-generic-header-panel__item-padding-horizontal: null !default;
+
+$cardview-generic-header-panel__item-line-height: null !default;
+
+/**
+* $name 404. Text weight
+* $type select
+* $type-values 100|200|300|400|500|600|700|800|900
+*/
+$cardview-generic-header-panel__item-text-weight: null !default;
+
+/**
+* $name 408. Sort index text weight
+* $type select
+* $type-values 100|200|300|400|500|600|700|800|900
+*/
+$cardview-generic-header-panel__item__sort-index-text-weight: null !default;
+
+$cardview-generic-header-panel__item__icon-size: null !default;
+
+$cardview-generic-header-item__left-padding: null !default;
+$cardview-generic-header-item__right-padding: null !default;
+
+// #endregion
+
+// #region HEADER PANEL ITEM (HOVERED)
+
+/**
+* $name 503. Text weight
+* $type select
+* $type-values 100|200|300|400|500|600|700|800|900
+*/
+$cardview-generic-header-panel__item--hovered-text-weight: null !default;
+
+/**
+* $name 507. Sort index text weight
+* $type select
+* $type-values 100|200|300|400|500|600|700|800|900
+*/
+$cardview-generic-header-panel__item--hovered__sort-index-text-weight: null !default;
+
+// #endregion
+
+// #region HEADER PANEL ITEM (DISABLED)
+
+/**
+* $name 603. Text weight
+* $type select
+* $type-values 100|200|300|400|500|600|700|800|900
+*/
+$cardview-generic-header-panel__item--disabled-text-weight: null !default;
+
+/**
+* $name 607. Sort index text weight
+* $type select
+* $type-values 100|200|300|400|500|600|700|800|900
+*/
+$cardview-generic-header-panel__item--disabled__sort-index-text-weight: null !default;
+
+// #endregion
+
+// #region HEADER PANEL ITEM (ON DRAG)
+
+/**
+* $name 703. Text weight
+* $type select
+* $type-values 100|200|300|400|500|600|700|800|900
+*/
+$cardview-generic-header-panel__item--dragged-text-weight: null !default;
+
+$cardview-generic-header-item__sort-indicator__border-size: null;
+$cardview-generic-header-item__sort-indicator__border-radius: null;
+
+// #endregion
+
+// #region HEADER PANEL DROP ZONE
+
+$cardview-generic-header-panel__dropzone-height: null !default;
+
+$cardview-generic-header-panel__dropzone-top: null !default;
+
+$cardview-generic-header-panel__dropzone-border-width: null !default;
+
+/**
+* $name 801. Border radius
+* $type text
+*/
+$cardview-generic-header-panel__dropzone-border-radius: null !default;
+
+// #endregion
+
+// #region FILTER PANEL
+
+/**
+* $name 901. Border radius
+* $type text
+*/
+$cardview-generic-filter-panel-border-radius: null !default;
+
+// #endregion
+
+// #region NO DATA VIEW
+
+$cardview-generic-nodata-view__icon-container-size: null !default;
+
+$cardview-generic-nodata-view__icon-container-margin: null !default;
+
+$cardview-generic-nodata-view__icon-size: null !default;
+
+// #endregion
+
+// #region HIGHLIGHTS IN SEARCH
+
+/**
+* $name 1101. Border radius
+* $type text
+*/
+$cardview-generic-card__content__field-value--highlighted-border-radius: null !default;
+
+$cardview-generic-card__content__field-value--highlighted-border-padding: null !default;
+
+/**
+* $name 1103. Text weight
+* $type select
+* $type-values 100|200|300|400|500|600|700|800|900
+*/
+$cardview-generic-card__content__field-value--highlighted-text-weight: null !default;
+
+// #endregion
+
+// #region COLUMN CHOOSER
+
+$cardview-generic-column-chooser--empty__message-horizontal-padding: null !default;
+
+$cardview-generic-column-chooser__select-all-item-horizontal-padding: null !default;
+
+// #endregion
+
+@if $size == "default" {
+
+  // Common
+  $cardview-generic-common-border-radius: 16px !default;
+  $cardview-generic-common-text-weight: 400 !default;
+  $cardview-generic-common-cards-row-gap: 16px !default;
+  $cardview-generic-common-cards-column-gap: 16px !default;
+  $cardview-generic-common-gap: 20px !default;
+  $cardview-generic-common-padding: 24px !default;
+
+  // Card
+  $cardview-generic-card-min-width: 250px !default;
+  $cardview-generic-card-border-width: 1px !default;
+  $cardview-generic-card-border-radius: 8px !default;
+  $cardview-generic-card__header-height: 52px !default;
+  $cardview-generic-card__header-text-size: 16px !default;
+  $cardview-generic-card__header__selection-checkbox-padding-right: 12px !default;
+  $cardview-generic-card__field-caption-weight: 600 !default;
+  $cardview-generic-card__cover-max-height: 180px !default;
+  $cardview-generic-card__cover--noimage__icon-size: 48px !default;
+  $cardview-generic-card__content-padding: 12px !default;
+  $cardview-generic-card__content-row-gap: 8px !default;
+  $cardview-generic-card__content__cell-padding-vertical: 6px !default;
+  $cardview-generic-card__content__cell-padding-horizontal: 12px !default;
+
+  // Card - selected
+  $cardview-generic-card--selected__field-caption-weight: $cardview-generic-card__field-caption-weight !default;
+
+  // Header
+  $cardview-generic-header-gap: 12px !default;
+
+  // Header panel
+  $cardview-generic-header-panel-vertical-margin: 4px !default;
+  $cardview-generic-header-panel--empty-line-height: 36px !default;
+
+  // Header panel item - default
+  $cardview-generic-header-panel__item-border-width: 1px !default;
+  $cardview-generic-header-panel__item-border-radius: 4px !default;
+  $cardview-generic-header-panel__item-padding-horizontal: 12px !default;
+  $cardview-generic-header-panel__item-padding-vertical: 8px !default;
+  $cardview-generic-header-item__left-padding: 6px !default;
+  $cardview-generic-header-item__right-padding: 2px !default;
+  $cardview-generic-header-panel__item-line-height: 18px !default;
+  $cardview-generic-header-panel__item-text-weight: $cardview-generic-common-text-weight !default;
+  $cardview-generic-header-panel__item__sort-index-text-weight: 400 !default;
+  $cardview-generic-header-panel__item__icon-size: $generic-base-icon-size !default;
+
+  // Header panel item - hovered
+  $cardview-generic-header-panel__item--hovered-text-weight: $cardview-generic-header-panel__item-text-weight !default;
+  $cardview-generic-header-panel__item--hovered__sort-index-text-weight: $cardview-generic-header-panel__item__sort-index-text-weight !default;
+
+  // Header panel item - disabled
+  $cardview-generic-header-panel__item--disabled-text-weight: $cardview-generic-header-panel__item-text-weight !default;
+  $cardview-generic-header-panel__item--disabled__sort-index-text-weight: $cardview-generic-header-panel__item__sort-index-text-weight !default;
+
+  // Header panel item - dragged
+  $cardview-generic-header-panel__item--dragged-text-weight: $cardview-generic-header-panel__item-text-weight !default;
+  $cardview-generic-header-item__sort-indicator__border-size: 2px !default;
+  $cardview-generic-header-item__sort-indicator__border-radius: 8px !default;
+
+  // Header panel Drop-zone
+  $cardview-generic-header-panel__dropzone-height: 36px !default;
+  $cardview-generic-header-panel__dropzone-top: 0 !default;
+  $cardview-generic-header-panel__dropzone-border-width: 1.5px !default;
+  $cardview-generic-header-panel__dropzone-border-radius: 8px !default;
+
+  // Filter panel
+  $cardview-generic-filter-panel-border-radius: 0 !default;
+
+  // Empty view
+  $cardview-generic-nodata-view__icon-container-size: 60px !default;
+  $cardview-generic-nodata-view__icon-container-margin: 12px !default;
+  $cardview-generic-nodata-view__icon-size: 36px !default;
+
+  // Search highlight
+  $cardview-generic-card__content__field-value--highlighted-border-radius: 5px !default;
+  $cardview-generic-card__content__field-value--highlighted-border-padding: .125em 0.2em !default;
+  $cardview-generic-card__content__field-value--highlighted-text-weight: 500 !default;
+
+  // Column chooser
+  $cardview-generic-column-chooser--empty__message-horizontal-padding: 24px !default;
+  $cardview-generic-column-chooser__select-all-item-horizontal-padding: 10px !default;
+}
+@else if $size == "compact" {
+
+  // Common
+  $cardview-generic-common-border-radius: 16px !default;
+  $cardview-generic-common-text-weight: 400 !default;
+  $cardview-generic-common-cards-row-gap: 12px !default;
+  $cardview-generic-common-cards-column-gap: 12px !default;
+  $cardview-generic-common-gap: 16px !default;
+  $cardview-generic-common-padding: 16px !default;
+
+  // Card
+  $cardview-generic-card-min-width: 250px !default;
+  $cardview-generic-card-border-width: 1px !default;
+  $cardview-generic-card-border-radius: 6px !default;
+  $cardview-generic-card__header-height: 48px !default;
+  $cardview-generic-card__header-text-size: 14px !default;
+  $cardview-generic-card__header__selection-checkbox-padding-right: 8px !default;
+  $cardview-generic-card__field-caption-weight: 600 !default;
+  $cardview-generic-card__cover-max-height: 140px !default;
+  $cardview-generic-card__cover--noimage__icon-size: 32px !default;
+  $cardview-generic-card__content-padding: 8px !default;
+  $cardview-generic-card__content-row-gap: 4px !default;
+  $cardview-generic-card__content__cell-padding-vertical: 4px !default;
+  $cardview-generic-card__content__cell-padding-horizontal: 8px !default;
+
+  // Card - selected
+  $cardview-generic-card--selected__field-caption-weight: $cardview-generic-card__field-caption-weight !default;
+
+  // Header
+  $cardview-generic-header-gap: 12px !default;
+
+  // Header panel
+  $cardview-generic-header-panel-vertical-margin: 0 !default;
+  $cardview-generic-header-panel--empty-line-height: 24px !default;
+
+  // Header panel item - default
+  $cardview-generic-header-panel__item-border-width: 1px !default;
+  $cardview-generic-header-panel__item-border-radius: 4px !default;
+  $cardview-generic-header-panel__item-padding-horizontal: 8px !default;
+  $cardview-generic-header-panel__item-padding-vertical: 5px !default;
+  $cardview-generic-header-item__left-padding: 3px !default;
+  $cardview-generic-header-item__right-padding: 1px !default;
+  $cardview-generic-header-panel__item-line-height: 14px !default;
+  $cardview-generic-header-panel__item-text-weight: $cardview-generic-common-text-weight !default;
+  $cardview-generic-header-panel__item__sort-index-text-weight: 400 !default;
+  $cardview-generic-header-panel__item__icon-size: $generic-base-icon-size !default;
+
+  // Header panel item - hovered
+  $cardview-generic-header-panel__item--hovered-text-weight: $cardview-generic-header-panel__item-text-weight !default;
+  $cardview-generic-header-panel__item--hovered__sort-index-text-weight: $cardview-generic-header-panel__item__sort-index-text-weight !default;
+
+  // Header panel item - disabled
+  $cardview-generic-header-panel__item--disabled-text-weight: $cardview-generic-header-panel__item-text-weight !default;
+  $cardview-generic-header-panel__item--disabled__sort-index-text-weight: $cardview-generic-header-panel__item__sort-index-text-weight !default;
+
+  // Header panel item - dragged
+  $cardview-generic-header-panel__item--dragged-text-weight: $cardview-generic-header-panel__item-text-weight !default;
+  $cardview-generic-header-item__sort-indicator__border-size: 1px !default;
+  $cardview-generic-header-item__sort-indicator__border-radius: 4px !default;
+
+  // Header panel Drop-zone
+  $cardview-generic-header-panel__dropzone-height: 24px !default;
+  $cardview-generic-header-panel__dropzone-top: 0 !default;
+  $cardview-generic-header-panel__dropzone-border-width: 1.5px !default;
+  $cardview-generic-header-panel__dropzone-border-radius: 6px !default;
+
+  // Filter panel
+  $cardview-generic-filter-panel-border-radius: 0 !default;
+
+  // Empty view
+  $cardview-generic-nodata-view__icon-container-size: 40px !default;
+  $cardview-generic-nodata-view__icon-container-margin: 8px !default;
+  $cardview-generic-nodata-view__icon-size: 24px !default;
+
+  // Search highlight
+  $cardview-generic-card__content__field-value--highlighted-border-radius: 5px !default;
+  $cardview-generic-card__content__field-value--highlighted-border-padding: .125em 0.2em !default;
+  $cardview-generic-card__content__field-value--highlighted-text-weight: 500 !default;
+
+  // Column chooser
+  $cardview-generic-column-chooser--empty__message-horizontal-padding: 16px !default;
+  $cardview-generic-column-chooser__select-all-item-horizontal-padding: 6px !default;
+}
+
+$cardview-border-radius: $cardview-generic-common-border-radius !default;
+$cardview-text-weight: $cardview-generic-common-text-weight !default;
+$cardview-cards-row-gap: $cardview-generic-common-cards-row-gap !default;
+$cardview-cards-column-gap: $cardview-generic-common-cards-column-gap !default;
+$cardview-gap: $cardview-generic-common-gap !default;
+$cardview-padding: $cardview-generic-common-padding !default;
+
+$cardview-card-min-width: $cardview-generic-card-min-width !default;
+$cardview-card-border-width: $cardview-generic-card-border-width !default;
+$cardview-card-border-radius: $cardview-generic-card-border-radius !default;
+$cardview-card__header-height: $cardview-generic-card__header-height !default;
+$cardview-card__header-text-size: $cardview-generic-card__header-text-size !default;
+$cardview-card__header__selection-checkbox-padding-right: $cardview-generic-card__header__selection-checkbox-padding-right !default;
+$cardview-card__field-caption-weight: $cardview-generic-card__field-caption-weight !default;
+$cardview-card__cover-max-height: $cardview-generic-card__cover-max-height !default;
+$cardview-card__cover--noimage__icon-size: $cardview-generic-card__cover--noimage__icon-size !default;
+$cardview-card__content-padding: $cardview-generic-card__content-padding !default;
+$cardview-card__content-row-gap: $cardview-generic-card__content-row-gap !default;
+$cardview-card__content__cell-padding-vertical: $cardview-generic-card__content__cell-padding-vertical !default;
+$cardview-card__content__cell-padding-horizontal: $cardview-generic-card__content__cell-padding-horizontal !default;
+
+$cardview-card--selected__field-caption-weight: $cardview-generic-card--selected__field-caption-weight !default;
+
+$cardview-header-gap: $cardview-generic-header-gap !default;
+
+$cardview-header-panel-vertical-margin: $cardview-generic-header-panel-vertical-margin !default;
+$cardview-header-panel--empty-line-height: $cardview-generic-header-panel--empty-line-height !default;
+
+$cardview-header-panel__item-border-width: $cardview-generic-header-panel__item-border-width !default;
+$cardview-header-panel__item-border-radius: $cardview-generic-header-panel__item-border-radius !default;
+$cardview-header-panel__item-padding-horizontal: $cardview-generic-header-panel__item-padding-horizontal !default;
+$cardview-header-panel__item-padding-vertical: $cardview-generic-header-panel__item-padding-vertical !default;
+$cardview-header-panel__item-line-height: $cardview-generic-header-panel__item-line-height !default;
+$cardview-header-panel__item-text-weight: $cardview-generic-header-panel__item-text-weight !default;
+$cardview-header-panel__item__sort-index-text-weight: $cardview-generic-header-panel__item__sort-index-text-weight !default;
+$cardview-header-panel__item__icon-size: $cardview-generic-header-panel__item__icon-size !default;
+
+$cardview-header-panel__item--hovered-text-weight: $cardview-generic-header-panel__item--hovered-text-weight !default;
+$cardview-header-panel__item--hovered__sort-index-text-weight: $cardview-generic-header-panel__item--hovered__sort-index-text-weight !default;
+
+$cardview-header-panel__item--disabled-text-weight: $cardview-generic-header-panel__item--disabled-text-weight !default;
+$cardview-header-panel__item--disabled__sort-index-text-weight: $cardview-generic-header-panel__item--disabled__sort-index-text-weight !default;
+
+$cardview-header-panel__item--dragged-text-weight: $cardview-generic-header-panel__item--dragged-text-weight !default;
+
+$cardview-header-panel__dropzone-height: $cardview-generic-header-panel__dropzone-height !default;
+$cardview-header-panel__dropzone-top: $cardview-generic-header-panel__dropzone-top !default;
+$cardview-header-panel__dropzone-border-width: $cardview-generic-header-panel__dropzone-border-width !default;
+$cardview-header-panel__dropzone-border-radius: $cardview-generic-header-panel__dropzone-border-radius !default;
+
+$cardview-filter-panel-border-radius: $cardview-generic-filter-panel-border-radius !default;
+
+$cardview-nodata-view__icon-container-size: $cardview-generic-nodata-view__icon-container-size !default;
+$cardview-nodata-view__icon-container-margin: $cardview-generic-nodata-view__icon-container-margin !default;
+$cardview-nodata-view__icon-size: $cardview-generic-nodata-view__icon-size !default;
+
+$cardview-card__content__field-value--highlighted-border-radius: $cardview-generic-card__content__field-value--highlighted-border-radius !default;
+$cardview-card__content__field-value--highlighted-border-padding: $cardview-generic-card__content__field-value--highlighted-border-padding !default;
+$cardview-card__content__field-value--highlighted-text-weight: $cardview-generic-card__content__field-value--highlighted-text-weight !default;
+
+$cardview-column-chooser--empty__message-horizontal-padding: $cardview-generic-column-chooser--empty__message-horizontal-padding !default;
+$cardview-column-chooser__select-all-item-horizontal-padding: $cardview-generic-column-chooser__select-all-item-horizontal-padding !default;
+
+$cardview-header-item__left-padding: $cardview-generic-header-item__left-padding !default;
+$cardview-header-item__right-padding: $cardview-generic-header-item__right-padding !default;
+$cardview-header-item__sort-indicator__border-size: $cardview-generic-header-item__sort-indicator__border-size !default;
+$cardview-header-item__sort-indicator__border-radius: $cardview-generic-header-item__sort-indicator__border-radius !default;

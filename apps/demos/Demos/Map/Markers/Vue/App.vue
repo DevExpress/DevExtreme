@@ -31,18 +31,18 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxMap from 'devextreme-vue/map';
-import DxCheckBox from 'devextreme-vue/check-box';
+import DxCheckBox, { type DxCheckBoxTypes } from 'devextreme-vue/check-box';
 import DxButton from 'devextreme-vue/button';
 import { markersData } from './data.ts';
 
 const markerUrl = 'https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/maps/map-marker.png';
-const markersIcon = ref(markerUrl);
+const markersIcon = ref<string | undefined>(markerUrl);
 const apiKey = {
   azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
 };
-const markers = ref(markersData);
-function useCustomMarkers(data) {
-  markersIcon.value = data.value ? markerUrl : null;
+const markers = ref<Record<string, any>[]>(markersData);
+function useCustomMarkers(data: DxCheckBoxTypes.ValueChangedEvent) {
+  markersIcon.value = data.value ? markerUrl : undefined;
   markers.value = markersData;
 }
 function showTooltips() {

@@ -14,16 +14,26 @@ import {
 
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { DxiTextEditorButton } from './base/text-editor-button-dxi';
 
+import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-button',
+    standalone: true,
     template: '',
     styles: [''],
-    providers: [NestedOptionHost],
+    imports: [ DxIntegrationModule ],
+    providers: [
+        NestedOptionHost,
+        {
+           provide: PROPERTY_TOKEN_buttons,
+           useExisting: DxiButtonComponent,
+        }
+    ],
     inputs: [
         'location',
         'name',
@@ -61,7 +71,7 @@ export class DxiButtonComponent extends DxiTextEditorButton {
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxiButtonComponent
   ],
   exports: [

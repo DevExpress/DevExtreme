@@ -12,7 +12,6 @@ import {
     Output,
     EventEmitter,
     ContentChildren,
-    forwardRef,
     QueryList
 } from '@angular/core';
 
@@ -30,19 +29,30 @@ import { PositionAlignment } from 'devextreme/common';
 import { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {
+    DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
-import { DxiDateBoxToolbarItemComponent } from './toolbar-item-dxi';
 
+import {
+    PROPERTY_TOKEN_toolbarItems,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-date-box-drop-down-options',
+    standalone: true,
     template: '',
     styles: [''],
+    imports: [ DxIntegrationModule ],
     providers: [NestedOptionHost]
 })
 export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_toolbarItems)
+    set _toolbarItemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('toolbarItems', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');
@@ -57,14 +67,6 @@ export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements 
     }
     set animation(value: { hide?: AnimationConfig, show?: AnimationConfig }) {
         this._setOption('animation', value);
-    }
-
-    @Input()
-    get closeOnOutsideClick(): boolean | ((event: event) => boolean) {
-        return this._getOption('closeOnOutsideClick');
-    }
-    set closeOnOutsideClick(value: boolean | ((event: event) => boolean)) {
-        this._setOption('closeOnOutsideClick', value);
     }
 
     @Input()
@@ -148,10 +150,10 @@ export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get height(): (() => number | string) | number | string {
+    get height(): number | string {
         return this._getOption('height');
     }
-    set height(value: (() => number | string) | number | string) {
+    set height(value: number | string) {
         this._setOption('height', value);
     }
 
@@ -188,34 +190,34 @@ export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get maxHeight(): (() => number | string) | number | string {
+    get maxHeight(): number | string {
         return this._getOption('maxHeight');
     }
-    set maxHeight(value: (() => number | string) | number | string) {
+    set maxHeight(value: number | string) {
         this._setOption('maxHeight', value);
     }
 
     @Input()
-    get maxWidth(): (() => number | string) | number | string {
+    get maxWidth(): number | string {
         return this._getOption('maxWidth');
     }
-    set maxWidth(value: (() => number | string) | number | string) {
+    set maxWidth(value: number | string) {
         this._setOption('maxWidth', value);
     }
 
     @Input()
-    get minHeight(): (() => number | string) | number | string {
+    get minHeight(): number | string {
         return this._getOption('minHeight');
     }
-    set minHeight(value: (() => number | string) | number | string) {
+    set minHeight(value: number | string) {
         this._setOption('minHeight', value);
     }
 
     @Input()
-    get minWidth(): (() => number | string) | number | string {
+    get minWidth(): number | string {
         return this._getOption('minWidth');
     }
-    set minWidth(value: (() => number | string) | number | string) {
+    set minWidth(value: number | string) {
         this._setOption('minWidth', value);
     }
 
@@ -420,10 +422,10 @@ export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements 
     }
 
     @Input()
-    get width(): (() => number | string) | number | string {
+    get width(): number | string {
         return this._getOption('width');
     }
-    set width(value: (() => number | string) | number | string) {
+    set width(value: number | string) {
         this._setOption('width', value);
     }
 
@@ -441,7 +443,7 @@ export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() heightChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() heightChange: EventEmitter<number | string>;
 
     /**
     
@@ -462,24 +464,15 @@ export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() widthChange: EventEmitter<(() => number | string) | number | string>;
+    @Output() widthChange: EventEmitter<number | string>;
     protected get _optionPath() {
         return 'dropDownOptions';
     }
 
 
-    @ContentChildren(forwardRef(() => DxiDateBoxToolbarItemComponent))
-    get toolbarItemsChildren(): QueryList<DxiDateBoxToolbarItemComponent> {
-        return this._getOption('toolbarItems');
-    }
-    set toolbarItemsChildren(value) {
-        this.setChildren('toolbarItems', value);
-    }
-
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {
         super();
-
         this._createEventEmitters([
             { emit: 'heightChange' },
             { emit: 'positionChange' },
@@ -504,7 +497,7 @@ export class DxoDateBoxDropDownOptionsComponent extends NestedOption implements 
 }
 
 @NgModule({
-  declarations: [
+  imports: [
     DxoDateBoxDropDownOptionsComponent
   ],
   exports: [

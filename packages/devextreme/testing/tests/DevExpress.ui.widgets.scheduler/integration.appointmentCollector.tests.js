@@ -1,14 +1,13 @@
 import $ from 'jquery';
 import translator from 'common/core/animation/translator';
 import fx from 'common/core/animation/fx';
+import { mockDataAccessor } from '../../helpers/scheduler/mockDataAccessor.js';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import themes from 'ui/themes';
 import { CompactAppointmentsHelper } from '__internal/scheduler/m_compact_appointments_helper';
 import Widget from 'ui/widget/ui.widget';
 import Color from 'color';
-import { DataSource } from 'common/data/data_source/data_source';
-import { CustomStore } from 'common/data/custom_store';
-import AppointmentAdapter from '__internal/scheduler/m_appointment_adapter';
 
 import '__internal/scheduler/m_scheduler';
 import 'generic_light.css!';
@@ -29,16 +28,14 @@ const COMPACT_THEME_ADAPTIVE_COLLECTOR_RIGHT_OFFSET = 1;
 const baseConfig = {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 };
 
 module('Integration: collector', baseConfig, () => {
-    test('Start date should be equal targetedAppointmentData.startDate in appointment popup form in case recurrent appointment (T882652)', function(assert) {
+    test('Start date should be equal targetedAppointmentData.startDate in appointment popup form in case recurrent appointment (T882652)', async function(assert) {
         const data = [{
             text: '1',
             startDate: new Date(2017, 4, 16, 9, 30),
@@ -56,7 +53,7 @@ module('Integration: collector', baseConfig, () => {
             recurrenceRule: 'FREQ=DAILY'
         }];
 
-        const scheduler = createWrapper({
+        const scheduler = await createWrapper({
             dataSource: data,
             views: ['month'],
             currentView: 'month',
@@ -89,24 +86,16 @@ module('Integration: Appointments Collector Base Tests', baseConfig, () => {
             _getAppointmentTemplate(template) {
                 return this._getTemplateByOption(template);
             },
-            _dataAccessors: {
-                getter: {
-                    startDate: (obj) => obj.startDate,
-                    endDate: (obj) => obj.endDate,
-                },
-            },
-            createAppointmentAdapter(date) {
-                const schedulerMock = {
-                    fire: (methodName, fieldName, appointment) => appointment[fieldName]
-                };
-                return new AppointmentAdapter(schedulerMock, date);
-            }
+            _dataAccessors: mockDataAccessor,
         }))($('<div>'));
     };
 
     const renderAppointmentsCollectorContainer = ({ widgetMock, items, options, color }) => {
         const helper = new CompactAppointmentsHelper(widgetMock);
-        items = items || { data: [{ text: 'a', startDate: new Date(2015, 1, 1) }], colors: [], settings: [] };
+        items = items || [{
+            appointment: [{ text: 'a', startDate: new Date(2015, 1, 1) }],
+            color: Promise.resolve(undefined),
+        }];
 
         return helper.render({
             ...options,
@@ -118,7 +107,7 @@ module('Integration: Appointments Collector Base Tests', baseConfig, () => {
         });
     };
 
-    test('Appointment collector should be rendered with right class', function(assert) {
+    test('Appointment collector should be rendered with right class', async function(assert) {
         const widgetMock = createWidget();
 
         const $collector = renderAppointmentsCollectorContainer({ widgetMock });
@@ -126,27 +115,26 @@ module('Integration: Appointments Collector Base Tests', baseConfig, () => {
         assert.ok($collector.dxButton('instance'), 'Container is button');
     });
 
-    test('Appointment collector should not be painted if items have different colors', function(assert) {
+    test('Appointment collector should not be painted if items have different colors', async function(assert) {
         const widgetMock = createWidget();
         const color = '#0000ff';
 
         const $collector = renderAppointmentsCollectorContainer({
             widgetMock,
-            items: {
-                data: [
-                    { text: 'a', startDate: new Date(2015, 1, 1) },
-                    { text: 'b', startDate: new Date(2015, 1, 1) }
-                ],
-                colors: ['#fff000', '#000fff'],
-                settings: []
-            },
+            items: [{
+                appointment: [{ text: 'a', startDate: new Date(2015, 1, 1) }],
+                color: Promise.resolve('#fff000'),
+            }, {
+                appointment: [{ text: 'b', startDate: new Date(2015, 1, 1) }],
+                color: Promise.resolve('#000fff'),
+            }],
             color
         });
 
         assert.notEqual(new Color($collector.css('backgroundColor')).toHex(), color, 'Color is OK');
     });
 
-    test('Appointment collector should have a correct markup', function(assert) {
+    test('Appointment collector should have a correct markup', async function(assert) {
         const widgetMock = createWidget();
         const $button = renderAppointmentsCollectorContainer({ widgetMock });
         const $collectorContent = $button.find('.dx-scheduler-appointment-collector-content');
@@ -178,13 +166,8 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         });
     };
 
-    const getAppointmentColor = ($task, checkedProperty) => {
-        checkedProperty = checkedProperty || 'backgroundColor';
-        return new Color($task.css(checkedProperty)).toHex();
-    };
-
-    const checkItemDataInDropDownTemplate = (assert, dataSource, currentDate) => {
-        const scheduler = createInstance({
+    const checkItemDataInDropDownTemplate = async(assert, dataSource, currentDate) => {
+        const scheduler = await createInstance({
             dataSource: dataSource,
             height: 600,
             maxAppointmentsPerCell: 1,
@@ -199,8 +182,8 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         scheduler.appointments.compact.click();
     };
 
-    test('Appointment collector should have correct coordinates on month view', function(assert) {
-        const scheduler = createInstance();
+    test('Appointment collector should have correct coordinates on month view', async function(assert) {
+        const scheduler = await createInstance();
 
         assert.equal(scheduler.appointments.compact.getButtonCount(), 0, 'Collector wasn\'t rendered');
         assert.equal(scheduler.appointments.getAppointmentCount(), 6, 'Six appointments were rendered');
@@ -219,13 +202,13 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
-    test('Appointment collector should have correct size in material-based themes', function(assert) {
+    test('Appointment collector should have correct size in material-based themes', async function(assert) {
         const origIsMaterialBased = themes.isMaterialBased;
 
         try {
             themes.isMaterialBased = () => true;
 
-            const scheduler = createInstance({
+            const scheduler = await createInstance({
                 currentDate: new Date(2019, 2, 4),
                 views: ['month'],
                 width: 840,
@@ -241,10 +224,10 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         }
     });
 
-    test('DropDown appointment button should have correct coordinates on weekView, not in allDay panel', function(assert) {
+    test('DropDown appointment button should have correct coordinates on weekView, not in allDay panel', async function(assert) {
         const WEEK_VIEW_BUTTON_OFFSET = 5;
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2019, 2, 4),
             views: ['week'],
             width: 840,
@@ -268,8 +251,8 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
-    test('Appointment collector should have correct size when intervalCount is set', function(assert) {
-        const scheduler = createInstance({
+    test('Appointment collector should have correct size when intervalCount is set', async function(assert) {
+        const scheduler = await createInstance({
             views: [{ type: 'month', intervalCount: 2 }],
             width: 850,
             maxAppointmentsPerCell: 2,
@@ -285,19 +268,21 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             { startDate: new Date(2019, 2, 4), text: 'e', endDate: new Date(2019, 2, 4, 0, 30) },
             { startDate: new Date(2019, 2, 4), text: 'f', endDate: new Date(2019, 2, 4, 0, 30) }
         ]);
+        await waitAsync(0);
 
         const cellWidth = scheduler.workSpace.getCell(0).outerWidth();
 
         assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), cellWidth - 60, 1.5, 'Collector width is ok');
 
         scheduler.instance.option('views', ['month']);
+        await waitAsync(0);
 
         assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), cellWidth - 36, 1, 'Collector width is ok');
         assert.roughEqual(scheduler.appointments.compact.getButtonHeight(), 20, 1, 'Collector height is ok');
     });
 
-    test('Appointment collector count should be ok when there are multiday appointments', function(assert) {
-        const scheduler = createInstance({
+    test('Appointment collector count should be ok when there are multiday appointments', async function(assert) {
+        const scheduler = await createInstance({
             views: ['month'],
             currentView: 'month',
             currentDate: new Date(2019, 8, 20),
@@ -313,19 +298,19 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             { text: 'e', startDate: new Date(2019, 8, 12), endDate: new Date(2019, 8, 15) },
             { text: 'f', startDate: new Date(2019, 8, 12), endDate: new Date(2019, 8, 15) }
         ]);
+        await waitAsync(0);
 
         assert.equal(scheduler.appointments.compact.getButtonCount(), 3, 'Collectors count is ok');
     });
 
-    test('Many dropDown appts with one multi day task should be grouped correctly', function(assert) {
-        const scheduler = createInstance({
+    test('Many dropDown appts with one multi day task should be grouped correctly', async function(assert) {
+        const scheduler = await createInstance({
             views: ['month'],
             currentView: 'month',
             currentDate: new Date(2019, 4, 29),
             width: 800,
             height: 490
         });
-        this.clock.tick(300);
         scheduler.instance.focus();
 
         scheduler.instance.option('dataSource', [
@@ -339,14 +324,14 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             { text: '8', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 29, 1) },
             { text: 'long appt', startDate: new Date(2019, 4, 29), endDate: new Date(2019, 4, 31, 1) }
         ]);
+        await waitAsync(0);
 
         scheduler.appointments.compact.click(0);
-        this.clock.tick(300);
         assert.equal(scheduler.tooltip.getItemCount(), 8, 'There are 8 collapsed appts');
     });
 
-    test('Many collapsed appts should be grouped correctly with one multi day task which started before collector (T525443)', function(assert) {
-        const scheduler = createInstance({
+    test('Many collapsed appts should be grouped correctly with one multi day task which started before collector (T525443)', async function(assert) {
+        const scheduler = await createInstance({
             views: ['month'],
             currentView: 'month',
             maxAppointmentsPerCell: 1,
@@ -354,7 +339,6 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             width: 800,
             height: 950
         });
-        this.clock.tick(300);
         scheduler.instance.focus();
 
         scheduler.instance.option('dataSource', [
@@ -373,14 +357,14 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             { text: '12', startDate: new Date(2019, 5, 11, 14, 0), endDate: new Date(2019, 5, 11, 15, 30) },
             { text: '13', startDate: new Date(2019, 5, 11, 14, 30), endDate: new Date(2019, 5, 11, 16, 0) }
         ]);
+        await waitAsync(0);
 
         scheduler.appointments.compact.click(0);
-        this.clock.tick(300);
         assert.equal(scheduler.tooltip.getItemCount(), 13, 'There are 13 drop down appts');
     });
 
-    test('Appointment collector should have correct coordinates: rtl mode', function(assert) {
-        const scheduler = createInstance({
+    test('Appointment collector should have correct coordinates: rtl mode', async function(assert) {
+        const scheduler = await createInstance({
             currentDate: new Date(2019, 2, 4),
             views: ['month'],
             width: 840,
@@ -399,7 +383,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
-    test('Collapsed appointment should raise the onAppointmentClick event', function(assert) {
+    test('Collapsed appointment should raise the onAppointmentClick event', async function(assert) {
         let tooltipItemElement = null;
         let instance;
         const spy = sinon.spy();
@@ -412,7 +396,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             { startDate: new Date(2015, 2, 4), text: 'f', endDate: new Date(2015, 2, 4, 0, 30) },
             { startDate: new Date(2015, 2, 4), text: 'g', endDate: new Date(2015, 2, 4, 0, 30) }
         ];
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 2, 4),
             views: ['month'],
             width: 840,
@@ -440,6 +424,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             instance = scheduler.instance;
 
             instance.option('dataSource', appointments);
+            await waitAsync(0);
             scheduler.appointments.compact.click();
             tooltipItemElement = scheduler.tooltip.getItemElement(2).get(0);
             scheduler.tooltip.clickOnItem(2);
@@ -449,8 +434,8 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         }
     });
 
-    test('Collapsed appointments should not be duplicated when items option change (T503748)', function(assert) {
-        const scheduler = createInstance({
+    test('Collapsed appointments should not be duplicated when items option change (T503748)', async function(assert) {
+        const scheduler = await createInstance({
             views: ['month'],
             currentView: 'month',
             currentDate: new Date(2016, 8, 20),
@@ -476,7 +461,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.equal(scheduler.tooltip.getItemCount(), 2, 'There are 3 drop down appts');
     });
 
-    test('Collapsed appointment should be rendered correctly with expressions on custom template', function(assert) {
+    test('Collapsed appointment should be rendered correctly with expressions on custom template', async function(assert) {
         const startDate = new Date(2015, 1, 4, 1);
         const endDate = new Date(2015, 1, 4, 2);
         const appointments = [{
@@ -493,7 +478,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             Text: 'Item 3'
         }];
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 4),
             views: ['month'],
             currentView: 'month',
@@ -514,7 +499,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
     });
 
 
-    test('Appointment collector should be rendered correctly when appointmentCollectorTemplate is used', function(assert) {
+    test('Appointment collector should be rendered correctly when appointmentCollectorTemplate is used', async function(assert) {
         const startDate = new Date(2015, 1, 4, 1);
         const endDate = new Date(2015, 1, 4, 2);
         const appointments = [{
@@ -531,7 +516,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             Text: 'Item 3'
         }];
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 4),
             views: ['month'],
             currentView: 'month',
@@ -552,7 +537,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.equal($collector.find('.button-title').text(), 'Appointment count is 2', 'Template is applied correctly');
     });
 
-    test('dxScheduler should render dropDownAppointment appointment template with render function that returns dom node', function(assert) {
+    test('dxScheduler should render dropDownAppointment appointment template with render function that returns dom node', async function(assert) {
         const startDate = new Date(2015, 1, 4, 1);
         const endDate = new Date(2015, 1, 4, 2);
         const appointments = [{
@@ -569,7 +554,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             Text: 'Item 3'
         }];
 
-        const scheduler = createInstance({
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 1, 4),
             views: ['month'],
             currentView: 'month',
@@ -600,8 +585,8 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.equal(scheduler.tooltip.getItemElement().text(), 'text', 'Text is correct on init');
     });
 
-    test('Appointment collector should have correct width on timeline view', function(assert) {
-        const scheduler = createInstance({
+    test('Appointment collector should have correct width on timeline view', async function(assert) {
+        const scheduler = await createInstance({
             currentDate: new Date(2015, 2, 4),
             views: [{ type: 'timelineDay', name: 'timelineDay' }],
             width: 850,
@@ -617,6 +602,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             { startDate: new Date(2015, 2, 4), text: 'e', endDate: new Date(2015, 2, 4, 0, 30) },
             { startDate: new Date(2015, 2, 4), text: 'f', endDate: new Date(2015, 2, 4, 0, 30) }
         ]);
+        await waitAsync(0);
 
         const collectorWidth = scheduler.appointments.compact.getButtonWidth(0);
         const cellWidth = scheduler.workSpace.getCell(0).outerWidth();
@@ -624,7 +610,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         assert.roughEqual(collectorWidth, cellWidth - 4, 1.5, 'DropDown button has correct width');
     });
 
-    test('The itemData argument of the drop down appointment template is should be instance of the data source', function(assert) {
+    test('The itemData argument of the drop down appointment template is should be instance of the data source', async function(assert) {
         const dataSource = [{
             startDate: new Date(2015, 4, 24, 9),
             endDate: new Date(2015, 4, 24, 11),
@@ -641,10 +627,10 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             allDay: true,
             text: 'Task 3'
         }];
-        checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
+        await checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
     });
 
-    test('The itemData argument of the drop down appointment template is should be instance of the data source for recurrence rule', function(assert) {
+    test('The itemData argument of the drop down appointment template is should be instance of the data source for recurrence rule', async function(assert) {
         const dataSource = [{
             startDate: new Date(2015, 4, 24, 9),
             endDate: new Date(2015, 4, 24, 11),
@@ -664,7 +650,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             recurrenceRule: 'FREQ=DAILY;COUNT=4',
             text: 'Task 3'
         }];
-        checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
+        await checkItemDataInDropDownTemplate(assert, dataSource, new Date(2015, 4, 24));
     });
 
     [{
@@ -696,7 +682,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         view: 'month',
         expectedNumberOfCollectors: 9,
         expectedText: '5 more',
-        collectorIndex: 3,
+        collectorIndex: 0,
         description: 'Scheduler should render correct number of collectors and pass correct number of appointments to them in month view (T965267)',
     }, {
         dataSource: [{
@@ -755,8 +741,8 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         collectorIndex,
         description,
     }) => {
-        test(description, function(assert) {
-            const scheduler = createWrapper({
+        test(description, async function(assert) {
+            const scheduler = await createWrapper({
                 dataSource,
                 views: [{
                     type: view,
@@ -799,30 +785,32 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         });
     };
 
-    test('There are no ordinary appointments on adaptive month view', function(assert) {
-        const scheduler = createInstance();
+    test('There are no ordinary appointments on adaptive month view', async function(assert) {
+        const scheduler = await createInstance();
 
         assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
         assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointments are not rendered');
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }]);
+        await waitAsync(0);
 
         assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
         assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointments are not rendered');
     });
 
-    test('There are no ordinary appointments on adaptive week view allDay panel', function(assert) {
-        const scheduler = createInstance();
+    test('There are no ordinary appointments on adaptive week view allDay panel', async function(assert) {
+        const scheduler = await createInstance();
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
         assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointments are not rendered');
     });
 
-    test('Adaptive collector should have correct coordinates', function(assert) {
-        const scheduler = createInstance();
+    test('Adaptive collector should have correct coordinates', async function(assert) {
+        const scheduler = await createInstance();
 
         const $collector = scheduler.appointments.compact.getButton(0);
 
@@ -833,8 +821,8 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         assert.roughEqual(buttonCoordinates.top, expectedCoordinates.top + scheduler.workSpace.getCellHeight() - ADAPTIVE_COLLECTOR_BOTTOM_OFFSET, 1.001, 'Top coordinate is OK');
     });
 
-    test('Adaptive collector should have correct sizes', function(assert) {
-        const scheduler = createInstance();
+    test('Adaptive collector should have correct sizes', async function(assert) {
+        const scheduler = await createInstance();
 
         const $collector = scheduler.appointments.compact.getButton(0);
 
@@ -842,11 +830,11 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         assert.roughEqual($collector.outerHeight(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Height is OK');
     });
 
-    test('Adaptive collector should have correct size in material theme', function(assert) {
+    test('Adaptive collector should have correct size in material theme', async function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = () => true;
 
-        const scheduler = createInstance();
+        const scheduler = await createInstance();
         const $collector = scheduler.appointments.compact.getButton(0);
 
         assert.roughEqual($collector.outerWidth(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Width is OK');
@@ -855,11 +843,12 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         themes.isMaterial = origIsMaterial;
     });
 
-    test('Adaptive collector should have correct coordinates on allDay panel', function(assert) {
-        const scheduler = createInstance();
+    test('Adaptive collector should have correct coordinates on allDay panel', async function(assert) {
+        const scheduler = await createInstance();
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         const $collector = scheduler.appointments.compact.getButton(0);
 
@@ -870,11 +859,12 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         assert.roughEqual(buttonCoordinates.top, (scheduler.workSpace.getAllDayCellHeight() - ADAPTIVE_COLLECTOR_DEFAULT_SIZE) / 2, 1.001, 'Top coordinate is OK');
     });
 
-    test('Adaptive collector should have correct sizes on allDayPanel', function(assert) {
-        const scheduler = createInstance();
+    test('Adaptive collector should have correct sizes on allDayPanel', async function(assert) {
+        const scheduler = await createInstance();
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30), allDay: true }]);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         const $collector = scheduler.appointments.compact.getButton(0);
 
@@ -882,13 +872,14 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         assert.roughEqual($collector.outerHeight(), ADAPTIVE_COLLECTOR_DEFAULT_SIZE, 1.001, 'Height is OK');
     });
 
-    test('Ordinary appointment count depends on scheduler width on week view', function(assert) {
-        const scheduler = createInstance();
+    test('Ordinary appointment count depends on scheduler width on week view', async function(assert) {
+        const scheduler = await createInstance();
 
         scheduler.instance.option('width', 600);
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Collector is rendered');
         assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
@@ -904,13 +895,14 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Appointments are rendered');
     });
 
-    test('Ordinary appointments should have correct sizes on week view', function(assert) {
-        const scheduler = createInstance();
+    test('Ordinary appointments should have correct sizes on week view', async function(assert) {
+        const scheduler = await createInstance();
 
         scheduler.instance.option('width', 700);
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         const $appointment = scheduler.appointments.getAppointment(0);
 
@@ -929,13 +921,14 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         assert.roughEqual($secondAppointment.outerHeight(), 50, 1.001, 'Height is OK');
     });
 
-    test('Adaptive collector should have correct coordinates on week view', function(assert) {
-        const scheduler = createInstance();
+    test('Adaptive collector should have correct coordinates on week view', async function(assert) {
+        const scheduler = await createInstance();
 
         scheduler.instance.option('width', 700);
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         const $collector = scheduler.appointments.compact.getButton(0);
 
@@ -946,11 +939,12 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
     });
 
-    test('Adaptive collector should have correct coordinates coordinates on week view in compact theme', function(assert) {
+    test('Adaptive collector should have correct coordinates coordinates on week view in compact theme', async function(assert) {
         try {
             this.themeMock = sinon.stub(themes, 'current').returns('generic.light.compact');
-            const scheduler = createInstance();
+            const scheduler = await createInstance();
             scheduler.instance.option('currentView', 'week');
+            await waitAsync(0);
 
             const $collector = scheduler.appointments.compact.getButton(0);
 
@@ -964,13 +958,14 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         }
     });
 
-    test('Adaptive collector should have correct sizes on week view', function(assert) {
-        const scheduler = createInstance();
+    test('Adaptive collector should have correct sizes on week view', async function(assert) {
+        const scheduler = await createInstance();
 
         scheduler.instance.option('width', 700);
 
         scheduler.instance.option('dataSource', [{ startDate: new Date(2019, 2, 4), text: 'a', endDate: new Date(2019, 2, 4, 0, 30) }, { startDate: new Date(2019, 2, 4), text: 'b', endDate: new Date(2019, 2, 4, 0, 30) }]);
         scheduler.instance.option('currentView', 'week');
+        await waitAsync(0);
 
         const $collector = scheduler.appointments.compact.getButton(0);
 

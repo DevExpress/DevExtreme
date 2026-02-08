@@ -1,5 +1,5 @@
 import { Component, Input, AfterViewInit } from '@angular/core';
-import DataSource from 'devextreme/data/data_source';
+import { DataSource } from 'devextreme-angular/common/data';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';

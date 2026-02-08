@@ -70,6 +70,7 @@ import {
  LegendHoverMode,
  PointInteractionMode,
  PointSymbol,
+ ValueAxisVisualRangeUpdateMode,
  ValueErrorBarDisplayMode,
  ValueErrorBarType,
 } from "devextreme/common/charts";
@@ -608,7 +609,6 @@ const DxArgumentAxisConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:aggregateByCategory": null,
     "update:aggregatedPointsPosition": null,
     "update:aggregationGroupWidth": null,
     "update:aggregationInterval": null,
@@ -660,7 +660,6 @@ const DxArgumentAxisConfig = {
     "update:workWeek": null,
   },
   props: {
-    aggregateByCategory: Boolean,
     aggregatedPointsPosition: String as PropType<AggregatedPointsPosition>,
     aggregationGroupWidth: Number,
     aggregationInterval: [Number, Object, String] as PropType<number | Record<string, any> | TimeInterval>,
@@ -3454,7 +3453,7 @@ const DxValueAxisConfig = {
     valueType: String as PropType<ChartsDataType>,
     visible: Boolean,
     visualRange: [Array, Object] as PropType<(Array<Date | number | string>) | CommonChartTypes.VisualRange | Record<string, any>>,
-    visualRangeUpdateMode: String as PropType<VisualRangeUpdateMode>,
+    visualRangeUpdateMode: String as PropType<ValueAxisVisualRangeUpdateMode>,
     wholeRange: [Array, Object] as PropType<(Array<Date | number | string>) | CommonChartTypes.VisualRange | Record<string, any>>,
     width: Number
   }

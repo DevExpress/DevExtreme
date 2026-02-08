@@ -1,0 +1,740 @@
+@use '../colors' as *;
+@use '../../base/cardView/variables' as *;
+@use '../../base/cardView/header_panel/variables' as *;
+@use '../../base/cardView/header_panel/item/variables' as *;
+@use '../../base/cardView/content_view/content/card/variables' as *;
+@use '../../base/cardView/content_view/content/card/header/variables' as *;
+@use '../../base/cardView/content_view/content/card/cover/variables' as *;
+@use '../../base/cardView/content_view/content/card/content/variables' as *;
+@use '../../base/cardView/content_view/content/variables' as *;
+@use '../../base/cardView/content_view/no_data/variables' as *;
+@use '../../base/cardView/column_chooser/variables' as *;
+@use '../../base/cardView/filter_panel/variables' as *;
+@use "sass:color";
+
+// adduse
+
+// #region COMMON SETTINGS
+
+/**
+* $name 100. Background color
+* $type color
+*/
+$cardview-generic-common-bg-color: null !default;
+
+/**
+* $name 102. Link color
+* $type color
+*/
+$cardview-generic-common-link-color: null !default;
+
+/**
+* $name 103. Text color
+* $type color
+*/
+$cardview-generic-common-text-color: null !default;
+
+// #endregion
+
+// #region CARD
+
+/**
+* $name 200. Background color
+* $type color
+*/
+$cardview-generic-card-bg-color: null !default;
+
+/**
+* $name 201. Border color
+* $type color
+*/
+$cardview-generic-card-border-color: null !default;
+
+/**
+* $name 203. Divider color
+* $type color
+*/
+$cardview-generic-card-divider-color: null !default;
+
+/**
+* $name 204. Text color
+* $type color
+*/
+$cardview-generic-card-text-color: null !default;
+
+/**
+* $name 206. Cover background color
+* $type color
+*/
+$cardview-generic-card__cover-bg-color: null !default;
+
+/**
+* $name 207. "Empty cover" background color
+* $type color
+*/
+$cardview-generic-card__cover--noimage-bg-color: null !default;
+
+/**
+* $name 208. "Empty cover" icon color
+* $type color
+*/
+$cardview-generic-card__cover--noimage__icon-color: null !default;
+
+$cardview-generic-card--focused-outline-color: null !default;
+
+// #endregion
+
+// #region CARD (SELECTED)
+
+/**
+* $name 300. Background color
+* $type color
+*/
+$cardview-generic-card--selected-bg-color: null !default;
+
+/**
+* $name 301. Border color
+* $type color
+*/
+$cardview-generic-card--selected-border-color: null !default;
+
+/**
+* $name 302. Divider color
+* $type color
+*/
+$cardview-generic-card--selected-divider-color: null !default;
+
+/**
+* $name 303. Text color
+* $type color
+*/
+$cardview-generic-card--selected-text-color: null !default;
+
+/**
+* $name 305. Cover background color
+* $type color
+*/
+$cardview-generic-card--selected__cover-bg-color: null !default;
+
+/**
+* $name 306. "Empty cover" background color
+* $type color
+*/
+$cardview-generic-card--selected__cover--noimage-bg-color: null !default;
+
+/**
+* $name 307. "Empty cover" icon color
+* $type color
+*/
+$cardview-generic-card--selected__cover--noimage__icon-color: null !default;
+
+// #endregion
+
+// #region HEADER PANEL ITEM
+
+/**
+* $name 400. Background color
+* $type color
+*/
+$cardview-generic-header-panel__item-bg-color: null !default;
+
+/**
+* $name 401. Border color
+* $type color
+*/
+$cardview-generic-header-panel__item-border-color: null !default;
+
+/**
+* $name 403. Text color
+* $type color
+*/
+$cardview-generic-header-panel__item-text-color: null !default;
+
+/**
+* $name 405. Icon color
+* $type color
+*/
+$cardview-generic-header-panel__item__icon-color: null !default;
+
+/**
+* $name 406. Active "Filter" icon color
+* $type color
+*/
+$cardview-generic-header-panel__item__header-filter-icon--selected-color: null !default;
+
+/**
+* $name 407. Sort index text color
+* $type color
+*/
+$cardview-generic-header-panel__item__sort-index-text-color: null !default;
+
+$cardview-generic-header-panel__item--focused-outline-color: null !default;
+
+// #endregion
+
+// #region HEADER PANEL ITEM (HOVERED)
+
+/**
+* $name 500. Background color
+* $type color
+*/
+$cardview-generic-header-panel__item--hovered-bg-color: null !default;
+
+/**
+* $name 501. Border color
+* $type color
+*/
+$cardview-generic-header-panel__item--hovered-border-color: null !default;
+
+/**
+* $name 502. Text color
+* $type color
+*/
+$cardview-generic-header-panel__item--hovered-text-color: null !default;
+
+/**
+* $name 504. Icon color
+* $type color
+*/
+$cardview-generic-header-panel__item--hovered__icon-color: null !default;
+
+/**
+* $name 505. Active "Filter" icon color
+* $type color
+*/
+$cardview-generic-header-panel__item--hovered__header-filter-icon--selected-color: null !default;
+
+/**
+* $name 506. Sort index text color
+* $type color
+*/
+$cardview-generic-header-panel__item--hovered__sort-index-text-color: null !default;
+
+// #endregion
+
+// #region HEADER PANEL ITEM (DISABLED)
+
+/**
+* $name 600. Background color
+* $type color
+*/
+$cardview-generic-header-panel__item--disabled-bg-color: null !default;
+
+/**
+* $name 601. Border color
+* $type color
+*/
+$cardview-generic-header-panel__item--disabled-border-color: null !default;
+
+/**
+* $name 602. Text color
+* $type color
+*/
+$cardview-generic-header-panel__item--disabled-text-color: null !default;
+
+/**
+* $name 604. Icon color
+* $type color
+*/
+$cardview-generic-header-panel__item--disabled__icon-color: null !default;
+
+/**
+* $name 605. Active "Filter" icon color
+* $type color
+*/
+$cardview-generic-header-panel__item--disabled__header-filter-icon--selected-color: null !default;
+
+/**
+* $name 606. Sort index text color
+* $type color
+*/
+$cardview-generic-header-panel__item--disabled__sort-index-text-color: null !default;
+
+// #endregion
+
+// #region HEADER PANEL ITEM (ON DRAG)
+
+/**
+* $name 700. Background color
+* $type color
+*/
+$cardview-generic-header-panel__item--dragged-bg-color: null !default;
+
+/**
+* $name 701. Border color
+* $type color
+*/
+$cardview-generic-header-panel__item--dragged-border-color: null !default;
+
+/**
+* $name 702. Text color
+* $type color
+*/
+$cardview-generic-header-panel__item--dragged-text-color: null !default;
+
+/**
+* $name 704. "Drag allowed" icon color
+* $type color
+*/
+$cardview-generic-header-panel__item--dragged__allowance-icon-color: null !default;
+
+/**
+* $name 705. "Drag blocked" icon color
+* $type color
+*/
+$cardview-generic-header-panel__item--dragged__prohibition-icon-color: null !default;
+
+/**
+* $name 706. Box shadow color
+* $type color
+*/
+$cardview-generic-header-panel__item--dragged-box-shadow-color: null !default;
+
+// #endregion
+
+// #region HEADER PANEL DROP ZONE
+
+/**
+* $name 800. Background color
+* $type color
+*/
+$cardview-generic-header-panel__dropzone-bg-color: null !default;
+
+/**
+* $name 802. Border color
+* $type color
+*/
+$cardview-generic-header-panel__dropzone-border-color: null !default;
+
+/**
+* $name 803. Text color
+* $type color
+*/
+$cardview-generic-header-panel__dropzone-text-color: null !default;
+
+/**
+* $name 804. Icon color
+* $type color
+*/
+$cardview-generic-header-panel__dropzone__icon-color: null !default;
+
+// #endregion
+
+// #region FILTER PANEL
+
+/**
+* $name 900. Background color
+* $type color
+*/
+$cardview-generic-filter-panel-bg-color: null !default;
+
+/**
+* $name 902. Border color
+* $type color
+*/
+$cardview-generic-filter-panel-border-color: null !default;
+
+/**
+* $name 903. Text color
+* $type color
+*/
+$cardview-generic-filter-panel-text-color: null !default;
+
+/**
+* $name 904. Icon color
+* $type color
+*/
+$cardview-generic-filter-panel__icon-color: null !default;
+
+// #endregion
+
+// #region EMPTY VIEW
+
+/**
+* $name 1000. Background color
+* $type color
+*/
+$cardview-generic-nodata-view-bg-color: null !default;
+
+/**
+* $name 1001. Text color
+* $type color
+*/
+$cardview-generic-nodata-view-text-color: null !default;
+
+/**
+* $name 1002. Icon color
+* $type color
+*/
+$cardview-generic-nodata-view__icon-color: null !default;
+
+/**
+* $name 1003. Icon background color
+* $type color
+*/
+$cardview-generic-nodata-view__icon-bg-color: null !default;
+
+// #endregion
+
+// #region HIGHLIGHTS IN SEARCH
+
+/**
+* $name 1100. Background color
+* $type color
+*/
+$cardview-generic-card__content__field-value--highlighted-bg-color: null !default;
+
+/**
+* $name 1102. Text color
+* $type color
+*/
+$cardview-generic-card__content__field-value--highlighted-text-color: null !default;
+
+/**
+* $name 1104. Box shadow color
+* $type color
+*/
+$cardview-generic-card__content__field-value--highlighted-box-shadow-color: null !default;
+
+// #endregion
+
+// #region COLUMN CHOOSER
+
+$cardview-generic-columnchooser--empty__message-color: null !default;
+
+// #endregion
+
+@if $color == 'light' or $color == 'carmine' or $color == 'softblue' or $color == 'greenmist' {
+
+  // Common
+  $cardview-generic-common-bg-color: $base-bg !default;
+  $cardview-generic-common-link-color: $base-link-color !default;
+  $cardview-generic-common-text-color: $base-text-color !default;
+
+  // Card
+  $cardview-generic-card-bg-color: $base-bg !default;
+  $cardview-generic-card-border-color: $base-border-color !default;
+  $cardview-generic-card-divider-color: $cardview-generic-card-border-color !default;
+  $cardview-generic-card-text-color: $cardview-generic-common-text-color !default;
+  $cardview-generic-card__cover-bg-color: #FFF !default;
+  $cardview-generic-card__cover--noimage-bg-color: darken($base-bg, 7.84) !default;
+  $cardview-generic-card__cover--noimage__icon-color: lighten($cardview-generic-common-text-color, 38.43) !default;
+
+  $cardview-generic-card--focused-outline-color: $base-accent !default;
+
+  // Card - selected
+  $cardview-generic-card--selected-bg-color: lighten(desaturate(adjust-hue($base-accent, 2), 6.41), 48.63) !default;
+  $cardview-generic-card--selected-border-color: lighten(desaturate(adjust-hue($base-accent, 2), 6.88), 33.14) !default;
+  $cardview-generic-card--selected-divider-color: $cardview-generic-card--selected-border-color !default;
+  $cardview-generic-card--selected-text-color: $cardview-generic-card-text-color !default;
+  $cardview-generic-card--selected__cover-bg-color: $cardview-generic-card__cover-bg-color !default;
+  $cardview-generic-card--selected__cover--noimage-bg-color: $cardview-generic-card__cover--noimage-bg-color !default;
+  $cardview-generic-card--selected__cover--noimage__icon-color: $cardview-generic-card__cover--noimage__icon-color !default;
+
+  // Header panel item - default state
+  $cardview-generic-header-panel__item-bg-color: darken($base-bg, 3.92) !default;
+  $cardview-generic-header-panel__item-border-color: $base-border-color !default;
+  $cardview-generic-header-panel__item-text-color: $cardview-generic-common-text-color !default;
+  $cardview-generic-header-panel__item__icon-color: $cardview-generic-common-text-color !default;
+  $cardview-generic-header-panel__item__header-filter-icon--selected-color: $base-accent !default;
+  $cardview-generic-header-panel__item__sort-index-text-color: $cardview-generic-common-text-color !default;
+
+  $cardview-generic-header-panel__item--focused-outline-color: $base-accent !default;
+
+  // Header panel item - hovered
+  $cardview-generic-header-panel__item--hovered-bg-color: darken($cardview-generic-header-panel__item-bg-color, 3.92)  !default;
+  $cardview-generic-header-panel__item--hovered-border-color: darken($cardview-generic-header-panel__item-border-color, 10.59) !default;
+  $cardview-generic-header-panel__item--hovered-text-color: $cardview-generic-header-panel__item-text-color !default;
+  $cardview-generic-header-panel__item--hovered__icon-color: $cardview-generic-header-panel__item__icon-color !default;
+  $cardview-generic-header-panel__item--hovered__header-filter-icon--selected-color: $cardview-generic-header-panel__item__header-filter-icon--selected-color !default;
+  $cardview-generic-header-panel__item--hovered__sort-index-text-color: $cardview-generic-header-panel__item__sort-index-text-color !default;
+
+  // Header panel item - disabled
+  $cardview-generic-header-panel__item--disabled-bg-color: $cardview-generic-common-bg-color !default;
+  $cardview-generic-header-panel__item--disabled-border-color: $cardview-generic-header-panel__item-border-color !default;
+  $cardview-generic-header-panel__item--disabled-text-color: lighten($cardview-generic-header-panel__item-text-color, 60.00) !default;
+  $cardview-generic-header-panel__item--disabled__icon-color: lighten($cardview-generic-header-panel__item__icon-color, 60.00) !default;
+  $cardview-generic-header-panel__item--disabled__header-filter-icon--selected-color: lighten(desaturate($cardview-generic-header-panel__item__header-filter-icon--selected-color, 34.10), 27.06) !default;
+  $cardview-generic-header-panel__item--disabled__sort-index-text-color: lighten($cardview-generic-header-panel__item__sort-index-text-color, 60.00) !default;
+
+  // Header panel item - dragged
+  $cardview-generic-header-panel__item--dragged-bg-color: $cardview-generic-header-panel__item-bg-color !default;
+  $cardview-generic-header-panel__item--dragged-border-color: $cardview-generic-header-panel__item-border-color !default;
+  $cardview-generic-header-panel__item--dragged-text-color: $cardview-generic-header-panel__item-text-color !default;
+  $cardview-generic-header-panel__item--dragged__allowance-icon-color: $cardview-generic-common-text-color !default;
+  $cardview-generic-header-panel__item--dragged__prohibition-icon-color: $base-danger !default;
+  $cardview-generic-header-panel__item--dragged-box-shadow-color: rgba(0, 0, 0, 0.2) !default;
+
+  // Header panel Drop-zone
+  $cardview-generic-header-panel__dropzone-bg-color: lighten(desaturate(adjust-hue($base-accent, 2), 6.41), 48.63) !default;
+  $cardview-generic-header-panel__dropzone-border-color: $base-accent !default;
+  $cardview-generic-header-panel__dropzone-text-color: $base-accent !default;
+  $cardview-generic-header-panel__dropzone__icon-color: $base-accent !default;
+
+  // Filter panel
+  $cardview-generic-filter-panel-bg-color: $cardview-generic-common-bg-color !default;
+  $cardview-generic-filter-panel-border-color: $base-border-color !default;
+  $cardview-generic-filter-panel-text-color: $base-accent !default;
+  $cardview-generic-filter-panel__icon-color: $base-accent !default;
+
+  // Empty view
+  $cardview-generic-nodata-view-bg-color: $cardview-generic-common-bg-color !default;
+  $cardview-generic-nodata-view-text-color: $base-label-color !default;
+  $cardview-generic-nodata-view__icon-color: $cardview-generic-nodata-view-text-color !default;
+  $cardview-generic-nodata-view__icon-bg-color: darken($base-bg, 7.84) !default;
+
+  // Search highlight
+  $cardview-generic-card__content__field-value--highlighted-bg-color: $base-warning !default;
+  $cardview-generic-card__content__field-value--highlighted-text-color: $cardview-generic-common-text-color !default;
+  $cardview-generic-card__content__field-value--highlighted-box-shadow-color: rgba(0, 0, 0, 0.25) !default;
+
+  // Column chooser
+  $cardview-generic-columnchooser--empty__message-color: lighten($cardview-generic-common-text-color, 26%) !default;
+}
+
+@if $color == "dark" or $color == "darkviolet" or $color == "darkmoon" {
+
+  // Common
+  $cardview-generic-common-bg-color: $base-bg !default;
+  $cardview-generic-common-link-color: $base-link-color !default;
+  $cardview-generic-common-text-color: $base-text-color !default;
+
+  // Card
+  $cardview-generic-card-bg-color: $base-bg !default;
+  $cardview-generic-card-border-color: $base-border-color !default;
+  $cardview-generic-card-divider-color: $cardview-generic-card-border-color !default;
+  $cardview-generic-card-text-color: $cardview-generic-common-text-color !default;
+  $cardview-generic-card__cover-bg-color: #FFF !default;
+  $cardview-generic-card__cover--noimage-bg-color: lighten(desaturate($base-bg, 0.30), 8.04) !default;
+  $cardview-generic-card__cover--noimage__icon-color: darken($cardview-generic-common-text-color, 38.04) !default;
+
+  $cardview-generic-card--focused-outline-color: $base-accent !default;
+
+  // Card - selected
+  $cardview-generic-card--selected-bg-color: darken(desaturate(adjust-hue($base-accent, 1), 60.34), 29.41) !default;
+  $cardview-generic-card--selected-border-color: darken(desaturate(adjust-hue($base-accent, 1), 44.18), 11.76) !default;
+  $cardview-generic-card--selected-divider-color: $cardview-generic-card--selected-border-color !default;
+  $cardview-generic-card--selected-text-color: $cardview-generic-card-text-color !default;
+  $cardview-generic-card--selected__cover-bg-color: $cardview-generic-card__cover-bg-color !default;
+  $cardview-generic-card--selected__cover--noimage-bg-color: $cardview-generic-card__cover--noimage-bg-color !default;
+  $cardview-generic-card--selected__cover--noimage__icon-color: $cardview-generic-card__cover--noimage__icon-color !default;
+
+  // Header panel item - default
+  $cardview-generic-header-panel__item-bg-color: lighten($base-bg, 3.92) !default;
+  $cardview-generic-header-panel__item-border-color: $base-border-color !default;
+  $cardview-generic-header-panel__item-text-color: $cardview-generic-common-text-color !default;
+  $cardview-generic-header-panel__item__icon-color: $cardview-generic-common-text-color !default;
+  $cardview-generic-header-panel__item__header-filter-icon--selected-color: $base-accent !default;
+  $cardview-generic-header-panel__item__sort-index-text-color: $cardview-generic-common-text-color !default;
+
+  $cardview-generic-header-panel__item--focused-outline-color: $base-accent !default;
+
+  // Header panel item - hovered
+  $cardview-generic-header-panel__item--hovered-bg-color: lighten($cardview-generic-header-panel__item-bg-color, 3.92)  !default;
+  $cardview-generic-header-panel__item--hovered-border-color: lighten($cardview-generic-header-panel__item-border-color, 10.20) !default;
+  $cardview-generic-header-panel__item--hovered-text-color: $cardview-generic-header-panel__item-text-color !default;
+  $cardview-generic-header-panel__item--hovered__icon-color: $cardview-generic-header-panel__item__icon-color !default;
+  $cardview-generic-header-panel__item--hovered__header-filter-icon--selected-color: $cardview-generic-header-panel__item__header-filter-icon--selected-color !default;
+  $cardview-generic-header-panel__item--hovered__sort-index-text-color: $cardview-generic-header-panel__item__sort-index-text-color !default;
+
+  // Header panel item - disabled
+  $cardview-generic-header-panel__item--disabled-bg-color: darken($cardview-generic-common-bg-color, 8.24) !default;
+  $cardview-generic-header-panel__item--disabled-border-color: $cardview-generic-header-panel__item-border-color !default;
+  $cardview-generic-header-panel__item--disabled-text-color: darken($cardview-generic-header-panel__item-text-color, 59.22) !default;
+  $cardview-generic-header-panel__item--disabled__icon-color: darken($cardview-generic-header-panel__item__icon-color, 59.22) !default;
+  $cardview-generic-header-panel__item--disabled__header-filter-icon--selected-color: darken(desaturate($cardview-generic-header-panel__item__header-filter-icon--selected-color, 22.79), 17.65) !default;
+  $cardview-generic-header-panel__item--disabled__sort-index-text-color: darken($cardview-generic-header-panel__item__sort-index-text-color, 59.22) !default;
+
+  // Header panel item - dragged
+  $cardview-generic-header-panel__item--dragged-bg-color: $cardview-generic-header-panel__item-bg-color !default;
+  $cardview-generic-header-panel__item--dragged-border-color: $cardview-generic-header-panel__item-border-color !default;
+  $cardview-generic-header-panel__item--dragged-text-color: $cardview-generic-header-panel__item-text-color !default;
+  $cardview-generic-header-panel__item--dragged__allowance-icon-color: $cardview-generic-common-text-color !default;
+  $cardview-generic-header-panel__item--dragged__prohibition-icon-color: $base-danger !default;
+  $cardview-generic-header-panel__item--dragged-box-shadow-color: rgba(0, 0, 0, 0.2) !default;
+
+  // Header panel Drop-zone
+  $cardview-generic-header-panel__dropzone-bg-color: darken(desaturate(adjust-hue($base-accent, 1), 60.34), 29.41) !default;
+  $cardview-generic-header-panel__dropzone-border-color: $base-accent !default;
+  $cardview-generic-header-panel__dropzone-text-color: $base-accent !default;
+  $cardview-generic-header-panel__dropzone__icon-color: $base-accent !default;
+
+  // Filter panel
+  $cardview-generic-filter-panel-bg-color: $cardview-generic-common-bg-color !default;
+  $cardview-generic-filter-panel-border-color: $base-border-color !default;
+  $cardview-generic-filter-panel-text-color: $base-accent !default;
+  $cardview-generic-filter-panel__icon-color: $base-accent !default;
+
+  // Empty view
+  $cardview-generic-nodata-view-bg-color: $cardview-generic-common-bg-color !default;
+  $cardview-generic-nodata-view-text-color: $base-label-color !default;
+  $cardview-generic-nodata-view__icon-color: $cardview-generic-nodata-view-text-color !default;
+  $cardview-generic-nodata-view__icon-bg-color: lighten(desaturate($base-bg, 0.30), 8.04) !default;
+
+  // Search highlight
+  $cardview-generic-card__content__field-value--highlighted-bg-color: $base-warning !default;
+  $cardview-generic-card__content__field-value--highlighted-text-color: $cardview-generic-common-text-color !default;
+  $cardview-generic-card__content__field-value--highlighted-box-shadow-color: rgba(0, 0, 0, 0.25) !default;
+
+  // Column chooser
+  $cardview-generic-columnchooser--empty__message-color: lighten($cardview-generic-common-text-color, 26%) !default;
+}
+
+@if $color == "contrast" {
+
+  // Common
+  $cardview-generic-common-bg-color: $base-bg !default;
+  $cardview-generic-common-link-color: $base-link-color !default;
+  $cardview-generic-common-text-color: $base-text-color !default;
+
+  // Card
+  $cardview-generic-card-bg-color: $base-bg !default;
+  $cardview-generic-card-border-color: $base-border-color !default;
+  $cardview-generic-card-divider-color: $cardview-generic-card-border-color !default;
+  $cardview-generic-card-text-color: $cardview-generic-common-text-color !default;
+  $cardview-generic-card__cover-bg-color: #FFF !default;
+  $cardview-generic-card__cover--noimage-bg-color: $cardview-generic-common-bg-color !default;
+  $cardview-generic-card__cover--noimage__icon-color: $cardview-generic-common-text-color !default;
+
+  // Card - selected
+  $cardview-generic-card--selected-bg-color: $base-accent !default;
+  $cardview-generic-card--selected-border-color: $cardview-generic-card-border-color !default;
+  $cardview-generic-card--selected-divider-color: $cardview-generic-card-divider-color !default;
+  $cardview-generic-card--selected-text-color: $cardview-generic-card-text-color !default;
+  $cardview-generic-card--selected__cover-bg-color: $cardview-generic-card__cover-bg-color !default;
+  $cardview-generic-card--selected__cover--noimage-bg-color: $cardview-generic-card__cover--noimage-bg-color !default;
+  $cardview-generic-card--selected__cover--noimage__icon-color: $cardview-generic-card__cover--noimage__icon-color !default;
+
+  // Header panel item - default
+  $cardview-generic-header-panel__item-bg-color: $cardview-generic-common-bg-color !default;
+  $cardview-generic-header-panel__item-border-color: $base-border-color !default;
+  $cardview-generic-header-panel__item-text-color: $cardview-generic-common-text-color !default;
+  $cardview-generic-header-panel__item__icon-color: $cardview-generic-common-text-color !default;
+  $cardview-generic-header-panel__item__header-filter-icon--selected-color: $base-accent !default;
+  $cardview-generic-header-panel__item__sort-index-text-color: $cardview-generic-common-text-color !default;
+
+  // Header panel item - hovered
+  $cardview-generic-header-panel__item--hovered-bg-color: $cardview-generic-header-panel__item-bg-color  !default;
+  $cardview-generic-header-panel__item--hovered-border-color: $cardview-generic-header-panel__item-border-color !default;
+  $cardview-generic-header-panel__item--hovered-text-color: $cardview-generic-header-panel__item-text-color !default;
+  $cardview-generic-header-panel__item--hovered__icon-color: $cardview-generic-header-panel__item__icon-color !default;
+  $cardview-generic-header-panel__item--hovered__header-filter-icon--selected-color: $cardview-generic-header-panel__item__header-filter-icon--selected-color !default;
+  $cardview-generic-header-panel__item--hovered__sort-index-text-color: $cardview-generic-header-panel__item__sort-index-text-color !default;
+
+  // Header panel item - disabled
+  $cardview-generic-header-panel__item--disabled-bg-color: $cardview-generic-header-panel__item-bg-color !default;
+  $cardview-generic-header-panel__item--disabled-border-color: $cardview-generic-header-panel__item-border-color !default;
+  $cardview-generic-header-panel__item--disabled-text-color: darken($cardview-generic-header-panel__item-text-color, 49.80) !default;
+  $cardview-generic-header-panel__item--disabled__icon-color: darken($cardview-generic-header-panel__item__icon-color, 49.80) !default;
+  $cardview-generic-header-panel__item--disabled__header-filter-icon--selected-color: darken($cardview-generic-header-panel__item__header-filter-icon--selected-color, 20.98) !default;
+  $cardview-generic-header-panel__item--disabled__sort-index-text-color: darken($cardview-generic-header-panel__item__sort-index-text-color, 49.80) !default;
+
+  // Header panel item - dragged
+  $cardview-generic-header-panel__item--dragged-bg-color: $cardview-generic-header-panel__item-bg-color !default;
+  $cardview-generic-header-panel__item--dragged-border-color: $cardview-generic-header-panel__item-border-color !default;
+  $cardview-generic-header-panel__item--dragged-text-color: $cardview-generic-header-panel__item-text-color !default;
+  $cardview-generic-header-panel__item--dragged__allowance-icon-color: $cardview-generic-common-text-color !default;
+  $cardview-generic-header-panel__item--dragged__prohibition-icon-color: $base-danger !default;
+  $cardview-generic-header-panel__item--dragged-box-shadow-color: rgba(0, 0, 0, 0.2) !default;
+
+  // Header panel Drop-zone
+  $cardview-generic-header-panel__dropzone-bg-color: $base-accent !default;
+  $cardview-generic-header-panel__dropzone-border-color: $base-text-color !default;
+  $cardview-generic-header-panel__dropzone-text-color: $base-text-color !default;
+  $cardview-generic-header-panel__dropzone__icon-color: $base-text-color !default;
+
+  // Filter panel
+  $cardview-generic-filter-panel-bg-color: $cardview-generic-common-bg-color !default;
+  $cardview-generic-filter-panel-border-color: $base-border-color !default;
+  $cardview-generic-filter-panel-text-color: $base-accent !default;
+  $cardview-generic-filter-panel__icon-color: $base-accent !default;
+
+  // Empty view
+  $cardview-generic-nodata-view-bg-color: $cardview-generic-common-bg-color !default;
+  $cardview-generic-nodata-view-text-color: $base-label-color !default;
+  $cardview-generic-nodata-view__icon-color: $cardview-generic-nodata-view-text-color !default;
+  $cardview-generic-nodata-view__icon-bg-color: $cardview-generic-common-bg-color !default;
+
+  // Search highlight
+  $cardview-generic-card__content__field-value--highlighted-bg-color: $base-warning !default;
+  $cardview-generic-card__content__field-value--highlighted-text-color: $base-inverted-text-color !default;
+  $cardview-generic-card__content__field-value--highlighted-box-shadow-color: rgba(0, 0, 0, 0.25) !default;
+
+  // Column chooser
+  $cardview-generic-columnchooser--empty__message-color: lighten($cardview-generic-common-text-color, 26%) !default;
+}
+
+$cardview-bg-color: $cardview-generic-common-bg-color !default;
+$cardview-link-color: $cardview-generic-common-link-color !default;
+$cardview-text-color: $cardview-generic-common-text-color !default;
+
+$cardview-card-bg-color: $cardview-generic-card-bg-color !default;
+$cardview-card-border-color: $cardview-generic-card-border-color !default;
+$cardview-card-divider-color: $cardview-generic-card-divider-color !default;
+$cardview-card-text-color: $cardview-generic-card-text-color !default;
+$cardview-card__cover-bg-color: $cardview-generic-card__cover-bg-color !default;
+$cardview-card__cover--noimage-bg-color: $cardview-generic-card__cover--noimage-bg-color !default;
+$cardview-card__cover--noimage__icon-color: $cardview-generic-card__cover--noimage__icon-color !default;
+
+$cardview-card--focused-outline-color: $cardview-generic-card--focused-outline-color !default;
+
+$cardview-card--selected-bg-color: $cardview-generic-card--selected-bg-color !default;
+$cardview-card--selected-border-color: $cardview-generic-card--selected-border-color !default;
+$cardview-card--selected-divider-color: $cardview-generic-card--selected-divider-color !default;
+$cardview-card--selected-text-color: $cardview-generic-card--selected-text-color !default;
+$cardview-card--selected__cover-bg-color: $cardview-generic-card--selected__cover-bg-color !default;
+$cardview-card--selected__cover--noimage-bg-color: $cardview-generic-card--selected__cover--noimage-bg-color !default;
+$cardview-card--selected__cover--noimage__icon-color: $cardview-generic-card--selected__cover--noimage__icon-color !default;
+
+$cardview-header-panel__item-bg-color: $cardview-generic-header-panel__item-bg-color !default;
+$cardview-header-panel__item-border-color: $cardview-generic-header-panel__item-border-color !default;
+$cardview-header-panel__item-text-color: $cardview-generic-header-panel__item-text-color !default;
+$cardview-header-panel__item__icon-color: $cardview-generic-header-panel__item__icon-color !default;
+$cardview-header-panel__item__header-filter-icon--selected-color: $cardview-generic-header-panel__item__header-filter-icon--selected-color !default;
+$cardview-header-panel__item__sort-index-text-color: $cardview-generic-header-panel__item__sort-index-text-color !default;
+
+$cardview-header-panel__item--focused-outline-color: $cardview-generic-header-panel__item--focused-outline-color !default;
+
+$cardview-header-panel__item--hovered-bg-color: $cardview-generic-header-panel__item--hovered-bg-color !default;
+$cardview-header-panel__item--hovered-border-color: $cardview-generic-header-panel__item--hovered-border-color !default;
+$cardview-header-panel__item--hovered-text-color: $cardview-generic-header-panel__item--hovered-text-color !default;
+$cardview-header-panel__item--hovered__icon-color: $cardview-generic-header-panel__item--hovered__icon-color !default;
+$cardview-header-panel__item--hovered__header-filter-icon--selected-color: $cardview-generic-header-panel__item--hovered__header-filter-icon--selected-color !default;
+$cardview-header-panel__item--hovered__sort-index-text-color: $cardview-generic-header-panel__item--hovered__sort-index-text-color !default;
+
+$cardview-header-panel__item--disabled-bg-color: $cardview-generic-header-panel__item--disabled-bg-color !default;
+$cardview-header-panel__item--disabled-border-color: $cardview-generic-header-panel__item--disabled-border-color !default;
+$cardview-header-panel__item--disabled-text-color: $cardview-generic-header-panel__item--disabled-text-color !default;
+$cardview-header-panel__item--disabled__icon-color: $cardview-generic-header-panel__item--disabled__icon-color !default;
+$cardview-header-panel__item--disabled__header-filter-icon--selected-color: $cardview-generic-header-panel__item--disabled__header-filter-icon--selected-color !default;
+$cardview-header-panel__item--disabled__sort-index-text-color: $cardview-generic-header-panel__item--disabled__sort-index-text-color !default;
+
+$cardview-header-panel__item--dragged-bg-color: $cardview-generic-header-panel__item--dragged-bg-color !default;
+$cardview-header-panel__item--dragged-border-color: $cardview-generic-header-panel__item--dragged-border-color !default;
+$cardview-header-panel__item--dragged-text-color: $cardview-generic-header-panel__item--dragged-text-color !default;
+$cardview-header-panel__item--dragged__allowance-icon-color: $cardview-generic-header-panel__item--dragged__allowance-icon-color !default;
+$cardview-header-panel__item--dragged__prohibition-icon-color: $cardview-generic-header-panel__item--dragged__prohibition-icon-color !default;
+$cardview-header-panel__item--dragged-box-shadow-color: $cardview-generic-header-panel__item--dragged-box-shadow-color !default;
+
+$cardview-header-panel__dropzone-bg-color: $cardview-generic-header-panel__dropzone-bg-color !default;
+$cardview-header-panel__dropzone-border-color: $cardview-generic-header-panel__dropzone-border-color !default;
+$cardview-header-panel__dropzone-text-color: $cardview-generic-header-panel__dropzone-text-color !default;
+$cardview-header-panel__dropzone__icon-color: $cardview-generic-header-panel__dropzone__icon-color !default;
+
+$cardview-filter-panel-bg-color: $cardview-generic-filter-panel-bg-color !default;
+$cardview-filter-panel-border-color: $cardview-generic-filter-panel-border-color !default;
+$cardview-filter-panel-text-color: $cardview-generic-filter-panel-text-color !default;
+$cardview-filter-panel__icon-color: $cardview-generic-filter-panel__icon-color !default;
+
+$cardview-nodata-view-bg-color: $cardview-generic-nodata-view-bg-color !default;
+$cardview-nodata-view-text-color: $cardview-generic-nodata-view-text-color !default;
+$cardview-nodata-view__icon-color: $cardview-generic-nodata-view__icon-color !default;
+$cardview-nodata-view__icon-bg-color: $cardview-generic-nodata-view__icon-bg-color !default;
+
+$cardview-card__content__field-value--highlighted-bg-color: $cardview-generic-card__content__field-value--highlighted-bg-color !default;
+$cardview-card__content__field-value--highlighted-text-color: $cardview-generic-card__content__field-value--highlighted-text-color !default;
+$cardview-card__content__field-value--highlighted-box-shadow: 0 1px 3px $cardview-generic-card__content__field-value--highlighted-box-shadow-color !default;
+
+$cardview-columnchooser--empty__message-color: $cardview-generic-columnchooser--empty__message-color !default;
+
+$cardview-header-item__sort-indicator__border-color: $base-accent !default;

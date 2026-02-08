@@ -2,36 +2,41 @@ import { getOuterHeight, getOuterWidth } from 'core/utils/size';
 import fx from 'common/core/animation/fx';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
+import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Scrolling to time', () => {
     ['standard', 'virtual'].forEach((scrollingMode) => {
+        const timeout = scrollingMode === 'virtual' ? 50 : 0;
         const moduleName = scrollingMode === 'virtual'
             ? 'Virtual Scrolling'
             : 'Standard Scrolling';
         QUnit.module(moduleName, {
             beforeEach: function() {
-                this.createScheduler = (options) => {
-                    return createWrapper({
+                this.createScheduler = async(options) => {
+                    const scheduler = await createWrapper({
                         showCurrentTimeIndicator: false,
                         scrolling: { mode: scrollingMode },
                         ...options,
                     });
+                    const workSpace = scheduler.instance.getWorkSpace();
+
+                    workSpace.renderer.getRenderTimeout = () => -1;
+
+                    return scheduler;
                 };
 
-                this.clock = sinon.useFakeTimers();
                 sinon.spy(errors, 'log');
                 fx.off = true;
             },
             afterEach: function() {
-                this.clock.restore();
                 errors.log.restore();
                 fx.off = false;
             }
         }, () => {
-            QUnit.test('Check scrolling to time', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Check scrolling to time', async function(assert) {
+                const scheduler = await this.createScheduler({
                     currentView: 'week',
                     currentDate: new Date(2015, 1, 9),
                     height: 500
@@ -41,6 +46,7 @@ QUnit.module('Scrolling to time', () => {
                 const scrollBy = sinon.spy(scrollable, 'scrollBy');
 
                 scheduler.instance.scrollToTime(9, 5);
+                await waitAsync(timeout);
 
                 const cellHeight = getOuterHeight(scheduler.workSpace.getCells().eq(0));
                 const expectedTop = cellHeight * (18 + 1 / 6);
@@ -49,8 +55,8 @@ QUnit.module('Scrolling to time', () => {
                 assert.equal(scrollBy.getCall(0).args[0].left, 0, 'scrollBy was called with right distance');
             });
 
-            QUnit.test('Check scrolling to time, if startDayHour is not 0', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Check scrolling to time, if startDayHour is not 0', async function(assert) {
+                const scheduler = await this.createScheduler({
                     currentView: 'week',
                     currentDate: new Date(2015, 1, 9),
                     height: 500,
@@ -61,10 +67,12 @@ QUnit.module('Scrolling to time', () => {
                 const scrollBy = sinon.spy(scrollable, 'scrollBy');
 
                 scheduler.instance.scrollToTime(2, 0);
+                await waitAsync(timeout);
 
                 assert.roughEqual(scrollBy.getCall(0).args[0].top, 0, 2.001, 'scrollBy was called with right distance');
 
                 scheduler.instance.scrollToTime(5, 0);
+                await waitAsync(timeout);
 
                 const cellHeight = getOuterHeight(scheduler.workSpace.getCells().eq(0));
                 const expectedTop = cellHeight * 4;
@@ -77,8 +85,8 @@ QUnit.module('Scrolling to time', () => {
                 );
             });
 
-            QUnit.test('Check scrolling to time, if \'hours\' argument greater than the \'endDayHour\' option', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Check scrolling to time, if \'hours\' argument greater than the \'endDayHour\' option', async function(assert) {
+                const scheduler = await this.createScheduler({
                     currentView: 'week',
                     currentDate: new Date(2015, 1, 9),
                     height: 500,
@@ -89,6 +97,7 @@ QUnit.module('Scrolling to time', () => {
                 const scrollBy = sinon.spy(scrollable, 'scrollBy');
 
                 scheduler.instance.scrollToTime(12, 0);
+                await waitAsync(timeout);
 
                 const cellHeight = getOuterHeight(scheduler.workSpace.getCells().eq(0));
                 const expectedTop = cellHeight * 18;
@@ -101,8 +110,8 @@ QUnit.module('Scrolling to time', () => {
                 );
             });
 
-            QUnit.test('Scrolling to date which doesn\'t locate on current view should call console warning', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Scrolling to date which doesn\'t locate on current view should call console warning', async function(assert) {
+                const scheduler = await this.createScheduler({
                     currentView: 'week',
                     currentDate: new Date(2015, 1, 9),
                     height: 500
@@ -114,8 +123,8 @@ QUnit.module('Scrolling to time', () => {
                 assert.equal(errors.log.getCall(1).args[0], 'W1008', 'warning has correct error id');
             });
 
-            QUnit.test('Check scrolling to time for timeline view', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Check scrolling to time for timeline view', async function(assert) {
+                const scheduler = await this.createScheduler({
                     views: ['timelineWeek'],
                     currentView: 'timelineWeek',
                     currentDate: new Date(2015, 1, 9),
@@ -129,17 +138,18 @@ QUnit.module('Scrolling to time', () => {
                 const scrollBy = sinon.spy(scrollable, 'scrollBy');
 
                 scheduler.instance.scrollToTime(9, 5);
+                await waitAsync(timeout);
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace._getScrollCoordinates(9, 5, new Date(2015, 1, 9)).left,
+                    scheduler.instance._workSpace._getScrollCoordinates(new Date(2015, 1, 9, 9, 5)).left,
                     1.001,
                     'scrollBy was called with right distance',
                 );
             });
 
-            QUnit.test('Check scrolling to time for timeline view, rtl mode', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Check scrolling to time for timeline view, rtl mode', async function(assert) {
+                const scheduler = await this.createScheduler({
                     views: ['timelineWeek'],
                     currentView: 'timelineWeek',
                     currentDate: new Date(2015, 1, 9),
@@ -156,17 +166,18 @@ QUnit.module('Scrolling to time', () => {
                 const offset = getOuterWidth(scheduler.instance.getWorkSpace().getScrollableContainer());
 
                 scheduler.instance.scrollToTime(9, 5);
+                await waitAsync(timeout);
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace._getScrollCoordinates(9, 5, new Date(2015, 1, 9)).left - scrollLeft - offset,
+                    scheduler.instance._workSpace._getScrollCoordinates(new Date(2015, 1, 9, 9, 5)).left - scrollLeft - offset,
                     1.001,
                     'scrollBy was called with right distance',
                 );
             });
 
-            QUnit.test('Check scrolling to time for timeline view if date was set', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Check scrolling to time for timeline view if date was set', async function(assert) {
+                const scheduler = await this.createScheduler({
                     views: ['timelineWeek'],
                     currentView: 'timelineWeek',
                     currentDate: new Date(2015, 1, 9),
@@ -181,17 +192,18 @@ QUnit.module('Scrolling to time', () => {
                 const scrollBy = sinon.spy(scrollable, 'scrollBy');
 
                 scheduler.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
+                await waitAsync(timeout);
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace._getScrollCoordinates(9, 5, new Date(2015, 1, 11)).left,
+                    scheduler.instance._workSpace._getScrollCoordinates(new Date(2015, 1, 11, 9, 5)).left,
                     1.001,
                     'scrollBy was called with right distance',
                 );
             });
 
-            QUnit.test('Check scrolling to time for timeline view if date was set, rtl mode', function(assert) {
-                const scheduler = this.createScheduler({
+            QUnit.test('Check scrolling to time for timeline view if date was set, rtl mode', async function(assert) {
+                const scheduler = await this.createScheduler({
                     views: ['timelineWeek'],
                     currentView: 'timelineWeek',
                     currentDate: new Date(2015, 1, 9),
@@ -209,23 +221,25 @@ QUnit.module('Scrolling to time', () => {
                 const offset = getOuterWidth(scheduler.workSpace.getDataTableScrollableContainer());
 
                 scheduler.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
+                await waitAsync(timeout);
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace._getScrollCoordinates(9, 5, new Date(2015, 1, 11)).left - scrollLeft - offset,
+                    scheduler.instance._workSpace._getScrollCoordinates(new Date(2015, 1, 11, 9, 5)).left - scrollLeft - offset,
                     1.001,
                     'scrollBy was called with right distance',
                 );
             });
 
-            QUnit.test('scrollToTime should throw a deprecation warning', function(assert) {
-                const scheduler = createWrapper({
+            QUnit.test('scrollToTime should throw a deprecation warning', async function(assert) {
+                const scheduler = await createWrapper({
                     views: ['day'],
                     currentView: 'day',
                     currentDate: new Date(2021, 8, 9),
                 });
 
                 scheduler.instance.scrollToTime(10, 0);
+                await waitAsync(timeout);
 
                 assert.equal(errors.log.callCount, 1, 'warning has been called once');
                 assert.deepEqual(

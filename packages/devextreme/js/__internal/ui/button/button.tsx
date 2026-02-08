@@ -1,31 +1,59 @@
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { click } from '@js/common/core/events/short';
 import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';
+import type { DefaultOptionsRule } from '@js/core/options/utils';
 import { convertRulesToOptions, createDefaultOptionRules } from '@js/core/options/utils';
 import { getImageSourceType } from '@js/core/utils/icon';
 import { camelize } from '@js/core/utils/inflector';
+import type { Properties as ButtonProperties, TemplateData } from '@js/ui/button.d';
 import { current, isMaterial } from '@js/ui/themes';
+import type { BaseWidgetProps } from '@ts/core/r1/base_props';
+import { BaseWidgetDefaultProps } from '@ts/core/r1/base_props';
 import { createReRenderEffect, InfernoEffect, InfernoWrapperComponent } from '@ts/core/r1/runtime/inferno/index';
+import type { TemplateComponent } from '@ts/core/r1/types';
 import type { EffectReturn } from '@ts/core/r1/utils/effect_return';
 import { getTemplate } from '@ts/core/r1/utils/index';
 import { Widget } from '@ts/core/r1/widget';
 import { combineClasses } from '@ts/core/utils/combine_classes';
-import {
-  createRef as infernoCreateRef,
-} from 'inferno';
+import { createRef as infernoCreateRef } from 'inferno';
 
 import { Icon } from './icon';
 import type { InkRippleConfig } from './ink_ripple';
 import { InkRipple } from './ink_ripple';
-import type { ButtonProps } from './props';
-import { defaultButtonProps } from './props';
+
+export const BUTTON_CLASS = 'dx-button';
 
 const stylingModes = ['outlined', 'text', 'contained'];
+export const buttonComponentProps = [
+  'accessKey',
+  'activeStateEnabled',
+  'className',
+  'disabled',
+  'focusStateEnabled',
+  'height',
+  'hint',
+  'hoverStateEnabled',
+  'icon',
+  'iconPosition',
+  'iconTemplate',
+  'onClick',
+  'onKeyDown',
+  'onSubmit',
+  'pressed',
+  'rtlEnabled',
+  'stylingMode',
+  'tabIndex',
+  'template',
+  'templateData',
+  'text',
+  'type',
+  'useInkRipple',
+  'useSubmitBehavior',
+  'visible',
+  'width',
+];
 
-const getCssClasses = (model): string => {
+const getCssClasses = (model: ButtonProps): string => {
   const {
     icon,
     iconPosition,
@@ -33,16 +61,58 @@ const getCssClasses = (model): string => {
     text,
     type,
   } = model;
+
   const isValidStylingMode = stylingMode && stylingModes.includes(stylingMode);
   const classesMap = {
-    'dx-button': true,
+    [BUTTON_CLASS]: true,
     [`dx-button-mode-${isValidStylingMode ? stylingMode : 'contained'}`]: true,
     [`dx-button-${type ?? 'normal'}`]: true,
     'dx-button-has-text': !!text,
     'dx-button-has-icon': !!icon,
     'dx-button-icon-right': iconPosition !== 'left',
   };
+
   return combineClasses(classesMap);
+};
+
+const omit = <T extends Record<string, unknown>, K extends keyof T>(
+  obj: T,
+  excludedKeys: K[],
+): Omit<T, K> => {
+  const excludedSet = new Set(excludedKeys);
+
+  return Object.keys(obj).reduce((result, key) => {
+    if (!excludedSet.has(key as K)) {
+      result[key] = obj[key];
+    }
+
+    return result;
+  }, {}) as Omit<T, K>;
+};
+
+export type ButtonProps = Record<string, unknown> & BaseWidgetProps & ButtonProperties & {
+  iconPosition?: string;
+  onSubmit?: (e: { event: Event; submitInput: HTMLInputElement | null }) => void;
+  pressed?: boolean;
+  template?: TemplateComponent;
+  iconTemplate?: TemplateComponent;
+  children?: JSX.Element;
+  useInkRipple: boolean;
+  templateData?: TemplateData;
+};
+
+export const defaultButtonProps: ButtonProps = {
+  ...BaseWidgetDefaultProps,
+  activeStateEnabled: true,
+  hoverStateEnabled: true,
+  icon: '',
+  iconPosition: 'left',
+  stylingMode: 'contained',
+  text: '',
+  type: 'normal',
+  useInkRipple: false,
+  useSubmitBehavior: false,
+  templateData: {},
 };
 
 export const defaultOptionRules = createDefaultOptionRules([{
@@ -66,8 +136,7 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
 
   private readonly widgetRef = infernoCreateRef<Widget>();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private readonly __getterCache: any = {};
+  private readonly __getterCache: { inkRippleConfig?: InkRippleConfig } = {};
 
   constructor(props: ButtonProps) {
     super(props);
@@ -95,71 +164,54 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
 
   submitEffect(): EffectReturn {
     const namespace = 'UIFeedback';
-    const {
-      onSubmit,
-      useSubmitBehavior,
-    } = this.props;
-    if (useSubmitBehavior && onSubmit) {
-      click.on(this.submitInputRef.current, (event) => onSubmit({
-        event,
-        submitInput: this.submitInputRef.current,
-      }), {
-        namespace,
-      });
+    const { onSubmit, useSubmitBehavior } = this.props;
+    const submitInput = this.submitInputRef.current;
 
-      return () => click.off(this.submitInputRef.current, {
-        namespace,
-      });
+    if (useSubmitBehavior && onSubmit) {
+      click.on(
+        submitInput,
+        (event: Event) => onSubmit({ event, submitInput }),
+        { namespace },
+      );
+
+      return () => click.off(submitInput, { namespace });
     }
     return undefined;
   }
 
-  onActive(event): void {
-    const {
-      useInkRipple,
-    } = this.props;
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    useInkRipple && this.inkRippleRef.current!.showWave({
-      element: this.contentRef.current,
-      event,
-    });
-  }
-
-  onInactive(event): void {
-    const {
-      useInkRipple,
-    } = this.props;
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    useInkRipple && this.inkRippleRef.current!.hideWave({
-      element: this.contentRef.current,
-      event,
-    });
-  }
-
-  onWidgetClick(event): void {
-    const {
-      onClick,
-      useSubmitBehavior,
-    } = this.props;
-
-    onClick?.({
-      event,
-    });
-
-    if (useSubmitBehavior) {
-      this.submitInputRef.current!.click();
+  onActive(event: Event): void {
+    if (this.props.useInkRipple) {
+      this.inkRippleRef.current?.showWave({
+        element: this.contentRef.current,
+        event,
+      });
     }
   }
 
+  onInactive(event: Event): void {
+    if (this.props.useInkRipple) {
+      this.inkRippleRef.current?.hideWave({
+        element: this.contentRef.current,
+        event,
+      });
+    }
+  }
+
+  onWidgetClick(event: Event): void {
+    const { onClick, useSubmitBehavior } = this.props;
+
+    onClick?.({ event });
+
+    if (useSubmitBehavior) {
+      this.submitInputRef.current?.click();
+    }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   keyDown(e): unknown {
-    const {
-      onKeyDown,
-    } = this.props;
-    const {
-      keyName,
-      originalEvent,
-      which,
-    } = e;
+    const { onKeyDown } = this.props;
+    const { keyName, originalEvent, which } = e;
+
     const result = onKeyDown?.(e);
     if (result?.cancel) {
       return result;
@@ -170,17 +222,17 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
 
       this.onWidgetClick(originalEvent);
     }
+
     return undefined;
   }
 
   get aria(): Record<string, string> {
-    const {
-      icon,
-      text,
-    } = this.props;
+    const { icon, text } = this.props;
     let label = text ?? '';
+
     if (!text && icon) {
       const iconSource = getImageSourceType(icon);
+
       switch (iconSource) {
         case 'image':
         {
@@ -197,14 +249,14 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
           break;
         case 'svg': {
           const titleRegexp = /<title>(.*?)<\/title>/;
-          const title = titleRegexp.exec(icon)?.[1] ?? '';
-          label = title;
+          label = titleRegexp.exec(icon)?.[1] ?? '';
           break;
         }
         default:
           break;
       }
     }
+
     return {
       role: 'button',
       ...label ? { label } : {},
@@ -216,29 +268,21 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
   }
 
   get iconSource(): string {
-    const {
-      icon,
-    } = this.props;
-    return icon ?? '';
+    return this.props.icon ?? '';
   }
 
   get inkRippleConfig(): InkRippleConfig {
-    if (this.__getterCache.inkRippleConfig !== undefined) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return this.__getterCache.inkRippleConfig;
-    }
-    // eslint-disable-next-line no-return-assign
-    return this.__getterCache.inkRippleConfig = ((): InkRippleConfig => {
-      const {
-        icon,
-        text,
-      } = this.props;
-      return !text && icon ? {
+    if (this.__getterCache.inkRippleConfig === undefined) {
+      const { icon, text } = this.props;
+
+      this.__getterCache.inkRippleConfig = !text && icon ? {
         isCentered: true,
         useHoldAnimation: false,
         waveSizeCoefficient: 1,
       } : {};
-    })();
+    }
+
+    return this.__getterCache.inkRippleConfig;
   }
 
   get buttonTemplateData(): Record<string, unknown> {
@@ -246,50 +290,40 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
     return { icon, text, ...templateData };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  get restAttributes(): any {
-    const restProps = { ...this.props };
+  get restAttributes(): Partial<ButtonProps> {
+    const excludedKeys = [
+      ...buttonComponentProps,
+      'children',
+    ];
 
-    [
-      'accessKey', 'activeStateEnabled', 'children', 'className', 'disabled', 'focusStateEnabled', 'height', 'hint', 'hoverStateEnabled', 'icon', 'iconPosition', 'iconTemplate', 'onClick', 'onKeyDown', 'onSubmit', 'pressed', 'rtlEnabled', 'stylingMode', 'tabIndex', 'template', 'templateData', 'text', 'type', 'useInkRipple', 'useSubmitBehavior', 'visible', 'width',
-    ].forEach((excluded) => {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete restProps[excluded];
-    });
-
-    return restProps;
+    return omit(this.props, excludedKeys);
   }
 
   focus(): void {
-    this.widgetRef.current!.focus();
+    this.widgetRef.current?.focus();
   }
 
   activate(): void {
-    this.widgetRef.current!.activate();
+    this.widgetRef.current?.activate();
   }
 
   deactivate(): void {
-    this.widgetRef.current!.deactivate();
+    this.widgetRef.current?.deactivate();
   }
 
-  componentWillUpdate(nextProps): void {
+  componentWillUpdate(nextProps: ButtonProps): void {
     super.componentWillUpdate();
+
     if (this.props.icon !== nextProps.icon || this.props.text !== nextProps.text) {
       this.__getterCache.inkRippleConfig = undefined;
     }
   }
 
   render(): JSX.Element {
-    const {
-      children,
-      iconPosition,
-      text,
-    } = this.props;
+    const { children, iconPosition, text } = this.props;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ButtonTemplate: any = getTemplate(this.props.template);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const IconTemplate: any = getTemplate(this.props.iconTemplate);
+    const ButtonTemplate = getTemplate(this.props.template);
+    const IconTemplate = getTemplate(this.props.iconTemplate);
 
     const renderText = !this.props.template && !children && text !== '';
     const isIconLeft = iconPosition === 'left';
@@ -326,37 +360,42 @@ export class Button extends InfernoWrapperComponent<ButtonProps> {
         {...this.restAttributes}
       >
         <div className="dx-button-content" ref={this.contentRef}>
-          {ButtonTemplate && ButtonTemplate({ data: this.buttonTemplateData }) }
-          {!ButtonTemplate && children}
+          {ButtonTemplate
+            ? ButtonTemplate({ data: this.buttonTemplateData })
+            : children
+          }
+
           {isIconLeft && iconComponent}
           {renderText && (<span className="dx-button-text">{text}</span>)}
           {!isIconLeft && iconComponent}
-          {this.props.useSubmitBehavior
-            && (
-              <input ref={this.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input" />
-            )
-          }
-          {this.props.useInkRipple
-            && (
-              <InkRipple
-                config={this.inkRippleConfig}
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                ref={this.inkRippleRef as any}
-              />
-            )
-          }
+
+          {this.props.useSubmitBehavior && (
+            <input ref={this.submitInputRef} type="submit" tabIndex={-1} className="dx-button-submit-input" />
+          )}
+
+          {this.props.useInkRipple && (
+            <InkRipple config={this.inkRippleConfig} ref={this.inkRippleRef} />
+          )}
         </div>
       </Widget>
     );
   }
 }
+
 Button.defaultProps = { ...defaultButtonProps, ...convertRulesToOptions(defaultOptionRules) };
 
-// eslint-disable-next-line @typescript-eslint/naming-convention, @typescript-eslint/no-explicit-any
-const __defaultOptionRules: any = [];
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export function defaultOptions(rule) {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const __defaultOptionRules: DefaultOptionsRule<ButtonProps>[] = [];
+
+export function defaultOptions(rule: DefaultOptionsRule<ButtonProps>): void {
   __defaultOptionRules.push(rule);
-  // eslint-disable-next-line @stylistic/max-len
-  Button.defaultProps = Object.create(Object.prototype, Object.assign(Object.getOwnPropertyDescriptors(Button.defaultProps), Object.getOwnPropertyDescriptors(convertRulesToOptions(defaultOptionRules)), Object.getOwnPropertyDescriptors(convertRulesToOptions(__defaultOptionRules))));
+
+  Button.defaultProps = Object.create(
+    Object.prototype,
+    Object.assign(
+      Object.getOwnPropertyDescriptors(Button.defaultProps),
+      Object.getOwnPropertyDescriptors(convertRulesToOptions(defaultOptionRules)),
+      Object.getOwnPropertyDescriptors(convertRulesToOptions(__defaultOptionRules)),
+    ),
+  );
 }

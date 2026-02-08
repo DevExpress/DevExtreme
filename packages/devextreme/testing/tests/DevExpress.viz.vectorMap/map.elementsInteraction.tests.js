@@ -1,15 +1,21 @@
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-const commons = require('./vectorMapParts/commons.js');
-const mapLayerModule = require('viz/vector_map/map_layer');
-const projectionModule = require('viz/vector_map/projection.main');
-const resizeCallbacks = require('core/utils/resize_callbacks');
-const { implementationsMap } = require('core/utils/size');
-const vizMocks = require('../../helpers/vizMocks.js');
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import {
+    environment,
+    returnValue
+} from './vectorMapParts/commons.js';
+import mapLayerModule from 'viz/vector_map/map_layer';
+import projectionModule from 'viz/vector_map/projection.main';
+import resizeCallbacks from 'core/utils/resize_callbacks';
+import { implementationsMap } from 'core/utils/size';
+import {
+    stubIncidentOccurredCreation,
+    restoreIncidentOccurredCreation,
+} from '../../helpers/vizMocks.js';
 
-QUnit.module('Map - projection events', $.extend({}, commons.environment, {
+QUnit.module('Map - projection events', $.extend({}, environment, {
     beforeEach: function() {
-        commons.environment.beforeEach.apply(this, arguments);
+        environment.beforeEach.apply(this, arguments);
         this.layerCollection.stub('items').returns([]);
         this.tracker.on = sinon.stub().returns(noop);
     }
@@ -35,10 +41,10 @@ QUnit.test('On zoom', function(assert) {
     assert.deepEqual(onZoomFactorChanged.lastCall.args[0].zoomFactor, 'test-zoom');
 });
 
-QUnit.module('Map - event trigger interaction', $.extend({}, commons.environment, {
+QUnit.module('Map - event trigger interaction', $.extend({}, environment, {
     createMap: function() {
         const spy = sinon.spy(mapLayerModule, 'MapLayerCollection');
-        commons.environment.createMap.apply(this, arguments);
+        environment.createMap.apply(this, arguments);
         this.eventTrigger = spy.lastCall.args[0].eventTrigger;
     },
 
@@ -47,22 +53,22 @@ QUnit.module('Map - event trigger interaction', $.extend({}, commons.environment
     }
 }));
 
-const environmentForSize = $.extend({}, commons.environment, {
+const environmentForSize = $.extend({}, environment, {
     beforeEach: function() {
-        commons.environment.beforeEach.apply(this, arguments);
+        environment.beforeEach.apply(this, arguments);
         this.layerCollection.stub('items').returns([]);
-        vizMocks.stubIncidentOccurredCreation();
+        stubIncidentOccurredCreation();
         this.tracker.on = sinon.stub().returns(noop);
     },
 
     afterEach: function() {
-        vizMocks.restoreIncidentOccurredCreation();
-        commons.environment.afterEach.apply(this, arguments);
+        restoreIncidentOccurredCreation();
+        environment.afterEach.apply(this, arguments);
     },
 
     setContainerSize: function(width, height) {
-        implementationsMap.getWidth = commons.returnValue(width);
-        implementationsMap.getHeight = commons.returnValue(height);
+        implementationsMap.getWidth = returnValue(width);
+        implementationsMap.getHeight = returnValue(height);
     },
 
     checkSizes: function(assert, expected) {
