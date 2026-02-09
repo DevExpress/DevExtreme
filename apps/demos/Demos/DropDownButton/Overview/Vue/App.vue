@@ -246,7 +246,7 @@ function onColorClick(clickedColor: string) {
   .button-row {
     font-size: 12px;
     line-height: 14px;
-    opacity: 0.6;
+    color: var(--dx-color-icon);
   }
 
   #custom-template .dx-button {

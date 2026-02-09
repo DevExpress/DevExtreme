@@ -72,7 +72,6 @@ function onStateResetClick() {
 }
 
 #descContainer a {
-  color: #f05b41;
   text-decoration: underline;
   cursor: pointer;
 }

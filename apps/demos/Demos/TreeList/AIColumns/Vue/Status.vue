@@ -22,7 +22,7 @@ defineProps<{
 }
 
 .status--commission {
-  color: #f7630c;
+  color: var(--dx-color-warning);
 }
 
 .status--terminated {

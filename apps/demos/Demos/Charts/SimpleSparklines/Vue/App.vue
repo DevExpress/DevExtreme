@@ -4,7 +4,7 @@
     <div id="chart-demo">
       <table class="demo-table">
         <tr>
-          <th/>
+          <th><div class="dx-screen-reader-only">Year</div></th>
           <th>Oil (USD/barrel)</th>
           <th>Gold (USD/troy ounce)</th>
           <th>Silver (USD/troy ounce)</th>

@@ -3,7 +3,6 @@
 }
 
 ::ng-deep #pivotgrid-demo .desc-container a {
-  color: #f05b41;
   text-decoration: underline;
   cursor: pointer;
 }

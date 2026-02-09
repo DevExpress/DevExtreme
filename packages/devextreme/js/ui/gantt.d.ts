@@ -1683,7 +1683,7 @@ export type dxGanttColumn<TRowData = any, TKey = any> = Omit<dxGanttColumnBlank<
  * @inherits dxTreeListColumn
  * @namespace DevExpress.ui
  */
- interface dxGanttColumnBlank<TRowData = any, TKey = any> extends TreeListColumn<TRowData, TKey> {
+ interface dxGanttColumnBlank<TRowData = any, TKey = any> extends Omit<TreeListColumn<TRowData, TKey>, 'ai'> {
     /**
      * @hidden
      * @docid dxGanttColumn.allowEditing

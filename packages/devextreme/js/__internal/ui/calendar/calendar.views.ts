@@ -15,7 +15,12 @@ import BaseView from './calendar.base_view';
 const CALENDAR_OTHER_MONTH_CLASS = 'dx-calendar-other-month';
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
 const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
+const CALENDAR_WEEK_NUMBER_HEADER_CELL_CLASS = 'dx-week-number-header';
 const CALENDAR_WEEK_SELECTION_CLASS = 'dx-calendar-week-selection';
+
+const SCREEN_READER_ONLY_CLASS = 'dx-screen-reader-only';
+
+const WEEK_NUMBER_TEXT = 'WeekNumber';
 
 export interface MonthViewProperties extends BaseViewProperties {
   showWeekNumbers: boolean;
@@ -100,9 +105,14 @@ export class MonthView extends BaseView<MonthViewProperties> {
       // @ts-expect-error ts-error
       .attr({
         scope: 'col',
-        abbr: 'WeekNumber',
-        class: 'dx-week-number-header',
+        abbr: WEEK_NUMBER_TEXT,
+        class: CALENDAR_WEEK_NUMBER_HEADER_CELL_CLASS,
       });
+
+    $('<div>')
+      .text(WEEK_NUMBER_TEXT)
+      .addClass(SCREEN_READER_ONLY_CLASS)
+      .appendTo($weekNumberHeaderCell);
 
     $headerRow.prepend($weekNumberHeaderCell);
   }
@@ -149,7 +159,6 @@ export class MonthView extends BaseView<MonthViewProperties> {
     const { weekNumberRule = 'auto', firstDayOfWeek } = this.option();
 
     if (weekNumberRule === 'auto') {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return dateUtils.getWeekNumber(
         date,
         firstDayOfWeek,
@@ -157,7 +166,6 @@ export class MonthView extends BaseView<MonthViewProperties> {
       );
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateUtils.getWeekNumber(date, firstDayOfWeek, weekNumberRule);
   }
 
@@ -170,7 +178,6 @@ export class MonthView extends BaseView<MonthViewProperties> {
   _isTodayCell(cellDate: Date): boolean {
     const { _todayDate: today } = this.option();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateUtils.sameDate(cellDate, today());
   }
 
@@ -188,12 +195,10 @@ export class MonthView extends BaseView<MonthViewProperties> {
   }
 
   _isStartDayOfMonth(cellDate: Date): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateUtils.sameDate(cellDate, dateUtils.getFirstMonthDate(this.option('date')));
   }
 
   _isEndDayOfMonth(cellDate: Date): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateUtils.sameDate(cellDate, dateUtils.getLastMonthDate(this.option('date')));
   }
 
@@ -237,7 +242,6 @@ export class MonthView extends BaseView<MonthViewProperties> {
   }
 
   isBoundary(date: Date): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateUtils.sameMonthAndYear(date, this.option('min')) || dateUtils.sameMonthAndYear(date, this.option('max'));
   }
 
@@ -260,7 +264,6 @@ export class YearView extends BaseView {
   _isTodayCell(cellDate: Date): boolean {
     const { _todayDate: today } = this.option();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateUtils.sameMonthAndYear(cellDate, today());
   }
 
@@ -315,7 +318,6 @@ export class YearView extends BaseView {
   }
 
   isBoundary(date: Date): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateUtils.sameYear(date, this.option('min')) || dateUtils.sameYear(date, this.option('max'));
   }
 
@@ -330,7 +332,6 @@ export class DecadeView extends BaseView {
   _isTodayCell(cellDate: Date): boolean {
     const { _todayDate: today } = this.option();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateUtils.sameYear(cellDate, today());
   }
 
@@ -384,7 +385,6 @@ export class DecadeView extends BaseView {
   }
 
   _isValueOnCurrentView(currentDate: Date, value: Date): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateUtils.sameDecade(currentDate, value);
   }
 
@@ -397,7 +397,6 @@ export class DecadeView extends BaseView {
   }
 
   isBoundary(date: Date): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateUtils.sameDecade(date, this.option('min')) || dateUtils.sameDecade(date, this.option('max'));
   }
 
@@ -412,7 +411,6 @@ export class CenturyView extends BaseView {
   _isTodayCell(cellDate: Date): boolean {
     const { _todayDate: today } = this.option();
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateUtils.sameDecade(cellDate, today());
   }
 
@@ -482,7 +480,6 @@ export class CenturyView extends BaseView {
   }
 
   isBoundary(date: Date): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return dateUtils.sameCentury(date, this.option('min')) || dateUtils.sameCentury(date, this.option('max'));
   }
 

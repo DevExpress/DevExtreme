@@ -7,8 +7,10 @@ import { getWindow } from '@js/core/utils/window';
 import Box from '@ts/ui/box';
 import TimeView from '@ts/ui/date_box/time_view';
 
+import type { PopupProperties } from '../popup/m_popup';
+import type DateBox from './date_box.base';
+import uiDateUtils from './date_utils';
 import CalendarStrategy from './m_date_box.strategy.calendar';
-import uiDateUtils from './m_date_utils';
 
 const window = getWindow();
 
@@ -19,15 +21,17 @@ const DATEBOX_TIMEVIEW_SIDE_CLASS = 'dx-datebox-datetime-time-side';
 class CalendarWithTimeStrategy extends CalendarStrategy {
   _timeView!: TimeView;
 
+  // eslint-disable-next-line no-restricted-globals
   _repaintTimer?: ReturnType<typeof setTimeout>;
 
+  // eslint-disable-next-line no-restricted-globals
   _removeMinWidthTimer?: ReturnType<typeof setTimeout>;
 
   _currentAdaptiveMode?: boolean;
 
   _box?: Box;
 
-  ctor(dateBox): void {
+  ctor(dateBox: DateBox): void {
     super.ctor(dateBox);
 
     this.NAME = 'CalendarWithTime';
@@ -99,7 +103,7 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
     return super.isAdaptivityChanged();
   }
 
-  _updateValue(preventDefaultValue) {
+  _updateValue(preventDefaultValue?: boolean): void {
     let date = this.dateBoxValue();
 
     if (!date && !preventDefaultValue) {
@@ -170,9 +174,9 @@ class CalendarWithTimeStrategy extends CalendarStrategy {
     });
   }
 
-  popupConfig(popupConfig) {
+  popupConfig(popupConfig: PopupProperties): PopupProperties {
     const calendarPopupConfig = super.popupConfig(popupConfig);
-    return extend(calendarPopupConfig, { width: 'auto' });
+    return extend(calendarPopupConfig, { width: 'auto' }) as PopupProperties;
   }
 
   _preventFocusOnPopup(e): void {

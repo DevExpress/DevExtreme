@@ -6988,13 +6988,13 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxElementWrapper {
-    add(selector: string): this;
+    add(selector: string | dxElementWrapper): this;
 
     addClass(className: string): this;
 
     after(element: Element | dxElementWrapper): this;
 
-    append(element: Element | dxElementWrapper): this;
+    append(element: Element | dxElementWrapper | string): this;
 
     appendTo(element: Element | dxElementWrapper): this;
 
@@ -20309,7 +20309,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   interface dxGanttColumnBlank<TRowData = any, TKey = any>
-    extends DevExpress.ui.dxTreeList.Column<TRowData, TKey> {
+    extends Omit<DevExpress.ui.dxTreeList.Column<TRowData, TKey>, 'ai'> {
     /**
      * [descr:dxGanttColumn.allowEditing]
      */
@@ -25874,10 +25874,6 @@ declare module DevExpress.ui {
      */
     hideAppointmentTooltip(): void;
     /**
-     * [descr:dxScheduler.scrollTo(date, group, allDay)]
-     */
-    scrollTo(date: Date, group?: object, allDay?: boolean): void;
-    /**
      * [descr:dxScheduler.scrollTo(date, options)]
      */
     scrollTo(
@@ -25888,6 +25884,11 @@ declare module DevExpress.ui {
         alignInView?: DevExpress.ui.dxScheduler.SchedulerScrollToAlign;
       }
     ): void;
+    /**
+     * [descr:dxScheduler.scrollTo(date, group, allDay)]
+     * @deprecated [depNote:dxScheduler.scrollTo(date, group, allDay)]
+     */
+    scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */

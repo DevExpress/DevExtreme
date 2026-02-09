@@ -83,31 +83,31 @@ function getImagePath(taskId: number) {
 }
 
 .custom-task-color-0 {
-  background-color: #5c57c9;
+  background-color: #512DA8;
 }
 
 .custom-task-color-1 {
-  background-color: #35b86b;
+  background-color: #2E7D32;
 }
 
 .custom-task-color-2 {
-  background-color: #4796ce;
+  background-color: #1564C0;
 }
 
 .custom-task-color-3 {
-  background-color: #ce4776;
+  background-color: #C2185B;
 }
 
 .custom-task-color-4 {
-  background-color: #ce5b47;
+  background-color: #C62828;
 }
 
 .custom-task-color-5 {
-  background-color: #f78119;
+  background-color: #DD2C00;
 }
 
 .custom-task-color-6 {
-  background-color: #9f47ce;
+  background-color: #7B1FA2;
 }
 
 .custom-task {
