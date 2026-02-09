@@ -1119,7 +1119,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       showAppointmentPopup: that.showAppointmentPopup.bind(that),
       checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
       isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
-      allowDelete: that._editing.allowUpdating && that._editing.allowDeleting,
 
       createFormattedDateText: (appointment, targetedAppointment, format) => this.fire('createFormattedDateText', appointment, targetedAppointment, format),
       getAppointmentDisabled: (appointment) => this._dataAccessors.get('disabled', appointment),
