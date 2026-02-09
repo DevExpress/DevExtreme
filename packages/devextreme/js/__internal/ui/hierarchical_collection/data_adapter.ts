@@ -26,6 +26,8 @@ type SortOption = {
   desc?: boolean;
 } | string;
 
+export type IndirectSelectionMode = 'all' | 'skipDisabled';
+
 interface LangParams {
   locale?: string;
   collator?: Intl.Collator;
@@ -52,7 +54,7 @@ export interface DataAdapterOptions {
 
   searchMode: SearchMode;
 
-  allowDisabledNodeSelection: boolean;
+  indirectSelectionMode: IndirectSelectionMode;
 }
 
 SearchBoxController.setEditorClass(TextBox);
@@ -71,7 +73,7 @@ class DataAdapter {
     dataConverter: new HierarchicalDataConverter(),
     onNodeChanged: noop,
     sort: null,
-    allowDisabledNodeSelection: true,
+    indirectSelectionMode: 'all',
   };
 
   _selectedNodesKeys: ItemKey[] = [];
@@ -524,7 +526,7 @@ class DataAdapter {
         return;
       }
 
-      if (this.options.allowDisabledNodeSelection) {
+      if (this.options.indirectSelectionMode === 'all') {
         this._setFieldState(node, SELECTED, state);
         return;
       }
@@ -546,10 +548,10 @@ class DataAdapter {
       return false;
     }
 
-    const countedNodesAmount = this.getVisibleItemsCount()
-      - (!this.options.allowDisabledNodeSelection ? this._getDisabledItemsCount() : 0);
+    const subtractedNodesAmount = this.getVisibleItemsCount()
+      - (this.options.indirectSelectionMode === 'skipDisabled' ? this._getDisabledItemsCount() : 0);
 
-    return this.getSelectedNodesKeys().length === countedNodesAmount ? true : undefined;
+    return this.getSelectedNodesKeys().length === subtractedNodesAmount ? true : undefined;
   }
 
   toggleExpansion(key: ItemKey, state: boolean): void {

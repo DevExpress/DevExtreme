@@ -430,7 +430,7 @@ QUnit.module('Checkboxes', () => {
         assert.deepEqual(selectAllValueChangedLog, [undefined, true, false], 'after click by item1');
     });
 
-    QUnit.module('allowDisabledNodeSelection', {
+    QUnit.module('indirectSelectionMode', {
         beforeEach: function(module) {
             this.items = [{
                 id: 1,
@@ -450,14 +450,14 @@ QUnit.module('Checkboxes', () => {
         },
     }, () => {
         [
-            { allowDisabledNodeSelection: true, ariaCheckedStates: ['mixed', 'mixed', 'true', 'false'] },
-            { allowDisabledNodeSelection: false, ariaCheckedStates: ['false', 'false', 'true', 'false'] }
+            { indirectSelectionMode: 'all', ariaCheckedStates: ['mixed', 'mixed', 'true', 'false'] },
+            { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['false', 'false', 'true', 'false'] }
         ].forEach((config) => {
-            QUnit.test(`initial selection state should be correct when allowDisabledNodeSelection: ${config.allowDisabledNodeSelection}`, function(assert) {
+            QUnit.test(`initial selection state should be correct when indirectSelectionMode: ${config.indirectSelectionMode}`, function(assert) {
                 const treeView = initTree({
                     items: this.items,
                     showCheckBoxesMode: 'normal',
-                    allowDisabledNodeSelection: config.allowDisabledNodeSelection,
+                    indirectSelectionMode: config.indirectSelectionMode,
                 }).dxTreeView('instance');
 
                 const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
@@ -502,14 +502,14 @@ QUnit.module('Checkboxes', () => {
             },
         }, () => {
             [
-                { allowDisabledNodeSelection: true, ariaCheckedStates: ['true', 'true', 'true'] },
-                { allowDisabledNodeSelection: false, ariaCheckedStates: ['true', 'false', 'true'] }
+                { indirectSelectionMode: 'all', ariaCheckedStates: ['true', 'true', 'true'] },
+                { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['true', 'false', 'true'] }
             ].forEach((config) => {
-                QUnit.test(`selectAll should work correct when allowDisabledNodeSelection: ${config.allowDisabledNodeSelection}`, function(assert) {
+                QUnit.test(`selectAll should work correct when indirectSelectionMode: ${config.indirectSelectionMode}`, function(assert) {
                     const treeView = initTree({
                         items: this.unselectedItems,
                         showCheckBoxesMode: 'normal',
-                        allowDisabledNodeSelection: config.allowDisabledNodeSelection,
+                        indirectSelectionMode: config.indirectSelectionMode,
                     }).dxTreeView('instance');
 
                     treeView.selectAll();
@@ -524,14 +524,14 @@ QUnit.module('Checkboxes', () => {
             });
 
             [
-                { allowDisabledNodeSelection: true, ariaCheckedStates: ['false', 'false', 'false'] },
-                { allowDisabledNodeSelection: false, ariaCheckedStates: ['false', 'true', 'false'] }
+                { indirectSelectionMode: 'all', ariaCheckedStates: ['false', 'false', 'false'] },
+                { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['false', 'true', 'false'] }
             ].forEach((config) => {
-                QUnit.test(`unselectAll should work correct when allowDisabledNodeSelection: ${config.allowDisabledNodeSelection}`, function(assert) {
+                QUnit.test(`unselectAll should work correct when indirectSelectionMode: ${config.indirectSelectionMode}`, function(assert) {
                     const treeView = initTree({
                         items: this.selectedItems,
                         showCheckBoxesMode: 'normal',
-                        allowDisabledNodeSelection: config.allowDisabledNodeSelection,
+                        indirectSelectionMode: config.indirectSelectionMode,
                     }).dxTreeView('instance');
 
                     treeView.unselectAll();
@@ -545,15 +545,15 @@ QUnit.module('Checkboxes', () => {
                 });
             });
 
-            // TODO: think about test from false to true for allowDisabledNodesSelection
-            QUnit.test('change option allowDisabledNodesSelection in runtime should change modes correctly', function(assert) {
+            // TODO: think about test from false to true for indirectSelectionMode
+            QUnit.test('change option indirectSelectionMode in runtime should change modes correctly', function(assert) {
                 const selectedStatesBefore = ['true', 'true', 'true'];
                 const unselectedStatesAfter = ['false', 'true', 'false'];
 
                 const treeView = initTree({
                     items: this.unselectedItems,
                     showCheckBoxesMode: 'normal',
-                    allowDisabledNodeSelection: true,
+                    indirectSelectionMode: 'all',
                 }).dxTreeView('instance');
 
                 treeView.selectAll();
@@ -565,7 +565,7 @@ QUnit.module('Checkboxes', () => {
                     assert.strictEqual(ariaChecked, selectedStatesBefore[index], `checkbox ${index} has correct aria-checked state`);
                 });
 
-                treeView.option('allowDisabledNodeSelection', false);
+                treeView.option('indirectSelectionMode', 'skipDisabled');
 
                 treeView.unselectAll();
 
@@ -578,14 +578,14 @@ QUnit.module('Checkboxes', () => {
 
         QUnit.module('recursive selection', () => {
             [
-                { allowDisabledNodeSelection: true, ariaCheckedStates: ['true', 'true', 'true', 'true'] },
-                { allowDisabledNodeSelection: false, ariaCheckedStates: ['true', 'false', 'true', 'false'] }
+                { indirectSelectionMode: 'all', ariaCheckedStates: ['true', 'true', 'true', 'true'] },
+                { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['true', 'false', 'true', 'false'] }
             ].forEach((config) => {
-                QUnit.test(`from parent to children when allowDisabledNodesSelection = ${config.allowDisabledNodeSelection}`, function(assert) {
+                QUnit.test(`from parent to children when indirectSelectionMode = ${config.indirectSelectionMode}`, function(assert) {
                     const treeView = initTree({
                         items: this.items,
                         showCheckBoxesMode: 'normal',
-                        allowDisabledNodeSelection: config.allowDisabledNodeSelection,
+                        indirectSelectionMode: config.indirectSelectionMode,
                     }).dxTreeView('instance');
 
                     treeView.selectItem(1);
@@ -600,14 +600,14 @@ QUnit.module('Checkboxes', () => {
             });
 
             [
-                { allowDisabledNodeSelection: true, ariaCheckedStates: ['true', 'true', 'true', 'true'] },
-                { allowDisabledNodeSelection: false, ariaCheckedStates: ['false', 'false', 'true', 'true'] }
+                { indirectSelectionMode: 'all', ariaCheckedStates: ['true', 'true', 'true', 'true'] },
+                { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['false', 'false', 'true', 'true'] }
             ].forEach((config) => {
-                QUnit.test(`from children to parent when allowDisabledNodesSelection = ${config.allowDisabledNodeSelection}`, function(assert) {
+                QUnit.test(`from children to parent when indirectSelectionMode = ${config.indirectSelectionMode}`, function(assert) {
                     const treeView = initTree({
                         items: this.items,
                         showCheckBoxesMode: 'normal',
-                        allowDisabledNodeSelection: config.allowDisabledNodeSelection,
+                        indirectSelectionMode: config.indirectSelectionMode,
                     }).dxTreeView('instance');
 
                     treeView.selectItem(4);
