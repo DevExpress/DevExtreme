@@ -174,7 +174,7 @@ export interface Properties extends WidgetOptions<dxSpeechToText> {
 
   /**
    * @docid dxSpeechToTextOptions.startIcon
-   * @default 'micoutline'
+   * @default 'micfilled'
    * @public
    */
   startIcon?: string;

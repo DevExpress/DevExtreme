@@ -75,7 +75,7 @@ QUnit.module('Button Rendering', moduleConfig, () => {
     QUnit.test('should update button icon and text based on state', function(assert) {
         const getIcon = () => this.$element.find(`.${ICON_CLASS}`);
 
-        assert.ok(getIcon().hasClass(`${ICON_CLASS}-micoutline`), 'initial icon displayed');
+        assert.ok(getIcon().hasClass(`${ICON_CLASS}-micfilled`), 'initial icon displayed');
 
         this.$element.trigger('dxclick');
 

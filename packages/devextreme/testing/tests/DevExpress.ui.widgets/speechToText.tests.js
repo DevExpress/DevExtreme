@@ -17,6 +17,7 @@ const BUTTON_MODE_TEXT_CLASS = 'dx-button-mode-text';
 const BUTTON_MODE_OUTLINED_CLASS = 'dx-button-mode-outlined';
 const BUTTON_TYPE_DANGER_CLASS = 'dx-button-danger';
 const BUTTON_TYPE_PRIMARY_CLASS = 'dx-button-primary';
+const ICON_CLASS = 'dx-icon';
 
 const INKRIPPLE_CLASS = 'dx-inkripple';
 const INKRIPPLE_WAVE_CLASS = 'dx-inkripple-wave';
@@ -279,7 +280,7 @@ QUnit.module('State Management', moduleConfig, () => {
     });
 
     QUnit.test('INITIAL state should not have animation by default', function(assert) {
-        const animation = this.$element.css('animation');
+        const animation = this.$element.find(`.${ICON_CLASS}`).css('animation');
 
         assert.strictEqual(animation, 'none 0s ease 0s 1 normal none running');
     });
@@ -289,7 +290,7 @@ QUnit.module('State Management', moduleConfig, () => {
 
         $button.trigger('dxclick');
 
-        const animation = this.$element.css('animation');
+        const animation = this.$element.find(`.${ICON_CLASS}`).css('animation');
         const easeInOutAnimationEnabled = animation.includes('1.5s ease-in-out 0.5s infinite normal none running');
 
         assert.strictEqual(easeInOutAnimationEnabled, true);
