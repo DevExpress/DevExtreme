@@ -1,7 +1,4 @@
 $(() => {
-  const appointmentClassName = '.dx-scheduler-appointment';
-  const cellClassName = '.dx-scheduler-date-table-cell';
-
   $('#scheduler').dxScheduler({
     timeZone: 'America/Los_Angeles',
     dataSource: data,
@@ -10,17 +7,14 @@ $(() => {
     currentDate: new Date(2020, 10, 25),
     startDayHour: 9,
     recurrenceEditMode: 'series',
+    groups: [],
     onAppointmentContextMenu(e) {
-      updateContextMenu(
-        false,
-        appointmentContextMenuItems,
-        appointmentClassName,
-        itemTemplate,
-        onItemClick(e),
-      );
+      const items = getAppointmentContextMenuItems(e);
+      contextMenuInstance.option('dataSource', items);
     },
     onCellContextMenu(e) {
-      updateContextMenu(false, cellContextMenuItems, cellClassName, 'item', onItemClick(e));
+      const items = getCellContextMenuItems(e);
+      contextMenuInstance.option('dataSource', items);
     },
     resources: [{
       fieldExpr: 'roomId',
@@ -34,103 +28,17 @@ $(() => {
   const contextMenuInstance = $('#context-menu').dxContextMenu({
     width: 200,
     dataSource: [],
-    disabled: true,
-    target: appointmentClassName,
+    target: '#scheduler',
+    itemTemplate: contextMenuItemTemplate,
+    onItemClick: (e) => {
+      e.itemData.onItemClick(e);
+    },
+    onHiding: (e) => {
+      e.component.option('dataSource', []);
+    },
   }).dxContextMenu('instance');
 
-  const updateContextMenu = function (disable, dataSource, target, itemTemplate, onItemClick) {
-    contextMenuInstance.option({
-      dataSource,
-      target,
-      itemTemplate,
-      onItemClick,
-      disabled: disable,
-    });
-  };
-
-  const itemTemplate = function (itemData) {
-    return getAppointmentMenuTemplate(itemData);
-  };
-
-  const onItemClick = function (contextMenuEvent) {
-    return (e) => {
-      e.itemData.onItemClick(contextMenuEvent, e);
-    };
-  };
-
-  const createAppointment = function (e) {
-    e.component.showAppointmentPopup({
-      startDate: e.cellData.startDateUTC,
-    }, true);
-  };
-
-  const createRecurringAppointment = function (e) {
-    e.component.showAppointmentPopup({
-      startDate: e.cellData.startDateUTC,
-      recurrenceRule: 'FREQ=DAILY',
-    }, true);
-  };
-
-  const groupCell = function (e) {
-    const scheduler = e.component;
-
-    if (scheduler.option('groups')) {
-      scheduler.option({ crossScrollingEnabled: false, groups: undefined });
-    } else {
-      scheduler.option({ crossScrollingEnabled: true, groups: ['roomId'] });
-    }
-  };
-
-  const showCurrentDate = function (e) {
-    e.component.option('currentDate', new Date());
-  };
-
-  const showAppointment = function (e) {
-    e.component.showAppointmentPopup(e.appointmentData);
-  };
-
-  const deleteAppointment = function (e) {
-    e.component.deleteAppointment(e.appointmentData);
-  };
-
-  const repeatAppointmentWeekly = function (e) {
-    const itemData = e.appointmentData;
-
-    e.component.updateAppointment(itemData, $.extend(itemData, {
-      startDate: e.targetedAppointmentData.startDate,
-      recurrenceRule: 'FREQ=WEEKLY',
-    }));
-  };
-
-  const setResource = function (e, clickEvent) {
-    const itemData = e.appointmentData;
-
-    e.component.updateAppointment(itemData, $.extend(itemData, {
-      roomId: [clickEvent.itemData.id],
-    }));
-  };
-
-  const cellContextMenuItems = [
-    { text: 'New Appointment', onItemClick: createAppointment },
-    { text: 'New Recurring Appointment', onItemClick: createRecurringAppointment },
-    { text: 'Group by Room/Ungroup', beginGroup: true, onItemClick: groupCell },
-    { text: 'Go to Today', onItemClick: showCurrentDate },
-  ];
-
-  let appointmentContextMenuItems = [
-    { text: 'Open', onItemClick: showAppointment },
-    { text: 'Delete', onItemClick: deleteAppointment },
-    { text: 'Repeat Weekly', beginGroup: true, onItemClick: repeatAppointmentWeekly },
-    { text: 'Set Room', beginGroup: true, disabled: true },
-  ];
-
-  $.each(resourcesData, (i, item) => {
-    item.onItemClick = setResource;
-  });
-
-  appointmentContextMenuItems = $.merge(appointmentContextMenuItems, resourcesData);
-
-  const getAppointmentMenuTemplate = function (itemData) {
+  function contextMenuItemTemplate(itemData) {
     const template = $('<div></div>');
 
     if (itemData.color) {
@@ -141,5 +49,85 @@ $(() => {
     }
     template.append(itemData.text);
     return template;
-  };
+  }
+
+  function getAppointmentContextMenuItems(e) {
+    const scheduler = e.component;
+    const { appointmentData: appointment, targetedAppointmentData: targetedAppointment } = e;
+
+    return [
+      {
+        text: 'Open',
+        onItemClick: () => { scheduler.showAppointmentPopup(appointment); },
+      },
+      {
+        text: 'Delete',
+        onItemClick: () => { scheduler.deleteAppointment(appointment); },
+      },
+      {
+        text: 'Repeat Weekly',
+        beginGroup: true,
+        onItemClick: () => {
+          scheduler.updateAppointment(appointment, $.extend(appointment, {
+            startDate: targetedAppointment.startDate,
+            recurrenceRule: 'FREQ=WEEKLY',
+          }));
+        },
+      },
+      {
+        text: 'Set Room',
+        beginGroup: true,
+        disabled: true,
+      },
+      ...resourcesData.map((item) => ({
+        ...item,
+        onItemClick: (clickEvent) => {
+          scheduler.updateAppointment(appointment, $.extend(appointment, {
+            roomId: [clickEvent.itemData.id],
+          }));
+        },
+      })),
+    ];
+  }
+
+  function getCellContextMenuItems(e) {
+    const scheduler = e.component;
+
+    return [
+      {
+        text: 'New Appointment',
+        onItemClick: () => {
+          scheduler.showAppointmentPopup({
+            startDate: e.cellData.startDateUTC,
+          }, true);
+        },
+      },
+      {
+        text: 'New Recurring Appointment',
+        onItemClick: () => {
+          scheduler.showAppointmentPopup({
+            startDate: e.cellData.startDateUTC,
+            recurrenceRule: 'FREQ=DAILY',
+          }, true);
+        },
+      },
+      {
+        text: 'Group by Room/Ungroup',
+        beginGroup: true,
+        onItemClick: () => {
+          if (scheduler.option('groups').length) {
+            scheduler.option({ crossScrollingEnabled: false, groups: [] });
+          } else {
+            scheduler.option({ crossScrollingEnabled: true, groups: ['roomId'] });
+          }
+        },
+      },
+      {
+        text: 'Go to Today',
+        onItemClick: () => {
+          scheduler.option('currentDate', new Date());
+        },
+      },
+    ];
+  }
 });
