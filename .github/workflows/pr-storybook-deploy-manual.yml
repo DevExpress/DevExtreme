@@ -26,6 +26,7 @@ concurrency:
 
 env:
   SOURCE_DIR: ./apps/react-storybook/storybook-static
+  NX_SKIP_NX_CACHE: true
 
 jobs:
   preview:
