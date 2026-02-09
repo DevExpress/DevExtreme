@@ -2496,6 +2496,12 @@ class EditingControllerImpl extends modules.ViewController {
 
   protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean { return false; }
 
+  /// #DEBUG
+  public getInternalStateSize(): number {
+    return this._internalState.size;
+  }
+  /// #ENDDEBUG
+
   public shouldHighlightCell(parameters) {
     const cellModified = this.isCellModified(parameters);
     return cellModified
@@ -2505,12 +2511,6 @@ class EditingControllerImpl extends modules.ViewController {
                   || !parameters.row.isEditing
               );
   }
-
-  /// #DEBUG
-  public getInternalStateSize(): number {
-    return this._internalState.size;
-  }
-  /// #ENDDEBUG
 }
 
 export type EditingController = EditingControllerImpl
