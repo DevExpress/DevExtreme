@@ -3,6 +3,8 @@ import $ from '@js/core/renderer';
 import type CardView from '@js/ui/card_view';
 import { GridCoreModel } from '@ts/grids/grid_core/__tests__/__mock__/model/grid_core';
 
+import { HeaderPanelModel } from './header_panel';
+
 const CLASSES = {
   card: 'dx-card',
 };
@@ -25,5 +27,9 @@ export class CardViewModel extends GridCoreModel<CardView> {
 
   public getCard(cardIndex: number): dxElementWrapper {
     return $(this.getCards()[cardIndex]);
+  }
+
+  public getHeaderPanel(): HeaderPanelModel {
+    return new HeaderPanelModel(this.root);
   }
 }

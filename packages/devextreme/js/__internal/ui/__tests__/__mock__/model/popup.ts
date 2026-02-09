@@ -20,22 +20,18 @@ export class PopupModel {
     return this.getOverlayContent() !== null;
   }
 
-  public getTitle(): string | null {
+  public getTitle(): string {
     const overlay = this.getOverlayContent();
-    if (!overlay) return null;
-
-    const titleElement = overlay.querySelector(`.${CLASSES.popupTitle}`);
-    return titleElement?.textContent ?? null;
+    const titleElement = overlay?.querySelector(`.${CLASSES.popupTitle}`);
+    return titleElement?.textContent ?? '';
   }
 
-  public getElement(): HTMLElement | null {
-    return this.getPopupWrapper();
+  public getElement(): HTMLElement {
+    return this.getPopupWrapper() as HTMLElement;
   }
 
-  public getInstance(): Popup | null {
+  public getInstance(): Popup {
     const element = this.getElement();
-    if (!element) return null;
-
     return Popup.getInstance(element) as Popup;
   }
 }

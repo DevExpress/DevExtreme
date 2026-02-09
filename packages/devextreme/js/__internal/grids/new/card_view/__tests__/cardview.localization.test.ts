@@ -1,4 +1,3 @@
-/* eslint-disable i18n/no-russian-character */
 import {
   afterEach, beforeEach, describe, expect, it,
 } from '@jest/globals';
@@ -36,6 +35,9 @@ const testMessages = {
     'dxFilterBuilder-filterOperationIsBlank': 'xx - Is Blank',
     'dxFilterBuilder-filterOperationIsNotBlank': 'xx - Is Not Blank',
     'dxPagination-ariaLabel': 'xx - Page navigation',
+    'dxDataGrid-sortingAscendingText': 'xx - Sort Ascending',
+    'dxDataGrid-sortingDescendingText': 'xx - Sort Descending',
+    'dxDataGrid-sortingClearText': 'xx - Clear Sorting',
   },
 };
 
@@ -54,14 +56,14 @@ describe('CardView', () => {
           Company: 'Company',
           Address: 'Address',
         },
-        ru: {
-          Company: 'Компания',
-          Address: 'Адрес',
+        xx: {
+          Company: 'xx - Company',
+          Address: 'xx - Address',
         },
       };
 
       loadMessages(dictionary);
-      locale('ru');
+      locale('xx');
 
       const { instance } = await createCardView({
         dataSource: [
@@ -81,8 +83,8 @@ describe('CardView', () => {
 
       const columns = instance.option('columns') as { caption?: string }[];
 
-      expect(columns[0].caption).toBe('Компания');
-      expect(columns[1].caption).toBe('Адрес');
+      expect(columns[0].caption).toBe('xx - Company');
+      expect(columns[1].caption).toBe('xx - Address');
     });
 
     it('should change column captions when locale changes', async () => {
@@ -93,8 +95,8 @@ describe('CardView', () => {
         de: {
           Company: 'Firma',
         },
-        ru: {
-          Company: 'Компания',
+        xx: {
+          Company: 'xx - Company',
         },
       };
 
@@ -126,7 +128,7 @@ describe('CardView', () => {
       columns = instance.option('columns') as { caption?: string }[];
       expect(columns[0].caption).toBe('Firma');
 
-      locale('ru');
+      locale('xx');
       component.apiOption('columns', [
         {
           dataField: 'company',
@@ -135,7 +137,7 @@ describe('CardView', () => {
       ]);
 
       columns = instance.option('columns') as { caption?: string }[];
-      expect(columns[0].caption).toBe('Компания');
+      expect(columns[0].caption).toBe('xx - Company');
     });
 
     it('should localize columnChooser title', async () => {
@@ -377,6 +379,44 @@ describe('CardView', () => {
 
       expect(pagerElement).not.toBeNull();
       expect(pagerElement?.getAttribute('aria-label')).toBe('xx - Page navigation');
+    });
+
+    it('should localize sorting context menu items', async () => {
+      loadMessages(testMessages);
+      locale(testLocale);
+
+      let menuItems: { text?: string }[] = [];
+
+      const { component } = await createCardView({
+        dataSource: [
+          { id: 1, name: 'Test 1' },
+          { id: 2, name: 'Test 2' },
+        ],
+        columns: ['id', 'name'],
+        headerPanel: {
+          visible: true,
+        },
+        onContextMenuPreparing: (e) => {
+          menuItems = e.items ?? [];
+        },
+      });
+
+      await flushAsync();
+
+      const headerPanel = component.getHeaderPanel();
+      const headerItem = headerPanel.getHeaderItemByIndex(0);
+
+      const mouseEvent = new MouseEvent('contextmenu', {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+      });
+      headerItem.dispatchEvent(mouseEvent);
+
+      expect(menuItems).toHaveLength(3);
+      expect(menuItems[0].text).toBe('xx - Sort Ascending');
+      expect(menuItems[1].text).toBe('xx - Sort Descending');
+      expect(menuItems[2].text).toBe('xx - Clear Sorting');
     });
   });
 });
