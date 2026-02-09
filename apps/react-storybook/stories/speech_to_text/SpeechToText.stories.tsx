@@ -38,7 +38,7 @@ export const DefaultSpeechToText: Story = {
             control: { type: 'select' }
         },
         stopIcon: {
-            options: ['stopfilled', 'square', 'indeterminatestate', undefined],
+            options: ['micoutline', 'stopfilled', 'square', 'indeterminatestate', undefined],
             control: { type: 'select' }
         },
         startText: {
