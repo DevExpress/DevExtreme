@@ -1854,9 +1854,6 @@ export type ExplicitTypes<TRowData, TKey> = {
 /** @public */
 export type Properties<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
 
-/** @deprecated use Properties instead */
-export type Options<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
