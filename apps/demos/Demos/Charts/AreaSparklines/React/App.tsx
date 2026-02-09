@@ -11,7 +11,7 @@ function App() {
         <table className="demo-table" style={{ border: 1 }}>
           <tbody>
             <tr>
-              <th />
+              <th><div className="dx-screen-reader-only">Year</div></th>
               <th>Copper (USD/ton)</th>
               <th>Nickel (USD/ton)</th>
               <th>Palladium (USD/troy ounce)</th>
