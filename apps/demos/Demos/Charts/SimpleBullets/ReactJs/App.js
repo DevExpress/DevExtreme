@@ -16,7 +16,9 @@ function App() {
       <table className="demo-table">
         <tbody>
           <tr>
-            <th></th>
+            <th>
+              <div className="dx-screen-reader-only">Week</div>
+            </th>
             <th>June</th>
             <th>July</th>
             <th>August</th>

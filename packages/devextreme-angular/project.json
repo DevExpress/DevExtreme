@@ -162,7 +162,7 @@
         "{projectRoot}/src/common/index.ts",
         "{projectRoot}/metadata/generated/**/*"
       ],
-      "cache": true,
+      "cache": false,
       "inputs": ["default"]
     },
     "build": {

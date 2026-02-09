@@ -698,7 +698,7 @@ declare module DevExpress {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    type Properties = DOMComponentOptions<DOMComponentInstance>;
+    export type Properties = DOMComponentOptions<DOMComponentInstance>;
   }
 
   /**
@@ -16808,7 +16808,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    type Properties = dxDropDownEditorOptions<DropDownEditorInstance>;
+    export type Properties = dxDropDownEditorOptions<DropDownEditorInstance>;
   }
   /**
    * [descr:dxDropDownEditorOptions]
@@ -28013,7 +28013,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSpeechToTextOptions]
      */
-    export interface Properties extends WidgetOptions<dxSpeechToText> {
+    export type Properties = WidgetOptions<dxSpeechToText> & {
       /**
        * [descr:dxSpeechToTextOptions.customSpeechRecognizer]
        */
@@ -28080,7 +28080,7 @@ declare module DevExpress.ui {
        * [descr:dxSpeechToTextOptions.onEnd]
        */
       onEnd?: ((e: EndEvent) => void) | undefined;
-    }
+    };
     /**
      * [descr:_ui_speech_to_text_ResultEvent]
      */

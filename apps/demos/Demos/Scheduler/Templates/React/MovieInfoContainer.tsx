@@ -42,7 +42,7 @@ const MovieInfoContainer: React.FC<MovieInfoContainerProps> = ({ formInstanceRef
       {movie ? (
         <div className="movie-info">
           <div className="movie-preview-image">
-            <img src={movie.image} alt={movie.text} />
+            <img src={movie.image} alt={`${movie.text} poster`} />
           </div>
           <div className="movie-details">
             <div className="title">{movie.text} ({movie.year})</div>

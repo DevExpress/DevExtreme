@@ -169,9 +169,6 @@ export default class dxResizable extends DOMComponent<dxResizableOptions> { }
 /** @public */
 export type Properties = dxResizableOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxResizableOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';
