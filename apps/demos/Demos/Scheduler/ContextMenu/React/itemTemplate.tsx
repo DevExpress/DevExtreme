@@ -1,17 +1,17 @@
 import React from 'react';
 
-type AppointmentMenuTemplateProps = {
+type ItemTemplateProps = {
   data: {
     color: string;
     text: string;
   }
 };
 
-const AppointmentMenuTemplate = (props: AppointmentMenuTemplateProps) => (
+const ItemTemplate = (props: ItemTemplateProps) => (
   <div>
     {props.data.color && <div className="item-badge" style={{ backgroundColor: props.data.color }} />}
     {props.data.text}
   </div>
 );
 
-export default AppointmentMenuTemplate;
+export default ItemTemplate;
