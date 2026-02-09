@@ -298,6 +298,56 @@ test('DataGrid loses grouping after the expandAll method if a grouped column has
   ],
 }));
 
+test.only('DataGrid should not lose grouping after the expandAll method if a grouped column has string calculateGroupValue (T1321187)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.apiExpandAll();
+
+  await t
+    .expect(dataGrid.apiColumnOption('a', 'groupIndex'))
+    .eql(0);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    id: 0, a: 0, aLabel: 'A_0', b: 'B_0', c: 'C_0',
+  }],
+  keyExpr: 'id',
+  grouping: { autoExpandAll: false },
+  columns: [{
+    dataField: 'a',
+    groupIndex: 0,
+    calculateGroupValue: 'aLabel',
+  },
+  'b', 'c'],
+}));
+
+test.only('DataGrid should not change group column after the expandAll method if a grouped column has string calculateGroupValue (T1308536)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const firstGroupCellText = await dataGrid.getGroupRow(0).getCell(1).element.textContent;
+
+  await dataGrid.apiExpandAll();
+
+  await t
+    .expect(dataGrid.apiColumnOption('a', 'groupIndex'))
+    .eql(0)
+    .expect(dataGrid.apiColumnOption('aLabel', 'groupIndex'))
+    .eql(undefined)
+    .expect(dataGrid.getGroupRow(0).getCell(1).element.textContent)
+    .eql(firstGroupCellText);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    id: 0, a: 0, aLabel: 'A_0', b: 'B_0', c: 'C_0',
+  }],
+  keyExpr: 'id',
+  grouping: { autoExpandAll: false },
+  columns: [{
+    dataField: 'a',
+    groupIndex: 0,
+    calculateGroupValue: 'aLabel',
+  },
+  { dataField: 'aLabel', visible: false },
+  'b', 'c'],
+}));
+
 test('Grouping and filtering should be applied correctly when they change at runtime (T1237863)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
