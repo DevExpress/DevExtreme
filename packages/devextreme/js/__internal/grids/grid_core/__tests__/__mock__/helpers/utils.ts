@@ -17,7 +17,7 @@ export const SELECTORS = {
 
 export const GRID_CONTAINER_ID = 'gridContainer';
 
-export const createDataGrid = (
+export const createDataGrid = async (
   options: DataGridProperties = {},
 ): Promise<{
   $container: dxElementWrapper;
