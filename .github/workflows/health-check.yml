@@ -1,0 +1,9 @@
+name: Health Check
+
+on:
+  push:
+
+jobs:
+  invoke:
+    name: Invoke
+    uses: DevExpress/github-actions/.github/workflows/repository-check.yml@repo-check/latest
