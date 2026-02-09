@@ -7,13 +7,13 @@ const CLASSES = {
 };
 
 export class PopupModel {
-  protected getPopupWrapper(): HTMLElement | null {
-    return document.body.querySelector(`.${CLASSES.popupWrapper}`);
+  protected getPopupWrapper(): HTMLElement {
+    return document.body.querySelector(`.${CLASSES.popupWrapper}`) as HTMLElement;
   }
 
-  public getOverlayContent(): HTMLElement | null {
+  public getOverlayContent(): HTMLElement {
     const wrapper = this.getPopupWrapper();
-    return wrapper?.querySelector(`.${CLASSES.overlayContent}`) ?? null;
+    return wrapper?.querySelector(`.${CLASSES.overlayContent}`) as HTMLElement;
   }
 
   public isVisible(): boolean {
@@ -27,7 +27,7 @@ export class PopupModel {
   }
 
   public getElement(): HTMLElement {
-    return this.getPopupWrapper() as HTMLElement;
+    return this.getPopupWrapper();
   }
 
   public getInstance(): Popup {

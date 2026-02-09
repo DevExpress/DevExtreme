@@ -38,6 +38,12 @@ const testMessages = {
     'dxDataGrid-sortingAscendingText': 'xx - Sort Ascending',
     'dxDataGrid-sortingDescendingText': 'xx - Sort Descending',
     'dxDataGrid-sortingClearText': 'xx - Clear Sorting',
+    'dxDataGrid-editingConfirmDeleteMessage': 'xx - Are you sure you want to delete this record?',
+    'dxDataGrid-editingDeleteRow': 'xx - Delete',
+    'dxDataGrid-editingEditRow': 'xx - Edit',
+    'dxDataGrid-editingSaveRowChanges': 'xx - Save',
+    'dxDataGrid-editingAddRow': 'xx - Add a row',
+    'dxDataGrid-editingCancelRowChanges': 'xx - Cancel',
   },
 };
 
@@ -417,6 +423,78 @@ describe('CardView', () => {
       expect(menuItems[0].text).toBe('xx - Sort Ascending');
       expect(menuItems[1].text).toBe('xx - Sort Descending');
       expect(menuItems[2].text).toBe('xx - Clear Sorting');
+    });
+
+    describe('Editing texts', () => {
+      it('should localize confirmDeleteMessage', async () => {
+        loadMessages(testMessages);
+        locale(testLocale);
+
+        const { instance, component } = await createCardView({
+          dataSource: [
+            { id: 1, name: 'Test 1' },
+            { id: 2, name: 'Test 2' },
+          ],
+          columns: ['id', 'name'],
+          keyExpr: 'id',
+          editing: {
+            allowAdding: true,
+            allowDeleting: true,
+            allowUpdating: true,
+          },
+        });
+
+        await flushAsync();
+
+        instance.deleteCard(0);
+
+        await flushAsync();
+
+        const dialog = component.getConfirmationDialog();
+        expect(dialog.isVisible()).toBe(true);
+        expect(dialog.getMessage()).toBe('xx - Are you sure you want to delete this record?');
+
+        const cancelButton = dialog.getCancelButton();
+        cancelButton?.click();
+
+        await flushAsync();
+      });
+
+      it('should localize saveCard and cancel', async () => {
+        loadMessages(testMessages);
+        locale(testLocale);
+
+        const { instance, component } = await createCardView({
+          dataSource: [
+            { id: 1, name: 'Test 1' },
+            { id: 2, name: 'Test 2' },
+          ],
+          columns: ['id', 'name'],
+          keyExpr: 'id',
+          editing: {
+            allowAdding: true,
+            allowDeleting: true,
+            allowUpdating: true,
+          },
+        });
+
+        await flushAsync();
+
+        instance.editCard(0);
+
+        await flushAsync();
+
+        const editForm = component.getEditForm();
+        expect(editForm.isVisible()).toBe(true);
+
+        const saveButton = editForm.getSaveButton();
+        expect(saveButton).not.toBeNull();
+        expect(saveButton?.textContent?.trim()).toBe('xx - Save');
+
+        const cancelButton = editForm.getCancelButton();
+        expect(cancelButton).not.toBeNull();
+        expect(cancelButton?.textContent?.trim()).toBe('xx - Cancel');
+      });
     });
   });
 });

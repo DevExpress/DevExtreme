@@ -12,6 +12,7 @@ import { AIHeaderCellModel } from './cell/ai_header_cell';
 import { DataCellModel } from './cell/data_cell';
 import { HeaderCellModel } from './cell/header_cell';
 import { ColumnChooserModel } from './column_chooser';
+import { ConfirmationDialogModel } from './confirmation_dialog';
 import { EditFormModel } from './edit_form';
 import { FilterPanelModel } from './filter_panel';
 import { DataRowModel } from './row/data_row';
@@ -144,6 +145,10 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
 
   public getPager(): PagerModel {
     return new PagerModel(this.root);
+  }
+
+  public getConfirmationDialog(): ConfirmationDialogModel {
+    return new ConfirmationDialogModel();
   }
 
   public apiOption(name: string): unknown;
