@@ -41,9 +41,9 @@ jobs:
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: 32477-${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store
+            32477-${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -66,4 +66,4 @@ jobs:
           git commit -a -m "Bump devextreme version"
           git push --set-upstream origin $branch_name --force
           gh pr create --base ${{ inputs.branch_name }} --title "Bump devextreme version (${{ inputs.version }})" --body "Bump devextreme version" --reviewer DevExpress/devextreme-devops
-      
+
