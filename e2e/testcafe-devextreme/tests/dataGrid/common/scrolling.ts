@@ -1887,9 +1887,11 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
       .click(adaptiveCell.element);
 
     await dataGrid
-      .scrollBy(t, { y: 1000 });
+      .scrollTo(t, { y: 2000 });
+    await t.wait(300);
     await dataGrid
-      .scrollBy(t, { y: 1000 });
+      .scrollTo(t, { y: 1000 });
+    await t.wait(300);
 
     const scrollOffsets = await t
       .eval(() => (window as TestCaseWindow).dataGridScrollableEventValues) as number[];
