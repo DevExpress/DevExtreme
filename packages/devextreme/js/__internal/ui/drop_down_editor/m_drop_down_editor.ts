@@ -29,7 +29,7 @@ import type {
   EventInfo,
   PointerInteractionEvent,
 } from '@js/events';
-import type { Options as Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
+import type { Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import errors from '@js/ui/widget/ui.errors';

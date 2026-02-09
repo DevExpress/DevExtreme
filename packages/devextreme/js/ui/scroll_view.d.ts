@@ -150,9 +150,6 @@ export default class dxScrollView extends dxScrollable<dxScrollViewOptions> {
 /** @public */
 export type Properties = dxScrollViewOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxScrollViewOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

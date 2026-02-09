@@ -18,7 +18,7 @@ import type { ButtonProps as ButtonProperties } from '@ts/ui/button/button';
 export const SPEECH_TO_TEXT_CLASS = 'dx-speech-to-text';
 export const SPEECH_TO_TEXT_LISTENING_CLASS = 'dx-speech-to-text-listening';
 
-const DEFAULT_INITIAL_ICON = 'micoutline';
+const DEFAULT_INITIAL_ICON = 'micfilled';
 const DEFAULT_LISTENING_ICON = 'stopfilled';
 
 enum SpeechToTextState {

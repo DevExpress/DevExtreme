@@ -204,5 +204,4 @@ export default class dxDropDownEditor<
 }
 
 interface DropDownEditorInstance extends dxDropDownEditor<Properties> { }
-type Properties = dxDropDownEditorOptions<DropDownEditorInstance>;
-export type Options = Properties;
+export type Properties = dxDropDownEditorOptions<DropDownEditorInstance>;
