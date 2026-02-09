@@ -22,149 +22,150 @@ const initTree = function(options) {
     return $('#treeView').dxTreeView(options);
 };
 
-QUnit.module('Checkboxes', () => {
-    QUnit.test('Set intermediate state for parent if at least a one child is selected', function(assert) {
-        const data = $.extend(true, [], DATA[5]);
-        data[0].items[1].items[0].expanded = true;
-        data[0].items[1].items[1].expanded = true;
-        const $treeView = initTree({
-            items: data,
-            showCheckBoxesMode: 'normal'
-        });
+QUnit.module('Checkboxes');
 
-        const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
-        $(checkboxes[4]).trigger('dxclick');
-
-        assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), true);
-        assert.equal($(checkboxes[3]).dxCheckBox('instance').option('value'), false);
-        assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), undefined);
-        assert.equal($(checkboxes[1]).dxCheckBox('instance').option('value'), false);
-        assert.equal($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
+QUnit.test('Set intermediate state for parent if at least a one child is selected', function(assert) {
+    const data = $.extend(true, [], DATA[5]);
+    data[0].items[1].items[0].expanded = true;
+    data[0].items[1].items[1].expanded = true;
+    const $treeView = initTree({
+        items: data,
+        showCheckBoxesMode: 'normal'
     });
 
-    QUnit.test('selectNodesRecursive = false', function(assert) {
-        const data = $.extend(true, [], DATA[5]);
-        data[0].items[1].items[0].expanded = true;
-        data[0].items[1].items[1].expanded = true;
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
+    $(checkboxes[4]).trigger('dxclick');
 
-        const $treeView = initTree({
-            items: data,
-            selectNodesRecursive: false,
-            showCheckBoxesMode: 'normal'
-        });
+    assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), true);
+    assert.equal($(checkboxes[3]).dxCheckBox('instance').option('value'), false);
+    assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), undefined);
+    assert.equal($(checkboxes[1]).dxCheckBox('instance').option('value'), false);
+    assert.equal($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
+});
 
-        const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
-        $(checkboxes[4]).trigger('dxclick');
+QUnit.test('selectNodesRecursive = false', function(assert) {
+    const data = $.extend(true, [], DATA[5]);
+    data[0].items[1].items[0].expanded = true;
+    data[0].items[1].items[1].expanded = true;
 
-        assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), true);
-        assert.equal($(checkboxes[3]).dxCheckBox('instance').option('value'), false);
-        assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), false);
-        assert.equal($(checkboxes[1]).dxCheckBox('instance').option('value'), false);
-        assert.equal($(checkboxes[0]).dxCheckBox('instance').option('value'), false);
+    const $treeView = initTree({
+        items: data,
+        selectNodesRecursive: false,
+        showCheckBoxesMode: 'normal'
     });
 
-    QUnit.test('Remove intermediate state from parent if all children are unselected', function(assert) {
-        const data = $.extend(true, [], DATA[5]);
-        data[0].items[1].items[0].expanded = true;
-        data[0].items[1].items[1].expanded = true;
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
+    $(checkboxes[4]).trigger('dxclick');
 
-        const $treeView = initTree({
-            items: data,
-            showCheckBoxesMode: 'normal'
-        });
+    assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), true);
+    assert.equal($(checkboxes[3]).dxCheckBox('instance').option('value'), false);
+    assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), false);
+    assert.equal($(checkboxes[1]).dxCheckBox('instance').option('value'), false);
+    assert.equal($(checkboxes[0]).dxCheckBox('instance').option('value'), false);
+});
 
-        const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
-        $(checkboxes[4]).trigger('dxclick');
-        $(checkboxes[3]).trigger('dxclick');
-        $(checkboxes[4]).trigger('dxclick');
+QUnit.test('Remove intermediate state from parent if all children are unselected', function(assert) {
+    const data = $.extend(true, [], DATA[5]);
+    data[0].items[1].items[0].expanded = true;
+    data[0].items[1].items[1].expanded = true;
 
-        assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), false);
-        assert.equal($(checkboxes[3]).dxCheckBox('instance').option('value'), true);
-        assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), undefined);
-        assert.equal($(checkboxes[1]).dxCheckBox('instance').option('value'), false);
-        assert.equal($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
-
-        $(checkboxes[3]).trigger('dxclick');
-        assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), false);
-        assert.equal($(checkboxes[3]).dxCheckBox('instance').option('value'), false);
-        assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), false);
-        assert.equal($(checkboxes[1]).dxCheckBox('instance').option('value'), false);
-        assert.equal($(checkboxes[0]).dxCheckBox('instance').option('value'), false);
+    const $treeView = initTree({
+        items: data,
+        showCheckBoxesMode: 'normal'
     });
 
-    QUnit.test('Parent node should be selected if all children are selected', function(assert) {
-        const data = $.extend(true, [], DATA[5]);
-        data[0].items[1].items[0].expanded = true;
-        data[0].items[1].items[1].expanded = true;
-        const $treeView = initTree({
-            items: data,
-            showCheckBoxesMode: 'normal'
-        });
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
+    $(checkboxes[4]).trigger('dxclick');
+    $(checkboxes[3]).trigger('dxclick');
+    $(checkboxes[4]).trigger('dxclick');
 
-        const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
-        $(checkboxes[4]).trigger('dxclick');
-        $(checkboxes[3]).trigger('dxclick');
+    assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), false);
+    assert.equal($(checkboxes[3]).dxCheckBox('instance').option('value'), true);
+    assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), undefined);
+    assert.equal($(checkboxes[1]).dxCheckBox('instance').option('value'), false);
+    assert.equal($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
 
-        assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), true);
-        assert.equal($(checkboxes[3]).dxCheckBox('instance').option('value'), true);
-        assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), true);
-        assert.equal($(checkboxes[1]).dxCheckBox('instance').option('value'), false);
-        assert.equal($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
+    $(checkboxes[3]).trigger('dxclick');
+    assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), false);
+    assert.equal($(checkboxes[3]).dxCheckBox('instance').option('value'), false);
+    assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), false);
+    assert.equal($(checkboxes[1]).dxCheckBox('instance').option('value'), false);
+    assert.equal($(checkboxes[0]).dxCheckBox('instance').option('value'), false);
+});
+
+QUnit.test('Parent node should be selected if all children are selected', function(assert) {
+    const data = $.extend(true, [], DATA[5]);
+    data[0].items[1].items[0].expanded = true;
+    data[0].items[1].items[1].expanded = true;
+    const $treeView = initTree({
+        items: data,
+        showCheckBoxesMode: 'normal'
     });
 
-    QUnit.test('All children should be selected/unselected after click on parent node', function(assert) {
-        const data = $.extend(true, [], DATA[5]);
-        data[0].items[1].items[0].expanded = true;
-        data[0].items[1].items[1].expanded = true;
-        const $treeView = initTree({
-            items: data,
-            showCheckBoxesMode: 'normal'
-        });
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
+    $(checkboxes[4]).trigger('dxclick');
+    $(checkboxes[3]).trigger('dxclick');
 
-        const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
+    assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), true);
+    assert.equal($(checkboxes[3]).dxCheckBox('instance').option('value'), true);
+    assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), true);
+    assert.equal($(checkboxes[1]).dxCheckBox('instance').option('value'), false);
+    assert.equal($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
+});
 
-        $(checkboxes[2]).trigger('dxclick');
-
-        assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), true);
-        assert.equal($(checkboxes[3]).dxCheckBox('instance').option('value'), true);
-        assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), true);
-
-        $(checkboxes[2]).trigger('dxclick');
-
-        assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), false);
-        assert.equal($(checkboxes[3]).dxCheckBox('instance').option('value'), false);
-        assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), false);
+QUnit.test('All children should be selected/unselected after click on parent node', function(assert) {
+    const data = $.extend(true, [], DATA[5]);
+    data[0].items[1].items[0].expanded = true;
+    data[0].items[1].items[1].expanded = true;
+    const $treeView = initTree({
+        items: data,
+        showCheckBoxesMode: 'normal'
     });
 
-    QUnit.test('Regression: incorrect parent state', function(assert) {
-        const data = $.extend(true, [], data2);
-        data[2].expanded = true;
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
 
-        const $treeView = initTree({
-            dataSource: data,
-            dataStructure: 'plain',
-            showCheckBoxesMode: 'normal'
-        });
+    $(checkboxes[2]).trigger('dxclick');
 
-        const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
+    assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), true);
+    assert.equal($(checkboxes[3]).dxCheckBox('instance').option('value'), true);
+    assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), true);
 
-        $(checkboxes[3]).trigger('dxclick');
-        $(checkboxes[4]).trigger('dxclick');
-        $(checkboxes[5]).trigger('dxclick');
-        $(checkboxes[6]).trigger('dxclick');
+    $(checkboxes[2]).trigger('dxclick');
 
-        assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), true);
-        assert.equal($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
+    assert.equal($(checkboxes[4]).dxCheckBox('instance').option('value'), false);
+    assert.equal($(checkboxes[3]).dxCheckBox('instance').option('value'), false);
+    assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), false);
+});
 
+QUnit.test('Regression: incorrect parent state', function(assert) {
+    const data = $.extend(true, [], data2);
+    data[2].expanded = true;
+
+    const $treeView = initTree({
+        dataSource: data,
+        dataStructure: 'plain',
+        showCheckBoxesMode: 'normal'
     });
 
-    QUnit.test('T173381', function(assert) {
-        const $treeView = initTree({
-            items: [
-                {
-                    id: 777, text: 'root', items: [
-                        {
-                            id: 1, text: 'a', items:
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
+
+    $(checkboxes[3]).trigger('dxclick');
+    $(checkboxes[4]).trigger('dxclick');
+    $(checkboxes[5]).trigger('dxclick');
+    $(checkboxes[6]).trigger('dxclick');
+
+    assert.equal($(checkboxes[2]).dxCheckBox('instance').option('value'), true);
+    assert.equal($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
+
+});
+
+QUnit.test('T173381', function(assert) {
+    const $treeView = initTree({
+        items: [
+            {
+                id: 777, text: 'root', items: [
+                    {
+                        id: 1, text: 'a', items:
                             [
                                 {
                                     id: 11, text: 'a.1', expanded: true,
@@ -174,39 +175,39 @@ QUnit.module('Checkboxes', () => {
                                     ]
                                 },
                                 { id: 12, text: 'a.2' }]
-                        },
-                        {
-                            id: 2, text: 'b', expanded: true,
-                            items: [
-                                { id: 21, text: 'b.1' },
-                                { id: 22, text: 'b.2' }
-                            ]
-                        }
-                    ]
-                }
-            ],
-            showCheckBoxesMode: 'normal'
-        });
-        const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
-
-        $(checkboxes[2]).trigger('dxclick');
-        assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
-
-        $(checkboxes[6]).trigger('dxclick');
-        assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
-
-        $(checkboxes[6]).trigger('dxclick');
-        assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
+                    },
+                    {
+                        id: 2, text: 'b', expanded: true,
+                        items: [
+                            { id: 21, text: 'b.1' },
+                            { id: 22, text: 'b.2' }
+                        ]
+                    }
+                ]
+            }
+        ],
+        showCheckBoxesMode: 'normal'
     });
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
 
-    QUnit.test('T195986', function(assert) {
-        const $treeView = initTree({
-            items: [
-                {
-                    id: 777, text: 'root', expanded: true, selected: true,
-                    items: [
-                        {
-                            id: 1, text: 'a', expanded: true, selected: true, items:
+    $(checkboxes[2]).trigger('dxclick');
+    assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
+
+    $(checkboxes[6]).trigger('dxclick');
+    assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
+
+    $(checkboxes[6]).trigger('dxclick');
+    assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
+});
+
+QUnit.test('T195986', function(assert) {
+    const $treeView = initTree({
+        items: [
+            {
+                id: 777, text: 'root', expanded: true, selected: true,
+                items: [
+                    {
+                        id: 1, text: 'a', expanded: true, selected: true, items:
                             [
                                 {
                                     id: 11, text: 'a.1', expanded: true, selected: true,
@@ -216,249 +217,303 @@ QUnit.module('Checkboxes', () => {
                                     ]
                                 }
                             ]
-                        }
-                    ]
-                }
-            ],
-            showCheckBoxesMode: 'normal'
-        });
-        const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
-        $(checkboxes[3]).trigger('dxclick');
-        assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
-
-        $(checkboxes[3]).trigger('dxclick');
-        assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), true);
-    });
-
-    const clickByItemCheckbox = (wrapper, item) => wrapper.getElement()
-        .find(`[aria-label="${item}"] .dx-checkbox`)
-        .eq(0).trigger('dxclick');
-
-    const clickBySelectAllCheckbox = (wrapper) => wrapper.getElement()
-        .find(`.${SELECT_ALL_CHECKBOX_CLASS}`)
-        .eq(0).trigger('dxclick');
-
-    ['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
-        ['multiple', 'single'].forEach((selectionMode) => {
-            [false, true].forEach((selectNodesRecursive) => {
-                QUnit.test(`All deselected -> select middle level item. checkboxMode: ${showCheckBoxesMode}, selectionMode: ${selectionMode}, recursive: ${selectNodesRecursive} (T988753)`, function() {
-                    const wrapper = new TreeViewTestWrapper({
-                        showCheckBoxesMode, selectNodesRecursive, selectionMode,
-                        items: [ { text: 'item1', expanded: true, items: [
-                            { text: 'item1_1', expanded: true, items: [ { text: 'item1_1_1' } ] },
-                            { text: 'item1_2', expanded: true, items: [ { text: 'item1_2_1' } ] } ]
-                        } ],
-                    });
-
-                    clickByItemCheckbox(wrapper, 'item1_1');
-
-                    let expectedLog;
-                    if(showCheckBoxesMode === 'none') {
-                        expectedLog = [];
-                    } else if(showCheckBoxesMode === 'normal' || selectionMode === 'single') {
-                        expectedLog = ['itemSelectionChanged', 'selectionChanged'];
-                    } else if(showCheckBoxesMode === 'selectAll') {
-                        expectedLog = ['itemSelectionChanged', 'selectionChanged', 'selectAllValueChanged'];
                     }
-
-                    wrapper.checkEventLog(expectedLog, 'after click by item1_1 checkbox');
-                });
-
-                QUnit.test(`All selected -> deselect middle level item. checkboxMode: ${showCheckBoxesMode}, selectionMode: ${selectionMode}, recursive: ${selectNodesRecursive} (T988753)`, function() {
-                    const wrapper = new TreeViewTestWrapper({
-                        showCheckBoxesMode, selectNodesRecursive, selectionMode,
-                        items: [ { text: 'item1', selected: true, expanded: true, items: [
-                            { text: 'item1_1', selected: true, expanded: true, items: [ { text: 'item1_1_1' } ] },
-                            { text: 'item1_2', selected: true, expanded: true, items: [ { text: 'item1_2_1' } ] } ]
-                        } ],
-                    });
-
-                    clickByItemCheckbox(wrapper, 'item1_1');
-
-                    let expectedLog;
-                    if(showCheckBoxesMode === 'none') {
-                        expectedLog = [];
-                    } else if(selectionMode === 'single') {
-                        expectedLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
-                    } else if(showCheckBoxesMode === 'normal') {
-                        expectedLog = ['itemSelectionChanged', 'selectionChanged'];
-                    } else if(showCheckBoxesMode === 'selectAll') {
-                        expectedLog = selectNodesRecursive === false
-                            ? ['itemSelectionChanged', 'selectionChanged']
-                            : ['itemSelectionChanged', 'selectionChanged', 'selectAllValueChanged'];
-                    }
-
-                    wrapper.checkEventLog(expectedLog, 'after click by item1_1 checkbox');
-                });
-            });
-        });
+                ]
+            }
+        ],
+        showCheckBoxesMode: 'normal'
     });
+    const checkboxes = $treeView.find(`.${CHECKBOX_CLASS}`);
+    $(checkboxes[3]).trigger('dxclick');
+    assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), undefined);
 
-    QUnit.test('selectAll checkbox should have aria-label="Select All" attribute', function(assert) {
-        initTree({
-            items: [ { text: 'item' } ],
-            showCheckBoxesMode: 'selectAll'
-        });
+    $(checkboxes[3]).trigger('dxclick');
+    assert.strictEqual($(checkboxes[0]).dxCheckBox('instance').option('value'), true);
+});
 
-        const $selectAllCheckbox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+const clickByItemCheckbox = (wrapper, item) => wrapper.getElement()
+    .find(`[aria-label="${item}"] .dx-checkbox`)
+    .eq(0).trigger('dxclick');
 
-        assert.strictEqual($selectAllCheckbox.attr('aria-label'), 'Select All');
-    });
+const clickBySelectAllCheckbox = (wrapper) => wrapper.getElement()
+    .find(`.${SELECT_ALL_CHECKBOX_CLASS}`)
+    .eq(0).trigger('dxclick');
 
-    QUnit.test('checkbox should have aria-label="Check state" attribute', function(assert) {
-        initTree({
-            items: [ { text: 'item' } ],
-            showCheckBoxesMode: 'normal'
-        });
-
-        const $checkbox = $(`.${CHECKBOX_CLASS}`);
-
-        assert.strictEqual($checkbox.attr('aria-label'), 'Check state');
-    });
-
-    QUnit.test('checkbox should have a correct aria-label value based on localization (T1247518)', function(assert) {
-        const localizedCheckStateText = 'custom-select-all';
-        localization.loadMessages({ 'en': { 'CheckState': localizedCheckStateText } });
-
-        initTree({
-            items: [ { text: 'item' } ],
-            showCheckBoxesMode: 'normal'
-        });
-
-        const $checkbox = $(`.${CHECKBOX_CLASS}`);
-
-        assert.strictEqual($checkbox.attr('aria-label'), localizedCheckStateText, 'checkbox aria-label has correct localized value');
-    });
-
-    QUnit.test('SelectAll checkBox should select all values on enter key when no items selected', function(assert) {
-        let selectAllValue = null;
-        const wrapper = new TreeViewTestWrapper({
-            showCheckBoxesMode: 'selectAll',
-            focusStateEnabled: true,
-            items: [ { text: 'item1', items: [ { text: 'item1_1' }, { text: 'item1_2' } ] } ],
-            onSelectAllValueChanged: ({ value }) => { selectAllValue = value; }
-        });
-        const $selectAll = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
-
-        $selectAll.trigger($.Event('keydown', { key: 'enter' }));
-
-        assert.deepEqual(selectAllValue, true, 'all items selected');
-    });
-
-    QUnit.test('SelectAll checkBox should delect all values on enter key when all items selected', function(assert) {
-        let selectAllValue = null;
-        const wrapper = new TreeViewTestWrapper({
-            showCheckBoxesMode: 'selectAll',
-            focusStateEnabled: true,
-            items: [{ text: 'item1', selected: true, items: [ { text: 'item1_1' }, { text: 'item1_2' } ]
-            }],
-            onSelectAllValueChanged: ({ value }) => { selectAllValue = value; }
-        });
-        const $selectAll = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
-
-        $selectAll.trigger($.Event('keydown', { key: 'enter' }));
-
-        assert.deepEqual(selectAllValue, false, 'all items deselected');
-    });
-
-    ['click', 'enter'].forEach((scenario) => {
-        [
-            {
-                initialValue: undefined,
-                newValue: true,
-                items: [{ text: 'item1' }, { text: 'item2', selected: true }],
-            },
-            {
-                initialValue: false,
-                newValue: true,
-                items: [{ text: 'item1' }, { text: 'item2' }],
-            },
-            {
-                initialValue: true,
-                newValue: false,
-                items: [{ text: 'item1', selected: true }, { text: 'item2', selected: true }],
-            },
-        ].forEach(({ initialValue, newValue, items }) => {
-            QUnit.test(`Select all checkbox should change value from ${initialValue} to ${newValue} on ${scenario}`, function(assert) {
+['none', 'normal', 'selectAll'].forEach((showCheckBoxesMode) => {
+    ['multiple', 'single'].forEach((selectionMode) => {
+        [false, true].forEach((selectNodesRecursive) => {
+            QUnit.test(`All deselected -> select middle level item. checkboxMode: ${showCheckBoxesMode}, selectionMode: ${selectionMode}, recursive: ${selectNodesRecursive} (T988753)`, function() {
                 const wrapper = new TreeViewTestWrapper({
-                    showCheckBoxesMode: 'selectAll',
-                    focusStateEnabled: true,
-                    items,
+                    showCheckBoxesMode, selectNodesRecursive, selectionMode,
+                    items: [ { text: 'item1', expanded: true, items: [
+                        { text: 'item1_1', expanded: true, items: [ { text: 'item1_1_1' } ] },
+                        { text: 'item1_2', expanded: true, items: [ { text: 'item1_2_1' } ] } ]
+                    } ],
                 });
-                const $selectAll = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
-                const selectAll = $selectAll.dxCheckBox('instance');
 
-                assert.strictEqual(selectAll.option('value'), initialValue, `initital value is ${initialValue}`);
+                clickByItemCheckbox(wrapper, 'item1_1');
 
-                if(scenario === 'click') {
-                    $selectAll.trigger('dxclick');
-                } else {
-                    $selectAll.trigger($.Event('keydown', { key: 'enter' }));
+                let expectedLog;
+                if(showCheckBoxesMode === 'none') {
+                    expectedLog = [];
+                } else if(showCheckBoxesMode === 'normal' || selectionMode === 'single') {
+                    expectedLog = ['itemSelectionChanged', 'selectionChanged'];
+                } else if(showCheckBoxesMode === 'selectAll') {
+                    expectedLog = ['itemSelectionChanged', 'selectionChanged', 'selectAllValueChanged'];
                 }
 
-                assert.strictEqual(selectAll.option('value'), newValue, `new value is ${initialValue}`);
+                wrapper.checkEventLog(expectedLog, 'after click by item1_1 checkbox');
+            });
+
+            QUnit.test(`All selected -> deselect middle level item. checkboxMode: ${showCheckBoxesMode}, selectionMode: ${selectionMode}, recursive: ${selectNodesRecursive} (T988753)`, function() {
+                const wrapper = new TreeViewTestWrapper({
+                    showCheckBoxesMode, selectNodesRecursive, selectionMode,
+                    items: [ { text: 'item1', selected: true, expanded: true, items: [
+                        { text: 'item1_1', selected: true, expanded: true, items: [ { text: 'item1_1_1' } ] },
+                        { text: 'item1_2', selected: true, expanded: true, items: [ { text: 'item1_2_1' } ] } ]
+                    } ],
+                });
+
+                clickByItemCheckbox(wrapper, 'item1_1');
+
+                let expectedLog;
+                if(showCheckBoxesMode === 'none') {
+                    expectedLog = [];
+                } else if(selectionMode === 'single') {
+                    expectedLog = ['itemSelectionChanged', 'itemSelectionChanged', 'selectionChanged'];
+                } else if(showCheckBoxesMode === 'normal') {
+                    expectedLog = ['itemSelectionChanged', 'selectionChanged'];
+                } else if(showCheckBoxesMode === 'selectAll') {
+                    expectedLog = selectNodesRecursive === false
+                        ? ['itemSelectionChanged', 'selectionChanged']
+                        : ['itemSelectionChanged', 'selectionChanged', 'selectAllValueChanged'];
+                }
+
+                wrapper.checkEventLog(expectedLog, 'after click by item1_1 checkbox');
+            });
+        });
+    });
+});
+
+QUnit.test('selectAll checkbox should have aria-label="Select All" attribute', function(assert) {
+    initTree({
+        items: [ { text: 'item' } ],
+        showCheckBoxesMode: 'selectAll'
+    });
+
+    const $selectAllCheckbox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+
+    assert.strictEqual($selectAllCheckbox.attr('aria-label'), 'Select All');
+});
+
+QUnit.test('checkbox should have aria-label="Check state" attribute', function(assert) {
+    initTree({
+        items: [ { text: 'item' } ],
+        showCheckBoxesMode: 'normal'
+    });
+
+    const $checkbox = $(`.${CHECKBOX_CLASS}`);
+
+    assert.strictEqual($checkbox.attr('aria-label'), 'Check state');
+});
+
+QUnit.test('checkbox should have a correct aria-label value based on localization (T1247518)', function(assert) {
+    const localizedCheckStateText = 'custom-select-all';
+    localization.loadMessages({ 'en': { 'CheckState': localizedCheckStateText } });
+
+    initTree({
+        items: [ { text: 'item' } ],
+        showCheckBoxesMode: 'normal'
+    });
+
+    const $checkbox = $(`.${CHECKBOX_CLASS}`);
+
+    assert.strictEqual($checkbox.attr('aria-label'), localizedCheckStateText, 'checkbox aria-label has correct localized value');
+});
+
+QUnit.test('SelectAll checkBox should select all values on enter key when no items selected', function(assert) {
+    let selectAllValue = null;
+    const wrapper = new TreeViewTestWrapper({
+        showCheckBoxesMode: 'selectAll',
+        focusStateEnabled: true,
+        items: [ { text: 'item1', items: [ { text: 'item1_1' }, { text: 'item1_2' } ] } ],
+        onSelectAllValueChanged: ({ value }) => { selectAllValue = value; }
+    });
+    const $selectAll = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+
+    $selectAll.trigger($.Event('keydown', { key: 'enter' }));
+
+    assert.deepEqual(selectAllValue, true, 'all items selected');
+});
+
+QUnit.test('SelectAll checkBox should delect all values on enter key when all items selected', function(assert) {
+    let selectAllValue = null;
+    const wrapper = new TreeViewTestWrapper({
+        showCheckBoxesMode: 'selectAll',
+        focusStateEnabled: true,
+        items: [{ text: 'item1', selected: true, items: [ { text: 'item1_1' }, { text: 'item1_2' } ]
+        }],
+        onSelectAllValueChanged: ({ value }) => { selectAllValue = value; }
+    });
+    const $selectAll = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+
+    $selectAll.trigger($.Event('keydown', { key: 'enter' }));
+
+    assert.deepEqual(selectAllValue, false, 'all items deselected');
+});
+
+['click', 'enter'].forEach((scenario) => {
+    [
+        {
+            initialValue: undefined,
+            newValue: true,
+            items: [{ text: 'item1' }, { text: 'item2', selected: true }],
+        },
+        {
+            initialValue: false,
+            newValue: true,
+            items: [{ text: 'item1' }, { text: 'item2' }],
+        },
+        {
+            initialValue: true,
+            newValue: false,
+            items: [{ text: 'item1', selected: true }, { text: 'item2', selected: true }],
+        },
+    ].forEach(({ initialValue, newValue, items }) => {
+        QUnit.test(`Select all checkbox should change value from ${initialValue} to ${newValue} on ${scenario}`, function(assert) {
+            const wrapper = new TreeViewTestWrapper({
+                showCheckBoxesMode: 'selectAll',
+                focusStateEnabled: true,
+                items,
+            });
+            const $selectAll = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+            const selectAll = $selectAll.dxCheckBox('instance');
+
+            assert.strictEqual(selectAll.option('value'), initialValue, `initital value is ${initialValue}`);
+
+            if(scenario === 'click') {
+                $selectAll.trigger('dxclick');
+            } else {
+                $selectAll.trigger($.Event('keydown', { key: 'enter' }));
+            }
+
+            assert.strictEqual(selectAll.option('value'), newValue, `new value is ${initialValue}`);
+        });
+    });
+});
+
+QUnit.test('SelectAll checkBox should have the same focusStateEnabled as treeView', function(assert) {
+    const wrapper = new TreeViewTestWrapper({
+        showCheckBoxesMode: 'selectAll',
+        focusStateEnabled: false,
+        items: [{ text: 'item1' }],
+    });
+    const selectAllCheckBox = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`).dxCheckBox('instance');
+
+    assert.deepEqual(selectAllCheckBox.option('focusStateEnabled'), false);
+});
+
+QUnit.test('Check value of the selectAllValueChanged event (T988753)', function(assert) {
+    const selectAllValueChangedLog = [];
+    const wrapper = new TreeViewTestWrapper({
+        showCheckBoxesMode: 'selectAll',
+        items: [ { text: 'item1', expanded: true, items: [ { text: 'item1_1' }, { text: 'item1_2' } ] } ],
+        onSelectAllValueChanged: (args) => { selectAllValueChangedLog.push(args.value); }
+    });
+
+    clickByItemCheckbox(wrapper, 'item1_1');
+    assert.deepEqual(selectAllValueChangedLog, [undefined], 'after click by item1_1');
+
+    clickByItemCheckbox(wrapper, 'item1_2');
+    assert.deepEqual(selectAllValueChangedLog, [undefined, true], 'after click by item1_2');
+
+    clickByItemCheckbox(wrapper, 'item1');
+    assert.deepEqual(selectAllValueChangedLog, [undefined, true, false], 'after click by item1');
+});
+
+QUnit.module('indirectSelectionMode', {
+    beforeEach: function(module) {
+        this.items = [{
+            id: 1,
+            expanded: true,
+            items: [{
+                id: 2,
+                expanded: true,
+                disabled: true,
+                items: [{
+                    id: 3,
+                    selected: true,
+                }, {
+                    id: 4,
+                }],
+            }],
+        }];
+    },
+}, () => {
+    [
+        { indirectSelectionMode: 'all', ariaCheckedStates: ['mixed', 'mixed', 'true', 'false'] },
+        { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['false', 'false', 'true', 'false'] }
+    ].forEach((config) => {
+        QUnit.test(`initial selection state should be correct when indirectSelectionMode: ${config.indirectSelectionMode}`, function(assert) {
+            const treeView = initTree({
+                items: this.items,
+                showCheckBoxesMode: 'normal',
+                indirectSelectionMode: config.indirectSelectionMode,
+            }).dxTreeView('instance');
+
+            const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
+
+            checkboxes.each((index, checkbox) => {
+                const ariaChecked = $(checkbox).attr('aria-checked');
+                assert.strictEqual(ariaChecked, config.ariaCheckedStates[index], `checkbox ${index} has correct aria-checked state`);
             });
         });
     });
 
-    QUnit.test('SelectAll checkBox should have the same focusStateEnabled as treeView', function(assert) {
-        const wrapper = new TreeViewTestWrapper({
-            showCheckBoxesMode: 'selectAll',
-            focusStateEnabled: false,
-            items: [{ text: 'item1' }],
-        });
-        const selectAllCheckBox = wrapper.getElement().find(`.${SELECT_ALL_CHECKBOX_CLASS}`).dxCheckBox('instance');
-
-        assert.deepEqual(selectAllCheckBox.option('focusStateEnabled'), false);
-    });
-
-    QUnit.test('Check value of the selectAllValueChanged event (T988753)', function(assert) {
-        const selectAllValueChangedLog = [];
-        const wrapper = new TreeViewTestWrapper({
-            showCheckBoxesMode: 'selectAll',
-            items: [ { text: 'item1', expanded: true, items: [ { text: 'item1_1' }, { text: 'item1_2' } ] } ],
-            onSelectAllValueChanged: (args) => { selectAllValueChangedLog.push(args.value); }
-        });
-
-        clickByItemCheckbox(wrapper, 'item1_1');
-        assert.deepEqual(selectAllValueChangedLog, [undefined], 'after click by item1_1');
-
-        clickByItemCheckbox(wrapper, 'item1_2');
-        assert.deepEqual(selectAllValueChangedLog, [undefined, true], 'after click by item1_2');
-
-        clickByItemCheckbox(wrapper, 'item1');
-        assert.deepEqual(selectAllValueChangedLog, [undefined, true, false], 'after click by item1');
-    });
-
-    QUnit.module('indirectSelectionMode', {
+    QUnit.module('selectAll', {
         beforeEach: function(module) {
-            this.items = [{
+            this.selectedItems = [{
+                id: 1,
+                selected: true,
+                expanded: true,
+                items: [{
+                    id: 2,
+                    selected: true,
+                    disabled: true,
+                    expanded: true,
+                    items: [{
+                        id: 3,
+                        selected: true,
+                    }],
+                }],
+            }];
+
+            this.unselectedItems = [{
                 id: 1,
                 expanded: true,
                 items: [{
                     id: 2,
-                    expanded: true,
                     disabled: true,
+                    expanded: true,
                     items: [{
                         id: 3,
-                        selected: true,
-                    }, {
-                        id: 4,
                     }],
                 }],
             }];
         },
     }, () => {
         [
-            { indirectSelectionMode: 'all', ariaCheckedStates: ['mixed', 'mixed', 'true', 'false'] },
-            { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['false', 'false', 'true', 'false'] }
+            { indirectSelectionMode: 'all', ariaCheckedStates: ['true', 'true', 'true'] },
+            { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['true', 'false', 'true'] }
         ].forEach((config) => {
-            QUnit.test(`initial selection state should be correct when indirectSelectionMode: ${config.indirectSelectionMode}`, function(assert) {
+            QUnit.test(`selectAll should work correct when indirectSelectionMode: ${config.indirectSelectionMode}`, function(assert) {
                 const treeView = initTree({
-                    items: this.items,
+                    items: this.unselectedItems,
                     showCheckBoxesMode: 'normal',
                     indirectSelectionMode: config.indirectSelectionMode,
                 }).dxTreeView('instance');
+
+                treeView.selectAll();
 
                 const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
 
@@ -469,155 +524,100 @@ QUnit.module('Checkboxes', () => {
             });
         });
 
-        QUnit.module('selectAll', {
-            beforeEach: function(module) {
-                this.selectedItems = [{
-                    id: 1,
-                    selected: true,
-                    expanded: true,
-                    items: [{
-                        id: 2,
-                        selected: true,
-                        disabled: true,
-                        expanded: true,
-                        items: [{
-                            id: 3,
-                            selected: true,
-                        }],
-                    }],
-                }];
-
-                this.unselectedItems = [{
-                    id: 1,
-                    expanded: true,
-                    items: [{
-                        id: 2,
-                        disabled: true,
-                        expanded: true,
-                        items: [{
-                            id: 3,
-                        }],
-                    }],
-                }];
-            },
-        }, () => {
-            [
-                { indirectSelectionMode: 'all', ariaCheckedStates: ['true', 'true', 'true'] },
-                { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['true', 'false', 'true'] }
-            ].forEach((config) => {
-                QUnit.test(`selectAll should work correct when indirectSelectionMode: ${config.indirectSelectionMode}`, function(assert) {
-                    const treeView = initTree({
-                        items: this.unselectedItems,
-                        showCheckBoxesMode: 'normal',
-                        indirectSelectionMode: config.indirectSelectionMode,
-                    }).dxTreeView('instance');
-
-                    treeView.selectAll();
-
-                    const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
-
-                    checkboxes.each((index, checkbox) => {
-                        const ariaChecked = $(checkbox).attr('aria-checked');
-                        assert.strictEqual(ariaChecked, config.ariaCheckedStates[index], `checkbox ${index} has correct aria-checked state`);
-                    });
-                });
-            });
-
-            [
-                { indirectSelectionMode: 'all', ariaCheckedStates: ['false', 'false', 'false'] },
-                { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['false', 'true', 'false'] }
-            ].forEach((config) => {
-                QUnit.test(`unselectAll should work correct when indirectSelectionMode: ${config.indirectSelectionMode}`, function(assert) {
-                    const treeView = initTree({
-                        items: this.selectedItems,
-                        showCheckBoxesMode: 'normal',
-                        indirectSelectionMode: config.indirectSelectionMode,
-                    }).dxTreeView('instance');
-
-                    treeView.unselectAll();
-
-                    const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
-
-                    checkboxes.each((index, checkbox) => {
-                        const ariaChecked = $(checkbox).attr('aria-checked');
-                        assert.strictEqual(ariaChecked, config.ariaCheckedStates[index], `checkbox ${index} has correct aria-checked state`);
-                    });
-                });
-            });
-
-            // TODO: think about test from false to true for indirectSelectionMode
-            QUnit.test('change option indirectSelectionMode in runtime should change modes correctly', function(assert) {
-                const selectedStatesBefore = ['true', 'true', 'true'];
-                const unselectedStatesAfter = ['false', 'true', 'false'];
-
+        [
+            { indirectSelectionMode: 'all', ariaCheckedStates: ['false', 'false', 'false'] },
+            { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['false', 'true', 'false'] }
+        ].forEach((config) => {
+            QUnit.test(`unselectAll should work correct when indirectSelectionMode: ${config.indirectSelectionMode}`, function(assert) {
                 const treeView = initTree({
-                    items: this.unselectedItems,
+                    items: this.selectedItems,
                     showCheckBoxesMode: 'normal',
-                    indirectSelectionMode: 'all',
+                    indirectSelectionMode: config.indirectSelectionMode,
                 }).dxTreeView('instance');
 
-                treeView.selectAll();
+                treeView.unselectAll();
 
                 const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
 
                 checkboxes.each((index, checkbox) => {
                     const ariaChecked = $(checkbox).attr('aria-checked');
-                    assert.strictEqual(ariaChecked, selectedStatesBefore[index], `checkbox ${index} has correct aria-checked state`);
-                });
-
-                treeView.option('indirectSelectionMode', 'skipDisabled');
-
-                treeView.unselectAll();
-
-                checkboxes.each((index, checkbox) => {
-                    const ariaChecked = $(checkbox).attr('aria-checked');
-                    assert.strictEqual(ariaChecked, unselectedStatesAfter[index], `checkbox ${index} has correct aria-checked state`);
+                    assert.strictEqual(ariaChecked, config.ariaCheckedStates[index], `checkbox ${index} has correct aria-checked state`);
                 });
             });
         });
 
-        QUnit.module('recursive selection', () => {
-            [
-                { indirectSelectionMode: 'all', ariaCheckedStates: ['true', 'true', 'true', 'true'] },
-                { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['true', 'false', 'true', 'false'] }
-            ].forEach((config) => {
-                QUnit.test(`from parent to children when indirectSelectionMode = ${config.indirectSelectionMode}`, function(assert) {
-                    const treeView = initTree({
-                        items: this.items,
-                        showCheckBoxesMode: 'normal',
-                        indirectSelectionMode: config.indirectSelectionMode,
-                    }).dxTreeView('instance');
+        // TODO: think about test from false to true for indirectSelectionMode
+        QUnit.test('change option indirectSelectionMode in runtime should change modes correctly', function(assert) {
+            const selectedStatesBefore = ['true', 'true', 'true'];
+            const unselectedStatesAfter = ['false', 'true', 'false'];
 
-                    treeView.selectItem(1);
+            const treeView = initTree({
+                items: this.unselectedItems,
+                showCheckBoxesMode: 'normal',
+                indirectSelectionMode: 'all',
+            }).dxTreeView('instance');
 
-                    const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
+            treeView.selectAll();
 
-                    checkboxes.each((index, checkbox) => {
-                        const ariaChecked = $(checkbox).attr('aria-checked');
-                        assert.strictEqual(ariaChecked, config.ariaCheckedStates[index], `checkbox ${index} has correct aria-checked state`);
-                    });
-                });
+            let checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
+            checkboxes.each((index, checkbox) => {
+                const ariaChecked = $(checkbox).attr('aria-checked');
+                assert.strictEqual(ariaChecked, selectedStatesBefore[index], `checkbox ${index} has correct aria-checked state`);
             });
 
-            [
-                { indirectSelectionMode: 'all', ariaCheckedStates: ['true', 'true', 'true', 'true'] },
-                { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['false', 'false', 'true', 'true'] }
-            ].forEach((config) => {
-                QUnit.test(`from children to parent when indirectSelectionMode = ${config.indirectSelectionMode}`, function(assert) {
-                    const treeView = initTree({
-                        items: this.items,
-                        showCheckBoxesMode: 'normal',
-                        indirectSelectionMode: config.indirectSelectionMode,
-                    }).dxTreeView('instance');
+            treeView.option('indirectSelectionMode', 'skipDisabled');
 
-                    treeView.selectItem(4);
+            treeView.unselectAll();
 
-                    const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
+            checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
+            checkboxes.each((index, checkbox) => {
+                const ariaChecked = $(checkbox).attr('aria-checked');
+                assert.strictEqual(ariaChecked, unselectedStatesAfter[index], `checkbox ${index} has correct aria-checked state`);
+            });
+        });
+    });
 
-                    checkboxes.each((index, checkbox) => {
-                        const ariaChecked = $(checkbox).attr('aria-checked');
-                        assert.strictEqual(ariaChecked, config.ariaCheckedStates[index], `checkbox ${index} has correct aria-checked state`);
-                    });
+    QUnit.module('recursive selection', () => {
+        [
+            { indirectSelectionMode: 'all', ariaCheckedStates: ['true', 'true', 'true', 'true'] },
+            { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['true', 'false', 'true', 'false'] }
+        ].forEach((config) => {
+            QUnit.test(`from parent to children when indirectSelectionMode = ${config.indirectSelectionMode}`, function(assert) {
+                const treeView = initTree({
+                    items: this.items,
+                    showCheckBoxesMode: 'normal',
+                    indirectSelectionMode: config.indirectSelectionMode,
+                }).dxTreeView('instance');
+
+                treeView.selectItem(1);
+
+                const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
+
+                checkboxes.each((index, checkbox) => {
+                    const ariaChecked = $(checkbox).attr('aria-checked');
+                    assert.strictEqual(ariaChecked, config.ariaCheckedStates[index], `checkbox ${index} has correct aria-checked state`);
+                });
+            });
+        });
+
+        [
+            { indirectSelectionMode: 'all', ariaCheckedStates: ['true', 'true', 'true', 'true'] },
+            { indirectSelectionMode: 'skipDisabled', ariaCheckedStates: ['false', 'false', 'true', 'true'] }
+        ].forEach((config) => {
+            QUnit.test(`from children to parent when indirectSelectionMode = ${config.indirectSelectionMode}`, function(assert) {
+                const treeView = initTree({
+                    items: this.items,
+                    showCheckBoxesMode: 'normal',
+                    indirectSelectionMode: config.indirectSelectionMode,
+                }).dxTreeView('instance');
+
+                treeView.selectItem(4);
+
+                const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
+
+                checkboxes.each((index, checkbox) => {
+                    const ariaChecked = $(checkbox).attr('aria-checked');
+                    assert.strictEqual(ariaChecked, config.ariaCheckedStates[index], `checkbox ${index} has correct aria-checked state`);
                 });
             });
         });

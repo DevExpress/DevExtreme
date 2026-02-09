@@ -443,7 +443,8 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
         this.repaint();
         break;
       case 'indirectSelectionMode':
-        this._initDataAdapter();
+        this._dataAdapter.setOption('indirectSelectionMode', args.value ?? 'all');
+        // this._initDataAdapter();
         this.repaint();
         break;
       default:

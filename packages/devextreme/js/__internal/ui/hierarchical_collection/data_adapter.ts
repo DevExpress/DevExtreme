@@ -76,6 +76,8 @@ class DataAdapter {
     indirectSelectionMode: 'all',
   };
 
+  _disabledNodesKeys: ItemKey[] = [];
+
   _selectedNodesKeys: ItemKey[] = [];
 
   _expandedNodesKeys: ItemKey[] = [];
@@ -115,8 +117,13 @@ class DataAdapter {
 
     this.options.dataConverter._dataStructure = this._dataStructure;
 
+    this._updateDisabled();
     this._updateSelection();
     this._updateExpansion();
+  }
+
+  _updateDisabled(): void {
+    this._disabledNodesKeys = this._updateNodesKeysArray(DISABLED);
   }
 
   _updateSelection(): void {
@@ -149,6 +156,9 @@ class DataAdapter {
       }
 
       if (node.internalFields[property]) {
+        if (property === DISABLED) {
+          array.push(node.internalFields.key);
+        }
         if (property === EXPANDED || this.options.multipleSelection) {
           array.push(node.internalFields.key);
         } else {
@@ -202,6 +212,9 @@ class DataAdapter {
 
       if (parent && node.internalFields.parentKey !== this.options.rootValue) {
         this._iterateParents(node, (parentNode: InternalNode): void => {
+          if (this.options.indirectSelectionMode === 'skipDisabled' && this._isNodeDisabled(parentNode)) {
+            return;
+          }
           const newParentState = this._calculateSelectedState(parentNode);
           this._setFieldState(parentNode, SELECTED, newParentState);
         });
@@ -234,6 +247,10 @@ class DataAdapter {
     processedKeys?: ItemKey[],
   ): void {
     if (!isFunction(callback) || !node) {
+      return;
+    }
+
+    if (this.options.indirectSelectionMode === 'skipDisabled' && this._isNodeDisabled(node)) {
       return;
     }
 
@@ -282,15 +299,21 @@ class DataAdapter {
     const itemsCount = node.internalFields.childrenKeys.length;
     let selectedItemsCount = 0;
     let invisibleItemsCount = 0;
+    let disabledItemsCount = 0;
     let result: boolean | undefined = false;
+
+    const isSkipDisabled = this.options.indirectSelectionMode === 'skipDisabled';
 
     for (let i = 0; i <= itemsCount - 1; i += 1) {
       const childNode = this.getNodeByKey(node.internalFields.childrenKeys[i]);
       const isChildInvisible = childNode?.internalFields.item.visible === false;
+      const isChildDisabled = childNode?.internalFields.item.disabled === true;
       const childState = childNode?.internalFields.selected;
 
       if (isChildInvisible) {
         invisibleItemsCount += 1;
+      } else if (isChildDisabled && isSkipDisabled) {
+        disabledItemsCount += 1;
       } else if (childState) {
         selectedItemsCount += 1;
       } else if (childState === undefined) {
@@ -298,8 +321,18 @@ class DataAdapter {
       }
     }
 
+    let subtractedItemsCount = invisibleItemsCount;
+
+    if (isSkipDisabled) {
+      subtractedItemsCount += disabledItemsCount;
+    }
+
+    if (itemsCount === subtractedItemsCount) {
+      return node.internalFields.selected;
+    }
+
     if (selectedItemsCount) {
-      result = selectedItemsCount === itemsCount - invisibleItemsCount ? true : undefined;
+      result = selectedItemsCount === itemsCount - subtractedItemsCount ? true : undefined;
     }
 
     return result;
@@ -307,7 +340,16 @@ class DataAdapter {
 
   _toggleChildrenSelection(node: InternalNode, state: boolean): void {
     this._iterateChildren(node, true, (child) => {
-      if (child && this._isNodeVisible(child)) {
+      if (!child) {
+        return;
+      }
+
+      if (this.options.indirectSelectionMode === 'all' && this._isNodeVisible(child)) {
+        this._setFieldState(child, SELECTED, state);
+        return;
+      }
+
+      if (!this._isNodeDisabled(child)) {
         this._setFieldState(child, SELECTED, state);
       }
     });
@@ -377,8 +419,14 @@ class DataAdapter {
 
   _updateFields(): void {
     this.options.dataConverter.updateChildrenKeys();
+
+    this._updateDisabled();
     this._updateSelection();
     this._updateExpansion();
+  }
+
+  getDisabledNodesKeys(): ItemKey[] {
+    return this._disabledNodesKeys;
   }
 
   getSelectedNodesKeys(): ItemKey[] {
@@ -544,14 +592,25 @@ class DataAdapter {
   }
 
   isAllSelected(): boolean | undefined {
-    if (!this.getSelectedNodesKeys().length) {
+    const selectedNodesAmount = new Set(this.getSelectedNodesKeys());
+    const disabledNodesAmount = new Set(this.getDisabledNodesKeys());
+
+    // @ts-expect-error ts-error
+    const selectedDisabledNodesAmount = selectedNodesAmount.intersection(disabledNodesAmount).size;
+
+    const isSkipDisabled = this.options.indirectSelectionMode === 'skipDisabled';
+
+    const selectedNodesKeysAmount = this.getSelectedNodesKeys().length
+      - (isSkipDisabled ? selectedDisabledNodesAmount : 0);
+
+    if (!selectedNodesKeysAmount) {
       return false;
     }
 
     const subtractedNodesAmount = this.getVisibleItemsCount()
-      - (this.options.indirectSelectionMode === 'skipDisabled' ? this._getDisabledItemsCount() : 0);
+      - (isSkipDisabled ? this._getDisabledItemsCount() : 0);
 
-    return this.getSelectedNodesKeys().length === subtractedNodesAmount ? true : undefined;
+    return selectedNodesKeysAmount === subtractedNodesAmount ? true : undefined;
   }
 
   toggleExpansion(key: ItemKey, state: boolean): void {
