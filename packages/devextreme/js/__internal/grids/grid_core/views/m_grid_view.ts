@@ -319,17 +319,14 @@ export class ResizingController extends modules.ViewController {
   }
 
   private _toggleContentMinHeight(value) {
-    const scrollable = this._rowsView.getScrollable();
     const $contentElement = this._rowsView._findContentElement();
 
-    if (scrollable?.option('useNative') === false) {
-      if (value === true) {
-        this._prevContentMinHeight = $contentElement.get(0).style.minHeight;
-      }
+    if (value === true) {
+      this._prevContentMinHeight = $contentElement.get(0).style.minHeight;
+    }
 
-      if (isDefined(this._prevContentMinHeight)) {
-        $contentElement.css({ minHeight: value ? gridCoreUtils.getContentHeightLimit(browser) : this._prevContentMinHeight });
-      }
+    if (isDefined(this._prevContentMinHeight)) {
+      $contentElement.css({ minHeight: value ? gridCoreUtils.getContentHeightLimit(browser) : this._prevContentMinHeight });
     }
   }
 
