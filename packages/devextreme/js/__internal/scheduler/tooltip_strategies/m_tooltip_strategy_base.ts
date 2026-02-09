@@ -72,17 +72,22 @@ export class TooltipStrategyBase {
         this.hide();
         this._tooltip.option('target').focus();
       });
-      this._list.registerKeyHandler?.('del', (e) => {
+      this._list.registerKeyHandler?.('del', () => {
         const { focusedElement } = this._list.option();
-
-        if (!focusedElement || !this._options.allowDelete) {
+        if (!focusedElement) {
           return;
         }
 
         const { appointment, targetedAppointment } = this._list._getItemData(focusedElement);
+        if (!appointment) {
+          return;
+        }
 
-        if (appointment) {
-          e.preventDefault();
+        const { editing } = this._extraOptions;
+        const disabled = this._options.getAppointmentDisabled(appointment);
+        const isDeletingAllowed = editing === true || editing?.allowDeleting === true;
+
+        if (!disabled && isDeletingAllowed) {
           this.hide();
           this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
         }
@@ -138,7 +143,7 @@ export class TooltipStrategyBase {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _onListRender(e) {}
+  _onListRender(e) { }
 
   _createTooltipElement(wrapperClass) {
     return $('<div>').appendTo(this._options.container).addClass(wrapperClass);
@@ -194,7 +199,7 @@ export class TooltipStrategyBase {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _onListItemContextMenu(e) {}
+  _onListItemContextMenu(e) { }
 
   _createItemListContent(appointment, targetedAppointment, color) {
     const { editing } = this._extraOptions;
