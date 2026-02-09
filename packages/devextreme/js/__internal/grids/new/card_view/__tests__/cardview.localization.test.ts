@@ -46,6 +46,7 @@ const testMessages = {
     'dxDataGrid-editingCancelRowChanges': 'xx - Cancel',
     'dxDataGrid-trueText': 'xx - True',
     'dxDataGrid-falseText': 'xx - False',
+    'dxDataGrid-noDataText': 'xx - No data',
   },
 };
 
@@ -450,6 +451,23 @@ describe('CardView', () => {
 
       expect(firstCard.getFieldValue(2)).toBe('xx - True');
       expect(secondCard.getFieldValue(2)).toBe('xx - False');
+    });
+
+    it('should localize noDataText', async () => {
+      loadMessages(testMessages);
+      locale(testLocale);
+
+      const { component } = await createCardView({
+        dataSource: [],
+        columns: ['id', 'name'],
+      });
+
+      await flushAsync();
+
+      const noDataElement = component.getNoDataElement();
+
+      expect(noDataElement).not.toBeNull();
+      expect(noDataElement?.textContent?.trim()).toBe('xx - No data');
     });
 
     describe('Editing texts', () => {

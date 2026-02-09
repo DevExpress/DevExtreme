@@ -7,6 +7,7 @@ import { HeaderPanelModel } from './header_panel';
 
 const CLASSES = {
   card: 'dx-cardview-card',
+  noDataMessage: 'dx-gridcore-nodata-text',
 };
 
 export class CardViewModel extends GridCoreModel<CardView> {
@@ -27,6 +28,10 @@ export class CardViewModel extends GridCoreModel<CardView> {
 
   public getCard(cardIndex: number): CardModel {
     return new CardModel(this.getCards()[cardIndex]);
+  }
+
+  public getNoDataElement(): HTMLElement | null {
+    return this.root.querySelector(`.${CLASSES.noDataMessage}`);
   }
 
   public getHeaderPanel(): HeaderPanelModel {
