@@ -51,6 +51,7 @@ const testMessages = {
     'dxDataGrid-headerFilterEmptyValue': 'xx - (Blanks)',
     'dxDataGrid-headerFilterOK': 'xx - OK',
     'dxDataGrid-headerFilterCancel': 'xx - Cancel',
+    'dxDataGrid-searchPanelPlaceholder': 'xx - Search',
   },
 };
 
@@ -507,6 +508,28 @@ describe('CardView', () => {
       expect(headerFilter.getOKButton().textContent).toBe('xx - OK');
       expect(headerFilter.getCancelButton().textContent).toBe('xx - Cancel');
       expect(headerFilter.getListItem(0).textContent).toBe('xx - (Blanks)');
+    });
+
+    it('should localize searchPanel placeholder', async () => {
+      loadMessages(testMessages);
+      locale(testLocale);
+
+      const { component } = await createCardView({
+        dataSource: [
+          { id: 1, name: 'Test 1' },
+          { id: 2, name: 'Test 2' },
+        ],
+        columns: ['id', 'name'],
+        searchPanel: {
+          visible: true,
+        },
+      });
+
+      await flushAsync();
+
+      const searchEditor = component.getSearchEditor();
+      const input = searchEditor.getInput();
+      expect(input.placeholder).toBe('xx - Search');
     });
 
     describe('Editing texts', () => {

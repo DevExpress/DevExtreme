@@ -1,6 +1,7 @@
 import $ from '@js/core/renderer';
 import type CardView from '@js/ui/card_view';
 import { GridCoreModel } from '@ts/grids/grid_core/__tests__/__mock__/model/grid_core';
+import { TextBoxModel } from '@ts/ui/__tests__/__mock__/model/textbox';
 
 import { CardModel } from './card';
 import { HeaderPanelModel } from './header_panel';
@@ -8,6 +9,7 @@ import { HeaderPanelModel } from './header_panel';
 const CLASSES = {
   card: 'dx-cardview-card',
   noDataMessage: 'dx-gridcore-nodata-text',
+  searchBox: 'dx-searchbox',
 };
 
 export class CardViewModel extends GridCoreModel<CardView> {
@@ -30,11 +32,16 @@ export class CardViewModel extends GridCoreModel<CardView> {
     return new CardModel(this.getCards()[cardIndex]);
   }
 
-  public getNoDataElement(): HTMLElement | null {
-    return this.root.querySelector(`.${CLASSES.noDataMessage}`);
+  public getNoDataElement(): HTMLElement {
+    return this.root.querySelector(`.${CLASSES.noDataMessage}`) as HTMLElement;
   }
 
   public getHeaderPanel(): HeaderPanelModel {
     return new HeaderPanelModel(this.root);
+  }
+
+  public getSearchEditor(): TextBoxModel {
+    const element = this.root.querySelector<HTMLElement>(`.${CLASSES.searchBox}`) as HTMLElement;
+    return new TextBoxModel(element);
   }
 }
