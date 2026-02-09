@@ -446,7 +446,7 @@ export default class DataGrid extends GridCore {
   }
 
   getEditPopup(): EditPopup {
-    return new EditPopup(this.element.find(`.${this.addWidgetPrefix(CLASS.popupEdit)}`));
+    return new EditPopup(Selector(`.${this.addWidgetPrefix(CLASS.popupEdit)}`));
   }
 
   getToolbar(): Toolbar {
