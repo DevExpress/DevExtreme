@@ -44,6 +44,8 @@ const testMessages = {
     'dxDataGrid-editingSaveRowChanges': 'xx - Save',
     'dxDataGrid-editingAddRow': 'xx - Add a row',
     'dxDataGrid-editingCancelRowChanges': 'xx - Cancel',
+    'dxDataGrid-trueText': 'xx - True',
+    'dxDataGrid-falseText': 'xx - False',
   },
 };
 
@@ -423,6 +425,31 @@ describe('CardView', () => {
       expect(menuItems[0].text).toBe('xx - Sort Ascending');
       expect(menuItems[1].text).toBe('xx - Sort Descending');
       expect(menuItems[2].text).toBe('xx - Clear Sorting');
+    });
+
+    it('should localize boolean column trueText and falseText', async () => {
+      loadMessages(testMessages);
+      locale(testLocale);
+
+      const { component } = await createCardView({
+        dataSource: [
+          { id: 1, name: 'Test 1', active: true },
+          { id: 2, name: 'Test 2', active: false },
+        ],
+        columns: [
+          'id',
+          'name',
+          { dataField: 'active', dataType: 'boolean' },
+        ],
+      });
+
+      await flushAsync();
+
+      const firstCard = component.getCard(0);
+      const secondCard = component.getCard(1);
+
+      expect(firstCard.getFieldValue(2)).toBe('xx - True');
+      expect(secondCard.getFieldValue(2)).toBe('xx - False');
     });
 
     describe('Editing texts', () => {

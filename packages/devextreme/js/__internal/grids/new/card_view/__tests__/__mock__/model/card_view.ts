@@ -1,12 +1,12 @@
-import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type CardView from '@js/ui/card_view';
 import { GridCoreModel } from '@ts/grids/grid_core/__tests__/__mock__/model/grid_core';
 
+import { CardModel } from './card';
 import { HeaderPanelModel } from './header_panel';
 
 const CLASSES = {
-  card: 'dx-card',
+  card: 'dx-cardview-card',
 };
 
 export class CardViewModel extends GridCoreModel<CardView> {
@@ -21,12 +21,12 @@ export class CardViewModel extends GridCoreModel<CardView> {
     return ($(this.root) as any).dxCardView('instance') as CardView;
   }
 
-  public getCards(): NodeListOf<HTMLElement> {
+  private getCards(): NodeListOf<HTMLElement> {
     return this.root.querySelectorAll(`.${CLASSES.card}`);
   }
 
-  public getCard(cardIndex: number): dxElementWrapper {
-    return $(this.getCards()[cardIndex]);
+  public getCard(cardIndex: number): CardModel {
+    return new CardModel(this.getCards()[cardIndex]);
   }
 
   public getHeaderPanel(): HeaderPanelModel {
