@@ -5,7 +5,6 @@ const SELECTORS = {
   item: 'dx-item',
   toolbar: 'dx-toolbar',
   saveButton: '[aria-label*="Save"]',
-  cancelButton: '[aria-label*="Cancel"]',
 };
 
 export class EditFormModel extends PopupModel {
@@ -17,12 +16,6 @@ export class EditFormModel extends PopupModel {
     const overlay = this.getOverlayContent();
     const toolbar = overlay?.querySelector(`.${SELECTORS.toolbar}`);
     return toolbar?.querySelector(SELECTORS.saveButton) as HTMLElement;
-  }
-
-  public getCancelButton(): HTMLElement {
-    const overlay = this.getOverlayContent();
-    const toolbar = overlay?.querySelector(`.${SELECTORS.toolbar}`);
-    return toolbar?.querySelector(SELECTORS.cancelButton) as HTMLElement;
   }
 
   public getItem(id: string): HTMLElement | null {

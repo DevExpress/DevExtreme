@@ -3,6 +3,7 @@ import {
 } from '@jest/globals';
 import { formatMessage, loadMessages, locale } from '@js/localization';
 
+import { HeaderFilterModel } from '../../../grid_core/__tests__/__mock__/model/header_filter';
 import {
   afterTest,
   beforeTest,
@@ -47,6 +48,9 @@ const testMessages = {
     'dxDataGrid-trueText': 'xx - True',
     'dxDataGrid-falseText': 'xx - False',
     'dxDataGrid-noDataText': 'xx - No data',
+    'dxDataGrid-headerFilterEmptyValue': 'xx - (Blanks)',
+    'dxDataGrid-headerFilterOK': 'xx - OK',
+    'dxDataGrid-headerFilterCancel': 'xx - Cancel',
   },
 };
 
@@ -420,7 +424,7 @@ describe('CardView', () => {
         cancelable: true,
         view: window,
       });
-      headerItem.dispatchEvent(mouseEvent);
+      headerItem.getElement().dispatchEvent(mouseEvent);
 
       expect(menuItems).toHaveLength(3);
       expect(menuItems[0].text).toBe('xx - Sort Ascending');
@@ -468,6 +472,41 @@ describe('CardView', () => {
 
       expect(noDataElement).not.toBeNull();
       expect(noDataElement?.textContent?.trim()).toBe('xx - No data');
+    });
+
+    it('should localize header filter texts', async () => {
+      loadMessages(testMessages);
+      locale(testLocale);
+
+      const { component } = await createCardView({
+        dataSource: [
+          { id: 1, name: 'Test 1' },
+          { id: 2, name: 'Test 2' },
+          { id: 3, name: null },
+        ],
+        columns: [
+          'id',
+          'name',
+        ],
+        headerFilter: {
+          visible: true,
+        },
+      });
+
+      await flushAsync();
+
+      const headerPanel = component.getHeaderPanel();
+      headerPanel.getHeaderItemByIndex(1).getIcon().click();
+
+      await flushAsync();
+
+      const headerFilter = new HeaderFilterModel();
+
+      expect(headerFilter.isVisible()).toBe(true);
+
+      expect(headerFilter.getOKButton().textContent).toBe('xx - OK');
+      expect(headerFilter.getCancelButton().textContent).toBe('xx - Cancel');
+      expect(headerFilter.getListItem(0).textContent).toBe('xx - (Blanks)');
     });
 
     describe('Editing texts', () => {

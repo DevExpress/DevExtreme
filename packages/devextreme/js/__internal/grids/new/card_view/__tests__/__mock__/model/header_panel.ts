@@ -1,3 +1,5 @@
+import { HeaderItemModel } from './header_item';
+
 const CLASSES = {
   headerPanel: 'dx-cardview-headerpanel',
   headerPanelContent: 'dx-cardview-headerpanel-content',
@@ -7,16 +9,17 @@ const CLASSES = {
 export class HeaderPanelModel {
   constructor(private readonly root: HTMLElement) {}
 
-  public getContentElement(): HTMLElement | null {
-    return this.root.querySelector(`.${CLASSES.headerPanelContent}`);
+  public getContentElement(): HTMLElement {
+    return this.root.querySelector(`.${CLASSES.headerPanelContent}`) as HTMLElement;
   }
 
-  public getHeaderItems(): HTMLElement[] {
+  public getHeaderItems(): HeaderItemModel[] {
     const content = this.getContentElement();
-    return Array.from(content?.querySelectorAll(`.${CLASSES.headerItem}`) ?? []);
+    const elements = Array.from(content?.querySelectorAll(`.${CLASSES.headerItem}`) ?? []);
+    return elements.map((element) => new HeaderItemModel(element as HTMLElement));
   }
 
-  public getHeaderItemByIndex(index: number): HTMLElement {
+  public getHeaderItemByIndex(index: number): HeaderItemModel {
     const items = this.getHeaderItems();
     return items[index];
   }

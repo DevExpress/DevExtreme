@@ -6,6 +6,10 @@ const CLASSES = {
   overlayContent: 'dx-overlay-content',
 };
 
+const SELECTORS = {
+  cancelButton: '[role="button"][aria-label*="Cancel"]',
+};
+
 export class PopupModel {
   protected getPopupWrapper(): HTMLElement {
     return document.body.querySelector(`.${CLASSES.popupWrapper}`) as HTMLElement;
@@ -33,5 +37,10 @@ export class PopupModel {
   public getInstance(): Popup {
     const element = this.getElement();
     return Popup.getInstance(element) as Popup;
+  }
+
+  public getCancelButton(): HTMLElement {
+    const wrapper = this.getPopupWrapper();
+    return wrapper?.querySelector(SELECTORS.cancelButton) as HTMLElement;
   }
 }
