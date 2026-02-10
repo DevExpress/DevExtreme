@@ -5,10 +5,15 @@ import {
   jest,
 } from '@jest/globals';
 import type { PromptData, PromptTemplateName } from '@ts/core/ai_integration/core/prompt_manager';
-import { ERROR_MESSAGES, PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
-import { templates } from '@ts/core/ai_integration/templates/index';
+import { ERROR_MESSAGES, LANG_TEMPLATE_NAME, PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
+import { metaTemplates, templates } from '@ts/core/ai_integration/templates/index';
 
 jest.mock('@ts/core/ai_integration/templates/index', () => ({
+  metaTemplates: {
+    addLanguage: {
+      system: '{{message}} Provide an answer in {{lang}} language.',
+    },
+  },
   templates: {
     'full-template': {
       system: 'System message with {{placeholder}}',
@@ -36,6 +41,17 @@ describe('PromptManager', () => {
 
       templatesMap.forEach((value, key) => {
         expect(value).toBe(templates[key]);
+      });
+    });
+
+    it('should initialize Map with metaTemplates', () => {
+      // @ts-expect-error Access to protected property for a test
+      const { metaTemplates: metaTemplatesMap } = promptManager;
+
+      expect(metaTemplatesMap).toBeInstanceOf(Map);
+
+      metaTemplatesMap.forEach((value, key) => {
+        expect(value).toBe(metaTemplates[key]);
       });
     });
   });
@@ -185,6 +201,73 @@ describe('PromptManager', () => {
           expect(prompt.system).toBeUndefined();
           expect(prompt.user).toBeUndefined();
         });
+      });
+    });
+  });
+
+  describe('lang', () => {
+    const LANG = 'de-DE';
+    const promptManagerWithLang = new PromptManager({ lang: LANG });
+
+    describe('constructor', () => {
+      it('should store lang from options', () => {
+        // @ts-expect-error Access to protected property for a test
+        expect(promptManagerWithLang.lang).toBe(LANG);
+      });
+
+      it('should be undefined when lang is not provided', () => {
+        // @ts-expect-error Access to protected property for a test
+        expect(promptManager.lang).toBeUndefined();
+      });
+    });
+
+    describe('buildPrompt', () => {
+      it('should wrap system message with lang template when lang is set', () => {
+        const data: PromptData = {
+          system: { placeholder: 'system-value' },
+          user: { placeholder: 'user-value' },
+        };
+
+        const prompt = promptManagerWithLang.buildPrompt('full-template' as PromptTemplateName, data);
+
+        expect(prompt.system).toBe('System message with system-value Provide an answer in de-DE language.');
+        expect(prompt.user).toBe('User message with user-value');
+      });
+
+      it('should wrap system with empty message when template has no system', () => {
+        const prompt = promptManagerWithLang.buildPrompt('empty' as PromptTemplateName, {});
+
+        expect(prompt.system).toBe(' Provide an answer in de-DE language.');
+      });
+
+      it('should not modify user message when lang is set', () => {
+        const data: PromptData = {
+          user: { placeholder: 'user-value' },
+        };
+
+        const prompt = promptManagerWithLang.buildPrompt('user-only' as PromptTemplateName, data);
+
+        expect(prompt.user).toBe('User message only. Placeholder is user-value');
+      });
+
+      it('should not wrap system when lang is not set', () => {
+        const data: PromptData = {
+          system: { placeholder: 'system-value' },
+        };
+
+        const prompt = promptManager.buildPrompt('full-template' as PromptTemplateName, data);
+
+        expect(prompt.system).toBe('System message with system-value');
+      });
+
+      it('should use LANG_TEMPLATE_NAME to look up the meta template', () => {
+        expect(LANG_TEMPLATE_NAME).toBe('addLanguage');
+
+        // @ts-expect-error Access to protected property for a test
+        const langTemplate = promptManagerWithLang.metaTemplates.get(LANG_TEMPLATE_NAME);
+
+        expect(langTemplate).toBeDefined();
+        expect(langTemplate?.system).toContain('{{lang}}');
       });
     });
   });
