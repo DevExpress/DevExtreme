@@ -669,11 +669,16 @@ class SchedulerAppointments extends CollectionWidget<any> {
     return {
       area: this._calculateResizableArea(itemSetting, appointmentData),
       onResizeStart: (e) => {
-        this._isResizing = true;
         const $appointment = $(e.element);
 
+        this._isResizing = true;
+        this._kbn.$focusedItem = $appointment;
+
         if (this.invoke('needRecalculateResizableArea')) {
-          const updatedArea = this._calculateResizableArea($appointment.data(APPOINTMENT_SETTINGS_KEY), $appointment.data('dxItemData'));
+          const updatedArea = this._calculateResizableArea(
+            this.getAppointmentSettings($appointment),
+            $appointment.data('dxItemData'),
+          );
 
           e.component.option('area', updatedArea);
           e.component._renderDragOffsets(e.event);
