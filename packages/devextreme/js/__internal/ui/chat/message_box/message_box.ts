@@ -37,6 +37,8 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 
   fileUploaderOptions?: FileUploaderProperties;
 
+  previewText?: string;
+
   text?: string;
 
   onMessageEntered?: (e: MessageEnteredEvent) => void;
@@ -61,7 +63,6 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
   _typingEndAction?: () => void;
 
-  // eslint-disable-next-line no-restricted-globals
   _typingEndTimeoutId?: ReturnType<typeof setTimeout> | undefined;
 
   _getDefaultOptions(): Properties {
@@ -71,6 +72,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       focusStateEnabled: true,
       hoverStateEnabled: true,
       fileUploaderOptions: undefined,
+      previewText: '',
       text: '',
       onMessageEntered: undefined,
       onMessageEditCanceled: undefined,
@@ -93,7 +95,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
     super._initMarkup();
 
-    if (this.option('text')) {
+    if (this.option('previewText')) {
       this._renderEditingPreview();
     }
 
@@ -111,7 +113,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
   _cancelMessageEdit(): void {
     const { onMessageEditCanceled } = this.option();
 
-    this.option('text', '');
+    this.option('previewText', '');
     this._textArea.focus();
     onMessageEditCanceled?.();
   }
@@ -122,14 +124,14 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-      text,
+      previewText,
     } = this.option();
 
     this._editingPreview = this._createComponent($editingPreview, EditingPreview, {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
-      text,
+      text: previewText,
       onCancel: () => this._cancelMessageEdit(),
     });
   }
@@ -147,7 +149,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     );
 
     this._textArea.registerKeyHandler(ESCAPE_KEY, () => {
-      if (this.option('text')) {
+      const { previewText } = this.option();
+      if (previewText) {
         this._cancelMessageEdit();
       }
     });
@@ -159,6 +162,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      previewText,
       text,
     } = this.option();
 
@@ -167,10 +171,14 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
-      value: text,
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      value: previewText || text,
       onInput: (e: InputEvent): void => {
         this._triggerTypingStartAction(e);
         this._updateTypingEndTimeout();
+      },
+      onValueChanged: ({ value }): void => {
+        this.option('text', value);
       },
       onSend: (e: SendEvent): void => {
         this._sendHandler(e);
@@ -229,7 +237,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._typingEndAction?.();
 
     const { text = '' } = this._textArea.option();
-    const { text: previewText } = this.option();
+    const { previewText } = this.option();
 
     if (previewText) {
       const { onMessageUpdating } = this.option();
@@ -279,8 +287,14 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         this._createTypingEndAction();
         break;
 
-      case 'text':
+      case 'previewText':
+        this._textArea.option('value', value);
         this._updateEditingPreview(value);
+        this.option('text', value);
+
+        break;
+
+      case 'text':
         this._textArea.option('value', value);
         break;
 
@@ -311,7 +325,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
     this._textArea.toggleAttachButtonVisibleState(state);
   }
 
-  _updateEditingPreview(text: string | undefined): void {
+  _updateEditingPreview(text?: string): void {
     if (this._editingPreview) {
       this._editingPreview.option('text', text);
 

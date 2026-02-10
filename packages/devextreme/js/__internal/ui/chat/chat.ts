@@ -91,6 +91,7 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions: undefined,
       focusStateEnabled: true,
       hoverStateEnabled: true,
+      inputFieldText: '',
       items: [],
       messageTemplate: null,
       messageTimestampFormat: 'shorttime',
@@ -354,7 +355,7 @@ class Chat extends Widget<Properties> {
     invokeConditionally(
       messageEditingStartArgs.cancel,
       () => {
-        this._messageBox.option('text', e.message.text);
+        this._messageBox.option('previewText', e.message.text);
         this._messageBox.resetFileUploader();
         this._messageBox.toggleAttachButtonVisibleState(false);
         this._messageToEdit = e.message;
@@ -380,7 +381,7 @@ class Chat extends Widget<Properties> {
         {
           onApplyButtonClick: (): void => {
             if (this._messageToEdit === this._messageToDelete) {
-              this._messageBox.option('text', '');
+              this._messageBox.option('previewText', '');
               this._messageEditCanceledAction?.({ message: this._messageToEdit });
               this._messageToEdit = undefined;
             }
@@ -434,7 +435,7 @@ class Chat extends Widget<Properties> {
     invokeConditionally(
       eventArgs.cancel,
       () => {
-        this._messageBox.option('text', '');
+        this._messageBox.option('previewText', '');
         this._messageBox.toggleAttachButtonVisibleState(true);
         this._messageUpdatedAction?.(eventArgs);
         this._messageToEdit = undefined;
@@ -460,6 +461,7 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      inputFieldText,
     } = this.option();
 
     const $messageBox = $('<div>');
@@ -471,6 +473,7 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      text: inputFieldText,
       onMessageEntered: (e) => {
         this._messageEnteredHandler(e);
       },
@@ -485,6 +488,11 @@ class Chat extends Widget<Properties> {
       },
       onMessageUpdating: (e) => {
         this._messageUpdatingHandler(e);
+      },
+      onOptionChanged: ({ name, value }) => {
+        if (name === 'text') {
+          this.option('inputFieldText', value);
+        }
       },
     };
 
@@ -644,6 +652,9 @@ class Chat extends Widget<Properties> {
         break;
       }
       case 'editing':
+        break;
+      case 'inputFieldText':
+        this._messageBox.option('text', value);
         break;
       case 'items':
         this._messageList.option(name, this.option('items'));
