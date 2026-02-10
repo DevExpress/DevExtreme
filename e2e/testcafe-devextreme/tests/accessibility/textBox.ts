@@ -11,8 +11,6 @@ const options: Options<Properties> = {
   placeholder: [undefined, 'placeholder'],
   showClearButton: [true, false],
   mode: ['password', 'email', 'search', 'tel', 'text', 'url'],
-  // NOTE: Doesn't matter if there are contrast issues
-  // stylingMode: ['outlined', 'filled', 'underlined'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 

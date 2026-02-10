@@ -16,6 +16,7 @@ const file: File[] = [{
   stream: () => new ReadableStream(),
   text: () => Promise.resolve('File text'),
   arrayBuffer: () => Promise.resolve(new ArrayBuffer(1024)),
+  bytes: () => Promise.resolve(new Uint8Array(1024)),
 }];
 
 const options: Options<Properties> = {
