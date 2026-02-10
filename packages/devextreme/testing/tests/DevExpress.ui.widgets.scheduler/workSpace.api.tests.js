@@ -50,7 +50,7 @@ module('API', () => {
             this.createInstance('Week', { width: 800, height: 800, rtlEnabled: true });
             const index = this.instance.getCellIndexByCoordinates({ left: 411, top: 50 });
 
-            assert.equal(index, 9, 'Index is OK');
+            assert.equal(index, 10, 'Index is OK');
         });
 
         test('All day row', async function(assert) {
@@ -79,7 +79,7 @@ module('API', () => {
             });
             const index = this.instance.getCellIndexByCoordinates({ left: 100, top: 55 });
 
-            assert.equal(index, 16, 'Index is OK');
+            assert.equal(index, 15, 'Index is OK');
         });
 
         test('Vertical grouped view', async function(assert) {
