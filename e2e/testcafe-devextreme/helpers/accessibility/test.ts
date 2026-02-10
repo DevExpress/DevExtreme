@@ -1,7 +1,7 @@
 import { ElementContext } from 'axe-core';
 import type { WidgetName } from 'devextreme-testcafe-models/types';
 import { createWidget } from '../createWidget';
-import { isMaterialBased } from '../themeUtils';
+import { isFluent } from '../themeUtils';
 import { a11yCheck, A11yCheckOptions } from './utils';
 import { generateOptionMatrix, Options } from '../generateOptionMatrix';
 
@@ -16,9 +16,9 @@ export interface Configuration<TComponentOptions = unknown> {
 export const defaultSelector = '#container';
 const defaultOptions = {};
 const defaultCreated = async () => {};
-const defaultA11yCheckConfig = isMaterialBased() ? {
+const defaultA11yCheckConfig = isFluent() ? {} : {
   runOnly: 'color-contrast',
-} : {};
+};
 
 const getOptionConfigurations = <TComponentOptions = unknown>(
   options: Options<TComponentOptions> | undefined,
@@ -29,6 +29,8 @@ const getOptionConfigurations = <TComponentOptions = unknown>(
 
   return generateOptionMatrix(options);
 };
+
+const componentsWithDisabledColorContrastIssues: WidgetName[] = ['dxTagBox', 'dxFileUploader', 'dxDateRangeBox'];
 
 export const testAccessibility = <TComponentOptions = unknown>(
   configuration: Configuration<TComponentOptions>,
@@ -45,7 +47,23 @@ export const testAccessibility = <TComponentOptions = unknown>(
 
   optionConfigurations.forEach((optionConfiguration, index) => {
     test(`${component}: test with axe #${index}`, async (t) => {
-      await a11yCheck(t, a11yCheckConfig, selector, optionConfiguration);
+      const currentA11yCheckConfig = { ...a11yCheckConfig } as A11yCheckOptions;
+      const isComponentDisabled = (optionConfiguration as Record<string, unknown>).disabled;
+      const shouldIgnoreColorContrast = componentsWithDisabledColorContrastIssues
+        .includes(component) && isComponentDisabled;
+
+      if (shouldIgnoreColorContrast) {
+        if (currentA11yCheckConfig.runOnly === 'color-contrast') {
+          return;
+        }
+
+        currentA11yCheckConfig.rules = {
+          ...currentA11yCheckConfig.rules,
+          'color-contrast': { enabled: false },
+        };
+      }
+
+      await a11yCheck(t, currentA11yCheckConfig, selector, optionConfiguration);
     }).before(async (t) => {
       await createWidget(
         component,

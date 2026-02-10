@@ -133,7 +133,7 @@
           "./src/ui/popup/index.ts"
         ]
       },
-      "cache": true,
+      "cache": false,
       "inputs": ["default"],
       "outputs": [
         "{projectRoot}/src/ui/**/*",
@@ -162,12 +162,18 @@
         "{projectRoot}/src/common/index.ts",
         "{projectRoot}/metadata/generated/**/*"
       ],
-      "cache": true,
+      "cache": false,
       "inputs": ["default"]
     },
     "build": {
       "executor": "nx:run-commands",
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        {
+          "dependencies": true,
+          "target": "build",
+          "params": "forward"
+        }
+      ],
       "options": {
         "commands": [
           "pnpm --workspace-root nx clean:dist devextreme-angular",
@@ -182,7 +188,14 @@
         "{projectRoot}/npm/dist"
       ],
       "cache": true,
-      "inputs": ["default"]
+      "inputs": ["default"],
+      "configurations": {
+        "testing": {
+          "env": {
+            "BUILD_TEST_INTERNAL_PACKAGE": "true"
+          }
+        }
+      }
     },
     "pack": {
       "executor": "nx:run-commands",
@@ -289,7 +302,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "pnpm --workspace-root nx build devextreme-angular",
+          "pnpm --workspace-root nx build devextreme-angular -c testing",
           "pnpm --workspace-root nx build:tests devextreme-angular",
           "pnpm --workspace-root nx test:all devextreme-angular"
         ],

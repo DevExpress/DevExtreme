@@ -194,7 +194,6 @@ class Menu extends MenuBase<MenuProperties> {
     const rootMenuElements = super._itemElements();
     const submenuElements = this._submenuItemElements();
 
-    // @ts-expect-error ts-error
     return rootMenuElements.add(submenuElements);
   }
 

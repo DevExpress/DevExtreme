@@ -31,7 +31,7 @@ sup {
 
 .right-content .sub-title {
   font-size: 120%;
-  color: rgba(152, 152, 152, 0.8);
+  color: var(--dx-texteditor-color-label);
 }
 
 .title-container {

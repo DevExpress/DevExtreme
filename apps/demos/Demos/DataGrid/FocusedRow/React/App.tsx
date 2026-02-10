@@ -102,7 +102,7 @@ const App = () => {
       <div className="task-info">
         <div className="info">
           <div id="taskSubject">{taskSubject}</div>
-          <p id="taskDetails" dangerouslySetInnerHTML={{ __html: taskDetails }}></p>
+          <p id="taskDetails">{taskDetails}</p>
         </div>
         <div className="progress">
           <span id="taskStatus">{taskStatus}</span>

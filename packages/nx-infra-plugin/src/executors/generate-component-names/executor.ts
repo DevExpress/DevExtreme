@@ -45,7 +45,7 @@ const runExecutor: PromiseExecutor<GenerateComponentNamesExecutorSchema> = async
   const projectRoot = resolveProjectPath(context);
 
   try {
-    logger.info(MSG_GENERATING);
+    logger.verbose(MSG_GENERATING);
 
     validateDependencies();
 
@@ -59,7 +59,7 @@ const runExecutor: PromiseExecutor<GenerateComponentNamesExecutorSchema> = async
     const generator = new AngularComponentNamesGenerator(config);
     generator.generate();
 
-    logger.info(MSG_GENERATED);
+    logger.verbose(MSG_GENERATED);
     return { success: true };
   } catch (error) {
     logError(ERROR_GENERATION_FAILED, error);

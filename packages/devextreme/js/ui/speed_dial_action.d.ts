@@ -115,9 +115,6 @@ export default class dxSpeedDialAction extends Widget<dxSpeedDialActionOptions> 
 /** @public */
 export type Properties = dxSpeedDialActionOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxSpeedDialActionOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

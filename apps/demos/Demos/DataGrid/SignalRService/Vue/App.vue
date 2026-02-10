@@ -105,11 +105,11 @@ onMounted(() => {
 }
 
 #gridContainer .inc {
-  color: #2ab71b;
+  color: var(--dx-color-success);
 }
 
 #gridContainer .dec {
-  color: #f00;
+  color: var(--dx-color-danger);
 }
 
 #gridContainer .inc .arrow,

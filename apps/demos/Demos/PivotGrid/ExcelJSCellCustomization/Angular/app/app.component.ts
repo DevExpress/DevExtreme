@@ -132,7 +132,7 @@ export class AppComponent {
 
     return (value > 50000)
       ? { font: '006100', fill: 'C6EFCE', bold: false }
-      : { font: '9C6500', fill: 'FFEB9C', bold: false };
+      : { font: '6E4600', fill: 'FFEB9C', bold: false };
   }
 }
 

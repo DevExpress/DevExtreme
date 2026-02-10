@@ -4,7 +4,7 @@
     <table class="demo-table">
       <tbody>
         <tr>
-          <th/>
+          <th><div class="dx-screen-reader-only">Week</div></th>
           <th>June</th>
           <th>July</th>
           <th>August</th>

@@ -13,9 +13,6 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-const appointmentClassName = '.dx-scheduler-appointment';
-const cellClassName = '.dx-scheduler-date-table-cell';
-
 let modulePrefix = '';
 // @ts-ignore
 if (window && window.config?.packageConfigPaths) {
@@ -42,60 +39,80 @@ export class AppComponent {
 
   resourcesData: Resource[];
 
-  groups: string[];
+  groups: string[] = [];
 
   crossScrollingEnabled = false;
 
-  contextMenuItems = [];
-
-  disabled = true;
-
-  target: string = appointmentClassName;
+  contextMenuItems: ContextMenuItem[] = [];
 
   constructor(service: Service) {
     this.resourcesData = service.getResources();
     this.appointmentsData = service.getAppointments();
   }
 
-  onAppointmentContextMenu({ appointmentData, targetedAppointmentData }: DxSchedulerTypes.AppointmentContextMenuEvent) {
+  onContextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
+    e.itemData.onItemClick(e);
+  }
+
+  onAppointmentContextMenu(e: DxSchedulerTypes.AppointmentContextMenuEvent) {
+    const items = this.getAppointmentContextMenuItems(e);
+    this.contextMenuItems = items;
+  }
+
+  onCellContextMenu(e: DxSchedulerTypes.CellContextMenuEvent) {
+    const items = this.getCellContextMenuItems(e);
+    this.contextMenuItems = items;
+  }
+
+  onContextMenuHiding() {
+    this.contextMenuItems = [];
+  }
+
+  getAppointmentContextMenuItems(e: DxSchedulerTypes.AppointmentContextMenuEvent): ContextMenuItem[] {
+    const {
+      appointmentData: appointment,
+      targetedAppointmentData: targetedAppointment,
+    } = e;
     const scheduler = this.scheduler.instance;
-    const resourceItems = this.resourcesData
-      .map((item) => ({
-        ...item,
-        onItemClick: ({ itemData }: DxContextMenuTypes.ItemClickEvent<Resource>) => scheduler.updateAppointment(appointmentData, {
-          ...appointmentData,
-          ...{ roomId: [itemData.id] },
-        }),
-      }));
-    this.target = appointmentClassName;
-    this.disabled = false;
-    this.contextMenuItems = [
+
+    return [
       {
         text: 'Open',
-        onItemClick: () => scheduler.showAppointmentPopup(appointmentData),
+        onItemClick: () => scheduler.showAppointmentPopup(appointment),
       },
       {
         text: 'Delete',
-        onItemClick: () => scheduler.deleteAppointment(appointmentData),
+        onItemClick: () => scheduler.deleteAppointment(appointment),
       },
       {
         text: 'Repeat Weekly',
         beginGroup: true,
-        onItemClick: () => scheduler.updateAppointment(appointmentData, {
-          startDate: targetedAppointmentData.startDate,
+        onItemClick: () => scheduler.updateAppointment(appointment, {
+          ...appointment,
+          startDate: targetedAppointment.startDate,
           recurrenceRule: 'FREQ=WEEKLY',
         }),
       },
-      { text: 'Set Room', beginGroup: true, disabled: true },
-      ...resourceItems,
+      {
+        text: 'Set Room',
+        beginGroup: true,
+        disabled: true,
+      },
+      ...this.resourcesData.map((item) => ({
+        ...item,
+        onItemClick: ({ itemData }: DxContextMenuTypes.ItemClickEvent<Resource>) => scheduler.updateAppointment(appointment, {
+          ...appointment,
+          roomId: [itemData.id],
+        }),
+      })),
     ];
   }
 
-  onCellContextMenu({ cellData }: DxSchedulerTypes.CellContextMenuEvent) {
+  getCellContextMenuItems(e: DxSchedulerTypes.CellContextMenuEvent): ContextMenuItem[] {
+    const { cellData } = e;
     const scheduler = this.scheduler.instance;
-    this.target = cellClassName;
-    this.disabled = false;
-    this.contextMenuItems = [
+
+    return [
       {
         text: 'New Appointment',
         onItemClick: () => scheduler.showAppointmentPopup(
@@ -117,9 +134,9 @@ export class AppComponent {
         text: 'Group by Room/Ungroup',
         beginGroup: true,
         onItemClick: () => {
-          if (this.groups) {
+          if (this.groups.length) {
             this.crossScrollingEnabled = false;
-            this.groups = null;
+            this.groups = [];
           } else {
             this.crossScrollingEnabled = true;
             this.groups = ['roomId'];
@@ -133,10 +150,6 @@ export class AppComponent {
         },
       },
     ];
-  }
-
-  onContextMenuItemClick(e: DxContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
-    e.itemData.onItemClick(e);
   }
 }
 

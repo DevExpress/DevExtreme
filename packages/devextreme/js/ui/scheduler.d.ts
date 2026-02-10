@@ -1304,14 +1304,6 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     hideAppointmentTooltip(): void;
     /**
      * @docid
-     * @publicName scrollTo(date, group, allDay)
-     * @param2 group:Object|undefined
-     * @param3 allDay:Boolean|undefined
-     * @public
-     */
-    scrollTo(date: Date, group?: object, allDay?: boolean): void;
-    /**
-     * @docid
      * @publicName scrollTo(date, options)
      * @param2 options:Object|undefined
      * @param2_field group:Object|undefined
@@ -1324,6 +1316,15 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
         allDay?: boolean;
         alignInView?: SchedulerScrollToAlign;
     }): void;
+    /**
+     * @docid
+     * @publicName scrollTo(date, group, allDay)
+     * @param2 group:Object|undefined
+     * @param3 allDay:Boolean|undefined
+     * @public
+     * @deprecated
+     */
+    scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
      * @docid
      * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)
@@ -1437,9 +1438,6 @@ export type dxSchedulerAppointment = CollectionWidgetItem & {
 
 /** @public */
 export type Properties = dxSchedulerOptions;
-
-/** @deprecated use Properties instead */
-export type Options = dxSchedulerOptions;
 
 /**
  * @docid

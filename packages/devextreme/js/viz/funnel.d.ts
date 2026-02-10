@@ -760,9 +760,6 @@ export interface dxFunnelItem {
 /** @public */
 export type Properties = dxFunnelOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxFunnelOptions;
-
 // #region deprecated in v23.1
 
 /** @deprecated Use Legend instead */
