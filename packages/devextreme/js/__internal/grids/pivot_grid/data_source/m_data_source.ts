@@ -717,9 +717,9 @@ class PivotGridDataSource {
       values: this.getAreaFields('data'),
       filters: applyFilters
         ? this._fields.filter((f) => f !== field
-          && f.area
-          && f.filterValues
-          && f.filterValues.length)
+            && f.area
+            && f.filterValues
+            && f.filterValues.length)
         : [],
       skipValues: true,
     };
@@ -839,8 +839,8 @@ class PivotGridDataSource {
       }
 
       if (field.levels
-        && dimension !== descriptions.filters
-        && dimension !== descriptions.values) {
+          && dimension !== descriptions.filters
+          && dimension !== descriptions.values) {
         dimension.push.apply(dimension, field.levels);
         if (field.filterValues && field.filterValues.length) {
           descriptions.filters.push(field);
@@ -1049,9 +1049,9 @@ class PivotGridDataSource {
     if (store) {
       extend(options, descriptions);
       options.columnExpandedPaths = options.columnExpandedPaths
-        || this.getExpandedPaths(this._data, options, 'columns', that._lastLoadOptions);
+          || this.getExpandedPaths(this._data, options, 'columns', that._lastLoadOptions);
       options.rowExpandedPaths = options.rowExpandedPaths
-        || this.getExpandedPaths(this._data, options, 'rows', that._lastLoadOptions);
+          || this.getExpandedPaths(this._data, options, 'rows', that._lastLoadOptions);
 
       if (paginate) {
         options.pageSize = this._pageSize;
@@ -1076,7 +1076,7 @@ class PivotGridDataSource {
 
       storeLoadOptions = storeLoadOptions
         .filter((options) => !(options.rows.length && options.rowTake === 0)
-          && !(options.columns.length && options.columnTake === 0));
+            && !(options.columns.length && options.columnTake === 0));
 
       if (!storeLoadOptions.length) {
         that._update(deferred);
@@ -1130,8 +1130,8 @@ class PivotGridDataSource {
 
   paginate() {
     return this._paginate
-      && this._store
-      && this._store.supportPaging();
+        && this._store
+        && this._store.supportPaging();
   }
 
   isEmpty() {
@@ -1160,8 +1160,8 @@ class PivotGridDataSource {
       that._sort(descriptions, loadedData);
 
       !that.isEmpty()
-        && isRunningTotalUsed(dataFields)
-        && summaryUtils.applyRunningTotal(descriptions, loadedData);
+          && isRunningTotalUsed(dataFields)
+          && summaryUtils.applyRunningTotal(descriptions, loadedData);
 
       that._data = loadedData;
       deferred !== false && when(deferred).done(() => {
@@ -1405,9 +1405,6 @@ class PivotGridDataSource {
     if (delayedLoadTask) {
       delayedLoadTask.abort();
     }
-
-    that._store?.dispose();
-
     this._isDisposed = true;
   }
 
