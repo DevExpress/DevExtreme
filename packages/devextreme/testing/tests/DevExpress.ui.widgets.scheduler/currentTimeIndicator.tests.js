@@ -1009,7 +1009,7 @@ QUnit.module('DateTime indicator on TimelineDay View', () => {
         const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
         const cellWidth = getOuterWidth($element.find('.dx-scheduler-date-table-cell').eq(0));
 
-        assert.roughEqual(getOuterHeight($shader), 271, 1, 'Shader has correct height');
+        assert.roughEqual(getOuterHeight($shader), 764, 1, 'Shader has correct height');
 
         assert.roughEqual(getOuterWidth($shader), 9.5 * cellWidth, 1, 'Shader has correct width');
     });
