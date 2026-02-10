@@ -71,7 +71,7 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 0 },
                         expectedRects: [{
                             left: -9999,
-                            top: -9819,
+                            top: -9859,
                             width: 300
                         }]
                     },
@@ -79,15 +79,15 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 1050 },
                         expectedRects: [{
                             left: -9999,
-                            top: -9819,
+                            top: -9859,
                             width: 300
                         }]
                     },
                     {
                         offset: { x: 2100 },
                         expectedRects: [{
-                            left: -10386,
-                            top: -9819,
+                            left: -10371,
+                            top: -9859,
                             width: 150
                         }]
                     }
@@ -164,7 +164,7 @@ module('Virtual scrolling Month View', () => {
                         offset: { y: 0 },
                         expectedRects: [{
                             left: -9934,
-                            top: -9849,
+                            top: -9889,
                             width: 300
                         }]
                     },
@@ -172,7 +172,7 @@ module('Virtual scrolling Month View', () => {
                         offset: { y: 900 },
                         expectedRects: [{
                             left: -9934,
-                            top: -9549,
+                            top: -9589,
                             width: 300
                         }]
                     },
@@ -254,19 +254,19 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 0 },
                         expectedRects: [{
                             left: -9924,
-                            top: -9819,
+                            top: -9859,
                             width: 450
                         }, {
                             left: -9999,
-                            top: -9719,
+                            top: -9759,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9619,
+                            top: -9659,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9519,
+                            top: -9559,
                             width: 450
                         }]
                     },
@@ -274,35 +274,35 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 700 },
                         expectedRects: [{
                             left: -10324,
-                            top: -9819,
+                            top: -9859,
                             width: 150
                         }, {
                             left: -10324,
-                            top: -9719,
+                            top: -9759,
                             width: 150
                         }, {
                             left: -10324,
-                            top: -9619,
+                            top: -9659,
                             width: 150
                         }, {
                             left: -10324,
-                            top: -9519,
+                            top: -9559,
                             width: 75
                         }, {
                             left: -9574,
-                            top: -9819,
+                            top: -9859,
                             width: 450
                         }, {
-                            left: -9649,
-                            top: -9719,
+                            left: -9689,
+                            top: -9759,
                             width: 525
                         }, {
-                            left: -9649,
-                            top: -9619,
+                            left: -9689,
+                            top: -9659,
                             width: 525
                         }, {
-                            left: -9649,
-                            top: -9519,
+                            left: -9689,
+                            top: -9559,
                             width: 450
                         }]
                     },
@@ -310,19 +310,19 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 1050 },
                         expectedRects: [{
                             left: -9924,
-                            top: -9819,
+                            top: -9859,
                             width: 450
                         }, {
                             left: -9999,
-                            top: -9719,
+                            top: -9759,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9619,
+                            top: -9659,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9519,
+                            top: -9559,
                             width: 450
                         }]
                     },
@@ -330,19 +330,19 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 1400 },
                         expectedRects: [{
                             left: -10274,
-                            top: -9819,
+                            top: -9859,
                             width: 450
                         }, {
                             left: -10349,
-                            top: -9719,
+                            top: -9759,
                             width: 525
                         }, {
                             left: -10349,
-                            top: -9619,
+                            top: -9659,
                             width: 525
                         }, {
                             left: -10349,
-                            top: -9519,
+                            top: -9559,
                             width: 450
                         }]
                     }
@@ -420,19 +420,19 @@ module('Virtual scrolling Month View', () => {
                         offset: { y: 0 },
                         expectedRects: [{
                             left: -9693,
-                            top: -9649,
+                            top: -9689,
                             width: 322
                         }, {
                             left: -9934,
-                            top: -9549,
+                            top: -9589,
                             width: 563
                         }, {
                             left: -9934,
-                            top: -9449,
+                            top: -9489,
                             width: 563
                         }, {
                             left: -9934,
-                            top: -9349,
+                            top: -9389,
                             width: 322
                         }]
                     },
@@ -440,19 +440,19 @@ module('Virtual scrolling Month View', () => {
                         offset: { y: 350 },
                         expectedRects: [{
                             left: -9693,
-                            top: -9999,
+                            top: -10039,
                             width: 322
                         }, {
                             left: -9934,
-                            top: -9899,
+                            top: -9939,
                             width: 563
                         }, {
                             left: -9934,
-                            top: -9799,
+                            top: -9839,
                             width: 563
                         }, {
                             left: -9934,
-                            top: -9699,
+                            top: -9739,
                             width: 322
                         }]
                     },
@@ -460,19 +460,19 @@ module('Virtual scrolling Month View', () => {
                         offset: { y: 1000 },
                         expectedRects: [{
                             left: -9693,
-                            top: -9449,
+                            top: -9489,
                             width: 322
                         }, {
                             left: -9934,
-                            top: -9349,
+                            top: -9389,
                             width: 563
                         }, {
                             left: -9934,
-                            top: -9249,
+                            top: -9289,
                             width: 563
                         }, {
                             left: -9934,
-                            top: -9149,
+                            top: -9189,
                             width: 322
                         }]
                     }
@@ -560,14 +560,14 @@ module('Virtual scrolling Month View', () => {
                         scrollX: 1066,
                         expectedSettings: {
                             left: -9490,
-                            top: -9499,
+                            top: -9559,
                             width: 75,
                         }
                     }, {
                         scrollX: 1300,
                         expectedSettings: {
                             left: -9724,
-                            top: -9499,
+                            top: -9559,
                             width: 75,
                         }
                     }].forEach(({ scrollX, expectedSettings }) => {
@@ -639,15 +639,15 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 0 },
                         expectedRects: [{
                             left: -9924,
-                            top: -9819,
+                            top: -9859,
                             width: 75
                         }, {
                             left: -9924,
-                            top: -9619,
+                            top: -9659,
                             width: 75
                         }, {
                             left: -9924,
-                            top: -9419,
+                            top: -9459,
                             width: 75
                         }]
                     },
@@ -655,15 +655,15 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 1050 },
                         expectedRects: [{
                             left: -9924,
-                            top: -9819,
+                            top: -9859,
                             width: 75
                         }, {
                             left: -9924,
-                            top: -9619,
+                            top: -9659,
                             width: 75
                         }, {
                             left: -9924,
-                            top: -9419,
+                            top: -9459,
                             width: 75
                         }]
                     },
@@ -746,15 +746,15 @@ module('Virtual scrolling Month View', () => {
                         offset: { y: 0 },
                         expectedRects: [{
                             left: -9859,
-                            top: -9849,
+                            top: -9889,
                             width: 75
                         }, {
                             left: -9859,
-                            top: -9649,
+                            top: -9689,
                             width: 75
                         }, {
                             left: -9859,
-                            top: -9449,
+                            top: -9489,
                             width: 75
                         }]
                     },
@@ -762,15 +762,15 @@ module('Virtual scrolling Month View', () => {
                         offset: { y: 900 },
                         expectedRects: [{
                             left: -9859,
-                            top: -9549,
+                            top: -9589,
                             width: 75
                         }, {
                             left: -9859,
-                            top: -9349,
+                            top: -9389,
                             width: 75
                         }, {
                             left: -9859,
-                            top: -9149,
+                            top: -9189,
                             width: 75
                         }]
                     }
@@ -848,19 +848,19 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 0 },
                         expectedRects: [{
                             left: -9924,
-                            top: -9819,
+                            top: -9859,
                             width: 450
                         }, {
                             left: -9999,
-                            top: -9719,
+                            top: -9759,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9619,
+                            top: -9659,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9519,
+                            top: -9559,
                             width: 300
                         }]
                     },
@@ -868,19 +868,19 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 1050 },
                         expectedRects: [{
                             left: -9924,
-                            top: -9819,
+                            top: -9859,
                             width: 450
                         }, {
                             left: -9999,
-                            top: -9719,
+                            top: -9759,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9619,
+                            top: -9659,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9519,
+                            top: -9559,
                             width: 300
                         }]
                     },
@@ -888,19 +888,19 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 1300 },
                         expectedRects: [{
                             left: -10174,
-                            top: -9819,
+                            top: -9859,
                             width: 450
                         }, {
                             left: -10249,
-                            top: -9719,
+                            top: -9759,
                             width: 525
                         }, {
                             left: -10249,
-                            top: -9619,
+                            top: -9659,
                             width: 525
                         }, {
                             left: -10249,
-                            top: -9519,
+                            top: -9559,
                             width: 300
                         }]
                     }
@@ -979,7 +979,7 @@ module('Virtual scrolling Month View', () => {
                         offset: { y: 0 },
                         expectedRects: [{
                             left: -9853,
-                            top: -9849,
+                            top: -9889,
                             width: 482
                         }, {
                             left: -9934,
@@ -987,11 +987,11 @@ module('Virtual scrolling Month View', () => {
                             width: 562
                         }, {
                             left: -9934,
-                            top: -9649,
+                            top: -9689,
                             width: 562
                         }, {
                             left: -9934,
-                            top: -9549,
+                            top: -9589,
                             width: 321
                         }]
                     },
@@ -999,19 +999,19 @@ module('Virtual scrolling Month View', () => {
                         offset: { y: 900 },
                         expectedRects: [{
                             left: -9853,
-                            top: -9549,
+                            top: -9589,
                             width: 482
                         }, {
                             left: -9934,
-                            top: -9449,
+                            top: -9489,
                             width: 562
                         }, {
                             left: -9934,
-                            top: -9349,
+                            top: -9389,
                             width: 562
                         }, {
                             left: -9934,
-                            top: -9249,
+                            top: -9289,
                             width: 321
                         }]
                     },
@@ -1023,15 +1023,15 @@ module('Virtual scrolling Month View', () => {
                             width: 482
                         }, {
                             left: -9934,
-                            top: -9649,
+                            top: -9689,
                             width: 562
                         }, {
                             left: -9934,
-                            top: -9549,
+                            top: -9589,
                             width: 562
                         }, {
                             left: -9934,
-                            top: -9449,
+                            top: -9489,
                             width: 321
                         }]
                     }
