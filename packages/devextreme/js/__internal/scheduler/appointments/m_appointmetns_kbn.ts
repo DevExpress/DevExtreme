@@ -11,14 +11,10 @@ import { getNextElement, getPrevElement } from './utils/sorted_index_utils';
 export class AppointmentsKeyboardNavigation {
   private readonly _collection: SchedulerAppointments;
 
-  private _$focusedItem: dxElementWrapper | null = null;
+  public $focusedItem: dxElementWrapper | null = null;
 
-  public get $focusedItem(): dxElementWrapper | null {
-    return this._$focusedItem;
-  }
-
-  constructor(options: SchedulerAppointments) {
-    this._collection = options;
+  constructor(collection: SchedulerAppointments) {
+    this._collection = collection;
   }
 
   public $focusableItems(): dxElementWrapper {
@@ -49,8 +45,8 @@ export class AppointmentsKeyboardNavigation {
   }
 
   public focusInHandler(e: DxEvent): void {
-    this._$focusedItem = $(e.target);
-    this._collection.option('focusedElement', getPublicElement(this._$focusedItem));
+    this.$focusedItem = $(e.target);
+    this._collection.option('focusedElement', getPublicElement(this.$focusedItem));
   }
 
   public focusOutHandler(): void {
@@ -109,10 +105,14 @@ export class AppointmentsKeyboardNavigation {
       return;
     }
 
-    const resizableInstance = (this.$focusedItem as any).dxResizable('instance');
     this._collection.moveAppointmentBack();
-    resizableInstance._detachEventHandlers();
-    resizableInstance._attachEventHandlers();
-    resizableInstance._toggleResizingClass(false);
+
+    const resizableInstance = (this.$focusedItem as any).dxResizable('instance');
+
+    if (resizableInstance) {
+      resizableInstance._detachEventHandlers();
+      resizableInstance._attachEventHandlers();
+      resizableInstance._toggleResizingClass(false);
+    }
   }
 }
