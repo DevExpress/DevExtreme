@@ -286,7 +286,7 @@ class EditingControllerImpl extends modules.ViewController {
     const internalData = this._getInternalData(params.key);
 
     if (internalData) {
-      return extend(internalData, params) as InternalEditData;
+      return { ...internalData, ...params };
     }
 
     this._internalState.set(getKeyHash(params.key), params);
@@ -1743,7 +1743,7 @@ class EditingControllerImpl extends modules.ViewController {
       // eslint-disable-next-line default-case
       switch (type) {
         case DATA_EDIT_DATA_REMOVE_TYPE:
-          this.executeAction('onRowRemoved', extend({}, params, { data: internalData?.oldData }));
+          this.executeAction('onRowRemoved', { ...params, data: internalData?.oldData });
           break;
         case DATA_EDIT_DATA_INSERT_TYPE:
           this.executeAction('onRowInserted', params);
