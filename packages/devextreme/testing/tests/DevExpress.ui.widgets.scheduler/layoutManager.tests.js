@@ -1429,7 +1429,7 @@ QUnit.testInActiveWindow('Apps should be focused in right order on month view wi
         views: [{
             type: 'month',
             name: 'MONTH',
-            maxAppointmentsPerCell: '2'
+            maxAppointmentsPerCell: 2
         }],
         height: 600,
         currentDate: new Date(2015, 9, 16),
