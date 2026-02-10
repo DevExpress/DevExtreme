@@ -11,12 +11,8 @@ import {
     template,
 } from '../common';
 
-import {
-    Properties as FileUploaderOptions,
-} from './file_uploader';
-
-import { Properties as SpeechToTextOptions } from './speech_to_text';
-
+import { Properties as FileUploaderProperties } from './file_uploader';
+import { Properties as SpeechToTextProperties } from './speech_to_text';
 import { Properties as TextAreaProperties } from './text_area';
 
 import Widget, { WidgetOptions } from './widget/ui.widget';
@@ -360,7 +356,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @type dxFileUploaderOptions
      * @public
      */
-    fileUploaderOptions?: Omit<FileUploaderOptions, 'dialogTrigger' | 'showFileList' | 'uploadMode' | 'value'>;
+    fileUploaderOptions?: Omit<FileUploaderProperties, 'dialogTrigger' | 'showFileList' | 'uploadMode' | 'value'>;
     /**
      * @docid
      * @default true
@@ -438,6 +434,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
      * @default ""
+     * @type string|undefined
      * @public
      */
     inputFieldText?: TextAreaProperties['value'];
@@ -489,7 +486,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @type dxSpeechToTextOptions
      * @public
      */
-    speechToTextOptions?: Omit<SpeechToTextOptions, 'stylingMode' | 'type'>;
+    speechToTextOptions?: Omit<SpeechToTextProperties, 'stylingMode' | 'type'>;
     /**
      * @docid
      * @default undefined
