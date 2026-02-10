@@ -6,6 +6,7 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import errors from '@js/ui/widget/ui.errors';
+import { getIntersection } from '@ts/core/utils/m_array';
 import SearchBoxController, { getOperationBySearchMode } from '@ts/ui/collection/search_box_controller';
 import TextBox from '@ts/ui/text_box/m_text_box';
 
@@ -100,7 +101,7 @@ class DataAdapter {
   ): void {
     this.options[name] = value;
 
-    if (name === 'recursiveSelection') {
+    if (name === 'recursiveSelection' || name === 'disabledNodeSelectionMode') {
       this._updateSelection();
     }
   }
@@ -123,15 +124,7 @@ class DataAdapter {
   }
 
   _updateDisabled(): void {
-    each(this._getDataBySelectionMode(), (_index: number, node: InternalNode): void => {
-      if (!this._isNodeVisible(node)) {
-        return;
-      }
-
-      if (node.internalFields.disabled) {
-        this._disabledNodesKeys.push(node.internalFields.key);
-      }
-    });
+    this._disabledNodesKeys = this._updateNodesKeysArray(DISABLED);
   }
 
   _updateSelection(): void {
@@ -164,10 +157,7 @@ class DataAdapter {
       }
 
       if (node.internalFields[property]) {
-        if (property === DISABLED) {
-          array.push(node.internalFields.key);
-        }
-        if (property === EXPANDED || this.options.multipleSelection) {
+        if (property === EXPANDED || property === DISABLED || this.options.multipleSelection) {
           array.push(node.internalFields.key);
         } else {
           if (array.length) {
@@ -352,12 +342,8 @@ class DataAdapter {
         return;
       }
 
-      if (this.options.disabledNodeSelectionMode === 'all') {
-        this._setFieldState(child, SELECTED, state);
-        return;
-      }
-
-      if (!this._isNodeDisabled(child)) {
+      if (this.options.disabledNodeSelectionMode === 'all'
+        || !this._isNodeDisabled(child)) {
         this._setFieldState(child, SELECTED, state);
       }
     });
@@ -582,12 +568,8 @@ class DataAdapter {
         return;
       }
 
-      if (this.options.disabledNodeSelectionMode === 'all') {
-        this._setFieldState(node, SELECTED, state);
-        return;
-      }
-
-      if (!this._isNodeDisabled(node)) {
+      if (this.options.disabledNodeSelectionMode === 'all'
+        || !this._isNodeDisabled(node)) {
         this._setFieldState(node, SELECTED, state);
       }
     });
@@ -599,28 +581,11 @@ class DataAdapter {
     }
   }
 
-  _testIntersection(arr1: ItemKey[], arr2: ItemKey[]): ItemKey[] {
-    const set = new Set<ItemKey>(arr1);
-    const result = new Set<ItemKey>();
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const item of arr2) {
-      if (set.has(item)) {
-        result.add(item);
-      }
-    }
-
-    return [...result];
-  }
-
   isAllSelected(): boolean | undefined {
     const selectedNodeKeys = this.getSelectedNodesKeys();
     const disabledNodeKeys = this.getDisabledNodesKeys();
 
-    // @sts-expect-error ts-error
-    // const selectedDisabledNodesAmount = selectedNodesAmount
-    // .intersection(disabledNodesAmount).size;
-    const selectedDisabledNodesAmount = this._testIntersection(
+    const selectedDisabledNodesAmount = getIntersection(
       selectedNodeKeys,
       disabledNodeKeys,
     ).length;

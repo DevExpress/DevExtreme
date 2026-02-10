@@ -444,7 +444,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
         break;
       case 'disabledNodeSelectionMode':
         this._dataAdapter.setOption('disabledNodeSelectionMode', args.value ?? 'all');
-        // this._initDataAdapter();
         this.repaint();
         break;
       default:
