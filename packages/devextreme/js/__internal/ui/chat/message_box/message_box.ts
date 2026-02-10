@@ -3,6 +3,7 @@ import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { InteractionEvent } from '@js/events';
 import type { Attachment } from '@js/ui/chat';
 import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
+import type { Properties as SpeechToTextProperties } from '@js/ui/speech_to_text';
 import type { InputEvent } from '@js/ui/text_area';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
@@ -13,12 +14,6 @@ import type {
 } from '@ts/ui/chat/message_box/chat_text_area';
 import ChatTextArea from '@ts/ui/chat/message_box/chat_text_area';
 import EditingPreview from '@ts/ui/chat/message_box/editing_preview';
-
-export const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
-export const CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS = 'dx-chat-messagebox-textarea-container';
-
-export const TYPING_END_DELAY = 2000;
-const ESCAPE_KEY = 'escape';
 
 export type MessageEnteredEvent = NativeEventInfo<MessageBox, InteractionEvent>
   & {
@@ -39,6 +34,10 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 
   previewText?: string;
 
+  speechToTextEnabled?: boolean;
+
+  speechToTextOptions?: SpeechToTextProperties;
+
   text?: string;
 
   onMessageEntered?: (e: MessageEnteredEvent) => void;
@@ -51,6 +50,12 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
 
   onMessageUpdating?: (e: { text: string }) => void;
 }
+
+export const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
+export const CHAT_MESSAGEBOX_TEXTAREA_CONTAINER_CLASS = 'dx-chat-messagebox-textarea-container';
+
+export const TYPING_END_DELAY = 2000;
+const ESCAPE_KEY = 'escape';
 
 class MessageBox extends DOMComponent<MessageBox, Properties> {
   _textArea!: ChatTextArea;
@@ -73,6 +78,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       hoverStateEnabled: true,
       fileUploaderOptions: undefined,
       previewText: '',
+      speechToTextEnabled: false,
+      speechToTextOptions: undefined,
       text: '',
       onMessageEntered: undefined,
       onMessageEditCanceled: undefined,
@@ -163,6 +170,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       focusStateEnabled,
       hoverStateEnabled,
       previewText,
+      speechToTextEnabled,
+      speechToTextOptions,
       text,
     } = this.option();
 
@@ -173,6 +182,8 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       hoverStateEnabled,
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       value: previewText || text,
+      speechToTextEnabled,
+      speechToTextOptions,
       onInput: (e: InputEvent): void => {
         this._triggerTypingStartAction(e);
         this._updateTypingEndTimeout();
@@ -285,6 +296,11 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
 
       case 'onTypingEnd':
         this._createTypingEndAction();
+        break;
+
+      case 'speechToTextEnabled':
+      case 'speechToTextOptions':
+        this._textArea.option(fullName, value);
         break;
 
       case 'previewText':

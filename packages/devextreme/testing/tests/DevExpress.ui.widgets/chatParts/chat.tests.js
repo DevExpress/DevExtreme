@@ -2603,6 +2603,55 @@ QUnit.module('Chat', () => {
         });
     });
 
+    QUnit.module('SpeechToText integration', moduleConfig, () => {
+        QUnit.test('speechToTextEnabled should be passed to messageBox on init', function(assert) {
+            this.reinit({ speechToTextEnabled: true });
+
+            const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
+
+            assert.strictEqual(messageBox.option('speechToTextEnabled'), true, 'speechToTextEnabled is passed to messageBox');
+        });
+
+        QUnit.test('speechToTextOptions should be passed to messageBox on init', function(assert) {
+            const speechToTextOptions = {
+                speechRecognitionConfig: {
+                    continuous: true,
+                    interimResults: true,
+                },
+            };
+
+            this.reinit({ speechToTextEnabled: true, speechToTextOptions });
+
+            const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
+
+            assert.deepEqual(messageBox.option('speechToTextOptions'), speechToTextOptions, 'speechToTextOptions is passed to messageBox');
+        });
+
+        QUnit.test('speechToTextEnabled should be updated in messageBox at runtime', function(assert) {
+            const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
+
+            this.instance.option('speechToTextEnabled', true);
+
+            assert.strictEqual(messageBox.option('speechToTextEnabled'), true, 'speechToTextEnabled is updated in messageBox');
+        });
+
+        QUnit.test('speechToTextOptions should be updated in messageBox at runtime', function(assert) {
+            this.reinit({ speechToTextEnabled: true });
+
+            const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
+
+            const newOptions = {
+                speechRecognitionConfig: {
+                    continuous: false,
+                },
+            };
+
+            this.instance.option('speechToTextOptions', newOptions);
+
+            assert.deepEqual(messageBox.option('speechToTextOptions'), newOptions, 'speechToTextOptions is updated in messageBox');
+        });
+    });
+
     QUnit.module('Data Layer Integration', {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();

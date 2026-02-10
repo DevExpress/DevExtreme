@@ -1375,7 +1375,9 @@ testComponentDefaults(Chat,
         editing: {
             allowUpdating: false,
             allowDeleting: false,
-        }
+        },
+        speechToTextEnabled: false,
+        speechToTextOptions: undefined,
     }
 );
 
@@ -1396,6 +1398,8 @@ testComponentDefaults(ChatMessageBox,
         hoverStateEnabled: true,
         fileUploaderOptions: undefined,
         previewText: '',
+        speechToTextEnabled: false,
+        speechToTextOptions: undefined,
         text: '',
         onMessageEntered: undefined,
         onTypingStart: undefined,
@@ -1413,6 +1417,8 @@ testComponentDefaults(ChatTextArea,
         autoResizeEnabled: true,
         valueChangeEvent: 'input',
         fileUploaderOptions: undefined,
+        speechToTextEnabled: false,
+        speechToTextOptions: undefined,
         onSend: undefined,
     }
 );
@@ -1493,6 +1499,7 @@ testComponentDefaults(SpeechToText,
         onStopClick: undefined,
         onResult: undefined,
         onError: undefined,
+        onEnd: undefined,
     }
 );
 

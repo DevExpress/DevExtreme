@@ -16,10 +16,11 @@ import type {
   MessageEnteredEvent,
   MessageUpdatedEvent,
   MessageUpdatingEvent,
-  Properties,
+  Properties as ChatProperties,
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
+import type { Properties as SpeechToTextProperties } from '@js/ui/speech_to_text';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -39,6 +40,11 @@ import type {
 } from '@ts/ui/chat/messagelist';
 import MessageList from '@ts/ui/chat/messagelist';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
+
+type Properties = ChatProperties & {
+  speechToTextEnabled?: boolean;
+  speechToTextOptions?: SpeechToTextProperties;
+};
 
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -101,6 +107,8 @@ class Chat extends Widget<Properties> {
       showDayHeaders: true,
       showMessageTimestamp: true,
       showUserName: true,
+      speechToTextEnabled: false,
+      speechToTextOptions: undefined,
       typingUsers: [],
       user: { id: new Guid().toString() },
       onMessageDeleted: undefined,
@@ -464,6 +472,8 @@ class Chat extends Widget<Properties> {
       hoverStateEnabled,
       // @ts-expect-error wait for .d.ts
       inputFieldText,
+      speechToTextEnabled,
+      speechToTextOptions,
     } = this.option();
 
     const $messageBox = $('<div>');
@@ -476,6 +486,8 @@ class Chat extends Widget<Properties> {
       focusStateEnabled,
       hoverStateEnabled,
       text: inputFieldText,
+      speechToTextEnabled,
+      speechToTextOptions,
       onMessageEntered: (e) => {
         this._messageEnteredHandler(e);
       },
@@ -644,6 +656,8 @@ class Chat extends Widget<Properties> {
       case 'hoverStateEnabled':
         this._messageBox.option(name, value);
         break;
+      case 'speechToTextEnabled':
+      case 'speechToTextOptions':
       case 'fileUploaderOptions':
         this._messageBox.option(fullName, value);
         break;
