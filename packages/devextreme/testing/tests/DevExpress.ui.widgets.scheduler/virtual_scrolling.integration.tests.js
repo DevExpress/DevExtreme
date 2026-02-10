@@ -657,7 +657,7 @@ module('Virtual scrolling integration', () => {
                             offset: { x: 0, y: 0 },
                             appointmentRects: [
                                 { left: -9772, top: -9735, height: 532 },
-                                { left: -9677, top: -9849, height: 38 }
+                                { left: -9677, top: -9809, height: 38 }
                             ]
                         },
                         {
@@ -1635,7 +1635,7 @@ module('Virtual scrolling integration', () => {
                         {
                             offset: { x: 1000 },
                             appointmentRects: [
-                                { left: -9849, top: -9869, height: 25, width: 75 },
+                                { left: -9809, top: -9869, height: 25, width: 75 },
                                 { left: -9734, top: -9869, height: 25, width: 75 },
                                 { left: -9659, top: -9869, height: 25, width: 75 },
                                 { left: -9584, top: -9869, height: 25, width: 75 },
@@ -1775,14 +1775,6 @@ module('Virtual scrolling integration', () => {
                     {
                         offsetY: 0,
                         expected: [{
-                            groupIndex: 0,
-                            top: 126,
-                            height: 342
-                        }, {
-                            groupIndex: 0,
-                            top: 126,
-                            height: 342
-                        }, {
                             groupIndex: 1,
                             top: 784,
                             height: 76
@@ -1795,14 +1787,6 @@ module('Virtual scrolling integration', () => {
                     {
                         offsetY: 550,
                         expected: [{
-                            groupIndex: 0,
-                            top: 266,
-                            height: 190
-                        }, {
-                            groupIndex: 0,
-                            top: 266,
-                            height: 190
-                        }, {
                             groupIndex: 1,
                             top: 760,
                             height: 342
@@ -1815,14 +1799,6 @@ module('Virtual scrolling integration', () => {
                     {
                         offsetY: 950,
                         expected: [{
-                            groupIndex: 0,
-                            top: 456,
-                            height: 0
-                        }, {
-                            groupIndex: 1,
-                            top: 760,
-                            height: 342
-                        }, {
                             groupIndex: 1,
                             top: 760,
                             height: 342
@@ -1831,14 +1807,6 @@ module('Virtual scrolling integration', () => {
                     {
                         offsetY: 590,
                         expected: [{
-                            groupIndex: 0,
-                            top: 456,
-                            height: 0
-                        }, {
-                            groupIndex: 1,
-                            top: 760,
-                            height: 342
-                        }, {
                             groupIndex: 1,
                             top: 760,
                             height: 342
@@ -2634,16 +2602,16 @@ module('Virtual scrolling integration', () => {
                                     offset: { x: 0, y: 0 },
                                     expectedIndices: [0, 2],
                                     appointmentRects: [
-                                        { left: -9934, top: -9850.015625, height: 38 },
-                                        { left: -9534, top: -9736.015625, height: 76 }
+                                        { left: -9934, top: -9890, height: 38 },
+                                        { left: -9534, top: -9776, height: 76 }
                                     ]
                                 },
                                 {
                                     offset: { x: 300, y: 0 },
                                     expectedIndices: [0, 2],
                                     appointmentRects: [
-                                        { left: -10234, top: -9850.015625, height: 38 },
-                                        { left: -9834, top: -9736.015625, height: 76 }
+                                        { left: -10234, top: -9890, height: 38 },
+                                        { left: -9834, top: -9776, height: 76 }
                                     ]
                                 },
                                 {
@@ -2655,27 +2623,27 @@ module('Virtual scrolling integration', () => {
                                     offset: { x: 0, y: 1100 },
                                     expectedIndices: [1, 3],
                                     appointmentRects: [
-                                        { left: -9734, top: -10076.015625, height: 38 },
-                                        { left: -9334, top: -10076.015625, height: 76 }
+                                        { left: -9734, top: -10116, height: 38 },
+                                        { left: -9334, top: -10116, height: 76 }
                                     ]
                                 },
                                 {
                                     offset: { x: 300, y: 1100 },
                                     expectedIndices: [1, 3, 4],
                                     appointmentRects: [
-                                        { left: -10034, top: -10076.015625, height: 38 },
-                                        { left: -9634, top: -10076.015625, height: 76 },
-                                        { left: -9816, top: -9962.015625, height: 76 }
+                                        { left: -10034, top: -10116, height: 38 },
+                                        { left: -9634, top: -10116, height: 76 },
+                                        { left: -9434, top: -9622, height: 152 }
                                     ]
                                 },
                                 {
                                     offset: { x: 1700, y: 1100 },
                                     expectedIndices: [7, 8, 9, 10],
                                     appointmentRects: [
-                                        { left: -10216, top: -9962.015625, height: 646 },
-                                        { left: -10016, top: -9962.015625, height: 646 },
-                                        { left: -9816, top: -9962.015625, height: 646 },
-                                        { left: -9616, top: -9962.015625, height: 646 }
+                                        { left: -10201, top: -10002, height: 646 },
+                                        { left: -10001, top: -10002, height: 646 },
+                                        { left: -9801, top: -10002, height: 646 },
+                                        { left: -9601, top: -10002, height: 646 }
                                     ]
                                 },
                             ].forEach(({ offset, expectedIndices, appointmentRects }) => {
