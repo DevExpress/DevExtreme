@@ -107,12 +107,12 @@ const sources = (src, dist, distGlob) => (() => merge(
         .pipe(gulp.dest(dist)),
 
     gulp
-        .src(['build/npm-bin/**/*.js', '!build/npm-bin/license/**'])
+        .src(['build/npm-bin/*.js'])
         .pipe(eol('\n'))
         .pipe(gulp.dest(`${dist}/bin`)),
 
     gulp
-        .src(['build/npm-bin/license/**'])
+        .src(['license/**'])
         .pipe(eol('\n'))
         .pipe(gulp.dest(`${dist}/license`)),
 
