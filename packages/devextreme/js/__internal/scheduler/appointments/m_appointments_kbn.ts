@@ -21,6 +21,7 @@ export class AppointmentsKeyboardNavigation {
     const appts = this._collection._itemElements().not('.dx-state-disabled');
     const collectors = this._collection.$element().find('.dx-scheduler-appointment-collector');
 
+    // @ts-expect-error
     return appts.add(collectors);
   }
 
