@@ -415,8 +415,11 @@ class PivotGrid extends Widget {
           that._fieldChooserBase = null;
         }
         that._initDataController();
-        that.getFieldChooserPopup().hide();
-        that._renderFieldChooser();
+        that.getFieldChooserPopup().hide().then(() => {
+          that.getFieldChooserPopup().dispose();
+          that._fieldChooserPopup = null;
+          that._renderFieldChooser();
+        });
         that._invalidate();
         break;
       case 'texts':
@@ -651,22 +654,20 @@ class PivotGrid extends Widget {
       },
     };
 
-    if (that._fieldChooserPopup) {
-      if (that._fieldChooserPopup.option('visible')) {
-        that._fieldChooserPopup.hide();
-      }
-      that._fieldChooserPopup.dispose();
-      that._fieldChooserPopup = null;
+    if (that.getFieldChooserPopup()) {
+      that._fieldChooserPopup.option(popupOptions);
+      that._fieldChooserPopup.$content().dxPivotGridFieldChooser(fieldChooserComponentOptions);
+    } else {
+      that._fieldChooserPopup = that._createComponent(
+        $(DIV)
+          .addClass(FIELD_CHOOSER_POPUP_CLASS)
+          .appendTo(container),
+        Popup,
+        // @ts-expect-error ts-error
+        popupOptions,
+      );
+      that._fieldChooserPopup.$content().dxPivotGridFieldChooser(fieldChooserComponentOptions);
     }
-
-    that._fieldChooserPopup = that._createComponent(
-      $(DIV)
-        .addClass(FIELD_CHOOSER_POPUP_CLASS)
-        .appendTo(container),
-      Popup,
-      // @ts-expect-error ts-error
-      popupOptions,
-    );
   }
 
   _renderContextMenu() {
@@ -1286,12 +1287,12 @@ class PivotGrid extends Widget {
       that._fieldChooserBase = null;
     }
 
-    super._dispose();
-
     if (that._dataController) {
       that._dataController.dispose();
       that._dataController = null;
     }
+
+    super._dispose();
   }
 
   _tableElement() {
