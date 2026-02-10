@@ -12,9 +12,9 @@ import CustomItem from './CustomItem.tsx';
 const companyLabel = { 'aria-label': 'Company' };
 
 const App = () => {
-  const [selectedItems, setSelectedItems] = useState<Company[]>([companies[0]])
-  const [multiple, setMultiple] = useState<boolean>(false)
-  const [collapsible, setCollapsible] = useState<boolean>(false)
+  const [selectedItems, setSelectedItems] = useState<Company[]>([companies[0]]);
+  const [multiple, setMultiple] = useState<boolean>(false);
+  const [collapsible, setCollapsible] = useState<boolean>(false);
   const [animationDuration, setAnimationDuration] = useState<number>(300);
 
   const selectionChanged = useCallback((e: AccordionTypes.SelectionChangedEvent): void => {
