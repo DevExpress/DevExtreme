@@ -546,8 +546,7 @@ QUnit.module('disabledNodeSelectionMode', {
             });
         });
 
-        // TODO: think about test from false to true for disabledNodeSelectionMode
-        QUnit.test('change option disabledNodeSelectionMode in runtime should change modes correctly', function(assert) {
+        QUnit.test('change option disabledNodeSelectionMode in runtime should change modes correctly (all -> skipDisabled)', function(assert) {
             const selectedStatesBefore = ['true', 'true', 'true'];
             const unselectedStatesAfter = ['false', 'true', 'false'];
 
@@ -566,6 +565,35 @@ QUnit.module('disabledNodeSelectionMode', {
             });
 
             treeView.option('disabledNodeSelectionMode', 'skipDisabled');
+
+            treeView.unselectAll();
+
+            checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
+            checkboxes.each((index, checkbox) => {
+                const ariaChecked = $(checkbox).attr('aria-checked');
+                assert.strictEqual(ariaChecked, unselectedStatesAfter[index], `checkbox ${index} has correct aria-checked state`);
+            });
+        });
+
+        QUnit.test('change option disabledNodeSelectionMode in runtime should change modes correctly (skipDisabled -> all)', function(assert) {
+            const selectedStatesBefore = ['true', 'false', 'true'];
+            const unselectedStatesAfter = ['false', 'false', 'false'];
+
+            const treeView = initTree({
+                items: this.unselectedItems,
+                showCheckBoxesMode: 'normal',
+                disabledNodeSelectionMode: 'skipDisabled',
+            }).dxTreeView('instance');
+
+            treeView.selectAll();
+
+            let checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
+            checkboxes.each((index, checkbox) => {
+                const ariaChecked = $(checkbox).attr('aria-checked');
+                assert.strictEqual(ariaChecked, selectedStatesBefore[index], `checkbox ${index} has correct aria-checked state`);
+            });
+
+            treeView.option('disabledNodeSelectionMode', 'all');
 
             treeView.unselectAll();
 
