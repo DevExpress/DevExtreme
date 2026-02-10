@@ -838,7 +838,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             );
         });
 
-        QUnit.test('should remove EditingPreview when previewText option is cleared at runtime', function(assert) {
+        QUnit.test('should not remove EditingPreview when previewText option is cleared at runtime', function(assert) {
             this.reinit({ previewText: 'editing text' });
 
             assert.strictEqual(this.getEditingPreview().length, 1, 'EditingPreview initially rendered');
@@ -906,7 +906,6 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('Escape key should cancel editing and switch to creation mode', function(assert) {
-            debugger;
             this.reinit({ previewText: 'original message' });
 
             assert.strictEqual(this.getEditingPreview().length, 1, 'in editing mode');
@@ -954,7 +953,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(editingPreview.option('text'), '', 'Editing preview text is cleared after pressing Escape');
         });
 
-        QUnit.test('Text option should update editing preview when changed at runtime', function(assert) {
+        QUnit.test('previewText option should update editing preview when changed at runtime', function(assert) {
             this.instance.option('previewText', 'new text value');
 
             const editingPreview = this.getEditingPreviewInstance();
