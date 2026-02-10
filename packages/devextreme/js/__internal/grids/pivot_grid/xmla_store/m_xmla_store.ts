@@ -1159,9 +1159,6 @@ class XmlaStore {
     return true;
   }
 
-  dispose() {
-  }
-
   getDrillDownItems(options, params) {
     // @ts-expect-error
     const result = new Deferred();
