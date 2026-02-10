@@ -4,14 +4,14 @@
 const fs = require("fs");
 const path = require("path");
 
-const { getDevExpressLCXKey } = require("./get-lcx");
-const { convertLCXtoLCP } = require("./lcx2lcp");
+const { getDevExpressLCXKey } = require("./dx-get-lcx");
+const { convertLCXtoLCP } = require("./dx-lcx-2-lcp");
 
 const EXPORT_NAME = "LICENSE_KEY";
 
-function fail(msg, code = 1) {
+function fail(msg) {
   process.stderr.write(msg.endsWith("\n") ? msg : msg + "\n");
-  process.exit(code);
+  process.exit(0);
 }
 
 function printHelp() {
@@ -54,7 +54,8 @@ function parseArgs(argv) {
     else if (a === "--force") out.force = true;
     else if (a === "--cwd") out.cwd = args[++i] || process.cwd();
     else if (a.startsWith("--cwd=")) out.cwd = a.slice("--cwd=".length);
-    else fail(`Unknown argument: ${a}\nRun devextreme-license --help`);
+    else fai
+    l(`Unknown argument: ${a}\nRun devextreme-license --help`);
   }
 
   return out;
