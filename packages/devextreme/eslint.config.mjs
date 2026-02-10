@@ -30,6 +30,7 @@ export default [
             'js/viz/docs/*',
             'node_modules/*',
             'build/*',
+            'license/*',
             '**/*.j.tsx',
             'playground/*',
             'themebuilder/data/metadata/*',
