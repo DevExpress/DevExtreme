@@ -2,6 +2,7 @@ import ArrayStore from '@js/common/data/array_store';
 import { CustomStore } from '@js/common/data/custom_store';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import dataQuery from '@js/common/data/query';
+// eslint-disable-next-line import/extensions
 import { aggregators } from '@js/common/data/utils';
 import Class from '@js/core/class';
 import { noop } from '@js/core/utils/common';
@@ -583,10 +584,6 @@ const LocalStore = Class.inherit((function () {
       }
 
       return drillDownItems;
-    },
-
-    dispose() {
-      this._dataSource?.dispose();
     },
   };
 })()).include(storeDrillDownMixin);
