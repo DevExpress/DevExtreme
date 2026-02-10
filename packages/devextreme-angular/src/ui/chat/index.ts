@@ -297,10 +297,10 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     
     @Input()
-    get inputFieldText(): any {
+    get inputFieldText(): string | undefined {
         return this._getOption('inputFieldText');
     }
-    set inputFieldText(value: any) {
+    set inputFieldText(value: string | undefined) {
         this._setOption('inputFieldText', value);
     }
 
@@ -690,7 +690,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() inputFieldTextChange: EventEmitter<any>;
+    @Output() inputFieldTextChange: EventEmitter<string | undefined>;
 
     /**
     

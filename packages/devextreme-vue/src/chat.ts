@@ -72,9 +72,6 @@ import {
  StopClickEvent,
  SpeechRecognitionConfig,
 } from "devextreme/ui/speech_to_text";
-import {
- WidgetOptions,
-} from "devextreme/ui/widget/ui.widget";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -142,7 +139,7 @@ const componentConfig = {
     height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
-    inputFieldText: {},
+    inputFieldText: String,
     items: Array as PropType<Array<Message>>,
     messageTemplate: {},
     messageTimestampFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
@@ -165,7 +162,7 @@ const componentConfig = {
     showDayHeaders: Boolean,
     showMessageTimestamp: Boolean,
     showUserName: Boolean,
-    speechToTextOptions: Object as PropType<dxSpeechToTextOptions | Record<string, any> | WidgetOptions>,
+    speechToTextOptions: Object as PropType<dxSpeechToTextOptions | Record<string, any>>,
     typingUsers: Array as PropType<Array<User>>,
     user: Object as PropType<User | Record<string, any>>,
     visible: Boolean,
