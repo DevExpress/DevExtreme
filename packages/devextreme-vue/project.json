@@ -118,7 +118,7 @@
           }
         }
       },
-      "cache": true,
+      "cache": false,
       "inputs": ["default"],
       "outputs": [
         "{projectRoot}/src/**/*",
