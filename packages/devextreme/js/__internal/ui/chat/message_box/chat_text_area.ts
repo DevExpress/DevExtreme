@@ -57,7 +57,6 @@ export type Properties = TextAreaProperties & {
 };
 
 class ChatTextArea extends TextArea<Properties> {
-  // eslint-disable-next-line no-restricted-globals
   _informerTimeoutId?: ReturnType<typeof setTimeout> | undefined;
 
   _informer?: Informer | null;
@@ -154,6 +153,7 @@ class ChatTextArea extends TextArea<Properties> {
     super._initMarkup();
     this._renderToolbar();
     this._initFileUploader();
+    this._toggleButtonDisableState();
   }
 
   _showInformer(text: string): void {
@@ -432,7 +432,7 @@ class ChatTextArea extends TextArea<Properties> {
 
   _processSendButtonActivation(e: Partial<SendEvent>): void {
     this._sendAction?.(e);
-    this.reset();
+    this.clear();
     this.resetFileUploader();
     this._toggleButtonDisableState(true);
   }

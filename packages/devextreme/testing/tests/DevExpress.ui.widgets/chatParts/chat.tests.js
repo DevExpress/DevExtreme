@@ -880,6 +880,34 @@ QUnit.module('Chat', () => {
         });
     });
 
+    QUnit.module('MessageBox integration', moduleConfig, () => {
+        QUnit.test('inputFieldText option should be passed to messageBox on init', function(assert) {
+            this.reinit({
+                inputFieldText: 'some text',
+            });
+
+            const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
+
+            assert.strictEqual(messageBox.option('text'), 'some text', 'inputFieldText is passed to messageBox on init');
+        });
+
+        QUnit.test('inputFieldText option should be passed to messageBox at runtime', function(assert) {
+            const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
+
+            this.instance.option('inputFieldText', 'some text');
+
+            assert.strictEqual(messageBox.option('text'), 'some text', 'inputFieldText is passed to messageBox at runtime');
+        });
+
+        QUnit.test('inputFieldText option should be updated after messageBox text option update', function(assert) {
+            const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
+
+            messageBox.option('text', 'some text');
+
+            assert.strictEqual(this.instance.option('inputFieldText'), 'some text', 'inputFieldText is updated after messageBox text option update');
+        });
+    });
+
     QUnit.module('AlertList integration', {
         beforeEach: function() {
             moduleConfig.beforeEach.apply(this, arguments);

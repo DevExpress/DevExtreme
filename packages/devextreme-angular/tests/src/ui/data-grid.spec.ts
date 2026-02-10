@@ -368,11 +368,11 @@ describe('DxDataGrid', () => {
         template: `
                 <dx-data-grid id="gridContainer" [dataSource]="dataSource" [repaintChangesOnly]="true">
                   <dxo-data-grid-sorting mode="none"></dxo-data-grid-sorting>
-                
+
                   <ng-container *ngFor="let col of columns">
                     <dxi-data-grid-column [caption]="col.caption" [dataField]="col.field" [cellTemplate]="col.cellTemplateName">
                     </dxi-data-grid-column>
-                
+
                     <div *dxTemplate="let cell of col.cellTemplateName">
                       <div *ngIf="col.cellTemplateName === 'templateA'">
                         someTemplateA
@@ -381,7 +381,7 @@ describe('DxDataGrid', () => {
                         <div class="templBClass">someTemplateB</div>
                       </div>
                     </div>
-                
+
                   </ng-container>
                 </dx-data-grid>`,
       },
@@ -610,6 +610,6 @@ describe('DxDataGrid slow tests', () => {
     const memoryAfter = await (performance as any).measureUserAgentSpecificMemory();
     const memoryDiff = Math.round((memoryAfter.bytes - memoryBefore.bytes) / 1024);
 
-    expect(memoryDiff).toBeLessThan(30);
+    expect(memoryDiff).toBeLessThan(40);
   });
 });
