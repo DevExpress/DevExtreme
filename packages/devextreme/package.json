@@ -256,7 +256,7 @@
   "bin": {
     "devextreme-bundler-init": "bin/bundler-init.js",
     "devextreme-bundler": "bin/bundler.js",
-    "devextreme-license": "bin/devextreme-license.js"
+    "devextreme-license": "bin/license/devextreme-license.js"
   },
   "browserslist": [
     "last 2 Chrome versions",
@@ -271,5 +271,11 @@
   "publishConfig": {
     "directory": "artifacts/npm/devextreme",
     "linkDirectory": true
+  },
+  "exports": {
+    "./license/devextreme-license-plugin": {
+      "types": "./bin/license/devextreme-license-plugin.d.ts",
+      "default": "./bin/license/devextreme-license-plugin.js"
+    }
   }
 }
