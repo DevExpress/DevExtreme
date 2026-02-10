@@ -74,7 +74,7 @@
     @if (currentSelectedMovie; as movie) {
     <div class="movie-info">
       <div class="movie-preview-image">
-        <img [src]="movie.image" [alt]="movie.text" />
+        <img [src]="movie.image" alt="{{ movie.text }} poster" />
       </div>
       <div class="movie-details">
         <div class="title">{{ movie.text }} ({{ movie.year }})</div>
@@ -96,7 +96,7 @@
     @if (getMovieById | apply : model.appointmentData.movieId; as movie) {
     <div class="movie-preview">
       <div class="movie-preview-image">
-        <img [src]="movie.image" [alt]="movie.text" />
+        <img [src]="movie.image" alt="{{ movie.text }} poster" />
       </div>
       <div class="movie-details">
         <div class="title">{{ movie.text }}</div>
@@ -124,7 +124,7 @@
     @if (getMovieById | apply : model.appointmentData.movieId; as movie) {
     <div class="movie-info">
       <div class="movie-preview-image">
-        <img [src]="movie.image" [alt]="movie.text" />
+        <img [src]="movie.image" alt="{{ movie.text }} poster" />
       </div>
       <div class="movie-details">
         <div class="title">{{ movie.text + " (" + movie.year + ")" }}</div>
