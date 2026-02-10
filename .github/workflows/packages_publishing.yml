@@ -52,10 +52,9 @@ jobs:
         with:
           path: |
             ${{ env.PNPM_STORE_PATH }}
-            .nx/cache
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store
+            ${{ runner.os }}-pnpm-cache
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -152,10 +151,9 @@ jobs:
         with:
           path: |
             ${{ env.PNPM_STORE_PATH }}
-            .nx/cache
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store
+            ${{ runner.os }}-pnpm-cache
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
