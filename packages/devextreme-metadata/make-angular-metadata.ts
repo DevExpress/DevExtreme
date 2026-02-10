@@ -51,6 +51,8 @@ Ng.makeMetadata({
     removeMembers(/\/card_view:/),
     removeMembers(/\/chat:TextMessage.attachments/),
     removeMembers(/\/chat:dxChatOptions\.(fileUploaderOptions|onAttachmentDownloadClick)/),
+    removeMembers(/\/chat:dxChatOptions.speechToTextOptions/),
+    removeMembers(/\/chat:dxChatOptions.inputFieldText/),
     removeMembers(/\/form:dxFormOptions\.(aiIntegration|onSmartPasting|onSmartPasted|smartPaste)/),
     removeMembers(/\/form:dxFormSimpleItem\.aiOptions/),
     removeMembers(/\/form:FormPredefinedButtonItem/),

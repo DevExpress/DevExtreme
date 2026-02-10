@@ -15,6 +15,10 @@ import {
     Properties as FileUploaderOptions,
 } from './file_uploader';
 
+import { Properties as SpeechToTextOptions } from './speech_to_text';
+
+import { Properties as TextAreaProperties } from './text_area';
+
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
     EventInfo,
@@ -353,7 +357,6 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     activeStateEnabled?: boolean;
     /**
      * @docid
-     * @default null
      * @type dxFileUploaderOptions
      * @public
      */
@@ -434,6 +437,12 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     alerts?: Array<Alert>;
     /**
      * @docid
+     * @default ""
+     * @public
+     */
+    inputFieldText?: TextAreaProperties['value'];
+    /**
+     * @docid
      * @default null
      * @type_function_return string|Element|jQuery
      * @public
@@ -475,6 +484,12 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     showMessageTimestamp?: boolean;
+    /**
+     * @docid
+     * @type dxSpeechToTextOptions
+     * @public
+     */
+    speechToTextOptions?: Omit<SpeechToTextOptions, 'stylingMode' | 'type'>;
     /**
      * @docid
      * @default undefined
