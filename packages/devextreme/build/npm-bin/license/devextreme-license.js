@@ -54,8 +54,7 @@ function parseArgs(argv) {
     else if (a === "--force") out.force = true;
     else if (a === "--cwd") out.cwd = args[++i] || process.cwd();
     else if (a.startsWith("--cwd=")) out.cwd = a.slice("--cwd=".length);
-    else fai
-    l(`Unknown argument: ${a}\nRun devextreme-license --help`);
+    else fail(`Unknown argument: ${a}\nRun devextreme-license --help`);
   }
 
   return out;
