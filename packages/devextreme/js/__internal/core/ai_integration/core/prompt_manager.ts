@@ -11,6 +11,10 @@ export interface PromptTemplate {
   user?: string;
 }
 
+export interface PromptManagerOptions {
+  lang: string;
+}
+
 export type PromptTemplateName = | 'changeStyle'
   | 'changeTone'
   | 'execute'
@@ -30,11 +34,16 @@ export const ERROR_MESSAGES = {
   TEMPLATE_NOT_FOUND: 'Template not found',
 };
 
+export const LANG_TEMPLATE_NAME = 'addLanguage';
+
 export class PromptManager {
   private readonly templates: PromptTemplates;
 
-  constructor() {
+  private readonly lang?: string;
+
+  constructor(options?: PromptManagerOptions) {
     this.templates = new Map(Object.entries(templates) as [PromptTemplateName, PromptTemplate][]);
+    this.lang = options?.lang;
   }
 
   public buildPrompt(templateName: PromptTemplateName, data: PromptData): Prompt {
@@ -44,7 +53,9 @@ export class PromptManager {
       throw new Error(ERROR_MESSAGES.TEMPLATE_NOT_FOUND);
     }
 
-    const system = this.generateMessage(template.system, data.system);
+    const baseSystemMessage = this.generateMessage(template.system, data.system);
+
+    const system = this.generateMessage(LANG_TEMPLATE_NAME, { message: baseSystemMessage ?? '' });
     const user = this.generateMessage(template.user, data.user);
 
     const prompt = { system, user };
