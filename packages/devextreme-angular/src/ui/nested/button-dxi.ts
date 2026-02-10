@@ -42,6 +42,7 @@ import { PROPERTY_TOKEN_buttons } from 'devextreme-angular/core/tokens';
         'disabled',
         'hint',
         'icon',
+        'onClick',
         'template',
         'text',
         'visible'
