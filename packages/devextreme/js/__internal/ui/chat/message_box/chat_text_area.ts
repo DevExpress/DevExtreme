@@ -323,6 +323,7 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _getSpeechToTextButtonConfig(): ToolbarItem {
+    // @ts-expect-error dxSpeechToText should be added to ToolbarItemComponent
     const configuration = {
       widget: 'dxSpeechToText',
       location: 'after',
