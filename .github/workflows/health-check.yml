@@ -2,6 +2,8 @@ name: Health Check
 
 on:
   push:
+    branches:
+      - 26_1
 
 jobs:
   invoke:
