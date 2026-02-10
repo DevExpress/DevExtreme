@@ -1986,7 +1986,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option
     }
 
     this.scheduler.appointments.compact.click();
-    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 0, 'ddAppointment is rendered');
+    assert.equal(this.scheduler.appointments.compact.getButtonCount(), 0, 'ddAppointment is not rendered');
     assert.equal(this.scheduler.tooltip.getItemCount(), 0, 'DropDown menu has correct items');
 });
 
