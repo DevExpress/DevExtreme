@@ -169,6 +169,7 @@
         "generate-external-bundles": "rollup -c ./rollup.external.bundles.config.mjs --silent",
         "prepare-js": "gulp js && pnpm run generate-ng-umd && pnpm run generate-devextreme-angular-umd && pnpm run generate-external-bundles && npm run generate-tgz-packages",
         "prepare-shared": "pnpm run prepare-ts && gulp shared",
+        "eslint": "eslint",
         "lint-html": "prettier --check .",
         "lint-js": "eslint . --ignore-pattern 'Demos'",
         "lint-demos": "eslint ./Demos",
