@@ -68,14 +68,4 @@ const DevExtremeLicensePlugin = createUnplugin(() => {
 
 module.exports = {
   DevExtremeLicensePlugin,
-  vite: DevExtremeLicensePlugin.vite,
-  rollup: DevExtremeLicensePlugin.rollup,
-  webpack: DevExtremeLicensePlugin.webpack,
-  esbuild: DevExtremeLicensePlugin.esbuild,
-  default: {
-    vite: DevExtremeLicensePlugin.vite,
-    rollup: DevExtremeLicensePlugin.rollup,
-    webpack: DevExtremeLicensePlugin.webpack,
-    esbuild: DevExtremeLicensePlugin.esbuild,
-  },
 };
