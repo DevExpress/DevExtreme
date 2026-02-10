@@ -1,6 +1,7 @@
 name: Health Check
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - 26_1
