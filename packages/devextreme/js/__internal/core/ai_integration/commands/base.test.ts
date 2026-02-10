@@ -13,6 +13,7 @@ import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
 import { Provider } from '@ts/core/ai_integration/test_utils/provider_mock';
 
 jest.mock('@ts/core/ai_integration/templates/index', () => ({
+  metaTemplates: {},
   templates: {
     'test-template-name': {
       system: 'System test template with {{first}}',
