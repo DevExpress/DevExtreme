@@ -38,7 +38,7 @@ import type { SupportedKeys } from '@ts/core/widget/widget';
 import CheckBox from '@ts/ui/check_box/index';
 import type { ActionArgs, CollectionItemInfo, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
-import type { DataAdapterOptions, IndirectSelectionMode } from '@ts/ui/hierarchical_collection/data_adapter';
+import type { DataAdapterOptions, DisabledNodeSelectionMode } from '@ts/ui/hierarchical_collection/data_adapter';
 import type {
   InternalNode, ItemData, ItemKey, PublicNode,
 } from '@ts/ui/hierarchical_collection/data_converter';
@@ -99,7 +99,7 @@ export interface TreeViewBaseProperties extends Properties<TreeViewNode>, Omit<
 
   _supportItemUrl?: boolean;
 
-  indirectSelectionMode?: IndirectSelectionMode;
+  disabledNodeSelectionMode?: DisabledNodeSelectionMode;
 }
 
 class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, TreeViewNode> {
@@ -284,7 +284,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       createChildren: null,
       onSelectAllValueChanged: null,
       _supportItemUrl: false,
-      indirectSelectionMode: 'all',
+      disabledNodeSelectionMode: 'all',
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -442,8 +442,8 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       case 'collapseIcon':
         this.repaint();
         break;
-      case 'indirectSelectionMode':
-        this._dataAdapter.setOption('indirectSelectionMode', args.value ?? 'all');
+      case 'disabledNodeSelectionMode':
+        this._dataAdapter.setOption('disabledNodeSelectionMode', args.value ?? 'all');
         // this._initDataAdapter();
         this.repaint();
         break;
@@ -697,7 +697,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       expandNodesRecursive = true,
       selectionRequired = false,
       dataStructure = 'tree',
-      indirectSelectionMode,
+      disabledNodeSelectionMode,
     } = this.option();
 
     return {
@@ -710,7 +710,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       dataType: dataStructure,
       sort: this._dataSource?.sort(),
       langParams: this._dataSource?.loadOptions?.()?.langParams,
-      indirectSelectionMode,
+      disabledNodeSelectionMode,
     };
   }
 

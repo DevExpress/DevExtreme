@@ -26,7 +26,7 @@ type SortOption = {
   desc?: boolean;
 } | string;
 
-export type IndirectSelectionMode = 'all' | 'skipDisabled';
+export type DisabledNodeSelectionMode = 'all' | 'skipDisabled';
 
 interface LangParams {
   locale?: string;
@@ -54,7 +54,7 @@ export interface DataAdapterOptions {
 
   searchMode: SearchMode;
 
-  indirectSelectionMode: IndirectSelectionMode;
+  disabledNodeSelectionMode: DisabledNodeSelectionMode;
 }
 
 SearchBoxController.setEditorClass(TextBox);
@@ -73,7 +73,7 @@ class DataAdapter {
     dataConverter: new HierarchicalDataConverter(),
     onNodeChanged: noop,
     sort: null,
-    indirectSelectionMode: 'all',
+    disabledNodeSelectionMode: 'all',
   };
 
   _disabledNodesKeys: ItemKey[] = [];
@@ -220,7 +220,7 @@ class DataAdapter {
 
       if (parent && node.internalFields.parentKey !== this.options.rootValue) {
         this._iterateParents(node, (parentNode: InternalNode): void => {
-          if (this.options.indirectSelectionMode === 'skipDisabled' && this._isNodeDisabled(parentNode)) {
+          if (this.options.disabledNodeSelectionMode === 'skipDisabled' && this._isNodeDisabled(parentNode)) {
             return;
           }
           const newParentState = this._calculateSelectedState(parentNode);
@@ -258,7 +258,7 @@ class DataAdapter {
       return;
     }
 
-    if (this.options.indirectSelectionMode === 'skipDisabled' && this._isNodeDisabled(node)) {
+    if (this.options.disabledNodeSelectionMode === 'skipDisabled' && this._isNodeDisabled(node)) {
       return;
     }
 
@@ -310,7 +310,7 @@ class DataAdapter {
     let disabledItemsCount = 0;
     let result: boolean | undefined = false;
 
-    const isSkipDisabled = this.options.indirectSelectionMode === 'skipDisabled';
+    const isSkipDisabled = this.options.disabledNodeSelectionMode === 'skipDisabled';
 
     for (let i = 0; i <= itemsCount - 1; i += 1) {
       const childNode = this.getNodeByKey(node.internalFields.childrenKeys[i]);
@@ -352,7 +352,7 @@ class DataAdapter {
         return;
       }
 
-      if (this.options.indirectSelectionMode === 'all') {
+      if (this.options.disabledNodeSelectionMode === 'all') {
         this._setFieldState(child, SELECTED, state);
         return;
       }
@@ -582,7 +582,7 @@ class DataAdapter {
         return;
       }
 
-      if (this.options.indirectSelectionMode === 'all') {
+      if (this.options.disabledNodeSelectionMode === 'all') {
         this._setFieldState(node, SELECTED, state);
         return;
       }
@@ -625,7 +625,7 @@ class DataAdapter {
       disabledNodeKeys,
     ).length;
 
-    const isSkipDisabled = this.options.indirectSelectionMode === 'skipDisabled';
+    const isSkipDisabled = this.options.disabledNodeSelectionMode === 'skipDisabled';
 
     const selectedNodesKeysAmount = this.getSelectedNodesKeys().length
       - (isSkipDisabled ? selectedDisabledNodesAmount : 0);
