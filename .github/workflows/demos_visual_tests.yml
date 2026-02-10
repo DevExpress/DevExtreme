@@ -406,7 +406,7 @@ jobs:
             | tr '\n' ' ')
           if [ ! -z "$CHANGED_DEMOS" ]; then
             echo "Changed demo files: $CHANGED_DEMOS"
-            pnpx eslint $CHANGED_DEMOS
+            pnpm run eslint $CHANGED_DEMOS
           else
             echo "No demo files changed, skipping lint-demos"
           fi
