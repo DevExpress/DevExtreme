@@ -856,9 +856,6 @@ export interface dxHtmlEditorVariables {
 /** @public */
 export type Properties = dxHtmlEditorOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxHtmlEditorOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

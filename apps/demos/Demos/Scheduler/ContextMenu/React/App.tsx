@@ -1,18 +1,15 @@
 import React, { useCallback, useRef, useState } from 'react';
 
 import { Scheduler, Resource } from 'devextreme-react/scheduler';
-import type { SchedulerTypes, SchedulerRef } from 'devextreme-react/scheduler';
+import type { SchedulerRef, SchedulerTypes } from 'devextreme-react/scheduler';
 import { ContextMenu } from 'devextreme-react/context-menu';
 import type { ContextMenuTypes } from 'devextreme-react/context-menu';
 
-import AppointmentMenuTemplate from './AppointmentTemplate.tsx';
+import ItemTemplate from './itemTemplate.tsx';
 import { data, resourcesData } from './data.ts';
 import type { ContextMenuItem } from './types';
 
 const views: SchedulerTypes.ViewType[] = ['day', 'month'];
-
-const appointmentClassName = '.dx-scheduler-appointment';
-const cellClassName = '.dx-scheduler-date-table-cell';
 
 const onContextMenuItemClick = (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => {
   e.itemData?.onItemClick?.(e);
@@ -22,39 +19,28 @@ const App = () => {
   const schedulerRef = useRef<SchedulerRef>(null);
   const [currentDate, setCurrentDate] = useState(new Date(2020, 10, 25));
   const [contextMenuItems, setContextMenuItems] = useState<ContextMenuItem[]>([]);
-  const [target, setTarget] = useState(appointmentClassName);
-  const [disabled, setDisabled] = useState(true);
-  const [groups, setGroups] = useState<string[] | undefined>(undefined);
+  const [groups, setGroups] = useState<string[]>([]);
   const [crossScrollingEnabled, setCrossScrollingEnabled] = useState(false);
 
-  const onAppointmentContextMenu = useCallback((event: SchedulerTypes.AppointmentContextMenuEvent) => {
-    const { appointmentData, targetedAppointmentData } = event;
-    const scheduler = schedulerRef.current?.instance();
+  const getAppointmentContextMenuItems = useCallback((e: SchedulerTypes.AppointmentContextMenuEvent) => {
+    const { appointmentData: appointment, targetedAppointmentData: targetedAppointment } = e;
+    const scheduler = e.component;
 
-    const resourceItems: ContextMenuItem[] = resourcesData.map((item) => ({
-      ...item,
-      onItemClick: (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => scheduler?.updateAppointment(appointmentData, {
-        ...appointmentData,
-        ...{ roomId: [e.itemData?.id] },
-      }),
-    }));
-
-    setTarget(appointmentClassName);
-    setDisabled(false);
-    setContextMenuItems([
+    return [
       {
         text: 'Open',
-        onItemClick: () => scheduler?.showAppointmentPopup(appointmentData),
+        onItemClick: () => scheduler?.showAppointmentPopup(appointment),
       },
       {
         text: 'Delete',
-        onItemClick: () => scheduler?.deleteAppointment(appointmentData),
+        onItemClick: () => scheduler?.deleteAppointment(appointment),
       },
       {
         text: 'Repeat Weekly',
         beginGroup: true,
-        onItemClick: () => scheduler?.updateAppointment(appointmentData, {
-          startDate: targetedAppointmentData?.startDate,
+        onItemClick: () => scheduler?.updateAppointment(appointment, {
+          ...appointment,
+          startDate: targetedAppointment?.startDate,
           recurrenceRule: 'FREQ=WEEKLY',
         }),
       },
@@ -63,40 +49,50 @@ const App = () => {
         beginGroup: true,
         disabled: true,
       },
-      ...resourceItems,
-    ]);
+      ...resourcesData.map((item) => ({
+        ...item,
+        onItemClick: (clickEvent: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => {
+          scheduler?.updateAppointment(appointment, {
+            ...appointment,
+            roomId: [clickEvent.itemData?.id],
+          });
+        },
+      })),
+    ];
   }, []);
 
-  const onCellContextMenu = useCallback((e: SchedulerTypes.CellContextMenuEvent) => {
-    const scheduler = schedulerRef.current?.instance();
+  const getCellContextMenuItems = useCallback((e: SchedulerTypes.CellContextMenuEvent) => {
+    const scheduler = e.component;
 
-    setTarget(cellClassName);
-    setDisabled(false);
-    setContextMenuItems([
+    return [
       {
         text: 'New Appointment',
-        onItemClick: () => scheduler?.showAppointmentPopup(
-          { startDate: e.cellData.startDateUTC },
-          true,
-        ),
+        onItemClick: () => {
+          scheduler?.showAppointmentPopup(
+            { startDate: e.cellData.startDateUTC },
+            true,
+          );
+        },
       },
       {
         text: 'New Recurring Appointment',
-        onItemClick: () => scheduler?.showAppointmentPopup(
-          {
-            startDate: e.cellData.startDateUTC,
-            recurrenceRule: 'FREQ=DAILY',
-          },
-          true,
-        ),
+        onItemClick: () => {
+          scheduler?.showAppointmentPopup(
+            {
+              startDate: e.cellData.startDateUTC,
+              recurrenceRule: 'FREQ=DAILY',
+            },
+            true,
+          );
+        },
       },
       {
         text: 'Group by Room/Ungroup',
         beginGroup: true,
         onItemClick: () => {
-          if (groups) {
+          if (groups.length) {
             setCrossScrollingEnabled(false);
-            setGroups(undefined);
+            setGroups([]);
           } else {
             setCrossScrollingEnabled(true);
             setGroups(['roomId']);
@@ -109,8 +105,22 @@ const App = () => {
           setCurrentDate(new Date());
         },
       },
-    ]);
+    ];
   }, [groups]);
+
+  const onAppointmentContextMenu = useCallback((e: SchedulerTypes.AppointmentContextMenuEvent) => {
+    const items = getAppointmentContextMenuItems(e);
+    setContextMenuItems(items);
+  }, [getAppointmentContextMenuItems]);
+
+  const onCellContextMenu = useCallback((e: SchedulerTypes.CellContextMenuEvent) => {
+    const items = getCellContextMenuItems(e);
+    setContextMenuItems(items);
+  }, [getCellContextMenuItems]);
+
+  const onContextMenuHiding = useCallback(() => {
+    setContextMenuItems([]);
+  }, []);
 
   return (
     <>
@@ -139,10 +149,10 @@ const App = () => {
       <ContextMenu
         dataSource={contextMenuItems}
         width={200}
-        target={target}
-        disabled={disabled}
+        target='.dx-scheduler'
         onItemClick={onContextMenuItemClick}
-        itemComponent={AppointmentMenuTemplate}
+        onHiding={onContextMenuHiding}
+        itemComponent={ItemTemplate}
       />
     </>
   );

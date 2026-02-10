@@ -72,6 +72,7 @@ const filterModes: DxTreeListTypes.TreeListFilterMode[] = ['matchOnly', 'withAnc
 .options {
   margin-top: 20px;
   padding: 20px;
+  background-color: var(--dx-datagrid-row-alternation-bg);
 }
 
 .options .caption {

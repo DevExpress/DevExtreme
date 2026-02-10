@@ -249,6 +249,4 @@ export function baseZIndex(zIndex: number): void;
 
 interface OverlayInstance extends dxOverlay<Properties> { }
 
-type Properties = dxOverlayOptions<OverlayInstance>;
-
-export type Options = Properties;
+export type Properties = dxOverlayOptions<OverlayInstance>;

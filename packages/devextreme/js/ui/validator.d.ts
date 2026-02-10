@@ -220,9 +220,6 @@ export interface dxValidatorResult {
 /** @public */
 export type Properties = dxValidatorOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxValidatorOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

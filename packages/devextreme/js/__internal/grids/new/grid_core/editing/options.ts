@@ -28,8 +28,8 @@ export interface Options {
 
     confirmDelete?: boolean;
 
-    form?: dxForm.Options;
-    popup?: dxPopup.Options;
+    form?: dxForm.Properties;
+    popup?: dxPopup.Properties;
 
     texts?: Partial<EditingTexts>;
   };

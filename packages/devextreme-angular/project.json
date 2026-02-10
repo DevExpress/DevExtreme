@@ -133,7 +133,7 @@
           "./src/ui/popup/index.ts"
         ]
       },
-      "cache": true,
+      "cache": false,
       "inputs": ["default"],
       "outputs": [
         "{projectRoot}/src/ui/**/*",
@@ -162,7 +162,7 @@
         "{projectRoot}/src/common/index.ts",
         "{projectRoot}/metadata/generated/**/*"
       ],
-      "cache": true,
+      "cache": false,
       "inputs": ["default"]
     },
     "build": {
