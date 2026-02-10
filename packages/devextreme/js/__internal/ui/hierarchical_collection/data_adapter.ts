@@ -348,11 +348,11 @@ class DataAdapter {
 
   _toggleChildrenSelection(node: InternalNode, state: boolean): void {
     this._iterateChildren(node, true, (child) => {
-      if (!child) {
+      if (!child || !this._isNodeVisible(child)) {
         return;
       }
 
-      if (this.options.indirectSelectionMode === 'all' && this._isNodeVisible(child)) {
+      if (this.options.indirectSelectionMode === 'all') {
         this._setFieldState(child, SELECTED, state);
         return;
       }
