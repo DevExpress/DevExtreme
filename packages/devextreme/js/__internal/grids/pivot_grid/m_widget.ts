@@ -29,7 +29,7 @@ import DataAreaImport from './data_area/m_data_area';
 import DataControllerImport from './data_controller/m_data_controller';
 import { ExportController } from './export/m_export';
 import { FieldChooser } from './field_chooser/m_field_chooser';
-import { FieldChooserBase } from './field_chooser/m_field_chooser_base';
+// import { FieldChooserBase } from './field_chooser/m_field_chooser_base';
 import { FieldsArea } from './fields_area/m_fields_area';
 import HeadersArea from './headers_area/m_headers_area';
 import { findField, mergeArraysByMaxValue, setFieldProperty } from './m_widget_utils';
@@ -637,19 +637,22 @@ class PivotGrid extends Widget {
       },
     };
 
-    if (that.getFieldChooserPopup()) {
-      that._fieldChooserPopup.option(popupOptions);
-      that._fieldChooserPopup.$content().dxPivotGridFieldChooser(fieldChooserComponentOptions);
-    } else {
-      that._fieldChooserPopup = that._createComponent(
-        $(DIV)
-          .addClass(FIELD_CHOOSER_POPUP_CLASS)
-          .appendTo(container),
-        Popup,
-        // @ts-expect-error ts-error
-        popupOptions,
-      );
+    if (that._fieldChooserPopup) {
+      if (that._fieldChooserPopup.option('visible')) {
+        that._fieldChooserPopup.hide();
+      }
+      that._fieldChooserPopup.dispose();
+      that._fieldChooserPopup = null;
     }
+
+    that._fieldChooserPopup = that._createComponent(
+      $(DIV)
+        .addClass(FIELD_CHOOSER_POPUP_CLASS)
+        .appendTo(container),
+      Popup,
+      // @ts-expect-error ts-error
+      popupOptions,
+    );
   }
 
   _renderContextMenu() {
@@ -1166,15 +1169,15 @@ class PivotGrid extends Widget {
 
     that.$element().addClass(OVERFLOW_HIDDEN_CLASS);
 
-    that._createComponent(that.$element(), FieldChooserBase, {
-      dataSource: that.getDataSource(),
-      encodeHtml: that.option('encodeHtml'),
-      allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
-      headerFilter: that.option('headerFilter'),
-      visible: that.option('visible'),
-      // @ts-expect-error ts-error
-      remoteSort: that.option('scrolling.mode') === 'virtual',
-    });
+    // that._createComponent(that.$element(), FieldChooserBase, {
+    //   dataSource: that.getDataSource(),
+    //   encodeHtml: that.option('encodeHtml'),
+    //   allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
+    //   headerFilter: that.option('headerFilter'),
+    //   visible: that.option('visible'),
+    //   // @ts-expect-error ts-error
+    //   remoteSort: that.option('scrolling.mode') === 'virtual',
+    // });
 
     const dataArea = that._renderDataArea(dataAreaElement);
     const rowsArea = that._renderRowsArea(rowsAreaElement);
@@ -1258,9 +1261,17 @@ class PivotGrid extends Widget {
   _dispose() {
     const that = this;
     clearTimeout(that._hideLoadingTimeoutID);
+
+    if (that._fieldChooserPopup) {
+      that._fieldChooserPopup.dispose();
+      that._fieldChooserPopup = null;
+    }
+
     super._dispose();
+
     if (that._dataController) {
       that._dataController.dispose();
+      that._dataController = null;
     }
   }
 
