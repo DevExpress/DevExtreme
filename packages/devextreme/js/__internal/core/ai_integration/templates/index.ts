@@ -36,6 +36,6 @@ export const templates: PromptTemplates = {
     user: 'User prompt text: {{text}}. Dataset: {{data}}.',
   },
   addLanguage: {
-    system: '{{message}}. Provide an answer in {{lang}} language.',
+    system: '{{message}} Provide an answer in {{lang}} language.',
   },
 };

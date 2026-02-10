@@ -24,7 +24,8 @@ export type PromptTemplateName = | 'changeStyle'
   | 'summarize'
   | 'translate'
   | 'smartPaste'
-  | 'generateGridColumn';
+  | 'generateGridColumn'
+  | 'addLanguage';
 
 export type PromptTemplates = Map<PromptTemplateName, PromptTemplate>;
 
@@ -48,14 +49,21 @@ export class PromptManager {
 
   public buildPrompt(templateName: PromptTemplateName, data: PromptData): Prompt {
     const template = this.templates.get(templateName);
+    const langTemplate = this.templates.get(LANG_TEMPLATE_NAME);
 
     if (!template) {
       throw new Error(ERROR_MESSAGES.TEMPLATE_NOT_FOUND);
     }
 
-    const baseSystemMessage = this.generateMessage(template.system, data.system);
+    const baseSystem = this.generateMessage(template.system, data.system);
 
-    const system = this.generateMessage(LANG_TEMPLATE_NAME, { message: baseSystemMessage ?? '' });
+    const system = this.lang
+      ? this.generateMessage(langTemplate?.system, {
+        message: baseSystem ?? '',
+        lang: this.lang,
+      })
+      : baseSystem;
+
     const user = this.generateMessage(template.user, data.user);
 
     const prompt = { system, user };
