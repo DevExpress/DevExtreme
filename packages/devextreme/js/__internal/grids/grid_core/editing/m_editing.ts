@@ -283,13 +283,9 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   public _addInternalData(params: InternalEditData): InternalEditData {
-    const internalData = this._getInternalData(params.key);
+    const internalData = this._getInternalData(params.key) ?? {};
 
-    if (internalData) {
-      return { ...internalData, ...params };
-    }
-
-    this._internalState.set(getKeyHash(params.key), params);
+    this._internalState.set(getKeyHash(params.key), { ...internalData, ...params });
 
     return params;
   }
