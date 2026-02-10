@@ -2224,6 +2224,7 @@ test('Adding rows to a second page should work correctly when initial row values
       },
       insert(values) {
         if (values.id === 0) {
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
           values.id = (window as any).myData.length + 1;
         }
 
