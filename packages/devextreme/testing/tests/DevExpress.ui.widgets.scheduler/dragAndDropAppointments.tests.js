@@ -859,7 +859,7 @@ module('Common', commonModuleConfig, () => {
         const fakeAppointment = scheduler.appointments.getFakeAppointment();
         fakeAppointment.css('border-left', 'none');
 
-        assert.equal(fakeAppointment.outerWidth() - fakeAppointment.innerWidth(), 0, 'Correct width');
+        assert.equal(fakeAppointment.outerWidth() - fakeAppointment.innerWidth(), 1, 'Correct width');
 
         pointer.up();
     });

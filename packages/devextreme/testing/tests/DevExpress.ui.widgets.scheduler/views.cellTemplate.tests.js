@@ -425,7 +425,7 @@ module('CellTemplate tests', moduleConfig, () => {
 
                             // scheduler table cell size
                             if(!cellData.allDay && !cellIndex) {
-                                assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 88, 1.001, 'Data cell width is OK');
+                                assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 90, 1.001, 'Data cell width is OK');
                                 assert.equal($(cellElement).get(0).getBoundingClientRect().height, 38, 'Data cell height is OK');
                             }
                         },

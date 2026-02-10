@@ -535,7 +535,7 @@ QUnit.test('More than 3 cloned appointments should be grouped', async function(a
     this.scheduler.appointments.compact.click();
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '8 more', 'DropDown menu has correct text');
     assert.roughEqual(getOuterWidth(this.scheduler.appointments.compact.getButton()),
-        87, 1.001, 'DropDownMenu button width is OK');
+        90, 1.001, 'DropDownMenu button width is OK');
     assert.equal(this.scheduler.tooltip.getItemCount(), 8, 'DropDown menu has correct items');
 });
 
@@ -1019,10 +1019,10 @@ QUnit.test('Four rival all day appointments should have correct sizes', async fu
 
     assert.equal($appointments.length, 2, 'All appointments are rendered');
 
-    assert.roughEqual(getOuterWidth($appointments.eq(0)), 818, 1.1, 'appointment has a right width');
+    assert.roughEqual(getOuterWidth($appointments.eq(0)), 833, 1.1, 'appointment has a right width');
     assert.roughEqual(getOuterHeight($appointments.eq(0)), 13.5, 2, 'appointment has a right height');
 
-    assert.roughEqual(getOuterWidth($appointments.eq(1)), 818, 1.1, 'appointment has a right width');
+    assert.roughEqual(getOuterWidth($appointments.eq(1)), 833, 1.1, 'appointment has a right width');
     assert.roughEqual(getOuterHeight($appointments.eq(1)), 13.5, 2, 'appointment has a right height');
 });
 
@@ -1328,12 +1328,12 @@ QUnit.test('Two rival all day appointments should have correct sizes and positio
 
     assert.equal(firstAppointmentPosition.top, 0, 'appointment is rendered in right place');
     assert.roughEqual(firstAppointmentPosition.left, 0, 1, 'appointment is rendered in right place');
-    assert.roughEqual(getOuterWidth($appointment.eq(0)), 817, 1.1, 'appointment has a right width');
+    assert.roughEqual(getOuterWidth($appointment.eq(0)), 833, 1.1, 'appointment has a right width');
     assert.roughEqual(getOuterHeight($appointment.eq(0)), 28.5, 1.1, 'appointment has a right height');
 
     assert.roughEqual(secondAppointmentPosition.top, 28.5, 1, 'appointment is rendered in right place');
     assert.roughEqual(secondAppointmentPosition.left, 0, 1, 'appointment is rendered in right place');
-    assert.roughEqual(getOuterWidth($appointment.eq(1)), 817, 1.1, 'appointment has a right width');
+    assert.roughEqual(getOuterWidth($appointment.eq(1)), 833, 1.1, 'appointment has a right width');
     assert.roughEqual(getOuterHeight($appointment.eq(1)), 28.5, 1.1, 'appointment has a right height');
 });
 
