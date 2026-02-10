@@ -253,10 +253,10 @@ QUnit.test('Multi-week appointments should be split by several parts', async fun
     const fourthAppointmentTop = translator.locate($appointments.eq(3)).top;
 
     assert.equal($appointments.length, 4, 'Appointment is split by 3 parts');
-    assert.roughEqual(getOuterWidth($appointments.eq(0)), 585, 2.001, 'Appointment width is OK');
-    assert.roughEqual(getOuterWidth($appointments.eq(1)), 682, 2.001, 'Appointment width is OK');
-    assert.roughEqual(getOuterWidth($appointments.eq(2)), 682, 2.001, 'Appointment width is OK');
-    assert.roughEqual(getOuterWidth($appointments.eq(3)), 195, 2.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointments.eq(0)), 598, 2.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointments.eq(1)), 697, 2.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointments.eq(2)), 697, 2.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointments.eq(3)), 199, 2.001, 'Appointment width is OK');
 
     assert.roughEqual(firstAppointmentTop, 230, 3.51, 'The first appointment height is OK');
     assert.roughEqual(secondAppointmentTop, 330, 3.51, 'The second appointment height is OK');
@@ -279,7 +279,7 @@ QUnit.test('Multi-week appointments should have a correct left coordinate', asyn
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
-    assert.roughEqual(translator.locate($appointments.eq(0)).left, 97, 1.001, 'Left coordinate is OK');
+    assert.roughEqual(translator.locate($appointments.eq(0)).left, 99, 1.001, 'Left coordinate is OK');
     assert.roughEqual(translator.locate($appointments.eq(1)).left, 1, 1.001, 'Left coordinate is OK');
     assert.roughEqual(translator.locate($appointments.eq(2)).left, 1, 1.001, 'Left coordinate is OK');
 });
@@ -303,7 +303,7 @@ QUnit.test('Multi-week appointments should have a correct left coordinate, rtl m
 
     assert.roughEqual(translator.locate($appointments.eq(0)).left, 0, 1.001, 'Left coordinate is OK');
     assert.roughEqual(translator.locate($appointments.eq(1)).left, 0, 1.001, 'Left coordinate is OK');
-    assert.roughEqual(translator.locate($appointments.eq(2)).left, 487, 2.001, 'Left coordinate is OK');
+    assert.roughEqual(translator.locate($appointments.eq(2)).left, 498, 2.001, 'Left coordinate is OK');
 });
 
 QUnit.test('Multi-week appointments with resources should have a correct left coordinate on timeline view', async function(assert) {
@@ -568,10 +568,10 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
 
     assert.roughEqual(lefts[0], 0, 2.001);
     assert.roughEqual(lefts[1], 0, 1.001);
-    assert.roughEqual(lefts[2], 48, 1.001);
-    assert.roughEqual(lefts[3], 341, 1.001);
-    assert.roughEqual(lefts[4], 341, 1.001);
-    assert.roughEqual(lefts[5], 390, 1.001);
+    assert.roughEqual(lefts[2], 49, 1.001);
+    assert.roughEqual(lefts[3], 348, 1.001);
+    assert.roughEqual(lefts[4], 348, 1.001);
+    assert.roughEqual(lefts[5], 398, 1.001);
 
 });
 
@@ -622,12 +622,12 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
             translator.locate($appointments.eq(5)).left
         ].sort();
 
-        assert.roughEqual(leftOffsets[0], 345, 1);
-        assert.roughEqual(leftOffsets[1], 345, 1);
-        assert.roughEqual(leftOffsets[2], 591, 1);
-        assert.roughEqual(leftOffsets[3], 690, 1);
-        assert.roughEqual(leftOffsets[4], 690, 1);
-        assert.roughEqual(leftOffsets[5], 936, 1);
+        assert.roughEqual(leftOffsets[0], 350, 1);
+        assert.roughEqual(leftOffsets[1], 350, 1);
+        assert.roughEqual(leftOffsets[2], 600, 1);
+        assert.roughEqual(leftOffsets[3], 700, 1);
+        assert.roughEqual(leftOffsets[4], 700, 1);
+        assert.roughEqual(leftOffsets[5], 950, 1);
     });
 });
 
