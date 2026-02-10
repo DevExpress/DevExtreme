@@ -1,5 +1,6 @@
 import type {
   AIIntegration as IAIIntegration,
+  AIIntegrationOptions,
   AIProvider,
   ChangeStyleCommandParams,
   ChangeStyleCommandResult,
@@ -36,7 +37,6 @@ import {
   SummarizeCommand,
   TranslateCommand,
 } from '@ts/core/ai_integration/commands/index';
-import type { PromptManagerOptions } from '@ts/core/ai_integration/core/prompt_manager';
 import { PromptManager } from '@ts/core/ai_integration/core/prompt_manager';
 import { RequestManager } from '@ts/core/ai_integration/core/request_manager';
 
@@ -97,8 +97,8 @@ export class AIIntegration implements IAIIntegration {
 
   private readonly commands: Map<CommandNames, Commands[CommandNames]['command']>;
 
-  constructor(provider: AIProvider, options?: PromptManagerOptions) {
-    this.promptManager = new PromptManager(options);
+  constructor(provider: AIProvider, options?: AIIntegrationOptions) {
+    this.promptManager = new PromptManager({ lang: options?.lang });
     this.requestManager = new RequestManager(provider);
     this.commands = new Map();
   }

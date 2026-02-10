@@ -1,5 +1,5 @@
 import type { Prompt } from '@js/common/ai-integration';
-import { templates } from '@ts/core/ai_integration/templates/index';
+import { metaTemplates, templates } from '@ts/core/ai_integration/templates/index';
 
 export interface PromptData {
   system?: Record<string, string>;
@@ -11,8 +11,8 @@ export interface PromptTemplate {
   user?: string;
 }
 
-export interface PromptManagerOptions {
-  lang: string;
+interface PromptManagerOptions {
+  lang?: string;
 }
 
 export type PromptTemplateName = | 'changeStyle'
@@ -24,8 +24,7 @@ export type PromptTemplateName = | 'changeStyle'
   | 'summarize'
   | 'translate'
   | 'smartPaste'
-  | 'generateGridColumn'
-  | 'addLanguage';
+  | 'generateGridColumn';
 
 export type PromptTemplates = Map<PromptTemplateName, PromptTemplate>;
 
@@ -40,16 +39,19 @@ export const LANG_TEMPLATE_NAME = 'addLanguage';
 export class PromptManager {
   private readonly templates: PromptTemplates;
 
+  private readonly metaTemplates: Map<string, PromptTemplate>;
+
   private readonly lang?: string;
 
   constructor(options?: PromptManagerOptions) {
     this.templates = new Map(Object.entries(templates) as [PromptTemplateName, PromptTemplate][]);
+    this.metaTemplates = new Map(Object.entries(metaTemplates));
     this.lang = options?.lang;
   }
 
   public buildPrompt(templateName: PromptTemplateName, data: PromptData): Prompt {
     const template = this.templates.get(templateName);
-    const langTemplate = this.templates.get(LANG_TEMPLATE_NAME);
+    const langTemplate = this.metaTemplates.get(LANG_TEMPLATE_NAME);
 
     if (!template) {
       throw new Error(ERROR_MESSAGES.TEMPLATE_NOT_FOUND);
@@ -57,7 +59,7 @@ export class PromptManager {
 
     const baseSystem = this.generateMessage(template.system, data.system);
 
-    const system = this.lang
+    const system = this.lang && langTemplate
       ? this.generateMessage(langTemplate?.system, {
         message: baseSystem ?? '',
         lang: this.lang,
