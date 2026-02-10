@@ -123,7 +123,15 @@ class DataAdapter {
   }
 
   _updateDisabled(): void {
-    this._disabledNodesKeys = this._updateNodesKeysArray(DISABLED);
+    each(this._getDataBySelectionMode(), (_index: number, node: InternalNode): void => {
+      if (!this._isNodeVisible(node)) {
+        return;
+      }
+
+      if (node.internalFields.disabled) {
+        this._disabledNodesKeys.push(node.internalFields.key);
+      }
+    });
   }
 
   _updateSelection(): void {
