@@ -990,4 +990,54 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(editingPreview.option('text'), '', 'Editing preview is cleared after cancel');
         });
     });
+
+    QUnit.module('SpeechToText integration', () => {
+        QUnit.test('should pass speechToTextEnabled to ChatTextArea on initialization', function(assert) {
+            this.reinit({ speechToTextEnabled: true });
+
+            assert.strictEqual(this.textArea.option('speechToTextEnabled'), true, 'speechToTextEnabled is passed to ChatTextArea');
+        });
+
+        QUnit.test('should pass speechToTextOptions to ChatTextArea on initialization', function(assert) {
+            const speechToTextOptions = {
+                speechRecognitionConfig: {
+                    continuous: true,
+                    interimResults: true,
+                },
+            };
+
+            this.reinit({ speechToTextEnabled: true, speechToTextOptions });
+
+            assert.deepEqual(
+                this.textArea.option('speechToTextOptions'),
+                speechToTextOptions,
+                'speechToTextOptions is passed to ChatTextArea',
+            );
+        });
+
+        QUnit.test('should update speechToTextEnabled in ChatTextArea at runtime', function(assert) {
+            this.instance.option('speechToTextEnabled', true);
+
+            assert.strictEqual(this.textArea.option('speechToTextEnabled'), true, 'speechToTextEnabled is updated in ChatTextArea');
+        });
+
+        QUnit.test('should update speechToTextOptions in ChatTextArea at runtime', function(assert) {
+            this.reinit({ speechToTextEnabled: true });
+
+            const newOptions = {
+                speechRecognitionConfig: {
+                    continuous: false,
+                },
+            };
+
+            this.instance.option('speechToTextOptions', newOptions);
+
+            assert.deepEqual(
+                this.textArea.option('speechToTextOptions'),
+                newOptions,
+                'speechToTextOptions is updated in ChatTextArea',
+            );
+        });
+
+    });
 });
