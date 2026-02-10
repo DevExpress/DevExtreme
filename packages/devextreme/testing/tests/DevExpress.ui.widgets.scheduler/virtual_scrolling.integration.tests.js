@@ -511,7 +511,7 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 4500,
                                 appointmentRects: [
-                                    { left: -9773, top: -10157, height: 570 }
+                                    { left: -9773, top: -10185, height: 570 }
                                 ]
                             }
                         ].forEach(option => {
@@ -774,15 +774,15 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 1000,
                                 appointmentRects: [
-                                    { left: -9773.71875, top: -9946.171875, height: 760 },
+                                    { left: -9773.71875, top: -9986, height: 760 },
                                     { left: -9677.4375, top: -10138.171875, height: 76 }
                                 ]
                             },
                             {
                                 y: 2200,
                                 appointmentRects: [
-                                    { left: -9773.71875, top: -9284.171875, height: 76 },
-                                    { left: -9677.4375, top: -10120.171875, height: 760 }
+                                    { left: -9773.71875, top: -9324, height: 76 },
+                                    { left: -9677.4375, top: -10160, height: 760 }
                                 ]
                             }
                         ]
@@ -798,15 +798,15 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 1000,
                                 appointmentRects: [
-                                    { left: -9773.578125, top: -9984.171875, height: 798 },
+                                    { left: -9773.578125, top: -10024, height: 798 },
                                     { left: -9678.15625, top: -10138.171875, height: 38 }
                                 ]
                             },
                             {
                                 y: 2200,
                                 appointmentRects: [
-                                    { left: -9773.578125, top: -9360.171875, height: 152 },
-                                    { left: -9678.15625, top: -10120.171875, height: 684 }
+                                    { left: -9773.578125, top: -9400, height: 152 },
+                                    { left: -9678.15625, top: -10160, height: 684 }
                                 ]
                             }
                         ]
@@ -891,34 +891,34 @@ module('Virtual scrolling integration', () => {
                         steps: [{
                             offset: { x: 0, y: 0 },
                             appointmentRects: [
-                                { left: -9891.5, top: -9643.1875, height: 570 },
-                                { left: -9816.5, top: -9757.1875, height: 38 },
+                                { left: -9891.5, top: -9723, height: 570 },
+                                { left: -9816.5, top: -9837, height: 38 },
                             ]
                         }, {
                             offset: { x: 0, y: 1000 },
                             appointmentRects: [
-                                { left: -9891.5, top: -9997.1875, height: 912 },
+                                { left: -9891.5, top: -10077, height: 912 },
                             ]
                         }, {
                             offset: { x: 0, y: 2200 },
                             appointmentRects: [
-                                { left: -9891.5, top: -10105.1875, height: 684 },
+                                { left: -9891.5, top: -10185, height: 684 },
                             ]
                         }, {
                             offset: { x: 520, y: 0 },
                             appointmentRects: [
-                                { left: -9886.5, top: -9643.1875, height: 570 },
-                                { left: -9811.5, top: -9757.1875, height: 38 },
+                                { left: -9886.5, top: -9723, height: 570 },
+                                { left: -9811.5, top: -9837, height: 38 },
                             ]
                         }, {
                             offset: { x: 520, y: 1000 },
                             appointmentRects: [
-                                { left: -9886.5, top: -9997.1875, height: 912 },
+                                { left: -9886.5, top: -10077, height: 912 },
                             ]
                         }, {
                             offset: { x: 520, y: 2200 },
                             appointmentRects: [
-                                { left: -9886.5, top: -10105.1875, height: 684 },
+                                { left: -9886.5, top: -10185, height: 684 },
                             ]
                         }]
                     }, {
@@ -926,34 +926,34 @@ module('Virtual scrolling integration', () => {
                         steps: [{
                             offset: { x: 0, y: 0 },
                             appointmentRects: [
-                                { left: -9891.5, top: -9674.1875, height: 570 },
-                                { left: -9816.5, top: -9788.1875, height: 38 },
+                                { left: -9891.5, top: -9754, height: 570 },
+                                { left: -9816.5, top: -9868, height: 38 },
                             ]
                         }, {
                             offset: { x: 0, y: 1000 },
                             appointmentRects: [
-                                { left: -9891.5, top: -10028.1875, height: 912 },
+                                { left: -9891.5, top: -10108, height: 912 },
                             ]
                         }, {
                             offset: { x: 0, y: 2200 },
                             appointmentRects: [
-                                { left: -9891.5, top: -10105.1875, height: 684 },
+                                { left: -9891.5, top: -10185, height: 684 },
                             ]
                         }, {
                             offset: { x: 520, y: 0 },
                             appointmentRects: [
-                                { left: -9886.5, top: -9674.1875, height: 570 },
-                                { left: -9811.5, top: -9788.1875, height: 38 },
+                                { left: -9886.5, top: -9754, height: 570 },
+                                { left: -9811.5, top: -9868, height: 38 },
                             ]
                         }, {
                             offset: { x: 520, y: 1000 },
                             appointmentRects: [
-                                { left: -9886.5, top: -10028.1875, height: 912 },
+                                { left: -9886.5, top: -10108, height: 912 },
                             ]
                         }, {
                             offset: { x: 520, y: 2200 },
                             appointmentRects: [
-                                { left: -9886.5, top: -10105.1875, height: 684 },
+                                { left: -9886.5, top: -10185, height: 684 },
                             ]
                         }]
                     }
@@ -1062,37 +1062,37 @@ module('Virtual scrolling integration', () => {
                             {
                                 offset: { x: 0, y: 0 },
                                 appointmentRects: [
-                                    { left: -9891.5, top: -9643.1875, height: 570 }
+                                    { left: -9891.5, top: -9723, height: 570 }
                                 ]
                             },
                             {
                                 offset: { x: 0, y: 1000 },
                                 appointmentRects: [
-                                    { left: -9891.5, top: -9997.1875, height: 912 }
+                                    { left: -9891.5, top: -10077, height: 912 }
                                 ]
                             },
                             {
                                 offset: { x: 0, y: 2100 },
                                 appointmentRects: [
-                                    { left: -9891.5, top: -10105.1875, height: 570 }
+                                    { left: -9891.5, top: -10185, height: 570 }
                                 ]
                             },
                             {
                                 offset: { x: 520, y: 0 },
                                 appointmentRects: [
-                                    { left: -9886.5, top: -9643.1875, height: 570 }
+                                    { left: -9886.5, top: -9723, height: 570 }
                                 ]
                             },
                             {
                                 offset: { x: 520, y: 1000 },
                                 appointmentRects: [
-                                    { left: -9886.5, top: -9997.1875, height: 912 }
+                                    { left: -9886.5, top: -10077, height: 912 }
                                 ]
                             },
                             {
                                 offset: { x: 520, y: 2100 },
                                 appointmentRects: [
-                                    { left: -9886.5, top: -10105.1875, height: 570 }
+                                    { left: -9886.5, top: -10185, height: 570 }
                                 ]
                             }
                         ].forEach(({ offset, appointmentRects }) => {
@@ -1605,93 +1605,93 @@ module('Virtual scrolling integration', () => {
                         {
                             offset: { x: 0 },
                             appointmentRects: [
-                                { left: -9859, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9784, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9709, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9634, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9559, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9484, top: -9829.171875, height: 25, width: 75 },
-                                { left: -8809, top: -9829.171875, height: 25, width: 75 },
-                                { left: -8734, top: -9829.171875, height: 25, width: 5 },
+                                { left: -9859, top: -9869, height: 25, width: 75 },
+                                { left: -9784, top: -9869, height: 25, width: 75 },
+                                { left: -9709, top: -9869, height: 25, width: 75 },
+                                { left: -9634, top: -9869, height: 25, width: 75 },
+                                { left: -9559, top: -9869, height: 25, width: 75 },
+                                { left: -9484, top: -9869, height: 25, width: 75 },
+                                { left: -8809, top: -9869, height: 25, width: 75 },
+                                { left: -8734, top: -9869, height: 25, width: 5 },
                             ]
                         },
                         {
                             offset: { x: 500 },
                             appointmentRects: [
-                                { left: -10359, top: -9829.171875, height: 25, width: 75 },
-                                { left: -10284, top: -9829.171875, height: 25, width: 75 },
-                                { left: -10209, top: -9829.171875, height: 25, width: 75 },
-                                { left: -10134, top: -9829.171875, height: 25, width: 75 },
-                                { left: -10059, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9984, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9309, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9234, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9159, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9084, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9009, top: -9829.171875, height: 25, width: 75 },
-                                { left: -8934, top: -9829.171875, height: 25, width: 75 }
+                                { left: -10359, top: -9869, height: 25, width: 75 },
+                                { left: -10284, top: -9869, height: 25, width: 75 },
+                                { left: -10209, top: -9869, height: 25, width: 75 },
+                                { left: -10134, top: -9869, height: 25, width: 75 },
+                                { left: -10059, top: -9869, height: 25, width: 75 },
+                                { left: -9984, top: -9869, height: 25, width: 75 },
+                                { left: -9309, top: -9869, height: 25, width: 75 },
+                                { left: -9234, top: -9869, height: 25, width: 75 },
+                                { left: -9159, top: -9869, height: 25, width: 75 },
+                                { left: -9084, top: -9869, height: 25, width: 75 },
+                                { left: -9009, top: -9869, height: 25, width: 75 },
+                                { left: -8934, top: -9869, height: 25, width: 75 }
                             ]
                         },
                         {
                             offset: { x: 1000 },
                             appointmentRects: [
-                                { left: -9849, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9734, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9659, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9584, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9509, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9434, top: -9829.171875, height: 25, width: 75 },
-                                { left: -8759, top: -9829.171875, height: 25, width: 5 },
+                                { left: -9849, top: -9869, height: 25, width: 75 },
+                                { left: -9734, top: -9869, height: 25, width: 75 },
+                                { left: -9659, top: -9869, height: 25, width: 75 },
+                                { left: -9584, top: -9869, height: 25, width: 75 },
+                                { left: -9509, top: -9869, height: 25, width: 75 },
+                                { left: -9434, top: -9869, height: 25, width: 75 },
+                                { left: -8759, top: -9869, height: 25, width: 5 },
                             ]
                         },
                         {
                             offset: { x: 1500 },
                             appointmentRects: [
-                                { left: -10309, top: -9829.171875, height: 25, width: 75 },
-                                { left: -10234, top: -9829.171875, height: 25, width: 75 },
-                                { left: -10159, top: -9829.171875, height: 25, width: 75 },
-                                { left: -10084, top: -9829.171875, height: 25, width: 75 },
-                                { left: -10009, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9934, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9259, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9184, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9109, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9034, top: -9829.171875, height: 25, width: 75 },
-                                { left: -8959, top: -9829.171875, height: 25, width: 75 },
-                                { left: -8884, top: -9829.171875, height: 25, width: 75 }
+                                { left: -10309, top: -9869, height: 25, width: 75 },
+                                { left: -10234, top: -9869, height: 25, width: 75 },
+                                { left: -10159, top: -9869, height: 25, width: 75 },
+                                { left: -10084, top: -9869, height: 25, width: 75 },
+                                { left: -10009, top: -9869, height: 25, width: 75 },
+                                { left: -9934, top: -9869, height: 25, width: 75 },
+                                { left: -9259, top: -9869, height: 25, width: 75 },
+                                { left: -9184, top: -9869, height: 25, width: 75 },
+                                { left: -9109, top: -9869, height: 25, width: 75 },
+                                { left: -9034, top: -9869, height: 25, width: 75 },
+                                { left: -8959, top: -9869, height: 25, width: 75 },
+                                { left: -8884, top: -9869, height: 25, width: 75 }
                             ]
                         },
                         {
                             offset: { x: 2000 },
                             appointmentRects: [
-                                { left: -9759, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9684, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9609, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9534, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9459, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9384, top: -9829.171875, height: 25, width: 75 }
+                                { left: -9759, top: -9869, height: 25, width: 75 },
+                                { left: -9684, top: -9869, height: 25, width: 75 },
+                                { left: -9609, top: -9869, height: 25, width: 75 },
+                                { left: -9534, top: -9869, height: 25, width: 75 },
+                                { left: -9459, top: -9869, height: 25, width: 75 },
+                                { left: -9384, top: -9869, height: 25, width: 75 }
                             ]
                         },
                         {
                             offset: { x: 4200 },
                             appointmentRects: [
-                                { left: -9859, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9784, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9709, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9634, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9559, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9484, top: -9829.171875, height: 25, width: 75 }
+                                { left: -9859, top: -9869, height: 25, width: 75 },
+                                { left: -9784, top: -9869, height: 25, width: 75 },
+                                { left: -9709, top: -9869, height: 25, width: 75 },
+                                { left: -9634, top: -9869, height: 25, width: 75 },
+                                { left: -9559, top: -9869, height: 25, width: 75 },
+                                { left: -9484, top: -9869, height: 25, width: 75 }
                             ]
                         },
                         {
                             offset: { x: 5700 },
                             appointmentRects: [
-                                { left: -9784, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9709, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9634, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9559, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9484, top: -9829.171875, height: 25, width: 75 },
-                                { left: -9409, top: -9829.171875, height: 25, width: 75 }
+                                { left: -9784, top: -9869, height: 25, width: 75 },
+                                { left: -9709, top: -9869, height: 25, width: 75 },
+                                { left: -9634, top: -9869, height: 25, width: 75 },
+                                { left: -9559, top: -9869, height: 25, width: 75 },
+                                { left: -9484, top: -9869, height: 25, width: 75 },
+                                { left: -9409, top: -9869, height: 25, width: 75 }
                             ]
                         },
                         {
