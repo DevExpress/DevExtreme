@@ -52,7 +52,6 @@ jobs:
         with:
           path: |
             ${{ env.PNPM_STORE_PATH }}
-            .nx/cache
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store
@@ -152,7 +151,6 @@ jobs:
         with:
           path: |
             ${{ env.PNPM_STORE_PATH }}
-            .nx/cache
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store
