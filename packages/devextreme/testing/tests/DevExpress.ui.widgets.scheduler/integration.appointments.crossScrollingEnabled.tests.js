@@ -3,12 +3,12 @@ import translator from 'common/core/animation/translator';
 import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import devices from '__internal/core/m_devices';
-import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
+import { initTestMarkup, createWrapper, moveSchedulerToMainBlock } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -28,7 +28,7 @@ module('crossScrollingEnabled = true', config, () => {
     const isMobile = devices.current().deviceType !== 'desktop';
 
     test('Appointments should be rendered on the same line after navigating to the next month(T804721)', async function(assert) {
-        const expectedTop = 26;
+        const expectedTop = 30;
         const views = ['timelineMonth', 'timelineWeek'];
 
         const data = [{
