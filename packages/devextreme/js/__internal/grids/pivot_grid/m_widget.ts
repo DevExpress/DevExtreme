@@ -29,7 +29,7 @@ import DataAreaImport from './data_area/m_data_area';
 import DataControllerImport from './data_controller/m_data_controller';
 import { ExportController } from './export/m_export';
 import { FieldChooser } from './field_chooser/m_field_chooser';
-// import { FieldChooserBase } from './field_chooser/m_field_chooser_base';
+import { FieldChooserBase } from './field_chooser/m_field_chooser_base';
 import { FieldsArea } from './fields_area/m_fields_area';
 import HeadersArea from './headers_area/m_headers_area';
 import { findField, mergeArraysByMaxValue, setFieldProperty } from './m_widget_utils';
@@ -134,6 +134,8 @@ class PivotGrid extends Widget {
   _fieldChooserPopup: any;
 
   _fieldChooser: any;
+
+  _fieldChooserBase: any;
 
   _columnsArea: any;
 
@@ -408,6 +410,10 @@ class PivotGrid extends Widget {
       case 'allowSortingBySummary':
       case 'scrolling':
       case 'stateStoring':
+        if (that._fieldChooserBase) {
+          that._fieldChooserBase._dispose();
+          that._fieldChooserBase = null;
+        }
         that._initDataController();
         that.getFieldChooserPopup().hide();
         that._renderFieldChooser();
@@ -1177,15 +1183,15 @@ class PivotGrid extends Widget {
 
     that.$element().addClass(OVERFLOW_HIDDEN_CLASS);
 
-    // that._createComponent(that.$element(), FieldChooserBase, {
-    //   dataSource: that.getDataSource(),
-    //   encodeHtml: that.option('encodeHtml'),
-    //   allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
-    //   headerFilter: that.option('headerFilter'),
-    //   visible: that.option('visible'),
-    //   // @ts-expect-error ts-error
-    //   remoteSort: that.option('scrolling.mode') === 'virtual',
-    // });
+    that._fieldChooserBase = that._createComponent(that.$element(), FieldChooserBase, {
+      dataSource: that.getDataSource(),
+      encodeHtml: that.option('encodeHtml'),
+      allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
+      headerFilter: that.option('headerFilter'),
+      visible: that.option('visible'),
+      // @ts-expect-error ts-error
+      remoteSort: that.option('scrolling.mode') === 'virtual',
+    });
 
     const dataArea = that._renderDataArea(dataAreaElement);
     const rowsArea = that._renderRowsArea(rowsAreaElement);
@@ -1273,6 +1279,11 @@ class PivotGrid extends Widget {
     if (that._fieldChooserPopup) {
       that._fieldChooserPopup.dispose();
       that._fieldChooserPopup = null;
+    }
+
+    if (that._fieldChooserBase) {
+      that._fieldChooserBase._dispose();
+      that._fieldChooserBase = null;
     }
 
     super._dispose();
