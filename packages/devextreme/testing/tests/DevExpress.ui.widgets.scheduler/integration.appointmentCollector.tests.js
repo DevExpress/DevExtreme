@@ -309,7 +309,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         await waitAsync(0);
 
         scheduler.appointments.compact.click(0);
-        assert.equal(scheduler.tooltip.getItemCount(), 6, 'There are 8 collapsed appts');
+        assert.equal(scheduler.tooltip.getItemCount(), 6, 'There are 6 collapsed appts');
     });
 
     test('Many collapsed appts should be grouped correctly with one multi day task which started before collector (T525443)', async function(assert) {

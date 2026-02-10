@@ -4,7 +4,6 @@ import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 
 import 'fluent_blue_light.css!';
-// import 'generic_light.css!';
 
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
