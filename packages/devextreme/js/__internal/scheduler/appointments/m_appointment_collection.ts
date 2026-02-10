@@ -46,7 +46,7 @@ import type {
 import { AgendaAppointment } from './appointment/agenda_appointment';
 import { Appointment } from './appointment/m_appointment';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';
-import { AppointmentsKeyboardNavigation } from './m_appointmetns_kbn';
+import { AppointmentsKeyboardNavigation } from './m_appointments_kbn';
 import { getAppointmentDateRange } from './resizing/m_core';
 import { countVisibleAppointments } from './utils/count_visible_appointments';
 import { isNeedToAdd } from './utils/get_arrays_diff';
