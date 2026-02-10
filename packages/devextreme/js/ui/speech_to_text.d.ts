@@ -140,9 +140,8 @@ export type InitializedEvent = InitializedEventInfo<dxSpeechToText>;
 export type OptionChangedEvent = EventInfo<dxSpeechToText> & ChangedOptionInfo;
 
 /**
+ * @docid dxSpeechToTextOptions 
  * @public
- * @docid dxSpeechToTextOptions
- * @type object
  */
 export type Properties = WidgetOptions<dxSpeechToText> & {
   /**

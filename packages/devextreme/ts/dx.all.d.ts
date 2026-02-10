@@ -11415,6 +11415,10 @@ declare module DevExpress.ui {
      */
     alerts?: Array<DevExpress.ui.dxChat.Alert>;
     /**
+     * [descr:dxChatOptions.inputFieldText]
+     */
+    inputFieldText?: DevExpress.ui.dxTextArea.Properties['value'];
+    /**
      * [descr:dxChatOptions.messageTemplate]
      */
     messageTemplate?:
@@ -11448,6 +11452,13 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.showMessageTimestamp]
      */
     showMessageTimestamp?: boolean;
+    /**
+     * [descr:dxChatOptions.speechToTextOptions]
+     */
+    speechToTextOptions?: Omit<
+      DevExpress.ui.dxSpeechToText.Properties,
+      'stylingMode' | 'type'
+    >;
     /**
      * [descr:dxChatOptions.onAttachmentDownloadClick]
      */
