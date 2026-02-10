@@ -3,7 +3,7 @@ import translator from 'common/core/animation/translator';
 import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import devices from '__internal/core/m_devices';
-import { initTestMarkup, createWrapper, moveSchedulerToMainBlock } from '../../helpers/scheduler/helpers.js';
+import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import '__internal/scheduler/m_scheduler';

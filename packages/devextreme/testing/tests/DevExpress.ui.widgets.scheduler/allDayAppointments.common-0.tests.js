@@ -517,7 +517,6 @@ module('All day appointments common', config, () => {
 
                 scheduler.instance.option('dataSource', items);
                 await waitForAsync(() => scheduler.appointments.getAppointments().length === 3);
-                // moveSchedulerToMainBlock();
 
                 let $dropDown = scheduler.instance.$element().find('.dx-scheduler-appointment-collector');
                 assert.equal($dropDown.length, 1, 'Dropdown appointment was rendered');

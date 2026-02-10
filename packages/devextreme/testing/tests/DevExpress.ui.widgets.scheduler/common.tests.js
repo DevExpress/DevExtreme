@@ -10,7 +10,7 @@ import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import { getTimeZones } from 'time_zone_utils';
 
-import { createWrapper, initTestMarkup, moveSchedulerToMainBlock } from '../../helpers/scheduler/helpers.js';
+import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 QUnit.testStart(() => initTestMarkup());

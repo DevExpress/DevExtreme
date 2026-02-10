@@ -7,7 +7,7 @@ import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
 import dataUtils from 'core/element_data';
-import { createWrapper, initTestMarkup, moveSchedulerToMainBlock } from '../../helpers/scheduler/helpers.js';
+import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import 'fluent_blue_light.css!';
