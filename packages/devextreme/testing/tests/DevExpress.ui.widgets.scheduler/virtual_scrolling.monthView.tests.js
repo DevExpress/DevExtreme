@@ -293,15 +293,15 @@ module('Virtual scrolling Month View', () => {
                             top: -9859,
                             width: 450
                         }, {
-                            left: -9689,
+                            left: -9649,
                             top: -9759,
                             width: 525
                         }, {
-                            left: -9689,
+                            left: -9649,
                             top: -9659,
                             width: 525
                         }, {
-                            left: -9689,
+                            left: -9649,
                             top: -9559,
                             width: 450
                         }]
@@ -420,7 +420,7 @@ module('Virtual scrolling Month View', () => {
                         offset: { y: 0 },
                         expectedRects: [{
                             left: -9693,
-                            top: -9689,
+                            top: -9649,
                             width: 322
                         }, {
                             left: -9934,
@@ -750,7 +750,7 @@ module('Virtual scrolling Month View', () => {
                             width: 75
                         }, {
                             left: -9859,
-                            top: -9689,
+                            top: -9649,
                             width: 75
                         }, {
                             left: -9859,
@@ -987,7 +987,7 @@ module('Virtual scrolling Month View', () => {
                             width: 562
                         }, {
                             left: -9934,
-                            top: -9689,
+                            top: -9649,
                             width: 562
                         }, {
                             left: -9934,
@@ -1023,7 +1023,7 @@ module('Virtual scrolling Month View', () => {
                             width: 482
                         }, {
                             left: -9934,
-                            top: -9689,
+                            top: -9649,
                             width: 562
                         }, {
                             left: -9934,
