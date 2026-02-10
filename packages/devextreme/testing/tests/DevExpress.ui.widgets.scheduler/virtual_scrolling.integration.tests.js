@@ -224,8 +224,8 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 0,
                                 appointmentRects: [
-                                    { left: -9859, top: -9723, height: 570 },
-                                    { left: -9784, top: -9837, height: 38 },
+                                    { left: -9851, top: -9723, height: 570 },
+                                    { left: -9776, top: -9837, height: 38 },
                                     { left: -9334, top: -9723, height: 570 },
                                     { left: -9259, top: -9837, height: 38 }
                                 ]
@@ -233,14 +233,14 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 1000,
                                 appointmentRects: [
-                                    { left: -9859, top: -10077, height: 912 },
+                                    { left: -9851, top: -10077, height: 912 },
                                     { left: -9334, top: -10077, height: 912 },
                                 ]
                             },
                             {
                                 y: 2200,
                                 appointmentRects: [
-                                    { left: -9859, top: -10185, height: 684 },
+                                    { left: -9851, top: -10185, height: 684 },
                                     { left: -9334, top: -10185, height: 684 },
                                 ]
                             }]
@@ -250,21 +250,21 @@ module('Virtual scrolling integration', () => {
                         steps: [{
                             y: 0,
                             appointmentRects: [
-                                { left: -9859, top: -9754, height: 570 },
-                                { left: -9784, top: -9868, height: 38 },
+                                { left: -9851, top: -9754, height: 570 },
+                                { left: -9776, top: -9868, height: 38 },
                                 { left: -9334, top: -9754, height: 570 },
                                 { left: -9259, top: -9868, height: 38 }
                             ]
                         }, {
                             y: 1000,
                             appointmentRects: [
-                                { left: -9859, top: -10108, height: 912 },
+                                { left: -9851, top: -10108, height: 912 },
                                 { left: -9334, top: -10108, height: 912 },
                             ]
                         }, {
                             y: 2200,
                             appointmentRects: [
-                                { left: -9859, top: -10185, height: 684 },
+                                { left: -9851, top: -10185, height: 684 },
                                 { left: -9334, top: -10185, height: 684 },
                             ]
                         }]
@@ -342,15 +342,15 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 0,
                                 appointmentRects: [
-                                    { left: -9784, top: -9837, height: 684 },
+                                    { left: -9776, top: -9837, height: 684 },
                                     { left: -9259, top: -9837, height: 684 }
                                 ]
                             },
                             {
                                 y: 1000,
                                 appointmentRects: [
-                                    { left: -9859, top: -9963, height: 798 },
-                                    { left: -9784, top: -10077, height: 38 },
+                                    { left: -9851, top: -9963, height: 798 },
+                                    { left: -9776, top: -10077, height: 38 },
                                     { left: -9334, top: -9963, height: 798 },
                                     { left: -9259, top: -10077, height: 38 }
                                 ]
@@ -358,7 +358,7 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 2200,
                                 appointmentRects: [
-                                    { left: -9859, top: -10185, height: 684 },
+                                    { left: -9851, top: -10185, height: 684 },
                                     { left: -9334, top: -10185, height: 684 },
                                 ]
                             }
@@ -368,15 +368,15 @@ module('Virtual scrolling integration', () => {
                         steps: [{
                             y: 0,
                             appointmentRects: [
-                                { left: -9784, top: -9868, height: 684 },
+                                { left: -9776, top: -9868, height: 684 },
                                 { left: -9259, top: -9868, height: 684 }
                             ]
                         },
                         {
                             y: 1000,
                             appointmentRects: [
-                                { left: -9859, top: -9994, height: 798 },
-                                { left: -9784, top: -10108, height: 38 },
+                                { left: -9851, top: -9994, height: 798 },
+                                { left: -9776, top: -10108, height: 38 },
                                 { left: -9334, top: -9994, height: 798 },
                                 { left: -9259, top: -10108, height: 38 }
                             ]
@@ -384,7 +384,7 @@ module('Virtual scrolling integration', () => {
                         {
                             y: 2200,
                             appointmentRects: [
-                                { left: -9859, top: -10185, height: 684 },
+                                { left: -9851, top: -10185, height: 684 },
                                 { left: -9334, top: -10185, height: 684 },
                             ]
                         }
@@ -577,21 +577,21 @@ module('Virtual scrolling integration', () => {
                             {
                                 y: 0,
                                 appointmentRects: [
-                                    { left: -9859, top: -9723, height: 570 },
+                                    { left: -9851, top: -9723, height: 570 },
                                     { left: -9334, top: -9723, height: 570 }
                                 ]
                             },
                             {
                                 y: 1000,
                                 appointmentRects: [
-                                    { left: -9859, top: -10077, height: 912 },
+                                    { left: -9851, top: -10077, height: 912 },
                                     { left: -9334, top: -10077, height: 912 }
                                 ]
                             },
                             {
                                 y: 2100,
                                 appointmentRects: [
-                                    { left: -9859, top: -10185, height: 570 },
+                                    { left: -9851, top: -10185, height: 570 },
                                     { left: -9334, top: -10185, height: 570 }
                                 ]
                             }
@@ -657,7 +657,7 @@ module('Virtual scrolling integration', () => {
                             offset: { x: 0, y: 0 },
                             appointmentRects: [
                                 { left: -9772, top: -9735, height: 532 },
-                                { left: -9677, top: -9849, height: 38 }
+                                { left: -9677, top: -9809, height: 38 }
                             ]
                         },
                         {
@@ -673,7 +673,7 @@ module('Virtual scrolling integration', () => {
                             {
                                 offset: { x: 0, y: 0 },
                                 appointmentRects: [
-                                    { left: -9773, top: -9784, height: 570 },
+                                    { left: -9773, top: -9776, height: 570 },
                                     { left: -9677, top: -9898, height: 38 }
                                 ]
                             },
@@ -1605,12 +1605,12 @@ module('Virtual scrolling integration', () => {
                         {
                             offset: { x: 0 },
                             appointmentRects: [
-                                { left: -9859, top: -9869, height: 25, width: 75 },
-                                { left: -9784, top: -9869, height: 25, width: 75 },
-                                { left: -9709, top: -9869, height: 25, width: 75 },
-                                { left: -9634, top: -9869, height: 25, width: 75 },
-                                { left: -9559, top: -9869, height: 25, width: 75 },
-                                { left: -9484, top: -9869, height: 25, width: 75 },
+                                { left: -9851, top: -9869, height: 25, width: 75 },
+                                { left: -9776, top: -9869, height: 25, width: 75 },
+                                { left: -9701, top: -9869, height: 25, width: 75 },
+                                { left: -9626, top: -9869, height: 25, width: 75 },
+                                { left: -9551, top: -9869, height: 25, width: 75 },
+                                { left: -9476, top: -9869, height: 25, width: 75 },
                                 { left: -8809, top: -9869, height: 25, width: 75 },
                                 { left: -8734, top: -9869, height: 25, width: 5 },
                             ]
@@ -1635,7 +1635,7 @@ module('Virtual scrolling integration', () => {
                         {
                             offset: { x: 1000 },
                             appointmentRects: [
-                                { left: -9849, top: -9869, height: 25, width: 75 },
+                                { left: -9809, top: -9869, height: 25, width: 75 },
                                 { left: -9734, top: -9869, height: 25, width: 75 },
                                 { left: -9659, top: -9869, height: 25, width: 75 },
                                 { left: -9584, top: -9869, height: 25, width: 75 },
@@ -1675,22 +1675,22 @@ module('Virtual scrolling integration', () => {
                         {
                             offset: { x: 4200 },
                             appointmentRects: [
-                                { left: -9859, top: -9869, height: 25, width: 75 },
-                                { left: -9784, top: -9869, height: 25, width: 75 },
-                                { left: -9709, top: -9869, height: 25, width: 75 },
-                                { left: -9634, top: -9869, height: 25, width: 75 },
-                                { left: -9559, top: -9869, height: 25, width: 75 },
-                                { left: -9484, top: -9869, height: 25, width: 75 }
+                                { left: -9851, top: -9869, height: 25, width: 75 },
+                                { left: -9776, top: -9869, height: 25, width: 75 },
+                                { left: -9701, top: -9869, height: 25, width: 75 },
+                                { left: -9626, top: -9869, height: 25, width: 75 },
+                                { left: -9551, top: -9869, height: 25, width: 75 },
+                                { left: -9476, top: -9869, height: 25, width: 75 }
                             ]
                         },
                         {
                             offset: { x: 5700 },
                             appointmentRects: [
-                                { left: -9784, top: -9869, height: 25, width: 75 },
-                                { left: -9709, top: -9869, height: 25, width: 75 },
-                                { left: -9634, top: -9869, height: 25, width: 75 },
-                                { left: -9559, top: -9869, height: 25, width: 75 },
-                                { left: -9484, top: -9869, height: 25, width: 75 },
+                                { left: -9776, top: -9869, height: 25, width: 75 },
+                                { left: -9701, top: -9869, height: 25, width: 75 },
+                                { left: -9626, top: -9869, height: 25, width: 75 },
+                                { left: -9551, top: -9869, height: 25, width: 75 },
+                                { left: -9476, top: -9869, height: 25, width: 75 },
                                 { left: -9409, top: -9869, height: 25, width: 75 }
                             ]
                         },
@@ -1775,25 +1775,25 @@ module('Virtual scrolling integration', () => {
                     {
                         offsetY: 0,
                         expected: [{
-                            groupIndex: 0,
-                            top: 126,
-                            height: 342
+                            groupIndex: 1,
+                            top: 784,
+                            height: 76
                         }, {
-                            groupIndex: 0,
-                            top: 126,
-                            height: 342
+                            groupIndex: 1,
+                            top: 784,
+                            height: 76
                         }]
                     },
                     {
                         offsetY: 550,
                         expected: [{
-                            groupIndex: 0,
-                            top: 266,
-                            height: 190
+                            groupIndex: 1,
+                            top: 760,
+                            height: 342
                         }, {
-                            groupIndex: 0,
-                            top: 266,
-                            height: 190
+                            groupIndex: 1,
+                            top: 760,
+                            height: 342
                         }]
                     },
                     {
@@ -2632,7 +2632,7 @@ module('Virtual scrolling integration', () => {
                                     expectedIndices: [1, 3, 4],
                                     appointmentRects: [
                                         { left: -10034, top: -10116, height: 38 },
-                                        { left: -9634, top: -10116, height: 76 },
+                                        { left: -9626, top: -10116, height: 76 },
                                         { left: -9434, top: -9622, height: 152 }
                                     ]
                                 },
@@ -2729,46 +2729,46 @@ module('Virtual scrolling integration', () => {
                                     {
                                         offset: { x: 0 },
                                         appointmentRects: [
-                                            { left: -9859, top: -9799, height: 152 },
-                                            { left: -9784, top: -9799, height: 152 },
-                                            { left: -9709, top: -9799, height: 152 },
-                                            { left: -9634, top: -9799, height: 152 },
-                                            { left: -9559, top: -9799, height: 152 },
-                                            { left: -9484, top: -9799, height: 152 }
+                                            { left: -9851, top: -9834, height: 152 },
+                                            { left: -9776, top: -9834, height: 152 },
+                                            { left: -9701, top: -9834, height: 152 },
+                                            { left: -9626, top: -9834, height: 152 },
+                                            { left: -9551, top: -9834, height: 152 },
+                                            { left: -9476, top: -9834, height: 152 }
                                         ]
                                     },
                                     {
                                         offset: { x: 300 },
                                         appointmentRects: [
-                                            { left: -10159, top: -9799, height: 152 },
-                                            { left: -10084, top: -9799, height: 152 },
-                                            { left: -10009, top: -9799, height: 152 },
-                                            { left: -9899, top: -9799, height: 152 },
-                                            { left: -9859, top: -9799, height: 152 },
-                                            { left: -9784, top: -9799, height: 152 },
-                                            { left: -9074, top: -9799, height: 152 }
+                                            { left: -10159, top: -9834, height: 152 },
+                                            { left: -10084, top: -9834, height: 152 },
+                                            { left: -10009, top: -9834, height: 152 },
+                                            { left: -9934, top: -9834, height: 152 },
+                                            { left: -9851, top: -9834, height: 152 },
+                                            { left: -9776, top: -9834, height: 152 },
+                                            { left: -9109, top: -9834, height: 152 }
                                         ]
                                     },
                                     {
                                         offset: { x: 1100 },
                                         appointmentRects: [
-                                            { left: -9874, top: -9799, height: 152 },
-                                            { left: -9799, top: -9799, height: 152 },
-                                            { left: -9724, top: -9799, height: 152 },
-                                            { left: -9649, top: -9799, height: 152 },
-                                            { left: -9574, top: -9799, height: 152 },
-                                            { left: -9499, top: -9799, height: 152 }
+                                            { left: -9909, top: -9834, height: 152 },
+                                            { left: -9834, top: -9834, height: 152 },
+                                            { left: -9759, top: -9834, height: 152 },
+                                            { left: -9684, top: -9834, height: 152 },
+                                            { left: -9609, top: -9834, height: 152 },
+                                            { left: -9534, top: -9834, height: 152 }
                                         ]
                                     },
                                     {
                                         offset: { x: 2100 },
                                         appointmentRects: [
-                                            { left: -9859, top: -9799, height: 152 },
-                                            { left: -9784, top: -9799, height: 152 },
-                                            { left: -9709, top: -9799, height: 152 },
-                                            { left: -9634, top: -9799, height: 152 },
-                                            { left: -9559, top: -9799, height: 152 },
-                                            { left: -9484, top: -9799, height: 152 }
+                                            { left: -9851, top: -9834, height: 152 },
+                                            { left: -9776, top: -9834, height: 152 },
+                                            { left: -9701, top: -9834, height: 152 },
+                                            { left: -9626, top: -9834, height: 152 },
+                                            { left: -9551, top: -9834, height: 152 },
+                                            { left: -9476, top: -9834, height: 152 }
                                         ]
                                     }
                                 ].forEach(({ offset, appointmentRects }) => {
@@ -3101,7 +3101,7 @@ module('Virtual scrolling integration', () => {
 
                     const { virtualScrollingDispatcher } = instance.getWorkSpace();
 
-                    assert.equal(virtualScrollingDispatcher.rowHeight, 80, 'Cell height is correct');
+                    assert.equal(virtualScrollingDispatcher.rowHeight, 100, 'Cell height is correct');
 
                     $style.text(styleBefore);
                 });
@@ -3197,7 +3197,7 @@ module('Virtual scrolling integration', () => {
                 }]
             });
 
-            assert.equal(workSpace.getAllDayCellHeight(), 75, 'AllDayPanel height is correct');
+            assert.equal(workSpace.getAllDayCellHeight(), 57, 'AllDayPanel height is correct');
         });
 
         QUnit.test('WorkSpace elements should have correct height when there are a log of groups in timeline month', async function(assert) {
