@@ -599,12 +599,31 @@ class DataAdapter {
     }
   }
 
-  isAllSelected(): boolean | undefined {
-    const selectedNodesAmount = new Set(this.getSelectedNodesKeys());
-    const disabledNodesAmount = new Set(this.getDisabledNodesKeys());
+  _testIntersection(arr1: ItemKey[], arr2: ItemKey[]): ItemKey[] {
+    const set = new Set<ItemKey>(arr1);
+    const result = new Set<ItemKey>();
 
-    // @ts-expect-error ts-error
-    const selectedDisabledNodesAmount = selectedNodesAmount.intersection(disabledNodesAmount).size;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const item of arr2) {
+      if (set.has(item)) {
+        result.add(item);
+      }
+    }
+
+    return [...result];
+  }
+
+  isAllSelected(): boolean | undefined {
+    const selectedNodeKeys = this.getSelectedNodesKeys();
+    const disabledNodeKeys = this.getDisabledNodesKeys();
+
+    // @sts-expect-error ts-error
+    // const selectedDisabledNodesAmount = selectedNodesAmount
+    // .intersection(disabledNodesAmount).size;
+    const selectedDisabledNodesAmount = this._testIntersection(
+      selectedNodeKeys,
+      disabledNodeKeys,
+    ).length;
 
     const isSkipDisabled = this.options.indirectSelectionMode === 'skipDisabled';
 
