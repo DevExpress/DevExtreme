@@ -91,6 +91,7 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions: undefined,
       focusStateEnabled: true,
       hoverStateEnabled: true,
+      // @ts-expect-error wait for .d.ts
       inputFieldText: '',
       items: [],
       messageTemplate: null,
@@ -461,6 +462,7 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      // @ts-expect-error wait for .d.ts
       inputFieldText,
     } = this.option();
 
@@ -653,6 +655,7 @@ class Chat extends Widget<Properties> {
       }
       case 'editing':
         break;
+      // @ts-expect-error wait for .d.ts
       case 'inputFieldText':
         this._messageBox.option('text', value);
         break;
