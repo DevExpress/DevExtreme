@@ -133,10 +133,13 @@ function showHouse(house: Record<string, unknown>) {
 
 function changeFavoriteState() {
   const favoriteState = !currentHouse.value.Favorite;
+
   const message = `This item has been ${
     favoriteState ? 'added to' : 'removed from'
   } the Favorites list!`;
+
   currentHouse.value.Favorite = favoriteState;
+
   notify({
     message,
     width: 450,

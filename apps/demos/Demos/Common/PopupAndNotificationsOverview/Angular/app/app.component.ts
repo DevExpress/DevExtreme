@@ -52,6 +52,7 @@ export class AppComponent {
 
   changeFavoriteState() {
     const favoriteState = !this.currentHouse.Favorite;
+
     const message = `This item has been ${
       favoriteState ? 'added to' : 'removed from'
     } the Favorites list!`;

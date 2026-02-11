@@ -16,6 +16,11 @@ $(() => {
   const popupOptions = {
     width: 660,
     height: 540,
+    showTitle: true,
+    visible: false,
+    dragEnabled: false,
+    hideOnOutsideClick: true,
+    showCloseButton: true,
     contentTemplate() {
       const result = $(Mustache.render($('#property-details').html(), currentHouse));
       const button = result.find('#favorites')
@@ -24,11 +29,6 @@ $(() => {
       setButtonText(button, currentHouse.Favorite);
       return result;
     },
-    showTitle: true,
-    visible: false,
-    dragEnabled: false,
-    hideOnOutsideClick: true,
-    showCloseButton: true,
   };
 
   const buttonOptions = {
