@@ -23,6 +23,7 @@ import NumberBox from '../numberBox';
 import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
+import EditPopup from './editPopup';
 
 export const CLASS = {
   ...CLASS_BASE,
@@ -428,6 +429,10 @@ export default class DataGrid extends GridCore {
     return new EditForm(element, buttons);
   }
 
+  getEditPopup(): EditPopup {
+    return new EditPopup(Selector(`.${this.addWidgetPrefix(CLASS.popupEdit)}`));
+  }
+
   getToolbar(): Toolbar {
     return new Toolbar(this.element.find(`.${CLASS.toolbar}`));
   }
@@ -728,6 +733,21 @@ export default class DataGrid extends GridCore {
           getInstance,
         },
       },
+    )();
+  }
+
+  apiPageIndex(pageIndex?: number): Promise<number | void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        if (pageIndex === undefined) {
+          return (getInstance() as any).pageIndex();
+        }
+
+        (getInstance() as any).pageIndex(pageIndex);
+      },
+      { dependencies: { getInstance, pageIndex } },
     )();
   }
 

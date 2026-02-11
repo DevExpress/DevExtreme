@@ -2151,6 +2151,100 @@ test('The onEditorPreparing event should be called once after clicking on a cell
   })();
 });
 
+test('Adding rows to a second page should work correctly when initial row values ​​are specified in the onInitNewRow method (T1274123)', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const addAndSaveData = async () => {
+    // act
+    await dataGrid.apiAddRow();
+
+    const editPopup = dataGrid.getEditPopup();
+
+    // assert
+    await t
+      .expect(editPopup.isVisible())
+      .ok();
+
+    // act
+    await dataGrid.apiSaveEditData();
+
+    // assert
+    await t
+      .expect(dataGrid.isReady())
+      .ok()
+      .expect(editPopup.isVisible())
+      .notOk();
+  };
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await dataGrid.apiPageIndex(1);
+  await t.expect(dataGrid.isReady()).ok();
+
+  // assert
+  let visibleRows = await dataGrid.apiGetVisibleRows();
+
+  await t.expect(visibleRows.length)
+    .eql(10)
+    .expect(dataGrid.getDataCell(20, 0).element.textContent)
+    .eql('21');
+
+  // act
+  await addAndSaveData();
+  await addAndSaveData();
+
+  // assert
+  visibleRows = await dataGrid.apiGetVisibleRows();
+
+  await t
+    .expect(visibleRows.length)
+    .eql(12)
+    .expect(visibleRows[10].key)
+    .eql(31)
+    .expect(visibleRows[11].key)
+    .eql(32);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).myData = new Array(30).fill(null).map((_, index) => ({ id: index + 1, text: `item ${index + 1}` }));
+    (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
+      key: 'id',
+      data: (window as any).myData,
+    });
+  })();
+
+  return createWidget('dxDataGrid', {
+    dataSource: {
+      key: 'id',
+      load(loadOptions) {
+        return (window as any).myStore.load(loadOptions);
+      },
+      totalCount() {
+        return (window as any).myStore.totalCount();
+      },
+      insert(values) {
+        if (values.id === 0) {
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+          values.id = (window as any).myData.length + 1;
+        }
+
+        return (window as any).myStore.insert(values);
+      },
+    } as any,
+    columns: ['id', 'text'],
+    showBorders: true,
+    editing: {
+      mode: 'popup',
+      allowAdding: true,
+    },
+    onInitNewRow(e) {
+      e.data.id = 0;
+      e.data.text = 'test';
+    },
+    height: 300,
+  });
+});
+
 fixture`Editing - ShowEditorAlways`
   .page(url(__dirname, '../../../container.html'));
 
