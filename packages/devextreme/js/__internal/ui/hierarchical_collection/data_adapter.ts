@@ -527,6 +527,10 @@ class DataAdapter {
     const node = this._getByKey(dataArray, key);
 
     if (node) {
+      if (this.options.disabledNodeSelectionMode === 'never' && this._isNodeDisabled(node)) {
+        return;
+      }
+
       this._setFieldState(node, SELECTED, state);
 
       if (this.options.recursiveSelection && !selectRecursive) {

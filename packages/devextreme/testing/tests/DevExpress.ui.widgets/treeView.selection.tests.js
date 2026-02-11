@@ -131,12 +131,27 @@ module('selection common', () => {
     test('disabled item should be selectable via api', function(assert) {
         const items = [{ text: 'item 1', disabled: true }, { text: 'item 2', disabled: true, selected: true }];
         const treeView = createInstance({
-            items: items,
+            items,
             showCheckBoxesMode: 'normal'
         });
 
         treeView.instance.selectItem(1);
         treeView.checkSelected([0, 1], items);
+
+        treeView.instance.unselectItem(1);
+        treeView.checkSelected([1], items);
+    });
+
+    test('disabled item should be non selectable via api with disabledNodeSelectionMode = never', function(assert) {
+        const items = [{ text: 'item 1', disabled: true }, { text: 'item 2', disabled: true, selected: true }];
+        const treeView = createInstance({
+            items,
+            showCheckBoxesMode: 'normal',
+            disabledNodeSelectionMode: 'never',
+        });
+
+        treeView.instance.selectItem(1);
+        treeView.checkSelected([1], items);
 
         treeView.instance.unselectItem(1);
         treeView.checkSelected([1], items);
