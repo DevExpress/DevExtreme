@@ -41,6 +41,12 @@ require('./build/gulp/check_licenses');
 require('./build/gulp/systemjs');
 require('./build/gulp/state_manager');
 
+gulp.task('transpile', shell.task(
+    env.TEST_CI
+        ? 'pnpm nx run devextreme:build:transpile -c ci'
+        : 'pnpm nx run devextreme:build:transpile'
+));
+
 if(env.TEST_CI) {
     console.warn('Using test CI mode!');
 }
