@@ -22,8 +22,8 @@ import {
 } from '@angular/core';
 
 
-import { CompleteEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/progress_bar';
-import { ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import type { CompleteEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/progress_bar';
+import type { ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import DxProgressBar from 'devextreme/ui/progress_bar';
 

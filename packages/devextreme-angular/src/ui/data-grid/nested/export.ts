@@ -14,7 +14,7 @@ import {
 
 
 
-import { DataGridExportFormat } from 'devextreme/ui/data_grid';
+import type { DataGridExportFormat } from 'devextreme/ui/data_grid';
 
 import {
     DxIntegrationModule,

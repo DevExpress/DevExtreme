@@ -24,16 +24,16 @@ import {
 } from '@angular/core';
 
 
-import DataSource from 'devextreme/data/data_source';
-import * as CommonChartTypes from 'devextreme/common/charts';
-import { BackgroundImageLocation, ChartAxisScale, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, AxisScale } from 'devextreme/viz/range_selector';
-import { SliderValueChangeMode, ExportFormat, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
-import { dxChartCommonSeriesSettings } from 'devextreme/viz/chart';
-import { Palette, PaletteExtensionMode, ChartsDataType, Font, TimeInterval, ScaleBreak, ScaleBreakLineStyle, DiscreteAxisDivisionMode, LabelOverlap, VisualRangeUpdateMode, Theme, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { ChartSeries } from 'devextreme/viz/common';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { Format } from 'devextreme/common/core/localization';
+import type DataSource from 'devextreme/data/data_source';
+import type * as CommonChartTypes from 'devextreme/common/charts';
+import type { BackgroundImageLocation, ChartAxisScale, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent, AxisScale } from 'devextreme/viz/range_selector';
+import type { SliderValueChangeMode, ExportFormat, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
+import type { dxChartCommonSeriesSettings } from 'devextreme/viz/chart';
+import type { Palette, PaletteExtensionMode, ChartsDataType, Font, TimeInterval, ScaleBreak, ScaleBreakLineStyle, DiscreteAxisDivisionMode, LabelOverlap, VisualRangeUpdateMode, Theme, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import type { ChartSeries } from 'devextreme/viz/common';
+import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { Format } from 'devextreme/common/core/localization';
 
 import DxRangeSelector from 'devextreme/viz/range_selector';
 

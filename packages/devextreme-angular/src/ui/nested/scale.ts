@@ -16,11 +16,11 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { ChartsDataType, DiscreteAxisDivisionMode, Font, LabelOverlap, ScaleBreak, ScaleBreakLineStyle, TimeInterval } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
-import { CircularGaugeElementOrientation, CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
-import { AxisScale } from 'devextreme/viz/range_selector';
+import type { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import type { ChartsDataType, DiscreteAxisDivisionMode, Font, LabelOverlap, ScaleBreak, ScaleBreakLineStyle, TimeInterval } from 'devextreme/common/charts';
+import type { Format } from 'devextreme/common/core/localization';
+import type { CircularGaugeElementOrientation, CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
+import type { AxisScale } from 'devextreme/viz/range_selector';
 
 import {
     DxIntegrationModule,

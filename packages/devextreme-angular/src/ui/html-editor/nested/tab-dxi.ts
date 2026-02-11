@@ -12,7 +12,7 @@ import {
 
 
 
-import { HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
+import type { HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 import {
     DxIntegrationModule,

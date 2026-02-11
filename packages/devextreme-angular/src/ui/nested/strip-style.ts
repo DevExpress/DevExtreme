@@ -14,8 +14,8 @@ import {
 
 
 
-import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { Font } from 'devextreme/common/charts';
+import type { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import type { Font } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,

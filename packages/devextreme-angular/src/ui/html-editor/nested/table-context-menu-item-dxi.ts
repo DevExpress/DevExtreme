@@ -18,7 +18,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem } from 'devextreme/ui/html_editor';
+import type { dxHtmlEditorTableContextMenuItem, HtmlEditorPredefinedContextMenuItem } from 'devextreme/ui/html_editor';
 
 import {
     DxIntegrationModule,

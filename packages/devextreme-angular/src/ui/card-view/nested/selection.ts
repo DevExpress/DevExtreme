@@ -14,8 +14,8 @@ import {
 
 
 
-import { SingleMultipleOrNone, SelectAllMode } from 'devextreme/common';
-import { SelectionColumnDisplayMode } from 'devextreme/common/grids';
+import type { SingleMultipleOrNone, SelectAllMode } from 'devextreme/common';
+import type { SelectionColumnDisplayMode } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,

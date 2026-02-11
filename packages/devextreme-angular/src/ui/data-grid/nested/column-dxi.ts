@@ -16,14 +16,14 @@ import {
 
 
 
-import * as CommonTypes from 'devextreme/common';
-import { ColumnAIOptions, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
-import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
-import { DataGridPredefinedColumnButton, dxDataGridColumnButton, dxDataGridColumn, DataGridCommandColumnType } from 'devextreme/ui/data_grid';
-import { Format } from 'devextreme/common/core/localization';
-import { dxFormSimpleItem } from 'devextreme/ui/form';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
+import type * as CommonTypes from 'devextreme/common';
+import type { ColumnAIOptions, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
+import type { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
+import type { DataGridPredefinedColumnButton, dxDataGridColumnButton, dxDataGridColumn, DataGridCommandColumnType } from 'devextreme/ui/data_grid';
+import type { Format } from 'devextreme/common/core/localization';
+import type { dxFormSimpleItem } from 'devextreme/ui/form';
+import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
 
 import {
     DxIntegrationModule,

@@ -14,7 +14,7 @@ import {
 
 
 
-import { Format } from 'devextreme/common/core/localization';
+import type { Format } from 'devextreme/common/core/localization';
 
 import {
     DxIntegrationModule,

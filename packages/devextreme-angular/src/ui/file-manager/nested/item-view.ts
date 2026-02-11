@@ -14,7 +14,7 @@ import {
 
 
 
-import { dxFileManagerDetailsColumn, FileManagerItemViewMode } from 'devextreme/ui/file_manager';
+import type { dxFileManagerDetailsColumn, FileManagerItemViewMode } from 'devextreme/ui/file_manager';
 
 import {
     DxIntegrationModule,

@@ -14,7 +14,7 @@ import {
 
 
 
-import { PolarChartSeries } from 'devextreme/viz/polar_chart';
+import type { PolarChartSeries } from 'devextreme/viz/polar_chart';
 
 import {
     DxIntegrationModule,

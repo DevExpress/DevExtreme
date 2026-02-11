@@ -14,7 +14,7 @@ import {
 
 
 
-import { AppointmentFormProperties } from 'devextreme/ui/scheduler';
+import type { AppointmentFormProperties } from 'devextreme/ui/scheduler';
 
 import {
     DxIntegrationModule,

@@ -14,9 +14,9 @@ import {
 
 
 
-import { Format } from 'devextreme/common/core/localization';
-import { DashStyle, Font } from 'devextreme/common/charts';
-import { dxChartPointInfo, ChartTooltipLocation } from 'devextreme/viz/chart';
+import type { Format } from 'devextreme/common/core/localization';
+import type { DashStyle, Font } from 'devextreme/common/charts';
+import type { dxChartPointInfo, ChartTooltipLocation } from 'devextreme/viz/chart';
 
 import {
     DxIntegrationModule,

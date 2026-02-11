@@ -14,7 +14,7 @@ import {
 
 
 
-import { SearchMode } from 'devextreme/common';
+import type { SearchMode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

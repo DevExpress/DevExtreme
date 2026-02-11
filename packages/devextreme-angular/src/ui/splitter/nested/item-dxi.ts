@@ -16,7 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxSplitterOptions } from 'devextreme/ui/splitter';
+import type { dxSplitterOptions } from 'devextreme/ui/splitter';
 
 import {
     DxIntegrationModule,

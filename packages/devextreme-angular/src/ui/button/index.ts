@@ -17,8 +17,8 @@ import {
 } from '@angular/core';
 
 
-import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/button';
-import { ButtonStyle, ButtonType } from 'devextreme/common';
+import type { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/button';
+import type { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import DxButton from 'devextreme/ui/button';
 

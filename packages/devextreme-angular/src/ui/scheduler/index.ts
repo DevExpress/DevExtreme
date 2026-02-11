@@ -22,15 +22,15 @@ import {
 } from '@angular/core';
 
 
-import dxScheduler from 'devextreme/ui/scheduler';
-import dxSortable from 'devextreme/ui/sortable';
-import dxDraggable from 'devextreme/ui/draggable';
-import DataSource from 'devextreme/data/data_source';
-import { AllDayPanelMode, ViewType, dxSchedulerAppointment, AppointmentFormProperties, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, dxSchedulerScrolling, dxSchedulerToolbar } from 'devextreme/ui/scheduler';
-import { event } from 'devextreme/events/events.types';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { FirstDayOfWeek, Orientation } from 'devextreme/common';
+import type dxScheduler from 'devextreme/ui/scheduler';
+import type dxSortable from 'devextreme/ui/sortable';
+import type dxDraggable from 'devextreme/ui/draggable';
+import type DataSource from 'devextreme/data/data_source';
+import type { AllDayPanelMode, ViewType, dxSchedulerAppointment, AppointmentFormProperties, CellAppointmentsLimit, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, dxSchedulerScrolling, dxSchedulerToolbar } from 'devextreme/ui/scheduler';
+import type { event } from 'devextreme/events/events.types';
+import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { FirstDayOfWeek, Orientation } from 'devextreme/common';
 
 import DxScheduler from 'devextreme/ui/scheduler';
 

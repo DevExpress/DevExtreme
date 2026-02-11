@@ -14,9 +14,9 @@ import {
 
 
 
-import { AIIntegration } from 'devextreme/common/ai-integration';
-import { dxTextBoxOptions } from 'devextreme/ui/text_box';
-import { AIColumnMode } from 'devextreme/common/grids';
+import type { AIIntegration } from 'devextreme/common/ai-integration';
+import type { dxTextBoxOptions } from 'devextreme/ui/text_box';
+import type { AIColumnMode } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,

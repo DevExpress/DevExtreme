@@ -14,9 +14,9 @@ import {
 
 
 
-import { DashStyle, Font } from 'devextreme/common/charts';
-import { dxTreeMapNode } from 'devextreme/viz/tree_map';
-import { Format } from 'devextreme/common/core/localization';
+import type { DashStyle, Font } from 'devextreme/common/charts';
+import type { dxTreeMapNode } from 'devextreme/viz/tree_map';
+import type { Format } from 'devextreme/common/core/localization';
 
 import {
     DxIntegrationModule,

@@ -14,7 +14,7 @@ import {
 
 
 
-import { FinancialChartReductionLevel } from 'devextreme/viz/chart';
+import type { FinancialChartReductionLevel } from 'devextreme/viz/chart';
 
 import {
     DxIntegrationModule,

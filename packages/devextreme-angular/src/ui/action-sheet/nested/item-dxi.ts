@@ -16,8 +16,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { NativeEventInfo } from 'devextreme/common/core/events';
-import { ButtonStyle, ButtonType } from 'devextreme/common';
+import type { NativeEventInfo } from 'devextreme/common/core/events';
+import type { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

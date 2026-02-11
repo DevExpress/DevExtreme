@@ -18,11 +18,11 @@ import {
 
 
 
-import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
-import { event } from 'devextreme/events/events.types';
-import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
-import { Position } from 'devextreme/common';
-import { dxPopupToolbarItem } from 'devextreme/ui/popup';
+import type { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
+import type { event } from 'devextreme/events/events.types';
+import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
+import type { Position } from 'devextreme/common';
+import type { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {
     DxIntegrationModule,

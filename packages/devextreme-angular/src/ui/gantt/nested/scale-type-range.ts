@@ -14,7 +14,7 @@ import {
 
 
 
-import { GanttScaleType } from 'devextreme/ui/gantt';
+import type { GanttScaleType } from 'devextreme/ui/gantt';
 
 import {
     DxIntegrationModule,

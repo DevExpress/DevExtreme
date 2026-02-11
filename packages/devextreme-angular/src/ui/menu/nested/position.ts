@@ -14,8 +14,8 @@ import {
 
 
 
-import { PositionAlignment, HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { CollisionResolutionCombination, CollisionResolution } from 'devextreme/common/core/animation';
+import type { PositionAlignment, HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
+import type { CollisionResolutionCombination, CollisionResolution } from 'devextreme/common/core/animation';
 
 import {
     DxIntegrationModule,

@@ -16,7 +16,7 @@ import {
 
 
 
-import { dxGanttToolbarItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
+import type { dxGanttToolbarItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 
 import {
     DxIntegrationModule,

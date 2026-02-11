@@ -12,8 +12,8 @@ import {
 
 
 
-import { SummaryType } from 'devextreme/common/grids';
-import { Format } from 'devextreme/common/core/localization';
+import type { SummaryType } from 'devextreme/common/grids';
+import type { Format } from 'devextreme/common/core/localization';
 
 import {
     DxIntegrationModule,

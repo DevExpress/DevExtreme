@@ -12,11 +12,11 @@ import {
 
 
 
-import { FieldInfo, FilterBuilderOperation } from 'devextreme/ui/filter_builder';
-import { DataType } from 'devextreme/common';
-import { Format } from 'devextreme/common/core/localization';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
+import type { FieldInfo, FilterBuilderOperation } from 'devextreme/ui/filter_builder';
+import type { DataType } from 'devextreme/common';
+import type { Format } from 'devextreme/common/core/localization';
+import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
 
 import {
     DxIntegrationModule,

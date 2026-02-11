@@ -14,7 +14,7 @@ import {
 
 
 
-import { DashStyle, Font } from 'devextreme/common/charts';
+import type { DashStyle, Font } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,

@@ -18,10 +18,10 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxContextMenuItem } from 'devextreme/ui/context_menu';
-import { GanttPredefinedContextMenuItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
-import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
+import type { dxContextMenuItem } from 'devextreme/ui/context_menu';
+import type { GanttPredefinedContextMenuItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
+import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import type { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

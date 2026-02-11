@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartSeries } from 'devextreme/viz/common';
+import type { ChartSeries } from 'devextreme/viz/common';
 
 import {
     DxIntegrationModule,

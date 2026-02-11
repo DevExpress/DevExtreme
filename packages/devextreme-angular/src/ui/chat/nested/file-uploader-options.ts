@@ -16,9 +16,9 @@ import {
 
 
 
-import UploadInfo from 'devextreme/file_management/upload_info';
-import { BeforeSendEvent, ContentReadyEvent, DisposingEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, InitializedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, ValueChangedEvent, UploadHttpMethod, FileUploadMode } from 'devextreme/ui/file_uploader';
-import { ValidationStatus } from 'devextreme/common';
+import type UploadInfo from 'devextreme/file_management/upload_info';
+import type { BeforeSendEvent, ContentReadyEvent, DisposingEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, InitializedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, ValueChangedEvent, UploadHttpMethod, FileUploadMode } from 'devextreme/ui/file_uploader';
+import type { ValidationStatus } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

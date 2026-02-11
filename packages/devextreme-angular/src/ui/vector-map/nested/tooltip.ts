@@ -14,8 +14,8 @@ import {
 
 
 
-import { DashStyle, Font } from 'devextreme/common/charts';
-import { MapLayerElement } from 'devextreme/viz/vector_map';
+import type { DashStyle, Font } from 'devextreme/common/charts';
+import type { MapLayerElement } from 'devextreme/viz/vector_map';
 
 import {
     DxIntegrationModule,

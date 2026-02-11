@@ -14,7 +14,7 @@ import {
 
 
 
-import { Attachment, User } from 'devextreme/ui/chat';
+import type { Attachment, User } from 'devextreme/ui/chat';
 
 import {
     DxIntegrationModule,

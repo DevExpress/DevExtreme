@@ -22,11 +22,11 @@ import {
 } from '@angular/core';
 
 
-import { AnimationEaseMode, Font, ChartsColor, Palette, PaletteExtensionMode, LabelOverlap, Theme, TextOverflow, WordWrap, DashStyle } from 'devextreme/common/charts';
-import { ExportFormat, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
-import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, CircularGaugeElementOrientation, CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
-import { Format } from 'devextreme/common/core/localization';
-import { GaugeIndicator } from 'devextreme/viz/gauges/base_gauge';
+import type { AnimationEaseMode, Font, ChartsColor, Palette, PaletteExtensionMode, LabelOverlap, Theme, TextOverflow, WordWrap, DashStyle } from 'devextreme/common/charts';
+import type { ExportFormat, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
+import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, CircularGaugeElementOrientation, CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
+import type { Format } from 'devextreme/common/core/localization';
+import type { GaugeIndicator } from 'devextreme/viz/gauges/base_gauge';
 
 import DxCircularGauge from 'devextreme/viz/circular_gauge';
 

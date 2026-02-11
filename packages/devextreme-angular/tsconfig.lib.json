@@ -10,6 +10,7 @@
     "enableResourceInlining": true
   },
   "compilerOptions": {
+    "noUnusedLocals": false,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "moduleResolution": "node",

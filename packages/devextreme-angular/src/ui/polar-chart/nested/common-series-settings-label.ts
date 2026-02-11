@@ -14,8 +14,8 @@ import {
 
 
 
-import { Format } from 'devextreme/common/core/localization';
-import { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
+import type { Format } from 'devextreme/common/core/localization';
+import type { DashStyle, Font, RelativePosition } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,

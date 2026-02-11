@@ -16,11 +16,11 @@ import {
 
 
 
-import * as CommonChartTypes from 'devextreme/common/charts';
-import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
-import { ScaleBreak, ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap, TimeInterval, AxisScaleType, ChartsDataType, ValueAxisVisualRangeUpdateMode } from 'devextreme/common/charts';
-import { HorizontalAlignment, VerticalAlignment, Position } from 'devextreme/common';
-import { Format } from 'devextreme/common/core/localization';
+import type * as CommonChartTypes from 'devextreme/common/charts';
+import type { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
+import type { ScaleBreak, ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap, TimeInterval, AxisScaleType, ChartsDataType, ValueAxisVisualRangeUpdateMode } from 'devextreme/common/charts';
+import type { HorizontalAlignment, VerticalAlignment, Position } from 'devextreme/common';
+import type { Format } from 'devextreme/common/core/localization';
 
 import {
     DxIntegrationModule,

@@ -5,9 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
-import { HorizontalEdge, VerticalEdge } from 'devextreme/common';
-import { ChartsColor, Font, Palette } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
+import type { HorizontalEdge, VerticalEdge } from 'devextreme/common';
+import type { ChartsColor, Font, Palette } from 'devextreme/common/charts';
+import type { Format } from 'devextreme/common/core/localization';
 
 @Component({
     template: ''

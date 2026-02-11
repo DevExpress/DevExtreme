@@ -17,9 +17,9 @@ import {
 } from '@angular/core';
 
 
-import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/bullet';
-import { Theme, DashStyle, Font } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
+import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/bullet';
+import type { Theme, DashStyle, Font } from 'devextreme/common/charts';
+import type { Format } from 'devextreme/common/core/localization';
 
 import DxBullet from 'devextreme/viz/bullet';
 

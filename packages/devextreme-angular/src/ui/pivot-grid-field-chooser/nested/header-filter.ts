@@ -14,7 +14,7 @@ import {
 
 
 
-import { HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import type { HeaderFilterSearchConfig } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,

@@ -14,7 +14,7 @@ import {
 
 
 
-import { SmallValuesGroupingMode } from 'devextreme/viz/pie_chart';
+import type { SmallValuesGroupingMode } from 'devextreme/viz/pie_chart';
 
 import {
     DxIntegrationModule,

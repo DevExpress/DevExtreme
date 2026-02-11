@@ -5,14 +5,14 @@ import {
     Component,
 } from '@angular/core';
 
-import { AsyncRule, CompareRule, CustomRule, DataType, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, SortOrder, StringLengthRule } from 'devextreme/common';
-import { Format } from 'devextreme/common/core/localization';
-import { ColumnHeaderFilter, FilterOperation, FilterType, FixedPosition, SelectedFilterOperation } from 'devextreme/common/grids';
-import { Store } from 'devextreme/data';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { DataGridCommandColumnType, DataGridPredefinedColumnButton, dxDataGridColumn, dxDataGridColumnButton } from 'devextreme/ui/data_grid';
-import { SimpleItem } from 'devextreme/ui/form';
-import { dxTreeListColumn, dxTreeListColumnButton, TreeListCommandColumnType, TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
+import type { AsyncRule, CompareRule, CustomRule, DataType, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, SortOrder, StringLengthRule } from 'devextreme/common';
+import type { Format } from 'devextreme/common/core/localization';
+import type { ColumnHeaderFilter, FilterOperation, FilterType, FixedPosition, SelectedFilterOperation } from 'devextreme/common/grids';
+import type { Store } from 'devextreme/data';
+import type { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import type { DataGridCommandColumnType, DataGridPredefinedColumnButton, dxDataGridColumn, dxDataGridColumnButton } from 'devextreme/ui/data_grid';
+import type { SimpleItem } from 'devextreme/ui/form';
+import type { dxTreeListColumn, dxTreeListColumnButton, TreeListCommandColumnType, TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
 
 @Component({
     template: ''

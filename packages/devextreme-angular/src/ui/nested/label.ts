@@ -18,12 +18,12 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { HorizontalAlignment, HorizontalEdge, Position, VerticalAlignment, VerticalEdge } from 'devextreme/common';
-import { ChartsAxisLabelOverlap, DashStyle, Font, LabelOverlap, LabelPosition, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
-import { LabelLocation } from 'devextreme/ui/form';
-import { ChartLabelDisplayMode } from 'devextreme/viz/chart';
-import { CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
+import type { HorizontalAlignment, HorizontalEdge, Position, VerticalAlignment, VerticalEdge } from 'devextreme/common';
+import type { ChartsAxisLabelOverlap, DashStyle, Font, LabelOverlap, LabelPosition, RelativePosition, TextOverflow, WordWrap } from 'devextreme/common/charts';
+import type { Format } from 'devextreme/common/core/localization';
+import type { LabelLocation } from 'devextreme/ui/form';
+import type { ChartLabelDisplayMode } from 'devextreme/viz/chart';
+import type { CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
 
 import {
     DxIntegrationModule,

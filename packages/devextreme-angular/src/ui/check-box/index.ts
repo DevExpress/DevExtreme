@@ -22,8 +22,8 @@ import {
 } from '@angular/core';
 
 
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/check_box';
-import { ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import type { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/check_box';
+import type { ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 
 import DxCheckBox from 'devextreme/ui/check_box';
 

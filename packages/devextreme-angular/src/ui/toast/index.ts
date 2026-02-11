@@ -17,9 +17,9 @@ import {
 } from '@angular/core';
 
 
-import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
-import { event } from 'devextreme/events/events.types';
-import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, ToastType } from 'devextreme/ui/toast';
+import type { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
+import type { event } from 'devextreme/events/events.types';
+import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, ToastType } from 'devextreme/ui/toast';
 
 import DxToast from 'devextreme/ui/toast';
 

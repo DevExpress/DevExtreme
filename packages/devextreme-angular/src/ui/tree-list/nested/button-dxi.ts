@@ -16,11 +16,11 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import dxTreeList from 'devextreme/ui/tree_list';
-import { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
-import { event } from 'devextreme/events/events.types';
-import { TextEditorButtonLocation } from 'devextreme/common';
-import { dxButtonOptions } from 'devextreme/ui/button';
+import type dxTreeList from 'devextreme/ui/tree_list';
+import type { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
+import type { event } from 'devextreme/events/events.types';
+import type { TextEditorButtonLocation } from 'devextreme/common';
+import type { dxButtonOptions } from 'devextreme/ui/button';
 
 import {
     DxIntegrationModule,

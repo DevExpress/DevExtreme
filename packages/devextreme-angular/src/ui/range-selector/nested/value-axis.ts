@@ -14,8 +14,8 @@ import {
 
 
 
-import { ChartAxisScale } from 'devextreme/viz/range_selector';
-import { ChartsDataType } from 'devextreme/common/charts';
+import type { ChartAxisScale } from 'devextreme/viz/range_selector';
+import type { ChartsDataType } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,

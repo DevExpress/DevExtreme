@@ -14,8 +14,8 @@ import {
 
 
 
-import { DashStyle, LegendItem, Font, LegendHoverMode, RelativePosition } from 'devextreme/common/charts';
-import { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
+import type { DashStyle, LegendItem, Font, LegendHoverMode, RelativePosition } from 'devextreme/common/charts';
+import type { HorizontalAlignment, Position, Orientation, VerticalEdge } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

@@ -16,7 +16,7 @@ import {
 
 
 
-import { Command, CustomCommand } from 'devextreme/ui/diagram';
+import type { Command, CustomCommand } from 'devextreme/ui/diagram';
 
 import {
     DxIntegrationModule,

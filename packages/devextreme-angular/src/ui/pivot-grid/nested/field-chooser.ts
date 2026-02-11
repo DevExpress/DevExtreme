@@ -14,8 +14,8 @@ import {
 
 
 
-import { ApplyChangesMode } from 'devextreme/common/grids';
-import { FieldChooserLayout } from 'devextreme/common';
+import type { ApplyChangesMode } from 'devextreme/common/grids';
+import type { FieldChooserLayout } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

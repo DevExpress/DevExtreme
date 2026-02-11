@@ -22,9 +22,9 @@ import {
 } from '@angular/core';
 
 
-import { AIIntegration } from 'devextreme/common/ai-integration';
-import { Mode } from 'devextreme/common';
-import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent, SmartPastedEvent, SmartPastingEvent } from 'devextreme/ui/form';
+import type { AIIntegration } from 'devextreme/common/ai-integration';
+import type { Mode } from 'devextreme/common';
+import type { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent, SmartPastedEvent, SmartPastingEvent } from 'devextreme/ui/form';
 
 import DxForm from 'devextreme/ui/form';
 

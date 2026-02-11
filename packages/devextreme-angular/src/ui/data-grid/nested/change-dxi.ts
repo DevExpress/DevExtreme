@@ -12,7 +12,7 @@ import {
 
 
 
-import { DataChangeType } from 'devextreme/common/grids';
+import type { DataChangeType } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,

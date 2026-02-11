@@ -5,9 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
-import { ToolbarItemLocation } from 'devextreme/common';
-import { Command, CustomCommand } from 'devextreme/ui/diagram';
-import { AICommandNameExtended } from 'devextreme/ui/html_editor';
+import type { ToolbarItemLocation } from 'devextreme/common';
+import type { Command, CustomCommand } from 'devextreme/ui/diagram';
+import type { AICommandNameExtended } from 'devextreme/ui/html_editor';
 
 @Component({
     template: ''

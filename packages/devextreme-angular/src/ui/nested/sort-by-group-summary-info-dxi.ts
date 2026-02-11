@@ -12,7 +12,7 @@ import {
 
 
 
-import { SortOrder } from 'devextreme/common';
+import type { SortOrder } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

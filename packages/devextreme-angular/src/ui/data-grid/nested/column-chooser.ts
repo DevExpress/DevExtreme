@@ -14,9 +14,9 @@ import {
 
 
 
-import { ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig } from 'devextreme/common/grids';
-import { PositionConfig } from 'devextreme/common/core/animation';
-import { SortOrder } from 'devextreme/common';
+import type { ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig } from 'devextreme/common/grids';
+import type { PositionConfig } from 'devextreme/common/core/animation';
+import type { SortOrder } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

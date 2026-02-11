@@ -14,7 +14,7 @@ import {
 
 
 
-import { Mode } from 'devextreme/common';
+import type { Mode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

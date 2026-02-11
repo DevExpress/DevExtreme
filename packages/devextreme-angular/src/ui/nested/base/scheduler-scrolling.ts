@@ -5,9 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
-import { Mode, ScrollbarMode, ScrollMode } from 'devextreme/common';
-import { DataRenderMode } from 'devextreme/common/grids';
-import { DataGridScrollMode } from 'devextreme/ui/data_grid';
+import type { Mode, ScrollbarMode, ScrollMode } from 'devextreme/common';
+import type { DataRenderMode } from 'devextreme/common/grids';
+import type { DataGridScrollMode } from 'devextreme/ui/data_grid';
 
 @Component({
     template: ''

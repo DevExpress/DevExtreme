@@ -14,7 +14,7 @@ import {
 
 
 
-import { BackgroundImageLocation } from 'devextreme/viz/range_selector';
+import type { BackgroundImageLocation } from 'devextreme/viz/range_selector';
 
 import {
     DxIntegrationModule,

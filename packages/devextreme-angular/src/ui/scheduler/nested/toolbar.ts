@@ -16,7 +16,7 @@ import {
 
 
 
-import { dxSchedulerToolbarItem, SchedulerPredefinedToolbarItem } from 'devextreme/ui/scheduler';
+import type { dxSchedulerToolbarItem, SchedulerPredefinedToolbarItem } from 'devextreme/ui/scheduler';
 
 import {
     DxIntegrationModule,

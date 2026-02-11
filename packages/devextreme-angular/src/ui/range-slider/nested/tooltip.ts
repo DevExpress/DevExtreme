@@ -14,8 +14,8 @@ import {
 
 
 
-import { Format } from 'devextreme/common/core/localization';
-import { VerticalEdge, TooltipShowMode } from 'devextreme/common';
+import type { Format } from 'devextreme/common/core/localization';
+import type { VerticalEdge, TooltipShowMode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

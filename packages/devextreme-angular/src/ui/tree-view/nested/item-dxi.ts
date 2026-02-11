@@ -18,7 +18,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxTreeViewItem } from 'devextreme/ui/tree_view';
+import type { dxTreeViewItem } from 'devextreme/ui/tree_view';
 
 import {
     DxIntegrationModule,

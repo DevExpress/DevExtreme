@@ -16,7 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { ItemClickEvent } from 'devextreme/ui/drop_down_button';
+import type { ItemClickEvent } from 'devextreme/ui/drop_down_button';
 
 import {
     DxIntegrationModule,
