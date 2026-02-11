@@ -876,8 +876,6 @@ declare module DevExpress.aiIntegration {
   export class AIIntegration {
     /**
      * @docid
-     * @param provider
-     * @param options
      */
     constructor(provider: AIProvider, options?: AIIntegrationOptions);
     changeStyle(

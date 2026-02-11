@@ -281,8 +281,6 @@ export type AIIntegrationOptions = {
 export class AIIntegration {
   /**
    * @docid
-   * @param provider
-   * @param options
    */
   constructor(provider: AIProvider, options?: AIIntegrationOptions);
   /**
