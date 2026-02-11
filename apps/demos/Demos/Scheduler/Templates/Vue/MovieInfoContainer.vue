@@ -7,7 +7,7 @@
       <div class="movie-preview-image">
         <img
           :src="movie.image"
-          :alt="movie.text"
+          :alt="`${movie.text} poster`"
         >
       </div>
       <div class="movie-details">

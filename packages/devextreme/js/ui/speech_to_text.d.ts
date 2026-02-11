@@ -144,7 +144,7 @@ export type OptionChangedEvent = EventInfo<dxSpeechToText> & ChangedOptionInfo;
  * @docid dxSpeechToTextOptions
  * @type object
  */
-export interface Properties extends WidgetOptions<dxSpeechToText> {
+export type Properties = WidgetOptions<dxSpeechToText> & {
   /**
    * @docid dxSpeechToTextOptions.customSpeechRecognizer
    * @public
@@ -174,7 +174,7 @@ export interface Properties extends WidgetOptions<dxSpeechToText> {
 
   /**
    * @docid dxSpeechToTextOptions.startIcon
-   * @default 'micoutline'
+   * @default 'micfilled'
    * @public
    */
   startIcon?: string;
@@ -243,7 +243,7 @@ export interface Properties extends WidgetOptions<dxSpeechToText> {
    * @public
    */
   onEnd?: ((e: EndEvent) => void) | undefined;
-}
+};
 
 /**
  * @docid

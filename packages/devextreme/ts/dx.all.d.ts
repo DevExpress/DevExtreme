@@ -698,7 +698,7 @@ declare module DevExpress {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    type Properties = DOMComponentOptions<DOMComponentInstance>;
+    export type Properties = DOMComponentOptions<DOMComponentInstance>;
   }
 
   /**
@@ -874,11 +874,7 @@ declare module DevExpress.aiIntegration {
    * [descr:AIIntegration]
    */
   export class AIIntegration {
-    /**
-     * @docid
-     * @param provider
-     */
-    constructor(provider: AIProvider);
+    constructor(provider: AIProvider, options?: AIIntegrationOptions);
     changeStyle(
       params: ChangeStyleCommandParams,
       callbacks: RequestCallbacks<ChangeStyleCommandResult>
@@ -920,6 +916,15 @@ declare module DevExpress.aiIntegration {
       callbacks: RequestCallbacks<GenerateGridColumnCommandResult>
     ): () => void;
   }
+  /**
+   * [descr:AIIntegrationOptions]
+   */
+  export type AIIntegrationOptions = {
+    /**
+     * [descr:AIIntegrationOptions.lang]
+     */
+    lang?: string;
+  };
   /**
    * [descr:AIProvider]
    */
@@ -15262,7 +15267,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.contextToolbox.shapes]
        */
-      shapes?: Array<DevExpress.ui.dxDiagram.ShapeType> | Array<string>;
+      shapes?: Array<DevExpress.ui.dxDiagram.ShapeType | string>;
       /**
        * [descr:dxDiagramOptions.contextToolbox.width]
        */
@@ -15945,7 +15950,7 @@ declare module DevExpress.ui {
             /**
              * [descr:dxDiagramOptions.toolbox.groups.shapes]
              */
-            shapes?: Array<DevExpress.ui.dxDiagram.ShapeType> | Array<string>;
+            shapes?: Array<DevExpress.ui.dxDiagram.ShapeType | string>;
             /**
              * [descr:dxDiagramOptions.toolbox.groups.title]
              */
@@ -16808,7 +16813,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    type Properties = dxDropDownEditorOptions<DropDownEditorInstance>;
+    export type Properties = dxDropDownEditorOptions<DropDownEditorInstance>;
   }
   /**
    * [descr:dxDropDownEditorOptions]
@@ -28013,7 +28018,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSpeechToTextOptions]
      */
-    export interface Properties extends WidgetOptions<dxSpeechToText> {
+    export type Properties = WidgetOptions<dxSpeechToText> & {
       /**
        * [descr:dxSpeechToTextOptions.customSpeechRecognizer]
        */
@@ -28080,7 +28085,7 @@ declare module DevExpress.ui {
        * [descr:dxSpeechToTextOptions.onEnd]
        */
       onEnd?: ((e: EndEvent) => void) | undefined;
-    }
+    };
     /**
      * [descr:_ui_speech_to_text_ResultEvent]
      */
@@ -30745,6 +30750,9 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = dxTreeListColumnButton<TRowData, TKey>;
+    /**
+     * [descr:_ui_tree_list_ColumnButtonClickEvent]
+     */
     export type ColumnButtonClickEvent<
       TRowData = any,
       TKey = any
@@ -30752,7 +30760,13 @@ declare module DevExpress.ui {
       dxTreeList<TRowData, TKey>,
       PointerEvent | MouseEvent
     > & {
+      /**
+       * [descr:_ui_tree_list_ColumnButtonClickEvent.row]
+       */
       row?: Row<TRowData, TKey>;
+      /**
+       * [descr:_ui_tree_list_ColumnButtonClickEvent.column]
+       */
       column?: Column<TRowData, TKey>;
     };
     export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {

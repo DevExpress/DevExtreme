@@ -16,11 +16,10 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import type dxTreeList from 'devextreme/ui/tree_list';
-import type { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
-import type { event } from 'devextreme/events/events.types';
-import type { TextEditorButtonLocation } from 'devextreme/common';
-import type { dxButtonOptions } from 'devextreme/ui/button';
+import dxTreeList from 'devextreme/ui/tree_list';
+import { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton, ColumnButtonClickEvent } from 'devextreme/ui/tree_list';
+import { TextEditorButtonLocation } from 'devextreme/common';
+import { dxButtonOptions } from 'devextreme/ui/button';
 
 import {
     DxIntegrationModule,
@@ -92,10 +91,10 @@ export class DxiTreeListButtonComponent extends CollectionNestedOption implement
     }
 
     @Input()
-    get onClick(): ((e: { column: dxTreeListColumn, component: dxTreeList, element: any, event: event, model: any, row: dxTreeListRowObject }) => void) {
+    get onClick(): ((e: ColumnButtonClickEvent) => void) {
         return this._getOption('onClick');
     }
-    set onClick(value: ((e: { column: dxTreeListColumn, component: dxTreeList, element: any, event: event, model: any, row: dxTreeListRowObject }) => void)) {
+    set onClick(value: ((e: ColumnButtonClickEvent) => void)) {
         this._setOption('onClick', value);
     }
 

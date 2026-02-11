@@ -88,6 +88,13 @@ describe('AIIntegration', () => {
       // @ts-expect-error Access to protected property for a test
       expect(ai.requestManager).toBeInstanceOf(RequestManager);
     });
+
+    it('should pass lang option to PromptManager', () => {
+      const aiWithLang = new AIIntegration(provider, { lang: 'de-DE' });
+
+      // @ts-expect-error Access to protected property for a test
+      expect(aiWithLang.promptManager.lang).toBe('de-DE');
+    });
   });
 
   Object.keys(COMMANDS).forEach((commandName: string) => {

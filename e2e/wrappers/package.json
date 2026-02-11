@@ -35,7 +35,7 @@
     "devextreme-quill": "catalog:",
     "devextreme-react": "workspace:~",
     "devextreme-vue": "workspace:~",
-    "express": "4.22.0",
+    "express": "4.22.1",
     "inferno": "^8.2.0",
     "inferno-create-element": "^8.2.0",
     "jszip": "^3.10.1",
@@ -52,7 +52,7 @@
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@analogjs/vite-plugin-angular": "1.15.1",
+    "@analogjs/vite-plugin-angular": "1.22.5",
     "@angular-devkit/build-angular": "catalog:angular",
     "@angular/cli": "catalog:angular",
     "@angular/compiler-cli": "catalog:angular",

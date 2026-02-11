@@ -140,7 +140,4 @@ export type ComponentClass<TProperties> = {
 
 interface DOMComponentInstance extends DOMComponent<Properties> { }
 
-type Properties = DOMComponentOptions<DOMComponentInstance>;
-
-/** @deprecated use Properties instead */
-export type Options = Properties;
+export type Properties = DOMComponentOptions<DOMComponentInstance>;

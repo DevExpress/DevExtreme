@@ -41,6 +41,15 @@ describe('TranslateCommand', () => {
     });
   });
 
+  describe('getBuildPromptOptions', () => {
+    it('should return applyMetaTemplates: false', () => {
+      // @ts-expect-error Access to protected property for a test
+      const options = command.getBuildPromptOptions();
+
+      expect(options).toEqual({ applyMetaTemplates: false });
+    });
+  });
+
   describe('buildPromptData', () => {
     it('should form PromptData with text in user section and lang in system section', () => {
       // @ts-expect-error Access to protected property for a test
@@ -75,7 +84,7 @@ describe('TranslateCommand', () => {
       expect(promptManager.buildPrompt).toHaveBeenCalledWith('translate', {
         system: { lang: 'French' },
         user: { text: 'text to translate' },
-      });
+      }, { applyMetaTemplates: false });
     });
 
     it('promptManager.buildPrompt should should return prompt with passed values', () => {

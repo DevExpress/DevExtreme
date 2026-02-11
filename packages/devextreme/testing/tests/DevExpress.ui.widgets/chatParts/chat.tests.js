@@ -880,6 +880,34 @@ QUnit.module('Chat', () => {
         });
     });
 
+    QUnit.module('MessageBox integration', moduleConfig, () => {
+        QUnit.test('inputFieldText option should be passed to messageBox on init', function(assert) {
+            this.reinit({
+                inputFieldText: 'some text',
+            });
+
+            const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
+
+            assert.strictEqual(messageBox.option('text'), 'some text', 'inputFieldText is passed to messageBox on init');
+        });
+
+        QUnit.test('inputFieldText option should be passed to messageBox at runtime', function(assert) {
+            const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
+
+            this.instance.option('inputFieldText', 'some text');
+
+            assert.strictEqual(messageBox.option('text'), 'some text', 'inputFieldText is passed to messageBox at runtime');
+        });
+
+        QUnit.test('inputFieldText option should be updated after messageBox text option update', function(assert) {
+            const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
+
+            messageBox.option('text', 'some text');
+
+            assert.strictEqual(this.instance.option('inputFieldText'), 'some text', 'inputFieldText is updated after messageBox text option update');
+        });
+    });
+
     QUnit.module('AlertList integration', {
         beforeEach: function() {
             moduleConfig.beforeEach.apply(this, arguments);
@@ -2572,6 +2600,55 @@ QUnit.module('Chat', () => {
             });
 
             assert.ok(this.instance.getDataSource() instanceof DataSource);
+        });
+    });
+
+    QUnit.module('SpeechToText integration', moduleConfig, () => {
+        QUnit.test('speechToTextEnabled should be passed to messageBox on init', function(assert) {
+            this.reinit({ speechToTextEnabled: true });
+
+            const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
+
+            assert.strictEqual(messageBox.option('speechToTextEnabled'), true, 'speechToTextEnabled is passed to messageBox');
+        });
+
+        QUnit.test('speechToTextOptions should be passed to messageBox on init', function(assert) {
+            const speechToTextOptions = {
+                speechRecognitionConfig: {
+                    continuous: true,
+                    interimResults: true,
+                },
+            };
+
+            this.reinit({ speechToTextEnabled: true, speechToTextOptions });
+
+            const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
+
+            assert.deepEqual(messageBox.option('speechToTextOptions'), speechToTextOptions, 'speechToTextOptions is passed to messageBox');
+        });
+
+        QUnit.test('speechToTextEnabled should be updated in messageBox at runtime', function(assert) {
+            const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
+
+            this.instance.option('speechToTextEnabled', true);
+
+            assert.strictEqual(messageBox.option('speechToTextEnabled'), true, 'speechToTextEnabled is updated in messageBox');
+        });
+
+        QUnit.test('speechToTextOptions should be updated in messageBox at runtime', function(assert) {
+            this.reinit({ speechToTextEnabled: true });
+
+            const messageBox = MessageBox.getInstance(this.$element.find(`.${CHAT_MESSAGEBOX_CLASS}`));
+
+            const newOptions = {
+                speechRecognitionConfig: {
+                    continuous: false,
+                },
+            };
+
+            this.instance.option('speechToTextOptions', newOptions);
+
+            assert.deepEqual(messageBox.option('speechToTextOptions'), newOptions, 'speechToTextOptions is updated in messageBox');
         });
     });
 

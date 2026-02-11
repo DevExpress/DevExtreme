@@ -826,9 +826,22 @@ export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = ReducedNativeEv
 /** @public */
 export type RowDraggingReorderEvent<TRowData = any, TKey = any> = ReducedNativeEventInfo<dxTreeList<TRowData, TKey>> & RowDraggingEventInfo<TRowData> & DragReorderInfo;
 
-/** @public */
+/**
+ * @docid _ui_tree_list_ColumnButtonClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
 export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
+    /**
+     * @docid _ui_tree_list_ColumnButtonClickEvent.row
+     * @type dxTreeListRowObject
+     */
     row?: Row<TRowData, TKey>;
+    /**
+     * @docid _ui_tree_list_ColumnButtonClickEvent.column
+     * @type dxTreeListColumn
+     */
     column?: Column<TRowData, TKey>;
 };
 
@@ -1628,11 +1641,7 @@ export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends Colu
     name?: TreeListPredefinedColumnButton | string;
     /**
      * @docid dxTreeListColumnButton.onClick
-     * @type_function_param1 e:object
-     * @type_function_param1_field component:dxTreeList
-     * @type_function_param1_field event:event
-     * @type_function_param1_field row:dxTreeListRowObject
-     * @type_function_param1_field column:dxTreeListColumn
+     * @type_function_param1 e:{ui/tree_list:ColumnButtonClickEvent}
      * @public
      */
     onClick?: ((e: ColumnButtonClickEvent<TRowData, TKey>) => void);
@@ -1853,9 +1862,6 @@ export type ExplicitTypes<TRowData, TKey> = {
 
 /** @public */
 export type Properties<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
-
-/** @deprecated use Properties instead */
-export type Options<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
 
 /// #DEBUG
 // eslint-disable-next-line import/first
