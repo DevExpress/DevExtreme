@@ -416,7 +416,8 @@ class PivotGrid extends Widget {
         }
         that._initDataController();
         that.getFieldChooserPopup().hide().then(() => {
-          this.getFieldChooserPopup().dispose();
+          that.getFieldChooserPopup().dispose();
+          that._fieldChooserPopup = null;
           that._renderFieldChooser();
         });
         that._invalidate();
@@ -665,6 +666,7 @@ class PivotGrid extends Widget {
         // @ts-expect-error ts-error
         popupOptions,
       );
+      that._fieldChooserPopup.$content().dxPivotGridFieldChooser(fieldChooserComponentOptions);
     }
   }
 
