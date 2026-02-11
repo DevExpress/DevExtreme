@@ -50,51 +50,12 @@
         </select>
         <br />
         <div id="button"></div>
-        <div id="grid-playground" style="margin-top: 24px;">
-            <h2>DataGrid repaintChangesOnly + Cancel Changes</h2>
-            <p>
-                1) Clear the <strong>Name</strong> cell in any row.<br />
-                2) Press <strong>Tab</strong> (or click another cell) so the editor loses focus.<br />
-                3) Wait for the validation tooltip and click <strong>Cancel Changes</strong>.<br />
-                The original value must be restored for every row.
-            </p>
-            <div id="grid" style="max-width: 640px;"></div>
-        </div>
         <script>
             $(() => {
                 $("#button").dxButton({
                     text: 'Click me!',
                     onClick: () => { alert("clicked"); }
                 });
-
-                const jobs = [
-                    { id: 1, name: 'Job 1', article: 'Article A' },
-                    { id: 2, name: 'Job 2', article: 'Article B' }
-                ];
-
-                const grid = $("#grid").dxDataGrid({
-                    dataSource: jobs,
-                    keyExpr: 'id',
-                    repaintChangesOnly: true,
-                    showBorders: true,
-                    columnAutoWidth: true,
-                    editing: {
-                        mode: 'cell',
-                        allowUpdating: true
-                    },
-                    columns: [
-                        {
-                            dataField: 'name',
-                            showEditorAlways: true,
-                            validationRules: [{ type: 'required', message: 'Required field' }]
-                        },
-                        {
-                            dataField: 'article'
-                        }
-                    ]
-                }).dxDataGrid('instance');
-
-                window.dxPlayground = { grid };
             });
         </script>
     </div>
