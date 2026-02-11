@@ -71,6 +71,15 @@ describe('BaseCommand', () => {
     });
   });
 
+  describe('getBuildPromptOptions', () => {
+    it('should return { applyMetaTemplates: true } by default', () => {
+      // @ts-expect-error Access to protected property for a test
+      const result = command.getBuildPromptOptions();
+
+      expect(result).toEqual({ applyMetaTemplates: true });
+    });
+  });
+
   describe('execute', () => {
     it('getTemplateName should return the name of the corresponding template', () => {
       const spy = jest.spyOn(command, 'getTemplateName');

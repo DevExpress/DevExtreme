@@ -34,6 +34,10 @@ export const ERROR_MESSAGES = {
   TEMPLATE_NOT_FOUND: 'Template not found',
 };
 
+export interface BuildPromptOptions {
+  applyMetaTemplates: boolean;
+}
+
 export const LANG_TEMPLATE_NAME = 'addLanguage';
 
 export class PromptManager {
@@ -49,7 +53,11 @@ export class PromptManager {
     this.lang = options?.lang;
   }
 
-  public buildPrompt(templateName: PromptTemplateName, data: PromptData): Prompt {
+  public buildPrompt(
+    templateName: PromptTemplateName,
+    data: PromptData,
+    options: BuildPromptOptions,
+  ): Prompt {
     const template = this.templates.get(templateName);
     const langTemplate = this.metaTemplates.get(LANG_TEMPLATE_NAME);
 
@@ -59,8 +67,8 @@ export class PromptManager {
 
     const baseSystem = this.generateMessage(template.system, data.system);
 
-    const system = this.lang && langTemplate
-      ? this.generateMessage(langTemplate?.system, {
+    const system = options.applyMetaTemplates && this.lang && langTemplate
+      ? this.generateMessage(langTemplate.system, {
         message: baseSystem ?? '',
         lang: this.lang,
       })
