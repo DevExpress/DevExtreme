@@ -65,7 +65,7 @@ const getTestSpecificSkipRules = (testName) => {
 const SKIPPED_TESTS = {
   jQuery: {
     DataGrid: [
-      { demo: 'BatchUpdateRequest' }
+      { demo: 'BatchUpdateRequest' },
     ],
     Charts: [
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
