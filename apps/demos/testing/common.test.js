@@ -64,6 +64,9 @@ const getTestSpecificSkipRules = (testName) => {
 
 const SKIPPED_TESTS = {
   jQuery: {
+    DataGrid: [
+      { demo: 'BatchUpdateRequest' }
+    ],
     Charts: [
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
     ],
@@ -80,6 +83,7 @@ const SKIPPED_TESTS = {
   },
   Angular: {
     DataGrid: [
+      { demo: 'BatchUpdateRequest' },
       { demo: 'EditStateManagement', themes: [THEME.generic] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
       { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
@@ -167,6 +171,7 @@ const SKIPPED_TESTS = {
       { demo: 'DoughnutWithCustomLabelInCenter', themes: [THEME.material] },
     ],
     DataGrid: [
+      { demo: 'BatchUpdateRequest' },
       { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
       { demo: 'EditStateManagement', themes: [THEME.material] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
@@ -246,6 +251,7 @@ const SKIPPED_TESTS = {
       { demo: 'TopOrBottomPosition', themes: [THEME.material] },
     ],
     DataGrid: [
+      { demo: 'BatchUpdateRequest' },
       { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.material] },
       { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
