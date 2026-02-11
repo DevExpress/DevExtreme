@@ -18,7 +18,7 @@ interface Watcher {
 const forcibleWatcher = <T>(
   watchMethod: (
     fn: () => void,
-    callback: (value: T) => void
+    callback: (value: T) => void,
   ) => () => void,
   fn: () => T,
   callback: (value: T, oldValue: T) => void,
@@ -45,11 +45,11 @@ const forcibleWatcher = <T>(
 export interface ItemExtraOption<TProperties> {
   owner: Record<string, unknown>;
   fieldGetter: <TT>(
-    field: keyof TProperties
+    field: keyof TProperties,
   ) => (rawData: TProperties | undefined) => TT;
   watchMethod: <TT>() => (
     fn: () => void,
-    callback: (value: TT) => void
+    callback: (value: TT) => void,
   ) => () => void;
 }
 
