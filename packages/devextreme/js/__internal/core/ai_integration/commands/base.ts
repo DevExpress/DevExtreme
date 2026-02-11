@@ -1,5 +1,10 @@
 import type { AIResponse, RequestCallbacks, RequestParamsData } from '@js/common/ai-integration';
-import type { PromptData, PromptManager, PromptTemplateName } from '@ts/core/ai_integration/core/prompt_manager';
+import type {
+  BuildPromptOptions,
+  PromptData,
+  PromptManager,
+  PromptTemplateName,
+} from '@ts/core/ai_integration/core/prompt_manager';
 import type { RequestManager, RequestManagerCallbacks } from '@ts/core/ai_integration/core/request_manager';
 
 export abstract class BaseCommand<TParams extends RequestParamsData, TResult> {
@@ -11,8 +16,9 @@ export abstract class BaseCommand<TParams extends RequestParamsData, TResult> {
   public execute(params: TParams, callbacks: RequestCallbacks<TResult>): () => void {
     const templateName = this.getTemplateName();
     const data = this.buildPromptData(params);
+    const options = this.getBuildPromptOptions();
 
-    const prompt = this.promptManager.buildPrompt(templateName, data);
+    const prompt = this.promptManager.buildPrompt(templateName, data, options);
 
     const requestManagerCallbacks: RequestManagerCallbacks = {
       onChunk: (chunk) => { callbacks?.onChunk?.(chunk); },
@@ -27,6 +33,10 @@ export abstract class BaseCommand<TParams extends RequestParamsData, TResult> {
     const abort = this.requestManager.sendRequest(prompt, requestManagerCallbacks, params);
 
     return abort;
+  }
+
+  protected getBuildPromptOptions(): BuildPromptOptions {
+    return { applyMetaTemplates: true };
   }
 
   protected abstract getTemplateName(): PromptTemplateName;
