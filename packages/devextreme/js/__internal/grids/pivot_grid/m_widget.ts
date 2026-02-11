@@ -412,7 +412,6 @@ class PivotGrid extends Widget {
       case 'stateStoring':
         if (that._fieldChooserBase) {
           that._fieldChooserBase._dispose();
-          that._fieldChooserBase = null;
         }
         that._initDataController();
         that.getFieldChooserPopup().hide();
@@ -1275,12 +1274,10 @@ class PivotGrid extends Widget {
 
     if (that._fieldChooserBase) {
       that._fieldChooserBase._dispose();
-      that._fieldChooserBase = null;
     }
 
     if (that._dataController) {
       that._dataController.dispose();
-      that._dataController = null;
     }
 
     super._dispose();

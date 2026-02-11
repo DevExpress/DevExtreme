@@ -440,12 +440,6 @@ export class FieldChooserBase extends mixinWidget {
   addWidgetPrefix(className) {
     return `dx-pivotgrid-${className}`;
   }
-
-  _dispose() {
-    this._eventsStrategy.fireEvent('disposing', [{ component: this }]);
-    this._dataSource = null;
-    super._dispose();
-  }
 }
 
 registerComponent('dxPivotGridFieldChooserBase', FieldChooserBase as any);
