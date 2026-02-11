@@ -279,9 +279,6 @@ export type AIIntegrationOptions = {
  * @public
  */
 export class AIIntegration {
-  /**
-   * @docid
-   */
   constructor(provider: AIProvider, options?: AIIntegrationOptions);
   /**
    * @publicName changeStyle(params, callbacks)
