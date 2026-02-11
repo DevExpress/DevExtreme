@@ -63,6 +63,13 @@ export class TooltipStrategyBase {
 
   }
 
+  private isDeletingAllowed(appointment) {
+    const { editing } = this._extraOptions;
+    const disabled = this._options.getAppointmentDisabled(appointment);
+    const isDeletingAllowed = editing === true || editing?.allowDeleting === true;
+    return !disabled && isDeletingAllowed;
+  }
+
   _getContentTemplate(dataList) {
     return (container) => {
       const listElement = $('<div>');
@@ -83,11 +90,7 @@ export class TooltipStrategyBase {
           return;
         }
 
-        const { editing } = this._extraOptions;
-        const disabled = this._options.getAppointmentDisabled(appointment);
-        const isDeletingAllowed = editing === true || editing?.allowDeleting === true;
-
-        if (!disabled && isDeletingAllowed) {
+        if (this.isDeletingAllowed(appointment)) {
           this.hide();
           this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
         }
@@ -202,14 +205,11 @@ export class TooltipStrategyBase {
   _onListItemContextMenu(e) { }
 
   _createItemListContent(appointment, targetedAppointment, color) {
-    const { editing } = this._extraOptions;
     const $itemElement = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM);
     $itemElement.append(this._createItemListMarker(color));
     $itemElement.append(this._createItemListInfo(this._options.createFormattedDateText(appointment, targetedAppointment)));
 
-    const disabled = this._options.getAppointmentDisabled(appointment);
-
-    if (!disabled && (editing && editing.allowDeleting === true || editing === true)) {
+    if (this.isDeletingAllowed(appointment)) {
       $itemElement.append(this._createDeleteButton(appointment, targetedAppointment));
     }
 
