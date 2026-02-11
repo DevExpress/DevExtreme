@@ -29,6 +29,7 @@
     "@nx/devkit": "18.3.4",
     "@nx/jest": "19.4.2",
     "@nx/js": "19.4.2",
+    "@playwright/test": "^1.56.1",
     "@types/jest": "29.5.12",
     "@types/node": "20.12.8",
     "@types/shelljs": "0.8.15",
