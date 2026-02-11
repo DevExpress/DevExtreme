@@ -536,11 +536,6 @@ class ChatTextArea extends TextArea<Properties> {
     this._addFileToMap(file);
   }
 
-  _toggleButtonDisableState(state?: boolean): void {
-    const shouldDisable = state ?? !this._isMessageCanBeSent();
-    this._sendButton?.option('disabled', shouldDisable);
-  }
-
   _updateButtonsState(): void {
     if (this._speechToTextIsListening === true) {
       this._speechToTextButton?.option(STT_LISTENING_STATE);
