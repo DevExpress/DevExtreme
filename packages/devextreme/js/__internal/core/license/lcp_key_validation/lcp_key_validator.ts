@@ -59,7 +59,7 @@ function productsFromString(encodedString: string): ParsedProducts {
 }
 
 export function parseDevExpressProductKey(productsLicenseSource: string): Token {
-  if (isProductOnlyLicense(productsLicenseSource)) {
+  if (!isProductOnlyLicense(productsLicenseSource)) {
     return GENERAL_ERROR;
   }
 
