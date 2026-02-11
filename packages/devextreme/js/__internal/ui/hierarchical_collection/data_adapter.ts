@@ -582,12 +582,9 @@ class DataAdapter {
   }
 
   isAllSelected(): boolean | undefined {
-    const selectedNodeKeys = this.getSelectedNodesKeys();
-    const disabledNodeKeys = this.getDisabledNodesKeys();
-
     const selectedDisabledNodesAmount = getIntersection(
-      selectedNodeKeys,
-      disabledNodeKeys,
+      this.getSelectedNodesKeys(),
+      this.getDisabledNodesKeys(),
     ).length;
 
     const isSkipDisabled = this.options.disabledNodeSelectionMode === 'never';
