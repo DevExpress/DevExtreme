@@ -17,7 +17,7 @@ export class AppointmentsKeyboardNavigation {
     this._collection = collection;
   }
 
-  public $focusableItems(): dxElementWrapper {
+  public getFocusableItems(): dxElementWrapper {
     const appts = this._collection._itemElements().not('.dx-state-disabled');
     const collectors = this._collection.$element().find('.dx-scheduler-appointment-collector');
 
@@ -25,15 +25,15 @@ export class AppointmentsKeyboardNavigation {
     return appts.add(collectors);
   }
 
-  public $focusableItemBySortedIndex(sortedIndex: number): dxElementWrapper {
-    const $items = this.$focusableItems();
-
-    // @ts-expect-error
-    return $items.filter((_, itemElement: Element) => {
+  public getFocusableItemBySortedIndex(sortedIndex: number): dxElementWrapper {
+    const $items = this.getFocusableItems();
+    const itemElement = $items.toArray().filter((itemElement: Element) => {
       const $item = $(itemElement);
       const itemData = this._collection.getAppointmentSettings($item);
       return itemData.sortedIndex === sortedIndex;
-    }).eq(0);
+    });
+
+    return $(itemElement);
   }
 
   public focus(): void {
@@ -51,29 +51,29 @@ export class AppointmentsKeyboardNavigation {
   }
 
   public focusOutHandler(): void {
-    const $item = this.$focusableItemBySortedIndex(0);
+    const $item = this.getFocusableItemBySortedIndex(0);
     this._collection.option('focusedElement', getPublicElement($item));
   }
 
   public getSupportedKeys(): SupportedKeys {
     return {
-      escape: this._escHandler.bind(this),
-      del: this._delHandler.bind(this),
-      tab: this._tabHandler.bind(this),
+      escape: this.escHandler.bind(this),
+      del: this.delHandler.bind(this),
+      tab: this.tabHandler.bind(this),
     };
   }
 
   public resetTabIndex($appointment: dxElementWrapper): void {
-    this.$focusableItems().attr('tabIndex', -1);
+    this.getFocusableItems().attr('tabIndex', -1);
     $appointment.attr('tabIndex', this._collection.option('tabIndex'));
   }
 
-  private _tabHandler(e): void {
+  private tabHandler(e): void {
     if (!this.$focusedItem) {
       return;
     }
 
-    const $focusableItems = this.$focusableItems();
+    const $focusableItems = this.getFocusableItems();
     let index = this._collection.getAppointmentSettings(this.$focusedItem).sortedIndex;
     let $nextAppointment = e.shiftKey
       ? getPrevElement(index, this._collection.renderedElementsBySortedIndex)
@@ -85,7 +85,7 @@ export class AppointmentsKeyboardNavigation {
 
       if (!$nextAppointment) {
         e.shiftKey ? index-- : index++;
-        $nextAppointment = this.$focusableItemBySortedIndex(index);
+        $nextAppointment = this.getFocusableItemBySortedIndex(index);
       }
 
       this.resetTabIndex($nextAppointment);
@@ -93,7 +93,7 @@ export class AppointmentsKeyboardNavigation {
     }
   }
 
-  private _delHandler(e: DxEvent): void {
+  private delHandler(e: DxEvent): void {
     if (this._collection.option('allowDelete')) {
       e.preventDefault();
       const data = this._collection.getAppointmentSettings($(e.target)).itemData;
@@ -101,7 +101,7 @@ export class AppointmentsKeyboardNavigation {
     }
   }
 
-  private _escHandler(): void {
+  private escHandler(): void {
     if (!this._collection.isResizing) {
       return;
     }

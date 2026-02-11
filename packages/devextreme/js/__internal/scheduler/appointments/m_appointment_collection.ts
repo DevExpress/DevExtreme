@@ -152,11 +152,11 @@ class SchedulerAppointments extends CollectionWidget<any> {
   _moveFocus() {}
 
   _focusTarget() {
-    return this._kbn.$focusableItems();
+    return this._kbn.getFocusableItems();
   }
 
   _renderFocusTarget() {
-    const $item = this._kbn.$focusableItemBySortedIndex(0);
+    const $item = this._kbn.getFocusableItemBySortedIndex(0);
     this._kbn.resetTabIndex($item);
   }
 
