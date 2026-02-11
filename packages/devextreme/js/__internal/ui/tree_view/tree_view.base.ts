@@ -284,7 +284,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       createChildren: null,
       onSelectAllValueChanged: null,
       _supportItemUrl: false,
-      disabledNodeSelectionMode: 'all',
+      disabledNodeSelectionMode: 'recursiveAndAll',
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -443,7 +443,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
         this.repaint();
         break;
       case 'disabledNodeSelectionMode':
-        this._dataAdapter.setOption('disabledNodeSelectionMode', args.value ?? 'all');
+        this._dataAdapter.setOption('disabledNodeSelectionMode', args.value ?? 'recursiveAndAll');
         this.repaint();
         break;
       default:
@@ -709,7 +709,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       dataType: dataStructure,
       sort: this._dataSource?.sort(),
       langParams: this._dataSource?.loadOptions?.()?.langParams,
-      disabledNodeSelectionMode,
+      disabledNodeSelectionMode: disabledNodeSelectionMode ?? 'recursiveAndAll',
     };
   }
 

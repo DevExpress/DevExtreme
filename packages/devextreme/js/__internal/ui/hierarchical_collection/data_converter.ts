@@ -126,21 +126,26 @@ class DataConverter {
 
   _convertItemToNode(item: ItemData, parentKey?: ItemKey): InternalNode {
     this._itemsCount += 1;
+
+    const disabled = this._dataAccessors.getters.disabled(item, { defaultValue: false });
+    const expanded = this._dataAccessors.getters.expanded(item, { defaultValue: false });
+    const selected = this._dataAccessors.getters.selected(item, { defaultValue: false });
+
     if (item.visible !== false) {
       this._visibleItemsCount += 1;
-    }
 
-    if (item.disabled === true) {
-      this._disabledItemsCount += 1;
+      if (disabled) {
+        this._disabledItemsCount += 1;
+      }
     }
 
     const { items, ...itemWithoutItems } = item;
 
     const node = {
       internalFields: {
-        disabled: this._dataAccessors.getters.disabled(item, { defaultValue: false }),
-        expanded: this._dataAccessors.getters.expanded(item, { defaultValue: false }),
-        selected: this._dataAccessors.getters.selected(item, { defaultValue: false }),
+        disabled,
+        expanded,
+        selected,
         key: this._getUniqueKey(item),
         parentKey: isDefined(parentKey) ? parentKey : this._rootValue,
         item: this._makeObjectFromPrimitive(item),

@@ -448,11 +448,18 @@ QUnit.module('disabledNodeSelectionMode', {
                 }],
             }],
         }];
+
+        this.checkCheckboxStates = (checkboxes, expectedStates, assert) => {
+            checkboxes.each((index, checkbox) => {
+                const ariaChecked = $(checkbox).attr('aria-checked');
+                assert.strictEqual(ariaChecked, expectedStates[index], `checkbox ${index} has correct aria-checked state`);
+            });
+        };
     },
 }, () => {
     [
-        { disabledNodeSelectionMode: 'all', ariaCheckedStates: ['mixed', 'mixed', 'true', 'false'] },
-        { disabledNodeSelectionMode: 'skipDisabled', ariaCheckedStates: ['false', 'false', 'true', 'false'] }
+        { disabledNodeSelectionMode: 'recursiveAndAll', ariaCheckedStates: ['mixed', 'mixed', 'true', 'false'] },
+        { disabledNodeSelectionMode: 'never', ariaCheckedStates: ['false', 'false', 'true', 'false'] }
     ].forEach((config) => {
         QUnit.test(`initial selection state should be correct when disabledNodeSelectionMode: ${config.disabledNodeSelectionMode}`, function(assert) {
             const treeView = initTree({
@@ -462,11 +469,7 @@ QUnit.module('disabledNodeSelectionMode', {
             }).dxTreeView('instance');
 
             const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
-
-            checkboxes.each((index, checkbox) => {
-                const ariaChecked = $(checkbox).attr('aria-checked');
-                assert.strictEqual(ariaChecked, config.ariaCheckedStates[index], `checkbox ${index} has correct aria-checked state`);
-            });
+            this.checkCheckboxStates(checkboxes, config.ariaCheckedStates, assert);
         });
     });
 
@@ -503,8 +506,8 @@ QUnit.module('disabledNodeSelectionMode', {
         },
     }, () => {
         [
-            { disabledNodeSelectionMode: 'all', ariaCheckedStates: ['true', 'true', 'true'] },
-            { disabledNodeSelectionMode: 'skipDisabled', ariaCheckedStates: ['true', 'false', 'true'] }
+            { disabledNodeSelectionMode: 'recursiveAndAll', ariaCheckedStates: ['true', 'true', 'true'] },
+            { disabledNodeSelectionMode: 'never', ariaCheckedStates: ['true', 'false', 'true'] }
         ].forEach((config) => {
             QUnit.test(`selectAll should work correct when disabledNodeSelectionMode: ${config.disabledNodeSelectionMode}`, function(assert) {
                 const treeView = initTree({
@@ -516,17 +519,13 @@ QUnit.module('disabledNodeSelectionMode', {
                 treeView.selectAll();
 
                 const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
-
-                checkboxes.each((index, checkbox) => {
-                    const ariaChecked = $(checkbox).attr('aria-checked');
-                    assert.strictEqual(ariaChecked, config.ariaCheckedStates[index], `checkbox ${index} has correct aria-checked state`);
-                });
+                this.checkCheckboxStates(checkboxes, config.ariaCheckedStates, assert);
             });
         });
 
         [
-            { disabledNodeSelectionMode: 'all', ariaCheckedStates: ['false', 'false', 'false'] },
-            { disabledNodeSelectionMode: 'skipDisabled', ariaCheckedStates: ['false', 'true', 'false'] }
+            { disabledNodeSelectionMode: 'recursiveAndAll', ariaCheckedStates: ['false', 'false', 'false'] },
+            { disabledNodeSelectionMode: 'never', ariaCheckedStates: ['false', 'true', 'false'] }
         ].forEach((config) => {
             QUnit.test(`unselectAll should work correct when disabledNodeSelectionMode: ${config.disabledNodeSelectionMode}`, function(assert) {
                 const treeView = initTree({
@@ -538,77 +537,98 @@ QUnit.module('disabledNodeSelectionMode', {
                 treeView.unselectAll();
 
                 const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
-
-                checkboxes.each((index, checkbox) => {
-                    const ariaChecked = $(checkbox).attr('aria-checked');
-                    assert.strictEqual(ariaChecked, config.ariaCheckedStates[index], `checkbox ${index} has correct aria-checked state`);
-                });
+                this.checkCheckboxStates(checkboxes, config.ariaCheckedStates, assert);
             });
         });
 
-        QUnit.test('change option disabledNodeSelectionMode in runtime should change modes correctly (all -> skipDisabled)', function(assert) {
+        QUnit.test('change option disabledNodeSelectionMode in runtime should change modes correctly (recursiveAndAll -> never)', function(assert) {
             const selectedStatesBefore = ['true', 'true', 'true'];
             const unselectedStatesAfter = ['false', 'true', 'false'];
 
             const treeView = initTree({
                 items: this.unselectedItems,
                 showCheckBoxesMode: 'normal',
-                disabledNodeSelectionMode: 'all',
+                disabledNodeSelectionMode: 'recursiveAndAll',
             }).dxTreeView('instance');
 
             treeView.selectAll();
 
             let checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
-            checkboxes.each((index, checkbox) => {
-                const ariaChecked = $(checkbox).attr('aria-checked');
-                assert.strictEqual(ariaChecked, selectedStatesBefore[index], `checkbox ${index} has correct aria-checked state`);
-            });
+            this.checkCheckboxStates(checkboxes, selectedStatesBefore, assert);
 
-            treeView.option('disabledNodeSelectionMode', 'skipDisabled');
+            treeView.option('disabledNodeSelectionMode', 'never');
 
             treeView.unselectAll();
 
             checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
-            checkboxes.each((index, checkbox) => {
-                const ariaChecked = $(checkbox).attr('aria-checked');
-                assert.strictEqual(ariaChecked, unselectedStatesAfter[index], `checkbox ${index} has correct aria-checked state`);
-            });
+            this.checkCheckboxStates(checkboxes, unselectedStatesAfter, assert);
         });
 
-        QUnit.test('change option disabledNodeSelectionMode in runtime should change modes correctly (skipDisabled -> all)', function(assert) {
+        QUnit.test('change option disabledNodeSelectionMode in runtime should change modes correctly (never -> recursiveAndAll)', function(assert) {
             const selectedStatesBefore = ['true', 'false', 'true'];
             const unselectedStatesAfter = ['false', 'false', 'false'];
 
             const treeView = initTree({
                 items: this.unselectedItems,
                 showCheckBoxesMode: 'normal',
-                disabledNodeSelectionMode: 'skipDisabled',
+                disabledNodeSelectionMode: 'never',
             }).dxTreeView('instance');
 
             treeView.selectAll();
 
             let checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
-            checkboxes.each((index, checkbox) => {
-                const ariaChecked = $(checkbox).attr('aria-checked');
-                assert.strictEqual(ariaChecked, selectedStatesBefore[index], `checkbox ${index} has correct aria-checked state`);
-            });
+            this.checkCheckboxStates(checkboxes, selectedStatesBefore, assert);
 
-            treeView.option('disabledNodeSelectionMode', 'all');
+            treeView.option('disabledNodeSelectionMode', 'recursiveAndAll');
 
             treeView.unselectAll();
 
             checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
-            checkboxes.each((index, checkbox) => {
-                const ariaChecked = $(checkbox).attr('aria-checked');
-                assert.strictEqual(ariaChecked, unselectedStatesAfter[index], `checkbox ${index} has correct aria-checked state`);
+            this.checkCheckboxStates(checkboxes, unselectedStatesAfter, assert);
+        });
+
+        [
+            'customDisabled',
+            () => 'customDisabled',
+        ].forEach((customDisabledExpr) => {
+            QUnit.test('selection should work correct if disabledExpr as string is used and disabledNodeSelectionMode = never', function(assert) {
+                const items = [{
+                    id: 1,
+                    expanded: true,
+                    items: [{
+                        id: 2,
+                        expanded: true,
+                        customDisabled: true,
+                        items: [{
+                            id: 3,
+                            selected: true,
+                        }, {
+                            id: 4,
+                        }],
+                    }],
+                }];
+
+                const expectedSelectedAllStates = ['true', 'true', 'false', 'true', 'true'];
+
+                const treeView = initTree({
+                    items,
+                    showCheckBoxesMode: 'selectAll',
+                    disabledNodeSelectionMode: 'never',
+                    disabledExpr: customDisabledExpr,
+                }).dxTreeView('instance');
+
+                treeView.selectAll();
+
+                const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
+                this.checkCheckboxStates(checkboxes, expectedSelectedAllStates, assert);
             });
         });
     });
 
     QUnit.module('recursive selection', () => {
         [
-            { disabledNodeSelectionMode: 'all', ariaCheckedStates: ['true', 'true', 'true', 'true'] },
-            { disabledNodeSelectionMode: 'skipDisabled', ariaCheckedStates: ['true', 'false', 'true', 'false'] }
+            { disabledNodeSelectionMode: 'recursiveAndAll', ariaCheckedStates: ['true', 'true', 'true', 'true'] },
+            { disabledNodeSelectionMode: 'never', ariaCheckedStates: ['true', 'false', 'true', 'false'] }
         ].forEach((config) => {
             QUnit.test(`from parent to children when disabledNodeSelectionMode = ${config.disabledNodeSelectionMode}`, function(assert) {
                 const treeView = initTree({
@@ -620,17 +640,13 @@ QUnit.module('disabledNodeSelectionMode', {
                 treeView.selectItem(1);
 
                 const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
-
-                checkboxes.each((index, checkbox) => {
-                    const ariaChecked = $(checkbox).attr('aria-checked');
-                    assert.strictEqual(ariaChecked, config.ariaCheckedStates[index], `checkbox ${index} has correct aria-checked state`);
-                });
+                this.checkCheckboxStates(checkboxes, config.ariaCheckedStates, assert);
             });
         });
 
         [
-            { disabledNodeSelectionMode: 'all', ariaCheckedStates: ['true', 'true', 'true', 'true'] },
-            { disabledNodeSelectionMode: 'skipDisabled', ariaCheckedStates: ['false', 'false', 'true', 'true'] }
+            { disabledNodeSelectionMode: 'recursiveAndAll', ariaCheckedStates: ['true', 'true', 'true', 'true'] },
+            { disabledNodeSelectionMode: 'never', ariaCheckedStates: ['false', 'false', 'true', 'true'] }
         ].forEach((config) => {
             QUnit.test(`from children to parent when disabledNodeSelectionMode = ${config.disabledNodeSelectionMode}`, function(assert) {
                 const treeView = initTree({
@@ -642,11 +658,7 @@ QUnit.module('disabledNodeSelectionMode', {
                 treeView.selectItem(4);
 
                 const checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
-
-                checkboxes.each((index, checkbox) => {
-                    const ariaChecked = $(checkbox).attr('aria-checked');
-                    assert.strictEqual(ariaChecked, config.ariaCheckedStates[index], `checkbox ${index} has correct aria-checked state`);
-                });
+                this.checkCheckboxStates(checkboxes, config.ariaCheckedStates, assert);
             });
         });
     });

@@ -27,7 +27,7 @@ type SortOption = {
   desc?: boolean;
 } | string;
 
-export type DisabledNodeSelectionMode = 'all' | 'skipDisabled';
+export type DisabledNodeSelectionMode = 'recursiveAndAll' | 'never';
 
 interface LangParams {
   locale?: string;
@@ -74,7 +74,7 @@ class DataAdapter {
     dataConverter: new HierarchicalDataConverter(),
     onNodeChanged: noop,
     sort: null,
-    disabledNodeSelectionMode: 'all',
+    disabledNodeSelectionMode: 'recursiveAndAll',
   };
 
   _disabledNodesKeys: ItemKey[] = [];
@@ -179,8 +179,10 @@ class DataAdapter {
     return node?.internalFields.item.visible !== false;
   }
 
-  _isNodeDisabled(node?: InternalNode): boolean {
-    return node?.internalFields.item.disabled === true;
+  _isNodeDisabled(node?: InternalNode | null): boolean {
+    return (node?.internalFields.item
+      && this.options.dataAccessors.getters
+        .disabled(node?.internalFields.item, { defaultValue: false })) ?? false;
   }
 
   _getByKey(data: (InternalNode | null)[], key: ItemKey): InternalNode | null {
@@ -210,7 +212,7 @@ class DataAdapter {
 
       if (parent && node.internalFields.parentKey !== this.options.rootValue) {
         this._iterateParents(node, (parentNode: InternalNode): void => {
-          if (this.options.disabledNodeSelectionMode === 'skipDisabled' && this._isNodeDisabled(parentNode)) {
+          if (this.options.disabledNodeSelectionMode === 'never' && this._isNodeDisabled(parentNode)) {
             return;
           }
           const newParentState = this._calculateSelectedState(parentNode);
@@ -248,7 +250,7 @@ class DataAdapter {
       return;
     }
 
-    if (this.options.disabledNodeSelectionMode === 'skipDisabled' && this._isNodeDisabled(node)) {
+    if (this.options.disabledNodeSelectionMode === 'never' && this._isNodeDisabled(node)) {
       return;
     }
 
@@ -300,12 +302,12 @@ class DataAdapter {
     let disabledItemsCount = 0;
     let result: boolean | undefined = false;
 
-    const isSkipDisabled = this.options.disabledNodeSelectionMode === 'skipDisabled';
+    const isSkipDisabled = this.options.disabledNodeSelectionMode === 'never';
 
     for (let i = 0; i <= itemsCount - 1; i += 1) {
       const childNode = this.getNodeByKey(node.internalFields.childrenKeys[i]);
       const isChildInvisible = childNode?.internalFields.item.visible === false;
-      const isChildDisabled = childNode?.internalFields.item.disabled === true;
+      const isChildDisabled = this._isNodeDisabled(childNode);
       const childState = childNode?.internalFields.selected;
 
       if (isChildInvisible) {
@@ -342,7 +344,7 @@ class DataAdapter {
         return;
       }
 
-      if (this.options.disabledNodeSelectionMode === 'all'
+      if (this.options.disabledNodeSelectionMode === 'recursiveAndAll'
         || !this._isNodeDisabled(child)) {
         this._setFieldState(child, SELECTED, state);
       }
@@ -568,7 +570,7 @@ class DataAdapter {
         return;
       }
 
-      if (this.options.disabledNodeSelectionMode === 'all'
+      if (this.options.disabledNodeSelectionMode === 'recursiveAndAll'
         || !this._isNodeDisabled(node)) {
         this._setFieldState(node, SELECTED, state);
       }
@@ -590,7 +592,7 @@ class DataAdapter {
       disabledNodeKeys,
     ).length;
 
-    const isSkipDisabled = this.options.disabledNodeSelectionMode === 'skipDisabled';
+    const isSkipDisabled = this.options.disabledNodeSelectionMode === 'never';
 
     const selectedNodesKeysAmount = this.getSelectedNodesKeys().length
       - (isSkipDisabled ? selectedDisabledNodesAmount : 0);
