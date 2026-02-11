@@ -15,8 +15,6 @@ runManualTest('Common', 'PopupAndNotificationsOverview', (test) => {
   test('PopupAndNotificationsOverview', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t.wait(0);
-
     await t.click($(`.${IMAGES_CONTAINER_CLASS} .${ITEM_CONTENT_CLASS}`));
     await testScreenshot(t, takeScreenshot, 'common_dialogs_and_notifications_overview_popup.png');
 
