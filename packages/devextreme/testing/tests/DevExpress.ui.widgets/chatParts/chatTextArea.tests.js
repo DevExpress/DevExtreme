@@ -463,8 +463,8 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
     QUnit.module('SendButton state', {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
-            this.compareButtonState = (assert, expectedState) => {
-                const { stylingMode, type, disabled } = this.sendButton.option();
+            this.compareButtonState = (assert, expectedState, sendButton = this.sendButton) => {
+                const { stylingMode, type, disabled } = sendButton.option();
                 const stateOptions = { stylingMode, type, disabled };
 
                 assert.deepEqual(stateOptions, expectedState, 'send button has correct options');
@@ -585,6 +585,22 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
             $cancelButton.trigger('dxclick');
 
             this.compareButtonState(assert, SEND_BUTTON_INITIAL_STATE);
+        });
+
+        QUnit.test('send button should have updated state after speechToText disable during listening state', function(assert) {
+            this.reinit({ speechToTextEnabled: true });
+            this.typeText('i');
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            speechToTextInstance.option('onStartClick')({});
+            this.instance.option('speechToTextEnabled', false);
+
+            const $sendButton = this.$element.find(`.${BUTTON_CLASS}`);
+            const sendButton = Button.getInstance($sendButton);
+
+            this.compareButtonState(assert, SEND_BUTTON_READY_TO_SEND_STATE, sendButton);
         });
     });
 

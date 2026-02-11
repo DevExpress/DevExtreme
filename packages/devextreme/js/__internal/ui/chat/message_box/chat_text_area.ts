@@ -537,7 +537,7 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _updateButtonsState(): void {
-    if (this._speechToTextIsListening === true) {
+    if (this._speechToTextIsListening === true && this._speechToTextButton) {
       this._speechToTextButton?.option(STT_LISTENING_STATE);
       this._sendButton?.option(SEND_BUTTON_INITIAL_STATE);
 
@@ -616,6 +616,9 @@ class ChatTextArea extends TextArea<Properties> {
 
       case 'speechToTextEnabled':
         this._toolbar?.option({ items: this._getToolbarItems() });
+        this._speechToTextButton = undefined;
+        this._speechToTextIsListening = false;
+        this._updateButtonsState();
         break;
 
       case 'speechToTextOptions':
