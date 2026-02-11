@@ -5,5 +5,5 @@ export declare function hasProperty(property: string): boolean;
 export declare function setWindow(
   newWindowObject: Window | Record<string, unknown>,
 
-  hasWindow?: boolean
+  hasWindow?: boolean,
 ): void;
