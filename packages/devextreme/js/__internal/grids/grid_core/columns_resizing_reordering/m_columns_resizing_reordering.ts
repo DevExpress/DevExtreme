@@ -1330,7 +1330,6 @@ export class DraggingHeaderViewController extends modules.ViewController {
 
   public init() {
     super.init();
-
     this._columnsController = this.getController('columns');
     this._tablePositionController = this.getController('tablePosition');
     this._columnHeadersView = this.getView('columnHeadersView');
