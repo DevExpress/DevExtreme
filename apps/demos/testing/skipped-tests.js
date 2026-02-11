@@ -4,7 +4,6 @@ export const skippedTests = {
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
   Angular: {
-    // Common: ['PopupAndNotificationsOverview'],
     Scheduler: ['Templates'],
     // WebGL initialization error at the provider. There is no point in adding a mask
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
@@ -16,7 +15,6 @@ export const skippedTests = {
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
   Vue: {
-    // Common: ['PopupAndNotificationsOverview'],
     Scheduler: ['Templates'],
     // WebGL initialization error at the provider. There is no point in adding a mask
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
