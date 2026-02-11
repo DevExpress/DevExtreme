@@ -180,9 +180,7 @@ class DataAdapter {
   }
 
   _isNodeDisabled(node?: InternalNode | null): boolean {
-    return (node?.internalFields.item
-      && this.options.dataAccessors.getters
-        .disabled(node?.internalFields.item, { defaultValue: false })) ?? false;
+    return node?.internalFields.disabled ?? false;
   }
 
   _getByKey(data: (InternalNode | null)[], key: ItemKey): InternalNode | null {

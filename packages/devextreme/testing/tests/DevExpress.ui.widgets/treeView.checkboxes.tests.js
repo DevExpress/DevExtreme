@@ -591,7 +591,7 @@ QUnit.module('disabledNodeSelectionMode', {
             'customDisabled',
             () => 'customDisabled',
         ].forEach((customDisabledExpr) => {
-            QUnit.test('selection should work correct if disabledExpr as string is used and disabledNodeSelectionMode = never', function(assert) {
+            QUnit.test('selection should work correct if disabledExpr is used and disabledNodeSelectionMode = never', function(assert) {
                 const items = [{
                     id: 1,
                     expanded: true,
