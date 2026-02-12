@@ -28,6 +28,7 @@ import 'ui/validator';
 import errors from 'ui/widget/ui.errors';
 import { getCells, generateItems, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import { DataSource } from 'common/data/data_source/data_source';
@@ -8196,10 +8197,8 @@ QUnit.module('Editing with real dataController', {
     });
 
     // T729713
-    QUnit.skip('Cell mode - The editCellTemplate of the column should not be called when editing another column', function(assert) {
+    QUnit.test('Cell mode - The editCellTemplate of the column should not be called when editing another column', function(assert) {
         // arrange
-        const that = this;
-        const rowsView = that.rowsView;
         const $testElement = $('#container');
         const editCellTemplate = sinon.spy(function(_, options) {
             return $('<div>').dxTextBox({
@@ -8210,31 +8209,34 @@ QUnit.module('Editing with real dataController', {
             });
         });
 
-        $.extend(that.options.editing, {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'cell'
         });
 
-        rowsView.render($testElement);
-        that.columnOption('name', 'editCellTemplate', editCellTemplate);
+        this.rowsView.render($testElement);
+        this.columnOption('name', 'editCellTemplate', editCellTemplate);
 
         // act
-        $(rowsView.getCellElement(0, 0)).trigger('dxclick');
-        that.clock.tick(10);
-
-        const $inputElement = getInputElements($(rowsView.getCellElement(0, 0))).first();
-        $inputElement.val('test');
+        pointerMock($(this.rowsView.getCellElement(0, 0))).click();
 
         // assert
-        assert.strictEqual(editCellTemplate.callCount, 1);
+        assert.strictEqual(editCellTemplate.callCount, 1, 'editCellTemplate is called on cell click');
 
         // act
-        eventsEngine.trigger($inputElement[0], 'change');
-        $(rowsView.getCellElement(0, 1)).trigger('dxclick');
-        that.clock.tick(10);
+        const $inputElement = getInputElements($(this.rowsView.getCellElement(0, 0))).first();
+        keyboardMock($inputElement).type('test').change();
+        this.clock.tick(10);
+        pointerMock($('body')).click();
 
         // assert
-        assert.strictEqual(editCellTemplate.callCount, 1);
+        assert.strictEqual(editCellTemplate.callCount, 2, 'editCellTemplate is called on cell outside click after change');
+
+        // act
+        pointerMock($(this.rowsView.getCellElement(0, 1))).click();
+
+        // assert
+        assert.strictEqual(editCellTemplate.callCount, 2, 'editCellTemplate is not called on cell in another column click');
     });
 
     // T725319
@@ -9472,7 +9474,6 @@ QUnit.module('Editing with real dataController', {
             rowsView.render($testElement);
             this.option('onRowRemoving', (e) => {
                 changesInOnRowRemoving = this.option('editing.changes');
-
             });
 
             // act
@@ -9491,8 +9492,7 @@ QUnit.module('Editing with real dataController', {
             });
         });
 
-        // TODO
-        QUnit.skip('Changes - update row (custom store)', function(assert) {
+        QUnit.test('Changes - update row (custom store)', function(assert) {
             // arrange
             const that = this;
             let countCallOnRowUpdated = 0;
@@ -16689,56 +16689,6 @@ QUnit.module('Editing with scrolling', {
         const items = this.dataController.items();
         // assert.equal(this.dataController.pageIndex(), 1, "page index");
         assert.equal(items.length, 9, 'count items');
-        assert.ok(items[0].isNewRow, 'insert item');
-    });
-
-    // T258714
-    QUnit.skip('Change position of the inserted row when virtual scrolling', function(assert) {
-        // arrange
-        const testElement = $('#container');
-        let items;
-
-        this.options.scrolling = {
-            mode: 'virtual',
-            useNative: false
-        };
-
-        this.options.dataSource = generateDataSource(100, 2);
-
-        this.setupDataGrid();
-        this.rowsView.render(testElement);
-        this.rowsView.height(130);
-        this.rowsView.resize();
-
-        // assert
-        assert.equal(this.dataController.pageIndex(), 0, 'page index');
-
-        // arrange
-        this.rowsView.scrollTo({ y: 3500 });
-        this.clock.tick(10);
-
-        // assert
-        items = this.dataController.items();
-        assert.equal(this.dataController.pageIndex(), 24, 'page index');
-        assert.equal(items.length, 8, 'count items');
-
-        // act
-        this.addRow();
-        this.clock.tick(10);
-
-        // assert
-        items = this.dataController.items();
-        assert.equal(items.length, 9, 'count items');
-        assert.ok(items[4].isNewRow, 'insert item');
-
-        // act
-        this.rowsView.scrollTo({ y: 0 });
-        this.clock.tick(10);
-
-        // assert
-        items = this.dataController.items();
-        assert.equal(this.dataController.pageIndex(), 0, 'page index');
-        assert.equal(items.length, 5, 'count items');
         assert.ok(items[0].isNewRow, 'insert item');
     });
 
