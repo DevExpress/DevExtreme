@@ -279,7 +279,7 @@ function initBaseComponent() {
       $_getWatchMethod(): (
         valueGetter: () => any,
         valueChangeCallback: (value: any) => void,
-        options: { deep: boolean; skipImmediate: boolean }
+        options: { deep: boolean; skipImmediate: boolean },
       ) => any {
         return (valueGetter, valueChangeCallback, options) => {
           options = options || {};

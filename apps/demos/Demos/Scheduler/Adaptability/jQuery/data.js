@@ -53,10 +53,10 @@ const priorities = [
   {
     text: 'High priority',
     id: 1,
-    color: '#cc5c53',
+    color: '#C62828',
   }, {
     text: 'Low priority',
     id: 2,
-    color: '#ff9747',
+    color: '#DD2C00',
   },
 ];

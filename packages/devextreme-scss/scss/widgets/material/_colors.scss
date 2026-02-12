@@ -164,10 +164,10 @@ $scrollview-pulldown-path: null !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: $base-inverted-bg !default;
   $base-hover-color: $base-text-color !default;
-  $base-hover-bg: color.change(#fff, $alpha: 0.08) !default;
+  $base-hover-bg: color.change(#000, $alpha: 0.04) !default;
   $base-inverted-text-color: #fff !default;
   $base-focus-color: $base-inverted-text-color !default;
-  $base-focus-bg: color.change(#fff, $alpha: 0.08) !default;
+  $base-focus-bg: color.change(#000, $alpha: 0.04) !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
 
@@ -194,10 +194,10 @@ $scrollview-pulldown-path: null !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: #000 !default;
   $base-hover-color: $base-text-color !default;
-  $base-hover-bg: color.change(#fff, $alpha: 0.05) !default;
+  $base-hover-bg: color.change(#fff, $alpha: 0.04) !default;
   $base-inverted-text-color: rgba(0, 0, 0, 0.87) !default;
   $base-focus-color: $base-inverted-text-color !default;
-  $base-focus-bg: color.change(#fff, $alpha: 0.05) !default;
+  $base-focus-bg: color.change(#fff, $alpha: 0.04) !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
 

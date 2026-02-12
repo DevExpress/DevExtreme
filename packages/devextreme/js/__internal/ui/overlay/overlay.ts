@@ -159,7 +159,7 @@ export interface OverlayActions<
   onHidden?: OverlayProperties['onHidden'];
   onPositioned?: (e: Partial<PositioningEvent<TPosition>>) => void;
   onVisualPositionChanged?: (
-    e: Partial<VisualPositionChangedEvent<TPosition>>
+    e: Partial<VisualPositionChangedEvent<TPosition>>,
   ) => void;
 }
 
