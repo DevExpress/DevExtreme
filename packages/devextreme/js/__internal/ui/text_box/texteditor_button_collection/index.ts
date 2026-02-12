@@ -3,10 +3,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type dxButton from '@js/ui/button';
 import errors from '@js/ui/widget/ui.errors';
-
-import type TextEditorBase from '../m_text_editor.base';
-import type TextEditorButton from './m_button';
-import CustomButton from './m_custom';
+import type TextEditorBase from '@ts/ui/text_box/m_text_editor.base';
+import type TextEditorButton from '@ts/ui/text_box/texteditor_button_collection/button';
+import CustomButton from '@ts/ui/text_box/texteditor_button_collection/custom';
 
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 

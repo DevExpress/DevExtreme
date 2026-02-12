@@ -29,8 +29,8 @@ import Editor from '@ts/ui/editor/editor';
 
 import ClearButton from './m_text_editor.clear';
 import { TextEditorLabel } from './m_text_editor.label';
-import type { TextEditorButtonInfo } from './texteditor_button_collection/m_index';
-import TextEditorButtonCollection from './texteditor_button_collection/m_index';
+import type { TextEditorButtonInfo } from './texteditor_button_collection';
+import TextEditorButtonCollection from './texteditor_button_collection';
 
 export const TEXTEDITOR_CLASS = 'dx-texteditor';
 export const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
