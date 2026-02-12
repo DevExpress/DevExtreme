@@ -3,11 +3,11 @@ import { Deferred } from 'devextreme/core/utils/deferred';
 
 const sendRequestOrig = ajax.sendRequest;
 const fetchOrig = fetch;
-let ANTI_FORGERY_GETTING_PROMISE = null;
+let antiForgeryGettingPromise = null;
 
 async function fetchAntiForgeryToken() {
   try {
-    const response = await fetchOrig(`https://js.devexpress.com/Demos/NetCore/api/Common/GetAntiForgeryToken`, {
+    const response = await fetchOrig('https://js.devexpress.com/Demos/NetCore/api/Common/GetAntiForgeryToken', {
       method: 'GET',
       credentials: 'include',
       cache: 'no-cache',
@@ -27,27 +27,27 @@ async function fetchAntiForgeryToken() {
 
 async function getAntiForgeryTokenValue() {
   const tokenMeta = document.querySelector('meta[name="csrf-token"]');
-  
+
   if (tokenMeta) {
     const headerName = tokenMeta.dataset.headerName || 'RequestVerificationToken';
     const token = tokenMeta.getAttribute('content') || '';
-    
+
     return Promise.resolve({ headerName, token });
   }
 
-  if(!ANTI_FORGERY_GETTING_PROMISE) {
-    ANTI_FORGERY_GETTING_PROMISE = fetchAntiForgeryToken();
+  if (!antiForgeryGettingPromise) {
+    antiForgeryGettingPromise = fetchAntiForgeryToken();
   }
- 
-  const tokenData = await ANTI_FORGERY_GETTING_PROMISE;
+
+  const tokenData = await antiForgeryGettingPromise;
   const meta = document.createElement('meta');
-  
+
   meta.name = 'csrf-token';
   meta.content = tokenData.token;
   meta.dataset.headerName = tokenData.headerName;
   document.head.appendChild(meta);
-  ANTI_FORGERY_GETTING_PROMISE = null;
-  
+  antiForgeryGettingPromise = null;
+
   return tokenData;
 }
 

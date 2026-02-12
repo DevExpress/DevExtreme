@@ -1,8 +1,8 @@
 /* global $, DevExpress */
 const orig$ = $;
 const ajaxSendRequestOrig = DevExpress.utils.ajax.sendRequest;
-let ANTI_FORGERY_SETTING_PROMISE = null;
-  
+let antiForgerySettingPromise = null;
+
 function fetchAntiForgeryToken() {
   const d = orig$.Deferred();
 
@@ -17,7 +17,7 @@ function fetchAntiForgeryToken() {
     const error = xhr.responseJSON?.message || xhr.statusText || 'Unknown error';
     d.reject(new Error(`Failed to retrieve anti-forgery token: ${error}`));
   });
-  
+
   return d.promise();
 }
 
@@ -45,8 +45,8 @@ async function setAntiForgery() {
 
   // eslint-disable-next-line no-global-assign
   $ = orig$;
-  ANTI_FORGERY_SETTING_PROMISE = null;
-  
+  antiForgerySettingPromise = null;
+
   $.ajax = (url, options) => {
     if (typeof url !== 'string') {
       // eslint-disable-next-line no-param-reassign
@@ -78,11 +78,11 @@ async function setAntiForgery() {
 
 // eslint-disable-next-line no-global-assign
 $ = (...args) => orig$(async () => {
-  if(!ANTI_FORGERY_SETTING_PROMISE) {
-    ANTI_FORGERY_SETTING_PROMISE = setAntiForgery();
+  if (!antiForgerySettingPromise) {
+    antiForgerySettingPromise = setAntiForgery();
   }
-  
-  await ANTI_FORGERY_SETTING_PROMISE;
+
+  await antiForgerySettingPromise;
 
   return $(...args);
 });
