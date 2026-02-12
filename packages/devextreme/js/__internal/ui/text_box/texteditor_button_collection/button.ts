@@ -2,8 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/button';
 import Button from '@js/ui/button';
-
-import type TextEditorBase from '../m_text_editor.base';
+import type TextEditorBase from '@ts/ui/text_box/m_text_editor.base';
 
 type TextEditorButtonInstance = dxElementWrapper | Button;
 
@@ -51,12 +50,11 @@ export default class TextEditorButton {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _attachEvents(instance: unknown, $element?: dxElementWrapper): void {
     throw new Error('Not implemented');
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _create(): {
     instance: Button | dxElementWrapper;
     $element: dxElementWrapper;
@@ -75,7 +73,6 @@ export default class TextEditorButton {
     return options.visible || !editor?.option('readOnly');
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _isDisabled(): boolean | undefined {
     throw new Error('Not implemented');
   }
