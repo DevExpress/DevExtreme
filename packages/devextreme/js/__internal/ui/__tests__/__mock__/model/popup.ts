@@ -21,7 +21,7 @@ export class PopupModel {
   }
 
   public isVisible(): boolean {
-    return this.getOverlayContent() !== null;
+    return !!this.getOverlayContent();
   }
 
   public getTitle(): string {

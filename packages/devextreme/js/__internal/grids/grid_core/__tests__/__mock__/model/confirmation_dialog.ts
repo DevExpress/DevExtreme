@@ -9,7 +9,7 @@ export class ConfirmationDialogModel extends PopupModel {
   public getMessage(): string {
     const overlay = this.getOverlayContent();
     const messageElement = overlay.querySelector(`.${SELECTORS.dialogMessage}`) as HTMLElement;
-    return messageElement.textContent;
+    return messageElement.textContent ?? '';
   }
 
   public getCancelButton(): HTMLElement {

@@ -105,7 +105,7 @@ export class FilterPanelView extends modules.View {
       },
     });
     const filterEnabledHint = this.option('filterPanel.texts.filterEnabledHint')
-      || messageLocalization.format('dxDataGrid-filterPanelFilterEnabledHint');
+      ?? messageLocalization.format('dxDataGrid-filterPanelFilterEnabledHint');
     $element.attr('title', filterEnabledHint);
     return $element;
   }
@@ -145,7 +145,7 @@ export class FilterPanelView extends modules.View {
       });
     } else {
       filterText = that.option('filterPanel.texts.createFilter')
-        || messageLocalization.format('dxDataGrid-filterPanelCreateFilter');
+        ?? messageLocalization.format('dxDataGrid-filterPanelCreateFilter');
       $textElement.text(filterText);
     }
 
@@ -167,7 +167,7 @@ export class FilterPanelView extends modules.View {
     // @ts-expect-error
     const clearFilterValue = () => that.option('filterValue', null);
     const clearFilterText = that.option('filterPanel.texts.clearFilter')
-      || messageLocalization.format('dxDataGrid-filterPanelClearFilter');
+      ?? messageLocalization.format('dxDataGrid-filterPanelClearFilter');
     const $element = $('<div>')
       .addClass(that.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS))
       .text(clearFilterText);
@@ -322,11 +322,6 @@ export const filterPanelModule = {
       filterPanel: {
         visible: false,
         filterEnabled: true,
-        texts: {
-          createFilter: undefined,
-          clearFilter: undefined,
-          filterEnabledHint: undefined,
-        },
       },
     };
   },
