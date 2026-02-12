@@ -32,8 +32,8 @@ export interface TextEditorLabelProperties {
   getContainerWidth: () => number;
   getBeforeWidth: () => number;
   onClickHandler: () => void;
-  onHoverHandler: (e: MouseEvent) => void;
-  onActiveHandler: (e: MouseEvent) => void;
+  onHoverHandler: (e: MouseEvent | PointerEvent) => void;
+  onActiveHandler: (e: MouseEvent | PointerEvent) => void;
 }
 
 export class TextEditorLabel {

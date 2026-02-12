@@ -600,8 +600,8 @@ class TextEditorBase<
       onClickHandler: (): void => {
         this.focus();
       },
-      onHoverHandler: (e: MouseEvent): void => { e.stopPropagation(); },
-      onActiveHandler: (e: MouseEvent): void => { e.stopPropagation(); },
+      onHoverHandler: (e: MouseEvent | PointerEvent): void => { e.stopPropagation(); },
+      onActiveHandler: (e: MouseEvent | PointerEvent): void => { e.stopPropagation(); },
       $editor: this.$element(),
       text: label,
       mark: labelMark,
