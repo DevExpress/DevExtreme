@@ -205,18 +205,9 @@ export function shouldRunTestAtIndex(testIndex) {
 
 const SKIPPED_TESTS = {
   jQuery: {},
-  Angular: {
-    Common: ['PopupAndNotificationsOverview'],
-    FileUploader: ['CustomDropzone'],
-  },
-  Vue: {
-    Common: ['PopupAndNotificationsOverview'],
-    FileUploader: ['CustomDropzone'],
-  },
-  React: {
-    Common: ['PopupAndNotificationsOverview'],
-    FileUploader: ['CustomDropzone'],
-  },
+  Angular: {},
+  Vue: {},
+  React: {},
 };
 
 export function shouldSkipDemo(framework, component, demoName, skippedTests) {

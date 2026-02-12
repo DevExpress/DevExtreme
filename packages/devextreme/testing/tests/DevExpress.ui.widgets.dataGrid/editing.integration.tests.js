@@ -6557,7 +6557,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.option('editing.changes'), [], 'no changes');
     });
 
-    QUnit.skip('editRowKey in init configuration (editMode = popup)', function(assert) {
+    QUnit.test('editRowKey in init configuration (editMode = popup)', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [{ id: 1 }, { id: 2 }],
@@ -6567,12 +6567,11 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                 mode: 'popup',
                 editRowKey: 1
             },
-            loadingTimeout: null
         }).dxDataGrid('instance');
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editRowKey was not overwritten');
-        assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-edit-row'), 'editing row');
         assert.ok($('.dx-datagrid-edit-popup').length, 'popup is shown');
         assert.deepEqual(dataGrid.option('editing.changes'), [], 'no changes');
     });

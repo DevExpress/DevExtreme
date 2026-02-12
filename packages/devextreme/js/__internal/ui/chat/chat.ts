@@ -16,10 +16,11 @@ import type {
   MessageEnteredEvent,
   MessageUpdatedEvent,
   MessageUpdatingEvent,
-  Properties,
+  Properties as ChatProperties,
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
+import type { Properties as SpeechToTextProperties } from '@js/ui/speech_to_text';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -39,6 +40,11 @@ import type {
 } from '@ts/ui/chat/messagelist';
 import MessageList from '@ts/ui/chat/messagelist';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
+
+type Properties = ChatProperties & {
+  speechToTextEnabled?: boolean;
+  speechToTextOptions?: SpeechToTextProperties;
+};
 
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -91,6 +97,8 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions: undefined,
       focusStateEnabled: true,
       hoverStateEnabled: true,
+      // @ts-expect-error wait for .d.ts
+      inputFieldText: '',
       items: [],
       messageTemplate: null,
       messageTimestampFormat: 'shorttime',
@@ -99,6 +107,8 @@ class Chat extends Widget<Properties> {
       showDayHeaders: true,
       showMessageTimestamp: true,
       showUserName: true,
+      speechToTextEnabled: false,
+      speechToTextOptions: undefined,
       typingUsers: [],
       user: { id: new Guid().toString() },
       onMessageDeleted: undefined,
@@ -354,7 +364,7 @@ class Chat extends Widget<Properties> {
     invokeConditionally(
       messageEditingStartArgs.cancel,
       () => {
-        this._messageBox.option('text', e.message.text);
+        this._messageBox.option('previewText', e.message.text);
         this._messageBox.resetFileUploader();
         this._messageBox.toggleAttachButtonVisibleState(false);
         this._messageToEdit = e.message;
@@ -380,7 +390,7 @@ class Chat extends Widget<Properties> {
         {
           onApplyButtonClick: (): void => {
             if (this._messageToEdit === this._messageToDelete) {
-              this._messageBox.option('text', '');
+              this._messageBox.option('previewText', '');
               this._messageEditCanceledAction?.({ message: this._messageToEdit });
               this._messageToEdit = undefined;
             }
@@ -434,7 +444,7 @@ class Chat extends Widget<Properties> {
     invokeConditionally(
       eventArgs.cancel,
       () => {
-        this._messageBox.option('text', '');
+        this._messageBox.option('previewText', '');
         this._messageBox.toggleAttachButtonVisibleState(true);
         this._messageUpdatedAction?.(eventArgs);
         this._messageToEdit = undefined;
@@ -460,6 +470,10 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      // @ts-expect-error wait for .d.ts
+      inputFieldText,
+      speechToTextEnabled,
+      speechToTextOptions,
     } = this.option();
 
     const $messageBox = $('<div>');
@@ -471,6 +485,9 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      text: inputFieldText,
+      speechToTextEnabled,
+      speechToTextOptions,
       onMessageEntered: (e) => {
         this._messageEnteredHandler(e);
       },
@@ -485,6 +502,11 @@ class Chat extends Widget<Properties> {
       },
       onMessageUpdating: (e) => {
         this._messageUpdatingHandler(e);
+      },
+      onOptionChanged: ({ name, value }) => {
+        if (name === 'text') {
+          this.option('inputFieldText', value);
+        }
       },
     };
 
@@ -634,6 +656,8 @@ class Chat extends Widget<Properties> {
       case 'hoverStateEnabled':
         this._messageBox.option(name, value);
         break;
+      case 'speechToTextEnabled':
+      case 'speechToTextOptions':
       case 'fileUploaderOptions':
         this._messageBox.option(fullName, value);
         break;
@@ -644,6 +668,10 @@ class Chat extends Widget<Properties> {
         break;
       }
       case 'editing':
+        break;
+      // @ts-expect-error wait for .d.ts
+      case 'inputFieldText':
+        this._messageBox.option('text', value);
         break;
       case 'items':
         this._messageList.option(name, this.option('items'));

@@ -874,11 +874,7 @@ declare module DevExpress.aiIntegration {
    * [descr:AIIntegration]
    */
   export class AIIntegration {
-    /**
-     * @docid
-     * @param provider
-     */
-    constructor(provider: AIProvider);
+    constructor(provider: AIProvider, options?: AIIntegrationOptions);
     changeStyle(
       params: ChangeStyleCommandParams,
       callbacks: RequestCallbacks<ChangeStyleCommandResult>
@@ -920,6 +916,15 @@ declare module DevExpress.aiIntegration {
       callbacks: RequestCallbacks<GenerateGridColumnCommandResult>
     ): () => void;
   }
+  /**
+   * [descr:AIIntegrationOptions]
+   */
+  export type AIIntegrationOptions = {
+    /**
+     * [descr:AIIntegrationOptions.lang]
+     */
+    lang?: string;
+  };
   /**
    * [descr:AIProvider]
    */
@@ -15262,7 +15267,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.contextToolbox.shapes]
        */
-      shapes?: Array<DevExpress.ui.dxDiagram.ShapeType> | Array<string>;
+      shapes?: Array<DevExpress.ui.dxDiagram.ShapeType | string>;
       /**
        * [descr:dxDiagramOptions.contextToolbox.width]
        */
@@ -15945,7 +15950,7 @@ declare module DevExpress.ui {
             /**
              * [descr:dxDiagramOptions.toolbox.groups.shapes]
              */
-            shapes?: Array<DevExpress.ui.dxDiagram.ShapeType> | Array<string>;
+            shapes?: Array<DevExpress.ui.dxDiagram.ShapeType | string>;
             /**
              * [descr:dxDiagramOptions.toolbox.groups.title]
              */
@@ -30745,6 +30750,9 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = dxTreeListColumnButton<TRowData, TKey>;
+    /**
+     * [descr:_ui_tree_list_ColumnButtonClickEvent]
+     */
     export type ColumnButtonClickEvent<
       TRowData = any,
       TKey = any
@@ -30752,7 +30760,13 @@ declare module DevExpress.ui {
       dxTreeList<TRowData, TKey>,
       PointerEvent | MouseEvent
     > & {
+      /**
+       * [descr:_ui_tree_list_ColumnButtonClickEvent.row]
+       */
       row?: Row<TRowData, TKey>;
+      /**
+       * [descr:_ui_tree_list_ColumnButtonClickEvent.column]
+       */
       column?: Column<TRowData, TKey>;
     };
     export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {

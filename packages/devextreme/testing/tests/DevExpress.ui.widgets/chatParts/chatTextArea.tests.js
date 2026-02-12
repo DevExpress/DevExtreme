@@ -3,11 +3,20 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 
-import ChatTextArea, { CHAT_TEXT_AREA_ATTACH_BUTTON, DEFAULT_ALLOWED_FILE_EXTENSIONS } from '__internal/ui/chat/message_box/chat_text_area';
+import ChatTextArea, {
+    CHAT_TEXT_AREA_ATTACH_BUTTON,
+    DEFAULT_ALLOWED_FILE_EXTENSIONS,
+    STT_INITIAL_STATE,
+    STT_LISTENING_STATE,
+    SEND_BUTTON_INITIAL_STATE,
+    SEND_BUTTON_READY_TO_SEND_STATE,
+} from '__internal/ui/chat/message_box/chat_text_area';
 import Button from 'ui/button';
 import FileUploader, { FILEUPLOADER_CLASS, FILEUPLOADER_CANCEL_BUTTON_CLASS } from '__internal/ui/file_uploader/file_uploader';
 import { BUTTON_CLASS } from '__internal/ui/button/button';
 import Informer, { INFORMER_CLASS, INFORMER_TEXT_CLASS } from '__internal/ui/informer/informer';
+import SpeechToText, { SPEECH_TO_TEXT_CLASS } from '__internal/ui/speech_to_text/speech_to_text';
+import { TOOLBAR_BEFORE_CLASS, TOOLBAR_AFTER_CLASS } from '__internal/ui/toolbar/toolbar.base';
 import { TEXTEDITOR_INPUT_CLASS } from '__internal/ui/text_box/m_text_editor.base';
 import { TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE } from '__internal/ui/m_text_area';
 
@@ -69,8 +78,8 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
         QUnit.test('send button should be initialized with the corresponding configuration', function(assert) {
             const expectedOptions = {
                 icon: 'arrowright',
-                type: 'default',
-                stylingMode: 'contained',
+                type: 'normal',
+                stylingMode: 'text',
                 disabled: true,
             };
 
@@ -454,41 +463,47 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
     QUnit.module('SendButton state', {
         beforeEach: function() {
             this.clock = sinon.useFakeTimers();
+            this.compareButtonState = (assert, expectedState, sendButton = this.sendButton) => {
+                const { stylingMode, type, disabled } = sendButton.option();
+                const stateOptions = { stylingMode, type, disabled };
+
+                assert.deepEqual(stateOptions, expectedState, 'send button has correct options');
+            };
         },
         afterEach: function() {
             this.clock.restore();
         }
     }, () => {
-        QUnit.test('send button should be enabled after entering any character', function(assert) {
+        QUnit.test('send button should have correct state after entering any character', function(assert) {
             this.typeText('i');
 
-            assert.strictEqual(this.sendButton.option('disabled'), false);
+            this.compareButtonState(assert, SEND_BUTTON_READY_TO_SEND_STATE);
         });
 
-        QUnit.test('send button should be disabled after entering any character and clicking the button', function(assert) {
+        QUnit.test('send button should have correct state after entering any character and clicking the button', function(assert) {
             this.typeText('i').clickSendButton();
 
-            assert.strictEqual(this.sendButton.option('disabled'), true);
+            this.compareButtonState(assert, SEND_BUTTON_INITIAL_STATE);
         });
 
         ['    ', '\n'].forEach(emptyValue => {
-            QUnit.test(`send button should be disabled after entering only "${emptyValue === '\n' ? 'line breaks' : 'spaces'}"`, function(assert) {
+            QUnit.test(`send button should have correct state after entering only "${emptyValue === '\n' ? 'line breaks' : 'spaces'}"`, function(assert) {
                 this.typeText(emptyValue);
 
-                assert.strictEqual(this.sendButton.option('disabled'), true);
+                this.compareButtonState(assert, SEND_BUTTON_INITIAL_STATE);
             });
         });
 
-        QUnit.test('send button should be disabled after entering character and removing it', function(assert) {
+        QUnit.test('send button should have correct state after entering character and removing it', function(assert) {
             keyboardMock(this.$input)
                 .focus()
                 .type('i')
                 .press('backspace');
 
-            assert.strictEqual(this.sendButton.option('disabled'), true);
+            this.compareButtonState(assert, SEND_BUTTON_INITIAL_STATE);
         });
 
-        QUnit.test('send button should be enabled after adding and uploading files', function(assert) {
+        QUnit.test('send button should have correct state after adding and uploading files', function(assert) {
             this.reinit({
                 fileUploaderOptions: {
                     uploadFile: () => {},
@@ -500,7 +515,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
             this.clock.tick();
 
-            assert.strictEqual(this.sendButton.option('disabled'), false);
+            this.compareButtonState(assert, SEND_BUTTON_READY_TO_SEND_STATE);
         });
 
         QUnit.test('send button should be disabled after adding and before uploading', function(assert) {
@@ -512,7 +527,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
             this.getFileUploader().option('value', [fakeFile]);
 
-            assert.strictEqual(this.sendButton.option('disabled'), true);
+            this.compareButtonState(assert, SEND_BUTTON_INITIAL_STATE);
         });
 
         QUnit.test('send button should be disabled after adding, uploading and removing', function(assert) {
@@ -531,7 +546,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
             $cancelButton.trigger('dxclick');
 
-            assert.strictEqual(this.sendButton.option('disabled'), true);
+            this.compareButtonState(assert, SEND_BUTTON_INITIAL_STATE);
         });
 
         QUnit.test('send button should be disabled after adding files and some of them fail validation', function(assert) {
@@ -547,7 +562,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
             this.clock.tick();
 
-            assert.strictEqual(this.sendButton.option('disabled'), true, 'send button is disabled after adding file that fail validation');
+            this.compareButtonState(assert, SEND_BUTTON_INITIAL_STATE);
         });
 
         QUnit.test('send button should not be disabled after removing file that fail validation', function(assert) {
@@ -563,13 +578,29 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
             this.clock.tick();
 
-            assert.strictEqual(this.sendButton.option('disabled'), true, 'send button is disabled');
+            this.compareButtonState(assert, SEND_BUTTON_INITIAL_STATE);
 
             const $cancelButton = this.$element.find(`.${FILEUPLOADER_CANCEL_BUTTON_CLASS}`);
 
             $cancelButton.trigger('dxclick');
 
-            assert.strictEqual(this.sendButton.option('disabled'), true, 'send button is not disabled');
+            this.compareButtonState(assert, SEND_BUTTON_INITIAL_STATE);
+        });
+
+        QUnit.test('send button should have updated state after speechToText disable during listening state', function(assert) {
+            this.reinit({ speechToTextEnabled: true });
+            this.typeText('i');
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            speechToTextInstance.option('onStartClick')({});
+            this.instance.option('speechToTextEnabled', false);
+
+            const $sendButton = this.$element.find(`.${BUTTON_CLASS}`);
+            const sendButton = Button.getInstance($sendButton);
+
+            this.compareButtonState(assert, SEND_BUTTON_READY_TO_SEND_STATE, sendButton);
         });
     });
 
@@ -872,6 +903,413 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 this.instance.option('text', '');
 
                 assert.strictEqual(this.$element.find(`.${INFORMER_CLASS}`).length, 0, 'informer is hidden after text is cleared');
+            });
+        });
+    });
+
+    QUnit.module('SpeechToText integration', () => {
+        QUnit.test('speech to text button should not be rendered if speechToTextEnabled is false', function(assert) {
+            this.reinit({ speechToTextEnabled: false });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+
+            assert.strictEqual($speechToText.length, 0, 'speech to text button is not rendered');
+        });
+
+        QUnit.test('speech to text button should not be rendered by default', function(assert) {
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+
+            assert.strictEqual($speechToText.length, 0, 'speech to text button is not rendered by default');
+        });
+
+        QUnit.test('speech to text button should be rendered if speechToTextEnabled is true', function(assert) {
+            this.reinit({ speechToTextEnabled: true });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+
+            assert.strictEqual($speechToText.length, 1, 'speech to text button is rendered');
+            assert.ok(SpeechToText.getInstance($speechToText) instanceof SpeechToText, 'speech to text has correct instance');
+        });
+
+        QUnit.test('speech to text button should be rendered after speechToTextEnabled runtime update', function(assert) {
+            assert.strictEqual(this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`).length, 0, 'speech to text is not rendered initially');
+
+            this.instance.option('speechToTextEnabled', true);
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+
+            assert.strictEqual($speechToText.length, 1, 'speech to text button is rendered after runtime update');
+        });
+
+        QUnit.test('speech to text button should be removed after speechToTextEnabled is set to false at runtime', function(assert) {
+            this.reinit({ speechToTextEnabled: true });
+
+            this.instance.option('speechToTextEnabled', false);
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+
+            assert.strictEqual($speechToText.length, 0, 'speech to text button is removed');
+        });
+
+        QUnit.test('speech to text button should have correct default options', function(assert) {
+            this.reinit({ speechToTextEnabled: true });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            assert.strictEqual(speechToTextInstance.option('stylingMode'), 'text', 'stylingMode is text');
+            assert.strictEqual(speechToTextInstance.option('type'), 'normal', 'type is normal');
+            assert.strictEqual(speechToTextInstance.option('startIcon'), 'micoutline', 'startIcon is micoutline');
+            assert.strictEqual(speechToTextInstance.option('stopIcon'), 'micfilled', 'stopIcon is micfilled');
+        });
+
+        QUnit.test('speech to text button should be placed in toolbar with location after', function(assert) {
+            this.reinit({ speechToTextEnabled: true });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+
+            assert.ok($speechToText.length, 'speech to text is rendered in toolbar');
+        });
+
+        QUnit.test('speechToTextOptions should be passed to SpeechToText button', function(assert) {
+            const speechToTextOptions = {
+                speechRecognitionConfig: {
+                    continuous: true,
+                    interimResults: true,
+                },
+            };
+
+            this.reinit({
+                speechToTextEnabled: true,
+                speechToTextOptions,
+            });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            assert.deepEqual(speechToTextInstance.option('speechRecognitionConfig'), speechToTextOptions.speechRecognitionConfig, 'speechRecognitionConfig is passed');
+        });
+
+        QUnit.test('speechToTextOptions should be updated at runtime', function(assert) {
+            this.reinit({
+                speechToTextEnabled: true,
+            });
+
+            const newOptions = {
+                speechRecognitionConfig: {
+                    continuous: false,
+                    interimResults: false,
+                },
+            };
+
+            this.instance.option('speechToTextOptions', newOptions);
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            assert.deepEqual(speechToTextInstance.option('speechRecognitionConfig'), newOptions.speechRecognitionConfig, 'speechRecognitionConfig is updated');
+        });
+
+        QUnit.test('STT default options should override user-defined stylingMode, type and stopIcon', function(assert) {
+            this.reinit({
+                speechToTextEnabled: true,
+                speechToTextOptions: {
+                    stylingMode: 'contained',
+                    type: 'danger',
+                    stopIcon: 'customIcon',
+                },
+            });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            assert.strictEqual(speechToTextInstance.option('stylingMode'), 'text', 'stylingMode is always text');
+            assert.strictEqual(speechToTextInstance.option('type'), 'normal', 'type is always normal');
+            assert.strictEqual(speechToTextInstance.option('stopIcon'), 'micfilled', 'stopIcon is always micfilled');
+        });
+
+        QUnit.test('state options should be passed to speech to text button', function(assert) {
+            this.reinit({
+                speechToTextEnabled: true,
+                activeStateEnabled: false,
+                focusStateEnabled: false,
+                hoverStateEnabled: false,
+            });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            assert.strictEqual(speechToTextInstance.option('activeStateEnabled'), false, 'activeStateEnabled is passed');
+            assert.strictEqual(speechToTextInstance.option('focusStateEnabled'), false, 'focusStateEnabled is passed');
+            assert.strictEqual(speechToTextInstance.option('hoverStateEnabled'), false, 'hoverStateEnabled is passed');
+        });
+
+        QUnit.test('toolbar items order should be correct when both fileUploader and STT are enabled', function(assert) {
+            this.reinit({
+                speechToTextEnabled: true,
+                fileUploaderOptions: {},
+            });
+
+            const $beforeItems = this.$element.find(`.${TOOLBAR_BEFORE_CLASS}`).children();
+            const $afterItems = this.$element.find(`.${TOOLBAR_AFTER_CLASS}`).children();
+
+            assert.strictEqual($beforeItems.length, 1, 'one item in before section');
+            assert.ok($beforeItems.eq(0).find(`.${CHAT_TEXT_AREA_ATTACH_BUTTON}`).length, 'attach button is in before section');
+
+            assert.strictEqual($afterItems.length, 2, 'two items in after section');
+            assert.ok($afterItems.eq(0).find(`.${SPEECH_TO_TEXT_CLASS}`).length, 'speech to text is first in after section');
+            assert.ok($afterItems.eq(1).find(`.${BUTTON_CLASS}`).length, 'send button is second in after section');
+        });
+
+        QUnit.test('user-defined onResult callback should be called along with internal handler', function(assert) {
+            assert.expect(1);
+
+            const onResult = sinon.spy();
+
+            this.reinit({
+                speechToTextEnabled: true,
+                speechToTextOptions: {
+                    onResult,
+                },
+            });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            const fakeEvent = {
+                results: {
+                    0: [{ transcript: 'hello' }],
+                },
+            };
+
+            speechToTextInstance.option('onResult')({ event: fakeEvent });
+
+            assert.strictEqual(onResult.callCount, 1, 'user onResult callback is called');
+        });
+
+        QUnit.test('user-defined onStartClick callback should be called along with internal handler', function(assert) {
+            assert.expect(1);
+
+            const onStartClick = sinon.spy();
+
+            this.reinit({
+                speechToTextEnabled: true,
+                speechToTextOptions: {
+                    onStartClick,
+                },
+            });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            speechToTextInstance.option('onStartClick')({});
+
+            assert.strictEqual(onStartClick.callCount, 1, 'user onStartClick callback is called');
+        });
+
+        QUnit.test('user-defined onStopClick callback should be called along with internal handler', function(assert) {
+            assert.expect(1);
+
+            const onStopClick = sinon.spy();
+
+            this.reinit({
+                speechToTextEnabled: true,
+                speechToTextOptions: {
+                    onStopClick,
+                },
+            });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            speechToTextInstance.option('onStopClick')({});
+
+            assert.strictEqual(onStopClick.callCount, 1, 'user onStopClick callback is called');
+        });
+
+        QUnit.test('user-defined onEnd callback should be called along with internal handler', function(assert) {
+            assert.expect(1);
+
+            const onEnd = sinon.spy();
+
+            this.reinit({
+                speechToTextEnabled: true,
+                speechToTextOptions: {
+                    onEnd,
+                },
+            });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            speechToTextInstance.option('onEnd')({});
+
+            assert.strictEqual(onEnd.callCount, 1, 'user onEnd callback is called');
+        });
+
+        QUnit.test('textarea value should be updated with speech recognition result', function(assert) {
+            this.reinit({
+                speechToTextEnabled: true,
+            });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            const fakeEvent = {
+                results: {
+                    0: [{ transcript: 'hello world' }],
+                },
+            };
+
+            speechToTextInstance.option('onResult')({ event: fakeEvent });
+
+            assert.strictEqual(this.instance.option('value'), 'hello world', 'textarea value is updated');
+        });
+
+        QUnit.test('textarea value should be appended to existing text on speech recognition result', function(assert) {
+            this.reinit({
+                speechToTextEnabled: true,
+                value: 'existing text',
+            });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            speechToTextInstance.option('onStartClick')({});
+
+            const fakeEvent = {
+                results: {
+                    0: [{ transcript: 'hello world' }],
+                },
+            };
+
+            speechToTextInstance.option('onResult')({ event: fakeEvent });
+
+            assert.strictEqual(this.instance.option('value'), 'existing text hello world', 'textarea value is appended');
+        });
+
+        QUnit.test('multiple speech recognition results should be joined with spaces', function(assert) {
+            this.reinit({
+                speechToTextEnabled: true,
+            });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            const fakeEvent = {
+                results: {
+                    0: [{ transcript: 'hello' }],
+                    1: [{ transcript: 'world' }],
+                },
+            };
+
+            speechToTextInstance.option('onResult')({ event: fakeEvent });
+
+            assert.strictEqual(this.instance.option('value'), 'hello world', 'results are joined with spaces');
+        });
+
+        QUnit.test('initialInputText should be reset on onEnd event', function(assert) {
+            this.reinit({
+                speechToTextEnabled: true,
+                value: 'initial',
+            });
+
+            const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+            const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+            speechToTextInstance.option('onStartClick')({});
+
+            assert.strictEqual(this.instance._initialInputText, 'initial', 'initialInputText is set on start');
+
+            speechToTextInstance.option('onEnd')({});
+
+            assert.strictEqual(this.instance._initialInputText, '', 'initialInputText is reset on end');
+        });
+
+        QUnit.test('onInitialized should store reference to speech to text button', function(assert) {
+            this.reinit({
+                speechToTextEnabled: true,
+            });
+
+            assert.ok(this.instance._speechToTextButton, 'speech to text button reference is stored');
+        });
+
+        QUnit.test('user-defined onInitialized callback should be called', function(assert) {
+            assert.expect(1);
+
+            this.reinit({
+                speechToTextEnabled: true,
+                speechToTextOptions: {
+                    onInitialized: () => {
+                        assert.ok(true, 'user onInitialized callback is called');
+                    },
+                },
+            });
+        });
+
+        QUnit.module('SpeechToText button style options state', {
+            beforeEach: function() {
+                this.compareButtonState = (assert, expectedState) => {
+                    const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+                    const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+                    const { stylingMode, type } = speechToTextInstance.option();
+                    const styleOptions = { stylingMode, type };
+
+                    assert.deepEqual(styleOptions, expectedState, 'speech to text button has correct style options');
+                };
+            }
+        }, () => {
+            QUnit.test('speech to text button should have correct style options on init', function(assert) {
+                this.reinit({ speechToTextEnabled: true });
+
+                this.compareButtonState(assert, STT_INITIAL_STATE);
+            });
+
+            QUnit.test('speech to text button should have correct style options after entering text', function(assert) {
+                this.reinit({ speechToTextEnabled: true });
+                this.typeText('i');
+
+                this.compareButtonState(assert, STT_INITIAL_STATE);
+            });
+
+            QUnit.test('speech to text button should have correct style options after entering text and clicking send button', function(assert) {
+                this.reinit({ speechToTextEnabled: true });
+                this.typeText('i').clickSendButton();
+
+                this.compareButtonState(assert, STT_INITIAL_STATE);
+            });
+
+            QUnit.test('speech to text button should have correct style options when onStartClick is triggered', function(assert) {
+                this.reinit({ speechToTextEnabled: true });
+
+                const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+                const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+                speechToTextInstance.option('onStartClick')({});
+
+                this.compareButtonState(assert, STT_LISTENING_STATE);
+            });
+
+            QUnit.test('speech to text button should have correct style options after onStopClick is triggered', function(assert) {
+                this.reinit({ speechToTextEnabled: true });
+                const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+                const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+                speechToTextInstance.option('onStartClick')({});
+                speechToTextInstance.option('onStopClick')({});
+
+                this.compareButtonState(assert, STT_INITIAL_STATE);
+            });
+
+            QUnit.test('speech to text button should have correct style options after onEnd is triggered', function(assert) {
+                this.reinit({ speechToTextEnabled: true });
+                const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+                const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+                speechToTextInstance.option('onEnd')({});
+
+                this.compareButtonState(assert, STT_INITIAL_STATE);
             });
         });
     });

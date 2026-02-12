@@ -12,7 +12,7 @@ export const isButtonInstance = (
 ): instance is Button => instance instanceof Button;
 
 export default class TextEditorButton {
-  $container!: dxElementWrapper;
+  $container!: dxElementWrapper | null;
 
   $placeMarker?: dxElementWrapper | null;
 
@@ -30,7 +30,6 @@ export default class TextEditorButton {
     options: Properties,
   ) {
     this.instance = null;
-    // @ts-expect-error ts-error
     this.$container = null;
     this.$placeMarker = null;
     this.editor = editor;
@@ -47,14 +46,14 @@ export default class TextEditorButton {
 
     if ($placeMarker) {
       $placeMarker.replaceWith($element);
-    } else {
+    } else if ($container) {
       $element.appendTo($container);
     }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
   _attachEvents(instance: unknown, $element?: dxElementWrapper): void {
-    throw 'Not implemented';
+    throw new Error('Not implemented');
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -62,7 +61,7 @@ export default class TextEditorButton {
     instance: Button | dxElementWrapper;
     $element: dxElementWrapper;
   } | undefined {
-    throw 'Not implemented';
+    throw new Error('Not implemented');
   }
 
   _isRendered(): boolean {
@@ -78,7 +77,7 @@ export default class TextEditorButton {
 
   // eslint-disable-next-line class-methods-use-this
   _isDisabled(): boolean | undefined {
-    throw 'Not implemented';
+    throw new Error('Not implemented');
   }
 
   _shouldRender(): boolean {
@@ -89,7 +88,6 @@ export default class TextEditorButton {
     const { instance } = this;
 
     if (instance) {
-      // TODO: instance.dispose()
       if (isButtonInstance(instance)) {
         instance.dispose();
         instance.$element().remove();
@@ -102,13 +100,12 @@ export default class TextEditorButton {
 
     this.instance = null;
     this.editor = null;
-    // @ts-expect-error $container can be null and undefined
     this.$container = null;
     this.$placeMarker?.remove();
     this.$placeMarker = null;
   }
 
-  render($container: dxElementWrapper = this.$container): void {
+  render($container: dxElementWrapper | null = this.$container): void {
     this.$container = $container;
 
     if (this._isVisible()) {
@@ -116,7 +113,7 @@ export default class TextEditorButton {
 
       this.instance = instance;
       this._attachEvents(instance, $element);
-    } else {
+    } else if ($container) {
       this._addPlaceMarker($container);
     }
   }
