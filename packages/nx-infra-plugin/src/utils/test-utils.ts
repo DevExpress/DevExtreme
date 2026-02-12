@@ -39,6 +39,17 @@ export function createMockContext(options: MockContextOptions = {}): ExecutorCon
       },
       version: 2,
     },
+    nxJsonConfiguration: {},
+    projectGraph: {
+      nodes: {
+        [projectName]: {
+          name: projectName,
+          type: 'lib',
+          data: { root: projectRoot },
+        },
+      },
+      dependencies: {},
+    },
   };
 }
 
