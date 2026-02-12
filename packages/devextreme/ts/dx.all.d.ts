@@ -11420,6 +11420,10 @@ declare module DevExpress.ui {
      */
     alerts?: Array<DevExpress.ui.dxChat.Alert>;
     /**
+     * [descr:dxChatOptions.inputFieldText]
+     */
+    inputFieldText?: DevExpress.ui.dxTextArea.Properties['value'];
+    /**
      * [descr:dxChatOptions.messageTemplate]
      */
     messageTemplate?:
@@ -11453,6 +11457,17 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.showMessageTimestamp]
      */
     showMessageTimestamp?: boolean;
+    /**
+     * [descr:dxChatOptions.speechToTextEnabled]
+     */
+    speechToTextEnabled?: boolean;
+    /**
+     * [descr:dxChatOptions.speechToTextOptions]
+     */
+    speechToTextOptions?: Omit<
+      DevExpress.ui.dxSpeechToText.Properties,
+      'stylingMode' | 'type'
+    >;
     /**
      * [descr:dxChatOptions.onAttachmentDownloadClick]
      */
@@ -28015,77 +28030,7 @@ declare module DevExpress.ui {
     export type OptionChangedEvent =
       DevExpress.common.core.events.EventInfo<dxSpeechToText> &
         DevExpress.common.core.events.ChangedOptionInfo;
-    /**
-     * [descr:dxSpeechToTextOptions]
-     */
-    export type Properties = WidgetOptions<dxSpeechToText> & {
-      /**
-       * [descr:dxSpeechToTextOptions.customSpeechRecognizer]
-       */
-      customSpeechRecognizer?: CustomSpeechRecognizer;
-
-      /**
-       * [descr:dxSpeechToTextOptions.startText]
-       */
-      startText?: string;
-
-      /**
-       * [descr:dxSpeechToTextOptions.stopText]
-       */
-      stopText?: string;
-
-      /**
-       * [descr:dxSpeechToTextOptions.stylingMode]
-       */
-      stylingMode?: DevExpress.common.ButtonStyle;
-
-      /**
-       * [descr:dxSpeechToTextOptions.startIcon]
-       */
-      startIcon?: string;
-
-      /**
-       * [descr:dxSpeechToTextOptions.stopIcon]
-       */
-      stopIcon?: string;
-
-      /**
-       * [descr:dxSpeechToTextOptions.type]
-       */
-      type?: DevExpress.common.ButtonType | string;
-
-      /**
-       * [descr:dxSpeechToTextOptions.speechRecognitionConfig]
-       */
-      speechRecognitionConfig?:
-        | SpeechRecognitionConfig
-        | { [key: string]: any };
-
-      /**
-       * [descr:dxSpeechToTextOptions.onStartClick]
-       */
-      onStartClick?: ((e: StartClickEvent) => void) | undefined;
-
-      /**
-       * [descr:dxSpeechToTextOptions.onStopClick]
-       */
-      onStopClick?: ((e: StopClickEvent) => void) | undefined;
-
-      /**
-       * [descr:dxSpeechToTextOptions.onResult]
-       */
-      onResult?: ((e: ResultEvent) => void) | undefined;
-
-      /**
-       * [descr:dxSpeechToTextOptions.onError]
-       */
-      onError?: ((e: ErrorEvent) => void) | undefined;
-
-      /**
-       * [descr:dxSpeechToTextOptions.onEnd]
-       */
-      onEnd?: ((e: EndEvent) => void) | undefined;
-    };
+    export type Properties = dxSpeechToTextOptions;
     /**
      * [descr:_ui_speech_to_text_ResultEvent]
      */
@@ -28107,6 +28052,86 @@ declare module DevExpress.ui {
       dxSpeechToText,
       DevExpress.events.InteractionEvent
     >;
+  }
+  /**
+   * [descr:dxSpeechToTextOptions]
+   * @deprecated [depNote:dxSpeechToTextOptions]
+   */
+  export interface dxSpeechToTextOptions extends WidgetOptions<dxSpeechToText> {
+    /**
+     * [descr:dxSpeechToTextOptions.customSpeechRecognizer]
+     */
+    customSpeechRecognizer?: DevExpress.ui.dxSpeechToText.CustomSpeechRecognizer;
+
+    /**
+     * [descr:dxSpeechToTextOptions.startText]
+     */
+    startText?: string;
+
+    /**
+     * [descr:dxSpeechToTextOptions.stopText]
+     */
+    stopText?: string;
+
+    /**
+     * [descr:dxSpeechToTextOptions.stylingMode]
+     */
+    stylingMode?: DevExpress.common.ButtonStyle;
+
+    /**
+     * [descr:dxSpeechToTextOptions.startIcon]
+     */
+    startIcon?: string;
+
+    /**
+     * [descr:dxSpeechToTextOptions.stopIcon]
+     */
+    stopIcon?: string;
+
+    /**
+     * [descr:dxSpeechToTextOptions.type]
+     */
+    type?: DevExpress.common.ButtonType | string;
+
+    /**
+     * [descr:dxSpeechToTextOptions.speechRecognitionConfig]
+     */
+    speechRecognitionConfig?:
+      | DevExpress.ui.dxSpeechToText.SpeechRecognitionConfig
+      | { [key: string]: any };
+
+    /**
+     * [descr:dxSpeechToTextOptions.onStartClick]
+     */
+    onStartClick?:
+      | ((e: DevExpress.ui.dxSpeechToText.StartClickEvent) => void)
+      | undefined;
+
+    /**
+     * [descr:dxSpeechToTextOptions.onStopClick]
+     */
+    onStopClick?:
+      | ((e: DevExpress.ui.dxSpeechToText.StopClickEvent) => void)
+      | undefined;
+
+    /**
+     * [descr:dxSpeechToTextOptions.onResult]
+     */
+    onResult?:
+      | ((e: DevExpress.ui.dxSpeechToText.ResultEvent) => void)
+      | undefined;
+
+    /**
+     * [descr:dxSpeechToTextOptions.onError]
+     */
+    onError?:
+      | ((e: DevExpress.ui.dxSpeechToText.ErrorEvent) => void)
+      | undefined;
+
+    /**
+     * [descr:dxSpeechToTextOptions.onEnd]
+     */
+    onEnd?: ((e: DevExpress.ui.dxSpeechToText.EndEvent) => void) | undefined;
   }
   /**
    * [descr:dxSpeedDialAction]

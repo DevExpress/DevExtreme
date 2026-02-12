@@ -20,7 +20,6 @@ import type {
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
-import type { Properties as SpeechToTextProperties } from '@js/ui/speech_to_text';
 import { invokeConditionally } from '@ts/core/utils/conditional_invoke';
 import type { OptionChanged } from '@ts/core/widget/types';
 import Widget from '@ts/core/widget/widget';
@@ -41,15 +40,10 @@ import type {
 import MessageList from '@ts/ui/chat/messagelist';
 import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 
-type Properties = ChatProperties & {
-  speechToTextEnabled?: boolean;
-  speechToTextOptions?: SpeechToTextProperties;
-};
-
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-class Chat extends Widget<Properties> {
+class Chat extends Widget<ChatProperties> {
   _messageBox!: MessageBox;
 
   _messageList!: MessageList;
@@ -82,7 +76,7 @@ class Chat extends Widget<Properties> {
 
   _attachmentDownloadAction?: (e: Partial<AttachmentDownloadClickEvent>) => void;
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): ChatProperties {
     return {
       ...super._getDefaultOptions(),
       activeStateEnabled: true,
@@ -97,7 +91,6 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions: undefined,
       focusStateEnabled: true,
       hoverStateEnabled: true,
-      // @ts-expect-error wait for .d.ts
       inputFieldText: '',
       items: [],
       messageTemplate: null,
@@ -470,7 +463,6 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
-      // @ts-expect-error wait for .d.ts
       inputFieldText,
       speechToTextEnabled,
       speechToTextOptions,
@@ -647,7 +639,7 @@ class Chat extends Widget<Properties> {
     return $input;
   }
 
-  _optionChanged(args: OptionChanged<Properties>): void {
+  _optionChanged(args: OptionChanged<ChatProperties>): void {
     const { name, fullName, value } = args;
 
     switch (name) {
@@ -662,14 +654,13 @@ class Chat extends Widget<Properties> {
         this._messageBox.option(fullName, value);
         break;
       case 'user': {
-        const author = value as Properties[typeof name];
+        const author = value as ChatProperties[typeof name];
 
         this._messageList.option('currentUserId', author?.id);
         break;
       }
       case 'editing':
         break;
-      // @ts-expect-error wait for .d.ts
       case 'inputFieldText':
         this._messageBox.option('text', value);
         break;

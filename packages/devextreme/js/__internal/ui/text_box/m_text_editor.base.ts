@@ -27,10 +27,10 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 
-import ClearButton from './m_text_editor.clear';
-import { TextEditorLabel } from './m_text_editor.label';
-import type { TextEditorButtonInfo } from './texteditor_button_collection/m_index';
-import TextEditorButtonCollection from './texteditor_button_collection/m_index';
+import ClearButton from './text_editor.clear';
+import { TextEditorLabel } from './text_editor.label';
+import type { TextEditorButtonInfo } from './texteditor_button_collection/index';
+import TextEditorButtonCollection from './texteditor_button_collection/index';
 
 export const TEXTEDITOR_CLASS = 'dx-texteditor';
 export const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';

@@ -22,7 +22,7 @@ import { getWidth, getHeight } from 'core/utils/size';
 import Guid from 'core/guid';
 import browser from 'core/utils/browser';
 
-import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
+import { TextEditorLabel } from '__internal/ui/text_box/text_editor.label';
 
 import 'fluent_blue_light.css!';
 

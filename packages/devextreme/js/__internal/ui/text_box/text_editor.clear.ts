@@ -4,7 +4,7 @@ import pointer from '@js/common/core/events/pointer';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import TextEditorButton from '@ts/ui/text_box/texteditor_button_collection/m_button';
+import TextEditorButton from '@ts/ui/text_box/texteditor_button_collection/button';
 
 const pointerDown = pointer.down;
 
@@ -62,7 +62,7 @@ export default class ClearButton extends TextEditorButton {
   }
 
   // TODO: get rid of it
-  // eslint-disable-next-line class-methods-use-this
+
   _legacyRender($editor: dxElementWrapper, isVisible: boolean): void {
     $editor.toggleClass(TEXTEDITOR_SHOW_CLEAR_BUTTON_CLASS, isVisible);
   }
