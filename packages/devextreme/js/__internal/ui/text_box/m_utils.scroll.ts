@@ -3,9 +3,11 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { PointerInteractionEvent } from '@js/events';
 
+type PointerInteractionEventTarget = Element | null;
+
 interface TextBoxScrollData {
   validate: (e: PointerInteractionEvent & {
-    target?: dxElementWrapper;
+    target?: PointerInteractionEventTarget;
     delta?: number;
     _needSkipEvent?: boolean;
   }) => boolean;
@@ -52,7 +54,7 @@ export const prepareScrollData = (
   const $container = $(container);
 
   const isCorrectTarget = (
-    eventTarget: dxElementWrapper | HTMLElement,
+    eventTarget: PointerInteractionEventTarget,
   ): boolean => (validateTarget ? $(eventTarget).is(container) : true);
 
   const scrollData: TextBoxScrollData = {
