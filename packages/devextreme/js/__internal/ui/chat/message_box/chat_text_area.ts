@@ -61,6 +61,12 @@ export type Properties = TextAreaProperties & {
   onSend?: (e: SendEvent) => void;
 };
 
+interface ButtonState {
+  disabled?: boolean;
+  stylingMode: ButtonStyle;
+  type: ButtonType;
+}
+
 const CHAT_TEXT_AREA_ATTACHMENTS = 'dx-chat-textarea-attachments';
 export const CHAT_TEXT_AREA_ATTACH_BUTTON = 'dx-chat-textarea-attach-button';
 
@@ -75,25 +81,22 @@ const ERRORS = {
   fileLimit: messageLocalization.format('dxChat-fileLimitReachedWarning', MAX_ATTACHMENTS_COUNT),
 };
 
-interface ButtonState {
-  disabled?: boolean;
-  stylingMode: ButtonStyle;
-  type: ButtonType;
-}
-
 export const STT_INITIAL_STATE: ButtonState = {
   stylingMode: 'text',
   type: 'normal',
 };
+
 export const STT_LISTENING_STATE: ButtonState = {
   stylingMode: 'contained',
   type: 'default',
 };
+
 export const SEND_BUTTON_INITIAL_STATE: ButtonState = {
   stylingMode: 'text',
   type: 'normal',
   disabled: true,
 };
+
 export const SEND_BUTTON_READY_TO_SEND_STATE: ButtonState = {
   stylingMode: 'contained',
   type: 'default',
@@ -127,7 +130,7 @@ class ChatTextArea extends TextArea<Properties> {
 
   _speechToTextButton?: dxSpeechToText;
 
-  _speechToTextIsListening?: boolean;
+  _isSpeechToTextListening?: boolean;
 
   _sendAction?: (e: Partial<SendEvent>) => void;
 
@@ -327,10 +330,10 @@ class ChatTextArea extends TextArea<Properties> {
       stopIcon: 'micfilled',
       onEnd: (e: EndEvent): void => {
         this._initialInputText = '';
+        this._isSpeechToTextListening = false;
+        this._updateButtonsState();
 
         speechToTextOptions?.onEnd?.(e);
-        this._speechToTextIsListening = false;
-        this._updateButtonsState();
       },
       onInitialized: (e: InitializedSTTEvent): void => {
         this._speechToTextButton = e.component;
@@ -342,15 +345,16 @@ class ChatTextArea extends TextArea<Properties> {
         const { text } = this.option();
 
         this._initialInputText = text;
+        this._isSpeechToTextListening = true;
+        this._updateButtonsState();
 
         speechToTextOptions?.onStartClick?.(e);
-        this._speechToTextIsListening = true;
-        this._updateButtonsState();
       },
       onStopClick: (e: StopClickEvent): void => {
-        speechToTextOptions?.onStopClick?.(e);
-        this._speechToTextIsListening = false;
+        this._isSpeechToTextListening = false;
         this._updateButtonsState();
+
+        speechToTextOptions?.onStopClick?.(e);
       },
     };
 
@@ -537,7 +541,9 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _updateButtonsState(): void {
-    if (this._speechToTextIsListening === true && this._speechToTextButton) {
+    const { speechToTextEnabled } = this.option();
+
+    if (this._isSpeechToTextListening === true && speechToTextEnabled) {
       this._speechToTextButton?.option(STT_LISTENING_STATE);
       this._sendButton?.option(SEND_BUTTON_INITIAL_STATE);
 
@@ -617,7 +623,7 @@ class ChatTextArea extends TextArea<Properties> {
       case 'speechToTextEnabled':
         this._toolbar?.option({ items: this._getToolbarItems() });
         this._speechToTextButton = undefined;
-        this._speechToTextIsListening = false;
+        this._isSpeechToTextListening = false;
         this._updateButtonsState();
         break;
 
@@ -710,6 +716,7 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _dispose(): void {
+    this._speechToTextButton = undefined;
     this._cleanFileUploader();
     this._cleanToolbar();
     this._cleanInformer();
