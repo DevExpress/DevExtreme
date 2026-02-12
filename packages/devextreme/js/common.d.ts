@@ -797,7 +797,7 @@ export type TextEditorButtonLocation = 'after' | 'before';
  * @public
  * @namespace DevExpress.common
  */
-export type ToolbarItemComponent = 'dxAutocomplete' | 'dxButton' | 'dxButtonGroup' | 'dxCheckBox' | 'dxDateBox' | 'dxDropDownButton' | 'dxMenu' | 'dxSelectBox' | 'dxSwitch' | 'dxTabs' | 'dxTextBox';
+export type ToolbarItemComponent = 'dxAutocomplete' | 'dxButton' | 'dxButtonGroup' | 'dxCheckBox' | 'dxDateBox' | 'dxDropDownButton' | 'dxMenu' | 'dxSelectBox' | 'dxSwitch' | 'dxTabs' | 'dxTextBox' | 'dxSpeechToText';
 
 /**
  * @public

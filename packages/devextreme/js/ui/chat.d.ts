@@ -483,6 +483,12 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     showMessageTimestamp?: boolean;
     /**
      * @docid
+     * @default false
+     * @public
+     */
+    speechToTextEnabled?: boolean;
+    /**
+     * @docid
      * @type dxSpeechToTextOptions
      * @public
      */

@@ -1726,7 +1726,8 @@ declare module DevExpress.common {
     | 'dxSelectBox'
     | 'dxSwitch'
     | 'dxTabs'
-    | 'dxTextBox';
+    | 'dxTextBox'
+    | 'dxSpeechToText';
   export type ToolbarItemLocation = 'after' | 'before' | 'center';
   export type TooltipShowMode = 'always' | 'onHover';
   export type ValidationCallbackData = {
@@ -11457,6 +11458,10 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.showMessageTimestamp]
      */
     showMessageTimestamp?: boolean;
+    /**
+     * [descr:dxChatOptions.speechToTextEnabled]
+     */
+    speechToTextEnabled?: boolean;
     /**
      * [descr:dxChatOptions.speechToTextOptions]
      */
