@@ -5,9 +5,8 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
-
-import type TextEditorBase from '../m_text_editor.base';
-import TextEditorButton, { isButtonInstance } from './m_button';
+import type TextEditorBase from '@ts/ui/text_box/m_text_editor.base';
+import TextEditorButton, { isButtonInstance } from '@ts/ui/text_box/texteditor_button_collection/button';
 
 const CUSTOM_BUTTON_HOVERED_CLASS = 'dx-custom-button-hovered';
 
@@ -59,7 +58,6 @@ export default class CustomButton extends TextEditorButton {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _prepareIntegrationOptions(editor: TextEditorBase): Record<string, unknown> {
     return {
       ...editor.option('integrationOptions'),
