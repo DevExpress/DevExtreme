@@ -1,3 +1,4 @@
+import type { LabelMode } from '@js/common';
 import { name as click } from '@js/common/core/events/click';
 import { active } from '@js/common/core/events/core/emitter.feedback';
 import eventsEngine from '@js/common/core/events/core/events_engine';
@@ -19,10 +20,26 @@ const LABEL_BEFORE_CLASS = 'dx-label-before';
 const LABEL_CLASS = 'dx-label';
 const LABEL_AFTER_CLASS = 'dx-label-after';
 
-class TextEditorLabel {
+export interface TextEditorLabelProperties {
+  $editor: dxElementWrapper,
+  text?: string,
+  mark?: string,
+  mode?: LabelMode;
+  rtlEnabled?: boolean;
+  containsButtonsBefore?: boolean;
+  beforeWidth?: number;
+  containerWidth?: number;
+  getContainerWidth: () => number;
+  getBeforeWidth: () => number;
+  onClickHandler: () => void;
+  onHoverHandler: (e: MouseEvent) => void;
+  onActiveHandler: (e: MouseEvent) => void;
+}
+
+export class TextEditorLabel {
   public NAME: string;
 
-  _props: any;
+  _props: TextEditorLabelProperties;
 
   _id: string;
 
@@ -36,7 +53,7 @@ class TextEditorLabel {
 
   _$root!: dxElementWrapper;
 
-  constructor(props) {
+  constructor(props: TextEditorLabelProperties) {
     this.NAME = 'dxLabel';
     this._props = props;
 
@@ -97,25 +114,24 @@ class TextEditorLabel {
     eventsEngine.off(this._$labelSpan, activeEventName);
 
     if (this._isVisible() && this._isOutsideMode()) {
-      eventsEngine.on(this._$labelSpan, clickEventName, (e) => {
-        // @ts-expect-error
-        const selectedText = getWindow().getSelection().toString();
+      eventsEngine.on(this._$labelSpan, clickEventName, (e: MouseEvent) => {
+        const selectedText = getWindow()?.getSelection()?.toString();
 
         if (selectedText === '') {
           this._props.onClickHandler();
           e.preventDefault();
         }
       });
-      eventsEngine.on(this._$labelSpan, hoverStartEventName, (e) => {
+      eventsEngine.on(this._$labelSpan, hoverStartEventName, (e: MouseEvent) => {
         this._props.onHoverHandler(e);
       });
-      eventsEngine.on(this._$labelSpan, activeEventName, (e) => {
+      eventsEngine.on(this._$labelSpan, activeEventName, (e: MouseEvent) => {
         this._props.onActiveHandler(e);
       });
     }
   }
 
-  _updateEditorLabelClass(visible): void {
+  _updateEditorLabelClass(visible: boolean): void {
     this._props.$editor
       .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
       .removeClass(TEXTEDITOR_LABEL_OUTSIDE_CLASS)
@@ -134,7 +150,7 @@ class TextEditorLabel {
     }
   }
 
-  _isOutsideMode() {
+  _isOutsideMode(): boolean {
     return this._props.mode === 'outside';
   }
 
@@ -150,18 +166,18 @@ class TextEditorLabel {
   }
 
   _updateMark(): void {
-    this._$labelSpan.attr('data-mark', this._props.mark);
+    this._$labelSpan.attr('data-mark', this._props.mark ?? null);
   }
 
   _updateText(): void {
-    this._$labelSpan.text(this._props.text);
+    this._$labelSpan.text(this._props.text ?? '');
   }
 
   _updateBeforeWidth(): void {
     if (this._isVisible()) {
       const width = this._props.beforeWidth ?? this._props.getBeforeWidth();
-      // @ts-expect-error
-      this._$before.css({ width });
+
+      this._$before?.css({ width });
 
       this._updateLabelTransform();
     }
@@ -186,27 +202,30 @@ class TextEditorLabel {
     }
   }
 
-  $element() {
+  $element(): dxElementWrapper {
     return this._$root;
   }
 
-  isVisible() {
+  isVisible(): boolean {
     return this._isVisible();
   }
 
-  // @ts-expect-error
-  getId() {
-    if (this._isVisible()) return this._id;
+  getId(): string | undefined {
+    if (this._isVisible()) {
+      return this._id;
+    }
+
+    return undefined;
   }
 
-  updateMode(mode): void {
+  updateMode(mode: LabelMode): void {
     this._props.mode = mode;
     this._toggleMarkupVisibility();
     this._updateBeforeWidth();
     this._updateMaxWidth();
   }
 
-  updateText(text): void {
+  updateText(text: string): void {
     this._props.text = text;
     this._updateText();
     this._toggleMarkupVisibility();
@@ -214,27 +233,23 @@ class TextEditorLabel {
     this._updateMaxWidth();
   }
 
-  updateMark(mark): void {
+  updateMark(mark: string): void {
     this._props.mark = mark;
     this._updateMark();
   }
 
-  updateContainsButtonsBefore(containsButtonsBefore): void {
+  updateContainsButtonsBefore(containsButtonsBefore: boolean): void {
     this._props.containsButtonsBefore = containsButtonsBefore;
     this._updateEditorBeforeButtonsClass();
   }
 
-  updateBeforeWidth(beforeWidth): void {
+  updateBeforeWidth(beforeWidth: number): void {
     this._props.beforeWidth = beforeWidth;
     this._updateBeforeWidth();
   }
 
-  updateMaxWidth(containerWidth): void {
+  updateMaxWidth(containerWidth: number): void {
     this._props.containerWidth = containerWidth;
     this._updateMaxWidth();
   }
 }
-
-export {
-  TextEditorLabel,
-};
