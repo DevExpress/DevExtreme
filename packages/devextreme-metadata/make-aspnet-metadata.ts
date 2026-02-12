@@ -167,6 +167,11 @@ AspNet.makeMetadata({
       ['ui/button:dxButtonOptions', 'common:TextEditorButton.options'],
       ['ui/button:dxButtonOptions', 'ui/form:dxFormButtonItem.buttonOptions'],
       ['ui/calendar:dxCalendarOptions', 'ui/date_box:DateBoxBaseOptions.calendarOptions'],
+      [
+        'ui/file_uploader:dxFileUploaderOptions',
+        'ui/html_editor:dxHtmlEditorImageUpload.fileUploaderOptions',
+      ],
+      ['ui/file_uploader:dxFileUploaderOptions', 'ui/chat:dxChatOptions.fileUploaderOptions'],
       ['ui/filter_builder:dxFilterBuilderOptions', 'common/grids:GridBaseOptions.filterBuilder'],
       ['ui/filter_builder:dxFilterBuilderOptions', 'ui/card_view:dxCardViewOptions.filterBuilder'],
       ['ui/form:dxFormOptions', 'common/grids:EditingBase.form'],
@@ -193,6 +198,7 @@ AspNet.makeMetadata({
         'ui/text_box:dxTextBoxOptions',
         'ui/widget/ui.search_box_mixin:SearchBoxMixinOptions.searchEditorOptions',
       ],
+      ['ui/speech_to_text:dxSpeechToTextOptions', 'ui/chat:dxChatOptions.speechToTextOptions'],
     ].flatMap((pair) => replaceTypes(pair[1], ['*'], [types.uidRef(pair[0], true)])),
 
     removeMembers('common/ai-integration:AIIntegration'),
