@@ -422,6 +422,19 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
 
 
+    /**
+     * [descr:dxChatOptions.speechToTextEnabled]
+    
+     */
+    @Input()
+    get speechToTextEnabled(): boolean {
+        return this._getOption('speechToTextEnabled');
+    }
+    set speechToTextEnabled(value: boolean) {
+        this._setOption('speechToTextEnabled', value);
+    }
+
+
     
     @Input()
     get speechToTextOptions(): dxSpeechToTextOptions {
@@ -760,6 +773,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() speechToTextEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() speechToTextOptionsChange: EventEmitter<dxSpeechToTextOptions>;
 
     /**
@@ -840,6 +860,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'showDayHeadersChange' },
             { emit: 'showMessageTimestampChange' },
             { emit: 'showUserNameChange' },
+            { emit: 'speechToTextEnabledChange' },
             { emit: 'speechToTextOptionsChange' },
             { emit: 'typingUsersChange' },
             { emit: 'userChange' },
