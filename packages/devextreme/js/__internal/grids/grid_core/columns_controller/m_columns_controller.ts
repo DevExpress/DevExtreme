@@ -1340,14 +1340,16 @@ export class ColumnsController extends modules.Controller {
         .map((column): string => column.calculateGroupValue);
 
       each(columns, (_: number, column) => {
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        delete column[indexParameterName];
-        if (sortParameters) {
-          for (let i = 0; i < sortParameters.length; i += 1) {
-            const { selector, isExpanded } = sortParameters[i];
-            const isReferencedAsGroupValue = referencedGroupValues.includes(column.dataField);
+        const isReferencedAsGroupValue = indexParameterName === 'groupIndex'
+          && referencedGroupValues.includes(column.dataField);
 
-            if (!isReferencedAsGroupValue) {
+        if (!isReferencedAsGroupValue) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+          delete column[indexParameterName];
+          if (sortParameters) {
+            for (let i = 0; i < sortParameters.length; i += 1) {
+              const { selector, isExpanded } = sortParameters[i];
+
               if (selector === column.dataField
                 || selector === column.name
                 || selector === column.displayField
