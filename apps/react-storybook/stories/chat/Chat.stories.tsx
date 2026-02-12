@@ -54,6 +54,7 @@ export const Overview: Story = {
         user: firstAuthor,
         alerts: [],
         ...commonArgs,
+        speechToTextEnabled: false,
     },
     argTypes: {
         user: {
@@ -99,6 +100,7 @@ export const Overview: Story = {
         activeStateEnabled,
         hoverStateEnabled,
         focusStateEnabled,
+        speechToTextEnabled,
     }) => {
         const [messages, setMessages] = useState(items);
 
@@ -128,6 +130,7 @@ export const Overview: Story = {
                     activeStateEnabled={activeStateEnabled}
                     focusStateEnabled={focusStateEnabled}
                     hoverStateEnabled={hoverStateEnabled}
+                    speechToTextEnabled={speechToTextEnabled}
                 >
                 </Chat>
             </div>
