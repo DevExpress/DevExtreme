@@ -9,6 +9,7 @@ export interface CaretRange {
   end: number;
 }
 
+// @ts-expect-error mac should be correctly typed in environment.d.ts
 const { ios, mac } = devices.real();
 
 // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing

@@ -34,11 +34,6 @@ export type Device = {
    * @docid
    * @public
    */
-  mac?: boolean;
-  /**
-   * @docid
-   * @public
-   */
   phone?: boolean;
   /**
    * @docid

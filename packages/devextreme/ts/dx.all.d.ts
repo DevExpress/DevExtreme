@@ -2823,10 +2823,6 @@ declare module DevExpress.common.core.environment {
      */
     ios?: boolean;
     /**
-     * [descr:Device.mac]
-     */
-    mac?: boolean;
-    /**
      * [descr:Device.phone]
      */
     phone?: boolean;
