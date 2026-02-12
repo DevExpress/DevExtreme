@@ -9,11 +9,8 @@ export interface CaretRange {
   end: number;
 }
 
-const {
-  ios,
-  // @ts-expect-error Device type doesn't contain mac
-  mac,
-} = devices.real();
+// @ts-expect-error mac should be correctly typed in environment.d.ts
+const { ios, mac } = devices.real();
 
 // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
 const isFocusingOnCaretChange = ios || mac;
