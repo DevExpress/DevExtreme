@@ -21,9 +21,9 @@ const LABEL_CLASS = 'dx-label';
 const LABEL_AFTER_CLASS = 'dx-label-after';
 
 export interface TextEditorLabelProperties {
-  $editor: dxElementWrapper,
-  text?: string,
-  mark?: string,
+  $editor: dxElementWrapper;
+  text?: string;
+  mark?: string;
   mode?: LabelMode;
   rtlEnabled?: boolean;
   containsButtonsBefore?: boolean;
