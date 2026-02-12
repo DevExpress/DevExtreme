@@ -1792,7 +1792,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return result;
   }
 
-  scrollTo(date, groupValues?: RawGroupValues | GroupValues, allDay = false, throwWarning = true) {
+  scrollTo(date: Date, groupValues?: RawGroupValues | GroupValues, allDay = false, throwWarning = true, align: 'start' | 'center' = 'center') {
     if (!this._isValidScrollDate(date, throwWarning)) {
       return;
     }
@@ -1819,8 +1819,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const scrollableWidth = getWidth($scrollable);
     const cellHeight = this.getCellHeight();
 
-    const xShift = (scrollableWidth - cellWidth) / 2;
-    const yShift = (scrollableHeight - cellHeight) / 2;
+    const xShift = align === 'start' ? 0 : (scrollableWidth - cellWidth) / 2;
+    const yShift = align === 'start' ? 0 : (scrollableHeight - cellHeight) / 2;
 
     const left = coordinates.left - scrollable.scrollLeft() - xShift - offset;
     let top = coordinates.top - scrollable.scrollTop() - yShift;

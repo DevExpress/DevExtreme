@@ -5,13 +5,13 @@ export interface Coordinates {
 
 export interface dxElementWrapper {
 
-  add(selector: string): this;
+  add(selector: string | dxElementWrapper): this;
 
   addClass(className: string): this;
 
   after(element: Element | dxElementWrapper): this;
 
-  append(element: Element | dxElementWrapper): this;
+  append(element: Element | dxElementWrapper | string): this;
 
   appendTo(element: Element | dxElementWrapper): this;
 
