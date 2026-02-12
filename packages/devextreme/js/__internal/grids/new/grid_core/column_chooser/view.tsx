@@ -1,6 +1,6 @@
-import messageLocalization from '@js/common/core/localization/message';
 import type { ColumnChooserMode } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
+import messageLocalization from '@js/localization/message';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
@@ -48,7 +48,7 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
 
   private readonly dragAndDropModeConfig: ReadonlySignal<TreeViewProperties> = computed(() => ({
     noDataText: this.options.oneWay('columnChooser.emptyPanelText').value
-      || messageLocalization.format('dxDataGrid-columnChooserEmptyText'),
+      ?? messageLocalization.format('dxDataGrid-columnChooserEmptyText'),
     activeStateEnabled: false,
   }));
 
