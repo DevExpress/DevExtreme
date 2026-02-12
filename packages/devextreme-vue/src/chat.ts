@@ -112,6 +112,7 @@ type AccessibleOptions = Pick<Properties,
   "showDayHeaders" |
   "showMessageTimestamp" |
   "showUserName" |
+  "speechToTextEnabled" |
   "speechToTextOptions" |
   "typingUsers" |
   "user" |
@@ -162,6 +163,7 @@ const componentConfig = {
     showDayHeaders: Boolean,
     showMessageTimestamp: Boolean,
     showUserName: Boolean,
+    speechToTextEnabled: Boolean,
     speechToTextOptions: Object as PropType<dxSpeechToTextOptions | Record<string, any>>,
     typingUsers: Array as PropType<Array<User>>,
     user: Object as PropType<User | Record<string, any>>,
@@ -208,6 +210,7 @@ const componentConfig = {
     "update:showDayHeaders": null,
     "update:showMessageTimestamp": null,
     "update:showUserName": null,
+    "update:speechToTextEnabled": null,
     "update:speechToTextOptions": null,
     "update:typingUsers": null,
     "update:user": null,
