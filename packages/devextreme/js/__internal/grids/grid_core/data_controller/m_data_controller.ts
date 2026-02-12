@@ -70,7 +70,7 @@ interface HandleDataChangedArguments {
   error?: any;
 }
 
-type UserData = Record<string, unknown>;
+export type UserData = Record<string, unknown>;
 
 export interface Item {
   rowType: 'data' | 'group' | 'groupFooter' | 'detailAdaptive';

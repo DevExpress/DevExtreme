@@ -21,6 +21,7 @@ import AdaptiveDetailRow from './adaptiveDetailRow';
 import ColumnChooser from './columnChooser';
 import TextBox from '../textBox';
 import { GroupPanel } from './groupPanel';
+import EditPopup from './editPopup';
 
 export const CLASS = {
   dataGrid: 'dx-datagrid',
@@ -403,6 +404,10 @@ export default class DataGrid extends Widget {
     return new EditForm(element, buttons);
   }
 
+  getEditPopup(): EditPopup {
+    return new EditPopup(Selector(`.${this.addWidgetPrefix(CLASS.popupEdit)}`));
+  }
+
   getToolbar(): Toolbar {
     return new Toolbar(this.element.find(`.${CLASS.toolbar}`));
   }
@@ -752,6 +757,21 @@ export default class DataGrid extends Widget {
           getInstance,
         },
       },
+    )();
+  }
+
+  apiPageIndex(pageIndex?: number): Promise<number | void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        if (pageIndex === undefined) {
+          return (getInstance() as any).pageIndex();
+        }
+
+        (getInstance() as any).pageIndex(pageIndex);
+      },
+      { dependencies: { getInstance, pageIndex } },
     )();
   }
 
