@@ -3,6 +3,7 @@ import { Deferred } from 'devextreme/core/utils/deferred';
 
 const sendRequestOrig = ajax.sendRequest;
 const fetchOrig = fetch;
+let ANTI_FORGERY_GETTING_PROMISE = null;
 
 async function fetchAntiForgeryToken() {
   try {
@@ -26,18 +27,27 @@ async function fetchAntiForgeryToken() {
 
 async function getAntiForgeryTokenValue() {
   const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+  
   if (tokenMeta) {
     const headerName = tokenMeta.dataset.headerName || 'RequestVerificationToken';
     const token = tokenMeta.getAttribute('content') || '';
+    
     return Promise.resolve({ headerName, token });
   }
 
-  const tokenData = await fetchAntiForgeryToken();
+  if(!ANTI_FORGERY_GETTING_PROMISE) {
+    ANTI_FORGERY_GETTING_PROMISE = fetchAntiForgeryToken();
+  }
+ 
+  const tokenData = await ANTI_FORGERY_GETTING_PROMISE;
   const meta = document.createElement('meta');
+  
   meta.name = 'csrf-token';
   meta.content = tokenData.token;
   meta.dataset.headerName = tokenData.headerName;
   document.head.appendChild(meta);
+  ANTI_FORGERY_GETTING_PROMISE = null;
+  
   return tokenData;
 }
 
