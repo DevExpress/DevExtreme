@@ -18,7 +18,7 @@ interface ReadyCallbackAddContext {
   callBase: ReadyCallbackAdd;
 }
 
-let originalAdd: ReadyCallbackAdd = () => {};
+let originalAdd: ReadyCallbackAdd;
 let callbacks: ReadyCallback[] = [];
 let readyCallbackAdd = function (this: ReadyCallbackAddContext, callback: ReadyCallback) {
   if (!originalAdd) {
