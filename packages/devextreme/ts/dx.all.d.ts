@@ -11458,6 +11458,10 @@ declare module DevExpress.ui {
      */
     showMessageTimestamp?: boolean;
     /**
+     * [descr:dxChatOptions.speechToTextEnabled]
+     */
+    speechToTextEnabled?: boolean;
+    /**
      * [descr:dxChatOptions.speechToTextOptions]
      */
     speechToTextOptions?: Omit<
