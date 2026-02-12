@@ -17,24 +17,25 @@ export const allowScroll = (
   shiftKey?: boolean,
 ): boolean | undefined => {
   const $container = $(container);
-  const scrollTopPos = shiftKey ? $container.scrollLeft() : $container.scrollTop();
+  // @ts-expect-error scrollLeft, scrollTop should be correctly typed in renderer.d.ts
+  const scrollTopPos = parseFloat(shiftKey ? $container.scrollLeft() : $container.scrollTop());
 
   const prop = shiftKey ? 'Width' : 'Height';
-  // @ts-expect-error
-  const scrollSize = $container.prop(`scroll${prop}`);
-  // @ts-expect-error
-  const clientSize = $container.prop(`client${prop}`);
-  // @ts-expect-error
+
+  // @ts-expect-error prop should be correctly typed in renderer.d.ts
+  const scrollSize = parseFloat($container.prop(`scroll${prop}`));
+  // @ts-expect-error prop should be correctly typed in renderer.d.ts
+  const clientSize = parseFloat($container.prop(`client${prop}`));
+
   // NOTE: round to the nearest integer towards zero
   const scrollBottomPos = (scrollSize - clientSize - scrollTopPos) | 0;
-  // @ts-expect-error
+
   if (scrollTopPos === 0 && scrollBottomPos === 0) {
     return false;
   }
-  // @ts-expect-error
+
   const isScrollFromTop = scrollTopPos === 0 && delta >= 0;
   const isScrollFromBottom = scrollBottomPos === 0 && delta <= 0;
-  // @ts-expect-error
   const isScrollFromMiddle = scrollTopPos > 0 && scrollBottomPos > 0;
 
   if (isScrollFromTop || isScrollFromBottom || isScrollFromMiddle) {
