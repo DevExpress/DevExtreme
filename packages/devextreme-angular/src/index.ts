@@ -177,6 +177,7 @@ export namespace Common {
     export namespace AiIntegration {
         export const AIIntegration: typeof import('devextreme/common/ai-integration').AIIntegration = AiIntegrationModule.AIIntegration;
         export type AIIntegration = import('devextreme/common/ai-integration').AIIntegration;
+        export type AIIntegrationOptions = import('devextreme/common/ai-integration').AIIntegrationOptions;
         export type AIProvider = import('devextreme/common/ai-integration').AIProvider;
         export type AIResponse = import('devextreme/common/ai-integration').AIResponse;
         export type GenerateGridColumnCommandResponse = import('devextreme/common/ai-integration').GenerateGridColumnCommandResponse;

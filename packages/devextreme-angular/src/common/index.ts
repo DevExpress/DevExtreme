@@ -15,6 +15,7 @@ export type { ApplyValueMode, AsyncRule, ButtonStyle, ButtonType, CompareRule, C
 export namespace AiIntegration {
     export const AIIntegration = AiIntegrationModule.AIIntegration;
     export type AIIntegration = AiIntegrationModule.AIIntegration;
+    export type AIIntegrationOptions = AiIntegrationModule.AIIntegrationOptions;
     export type AIProvider = AiIntegrationModule.AIProvider;
     export type AIResponse = AiIntegrationModule.AIResponse;
     export type GenerateGridColumnCommandResponse = AiIntegrationModule.GenerateGridColumnCommandResponse;
