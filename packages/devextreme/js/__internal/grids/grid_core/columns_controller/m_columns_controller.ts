@@ -1334,34 +1334,41 @@ export class ColumnsController extends modules.Controller {
       sortParameters,
       indexParameterName: string,
     ): void {
+      const referencedGroupValues: string[] = columns
+        .filter((column) => isString(column.calculateGroupValue))
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        .map((column): string => column.calculateGroupValue);
+
       each(columns, (_: number, column) => {
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete column[indexParameterName];
         if (sortParameters) {
           for (let i = 0; i < sortParameters.length; i += 1) {
-            const { selector } = sortParameters[i];
-            const { isExpanded } = sortParameters[i];
+            const { selector, isExpanded } = sortParameters[i];
+            const isReferencedAsGroupValue = referencedGroupValues.includes(column.dataField);
 
-            if (selector === column.dataField
-              || selector === column.name
-              || selector === column.displayField
-              || gridCoreUtils.isEqualSelectors(selector, column.selector)
-              || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateCellValue)
-              || gridCoreUtils.isEqualSelectors(selector, column.calculateGroupValue)
-              || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateDisplayValue)
-            ) {
-              if (fromDataSource) {
-                column.sortOrder = 'sortOrder' in column ? column.sortOrder : sortParameters[i].desc ? 'desc' : 'asc';
-              } else {
-                column.sortOrder = column.sortOrder ?? (sortParameters[i].desc ? 'desc' : 'asc');
+            if (!isReferencedAsGroupValue) {
+              if (selector === column.dataField
+                || selector === column.name
+                || selector === column.displayField
+                || gridCoreUtils.isEqualSelectors(selector, column.selector)
+                || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateCellValue)
+                || gridCoreUtils.isEqualSelectors(selector, column.calculateGroupValue)
+                || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateDisplayValue)
+              ) {
+                if (fromDataSource) {
+                  column.sortOrder = 'sortOrder' in column ? column.sortOrder : sortParameters[i].desc ? 'desc' : 'asc';
+                } else {
+                  column.sortOrder = column.sortOrder ?? (sortParameters[i].desc ? 'desc' : 'asc');
+                }
+
+                if (isExpanded !== undefined) {
+                  column.autoExpandGroup = isExpanded;
+                }
+
+                column[indexParameterName] = i;
+                break;
               }
-
-              if (isExpanded !== undefined) {
-                column.autoExpandGroup = isExpanded;
-              }
-
-              column[indexParameterName] = i;
-              break;
             }
           }
         }

@@ -298,7 +298,7 @@ test('DataGrid loses grouping after the expandAll method if a grouped column has
   ],
 }));
 
-test.only('DataGrid should not lose grouping after the expandAll method if a grouped column has string calculateGroupValue (T1321187)', async (t) => {
+test('DataGrid should not lose grouping after the expandAll method if a grouped column has string calculateGroupValue (T1321187)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.apiExpandAll();
@@ -320,7 +320,7 @@ test.only('DataGrid should not lose grouping after the expandAll method if a gro
   'b', 'c'],
 }));
 
-test.only('DataGrid should not change group column after the expandAll method if a grouped column has string calculateGroupValue (T1308536)', async (t) => {
+test('DataGrid should not change group column after the expandAll method if a grouped column has string calculateGroupValue (T1308536)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const firstGroupCellText = await dataGrid.getGroupRow(0).getCell(1).element.textContent;
 
