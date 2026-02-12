@@ -62,7 +62,7 @@ export default class ClearButton extends TextEditorButton {
   }
 
   // TODO: get rid of it
-  // eslint-disable-next-line class-methods-use-this
+
   _legacyRender($editor: dxElementWrapper, isVisible: boolean): void {
     $editor.toggleClass(TEXTEDITOR_SHOW_CLEAR_BUTTON_CLASS, isVisible);
   }
