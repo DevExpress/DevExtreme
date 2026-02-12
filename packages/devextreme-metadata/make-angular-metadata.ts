@@ -50,7 +50,9 @@ Ng.makeMetadata({
     removeMembers(/\/calendar:dxCalendarOptions.todayButtonText/),
     removeMembers(/\/card_view:/),
     removeMembers(/\/chat:TextMessage.attachments/),
-    removeMembers(/\/chat:dxChatOptions\.(fileUploaderOptions|onAttachmentDownloadClick)/),
+    removeMembers(
+      /\/chat:dxChatOptions\.(fileUploaderOptions|inputFieldText|onAttachmentDownloadClick|speechToTextOptions)/,
+    ),
     removeMembers(/\/form:dxFormOptions\.(aiIntegration|onSmartPasting|onSmartPasted|smartPaste)/),
     removeMembers(/\/form:dxFormSimpleItem\.aiOptions/),
     removeMembers(/\/form:FormPredefinedButtonItem/),

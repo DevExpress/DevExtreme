@@ -31,7 +31,7 @@ import {
     Item as dxToolbarItem,
 } from './toolbar';
 
-import { Properties as fileUploaderProperties } from './file_uploader';
+import { Properties as FileUploaderProperties } from './file_uploader';
 
 export {
     EditorStyle,
@@ -642,7 +642,7 @@ export interface dxHtmlEditorImageUpload {
     * @type dxFileUploaderOptions
     * @public
     */
-    fileUploaderOptions?: fileUploaderProperties;
+    fileUploaderOptions?: FileUploaderProperties;
  }
 
 /**
