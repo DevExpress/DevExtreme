@@ -2286,6 +2286,9 @@ importers:
       lodash:
         specifier: 4.17.23
         version: 4.17.23
+      minimatch:
+        specifier: 9.0.5
+        version: 9.0.5
       ng-packagr:
         specifier: '>=19.0.0'
         version: 19.2.2(@angular/compiler-cli@21.0.8(@angular/compiler@21.0.8)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5)
@@ -2311,6 +2314,9 @@ importers:
       '@types/lodash':
         specifier: 4.17.23
         version: 4.17.23
+      '@types/minimatch':
+        specifier: 5.1.2
+        version: 5.1.2
       '@types/node':
         specifier: 18.19.130
         version: 18.19.130
@@ -17640,6 +17646,10 @@ packages:
         optional: true
       '@swc/wasm':
         optional: true
+
+  tsc-alias@1.8.10:
+    resolution: {integrity: sha512-Ibv4KAWfFkFdKJxnWfVtdOmB0Zi1RJVxcbPGiCDsFpCQSsmpWyuzHG3rQyI5YkobWwxFPEyQfu1hdo4qLG2zPw==}
+    hasBin: true
 
   tsc-alias@1.8.16:
     resolution: {integrity: sha512-QjCyu55NFyRSBAl6+MTFwplpFcnm2Pq01rR/uxfqJoLMm6X3O14KEGtaSDZpJYaE1bJBGDjD0eSuiIWPe2T58g==}
@@ -41499,6 +41509,15 @@ snapshots:
       yn: 3.1.1
     optionalDependencies:
       '@swc/core': 1.15.3
+
+  tsc-alias@1.8.10:
+    dependencies:
+      chokidar: 3.6.0
+      commander: 9.5.0
+      globby: 11.1.0
+      mylas: 2.1.13
+      normalize-path: 3.0.0
+      plimit-lit: 1.6.1
 
   tsc-alias@1.8.16:
     dependencies:
