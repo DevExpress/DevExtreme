@@ -874,11 +874,7 @@ declare module DevExpress.aiIntegration {
    * [descr:AIIntegration]
    */
   export class AIIntegration {
-    /**
-     * @docid
-     * @param provider
-     */
-    constructor(provider: AIProvider);
+    constructor(provider: AIProvider, options?: AIIntegrationOptions);
     changeStyle(
       params: ChangeStyleCommandParams,
       callbacks: RequestCallbacks<ChangeStyleCommandResult>
@@ -920,6 +916,15 @@ declare module DevExpress.aiIntegration {
       callbacks: RequestCallbacks<GenerateGridColumnCommandResult>
     ): () => void;
   }
+  /**
+   * [descr:AIIntegrationOptions]
+   */
+  export type AIIntegrationOptions = {
+    /**
+     * [descr:AIIntegrationOptions.lang]
+     */
+    lang?: string;
+  };
   /**
    * [descr:AIProvider]
    */

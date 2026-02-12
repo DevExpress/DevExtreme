@@ -164,7 +164,7 @@ describe('SmartPasteCommand', () => {
       expect(buildPromptSpy).toHaveBeenCalledTimes(1);
       expect(promptManager.buildPrompt).toHaveBeenCalledWith(COMMAND_NAME, {
         user: { text: USER_TEXT, fields: PROCESSED_USER_FIELDS },
-      });
+      }, { applyMetaTemplates: true });
     });
 
     it('promptManager.buildPrompt should should return prompt with passed values', () => {

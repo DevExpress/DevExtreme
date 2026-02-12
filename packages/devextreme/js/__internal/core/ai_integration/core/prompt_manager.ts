@@ -1,5 +1,5 @@
 import type { Prompt } from '@js/common/ai-integration';
-import { templates } from '@ts/core/ai_integration/templates/index';
+import { metaTemplates, templates } from '@ts/core/ai_integration/templates/index';
 
 export interface PromptData {
   system?: Record<string, string>;
@@ -9,6 +9,10 @@ export interface PromptData {
 export interface PromptTemplate {
   system?: string;
   user?: string;
+}
+
+interface PromptManagerOptions {
+  lang?: string;
 }
 
 export type PromptTemplateName = | 'changeStyle'
@@ -30,21 +34,46 @@ export const ERROR_MESSAGES = {
   TEMPLATE_NOT_FOUND: 'Template not found',
 };
 
+export interface BuildPromptOptions {
+  applyMetaTemplates: boolean;
+}
+
+export const LANG_TEMPLATE_NAME = 'addLanguage';
+
 export class PromptManager {
   private readonly templates: PromptTemplates;
 
-  constructor() {
+  private readonly metaTemplates: Map<string, PromptTemplate>;
+
+  private readonly lang?: string;
+
+  constructor(options?: PromptManagerOptions) {
     this.templates = new Map(Object.entries(templates) as [PromptTemplateName, PromptTemplate][]);
+    this.metaTemplates = new Map(Object.entries(metaTemplates));
+    this.lang = options?.lang;
   }
 
-  public buildPrompt(templateName: PromptTemplateName, data: PromptData): Prompt {
+  public buildPrompt(
+    templateName: PromptTemplateName,
+    data: PromptData,
+    options: BuildPromptOptions,
+  ): Prompt {
     const template = this.templates.get(templateName);
+    const langTemplate = this.metaTemplates.get(LANG_TEMPLATE_NAME);
 
     if (!template) {
       throw new Error(ERROR_MESSAGES.TEMPLATE_NOT_FOUND);
     }
 
-    const system = this.generateMessage(template.system, data.system);
+    const baseSystem = this.generateMessage(template.system, data.system);
+
+    const system = options.applyMetaTemplates && this.lang && langTemplate
+      ? this.generateMessage(langTemplate.system, {
+        message: baseSystem ?? '',
+        lang: this.lang,
+      })
+      : baseSystem;
+
     const user = this.generateMessage(template.user, data.user);
 
     const prompt = { system, user };

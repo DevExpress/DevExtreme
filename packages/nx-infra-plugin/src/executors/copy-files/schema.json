@@ -1,17 +1,15 @@
 {
-  "$schema": "https://json-schema.org/schema",
+  "$schema": "http://json-schema.org/schema",
   "type": "object",
-  "description": "Copy files or directories to a destination. Supports glob patterns and recursive directory copying.",
   "properties": {
     "files": {
       "type": "array",
-      "description": "Array of file copy operations to perform.",
       "items": {
         "type": "object",
         "properties": {
           "from": {
             "type": "string",
-            "description": "Source path relative to project root. Supports glob patterns (e.g., './src/*.ts', './assets/**/*')."
+            "description": "Source path relative to project root. Can be a file, directory, or glob pattern."
           },
           "to": {
             "type": "string",
