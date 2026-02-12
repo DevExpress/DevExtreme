@@ -41,9 +41,23 @@ require('./build/gulp/check_licenses');
 require('./build/gulp/systemjs');
 require('./build/gulp/state_manager');
 
+function getTranspileConfig() {
+    if(env.TEST_CI) {
+        return 'ci';
+    }
+
+    if(env.BUILD_INTERNAL_PACKAGE) {
+        return 'internal';
+    }
+
+    return '';
+}
+
+const transpileConfig = getTranspileConfig();
+
 gulp.task('transpile', shell.task(
-    env.TEST_CI
-        ? 'pnpm nx run devextreme:build:transpile -c ci'
+    transpileConfig
+        ? `pnpm nx run devextreme:build:transpile -c ${transpileConfig}`
         : 'pnpm nx run devextreme:build:transpile'
 ));
 
