@@ -67,8 +67,7 @@ export default class ClearButton extends TextEditorButton {
     $editor.toggleClass(TEXTEDITOR_SHOW_CLEAR_BUTTON_CLASS, isVisible);
   }
 
-  // @ts-expect-error ts-error
-  update(rendered = false): void {
+  update(rendered = false): boolean {
     if (!rendered) {
       super.update();
     }
@@ -76,7 +75,7 @@ export default class ClearButton extends TextEditorButton {
     const { editor, instance } = this;
 
     if (!editor) {
-      return;
+      return false;
     }
 
     const $editor = editor.$element();
@@ -88,5 +87,7 @@ export default class ClearButton extends TextEditorButton {
     }
 
     this._legacyRender($editor, isVisible);
+
+    return isVisible;
   }
 }
