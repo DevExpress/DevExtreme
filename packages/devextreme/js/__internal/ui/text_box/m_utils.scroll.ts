@@ -1,8 +1,21 @@
 import { isDxMouseWheelEvent } from '@js/common/core/events/utils/index';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { PointerInteractionEvent } from '@js/events';
 
-// @ts-expect-error
-const allowScroll = function (container, delta, shiftKey?: boolean) {
+interface TextBoxScrollData {
+  validate: (e: PointerInteractionEvent & {
+    target?: dxElementWrapper;
+    delta?: number;
+    _needSkipEvent?: boolean;
+  }) => boolean;
+}
+
+export const allowScroll = (
+  container: dxElementWrapper,
+  delta: number,
+  shiftKey?: boolean,
+): boolean | undefined => {
   const $container = $(container);
   const scrollTopPos = shiftKey ? $container.scrollLeft() : $container.scrollTop();
 
@@ -27,29 +40,35 @@ const allowScroll = function (container, delta, shiftKey?: boolean) {
   if (isScrollFromTop || isScrollFromBottom || isScrollFromMiddle) {
     return true;
   }
+
+  return undefined;
 };
 
-const prepareScrollData = function (container, validateTarget?: any) {
+export const prepareScrollData = (
+  container: dxElementWrapper,
+  validateTarget?: boolean,
+): TextBoxScrollData => {
   const $container = $(container);
-  const isCorrectTarget = function (eventTarget) {
-    return validateTarget ? $(eventTarget).is(container) : true;
-  };
 
-  return {
-    // @ts-expect-error
-    validate(e) {
+  const isCorrectTarget = (
+    eventTarget: dxElementWrapper | HTMLElement,
+  ): boolean => (validateTarget ? $(eventTarget).is(container) : true);
+
+  const scrollData: TextBoxScrollData = {
+    validate: (e) => {
       if (isDxMouseWheelEvent(e) && isCorrectTarget(e.target)) {
-        if (allowScroll($container, -e.delta, e.shiftKey)) {
+        if (allowScroll($container, -(e.delta ?? 0), e.shiftKey)) {
           e._needSkipEvent = true;
+
           return true;
         }
+
         return false;
       }
+
+      return false;
     },
   };
-};
 
-export {
-  allowScroll,
-  prepareScrollData,
+  return scrollData;
 };
