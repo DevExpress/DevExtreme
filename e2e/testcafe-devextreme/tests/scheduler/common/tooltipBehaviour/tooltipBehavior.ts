@@ -6,6 +6,7 @@ import dataSource from './init/widget.data';
 import { createScheduler, scroll } from './init/widget.setup';
 import url from '../../../../helpers/getPageUrl';
 import { DEFAULT_BROWSER_SIZE } from '../../../../helpers/const';
+import { Themes } from '../../../../helpers/themes';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
@@ -125,7 +126,10 @@ test.meta({ browserSize: [600, 400] })('The tooltip should hide after manually s
   }));
 });
 
-test.meta({ browserSize: DEFAULT_BROWSER_SIZE })('Collector tooltip focused list item screenshot', async (t) => {
+test.meta({
+  browserSize: DEFAULT_BROWSER_SIZE,
+  themes: [Themes.fluentBlue, Themes.genericLight, Themes.materialBlue],
+})('Collector tooltip focused list item screenshot', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const scheduler = new Scheduler('#container');
   const collector = scheduler.collectors.find('2 more');
