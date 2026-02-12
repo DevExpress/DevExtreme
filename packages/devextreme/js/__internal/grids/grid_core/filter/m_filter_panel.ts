@@ -237,6 +237,24 @@ export class FilterPanelView extends modules.View {
     return deferred.promise();
   }
 
+  private getFilterOperationDescriptions() {
+    return {
+      between: this.option('filterBuilder.filterOperationDescriptions.between') ?? messageLocalization.format('dxFilterBuilder-filterOperationBetween'),
+      equal: this.option('filterBuilder.filterOperationDescriptions.equal') ?? messageLocalization.format('dxFilterBuilder-filterOperationEquals'),
+      notEqual: this.option('filterBuilder.filterOperationDescriptions.notEqual') ?? messageLocalization.format('dxFilterBuilder-filterOperationNotEquals'),
+      lessThan: this.option('filterBuilder.filterOperationDescriptions.lessThan') ?? messageLocalization.format('dxFilterBuilder-filterOperationLess'),
+      lessThanOrEqual: this.option('filterBuilder.filterOperationDescriptions.lessThanOrEqual') ?? messageLocalization.format('dxFilterBuilder-filterOperationLessOrEquals'),
+      greaterThan: this.option('filterBuilder.filterOperationDescriptions.greaterThan') ?? messageLocalization.format('dxFilterBuilder-filterOperationGreater'),
+      greaterThanOrEqual: this.option('filterBuilder.filterOperationDescriptions.greaterThanOrEqual') ?? messageLocalization.format('dxFilterBuilder-filterOperationGreaterOrEquals'),
+      startsWith: this.option('filterBuilder.filterOperationDescriptions.startsWith') ?? messageLocalization.format('dxFilterBuilder-filterOperationStartsWith'),
+      contains: this.option('filterBuilder.filterOperationDescriptions.contains') ?? messageLocalization.format('dxFilterBuilder-filterOperationContains'),
+      notContains: this.option('filterBuilder.filterOperationDescriptions.notContains') ?? messageLocalization.format('dxFilterBuilder-filterOperationNotContains'),
+      endsWith: this.option('filterBuilder.filterOperationDescriptions.endsWith') ?? messageLocalization.format('dxFilterBuilder-filterOperationEndsWith'),
+      isBlank: this.option('filterBuilder.filterOperationDescriptions.isBlank') ?? messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
+      isNotBlank: this.option('filterBuilder.filterOperationDescriptions.isNotBlank') ?? messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank'),
+    };
+  }
+
   private getConditionText(filterValue, options) {
     const that = this;
     const operation = filterValue[1];
@@ -247,13 +265,14 @@ export class FilterPanelView extends modules.View {
     const field = getField(filterValue[0], options.columns);
     const fieldText = field.caption || '';
     const value = filterValue[2];
+    const filterOperationDescriptions = this.getFilterOperationDescriptions();
 
     if (customOperation) {
       operationText = customOperation.caption || inflector.captionize(customOperation.name);
     } else if (value === null) {
-      operationText = getCaptionByOperation(operation === '=' ? 'isblank' : 'isnotblank', options.filterOperationDescriptions);
+      operationText = getCaptionByOperation(operation === '=' ? 'isblank' : 'isnotblank', filterOperationDescriptions);
     } else {
-      operationText = getCaptionByOperation(operation, options.filterOperationDescriptions);
+      operationText = getCaptionByOperation(operation, filterOperationDescriptions);
     }
     this._getValueText(field, customOperation, value).done((valueText) => {
       deferred.resolve(that._getConditionText(fieldText, operationText, valueText));
@@ -296,26 +315,12 @@ export class FilterPanelView extends modules.View {
     const options = {
       customOperations,
       columns: this._columnsController.getFilteringColumns(),
-      filterOperationDescriptions: {
-        between: this.option('filterOperationDescriptions.between') ?? messageLocalization.format('dxFilterBuilder-filterOperationBetween'),
-        equal: this.option('filterOperationDescriptions.equal') ?? messageLocalization.format('dxFilterBuilder-filterOperationEquals'),
-        notEqual: this.option('filterOperationDescriptions.notEqual') ?? messageLocalization.format('dxFilterBuilder-filterOperationNotEquals'),
-        lessThan: this.option('filterOperationDescriptions.lessThan') ?? messageLocalization.format('dxFilterBuilder-filterOperationLess'),
-        lessThanOrEqual: this.option('filterOperationDescriptions.lessThanOrEqual') ?? messageLocalization.format('dxFilterBuilder-filterOperationLessOrEquals'),
-        greaterThan: this.option('filterOperationDescriptions.greaterThan') ?? messageLocalization.format('dxFilterBuilder-filterOperationGreater'),
-        greaterThanOrEqual: this.option('filterOperationDescriptions.greaterThanOrEqual') ?? messageLocalization.format('dxFilterBuilder-filterOperationGreaterOrEquals'),
-        startsWith: this.option('filterOperationDescriptions.startsWith') ?? messageLocalization.format('dxFilterBuilder-filterOperationStartsWith'),
-        contains: this.option('filterOperationDescriptions.contains') ?? messageLocalization.format('dxFilterBuilder-filterOperationContains'),
-        notContains: this.option('filterOperationDescriptions.notContains') ?? messageLocalization.format('dxFilterBuilder-filterOperationNotContains'),
-        endsWith: this.option('filterOperationDescriptions.endsWith') ?? messageLocalization.format('dxFilterBuilder-filterOperationEndsWith'),
-        isBlank: this.option('filterOperationDescriptions.isBlank') ?? messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
-        isNotBlank: this.option('filterOperationDescriptions.isNotBlank') ?? messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank'),
-      },
+      filterOperationDescriptions: this.getFilterOperationDescriptions(),
       groupOperationDescriptions: {
-        and: this.option('groupOperationDescriptions.and') ?? messageLocalization.format('dxFilterBuilder-and'),
-        or: this.option('groupOperationDescriptions.or') ?? messageLocalization.format('dxFilterBuilder-or'),
-        notAnd: this.option('groupOperationDescriptions.notAnd') ?? messageLocalization.format('dxFilterBuilder-notAnd'),
-        notOr: this.option('groupOperationDescriptions.notOr') ?? messageLocalization.format('dxFilterBuilder-notOr'),
+        and: this.option('filterBuilder.groupOperationDescriptions.and') ?? messageLocalization.format('dxFilterBuilder-and'),
+        or: this.option('filterBuilder.groupOperationDescriptions.or') ?? messageLocalization.format('dxFilterBuilder-or'),
+        notAnd: this.option('filterBuilder.groupOperationDescriptions.notAnd') ?? messageLocalization.format('dxFilterBuilder-notAnd'),
+        notOr: this.option('filterBuilder.groupOperationDescriptions.notOr') ?? messageLocalization.format('dxFilterBuilder-notOr'),
       },
     };
     return isCondition(filterValue) ? this.getConditionText(filterValue, options) : this.getGroupText(filterValue, options);
