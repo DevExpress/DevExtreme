@@ -414,7 +414,8 @@ class TextEditorMask<
   }
 
   _handleChain(args: HandlingArgs): number {
-    const handledCount = this._maskRulesChain?.handle(this._normalizeChainArguments(args)) ?? 0;
+    const handledCount: number = this._maskRulesChain?.handle(this._normalizeChainArguments(args))
+      ?? 0;
 
     this._updateMaskInfo();
 
