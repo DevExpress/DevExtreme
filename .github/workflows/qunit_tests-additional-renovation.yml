@@ -15,7 +15,7 @@ on:
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
-  RUN_TESTS: true
+  RUN_TESTS: ${{ (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')) && 'true' || 'false' }}
 
 jobs:
   check-should-run:
