@@ -22,7 +22,7 @@
 import { computed } from 'vue';
 
 const props = withDefaults(defineProps<{
-  pointInfo: Record<string, any>
+  pointInfo?: Record<string, any>
 }>(), {
   pointInfo: () => ({} as Record<string, any>),
 });
