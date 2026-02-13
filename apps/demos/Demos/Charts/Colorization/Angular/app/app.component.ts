@@ -39,7 +39,7 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   salesAmount: SalesAmount[];
 
-  options: ColorizationOption[ 'options' ];
+  options: ColorizationOption['options'];
 
   colorizationOptions: ColorizationOption[] = [{
     name: 'Discrete',
