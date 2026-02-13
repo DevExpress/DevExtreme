@@ -136,7 +136,10 @@
       "cache": true,
       "configurations": {
         "internal": {
-          "outputFile": "./artifacts/npm/devextreme-internal/bundles/dx.custom.config.js"
+          "outputFile": "./artifacts/npm/devextreme-internal/bundles/dx.custom.config.js",
+          "outputs": [
+            "{projectRoot}/artifacts/npm/devextreme-internal/bundles/dx.custom.config.js"
+          ]
         }
       }
     },
