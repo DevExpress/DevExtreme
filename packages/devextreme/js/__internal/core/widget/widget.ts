@@ -402,6 +402,7 @@ class Widget<
     }
   }
 
+  // test
   _keyboardHandler(
     options: KeyboardKeyDownEvent,
     onlyChildProcessing?: boolean,
@@ -427,8 +428,7 @@ class Widget<
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     keyboardListeners.forEach((listener) => listener?._keyboardHandler(options));
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    onKeyboardHandled && onKeyboardHandled(options);
+    onKeyboardHandled?.(options);
 
     return true;
   }
