@@ -1,7 +1,13 @@
 import EventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
+import type { dxElementWrapper } from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { clipboardText as getClipboardText } from '@js/core/utils/dom';
+import type { DxEvent } from '@js/events';
+import type { TextEditorBaseProperties } from '@ts/ui/text_box/m_text_editor.base';
+import type TextEditorMask from '@ts/ui/text_box/m_text_editor.mask';
+import type { HandlingArgs } from '@ts/ui/text_box/m_text_editor.mask.rule';
+import type { CaretRange } from '@ts/ui/text_box/utils.caret';
 
 const MASK_EVENT_NAMESPACE = 'dxMask';
 const BLUR_EVENT = 'blur beforedeactivate';
@@ -10,64 +16,78 @@ const DELETE_INPUT_TYPES = ['deleteContentBackward', 'deleteSoftLineBackward', '
 const HISTORY_INPUT_TYPES = ['historyUndo', 'historyRedo'];
 const EVENT_NAMES = ['focusIn', 'focusOut', 'input', 'paste', 'cut', 'drop', 'beforeInput'];
 
-function getEmptyString(length) {
+function getEmptyString(length: number): string {
   return EMPTY_CHAR.repeat(length);
 }
 
 export default class MaskStrategy {
-  editor: any;
+  editor: TextEditorMask;
 
-  _dragTimer?: any;
+  _dragTimer?: ReturnType<typeof setTimeout>;
 
-  _inputHandlerTimer?: any;
+  _inputHandlerTimer?: ReturnType<typeof setTimeout>;
 
-  _caretTimeout?: any;
+  _caretTimeout?: ReturnType<typeof setTimeout>;
 
-  _prevCaret?: any;
+  _prevCaret?: CaretRange;
 
   _previousText?: string;
 
-  constructor(editor) {
+  constructor(editor: TextEditorMask) {
     this.editor = editor;
   }
 
-  _editorOption() {
+  _editorOption<K extends keyof TextEditorBaseProperties>(name: K): TextEditorBaseProperties[K];
+  _editorOption<K extends keyof TextEditorBaseProperties>(
+    name: K,
+    value: TextEditorBaseProperties[K],
+  ): void;
+  _editorOption<K extends keyof TextEditorBaseProperties>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    name: K,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    value?: TextEditorBaseProperties[K],
+  ): TextEditorBaseProperties[K] | void {
+    // eslint-disable-next-line prefer-rest-params
     return this.editor.option(...arguments);
   }
 
-  _editorInput() {
+  _editorInput(): dxElementWrapper {
     return this.editor._input();
   }
 
-  _editorCaret(newCaret?: any) {
+  _editorCaret(): CaretRange;
+  _editorCaret(newCaret: CaretRange): void;
+  _editorCaret(newCaret?: CaretRange): CaretRange | void {
     if (!newCaret) {
       return this.editor._caret();
     }
 
-    this.editor._caret(newCaret);
+    return this.editor._caret(newCaret);
   }
 
-  _attachChangeEventHandler() {
-    // @ts-expect-error
+  _attachChangeEventHandler(): void {
+    // @ts-expect-error ts-expect-error
     if (!this._editorOption('valueChangeEvent').split(' ').includes('change')) {
       return;
     }
 
     const $input = this._editorInput();
     const namespace = addNamespace(BLUR_EVENT, MASK_EVENT_NAMESPACE);
+
     EventsEngine.on($input, namespace, (e) => {
       this.editor._changeHandler(e);
     });
   }
 
-  _beforeInputHandler() {
-    // @ts-expect-error
+  _beforeInputHandler(): void {
     this._previousText = this._editorOption('text');
     this._prevCaret = this._editorCaret();
   }
 
-  _inputHandler(event) {
+  _inputHandler(event: DxEvent<InputEvent>): void {
     const { originalEvent } = event;
+
     if (!originalEvent) {
       return;
     }
@@ -90,13 +110,13 @@ export default class MaskStrategy {
       this._editorCaret(currentCaret);
       this._handleInsertTextInputEvent(originalEvent.data);
     }
-    // @ts-expect-error
+
     if (this._editorOption('text') === this._previousText) {
       event.stopImmediatePropagation();
     }
   }
 
-  _handleHistoryInputEvent() {
+  _handleHistoryInputEvent(): void {
     const caret = this._editorCaret();
 
     this._updateEditorMask({
@@ -105,17 +125,21 @@ export default class MaskStrategy {
       text: '',
     });
 
-    this._editorCaret(this._prevCaret);
+    if (this._prevCaret) {
+      this._editorCaret(this._prevCaret);
+    }
   }
 
-  _handleBackwardDeleteInputEvent() {
+  _handleBackwardDeleteInputEvent(): void {
     this._clearSelectedText(true);
 
     const caret = this._editorCaret();
+
     this.editor.setForwardDirection();
     this.editor._adjustCaret();
 
     const adjustedForwardCaret = this._editorCaret();
+
     if (adjustedForwardCaret.start !== caret.start) {
       this.editor.setBackwardDirection();
       this.editor._adjustCaret();
@@ -124,7 +148,7 @@ export default class MaskStrategy {
 
   _clearSelectedText(isDeleteInputEvent?: boolean): void {
     const selectionLength = this._prevCaret && (this._prevCaret.end - this._prevCaret.start);
-    const length = selectionLength || Number(isDeleteInputEvent);
+    const length = selectionLength ?? Number(isDeleteInputEvent);
 
     const caret = this._editorCaret();
 
@@ -138,7 +162,7 @@ export default class MaskStrategy {
     }
   }
 
-  _handleInsertTextInputEvent(data) {
+  _handleInsertTextInputEvent(data: DxEvent<InputEvent>['data']): void {
     // NOTE: data has length > 1 when autosuggestion is applied.
     const text = data ?? '';
 
@@ -146,23 +170,24 @@ export default class MaskStrategy {
 
     const hasValidChars = this._updateEditorMask({
       start: this._prevCaret?.start ?? 0,
-      length: text.length || 1,
+      length: text.length ?? 1,
       text,
     });
 
-    if (!hasValidChars) {
+    if (!hasValidChars && this._prevCaret) {
       this._editorCaret(this._prevCaret);
     }
   }
 
-  _updateEditorMask(args) {
-    const textLength = args.text.length;
-    const processedCharsCount = this.editor._handleChain(args);
+  _updateEditorMask(args: HandlingArgs): boolean {
+    const textLength = args.text?.length ?? 0;
+    const processedCharsCount = this.editor._handleChain(args) ?? 0;
 
     this.editor._displayMask();
 
     if (this.editor.isForwardDirection()) {
       const { start, end } = this._editorCaret();
+
       const correction = processedCharsCount - textLength;
 
       const hasSkippedStub = processedCharsCount > 1;
@@ -176,82 +201,101 @@ export default class MaskStrategy {
     return !!processedCharsCount;
   }
 
-  _focusInHandler() {
+  _focusInHandler(): void {
     this.editor._showMaskPlaceholder();
     this.editor.setForwardDirection();
-    // @ts-expect-error
+
     if (!this.editor._isValueEmpty() && this._editorOption('isValid')) {
       this.editor._adjustCaret();
     } else {
-      const caret = this.editor._maskRulesChain.first();
+      const caret = this.editor._maskRulesChain?.first(0) ?? 0;
+
+      // eslint-disable-next-line no-restricted-globals
       this._caretTimeout = setTimeout(() => {
         this._editorCaret({ start: caret, end: caret });
       }, 0);
     }
   }
 
-  _focusOutHandler(event) {
+  _focusOutHandler(event: DxEvent<FocusEvent>): void {
     this.editor._changeHandler(event);
-    // @ts-expect-error
+
     if (this._editorOption('showMaskMode') === 'onFocus' && this.editor._isValueEmpty()) {
-      // @ts-expect-error
       this._editorOption('text', '');
       this.editor._renderDisplayText('');
     }
   }
 
-  _delHandler(event) {
+  _delHandler(event: DxEvent<KeyboardEvent>): void {
     const { editor } = this;
 
-    editor._maskKeyHandler(event, () => {
+    editor._maskKeyHandler(event, (): undefined => {
       if (!editor._hasSelection()) {
+        // @ts-expect-error ts-expect-error
         editor._handleKey(EMPTY_CHAR);
       }
     });
   }
 
-  _cutHandler(event) {
+  _cutHandler(event: DxEvent<ClipboardEvent>): void {
     const caret = this._editorCaret();
-    const selectedText = this._editorInput().val().substring(caret.start, caret.end);
+    const inputVal = this._editorInput().val();
+    // @ts-expect-error dxElementWrapper.val() should return string
+    const selectedText = inputVal.substring(caret.start, caret.end);
 
-    this.editor._maskKeyHandler(event, () => getClipboardText(event, selectedText));
+    this.editor._maskKeyHandler(event, (): Promise<string> => {
+      const text = getClipboardText(event, selectedText);
+
+      return text as unknown as Promise<string>;
+    });
   }
 
-  _dropHandler() {
+  _dropHandler(): void {
     this._clearDragTimer();
+
+    // eslint-disable-next-line no-restricted-globals
     this._dragTimer = setTimeout(() => {
+      // @ts-expect-error dxElementWrapper.val() should return string
       const value = this.editor._convertToValue(this._editorInput().val());
-      // @ts-expect-error
+
       this._editorOption('value', value);
     });
   }
 
-  _pasteHandler(event) {
+  _pasteHandler(event: DxEvent<ClipboardEvent>): void {
     const { editor } = this;
-    // @ts-expect-error
+
     if (this._editorOption('disabled')) {
       return;
     }
 
     const caret = this._editorCaret();
 
-    editor._maskKeyHandler(event, () => {
+    editor._maskKeyHandler(event, (): undefined => {
       const pastedText = getClipboardText(event);
-      const restText = editor._maskRulesChain.text().substring(caret.end);
-      const accepted = editor._handleChain({ text: pastedText, start: caret.start, length: pastedText.length });
-      const newCaret = caret.start + accepted;
+      const restText = editor._maskRulesChain?.text().substring(caret.end);
+      const accepted = editor._handleChain({
+        text: pastedText,
+        start: caret.start,
+        length: pastedText.length,
+      });
+      const newCaret = caret.start + (accepted ?? 0);
 
-      editor._handleChain({ text: restText, start: newCaret, length: restText.length });
+      editor._handleChain({ text: restText, start: newCaret, length: restText?.length ?? 0 });
       editor._caret({ start: newCaret, end: newCaret });
     });
   }
 
-  _autoFillHandler(event) {
+  _autoFillHandler(event: InputEvent): void {
     const { editor } = this;
-    const inputVal = this._editorInput().val();
+
+    // @ts-expect-error dxElementWrapper.val() should return string
+    const inputVal = this._editorInput().val() as string;
+
+    // eslint-disable-next-line no-restricted-globals
     this._inputHandlerTimer = setTimeout(() => {
       if (this._isAutoFill()) {
-        editor._maskKeyHandler(event, () => {
+        editor._maskKeyHandler(event, (): undefined => {
           editor._handleChain({ text: inputVal, start: 0, length: inputVal.length });
         });
         editor._validateMask();
@@ -259,7 +303,7 @@ export default class MaskStrategy {
     });
   }
 
-  _isAutoFill() {
+  _isAutoFill(): boolean {
     const $input = this._editorInput();
 
     if (browser.webkit) {
@@ -270,23 +314,23 @@ export default class MaskStrategy {
     return false;
   }
 
-  _clearDragTimer() {
+  _clearDragTimer(): void {
     clearTimeout(this._dragTimer);
   }
 
-  _clearTimers() {
+  _clearTimers(): void {
     this._clearDragTimer();
     clearTimeout(this._caretTimeout);
     clearTimeout(this._inputHandlerTimer);
   }
 
-  getHandler(handlerName) {
+  getHandler(handlerName: string): (args: unknown) => void {
     return (args) => {
       this[`_${handlerName}Handler`]?.(args);
     };
   }
 
-  attachEvents() {
+  attachEvents(): void {
     const $input = this._editorInput();
 
     EVENT_NAMES.forEach((eventName) => {
@@ -297,12 +341,12 @@ export default class MaskStrategy {
     this._attachChangeEventHandler();
   }
 
-  detachEvents() {
+  detachEvents(): void {
     this._clearTimers();
     EventsEngine.off(this._editorInput(), `.${MASK_EVENT_NAMESPACE}`);
   }
 
-  clean() {
+  clean(): void {
     this._clearTimers();
   }
 }
