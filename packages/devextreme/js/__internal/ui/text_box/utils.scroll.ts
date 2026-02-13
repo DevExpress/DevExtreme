@@ -30,7 +30,7 @@ export const allowScroll = (
   const clientSize = parseFloat($container.prop(`client${prop}`));
 
   // NOTE: round to the nearest integer towards zero
-  const scrollBottomPos = (scrollSize - clientSize - scrollTopPos) | 0;
+  const scrollBottomPos = Math.trunc(scrollSize - clientSize - scrollTopPos);
 
   if (scrollTopPos === 0 && scrollBottomPos === 0) {
     return false;
