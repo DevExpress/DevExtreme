@@ -1,15 +1,3 @@
-.dx-scheduler-timeline-day .dx-scheduler-date-table {
-    width: 1300px;
-}
-
-.dx-scheduler-timeline-week .dx-scheduler-date-table {
-    width: 7500px;
-}
-
-.dx-scheduler-timeline-work-week .dx-scheduler-date-table {
-    width: 6500px;
-}
-
-.dx-scheduler-timeline-month .dx-scheduler-date-table {
-    width: 4500px;
+.dx-scheduler-timeline .dx-scheduler-cell-sizes-horizontal {
+    width: 100px;
 }
