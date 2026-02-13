@@ -73,7 +73,7 @@ export class AppComponent {
           .then(({ data }: { data: Record<string, unknown>[] }) => ({
             data,
           }))
-          .catch(() => { throw 'Data Loading Error'; });
+          .catch(() => { throw new Error('Data Loading Error'); });
       },
     });
     this.states = AspNetData.createStore({

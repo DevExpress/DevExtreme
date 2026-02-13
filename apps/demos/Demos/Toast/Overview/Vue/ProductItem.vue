@@ -19,7 +19,7 @@ import { products } from './data.ts';
 type Product = typeof products[0];
 
 const props = withDefaults(defineProps<{
-  product: Product,
+  product?: Product,
 }>(), {
   product: () => ({} as Product),
 });
