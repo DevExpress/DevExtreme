@@ -2632,7 +2632,7 @@ module('Virtual scrolling integration', () => {
                                     expectedIndices: [1, 3, 4],
                                     appointmentRects: [
                                         { left: -10034, top: -10116, height: 38 },
-                                        { left: -9626, top: -10116, height: 76 },
+                                        { left: -9634, top: -10116, height: 76 },
                                         { left: -9434, top: -9622, height: 152 }
                                     ]
                                 },
@@ -2729,46 +2729,46 @@ module('Virtual scrolling integration', () => {
                                     {
                                         offset: { x: 0 },
                                         appointmentRects: [
-                                            { left: -9851, top: -9834, height: 152 },
-                                            { left: -9776, top: -9834, height: 152 },
-                                            { left: -9701, top: -9834, height: 152 },
-                                            { left: -9626, top: -9834, height: 152 },
-                                            { left: -9551, top: -9834, height: 152 },
-                                            { left: -9476, top: -9834, height: 152 }
+                                            { left: -9859, top: -9799, height: 152 },
+                                            { left: -9784, top: -9799, height: 152 },
+                                            { left: -9709, top: -9799, height: 152 },
+                                            { left: -9634, top: -9799, height: 152 },
+                                            { left: -9559, top: -9799, height: 152 },
+                                            { left: -9484, top: -9799, height: 152 }
                                         ]
                                     },
                                     {
                                         offset: { x: 300 },
                                         appointmentRects: [
-                                            { left: -10159, top: -9834, height: 152 },
-                                            { left: -10084, top: -9834, height: 152 },
-                                            { left: -10009, top: -9834, height: 152 },
-                                            { left: -9934, top: -9834, height: 152 },
-                                            { left: -9851, top: -9834, height: 152 },
-                                            { left: -9776, top: -9834, height: 152 },
-                                            { left: -9109, top: -9834, height: 152 }
+                                            { left: -10159, top: -9799, height: 152 },
+                                            { left: -10084, top: -9799, height: 152 },
+                                            { left: -10009, top: -9799, height: 152 },
+                                            { left: -9934, top: -9799, height: 152 },
+                                            { left: -9859, top: -9799, height: 152 },
+                                            { left: -9784, top: -9799, height: 152 },
+                                            { left: -9109, top: -9799, height: 152 }
                                         ]
                                     },
                                     {
                                         offset: { x: 1100 },
                                         appointmentRects: [
-                                            { left: -9909, top: -9834, height: 152 },
-                                            { left: -9834, top: -9834, height: 152 },
-                                            { left: -9759, top: -9834, height: 152 },
-                                            { left: -9684, top: -9834, height: 152 },
-                                            { left: -9609, top: -9834, height: 152 },
-                                            { left: -9534, top: -9834, height: 152 }
+                                            { left: -9909, top: -9799, height: 152 },
+                                            { left: -9834, top: -9799, height: 152 },
+                                            { left: -9759, top: -9799, height: 152 },
+                                            { left: -9684, top: -9799, height: 152 },
+                                            { left: -9609, top: -9799, height: 152 },
+                                            { left: -9534, top: -9799, height: 152 }
                                         ]
                                     },
                                     {
                                         offset: { x: 2100 },
                                         appointmentRects: [
-                                            { left: -9851, top: -9834, height: 152 },
-                                            { left: -9776, top: -9834, height: 152 },
-                                            { left: -9701, top: -9834, height: 152 },
-                                            { left: -9626, top: -9834, height: 152 },
-                                            { left: -9551, top: -9834, height: 152 },
-                                            { left: -9476, top: -9834, height: 152 }
+                                            { left: -9851, top: -9799, height: 152 },
+                                            { left: -9776, top: -9799, height: 152 },
+                                            { left: -9701, top: -9799, height: 152 },
+                                            { left: -9626, top: -9799, height: 152 },
+                                            { left: -9551, top: -9799, height: 152 },
+                                            { left: -9476, top: -9799, height: 152 }
                                         ]
                                     }
                                 ].forEach(({ offset, appointmentRects }) => {
@@ -3101,7 +3101,7 @@ module('Virtual scrolling integration', () => {
 
                     const { virtualScrollingDispatcher } = instance.getWorkSpace();
 
-                    assert.equal(virtualScrollingDispatcher.rowHeight, 100, 'Cell height is correct');
+                    assert.equal(virtualScrollingDispatcher.rowHeight, viewName === 'month' ? 100 : 80, 'Cell height is correct');
 
                     $style.text(styleBefore);
                 });
