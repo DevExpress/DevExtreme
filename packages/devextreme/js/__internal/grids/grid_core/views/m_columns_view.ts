@@ -433,7 +433,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
           const difference = $element[0].scrollWidth - $element[0].clientWidth;
           if (difference > 0 && !isDefined($element.attr('title'))) {
-            $element.attr('title', $element.text());
+            const hintText = isHeaderRow && column?.caption ? column.caption : $element.text();
+            $element.attr('title', hintText);
             $element.data(CELL_HINT_VISIBLE, true);
           }
         }
