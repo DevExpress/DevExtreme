@@ -25,8 +25,16 @@ export class SchedulerModel {
     return new ToolbarModel(this.container.querySelector('.dx-scheduler-header'));
   }
 
+  getHeader(): HTMLElement {
+    return this.container.querySelector('.dx-scheduler-header') as HTMLElement;
+  }
+
   getStatusContent(): string {
     return this.container.querySelector('.dx-screen-reader-only')?.textContent ?? '';
+  }
+
+  getWorkSpace(): HTMLElement {
+    return this.container.querySelector('.dx-scheduler-work-space') as HTMLElement;
   }
 
   getAppointment(text?: string): AppointmentModel<HTMLDivElement | null> {

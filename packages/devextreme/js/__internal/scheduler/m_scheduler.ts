@@ -428,6 +428,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         }
         break;
       case 'tabIndex':
+        this._appointments.option(name, value);
+        // @ts-expect-error
+        super._optionChanged(args);
+        break;
       case 'focusStateEnabled':
         this._updateOption('header', name, value);
         this._updateOption('workSpace', name, value);
@@ -991,7 +995,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._a11yStatus = createA11yStatusContainer();
     this._a11yStatus.prependTo(this.$element());
     // @ts-expect-error
-    this.setAria({ role: 'group' });
+    this.setAria({ role: 'application' });
   }
 
   _initMarkupOnResourceLoaded() {
@@ -1227,7 +1231,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       max: this.getViewOption('max'),
       indicatorTime: this.option('indicatorTime'),
       startViewDate: this.getStartViewDate(),
-      tabIndex: this.option('tabIndex'),
+      tabIndex: undefined,
       focusStateEnabled: this.option('focusStateEnabled'),
       useDropDownViewSwitcher: this.option('useDropDownViewSwitcher'),
       firstDayOfWeek: this.getFirstDayOfWeek(),
@@ -1356,7 +1360,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
       viewOffset: this.getViewOffsetMs(),
-      tabIndex: this.option('tabIndex'),
+      tabIndex: undefined,
       accessKey: this.option('accessKey'),
       focusStateEnabled: this.option('focusStateEnabled'),
       cellDuration: this.option('cellDuration'),

@@ -1,14 +1,20 @@
 import {
   afterEach, describe, expect, it, jest,
 } from '@jest/globals';
+import $ from '@js/core/renderer';
 
 import { createScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
 describe('Appointments', () => {
   afterEach(() => {
+    const $scheduler = $('.dx-scheduler');
+    // @ts-expect-error
+    $scheduler.dxScheduler('dispose');
+    document.body.innerHTML = '';
     jest.useRealTimers();
   });
+
   it('All-day appointment should not be resizable if current view is "day"', async () => {
     setupSchedulerTestEnvironment();
     const { POM } = await createScheduler({
@@ -80,5 +86,97 @@ describe('Appointments', () => {
       const tooltipTitleElement = tooltipAppointment?.querySelector('.dx-tooltip-appointment-item-content-subject');
       expect(tooltipTitleElement?.textContent?.trim()).toBe('(No subject)');
     }
+  });
+
+  describe('Keyboard Navigation', () => {
+    const dataSource = [
+      {
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+      },
+      {
+        text: 'Appointment 2',
+        startDate: new Date(2015, 1, 9, 10),
+        endDate: new Date(2015, 1, 9, 11),
+      },
+      {
+        text: 'Appointment 3',
+        startDate: new Date(2015, 1, 9, 12),
+        endDate: new Date(2015, 1, 9, 13),
+      },
+    ];
+
+    it('should focus first appointment on Home', async () => {
+      setupSchedulerTestEnvironment();
+      const { POM, keydown } = await createScheduler({
+        dataSource,
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9),
+      });
+
+      const appointments = POM.getAppointments();
+      const firstAppointment = appointments[0];
+      const lastAppointment = appointments[2];
+
+      lastAppointment.element.focus();
+      keydown(lastAppointment.element, 'Home');
+
+      expect(firstAppointment.isFocused()).toBe(true);
+      expect(lastAppointment.isFocused()).toBe(false);
+    });
+
+    it('should focus last appointment on End', async () => {
+      setupSchedulerTestEnvironment();
+      const { POM, keydown } = await createScheduler({
+        dataSource,
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9),
+      });
+
+      const appointments = POM.getAppointments();
+      const firstAppointment = appointments[0];
+      const lastAppointment = appointments[2];
+
+      firstAppointment.element.focus();
+      keydown(firstAppointment.element, 'End');
+
+      expect(firstAppointment.isFocused()).toBe(false);
+      expect(lastAppointment.isFocused()).toBe(true);
+    });
+
+    it('should not change focus when Home is pressed on the first appointment', async () => {
+      setupSchedulerTestEnvironment();
+      const { POM, keydown } = await createScheduler({
+        dataSource,
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9),
+      });
+
+      const appointments = POM.getAppointments();
+      const firstAppointment = appointments[0];
+
+      firstAppointment.element.focus();
+      keydown(firstAppointment.element, 'Home');
+
+      expect(firstAppointment.isFocused()).toBe(true);
+    });
+
+    it('should not change focus when End is pressed on the last appointment', async () => {
+      setupSchedulerTestEnvironment();
+      const { POM, keydown } = await createScheduler({
+        dataSource,
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9),
+      });
+
+      const appointments = POM.getAppointments();
+      const lastAppointment = appointments[2];
+
+      lastAppointment.element.focus();
+      keydown(lastAppointment.element, 'End');
+
+      expect(lastAppointment.isFocused()).toBe(true);
+    });
   });
 });
