@@ -1676,11 +1676,11 @@ module('Virtual scrolling integration', () => {
                             offset: { x: 4200 },
                             appointmentRects: [
                                 { left: -9859, top: -9869, height: 25, width: 75 },
-                                { left: -9776, top: -9869, height: 25, width: 75 },
-                                { left: -9701, top: -9869, height: 25, width: 75 },
-                                { left: -9626, top: -9869, height: 25, width: 75 },
-                                { left: -9551, top: -9869, height: 25, width: 75 },
-                                { left: -9476, top: -9869, height: 25, width: 75 }
+                                { left: -9784, top: -9869, height: 25, width: 75 },
+                                { left: -9709, top: -9869, height: 25, width: 75 },
+                                { left: -9634, top: -9869, height: 25, width: 75 },
+                                { left: -9559, top: -9869, height: 25, width: 75 },
+                                { left: -9484, top: -9869, height: 25, width: 75 }
                             ]
                         },
                         {
@@ -1775,9 +1775,9 @@ module('Virtual scrolling integration', () => {
                     {
                         offsetY: 0,
                         expected: [{
-                            groupIndex: 1,
-                            top: 784,
-                            height: 76
+                            groupIndex: 0,
+                            top: 126,
+                            height: 342
                         }, {
                             groupIndex: 1,
                             top: 784,
@@ -1787,9 +1787,9 @@ module('Virtual scrolling integration', () => {
                     {
                         offsetY: 550,
                         expected: [{
-                            groupIndex: 1,
-                            top: 760,
-                            height: 342
+                            groupIndex: 0,
+                            top: 266,
+                            height: 190
                         }, {
                             groupIndex: 1,
                             top: 760,
