@@ -1341,7 +1341,9 @@ export class ColumnsController extends modules.Controller {
 
       each(columns, (_: number, column) => {
         const isReferencedAsGroupValue = indexParameterName === 'groupIndex'
-          && referencedGroupValues.includes(column.dataField);
+          && referencedGroupValues.some(
+            (groupValue) => column.dataField === groupValue || column.name === groupValue,
+          );
 
         if (!isReferencedAsGroupValue) {
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
