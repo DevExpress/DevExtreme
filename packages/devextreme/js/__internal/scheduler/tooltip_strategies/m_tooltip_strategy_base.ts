@@ -71,7 +71,7 @@ export class TooltipStrategyBase {
   }
 
   private removeAppointmentFromTooltip(appointment) {
-    const currentItems = this._list.option('dataSource');
+    const currentItems = this._list.option('dataSource') || [];
     const newDataList = currentItems.filter((item) => item.appointment !== appointment);
 
     if (newDataList.length === 0) {
