@@ -105,6 +105,7 @@ module('Mobile tooltip', moduleConfig, () => {
         assert.ok(scheduler.tooltip.isVisible(), 'Tooltip should be visible after click on appointment');
 
         scheduler.tooltip.clickOnDeleteButton();
+        assert.notOk(scheduler.tooltip.isVisible(), 'Tooltip should be hide after click on remove button in tooltip');
 
         assert.equal(scheduler.instance.option('dataSource').length, initialDataCount - 1, 'Appointment should delete form dataSource after click on delete button in tooltip');
     });
