@@ -48,5 +48,8 @@
     "appsDir": "apps",
     "libsDir": "packages"
   },
-  "defaultBase": "master"
+  "defaultBase": "master",
+  "tui": {
+    "enabled": false
+  }
 }

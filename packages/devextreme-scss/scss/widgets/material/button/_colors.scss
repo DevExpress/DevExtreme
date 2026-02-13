@@ -27,7 +27,7 @@ $button-normal-selected-color: $base-text-color !default;
 * $name 15. Background color (contained)
 * $type color
 */
-$button-normal-bg: $base-element-bg !default;
+$button-normal-bg: null !default;
 
 /**
 * $name 30. Hover state background color
@@ -246,6 +246,7 @@ $button-success-text-selected-bg: color.change($button-success-bg, $alpha: 0.12)
 $button-success-text-selected-color: $button-success-bg !default;
 
 @if $mode == "light" {
+  $button-normal-bg: $base-element-bg !default;
   $button-disabled-background: rgba(0, 0, 0, 0.12) !default;
   $button-disabled-text-color: rgba(0, 0, 0, 0.38) !default;
   $button-shadow-color: rgba(0, 0, 0, 0.24) !default;
@@ -269,6 +270,7 @@ $button-success-text-selected-color: $button-success-bg !default;
 }
 
 @if $mode == "dark" {
+  $button-normal-bg: color.adjust($base-element-bg, $lightness: 6%, $space: hsl) !default;
   $button-disabled-background: rgba(255, 255, 255, 0.12) !default;
   $button-disabled-text-color: rgba(255, 255, 255, 0.38) !default;
   $button-shadow-color: rgba(0, 0, 0, 0.4) !default;

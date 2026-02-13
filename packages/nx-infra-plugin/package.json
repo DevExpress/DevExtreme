@@ -19,10 +19,42 @@
     "rimraf": "3.0.2"
   },
   "peerDependencies": {
+    "@babel/core": ">=7.0.0",
+    "@babel/plugin-transform-modules-commonjs": ">=7.0.0",
+    "@babel/plugin-transform-object-rest-spread": ">=7.0.0",
+    "@babel/plugin-transform-runtime": ">=7.0.0",
+    "@babel/preset-env": ">=7.0.0",
+    "babel-plugin-add-module-exports": ">=1.0.0",
+    "babel-plugin-inferno": ">=6.0.0",
+    "core-js-compat": ">=3.0.0",
     "karma": ">=6.0.0",
     "ng-packagr": ">=19.0.0"
   },
   "peerDependenciesMeta": {
+    "@babel/core": {
+      "optional": true
+    },
+    "@babel/plugin-transform-modules-commonjs": {
+      "optional": true
+    },
+    "@babel/plugin-transform-object-rest-spread": {
+      "optional": true
+    },
+    "@babel/plugin-transform-runtime": {
+      "optional": true
+    },
+    "@babel/preset-env": {
+      "optional": true
+    },
+    "babel-plugin-add-module-exports": {
+      "optional": true
+    },
+    "babel-plugin-inferno": {
+      "optional": true
+    },
+    "core-js-compat": {
+      "optional": true
+    },
     "karma": {
       "optional": true
     },
@@ -31,6 +63,7 @@
     }
   },
   "devDependencies": {
+    "@types/babel__core": "7.20.5",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.14",
     "@types/normalize-path": "3.0.2",

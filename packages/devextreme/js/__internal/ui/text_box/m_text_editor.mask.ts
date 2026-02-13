@@ -19,8 +19,8 @@ import type { TextEditorBaseProperties } from './m_text_editor.base';
 import TextEditorBase from './m_text_editor.base';
 import { EmptyMaskRule, MaskRule, StubMaskRule } from './m_text_editor.mask.rule';
 import MaskStrategy from './m_text_editor.mask.strategy';
-import type { CaretRange } from './m_utils.caret';
-import caretUtils from './m_utils.caret';
+import type { CaretRange } from './utils.caret';
+import caretUtils from './utils.caret';
 
 type MaskRules = Record<string, RegExp | ((char: string) => boolean)>;
 

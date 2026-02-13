@@ -140,7 +140,7 @@ describe('GenerateGridColumnCommand', () => {
           text: USER_TEXT,
           data: PROCESSED_DATA,
         },
-      });
+      }, { applyMetaTemplates: true });
     });
 
     it('promptManager.buildPrompt should should return prompt with passed values', () => {

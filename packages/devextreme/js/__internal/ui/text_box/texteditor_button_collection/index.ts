@@ -3,10 +3,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type dxButton from '@js/ui/button';
 import errors from '@js/ui/widget/ui.errors';
-
-import type TextEditorBase from '../m_text_editor.base';
-import type TextEditorButton from './m_button';
-import CustomButton from './m_custom';
+import type TextEditorBase from '@ts/ui/text_box/m_text_editor.base';
+import type TextEditorButton from '@ts/ui/text_box/texteditor_button_collection/button';
+import CustomButton from '@ts/ui/text_box/texteditor_button_collection/custom';
 
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 
@@ -63,7 +62,10 @@ function isPredefinedButtonName(
   return !!predefinedButtonsInfo.find((info) => info.name === name);
 }
 
-export type TextEditorButtonInfo = PublicTextEditorButton & { Ctor: CustomButton };
+export type TextEditorButtonInfo = PublicTextEditorButton & {
+  name: string;
+  Ctor: typeof CustomButton;
+};
 
 export default class TextEditorButtonCollection<
   TComponent extends TextEditorBase = TextEditorBase,
@@ -86,18 +88,9 @@ export default class TextEditorButtonCollection<
     const names: (string | TextEditorButtonInfo)[] = [];
 
     return buttons.map((button) => {
-      const isStringButton = typeof button === 'string';
-
-      if (!isStringButton) {
-        checkButtonInfo(button);
-      }
-      const isDefaultButton = isStringButton
-        || isPredefinedButtonName(button.name, this.defaultButtonsInfo);
-
-      if (isDefaultButton) {
+      if (typeof button === 'string') {
         const defaultButtonInfo = this.defaultButtonsInfo.find(
-          // @ts-expect-error ts-error
-          ({ name }) => name === button || name === button.name,
+          ({ name }) => name === button,
         );
 
         if (!defaultButtonInfo) {
@@ -108,8 +101,27 @@ export default class TextEditorButtonCollection<
 
         return defaultButtonInfo;
       }
-      const { name } = button;
-      // @ts-expect-error @ts-error
+
+      checkButtonInfo(button);
+
+      const isDefaultButton = isPredefinedButtonName(button.name, this.defaultButtonsInfo);
+
+      if (isDefaultButton) {
+        const defaultButtonInfo = this.defaultButtonsInfo.find(
+          ({ name }) => name === button.name,
+        );
+
+        if (!defaultButtonInfo) {
+          throw errors.Error('E1056', this.editor.NAME, button);
+        }
+
+        checkNamesUniqueness(names, button);
+
+        return defaultButtonInfo;
+      }
+
+      const { name = '' } = button;
+
       checkNamesUniqueness(names, name);
 
       return { ...button, Ctor: CustomButton } as unknown as TextEditorButtonInfo;
@@ -118,8 +130,8 @@ export default class TextEditorButtonCollection<
 
   _createButton(buttonsInfo: TextEditorButtonInfo): TextEditorButton {
     const { Ctor, options, name } = buttonsInfo;
-    // @ts-expect-error ts-error
-    const button: TextEditorButton = new Ctor(name, this.editor, options);
+
+    const button: TextEditorButton = new Ctor(name, this.editor, options ?? {});
 
     this.buttons.push(button);
 

@@ -169,11 +169,11 @@ const prioritiesData: Priority[] = [
   {
     text: 'Low Priority',
     id: 1,
-    color: '#1e90ff',
+    color: '#1564C0',
   }, {
     text: 'High Priority',
     id: 2,
-    color: '#ff9747',
+    color: '#DD2C00',
   },
 ];
 
