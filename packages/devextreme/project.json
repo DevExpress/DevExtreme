@@ -133,7 +133,15 @@
       "outputs": [
         "{projectRoot}/artifacts/npm/devextreme/bundles/dx.custom.config.js"
       ],
-      "cache": true
+      "cache": true,
+      "configurations": {
+        "internal": {
+          "outputFile": "./artifacts/npm/devextreme-internal/bundles/dx.custom.config.js",
+          "outputs": [
+            "{projectRoot}/artifacts/npm/devextreme-internal/bundles/dx.custom.config.js"
+          ]
+        }
+      }
     },
     "clean:dist-ts": {
       "executor": "devextreme-nx-infra-plugin:clean",
@@ -387,6 +395,29 @@
             "{projectRoot}/artifacts/transpiled-renovation-npm",
             "{projectRoot}/build/bundle-templates/dx.custom.js",
             "{projectRoot}/artifacts/npm/devextreme/bundles/dx.custom.config.js"
+          ]
+        },
+        "internal": {
+          "commands": [
+            "pnpm nx build:devextreme-bundler-config:generate devextreme",
+            "pnpm nx build:devextreme-bundler-config:prod devextreme -c internal",
+            "pnpm nx build:ts:internal devextreme",
+            "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel",
+            "pnpm nx copy:json:transpiled devextreme",
+            "pnpm nx run-many --targets=build:cjs,build:cjs:internal,build:cjs:bundles --projects=devextreme --parallel -c production",
+            "pnpm nx copy:json:transpiled-production devextreme",
+            "pnpm nx run-many --targets=build:npm:esm,build:npm:esm:internal,build:npm:cjs,build:npm:cjs:internal --projects=devextreme --parallel",
+            "pnpm nx copy:json:esm-npm devextreme",
+            "pnpm nx build:cjs:bundles devextreme -c esm-npm",
+            "pnpm nx build:npm:dual-mode devextreme",
+            "pnpm nx clean:dist-ts devextreme"
+          ],
+          "outputs": [
+            "{projectRoot}/artifacts/transpiled",
+            "{projectRoot}/artifacts/transpiled-esm-npm",
+            "{projectRoot}/artifacts/transpiled-renovation-npm",
+            "{projectRoot}/build/bundle-templates/dx.custom.js",
+            "{projectRoot}/artifacts/npm/devextreme-internal/bundles/dx.custom.config.js"
           ]
         }
       }
