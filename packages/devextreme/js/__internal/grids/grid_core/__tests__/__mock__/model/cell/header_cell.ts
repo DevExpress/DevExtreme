@@ -4,6 +4,7 @@ const SELECTORS = {
   headerContent: 'text-content',
   alignmentRight: 'dx-text-content-alignment-right',
   alignmentLeft: 'dx-text-content-alignment-left',
+  sortIndexIcon: 'dx-sort-index-icon',
 };
 
 export class HeaderCellModel {
@@ -38,5 +39,9 @@ export class HeaderCellModel {
       default:
         return 'left';
     }
+  }
+
+  public getSortIndexIcon(): HTMLElement | null {
+    return this.root?.querySelector(`.${SELECTORS.sortIndexIcon}`) ?? null;
   }
 }
