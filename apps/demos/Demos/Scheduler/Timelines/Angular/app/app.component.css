@@ -1,3 +1,3 @@
-:host ::ng-deep .dx-scheduler-timeline .dx-scheduler-cell-sizes-horizontal {
+::ng-deep .dx-scheduler-timeline .dx-scheduler-cell-sizes-horizontal {
   width: 100px;
 }
