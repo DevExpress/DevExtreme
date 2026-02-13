@@ -91,6 +91,7 @@ import {
  dxTreeListToolbar,
  dxTreeListRowObject,
  TreeListPredefinedColumnButton,
+ ColumnButtonClickEvent,
  dxTreeListColumnButton,
  TreeListCommandColumnType,
  TreeListPredefinedToolbarItem,
@@ -156,9 +157,6 @@ import {
  CollisionResolutionCombination,
 } from "devextreme/common/core/animation";
 import {
- event,
-} from "devextreme/events/events.types";
-import {
  Format,
 } from "devextreme/common/core/localization";
 import {
@@ -179,6 +177,9 @@ import {
  FormItemComponent,
  FormItemType,
 } from "devextreme/ui/form";
+import {
+ event,
+} from "devextreme/events/events.types";
 import {
  EventInfo,
 } from "devextreme/common/core/events";
@@ -705,7 +706,7 @@ const DxButtonConfig = {
     hint: String,
     icon: String,
     name: String as PropType<string | TreeListPredefinedColumnButton>,
-    onClick: Function as PropType<((e: { column: dxTreeListColumn, component: dxTreeList, element: any, event: event, model: any, row: dxTreeListRowObject }) => void)>,
+    onClick: Function as PropType<((e: ColumnButtonClickEvent) => void)>,
     template: {},
     text: String,
     visible: [Boolean, Function] as PropType<boolean | (((options: { column: dxTreeListColumn, component: dxTreeList, row: dxTreeListRowObject }) => boolean))>

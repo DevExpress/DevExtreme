@@ -13,6 +13,7 @@ Ng.makeMetadata({
     removeMembers(/\/card_view:/),
     removeMembers(/\/scheduler:Toolbar/),
     removeMembers(/\/stepper:/),
+    removeMembers(/\/tree_list:dxTreeListColumnButton.onClick/),
   ],
   variables: {
     collectionItems: [...commonSmdCollectionItems],
