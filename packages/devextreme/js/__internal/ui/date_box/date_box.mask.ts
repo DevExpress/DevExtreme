@@ -11,13 +11,12 @@ import { fitIntoRange, inRange, sign } from '@js/core/utils/math';
 import {
   isDate, isDefined, isFunction, isString,
 } from '@js/core/utils/type';
-import type { DxEvent } from '@js/events';
+import type { DxEvent, InteractionEvent } from '@js/events';
 import type { DateLike, Properties } from '@js/ui/date_box';
 import dateLocalization from '@ts/core/localization/date';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 
-import type { ValueChangedEvent } from '../editor/editor';
 import type { DxMouseWheelEvent } from '../scroll_view/types';
 import type { DateBoxBaseProperties } from './date_box.base';
 import DateBoxBase from './date_box.base';
@@ -47,14 +46,17 @@ class DateBoxMask extends DateBoxBase {
 
   _formatPattern?: string | null;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent) => unknown> {
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | undefined> {
     const originalHandlers = super._supportedKeys();
-    const callOriginalHandler = (e: KeyboardEvent): unknown => {
+    const callOriginalHandler = (e: KeyboardEvent): boolean | undefined => {
       const normalizedKeyName = normalizeKeyName(e);
       const originalHandler = normalizedKeyName ? originalHandlers[normalizedKeyName] : undefined;
       return originalHandler?.apply(this, [e]);
     };
-    const applyHandler = (e: KeyboardEvent, maskHandler: (e: KeyboardEvent) => void): unknown => {
+    const applyHandler = (
+      e: KeyboardEvent,
+      maskHandler: (e: KeyboardEvent) => boolean | undefined,
+    ): boolean | undefined => {
       if (this._shouldUseOriginalHandler(e)) {
         return callOriginalHandler.apply(this, [e]);
       }
@@ -68,42 +70,52 @@ class DateBoxMask extends DateBoxBase {
         if (!this._isAllSelected()) {
           event.preventDefault();
         }
+        return undefined;
       }),
       backspace: (e) => applyHandler(e, (event) => {
         this._revertPart(BACKWARD);
         if (!this._isAllSelected()) {
           event.preventDefault();
         }
+        return undefined;
       }),
-      home: (e) => applyHandler(e, (event): void => {
+      home: (e) => applyHandler(e, (event) => {
         this._selectFirstPart();
         event.preventDefault();
+        return undefined;
       }),
-      end: (e) => applyHandler(e, (event): void => {
+      end: (e) => applyHandler(e, (event) => {
         this._selectLastPart();
         event.preventDefault();
+        return undefined;
       }),
       escape: (e) => applyHandler(e, () => {
         this._revertChanges();
+        return undefined;
       }),
       enter: (e) => applyHandler(e, () => {
         this._enterHandler();
+        return undefined;
       }),
       leftArrow: (e) => applyHandler(e, (event) => {
         this._selectNextPart(BACKWARD);
         event.preventDefault();
+        return undefined;
       }),
       rightArrow: (e) => applyHandler(e, (event) => {
         this._selectNextPart(FORWARD);
         event.preventDefault();
+        return undefined;
       }),
       upArrow: (e) => applyHandler(e, (event) => {
         this._upDownArrowHandler(FORWARD);
         event.preventDefault();
+        return undefined;
       }),
       downArrow: (e) => applyHandler(e, (event) => {
         this._upDownArrowHandler(BACKWARD);
         event.preventDefault();
+        return undefined;
       }),
     };
   }
@@ -726,10 +738,11 @@ class DateBoxMask extends DateBoxBase {
     }
   }
 
-  _valueChangeEventHandler(e: ValueChangedEvent): void {
+  _valueChangeEventHandler(e: InteractionEvent): void {
     const { text } = this.option();
 
     if (this._useMaskBehavior()) {
+      // @ts-expect-error editor's ValueChangedEvent should be extended
       this._saveValueChangeEvent(e);
       if (!text) {
         this._maskValue = null;

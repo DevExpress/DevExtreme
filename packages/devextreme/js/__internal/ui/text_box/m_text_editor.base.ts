@@ -828,8 +828,8 @@ class TextEditorBase<
     super._toggleFocusClass(isFocused, this._focusClassTarget($element));
   }
 
-  _hasFocusClass(element: dxElementWrapper): boolean {
-    return super._hasFocusClass($(element || this.$element()));
+  _hasFocusClass(element?: dxElementWrapper): boolean {
+    return super._hasFocusClass($(element ?? this.$element()));
   }
 
   _renderEmptinessEvent(): void {

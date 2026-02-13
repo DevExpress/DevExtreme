@@ -106,9 +106,9 @@ class DateView extends Editor<DateViewProperties> {
     super._render();
     this.$element().addClass(DATEVIEW_CLASS);
 
-    const { type } = this.option();
+    const { type = 'date' } = this.option();
 
-    this._toggleFormatClasses(type as string);
+    this._toggleFormatClasses(type);
     this._toggleCompactClass();
   }
 
