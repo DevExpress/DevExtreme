@@ -239,9 +239,6 @@ export default class dxNumberBox extends dxTextEditor<dxNumberBoxOptions> {
 /** @public */
 export type Properties = dxNumberBoxOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxNumberBoxOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

@@ -26,8 +26,8 @@ import { hasWindow } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/tag_box';
 import errors from '@js/ui/widget/ui.errors';
 import SelectBox from '@ts/ui/m_select_box';
-import caret from '@ts/ui/text_box/m_utils.caret';
-import { allowScroll } from '@ts/ui/text_box/m_utils.scroll';
+import caret from '@ts/ui/text_box/utils.caret';
+import { allowScroll } from '@ts/ui/text_box/utils.scroll';
 
 function xor(a: boolean, b: boolean): boolean {
   return (a || b) && !(a && b);

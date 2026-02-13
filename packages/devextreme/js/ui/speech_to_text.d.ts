@@ -140,67 +140,68 @@ export type InitializedEvent = InitializedEventInfo<dxSpeechToText>;
 export type OptionChangedEvent = EventInfo<dxSpeechToText> & ChangedOptionInfo;
 
 /**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
  * @public
- * @docid dxSpeechToTextOptions
- * @type object
+ * @docid
  */
-export interface Properties extends WidgetOptions<dxSpeechToText> {
+export interface dxSpeechToTextOptions extends WidgetOptions<dxSpeechToText> {
   /**
-   * @docid dxSpeechToTextOptions.customSpeechRecognizer
+   * @docid
    * @public
    */
   customSpeechRecognizer?: CustomSpeechRecognizer;
 
   /**
-   * @docid dxSpeechToTextOptions.startText
+   * @docid
    * @default ""
    * @public
    */
   startText?: string;
 
   /**
-   * @docid dxSpeechToTextOptions.stopText
+   * @docid
    * @default ""
    * @public
    */
   stopText?: string;
 
   /**
-   * @docid dxSpeechToTextOptions.stylingMode
+   * @docid
    * @default 'contained'
    * @public
    */
   stylingMode?: ButtonStyle;
 
   /**
-   * @docid dxSpeechToTextOptions.startIcon
-   * @default 'micoutline'
+   * @docid
+   * @default 'micfilled'
    * @public
    */
   startIcon?: string;
 
   /**
-   * @docid dxSpeechToTextOptions.stopIcon
+   * @docid
    * @default 'stopfilled'
    * @public
    */
   stopIcon?: string;
 
   /**
-   * @docid dxSpeechToTextOptions.type
+   * @docid
    * @default 'normal'
    * @public
    */
   type?: ButtonType | string;
 
   /**
-   * @docid dxSpeechToTextOptions.speechRecognitionConfig
+   * @docid
    * @public
    */
   speechRecognitionConfig?: SpeechRecognitionConfig | { [key: string]: any };
 
   /**
-   * @docid dxSpeechToTextOptions.onStartClick
+   * @docid
    * @default undefined
    * @type_function_param1 e:{ui/speech_to_text:StartClickEvent}
    * @action
@@ -209,7 +210,7 @@ export interface Properties extends WidgetOptions<dxSpeechToText> {
   onStartClick?: ((e: StartClickEvent) => void) | undefined;
 
   /**
-   * @docid dxSpeechToTextOptions.onStopClick
+   * @docid
    * @default undefined
    * @type_function_param1 e:{ui/speech_to_text:StopClickEvent}
    * @action
@@ -218,7 +219,7 @@ export interface Properties extends WidgetOptions<dxSpeechToText> {
   onStopClick?: ((e: StopClickEvent) => void) | undefined;
 
   /**
-   * @docid dxSpeechToTextOptions.onResult
+   * @docid
    * @default undefined
    * @type_function_param1 e:{ui/speech_to_text:ResultEvent}
    * @action
@@ -227,7 +228,7 @@ export interface Properties extends WidgetOptions<dxSpeechToText> {
   onResult?: ((e: ResultEvent) => void) | undefined;
 
   /**
-   * @docid dxSpeechToTextOptions.onError
+   * @docid
    * @default undefined
    * @type_function_param1 e:{ui/speech_to_text:ErrorEvent}
    * @action
@@ -236,7 +237,7 @@ export interface Properties extends WidgetOptions<dxSpeechToText> {
   onError?: ((e: ErrorEvent) => void) | undefined;
 
   /**
-   * @docid dxSpeechToTextOptions.onEnd
+   * @docid
    * @default undefined
    * @type_function_param1 e:{ui/speech_to_text:EndEvent}
    * @action
@@ -249,10 +250,12 @@ export interface Properties extends WidgetOptions<dxSpeechToText> {
  * @docid
  * @inherits Widget
  * @namespace DevExpress.ui
- * @options Properties
  * @public
  */
 export default class dxSpeechToText extends Widget<Properties> { }
+
+/** @public */
+export type Properties = dxSpeechToTextOptions;
 
 /** @public */
 export type ExplicitTypes = {

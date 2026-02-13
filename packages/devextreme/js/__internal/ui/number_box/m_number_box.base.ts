@@ -20,7 +20,7 @@ import { isDefined } from '@js/core/utils/type';
 import TextEditor from '@ts/ui/text_box/m_text_editor';
 
 import type { TextEditorBaseProperties } from '../text_box/m_text_editor.base';
-import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/m_index';
+import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/index';
 import SpinButtons from './m_number_box.spins';
 
 const math = Math;

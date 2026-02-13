@@ -1,3 +1,5 @@
+import { getAccentColorScheme } from '@ts/viz/core/themes/shared/accent_color_scheme';
+
 const FONT_FAMILY = 'roboto, \'roboto fallback\', helvetica, arial, sans-serif';
 
 const LIGHT_TITLE_COLOR = 'rgba(0,0,0,0.87)';
@@ -429,62 +431,25 @@ function getMaterialColorScheme(
   return {
     theme: {
       name: `material.${accentName}.${themeName}`,
-
-      rangeSelector: {
-        selectedRangeColor: accentColor,
-        sliderMarker: {
-          color: accentColor,
-        },
-        sliderHandle: {
-          color: accentColor,
-        },
-      },
-
-      map: {
-        'layer:marker:dot': {
-          color: accentColor,
-        },
-        'layer:marker:bubble': {
-          color: accentColor,
-        },
-        legend: {
-          markerColor: accentColor,
-        },
-      },
-
-      bullet: {
-        color: accentColor,
-      },
-
-      gauge: {
-        valueIndicators: {
-          rangebar: {
-            color: accentColor,
-          },
-          // eslint-disable-next-line spellcheck/spell-checker
-          textcloud: {
-            color: accentColor,
-          },
-        },
-      },
+      ...getAccentColorScheme(accentColor),
     },
     baseThemeName: `material.${themeName}`,
   };
 }
 
-const materialAccents = {
-  blue: '#03a9f4',
-  lime: '#cddc39',
-  orange: '#ff5722',
-  purple: '#9c27b0',
-  teal: '#009688',
+const materialAccents: Record<string, { light: string; dark: string }> = {
+  blue: { light: '#1564C0', dark: '#90CAF9' },
+  lime: { light: '#cddc39', dark: '#cddc39' },
+  orange: { light: '#ff5722', dark: '#ff5722' },
+  purple: { light: '#9c27b0', dark: '#9c27b0' },
+  teal: { light: '#009688', dark: '#009688' },
 };
 
 Object.keys(materialAccents).forEach((accent) => {
-  const color = materialAccents[accent];
+  const { light, dark } = materialAccents[accent];
   themes.push(
-    getMaterialColorScheme(accent, 'light', color),
-    getMaterialColorScheme(accent, 'dark', color),
+    getMaterialColorScheme(accent, 'light', light),
+    getMaterialColorScheme(accent, 'dark', dark),
     { theme: { name: `material.${accent}.light.compact` }, baseThemeName: `material.${accent}.light` },
     { theme: { name: `material.${accent}.dark.compact` }, baseThemeName: `material.${accent}.dark` },
   );

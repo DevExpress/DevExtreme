@@ -79,7 +79,7 @@ describe('ChangeToneCommand', () => {
       expect(promptManager.buildPrompt).toHaveBeenCalledWith('changeTone', {
         system: { tone: params.tone },
         user: { text: params.text },
-      });
+      }, { applyMetaTemplates: true });
     });
 
     it('promptManager.buildPrompt should should return prompt with passed values', () => {

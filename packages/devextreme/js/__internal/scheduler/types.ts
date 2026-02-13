@@ -226,7 +226,7 @@ export interface ViewDataProviderType {
     rowIndex: number,
     columnIndex: number,
     isAllDay?: boolean,
-    rtlEnabled?: boolean
+    rtlEnabled?: boolean,
   ) => ViewCellData;
   getCellCount: (config: CountGenerationConfig) => number;
   getRowCount: (config: CountGenerationConfig) => number;
@@ -236,7 +236,7 @@ export interface ViewDataProviderType {
   getVisibleDayDuration: (
     startDayHour: number,
     endDayHour: number,
-    hoursInterval: number
+    hoursInterval: number,
   ) => number;
   getLastViewDateByEndDayHour: (endDayHour: number) => Date;
   getIntervalDuration: (intervalCount: number) => number;

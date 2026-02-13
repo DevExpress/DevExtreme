@@ -23,13 +23,7 @@ export default function CustomItem(company) {
           Fax: <b>{Fax}</b>
         </p>
         <p>
-          Website:{' '}
-          <a
-            href={Website}
-            target="_blank"
-          >
-            {Website}
-          </a>
+          Website: <span className="accordion-item-link">{Website}</span>
         </p>
       </div>
     </div>

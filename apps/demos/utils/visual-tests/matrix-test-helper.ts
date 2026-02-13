@@ -205,22 +205,9 @@ export function shouldRunTestAtIndex(testIndex) {
 
 const SKIPPED_TESTS = {
   jQuery: {},
-  Angular: {
-    Common: ['PopupAndNotificationsOverview'],
-    Scheduler: ['ContextMenu'],
-    FileUploader: ['CustomDropzone'],
-  },
-  Vue: {
-    Common: ['PopupAndNotificationsOverview'],
-    // NOTE: Context menu item position is different across themes
-    Scheduler: ['ContextMenu'],
-    FileUploader: ['CustomDropzone'],
-  },
-  React: {
-    Common: ['PopupAndNotificationsOverview'],
-    Scheduler: ['ContextMenu'],
-    FileUploader: ['CustomDropzone'],
-  },
+  Angular: {},
+  Vue: {},
+  React: {},
 };
 
 export function shouldSkipDemo(framework, component, demoName, skippedTests) {

@@ -16,7 +16,7 @@ import type {
   MessageEnteredEvent,
   MessageUpdatedEvent,
   MessageUpdatingEvent,
-  Properties,
+  Properties as ChatProperties,
   TypingEndEvent,
   TypingStartEvent,
 } from '@js/ui/chat';
@@ -43,7 +43,7 @@ import type { DataChange } from '@ts/ui/collection/collection_widget.base';
 const CHAT_CLASS = 'dx-chat';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
-class Chat extends Widget<Properties> {
+class Chat extends Widget<ChatProperties> {
   _messageBox!: MessageBox;
 
   _messageList!: MessageList;
@@ -76,7 +76,7 @@ class Chat extends Widget<Properties> {
 
   _attachmentDownloadAction?: (e: Partial<AttachmentDownloadClickEvent>) => void;
 
-  _getDefaultOptions(): Properties {
+  _getDefaultOptions(): ChatProperties {
     return {
       ...super._getDefaultOptions(),
       activeStateEnabled: true,
@@ -91,6 +91,7 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions: undefined,
       focusStateEnabled: true,
       hoverStateEnabled: true,
+      inputFieldText: '',
       items: [],
       messageTemplate: null,
       messageTimestampFormat: 'shorttime',
@@ -99,6 +100,8 @@ class Chat extends Widget<Properties> {
       showDayHeaders: true,
       showMessageTimestamp: true,
       showUserName: true,
+      speechToTextEnabled: false,
+      speechToTextOptions: undefined,
       typingUsers: [],
       user: { id: new Guid().toString() },
       onMessageDeleted: undefined,
@@ -354,7 +357,7 @@ class Chat extends Widget<Properties> {
     invokeConditionally(
       messageEditingStartArgs.cancel,
       () => {
-        this._messageBox.option('text', e.message.text);
+        this._messageBox.option('previewText', e.message.text);
         this._messageBox.resetFileUploader();
         this._messageBox.toggleAttachButtonVisibleState(false);
         this._messageToEdit = e.message;
@@ -380,7 +383,7 @@ class Chat extends Widget<Properties> {
         {
           onApplyButtonClick: (): void => {
             if (this._messageToEdit === this._messageToDelete) {
-              this._messageBox.option('text', '');
+              this._messageBox.option('previewText', '');
               this._messageEditCanceledAction?.({ message: this._messageToEdit });
               this._messageToEdit = undefined;
             }
@@ -434,7 +437,7 @@ class Chat extends Widget<Properties> {
     invokeConditionally(
       eventArgs.cancel,
       () => {
-        this._messageBox.option('text', '');
+        this._messageBox.option('previewText', '');
         this._messageBox.toggleAttachButtonVisibleState(true);
         this._messageUpdatedAction?.(eventArgs);
         this._messageToEdit = undefined;
@@ -460,6 +463,9 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      inputFieldText,
+      speechToTextEnabled,
+      speechToTextOptions,
     } = this.option();
 
     const $messageBox = $('<div>');
@@ -471,6 +477,9 @@ class Chat extends Widget<Properties> {
       fileUploaderOptions,
       focusStateEnabled,
       hoverStateEnabled,
+      text: inputFieldText,
+      speechToTextEnabled,
+      speechToTextOptions,
       onMessageEntered: (e) => {
         this._messageEnteredHandler(e);
       },
@@ -485,6 +494,11 @@ class Chat extends Widget<Properties> {
       },
       onMessageUpdating: (e) => {
         this._messageUpdatingHandler(e);
+      },
+      onOptionChanged: ({ name, value }) => {
+        if (name === 'text') {
+          this.option('inputFieldText', value);
+        }
       },
     };
 
@@ -625,7 +639,7 @@ class Chat extends Widget<Properties> {
     return $input;
   }
 
-  _optionChanged(args: OptionChanged<Properties>): void {
+  _optionChanged(args: OptionChanged<ChatProperties>): void {
     const { name, fullName, value } = args;
 
     switch (name) {
@@ -634,16 +648,21 @@ class Chat extends Widget<Properties> {
       case 'hoverStateEnabled':
         this._messageBox.option(name, value);
         break;
+      case 'speechToTextEnabled':
+      case 'speechToTextOptions':
       case 'fileUploaderOptions':
         this._messageBox.option(fullName, value);
         break;
       case 'user': {
-        const author = value as Properties[typeof name];
+        const author = value as ChatProperties[typeof name];
 
         this._messageList.option('currentUserId', author?.id);
         break;
       }
       case 'editing':
+        break;
+      case 'inputFieldText':
+        this._messageBox.option('text', value);
         break;
       case 'items':
         this._messageList.option(name, this.option('items'));

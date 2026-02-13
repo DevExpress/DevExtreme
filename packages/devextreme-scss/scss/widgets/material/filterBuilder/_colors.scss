@@ -16,7 +16,7 @@ $filterbuilder-text-color: $base-text-color !default;
 * $name 20. Focused text color
 * $type color
 */
-$filterbuilder-text-focus-color: #fff !default;
+$filterbuilder-text-focus-color: null !default;
 
 /**
 * $name 30. Plus icon color
@@ -62,7 +62,15 @@ $filterbuilder-item-operator-focus-color: color.adjust($filterbuilder-item-opera
 * $name 80. Value button color
 * $type color
 */
-$filterbuilder-item-value-color: color.change($base-border-color, $alpha: 0.5) !default;
-$filterbuilder-item-value-hover-color: $filterbuilder-item-value-color !default;
-$filterbuilder-item-value-focus-color: color.adjust($filterbuilder-item-value-color, $alpha: 0.7) !default;
+$filterbuilder-item-value-color: color.change($base-icon-color, $alpha: 0.12) !default;
+$filterbuilder-item-value-hover-color: color.change($base-icon-color, $alpha: 0.24) !default;
+$filterbuilder-item-value-focus-color: $base-icon-color !default;
 $filterbuilder-menu-icon-color: $base-text-color !default;
+
+@if $mode == "light" {
+  $filterbuilder-text-focus-color: #fff !default;
+}
+
+@if $mode == "dark" {
+  $filterbuilder-text-focus-color: #000 !default;
+}

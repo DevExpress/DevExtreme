@@ -19,12 +19,9 @@
       </p>
       <p>
         Website:
-        <a
-          :href="itemData.Website"
-          target="_blank"
-        >
+        <span class="accordion-item-link">
           {{ itemData.Website }}
-        </a>
+        </span>
       </p>
     </div>
   </div>
@@ -36,3 +33,10 @@ defineProps<{
   itemData: CompanyData
 }>();
 </script>
+<style>
+.accordion-item-link {
+  color: var(--dx-color-link);
+  cursor: pointer;
+  text-decoration: underline;
+}
+</style>
