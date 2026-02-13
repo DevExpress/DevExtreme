@@ -70,6 +70,19 @@ export class TooltipStrategyBase {
     return !disabled && isDeletingAllowed;
   }
 
+  private removeAppointmentFromTooltip(appointment) {
+    const currentItems = this._list.option('dataSource');
+    const newDataList = currentItems.filter((item) => item.appointment !== appointment);
+
+    if (newDataList.length === 0) {
+      this.hide();
+      return;
+    }
+
+    const $target = this._tooltip?.option('target');
+    this.show($target, newDataList, this._extraOptions);
+  }
+
   _getContentTemplate(dataList) {
     return (container) => {
       const listElement = $('<div>');
@@ -91,7 +104,7 @@ export class TooltipStrategyBase {
         }
 
         if (this.isDeletingAllowed(appointment)) {
-          this.hide();
+          this.removeAppointmentFromTooltip(appointment);
           this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
         }
       });
@@ -248,8 +261,8 @@ export class TooltipStrategyBase {
       stylingMode: 'text',
       tabIndex: -1,
       onClick: (e) => {
-        this.hide();
         e.event.stopPropagation();
+        this.removeAppointmentFromTooltip(appointment);
         this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
       },
     });
