@@ -16,6 +16,8 @@
         document.getElementsByTagName("head")[0].appendChild(link);
     </script>
 
+    <!-- DEBUG: set before scheduler loads to see tooltip logs -->
+    <script>window.__DX_SCHEDULER_TOOLTIP_DEBUG__ = true;</script>
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
     <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
@@ -49,12 +51,40 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="scheduler"></div>
         <script>
             $(() => {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
+                const date = new Date();
+                const start = new Date(date);
+                start.setHours(9, 0, 0);
+                const end = new Date(date);
+                end.setHours(9, 30, 0);
+                $("#scheduler").dxScheduler({
+                    // onAppointmentDeleting(e) {
+                    //     e.cancel = DevExpress.ui.dialog.confirm(
+                    //         'Вы точно хотите удалить встречу?',
+                    //         'Подтверждение удаления'
+                    //     ).then((confirmed) => !confirmed);
+                    // },
+                    dataSource: [
+                        { text: 'Meeting 1', startDate: start, endDate: end },
+                        { text: 'Meeting 2', startDate: start, endDate: end },
+                        { text: 'Meeting 3', startDate: start, endDate: end },
+                        { text: 'Meeting 4', startDate: start, endDate: end },
+                        // { text: 'Meeting 5', startDate: start, endDate: end },
+                        // { text: 'Meeting 6', startDate: start, endDate: end },
+                        // { text: 'Meeting 7', startDate: start, endDate: end },
+                        // { text: 'Meeting 8', startDate: start, endDate: end },
+                        // { text: 'Meeting 9', startDate: start, endDate: end },
+                        // { text: 'Meeting 10', startDate: start, endDate: end },
+                    ],
+                    views: ['day', 'week', 'month'],
+                    currentView: 'day',
+                    currentDate: date,
+                    startDayHour: 9,
+                    endDayHour: 18,
+                    height: 1000,
+                    maxAppointmentsPerCell: 1
                 });
             });
         </script>
