@@ -1,15 +1,3 @@
-:host ::ng-deep .dx-scheduler-timeline-day .dx-scheduler-date-table {
-  width: 1300px;
-}
-
-:host ::ng-deep .dx-scheduler-timeline-week .dx-scheduler-date-table {
-  width: 7500px;
-}
-
-:host ::ng-deep .dx-scheduler-timeline-work-week .dx-scheduler-date-table {
-  width: 6500px;
-}
-
-:host ::ng-deep .dx-scheduler-timeline-month .dx-scheduler-date-table {
-  width: 4500px;
+:host ::ng-deep .dx-scheduler-timeline .dx-scheduler-cell-sizes-horizontal {
+  width: 100px;
 }
