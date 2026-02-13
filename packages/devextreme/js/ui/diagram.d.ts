@@ -287,7 +287,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        */
-      shapes?: Array<ShapeType> | Array<string>;
+      shapes?: Array<ShapeType | string>;
       /**
        * @docid
        * @default 152
@@ -1068,7 +1068,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /**
          * @docid
          */
-        shapes?: Array<ShapeType> | Array<string>;
+        shapes?: Array<ShapeType | string>;
         /**
          * @docid
          */
@@ -1703,9 +1703,6 @@ export interface dxDiagramMoveShapeArgs {
 
 /** @public */
 export type Properties = dxDiagramOptions;
-
-/** @deprecated use Properties instead */
-export type Options = dxDiagramOptions;
 
 // #region deprecated in v24.1
 

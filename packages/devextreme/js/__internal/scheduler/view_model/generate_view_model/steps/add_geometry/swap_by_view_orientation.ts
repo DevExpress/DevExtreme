@@ -5,7 +5,7 @@ import type {
 } from './types';
 
 export function getAbstractSizeByViewOrientation(
-  size: Geometry, viewOrientation: Orientation
+  size: Geometry, viewOrientation: Orientation,
 ): X & Y;
 export function getAbstractSizeByViewOrientation(
   size: RealSize, viewOrientation: Orientation,
@@ -31,7 +31,7 @@ export function getAbstractSizeByViewOrientation(
 }
 
 export function getRealSizeByViewOrientation(
-  size: X & Y, viewOrientation: Orientation
+  size: X & Y, viewOrientation: Orientation,
 ): Geometry;
 export function getRealSizeByViewOrientation(
   size: AbstractSize, viewOrientation: Orientation,

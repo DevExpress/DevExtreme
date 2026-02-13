@@ -1439,9 +1439,6 @@ export type dxSchedulerAppointment = CollectionWidgetItem & {
 /** @public */
 export type Properties = dxSchedulerOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxSchedulerOptions;
-
 /**
  * @docid
  * @public

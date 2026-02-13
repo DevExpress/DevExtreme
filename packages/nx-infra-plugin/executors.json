@@ -59,6 +59,16 @@
       "implementation": "./src/executors/localization/executor",
       "schema": "./src/executors/localization/schema.json",
       "description": "Generate localization message files and TypeScript CLDR data modules"
+    },
+    "concatenate-files": {
+      "implementation": "./src/executors/concatenate-files/executor",
+      "schema": "./src/executors/concatenate-files/schema.json",
+      "description": "Concatenate files with optional content extraction and transforms"
+    },
+    "babel-transform": {
+      "implementation": "./src/executors/babel-transform/executor",
+      "schema": "./src/executors/babel-transform/schema.json",
+      "description": "Transform JavaScript/TypeScript files using Babel with configurable presets"
     }
   }
 }

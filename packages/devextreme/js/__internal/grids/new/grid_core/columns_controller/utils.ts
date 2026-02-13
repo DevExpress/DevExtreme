@@ -15,7 +15,7 @@ import { defaultColumnProperties, defaultColumnPropertiesByDataType } from './op
 import type { Column, ColumnFromDataOptions, ColumnsConfigurationFromData } from './types';
 
 type TemplateNormalizationFunc = <T>(
-  template: Template<T> | undefined
+  template: Template<T> | undefined,
 ) => ComponentType<T> | undefined;
 
 export function normalizeColumn(

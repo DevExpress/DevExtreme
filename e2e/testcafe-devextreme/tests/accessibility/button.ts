@@ -14,12 +14,9 @@ const optionsWithSimpleItems: Options<Properties> = {
   disabled: [true, false],
   icon: [undefined, 'user'],
   text: [undefined, 'text'],
-  // NOTE: Doesn't matter if there are contrast issues
-  // stylingMode: ['text', 'contained', 'outlined'],
-  // type: ['danger', 'default', 'normal', 'success'],
 };
 
-const created = async (t: TestController, optionConfiguration): Promise<void> => {
+const created = async (_t: TestController, optionConfiguration): Promise<void> => {
   const { icon, text } = optionConfiguration;
 
   if (!(icon && text)) {

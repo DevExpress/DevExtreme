@@ -241,7 +241,7 @@ type IContextToolboxProps = React.PropsWithChildren<{
   displayMode?: ToolboxDisplayMode;
   enabled?: boolean;
   shapeIconsPerRow?: number;
-  shapes?: Array<ShapeType>;
+  shapes?: Array<ShapeType | string>;
   width?: number;
 }>
 const _componentContextToolbox = (props: IContextToolboxProps) => {
@@ -468,7 +468,7 @@ type IGroupProps = React.PropsWithChildren<{
   category?: ShapeCategory | string;
   displayMode?: ToolboxDisplayMode;
   expanded?: boolean;
-  shapes?: Array<ShapeType>;
+  shapes?: Array<ShapeType | string>;
 }>
 const _componentGroup = (props: IGroupProps) => {
   return React.createElement(NestedOption<IGroupProps>, {
@@ -745,7 +745,7 @@ type IToolboxProps = React.PropsWithChildren<{
     category?: ShapeCategory | string;
     displayMode?: ToolboxDisplayMode;
     expanded?: boolean;
-    shapes?: Array<ShapeType>;
+    shapes?: Array<ShapeType | string>;
     title?: string;
   }[];
   shapeIconsPerRow?: number;
@@ -776,7 +776,7 @@ type IToolboxGroupProps = React.PropsWithChildren<{
   category?: ShapeCategory | string;
   displayMode?: ToolboxDisplayMode;
   expanded?: boolean;
-  shapes?: Array<ShapeType>;
+  shapes?: Array<ShapeType | string>;
   title?: string;
 }>
 const _componentToolboxGroup = (props: IToolboxGroupProps) => {

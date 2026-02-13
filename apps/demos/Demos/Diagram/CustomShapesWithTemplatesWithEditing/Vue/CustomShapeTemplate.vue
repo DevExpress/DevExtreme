@@ -36,9 +36,9 @@
 <script setup lang="ts">
 
 const props = withDefaults(defineProps<{
-  employee: Record<string, any>
-  editEmployee: Function
-  deleteEmployee: Function
+  employee?: Record<string, any>
+  editEmployee?: Function
+  deleteEmployee?: Function
 }>(), {
   employee: () => ({}),
   editEmployee: () => ({}),

@@ -82,7 +82,7 @@ export function normalizePanelSize(
   }
 
   if (resizable === false && isDefined(paneRestrictions.size)) {
-    return paneRestrictions.size;
+    return Math.min(Math.max(paneRestrictions.size, minSize), maxSize);
   }
 
   let adjustedSize = compareNumbersWithPrecision(size, minSize) < 0 ? minSize : size;
