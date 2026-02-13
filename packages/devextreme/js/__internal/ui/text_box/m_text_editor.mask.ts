@@ -441,7 +441,7 @@ class TextEditorMask<
   }
 
   _replaceMaskCharWithEmpty(text: string): string {
-    const { maskChar = '' } = this.option();
+    const { maskChar = EMPTY_CHAR } = this.option();
 
     return text.replace(new RegExp(maskChar, 'g'), EMPTY_CHAR);
   }
