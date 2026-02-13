@@ -56,7 +56,7 @@ export default class MaskStrategy {
     return this.editor._input();
   }
 
-  _editorCaret(): CaretRange;
+  _editorCaret(): CaretRange | undefined;
   _editorCaret(newCaret: CaretRange): void;
   _editorCaret(newCaret?: CaretRange): CaretRange | void {
     if (!newCaret) {
@@ -101,7 +101,7 @@ export default class MaskStrategy {
     } else {
       const currentCaret = this._editorCaret();
 
-      if (!currentCaret.end) {
+      if (!currentCaret?.end) {
         return;
       }
 
@@ -118,6 +118,10 @@ export default class MaskStrategy {
 
   _handleHistoryInputEvent(): void {
     const caret = this._editorCaret();
+
+    if (!caret) {
+      return;
+    }
 
     this._updateEditorMask({
       start: caret.start,
@@ -140,7 +144,7 @@ export default class MaskStrategy {
 
     const adjustedForwardCaret = this._editorCaret();
 
-    if (adjustedForwardCaret.start !== caret.start) {
+    if (adjustedForwardCaret?.start !== caret?.start) {
       this.editor.setBackwardDirection();
       this.editor._adjustCaret();
     }
@@ -155,7 +159,7 @@ export default class MaskStrategy {
     if (!this._isAutoFill()) {
       this.editor.setBackwardDirection();
       this._updateEditorMask({
-        start: caret.start,
+        start: caret?.start,
         length,
         text: getEmptyString(length),
       });
@@ -186,7 +190,7 @@ export default class MaskStrategy {
     this.editor._displayMask();
 
     if (this.editor.isForwardDirection()) {
-      const { start, end } = this._editorCaret();
+      const { start = 0, end = 0 } = this._editorCaret() ?? {};
 
       const correction = processedCharsCount - textLength;
 
@@ -234,6 +238,8 @@ export default class MaskStrategy {
         // @ts-expect-error ts-expect-error
         editor._handleKey(EMPTY_CHAR);
       }
+
+      return undefined;
     });
   }
 
@@ -241,7 +247,7 @@ export default class MaskStrategy {
     const caret = this._editorCaret();
     const inputVal = this._editorInput().val();
     // @ts-expect-error dxElementWrapper.val() should return string
-    const selectedText = inputVal.substring(caret.start, caret.end);
+    const selectedText = caret ? inputVal.substring(caret.start, caret.end) : '';
 
     this.editor._maskKeyHandler(event, (): Promise<string> => {
       const text = getClipboardText(event, selectedText);
@@ -273,16 +279,18 @@ export default class MaskStrategy {
 
     editor._maskKeyHandler(event, (): undefined => {
       const pastedText = getClipboardText(event);
-      const restText = editor._maskRulesChain?.text().substring(caret.end);
+      const restText = editor._maskRulesChain?.text().substring(caret?.end ?? 0);
       const accepted = editor._handleChain({
         text: pastedText,
-        start: caret.start,
+        start: caret?.start,
         length: pastedText.length,
       });
-      const newCaret = caret.start + (accepted ?? 0);
+      const newCaret = (caret?.start ?? 0) + (accepted ?? 0);
 
       editor._handleChain({ text: restText, start: newCaret, length: restText?.length ?? 0 });
       editor._caret({ start: newCaret, end: newCaret });
+
+      return undefined;
     });
   }
 
@@ -297,6 +305,8 @@ export default class MaskStrategy {
       if (this._isAutoFill()) {
         editor._maskKeyHandler(event, (): undefined => {
           editor._handleChain({ text: inputVal, start: 0, length: inputVal.length });
+
+          return undefined;
         });
         editor._validateMask();
       }

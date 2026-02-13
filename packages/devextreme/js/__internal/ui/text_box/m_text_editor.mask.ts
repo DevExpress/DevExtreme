@@ -274,7 +274,7 @@ class TextEditorMask<
       ? new StubMaskRule({ maskChar: mask[index + 1] })
       : this._getMaskRule(currentMaskChar);
 
-    const rule = this._parseMaskRule(index + 1);
+    const rule = this._parseMaskRule(index + 1 + (isEscapedChar ? 1 : 0));
 
     if (rule) {
       result?.next(rule);

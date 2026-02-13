@@ -199,6 +199,7 @@ class DropDownEditor<
       enter: (e): boolean => {
         if (this.option('opened')) {
           e.preventDefault();
+          // @ts-expect-error - KeyboardEvent passed as ValueChangedEvent for legacy compatibility
           this._valueChangeEventHandler(e);
         }
         return true;
