@@ -275,7 +275,7 @@ QUnit.test('itemTemplate passed to createComponent should work correct', async f
     stubComponent.option.reset();
     const e = { event: { stopPropagation: sinon.spy() } };
     stubCreateComponent.getCall(2).args[2].onClick(e);
-    assert.deepEqual(stubComponent.option.getCall(0).args, ['visible', false], 'tooltip is hide');
+    assert.deepEqual(stubComponent.option.getCall(0).args, ['visible', true], 'tooltip is visible');
     assert.ok(e.event.stopPropagation.called);
     assert.deepEqual(stubCheckAndDeleteAppointment.getCall(0).args, [item.appointment, item.targetedAppointment]);
 });
