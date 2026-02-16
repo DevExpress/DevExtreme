@@ -207,10 +207,15 @@ QUnit.module('Hamburger', {
         this.renderArea = function() {
             that.area.render(that.$container, that.fields);
         };
+
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 }, () => {
 
-    QUnit.skip('Render hamburger button', function(assert) {
+    QUnit.test('Render hamburger button', function(assert) {
         this.renderArea();
 
         const rows = this.area.tableElement()[0].rows;
@@ -225,11 +230,12 @@ QUnit.module('Hamburger', {
         assert.ok(!popup.option('dragEnabled'));
     });
 
-    QUnit.skip('Show popup with fields', function(assert) {
+    QUnit.test('Show popup with fields', function(assert) {
         this.renderArea();
         const button = $(this.area.tableElement()[0].rows[0].cells[0]).children(0).dxButton('instance');
 
         button.element().trigger('dxclick');
+        this.clock.tick(10);
         const popup = this.area.tableElement().find('.dx-fields-area-popup').dxPopup('instance');
 
         assert.ok(popup);
