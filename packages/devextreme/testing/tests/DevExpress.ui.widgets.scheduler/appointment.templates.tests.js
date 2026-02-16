@@ -8,7 +8,7 @@ import {
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -310,7 +310,10 @@ QUnit.module('Integration: Appointment templates', {
             data: recurrenceAndCompactData,
             appointmentTooltip: createTestForRecurrenceData,
             name: 'recurrence in collector',
-            testCollector: true
+            testCollector: true,
+            options: {
+                maxAppointmentsPerCell: 2
+            }
         },
         {
             data: hourlyRecurrenceData,
