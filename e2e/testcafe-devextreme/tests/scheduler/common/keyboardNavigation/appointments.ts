@@ -16,7 +16,7 @@ test('Document should not scroll on \'End\' press when appointment is focused', 
     .click(scheduler.getAppointment('Appointment 1').element)
     .pressKey('End');
 
-  const scrollTop = await ClientFunction(() => document.body.scrollTop)();
+  const scrollTop = await ClientFunction(() => document.documentElement.scrollTop)();
 
   await t.expect(scrollTop).eql(0);
 }).before(async () => {
@@ -59,14 +59,14 @@ test('Document should not scroll on \'Home\' press when appointment is focused',
   const initialScrollTop = 40;
 
   await ClientFunction(
-    (scrollTop) => { document.body.scrollTop = scrollTop; },
+    (scrollTop) => { document.documentElement.scrollTo(0, scrollTop); },
   )(initialScrollTop);
 
   await t
     .click(scheduler.getAppointment('Appointment 1').element)
     .pressKey('Home');
 
-  const scrollTop = await ClientFunction(() => document.body.scrollTop)();
+  const scrollTop = await ClientFunction(() => document.documentElement.scrollTop)();
 
   await t.expect(scrollTop).eql(initialScrollTop);
 }).before(async () => {
