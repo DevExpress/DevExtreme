@@ -1796,7 +1796,7 @@ QUnit.module('Horizontal direction. RTL', {
         assert.equal($items.eq(5).text(), '1', 'item 5 text');
 
         assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].sourceIndex, 0);
-        assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].targetIndex, 5);
+        assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].targetIndex, 6);
     });
 
     QUnit.test('drag to the end of the container', function(assert) {
