@@ -32,7 +32,30 @@
         }
       }
     }
+
+    .dx-checkbox.dx-state-disabled {
+      .dx-checkbox-icon {
+        background-color: $checkbox-disabled-background-focused;
+        border-color: $checkbox-disabled-border-color-focused;
+      }
+
+      &.dx-checkbox-checked {
+        .dx-checkbox-icon {
+          color: $checkbox-disabled-border-color-focused;
+        }
+      }
+
+      &.dx-checkbox-indeterminate {
+        .dx-checkbox-icon::before {
+          background-color: $checkbox-disabled-border-color-focused;
+        }
+      }
+    }
   }
+}
+
+.dx-treeview-item-content.dx-state-disabled {
+  color: $treeview-item-content-disabled;
 }
 
 @include default-expander-icon(
