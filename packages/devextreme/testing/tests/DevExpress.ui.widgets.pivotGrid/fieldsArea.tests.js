@@ -200,6 +200,7 @@ QUnit.module('Hamburger', {
         ];
 
         this.area = new FieldsArea(this.component, 'row');
+        this.area._shouldCreateButton = function() { return true; };
         this.$container = $('#container').addClass('dx-pivotgrid');
 
         const that = this;
