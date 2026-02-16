@@ -6725,7 +6725,7 @@ QUnit.module('Remote paging', {
 
         setTimeout(function() {
             assert.strictEqual(that.loadArgs.length, 1, 'one load');
-            assert.deepEqual(this.loadArgs[0], {
+            assert.deepEqual(that.loadArgs[0], {
                 group: [{
                     desc: false,
                     groupInterval: undefined,
