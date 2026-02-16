@@ -7,7 +7,7 @@ import { CustomStore } from 'common/data/custom_store';
 import fx from 'common/core/animation/fx';
 
 import '__internal/scheduler/m_scheduler';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -169,8 +169,8 @@ QUnit.module('onContentReady event', moduleConfig, () => {
                 assert.equal($header.length, 1, 'Header is rendered');
                 assert.equal($workSpace.length, 1, 'Work Space is rendered');
                 assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
-                assert.roughEqual(appointmentPosition.top, 100, 2.001, 'Appointment top is OK');
-                assert.roughEqual(appointmentPosition.left, 199, 1.001, 'Appointment left is OK');
+                assert.roughEqual(appointmentPosition.top, 76, 2.001, 'Appointment top is OK');
+                assert.roughEqual(appointmentPosition.left, 209, 1.001, 'Appointment left is OK');
                 done();
             }
         });
@@ -189,8 +189,8 @@ QUnit.module('onContentReady event', moduleConfig, () => {
             const appointmentPosition = translator.locate(scheduler.appointments.getAppointment());
 
             assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
-            assert.roughEqual(appointmentPosition.top, 100, 2.001, 'Appointment top is OK');
-            assert.roughEqual(appointmentPosition.left, 199, 1.001, 'Appointment left is OK');
+            assert.roughEqual(appointmentPosition.top, 76, 2.001, 'Appointment top is OK');
+            assert.roughEqual(appointmentPosition.left, 209, 1.001, 'Appointment left is OK');
         });
 
         scheduler.instance.addAppointment({
@@ -217,8 +217,8 @@ QUnit.module('onContentReady event', moduleConfig, () => {
             const appointmentPosition = translator.locate(scheduler.appointments.getAppointment());
 
             assert.equal(scheduler.appointments.getAppointmentCount(), 1, 'Appointment is rendered');
-            assert.roughEqual(appointmentPosition.top, 150, 2.001, 'Appointment top is OK');
-            assert.roughEqual(appointmentPosition.left, 199, 1.001, 'Appointment left is OK');
+            assert.roughEqual(appointmentPosition.top, 114, 2.001, 'Appointment top is OK');
+            assert.roughEqual(appointmentPosition.left, 209, 1.001, 'Appointment left is OK');
         });
 
         scheduler.instance.updateAppointment(appointment, {

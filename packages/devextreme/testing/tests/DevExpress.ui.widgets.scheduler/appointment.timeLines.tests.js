@@ -9,7 +9,7 @@ import {
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const {
     module,
@@ -22,7 +22,7 @@ QUnit.testStart(() => initTestMarkup());
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
-const APPOINTMENT_DEFAULT_TOP_OFFSET = 26;
+const APPOINTMENT_DEFAULT_TOP_OFFSET = 30;
 
 const createInstanceBase = async(options) => {
     const scheduler = await createWrapper({

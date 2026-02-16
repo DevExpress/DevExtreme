@@ -21,7 +21,7 @@ import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const {
     module,
@@ -1089,10 +1089,16 @@ module('Integration: Appointment Day, Week views', {
 
                 assert.strictEqual(scheduler.appointments.compact.getButtonCount(), 2, 'Appointments are rendered');
 
-                const tailCoords = translator.locate(scheduler.appointments.compact.getButton(1));
+                const coords = [
+                    translator.locate(scheduler.appointments.compact.getButton(0)),
+                    translator.locate(scheduler.appointments.compact.getButton(1)),
+                ].sort((a, b) => a.left - b.left);
 
-                assert.strictEqual(tailCoords.top, 0, 'Appointment top is correct');
-                assert.roughEqual(tailCoords.left, 196, 2, 'Appointment left is correct');
+                assert.strictEqual(coords[0].top, 456, 'Appointment top is correct');
+                assert.roughEqual(coords[0].left, 120, 2, 'Appointment left is correct');
+
+                assert.strictEqual(coords[1].top, 0, 'Appointment top is correct');
+                assert.roughEqual(coords[1].left, 195, 2, 'Appointment left is correct');
             });
 
             test('targetedAppointmentData should have valid targeted resource on onAppointmentClick event', async function(assert) {
@@ -1205,10 +1211,10 @@ module('Integration: Appointment Day, Week views', {
         assert.equal(appointments.length, 2, 'Correct number of appointments');
 
         assert.equal(appointments[0].position.top, 0, 'Correct top coordinate');
-        assert.roughEqual(appointments[0].position.left, 224, 2, 'Correct left coordinate');
+        assert.roughEqual(appointments[0].position.left, 233.25, 2, 'Correct left coordinate');
 
         assert.equal(appointments[1].position.top, 0, 'Correct top coordinate');
-        assert.roughEqual(appointments[1].position.left, 448, 2, 'Correct left coordinate');
+        assert.roughEqual(appointments[1].position.left, 466.5, 2, 'Correct left coordinate');
     });
 
     test('Appointments should be rendered correctly when groupByDate is true in Week view', async function(assert) {
@@ -1251,10 +1257,10 @@ module('Integration: Appointment Day, Week views', {
 
         assert.equal(appointments.length, 2, 'Correct number of appointments');
 
-        assert.equal(appointments[0].position.top, 100, 'Correct top coordinate');
-        assert.roughEqual(appointments[0].position.left, 320, 2, 'Correct left coordinate');
+        assert.equal(appointments[0].position.top, 76, 'Correct top coordinate');
+        assert.roughEqual(appointments[0].position.left, 333.203125, 2, 'Correct left coordinate');
 
-        assert.equal(appointments[1].position.top, 200, 'Correct top coordinate');
-        assert.roughEqual(appointments[1].position.left, 640, 2, 'Correct left coordinate');
+        assert.equal(appointments[1].position.top, 152, 'Correct top coordinate');
+        assert.roughEqual(appointments[1].position.left, 667, 2, 'Correct left coordinate');
     });
 });

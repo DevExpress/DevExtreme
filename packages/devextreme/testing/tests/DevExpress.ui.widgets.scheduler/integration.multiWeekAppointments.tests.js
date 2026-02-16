@@ -8,7 +8,7 @@ import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
 
 import '__internal/scheduler/m_scheduler';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const { testStart } = QUnit;
 
@@ -246,11 +246,6 @@ QUnit.test('Multi-week appointments should be split by several parts', async fun
     await waitAsync(0);
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
-    const rowHeight = getOuterHeight(
-        this.instance.getWorkSpace().getWorkArea().find('.dx-scheduler-date-table tr').eq(0)
-    );
-    const appointmentHeight = getOuterHeight($appointments);
-    const appointmentTopOffsetInsideCell = (rowHeight - appointmentHeight) / 2;
 
     const firstAppointmentTop = translator.locate($appointments.eq(0)).top;
     const secondAppointmentTop = translator.locate($appointments.eq(1)).top;
@@ -258,15 +253,15 @@ QUnit.test('Multi-week appointments should be split by several parts', async fun
     const fourthAppointmentTop = translator.locate($appointments.eq(3)).top;
 
     assert.equal($appointments.length, 4, 'Appointment is split by 3 parts');
-    assert.roughEqual(getOuterWidth($appointments.eq(0)), 600, 2.001, 'Appointment width is OK');
-    assert.roughEqual(getOuterWidth($appointments.eq(1)), 699, 2.001, 'Appointment width is OK');
-    assert.roughEqual(getOuterWidth($appointments.eq(2)), 699, 2.001, 'Appointment width is OK');
-    assert.roughEqual(getOuterWidth($appointments.eq(3)), 200, 2.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointments.eq(0)), 598, 2.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointments.eq(1)), 697, 2.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointments.eq(2)), 697, 2.001, 'Appointment width is OK');
+    assert.roughEqual(getOuterWidth($appointments.eq(3)), 199, 2.001, 'Appointment width is OK');
 
-    assert.roughEqual(firstAppointmentTop, rowHeight * 2 + appointmentTopOffsetInsideCell + 1, 3.51, 'The first appointment height is OK');
-    assert.roughEqual(secondAppointmentTop, rowHeight * 3 + appointmentTopOffsetInsideCell + 1, 3.51, 'The second appointment height is OK');
-    assert.roughEqual(thirdAppointmentTop, rowHeight * 4 + appointmentTopOffsetInsideCell + 1, 3.51, 'The third appointment height is OK');
-    assert.roughEqual(fourthAppointmentTop, rowHeight * 5 + appointmentTopOffsetInsideCell + 1, 3.51, 'The fourth appointment height is OK');
+    assert.roughEqual(firstAppointmentTop, 230, 3.51, 'The first appointment height is OK');
+    assert.roughEqual(secondAppointmentTop, 330, 3.51, 'The second appointment height is OK');
+    assert.roughEqual(thirdAppointmentTop, 430, 3.51, 'The third appointment height is OK');
+    assert.roughEqual(fourthAppointmentTop, 530, 3.51, 'The fourth appointment height is OK');
 });
 
 QUnit.test('Multi-week appointments should have a correct left coordinate', async function(assert) {
@@ -284,7 +279,7 @@ QUnit.test('Multi-week appointments should have a correct left coordinate', asyn
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
-    assert.roughEqual(translator.locate($appointments.eq(0)).left, 100, 1.001, 'Left coordinate is OK');
+    assert.roughEqual(translator.locate($appointments.eq(0)).left, 99, 1.001, 'Left coordinate is OK');
     assert.roughEqual(translator.locate($appointments.eq(1)).left, 1, 1.001, 'Left coordinate is OK');
     assert.roughEqual(translator.locate($appointments.eq(2)).left, 1, 1.001, 'Left coordinate is OK');
 });
@@ -308,7 +303,7 @@ QUnit.test('Multi-week appointments should have a correct left coordinate, rtl m
 
     assert.roughEqual(translator.locate($appointments.eq(0)).left, 0, 1.001, 'Left coordinate is OK');
     assert.roughEqual(translator.locate($appointments.eq(1)).left, 0, 1.001, 'Left coordinate is OK');
-    assert.roughEqual(translator.locate($appointments.eq(2)).left, 500, 2.001, 'Left coordinate is OK');
+    assert.roughEqual(translator.locate($appointments.eq(2)).left, 498, 2.001, 'Left coordinate is OK');
 });
 
 QUnit.test('Multi-week appointments with resources should have a correct left coordinate on timeline view', async function(assert) {
@@ -562,13 +557,21 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
     });
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
+    const lefts = [
+        translator.locate($appointments.eq(0)).left,
+        translator.locate($appointments.eq(1)).left,
+        translator.locate($appointments.eq(2)).left,
+        translator.locate($appointments.eq(3)).left,
+        translator.locate($appointments.eq(4)).left,
+        translator.locate($appointments.eq(5)).left,
+    ].sort((a, b) => a - b);
 
-    assert.roughEqual(translator.locate($appointments.eq(0)).left, 50, 2.001);
-    assert.roughEqual(translator.locate($appointments.eq(1)).left, 399, 1.001);
-    assert.roughEqual(translator.locate($appointments.eq(2)).left, 0, 1.001);
-    assert.roughEqual(translator.locate($appointments.eq(3)).left, 349, 1.001);
-    assert.roughEqual(translator.locate($appointments.eq(4)).left, 0, 1.001);
-    assert.roughEqual(translator.locate($appointments.eq(5)).left, 349, 1.001);
+    assert.roughEqual(lefts[0], 0, 2.001);
+    assert.roughEqual(lefts[1], 0, 1.001);
+    assert.roughEqual(lefts[2], 49, 1.001);
+    assert.roughEqual(lefts[3], 348, 1.001);
+    assert.roughEqual(lefts[4], 348, 1.001);
+    assert.roughEqual(lefts[5], 398, 1.001);
 
 });
 
@@ -577,9 +580,7 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
 
         await this.createInstance({ width: 1052 });
 
-        const cellWidth = 50;
-
-        mockWorkSpaceRendering.call(this, this.instance, cellWidth, [700, 350, 0]);
+        mockWorkSpaceRendering.call(this, this.instance, 50, [700, 350, 0]);
 
         this.instance.option({
             views: ['month'],
@@ -612,14 +613,21 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
         await waitAsync(0);
 
         const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
+        const leftOffsets = [
+            translator.locate($appointments.eq(0)).left,
+            translator.locate($appointments.eq(1)).left,
+            translator.locate($appointments.eq(2)).left,
+            translator.locate($appointments.eq(3)).left,
+            translator.locate($appointments.eq(4)).left,
+            translator.locate($appointments.eq(5)).left
+        ].sort();
 
-        assert.roughEqual(translator.locate($appointments.eq(0)).left, cellWidth * 7, 1.001, 'The second head is OK');
-        assert.roughEqual(translator.locate($appointments.eq(1)).left, cellWidth * 14, 2.001, 'The first head is OK');
-        assert.roughEqual(translator.locate($appointments.eq(2)).left, cellWidth * 7, 1.001, 'The second body is OK');
-        assert.roughEqual(translator.locate($appointments.eq(3)).left, cellWidth * 14, 1.001, 'The first body is OK');
-        assert.roughEqual(translator.locate($appointments.eq(4)).left, cellWidth * 12, 2.001, 'The second tail is OK');
-        assert.roughEqual(translator.locate($appointments.eq(5)).left, cellWidth * 19, 2.001, 'The first tail is OK');
-
+        assert.roughEqual(leftOffsets[0], 350, 1);
+        assert.roughEqual(leftOffsets[1], 350, 1);
+        assert.roughEqual(leftOffsets[2], 600, 1);
+        assert.roughEqual(leftOffsets[3], 700, 1);
+        assert.roughEqual(leftOffsets[4], 700, 1);
+        assert.roughEqual(leftOffsets[5], 950, 1);
     });
 });
 

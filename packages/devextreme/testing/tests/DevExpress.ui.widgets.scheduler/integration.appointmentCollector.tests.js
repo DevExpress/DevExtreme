@@ -10,7 +10,7 @@ import Widget from 'ui/widget/ui.widget';
 import Color from 'color';
 
 import '__internal/scheduler/m_scheduler';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const { test, module, testStart } = QUnit;
 
@@ -62,7 +62,11 @@ module('Integration: collector', baseConfig, () => {
             onAppointmentFormOpening: e => {
                 const startDate = e.form.getEditor('startDate').option('value');
                 assert.equal(startDate.getDate(), 16, 'Recurrence appointment date should be display equal targetedAppointmentData date in form');
-            }
+            },
+            editing: {
+                legacyForm: true
+            },
+            maxAppointmentsPerCell: 2
         });
 
         scheduler.appointments.compact.click();
@@ -225,7 +229,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
     });
 
     test('DropDown appointment button should have correct coordinates on weekView, not in allDay panel', async function(assert) {
-        const WEEK_VIEW_BUTTON_OFFSET = 5;
+        const WEEK_VIEW_BUTTON_OFFSET = 6;
 
         const scheduler = await createInstance({
             currentDate: new Date(2019, 2, 4),
@@ -272,13 +276,13 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
 
         const cellWidth = scheduler.workSpace.getCell(0).outerWidth();
 
-        assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), cellWidth - 60, 1.5, 'Collector width is ok');
+        assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), cellWidth - 54, 1.5, 'Collector width is ok');
 
         scheduler.instance.option('views', ['month']);
         await waitAsync(0);
 
-        assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), cellWidth - 36, 1, 'Collector width is ok');
-        assert.roughEqual(scheduler.appointments.compact.getButtonHeight(), 20, 1, 'Collector height is ok');
+        assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), cellWidth - 53, 1, 'Collector width is ok');
+        assert.roughEqual(scheduler.appointments.compact.getButtonHeight(), 22, 1, 'Collector height is ok');
     });
 
     test('Appointment collector count should be ok when there are multiday appointments', async function(assert) {
@@ -327,7 +331,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
         await waitAsync(0);
 
         scheduler.appointments.compact.click(0);
-        assert.equal(scheduler.tooltip.getItemCount(), 8, 'There are 8 collapsed appts');
+        assert.equal(scheduler.tooltip.getItemCount(), 6, 'There are 6 collapsed appts');
     });
 
     test('Many collapsed appts should be grouped correctly with one multi day task which started before collector (T525443)', async function(assert) {
@@ -406,7 +410,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             onAppointmentClick(args) {
                 assert.equal(args.component, instance, 'dxScheduler is \'component\'');
                 assert.equal(args.element, instance.element(), 'dxScheduler element is \'element\'');
-                assert.deepEqual(args.appointmentData, appointments[3], 'Appointment data is OK');
+                assert.deepEqual(args.appointmentData, appointments[5], 'Appointment data is OK');
 
                 assert.equal($(args.appointmentElement).get(0), tooltipItemElement, 'Appointment element is OK');
                 assert.ok(args.event instanceof $.Event, 'Event is OK');
@@ -488,8 +492,8 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             endDateExpr: 'End',
             textExpr: 'Text',
             height: 490,
-            maxAppointmentsPerCell: 'auto',
-            dropDownAppointmentTemplate(data) {
+            maxAppointmentsPerCell: 1,
+            appointmentTooltipTemplate({ appointmentData: data }) {
                 return `<div class='custom-title'>${data.Text}</div>`;
             }
         });
@@ -526,7 +530,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             endDateExpr: 'End',
             textExpr: 'Text',
             height: 490,
-            maxAppointmentsPerCell: 'auto',
+            maxAppointmentsPerCell: 1,
             appointmentCollectorTemplate(data) {
                 return `<div class='button-title'>Appointment count is ${data.appointmentCount}</div>`;
             }
@@ -564,11 +568,11 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             endDateExpr: 'End',
             textExpr: 'Text',
             height: 500,
-            maxAppointmentsPerCell: 'auto',
-            dropDownAppointmentTemplate: 'dropDownAppointmentTemplate',
+            maxAppointmentsPerCell: 1,
+            appointmentTooltipTemplate: 'appointmentTooltipTemplate',
             integrationOptions: {
                 templates: {
-                    'dropDownAppointmentTemplate': {
+                    'appointmentTooltipTemplate': {
                         render(args) {
                             const $element = $('<span>')
                                 .addClass('dx-template-wrapper')
@@ -906,19 +910,19 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
 
         const $appointment = scheduler.appointments.getAppointment(0);
 
-        assert.roughEqual($appointment.outerWidth(), 50, 1.001, 'Width is OK');
-        assert.roughEqual($appointment.outerHeight(), 50, 1.001, 'Height is OK');
+        assert.roughEqual($appointment.outerWidth(), 59, 1.001, 'Width is OK');
+        assert.roughEqual($appointment.outerHeight(), 38, 1.001, 'Height is OK');
 
         scheduler.instance.option('width', 1000);
 
         const $firstAppointment = scheduler.appointments.getAppointment(0);
         const $secondAppointment = scheduler.appointments.getAppointment(1);
 
-        assert.roughEqual($firstAppointment.outerWidth(), 46.5, 1.001, 'Width is OK');
-        assert.roughEqual($firstAppointment.outerHeight(), 50, 1.001, 'Height is OK');
+        assert.roughEqual($firstAppointment.outerWidth(), 51, 1.001, 'Width is OK');
+        assert.roughEqual($firstAppointment.outerHeight(), 38, 1.001, 'Height is OK');
 
-        assert.roughEqual($secondAppointment.outerWidth(), 46.5, 1.001, 'Width is OK');
-        assert.roughEqual($secondAppointment.outerHeight(), 50, 1.001, 'Height is OK');
+        assert.roughEqual($secondAppointment.outerWidth(), 51, 1.001, 'Width is OK');
+        assert.roughEqual($secondAppointment.outerHeight(), 38, 1.001, 'Height is OK');
     });
 
     test('Adaptive collector should have correct coordinates on week view', async function(assert) {

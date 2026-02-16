@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import devices from '__internal/core/m_devices';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import fx from 'common/core/animation/fx';
 import { DataSource } from 'common/data/data_source/data_source';
@@ -34,11 +34,11 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         const expectedValues = [
             {
                 'appointment1': {
-                    top: 26,
+                    top: 30,
                     left: 0
                 },
                 'appointment2': {
-                    top: 190,
+                    top: 202,
                     left: 430
                 }
             }, {
@@ -47,8 +47,8 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
                     left: 0
                 },
                 'appointment2': {
-                    top: 100,
-                    left: 307
+                    top: 76,
+                    left: 319
                 }
             }
         ];

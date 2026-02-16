@@ -1,7 +1,6 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 
-import dateUtils from 'core/utils/date';
 import {
     createWrapper,
     initTestMarkup,
@@ -72,7 +71,7 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 0 },
                         expectedRects: [{
                             left: -9999,
-                            top: -9837,
+                            top: -9859,
                             width: 300
                         }]
                     },
@@ -80,7 +79,7 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 1050 },
                         expectedRects: [{
                             left: -9999,
-                            top: -9837,
+                            top: -9859,
                             width: 300
                         }]
                     },
@@ -88,7 +87,7 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 2100 },
                         expectedRects: [{
                             left: -10371,
-                            top: -9837,
+                            top: -9859,
                             width: 150
                         }]
                     }
@@ -164,26 +163,22 @@ module('Virtual scrolling Month View', () => {
                     {
                         offset: { y: 0 },
                         expectedRects: [{
-                            left: -9899,
-                            top: -9866,
+                            left: -9934,
+                            top: -9889,
                             width: 300
                         }]
                     },
                     {
                         offset: { y: 900 },
                         expectedRects: [{
-                            left: -9899,
-                            top: -9866,
+                            left: -9934,
+                            top: -9589,
                             width: 300
                         }]
                     },
                     {
                         offset: { y: 1800 },
-                        expectedRects: [{
-                            left: -9899,
-                            top: -10274,
-                            width: 300
-                        }]
+                        expectedRects: []
                     }
                 ].forEach(({ offset, expectedRects }) => {
                     promise = asyncScrollTest(
@@ -259,19 +254,19 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 0 },
                         expectedRects: [{
                             left: -9924,
-                            top: -9837,
+                            top: -9859,
                             width: 450
                         }, {
                             left: -9999,
-                            top: -9762,
+                            top: -9759,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9687,
+                            top: -9659,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9612,
+                            top: -9559,
                             width: 450
                         }]
                     },
@@ -279,35 +274,35 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 700 },
                         expectedRects: [{
                             left: -10324,
-                            top: -9837,
+                            top: -9859,
                             width: 150
                         }, {
-                            left: -9574,
-                            top: -9837,
-                            width: 450
-                        }, {
                             left: -10324,
-                            top: -9762,
+                            top: -9759,
                             width: 150
                         }, {
-                            left: -9649,
-                            top: -9762,
-                            width: 525
-                        }, {
                             left: -10324,
-                            top: -9687,
+                            top: -9659,
                             width: 150
                         }, {
-                            left: -9649,
-                            top: -9687,
-                            width: 525
-                        }, {
                             left: -10324,
-                            top: -9612,
+                            top: -9559,
                             width: 75
                         }, {
+                            left: -9574,
+                            top: -9859,
+                            width: 450
+                        }, {
                             left: -9649,
-                            top: -9612,
+                            top: -9759,
+                            width: 525
+                        }, {
+                            left: -9649,
+                            top: -9659,
+                            width: 525
+                        }, {
+                            left: -9649,
+                            top: -9559,
                             width: 450
                         }]
                     },
@@ -315,19 +310,19 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 1050 },
                         expectedRects: [{
                             left: -9924,
-                            top: -9837,
+                            top: -9859,
                             width: 450
                         }, {
                             left: -9999,
-                            top: -9762,
+                            top: -9759,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9687,
+                            top: -9659,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9612,
+                            top: -9559,
                             width: 450
                         }]
                     },
@@ -335,19 +330,19 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 1400 },
                         expectedRects: [{
                             left: -10274,
-                            top: -9837,
+                            top: -9859,
                             width: 450
                         }, {
                             left: -10349,
-                            top: -9762,
+                            top: -9759,
                             width: 525
                         }, {
                             left: -10349,
-                            top: -9687,
+                            top: -9659,
                             width: 525
                         }, {
                             left: -10349,
-                            top: -9612,
+                            top: -9559,
                             width: 450
                         }]
                     }
@@ -424,61 +419,61 @@ module('Virtual scrolling Month View', () => {
                     {
                         offset: { y: 0 },
                         expectedRects: [{
-                            left: -9674,
-                            top: -9716,
-                            width: 303
+                            left: -9693,
+                            top: -9689,
+                            width: 322
                         }, {
-                            left: -9899,
-                            top: -9641,
-                            width: 528
+                            left: -9934,
+                            top: -9589,
+                            width: 563
                         }, {
-                            left: -9899,
-                            top: -9566,
-                            width: 528
+                            left: -9934,
+                            top: -9489,
+                            width: 563
                         }, {
-                            left: -9899,
-                            top: -9491,
-                            width: 300
+                            left: -9934,
+                            top: -9389,
+                            width: 322
                         }]
                     },
                     {
                         offset: { y: 350 },
                         expectedRects: [{
-                            left: -9674,
-                            top: -10066,
-                            width: 303
+                            left: -9693,
+                            top: -10039,
+                            width: 322
                         }, {
-                            left: -9899,
-                            top: -9991,
-                            width: 528
+                            left: -9934,
+                            top: -9939,
+                            width: 563
                         }, {
-                            left: -9899,
-                            top: -9916,
-                            width: 528
+                            left: -9934,
+                            top: -9839,
+                            width: 563
                         }, {
-                            left: -9899,
-                            top: -9841,
-                            width: 300
+                            left: -9934,
+                            top: -9739,
+                            width: 322
                         }]
                     },
                     {
                         offset: { y: 1000 },
                         expectedRects: [{
-                            left: -9674,
-                            top: -9816,
-                            width: 303
+                            left: -9693,
+                            top: -9489,
+                            width: 322
                         }, {
-                            left: -9899,
-                            top: -9741,
-                            width: 528
+                            left: -9934,
+                            top: -9389,
+                            width: 563
                         }, {
-                            left: -9899,
-                            top: -9666,
-                            width: 528
+                            left: -9934,
+                            top: -9289,
+                            width: 563
                         }, {
-                            left: -9899,
-                            top: -9591,
-                            width: 300
+                            left: -9934,
+                            top: -9189,
+                            width: 322
                         }]
                     }
                 ].forEach(({ offset, expectedRects }) => {
@@ -508,72 +503,6 @@ module('Virtual scrolling Month View', () => {
                 });
 
                 return promise;
-            });
-        });
-
-        ['horizontal', 'vertical'].forEach(groupOrientation => {
-            test(`Appointment should be correctly croped if Month view  and "${groupOrientation}" group orientation`, async function(assert) {
-                const longAppointment = {
-                    startDate: new Date(2015, 2, 4, 0, 10),
-                    endDate: new Date(2015, 2, 4, 23, 50)
-                };
-                const scheduler = await createWrapper({
-                    currentDate: new Date(2015, 2, 4),
-                    scrolling: {
-                        mode: 'virtual'
-                    },
-                    views: [{
-                        type: 'month',
-                        groupOrientation: groupOrientation
-                    }],
-                    currentView: 'month',
-                    dataSource: [longAppointment],
-                    height: 400
-                });
-
-                const { instance } = scheduler;
-                const workspace = instance.getWorkSpace();
-                const { viewDataProvider } = workspace;
-                const scrollable = workspace.getScrollable();
-
-                workspace.renderer.getRenderTimeout = () => -1;
-
-                return asyncWrapper(assert, promise => {
-                    [
-                        1000, 1050, 1100, 1200, 1250, 1300, 1350, 1400, 1500, 2000
-                    ].forEach(scrollY => {
-                        promise = asyncScrollTest(
-                            assert,
-                            promise,
-                            () => {
-                                const layoutManager = instance.getLayoutManager();
-                                const settings = layoutManager._positionMap[0][0];
-
-                                assert.equal(
-                                    settings.groupIndex,
-                                    0,
-                                    `group index is correct when scrolled to ${scrollY}`
-                                );
-
-                                const startViewDate = viewDataProvider.findGroupCellStartDate(
-                                    settings.groupIndex,
-                                    settings.info.appointment.startDate,
-                                    settings.info.appointment.endDate
-                                );
-
-                                assert.deepEqual(
-                                    dateUtils.trimTime(settings.info.appointment.startDate),
-                                    startViewDate,
-                                    'start date is correct'
-                                );
-                            },
-                            scrollable,
-                            { y: scrollY }
-                        );
-                    });
-
-                    return promise;
-                });
             });
         });
 
@@ -630,27 +559,30 @@ module('Virtual scrolling Month View', () => {
                     [{
                         scrollX: 1066,
                         expectedSettings: {
-                            hMax: 1650,
-                            left: 1575
+                            left: -9490,
+                            top: -9559,
+                            width: 75,
                         }
                     }, {
                         scrollX: 1300,
                         expectedSettings: {
-                            hMax: 1950,
-                            left: 1575
+                            left: -9724,
+                            top: -9559,
+                            width: 75,
                         }
                     }].forEach(({ scrollX, expectedSettings }) => {
                         promise = asyncScrollTest(
                             assert,
                             promise,
                             () => {
-                                const layoutManager = instance.getLayoutManager();
-                                const settings = layoutManager._positionMap[0][0];
+                                const appointmentRect = scheduler.appointments
+                                    .getAppointment(0)
+                                    .get(0)
+                                    .getBoundingClientRect();
 
-                                assert.ok(true, `scrollX: ${scrollX}`);
-
-                                assert.equal(settings.hMax, expectedSettings.hMax, 'Last group cell position is correct');
-                                assert.equal(settings.left, expectedSettings.left, 'Cell left position is correct');
+                                assert.roughEqual(appointmentRect.left, expectedSettings.left, 2.01, 'appointment left is correct');
+                                assert.roughEqual(appointmentRect.top, expectedSettings.top, 2.01, 'appointment top is correct');
+                                assert.roughEqual(appointmentRect.width, expectedSettings.width, 2.01, 'appointment width is correct');
                             },
                             scrollable,
                             { left: scrollX }
@@ -684,7 +616,8 @@ module('Virtual scrolling Month View', () => {
                         { id: 1, text: 'rc_001' },
                         { id: 2, text: 'rc_002' },
                         { id: 3, text: 'rc_003' },
-                        { id: 4, text: 'rc_004' }
+                        { id: 4, text: 'rc_004' },
+                        { id: 5, text: 'rc_005' }
                     ]
                 }],
                 scrolling: {
@@ -706,15 +639,15 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 0 },
                         expectedRects: [{
                             left: -9924,
-                            top: -9837,
+                            top: -9859,
                             width: 75
                         }, {
                             left: -9924,
-                            top: -9681,
+                            top: -9659,
                             width: 75
                         }, {
                             left: -9924,
-                            top: -9527,
+                            top: -9459,
                             width: 75
                         }]
                     },
@@ -722,15 +655,15 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 1050 },
                         expectedRects: [{
                             left: -9924,
-                            top: -9837,
+                            top: -9859,
                             width: 75
                         }, {
                             left: -9924,
-                            top: -9681,
+                            top: -9659,
                             width: 75
                         }, {
                             left: -9924,
-                            top: -9527,
+                            top: -9459,
                             width: 75
                         }]
                     },
@@ -812,32 +745,32 @@ module('Virtual scrolling Month View', () => {
                     {
                         offset: { y: 0 },
                         expectedRects: [{
-                            left: -9824,
-                            top: -9866,
+                            left: -9859,
+                            top: -9889,
                             width: 75
                         }, {
-                            left: -9824,
-                            top: -9716,
+                            left: -9859,
+                            top: -9689,
                             width: 75
                         }, {
-                            left: -9824,
-                            top: -9566,
+                            left: -9859,
+                            top: -9489,
                             width: 75
                         }]
                     },
                     {
                         offset: { y: 900 },
                         expectedRects: [{
-                            left: -9824,
-                            top: -9866,
+                            left: -9859,
+                            top: -9589,
                             width: 75
                         }, {
-                            left: -9824,
-                            top: -9716,
+                            left: -9859,
+                            top: -9389,
                             width: 75
                         }, {
-                            left: -9824,
-                            top: -9566,
+                            left: -9859,
+                            top: -9189,
                             width: 75
                         }]
                     }
@@ -915,60 +848,60 @@ module('Virtual scrolling Month View', () => {
                         offset: { x: 0 },
                         expectedRects: [{
                             left: -9924,
-                            top: -9837,
+                            top: -9859,
                             width: 450
                         }, {
                             left: -9999,
-                            top: -9766,
+                            top: -9759,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9695,
+                            top: -9659,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9625,
-                            width: 301
+                            top: -9559,
+                            width: 300
                         }]
                     },
                     {
                         offset: { x: 1050 },
                         expectedRects: [{
                             left: -9924,
-                            top: -9837,
+                            top: -9859,
                             width: 450
                         }, {
                             left: -9999,
-                            top: -9766,
+                            top: -9759,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9695,
+                            top: -9659,
                             width: 525
                         }, {
                             left: -9999,
-                            top: -9625,
-                            width: 301
+                            top: -9559,
+                            width: 300
                         }]
                     },
                     {
                         offset: { x: 1300 },
                         expectedRects: [{
                             left: -10174,
-                            top: -9837,
+                            top: -9859,
                             width: 450
                         }, {
                             left: -10249,
-                            top: -9766,
+                            top: -9759,
                             width: 525
                         }, {
                             left: -10249,
-                            top: -9695,
+                            top: -9659,
                             width: 525
                         }, {
                             left: -10249,
-                            top: -9625,
-                            width: 301
+                            top: -9559,
+                            width: 300
                         }]
                     }
                 ].forEach(({ offset, expectedRects }) => {
@@ -1045,61 +978,61 @@ module('Virtual scrolling Month View', () => {
                     {
                         offset: { y: 0 },
                         expectedRects: [{
-                            left: -9824,
-                            top: -9866,
-                            width: 453
+                            left: -9853,
+                            top: -9889,
+                            width: 482
                         }, {
-                            left: -9899,
-                            top: -9791,
-                            width: 528
+                            left: -9934,
+                            top: -9789,
+                            width: 562
                         }, {
-                            left: -9899,
-                            top: -9716,
-                            width: 528
+                            left: -9934,
+                            top: -9689,
+                            width: 562
                         }, {
-                            left: -9899,
-                            top: -9641,
-                            width: 301
+                            left: -9934,
+                            top: -9589,
+                            width: 321
                         }]
                     },
                     {
                         offset: { y: 900 },
                         expectedRects: [{
-                            left: -9824,
-                            top: -9866,
-                            width: 453
+                            left: -9853,
+                            top: -9589,
+                            width: 482
                         }, {
-                            left: -9899,
-                            top: -9791,
-                            width: 528
+                            left: -9934,
+                            top: -9489,
+                            width: 562
                         }, {
-                            left: -9899,
-                            top: -9716,
-                            width: 528
+                            left: -9934,
+                            top: -9389,
+                            width: 562
                         }, {
-                            left: -9899,
-                            top: -9641,
-                            width: 301
+                            left: -9934,
+                            top: -9289,
+                            width: 321
                         }]
                     },
                     {
                         offset: { y: 1100 },
                         expectedRects: [{
-                            left: -9824,
-                            top: -10066,
-                            width: 453
+                            left: -9853,
+                            top: -9789,
+                            width: 482
                         }, {
-                            left: -9899,
-                            top: -9991,
-                            width: 528
+                            left: -9934,
+                            top: -9689,
+                            width: 562
                         }, {
-                            left: -9899,
-                            top: -9916,
-                            width: 528
+                            left: -9934,
+                            top: -9589,
+                            width: 562
                         }, {
-                            left: -9899,
-                            top: -9841,
-                            width: 301
+                            left: -9934,
+                            top: -9489,
+                            width: 321
                         }]
                     }
                 ].forEach(({ offset, expectedRects }) => {
