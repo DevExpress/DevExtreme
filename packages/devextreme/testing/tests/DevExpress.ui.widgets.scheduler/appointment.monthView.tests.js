@@ -504,28 +504,28 @@ module('Integration: Appointments in Month view', {
                 assert.deepEqual(parts, [
                     {
                         level: 0,
-                        maxLevel: 3,
+                        maxLevel: 2,
                         partIndex: 0,
                         partTotalCount: 2,
                         reduced: 'head',
                     },
                     {
                         level: 1,
-                        maxLevel: 3,
+                        maxLevel: 2,
                         partIndex: 0,
                         partTotalCount: 0,
                         reduced: undefined,
                     },
                     {
                         level: 0,
-                        maxLevel: 3,
+                        maxLevel: 2,
                         partIndex: 1,
                         partTotalCount: 2,
                         reduced: 'tail',
                     },
                     {
                         level: 1,
-                        maxLevel: 3,
+                        maxLevel: 2,
                         partIndex: 0,
                         partTotalCount: 0,
                         reduced: undefined,

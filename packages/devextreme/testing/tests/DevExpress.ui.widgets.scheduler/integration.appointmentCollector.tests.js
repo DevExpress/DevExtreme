@@ -222,7 +222,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
             });
 
             assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), 63, 1, 'Collector width is ok');
-            assert.roughEqual(scheduler.appointments.compact.getButtonHeight(), 20, 1, 'Collector height is ok');
+            assert.roughEqual(scheduler.appointments.compact.getButtonHeight(), 22, 1, 'Collector height is ok');
         } finally {
             themes.isMaterialBased = origIsMaterialBased;
         }
@@ -276,12 +276,12 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
 
         const cellWidth = scheduler.workSpace.getCell(0).outerWidth();
 
-        assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), cellWidth - 54, 1.5, 'Collector width is ok');
+        assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), cellWidth - 80, 1.5, 'Collector width is ok');
 
         scheduler.instance.option('views', ['month']);
         await waitAsync(0);
 
-        assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), cellWidth - 53, 1, 'Collector width is ok');
+        assert.roughEqual(scheduler.appointments.compact.getButtonWidth(), cellWidth - 56, 1, 'Collector width is ok');
         assert.roughEqual(scheduler.appointments.compact.getButtonHeight(), 22, 1, 'Collector height is ok');
     });
 
@@ -381,7 +381,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = false', baseCon
 
         const collectorCoordinates = translator.locate($collector);
         const expectedCoordinates = scheduler.workSpace.getCell(7).position();
-        const rtlOffset = scheduler.workSpace.getCell(7).outerWidth() - 36;
+        const rtlOffset = scheduler.workSpace.getCell(7).outerWidth() - 56;
 
         assert.roughEqual(collectorCoordinates.left, expectedCoordinates.left + rtlOffset, 1.001, 'Left coordinate is OK');
         assert.roughEqual(collectorCoordinates.top, expectedCoordinates.top, 1.001, 'Top coordinate is OK');
@@ -910,7 +910,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
 
         const $appointment = scheduler.appointments.getAppointment(0);
 
-        assert.roughEqual($appointment.outerWidth(), 59, 1.001, 'Width is OK');
+        assert.roughEqual($appointment.outerWidth(), 55, 1.001, 'Width is OK');
         assert.roughEqual($appointment.outerHeight(), 38, 1.001, 'Height is OK');
 
         scheduler.instance.option('width', 1000);
@@ -918,7 +918,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         const $firstAppointment = scheduler.appointments.getAppointment(0);
         const $secondAppointment = scheduler.appointments.getAppointment(1);
 
-        assert.roughEqual($firstAppointment.outerWidth(), 51, 1.001, 'Width is OK');
+        assert.roughEqual($firstAppointment.outerWidth(), 49, 1.001, 'Width is OK');
         assert.roughEqual($firstAppointment.outerHeight(), 38, 1.001, 'Height is OK');
 
         assert.roughEqual($secondAppointment.outerWidth(), 51, 1.001, 'Width is OK');

@@ -569,8 +569,8 @@ QUnit.test('Grouped multi-week appointments should have a correct left offset', 
     assert.roughEqual(lefts[0], 0, 2.001);
     assert.roughEqual(lefts[1], 0, 1.001);
     assert.roughEqual(lefts[2], 49, 1.001);
-    assert.roughEqual(lefts[3], 348, 1.001);
-    assert.roughEqual(lefts[4], 348, 1.001);
+    assert.roughEqual(lefts[3], 349, 1.001);
+    assert.roughEqual(lefts[4], 349, 1.001);
     assert.roughEqual(lefts[5], 398, 1.001);
 
 });

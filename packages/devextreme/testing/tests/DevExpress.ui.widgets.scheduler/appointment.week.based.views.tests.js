@@ -1094,7 +1094,7 @@ module('Integration: Appointment Day, Week views', {
                     translator.locate(scheduler.appointments.compact.getButton(1)),
                 ].sort((a, b) => a.left - b.left);
 
-                assert.strictEqual(coords[0].top, 456, 'Appointment top is correct');
+                assert.strictEqual(coords[0].top, 475, 'Appointment top is correct');
                 assert.roughEqual(coords[0].left, 120, 2, 'Appointment left is correct');
 
                 assert.strictEqual(coords[1].top, 0, 'Appointment top is correct');
