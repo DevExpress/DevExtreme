@@ -494,11 +494,12 @@ module('Integration: Appointments in Month view', {
                 });
 
                 const appointments = scheduler.instance._getAppointmentsToRepaint();
-                const parts = appointments.map((item) => ({
-                    level: item.level,
-                    partIndex: item.partIndex,
-                    partTotalCount: item.partTotalCount,
-                }));
+                const parts = appointments.map((item) => {
+                    const part = { level: item.level };
+                    if(item.partIndex !== undefined) part.partIndex = item.partIndex;
+                    if(item.partTotalCount !== undefined) part.partTotalCount = item.partTotalCount;
+                    return part;
+                });
                 assert.deepEqual(parts, [
                     {
                         level: 0,

@@ -329,7 +329,7 @@ module('Virtual scrolling Month View', () => {
                     {
                         offset: { x: 1400 },
                         expectedRects: [{
-                            left: -10274,
+                            left: -9574,
                             top: -9859,
                             width: 450
                         }, {
@@ -337,13 +337,21 @@ module('Virtual scrolling Month View', () => {
                             top: -9759,
                             width: 525
                         }, {
+                            left: -9649,
+                            top: -9759,
+                            width: 525
+                        }, {
+                            left: -10324,
+                            top: -9659,
+                            width: 150
+                        }, {
                             left: -10349,
                             top: -9659,
                             width: 525
                         }, {
-                            left: -10349,
+                            left: -10324,
                             top: -9559,
-                            width: 450
+                            width: 75
                         }]
                     }
                 ].forEach(({ offset, expectedRects }) => {
