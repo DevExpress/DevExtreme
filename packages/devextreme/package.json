@@ -89,7 +89,7 @@
     "@testing-library/user-event": "^14.5.2",
     "@types/enzyme": "3.10.19",
     "@types/jquery": "catalog:",
-    "@types/react": "16.14.34",
+    "@types/react": "16.14.69",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/experimental-utils": "5.62.0",
     "@typescript-eslint/parser": "catalog:",
