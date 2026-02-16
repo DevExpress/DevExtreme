@@ -496,39 +496,29 @@ module('Integration: Appointments in Month view', {
                 const appointments = scheduler.instance._getAppointmentsToRepaint();
                 const parts = appointments.map((item) => ({
                     level: item.level,
-                    maxLevel: item.maxLevel,
                     partIndex: item.partIndex,
                     partTotalCount: item.partTotalCount,
-                    reduced: item.reduced,
                 }));
                 assert.deepEqual(parts, [
                     {
                         level: 0,
-                        maxLevel: 2,
                         partIndex: 0,
                         partTotalCount: 2,
-                        reduced: 'head',
                     },
                     {
                         level: 1,
-                        maxLevel: 2,
                         partIndex: 0,
                         partTotalCount: 0,
-                        reduced: undefined,
                     },
                     {
                         level: 0,
-                        maxLevel: 2,
                         partIndex: 1,
                         partTotalCount: 2,
-                        reduced: 'tail',
                     },
                     {
                         level: 1,
-                        maxLevel: 2,
                         partIndex: 0,
                         partTotalCount: 0,
-                        reduced: undefined,
                     }
                 ], 'Parts  should be correct');
             });

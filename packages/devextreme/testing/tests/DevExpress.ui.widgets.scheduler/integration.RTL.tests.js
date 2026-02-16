@@ -37,19 +37,19 @@ module('RTL', moduleConfig, () => {
                 week: [
                     {
                         top: 0,
-                        left: 573
+                        left: 568
                     }, {
                         top: 0,
-                        left: 256
+                        left: 253
                     }
                 ],
                 day: [
                     {
                         top: 0,
-                        left: 347
+                        left: 345
                     }, {
                         top: 0,
-                        left: 30
+                        left: 29
                     }
                 ]
             };

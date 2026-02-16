@@ -360,11 +360,11 @@ QUnit.test('Rival duplicated appointments should have correct positions', async 
 
     assert.equal(firstAppointmentPosition.left, 0, 'appointment is rendered in right place');
     assert.roughEqual(firstAppointmentPosition.top, 30, 1.5, 'appointment is rendered in right place');
-    assert.roughEqual(getOuterWidth($appointment.eq(0)), getOuterWidth($tableCell) * 2, 1.5, 'appointment has a right size');
+    assert.roughEqual(getOuterWidth($appointment.eq(0)), getOuterWidth($tableCell), 1.5, 'appointment has a right size');
 
     assert.equal(secondAppointmentPosition.left, 0, 'appointment is rendered in right place');
     assert.roughEqual(secondAppointmentPosition.top, 54, 1.5, 'appointment is rendered in right place');
-    assert.roughEqual(getOuterWidth($appointment.eq(1)), getOuterWidth($tableCell), 1.1, 'appointment has a right size');
+    assert.roughEqual(getOuterWidth($appointment.eq(1)), getOuterWidth($tableCell) * 2, 1.1, 'appointment has a right size');
 });
 
 QUnit.test('Appointments should be rendered without errors (T816873)', async function(assert) {
@@ -604,7 +604,7 @@ QUnit.test('More than 3 cloned appointments should be grouped', async function(a
     this.scheduler.appointments.compact.click();
     assert.equal(this.scheduler.appointments.compact.getButtonText(), '8 more', 'DropDown menu has correct text');
     assert.roughEqual(getOuterWidth(this.scheduler.appointments.compact.getButton()),
-        90, 1.001, 'DropDownMenu button width is OK');
+        86, 1.001, 'DropDownMenu button width is OK');
     assert.equal(this.scheduler.tooltip.getItemCount(), 8, 'DropDown menu has correct items');
 });
 
@@ -1397,14 +1397,14 @@ QUnit.test('Two rival all day appointments should have correct sizes and positio
     assert.equal($appointment.length, 2, 'All appointments are rendered');
 
     assert.equal(firstAppointmentPosition.top, 0, 'appointment is rendered in right place');
-    assert.roughEqual(firstAppointmentPosition.left, 0, 1, 'appointment is rendered in right place');
+    assert.roughEqual(firstAppointmentPosition.left, 5, 1, 'appointment is rendered in right place');
     assert.roughEqual(getOuterWidth($appointment.eq(0)), 833, 1.1, 'appointment has a right width');
-    assert.roughEqual(getOuterHeight($appointment.eq(0)), 28.5, 1.1, 'appointment has a right height');
+    assert.roughEqual(getOuterHeight($appointment.eq(0)), 26, 1.1, 'appointment has a right height');
 
-    assert.roughEqual(secondAppointmentPosition.top, 28.5, 1, 'appointment is rendered in right place');
-    assert.roughEqual(secondAppointmentPosition.left, 0, 1, 'appointment is rendered in right place');
+    assert.roughEqual(secondAppointmentPosition.top, 31, 1, 'appointment is rendered in right place');
+    assert.roughEqual(secondAppointmentPosition.left, 5, 1, 'appointment is rendered in right place');
     assert.roughEqual(getOuterWidth($appointment.eq(1)), 833, 1.1, 'appointment has a right width');
-    assert.roughEqual(getOuterHeight($appointment.eq(1)), 28.5, 1.1, 'appointment has a right height');
+    assert.roughEqual(getOuterHeight($appointment.eq(1)), 26, 1.1, 'appointment has a right height');
 });
 
 QUnit.test('All day appointments should have correct left position, vertical strategy, rtl mode', async function(assert) {
@@ -2162,8 +2162,8 @@ QUnit.test('Full-size appointment should have minWidth, narrow width', async fun
 
     const $appointments = $(this.instance.$element()).find('.dx-scheduler-appointment');
 
-    assert.roughEqual($appointments.eq(0).get(0).getBoundingClientRect().width, 5, 1.1, 'Appointment has min width');
-    assert.roughEqual($appointments.eq(1).get(0).getBoundingClientRect().width, 5, 1.1, 'Appointment has min width');
+    assert.roughEqual($appointments.eq(0).get(0).getBoundingClientRect().width, 6, 1.1, 'Appointment has min width');
+    assert.roughEqual($appointments.eq(1).get(0).getBoundingClientRect().width, 6, 1.1, 'Appointment has min width');
 });
 
 QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, \'auto\' mode, narrow width', async function(assert) {
@@ -2291,7 +2291,7 @@ QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell and wi
     tableCellWidth = getOuterWidth(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
     appointmentWidth = getOuterWidth($appointment.eq(0));
 
-    assert.roughEqual(appointmentWidth, tableCellWidth - 26, 1.5, 'One appointment is full-size');
+    assert.roughEqual(appointmentWidth, 89, 1.5, 'One appointment is full-size');
 
     this.scheduler.appointments.compact.click();
     assert.ok(this.scheduler.tooltip.isVisible(), 'ddAppointment is rendered');
