@@ -18,7 +18,7 @@ import {
 } from '../../helpers/scheduler/helpers.js';
 import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import '__internal/scheduler/m_scheduler';
 
 const {
@@ -529,7 +529,7 @@ module('Common', commonModuleConfig, () => {
         const scheduler = await createWrapper({
             _draggingMode: 'default',
             editing: true,
-            height: 600,
+            height: 1200,
             views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
             currentView: 'month',
             dataSource: [{
@@ -859,7 +859,7 @@ module('Common', commonModuleConfig, () => {
         const fakeAppointment = scheduler.appointments.getFakeAppointment();
         fakeAppointment.css('border-left', 'none');
 
-        assert.equal(fakeAppointment.outerWidth() - fakeAppointment.innerWidth(), 0, 'Correct width');
+        assert.equal(fakeAppointment.outerWidth() - fakeAppointment.innerWidth(), 1, 'Correct width');
 
         pointer.up();
     });

@@ -8,7 +8,7 @@ import {
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const {
     module,
@@ -225,9 +225,9 @@ module('Integration: Appointment scroll', {
                         store: []
                     }),
                     currentView: 'week',
-                    height: 500,
+                    height: 400,
                     showAllDayPanel: false,
-                    width: 600
+                    width: 400
                 });
 
                 scheduler.instance.getWorkSpaceScrollable().scrollBy(140);
