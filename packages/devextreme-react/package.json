@@ -69,7 +69,7 @@
     "@testing-library/react": "14.3.1",
     "@testing-library/user-event": "14.5.2",
     "@types/react": "18.0.38",
-    "@types/react-dom": "18.0.11",
+    "@types/react-dom": "18.3.7",
     "devextreme-metadata": "workspace:*",
     "devextreme-nx-infra-plugin": "workspace:*",
     "jest-environment-jsdom": "29.7.0",
