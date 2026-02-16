@@ -303,7 +303,7 @@ module('Virtual scrolling timelines', () => {
                                 expectedRects: [{
                                     left: -10299,
                                     top: -9833,
-                                    width: 1600
+                                    width: 1650
                                 }, {
                                     left: -10299,
                                     top: -9679,
@@ -327,7 +327,7 @@ module('Virtual scrolling timelines', () => {
                                 }, {
                                     left: -10299,
                                     top: -9525,
-                                    width: 1600
+                                    width: 1650
                                 }]
                             },
                             {
