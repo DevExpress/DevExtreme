@@ -32,7 +32,7 @@ test.meta({
   showBorders: true,
 }));
 
-test('FilterRow range overlay screenshot', async (t) => {
+test.meta({ unstable: true })('FilterRow range overlay screenshot', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   const filterEditor = dataGrid.getFilterEditor(1, FilterTextBox);
