@@ -83,6 +83,7 @@ export const getAriaDescription = async (options: AppointmentProperties): Promis
   const texts = [
     getGroupText(options),
     ...resources,
+    messageLocalization.format('dxScheduler-appointmentAriaLabel-hotkeys'),
   ].filter(Boolean);
 
   return texts.join('; ');

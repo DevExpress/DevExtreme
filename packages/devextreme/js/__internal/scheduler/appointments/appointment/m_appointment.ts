@@ -193,14 +193,16 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     // eslint-disable-next-line no-void
     void getAriaDescription(this.option())
       .then((text) => {
-        if (text) {
-          const id = `dx-${new Guid()}`;
-          const $description = $element.find(`.${APPOINTMENT_CONTENT_CLASSES.ARIA_DESCRIPTION}`);
+        if (!text) {
+          return;
+        }
 
-          if ($description) {
-            $element.attr('aria-describedby', id);
-            $description.text(text).attr('id', id);
-          }
+        const id = `dx-${new Guid()}`;
+        const $description = $element.find(`.${APPOINTMENT_CONTENT_CLASSES.ARIA_DESCRIPTION}`);
+
+        if ($description) {
+          $element.attr('aria-describedby', id);
+          $description.text(text).attr('id', id);
         }
       });
   }

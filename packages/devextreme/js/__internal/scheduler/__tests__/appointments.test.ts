@@ -88,6 +88,22 @@ describe('Appointments', () => {
     }
   });
 
+  it('should have aria-describedby attr', async () => {
+    setupSchedulerTestEnvironment();
+    const { POM } = await createScheduler({
+      dataSource: [{
+        text: 'Appointment 1',
+        startDate: new Date(2015, 1, 9, 8),
+        endDate: new Date(2015, 1, 9, 9),
+      }],
+      currentView: 'day',
+      currentDate: new Date(2015, 1, 9, 8),
+    });
+
+    const appointment = POM.getAppointment();
+    expect(appointment.element?.hasAttribute('aria-describedby')).toBe(true);
+  });
+
   describe('Keyboard Navigation', () => {
     const dataSource = [
       {

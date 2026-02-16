@@ -274,6 +274,7 @@
 
         "dxScheduler-appointmentAriaLabel-group": "Groupe : {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Rendez-vous récurrent",
+        "dxScheduler-appointmentAriaLabel-hotkeys": "Press Delete to delete this appointment. Press Home or End to quickly navigate to the first or last appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Liste des rendez-vous ",
         "dxScheduler-newPopupTitle": "Nouveau rendez-vous",
@@ -588,7 +589,6 @@
         "dxHtmlEditor-aiCommandChangeTone": "Changer le ton",
         "dxHtmlEditor-aiCommandTranslate": "Traduire",
         "dxHtmlEditor-aiCommandAskAI": "Demander à l’IA",
-        
         "dxHtmlEditor-aiCommandChangeStyleFormal": "Formel",
         "dxHtmlEditor-aiCommandChangeStyleInformal": "Informel",
         "dxHtmlEditor-aiCommandChangeStyleTechnical": "Technique",
@@ -601,13 +601,11 @@
         "dxHtmlEditor-aiCommandChangeStyleExpository": "Expositif",
         "dxHtmlEditor-aiCommandChangeStyleDescriptive": "Descriptif",
         "dxHtmlEditor-aiCommandChangeStyleConversational": "Conversationnel",
-        
         "dxHtmlEditor-aiCommandChangeToneProfessional": "Professionnel",
         "dxHtmlEditor-aiCommandChangeToneCasual": "Décontracté",
         "dxHtmlEditor-aiCommandChangeToneStraightforward": "Direct",
         "dxHtmlEditor-aiCommandChangeToneConfident": "Confiant",
         "dxHtmlEditor-aiCommandChangeToneFriendly": "Amical",
-        
         "dxHtmlEditor-aiCommandTranslateArabic": "Arabe",
         "dxHtmlEditor-aiCommandTranslateChinese": "Chinois",
         "dxHtmlEditor-aiCommandTranslateEnglish": "Anglais",
