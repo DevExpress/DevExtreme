@@ -1396,13 +1396,13 @@ QUnit.test('Two rival all day appointments should have correct sizes and positio
 
     assert.equal($appointment.length, 2, 'All appointments are rendered');
 
-    assert.equal(firstAppointmentPosition.top, 0, 'appointment is rendered in right place');
-    assert.roughEqual(firstAppointmentPosition.left, 5, 1, 'appointment is rendered in right place');
+    assert.roughEqual(firstAppointmentPosition.top, 5, 1, 'appointment is rendered in right place');
+    assert.equal(firstAppointmentPosition.left, 0, 'appointment is rendered in right place');
     assert.roughEqual(getOuterWidth($appointment.eq(0)), 833, 1.1, 'appointment has a right width');
     assert.roughEqual(getOuterHeight($appointment.eq(0)), 26, 1.1, 'appointment has a right height');
 
     assert.roughEqual(secondAppointmentPosition.top, 31, 1, 'appointment is rendered in right place');
-    assert.roughEqual(secondAppointmentPosition.left, 5, 1, 'appointment is rendered in right place');
+    assert.equal(secondAppointmentPosition.left, 0, 'appointment is rendered in right place');
     assert.roughEqual(getOuterWidth($appointment.eq(1)), 833, 1.1, 'appointment has a right width');
     assert.roughEqual(getOuterHeight($appointment.eq(1)), 26, 1.1, 'appointment has a right height');
 });
