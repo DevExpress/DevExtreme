@@ -47,6 +47,8 @@ import type {
 } from './calendar.views';
 import Views from './calendar.views';
 
+// STYLE calendar
+
 const CALENDAR_CLASS = 'dx-calendar';
 const CALENDAR_BODY_CLASS = 'dx-calendar-body';
 const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
@@ -561,7 +563,7 @@ class Calendar<
     const strategyName = this._getSelectionStrategyName();
     const strategy = SELECTION_STRATEGIES[strategyName];
 
-    if (!this._selectionStrategy || this._selectionStrategy.NAME !== strategyName) {
+    if (this._selectionStrategy?.NAME !== strategyName) {
       // eslint-disable-next-line new-cap
       this._selectionStrategy = new strategy(this);
     }

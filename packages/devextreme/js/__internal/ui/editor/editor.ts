@@ -65,7 +65,6 @@ class Editor<
 
   public validationRequest!: ReturnType<typeof Callbacks>;
 
-  // eslint-disable-next-line no-restricted-globals
   public showValidationMessageTimeout?: ReturnType<typeof setTimeout>;
 
   private _valueChangeAction!: ((event?: Record<string, unknown>) => void);
