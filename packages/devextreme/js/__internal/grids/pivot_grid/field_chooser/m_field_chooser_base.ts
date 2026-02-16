@@ -121,17 +121,6 @@ export class FieldChooserBase extends mixinWidget {
     };
   }
 
-  protected _setAriaSortAttribute(column, ariaSortState, $rootElement) {
-    $rootElement.removeAttr('aria-roledescription');
-
-    if (column.isGrouped && isDefined(column.sortOrder)) {
-      const description = column.sortOrder === 'asc'
-        ? this.localize('dxDataGrid-ariaSortedAscendingColumn')
-        : this.localize('dxDataGrid-ariaSortedDescendingColumn');
-      this.setAria('roledescription', description, $rootElement);
-    }
-  }
-
   _init() {
     super._init();
     this._headerFilterView = new HeaderFilterView(this);
