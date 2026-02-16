@@ -225,8 +225,8 @@ QUnit.module('sortable without containers', () => {
         assert.equal($items.eq(1).text(), '3', 'item 1 text');
         assert.equal($items.eq(2).text(), '4', 'item 2 text');
         assert.equal($items.eq(3).text(), '5', 'item 3 text');
-        assert.equal($items.eq(4).text(), '1', 'item 4 text');
-        assert.equal($items.eq(5).text(), '6', 'item 5 text');
+        assert.equal($items.eq(4).text(), '6', 'item 4 text');
+        assert.equal($items.eq(5).text(), '1', 'item 5 text');
     });
 
     QUnit.test('horizontal dragging between lines to the end of the first line', function(assert) {
@@ -499,6 +499,8 @@ QUnit.module('sortable without containers', () => {
                 changedArgs = e;
             }
         });
+
+        $('<div>').addClass('not-test-item').text('X').appendTo('.test-container');
 
         const $item = $sortable.find('.not-test-item').eq(0);
         const offset = $item.offset();
@@ -1790,8 +1792,8 @@ QUnit.module('Horizontal direction. RTL', {
         assert.equal($items.eq(1).text(), '3', 'item 1 text');
         assert.equal($items.eq(2).text(), '4', 'item 2 text');
         assert.equal($items.eq(3).text(), '5', 'item 3 text');
-        assert.equal($items.eq(4).text(), '1', 'item 4 text');
-        assert.equal($items.eq(5).text(), '6', 'item 5 text');
+        assert.equal($items.eq(4).text(), '6', 'item 4 text');
+        assert.equal($items.eq(5).text(), '1', 'item 5 text');
 
         assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].sourceIndex, 0);
         assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].targetIndex, 5);
