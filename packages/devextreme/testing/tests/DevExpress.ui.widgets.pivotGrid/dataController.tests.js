@@ -6714,30 +6714,35 @@ QUnit.module('Remote paging', {
 
         const dataController = that.setup({
             paginate: true,
-            fields: [{ dataField: 'row', area: 'row' }],
-            load: function(loadOptions) {
-                that.loadArgs.push(loadOptions);
-                return $.Deferred().resolve([{ key: 'row 1' }, { key: 'row 2' }], {
-                    groupCount: 10
-                });
-            }
+            store: {
+                load: function(loadOptions) {
+                    that.loadArgs.push(loadOptions);
+                    return $.Deferred().resolve({
+                        rows: [
+                            { value: 'row 1', text: 'row 1', index: 1 },
+                            { value: 'row 2', text: 'row 2', index: 2 }
+                        ],
+                        columns: [],
+                        values: [[null], [null], [null]],
+                        grandTotalRowIndex: 0,
+                        grandTotalColumnIndex: 0
+                    });
+                },
+                getFields: function() {
+                    return $.Deferred().resolve([]);
+                },
+                supportPaging: function() {
+                    return true;
+                }
+            },
+            fields: [{ dataField: 'row', area: 'row' }, { area: 'data' }]
         });
 
         setTimeout(function() {
             assert.strictEqual(that.loadArgs.length, 1, 'one load');
-            assert.deepEqual(that.loadArgs[0], {
-                group: [{
-                    desc: false,
-                    groupInterval: undefined,
-                    isExpanded: false,
-                    selector: 'row'
-                }],
-                groupSummary: [],
-                requireGroupCount: true,
-                skip: 0,
-                take: 2,
-                totalSummary: []
-            }, 'load args');
+            assert.ok(that.loadArgs[0].rows, 'has rows in load options');
+            assert.strictEqual(that.loadArgs[0].rowSkip, 0, 'rowSkip is 0');
+            assert.strictEqual(that.loadArgs[0].rowTake, 2, 'rowTake is 2');
 
             assert.deepEqual(dataController.getRowsInfo(), [
                 [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true }],
