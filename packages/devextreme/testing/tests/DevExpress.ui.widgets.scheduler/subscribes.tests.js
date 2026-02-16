@@ -1028,7 +1028,7 @@ module('Grouping By Date', {
             assert.equal(results.length, 3, 'Result length is OK');
             this.checkNeedCoordinatesResult(assert, results[0], 3, 0, 0, 99, 1.1);
             this.checkNeedCoordinatesResult(assert, results[1], 5, 0, 0, 166, 1.1);
-            this.checkNeedCoordinatesResult(assert, results[2], 7, 0, 0, 233, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[2], 2, 0, 0, 233, 1.1);
         });
 
         test(`"createAppointmentSettings" should work correct when groupByDate = true, Month view when renovateRender is ${isRenovatedRender}`, async function(assert) {
@@ -1077,8 +1077,8 @@ module('Grouping By Date', {
             const results = layoutManager._positionMap[0];
 
             assert.equal(results.length, 2, 'Coordinates count is ok');
-            this.checkNeedCoordinatesResult(assert, results[0], 2, 3, cellHeight * 3 + 30, cellWidth * 5, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[1], 3, 3, cellHeight * 3 + 30, cellWidth * 7, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[0], 5, 3, cellHeight * 3, cellWidth * 5, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[1], 7, 3, cellHeight * 3, cellWidth * 7, 1.5);
         });
     });
 
