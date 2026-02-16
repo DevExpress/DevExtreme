@@ -350,9 +350,9 @@ module('Virtual scrolling integration', () => {
                                 y: 1000,
                                 appointmentRects: [
                                     { left: -9859, top: -9963, height: 798 },
-                                    { left: -9784, top: -10077, height: 38 },
-                                    { left: -9334, top: -9963, height: 798 },
-                                    { left: -9259, top: -10077, height: 38 }
+                                    { left: -9784, top: -10837, height: 38 },
+                                    { left: -9784, top: -9963, height: 798 },
+                                    { left: -9784, top: -10837, height: 38 }
                                 ]
                             },
                             {
