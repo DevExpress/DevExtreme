@@ -197,7 +197,7 @@ QUnit.module('sortable without containers', () => {
         assert.equal($items.eq(3).text(), '4', 'item 3 text');
     });
 
-    QUnit.skip('horizontal dragging between lines', function(assert) {
+    QUnit.test('horizontal dragging between lines', function(assert) {
         createHorizontalMarkUp(HORIZONTAL_WIDTH_SMALL, true);
 
         const $sortable = $('#sortable').dxSortableOld({
@@ -229,7 +229,7 @@ QUnit.module('sortable without containers', () => {
         assert.equal($items.eq(5).text(), '6', 'item 5 text');
     });
 
-    QUnit.skip('horizontal dragging between lines to the end of the first line', function(assert) {
+    QUnit.test('horizontal dragging between lines to the end of the first line', function(assert) {
         createHorizontalMarkUp(HORIZONTAL_WIDTH_SMALL, true);
 
         const $sortable = $('#sortable').dxSortableOld({
@@ -490,7 +490,7 @@ QUnit.module('sortable without containers', () => {
         assert.ok(!changedArgs, 'changed called');
     });
 
-    QUnit.skip('dragging not allowed item', function(assert) {
+    QUnit.test('dragging not allowed item', function(assert) {
         let changedArgs;
         const $sortable = $('#sortable').dxSortableOld({
             itemSelector: '.test-item',
@@ -1768,7 +1768,7 @@ QUnit.module('Horizontal direction. RTL', {
         assert.strictEqual(this.sortable.option('onChanged').lastCall.args[0].targetIndex, 2);
     });
 
-    QUnit.skip('horizontal dragging between lines', function(assert) {
+    QUnit.test('horizontal dragging between lines', function(assert) {
         createHorizontalMarkUp(HORIZONTAL_WIDTH_SMALL, true);
 
         const $sortable = this.createSortable({});
