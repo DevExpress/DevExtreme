@@ -18778,6 +18778,10 @@ declare module DevExpress.ui {
      */
     getEditor(dataField: string): Editor | undefined;
     /**
+     * [descr:dxForm.getScrollable()]
+     */
+    getScrollable(): DevExpress.common.Scrollable | undefined;
+    /**
      * [descr:dxForm.itemOption(id)]
      */
     itemOption(id: string): any;

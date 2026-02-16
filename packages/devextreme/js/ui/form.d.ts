@@ -22,6 +22,7 @@ import {
     RequiredRule,
     StringLengthRule,
     VerticalAlignment,
+    Scrollable,
 } from '../common';
 
 import {
@@ -390,6 +391,13 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @public
      */
     getEditor(dataField: string): Editor | undefined;
+    /**
+     * @docid
+     * @publicName getScrollable()
+     * @public
+     * @return Scrollable | undefined
+     */
+    getScrollable(): Scrollable | undefined;
     /**
      * @docid
      * @publicName itemOption(id)
