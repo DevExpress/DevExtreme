@@ -554,6 +554,19 @@ module('selection single', () => {
         treeView.checkSelected([], items);
     });
 
+    test('selectByClick option should not select item witch disabled: true', function(assert) {
+        const items = [{ text: 'item 1', disabled: true }, { text: 'item 2' }];
+        const treeView = createInstance({
+            items: items,
+            selectByClick: true,
+            selectionMode: 'single'
+        });
+
+        eventsEngine.trigger(treeView.getItems().eq(0), 'dxclick');
+
+        treeView.checkSelected([], items);
+    });
+
     test('selection can be prevented on itemClick', function(assert) {
         const items = [{ text: 'item 1' }, { text: 'item 2' }];
         const treeView = createInstance({
