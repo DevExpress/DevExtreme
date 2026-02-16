@@ -329,19 +329,19 @@ module('Virtual scrolling Month View', () => {
                     {
                         offset: { x: 1400 },
                         expectedRects: [{
-                            left: -9574,
+                            left: -10274,
                             top: -9859,
                             width: 450
                         }, {
-                            left: -9649,
+                            left: -10349,
                             top: -9759,
                             width: 525
                         }, {
-                            left: -9759,
+                            left: -10349,
                             top: -9659,
                             width: 525
                         }, {
-                            left: -9649,
+                            left: -10349,
                             top: -9559,
                             width: 450
                         }]

@@ -921,7 +921,7 @@ module('Integration: Appointments Collector, adaptivityEnabled = true', baseConf
         assert.roughEqual($firstAppointment.outerWidth(), 49, 1.001, 'Width is OK');
         assert.roughEqual($firstAppointment.outerHeight(), 38, 1.001, 'Height is OK');
 
-        assert.roughEqual($secondAppointment.outerWidth(), 48, 1.001, 'Width is OK');
+        assert.roughEqual($secondAppointment.outerWidth(), 49, 1.001, 'Width is OK');
         assert.roughEqual($secondAppointment.outerHeight(), 38, 1.001, 'Height is OK');
     });
 

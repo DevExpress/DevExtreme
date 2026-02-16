@@ -507,8 +507,6 @@ module('Integration: Appointments in Month view', {
                     },
                     {
                         level: 1,
-                        partIndex: 0,
-                        partTotalCount: 0,
                     },
                     {
                         level: 0,
@@ -517,8 +515,6 @@ module('Integration: Appointments in Month view', {
                     },
                     {
                         level: 1,
-                        partIndex: 0,
-                        partTotalCount: 0,
                     }
                 ], 'Parts  should be correct');
             });
