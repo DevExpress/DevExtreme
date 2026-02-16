@@ -395,7 +395,6 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @docid
      * @publicName getScrollable()
      * @public
-     * @return Scrollable | undefined
      */
     getScrollable(): Scrollable | undefined;
     /**
