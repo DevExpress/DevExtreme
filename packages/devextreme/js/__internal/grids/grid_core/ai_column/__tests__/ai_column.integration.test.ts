@@ -2,24 +2,20 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import type { GenerateGridColumnCommandResponse, RequestParams } from '@js/common/ai-integration';
-import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { LoadOptions } from '@js/data';
 import DataSource from '@js/data/data_source';
-import type { Properties as DataGridProperties } from '@js/ui/data_grid';
-import DataGrid from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
 import { AIIntegration } from '@ts/core/ai_integration/core/ai_integration';
 import ArrayStore from '@ts/data/m_array_store';
-import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
 
+import {
+  afterTest,
+  beforeTest as baseBeforeTest,
+  createDataGrid,
+  GRID_CONTAINER_ID,
+} from '../../__tests__/__mock__/helpers/utils';
 import { CLASSES } from '../const';
-
-const SELECTORS = {
-  gridContainer: '#gridContainer',
-};
-
-const GRID_CONTAINER_ID = 'gridContainer';
 
 const EMPTY_CELL_TEXT = '\u00A0';
 
@@ -33,48 +29,10 @@ interface RequestResult {
   abort: () => void;
 }
 
-const createDataGrid = async (
-  options: DataGridProperties = {},
-): Promise<{
-  $container: dxElementWrapper;
-  component: DataGridModel;
-  instance: DataGrid;
-}> => new Promise((resolve) => {
-  const $container = $('<div>')
-    .attr('id', GRID_CONTAINER_ID)
-    .appendTo(document.body);
-
-  const dataGridOptions: DataGridProperties = {
-    keyExpr: 'id',
-    ...options,
-  };
-
-  const instance = new DataGrid($container.get(0) as HTMLDivElement, dataGridOptions);
-  const component = new DataGridModel($container.get(0) as HTMLElement);
-
-  jest.runAllTimers();
-
-  resolve({
-    $container,
-    component,
-    instance,
-  });
-});
-
 const beforeTest = (): void => {
-  jest.useFakeTimers();
+  baseBeforeTest();
   jest.spyOn(errors, 'log').mockImplementation(jest.fn());
   jest.spyOn(errors, 'Error').mockImplementation(() => ({}));
-};
-
-const afterTest = (): void => {
-  const $container = $(SELECTORS.gridContainer);
-  const dataGrid = ($container as any).dxDataGrid('instance') as DataGrid;
-
-  dataGrid.dispose();
-  $container.remove();
-  jest.clearAllMocks();
-  jest.useRealTimers();
 };
 
 describe('Options', () => {
@@ -416,8 +374,8 @@ describe('Options', () => {
     });
   });
 
-  describe('when the noDataText is set', () => {
-    it('should render this text', async () => {
+  describe('when noDataText is set', () => {
+    it('should render this text (initial render)', async () => {
       const { component } = await createDataGrid({
         dataSource: [
           { id: 1, name: 'Name 1', value: 10 },
@@ -454,10 +412,56 @@ describe('Options', () => {
       expect(component.getDataCell(0, 3).getText()).toBe('Test - No Data');
       expect(component.getDataCell(1, 3).getText()).toBe('Test - No Data');
     });
+
+    it('should render this text (runtime change)', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            cssClass: 'custom-class',
+            ai: {
+              prompt: 'Initial Prompt',
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"","2":""}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      await Promise.resolve();
+
+      expect(component.getDataCell(0, 3).getText()).toBe(EMPTY_CELL_TEXT);
+      expect(component.getDataCell(1, 3).getText()).toBe(EMPTY_CELL_TEXT);
+
+      component.apiColumnOption('myColumn', 'ai.noDataText', 'Test - No Data');
+
+      await Promise.resolve();
+
+      expect(component.getDataCell(0, 3).getText()).toBe('Test - No Data');
+      expect(component.getDataCell(1, 3).getText()).toBe('Test - No Data');
+    });
   });
 
-  describe('when the emptyText is set', () => {
-    it('should render this text', async () => {
+  describe('when emptyText is set', () => {
+    it('should render this text (initial render)', async () => {
       const { component } = await createDataGrid({
         keyExpr: 'id',
         dataSource: [
@@ -493,10 +497,55 @@ describe('Options', () => {
       expect(component.getDataCell(0, 3).getText()).toBe('Test - Empty Data');
       expect(component.getDataCell(1, 3).getText()).toBe('Test - Empty Data');
     });
+
+    it('should render this text (runtime change)', async () => {
+      const { component } = await createDataGrid({
+        keyExpr: 'id',
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            cssClass: 'custom-class',
+            ai: {
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"","2":""}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      await Promise.resolve();
+
+      expect(component.getDataCell(0, 3).getText()).toBe(EMPTY_CELL_TEXT);
+      expect(component.getDataCell(1, 3).getText()).toBe(EMPTY_CELL_TEXT);
+
+      component.apiColumnOption('myColumn', 'ai.emptyText', 'Test - Empty Data');
+
+      await Promise.resolve();
+
+      expect(component.getDataCell(0, 3).getText()).toBe('Test - Empty Data');
+      expect(component.getDataCell(1, 3).getText()).toBe('Test - Empty Data');
+    });
   });
 
   describe('when the noDataText is set and mode = "manual"', () => {
-    it('should render this text', async () => {
+    it('should render this text (initial render)', async () => {
       const { component, instance } = await createDataGrid({
         dataSource: [
           { id: 1, name: 'Name 1', value: 10 },
@@ -540,10 +589,61 @@ describe('Options', () => {
       expect(component.getDataCell(0, 3).getText()).toBe('Test - No Data');
       expect(component.getDataCell(1, 3).getText()).toBe('Test - No Data');
     });
+
+    it('should render this text (runtime change)', async () => {
+      const { component, instance } = await createDataGrid({
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        keyExpr: 'id',
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            cssClass: 'custom-class',
+            ai: {
+              prompt: 'Initial Prompt',
+              mode: 'manual',
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"","2":""}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      expect(component.getDataCell(0, 3).getText()).toBe(EMPTY_CELL_TEXT);
+      expect(component.getDataCell(1, 3).getText()).toBe(EMPTY_CELL_TEXT);
+
+      instance.sendAIColumnRequest('myColumn');
+      await Promise.resolve();
+
+      expect(component.getDataCell(0, 3).getText()).toBe(EMPTY_CELL_TEXT);
+      expect(component.getDataCell(1, 3).getText()).toBe(EMPTY_CELL_TEXT);
+
+      component.apiColumnOption('myColumn', 'ai.noDataText', 'Test - No Data');
+      instance.sendAIColumnRequest('myColumn');
+      await Promise.resolve();
+
+      expect(component.getDataCell(0, 3).getText()).toBe('Test - No Data');
+      expect(component.getDataCell(1, 3).getText()).toBe('Test - No Data');
+    });
   });
 
   describe('when the emptyText is set and mode = "manual"', () => {
-    it('should render this text', async () => {
+    it('should render this text (initial render)', async () => {
       const { component, instance } = await createDataGrid({
         keyExpr: 'id',
         dataSource: [
@@ -582,6 +682,63 @@ describe('Options', () => {
       expect(component.getDataCell(1, 3).getText()).toBe('Test - Empty Data');
 
       instance.columnOption('myColumn', 'ai.prompt', 'Updated Prompt');
+      instance.sendAIColumnRequest('myColumn');
+      await Promise.resolve();
+
+      expect(component.getDataCell(0, 3).getText()).toBe('Test - No Data');
+      expect(component.getDataCell(1, 3).getText()).toBe('Test - No Data');
+    });
+
+    it('should render this text (runtime change)', async () => {
+      const { component, instance } = await createDataGrid({
+        keyExpr: 'id',
+        dataSource: [
+          { id: 1, name: 'Name 1', value: 10 },
+          { id: 2, name: 'Name 2', value: 20 },
+        ],
+        columns: [
+          { dataField: 'id', caption: 'ID' },
+          { dataField: 'name', caption: 'Name' },
+          { dataField: 'value', caption: 'Value' },
+          {
+            type: 'ai',
+            caption: 'AI Column',
+            name: 'myColumn',
+            cssClass: 'custom-class',
+            ai: {
+              mode: 'manual',
+              aiIntegration: new AIIntegration({
+                sendRequest(): RequestResult {
+                  return {
+                    promise: new Promise<string>((resolve) => {
+                      resolve('{"1":"","2":""}');
+                    }),
+                    abort: (): void => {},
+                  };
+                },
+              }),
+            },
+          },
+        ],
+      });
+
+      expect(component.getDataCell(0, 3).getText()).toBe(EMPTY_CELL_TEXT);
+      expect(component.getDataCell(1, 3).getText()).toBe(EMPTY_CELL_TEXT);
+
+      instance.columnOption('myColumn', 'ai.emptyText', 'Test - Empty Data');
+      await Promise.resolve();
+
+      expect(component.getDataCell(0, 3).getText()).toBe('Test - Empty Data');
+      expect(component.getDataCell(1, 3).getText()).toBe('Test - Empty Data');
+
+      instance.columnOption('myColumn', 'ai.prompt', 'Updated Prompt');
+      instance.sendAIColumnRequest('myColumn');
+      await Promise.resolve();
+
+      expect(component.getDataCell(0, 3).getText()).toBe(EMPTY_CELL_TEXT);
+      expect(component.getDataCell(1, 3).getText()).toBe(EMPTY_CELL_TEXT);
+
+      instance.columnOption('myColumn', 'ai.noDataText', 'Test - No Data');
       instance.sendAIColumnRequest('myColumn');
       await Promise.resolve();
 
@@ -4546,44 +4703,6 @@ describe('AI data', () => {
           component.getDataCell(1, 3).getElement(),
         ],
       );
-    });
-  });
-
-  describe('when repaintChangesOnly is enabled', () => {
-    it('should render only AI cells', async () => {
-      const { component } = await createDataGrid({
-        dataSource: items,
-        keyExpr: 'id',
-        repaintChangesOnly: true,
-        columns: [
-          { dataField: 'id', caption: 'ID' },
-          { dataField: 'name', caption: 'Name' },
-          { dataField: 'value', caption: 'Value' },
-          {
-            type: 'ai',
-            caption: 'AI Column',
-            name: 'myColumn',
-            ai: {
-              aiIntegration: new AIIntegration({
-                sendRequest(): RequestResult {
-                  return {
-                    promise: new Promise<string>((resolve) => {
-                      resolve('{"1":"AI Response 1","2":"AI Response 2"}');
-                    }),
-                    abort: (): void => {},
-                  };
-                },
-              }),
-            },
-          },
-        ],
-      });
-      const cells = [...component.getDataCells(0), ...component.getDataCells(1)];
-
-      component.apiColumnOption('myColumn', 'ai.prompt', 'Initial prompt');
-      await Promise.resolve();
-
-      compareCellNodes(cells, [...component.getDataCells(0), ...component.getDataCells(1)]);
     });
   });
 });

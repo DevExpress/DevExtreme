@@ -1,5 +1,8 @@
 import React, {
-  useCallback, useEffect, useRef, useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
 } from 'react';
 import Chart, {
   ArgumentAxis,
@@ -15,9 +18,10 @@ import Chart, {
   Crosshair,
   Margin,
   HorizontalLine,
-  IAggregationProps,
 } from 'devextreme-react/chart';
-import { VisualRange } from 'devextreme-react/common/charts';
+import type { SeriesPoint } from 'devextreme/common/charts';
+import type { ChartRef, IAggregationProps } from 'devextreme-react/chart';
+import type { VisualRange } from 'devextreme-react/common/charts';
 import { CustomStore } from 'devextreme-react/common/data';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import TooltipTemplate from './TooltipTemplate.tsx';
@@ -26,22 +30,22 @@ const minVisualRangeLength = { minutes: 10 };
 const defaultVisualRange: VisualRange = { length: 'hour' };
 
 function App() {
-  const [dataSource, setDataSource] = useState(null);
-  const chartRef = useRef(null);
+  const [dataSource, setDataSource] = useState<CustomStore | null>(null);
+  const chartRef = useRef<ChartRef>(null);
 
-  const customizePoint = useCallback((arg) => {
+  const customizePoint = useCallback((arg): SeriesPoint => {
     if (arg.seriesName === 'Volume') {
-      const point = chartRef.current.instance().getAllSeries()[0]
+      const point = chartRef.current?.instance().getAllSeries()[0]
         .getPointsByArg(arg.argument)[0].data;
       if (point && point.close >= point.open) {
         return { color: '#1db2f5' };
       }
     }
-    return null;
+    return {};
   }, []);
 
-  const calculateCandle = useCallback<IAggregationProps['calculate']>((e) => {
-    const prices = e.data.map((d) => d.price);
+  const calculateCandle = useCallback<NonNullable<IAggregationProps['calculate']>>((e): Record<string, unknown> => {
+    const prices = e.data?.map((d) => d.price) ?? [];
     if (prices.length) {
       return {
         date: new Date((e.intervalStart.valueOf() + e.intervalEnd.valueOf()) / 2),
@@ -51,7 +55,7 @@ function App() {
         close: prices[prices.length - 1],
       };
     }
-    return null;
+    return {};
   }, []);
 
   useEffect(() => {

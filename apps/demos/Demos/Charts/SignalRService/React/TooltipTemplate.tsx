@@ -7,9 +7,9 @@ const formatNumber = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 }).format;
 
-export default function TooltipTemplate(pointInfo) {
-  const volume = pointInfo.points.filter((point: { seriesName: string; }) => point.seriesName === 'Volume')[0];
-  const prices = pointInfo.points.filter((point: { seriesName: string; }) => point.seriesName !== 'Volume')[0];
+export default function TooltipTemplate(pointInfo: any) {
+  const volume = pointInfo.points.filter((point: { seriesName: string; }): boolean => point.seriesName === 'Volume')[0];
+  const prices = pointInfo.points.filter((point: { seriesName: string; }): boolean => point.seriesName !== 'Volume')[0];
 
   return (
     <div className="tooltip-template">

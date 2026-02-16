@@ -2,16 +2,17 @@ import React from 'react';
 
 import DataGrid, { Column, Paging, Pager } from 'devextreme-react/data-grid';
 import { CustomStore } from 'devextreme-react/common/data';
+import type { LoadOptions, LoadResultObject } from 'devextreme-react/common/data';
 import 'whatwg-fetch';
 
-function isNotEmpty(value: string | undefined | null) {
+function isNotEmpty(value: unknown) {
   return value !== undefined && value !== null && value !== '';
 }
 
 const store = new CustomStore({
   key: 'OrderNumber',
-  async load(loadOptions) {
-    const paramNames = [
+  async load(loadOptions: LoadOptions) {
+    const paramNames: (keyof LoadOptions)[] = [
       'skip', 'take', 'requireTotalCount', 'requireGroupCount',
       'sort', 'filter', 'totalSummary', 'group', 'groupSummary',
     ];
@@ -24,7 +25,7 @@ const store = new CustomStore({
     try {
       const response = await fetch(`https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/orders?${queryString}`);
 
-      const result = await response.json();
+      const result = await response.json() as LoadResultObject;
 
       return {
         data: result.data,

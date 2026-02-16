@@ -1,20 +1,22 @@
 import React, { useCallback, useRef, useState } from 'react';
-import DropDownBox, { type DropDownBoxTypes } from 'devextreme-react/drop-down-box';
-import TreeView, { TreeViewRef } from 'devextreme-react/tree-view';
+import DropDownBox from 'devextreme-react/drop-down-box';
+import type { DropDownBoxTypes } from 'devextreme-react/drop-down-box';
+import TreeView from 'devextreme-react/tree-view';
+import type { TreeViewRef } from 'devextreme-react/tree-view';
 import DataGrid, {
   Selection,
   Paging,
   FilterRow,
   Scrolling,
-  type DataGridTypes,
 } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 import { CustomStore } from 'devextreme-react/common/data';
 import 'whatwg-fetch';
 
 const gridColumns = ['CompanyName', 'City', 'Phone'];
 const ownerLabel = { 'aria-label': 'Owner' };
 
-const makeAsyncDataSource = (jsonFile: string) =>
+const makeAsyncDataSource = (jsonFile: string): CustomStore =>
   new CustomStore({
     loadMode: 'raw',
     key: 'ID',
@@ -27,12 +29,12 @@ const treeDataSource = makeAsyncDataSource('treeProducts.json');
 const gridDataSource = makeAsyncDataSource('customers.json');
 
 function App() {
-  const [treeBoxValue, setTreeBoxValue] = useState(['1_1']);
-  const [gridBoxValue, setGridBoxValue] = useState([3]);
-  const treeViewRef = useRef<TreeViewRef>();
+  const [treeBoxValue, setTreeBoxValue] = useState<string[]>(['1_1']);
+  const [gridBoxValue, setGridBoxValue] = useState<number[]>([3]);
+  const treeViewRef = useRef<TreeViewRef>(null);
 
   const syncTreeViewSelection = useCallback(
-    (e: DropDownBoxTypes.ValueChangedEvent | any) => {
+    (e): void => {
       const treeView = (e.component.selectItem && e.component)
         || (treeViewRef.current?.instance());
 
@@ -41,7 +43,7 @@ function App() {
           treeView.unselectAll();
         } else {
           const values = e.value || treeBoxValue;
-          values?.forEach((value) => {
+          values?.forEach((value: string): void => {
             treeView.selectItem(value);
           });
         }
@@ -54,18 +56,18 @@ function App() {
     [treeBoxValue],
   );
 
-  const syncDataGridSelection = useCallback((e: DropDownBoxTypes.ValueChangedEvent) => {
+  const syncDataGridSelection = useCallback((e: DropDownBoxTypes.ValueChangedEvent): void => {
     setGridBoxValue(e.value || []);
   }, []);
 
   const treeViewItemSelectionChanged = useCallback(
-    (e: { component: { getSelectedNodeKeys: () => any } }) => {
+    (e: { component: { getSelectedNodeKeys: () => any } }): void => {
       setTreeBoxValue(e.component.getSelectedNodeKeys());
     },
     [],
   );
 
-  const dataGridOnSelectionChanged = useCallback((e: DataGridTypes.SelectionChangedEvent) => {
+  const dataGridOnSelectionChanged = useCallback((e: DataGridTypes.SelectionChangedEvent): void => {
     setGridBoxValue((e.selectedRowKeys.length && e.selectedRowKeys) || []);
   }, []);
 

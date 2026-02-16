@@ -4,25 +4,26 @@ import DataGrid, {
   Selection,
   Toolbar,
   Item,
-  DataGridRef,
 } from 'devextreme-react/data-grid';
+import type { DataGridRef } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import Button from 'devextreme-react/button';
-import { Employee, employees, titleLabel } from './data.ts';
+import { employees, titleLabel } from './data.ts';
+import type { Employee } from './data.ts';
 
 const titles = ['All', 'Dr.', 'Mr.', 'Mrs.', 'Ms.'];
 const getEmployeeName = (row: Employee) => `${row.FirstName} ${row.LastName}`;
 const getEmployeeNames = (selectedRowsData: Employee[]) => (selectedRowsData.length ? selectedRowsData.map(getEmployeeName).join(', ') : 'Nobody has been selected');
 
 const App = () => {
-  const [prefix, setPrefix] = useState('');
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [prefix, setPrefix] = useState<string | null>('');
+  const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
   const [selectedEmployeeNames, setSelectedEmployeeNames] = useState('Nobody has been selected');
 
   const dataGridRef = useRef<DataGridRef>(null);
 
   const onClearButtonClicked = useCallback(() => {
-    dataGridRef.current.instance().clearSelection();
+    dataGridRef.current?.instance().clearSelection();
   }, []);
 
   const onSelectionChanged = useCallback(

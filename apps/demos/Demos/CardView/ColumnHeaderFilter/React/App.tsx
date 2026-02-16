@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { type ComponentProps } from 'react';
+
 import CardView, { Column, HeaderFilter, ColumnHeaderFilter, ColumnHeaderFilterSearch } from 'devextreme-react/card-view';
-import { orders, Order } from './data.ts';
+import type { CardViewTypes } from 'devextreme-react/card-view';
+import type { DataSourceOptions } from 'devextreme-react/common/data';
+
+import { orders } from './data.ts';
+import type { Order, OrderFilter } from './data.ts';
 
 function getOrderDay(rowData: Order) {
   return new Date(rowData.OrderDate).getDay();
 }
 
-function calculateOrderDateFilterExpression(value, selectedFilterOperations, target) {
+function calculateOrderDateFilterExpression(
+  this: CardViewTypes.Column,
+  value: string,
+  selectedFilterOperations: string | null,
+  target: string
+) {
   if (value === 'weekends') {
     return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
   }
   return this.defaultCalculateFilterExpression(value, selectedFilterOperations, target);
 }
 
-const saleAmountHeaderFilterDataSource = [
+const saleAmountHeaderFilterDataSource: OrderFilter[] = [
   {
     text: 'Less than $3000',
     value: ['SaleAmount', '<', 3000],
@@ -45,14 +55,27 @@ const saleAmountHeaderFilterDataSource = [
   },
 ];
 
-function orderDateHeaderFilterDataSource(data) {
-  data.dataSource.postProcess = function (results) {
-    results.push({
-      text: 'Weekends',
-      value: 'weekends',
-    });
-    return results;
-  };
+interface HeaderFilterDataResult {
+  text: string;
+  value: string;
+}
+
+interface HeaderFilterDataSourceOptions {
+  component: Record<string, any>;
+  dataSource: DataSourceOptions<HeaderFilterDataResult> | null;
+}
+
+function orderDateHeaderFilterDataSource(options: HeaderFilterDataSourceOptions): void {
+  if (options.dataSource) {
+    options.dataSource.postProcess = (results: HeaderFilterDataResult[]) => {
+      results.push({
+        text: 'Weekends',
+        value: 'weekends',
+      });
+
+      return results;
+    };
+  }
 }
 
 const App = () => (
@@ -76,7 +99,7 @@ const App = () => (
     <Column
       dataField="OrderDate"
       dataType="date"
-      calculateFilterExpression={calculateOrderDateFilterExpression}
+      calculateFilterExpression={calculateOrderDateFilterExpression as ComponentProps<typeof Column>['calculateFilterExpression']}
     >
       <ColumnHeaderFilter
         dataSource={orderDateHeaderFilterDataSource}

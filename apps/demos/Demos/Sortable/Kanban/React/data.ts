@@ -3,6 +3,8 @@ export interface Employee {
   Name: string,
 }
 
+export type TaskStatus = 'Not Started' | 'Need Assistance' | 'In Progress' | 'Deferred' | 'Completed';
+
 export interface Task {
   Task_ID: number,
   Task_Assigned_Employee_ID: number,
@@ -10,11 +12,14 @@ export interface Task {
   Task_Subject: string,
   Task_Start_Date: string | Date,
   Task_Due_Date: string | Date,
-  Task_Status: string,
+  Task_Status: TaskStatus,
   Task_Priority: number,
   Task_Completion: number,
   Task_Parent_ID: number,
 }
+
+export const taskStatuses: TaskStatus[] = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
+
 export const tasks: Task[] = [{
   Task_ID: 1,
   Task_Assigned_Employee_ID: 1,

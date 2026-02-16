@@ -8,13 +8,13 @@
 >
   <div *dxTemplate="let itemData of 'item'">
     <div class="item-template-container">
-      <span
-        *ngIf="itemData.icon"
-        [ngClass]="itemData.icon"
-        class="dx-icon"
-      ></span>
+      @if (itemData.icon) {
+      <span [class]="itemData.icon" class="dx-icon"></span>
+      }
       <span class="dx-menu-item-text">{{ itemData.text }}</span>
-      <span *ngIf="itemData.items" class="dx-icon-spinright dx-icon"></span>
+      @if (itemData.items) {
+      <span class="dx-icon-spinright dx-icon"></span>
+      }
     </div>
   </div>
 </dx-context-menu>

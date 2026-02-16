@@ -9,14 +9,13 @@ import HTMLReactParser from 'html-react-parser';
 import { REGENERATION_TEXT } from './data.js';
 
 function convertToHtml(value) {
-  const result = unified()
+  return unified()
     .use(remarkParse)
     .use(remarkRehype)
     .use(rehypeMinifyWhitespace)
     .use(rehypeStringify)
     .processSync(value)
     .toString();
-  return result;
 }
 const Message = ({ text, onRegenerateButtonClick }) => {
   const [icon, setIcon] = useState('copy');
@@ -31,7 +30,7 @@ const Message = ({ text, onRegenerateButtonClick }) => {
     return <span>{REGENERATION_TEXT}</span>;
   }
   return (
-    <React.Fragment>
+    <>
       <div className="chat-messagebubble-text">{HTMLReactParser(convertToHtml(text))}</div>
       <div className="bubble-button-container">
         <Button
@@ -47,7 +46,7 @@ const Message = ({ text, onRegenerateButtonClick }) => {
           onClick={onRegenerateButtonClick}
         />
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default Message;

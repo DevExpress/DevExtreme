@@ -1,5 +1,11 @@
 import React from 'react';
-import Scheduler, { Resource, View } from 'devextreme-react/scheduler';
+import Scheduler, {
+  Resource,
+  View,
+  Editing,
+  Form as SchedulerForm,
+  Item,
+} from 'devextreme-react/scheduler';
 import { data, priorityData, typeData } from './data.js';
 
 const currentDate = new Date(2021, 3, 27);
@@ -7,10 +13,10 @@ const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const typeGroups = ['typeId'];
 const priorityGroups = ['priorityId'];
 const DateCell = ({ data: cellData }) => (
-  <React.Fragment>
+  <>
     <div className="name">{dayOfWeekNames[cellData.date.getDay()]}</div>
     <div className="number">{cellData.date.getDate()}</div>
-  </React.Fragment>
+  </>
 );
 const App = () => (
   <Scheduler
@@ -50,6 +56,29 @@ const App = () => (
       label="Type"
       allowMultiple={false}
     />
+
+    <Editing>
+      <SchedulerForm>
+        <Item name="mainGroup">
+          <Item name="subjectGroup" />
+          <Item name="dateGroup" />
+          <Item name="repeatGroup" />
+          <Item name="resourcesGroup">
+            <Item
+              name="priorityIdGroup"
+              colCount={3}
+              colCountByScreen={{ xs: 3 }}
+            >
+              <Item name="priorityIdIcon" />
+              <Item name="priorityId" />
+              <Item name="typeId" />
+            </Item>
+          </Item>
+          <Item name="descriptionGroup" />
+        </Item>
+        <Item name="recurrenceGroup" />
+      </SchedulerForm>
+    </Editing>
   </Scheduler>
 );
 export default App;

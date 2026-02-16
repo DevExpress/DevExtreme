@@ -24,7 +24,7 @@ function App() {
     [setVisualRange],
   );
   return (
-    <React.Fragment>
+    <>
       <Chart
         id="zoomedChart"
         palette="Harmony Light"
@@ -76,7 +76,7 @@ function App() {
           />
         </ChartOptions>
       </RangeSelector>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

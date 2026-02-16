@@ -1,7 +1,9 @@
 /* global process */
 process.env.CHROME_BIN = require('puppeteer').executablePath();
 
-const webpackConfig = require('./webpack.test');
+const path = require('path');
+
+const webpackConfig = require(path.resolve(__dirname, './webpack.test'));
 
 module.exports = function (config) {
   config.set({
@@ -18,7 +20,20 @@ module.exports = function (config) {
 
     autoWatch: true,
 
-    browsers: ['ChromeHeadless'],
+    browsers: ['ChromeHeadlessWithGC'],
+
+    customLaunchers: {
+      ChromeHeadlessWithGC: {
+        base: 'ChromeHeadless',
+        flags: [
+          '--enable-features=MeasureMemory',
+          '--js-flags=--expose-gc',
+          '--no-sandbox',
+          '--disable-gpu',
+          '--enable-precise-memory-info',
+        ],
+      },
+    },
 
     reporters: [
       'progress',
@@ -34,13 +49,22 @@ module.exports = function (config) {
     junitReporter: {
       outputFile: 'test-results.xml',
     },
-
+    beforeMiddleware: ['customHeaders'],
     // Karma plugins loaded
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-junit-reporter'),
       require('karma-webpack'),
+      {
+        'middleware:customHeaders': ['factory', function () {
+          return function (req, res, next) {
+            res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+            res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+            next();
+          };
+        }],
+      },
     ],
 
     webpack: webpackConfig,

@@ -10,13 +10,12 @@ import {
   Tooltip,
   Border,
 } from 'devextreme-react/chart';
-import service from './data.js';
+import { maleAgeData } from './data.js';
 
-const dataSource = service.getMaleAgeData();
 function customizeItems(items) {
   const sortedItems = [];
   items.forEach((item) => {
-    const startIndex = item.series.stack === 'male' ? 0 : 3;
+    const startIndex = item.series?.stack === 'male' ? 0 : 3;
     sortedItems.splice(startIndex, 0, item);
   });
   return sortedItems;
@@ -26,7 +25,7 @@ function App() {
     <Chart
       id="chart"
       title="Population: Age Structure"
-      dataSource={dataSource}
+      dataSource={maleAgeData}
     >
       <CommonSeriesSettings
         argumentField="state"

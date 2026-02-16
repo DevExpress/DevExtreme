@@ -1,16 +1,19 @@
 import React from 'react';
-import { TagBox, type TagBoxTypes } from 'devextreme-react/tag-box';
+import { TagBox } from 'devextreme-react/tag-box';
+import type { TagBoxTypes } from 'devextreme-react/tag-box';
 import { products, productLabel } from './data.ts';
+import type { Product } from './types.ts';
 
 const defaultValues = {
   severalItems: [1, 2, 3, 4],
   allItems: [1, 2, 3, 4, 5],
   ordinaryTags: [1, 2, 3, 4, 5, 6, 7],
-};
-const items = products.slice(0, 5);
+} satisfies Record<string, number[]>;
 
-const onMultiTagPreparing = (args: TagBoxTypes.MultiTagPreparingEvent) => {
-  const selectedItemsLength = args.selectedItems.length;
+const items: Product[] = products.slice(0, 5);
+
+const onMultiTagPreparing = (args: TagBoxTypes.MultiTagPreparingEvent): void => {
+  const selectedItemsLength = args.selectedItems?.length ?? 0;
   const totalCount = 5;
 
   if (selectedItemsLength < totalCount) {

@@ -95,7 +95,7 @@ $(() => {
     return day === 0 || day === 6;
   }
   function isHoliday(d) {
-    return holidays.some((item) => d.date.getDate() === item[0] && d.date.getMonth() === item[1]);
+    return holidays.some((item) => d.getDate() === item[0] && d.getMonth() === item[1]);
   }
 
   function getCellTemplate(data) {

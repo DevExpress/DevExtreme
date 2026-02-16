@@ -8,11 +8,12 @@ import PieChart, {
   Connector,
   Export,
 } from 'devextreme-react/pie-chart';
+import type { PieChartTypes } from 'devextreme-react/pie-chart';
 import { populationByRegions } from './data.ts';
 
-function customizeTooltip(arg: { valueText: string; percent: number; }) {
+function customizeTooltip(arg: PieChartTypes.PointInfo): Record<string, string> {
   return {
-    text: `${arg.valueText} - ${(arg.percent * 100).toFixed(2)}%`,
+    text: `${arg.valueText} - ${((arg.percent ?? 0) * 100).toFixed(2)}%`,
   };
 }
 

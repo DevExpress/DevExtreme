@@ -1,5 +1,6 @@
 import React, { useCallback, useRef } from 'react';
-import Scheduler, { Resource, type SchedulerTypes, SchedulerRef } from 'devextreme-react/scheduler';
+import Scheduler, { Resource } from 'devextreme-react/scheduler';
+import type { SchedulerTypes, SchedulerRef } from 'devextreme-react/scheduler';
 import SpeedDialAction from 'devextreme-react/speed-dial-action';
 import { data, priorities } from './data.ts';
 
@@ -16,7 +17,7 @@ const App = () => {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Scheduler
         ref={schedulerRef}
         timeZone="America/Los_Angeles"
@@ -40,7 +41,7 @@ const App = () => {
         icon="plus"
         onClick={showAppointmentPopup}
       />
-    </React.Fragment>
+    </>
   );
 };
 

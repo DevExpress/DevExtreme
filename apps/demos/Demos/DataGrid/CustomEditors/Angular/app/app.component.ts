@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
   DxDataGridModule, DxListModule, DxDropDownBoxModule, DxTagBoxModule,
 } from 'devextreme-angular';
@@ -22,6 +21,12 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxDataGridModule,
+    DxListModule,
+    DxDropDownBoxModule,
+    DxTagBoxModule,
+  ],
 })
 
 export class AppComponent {
@@ -74,16 +79,14 @@ export class AppComponent {
     if (target === 'search' && typeof (filterValue) === 'string') {
       return [(this as any).dataField, 'contains', filterValue];
     }
-    return function (rowData) {
-      return (rowData.AssignedEmployee || []).indexOf(filterValue) !== -1;
-    };
+    return (rowData) => (rowData.AssignedEmployee || []).indexOf(filterValue) !== -1;
   }
 
   cellTemplate(container, options) {
     const noBreakSpace = '\u00A0';
 
     const assignees = (options.value || []).map(
-      (assigneeId: number) => options.column!.lookup!.calculateCellValue!(assigneeId),
+      (assigneeId: number) => options.column?.lookup?.calculateCellValue?.(assigneeId),
     );
     const text = assignees.join(', ');
 
@@ -92,17 +95,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDataGridModule,
-    DxListModule,
-    DxDropDownBoxModule,
-    DxTagBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

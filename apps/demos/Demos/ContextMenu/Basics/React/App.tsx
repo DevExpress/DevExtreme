@@ -6,9 +6,9 @@ import notify from 'devextreme/ui/notify';
 import { contextMenuItems as items } from './data.ts';
 import type { ContextMenuItem } from './types';
 
-function itemClick(e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) {
-  if (!e.itemData.items) {
-    notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
+function itemClick(e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>): void {
+  if (!e.itemData?.items) {
+    notify(`The "${e.itemData?.text}" item was clicked`, 'success', 1500);
   }
 }
 
@@ -23,7 +23,7 @@ function App() {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="label">
         Right click the image to show available actions:
       </div>
@@ -34,7 +34,7 @@ function App() {
         target="#image"
         onItemClick={itemClick}
       />
-    </React.Fragment>
+    </>
   );
 }
 

@@ -5,17 +5,20 @@ import VectorMap, {
   Tooltip,
   Border,
   Font,
-  ILayerProps, ITooltipProps,
 } from 'devextreme-react/vector-map';
+import type { ILayerProps, ITooltipProps, VectorMapTypes } from 'devextreme-react/vector-map';
 
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { countries } from './data.ts';
+
+type CountriesKey = keyof typeof countries;
 
 const bounds = [-180, 85, 180, -60];
 
 const customizeLayer: ILayerProps['customize'] = (elements) => {
   elements.forEach((element) => {
-    const country = countries[element.attribute('name')];
+    const name = element.attribute('name') as CountriesKey;
+    const country = countries[name];
     if (country) {
       element.applySettings({
         color: country.color,
@@ -26,14 +29,15 @@ const customizeLayer: ILayerProps['customize'] = (elements) => {
   });
 };
 
-const clickHandler = ({ target }) => {
-  if (target && countries[target.attribute('name')]) {
+const clickHandler = ({ target }: VectorMapTypes.ClickEvent) => {
+  const name = target?.attribute('name') as CountriesKey;
+  if (target && countries[name]) {
     target.selected(!target.selected());
   }
 };
 
 const customizeTooltip: ITooltipProps['customizeTooltip'] = ({ attribute }) => {
-  const name = attribute('name');
+  const name = attribute('name') as CountriesKey;
   const country = countries[name];
   if (country) {
     return {
@@ -41,7 +45,7 @@ const customizeTooltip: ITooltipProps['customizeTooltip'] = ({ attribute }) => {
       color: country.color,
     };
   }
-  return null;
+  return {};
 };
 
 export default function App() {

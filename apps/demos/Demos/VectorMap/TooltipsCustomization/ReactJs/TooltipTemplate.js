@@ -6,11 +6,12 @@ const { format } = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 });
 function getPieData(name) {
-  return countriesGDP[name]
+  const data = countriesGDP[name];
+  return data
     ? [
-      { name: 'industry', value: countriesGDP[name].industry },
-      { name: 'services', value: countriesGDP[name].services },
-      { name: 'agriculture', value: countriesGDP[name].agriculture },
+      { name: 'industry', value: data.industry ?? 0 },
+      { name: 'services', value: data.services ?? 0 },
+      { name: 'agriculture', value: data.agriculture ?? 0 },
     ]
     : null;
 }

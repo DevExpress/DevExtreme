@@ -1,5 +1,6 @@
-import { VehicleImageLicenseProps } from './types';
 import React from 'react';
+
+import type { VehicleImageLicenseProps } from './types.ts';
 
 const LicenseInfo = ({
   vehicle: {
@@ -10,6 +11,7 @@ const LicenseInfo = ({
   },
 }: VehicleImageLicenseProps) => {
   const vehicleLink = `https://${Source}`;
+
   return (
     <div>
       <p><b>Image licensed under: </b> <span>{LicenseName}</span></p>

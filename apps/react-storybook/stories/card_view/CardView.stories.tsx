@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 
 import dxCardView from "devextreme/ui/card_view";
 import { wrapDxWithReact } from "../utils";
 import { store } from "./data";
 import { generatedData } from "./generatedData";
 import { renderFooter } from "./templates";
-import { fn } from '@storybook/test';
+import { fn } from 'storybook/test';
 
 const CardView = wrapDxWithReact(dxCardView);
 

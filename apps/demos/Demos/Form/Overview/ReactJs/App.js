@@ -3,7 +3,7 @@ import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import NumberBox from 'devextreme-react/number-box';
 import Form from 'devextreme-react/form';
-import service from './data.js';
+import { companies } from './data.js';
 
 const labelModes = ['outside', 'static', 'floating', 'hidden'];
 const labelLocations = ['left', 'top'];
@@ -16,7 +16,6 @@ const labelLocationLabel = { 'aria-label': 'Label Location' };
 const columnCountLabel = { 'aria-label': 'Column Count' };
 const minCountWidthLabel = { 'aria-label': 'Min Count Width' };
 const App = () => {
-  const companies = service.getCompanies();
   const [labelMode, setLabelMode] = useState('floating');
   const [labelLocation, setLabelLocation] = useState('left');
   const [readOnly, setReadOnly] = useState(false);
@@ -25,54 +24,30 @@ const App = () => {
   const [colCount, setColCount] = useState(2);
   const [company, setCompany] = useState(companies[0]);
   const [width, setWidth] = useState();
-  const onCompanyChanged = useCallback(
-    (e) => {
-      setCompany(e.value);
-    },
-    [setCompany],
-  );
-  const onLabelModeChanged = useCallback(
-    (e) => {
-      setLabelMode(e.value);
-    },
-    [setLabelMode],
-  );
-  const onLabelLocationChanged = useCallback(
-    (e) => {
-      setLabelLocation(e.value);
-    },
-    [setLabelLocation],
-  );
-  const onReadOnlyChanged = useCallback(
-    (e) => {
-      setReadOnly(e.value);
-    },
-    [setReadOnly],
-  );
-  const onShowColonChanged = useCallback(
-    (e) => {
-      setShowColon(e.value);
-    },
-    [setShowColon],
-  );
-  const onMinColWidthChanged = useCallback(
-    (e) => {
-      setMinColWidth(e.value);
-    },
-    [setMinColWidth],
-  );
-  const onColumnsCountChanged = useCallback(
-    (e) => {
-      setColCount(e.value);
-    },
-    [setColCount],
-  );
-  const onFormWidthChanged = useCallback(
-    (e) => {
-      setWidth(e.value);
-    },
-    [setWidth],
-  );
+  const onCompanyChanged = useCallback(({ value }) => {
+    setCompany(value);
+  }, []);
+  const onLabelModeChanged = useCallback(({ value }) => {
+    setLabelMode(value);
+  }, []);
+  const onLabelLocationChanged = useCallback(({ value }) => {
+    setLabelLocation(value);
+  }, []);
+  const onReadOnlyChanged = useCallback(({ value }) => {
+    setReadOnly(value);
+  }, []);
+  const onShowColonChanged = useCallback(({ value }) => {
+    setShowColon(value);
+  }, []);
+  const onMinColWidthChanged = useCallback(({ value }) => {
+    setMinColWidth(value);
+  }, []);
+  const onColumnsCountChanged = useCallback(({ value }) => {
+    setColCount(value);
+  }, []);
+  const onFormWidthChanged = useCallback(({ value }) => {
+    setWidth(value);
+  }, []);
   const companySelectorLabelMode = labelMode === 'outside' ? 'hidden' : labelMode;
   return (
     <div id="form-demo">

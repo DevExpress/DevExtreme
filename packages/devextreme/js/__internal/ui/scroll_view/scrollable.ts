@@ -58,9 +58,9 @@ export interface ScrollableProperties extends DOMComponentProperties<any>, Omit<
   useKeyboard?: boolean;
   updateManually?: boolean;
   inertiaEnabled?: boolean;
-  onStart?: (() => void) | null;
-  onEnd?: (() => void) | null;
-  onBounce?: (() => void) | null;
+  onStart?: ((e) => void) | null;
+  onEnd?: ((e) => void) | null;
+  onBounce?: ((e) => void) | null;
 }
 
 class Scrollable<

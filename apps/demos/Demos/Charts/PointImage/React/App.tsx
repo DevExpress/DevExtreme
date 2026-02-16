@@ -11,13 +11,13 @@ import {
   Export,
   Legend,
   Point,
-  IExportProps,
 } from 'devextreme-react/chart';
+import type { IExportProps } from 'devextreme-react/chart';
 import { iceHockeyStatistics } from './data.ts';
 
 const exportFormats: IExportProps['formats'] = ['PNG', 'PDF', 'JPEG', 'GIF', 'SVG'];
 
-function customizePoint(e: { value: number; }) {
+function customizePoint(e: { value: number; }): Record<string, unknown> {
   if (e.value === 1) {
     return { image: { url: '../../../../images/Charts/PointImage/icon-medal-gold.png', width: 20, height: 20 }, visible: true };
   }
@@ -27,10 +27,10 @@ function customizePoint(e: { value: number; }) {
   if (e.value === 3) {
     return { image: { url: '../../../../images/Charts/PointImage/icon-medal-bronse.png', width: 20, height: 20 }, visible: true };
   }
-  return null;
+  return {};
 }
 
-function customizeText(e: { valueText: string; }) {
+function customizeText(e: { valueText: string; }): string {
   if (e.valueText === '1') {
     return `${e.valueText}st place`;
   } if (e.valueText === '2') {

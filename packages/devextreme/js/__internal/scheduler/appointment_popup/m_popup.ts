@@ -192,8 +192,8 @@ export class AppointmentPopup {
 
     const formData = this._createFormData(appointmentAdapter);
 
-    this.form.formData = formData;
     this.form.readOnly = this._isReadOnly(appointmentAdapter);
+    this.form.formData = formData;
 
     this.form.showMainGroup();
   }
@@ -401,61 +401,6 @@ export class AppointmentPopup {
     return false;
   }
 
-  updateToolbarForRecurrenceGroup(): void {
-    if (this.tryApplyCustomToolbarItems()) {
-      return;
-    }
-
-    const toolbarItems: ToolbarItem[] = [
-      {
-        toolbar: 'top',
-        location: 'before',
-        widget: 'dxButton',
-        options: {
-          icon: 'arrowleft',
-          stylingMode: 'text',
-          onClick: (): void => {
-            this.form.saveRecurrenceValue();
-            this.form.showMainGroup();
-          },
-        },
-      },
-      {
-        toolbar: 'top',
-        location: 'before',
-        text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
-        cssClass: 'dx-toolbar-label',
-      },
-      {
-        toolbar: 'top',
-        location: 'after',
-        widget: 'dxButton',
-        options: {
-          text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
-          stylingMode: 'contained',
-          type: 'default',
-          onClick: (e): void => {
-            this._saveButtonClickHandler(e);
-          },
-        },
-      },
-      {
-        toolbar: 'top',
-        location: 'after',
-        widget: 'dxButton',
-        options: {
-          text: messageLocalization.format('Cancel'),
-          stylingMode: 'outlined',
-          onClick: (): void => {
-            this.hide();
-          },
-        },
-      },
-    ];
-
-    this.popup.option('toolbarItems', toolbarItems);
-  }
-
   updateToolbarForMainGroup(): void {
     if (this.tryApplyCustomToolbarItems()) {
       return;
@@ -486,6 +431,63 @@ export class AppointmentPopup {
           shortcut: 'done',
         } as ToolbarItem,
       );
+    }
+
+    toolbarItems.push({
+      toolbar: 'top',
+      location: 'after',
+      shortcut: 'cancel',
+      options: {
+        stylingMode: 'outlined',
+      },
+    } as ToolbarItem);
+
+    this.popup.option('toolbarItems', toolbarItems);
+  }
+
+  updateToolbarForRecurrenceGroup(): void {
+    if (this.tryApplyCustomToolbarItems()) {
+      return;
+    }
+
+    const toolbarItems: ToolbarItem[] = [
+      {
+        toolbar: 'top',
+        location: 'before',
+        widget: 'dxButton',
+        options: {
+          icon: 'arrowleft',
+          stylingMode: 'text',
+          elementAttr: {
+            'aria-label': messageLocalization.format('Back'),
+          },
+          onClick: (): void => {
+            this.form.saveRecurrenceValue();
+            this.form.showMainGroup();
+          },
+        },
+      },
+      {
+        toolbar: 'top',
+        location: 'before',
+        text: messageLocalization.format('dxScheduler-editorLabelRecurrence'),
+        cssClass: 'dx-toolbar-label',
+      },
+    ];
+
+    const canSave = !this.form.readOnly;
+    if (canSave) {
+      toolbarItems.push({
+        toolbar: 'top',
+        location: 'after',
+        options: {
+          onClick: (e) => this._saveButtonClickHandler(e),
+          stylingMode: 'contained',
+          type: 'default',
+          text: messageLocalization.format('dxScheduler-editPopupSaveButtonText'),
+        },
+        shortcut: 'done',
+      } as ToolbarItem);
     }
 
     toolbarItems.push({

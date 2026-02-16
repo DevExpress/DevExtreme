@@ -206,7 +206,7 @@
     }
 
     .dx-#{$widget-name}-total-footer {
-      .dx-#{$widget-name}-sticky-column, .dx-#{$widget-name}-sticky-column-left, .dx-#{$widget-name}-sticky-column-right {
+      td:not(.dx-#{$widget-name}-sticky-column):not(.dx-#{$widget-name}-sticky-column-left):not(.dx-#{$widget-name}-sticky-column-right) {
         background-color: transparent;
       }
     }
@@ -1142,6 +1142,12 @@
 
         .dx-filter-range-content {
           padding: $grid-cell-padding $grid-texteditor-input-padding $grid-cell-padding $grid-cell-padding;
+        }
+
+        .dx-#{$widget-name}-sticky-column-right {
+          &.dx-command-expand {
+            z-index: 4;
+          }
         }
       }
     }

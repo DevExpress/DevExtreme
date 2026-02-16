@@ -1,4 +1,4 @@
-import { ChatTypes } from 'devextreme-react/chat';
+import type { ChatTypes } from 'devextreme-react/chat';
 
 export const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,

@@ -1,11 +1,17 @@
 import React from 'react';
+
 import DataGrid, {
-  Column, Export, Summary, GroupPanel, Grouping, SortByGroupSummaryInfo, TotalItem, type DataGridTypes,
+  Column, Export, Summary, GroupPanel, Grouping, SortByGroupSummaryInfo, TotalItem,
 } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 import { Workbook } from 'devextreme-exceljs-fork';
 import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme-react/common/export/excel';
+import type { DataGridExportOptions } from 'devextreme-react/common/export/excel';
+
 import { companies } from './data.ts';
+
+type CustomizeCellOptions = Parameters<Required<DataGridExportOptions>['customizeCell']>[number];
 
 const onExporting = (e: DataGridTypes.ExportingEvent) => {
   const workbook = new Workbook();
@@ -20,22 +26,22 @@ const onExporting = (e: DataGridTypes.ExportingEvent) => {
     worksheet,
     keepColumnWidths: false,
     topLeftCell: { row: 2, column: 2 },
-    customizeCell: ({ gridCell, excelCell }) => {
-      if (gridCell.rowType === 'data') {
-        if (gridCell.column.dataField === 'Phone') {
+    customizeCell: ({ gridCell, excelCell }: CustomizeCellOptions) => {
+      if (excelCell && gridCell?.rowType === 'data') {
+        if (gridCell.column?.dataField === 'Phone') {
           excelCell.value = parseInt(gridCell.value, 10);
           excelCell.numFmt = '[<=9999999]###-####;(###) ###-####';
         }
-        if (gridCell.column.dataField === 'Website') {
+        if (gridCell.column?.dataField === 'Website') {
           excelCell.value = { text: gridCell.value, hyperlink: gridCell.value };
           excelCell.font = { color: { argb: 'FF0000FF' }, underline: true };
           excelCell.alignment = { horizontal: 'left' };
         }
       }
-      if (gridCell.rowType === 'group') {
+      if (excelCell && gridCell?.rowType === 'group') {
         excelCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'BEDFE6' } };
       }
-      if (gridCell.rowType === 'totalFooter' && excelCell.value) {
+      if (excelCell && gridCell?.rowType === 'totalFooter' && excelCell.value) {
         excelCell.font.italic = true;
       }
     },
@@ -48,10 +54,11 @@ const onExporting = (e: DataGridTypes.ExportingEvent) => {
 
 const renderGridCell = (data: DataGridTypes.ColumnCellTemplateData) => <a href={ data.text } target='_blank' rel='noopener noreferrer'>Website</a>;
 
-const phoneNumberFormat = (value) => {
-  const USNumber = value.match(/(\d{3})(\d{3})(\d{4})/);
+const phoneNumberFormat = (value: number) => {
+  const valueStr = String(value);
+  const USNumber = valueStr.match(/(\d{3})(\d{3})(\d{4})/);
 
-  return `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}`;
+  return USNumber ? `(${USNumber[1]}) ${USNumber[2]}-${USNumber[3]}` : '';
 };
 
 const App = () => (

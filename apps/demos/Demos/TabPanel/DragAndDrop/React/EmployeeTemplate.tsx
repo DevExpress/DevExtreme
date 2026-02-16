@@ -1,22 +1,29 @@
 import React from 'react';
 import { List } from 'devextreme-react/list';
-import service from './data.ts';
+import { tasks } from './data.ts';
+import type { Employee, Task } from './types.ts';
 
-function itemRender(data) {
+function itemRender(data: Task) {
   return <div>{data.Subject}</div>;
 }
 
-function EmployeeTemplate(props: { data: { ID?: any; FirstName?: any; LastName?: any; Picture?: any; Position?: any; Notes?: any; }; }) {
-  const tasks = service
-    .getTasks()
-    .filter((task: { EmployeeID: any; }) => task.EmployeeID === props.data.ID);
+interface EmployeeTemplateProps {
+  data: Employee;
+}
+
+function EmployeeTemplate({ data }: EmployeeTemplateProps) {
+  const employeeTasks = tasks.filter((task: { EmployeeID: any; }) => task.EmployeeID === data.ID);
   const {
-    FirstName, LastName, Picture, Position, Notes,
-  } = props.data;
-  const completedTasks = tasks.filter((task: { Status: string; }) => task.Status === 'Completed');
+    FirstName,
+    LastName,
+    Picture,
+    Position,
+    Notes,
+  } = data;
+  const completedTasks = employeeTasks.filter((task: { Status: string; }) => task.Status === 'Completed');
 
   return (
-    <React.Fragment>
+    <>
       <div className="employeeInfo">
         <img alt={`${FirstName} ${LastName}`} className="employeePhoto" src={Picture} />
         <p className="employeeNotes">
@@ -28,7 +35,7 @@ function EmployeeTemplate(props: { data: { ID?: any; FirstName?: any; LastName?:
       <div className="caption">{`${FirstName} ${LastName}'s Tasks:`}</div>
       <div className="task-list">
         <List
-          dataSource={tasks}
+          dataSource={employeeTasks}
           showSelectionControls={true}
           selectedItems={completedTasks}
           disabled={true}
@@ -36,7 +43,7 @@ function EmployeeTemplate(props: { data: { ID?: any; FirstName?: any; LastName?:
           itemRender={itemRender}
         ></List>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

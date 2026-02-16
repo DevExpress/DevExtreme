@@ -6,27 +6,26 @@ import { ArrayStore } from 'devextreme-react/common/data';
 
 import Item from './Item.tsx';
 import Tag from './Tag.tsx';
-import {
-  simpleProducts, products, productLabel, Product,
-} from './data.ts';
+import { simpleProducts, products, productLabel } from './data.ts';
+import type { Product } from './types.ts';
 
-const disabledValue = [simpleProducts[0]];
-const value = [1, 2];
+const disabledValue: string[] = [simpleProducts[0]];
+const value: number[] = [1, 2];
 const dataSource = new ArrayStore({
   data: products,
   key: 'Id',
 });
 
 function App() {
-  const [editableProducts, setEditableProducts] = useState([...simpleProducts]);
-  const [target, setTarget] = useState(null);
-  const [product, setProduct] = useState<Product>({});
+  const [editableProducts, setEditableProducts] = useState<string[]>([...simpleProducts]);
+  const [target, setTarget] = useState<HTMLElement>();
+  const [product, setProduct] = useState<Product | null>(null);
 
   const onCustomItemCreating = useCallback(
-    (args: TagBoxTypes.CustomItemCreatingEvent) => {
+    (args: TagBoxTypes.CustomItemCreatingEvent): void => {
       const newValue = args.text;
-      const isItemInDataSource = editableProducts.some((item) => item === newValue);
-      if (!isItemInDataSource) {
+      const isItemInDataSource = editableProducts.some((item: string): boolean => item === newValue);
+      if (!isItemInDataSource && newValue) {
         setEditableProducts([newValue, ...editableProducts]);
       }
       args.customItem = newValue;
@@ -34,15 +33,15 @@ function App() {
     [editableProducts],
   );
 
-  const onMouseEnter = useCallback((e: { currentTarget: any }, newProduct) => {
+  const onMouseEnter = useCallback((e: React.MouseEvent<HTMLElement>, newProduct: Product): void => {
     setTarget(e.currentTarget);
     setProduct(newProduct);
   }, []);
 
-  const getAltText = useCallback((text: String) => `${text}. Picture`, []);
+  const getAltText = useCallback((text: string): string => `${text}. Picture`, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="dx-fieldset">
         <div className="dx-field">
           <div className="dx-field-label">Default mode</div>
@@ -168,25 +167,25 @@ function App() {
             >
               <p>
                 <b>Name: </b>
-                <span>{product.Name}</span>
+                <span>{product?.Name}</span>
               </p>
               <p>
                 <b>Price: </b>
-                <span>{product.Price}</span>
+                <span>{product?.Price}</span>
               </p>
               <p>
                 <b>In-stock: </b>
-                <span>{product.Current_Inventory}</span>
+                <span>{product?.Current_Inventory}</span>
               </p>
               <p>
                 <b>Category: </b>
-                <span>{product.Category}</span>
+                <span>{product?.Category}</span>
               </p>
             </Popover>
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

@@ -58,7 +58,7 @@ export type AsyncRule = {
   * @docid
   * @type_function_return Promise<any>
   * @type_function_param1 options:object
-  * @type_function_param1_field value:string|number
+  * @type_function_param1_field value:any
   * @type_function_param1_field rule:object
   * @type_function_param1_field validator:object
   * @type_function_param1_field data:object
@@ -160,7 +160,7 @@ export type CustomRule = {
   /**
   * @docid
   * @type_function_param1 options:object
-  * @type_function_param1_field value:string|number
+  * @type_function_param1_field value:any
   * @type_function_param1_field rule:object
   * @type_function_param1_field validator:object
   * @type_function_param1_field data:object

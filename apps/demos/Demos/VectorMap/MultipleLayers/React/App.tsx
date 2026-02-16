@@ -1,12 +1,12 @@
 import React from 'react';
 import VectorMap, {
-  ILegendProps,
   Export,
   Layer,
   Legend,
   Source,
   Font,
 } from 'devextreme-react/vector-map';
+import type { ILegendProps } from 'devextreme-react/vector-map';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { streamsData } from './data.ts';
 

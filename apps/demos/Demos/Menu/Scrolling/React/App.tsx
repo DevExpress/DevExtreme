@@ -4,27 +4,29 @@ import Menu, { type MenuTypes } from 'devextreme-react/menu';
 import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 import notify from 'devextreme/ui/notify';
 
-import service from './data.ts';
-import type { ProductType } from './types';
+import { products } from './data.ts';
+import type { Product } from './types';
 
 const SUBMENU_HEIGHT = 200;
-const products = service.getProducts();
 
 const App = () => {
-  const [limitSubmenuHeight, setLimitSubmenuHeight] = useState(false);
+  const [limitSubmenuHeight, setLimitSubmenuHeight] = useState<boolean>(false);
 
-  const itemClick = useCallback((e: MenuTypes.ItemClickEvent<ProductType>) => {
-    if (!e.itemData.items) {
-      notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
+  const itemClick = useCallback((e: MenuTypes.ItemClickEvent<Product>): void => {
+    if (!e.itemData?.items) {
+      notify(`The "${e.itemData?.text}" item was clicked`, 'success', 1500);
     }
   }, []);
 
-  const limitSubmenuHeightOnMouseClick = useCallback((e: CheckBoxTypes.ValueChangedEvent) => {
+  const limitSubmenuHeightOnMouseClick = useCallback((e: CheckBoxTypes.ValueChangedEvent): void => {
     setLimitSubmenuHeight(e.value);
   }, []);
 
-  const onSubmenuShowing = useCallback(({ submenuContainer }: MenuTypes.SubmenuShowingEvent) => {
-    submenuContainer.style.maxHeight = limitSubmenuHeight ? `${SUBMENU_HEIGHT}px` : '';
+  const onSubmenuShowing = useCallback((e: MenuTypes.SubmenuShowingEvent<Product>): void => {
+    if (!e.submenuContainer) {
+      return;
+    }
+    e.submenuContainer.style.maxHeight = limitSubmenuHeight ? `${SUBMENU_HEIGHT}px` : '';
   }, [limitSubmenuHeight]);
 
   return (

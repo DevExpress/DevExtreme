@@ -13,26 +13,23 @@ function nodeClick(e) {
 }
 function App() {
   const [drillInfo, setDrillInfo] = useState([]);
-  const drill = useCallback(
-    (e) => {
-      const newDrillInfo = [];
-      for (let node = e.node.getParent(); node; node = node.getParent()) {
-        newDrillInfo.unshift({
-          text: node.label() || 'All Continents',
-          node,
-        });
-      }
-      if (newDrillInfo.length) {
-        newDrillInfo.push({
-          text: e.node.label(),
-        });
-      }
-      setDrillInfo(newDrillInfo);
-    },
-    [setDrillInfo],
-  );
+  const drill = useCallback((e) => {
+    const newDrillInfo = [];
+    for (let node = e.node.getParent(); node; node = node.getParent()) {
+      newDrillInfo.unshift({
+        text: node.label() || 'All Continents',
+        node,
+      });
+    }
+    if (newDrillInfo.length) {
+      newDrillInfo.push({
+        text: e.node.label(),
+      });
+    }
+    setDrillInfo(newDrillInfo);
+  }, []);
   return (
-    <React.Fragment>
+    <>
       <TreeMap
         dataSource={citiesPopulation}
         interactWithGroup={true}
@@ -52,7 +49,7 @@ function App() {
         onItemClick={drillInfoClick}
         treeInfo={drillInfo}
       />
-    </React.Fragment>
+    </>
   );
 }
 export default App;

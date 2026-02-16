@@ -66,16 +66,18 @@ function calculateFilterExpression(value, selectedFilterOperations, target) {
   if (target === 'headerFilter' && value === 'weekends') {
     return [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]];
   }
-  return column.defaultCalculateFilterExpression(value, selectedFilterOperations, target);
+  return column.defaultCalculateFilterExpression?.(value, selectedFilterOperations, target);
 }
 const orderHeaderFilter = (data) => {
-  data.dataSource.postProcess = (results) => {
-    results.push({
-      text: 'Weekends',
-      value: 'weekends',
-    });
-    return results;
-  };
+  if (data.dataSource) {
+    data.dataSource.postProcess = (results) => {
+      results.push({
+        text: 'Weekends',
+        value: 'weekends',
+      });
+      return results;
+    };
+  }
 };
 const App = () => {
   const [showFilterRow, setShowFilterRow] = useState(true);
@@ -83,7 +85,7 @@ const App = () => {
   const [currentFilter, setCurrentFilter] = useState(applyFilterTypes[0].key);
   const dataGridRef = useRef(null);
   const clearFilter = useCallback(() => {
-    dataGridRef.current.instance().clearFilter();
+    dataGridRef.current?.instance().clearFilter();
   }, []);
   const onShowFilterRowChanged = useCallback(
     (e) => {

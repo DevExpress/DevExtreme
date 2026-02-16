@@ -1,4 +1,6 @@
-export const productTypes = [{
+import type { ProductType, Product } from './types.ts';
+
+export const productTypes: ProductType[] = [{
   id: 1,
   text: 'All',
 }, {
@@ -15,7 +17,7 @@ export const productTypes = [{
   text: 'Projectors',
 }];
 
-export const products = [{
+export const products: Product[] = [{
   text: 'HD Video Player',
   type: 2,
 }, {

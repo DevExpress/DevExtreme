@@ -1,11 +1,14 @@
 import React from 'react';
+
 import DataGrid, {
   Column, Selection, Summary, TotalItem, Pager,
 } from 'devextreme-react/data-grid';
+import type { ITotalItemProps } from 'devextreme-react/data-grid';
 import { formatDate } from 'devextreme-react/common/core/localization';
+
 import { orders } from './data.ts';
 
-const customizeDate = (itemInfo) => `First: ${formatDate(itemInfo.value, 'MMM dd, yyyy')}`;
+const customizeDate: ITotalItemProps['customizeText'] = (itemInfo) => `First: ${formatDate(itemInfo.value as Date, 'MMM dd, yyyy')}`;
 
 const App = () => (
   <DataGrid

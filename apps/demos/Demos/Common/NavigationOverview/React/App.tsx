@@ -1,12 +1,30 @@
 import React, { useCallback, useState } from 'react';
-import TreeView, { type TreeViewTypes } from 'devextreme-react/tree-view';
-import TabPanel, { type TabPanelTypes } from 'devextreme-react/tab-panel';
+
+import TabPanel from 'devextreme-react/tab-panel';
+import type { TabPanelTypes } from 'devextreme-react/tab-panel';
+import TreeView from 'devextreme-react/tree-view';
+import type { TreeViewTypes } from 'devextreme-react/tree-view';
+
 import { continents } from './data.ts';
 
-const renderPanelItemTitle = (item) => <span className="tab-panel-title">{item.text}</span>;
+interface City {
+  text: string;
+  flag: string;
+  capital?: boolean;
+  description: string;
+  population: string;
+  area: string;
+  density: string;
+}
 
-const renderPanelItem = (city) => (
-  <React.Fragment>
+interface TabItem {
+  text: string;
+}
+
+const renderPanelItemTitle = (item: TabItem) => <span className="tab-panel-title">{item.text}</span>;
+
+const renderPanelItem = (city: City) => (
+  <>
     <img alt="country flag" className="flag" src={city.flag} />
     <div className="right-content">
       <div>
@@ -38,7 +56,7 @@ const renderPanelItem = (city) => (
         </div>
       </div>
     </div>
-  </React.Fragment>
+  </>
 );
 function App() {
   const [tabPanelIndex, setTabPanelIndex] = useState(0);
@@ -46,7 +64,7 @@ function App() {
   const [citiesData, setCitiesData] = useState(continents[0].items[0].cities);
 
   const handleTreeViewSelectionChange = useCallback((
-    e: TreeViewTypes.SelectionChangedEvent & { itemData: any },
+    e: TreeViewTypes.ItemSelectionChangedEvent,
   ) => {
     const selectedCountryData = e.itemData;
     if (selectedCountryData.cities) {
@@ -54,13 +72,14 @@ function App() {
       setCountryData(selectedCountryData);
       setCitiesData(selectedCountryData.cities);
     }
-  }, [setTabPanelIndex, setCountryData, setCitiesData]);
+  }, []);
 
   const handleTabPanelSelectionChange = useCallback((
-    e: TabPanelTypes.SelectionChangedEvent & { value: any },
+    e: TabPanelTypes.SelectionChangedEvent,
   ) => {
-    setTabPanelIndex(e.value);
-  }, [setTabPanelIndex]);
+    const index = e.component.option('selectedIndex') ?? 0;
+    setTabPanelIndex(index);
+  }, []);
 
   return (
     <div className="container">

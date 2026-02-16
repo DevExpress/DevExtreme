@@ -2,23 +2,25 @@ import React, { useCallback, useState } from 'react';
 import Menu from 'devextreme-react/menu';
 import CheckBox from 'devextreme-react/check-box';
 import notify from 'devextreme/ui/notify';
-import service from './data.js';
+import { products } from './data.js';
 
 const SUBMENU_HEIGHT = 200;
-const products = service.getProducts();
 const App = () => {
   const [limitSubmenuHeight, setLimitSubmenuHeight] = useState(false);
   const itemClick = useCallback((e) => {
-    if (!e.itemData.items) {
-      notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
+    if (!e.itemData?.items) {
+      notify(`The "${e.itemData?.text}" item was clicked`, 'success', 1500);
     }
   }, []);
   const limitSubmenuHeightOnMouseClick = useCallback((e) => {
     setLimitSubmenuHeight(e.value);
   }, []);
   const onSubmenuShowing = useCallback(
-    ({ submenuContainer }) => {
-      submenuContainer.style.maxHeight = limitSubmenuHeight ? `${SUBMENU_HEIGHT}px` : '';
+    (e) => {
+      if (!e.submenuContainer) {
+        return;
+      }
+      e.submenuContainer.style.maxHeight = limitSubmenuHeight ? `${SUBMENU_HEIGHT}px` : '';
     },
     [limitSubmenuHeight],
   );

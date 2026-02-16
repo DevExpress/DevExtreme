@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import Scheduler, { type SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
+import type { FormRef } from 'devextreme-react/form';
 import notify from 'devextreme/ui/notify';
-import { FormRef } from 'devextreme-react/form';
 import { data, holidays } from './data.ts';
 import Utils from './utils.ts';
 import DataCell from './DataCell.tsx';
@@ -36,7 +37,8 @@ const notifyDisableDate = () => {
 };
 
 const onContentReady = (e: SchedulerTypes.ContentReadyEvent) => {
-  setComponentAria(e.component?.$element());
+  const element = e.component?.element();
+  element && setComponentAria(element);
 };
 
 const applyDisableDatesToDateEditors = (form: ReturnType<FormRef['instance']>) => {
@@ -74,11 +76,11 @@ const onAppointmentUpdating = (e: SchedulerTypes.AppointmentUpdatingEvent) => {
   }
 };
 
-const setComponentAria = (element) => {
-  const prevAria = element?.attr('aria-label') || '';
+const setComponentAria = (element: HTMLElement) => {
+  const prevAria = element.getAttribute('aria-label') || '';
   const description = ariaDescription();
   const nextAria = `${prevAria}${description ? ` ${description}` : ''}`;
-  element?.attr('aria-label', nextAria);
+  element.setAttribute('aria-label', nextAria);
 };
 
 const App = () => {

@@ -334,16 +334,6 @@ QUnit.test('encodeHtml', function(assert) {
     }], 'renderer animation options');
 });
 
-QUnit.skip('Option from the invalidating list', function(assert) {
-    this.createWidget();
-    const spy = sinon.spy(this.widget, '_invalidate');
-    this.widget._invalidatingOptions = ['test-option'];
-
-    this.widget.option('test-option', 'test-value');
-
-    assert.deepEqual(spy.lastCall.args, []);
-});
-
 QUnit.test('Unknown option', function(assert) {
     this.createWidget();
     const spy = sinon.spy(this.widget, '_invalidate');

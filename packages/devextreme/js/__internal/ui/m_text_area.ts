@@ -14,7 +14,7 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/text_area';
 import type { OptionChanged } from '@ts/core/widget/types';
 import TextBox from '@ts/ui/text_box/m_text_box';
-import { allowScroll, prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
+import { allowScroll, prepareScrollData } from '@ts/ui/text_box/utils.scroll';
 
 export const TEXTAREA_CLASS = 'dx-textarea';
 export const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';

@@ -1,9 +1,12 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { TextBox, Button as TextBoxButton, type TextBoxTypes } from 'devextreme-react/text-box';
-import { NumberBox, Button as NumberBoxButton, type NumberBoxTypes } from 'devextreme-react/number-box';
-import { DateBox, Button as DateBoxButton, type DateBoxTypes } from 'devextreme-react/date-box';
-import { type ButtonTypes } from 'devextreme-react/button';
+import { TextBox, Button as TextBoxButton } from 'devextreme-react/text-box';
+import type { TextBoxTypes } from 'devextreme-react/text-box';
+import { NumberBox, Button as NumberBoxButton } from 'devextreme-react/number-box';
+import type { NumberBoxTypes } from 'devextreme-react/number-box';
+import { DateBox, Button as DateBoxButton } from 'devextreme-react/date-box';
+import type { DateBoxTypes } from 'devextreme-react/date-box';
+import type { ButtonTypes } from 'devextreme-react/button';
 
 const millisecondsInDay = 24 * 60 * 60 * 1000;
 const currencyLabel = { 'aria-label': 'Multi Currency' };
@@ -12,94 +15,94 @@ const passwordLabel = { 'aria-label': 'Password' };
 
 function App() {
   const [passwordMode, setPasswordMode] = useState<TextBoxTypes.TextBoxType>('password');
-  const [currencyFormat, setCurrencyFormat] = useState('$ #.##');
-  const [currencyValue, setCurrencyValue] = useState(14500.55);
-  const [dateValue, setDateValue] = useState(new Date().getTime());
+  const [currencyFormat, setCurrencyFormat] = useState<string>('$ #.##');
+  const [currencyValue, setCurrencyValue] = useState<number>(14500.55);
+  const [dateValue, setDateValue] = useState<number>(new Date().getTime());
 
   const passwordButton = useMemo<ButtonTypes.Properties>(
-    () => ({
+    (): ButtonTypes.Properties => ({
       icon: 'eyeopen',
       stylingMode: 'text',
-      onClick: () => {
+      onClick: (): void => {
         setPasswordMode((prevPasswordMode: string) =>
           (prevPasswordMode === 'text' ? 'password' : 'text'));
       },
     }),
-    [setPasswordMode],
+    [],
   );
 
   const currencyButton = useMemo<ButtonTypes.Properties>(
-    () => ({
+    (): ButtonTypes.Properties => ({
       text: '€',
       stylingMode: 'text',
       width: 32,
       elementAttr: {
         class: 'currency',
       },
-      onClick: (e) => {
+      onClick: (e: ButtonTypes.ClickEvent): void => {
         if (e.component.option('text') === '$') {
           e.component.option('text', '€');
           setCurrencyFormat('$ #.##');
-          setCurrencyValue((prevCurrencyValue: number) => prevCurrencyValue / 0.836);
+          setCurrencyValue((prevCurrencyValue: number): number => prevCurrencyValue / 0.836);
         } else {
           e.component.option('text', '$');
           setCurrencyFormat('€ #.##');
-          setCurrencyValue((prevCurrencyValue: number) => prevCurrencyValue * 0.836);
+          setCurrencyValue((prevCurrencyValue: number): number => prevCurrencyValue * 0.836);
         }
       },
     }),
-    [setCurrencyFormat, setCurrencyValue],
+    [],
   );
 
   const todayButton = useMemo<ButtonTypes.Properties>(
-    () => ({
+    (): ButtonTypes.Properties => ({
       text: 'Today',
       stylingMode: 'text',
-      onClick: () => {
+      onClick: (): void => {
         setDateValue(new Date().getTime());
       },
     }),
-    [setDateValue],
+    [],
   );
 
   const prevDateButton = useMemo<ButtonTypes.Properties>(
-    () => ({
+    (): ButtonTypes.Properties => ({
       icon: 'spinprev',
       stylingMode: 'text',
-      onClick: () => {
-        setDateValue((prevDateValue: number) => prevDateValue - millisecondsInDay);
+      onClick: (): void => {
+        setDateValue((prevDateValue: number): number => prevDateValue - millisecondsInDay);
       },
     }),
-    [setDateValue],
+    [],
   );
 
   const nextDateButton = useMemo<ButtonTypes.Properties>(
-    () => ({
+    (): ButtonTypes.Properties => ({
       icon: 'spinnext',
       stylingMode: 'text',
-      onClick: () => {
-        setDateValue((prevDateValue: number) => prevDateValue + millisecondsInDay);
+      onClick: (): void => {
+        setDateValue((prevDateValue: number): number => prevDateValue + millisecondsInDay);
       },
     }),
-    [setDateValue],
+    [],
   );
 
   const onDateChanged = useCallback(
-    (e: DateBoxTypes.ValueChangedEvent) => {
+    (e: DateBoxTypes.ValueChangedEvent): void => {
       setDateValue(e.value);
     },
-    [setDateValue],
+    [],
   );
 
   const changeCurrency = useCallback(
-    (data: NumberBoxTypes.ValueChangedEvent) => {
+    (data: NumberBoxTypes.ValueChangedEvent): void => {
       setCurrencyValue(data.value);
     },
-    [setCurrencyValue],
+    [],
   );
 
   return (
-    <React.Fragment>
+    <>
       <div className="dx-fieldset">
         <div className="dx-field">
           <div className="dx-field-label">Password TextBox</div>
@@ -169,7 +172,7 @@ function App() {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 

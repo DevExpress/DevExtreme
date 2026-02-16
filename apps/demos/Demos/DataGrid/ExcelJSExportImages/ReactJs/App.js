@@ -1,7 +1,7 @@
 import React from 'react';
+import { saveAs } from 'file-saver-es';
 import DataGrid, { Column, Export } from 'devextreme-react/data-grid';
 import { Workbook } from 'devextreme-exceljs-fork';
-import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme-react/common/export/excel';
 import { employees } from './data.js';
 
@@ -22,8 +22,8 @@ const onExporting = (e) => {
     autoFilterEnabled: true,
     topLeftCell: { row: 2, column: 2 },
     customizeCell: ({ gridCell, excelCell }) => {
-      if (gridCell.rowType === 'data') {
-        if (gridCell.column.dataField === 'Picture') {
+      if (gridCell?.rowType === 'data') {
+        if (excelCell && gridCell?.column?.dataField === 'Picture') {
           excelCell.value = undefined;
           const image = workbook.addImage({
             base64: gridCell.value,

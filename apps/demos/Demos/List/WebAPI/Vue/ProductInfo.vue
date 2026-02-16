@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div>{{ item.CategoryName }}</div>
     <div>{{ item.ProductName }}</div>
     <b class="price">{{ currency(item.UnitPrice) }}</b>
   </div>

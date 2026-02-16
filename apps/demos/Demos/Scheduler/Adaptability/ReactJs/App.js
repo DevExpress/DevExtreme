@@ -12,7 +12,7 @@ const App = () => {
     schedulerRef.current?.instance().showAppointmentPopup();
   }, []);
   return (
-    <React.Fragment>
+    <>
       <Scheduler
         ref={schedulerRef}
         timeZone="America/Los_Angeles"
@@ -36,7 +36,7 @@ const App = () => {
         icon="plus"
         onClick={showAppointmentPopup}
       />
-    </React.Fragment>
+    </>
   );
 };
 export default App;

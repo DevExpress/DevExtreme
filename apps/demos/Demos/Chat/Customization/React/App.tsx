@@ -1,7 +1,10 @@
 import React, { useState, useCallback } from 'react';
-import Chat, { type ChatTypes } from 'devextreme-react/chat';
+import Chat from 'devextreme-react/chat';
+import type { ChatTypes } from 'devextreme-react/chat';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
+import type { Format } from 'devextreme-react/common/core/localization';
 
 import {
   currentUser,
@@ -12,32 +15,34 @@ import {
   dayHeaderLabel,
 } from './data.ts';
 
+type CheckBoxValue = CheckBoxTypes.Properties['value'];
+
 export default function App() {
   const [messages, setMessages] = useState<ChatTypes.Message[]>(initialMessages);
-  const [showAvatar, setShowAvatar] = useState(true);
-  const [showUsername, setShowUsername] = useState(true);
-  const [showDayHeaders, setDayHeaders] = useState(true);
-  const [dayHeaderFormat, setDayHeaderFormat] = useState(headerFormats[0]);
-  const [showMessageTimestamp, setMessageTimestamp] = useState(true);
-  const [messageTimestampFormat, setMessageTimestampFormat] = useState(messageTimestamps[0]);
-  const [isDisabled, setDisabled] = useState(false);
+  const [showAvatar, setShowAvatar] = useState<CheckBoxValue>(true);
+  const [showUsername, setShowUsername] = useState<CheckBoxValue>(true);
+  const [showDayHeaders, setDayHeaders] = useState<CheckBoxValue>(true);
+  const [dayHeaderFormat, setDayHeaderFormat] = useState<Format>(headerFormats[0]);
+  const [showMessageTimestamp, setMessageTimestamp] = useState<CheckBoxValue>(true);
+  const [messageTimestampFormat, setMessageTimestampFormat] = useState<Format>(messageTimestamps[0]);
+  const [isDisabled, setDisabled] = useState<CheckBoxTypes.Properties['value']>(false);
 
-  const onMessageEntered = useCallback(({ message }: ChatTypes.MessageEnteredEvent) => {
+  const onMessageEntered = useCallback(({ message }: ChatTypes.MessageEnteredEvent): void => {
     setMessages((prevMessages) => [...prevMessages, message]);
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="chat-container">
         <Chat
           height={710}
           items={messages}
           user={currentUser}
-          disabled={isDisabled}
-          showAvatar={showAvatar}
-          showUserName={showUsername}
-          showDayHeaders={showDayHeaders}
-          showMessageTimestamp={showMessageTimestamp}
+          disabled={!!isDisabled}
+          showAvatar={!!showAvatar}
+          showUserName={!!showUsername}
+          showDayHeaders={!!showDayHeaders}
+          showMessageTimestamp={!!showMessageTimestamp}
           dayHeaderFormat={dayHeaderFormat}
           messageTimestampFormat={messageTimestampFormat}
           onMessageEntered={onMessageEntered}
@@ -113,6 +118,6 @@ export default function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }

@@ -29,7 +29,7 @@ $(() => {
       const { file } = e;
       const dropZoneText = document.getElementById('dropzone-text');
       const fileReader = new FileReader();
-      fileReader.onload = function () {
+      fileReader.onload = () => {
         toggleDropZoneActive(document.getElementById('dropzone-external'), false);
         const dropZoneImage = document.getElementById('dropzone-image');
         dropZoneImage.src = fileReader.result;
@@ -67,5 +67,5 @@ $(() => {
     dropZoneImage.hidden = !visible;
   }
 
-  document.getElementById('dropzone-image').onload = function () { toggleImageVisible(true); };
+  document.getElementById('dropzone-image').onload = () => { toggleImageVisible(true); };
 });

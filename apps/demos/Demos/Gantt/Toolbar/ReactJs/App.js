@@ -42,7 +42,7 @@ function App() {
     });
   }, [ganttConfig]);
   return (
-    <React.Fragment>
+    <>
       <Gantt
         taskListWidth={500}
         scaleType="weeks"
@@ -110,7 +110,7 @@ function App() {
           wheel to zoom (in or out) to browse data across various levels of detail.
         </div>
       </Popup>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

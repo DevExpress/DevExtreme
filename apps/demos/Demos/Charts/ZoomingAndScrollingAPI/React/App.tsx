@@ -14,7 +14,7 @@ import RangeSelector, {
   Behavior,
   type RangeSelectorTypes,
 } from 'devextreme-react/range-selector';
-import { VisualRange } from 'devextreme-react/common/charts';
+import type { VisualRange } from 'devextreme-react/common/charts';
 import { zoomingData } from './data.ts';
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
   }, [setVisualRange]);
 
   return (
-    <React.Fragment>
+    <>
       <Chart
         id="zoomedChart"
         palette="Harmony Light"
@@ -55,7 +55,7 @@ function App() {
           <Series argumentField="arg" valueField="y3" />
         </ChartOptions>
       </RangeSelector>
-    </React.Fragment>
+    </>
   );
 }
 

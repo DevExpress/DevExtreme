@@ -87,49 +87,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getController('data')._dataSource.sort(), [{ selector: 'field2', desc: false }]);
     });
 
-    QUnit.skip('Change column sortOrder via option method with canceling in onOptionChanged handler', function(assert) {
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: null,
-            dataSource: [],
-            columns: [{ dataField: 'column1', sortOrder: 'asc' }],
-            onOptionChanged: function(args) {
-                if(args.fullName === 'columns[0].sortOrder') {
-                    dataGrid.option('columns[0].sortOrder', 'asc');
-                }
-            }
-        }).dxDataGrid('instance');
-
-        // act
-        dataGrid.option('columns[0].sortOrder', 'desc');
-
-        // assert
-        assert.strictEqual(dataGrid.columnOption(0, 'sortOrder'), 'asc', 'sortOrder internal state');
-        assert.strictEqual(dataGrid.option('columns[0].sortOrder'), 'asc', 'sortOrder option value');
-    });
-
-    // T734761
-    QUnit.skip('Change column sortOrder via columnOption method with canceling in onOptionChanged handler', function(assert) {
-        // arrange
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: null,
-            dataSource: [],
-            columns: [{ dataField: 'column1', sortOrder: 'asc' }],
-            onOptionChanged: function(args) {
-                if(args.fullName === 'columns[0].sortOrder') {
-                    dataGrid.option('columns[0].sortOrder', 'asc');
-                }
-            }
-        }).dxDataGrid('instance');
-
-        // act
-        dataGrid.columnOption(0, 'sortOrder', 'desc');
-
-        // assert
-        assert.strictEqual(dataGrid.columnOption(0, 'sortOrder'), 'asc', 'sortOrder internal state');
-        assert.strictEqual(dataGrid.option('columns[0].sortOrder'), 'asc', 'sortOrder option value');
-    });
-
     // T859208
     QUnit.test('Sort indicators should not be rendered if grouping is applied and showWhenGrouped = true (single sorting)', function(assert) {
         // arrange

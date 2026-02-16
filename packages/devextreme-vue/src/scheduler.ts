@@ -402,7 +402,7 @@ prepareComponentConfig(componentConfig);
 const DxScheduler = defineComponent(componentConfig);
 
 
-const DxAiOptionsConfig = {
+const DxAIOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -415,11 +415,11 @@ const DxAiOptionsConfig = {
   }
 };
 
-prepareConfigurationComponentConfig(DxAiOptionsConfig);
+prepareConfigurationComponentConfig(DxAIOptionsConfig);
 
-const DxAiOptions = defineComponent(DxAiOptionsConfig);
+const DxAIOptions = defineComponent(DxAIOptionsConfig);
 
-(DxAiOptions as any).$_optionName = "aiOptions";
+(DxAIOptions as any).$_optionName = "aiOptions";
 
 const DxAppointmentDraggingConfig = {
   emits: {
@@ -471,7 +471,7 @@ const DxAsyncRuleConfig = {
     message: String,
     reevaluate: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => any)>
   }
 };
 
@@ -655,7 +655,7 @@ const DxCustomRuleConfig = {
     message: String,
     reevaluate: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)>
   }
 };
 
@@ -784,14 +784,12 @@ const DxFormConfig = {
     "update:labelLocation": null,
     "update:labelMode": null,
     "update:minColWidth": null,
-    "update:onCanceled": null,
     "update:onContentReady": null,
     "update:onDisposing": null,
     "update:onEditorEnterKey": null,
     "update:onFieldDataChanged": null,
     "update:onInitialized": null,
     "update:onOptionChanged": null,
-    "update:onSaved": null,
     "update:onSmartPasted": null,
     "update:onSmartPasting": null,
     "update:optionalMark": null,
@@ -832,14 +830,12 @@ const DxFormConfig = {
     labelLocation: String as PropType<LabelLocation>,
     labelMode: String as PropType<FormLabelMode>,
     minColWidth: Number,
-    onCanceled: Function as PropType<((formData: any) => void)>,
     onContentReady: Function as PropType<((e: FormContentReadyEvent) => void)>,
     onDisposing: Function as PropType<((e: FormDisposingEvent) => void)>,
     onEditorEnterKey: Function as PropType<((e: EditorEnterKeyEvent) => void)>,
     onFieldDataChanged: Function as PropType<((e: FieldDataChangedEvent) => void)>,
     onInitialized: Function as PropType<((e: FormInitializedEvent) => void)>,
     onOptionChanged: Function as PropType<((e: FormOptionChangedEvent) => void)>,
-    onSaved: Function as PropType<((formData: any) => void)>,
     onSmartPasted: Function as PropType<((e: SmartPastedEvent) => void)>,
     onSmartPasting: Function as PropType<((e: SmartPastingEvent) => void)>,
     optionalMark: String,
@@ -1743,7 +1739,7 @@ const DxValidationRuleConfig = {
     reevaluate: Boolean,
     trim: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)>
   }
 };
 
@@ -1825,7 +1821,7 @@ const DxView = defineComponent(DxViewConfig);
 export default DxScheduler;
 export {
   DxScheduler,
-  DxAiOptions,
+  DxAIOptions,
   DxAppointmentDragging,
   DxAsyncRule,
   DxButtonItem,

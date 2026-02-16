@@ -15,7 +15,7 @@
           <div class="address">{{
             item.Postal_Code + ", " + item.Address
           }}</div>
-          <div class="type" [ngClass]="item.Hotel_Class.toLowerCase()"></div>
+          <div class="type" [class]="item.Hotel_Class.toLowerCase()"></div>
         </div>
         <div class="price-container">
           <div class="price">{{
@@ -34,10 +34,7 @@
   <div class="header">
     <div class="name-container">
       <div class="name">{{ currentHotel.Hotel_Name }}</div>
-      <div
-        class="type"
-        [ngClass]="currentHotel.Hotel_Class.toLowerCase()"
-      ></div>
+      <div class="type" [class]="currentHotel.Hotel_Class.toLowerCase()"></div>
     </div>
     <div class="price-container">
       <div class="price">{{

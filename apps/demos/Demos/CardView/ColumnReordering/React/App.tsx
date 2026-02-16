@@ -1,5 +1,7 @@
 import React from 'react';
+
 import CardView, { Column } from 'devextreme-react/card-view';
+
 import { orders } from './data.ts';
 
 const App = () => (

@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import Diagram, {
-  Nodes, AutoLayout, Toolbox, PropertiesPanel, type DiagramTypes,
+  Nodes, AutoLayout, Toolbox, PropertiesPanel,
 } from 'devextreme-react/diagram';
 import { ArrayStore } from 'devextreme-react/common/data';
+import type { DiagramTypes } from 'devextreme-react/diagram';
 import service from './data.ts';
 
 const dataSource = new ArrayStore({
@@ -28,11 +29,11 @@ function onContentReady(e: DiagramTypes.ContentReadyEvent) {
 export default function App() {
   const [selectedItemNames, setSelectedItemNames] = useState('Nobody has been selected');
 
-  const onSelectionChanged = useCallback(({ items }) => {
+  const onSelectionChanged = useCallback(({ items }: { items: DiagramTypes.Item[] }) => {
     let selectedItems = 'Nobody has been selected';
     const filteredItems = items
       .filter((item) => item.itemType === 'shape')
-      .map((item) => item.text);
+      .map((item) => item.dataItem?.[textExpression]);
     if (filteredItems.length > 0) {
       selectedItems = filteredItems.join(', ');
     }

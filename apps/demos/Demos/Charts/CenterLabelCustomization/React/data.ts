@@ -1,4 +1,6 @@
-export const data = [
+import type { CountryData } from './types.ts';
+
+export const data: CountryData[] = [
   { country: 'France', commodity: 'Nuclear', total: 413278 },
   { country: 'Germany', commodity: 'Nuclear', total: 76536 },
   { country: 'France', commodity: 'Thermal', total: 47594 },

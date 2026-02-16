@@ -88,20 +88,6 @@ export type AppointmentFormIconsShowMode = 'both' | 'main' | 'recurrence' | 'non
 export type AppointmentFormProperties = FormProperties & {
   /**
    * @docid
-   * @type_function_param1 formData:object
-   * @default undefined
-   * @public
-   */
-  onSaved?: ((formData: any) => void);
-  /**
-   * @docid
-   * @type_function_param1 formData:object
-   * @default undefined
-   * @public
-   */
-  onCanceled?: ((formData: any) => void);
-  /**
-   * @docid
    * @default "main"
    * @public
    */
@@ -109,6 +95,8 @@ export type AppointmentFormProperties = FormProperties & {
 };
 /** @public */
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
+/** @public */
+export type SchedulerScrollToAlign = 'start' | 'center';
 /** @public */
 export type SchedulerPredefinedToolbarItem = 'today' | 'dateNavigator' | 'viewSwitcher';
 /** @public */
@@ -1322,6 +1310,20 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
      * @public
      */
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
+    /**
+     * @docid
+     * @publicName scrollTo(date, options)
+     * @param2 options:Object|undefined
+     * @param2_field group:Object|undefined
+     * @param2_field allDay:Boolean|undefined
+     * @param2_field alignInView:Enums.SchedulerScrollToAlign|undefined
+     * @public
+     */
+    scrollTo(date: Date, options?: {
+        group?: object;
+        allDay?: boolean;
+        alignInView?: SchedulerScrollToAlign;
+    }): void;
     /**
      * @docid
      * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)

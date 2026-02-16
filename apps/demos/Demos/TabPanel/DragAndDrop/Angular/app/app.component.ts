@@ -1,10 +1,9 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
   DxButtonModule, DxSortableModule, DxTabPanelModule, DxListModule,
 } from 'devextreme-angular';
-import { DxSortableTypes } from 'devextreme-angular/ui/sortable';
+import type { DxSortableTypes } from 'devextreme-angular/ui/sortable';
 import { Employee, Service, Task } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -23,6 +22,12 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxButtonModule,
+    DxSortableModule,
+    DxTabPanelModule,
+    DxListModule,
+  ],
 })
 
 export class AppComponent {
@@ -96,17 +101,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxButtonModule,
-    DxSortableModule,
-    DxTabPanelModule,
-    DxListModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

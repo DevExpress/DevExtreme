@@ -26,7 +26,8 @@ import Quill from 'devextreme-quill';
 import type { CommandsMap } from '../utils/ai';
 import {
   buildCommandsMap,
-  defaultCommandNames,
+  commandMessageKeys,
+  getDefaultCommandName,
   getDefaultOptionsByCommand,
   hasInvalidCustomCommand,
 } from '../utils/ai';
@@ -134,13 +135,16 @@ if (Quill) {
         }
 
         this.quill.on('editor-change', (eventName, newValue, oldValue, eventSource) => {
-          const isSilentMode = eventSource === SILENT_ACTION && isEmptyObject(this.quill.getFormat());
+          const isSilentMode = eventSource === SILENT_ACTION
+            && isEmptyObject(this.quill.getFormat());
 
           if (!isSilentMode) {
             const isSelectionChanged = eventName === SELECTION_CHANGE_EVENT;
 
             this._updateToolbar(isSelectionChanged);
           }
+
+          this._updateHeaderFormatWidget();
         });
       }
     }
@@ -368,17 +372,17 @@ if (Quill) {
       commandOptions?: string[],
     ) {
       const options = commandOptions?.map(capitalize)
-        ?? getDefaultOptionsByCommand(command)?.map(capitalize);
+        ?? getDefaultOptionsByCommand(command);
 
       const item = {
         id: command,
         name: command,
-        text: text ?? defaultCommandNames[command],
+        text: text ?? getDefaultCommandName(command),
         items: options?.map((option) => ({
           id: option,
           text: option,
           parentCommand: command,
-          options: options?.map(capitalize),
+          options,
         })),
       };
 
@@ -445,7 +449,7 @@ if (Quill) {
     _prepareAIMenuItemConfig(item: AIToolbarItem) {
       const {
         name = TOOLBAR_AI_ITEM_NAME,
-        commands = Object.keys(defaultCommandNames) as AICommandName[],
+        commands = Object.keys(commandMessageKeys) as AICommandName[],
       } = item;
 
       const commandsMap = buildCommandsMap(commands);
@@ -669,6 +673,18 @@ if (Quill) {
       }
 
       this._toggleClearFormatting(hasFormats || selection.length > 1);
+    }
+
+    _updateHeaderFormatWidget() {
+      const selection = this.quill.getSelection();
+      const formatName = 'header';
+      const formatWidget = this._toolbarWidgets.getByName(formatName);
+      const formats = this.quill.getFormat(selection);
+      if (!selection || !formatWidget) {
+        return;
+      }
+
+      this._markActiveFormatWidget(formatName, formatWidget, formats);
     }
 
     _markActiveFormatWidget(name, widget, formats) {

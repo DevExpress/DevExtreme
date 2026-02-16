@@ -1,6 +1,13 @@
+interface LineFeature {
+  geometry: {
+    type: string;
+    coordinates: number[][];
+  };
+}
+
 export const coordLinesData = {
   type: 'FeatureCollection',
-  features: [],
+  features: [] as LineFeature[],
 };
 
 // add meridians

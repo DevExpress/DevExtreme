@@ -1,16 +1,30 @@
 import React, { useState } from 'react';
 
-import PivotGrid, {
-  FieldChooser,
-  FieldPanel,
-} from 'devextreme-react/pivot-grid';
+import PivotGrid, { FieldChooser, FieldPanel } from 'devextreme-react/pivot-grid';
+import type { PivotGridTypes } from 'devextreme-react/pivot-grid';
 import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
+import type { ContextMenuTypes } from 'devextreme-react/context-menu';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
 import { sales } from './data.ts';
 
-const setSummaryType = (args, sourceField) => {
+type CheckBoxValue = CheckBoxTypes.Properties['value'];
+
+type FieldWithIndex = PivotGridTypes.ContextMenuPreparingEvent['field'] & {
+  index: number
+};
+
+type ContextMenuItem = ContextMenuTypes.Item & {
+  value?: string;
+  onItemClick?: (e: ContextMenuTypes.ItemClickEvent) => void;
+};
+
+const setSummaryType = (
+  args: ContextMenuTypes.ItemClickEvent,
+  sourceField: FieldWithIndex
+) => {
   dataSource.field(sourceField.index, {
     summaryType: args.itemData.value,
   });
@@ -18,17 +32,17 @@ const setSummaryType = (args, sourceField) => {
   dataSource.load();
 };
 
-const onContextMenuPreparing = (e) => {
-  const sourceField = e.field;
+const onContextMenuPreparing = (e: PivotGridTypes.ContextMenuPreparingEvent) => {
+  const sourceField = e.field as FieldWithIndex;
 
-  if (sourceField) {
+  if (sourceField && e.items) {
     if (!sourceField.groupName || sourceField.groupIndex === 0) {
       e.items.push({
         text: 'Hide field',
         onItemClick() {
           let fieldIndex: number;
 
-          if (sourceField.groupName) {
+          if (sourceField.groupName && sourceField.area !== undefined && sourceField.areaIndex !== undefined) {
             const areaField: any = dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex];
 
             fieldIndex = areaField.index;
@@ -45,7 +59,7 @@ const onContextMenuPreparing = (e) => {
     }
 
     if (sourceField.dataType === 'number') {
-      const menuItems = [];
+      const menuItems: ContextMenuItem[] = [];
 
       e.items.push({ text: 'Summary Type', items: menuItems });
       ['Sum', 'Avg', 'Min', 'Max'].forEach((summaryType) => {
@@ -54,10 +68,10 @@ const onContextMenuPreparing = (e) => {
         menuItems.push({
           text: summaryType,
           value: summaryType.toLowerCase(),
-          onItemClick(args) {
+          onItemClick(args: ContextMenuTypes.ItemClickEvent) {
             setSummaryType(args, sourceField);
           },
-          selected: e.field.summaryType === summaryTypeValue,
+          selected: e.field?.summaryType === summaryTypeValue,
         });
       });
     }
@@ -65,13 +79,13 @@ const onContextMenuPreparing = (e) => {
 };
 
 const App = () => {
-  const [showColumnFields, setShowColumnFields] = useState(true);
-  const [showDataFields, setShowDataFields] = useState(true);
-  const [showFilterFields, setShowFilterFields] = useState(true);
-  const [showRowFields, setShowRowFields] = useState(true);
+  const [showColumnFields, setShowColumnFields] = useState<CheckBoxValue>(true);
+  const [showDataFields, setShowDataFields] = useState<CheckBoxValue>(true);
+  const [showFilterFields, setShowFilterFields] = useState<CheckBoxValue>(true);
+  const [showRowFields, setShowRowFields] = useState<CheckBoxValue>(true);
 
   return (
-    <React.Fragment>
+    <>
       <PivotGrid
         id="sales"
         dataSource={dataSource}
@@ -83,10 +97,10 @@ const App = () => {
         onContextMenuPreparing={onContextMenuPreparing}
       >
         <FieldPanel
-          showColumnFields={showColumnFields}
-          showDataFields={showDataFields}
-          showFilterFields={showFilterFields}
-          showRowFields={showRowFields}
+          showColumnFields={!!showColumnFields}
+          showDataFields={!!showDataFields}
+          showFilterFields={!!showFilterFields}
+          showRowFields={!!showRowFields}
           allowFieldDragging={true}
           visible={true}
         />
@@ -122,7 +136,7 @@ const App = () => {
             text="Show Filter Fields" />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

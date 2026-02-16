@@ -28,7 +28,7 @@ const App = () => {
     setShowDragIcons(args.value);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <DataGrid
         height={440}
         dataSource={tasks}
@@ -80,7 +80,7 @@ const App = () => {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

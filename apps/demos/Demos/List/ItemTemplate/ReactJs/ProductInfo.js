@@ -7,14 +7,15 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 });
 export default function ProductInfo(item) {
+  const { Name, ImageSrc, Price } = item;
   return (
     <div className="product">
       <img
-        alt={item.Name}
-        src={item.ImageSrc}
+        alt={Name}
+        src={ImageSrc}
       />
-      <div>{item.Name}</div>
-      <div className="price">{currencyFormatter.format(item.Price)}</div>
+      <div>{Name}</div>
+      <div className="price">{currencyFormatter.format(Price)}</div>
     </div>
   );
 }

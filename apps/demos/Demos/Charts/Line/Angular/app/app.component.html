@@ -1,11 +1,9 @@
 <div id="chart-demo">
   <dx-chart palette="Violet" [dataSource]="countriesInfo">
-    <dxi-chart-series
-      *ngFor="let energy of energySources"
-      [valueField]="energy.value"
-      [name]="energy.name"
-    >
+    @for(energy of energySources; track energy.name) {
+    <dxi-chart-series [valueField]="energy.value" [name]="energy.name">
     </dxi-chart-series>
+    }
     <dxo-chart-common-series-settings
       #seriesSettings
       argumentField="country"

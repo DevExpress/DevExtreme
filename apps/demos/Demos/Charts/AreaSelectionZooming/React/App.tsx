@@ -11,23 +11,23 @@ import Chart, {
   Crosshair,
   Legend,
   Border,
-  type ChartTypes,
 } from 'devextreme-react/chart';
+import type { ChartTypes, ChartRef } from 'devextreme-react/chart';
 import Button from 'devextreme-react/button';
 import { birthLife } from './data.ts';
 
-function customizeTooltip(pointInfo: ChartTypes.CommonPointInfo) {
-  const { data } = pointInfo.point;
+function customizeTooltip(pointInfo: ChartTypes.CommonPointInfo): Record<string, string> {
+  const { data } = pointInfo.point ?? {};
   return {
     text: `${data.country} ${data.year}`,
   };
 }
 
 function App() {
-  const chartRef = useRef(null);
+  const chartRef = useRef<ChartRef>(null);
 
   const resetZoom = useCallback(() => {
-    chartRef.current.instance().resetVisualRange();
+    chartRef.current?.instance().resetVisualRange();
   }, []);
 
   return (

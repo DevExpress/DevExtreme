@@ -1,8 +1,26 @@
 import React, { useCallback, useState } from 'react';
+
 import { ArrayStore } from 'devextreme-react/common/data';
-import List, { type ListTypes } from 'devextreme-react/list';
+import List from 'devextreme-react/list';
+import type { ListTypes } from 'devextreme-react/list';
 import TileView from 'devextreme-react/tile-view';
+
 import { data } from './data.ts';
+
+interface Hotel {
+  Id: number;
+  Hotel_Name: string;
+  Address: string;
+  Postal_Code: string;
+  City: string;
+  Hotel_Class: string;
+  Price: number;
+  Images: { FileName: string }[];
+}
+
+interface GroupInfo {
+  key: string;
+}
 
 const dataSourceOptions = {
   store: new ArrayStore({
@@ -24,9 +42,9 @@ const formatCurrency = new Intl.NumberFormat(
   },
 ).format;
 
-const renderListGroup = (group) => <div className="city">{group.key}</div>;
+const renderListGroup = (group: GroupInfo) => <div className="city">{group.key}</div>;
 
-const renderListItem = (item) => (
+const renderListItem = (item: Hotel) => (
   <div>
     <div className="hotel">
       <div className="name">{item.Hotel_Name}</div>
@@ -57,10 +75,10 @@ const App = () => {
     const hotel = e.addedItems[0];
     setCurrentHotel(hotel);
     setSelectedItemKeys([hotel.Id]);
-  }, [setCurrentHotel, setSelectedItemKeys]);
+  }, []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="left">
         <List
           selectionMode="single"
@@ -102,7 +120,7 @@ const App = () => {
         <div className="address">{currentHotel.Postal_Code}, {currentHotel.Address}</div>
         <div className="description">{currentHotel.Description}</div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

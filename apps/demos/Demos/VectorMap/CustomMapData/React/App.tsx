@@ -3,13 +3,14 @@ import VectorMap, {
   Layer,
   Export,
   Title,
-  Label, ILayerProps,
+  Label,
 } from 'devextreme-react/vector-map';
+import type { ILayerProps } from 'devextreme-react/vector-map';
 import { pangaeaBorders, pangaeaContinents } from './data.ts';
 
 const projection = {
-  to: ([l, lt]) => [l / 100, lt / 100],
-  from: ([x, y]) => [x * 100, y * 100],
+  to: ([l, lt]: [number, number]) => [l / 100, lt / 100],
+  from: ([x, y]: [number, number]) => [x * 100, y * 100],
 };
 
 const customizeLayer: ILayerProps['customize'] = (elements) => {

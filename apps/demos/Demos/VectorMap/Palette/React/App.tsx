@@ -1,16 +1,16 @@
 import React from 'react';
 
 import VectorMap, {
-  ILayerProps,
-  ILegendProps, ITooltipProps,
   Layer,
   Legend,
   Source,
   Tooltip,
 } from 'devextreme-react/vector-map';
+import type { ILayerProps, ILegendProps, ITooltipProps } from 'devextreme-react/vector-map';
 
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { populations } from './data.ts';
+import type { PopulationsKey } from './data.ts';
 
 const colorGroups = [0, 0.5, 0.8, 1, 2, 3, 100];
 
@@ -18,7 +18,8 @@ const bounds = [-180, 85, 180, -60];
 
 const customizeLayer: ILayerProps['customize'] = (elements) => {
   elements.forEach((element) => {
-    element.attribute('population', populations[element.attribute('name')]);
+    const name = element.attribute('name') as PopulationsKey;
+    element.attribute('population', populations[name]);
   });
 };
 
@@ -38,7 +39,7 @@ const customizeTooltip: ITooltipProps['customizeTooltip'] = (arg) => {
   if (arg.attribute('population')) {
     return { text: `${arg.attribute('name')}: ${arg.attribute('population')}% of world population` };
   }
-  return null;
+  return {};
 };
 
 export default function App() {

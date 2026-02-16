@@ -22,7 +22,8 @@
   <dxi-card-view-column dataField="Horsepower"></dxi-card-view-column>
 
   <div *dxTemplate="let model of 'vehicleCardTemplate'">
-    <ng-container *ngIf="model.card?.data as data">
+    @if(model.card?.data; as data) {
+    <ng-container>
       <vehicle-card
         [id]="data.ID"
         [model]="data.TrademarkName + ' ' + data.Name"
@@ -34,6 +35,7 @@
         (showInfo)="showInfo(data)"
       ></vehicle-card>
     </ng-container>
+    }
   </div>
 </dx-card-view>
 
@@ -47,9 +49,8 @@
 >
   <dxo-position at="center" my="center" collision="fit"></dxo-position>
   <div *dxTemplate="let _ of 'content'">
-    <license-info
-      *ngIf="currentVehicle"
-      [vehicle]="currentVehicle"
-    ></license-info>
+    @if(currentVehicle) {
+    <license-info [vehicle]="currentVehicle"></license-info>
+    }
   </div>
 </dx-popup>

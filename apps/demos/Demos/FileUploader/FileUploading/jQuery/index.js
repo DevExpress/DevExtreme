@@ -15,7 +15,7 @@ $(() => {
             $('<span />').html(`Name: ${file.name}<br/>`),
             $('<span />').html(`Size ${file.size} bytes<br/>`),
             $('<span />').html(`Type ${file.type}<br/>`),
-            $('<span />').html(`Last Modified Date: ${file.lastModifiedDate}`),
+            $('<span />').html(`Last Modified Date: ${new Date(file.lastModified).toDateString()}`),
           );
           $selectedItem.appendTo($('#selected-files'));
         });

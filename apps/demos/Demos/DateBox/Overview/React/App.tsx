@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import DateBox, { type DateBoxTypes } from 'devextreme-react/date-box';
 
-import service from './data.ts';
+import { federalHolidays } from './data.ts';
 
 const dateTimeLabel = { 'aria-label': 'Date Time' };
 const dateLabel = { 'aria-label': 'Date' };
@@ -13,22 +13,22 @@ const customFormatLabel = { 'aria-label': 'Custom Format' };
 const birthDateLabel = { 'aria-label': 'Birth Date' };
 
 function App() {
-  const [value, setValue] = useState(new Date(1981, 3, 27));
+  const [value, setValue] = useState<Date>(new Date(1981, 3, 27));
   const now = new Date();
   const firstWorkDay2017 = new Date(2017, 0, 3);
   const min = new Date(1900, 0, 1);
   const dateClear = new Date(2015, 11, 1, 6);
-  const disabledDates = service.getFederalHolidays();
+  const disabledDates = federalHolidays;
 
   const diffInDay = useMemo(
-    () =>
+    (): string =>
       `${Math.floor(
         Math.abs((new Date().getTime() - value.getTime()) / (24 * 60 * 60 * 1000)),
       )} days`,
     [value],
   );
 
-  const onValueChanged = useCallback((e: DateBoxTypes.ValueChangedEvent) => {
+  const onValueChanged = useCallback((e: DateBoxTypes.ValueChangedEvent): void => {
     setValue(e.value);
   }, []);
 

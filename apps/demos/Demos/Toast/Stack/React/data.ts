@@ -1,4 +1,7 @@
-export const directions = [
+import type { ToastType } from 'devextreme/ui/toast';
+import type { NotifyStack } from './types.ts';
+
+export const directions: NotifyStack['direction'][] = [
   'down-push',
   'down-stack',
   'up-push',
@@ -9,7 +12,7 @@ export const directions = [
   'right-stack',
 ];
 
-export const positions = [
+export const positions: NotifyStack['position'][] = [
   'top left',
   'top center',
   'top right',
@@ -21,9 +24,9 @@ export const positions = [
   'right center',
 ];
 
-export const types = ['error', 'info', 'success', 'warning'];
+export const types: ToastType[] = ['error', 'info', 'success', 'warning'];
 
-export const radioGroupItems = ['predefined', 'coordinates'];
+export const radioGroupItems: string[] = ['predefined', 'coordinates'];
 
 export const positionTopLabel = { 'aria-label': 'Position Top' };
 export const positionBottomLabel = { 'aria-label': 'Position Bottom' };

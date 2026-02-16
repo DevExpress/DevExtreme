@@ -1,4 +1,26 @@
-export const orders = [{
+import type { FilterBuilderTypes } from 'devextreme-react/filter-builder';
+
+export interface Order {
+  ID: number;
+  OrderNumber: number;
+  OrderDate: string;
+  SaleAmount: number;
+  Terms: string;
+  Employee: string;
+  CustomerInfo: {
+    StoreState: string;
+    StoreCity: string;
+  };
+}
+
+export type OrderFilterValue<T extends keyof Order = keyof Order> = [T, FilterBuilderTypes.FilterOperation, Order[T]];
+
+export interface OrderFilter {
+  text: string;
+  value: OrderFilterValue | OrderFilterValue[];
+}
+
+export const orders: Order[] = [{
   ID: 1,
   OrderNumber: 35703,
   OrderDate: '2014/04/10',

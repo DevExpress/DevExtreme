@@ -7,9 +7,11 @@
       <th>July</th>
       <th>August</th>
     </tr>
-    <tr *ngFor="let week of weeksData">
+    @for(week of weeksData; track week) {
+    <tr>
       <th>{{ week.weekCount }} week</th>
-      <td *ngFor="let bullet of week.bulletsData">
+      @for(bullet of week.bulletsData; track bullet) {
+      <td>
         <dx-bullet
           class="bullet"
           [startScaleValue]="0"
@@ -23,6 +25,8 @@
           ></dxo-bullet-tooltip>
         </dx-bullet>
       </td>
+      }
     </tr>
+    }
   </table>
 </div>

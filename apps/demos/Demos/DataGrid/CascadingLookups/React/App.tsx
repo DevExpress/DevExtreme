@@ -1,16 +1,16 @@
 import React from 'react';
 import DataGrid, {
-  Column, type DataGridTypes, Editing, Lookup,
+  Column, Editing, Lookup,
 } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 import {
-  employees, states, cities, Employee,
+  employees, states, cities,
 } from './data.ts';
+import type { Employee } from './data.ts';
 
 const onEditorPreparing = (e: DataGridTypes.EditorPreparingEvent) => {
   if (e.parentType === 'dataRow' && e.dataField === 'CityID') {
-    const isStateNotSet = e.row.data.StateID === undefined;
-
-    e.editorOptions.disabled = isStateNotSet;
+    e.editorOptions.disabled = e.row?.data.StateID === undefined;
   }
 };
 
@@ -19,9 +19,9 @@ const getFilteredCities = (options: { data?: Employee; }) => ({
   filter: options.data ? ['StateID', '=', options.data.StateID] : null,
 });
 
-function setStateValue(rowData: Employee, value) {
+function setStateValue(this: DataGridTypes.Column, rowData: Employee, value: number) {
   rowData.CityID = null;
-  this.defaultSetCellValue?.(rowData, value);
+  this.defaultSetCellValue?.(rowData, value, undefined);
 }
 
 const App = () => (

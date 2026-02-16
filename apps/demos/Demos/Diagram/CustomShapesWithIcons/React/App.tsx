@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import Diagram, {
-  CustomShape, ConnectionPoint, Group, Toolbox, DiagramRef,
+  CustomShape, ConnectionPoint, Group, Toolbox,
 } from 'devextreme-react/diagram';
+import type { DiagramRef } from 'devextreme-react/diagram';
 import 'whatwg-fetch';
 
 export default function App() {

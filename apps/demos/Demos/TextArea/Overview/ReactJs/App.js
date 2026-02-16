@@ -2,23 +2,21 @@ import React, { useCallback, useState } from 'react';
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import TextArea from 'devextreme-react/text-area';
-import service from './data.js';
+import { valueChangeEvents, content } from './data.js';
 
-const content = service.getContent();
-const { valueChangeEvents } = service;
 const notesLabel = { 'aria-label': 'Notes' };
 const eventLabel = { 'aria-label': 'Event' };
 function App() {
   const [value, setValue] = useState(content);
   const [valueForEditableTestArea, setValueForEditableTestArea] = useState(content);
-  const [maxLength, setMaxLength] = useState(null);
+  const [maxLength, setMaxLength] = useState(undefined);
   const [eventValue, setEventValue] = useState(valueChangeEvents[0].name);
   const [autoResizeEnabled, setAutoResizeEnabled] = useState(false);
   const [height, setHeight] = useState(90);
   const onCheckboxValueChanged = useCallback((e) => {
     const str = content;
     setValue(e.value ? str.substring(0, 100) : str);
-    setMaxLength(e.value ? 100 : null);
+    setMaxLength(e.value ? 100 : undefined);
   }, []);
   const onAutoResizeChanged = useCallback((e) => {
     setAutoResizeEnabled(e.value);
@@ -31,7 +29,7 @@ function App() {
     setValueForEditableTestArea(e.value);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="dx-fieldset">
         <div className="dx-fieldset-header">Default Mode</div>
         <div className="dx-field">
@@ -92,7 +90,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

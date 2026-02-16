@@ -1,9 +1,6 @@
-import {
-  enableProdMode, Component, ViewChild, NgModule,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { enableProdMode, Component, ViewChild, provideZoneChangeDetection } from '@angular/core';
+import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { CustomStore } from 'devextreme-angular/common/data';
 import { DxDropDownBoxModule, DxDataGridModule } from 'devextreme-angular';
@@ -23,6 +20,11 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
+  imports: [
+    DxTreeViewModule,
+    DxDropDownBoxModule,
+    DxDataGridModule,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxTreeViewComponent, { static: false }) treeView: DxTreeViewComponent;
@@ -75,17 +77,9 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxTreeViewModule,
-    DxDropDownBoxModule,
-    HttpClientModule,
-    DxDataGridModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    provideHttpClient(withFetch()),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

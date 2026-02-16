@@ -1,6 +1,5 @@
-import { enableProdMode, Component, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { enableProdMode, Component, provideZoneChangeDetection } from '@angular/core';
 import { DxNumberBoxModule, DxDateBoxModule } from 'devextreme-angular';
 import { DxButtonTypes } from 'devextreme-angular/ui/button';
 import { DxTextBoxModule, DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
@@ -21,6 +20,11 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
+  imports: [
+    DxTextBoxModule,
+    DxNumberBoxModule,
+    DxDateBoxModule,
+  ],
 })
 
 export class AppComponent {
@@ -87,17 +91,8 @@ export class AppComponent {
   };
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxTextBoxModule,
-    DxNumberBoxModule,
-    DxDateBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

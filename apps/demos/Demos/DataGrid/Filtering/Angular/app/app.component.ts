@@ -1,8 +1,5 @@
-import {
-  NgModule, Component, ViewChild, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
   DxDataGridComponent,
   DxDataGridModule,
@@ -28,6 +25,11 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
+  imports: [
+    DxDataGridModule,
+    DxSelectBoxModule,
+    DxCheckBoxModule,
+  ],
 })
 
 export class AppComponent {
@@ -83,14 +85,14 @@ export class AppComponent {
     return (new Date(OrderDate)).getDay();
   }
 
-  calculateFilterExpression(value: string, _: unknown, target: string) {
+  calculateFilterExpression(value: string, _: unknown, target: string, ...args: unknown[]) {
     const column = this as any;
 
     if (target === 'headerFilter' && value === 'weekends') {
       return [[AppComponent.getOrderDay, '=', 0], 'or', [AppComponent.getOrderDay, '=', 6]];
     }
 
-    return column.defaultCalculateFilterExpression.apply(this, arguments);
+    return column.defaultCalculateFilterExpression.apply(this, [value, _, target, ...args]);
   }
 
   orderHeaderFilter = ({ dataSource }) => {
@@ -108,16 +110,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDataGridModule,
-    DxSelectBoxModule,
-    DxCheckBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

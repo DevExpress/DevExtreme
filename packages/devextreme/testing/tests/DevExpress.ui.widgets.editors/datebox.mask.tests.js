@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { renderDateParts, getDatePartIndexByPosition } from '__internal/ui/date_box/m_date_box.mask.parts';
+import { renderDateParts, getDatePartIndexByPosition } from '__internal/ui/date_box/date_box.mask.parts';
 import dateParser from '__internal/core/localization/ldml/dateParserModule';
 import dateLocalization from 'common/core/localization/date';
 import { noop } from 'core/utils/common';
@@ -1865,6 +1865,24 @@ module('Caret moving', setupModule, () => {
         this.$input.trigger('dxclick');
 
         assert.deepEqual(this.keyboard.caret(), allSelectedCaret, 'no date part is selected');
+    });
+
+    test('should keep active part after focus out and focus in (T1318439)', function(assert) {
+        const caretYear = { start: 11, end: 15 };
+
+        this.instance.option({
+            useMaskBehavior: true,
+            mode: 'text',
+        });
+
+        this.keyboard.press('end');
+
+        assert.deepEqual(this.keyboard.caret(), caretYear, 'year is selected initially');
+
+        this.$input.trigger('focusout');
+        this.$input.trigger('focusin');
+
+        assert.deepEqual(this.keyboard.caret(), caretYear, 'year is selected after focus return');
     });
 });
 

@@ -1703,7 +1703,6 @@ export class ColumnsController extends modules.Controller {
                 result = false;
               }
             } else if (gridCoreUtils.isDateType(column.dataType)) {
-              // @ts-expect-error
               parsedValue = dateLocalization.parse(text, column.format);
               if (parsedValue) {
                 result = parsedValue;
@@ -1836,9 +1835,18 @@ export class ColumnsController extends modules.Controller {
 
   public getRowIndex(columnIndex, alwaysGetRowIndex?) {
     const column = this._columns[columnIndex];
-    const bandColumnsCache = this.getBandColumnsCache();
+    if (!column) {
+      return 0;
+    }
 
-    return column && (alwaysGetRowIndex || column.visible && !(column.command || isDefined(column.groupIndex))) ? getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex).length : 0;
+    const isCommandOrGroupColumn = column.command || this._isColumnInGroupPanel(column);
+    const isVisibleDataColumn = column.visible && !isCommandOrGroupColumn;
+    if (!alwaysGetRowIndex && !isVisibleDataColumn) {
+      return 0;
+    }
+
+    const bandColumnsCache = this.getBandColumnsCache();
+    return getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex).length;
   }
 
   public getChildrenByBandColumn(bandColumnIndex, onlyVisibleDirectChildren?) {

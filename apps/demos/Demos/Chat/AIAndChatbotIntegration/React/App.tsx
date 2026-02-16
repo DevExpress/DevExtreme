@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import Chat, { type ChatTypes } from 'devextreme-react/chat';
+import Chat from 'devextreme-react/chat';
+import type { ChatTypes } from 'devextreme-react/chat';
 import { loadMessages } from 'devextreme-react/common/core/localization';
 import {
   user,
@@ -19,11 +20,14 @@ loadMessages({
 
 export default function App() {
   const {
-    alerts, insertMessage, fetchAIResponse, regenerateLastAIResponse,
+    alerts,
+    insertMessage,
+    fetchAIResponse,
+    regenerateLastAIResponse,
   } = useApi();
 
   const [typingUsers, setTypingUsers] = useState<ChatTypes.User[]>([]);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const processAIRequest = useCallback(async (message: ChatTypes.Message): Promise<void> => {
     setIsProcessing(true);
@@ -39,11 +43,11 @@ export default function App() {
     insertMessage({ id: Date.now(), ...message });
 
     if (!alerts.length) {
-      (event.target as HTMLElement).blur();
+      (event?.target as HTMLElement).blur();
 
       await processAIRequest(message);
 
-      (event.target as HTMLElement).focus();
+      (event?.target as HTMLElement).focus();
     }
   }, [insertMessage, alerts.length, processAIRequest]);
 

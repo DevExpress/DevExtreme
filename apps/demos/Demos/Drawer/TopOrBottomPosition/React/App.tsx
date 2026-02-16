@@ -1,17 +1,17 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import Drawer, { type DrawerTypes } from 'devextreme-react/drawer';
-import RadioGroup from 'devextreme-react/radio-group';
+import RadioGroup, { type RadioGroupTypes } from 'devextreme-react/radio-group';
 import Toolbar from 'devextreme-react/toolbar';
 import HTMLReactParser from 'html-react-parser';
 import { text } from './data.ts';
 import NavigationList from './NavigationList.tsx';
 
-const RadioGroupOpenedOptions = ['push', 'shrink', 'overlap'];
-const RadioGroupPositionOptions = ['top', 'bottom'];
-const RadioGroupRevealOptions = ['slide', 'expand'];
+const RadioGroupOpenedOptions: DrawerTypes.OpenedStateMode[] = ['push', 'shrink', 'overlap'];
+const RadioGroupRevealOptions: DrawerTypes.RevealMode[] = ['slide', 'expand'];
+const RadioGroupPositionOptions: DrawerTypes.PanelLocation[] = ['top', 'bottom'];
 
 const App = () => {
-  const [opened, setOpened] = useState(false);
+  const [opened, setOpened] = useState<boolean>(false);
   const [openedStateMode, setOpenedStateMode] = useState<DrawerTypes.OpenedStateMode>('shrink');
   const [revealMode, setRevealMode] = useState<DrawerTypes.RevealMode>('expand');
   const [position, setPosition] = useState<DrawerTypes.PanelLocation>('top');
@@ -22,26 +22,26 @@ const App = () => {
     options: {
       icon: 'menu',
       stylingMode: 'text',
-      onClick: () => setOpened(!opened),
+      onClick: (): void => setOpened((opened: boolean): boolean => !opened),
     },
-  }], [opened, setOpened]);
+  }], []);
 
-  const onOpenedStateModeChanged = useCallback(({ value }) => {
+  const onOpenedStateModeChanged = useCallback(({ value }: RadioGroupTypes.ValueChangedEvent): void => {
     setOpenedStateMode(value);
-  }, [setOpenedStateMode]);
+  }, []);
 
-  const onRevealModeChanged = useCallback(({ value }) => {
+  const onRevealModeChanged = useCallback(({ value }: RadioGroupTypes.ValueChangedEvent): void => {
     setRevealMode(value);
-  }, [setRevealMode]);
+  }, []);
 
-  const onPositionChanged = useCallback(({ value }) => {
+  const onPositionChanged = useCallback(({ value }: RadioGroupTypes.ValueChangedEvent): void => {
     setPosition(value);
-  }, [setPosition]);
+  }, []);
 
-  const onOutsideClick = useCallback(() => {
+  const onOutsideClick = useCallback((): boolean => {
     setOpened(false);
     return false;
-  }, [setOpened]);
+  }, []);
 
   return (
     <div className="flex-container">

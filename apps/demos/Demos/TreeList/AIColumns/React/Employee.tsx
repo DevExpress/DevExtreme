@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { type TreeListTypes } from 'devextreme-react/tree-list';
+
 import { type Employee } from './types';
 
 export default function Employee(props: TreeListTypes.ColumnCellTemplateData<Employee>) {

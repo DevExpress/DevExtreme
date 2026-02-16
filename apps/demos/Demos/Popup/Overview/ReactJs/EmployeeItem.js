@@ -2,26 +2,27 @@ import React, { useCallback } from 'react';
 import { Button } from 'devextreme-react/button';
 
 export function EmployeeItem(props) {
-  const showInfo = useCallback(() => {
-    props.showInfo(props.employee);
-  }, [props]);
+  const { employee, showInfo } = props;
+  const onInfoButtonClick = useCallback(() => {
+    showInfo(employee);
+  }, [employee, showInfo]);
   return (
-    <React.Fragment>
+    <>
       <img
-        alt={`${props.employee.FirstName} ${props.employee.LastName}`}
-        src={props.employee.Picture}
-        id={`image${props.employee.ID}`}
+        alt={`${employee.FirstName} ${employee.LastName}`}
+        src={employee.Picture}
+        id={`image${employee.ID}`}
       />
       <br />
       <i>
-        {props.employee.FirstName} {props.employee.LastName}
+        {employee.FirstName} {employee.LastName}
       </i>
       <br />
       <Button
         className="button-info"
         text="Details"
-        onClick={showInfo}
+        onClick={onInfoButtonClick}
       />
-    </React.Fragment>
+    </>
   );
 }

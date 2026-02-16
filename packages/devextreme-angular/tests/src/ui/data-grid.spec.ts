@@ -18,6 +18,7 @@ import {
 import DxDataGrid from 'devextreme/ui/data_grid';
 
 @Component({
+  standalone: false,
   selector: 'test-container-component',
   template: '',
 })
@@ -277,6 +278,7 @@ describe('DxDataGrid', () => {
 
   it('should destroy devextreme components in template correctly', () => {
     @Component({
+      standalone: false,
       selector: 'test-container-component',
       template: '',
     })
@@ -331,6 +333,7 @@ describe('DxDataGrid', () => {
       { field: 'otherField', caption: 'Other field2', cellTemplateName: undefined },
     ];
     @Component({
+      standalone: false,
       selector: 'test-container-component',
       template: '',
     })
@@ -557,5 +560,56 @@ describe('Nested DxDataGrid', () => {
         done();
       }, 1000);
     }, 1000);
+  });
+});
+
+describe('DxDataGrid slow tests', () => {
+  const originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+
+  beforeAll(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
+
+    TestBed.configureTestingModule(
+      {
+        declarations: [TestContainerComponent],
+        imports: [DxDataGridModule],
+      },
+    );
+  });
+  afterAll(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+  });
+
+  it('should not memory leak after click if dx-data-grid is on page (T1307313)', async () => {
+    TestBed.overrideComponent(TestContainerComponent, {
+      set: {
+        template: '<dx-data-grid [dataSource]="[]"></dx-data-grid>',
+      },
+    });
+
+    const fixture = TestBed.createComponent(TestContainerComponent);
+
+    fixture.detectChanges();
+
+    for (let i = 0; i < 100; i++) {
+      document.body.click();
+      fixture.detectChanges();
+    }
+
+    globalThis.gc();
+
+    const memoryBefore = await (performance as any).measureUserAgentSpecificMemory();
+
+    for (let i = 0; i < 100; i++) {
+      document.body.click();
+      fixture.detectChanges();
+    }
+
+    globalThis.gc();
+
+    const memoryAfter = await (performance as any).measureUserAgentSpecificMemory();
+    const memoryDiff = Math.round((memoryAfter.bytes - memoryBefore.bytes) / 1024);
+
+    expect(memoryDiff).toBeLessThan(30);
   });
 });

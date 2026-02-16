@@ -30,7 +30,11 @@
   </DxScheduler>
 </template>
 <script setup lang="ts">
-import { DxScheduler, DxResource, type DxSchedulerTypes } from 'devextreme-vue/scheduler';
+import {
+  DxScheduler,
+  DxResource,
+  type DxSchedulerTypes,
+} from 'devextreme-vue/scheduler';
 import { data, priorityData, resourcesData } from './data.ts';
 
 const views: DxSchedulerTypes.ViewType[] = ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];

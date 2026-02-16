@@ -118,13 +118,32 @@ AspNet.makeMetadata({
         'ui/scheduler:dxSchedulerOptions.cellDuration',
         'ui/scheduler:dxSchedulerOptions.views.(agenda|cell)Duration',
         'ui/text_box:dxTextBoxOptions.maxLength',
-        'common/grids:ColumnBase.ownerBand',
+        // 'common/grids:ColumnBase.ownerBand',
         'ui/responsive_box:dxResponsiveBoxItem.location.(col|row)',
         'ui/tag_box:dxTagBoxOptions.maxDisplayedTags',
       ],
       ['number', 'string'],
       ['int'],
     ),
+
+    // recover inherited
+    // ownerBand
+    removeMembers('common/grids:ColumnBase.ownerBand'),
+    addMember({ uid: 'ui/data_grid:dxDataGridColumn.ownerBand' }),
+    addMember({ uid: 'ui/tree_list:dxTreeListColumn.ownerBand' }),
+    replaceTypes('ui/data_grid:dxDataGridColumn.ownerBand', ['*'], ['int']),
+    replaceTypes('ui/tree_list:dxTreeListColumn.ownerBand', ['*'], ['number']),
+    // ownerBand
+    // maxLength
+    addMember({ uid: 'ui/drop_down_box:dxDropDownBoxOptions.maxLength' }),
+    addMember({ uid: 'ui/tag_box:dxTagBoxOptions.maxLength' }),
+    replaceTypes(
+      ['ui/drop_down_box:dxDropDownBoxOptions.maxLength', 'ui/tag_box:dxTagBoxOptions.maxLength'],
+      ['*'],
+      ['number', 'string'],
+    ),
+    // maxLength
+    // recover inherited
 
     // This isn't the pageSize you're looking for. Rollback.
     replaceTypes('ui/diagram:dxDiagramOptions.pageSize', ['int'], []),

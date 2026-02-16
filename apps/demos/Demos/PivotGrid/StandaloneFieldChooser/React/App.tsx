@@ -1,32 +1,15 @@
 import React, { useRef, useState } from 'react';
 
-import {
-  PivotGrid,
-  FieldChooser,
-} from 'devextreme-react/pivot-grid';
-
-import {
-  PivotGridFieldChooser,
-  Texts,
-  PivotGridFieldChooserRef,
-} from 'devextreme-react/pivot-grid-field-chooser';
-
-import {
-  SelectBox,
-} from 'devextreme-react/select-box';
-
-import {
-  Button,
-} from 'devextreme-react/button';
-
-import {
-  RadioGroup,
-} from 'devextreme-react/radio-group';
+import { Button } from 'devextreme-react/button';
+import type { ApplyChangesMode } from 'devextreme-react/common/grids';
+import type { FieldChooserLayout } from 'devextreme-react/common';
+import { PivotGrid, FieldChooser } from 'devextreme-react/pivot-grid';
+import { PivotGridFieldChooser, Texts } from 'devextreme-react/pivot-grid-field-chooser';
+import type { PivotGridFieldChooserRef } from 'devextreme-react/pivot-grid-field-chooser';
+import { RadioGroup } from 'devextreme-react/radio-group';
+import { SelectBox } from 'devextreme-react/select-box';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-
-import { ApplyChangesMode } from 'devextreme-react/common/grids';
-import { FieldChooserLayout } from 'devextreme-react/common';
 
 import service from './data.ts';
 
@@ -40,7 +23,7 @@ const App = () => {
   const fieldChooserRef = useRef<PivotGridFieldChooserRef>(null);
 
   return (
-    <React.Fragment>
+    <>
       <PivotGrid
         dataSource={dataSource}
         allowSortingBySummary={true}
@@ -73,11 +56,11 @@ const App = () => {
             <Button
               text="Apply"
               type="default"
-              onClick={() => fieldChooserRef.current.instance().applyChanges()}
+              onClick={() => fieldChooserRef.current?.instance().applyChanges()}
             ></Button>
             <Button
               text="Cancel"
-              onClick={() => fieldChooserRef.current.instance().cancelChanges()}
+              onClick={() => fieldChooserRef.current?.instance().cancelChanges()}
             ></Button>
           </div>
         }
@@ -111,7 +94,7 @@ const App = () => {
 
       </div>
 
-    </React.Fragment>
+    </>
   );
 };
 

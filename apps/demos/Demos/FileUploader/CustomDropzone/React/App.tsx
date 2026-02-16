@@ -1,17 +1,18 @@
 import React, { useCallback, useState } from 'react';
-import FileUploader, { type FileUploaderTypes } from 'devextreme-react/file-uploader';
+import FileUploader from 'devextreme-react/file-uploader';
+import type { FileUploaderTypes } from 'devextreme-react/file-uploader';
 import ProgressBar from 'devextreme-react/progress-bar';
 
-const allowedFileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
+const allowedFileExtensions: string[] = ['.jpg', '.jpeg', '.gif', '.png'];
 
 export default function App() {
-  const [isDropZoneActive, setIsDropZoneActive] = useState(false);
+  const [isDropZoneActive, setIsDropZoneActive] = useState<boolean>(false);
   const [imageSource, setImageSource] = useState<string>('');
-  const [textVisible, setTextVisible] = useState(true);
-  const [progressVisible, setProgressVisible] = useState(false);
-  const [progressValue, setProgressValue] = useState(0);
+  const [textVisible, setTextVisible] = useState<boolean>(true);
+  const [progressVisible, setProgressVisible] = useState<boolean>(false);
+  const [progressValue, setProgressValue] = useState<number>(0);
 
-  const onDropZoneEnter = useCallback(({ component, dropZoneElement, event }) => {
+  const onDropZoneEnter = useCallback(({ component, dropZoneElement, event }): void => {
     if (dropZoneElement.id === 'dropzone-external') {
       const items = event.originalEvent.dataTransfer.items;
 
@@ -25,18 +26,18 @@ export default function App() {
         setIsDropZoneActive(true);
       }
     }
-  }, [setIsDropZoneActive]);
+  }, []);
 
-  const onDropZoneLeave = useCallback((e: FileUploaderTypes.DropZoneLeaveEvent) => {
+  const onDropZoneLeave = useCallback((e: FileUploaderTypes.DropZoneLeaveEvent): void => {
     if (e.dropZoneElement.id === 'dropzone-external') {
       setIsDropZoneActive(false);
     }
-  }, [setIsDropZoneActive]);
+  }, []);
 
-  const onUploaded = useCallback((e: FileUploaderTypes.UploadedEvent) => {
+  const onUploaded = useCallback((e: FileUploaderTypes.UploadedEvent): void => {
     const { file } = e;
     const fileReader = new FileReader();
-    fileReader.onload = () => {
+    fileReader.onload = (): void => {
       setIsDropZoneActive(false);
       setImageSource(fileReader.result as string);
     };
@@ -44,16 +45,16 @@ export default function App() {
     setTextVisible(false);
     setProgressVisible(false);
     setProgressValue(0);
-  }, [setImageSource, setIsDropZoneActive, setTextVisible, setProgressVisible, setProgressValue]);
+  }, []);
 
-  const onProgress = useCallback((e: { bytesLoaded: number; bytesTotal: number; }) => {
+  const onProgress = useCallback((e: FileUploaderTypes.ProgressEvent): void => {
     setProgressValue((e.bytesLoaded / e.bytesTotal) * 100);
-  }, [setProgressValue]);
+  }, []);
 
   const onUploadStarted = useCallback(() => {
     setImageSource('');
     setProgressVisible(true);
-  }, [setImageSource, setProgressVisible]);
+  }, []);
 
   return (
     <div className="widget-container flex-box">

@@ -1,4 +1,4 @@
-export default [
+export const products = [
   {
     ID: 1,
     Name: 'HD Video Player',

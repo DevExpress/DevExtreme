@@ -1,9 +1,9 @@
 import React from 'react';
 import CardView, { CardHeader, Column, Paging } from 'devextreme-react/card-view';
 import { tasks } from './data.js';
+import EmployeeComponent from './Employee.js';
 import HeaderTemplate from './HeaderTemplate.js';
-import Priority from './Priority.js';
-import Employee from './Employee.js';
+import PriorityComponent from './Priority.js';
 import Progress from './Progress.js';
 
 const App = () => (
@@ -21,7 +21,7 @@ const App = () => (
     <Column
       dataField="Task_Priority"
       caption="Priority"
-      fieldValueRender={(model) => <Priority priorityID={model.field.value} />}
+      fieldValueRender={(model) => <PriorityComponent priorityID={model.field.value} />}
     />
     <Column
       dataField="Task_Start_Date"
@@ -36,7 +36,7 @@ const App = () => (
     <Column
       dataField="Task_Assigned_Employee_ID"
       caption="Assigned to"
-      fieldValueRender={(model) => <Employee employeeID={model.field.value} />}
+      fieldValueRender={(model) => <EmployeeComponent employeeID={model.field.value} />}
     />
     <Column
       dataField="Task_Status"

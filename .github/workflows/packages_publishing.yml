@@ -52,10 +52,9 @@ jobs:
         with:
           path: |
             ${{ env.PNPM_STORE_PATH }}
-            .nx/cache
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store
+            ${{ runner.os }}-pnpm-cache
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -86,10 +85,25 @@ jobs:
           mkdir -p ./artifacts/deps-scanner
           cp reportGithub.json ./artifacts/deps-scanner/
 
+      - name: Build SBOMs
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm set "//npm.pkg.github.com/:_authToken" "$env:NODE_AUTH_TOKEN"
+          pnpm nx build sbom;
+
       - name: Build artifacts package
         run: npx ts-node tools/scripts/make-artifacts-package
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: packages/sbom/dist
+          retention-days: 7
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
         with:
           name: packages
           path: artifacts/npm/*.tgz
@@ -137,10 +151,9 @@ jobs:
         with:
           path: |
             ${{ env.PNPM_STORE_PATH }}
-            .nx/cache
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store
+            ${{ runner.os }}-pnpm-cache
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
