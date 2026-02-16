@@ -180,7 +180,7 @@ QUnit.module('Hamburger', {
     beforeEach: function() {
         this.component = {
             option: sinon.stub(),
-            element: function() {
+            $element: function() {
                 return $('<div>').dxPivotGridFieldChooserBase();
             },
 

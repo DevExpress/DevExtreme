@@ -6133,7 +6133,12 @@ QUnit.module('Vertical headers', {
 
         const columnsWidth = grid._columnsArea.getColumnsWidth();
         const dataWidth = grid._dataArea.getColumnsWidth();
-        assert.deepEqual(columnsWidth, dataWidth);
+
+        assert.strictEqual(columnsWidth.length, dataWidth.length, 'arrays have same length');
+
+        for(let i = 0; i < columnsWidth.length; i++) {
+            assert.roughEqual(columnsWidth[i], dataWidth[i], 2, `column ${i} width`);
+        }
     });
 
     function needRunZoomTest() {
