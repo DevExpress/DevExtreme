@@ -35,19 +35,19 @@
 
     .dx-checkbox.dx-state-disabled {
       .dx-checkbox-icon {
-        background-color: $checkbox-disabled-background-focused;
-        border-color: $checkbox-disabled-border-color-focused;
+        background-color: $treeview-checkbox-disabled-background-focused;
+        border-color: $treeview-checkbox-disabled-border-color-focused;
       }
 
       &.dx-checkbox-checked {
         .dx-checkbox-icon {
-          color: $checkbox-disabled-border-color-focused;
+          color: $treeview-checkbox-disabled-border-color-focused;
         }
       }
 
       &.dx-checkbox-indeterminate {
         .dx-checkbox-icon::before {
-          background-color: $checkbox-disabled-border-color-focused;
+          background-color: $treeview-checkbox-disabled-border-color-focused;
         }
       }
     }

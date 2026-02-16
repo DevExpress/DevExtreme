@@ -19,19 +19,19 @@ $treeview-item-selected-color: $treeview-color !default;
 $treeview-item-selected-bg: $base-selected-bg !default;
 $treeview-spin-icon-color: $base-spin-icon-color !default;
 $checkbox-border-color-focused: $base-accent-active !default;
-$checkbox-disabled-border-color-focused: null !default;
-$checkbox-disabled-background-focused: null !default;
+$treeview-checkbox-disabled-border-color-focused: null !default;
+$treeview-checkbox-disabled-background-focused: null !default;
 $treeview-item-content-disabled: null !default;
-
 
 @if $mode == "light" {
   $treeview-item-content-disabled: color.scale($base-bg, $lightness: -25.88%);
-  $checkbox-disabled-border-color-focused: color.scale($base-bg, $lightness: -29.8%);
-  $checkbox-disabled-background-focused: color.scale($base-bg, $lightness: -7.84%);
+  $treeview-checkbox-disabled-border-color-focused: color.scale($base-bg, $lightness: -29.8%);
+  $treeview-checkbox-disabled-background-focused: color.scale($base-bg, $lightness: -7.84%);
 }
 
 @if $mode == "dark" {
   $treeview-item-content-disabled: color.change($base-bg, $lightness: 36.08%, $space: hsl);
-  $checkbox-disabled-border-color-focused: color.change($base-bg, $lightness: 70.2%, $space: hsl);
-  $checkbox-disabled-background-focused: color.change($base-bg, $lightness: 92.16%, $space: hsl);
+  $treeview-checkbox-disabled-border-color-focused: color.change($base-bg, $lightness: 41.96%, $space: hsl);
+  $treeview-checkbox-disabled-background-focused: color.change($base-bg, $lightness: 21.96%, $space: hsl);
 }
+
