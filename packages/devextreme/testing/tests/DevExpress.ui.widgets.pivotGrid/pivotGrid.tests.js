@@ -6105,7 +6105,7 @@ QUnit.module('Vertical headers', {
     });
 
     // T696415
-    QUnit.skip('headers and data columns has same width', function(assert) {
+    QUnit.test('headers and data columns has same width', function(assert) {
         const fields = [
             { area: 'row', dataField: 'row1' },
             { area: 'column', dataField: 'col1' }
@@ -6129,6 +6129,7 @@ QUnit.module('Vertical headers', {
         this.clock.tick(10);
         grid.$element().css('zoom', 1.35);
         grid.repaint();
+        this.clock.tick(10);
 
         const columnsWidth = grid._columnsArea.getColumnsWidth();
         const dataWidth = grid._dataArea.getColumnsWidth();
