@@ -178,10 +178,25 @@ QUnit.module('Rendering', {
 
 QUnit.module('Hamburger', {
     beforeEach: function() {
+        const fieldChooserBaseMock = {
+            renderField: function(field) {
+                return $('<div>').addClass('dx-area-field').text(field.dataField);
+            },
+            subscribeToEvents: sinon.stub(),
+            renderSortable: sinon.stub()
+        };
+
         this.component = {
             option: sinon.stub(),
             $element: function() {
-                return $('<div>').dxPivotGridFieldChooserBase();
+                const element = $('<div>');
+                element.dxPivotGridFieldChooserBase = function(method) {
+                    if(method === 'instance') {
+                        return fieldChooserBaseMock;
+                    }
+                    return element;
+                };
+                return element;
             },
 
             _createComponent: function(container, Component, options) {
