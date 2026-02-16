@@ -16,7 +16,7 @@ import {
 import { waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 import dateUtils from 'core/utils/date';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import '__internal/scheduler/m_scheduler';
 
 const { module, test } = QUnit;
@@ -1008,6 +1008,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 endDayHour: 19,
                 currentDate: new Date(2015, 2, 16),
                 dataSource: dataSource,
+                maxAppointmentsPerCell: 'unlimited',
                 width: 600
             });
 
@@ -1439,7 +1440,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const cellWorkspaceRect = scheduler.workSpace.getCellWorkspaceRect(2, 6);
             const position = scheduler.appointments.getAppointment(0).position();
             assert.roughEqual(position.left, cellWorkspaceRect.left, 0.5, 'Appointment position.left is correct');
-            assert.roughEqual(Math.ceil(position.top - cellWorkspaceRect.top), 5, 1.01, 'Appointment position.top is correct');
+            assert.roughEqual(Math.ceil(position.top - cellWorkspaceRect.top), -5, 1.01, 'Appointment position.top is correct');
         });
 
         test('Appointment has correct occurrences dates with interval > 1', async function(assert) {
@@ -1469,7 +1470,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const cellWorkspaceRect = scheduler.workSpace.getCellWorkspaceRect(2, 6);
 
             assert.roughEqual(firstPosition.left, eighthPosition.left, 0.5, 'Appointment position.left is correct');
-            assert.roughEqual(Math.ceil(firstPosition.top - cellWorkspaceRect.top), 5, 1.01, 'Appointment position.top is correct');
+            assert.roughEqual(Math.ceil(firstPosition.top - cellWorkspaceRect.top), -5, 1.01, 'Appointment position.top is correct');
         });
 
         test('Appointment has correct occurrences dates with interval > 1, custom firstDayOfWeek', async function(assert) {
@@ -1500,7 +1501,7 @@ supportedScrollingModes.forEach(scrollingMode => {
             const cellWorkspaceRect = scheduler.workSpace.getCellWorkspaceRect(2, 6);
 
             assert.roughEqual(firstPosition.left, eighthPosition.left, 0.5, 'Appointment position.left is correct');
-            assert.roughEqual(Math.ceil(firstPosition.top - cellWorkspaceRect.top), 5, 1.01, 'Appointment position.top is correct');
+            assert.roughEqual(Math.ceil(firstPosition.top - cellWorkspaceRect.top), -5, 1.01, 'Appointment position.top is correct');
         });
 
         [undefined, 1].forEach(firstDayOfWeek => {
@@ -1533,7 +1534,7 @@ supportedScrollingModes.forEach(scrollingMode => {
                 const cellWorkspaceRect = scheduler.workSpace.getCellWorkspaceRect(2, 6);
 
                 assert.roughEqual(firstPosition.left, eighthPosition.left, 0.5, 'Appointment position.left is correct');
-                assert.roughEqual(Math.ceil(firstPosition.top - cellWorkspaceRect.top), 5, 1.01, 'Appointment position.top is correct');
+                assert.roughEqual(Math.ceil(firstPosition.top - cellWorkspaceRect.top), -5, 1.01, 'Appointment position.top is correct');
                 assert.roughEqual(fourthPosition.top - firstPosition.top, eighthPosition.top - fourthPosition.top, 0.5, 'Appointment position.top is correct');
             });
         });
