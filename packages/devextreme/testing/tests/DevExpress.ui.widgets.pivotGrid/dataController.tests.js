@@ -6708,7 +6708,8 @@ QUnit.module('Remote paging', {
         assert.strictEqual(changedSpy.callCount, 3, 'changed call count');
     });
 
-    QUnit.skip('load with CustomStore', function(assert) {
+    QUnit.test('load with CustomStore', function(assert) {
+        const done = assert.async();
         const that = this;
 
         const dataController = that.setup({
@@ -6722,25 +6723,28 @@ QUnit.module('Remote paging', {
             }
         });
 
-        assert.strictEqual(this.loadArgs.length, 1, 'one load');
-        assert.deepEqual(this.loadArgs[0], {
-            group: [{
-                desc: false,
-                groupInterval: undefined,
-                isExpanded: false,
-                selector: 'row'
-            }],
-            groupSummary: [],
-            requireGroupCount: true,
-            skip: 0,
-            take: 2,
-            totalSummary: []
-        }, 'load args');
+        setTimeout(function() {
+            assert.strictEqual(that.loadArgs.length, 1, 'one load');
+            assert.deepEqual(this.loadArgs[0], {
+                group: [{
+                    desc: false,
+                    groupInterval: undefined,
+                    isExpanded: false,
+                    selector: 'row'
+                }],
+                groupSummary: [],
+                requireGroupCount: true,
+                skip: 0,
+                take: 2,
+                totalSummary: []
+            }, 'load args');
 
-        assert.deepEqual(dataController.getRowsInfo(), [
-            [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true }],
-            [{ dataSourceIndex: 2, text: 'row 2', path: ['row 2'], type: 'D', isLast: true }]
-        ]);
+            assert.deepEqual(dataController.getRowsInfo(), [
+                [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true }],
+                [{ dataSourceIndex: 2, text: 'row 2', path: ['row 2'], type: 'D', isLast: true }]
+            ]);
+            done();
+        }, 0);
     });
 
 });
