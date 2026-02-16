@@ -253,11 +253,11 @@ module('Virtual scrolling Month View', () => {
                     {
                         offset: { x: 0 },
                         expectedRects: [{
-                            left: -9924,
+                            left: -10274,
                             top: -9859,
                             width: 450
                         }, {
-                            left: -9999,
+                            left: -10349,
                             top: -9759,
                             width: 525
                         }, {
@@ -265,9 +265,21 @@ module('Virtual scrolling Month View', () => {
                             top: -9659,
                             width: 525
                         }, {
-                            left: -9999,
+                            left: -10349,
                             top: -9559,
                             width: 450
+                        }, {
+                            left: -9999,
+                            top: -9459,
+                            width: 525
+                        }, {
+                            left: -9999,
+                            top: -9359,
+                            width: 525
+                        }, {
+                            left: -9999,
+                            top: -9259,
+                            width: 375
                         }]
                     },
                     {
@@ -309,11 +321,11 @@ module('Virtual scrolling Month View', () => {
                     {
                         offset: { x: 1050 },
                         expectedRects: [{
-                            left: -9924,
+                            left: -10274,
                             top: -9859,
                             width: 450
                         }, {
-                            left: -9999,
+                            left: -10349,
                             top: -9759,
                             width: 525
                         }, {
@@ -321,9 +333,21 @@ module('Virtual scrolling Month View', () => {
                             top: -9659,
                             width: 525
                         }, {
-                            left: -9999,
+                            left: -10349,
                             top: -9559,
                             width: 450
+                        }, {
+                            left: -9999,
+                            top: -9459,
+                            width: 525
+                        }, {
+                            left: -9999,
+                            top: -9359,
+                            width: 525
+                        }, {
+                            left: -9999,
+                            top: -9259,
+                            width: 375
                         }]
                     },
                     {
