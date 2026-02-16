@@ -80,11 +80,14 @@ const getResourceText = async (options: AppointmentProperties): Promise<string[]
 
 export const getAriaDescription = async (options: AppointmentProperties): Promise<string> => {
   const resources = await getResourceText(options);
-  const texts = [
+  const text = [
     getGroupText(options),
     ...resources,
-    messageLocalization.format('dxScheduler-appointmentAriaLabel-hotkeys'),
-  ].filter(Boolean);
+    options.allowDelete
+      ? messageLocalization.format('dxScheduler-appointmentAriaLabel-deleteHotkey')
+      : null,
+    messageLocalization.format('dxScheduler-appointmentAriaLabel-homeEndHotkeys'),
+  ].filter(Boolean).join('; ');
 
-  return texts.join('; ');
+  return text;
 };

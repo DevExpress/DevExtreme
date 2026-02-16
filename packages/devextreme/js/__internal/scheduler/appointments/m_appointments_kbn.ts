@@ -117,7 +117,9 @@ export class AppointmentsKeyboardNavigation {
     }
   }
 
-  private homeHandler(): void {
+  private homeHandler(e: DxEvent): void {
+    e.preventDefault();
+
     const $firstItem = this.getFocusableItems().first();
 
     if (this.$focusedItem && $firstItem.is(this.$focusedItem)) {
@@ -127,7 +129,9 @@ export class AppointmentsKeyboardNavigation {
     this.focusItem($firstItem);
   }
 
-  private endHandler(): void {
+  private endHandler(e: DxEvent): void {
+    e.preventDefault();
+
     const $lastItem = this.getFocusableItems().last();
 
     if (this.$focusedItem && $lastItem.is(this.$focusedItem)) {

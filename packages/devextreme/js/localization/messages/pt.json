@@ -274,7 +274,8 @@
 
         "dxScheduler-appointmentAriaLabel-group": "Grupo: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Compromisso recorrente",
-        "dxScheduler-appointmentAriaLabel-hotkeys": "Press Delete to delete this appointment. Press Home or End to quickly navigate to the first or last appointment",
+        "dxScheduler-appointmentAriaLabel-deleteHotkey": "Press Delete to delete this appointment",
+        "dxScheduler-appointmentAriaLabel-homeEndHotkeys": "Press Home or End to quickly navigate to the first or last appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Lista de compromissos",
         "dxScheduler-newPopupTitle": "New Appointment",

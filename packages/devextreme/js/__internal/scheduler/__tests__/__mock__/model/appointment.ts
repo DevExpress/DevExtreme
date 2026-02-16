@@ -8,6 +8,7 @@ export interface AppointmentModel<T = HTMLDivElement> {
   getText: () => string;
   getDisplayDate: () => string;
   getAriaLabel: () => string;
+  getAriaDescription: () => string;
   getGeometry: () => Position;
   getColor: (view: string) => string | undefined;
   getSnapshot: () => object;
@@ -46,6 +47,11 @@ export const createAppointmentModel = <T extends HTMLDivElement | null>(
   getText: () => getText(element),
   getDisplayDate: () => getDisplayDate(element),
   getAriaLabel: () => element?.getAttribute('aria-label') ?? '',
+  getAriaDescription: (): string => {
+    const id = element?.getAttribute('aria-describedby') ?? '';
+    const descriptionElement = id ? document.getElementById(id) : null;
+    return descriptionElement?.textContent ?? '';
+  },
   getGeometry: () => getGeometry(element),
   getColor(view: string): string | undefined {
     if (!element) {

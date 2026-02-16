@@ -274,7 +274,8 @@
 
         "dxScheduler-appointmentAriaLabel-group": "Gruppe: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Tilbagevendende aftale",
-        "dxScheduler-appointmentAriaLabel-hotkeys": "Press Delete to delete this appointment. Press Home or End to quickly navigate to the first or last appointment",
+        "dxScheduler-appointmentAriaLabel-deleteHotkey": "Press Delete to delete this appointment",
+        "dxScheduler-appointmentAriaLabel-homeEndHotkeys": "Press Home or End to quickly navigate to the first or last appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Aftaleliste",
         "dxScheduler-newPopupTitle": "New Appointment",

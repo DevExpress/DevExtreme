@@ -1,12 +1,17 @@
 import {
-  afterEach, describe, expect, it, jest,
+  afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import messageLocalization from '@js/common/core/localization/message';
 import $ from '@js/core/renderer';
 
 import { createScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
 describe('Appointments', () => {
+  beforeEach(() => {
+    setupSchedulerTestEnvironment();
+  });
+
   afterEach(() => {
     const $scheduler = $('.dx-scheduler');
     // @ts-expect-error
@@ -16,7 +21,6 @@ describe('Appointments', () => {
   });
 
   it('All-day appointment should not be resizable if current view is "day"', async () => {
-    setupSchedulerTestEnvironment();
     const { POM } = await createScheduler({
       dataSource: [{
         text: 'Appointment 1',
@@ -33,7 +37,6 @@ describe('Appointments', () => {
   });
 
   it('should display "(No subject)" for appointments without title', async () => {
-    setupSchedulerTestEnvironment({ height: 200 });
     const appointmentWithoutTitle = {
       startDate: new Date(2017, 4, 9, 9, 30),
       endDate: new Date(2017, 4, 9, 11),
@@ -56,7 +59,6 @@ describe('Appointments', () => {
   });
 
   it('should display "(No subject)" in tooltip for appointments without title', async () => {
-    setupSchedulerTestEnvironment({ height: 200 });
     const appointmentWithoutTitle = {
       startDate: new Date(2017, 4, 9, 9, 30),
       endDate: new Date(2017, 4, 9, 11),
@@ -88,20 +90,84 @@ describe('Appointments', () => {
     }
   });
 
-  it('should have aria-describedby attr', async () => {
-    setupSchedulerTestEnvironment();
-    const { POM } = await createScheduler({
-      dataSource: [{
-        text: 'Appointment 1',
-        startDate: new Date(2015, 1, 9, 8),
-        endDate: new Date(2015, 1, 9, 9),
-      }],
-      currentView: 'day',
-      currentDate: new Date(2015, 1, 9, 8),
+  describe('Appointment aria attributes', () => {
+    const deleteHotkeyText = messageLocalization.format('dxScheduler-appointmentAriaLabel-deleteHotkey');
+    const homeEndHotkeysText = messageLocalization.format('dxScheduler-appointmentAriaLabel-homeEndHotkeys');
+
+    it('should have correct aria-describedby when editing = false', async () => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        editing: false,
+      });
+
+      const appointment = POM.getAppointment();
+      expect(appointment.getAriaDescription()).toBe(homeEndHotkeysText);
     });
 
-    const appointment = POM.getAppointment();
-    expect(appointment.element?.hasAttribute('aria-describedby')).toBe(true);
+    it('should have correct aria-describedby when allowUpdating = true', async () => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        editing: {
+          allowUpdating: true,
+        },
+      });
+
+      const appointment = POM.getAppointment();
+      expect(appointment.getAriaDescription()).toBe(`${deleteHotkeyText}; ${homeEndHotkeysText}`);
+    });
+
+    it('should have correct aria-describedby when allowUpdating = true and allowDeleting = false', async () => {
+      const { POM } = await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        editing: {
+          allowUpdating: true,
+          allowDeleting: false,
+        },
+      });
+
+      const appointment = POM.getAppointment();
+      expect(appointment.getAriaDescription()).toBe(homeEndHotkeysText);
+    });
+
+    it('should have correct aria-describedby when allowDeleting is updated', async () => {
+      const { scheduler, POM } = await createScheduler({
+        dataSource: [{
+          text: 'Appointment 1',
+          startDate: new Date(2015, 1, 9, 8),
+          endDate: new Date(2015, 1, 9, 9),
+        }],
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9, 8),
+        editing: {
+          allowUpdating: true,
+          allowDeleting: false,
+        },
+      });
+
+      scheduler.option('editing.allowDeleting', true);
+      await new Promise(process.nextTick);
+
+      const appointment = POM.getAppointment();
+      expect(appointment.getAriaDescription()).toBe(`${deleteHotkeyText}; ${homeEndHotkeysText}`);
+    });
   });
 
   describe('Keyboard Navigation', () => {
@@ -124,7 +190,6 @@ describe('Appointments', () => {
     ];
 
     it('should focus first appointment on Home', async () => {
-      setupSchedulerTestEnvironment();
       const { POM, keydown } = await createScheduler({
         dataSource,
         currentView: 'day',
@@ -143,7 +208,6 @@ describe('Appointments', () => {
     });
 
     it('should focus last appointment on End', async () => {
-      setupSchedulerTestEnvironment();
       const { POM, keydown } = await createScheduler({
         dataSource,
         currentView: 'day',
@@ -162,7 +226,6 @@ describe('Appointments', () => {
     });
 
     it('should not change focus when Home is pressed on the first appointment', async () => {
-      setupSchedulerTestEnvironment();
       const { POM, keydown } = await createScheduler({
         dataSource,
         currentView: 'day',
@@ -179,7 +242,6 @@ describe('Appointments', () => {
     });
 
     it('should not change focus when End is pressed on the last appointment', async () => {
-      setupSchedulerTestEnvironment();
       const { POM, keydown } = await createScheduler({
         dataSource,
         currentView: 'day',
