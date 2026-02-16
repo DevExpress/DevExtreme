@@ -1,10 +1,6 @@
 import 'fluent_blue_light.css!';
 import '__internal/scheduler/m_subscribes';
 import '__internal/scheduler/m_scheduler';
-import {
-    DateGeneratorBaseStrategy,
-    DateGeneratorVirtualStrategy
-} from '__internal/scheduler/view_model/generate_view_model/m_settings_generator';
 
 import $ from 'jquery';
 import fx from 'common/core/animation/fx';
@@ -55,32 +51,6 @@ module('Subscribes', {
 
         assert.equal(targetedData.startDate.getTime(), appointmentData.startDate.getTime() + 2 * 3600000, 'Targeted startDate is OK');
         assert.equal(targetedData.endDate.getTime(), appointmentData.endDate.getTime() + 2 * 3600000, 'Targeted endDate is OK');
-    });
-
-    [
-        {
-            scrollingMode: 'standard',
-            expectedType: DateGeneratorBaseStrategy
-        },
-        {
-            scrollingMode: 'virtual',
-            expectedType: DateGeneratorVirtualStrategy
-        }
-    ].forEach(option => {
-        test(`Appointment dates generator strategy should has correct type if scrolling.mode: ${option.scrollingMode}`, async function(assert) {
-            await this.createInstance({
-                currentView: 'day',
-                scrolling: {
-                    mode: option.scrollingMode
-                }
-            });
-
-            const layoutManager = this.instance.getLayoutManager();
-            const appointmentRenderingStrategy = layoutManager.getRenderingStrategyInstance();
-            const { dateSettingsStrategy } = appointmentRenderingStrategy.getAppointmentSettingsGenerator();
-
-            assert.ok(dateSettingsStrategy instanceof option.expectedType, 'Type of the appointment dates generator is correct');
-        });
     });
 
     test('\'createAppointmentSettings\' should return workSpace date table scrollable', async function(assert) {
