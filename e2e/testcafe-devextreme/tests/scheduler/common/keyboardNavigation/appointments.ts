@@ -56,13 +56,10 @@ test('Document should not scroll on \'End\' press when appointment is focused', 
 
 test('Document should not scroll on \'Home\' press when appointment is focused', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const initialScrollTop = 40;
-
-  await ClientFunction(
-    (scrollTop) => { document.documentElement.scrollTo(0, scrollTop); },
-  )(initialScrollTop);
+  const initialScrollTop = 100;
 
   await t
+    .scroll(0, initialScrollTop)
     .click(scheduler.getAppointment('Appointment 1').element)
     .pressKey('Home');
 
