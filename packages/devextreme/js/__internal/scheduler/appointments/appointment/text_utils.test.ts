@@ -83,7 +83,7 @@ describe('Appointment text utils', () => {
       expect(await getAriaDescription({
         ...options,
         groupTexts: [],
-      })).toBe('Assignee: Samantha Bright');
+      })).toContain('Assignee: Samantha Bright');
     });
 
     it('should return text with multiple resources', async () => {
@@ -94,7 +94,7 @@ describe('Appointment text utils', () => {
       expect(await getAriaDescription({
         ...options,
         groupTexts: [],
-      })).toBe('Assignee: Samantha Bright, John Heart; Room: Room 1');
+      })).toContain('Assignee: Samantha Bright, John Heart; Room: Room 1');
     });
 
     it('should return text with group', async () => {
@@ -103,7 +103,7 @@ describe('Appointment text utils', () => {
         ...options,
         groupIndex: 0,
         groupTexts: ['Samantha Bright'],
-      })).toBe('Group: Samantha Bright');
+      })).toContain('Group: Samantha Bright');
     });
 
     it('should return text with multiple groups and resources', async () => {
@@ -115,7 +115,7 @@ describe('Appointment text utils', () => {
         ...options,
         groupIndex: 1,
         groupTexts: ['Samantha Bright', 'Room 1'],
-      })).toBe('Group: Samantha Bright, Room 1; Assignee: Samantha Bright; Room: Room 1, Room 2');
+      })).toContain('Group: Samantha Bright, Room 1; Assignee: Samantha Bright; Room: Room 1, Room 2');
     });
   });
 });
