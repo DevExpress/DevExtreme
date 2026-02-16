@@ -1889,7 +1889,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
     const node = this._getNodeByElement($item);
 
-    if (!node) return;
+    if (!node || node.internalFields.disabled) return;
 
     this._itemDXEventHandler(e, 'onItemClick', {
       node: this._dataAdapter.getPublicNode(node),
