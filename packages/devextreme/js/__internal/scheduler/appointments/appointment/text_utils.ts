@@ -68,7 +68,7 @@ const getGroupText = (options: AppointmentProperties): string => {
 
   const groupText = options.groupTexts.join(', ');
   // @ts-ignore @ts-expect-error
-  return messageLocalization.format('dxScheduler-appointmentAriaLabel-group', groupText);
+  return messageLocalization.format('dxScheduler-appointmentAriaDescription-group', groupText);
 };
 
 const getResourceText = async (options: AppointmentProperties): Promise<string[]> => {
@@ -84,9 +84,9 @@ export const getAriaDescription = async (options: AppointmentProperties): Promis
     getGroupText(options),
     ...resources,
     options.allowDelete
-      ? messageLocalization.format('dxScheduler-appointmentAriaLabel-deleteHotkey')
+      ? messageLocalization.format('dxScheduler-hotkeysAriaDescription-delete')
       : null,
-    messageLocalization.format('dxScheduler-appointmentAriaLabel-homeEndHotkeys'),
+    messageLocalization.format('dxScheduler-hotkeysAriaDescription-homeEnd'),
   ].filter(Boolean).join('; ');
 
   return text;
