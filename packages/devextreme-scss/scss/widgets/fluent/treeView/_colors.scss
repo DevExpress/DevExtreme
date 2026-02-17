@@ -40,12 +40,8 @@ $treeview-checkbox-accent-color-focused: mull !default;
   $treeview-item-content-disabled: color.change($base-bg, $lightness: 36.08%, $space: hsl);
   $treeview-checkbox-disabled-border-color-focused: color.change($base-bg, $lightness: 41.96%, $space: hsl);
   $treeview-checkbox-disabled-background-focused: color.change($base-bg, $lightness: 21.96%, $space: hsl);
-  //$treeview-checkbox-border-color-focused: #FFFFFF;
   $treeview-checkbox-border-color-focused: color.change($base-bg, $lightness: 100%, $space: hsl);
-  //$treeview-checkbox-background-color-focused: #383838;
   $treeview-checkbox-background-color-focused: color.change($base-bg, $lightness: 21.96%, $space: hsl);
-  //$treeview-checkbox-accent-color-focused: #B4D6FA;
   $treeview-checkbox-accent-color-focused: color.change($base-accent, $lightness: 84%, $space: hsl);
-
 }
 
