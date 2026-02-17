@@ -36,7 +36,7 @@ export class AppComponent {
     this.source = new DataSource({
       store: new CustomStore({
         load: () => lastValueFrom(http.get('../../../../data/resourceData.json'))
-          .catch(() => { throw 'Data Loading Error'; }),
+          .catch(() => { throw new Error('Data Loading Error'); }),
         loadMode: 'raw',
       }),
       filter: ['month', '<=', '12'],
