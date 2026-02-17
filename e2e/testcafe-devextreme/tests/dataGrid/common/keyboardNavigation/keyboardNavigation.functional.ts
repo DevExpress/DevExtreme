@@ -5275,7 +5275,7 @@ test('Focus events should be called when pressing the Ctrl + End key when virtua
   })();
 });
 
-test.meta({ unstable: true })('Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled', async (t) => {
+test('Focus events should be called when pressing the Ctrl + End key when virtual scrolling and columns are enabled', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
 
@@ -5346,7 +5346,7 @@ test.meta({ unstable: true })('Focus events should be called when pressing the C
   })();
 });
 
-test.meta({ unstable: true })('Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is \'virtual\'', async (t) => {
+test('Focus events should be called when pressing the Ctrl + End key when rowRenderingMode is \'virtual\'', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
 
@@ -5988,7 +5988,7 @@ test('The batch edit mode - Shift + Tab navigation through interactive elements 
   });
 });
 
-test.meta({ unstable: true })('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
+test('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async (t) => {
   await addFocusableElementBefore('#container');
 
   // header row
