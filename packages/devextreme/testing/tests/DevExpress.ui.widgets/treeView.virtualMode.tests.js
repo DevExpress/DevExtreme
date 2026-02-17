@@ -275,7 +275,7 @@ QUnit.test('Don\'t create loadindicator on dblclick after expand childless item 
     assert.equal($node.find('.dx-loadindicator').length, 0);
 });
 
-QUnit.test('Don\'t create loadindicator when disabled item expands', function(assert) {
+QUnit.test('Should create loadindicator when disabled item expands', function(assert) {
     const newData = $.extend(true, [], data2);
     newData[15].disabled = true;
 
@@ -290,7 +290,7 @@ QUnit.test('Don\'t create loadindicator when disabled item expands', function(as
     const $node = this.$element.find(`.${TREEVIEW_NODE_CLASS}`).eq(2);
 
     $node.find('.dx-treeview-toggle-item-visibility').trigger('dxclick');
-    assert.equal($node.find('.dx-loadindicator').length, 0);
+    assert.strictEqual($node.find('.dx-loadindicator').length, 1);
 });
 
 QUnit.test('Add leaf class after expand childless item', function(assert) {

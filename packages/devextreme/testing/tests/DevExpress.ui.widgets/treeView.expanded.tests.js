@@ -232,7 +232,7 @@ module('Expanded items', {
         assert.ok(treeView.option('items')[0].expanded, 'disabled item was expanded');
     });
 
-    test('disabled item with custom expander icons should not expand on click', function(assert) {
+    test('disabled item with custom expander icons should expand on click', function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].disabled = true;
         const $treeView = initTree({
@@ -245,7 +245,7 @@ module('Expanded items', {
 
         $icon.trigger('dxclick');
 
-        assert.notOk(treeView.option('items')[0].expanded, 'disabled item was not expanded');
+        assert.ok(treeView.option('items')[0].expanded, 'disabled item was not expanded');
     });
 
     test('expanded disabled item should not collapse on click', function(assert) {
@@ -292,7 +292,7 @@ module('Expanded items', {
         assert.notOk($expandIcon.is(':visible'));
     });
 
-    test('expanded disabled item with custom icon should not collapse on click', function(assert) {
+    test('expanded disabled item with custom icon should collapse on click', function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].expanded = true;
         data[0].disabled = true;
@@ -306,7 +306,7 @@ module('Expanded items', {
 
         $icon.trigger('dxclick');
 
-        assert.ok(treeView.option('items')[0].expanded, 'disabled item was not collapsed');
+        assert.notOk(treeView.option('items')[0].expanded, 'disabled item was not collapsed');
     });
 
     test('expanded item with custom icon should collapse on click', function(assert) {
@@ -651,7 +651,7 @@ module('Expanded items', {
         assert.notOk(nodes[0].items[0].items[0].expanded, 'item 111');
     });
 
-    test('Disabled item doesn\'t expand when using the expandAll method', function(assert) {
+    test('Disabled item should expand when using the expandAll method', function(assert) {
         const $treeView = initTree({
             items: [{
                 text: '1',
@@ -683,11 +683,11 @@ module('Expanded items', {
         assert.ok(isNodeExpanded($node2), 'second node is expanded');
         assert.equal(getNodeItemId($node2), 11, 'id for second node');
 
-        assert.notOk(isNodeExpanded($node3), 'third node is expanded');
+        assert.ok(isNodeExpanded($node3), 'third node is expanded');
         assert.equal(getNodeItemId($node3), 111, 'id for third node');
     });
 
-    test('Disabled item doesn\'t expand when using the expandAll method and the expandNodesRecursive is enabled', function(assert) {
+    test('Disabled item should expand when using the expandAll method and the expandNodesRecursive is enabled', function(assert) {
         const $treeView = initTree({
             expandNodesRecursive: true,
             items: [{
@@ -720,7 +720,7 @@ module('Expanded items', {
         assert.ok(isNodeExpanded($node2), 'second node is expanded');
         assert.equal(getNodeItemId($node2), 11, 'id for second node');
 
-        assert.notOk(isNodeExpanded($node3), 'third node is expanded');
+        assert.ok(isNodeExpanded($node3), 'third node is expanded');
         assert.equal(getNodeItemId($node3), 111, 'id for third node');
     });
 
