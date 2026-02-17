@@ -885,10 +885,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     this.setAria('selected', nodeData.selected, $node);
     this._toggleSelectedClass($node, nodeData.selected);
 
-    // if (nodeData.disabled) {
-    //   this.setAria('disabled', nodeData.disabled, $node);
-    // }
-
     super._renderItem(
       this._renderedItemsCount + nodeIndex,
       // @ts-expect-error ts-error
@@ -1001,7 +997,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
     const node = this._getNode(itemData);
 
-    if (node?.disabled) {
+    if (node?.internalFields.disabled) {
       const $itemContent = $(itemElement).find(`.${ITEM_CONTENT_CLASS}`);
       $(itemElement).removeClass(DISABLED_STATE_CLASS);
       $(itemElement).removeAttr(DISABLED_STATE_ARIA);
