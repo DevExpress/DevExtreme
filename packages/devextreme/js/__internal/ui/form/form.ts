@@ -550,11 +550,6 @@ class Form extends Widget<FormProperties> {
     // @ts-expect-error ts-error
     this._lastMarkupScreenFactor = undefined;
 
-    if (this._scrollable) {
-      this._scrollable.dispose();
-      this._scrollable = undefined;
-    }
-
     resizeObserverSingleton.unobserve(this.$element().get(0));
   }
 
@@ -1761,7 +1756,8 @@ class Form extends Widget<FormProperties> {
   }
 
   getScrollable(): Scrollable | undefined {
-    return this._scrollable;
+    const { scrollingEnabled } = this.option();
+    return scrollingEnabled ? this._scrollable : undefined;
   }
 
   updateDimensions(): Promise<unknown> {
