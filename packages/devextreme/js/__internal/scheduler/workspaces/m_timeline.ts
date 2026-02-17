@@ -280,7 +280,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   scrollToTime(hours, minutes, date) {
-    const coordinates = this._getScrollCoordinates(hours, minutes, date);
+    date = date || new Date(this.option('currentDate'));
+    date.setHours(hours, minutes, 0, 0);
+
+    const coordinates = this._getScrollCoordinates(date);
     const scrollable = this.getScrollable();
     const offset = this.option('rtlEnabled') ? getBoundingRect(this.getScrollableContainer().get(0)).width : 0;
 

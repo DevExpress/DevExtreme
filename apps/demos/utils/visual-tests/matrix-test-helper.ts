@@ -4,7 +4,7 @@ import { ClientFunction } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
 import { gitHubIgnored } from './github-ignored-list';
 
-export const FRAMEWORKS = { 
+export const FRAMEWORKS = {
   jquery: 'jQuery',
   react: 'React',
   vue: 'Vue',
@@ -47,7 +47,8 @@ function shouldRunTestExplicitlyInternal(framework, product, demo) {
 }
 
 function patternGroupFromValues(product, demo, framework) {
-  const wrap = (x) => RegExp(x || '.*', 'i');
+  const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\-]/g, '\\$&');
+  const wrap = (x) => RegExp(x ? escapeRegExp(x) : '.*', 'i');
   return {
     product: wrap(product),
     demo: wrap(demo),
@@ -183,7 +184,7 @@ function getExplicitTests() {
     } finally {
       // eslint-disable-next-line no-extend-native
       // @ts-expect-error types error
-      RegExp.prototype.toJSON = oldToJSON;  
+      RegExp.prototype.toJSON = oldToJSON;
     }
   }
 
@@ -191,7 +192,7 @@ function getExplicitTests() {
 }
 
 export function shouldRunFramework(currentFramework) {
-  return !currentFramework 
+  return !currentFramework
     || !settings.targetFramework
     || currentFramework.toLowerCase() === settings.targetFramework.toLowerCase();
 }
@@ -208,8 +209,8 @@ export function shouldRunTestAtIndex(testIndex) {
 }
 
 const SKIPPED_TESTS = {
-  jQuery: { 
-    DataGrid: ['RemoteGrouping', 'OdataService', 'FilteringAPI'],
+  jQuery: {
+    DataGrid: [ 'OdataService', 'FilteringAPI'],
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
     ],
@@ -217,7 +218,7 @@ const SKIPPED_TESTS = {
   Angular: {
     Charts: ['Crosshair'],
     Common: ['PopupAndNotificationsOverview'],
-    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
+    DataGrid: [ 'Toolbar', 'OdataService', 'FilteringAPI'],
     Scheduler: ['ContextMenu'],
     FileUploader: ['CustomDropzone'],
   },
@@ -226,14 +227,14 @@ const SKIPPED_TESTS = {
     Common: ['PopupAndNotificationsOverview'],
     // NOTE: Context menu item position is different across themes
     Scheduler: ['ContextMenu'],
-    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
+    DataGrid: [ 'Toolbar', 'OdataService', 'FilteringAPI'],
     FileUploader: ['CustomDropzone']
   },
   React: {
     Charts: ['Crosshair'],
     Common: ['PopupAndNotificationsOverview'],
     Scheduler: ['ContextMenu'],
-    DataGrid: ['EditStateManagement', 'Toolbar', 'RemoteGrouping', 'OdataService', 'FilteringAPI'],
+    DataGrid: [ 'Toolbar', 'OdataService', 'FilteringAPI'],
     FileUploader: ['CustomDropzone']
   },
 };
@@ -327,7 +328,7 @@ export function runManualTestCore(
     changeTheme(__dirname, `../../Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/index.html`, process.env.THEME);
     testURL = `http://127.0.0.1:8080/apps/demos/Demos/${widget}/${demo}/${FRAMEWORKS[framework]}/`;
   }
-  
+
   const getTestStyles = (demoName) => {
     switch (demoName) {
       case 'EditorAppearanceVariants':
@@ -341,7 +342,7 @@ export function runManualTestCore(
         return '';
     }
   };
-  
+
   const testStyles = getTestStyles(demo);
 
   const clientScripts = [

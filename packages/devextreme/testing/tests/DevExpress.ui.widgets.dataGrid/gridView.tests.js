@@ -532,9 +532,9 @@ QUnit.module('Grid view', {
                 ],
                 totalItem: {
                     summaryCells: [
-                        { summaryType: 'count', value: 100 },
-                        { summaryType: 'min', value: 0 },
-                        { summaryType: 'max', value: 120001 }
+                        [{ summaryType: 'count', value: 100 }],
+                        [{ summaryType: 'min', value: 0 }],
+                        [{ summaryType: 'max', value: 120001 }]
                     ]
                 }
             })
@@ -592,7 +592,7 @@ QUnit.module('Grid view', {
                 ],
                 totalItem: {
                     summaryCells: [
-                        { summaryType: 'count', value: 100 }
+                        [{ summaryType: 'count', value: 100 }]
                     ]
                 }
             })
@@ -1626,9 +1626,9 @@ QUnit.module('Synchronize columns', {
                 items: [{ values: [''] }],
                 totalItem: {
                     summaryCells: [
-                        { summaryType: 'count', value: 100 },
-                        { summaryType: 'min', value: 0 },
-                        { summaryType: 'max', value: 120001 }
+                        [{ summaryType: 'count', value: 100 }],
+                        [{ summaryType: 'min', value: 0 }],
+                        [{ summaryType: 'max', value: 120001 }]
                     ]
                 }
             })
@@ -1663,9 +1663,9 @@ QUnit.module('Synchronize columns', {
                 items: [{ values: [''] }],
                 totalItem: {
                     summaryCells: [
-                        { summaryType: 'count', value: 100 },
-                        { summaryType: 'min', value: 0 },
-                        { summaryType: 'max', value: 120001 }
+                        [{ summaryType: 'count', value: 100 }],
+                        [{ summaryType: 'min', value: 0 }],
+                        [{ summaryType: 'max', value: 120001 }]
                     ]
                 }
             })
