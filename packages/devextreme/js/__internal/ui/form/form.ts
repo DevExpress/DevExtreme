@@ -568,7 +568,7 @@ class Form extends Widget<FormProperties> {
   _getContent(): dxElementWrapper {
     const { scrollingEnabled } = this.option();
     return scrollingEnabled
-      ? $(this._scrollable?.content())
+      ? $(this.getScrollable()?.content())
       : this.$element();
   }
 
@@ -1755,11 +1755,17 @@ class Form extends Widget<FormProperties> {
     return this._itemsRunTimeInfo.findWidgetInstanceByName<Button>(name);
   }
 
+  getScrollable(): Scrollable | undefined {
+    const { scrollingEnabled } = this.option();
+    return scrollingEnabled ? this._scrollable : undefined;
+  }
+
   updateDimensions(): Promise<unknown> {
     const deferred = Deferred<Form>();
+    const scrollable = this.getScrollable();
 
-    if (this._scrollable) {
-      this._scrollable.update().done(() => {
+    if (scrollable) {
+      scrollable.update().done(() => {
         // @ts-expect-error ts-error
         deferred.resolveWith(this);
       });
