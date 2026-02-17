@@ -495,7 +495,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const headerContentClass = this.addWidgetPrefix(HEADER_TEXT_CONTENT_CLASS);
 
     if (isHeaderRow && !$cell.hasClass(headerContentClass)) {
-      $cellContent = $cell.find(`.${headerContentClass}`);
+      const $headerContent = $cell.find(`.${headerContentClass}`);
+      $cellContent = $headerContent.length ? $headerContent : $cell;
     }
 
     const hasWidthOverflow = $cellContent[0].scrollWidth - $cellContent[0].clientWidth > 0;

@@ -67,10 +67,10 @@ describe('Column Headers', () => {
         cellHintEnabled: true,
       });
 
-      const headerCell = component.getHeaderCell(0);
-      const headerCellElement = headerCell.getElement() as HTMLElement;
+      const headerCellElement = component.getHeaderCells()[0];
+      const headerContentElement = component.getHeaderCell(0).getHeaderContent() as HTMLElement;
 
-      simulateTextOverflow(headerCellElement, 50, 20);
+      simulateTextOverflow(headerContentElement, 50, 20);
       simulateHoverEvent(headerCellElement);
 
       expect($(headerCellElement).attr('title')).toBe('Position');
