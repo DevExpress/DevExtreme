@@ -57,6 +57,7 @@ class TextArea extends TextBox<TextAreaProperties> {
 
   _renderContentImpl(): void {
     this._updateInputHeight();
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     super._renderContentImpl();
   }
 
@@ -73,6 +74,7 @@ class TextArea extends TextBox<TextAreaProperties> {
     return $input;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _setInputMinHeight(): void {}
 
   _renderScrollHandler(): void {
@@ -82,10 +84,18 @@ class TextArea extends TextBox<TextAreaProperties> {
 
     // @ts-expect-error ts-error
     eventsEngine.on($input, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
-    // @ts-expect-error ts-error
-    eventsEngine.on($input, addNamespace(pointerEvents.down, this.NAME), this._pointerDownHandler.bind(this));
-    // @ts-expect-error ts-error
-    eventsEngine.on($input, addNamespace(pointerEvents.move, this.NAME), this._pointerMoveHandler.bind(this));
+    eventsEngine.on(
+      $input,
+      // @ts-expect-error ts-error
+      addNamespace(pointerEvents.down, this.NAME),
+      this._pointerDownHandler.bind(this),
+    );
+    eventsEngine.on(
+      $input,
+      // @ts-expect-error ts-error
+      addNamespace(pointerEvents.move, this.NAME),
+      this._pointerMoveHandler.bind(this),
+    );
   }
 
   _pointerDownHandler(e): void {
@@ -213,6 +223,7 @@ class TextArea extends TextBox<TextAreaProperties> {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _renderInputType(): void {}
 
   _visibilityChanged(visible: boolean): void {
@@ -221,9 +232,9 @@ class TextArea extends TextBox<TextAreaProperties> {
     }
   }
 
-  _updateInputAutoResizeAppearance($input: dxElementWrapper, isAutoResizeEnabled?): void {
+  _updateInputAutoResizeAppearance($input: dxElementWrapper, isAutoResizeEnabled?: boolean): void {
     if ($input) {
-      const autoResizeEnabled = ensureDefined(isAutoResizeEnabled, this.option('autoResizeEnabled'));
+      const autoResizeEnabled = ensureDefined(isAutoResizeEnabled, Boolean(this.option('autoResizeEnabled')));
 
       $input.toggleClass(TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE, autoResizeEnabled);
     }
@@ -241,8 +252,9 @@ class TextArea extends TextBox<TextAreaProperties> {
     switch (name) {
       case '_shouldAttachKeyboardEvents':
       case 'autoResizeEnabled':
-        this._updateInputAutoResizeAppearance(this._input(), value);
+        this._updateInputAutoResizeAppearance(this._input(), Boolean(value));
         this._refreshEvents();
+        this._renderDimensions();
         this._updateInputHeight();
         break;
       case 'value':
