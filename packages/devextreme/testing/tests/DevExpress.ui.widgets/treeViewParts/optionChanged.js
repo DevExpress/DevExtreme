@@ -72,14 +72,12 @@ QUnit.test('node should have disabled class when it was disabled at runtime', fu
         dataStructure: 'plain'
     });
     const instance = $treeView.dxTreeView('instance');
-    const $item = $treeView.find('.dx-treeview-item').eq(0);
     const $itemContent = $treeView.find('.dx-treeview-item-content').eq(0);
 
     instance.option('items[0].disabled', true);
-    assert.ok(itemContent.hasClass('dx-state-disabled'), 'item should be disabled');
-
+    assert.ok($itemContent.hasClass('dx-state-disabled'), 'item should be disabled');
     instance.option('items[0].disabled', false);
-    assert.notOk(itemContent.hasClass('dx-state-disabled'), 'item should not be disabled');
+    assert.notOk($itemContent.hasClass('dx-state-disabled'), 'item should not be disabled');
 });
 
 QUnit.test('checkbox should have disabled class when item was disabled at runtime', function(assert) {
