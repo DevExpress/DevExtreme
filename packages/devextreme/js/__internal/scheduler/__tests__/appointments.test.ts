@@ -91,8 +91,8 @@ describe('Appointments', () => {
   });
 
   describe('Appointment aria attributes', () => {
-    const deleteHotkeyText = messageLocalization.format('dxScheduler-appointmentAriaLabel-deleteHotkey');
-    const homeEndHotkeysText = messageLocalization.format('dxScheduler-appointmentAriaLabel-homeEndHotkeys');
+    const deleteHotkeyText = messageLocalization.format('dxScheduler-hotkeysAriaDescription-delete');
+    const homeEndHotkeysText = messageLocalization.format('dxScheduler-hotkeysAriaDescription-homeEnd');
 
     it('should have correct aria-describedby when editing = false', async () => {
       const { POM } = await createScheduler({
