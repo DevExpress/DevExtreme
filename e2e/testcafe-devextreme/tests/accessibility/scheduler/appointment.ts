@@ -16,7 +16,7 @@ const currentDate = Date.UTC(2021, 1, 1);
 const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.text}</div>`;
 
 ['month', 'week', 'day', 'agenda'].forEach((currentView) => {
-  test(`appointment should have correct aria-label without description (${currentView})`, async (t) => {
+  test(`appointment should have correct aria-label and have description (${currentView})`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('App 1');
 
@@ -24,7 +24,7 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
       .expect(appointment.getAriaLabel())
       .eql('App 1: February 1, 2021, 12:00 PM - 1:00 PM')
       .expect(await appointment.hasAriaDescription())
-      .notOk();
+      .ok();
 
     await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {
@@ -36,7 +36,7 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
     });
   });
 
-  test(`appointment with template should have correct aria-label without description (${currentView})`, async (t) => {
+  test(`appointment with template should have correct aria-label and have description (${currentView})`, async (t) => {
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('App 1');
 
@@ -44,7 +44,7 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
       .expect(appointment.getAriaLabel())
       .eql('App 1: February 1, 2021, 12:00 PM - 1:00 PM')
       .expect(await appointment.hasAriaDescription())
-      .notOk();
+      .ok();
 
     await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {
@@ -65,7 +65,7 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
       .expect(appointment.getAriaLabel())
       .eql('App 1: February 1, 2021, 12:00 PM - 1:00 PM')
       .expect(await appointment.getAriaDescription())
-      .eql('Group: resource1; Group 1: resource1');
+      .contains('Group: resource1; Group 1: resource1');
 
     await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {
@@ -99,7 +99,7 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
       .expect(appointment.getAriaLabel())
       .eql('App 1: February 1, 2021, 12:00 PM - 1:00 PM')
       .expect(await appointment.getAriaDescription())
-      .eql('Group: resource1; Group 1: resource1');
+      .contains('Group: resource1; Group 1: resource1');
 
     await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {
@@ -134,7 +134,7 @@ const appointmentTemplate = ({ appointmentData }) => `<div>${appointmentData.tex
       .expect(appointment.getAriaLabel())
       .eql('App 1: February 1, 2021, 12:00 PM - 1:00 PM')
       .expect(await appointment.getAriaDescription())
-      .eql('Group: resource11, resource21; Group 1: resource11; Group 2: resource21, resource22');
+      .contains('Group: resource11, resource21; Group 1: resource11; Group 2: resource21, resource22');
 
     await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {

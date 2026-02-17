@@ -223,6 +223,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
         break;
       case 'allowDrag':
       case 'allowResize':
+      case 'allowDelete':
       case 'allowAllDayResize':
         (this as any)._cleanFocusState();
         this.forceRepaintAllAppointments(this.option('items') || []);
@@ -231,8 +232,6 @@ class SchedulerAppointments extends CollectionWidget<any> {
       case 'focusedElement':
         this._kbn.resetTabIndex($(args.value));
         super._optionChanged(args);
-        break;
-      case 'allowDelete':
         break;
       case 'focusStateEnabled':
         this._clearDropDownItemsElements();
@@ -619,6 +618,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
   ): void {
     const allowResize = this.option('allowResize') && !settings.skipResizing;
     const allowDrag = this.option('allowDrag');
+    const allowDelete = this.option('allowDelete');
     const { allDay } = settings;
     const { groups, groupsLeafs, resourceById } = this.getResourceManager();
     const isGroupByDate = this.option('groupByDate');
@@ -631,6 +631,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
       direction: settings.direction || 'vertical',
       allowResize,
       allowDrag,
+      allowDelete,
       allDay,
       // NOTE: hide reduced icon for grouped by date workspace
       reduced: isGroupByDate ? undefined : settings.reduced,

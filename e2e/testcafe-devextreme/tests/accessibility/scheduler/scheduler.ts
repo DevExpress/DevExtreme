@@ -13,7 +13,7 @@ test('Scheduler should have right aria attributes after view changed', async (t)
   await t.expect(scheduler.element.getAttribute('aria-label')).contains('Scheduler. Month view');
   await t.expect(scheduler.getGeneralStatusContainer().textContent).contains('Scheduler. Month view');
 
-  await t.expect(scheduler.element.getAttribute('role')).eql('group');
+  await t.expect(scheduler.element.getAttribute('role')).eql('application');
 
   await scheduler.option('currentView', 'week');
 
