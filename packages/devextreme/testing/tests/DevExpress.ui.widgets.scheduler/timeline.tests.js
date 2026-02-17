@@ -393,40 +393,6 @@ QUnit.test('Scheduler timeline week cells should have right height if crossScrol
     assert.roughEqual(getOuterHeight($firstRowCell), getOuterHeight($lastRowCell), 1.5, 'Cells has correct height');
 });
 
-QUnit.skip('The part of long appointment should have right coordinates on current week (T342192) №3', async function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 1, 23),
-        firstDayOfWeek: 1,
-        startDayHour: 1,
-        endDayHour: 10,
-        hoursInterval: 0.5
-    });
-    const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 1, 4, 30), 0, false);
-    const $expectedCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(115);
-
-    const expectedPositionLeft = $expectedCell.position().left;
-
-    assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
-
-});
-
-QUnit.skip('Timeline should find cell coordinates by date depend on start/end day hour & hoursInterval', async function(assert) {
-    const $element = this.instance.$element();
-
-    this.instance.option({
-        currentDate: new Date(2015, 2, 1),
-        firstDayOfWeek: 0,
-        startDayHour: 5,
-        endDayHour: 10,
-        hoursInterval: 0.75
-    });
-
-    const coords = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 2, 2, 8, 0));
-
-    assert.equal(coords.top, $element.find('.dx-scheduler-date-table-cell').eq(11).position().top, 'Cell coordinates are right');
-    assert.equal(coords.left, $element.find('.dx-scheduler-date-table-cell').eq(11).position().left, 'Cell coordinates are right');
-});
-
 QUnit.module('Timeline Month', {
     beforeEach: function() {
         this.instance = $('#scheduler-timeline').dxSchedulerTimelineMonth({
@@ -447,14 +413,6 @@ QUnit.test('timeline should have correct group table width (T718364)', async fun
     }]);
 
     assert.equal(this.instance.getGroupTableWidth(), 100, 'Group table width is OK');
-});
-
-QUnit.skip('Scheduler timeline month getPositionShift should return null shift', async function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 9, 21)
-    });
-
-    assert.deepEqual(this.instance.getPositionShift(), { top: 0, left: 0, cellPosition: 0 }, 'First view date is OK');
 });
 
 QUnit.test('Scrollables should be updated after currentDate changing', async function(assert) {
