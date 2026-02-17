@@ -945,9 +945,6 @@ export interface dxFormTabbedItem {
 /** @public */
 export type Properties = dxFormOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxFormOptions;
-
 // TODO: temporary commented out to fix jquery generation error in R1
 
 // ///#DEBUG

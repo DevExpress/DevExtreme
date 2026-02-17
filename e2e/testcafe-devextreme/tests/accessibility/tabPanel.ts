@@ -23,8 +23,6 @@ const options: Options<Properties> = {
   disabled: [true, false],
   width: [450, 'auto'],
   height: [250, 550],
-  // NOTE: Doesn't matter if there are contrast issues
-  // stylingMode: ['primary', 'secondary'],
 };
 
 const configuration: Configuration = {

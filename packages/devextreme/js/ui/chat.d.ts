@@ -11,9 +11,9 @@ import {
     template,
 } from '../common';
 
-import {
-    Properties as FileUploaderOptions,
-} from './file_uploader';
+import { Properties as FileUploaderProperties } from './file_uploader';
+import { Properties as SpeechToTextProperties } from './speech_to_text';
+import { Properties as TextAreaProperties } from './text_area';
 
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
@@ -353,11 +353,10 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     activeStateEnabled?: boolean;
     /**
      * @docid
-     * @default null
      * @type dxFileUploaderOptions
      * @public
      */
-    fileUploaderOptions?: Omit<FileUploaderOptions, 'dialogTrigger' | 'showFileList' | 'uploadMode' | 'value'>;
+    fileUploaderOptions?: Omit<FileUploaderProperties, 'dialogTrigger' | 'showFileList' | 'uploadMode' | 'value'>;
     /**
      * @docid
      * @default true
@@ -434,6 +433,13 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     alerts?: Array<Alert>;
     /**
      * @docid
+     * @default ""
+     * @type string|undefined
+     * @public
+     */
+    inputFieldText?: TextAreaProperties['value'];
+    /**
+     * @docid
      * @default null
      * @type_function_return string|Element|jQuery
      * @public
@@ -475,6 +481,18 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     showMessageTimestamp?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    speechToTextEnabled?: boolean;
+    /**
+     * @docid
+     * @type dxSpeechToTextOptions
+     * @public
+     */
+    speechToTextOptions?: Omit<SpeechToTextProperties, 'stylingMode' | 'type'>;
     /**
      * @docid
      * @default undefined

@@ -253,9 +253,6 @@ export default class dxDropDownBox extends dxDropDownEditor<dxDropDownBoxOptions
 /** @public */
 export type Properties = dxDropDownBoxOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxDropDownBoxOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

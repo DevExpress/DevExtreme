@@ -2,6 +2,7 @@ import dateLocalization from '@js/common/core/localization/date';
 import $ from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { isDate } from '@js/core/utils/type';
+import type { Format } from '@js/localization';
 import type { DateLike, DateType } from '@js/ui/date_box';
 
 const DATE_COMPONENTS = ['year', 'day', 'month', 'day'];
@@ -20,14 +21,14 @@ interface FormatInfo {
   components: DateComponentKey[];
 }
 
-const getStringFormat = (format: string | { type: string }): string | null => {
+const getStringFormat = (format: Format): string | null | undefined => {
   const formatType = typeof format;
 
   if (formatType === 'string') {
     return 'format';
   }
 
-  if (typeof format === 'object' && format.type !== undefined) {
+  if (typeof format === 'object' && 'type' in format) {
     return format.type;
   }
 
@@ -165,7 +166,7 @@ const dateUtils = {
     return dateLocalization.formatUsesDayName(format);
   },
 
-  getLongestDate(format: string, monthNames: string[], dayNames: string[]): Date {
+  getLongestDate(format: Format, monthNames: string[], dayNames: string[]): Date {
     const stringFormat = getStringFormat(format);
     let month = 9;
 

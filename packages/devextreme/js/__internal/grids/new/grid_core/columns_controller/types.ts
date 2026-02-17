@@ -76,7 +76,7 @@ export type Column = Pick<Required<ColumnBase>, InheritedColumnProps> & {
   headerFilter?: HeaderFilterColumnOptions;
 
   setFieldValue: (
-    this: Column, newData: DeepPartial<DataObject>, value: unknown, currentRowData: DataObject
+    this: Column, newData: DeepPartial<DataObject>, value: unknown, currentRowData: DataObject,
   ) => (void | Promise<void>);
   defaultSetFieldValue: Column['setFieldValue'];
 

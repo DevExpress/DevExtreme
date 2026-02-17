@@ -813,9 +813,6 @@ export type dxPivotGridSummaryCell = SummaryCell;
 /** @public */
 export type Properties = dxPivotGridOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxPivotGridOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

@@ -12,7 +12,7 @@ import { extend } from '@js/core/utils/extend';
 import { inputType } from '@js/core/utils/support';
 import { isDate as isDateType, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
-import type { DxEvent } from '@js/events';
+import type { DxEvent, InteractionEvent } from '@js/events';
 import type {
   DateLike,
   DatePickerType,
@@ -23,7 +23,6 @@ import type { ToolbarItem } from '@js/ui/popup';
 import type { OptionChanged } from '@ts/core/widget/types';
 import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 
-import type { ValueChangedEvent } from '../editor/editor';
 import type { PopupProperties } from '../popup/m_popup';
 import uiDateUtils from './date_utils';
 import Calendar from './m_date_box.strategy.calendar';
@@ -71,6 +70,7 @@ const STRATEGY_CLASSES = {
 };
 
 export interface DateBoxBaseProperties extends Omit<Properties, 'onClosed' | 'onOpened'> {
+  buttonsLocation?: string;
   emptyDateValue?: Date;
   _showValidationIcon?: boolean;
 }
@@ -84,7 +84,8 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
 
   _userOptions?: DateBoxBaseProperties;
 
-  _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
+  _supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | undefined> {
+    // @ts-expect-error ts-error
     return {
       ...super._supportedKeys(),
       ...this._strategy.supportedKeys(),
@@ -120,12 +121,13 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<DateBoxBaseProperties>[] {
-    // @ts-expect-error ts-error
     return super._defaultOptionsRules().concat([
       {
         device: { platform: 'ios' },
         options: {
-          'dropDownOptions.showTitle': true,
+          dropDownOptions: {
+            showTitle: true,
+          },
         },
       },
       {
@@ -531,7 +533,9 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
       : uiDateUtils.FORMATS_MAP[mode] as string | null;
   }
 
-  _valueChangeEventHandler(e: ValueChangedEvent): void {
+  _valueChangeEventHandler(
+    e: InteractionEvent,
+  ): void {
     const { text, type = 'date', validationError } = this.option();
     const currentValue = this.getDateOption('value');
 
@@ -548,7 +552,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     if (this._applyInternalValidation(date).isValid) {
       const displayedText = this._getDisplayedText(newValue);
 
-      if (value && newValue && value.getTime() === newValue.getTime() && displayedText !== text) {
+      if (value && value.getTime() === newValue?.getTime() && displayedText !== text) {
         this._renderValue();
       } else {
         this.dateValue(newValue, e);
@@ -577,7 +581,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
   _getParsedDate(text?: string): Date | undefined {
     const { displayFormat } = this.option();
     const strategyDisplayFormat = this._strategy.getDisplayFormat(displayFormat);
-    const parsedText = this._strategy.getParsedText(text, strategyDisplayFormat);
+    const parsedText = this._strategy.getParsedText(text, strategyDisplayFormat as string);
 
     return parsedText ?? undefined;
   }
@@ -631,7 +635,9 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
   _isValueChanged(newValue: Date | null): boolean {
     const oldValue = this.getDateOption('value');
 
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     const oldTime = oldValue && oldValue.getTime();
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     const newTime = newValue && newValue.getTime();
 
     return oldTime !== newTime;
@@ -686,7 +692,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     this._refresh();
   }
 
-  _applyButtonHandler(e: { event: ValueChangedEvent }): void {
+  _applyButtonHandler(e: { event: InteractionEvent }): void {
     const value = this._strategy.getValue();
     this.dateValue(value, e.event);
 
@@ -794,7 +800,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
       return undefined;
     }
 
-    return dateSerialization.getDateSerializationFormat(value) as string | undefined;
+    return dateSerialization.getDateSerializationFormat(value) as string;
   }
 
   _updateValue(value?: Date | null): void {
@@ -802,10 +808,14 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     this._applyInternalValidation(value ?? this.getDateOption('value'));
   }
 
-  dateValue(value: Date | null, dxEvent?: ValueChangedEvent): void {
+  dateValue(
+    value: Date | null,
+    dxEvent?: InteractionEvent | Event,
+  ): void {
     const isValueChanged = this._isValueChanged(value);
 
     if (isValueChanged && dxEvent) {
+      // @ts-expect-error editor's ValueChangedEvent should be extended
       this._saveValueChangeEvent(dxEvent);
     }
 

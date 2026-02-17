@@ -10,7 +10,8 @@ import NestedOption from "./core/nested-option";
 
 import type { Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, Attachment as ChatAttachment, User as ChatUser } from "devextreme/ui/chat";
 import type { DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, BeforeSendEvent, ContentReadyEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, ValueChangedEvent, UploadHttpMethod, FileUploadMode } from "devextreme/ui/file_uploader";
-import type { Format, ValidationStatus } from "devextreme/common";
+import type { DisposingEvent as SpeechToTextDisposingEvent, InitializedEvent as SpeechToTextInitializedEvent, ContentReadyEvent as SpeechToTextContentReadyEvent, OptionChangedEvent as SpeechToTextOptionChangedEvent, CustomSpeechRecognizer as SpeechToTextCustomSpeechRecognizer, EndEvent, ErrorEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig as SpeechToTextSpeechRecognitionConfig } from "devextreme/ui/speech_to_text";
+import type { Format, ValidationStatus, ButtonStyle, ButtonType } from "devextreme/common";
 
 import type UploadInfo from "devextreme/file_management/upload_info";
 
@@ -73,6 +74,7 @@ const Chat = memo(
         fileUploaderOptions: { optionName: "fileUploaderOptions", isCollectionItem: false },
         item: { optionName: "items", isCollectionItem: true },
         messageTimestampFormat: { optionName: "messageTimestampFormat", isCollectionItem: false },
+        speechToTextOptions: { optionName: "speechToTextOptions", isCollectionItem: false },
         typingUser: { optionName: "typingUsers", isCollectionItem: true },
         user: { optionName: "user", isCollectionItem: false }
       }), []);
@@ -165,6 +167,25 @@ const _componentAuthor = (props: IAuthorProps) => {
 };
 
 const Author = Object.assign<typeof _componentAuthor, NestedComponentMeta>(_componentAuthor, {
+  componentType: "option",
+});
+
+// owners:
+// SpeechToTextOptions
+type ICustomSpeechRecognizerProps = React.PropsWithChildren<{
+  enabled?: boolean;
+  isListening?: boolean;
+}>
+const _componentCustomSpeechRecognizer = (props: ICustomSpeechRecognizerProps) => {
+  return React.createElement(NestedOption<ICustomSpeechRecognizerProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "customSpeechRecognizer",
+    },
+  });
+};
+
+const CustomSpeechRecognizer = Object.assign<typeof _componentCustomSpeechRecognizer, NestedComponentMeta>(_componentCustomSpeechRecognizer, {
   componentType: "option",
 });
 
@@ -352,6 +373,78 @@ const MessageTimestampFormat = Object.assign<typeof _componentMessageTimestampFo
 });
 
 // owners:
+// SpeechToTextOptions
+type ISpeechRecognitionConfigProps = React.PropsWithChildren<{
+  continuous?: boolean;
+  grammars?: Array<string>;
+  interimResults?: boolean;
+  lang?: string;
+  maxAlternatives?: number;
+}>
+const _componentSpeechRecognitionConfig = (props: ISpeechRecognitionConfigProps) => {
+  return React.createElement(NestedOption<ISpeechRecognitionConfigProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "speechRecognitionConfig",
+    },
+  });
+};
+
+const SpeechRecognitionConfig = Object.assign<typeof _componentSpeechRecognitionConfig, NestedComponentMeta>(_componentSpeechRecognitionConfig, {
+  componentType: "option",
+});
+
+// owners:
+// Chat
+type ISpeechToTextOptionsProps = React.PropsWithChildren<{
+  accessKey?: string | undefined;
+  activeStateEnabled?: boolean;
+  customSpeechRecognizer?: SpeechToTextCustomSpeechRecognizer;
+  disabled?: boolean;
+  elementAttr?: Record<string, any>;
+  focusStateEnabled?: boolean;
+  height?: number | string | undefined;
+  hint?: string | undefined;
+  hoverStateEnabled?: boolean;
+  onContentReady?: ((e: SpeechToTextContentReadyEvent) => void);
+  onDisposing?: ((e: SpeechToTextDisposingEvent) => void);
+  onEnd?: ((e: EndEvent) => void) | undefined;
+  onError?: ((e: ErrorEvent) => void) | undefined;
+  onInitialized?: ((e: SpeechToTextInitializedEvent) => void);
+  onOptionChanged?: ((e: SpeechToTextOptionChangedEvent) => void);
+  onResult?: ((e: ResultEvent) => void) | undefined;
+  onStartClick?: ((e: StartClickEvent) => void) | undefined;
+  onStopClick?: ((e: StopClickEvent) => void) | undefined;
+  rtlEnabled?: boolean;
+  speechRecognitionConfig?: Record<string, any> | SpeechToTextSpeechRecognitionConfig;
+  startIcon?: string;
+  startText?: string;
+  stopIcon?: string;
+  stopText?: string;
+  stylingMode?: ButtonStyle;
+  tabIndex?: number;
+  type?: ButtonType | string;
+  visible?: boolean;
+  width?: number | string | undefined;
+}>
+const _componentSpeechToTextOptions = (props: ISpeechToTextOptionsProps) => {
+  return React.createElement(NestedOption<ISpeechToTextOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "speechToTextOptions",
+      ExpectedChildren: {
+        customSpeechRecognizer: { optionName: "customSpeechRecognizer", isCollectionItem: false },
+        speechRecognitionConfig: { optionName: "speechRecognitionConfig", isCollectionItem: false }
+      },
+    },
+  });
+};
+
+const SpeechToTextOptions = Object.assign<typeof _componentSpeechToTextOptions, NestedComponentMeta>(_componentSpeechToTextOptions, {
+  componentType: "option",
+});
+
+// owners:
 // Chat
 type ITypingUserProps = React.PropsWithChildren<{
   avatarAlt?: string;
@@ -405,6 +498,8 @@ export {
   IAttachmentProps,
   Author,
   IAuthorProps,
+  CustomSpeechRecognizer,
+  ICustomSpeechRecognizerProps,
   DayHeaderFormat,
   IDayHeaderFormatProps,
   Editing,
@@ -415,6 +510,10 @@ export {
   IItemProps,
   MessageTimestampFormat,
   IMessageTimestampFormatProps,
+  SpeechRecognitionConfig,
+  ISpeechRecognitionConfigProps,
+  SpeechToTextOptions,
+  ISpeechToTextOptionsProps,
   TypingUser,
   ITypingUserProps,
   User,

@@ -176,7 +176,6 @@ class MultiselectDateBox extends TypedDateBox {
 
     if ($(target).is($(startDateInput))) {
       if (startDate) {
-        // @ts-expect-error
         calendar._skipNavigate = true;
         calendar.option('currentDate', startDate);
       }
@@ -184,7 +183,6 @@ class MultiselectDateBox extends TypedDateBox {
       calendar.option('currentSelection', 'startDate');
 
       if (dateRangeBox.option('disableOutOfRangeSelection')) {
-        // @ts-expect-error
         calendar._setViewsMaxOption(endDate);
       }
     }
@@ -194,11 +192,9 @@ class MultiselectDateBox extends TypedDateBox {
         if (startDate && monthDifference(startDate, endDate) > 1) {
           // @ts-expect-error
           calendar.option('currentDate', calendar._getDateByOffset(null, endDate));
-          // @ts-expect-error
           calendar.option('currentDate', calendar._getDateByOffset(-1, endDate));
         }
 
-        // @ts-expect-error
         calendar._skipNavigate = true;
         calendar.option('currentDate', endDate);
       }
@@ -206,7 +202,6 @@ class MultiselectDateBox extends TypedDateBox {
       calendar.option('currentSelection', 'endDate');
 
       if (dateRangeBox.option('disableOutOfRangeSelection')) {
-        // @ts-expect-error
         calendar._setViewsMinOption(startDate);
       }
     }

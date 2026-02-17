@@ -29,7 +29,7 @@ import type {
   EventInfo,
   PointerInteractionEvent,
 } from '@js/events';
-import type { Options as Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
+import type { Properties } from '@js/ui/drop_down_editor/ui.drop_down_editor';
 import type { Properties as PopupProperties } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import errors from '@js/ui/widget/ui.errors';
@@ -39,7 +39,7 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import TextBox from '@ts/ui/text_box/m_text_box';
 
 import type Popover from '../popover/m_popover';
-import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/m_index';
+import type { TextEditorButtonInfo } from '../text_box/texteditor_button_collection/index';
 import DropDownButton from './m_drop_down_button';
 import { getElementWidth, getSizeValue } from './m_utils';
 

@@ -12,26 +12,28 @@ fixture('FileUploader.CustomDropzone')
   });
 
 runManualTest('FileUploader', 'CustomDropzone', (test) => {
-  const triggerDragEnter = async (dropZoneSelector, items) => {
+  const triggerDragEnter = async (
+    dropZoneSelector: string,
+    items: { type: string }[],
+  ): Promise<void> => {
     await ClientFunction(() => {
-      // @ts-expect-error $ is not typed
-      // eslint-disable-next-line no-undef
-      const $dropZone = $(dropZoneSelector);
-      const { left, top } = $dropZone.offset();
-      // @ts-expect-error $ is not typed
-      // eslint-disable-next-line no-undef
-      $dropZone.trigger($.Event('dragenter', {
-        // @ts-expect-error $ is not typed
-        // eslint-disable-next-line no-undef
-        originalEvent: $.Event('dragenter', {
-          dataTransfer: {
-            items,
-            types: ['Files'],
-          },
-          clientX: left,
-          clientY: top,
-        }),
-      }));
+      const dropZone = document.querySelector(dropZoneSelector);
+      const rect = dropZone.getBoundingClientRect();
+      const event = new DragEvent('dragenter', {
+        bubbles: true,
+        cancelable: true,
+        clientX: rect.left,
+        clientY: rect.top,
+      });
+
+      Object.defineProperty(event, 'dataTransfer', {
+        value: {
+          items,
+          types: ['Files'],
+        },
+      });
+
+      dropZone.dispatchEvent(event);
     }, { dependencies: { dropZoneSelector, items } })();
   };
 

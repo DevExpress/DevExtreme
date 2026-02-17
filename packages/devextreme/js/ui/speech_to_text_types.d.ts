@@ -10,5 +10,6 @@ export {
   DisposingEvent,
   InitializedEvent,
   OptionChangedEvent,
+  dxSpeechToTextOptions,
   Properties,
 } from './speech_to_text';
