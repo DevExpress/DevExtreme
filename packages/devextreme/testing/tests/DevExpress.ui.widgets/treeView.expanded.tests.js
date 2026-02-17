@@ -217,7 +217,7 @@ module('Expanded items', {
         assert.ok(treeView.option('items')[0].expanded, 'item was expanded');
     });
 
-    test('disabled item should not expand on click', function(assert) {
+    test('disabled item should expand on click', function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].disabled = true;
         const $treeView = initTree({
