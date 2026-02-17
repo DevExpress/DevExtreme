@@ -24,7 +24,7 @@ $treeview-checkbox-disabled-background-focused: null !default;
 $treeview-item-content-disabled: null !default;
 $treeview-checkbox-border-color-focused: null !default;
 $treeview-checkbox-background-color-focused: null !default;
-$treeview-checkbox-accent-color-focused: mull !default;
+$treeview-checkbox-accent-color-focused: null !default;
 
 @if $mode == "light" {
   $treeview-item-content-disabled: color.scale($base-bg, $lightness: -25.88%) !default;
