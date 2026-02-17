@@ -787,11 +787,11 @@ QUnit.module('keyboard navigation', {
         $focusedNode.find('.dx-treeview-item').trigger('dxpointerdown');
         assert.ok($focusedNode.hasClass('dx-state-focused'), 'item was focused');
 
-        keyboard.keyDown('left');
+        keyboard.keyDown('up');
         $focusedNode = $treeView.find('.dx-treeview-node[data-item-id=2]');
         assert.ok($focusedNode.hasClass('dx-state-focused'), 'first item was focused');
 
-        keyboard.keyDown('right');
+        keyboard.keyDown('down');
         $focusedNode = $treeView.find('.dx-treeview-node[data-item-id=21]');
         assert.ok($focusedNode.hasClass('dx-state-focused'), 'item was focused');
     });
