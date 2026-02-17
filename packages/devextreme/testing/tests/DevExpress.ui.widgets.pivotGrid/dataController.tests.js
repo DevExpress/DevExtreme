@@ -6709,47 +6709,46 @@ QUnit.module('Remote paging', {
     });
 
     QUnit.test('load with CustomStore', function(assert) {
-        const done = assert.async();
         const that = this;
+
+        const CustomPivotStore = Class.inherit({
+            ctor: function() {},
+            getFields: function() {
+                return $.Deferred().resolve([]).promise();
+            },
+            supportPaging: function() {
+                return true;
+            },
+            load: function(loadOptions) {
+                that.loadArgs.push(loadOptions);
+                return $.Deferred().resolve({
+                    rows: [
+                        { value: 'row 1', text: 'row 1', index: 1 },
+                        { value: 'row 2', text: 'row 2', index: 2 }
+                    ],
+                    columns: [],
+                    values: [[null], [null], [null]],
+                    grandTotalRowIndex: 0,
+                    grandTotalColumnIndex: 0
+                }).promise();
+            }
+        });
 
         const dataController = that.setup({
             paginate: true,
-            store: {
-                load: function(loadOptions) {
-                    that.loadArgs.push(loadOptions);
-                    return $.Deferred().resolve({
-                        rows: [
-                            { value: 'row 1', text: 'row 1', index: 1 },
-                            { value: 'row 2', text: 'row 2', index: 2 }
-                        ],
-                        columns: [],
-                        values: [[null], [null], [null]],
-                        grandTotalRowIndex: 0,
-                        grandTotalColumnIndex: 0
-                    });
-                },
-                getFields: function() {
-                    return $.Deferred().resolve([]);
-                },
-                supportPaging: function() {
-                    return true;
-                }
-            },
+            store: new CustomPivotStore(),
             fields: [{ dataField: 'row', area: 'row' }, { area: 'data' }]
         });
 
-        setTimeout(function() {
-            assert.strictEqual(that.loadArgs.length, 1, 'one load');
-            assert.ok(that.loadArgs[0].rows, 'has rows in load options');
-            assert.strictEqual(that.loadArgs[0].rowSkip, 0, 'rowSkip is 0');
-            assert.strictEqual(that.loadArgs[0].rowTake, 2, 'rowTake is 2');
+        assert.strictEqual(that.loadArgs.length, 1, 'one load');
+        assert.ok(that.loadArgs[0].rows, 'has rows in load options');
+        assert.strictEqual(that.loadArgs[0].rowSkip, 0, 'rowSkip is 0');
+        assert.strictEqual(that.loadArgs[0].rowTake, 2, 'rowTake is 2');
 
-            assert.deepEqual(dataController.getRowsInfo(), [
-                [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true }],
-                [{ dataSourceIndex: 2, text: 'row 2', path: ['row 2'], type: 'D', isLast: true }]
-            ]);
-            done();
-        }, 0);
+        assert.deepEqual(dataController.getRowsInfo(), [
+            [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true }],
+            [{ dataSourceIndex: 2, text: 'row 2', path: ['row 2'], type: 'D', isLast: true }]
+        ]);
     });
 
 });
