@@ -427,7 +427,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
                                     && !isGroupCellWithTemplate;
 
         if (shouldShowHint) {
-          this._setCellTitleAttribute($cell, isHeaderRow);
+          this._setCellTitleAttribute($element, isHeaderRow);
         }
       }));
     }
@@ -496,7 +496,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
     if (isHeaderRow && !$cell.hasClass(headerContentClass)) {
       const $headerContent = $cell.find(`.${headerContentClass}`);
-      $cellContent = $headerContent.length ? $headerContent : $cell;
+      $cellContent = $headerContent.length ? $headerContent : $cellContent;
     }
 
     const hasWidthOverflow = $cellContent[0].scrollWidth - $cellContent[0].clientWidth > 0;
