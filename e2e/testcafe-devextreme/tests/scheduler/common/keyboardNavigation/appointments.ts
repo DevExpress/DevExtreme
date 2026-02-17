@@ -2,28 +2,27 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { ClientFunction } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
+import { getDocumentScrollTop } from '../../../../helpers/domUtils';
 
 fixture.disablePageReloads`KeyboardNavigation.Appointments`
   .page(url(__dirname, '../../../container.html'));
 
-const PARENT_SELECTOR = '#parentContainer';
 const SCHEDULER_SELECTOR = '#container';
 
 test('Document should not scroll on \'End\' press when appointment is focused', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
+  await t.click(scheduler.getAppointment('Appointment 1').element);
+
+  const expectedScrollTop = await getDocumentScrollTop();
+
   await t
-    .click(scheduler.getAppointment('Appointment 1').element)
-    .pressKey('End');
-
-  const scrollTop = await ClientFunction(() => document.documentElement.scrollTop)();
-
-  await t.expect(scrollTop).eql(0);
+    .pressKey('End')
+    .expect(getDocumentScrollTop()).eql(expectedScrollTop);
 }).before(async () => {
-  ClientFunction((selector) => {
-    const parent = document.querySelector(selector) as HTMLElement;
-    parent.style.height = '2000px';
-  })(PARENT_SELECTOR);
+  await ClientFunction(() => {
+    document.body.style.height = '2000px';
+  })();
 
   await createWidget('dxScheduler', {
     dataSource: [
@@ -48,29 +47,27 @@ test('Document should not scroll on \'End\' press when appointment is focused', 
     currentDate: new Date(2015, 1, 9),
   });
 }).after(async () => {
-  ClientFunction((selector) => {
-    const parent = document.querySelector(selector) as HTMLElement;
-    parent.style.height = '';
-  })(PARENT_SELECTOR);
+  await ClientFunction(() => {
+    document.body.style.height = '';
+  })();
 });
 
 test('Document should not scroll on \'Home\' press when appointment is focused', async (t) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const initialScrollTop = 100;
 
   await t
-    .scroll(0, initialScrollTop)
-    .click(scheduler.getAppointment('Appointment 1').element)
-    .pressKey('Home');
+    .scroll(0, 100)
+    .click(scheduler.getAppointment('Appointment 1').element);
 
-  const scrollTop = await ClientFunction(() => document.documentElement.scrollTop)();
+  const expectedScrollTop = await getDocumentScrollTop();
 
-  await t.expect(scrollTop).eql(initialScrollTop);
+  await t
+    .pressKey('Home')
+    .expect(getDocumentScrollTop()).eql(expectedScrollTop);
 }).before(async () => {
-  ClientFunction((selector) => {
-    const parent = document.querySelector(selector) as HTMLElement;
-    parent.style.height = '2000px';
-  })(PARENT_SELECTOR);
+  await ClientFunction(() => {
+    document.body.style.height = '2000px';
+  })();
 
   await createWidget('dxScheduler', {
     dataSource: [
@@ -95,8 +92,7 @@ test('Document should not scroll on \'Home\' press when appointment is focused',
     currentDate: new Date(2015, 1, 9),
   });
 }).after(async () => {
-  ClientFunction((selector) => {
-    const parent = document.querySelector(selector) as HTMLElement;
-    parent.style.height = '';
-  })(PARENT_SELECTOR);
+  await ClientFunction(() => {
+    document.body.style.height = '';
+  })();
 });
