@@ -788,7 +788,7 @@ QUnit.module('keyboard navigation', {
         assert.ok($focusedNode.hasClass('dx-state-focused'), 'item was focused');
 
         keyboard.keyDown('left');
-        $focusedNode = $treeView.find('.dx-treeview-node[data-item-id=1]');
+        $focusedNode = $treeView.find('.dx-treeview-node[data-item-id=2]');
         assert.ok($focusedNode.hasClass('dx-state-focused'), 'first item was focused');
 
         keyboard.keyDown('right');

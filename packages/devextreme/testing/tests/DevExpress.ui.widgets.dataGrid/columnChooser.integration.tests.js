@@ -466,10 +466,10 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // act
         dataGrid.showColumnChooser();
 
-        const items = $('.dx-item.dx-treeview-item');
+        const item = $('.dx-item.dx-treeview-item').eq(2).find('.dx-treeview-item-content');
 
         // assert
-        assert.ok(items.eq(2).hasClass('dx-state-disabled'), 'Column with allowHiding=false is disabled');
+        assert.ok(item.hasClass('dx-state-disabled'), 'Column with allowHiding=false is disabled');
     });
 
     QUnit.test('Column chooser search.editorOptions option should work', function(assert) {

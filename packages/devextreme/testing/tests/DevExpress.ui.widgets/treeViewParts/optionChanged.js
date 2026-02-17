@@ -103,7 +103,7 @@ QUnit.test('node should have disabled class when it was disabled at runtime with
         dataStructure: 'plain'
     });
     const instance = $treeView.dxTreeView('instance');
-    const $item = $treeView.find('.dx-treeview-item').eq(0);
+    const $item = $treeView.find('.dx-treeview-item-content').eq(0);
 
     instance.option('items[0].disable', true);
     assert.ok($item.hasClass('dx-state-disabled'), 'item should be disabled');
