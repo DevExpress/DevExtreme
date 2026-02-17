@@ -130,7 +130,7 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-item-selected-bg: color.change(#000, $alpha: 0.1) !default;
   $treeview-item-selected-hover-bg: color.change(#000, $alpha: 0.07) !default;
   $treeview-spin-icon-color: $base-icon-color !default;
-  $treeview-item-content-disabled: color.adjust($base-text-color, $lightness: 40%, $space: hsl);
+  $treeview-item-content-disabled: color.adjust($base-text-color, $lightness: 40%, $space: hsl) !default;
 }
 
 @if $color == "softblue" {
