@@ -32303,6 +32303,7 @@ declare module DevExpress.ui {
       TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.common.core.events.EventInfo<dxTreeView<TItem, TKey>>;
+    export type DisabledNodeSelectionMode = 'recursiveAndAll' | 'never';
     /**
      * [descr:_ui_tree_view_DisposingEvent]
      */
@@ -32594,6 +32595,10 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewOptions.dataStructure]
      */
     dataStructure?: DevExpress.common.DataStructure;
+    /**
+     * [descr:dxTreeViewOptions.disabledNodeSelectionMode]
+     */
+    disabledNodeSelectionMode?: DevExpress.ui.dxTreeView.DisabledNodeSelectionMode;
     /**
      * [descr:dxTreeViewOptions.expandAllEnabled]
      */
