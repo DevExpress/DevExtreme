@@ -24,13 +24,20 @@ import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
 import {
-  isDefined, isFunction, isPlainObject, isPrimitive, isString,
+  isDefined,
+  isFunction,
+  isPlainObject,
+  isPrimitive,
+  isString,
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent, InteractionEvent, NativeEventInfo } from '@js/events';
 import type { InitializedEvent, Properties as CheckBoxProperties, ValueChangedEvent } from '@js/ui/check_box';
 import type {
-  Item, Properties, TreeViewCheckBoxMode, TreeViewExpandEvent,
+  Item,
+  Properties,
+  TreeViewCheckBoxMode,
+  TreeViewExpandEvent,
 } from '@js/ui/tree_view';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -38,9 +45,12 @@ import type { SupportedKeys } from '@ts/core/widget/widget';
 import CheckBox from '@ts/ui/check_box/index';
 import type { ActionArgs, CollectionItemInfo, PostprocessRenderItemInfo } from '@ts/ui/collection/collection_widget.base';
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
-import type { DataAdapterOptions, DisabledNodeSelectionMode } from '@ts/ui/hierarchical_collection/data_adapter';
+import type { DataAdapterOptions } from '@ts/ui/hierarchical_collection/data_adapter';
 import type {
-  InternalNode, ItemData, ItemKey, PublicNode,
+  InternalNode,
+  ItemData,
+  ItemKey,
+  PublicNode,
 } from '@ts/ui/hierarchical_collection/data_converter';
 import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/hierarchical_collection_widget';
 import type { LoadIndicatorProperties } from '@ts/ui/load_indicator';
@@ -98,8 +108,6 @@ export interface TreeViewBaseProperties extends Properties<TreeViewNode>, Omit<
   deferRendering?: boolean;
 
   _supportItemUrl?: boolean;
-
-  disabledNodeSelectionMode?: DisabledNodeSelectionMode;
 }
 
 class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, TreeViewNode> {

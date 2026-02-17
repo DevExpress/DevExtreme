@@ -5,6 +5,7 @@ import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
+import type { DisabledNodeSelectionMode } from '@js/ui/tree_view';
 import errors from '@js/ui/widget/ui.errors';
 import { getIntersection } from '@ts/core/utils/m_array';
 import SearchBoxController, { getOperationBySearchMode } from '@ts/ui/collection/search_box_controller';
@@ -26,8 +27,6 @@ type SortOption = {
   selector: string | ((item: ItemData) => unknown);
   desc?: boolean;
 } | string;
-
-export type DisabledNodeSelectionMode = 'recursiveAndAll' | 'never';
 
 interface LangParams {
   locale?: string;
