@@ -52,7 +52,13 @@ async function getAntiForgeryTokenValue() {
 }
 
 ajax.sendRequest = (options) => {
-  const deferred = new Deferred();
+  const deferred = typeof Deferred !== 'undefined' ? new Deferred() : (() => {
+    let resolve;
+    let reject;
+    // eslint-disable-next-line spellcheck/spell-checker
+    const promise = new Promise((res, rej) => { resolve = res; reject = rej; });
+    return { promise: () => promise, resolve, reject };
+  })();
 
   getAntiForgeryTokenValue().then(({ headerName, token }) => {
     options.headers = {
