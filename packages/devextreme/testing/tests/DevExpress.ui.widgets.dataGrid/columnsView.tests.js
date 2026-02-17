@@ -324,7 +324,7 @@ QUnit.module('API methods', {
         firstCellElement.trigger('mousemove');
 
         // assert
-        assert.strictEqual(firstCellElement.attr('title'), 'Column 1', 'has attribute title in first cell');
+        assert.strictEqual(firstCellElement.attr('title'), 'Test Test Test Test Test', 'has attribute title in first cell');
 
         // act
         const lastCellElement = $table.find('td').last();
