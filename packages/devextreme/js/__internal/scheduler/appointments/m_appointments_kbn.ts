@@ -59,6 +59,8 @@ export class AppointmentsKeyboardNavigation {
       escape: this.escHandler.bind(this),
       del: this.delHandler.bind(this),
       tab: this.tabHandler.bind(this),
+      home: this.homeHandler.bind(this),
+      end: this.endHandler.bind(this),
     };
   }
 
@@ -87,8 +89,7 @@ export class AppointmentsKeyboardNavigation {
         $nextAppointment = this.getFocusableItemBySortedIndex(index);
       }
 
-      this.resetTabIndex($nextAppointment);
-      eventsEngine.trigger($nextAppointment, 'focus');
+      this.focusItem($nextAppointment);
     }
   }
 
@@ -114,5 +115,34 @@ export class AppointmentsKeyboardNavigation {
       resizableInstance._attachEventHandlers();
       resizableInstance._toggleResizingClass(false);
     }
+  }
+
+  private homeHandler(e: DxEvent): void {
+    e.preventDefault();
+
+    const $firstItem = this.getFocusableItems().first();
+
+    if (this.$focusedItem && $firstItem.is(this.$focusedItem)) {
+      return;
+    }
+
+    this.focusItem($firstItem);
+  }
+
+  private endHandler(e: DxEvent): void {
+    e.preventDefault();
+
+    const $lastItem = this.getFocusableItems().last();
+
+    if (this.$focusedItem && $lastItem.is(this.$focusedItem)) {
+      return;
+    }
+
+    this.focusItem($lastItem);
+  }
+
+  private focusItem($item: dxElementWrapper): void {
+    this.resetTabIndex($item);
+    eventsEngine.trigger($item, 'focus');
   }
 }

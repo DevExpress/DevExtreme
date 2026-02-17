@@ -4,6 +4,7 @@ export type {
   ScrollDirection,
   TreeViewCheckBoxMode,
   TreeViewExpandEvent,
+  DisabledNodeSelectionMode,
   ContentReadyEvent,
   DisposingEvent,
   InitializedEvent,
