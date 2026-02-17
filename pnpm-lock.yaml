@@ -127,6 +127,9 @@ catalogs:
     jquery:
       specifier: 3.7.1
       version: 3.7.1
+    testcafe:
+      specifier: 3.7.4
+      version: 3.7.4
   eslint8:
     '@babel/eslint-parser':
       specifier: 7.23.10
@@ -734,7 +737,7 @@ importers:
         specifier: 0.16.15
         version: 0.16.15
       testcafe:
-        specifier: 3.7.4
+        specifier: 'catalog:'
         version: 3.7.4
       testcafe-reporter-spec-time:
         specifier: 4.0.0
@@ -1115,7 +1118,7 @@ importers:
         specifier: 0.12.1
         version: 0.12.1
       testcafe:
-        specifier: 3.7.4
+        specifier: 'catalog:'
         version: 3.7.4
       testcafe-reporter-spec-time:
         specifier: 4.0.0
@@ -1284,7 +1287,7 @@ importers:
         specifier: ~2.1.0
         version: 2.1.0(jasmine-core@5.6.0)(karma-jasmine@5.1.0(karma@6.4.4))(karma@6.4.4)
       testcafe:
-        specifier: 3.7.4
+        specifier: 'catalog:'
         version: 3.7.4
       typescript:
         specifier: ~5.8.3
@@ -2262,7 +2265,7 @@ importers:
   packages/testcafe-models:
     dependencies:
       testcafe:
-        specifier: 3.7.4
+        specifier: 'catalog:'
         version: 3.7.4
     devDependencies:
       devextreme:

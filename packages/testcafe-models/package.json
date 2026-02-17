@@ -1,7 +1,7 @@
 {
   "name": "devextreme-testcafe-models",
   "peerDependencies": {
-    "testcafe": "3.7.4"
+    "testcafe": "catalog:"
   },
   "devDependencies": {
     "devextreme": "workspace:*"
