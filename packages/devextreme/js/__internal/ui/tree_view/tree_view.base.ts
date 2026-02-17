@@ -1984,7 +1984,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   }
 
   _findNonDisabledNodes($nodes: dxElementWrapper): dxElementWrapper {
-    return $nodes.not(`:has(>.${ITEM_CONTENT_CLASS}.${DISABLED_STATE_CLASS})`);
+    return $nodes.not(`:has(>.${ITEM_CLASS} > .${ITEM_CONTENT_CLASS}.${DISABLED_STATE_CLASS})`);
   }
 
   _moveFocus(location: string, e: DxEvent<KeyboardEvent>): void {
@@ -2101,7 +2101,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   }
 
   _getClosestNonDisabledNode($node: dxElementWrapper): dxElementWrapper {
-    const isNodeDisabled = ($el: dxElementWrapper): boolean => $el.children(`.${ITEM_CONTENT_CLASS}.${DISABLED_STATE_CLASS}`).length > 0;
+    const isNodeDisabled = ($el: dxElementWrapper): boolean => $el.find(`.${ITEM_CLASS} .${ITEM_CONTENT_CLASS}.${DISABLED_STATE_CLASS}`).length > 0;
 
     let currentNode = $node;
 

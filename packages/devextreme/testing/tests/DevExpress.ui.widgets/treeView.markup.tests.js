@@ -16,6 +16,7 @@ const NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
 const OPENED_NODE_CONTAINER_CLASS = 'dx-treeview-node-container-opened';
 const NODE_CLASS = 'dx-treeview-node';
 const ITEM_CLASS = 'dx-treeview-item';
+const ITEM_CONTENT_CLASS = 'dx-treeview-item';
 const ICON_CLASS = 'dx-icon';
 const SELECTED_STATE_CLASS = 'dx-state-selected';
 const ITEM_WITH_CHECKBOX_CLASS = 'dx-treeview-item-with-checkbox';
@@ -424,7 +425,7 @@ QUnit.module('markup', {
         assert.equal($rootNodeSecondItem.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS).length, 0);
     });
 
-    QUnit.test('Add disabled class for toggle icon if item is disabled', function(assert) {
+    QUnit.test('Do not add disabled class for toggle icon if item is disabled', function(assert) {
         const $treeView = initTree({
             items: [{
                 id: 1,
@@ -437,7 +438,7 @@ QUnit.module('markup', {
         const $rootNode = $treeView.find(`.${NODE_CONTAINER_CLASS}:first-child`);
         const $icon = $rootNode.find(`.${ITEM_CLASS}`).eq(0).children(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`).eq(0);
 
-        assert.ok($icon.hasClass('dx-state-disabled'));
+        assert.notOk($icon.hasClass('dx-state-disabled'));
     });
 
     QUnit.test('Render checkboxes', function(assert) {
@@ -515,7 +516,7 @@ QUnit.module('markup', {
             items: [{ id: 1, text: 'item 1', isDisabled: true }],
             disabledExpr: 'isDisabled'
         });
-        const $item = $treeView.find('.' + ITEM_CLASS).eq(0);
+        const $item = $treeView.find('.' + ITEM_CLASS).eq(0).find('.' + ITEM_CONTENT_CLASS).eq(0);
 
         assert.ok($item.hasClass('dx-state-disabled'));
     });
@@ -528,7 +529,7 @@ QUnit.module('markup', {
                 return '123';
             }
         });
-        const $item = $treeView.find('.' + ITEM_CLASS).eq(0);
+        const $item = $treeView.find('.' + ITEM_CLASS).eq(0).find('.' + ITEM_CONTENT_CLASS).eq(0);
 
         assert.ok($item.hasClass('dx-state-disabled'));
     });

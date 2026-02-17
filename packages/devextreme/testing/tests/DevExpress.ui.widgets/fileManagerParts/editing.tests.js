@@ -2077,7 +2077,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1', true), false, '\'Folder 1\' toggle is closed');
 
         assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
-        assert.notOk($folderNodes.eq(2).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is ensabled');
+        assert.notOk($folderNodes.eq(2).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 2', true), null, '\'Folder 2\' toggle is absent');
 
         assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
