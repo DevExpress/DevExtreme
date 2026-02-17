@@ -940,32 +940,31 @@ class SchedulerAppointments extends CollectionWidget<any> {
     });
   }
 
+  getCollectorDataListBySortedIndex(sortedIndex: number): CompactAppointmentOptions['items'] | undefined {
+    const items: AppointmentViewModelPlain[] = this.option('items') ?? [];
+    const collector = items.find((item) => 'items' in item && item.sortedIndex === sortedIndex) as AppointmentCollectorViewModel | undefined;
+    return collector ? this.mapCollectorToTooltipItems(collector) : undefined;
+  }
+
+  private mapCollectorToTooltipItems(collector: AppointmentCollectorViewModel): CompactAppointmentOptions['items'] {
+    const resourceManager = this.getResourceManager();
+    const groups = this.option('groups');
+    return collector.items.map((item) => {
+      const appointmentConfig = { itemData: item.itemData, groupIndex: collector.groupIndex, groups };
+      return {
+        appointment: item.itemData,
+        targetedAppointment: getTargetedAppointment(item.itemData, item, this.dataAccessors, resourceManager),
+        color: resourceManager.getAppointmentColor(appointmentConfig),
+        settings: item,
+      };
+    });
+  }
+
   protected renderDropDownAppointment(
     $fragment: dxElementWrapper,
     appointment: AppointmentCollectorViewModel,
   ): dxElementWrapper {
-    const virtualItems = appointment.items;
-    const items: CompactAppointmentOptions['items'] = [];
-    virtualItems.forEach((item) => {
-      const appointmentConfig = {
-        itemData: item.itemData,
-        groupIndex: appointment.groupIndex,
-        groups: this.option('groups'),
-      };
-      const resourceManager = this.getResourceManager();
-
-      items.push({
-        appointment: item.itemData,
-        targetedAppointment: getTargetedAppointment(
-          item.itemData,
-          item,
-          this.dataAccessors,
-          resourceManager,
-        ),
-        color: resourceManager.getAppointmentColor(appointmentConfig),
-        settings: item,
-      });
-    });
+    const items = this.mapCollectorToTooltipItems(appointment);
 
     const $item = this.invoke('renderCompactAppointments', {
       $container: $fragment,

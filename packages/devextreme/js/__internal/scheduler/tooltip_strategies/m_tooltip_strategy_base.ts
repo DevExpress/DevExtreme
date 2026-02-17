@@ -5,6 +5,8 @@ import Button from '@js/ui/button';
 import { createPromise } from '@ts/core/utils/promise';
 import List from '@ts/ui/list/list.edit';
 
+import { APPOINTMENT_SETTINGS_KEY } from '../constants';
+
 const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item';
 const TOOLTIP_APPOINTMENT_ITEM_CONTENT = `${TOOLTIP_APPOINTMENT_ITEM}-content`;
 const TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT = `${TOOLTIP_APPOINTMENT_ITEM}-content-subject`;
@@ -27,6 +29,10 @@ export class TooltipStrategyBase {
   _extraOptions: any;
 
   _list: any;
+
+  private _dataChangeUnsubscribe: (() => void) | null = null;
+
+  private _collectorSortedIndex: number | null = null;
 
   constructor(options) {
     this._tooltip = null;
@@ -70,17 +76,41 @@ export class TooltipStrategyBase {
     return !disabled && isDeletingAllowed;
   }
 
-  private removeAppointmentFromTooltip(appointment) {
-    const currentItems = this._list.option('dataSource') || [];
-    const newDataList = currentItems.filter((item) => item.appointment !== appointment);
+  private tryUpdateTooltipFromDataSource() {
+    const { getCollectorBySortedIndex, getCollectorDataListBySortedIndex } = this._options;
 
-    if (newDataList.length === 0) {
+    if (this._collectorSortedIndex == null) return;
+    if (!this._tooltip.option('visible')) return;
+
+    const newDataList = getCollectorDataListBySortedIndex(this._collectorSortedIndex);
+    if (!newDataList?.length) {
       this.hide();
       return;
     }
 
-    const $target = this._tooltip?.option('target');
-    this.show($target, newDataList, this._extraOptions);
+    this._list.option('dataSource', newDataList);
+
+    const newCollector = getCollectorBySortedIndex(this._collectorSortedIndex);
+    if (newCollector) {
+      this._tooltip.option('position', {
+        ...this._tooltip.option('position'),
+        of: $(newCollector),
+      });
+    }
+  }
+
+  private subscribeToAppointmentDataChange() {
+    const { subscribeToAppointmentDataChange } = this._options;
+    this._dataChangeUnsubscribe?.();
+    this._dataChangeUnsubscribe = subscribeToAppointmentDataChange(
+      () => this.tryUpdateTooltipFromDataSource(),
+    );
+  }
+
+  private unsubscribeFromAppointmentDataChange() {
+    this._dataChangeUnsubscribe?.();
+    this._dataChangeUnsubscribe = null;
+    this._collectorSortedIndex = null;
   }
 
   protected getContentTemplate(dataList) {
@@ -104,7 +134,6 @@ export class TooltipStrategyBase {
         }
 
         if (this.isDeletingAllowed(appointment)) {
-          this.removeAppointmentFromTooltip(appointment);
           this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
         }
       });
@@ -120,12 +149,16 @@ export class TooltipStrategyBase {
 
   protected onShown() {
     this._list.option('focusStateEnabled', this._extraOptions.focusStateEnabled);
+    const settings = $(this._tooltip.option('target')).data(APPOINTMENT_SETTINGS_KEY) as any;
+    this._collectorSortedIndex = settings?.sortedIndex;
+    this.subscribeToAppointmentDataChange();
   }
 
   dispose() {
   }
 
   hide() {
+    this.unsubscribeFromAppointmentDataChange();
     if (this._tooltip) {
       this._tooltip.option('visible', false);
     }
@@ -262,7 +295,6 @@ export class TooltipStrategyBase {
       tabIndex: -1,
       onClick: (e) => {
         e.event.stopPropagation();
-        this.removeAppointmentFromTooltip(appointment);
         this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
       },
     });
