@@ -21,14 +21,14 @@ import {
     QueryList
 } from '@angular/core';
 
-export { ExplicitTypes } from 'devextreme/ui/tree_view';
+export type { ExplicitTypes } from 'devextreme/ui/tree_view';
 
-import DataSource from 'devextreme/data/data_source';
-import { dxTreeViewNode, dxTreeViewItem, DisabledNodeSelectionMode, TreeViewExpandEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, ItemSelectionChangedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, TreeViewCheckBoxMode } from 'devextreme/ui/tree_view';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { DataStructure, ScrollDirection, SearchMode, SingleOrMultiple } from 'devextreme/common';
-import { dxTextBoxOptions } from 'devextreme/ui/text_box';
+import type DataSource from 'devextreme/data/data_source';
+import type { dxTreeViewNode, dxTreeViewItem, DisabledNodeSelectionMode, TreeViewExpandEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, ItemSelectionChangedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, TreeViewCheckBoxMode } from 'devextreme/ui/tree_view';
+import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { DataStructure, ScrollDirection, SearchMode, SingleOrMultiple } from 'devextreme/common';
+import type { dxTextBoxOptions } from 'devextreme/ui/text_box';
 
 import DxTreeView from 'devextreme/ui/tree_view';
 
