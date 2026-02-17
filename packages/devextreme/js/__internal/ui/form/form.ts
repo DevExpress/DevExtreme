@@ -549,7 +549,11 @@ class Form extends Widget<FormProperties> {
     this._cachedColCountOptions = [];
     // @ts-expect-error ts-error
     this._lastMarkupScreenFactor = undefined;
-    this._scrollable = undefined;
+
+    if (this._scrollable) {
+      this._scrollable.dispose();
+      this._scrollable = undefined;
+    }
 
     resizeObserverSingleton.unobserve(this.$element().get(0));
   }

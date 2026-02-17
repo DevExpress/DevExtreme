@@ -71,3 +71,17 @@ QUnit.test('getScrollable content contains form layout manager when scrollingEna
 
     assert.equal($content.find('.dx-layout-manager').length, 1, 'layout manager is inside scrollable content');
 });
+
+QUnit.test('old Scrollable instance is disposed when scrollingEnabled is toggled', function(assert) {
+    const form = initForm({ scrollingEnabled: true });
+
+    const oldScrollable = form.getScrollable();
+    const disposeSpy = sinon.spy(oldScrollable, 'dispose');
+
+    form.option('scrollingEnabled', false);
+
+    assert.strictEqual(disposeSpy.callCount, 1, 'dispose was called on the old scrollable');
+    assert.strictEqual(form.getScrollable(), undefined, 'scrollable is undefined after toggling off');
+
+    disposeSpy.restore();
+});
