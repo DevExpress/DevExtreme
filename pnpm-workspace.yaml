@@ -21,6 +21,7 @@ catalog:
   eslint-plugin-qunit: 8.1.2
   globals: 15.14.0
   gulp-eslint-new: 2.4.0
+  testcafe: 3.7.4
   "@babel/eslint-parser": 7.26.5
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.2.0
