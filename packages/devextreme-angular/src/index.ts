@@ -105,7 +105,7 @@ export namespace Common {
     export type ButtonType = import('devextreme/common').ButtonType;
     export type CompareRule = import('devextreme/common').CompareRule;
     export type ComparisonOperator = import('devextreme/common').ComparisonOperator;
-    export const config: typeof import('devextreme/common').config = CommonModule.config;
+    export const config = (CommonModule as any).config as typeof import('devextreme/common').config;
     export type CustomRule = import('devextreme/common').CustomRule;
     export type DataStructure = import('devextreme/common').DataStructure;
     export type DataType = import('devextreme/common').DataType;
@@ -124,7 +124,7 @@ export namespace Common {
     export type FloatingActionButtonDirection = import('devextreme/common').FloatingActionButtonDirection;
     export type Format = import('devextreme/common').Format;
     export type GlobalConfig = import('devextreme/common').GlobalConfig;
-    export const Guid: typeof import('devextreme/common').Guid = CommonModule.Guid;
+    export const Guid = (CommonModule as any).Guid as typeof import('devextreme/common').Guid;
     export type Guid = import('devextreme/common').Guid;
     export type HorizontalAlignment = import('devextreme/common').HorizontalAlignment;
     export type HorizontalEdge = import('devextreme/common').HorizontalEdge;
@@ -146,7 +146,7 @@ export namespace Common {
     export type ScrollMode = import('devextreme/common').ScrollMode;
     export type SearchMode = import('devextreme/common').SearchMode;
     export type SelectAllMode = import('devextreme/common').SelectAllMode;
-    export const setTemplateEngine: typeof import('devextreme/common').setTemplateEngine = CommonModule.setTemplateEngine;
+    export const setTemplateEngine = (CommonModule as any).setTemplateEngine as typeof import('devextreme/common').setTemplateEngine;
     export type SimplifiedSearchMode = import('devextreme/common').SimplifiedSearchMode;
     export type SingleMultipleAllOrNone = import('devextreme/common').SingleMultipleAllOrNone;
     export type SingleMultipleOrNone = import('devextreme/common').SingleMultipleOrNone;
@@ -175,7 +175,7 @@ export namespace Common {
     export type VerticalAlignment = import('devextreme/common').VerticalAlignment;
     export type VerticalEdge = import('devextreme/common').VerticalEdge;
     export namespace AiIntegration {
-        export const AIIntegration: typeof import('devextreme/common/ai-integration').AIIntegration = AiIntegrationModule.AIIntegration;
+        export const AIIntegration = (AiIntegrationModule as any).AIIntegration as typeof import('devextreme/common/ai-integration').AIIntegration;
         export type AIIntegration = import('devextreme/common/ai-integration').AIIntegration;
         export type AIIntegrationOptions = import('devextreme/common/ai-integration').AIIntegrationOptions;
         export type AIProvider = import('devextreme/common/ai-integration').AIProvider;
@@ -210,8 +210,8 @@ export namespace Common {
         export type PaletteExtensionMode = import('devextreme/common/charts').PaletteExtensionMode;
         export type PointInteractionMode = import('devextreme/common/charts').PointInteractionMode;
         export type PointSymbol = import('devextreme/common/charts').PointSymbol;
-        export const registerGradient: typeof import('devextreme/common/charts').registerGradient = ChartsModule.registerGradient;
-        export const registerPattern: typeof import('devextreme/common/charts').registerPattern = ChartsModule.registerPattern;
+        export const registerGradient = (ChartsModule as any).registerGradient as typeof import('devextreme/common/charts').registerGradient;
+        export const registerPattern = (ChartsModule as any).registerPattern as typeof import('devextreme/common/charts').registerPattern;
         export type RelativePosition = import('devextreme/common/charts').RelativePosition;
         export type ScaleBreak = import('devextreme/common/charts').ScaleBreak;
         export type ScaleBreakLineStyle = import('devextreme/common/charts').ScaleBreakLineStyle;
@@ -236,22 +236,22 @@ export namespace Common {
     export namespace Core {
         export namespace Animation {
             export type AnimationConfig = import('devextreme/common/core/animation').AnimationConfig;
-            export const animationPresets: typeof import('devextreme/common/core/animation').animationPresets = CoreAnimationModule.animationPresets;
+            export const animationPresets = (CoreAnimationModule as any).animationPresets as typeof import('devextreme/common/core/animation').animationPresets;
             export type AnimationState = import('devextreme/common/core/animation').AnimationState;
-            export const cancelAnimationFrame: typeof import('devextreme/common/core/animation').cancelAnimationFrame = CoreAnimationModule.cancelAnimationFrame;
+            export const cancelAnimationFrame = (CoreAnimationModule as any).cancelAnimationFrame as typeof import('devextreme/common/core/animation').cancelAnimationFrame;
             export type CollisionResolution = import('devextreme/common/core/animation').CollisionResolution;
             export type CollisionResolutionCombination = import('devextreme/common/core/animation').CollisionResolutionCombination;
-            export const fx: typeof import('devextreme/common/core/animation').fx = CoreAnimationModule.fx;
+            export const fx = (CoreAnimationModule as any).fx as typeof import('devextreme/common/core/animation').fx;
             export type PositionConfig = import('devextreme/common/core/animation').PositionConfig;
-            export const requestAnimationFrame: typeof import('devextreme/common/core/animation').requestAnimationFrame = CoreAnimationModule.requestAnimationFrame;
-            export const TransitionExecutor: typeof import('devextreme/common/core/animation').TransitionExecutor = CoreAnimationModule.TransitionExecutor;
+            export const requestAnimationFrame = (CoreAnimationModule as any).requestAnimationFrame as typeof import('devextreme/common/core/animation').requestAnimationFrame;
+            export const TransitionExecutor = (CoreAnimationModule as any).TransitionExecutor as typeof import('devextreme/common/core/animation').TransitionExecutor;
             export type TransitionExecutor = import('devextreme/common/core/animation').TransitionExecutor;
         }
         export namespace Environment {
             export type Device = import('devextreme/common/core/environment').Device;
-            export const getTimeZones: typeof import('devextreme/common/core/environment').getTimeZones = CoreEnvironmentModule.getTimeZones;
-            export const hideTopOverlay: typeof import('devextreme/common/core/environment').hideTopOverlay = CoreEnvironmentModule.hideTopOverlay;
-            export const initMobileViewport: typeof import('devextreme/common/core/environment').initMobileViewport = CoreEnvironmentModule.initMobileViewport;
+            export const getTimeZones = (CoreEnvironmentModule as any).getTimeZones as typeof import('devextreme/common/core/environment').getTimeZones;
+            export const hideTopOverlay = (CoreEnvironmentModule as any).hideTopOverlay as typeof import('devextreme/common/core/environment').hideTopOverlay;
+            export const initMobileViewport = (CoreEnvironmentModule as any).initMobileViewport as typeof import('devextreme/common/core/environment').initMobileViewport;
             export type SchedulerTimeZone = import('devextreme/common/core/environment').SchedulerTimeZone;
         }
         export namespace Events {
@@ -263,68 +263,68 @@ export namespace Common {
             export type InitializedEventInfo<TComponent> = import('devextreme/common/core/events').InitializedEventInfo<TComponent>;
             export type ItemInfo<TItemData = any> = import('devextreme/common/core/events').ItemInfo<TItemData>;
             export type NativeEventInfo<TComponent, TNativeEvent = Event> = import('devextreme/common/core/events').NativeEventInfo<TComponent, TNativeEvent>;
-            export const off: typeof import('devextreme/common/core/events').off = CoreEventsModule.off;
-            export const on: typeof import('devextreme/common/core/events').on = CoreEventsModule.on;
-            export const one: typeof import('devextreme/common/core/events').one = CoreEventsModule.one;
-            export const trigger: typeof import('devextreme/common/core/events').trigger = CoreEventsModule.trigger;
+            export const off = (CoreEventsModule as any).off as typeof import('devextreme/common/core/events').off;
+            export const on = (CoreEventsModule as any).on as typeof import('devextreme/common/core/events').on;
+            export const one = (CoreEventsModule as any).one as typeof import('devextreme/common/core/events').one;
+            export const trigger = (CoreEventsModule as any).trigger as typeof import('devextreme/common/core/events').trigger;
         }
         export namespace Localization {
             export type Format = import('devextreme/common/core/localization').Format;
-            export const formatDate: typeof import('devextreme/common/core/localization').formatDate = CoreLocalizationModule.formatDate;
-            export const formatMessage: typeof import('devextreme/common/core/localization').formatMessage = CoreLocalizationModule.formatMessage;
-            export const formatNumber: typeof import('devextreme/common/core/localization').formatNumber = CoreLocalizationModule.formatNumber;
-            export const loadMessages: typeof import('devextreme/common/core/localization').loadMessages = CoreLocalizationModule.loadMessages;
-            export const locale: typeof import('devextreme/common/core/localization').locale = CoreLocalizationModule.locale;
-            export const parseDate: typeof import('devextreme/common/core/localization').parseDate = CoreLocalizationModule.parseDate;
-            export const parseNumber: typeof import('devextreme/common/core/localization').parseNumber = CoreLocalizationModule.parseNumber;
+            export const formatDate = (CoreLocalizationModule as any).formatDate as typeof import('devextreme/common/core/localization').formatDate;
+            export const formatMessage = (CoreLocalizationModule as any).formatMessage as typeof import('devextreme/common/core/localization').formatMessage;
+            export const formatNumber = (CoreLocalizationModule as any).formatNumber as typeof import('devextreme/common/core/localization').formatNumber;
+            export const loadMessages = (CoreLocalizationModule as any).loadMessages as typeof import('devextreme/common/core/localization').loadMessages;
+            export const locale = (CoreLocalizationModule as any).locale as typeof import('devextreme/common/core/localization').locale;
+            export const parseDate = (CoreLocalizationModule as any).parseDate as typeof import('devextreme/common/core/localization').parseDate;
+            export const parseNumber = (CoreLocalizationModule as any).parseNumber as typeof import('devextreme/common/core/localization').parseNumber;
         }
     }
     export namespace Data {
-        export const applyChanges: typeof import('devextreme/common/data').applyChanges = DataModule.applyChanges;
-        export const ArrayStore: typeof import('devextreme/common/data').ArrayStore = DataModule.ArrayStore;
+        export const applyChanges = (DataModule as any).applyChanges as typeof import('devextreme/common/data').applyChanges;
+        export const ArrayStore = (DataModule as any).ArrayStore as typeof import('devextreme/common/data').ArrayStore;
         export type ArrayStore<TItem = any, TKey = any> = import('devextreme/common/data').ArrayStore<TItem, TKey>;
         export type ArrayStoreOptions<TItem = any, TKey = any> = import('devextreme/common/data').ArrayStoreOptions<TItem, TKey>;
-        export const base64_encode: typeof import('devextreme/common/data').base64_encode = DataModule.base64_encode;
-        export const compileGetter: typeof import('devextreme/common/data').compileGetter = DataModule.compileGetter;
-        export const compileSetter: typeof import('devextreme/common/data').compileSetter = DataModule.compileSetter;
-        export const CustomStore: typeof import('devextreme/common/data').CustomStore = DataModule.CustomStore;
+        export const base64_encode = (DataModule as any).base64_encode as typeof import('devextreme/common/data').base64_encode;
+        export const compileGetter = (DataModule as any).compileGetter as typeof import('devextreme/common/data').compileGetter;
+        export const compileSetter = (DataModule as any).compileSetter as typeof import('devextreme/common/data').compileSetter;
+        export const CustomStore = (DataModule as any).CustomStore as typeof import('devextreme/common/data').CustomStore;
         export type CustomStore<TItem = any, TKey = any> = import('devextreme/common/data').CustomStore<TItem, TKey>;
         export type CustomStoreOptions<TItem = any, TKey = any> = import('devextreme/common/data').CustomStoreOptions<TItem, TKey>;
-        export const DataSource: typeof import('devextreme/common/data').DataSource = DataModule.DataSource;
+        export const DataSource = (DataModule as any).DataSource as typeof import('devextreme/common/data').DataSource;
         export type DataSource<TItem = any, TKey = any> = import('devextreme/common/data').DataSource<TItem, TKey>;
         export type DataSourceOptions<TStoreItem = any, TMappedItem = TStoreItem, TItem = TMappedItem, TKey = any> = import('devextreme/common/data').DataSourceOptions<TStoreItem, TMappedItem, TItem, TKey>;
-        export const EdmLiteral: typeof import('devextreme/common/data').EdmLiteral = DataModule.EdmLiteral;
+        export const EdmLiteral = (DataModule as any).EdmLiteral as typeof import('devextreme/common/data').EdmLiteral;
         export type EdmLiteral = import('devextreme/common/data').EdmLiteral;
-        export const EndpointSelector: typeof import('devextreme/common/data').EndpointSelector = DataModule.EndpointSelector;
+        export const EndpointSelector = (DataModule as any).EndpointSelector as typeof import('devextreme/common/data').EndpointSelector;
         export type EndpointSelector = import('devextreme/common/data').EndpointSelector;
-        export const errorHandler: typeof import('devextreme/common/data').errorHandler = DataModule.errorHandler;
+        export const errorHandler = (DataModule as any).errorHandler as typeof import('devextreme/common/data').errorHandler;
         export type FilterDescriptor = import('devextreme/common/data').FilterDescriptor;
         export type GroupDescriptor<T> = import('devextreme/common/data').GroupDescriptor<T>;
         export type GroupingInterval = import('devextreme/common/data').GroupingInterval;
         export type GroupItem<TItem = any> = import('devextreme/common/data').GroupItem<TItem>;
-        export const isGroupItemsArray: typeof import('devextreme/common/data').isGroupItemsArray = DataModule.isGroupItemsArray;
-        export const isItemsArray: typeof import('devextreme/common/data').isItemsArray = DataModule.isItemsArray;
-        export const isLoadResultObject: typeof import('devextreme/common/data').isLoadResultObject = DataModule.isLoadResultObject;
-        export const keyConverters: typeof import('devextreme/common/data').keyConverters = DataModule.keyConverters;
+        export const isGroupItemsArray = (DataModule as any).isGroupItemsArray as typeof import('devextreme/common/data').isGroupItemsArray;
+        export const isItemsArray = (DataModule as any).isItemsArray as typeof import('devextreme/common/data').isItemsArray;
+        export const isLoadResultObject = (DataModule as any).isLoadResultObject as typeof import('devextreme/common/data').isLoadResultObject;
+        export const keyConverters = (DataModule as any).keyConverters as typeof import('devextreme/common/data').keyConverters;
         export type LangParams = import('devextreme/common/data').LangParams;
         export type LoadOptions<T = any> = import('devextreme/common/data').LoadOptions<T>;
         export type LoadResult<TItem = any> = import('devextreme/common/data').LoadResult<TItem>;
         export type LoadResultObject<TItem = any> = import('devextreme/common/data').LoadResultObject<TItem>;
-        export const LocalStore: typeof import('devextreme/common/data').LocalStore = DataModule.LocalStore;
+        export const LocalStore = (DataModule as any).LocalStore as typeof import('devextreme/common/data').LocalStore;
         export type LocalStore<TItem = any, TKey = any> = import('devextreme/common/data').LocalStore<TItem, TKey>;
         export type LocalStoreOptions<TItem = any, TKey = any> = import('devextreme/common/data').LocalStoreOptions<TItem, TKey>;
-        export const ODataContext: typeof import('devextreme/common/data').ODataContext = DataModule.ODataContext;
+        export const ODataContext = (DataModule as any).ODataContext as typeof import('devextreme/common/data').ODataContext;
         export type ODataContext = import('devextreme/common/data').ODataContext;
         export type ODataContextOptions = import('devextreme/common/data').ODataContextOptions;
-        export const ODataStore: typeof import('devextreme/common/data').ODataStore = DataModule.ODataStore;
+        export const ODataStore = (DataModule as any).ODataStore as typeof import('devextreme/common/data').ODataStore;
         export type ODataStore<TItem = any, TKey = any> = import('devextreme/common/data').ODataStore<TItem, TKey>;
         export type ODataStoreOptions<TItem = any, TKey = any> = import('devextreme/common/data').ODataStoreOptions<TItem, TKey>;
-        export const query: typeof import('devextreme/common/data').query = DataModule.query;
+        export const query = (DataModule as any).query as typeof import('devextreme/common/data').query;
         export type Query = import('devextreme/common/data').Query;
         export type ResolvedData<TItem = any> = import('devextreme/common/data').ResolvedData<TItem>;
         export type SearchOperation = import('devextreme/common/data').SearchOperation;
         export type SelectDescriptor<T> = import('devextreme/common/data').SelectDescriptor<T>;
-        export const setErrorHandler: typeof import('devextreme/common/data').setErrorHandler = DataModule.setErrorHandler;
+        export const setErrorHandler = (DataModule as any).setErrorHandler as typeof import('devextreme/common/data').setErrorHandler;
         export type SortDescriptor<T> = import('devextreme/common/data').SortDescriptor<T>;
         export type Store<TItem = any, TKey = any> = import('devextreme/common/data').Store<TItem, TKey>;
         export type StoreOptions<TItem = any, TKey = any> = import('devextreme/common/data').StoreOptions<TItem, TKey>;
@@ -334,8 +334,8 @@ export namespace Common {
         export namespace Excel {
             export type DataGridCell = import('devextreme/common/export/excel').DataGridCell;
             export type DataGridExportOptions = import('devextreme/common/export/excel').DataGridExportOptions;
-            export const exportDataGrid: typeof import('devextreme/common/export/excel').exportDataGrid = ExportExcelModule.exportDataGrid;
-            export const exportPivotGrid: typeof import('devextreme/common/export/excel').exportPivotGrid = ExportExcelModule.exportPivotGrid;
+            export const exportDataGrid = (ExportExcelModule as any).exportDataGrid as typeof import('devextreme/common/export/excel').exportDataGrid;
+            export const exportPivotGrid = (ExportExcelModule as any).exportPivotGrid as typeof import('devextreme/common/export/excel').exportPivotGrid;
             export type PivotGridCell = import('devextreme/common/export/excel').PivotGridCell;
             export type PivotGridExportOptions = import('devextreme/common/export/excel').PivotGridExportOptions;
         }
@@ -343,8 +343,8 @@ export namespace Common {
             export type Cell = import('devextreme/common/export/pdf').Cell;
             export type DataGridCell = import('devextreme/common/export/pdf').DataGridCell;
             export type DataGridExportOptions = import('devextreme/common/export/pdf').DataGridExportOptions;
-            export const exportDataGrid: typeof import('devextreme/common/export/pdf').exportDataGrid = ExportPdfModule.exportDataGrid;
-            export const exportGantt: typeof import('devextreme/common/export/pdf').exportGantt = ExportPdfModule.exportGantt;
+            export const exportDataGrid = (ExportPdfModule as any).exportDataGrid as typeof import('devextreme/common/export/pdf').exportDataGrid;
+            export const exportGantt = (ExportPdfModule as any).exportGantt as typeof import('devextreme/common/export/pdf').exportGantt;
             export type GanttExportFont = import('devextreme/common/export/pdf').GanttExportFont;
             export type GanttExportOptions = import('devextreme/common/export/pdf').GanttExportOptions;
         }

@@ -1,4 +1,4 @@
-export {
+export type {
   OpenedStateMode,
   PanelLocation,
   RevealMode,

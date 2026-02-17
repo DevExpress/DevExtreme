@@ -1,4 +1,4 @@
-export {
+export type {
   DashStyle,
   HatchDirection,
   HorizontalEdge,
