@@ -1,2 +1,12 @@
-export { animationPresets, cancelAnimationFrame, fx, requestAnimationFrame } from "devextreme/common/core/animation";
-export type { AnimationConfig, AnimationState, CollisionResolution, CollisionResolutionCombination, PositionConfig, TransitionExecutor } from "devextreme/common/core/animation";
+export {
+    AnimationConfig,
+    animationPresets,
+    AnimationState,
+    cancelAnimationFrame,
+    CollisionResolution,
+    CollisionResolutionCombination,
+    fx,
+    PositionConfig,
+    requestAnimationFrame,
+    TransitionExecutor,
+} from "devextreme/common/core/animation";
