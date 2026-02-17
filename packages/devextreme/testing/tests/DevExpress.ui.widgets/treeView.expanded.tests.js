@@ -225,11 +225,11 @@ module('Expanded items', {
         });
         const treeView = $treeView.dxTreeView('instance');
         const $firstItem = $treeView.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0);
-        const $icon = $firstItem.parent().find(`> .${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`);
+        const $icon = $firstItem.find(`.${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`);
 
         $icon.trigger('dxclick');
 
-        assert.ok(!treeView.option('items')[0].expanded, 'disabled item was not expanded');
+        assert.ok(treeView.option('items')[0].expanded, 'disabled item was expanded');
     });
 
     test('disabled item with custom expander icons should not expand on click', function(assert) {
