@@ -68,6 +68,8 @@ export {
 export type TreeViewCheckBoxMode = 'none' | 'normal' | 'selectAll';
 /** @public */
 export type TreeViewExpandEvent = 'dblclick' | 'click';
+/** @public */
+export type DisabledNodeSelectionMode = 'recursiveAndAll' | 'never';
 
 /**
  * @docid _ui_tree_view_ContentReadyEvent
@@ -210,6 +212,12 @@ export interface dxTreeViewOptions<TItem extends ItemLike = any, TKey = any>
      * @public
      */
     dataStructure?: DataStructure;
+    /**
+     * @docid
+     * @default 'recursiveAndAll'
+     * @public
+     */
+    disabledNodeSelectionMode?: DisabledNodeSelectionMode;
     /**
      * @docid
      * @default false
