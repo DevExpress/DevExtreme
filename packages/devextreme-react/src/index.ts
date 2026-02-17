@@ -83,4 +83,5 @@ export { ValidationSummary } from "./validation-summary";
 export { Validator } from "./validator";
 export { VectorMap } from "./vector-map";
 
-export * as Common from "./common/index";
+import * as Common from "./common/index";
+export { Common };
