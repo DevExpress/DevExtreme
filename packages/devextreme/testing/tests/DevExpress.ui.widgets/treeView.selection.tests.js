@@ -554,7 +554,7 @@ module('selection single', () => {
         treeView.checkSelected([], items);
     });
 
-    test('selectByClick option should not select item witch disabled: true', function(assert) {
+    test('selectByClick option should not select item with disabled: true', function(assert) {
         const items = [{ text: 'item 1', disabled: true }, { text: 'item 2' }];
         const treeView = createInstance({
             items: items,
