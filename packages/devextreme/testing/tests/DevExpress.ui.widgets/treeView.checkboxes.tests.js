@@ -564,6 +564,24 @@ QUnit.module('disabledNodeSelectionMode', {
             this.checkCheckboxStates(checkboxes, unselectedStatesAfter, assert);
         });
 
+        QUnit.test('switching from recursiveAndAll to never should preserve disabled node selected state', function(assert) {
+            const treeView = initTree({
+                items: this.unselectedItems,
+                showCheckBoxesMode: 'normal',
+                disabledNodeSelectionMode: 'recursiveAndAll',
+            }).dxTreeView('instance');
+
+            treeView.selectAll();
+
+            let checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
+            this.checkCheckboxStates(checkboxes, ['true', 'true', 'true'], assert);
+
+            treeView.option('disabledNodeSelectionMode', 'never');
+
+            checkboxes = $(treeView.$element()).find(`.${CHECKBOX_CLASS}`);
+            this.checkCheckboxStates(checkboxes, ['true', 'true', 'true'], assert);
+        });
+
         QUnit.test('change option disabledNodeSelectionMode in runtime should change modes correctly (never -> recursiveAndAll)', function(assert) {
             const selectedStatesBefore = ['true', 'false', 'true'];
             const unselectedStatesAfter = ['false', 'false', 'false'];

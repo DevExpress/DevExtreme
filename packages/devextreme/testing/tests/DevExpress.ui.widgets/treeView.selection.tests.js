@@ -157,6 +157,21 @@ module('selection common', () => {
         treeView.checkSelected([1], items);
     });
 
+    test('selectionChanged should not fire for disabled item with disabledNodeSelectionMode = never', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+        const items = [{ text: 'item 1', disabled: true }];
+        const treeView = createInstance({
+            items,
+            showCheckBoxesMode: 'normal',
+            disabledNodeSelectionMode: 'never',
+            onSelectionChanged: selectionChangedHandler,
+        });
+
+        treeView.instance.selectItem(1);
+
+        assert.equal(selectionChangedHandler.callCount, 0, 'selectionChanged should not fire');
+    });
+
     test('all nodes should have selected class if they have selected property', function(assert) {
         const items = [{ text: 'item 1', selected: true, expanded: true, items: [{ text: 'item 11', selected: true }] }, { text: 'item 2', selected: true }];
         const treeView = createInstance({

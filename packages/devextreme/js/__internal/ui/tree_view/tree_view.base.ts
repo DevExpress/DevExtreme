@@ -1680,6 +1680,11 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       return false;
     }
 
+    const { disabledNodeSelectionMode } = this.option();
+    if (disabledNodeSelectionMode === 'never' && node.internalFields.disabled) {
+      return false;
+    }
+
     if (node.internalFields.selected === value) {
       return true;
     }
