@@ -13,7 +13,6 @@
 }
 
 .dx-treeview-item-with-checkbox {
-
   .dx-treeview-item {
     .dx-checkbox.dx-state-disabled {
       .dx-checkbox-icon {
@@ -45,6 +44,7 @@
       &.dx-checkbox-indeterminate {
         .dx-checkbox-icon {
           border-color: $treeview-checkbox-accent-color-focused;
+
           &::before {
             background-color: $treeview-checkbox-accent-color-focused;
           }
