@@ -200,7 +200,17 @@ QUnit.module('Hamburger', {
             },
 
             _createComponent: function(container, Component, options) {
-                return new Component(container, options);
+                const instance = new Component(container, options);
+
+                if(instance.NAME === 'dxPopup' && instance.content) {
+                    const originalContent = instance.content.bind(instance);
+                    instance.content = function() {
+                        const content = originalContent();
+                        return content && content.jquery ? content : $(content);
+                    };
+                }
+
+                return instance;
             }
         };
 
@@ -210,8 +220,8 @@ QUnit.module('Hamburger', {
         this.component.option.withArgs('rowLayout').returns('tree');
 
         this.fields = [
-            { dataField: 'Field Area 1', allowFiltering: true, allowSorting: true, area: 'row' },
-            { dataField: 'Field2', allowFiltering: true, allowSorting: true, area: 'row' }
+            { dataField: 'Field Area 1', allowFiltering: true, allowSorting: true, area: 'row', visible: true },
+            { dataField: 'Field2', allowFiltering: true, allowSorting: true, area: 'row', visible: true }
         ];
 
         this.area = new FieldsArea(this.component, 'row');
@@ -249,15 +259,22 @@ QUnit.module('Hamburger', {
     QUnit.test('Show popup with fields', function(assert) {
         this.renderArea();
         const button = $(this.area.tableElement()[0].rows[0].cells[0]).children(0).dxButton('instance');
-
-        button.element().trigger('dxclick');
-        this.clock.tick(10);
         const popup = this.area.tableElement().find('.dx-fields-area-popup').dxPopup('instance');
 
-        assert.ok(popup);
-        assert.ok(popup.option('visible'));
-        assert.strictEqual(popup.content().find('.dx-pivotgrid-fields-area-head').length, 1);
-        assert.strictEqual(popup.content().find('.dx-pivotgrid-fields-area-head').find('.dx-area-field').length, 2);
+        assert.ok(popup, 'popup exists');
+        assert.ok(!popup.option('visible'), 'popup is hidden initially');
+
+        const contentTemplate = popup.option('contentTemplate');
+        assert.ok(contentTemplate, 'popup has contentTemplate');
+
+        const templateResult = contentTemplate();
+        assert.ok(templateResult.hasClass('dx-area-field-container'), 'contentTemplate returns table with correct class');
+        assert.strictEqual(templateResult.find('.dx-pivotgrid-fields-area-head').length, 1, 'contentTemplate creates fields area head');
+        assert.strictEqual(templateResult.find('.dx-pivotgrid-fields-area-head td').length, 2, 'contentTemplate creates 2 field cells');
+
+        $(button.$element()).trigger('dxclick');
+
+        assert.ok(popup.option('visible'), 'popup is visible after click');
     });
 
 });
