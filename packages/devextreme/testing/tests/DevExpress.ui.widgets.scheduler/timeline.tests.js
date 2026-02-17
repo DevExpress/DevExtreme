@@ -206,34 +206,6 @@ QUnit.test('Group table cells should have correct height', async function(assert
     assert.roughEqual(dateTableCellHeight, groupHeaderHeight, 1.1, 'Cell height is OK');
 });
 
-QUnit.skip('the "getCoordinatesByDate" method should return right coordinates for grouped timeline', async function(assert) {
-    const instance = $('#scheduler-timeline').dxSchedulerTimelineDay({
-        'currentDate': new Date(2015, 9, 28),
-        groupOrientation: 'vertical',
-        getResourceManager: getEmptyResourceManager,
-    }).dxSchedulerTimelineDay('instance');
-
-    await applyWorkspaceGroups(instance, [{
-        label: 'one',
-        fieldExpr: 'one',
-        dataSource: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-    }, {
-        label: 'two',
-        fieldExpr: 'two',
-        dataSource: [{ id: 1, text: '1' }, { id: 2, text: '2' }]
-    }]);
-
-    const coordinates = instance.positionHelper.getCoordinatesByDate(new Date(2015, 9, 28, 1), 1);
-    const expectedPosition = instance.$element()
-        .find('.dx-scheduler-date-table-row').eq(1)
-        .find('.dx-scheduler-date-table-cell').eq(2)
-        .position();
-
-    assert.equal(coordinates.left, expectedPosition.left, 'Coordinates are OK');
-    assert.equal(coordinates.top, expectedPosition.top, 'Coordinates are OK');
-});
-
-
 QUnit.test('the \'getCellIndexByCoordinates\' method should return right coordinates', async function(assert) {
     const cellWidth = getOuterWidth(this.instance.$element().find('.dx-scheduler-date-table-cell').eq(0));
     const cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth * 15, top: 1 });
@@ -328,43 +300,6 @@ QUnit.module('Timeline Day', {
     }
 });
 
-[true, false].forEach((renovateRender) => {
-    QUnit.skip(`the 'getCoordinatesByDate' method should return right coordinates when renovateRender is ${true}`, async function(assert) {
-        this.instance.option({
-            currentDate: new Date(2015, 10, 15),
-            startDayHour: 9,
-            hoursInterval: 1,
-            renovateRender,
-        });
-
-        const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
-        const $expectedCell = this.instance.$element()
-            .find('.dx-scheduler-date-table-cell').eq(1);
-        const expectedPositionLeft = $expectedCell.position().left + 0.5 * getOuterWidth($expectedCell);
-
-        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
-    });
-
-    QUnit.skip(`the 'getCoordinatesByDate' method should return right coordinates for rtl mode when renovateRender is ${true}`, async function(assert) {
-        this.instance.option({
-            rtlEnabled: true,
-            width: 100,
-            currentDate: new Date(2015, 10, 15),
-            startDayHour: 9,
-            hoursInterval: 1,
-            renovateRender,
-        });
-
-        const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 10, 15, 10, 30), 0, false);
-        const $expectedCell = this.instance.$element()
-            .find('.dx-scheduler-date-table-cell').eq(1);
-
-        const expectedPositionLeft = $expectedCell.position().left + getOuterWidth($expectedCell) - 0.5 * getOuterWidth($expectedCell);
-
-        assert.roughEqual(coordinates.left, expectedPositionLeft, 1.001, 'left coordinate is OK');
-    });
-});
-
 QUnit.module('Timeline Day, groupOrientation = horizontal', {
     beforeEach: async function() {
         const resourceConfig = await getWorkspaceResourceConfig([{
@@ -395,26 +330,6 @@ QUnit.test('Group table cells should have correct height, groupOrientation = hor
     const groupHeaderHeight = $groupHeader.get(0).getBoundingClientRect().height;
 
     assert.roughEqual(50, groupHeaderHeight, 1.1, 'Cell height is OK');
-});
-
-QUnit.skip('the \'getCoordinatesByDate\' method should return right coordinates for grouped timeline, groupOrientation = horizontal', async function(assert) {
-    this.instance.option({
-        currentDate: new Date(2015, 9, 21),
-        firstDayOfWeek: 1,
-        startDayHour: 5,
-        endDayHour: 8,
-        hoursInterval: 1
-    });
-
-    const coordinates = this.instance.positionHelper.getCoordinatesByDate(new Date(2015, 9, 21, 6), 1);
-    const expectedPosition = this.instance.$element()
-        .find('.dx-scheduler-date-table-row').eq(0)
-        .find('.dx-scheduler-date-table-cell').eq(4)
-        .position();
-
-    assert.equal(coordinates.left, expectedPosition.left, 'Coordinates are OK');
-    assert.equal(coordinates.top, expectedPosition.top, 'Coordinates are OK');
-
 });
 
 QUnit.module('Timeline Week', {
