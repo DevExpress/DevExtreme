@@ -736,7 +736,7 @@ export class AppointmentForm {
           },
           editorType: 'dxTextArea',
           editorOptions: {
-            height: 100,
+            minHeight: 100,
           } as TextAreaProperties,
         },
       ],
