@@ -1044,6 +1044,24 @@ QUnit.module('dxPivotGrid', {
 
     });
 
+    QUnit.test('T1317109: fieldChooser disposes on dataSource change', function(assert) {
+        const pivotGrid = createPivotGrid({
+            dataSource: {
+                rows: [],
+                columns: [],
+                values: []
+            }
+        });
+
+        const disposeSpy = sinon.spy(pivotGrid._fieldChooserBase, '_dispose');
+
+        pivotGrid.option('dataSource', this.testOptions.dataSource);
+
+        this.clock.tick(500);
+
+        assert.ok(disposeSpy.calledOnce, '_dispose was called once on dataSource change');
+    });
+
     QUnit.test('not show field chooser popup on description area click when fieldChooser disabled', function(assert) {
         createPivotGrid({
             fieldChooser: {
@@ -2895,6 +2913,57 @@ QUnit.module('dxPivotGrid', {
 
         assert.ok(pivotGrid._columnsArea.hasScroll(), 'columns area scroll');
         assert.ok(pivotGrid._rowsArea.hasScroll(), 'rows area scroll');
+    });
+
+    QUnit.test('T1317673 - First and third columns should have width > 0 in virtual scrolling mode with many fields', function(assert) {
+        const fields = [
+            { dataField: 'row1', area: 'row', dataType: 'string', index: 0, },
+            { dataField: 'row2', area: 'row', dataType: 'string', index: 1 },
+        ];
+        const dataFieldsNum = 40;
+
+        for(let i = 0; i < dataFieldsNum; i++) {
+            fields.push({ dataField: 'data' + i, area: 'data', dataType: 'number', index: i });
+        }
+
+        const data = [];
+        const dataItemsNum = 10;
+
+        for(let i = 0; i < dataItemsNum; i++) {
+            const item = {
+                row1: i % 2 === 0 ? 'Category A' : 'Category B',
+                row2: i % 3 === 0 ? 'Subcategory X' : 'Subcategory Y'
+            };
+
+            data.push(item);
+        }
+
+        $('#pivotGrid').empty();
+        $('#pivotGrid').width(800);
+        $('#pivotGrid').height(400);
+
+        const pivotGrid = createPivotGrid({
+            dataFieldArea: 'row',
+            rowHeaderLayout: 'tree',
+            scrolling: {
+                mode: 'virtual',
+                timeout: 0
+            },
+            dataSource: {
+                fields: fields,
+                store: data
+            }
+        });
+        this.clock.tick(10);
+
+        pivotGrid.getDataSource().expandHeaderItem('rowsArea', ['Category A']);
+        this.clock.tick(10);
+
+        const $cols = pivotGrid.$element().find('.dx-pivotgrid-vertical-headers table:not(.dx-pivot-grid-fake-table) colgroup col');
+
+        assert.strictEqual($cols.length, 3, 'colgroup has 3 elements');
+        assert.ok(getWidth($cols.eq(0)) > 0, 'first column width > 0');
+        assert.ok(getWidth($cols.eq(2)) > 0, 'third column width > 0');
     });
 
     // T518512;

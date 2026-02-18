@@ -517,10 +517,9 @@ export class RowsView extends ColumnsView {
   }
 
   private _setGridRole($element: dxElementWrapper): void {
-    const hasData = !this._dataController?.isEmpty();
     const gridRoleName = this._getGridRoleName();
 
-    if ($element?.length && hasData) {
+    if ($element?.length) {
       this.setAria('role', gridRoleName, $element);
     }
   }

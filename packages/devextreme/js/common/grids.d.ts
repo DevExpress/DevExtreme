@@ -2959,6 +2959,7 @@ export interface ScrollingBase {
   /**
    * @docid GridBaseOptions.scrolling.scrollByThumb
    * @default false
+   * @default true &for(desktop)
    * @public
    */
   scrollByThumb?: boolean;

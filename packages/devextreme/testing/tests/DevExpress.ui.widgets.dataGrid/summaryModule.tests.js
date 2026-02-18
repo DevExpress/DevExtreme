@@ -8,6 +8,7 @@ import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 import * as summaryModule from '__internal/grids/data_grid/summary/m_summary';
 import gridCoreUtils from '__internal/grids/grid_core/m_utils';
+import { noop } from 'core/utils/common';
 
 QUnit.testStart(function() {
     const markup =
@@ -448,7 +449,7 @@ QUnit.module('Summary footer', {
             }],
             column: { alignment: 'left' },
             summaryTexts: summaryTexts
-        });
+        }, noop);
 
         // assert
         assert.equal($cellElements[0].find('.dx-datagrid-summary-item').text(), 119, 'column is not command');
@@ -462,7 +463,7 @@ QUnit.module('Summary footer', {
             }],
             column: { command: 'expand', alignment: 'left' },
             summaryTexts: summaryTexts
-        });
+        }, noop);
 
         // assert
         assert.equal($cellElements[1].html(), '', 'command column');

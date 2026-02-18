@@ -1,6 +1,6 @@
 {
   "name": "devextreme-testcafe-tests",
-  "version": "25.1.7",
+  "version": "25.1.8",
   "scripts": {
     "test": "ts-node ./runner.ts",
     "lint": "eslint --ext .js,.ts .",
@@ -13,7 +13,7 @@
     "@types/jquery": "3.5.29",
     "@typescript-eslint/eslint-plugin": "catalog:eslint8",  
     "@typescript-eslint/parser": "catalog:eslint8",
-    "axe-core": "4.10.3",
+    "axe-core": "catalog:",
     "devextreme": "workspace:*",
     "devextreme-screenshot-comparer": "2.0.17",
     "devextreme-testcafe-models": "workspace:*",
@@ -27,7 +27,7 @@
     "minimist": "1.2.8",
     "mockdate": "3.0.5",
     "nconf": "0.12.1",
-    "testcafe": "3.7.2",
+    "testcafe": "catalog:",
     "testcafe-reporter-spec-time": "4.0.0",
     "ts-node": "10.9.2"
   }

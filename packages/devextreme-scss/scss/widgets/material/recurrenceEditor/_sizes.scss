@@ -4,16 +4,16 @@
 
 $material-recurrence-until-date-box-top-margin: null !default;
 $material-recurrence-count-number-box-top-margin: null !default;
-$material-recurrence-interval-number-box-margin-top: null !default;
+$material-recurrence-interval-number-box-margin-bottom: null !default;
 
 @if $size == "default" {
   $material-recurrence-until-date-box-top-margin: 60px !default;
   $material-recurrence-count-number-box-top-margin: 100px !default;
-  $material-recurrence-interval-number-box-margin-top: 55px !default;
+  $material-recurrence-interval-number-box-margin-bottom: 10px !default;
 }
 
 @else if $size == "compact" {
   $material-recurrence-until-date-box-top-margin: 50px !default;
   $material-recurrence-count-number-box-top-margin: 82px !default;
-  $material-recurrence-interval-number-box-margin-top: 33px !default;
+  $material-recurrence-interval-number-box-margin-bottom: 8px !default;
 }

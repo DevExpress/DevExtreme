@@ -431,7 +431,7 @@ test('Scheduler a11y: appointments does not have info about reccurence', async (
 test('Scheduler a11y: Appointment collector button doesn\'t have info about date', async (t) => {
   const scheduler = new Scheduler('#container');
   const schedulerCollector = scheduler.collectors.get(0);
-  const dateText = 'March 6, 2021';
+  const dateText = 'March 5, 2021';
 
   await t
     .expect(scheduler.element().exists)
