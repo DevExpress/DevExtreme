@@ -709,8 +709,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(loadCallCount, 1, 'one load count on start');
     });
 
-    // T268912
-    QUnit.skip('load from remote rest store when remoteOperations false', function(assert) {
+    QUnit.test('load from remote rest store when remoteOperations false (T268912)', function(assert) {
         this.clock.restore();
         const done = assert.async();
         let errorMessage;

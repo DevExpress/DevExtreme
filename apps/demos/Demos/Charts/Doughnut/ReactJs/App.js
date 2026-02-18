@@ -12,7 +12,7 @@ import { populationByRegions } from './data.js';
 
 function customizeTooltip(arg) {
   return {
-    text: `${arg.valueText} - ${(arg.percent * 100).toFixed(2)}%`,
+    text: `${arg.valueText} - ${((arg.percent ?? 0) * 100).toFixed(2)}%`,
   };
 }
 function App() {

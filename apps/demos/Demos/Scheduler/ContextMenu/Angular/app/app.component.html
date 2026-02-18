@@ -19,17 +19,20 @@
     icon="conferenceroomoutline"
   ></dxi-scheduler-resource>
 </dx-scheduler>
+
 <dx-context-menu
   [items]="contextMenuItems"
-  [disabled]="disabled"
-  [target]="target"
+  target=".dx-scheduler"
   (onItemClick)="onContextMenuItemClick($event)"
+  (onHiding)="onContextMenuHiding()"
   [width]="200"
 >
   <div *dxTemplate="let e of 'item'">
-    @if(e.color) {
-    <div class="item-badge" [ngStyle]="{ backgroundColor: e.color }"></div>
-    }
-    <div class="item-text">{{ e.text }}</div>
+    <div>
+      @if(e.color) {
+      <div class="item-badge" [style.background-color]="e.color"></div>
+      }
+      {{ e.text }}
+    </div>
   </div>
 </dx-context-menu>

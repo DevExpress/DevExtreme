@@ -18,7 +18,7 @@ import ArrayStore from 'common/data/array_store';
 import dragEvents from 'common/core/events/drag';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const { testStart, test, module } = QUnit;
 
@@ -105,7 +105,7 @@ module('Common', moduleConfig, () => {
                 },
                 expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
                 expectedPosition: {
-                    top: 500,
+                    top: 380,
                     left: 0
                 },
                 expectedPopupDates: {
@@ -125,7 +125,7 @@ module('Common', moduleConfig, () => {
                 },
                 expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
                 expectedPosition: {
-                    top: 500,
+                    top: 380,
                     left: 0
                 },
                 expectedPopupDates: {
@@ -146,7 +146,7 @@ module('Common', moduleConfig, () => {
                 schedulerTimeZone: timeZones.Yekaterinburg,
                 expectedContent: '7:00 PM - 8:00 PM',
                 expectedPosition: {
-                    top: 1900,
+                    top: 1444,
                     left: 0
                 },
                 expectedPopupDates: {
@@ -167,7 +167,7 @@ module('Common', moduleConfig, () => {
                 schedulerTimeZone: timeZones.Yekaterinburg,
                 expectedContent: '7:00 PM - 8:00 PM',
                 expectedPosition: {
-                    top: 1900,
+                    top: 1444,
                     left: 0
                 },
                 expectedPopupDates: {

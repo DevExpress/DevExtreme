@@ -49,7 +49,7 @@ const saleAmountHeaderFilterDataSource = [
 ];
 function orderDateHeaderFilterDataSource(options) {
   if (options.dataSource) {
-    options.dataSource.postProcess = function (results) {
+    options.dataSource.postProcess = (results) => {
       results.push({
         text: 'Weekends',
         value: 'weekends',

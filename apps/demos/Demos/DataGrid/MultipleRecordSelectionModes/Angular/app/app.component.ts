@@ -1,7 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
-import themes from 'devextreme/ui/themes';
+import themes, { isGeneric } from 'devextreme/ui/themes';
 import { Service, Sale } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -35,7 +35,7 @@ export class AppComponent {
   constructor(service: Service) {
     this.sales = service.getSales();
     this.allMode = 'allPages';
-    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+    this.checkBoxesMode = isGeneric(themes.current()) ? 'onClick' : 'always';
   }
 }
 

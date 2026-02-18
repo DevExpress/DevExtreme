@@ -1,6 +1,9 @@
 import React from 'react';
 
 function getImagePath(data) {
+  if (!data) {
+    return '';
+  }
   return `../../../../images/flags/${data.name.replace(/\s/, '')}.svg`;
 }
 const formatNumber = new Intl.NumberFormat('en-US', {
@@ -36,7 +39,7 @@ export default function AnnotationTemplate(annotation) {
           className="capital"
           dx="5"
         >
-          {data.capital}
+          {data?.capital}
         </tspan>
         <tspan
           dy="14"
@@ -49,7 +52,7 @@ export default function AnnotationTemplate(annotation) {
           className="population"
           dx="5"
         >
-          {formatNumber(data.population)}
+          {formatNumber(data?.population ?? 0)}
         </tspan>
         <tspan
           dy="14"
@@ -62,7 +65,7 @@ export default function AnnotationTemplate(annotation) {
           className="area"
           dx="5"
         >
-          {formatNumber(data.area)}
+          {formatNumber(data?.area ?? 0)}
         </tspan>
         <tspan dx="5">km</tspan>
         <tspan

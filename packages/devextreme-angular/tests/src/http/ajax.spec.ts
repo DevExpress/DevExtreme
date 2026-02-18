@@ -75,6 +75,7 @@ const generateString = (size: number, content?) => {
 };
 
 @Component({
+  standalone: false,
   selector: 'test-container-component',
   template: `<dx-file-uploader
       uploadUrl="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload"

@@ -8,8 +8,8 @@ const MovieInfoContainer = ({ formInstanceRef }) => {
   const [movie, setMovie] = useState(null);
   useEffect(() => {
     const form = formInstanceRef.current;
-    const formData = form.option('formData');
-    const currentMovie = getMovieById(formData.movieId);
+    const formData = form?.option('formData');
+    const currentMovie = getMovieById(formData?.movieId);
     setMovie(currentMovie);
     const handleFieldDataChanged = (e) => {
       if (e.dataField === 'movieId') {
@@ -17,9 +17,9 @@ const MovieInfoContainer = ({ formInstanceRef }) => {
         setMovie(updatedMovie);
       }
     };
-    form.on('fieldDataChanged', handleFieldDataChanged);
+    form?.on('fieldDataChanged', handleFieldDataChanged);
     return () => {
-      form.off('fieldDataChanged', handleFieldDataChanged);
+      form?.off('fieldDataChanged', handleFieldDataChanged);
     };
   }, [formInstanceRef]);
   return (
@@ -29,7 +29,7 @@ const MovieInfoContainer = ({ formInstanceRef }) => {
           <div className="movie-preview-image">
             <img
               src={movie.image}
-              alt={movie.text}
+              alt={`${movie.text} poster`}
             />
           </div>
           <div className="movie-details">

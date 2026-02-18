@@ -8,7 +8,7 @@ const views = ['day', 'workWeek'];
 const App = () => {
   const [currentShift, setCurrentShift] = useState(shifts[0]);
   return (
-    <React.Fragment>
+    <>
       <div className="options">
         <div className="option">
           <div className="label">Work Hours:</div>
@@ -35,7 +35,7 @@ const App = () => {
         cellDuration={60}
         showAllDayPanel={false}
       />
-    </React.Fragment>
+    </>
   );
 };
 export default App;

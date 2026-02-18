@@ -19,10 +19,10 @@ type DateCellProps = {
 };
 
 const DateCell = ({ data: cellData }: DateCellProps) => (
-  <React.Fragment>
+  <>
     <div className="name">{dayOfWeekNames[cellData.date.getDay()]}</div>
     <div className="number">{cellData.date.getDate()}</div>
-  </React.Fragment>
+  </>
 );
 
 const App = () => (

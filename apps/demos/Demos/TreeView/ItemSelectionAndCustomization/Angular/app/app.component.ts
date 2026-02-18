@@ -40,7 +40,7 @@ if (window && window.config?.packageConfigPaths) {
   ],
 })
 export class AppComponent {
-  @ViewChild(DxTreeViewComponent<Employee>, { static: false }) treeView: DxTreeViewComponent;
+  @ViewChild(DxTreeViewComponent, { static: false }) treeView: DxTreeViewComponent<Employee>;
 
   employees: Employee[];
 

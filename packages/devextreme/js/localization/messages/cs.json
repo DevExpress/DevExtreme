@@ -282,7 +282,9 @@
 
         "dxScheduler-editorLabelTitle": "Předmět",
         "dxScheduler-editorLabelStartDate": "Počáteční datum",
+        "dxScheduler-editorAriaLabelStartTime": "Start time",
         "dxScheduler-editorLabelEndDate": "Koncové datum",
+        "dxScheduler-editorAriaLabelEndTime": "End time",
         "dxScheduler-editorLabelDescription": "Popis",
         "dxScheduler-editorLabelRecurrence": "Opakovat",
 

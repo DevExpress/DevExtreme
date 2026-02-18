@@ -1,5 +1,5 @@
 import type { SchedulerTypes } from 'devextreme-react/scheduler';
-import { type ContextMenuTypes } from 'devextreme-react/context-menu';
+import type { ContextMenuTypes } from 'devextreme-react/context-menu';
 
 export type Appointment = SchedulerTypes.Appointment & { roomId: number[] };
 
@@ -9,4 +9,4 @@ export type Resource = {
   color?: string;
 };
 
-export type ContextMenuItem = ContextMenuTypes.Item & Resource & { onItemClick?: (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => void };
+export type ContextMenuItem = ContextMenuTypes.Item & Partial<Resource> & { onItemClick?: (e: ContextMenuTypes.ItemClickEvent<ContextMenuItem>) => void };

@@ -9,11 +9,11 @@ import Chart, {
 } from 'devextreme-react/chart';
 import { medalSources, medalStatistics } from './data.js';
 
-function onPointClick({ target: point }) {
-  if (point.isSelected()) {
-    point.clearSelection();
+function onPointClick(e) {
+  if (e.target.isSelected()) {
+    e.target.clearSelection();
   } else {
-    point.select();
+    e.target.select();
   }
 }
 function App() {

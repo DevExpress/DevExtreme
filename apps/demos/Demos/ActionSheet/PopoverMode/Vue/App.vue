@@ -22,11 +22,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import DxActionSheet from 'devextreme-vue/action-sheet';
-import DxList, { type DxListTypes } from 'devextreme-vue/list';
+import DxList from 'devextreme-vue/list';
+import type { DxListTypes } from 'devextreme-vue/list';
 import notify from 'devextreme/ui/notify';
+import type { DxElement } from 'devextreme/core/element';
 import { actionSheetItems, contacts } from './data.ts';
 import ContactItem from './ContactItem.vue';
-import { type DxElement } from 'devextreme/core/element';
 
 const isActionSheetVisible = ref(false);
 const actionSheetTarget = ref<DxElement>();

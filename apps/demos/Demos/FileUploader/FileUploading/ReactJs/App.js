@@ -17,6 +17,9 @@ export default function App() {
   const [accept, setAccept] = useState('*');
   const [selectedFiles, setSelectedFiles] = useState([]);
   const onSelectedFilesChanged = useCallback(({ value }) => {
+    if (!value) {
+      return;
+    }
     setSelectedFiles(value);
   }, []);
   const onAcceptChanged = useCallback(({ value }) => {

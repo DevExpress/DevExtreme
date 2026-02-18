@@ -2,11 +2,11 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { DxChatModule, DxButtonModule } from 'devextreme-angular';
-import { type DxChatTypes } from 'devextreme-angular/ui/chat';
+import type { DxChatTypes } from 'devextreme-angular/ui/chat';
 import { Observable } from 'rxjs';
-import { AppService } from './app.service';
 import { loadMessages } from 'devextreme-angular/common/core/localization';
 import { DataSource } from 'devextreme-angular/common/data';
+import { AppService } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

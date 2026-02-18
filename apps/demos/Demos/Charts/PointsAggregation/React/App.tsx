@@ -12,37 +12,62 @@ import Chart, {
   Label,
   Tooltip,
 } from 'devextreme-react/chart';
-import type { IAggregationProps } from 'devextreme-react/chart';
+import type { ChartTypes, IAggregationProps } from 'devextreme-react/chart';
 import CheckBox from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
 import {
-  weatherData, aggregationFunctions, aggregationIntervals, functionLabel, intervalLabel,
+  weatherData,
+  aggregationFunctions,
+  aggregationIntervals,
+  functionLabel,
+  intervalLabel,
 } from './data.ts';
 
-const customizeTooltip = (pointInfo) => {
-  const { aggregationInfo } = pointInfo.point;
-  const start: Date = aggregationInfo?.intervalStart;
-  const end: Date = aggregationInfo?.intervalEnd;
+const customizeTooltip = (pointInfo: ChartTypes.PointInfo): Record<string, string> => {
   const handlers = {
-    'Average temperature': (arg: { argument: Date; value: number; }) => ({
-      text: `${(!aggregationInfo
-        ? `Date: ${arg.argument.toDateString()}`
-        : `Interval: ${start.toDateString()} - ${end.toDateString()}`)
-      }<br/>Temperature: ${arg.value.toFixed(2)} °C`,
-    }),
-    'Temperature range': (arg: { rangeValue1: number; rangeValue2: number; }) => ({
-      text: `Interval: ${start.toDateString()
-      } - ${end.toDateString()
-      }<br/>Temperature range: ${arg.rangeValue1
-      } - ${arg.rangeValue2} °C`,
-    }),
-    Precipitation: (arg: { argument: Date; valueText: string; }) => ({
-      text: `Date: ${arg.argument.toDateString()
-      }<br/>Precipitation: ${arg.valueText} mm`,
-    }),
+    'Average temperature': (info: ChartTypes.PointInfo): Record<string, string> => {
+      const { aggregationInfo } = info.point ?? {};
+      const arg = info.argument;
+
+      if (!(arg instanceof Date)
+        || !('value' in info)
+        || typeof info.value !== 'number') {
+        return { text: '' };
+      }
+
+      return {
+        text: `${(!aggregationInfo
+          ? `Date: ${arg.toDateString()}`
+          : `Interval: ${aggregationInfo.intervalStart.toDateString()} - ${aggregationInfo.intervalEnd.toDateString()}`)
+        }<br/>Temperature: ${(info.value).toFixed(2)} °C`,
+      };
+    },
+    'Temperature range': (info: ChartTypes.PointInfo): Record<string, string> => {
+      const { aggregationInfo } = info.point ?? {};
+
+      if (!('rangeValue1' in info)) {
+        return { text: '' };
+      }
+
+      return {
+        text: `Interval: ${aggregationInfo?.intervalStart.toDateString()} - ${aggregationInfo?.intervalEnd.toDateString()}
+               <br/>Temperature range: ${info.rangeValue1} - ${info.rangeValue2} °C`,
+      };
+    },
+    Precipitation: (info: ChartTypes.PointInfo): Record<string, string> => {
+      const arg = info.argument;
+
+      if (!(arg instanceof Date)) {
+        return { text: '' };
+      }
+
+      return {
+        text: `Date: ${arg.toDateString()}<br/>Precipitation: ${info.valueText} mm`,
+      };
+    },
   };
 
-  return handlers[pointInfo.seriesName](pointInfo);
+  return handlers[pointInfo.seriesName as keyof typeof handlers](pointInfo);
 };
 
 function App() {
@@ -50,21 +75,21 @@ function App() {
   const [currentFunction, setCurrentFunction] = useState(aggregationFunctions[0].func);
   const [currentInterval, setCurrentInterval] = useState(aggregationIntervals[0].interval);
 
-  const updateAggregationUsage = useCallback(({ value }) => {
+  const updateAggregationUsage = useCallback(({ value }): void => {
     setUseAggregation(value);
-  }, [setUseAggregation]);
+  }, []);
 
-  const updateInterval = useCallback(({ value }) => {
+  const updateInterval = useCallback(({ value }): void => {
     setCurrentInterval(value);
-  }, [setCurrentInterval]);
+  }, []);
 
-  const updateMethod = useCallback(({ value }) => {
+  const updateMethod = useCallback(({ value }): void => {
     setCurrentFunction(value);
-  }, [setCurrentFunction]);
+  }, []);
 
-  const calculateRangeArea = useCallback<IAggregationProps['calculate']>((aggregationInfo) => {
-    if (!aggregationInfo.data.length) {
-      return null;
+  const calculateRangeArea = useCallback<NonNullable<IAggregationProps['calculate']>>((aggregationInfo) => {
+    if (!aggregationInfo.data?.length) {
+      return {};
     }
 
     const temp = aggregationInfo.data.map((item: { temp: number; }) => item.temp);

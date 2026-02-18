@@ -1,5 +1,5 @@
 /* global ts */
-module.exports.translate = function (data) {
+module.exports.translate = (data) => {
   if (ts === undefined) {
     throw new Error('TypeScript is required, but window.ts is not defined!\nInclude typescript.js to page');
   }

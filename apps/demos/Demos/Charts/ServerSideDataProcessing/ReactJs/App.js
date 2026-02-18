@@ -62,9 +62,9 @@ function customizeLabel(e) {
 function customizeArgumentAxisLabel(e) {
   return new Date(e.value).getDate().toString();
 }
-function customizeTooltip(arg) {
+function customizeTooltip({ valueText }) {
   return {
-    text: `${arg.valueText}${'&#176C'}`,
+    text: `${valueText}${'&#176C'}`,
   };
 }
 function App() {

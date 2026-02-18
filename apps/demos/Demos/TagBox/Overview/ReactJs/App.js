@@ -14,13 +14,13 @@ const dataSource = new ArrayStore({
 });
 function App() {
   const [editableProducts, setEditableProducts] = useState([...simpleProducts]);
-  const [target, setTarget] = useState(null);
+  const [target, setTarget] = useState();
   const [product, setProduct] = useState(null);
   const onCustomItemCreating = useCallback(
     (args) => {
       const newValue = args.text;
       const isItemInDataSource = editableProducts.some((item) => item === newValue);
-      if (!isItemInDataSource) {
+      if (!isItemInDataSource && newValue) {
         setEditableProducts([newValue, ...editableProducts]);
       }
       args.customItem = newValue;

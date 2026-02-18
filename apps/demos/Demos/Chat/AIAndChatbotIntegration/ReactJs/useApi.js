@@ -22,7 +22,7 @@ export async function getAIResponse(messages, delay) {
   if (delay) {
     await wait(delay);
   }
-  return data.choices[0].message?.content;
+  return data.choices[0].message?.content ?? '';
 }
 const store = [];
 const customStore = new CustomStore({
@@ -46,7 +46,7 @@ export const dataSource = new DataSource({
   paginate: false,
 });
 const dataItemToMessage = (item) => ({
-  role: item.author.id,
+  role: item.author?.id,
   content: item.text,
 });
 const getMessageHistory = () => [...dataSource.items()].map(dataItemToMessage);
@@ -97,7 +97,9 @@ export const useApi = () => {
     updateLastMessageContent(REGENERATION_TEXT);
     try {
       const aiResponse = await getAIResponse(messageHistory.slice(0, -1));
-      updateLastMessageContent(aiResponse);
+      if (typeof aiResponse === 'string') {
+        updateLastMessageContent(aiResponse);
+      }
     } catch {
       updateLastMessageContent(messageHistory.at(-1)?.content);
       alertLimitReached();

@@ -9,7 +9,7 @@ const defaultValues = {
 };
 const items = products.slice(0, 5);
 const onMultiTagPreparing = (args) => {
-  const selectedItemsLength = args.selectedItems.length;
+  const selectedItemsLength = args.selectedItems?.length ?? 0;
   const totalCount = 5;
   if (selectedItemsLength < totalCount) {
     args.cancel = true;

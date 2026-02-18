@@ -1,4 +1,6 @@
-const maleAgeData = [{
+import type { MaleAgeData } from './types.ts';
+
+export const maleAgeData: MaleAgeData[] = [{
   state: 'USA',
   maleyoung: 29.956,
   malemiddle: 90.354,
@@ -55,9 +57,3 @@ const maleAgeData = [{
   femalemiddle: 19.228,
   femaleolder: 5.459,
 }];
-
-export default {
-  getMaleAgeData() {
-    return maleAgeData;
-  },
-};

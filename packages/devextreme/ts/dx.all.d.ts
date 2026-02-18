@@ -4094,14 +4094,7 @@ declare module DevExpress.common.data {
     /**
      * [descr:Store.push(changes)]
      */
-    push(
-      changes: Array<{
-        type: 'insert' | 'update' | 'remove';
-        data?: DevExpress.core.DeepPartial<TItem>;
-        key?: TKey;
-        index?: number;
-      }>
-    ): void;
+    push(changes: Array<DevExpress.data.StoreChange<TItem, TKey>>): void;
     /**
      * [descr:Store.remove(key)]
      */
@@ -4157,7 +4150,7 @@ declare module DevExpress.common.data {
     /**
      * [descr:StoreOptions.onPush]
      */
-    onPush?: (changes: Array<TItem>) => void;
+    onPush?: (changes: Array<DevExpress.data.StoreChange<TItem, TKey>>) => void;
     /**
      * [descr:StoreOptions.onRemoved]
      */
@@ -6974,13 +6967,13 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface dxElementWrapper {
-    add(selector: string): this;
+    add(selector: string | dxElementWrapper): this;
 
     addClass(className: string): this;
 
     after(element: Element | dxElementWrapper): this;
 
-    append(element: Element | dxElementWrapper): this;
+    append(element: Element | dxElementWrapper | string): this;
 
     appendTo(element: Element | dxElementWrapper): this;
 
@@ -7858,6 +7851,15 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export type SortDescriptor<T> = KeySelector<T> | OrderingDescriptor<T>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type StoreChange<TItem = any, TKey = any> = {
+    type: 'insert' | 'update' | 'remove';
+    data?: DevExpress.core.DeepPartial<TItem>;
+    key?: TKey;
+    index?: number;
+  };
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -10403,6 +10405,9 @@ declare module DevExpress.ui {
      * [descr:CardTemplateData]
      */
     export type CardTemplateData = {
+      /**
+       * [descr:CardTemplateData.card]
+       */
       card: CardInfo;
     };
     /**
@@ -10446,6 +10451,9 @@ declare module DevExpress.ui {
      * [descr:ColumnTemplateData]
      */
     export type ColumnTemplateData<TCardData = unknown, TKey = unknown> = {
+      /**
+       * [descr:ColumnTemplateData.column]
+       */
       column: Column<TCardData, TKey>;
     };
     /**
@@ -20281,7 +20289,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   interface dxGanttColumnBlank<TRowData = any, TKey = any>
-    extends DevExpress.ui.dxTreeList.Column<TRowData, TKey> {
+    extends Omit<DevExpress.ui.dxTreeList.Column<TRowData, TKey>, 'ai'> {
     /**
      * [descr:dxGanttColumn.allowEditing]
      */
@@ -25850,6 +25858,17 @@ declare module DevExpress.ui {
      */
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
+     * [descr:dxScheduler.scrollTo(date, options)]
+     */
+    scrollTo(
+      date: Date,
+      options?: {
+        group?: object;
+        allDay?: boolean;
+        alignInView?: DevExpress.ui.dxScheduler.SchedulerScrollToAlign;
+      }
+    ): void;
+    /**
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
     showAppointmentPopup(
@@ -26211,6 +26230,7 @@ declare module DevExpress.ui {
       | 'today'
       | 'dateNavigator'
       | 'viewSwitcher';
+    export type SchedulerScrollToAlign = 'start' | 'center';
     /**
      * [descr:TargetedAppointmentInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -30704,6 +30724,9 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = dxTreeListColumnButton<TRowData, TKey>;
+    /**
+     * [descr:_ui_tree_list_ColumnButtonClickEvent]
+     */
     export type ColumnButtonClickEvent<
       TRowData = any,
       TKey = any
@@ -30711,7 +30734,13 @@ declare module DevExpress.ui {
       dxTreeList<TRowData, TKey>,
       PointerEvent | MouseEvent
     > & {
+      /**
+       * [descr:_ui_tree_list_ColumnButtonClickEvent.row]
+       */
       row?: Row<TRowData, TKey>;
+      /**
+       * [descr:_ui_tree_list_ColumnButtonClickEvent.column]
+       */
       column?: Column<TRowData, TKey>;
     };
     export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {

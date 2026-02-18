@@ -133,7 +133,7 @@
           "./src/ui/popup/index.ts"
         ]
       },
-      "cache": true,
+      "cache": false,
       "inputs": ["default"],
       "outputs": [
         "{projectRoot}/src/ui/**/*",
@@ -162,7 +162,7 @@
         "{projectRoot}/src/common/index.ts",
         "{projectRoot}/metadata/generated/**/*"
       ],
-      "cache": true,
+      "cache": false,
       "inputs": ["default"]
     },
     "build": {
@@ -418,7 +418,8 @@
       "{projectRoot}/package.json",
       "{projectRoot}/metadata/**/*",
       "{workspaceRoot}/tsconfig.json",
-      "{workspaceRoot}/tools/generators-config.js"
+      "{workspaceRoot}/tools/generators-config.js",
+      "{workspaceRoot}/packages/devextreme-metadata/**/*"
     ],
     "test": [
       "{projectRoot}/tests/**/*",

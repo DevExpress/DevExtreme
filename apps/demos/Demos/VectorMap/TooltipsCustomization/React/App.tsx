@@ -16,6 +16,7 @@ import type { ILayerProps, ILegendProps } from 'devextreme-react/vector-map';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { countriesGDP } from './data.ts';
 import TooltipTemplate from './TooltipTemplate.tsx';
+import type { CountriesGDPKey } from './data.ts';
 
 const colorGroups = [0, 10000, 50000, 100000, 500000, 1000000, 10000000, 50000000];
 const mapBounds = [-180, 85, 180, -60];
@@ -26,7 +27,8 @@ const { format } = new Intl.NumberFormat('en-US', {
 
 const customizeLayer: ILayerProps['customize'] = (elements) => {
   elements.forEach((element) => {
-    const countryGDPData = countriesGDP[element.attribute('name')];
+    const name = element.attribute('name') as CountriesGDPKey;
+    const countryGDPData = countriesGDP[name];
     element.attribute('total', (countryGDPData?.total) || 0);
   });
 };

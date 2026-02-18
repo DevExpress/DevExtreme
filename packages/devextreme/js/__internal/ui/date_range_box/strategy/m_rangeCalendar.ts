@@ -66,11 +66,11 @@ class RangeCalendarStrategy extends CalendarStrategy {
       enter: (e) => {
         if (dateRangeBox.option('opened')) {
           // @ts-expect-error
-          const dateBoxValue = this.dateBox.dateOption('value');
+          const dateBoxValue = this.dateBox.getDateOption('value');
           // @ts-expect-error
           this.dateBox._valueChangeEventHandler(e);
           // @ts-expect-error
-          const newDateBoxValue = this.dateBox.dateOption('value');
+          const newDateBoxValue = this.dateBox.getDateOption('value');
           const dateBoxValueChanged = !isSameDates(dateBoxValue, newDateBoxValue);
 
           if (dateBoxValueChanged) {
@@ -253,10 +253,10 @@ class RangeCalendarStrategy extends CalendarStrategy {
 
     if (arguments.length) {
       // @ts-expect-error
-      return dateBox.dateValue.apply(dateBox, arguments);
+      return dateBox.setDateOption.apply(dateBox, arguments);
     }
     // @ts-expect-error
-    return dateBox.dateOption.apply(dateBox, ['value']);
+    return dateBox.getDateOption.apply(dateBox, ['value']);
   }
 
   _cellClickHandler(): void { }

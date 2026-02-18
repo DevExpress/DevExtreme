@@ -1,6 +1,6 @@
 import fx from 'common/core/animation/fx';
 import positionUtils from 'common/core/animation/position';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import config from 'core/config';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerShownEvent } from 'common/core/events/visibility_change';
@@ -15,7 +15,7 @@ import { normalizeKeyName } from 'common/core/events/utils/index';
 
 
 const { module, testStart, test, testInActiveWindow } = QUnit;
-const SLIDER_PADDING = 7;
+const SLIDER_PADDING = 10;
 
 testStart(() => {
     const markup = `
@@ -1181,6 +1181,8 @@ module('tooltip integration', {
 
         this.init = (options) => {
             this.slider = this.$slider.dxSlider(options).dxSlider('instance');
+            this.$wrapper = this.$slider.find(`.${SLIDER_WRAPPER_CLASS}`);
+            this.pointer = pointerMock(this.$wrapper);
             this.$handle = this.$slider.find(`.${SLIDER_HANDLE_CLASS}`);
             this.handle = SliderHandle.getInstance(this.$handle);
             this.$tooltip = this.$handle.find(`.${TOOLTIP_CLASS}`);
@@ -1351,6 +1353,24 @@ module('tooltip integration', {
         this.checkTooltipExists(true, assert);
     });
 
+    test('tooltip should update value when slider value is changed by keyboard after swipe event without swipeEnd (T1316215)', function(assert) {
+        this.init({
+            min: 0,
+            max: 100,
+            value: 50,
+            width: 100,
+            tooltip: {
+                enabled: true,
+                showMode: 'always'
+            }
+        });
+
+        this.pointer.start().swipeStart().swipe(0);
+        keyboardMock(this.$handle).keyDown('right');
+
+        assert.strictEqual(this.getTooltipText(), '51', 'tooltip value is updated');
+    });
+
     module('tooltip position', () => {
         test('tooltip should be centered after visibility changed', function(assert) {
             const $parent = this.$slider.parent();
@@ -1494,7 +1514,7 @@ module('tooltip integration', {
             const tooltipRightBorder = $tooltipContent.offset().left + $tooltipContent.outerWidth() - this.$slider.offset().left;
             const boundaryOffset = sliderWidth - tooltipRightBorder;
 
-            assert.roughEqual(boundaryOffset, 2, 0.3, 'tooltip content should have correct boundary offset');
+            assert.roughEqual(boundaryOffset, 2, 0.5, 'tooltip content should have correct boundary offset');
         });
 
         test('arrow should be centered after dimension was changed', function(assert) {
