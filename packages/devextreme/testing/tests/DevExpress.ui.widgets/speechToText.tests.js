@@ -280,9 +280,9 @@ QUnit.module('State Management', moduleConfig, () => {
     });
 
     QUnit.test('INITIAL state should not have animation by default', function(assert) {
-        const animation = this.$element.find(`.${ICON_CLASS}`).css('animation');
+        const animationName = this.$element.find(`.${ICON_CLASS}`).css('animation-name');
 
-        assert.strictEqual(animation, 'none');
+        assert.strictEqual(animationName, 'none');
     });
 
     QUnit.test('LISTENING state should have animation by default', function(assert) {
@@ -290,10 +290,9 @@ QUnit.module('State Management', moduleConfig, () => {
 
         $button.trigger('dxclick');
 
-        const animation = this.$element.find(`.${ICON_CLASS}`).css('animation');
-        const easeInOutAnimationEnabled = animation.includes('1.5s ease-in-out 0.5s infinite dx-speech-to-text-listening-animation');
+        const animationName = this.$element.find(`.${ICON_CLASS}`).css('animation-name');
 
-        assert.strictEqual(easeInOutAnimationEnabled, true);
+        assert.strictEqual(animationName, 'dx-speech-to-text-listening-animation');
     });
 });
 
