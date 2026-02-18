@@ -12,6 +12,32 @@
   @include dx-icon-sizing($fluent-base-icon-size);
 }
 
+.dx-treeview-select-all-item {
+  &.dx-state-focused {
+    .dx-checkbox-icon {
+      border-color: $treeview-checkbox-border-color-focused;
+      background-color: $treeview-checkbox-background-color-focused;
+    }
+  }
+
+  &.dx-state-focused.dx-checkbox-checked {
+    .dx-checkbox-icon {
+      background-color: $treeview-checkbox-accent-color-focused;
+      border-color: $treeview-checkbox-accent-color-focused;
+    }
+  }
+
+  &.dx-state-focused.dx-checkbox-indeterminate {
+    .dx-checkbox-icon {
+      border-color: $treeview-checkbox-accent-color-focused;
+
+      &::before {
+        background-color: $treeview-checkbox-accent-color-focused;
+      }
+    }
+  }
+}
+
 .dx-treeview-item-with-checkbox {
   .dx-treeview-item {
     .dx-checkbox.dx-state-disabled {
