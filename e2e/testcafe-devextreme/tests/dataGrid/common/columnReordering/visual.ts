@@ -8,7 +8,7 @@ import { testScreenshot } from '../../../../helpers/themeUtils';
 fixture.disablePageReloads`Column reordering.Visual`
   .page(url(__dirname, '../../../container.html'));
 
-test.meta({ unstable: true })('column separator should work properly with expand columns', async (t) => {
+test('column separator should work properly with expand columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   await MouseUpEvents.disable(MouseAction.dragToOffset);
