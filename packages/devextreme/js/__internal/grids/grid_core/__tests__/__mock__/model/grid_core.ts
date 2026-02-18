@@ -5,6 +5,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
 import { DataCellModel } from './cell/data_cell';
+import { HeaderCellModel } from './cell/header_cell';
 import { ColumnChooserModel } from './column_chooser';
 import { DataRowModel } from './row/data_row';
 
@@ -26,8 +27,8 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
     return this.root.querySelectorAll(`.${SELECTORS.headerRowClass} > td`);
   }
 
-  public getHeaderCell(columnIndex: number): HTMLElement {
-    return this.getHeaderCells()[columnIndex];
+  public getHeaderCell(columnIndex: number): HeaderCellModel {
+    return new HeaderCellModel(this.getHeaderCells()[columnIndex], this.addWidgetPrefix.bind(this));
   }
 
   public getCellElement(rowIndex: number, columnIndex: number): HTMLElement {
