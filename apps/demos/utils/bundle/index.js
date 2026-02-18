@@ -188,6 +188,11 @@ const prepareConfigs = (framework) => {
     ];
   }
 
+  if (['react', 'vue'].includes(framework)) {
+    packages.push(`devextreme-${framework}/common/data.js`);
+    packages.push(`devextreme-${framework}/common/ai-integration.js`);
+  }
+
   const builderConfig = getDefaultBuilderConfig(framework, additionPaths, modulesMap);
 
   additionPackage.forEach((p) => {
