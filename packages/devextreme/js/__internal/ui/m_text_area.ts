@@ -157,10 +157,17 @@ class TextArea extends TextBox<TextAreaProperties> {
       return;
     }
 
+    const {
+      autoResizeEnabled,
+      height,
+      minHeight: minHeightOptionValue,
+    } = this.option();
+
     const $input = this._input();
-    const height = this.option('height');
-    const autoHeightResizing = height === undefined && this.option('autoResizeEnabled');
-    const shouldCalculateInputHeight = autoHeightResizing || (height === undefined && this.option('minHeight'));
+
+    const shouldCalculateInputHeight = autoResizeEnabled
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      || (height === undefined && minHeightOptionValue);
 
     if (!shouldCalculateInputHeight) {
       $input.css('height', '');
@@ -193,7 +200,7 @@ class TextArea extends TextBox<TextAreaProperties> {
 
     $input.css('height', inputHeight);
 
-    if (autoHeightResizing) {
+    if (autoResizeEnabled) {
       this.$element().css('height', 'auto');
     }
   }
