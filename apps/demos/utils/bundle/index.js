@@ -189,8 +189,25 @@ const prepareConfigs = (framework) => {
   }
 
   if (['react', 'vue'].includes(framework)) {
-    packages.push(`devextreme-${framework}/common/data.js`);
-    packages.push(`devextreme-${framework}/common/ai-integration.js`);
+    const commonDir = path.join(process.cwd(), 'node_modules', `devextreme-${framework}`, 'cjs', 'common');
+    
+    if (fs.existsSync(commonDir)) {
+      const collectJsExceptIndex = (dir, prefix = '') => {
+        const names = fs.readdirSync(dir, { withFileTypes: true });
+        
+        for (const ent of names) {
+          const rel = prefix ? `${prefix}/${ent.name}` : ent.name;
+          
+          if (ent.isDirectory()) {
+            collectJsExceptIndex(path.join(dir, ent.name), rel);
+          } else if (ent.isFile() && ent.name.endsWith('.js') && ent.name !== 'index.js') {
+            packages.push(`devextreme-${framework}/common/${rel}`);
+          }
+        }
+      };
+      
+      collectJsExceptIndex(commonDir);
+    }
   }
 
   const builderConfig = getDefaultBuilderConfig(framework, additionPaths, modulesMap);
