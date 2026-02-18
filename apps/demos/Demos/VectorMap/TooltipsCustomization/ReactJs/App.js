@@ -21,7 +21,8 @@ const { format } = new Intl.NumberFormat('en-US', {
 });
 const customizeLayer = (elements) => {
   elements.forEach((element) => {
-    const countryGDPData = countriesGDP[element.attribute('name')];
+    const name = element.attribute('name');
+    const countryGDPData = countriesGDP[name];
     element.attribute('total', countryGDPData?.total || 0);
   });
 };

@@ -18,8 +18,8 @@ const menuMetaJson = [
                 Title: 'Demo 1.1.1.2',
                 Name: 'Demo1.1.1.2',
                 Widget: 'Widget',
-              }
-            ]
+              },
+            ],
           }, {
             Name: 'Category.1.1.2',
             Groups: [
@@ -30,12 +30,12 @@ const menuMetaJson = [
                     Title: 'Demo 1.1.2.1.1',
                     Name: 'Demo1.1.2.1.1',
                     Widget: 'Widget',
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       }, {
         Name: 'Group1.2',
         Demos: [
@@ -44,12 +44,12 @@ const menuMetaJson = [
             Name: 'Demo1.2.1',
             Widget: 'Widget',
             Modules: 'openai',
-          }
-        ]
-      }
-    ]
-  }
-]
+          },
+        ],
+      },
+    ],
+  },
+];
 
 describe('check functions', () => {
   test('hasGroups (first level)', () => {
@@ -100,7 +100,7 @@ describe('get functions', () => {
     }, {
       title: 'CATEGORY1',
       value: 'Category1',
-    }])
+    }]);
   });
 
   test('getGroups', () => {
@@ -118,7 +118,7 @@ describe('get functions', () => {
       title: 'Category1.1',
     }, {
       title: 'Group1.2',
-    }])
+    }]);
   });
 
   test('getDemos', () => {
@@ -158,13 +158,13 @@ describe('get functions', () => {
   });
   test('getByPath (error)', () => {
     const path = ['Category1', 'Category1.1', 'Group1.1.1', 'Demo1.1.1.3'];
-    const errorMessage = `incorrect path for menuMetaData: ${JSON.stringify(path)}`
+    const errorMessage = `incorrect path for menuMetaData: ${JSON.stringify(path)}`;
     expect(() => menuMetaUtils.getByPath(menuMetaJson, path))
       .toThrow(errorMessage);
   });
   test('getByPath (error nesting demo)', () => {
     const path = ['Category1', 'Category1.1', 'Group1.1.1', 'Demo1.1.1.1', 'smth'];
-    const errorMessage = `incorrect path for menuMetaData: ${JSON.stringify(path)}`
+    const errorMessage = `incorrect path for menuMetaData: ${JSON.stringify(path)}`;
     expect(() => menuMetaUtils.getByPath(menuMetaJson, path))
       .toThrow(errorMessage);
   });
@@ -178,8 +178,8 @@ describe('add functions', () => {
       Name: name,
       Equivalents: '',
       Groups: [],
-    }
-    menuMetaUtils.addCategory(meta, name)
+    };
+    menuMetaUtils.addCategory(meta, name);
     expect(meta).toStrictEqual([newCategory]);
   });
   test('addGroup', () => {
@@ -224,7 +224,7 @@ describe('add functions', () => {
       ['Category', 'Group'],
       'Test Demo',
       widgetName,
-      equivalents
+      equivalents,
     );
 
     expect(meta).toStrictEqual([{
@@ -268,9 +268,9 @@ describe('modules functions', () => {
           Title: 'Demo 2',
           Name: 'Demo2',
         }],
-      }]
+      }],
     }];
-    
+
     menuMetaUtils.updateDemoProperties(
       meta,
       ['Category1', 'Group2', 'Demo2'],
@@ -293,7 +293,7 @@ describe('modules functions', () => {
           Name: 'Demo2',
           Modules: 'module1,module2',
         }],
-      }]
+      }],
     }]);
   });
   test('updateDemoProperties (no modules)', () => {
@@ -311,10 +311,10 @@ describe('modules functions', () => {
           Title: 'Demo 2',
           Name: 'Demo2',
         }],
-      }]
+      }],
     }];
-    const testMeta = [ ...meta ];
-    
+    const testMeta = [...meta];
+
     menuMetaUtils.updateDemoProperties(
       testMeta,
       ['Category1', 'Group2', 'Demo2'],
@@ -340,9 +340,9 @@ describe('modules functions', () => {
           Title: 'Demo 2',
           Name: 'Demo2',
         }],
-      }]
+      }],
     }];
-    
+
     menuMetaUtils.addDemoModules(
       meta,
       ['Category1', 'Group2', 'Demo2'],
@@ -365,8 +365,8 @@ describe('modules functions', () => {
           Name: 'Demo2',
           Modules: 'module3,module4',
         }],
-      }]
-    }])
+      }],
+    }]);
   });
   test('addDemoModules, ([])', () => {
     const meta = [{
@@ -384,10 +384,10 @@ describe('modules functions', () => {
           Title: 'Demo 2',
           Name: 'Demo2',
         }],
-      }]
+      }],
     }];
-    const testMeta = [ ...meta ];
-    
+    const testMeta = [...meta];
+
     menuMetaUtils.addDemoModules(
       testMeta,
       ['Category1', 'Group2', 'Demo2'],
@@ -403,6 +403,6 @@ describe('utils', () => {
     expect(
       menuMetaUtils
         .prepareModules(['jspdf', 'jspdf&jspdf-autotable', 'jsp', 'openai', 'html', 'html&openai']))
-        .toStrictEqual(['jspdf&jspdf-autotable', 'jsp', 'html&openai']);
+      .toStrictEqual(['jspdf&jspdf-autotable', 'jsp', 'html&openai']);
   });
 });

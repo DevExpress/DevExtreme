@@ -86,7 +86,6 @@
    },
    "generate-components": {
       "executor": "devextreme-nx-infra-plugin:generate-components",
-      "dependsOn": ["devextreme-metadata:generate"],
       "options": {
         "metadataPath": "../devextreme-metadata/dist/integration-data.json",
         "componentsDir": "./src",
@@ -103,7 +102,7 @@
         "!{projectRoot}/src/common/**/*",
         "!{projectRoot}/src/**/__tests__/**/*"
       ],
-      "cache": true,
+      "cache": false,
       "inputs": ["default"]
     },
     "regenerate": {
@@ -122,7 +121,7 @@
         "!{projectRoot}/src/common/**/*",
         "!{projectRoot}/src/**/__tests__/**/*"
       ],
-      "cache": true,
+      "cache": false,
       "inputs": ["default"]
     },
     "build": {
@@ -180,11 +179,11 @@
   },
   "namedInputs": {
     "default": [
-      "{projectRoot}/devextreme-metadata/**/*",
       "{projectRoot}/src/**/*",
       "!{projectRoot}/src/**/__tests__/*",
       "{projectRoot}/tsconfig*",
-      "{workspaceRoot}/tsconfig.json"
+      "{workspaceRoot}/tsconfig.json",
+      "{workspaceRoot}/packages/devextreme-metadata/**/*"
     ],
     "test": [
       "{projectRoot}/src/**/__tests__/*",

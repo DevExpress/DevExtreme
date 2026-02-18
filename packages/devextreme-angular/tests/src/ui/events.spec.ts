@@ -15,6 +15,7 @@ import readyCallbacks from 'devextreme/core/utils/ready_callbacks';
 import { on } from 'devextreme/events';
 
 @Component({
+  standalone: false,
   selector: 'test-container-component',
   template: '',
 })

@@ -30,11 +30,11 @@ export default function App() {
           height={710}
           items={messages}
           user={currentUser}
-          disabled={isDisabled}
-          showAvatar={showAvatar}
-          showUserName={showUsername}
-          showDayHeaders={showDayHeaders}
-          showMessageTimestamp={showMessageTimestamp}
+          disabled={!!isDisabled}
+          showAvatar={!!showAvatar}
+          showUserName={!!showUsername}
+          showDayHeaders={!!showDayHeaders}
+          showMessageTimestamp={!!showMessageTimestamp}
           dayHeaderFormat={dayHeaderFormat}
           messageTimestampFormat={messageTimestampFormat}
           onMessageEntered={onMessageEntered}

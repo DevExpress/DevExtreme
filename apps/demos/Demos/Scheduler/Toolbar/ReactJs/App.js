@@ -5,7 +5,7 @@ import {
   Scheduler, Resource, Toolbar, Item,
 } from 'devextreme-react/scheduler';
 import { SelectBox } from 'devextreme-react/select-box';
-import { assignees, schedulerDataSource, currentDate } from './data.js';
+import { assignees, data, currentDate } from './data.js';
 
 const views = ['day', 'week', 'workWeek', 'month'];
 const selectBoxPlaceholder = 'Select Employee';
@@ -46,7 +46,7 @@ const App = () => {
       return;
     }
     const currentDate = scheduler.option('currentDate');
-    const cellDuration = scheduler.option('cellDuration');
+    const cellDuration = Number(scheduler.option('cellDuration'));
     const cellDurationMs = cellDuration * MS_IN_HOUR;
     const currentTime = new Date(currentDate).getTime();
     const roundTime = Math.round(currentTime / cellDurationMs) * cellDurationMs;
@@ -73,7 +73,7 @@ const App = () => {
   return (
     <Scheduler
       timeZone="America/Los_Angeles"
-      dataSource={schedulerDataSource}
+      dataSource={data}
       views={views}
       defaultCurrentView="workWeek"
       defaultCurrentDate={currentDate}

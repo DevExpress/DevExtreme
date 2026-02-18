@@ -6,7 +6,18 @@ import PieChart, {
   Connector,
 } from 'devextreme-react/pie-chart';
 
-function PieChartComponent(props) {
+import type { ILabelProps } from 'devextreme-react/pie-chart';
+
+interface PieChartDataItem {
+  name: string;
+  value: number;
+}
+
+interface PieChartComponentProps {
+  data: PieChartDataItem[];
+}
+
+function PieChartComponent(props: PieChartComponentProps) {
   return (
     <PieChart id="gdp-sectors"
       dataSource={props.data}
@@ -30,10 +41,8 @@ function PieChartComponent(props) {
   );
 }
 
-function customizeText(pointInfo: { argument: string | any[]; value: any; }) {
-  return `${pointInfo.argument[0].toUpperCase()}${
-    pointInfo.argument.slice(1)
-  }: $${pointInfo.value}M`;
-}
+const customizeText: ILabelProps['customizeText'] = (pointInfo) => `${pointInfo.argument[0].toUpperCase()}${
+  pointInfo.argument.slice(1)
+}: $${pointInfo.value}M`;
 
 export default PieChartComponent;

@@ -44,8 +44,12 @@ export class AppComponent {
     });
   }
 
-  itemTypeExpr(obj) {
-    return `employee${obj.ID}`;
+  itemTypeExpr(obj, value) {
+    if (value === undefined) {
+      return `employee${obj.ID}`;
+    }
+    obj.type = value;
+    return null;
   }
 
   showInfo(employee) {

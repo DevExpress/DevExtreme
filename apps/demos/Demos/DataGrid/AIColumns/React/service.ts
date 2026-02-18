@@ -1,8 +1,8 @@
-import { type AIMessage } from './types';
 import { AIIntegration } from 'devextreme-react/common/ai-integration';
 import type { RequestParams, Response } from 'devextreme-react/common/ai-integration';
 import { AzureOpenAI } from 'openai';
 import notify from 'devextreme/ui/notify';
+import type { AIMessage } from './types';
 
 const AzureOpenAIConfig = {
   dangerouslyAllowBrowser: true,
@@ -68,13 +68,11 @@ export const aiIntegration = new AIIntegration({
 
     const promise = getAIResponseRecursive(aiPrompt, signal);
 
-    const result: Response = {
+    return {
       promise,
       abort: () => {
         controller.abort();
       },
     };
-
-    return result;
   },
 });

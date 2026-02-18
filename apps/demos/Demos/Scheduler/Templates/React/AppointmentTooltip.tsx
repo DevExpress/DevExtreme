@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { query as Query } from 'devextreme-react/common/data';
-import { type SchedulerTypes } from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
 
 import { moviesData } from './data.ts';
 
@@ -21,7 +21,7 @@ const AppointmentTooltip: React.FC<AppointmentProps> = ({ data }) => {
   return (
     <div className="movie-info">
       <div className="movie-preview-image">
-        <img src={movieData.image} alt={movieData.text} />
+        <img src={movieData.image} alt={`${movieData.text} poster`} />
       </div>
       <div className="movie-details">
         <div className="title">

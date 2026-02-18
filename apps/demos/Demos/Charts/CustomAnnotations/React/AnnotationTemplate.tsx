@@ -1,6 +1,11 @@
 import React from 'react';
+import type { PopulationData } from './types.ts';
 
-function getImagePath(data: { name: string; }) {
+function getImagePath(data?: { name: string; }): string {
+  if (!data) {
+    return '';
+  }
+
   return `../../../../images/flags/${data.name.replace(/\s/, '')}.svg`;
 }
 
@@ -8,14 +13,7 @@ const formatNumber = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 }).format;
 
-interface AnnotationData {
-  name: string,
-  capital: string,
-  population: number,
-  area: number,
-}
-
-export default function AnnotationTemplate(annotation: { argument?: string; data?: AnnotationData; }) {
+export default function AnnotationTemplate(annotation: { argument?: string; data?: PopulationData; }) {
   const { data } = annotation;
   return (
     <svg className="annotation">
@@ -24,11 +22,11 @@ export default function AnnotationTemplate(annotation: { argument?: string; data
       <text x="70" y="25" className="state">{annotation.argument}</text>
       <text x="0" y="60">
         <tspan className="caption">Capital:</tspan>
-        <tspan className="capital" dx="5">{data.capital}</tspan>
+        <tspan className="capital" dx="5">{data?.capital}</tspan>
         <tspan dy="14" x="0" className="caption">Population:</tspan>
-        <tspan className="population" dx="5">{formatNumber(data.population)}</tspan>
+        <tspan className="population" dx="5">{formatNumber(data?.population ?? 0)}</tspan>
         <tspan dy="14" x="0" className="caption">Area:</tspan>
-        <tspan className="area" dx="5">{formatNumber(data.area)}</tspan>
+        <tspan className="area" dx="5">{formatNumber(data?.area ?? 0)}</tspan>
         <tspan dx="5">km</tspan>
         <tspan className="sup" dy="-2">2</tspan>
       </text>

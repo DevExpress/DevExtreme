@@ -1,3 +1,6 @@
+import type { FirstDayOfWeek } from '@js/common';
+import type { ValueChangedEvent } from '@js/ui/calendar';
+
 import type { NormalizedView, SafeSchedulerOptions } from '../utils/options/types';
 
 export interface HeaderOptions {
@@ -11,11 +14,12 @@ export interface HeaderOptions {
   tabIndex?: number;
   focusStateEnabled?: boolean;
   useDropDownViewSwitcher: boolean;
-  firstDayOfWeek?: number;
+  firstDayOfWeek?: FirstDayOfWeek;
   toolbar: SafeSchedulerOptions['toolbar'];
   onCurrentViewChange: (name: string) => void;
   onCurrentDateChange: (date: Date) => void;
   customizeDateNavigatorText: SafeSchedulerOptions['customizeDateNavigatorText'];
+  _useShortDateFormat?: boolean;
 }
 
 export type Step = 'day' | 'week' | 'workWeek' | 'month' | 'agenda';
@@ -27,3 +31,15 @@ export interface IntervalOptions {
   intervalCount: number;
   agendaDuration?: number;
 }
+
+export interface HeaderCalendarOptions {
+  value: Date;
+  min?: Date;
+  max?: Date;
+  firstDayOfWeek?: FirstDayOfWeek;
+  focusStateEnabled?: boolean;
+  tabIndex?: number;
+  onValueChanged?: (e: ValueChangedEvent) => void;
+}
+
+export type EventMapHandler = (value: unknown) => void;

@@ -9,7 +9,7 @@ import type { ILabelProps } from 'devextreme-react/pie-chart';
 
 const customizeText: ILabelProps['customizeText'] = (pointInfo) => `${pointInfo.argument[0].toUpperCase()}${pointInfo.argument.slice(1)}: $${pointInfo.value}M`;
 
-function PieChartComponent(props) {
+function PieChartComponent(props: { data: { name: string; value: number }[] }) {
   return (
     <PieChart id="gdp-sectors"
       dataSource={props.data}

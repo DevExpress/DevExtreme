@@ -13,7 +13,7 @@ const defaultValues = {
 const items: Product[] = products.slice(0, 5);
 
 const onMultiTagPreparing = (args: TagBoxTypes.MultiTagPreparingEvent): void => {
-  const selectedItemsLength = args.selectedItems.length;
+  const selectedItemsLength = args.selectedItems?.length ?? 0;
   const totalCount = 5;
 
   if (selectedItemsLength < totalCount) {

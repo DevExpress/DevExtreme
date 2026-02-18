@@ -8,17 +8,18 @@ import Chart, {
   Legend,
   Export,
 } from 'devextreme-react/chart';
+import type { ChartTypes } from 'devextreme-react/chart';
 import { exportData } from './data.ts';
 
-function onPointClick({ target: point }) {
-  point.select();
+function onPointClick(e: ChartTypes.PointClickEvent): void {
+  e.target.select();
 }
 
-function onLegendClick({ target: series }) {
-  if (series.isVisible()) {
-    series.hide();
+function onLegendClick(e: ChartTypes.LegendClickEvent): void {
+  if (e.target.isVisible()) {
+    e.target.hide();
   } else {
-    series.show();
+    e.target.show();
   }
 }
 

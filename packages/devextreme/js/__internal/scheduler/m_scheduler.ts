@@ -28,7 +28,7 @@ import {
 import { hasWindow } from '@js/core/utils/window';
 import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
-import type { Appointment, AppointmentTooltipShowingEvent } from '@js/ui/scheduler';
+import type { Appointment, AppointmentTooltipShowingEvent, FirstDayOfWeek } from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
@@ -64,7 +64,7 @@ import { MobileTooltipStrategy } from './tooltip_strategies/m_mobile_tooltip_str
 import type {
   AppointmentTooltipItem,
   SafeAppointment,
-  TargetedAppointment,
+  ScrollToGroupValuesOrOptions, ScrollToOptions, TargetedAppointment,
 } from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
@@ -2022,8 +2022,30 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._appointmentTooltip?.hide();
   }
 
-  scrollTo(date, groupValues, allDay) {
-    this._workSpace.scrollTo(date, groupValues, allDay);
+  scrollTo(
+    date: Date,
+    groupValuesOrOptions?: ScrollToGroupValuesOrOptions,
+    allDay?: boolean | undefined,
+  ) {
+    let groupValues;
+    let allDayValue;
+    let align: 'start' | 'center' = 'center';
+
+    if (this._isScrollOptionsObject(groupValuesOrOptions)) {
+      groupValues = groupValuesOrOptions.group;
+      allDayValue = groupValuesOrOptions.allDay;
+      align = groupValuesOrOptions.alignInView ?? 'center';
+    } else {
+      groupValues = groupValuesOrOptions;
+      allDayValue = allDay;
+    }
+
+    this._workSpace.scrollTo(date, groupValues, allDayValue, true, align);
+  }
+
+  private _isScrollOptionsObject(options?: ScrollToGroupValuesOrOptions): options is ScrollToOptions {
+    return Boolean(options) && typeof options === 'object'
+      && ('align' in options || 'allDay' in options || 'group' in options);
   }
 
   _isHorizontalVirtualScrolling() {
@@ -2134,10 +2156,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  getFirstDayOfWeek() {
+  getFirstDayOfWeek(): FirstDayOfWeek {
     return isDefined(this.getViewOption('firstDayOfWeek'))
-      ? this.getViewOption('firstDayOfWeek')
-      : dateLocalization.firstDayOfWeekIndex();
+      ? this.getViewOption('firstDayOfWeek') as FirstDayOfWeek
+      : dateLocalization.firstDayOfWeekIndex() as FirstDayOfWeek;
   }
 
   _validateKeyFieldIfAgendaExist() {

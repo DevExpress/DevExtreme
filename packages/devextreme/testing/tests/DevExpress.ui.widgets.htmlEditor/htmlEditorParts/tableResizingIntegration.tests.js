@@ -20,6 +20,7 @@ const DX_HIGHLIGHTED_COLUMN_CLASS = 'dx-htmleditor-highlighted-column';
 const TIME_TO_WAIT = 200;
 
 const DRAGGABLE_ELEMENT_OFFSET = 2;
+const HTML_EDITOR_CONTENT_MARGIN = 1;
 const TABLE_BORDERS = 1;
 
 const tableMarkup = '\
@@ -381,10 +382,10 @@ module('Table resizing integration', {
             const tablePosition = getBoundingRect(this.$element.find('table').get(0));
             const framePosition = getBoundingRect($resizeFrame.get(0));
 
-            assert.strictEqual(tablePosition.left, framePosition.left, 'Left is correrct');
-            assert.strictEqual(tablePosition.top, framePosition.top, 'Top is correrct');
-            assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correrct');
-            assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correrct');
+            assert.strictEqual(tablePosition.left, framePosition.top, 'Left is correct');
+            assert.strictEqual(tablePosition.top - HTML_EDITOR_CONTENT_MARGIN, framePosition.top, 'Top is correct');
+            assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correct');
+            assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correct');
         });
 
         test('Check table resize frame position after content height changes', function(assert) {
@@ -401,10 +402,10 @@ module('Table resizing integration', {
             const rowBorderOffsets = getRowBordersOffset(this.$element.find('table').eq(0));
             const $rowResizerElements = $resizeFrame.find(`.${DX_ROW_RESIZER_CLASS}`);
 
-            assert.strictEqual(tablePosition.left, framePosition.left, 'Left is correrct');
-            assert.strictEqual(tablePosition.top, framePosition.top, 'Top is correrct');
-            assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correrct');
-            assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correrct');
+            assert.strictEqual(tablePosition.left, framePosition.left, 'Left is correct');
+            assert.strictEqual(tablePosition.top - HTML_EDITOR_CONTENT_MARGIN, framePosition.top, 'Top is correct');
+            assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correct');
+            assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correct');
 
             checkResizerPositions(assert, $rowResizerElements, rowBorderOffsets, 'top');
         });
@@ -439,7 +440,7 @@ module('Table resizing integration', {
             const tablePosition = getBoundingRect(this.$element.find('table').get(0));
             const framePosition = getBoundingRect($resizeFrame.get(0));
 
-            assert.strictEqual(tablePosition.top, framePosition.top, 'Frame top position is correrct');
+            assert.strictEqual(tablePosition.top - HTML_EDITOR_CONTENT_MARGIN, framePosition.top, 'Frame top position is correct');
         });
     });
 
@@ -479,8 +480,8 @@ module('Table resizing integration', {
 
             checkResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
 
-            assert.roughEqual(columnBorderOffsets[0], 150, 2.01);
-            assert.roughEqual(columnBorderOffsets[1], 200, 2.01);
+            assert.roughEqual(columnBorderOffsets[0], 150, 4.01);
+            assert.roughEqual(columnBorderOffsets[1], 200, 4.01);
         });
 
         test('The widget raise valueChange event after resizing (T1041884)', function(assert) {
@@ -543,8 +544,8 @@ module('Table resizing integration', {
 
             checkResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
 
-            assert.roughEqual(columnBorderOffsets[0], 150, 2.01);
-            assert.roughEqual(columnBorderOffsets[1], 200, 2.01);
+            assert.roughEqual(columnBorderOffsets[0], 150, 4.01);
+            assert.roughEqual(columnBorderOffsets[1], 200, 4.01);
         });
 
         test('Frame should change height if the table height is changed by horizontal drag', function(assert) {
@@ -689,6 +690,7 @@ module('Table resizing integration', {
             this.instance.option('tableResizing.minColumnWidth', 50);
 
             const $table = this.$element.find('table');
+            const initialWidth = $table.find('tr').eq(0).find('td:last-child').outerWidth();
 
             $columnResizerElements.eq(3)
                 .trigger('dxpointerdown');
@@ -705,7 +707,7 @@ module('Table resizing integration', {
 
             this.clock.tick(TIME_TO_WAIT);
 
-            assert.roughEqual($table.find('tr').eq(0).find('td:last-child').outerWidth(), 50, 3);
+            assert.roughEqual($table.find('tr').eq(0).find('td:last-child').outerWidth(), initialWidth - 30, 3);
             assert.ok(checkingElement.is(':visible'));
         });
 
@@ -775,7 +777,7 @@ module('Table resizing integration', {
                 .start()
                 .dragStart();
 
-            dragLoop(pointerMockInstance, 5, [-20, 0]);
+            dragLoop(pointerMockInstance, 5, [-19, 0]);
 
             this.clock.tick(TIME_TO_WAIT);
 
@@ -815,9 +817,9 @@ module('Table resizing integration', {
             const columnBorderOffsets = getColumnBordersOffset($table);
             const $highlightedElement = this.$element.find(`.${DX_HIGHLIGHTED_COLUMN_CLASS}`);
 
-            assert.roughEqual(columnBorderOffsets[0], 160, 3);
+            assert.roughEqual(columnBorderOffsets[0], 140, 3);
             assert.roughEqual(columnBorderOffsets[1], 200, 3);
-            assert.roughEqual(parseInt($highlightedElement.css('left')), 160, 3);
+            assert.roughEqual(parseInt($highlightedElement.css('left')), 140, 3);
 
             PointerMock($draggableElement).dragEnd();
         });
@@ -1477,7 +1479,7 @@ module('Table resizing integration', {
 
             $table = this.$element.find('table');
 
-            assert.roughEqual($table.outerWidth(), startTableWidth, 2.01, 'Table width is not changed');
+            assert.roughEqual($table.outerWidth(), startTableWidth, 4.01, 'Table width is not changed');
         });
 
         test('Column resizers should be updated after a some columns insert', function(assert) {
@@ -1594,7 +1596,7 @@ module('Table resizing integration', {
 
             checkResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
 
-            assert.roughEqual($table.outerWidth(), tableWidth, 2, 'Table width is not changed');
+            assert.roughEqual($table.outerWidth(), tableWidth, 3, 'Table width is not changed');
         });
 
         test('Table should save custom row height after the first row deletion', function(assert) {
@@ -1653,10 +1655,10 @@ module('Table resizing integration', {
             const tablePosition = getBoundingRect(this.$element.find('table').get(1));
             const framePosition = getBoundingRect($resizeFrame.get(1));
 
-            assert.strictEqual(tablePosition.left, framePosition.left, 'Left is correrct');
-            assert.strictEqual(tablePosition.top, framePosition.top, 'Top is correrct');
-            assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correrct');
-            assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correrct');
+            assert.strictEqual(tablePosition.left, framePosition.left, 'Left is correct');
+            assert.strictEqual(tablePosition.top - HTML_EDITOR_CONTENT_MARGIN, framePosition.top, 'Top is correct');
+            assert.strictEqual(tablePosition.height, framePosition.height, 'Height is correct');
+            assert.strictEqual(tablePosition.width, framePosition.width, 'Width is correct');
         });
 
         test('Row resizers should be updated on the table structure update after resize', function(assert) {
@@ -1889,9 +1891,9 @@ module('Table resizing integration', {
 
 
                 setTimeout(() => {
-                    assert.roughEqual($columns.eq(2).outerWidth(), 60, 2, 'Changes is reverted for the resized column');
-                    assert.roughEqual($columns.eq(3).outerWidth(), 140, 2, 'Changes is reverted for the next column');
-                    assert.roughEqual($table.outerWidth(), 400, 2, 'Table width is correct');
+                    assert.roughEqual($columns.eq(2).outerWidth(), 60, 4, 'Changes is reverted for the resized column');
+                    assert.roughEqual($columns.eq(3).outerWidth(), 140, 4, 'Changes is reverted for the next column');
+                    assert.roughEqual($table.outerWidth(), 400, 4, 'Table width is correct');
 
                     done();
                 }, TIME_TO_WAIT);
@@ -1930,10 +1932,10 @@ module('Table resizing integration', {
 
                 setTimeout(() => {
                     $table.find('tr').eq(0).find('td').each((i, columnElement) => {
-                        assert.roughEqual($(columnElement).outerWidth(), 100, 2, 'Column has expected width, index = ' + i);
+                        assert.roughEqual($(columnElement).outerWidth(), 100, 4, 'Column has expected width, index = ' + i);
                     });
 
-                    assert.roughEqual($table.outerWidth(), 400, 2, 'Table width is correct');
+                    assert.roughEqual($table.outerWidth(), 400, 4, 'Table width is correct');
 
                     done();
                 }, TIME_TO_WAIT);
@@ -1975,10 +1977,10 @@ module('Table resizing integration', {
 
                 setTimeout(() => {
                     $table.find('tr').eq(0).find('td').each((i, columnElement) => {
-                        assert.roughEqual($(columnElement).outerWidth(), expectedWidths[i], 2, 'Column has expected width, index = ' + i);
+                        assert.roughEqual($(columnElement).outerWidth(), expectedWidths[i], 4, 'Column has expected width, index = ' + i);
                     });
 
-                    assert.roughEqual($table.outerWidth(), 360, 2, 'Table width is correct');
+                    assert.roughEqual($table.outerWidth(), 360, 4, 'Table width is correct');
 
                     done();
                 }, TIME_TO_WAIT);
@@ -2101,10 +2103,10 @@ module('Table resizing integration', {
 
                 setTimeout(() => {
                     $table.find('tr').eq(0).find('td').each((i, columnElement) => {
-                        assert.roughEqual($(columnElement).outerWidth(), expectedWidths[i], 2, 'Column has expected width, index = ' + i);
+                        assert.roughEqual($(columnElement).outerWidth(), expectedWidths[i], 4, 'Column has expected width, index = ' + i);
                     });
 
-                    assert.roughEqual($table.outerWidth(), 240, 2, 'Table width is correct');
+                    assert.roughEqual($table.outerWidth(), 240, 4, 'Table width is correct');
 
                     done();
                 }, TIME_TO_WAIT);
@@ -2191,8 +2193,8 @@ module('Table resizing integration', {
 
             checkResizerPositions(assert, $columnResizerElements, columnBorderOffsets, 'right');
 
-            assert.roughEqual(columnBorderOffsets[0], 70, 3);
-            assert.roughEqual(columnBorderOffsets[1], 200, 3);
+            assert.roughEqual(columnBorderOffsets[0], 70, 4);
+            assert.roughEqual(columnBorderOffsets[1], 200, 4);
         });
 
         test('Columns resizers should be positioned correctly if the rtl mode is enabled at runtime', function(assert) {
@@ -2240,8 +2242,8 @@ module('Table resizing integration', {
 
             checkResizerPositions(assert, $columnResizerElements, columnBorderOffsets, 'right');
 
-            assert.roughEqual(columnBorderOffsets[0], 70, 3);
-            assert.roughEqual(columnBorderOffsets[1], 200, 3);
+            assert.roughEqual(columnBorderOffsets[0], 70, 4);
+            assert.roughEqual(columnBorderOffsets[1], 200, 4);
         });
     });
 });

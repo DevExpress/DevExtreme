@@ -5,6 +5,9 @@ import { products } from './data.js';
 const App = () => {
   const [currentItem, setCurrentItem] = useState(products[0]);
   const selectItem = useCallback((e) => {
+    if (!e.itemData) {
+      return;
+    }
     setCurrentItem({ ...e.itemData });
   }, []);
   return (

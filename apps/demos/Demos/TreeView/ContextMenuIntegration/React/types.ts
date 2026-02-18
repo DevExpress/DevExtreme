@@ -9,7 +9,7 @@ export type Product = {
   id: string;
   text: string;
   expanded?: boolean;
-  items: (Product | ProductItem)[];
+  items?: (Product | ProductItem)[];
 };
 
 export type MenuItem = {

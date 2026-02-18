@@ -1,5 +1,4 @@
-import createTestCafe from 'testcafe';
-import { ClientFunction } from 'testcafe';
+import createTestCafe, { ClientFunction } from 'testcafe';
 import fs from 'fs';
 
 const LAUNCH_RETRY_ATTEMPTS = 3;
@@ -7,7 +6,6 @@ const LAUNCH_RETRY_TIMEOUT = 10000;
 
 const wait = async (
   timeout: number,
-// eslint-disable-next-line no-promise-executor-return
 ): Promise<void> => new Promise((resolve) => setTimeout(resolve, timeout));
 
 const retry = async <T>(action: () => Promise<T>, attempt: number): Promise<T> => {
@@ -18,13 +16,12 @@ const retry = async <T>(action: () => Promise<T>, attempt: number): Promise<T> =
       throw error;
     }
 
-    /* eslint-disable no-console */
     console.log('\n > error occurred during testcafe launch!\n');
     console.error(error);
     console.info(`\n > waiting ${LAUNCH_RETRY_TIMEOUT / 1000} seconds...\n`);
     await wait(LAUNCH_RETRY_TIMEOUT);
     console.info('\n > retry launching testcafe\n');
-    /* eslint-enable no-console */
+
     return retry(action, attempt - 1);
   }
 };
@@ -93,9 +90,9 @@ async function main() {
     if (process.env.TCQUARANTINE) {
       return { successThreshold: 1, attemptLimit: 3 };
     }
-    
+
     return false;
-  }
+  };
 
   const failedCount = await retry(() => runner
     .reporter(reporters)
@@ -106,6 +103,7 @@ async function main() {
       // @ts-expect-error ts-error
       hooks: {
         test: {
+          // eslint-disable-next-line no-undef
           before: async (t: TestController) => {
             await ClientFunction(() => {
               if (document.activeElement && document.activeElement !== document.body) {

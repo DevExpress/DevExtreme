@@ -11,7 +11,8 @@ const allowedFileExtensions = [];
 export default function App() {
   const [currentPath, setCurrentPath] = useState('Documents/Reports');
   const onCurrentDirectoryChanged = useCallback((e) => {
-    setCurrentPath(e.component.option('currentPath'));
+    const path = e?.component?.option('currentPath');
+    path && setCurrentPath(path);
   }, []);
   return (
     <FileManager

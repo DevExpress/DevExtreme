@@ -5,12 +5,19 @@ import FileManager, {
 import type { FileManagerRef } from 'devextreme-react/file-manager';
 import { fileItems, getItemInfo } from './data.ts';
 
+interface FileSystemItem {
+  name: string;
+  isDirectory: boolean;
+  size?: number;
+  items?: FileSystemItem[];
+}
+
 export default function App() {
   const fileManagerRef = useRef<FileManagerRef>(null);
 
   const createFile = useCallback((
     fileExtension,
-    directory = fileManagerRef.current.instance().getCurrentDirectory(),
+    directory = fileManagerRef?.current?.instance()?.getCurrentDirectory(),
   ) => {
     const newItem = {
       __KEY__: Date.now(),
@@ -19,12 +26,12 @@ export default function App() {
       size: 0,
     };
 
-    if (!directory.isDirectory) {
+    if (!directory?.isDirectory) {
       return false;
     }
 
-    let array = null;
-    if (!directory.dataItem) {
+    let array: FileSystemItem[];
+    if (!directory?.dataItem) {
       array = fileItems;
     } else {
       array = directory.dataItem.items;
@@ -44,20 +51,20 @@ export default function App() {
     if (viewArea === 'navPane') {
       items = [directory];
     } else {
-      items = fileManagerRef.current.instance().getSelectedItems();
+      items = fileManagerRef?.current?.instance()?.getSelectedItems();
     }
 
-    items.forEach((item: { dataItem: { category: any; }; }) => {
+    items?.forEach((item: { dataItem: { category: any; }; }) => {
       if (item.dataItem) {
         item.dataItem.category = newCategory;
       }
     });
 
-    return items.length > 0;
+    return items && items.length > 0;
   }, []);
 
   const onItemClick = useCallback(({ itemData, viewArea, fileSystemItem }) => {
-    let updated = false;
+    let updated: boolean | undefined = false;
     const { extension, category } = getItemInfo(itemData.text);
 
     if (extension) {
@@ -67,7 +74,7 @@ export default function App() {
     }
 
     if (updated) {
-      fileManagerRef.current.instance().refresh();
+      fileManagerRef?.current?.instance()?.refresh();
     }
   }, [createFile, updateCategory]);
 

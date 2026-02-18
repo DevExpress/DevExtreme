@@ -4,7 +4,7 @@ import RowTemplate from './RowTemplate.js';
 const years = ['2010', '2011', '2012'];
 function App() {
   return (
-    <React.Fragment>
+    <>
       <div className="long-title">
         <h3>Monthly Prices of Copper, Nickel and Palladium</h3>
       </div>
@@ -29,7 +29,7 @@ function App() {
           </tbody>
         </table>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

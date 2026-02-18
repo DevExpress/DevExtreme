@@ -22,6 +22,7 @@ const CLASSES = {
   recurrenceGroup: 'dx-scheduler-form-recurrence-group',
   recurrenceHidden: 'dx-scheduler-form-recurrence-group-hidden',
 
+  recurrenceStartDateEditor: 'dx-scheduler-form-recurrence-start-date-editor',
   frequencyEditor: 'dx-scheduler-form-recurrence-frequency-editor',
   byMonthEditor: 'dx-scheduler-form-recurrence-by-month-editor',
   dayOfMonthEditor: 'dx-scheduler-form-day-of-month-editor',
@@ -216,6 +217,7 @@ export class RecurrenceForm {
           getStartDateCommonConfig(this.scheduler.getFirstDayOfWeek()),
           {
             name: EDITOR_NAMES.recurrenceStartDateEditor,
+            cssClass: CLASSES.recurrenceStartDateEditor,
             label: {
               text: messageLocalization.format('dxScheduler-editorLabelStartDate'),
             },
@@ -269,6 +271,10 @@ export class RecurrenceForm {
   }
 
   private createRecurrenceRuleGroup(): GroupItem {
+    // Change of frequency editor's value causes rerender of the recurrencePatternGroup.
+    // To prevent focus loss in this editor, we use this flag.
+    let needRestoreFrequencyEditorFocus = false;
+
     return {
       itemType: 'group',
       name: GROUP_NAMES.recurrenceRuleRepeatGroup,
@@ -314,12 +320,23 @@ export class RecurrenceForm {
             displayExpr: 'text',
             onContentReady: (e): void => {
               e.component.option('value', this.recurrenceRule.frequency);
+
+              if (needRestoreFrequencyEditorFocus) {
+                setTimeout(() => {
+                  e.component.focus();
+                  needRestoreFrequencyEditorFocus = false;
+                });
+              }
             },
             onValueChanged: (e): void => {
               const previousValue = this.recurrenceRule.frequency;
 
               if (previousValue === e.value) {
                 return;
+              }
+
+              if (e.event) {
+                needRestoreFrequencyEditorFocus = true;
               }
 
               this.recurrenceRule.frequency = e.value;

@@ -2,7 +2,7 @@ import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import dateUtils from 'core/utils/date';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import '__internal/scheduler/workspaces/m_timeline';
 import '__internal/scheduler/workspaces/m_timeline_day';
@@ -118,7 +118,7 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', a
         dateTableScrollable.scrollTo({ top: 102 });
 
         setTimeout(() => {
-            assert.equal(groupPanelScrollable.scrollTop(), 102, 'Scroll position is OK');
+            assert.equal(groupPanelScrollable.scrollTop(), 87, 'Scroll position is OK');
             done();
         }, 100);
     });
@@ -146,7 +146,7 @@ QUnit.test('Date table should have a correct width if cell is less than 75px', a
 
         groupPanelScrollable.scrollTo({ top: 102 });
 
-        assert.equal(dateTableScrollable.scrollTop(), 102, 'Scroll position is OK');
+        assert.equal(dateTableScrollable.scrollTop(), 87, 'Scroll position is OK');
     });
 });
 
@@ -283,7 +283,7 @@ QUnit.test('Ensure cell min height is equal to cell height(T389468)', async func
     try {
         this.instance.option('currentDate', new Date(2010, 10, 10));
         const height = getOuterHeight(this.instance.$element().find('.dx-scheduler-group-header').eq(0));
-        const expectedHeight = getOuterHeight(this.instance.$element().find('.dx-scheduler-date-table-cell').first()) - 1;
+        const expectedHeight = getOuterHeight(this.instance.$element().find('.dx-scheduler-date-table-cell').first());
 
         assert.roughEqual(height, expectedHeight, 2.001, 'Group cell height is OK');
 

@@ -32,7 +32,7 @@ const App = () => {
     }
   }, []);
   return (
-    <React.Fragment>
+    <>
       <div className="option">
         <span>Office Time Zone</span>
         <SelectBox
@@ -58,7 +58,7 @@ const App = () => {
       >
         <Editing allowTimeZoneEditing={true} />
       </Scheduler>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

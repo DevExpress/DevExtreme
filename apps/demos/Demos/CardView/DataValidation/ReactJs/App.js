@@ -25,16 +25,12 @@ function calculateFullName({ firstName, lastName }) {
 const emailValidationUrl =
   'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
 async function emailValidationCallback(options) {
-  const response = await fetch(emailValidationUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json;',
-    },
-    body: JSON.stringify({
+  const response = await fetch(
+    `${emailValidationUrl}?${new URLSearchParams({
       id: options.data.id,
       email: options.value,
-    }),
-  });
+    })}`,
+  );
   return response.json();
 }
 function hireDateValidationCallback(options) {

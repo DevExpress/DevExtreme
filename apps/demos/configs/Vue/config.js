@@ -44,8 +44,10 @@ window.config = {
     'npm:': '../../../../node_modules/',
     'bundles:': '../../../../bundles/',
     'externals:': '../../../../bundles/externals/',
+    'anti-forgery:': '../../../../shared/anti-forgery/',
   },
   map: {
+    'anti-forgery': 'anti-forgery:fetch-override.js',
     'vue': 'npm:vue/dist/vue.esm-browser.js',
     '@vue/shared': 'npm:@vue/shared/dist/shared.cjs.prod.js',
     'vue-loader': 'npm:dx-systemjs-vue-browser/index.js',

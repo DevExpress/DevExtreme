@@ -1,9 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
 import { DxCardViewModule, DxCardViewComponent, DxButtonModule } from 'devextreme-angular';
-import { AppService, Employee } from './app.service';
-
 import notify from 'devextreme/ui/notify';
+import { AppService, Employee } from './app.service';
 
 if (!document.location.host.includes('localhost')) {
   enableProdMode();

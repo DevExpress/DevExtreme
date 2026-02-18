@@ -14,7 +14,7 @@ const orgLinksDataSource = new ArrayStore({
   data: service.getOrgLinks(),
 });
 
-function itemTypeExpr(obj: { type: string; }, value: string) {
+function itemTypeExpr(obj: { type: string | undefined; }, value: string) {
   if (value) {
     obj.type = (value === 'rectangle') ? undefined : 'group';
     return null;
@@ -22,7 +22,7 @@ function itemTypeExpr(obj: { type: string; }, value: string) {
   return obj.type === 'group' ? 'ellipse' : 'rectangle';
 }
 
-function itemWidthExpr(obj: { width: number; type: string; }, value) {
+function itemWidthExpr(obj: { width: number; type: string; }, value: number) {
   if (value) {
     obj.width = value;
     return null;
@@ -30,7 +30,7 @@ function itemWidthExpr(obj: { width: number; type: string; }, value) {
   return obj.width || (obj.type === 'group' && 1.5) || 1;
 }
 
-function itemHeightExpr(obj: { height: number; type: string; }, value) {
+function itemHeightExpr(obj: { height: number; type: string; }, value: number) {
   if (value) {
     obj.height = value;
     return null;

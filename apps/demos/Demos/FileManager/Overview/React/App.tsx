@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import FileManager, { type FileManagerTypes, Permissions } from 'devextreme-react/file-manager';
+import FileManager, { Permissions } from 'devextreme-react/file-manager';
+import type { FileManagerTypes } from 'devextreme-react/file-manager';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 import { Popup } from 'devextreme-react/popup';
 
@@ -25,7 +26,8 @@ export default function App() {
   }, [setPopupVisible]);
 
   const onCurrentDirectoryChanged = useCallback((e: FileManagerTypes.CurrentDirectoryChangedEvent) => {
-    setCurrentPath(e.component.option('currentPath'));
+    const path = e?.component?.option('currentPath');
+    path && setCurrentPath(path);
   }, [setCurrentPath]);
 
   return (

@@ -50,6 +50,9 @@ function readThemeMarker(): string | null {
   let result: string;
 
   try {
+    if (!window?.getComputedStyle) {
+      return null;
+    }
     result = window.getComputedStyle(element.get(0)).fontFamily;
     if (!result) {
       return null;

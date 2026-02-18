@@ -20,21 +20,24 @@ function format(value: number): string {
   return `${value}%`;
 }
 
+const MIN_VALUE = 0;
+const MAX_VALUE = 100;
+
 function App() {
   const [startValue, setStartValue] = useState<number>(10);
   const [endValue, setEndValue] = useState<number>(90);
 
   const onRangeChanged = useCallback((data: RangeSliderTypes.ValueChangedEvent): void => {
-    setStartValue(data.start);
-    setEndValue(data.end);
+    setStartValue(data.start ?? MIN_VALUE);
+    setEndValue(data.end ?? MAX_VALUE);
   }, []);
 
   const onStartChanged = useCallback((data: NumberBoxTypes.ValueChangedEvent): void => {
-    setStartValue(data.value);
+    setStartValue(data.value ?? MIN_VALUE);
   }, []);
 
   const onEndChanged = useCallback((data: NumberBoxTypes.ValueChangedEvent): void => {
-    setEndValue(data.value);
+    setEndValue(data.value ?? MAX_VALUE);
   }, []);
 
   return (
@@ -43,13 +46,13 @@ function App() {
         <div className="dx-field">
           <div className="dx-field-label">Default mode</div>
           <div className="dx-field-value">
-            <RangeSlider min={0} max={100} defaultValue={defaultValues.defaultMode} />
+            <RangeSlider min={MIN_VALUE} max={MAX_VALUE} defaultValue={defaultValues.defaultMode} />
           </div>
         </div>
         <div className="dx-field custom-height-slider">
           <div className="dx-field-label">With labels</div>
           <div className="dx-field-value">
-            <RangeSlider min={0} max={100} defaultValue={defaultValues.labels}>
+            <RangeSlider min={MIN_VALUE} max={MAX_VALUE} defaultValue={defaultValues.labels}>
               <Label visible={true} format={format} position="top" />
             </RangeSlider>
           </div>
@@ -57,7 +60,7 @@ function App() {
         <div className="dx-field custom-height-slider">
           <div className="dx-field-label">With tooltips</div>
           <div className="dx-field-value">
-            <RangeSlider min={0} max={100} defaultValue={defaultValues.tooltips}>
+            <RangeSlider min={MIN_VALUE} max={MAX_VALUE} defaultValue={defaultValues.tooltips}>
               <Tooltip enabled={true} format={format} showMode="always" position="bottom" />
             </RangeSlider>
           </div>
@@ -66,8 +69,8 @@ function App() {
           <div className="dx-field-label">Without range highlighting</div>
           <div className="dx-field-value">
             <RangeSlider
-              min={0}
-              max={100}
+              min={MIN_VALUE}
+              max={MAX_VALUE}
               defaultValue={defaultValues.withoutRangeHighlighting}
               showRange={false} />
           </div>
@@ -75,7 +78,7 @@ function App() {
         <div className="dx-field">
           <div className="dx-field-label">With discrete step</div>
           <div className="dx-field-value">
-            <RangeSlider min={0} max={100} defaultValue={defaultValues.discreteStep} step={10}>
+            <RangeSlider min={MIN_VALUE} max={MAX_VALUE} defaultValue={defaultValues.discreteStep} step={10}>
               <Tooltip enabled={true} />
             </RangeSlider>
           </div>
@@ -84,8 +87,8 @@ function App() {
           <div className="dx-field-label">Disabled</div>
           <div className="dx-field-value">
             <RangeSlider
-              min={0}
-              max={100}
+              min={MIN_VALUE}
+              max={MAX_VALUE}
               defaultValue={defaultValues.disabled}
               disabled={true} />
           </div>
@@ -97,8 +100,8 @@ function App() {
           <div className="dx-field-label">On handle movement</div>
           <div className="dx-field-value">
             <RangeSlider
-              min={0}
-              max={100}
+              min={MIN_VALUE}
+              max={MAX_VALUE}
               start={startValue}
               end={endValue}
               onValueChanged={onRangeChanged} />
@@ -108,8 +111,8 @@ function App() {
           <div className="dx-field-label">On handle release</div>
           <div className="dx-field-value">
             <RangeSlider
-              min={0}
-              max={100}
+              min={MIN_VALUE}
+              max={MAX_VALUE}
               start={startValue}
               end={endValue}
               valueChangeMode="onHandleRelease"
@@ -121,8 +124,8 @@ function App() {
           <div className="dx-field-value">
             <NumberBox
               value={startValue}
-              min={0}
-              max={100}
+              min={MIN_VALUE}
+              max={MAX_VALUE}
               showSpinButtons={true}
               inputAttr={startValueLabel}
               onValueChanged={onStartChanged} />
@@ -133,8 +136,8 @@ function App() {
           <div className="dx-field-value">
             <NumberBox
               value={endValue}
-              min={0}
-              max={100}
+              min={MIN_VALUE}
+              max={MAX_VALUE}
               showSpinButtons={true}
               inputAttr={endValueLabel}
               onValueChanged={onEndChanged} />

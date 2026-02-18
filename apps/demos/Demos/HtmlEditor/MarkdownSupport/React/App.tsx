@@ -16,34 +16,30 @@ const headerOptions = {
   },
 };
 const converter = {
-  toHtml(value) {
-    const result = unified()
+  toHtml(value: string): string {
+    return unified()
       .use(remarkParse)
       .use(remarkRehype)
       .use(rehypeStringify)
       .processSync(value)
       .toString();
-
-    return result;
   },
-  fromHtml(value) {
-    const result = unified()
+  fromHtml(value: string): string {
+    return unified()
       .use(rehypeParse)
       .use(rehypeRemark)
       .use(remarkStringify)
       .processSync(value)
       .toString();
-
-    return result;
   },
 };
 
 export default function App() {
-  const [valueContent, setValueContent] = useState(markup);
+  const [valueContent, setValueContent] = useState<string | undefined>(markup);
 
-  const valueChanged = useCallback((e: { value?: string; }) => {
-    setValueContent(e.value);
-  }, [setValueContent]);
+  const valueChanged = useCallback((e: { value?: string; }): void => {
+    setValueContent(e?.value);
+  }, []);
 
   return (
     <div className="widget-container">

@@ -16,6 +16,7 @@ import {
 } from 'devextreme-react/gantt';
 import * as pdfExporter from 'devextreme-react/common/export/pdf';
 import { jsPDF } from 'jspdf';
+import { applyPlugin } from 'jspdf-autotable';
 import {
   tasks,
   dependencies,
@@ -27,7 +28,6 @@ import {
   exportModeLabel,
   dateRangeLabel,
 } from './data.js';
-import { applyPlugin } from 'jspdf-autotable';
 
 applyPlugin(jsPDF);
 const formats = ['A0', 'A1', 'A2', 'A3', 'A4', 'Auto'];
@@ -77,7 +77,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <Gantt
           ref={this.ganttRef}
           taskListWidth={500}
@@ -223,7 +223,7 @@ class App extends React.Component {
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 
@@ -245,7 +245,7 @@ class App extends React.Component {
         endDate: this.state.endDate,
       };
     } else {
-      dataRange = dataRangeMode;
+      dataRange = { mode: dataRangeMode };
     }
     pdfExporter
       .exportGantt({

@@ -97,9 +97,9 @@ const performConversion = async (patterns) => {
 };
 
 function splitArrayIntoSubarrays(array, subarrayLength) {
-  var result = [];
+  const result = [];
 
-  for (var i = 0; i < array.length; i += subarrayLength) {
+  for (let i = 0; i < array.length; i += subarrayLength) {
     result.push(array.slice(i, i + subarrayLength));
   }
 
@@ -130,7 +130,6 @@ async function batchPatternsAndConvert() {
   const allPatterns = getPatterns();
   const batches = splitArrayIntoSubarrays(allPatterns, 10);
   for (const batch of batches) {
-    // eslint-disable-next-line no-await-in-loop
     await performConversion(batch);
   }
 }
