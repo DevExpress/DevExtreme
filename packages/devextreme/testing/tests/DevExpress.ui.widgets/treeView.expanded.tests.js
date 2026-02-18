@@ -245,7 +245,7 @@ module('Expanded items', {
 
         $icon.trigger('dxclick');
 
-        assert.ok(treeView.option('items')[0].expanded, 'disabled item was not expanded');
+        assert.ok(treeView.option('items')[0].expanded, 'disabled item was expanded');
     });
 
     test('expanded disabled item should not collapse on click', function(assert) {
@@ -306,7 +306,7 @@ module('Expanded items', {
 
         $icon.trigger('dxclick');
 
-        assert.notOk(treeView.option('items')[0].expanded, 'disabled item was not collapsed');
+        assert.notOk(treeView.option('items')[0].expanded, 'disabled item was collapsed');
     });
 
     test('expanded item with custom icon should collapse on click', function(assert) {
