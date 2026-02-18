@@ -82,5 +82,4 @@ export { DxValidationSummary } from "./validation-summary";
 export { DxValidator } from "./validator";
 export { DxVectorMap } from "./vector-map";
 
-import * as Common from "./common/index";
-export { Common };
+export * as Common from "./common/index";
