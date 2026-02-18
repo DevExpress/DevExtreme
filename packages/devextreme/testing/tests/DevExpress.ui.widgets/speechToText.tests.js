@@ -279,7 +279,7 @@ QUnit.module('State Management', moduleConfig, () => {
     });
 
     QUnit.test('INITIAL state should not have animation by default', function(assert) {
-        const animationName = this.$element.find(`.${ICON_CLASS}`).css('animation-name');
+        const animationName = this.$element.css('animation-name');
 
         assert.strictEqual(animationName, 'none');
     });
@@ -289,7 +289,7 @@ QUnit.module('State Management', moduleConfig, () => {
 
         $button.trigger('dxclick');
 
-        const animationName = this.$element.find(`.${ICON_CLASS}`).css('animation-name');
+        const animationName = this.$element.css('animation-name');
 
         assert.strictEqual(animationName, 'dx-speech-to-text-listening-animation');
     });
