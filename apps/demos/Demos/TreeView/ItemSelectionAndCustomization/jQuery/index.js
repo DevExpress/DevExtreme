@@ -77,4 +77,16 @@ $(() => {
       treeView.option('selectByClick', e.value);
     },
   });
+
+  $('#disabledNodesSelectionMode').dxCheckBox({
+    text: 'Allow Disabled Nodes Selection',
+    value: true,
+    onValueChanged(e) {
+      if (e.value) {
+        treeView.option('disabledNodeSelectionMode', 'recursiveAndAll');
+      } else {
+        treeView.option('disabledNodeSelectionMode', 'never');
+      }
+    },
+  });
 });
