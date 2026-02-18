@@ -4,7 +4,8 @@
   "description": "Angular UI and visualization components based on DevExtreme widgets",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DevExpress/devextreme-angular.git"
+    "url": "https://github.com/DevExpress/DevExtreme.git",
+    "directory": "packages/devextreme-angular"
   },
   "scripts": {
     "build": "pnpm --workspace-root nx build devextreme-angular",
