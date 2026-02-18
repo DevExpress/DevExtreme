@@ -131,7 +131,7 @@ module('selection common', () => {
     test('disabled item should be selectable via api', function(assert) {
         const items = [{ text: 'item 1', disabled: true }, { text: 'item 2', disabled: true, selected: true }];
         const treeView = createInstance({
-            items: items,
+            items,
             showCheckBoxesMode: 'normal'
         });
 
@@ -140,6 +140,36 @@ module('selection common', () => {
 
         treeView.instance.unselectItem(1);
         treeView.checkSelected([1], items);
+    });
+
+    test('disabled item should be non selectable via api with disabledNodeSelectionMode = never', function(assert) {
+        const items = [{ text: 'item 1', disabled: true }, { text: 'item 2', disabled: true, selected: true }];
+        const treeView = createInstance({
+            items,
+            showCheckBoxesMode: 'normal',
+            disabledNodeSelectionMode: 'never',
+        });
+
+        treeView.instance.selectItem(1);
+        treeView.checkSelected([1], items);
+
+        treeView.instance.unselectItem(1);
+        treeView.checkSelected([1], items);
+    });
+
+    test('selectionChanged should not fire for disabled item with disabledNodeSelectionMode = never', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+        const items = [{ text: 'item 1', disabled: true }];
+        const treeView = createInstance({
+            items,
+            showCheckBoxesMode: 'normal',
+            disabledNodeSelectionMode: 'never',
+            onSelectionChanged: selectionChangedHandler,
+        });
+
+        treeView.instance.selectItem(1);
+
+        assert.equal(selectionChangedHandler.callCount, 0, 'selectionChanged should not fire');
     });
 
     test('all nodes should have selected class if they have selected property', function(assert) {
