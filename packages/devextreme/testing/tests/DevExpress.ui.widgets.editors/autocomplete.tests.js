@@ -12,7 +12,7 @@ import { isRenderer } from 'core/utils/type';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 import { getHeight, getOuterHeight } from 'core/utils/size';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import 'ui/select_box';
 
 QUnit.testStart(() => {
@@ -54,6 +54,8 @@ const KEY_UP = 'ArrowUp';
 const KEY_ENTER = 'Enter';
 const KEY_ESC = 'Escape';
 const KEY_TAB = 'Tab';
+
+const BORDER_WIDTH = 1;
 
 QUnit.module('dxAutocomplete', {
     beforeEach: function() {
@@ -180,9 +182,11 @@ QUnit.module('dxAutocomplete', {
         autocomplete.option('height', initialHeight + increment);
         autocomplete.option('width', initialWidth + increment);
 
+        const overlayContentWidth = $overlayContent.width() - BORDER_WIDTH * 2;
+
         const dHeight = $autocomplete.height() - initialHeight;
         const dWidth = $autocomplete.width() - initialWidth;
-        const dPopupWidth = $overlayContent.width() - initialPopupWidth;
+        const dPopupWidth = overlayContentWidth - initialPopupWidth;
 
         assert.notEqual(dHeight, 0, 'Height could be changed');
         assert.notEqual(dWidth, 0, 'Width could be changed');

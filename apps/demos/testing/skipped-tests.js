@@ -22,7 +22,6 @@ export const skippedTests = {
     Charts: ['ServerSideDataProcessing'],
     Common: ['PopupAndNotificationsOverview'],
     DataGrid: [
-      'SignalRService',
       'MultipleRecordSelectionModes',
       'RemoteCRUDOperations',
       'ExcelJSExportMultipleGrids',
@@ -45,7 +44,6 @@ export const skippedTests = {
     DataGrid: [
       'Overview',
       'Toolbar',
-      'SignalRService',
       'MultipleRecordSelectionModes',
       'ExcelJSExportMultipleGrids',
       'PDFExportMultipleGrids',
@@ -66,7 +64,6 @@ export const skippedTests = {
     Common: ['PopupAndNotificationsOverview'],
     Charts: ['PointsAggregation', 'ServerSideDataProcessing'],
     DataGrid: [
-      'SignalRService',
       'MultipleRecordSelectionModes',
       'ExcelJSExportMultipleGrids',
       'PDFExportMultipleGrids',

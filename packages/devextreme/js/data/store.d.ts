@@ -2,6 +2,13 @@ import { DxPromise, DxExtendedPromise } from '../core/utils/deferred';
 import { DeepPartial } from '../core';
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from '../common/data';
 
+type StoreChange<TItem = any, TKey = any > = {
+    type: 'insert' | 'update' | 'remove';
+    data?: DeepPartial<TItem>;
+    key?: TKey;
+    index?: number;
+};
+
 /**
  * @docid StoreOptions
  * @namespace DevExpress.common.data
@@ -57,10 +64,11 @@ export type StoreOptions<
     onModifying?: Function;
     /**
      * @docid StoreOptions.onPush
+     * @type_function_param1 changes:Array<any>
      * @action
      * @public
      */
-    onPush?: ((changes: Array<TItem>) => void);
+    onPush?: ((changes: Array<StoreChange<TItem, TKey>>) => void);
     /**
      * @docid StoreOptions.onRemoved
      * @type_function_param1 key:object|string|number
@@ -166,7 +174,7 @@ export class Store<
      * @param1 changes:Array<any>
      * @public
      */
-    push(changes: Array<{ type: 'insert' | 'update' | 'remove'; data?: DeepPartial<TItem>; key?: TKey; index?: number }>): void;
+    push(changes: Array<StoreChange<TItem, TKey>>): void;
     /**
      * @docid
      * @publicName remove(key)

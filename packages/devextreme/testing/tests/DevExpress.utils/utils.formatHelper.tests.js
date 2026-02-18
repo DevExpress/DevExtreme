@@ -1,4 +1,5 @@
-const formatHelper = require('format_helper');
+import formatHelper from 'format_helper';
+
 const getDateFormatByTickInterval = formatHelper.getDateFormatByTickInterval;
 
 function checkDateWithFormat(date, format, expected, assert) {
@@ -418,3 +419,86 @@ QUnit.test('Case insensitive', function(assert) {
     checkDateWithFormat(date1, getDateFormatByTickInterval(date1, date2, 'seCond'), '8:22:30 AM', assert);
     checkDateWithFormat(date1, getDateFormatByTickInterval(date1, date2, 'miLLisecond'), '333', assert);
 });
+
+QUnit.module('Format method', function() {
+    QUnit.test('format with invalid format should return value as string', function(assert) {
+        assert.equal(formatHelper.format(123, ''), '123', 'Empty string format returns value.toString()');
+        assert.equal(formatHelper.format(123, null), '123', 'Null format returns value.toString()');
+        assert.equal(formatHelper.format(123, undefined), '123', 'Undefined format returns value.toString()');
+    });
+
+    QUnit.test('format with invalid value should return value as string or empty string', function(assert) {
+        assert.equal(formatHelper.format('text', 'decimal'), 'text', 'String value with numeric format returns value.toString()');
+        assert.equal(formatHelper.format(null, 'decimal'), '', 'Null value returns empty string');
+        assert.equal(formatHelper.format(undefined, 'decimal'), '', 'Undefined value returns empty string');
+    });
+
+    QUnit.test('format with invalid Date should return value as string', function(assert) {
+        const invalidDate = new Date('weekend');
+        assert.equal(formatHelper.format(invalidDate, 'shortDate'), 'Invalid Date', 'Invalid Date returns "Invalid Date" string');
+    });
+
+    QUnit.test('format numeric value with string format', function(assert) {
+        assert.equal(formatHelper.format(1234.5, 'decimal'), '1234.5', 'Decimal format');
+        assert.equal(formatHelper.format(0.45, 'percent'), '45%', 'Percent format');
+        assert.equal(formatHelper.format(1234.5, 'currency'), '$1,235', 'Currency format');
+    });
+
+    QUnit.test('format numeric value with object format', function(assert) {
+        assert.equal(formatHelper.format(1234.567, { type: 'fixedPoint', precision: 2 }), '1,234.57', 'FixedPoint with precision');
+        assert.equal(formatHelper.format(0.123, { type: 'percent', precision: 1 }), '12.3%', 'Percent with precision');
+    });
+
+    QUnit.test('format numeric value with function format', function(assert) {
+        const customFormat = function(value) {
+            return 'Custom: ' + value;
+        };
+        assert.equal(formatHelper.format(123, customFormat), 'Custom: 123', 'Function format');
+    });
+
+    QUnit.test('format date value with string format', function(assert) {
+        const date = new Date(2017, 8, 5, 14, 30, 45);
+        assert.equal(formatHelper.format(date, 'shortDate'), '9/5/2017', 'Short date format');
+        assert.equal(formatHelper.format(date, 'shortTime'), '2:30 PM', 'Short time format');
+    });
+
+    QUnit.test('format date value with object format', function(assert) {
+        const date = new Date(2017, 8, 5, 14, 30, 45);
+        assert.equal(formatHelper.format(date, { type: 'shortDate' }), '9/5/2017', 'Short date format object');
+        assert.equal(formatHelper.format(date, { type: 'longDate' }), 'Tuesday, September 5, 2017', 'Long date format object');
+    });
+
+    QUnit.test('format date value with function format', function(assert) {
+        const date = new Date(2017, 8, 5);
+        const customFormat = function(value) {
+            return 'Year: ' + value.getFullYear();
+        };
+        assert.equal(formatHelper.format(date, customFormat), 'Year: 2017', 'Function format for date');
+    });
+
+    QUnit.test('format zero value', function(assert) {
+        assert.equal(formatHelper.format(0, 'decimal'), '0', 'Zero with decimal format');
+        assert.equal(formatHelper.format(0, 'percent'), '0%', 'Zero with percent format');
+    });
+
+    QUnit.test('format negative value', function(assert) {
+        assert.equal(formatHelper.format(-123.45, 'fixedPoint'), '-123', 'Negative number with fixedPoint');
+        assert.equal(formatHelper.format(-0.5, 'percent'), '-50%', 'Negative percent');
+    });
+
+    QUnit.test('format with custom format pattern', function(assert) {
+        assert.equal(formatHelper.format(1234.5, '#,##0.00'), '1,234.50', 'Custom number pattern');
+        const date = new Date(2017, 8, 5);
+        assert.equal(formatHelper.format(date, 'yyyy-MM-dd'), '2017-09-05', 'Custom date pattern');
+    });
+
+    QUnit.test('format empty string value', function(assert) {
+        assert.equal(formatHelper.format('', 'decimal'), '', 'Empty string returns empty string');
+    });
+
+    QUnit.test('format boolean value should return string', function(assert) {
+        assert.equal(formatHelper.format(true, 'decimal'), 'true', 'Boolean true returns "true"');
+        assert.equal(formatHelper.format(false, 'decimal'), 'false', 'Boolean false returns "false"');
+    });
+});
+

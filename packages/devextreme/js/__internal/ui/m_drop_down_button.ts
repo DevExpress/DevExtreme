@@ -695,7 +695,7 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
   }
 
   _updateItemCollection(optionName): void {
-    const selectedItemKey = this.option('selectedItemKey');
+    const { selectedItemKey, useSelectMode } = this.option();
     this._setListOption('selectedItem', null);
     // @ts-expect-error ts-error
     this._setWidgetOption('_list', [optionName]);
@@ -703,8 +703,10 @@ class DropDownButton extends Widget<DropDownButtonProperties> {
     if (isDefined(selectedItemKey)) {
       this._loadSelectedItem()
         .done((selectedItem) => {
-          this._setListOption('selectedItemKeys', [selectedItemKey]);
-          this._setListOption('selectedItem', selectedItem);
+          if (useSelectMode) {
+            this._setListOption('selectedItemKeys', [selectedItemKey]);
+            this._setListOption('selectedItem', selectedItem);
+          }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         }).fail((error) => {
           this._setListOption('selectedItemKeys', []);
