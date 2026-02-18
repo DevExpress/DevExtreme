@@ -101,6 +101,9 @@ export class TooltipStrategyBase {
 
   private subscribeToAppointmentDataChange() {
     const { subscribeToAppointmentDataChange } = this._options;
+
+    if (!subscribeToAppointmentDataChange) return;
+
     this._dataChangeUnsubscribe?.();
     this._dataChangeUnsubscribe = subscribeToAppointmentDataChange(
       () => this.tryUpdateTooltipFromDataSource(),
@@ -148,10 +151,17 @@ export class TooltipStrategyBase {
   }
 
   protected onShown() {
+    const { subscribeToAppointmentDataChange } = this._options;
+
     this._list.option('focusStateEnabled', this._extraOptions.focusStateEnabled);
-    const settings = $(this._tooltip.option('target')).data(APPOINTMENT_SETTINGS_KEY) as any;
-    this._collectorSortedIndex = settings?.sortedIndex;
-    this.subscribeToAppointmentDataChange();
+
+    if (subscribeToAppointmentDataChange) {
+      const settings = $(this._tooltip.option('target')).data(APPOINTMENT_SETTINGS_KEY) as { sortedIndex?: number } | undefined;
+      this._collectorSortedIndex = settings?.sortedIndex ?? null;
+      if (this._collectorSortedIndex != null) {
+        this.subscribeToAppointmentDataChange();
+      }
+    }
   }
 
   dispose() {

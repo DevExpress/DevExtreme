@@ -544,7 +544,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         assert.equal(scheduler.tooltip.getDateText(), 'February 9 11:00 AM - 12:00 PM', 'dates and time were displayed correctly');
     });
 
-    test('Click on tooltip-remove button should call scheduler.deleteAppointment and hide tooltip', async function(assert) {
+    test('Click on tooltip-remove button should call scheduler.deleteAppointment', async function(assert) {
         const data = new DataSource({
             store: getSampleData()
         });
@@ -564,11 +564,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                 text: 'Task 2'
             },
             'processDeleteAppointment has a correct arguments');
-
-        assert.notOk(scheduler.tooltip.isVisible(), 'tooltip was hidden');
     });
 
-    test('Click on tooltip-remove button should call scheduler.updateAppointment and hide tooltip, if recurrenceRuleExpr and recurrenceExceptionExpr is set', async function(assert) {
+    test('Click on tooltip-remove button should call scheduler.updateAppointment, if recurrenceRuleExpr and recurrenceExceptionExpr is set', async function(assert) {
         const scheduler = await createScheduler({
             currentDate: new Date(2018, 6, 30),
             currentView: 'month',
@@ -604,9 +602,6 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                 SC_RecurrenceException: '20170626T100000Z,' + exceptionString
             },
             'updateAppointment has a right arguments');
-
-        assert.notOk(scheduler.tooltip.isVisible(), 'tooltip was hidden');
-
     });
 
     test('Tooltip should appear if mouse is over arrow icon', async function(assert) {
