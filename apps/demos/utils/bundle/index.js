@@ -21,6 +21,7 @@ const prepareModulesToNamedImport = () => {
     'time_zone_utils.js',
     'devextreme/ui/dialog.js',
     'common/charts.js',
+    'common/data.js',
   ];
 
   const paths = [
