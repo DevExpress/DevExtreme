@@ -9,7 +9,7 @@ async function fetchAntiForgeryToken() {
   try {
     const response = await fetchOrig('https://js.devexpress.com/Demos/NetCore/api/Common/GetAntiForgeryToken', {
       method: 'GET',
-      credentials: 'include',
+      // credentials: 'include',
       cache: 'no-cache',
     });
 
@@ -67,7 +67,7 @@ ajax.sendRequest = (options) => {
     };
 
     options.xhrFields = {
-      withCredentials: true,
+      // withCredentials: true,
     };
 
     sendRequestOrig(options).then(
@@ -94,7 +94,7 @@ window.fetch = async (url, options = {}) => {
     ...(options.headers || {}),
   };
 
-  options.credentials = 'include';
+  // options.credentials = 'include';
 
   return fetchOrig(url, options);
 };
