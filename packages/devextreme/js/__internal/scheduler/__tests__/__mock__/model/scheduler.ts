@@ -101,20 +101,10 @@ export class SchedulerModel {
 
     const keyEvent = new KeyboardEvent('keydown', {
       key: 'Delete',
-      which: 46,
-      keyCode: 46,
       bubbles: true,
     });
     const keyboardOptions = {
       keyName: 'del',
-      key: 'Delete',
-      code: 'Delete',
-      which: 46,
-      ctrl: false,
-      shift: false,
-      alt: false,
-      metaKey: false,
-      location: 0,
       originalEvent: keyEvent,
     };
     listInstance._keyboardHandler(keyboardOptions);
