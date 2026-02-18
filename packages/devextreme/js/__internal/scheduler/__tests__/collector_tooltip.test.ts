@@ -18,6 +18,35 @@ describe('Collector tooltip behavior', () => {
     document.body.innerHTML = '';
   });
 
+  it('should hide when last item is deleted', async () => {
+    const { POM } = await createScheduler({
+      dataSource: [
+        {
+          text: 'Apt1',
+          startDate: new Date(2017, 4, 22, 9, 30),
+          endDate: new Date(2017, 4, 22, 10, 30),
+        },
+        {
+          text: 'Apt2',
+          startDate: new Date(2017, 4, 22, 9, 30),
+          endDate: new Date(2017, 4, 22, 10, 30),
+        },
+      ],
+      views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
+      currentView: 'month',
+      currentDate: new Date(2017, 4, 22),
+      height: 600,
+    });
+
+    const collector = POM.getCollectorButton();
+    collector.click();
+
+    const deleteButton = POM.getTooltipDeleteButton();
+    deleteButton.click();
+
+    expect(POM.isTooltipVisible()).toBe(false);
+  });
+
   it('should stay visible when one appointment is deleted and items remain', async () => {
     const { POM } = await createScheduler({
       dataSource: [
@@ -103,34 +132,5 @@ describe('Collector tooltip behavior', () => {
     POM.pressDeleteOnTooltipItem();
 
     expect(POM.isTooltipVisible()).toBe(true);
-  });
-
-  it('should hide when last item is deleted', async () => {
-    const { POM } = await createScheduler({
-      dataSource: [
-        {
-          text: 'Apt1',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 10, 30),
-        },
-        {
-          text: 'Apt2',
-          startDate: new Date(2017, 4, 22, 9, 30),
-          endDate: new Date(2017, 4, 22, 10, 30),
-        },
-      ],
-      views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
-      currentView: 'month',
-      currentDate: new Date(2017, 4, 22),
-      height: 600,
-    });
-
-    const collector = POM.getCollectorButton();
-    collector.click();
-
-    const deleteButton = POM.getTooltipDeleteButton();
-    deleteButton.click();
-
-    expect(POM.isTooltipVisible()).toBe(false);
   });
 });
