@@ -521,6 +521,97 @@ QUnit.module('the \'autoResizeEnabled\' option', () => {
 
         assert.equal(inputHeight, $input[0].scrollHeight, 'widget height is correct');
     });
+
+    QUnit.test('height option should be ignored when autoResizeEnabled is true (T1321529)', function(assert) {
+        const $element = $('#textarea').dxTextArea({
+            autoResizeEnabled: true,
+            height: 100,
+        });
+
+        const elementStyleHeight = $element.get(0).style.height;
+
+        assert.strictEqual(elementStyleHeight, 'auto', 'height option is ignored, element style height is auto');
+    });
+
+    QUnit.test('widget should auto-resize when both autoResizeEnabled and height are specified (T1321529)', function(assert) {
+        const $element = $('#textarea').dxTextArea({
+            autoResizeEnabled: true,
+            height: 100,
+        });
+
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const initialInputHeight = $input.outerHeight();
+
+        $input.val('\n\n\n\n');
+        $input.trigger('input');
+
+        const heightAfterInput = $input.outerHeight();
+
+        assert.ok(heightAfterInput > initialInputHeight, 'input height increased, height option is ignored');
+    });
+
+    QUnit.test('height option should be applied when autoResizeEnabled is false', function(assert) {
+        const specifiedHeight = 100;
+        const $element = $('#textarea').dxTextArea({
+            autoResizeEnabled: false,
+            height: specifiedHeight,
+        });
+
+        const elementHeight = $element.outerHeight();
+
+        assert.strictEqual(elementHeight, specifiedHeight, 'height option is applied when autoResizeEnabled is false');
+    });
+
+    QUnit.test('height option should start working after disabling autoResizeEnabled (T1321529)', function(assert) {
+        const specifiedHeight = 100;
+        const $element = $('#textarea').dxTextArea({
+            autoResizeEnabled: true,
+            height: specifiedHeight,
+            value: '1\n2\n3\n4\n5\n6\n7\n8\n9\n10',
+        });
+        const instance = $element.dxTextArea('instance');
+
+        const elementStyleHeight = $element.get(0).style.height;
+        assert.strictEqual(elementStyleHeight, 'auto', 'height is auto when autoResizeEnabled is true');
+
+        instance.option('autoResizeEnabled', false);
+
+        const elementHeight = $element.outerHeight();
+
+        assert.strictEqual(elementHeight, specifiedHeight, 'height option is applied after disabling autoResizeEnabled');
+    });
+
+    QUnit.test('widget should show scrollbar when content exceeds maxHeight with autoResizeEnabled and height (T1321529)', function(assert) {
+        const $element = $('#textarea').dxTextArea({
+            autoResizeEnabled: true,
+            height: 100,
+            maxHeight: 150,
+            value: '1\n2\n3\n4\n5\n6\n7\n8\n9\n10',
+        });
+
+        const $input = $element.find(`.${INPUT_CLASS}`);
+
+        assert.notOk($input.hasClass(AUTO_RESIZE_CLASS), 'auto-resize class is removed when content exceeds maxHeight');
+        assert.strictEqual($input.css('overflow-y'), 'auto', 'scrollbar is visible when content exceeds maxHeight');
+    });
+
+    QUnit.test('widget should restore auto-resize class when content fits after exceeding maxHeight with height option (T1321529)', function(assert) {
+        const $element = $('#textarea').dxTextArea({
+            autoResizeEnabled: true,
+            height: 100,
+            maxHeight: 150,
+            value: '1\n2\n3\n4\n5\n6\n7\n8\n9\n10'
+        });
+
+        const instance = $element.dxTextArea('instance');
+        const $input = $element.find(`.${INPUT_CLASS}`);
+
+        assert.notOk($input.hasClass(AUTO_RESIZE_CLASS), 'auto-resize class is removed with long text');
+
+        instance.option('value', '1\n2');
+
+        assert.ok($input.hasClass(AUTO_RESIZE_CLASS), 'auto-resize class is restored when content fits');
+    });
 });
 
 QUnit.module('TextArea in simulated scrollable', () => {

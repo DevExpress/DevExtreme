@@ -80,12 +80,6 @@ const getIgnoredRules = (testName) => {
     'FileManager-Overview': ['aria-command-name', 'empty-table-header', 'label'],
     'FileManager-UICustomization': ['aria-command-name', 'empty-table-header', 'label'],
 
-    'PivotGrid-SummaryDisplayModes': ['aria-allowed-attr'],
-    'PivotGrid-StatePersistence': ['aria-allowed-attr'],
-    'PivotGrid-StandaloneFieldChooser': ['aria-allowed-attr'],
-    'PivotGrid-FieldPanel': ['aria-allowed-attr'],
-    'PivotGrid-ExcelJsHeaderAndFooter': ['aria-allowed-attr'],
-
     'Gantt-Appearance': ['aria-toggle-field-name'],
     'Gantt-ExportToPDF': ['aria-toggle-field-name'],
     'Gantt-StripLines': ['aria-required-parent', 'aria-valid-attr-value'],
