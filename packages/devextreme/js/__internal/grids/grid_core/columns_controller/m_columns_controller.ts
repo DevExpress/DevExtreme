@@ -1306,38 +1306,39 @@ export class ColumnsController extends modules.Controller {
         .map((column): string => column.calculateGroupValue);
 
       each(columns, (_: number, column) => {
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        delete column[indexParameterName];
-
         const isReferencedAsGroupValue = indexParameterName === 'groupIndex'
           && referencedGroupValues.some(
             (groupValue) => column.dataField === groupValue || column.name === groupValue,
           );
 
-        if (!isReferencedAsGroupValue && sortParameters) {
-          for (let i = 0; i < sortParameters.length; i += 1) {
-            const { selector, isExpanded } = sortParameters[i];
+        if (!isReferencedAsGroupValue) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+          delete column[indexParameterName];
+          if (sortParameters) {
+            for (let i = 0; i < sortParameters.length; i += 1) {
+              const { selector, isExpanded } = sortParameters[i];
 
-            if (selector === column.dataField
+              if (selector === column.dataField
                 || selector === column.name
                 || selector === column.displayField
                 || gridCoreUtils.isEqualSelectors(selector, column.selector)
                 || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateCellValue)
                 || gridCoreUtils.isEqualSelectors(selector, column.calculateGroupValue)
                 || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateDisplayValue)
-            ) {
-              if (fromDataSource) {
-                column.sortOrder = 'sortOrder' in column ? column.sortOrder : sortParameters[i].desc ? 'desc' : 'asc';
-              } else {
-                column.sortOrder = column.sortOrder ?? (sortParameters[i].desc ? 'desc' : 'asc');
-              }
+              ) {
+                if (fromDataSource) {
+                  column.sortOrder = 'sortOrder' in column ? column.sortOrder : sortParameters[i].desc ? 'desc' : 'asc';
+                } else {
+                  column.sortOrder = column.sortOrder ?? (sortParameters[i].desc ? 'desc' : 'asc');
+                }
 
-              if (isExpanded !== undefined) {
-                column.autoExpandGroup = isExpanded;
-              }
+                if (isExpanded !== undefined) {
+                  column.autoExpandGroup = isExpanded;
+                }
 
-              column[indexParameterName] = i;
-              break;
+                column[indexParameterName] = i;
+                break;
+              }
             }
           }
         }
