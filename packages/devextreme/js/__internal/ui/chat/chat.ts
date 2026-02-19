@@ -467,7 +467,6 @@ class Chat extends Widget<ChatProperties> {
       speechToTextEnabled,
       speechToTextOptions,
     } = this.option();
-
     const $messageBox = $('<div>');
 
     this.$element().append($messageBox);
