@@ -91,7 +91,7 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-item-selected-bg: color.change(#748fbc, $alpha: 0.42) !default;
   $treeview-item-selected-hover-bg: color.change(#748fbc, $alpha: 0.3) !default;
   $treeview-spin-icon-color: $base-icon-color !default;
-  $treeview-item-content-disabled: color.adjust($base-text-color, $lightness: -48.24%) !default;;
+  $treeview-item-content-disabled: color.adjust($base-text-color, $lightness: -48.24%) !default;
 }
 
 @if $color == "darkviolet" {
@@ -104,7 +104,7 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-item-selected-bg: color.change($base-accent, $alpha: 0.46) !default;
   $treeview-item-selected-hover-bg: color.change($base-accent, $alpha: 0.6) !default;
   $treeview-spin-icon-color: $base-header-color !default;
-  $treeview-item-content-disabled: color.change($base-text-color, $saturation: 0%, $lightness: 51.76%, $space: hsl) !default;;
+  $treeview-item-content-disabled: color.change($base-text-color, $saturation: 0%, $lightness: 51.76%, $space: hsl) !default;
 }
 
 @if $color == "greenmist" {
