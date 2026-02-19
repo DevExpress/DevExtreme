@@ -2,6 +2,7 @@ import $ from 'jquery';
 import TreeView from 'ui/tree_view';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 import eventsEngine from 'common/core/events/core/events_engine';
+import { NODE_CLASS } from '__internal/ui/tree_view/tree_view.base';
 
 const { module, test } = QUnit;
 
@@ -82,7 +83,7 @@ let helper;
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
 
-            const $itemContent = helper.$widget.find('.dx-treeview-item-content').eq(0);
+            const $itemContent = helper.$widget.find(`.${NODE_CLASS}`).eq(0);
             assert.strictEqual($itemContent.attr('aria-disabled'), 'true', 'aria-disabled equals true');
 
         });

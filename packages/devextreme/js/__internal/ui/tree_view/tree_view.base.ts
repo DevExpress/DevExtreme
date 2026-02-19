@@ -61,10 +61,10 @@ import { getRelativeOffset } from '@ts/ui/scroll_view/utils/get_relative_offset'
 
 const WIDGET_CLASS = 'dx-treeview';
 
-const NODE_CLASS = `${WIDGET_CLASS}-node`;
-const NODE_CONTAINER_CLASS = `${NODE_CLASS}-container`;
+export const NODE_CLASS = `${WIDGET_CLASS}-node`;
+export const NODE_CONTAINER_CLASS = `${NODE_CLASS}-container`;
 const NODE_LOAD_INDICATOR_CLASS = `${NODE_CLASS}-loadindicator`;
-const OPENED_NODE_CONTAINER_CLASS = `${NODE_CLASS}-container-opened`;
+export const OPENED_NODE_CONTAINER_CLASS = `${NODE_CLASS}-container-opened`;
 const IS_LEAF = `${NODE_CLASS}-is-leaf`;
 
 export const ITEM_CLASS = `${WIDGET_CLASS}-item`;
@@ -77,8 +77,8 @@ const ITEM_WITHOUT_CHECKBOX_CLASS = `${ITEM_CLASS}-without-checkbox`;
 const ITEM_DATA_KEY = `${ITEM_CLASS}-data`;
 
 export const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
-const CUSTOM_COLLAPSE_ICON_CLASS = `${WIDGET_CLASS}-custom-collapse-icon`;
-const CUSTOM_EXPAND_ICON_CLASS = `${WIDGET_CLASS}-custom-expand-icon`;
+export const CUSTOM_COLLAPSE_ICON_CLASS = `${WIDGET_CLASS}-custom-collapse-icon`;
+export const CUSTOM_EXPAND_ICON_CLASS = `${WIDGET_CLASS}-custom-expand-icon`;
 
 const LOAD_INDICATOR_CLASS = `${WIDGET_CLASS}-loadindicator`;
 const LOAD_INDICATOR_WRAPPER_CLASS = `${WIDGET_CLASS}-loadindicator-wrapper`;
@@ -87,7 +87,8 @@ export const SELECT_ALL_ITEM_CLASS = `${WIDGET_CLASS}-select-all-item`;
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 export const DISABLED_STATE_CLASS = 'dx-state-disabled';
-const DISABLED_STATE_ARIA = 'aria-disabled';
+const DISABLED_STATE = 'disabled';
+const SELECTED_STATE = 'selected';
 const SELECTED_ITEM_CLASS = 'dx-state-selected';
 const EXPAND_EVENT_NAMESPACE = 'dxTreeView_expand';
 const DATA_ITEM_ID = 'data-item-id';
@@ -327,13 +328,13 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
   _fireSelectionChanged(): void {
     this._createActionByOption('onSelectionChanged', {
-      excludeValidators: ['disabled', 'readOnly'],
+      excludeValidators: [DISABLED_STATE, 'readOnly'],
     })();
   }
 
   _createSelectAllValueChangedAction(): void {
     this._selectAllValueChangedAction = this._createActionByOption('onSelectAllValueChanged', {
-      excludeValidators: ['disabled', 'readOnly'],
+      excludeValidators: [DISABLED_STATE, 'readOnly'],
     });
   }
 
@@ -900,7 +901,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       $nodeContainer.addClass(CUSTOM_EXPANDER_ICON_ITEM_CONTAINER_CLASS);
     }
 
-    this.setAria('selected', nodeData.selected, $node);
+    this.setAria(SELECTED_STATE, nodeData.selected, $node);
+    if (nodeData.disabled) {
+      this.setAria(DISABLED_STATE, nodeData.disabled, $node);
+    }
     this._toggleSelectedClass($node, nodeData.selected);
 
     super._renderItem(
@@ -1018,9 +1022,8 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     if (node?.internalFields.disabled) {
       const $itemContent = $(itemElement).find(`.${ITEM_CONTENT_CLASS}`);
       $(itemElement).removeClass(DISABLED_STATE_CLASS);
-      $(itemElement).removeAttr(DISABLED_STATE_ARIA);
+      $(itemElement).removeAttr(`aria-${DISABLED_STATE}`);
       $itemContent.addClass(DISABLED_STATE_CLASS);
-      $itemContent.attr(DISABLED_STATE_ARIA, true);
     }
 
     if (this._showCheckboxes()) {
@@ -1591,7 +1594,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
     if (this._showCheckboxes()) {
       const checkbox = this._getCheckBoxInstance($node);
-      checkbox.option('disabled', !!state);
+      checkbox.option(DISABLED_STATE, !!state);
     }
   }
 
