@@ -4,6 +4,7 @@ import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/
 import { DxCardViewModule, DxTextAreaModule } from 'devextreme-angular';
 import { lastValueFrom } from 'rxjs';
 import { Employee, Service } from './app.service';
+import 'anti-forgery';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
