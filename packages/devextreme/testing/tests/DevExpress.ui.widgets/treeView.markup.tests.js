@@ -514,7 +514,7 @@ QUnit.module('markup', {
             items: [{ id: 1, text: 'item 1', isDisabled: true }],
             disabledExpr: 'isDisabled'
         });
-        const $item = $treeView.find('.' + ITEM_CLASS).eq(0).find('.' + ITEM_CONTENT_CLASS).eq(0);
+        const $item = $treeView.find(`.${ITEM_CLASS} > .${ITEM_CONTENT_CLASS}`).eq(0);
 
         assert.ok($item.hasClass(DISABLED_STATE_CLASS));
     });

@@ -82,15 +82,8 @@ let helper;
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
 
-            const $itemContent = helper.$widget
-                .find('.dx-treeview-item-content')
-                .eq(0);
-
-            assert.strictEqual(
-                $itemContent.attr('aria-disabled'),
-                'true',
-                'aria-disabled equals true'
-            );
+            const $itemContent = helper.$widget.find('.dx-treeview-item-content').eq(0);
+            assert.strictEqual($itemContent.attr('aria-disabled'), 'true', 'aria-disabled equals true');
 
         });
 

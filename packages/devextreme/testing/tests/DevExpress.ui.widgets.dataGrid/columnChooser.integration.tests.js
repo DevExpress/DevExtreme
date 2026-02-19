@@ -466,7 +466,7 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // act
         dataGrid.showColumnChooser();
 
-        const item = $('.dx-item.dx-treeview-item').eq(2).find('.dx-treeview-item-content');
+        const item = $('.dx-item.dx-treeview-item > .dx-treeview-item-content').eq(2);
 
         // assert
         assert.ok(item.hasClass('dx-state-disabled'), 'Column with allowHiding=false is disabled');
