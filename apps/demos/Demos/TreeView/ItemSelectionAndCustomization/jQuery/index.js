@@ -13,6 +13,7 @@ $(() => {
     width: 340,
     height: 320,
     showCheckBoxesMode: 'normal',
+    disabledNodeSelectionMode: 'never',
     onSelectionChanged(e) {
       syncSelection(e.component);
     },
@@ -80,7 +81,7 @@ $(() => {
 
   $('#disabledNodeSelectionMode').dxCheckBox({
     text: 'Allow Disabled Nodes Selection',
-    value: true,
+    value: false,
     onValueChanged(e) {
       if (e.value) {
         treeView.option('disabledNodeSelectionMode', 'recursiveAndAll');
