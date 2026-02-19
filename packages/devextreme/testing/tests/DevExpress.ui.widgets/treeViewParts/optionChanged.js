@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { DATA } from './testData.js';
 import { initTree } from './testUtils.js';
-import { ITEM_CONTENT_CLASS, DISABLED_STATE_CLASS  } from '__internal/ui/tree_view/tree_view.base';
+import { ITEM_CONTENT_CLASS, DISABLED_STATE_CLASS } from '__internal/ui/tree_view/tree_view.base';
 
 QUnit.module('optionChanged');
 
