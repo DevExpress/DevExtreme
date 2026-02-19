@@ -351,7 +351,7 @@ export class StubMaskRule extends MaskRule {
       ? this._prepareHandlingArgs(args, { str: rest, length: args.length - 1 })
       : args;
 
-    return this.next()?.handle(nextArgs) ?? 0 + 1;
+    return (this.next()?.handle(nextArgs) ?? 0) + 1;
   }
 
   clear(args: HandlingArgs): void {
@@ -368,7 +368,7 @@ export class StubMaskRule extends MaskRule {
   }
 
   first(index: number): number {
-    const newIndex = index + 1;
+    const newIndex = (index ?? 0) + 1;
 
     return this.next().first(newIndex);
   }
@@ -385,6 +385,7 @@ export class StubMaskRule extends MaskRule {
     if (caret === (index + 1) && this._accepted()) {
       return caret;
     }
+
     return this.next()?._adjustedForward(caret, index + 1, char);
   }
 
