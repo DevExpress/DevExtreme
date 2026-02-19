@@ -2148,8 +2148,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  getOccurrences(startDate: Date, endDate: Date, rawAppointment: Appointment[]): Appointment[] {
-    return this._layoutManager.getOccurrences(startDate, endDate, rawAppointment);
+  getOccurrences(startDate: Date, endDate: Date, rawAppointments: Appointment[]): Appointment[] {
+    return this._layoutManager.getOccurrences(startDate, endDate, rawAppointments);
   }
 
   getFirstDayOfWeek(): FirstDayOfWeek {

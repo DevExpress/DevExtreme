@@ -34,9 +34,18 @@ class AppointmentLayoutManager {
     this.filteredItems = filterAppointments(this.schedulerStore, this.preparedItems);
   }
 
-  public getOccurrences(startDate: Date, endDate: Date, items?: Appointment[]): Appointment[] {
-    const preparedItems = prepareAppointments(this.schedulerStore, items);
-    const occurrences = getOccurrences(this.schedulerStore, startDate, endDate, preparedItems);
+  public getOccurrences(
+    startDate: Date,
+    endDate: Date,
+    rawAppointments?: Appointment[],
+  ): Appointment[] {
+    const preparedAppointments = prepareAppointments(this.schedulerStore, rawAppointments);
+    const occurrences = getOccurrences(
+      this.schedulerStore,
+      startDate,
+      endDate,
+      preparedAppointments,
+    );
 
     return occurrences;
   }
