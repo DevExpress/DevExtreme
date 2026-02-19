@@ -212,11 +212,11 @@ export default class MaskStrategy {
     if (!this.editor._isValueEmpty() && this._editorOption('isValid')) {
       this.editor._adjustCaret();
     } else {
-      const caret = this.editor._maskRulesChain.first();
+      const caret = this.editor._maskRulesChain?.first();
 
       // eslint-disable-next-line no-restricted-globals
       this._caretTimeout = setTimeout(() => {
-        this._editorCaret({ start: caret, end: caret });
+        this._editorCaret({ start: caret ?? 0, end: caret ?? 0 });
       }, 0);
     }
   }
@@ -231,13 +231,13 @@ export default class MaskStrategy {
   }
 
   _delHandler(event: DxEvent<KeyboardEvent>): void {
-    const { editor } = this;
-
-    editor._maskKeyHandler(event, () => {
-      if (!editor._hasSelection()) {
+    this.editor._maskKeyHandler(event, () => {
+      if (!this.editor._hasSelection()) {
         // @ts-expect-error bad editor type
-        editor._handleKey(EMPTY_CHAR);
+        this.editor._handleKey(EMPTY_CHAR);
       }
+
+      return undefined;
     });
   }
 
@@ -248,7 +248,10 @@ export default class MaskStrategy {
     // @ts-expect-error dxElementWrapper.val() should return string
     const selectedText = inputVal.substring(caret?.start, caret?.end);
 
-    this.editor._maskKeyHandler(event, () => (getClipboardText(event, selectedText)) as string);
+    this.editor._maskKeyHandler(
+      event,
+      () => getClipboardText(event, selectedText) as Promise<string>,
+    );
   }
 
   _dropHandler(): void {
@@ -256,6 +259,7 @@ export default class MaskStrategy {
 
     // eslint-disable-next-line no-restricted-globals
     this._dragTimer = setTimeout(() => {
+      // @ts-expect-error dxElementWrapper.val() should return string
       const value = this.editor._convertToValue(this._editorInput().val());
 
       this._editorOption('value', value);
@@ -273,7 +277,7 @@ export default class MaskStrategy {
 
     editor._maskKeyHandler(event, () => {
       const pastedText = getClipboardText(event);
-      const restText = editor._maskRulesChain.text().substring(caret?.end);
+      const restText = editor._maskRulesChain?.text().substring(caret?.end);
       const accepted = editor._handleChain({
         text: pastedText,
         start: caret?.start,
@@ -281,23 +285,31 @@ export default class MaskStrategy {
       });
       const newCaret = (caret?.start ?? 0) + accepted;
 
-      editor._handleChain({ text: restText, start: newCaret, length: restText.length });
+      editor._handleChain({ text: restText, start: newCaret, length: restText?.length });
       editor._caret({ start: newCaret, end: newCaret });
+
+      return undefined;
     });
   }
 
   _autoFillHandler(event: InputEvent): void {
-    const { editor } = this;
-    const inputVal = this._editorInput().val();
+    // @ts-expect-error dxElementWrapper.val() should return string
+    const inputVal: string = this._editorInput().val();
 
     // eslint-disable-next-line no-restricted-globals
     this._inputHandlerTimer = setTimeout(() => {
       if (this._isAutoFill()) {
-        editor._maskKeyHandler(event, () => {
-          editor._handleChain({ text: inputVal, start: 0, length: inputVal.length });
+        this.editor._maskKeyHandler(event, () => {
+          this.editor._handleChain({
+            text: inputVal,
+            start: 0,
+            length: inputVal.length,
+          });
+
+          return undefined;
         });
 
-        editor._validateMask();
+        this.editor._validateMask();
       }
     });
   }
