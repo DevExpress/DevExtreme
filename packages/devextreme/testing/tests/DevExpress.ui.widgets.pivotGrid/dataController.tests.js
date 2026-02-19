@@ -6741,9 +6741,21 @@ QUnit.module('Remote paging', {
         });
 
         assert.strictEqual(that.loadArgs.length, 1, 'one load');
-        assert.ok(that.loadArgs[0].rows, 'has rows in load options');
-        assert.strictEqual(that.loadArgs[0].rowSkip, 0, 'rowSkip is 0');
-        assert.strictEqual(that.loadArgs[0].rowTake, 2, 'rowTake is 2');
+
+        const loadOptions = that.loadArgs[0];
+        assert.strictEqual(loadOptions.rows.length, 1, 'rows count');
+        assert.strictEqual(loadOptions.rows[0].dataField, 'row', 'rows dataField');
+        assert.deepEqual(loadOptions.columns, [], 'columns');
+        assert.strictEqual(loadOptions.values.length, 1, 'values count');
+        assert.strictEqual(loadOptions.values[0].area, 'data', 'values area');
+        assert.deepEqual(loadOptions.filters, [], 'filters');
+        assert.deepEqual(loadOptions.columnExpandedPaths, [], 'columnExpandedPaths');
+        assert.deepEqual(loadOptions.rowExpandedPaths, [], 'rowExpandedPaths');
+        assert.strictEqual(loadOptions.pageSize, 40, 'pageSize');
+        assert.strictEqual(loadOptions.rowSkip, 0, 'rowSkip');
+        assert.strictEqual(loadOptions.rowTake, 2, 'rowTake');
+        assert.strictEqual(loadOptions.columnSkip, 0, 'columnSkip');
+        assert.strictEqual(loadOptions.columnTake, 2, 'columnTake');
 
         assert.deepEqual(dataController.getRowsInfo(), [
             [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true }],
