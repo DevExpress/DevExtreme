@@ -2148,10 +2148,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  getOccurrences(startDate: Date, endDate: Date, rawAppointment: Appointment[]): Appointment[] {
-    return this._layoutManager.getOccurrences(startDate, endDate, rawAppointment);
-  }
-
   getFirstDayOfWeek(): FirstDayOfWeek {
     return isDefined(this.getViewOption('firstDayOfWeek'))
       ? this.getViewOption('firstDayOfWeek') as FirstDayOfWeek
