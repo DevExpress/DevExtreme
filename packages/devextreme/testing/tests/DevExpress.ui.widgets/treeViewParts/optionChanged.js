@@ -12,7 +12,7 @@ QUnit.test('selectAllText', function(assert) {
     }).dxTreeView('instance');
 
     treeView.option('selectAllText', 'Select all items');
-    assert.equal(treeView._$selectAllItem.dxCheckBox('instance').option('text'), 'Select all items');
+    assert.strictEqual(treeView._$selectAllItem.dxCheckBox('instance').option('text'), 'Select all items');
 });
 
 QUnit.test('selectAll mode', function(assert) {
@@ -22,10 +22,10 @@ QUnit.test('selectAll mode', function(assert) {
     }).dxTreeView('instance');
 
     treeView.option('showCheckBoxesMode', 'normal');
-    assert.equal(typeof treeView._$selectAllItem, 'undefined');
+    assert.strictEqual(typeof treeView._$selectAllItem, 'undefined');
 
     treeView.option('showCheckBoxesMode', 'selectAll');
-    assert.equal(treeView._$selectAllItem.length, 1);
+    assert.strictEqual(treeView._$selectAllItem.length, 1);
 });
 
 QUnit.test('scrollDirection', function(assert) {
@@ -34,7 +34,7 @@ QUnit.test('scrollDirection', function(assert) {
     }).dxTreeView('instance');
 
     treeView.option('scrollDirection', 'both');
-    assert.equal(treeView.getScrollable().option('direction'), 'both');
+    assert.strictEqual(treeView.getScrollable().option('direction'), 'both');
 });
 
 QUnit.test('showCheckBoxes', function(assert) {
@@ -46,10 +46,10 @@ QUnit.test('showCheckBoxes', function(assert) {
     }).dxTreeView('instance');
 
     treeView.option('showCheckBoxesMode', 'normal');
-    assert.equal(treeView.$element().find('.dx-checkbox').length, 6);
+    assert.strictEqual(treeView.$element().find('.dx-checkbox').length, 6);
 
     treeView.option('showCheckBoxesMode', 'none');
-    assert.equal(treeView.$element().find('.dx-checkbox').length, 0);
+    assert.strictEqual(treeView.$element().find('.dx-checkbox').length, 0);
 });
 
 QUnit.test('parentIdExpr should work correctly when it was dynamically changed', function(assert) {
@@ -62,7 +62,7 @@ QUnit.test('parentIdExpr should work correctly when it was dynamically changed',
     instance.option('parentIdExpr', 'parentId');
     const $node1 = $treeView.find('.dx-treeview-node').eq(0);
 
-    assert.equal($node1.find('.dx-treeview-node').length, 1, 'item 11 became a child of the item 1');
+    assert.strictEqual($node1.find('.dx-treeview-node').length, 1, 'item 11 became a child of the item 1');
 });
 
 QUnit.module('Option changing for single item');

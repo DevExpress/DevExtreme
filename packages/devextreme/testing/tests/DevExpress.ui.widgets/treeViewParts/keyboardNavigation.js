@@ -29,7 +29,7 @@ QUnit.module('keyboard navigation', {
 
         $treeView.focusin();
 
-        assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
+        assert.strictEqual(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.ok($firstNode.hasClass('dx-state-focused'), 'item was focused ');
     });
 
@@ -48,12 +48,12 @@ QUnit.module('keyboard navigation', {
 
         $firstItem.trigger('dxpointerdown');
 
-        assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
+        assert.strictEqual(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.ok($firstNode.hasClass('dx-state-focused'), 'item was focused ');
 
         keyboard.keyDown('down');
 
-        assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
+        assert.strictEqual(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.ok($secondNode.hasClass('dx-state-focused'), 'next item was focused after down was pressed');
     });
 
@@ -101,7 +101,7 @@ QUnit.module('keyboard navigation', {
 
         keyboard.keyDown('home');
 
-        assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
+        assert.strictEqual(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.ok($secondNode.hasClass('dx-state-focused'), 'first item was focused after home was pressed');
     });
 
@@ -136,7 +136,7 @@ QUnit.module('keyboard navigation', {
         $firstItem.trigger('dxpointerdown');
         $treeView.trigger($.Event('keydown', { key: 'Home', shiftKey: true }));
 
-        assert.equal($treeView.dxTreeView('instance').option('selectedIndex'), -1);
+        assert.strictEqual($treeView.dxTreeView('instance').option('selectedIndex'), -1);
     });
 
     QUnit.test('end key pressing move focus to the last element', function(assert) {
@@ -158,7 +158,7 @@ QUnit.module('keyboard navigation', {
 
         keyboard.keyDown('end');
 
-        assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
+        assert.strictEqual(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.ok($secondNode.hasClass('dx-state-focused'), 'last item was focused after end was pressed');
     });
 
@@ -193,7 +193,7 @@ QUnit.module('keyboard navigation', {
         $firstItem.trigger('dxpointerdown');
         $treeView.trigger($.Event('keydown', { key: 'End', shiftKey: true }));
 
-        assert.equal($treeView.dxTreeView('instance').option('selectedIndex'), -1);
+        assert.strictEqual($treeView.dxTreeView('instance').option('selectedIndex'), -1);
     });
 
     QUnit.test('up arrow move focus to the previous element', function(assert) {
@@ -251,7 +251,7 @@ QUnit.module('keyboard navigation', {
         $item.trigger('dxpointerdown');
         $treeView.trigger($.Event('keydown', { key: 'ArrowDown', shiftKey: true }));
 
-        assert.equal($checkBox.dxCheckBox('instance').option('value'), true);
+        assert.strictEqual($checkBox.dxCheckBox('instance').option('value'), true);
     });
 
     QUnit.test('shiftDown key test without checkBoxes', function(assert) {
@@ -265,7 +265,7 @@ QUnit.module('keyboard navigation', {
         $item.trigger('dxpointerdown');
         $treeView.trigger($.Event('keydown', { key: 'ArrowDown', shiftKey: true }));
 
-        assert.equal($treeView.dxTreeView('instance').option('selectedIndex'), -1);
+        assert.strictEqual($treeView.dxTreeView('instance').option('selectedIndex'), -1);
     });
 
     QUnit.test('up arrow move focus on item with same level', function(assert) {
@@ -302,7 +302,7 @@ QUnit.module('keyboard navigation', {
         $item.trigger('dxpointerdown');
         $treeView.trigger($.Event('keydown', { key: 'ArrowUp', shiftKey: true }));
 
-        assert.equal($checkBox.dxCheckBox('instance').option('value'), true);
+        assert.strictEqual($checkBox.dxCheckBox('instance').option('value'), true);
     });
 
     QUnit.test('shiftUp key test without checkBoxes', function(assert) {
@@ -316,7 +316,7 @@ QUnit.module('keyboard navigation', {
         $item.trigger('dxpointerdown');
         $treeView.trigger($.Event('keydown', { key: 'ArrowUp', shiftKey: true }));
 
-        assert.equal($treeView.dxTreeView('instance').option('selectedIndex'), -1);
+        assert.strictEqual($treeView.dxTreeView('instance').option('selectedIndex'), -1);
     });
 
     QUnit.test('left/right arrow collapse/expand node-container', function(assert) {
@@ -338,12 +338,12 @@ QUnit.module('keyboard navigation', {
         $treeView.focusin();
         $parentItem.trigger('dxpointerdown');
         keyboard.keyDown('right');
-        assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
+        assert.strictEqual(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.ok($treeView.find(`.${internals.NODE_CLASS}`).eq(1).is(':visible'), 'child item not hidden');
         assert.ok($iconItem.hasClass('dx-treeview-toggle-item-visibility-opened'), 'icon item indicate opened state');
 
         keyboard.keyDown('left');
-        assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
+        assert.strictEqual(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.ok($treeView.find(`.${internals.NODE_CLASS}`).eq(1).is(':hidden'), 'child item is hidden');
         assert.ok(!$iconItem.hasClass('dx-treeview-toggle-item-visibility-opened'), 'icon item indicate closed state');
     });
@@ -459,7 +459,7 @@ QUnit.module('keyboard navigation', {
         const $childNode = $treeView.find('.dx-treeview-node').eq(5);
 
         assert.ok($childNode.is(':visible'), 'deep leaf is visible');
-        assert.equal(expandFired, 3, 'onItemExpanded was fired desired number of times');
+        assert.strictEqual(expandFired, 3, 'onItemExpanded was fired desired number of times');
 
         const $parentNode = $treeView.find('.dx-treeview-node').eq(0);
         assert.ok($parentNode.hasClass('dx-state-focused'));
@@ -559,8 +559,8 @@ QUnit.module('keyboard navigation', {
         assert.ok(handler.calledOnce);
         assert.ok(args.itemData.expanded);
         assert.ok(args.node.expanded);
-        assert.equal(args.itemData.text, 'Item 1');
-        assert.equal(args.node.text, 'Item 1');
+        assert.strictEqual(args.itemData.text, 'Item 1');
+        assert.strictEqual(args.node.text, 'Item 1');
     });
 
     QUnit.test('left arrow should raise onItemCollapsed event', function(assert) {
@@ -585,8 +585,8 @@ QUnit.module('keyboard navigation', {
         assert.ok(handler.calledOnce);
         assert.ok(!args.itemData.expanded);
         assert.ok(!args.node.expanded);
-        assert.equal(args.itemData.text, 'Item 1');
-        assert.equal(args.node.text, 'Item 1');
+        assert.strictEqual(args.itemData.text, 'Item 1');
+        assert.strictEqual(args.node.text, 'Item 1');
     });
 
     QUnit.test('focus remains on parent node if it is root after left arrow pressing', function(assert) {
@@ -624,7 +624,7 @@ QUnit.module('keyboard navigation', {
         $item.trigger('dxpointerdown');
         keyboard.keyDown('enter');
 
-        assert.equal(clickFired, 1);
+        assert.strictEqual(clickFired, 1);
     });
 
     QUnit.test('item should be expanded by enter when expandEvent is click', function(assert) {
@@ -660,7 +660,7 @@ QUnit.module('keyboard navigation', {
         $item.trigger('dxpointerdown');
 
         keyboard.keyDown('enter');
-        assert.equal($checkBox.dxCheckBox('instance').option('value'), true);
+        assert.strictEqual($checkBox.dxCheckBox('instance').option('value'), true);
     });
 
     QUnit.test('enter key pressing fire onItemSelectionChanged if checkboxes are visible', function(assert) {
@@ -681,7 +681,7 @@ QUnit.module('keyboard navigation', {
         $item.trigger('dxpointerdown');
 
         keyboard.keyDown('enter');
-        assert.equal(selectFired, 1);
+        assert.strictEqual(selectFired, 1);
     });
 
     QUnit.test('space key pressing fire onItemClick', function(assert) {
@@ -702,7 +702,7 @@ QUnit.module('keyboard navigation', {
         $item.trigger('dxpointerdown');
         keyboard.keyDown('space');
 
-        assert.equal(clickFired, 1);
+        assert.strictEqual(clickFired, 1);
     });
 
     QUnit.test('space key pressing select/unselect nodes if checkboxes are visible', function(assert) {
@@ -720,7 +720,7 @@ QUnit.module('keyboard navigation', {
         $item.trigger('dxpointerdown');
 
         keyboard.keyDown('space');
-        assert.equal($checkBox.dxCheckBox('instance').option('value'), true);
+        assert.strictEqual($checkBox.dxCheckBox('instance').option('value'), true);
     });
 
     QUnit.test('space key pressing fire onItemSelectionChanged if checkboxes are visible', function(assert) {
@@ -741,7 +741,7 @@ QUnit.module('keyboard navigation', {
         $item.trigger('dxpointerdown');
 
         keyboard.keyDown('space');
-        assert.equal(selectFired, 1);
+        assert.strictEqual(selectFired, 1);
     });
 
     QUnit.test('T179601', function(assert) {
@@ -765,7 +765,7 @@ QUnit.module('keyboard navigation', {
 
         let actualSelectedState = true;
         keyboard.keyDown('space');
-        assert.equal($checkBox.dxCheckBox('instance').option('value'), true);
+        assert.strictEqual($checkBox.dxCheckBox('instance').option('value'), true);
 
         actualSelectedState = false;
         keyboard.keyDown('space');

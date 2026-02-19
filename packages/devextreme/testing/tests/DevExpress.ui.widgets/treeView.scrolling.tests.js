@@ -193,13 +193,13 @@ QUnit.module('useNativeScrolling', () => {
 
         const $treeView = wrapper.getElement();
 
-        assert.equal($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 1, 'native scrollable');
-        assert.equal($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 0, 'simulated scrollable');
+        assert.strictEqual($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 1, 'native scrollable');
+        assert.strictEqual($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 0, 'simulated scrollable');
 
         wrapper.getInstance().option('useNativeScrolling', false);
 
-        assert.equal($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 0, 'native scrollable');
-        assert.equal($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 1, 'simulated scrollable');
+        assert.strictEqual($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 0, 'native scrollable');
+        assert.strictEqual($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 1, 'simulated scrollable');
     });
 
     QUnit.test('switching useNative to true turns off simulated scrolling', function(assert) {
@@ -209,13 +209,13 @@ QUnit.module('useNativeScrolling', () => {
 
         const $treeView = wrapper.getElement();
 
-        assert.equal($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 0, 'native scrollable');
-        assert.equal($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 1, 'simulated scrollable');
+        assert.strictEqual($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 0, 'native scrollable');
+        assert.strictEqual($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 1, 'simulated scrollable');
 
         wrapper.getInstance().option('useNativeScrolling', true);
 
-        assert.equal($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 1, 'native scrollable');
-        assert.equal($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 0, 'simulated scrollable');
+        assert.strictEqual($treeView.find(`.${SCROLLABLE_NATIVE_CLASS}`).length, 1, 'native scrollable');
+        assert.strictEqual($treeView.find(`.${SCROLLABLE_SIMULATED_CLASS}`).length, 0, 'simulated scrollable');
     });
 });
 
