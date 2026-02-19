@@ -70,7 +70,7 @@ export class TooltipStrategyBase {
     return !disabled && isDeletingAllowed;
   }
 
-  _getContentTemplate(dataList) {
+  protected getContentTemplate(dataList) {
     return (container) => {
       const listElement = $('<div>');
       $(container).append(listElement);
