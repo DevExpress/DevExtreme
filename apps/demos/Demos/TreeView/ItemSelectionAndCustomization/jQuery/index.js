@@ -63,6 +63,15 @@ $(() => {
     },
   }).dxSelectBox('instance');
 
+  $('#disabledNodeSelectionMode').dxSelectBox({
+    items: ['never', 'recursiveAndAll'],
+    inputAttr: { 'aria-label': 'Disabled Node Selection Mode' },
+    value: 'never',
+    onValueChanged(e) {
+      treeView.option('disabledNodeSelectionMode', e.value);
+    },
+  });
+
   const recursiveCheckBox = $('#selectNodesRecursive').dxCheckBox({
     text: 'Select Nodes Recursive',
     value: true,
@@ -76,18 +85,6 @@ $(() => {
     value: false,
     onValueChanged(e) {
       treeView.option('selectByClick', e.value);
-    },
-  });
-
-  $('#disabledNodeSelectionMode').dxCheckBox({
-    text: 'Allow Disabled Nodes Selection',
-    value: false,
-    onValueChanged(e) {
-      if (e.value) {
-        treeView.option('disabledNodeSelectionMode', 'recursiveAndAll');
-      } else {
-        treeView.option('disabledNodeSelectionMode', 'never');
-      }
     },
   });
 });
