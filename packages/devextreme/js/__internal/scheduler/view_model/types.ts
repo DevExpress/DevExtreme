@@ -46,7 +46,6 @@ export interface FilterOptions {
   resourceManager: ResourceManager;
   timeZone: string;
   dataAccessor: AppointmentDataAccessor;
-  viewOffset: number;
   firstDayOfWeek?: number;
   allDayIntervals: DateInterval[];
   regularIntervals: DateInterval[];
