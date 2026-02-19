@@ -12,7 +12,7 @@ const CHECKBOX_CLASS = 'dx-checkbox';
 
 fixture('TreeView.ItemSelectionAndCustomization')
   .before(async (ctx) => {
-    ctx.initialWindowSize = [900, 1200];
+    ctx.initialWindowSize = [900, 800];
   });
 
 runManualTest('TreeView', 'ItemSelectionAndCustomization', (test) => {
