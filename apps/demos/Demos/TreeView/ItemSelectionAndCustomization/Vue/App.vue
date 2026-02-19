@@ -68,7 +68,6 @@
               :items="disabledNodeSelectionModes"
               v-model:value="disabledNodeSelectionModeValue"
               :input-attr="{ 'aria-label': 'Disabled Node Selection Mode' }"
-              @value-changed="disabledNodeSelectionModeValueChanged"
             />
           </div>
         </div>
