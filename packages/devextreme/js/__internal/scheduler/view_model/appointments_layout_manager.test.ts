@@ -190,7 +190,7 @@ describe('getOccurrences', () => {
         [appointment],
       );
 
-      expect(new Date('2000-01-01T00:00:00Z').getDay()).toBe(6); // weekend
+      expect(new Date('2000-01-01T06:00:00Z').getDay()).toBe(6); // weekend
       expect(occurrences).toEqual([{ ...appointment }]);
     });
 
@@ -427,5 +427,42 @@ describe('getOccurrences', () => {
 
       expect(occurrences).toEqual([]);
     });
+  });
+
+  it('should return occurrences for common and recurring appointments together', async () => {
+    const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
+
+    const appointment = {
+      text: 'test 1',
+      startDate: new Date('2000-01-01T06:00:00Z'),
+      endDate: new Date('2000-01-01T07:00:00Z'),
+    };
+    const recurringAppointment = {
+      text: 'test 2',
+      startDate: new Date('2000-01-01T06:00:00Z'),
+      endDate: new Date('2000-01-01T07:00:00Z'),
+      recurrenceRule: 'FREQ=DAILY;INTERVAL=3',
+    };
+    const occurrences = layoutManager.getOccurrences(
+      new Date('2000-01-01T00:00:00Z'),
+      new Date('2000-01-06T00:00:00Z'),
+      [appointment, recurringAppointment],
+    );
+
+    expect(occurrences).toEqual([{
+      text: 'test 1',
+      startDate: new Date('2000-01-01T06:00:00Z'),
+      endDate: new Date('2000-01-01T07:00:00Z'),
+    }, {
+      text: 'test 2',
+      startDate: new Date('2000-01-01T06:00:00Z'),
+      endDate: new Date('2000-01-01T07:00:00Z'),
+      recurrenceRule: 'FREQ=DAILY;INTERVAL=3',
+    }, {
+      text: 'test 2',
+      startDate: new Date('2000-01-04T06:00:00Z'),
+      endDate: new Date('2000-01-04T07:00:00Z'),
+      recurrenceRule: 'FREQ=DAILY;INTERVAL=3',
+    }]);
   });
 });
