@@ -24,13 +24,20 @@ import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
 import {
-  isDefined, isFunction, isPlainObject, isPrimitive, isString,
+  isDefined,
+  isFunction,
+  isPlainObject,
+  isPrimitive,
+  isString,
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent, InteractionEvent, NativeEventInfo } from '@js/events';
 import type { InitializedEvent, Properties as CheckBoxProperties, ValueChangedEvent } from '@js/ui/check_box';
 import type {
-  Item, Properties, TreeViewCheckBoxMode, TreeViewExpandEvent,
+  Item,
+  Properties,
+  TreeViewCheckBoxMode,
+  TreeViewExpandEvent,
 } from '@js/ui/tree_view';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -40,7 +47,10 @@ import type { ActionArgs, CollectionItemInfo, PostprocessRenderItemInfo } from '
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 import type { DataAdapterOptions } from '@ts/ui/hierarchical_collection/data_adapter';
 import type {
-  InternalNode, ItemData, ItemKey, PublicNode,
+  InternalNode,
+  ItemData,
+  ItemKey,
+  PublicNode,
 } from '@ts/ui/hierarchical_collection/data_converter';
 import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/hierarchical_collection_widget';
 import type { LoadIndicatorProperties } from '@ts/ui/load_indicator';
@@ -88,6 +98,7 @@ export const EXPANDER_ICON_STUB_CLASS = `${WIDGET_CLASS}-expander-icon-stub`;
 type TreeViewItem = Item & {
   url?: string;
 };
+
 type TreeViewNode = InternalNode & TreeViewItem;
 
 export interface TreeViewBaseProperties extends Properties<TreeViewNode>, Omit<
@@ -281,6 +292,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       createChildren: null,
       onSelectAllValueChanged: null,
       _supportItemUrl: false,
+      disabledNodeSelectionMode: 'recursiveAndAll',
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -436,6 +448,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
         break;
       case 'expandIcon':
       case 'collapseIcon':
+        this.repaint();
+        break;
+      case 'disabledNodeSelectionMode':
+        this._dataAdapter.setOption('disabledNodeSelectionMode', args.value ?? 'recursiveAndAll');
         this.repaint();
         break;
       default:
@@ -688,6 +704,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       expandNodesRecursive = true,
       selectionRequired = false,
       dataStructure = 'tree',
+      disabledNodeSelectionMode,
     } = this.option();
 
     return {
@@ -700,6 +717,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       dataType: dataStructure,
       sort: this._dataSource?.sort(),
       langParams: this._dataSource?.loadOptions?.()?.langParams,
+      disabledNodeSelectionMode: disabledNodeSelectionMode ?? 'recursiveAndAll',
     };
   }
 
@@ -1667,6 +1685,11 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   ): boolean {
     const node = this._getNode(itemElement);
     if (!node || node.visible === false) {
+      return false;
+    }
+
+    const { disabledNodeSelectionMode } = this.option();
+    if (disabledNodeSelectionMode === 'never' && node.internalFields.disabled) {
       return false;
     }
 
