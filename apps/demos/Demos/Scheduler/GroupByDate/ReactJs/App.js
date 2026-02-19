@@ -21,7 +21,7 @@ const App = () => {
         defaultCurrentDate={currentDate}
         height={730}
         startDayHour={9}
-        endDayHour={16}
+        endDayHour={19}
         crossScrollingEnabled={true}
       >
         <Resource
