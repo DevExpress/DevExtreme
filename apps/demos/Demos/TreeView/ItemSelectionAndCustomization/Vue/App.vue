@@ -38,56 +38,60 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="options-container">
-        <div class="option">
-          <span>Show Check Boxes Mode:</span>
-          <div class="editor-container">
-            <DxSelectBox
-              :items="showCheckBoxesModes"
-              :input-attr="{ 'aria-label': 'Show Checkboxes Mode' }"
-              v-model:value="showCheckBoxesModeValue"
-              @value-changed="showCheckBoxesModeValueChanged"
-            />
+        <div class="options-section">
+          <div class="option">
+            <span>Show Check Boxes Mode:</span>
+            <div class="editor-container">
+              <DxSelectBox
+                :items="showCheckBoxesModes"
+                :input-attr="{ 'aria-label': 'Show Checkboxes Mode' }"
+                v-model:value="showCheckBoxesModeValue"
+                @value-changed="showCheckBoxesModeValueChanged"
+              />
+            </div>
+          </div>
+          <div class="option">
+            <span>Selection Mode:</span>
+            <div class="editor-container">
+              <DxSelectBox
+                :items="selectionModes"
+                v-model:value="selectionModeValue"
+                :input-attr="{ 'aria-label': 'Selection Mode' }"
+                :disabled="isSelectionModeDisabled"
+                @value-changed="selectionModeValueChanged"
+              />
+            </div>
+          </div>
+          <div class="option">
+            <span>Disabled Node Selection Mode:</span>
+            <div class="editor-container">
+              <DxSelectBox
+                :items="disabledNodeSelectionModes"
+                v-model:value="disabledNodeSelectionModeValue"
+                :input-attr="{ 'aria-label': 'Disabled Node Selection Mode' }"
+              />
+            </div>
           </div>
         </div>
-        <div class="option">
-          <span>Selection Mode:</span>
-          <div class="editor-container">
-            <DxSelectBox
-              :items="selectionModes"
-              v-model:value="selectionModeValue"
-              :input-attr="{ 'aria-label': 'Selection Mode' }"
-              :disabled="isSelectionModeDisabled"
-              @value-changed="selectionModeValueChanged"
-            />
+        <div class="options-section">
+          <div class="option">
+            <div class="caption-placeholder">&nbsp;</div>
+            <div class="editor-container">
+              <DxCheckBox
+                text="Select Nodes Recursive"
+                :disabled="isRecursiveDisabled"
+                v-model:value="selectNodesRecursiveValue"
+              />
+            </div>
           </div>
-        </div>
-        <div class="option">
-          <span>Disabled Node Selection Mode:</span>
-          <div class="editor-container">
-            <DxSelectBox
-              :items="disabledNodeSelectionModes"
-              v-model:value="disabledNodeSelectionModeValue"
-              :input-attr="{ 'aria-label': 'Disabled Node Selection Mode' }"
-            />
-          </div>
-        </div>
-        <div class="option">
-          <div class="caption-placeholder">&nbsp;</div>
-          <div class="editor-container">
-            <DxCheckBox
-              text="Select Nodes Recursive"
-              :disabled="isRecursiveDisabled"
-              v-model:value="selectNodesRecursiveValue"
-            />
-          </div>
-        </div>
-        <div class="option">
-          <div class="caption-placeholder">&nbsp;</div>
-          <div class="editor-container">
-            <DxCheckBox
-              text="Select By Click"
-              v-model:value="selectByClickValue"
-            />
+          <div class="option">
+            <div class="caption-placeholder">&nbsp;</div>
+            <div class="editor-container">
+              <DxCheckBox
+                text="Select By Click"
+                v-model:value="selectByClickValue"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -183,7 +187,7 @@ function selectionModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
 }
 
 .option {
-  width: 20%;
+  width: 30%;
   margin-top: 10px;
   margin-right: 9px;
   box-sizing: border-box;
@@ -194,8 +198,11 @@ function selectionModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
 
 .options-container {
   display: flex;
-  justify-content: space-between;
-  align-items: stretch;
+  flex-direction: column;
+}
+
+.options-section {
+  display: flex;
 }
 
 .editor-container {

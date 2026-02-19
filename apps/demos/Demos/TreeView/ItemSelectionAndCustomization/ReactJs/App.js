@@ -104,59 +104,63 @@ const App = () => {
       <div className="options">
         <div className="caption">Options</div>
         <div className="options-container">
-          <div className="option">
-            <span>Show Check Boxes Mode:</span>
-            <div className="editor-container">
-              <SelectBox
-                items={showCheckBoxesModes}
-                value={showCheckBoxesMode}
-                inputAttr={showCheckboxesModeLabel}
-                onValueChanged={showCheckBoxesModeValueChanged}
-              />
+          <div className="options-section">
+            <div className="option">
+              <span>Show Check Boxes Mode:</span>
+              <div className="editor-container">
+                <SelectBox
+                  items={showCheckBoxesModes}
+                  value={showCheckBoxesMode}
+                  inputAttr={showCheckboxesModeLabel}
+                  onValueChanged={showCheckBoxesModeValueChanged}
+                />
+              </div>
+            </div>
+            <div className="option">
+              <span>Selection Mode:</span>
+              <div className="editor-container">
+                <SelectBox
+                  items={selectionModes}
+                  value={selectionMode}
+                  inputAttr={selectionModeLabel}
+                  disabled={isSelectionModeDisabled}
+                  onValueChanged={selectionModeValueChanged}
+                />
+              </div>
+            </div>
+            <div className="option">
+              <span>Disabled Node Selection Mode:</span>
+              <div className="editor-container">
+                <SelectBox
+                  items={disabledNodeSelectionModes}
+                  value={disabledNodeSelectionMode}
+                  inputAttr={disabledNodeSelectionModeLabel}
+                  onValueChanged={disabledNodeSelectionModeValueChanged}
+                />
+              </div>
             </div>
           </div>
-          <div className="option">
-            <span>Selection Mode:</span>
-            <div className="editor-container">
-              <SelectBox
-                items={selectionModes}
-                value={selectionMode}
-                inputAttr={selectionModeLabel}
-                disabled={isSelectionModeDisabled}
-                onValueChanged={selectionModeValueChanged}
-              />
+          <div className="options-section">
+            <div className="option">
+              <div className="caption-placeholder">&nbsp;</div>
+              <div className="editor-container">
+                <CheckBox
+                  text="Select Nodes Recursive"
+                  value={selectNodesRecursive}
+                  disabled={isRecursiveDisabled}
+                  onValueChanged={selectNodesRecursiveValueChanged}
+                />
+              </div>
             </div>
-          </div>
-          <div className="option">
-            <span>Disabled Node Selection Mode:</span>
-            <div className="editor-container">
-              <SelectBox
-                items={disabledNodeSelectionModes}
-                value={disabledNodeSelectionMode}
-                inputAttr={disabledNodeSelectionModeLabel}
-                onValueChanged={disabledNodeSelectionModeValueChanged}
-              />
-            </div>
-          </div>
-          <div className="option">
-            <div className="caption-placeholder">&nbsp;</div>
-            <div className="editor-container">
-              <CheckBox
-                text="Select Nodes Recursive"
-                value={selectNodesRecursive}
-                disabled={isRecursiveDisabled}
-                onValueChanged={selectNodesRecursiveValueChanged}
-              />
-            </div>
-          </div>
-          <div className="option">
-            <div className="caption-placeholder">&nbsp;</div>
-            <div className="editor-container">
-              <CheckBox
-                text="Select By Click"
-                value={selectByClick}
-                onValueChanged={selectByClickValueChanged}
-              />
+            <div className="option">
+              <div className="caption-placeholder">&nbsp;</div>
+              <div className="editor-container">
+                <CheckBox
+                  text="Select By Click"
+                  value={selectByClick}
+                  onValueChanged={selectByClickValueChanged}
+                />
+              </div>
             </div>
           </div>
         </div>
