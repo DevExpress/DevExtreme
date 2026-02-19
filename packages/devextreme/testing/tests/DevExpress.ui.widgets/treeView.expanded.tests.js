@@ -8,13 +8,15 @@ import 'ui/tree_view';
 
 import 'fluent_blue_light.css!';
 
-const TREEVIEW_ITEM_CLASS = 'dx-treeview-item';
-const TREEVIEW_NODE_CLASS = 'dx-treeview-node';
-const TREEVIEW_NODE_CONTAINER_CLASS = `${TREEVIEW_NODE_CLASS}-container`;
-const TREEVIEW_NODE_CONTAINER_OPENED_CLASS = `${TREEVIEW_NODE_CLASS}-container-opened`;
-const TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
-const TREEVIEW_CUSTOM_EXPAND_ICON_CLASS = 'dx-treeview-custom-expand-icon';
-const TREEVIEW_CUSTOM_COLLAPSE_ICON_CLASS = 'dx-treeview-custom-collapse-icon';
+import {
+    NODE_CLASS as TREEVIEW_NODE_CLASS,
+    ITEM_CLASS as TREEVIEW_ITEM_CLASS,
+    NODE_CONTAINER_CLASS as TREEVIEW_NODE_CONTAINER_CLASS,
+    OPENED_NODE_CONTAINER_CLASS as TREEVIEW_NODE_CONTAINER_OPENED_CLASS,
+    TOGGLE_ITEM_VISIBILITY_CLASS as TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS,
+    CUSTOM_EXPAND_ICON_CLASS as TREEVIEW_CUSTOM_EXPAND_ICON_CLASS,
+    CUSTOM_COLLAPSE_ICON_CLASS as TREEVIEW_CUSTOM_COLLAPSE_ICON_CLASS
+} from '__internal/ui/tree_view/tree_view.base';
 
 const { module, test, testStart } = QUnit;
 
