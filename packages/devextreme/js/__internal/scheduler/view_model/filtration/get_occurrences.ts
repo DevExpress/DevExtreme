@@ -1,7 +1,6 @@
 import type { Appointment } from '@js/ui/scheduler';
 
 import type Scheduler from '../../m_scheduler';
-import timeZoneUtils from '../../m_utils_time_zone';
 import type {
   CompareOptions, FilterOptions, MinimalAppointmentEntity,
 } from '../types';
@@ -19,17 +18,17 @@ export const getOccurrences = (
   const compareOptions = {
     startDayHour: 0,
     endDayHour: 24,
-    min: timeZoneUtils.createUTCDateWithLocalOffset(startDate).getTime(),
-    max: timeZoneUtils.createUTCDateWithLocalOffset(endDate).getTime(),
+    min: startDate.getTime(),
+    max: endDate.getTime(),
     skippedDays: [],
   } as CompareOptions;
 
   const filterOptions = {
     ...getFilterOptions(schedulerStore, compareOptions),
-
     // NOTE: to return allDay appointments if they intersect with [startDate; endDate]
     allDayPanelMode: 'allDay',
     supportAllDayPanel: true,
+    isDateTimeView: true,
   } as FilterOptions;
 
   const step1 = addAllDayPanelOccupation(appointments, filterOptions);
