@@ -1,4 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
+import { getCompareOptions } from '@ts/scheduler/view_model/common/get_compare_options';
 
 import { mockAppointmentDataAccessor } from '../../../../__mock__/appointment_data_accessor.mock';
 import type Scheduler from '../../../../m_scheduler';
@@ -45,7 +46,10 @@ describe('getFilterOptions', () => {
         offsetMinutes: 30,
       });
 
-      expect(getFilterOptions(schedulerStore)).toEqual({
+      const compareOptions = getCompareOptions(schedulerStore);
+      const filterOptions = getFilterOptions(schedulerStore, compareOptions);
+
+      expect(filterOptions).toEqual({
         allDayPanelMode: 'allDay',
         showAllDayPanel: true,
         supportAllDayPanel: false,
@@ -53,7 +57,6 @@ describe('getFilterOptions', () => {
         resourceManager: schedulerStore.resourceManager,
         dataAccessor: schedulerStore._dataAccessors,
         timeZone: 'Etc/UTC',
-        viewOffset: 30 * 60_000,
         firstDayOfWeek: 0,
         allDayIntervals: [{
           min: Date.UTC(2000, 0, 10, 0, 30),
