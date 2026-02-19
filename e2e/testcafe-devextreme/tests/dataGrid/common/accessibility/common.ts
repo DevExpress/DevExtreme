@@ -519,7 +519,9 @@ test('Column chooser with the \'select\' mode', async (t) => {
   // assert
   await t
     .expect(columnChooser.isOpened)
-    .ok();
+    .ok()
+    .expect(columnChooser.getColumnsCount())
+    .gt(0);
 
   await screenshotCheck(t, 'column-chooser-select-mode');
 }).before(async () => createWidget('dxDataGrid', {
