@@ -3,7 +3,6 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import {
   DxAccordionModule, DxCheckBoxModule, DxSliderModule, DxTagBoxModule,
 } from 'devextreme-angular';
-
 import { Company, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
