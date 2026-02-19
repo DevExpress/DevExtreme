@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
 import { extend } from '@js/core/utils/extend';
@@ -79,7 +80,6 @@ class BaseMaskRule {
     return this.next()?.first(newIndex);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isAccepted(caret?: number): boolean {
     return false;
   }
@@ -95,32 +95,30 @@ class BaseMaskRule {
   }
 
   _adjustedForward(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     caret: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     index: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     char?: string,
   // @ts-expect-error return type
   ): number {}
 
   _adjustedBackward(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     caret: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     index: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     char?: string,
   // @ts-expect-error return type
   ): number {}
 
   // @ts-expect-error return type
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-  isValid(args: any): boolean {}
+
+  isValid(args: HandlingArgs): boolean {}
 
   reset(): void {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   clear(args?: HandlingArgs): void {}
 
   // @ts-expect-error return type
@@ -133,7 +131,7 @@ class BaseMaskRule {
   rawValue(): string {}
 
   // @ts-expect-error return type
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   handle(args: HandlingArgs): number {}
 }
 
