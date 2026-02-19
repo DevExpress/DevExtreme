@@ -23,7 +23,7 @@ export interface HandlingArgs {
   value?: string;
   text?: string;
   start?: number;
-  str?: string | undefined;
+  str?: string;
   length?: number;
   index?: number;
   fullText?: string;
@@ -74,10 +74,10 @@ class BaseMaskRule {
     return finalConfig;
   }
 
-  first(index: number): number {
-    const newIndex = (index ?? 0) + 1;
+  first(index = 0): number {
+    const newIndex = index + 1;
 
-    return this.next()?.first(newIndex);
+    return this.next().first(newIndex);
   }
 
   isAccepted(caret?: number): boolean {
@@ -96,19 +96,14 @@ class BaseMaskRule {
 
   _adjustedForward(
     caret: number,
-
     index: number,
-
     char?: string,
   // @ts-expect-error return type
   ): number {}
 
   _adjustedBackward(
-
     caret: number,
-
     index: number,
-
     char?: string,
   // @ts-expect-error return type
   ): number {}
@@ -134,7 +129,7 @@ class BaseMaskRule {
 }
 
 export class EmptyMaskRule extends BaseMaskRule {
-  // @ts-expect-error params
+  // @ts-expect-error Liskov
   // eslint-disable-next-line @stylistic/max-len
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   next() {}
@@ -176,19 +171,19 @@ export class MaskRule extends BaseMaskRule {
   text(): string {
     const isValueEqualEmptyChar = this._value === EMPTY_CHAR;
     const value = isValueEqualEmptyChar ? this.maskChar : this._value;
-    const finalValue = `${value}${(this.next()?.text() ?? '')}`;
+    const finalValue = `${value}${(this.next().text() ?? '')}`;
 
     return finalValue;
   }
 
   value(): string {
-    const finalValue = `${this._value}${(this.next()?.value() ?? '')}`;
+    const finalValue = `${this._value}${(this.next().value() ?? '')}`;
 
     return finalValue;
   }
 
   rawValue(): string {
-    const finalValue = `${this._value}${(this.next()?.rawValue() ?? '')}`;
+    const finalValue = `${this._value}${(this.next().rawValue() ?? '')}`;
 
     return finalValue;
   }
@@ -200,7 +195,7 @@ export class MaskRule extends BaseMaskRule {
     }
 
     if (args.start) {
-      return this.next()?.handle(this._prepareHandlingArgs(args, { start: args.start - 1 }));
+      return this.next().handle(this._prepareHandlingArgs(args, { start: args.start - 1 }));
     }
 
     const char = str[0];
@@ -213,7 +208,7 @@ export class MaskRule extends BaseMaskRule {
     const rule = isAccepted ? this.next() : this;
     const handlingArgs = this._prepareHandlingArgs(args, { str: rest, length: args.length - 1 });
 
-    const handledResult = rule?.handle(handlingArgs);
+    const handledResult = rule.handle(handlingArgs);
     const result = isAccepted ? handledResult + 1 : handledResult;
 
     return result;
@@ -221,12 +216,12 @@ export class MaskRule extends BaseMaskRule {
 
   clear(args: HandlingArgs): void {
     this._tryAcceptChar(EMPTY_CHAR, args);
-    this.next()?.clear(this._prepareHandlingArgs(args));
+    this.next().clear(this._prepareHandlingArgs(args));
   }
 
   reset(): void {
     this._accepted(false);
-    this.next()?.reset();
+    this.next().reset();
   }
 
   _tryAcceptChar(char: string, args: HandlingArgs): void {
@@ -258,9 +253,9 @@ export class MaskRule extends BaseMaskRule {
     this._isAccepted = !!value;
   }
 
-  first(index: number): number {
+  first(index = 0): number {
     return this._value === EMPTY_CHAR
-      ? index || 0
+      ? index
       : super.first(index);
   }
 
@@ -293,7 +288,7 @@ export class MaskRule extends BaseMaskRule {
   isAccepted(caret: number): boolean {
     return Boolean(caret === 0
       ? this._accepted()
-      : this.next()?.isAccepted(caret - 1));
+      : this.next().isAccepted(caret - 1));
   }
 
   _adjustedForward(
@@ -305,7 +300,7 @@ export class MaskRule extends BaseMaskRule {
       return index;
     }
 
-    return this.next()?._adjustedForward(caret, index + 1, char) || index + 1;
+    return this.next()._adjustedForward(caret, index + 1, char) || index + 1;
   }
 
   _adjustedBackward(caret: number, index: number): number {
@@ -313,18 +308,18 @@ export class MaskRule extends BaseMaskRule {
       return caret;
     }
 
-    return this.next()?._adjustedBackward(caret, index + 1) || index + 1;
+    return this.next()._adjustedBackward(caret, index + 1) || index + 1;
   }
 
   isValid(args: HandlingArgs): boolean {
     return this._isValid(this._value, args)
-      && this.next()?.isValid(this._prepareHandlingArgs(args));
+      && this.next().isValid(this._prepareHandlingArgs(args));
   }
 }
 
 export class StubMaskRule extends MaskRule {
   value(): string {
-    return this.next()?.value();
+    return this.next().value();
   }
 
   handle(args: HandlingArgs): number {
@@ -338,7 +333,7 @@ export class StubMaskRule extends MaskRule {
     if (args.start || hasValueProperty) {
       const handlingArgs = this._prepareHandlingArgs(args, { start: args.start && args.start - 1 });
 
-      return this.next()?.handle(handlingArgs);
+      return this.next().handle(handlingArgs);
     }
 
     const char = str[0];
@@ -350,12 +345,12 @@ export class StubMaskRule extends MaskRule {
       ? this._prepareHandlingArgs(args, { str: rest, length: args.length - 1 })
       : args;
 
-    return (this.next()?.handle(nextArgs) ?? 0) + 1;
+    return (this.next().handle(nextArgs) ?? 0) + 1;
   }
 
   clear(args: HandlingArgs): void {
     this._accepted(false);
-    this.next()?.clear(this._prepareHandlingArgs(args));
+    this.next().clear(this._prepareHandlingArgs(args));
   }
 
   _tryAcceptChar(char: string): void {
@@ -366,8 +361,8 @@ export class StubMaskRule extends MaskRule {
     return char === this.maskChar;
   }
 
-  first(index: number): number {
-    const newIndex = (index ?? 0) + 1;
+  first(index = 0): number {
+    const newIndex = index + 1;
 
     return this.next().first(newIndex);
   }
@@ -385,7 +380,7 @@ export class StubMaskRule extends MaskRule {
       return caret;
     }
 
-    return this.next()?._adjustedForward(caret, index + 1, char);
+    return this.next()._adjustedForward(caret, index + 1, char);
   }
 
   _adjustedBackward(caret: number, index: number): number {
@@ -393,10 +388,10 @@ export class StubMaskRule extends MaskRule {
       return 0;
     }
 
-    return this.next()?._adjustedBackward(caret, index + 1);
+    return this.next()._adjustedBackward(caret, index + 1);
   }
 
   isValid(args: HandlingArgs): boolean {
-    return Boolean(this.next()?.isValid(this._prepareHandlingArgs(args)));
+    return Boolean(this.next().isValid(this._prepareHandlingArgs(args)));
   }
 }
