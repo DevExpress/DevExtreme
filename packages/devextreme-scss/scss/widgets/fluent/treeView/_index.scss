@@ -81,18 +81,18 @@
     .dx-checkbox.dx-state-disabled {
       .dx-checkbox-icon {
         background-color: $treeview-checkbox-disabled-background-focused;
-        border-color: $treeview-checkbox-disabled-border-color-focused;
+        border-color: $treeview-checkbox-disabled-control-color-focused;
       }
 
       &.dx-checkbox-checked {
         .dx-checkbox-icon {
-          color: $treeview-checkbox-disabled-border-color-focused;
+          color: $treeview-checkbox-disabled-control-color-focused;
         }
       }
 
       &.dx-checkbox-indeterminate {
         .dx-checkbox-icon::before {
-          background-color: $treeview-checkbox-disabled-border-color-focused;
+          background-color: $treeview-checkbox-disabled-control-color-focused;
         }
       }
     }

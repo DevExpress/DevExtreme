@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import { DATA } from './testData.js';
 import { initTree } from './testUtils.js';
+import { ITEM_CONTENT_CLASS, DISABLED_STATE_CLASS  } from '__internal/ui/tree_view/tree_view.base';
 
 QUnit.module('optionChanged');
 
@@ -72,12 +73,12 @@ QUnit.test('node should have disabled class when it was disabled at runtime', fu
         dataStructure: 'plain'
     });
     const instance = $treeView.dxTreeView('instance');
-    const $itemContent = $treeView.find('.dx-treeview-item-content').eq(0);
+    const $itemContent = $treeView.find(`.${ITEM_CONTENT_CLASS}`).eq(0);
 
     instance.option('items[0].disabled', true);
-    assert.ok($itemContent.hasClass('dx-state-disabled'), 'item should be disabled');
+    assert.ok($itemContent.hasClass(DISABLED_STATE_CLASS), 'item should be disabled');
     instance.option('items[0].disabled', false);
-    assert.notOk($itemContent.hasClass('dx-state-disabled'), 'item should not be disabled');
+    assert.notOk($itemContent.hasClass(DISABLED_STATE_CLASS), 'item should not be disabled');
 });
 
 QUnit.test('checkbox should have disabled class when item was disabled at runtime', function(assert) {
@@ -90,10 +91,10 @@ QUnit.test('checkbox should have disabled class when item was disabled at runtim
     const $checkbox = $treeView.find('.dx-checkbox').eq(0);
 
     instance.option('items[0].disabled', true);
-    assert.ok($checkbox.hasClass('dx-state-disabled'), 'checkbox should be disabled');
+    assert.ok($checkbox.hasClass(DISABLED_STATE_CLASS), 'checkbox should be disabled');
 
     instance.option('items[0].disabled', false);
-    assert.notOk($checkbox.hasClass('dx-state-disabled'), 'checkbox should not be disabled');
+    assert.notOk($checkbox.hasClass(DISABLED_STATE_CLASS), 'checkbox should not be disabled');
 });
 
 QUnit.test('node should have disabled class when it was disabled at runtime with expressions', function(assert) {
@@ -103,13 +104,13 @@ QUnit.test('node should have disabled class when it was disabled at runtime with
         dataStructure: 'plain'
     });
     const instance = $treeView.dxTreeView('instance');
-    const $item = $treeView.find('.dx-treeview-item-content').eq(0);
+    const $item = $treeView.find(`.${ITEM_CONTENT_CLASS}`).eq(0);
 
     instance.option('items[0].disable', true);
-    assert.ok($item.hasClass('dx-state-disabled'), 'item should be disabled');
+    assert.ok($item.hasClass(DISABLED_STATE_CLASS), 'item should be disabled');
 
     instance.option('items[0].disable', false);
-    assert.notOk($item.hasClass('dx-state-disabled'), 'item should not be disabled');
+    assert.notOk($item.hasClass(DISABLED_STATE_CLASS), 'item should not be disabled');
 });
 
 QUnit.test('checkbox should have disabled class when item was disabled at runtime with expressions', function(assert) {
@@ -123,8 +124,8 @@ QUnit.test('checkbox should have disabled class when item was disabled at runtim
     const $checkbox = $treeView.find('.dx-checkbox').eq(0);
 
     instance.option('items[0].disable', true);
-    assert.ok($checkbox.hasClass('dx-state-disabled'), 'checkbox should be disabled');
+    assert.ok($checkbox.hasClass(DISABLED_STATE_CLASS), 'checkbox should be disabled');
 
     instance.option('items[0].disable', false);
-    assert.notOk($checkbox.hasClass('dx-state-disabled'), 'checkbox should not be disabled');
+    assert.notOk($checkbox.hasClass(DISABLED_STATE_CLASS), 'checkbox should not be disabled');
 });

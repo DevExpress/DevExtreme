@@ -86,7 +86,7 @@ const TOGGLE_ITEM_VISIBILITY_OPENED_CLASS = `${WIDGET_CLASS}-toggle-item-visibil
 export const SELECT_ALL_ITEM_CLASS = `${WIDGET_CLASS}-select-all-item`;
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
-const DISABLED_STATE_CLASS = 'dx-state-disabled';
+export const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const DISABLED_STATE_ARIA = 'aria-disabled';
 const SELECTED_ITEM_CLASS = 'dx-state-selected';
 const EXPAND_EVENT_NAMESPACE = 'dxTreeView_expand';

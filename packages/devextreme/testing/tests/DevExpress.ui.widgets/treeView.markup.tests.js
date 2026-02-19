@@ -8,15 +8,13 @@ QUnit.testStart(function() {
 });
 
 import 'ui/tree_view';
-import { EXPANDER_ICON_STUB_CLASS } from '__internal/ui/tree_view/tree_view.base';
+import { EXPANDER_ICON_STUB_CLASS, ITEM_CLASS, ITEM_CONTENT_CLASS, DISABLED_STATE_CLASS  } from '__internal/ui/tree_view/tree_view.base';
 import localization from 'localization';
 
 const WIDGET_CLASS = 'dx-treeview';
 const NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
 const OPENED_NODE_CONTAINER_CLASS = 'dx-treeview-node-container-opened';
 const NODE_CLASS = 'dx-treeview-node';
-const ITEM_CLASS = 'dx-treeview-item';
-const ITEM_CONTENT_CLASS = 'dx-treeview-item-content';
 const ICON_CLASS = 'dx-icon';
 const SELECTED_STATE_CLASS = 'dx-state-selected';
 const ITEM_WITH_CHECKBOX_CLASS = 'dx-treeview-item-with-checkbox';
@@ -438,7 +436,7 @@ QUnit.module('markup', {
         const $rootNode = $treeView.find(`.${NODE_CONTAINER_CLASS}:first-child`);
         const $icon = $rootNode.find(`.${ITEM_CLASS}`).eq(0).children(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`).eq(0);
 
-        assert.notOk($icon.hasClass('dx-state-disabled'));
+        assert.notOk($icon.hasClass(DISABLED_STATE_CLASS));
     });
 
     QUnit.test('Render checkboxes', function(assert) {
@@ -518,7 +516,7 @@ QUnit.module('markup', {
         });
         const $item = $treeView.find('.' + ITEM_CLASS).eq(0).find('.' + ITEM_CONTENT_CLASS).eq(0);
 
-        assert.ok($item.hasClass('dx-state-disabled'));
+        assert.ok($item.hasClass(DISABLED_STATE_CLASS));
     });
 
     QUnit.test('Disabled class is added when disabledExpr is used with custom template', function(assert) {
@@ -532,7 +530,7 @@ QUnit.module('markup', {
         const $item = $treeView.find(`.${ITEM_CLASS} > .${ITEM_CONTENT_CLASS}`).eq(0);
 
 
-        assert.ok($item.hasClass('dx-state-disabled'));
+        assert.ok($item.hasClass(DISABLED_STATE_CLASS));
     });
 
     QUnit.test('toggle visibility icon should not render for invisible item (T323491)', function(assert) {

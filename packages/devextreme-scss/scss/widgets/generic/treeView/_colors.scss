@@ -65,7 +65,7 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-item-selected-bg: $base-inverted-bg !default;
   $treeview-item-selected-hover-bg: $base-inverted-bg !default;
   $treeview-spin-icon-color: $base-icon-color !default;
-  $treeview-item-content-disabled: color.scale($base-text-color, $lightness: -48.24%) !default;
+  $treeview-item-content-disabled: color.adjust($base-text-color, $lightness: -48.24%) !default;
 }
 
 @if $color == "dark" {
@@ -91,7 +91,7 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-item-selected-bg: color.change(#748fbc, $alpha: 0.42) !default;
   $treeview-item-selected-hover-bg: color.change(#748fbc, $alpha: 0.3) !default;
   $treeview-spin-icon-color: $base-icon-color !default;
-  $treeview-item-content-disabled: color.scale($base-text-color, $lightness: -48.24%) !default;;
+  $treeview-item-content-disabled: color.adjust($base-text-color, $lightness: -48.24%) !default;;
 }
 
 @if $color == "darkviolet" {
