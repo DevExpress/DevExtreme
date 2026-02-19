@@ -135,6 +135,7 @@ class TextEditorMask<
   }
 
   _initMaskStrategy(): void {
+    // @ts-expect-error MaskStrategy bad typification
     this._maskStrategy = new MaskStrategy(this);
   }
 
