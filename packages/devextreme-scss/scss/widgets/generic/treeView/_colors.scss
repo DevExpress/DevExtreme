@@ -53,7 +53,7 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-item-selected-bg: color.change($base-accent, $alpha: 0.48) !default;
   $treeview-item-selected-hover-bg: color.change($base-accent, $alpha: 0.3) !default;
   $treeview-spin-icon-color: $base-header-color !default;
-  $treeview-item-content-disabled: color.adjust($base-text-color, $lightness: 40%, $space: hsl);
+  $treeview-item-content-disabled: color.adjust($base-text-color, $lightness: 40%, $space: hsl) !default;
 }
 
 @if $color == "contrast" {
