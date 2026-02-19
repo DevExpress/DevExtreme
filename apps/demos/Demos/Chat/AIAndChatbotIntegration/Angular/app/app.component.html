@@ -11,6 +11,7 @@
     [alerts]="alerts$ | async"
     (onMessageEntered)="onMessageEntered($event)"
     messageTemplate="messageTemplate"
+    [speechToTextEnabled]="true"
   >
     <div *dxTemplate="let data of 'messageTemplate'">
       @if (data.message.text === regenerationText) {
