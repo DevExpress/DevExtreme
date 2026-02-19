@@ -183,7 +183,7 @@ function selectionModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
 }
 
 .option {
-  width: 24%;
+  width: 20%;
   margin-top: 10px;
   margin-right: 9px;
   box-sizing: border-box;
