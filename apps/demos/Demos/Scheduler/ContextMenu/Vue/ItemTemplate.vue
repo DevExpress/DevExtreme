@@ -1,11 +1,13 @@
 <template>
   <div>
-    <div
-      v-if="itemData.color"
-      :style="styleObject"
-      class="item-badge"
-    />
-    {{ itemData.text }}
+    <div>
+      <div
+        v-if="itemData.color"
+        :style="styleObject"
+        class="item-badge"
+      />
+      {{ itemData.text }}
+    </div>
   </div>
 </template>
 

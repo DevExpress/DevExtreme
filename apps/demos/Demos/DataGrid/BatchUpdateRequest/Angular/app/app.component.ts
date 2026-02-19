@@ -1,17 +1,16 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DxDataGridComponent, DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
-import { antiForgeryInterceptor, AntiForgeryTokenService } from './app.service';
+import 'anti-forgery';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
-const URL = `${BASE_PATH}/api/DataGridBatchUpdateWebApi`;
+const URL = 'https://js.devexpress.com/Demos/NetCore/api/DataGridBatchUpdateWebApi';
 
 let modulePrefix = '';
 // @ts-ignore
@@ -30,16 +29,12 @@ if (window && window.config?.packageConfigPaths) {
 export class AppComponent {
   ordersStore: AspNetData.CustomStore;
 
-  constructor(private http: HttpClient, private tokenService: AntiForgeryTokenService) {
+  constructor(private http: HttpClient) {
     this.ordersStore = AspNetData.createStore({
       key: 'OrderID',
       loadUrl: `${URL}/Orders`,
-      async onBeforeSend(_method, ajaxOptions) {
-        const tokenData = await lastValueFrom(tokenService.getToken());
-        ajaxOptions.xhrFields = {
-          withCredentials: true,
-          headers: { [tokenData.headerName]: tokenData.token },
-        };
+      onBeforeSend(method, ajaxOptions) {
+        ajaxOptions.xhrFields = { withCredentials: true };
       },
     });
   }
@@ -58,23 +53,16 @@ export class AppComponent {
     changes: DxDataGridTypes.DataChange[],
     component: DxDataGridComponent['instance'],
   ): Promise<void> {
-    try {
-      await lastValueFrom(
-        this.http.post(url, JSON.stringify(changes), {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }),
-      );
-      await component.refresh(true);
-      component.cancelEditData();
-    } catch (error: any) {
-      const errorMessage = (typeof error?.error === 'string' && error.error)
-        ? error.error
-        : (error?.statusText || 'Unknown error');
-      throw new Error(`Batch save failed: ${errorMessage}`);
-    }
+    await lastValueFrom(
+      this.http.post(url, JSON.stringify(changes), {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }),
+    );
+    await component.refresh(true);
+    component.cancelEditData();
   }
 
   normalizeChanges(changes: DxDataGridTypes.DataChange[]): DxDataGridTypes.DataChange[] {
@@ -106,9 +94,6 @@ export class AppComponent {
 bootstrapApplication(AppComponent, {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
-    provideHttpClient(
-      withFetch(),
-      withInterceptors([antiForgeryInterceptor]),
-    ),
+    provideHttpClient(withFetch()),
   ],
 });

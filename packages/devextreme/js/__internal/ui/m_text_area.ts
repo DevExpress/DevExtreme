@@ -14,7 +14,7 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import type { Properties } from '@js/ui/text_area';
 import type { OptionChanged } from '@ts/core/widget/types';
 import TextBox from '@ts/ui/text_box/m_text_box';
-import { allowScroll, prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
+import { allowScroll, prepareScrollData } from '@ts/ui/text_box/utils.scroll';
 
 export const TEXTAREA_CLASS = 'dx-textarea';
 export const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';
@@ -59,6 +59,7 @@ class TextArea<
 
   _renderContentImpl(): void {
     this._updateInputHeight();
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     super._renderContentImpl();
   }
 
@@ -75,6 +76,7 @@ class TextArea<
     return $input;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _setInputMinHeight(): void {}
 
   _renderScrollHandler(): void {
@@ -84,10 +86,18 @@ class TextArea<
 
     // @ts-expect-error ts-error
     eventsEngine.on($input, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
-    // @ts-expect-error ts-error
-    eventsEngine.on($input, addNamespace(pointerEvents.down, this.NAME), this._pointerDownHandler.bind(this));
-    // @ts-expect-error ts-error
-    eventsEngine.on($input, addNamespace(pointerEvents.move, this.NAME), this._pointerMoveHandler.bind(this));
+    eventsEngine.on(
+      $input,
+      // @ts-expect-error ts-error
+      addNamespace(pointerEvents.down, this.NAME),
+      this._pointerDownHandler.bind(this),
+    );
+    eventsEngine.on(
+      $input,
+      // @ts-expect-error ts-error
+      addNamespace(pointerEvents.move, this.NAME),
+      this._pointerMoveHandler.bind(this),
+    );
   }
 
   _pointerDownHandler(e): void {
@@ -172,10 +182,17 @@ class TextArea<
       return;
     }
 
+    const {
+      autoResizeEnabled,
+      height,
+      minHeight: minHeightOptionValue,
+    } = this.option();
+
     const $input = this._input();
-    const height = this.option('height');
-    const autoHeightResizing = height === undefined && this.option('autoResizeEnabled');
-    const shouldCalculateInputHeight = autoHeightResizing || (height === undefined && this.option('minHeight'));
+
+    const shouldCalculateInputHeight = autoResizeEnabled
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      || (height === undefined && minHeightOptionValue);
 
     if (!shouldCalculateInputHeight) {
       $input.css('height', '');
@@ -210,7 +227,7 @@ class TextArea<
 
     $input.css('height', inputHeight);
 
-    if (autoHeightResizing) {
+    if (autoResizeEnabled) {
       this.$element().css('height', 'auto');
     }
   }
@@ -242,6 +259,7 @@ class TextArea<
     return undefined;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _renderInputType(): void {}
 
   _visibilityChanged(visible: boolean): void {
@@ -250,9 +268,9 @@ class TextArea<
     }
   }
 
-  _updateInputAutoResizeAppearance($input: dxElementWrapper, isAutoResizeEnabled?): void {
+  _updateInputAutoResizeAppearance($input: dxElementWrapper, isAutoResizeEnabled?: boolean): void {
     if ($input) {
-      const autoResizeEnabled = ensureDefined(isAutoResizeEnabled, this.option('autoResizeEnabled'));
+      const autoResizeEnabled = ensureDefined(isAutoResizeEnabled, Boolean(this.option('autoResizeEnabled')));
 
       $input.toggleClass(TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE, autoResizeEnabled);
     }
@@ -270,8 +288,9 @@ class TextArea<
     switch (name) {
       case '_shouldAttachKeyboardEvents':
       case 'autoResizeEnabled':
-        this._updateInputAutoResizeAppearance(this._input(), value);
+        this._updateInputAutoResizeAppearance(this._input(), Boolean(value));
         this._refreshEvents();
+        this._renderDimensions();
         this._updateInputHeight();
         break;
       case 'value':

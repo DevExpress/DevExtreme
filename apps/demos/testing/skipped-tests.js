@@ -8,8 +8,6 @@ export const skippedTests = {
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
   React: {
-    DataGrid: ['SignalRService'],
-    // NOTE: 'GroupByDate' demo has problems with rendering
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
   Vue: {

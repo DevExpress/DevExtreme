@@ -272,6 +272,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
           font-size: $generic-scheduler-appointment-popup-icon-size;
         }
       }
+
+      &.dx-scheduler-form-inner-label-offset {
+        margin-top: $generic-scheduler-appointment-popup-icon-inner-label-margin-top;
+      }
     }
 
     .dx-scheduler-form-icon-sized-gap {

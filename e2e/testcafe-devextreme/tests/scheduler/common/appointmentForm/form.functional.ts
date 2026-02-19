@@ -19,7 +19,7 @@ test('Subject text editor should have focus after returning from recurrence form
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, true);
 
-  await appointmentPopup.openRecurrenceSettings(t);
+  await appointmentPopup.clickRecurrenceSettingsButton(t);
 
   await t.click(appointmentPopup.recurrence.backButton);
 
@@ -47,7 +47,7 @@ test('Recurrence start date editor should have focus after opening recurrence se
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, true);
 
-  await appointmentPopup.openRecurrenceSettings(t);
+  await appointmentPopup.clickRecurrenceSettingsButton(t);
 
   await t
     .expect(appointmentPopup.recurrence.startDateInput.focused)

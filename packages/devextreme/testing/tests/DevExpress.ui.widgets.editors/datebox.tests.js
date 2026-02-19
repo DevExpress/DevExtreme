@@ -14,7 +14,7 @@ import ja from 'localization/messages/ja.json!';
 import pointerMock from '../../helpers/pointerMock.js';
 import support from '__internal/core/utils/m_support';
 import typeUtils from 'core/utils/type';
-import uiDateUtils from '__internal/ui/date_box/m_date_utils';
+import uiDateUtils from '__internal/ui/date_box/date_utils';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 
 import '../../helpers/calendarFixtures.js';

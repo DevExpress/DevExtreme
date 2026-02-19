@@ -9,7 +9,7 @@ import Callbacks from '@js/core/utils/callbacks';
 // @ts-expect-error
 import { grep } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
-import { isFunction } from '@js/core/utils/type';
+import { isDefined, isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import errors from '@js/ui/widget/ui.errors';
 
@@ -150,6 +150,10 @@ export class ModuleItem {
     value: string | number | boolean | undefined,
     $target: dxElementWrapper,
   ) {
+    if (!isDefined(value)) {
+      return;
+    }
+
     const target = $target.get(0);
     const prefix = name !== 'role' && name !== 'id' ? 'aria-' : '';
     const normalizedValue = String(value).replace(/\s+/g, ' ').trim();

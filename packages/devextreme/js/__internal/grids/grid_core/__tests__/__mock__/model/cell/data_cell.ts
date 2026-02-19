@@ -1,6 +1,9 @@
+import { TextBoxModel } from '@ts/ui/__tests__/__mock__/model/textbox';
+
 const SELECTORS = {
   editCell: 'dx-editor-cell',
   invalidCell: 'invalid',
+  textBox: 'dx-textbox',
 };
 
 export class DataCellModel {
@@ -26,5 +29,10 @@ export class DataCellModel {
 
   public getHTML(): string {
     return this.root?.innerHTML ?? '';
+  }
+
+  public getEditor(): TextBoxModel {
+    const editorElement = this.root?.querySelector(`.${SELECTORS.textBox}`) as HTMLElement;
+    return new TextBoxModel(editorElement);
   }
 }

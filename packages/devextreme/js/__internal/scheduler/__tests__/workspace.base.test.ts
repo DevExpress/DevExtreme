@@ -1,6 +1,7 @@
 import {
-  describe, expect, it, jest,
+  beforeAll, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import { logger } from '@ts/core/utils/m_console';
 
 import { getResourceManagerMock } from '../__mock__/resource_manager.mock';
 import SchedulerTimelineDay from '../workspaces/m_timeline_day';
@@ -12,13 +13,38 @@ import SchedulerWorkSpaceDay from '../workspaces/m_work_space_day';
 import SchedulerWorkSpaceMonth from '../workspaces/m_work_space_month';
 import SchedulerWorkSpaceWeek from '../workspaces/m_work_space_week';
 import SchedulerWorkSpaceWorkWeek from '../workspaces/m_work_space_work_week';
+import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
+
+jest.mock('@ts/core/m_devices', () => {
+  const originalModule: any = jest.requireActual('@ts/core/m_devices');
+  const real = jest.fn().mockReturnValue({
+    platform: 'mac',
+    mac: true,
+    deviceType: 'desktop',
+  });
+  const current = jest.fn().mockReturnValue({
+    platform: 'mac',
+    mac: true,
+    deviceType: 'desktop',
+  });
+
+  return {
+    __esModule: true,
+    default: {
+      ...originalModule.default,
+      isSimulator: originalModule.default.isSimulator,
+      real,
+      current,
+    },
+  };
+});
 
 type WorkspaceConstructor<T> = new (container: Element, options?: any) => T;
 
 const createWorkspace = <T extends SchedulerWorkSpace>(
   WorkSpace: WorkspaceConstructor<T>,
   currentView: string,
-): T => {
+): { workspace: T; container: Element } => {
   const container = document.createElement('div');
   const workspace = new WorkSpace(container, {
     views: [currentView],
@@ -30,8 +56,9 @@ const createWorkspace = <T extends SchedulerWorkSpace>(
   (workspace as any)._isVisible = () => true;
   expect(container.classList).toContain('dx-scheduler-work-space');
 
-  return workspace;
+  return { workspace, container };
 };
+
 const workSpaces: {
   currentView: string;
   WorkSpace: WorkspaceConstructor<SchedulerWorkSpace>;
@@ -46,10 +73,14 @@ const workSpaces: {
   { currentView: 'timelineMonth', WorkSpace: SchedulerTimelineMonth },
 ];
 
+beforeAll(() => {
+  setupSchedulerTestEnvironment();
+});
+
 describe('scheduler workspace', () => {
   workSpaces.forEach(({ currentView, WorkSpace }) => {
     it(`should clear cache on dimension change, view: ${currentView}`, () => {
-      const workspace = createWorkspace(WorkSpace, currentView);
+      const { workspace } = createWorkspace(WorkSpace, currentView);
       jest.spyOn(workspace.cache, 'clear');
 
       workspace.cache.memo('test', () => 'value');
@@ -59,7 +90,7 @@ describe('scheduler workspace', () => {
     });
 
     it(`should clear cache on _cleanView call, view: ${currentView}`, () => {
-      const workspace = createWorkspace(WorkSpace, currentView);
+      const { workspace } = createWorkspace(WorkSpace, currentView);
       jest.spyOn(workspace.cache, 'clear');
 
       workspace.cache.memo('test', () => 'value');
@@ -68,5 +99,97 @@ describe('scheduler workspace', () => {
       expect(workspace.cache.clear).toHaveBeenCalledTimes(1);
       expect(workspace.cache.size).toBe(0);
     });
+  });
+});
+
+describe('scheduler workspace scrollTo', () => {
+  beforeEach(() => {
+    setupSchedulerTestEnvironment();
+  });
+
+  it('should change scroll position with center alignment', () => {
+    const { workspace, container } = createWorkspace(SchedulerTimelineDay, 'timelineDay');
+
+    const scrollableElement = container.querySelector('.dx-scheduler-date-table-scrollable') as HTMLElement;
+    const scrollableContainer = scrollableElement.querySelector('.dx-scrollable-container') as HTMLElement;
+
+    workspace.scrollTo(new Date(2017, 4, 25, 22, 0));
+
+    expect(scrollableContainer.scrollLeft).toBeCloseTo(11125);
+  });
+
+  it('should not change scroll position when date is outside view range', () => {
+    const { workspace, container } = createWorkspace(SchedulerTimelineDay, 'timelineDay');
+
+    const scrollableElement = container.querySelector('.dx-scheduler-date-table-scrollable') as HTMLElement;
+    const scrollableContainer = scrollableElement.querySelector('.dx-scrollable-container') as HTMLElement;
+
+    workspace.scrollTo(new Date(2030, 0, 1));
+
+    expect(scrollableContainer.scrollLeft).toBeCloseTo(0);
+    expect(scrollableContainer.scrollTop).toBeCloseTo(0);
+  });
+
+  it('should scroll with start alignment', () => {
+    const { workspace, container } = createWorkspace(SchedulerTimelineDay, 'timelineDay');
+
+    const scrollableElement = container.querySelector('.dx-scheduler-date-table-scrollable') as HTMLElement;
+    const scrollableContainer = scrollableElement.querySelector('.dx-scrollable-container') as HTMLElement;
+
+    workspace.scrollTo(new Date(2017, 4, 25, 22, 0), undefined, false, true, 'start');
+
+    expect(scrollableContainer.scrollLeft).toBeCloseTo(11000);
+    expect(scrollableContainer.scrollTop).toBeCloseTo(0);
+  });
+
+  it('should scroll with center alignment', () => {
+    const { workspace, container } = createWorkspace(SchedulerTimelineDay, 'timelineDay');
+
+    const scrollableElement = container.querySelector('.dx-scheduler-date-table-scrollable') as HTMLElement;
+    const scrollableContainer = scrollableElement.querySelector('.dx-scrollable-container') as HTMLElement;
+
+    workspace.scrollTo(new Date(2017, 4, 25, 22, 0), undefined, false, true, 'center');
+
+    expect(scrollableContainer.scrollLeft).toBeCloseTo(11125);
+  });
+
+  it('should scroll to all day panel when allDay is true', () => {
+    const { workspace, container } = createWorkspace(SchedulerTimelineDay, 'timelineDay');
+
+    const scrollableElement = container.querySelector('.dx-scheduler-date-table-scrollable') as HTMLElement;
+    const scrollableContainer = scrollableElement.querySelector('.dx-scrollable-container') as HTMLElement;
+
+    workspace.scrollTo(new Date(2017, 4, 25, 22, 0), undefined, true);
+
+    expect(scrollableContainer.scrollLeft).toBeCloseTo(11125);
+  });
+
+  it('should handle throwWarning parameter correctly', () => {
+    const loggerWarnSpy = jest.spyOn(logger, 'warn');
+    loggerWarnSpy.mockReset();
+
+    const { workspace, container } = createWorkspace(SchedulerTimelineDay, 'timelineDay');
+
+    const scrollableElement = container.querySelector('.dx-scheduler-date-table-scrollable') as HTMLElement;
+    const scrollableContainer = scrollableElement.querySelector('.dx-scrollable-container') as HTMLElement;
+
+    workspace.scrollTo(new Date(2030, 0, 1), undefined, false, true);
+
+    expect(scrollableContainer.scrollLeft).toBe(0);
+    expect(scrollableContainer.scrollTop).toBe(0);
+    expect(loggerWarnSpy).toHaveBeenCalledTimes(1);
+    expect(loggerWarnSpy).toHaveBeenCalledWith(expect.stringContaining('W1008'));
+  });
+
+  it('should apply RTL offset when rtlEnabled is true', () => {
+    const { workspace, container } = createWorkspace(SchedulerTimelineDay, 'timelineDay');
+    workspace.option('rtlEnabled', true);
+
+    const scrollableElement = container.querySelector('.dx-scheduler-date-table-scrollable') as HTMLElement;
+    const scrollableContainer = scrollableElement.querySelector('.dx-scrollable-container') as HTMLElement;
+
+    workspace.scrollTo(new Date(2017, 4, 25, 22, 0));
+
+    expect(scrollableContainer.scrollLeft).toBeCloseTo(-11125);
   });
 });

@@ -899,7 +899,7 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
                 $row
                   .toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected)
                   .find(`.${SELECT_CHECKBOX_CLASS}`).dxCheckBox('option', 'value', isSelected);
-                that.setAria('selected', isSelected, $row);
+                that.setAria('selected', String(isSelected), $row);
               }
             }
           });
@@ -949,7 +949,7 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
 
       const selectionMode = this.option(SELECTION_MODE);
       if (selectionMode !== 'none') {
-        this.setAria('selected', isSelected, $row);
+        this.setAria('selected', String(isSelected), $row);
       }
     }
 

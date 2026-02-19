@@ -1,12 +1,14 @@
+/* eslint-disable class-methods-use-this */
 import messageLocalization from '@js/common/core/localization/message';
-// @ts-expect-error
-import { splitPair } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isEmptyObject, isFunction } from '@js/core/utils/type';
 import Calendar from '@js/ui/calendar';
+import type { ToolbarItem } from '@js/ui/popup';
 import { isMaterial } from '@js/ui/themes';
+import { splitPair } from '@ts/core/utils/m_common';
 
+import type { PopupProperties } from '../popup/m_popup';
 import DateBoxStrategy from './m_date_box.strategy';
 
 const TODAY_BUTTON_CLASS = 'dx-button-today';
@@ -27,8 +29,7 @@ class CalendarStrategy extends DateBoxStrategy {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | void> {
+  supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
     const homeEndHandler = function (e) {
       if (this.option('opened')) {
         e.preventDefault();
@@ -131,7 +132,7 @@ class CalendarStrategy extends DateBoxStrategy {
     this.dateBox.setAria('activedescendant', e.actionValue);
   }
 
-  _getTodayButtonConfig() {
+  _getTodayButtonConfig(): ToolbarItem {
     const buttonsLocation = this.dateBox.option('buttonsLocation');
     const isButtonsLocationDefault = buttonsLocation === 'default';
     const position = isButtonsLocationDefault ? ['bottom', 'center'] : splitPair(buttonsLocation);
@@ -157,7 +158,7 @@ class CalendarStrategy extends DateBoxStrategy {
     return isEmptyObject(calendarOptions) || calendarOptions.visible !== false;
   }
 
-  _getPopupToolbarItems(toolbarItems) {
+  _getPopupToolbarItems(toolbarItems: ToolbarItem[]): ToolbarItem[] {
     const useButtons = this.dateBox.option('applyValueMode') === 'useButtons';
     const shouldRenderTodayButton = useButtons && this._isCalendarVisible();
 
@@ -173,11 +174,11 @@ class CalendarStrategy extends DateBoxStrategy {
     return toolbarItems;
   }
 
-  popupConfig(popupConfig) {
+  popupConfig(popupConfig: PopupProperties): PopupProperties {
     return extend(true, popupConfig, {
       position: { collision: 'flipfit flip' },
       width: 'auto',
-    });
+    }) as PopupProperties;
   }
 
   _valueChangedHandler(e) {
@@ -193,8 +194,7 @@ class CalendarStrategy extends DateBoxStrategy {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _updateValue(preventDefaultValue?: boolean) {
+  _updateValue() {
     if (!this._widget) {
       return;
     }
@@ -206,7 +206,7 @@ class CalendarStrategy extends DateBoxStrategy {
     this._lastActionElement = 'input';
 
     if (this.dateBox.option('opened') && this._widget) {
-      this._updateValue(true);
+      this._updateValue();
     }
   }
 

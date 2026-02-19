@@ -28,7 +28,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
-import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
+import { TextEditorLabel } from '__internal/ui/text_box/text_editor.label';
 
 import 'fluent_blue_light.css!';
 
@@ -2076,6 +2076,16 @@ QUnit.module('options', {
         lookup.option({ inputAttr: { custom: null } });
 
         assert.strictEqual($field.attr('custom'), undefined, 'custom attribute is set correctly');
+    });
+
+    QUnit.test('Default input class should not be removed when a custom class added via inputAttr (T1319976)', function(assert) {
+        const lookup = $('#lookup').dxLookup({
+            inputAttr: { class: 'custom' },
+        }).dxLookup('instance');
+
+        const $field = $(lookup.field());
+
+        assert.strictEqual($field.attr('class'), `custom ${LOOKUP_FIELD_CLASS}`, 'custom class is added and default class remains');
     });
 
     QUnit.test('Displayed text should be correct when items have nested items field and grouping is disabled (T1292151)', function(assert) {

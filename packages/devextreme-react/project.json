@@ -102,7 +102,7 @@
         "!{projectRoot}/src/common/**/*",
         "!{projectRoot}/src/**/__tests__/**/*"
       ],
-      "cache": true,
+      "cache": false,
       "inputs": ["default"]
     },
     "regenerate": {
@@ -121,7 +121,7 @@
         "!{projectRoot}/src/common/**/*",
         "!{projectRoot}/src/**/__tests__/**/*"
       ],
-      "cache": true,
+      "cache": false,
       "inputs": ["default"]
     },
     "build": {
