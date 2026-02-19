@@ -264,17 +264,13 @@ QUnit.module('Hamburger', {
         assert.ok(popup, 'popup exists');
         assert.ok(!popup.option('visible'), 'popup is hidden initially');
 
-        const contentTemplate = popup.option('contentTemplate');
-        assert.ok(contentTemplate, 'popup has contentTemplate');
-
-        const templateResult = contentTemplate();
-        assert.ok(templateResult.hasClass('dx-area-field-container'), 'contentTemplate returns table with correct class');
-        assert.strictEqual(templateResult.find('.dx-pivotgrid-fields-area-head').length, 1, 'contentTemplate creates fields area head');
-        assert.strictEqual(templateResult.find('.dx-pivotgrid-fields-area-head td').length, 2, 'contentTemplate creates 2 field cells');
-
         $(button.$element()).trigger('dxclick');
 
         assert.ok(popup.option('visible'), 'popup is visible after click');
+
+        const $content = $(popup.content());
+        assert.strictEqual($content.find('.dx-pivotgrid-fields-area-head').length, 1, 'popup content has fields area head');
+        assert.strictEqual($content.find('.dx-area-field').length, 2, 'popup content has 2 fields');
     });
 
 });

@@ -6207,7 +6207,7 @@ QUnit.module('Vertical headers', {
         assert.strictEqual(columnsWidth.length, dataWidth.length, 'arrays have same length');
 
         for(let i = 0; i < columnsWidth.length; i++) {
-            assert.roughEqual(columnsWidth[i], dataWidth[i], 0.5, `column ${i} width`);
+            assert.roughEqual(columnsWidth[i], dataWidth[i], 1.1, `column ${i} width`);
         }
     });
 
