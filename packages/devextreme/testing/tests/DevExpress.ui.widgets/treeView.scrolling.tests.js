@@ -64,11 +64,6 @@ QUnit.module('scrollToItem', {
         ];
     }
 
-    function isNotSupported(key, config) {
-        const isFirstLevelNodeKey = key.indexOf('_') === -1;
-        return config.disabled && !config.expanded && !isFirstLevelNodeKey;
-    }
-
     const configs = [];
     ['vertical', 'horizontal', 'both'].forEach(scrollDirection => {
         [false, true].forEach(expanded => {
@@ -110,20 +105,14 @@ QUnit.module('scrollToItem', {
 
                 const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
                 const done = assert.async();
-                if(isNotSupported(key, config)) {
-                    completionCallback.fail(() => {
-                        assert.ok('scroll must fail');
-                        done();
-                    });
-                } else {
-                    completionCallback.done(() => {
-                        wrapper.getElement().focusout();
-                        wrapper.getElement().focusin();
-                        wrapper.checkNodeIsInVisibleArea(key);
-                        this.clock.tick(400);
-                        done();
-                    });
-                }
+
+                completionCallback.done(() => {
+                    wrapper.getElement().focusout();
+                    wrapper.getElement().focusin();
+                    wrapper.checkNodeIsInVisibleArea(key);
+                    this.clock.tick(400);
+                    done();
+                });
                 this.clock.tick(10);
             });
         });
@@ -135,16 +124,12 @@ QUnit.module('scrollToItem', {
                 config.keysToScroll.forEach(key => {
                     const completionCallback = wrapper.instance.scrollToItem(key);
                     const done = assert.async();
-                    if(isNotSupported(key, config)) {
-                        completionCallback.fail(() => { assert.ok('scroll must fail'); done(); });
-                    } else {
-                        completionCallback.done(() => {
-                            wrapper.getElement().focusout();
-                            wrapper.getElement().focusin();
-                            wrapper.checkNodeIsInVisibleArea(key);
-                            done();
-                        });
-                    }
+                    completionCallback.done(() => {
+                        wrapper.getElement().focusout();
+                        wrapper.getElement().focusin();
+                        wrapper.checkNodeIsInVisibleArea(key);
+                        done();
+                    });
                     this.clock.tick(10);
                 });
             });
