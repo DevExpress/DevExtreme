@@ -3,10 +3,16 @@ import TreeView from 'devextreme-react/tree-view';
 import List from 'devextreme-react/list';
 import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
-import { employees, showCheckboxesModeLabel, selectionModeLabel } from './data.js';
+import {
+  employees,
+  showCheckboxesModeLabel,
+  selectionModeLabel,
+  disabledNodeSelectionModeLabel,
+} from './data.js';
 
 const showCheckBoxesModes = ['normal', 'selectAll', 'none'];
 const selectionModes = ['multiple', 'single'];
+const disabledNodeSelectionModes = ['never', 'recursiveAndAll'];
 const renderTreeViewItem = (item) => `${item.fullName} (${item.position})`;
 const renderListItem = (item) => `${item.prefix} ${item.fullName} (${item.position})`;
 const App = () => {
@@ -16,6 +22,9 @@ const App = () => {
   const [selectByClick, setSelectByClick] = useState(false);
   const [showCheckBoxesMode, setShowCheckBoxesMode] = useState(showCheckBoxesModes[0]);
   const [selectionMode, setSelectionMode] = useState(selectionModes[0]);
+  const [disabledNodeSelectionMode, setDisabledNodeSelectionMode] = useState(
+    disabledNodeSelectionModes[0],
+  );
   const [isSelectionModeDisabled, setIsSelectionModeDisabled] = useState(false);
   const [isRecursiveDisabled, setIsRecursiveDisabled] = useState(false);
   const syncSelection = useCallback((treeView) => {
@@ -52,6 +61,9 @@ const App = () => {
     }
     setIsRecursiveDisabled(value === 'single');
   }, []);
+  const disabledNodeSelectionModeValueChanged = useCallback((e) => {
+    setDisabledNodeSelectionMode(e.value);
+  }, []);
   const selectNodesRecursiveValueChanged = useCallback((e) => {
     setSelectNodesRecursive(e.value);
   }, []);
@@ -72,6 +84,7 @@ const App = () => {
           selectByClick={selectByClick}
           showCheckBoxesMode={showCheckBoxesMode}
           selectionMode={selectionMode}
+          disabledNodeSelectionMode={disabledNodeSelectionMode}
           onSelectionChanged={treeViewSelectionChanged}
           onContentReady={treeViewContentReady}
           itemRender={renderTreeViewItem}
@@ -111,6 +124,17 @@ const App = () => {
                 inputAttr={selectionModeLabel}
                 disabled={isSelectionModeDisabled}
                 onValueChanged={selectionModeValueChanged}
+              />
+            </div>
+          </div>
+          <div className="option">
+            <span>Disabled Node Selection Mode:</span>
+            <div className="editor-container">
+              <SelectBox
+                items={disabledNodeSelectionModes}
+                value={disabledNodeSelectionMode}
+                inputAttr={disabledNodeSelectionModeLabel}
+                onValueChanged={disabledNodeSelectionModeValueChanged}
               />
             </div>
           </div>

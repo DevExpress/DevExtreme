@@ -10,6 +10,7 @@
         :items="employees"
         :show-check-boxes-mode="showCheckBoxesModeValue"
         :selection-mode="selectionModeValue"
+        :disabled-node-selection-mode="disabledNodeSelectionModeValue"
         :select-nodes-recursive="selectNodesRecursiveValue"
         :select-by-click="selectByClickValue"
         @selection-changed="treeViewSelectionChanged"
@@ -61,6 +62,17 @@
           </div>
         </div>
         <div class="option">
+          <span>Disabled Node Selection Mode:</span>
+          <div class="editor-container">
+            <DxSelectBox
+              :items="disabledNodeSelectionModes"
+              v-model:value="disabledNodeSelectionModeValue"
+              :input-attr="{ 'aria-label': 'Disabled Node Selection Mode' }"
+              @value-changed="disabledNodeSelectionModeValueChanged"
+            />
+          </div>
+        </div>
+        <div class="option">
           <div class="caption-placeholder">&nbsp;</div>
           <div class="editor-container">
             <DxCheckBox
@@ -95,9 +107,11 @@ import type { Employee } from './types';
 
 const selectionModes: SingleOrMultiple[] = ['multiple', 'single'];
 const showCheckBoxesModes: DxTreeViewTypes.TreeViewCheckBoxMode[] = ['normal', 'selectAll', 'none'];
+const disabledNodeSelectionModes: DxTreeViewTypes.DisabledNodeSelectionMode[] = ['never', 'recursiveAndAll'];
 const selectedEmployees = ref([]);
 const showCheckBoxesModeValue = ref(showCheckBoxesModes[0]);
 const selectionModeValue = ref(selectionModes[0]);
+const disabledNodeSelectionModeValue = ref(disabledNodeSelectionModes[0]);
 const isSelectionModeDisabled = ref(false);
 const isRecursiveDisabled = ref(false);
 const selectNodesRecursiveValue = ref(true);
