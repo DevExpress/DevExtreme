@@ -155,7 +155,7 @@
 .dx-field-item-optional {
   .dx-label > span {
     &::after {
-      content: attr(data-mark);
+      content: attr(data-mark) / '';
     }
   }
 }

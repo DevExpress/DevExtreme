@@ -78,10 +78,11 @@ export class ErrorHandlingController extends modules.ViewController {
   private _renderErrorMessage(error) {
     const message = error.url ? error.message.replace(error.url, '') : error.message || error;
     const $message = $('<div>')
-      .attr('role', 'alert')
-      .attr('aria-roledescription', messageLocalization.format('dxDataGrid-ariaError'))
       .addClass(ERROR_MESSAGE_CLASS)
       .text(message);
+
+    this.setAria('role', 'alert', $message);
+    this.setAria('roledescription', messageLocalization.format('dxDataGrid-ariaError'), $message);
 
     if (error.url) {
       $('<a>').attr('href', error.url).text(error.url).appendTo($message);

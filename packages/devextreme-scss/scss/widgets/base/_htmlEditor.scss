@@ -22,6 +22,14 @@ $transparent-border: 1px solid transparent;
   @return list-#{$counter};
 }
 
+@function add-counter-set($counter, $start: 1) {
+  @if $counter > $start {
+    @return add-counter-set($counter - 1, $start) + " " + list-#{$counter} + " 0";
+  }
+
+  @return list-#{$counter} + " 0";
+}
+
 @mixin if-less-then-max-indent($value) {
   @if $value < $max-indent {
     li.ql-indent-#{$value} {
@@ -194,7 +202,11 @@ $transparent-border: 1px solid transparent;
     padding: 2px 5px;
   }
 
-  ol,
+  ol {
+    padding-inline-start: 1.5em;
+    counter-reset: add-counter-reset($max-indent);
+  }
+
   ul {
     padding-inline-start: 1.5em;
   }
@@ -238,12 +250,15 @@ $transparent-border: 1px solid transparent;
   }
 
   li[data-list="ordered"] {
-    counter-reset: add-counter-reset($max-indent);
     counter-increment: list-0;
 
     &::before {
       content: counter(list-0, nth($list-style, 1)) ". ";
     }
+  }
+
+  li[data-list="ordered"]:not([class*="ql-indent"]) {
+    counter-set: add-counter-set($max-indent);
   }
 
   @include add-counter($max-indent);
