@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import EventsEngine from '@js/common/core/events/core/events_engine';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import type { dxElementWrapper } from '@js/core/renderer';
@@ -42,7 +41,9 @@ export default class MaskStrategy {
     value: TextEditorBaseProperties[K],
   ): void;
   _editorOption<K extends keyof TextEditorBaseProperties>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     name: K,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     value?: TextEditorBaseProperties[K],
   ): TextEditorBaseProperties[K] | void {
     // eslint-disable-next-line prefer-rest-params
@@ -65,8 +66,9 @@ export default class MaskStrategy {
   }
 
   _attachChangeEventHandler(): void {
-    // @ts-expect-error ts-expect-error
-    if (!this._editorOption('valueChangeEvent').split(' ').includes('change')) {
+    const valueChangeEvent = this._editorOption('valueChangeEvent');
+
+    if (!valueChangeEvent?.split(' ').includes('change')) {
       return;
     }
 
@@ -144,7 +146,8 @@ export default class MaskStrategy {
 
   _clearSelectedText(isDeleteInputEvent?: boolean): void {
     const selectionLength = this._prevCaret && (this._prevCaret.end - this._prevCaret.start);
-    const length = selectionLength ?? Number(isDeleteInputEvent);
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const length = selectionLength || Number(Boolean(isDeleteInputEvent));
 
     const caret = this._editorCaret();
 
@@ -167,7 +170,8 @@ export default class MaskStrategy {
 
     const hasValidChars = this._updateEditorMask({
       start: this._prevCaret?.start ?? 0,
-      length: text.length ?? 1,
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      length: text.length || 1,
       text,
     });
 
@@ -229,7 +233,7 @@ export default class MaskStrategy {
   _delHandler(event: DxEvent<KeyboardEvent>): void {
     const { editor } = this;
 
-    editor._maskKeyHandler(event, (): undefined => {
+    editor._maskKeyHandler(event, () => {
       if (!editor._hasSelection()) {
         // @ts-expect-error bad editor type
         editor._handleKey(EMPTY_CHAR);

@@ -114,7 +114,6 @@ class BaseMaskRule {
   ): number {}
 
   // @ts-expect-error return type
-
   isValid(args: HandlingArgs): boolean {}
 
   reset(): void {}
@@ -131,7 +130,6 @@ class BaseMaskRule {
   rawValue(): string {}
 
   // @ts-expect-error return type
-
   handle(args: HandlingArgs): number {}
 }
 
@@ -339,6 +337,7 @@ export class StubMaskRule extends MaskRule {
 
     if (args.start || hasValueProperty) {
       const handlingArgs = this._prepareHandlingArgs(args, { start: args.start && args.start - 1 });
+
       return this.next()?.handle(handlingArgs);
     }
 
