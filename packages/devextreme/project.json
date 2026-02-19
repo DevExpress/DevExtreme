@@ -150,10 +150,14 @@
       }
     },
     "build:ts:internal": {
-      "executor": "nx:run-commands",
+      "executor": "devextreme-nx-infra-plugin:build-typescript",
       "options": {
-        "command": "gulp ts-compile-internal",
-        "cwd": "{projectRoot}"
+        "srcPattern": "./js/__internal/**/*.{ts,tsx}",
+        "excludePatterns": ["./js/__internal/**/__tests__/**/*"],
+        "tsconfig": "./js/__internal/tsconfig.json",
+        "outDir": "./artifacts/dist_ts",
+        "resolvePaths": true,
+        "resolvePathsBaseDir": "./js"
       },
       "inputs": [
         "{projectRoot}/js/__internal/**/*.{ts,tsx}",
@@ -183,7 +187,10 @@
         "!{projectRoot}/js/**/*.d.ts",
         "!{projectRoot}/js/__internal/**/*"
       ],
-      "outputs": ["{projectRoot}/artifacts/transpiled"],
+      "outputs": [
+        "{projectRoot}/artifacts/transpiled",
+        "{projectRoot}/artifacts/transpiled-renovation-npm"
+      ],
       "cache": true
     },
     "copy:json:transpiled": {
@@ -276,7 +283,10 @@
         }
       },
       "inputs": ["{projectRoot}/artifacts/dist_ts/__internal/**/*.{js,jsx}"],
-      "outputs": ["{projectRoot}/artifacts/transpiled/__internal"],
+      "outputs": [
+        "{projectRoot}/artifacts/transpiled/__internal",
+        "{projectRoot}/artifacts/transpiled-renovation-npm/__internal"
+      ],
       "cache": true
     },
     "build:npm:esm:internal": {
@@ -325,14 +335,37 @@
         }
       },
       "inputs": ["{projectRoot}/build/bundle-templates/**/*.js"],
-      "outputs": ["{projectRoot}/artifacts/transpiled/bundles"],
+      "outputs": [
+        "{projectRoot}/artifacts/transpiled/bundles",
+        "{projectRoot}/artifacts/transpiled-renovation-npm/bundles",
+        "{projectRoot}/artifacts/transpiled-esm-npm/bundles"
+      ],
       "cache": true
     },
     "build:npm:dual-mode": {
-      "executor": "nx:run-commands",
+      "executor": "devextreme-nx-infra-plugin:create-dual-mode-manifest",
       "options": {
-        "command": "cross-env BUILD_ESM_PACKAGE=true gulp esm-dual-mode-manifests",
-        "cwd": "{projectRoot}"
+        "esmDir": "./artifacts/transpiled-esm-npm/esm",
+        "cjsDir": "./artifacts/transpiled-esm-npm/cjs",
+        "outputDir": "./artifacts/transpiled-esm-npm",
+        "srcDir": "./js",
+        "excludePatterns": [
+          "__internal/**/*",
+          "viz/docs/**/*",
+          "bundles/**/*"
+        ],
+        "generatedDtsFiles": [
+          "events/click.d.ts",
+          "events/contextmenu.d.ts",
+          "events/dblclick.d.ts",
+          "events/drag.d.ts",
+          "events/hold.d.ts",
+          "events/hover.d.ts",
+          "events/pointer.d.ts",
+          "events/swipe.d.ts",
+          "events/transform.d.ts",
+          "integration/jquery.d.ts"
+        ]
       },
       "inputs": [
         "{projectRoot}/artifacts/transpiled-esm-npm/esm/**/*",
