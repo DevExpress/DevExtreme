@@ -2,31 +2,6 @@
 import { extend } from '@js/core/utils/extend';
 import { isFunction } from '@js/core/utils/type';
 
-type AllowedCharsFunction = (
-  char: string, index: number, fullText: string,
-) => boolean;
-
-type AllowedChars = RegExp
-  | AllowedCharsFunction
-  | string[]
-  | string;
-
-interface MaskRuleConfig {
-  maskChar?: string;
-  pattern?: string;
-  allowedChars?: AllowedChars;
-}
-
-export interface HandlingArgs {
-  value?: string;
-  text?: string;
-  start?: number;
-  str?: string | undefined;
-  length?: number;
-  index?: number;
-  fullText?: string;
-}
-
 const EMPTY_CHAR = ' ';
 
 class BaseMaskRule {
@@ -34,190 +9,119 @@ class BaseMaskRule {
 
   maskChar?: string;
 
-  _next?: BaseMaskRule;
+  _next?: any;
 
-  constructor(config?: MaskRuleConfig) {
+  constructor(config) {
     this._value = EMPTY_CHAR;
     extend(this, config);
   }
 
-  next(): BaseMaskRule;
-  next(rule: BaseMaskRule): undefined;
-  next(rule?: BaseMaskRule): BaseMaskRule | undefined {
+  next(rule?: any) {
     if (!arguments.length) {
       return this._next;
     }
 
     this._next = rule;
-
-    return undefined;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  _prepareHandlingArgs(
-    args: HandlingArgs,
-    config?: HandlingArgs,
-  ): HandlingArgs {
-    const configuration = config ?? {};
+  _prepareHandlingArgs(args, config?: any) {
+    config = config || {};
     const handlingProperty = Object.prototype.hasOwnProperty.call(args, 'value') ? 'value' : 'text';
-
-    const finalConfig = {
-      ...args,
-      start: configuration.start ?? args.start,
-      length: configuration.length ?? args.length,
-      index: (args.index ?? 0) + 1,
-    };
-
-    finalConfig[handlingProperty] = configuration.str ?? args[handlingProperty];
-
-    return finalConfig;
+    args[handlingProperty] = config.str ?? args[handlingProperty];
+    args.start = config.start ?? args.start;
+    args.length = config.length ?? args.length;
+    args.index += 1;
+    return args;
   }
 
-  first(index: number): number {
-    const newIndex = (index ?? 0) + 1;
-
-    return this.next().first(newIndex);
+  first(index) {
+    index = index || 0;
+    return this.next().first(index + 1);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
-  isAccepted(caret?: number): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  isAccepted(caret?: any) {
     return false;
   }
 
-  adjustedCaret(
-    caret: number,
-    isForwardDirection: boolean,
-    char: string,
-  ): number {
+  adjustedCaret(caret, isForwardDirection, char) {
     return isForwardDirection
       ? this._adjustedForward(caret, 0, char)
       : this._adjustedBackward(caret, 0, char);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  _adjustedForward(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    caret: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    index: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    char?: string,
-  ): number {
-    return 0;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _adjustedForward(caret, index, char) {}
 
-  // eslint-disable-next-line class-methods-use-this
-  _adjustedBackward(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    caret: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    index: number,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    char?: string,
-  ): number {
-    return 0;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _adjustedBackward(caret, index, char?: string) {}
 
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any, class-methods-use-this
-  isValid(args: any): boolean {
-    return false;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  isValid(args: any) {}
 
-  // eslint-disable-next-line class-methods-use-this
-  reset(): void {}
+  reset() {}
 
-  // eslint-disable-next-line @stylistic/max-len
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this, @typescript-eslint/no-explicit-any
-  clear(args?: any): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  clear(args?: any) {}
 
-  // eslint-disable-next-line class-methods-use-this
-  text(): string {
-    return '';
-  }
+  text() {}
 
-  // eslint-disable-next-line class-methods-use-this
-  value(): string {
-    return '';
-  }
+  value() {}
 
-  // eslint-disable-next-line class-methods-use-this
-  rawValue(): string {
-    return '';
-  }
+  rawValue() {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, class-methods-use-this
-  handle(args: HandlingArgs): number {
-    return 0;
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  handle(args) {}
 }
 
 export class EmptyMaskRule extends BaseMaskRule {
-  next(): this;
-  next(rule: BaseMaskRule): undefined;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  next(rule?: BaseMaskRule): this | undefined {
-    if (!arguments.length) {
-      return this;
-    }
+  next() {}
 
-    return undefined;
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  handle(): number {
+  handle() {
     return 0;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  text(): string {
+  text() {
     return '';
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  value(): string {
+  value() {
     return '';
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  first(): number {
+  first() {
     return 0;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  rawValue(): string {
+  rawValue() {
     return '';
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  adjustedCaret(): number {
+  adjustedCaret() {
     return 0;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  isValid(): boolean {
+  isValid() {
     return true;
   }
 }
 
 export class MaskRule extends BaseMaskRule {
-  allowedChars?: AllowedChars;
-
   _isAccepted?: boolean;
 
-  text(): string {
+  text() {
     return (this._value !== EMPTY_CHAR ? this._value : this.maskChar) + this.next().text();
   }
 
-  value(): string {
+  value() {
     return this._value + this.next().value();
   }
 
-  rawValue(): string {
+  rawValue() {
     return this._value + this.next().rawValue();
   }
 
-  handle(args: HandlingArgs): number {
+  handle(args) {
     const str = Object.prototype.hasOwnProperty.call(args, 'value') ? args.value : args.text;
     if (!str || !str.length || !args.length) {
       return 0;
@@ -233,65 +137,56 @@ export class MaskRule extends BaseMaskRule {
     this._tryAcceptChar(char, args);
 
     return this._accepted()
-      ? this.next().handle(
-        this._prepareHandlingArgs(args, { str: rest, length: args.length - 1 }),
-      ) + 1
+      ? this.next().handle(this._prepareHandlingArgs(args, { str: rest, length: args.length - 1 })) + 1
       : this.handle(this._prepareHandlingArgs(args, { str: rest, length: args.length - 1 }));
   }
 
-  clear(args: HandlingArgs): void {
+  clear(args) {
     this._tryAcceptChar(EMPTY_CHAR, args);
     this.next().clear(this._prepareHandlingArgs(args));
   }
 
-  reset(): void {
+  reset() {
     this._accepted(false);
     this.next().reset();
   }
 
-  _tryAcceptChar(char: string, args: HandlingArgs): void {
+  _tryAcceptChar(char, args) {
     this._accepted(false);
 
     if (!this._isAllowed(char, args)) {
       return;
     }
-
-    const acceptedChar: string = char === EMPTY_CHAR ? this.maskChar ?? '' : char;
-
-    const fullTextSubstring1 = args.fullText?.substring(0, args.index) ?? '';
-    const fullTextSubstring2 = args.fullText?.substring((args.index ?? 0) + 1) ?? '';
-
-    args.fullText = `${fullTextSubstring1}${acceptedChar}${fullTextSubstring2}`;
-
+    const acceptedChar = char === EMPTY_CHAR ? this.maskChar : char;
+    args.fullText = args.fullText.substring(0, args.index) + acceptedChar + args.fullText.substring(args.index + 1);
     this._accepted(true);
     this._value = char;
   }
 
-  _accepted(value?: boolean): boolean {
+  // @ts-expect-error
+  _accepted(value?: any) {
     if (!arguments.length) {
-      return Boolean(this._isAccepted);
+      return !!this._isAccepted;
     }
-
     this._isAccepted = !!value;
-
-    return Boolean(this._isAccepted);
   }
 
-  first(index: number): number {
+  first(index) {
     return this._value === EMPTY_CHAR
       ? index || 0
       : super.first(index);
   }
 
-  _isAllowed(char: string, args?: HandlingArgs): boolean {
+  _isAllowed(char, args?: any) {
     if (char === EMPTY_CHAR) {
       return true;
     }
 
-    return this._isValid(char, args ?? {});
+    return this._isValid(char, args);
   }
 
-  _isValid(char: string, args: HandlingArgs): boolean {
+  _isValid(char, args) {
+    // @ts-expect-error
     const { allowedChars } = this;
 
     if (allowedChars instanceof RegExp) {
@@ -299,7 +194,7 @@ export class MaskRule extends BaseMaskRule {
     }
 
     if (isFunction(allowedChars)) {
-      return allowedChars(char, args.index ?? 0, args.fullText ?? '');
+      return allowedChars(char, args.index, args.fullText);
     }
 
     if (Array.isArray(allowedChars)) {
@@ -309,17 +204,13 @@ export class MaskRule extends BaseMaskRule {
     return allowedChars === char;
   }
 
-  isAccepted(caret: number): boolean {
+  isAccepted(caret) {
     return caret === 0
       ? this._accepted()
       : this.next().isAccepted(caret - 1);
   }
 
-  _adjustedForward(
-    caret: number,
-    index: number,
-    char: string,
-  ): number {
+  _adjustedForward(caret, index, char) {
     if (index >= caret) {
       return index;
     }
@@ -327,7 +218,7 @@ export class MaskRule extends BaseMaskRule {
     return this.next()._adjustedForward(caret, index + 1, char) || index + 1;
   }
 
-  _adjustedBackward(caret: number, index: number): number {
+  _adjustedBackward(caret, index) {
     if (index >= caret - 1) {
       return caret;
     }
@@ -335,28 +226,25 @@ export class MaskRule extends BaseMaskRule {
     return this.next()._adjustedBackward(caret, index + 1) || index + 1;
   }
 
-  isValid(args: HandlingArgs): boolean {
-    return this._isValid(this._value, args)
-      && this.next().isValid(this._prepareHandlingArgs(args));
+  isValid(args) {
+    return this._isValid(this._value, args) && this.next().isValid(this._prepareHandlingArgs(args));
   }
 }
 
 export class StubMaskRule extends MaskRule {
-  value(): string {
+  value() {
     return this.next().value();
   }
 
-  handle(args: HandlingArgs): number {
+  handle(args) {
     const hasValueProperty = Object.prototype.hasOwnProperty.call(args, 'value');
     const str = hasValueProperty ? args.value : args.text;
-
-    if (!str?.length || !args.length) {
+    if (!str.length || !args.length) {
       return 0;
     }
 
     if (args.start || hasValueProperty) {
-      return this.next()
-        .handle(this._prepareHandlingArgs(args, { start: args.start && args.start - 1 }));
+      return this.next().handle(this._prepareHandlingArgs(args, { start: args.start && args.start - 1 }));
     }
 
     const char = str[0];
@@ -364,37 +252,29 @@ export class StubMaskRule extends MaskRule {
 
     this._tryAcceptChar(char);
 
-    const nextArgs = this._isAllowed(char)
-      ? this._prepareHandlingArgs(args, { str: rest, length: args.length - 1 })
-      : args;
-
+    const nextArgs = this._isAllowed(char) ? this._prepareHandlingArgs(args, { str: rest, length: args.length - 1 }) : args;
     return this.next().handle(nextArgs) + 1;
   }
 
-  clear(args: HandlingArgs): void {
+  clear(args) {
     this._accepted(false);
     this.next().clear(this._prepareHandlingArgs(args));
   }
 
-  _tryAcceptChar(char: string): void {
+  _tryAcceptChar(char) {
     this._accepted(this._isValid(char));
   }
 
-  _isValid(char: string): boolean {
+  _isValid(char) {
     return char === this.maskChar;
   }
 
-  first(index = 0): number {
-    const newIndex = index + 1;
-
-    return this.next().first(newIndex);
+  first(index) {
+    index = index || 0;
+    return this.next().first(index + 1);
   }
 
-  _adjustedForward(
-    caret: number,
-    index: number,
-    char: string,
-  ): number {
+  _adjustedForward(caret, index, char) {
     if (index >= caret && char === this.maskChar) {
       return index;
     }
@@ -402,11 +282,10 @@ export class StubMaskRule extends MaskRule {
     if (caret === (index + 1) && this._accepted()) {
       return caret;
     }
-
     return this.next()._adjustedForward(caret, index + 1, char);
   }
 
-  _adjustedBackward(caret: number, index: number): number {
+  _adjustedBackward(caret, index) {
     if (index >= caret - 1) {
       return 0;
     }
@@ -414,7 +293,7 @@ export class StubMaskRule extends MaskRule {
     return this.next()._adjustedBackward(caret, index + 1);
   }
 
-  isValid(args: HandlingArgs): boolean {
+  isValid(args) {
     return this.next().isValid(this._prepareHandlingArgs(args));
   }
 }

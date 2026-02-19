@@ -291,10 +291,6 @@ class DateBoxMask extends DateBoxBase {
     const caret = this._caret();
     const { text = '' } = this.option();
 
-    if (!caret) {
-      return false;
-    }
-
     return caret.end - caret.start === text.length;
   }
 
@@ -665,11 +661,7 @@ class DateBoxMask extends DateBoxBase {
     this._loadMaskValue(this._maskValue);
     const { text } = this.option();
     if (text) {
-      const caret = this._caret();
-      if (!caret) {
-        return;
-      }
-      this._activePartIndex = getDatePartIndexByPosition(this._dateParts, caret.start);
+      this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
 
       if (!this._isAllSelected()) {
         this._clearSearchValue();
@@ -694,14 +686,7 @@ class DateBoxMask extends DateBoxBase {
 
   _maskPasteHandler(e: DxEvent): void {
     const { text } = this.option();
-    const caret = this._caret();
-    const pastedText = clipboardText(e) as string;
-
-    if (!text || !caret) {
-      return;
-    }
-
-    const newText = this._replaceSelectedText(text, caret, pastedText);
+    const newText = this._replaceSelectedText(text, this._caret(), clipboardText(e));
     const date = dateLocalization.parse(newText, this._getFormatPattern());
 
     if (date && this._isDateValid(date)) {

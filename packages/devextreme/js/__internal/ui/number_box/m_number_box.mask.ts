@@ -105,7 +105,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
         this._caretTimeout = undefined;
         const caret = this._caret();
 
-        if (caret?.start === caret?.end && this._useMaskBehavior()) {
+        if (caret.start === caret.end && this._useMaskBehavior()) {
           const text = this._getInputVal();
           const decimalSeparatorIndex = this._getTextSeparatorIndex(text);
 
@@ -253,13 +253,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
 
   _removeHandler(e) {
     const caret = this._caret();
-
-    if (!caret) {
-      return;
-    }
-
     const text = this._getInputVal();
-
     let { start } = caret;
     let { end } = caret;
 
@@ -524,11 +518,6 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     }
 
     const caret = this._caret();
-
-    if (!caret) {
-      return false;
-    }
-
     const point = number.getDecimalSeparator();
     const pointIndex = this._getTextSeparatorIndex(text);
     const isCaretOnFloat = pointIndex >= 0 && pointIndex < caret.start;
@@ -713,11 +702,6 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     }
 
     const caret = this._caret();
-
-    if (!caret) {
-      return;
-    }
-
     if (caret.start !== caret.end) {
       if (normalizeKeyName(e) === MINUS_KEY) {
         this._applyRevertedSign(e, caret, true);
