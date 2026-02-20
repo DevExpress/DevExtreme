@@ -99,22 +99,25 @@ class TextEditorMask<
   }
 
   _supportedKeys(): SupportedKeys {
-    const that = this;
-
-    const keyHandlerMap = {
-      del: that._maskStrategy.getHandler('del'),
-      enter: that._changeHandler,
-    };
-
     const result = super._supportedKeys();
 
-    each(keyHandlerMap, (key, callback) => {
+    const keyHandlerMap = {
+      del: this._maskStrategy.getHandler('del'),
+      enter: this._changeHandler,
+    };
+
+    Object.entries(keyHandlerMap).forEach(([key, handler]) => {
       const parentHandler = result[key];
 
-      result[key] = function (e) {
-        that.option('mask') && callback.call(that, e);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      result[key] = (e: any): void => {
+        const { mask } = this.option();
 
-        parentHandler && parentHandler(e);
+        if (mask && handler) {
+          handler.call(this, e);
+        }
+
+        parentHandler?.(e);
       };
     });
 
