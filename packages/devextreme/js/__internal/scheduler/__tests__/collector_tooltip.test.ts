@@ -39,9 +39,9 @@ describe('Collector tooltip behavior', () => {
     });
 
     POM.getCollectorButton().click();
-    POM.pressDeleteOnTooltipItem();
+    POM.tooltip.pressDeleteOnItem();
 
-    expect(POM.isTooltipVisible()).toBe(false);
+    expect(POM.tooltip.isVisible()).toBe(false);
   });
 
   it('should not delete disabled appointment by Delete key when focused in tooltip from collector', async () => {
@@ -66,8 +66,8 @@ describe('Collector tooltip behavior', () => {
     });
 
     POM.getCollectorButton().click();
-    POM.pressDeleteOnTooltipItem();
+    POM.tooltip.pressDeleteOnItem();
 
-    expect(POM.isTooltipVisible()).toBe(true);
+    expect(POM.tooltip.isVisible()).toBe(true);
   });
 });
