@@ -363,12 +363,14 @@ class TextEditorMask<
   }
 
   _displayMask(caret?: CaretRange): void {
-    // Expected
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, no-param-reassign
-    caret = caret || this._caret();
+    const currentCaret = caret ?? this._caret();
+    const finalCaret = {
+      start: currentCaret.start ?? 0,
+      end: currentCaret.end ?? 0,
+    };
 
     this._renderValue();
-    this._caret(caret);
+    this._caret(finalCaret);
   }
 
   _isValueEmpty(): boolean {
@@ -453,6 +455,7 @@ class TextEditorMask<
     return handledCount;
   }
 
+  // TODO
   _normalizeChainArguments(args?: HandlingArgs): HandlingArgs {
     // Expected
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, no-param-reassign
@@ -463,6 +466,7 @@ class TextEditorMask<
     return args;
   }
 
+  // TODO
   _convertToValue(text?: string): string {
     if (this._isMaskedValueMode()) {
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, no-param-reassign
@@ -587,6 +591,7 @@ class TextEditorMask<
     this._caret({ start: caret, end: caret });
   }
 
+  // TODO
   _caret(
     position?: CaretRange,
     force?: boolean,
