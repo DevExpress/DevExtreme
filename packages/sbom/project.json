@@ -7,8 +7,7 @@
       "options": {
         "cwd": "{projectRoot}",
         "command": "pnpm install --frozen-lockfile"
-      },
-      "cache": false
+      }
     },
     "build": {
       "executor": "nx:run-commands",
@@ -21,8 +20,7 @@
           "pnpm dx-make-sbom ../../ dist/ devextreme,devextreme-react,devextreme-angular,devextreme-vue,devextreme-themebuilder",
           "cp dist/devextreme.sbom.json dist/devextreme-dist.sbom.json"
         ]
-      },
-      "cache": false
+      }
     },
     "make": {
       "executor": "nx:run-commands",
@@ -31,8 +29,7 @@
         "cwd": "{projectRoot}",
         "parallel": false,
         "commands": ["pnpm dx-make-sbom ../../ dist/"]
-      },
-      "cache": false
+      }
     }
   }
 }

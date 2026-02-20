@@ -6,33 +6,101 @@
 @use "../sizes" as *;
 @use "../../base/treeView" as *;
 @use "../../base/icon_fonts" as *;
-@use "../checkBox/colors" as *;
 
 .dx-treeview-custom-expand-icon,
 .dx-treeview-custom-collapse-icon {
   @include dx-icon-sizing($fluent-base-icon-size);
 }
 
+.dx-treeview-select-all-item {
+  &.dx-state-focused {
+    .dx-checkbox-icon {
+      border-color: $treeview-checkbox-border-color-focused;
+      background-color: $treeview-checkbox-background-color-focused;
+    }
+  }
+
+  &.dx-state-focused.dx-checkbox-checked {
+    .dx-checkbox-icon {
+      background-color: $treeview-checkbox-accent-color-focused;
+      border-color: $treeview-checkbox-accent-color-focused;
+    }
+  }
+
+  &.dx-state-focused.dx-checkbox-indeterminate {
+    .dx-checkbox-icon {
+      border-color: $treeview-checkbox-accent-color-focused;
+
+      &::before {
+        background-color: $treeview-checkbox-accent-color-focused;
+      }
+    }
+  }
+}
+
 .dx-treeview-item-with-checkbox {
+  .dx-treeview-item {
+    .dx-checkbox.dx-state-disabled {
+      .dx-checkbox-icon {
+        border-color: $treeview-item-content-disabled;
+      }
+
+      &.dx-checkbox-indeterminate {
+        .dx-checkbox-icon::before {
+          background-color: $treeview-item-content-disabled;
+        }
+      }
+    }
+  }
+
   &.dx-state-focused > .dx-treeview-item {
     .dx-checkbox {
       .dx-checkbox-icon {
-        border-color: $checkbox-accent-color-focused;
+        border-color: $treeview-checkbox-border-color-focused;
+        background-color: $treeview-checkbox-background-color-focused;
       }
 
       &.dx-checkbox-checked {
         .dx-checkbox-icon {
-          background-color: $checkbox-accent-color-focused;
+          background-color: $treeview-checkbox-accent-color-focused;
+          border-color: $treeview-checkbox-accent-color-focused;
+        }
+      }
+
+      &.dx-checkbox-indeterminate {
+        .dx-checkbox-icon {
+          border-color: $treeview-checkbox-accent-color-focused;
+
+          &::before {
+            background-color: $treeview-checkbox-accent-color-focused;
+          }
+        }
+      }
+    }
+
+    .dx-checkbox.dx-state-disabled {
+      .dx-checkbox-icon {
+        background-color: $treeview-checkbox-disabled-background-focused;
+        border-color: $treeview-checkbox-disabled-control-color-focused;
+      }
+
+      &.dx-checkbox-checked {
+        .dx-checkbox-icon {
+          color: $treeview-checkbox-disabled-control-color-focused;
         }
       }
 
       &.dx-checkbox-indeterminate {
         .dx-checkbox-icon::before {
-          background-color: $checkbox-accent-color-focused;
+          background-color: $treeview-checkbox-disabled-control-color-focused;
         }
       }
     }
   }
+}
+
+.dx-treeview-item-content.dx-state-disabled {
+  color: $treeview-item-content-disabled;
 }
 
 @include default-expander-icon(
