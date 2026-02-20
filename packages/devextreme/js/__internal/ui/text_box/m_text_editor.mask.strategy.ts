@@ -238,6 +238,8 @@ export default class MaskStrategy {
         // @ts-expect-error bad editor type
         editor._handleKey(EMPTY_CHAR);
       }
+
+      return undefined;
     });
   }
 
@@ -248,7 +250,10 @@ export default class MaskStrategy {
     // @ts-expect-error dxElementWrapper.val() should return string
     const selectedText = inputVal.substring(caret?.start, caret?.end);
 
-    this.editor._maskKeyHandler(event, () => (getClipboardText(event, selectedText)) as string);
+    this.editor._maskKeyHandler(
+      event,
+      () => (getClipboardText(event, selectedText)) as Promise<string>,
+    );
   }
 
   _dropHandler(): void {
@@ -284,6 +289,8 @@ export default class MaskStrategy {
 
       editor._handleChain({ text: restText, start: newCaret, length: restText.length });
       editor._caret({ start: newCaret, end: newCaret });
+
+      return undefined;
     });
   }
 
@@ -301,6 +308,8 @@ export default class MaskStrategy {
             start: 0,
             length: inputVal.length,
           });
+
+          return undefined;
         });
 
         editor._validateMask();

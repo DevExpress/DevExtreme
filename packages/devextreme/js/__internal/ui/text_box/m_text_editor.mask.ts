@@ -480,7 +480,7 @@ class TextEditorMask<
 
   _maskKeyHandler(
     e: KeyboardEvent | ClipboardEvent | InputEvent,
-    keyHandler,
+    keyHandler: () => Promise<string> | undefined,
   ): void {
     const { readOnly } = this.option();
 
@@ -506,6 +506,7 @@ class TextEditorMask<
     const handled = keyHandler();
 
     if (handled) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       handled.then(raiseInputEvent);
     } else {
       this.setForwardDirection();
