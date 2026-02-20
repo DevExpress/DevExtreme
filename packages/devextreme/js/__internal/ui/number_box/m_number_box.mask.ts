@@ -101,12 +101,11 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   _focusInHandler(e): void {
     if (!this._preventNestedFocusEvent(e)) {
       this.clearCaretTimeout();
-      // eslint-disable-next-line no-restricted-globals
       this._caretTimeout = setTimeout(() => {
         this._caretTimeout = undefined;
         const caret = this._caret();
 
-        if (caret !== undefined && caret.start === caret.end && this._useMaskBehavior()) {
+        if (caret.start === caret.end && this._useMaskBehavior()) {
           const text = this._getInputVal();
           const decimalSeparatorIndex = this._getTextSeparatorIndex(text);
 
@@ -255,8 +254,8 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   _removeHandler(e) {
     const caret = this._caret();
     const text = this._getInputVal();
-
-    let { start = 0, end = 0 } = caret ?? {};
+    let { start } = caret;
+    let { end } = caret;
 
     this._lastKey = getChar(e);
     this._lastKeyName = normalizeKeyName(e);
@@ -521,7 +520,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     const caret = this._caret();
     const point = number.getDecimalSeparator();
     const pointIndex = this._getTextSeparatorIndex(text);
-    const isCaretOnFloat = pointIndex >= 0 && pointIndex < (caret?.start ?? 0);
+    const isCaretOnFloat = pointIndex >= 0 && pointIndex < caret.start;
     const textParts = this._removeStubs(text, true).split(point);
 
     if (!isCaretOnFloat || textParts.length !== 2) {
@@ -703,7 +702,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     }
 
     const caret = this._caret();
-    if (caret !== undefined && caret.start !== caret.end) {
+    if (caret.start !== caret.end) {
       if (normalizeKeyName(e) === MINUS_KEY) {
         this._applyRevertedSign(e, caret, true);
         return;

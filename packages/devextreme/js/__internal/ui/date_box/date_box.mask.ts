@@ -22,16 +22,13 @@ import type { DateBoxBaseProperties } from './date_box.base';
 import DateBoxBase from './date_box.base';
 import { getDatePartIndexByPosition, renderDateParts } from './date_box.mask.parts';
 
-export interface DateBoxMaskProperties extends Properties {
-  emptyDateValue?: Date;
-}
-
 const MASK_EVENT_NAMESPACE = 'dateBoxMask';
 const FORWARD = 1;
 const BACKWARD = -1;
 
-const defaultCaretPosition = { start: 0, end: 0 };
-
+export interface DateBoxMaskProperties extends Properties {
+  emptyDateValue?: Date;
+}
 class DateBoxMask extends DateBoxBase {
   _activePartIndex?: number | null;
 
@@ -291,7 +288,7 @@ class DateBoxMask extends DateBoxBase {
   }
 
   _isAllSelected(): boolean {
-    const caret = this._caret() ?? defaultCaretPosition;
+    const caret = this._caret();
     const { text = '' } = this.option();
 
     return caret.end - caret.start === text.length;
@@ -664,10 +661,7 @@ class DateBoxMask extends DateBoxBase {
     this._loadMaskValue(this._maskValue);
     const { text } = this.option();
     if (text) {
-      this._activePartIndex = getDatePartIndexByPosition(
-        this._dateParts,
-        this._caret()?.start ?? defaultCaretPosition.start,
-      );
+      this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
 
       if (!this._isAllSelected()) {
         this._clearSearchValue();
@@ -692,7 +686,7 @@ class DateBoxMask extends DateBoxBase {
 
   _maskPasteHandler(e: DxEvent): void {
     const { text } = this.option();
-    const newText = this._replaceSelectedText(text ?? '', this._caret() ?? defaultCaretPosition, clipboardText(e));
+    const newText = this._replaceSelectedText(text, this._caret(), clipboardText(e));
     const date = dateLocalization.parse(newText, this._getFormatPattern());
 
     if (date && this._isDateValid(date)) {
