@@ -290,6 +290,41 @@ QUnit.module('render', moduleConfig, () => {
         assert.strictEqual(this.overflowMenu.$popupContent().closest($container).length, 1, 'Popover content located into desired container');
     });
 
+    QUnit.test('popup should have correct height after async item templates are rendered (T1322123)', function(assert) {
+        const templateRenderingTimeout = 10;
+        const itemHeight = 50;
+
+        this.instance.option({
+            items: [1, 2, 3],
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    'item': {
+                        render({ model, container, onRendered }) {
+                            setTimeout(() => {
+                                const $item = $(`<div>${model}</div>`);
+                                $item.css('height', itemHeight);
+                                $item.appendTo(container);
+
+                                onRendered();
+                            }, templateRenderingTimeout);
+                        }
+                    }
+                }
+            },
+        });
+
+        this.overflowMenu.click();
+
+        this.clock.tick(templateRenderingTimeout);
+
+        const $overlayContent = this.overflowMenu.popup().$overlayContent();
+        const overlayContentHeight = getOuterHeight($overlayContent);
+
+        assert.strictEqual(this.overflowMenu.$items().length, 3, 'all items are rendered');
+        assert.strictEqual(overlayContentHeight, 197, 'popup height is updated');
+    });
+
     QUnit.test('popup should be placed into new container after changing the container option', function(assert) {
         const $container = $('#dropDownMenu');
 
