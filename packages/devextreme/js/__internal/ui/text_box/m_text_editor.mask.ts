@@ -307,11 +307,13 @@ class TextEditorMask<
       return;
     }
 
-    const { value = '' } = this.option('value');
+    const { value: optionValue } = this.option();
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const value = optionValue || '';
 
     this._maskRulesChain.clear(this._normalizeChainArguments());
 
-    const chainArgs = { length: value.length };
+    const chainArgs = { length: value?.length };
 
     chainArgs[this._isMaskedValueMode() ? 'text' : 'value'] = value;
 
