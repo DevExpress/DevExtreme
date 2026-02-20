@@ -71,7 +71,7 @@ const buildInMaskRules: MaskRules = {
 class TextEditorMask<
   TProperties extends TextEditorBaseProperties= TextEditorBaseProperties,
 > extends TextEditorBase<TProperties> {
-  _changedValue?: any;
+  _changedValue?: string;
 
   _maskStrategy!: MaskStrategy;
 
@@ -83,9 +83,9 @@ class TextEditorMask<
 
   _maskRules?: MaskRules;
 
-  _textValue?: any;
+  _textValue?: string;
 
-  _value?: any;
+  _value?: string;
 
   _getDefaultOptions(): TProperties {
     return {
@@ -242,7 +242,9 @@ class TextEditorMask<
 
   _changeHandler(e: DxEvent): void {
     const $input = this._input();
-    const inputValue = $input.val();
+
+    // @ts-expect-error dxElementWrapper.val() should return string
+    const inputValue = $input.val() as string;
 
     if (inputValue === this._changedValue) {
       return;
@@ -467,7 +469,6 @@ class TextEditorMask<
       text = text || this._value || '';
     }
 
-    // @ts-expect-error return type
     return text;
   }
 
@@ -713,7 +714,8 @@ class TextEditorMask<
         this._validateMask();
         super._optionChanged(args);
 
-        this._changedValue = this._input().val();
+        // @ts-expect-error dxElementWrapper.val() should return string
+        this._changedValue = this._input().val() as string;
         break;
       case 'maskInvalidMessage':
         break;
