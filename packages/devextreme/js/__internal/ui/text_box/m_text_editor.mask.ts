@@ -10,6 +10,7 @@ import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isEmpty } from '@js/core/utils/string';
+import type { DxEvent } from '@js/events';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
@@ -227,7 +228,7 @@ class TextEditorMask<
     this._renderMaskedValue();
   }
 
-  _changeHandler(e): void {
+  _changeHandler(e: DxEvent): void {
     const $input = this._input();
     const inputValue = $input.val();
 
@@ -332,7 +333,8 @@ class TextEditorMask<
 
     const textBefore = text.slice(0, selection.start);
     const textAfter = text.slice(selection.end);
-    const edited = textBefore + char + textAfter;
+
+    const edited = `${textBefore}${char}${textAfter}`;
 
     return edited;
   }
