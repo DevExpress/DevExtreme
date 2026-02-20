@@ -6,7 +6,7 @@ import fx from '@js/common/core/animation/fx';
 import { createScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
-describe('Collector tooltip behavior', () => {
+describe('Appointment tooltip behavior', () => {
   beforeEach(() => {
     fx.off = true;
     setupSchedulerTestEnvironment();
