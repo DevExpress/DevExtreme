@@ -431,8 +431,13 @@ class TextEditorMask<
   }
 
   _isControlKeyFired(e: KeyboardEvent): boolean {
-    // @ts-expect-error normalizeKeyName
-    return this._isControlKey(normalizeKeyName(e)) || isCommandKeyPressed(e);
+    const normalizedKeyName = normalizeKeyName(e);
+
+    const isControlKey = isDefined(normalizedKeyName)
+      ? this._isControlKey(normalizedKeyName)
+      : false;
+
+    return isControlKey || isCommandKeyPressed(e);
   }
 
   _handleChain(args: HandlingArgs): number {
