@@ -2,6 +2,7 @@ import type { Appointment } from '@js/ui/scheduler';
 
 import type Scheduler from '../m_scheduler';
 import { filterAppointments } from './filtration/filter_appointments';
+import type { Occurrence } from './filtration/get_occurrences';
 import { getOccurrences } from './filtration/get_occurrences';
 import { generateAgendaViewModel } from './generate_view_model/generate_agenda_view_model';
 import { generateGridViewModel } from './generate_view_model/generate_grid_view_model';
@@ -38,7 +39,7 @@ class AppointmentLayoutManager {
     startDate: Date,
     endDate: Date,
     rawAppointments: Appointment[],
-  ): Appointment[] {
+  ): Occurrence[] {
     const preparedAppointments = prepareAppointments(this.schedulerStore, rawAppointments);
     const occurrences = getOccurrences(
       this.schedulerStore,
