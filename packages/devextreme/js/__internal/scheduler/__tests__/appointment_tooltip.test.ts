@@ -44,6 +44,32 @@ describe('Appointment tooltip behavior', () => {
     expect(POM.tooltip.isVisible()).toBe(false);
   });
 
+  it('should delete appointment on delete button click in tooltip', async () => {
+    const { POM } = await createScheduler({
+      dataSource: [
+        {
+          text: 'Apt1',
+          startDate: new Date(2017, 4, 22, 9, 30),
+          endDate: new Date(2017, 4, 22, 10, 30),
+        },
+        {
+          text: 'Apt2',
+          startDate: new Date(2017, 4, 22, 9, 30),
+          endDate: new Date(2017, 4, 22, 10, 30),
+        },
+      ],
+      views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
+      currentView: 'month',
+      currentDate: new Date(2017, 4, 22),
+      height: 600,
+    });
+
+    POM.getCollectorButton().click();
+    POM.tooltip.getDeleteButton().click();
+
+    expect(POM.tooltip.isVisible()).toBe(false);
+  });
+
   it('delete button in tooltip should not be focusable using tab', async () => {
     const { POM } = await createScheduler({
       dataSource: [
