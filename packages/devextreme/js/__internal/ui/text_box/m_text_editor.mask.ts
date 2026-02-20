@@ -124,7 +124,11 @@ class TextEditorMask<
   }
 
   _getSubmitElement(): dxElementWrapper {
-    return !this.option('mask') ? super._getSubmitElement() : this._$hiddenElement;
+    const { mask } = this.option();
+
+    const submitElement = !mask ? super._getSubmitElement() : this._$hiddenElement;
+
+    return submitElement;
   }
 
   _init(): void {
@@ -157,6 +161,7 @@ class TextEditorMask<
 
       if (focused(input) && !isCommandKeyPressed(event)) {
         this._onMouseWheel(event);
+
         event.preventDefault();
         event.stopPropagation();
       }
@@ -176,7 +181,9 @@ class TextEditorMask<
   _onMouseWheel(e?): void {}
 
   _useMaskBehavior(): boolean {
-    return Boolean(this.option('mask'));
+    const { mask } = this.option();
+
+    return Boolean(mask);
   }
 
   _attachDropEventHandler(): void {
@@ -202,7 +209,9 @@ class TextEditorMask<
   }
 
   _renderHiddenElement(): void {
-    if (this.option('mask')) {
+    const { mask } = this.option();
+
+    if (mask) {
       this._$hiddenElement = $('<input>')
         .attr('type', 'hidden')
         .appendTo(this._inputWrapper());
@@ -218,7 +227,9 @@ class TextEditorMask<
     this._maskRulesChain = null;
     this._maskStrategy.detachEvents();
 
-    if (!this.option('mask')) {
+    const { mask } = this.option();
+
+    if (!mask) {
       return;
     }
 
@@ -245,7 +256,9 @@ class TextEditorMask<
   }
 
   _parseMask(): void {
-    this._maskRules = extend({}, buildInMaskRules, this.option('maskRules'));
+    const { maskRules } = this.option();
+
+    this._maskRules = extend({}, buildInMaskRules, maskRules);
     this._maskRulesChain = this._parseMaskRule(0);
   }
 
@@ -315,8 +328,9 @@ class TextEditorMask<
     this._maskRulesChain.clear(this._normalizeChainArguments());
 
     const chainArgs = { length: value?.length };
+    const prop = this._isMaskedValueMode() ? 'text' : 'value';
 
-    chainArgs[this._isMaskedValueMode() ? 'text' : 'value'] = value;
+    chainArgs[prop] = value;
 
     this._handleChain(chainArgs);
     this._displayMask();
@@ -346,6 +360,7 @@ class TextEditorMask<
   }
 
   _displayMask(caret?: CaretRange): void {
+    // Expected
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, no-param-reassign
     caret = caret || this._caret();
 
@@ -433,6 +448,8 @@ class TextEditorMask<
   }
 
   _normalizeChainArguments(args?: HandlingArgs): HandlingArgs {
+    // Expected
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, no-param-reassign
     args = args || {};
     args.index = 0;
     args.fullText = this._maskRulesChain.text();
@@ -617,18 +634,29 @@ class TextEditorMask<
     if (!this._maskRulesChain) {
       return;
     }
-    const isValid = isEmpty(this.option('value')) || this._maskRulesChain.isValid(this._normalizeChainArguments());
+
+    const { maskInvalidMessage, value } = this.option();
+
+    const defaultValidationError = {
+      editorSpecific: true,
+      message: maskInvalidMessage,
+    };
+
+    const isValid = isEmpty(value) || this._maskRulesChain.isValid(this._normalizeChainArguments());
+    const validationError = isValid ? null : defaultValidationError;
 
     this.option({
       isValid,
-      validationError: isValid ? null : { editorSpecific: true, message: this.option('maskInvalidMessage') },
+      validationError,
     });
   }
 
   _updateHiddenElement(): void {
     this._removeHiddenElement();
 
-    if (this.option('mask')) {
+    const { mask } = this.option();
+
+    if (mask) {
       this._input().removeAttr('name');
       this._renderHiddenElement();
     }
@@ -646,9 +674,11 @@ class TextEditorMask<
   }
 
   _processEmptyMask(mask: string): void {
-    if (mask) return;
+    if (mask) {
+      return;
+    }
 
-    const value = this.option('value');
+    const { value } = this.option();
 
     this.option({
       text: value,
@@ -686,7 +716,7 @@ class TextEditorMask<
       case 'maskInvalidMessage':
         break;
       case 'showMaskMode':
-        this.option('text', '');
+        this.option({ text: '' });
         this._renderValue();
         break;
       default:
@@ -696,9 +726,12 @@ class TextEditorMask<
 
   clear(): void {
     const { value: defaultValue } = this._getDefaultOptions();
-    if (this.option('value') === defaultValue) {
+    const { value } = this.option();
+
+    if (value === defaultValue) {
       this._renderMaskedValue();
     }
+
     super.clear();
   }
 }
