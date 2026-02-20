@@ -24,6 +24,8 @@ import caretUtils from './utils.caret';
 
 type MaskRules = Record<string, RegExp | ((char: string) => boolean)>;
 
+type CaretDirection = 'forward' | 'backward';
+
 const EMPTY_CHAR = ' ';
 const ESCAPED_CHAR = '\\';
 
@@ -72,7 +74,7 @@ class TextEditorMask<
 
   _$hiddenElement!: dxElementWrapper;
 
-  _typingDirection?: 'forward' | 'backward';
+  _typingDirection?: CaretDirection;
 
   _maskRulesChain?: any;
 
@@ -521,7 +523,7 @@ class TextEditorMask<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type, consistent-return
-  _direction(direction?: 'forward' | 'backward'): 'forward' | 'backward' | void {
+  _direction(direction?: CaretDirection): CaretDirection | void {
     if (!arguments.length) {
       return this._typingDirection;
     }
