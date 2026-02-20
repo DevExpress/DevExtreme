@@ -686,6 +686,7 @@ class DateBoxMask extends DateBoxBase {
 
   _maskPasteHandler(e: DxEvent): void {
     const { text } = this.option();
+    // @ts-expect-error text
     const newText = this._replaceSelectedText(text, this._caret(), clipboardText(e));
     const date = dateLocalization.parse(newText, this._getFormatPattern());
 

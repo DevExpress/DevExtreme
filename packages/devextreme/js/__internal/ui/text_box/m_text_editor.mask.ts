@@ -16,14 +16,13 @@ import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
+import type { TextEditorBaseProperties } from '@ts/ui/text_box/m_text_editor.base';
+import TextEditorBase from '@ts/ui/text_box/m_text_editor.base';
 import type { HandlingArgs } from '@ts/ui/text_box/m_text_editor.mask.rule';
-
-import type { TextEditorBaseProperties } from './m_text_editor.base';
-import TextEditorBase from './m_text_editor.base';
-import { EmptyMaskRule, MaskRule, StubMaskRule } from './m_text_editor.mask.rule';
-import MaskStrategy from './m_text_editor.mask.strategy';
-import type { CaretRange } from './utils.caret';
-import caretUtils from './utils.caret';
+import { EmptyMaskRule, MaskRule, StubMaskRule } from '@ts/ui/text_box/m_text_editor.mask.rule';
+import MaskStrategy from '@ts/ui/text_box/m_text_editor.mask.strategy';
+import type { CaretRange } from '@ts/ui/text_box/utils.caret';
+import caretUtils from '@ts/ui/text_box/utils.caret';
 
 type MaskRules = Record<string, RegExp | ((char: string) => boolean)>;
 

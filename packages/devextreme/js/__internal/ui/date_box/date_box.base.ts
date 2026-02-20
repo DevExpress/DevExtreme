@@ -533,6 +533,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
       : uiDateUtils.FORMATS_MAP[mode] as string | null;
   }
 
+  // @ts-expect-error Liskov
   _valueChangeEventHandler(
     e: InteractionEvent,
   ): void {
