@@ -139,6 +139,12 @@ export function isUnsupportedKeyFormat(licenseKey: string | undefined): boolean 
   return false;
 }
 
+function displayTrialPanel(): void {
+  const buyNowLink = config().buyNowLink ?? BUY_NOW_LINK;
+  const licensingDocLink = config().licensingDocLink ?? LICENSING_DOC_LINK;
+  showTrialPanel(buyNowLink, licensingDocLink, fullVersion, SUBSCRIPTION_NAMES);
+}
+
 function getLicenseCheckParams({
   licenseKey,
   version,
@@ -192,6 +198,7 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
   validationPerformed = true;
 
   if (isUnsupportedKeyFormat(licenseKey)) {
+    displayTrialPanel();
     return;
   }
 
@@ -209,9 +216,7 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
   }
 
   if (error && !internal) {
-    const buyNowLink = config().buyNowLink ?? BUY_NOW_LINK;
-    const licensingDocLink = config().licensingDocLink ?? LICENSING_DOC_LINK;
-    showTrialPanel(buyNowLink, licensingDocLink, fullVersion, SUBSCRIPTION_NAMES);
+    displayTrialPanel();
   }
 
   const preview = isPreview(version.patch);
