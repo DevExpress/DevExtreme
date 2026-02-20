@@ -128,11 +128,11 @@ export function isUnsupportedKeyFormat(licenseKey: string | undefined): boolean 
   }
 
   if (hasLicensePrefix(licenseKey, 'LCXv1')) {
-    errors.log('W0000', 'config', 'licenseKey', '0.0', 'LCXv1 is specified in the license key');
+    errors.log('W0000', 'config', 'licenseKey', 'LCXv1 is specified in the license key');
     return true;
   }
   if (hasLicensePrefix(licenseKey, 'egow')) {
-    errors.log('W0000', 'config', 'licenseKey', '0.0', 'DevExtreme key is specified in the license key');
+    errors.log('W0000', 'config', 'licenseKey', 'DevExtreme key is specified in the license key');
     return true;
   }
 
