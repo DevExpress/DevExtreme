@@ -3,6 +3,7 @@ import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import { DxSchedulerModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import 'anti-forgery';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
