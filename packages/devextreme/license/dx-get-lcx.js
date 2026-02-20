@@ -1,5 +1,3 @@
-
-
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -12,6 +10,10 @@ function isNonEmptyString(v) {
     return typeof v === 'string' && v.trim().length > 0;
 }
 
+function hasEnvVar(name) {
+    return Object.prototype.hasOwnProperty.call(process.env, name);
+}
+
 function readTextFileIfExists(filePath) {
     try {
         if(!filePath) return null;
@@ -20,7 +22,7 @@ function readTextFileIfExists(filePath) {
         if(!stat.isFile()) return null;
         const raw = fs.readFileSync(filePath, 'utf8');
         return isNonEmptyString(raw) ? raw : null;
-    } catch{
+    } catch {
         return null;
     }
 }
@@ -69,26 +71,28 @@ function resolveFromLicensePathEnv(licensePathValue) {
             if(stat.isFile()) return p;
             if(stat.isDirectory()) return path.join(p, LICENSE_FILE);
         }
-    } catch{}
+    } catch {}
 
     if(p.toLowerCase().endsWith('.txt')) return p;
     return path.join(p, LICENSE_FILE);
 }
 
 function getDevExpressLCXKey() {
-    // 1) env DevExpress_License
-    const envKey = normalizeKey(process.env[LICENSE_ENV]);
-    if(envKey) return { key: envKey, source: `env:${LICENSE_ENV}` };
+    if(hasEnvVar(LICENSE_ENV)) {
+        return { key: normalizeKey(process.env[LICENSE_ENV]), source: `env:${LICENSE_ENV}` };
+    }
 
-    // 2) env DevExpress_LicensePath
-    const licensePath = resolveFromLicensePathEnv(process.env[LICENSE_PATH_ENV]);
-    const fromCustom = normalizeKey(readTextFileIfExists(licensePath));
-    if(fromCustom) return { key: fromCustom, source: `file:${licensePath}` };
+    if(hasEnvVar(LICENSE_PATH_ENV)) {
+        const licensePath = resolveFromLicensePathEnv(process.env[LICENSE_PATH_ENV]);
+        const key = normalizeKey(readTextFileIfExists(licensePath));
+        return { key, source: key ? `file:${licensePath}` : `env:${LICENSE_PATH_ENV}` };
+    }
 
-    // 3) default OS location
     const defaultPath = getDefaultLicenseFilePath();
     const fromDefault = normalizeKey(readTextFileIfExists(defaultPath));
-    if(fromDefault) return { key: fromDefault, source: `file:${defaultPath}` };
+    if(fromDefault) {
+        return { key: fromDefault, source: `file:${defaultPath}` };
+    }
 
     return { key: null, source: null };
 }
