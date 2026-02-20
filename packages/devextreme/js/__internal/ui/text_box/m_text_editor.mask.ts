@@ -1,5 +1,3 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as wheelEventName } from '@js/common/core/events/core/wheel';
 import {
@@ -10,24 +8,23 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
 import { isEmpty } from '@js/core/utils/string';
-import type { DxEvent } from '@js/events';
+import { isDefined } from '@js/core/utils/type';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
-import type { ValueChangedEvent } from '@ts/ui/editor/editor';
-import type { DxMouseWheelEvent } from '@ts/ui/scroll_view/types';
-import type { TextEditorBaseProperties } from '@ts/ui/text_box/m_text_editor.base';
-import TextEditorBase from '@ts/ui/text_box/m_text_editor.base';
-import type { HandlingArgs } from '@ts/ui/text_box/m_text_editor.mask.rule';
-import { EmptyMaskRule, MaskRule, StubMaskRule } from '@ts/ui/text_box/m_text_editor.mask.rule';
-import MaskStrategy from '@ts/ui/text_box/m_text_editor.mask.strategy';
-import type { CaretRange } from '@ts/ui/text_box/utils.caret';
-import caretUtils from '@ts/ui/text_box/utils.caret';
+
+import type { TextEditorBaseProperties } from './m_text_editor.base';
+import TextEditorBase from './m_text_editor.base';
+import { EmptyMaskRule, MaskRule, StubMaskRule } from './m_text_editor.mask.rule';
+import MaskStrategy from './m_text_editor.mask.strategy';
+import type { CaretRange } from './utils.caret';
+import caretUtils from './utils.caret';
 
 type MaskRules = Record<string, RegExp | ((char: string) => boolean)>;
 
-type CaretDirection = 'forward' | 'backward';
+const caret = caretUtils;
 
 const EMPTY_CHAR = ' ';
 const ESCAPED_CHAR = '\\';
@@ -37,16 +34,6 @@ const FORWARD_DIRECTION = 'forward';
 const BACKWARD_DIRECTION = 'backward';
 
 const DROP_EVENT_NAME = 'drop';
-
-const isNumericChar = (char: string): boolean => /[0-9]/.test(char);
-
-const isLiteralChar = (char: string): boolean => {
-  const code = char.charCodeAt(0);
-
-  return (code > 64 && code < 91) || (code > 96 && code < 123) || code > 127;
-};
-
-const isSpaceChar = (char: string): boolean => char === ' ';
 
 const buildInMaskRules: MaskRules = {
   0: /[0-9]/,
@@ -68,10 +55,23 @@ const buildInMaskRules: MaskRules = {
   },
 };
 
+function isNumericChar(char): boolean {
+  return /[0-9]/.test(char);
+}
+
+function isLiteralChar(char): boolean {
+  const code = char.charCodeAt();
+  return code > 64 && code < 91 || code > 96 && code < 123 || code > 127;
+}
+
+function isSpaceChar(char): boolean {
+  return char === ' ';
+}
+
 class TextEditorMask<
   TProperties extends TextEditorBaseProperties= TextEditorBaseProperties,
 > extends TextEditorBase<TProperties> {
-  _changedValue?: string;
+  _changedValue?: any;
 
   _maskStrategy!: MaskStrategy;
 
@@ -79,50 +79,49 @@ class TextEditorMask<
 
   _typingDirection?: 'forward' | 'backward';
 
-  _maskRulesChain?: EmptyMaskRule | StubMaskRule | MaskRule | null;
+  _maskRulesChain?: any;
 
   _maskRules?: MaskRules;
 
-  _textValue?: string;
+  _textValue?: any;
 
-  _value?: string;
+  _value?: any;
 
   _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
       mask: '',
+
       maskChar: '_',
+
       maskRules: {},
+
       maskInvalidMessage: messageLocalization.format('validation-mask'),
+
       useMaskedValue: false,
+
       showMaskMode: 'always',
     };
   }
 
   _supportedKeys(): SupportedKeys {
-    const parentKeys = super._supportedKeys();
+    const that = this;
 
-    const delHandler = (e: DxEvent<KeyboardEvent>): void => {
-      if (this.option('mask')) {
-        this._maskStrategy.getHandler('del')(e);
-      }
-
-      parentKeys.del?.(e);
+    const keyHandlerMap = {
+      del: that._maskStrategy.getHandler('del'),
+      enter: that._changeHandler,
     };
 
-    const enterHandler = (e: DxEvent<KeyboardEvent>): void => {
-      if (this.option('mask')) {
-        this._changeHandler(e);
-      }
+    const result = super._supportedKeys();
+    each(keyHandlerMap, (key, callback) => {
+      const parentHandler = result[key];
+      result[key] = function (e) {
+        that.option('mask') && callback.call(that, e);
+        parentHandler && parentHandler(e);
+      };
+    });
 
-      parentKeys.enter?.(e);
-    };
-
-    return {
-      ...parentKeys,
-      del: delHandler,
-      enter: enterHandler,
-    };
+    return result;
   }
 
   _getSubmitElement(): dxElementWrapper {
@@ -151,7 +150,7 @@ class TextEditorMask<
     }
 
     const input = this._input();
-    // @ts-expect-error Second argument
+    // @ts-expect-error ts-error
     const eventName = addNamespace(wheelEventName, this.NAME);
     const mouseWheelAction = this._createAction((e) => {
       const { event } = e;
@@ -173,7 +172,8 @@ class TextEditorMask<
     return false;
   }
 
-  _onMouseWheel(e?: DxMouseWheelEvent): void {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _onMouseWheel(e?): void {}
 
   _useMaskBehavior(): boolean {
     return Boolean(this.option('mask'));
@@ -185,13 +185,12 @@ class TextEditorMask<
     if (!useMaskBehavior) {
       return;
     }
-
-    // @ts-expect-error addNamespace
+    // @ts-expect-error
     const eventName = addNamespace(DROP_EVENT_NAME, this.NAME);
     const input = this._input();
 
     eventsEngine.off(input, eventName);
-    eventsEngine.on(input, eventName, (e) => { e.preventDefault(); });
+    eventsEngine.on(input, eventName, (e) => e.preventDefault());
   }
 
   _render(): void {
@@ -210,13 +209,13 @@ class TextEditorMask<
   }
 
   _removeHiddenElement(): void {
-    this._$hiddenElement?.remove();
+    this._$hiddenElement && this._$hiddenElement.remove();
   }
 
   _renderMask(): void {
     this.$element().removeClass(TEXTEDITOR_MASKED_CLASS);
-
     this._maskRulesChain = null;
+
     this._maskStrategy.detachEvents();
 
     if (!this.option('mask')) {
@@ -230,20 +229,17 @@ class TextEditorMask<
     this._renderMaskedValue();
   }
 
-  _changeHandler(e: DxEvent): void {
+  _changeHandler(e): void {
     const $input = this._input();
-    // @ts-expect-error dxElementWrapper.val()
-    const inputValue: string = $input.val();
+    const inputValue = $input.val();
 
     if (inputValue === this._changedValue) {
       return;
     }
 
     this._changedValue = inputValue;
-
     const changeEvent = createEvent(e, { type: 'change' });
-
-    // @ts-expect-error trigger does not exist on type EventsEngineType
+    // @ts-expect-error
     eventsEngine.trigger($input, changeEvent);
   }
 
@@ -252,53 +248,41 @@ class TextEditorMask<
     this._maskRulesChain = this._parseMaskRule(0);
   }
 
-  _parseMaskRule(index: number): EmptyMaskRule | StubMaskRule | MaskRule | undefined {
+  _parseMaskRule(index: number): EmptyMaskRule | StubMaskRule | MaskRule {
     const { mask } = this.option();
-
-    if (!mask) {
-      return undefined;
-    }
-
+    // @ts-expect-error ts-error
     if (index >= mask.length) {
-      return new EmptyMaskRule({});
+      // @ts-expect-error ts-error
+      return new EmptyMaskRule();
     }
-
+    // @ts-expect-error
     const currentMaskChar = mask[index];
     const isEscapedChar = currentMaskChar === ESCAPED_CHAR;
-
     const result = isEscapedChar
+      // @ts-expect-error
       ? new StubMaskRule({ maskChar: mask[index + 1] })
       : this._getMaskRule(currentMaskChar);
-
-    const rule = this._parseMaskRule(index + 1 + (isEscapedChar ? 1 : 0));
-
-    if (rule) {
-      // @ts-expect-error EmptyMaskRule.next() violates Liskov substitution in BaseMaskRule
-      result.next(rule);
-    }
-
+    // @ts-expect-error
+    result.next(this._parseMaskRule(index + 1 + isEscapedChar));
     return result;
   }
 
-  _getMaskRule(pattern: string): MaskRule | StubMaskRule {
-    const entries = Object.entries(this._maskRules ?? {});
+  _getMaskRule(pattern) {
+    let ruleConfig;
+    // @ts-expect-error
+    each(this._maskRules, (rulePattern, allowedChars) => {
+      if (rulePattern === pattern) {
+        ruleConfig = {
+          pattern: rulePattern,
+          allowedChars,
+        };
+        return false;
+      }
+    });
 
-    const found = entries.find(
-      ([rulePattern]) => rulePattern === pattern,
-    );
-
-    if (found) {
-      const [rulePattern, allowedChars] = found;
-      const { maskChar: optionMaskChar } = this.option();
-
-      return new MaskRule({
-        maskChar: optionMaskChar ?? ' ',
-        pattern: rulePattern,
-        allowedChars,
-      });
-    }
-
-    return new StubMaskRule({ maskChar: pattern });
+    return isDefined(ruleConfig)
+      ? new MaskRule(extend({ maskChar: this.option('maskChar') || ' ' }, ruleConfig))
+      : new StubMaskRule({ maskChar: pattern });
   }
 
   _renderMaskedValue(): void {
@@ -306,23 +290,17 @@ class TextEditorMask<
       return;
     }
 
-    const { value = '' } = this.option();
-
+    const value = this.option('value') || '';
     this._maskRulesChain.clear(this._normalizeChainArguments());
-
+    // @ts-expect-error ts-error
     const chainArgs = { length: value.length };
-
     chainArgs[this._isMaskedValueMode() ? 'text' : 'value'] = value;
 
     this._handleChain(chainArgs);
     this._displayMask();
   }
 
-  _replaceSelectedText(
-    text: string,
-    selection: CaretRange,
-    char: string,
-  ): string {
+  _replaceSelectedText(text, selection, char) {
     if (char === undefined) {
       return text;
     }
@@ -334,20 +312,17 @@ class TextEditorMask<
     return edited;
   }
 
-  _isMaskedValueMode(): boolean {
-    const { useMaskedValue } = this.option();
-
-    return Boolean(useMaskedValue);
+  _isMaskedValueMode() {
+    return this.option('useMaskedValue');
   }
 
-  _displayMask(caret?: CaretRange): void {
-    const currentCaret = caret ?? this._caret();
-
+  _displayMask(caret?): void {
+    caret = caret || this._caret();
     this._renderValue();
-    this._caret(currentCaret);
+    this._caret(caret);
   }
 
-  _isValueEmpty(): boolean {
+  _isValueEmpty() {
     return isEmpty(this._value);
   }
 
@@ -363,8 +338,7 @@ class TextEditorMask<
 
   _showMaskPlaceholder(): void {
     if (this._shouldShowMask()) {
-      const text = this._maskRulesChain?.text();
-
+      const text = this._maskRulesChain.text();
       this.option('text', text);
 
       const { showMaskMode } = this.option();
@@ -388,85 +362,74 @@ class TextEditorMask<
         this._$hiddenElement.val(submitElementValue);
       }
     }
-
     return super._renderValue();
   }
 
-  _getPreparedValue(): string {
+  _getPreparedValue() {
     return this._convertToValue().replace(/\s+$/, '');
   }
 
-  _valueChangeEventHandler(e: ValueChangedEvent, value?: unknown): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _valueChangeEventHandler(e, value?): void {
     if (!this._maskRulesChain) {
-      super._valueChangeEventHandler(e, value);
-
+      // @ts-expect-error
+      super._valueChangeEventHandler.apply(this, arguments);
       return;
     }
 
     this._saveValueChangeEvent(e);
 
-    this.option({
-      value: this._getPreparedValue(),
-    });
+    this.option('value', this._getPreparedValue());
   }
 
-  _isControlKeyFired(e: KeyboardEvent): boolean {
-    return this._isControlKey(normalizeKeyName(e) ?? '') || isCommandKeyPressed(e);
+  _isControlKeyFired(e) {
+    // @ts-expect-error
+    return this._isControlKey(normalizeKeyName(e)) || isCommandKeyPressed(e);
   }
 
-  _handleChain(args: HandlingArgs): number {
-    const handledCount = this._maskRulesChain?.handle(this._normalizeChainArguments(args)) ?? 0;
-
+  _handleChain(args) {
+    const handledCount = this._maskRulesChain.handle(this._normalizeChainArguments(args));
     this._updateMaskInfo();
-
     return handledCount;
   }
 
-  _normalizeChainArguments(args?: HandlingArgs): HandlingArgs {
-    return {
-      ...args,
-      index: 0,
-      fullText: this._maskRulesChain?.text(),
-    };
+  _normalizeChainArguments(args?) {
+    args = args || {};
+    args.index = 0;
+    args.fullText = this._maskRulesChain.text();
+    return args;
   }
 
-  _convertToValue(text?: string): string {
+  _convertToValue(text?) {
     if (this._isMaskedValueMode()) {
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      return this._replaceMaskCharWithEmpty(text || this._textValue || '');
+      text = this._replaceMaskCharWithEmpty(text || this._textValue || '');
+    } else {
+      text = text || this._value || '';
     }
 
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return text || this._value || '';
+    return text;
   }
 
-  _replaceMaskCharWithEmpty(text: string): string {
-    const { maskChar = EMPTY_CHAR } = this.option();
-
+  _replaceMaskCharWithEmpty(text) {
+    const { maskChar } = this.option();
+    // @ts-expect-error ts-error
     return text.replace(new RegExp(maskChar, 'g'), EMPTY_CHAR);
   }
 
-  _maskKeyHandler(
-    e: KeyboardEvent | ClipboardEvent | InputEvent,
-    keyHandler: () => Promise<string> | undefined,
-  ): void {
+  _maskKeyHandler(e, keyHandler): void {
     if (this.option('readOnly')) {
       return;
     }
 
     this.setForwardDirection();
-
     e.preventDefault();
 
     this._handleSelection();
 
-    // @ts-expect-error dxElementWrapper.val() should return string
-    const previousText: string = this._input().val();
-
-    const raiseInputEvent = (): void => {
-      // @ts-expect-error dxElementWrapper.val() should return string
+    const previousText = this._input().val();
+    const raiseInputEvent = () => {
       if (previousText !== this._input().val()) {
-        // @ts-expect-error trigger
+        // @ts-expect-error
         eventsEngine.trigger(this._input(), 'input');
       }
     };
@@ -474,18 +437,17 @@ class TextEditorMask<
     const handled = keyHandler();
 
     if (handled) {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       handled.then(raiseInputEvent);
     } else {
       this.setForwardDirection();
       this._adjustCaret();
       this._displayMask();
-      this._maskRulesChain?.reset();
+      this._maskRulesChain.reset();
       raiseInputEvent();
     }
   }
 
-  _handleKey(key: string, direction: CaretDirection): void {
+  _handleKey(key, direction): void {
     this._direction(direction || FORWARD_DIRECTION);
     this._adjustCaret(key);
     this._handleKeyChain(key);
@@ -502,7 +464,7 @@ class TextEditorMask<
     this._handleKeyChain(emptyChars);
   }
 
-  _handleKeyChain(chars: string): void {
+  _handleKeyChain(chars): void {
     const caret = this._caret();
     const start = this.isForwardDirection() ? caret.start : caret.start - 1;
     const end = this.isForwardDirection() ? caret.end : caret.end - 1;
@@ -518,12 +480,11 @@ class TextEditorMask<
     return !currentCaret || currentCaret !== this._caret().start;
   }
 
-  _adjustCaret(char?: string): void {
+  _adjustCaret(char?): void {
     const caretStart = this._caret().start;
     const isForwardDirection = this.isForwardDirection();
 
-    const caret = this._maskRulesChain?.adjustedCaret(caretStart, isForwardDirection, char ?? '') ?? 0;
-
+    const caret = this._maskRulesChain.adjustedCaret(caretStart, isForwardDirection, char);
     this._caret({ start: caret, end: caret });
   }
 
@@ -531,29 +492,30 @@ class TextEditorMask<
     const currentCaret = this._caret().start;
     const maskRuleIndex = currentCaret + (this.isForwardDirection() ? 0 : -1);
 
-    const caret = this._maskRulesChain?.isAccepted(maskRuleIndex)
+    const caret = this._maskRulesChain.isAccepted(maskRuleIndex)
       ? currentCaret + (this.isForwardDirection() ? 1 : -1)
       : currentCaret;
 
     this._caret({ start: caret, end: caret });
   }
 
-  _caret(): CaretRange;
-  _caret(position: CaretRange, force?: boolean): void;
-  _caret(position?: CaretRange, force?: boolean): CaretRange | void {
+  _caret(
+    position?: { start: number; end: number },
+    force?,
+    // @ts-expect-error
+  ): CaretRange {
     const $input = this._input();
 
     if (!$input.length) {
-      return undefined;
+      // @ts-expect-error
+      return;
     }
 
-    if (position === undefined) {
-      return caretUtils($input);
+    if (!arguments.length) {
+      // @ts-expect-error
+      return caret($input);
     }
-
-    caretUtils($input, position, force);
-
-    return undefined;
+    caret($input, position, force);
   }
 
   _hasSelection(): boolean {
@@ -562,16 +524,13 @@ class TextEditorMask<
     return caret.start !== caret.end;
   }
 
-  _direction(): CaretDirection;
-  _direction(direction: CaretDirection): void;
-  _direction(direction?: CaretDirection): CaretDirection | void {
-    if (direction === undefined) {
-      return this._typingDirection as CaretDirection;
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type, consistent-return
+  _direction(direction?: 'forward' | 'backward'): 'forward' | 'backward' | void {
+    if (!arguments.length) {
+      return this._typingDirection;
     }
 
     this._typingDirection = direction;
-
-    return undefined;
   }
 
   setForwardDirection(): void {
@@ -587,12 +546,12 @@ class TextEditorMask<
   }
 
   _updateMaskInfo(): void {
-    this._textValue = this._maskRulesChain?.text();
-    this._value = this._maskRulesChain?.value();
+    this._textValue = this._maskRulesChain.text();
+    this._value = this._maskRulesChain.value();
   }
 
   _clean(): void {
-    this._maskStrategy?.clean();
+    this._maskStrategy && this._maskStrategy.clean();
     super._clean();
   }
 
@@ -628,7 +587,7 @@ class TextEditorMask<
     this._refreshValueChangeEvent();
   }
 
-  _processEmptyMask(mask: string): void {
+  _processEmptyMask(mask): void {
     if (mask) return;
 
     const value = this.option('value');
@@ -651,7 +610,7 @@ class TextEditorMask<
     switch (args.name) {
       case 'mask':
         this._updateMaskOption();
-        this._processEmptyMask(args.value as string);
+        this._processEmptyMask(args.value);
         break;
       case 'maskChar':
       case 'maskRules':
@@ -663,7 +622,6 @@ class TextEditorMask<
         this._validateMask();
         super._optionChanged(args);
 
-        // @ts-expect-error dxElementWrapper.val()
         this._changedValue = this._input().val();
         break;
       case 'maskInvalidMessage':
