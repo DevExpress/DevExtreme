@@ -39,7 +39,10 @@ describe('Appointment tooltip behavior', () => {
     });
 
     POM.getCollectorButton().click();
-    POM.tooltip.pressDeleteOnItem();
+
+    const tooltipScrollableContent = POM.tooltip.getScrollableContent();
+    tooltipScrollableContent?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    tooltipScrollableContent?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', bubbles: true }));
 
     expect(POM.tooltip.isVisible()).toBe(false);
   });
@@ -119,7 +122,10 @@ describe('Appointment tooltip behavior', () => {
     });
 
     POM.getCollectorButton().click();
-    POM.tooltip.pressDeleteOnItem();
+
+    const tooltipScrollableContent = POM.tooltip.getScrollableContent();
+    tooltipScrollableContent?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    tooltipScrollableContent?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', bubbles: true }));
 
     expect(POM.tooltip.isVisible()).toBe(true);
   });
@@ -146,7 +152,10 @@ describe('Appointment tooltip behavior', () => {
     });
 
     POM.getCollectorButton().click();
-    POM.tooltip.pressDeleteOnItem();
+
+    const tooltipScrollableContent = POM.tooltip.getScrollableContent();
+    tooltipScrollableContent?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+    tooltipScrollableContent?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', bubbles: true }));
 
     expect(POM.tooltip.isVisible()).toBe(true);
   });
