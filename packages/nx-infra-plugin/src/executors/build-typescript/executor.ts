@@ -137,6 +137,17 @@ async function resolveSourceFiles(
   return files;
 }
 
+function replacePathPrefix(filePath: string, from: string, to: string): string {
+  if (isWindowsOS()) {
+    return normalizeGlobPathForWindows(filePath).replace(
+      normalizeGlobPathForWindows(from),
+      normalizeGlobPathForWindows(to),
+    );
+  }
+
+  return filePath.replace(from, to);
+}
+
 function buildCompilerOptions(
   tsconfigContent: TsConfig,
   tsconfigPath: string,
@@ -178,7 +189,7 @@ async function emitWithAliasResolution(
     let finalContent = fileData;
 
     if (aliasTranspileFunc && aliasPath) {
-      const normalizedFilePath = filePath.replace(outDir, aliasPath);
+      const normalizedFilePath = replacePathPrefix(filePath, outDir, aliasPath);
       finalContent = aliasTranspileFunc(normalizedFilePath, fileData);
     }
 
