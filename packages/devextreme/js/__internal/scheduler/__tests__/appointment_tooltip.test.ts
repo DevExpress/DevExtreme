@@ -69,6 +69,35 @@ describe('Appointment tooltip behavior', () => {
     expect(POM.tooltip.getDeleteButton().getAttribute('tabindex')).toBe('-1');
   });
 
+  it('should not delete appointment by Delete key when editing.allowDeleting=false', async () => {
+    const { POM } = await createScheduler({
+      dataSource: [
+        {
+          text: 'Apt1',
+          startDate: new Date(2017, 4, 22, 9, 30),
+          endDate: new Date(2017, 4, 22, 10, 30),
+        },
+        {
+          text: 'Apt2',
+          startDate: new Date(2017, 4, 22, 9, 30),
+          endDate: new Date(2017, 4, 22, 10, 30),
+        },
+      ],
+      views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
+      currentView: 'month',
+      currentDate: new Date(2017, 4, 22),
+      height: 600,
+      editing: {
+        allowDeleting: false,
+      },
+    });
+
+    POM.getCollectorButton().click();
+    POM.tooltip.pressDeleteOnItem();
+
+    expect(POM.tooltip.isVisible()).toBe(true);
+  });
+
   it('should not delete disabled appointment by Delete key when focused in tooltip from collector', async () => {
     const { POM } = await createScheduler({
       dataSource: [
