@@ -118,8 +118,25 @@ function isPreview(patch: number): boolean {
   return isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
 }
 
-function isDevExpressDeveloperKey(licenseKey: string): boolean {
-  return licenseKey.startsWith('LCX');
+function hasLicensePrefix(licenseKey: string, prefix: string): boolean {
+  return licenseKey.trim().startsWith(prefix);
+}
+
+export function isUnsupportedKeyFormat(licenseKey: string | undefined): boolean {
+  if (!licenseKey) {
+    return false;
+  }
+
+  if (hasLicensePrefix(licenseKey, 'LCXv1')) {
+    errors.log('W0000', 'config', 'licenseKey', '0.0', 'LCXv1 is specified in the license key');
+    return true;
+  }
+  if (hasLicensePrefix(licenseKey, 'egow')) {
+    errors.log('W0000', 'config', 'licenseKey', '0.0', 'DevExtreme key is specified in the license key');
+    return true;
+  }
+
+  return false;
 }
 
 function getLicenseCheckParams({
@@ -140,7 +157,7 @@ function getLicenseCheckParams({
       return { preview, error: 'W0019' };
     }
 
-    if (isDevExpressDeveloperKey(licenseKey)) {
+    if (hasLicensePrefix(licenseKey, 'LCX')) {
       return { preview, error: 'W0024' };
     }
 
@@ -173,6 +190,10 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
     return;
   }
   validationPerformed = true;
+
+  if (isUnsupportedKeyFormat(licenseKey)) {
+    return;
+  }
 
   const version = parseVersion(versionStr);
 
