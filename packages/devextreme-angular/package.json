@@ -1,7 +1,7 @@
 {
   "name": "devextreme-angular",
   "version": "26.1.0",
-  "description": "Angular UI and visualization components based on DevExtreme widgets",
+  "description": "DevExtreme UI and Visualization Components for Angular",
   "repository": {
     "type": "git",
     "url": "https://github.com/DevExpress/DevExtreme.git",

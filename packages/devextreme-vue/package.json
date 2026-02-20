@@ -1,7 +1,7 @@
 {
   "name": "devextreme-vue",
   "version": "26.1.0",
-  "description": "DevExtreme Vue UI and Visualization Components",
+  "description": "DevExtreme UI and Visualization Components for Vue",
   "repository": {
     "type": "git",
     "url": "https://github.com/DevExpress/DevExtreme.git",
