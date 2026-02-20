@@ -365,8 +365,8 @@ class TextEditorMask<
   _displayMask(caret?: CaretRange): void {
     const currentCaret = caret ?? this._caret();
     const finalCaret = {
-      start: currentCaret.start ?? 0,
-      end: currentCaret.end ?? 0,
+      start: currentCaret?.start ?? 0,
+      end: currentCaret?.end ?? 0,
     };
 
     this._renderValue();
@@ -533,8 +533,8 @@ class TextEditorMask<
 
     const caret = this._caret();
 
-    const caretStart = caret.start ?? 0;
-    const caretEnd = caret.end ?? 0;
+    const caretStart = caret?.start ?? 0;
+    const caretEnd = caret?.end ?? 0;
 
     const emptyChars = new Array(caretEnd - caretStart + 1).join(EMPTY_CHAR);
 
@@ -544,8 +544,8 @@ class TextEditorMask<
   _handleKeyChain(chars: string): void {
     const caret = this._caret();
 
-    const caretStart = caret.start ?? 0;
-    const caretEnd = caret.end ?? 0;
+    const caretStart = caret?.start ?? 0;
+    const caretEnd = caret?.end ?? 0;
 
     const start = this.isForwardDirection() ? caretStart : caretStart - 1;
     const end = this.isForwardDirection() ? caretEnd : caretEnd - 1;
@@ -558,15 +558,15 @@ class TextEditorMask<
   _tryMoveCaretBackward(): boolean {
     this.setBackwardDirection();
 
-    const currentCaret = this._caret().start;
+    const currentCaret = this._caret()?.start;
 
     this._adjustCaret();
 
-    return !currentCaret || currentCaret !== this._caret().start;
+    return !currentCaret || currentCaret !== this._caret()?.start;
   }
 
   _adjustCaret(char?: string): void {
-    const caretStart = this._caret().start ?? 0;
+    const caretStart = this._caret()?.start ?? 0;
     const isForwardDirection = this.isForwardDirection();
 
     const caret = this._maskRulesChain?.adjustedCaret(caretStart, isForwardDirection, char ?? '');
@@ -575,7 +575,7 @@ class TextEditorMask<
   }
 
   _moveCaret(): void {
-    const currentCaret = this._caret().start ?? 0;
+    const currentCaret = this._caret()?.start ?? 0;
     const maskRuleIndex = currentCaret + (this.isForwardDirection() ? 0 : -1);
 
     const caret = this._maskRulesChain?.isAccepted(maskRuleIndex)
@@ -585,32 +585,28 @@ class TextEditorMask<
     this._caret({ start: caret, end: caret });
   }
 
-  // TODO
   _caret(
     position?: CaretRange,
     force?: boolean,
-    // @ts-expect-error return type
-  ): CaretRange {
+  ): CaretRange | undefined {
     const $input = this._input();
 
     if (!$input.length) {
-      // @ts-expect-error return type
-      return;
+      return undefined;
     }
 
-    if (!arguments.length) {
-      // @ts-expect-error return type
-      // eslint-disable-next-line consistent-return
-      return caretUtils($input);
+    if (arguments.length > 0) {
+      caretUtils($input, position, force);
+      return undefined;
     }
 
-    caretUtils($input, position, force);
+    return caretUtils($input);
   }
 
   _hasSelection(): boolean {
     const caret = this._caret();
 
-    return caret.start !== caret.end;
+    return caret?.start !== caret?.end;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type, consistent-return
