@@ -33,6 +33,16 @@ const BACKWARD_DIRECTION = 'backward';
 
 const DROP_EVENT_NAME = 'drop';
 
+const isNumericChar = (char: string): boolean => /[0-9]/.test(char);
+
+const isLiteralChar = (char: string): boolean => {
+  const code = char.charCodeAt(0);
+
+  return (code > 64 && code < 91) || (code > 96 && code < 123) || code > 127;
+};
+
+const isSpaceChar = (char: string): boolean => char === ' ';
+
 const buildInMaskRules: MaskRules = {
   0: /[0-9]/,
   9: /[0-9\s]/,
@@ -52,19 +62,6 @@ const buildInMaskRules: MaskRules = {
     return isLiteralChar(char) || isNumericChar(char) || isSpaceChar(char);
   },
 };
-
-function isNumericChar(char): boolean {
-  return /[0-9]/.test(char);
-}
-
-function isLiteralChar(char): boolean {
-  const code = char.charCodeAt();
-  return code > 64 && code < 91 || code > 96 && code < 123 || code > 127;
-}
-
-function isSpaceChar(char): boolean {
-  return char === ' ';
-}
 
 class TextEditorMask<
   TProperties extends TextEditorBaseProperties= TextEditorBaseProperties,
