@@ -37,7 +37,7 @@ class AppointmentLayoutManager {
   public getOccurrences(
     startDate: Date,
     endDate: Date,
-    rawAppointments?: Appointment[],
+    rawAppointments: Appointment[],
   ): Appointment[] {
     const preparedAppointments = prepareAppointments(this.schedulerStore, rawAppointments);
     const occurrences = getOccurrences(
