@@ -24,8 +24,6 @@ import caretUtils from './utils.caret';
 
 type MaskRules = Record<string, RegExp | ((char: string) => boolean)>;
 
-const caret = caretUtils;
-
 const EMPTY_CHAR = ' ';
 const ESCAPED_CHAR = '\\';
 
@@ -513,9 +511,10 @@ class TextEditorMask<
 
     if (!arguments.length) {
       // @ts-expect-error
-      return caret($input);
+      return caretUtils($input);
     }
-    caret($input, position, force);
+
+    caretUtils($input, position, force);
   }
 
   _hasSelection(): boolean {
