@@ -10,6 +10,7 @@ import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isEmpty } from '@js/core/utils/string';
+import { isDefined } from '@js/core/utils/type';
 import type { DxEvent } from '@js/events';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -109,8 +110,7 @@ class TextEditorMask<
     Object.entries(keyHandlerMap).forEach(([key, handler]) => {
       const parentHandler = result[key];
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      result[key] = (e: any): void => {
+      result[key] = (e: DxEvent<KeyboardEvent>): void => {
         const { mask } = this.option();
 
         if (mask && handler) {
@@ -139,7 +139,7 @@ class TextEditorMask<
   }
 
   _initMaskStrategy(): void {
-    // @ts-expect-error MaskStrategy bad typification
+    // @ts-expect-error expected
     this._maskStrategy = new MaskStrategy(this);
   }
 
@@ -157,7 +157,7 @@ class TextEditorMask<
     // @ts-expect-error addNamespace with second argument
     const eventName = addNamespace(wheelEventName, this.NAME);
 
-    const mouseWheelAction = this._createAction((e) => {
+    const mouseWheelAction = this._createAction((e: { event: DxMouseWheelEvent }) => {
       const { event } = e;
 
       if (focused(input) && !isCommandKeyPressed(event)) {
@@ -199,7 +199,7 @@ class TextEditorMask<
     const input = this._input();
 
     eventsEngine.off(input, eventName);
-    eventsEngine.on(input, eventName, (e) => { e.preventDefault(); });
+    eventsEngine.on(input, eventName, (e: DxEvent<DragEvent>) => { e.preventDefault(); });
   }
 
   _render(): void {
@@ -266,17 +266,14 @@ class TextEditorMask<
   _parseMaskRule(index: number): EmptyMaskRule | StubMaskRule | MaskRule {
     const { mask } = this.option();
 
-    // @ts-expect-error mask can be undefined
-    if (index >= mask.length) {
+    if (!isDefined(mask) || index >= mask.length) {
       return new EmptyMaskRule({});
     }
 
-    // @ts-expect-error mask can be undefined
     const currentMaskChar = mask[index];
     const isEscapedChar = currentMaskChar === ESCAPED_CHAR;
 
     const result = isEscapedChar
-      // @ts-expect-error mask can be undefined
       ? new StubMaskRule({ maskChar: mask[index + 1] })
       : this._getMaskRule(currentMaskChar);
 
