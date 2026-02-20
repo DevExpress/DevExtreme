@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
+import 'anti-forgery';
 
 const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi';
 
