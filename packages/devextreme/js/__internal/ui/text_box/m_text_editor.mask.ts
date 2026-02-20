@@ -419,13 +419,16 @@ class TextEditorMask<
     return this._convertToValue().replace(/\s+$/, '');
   }
 
-  _valueChangeEventHandler(e: ValueChangedEvent, value?: unknown): void {
+  _valueChangeEventHandler(...args: unknown[]): void {
     if (!this._maskRulesChain) {
-      super._valueChangeEventHandler(e, value);
+      // @ts-expect-error _valueChangeEventHandler
+      super._valueChangeEventHandler(...args);
       return;
     }
 
-    this._saveValueChangeEvent(e);
+    const [e] = args;
+
+    this._saveValueChangeEvent(e as ValueChangedEvent);
 
     const preparedValue = this._getPreparedValue();
 
