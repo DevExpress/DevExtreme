@@ -1,48 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { mockAppointmentDataAccessor } from '../__mock__/appointment_data_accessor.mock';
-import { mockTimeZoneCalculator } from '../__mock__/timezone_calculator.mock';
-import type Scheduler from '../m_scheduler';
-import { ResourceManager } from '../utils/resource_manager/resource_manager';
+import { getSchedulerMock } from './__mock__/scheduler.mock';
 import AppointmentLayoutManager from './appointments_layout_manager';
-
-export const getSchedulerMock = ({
-  type,
-  startDayHour,
-  endDayHour,
-  offsetMinutes,
-  resourceManager,
-  dateRange,
-  skippedDays,
-}: {
-  type: string;
-  startDayHour: number;
-  endDayHour: number;
-  offsetMinutes: number;
-  resourceManager?: ResourceManager;
-  skippedDays?: number[];
-  dateRange?: Date[];
-}): Scheduler => ({
-  timeZoneCalculator: mockTimeZoneCalculator,
-  currentView: { type, skippedDays: skippedDays ?? [] },
-  getWorkSpace: () => ({
-    getDateRange: () => dateRange ?? [
-      new Date(2000, 0, 10, startDayHour),
-      new Date(2000, 0, 11, endDayHour),
-    ],
-  }),
-  getTimeZone: () => 'Etc/UTC',
-  getViewOption: (name: string) => ({
-    startDayHour,
-    endDayHour,
-    allDayPanelMode: 'allDay',
-    cellDuration: 30,
-  }[name]),
-  option: (name: string) => ({ firstDayOfWeek: 0, showAllDayPanel: true }[name]),
-  getViewOffsetMs: () => offsetMinutes * 60_000,
-  resourceManager: resourceManager ?? new ResourceManager([]),
-  _dataAccessors: mockAppointmentDataAccessor,
-}) as unknown as Scheduler;
 
 const defaultOptions = {
   type: 'week',
@@ -53,7 +12,7 @@ const defaultOptions = {
 
 describe('getOccurrences', () => {
   describe('common appointments', () => {
-    it('should return occurrence', async () => {
+    it('should return occurrence', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const appointment = {
@@ -70,7 +29,7 @@ describe('getOccurrences', () => {
       expect(occurrences).toEqual([{ ...appointment }]);
     });
 
-    it('should return occurrences with extra field', async () => {
+    it('should return occurrences with extra field', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const appointment = {
@@ -88,7 +47,7 @@ describe('getOccurrences', () => {
       expect(occurrences).toEqual([{ ...appointment }]);
     });
 
-    it('should return occurrences if appointment intersects partially', async () => {
+    it('should return occurrences if appointment intersects partially', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const appointment = {
@@ -105,7 +64,7 @@ describe('getOccurrences', () => {
       expect(occurrences).toEqual([{ ...appointment }]);
     });
 
-    it('should return occurrences if interval is in appointment', async () => {
+    it('should return occurrences if interval is in appointment', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const appointment = {
@@ -122,7 +81,7 @@ describe('getOccurrences', () => {
       expect(occurrences).toEqual([{ ...appointment }]);
     });
 
-    it('should not return occurrences out of interval - 1', async () => {
+    it('should not return occurrences out of interval - 1', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const appointment = {
@@ -139,7 +98,7 @@ describe('getOccurrences', () => {
       expect(occurrences).toEqual([]);
     });
 
-    it('should not return occurrences out of interval - 2', async () => {
+    it('should not return occurrences out of interval - 2', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const appointment = {
@@ -156,7 +115,7 @@ describe('getOccurrences', () => {
       expect(occurrences).toEqual([]);
     });
 
-    it('should not return occurrences out of interval - 3', async () => {
+    it('should not return occurrences out of interval - 3', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const appointment = {
@@ -173,7 +132,7 @@ describe('getOccurrences', () => {
       expect(occurrences).toEqual([]);
     });
 
-    it('should return occurrences if scheduler has skipped days, and appointment intersects with them', async () => {
+    it('should return occurrences if scheduler has skipped days, and appointment intersects with them', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock({
         ...defaultOptions,
         skippedDays: [0, 6],
@@ -194,7 +153,7 @@ describe('getOccurrences', () => {
       expect(occurrences).toEqual([{ ...appointment }]);
     });
 
-    it('should return occurrences out of scheduler day hours', async () => {
+    it('should return occurrences out of scheduler day hours', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock({
         ...defaultOptions,
         startDayHour: 8,
@@ -215,7 +174,7 @@ describe('getOccurrences', () => {
       expect(occurrences).toEqual([{ ...appointment }]);
     });
 
-    it('should return occurrences out of scheduler visible dates', async () => {
+    it('should return occurrences out of scheduler visible dates', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock({
         ...defaultOptions,
         dateRange: [
@@ -238,7 +197,7 @@ describe('getOccurrences', () => {
       expect(occurrences).toEqual([{ ...appointment }]);
     });
 
-    it('should return occurrence if appointment has visible=false', async () => {
+    it('should return occurrence if appointment has visible=false', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const appointment = {
@@ -258,7 +217,7 @@ describe('getOccurrences', () => {
   });
 
   describe('recurring appointments', () => {
-    it('should return occurrences', async () => {
+    it('should return occurrences', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const occurrences = layoutManager.getOccurrences(
@@ -285,7 +244,7 @@ describe('getOccurrences', () => {
       }]);
     });
 
-    it('should return occurrences with extra fields', async () => {
+    it('should return occurrences with extra fields', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const occurrences = layoutManager.getOccurrences(
@@ -315,7 +274,7 @@ describe('getOccurrences', () => {
       }]);
     });
 
-    it('should return occurrences with exceptions', async () => {
+    it('should return occurrences with exceptions', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const occurrences = layoutManager.getOccurrences(
@@ -345,7 +304,7 @@ describe('getOccurrences', () => {
       }]);
     });
 
-    it('should return occurrences out of recurring appointment with startDate out of interval', async () => {
+    it('should return occurrences out of recurring appointment with startDate out of interval', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const occurrences = layoutManager.getOccurrences(
@@ -374,7 +333,7 @@ describe('getOccurrences', () => {
   });
 
   describe('all day appointments', () => {
-    it('should return occurrences if all day appointment\' date intersects with the given interval', async () => {
+    it('should return occurrences if all day appointment\' date intersects with the given interval', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const appointment = {
@@ -392,7 +351,7 @@ describe('getOccurrences', () => {
       expect(occurrences).toEqual([{ ...appointment }]);
     });
 
-    it('should not return occurrences if appointment is not in interval - 1', async () => {
+    it('should not return occurrences if appointment is not in interval - 1', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const appointment = {
@@ -410,7 +369,7 @@ describe('getOccurrences', () => {
       expect(occurrences).toEqual([]);
     });
 
-    it('should not return occurrences if appointment is not in interval - 2', async () => {
+    it('should not return occurrences if appointment is not in interval - 2', () => {
       const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
       const appointment = {
@@ -429,7 +388,7 @@ describe('getOccurrences', () => {
     });
   });
 
-  it('should return occurrences for common and recurring appointments together', async () => {
+  it('should return occurrences for common and recurring appointments together', () => {
     const layoutManager = new AppointmentLayoutManager(getSchedulerMock(defaultOptions));
 
     const appointment = {

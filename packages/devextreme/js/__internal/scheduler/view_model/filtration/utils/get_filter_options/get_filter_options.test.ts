@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { getSchedulerMock } from '@ts/scheduler/view_model/appointments_layout_manager.test';
+import { getSchedulerMock } from '@ts/scheduler/view_model/__mock__/scheduler.mock';
 import { getCompareOptions } from '@ts/scheduler/view_model/common/get_compare_options';
 
 import { getFilterOptions } from './get_filter_options';

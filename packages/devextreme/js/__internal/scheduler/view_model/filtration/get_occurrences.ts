@@ -1,5 +1,3 @@
-import type { Appointment } from '@js/ui/scheduler';
-
 import type Scheduler from '../../m_scheduler';
 import type {
   CompareOptions, FilterOptions, MinimalAppointmentEntity,
@@ -9,12 +7,18 @@ import { filterByIntervals } from './utils/filter_by_intervals/filter_by_interva
 import { getFilterOptions } from './utils/get_filter_options/get_filter_options';
 import { splitByRecurrence } from './utils/split_by_recurrence/split_by_recurrence';
 
+export interface Occurrence {
+  startDate: Date;
+  endDate: Date;
+  appointmentData: object;
+}
+
 export const getOccurrences = (
   schedulerStore: Scheduler,
   startDate: Date,
   endDate: Date,
   appointments: MinimalAppointmentEntity[],
-): Appointment[] => {
+): Occurrence[] => {
   const compareOptions = {
     startDayHour: 0,
     endDayHour: 24,
@@ -35,15 +39,11 @@ export const getOccurrences = (
   const step2 = splitByRecurrence(step1, filterOptions);
   const step3 = filterByIntervals(step2, filterOptions);
 
-  const step4 = step3.map((appointment) => {
-    const { startDate: sourceStartDate, endDate: sourceEndDate } = appointment.source;
-    const occurrence = { ...appointment.itemData };
-
-    schedulerStore._dataAccessors.set('startDate', occurrence, new Date(sourceStartDate));
-    schedulerStore._dataAccessors.set('endDate', occurrence, new Date(sourceEndDate));
-
-    return occurrence;
-  });
+  const step4 = step3.map((appointment) => ({
+    startDate: new Date(appointment.source.startDate),
+    endDate: new Date(appointment.source.endDate),
+    appointmentData: appointment.itemData,
+  } as Occurrence));
 
   return step4;
 };
