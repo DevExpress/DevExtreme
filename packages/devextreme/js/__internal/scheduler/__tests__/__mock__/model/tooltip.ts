@@ -2,11 +2,11 @@ import $ from '@js/core/renderer';
 import { within } from '@testing-library/dom';
 import List from '@ts/ui/list/list.edit';
 
-const TOOLTIP_tooltip_SELECTOR = '.dx-overlay-tooltip.dx-scheduler-appointment-tooltip-tooltip';
+const TOOLTIP_WRAPPER_SELECTOR = '.dx-overlay-wrapper.dx-scheduler-appointment-tooltip-wrapper';
 
 export class TooltipModel {
   private get element(): HTMLElement | null {
-    return document.querySelector<HTMLElement>(TOOLTIP_tooltip_SELECTOR);
+    return document.querySelector<HTMLElement>(TOOLTIP_WRAPPER_SELECTOR);
   }
 
   isVisible(): boolean {
