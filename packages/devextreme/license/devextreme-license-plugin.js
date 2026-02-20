@@ -1,5 +1,3 @@
-
-
 const { createUnplugin } = require('unplugin');
 const { getDevExpressLCXKey } = require('./dx-get-lcx');
 const { tryConvertLCXtoLCP } = require('./dx-lcx-2-lcp');
@@ -26,7 +24,11 @@ const DevExtremeLicensePlugin = createUnplugin(() => {
         resolvedOnce = true;
 
         try {
-            const { key: lcx } = getDevExpressLCXKey();
+            const { key: lcx, source } = getDevExpressLCXKey() || {};
+
+            const sourceMessage = `[devextreme-bundler-plugin] DevExpress license key (LCX) retrieved from: ${source || '(unknown source)'}`;
+            process.stdout.write(sourceMessage + '\n');
+
             if(!lcx) {
                 warnOnce(ctx, '[devextreme-bundler-plugin] LCX not found. Placeholder will remain.');
                 return (lcpCache = null);
