@@ -15,6 +15,7 @@ import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
+import type { DxMouseWheelEvent } from '@ts/ui/scroll_view/types';
 import type { TextEditorBaseProperties } from '@ts/ui/text_box/m_text_editor.base';
 import TextEditorBase from '@ts/ui/text_box/m_text_editor.base';
 import type { HandlingArgs } from '@ts/ui/text_box/m_text_editor.mask.rule';
@@ -178,7 +179,7 @@ class TextEditorMask<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _onMouseWheel(e?): void {}
+  _onMouseWheel(e?: DxMouseWheelEvent): void {}
 
   _useMaskBehavior(): boolean {
     const { mask } = this.option();
