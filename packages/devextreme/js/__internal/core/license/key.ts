@@ -14,4 +14,4 @@ export const PUBLIC_KEY: PublicKey = {
   ]),
 };
 
-export const INTERNAL_USAGE_ID = 'D7ZUL5liTfLPw6l61fcvjU';
+export const INTERNAL_USAGE_ID = 'BcF4kHIVsHRt1LI4dBa05M';
