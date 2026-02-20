@@ -2,20 +2,20 @@ import { isAppointmentTakesAllDay } from '../../../r1/utils/base';
 import type { AllDayPanelOccupation, FilterOptions, MinimalAppointmentEntity } from '../../types';
 
 export const addAllDayPanelOccupation = <T extends MinimalAppointmentEntity>(
-  entities: T[],
+  appointments: T[],
   { supportAllDayPanel, allDayPanelMode }: FilterOptions,
-): (T & AllDayPanelOccupation)[] => entities.map((entity) => {
+): (T & AllDayPanelOccupation)[] => appointments.map((appointment) => {
   const isAllDayPanelOccupied = supportAllDayPanel && isAppointmentTakesAllDay(
     {
-      allDay: entity.allDay,
-      startDate: new Date(entity.source.startDate),
-      endDate: new Date(entity.source.endDate),
+      allDay: appointment.allDay,
+      startDate: new Date(appointment.source.startDate),
+      endDate: new Date(appointment.source.endDate),
     },
     allDayPanelMode,
   );
 
   return {
-    ...entity,
+    ...appointment,
     isAllDayPanelOccupied,
   };
 });

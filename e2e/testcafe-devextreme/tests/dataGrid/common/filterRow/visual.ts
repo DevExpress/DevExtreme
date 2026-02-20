@@ -32,7 +32,7 @@ test.meta({
   showBorders: true,
 }));
 
-test.meta({ unstable: true })('FilterRow range overlay screenshot', async (t) => {
+test('FilterRow range overlay screenshot', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   const filterEditor = dataGrid.getFilterEditor(1, FilterTextBox);
@@ -42,7 +42,7 @@ test.meta({ unstable: true })('FilterRow range overlay screenshot', async (t) =>
   await t
     .click(filterEditor.menu.getItemByText('Between'));
   // act
-  await testScreenshot(t, takeScreenshot, 'filter-row-overlay.png', { element: dataGrid.element });
+  await testScreenshot(t, takeScreenshot, 'filter-row-overlay.png');
   await t
     .expect(compareResults.isValid())
     .ok()

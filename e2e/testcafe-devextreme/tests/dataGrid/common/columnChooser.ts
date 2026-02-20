@@ -11,13 +11,17 @@ fixture.disablePageReloads`Column chooser`
 // visual: generic.light
 // visual: material.blue.light
 // visual: fluent.blue.light
-
+// visual: fluent.blue.dark
 ['dragAndDrop', 'select'].forEach((mode: any) => {
   test(`Column chooser screenshot in mode=${mode}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const dataGrid = new DataGrid('#container');
 
     await dataGrid.apiShowColumnChooser();
+
+    await t
+      .expect(dataGrid.getColumnChooser().isOpened)
+      .ok();
 
     await testScreenshot(t, takeScreenshot, `column-chooser-${mode}-mode.png`, { element: dataGrid.element });
     await t
@@ -44,6 +48,47 @@ fixture.disablePageReloads`Column chooser`
     },
   }));
 });
+
+// visual: fluent.blue.light
+// visual: fluent.blue.dark
+test('Empty column chooser', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const columnChooser = dataGrid.getColumnChooser();
+  const columnChooserButton = dataGrid.getColumnChooserButton();
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  // act
+  await t.click(columnChooserButton);
+
+  // assert
+  await t
+    .expect(columnChooser.isOpened)
+    .ok();
+
+  await testScreenshot(t, takeScreenshot, 'empty-column-chooser.png');
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(10, 5),
+  keyExpr: 'field_0',
+  columnChooser: {
+    enabled: true,
+  },
+  columns: [
+    'field_0',
+    'field_1',
+    'field_2',
+    'field_3',
+    'field_4',
+  ],
+}, '#container'));
 
 test('Column chooser checkboxes should be aligned correctly with plain structure', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
