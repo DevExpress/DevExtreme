@@ -256,6 +256,7 @@ export default class MaskStrategy {
 
     // eslint-disable-next-line no-restricted-globals
     this._dragTimer = setTimeout(() => {
+      // @ts-expect-error dxElementWrapper.val()
       const value = this.editor._convertToValue(this._editorInput().val());
 
       this._editorOption('value', value);
@@ -294,7 +295,12 @@ export default class MaskStrategy {
     this._inputHandlerTimer = setTimeout(() => {
       if (this._isAutoFill()) {
         editor._maskKeyHandler(event, () => {
-          editor._handleChain({ text: inputVal, start: 0, length: inputVal.length });
+          editor._handleChain({
+            // @ts-expect-error dxElementWrapper.val()
+            text: inputVal,
+            start: 0,
+            length: inputVal.length,
+          });
         });
 
         editor._validateMask();
