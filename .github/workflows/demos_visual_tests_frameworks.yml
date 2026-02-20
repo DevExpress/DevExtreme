@@ -16,7 +16,7 @@ env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
   BUILD_TEST_INTERNAL_PACKAGE: true
-  RUN_TESTS: true
+  RUN_TESTS: ${{ (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')) && 'true' || 'false' }}
 
 jobs:
   check-should-run:
@@ -439,7 +439,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '133.0.6943.53'
+        chrome-version: '145.0.7632.67'
 
     - name: Use Node.js
       uses: actions/setup-node@v4

@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 env:
-  RUN_TESTS: true
+  RUN_TESTS: ${{ (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'force all tests')) && 'true' || 'false' }}
 
 jobs:
   check-should-run:

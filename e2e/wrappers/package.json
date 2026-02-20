@@ -73,7 +73,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "testcafe": "^3.4.0",
+    "testcafe": "3.7.4",
     "typescript": "~5.8.3",
     "vite": "^6.2.0"
   },
