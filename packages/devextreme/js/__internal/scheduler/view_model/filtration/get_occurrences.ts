@@ -19,31 +19,33 @@ export const getOccurrences = (
   endDate: Date,
   appointments: MinimalAppointmentEntity[],
 ): Occurrence[] => {
-  const compareOptions = {
+  const compareOptions: CompareOptions = {
+    // NOTE: days hours are intentionally set to 0 and 24
+    // to return all appointments that intersect with [startDate; endDate]
     startDayHour: 0,
     endDayHour: 24,
     min: startDate.getTime(),
     max: endDate.getTime(),
     skippedDays: [],
-  } as CompareOptions;
+  };
 
-  const filterOptions = {
+  const filterOptions: FilterOptions = {
     ...getFilterOptions(schedulerStore, compareOptions),
     // NOTE: to return allDay appointments if they intersect with [startDate; endDate]
     allDayPanelMode: 'allDay',
     supportAllDayPanel: true,
     isDateTimeView: true,
-  } as FilterOptions;
+  };
 
   const step1 = addAllDayPanelOccupation(appointments, filterOptions);
   const step2 = splitByRecurrence(step1, filterOptions);
   const step3 = filterByIntervals(step2, filterOptions);
 
-  const step4 = step3.map((appointment) => ({
+  const step4: Occurrence[] = step3.map((appointment) => ({
     startDate: new Date(appointment.source.startDate),
     endDate: new Date(appointment.source.endDate),
     appointmentData: appointment.itemData,
-  } as Occurrence));
+  }));
 
   return step4;
 };

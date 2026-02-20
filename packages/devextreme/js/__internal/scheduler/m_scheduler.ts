@@ -78,6 +78,7 @@ import { setAppointmentGroupValues } from './utils/resource_manager/appointment_
 import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
+import type { Occurrence } from './view_model/filtration/get_occurrences';
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from './view_model/types';
 import SchedulerAgenda from './workspaces/m_agenda';
@@ -2148,7 +2149,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  getOccurrences(startDate: Date, endDate: Date, rawAppointments: Appointment[]): Appointment[] {
+  getOccurrences(startDate: Date, endDate: Date, rawAppointments: Appointment[]): Occurrence[] {
     return this._layoutManager.getOccurrences(startDate, endDate, rawAppointments);
   }
 
