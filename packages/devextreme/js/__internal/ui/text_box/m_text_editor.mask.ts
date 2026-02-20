@@ -417,14 +417,9 @@ class TextEditorMask<
     return this._convertToValue().replace(/\s+$/, '');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _valueChangeEventHandler(e: ValueChangedEvent, value?: unknown): void {
     if (!this._maskRulesChain) {
-      // @ts-expect-error arguments
-      // eslint-disable-next-line prefer-rest-params
-      super._valueChangeEventHandler.apply(this, arguments);
-      // super._valueChangeEventHandler(e, value);
-
+      super._valueChangeEventHandler(e, value);
       return;
     }
 
