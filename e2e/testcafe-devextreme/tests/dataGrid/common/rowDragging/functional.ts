@@ -779,7 +779,7 @@ test('Item should appear in a correct spot when dragging to a different page wit
   await t.drag(dataGrid.getDataRow(2).getDragCommand(), 0, 32, { speed: 0.95 });
 
   const visibleRows = await dataGrid.apiGetVisibleRows();
-  const visibleRowKeys = visibleRows.map((row) => row.key);
+  const visibleRowKeys: string[] = visibleRows.map((row) => row.key);
   const expectedSequence = ['5-1', '3-1', '6-1'];
 
   const startIndex = visibleRowKeys.findIndex(
