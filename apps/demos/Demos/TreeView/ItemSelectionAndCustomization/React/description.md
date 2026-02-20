@@ -35,4 +35,4 @@ Selects/unselects all nodes.
 - [getSelectedNodes()](/Documentation/ApiReference/UI_Components/dxTreeView/Methods/#getSelectedNodes) / [getSelectedNodeKeys()](/Documentation/ApiReference/UI_Components/dxTreeView/Methods/#getSelectedNodeKeys)        
 Returns selected nodes/keys. This demo implements **getSelectedNodes()** to update the List component.
 
-This demo also implements [itemTemplate](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#itemTemplate) to customize nodes and does not include a [text](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/items/#text) field in the TreeView data source.
+This demo also implements [itemRender](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#itemRender) to customize nodes and does not include a [text](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/items/#text) field in the TreeView data source.
