@@ -9,9 +9,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
 import { isEmpty } from '@js/core/utils/string';
-import { isDefined } from '@js/core/utils/type';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
@@ -273,24 +271,35 @@ class TextEditorMask<
     return result;
   }
 
-  _getMaskRule(pattern): MaskRule | StubMaskRule {
-    let ruleConfig;
+  _getMaskRule(pattern: string): MaskRule | StubMaskRule {
+    if (!this._maskRules) {
+      return new StubMaskRule({ maskChar: pattern });
+    }
 
-    // @ts-expect-error ts error
-    each(this._maskRules, (rulePattern, allowedChars) => {
-      if (rulePattern === pattern) {
-        ruleConfig = {
-          pattern: rulePattern,
-          allowedChars,
-        };
+    const matchingEntry = Object.entries(this._maskRules).find(
+      ([rulePattern]) => rulePattern === pattern,
+    );
 
-        return false;
-      }
-    });
+    if (matchingEntry) {
+      const [, allowedChars] = matchingEntry;
 
-    return isDefined(ruleConfig)
-      ? new MaskRule(extend({ maskChar: this.option('maskChar') || ' ' }, ruleConfig))
-      : new StubMaskRule({ maskChar: pattern });
+      const ruleConfig = {
+        pattern,
+        allowedChars,
+      };
+
+      const { maskChar } = this.option();
+
+      return new MaskRule(
+        extend(
+          // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+          { maskChar: maskChar || ' ' },
+          ruleConfig,
+        ),
+      );
+    }
+
+    return new StubMaskRule({ maskChar: pattern });
   }
 
   _renderMaskedValue(): void {
