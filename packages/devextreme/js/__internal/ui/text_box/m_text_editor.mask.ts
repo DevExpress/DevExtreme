@@ -277,8 +277,11 @@ class TextEditorMask<
       ? new StubMaskRule({ maskChar: mask[index + 1] })
       : this._getMaskRule(currentMaskChar);
 
-    // @ts-expect-error TODO
-    result.next(this._parseMaskRule(index + 1 + isEscapedChar));
+    const nextIndex = index + 1 + Number(isEscapedChar);
+    const recursiveResult = this._parseMaskRule(nextIndex);
+
+    // @ts-expect-error EmptyMaskRule Liskov
+    result.next(recursiveResult);
 
     return result;
   }
