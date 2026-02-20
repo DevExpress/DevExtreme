@@ -463,17 +463,14 @@ class TextEditorMask<
     };
   }
 
-  // TODO
   _convertToValue(text?: string): string {
     if (this._isMaskedValueMode()) {
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, no-param-reassign
-      text = this._replaceMaskCharWithEmpty(text || this._textValue || '');
-    } else {
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, no-param-reassign
-      text = text || this._value || '';
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      return this._replaceMaskCharWithEmpty(text || this._textValue || '');
     }
 
-    return text;
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return text || this._value || '';
   }
 
   _replaceMaskCharWithEmpty(text: string): string {
