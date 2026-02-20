@@ -455,15 +455,12 @@ class TextEditorMask<
     return handledCount;
   }
 
-  // TODO
   _normalizeChainArguments(args?: HandlingArgs): HandlingArgs {
-    // Expected
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, no-param-reassign
-    args = args || {};
-    args.index = 0;
-    args.fullText = this._maskRulesChain?.text();
-
-    return args;
+    return {
+      ...args,
+      index: 0,
+      fullText: this._maskRulesChain?.text(),
+    };
   }
 
   // TODO
