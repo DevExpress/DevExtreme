@@ -52,8 +52,6 @@ export const skippedTests = {
       'OdataService',
       'FocusedRow',
     ],
-    // NOTE: 'GroupByDate' demo has problems with rendering
-    Scheduler: ['GroupByDate', 'Templates'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
     Gantt: ['Validation'],
     TreeView: ['VirtualMode'],
