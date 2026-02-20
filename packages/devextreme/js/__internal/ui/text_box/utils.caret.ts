@@ -5,8 +5,8 @@ import $ from '@js/core/renderer';
 import { isDefined } from '@js/core/utils/type';
 
 export interface CaretRange {
-  start: number;
-  end: number;
+  start?: number;
+  end?: number;
 }
 
 // @ts-expect-error mac should be correctly typed in environment.d.ts
@@ -41,8 +41,8 @@ export const setCaret = (
   selection: CaretRange,
 ): void => {
   try {
-    input.selectionStart = selection.start;
-    input.selectionEnd = selection.end;
+    input.selectionStart = selection.start ?? null;
+    input.selectionEnd = selection.end ?? null;
   } catch { /** empty */ }
 };
 

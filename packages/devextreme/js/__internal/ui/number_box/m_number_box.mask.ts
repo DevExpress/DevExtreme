@@ -254,8 +254,8 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
   _removeHandler(e) {
     const caret = this._caret();
     const text = this._getInputVal();
-    let { start } = caret;
-    let { end } = caret;
+
+    let { start = 0, end = 0 } = caret;
 
     this._lastKey = getChar(e);
     this._lastKeyName = normalizeKeyName(e);
@@ -265,7 +265,11 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
 
     if (start === end) {
       const caretPosition = start;
-      const canDelete = isBackspaceKey && caretPosition > 0 || isDeleteKey && caretPosition < text.length;
+
+      const canDelete = isBackspaceKey
+        && caretPosition > 0
+        || isDeleteKey
+        && caretPosition < text.length;
 
       if (canDelete) {
         isDeleteKey && end++;
@@ -520,7 +524,7 @@ class NumberBoxMask extends NumberBoxBase<NumberBoxMaskProperties> {
     const caret = this._caret();
     const point = number.getDecimalSeparator();
     const pointIndex = this._getTextSeparatorIndex(text);
-    const isCaretOnFloat = pointIndex >= 0 && pointIndex < caret.start;
+    const isCaretOnFloat = pointIndex >= 0 && pointIndex < (caret?.start ?? 0);
     const textParts = this._removeStubs(text, true).split(point);
 
     if (!isCaretOnFloat || textParts.length !== 2) {
