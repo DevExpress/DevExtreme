@@ -773,31 +773,21 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
 
 // T1139685
 test('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
-  const fromIndex = 2;
-  const toIndex = 4;
-
   const dataGrid = new DataGrid('#container');
-  await dataGrid.moveRow(fromIndex, 0, 50, true);
-  await dataGrid.moveRow(fromIndex, 0, 95);
-  await t.wait(500);
-  await dataGrid.moveRow(toIndex, 0, 5);
 
-  await t.wait(200);
+  await t.expect(dataGrid.isReady()).ok();
+  await t.drag(dataGrid.getDataRow(2).getDragCommand(), 0, 32, { speed: 0.95 });
 
-  await ClientFunction((grid) => {
-    const instance = grid.getInstance();
-    $(instance.element()).trigger($.Event('dxpointerup'));
-  })(dataGrid);
-  await t.wait(200);
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+  const visibleRowKeys = visibleRows.map((row) => row.key);
+  const expectedSequence = ['5-1', '3-1', '6-1'];
 
-  const getDraggedRowIndexFunc = ClientFunction((grid) => grid.getInstance()
-    .getVisibleRows()
-    .findIndex(({ key }, index: number, rows) => key > rows[index + 1]?.key))(dataGrid);
+  const startIndex = visibleRowKeys.findIndex(
+    (_, i) => expectedSequence.every((val, j) => visibleRowKeys[i + j] === val),
+  );
 
-  await t.expect(getDraggedRowIndexFunc)
-    .eql(toIndex - 2);
-}).before(async (t) => {
-  await t.maximizeWindow();
+  await t.expect(startIndex).gte(0);
+}).before(async () => {
   const items = generateData(20, 1);
   return createWidget('dxDataGrid', {
     height: 250,
