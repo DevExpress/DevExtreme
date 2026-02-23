@@ -3,6 +3,7 @@
 $scheduler-appointment-base-color: null !default;
 $scheduler-tooltip-appointment-text-color: null !default;
 $scheduler-appointment-overlay-bg: null !default;
+$scheduler-tooltip-list-focused-bg: null !default;
 
 .dx-popup-wrapper.dx-scheduler-appointment-tooltip-wrapper,
 .dx-scheduler-overlay-panel {
@@ -14,6 +15,10 @@ $scheduler-appointment-overlay-bg: null !default;
 
       .dx-list-item-content {
         padding: 5px;
+      }
+
+      &.dx-state-focused {
+        background-color: $scheduler-tooltip-list-focused-bg;
       }
     }
   }
