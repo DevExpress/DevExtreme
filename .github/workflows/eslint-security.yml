@@ -59,20 +59,15 @@ jobs:
           printf '  %s\n' "${TARGETS[@]}"
 
           set +e
-          npx --prefix .github/eslint eslint "${TARGETS[@]}" \
-            --ext .js,.ts \
-            --config .github/eslint/security.config.mjs \
-            --quiet \
-            -f .github/eslint/only-problems-html.mjs \
-            -o eslint-report.html
+          node .github/eslint/run-security-lint.mjs "${TARGETS[@]}"
           code=$?
           set -e
 
-          code=$?
           if [ "$code" -ne 0 ]; then
             echo "::warning::ESLint exited with code $code (issues found). The job will continue."
-            exit 0
           fi
+          
+          exit 0
 
       - name: Upload ESLint HTML report
         if: always()

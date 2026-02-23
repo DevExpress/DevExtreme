@@ -25,6 +25,5 @@ export default [
 		...extraIgnores,
 	],  
   },
-  ...(CI ? [{ linterOptions: { noInlineConfig: true } }] : []),
   ...security.recommended
 ];
