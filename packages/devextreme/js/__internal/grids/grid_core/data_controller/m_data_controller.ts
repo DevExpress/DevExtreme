@@ -499,6 +499,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     // B255430
     const updateItemsHandler = function (change) {
       that._columnsController.columnsChanged.remove(updateItemsHandler);
+
       that.updateItems({
         repaintChangesOnly: false,
         event: change?.changeTypes?.event,
@@ -524,7 +525,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
       }
 
       const excludedOptionNames = [
-        'ai',
         'width',
         'visibleWidth',
         'filterValue',
@@ -1632,6 +1632,10 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return changePaging(this, 'pageSize', value);
   }
 
+  public isCustomLoading() {
+    return this._isCustomLoading;
+  }
+
   public beginCustomLoading(messageText?: string) {
     this._isCustomLoading = true;
     this._loadingText = messageText ?? '';
@@ -1779,6 +1783,13 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     const operationTypes = this._dataSource?.operationTypes() ?? {};
 
     return Object.keys(operationTypes).some((type) => operationTypes[type]);
+  }
+
+  /**
+   * @extended: virtual_scrolling
+   */
+  public isViewportChanging(): boolean {
+    return false;
   }
 }
 export const dataControllerModule: Module = {

@@ -1,10 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import RangeSelector, { Chart, type RangeSelectorTypes, Series } from 'devextreme-react/range-selector';
+
+import RangeSelector, { Chart, Series } from 'devextreme-react/range-selector';
+import type { RangeSelectorTypes } from 'devextreme-react/range-selector';
+
 import { dataSource } from './data.ts';
 
 const formatNumber = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format;
 
-function calculateTotalProduction(range = []) {
+function calculateTotalProduction(range: string[] = []) {
   let startIndex = 0;
   let endIndex = dataSource.length;
 
@@ -26,8 +29,8 @@ function App() {
   const [totalProduction, setTotalProduction] = useState(calculateTotalProduction());
 
   const processRange = useCallback((e: RangeSelectorTypes.ValueChangedEvent) => {
-    setTotalProduction(calculateTotalProduction(e.value));
-  }, [setTotalProduction]);
+    setTotalProduction(calculateTotalProduction(e.value as string[]));
+  }, []);
 
   return (
     <div id="range-selector-demo">

@@ -1,7 +1,9 @@
 import React, { useCallback, useState } from 'react';
+
 import FilterBuilder, { type FilterBuilderTypes } from 'devextreme-react/filter-builder';
 import Button from 'devextreme-react/button';
 import DataGrid from 'devextreme-react/data-grid';
+
 import { filter, fields, columns, products } from './data.ts';
 
 const App = () => {
@@ -10,11 +12,11 @@ const App = () => {
 
   const onValueChanged = useCallback((e: FilterBuilderTypes.ValueChangedEvent) => {
     setValue(e.value);
-  }, [setValue]);
+  }, []);
 
   const buttonClick = useCallback(() => {
     setGridFilterValue(value);
-  }, [value, setGridFilterValue]);
+  }, [value]);
 
   return (
     <div>

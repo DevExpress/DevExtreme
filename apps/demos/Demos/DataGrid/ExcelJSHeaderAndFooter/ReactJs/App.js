@@ -1,7 +1,7 @@
 import React from 'react';
+import { saveAs } from 'file-saver-es';
 import DataGrid, { Column, Export } from 'devextreme-react/data-grid';
 import { Workbook } from 'devextreme-exceljs-fork';
-import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme-react/common/export/excel';
 import { countries } from './data.js';
 
@@ -25,7 +25,7 @@ const onExporting = (e) => {
     headerRow.getCell(1).font = { name: 'Segoe UI Light', size: 22 };
     headerRow.getCell(1).alignment = { horizontal: 'center' };
     // footer
-    const footerRowIndex = cellRange.to.row + 2;
+    const footerRowIndex = (cellRange.to?.row ?? 0) + 2;
     const footerRow = worksheet.getRow(footerRowIndex);
     worksheet.mergeCells(footerRowIndex, 1, footerRowIndex, 8);
     footerRow.getCell(1).value = 'www.wikipedia.org';
@@ -37,7 +37,7 @@ const onExporting = (e) => {
   });
 };
 const App = () => (
-  <React.Fragment>
+  <>
     <div id="long-title">
       <h3>Country Area, Population, and GDP Structure</h3>
     </div>
@@ -92,6 +92,6 @@ const App = () => (
         </Column>
       </Column>
     </DataGrid>
-  </React.Fragment>
+  </>
 );
 export default App;

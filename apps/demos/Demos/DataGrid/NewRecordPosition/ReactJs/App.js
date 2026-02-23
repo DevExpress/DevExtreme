@@ -37,13 +37,14 @@ const App = () => {
       {
         key,
         type: 'insert',
-        insertAfterKey: e.row.key,
+        insertAfterKey: e.row?.key,
+        data: {},
       },
     ]);
     setEditRowKey(key);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <DataGrid
         id="gridContainer"
         dataSource={dataSource}
@@ -128,7 +129,7 @@ const App = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

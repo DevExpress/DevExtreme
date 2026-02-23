@@ -1,6 +1,6 @@
 import dateUtils from 'core/utils/date';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import dateLocalization from 'common/core/localization/date';
 
@@ -97,10 +97,10 @@ module('Work Space Base', {
                     this.instance.option('crossScrollingEnabled', true);
 
                     this.instance.option('width', 400);
-                    assert.equal(this.instance.getWorkSpaceMinWidth(), 298, 'minWidth is ok');
+                    assert.equal(this.instance.getWorkSpaceMinWidth(), 333, 'minWidth is ok');
 
                     this.instance.option('width', 900);
-                    assert.equal(this.instance.getWorkSpaceMinWidth(), 798, 'minWidth is ok');
+                    assert.equal(this.instance.getWorkSpaceMinWidth(), 833, 'minWidth is ok');
                 });
             }
 

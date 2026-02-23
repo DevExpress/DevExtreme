@@ -18,3 +18,8 @@ export default Gantt;
  * @name dxGanttContextMenuItem
  * @inherits dxContextMenuItem
  */
+
+/**
+ * @name dxGanttColumn.ai
+ * @hidden
+ */

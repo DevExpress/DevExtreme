@@ -3,14 +3,19 @@ import { query as Query } from 'devextreme-react/common/data';
 import { moviesData } from './data.js';
 
 const getMovieById = (id) => Query(moviesData).filter(['id', id]).toArray()[0];
-const AppointmentTooltip = (props) => {
-  const { movieId } = props.data.appointmentData;
+const AppointmentTooltip = ({ data }) => {
+  const { movieId } = data.appointmentData;
   const movieData = useMemo(() => getMovieById(movieId), [movieId]);
   return (
-    <div className="movie-tooltip">
-      <img src={movieData.image} />
-      <div className="movie-info">
-        <div className="movie-title">
+    <div className="movie-info">
+      <div className="movie-preview-image">
+        <img
+          src={movieData.image}
+          alt={`${movieData.text} poster`}
+        />
+      </div>
+      <div className="movie-details">
+        <div className="title">
           {movieData.text} ({movieData.year})
         </div>
         <div>Director: {movieData.director}</div>

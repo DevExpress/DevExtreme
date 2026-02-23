@@ -24,7 +24,7 @@ readdirSync(rootDemosFolder, { withFileTypes: true }).forEach((widgetFolder) => 
 const collectDemos = (group) => {
   if (group.Demos) {
     group.Demos.forEach((demo) => demos.push(demo));
-  } else if(group.Groups) {
+  } else if (group.Groups) {
     group.Groups.forEach(collectDemos);
   }
 };

@@ -16,8 +16,10 @@ const getFilteredDimensionOptions = (data) =>
 const PaneContent = (data) => {
   const paneContentRef = useRef(null);
   useEffect(() => {
-    const element = paneContentRef.current.parentNode;
-    element.setAttribute('tabIndex', '0');
+    const element = paneContentRef.current?.parentNode;
+    if (element instanceof HTMLElement) {
+      element.setAttribute('tabIndex', '0');
+    }
   });
   return (
     <div

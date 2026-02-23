@@ -5,7 +5,7 @@ import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import { getWidth, getOuterWidth } from 'core/utils/size';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
-import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
+import { TextEditorLabel } from '__internal/ui/text_box/text_editor.label';
 
 import 'fluent_blue_light.css!';
 

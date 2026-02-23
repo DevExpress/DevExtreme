@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import TreeMap, {
-  Colorizer, Tooltip, ITreeMapOptions, ITooltipProps,
+  Colorizer, Tooltip,
 } from 'devextreme-react/tree-map';
-import { TreeMapLayoutAlgorithm } from 'devextreme/viz/tree_map';
+import type { ITreeMapOptions, ITooltipProps } from 'devextreme-react/tree-map';
+import type { TreeMapLayoutAlgorithm } from 'devextreme/viz/tree_map';
 import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import { populationByAge, algorithmLabel } from './data.ts';
 
@@ -21,7 +22,7 @@ function App() {
   }, [setSelectedAlgorithm, setCurrentAlgorithm]);
 
   return (
-    <React.Fragment>
+    <>
       <TreeMap
         id="treemap"
         dataSource={populationByAge}
@@ -51,16 +52,20 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 
-const customAlgorithm: ITreeMapOptions['layoutAlgorithm'] = (arg) => {
-  const totalRect = arg.rect.slice();
-  let totalSum = arg.sum;
+const customAlgorithm: ITreeMapOptions['layoutAlgorithm'] = (arg): void => {
+  const totalRect = arg.rect?.slice();
+  let totalSum = arg.sum ?? 0;
   let side = 0;
 
-  arg.items.forEach((item) => {
+  if (!totalRect || totalSum <= 0) {
+    return;
+  }
+
+  arg.items?.forEach((item): void => {
     const size = Math.round(((totalRect[side + 2] - totalRect[side]) * item.value) / totalSum);
     const rect = totalRect.slice();
 

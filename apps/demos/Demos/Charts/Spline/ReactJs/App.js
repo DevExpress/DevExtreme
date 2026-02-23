@@ -26,7 +26,7 @@ function App() {
     [setType],
   );
   return (
-    <React.Fragment>
+    <>
       <Chart
         palette="Violet"
         dataSource={sharingStatisticsInfo}
@@ -74,7 +74,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

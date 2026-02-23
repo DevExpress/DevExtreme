@@ -2809,10 +2809,9 @@ QUnit.module('Editing', baseModuleConfig, () => {
             this.clock.tick(10);
             $(grid.getCellElement(0, 1)).trigger('dxclick');
             this.clock.tick(10);
-            const callCount = action === 'close edit cell' ? 3 : 4;
 
             // assert
-            assert.equal(validationCallback.callCount, callCount, 'validation callback call count');
+            assert.equal(validationCallback.callCount, 3, 'validation callback call count');
         });
     });
 
@@ -6558,7 +6557,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.option('editing.changes'), [], 'no changes');
     });
 
-    QUnit.skip('editRowKey in init configuration (editMode = popup)', function(assert) {
+    QUnit.test('editRowKey in init configuration (editMode = popup)', function(assert) {
         // arrange
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: [{ id: 1 }, { id: 2 }],
@@ -6568,12 +6567,11 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                 mode: 'popup',
                 editRowKey: 1
             },
-            loadingTimeout: null
         }).dxDataGrid('instance');
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editRowKey was not overwritten');
-        assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-edit-row'), 'editing row');
         assert.ok($('.dx-datagrid-edit-popup').length, 'popup is shown');
         assert.deepEqual(dataGrid.option('editing.changes'), [], 'no changes');
     });

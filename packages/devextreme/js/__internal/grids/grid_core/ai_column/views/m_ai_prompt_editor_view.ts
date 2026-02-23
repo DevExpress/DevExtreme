@@ -157,12 +157,4 @@ export class AIPromptEditorView extends View {
       // TODO: this.component.refresh();
     }
   }
-
-  public dispose(): void {
-    super.dispose();
-
-    if (this.aiColumnOptionChangedHandler) {
-      this.columnsController.aiColumnOptionChanged.remove(this.aiColumnOptionChangedHandler);
-    }
-  }
 }

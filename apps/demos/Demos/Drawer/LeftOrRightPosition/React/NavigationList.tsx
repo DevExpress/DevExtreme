@@ -7,7 +7,8 @@ function NavigationList() {
     <div className="list" style={{ width: '200px' }}>
       <List
         dataSource={navigation}
-        className="panel-list" />
+        className="panel-list"
+      />
     </div>
   );
 }

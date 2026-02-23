@@ -13,7 +13,7 @@ import { employees, states } from './data.js';
 
 const allowedPageSizes = [5, 10];
 const App = () => (
-  <React.Fragment>
+  <>
     <p>
       Click this text and press <b>Tab</b>
     </p>
@@ -54,6 +54,6 @@ const App = () => (
         />
       </Column>
     </DataGrid>
-  </React.Fragment>
+  </>
 );
 export default App;

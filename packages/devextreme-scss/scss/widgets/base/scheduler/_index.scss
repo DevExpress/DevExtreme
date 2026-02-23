@@ -31,6 +31,8 @@ $agenda-appointment-text-color: null !default;
 $agenda-appointment-title-font-size: null !default;
 
 $scheduler-header-panel-table-cell-height: null !default;
+
+$scheduler-appointment-popup-icon-margin-top: null !default;
 $scheduler-appointment-popup-repeat-end-item-height: null !default;
 $scheduler-appointment-popup-repeat-end-item-vertical-margin: null !default;
 
@@ -40,7 +42,7 @@ $agenda-appointment-recurrence-icon-color: null !default;
 @use "./layout/header" as *;
 @use "./mixins" as *;
 @use "../mixins" as *;
-@use "../icons" as *;
+@use "../icon_fonts" as *;
 @use "./common";
 @use "./tooltip" with (
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,
@@ -500,17 +502,13 @@ $scheduler-appointment-form-label-padding: 20px;
       }
 
       /* Icons alignment */
-      .dx-scheduler-form-group-with-icon .dx-box-item:has(.dx-scheduler-form-icon) {
+      .dx-scheduler-form-group-with-icon .dx-item-content > .dx-box-item:has(.dx-scheduler-form-icon) {
         flex: 0 1 auto !important; // stylelint-disable-line declaration-no-important
-        align-items: end;
+        align-items: start;
       }
 
-      .dx-scheduler-form-date-range-group .dx-box-item:has(.dx-scheduler-form-icon),
-      .dx-scheduler-form-description-group .dx-box-item:has(.dx-scheduler-form-icon),
-      .dx-scheduler-form-resources-group .dx-box-item:has(.dx-scheduler-default-resources-icon),
-      .dx-scheduler-form-recurrence-settings-group .dx-box-item:has(.dx-scheduler-form-icon),
-      .dx-scheduler-form-recurrence-end-group .dx-box-item:has(.dx-scheduler-form-icon) {
-        align-items: start;
+      .dx-scheduler-form-top-label-offset {
+        margin-top: $scheduler-appointment-popup-icon-margin-top;
       }
 
       .dx-scheduler-form-icon {

@@ -32,6 +32,8 @@ const DROP_DOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const CUSTOM_CLASS = 'custom-class';
 const LIST_CLASS = 'dx-list';
 const LIST_ITEMS_CLASS = 'dx-list-items';
+const LIST_ITEM_CLASS = 'dx-list-item';
+const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 
 const OVERLAY_CONTENT_LABEL = 'Dropdown';
 
@@ -1255,6 +1257,22 @@ QUnit.module('list integration', {}, () => {
         instance.option('useSelectMode', true);
 
         assert.deepEqual(list.option('selectedItemKeys'), [0], 'List has correct selection');
+    });
+
+    QUnit.test('list items should not have selected class from ddb selectedItemKey after set items at runtime (T1314783)', function(assert) {
+        const dropDownButton = new DropDownButton($('#dropDownButton'), {
+            items: ['item1'],
+            useSelectMode: false,
+            opened: true,
+            selectedItemKey: 'item1',
+        });
+        const list = getList(dropDownButton);
+
+        dropDownButton.option('items', ['item1']);
+        const $listItems = list.itemElements();
+
+        assert.strictEqual($listItems.length, 1, 'there is one list item');
+        assert.strictEqual($listItems.hasClass(LIST_ITEM_SELECTED_CLASS), false, 'item does not have selected class');
     });
 });
 

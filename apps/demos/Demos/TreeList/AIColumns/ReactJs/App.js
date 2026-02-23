@@ -1,6 +1,6 @@
 import React from 'react';
 import TreeList, {
-  Column, Scrolling, Paging, Ai,
+  Column, Scrolling, Paging, AI,
 } from 'devextreme-react/tree-list';
 import { employees } from './data.js';
 import { aiIntegration } from './service.js';
@@ -26,6 +26,7 @@ export default function App() {
       autoExpandAll={true}
       aiIntegration={aiIntegration}
       onAIColumnRequestCreating={onAIColumnRequestCreating}
+      className="ai__grid"
     >
       <Paging
         enabled={true}
@@ -69,7 +70,7 @@ export default function App() {
         fixedPosition="right"
         cssClass="ai__cell"
       >
-        <Ai
+        <AI
           mode="auto"
           noDataText="No data"
           prompt="Identify the department where the employee works. Select from the following department list: 'Management', 'Human Resources', 'IT', 'Shipping', 'Support', 'Sales', 'Engineering'. Use 'Engineering' if you cannot find a better match."

@@ -10,13 +10,13 @@ const showToast = (event, value, type) => {
   notify(`${event} "${value}" task`, type, 800);
 };
 const showAddedToast = (e) => {
-  showToast('Added', e.appointmentData.text, 'success');
+  showToast('Added', e.appointmentData.text ?? '', 'success');
 };
 const showUpdatedToast = (e) => {
-  showToast('Updated', e.appointmentData.text, 'info');
+  showToast('Updated', e.appointmentData.text ?? '', 'info');
 };
 const showDeletedToast = (e) => {
-  showToast('Deleted', e.appointmentData.text, 'warning');
+  showToast('Deleted', e.appointmentData.text ?? '', 'warning');
 };
 const App = () => {
   const [allowAdding, setAllowAdding] = useState(true);
@@ -30,7 +30,7 @@ const App = () => {
   const onAllowDraggingChanged = useCallback((e) => setAllowDragging(e.value), []);
   const onAllowUpdatingChanged = useCallback((e) => setAllowUpdating(e.value), []);
   return (
-    <React.Fragment>
+    <>
       <Scheduler
         timeZone="America/Los_Angeles"
         dataSource={data}
@@ -94,7 +94,7 @@ const App = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

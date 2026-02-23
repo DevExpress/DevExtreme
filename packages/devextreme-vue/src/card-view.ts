@@ -491,7 +491,7 @@ prepareComponentConfig(componentConfig);
 const DxCardView = defineComponent(componentConfig);
 
 
-const DxAiOptionsConfig = {
+const DxAIOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -504,11 +504,11 @@ const DxAiOptionsConfig = {
   }
 };
 
-prepareConfigurationComponentConfig(DxAiOptionsConfig);
+prepareConfigurationComponentConfig(DxAIOptionsConfig);
 
-const DxAiOptions = defineComponent(DxAiOptionsConfig);
+const DxAIOptions = defineComponent(DxAIOptionsConfig);
 
-(DxAiOptions as any).$_optionName = "aiOptions";
+(DxAIOptions as any).$_optionName = "aiOptions";
 
 const DxAnimationConfig = {
   emits: {
@@ -548,7 +548,7 @@ const DxAsyncRuleConfig = {
     message: String,
     reevaluate: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => any)>
   }
 };
 
@@ -1301,7 +1301,7 @@ const DxCustomRuleConfig = {
     message: String,
     reevaluate: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)>
   }
 };
 
@@ -3259,7 +3259,7 @@ const DxValidationRuleConfig = {
     reevaluate: Boolean,
     trim: Boolean,
     type: String as PropType<ValidationRuleType>,
-    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean)>
+    validationCallback: Function as PropType<((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: any }) => boolean)>
   }
 };
 
@@ -3276,7 +3276,7 @@ const DxValidationRule = defineComponent(DxValidationRuleConfig);
 export default DxCardView;
 export {
   DxCardView,
-  DxAiOptions,
+  DxAIOptions,
   DxAnimation,
   DxAsyncRule,
   DxAt,

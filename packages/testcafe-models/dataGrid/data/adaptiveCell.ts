@@ -16,4 +16,8 @@ export default class AdaptiveCell extends FocusableElement {
     this.isFocused = this.element.hasClass(CLASS.focused);
     this.isEditCell = this.element.child(`.${CLASS.textBox}`).exists;
   }
+
+  getAdaptiveCellValue(): Promise<string> {
+    return this.element.textContent;
+  }
 }

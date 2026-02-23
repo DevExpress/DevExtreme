@@ -7,13 +7,14 @@ import Chart, {
   Legend,
   Export,
 } from 'devextreme-react/chart';
+import type { ChartTypes } from 'devextreme-react/chart';
 import { medalSources, medalStatistics } from './data.ts';
 
-function onPointClick({ target: point }) {
-  if (point.isSelected()) {
-    point.clearSelection();
+function onPointClick(e: ChartTypes.PointClickEvent): void {
+  if (e.target.isSelected()) {
+    e.target.clearSelection();
   } else {
-    point.select();
+    e.target.select();
   }
 }
 

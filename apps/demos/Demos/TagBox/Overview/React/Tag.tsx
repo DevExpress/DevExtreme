@@ -1,18 +1,19 @@
 import React from 'react';
+import type { Product } from './types.ts';
 
 interface TagProps {
-  product: any;
-  onMouseEnter: any;
-  getAltText: any;
+  product: Product;
+  onMouseEnter: (e: React.MouseEvent<HTMLElement>, product: Product) => void;
+  getAltText: (text: string) => string;
 }
 
 export default function Tag({ product, onMouseEnter, getAltText }: TagProps) {
   const isDisabled = product.Name === 'SuperHD Video Player';
   return (
-    <React.Fragment>
+    <>
       <div
         className={`dx-tag-content ${isDisabled && 'disabled-tag'}`}
-        onMouseEnter={(e) => onMouseEnter(e, product)}
+        onMouseEnter={(e: React.MouseEvent<HTMLElement>): void => onMouseEnter(e, product)}
         aria-disabled={isDisabled}
       >
         <img
@@ -23,6 +24,6 @@ export default function Tag({ product, onMouseEnter, getAltText }: TagProps) {
         <span>{product.Name}</span>
         {!isDisabled && <div className="dx-tag-remove-button"></div>}
       </div>
-    </React.Fragment>
+    </>
   );
 }

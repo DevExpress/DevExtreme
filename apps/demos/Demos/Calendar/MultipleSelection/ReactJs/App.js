@@ -52,7 +52,7 @@ export default function App() {
     [setWeekendDisabled],
   );
   const onClearButtonClick = useCallback(() => {
-    calendar.current.instance().clear();
+    calendar.current?.instance().clear();
   }, []);
   return (
     <div id="calendar-demo">
@@ -65,7 +65,7 @@ export default function App() {
           min={minDateValue}
           max={maxDateValue}
           defaultValue={initialValue}
-          disabledDates={weekendDisabled ? isDateDisabled : null}
+          disabledDates={weekendDisabled ? isDateDisabled : undefined}
         />
       </div>
       <div className="options">

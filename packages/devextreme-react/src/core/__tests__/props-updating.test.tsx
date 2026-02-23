@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { cleanup, render } from '@testing-library/react';
+import { cleanup, render, fireEvent } from '@testing-library/react';
 import * as React from 'react';
 import { memo } from 'react';
 import { act } from 'react-dom/test-utils';
@@ -186,6 +186,80 @@ describe('option update', () => {
 
     expect(Widget.option.mock.calls[0][1]).toEqual(ref.current?.instance().element());
     expect(Widget.option.mock.calls[1][1]).toEqual(ref.current?.instance().element());
+  });
+
+  it('keeps component ref defined when controlled selection triggers optionChanged', () => {
+    const ref = React.createRef<TestComponentRef>();
+    const clickInstances: Array<ReturnType<TestComponentRef['instance']> | undefined> = [];
+    const optionChangedInstances: Array<ReturnType<TestComponentRef['instance']> | undefined> = [];
+
+    const SelectionScenario = () => {
+      const [selectedRowKeys, setSelectedRowKeys] = React.useState<number[]>([]);
+
+      const handleClick = React.useCallback(() => {
+        clickInstances.push(ref.current?.instance());
+        setSelectedRowKeys((prev) => [...prev, prev.length + 1]);
+      }, []);
+
+      const handleOptionChanged = React.useCallback((e: { fullName?: string }) => {
+        if (e.fullName === 'selectedRowKeys') {
+          optionChangedInstances.push(ref.current?.instance());
+        }
+      }, []);
+
+      return (
+        <>
+          <button type="button" onClick={handleClick}>Test</button>
+          <TestComponent
+            ref={ref}
+            selectedRowKeys={selectedRowKeys}
+            selection={{ mode: 'multiple' }}
+            onOptionChanged={handleOptionChanged}
+            independentEvents={['onOptionChanged']}
+          />
+        </>
+      );
+    };
+
+    const { getByText } = render(<SelectionScenario />);
+
+    let currentOnOptionChanged = WidgetClass.mock.calls[0][1].onOptionChanged;
+
+    expect(typeof currentOnOptionChanged).toBe('function');
+
+    Widget.option.mockImplementation((name: string, value: unknown) => {
+      if (name === 'integrationOptions.useDeferUpdateForTemplates') {
+        return false;
+      }
+
+      if (name === 'onOptionChanged') {
+        currentOnOptionChanged = value as typeof currentOnOptionChanged;
+        return undefined;
+      }
+
+      if (name === 'selectedRowKeys' && typeof currentOnOptionChanged === 'function') {
+        currentOnOptionChanged({
+          component: Widget,
+          element: undefined,
+          fullName: name,
+          model: undefined,
+          name,
+          previousValue: undefined,
+          value,
+        });
+      }
+
+      return undefined;
+    });
+
+    act(() => {
+      fireEvent.click(getByText('Test'));
+    });
+
+    expect(clickInstances).toHaveLength(1);
+    expect(clickInstances[0]).toBeTruthy();
+    expect(optionChangedInstances).toHaveLength(1);
+    expect(optionChangedInstances[0]).toBeTruthy();
   });
 
   it('updates nested collection item', () => {

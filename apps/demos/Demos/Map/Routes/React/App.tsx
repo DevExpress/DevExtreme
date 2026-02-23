@@ -1,5 +1,7 @@
 import React, { useCallback, useState } from 'react';
+import type { RouteMode } from 'devextreme/ui/map_types';
 import Map from 'devextreme-react/map';
+import type { IRouteProps } from 'devextreme-react/map';
 import SelectBox from 'devextreme-react/select-box';
 import {
   markersData,
@@ -8,29 +10,29 @@ import {
   colorLabel,
 } from './data.ts';
 
-const modes = ['driving', 'walking'];
-const routeColors = ['blue', 'green', 'red'];
+const modes: RouteMode[] = ['driving', 'walking'];
+const routeColors: string[] = ['blue', 'green', 'red'];
 
 const apiKey = {
   azure: '6N8zuPkBsnfwniNAJkldM3cUgm3lXg3y9gkIKy59benICnnepK4DJQQJ99AIACYeBjFllM6LAAAgAZMPGFXE',
 };
 
 export default function App() {
-  const [routes, setRoutes] = useState(routesData);
+  const [routes, setRoutes] = useState<IRouteProps[]>(routesData);
 
-  const routeModeChange = useCallback((value) => {
-    setRoutes(routes.map((item) => {
+  const routeModeChange = useCallback((value: RouteMode): void => {
+    setRoutes(routes.map((item: IRouteProps): IRouteProps => {
       item.mode = value;
       return item;
     }));
-  }, [routes, setRoutes]);
+  }, [routes]);
 
-  const routeColorChange = useCallback((value) => {
-    setRoutes(routes.map((item) => {
+  const routeColorChange = useCallback((value: string): void => {
+    setRoutes(routes.map((item: IRouteProps): IRouteProps => {
       item.color = value;
       return item;
     }));
-  }, [routes, setRoutes]);
+  }, [routes]);
 
   return (
     <div>

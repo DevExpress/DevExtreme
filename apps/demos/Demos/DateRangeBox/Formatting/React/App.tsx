@@ -1,12 +1,13 @@
 import React from 'react';
 import DateRangeBox from 'devextreme-react/date-range-box';
+import type { DateRangeBoxTypes } from 'devextreme-react/date-range-box';
 
 const msInDay = 1000 * 60 * 60 * 24;
 const now = new Date();
 const startDate = new Date(now.getTime() - msInDay * 3);
 const endDate = new Date(now.getTime() + msInDay * 3);
 
-const commonSettings = {
+const commonSettings: DateRangeBoxTypes.Properties = {
   showClearButton: true,
   useMaskBehavior: true,
   openOnFieldClick: false,

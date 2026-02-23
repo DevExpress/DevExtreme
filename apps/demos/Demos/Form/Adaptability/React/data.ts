@@ -1,4 +1,6 @@
-export default {
+import type { Employee } from './types.ts';
+
+export const employee: Employee = {
   ID: 1,
   FirstName: 'John',
   LastName: 'Heart',

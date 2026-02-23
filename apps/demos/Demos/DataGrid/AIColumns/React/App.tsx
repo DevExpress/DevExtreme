@@ -1,20 +1,23 @@
 import React, { useCallback, useState } from 'react';
+
 import DataGrid, {
   Column,
   Paging,
   Grouping,
-  Ai,
+  AI,
 } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 import Popup, { Position } from 'devextreme-react/popup';
+
 import { vehicles } from './data.ts';
 import { aiIntegration } from './service.ts';
-import Trademark from './Trademark.tsx';
 import Category from './Category.tsx';
 import LicenseInfo from './LicenseInfo.tsx';
-import { type Vehicle } from './types.ts';
+import Trademark from './Trademark.tsx';
+import type { Vehicle } from './types.ts';
 
-const onAIColumnRequestCreating = (e) => {
-  e.data = e.data.map((item) => ({
+const onAIColumnRequestCreating = (e: DataGridTypes.AIColumnRequestCreatingEvent) => {
+  e.data = e.data.map((item: Vehicle) => ({
     ID: item.ID,
     TrademarkName: item.TrademarkName,
     Name: item.Name,
@@ -34,13 +37,14 @@ export default function App() {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <DataGrid
         dataSource={vehicles}
         showBorders={true}
         keyExpr="ID"
         aiIntegration={aiIntegration}
         onAIColumnRequestCreating={onAIColumnRequestCreating}
+        className="ai__grid"
       >
         <Paging
           enabled={true}
@@ -91,7 +95,7 @@ export default function App() {
           fixedPosition="right"
           cssClass="ai__cell"
         >
-          <Ai
+          <AI
             mode="auto"
             noDataText="No data"
             prompt="Identify the country where the vehicle model is manufactured. When looking up a country, consider vehicle brand, model, and specifications."
@@ -116,6 +120,6 @@ export default function App() {
           collision="fit"
         />
       </Popup>
-    </React.Fragment>
+    </>
   );
 }

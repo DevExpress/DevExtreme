@@ -48,7 +48,7 @@ function App() {
     [setVisualRange],
   );
   return (
-    <React.Fragment>
+    <>
       <Chart
         id="zoomedChart"
         palette="Soft"
@@ -95,7 +95,7 @@ function App() {
           />
         </ChartOptions>
       </RangeSelector>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

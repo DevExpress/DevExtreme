@@ -862,6 +862,36 @@ QUnit.test('Using the single section of axis options for some panes (check custo
     assert.deepEqual(visualRangeChanged.getCall(2).args[0].value, { startValue: 18, endValue: 25 });
 });
 
+// T1317590
+QUnit.test('Argument axis overlays/labels are removed when dataSource update', function(assert) {
+    const initialData = [
+        { arg: 'Monday', val: 1 },
+        { arg: 'Friday', val: 2 }
+    ];
+    const updatedData = [
+        { arg: 'Tuesday', val: 3 },
+        { arg: 'Thursday', val: 4 }
+    ];
+
+    const chart = this.createChart({
+        dataSource: initialData,
+        series: { argumentField: 'arg', valueField: 'val' },
+        argumentAxis: { label: { visible: true } }
+    });
+
+    let label = this.$container.find('.dxc-arg-elements text').filter(function() {
+        return $(this).text() === 'Friday';
+    });
+    assert.ok(label.length, 'Friday label exists');
+
+    chart.option('dataSource', updatedData);
+
+    label = this.$container.find('.dxc-arg-elements text').filter(function() {
+        return $(this).text() === 'Friday';
+    });
+    assert.notOk(label.length, 'Friday label is not exists');
+});
+
 // T681674
 QUnit.test('actual value axis visualRange after dataSource updating (argument axis without visual range)', function(assert) {
     const chart = this.createChart({
@@ -1029,6 +1059,53 @@ QUnit.test('Set the visualRange option by the different ways', function(assert) 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: { length: 2 } });
     assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 5, endValue: 7 });
     assert.deepEqual(chart.option('valueAxis._customVisualRange'), { length: 2 });
+});
+
+QUnit.test('visualRangeUpdateMode change should not corrupt _customVisualRange causing incorrect visualRange on subsequent axis rerender (T1315301)', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
+    const dataSource = [{
+        arg: 1,
+        val: 4
+    }, {
+        arg: 2,
+        val: 5
+    }, {
+        arg: 5,
+        val: 7
+    }, {
+        arg: 8,
+        val: 3
+    }, {
+        arg: 11,
+        val: 8
+    }];
+
+    const chart = this.createChart({
+        size: {
+            width: 1000,
+            height: 600
+        },
+        dataSource: dataSource,
+        series: { type: 'bar' },
+        valueAxis: {
+            visualRangeUpdateMode: 'auto',
+        }
+    });
+
+    const initialVisualRange = chart.option('valueAxis.visualRange');
+
+    chart.option('valueAxis.visualRangeUpdateMode', 'keep');
+
+    assert.strictEqual(chart.option('valueAxis.visualRangeUpdateMode'), 'keep', 'visualRangeUpdateMode has changed to "keep"');
+    assert.deepEqual(chart.option('valueAxis.visualRange'), initialVisualRange, 'visualRange remains unchanged');
+    assert.deepEqual(chart.option('valueAxis._customVisualRange'), undefined, '_customVisualRange not set');
+
+    chart.option('commonAxisSettings.title', 'custom');
+
+    assert.strictEqual(chart.option('valueAxis.visualRangeUpdateMode'), 'keep', 'visualRangeUpdateMode is still "keep" after rerender');
+    assert.strictEqual(chart.option('commonAxisSettings.title'), 'custom', 'commonAxisSettings.title was successfully changed');
+    assert.deepEqual(chart.option('valueAxis.visualRange'), initialVisualRange, 'visualRange remains correct after axis rerender');
+    assert.deepEqual(chart.option('valueAxis._customVisualRange'), undefined, '_customVisualRange not set');
 });
 
 QUnit.test('Reload dataSource - visualRange option should be changed', function(assert) {

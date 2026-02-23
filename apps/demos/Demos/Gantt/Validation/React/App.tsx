@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import Gantt, {
   Tasks, Dependencies, Column, Validation, Editing,
 } from 'devextreme-react/gantt';
-import CheckBox, { ICheckBoxOptions } from 'devextreme-react/check-box';
+import CheckBox from 'devextreme-react/check-box';
+import type { ICheckBoxOptions } from 'devextreme-react/check-box';
 import { tasks, dependencies } from './data.ts';
 
 function App() {

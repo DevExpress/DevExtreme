@@ -1,33 +1,48 @@
 import React from 'react';
+import type { Company } from './types.ts';
 
-function CompanyItem({ data }) {
-  const company = data;
+interface CompanyItemProps {
+  data: Company;
+}
+
+function CompanyItem({ data }: CompanyItemProps) {
+  const {
+    CompanyName,
+    City,
+    State,
+    Zipcode,
+    Address,
+    Phone,
+    Fax,
+    Website,
+  } = data;
+
   return (
     <div>
       <div className="multiview-item">
-        <div className="header">{ company.CompanyName }</div>
+        <div className="header">{ CompanyName }</div>
         <div>
           <p>
-            <b>{ company.City } </b>
-            (<span>{ company.State }</span>)
+            <b>{ City } </b>
+            (<span>{ State }</span>)
           </p>
           <p>
-            <span>{ company.Zipcode } </span>
-            <span>{ company.Address }</span>
+            <span>{ Zipcode } </span>
+            <span>{ Address }</span>
           </p>
         </div>
         <div>
           <p>
-            Phone: <b>{ company.Phone }</b>
+            Phone: <b>{ Phone }</b>
           </p>
           <p>
-            Fax: <b>{ company.Fax }</b>
+            Fax: <b>{ Fax }</b>
           </p>
           <p>
             Website: <a
-              href={company.Website}
+              href={Website}
               target="_blank">
-              { company.Website }
+              { Website }
             </a>
           </p>
         </div>

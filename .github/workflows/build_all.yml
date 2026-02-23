@@ -6,6 +6,13 @@ on:
       - 'apps/**/*.md'
   push:
     branches: [25_2]
+  workflow_dispatch:
+    inputs:
+      SBOM:
+        description: 'Build SBOM'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   build:
@@ -34,10 +41,9 @@ jobs:
         with:
           path: |
             ${{ env.STORE_PATH }}
-            .nx/cache
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store
+            ${{ runner.os }}-pnpm-cache
 
       - name: Install dependencies
         run:  pnpm install --frozen-lockfile
@@ -45,12 +51,29 @@ jobs:
       - name: Build npm packages
         run: pnpm run all:build
 
-      - name: Copy build artifacts
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: devextreme-npm-packages
           path: |
             artifacts/npm/*.tgz
+          retention-days: 1
+
+      - name: Build SBOMs
+        if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
+          pnpm nx build sbom;
+
+      - name: Upload SBOM artifacts
+        if: ${{ github.event_name == 'push' || github.event.inputs.SBOM == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: |
+            packages/sbom/dist/**/*
           retention-days: 1
 
   custom_bundles:

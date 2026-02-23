@@ -16,6 +16,7 @@
         >
           <template #content="{ data }">
             <DxTreeView
+              ref="treeViewRef"
               :data-source="treeDataSource"
               :select-by-click="true"
               data-structure="plain"
@@ -23,9 +24,8 @@
               parent-id-expr="categoryId"
               selection-mode="single"
               display-expr="name"
-              @content-ready="treeViewContentReady($event)"
+              @content-ready="treeViewContentReady"
               @item-selection-changed="treeViewItemSelectionChanged($event)"
-              @item-click="onTreeItemClick()"
             />
           </template>
         </DxDropDownBox>
@@ -74,12 +74,17 @@ import { ref } from 'vue';
 import DxDropDownBox from 'devextreme-vue/drop-down-box';
 import DxTreeView, { type DxTreeViewTypes } from 'devextreme-vue/tree-view';
 import {
-  DxDataGrid, DxSelection, DxPaging, DxFilterRow, DxScrolling,
+  DxDataGrid,
+  DxSelection,
+  DxPaging,
+  DxFilterRow,
+  DxScrolling,
 } from 'devextreme-vue/data-grid';
 import { CustomStore } from 'devextreme-vue/common/data';
+import type dxTreeView from 'devextreme/ui/tree_view';
 import 'whatwg-fetch';
 
-const treeBoxValue = ref(['1_1']);
+const treeBoxValue = ref('1_1');
 const isGridBoxOpened = ref(false);
 const isTreeBoxOpened = ref(false);
 const gridBoxValue = ref([3]);
@@ -87,11 +92,14 @@ const gridDataSource = makeAsyncDataSource('customers.json');
 const treeDataSource = makeAsyncDataSource('treeProducts.json');
 const gridColumns = ['CompanyName', 'City', 'Phone'];
 
-let treeView: DxTreeView['instance'];
+const treeViewRef = ref<{ instance: dxTreeView } | null>(null);
 
-function treeViewContentReady({ component }: DxTreeViewTypes.ContentReadyEvent) {
-  treeView = component;
-  syncTreeViewSelection();
+function treeViewContentReady({
+  component,
+}: DxTreeViewTypes.ContentReadyEvent) {
+  if (treeBoxValue.value) {
+    component.selectItem(treeBoxValue.value);
+  }
 }
 
 function makeAsyncDataSource(jsonFile: string) {
@@ -99,30 +107,34 @@ function makeAsyncDataSource(jsonFile: string) {
     loadMode: 'raw',
     key: 'ID',
     load() {
-      return fetch(`../../../../data/${jsonFile}`)
-        .then((response) => response.json());
+      return fetch(
+        `../../../../data/${jsonFile}`,
+      ).then((response) => response.json());
     },
   });
 }
 
 function syncTreeViewSelection() {
-  treeView?.unselectAll();
+  if (!treeViewRef?.value?.instance) return;
 
   if (treeBoxValue.value) {
-    treeView?.selectItem(treeBoxValue.value);
+    treeViewRef.value.instance.selectItem(treeBoxValue.value);
+  } else {
+    treeViewRef.value.instance.unselectAll();
   }
+
+  isTreeBoxOpened.value = false;
 }
 
-function treeViewItemSelectionChanged(e: DxTreeViewTypes.ItemSelectionChangedEvent) {
-  treeBoxValue.value = e.component.getSelectedNodeKeys();
+function treeViewItemSelectionChanged(
+  e: DxTreeViewTypes.ItemSelectionChangedEvent,
+) {
+  const selectedKeys = e.component.getSelectedNodeKeys();
+  treeBoxValue.value = selectedKeys.length > 0 ? selectedKeys[0] : null;
 }
 
 function gridBoxDisplayExpr(item: any) {
   return item && `${item.CompanyName} <${item.Phone}>`;
-}
-
-function onTreeItemClick() {
-  isTreeBoxOpened.value = false;
 }
 
 function onGridSelectionChanged() {

@@ -46,7 +46,7 @@ function customizePoint(e) {
       visible: true,
     };
   }
-  return null;
+  return {};
 }
 function customizeText(e) {
   if (e.valueText === '1') {

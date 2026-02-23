@@ -215,15 +215,6 @@ baseConfigs.forEach(baseConfig => {
             return isOpenedStateMode && isPosition;
         }
 
-        function testOrSkip(name, skip, callback) {
-            if(skip()) {
-
-                // QUnit.skip(name + ' - NOT SUPPORTED', function() {});
-            } else {
-                QUnit.test(name, callback);
-            }
-        }
-
         [undefined, 25].forEach(minSize => {
             QUnit.test('opened: false', function(assert) {
                 const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
@@ -309,7 +300,7 @@ baseConfigs.forEach(baseConfig => {
                 });
             });
 
-            testOrSkip(`(revealMode: ${revealMode}) opened: false, visible: false -> visible: true -> opened: true`, () => configIs('overlap'), function(assert) {
+            QUnit.test(`(revealMode: ${revealMode}) opened: false, visible: false -> visible: true -> opened: true`, function(assert) {
                 const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
                 const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                     opened: false,
@@ -324,7 +315,11 @@ baseConfigs.forEach(baseConfig => {
                 drawer.option('opened', true);
                 this.clock.tick(100);
 
-                drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
+                if(!configIs('overlap')) {
+                    drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
+                } else {
+                    assert.strictEqual(drawer._overlay.option('visible'), true, 'panel is opened');
+                }
             });
 
 
@@ -489,7 +484,7 @@ baseConfigs.forEach(baseConfig => {
             drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOrSkip('opened: true (T813710: template + rendered + _viewPortChangeHandler)', () => configIs(['shrink', 'push']) || configIs(undefined, 'right'), function(assert) {
+        QUnit.test('opened: true (T813710: template + rendered + _viewPortChangeHandler)', function(assert) {
             const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
@@ -517,7 +512,7 @@ baseConfigs.forEach(baseConfig => {
             drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOrSkip('opened: true, visible: false -> visible: true', () => configIs('overlap'), function(assert) {
+        QUnit.test('opened: true, visible: false -> visible: true', function(assert) {
             const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
@@ -529,10 +524,14 @@ baseConfigs.forEach(baseConfig => {
             drawer.option('visible', true);
             this.clock.tick(100);
 
-            drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
+            if(!configIs('overlap')) {
+                drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
+            } else {
+                assert.strictEqual(drawer._overlay.option('visible'), true, 'panel is opened');
+            }
         });
 
-        testOrSkip('opened: true, visible: false -> repaint -> visible: true', () => configIs('overlap'), function(assert) {
+        QUnit.test('opened: true, visible: false -> repaint -> visible: true', function(assert) {
             const drawerElement = $('#' + drawerTesters.drawerElementId).get(0);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
@@ -547,7 +546,11 @@ baseConfigs.forEach(baseConfig => {
             drawer.option('visible', true);
             this.clock.tick(100);
 
-            drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
+            if(!configIs('overlap')) {
+                drawerTesters[baseConfig.position].checkOpened(assert, drawer, drawerElement);
+            } else {
+                assert.strictEqual(drawer._overlay.option('visible'), true, 'panel is opened');
+            }
         });
     });
 });

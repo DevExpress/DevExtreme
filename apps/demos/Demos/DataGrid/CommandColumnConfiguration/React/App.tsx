@@ -1,17 +1,20 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
-  Button, Column, type DataGridTypes, Editing, Lookup,
+  Button, Column, Editing, Lookup,
 } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 
 import { employees as defaultEmployees, states, getMaxID } from './data.ts';
 
-const isChief = (position: string) => position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
+type ButtonRenderOptions = Pick<DataGridTypes.ColumnButtonClickEvent, 'row' | 'column' | 'component'>;
 
-const isCloneIconVisible = (e) => !e.row.isEditing;
+const isChief = (position?: string) => !!position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
 
-const isCloneIconDisabled = (e) => isChief(e.row.data.Position);
+const isCloneIconVisible = (e: ButtonRenderOptions) => !e.row?.isEditing;
 
-const isDeleteIconVisible = (e) => !isChief(e.row.data.Position);
+const isCloneIconDisabled = (e: ButtonRenderOptions) => isChief(e.row?.data?.Position);
+
+const isDeleteIconVisible = (e: ButtonRenderOptions) => !isChief(e.row?.data?.Position);
 
 const onRowValidating = (e: DataGridTypes.RowValidatingEvent) => {
   const position = e.newData.Position;

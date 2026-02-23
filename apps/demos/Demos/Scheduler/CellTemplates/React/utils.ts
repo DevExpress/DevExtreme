@@ -1,4 +1,4 @@
-import { SchedulerTypes } from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
 import { dinnerTime, holidays } from './data.ts';
 
 export default class Utils {
@@ -29,9 +29,9 @@ export default class Utils {
   }
 
   static isValidAppointment(component: SchedulerTypes.AppointmentAddingEvent['component'], appointmentData: SchedulerTypes.AppointmentAddingEvent['appointmentData']) {
-    const startDate = new Date(appointmentData.startDate);
-    const endDate = new Date(appointmentData.endDate);
-    const cellDuration = component.option('cellDuration');
+    const startDate = appointmentData.startDate ? new Date(appointmentData.startDate) : new Date();
+    const endDate = appointmentData.endDate ? new Date(appointmentData.endDate) : new Date();
+    const cellDuration = Number(component.option('cellDuration'));
     return Utils.isValidAppointmentInterval(startDate, endDate, cellDuration);
   }
 

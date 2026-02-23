@@ -1,9 +1,7 @@
-import {
-  NgModule, Component, OnInit, OnDestroy, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClientModule } from '@angular/common/http';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, OnInit, OnDestroy, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { AsyncPipe } from '@angular/common';
 import { DxLoadPanelModule } from 'devextreme-angular';
 import { Observable, Subscription } from 'rxjs';
 import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
@@ -25,6 +23,11 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    AsyncPipe,
+    DxDataGridModule,
+    DxLoadPanelModule,
+  ],
 })
 export class AppComponent implements OnInit, OnDestroy {
   ordersSubscription: Subscription;
@@ -84,16 +87,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDataGridModule,
-    DxLoadPanelModule,
-    HttpClientModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    provideHttpClient(withFetch()),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

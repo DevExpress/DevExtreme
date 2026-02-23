@@ -1,12 +1,20 @@
 <template>
-  <div class="showtime-preview">
-    <div> {{ movieData.text }}</div>
-    <div>
-      Ticket Price: <strong>${{ templateModel.targetedAppointmentData?.price }}</strong>
+  <div class="movie-preview">
+    <div class="movie-preview-image">
+      <img
+        :src="movieData.image"
+        :alt="`${movieData.text} poster`"
+      >
     </div>
-    <div>
-      {{ getFormatDate(templateModel.targetedAppointmentData?.displayStartDate) }} -
-      {{ getFormatDate(templateModel.targetedAppointmentData?.displayEndDate) }}
+    <div class="movie-details">
+      <div class="title">{{ movieData.text }}</div>
+      <div>
+        Ticket Price: <strong>${{ templateModel.targetedAppointmentData?.price }}</strong>
+      </div>
+      <div>
+        {{ getFormatDate(templateModel.targetedAppointmentData?.displayStartDate) }} -
+        {{ getFormatDate(templateModel.targetedAppointmentData?.displayEndDate) }}
+      </div>
     </div>
   </div>
 </template>
@@ -34,50 +42,3 @@ const getMovieById = function (resourceId: string) {
 const movieData = getMovieById(props.templateModel.targetedAppointmentData?.movieId);
 
 </script>
-<style scoped>
-  .dx-tooltip-wrapper .dx-overlay-content .dx-popup-content {
-    padding: 14px;
-  }
-
-  .showtime-preview > div:first-child {
-    font-size: 12px;
-    white-space: normal;
-  }
-
-  .showtime-preview > div:not(:first-child) {
-    font-size: 11px;
-    white-space: normal;
-  }
-
-  .movie-tooltip .movie-info {
-    display: inline-block;
-    margin-left: 10px;
-    vertical-align: top;
-    text-align: left;
-  }
-
-  .movie-tooltip img {
-    height: 80px;
-    margin-bottom: 10px;
-  }
-
-  .movie-tooltip .movie-title {
-    font-size: 1.5em;
-    line-height: 40px;
-  }
-
-  .long-title h3 {
-    font-family:
-      'Segoe UI Light',
-      'Helvetica Neue Light',
-      'Segoe UI',
-      'Helvetica Neue',
-      'Trebuchet MS',
-      Verdana;
-    font-weight: 200;
-    font-size: 28px;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-</style>

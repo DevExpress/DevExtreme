@@ -1,8 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import FileManager, {
-  Permissions, ItemView, type FileManagerTypes, IItemViewProps,
+  Permissions, ItemView,
 } from 'devextreme-react/file-manager';
+import type { FileManagerTypes, IItemViewProps } from 'devextreme-react/file-manager';
 import { fileItems } from './data.ts';
+
+interface CustomFileSystemItem {
+  isDirectory: boolean;
+  getFileExtension: () => string;
+}
 
 export default function App() {
   const [itemViewMode, setItemViewMode] = useState<IItemViewProps['mode']>('thumbnails');
@@ -13,7 +19,7 @@ export default function App() {
     }
   }, [setItemViewMode]);
 
-  const customizeIcon = useCallback<FileManagerTypes.Properties['customizeThumbnail']>((fileSystemItem) => {
+  const customizeIcon = useCallback((fileSystemItem: CustomFileSystemItem) => {
     if (fileSystemItem.isDirectory) {
       return '../../../../images/thumbnails/folder.svg';
     }

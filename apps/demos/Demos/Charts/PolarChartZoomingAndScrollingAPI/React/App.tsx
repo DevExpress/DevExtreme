@@ -19,7 +19,7 @@ import RangeSelector, {
   type RangeSelectorTypes,
 } from 'devextreme-react/range-selector';
 
-import { VisualRange } from 'devextreme-react/common/charts';
+import type { VisualRange } from 'devextreme-react/common/charts';
 import { dataSource } from './data.ts';
 
 function App() {
@@ -30,7 +30,7 @@ function App() {
   }, [setVisualRange]);
 
   return (
-    <React.Fragment>
+    <>
       <PolarChart
         id="zoomedChart"
         dataSource={dataSource}
@@ -86,7 +86,7 @@ function App() {
         </Scale>
         <Behavior valueChangeMode="onHandleMove" />
       </RangeSelector>
-    </React.Fragment>
+    </>
   );
 }
 

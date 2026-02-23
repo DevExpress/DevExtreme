@@ -20,7 +20,7 @@ const statusLabel = { 'aria-label': 'Status' };
 const employees = createStore({
   key: 'ID',
   loadUrl: `${url}/Employees`,
-  onBeforeSend(method, ajaxOptions) {
+  onBeforeSend(_method, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
   },
 });
@@ -29,14 +29,14 @@ const tasks = createStore({
   loadUrl: `${url}/Tasks`,
   updateUrl: `${url}/UpdateTask`,
   insertUrl: `${url}/InsertTask`,
-  onBeforeSend(method, ajaxOptions) {
+  onBeforeSend(_method, ajaxOptions) {
     ajaxOptions.xhrFields = { withCredentials: true };
   },
 });
 const cellTemplate = (container, options) => {
   const noBreakSpace = '\u00A0';
   const assignees = (options.value || []).map((assigneeId) =>
-    options.column.lookup.calculateCellValue(assigneeId),
+    options.column.lookup?.calculateCellValue?.(assigneeId),
   );
   const text = assignees.join(', ');
   container.textContent = text || noBreakSpace;
@@ -52,8 +52,8 @@ const onRowInserted = (e) => e.component.navigateToRow(e.key);
 const statusEditorRender = (cell) => {
   const onValueChanged = (e) => cell.setValue(e.value);
   const itemRender = (data) => {
-    const imageSource = `images/icons/status-${data.id}.svg`;
-    if (data != null) {
+    if (data) {
+      const imageSource = `images/icons/status-${data.id}.svg`;
       return (
         <div>
           <img
@@ -66,10 +66,15 @@ const statusEditorRender = (cell) => {
     }
     return <span>(All)</span>;
   };
+  const lookupDataSource = cell.column.lookup?.dataSource;
+  const dataSource =
+    typeof lookupDataSource === 'function'
+      ? lookupDataSource({ data: cell.data, key: cell.row.key })
+      : lookupDataSource;
   return (
     <SelectBox
       defaultValue={cell.value}
-      {...cell.column.lookup}
+      dataSource={dataSource}
       onValueChanged={onValueChanged}
       inputAttr={statusLabel}
       itemRender={itemRender}

@@ -1,6 +1,6 @@
 {
   "name": "devextreme-themebuilder",
-  "version": "25.2.2",
+  "version": "25.2.5",
   "description": "DevExtreme ThemeBuilder",
   "keywords": [
     "devextreme",
@@ -10,7 +10,11 @@
   "homepage": "https://js.devexpress.com/",
   "bugs": "https://www.devexpress.com/support/",
   "author": "Developer Express Inc.",
-  "repository": "https://github.com/DevExpress/DevExtreme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DevExpress/DevExtreme.git",
+    "directory": "packages/devextreme-themebuilder"
+  },
   "license": "SEE LICENSE IN README.md",
   "scripts": {
     "test": "jest --coverage --verbose --runInBand",
@@ -43,7 +47,7 @@
     "eslint-plugin-no-only-tests": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
-    "express": "4.21.1",
+    "express": "4.21.2",
     "filing-cabinet": "4.1.6",
     "fs-extra": "11.2.0",
     "immutable": "4.3.5",

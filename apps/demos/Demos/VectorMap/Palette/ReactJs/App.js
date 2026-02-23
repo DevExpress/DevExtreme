@@ -9,7 +9,8 @@ const colorGroups = [0, 0.5, 0.8, 1, 2, 3, 100];
 const bounds = [-180, 85, 180, -60];
 const customizeLayer = (elements) => {
   elements.forEach((element) => {
-    element.attribute('population', populations[element.attribute('name')]);
+    const name = element.attribute('name');
+    element.attribute('population', populations[name]);
   });
 };
 const customizeText = (arg) => {
@@ -29,7 +30,7 @@ const customizeTooltip = (arg) => {
       text: `${arg.attribute('name')}: ${arg.attribute('population')}% of world population`,
     };
   }
-  return null;
+  return {};
 };
 export default function App() {
   return (

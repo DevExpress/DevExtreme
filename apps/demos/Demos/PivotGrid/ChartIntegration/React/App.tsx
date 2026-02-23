@@ -1,25 +1,21 @@
 import React, { useEffect, useRef } from 'react';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-
 import Chart, {
   AdaptiveLayout,
   CommonSeriesSettings,
   Size,
   Tooltip,
-  ChartRef,
 } from 'devextreme-react/chart';
-
-import PivotGrid, {
-  FieldChooser,
-  PivotGridRef,
-} from 'devextreme-react/pivot-grid';
+import type { ChartRef, ChartTypes } from 'devextreme-react/chart';
+import PivotGrid, { FieldChooser } from 'devextreme-react/pivot-grid';
+import type { PivotGridRef } from 'devextreme-react/pivot-grid';
 
 import { sales } from './data.ts';
 
-const customizeTooltip = (args) => {
+const customizeTooltip = (args: ChartTypes.CommonPointInfo) => {
   const valueText = (args.seriesName.indexOf('Total') !== -1)
-    ? new Intl.NumberFormat('en-EN', { style: 'currency', currency: 'USD' }).format(args.originalValue)
+    ? new Intl.NumberFormat('en-EN', { style: 'currency', currency: 'USD' }).format(args.originalValue as number)
     : args.originalValue;
 
   return {
@@ -33,14 +29,14 @@ const App = () => {
   const pivotGridRef = useRef<PivotGridRef>(null);
 
   useEffect(() => {
-    pivotGridRef.current.instance().bindChart(chartRef.current.instance(), {
+    pivotGridRef.current?.instance().bindChart(chartRef.current?.instance(), {
       dataFieldsDisplayMode: 'splitPanes',
       alternateDataFields: false,
     });
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Chart ref={chartRef}>
         <Size height={320} />
         <Tooltip enabled={true} customizeTooltip={customizeTooltip} />
@@ -62,7 +58,7 @@ const App = () => {
       >
         <FieldChooser enabled={true} height={400} />
       </PivotGrid>
-    </React.Fragment>
+    </>
   );
 };
 

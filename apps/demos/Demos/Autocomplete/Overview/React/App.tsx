@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { CustomStore } from 'devextreme-react/common/data';
+import type { LoadOptions } from 'devextreme-react/common/data';
 import { Autocomplete, type AutocompleteTypes } from 'devextreme-react/autocomplete';
 import 'whatwg-fetch';
-import { names, surnames, positions } from './data.ts';
 import AspNetData from 'devextreme-aspnet-data-nojquery';
+import { names, surnames, positions } from './data.ts';
 
-function isNotEmpty(value: string) {
+function isNotEmpty(value: string): boolean {
   return value !== undefined && value !== null && value !== '';
 }
 
@@ -20,51 +21,53 @@ const states = AspNetData.createStore({
 const clientsStore = new CustomStore({
   key: 'Value',
   useDefaultSearch: true,
-  load: (loadOptions) => {
+  load: (loadOptions: LoadOptions) => {
     let params = '?';
-    ['skip', 'take', 'filter'].forEach((option) => {
+    type LoadOptionKey = keyof LoadOptions;
+    const loadOptionKeys: LoadOptionKey[] = ['skip', 'take', 'filter'];
+    loadOptionKeys.forEach((option: LoadOptionKey): void => {
       if (option in loadOptions && isNotEmpty(loadOptions[option])) {
-        params += `${option}=${JSON.stringify(loadOptions[option])}&`;
+        params += `${option as string}=${JSON.stringify(loadOptions[option])}&`;
       }
     });
     params = params.slice(0, -1);
     return fetch(`https://js.devexpress.com/Demos/NetCore/api/DataGridWebApi/CustomersLookup${params}`)
-      .then((response) => response.json())
+      .then((response: Response) => response.json())
       .then((data) => ({
         data: data.data,
       }))
-      .catch(() => {
+      .catch((): never => {
         throw new Error('Data Loading Error');
       });
   },
 });
 
-const renderState = (data) => (
+const renderState = (data: { Name: string, Short: string }) => (
   <span>
     {data.Name} ({data.Short})
   </span>
 );
 
 function App() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
 
-  const [state, setState] = useState('');
-  const [currentClient, setCurrentClient] = useState('');
+  const [state, setState] = useState<string>('');
+  const [currentClient, setCurrentClient] = useState<string>('');
 
-  const handleFirstNameChange = useCallback((e: AutocompleteTypes.ValueChangedEvent) => {
+  const handleFirstNameChange = useCallback((e: AutocompleteTypes.ValueChangedEvent): void => {
     setFirstName(e.value);
   }, []);
 
-  const handleLastNameChange = useCallback((e: AutocompleteTypes.ValueChangedEvent) => {
+  const handleLastNameChange = useCallback((e: AutocompleteTypes.ValueChangedEvent): void => {
     setLastName(e.value);
   }, []);
 
-  const handleStateChange = useCallback((e: AutocompleteTypes.ValueChangedEvent) => {
+  const handleStateChange = useCallback((e: AutocompleteTypes.ValueChangedEvent): void => {
     setState(e.value);
   }, []);
 
-  const handleCurrentClientChange = useCallback((e: AutocompleteTypes.ValueChangedEvent) => {
+  const handleCurrentClientChange = useCallback((e: AutocompleteTypes.ValueChangedEvent): void => {
     setCurrentClient(e.value);
   }, []);
 

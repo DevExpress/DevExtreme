@@ -1,8 +1,7 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
-import themes from 'devextreme/ui/themes';
+import themes, { isGeneric } from 'devextreme/ui/themes';
 import { Service, Sale } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -21,6 +20,10 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxDataGridModule,
+    DxSelectBoxModule,
+  ],
 })
 export class AppComponent {
   sales: Sale[];
@@ -32,19 +35,12 @@ export class AppComponent {
   constructor(service: Service) {
     this.sales = service.getSales();
     this.allMode = 'allPages';
-    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+    this.checkBoxesMode = isGeneric(themes.current()) ? 'onClick' : 'always';
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDataGridModule,
-    DxSelectBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

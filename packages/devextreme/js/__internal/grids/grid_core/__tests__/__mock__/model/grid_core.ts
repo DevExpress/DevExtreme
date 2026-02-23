@@ -10,6 +10,7 @@ import { AIPromptEditorModel } from './ai_prompt_editor';
 import { AIHeaderCellModel } from './cell/ai_header_cell';
 import { DataCellModel } from './cell/data_cell';
 import { HeaderCellModel } from './cell/header_cell';
+import { ColumnChooserModel } from './column_chooser';
 import { EditFormModel } from './edit_form';
 import { DataRowModel } from './row/data_row';
 
@@ -22,6 +23,9 @@ const SELECTORS = {
   toast: 'dx-toast',
   loadPanel: 'dx-loadpanel',
   editForm: 'edit-form',
+  headerCellIndicators: 'dx-column-indicators',
+  headerCellFilter: 'dx-header-filter',
+  revertButton: 'dx-revert-button',
 };
 
 export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
@@ -46,6 +50,13 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
       this.getHeaderCells()[columnIndex],
       this.addWidgetPrefix.bind(this),
     );
+  }
+
+  public getHeaderCellFilter(columnIndex: number): dxElementWrapper {
+    const $headerCell = $(this.getHeaderCells()[columnIndex]);
+    const headerFilterSelector = `.${SELECTORS.headerCellIndicators} > .${SELECTORS.headerCellFilter}`;
+
+    return $headerCell.find(headerFilterSelector);
   }
 
   public getDataRows(): NodeListOf<HTMLElement> {
@@ -91,6 +102,10 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
     return new ToastModel(this.getToastContainer());
   }
 
+  public getRevertButton(): HTMLElement {
+    return document.body.querySelector(`.${SELECTORS.revertButton}`) as HTMLElement;
+  }
+
   public addWidgetPrefix(classNames: string): string {
     const componentName = this.NAME;
 
@@ -123,6 +138,10 @@ export abstract class GridCoreModel<TInstance extends GridBase = GridBase> {
 
   public getEditForm(): EditFormModel {
     return new EditFormModel(this.root.querySelector(`.${this.addWidgetPrefix(SELECTORS.editForm)}`));
+  }
+
+  public getColumnChooser(): ColumnChooserModel {
+    return new ColumnChooserModel(this.root);
   }
 
   public abstract getInstance(): TInstance;

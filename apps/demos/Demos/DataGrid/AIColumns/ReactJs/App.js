@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid, {
-  Column, Paging, Grouping, Ai,
+  Column, Paging, Grouping, AI,
 } from 'devextreme-react/data-grid';
 import Popup, { Position } from 'devextreme-react/popup';
 import { vehicles } from './data.js';
 import { aiIntegration } from './service.js';
-import Trademark from './Trademark.js';
 import Category from './Category.js';
 import LicenseInfo from './LicenseInfo.js';
+import Trademark from './Trademark.js';
 
 const onAIColumnRequestCreating = (e) => {
   e.data = e.data.map((item) => ({
@@ -26,13 +26,14 @@ export default function App() {
     setCurrentVehicle(null);
   }, []);
   return (
-    <React.Fragment>
+    <>
       <DataGrid
         dataSource={vehicles}
         showBorders={true}
         keyExpr="ID"
         aiIntegration={aiIntegration}
         onAIColumnRequestCreating={onAIColumnRequestCreating}
+        className="ai__grid"
       >
         <Paging
           enabled={true}
@@ -83,7 +84,7 @@ export default function App() {
           fixedPosition="right"
           cssClass="ai__cell"
         >
-          <Ai
+          <AI
             mode="auto"
             noDataText="No data"
             prompt="Identify the country where the vehicle model is manufactured. When looking up a country, consider vehicle brand, model, and specifications."
@@ -106,6 +107,6 @@ export default function App() {
           collision="fit"
         />
       </Popup>
-    </React.Fragment>
+    </>
   );
 }

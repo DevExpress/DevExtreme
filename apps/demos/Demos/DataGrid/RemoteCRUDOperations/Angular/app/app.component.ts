@@ -1,7 +1,6 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { HttpClient, HttpClientModule, HttpParams } from '@angular/common/http';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { HttpClient, HttpParams, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom, Observable } from 'rxjs';
 import { DxDataGridModule, DxSelectBoxModule, DxButtonModule } from 'devextreme-angular';
 import { CustomStore } from 'devextreme-angular/common/data';
@@ -24,6 +23,11 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
+  imports: [
+    DxDataGridModule,
+    DxSelectBoxModule,
+    DxButtonModule,
+  ],
 })
 export class AppComponent {
   dataSource: CustomStore;
@@ -70,7 +74,11 @@ export class AppComponent {
     this.logRequest(method, url, data);
 
     const httpParams = new HttpParams({ fromObject: data });
-    const httpOptions = { withCredentials: true, body: httpParams };
+    const httpOptions = {
+      withCredentials: true,
+      [method === 'GET' ? 'params' : 'body']: httpParams,
+    };
+
     let request: Observable<Object>;
 
     switch (method) {
@@ -110,17 +118,9 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDataGridModule,
-    DxSelectBoxModule,
-    DxButtonModule,
-    HttpClientModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    provideHttpClient(withFetch()),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

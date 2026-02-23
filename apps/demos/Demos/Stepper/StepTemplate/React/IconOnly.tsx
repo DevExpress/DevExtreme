@@ -1,7 +1,11 @@
 import React from 'react';
 
-export default function IconOnly(data) {
+interface IconOnlyProps {
+  icon: string;
+}
+
+export default function IconOnly({ icon }: IconOnlyProps) {
   return (
-    <i className={`dx-icon dx-icon-${data.icon}`}></i>
+    <i className={`dx-icon dx-icon-${icon}`}></i>
   );
 }

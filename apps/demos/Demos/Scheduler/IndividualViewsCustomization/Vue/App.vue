@@ -40,13 +40,43 @@
       field-expr="typeId"
       label="Type"
     />
+
+    <DxEditing>
+      <DxSchedulerForm>
+        <DxItem name="mainGroup">
+          <DxItem name="subjectGroup"/>
+          <DxItem name="dateGroup"/>
+          <DxItem name="repeatGroup"/>
+          <DxItem name="resourcesGroup">
+            <DxItem
+              :col-count="3"
+              :col-count-by-screen="{ xs: 3 }"
+              name="priorityIdGroup"
+            >
+              <DxItem name="priorityIdIcon"/>
+              <DxItem name="priorityId"/>
+              <DxItem name="typeId"/>
+            </DxItem>
+          </DxItem>
+          <DxItem name="descriptionGroup"/>
+        </DxItem>
+        <DxItem name="recurrenceGroup"/>
+      </DxSchedulerForm>
+    </DxEditing>
+
     <template #dateCellSlot="{ data: dateCell }">
       <DateCell :cell-data="dateCell"/>
     </template>
   </DxScheduler>
 </template>
 <script setup lang="ts">
-import DxScheduler, { DxResource, DxView } from 'devextreme-vue/scheduler';
+import DxScheduler, {
+  DxResource,
+  DxView,
+  DxEditing,
+  DxForm as DxSchedulerForm,
+} from 'devextreme-vue/scheduler';
+import { DxItem } from 'devextreme-vue/form';
 import DateCell from './DateCell.vue';
 import { data, priorityData, typeData } from './data.ts';
 

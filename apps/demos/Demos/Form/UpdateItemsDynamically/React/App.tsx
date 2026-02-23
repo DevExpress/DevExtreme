@@ -1,26 +1,32 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import 'devextreme-react/text-area';
 import Form, {
-  GroupItem, SimpleItem, Label, ButtonItem,
+  GroupItem,
+  SimpleItem,
+  Label,
+  ButtonItem,
 } from 'devextreme-react/form';
-import service from './data.ts';
-
-const employee = service.getEmployee();
+import type { CheckBoxTypes, ICheckBoxOptions } from 'devextreme-react/check-box';
+import type { ITextBoxOptions } from 'devextreme-react/text-box';
+import type { IButtonOptions } from 'devextreme-react/button';
+import { employee } from './data.ts';
+import type { Employee } from './types.ts';
 
 const App = () => {
-  const [phones, setPhones] = useState(employee.Phones);
-  const [isHomeAddressVisible, setIsHomeAddressVisible] = useState(true);
-  const formData = useMemo(() => ({ ...employee, Phones: phones }), [phones]);
+  const [phones, setPhones] = useState<string[]>(employee.Phones);
+  const [isHomeAddressVisible, setIsHomeAddressVisible] = useState<CheckBoxTypes.Properties['value']>(true);
 
-  const CheckBoxOptions = useMemo(() => ({
+  const formData = useMemo((): Employee => ({ ...employee, Phones: phones }), [phones]);
+
+  const CheckBoxOptions = useMemo((): ICheckBoxOptions => ({
     text: 'Show Address',
     value: isHomeAddressVisible,
-    onValueChanged: (e) => {
+    onValueChanged: (e: CheckBoxTypes.ValueChangedEvent): void => {
       setIsHomeAddressVisible(e.component.option('value'));
     },
-  }), [setIsHomeAddressVisible, isHomeAddressVisible]);
+  }), [isHomeAddressVisible]);
 
-  const generateNewPhoneOptions = useCallback((index: number) => ({
+  const generateNewPhoneOptions = useCallback((index: number): ITextBoxOptions => ({
     mask: '+1 (X00) 000-0000',
     maskRules: { X: /[01-9]/ },
     buttons: [{
@@ -29,7 +35,7 @@ const App = () => {
       options: {
         stylingMode: 'text',
         icon: 'trash',
-        onClick: () => {
+        onClick: (): void => {
           const newPhones = phones.slice(0, index).concat(phones.slice(index + 1));
           setPhones(newPhones);
         },
@@ -37,24 +43,24 @@ const App = () => {
     }],
   }), [phones]);
 
-  const PhoneOptions = useMemo(() => {
-    const options: any[] = [];
+  const PhoneOptions = useMemo((): ITextBoxOptions[] => {
+    const options: ITextBoxOptions[] = [];
     for (let i = 0; i < phones.length; i += 1) {
       options.push(generateNewPhoneOptions(i));
     }
     return options;
   }, [phones, generateNewPhoneOptions]);
 
-  const PhoneButtonOptions = useMemo(() => ({
+  const PhoneButtonOptions = useMemo((): IButtonOptions => ({
     icon: 'add',
     text: 'Add phone',
-    onClick: () => {
-      setPhones((prevPhones) => [...prevPhones, '']);
+    onClick: (): void => {
+      setPhones((prevPhones: string[]): string[] => [...prevPhones, '']);
     },
   }), []);
 
   return (
-    <React.Fragment>
+    <>
       <div className="long-title"><h3>Personal details</h3></div>
       <div className="form-container">
         <Form
@@ -72,7 +78,7 @@ const App = () => {
             <GroupItem>
               <GroupItem caption="Home Address"
                 name="HomeAddress"
-                visible={isHomeAddressVisible}>
+                visible={!!isHomeAddressVisible}>
                 <SimpleItem dataField="Address" />
                 <SimpleItem dataField="City" />
               </GroupItem>
@@ -82,10 +88,10 @@ const App = () => {
             name="phones-container">
             <GroupItem
               name="phones">
-              {PhoneOptions.map((phone, index: number) => <SimpleItem
+              {PhoneOptions.map((options: ITextBoxOptions, index: number) => <SimpleItem
                 key={`Phones${index}`}
                 dataField={`Phones[${index}]`}
-                editorOptions={phone}>
+                editorOptions={options}>
                 <Label text={`Phone ${index + 1}`} />
               </SimpleItem>)}
             </GroupItem>
@@ -98,7 +104,7 @@ const App = () => {
           </GroupItem>
         </Form>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

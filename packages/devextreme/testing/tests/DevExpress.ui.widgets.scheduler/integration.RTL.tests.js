@@ -4,7 +4,7 @@ import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 import translator from 'common/core/animation/translator';
 
 import '__internal/scheduler/m_scheduler';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const { test, module, testStart } = QUnit;
 
@@ -27,29 +27,29 @@ module('RTL', moduleConfig, () => {
             const expectedValues = {
                 month: [
                     {
-                        top: 256,
+                        top: 330,
                         left: 599
                     }, {
-                        top: 256,
+                        top: 330,
                         left: 250
                     }
                 ],
                 week: [
                     {
                         top: 0,
-                        left: 539
+                        left: 573
                     }, {
                         top: 0,
-                        left: 241
+                        left: 256
                     }
                 ],
                 day: [
                     {
                         top: 0,
-                        left: 324
+                        left: 347
                     }, {
                         top: 0,
-                        left: 25
+                        left: 30
                     }
                 ]
             };

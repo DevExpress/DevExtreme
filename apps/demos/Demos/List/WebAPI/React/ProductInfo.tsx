@@ -7,12 +7,16 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 2,
 });
 
-export default function ProductInfo(item) {
+interface ProductInfoData {
+  ProductName: string;
+  UnitPrice: number;
+}
+
+export default function ProductInfo(item: ProductInfoData) {
   return (
-    <React.Fragment>
-      <div>{item.CategoryName}</div>
+    <>
       <div>{item.ProductName}</div>
       <b className="price">{currencyFormatter.format(item.UnitPrice)}</b>
-    </React.Fragment>
+    </>
   );
 }

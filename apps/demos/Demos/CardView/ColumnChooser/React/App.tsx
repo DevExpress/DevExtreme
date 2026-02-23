@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
+
 import CardView, {
   Column, CardCover, SearchPanel, ColumnChooser, ColumnChooserSearch, ColumnChooserSelection,
 } from 'devextreme-react/card-view';
-import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
-import { employees, Employee } from './data.ts';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
+import SelectBox from 'devextreme-react/select-box';
+
+import { employees } from './data.ts';
+import type { Employee } from './data.ts';
+
+type CheckBoxValue = CheckBoxTypes.Properties['value'];
 
 function altExpr({ First_Name, Last_Name }: Employee): string {
   return `Photo of ${First_Name} ${Last_Name}`;
@@ -19,16 +25,18 @@ function calculateFullName({ First_Name, Last_Name }: Employee): string {
 }
 
 const columnChooserModeLabel = { 'aria-label': 'Column Chooser Mode' };
-const columnChooserModes = ['dragAndDrop', 'select'];
+const columnChooserModes = ['dragAndDrop', 'select'] as const;
+
+type ColumnChooserMode = typeof columnChooserModes[number];
 
 const App = () => {
-  const [columnChooserMode, setColumnChooserMode] = useState<'select' | 'dragAndDrop'>('select');
-  const [searchEnabled, setSearchEnabled] = useState(true);
-  const [allowSelectAll, setAllowSelectAll] = useState(true);
-  const [selectByClick, setSelectByClick] = useState(true);
-  const [allowColumnReordering, setAllowColumnReordering] = useState(false);
+  const [columnChooserMode, setColumnChooserMode] = useState<ColumnChooserMode>('select');
+  const [searchEnabled, setSearchEnabled] = useState<CheckBoxValue>(true);
+  const [allowSelectAll, setAllowSelectAll] = useState<CheckBoxValue>(true);
+  const [selectByClick, setSelectByClick] = useState<CheckBoxValue>(true);
+  const [allowColumnReordering, setAllowColumnReordering] = useState<CheckBoxValue>(false);
 
-  return <React.Fragment>
+  return <>
     <div className="options-panel">
       <div className="caption">Options</div>
       <div className="options-container">
@@ -78,7 +86,7 @@ const App = () => {
       keyExpr="ID"
       cardsPerRow="auto"
       cardMinWidth={300}
-      allowColumnReordering={allowColumnReordering}
+      allowColumnReordering={!!allowColumnReordering}
     >
       <SearchPanel
         visible={true}
@@ -89,11 +97,11 @@ const App = () => {
         height="340px"
       >
         <ColumnChooserSearch
-          enabled={searchEnabled}
+          enabled={!!searchEnabled}
         />
         <ColumnChooserSelection
-          allowSelectAll={allowSelectAll}
-          selectByClick={selectByClick}
+          allowSelectAll={!!allowSelectAll}
+          selectByClick={!!selectByClick}
         />
       </ColumnChooser>
       <CardCover
@@ -126,7 +134,7 @@ const App = () => {
         visible={false}
       />
     </CardView>
-  </React.Fragment>;
+  </>;
 };
 
 export default App;

@@ -1,10 +1,13 @@
 import React, { useCallback, useState } from 'react';
 
-import Scheduler, { AppointmentDragging, type SchedulerTypes } from 'devextreme-react/scheduler';
-import Draggable, { type DraggableTypes } from 'devextreme-react/draggable';
+import Scheduler, { AppointmentDragging } from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
+import Draggable from 'devextreme-react/draggable';
+import type { DraggableTypes } from 'devextreme-react/draggable';
 import ScrollView from 'devextreme-react/scroll-view';
 
-import { Task, appointments as defaultAppointments, tasks as defaultTasks } from './data.ts';
+import { appointments as defaultAppointments, tasks as defaultTasks } from './data.ts';
+import type { Task } from './data.ts';
 
 const currentDate = new Date(2021, 3, 26);
 const views: SchedulerTypes.Properties['views'] = [{ type: 'day', intervalCount: 3 }];
@@ -60,7 +63,7 @@ const App = () => {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <ScrollView id="scroll">
         <Draggable
           id="list"
@@ -98,7 +101,7 @@ const App = () => {
           onAdd={onAppointmentAdd as any}
         />
       </Scheduler>
-    </React.Fragment>
+    </>
   );
 };
 

@@ -1,4 +1,6 @@
-export const employee = {
+import type { Employee } from './types.ts';
+
+export const employee: Employee = {
   Full_Name: 'John Heart',
   Title: 'CEO',
   Birth_Date: '03/16/1964',

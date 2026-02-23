@@ -1,4 +1,35 @@
-export const orders = [{
+import type { DataSourceOptions } from 'devextreme-react/common/data';
+import type { FilterBuilderTypes } from 'devextreme-react/filter-builder';
+
+export interface Order {
+  ID: number;
+  OrderNumber: number;
+  OrderDate: string;
+  DeliveryDate: string;
+  SaleAmount: number;
+  Terms: string;
+  CustomerStoreCity: string;
+  Employee: string;
+}
+
+export type OrderFilterValue<T extends keyof Order = keyof Order> = [T, FilterBuilderTypes.FilterOperation, Order[T]];
+
+export interface OrderFilter {
+  text: string;
+  value: OrderFilterValue | OrderFilterValue[];
+}
+
+export interface HeaderFilterDataResult {
+  text: string;
+  value: string;
+}
+
+export interface HeaderFilterDataSourceOptions {
+  component: Record<string, any>;
+  dataSource: DataSourceOptions<HeaderFilterDataResult> | null;
+}
+
+export const orders: Order[] = [{
   ID: 1,
   OrderNumber: 35703,
   OrderDate: '2017/04/10',

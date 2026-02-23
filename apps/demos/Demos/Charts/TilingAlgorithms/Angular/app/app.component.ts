@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
 import { DxTreeMapModule, DxSelectBoxModule } from 'devextreme-angular';
 import { PopulationByAge, Service } from './app.service';
 
@@ -20,6 +19,11 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    BrowserModule,
+    DxTreeMapModule,
+    DxSelectBoxModule,
+  ],
 })
 export class AppComponent {
   getPopulationsByAge: PopulationByAge[];
@@ -33,7 +37,7 @@ export class AppComponent {
   customizeTooltip(arg) {
     const data = arg.node.data;
     const parentData = arg.node.getParent().data;
-    let result = '';
+    let result: string;
 
     if (arg.node.isLeaf()) {
       result = `<span class='country'>${parentData.name}</span><br />${
@@ -58,22 +62,17 @@ export class AppComponent {
       const rect = totalRect.slice();
 
       totalSum -= item.value;
-      rect[side + 2] = totalRect[side] = totalRect[side] + size;
+      const adjustedSize = totalRect[side] + size;
+      totalRect[side] = adjustedSize;
+      rect[side + 2] = adjustedSize;
       item.rect = rect;
       side = 1 - side;
     });
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxTreeMapModule,
-    DxSelectBoxModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

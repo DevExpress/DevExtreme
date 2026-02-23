@@ -2,6 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type { Appointment, Properties } from '@js/ui/scheduler';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
+import type { GroupValues, RawGroupValues } from './utils/resource_manager/types';
 import type { AppointmentViewModelPlain } from './view_model/types';
 
 export type Direction = 'vertical' | 'horizontal';
@@ -269,3 +270,14 @@ export interface CompactAppointmentOptions {
   allowDrag: boolean;
   isCompact: boolean;
 }
+
+export interface ScrollToOptions {
+  group?: RawGroupValues | GroupValues;
+  allDay?: boolean | undefined;
+  alignInView?: 'start' | 'center';
+}
+
+export type ScrollToGroupValuesOrOptions = RawGroupValues
+  | GroupValues
+  | ScrollToOptions
+  | undefined;

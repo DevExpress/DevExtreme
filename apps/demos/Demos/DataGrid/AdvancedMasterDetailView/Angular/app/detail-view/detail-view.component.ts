@@ -1,6 +1,7 @@
-import { Component, Input, AfterViewInit } from '@angular/core';
+import { Component, Input, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { DataSource } from 'devextreme-angular/common/data';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import { DxFormModule, DxDataGridModule, DxSelectBoxModule, DxTabPanelModule } from 'devextreme-angular';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
@@ -12,9 +13,14 @@ if (window && window.config?.packageConfigPaths) {
 
 @Component({
   selector: 'detail-view',
-  templateUrl: `.${modulePrefix && (`${modulePrefix}/detail-view`)}/detail-view.component.html`,
-  styleUrls: [`.${modulePrefix && (`${modulePrefix}/detail-view`)}/detail-view.component.css`],
-  providers: [],
+  templateUrl: `.${modulePrefix}/detail-view/detail-view.component.html`,
+  styleUrls: [`.${modulePrefix}/detail-view/detail-view.component.css`],
+  imports: [
+    DxDataGridModule,
+    DxFormModule,
+    DxSelectBoxModule,
+    DxTabPanelModule,
+  ],
 })
 export class DetailViewComponent implements AfterViewInit {
   @Input() key: number;
@@ -29,7 +35,7 @@ export class DetailViewComponent implements AfterViewInit {
 
   orderHistoryData: DataSource;
 
-  constructor() {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     this.url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridAdvancedMasterDetailView';
   }
 
@@ -42,6 +48,8 @@ export class DetailViewComponent implements AfterViewInit {
         onLoaded: (items) => this.setDefaultProduct(items),
       }),
     });
+
+    this.changeDetectorRef.detectChanges();
   }
 
   setDefaultProduct(items) {
@@ -50,6 +58,7 @@ export class DetailViewComponent implements AfterViewInit {
     if (firstItem && this.productIdBySupplier === undefined) {
       this.productIdBySupplier = firstItem.ProductID;
     }
+    this.changeDetectorRef.detectChanges();
   }
 
   handleValueChange(e: DxSelectBoxTypes.ValueChangedEvent) {

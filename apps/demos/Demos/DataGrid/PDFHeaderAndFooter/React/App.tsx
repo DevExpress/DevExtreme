@@ -1,7 +1,10 @@
 import React from 'react';
-import DataGrid, { Column, type DataGridTypes, Export } from 'devextreme-react/data-grid';
 import { jsPDF } from 'jspdf';
+
+import DataGrid, { Column, Export } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 import { exportDataGrid } from 'devextreme-react/common/export/pdf';
+
 import { countries } from './data.ts';
 
 const gdpFormat = {
@@ -21,10 +24,10 @@ const onExporting = (e: DataGridTypes.ExportingEvent) => {
     topLeft: { x: 1, y: 15 },
     columnWidths: [30, 20, 30, 15, 22, 22, 20, 20],
     customDrawCell({ rect }) {
-      if (lastPoint.x < rect.x + rect.w) {
+      if (rect && lastPoint.x < rect.x + rect.w) {
         lastPoint.x = rect.x + rect.w;
       }
-      if (lastPoint.y < rect.y + rect.h) {
+      if (rect && lastPoint.y < rect.y + rect.h) {
         lastPoint.y = rect.y + rect.h;
       }
     },
@@ -50,7 +53,7 @@ const onExporting = (e: DataGridTypes.ExportingEvent) => {
 };
 
 const App = () => (
-  <React.Fragment>
+  <>
     <div id="long-title">
       <h3>Country Area, Population, and GDP Structure</h3>
     </div>
@@ -104,7 +107,7 @@ const App = () => (
         </Column>
       </Column>
     </DataGrid>
-  </React.Fragment>
+  </>
 );
 
 export default App;

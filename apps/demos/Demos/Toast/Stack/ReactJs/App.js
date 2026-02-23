@@ -31,19 +31,19 @@ function App() {
   const [direction, setDirection] = useState('up-push');
   const topNumberBoxValueChanged = useCallback(
     (top) => setCoordinatePosition({ ...coordinatePosition, top }),
-    [coordinatePosition, setCoordinatePosition],
+    [coordinatePosition],
   );
   const bottomNumberBoxValueChanged = useCallback(
     (bottom) => setCoordinatePosition({ ...coordinatePosition, bottom }),
-    [coordinatePosition, setCoordinatePosition],
+    [coordinatePosition],
   );
   const leftNumberBoxValueChanged = useCallback(
     (left) => setCoordinatePosition({ ...coordinatePosition, left }),
-    [coordinatePosition, setCoordinatePosition],
+    [coordinatePosition],
   );
   const rightNumberBoxValueChanged = useCallback(
     (right) => setCoordinatePosition({ ...coordinatePosition, right }),
-    [coordinatePosition, setCoordinatePosition],
+    [coordinatePosition],
   );
   const show = useCallback(() => {
     const position = isPredefined ? predefinedPosition : coordinatePosition;
@@ -73,7 +73,7 @@ function App() {
     setId(id + 1);
   }, [id, isPredefined, predefinedPosition, coordinatePosition, direction]);
   return (
-    <React.Fragment>
+    <>
       <div className="options">
         <div>Position</div>
         <RadioGroup
@@ -93,7 +93,7 @@ function App() {
           <NumberBox
             visible={!isPredefined}
             placeholder="top"
-            defaultValue={null}
+            defaultValue={undefined}
             valueChangeEvent="keyup"
             disabled={!!coordinatePosition.bottom}
             inputAttr={positionTopLabel}
@@ -102,7 +102,7 @@ function App() {
           <NumberBox
             visible={!isPredefined}
             placeholder="bottom"
-            defaultValue={null}
+            defaultValue={undefined}
             valueChangeEvent="keyup"
             inputAttr={positionBottomLabel}
             disabled={!!coordinatePosition.top}
@@ -113,7 +113,7 @@ function App() {
           <NumberBox
             visible={!isPredefined}
             placeholder="left"
-            defaultValue={null}
+            defaultValue={undefined}
             valueChangeEvent="keyup"
             inputAttr={positionLeftLabel}
             disabled={!!coordinatePosition.right}
@@ -122,7 +122,7 @@ function App() {
           <NumberBox
             visible={!isPredefined}
             placeholder="right"
-            defaultValue={null}
+            defaultValue={undefined}
             valueChangeEvent="keyup"
             inputAttr={positionRightLabel}
             disabled={!!coordinatePosition.left}
@@ -149,7 +149,7 @@ function App() {
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 export default App;

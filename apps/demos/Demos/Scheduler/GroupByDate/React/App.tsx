@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
-import Switch, { type SwitchTypes } from 'devextreme-react/switch';
+import Switch from 'devextreme-react/switch';
+import type { SwitchTypes } from 'devextreme-react/switch';
 import Scheduler, { Resource, View } from 'devextreme-react/scheduler';
 import { data, priorityData } from './data.ts';
 
@@ -26,7 +27,7 @@ const App = () => {
         defaultCurrentDate={currentDate}
         height={730}
         startDayHour={9}
-        endDayHour={16}
+        endDayHour={19}
         crossScrollingEnabled={true}
       >
         <Resource

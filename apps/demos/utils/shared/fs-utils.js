@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-console */
 const fs = require('fs');
 const { copySync } = require('fs-extra');
 const path = require('path');
@@ -61,7 +59,7 @@ class FileSystemUtils {
 
           fs.writeFileSync(updatedToPath, content);
         }
-      })
+      });
   }
 
   copyFilesFromBlankDemos(approaches, demoPath) {
@@ -80,14 +78,12 @@ class FileSystemUtils {
 
   getDemoPathByMeta(pathParts, baseDemosDir, menuMetaData) {
     const demo = menuMetaUtils.getByPath(menuMetaData, pathParts);
-    const result = path.join(baseDemosDir, demo.Widget, demo.Name);
-    return result;
+    return path.join(baseDemosDir, demo.Widget, demo.Name);
   }
 
   getMissingApproaches(demoPath, approachesList) {
     const currentDemos = this.getApproachesList(demoPath);
-    const missingApproaches = approachesList.filter((approach) => !currentDemos.includes(approach));
-    return missingApproaches;
+    return approachesList.filter((approach) => !currentDemos.includes(approach));
   }
 
   saveMetaDataFile(menuMetaDataFilePath, metaData) {
@@ -101,10 +97,9 @@ class FileSystemUtils {
       throw new Error(`Directory does not exist: ${demoPath}`);
     }
 
-    const demosList = fs.readdirSync(demoPath, { withFileTypes: true })
+    return fs.readdirSync(demoPath, { withFileTypes: true })
       .filter((dirEntity) => dirEntity.isDirectory())
       .map((dirEntity) => dirEntity.name);
-    return demosList;
   }
 
   isValidDirectory(directoryPath) {

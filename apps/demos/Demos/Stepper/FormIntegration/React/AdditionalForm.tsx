@@ -1,11 +1,12 @@
-import React, { FC, memo } from 'react';
+import React, { memo } from 'react';
+import type { FC } from 'react';
 import 'devextreme-react/text-area';
 import { Form, SimpleItem } from 'devextreme-react/form';
 
-import { FormProps } from './types.ts';
+import type { FormProps } from './types.ts';
 
-const AdditionalForm: FC<FormProps> = memo(({ formData }) => (
-  <React.Fragment>
+const AdditionalForm: FC<FormProps> = memo(({ formData }: FormProps) => (
+  <>
     <div>
       Please let us know if you have any other requests.
     </div>
@@ -20,7 +21,7 @@ const AdditionalForm: FC<FormProps> = memo(({ formData }) => (
         label={{ visible: false }}
       ></SimpleItem>
     </Form>
-  </React.Fragment>
+  </>
 ));
 
 AdditionalForm.displayName = 'AdditionalForm';

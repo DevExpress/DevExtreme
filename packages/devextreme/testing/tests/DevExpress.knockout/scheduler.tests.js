@@ -5,7 +5,7 @@ require('integration/knockout');
 const Scheduler = require('ui/scheduler');
 const { waitAsync } = require('../../helpers/scheduler/waitForAsync.js');
 
-require('generic_light.css!');
+require('fluent_blue_light.css!');
 
 if(QUnit.urlParams['nocsp']) {
     QUnit.module('scheduler');
@@ -119,12 +119,21 @@ QUnit.test('T1282055: appointment collector renders correct', async function(ass
                     text: 'Install New Router in Dev Room',
                     startDate: ko.observable('2021-06-01T16:30:00.000Z'),
                     endDate: ko.observable('2021-06-01T18:30:00.000Z')
+                },
+                {
+                    text: 'Install New Router in Dev Room',
+                    startDate: ko.observable('2021-06-01T16:30:00.000Z'),
+                    endDate: ko.observable('2021-06-01T18:30:00.000Z')
+                },
+                {
+                    text: 'Install New Router in Dev Room',
+                    startDate: ko.observable('2021-06-01T16:30:00.000Z'),
+                    endDate: ko.observable('2021-06-01T18:30:00.000Z')
                 }
             ],
             views: ['month'],
             currentView: 'month',
             currentDate: new Date('2021-06-01T16:30:00'),
-            height: 300
         };
     }
 

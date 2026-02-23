@@ -1,11 +1,14 @@
 import React from 'react';
+
 import DataGrid, {
   Column, Editing, Paging, RequiredRule, PatternRule, EmailRule, AsyncRule,
 } from 'devextreme-react/data-grid';
+import type { IAsyncRuleProps } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
-const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridEmployeesValidation';
-const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
+const baseUrl = 'https://js.devexpress.com/Demos/NetCore';
+const url = `${baseUrl}/api/DataGridEmployeesValidation`;
+const emailValidationUrl = `${baseUrl}/RemoteValidation/CheckUniqueEmailAddress`;
 
 const dataSource = createStore({
   key: 'ID',
@@ -18,18 +21,11 @@ const dataSource = createStore({
   },
 });
 
-const asyncValidation = async (params) => {
-  const response = await fetch(emailValidationUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json;',
-    },
-    body: JSON.stringify({
-      id: params.data.ID,
-      email: params.value,
-    }),
-  });
-
+const asyncValidation: IAsyncRuleProps['validationCallback'] = async (params) => {
+  const response = await fetch(`${emailValidationUrl}?${new URLSearchParams({
+    id: params.data.ID,
+    email: params.value,
+  })}`);
   const result = await response.json();
 
   return result;

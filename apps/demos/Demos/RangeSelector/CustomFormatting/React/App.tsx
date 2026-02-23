@@ -1,10 +1,11 @@
 import React from 'react';
+
 import RangeSelector, {
-  Margin, Scale, Label, SliderMarker, Behavior, Format,
+  Behavior, Format, Label, Margin, Scale, SliderMarker,
 } from 'devextreme-react/range-selector';
 
 const App = () => {
-  const formatText = ({ valueText }) => `${valueText} mg/L`;
+  const formatText = ({ valueText }: { valueText: string }) => `${valueText} mg/L`;
 
   return (
     <RangeSelector

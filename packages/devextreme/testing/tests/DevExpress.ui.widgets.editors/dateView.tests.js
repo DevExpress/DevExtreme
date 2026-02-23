@@ -5,8 +5,8 @@ import { triggerShownEvent } from 'common/core/events/visibility_change';
 import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import dateLocalization from 'common/core/localization/date';
-import '__internal/ui/date_box/m_date_view';
-import '__internal/ui/date_box/m_date_view_roller';
+import '__internal/ui/date_box/date_view';
+import '__internal/ui/date_box/date_view_roller';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 

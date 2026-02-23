@@ -1,6 +1,6 @@
-import { IRouteProps } from 'devextreme-react/map';
+import type { IMarkerProps, IRouteProps } from 'devextreme-react/map';
 
-export const markersData = [{
+export const markersData: IMarkerProps[] = [{
   location: [40.755833, -73.986389],
 }, {
   location: '40.7825, -73.966111',

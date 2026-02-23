@@ -54,6 +54,8 @@
     <dx-button id="clear" text="Clear" (onClick)="clearEvents()"></dx-button>
   </div>
   <ul>
-    <li *ngFor="let event of events">{{ event }}</li>
+    @for(event of events; track event) {
+    <li>{{ event }}</li>
+    }
   </ul>
 </div>

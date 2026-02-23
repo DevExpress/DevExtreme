@@ -1,10 +1,10 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxCardViewModule, DxTextAreaModule } from 'devextreme-angular';
 import { lastValueFrom } from 'rxjs';
 import { Employee, Service } from './app.service';
+import 'anti-forgery';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -20,6 +20,10 @@ if (window && window.config?.packageConfigPaths) {
   selector: 'demo-app',
   templateUrl: `.${modulePrefix}/app.component.html`,
   providers: [Service],
+  imports: [
+    DxCardViewModule,
+    DxTextAreaModule,
+  ],
 })
 export class AppComponent {
   employees: Employee[];
@@ -52,10 +56,11 @@ export class AppComponent {
   emailValidationCallback = async (params) => {
     const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
 
-    const result = await lastValueFrom(this.httpClient.post(emailValidationUrl, {
-      id: params.data.id,
-      email: params.value,
-    }, {
+    const result = await lastValueFrom(this.httpClient.get(emailValidationUrl, {
+      params: {
+        id: params.data.id,
+        email: params.value,
+      },
       responseType: 'json',
     }));
 
@@ -65,16 +70,9 @@ export class AppComponent {
   hireDateValidationCallback = (params) => new Date(params.value) > new Date(params.data.birthDate);
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxCardViewModule,
-    DxTextAreaModule,
-    HttpClientModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    provideHttpClient(withFetch()),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

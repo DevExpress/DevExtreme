@@ -1,26 +1,26 @@
 import React, { useCallback, useState } from 'react';
-import TreeList, { Column, RowDragging } from 'devextreme-react/tree-list';
 import CheckBox from 'devextreme-react/check-box';
+import TreeList, { Column, RowDragging } from 'devextreme-react/tree-list';
 import { employees as employeeList } from './data.js';
 
 const expandedRowKeys = [1];
-const onDragChange = (e) => {
-  const visibleRows = e.component.getVisibleRows();
-  const sourceNode = e.component.getNodeByKey(e.itemData.ID);
-  let targetNode = visibleRows[e.toIndex].node;
-  while (targetNode?.data) {
-    if (targetNode.data.ID === sourceNode.data.ID) {
-      e.cancel = true;
-      break;
-    }
-    targetNode = targetNode.parent;
-  }
-};
 const App = () => {
   const [employees, setEmployees] = useState(employeeList);
   const [allowDropInsideItem, setAllowDropInsideItem] = useState(true);
   const [allowReordering, setAllowReordering] = useState(true);
   const [showDragIcons, setShowDragIcons] = useState(true);
+  const onDragChange = useCallback((e) => {
+    const visibleRows = e.component.getVisibleRows();
+    const sourceNode = e.component.getNodeByKey(e.itemData.ID);
+    let targetNode = visibleRows[e.toIndex].node;
+    while (targetNode?.data) {
+      if (targetNode.data.ID === sourceNode.data.ID) {
+        e.cancel = true;
+        break;
+      }
+      targetNode = targetNode.parent;
+    }
+  }, []);
   const onReorder = useCallback(
     (e) => {
       const visibleRows = e.component.getVisibleRows();
@@ -67,9 +67,9 @@ const App = () => {
         <RowDragging
           onDragChange={onDragChange}
           onReorder={onReorder}
-          allowDropInsideItem={allowDropInsideItem}
-          allowReordering={allowReordering}
-          showDragIcons={showDragIcons}
+          allowDropInsideItem={!!allowDropInsideItem}
+          allowReordering={!!allowReordering}
+          showDragIcons={!!showDragIcons}
         />
         <Column
           dataField="Title"

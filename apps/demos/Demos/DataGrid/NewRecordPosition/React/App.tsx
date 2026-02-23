@@ -1,15 +1,18 @@
 import React, { useCallback, useState } from 'react';
+
 import DataGrid, {
-  Column, Editing, ValidationRule, Button, IButtonProps, Toolbar, Item, Scrolling, type DataGridTypes, Pager,
+  Column, Editing, ValidationRule, Button, Toolbar, Item, Scrolling, Pager,
 } from 'devextreme-react/data-grid';
+import type { DataGridTypes } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import Guid from 'devextreme/core/guid';
+
 import { dataSource, positionLabel, scrollingModeLabel } from './data.ts';
 
 const newRowPositionOptions = ['first', 'last', 'pageTop', 'pageBottom', 'viewportTop', 'viewportBottom'];
 const scrollingModeOptions = ['standard', 'virtual'];
 
-const isAddButtonVisible = ({ row }) => !row.isEditing;
+const isAddButtonVisible = ({ row }: { row: DataGridTypes.Row }) => !row.isEditing;
 
 const onRowInserted = (e: DataGridTypes.RowInsertedEvent) => {
   e.component.navigateToRow(e.key);
@@ -18,21 +21,22 @@ const onRowInserted = (e: DataGridTypes.RowInsertedEvent) => {
 const App = () => {
   const [newRowPosition, setNewRowPosition] = useState<DataGridTypes.NewRowPosition>('viewportTop');
   const [scrollingMode, setScrollingMode] = useState<DataGridTypes.DataGridScrollMode>('standard');
-  const [changes, setChanges] = useState([]);
-  const [editRowKey, setEditRowKey] = useState(null);
+  const [changes, setChanges] = useState<DataGridTypes.DataChange[]>([]);
+  const [editRowKey, setEditRowKey] = useState<string | null>(null);
 
-  const onAddButtonClick = useCallback<IButtonProps['onClick']>((e) => {
+  const onAddButtonClick = useCallback((e: DataGridTypes.ColumnButtonClickEvent) => {
     const key = new Guid().toString();
     setChanges([{
       key,
       type: 'insert',
-      insertAfterKey: e.row.key,
+      insertAfterKey: e.row?.key,
+      data: {},
     }]);
     setEditRowKey(key);
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <DataGrid
         id='gridContainer'
         dataSource={dataSource}
@@ -107,7 +111,7 @@ const App = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

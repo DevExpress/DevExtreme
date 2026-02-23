@@ -1,6 +1,6 @@
 import dateUtils from 'core/utils/date';
 import { triggerShownEvent } from 'common/core/events/visibility_change';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 
 import '__internal/scheduler/workspaces/m_work_space_week';
@@ -330,7 +330,7 @@ module('Work Space Week', () => {
             const bounds = this.instance.getVisibleBounds();
 
             assert.deepEqual(bounds.top, { hours: 1, minutes: 0 }, 'Top bound is OK');
-            assert.deepEqual(bounds.bottom, { hours: 3, minutes: 30 }, 'Bottom bound is OK');
+            assert.deepEqual(bounds.bottom, { hours: 4, minutes: 30 }, 'Bottom bound is OK');
         });
 
         test('Get visible bounds if scroll position is not null', async function(assert) {
@@ -352,7 +352,7 @@ module('Work Space Week', () => {
             const bounds = this.instance.getVisibleBounds();
 
             assert.deepEqual(bounds.top, { hours: 3, minutes: 30 }, 'Top bound is OK');
-            assert.deepEqual(bounds.bottom, { hours: 8, minutes: 30 }, 'Bottom bound is OK');
+            assert.deepEqual(bounds.bottom, { hours: 11, minutes: 30 }, 'Bottom bound is OK');
         });
 
         test('Get visible bounds if hoursInterval is set', async function(assert) {
@@ -376,8 +376,8 @@ module('Work Space Week', () => {
 
             bounds = this.instance.getVisibleBounds();
 
-            assert.deepEqual(bounds.top, { hours: 6, minutes: 0 }, 'Top bound is OK');
-            assert.deepEqual(bounds.bottom, { hours: 23, minutes: 30 }, 'Bottom bound is OK');
+            assert.deepEqual(bounds.top, { hours: 0, minutes: 30 }, 'Top bound is OK');
+            assert.deepEqual(bounds.bottom, { hours: 24, minutes: 0 }, 'Bottom bound is OK');
 
         });
 

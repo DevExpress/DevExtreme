@@ -5,11 +5,11 @@ import {
   Series,
   ArgumentAxis,
   CommonSeriesSettings,
-  ICommonSeriesSettingsProps,
   Margin,
   Export,
   Legend,
 } from 'devextreme-react/chart';
+import type { ICommonSeriesSettingsProps } from 'devextreme-react/chart';
 
 import { dataSource, seriesTypeLabel } from './data.ts';
 

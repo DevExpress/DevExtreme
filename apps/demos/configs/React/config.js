@@ -46,9 +46,11 @@ window.config = {
     'npm:': '../../../../node_modules/',
     'bundles:': '../../../../bundles/',
     'externals:': '../../../../bundles/externals/',
+    'anti-forgery:': '../../../../shared/anti-forgery/',
   },
   defaultExtension: 'js',
   map: {
+    'anti-forgery': 'anti-forgery:fetch-override.js',
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
@@ -212,3 +214,5 @@ window.process = {
 };
 
 System.config(window.config);
+// eslint-disable-next-line
+const useTgzInCSB = ['openai'];

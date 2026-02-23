@@ -1,9 +1,5 @@
-import {
-  NgModule, Component, ViewChild, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, ViewChild, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
   DxPopupModule, DxDiagramModule, DxDiagramComponent, DxTextBoxModule, DxButtonModule,
 } from 'devextreme-angular';
@@ -26,6 +22,12 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxDiagramModule,
+    DxPopupModule,
+    DxTextBoxModule,
+    DxButtonModule,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxDiagramComponent, { static: false }) diagram: DxDiagramComponent;
@@ -54,8 +56,12 @@ export class AppComponent {
     });
   }
 
-  itemTypeExpr() {
-    return 'employee';
+  itemTypeExpr(obj, value) {
+    if (value === undefined) {
+      return 'employee';
+    }
+    obj.type = value;
+    return null;
   }
 
   itemCustomDataExpr(obj, value) {
@@ -120,17 +126,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDiagramModule,
-    DxPopupModule,
-    DxTextBoxModule,
-    DxButtonModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

@@ -14,7 +14,7 @@ import {
 } from 'devextreme-react/chart';
 import { dataSource, annotationSources } from './data.ts';
 
-const customizeTooltip = (annotation) => ({
+const customizeTooltip = (annotation: { description: string }): Record<string, string> => ({
   html: `<div class='tooltip'>${annotation.description}</div>`,
 });
 

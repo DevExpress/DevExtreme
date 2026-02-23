@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxPivotGridModule } from 'devextreme-angular';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { DxPivotGridTypes } from 'devextreme-angular/ui/pivot-grid';
@@ -21,6 +20,9 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
+  imports: [
+    DxPivotGridModule,
+  ],
 })
 export class AppComponent {
   pivotGridDataSource: PivotGridDataSource;
@@ -69,8 +71,6 @@ export class AppComponent {
   }
 
   prepareContextMenu(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
-    type SourceField = (typeof e.field) & { index: number };
-
     if (e.field && e.field.dataField === 'amount') {
       this.summaryDisplayModes.forEach((mode) => {
         e.items.push({
@@ -84,7 +84,7 @@ export class AppComponent {
                             || mode.value === 'absoluteVariation') {
               format = 'currency';
             }
-            this.pivotGridDataSource.field((e.field as SourceField).index, {
+            this.pivotGridDataSource.field(e.field.index, {
               summaryDisplayMode: mode.value,
               format,
               caption,
@@ -98,14 +98,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxPivotGridModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

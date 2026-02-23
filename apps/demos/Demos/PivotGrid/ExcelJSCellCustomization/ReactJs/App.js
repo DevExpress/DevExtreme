@@ -75,17 +75,19 @@ const onExporting = (e) => {
     component: e.component,
     worksheet,
     customizeCell: ({ pivotCell, excelCell }) => {
-      if (isDataCell(pivotCell) || isTotalCell(pivotCell)) {
-        const appearance = getConditionalAppearance(pivotCell);
-        Object.assign(excelCell, getExcelCellFormat(appearance));
+      if (pivotCell && excelCell) {
+        if (isDataCell(pivotCell) || isTotalCell(pivotCell)) {
+          const appearance = getConditionalAppearance(pivotCell);
+          Object.assign(excelCell, getExcelCellFormat(appearance));
+        }
+        const borderStyle = { style: 'thin', color: { argb: 'FF7E7E7E' } };
+        excelCell.border = {
+          bottom: borderStyle,
+          left: borderStyle,
+          right: borderStyle,
+          top: borderStyle,
+        };
       }
-      const borderStyle = { style: 'thin', color: { argb: 'FF7E7E7E' } };
-      excelCell.border = {
-        bottom: borderStyle,
-        left: borderStyle,
-        right: borderStyle,
-        top: borderStyle,
-      };
     },
   }).then(() => {
     workbook.xlsx.writeBuffer().then((buffer) => {

@@ -90,11 +90,12 @@ abstract class AreaItem {
     return this.component.option.apply(this.component, arguments);
   }
 
-  _getRowElement(index) {
-    const that = this;
-    if (that._tableElement && that._tableElement.length > 0) {
-      return that._tableElement[0].rows[index];
+  _getRowElement(index: number): HTMLTableRowElement | null {
+    if (this._tableElement?.length > 0) {
+      const tableElement = this._tableElement.get(0) as HTMLTableElement;
+      return tableElement.rows[index];
     }
+
     return null;
   }
 
@@ -139,49 +140,40 @@ abstract class AreaItem {
   }
 
   _renderTableContent(tableElement, data) {
-    const that = this;
     const rowsCount = data.length;
-    let row;
-    let cell;
-    let i;
-    let j;
-    let rowElement;
-    let cellElement;
-    let cellText;
-    const rtlEnabled = that.option('rtlEnabled');
-    const encodeHtml = that.option('encodeHtml');
-    let rowClassNames;
+    const rtlEnabled = this.option('rtlEnabled');
+    const encodeHtml = this.option('encodeHtml');
 
-    tableElement.data('area', that._getAreaName());
+    tableElement.data('area', this._getAreaName());
     tableElement.data('data', data);
-
     tableElement.css('width', '');
 
     const tbody = this._getMainElementMarkup();
 
-    for (i = 0; i < rowsCount; i += 1) {
-      row = data[i];
-      rowClassNames = [];
+    for (let i = 0; i < rowsCount; i += 1) {
+      const row = data[i];
+      const rowClassNames = [];
 
       const tr = domAdapter.createElement('tr');
 
-      for (j = 0; j < row.length; j += 1) {
-        cell = row[j];
+      for (let j = 0; j < row.length; j += 1) {
+        const cell = row[j];
+        const td = domAdapter.createElement('td');
 
         this._getRowClassNames(i, cell, rowClassNames);
 
-        const td = domAdapter.createElement('td');
+        let cellText = '';
 
         if (cell) {
           cell.rowspan && td.setAttribute('rowspan', cell.rowspan || 1);
           cell.colspan && td.setAttribute('colspan', cell.colspan || 1);
 
           const styleOptions = {
-            cellElement,
+            cellElement: undefined,
             cell,
             cellsCount: row.length,
             cellIndex: j,
-            rowElement,
+            rowElement: undefined,
             rowIndex: i,
             rowsCount,
             rtlEnabled,
@@ -189,7 +181,7 @@ abstract class AreaItem {
             cssArray: [],
           };
 
-          that._applyCustomStyles(styleOptions);
+          this._applyCustomStyles(styleOptions);
 
           if (styleOptions.cssArray.length) {
             setStyle(td, styleOptions.cssArray.join(';'));
@@ -209,8 +201,6 @@ abstract class AreaItem {
           }
 
           cellText = this._getCellText(cell, encodeHtml);
-        } else {
-          cellText = '';
         }
 
         const span = domAdapter.createElement('span');
@@ -284,24 +274,15 @@ abstract class AreaItem {
     }
   }
 
-  _getRowHeight(index) {
+  _getRowHeight(index: number): number {
     const row = this._getRowElement(index);
-    let height = 0;
 
-    const { offsetHeight } = row;
+    if (row?.lastChild) {
+      const { height } = row.getBoundingClientRect();
 
-    if (row && row.lastChild) {
-      if (row.getBoundingClientRect) {
-        const clientRect = getBoundingRect(row);
-        height = clientRect.height;
-
-        if (height <= offsetHeight - 1) {
-          height = offsetHeight;
-        }
-      }
-
-      return height > 0 ? height : offsetHeight;
+      return height <= row.offsetHeight - 1 ? row.offsetHeight : height;
     }
+
     return 0;
   }
 
@@ -345,69 +326,63 @@ abstract class AreaItem {
     this._tableElement[0].style.height = `${totalHeight}px`;
   }
 
-  getColumnsWidth() {
+  getColumnsWidth(): number[] {
     const rowsLength = this.getRowsLength();
-    let rowIndex;
-    let row;
-    let i;
-    let columnIndex;
-    const processedCells = [];
-    const result = [];
-    const fillCells = function (cells, rowIndex, columnIndex, rowSpan, colSpan) {
-      let rowOffset;
-      let columnOffset;
-      for (rowOffset = 0; rowOffset < rowSpan; rowOffset += 1) {
-        for (columnOffset = 0; columnOffset < colSpan; columnOffset += 1) {
-          cells[rowIndex + rowOffset] = cells[rowIndex + rowOffset] || [];
-          cells[rowIndex + rowOffset][columnIndex + columnOffset] = true;
-        }
-      }
-    };
+    const processedCells: boolean[][] = [];
+    const result: number[] = [];
+    const colSpans: number[] = [];
 
-    if (rowsLength) {
-      for (rowIndex = 0; rowIndex < rowsLength; rowIndex += 1) {
-        processedCells[rowIndex] = processedCells[rowIndex] || [];
-        row = this._getRowElement(rowIndex);
-        for (i = 0; i < row.cells.length; i += 1) {
-          for (columnIndex = 0; processedCells[rowIndex][columnIndex]; columnIndex += 1);
-          fillCells(
-            processedCells,
-            rowIndex,
-            columnIndex,
-            row.cells[i].rowSpan,
-            row.cells[i].colSpan,
-          );
-          if (row.cells[i].colSpan === 1) {
-            result[columnIndex] = result[columnIndex] || getRealElementWidth(row.cells[i]);
+    if (!rowsLength) {
+      return [];
+    }
+
+    for (let rowIndex = 0; rowIndex < rowsLength; rowIndex += 1) {
+      processedCells[rowIndex] ||= [];
+      const row = this._getRowElement(rowIndex) as HTMLTableRowElement;
+
+      Array.from(row.cells).forEach((cell) => {
+        let columnIndex = 0;
+        for (; processedCells[rowIndex][columnIndex]; columnIndex += 1);
+
+        for (let rowOffset = 0; rowOffset < cell.rowSpan; rowOffset += 1) {
+          for (let columnOffset = 0; columnOffset < cell.colSpan; columnOffset += 1) {
+            processedCells[rowIndex + rowOffset] ||= [];
+            processedCells[rowIndex + rowOffset][columnIndex + columnOffset] = true;
           }
         }
-      }
+
+        if (colSpans[columnIndex] === undefined || cell.colSpan < colSpans[columnIndex]) {
+          result[columnIndex] = getRealElementWidth(cell);
+          colSpans[columnIndex] = cell.colSpan;
+        }
+      });
     }
+
     return result;
   }
 
-  setColumnsWidth(values) {
-    let i;
-    const tableElement = this._tableElement[0];
-    this._colgroupElement.html('');
+  setColumnsWidth(values: number[]): void {
+    const tableElement = this._tableElement.get(0);
     const columnsCount = this.getColumnsCount();
-    const columnWidth: any = [];
+    const columnWidth: number[] = [];
 
-    for (i = 0; i < columnsCount; i += 1) {
+    for (let i = 0; i < columnsCount; i += 1) {
       columnWidth.push(values[i] || 0);
     }
 
-    for (i = columnsCount; i < values.length && values; i += 1) {
+    for (let i = columnsCount; i < values.length && values; i += 1) {
       columnWidth[columnsCount - 1] += values[i];
     }
 
-    for (i = 0; i < columnsCount; i += 1) {
+    this._colgroupElement.html('');
+
+    for (let i = 0; i < columnsCount; i += 1) {
       const col = domAdapter.createElement('col');
       col.style.width = `${columnWidth[i]}px`;
       this._colgroupElement.append(col);
     }
-    this._tableWidth = columnWidth.reduce((sum, width) => sum + width, 0);
 
+    this._tableWidth = columnWidth.reduce((sum, width) => sum + width, 0);
     tableElement.style.width = `${this._tableWidth}px`;
     tableElement.style.tableLayout = 'fixed';
   }

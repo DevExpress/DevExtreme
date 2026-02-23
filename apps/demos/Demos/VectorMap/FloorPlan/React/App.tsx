@@ -2,20 +2,21 @@ import React from 'react';
 import VectorMap, {
   Layer,
   Tooltip,
-  Label, ITooltipProps,
+  Label,
 } from 'devextreme-react/vector-map';
+import type { ITooltipProps } from 'devextreme-react/vector-map';
 import { roomsData, buildingData } from './data.ts';
 
 const projection = {
-  to: ([l, lt]) => [l / 100, lt / 100],
-  from: ([x, y]) => [x * 100, y * 100],
+  to: ([l, lt]: [number, number]) => [l / 100, lt / 100],
+  from: ([x, y]: [number, number]) => [x * 100, y * 100],
 };
 
 const customizeTooltip: ITooltipProps['customizeTooltip'] = (arg) => {
   if (arg.layer.name === 'rooms') {
     return { text: `Square: ${arg.attribute('square')} ft&#178` };
   }
-  return null;
+  return {};
 };
 
 export default function App() {

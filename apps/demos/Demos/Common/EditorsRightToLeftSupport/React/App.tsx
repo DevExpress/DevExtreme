@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { NumberBox } from 'devextreme-react/number-box';
-import { SelectBox, type SelectBoxTypes } from 'devextreme-react/select-box';
+import { SelectBox } from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import { Switch } from 'devextreme-react/switch';
 import { TextBox } from 'devextreme-react/text-box';
 import { Autocomplete } from 'devextreme-react/autocomplete';
@@ -18,15 +19,15 @@ import {
   autocompleteLabel,
 } from './data.ts';
 
-const languages = ['Arabic: Right-to-Left direction', 'English: Left-to-Right direction'];
-const tagBoxDefaultValue = [europeanUnion[0].id];
+const languages: string[] = ['Arabic: Right-to-Left direction', 'English: Left-to-Right direction'];
+const tagBoxDefaultValue: number[] = [europeanUnion[0].id];
 
 function App() {
-  const [rtlEnabled, setRtlEnabled] = useState(false);
-  const [displayExpr, setDisplayExpr] = useState('nameEn');
-  const [textValue, setTextValue] = useState('text');
+  const [rtlEnabled, setRtlEnabled] = useState<boolean>(false);
+  const [displayExpr, setDisplayExpr] = useState<string>('nameEn');
+  const [textValue, setTextValue] = useState<string>('text');
 
-  const onLanguageChanged = useCallback((args: SelectBoxTypes.ValueChangedEvent) => {
+  const onLanguageChanged = useCallback((args: SelectBoxTypes.ValueChangedEvent): void => {
     const isRTL = args.value === languages[0];
 
     setDisplayExpr(isRTL ? 'nameAr' : 'nameEn');
@@ -36,7 +37,7 @@ function App() {
 
   return (
     <div>
-      <div className={rtlEnabled ? 'dx-rtl' : null}>
+      <div className={rtlEnabled ? 'dx-rtl' : undefined}>
         <div className="options">
           <div className="caption">Options</div>
           <div className="dx-fieldset">

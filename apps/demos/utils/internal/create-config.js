@@ -60,8 +60,8 @@ class CreateConfig {
       if (group.Demos) {
         group.Demos.forEach((demo) => {
           if (demo.Modules) result[this.getKey(demo.Widget, demo.Name)] = demo.Modules;
-        })
-      } else if(group.Groups) {
+        });
+      } else if (group.Groups) {
         group.Groups.forEach(handleGroup);
       }
     };

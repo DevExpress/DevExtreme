@@ -7,8 +7,8 @@ import CardView, {
   ColumnChooserSearch,
   ColumnChooserSelection,
 } from 'devextreme-react/card-view';
-import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
+import SelectBox from 'devextreme-react/select-box';
 import { employees } from './data.js';
 
 function altExpr({ First_Name, Last_Name }) {
@@ -29,7 +29,7 @@ const App = () => {
   const [selectByClick, setSelectByClick] = useState(true);
   const [allowColumnReordering, setAllowColumnReordering] = useState(false);
   return (
-    <React.Fragment>
+    <>
       <div className="options-panel">
         <div className="caption">Options</div>
         <div className="options-container">
@@ -79,7 +79,7 @@ const App = () => {
         keyExpr="ID"
         cardsPerRow="auto"
         cardMinWidth={300}
-        allowColumnReordering={allowColumnReordering}
+        allowColumnReordering={!!allowColumnReordering}
       >
         <SearchPanel visible={true} />
         <ColumnChooser
@@ -87,10 +87,10 @@ const App = () => {
           mode={columnChooserMode}
           height="340px"
         >
-          <ColumnChooserSearch enabled={searchEnabled} />
+          <ColumnChooserSearch enabled={!!searchEnabled} />
           <ColumnChooserSelection
-            allowSelectAll={allowSelectAll}
-            selectByClick={selectByClick}
+            allowSelectAll={!!allowSelectAll}
+            selectByClick={!!selectByClick}
           />
         </ColumnChooser>
         <CardCover
@@ -123,7 +123,7 @@ const App = () => {
           visible={false}
         />
       </CardView>
-    </React.Fragment>
+    </>
   );
 };
 export default App;

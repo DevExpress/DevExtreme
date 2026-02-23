@@ -1,55 +1,58 @@
 import React, { useCallback, useRef, useState } from 'react';
 import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import Button from 'devextreme-react/button';
-import Calendar, { type CalendarTypes } from 'devextreme-react/calendar';
+import Calendar from 'devextreme-react/calendar';
+import type { CalendarTypes, CalendarRef } from 'devextreme-react/calendar';
 
 const selectionModes = ['single', 'multiple', 'range'];
 const selectionModeLabel = { 'aria-label': 'Selection Mode' };
 
-const isWeekend = (date) => {
+const isWeekend = (date: Date): boolean => {
   const day = date.getDay();
   return day === 0 || day === 6;
 };
-const isDateDisabled = ({ view, date }) => view === 'month' && isWeekend(date);
+const isDateDisabled = ({ view, date }: CalendarTypes.DisabledDate): boolean => view === 'month' && isWeekend(date);
 const now = new Date().getTime();
 const msInDay = 1000 * 60 * 60 * 24;
 const initialValue = [now, now + msInDay];
 
 export default function App() {
-  const calendar = useRef(null);
-  const [selectWeekOnClick, setSelectWeekOnClick] = useState(true);
+  const calendar = useRef<CalendarRef>(null);
+  const [selectWeekOnClick, setSelectWeekOnClick] = useState<boolean>(true);
   const [selectionMode, setSelectionMode] = useState<CalendarTypes.CalendarSelectionMode>('multiple');
-  const [minDateValue, setMinDateValue] = useState(null);
-  const [maxDateValue, setMaxDateValue] = useState(null);
-  const [weekendDisabled, setWeekendDisabled] = useState(null);
+  const [minDateValue, setMinDateValue] = useState<Date | null>(null);
+  const [maxDateValue, setMaxDateValue] = useState<Date | null>(null);
+  const [weekendDisabled, setWeekendDisabled] = useState<boolean | null>(null);
 
-  const onSelectWeekOnClickChange = useCallback(({ value }) => {
+  const onSelectWeekOnClickChange = useCallback(({ value }: CheckBoxTypes.ValueChangedEvent): void => {
     setSelectWeekOnClick(value);
   }, [setSelectWeekOnClick]);
 
-  const onSelectionModeChange = useCallback(({ value }) => {
+  const onSelectionModeChange = useCallback(({ value }: SelectBoxTypes.ValueChangedEvent): void => {
     setSelectionMode(value);
   }, [setSelectionMode]);
 
-  const onMinDateChange = useCallback(({ value }) => {
+  const onMinDateChange = useCallback(({ value }: CheckBoxTypes.ValueChangedEvent): void => {
     setMinDateValue(
       value ? new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3) : null,
     );
   }, [setMinDateValue]);
 
-  const onMaxDateChange = useCallback(({ value }) => {
+  const onMaxDateChange = useCallback(({ value }: CheckBoxTypes.ValueChangedEvent): void => {
     setMaxDateValue(
       value ? new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 3) : null,
     );
   }, [setMaxDateValue]);
 
-  const onDisableWeekendChange = useCallback(({ value }) => {
+  const onDisableWeekendChange = useCallback(({ value }: CheckBoxTypes.ValueChangedEvent): void => {
     setWeekendDisabled(value);
   }, [setWeekendDisabled]);
 
   const onClearButtonClick = useCallback(() => {
-    calendar.current.instance().clear();
+    calendar.current?.instance().clear();
   }, []);
 
   return (
@@ -63,7 +66,7 @@ export default function App() {
           min={minDateValue}
           max={maxDateValue}
           defaultValue={initialValue}
-          disabledDates={weekendDisabled ? isDateDisabled : null}
+          disabledDates={weekendDisabled ? isDateDisabled : undefined}
         />
       </div>
       <div className="options">

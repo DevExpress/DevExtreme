@@ -10,7 +10,7 @@ const format = {
   precision: 1,
 };
 
-function customizeText({ valueText }) {
+function customizeText({ valueText }: { valueText: string }): string {
   return `${valueText} °C`;
 }
 

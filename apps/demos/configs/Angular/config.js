@@ -155,8 +155,10 @@ window.config = {
     'npm:': '../../../../node_modules/',
     'bundles:': '../../../../bundles/',
     'externals:': '../../../../bundles/externals/',
+    'anti-forgery:': '../../../../shared/anti-forgery/',
   },
   map: {
+    'anti-forgery': 'anti-forgery:fetch-override.js',
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
@@ -166,6 +168,7 @@ window.config = {
     '@angular/platform-browser-dynamic': 'bundles:@angular/platform-browser-dynamic.umd.js',
     '@angular/core': 'bundles:@angular/core.umd.js',
     '@angular/core/primitives/signals': 'bundles:@angular/core.primitives.signals.umd.js',
+    '@angular/core/primitives/di': 'bundles:@angular/core.primitives.di.umd.js',
     '@angular/common': 'bundles:@angular/common.umd.js',
     '@angular/common/http': 'bundles:@angular/common-http.umd.js',
     '@angular/platform-browser': 'bundles:@angular/platform-browser.umd.js',
@@ -281,6 +284,8 @@ window.config = {
     // Prettier
     'prettier/standalone': 'npm:prettier/standalone.js',
     'prettier/parser-html': 'npm:prettier/parser-html.js',
+
+    'zone.js': 'npm:zone.js/bundles/zone.umd.js',
   },
   packages: {
     'app': {
@@ -340,3 +345,5 @@ window.process = {
 System.config(window.config);
 // eslint-disable-next-line no-console
 System.import('@angular/compiler').catch(console.error.bind(console));
+// eslint-disable-next-line
+const useTgzInCSB = ['openai'];

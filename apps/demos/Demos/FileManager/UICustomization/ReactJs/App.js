@@ -13,20 +13,20 @@ import { fileItems, getItemInfo } from './data.js';
 
 export default function App() {
   const fileManagerRef = useRef(null);
-  const createFile = useCallback((fileExtension, directory = fileManagerRef.current
-    .instance()
-    .getCurrentDirectory()) => {
+  const createFile = useCallback((fileExtension, directory = fileManagerRef?.current
+    ?.instance()
+    ?.getCurrentDirectory()) => {
     const newItem = {
       __KEY__: Date.now(),
       name: `New file${fileExtension}`,
       isDirectory: false,
       size: 0,
     };
-    if (!directory.isDirectory) {
+    if (!directory?.isDirectory) {
       return false;
     }
-    let array = null;
-    if (!directory.dataItem) {
+    let array;
+    if (!directory?.dataItem) {
       array = fileItems;
     } else {
       array = directory.dataItem.items;
@@ -43,14 +43,14 @@ export default function App() {
     if (viewArea === 'navPane') {
       items = [directory];
     } else {
-      items = fileManagerRef.current.instance().getSelectedItems();
+      items = fileManagerRef?.current?.instance()?.getSelectedItems();
     }
-    items.forEach((item) => {
+    items?.forEach((item) => {
       if (item.dataItem) {
         item.dataItem.category = newCategory;
       }
     });
-    return items.length > 0;
+    return items && items.length > 0;
   }, []);
   const onItemClick = useCallback(
     ({ itemData, viewArea, fileSystemItem }) => {
@@ -62,7 +62,7 @@ export default function App() {
         updated = updateCategory(category, fileSystemItem, viewArea);
       }
       if (updated) {
-        fileManagerRef.current.instance().refresh();
+        fileManagerRef?.current?.instance()?.refresh();
       }
     },
     [createFile, updateCategory],

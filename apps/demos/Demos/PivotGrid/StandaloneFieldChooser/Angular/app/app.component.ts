@@ -1,6 +1,5 @@
-import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
   DxPivotGridFieldChooserModule,
   DxRadioGroupModule,
@@ -27,6 +26,13 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxPivotGridModule,
+    DxRadioGroupModule,
+    DxPivotGridFieldChooserModule,
+    DxSelectBoxModule,
+    DxButtonModule,
+  ],
 })
 export class AppComponent {
   pivotGridDataSource: PivotGridDataSource;
@@ -95,18 +101,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxPivotGridModule,
-    DxRadioGroupModule,
-    DxPivotGridFieldChooserModule,
-    DxSelectBoxModule,
-    DxButtonModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

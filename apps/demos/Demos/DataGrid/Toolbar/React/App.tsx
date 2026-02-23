@@ -1,10 +1,12 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
+
 import SelectBox, { type SelectBoxTypes } from 'devextreme-react/select-box';
 import DataGrid, {
-  Grouping, Column, ColumnChooser, LoadPanel, Toolbar, Item, DataGridRef,
+  Grouping, Column, ColumnChooser, LoadPanel, Toolbar, Item,
 } from 'devextreme-react/data-grid';
-
+import type { DataGridRef } from 'devextreme-react/data-grid';
 import { query } from 'devextreme-react/common/data';
+
 import { orders } from './data.ts';
 
 const countLabel = { 'aria-label': 'Count' };
@@ -27,8 +29,8 @@ const App = () => {
   const toggleGroupColumn = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     const newGrouping = e.value;
 
-    dataGridRef.current.instance().clearGrouping();
-    dataGridRef.current.instance().columnOption(newGrouping, 'groupIndex', 0);
+    dataGridRef.current?.instance().clearGrouping();
+    dataGridRef.current?.instance().columnOption(newGrouping, 'groupIndex', 0);
 
     setTotalCount(getGroupCount(newGrouping));
     setGroupColumn(newGrouping);
@@ -48,7 +50,7 @@ const App = () => {
     icon: 'refresh',
     text: 'Refresh',
     onClick: () => {
-      dataGridRef.current.instance().refresh();
+      dataGridRef.current?.instance().refresh();
     },
   }), []);
 

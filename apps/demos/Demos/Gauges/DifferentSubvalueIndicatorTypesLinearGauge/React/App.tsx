@@ -1,11 +1,14 @@
 import React from 'react';
 import {
-  LinearGauge, Scale, Label, SubvalueIndicator,
+  LinearGauge,
+  Scale,
+  Label,
+  SubvalueIndicator,
 } from 'devextreme-react/linear-gauge';
 
 const subValues = [18, 43];
 
-function customizeText({ valueText }) {
+function customizeText({ valueText }: { valueText: string }): string {
   return `$${valueText}`;
 }
 

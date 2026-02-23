@@ -9,10 +9,11 @@ import PieChart, {
   Tooltip,
   Subtitle,
 } from 'devextreme-react/pie-chart';
+import type { PieChartTypes } from 'devextreme-react/pie-chart';
 import { exportImportData } from './data.ts';
 
-function customizeTooltip(arg: { argumentText: string; seriesName: string; valueText: string; }) {
-  return { text: `${arg.argumentText}<br>${arg.seriesName}: ${arg.valueText}B` };
+function customizeTooltip(arg: PieChartTypes.PointInfo): Record<string, string> {
+  return { text: `${arg?.argumentText}<br>${arg.seriesName}: ${arg.valueText}B` };
 }
 
 function App() {

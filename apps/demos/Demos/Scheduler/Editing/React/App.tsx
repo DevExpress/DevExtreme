@@ -8,20 +8,20 @@ import { data } from './data.ts';
 const currentDate = new Date(2021, 3, 29);
 const views: SchedulerTypes.ViewType[] = ['day', 'week'];
 
-const showToast = (event: string, value, type: string) => {
+const showToast = (event: string, value: string, type: string) => {
   notify(`${event} "${value}" task`, type, 800);
 };
 
 const showAddedToast = (e: SchedulerTypes.AppointmentAddedEvent) => {
-  showToast('Added', e.appointmentData.text, 'success');
+  showToast('Added', e.appointmentData.text ?? '', 'success');
 };
 
 const showUpdatedToast = (e: SchedulerTypes.AppointmentUpdatedEvent) => {
-  showToast('Updated', e.appointmentData.text, 'info');
+  showToast('Updated', e.appointmentData.text ?? '', 'info');
 };
 
 const showDeletedToast = (e: SchedulerTypes.AppointmentDeletedEvent) => {
-  showToast('Deleted', e.appointmentData.text, 'warning');
+  showToast('Deleted', e.appointmentData.text ?? '', 'warning');
 };
 
 const App = () => {
@@ -42,7 +42,7 @@ const App = () => {
   const onAllowUpdatingChanged = useCallback((e: CheckBoxTypes.ValueChangedEvent) => setAllowUpdating(e.value), []);
 
   return (
-    <React.Fragment>
+    <>
       <Scheduler
         timeZone="America/Los_Angeles"
         dataSource={data}
@@ -106,7 +106,7 @@ const App = () => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 

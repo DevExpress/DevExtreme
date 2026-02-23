@@ -3,7 +3,8 @@ import Diagram, { CustomShape, Nodes, AutoLayout } from 'devextreme-react/diagra
 import { Popup } from 'devextreme-react/popup';
 import { ArrayStore } from 'devextreme-react/common/data';
 import CustomShapeTemplate from './CustomShapeTemplate.tsx';
-import service, { Employee as EmployeeType } from './data.ts';
+import service from './data.ts';
+import type { Employee as EmployeeType } from './data.ts';
 
 const employees = service.getEmployees();
 const dataSource = new ArrayStore({
@@ -11,15 +12,19 @@ const dataSource = new ArrayStore({
   data: employees,
 });
 
-function itemTypeExpr(obj: { ID: number; }) {
-  return `employee${obj.ID}`;
+function itemTypeExpr(obj: { ID: number; type: string; }, value: string) {
+  if (value === undefined) {
+    return `employee${obj.ID}`;
+  }
+  obj.type = value;
+  return null;
 }
 
 export default function App() {
   const [currentEmployee, setCurrentEmployee] = useState<Partial<EmployeeType>>({});
   const [popupVisible, setPopupVisible] = useState(false);
 
-  const showInfo = useCallback((employee) => {
+  const showInfo = useCallback((employee: EmployeeType) => {
     setCurrentEmployee(employee);
     setPopupVisible(true);
   }, [setCurrentEmployee, setPopupVisible]);

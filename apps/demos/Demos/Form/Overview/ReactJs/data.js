@@ -1,4 +1,4 @@
-const companies = [
+export const companies = [
   {
     ID: 1,
     Name: 'Super Mart of the West',
@@ -48,8 +48,3 @@ const companies = [
     Active: true,
   },
 ];
-export default {
-  getCompanies() {
-    return companies;
-  },
-};

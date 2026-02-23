@@ -1,17 +1,12 @@
 import React from 'react';
 import { Stepper, Item } from 'devextreme-react/stepper';
-import { type Orientation } from 'devextreme-react/common';
+import type { StepperTypes } from 'devextreme-react/stepper';
+import type { Orientation } from 'devextreme-react/common';
 
 import { steps } from './data.ts';
+import type { StepperConfig } from './types.ts';
 
-interface SteppersProps {
-  orientation: Orientation;
-  navigationMode: boolean;
-  selectOnFocus: boolean;
-  rtlMode: boolean;
-}
-
-const stepperConfigs = [
+const stepperConfigs: StepperConfig[] = [
   {
     id: 'icons',
     labelId: 'iconsLabel',
@@ -32,6 +27,13 @@ const stepperConfigs = [
   },
 ];
 
+interface SteppersProps {
+  orientation: Orientation;
+  navigationMode: boolean;
+  selectOnFocus: boolean;
+  rtlMode: boolean;
+}
+
 export default function Steppers({
   orientation,
   navigationMode,
@@ -39,8 +41,8 @@ export default function Steppers({
   rtlMode,
 }: SteppersProps) {
   return (
-    <React.Fragment>
-      {stepperConfigs.map(({ id, labelId, title, fields }) => (
+    <>
+      {stepperConfigs.map(({ id, labelId, title, fields }: StepperConfig) => (
         <div key={id} className="stepper-wrapper">
           <div id={labelId} className="stepper-label">{title}</div>
           <Stepper
@@ -52,17 +54,17 @@ export default function Steppers({
             selectOnFocus={selectOnFocus}
             rtlEnabled={rtlMode}
           >
-            {steps.map((step, index) => {
-              const itemProps = fields.reduce((acc, field) => {
+            {steps.map((step: StepperTypes.Item, index: number) => {
+              const itemProps = fields.reduce((acc: Record<string, unknown>, field: keyof StepperTypes.Item): Record<string, unknown> => {
                 acc[field] = step[field];
                 return acc;
-              }, {} as Record<string, unknown>);
+              }, {});
 
               return <Item key={index} {...itemProps} />;
             })}
           </Stepper>
         </div>
       ))}
-    </React.Fragment>
+    </>
   );
 }

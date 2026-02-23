@@ -15,7 +15,7 @@ import { dataSource } from './data.js';
 
 const palette = ['#00ced1', '#008000', '#ffd700', '#ff7f50'];
 const customizeTooltip = (pointInfo) => ({
-  text: `${pointInfo.point.tag}<br/>Total Population: ${pointInfo.argumentText}M<br/>Population with Age over 60: ${pointInfo.valueText}M (${pointInfo.size}%)`,
+  text: `${pointInfo.point?.tag}<br/>Total Population: ${pointInfo.argumentText}M<br/>Population with Age over 60: ${pointInfo.valueText}M (${pointInfo.size}%)`,
 });
 function seriesClick(e) {
   const series = e.target;

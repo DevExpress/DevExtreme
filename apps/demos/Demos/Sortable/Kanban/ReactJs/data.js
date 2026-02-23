@@ -1,3 +1,10 @@
+export const taskStatuses = [
+  'Not Started',
+  'Need Assistance',
+  'In Progress',
+  'Deferred',
+  'Completed',
+];
 export const tasks = [
   {
     Task_ID: 1,

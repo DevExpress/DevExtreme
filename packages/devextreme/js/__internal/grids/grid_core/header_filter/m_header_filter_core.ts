@@ -542,9 +542,9 @@ export const headerFilterMixin = <T extends ModuleType<any>>(Base: T) => class H
 
         const indicatorLabel = (messageLocalization.format as any)('dxDataGrid-headerFilterIndicatorLabel', column.caption);
 
-        $headerFilterIndicator.attr('aria-label', indicatorLabel);
-        $headerFilterIndicator.attr('aria-haspopup', 'dialog');
-        $headerFilterIndicator.attr('role', 'button');
+        this.setAria('label', indicatorLabel, $headerFilterIndicator);
+        this.setAria('haspopup', 'dialog', $headerFilterIndicator);
+        this.setAria('role', 'button', $headerFilterIndicator);
       }
 
       return $headerFilterIndicator;

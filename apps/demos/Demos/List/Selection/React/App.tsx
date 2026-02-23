@@ -1,8 +1,10 @@
 import React, { useCallback, useState } from 'react';
-
+import type { SingleMultipleAllOrNone, SelectAllMode } from 'devextreme-react/common';
 import SelectBox from 'devextreme-react/select-box';
-import List, { type ListTypes } from 'devextreme-react/list';
+import List from 'devextreme-react/list';
+import type { ListTypes } from 'devextreme-react/list';
 import CheckBox from 'devextreme-react/check-box';
+import type { CheckBoxTypes } from 'devextreme-react/check-box';
 
 import { ArrayStore } from 'devextreme-react/common/data';
 
@@ -17,37 +19,25 @@ const dataSource = new ArrayStore({
   key: 'id',
   data: tasks,
 });
-const selectionModes = ['none', 'single', 'multiple', 'all'];
-const selectAllModes = ['page', 'allPages'];
+const selectionModes: SingleMultipleAllOrNone[] = ['none', 'single', 'multiple', 'all'];
+const selectAllModes: SelectAllMode[] = ['page', 'allPages'];
 
 export default function App() {
-  const [selectionMode, setSelectionMode] = useState<ListTypes.Properties['selectionMode']>('all');
-  const [selectAllMode, setSelectAllMode] = useState<ListTypes.Properties['selectAllMode']>('page');
-  const [selectByClick, setSelectByClick] = useState(false);
-  const [selectedItemKeys, setSelectedItemKeys] = useState([]);
+  const [selectionMode, setSelectionMode] = useState<SingleMultipleAllOrNone>('all');
+  const [selectAllMode, setSelectAllMode] = useState<SelectAllMode>('page');
+  const [selectByClick, setSelectByClick] = useState<CheckBoxTypes.Properties['value']>(false);
+  const [selectedItemKeys, setSelectedItemKeys] = useState<ListTypes.Properties['selectedItemKeys'][]>([]);
 
-  const onSelectedItemKeysChange = useCallback(({ name, value }) => {
+  const onSelectedItemKeysChange = useCallback(({ name, value }): void => {
     if (name === 'selectedItemKeys') {
       if (selectionMode !== 'none' || selectedItemKeys.length !== 0) {
         setSelectedItemKeys(value);
       }
     }
-  }, [selectionMode, selectedItemKeys, setSelectedItemKeys]);
-
-  const onSelectionModeChange = useCallback((value) => {
-    setSelectionMode(value);
-  }, [setSelectionMode]);
-
-  const onSelectAllModeChange = useCallback((value) => {
-    setSelectAllMode(value);
-  }, [setSelectAllMode]);
-
-  const onSelectByClickChange = useCallback((value) => {
-    setSelectByClick(value);
-  }, [setSelectByClick]);
+  }, [selectionMode, selectedItemKeys]);
 
   return (
-    <React.Fragment>
+    <>
       <div className="widget-container">
         <List
           dataSource={dataSource}
@@ -56,7 +46,7 @@ export default function App() {
           selectionMode={selectionMode}
           selectAllMode={selectAllMode}
           selectedItemKeys={selectedItemKeys}
-          selectByClick={selectByClick}
+          selectByClick={!!selectByClick}
           onOptionChanged={onSelectedItemKeysChange}>
         </List>
         <div className="selected-data">
@@ -73,7 +63,7 @@ export default function App() {
             items={selectionModes}
             inputAttr={selectionModeLabel}
             value={selectionMode}
-            onValueChange={onSelectionModeChange}>
+            onValueChange={setSelectionMode}>
           </SelectBox>
         </div>
         <div className="option">
@@ -84,7 +74,7 @@ export default function App() {
             items={selectAllModes}
             inputAttr={selectAllModeLabel}
             value={selectAllMode}
-            onValueChange={onSelectAllModeChange}>
+            onValueChange={setSelectAllMode}>
           </SelectBox>
         </div>
         <div className="option">
@@ -93,10 +83,10 @@ export default function App() {
           <CheckBox
             value={selectByClick}
             elementAttr={selectByClickLabel}
-            onValueChange={onSelectByClickChange}>
+            onValueChange={setSelectByClick}>
           </CheckBox>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }

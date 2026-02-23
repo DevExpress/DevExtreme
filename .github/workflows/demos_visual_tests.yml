@@ -13,8 +13,7 @@ on:
   workflow_dispatch:
 
 env:
-  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
-  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+  NX_SKIP_NX_CACHE: true
   BUILD_TEST_INTERNAL_PACKAGE: true
   RUN_TESTS: true
 
@@ -78,14 +77,17 @@ jobs:
     runs-on: devextreme-shr2
     name: Determine scope for framework tests
     needs: [check-should-run, get-changes]
-    if: needs.check-should-run.outputs.should-run == 'true'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      (needs.get-changes.result == 'success' || needs.get-changes.result == 'skipped')
     outputs:
       framework-tests-scope: ${{ steps.determine.outputs.framework-tests-scope }}
 
     steps:
       - name: Determine framework tests scope
         id: determine
-        run: |         
+        run: |
           if [ "${{ github.event_name }}" != "pull_request" ] || [ "${{ contains(github.event.pull_request.labels.*.name, 'force all tests') }}" = "true" ]; then
             echo "Framework tests scope: all demos"
             echo "framework-tests-scope=all" >> $GITHUB_OUTPUT
@@ -101,10 +103,13 @@ jobs:
     runs-on: devextreme-shr2
     name: Build DevExtreme
     needs: [check-should-run, determine-framework-tests-scope]
-    if: needs.check-should-run.outputs.should-run == 'true'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success'
     env:
       NODE_OPTIONS: --max-old-space-size=8192
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - name: Get sources
@@ -127,9 +132,9 @@ jobs:
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store
+            ${{ runner.os }}-pnpm-cache
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -184,9 +189,14 @@ jobs:
   build-demos:
     runs-on: devextreme-shr2
     name: Build Demos Bundles
-    timeout-minutes: 20
+    timeout-minutes: 30
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
-    if: needs.check-should-run.outputs.should-run == 'true' && needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success'
     env:
       NODE_OPTIONS: --max-old-space-size=8192
 
@@ -217,9 +227,9 @@ jobs:
         name: Restore pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store
+            ${{ runner.os }}-pnpm-cache
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -253,9 +263,14 @@ jobs:
   check-ts:
     name: Check TS
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
-    if: needs.check-should-run.outputs.should-run == 'true' && needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success'
     runs-on: devextreme-shr2
-    timeout-minutes: 20
+    timeout-minutes: 30
 
     steps:
       - name: Get sources
@@ -284,9 +299,9 @@ jobs:
         name: Restore pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store
+            ${{ runner.os }}-pnpm-cache
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -294,7 +309,7 @@ jobs:
       - name: Install tgz
         run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
 
-      - name: Run check TS for Vue
+      - name: Demos - Check Vue TS
         working-directory: apps/demos
         run: pnpm run ts-check-vue
 
@@ -302,14 +317,19 @@ jobs:
       #   working-directory: apps/demos
       #   run: pnpm run ts-check-ng
 
-      # - name: Run check TS for React
-      #   working-directory: apps/demos
-      #   run: pnpm run ts-check-react
+      - name: Demos - Check React TS
+        working-directory: apps/demos
+        run: pnpm run ts-check-react
 
   lint:
     name: Lint code base
     needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
-    if: needs.check-should-run.outputs.should-run == 'true' && needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success'
 
     runs-on: devextreme-shr2
     timeout-minutes: 60
@@ -349,9 +369,9 @@ jobs:
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-store
+          ${{ runner.os }}-pnpm-cache
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
@@ -386,7 +406,7 @@ jobs:
             | tr '\n' ' ')
           if [ ! -z "$CHANGED_DEMOS" ]; then
             echo "Changed demo files: $CHANGED_DEMOS"
-            pnpx eslint $CHANGED_DEMOS
+            pnpm run eslint $CHANGED_DEMOS
           else
             echo "No demo files changed, skipping lint-demos"
           fi
@@ -395,24 +415,119 @@ jobs:
           pnpm run lint-demos
         fi
 
-  check-generated-demos:
-    name: Check generated demos
+  check-generated-demos-changed:
+    name: Check generated demos (changed only)
     runs-on: devextreme-shr2
     timeout-minutes: 10
-    needs: [check-should-run, build-devextreme, determine-framework-tests-scope]
-    if: needs.check-should-run.outputs.should-run == 'true' && needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+    needs: [check-should-run, get-changes, build-devextreme, determine-framework-tests-scope]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed' &&
+      needs.build-devextreme.result == 'success'
 
     steps:
     - name: Get sources
       uses: actions/checkout@v4
 
-    - name: Download artifacts
-      if: github.event_name == 'pull_request'
+    - name: Download changed demos
       uses: actions/download-artifact@v4
       with:
         name: changed-demos
         path: apps/demos
       continue-on-error: true
+
+    - uses: pnpm/action-setup@v4
+      with:
+        run_install: false
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-sources
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v4
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Install tgz
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
+    - name: Prepare JS
+      working-directory: apps/demos
+      run: pnpm run prepare-js
+
+    - name: Check generated JS demos
+      working-directory: apps/demos
+      run: |
+        if [ -f "changed-files.json" ]; then
+          echo "Running convert-to-js on changed files only"
+
+          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '/React/' | grep '\.tsx$' | sed 's|^apps/demos/||' | sed 's|/[^/]*\.tsx$||' | sort | uniq)
+
+          if [ -z "$CHANGED_DEMOS" ]; then
+            echo "No React demos found in changed files, skipping conversion"
+          else
+            echo "Changed React demos:"
+            echo "$CHANGED_DEMOS"
+
+            echo "$CHANGED_DEMOS" | while read -r demo_dir; do
+              if [ ! -z "$demo_dir" ]; then
+                echo "Converting: $demo_dir"
+                pnpm run convert-to-js "$demo_dir"
+              fi
+            done
+          fi
+        fi
+
+        git add ./Demos -N
+
+        if git diff --exit-code . ':!package.json' ; then
+          echo "Generated JS demos are up-to-date"
+        else
+          echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js split' and commit changes."
+          echo "If you see another diff, ensure that extra listed files have LF endings."
+          exit 1
+        fi
+
+  check-generated-demos-all:
+    name: Check generated demos (${{ matrix.CONSTEL }})
+    runs-on: devextreme-shr2
+    timeout-minutes: 15
+    needs: [check-should-run, build-devextreme, determine-framework-tests-scope]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all' &&
+      needs.build-devextreme.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: ['1/5', '2/5', '3/5', '4/5', '5/5']
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
 
     - uses: pnpm/action-setup@v4
       with:
@@ -454,43 +569,28 @@ jobs:
 
     - name: Check generated JS demos
       working-directory: apps/demos
+      env:
+        CONSTEL: ${{ matrix.CONSTEL }}
       run: |
-        if [ -f "changed-files.json" ]; then
-          echo "Running convert-to-js on changed files only"
-          
-          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '/React/' | grep '\.tsx$' | sed 's|^apps/demos/||' | sed 's|/[^/]*\.tsx$||' | sort | uniq)
-          
-          if [ -z "$CHANGED_DEMOS" ]; then
-            echo "No React demos found in changed files, skipping conversion"
-          else
-            echo "Changed React demos:"
-            echo "$CHANGED_DEMOS"
-            
-            echo "$CHANGED_DEMOS" | while read -r demo_dir; do
-              if [ ! -z "$demo_dir" ]; then
-                echo "Converting: $demo_dir"
-                pnpm run convert-to-js "$demo_dir"
-              fi
-            done
-          fi
-        else
-          echo "Running convert-to-js on all files"
-          pnpm run convert-to-js
-        fi
+        echo "Running convert-to-js for split $CONSTEL"
+        pnpm run convert-to-js
 
         git add ./Demos -N
 
         if git diff --exit-code . ':!package.json' ; then
-          echo "Generated JS demos are up-to-date"
+          echo "Generated JS demos are up-to-date for split $CONSTEL"
         else
-            echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js split' and commit changes."
-            echo "If you see another diff, ensure that extra listed files have LF endings."
-            exit 1
+          echo "Generated JS demos are outdated for split $CONSTEL. Execute 'pnpm run convert-to-js split' and commit changes."
+          echo "If you see another diff, ensure that extra listed files have LF endings."
+          exit 1
         fi
 
   testcafe-jquery:
     needs: [check-should-run, build-devextreme]
-    if: needs.check-should-run.outputs.should-run == 'true'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.build-devextreme.result == 'success'
     strategy:
       fail-fast: false
       matrix:
@@ -530,7 +630,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '141.0.7390.122'
+        chrome-version: '145.0.7632.67'
         runner-type: 'github-hosted'
 
     - name: Use Node.js
@@ -551,9 +651,9 @@ jobs:
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-store
+          ${{ runner.os }}-pnpm-cache
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
@@ -582,12 +682,12 @@ jobs:
       id: chrome-flags
       run: |
         BASE_FLAGS="chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647"
-        
+
         # For Material theme, enable better font rendering to avoid instability
         if [[ "${{ matrix.THEME }}" != *"material"* ]]; then
           BASE_FLAGS="$BASE_FLAGS --font-render-hinting=none --disable-font-subpixel-positioning"
         fi
-        
+
         echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
 
     - name: Run TestCafe tests (jQuery)
@@ -638,7 +738,12 @@ jobs:
 
   testcafe-frameworks-all:
     needs: [check-should-run, determine-framework-tests-scope, build-demos]
-    if: needs.check-should-run.outputs.should-run == 'true' && needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all' &&
+      needs.build-demos.result == 'success'
     strategy:
       fail-fast: false
       matrix:
@@ -675,7 +780,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '141.0.7390.122'
+        chrome-version: '145.0.7632.67'
         runner-type: 'github-hosted'
 
     - name: Use Node.js
@@ -701,9 +806,9 @@ jobs:
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-store
+          ${{ runner.os }}-pnpm-cache
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
@@ -781,7 +886,12 @@ jobs:
 
   testcafe-frameworks-changed:
     needs: [check-should-run, determine-framework-tests-scope, build-demos]
-    if: needs.check-should-run.outputs.should-run == 'true' && needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed'
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed' &&
+      needs.build-demos.result == 'success'
     strategy:
       fail-fast: false
       matrix:
@@ -799,7 +909,7 @@ jobs:
       - name: Setup Chrome
         uses: ./.github/actions/setup-chrome
         with:
-          chrome-version: '141.0.7390.122'
+          chrome-version: '145.0.7632.67'
           runner-type: 'github-hosted'
 
       - name: Use Node.js
@@ -832,9 +942,9 @@ jobs:
         name: Restore pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store
+            ${{ runner.os }}-pnpm-cache
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

@@ -1,6 +1,6 @@
 import React from 'react';
 import EmployeeCard from './EmployeeCard.tsx';
-import { Employee } from './data';
+import type { Employee } from './data';
 
 interface EmployeeGalleryProps {
   employees: Employee[];

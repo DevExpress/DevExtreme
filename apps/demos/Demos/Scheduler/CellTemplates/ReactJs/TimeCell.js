@@ -6,7 +6,7 @@ const TimeCell = (props) => {
   const isDinner = Utils.isDinner(date);
   const hasCoffeeCupIcon = Utils.hasCoffeeCupIcon(date);
   return (
-    <div className={isDinner ? 'dinner' : null}>
+    <div className={isDinner ? 'dinner' : undefined}>
       {text}
       {hasCoffeeCupIcon && <div className="cafe" />}
     </div>

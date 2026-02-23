@@ -43,6 +43,7 @@ const SCROLL_CONTAINER_CLASS = 'scroll-container';
 const SCROLLABLE_SIMULATED_CLASS = 'scrollable-simulated';
 const GROUP_SPACE_CLASS = 'group-space';
 const CONTENT_CLASS = 'content';
+const HEADER_TEXT_CONTENT_CLASS = 'text-content';
 const TABLE_CLASS = 'table';
 const TABLE_FIXED_CLASS = 'table-fixed';
 const CONTENT_FIXED_CLASS = 'content-fixed';
@@ -371,7 +372,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
       if (browser.safari) {
         // T198380, T809552
-        // @ts-expect-error
         $table.append($('<thead>').append('<tr>'));
       }
 
@@ -427,16 +427,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
                                     && !isGroupCellWithTemplate;
 
         if (shouldShowHint) {
-          if ($element.data(CELL_HINT_VISIBLE)) {
-            $element.removeAttr('title');
-            $element.data(CELL_HINT_VISIBLE, false);
-          }
-
-          const difference = $element[0].scrollWidth - $element[0].clientWidth;
-          if (difference > 0 && !isDefined($element.attr('title'))) {
-            $element.attr('title', $element.text());
-            $element.data(CELL_HINT_VISIBLE, true);
-          }
+          this._setCellTitleAttribute($element, isHeaderRow);
         }
       }));
     }
@@ -492,6 +483,32 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     subscribeToRowEvents(this, $table);
 
     return $table;
+  }
+
+  private _setCellTitleAttribute($cell: dxElementWrapper, isHeaderRow: boolean): void {
+    if ($cell.data(CELL_HINT_VISIBLE)) {
+      $cell.removeAttr('title');
+      $cell.data(CELL_HINT_VISIBLE, false);
+    }
+
+    let $cellContent = $cell;
+    const headerContentClass = this.addWidgetPrefix(HEADER_TEXT_CONTENT_CLASS);
+
+    if (isHeaderRow && !$cell.hasClass(headerContentClass)) {
+      const $headerContent = $cell.find(`.${headerContentClass}`);
+      $cellContent = $headerContent.length ? $headerContent : $cellContent;
+    }
+
+    const hasWidthOverflow = $cellContent[0].scrollWidth - $cellContent[0].clientWidth > 0;
+
+    if (!hasWidthOverflow || isDefined($cell.attr('title'))) {
+      return;
+    }
+
+    const hintText = $cellContent.text() || $cell.text();
+
+    $cell.attr('title', hintText);
+    $cell.data(CELL_HINT_VISIBLE, true);
   }
 
   /**

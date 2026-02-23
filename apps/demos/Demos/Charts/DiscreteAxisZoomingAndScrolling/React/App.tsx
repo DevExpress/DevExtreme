@@ -18,7 +18,7 @@ import RangeSelector, {
   Series as RsChartSeries,
   type RangeSelectorTypes,
 } from 'devextreme-react/range-selector';
-import { VisualRange } from 'devextreme-react/common/charts';
+import type { VisualRange } from 'devextreme-react/common/charts';
 import { series, dataSource } from './data.ts';
 
 const seriesList = series.map((item) => <Series
@@ -43,7 +43,7 @@ function App() {
   }, [setVisualRange]);
 
   return (
-    <React.Fragment>
+    <>
       <Chart
         id="zoomedChart"
         palette="Soft"
@@ -79,7 +79,7 @@ function App() {
           <CommonSeriesSettingsOptions type="bar" ignoreEmptyPoints ={true} />
         </ChartOptions>
       </RangeSelector>
-    </React.Fragment>
+    </>
   );
 }
 

@@ -3,23 +3,24 @@ import DropDownButton from 'devextreme-react/drop-down-button';
 import Toolbar from 'devextreme-react/toolbar';
 import { Template } from 'devextreme-react/core/template';
 import notify from 'devextreme/ui/notify';
-import service from './data.js';
+import {
+  colors, downloads, alignments, profileSettings, fontSizes, lineHeights,
+} from './data.js';
 import ColorIcon from './ColorIcon.js';
 import DropDownButtonTemplate from './DropDownButtonTemplate.js';
 import 'whatwg-fetch';
 
 const buttonDropDownOptions = { width: 230 };
-const data = service.getData();
 const itemTemplateRender = (item) => <div style={{ fontSize: `${item.size}px` }}>{item.text}</div>;
 const App = () => {
   const [alignment, setAlignment] = useState('left');
   const [color, setColor] = useState(null);
   const [fontSize, setFontSize] = useState(14);
   const [lineHeight, setLineHeight] = useState(1.35);
-  const [colorPicker, setColorPicker] = useState(null);
+  const [colorPicker, setColorPicker] = useState(undefined);
   const onButtonClick = useCallback((e) => {
     notify(
-      `Go to ${e.element.querySelector('.button-title').textContent}'s profile`,
+      `Go to ${e.element.querySelector('.button-title')?.textContent}'s profile`,
       'success',
       600,
     );
@@ -30,18 +31,15 @@ const App = () => {
   const onColorClick = useCallback(
     (selectedColor) => {
       setColor(selectedColor);
-      const squareIcon = colorPicker.element().getElementsByClassName('dx-icon-square')[0];
-      squareIcon.style.color = selectedColor;
-      colorPicker.close();
+      const squareIcon = colorPicker?.element().getElementsByClassName('dx-icon-square')[0];
+      squareIcon.style.color = selectedColor ?? '';
+      colorPicker?.close();
     },
     [colorPicker],
   );
-  const onInitialized = useCallback(
-    (e) => {
-      setColorPicker(e.component);
-    },
-    [setColorPicker],
-  );
+  const onInitialized = useCallback((e) => {
+    setColorPicker(e.component);
+  }, []);
   const toolbarItems = useMemo(
     () => [
       {
@@ -57,14 +55,14 @@ const App = () => {
           onSelectionChanged: (e) => {
             setAlignment(e.item.name.toLowerCase());
           },
-          items: data.alignments,
+          items: alignments,
         },
       },
       {
         location: 'before',
         widget: 'dxDropDownButton',
         options: {
-          items: data.colors,
+          items: colors,
           icon: 'square',
           stylingMode: 'text',
           dropDownOptions: { width: 'auto' },
@@ -80,7 +78,7 @@ const App = () => {
           displayExpr: 'text',
           keyExpr: 'size',
           useSelectMode: true,
-          items: data.fontSizes,
+          items: fontSizes,
           selectedItemKey: 14,
           onSelectionChanged: (e) => {
             setFontSize(e.item.size);
@@ -97,7 +95,7 @@ const App = () => {
           displayExpr: 'text',
           keyExpr: 'lineHeight',
           useSelectMode: true,
-          items: data.lineHeights,
+          items: lineHeights,
           selectedItemKey: 1.35,
           onSelectionChanged: (e) => {
             setLineHeight(e.item.lineHeight);
@@ -105,7 +103,7 @@ const App = () => {
         },
       },
     ],
-    [setAlignment, setFontSize, setLineHeight, onInitialized],
+    [onInitialized],
   );
   return (
     <div>
@@ -118,7 +116,7 @@ const App = () => {
               text="Download Trial"
               icon="save"
               dropDownOptions={buttonDropDownOptions}
-              items={data.downloads}
+              items={downloads}
               onItemClick={onItemClick}
             />
           </div>
@@ -131,7 +129,7 @@ const App = () => {
               id="custom-template"
               splitButton={true}
               useSelectMode={false}
-              items={data.profileSettings}
+              items={profileSettings}
               displayExpr="name"
               keyExpr="id"
               onButtonClick={onButtonClick}
@@ -148,7 +146,7 @@ const App = () => {
           <Toolbar items={toolbarItems}>
             <Template name="colorpicker">
               <div className="custom-color-picker">
-                {data.colors.map((colorValue, i) => (
+                {colors.map((colorValue, i) => (
                   <ColorIcon
                     key={i}
                     color={colorValue}
@@ -166,7 +164,7 @@ const App = () => {
         <div
           className="dx-field"
           style={{
-            color,
+            color: color ?? undefined,
             textAlign: alignment,
             lineHeight,
             fontSize: `${fontSize}px`,

@@ -25,7 +25,8 @@ export default function App() {
   }, [setPopupVisible]);
   const onCurrentDirectoryChanged = useCallback(
     (e) => {
-      setCurrentPath(e.component.option('currentPath'));
+      const path = e?.component?.option('currentPath');
+      path && setCurrentPath(path);
     },
     [setCurrentPath],
   );

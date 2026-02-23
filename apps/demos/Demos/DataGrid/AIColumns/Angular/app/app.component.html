@@ -73,6 +73,8 @@
 >
   <dxo-position at="center" my="center" collision="fit" />
   <div *dxTemplate="let _ of 'content'">
-    <license-info *ngIf="currentVehicle" [vehicle]="currentVehicle" />
+    @if(currentVehicle) {
+    <license-info [vehicle]="currentVehicle" />
+    }
   </div>
 </dx-popup>

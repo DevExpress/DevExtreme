@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import ScrollView from 'devextreme-react/scroll-view';
 import Sortable from 'devextreme-react/sortable';
-import { tasks as taskList, employees } from './data.js';
+import { tasks as taskList, employees, taskStatuses } from './data.js';
 
 function getLists(statusArray, taskArray) {
   const tasksMap = taskArray.reduce((result, task) => {
@@ -33,7 +33,6 @@ function reorderItem(array, fromIdx, toIdx) {
   const result = removeItem(array, fromIdx);
   return insertItem(result, item, toIdx);
 }
-const taskStatuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
 const employeesRecord = getEmployeesMap(employees);
 const Card = ({ task, employeesMap }) => (
   <div className="card dx-card">

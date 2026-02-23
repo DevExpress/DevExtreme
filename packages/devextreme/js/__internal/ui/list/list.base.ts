@@ -1008,6 +1008,11 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._setListAria();
   }
 
+  _isMultiSelectMode(): boolean {
+    const { selectionMode } = this.option();
+    return selectionMode === 'multiple' || selectionMode === 'all';
+  }
+
   _setListAria(): void {
     const { items, allowItemDeleting, collapsibleGroups } = this.option();
 
@@ -1020,6 +1025,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const listArea = {
       role: shouldSetAria ? 'listbox' : undefined,
       label: shouldSetAria ? label : undefined,
+      // eslint-disable-next-line spellcheck/spell-checker
+      multiselectable: shouldSetAria && this._isMultiSelectMode() ? 'true' : undefined,
     };
 
     this.setAria(listArea, this._$listContainer);
@@ -1145,6 +1152,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       role: collapsibleGroups ? 'listbox' : undefined,
       // eslint-disable-next-line spellcheck/spell-checker
       labelledby: collapsibleGroups ? groupHeaderId : undefined,
+      // eslint-disable-next-line spellcheck/spell-checker
+      multiselectable: collapsibleGroups && this._isMultiSelectMode() ? 'true' : undefined,
     };
 
     this.setAria(groupHeaderAria, $groupBody);

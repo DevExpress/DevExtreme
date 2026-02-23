@@ -1,9 +1,5 @@
-import {
-  NgModule, Component, enableProdMode,
-} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import {
   DxPopupModule, DxDiagramModule,
 } from 'devextreme-angular';
@@ -26,6 +22,10 @@ if (window && window.config?.packageConfigPaths) {
   styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
   preserveWhitespaces: true,
+  imports: [
+    DxDiagramModule,
+    DxPopupModule,
+  ],
 })
 export class AppComponent {
   currentEmployee: Employee = new Employee();
@@ -44,8 +44,12 @@ export class AppComponent {
     });
   }
 
-  itemTypeExpr(obj) {
-    return `employee${obj.ID}`;
+  itemTypeExpr(obj, value) {
+    if (value === undefined) {
+      return `employee${obj.ID}`;
+    }
+    obj.type = value;
+    return null;
   }
 
   showInfo(employee) {
@@ -54,15 +58,8 @@ export class AppComponent {
   }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxDiagramModule,
-    DxPopupModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});

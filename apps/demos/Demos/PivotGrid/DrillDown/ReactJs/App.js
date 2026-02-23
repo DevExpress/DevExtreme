@@ -11,17 +11,17 @@ const App = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const dataGridRef = useRef(null);
   const onCellClick = useCallback((e) => {
-    if (e.area === 'data') {
+    if (e.area === 'data' && e.cell) {
       const pivotGridDataSource = e.component.getDataSource();
-      const rowPathLength = e.cell.rowPath.length;
-      const rowPathName = e.cell.rowPath[rowPathLength - 1];
+      const rowPathLength = e.cell.rowPath?.length ?? 0;
+      const rowPathName = e.cell.rowPath?.[rowPathLength - 1];
       setPopupTitle(`${rowPathName || 'Total'} Drill Down Data`);
       setDrillDownDataSource(pivotGridDataSource.createDrillDownDataSource(e.cell));
       setPopupVisible(true);
     }
   }, []);
   return (
-    <React.Fragment>
+    <>
       <PivotGrid
         id="sales"
         allowSortingBySummary={true}
@@ -40,7 +40,7 @@ const App = () => {
         height={400}
         title={popupTitle}
         onHiding={() => setPopupVisible(false)}
-        onShown={() => dataGridRef.current.instance().updateDimensions()}
+        onShown={() => dataGridRef.current?.instance().updateDimensions()}
         showCloseButton={true}
       >
         <DataGrid
@@ -62,7 +62,7 @@ const App = () => {
           />
         </DataGrid>
       </Popup>
-    </React.Fragment>
+    </>
   );
 };
 const dataSource = new PivotGridDataSource({

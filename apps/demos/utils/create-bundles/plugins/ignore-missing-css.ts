@@ -12,7 +12,7 @@ const ignoreMissingCssPlugin: Plugin = {
       }
     });
 
-    build.onLoad({ filter: /\.css$/, namespace: 'ignore-missing-css' }, (args) => ({
+    build.onLoad({ filter: /\.css$/, namespace: 'ignore-missing-css' }, () => ({
       contents: '',
       loader: 'css',
     }));

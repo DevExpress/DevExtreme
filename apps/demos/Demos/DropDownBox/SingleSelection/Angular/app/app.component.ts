@@ -1,14 +1,12 @@
-import {
-  enableProdMode, ChangeDetectionStrategy, ChangeDetectorRef, Component, NgModule, ViewChild,
-} from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { enableProdMode, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild, provideZoneChangeDetection } from '@angular/core';
+import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { CustomStore } from 'devextreme-angular/common/data';
 import { DxDataGridModule } from 'devextreme-angular';
+import { DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
 import { DxTreeViewModule, DxTreeViewComponent, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
-import { DxDropDownBoxModule, DxDropDownBoxTypes } from 'devextreme-angular/ui/drop-down-box';
+import { DxDropDownBoxModule } from 'devextreme-angular/ui/drop-down-box';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -25,6 +23,11 @@ if (window && window.config?.packageConfigPaths) {
   templateUrl: `.${modulePrefix}/app.component.html`,
   styleUrls: [`.${modulePrefix}/app.component.css`],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    DxTreeViewModule,
+    DxDropDownBoxModule,
+    DxDataGridModule,
+  ],
 })
 export class AppComponent {
   @ViewChild(DxTreeViewComponent, { static: false }) treeView: DxTreeViewComponent;
@@ -66,40 +69,28 @@ export class AppComponent {
     } else {
       this.treeView.instance.unselectAll();
     }
+
+    this.isTreeBoxOpened = false;
+    this.ref.detectChanges();
   }
 
   treeView_itemSelectionChanged(e: DxTreeViewTypes.ItemSelectionChangedEvent) {
-    this.treeBoxValue = e.component.getSelectedNodeKeys();
+    const selectedKeys = e.component.getSelectedNodeKeys();
+    this.treeBoxValue = selectedKeys.length > 0 ? selectedKeys[0] : null;
+  }
+
+  dataGrid_selectionChanged(e: DxDataGridTypes.SelectionChangedEvent) {
+    this.gridBoxValue = e.selectedRowKeys;
+    this.isGridBoxOpened = false;
+    this.ref.detectChanges();
   }
 
   gridBox_displayExpr = ({ CompanyName, Phone }) => CompanyName && `${CompanyName} <${Phone}>`;
-
-  onTreeBoxOptionChanged(e: DxDropDownBoxTypes.OptionChangedEvent) {
-    if (e.name === 'value') {
-      this.isTreeBoxOpened = false;
-      this.ref.detectChanges();
-    }
-  }
-
-  onGridBoxOptionChanged(e: DxDropDownBoxTypes.OptionChangedEvent) {
-    if (e.name === 'value') {
-      this.isGridBoxOpened = false;
-      this.ref.detectChanges();
-    }
-  }
 }
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    DxTreeViewModule,
-    DxDropDownBoxModule,
-    HttpClientModule,
-    DxDataGridModule,
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
+    provideHttpClient(withFetch()),
   ],
-  declarations: [AppComponent],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-platformBrowserDynamic().bootstrapModule(AppModule);
+});
