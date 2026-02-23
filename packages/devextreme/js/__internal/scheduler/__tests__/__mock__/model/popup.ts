@@ -2,6 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type dxForm from '@js/ui/form';
 import type dxPopup from '@js/ui/popup';
+import { within } from '@testing-library/dom';
 
 const queryRequiredElement = (parent: HTMLElement, selector: string): HTMLElement => {
   const element = parent.querySelector(selector);
@@ -16,8 +17,11 @@ export class PopupModel {
 
   component: dxPopup;
 
+  private readonly queries: ReturnType<typeof within>;
+
   constructor(element: HTMLDivElement) {
     this.element = element;
+    this.queries = within(element);
 
     // @ts-expect-error
     this.component = $('.dx-scheduler-appointment-popup.dx-popup.dx-widget').dxPopup('instance') as dxPopup;
