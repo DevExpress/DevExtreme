@@ -2,6 +2,7 @@ import $ from 'jquery';
 import TreeView from 'ui/tree_view';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 import eventsEngine from 'common/core/events/core/events_engine';
+import { NODE_CLASS } from '__internal/ui/tree_view/tree_view.base';
 
 const { module, test } = QUnit;
 
@@ -73,7 +74,7 @@ let helper;
             helper.checkItemsAttributes([0], { });
         });
 
-        test('Selected: ["Item_2"], selectionMode: "single", disabled: true', function() {
+        test('Selected: ["Item_2"], selectionMode: "single", disabled: true', function(assert) {
             this.items[1].selected = true;
             this.items[1].disabled = true;
 
@@ -81,7 +82,10 @@ let helper;
 
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
-            helper.checkItemsAttributes([0], { attributes: [ 'aria-disabled' ] });
+
+            const $itemContent = helper.$widget.find(`.${NODE_CLASS}`).eq(0);
+            assert.strictEqual($itemContent.attr('aria-disabled'), 'true', 'aria-disabled equals true');
+
         });
 
         test('Selected: ["Item_1_1"], selectionMode: "single", Item_1.expanded: true, collapseItem(["Item_1"]) -> expand(["Item_1"])', function() {

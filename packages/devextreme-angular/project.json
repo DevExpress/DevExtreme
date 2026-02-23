@@ -3,7 +3,9 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/devextreme-angular",
   "projectType": "library",
-  "implicitDependencies": ["devextreme"],
+  "implicitDependencies": [
+    "devextreme"
+  ],
   "targets": {
     "clean:src-ui": {
       "executor": "devextreme-nx-infra-plugin:clean",
@@ -45,17 +47,24 @@
           }
         ]
       },
-      "outputs": ["{projectRoot}/dist"],
-      "cache": true,
-      "inputs": ["default"]
+      "outputs": [
+        "{projectRoot}/dist"
+      ],
+      "inputs": [
+        "default"
+      ]
     },
     "build:license-headers": {
       "executor": "devextreme-nx-infra-plugin:add-license-headers",
-      "dependsOn": ["copy:build-sources"],
+      "dependsOn": [
+        "copy:build-sources"
+      ],
       "options": {
         "targetDirectory": "./dist",
         "packageJsonPath": "./package.json",
-        "includePatterns": ["**/*.ts"]
+        "includePatterns": [
+          "**/*.ts"
+        ]
       }
     },
     "build:ngc": {
@@ -64,9 +73,12 @@
         "project": "dist/ng-package.json",
         "tsConfig": "tsconfig.lib.json"
       },
-      "outputs": ["{projectRoot}/npm/dist"],
-      "cache": true,
-      "inputs": ["default"]
+      "outputs": [
+        "{projectRoot}/npm/dist"
+      ],
+      "inputs": [
+        "default"
+      ]
     },
     "npm:content": {
       "executor": "devextreme-nx-infra-plugin:copy-files",
@@ -89,7 +101,9 @@
     },
     "npm:package-json": {
       "executor": "devextreme-nx-infra-plugin:prepare-package-json",
-      "dependsOn": ["npm:content"],
+      "dependsOn": [
+        "npm:content"
+      ],
       "options": {
         "sourcePackageJson": "./npm/dist/package.json",
         "distDirectory": "./npm/dist"
@@ -100,9 +114,12 @@
       "options": {
         "workingDirectory": "./npm/dist"
       },
-      "outputs": ["{projectRoot}/npm/dist/*.tgz"],
-      "cache": true,
-      "inputs": ["default"]
+      "outputs": [
+        "{projectRoot}/npm/dist/*.tgz"
+      ],
+      "inputs": [
+        "default"
+      ]
     },
     "update-node-modules-with-npm-dist": {
       "executor": "devextreme-nx-infra-plugin:copy-files",
@@ -114,9 +131,12 @@
           }
         ]
       },
-      "outputs": ["{projectRoot}/node_modules/devextreme-angular/**/*"],
-      "cache": true,
-      "inputs": ["default"]
+      "outputs": [
+        "{projectRoot}/node_modules/devextreme-angular/**/*"
+      ],
+      "inputs": [
+        "default"
+      ]
     },
     "generate-components": {
       "executor": "devextreme-nx-infra-plugin:generate-components",
@@ -133,8 +153,9 @@
           "./src/ui/popup/index.ts"
         ]
       },
-      "cache": false,
-      "inputs": ["default"],
+      "inputs": [
+        "default"
+      ],
       "outputs": [
         "{projectRoot}/src/ui/**/*",
         "!{projectRoot}/src/ui/popup/service/**/*",
@@ -146,7 +167,9 @@
     },
     "regenerate": {
       "executor": "nx:run-commands",
-      "dependsOn": ["devextreme-metadata:generate"],
+      "dependsOn": [
+        "devextreme-metadata:generate"
+      ],
       "options": {
         "commands": [
           "pnpm --workspace-root nx clean:src-ui devextreme-angular",
@@ -162,8 +185,9 @@
         "{projectRoot}/src/common/index.ts",
         "{projectRoot}/metadata/generated/**/*"
       ],
-      "cache": false,
-      "inputs": ["default"]
+      "inputs": [
+        "default"
+      ]
     },
     "build": {
       "executor": "nx:run-commands",
@@ -187,8 +211,9 @@
         "{projectRoot}/",
         "{projectRoot}/npm/dist"
       ],
-      "cache": true,
-      "inputs": ["default"],
+      "inputs": [
+        "default"
+      ],
       "configurations": {
         "testing": {
           "env": {
@@ -249,8 +274,7 @@
       ],
       "outputs": [
         "{projectRoot}/tests/src/server/component-names.ts"
-      ],
-      "cache": true
+      ]
     },
     "clean:tests": {
       "executor": "devextreme-nx-infra-plugin:clean",
@@ -278,8 +302,7 @@
       "outputs": [
         "{projectRoot}/tests/dist/**/*",
         "{projectRoot}/tests/dist/**/*.js.map"
-      ],
-      "cache": true
+      ]
     },
     "copy:dist-dx-angular-to-tests-dist": {
       "executor": "devextreme-nx-infra-plugin:copy-files",
@@ -317,76 +340,99 @@
       "executor": "devextreme-nx-infra-plugin:karma-multi-env",
       "options": {
         "karmaConfig": "karma.conf.js",
-        "environments": ["client", "server", "hydration"]
+        "environments": [
+          "client",
+          "server",
+          "hydration"
+        ]
       },
-      "dependsOn": ["build:tests"],
+      "dependsOn": [
+        "build:tests"
+      ],
       "inputs": [
         "default",
         "test",
         "{projectRoot}/tests/dist/**/*"
-      ],
-      "cache": true
+      ]
     },
     "test:components-client": {
       "executor": "devextreme-nx-infra-plugin:karma-multi-env",
       "options": {
         "karmaConfig": "karma.conf.js",
-        "environments": ["client"]
+        "environments": [
+          "client"
+        ]
       },
-      "dependsOn": ["build:tests"],
+      "dependsOn": [
+        "build:tests"
+      ],
       "inputs": [
         "default",
         "test",
         "{projectRoot}/tests/dist/**/*"
-      ],
-      "cache": true
+      ]
     },
     "test:components-client-debug": {
       "executor": "devextreme-nx-infra-plugin:karma-multi-env",
       "options": {
         "karmaConfig": "karma.conf.js",
-        "environments": ["client"],
+        "environments": [
+          "client"
+        ],
         "debug": true
       },
-      "dependsOn": ["build:tests"]
+      "dependsOn": [
+        "build:tests"
+      ]
     },
     "test:components-server": {
       "executor": "devextreme-nx-infra-plugin:karma-multi-env",
       "options": {
         "karmaConfig": "karma.conf.js",
-        "environments": ["server", "hydration"]
+        "environments": [
+          "server",
+          "hydration"
+        ]
       },
-      "dependsOn": ["build:tests"],
+      "dependsOn": [
+        "build:tests"
+      ],
       "inputs": [
         "default",
         "test",
         "{projectRoot}/tests/dist/**/*"
-      ],
-      "cache": true
+      ]
     },
     "test:components-server-debug": {
       "executor": "devextreme-nx-infra-plugin:karma-multi-env",
       "options": {
         "karmaConfig": "karma.conf.js",
-        "environments": ["server"],
+        "environments": [
+          "server"
+        ],
         "debug": true
       },
-      "dependsOn": ["build:tests"],
+      "dependsOn": [
+        "build:tests"
+      ],
       "inputs": [
         "default",
         "test",
         "{projectRoot}/tests/dist/**/*"
-      ],
-      "cache": true
+      ]
     },
     "watch:test": {
       "executor": "devextreme-nx-infra-plugin:karma-multi-env",
       "options": {
         "karmaConfig": "karma.conf.js",
         "watch": true,
-        "environments": ["client"]
+        "environments": [
+          "client"
+        ]
       },
-      "dependsOn": ["build:tests"],
+      "dependsOn": [
+        "build:tests"
+      ],
       "inputs": [
         "default",
         "test",
@@ -397,15 +443,20 @@
       "executor": "devextreme-nx-infra-plugin:karma-multi-env",
       "options": {
         "karmaConfig": "karma.conf.js",
-        "environments": ["client", "server", "hydration"]
+        "environments": [
+          "client",
+          "server",
+          "hydration"
+        ]
       },
-      "dependsOn": ["build:tests"],
+      "dependsOn": [
+        "build:tests"
+      ],
       "inputs": [
         "default",
         "test",
         "{projectRoot}/tests/dist/**/*"
-      ],
-      "cache": true
+      ]
     },
     "watch:spec": {
       "executor": "nx:run-commands",

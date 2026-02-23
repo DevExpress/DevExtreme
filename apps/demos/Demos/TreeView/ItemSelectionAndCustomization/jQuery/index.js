@@ -13,6 +13,7 @@ $(() => {
     width: 340,
     height: 320,
     showCheckBoxesMode: 'normal',
+    disabledNodeSelectionMode: 'never',
     onSelectionChanged(e) {
       syncSelection(e.component);
     },
@@ -61,6 +62,15 @@ $(() => {
       recursiveCheckBox.option('disabled', e.value === 'single');
     },
   }).dxSelectBox('instance');
+
+  $('#disabledNodeSelectionMode').dxSelectBox({
+    items: ['never', 'recursiveAndAll'],
+    inputAttr: { 'aria-label': 'Disabled Node Selection Mode' },
+    value: 'never',
+    onValueChanged(e) {
+      treeView.option('disabledNodeSelectionMode', e.value);
+    },
+  });
 
   const recursiveCheckBox = $('#selectNodesRecursive').dxCheckBox({
     text: 'Select Nodes Recursive',

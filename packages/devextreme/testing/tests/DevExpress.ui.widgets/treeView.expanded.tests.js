@@ -8,13 +8,15 @@ import 'ui/tree_view';
 
 import 'fluent_blue_light.css!';
 
-const TREEVIEW_ITEM_CLASS = 'dx-treeview-item';
-const TREEVIEW_NODE_CLASS = 'dx-treeview-node';
-const TREEVIEW_NODE_CONTAINER_CLASS = `${TREEVIEW_NODE_CLASS}-container`;
-const TREEVIEW_NODE_CONTAINER_OPENED_CLASS = `${TREEVIEW_NODE_CLASS}-container-opened`;
-const TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS = 'dx-treeview-toggle-item-visibility';
-const TREEVIEW_CUSTOM_EXPAND_ICON_CLASS = 'dx-treeview-custom-expand-icon';
-const TREEVIEW_CUSTOM_COLLAPSE_ICON_CLASS = 'dx-treeview-custom-collapse-icon';
+import {
+    NODE_CLASS as TREEVIEW_NODE_CLASS,
+    ITEM_CLASS as TREEVIEW_ITEM_CLASS,
+    NODE_CONTAINER_CLASS as TREEVIEW_NODE_CONTAINER_CLASS,
+    OPENED_NODE_CONTAINER_CLASS as TREEVIEW_NODE_CONTAINER_OPENED_CLASS,
+    TOGGLE_ITEM_VISIBILITY_CLASS as TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS,
+    CUSTOM_EXPAND_ICON_CLASS as TREEVIEW_CUSTOM_EXPAND_ICON_CLASS,
+    CUSTOM_COLLAPSE_ICON_CLASS as TREEVIEW_CUSTOM_COLLAPSE_ICON_CLASS
+} from '__internal/ui/tree_view/tree_view.base';
 
 const { module, test, testStart } = QUnit;
 
@@ -54,7 +56,7 @@ module('Expanded items', {
             items: data
         });
 
-        assert.equal($treeView.find(`.${TREEVIEW_NODE_CONTAINER_OPENED_CLASS}`).length, 3);
+        assert.strictEqual($treeView.find(`.${TREEVIEW_NODE_CONTAINER_OPENED_CLASS}`).length, 3);
     });
 
     test('expansion by itemData', function(assert) {
@@ -85,7 +87,7 @@ module('Expanded items', {
         const done = assert.async();
         treeView.expandItem($firstItem.get(0)).done(() => { assert.ok('expand is success'); done(); });
 
-        assert.equal($treeView.find(`.${TREEVIEW_NODE_CONTAINER_OPENED_CLASS}`).length, 1);
+        assert.strictEqual($treeView.find(`.${TREEVIEW_NODE_CONTAINER_OPENED_CLASS}`).length, 1);
         assert.ok(itemExpandedHandler.calledOnce);
 
         const args = itemExpandedHandler.getCall(0).args[0];
@@ -104,7 +106,7 @@ module('Expanded items', {
             deferRendering: false
         });
 
-        assert.equal($treeView.find('.dx-treeview-node').length, 3, 'all items have been rendered');
+        assert.strictEqual($treeView.find('.dx-treeview-node').length, 3, 'all items have been rendered');
     });
 
     test('onContentReady rises after first expand', function(assert) {
@@ -120,11 +122,11 @@ module('Expanded items', {
 
         const done = assert.async(3);
         treeView.expandItem($firstItem.get(0)).done(() => { assert.ok('expand is success'); done(); });
-        assert.equal(onContentReadyHandler.callCount, 2);
+        assert.strictEqual(onContentReadyHandler.callCount, 2);
 
         treeView.collapseItem($firstItem.get(0)).done(() => { assert.ok('expand is success'); done(); });
         treeView.expandItem($firstItem.get(0)).done(() => { assert.ok('collapse is success'); done(); });
-        assert.equal(onContentReadyHandler.callCount, 2);
+        assert.strictEqual(onContentReadyHandler.callCount, 2);
     });
 
     test('onItemExpanded callback after click should have correct arguments', function(assert) {
@@ -165,7 +167,7 @@ module('Expanded items', {
         const done = assert.async();
         treeView.collapseItem($firstItem).done(() => { assert.ok('expand is success'); done(); });
 
-        assert.equal($treeView.find(`.${TREEVIEW_NODE_CONTAINER_OPENED_CLASS}`).length, 1);
+        assert.strictEqual($treeView.find(`.${TREEVIEW_NODE_CONTAINER_OPENED_CLASS}`).length, 1);
         assert.ok(itemCollapsedHandler.calledOnce);
 
         const args = itemCollapsedHandler.getCall(0).args[0];
@@ -217,7 +219,7 @@ module('Expanded items', {
         assert.ok(treeView.option('items')[0].expanded, 'item was expanded');
     });
 
-    test('disabled item should not expand on click', function(assert) {
+    test('disabled item should expand on click', function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].disabled = true;
         const $treeView = initTree({
@@ -225,14 +227,14 @@ module('Expanded items', {
         });
         const treeView = $treeView.dxTreeView('instance');
         const $firstItem = $treeView.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0);
-        const $icon = $firstItem.parent().find(`> .${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`);
+        const $icon = $firstItem.find(`.${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`);
 
         $icon.trigger('dxclick');
 
-        assert.ok(!treeView.option('items')[0].expanded, 'disabled item was not expanded');
+        assert.ok(treeView.option('items')[0].expanded, 'disabled item was expanded');
     });
 
-    test('disabled item with custom expander icons should not expand on click', function(assert) {
+    test('disabled item with custom expander icons should expand on click', function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].disabled = true;
         const $treeView = initTree({
@@ -245,7 +247,7 @@ module('Expanded items', {
 
         $icon.trigger('dxclick');
 
-        assert.notOk(treeView.option('items')[0].expanded, 'disabled item was not expanded');
+        assert.ok(treeView.option('items')[0].expanded, 'disabled item was expanded');
     });
 
     test('expanded disabled item should not collapse on click', function(assert) {
@@ -292,7 +294,7 @@ module('Expanded items', {
         assert.notOk($expandIcon.is(':visible'));
     });
 
-    test('expanded disabled item with custom icon should not collapse on click', function(assert) {
+    test('expanded disabled item with custom icon should collapse on click', function(assert) {
         const data = $.extend(true, [], DATA[5]);
         data[0].expanded = true;
         data[0].disabled = true;
@@ -306,7 +308,7 @@ module('Expanded items', {
 
         $icon.trigger('dxclick');
 
-        assert.ok(treeView.option('items')[0].expanded, 'disabled item was not collapsed');
+        assert.notOk(treeView.option('items')[0].expanded, 'disabled item was collapsed');
     });
 
     test('expanded item with custom icon should collapse on click', function(assert) {
@@ -454,7 +456,7 @@ module('Expanded items', {
 
         $item.trigger('dxclick');
 
-        assert.equal(itemExpanded, 0, 'event was not fired');
+        assert.strictEqual(itemExpanded, 0, 'event was not fired');
     });
 
     test('not expand parent items in non-recursive case', function(assert) {
@@ -469,7 +471,7 @@ module('Expanded items', {
         treeView.expandItem(11).done(() => { assert.ok('expand is success'); done(); });
 
         let $items = $treeView.find('.dx-treeview-node');
-        assert.equal($items.length, 1, 'root item was expanded');
+        assert.strictEqual($items.length, 1, 'root item was expanded');
 
         const nodes = treeView.getNodes();
         assert.notOk(nodes[0].expanded, 'root node is collapsed');
@@ -477,7 +479,7 @@ module('Expanded items', {
 
         treeView.expandItem(1).done(() => { assert.ok('expand is success'); done(); });
         $items = $treeView.find('.dx-treeview-node');
-        assert.equal($items.length, 3, 'root item was expanded');
+        assert.strictEqual($items.length, 3, 'root item was expanded');
     });
 
     test('expand parent items in recursive case', function(assert) {
@@ -491,7 +493,7 @@ module('Expanded items', {
         treeView.expandItem(11).done(() => { assert.ok('expand is success'); done(); });
 
         const $items = $treeView.find('.dx-treeview-node');
-        assert.equal($items.length, 3, 'root item was expanded');
+        assert.strictEqual($items.length, 3, 'root item was expanded');
 
         const nodes = treeView.getNodes();
         assert.ok(nodes[0].expanded, 'root node is expanded');
@@ -573,7 +575,7 @@ module('Expanded items', {
         treeView.expandItem(11).done(() => { assert.ok('expand is success'); done(); });
 
         const $items = $treeView.find('.dx-treeview-node');
-        assert.equal($items.length, 2, 'root item was expanded');
+        assert.strictEqual($items.length, 2, 'root item was expanded');
 
         const nodes = treeView.getNodes();
         assert.ok(nodes[0].expanded, 'root node is expanded');
@@ -651,7 +653,7 @@ module('Expanded items', {
         assert.notOk(nodes[0].items[0].items[0].expanded, 'item 111');
     });
 
-    test('Disabled item doesn\'t expand when using the expandAll method', function(assert) {
+    test('Disabled item should expand when using the expandAll method', function(assert) {
         const $treeView = initTree({
             items: [{
                 text: '1',
@@ -676,18 +678,18 @@ module('Expanded items', {
         const $node2 = $nodes.eq(1);
         const $node3 = $nodes.eq(2);
 
-        assert.equal($nodes.length, 3, 'nodes count');
+        assert.strictEqual($nodes.length, 3, 'nodes count');
         assert.ok(isNodeExpanded($node1), 'first node is expanded');
-        assert.equal(getNodeItemId($node1), 1, 'id for first node');
+        assert.strictEqual(getNodeItemId($node1), 1, 'id for first node');
 
         assert.ok(isNodeExpanded($node2), 'second node is expanded');
-        assert.equal(getNodeItemId($node2), 11, 'id for second node');
+        assert.strictEqual(getNodeItemId($node2), 11, 'id for second node');
 
-        assert.notOk(isNodeExpanded($node3), 'third node is expanded');
-        assert.equal(getNodeItemId($node3), 111, 'id for third node');
+        assert.ok(isNodeExpanded($node3), 'third node is expanded');
+        assert.strictEqual(getNodeItemId($node3), 111, 'id for third node');
     });
 
-    test('Disabled item doesn\'t expand when using the expandAll method and the expandNodesRecursive is enabled', function(assert) {
+    test('Disabled item should expand when using the expandAll method and the expandNodesRecursive is enabled', function(assert) {
         const $treeView = initTree({
             expandNodesRecursive: true,
             items: [{
@@ -713,15 +715,15 @@ module('Expanded items', {
         const $node2 = $nodes.eq(1);
         const $node3 = $nodes.eq(2);
 
-        assert.equal($nodes.length, 3, 'nodes count');
+        assert.strictEqual($nodes.length, 3, 'nodes count');
         assert.ok(isNodeExpanded($node1), 'first node is expanded');
-        assert.equal(getNodeItemId($node1), 1, 'id for first node');
+        assert.strictEqual(getNodeItemId($node1), 1, 'id for first node');
 
         assert.ok(isNodeExpanded($node2), 'second node is expanded');
-        assert.equal(getNodeItemId($node2), 11, 'id for second node');
+        assert.strictEqual(getNodeItemId($node2), 11, 'id for second node');
 
-        assert.notOk(isNodeExpanded($node3), 'third node is expanded');
-        assert.equal(getNodeItemId($node3), 111, 'id for third node');
+        assert.ok(isNodeExpanded($node3), 'third node is expanded');
+        assert.strictEqual(getNodeItemId($node3), 111, 'id for third node');
     });
 
     test('Expand all items when the expandNodesRecursive is enabled', function(assert) {
@@ -749,15 +751,15 @@ module('Expanded items', {
         const $node2 = $nodes.eq(1);
         const $node3 = $nodes.eq(2);
 
-        assert.equal($nodes.length, 3, 'nodes count');
+        assert.strictEqual($nodes.length, 3, 'nodes count');
         assert.ok(isNodeExpanded($node1), 'first node is expanded');
-        assert.equal(getNodeItemId($node1), 1, 'id for first node');
+        assert.strictEqual(getNodeItemId($node1), 1, 'id for first node');
 
         assert.ok(isNodeExpanded($node2), 'second node is expanded');
-        assert.equal(getNodeItemId($node2), 11, 'id for second node');
+        assert.strictEqual(getNodeItemId($node2), 11, 'id for second node');
 
         assert.ok(isNodeExpanded($node3), 'third node is expanded');
-        assert.equal(getNodeItemId($node3), 111, 'id for third node');
+        assert.strictEqual(getNodeItemId($node3), 111, 'id for third node');
     });
 
     test('Content ready event is thrown once when the expandAll is called', function(assert) {
@@ -912,8 +914,8 @@ module('Expanded items', {
                         const $item2 = wrapper.getElement().find('[aria-level="2"]');
 
                         assert.notEqual(wrapper.instance, undefined);
-                        assert.equal($item1.is(':visible'), true);
-                        assert.equal($item2.is(':visible'), expanded);
+                        assert.strictEqual($item1.is(':visible'), true);
+                        assert.strictEqual($item2.is(':visible'), expanded);
                         wrapper.instance.dispose();
                     });
                 });
@@ -930,7 +932,7 @@ module('Expanded items', {
                     wrapper.instance.expandItem(argumentGetter($item1)).done(() => { assert.ok('expand is success'); done(); });
 
                     const $item1_1 = wrapper.getElement().find('[aria-level="2"]');
-                    assert.equal($item1_1.is(':visible'), true);
+                    assert.strictEqual($item1_1.is(':visible'), true);
                     wrapper.instance.dispose();
                 }
 
@@ -955,8 +957,8 @@ module('Expanded items', {
                     wrapper.instance.expandAll();
 
                     const $item1_1 = wrapper.getElement().find('[aria-level="2"]');
-                    assert.equal($item1_1.length, 1);
-                    assert.equal($item1_1.is(':visible'), true);
+                    assert.strictEqual($item1_1.length, 1);
+                    assert.strictEqual($item1_1.is(':visible'), true);
                     wrapper.instance.dispose();
                 });
 
@@ -972,9 +974,9 @@ module('Expanded items', {
 
                     const $item1_1 = wrapper.getElement().find('[aria-level="2"]');
                     if(expanded) {
-                        assert.equal($item1_1.is(':hidden'), true);
+                        assert.strictEqual($item1_1.is(':hidden'), true);
                     } else {
-                        assert.equal($item1_1.length, 0);
+                        assert.strictEqual($item1_1.length, 0);
                     }
                     wrapper.instance.dispose();
                 }
@@ -1000,8 +1002,8 @@ module('Expanded items', {
                     wrapper.instance.collapseAll();
 
                     const $item1_1 = wrapper.getElement().find('[aria-level="2"]');
-                    assert.equal($item1_1.length, 1);
-                    assert.equal($item1_1.is(':hidden'), true);
+                    assert.strictEqual($item1_1.length, 1);
+                    assert.strictEqual($item1_1.is(':hidden'), true);
                     wrapper.instance.dispose();
                 });
             });
@@ -1019,7 +1021,7 @@ module('Expanded items', {
 
                 wrapper.instance.expandItem(1);
                 const item1_1 = wrapper.getElement().find('[data-item-id="2"]');
-                assert.equal(item1_1.length, 1, 'item1_1 is rendered');
+                assert.strictEqual(item1_1.length, 1, 'item1_1 is rendered');
             });
 
             function createOptions(options, items) {
