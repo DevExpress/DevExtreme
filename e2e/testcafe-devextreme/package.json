@@ -1,6 +1,6 @@
 {
   "name": "devextreme-testcafe-tests",
-  "version": "25.2.4",
+  "version": "25.2.5",
   "scripts": {
     "test": "ts-node ./runner.ts",
     "lint": "eslint",
@@ -19,7 +19,7 @@
     "minimist": "1.2.8",
     "mockdate": "3.0.5",
     "nconf": "0.12.1",
-    "testcafe": "3.7.2",
+    "testcafe": "catalog:",
     "testcafe-reporter-spec-time": "4.0.0",
     "ts-node": "10.9.2",
     "eslint": "catalog:",

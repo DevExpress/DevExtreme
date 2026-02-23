@@ -7,39 +7,9 @@ $(() => {
     return typeof obj;
   };
 
-  const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore';
-  const url = `${BASE_PATH}/api/DataGridCollaborativeEditing/`;
+  const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore/';
+  const url = `${BASE_PATH}api/DataGridCollaborativeEditing/`;
   const groupId = new DevExpress.data.Guid().toString();
-
-  function fetchAntiForgeryToken() {
-    return $.ajax({
-      url: `${BASE_PATH}/api/Common/GetAntiForgeryToken`,
-      method: 'GET',
-      xhrFields: { withCredentials: true },
-      cache: false,
-    }).fail((xhr) => {
-      const error = xhr.responseJSON?.message || xhr.statusText || 'Unknown error';
-      throw new Error(`Failed to retrieve anti-forgery token: ${error}`);
-    });
-  }
-
-  function getAntiForgeryTokenValue() {
-    const tokenMeta = document.querySelector('meta[name="csrf-token"]');
-    if (tokenMeta) {
-      const headerName = tokenMeta.dataset.headerName || 'RequestVerificationToken';
-      const token = tokenMeta.getAttribute('content');
-      return $.Deferred().resolve({ headerName, token });
-    }
-
-    return fetchAntiForgeryToken().then((tokenData) => {
-      const meta = document.createElement('meta');
-      meta.name = 'csrf-token';
-      meta.content = tokenData.token;
-      meta.dataset.headerName = tokenData.headerName;
-      document.head.appendChild(meta);
-      return tokenData;
-    });
-  }
 
   const createStore = function () {
     return DevExpress.data.AspNet.createStore({
@@ -48,13 +18,8 @@ $(() => {
       insertUrl: url,
       updateUrl: url,
       deleteUrl: url,
-      async onBeforeSend(_, ajaxOptions) {
+      onBeforeSend(method, ajaxOptions) {
         ajaxOptions.data.groupId = groupId;
-        const tokenData = await getAntiForgeryTokenValue();
-        ajaxOptions.xhrFields = {
-          withCredentials: true,
-          headers: { [tokenData.headerName]: tokenData.token },
-        };
       },
     });
   };
@@ -94,7 +59,7 @@ $(() => {
           lookup: {
             dataSource: DevExpress.data.AspNet.createStore({
               key: 'ID',
-              loadUrl: `${BASE_PATH}/api/DataGridStatesLookup`,
+              loadUrl: `${BASE_PATH}api/DataGridStatesLookup`,
             }),
             displayExpr: 'Name',
             valueExpr: 'ID',
@@ -125,7 +90,7 @@ $(() => {
   createDataGrid('grid1', store1);
   createDataGrid('grid2', store2);
 
-  const hubUrl = `${BASE_PATH}/dataGridCollaborativeEditingHub?GroupId=${groupId}`;
+  const hubUrl = `${BASE_PATH}dataGridCollaborativeEditingHub?GroupId=${groupId}`;
   const connection = new signalR.HubConnectionBuilder()
     .withUrl(hubUrl, {
       skipNegotiation: true,
