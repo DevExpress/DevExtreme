@@ -80,8 +80,8 @@ catalogs:
       specifier: ^4.11.1
       version: 4.11.1
     devexpress-diagram:
-      specifier: 2.2.24
-      version: 2.2.24
+      specifier: 2.2.25
+      version: 2.2.25
     devexpress-gantt:
       specifier: 4.1.64
       version: 4.1.64
@@ -392,7 +392,7 @@ importers:
         version: 2.6.12
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.24
+        version: 2.2.25
       devexpress-gantt:
         specifier: 'catalog:'
         version: 4.1.64
@@ -1158,7 +1158,7 @@ importers:
         version: 1.8.0
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.24
+        version: 2.2.25
       devexpress-gantt:
         specifier: 'catalog:'
         version: 4.1.64
@@ -1306,7 +1306,7 @@ importers:
         version: 1.8.0
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.24
+        version: 2.2.25
       devexpress-gantt:
         specifier: 'catalog:'
         version: 4.1.64
@@ -9798,8 +9798,8 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
-  devexpress-diagram@2.2.24:
-    resolution: {integrity: sha512-PD3mW50OFS44PnqUq2ywJHYDeNFWCIPhXCeLHkzg2BEdDufGGpW73Ux5z3F9NtW91sP0qNE1f1PrsR+3CIN0jA==}
+  devexpress-diagram@2.2.25:
+    resolution: {integrity: sha512-gcj+7AyH6HEzURTbexqbIciCGNFOAbypM6Gi2OuyvtQNR04WQCYozh8C3H0kLfHBNpRm2nEyjJWpV9MWThM8hA==}
 
   devexpress-gantt@4.1.64:
     resolution: {integrity: sha512-q9+diTugmzf3YNzQ4Xutr7ndgCAdpH7IyjTzGy2SiY5I+ePf2BaAZ0R3LGADBC5TuFS2OamIhF0HOj4ALgkf+A==}
@@ -30220,7 +30220,7 @@ snapshots:
       defined: 1.0.1
       minimist: 1.2.8
 
-  devexpress-diagram@2.2.24:
+  devexpress-diagram@2.2.25:
     dependencies:
       '@devexpress/utils': 1.4.7
       es6-object-assign: 1.1.0
