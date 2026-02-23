@@ -99,7 +99,7 @@ describe('Appointment tooltip behavior', () => {
   });
 
   it('should not delete appointment by Delete key when editing.allowDeleting=false', async () => {
-    const dataSource = [
+    const data = [
       {
         text: 'Apt1',
         startDate: new Date(2017, 4, 22, 9, 30),
@@ -113,7 +113,7 @@ describe('Appointment tooltip behavior', () => {
     ];
 
     const { POM, scheduler } = await createScheduler({
-      dataSource,
+      dataSource: [...data],
       views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
       currentView: 'month',
       currentDate: new Date(2017, 4, 22),
@@ -129,11 +129,11 @@ describe('Appointment tooltip behavior', () => {
     tooltipScrollableContent?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
     tooltipScrollableContent?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', bubbles: true }));
 
-    expect(scheduler.option('dataSource')).toEqual(dataSource);
+    expect((scheduler as any).getDataSource().items()).toEqual([...data]);
   });
 
   it('should not delete disabled appointment by Delete key when focused in tooltip from collector', async () => {
-    const dataSource = [
+    const data = [
       {
         text: 'Apt1',
         startDate: new Date(2017, 4, 22, 9, 30),
@@ -148,7 +148,7 @@ describe('Appointment tooltip behavior', () => {
     ];
 
     const { POM, scheduler } = await createScheduler({
-      dataSource,
+      dataSource: [...data],
       views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
       currentView: 'month',
       currentDate: new Date(2017, 4, 22),
@@ -161,6 +161,6 @@ describe('Appointment tooltip behavior', () => {
     tooltipScrollableContent?.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
     tooltipScrollableContent?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete', bubbles: true }));
 
-    expect(scheduler.option('dataSource')).toEqual(dataSource);
+    expect((scheduler as any).getDataSource().items()).toEqual([...data]);
   });
 });
