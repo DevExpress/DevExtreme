@@ -13,7 +13,7 @@ Toggles between multiple and single node selection.
 Specifies if users can select disabled nodes indirectly.
 
 - [selectNodesRecursive](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#selectNodesRecursive)    
-Configures whether child nodes are selected with parent nodes.
+Configures whether selection is updated between child and parent nodes.
 
 - [selectByClick](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#selectByClick)    
 Allows users to select items with a click or tap. 
