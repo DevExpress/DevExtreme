@@ -1,4 +1,3 @@
-import { within } from '@testing-library/dom';
 import { ToolbarModel } from '@ts/scheduler/__tests__/__mock__/model/toolbar';
 
 import { APPOINTMENT_POPUP_CLASS } from '../../../appointment_popup/m_popup';
@@ -8,17 +7,14 @@ import { createAppointmentModel } from './appointment';
 import { PopupModel } from './popup';
 
 const getTexts = (
-  cells: ArrayLike<Element>,
+  cells: NodeListOf<Element>,
 ): string[] => Array.from(cells).map((cell) => cell.textContent?.trim() ?? '');
 
 export class SchedulerModel {
   container: HTMLDivElement;
 
-  private readonly queries: ReturnType<typeof within>;
-
   constructor(container: HTMLDivElement) {
     this.container = container;
-    this.queries = within(container);
   }
 
   get popup(): PopupModel {
@@ -26,7 +22,7 @@ export class SchedulerModel {
   }
 
   get toolbar(): ToolbarModel {
-    return new ToolbarModel(this.queries.getByRole('toolbar'));
+    return new ToolbarModel(this.container.querySelector('.dx-scheduler-header'));
   }
 
   getStatusContent(): string {
@@ -35,22 +31,20 @@ export class SchedulerModel {
 
   getAppointment(text?: string): AppointmentModel<HTMLDivElement | null> {
     if (!text) {
-      const appointments = this.getAppointments();
-      return appointments.length > 0 ? appointments[0] : createAppointmentModel(null);
+      return createAppointmentModel(this.container.querySelector('.dx-scheduler-appointment'));
     }
     return this.getAppointments()
       .find((appointment) => appointment.getText() === text) ?? createAppointmentModel(null);
   }
 
   getAppointments(): AppointmentModel[] {
-    const allButtons = this.queries.queryAllByRole('button') as HTMLElement[];
-    const appointments = allButtons.filter((btn) => btn.classList.contains('dx-scheduler-appointment'));
-    return appointments.map((element) => createAppointmentModel(element as HTMLDivElement));
+    return [...this.container.querySelectorAll('.dx-scheduler-appointment')].map(
+      (element) => createAppointmentModel(element as HTMLDivElement),
+    );
   }
 
   getCollectorTexts(): string[] {
-    const allButtons = this.queries.queryAllByRole('button') as HTMLElement[];
-    const collectors = allButtons.filter((btn) => btn.classList.contains('dx-scheduler-appointment-collector'));
+    const collectors = this.container.querySelectorAll('.dx-scheduler-appointment-collector');
     return getTexts(collectors);
   }
 

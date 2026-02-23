@@ -1,20 +1,15 @@
-import { within } from '@testing-library/dom';
-
 export class ToolbarModel {
-  element: HTMLElement;
+  element: HTMLDivElement | null;
 
-  private readonly queries: ReturnType<typeof within>;
-
-  constructor(element: HTMLElement) {
+  constructor(element: HTMLDivElement | null) {
     this.element = element;
-    this.queries = within(element);
   }
 
-  getPrevButton(): HTMLElement {
-    return this.queries.getByRole('button', { name: 'Previous page' }) as HTMLElement;
+  getPrevButton(): HTMLDivElement | null | undefined {
+    return this.element?.querySelector('.dx-scheduler-navigator-previous');
   }
 
-  getNextButton(): HTMLElement {
-    return this.queries.getByRole('button', { name: 'Next page' }) as HTMLElement;
+  getNextButton(): HTMLDivElement | null | undefined {
+    return this.element?.querySelector('.dx-scheduler-navigator-next');
   }
 }
