@@ -2,9 +2,9 @@ import type { AllDayPanelOccupation, FilterOptions, MinimalAppointmentEntity } f
 import { isAppointmentMatchedResources } from './is_appointment_matched_resources';
 
 export const filterByAttributes = <T extends MinimalAppointmentEntity & AllDayPanelOccupation>(
-  entities: T[],
+  appointments: T[],
   { resourceManager, showAllDayPanel, supportAllDayPanel }: FilterOptions,
-): T[] => entities.filter((appointment): boolean => {
+): T[] => appointments.filter((appointment): boolean => {
     if (!appointment.visible) {
       return false;
     }

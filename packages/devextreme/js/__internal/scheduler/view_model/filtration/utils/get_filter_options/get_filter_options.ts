@@ -1,15 +1,16 @@
 import type Scheduler from '../../../../m_scheduler';
 import type { ViewType } from '../../../../types';
-import { getCompareOptions } from '../../../common/get_compare_options';
 import { shiftIntervals } from '../../../common/shift_intervals';
-import type { FilterOptions } from '../../../types';
+import type { CompareOptions, FilterOptions } from '../../../types';
 import { getVisibleDateTimeIntervals } from './get_visible_date_time_intervals';
 
 const VIEWS_WITH_ALL_DAY_PANEL: ViewType[] = ['day', 'week', 'workWeek'];
 const DATE_TIME_VIEWS: ViewType[] = ['day', 'week', 'workWeek', 'timelineDay', 'timelineWeek', 'timelineWorkWeek'];
 
-export const getFilterOptions = (schedulerStore: Scheduler): FilterOptions => {
-  const compareOptions = getCompareOptions(schedulerStore);
+export const getFilterOptions = (
+  schedulerStore: Scheduler,
+  compareOptions: CompareOptions,
+): FilterOptions => {
   const viewOffset = schedulerStore.getViewOffsetMs();
   const viewType = schedulerStore.currentView.type;
   const supportAllDayPanel = VIEWS_WITH_ALL_DAY_PANEL.includes(viewType);
@@ -23,7 +24,6 @@ export const getFilterOptions = (schedulerStore: Scheduler): FilterOptions => {
     resourceManager: schedulerStore.resourceManager,
     timeZone: schedulerStore.getTimeZone(),
     dataAccessor: schedulerStore._dataAccessors,
-    viewOffset,
     firstDayOfWeek: schedulerStore.option('firstDayOfWeek'),
     allDayIntervals: shiftIntervals(
       getVisibleDateTimeIntervals(compareOptions, true),
