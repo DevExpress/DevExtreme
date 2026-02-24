@@ -22,7 +22,7 @@ describe('DST/STD for recurrence appointments, T804886 and T856624', () => {
     document.body.innerHTML = '';
   });
 
-  it('Any recurrence appt part should have correct tooltip and popup if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', async () => {
+  it('Recurring appointments should have correct startDate and endDate if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', async () => {
     // NOTE: The daylight saving changed in Montreal on 10.03.2019 and in Paris on 31.03.2019
     const { scheduler, POM } = await createScheduler({
       dataSource: [
@@ -92,7 +92,7 @@ describe('DST/STD for recurrence appointments, T804886 and T856624', () => {
     expect(appointment2.getDisplayDate()).toBe('3:00 AM - 6:00 AM');
   });
 
-  it('Recurrence appt part at the time of DST-end should have correct tooltip and popup if recurrence starts in DST and ends in STD in custom timezone, appointment timezone is set (T804886)', async () => {
+  it('Recurring appt part at the time of DST-end should have correct startDate and endDate if recurrence starts in DST and ends in STD in custom timezone, appointment timezone is set (T804886)', async () => {
     // NOTE: The daylight saving changed backward in Montreal on 03.11.2019 and
     // in Paris on 27.10.2019
     const { scheduler, POM } = await createScheduler({
@@ -186,7 +186,7 @@ describe('Appointments with DST/STD cases', () => {
     expect(appointment.getDisplayDate()).toBe('1:00 AM - 3:00 AM');
   });
 
-  it('Second recurring appointment which started in STD and ended in DST time should have correct start & end dates & position', async () => {
+  it('Second recurring appointment which started in STD and ended in DST time should have correct start & end dates', async () => {
     const startDate = new Date(1520748000000);
     const endDate = new Date(1520751600000);
 
@@ -227,7 +227,7 @@ describe('Appointments with DST/STD cases', () => {
     });
 
     const appointments = POM.getAppointments();
-    expect(appointments.length).toBeGreaterThan(0);
+    expect(appointments.length).toEqual(1);
     expect(appointments[0].getText()).toBe('DST');
   });
 
@@ -247,7 +247,7 @@ describe('Appointments with DST/STD cases', () => {
     });
 
     const appointments = POM.getAppointments();
-    expect(appointments.length).toBeGreaterThan(0);
+    expect(appointments.length).toEqual(1);
     expect(appointments[0].getText()).toBe('November 4');
   });
 
@@ -302,11 +302,11 @@ describe('Appointments with DST/STD cases', () => {
     jest.runAllTimers();
     jest.useRealTimers();
 
-    const tooltipDeleteButton = document.querySelector<HTMLElement>(
-      '.dx-tooltip-appointment-item-delete-button',
-    );
+    const tooltipItem = POM.getTooltipAppointment();
+    expect(tooltipItem).not.toBeNull();
+    const tooltipDeleteButton = tooltipItem?.querySelector<HTMLElement>('.dx-tooltip-appointment-item-delete-button');
     expect(tooltipDeleteButton).not.toBeNull();
-    (tooltipDeleteButton as HTMLElement).click();
+    tooltipDeleteButton?.click();
     await new Promise(process.nextTick);
 
     expect(POM.getAppointments().length).toBe(0);
