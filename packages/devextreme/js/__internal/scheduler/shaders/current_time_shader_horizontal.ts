@@ -15,9 +15,9 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
       const $shader = isFirstShader ? this._$shader : this.createShader();
 
       if (this._workSpace.isGroupedByDate()) {
-        this.customizeGroupedByDateShader($shader, i);
+        this._customizeGroupedByDateShader($shader, i);
       } else {
-        this.customizeShader($shader, i);
+        this._customizeShader($shader, i);
       }
 
       if (!isFirstShader) {
@@ -26,11 +26,11 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
     }
   }
 
-  private customizeShader($shader: dxElementWrapper, groupIndex: number): void {
+  _customizeShader($shader: dxElementWrapper, groupIndex: number): void {
     // @ts-expect-error
     const shaderWidth = this._workSpace.getIndicationWidth() as number;
 
-    this.applyShaderWidth($shader, shaderWidth);
+    this._applyShaderWidth($shader, shaderWidth);
 
     if (groupIndex >= 1) {
       const workSpace = this._workSpace;
@@ -41,7 +41,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
     }
   }
 
-  private applyShaderWidth($shader: dxElementWrapper, width: number): void {
+  _applyShaderWidth($shader: dxElementWrapper, width: number): void {
     const maxWidth = getBoundingRect(this._$container.get(0)).width;
     let localWidth = width;
 
@@ -54,7 +54,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
     }
   }
 
-  private customizeGroupedByDateShader($shader: dxElementWrapper, groupIndex: number): void {
+  _customizeGroupedByDateShader($shader: dxElementWrapper, groupIndex: number): void {
     // @ts-expect-error
     const cellCount = this._workSpace.getIndicationCellCount() as number;
     const integerPart = Math.floor(cellCount);
@@ -67,7 +67,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
       : fractionPart * workSpace.getCellWidth();
     let shaderLeft = 0;
 
-    this.applyShaderWidth($shader, shaderWidth);
+    this._applyShaderWidth($shader, shaderWidth);
 
     if (isFirstShaderPart) {
       shaderLeft = workSpace._getCellCount() * workSpace.getCellWidth() * groupIndex;
