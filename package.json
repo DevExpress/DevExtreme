@@ -22,7 +22,8 @@
     "all:pack-and-copy": "nx run-many -t pack-and-copy",
     "demos:prepare": "nx run devextreme-demos:prepare-js",
     "demos:start": "http-server ./apps/demos --port 8080 -c-1",
-    "playwright:test:datagrid-bulk-delete": "playwright test -c e2e/playwright/playwright.config.ts e2e/playwright/tests/datagrid-bulk-delete.spec.ts --project=chromium"
+    "playwright:test:datagrid-bulk-delete": "playwright test -c e2e/playwright/playwright.config.ts e2e/playwright/tests/datagrid-bulk-delete.spec.ts --project=chromium",
+    "playwright:bisect:datagrid-bulk-delete": "node e2e/playwright/scripts/bisect-dx-version.mjs"
   },
   "nx": {},
   "private": true,

@@ -1,4 +1,3 @@
-import fs from 'fs';
 import path from 'path';
 import { pathToFileURL } from 'url';
 import { expect, test } from '@playwright/test';
@@ -13,18 +12,8 @@ test('DataGrid bulk delete should load next page', async ({ page }) => {
     'datagrid-bulk-delete.html'
   );
 
-  const dxScriptCandidates = [
-    path.join(repoRoot, 'artifacts', 'js', 'dx.all.debug.js'),
-    path.join(repoRoot, 'packages', 'devextreme', 'artifacts', 'js', 'dx.all.debug.js')
-  ];
-  const dxScriptPath = dxScriptCandidates.find((candidate) => fs.existsSync(candidate));
-  if (!dxScriptPath) {
-    throw new Error(
-      'DevExtreme debug bundle not found. Expected at ' +
-        dxScriptCandidates.join(' or ') +
-        '. Build artifacts before running this test.'
-    );
-  }
+  const dxVersion = process.env.DX_VERSION ?? '25.2.4';
+  const dxScriptUrl = `https://cdn3.devexpress.com/jslib/${dxVersion}/js/dx.all.js`;
 
   await page.goto(pathToFileURL(fixturePath).toString());
   await page.addStyleTag({
@@ -35,7 +24,7 @@ test('DataGrid bulk delete should load next page', async ({ page }) => {
     `
   });
 
-  await page.addScriptTag({ path: dxScriptPath });
+  await page.addScriptTag({ url: dxScriptUrl });
 
   await page.evaluate(() => {
     const data = Array.from({ length: 45 }, (_, index) => ({
