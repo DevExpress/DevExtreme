@@ -3270,11 +3270,11 @@ QUnit.test('Form is not redrawn when colCount doesn\'t change (\'colCount\' and 
 
     screen = 'lg';
     resizeCallbacks.fire();
-    assert.equal(initCount, 2, 'colCount is changed, editor is rerender');
+    assert.equal(initCount, 1, 'colCount is changed, editor is preserved');
 
     screen = 'xs';
     resizeCallbacks.fire();
-    assert.equal(initCount, 2, 'colCount doesn\'t changed, editor doesn\'t rerender');
+    assert.equal(initCount, 1, 'colCount doesn\'t changed, editor doesn\'t rerender');
 });
 
 QUnit.test('Column count for group may depend on screen factor', function(assert) {

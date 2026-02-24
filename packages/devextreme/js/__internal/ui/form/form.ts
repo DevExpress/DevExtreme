@@ -171,6 +171,8 @@ class Form extends Widget<FormProperties> {
 
   _isDataUpdating?: boolean;
 
+  _isDimensionChangeRefresh?: boolean;
+
   _$validationSummary?: dxElementWrapper;
 
   _loadPanel?: FormLoadPanel;
@@ -1011,7 +1013,13 @@ class Form extends Widget<FormProperties> {
         this._clearAutoColCountChangedTimeout();
         // eslint-disable-next-line no-restricted-globals
         this.autoColCountChangedTimeoutId = setTimeout(
-          () => !this._disposed && this._refresh(),
+          () => {
+            if (!this._disposed) {
+              this._isDimensionChangeRefresh = true;
+              this._refresh();
+              this._isDimensionChangeRefresh = false;
+            }
+          },
           0,
         );
       },
@@ -1586,7 +1594,9 @@ class Form extends Widget<FormProperties> {
     if (this._lastMarkupScreenFactor !== currentScreenFactor) {
       if (this._isColCountChanged(this._lastMarkupScreenFactor, currentScreenFactor)) {
         this._targetScreenFactor = currentScreenFactor;
+        this._isDimensionChangeRefresh = true;
         this._refresh();
+        this._isDimensionChangeRefresh = false;
         this._targetScreenFactor = undefined;
       }
 
@@ -1616,7 +1626,50 @@ class Form extends Widget<FormProperties> {
     // @ts-expect-error ts-error
     eventsEngine.trigger(this.$element().find(editorSelector), 'change');
 
+    if (this._isDimensionChangeRefresh) {
+      this._updateLayoutsOnDimensionChange();
+      return;
+    }
+
     super._refresh();
+  }
+
+  _updateLayoutsOnDimensionChange(): void {
+    this._cachedLayoutManagers.forEach((layoutManager: LayoutManager) => {
+      layoutManager.updateResponsiveBoxLayout();
+    });
+
+    this._updateGroupColCountClasses();
+    this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
+  }
+
+  _updateGroupColCountClasses(): void {
+    this._groupsColCount = [];
+
+    this._cachedLayoutManagers.forEach((layoutManager: LayoutManager) => {
+      if (layoutManager === this._rootLayoutManager) {
+        return;
+      }
+
+      const $group = layoutManager.$element().closest(`.${FORM_GROUP_CLASS}`);
+      if (!$group.length) {
+        return;
+      }
+
+      const oldColCountAttr = $group.attr(GROUP_COL_COUNT_ATTR);
+      const newColCount = layoutManager._getColCount();
+
+      if (oldColCountAttr) {
+        $group.removeClass(`${GROUP_COL_COUNT_CLASS}${oldColCountAttr}`);
+      }
+
+      $group.addClass(`${GROUP_COL_COUNT_CLASS}${newColCount}`);
+      $group.attr(GROUP_COL_COUNT_ATTR, newColCount);
+
+      if (!this._groupsColCount.includes(newColCount)) {
+        this._groupsColCount.push(newColCount);
+      }
+    });
   }
 
   _updateIsDirty(dataField: string): void {
