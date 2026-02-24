@@ -1187,7 +1187,7 @@ describe('Appointment Form', () => {
     });
 
     it('should render FontAwesome icon with correct CSS classes (T1322161)', async () => {
-      const { scheduler } = await createScheduler({
+      const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
         dataSource: [{
           text: 'Resource test app',
@@ -1206,11 +1206,10 @@ describe('Appointment Form', () => {
 
       scheduler.showAppointmentPopup(appointment);
 
-      const $iconElement = $('.dx-scheduler-form-resources-group .dx-icon');
+      const { resourceIcon } = POM.popup;
 
-      expect($iconElement.length).toBe(1);
-      expect($iconElement.hasClass('fas')).toBe(true);
-      expect($iconElement.hasClass('fa-home')).toBe(true);
+      expect(resourceIcon.classList.contains('fas')).toBe(true);
+      expect(resourceIcon.classList.contains('fa-home')).toBe(true);
     });
 
     it('should create dxTagBox for resource with multiple selection', async () => {
