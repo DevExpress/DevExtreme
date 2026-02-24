@@ -14,26 +14,11 @@
     <DxPopup
       v-model:visible="popupVisible"
       :drag-enabled="false"
-      :hide-on-outside-click="true"
-      :show-close-button="false"
-      :show-title="true"
-      :width="300"
-      :height="280"
+      :width="450"
+      :height="600"
       container=".dx-viewport"
-      title="Information"
+      titleTemplate="title"
     >
-      <DxPosition
-        at="bottom"
-        my="center"
-        v-model:of="positionOf"
-        collision="fit"
-      />
-      <DxToolbarItem
-        widget="dxButton"
-        toolbar="top"
-        locate-in-menu="always"
-        :options="moreInfoButtonOptions"
-      />
       <DxToolbarItem
         widget="dxButton"
         toolbar="bottom"
@@ -46,23 +31,9 @@
         location="after"
         :options="closeButtonOptions"
       />
-      <p>
-        Full Name:
-        <span>{{ currentEmployee?.FirstName }}</span>
-        <span>{{ currentEmployee?.LastName }}</span>
-      </p>
-      <p>
-        Birth Date: <span>{{ currentEmployee?.BirthDate }}</span>
-      </p>
-      <p>
-        Address: <span>{{ currentEmployee?.Address }}</span>
-      </p>
-      <p>
-        Hire Date: <span>{{ currentEmployee?.HireDate }}</span>
-      </p>
-      <p>
-        Position: <span>{{ currentEmployee?.Position }}</span>
-      </p>
+      <template #title>
+        <p class="title">Title template</p>
+      </template>
     </DxPopup>
 
   </div>
@@ -77,7 +48,7 @@ import { employees } from './data.ts';
 type Employee = typeof employees[0];
 
 const currentEmployee = ref<Employee>();
-const popupVisible = ref(false);
+const popupVisible = ref(true);
 const positionOf = ref('');
 const closeButtonOptions = {
   text: 'Close',
@@ -154,5 +125,9 @@ function showInfo(employee: Employee) {
 .dx-popup-content p {
   margin-bottom: 10px;
   margin-top: 0;
+}
+
+.title {
+  font-size: 30px;
 }
 </style>

@@ -30,7 +30,7 @@ export class AppComponent {
 
   employees: Employee[];
 
-  popupVisible = false;
+  popupVisible = true;
 
   moreInfoButtonOptions: Record<string, unknown>;
 

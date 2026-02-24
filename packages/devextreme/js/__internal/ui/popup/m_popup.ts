@@ -695,16 +695,25 @@ class Popup<
   ): dxElementWrapper {
     const $result = $(template.render({ container: getPublicElement($container) }));
 
-    const hasResultTemplateWrapperClass = $result.hasClass(TEMPLATE_WRAPPER_CLASS);
+    const resultClassList = Array.from($result.get(0)?.classList ?? []);
 
-    // eslint-disable-next-line no-debugger
-    debugger;
+    // const hasResultTemplateWrapperClass = $result.hasClass(TEMPLATE_WRAPPER_CLASS);
+    const hasResultTemplateWrapperClass = resultClassList.includes(TEMPLATE_WRAPPER_CLASS);
 
-    if (hasResultTemplateWrapperClass) {
+    // // eslint-disable-next-line no-debugger
+    // debugger;
+
+    if (resultClassList.length === 1 && hasResultTemplateWrapperClass) {
       $container.replaceWith($result);
       // eslint-disable-next-line no-param-reassign
       $container = $result;
+    } else if (hasResultTemplateWrapperClass) {
+      $result.removeClass(TEMPLATE_WRAPPER_CLASS);
+      $container.addClass(TEMPLATE_WRAPPER_CLASS);
     }
+
+    // // eslint-disable-next-line no-debugger
+    // debugger;
 
     return $container;
   }
