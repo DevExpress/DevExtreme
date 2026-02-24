@@ -21,15 +21,15 @@ describe('Keyboard Navigation', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
 
-  describe('from focused expand command cell with batch editing (T1322130)', () => {
-    const DATA_SOURCE = [
-      { id: 1, name: 'Item 1', group: 'A' },
-      { id: 2, name: 'Item 2', group: 'A' },
-      { id: 3, name: 'Item 3', group: 'B' },
-      { id: 4, name: 'Item 4', group: 'B' },
-      { id: 5, name: 'Item 5', group: 'C' },
-    ];
+  const DATA_SOURCE = [
+    { id: 1, name: 'Item 1', group: 'A' },
+    { id: 2, name: 'Item 2', group: 'A' },
+    { id: 3, name: 'Item 3', group: 'B' },
+    { id: 4, name: 'Item 4', group: 'B' },
+    { id: 5, name: 'Item 5', group: 'C' },
+  ];
 
+  describe('from focused expand command cell with batch editing (T1322130)', () => {
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     const createGridWithGrouping = (selectionMode: SelectionMode) => createDataGrid({
       dataSource: DATA_SOURCE,
@@ -75,15 +75,15 @@ describe('Keyboard Navigation', () => {
         triggerPointerDown(expandCell);
         jest.runAllTimers();
 
-        const controller = getKeyboardNavigationController(instance);
-        const prevRowIndex = controller._focusedCellPosition.rowIndex;
+        const keyboardNavController = getKeyboardNavigationController(instance);
+        const prevRowIndex = keyboardNavController._focusedCellPosition.rowIndex;
 
         expect(() => {
           triggerKeyDown(instance, key);
           jest.runAllTimers();
         }).not.toThrow();
 
-        const currentRowIndex = controller._focusedCellPosition.rowIndex;
+        const currentRowIndex = keyboardNavController._focusedCellPosition.rowIndex;
 
         switch (key) {
           case 'upArrow':
@@ -132,5 +132,61 @@ describe('Keyboard Navigation', () => {
         }).not.toThrow();
       },
     );
+  });
+
+  describe('from focused expand command cell (T1322440)', () => {
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    const createGridWithGrouping = () => createDataGrid({
+      dataSource: DATA_SOURCE,
+      columns: ['name', { dataField: 'group', groupIndex: 0 }],
+      editing: {
+        allowUpdating: true,
+        allowDeleting: true,
+      },
+      selection: {
+        mode: 'multiple',
+      },
+      grouping: {
+        autoExpandAll: false,
+      },
+      keyboardNavigation: {
+        enabled: true,
+      },
+    });
+
+    // Grid structure with autoExpandAll: true:
+    // Row 0: Group "A" (collapsed)
+    // Row 1: Data (Item 1)
+    // Row 2: Data (Item 2)
+    // Row 3: Group "B" (collapsed)
+    // Row 4: Data (Item 3)
+    // Row 5: Data (Item 4)
+    // Row 6: Group "C" (collapsed)
+    // Row 7: Data (Item 5)
+
+    it('should allow to focus the last group row', async () => {
+      const { instance, component } = await createGridWithGrouping();
+
+      const visibleGroupRows = component.getGroupRows();
+      const startGroupRowIndex = visibleGroupRows.length - 2; // Group "B"
+      const groupRow = component.getGroupRow(startGroupRowIndex);
+      const expandCell = groupRow.getExpandCell();
+
+      triggerPointerDown(expandCell); // expand the group row
+      jest.runAllTimers();
+
+      triggerPointerDown(expandCell); // and collapse it again to keep the expand cell focused
+      jest.runAllTimers();
+
+      expect(() => {
+        triggerKeyDown(instance, 'downArrow');
+        jest.runAllTimers();
+      }).not.toThrow();
+
+      const keyboardNavController = getKeyboardNavigationController(instance);
+      const finishGroupRowIndex = visibleGroupRows.length - 1; // Group "C"
+
+      expect(keyboardNavController._focusedCellPosition.rowIndex).toBe(finishGroupRowIndex);
+    });
   });
 });
