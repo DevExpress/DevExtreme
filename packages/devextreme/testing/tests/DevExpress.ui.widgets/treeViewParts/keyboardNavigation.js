@@ -846,7 +846,7 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('left');
 
         assert.strictEqual($treeView.find(`.${internals.NODE_CLASS}`).eq(1).is(':hidden'), true, 'child node is hidden after collapsing disabled parent');
-        assert.strictEqual(!items[0].expanded, true, 'disabled item expanded field is updated');
+        assert.strictEqual(items[0].expanded, false, 'disabled item expanded field is updated');
     });
 
     QUnit.test('right arrow should fire onItemExpanded for disabled node', function(assert) {
@@ -896,7 +896,7 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('left');
 
         assert.strictEqual(handler.calledOnce, true, 'onItemCollapsed was fired for disabled node');
-        assert.strictEqual(!handler.getCall(0).args[0].node.expanded, true, 'node is collapsed in event args');
+        assert.strictEqual(handler.getCall(0).args[0].node.expanded, false, 'node is collapsed in event args');
     });
 
     QUnit.testInActiveWindow('First list item should be focused on the tab key press when the search editor is focused', function(assert) {
