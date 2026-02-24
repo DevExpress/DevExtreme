@@ -12,6 +12,7 @@ export const employees: Employee[] = [{
     prefix: 'Dr.',
     position: 'COO',
     expanded: true,
+    disabled: true,
     items: [{
       id: 3,
       fullName: 'Kevin Carter',

@@ -78,6 +78,7 @@ import { setAppointmentGroupValues } from './utils/resource_manager/appointment_
 import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
+import type { Occurrence } from './view_model/filtration/get_occurrences';
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from './view_model/types';
 import SchedulerAgenda from './workspaces/m_agenda';
@@ -275,7 +276,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._updateOption('header', name, dateValue);
         this._updateOption('header', 'startViewDate', this.getStartViewDate());
         this._appointments.option('items', []);
-        this._filterAppointmentsByDate();
+        this._setRemoteFilterIfNeeded();
 
         this._postponeDataSourceLoading();
         break;
@@ -286,7 +287,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
         this._postponeResourceLoading().done(() => {
           this.appointmentDataSource.setDataSource(this._dataSource);
-          this._filterAppointmentsByDate();
+          this._setRemoteFilterIfNeeded();
           this._updateOption('workSpace', 'showAllDayPanel', this.option('showAllDayPanel'));
         });
         break;
@@ -318,7 +319,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._postponeResourceLoading().done(() => {
           this._refreshWorkSpace();
           this._header?.option(this._headerConfig());
-          this._filterAppointmentsByDate();
+          this._setRemoteFilterIfNeeded();
           this._appointments.option('allowAllDayResize', value !== 'day');
         });
         // NOTE:
@@ -339,7 +340,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       case 'groups':
         this._postponeResourceLoading().done(() => {
           this._refreshWorkSpace();
-          this._filterAppointmentsByDate();
+          this._setRemoteFilterIfNeeded();
         });
         break;
       case 'resources':
@@ -350,7 +351,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._postponeResourceLoading().done(() => {
           this._appointments.option('items', []);
           this._refreshWorkSpace();
-          this._filterAppointmentsByDate();
+          this._setRemoteFilterIfNeeded();
           this._createAppointmentPopupForm();
         });
         break;
@@ -361,7 +362,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._appointments.option('items', []);
         this._updateOption('workSpace', name, value);
         this._appointments.repaint();
-        this._filterAppointmentsByDate();
+        this._setRemoteFilterIfNeeded();
 
         this._postponeDataSourceLoading();
         break;
@@ -373,7 +374,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._appointments.option('items', []);
         this._updateOption('workSpace', 'viewOffset', this.normalizeViewOffsetValue(value));
         this._appointments.repaint();
-        this._filterAppointmentsByDate();
+        this._setRemoteFilterIfNeeded();
 
         this._postponeDataSourceLoading();
         break;
@@ -580,38 +581,26 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this.option('showAllDayPanel') && this._layoutManager.hasAllDayAppointments();
   }
 
-  _filterAppointmentsByDate() {
-    if (!this._workSpace) {
+  _setRemoteFilterIfNeeded(): void {
+    const dataSource = this._dataSource;
+    const remoteFiltering = this.option('remoteFiltering');
+
+    if (!this._workSpace || !remoteFiltering || !dataSource) {
       return;
     }
 
     const dateRange = this._workSpace.getDateRange();
-
     const startDate = this.timeZoneCalculator.createDate(dateRange[0], 'fromGrid');
     const endDate = this.timeZoneCalculator.createDate(dateRange[1], 'fromGrid');
 
-    this.setRemoteFilter(
-      startDate,
-      endDate,
-      this.option('remoteFiltering'),
-      this.option('dateSerializationFormat'),
-    );
-  }
-
-  setRemoteFilter(min, max, remoteFiltering = false, dateSerializationFormat?) {
-    const dataSource = this._dataSource;
-    const dataAccessors = this._dataAccessors;
-
-    if (!dataSource || !remoteFiltering) {
-      return;
-    }
-
+    const dateSerializationFormat = this.option('dateSerializationFormat');
     const dataSourceFilter = dataSource.filter();
+
     const filter = combineRemoteFilter({
       dataSourceFilter,
-      dataAccessors,
-      min,
-      max,
+      dataAccessors: this._dataAccessors,
+      min: startDate,
+      max: endDate,
       dateSerializationFormat,
       forceIsoDateParsing: config().forceIsoDateParsing,
     });
@@ -1188,7 +1177,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._waitAsyncTemplate(() => this._workSpaceRecalculation?.resolve());
 
     this.createAppointmentDataSource();
-    this._filterAppointmentsByDate();
+    this._setRemoteFilterIfNeeded();
     this._validateKeyFieldIfAgendaExist();
     this._updateA11yStatus();
   }
@@ -2158,6 +2147,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     } else {
       this._workSpace.focus();
     }
+  }
+
+  getOccurrences(startDate: Date, endDate: Date, rawAppointments: Appointment[]): Occurrence[] {
+    return this._layoutManager.getOccurrences(startDate, endDate, rawAppointments);
   }
 
   getFirstDayOfWeek(): FirstDayOfWeek {

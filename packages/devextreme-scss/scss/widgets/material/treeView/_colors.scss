@@ -18,8 +18,8 @@ $treeview-border-color: $base-border-color !default;
 $treeview-item-selected-color: $treeview-color !default;
 $treeview-item-selected-bg: null !default;
 $treeview-spin-icon-color: $base-spin-icon-color !default;
-
 $checkbox-border-color-focused: $base-focus-bg !default;
+$treeview-item-content-disabled: color.change($base-text-color, $alpha: 0.38) !default;
 
 @if $mode == "light" {
   $treeview-item-selected-bg: color.change(#000, $alpha: 0.12) !default;

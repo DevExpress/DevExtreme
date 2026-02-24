@@ -1,3 +1,5 @@
+import '@js/ui/speech_to_text';
+
 import { normalizeKeyName } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import devices from '@js/core/devices';

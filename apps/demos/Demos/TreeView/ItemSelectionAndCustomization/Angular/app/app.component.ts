@@ -54,6 +54,10 @@ export class AppComponent {
 
   selectionMode = this.selectionModes[0];
 
+  disabledNodeSelectionModes: DxTreeViewTypes.DisabledNodeSelectionMode[] = ['never', 'recursiveAndAll'];
+
+  disabledNodeSelectionMode = this.disabledNodeSelectionModes[0];
+
   selectNodesRecursive = true;
 
   selectByClick = false;
@@ -97,6 +101,10 @@ export class AppComponent {
       this.selectNodesRecursive = false;
       this.treeView.instance.unselectAll();
     }
+  }
+
+  disabledNodeSelectionModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
+    this.disabledNodeSelectionMode = e.value;
   }
 }
 

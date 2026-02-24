@@ -30,18 +30,14 @@ const getIntervals = <T extends Entity>(
 };
 
 export const filterByIntervals = <T extends Entity>(
-  entities: T[],
+  appointments: T[],
   options: FilterOptions,
-): T[] => entities.filter((appointment) => {
+): T[] => appointments.filter((appointment) => {
   const intervals = getIntervals(appointment, options);
-  // NOTE: if all day appointment ends at 00:00 make it longer to occupy next interval
-  const fixedAppointment = { ...appointment };
-  if (appointment.allDay) {
-    fixedAppointment.endDateUTC += 1;
-  }
 
-  return isAppointmentMatchedIntervals(
-    { startDate: fixedAppointment.startDateUTC, endDate: fixedAppointment.endDateUTC },
-    intervals,
-  );
+  // NOTE: if all day appointment ends at 00:00 make it longer to occupy next interval
+  const startDate = appointment.startDateUTC;
+  const endDate = appointment.allDay ? appointment.endDateUTC + 1 : appointment.endDateUTC;
+
+  return isAppointmentMatchedIntervals({ startDate, endDate }, intervals);
 });

@@ -12,6 +12,7 @@ export const employees = [
         prefix: 'Dr.',
         position: 'COO',
         expanded: true,
+        disabled: true,
         items: [
           {
             id: 3,
@@ -87,3 +88,4 @@ export const employees = [
 ];
 export const selectionModeLabel = { 'aria-label': 'Selection Mode' };
 export const showCheckboxesModeLabel = { 'aria-label': 'Show Checkboxes Mode' };
+export const disabledNodeSelectionModeLabel = { 'aria-label': 'Disabled Node Selection Mode' };

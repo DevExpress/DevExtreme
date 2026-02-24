@@ -2241,7 +2241,7 @@ describe('Appointment Popup', () => {
     POM.getAppointment('common-app').element?.click();
     jest.runAllTimers();
 
-    POM.getTooltipAppointment()?.click();
+    POM.tooltip.getAppointmentItem()?.click();
 
     expect(POM.isPopupVisible()).toBe(true);
     expect(POM.popup.dxForm.option('formData')).toMatchObject({ ...commonAppointment });

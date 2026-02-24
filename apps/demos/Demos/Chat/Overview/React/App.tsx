@@ -38,6 +38,7 @@ export default function App() {
         onTypingStart={typingStart}
         onTypingEnd={typingEnd}
         typingUsers={userChatTypingUsers}
+        speechToTextEnabled={true}
       />
       <Chat
         user={supportAgent}
@@ -46,6 +47,7 @@ export default function App() {
         onTypingStart={typingStart}
         onTypingEnd={typingEnd}
         typingUsers={supportChatTypingUsers}
+        speechToTextEnabled={true}
       />
     </>
   );
