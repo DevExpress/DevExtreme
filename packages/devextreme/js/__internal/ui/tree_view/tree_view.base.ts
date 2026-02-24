@@ -2009,10 +2009,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     this.option('focusedElement', getPublicElement(itemElement));
   }
 
-  _findNonDisabledNodes($nodes: dxElementWrapper): dxElementWrapper {
-    return $nodes.not(`:has(>.${ITEM_CLASS} > .${ITEM_CONTENT_CLASS}.${DISABLED_STATE_CLASS})`);
-  }
-
   _moveFocus(location: string, e: DxEvent<KeyboardEvent>): void {
     const { rtlEnabled, selectByClick } = this.option();
 
@@ -2115,7 +2111,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     const $node = $focusedNode.find(`.${NODE_CONTAINER_CLASS}`).eq(0);
 
     if ($node.hasClass(OPENED_NODE_CONTAINER_CLASS)) {
-      const $nextItem = this._nextItem(this._findNonDisabledNodes(this._nodeElements()));
+      const $nextItem = this._nextItem(this._nodeElements());
       this.option('focusedElement', getPublicElement($nextItem));
       this.getScrollable().scrollToElement(this._getNodeItemElement($nextItem));
       return;
@@ -2124,18 +2120,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     const node = this._getNodeByElement(this._getItem($focusedNode));
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._toggleExpandedState(node, true);
-  }
-
-  _getClosestNonDisabledNode($node: dxElementWrapper): dxElementWrapper {
-    const isNodeDisabled = ($el: dxElementWrapper): boolean => $el.find(`.${ITEM_CLASS} .${ITEM_CONTENT_CLASS}.${DISABLED_STATE_CLASS}`).length > 0;
-
-    let currentNode = $node;
-
-    do {
-      currentNode = currentNode.parent().closest(`.${NODE_CLASS}`);
-    } while (currentNode.length && isNodeDisabled(currentNode));
-
-    return currentNode;
   }
 
   _collapseFocusedContainer(): void {
@@ -2153,13 +2137,13 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._toggleExpandedState(node, false);
     } else {
-      const collapsedNode = this._getClosestNonDisabledNode($focusedNode);
+      const $closestParentNode = $focusedNode.parent().closest(`.${NODE_CLASS}`);
 
-      if (collapsedNode.length) {
-        this.option('focusedElement', getPublicElement(collapsedNode));
+      if ($closestParentNode.length) {
+        this.option('focusedElement', getPublicElement($closestParentNode));
       }
 
-      this.getScrollable().scrollToElement(this._getNodeItemElement(collapsedNode));
+      this.getScrollable().scrollToElement(this._getNodeItemElement($closestParentNode));
     }
   }
 
