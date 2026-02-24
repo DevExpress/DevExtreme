@@ -42,7 +42,7 @@ function getVersionTags() {
 }
 
 function runReproTest(version) {
-  const env = { ...process.env, DX_VERSION: version };
+  const env = { ...process.env, DX_VERSION: version, DX_BISECT: '1' };
   const result = spawnSync(
     'pnpm',
     [
