@@ -131,23 +131,23 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
   }
 
   _getShaderOffset(i: number, width: number): number {
-    return this._workSpace.getGroupedStrategy().getShaderOffset(i, width) as number;
+    return this._workSpace.getGroupedStrategy()._getShaderOffset(i, width) as number;
   }
 
   _getShaderTopOffset(i: number): number {
-    return this._workSpace.getGroupedStrategy().getShaderTopOffset(i) as number;
+    return this._workSpace.getGroupedStrategy()._getShaderTopOffset(i) as number;
   }
 
   _getShaderHeight(): number {
-    return this._workSpace.getGroupedStrategy().getShaderHeight() as number;
+    return this._workSpace.getGroupedStrategy()._getShaderHeight() as number;
   }
 
   _getShaderMaxHeight(): number {
-    return this._workSpace.getGroupedStrategy().getShaderMaxHeight() as number;
+    return this._workSpace.getGroupedStrategy()._getShaderMaxHeight() as number;
   }
 
   _getShaderWidth(): number {
-    return this._workSpace.getGroupedStrategy().getShaderWidth() as number;
+    return this._workSpace.getGroupedStrategy()._getShaderWidth() as number;
   }
 
   clean(): void {
