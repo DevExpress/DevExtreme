@@ -49,27 +49,27 @@ export class PopupModel {
   }
 
   get saveButton(): HTMLElement {
-    return queryRequiredElement(this.element, '.dx-button[aria-label="Save"]');
+    return this.queries.getByRole('button', { name: 'Save' }) as HTMLElement;
   }
 
   get cancelButton(): HTMLElement {
-    return queryRequiredElement(this.element, '.dx-button[aria-label="Cancel"]');
+    return this.queries.getByRole('button', { name: 'Cancel' }) as HTMLElement;
   }
 
   get closeButton(): HTMLElement {
-    return queryRequiredElement(this.element, '.dx-button[aria-label="Close"]');
+    return this.queries.getByRole('button', { name: 'Close' }) as HTMLElement;
   }
 
   get backButton(): HTMLElement {
-    return queryRequiredElement(this.element, '.dx-toolbar-button  .dx-button[aria-label="Back"]');
+    return this.queries.getByRole('button', { name: 'Back' }) as HTMLElement;
   }
 
   get editSeriesButton(): HTMLElement {
-    return queryRequiredElement(this.element, '[aria-label="Edit series"]');
+    return this.queries.getByRole('button', { name: 'Edit series' }) as HTMLElement;
   }
 
   get editAppointmentButton(): HTMLElement {
-    return queryRequiredElement(this.element, '[aria-label="Edit appointment"]');
+    return this.queries.getByRole('button', { name: 'Edit appointment' }) as HTMLElement;
   }
 
   get recurrenceSettingsButton(): HTMLElement {

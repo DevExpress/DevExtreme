@@ -30,7 +30,8 @@ export class SchedulerModel {
   }
 
   getStatusContent(): string {
-    return this.container.querySelector('.dx-scheduler-a11y-status-container')?.textContent ?? '';
+    const statusElement = this.container.querySelector('.dx-scheduler-a11y-status-container');
+    return statusElement?.textContent ?? '';
   }
 
   getAppointment(text?: string): AppointmentModel<HTMLDivElement | null> {
