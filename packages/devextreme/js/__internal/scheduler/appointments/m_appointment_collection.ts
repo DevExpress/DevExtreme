@@ -57,6 +57,7 @@ const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
 const DBLCLICK_EVENT_NAME = addNamespace(dblclickEvent, 'dxSchedulerAppointment');
 
+// test
 const toMs = dateUtils.dateToMilliseconds;
 
 interface ViewModelDiff {
