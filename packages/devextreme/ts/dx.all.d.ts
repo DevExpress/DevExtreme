@@ -25886,6 +25886,14 @@ declare module DevExpress.ui {
      */
     getEndViewDate(): Date;
     /**
+     * [descr:dxScheduler.getOccurrences(startDate, endDate, appointments)]
+     */
+    getOccurrences(
+      startDate: Date,
+      endDate: Date,
+      appointments: Appointment[]
+    ): Occurrence[];
+    /**
      * [descr:dxScheduler.getStartViewDate()]
      */
     getStartViewDate(): Date;
@@ -26359,6 +26367,24 @@ declare module DevExpress.ui {
      */
     visible?: boolean;
   } & Record<string, any>;
+  /**
+   * @deprecated Use the Scheduler's Occurrence type instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type dxSchedulerOccurrence = {
+    /**
+     * [descr:dxSchedulerOccurrence.startDate]
+     */
+    startDate: Date;
+    /**
+     * [descr:dxSchedulerOccurrence.endDate]
+     */
+    endDate: Date;
+    /**
+     * [descr:dxSchedulerOccurrence.appointmentData]
+     */
+    appointmentData: Appointment;
+  };
   /**
    * [descr:dxSchedulerOptions]
    * @deprecated [depNote:dxSchedulerOptions]
@@ -33308,6 +33334,10 @@ declare module DevExpress.ui {
    * [descr:ui.notify(options,stack)]
    */
   export function notify(options: any, stack?: Stack): void;
+  /**
+   * [descr:dxSchedulerOccurrence]
+   */
+  export type Occurrence = dxSchedulerOccurrence;
   /**
    * [descr:ui.repaintFloatingActionButton()]
    */
