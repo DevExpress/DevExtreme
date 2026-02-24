@@ -62,6 +62,8 @@ export default class DataSourceAdapter extends modules.Controller {
 
   private _isCustomLoading: any;
 
+  private _forceReload?: boolean;
+
   protected changed: any;
 
   protected loadingChanged: any;
@@ -404,7 +406,8 @@ export default class DataSourceAdapter extends modules.Controller {
     options.originalStoreLoadOptions = options.storeLoadOptions;
     options.remoteOperations = extend({}, this.remoteOperations());
 
-    const isFullReload = !this.isLoaded() && !this._isRefreshing;
+    const isFullReload = !!this._forceReload || (!this.isLoaded() && !this._isRefreshing);
+    this._forceReload = false;
 
     if (this.option('integrationOptions.renderedOnServer') && !this.isLoaded()) {
       options.delay = undefined;
@@ -851,6 +854,7 @@ export default class DataSourceAdapter extends modules.Controller {
    * @extended: virtual_scrolling
    */
   protected reload(full) {
+    this._forceReload = !!full;
     return full ? this._dataSource.reload() : this._dataSource.load();
   }
 
