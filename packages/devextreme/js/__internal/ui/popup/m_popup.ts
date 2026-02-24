@@ -102,7 +102,11 @@ const BUTTON_OUTLINED_MODE = 'outlined';
 
 const TOOLBAR_NAME_BASE = 'dxToolbarBase';
 
-const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS } as const;
+const HEIGHT_STRATEGIES = {
+  static: '',
+  inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS,
+  flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS,
+} as const;
 
 type HeightStrategiesType = typeof HEIGHT_STRATEGIES[keyof typeof HEIGHT_STRATEGIES];
 type TitleRenderAction = (event?: Record<string, unknown>) => void;
@@ -801,6 +805,7 @@ class Popup<
         index++;
       }
 
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       item.toolbar = data.toolbar || item.toolbar || 'top';
 
       if (item && item.toolbar === toolbar) {
@@ -847,7 +852,12 @@ class Popup<
     return BUTTON_NORMAL_TYPE;
   }
 
-  _getToolbarItemByAlias(data) {
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+  _getToolbarItemByAlias(data: any): {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    template: (_: any, __: any, container: dxElementWrapper) => void;
+  } | boolean {
     const itemType = data.shortcut;
 
     if (!ALLOWED_TOOLBAR_ITEM_ALIASES.includes(itemType)) {
@@ -860,6 +870,7 @@ class Popup<
       integrationOptions: {},
       type: this._getToolbarButtonType(itemType),
       stylingMode: this._getToolbarButtonStylingMode(itemType),
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     }, data.options || {});
 
     const itemClass = `${POPUP_CLASS}-${itemType}`;
@@ -890,6 +901,7 @@ class Popup<
 
   _toggleDisabledState(value: boolean): void {
     // @ts-expect-error ts-error
+    // eslint-disable-next-line prefer-rest-params
     super._toggleDisabledState(...arguments);
 
     this.$content()?.toggleClass(DISABLED_STATE_CLASS, Boolean(value));
