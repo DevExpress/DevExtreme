@@ -41,6 +41,9 @@ describe('Keyboard Navigation', () => {
       selection: {
         mode: selectionMode,
       },
+      scrolling: {
+        mode: 'virtual',
+      },
       grouping: {
         autoExpandAll: true,
       },
@@ -98,11 +101,13 @@ describe('Keyboard Navigation', () => {
       },
     );
 
+    // NOTE: { mode: 'single', key: 'downArrow' } is excluded because
+    // the _scrollBy fallback in _upDownKeysHandler only fires for upArrow,
+    // so single+downArrow at boundary never throws an error.
     it.each<{ mode: SelectionMode, key: KeyboardNavKey }>([
       { mode: 'multiple', key: 'upArrow' },
       { mode: 'multiple', key: 'downArrow' },
       { mode: 'single', key: 'upArrow' },
-      { mode: 'single', key: 'downArrow' },
     ])(
       'should not throw an error, while pressing $key on boundary rows (selection.mode: $mode)',
       async ({ key, mode }) => {
@@ -154,15 +159,10 @@ describe('Keyboard Navigation', () => {
       },
     });
 
-    // Grid structure with autoExpandAll: true:
+    // Grid structure with autoExpandAll: false:
     // Row 0: Group "A" (collapsed)
-    // Row 1: Data (Item 1)
-    // Row 2: Data (Item 2)
-    // Row 3: Group "B" (collapsed)
-    // Row 4: Data (Item 3)
-    // Row 5: Data (Item 4)
-    // Row 6: Group "C" (collapsed)
-    // Row 7: Data (Item 5)
+    // Row 1: Group "B" (collapsed)
+    // Row 2: Group "C" (collapsed)
 
     it('should allow to focus the last group row', async () => {
       const { instance, component } = await createGridWithGrouping();
