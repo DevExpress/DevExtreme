@@ -353,6 +353,12 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       activeStateEnabled: true,
       onItemRendered,
       _itemAttributes: { role: 'menuitem' },
+      _onItemsRendered: (): void => {
+        // T1322123
+        if (this.option('templatesRenderAsynchronously')) {
+          this._popup?._renderGeometry();
+        }
+      },
     });
   }
 

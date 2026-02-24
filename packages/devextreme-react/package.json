@@ -2,10 +2,11 @@
   "author": "Developer Express Inc.",
   "name": "devextreme-react",
   "version": "26.1.0",
-  "description": "DevExtreme React UI and Visualization Components",
+  "description": "DevExtreme UI and Visualization Components for React",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DevExpress/devextreme-react.git"
+    "url": "https://github.com/DevExpress/DevExtreme.git",
+    "directory": "packages/devextreme-react"
   },
   "sideEffects": false,
   "main": "./cjs/index.js",
