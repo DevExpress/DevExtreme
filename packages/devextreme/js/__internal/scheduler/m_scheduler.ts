@@ -28,7 +28,9 @@ import {
 import { hasWindow } from '@js/core/utils/window';
 import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
-import type { Appointment, AppointmentTooltipShowingEvent, FirstDayOfWeek } from '@js/ui/scheduler';
+import type {
+  Appointment, AppointmentTooltipShowingEvent, FirstDayOfWeek, Occurrence,
+} from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
@@ -78,7 +80,6 @@ import { setAppointmentGroupValues } from './utils/resource_manager/appointment_
 import { createResourceEditorModel } from './utils/resource_manager/popup_utils';
 import { ResourceManager } from './utils/resource_manager/resource_manager';
 import AppointmentLayoutManager from './view_model/appointments_layout_manager';
-import type { Occurrence } from './view_model/filtration/get_occurrences';
 import { AppointmentDataSource } from './view_model/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from './view_model/types';
 import SchedulerAgenda from './workspaces/m_agenda';
