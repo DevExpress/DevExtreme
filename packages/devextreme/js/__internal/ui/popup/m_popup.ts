@@ -695,25 +695,42 @@ class Popup<
   ): dxElementWrapper {
     const $result = $(template.render({ container: getPublicElement($container) }));
 
-    const resultClassList = Array.from($result.get(0)?.classList ?? []);
+    // const resultIsContainer = $result.get(0) === $container.get(0);
+
+    // if (resultIsContainer) {
+    //   $container.addClass(TEMPLATE_WRAPPER_CLASS);
+    //   return $container;
+    // }
+
+    // $container.replaceWith($result);
+
+    // const $newContainer = $result;
+
+    $result.removeClass(TEMPLATE_WRAPPER_CLASS);
+    $container.addClass(TEMPLATE_WRAPPER_CLASS);
+
+    // // eslint-disable-next-line no-debugger
+    // debugger;
+
+    // const resultClassList = Array.from($result.get(0)?.classList ?? []);
 
     // const hasResultTemplateWrapperClass = $result.hasClass(TEMPLATE_WRAPPER_CLASS);
-    const hasResultTemplateWrapperClass = resultClassList.includes(TEMPLATE_WRAPPER_CLASS);
+    // const hasResultTemplateWrapperClass = resultClassList.includes(TEMPLATE_WRAPPER_CLASS);
 
-    // // eslint-disable-next-line no-debugger
-    // debugger;
-
-    if (resultClassList.length === 1 && hasResultTemplateWrapperClass) {
-      $container.replaceWith($result);
-      // eslint-disable-next-line no-param-reassign
-      $container = $result;
-    } else if (hasResultTemplateWrapperClass) {
-      $result.removeClass(TEMPLATE_WRAPPER_CLASS);
-      $container.addClass(TEMPLATE_WRAPPER_CLASS);
-    }
-
-    // // eslint-disable-next-line no-debugger
-    // debugger;
+    // в jQuery, Angular надо заменить.
+    // React — контейнер уже является результатом, заменять не надо.
+    // Vue — не надо заменять, надо перенести класс.
+    // Нужно изменить условие — не наличие класса, а проверить, что один тот же элемент.
+    // if (hasResultTemplateWrapperClass) {
+    // if (resultClassList.length === 1 && hasResultTemplateWrapperClass) {
+    // $container.replaceWith($result);
+    // // eslint-disable-next-line no-param-reassign
+    // $container = $result;
+    // }
+    // else if (hasResultTemplateWrapperClass) {
+    //   $result.removeClass(TEMPLATE_WRAPPER_CLASS);
+    //   $container.addClass(TEMPLATE_WRAPPER_CLASS);
+    // }
 
     return $container;
   }

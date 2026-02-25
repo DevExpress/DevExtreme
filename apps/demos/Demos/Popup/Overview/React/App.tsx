@@ -7,7 +7,7 @@ import { employees } from './data.ts';
 const defaultCurrentEmployee: Partial<EmployeeItemProps['employee']> = {};
 export default function App() {
   const [currentEmployee, setCurrentEmployee] = useState<Employee | null>(null);
-  const [popupVisible, setPopupVisible] = useState<boolean>(true);
+  const [popupVisible, setPopupVisible] = useState<boolean>(false);
   const [positionOf, setPositionOf] = useState<string>('');
 
   const showInfo = useCallback((employee: EmployeeItemProps['employee']) => {
@@ -36,25 +36,25 @@ export default function App() {
     );
   }, [currentEmployee]);
 
-  // const showMoreInfo = useCallback(() => {
-  //   const message = `More info about ${currentEmployee?.FirstName} ${currentEmployee?.LastName}`;
-  //   notify(
-  //     {
-  //       message,
-  //       position: {
-  //         my: 'center top',
-  //         at: 'center top',
-  //       },
-  //     },
-  //     'success',
-  //     3000,
-  //   );
-  // }, [currentEmployee]);
+  const showMoreInfo = useCallback(() => {
+    const message = `More info about ${currentEmployee?.FirstName} ${currentEmployee?.LastName}`;
+    notify(
+      {
+        message,
+        position: {
+          my: 'center top',
+          at: 'center top',
+        },
+      },
+      'success',
+      3000,
+    );
+  }, [currentEmployee]);
 
-  // const getInfoButtonOptions = useMemo((): ButtonTypes.Properties => ({
-  //   text: 'More info',
-  //   onClick: showMoreInfo,
-  // }), [showMoreInfo]);
+  const getInfoButtonOptions = useMemo((): ButtonTypes.Properties => ({
+    text: 'More info',
+    onClick: showMoreInfo,
+  }), [showMoreInfo]);
 
   const getEmailButtonOptions = useMemo(() => ({
     icon: 'email',
@@ -76,8 +76,6 @@ export default function App() {
     </li>
   )), [showInfo]);
 
-  const renderTitle = () => <p className="title">Title template</p>;
-
   return (
     <div id="container">
       <div className="header">Employees</div>
@@ -86,10 +84,21 @@ export default function App() {
         visible={popupVisible}
         onHiding={hideInfo}
         dragEnabled={false}
-        width={450}
-        height={600}
-        titleRender={renderTitle}
+        hideOnOutsideClick={true}
+        showCloseButton={false}
+        showTitle={true}
+        title="Information"
+        container=".dx-viewport"
+        width={300}
+        height={280}
       >
+        <Position at="bottom" my="center" of={positionOf} collision="fit" />
+        <ToolbarItem
+          widget="dxButton"
+          toolbar="top"
+          locateInMenu="always"
+          options={getInfoButtonOptions}
+        />
         <ToolbarItem
           widget="dxButton"
           toolbar="bottom"
@@ -102,6 +111,23 @@ export default function App() {
           location="after"
           options={getCloseButtonOptions}
         />
+        <p>
+          Full Name:&nbsp;
+          <span>{currentEmployee?.FirstName}</span>&nbsp;
+          <span>{currentEmployee?.LastName}</span>
+        </p>
+        <p>
+          Birth Date: <span>{currentEmployee?.BirthDate}</span>
+        </p>
+        <p>
+          Address: <span>{currentEmployee?.Address}</span>
+        </p>
+        <p>
+          Hire Date: <span>{currentEmployee?.HireDate}</span>
+        </p>
+        <p>
+          Position: <span>{currentEmployee?.Position}</span>
+        </p>
       </Popup>
     </div>
   );
