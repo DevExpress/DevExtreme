@@ -227,8 +227,8 @@ declare namespace DevExpress.ui {
   /** @deprecated Use DevExpress.ui.dxResponsiveBoxItem */
   export type dxResponsiveBoxItemTemplate = dxResponsiveBoxItem;
 
-  /** @deprecated Use DevExpress.ui.dxSchedulerAppointment */
-  export type dxSchedulerAppointmentTemplate = dxSchedulerAppointment;
+  /** @deprecated Use DevExpress.ui.dxScheduler.Appointment */
+  export type dxSchedulerAppointmentTemplate = dxScheduler.Appointment;
 
   /** @deprecated Use DevExpress.ui.dxTabsItem */
   export type dxTabsItemTemplate = dxTabsItem;
