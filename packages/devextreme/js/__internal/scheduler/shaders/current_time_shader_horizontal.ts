@@ -43,14 +43,8 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
 
   _applyShaderWidth($shader: dxElementWrapper, width: number): void {
     const maxWidth = getBoundingRect(this._$container.get(0)).width;
-    let localWidth = width;
-
-    if (width > maxWidth) {
-      localWidth = maxWidth;
-    }
-
-    if (localWidth > 0) {
-      setWidth($shader, localWidth);
+    if (width > 0) {
+      setWidth($shader, Math.min(width, maxWidth));
     }
   }
 
