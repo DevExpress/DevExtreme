@@ -891,8 +891,8 @@ importers:
         specifier: 6.10.0
         version: 6.10.0(webpack@5.105.0)
       minimatch:
-        specifier: 9.0.6
-        version: 9.0.6
+        specifier: 10.2.1
+        version: 10.2.1
       source-map-loader:
         specifier: 4.0.2
         version: 4.0.2(webpack@5.105.0)
@@ -2289,8 +2289,8 @@ importers:
         specifier: 4.17.23
         version: 4.17.23
       minimatch:
-        specifier: 9.0.6
-        version: 9.0.6
+        specifier: 10.2.1
+        version: 10.2.1
       ng-packagr:
         specifier: '>=19.0.0'
         version: 19.2.2(@angular/compiler-cli@21.0.8(@angular/compiler@21.0.8)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5)
@@ -14089,6 +14089,10 @@ packages:
 
   minimatch@10.1.1:
     resolution: {integrity: sha512-enIvLvRAFZYXJzkCYG5RKmPfrFArdLv+R+lbQ53BmIMLIry74bjKzX6iHAm8WYamJkhSSEabrWN5D97XnKObjQ==}
+    engines: {node: 20 || >=22}
+
+  minimatch@10.2.1:
+    resolution: {integrity: sha512-MClCe8IL5nRRmawL6ib/eT4oLyeKMGCghibcDWK+J0hh0Q8kqSdia6BvbRMVk6mPa6WqUa5uR2oxt6C5jd533A==}
     engines: {node: 20 || >=22}
 
   minimatch@3.1.2:
@@ -32536,7 +32540,7 @@ snapshots:
 
   glob@13.0.0:
     dependencies:
-      minimatch: 10.1.1
+      minimatch: 10.2.1
       minipass: 7.1.2
       path-scurry: 2.0.1
 
@@ -33545,7 +33549,7 @@ snapshots:
 
   ignore-walk@8.0.0:
     dependencies:
-      minimatch: 10.1.1
+      minimatch: 10.2.1
 
   ignore@4.0.6: {}
 
@@ -36489,6 +36493,10 @@ snapshots:
   minimatch@10.1.1:
     dependencies:
       '@isaacs/brace-expansion': 5.0.1
+
+  minimatch@10.2.1:
+    dependencies:
+      brace-expansion: 5.0.3
 
   minimatch@3.1.2:
     dependencies:
