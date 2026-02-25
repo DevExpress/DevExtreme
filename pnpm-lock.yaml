@@ -185,13 +185,13 @@ importers:
     devDependencies:
       '@nx/devkit':
         specifier: 22.5.2
-        version: 22.5.2(nx@22.4.5)
+        version: 22.5.2(nx@22.5.2)
       '@nx/jest':
         specifier: 22.5.2
-        version: 22.5.2(@babel/traverse@7.28.6)(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(nx@22.4.5)(ts-node@10.9.2(@types/node@20.12.8)(typescript@5.9.3))(typescript@5.9.3)
+        version: 22.5.2(@babel/traverse@7.28.6)(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(nx@22.5.2)(ts-node@10.9.2(@types/node@20.12.8)(typescript@5.9.3))(typescript@5.9.3)
       '@nx/js':
         specifier: 22.5.2
-        version: 22.5.2(@babel/traverse@7.28.6)(nx@22.4.5)
+        version: 22.5.2(@babel/traverse@7.28.6)(nx@22.5.2)
       '@types/jest':
         specifier: 29.5.14
         version: 29.5.14
@@ -241,8 +241,8 @@ importers:
         specifier: 14.0.1
         version: 14.0.1(enquirer@2.4.1)
       nx:
-        specifier: 22.4.5
-        version: 22.4.5
+        specifier: 22.5.2
+        version: 22.5.2
       nx-cloud:
         specifier: 19.1.0
         version: 19.1.0
@@ -5361,19 +5361,9 @@ packages:
       verdaccio:
         optional: true
 
-  '@nx/nx-darwin-arm64@22.4.5':
-    resolution: {integrity: sha512-zdRHZv1AMvzgp+5g2VZNXXuqk0/n1wOFksOeZ6BRyKg6hC2YkjGyn5xle/UK668MDAwe9KKm4jizvztK/LlPuA==}
-    cpu: [arm64]
-    os: [darwin]
-
   '@nx/nx-darwin-arm64@22.5.2':
     resolution: {integrity: sha512-CPtgK/s4FQ0Y/6WmHpJccOTANve5UjlFajLp+S8Z538zHdc5a5MjJBcXo9oRzKNvhTHoGijr/fCMU2erMrYYtg==}
     cpu: [arm64]
-    os: [darwin]
-
-  '@nx/nx-darwin-x64@22.4.5':
-    resolution: {integrity: sha512-1NVWaSgpa8yawi2UILX4NE9UcMuNzAAGh95JSV2yJovRfKxFQgQSB6hj0gpJu+TLLVCroTqy4woSQ2a0SPodeQ==}
-    cpu: [x64]
     os: [darwin]
 
   '@nx/nx-darwin-x64@22.5.2':
@@ -5381,38 +5371,18 @@ packages:
     cpu: [x64]
     os: [darwin]
 
-  '@nx/nx-freebsd-x64@22.4.5':
-    resolution: {integrity: sha512-baaLz53wr/HsVfSJ7ZgIFCPAb/OtP7yPPasb3eIu65oVhSswGfgvz9+YINhuInUgW7x7STmRnhGeR8pj6iqFqw==}
-    cpu: [x64]
-    os: [freebsd]
-
   '@nx/nx-freebsd-x64@22.5.2':
     resolution: {integrity: sha512-Oy3jejPB7lszxAf4rdTpJfOBVgAUtkUZJCLTdGdnpveF/m3s9MN9DaeEXgUs0mMp1qV3Y0KE3KcVHqII54AoBQ==}
     cpu: [x64]
     os: [freebsd]
-
-  '@nx/nx-linux-arm-gnueabihf@22.4.5':
-    resolution: {integrity: sha512-wRBPv/l39tz+sQjZUH4hygCsd/DoUXUbDYkR6lnNXWHAVyPUh48/27JozM8hD3o/G3O2Vd8PFQasIXtvy2GS0Q==}
-    cpu: [arm]
-    os: [linux]
 
   '@nx/nx-linux-arm-gnueabihf@22.5.2':
     resolution: {integrity: sha512-38bZGStG6bZ+R7ZbGxvnDVjVrV6bRTsiX8rr3fmM/AkEfvgyhWgE3R+xqUHoJVM4PK0I2YlYoSjIny4gFeOBxQ==}
     cpu: [arm]
     os: [linux]
 
-  '@nx/nx-linux-arm64-gnu@22.4.5':
-    resolution: {integrity: sha512-6B/yCFiqjvV2Bkz6MKUtfFWjwtiF53DN07K1BFksMpQef+h2yE1IrGaG/OCl6VaVl4VRzQgLOluqP96M1yhDgg==}
-    cpu: [arm64]
-    os: [linux]
-
   '@nx/nx-linux-arm64-gnu@22.5.2':
     resolution: {integrity: sha512-D+tPXB0tkSuDPsuXvyQIsF3f3PBWfAwIe9FkBWtVoDVYqE+jbz+tVGsjQMNWGafLE4sC8ZQdjhsxyT8I53Anbw==}
-    cpu: [arm64]
-    os: [linux]
-
-  '@nx/nx-linux-arm64-musl@22.4.5':
-    resolution: {integrity: sha512-n0v60vRYn7BDHWB588snPZntLO2XC8/pvLd+QunneM2VGEPf51n5llX5U3AwTt/ybaZHWhbuHv0sJBIbT4I0GA==}
     cpu: [arm64]
     os: [linux]
 
@@ -5421,18 +5391,8 @@ packages:
     cpu: [arm64]
     os: [linux]
 
-  '@nx/nx-linux-x64-gnu@22.4.5':
-    resolution: {integrity: sha512-zT7nb1PRE3NcW/HFnbgKJ9ZPtCOeVDpbJ5J4ZhHj36ZAUWZVXFEIPq9VTIZFy5+0pioLUIClQQY7OUfwnV/Zig==}
-    cpu: [x64]
-    os: [linux]
-
   '@nx/nx-linux-x64-gnu@22.5.2':
     resolution: {integrity: sha512-wR6596Vr/Z+blUAmjLHG2TCQMs4O1oi9JXK1J/PoPeO9UqdHwStCJBAd61zDFSUYJe0x+dkeRQu96fE5BW8Kcg==}
-    cpu: [x64]
-    os: [linux]
-
-  '@nx/nx-linux-x64-musl@22.4.5':
-    resolution: {integrity: sha512-r8Rls5BS7lGQbUNX1Z1S370XrOacOU1bQ/dxY8i7qahFQKnMwpFo0W8odhgzjk+vrC/WLf9jOgz5/JPzehQBIw==}
     cpu: [x64]
     os: [linux]
 
@@ -5441,19 +5401,9 @@ packages:
     cpu: [x64]
     os: [linux]
 
-  '@nx/nx-win32-arm64-msvc@22.4.5':
-    resolution: {integrity: sha512-Lv81LTnG6sSvBOq2vDSeyfzpF9X0cTGlJdzJOJzPZXCZGFhTV1ig9TdLiij/GM2JwV4Kvq5Co6YzA5dxtGUphQ==}
-    cpu: [arm64]
-    os: [win32]
-
   '@nx/nx-win32-arm64-msvc@22.5.2':
     resolution: {integrity: sha512-SaWSZkRH5uV8vP2lj6RRv+kw2IzaIDXkutReOXpooshIWZl9KjrQELNTCZTYyhLDsMlcyhSvLFlTiA4NkZ8udw==}
     cpu: [arm64]
-    os: [win32]
-
-  '@nx/nx-win32-x64-msvc@22.4.5':
-    resolution: {integrity: sha512-52RfBcq9PXt76soCAZAJcNmCYrdsg6BvhBmjf0IFTMZ8IaeqZ9ktxAy1TZf/gCkOaM3ly4htbYMStiZ4MHX7Eg==}
-    cpu: [x64]
     os: [win32]
 
   '@nx/nx-win32-x64-msvc@22.5.2':
@@ -10232,10 +10182,6 @@ packages:
   es-array-method-boxes-properly@1.0.0:
     resolution: {integrity: sha512-wd6JXUmyHmt8T5a2xreUwKcGPq6f1f+WwIJkijUqiGcJz1qqnZgP6XIK+QyIWU5lT7imeNxUll48bziG+TSYcA==}
 
-  es-define-property@1.0.0:
-    resolution: {integrity: sha512-jxayLKShrEqqzJ0eumQbVhTYQM27CfT1T35+gCgDFoL82JLsXqTJ76zv6A0YLOgEnLUMvLzsDsGIrl8NFpT2gQ==}
-    engines: {node: '>= 0.4'}
-
   es-define-property@1.0.1:
     resolution: {integrity: sha512-e3nRfgfUZ4rNGL232gUgX06QNyyez04KdjFrF+LTRoOXmrOgFKDg4BCdsjW8EnT69eqdYGmRpJwiPVYNrCaW3g==}
     engines: {node: '>= 0.4'}
@@ -10266,10 +10212,6 @@ packages:
 
   es-object-atoms@1.1.1:
     resolution: {integrity: sha512-FGgH2h8zKNim9ljj7dankFPcICIK9Cp5bm+c2gQSYePhpaG5+esrLODihIorn+Pe6FGJzWhXQotPv73jTaldXA==}
-    engines: {node: '>= 0.4'}
-
-  es-set-tostringtag@2.0.3:
-    resolution: {integrity: sha512-3T8uNMC3OQTHkFUsFq8r/BwAXLHvU/9O9mE0fBc/MY5iq/8H7ncvO947LmYA6ldWw9Uh8Yhf25zu6n7nML5QWQ==}
     engines: {node: '>= 0.4'}
 
   es-set-tostringtag@2.1.0:
@@ -11612,9 +11554,6 @@ packages:
     engines: {node: '>=0.6.0'}
     hasBin: true
 
-  gopd@1.0.1:
-    resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
-
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
     engines: {node: '>= 0.4'}
@@ -11827,10 +11766,6 @@ packages:
 
   has-proto@1.2.0:
     resolution: {integrity: sha512-KIL7eQPfHQRC8+XluaIw7BHUwwqL19bQn4hzNgdr+1wXoU0KKj6rufu47lhY7KbJR2C6T6+PfyN0Ea7wkSS+qQ==}
-    engines: {node: '>= 0.4'}
-
-  has-symbols@1.0.3:
-    resolution: {integrity: sha512-l3LCuF6MgDNwTDKkdYGEihYjt5pRPbEg46rtlmnSPlUbgmB8LOIrKJbYYFBSbnPaJexMKtiPO8hmeRjRz2Td+A==}
     engines: {node: '>= 0.4'}
 
   has-symbols@1.1.0:
@@ -13213,10 +13148,6 @@ packages:
 
   js-yaml@3.14.2:
     resolution: {integrity: sha512-PMSmkqxr106Xa156c2M265Z+FTrPl+oxd/rgOQy2tijQeK5TxQ43psO1ZCwhVOSdnn+RzkzlRz/eY4BgJBYVpg==}
-    hasBin: true
-
-  js-yaml@4.1.0:
-    resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
     hasBin: true
 
   js-yaml@4.1.1:
@@ -14639,18 +14570,6 @@ packages:
   nx-cloud@19.1.0:
     resolution: {integrity: sha512-f24vd5/57/MFSXNMfkerdDiK0EvScGOKO71iOWgJNgI1xVweDRmOA/EfjnPMRd5m+pnoPs/4A7DzuwSW0jZVyw==}
     hasBin: true
-
-  nx@22.4.5:
-    resolution: {integrity: sha512-l68kzhnemXXGCDS9/W8eccZ7Bzse9pw1oJ466pzDM89MbA6hEaOQ0p+eDXZI++iWl0T+lYJ56EDhO23syKzt9g==}
-    hasBin: true
-    peerDependencies:
-      '@swc-node/register': ^1.8.0
-      '@swc/core': ^1.3.85
-    peerDependenciesMeta:
-      '@swc-node/register':
-        optional: true
-      '@swc/core':
-        optional: true
 
   nx@22.5.2:
     resolution: {integrity: sha512-s7dd2BZQOremv1AYhxwBY6NzJV9ETa6/OJ/zau/ulbLnHu8E5UAv+EjMC80m3qP3nob5OXnWiITKM9CcOHy6qw==}
@@ -24234,17 +24153,6 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@nx/devkit@22.5.2(nx@22.4.5)':
-    dependencies:
-      '@zkochan/js-yaml': 0.0.7
-      ejs: 3.1.10
-      enquirer: 2.3.6
-      minimatch: 10.1.1
-      nx: 22.4.5
-      semver: 7.7.4
-      tslib: 2.6.3
-      yargs-parser: 21.1.1
-
   '@nx/devkit@22.5.2(nx@22.5.2)':
     dependencies:
       '@zkochan/js-yaml': 0.0.7
@@ -24256,12 +24164,12 @@ snapshots:
       tslib: 2.6.3
       yargs-parser: 21.1.1
 
-  '@nx/jest@22.5.2(@babel/traverse@7.28.6)(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(nx@22.4.5)(ts-node@10.9.2(@types/node@20.12.8)(typescript@5.9.3))(typescript@5.9.3)':
+  '@nx/jest@22.5.2(@babel/traverse@7.28.6)(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(node-notifier@9.0.1)(nx@22.5.2)(ts-node@10.9.2(@types/node@20.12.8)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
       '@jest/reporters': 30.2.0(node-notifier@9.0.1)
       '@jest/test-result': 30.2.0
-      '@nx/devkit': 22.5.2(nx@22.4.5)
-      '@nx/js': 22.5.2(@babel/traverse@7.28.6)(nx@22.4.5)
+      '@nx/devkit': 22.5.2(nx@22.5.2)
+      '@nx/js': 22.5.2(@babel/traverse@7.28.6)(nx@22.5.2)
       '@phenomnomnominal/tsquery': 6.1.4(typescript@5.9.3)
       identity-obj-proxy: 3.0.0
       jest-config: 30.2.0(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@20.12.8)(typescript@5.9.3))
@@ -24288,7 +24196,7 @@ snapshots:
       - typescript
       - verdaccio
 
-  '@nx/js@22.5.2(@babel/traverse@7.28.6)(nx@22.4.5)':
+  '@nx/js@22.5.2(@babel/traverse@7.28.6)(nx@22.5.2)':
     dependencies:
       '@babel/core': 7.28.6
       '@babel/plugin-proposal-decorators': 7.25.9(@babel/core@7.28.6)
@@ -24297,7 +24205,7 @@ snapshots:
       '@babel/preset-env': 7.28.6(@babel/core@7.28.6)
       '@babel/preset-typescript': 7.28.5(@babel/core@7.28.6)
       '@babel/runtime': 7.28.6
-      '@nx/devkit': 22.5.2(nx@22.4.5)
+      '@nx/devkit': 22.5.2(nx@22.5.2)
       '@nx/workspace': 22.5.2
       '@zkochan/js-yaml': 0.0.7
       babel-plugin-const-enum: 1.2.0(@babel/core@7.28.6)
@@ -24324,61 +24232,31 @@ snapshots:
       - nx
       - supports-color
 
-  '@nx/nx-darwin-arm64@22.4.5':
-    optional: true
-
   '@nx/nx-darwin-arm64@22.5.2':
-    optional: true
-
-  '@nx/nx-darwin-x64@22.4.5':
     optional: true
 
   '@nx/nx-darwin-x64@22.5.2':
     optional: true
 
-  '@nx/nx-freebsd-x64@22.4.5':
-    optional: true
-
   '@nx/nx-freebsd-x64@22.5.2':
-    optional: true
-
-  '@nx/nx-linux-arm-gnueabihf@22.4.5':
     optional: true
 
   '@nx/nx-linux-arm-gnueabihf@22.5.2':
     optional: true
 
-  '@nx/nx-linux-arm64-gnu@22.4.5':
-    optional: true
-
   '@nx/nx-linux-arm64-gnu@22.5.2':
-    optional: true
-
-  '@nx/nx-linux-arm64-musl@22.4.5':
     optional: true
 
   '@nx/nx-linux-arm64-musl@22.5.2':
     optional: true
 
-  '@nx/nx-linux-x64-gnu@22.4.5':
-    optional: true
-
   '@nx/nx-linux-x64-gnu@22.5.2':
-    optional: true
-
-  '@nx/nx-linux-x64-musl@22.4.5':
     optional: true
 
   '@nx/nx-linux-x64-musl@22.5.2':
     optional: true
 
-  '@nx/nx-win32-arm64-msvc@22.4.5':
-    optional: true
-
   '@nx/nx-win32-arm64-msvc@22.5.2':
-    optional: true
-
-  '@nx/nx-win32-x64-msvc@22.4.5':
     optional: true
 
   '@nx/nx-win32-x64-msvc@22.5.2':
@@ -28779,10 +28657,10 @@ snapshots:
 
   call-bind@1.0.7:
     dependencies:
-      es-define-property: 1.0.0
+      es-define-property: 1.0.1
       es-errors: 1.3.0
       function-bind: 1.1.2
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
       set-function-length: 1.2.2
 
   call-bind@1.0.8:
@@ -29439,7 +29317,7 @@ snapshots:
   cosmiconfig@8.3.6(typescript@4.9.5):
     dependencies:
       import-fresh: 3.3.1
-      js-yaml: 4.1.0
+      js-yaml: 4.1.1
       parse-json: 5.2.0
       path-type: 4.0.0
     optionalDependencies:
@@ -29448,7 +29326,7 @@ snapshots:
   cosmiconfig@8.3.6(typescript@5.9.3):
     dependencies:
       import-fresh: 3.3.1
-      js-yaml: 4.1.0
+      js-yaml: 4.1.1
       parse-json: 5.2.0
       path-type: 4.0.0
     optionalDependencies:
@@ -29458,7 +29336,7 @@ snapshots:
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
-      js-yaml: 4.1.0
+      js-yaml: 4.1.1
       parse-json: 5.2.0
     optionalDependencies:
       typescript: 4.9.5
@@ -29467,7 +29345,7 @@ snapshots:
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
-      js-yaml: 4.1.0
+      js-yaml: 4.1.1
       parse-json: 5.2.0
     optionalDependencies:
       typescript: 5.5.4
@@ -29476,7 +29354,7 @@ snapshots:
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
-      js-yaml: 4.1.0
+      js-yaml: 4.1.1
       parse-json: 5.2.0
     optionalDependencies:
       typescript: 5.8.3
@@ -29485,7 +29363,7 @@ snapshots:
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
-      js-yaml: 4.1.0
+      js-yaml: 4.1.1
       parse-json: 5.2.0
     optionalDependencies:
       typescript: 5.9.3
@@ -29914,9 +29792,9 @@ snapshots:
 
   define-data-property@1.1.4:
     dependencies:
-      es-define-property: 1.0.0
+      es-define-property: 1.0.1
       es-errors: 1.3.0
-      gopd: 1.0.1
+      gopd: 1.2.0
 
   define-lazy-prop@2.0.0: {}
 
@@ -30509,19 +30387,19 @@ snapshots:
       data-view-buffer: 1.0.1
       data-view-byte-length: 1.0.1
       data-view-byte-offset: 1.0.0
-      es-define-property: 1.0.0
+      es-define-property: 1.0.1
       es-errors: 1.3.0
-      es-object-atoms: 1.0.0
-      es-set-tostringtag: 2.0.3
+      es-object-atoms: 1.1.1
+      es-set-tostringtag: 2.1.0
       es-to-primitive: 1.2.1
       function.prototype.name: 1.1.6
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
       get-symbol-description: 1.0.2
       globalthis: 1.0.4
-      gopd: 1.0.1
+      gopd: 1.2.0
       has-property-descriptors: 1.0.2
       has-proto: 1.0.3
-      has-symbols: 1.0.3
+      has-symbols: 1.1.0
       hasown: 2.0.2
       internal-slot: 1.0.7
       is-array-buffer: 3.0.4
@@ -30608,10 +30486,6 @@ snapshots:
 
   es-array-method-boxes-properly@1.0.0: {}
 
-  es-define-property@1.0.0:
-    dependencies:
-      get-intrinsic: 1.3.0
-
   es-define-property@1.0.1: {}
 
   es-errors@1.3.0: {}
@@ -30660,12 +30534,6 @@ snapshots:
   es-object-atoms@1.1.1:
     dependencies:
       es-errors: 1.3.0
-
-  es-set-tostringtag@2.0.3:
-    dependencies:
-      get-intrinsic: 1.3.0
-      has-tostringtag: 1.0.2
-      hasown: 2.0.2
 
   es-set-tostringtag@2.1.0:
     dependencies:
@@ -32482,7 +32350,7 @@ snapshots:
       es-errors: 1.3.0
       function-bind: 1.1.2
       has-proto: 1.0.3
-      has-symbols: 1.0.3
+      has-symbols: 1.1.0
       hasown: 2.0.2
 
   get-intrinsic@1.3.0:
@@ -32721,7 +32589,7 @@ snapshots:
   globalthis@1.0.4:
     dependencies:
       define-properties: 1.2.1
-      gopd: 1.0.1
+      gopd: 1.2.0
 
   globalyzer@0.1.0: {}
 
@@ -32782,10 +32650,6 @@ snapshots:
   gonzales-pe@4.3.0:
     dependencies:
       minimist: 1.2.8
-
-  gopd@1.0.1:
-    dependencies:
-      get-intrinsic: 1.3.0
 
   gopd@1.2.0: {}
 
@@ -33115,7 +32979,7 @@ snapshots:
 
   has-property-descriptors@1.0.2:
     dependencies:
-      es-define-property: 1.0.0
+      es-define-property: 1.0.1
 
   has-proto@1.0.3: {}
 
@@ -33123,13 +32987,11 @@ snapshots:
     dependencies:
       dunder-proto: 1.0.1
 
-  has-symbols@1.0.3: {}
-
   has-symbols@1.1.0: {}
 
   has-tostringtag@1.0.2:
     dependencies:
-      has-symbols: 1.0.3
+      has-symbols: 1.1.0
 
   has-value@0.3.1:
     dependencies:
@@ -35565,10 +35427,6 @@ snapshots:
       argparse: 1.0.10
       esprima: 4.0.1
 
-  js-yaml@4.1.0:
-    dependencies:
-      argparse: 2.0.1
-
   js-yaml@4.1.1:
     dependencies:
       argparse: 2.0.1
@@ -37370,57 +37228,6 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  nx@22.4.5:
-    dependencies:
-      '@napi-rs/wasm-runtime': 0.2.4
-      '@yarnpkg/lockfile': 1.1.0
-      '@yarnpkg/parsers': 3.0.2
-      '@zkochan/js-yaml': 0.0.7
-      axios: 1.13.5
-      chalk: 4.1.2
-      cli-cursor: 3.1.0
-      cli-spinners: 2.6.1
-      cliui: 8.0.1
-      dotenv: 16.4.5
-      dotenv-expand: 11.0.7
-      enquirer: 2.3.6
-      figures: 3.2.0
-      flat: 5.0.2
-      front-matter: 4.0.2
-      ignore: 7.0.5
-      jest-diff: 30.2.0
-      jsonc-parser: 3.2.0
-      lines-and-columns: 2.0.3
-      minimatch: 10.1.1
-      node-machine-id: 1.1.12
-      npm-run-path: 4.0.1
-      open: 8.4.2
-      ora: 5.3.0
-      resolve.exports: 2.0.3
-      semver: 7.7.3
-      string-width: 4.2.3
-      tar-stream: 2.2.0
-      tmp: 0.2.5
-      tree-kill: 1.2.2
-      tsconfig-paths: 4.2.0
-      tslib: 2.6.3
-      yaml: 2.8.1
-      yargs: 17.7.2
-      yargs-parser: 21.1.1
-    optionalDependencies:
-      '@nx/nx-darwin-arm64': 22.4.5
-      '@nx/nx-darwin-x64': 22.4.5
-      '@nx/nx-freebsd-x64': 22.4.5
-      '@nx/nx-linux-arm-gnueabihf': 22.4.5
-      '@nx/nx-linux-arm64-gnu': 22.4.5
-      '@nx/nx-linux-arm64-musl': 22.4.5
-      '@nx/nx-linux-x64-gnu': 22.4.5
-      '@nx/nx-linux-x64-musl': 22.4.5
-      '@nx/nx-win32-arm64-msvc': 22.4.5
-      '@nx/nx-win32-x64-msvc': 22.4.5
-    transitivePeerDependencies:
-      - debug
-
   nx@22.5.2:
     dependencies:
       '@napi-rs/wasm-runtime': 0.2.4
@@ -37506,7 +37313,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
-      has-symbols: 1.0.3
+      has-symbols: 1.1.0
       object-keys: 1.1.1
 
   object.assign@4.1.7:
@@ -37529,7 +37336,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
-      es-object-atoms: 1.0.0
+      es-object-atoms: 1.1.1
 
   object.entries@1.1.9:
     dependencies:
@@ -37574,7 +37381,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
-      es-object-atoms: 1.0.0
+      es-object-atoms: 1.1.1
 
   object.values@1.2.1:
     dependencies:
@@ -39332,7 +39139,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.8
       get-intrinsic: 1.3.0
-      has-symbols: 1.0.3
+      has-symbols: 1.1.0
       isarray: 2.0.5
 
   safe-array-concat@1.1.3:
@@ -39774,7 +39581,7 @@ snapshots:
       es-errors: 1.3.0
       function-bind: 1.1.2
       get-intrinsic: 1.3.0
-      gopd: 1.0.1
+      gopd: 1.2.0
       has-property-descriptors: 1.0.2
 
   set-function-name@2.0.2:
@@ -40364,7 +40171,7 @@ snapshots:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-abstract: 1.23.5
-      es-object-atoms: 1.0.0
+      es-object-atoms: 1.1.1
 
   string.prototype.trimend@1.0.9:
     dependencies:
@@ -41994,7 +41801,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.8
       for-each: 0.3.3
-      gopd: 1.0.1
+      gopd: 1.2.0
       has-proto: 1.0.3
       is-typed-array: 1.1.15
 
@@ -42011,7 +41818,7 @@ snapshots:
       available-typed-arrays: 1.0.7
       call-bind: 1.0.8
       for-each: 0.3.3
-      gopd: 1.0.1
+      gopd: 1.2.0
       has-proto: 1.0.3
       is-typed-array: 1.1.15
 
@@ -42029,7 +41836,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.8
       for-each: 0.3.3
-      gopd: 1.0.1
+      gopd: 1.2.0
       has-proto: 1.0.3
       is-typed-array: 1.1.15
       possible-typed-array-names: 1.0.0
@@ -42073,7 +41880,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.8
       has-bigints: 1.0.2
-      has-symbols: 1.0.3
+      has-symbols: 1.1.0
       which-boxed-primitive: 1.0.2
 
   unbox-primitive@1.1.0:
@@ -43434,7 +43241,7 @@ snapshots:
       available-typed-arrays: 1.0.7
       call-bind: 1.0.8
       for-each: 0.3.3
-      gopd: 1.0.1
+      gopd: 1.2.0
       has-tostringtag: 1.0.2
 
   which-typed-array@1.1.19:
