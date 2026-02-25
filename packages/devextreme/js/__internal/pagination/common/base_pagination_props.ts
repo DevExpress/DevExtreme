@@ -2,7 +2,6 @@ import type { DisplayMode } from '@js/common';
 import type { PageSize } from '@js/ui/pagination_types';
 import { BaseWidgetDefaultProps, type BaseWidgetProps } from '@ts/core/r1/base_props';
 
-import messageLocalization from '../../../common/core/localization/message';
 import type { EventCallback } from '../../core/r1/event_callback';
 
 export interface BasePaginationProps extends BaseWidgetProps {
@@ -41,5 +40,5 @@ export const BasePaginationDefaultProps: BasePaginationProps = {
   allowedPageSizes: [5, 10],
   showNavigationButtons: false,
   itemCount: 1,
-  label: messageLocalization.format('dxPagination-ariaLabel'),
+  label: undefined,
 };

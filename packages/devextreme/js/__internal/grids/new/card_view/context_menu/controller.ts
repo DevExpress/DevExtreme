@@ -1,4 +1,5 @@
 import type { SingleMultipleOrNone } from '@js/common';
+import messageLocalization from '@js/localization/message';
 import type { Item as ContextMenuItem, ItemClickEvent as ContextMenuItemPressedEvent } from '@js/ui/context_menu';
 
 import { ColumnsController } from '../../grid_core/columns_controller/index';
@@ -80,21 +81,21 @@ export class ContextMenuController
 
     return [
       {
-        text: this.options.oneWay('sorting.ascendingText').peek(),
+        text: this.options.oneWay('sorting.ascendingText').peek() ?? messageLocalization.format('dxDataGrid-sortingAscendingText'),
         value: 'asc',
         disabled: isDisabled || column.sortOrder === 'asc',
         icon: 'sortuptext',
         onItemClick,
       },
       {
-        text: this.options.oneWay('sorting.descendingText').peek(),
+        text: this.options.oneWay('sorting.descendingText').peek() ?? messageLocalization.format('dxDataGrid-sortingDescendingText'),
         value: 'desc',
         disabled: isDisabled || column.sortOrder === 'desc',
         icon: 'sortdowntext',
         onItemClick,
       },
       {
-        text: this.options.oneWay('sorting.clearText').peek(),
+        text: this.options.oneWay('sorting.clearText').peek() ?? messageLocalization.format('dxDataGrid-sortingClearText'),
         value: undefined,
         disabled: isDisabled || !column.sortOrder,
         icon: 'none',
