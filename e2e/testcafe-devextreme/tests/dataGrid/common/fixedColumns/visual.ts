@@ -263,21 +263,10 @@ test('The grid layout should be correct after unfixing a column via the context 
 
   await t.expect(dataGrid.isReady()).ok();
 
-  // act: fix the first 4 columns (Employee, Position, Address, City)
-  await ClientFunction(() => {
-    const grid = ($(DATA_GRID_SELECTOR) as any).dxDataGrid('instance');
-    const columns = grid.option('columns');
-    const newColumns = [
-      ...columns.slice(0, 4).map((column) => ({ ...column, fixed: true, fixedPosition: 'left' })),
-      ...columns.slice(4),
-    ];
-    grid.option('columns', newColumns);
-  }, { dependencies: { DATA_GRID_SELECTOR } })();
-
-  // act: unfix City column via context menu
-  const cityHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3);
+  // act: unfix Position column via context menu
+  const positionHeader = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(3);
   await t
-    .rightClick(cityHeader.element)
+    .rightClick(positionHeader.element)
     .click(contextMenu.getItemByText('Unfix'));
 
   // assert
@@ -289,96 +278,39 @@ test('The grid layout should be correct after unfixing a column via the context 
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{
     ID: 1,
+    Title: 'Mr.',
     FirstName: 'John',
     LastName: 'Heart',
     Position: 'CEO',
-    BirthDate: '1964/03/16',
-    HireDate: '1995/01/15',
-    Title: 'Mr.',
     Address: '351 S Hill St.',
     City: 'Los Angeles',
-    State: 'California',
     Zipcode: 90013,
-    Email: 'jheart@dx-email.com',
-    Skype: 'jheartDXskype',
-    HomePhone: '(213) 555-9208',
-    Department: 'Management',
-    MobilePhone: '(213) 555-9392',
+    State: 'California',
   }, {
     ID: 2,
+    Title: 'Mrs.',
     FirstName: 'Olivia',
     LastName: 'Peyton',
     Position: 'Sales Assistant',
-    BirthDate: '1981/06/03',
-    HireDate: '2012/05/14',
-    Title: 'Mrs.',
     Address: '807 W Paseo Del Mar',
     City: 'Los Angeles',
-    State: 'California',
     Zipcode: 90036,
-    Email: 'oliviap@dx-email.com',
-    Skype: 'oliviapDXskype',
-    HomePhone: '(310) 555-2728',
-    Department: 'Human Resources',
-    MobilePhone: '(818) 555-2387',
-  }, {
-    ID: 3,
-    FirstName: 'Robert',
-    LastName: 'Reagan',
-    Position: 'CMO',
-    BirthDate: '1974/09/07',
-    HireDate: '2002/11/08',
-    Title: 'Mr.',
-    Address: '4 Westmoreland Pl.',
-    City: 'Bentonville',
-    State: 'Arkansas',
-    Zipcode: 91103,
-    Email: 'robertr@dx-email.com',
-    Skype: 'robertrDXskype',
-    HomePhone: '(818) 555-2438',
-    Department: 'Management',
-    MobilePhone: '(818) 555-2387',
-  }, {
-    ID: 4,
-    FirstName: 'Greta',
-    LastName: 'Sims',
-    Position: 'HR Manager',
-    BirthDate: '1977/11/22',
-    HireDate: '1998/04/23',
-    Title: 'Ms.',
-    Address: '1700 S Grandview Dr.',
-    State: 'Georgia',
-    City: 'Atlanta',
-    Zipcode: 91803,
-    Email: 'gretas@dx-email.com',
-    Skype: 'gretasDXskype',
-    HomePhone: '(818) 555-0976',
-    Department: 'Human Resources',
-    MobilePhone: '(818) 555-6546',
+    State: 'California',
   }],
   keyExpr: 'ID',
   columnAutoWidth: true,
   showBorders: true,
   repaintChangesOnly: true,
   columnFixing: { enabled: true },
+  width: 800,
   columns: [
-    {
-      caption: 'Employee',
-      calculateCellValue(data) {
-        return [data.Title, data.FirstName, data.LastName].join(' ');
-      },
-    },
-    { dataField: 'Position', alignment: 'right' },
+    { dataField: 'Title', fixed: true },
+    { dataField: 'FirstName', fixed: true },
+    { dataField: 'LastName', fixed: true },
+    { dataField: 'Position', fixed: true },
     { dataField: 'Address' },
     { dataField: 'City' },
     { dataField: 'Zipcode' },
     { dataField: 'State' },
-    { dataField: 'Department' },
-    { dataField: 'BirthDate', dataType: 'date' },
-    { dataField: 'HireDate', dataType: 'date' },
-    { dataField: 'HomePhone' },
-    { dataField: 'MobilePhone' },
-    { dataField: 'Email' },
-    { dataField: 'Skype' },
   ],
 }));
