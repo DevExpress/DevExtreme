@@ -1,13 +1,21 @@
+import { PopupModel } from '../../../../../ui/__tests__/__mock__/model/popup';
+
 const SELECTORS = {
   textEditorInput: 'dx-texteditor-input',
   item: 'dx-item',
+  toolbar: 'dx-toolbar',
+  saveButton: '[aria-label*="Save"]',
 };
 
-export class EditFormModel {
-  constructor(protected readonly root: HTMLElement | null) {}
+export class EditFormModel extends PopupModel {
+  constructor(protected readonly root: HTMLElement | null) {
+    super();
+  }
 
-  public getElement(): HTMLElement | null {
-    return this.root;
+  public getSaveButton(): HTMLElement {
+    const overlay = this.getOverlayContent();
+    const toolbar = overlay?.querySelector(`.${SELECTORS.toolbar}`);
+    return toolbar?.querySelector(SELECTORS.saveButton) as HTMLElement;
   }
 
   public getItem(id: string): HTMLElement | null {
