@@ -1,33 +1,20 @@
+import { PopupModel } from '@ts/ui/__tests__/__mock__/model/popup';
 import { TreeViewModel } from '@ts/ui/__tests__/__mock__/model/tree_view';
 
-const CLASSES = {
-  columnChooser: 'dx-datagrid-column-chooser',
-  columnChooserList: 'dx-datagrid-column-chooser-list',
-  popupWrapper: 'dx-popup-wrapper',
-};
+export class ColumnChooserModel extends PopupModel {
+  private readonly columnChooserListClass: string;
 
-export class ColumnChooserModel {
-  constructor(protected readonly root: HTMLElement) {}
-
-  private getPopupWrapper(): HTMLElement | null {
-    return document.body.querySelector(`.${CLASSES.popupWrapper}.${CLASSES.columnChooser}`);
-  }
-
-  private getOverlay(): HTMLElement | null {
-    const wrapper = this.getPopupWrapper();
-    return wrapper?.querySelector('.dx-overlay-content') ?? null;
+  constructor(widgetName: string) {
+    super();
+    this.columnChooserListClass = `dx-${widgetName}-column-chooser-list`;
   }
 
   private getTreeView(): TreeViewModel | null {
-    const overlay = this.getOverlay();
+    const overlay = this.getOverlayContent();
     if (!overlay) return null;
 
-    const treeViewElement = overlay.querySelector(`.${CLASSES.columnChooserList}`) as HTMLElement;
+    const treeViewElement = overlay.querySelector(`.${this.columnChooserListClass}`) as HTMLElement;
     return treeViewElement ? new TreeViewModel(treeViewElement) : null;
-  }
-
-  public isVisible(): boolean {
-    return this.getOverlay() !== null;
   }
 
   public searchColumn(text: string): void {
