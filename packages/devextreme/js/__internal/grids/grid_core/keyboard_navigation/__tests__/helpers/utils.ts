@@ -5,8 +5,8 @@ import type { DataGridInstance } from '@ts/grids/grid_core/__tests__/__mock__/he
 
 import { CLICK_EVENT, NAV_KEYS } from './const';
 
-export // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getKeyboardNavigationController(instance: DataGridInstance): any {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getKeyboardNavigationController(instance: DataGridInstance): any {
   return instance.getController('keyboardNavigation');
 }
 
