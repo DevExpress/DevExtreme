@@ -57,20 +57,19 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
     maxHeight: number,
     isSolidShader: boolean,
   ): void {
-    let localShaderHeight = shaderHeight;
     const shaderWidth = this._getShaderWidth();
-    let bottomShaderWidth = shaderWidth - this._workSpace.getCellWidth();
-    if (localShaderHeight < 0) {
-      localShaderHeight = 0;
-      bottomShaderWidth = shaderWidth;
-    }
-    this._renderTopShader(this._$shader, localShaderHeight, shaderWidth * groupCount, 0);
+    const bottomShaderWidth = shaderHeight < 0
+      ? shaderWidth
+      : shaderWidth - this._workSpace.getCellWidth();
+    const normalizedShaderHeight = Math.max(shaderHeight, 0);
+
+    this._renderTopShader(this._$shader, normalizedShaderHeight, shaderWidth * groupCount, 0);
 
     if (!isSolidShader) {
       this._renderBottomShader(
         this._$shader,
         maxHeight,
-        localShaderHeight,
+        normalizedShaderHeight,
         bottomShaderWidth * groupCount + this._workSpace.getCellWidth(),
         0,
       );
