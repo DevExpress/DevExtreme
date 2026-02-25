@@ -100,6 +100,10 @@ export const move = function (
   // eslint-disable-next-line no-param-reassign
   $element = $($element);
 
+  if (!position) {
+    return;
+  }
+
   const { left, top } = position;
   // eslint-disable-next-line @typescript-eslint/init-declarations
   let translate;
@@ -150,9 +154,13 @@ export const resetPosition = function (
   clearCache($element);
 
   if (finishTransition) {
-    // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    $element.get(0).offsetHeight;
+    const element = $element.get(0);
+
+    if (element && 'offsetHeight' in element) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      element.offsetHeight;
+    }
+
     $element.css('transition', originalTransition);
   }
 };
