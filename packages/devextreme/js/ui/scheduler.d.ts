@@ -1286,8 +1286,6 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     /**
      * @docid
      * @publicName getOccurrences(startDate, endDate, appointments)
-     * @param1 startDate:Date
-     * @param2 endDate:Date
      * @param3 appointments:Array<dxSchedulerAppointment>
      * @public
      */
@@ -1372,13 +1370,6 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
 export type Appointment = dxSchedulerAppointment;
 
 /**
- * @public
- * @docid dxSchedulerOccurrence
- * @namespace DevExpress.ui
- */
-export type Occurrence = dxSchedulerOccurrence;
-
-/**
  * @namespace DevExpress.ui
  * @deprecated Use the Scheduler's Appointment type instead
  */
@@ -1453,10 +1444,10 @@ export type dxSchedulerAppointment = CollectionWidgetItem & {
 } & Record<string, any>;
 
 /**
- * @namespace DevExpress.ui
- * @deprecated Use the Scheduler's Occurrence type instead
+ * @docid
+ * @public
  */
-export type dxSchedulerOccurrence = {
+export type Occurrence = {
   /**
    * @docid
    * @public

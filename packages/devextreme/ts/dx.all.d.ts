@@ -25892,7 +25892,7 @@ declare module DevExpress.ui {
       startDate: Date,
       endDate: Date,
       appointments: Appointment[]
-    ): Occurrence[];
+    ): DevExpress.ui.dxScheduler.Occurrence[];
     /**
      * [descr:dxScheduler.getStartViewDate()]
      */
@@ -26268,6 +26268,23 @@ declare module DevExpress.ui {
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxScheduler>;
     /**
+     * [descr:Occurrence]
+     */
+    export type Occurrence = {
+      /**
+       * [descr:Occurrence.startDate]
+       */
+      startDate: Date;
+      /**
+       * [descr:Occurrence.endDate]
+       */
+      endDate: Date;
+      /**
+       * [descr:Occurrence.appointmentData]
+       */
+      appointmentData: Appointment;
+    };
+    /**
      * [descr:_ui_scheduler_OptionChangedEvent]
      */
     export type OptionChangedEvent =
@@ -26367,24 +26384,6 @@ declare module DevExpress.ui {
      */
     visible?: boolean;
   } & Record<string, any>;
-  /**
-   * @deprecated Use the Scheduler's Occurrence type instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type dxSchedulerOccurrence = {
-    /**
-     * [descr:dxSchedulerOccurrence.startDate]
-     */
-    startDate: Date;
-    /**
-     * [descr:dxSchedulerOccurrence.endDate]
-     */
-    endDate: Date;
-    /**
-     * [descr:dxSchedulerOccurrence.appointmentData]
-     */
-    appointmentData: Appointment;
-  };
   /**
    * [descr:dxSchedulerOptions]
    * @deprecated [depNote:dxSchedulerOptions]
@@ -33334,10 +33333,6 @@ declare module DevExpress.ui {
    * [descr:ui.notify(options,stack)]
    */
   export function notify(options: any, stack?: Stack): void;
-  /**
-   * [descr:dxSchedulerOccurrence]
-   */
-  export type Occurrence = dxSchedulerOccurrence;
   /**
    * [descr:ui.repaintFloatingActionButton()]
    */
