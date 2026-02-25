@@ -107,9 +107,25 @@ export class PopupModel {
 
   getTitle = (): HTMLElement | null => document.querySelector('.dx-popup-title');
 
-  getDoneButton = (): HTMLButtonElement => this.queries.getByRole('button', { name: 'OK' }) as HTMLButtonElement;
+  getDoneButton = (): HTMLButtonElement => {
+    const doneButton = this.element.querySelector('.dx-button.dx-popup-done') as HTMLButtonElement;
 
-  getCancelButton = (): HTMLButtonElement => this.queries.getByRole('button', { name: 'Cancel' }) as HTMLButtonElement;
+    if (!doneButton) {
+      throw new Error('Done button not found');
+    }
+
+    return doneButton;
+  };
+
+  getCancelButton = (): HTMLButtonElement => {
+    const cancelButton = this.element.querySelector('.dx-button.dx-popup-cancel') as HTMLButtonElement;
+
+    if (!cancelButton) {
+      throw new Error('Cancel button not found');
+    }
+
+    return cancelButton;
+  };
 
   getCloseButton = (): HTMLButtonElement => this.queries.getByRole('button', { name: 'Close' }) as HTMLButtonElement;
 
