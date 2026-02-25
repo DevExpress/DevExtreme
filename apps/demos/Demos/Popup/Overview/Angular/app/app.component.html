@@ -22,14 +22,23 @@
     }
   </ul>
   <dx-popup
-    [width]="450"
-    [height]="600"
+    [width]="300"
+    [height]="280"
+    [showTitle]="true"
+    title="Information"
     [dragEnabled]="false"
     [hideOnOutsideClick]="true"
+    [showCloseButton]="false"
     container=".dx-viewport"
-    titleTemplate="title"
     [(visible)]="popupVisible"
   >
+    <dxi-popup-toolbar-item
+      widget="dxButton"
+      toolbar="top"
+      locateInMenu="always"
+      [options]="moreInfoButtonOptions"
+    >
+    </dxi-popup-toolbar-item>
     <dxi-popup-toolbar-item
       widget="dxButton"
       toolbar="bottom"
@@ -44,8 +53,31 @@
       [options]="closeButtonOptions"
     >
     </dxi-popup-toolbar-item>
-    <div *dxTemplate="let data of 'title'">
-      <p class="title">Title template</p>
+    <dxo-position at="bottom" my="center" [of]="positionOf" collision="fit">
+    </dxo-position>
+    <div *dxTemplate="let data of 'content'">
+      <p>
+        Full Name:
+        <span
+          >{{ currentEmployee.FirstName }} {{ currentEmployee.LastName }}</span
+        >
+      </p>
+      <p>
+        Birth Date:
+        <span>{{ currentEmployee.BirthDate }}</span>
+      </p>
+      <p>
+        Address:
+        <span>{{ currentEmployee.Address }}</span>
+      </p>
+      <p>
+        Hire Date:
+        <span>{{ currentEmployee.HireDate }}</span>
+      </p>
+      <p>
+        Position:
+        <span>{{ currentEmployee.Position }}</span>
+      </p>
     </div>
   </dx-popup>
 </div>
