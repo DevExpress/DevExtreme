@@ -1285,6 +1285,13 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     getEndViewDate(): Date;
     /**
      * @docid
+     * @publicName getOccurrences(startDate, endDate, appointments)
+     * @param3 appointments:Array<dxSchedulerAppointment>
+     * @public
+     */
+    getOccurrences(startDate: Date, endDate: Date, appointments: Appointment[]): Occurrence[];
+    /**
+     * @docid
      * @publicName getStartViewDate()
      * @public
      */
@@ -1435,6 +1442,29 @@ export type dxSchedulerAppointment = CollectionWidgetItem & {
      */
     visible?: boolean;
 } & Record<string, any>;
+
+/**
+ * @docid
+ * @public
+ */
+export type Occurrence = {
+  /**
+   * @docid
+   * @public
+   */
+  startDate: Date;
+  /**
+   * @docid
+   * @public
+   */
+  endDate: Date;
+  /**
+   * @docid
+   * @public
+   * @type dxSchedulerAppointment
+   */
+  appointmentData: Appointment;
+};
 
 /** @public */
 export type Properties = dxSchedulerOptions;
