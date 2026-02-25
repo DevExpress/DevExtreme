@@ -1,5 +1,4 @@
 import type { Mode } from '@js/common';
-import messageLocalization from '@js/localization/message';
 import type { PagerBase } from '@js/ui/pagination';
 
 export type PageSize = number | 'all';
@@ -22,6 +21,6 @@ export const defaultOptions = {
     visible: 'auto',
     showPageSizeSelector: false,
     allowedPageSizes: 'auto',
-    label: messageLocalization.format('dxPager-ariaLabel'),
+    label: undefined,
   },
 } satisfies Options;

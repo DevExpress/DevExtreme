@@ -64,7 +64,7 @@ export interface ColumnChooserProps {
 export class ColumnChooser extends Component<ColumnChooserProps> {
   public render(): JSX.Element {
     const {
-      visible, popupConfig, popupRef, sortableConfig,
+      visible, popupConfig, popupRef, sortableConfig, title,
     } = this.props;
 
     if (!visible) {
@@ -72,6 +72,11 @@ export class ColumnChooser extends Component<ColumnChooserProps> {
     }
 
     const treeView = this.getTreeView();
+
+    const actualTitle = title || messageLocalization.format('dxDataGrid-columnChooserTitle');
+    const toolbarItems = [
+      { text: actualTitle, toolbar: 'top' as const, location: 'before' as const },
+    ];
 
     return (
       <div className={CLASS.excludeFlexBox}>
@@ -85,7 +90,7 @@ export class ColumnChooser extends Component<ColumnChooserProps> {
           // @ts-expect-error
           _loopFocus={true}
 
-          toolbarItems={popupConfig.toolbarItems}
+          toolbarItems={toolbarItems}
           wrapperAttr={{ class: this.getPopupWrapperClass() }}
 
           width={popupConfig.width}
