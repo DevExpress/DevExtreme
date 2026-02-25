@@ -410,11 +410,6 @@ const position = function (what, options?) {
   resetPosition($what, true);
 
   const offset = getOffsetWithoutScale($what);
-
-  if (!offset) {
-    return undefined;
-  }
-
   const targetPosition = options.h && options.v ? options : calculatePosition($what, options);
 
   const preciser = function (number) {
