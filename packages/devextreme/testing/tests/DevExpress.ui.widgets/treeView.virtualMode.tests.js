@@ -49,7 +49,7 @@ QUnit.test('All nodes should be rendered by default', function(assert) {
     });
     const items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
 
-    assert.equal(items.length, 3);
+    assert.strictEqual(items.length, 3);
 });
 
 QUnit.test('Only root nodes should be rendered in virtualMode', function(assert) {
@@ -61,8 +61,8 @@ QUnit.test('Only root nodes should be rendered in virtualMode', function(assert)
 
     const items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
 
-    assert.equal(items.length, 3);
-    assert.equal(treeView.option('items').length, 3);
+    assert.strictEqual(items.length, 3);
+    assert.strictEqual(treeView.option('items').length, 3);
 });
 
 QUnit.test('Render expanded node in virtualMode', function(assert) {
@@ -77,8 +77,8 @@ QUnit.test('Render expanded node in virtualMode', function(assert) {
 
     const items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
 
-    assert.equal(items.length, 6);
-    assert.equal(treeView.option('items').length, 6);
+    assert.strictEqual(items.length, 6);
+    assert.strictEqual(treeView.option('items').length, 6);
 });
 
 QUnit.test('Ignore virtual mode if dataStructure is set to \'tree\'', function(assert) {
@@ -90,7 +90,7 @@ QUnit.test('Ignore virtual mode if dataStructure is set to \'tree\'', function(a
 
     const items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
 
-    assert.equal(items.length, 16);
+    assert.strictEqual(items.length, 16);
 });
 
 QUnit.test('Root nodes should not have leaf class', function(assert) {
@@ -120,8 +120,8 @@ QUnit.test('Render second level in virtualMode after click on icon', function(as
     $icon.trigger('dxclick');
 
     const items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
-    assert.equal(items.length, 6);
-    assert.equal(treeView.option('items').length, 6);
+    assert.strictEqual(items.length, 6);
+    assert.strictEqual(treeView.option('items').length, 6);
 
     // T378648
     const $itemsContainer = $icon.parent().siblings(`.${internals.NODE_CONTAINER_CLASS}`);
@@ -142,8 +142,8 @@ QUnit.test('Render second level in virtualMode after expand by api', function(as
     treeView.expandItem(1);
 
     const items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
-    assert.equal(items.length, 6);
-    assert.equal(treeView.option('items').length, 6);
+    assert.strictEqual(items.length, 6);
+    assert.strictEqual(treeView.option('items').length, 6);
 });
 
 QUnit.test('Render second level in virtualMode with parentIdExpr', function(assert) {
@@ -157,8 +157,8 @@ QUnit.test('Render second level in virtualMode with parentIdExpr', function(asse
     treeView.expandItem(1);
 
     const items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
-    assert.equal(items.length, 3);
-    assert.equal(treeView.option('items').length, 3);
+    assert.strictEqual(items.length, 3);
+    assert.strictEqual(treeView.option('items').length, 3);
 });
 
 QUnit.test('DataSource should contain root items and second level after expand with custom root value', function(assert) {
@@ -179,8 +179,8 @@ QUnit.test('DataSource should contain root items and second level after expand w
     treeView.expandItem(1);
 
     const items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
-    assert.equal(items.length, 5);
-    assert.equal(treeView.option('items').length, 5);
+    assert.strictEqual(items.length, 5);
+    assert.strictEqual(treeView.option('items').length, 5);
 });
 
 QUnit.test('Render toggle icon everywhen', function(assert) {
@@ -192,7 +192,7 @@ QUnit.test('Render toggle icon everywhen', function(assert) {
 
     const $icons = this.$element.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
 
-    assert.equal($icons.length, 3);
+    assert.strictEqual($icons.length, 3);
 });
 
 QUnit.test('Remove toggle icon after expand childless item', function(assert) {
@@ -205,7 +205,7 @@ QUnit.test('Remove toggle icon after expand childless item', function(assert) {
     treeView.expandItem(16);
 
     const $icons = this.$element.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
-    assert.equal($icons.length, 2);
+    assert.strictEqual($icons.length, 2);
 });
 
 QUnit.test('No custom expander icons should be visible after expand childless item', function(assert) {
@@ -233,7 +233,7 @@ QUnit.test('Remove loadindicator after expand childless item', function(assert) 
 
     const $node = this.$element.find(`.${TREEVIEW_NODE_CLASS}`).eq(2);
     $node.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger('dxclick');
-    assert.equal($node.find('.dx-treeview-node-loadindicator').length, 1);
+    assert.strictEqual($node.find('.dx-treeview-node-loadindicator').length, 1);
 
     this.clock.tick(400);
     assert.ok($node.find('.dx-treeview-node-loadindicator').is(':hidden'));
@@ -251,7 +251,7 @@ QUnit.test('Remove loadindicator after expand childless item on dblclick', funct
     const $node = this.$element.find(`.${TREEVIEW_NODE_CLASS}`).eq(2);
 
     $node.find(`.${TREEVIEW_ITEM_CLASS}`).trigger(dblclickEvent.name);
-    assert.equal($node.find('.dx-loadindicator').length, 1);
+    assert.strictEqual($node.find('.dx-loadindicator').length, 1);
 
     this.clock.tick(400);
     assert.ok($node.find('.dx-loadindicator').is(':hidden'));
@@ -272,10 +272,10 @@ QUnit.test('Don\'t create loadindicator on dblclick after expand childless item 
     const $node = this.$element.find(`.${TREEVIEW_NODE_CLASS}`).eq(2);
 
     $node.find(`.${TREEVIEW_ITEM_CLASS}`).trigger(dblclickEvent.name);
-    assert.equal($node.find('.dx-loadindicator').length, 0);
+    assert.strictEqual($node.find('.dx-loadindicator').length, 0);
 });
 
-QUnit.test('Don\'t create loadindicator when disabled item expands', function(assert) {
+QUnit.test('Should create loadindicator when disabled item expands', function(assert) {
     const newData = $.extend(true, [], data2);
     newData[15].disabled = true;
 
@@ -290,7 +290,7 @@ QUnit.test('Don\'t create loadindicator when disabled item expands', function(as
     const $node = this.$element.find(`.${TREEVIEW_NODE_CLASS}`).eq(2);
 
     $node.find('.dx-treeview-toggle-item-visibility').trigger('dxclick');
-    assert.equal($node.find('.dx-loadindicator').length, 0);
+    assert.strictEqual($node.find('.dx-loadindicator').length, 1);
 });
 
 QUnit.test('Add leaf class after expand childless item', function(assert) {
@@ -317,7 +317,7 @@ QUnit.test('Don\'t render toggle icon if item.hasItems is false', function(asser
     });
 
     const icons = this.$element.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
-    assert.equal(icons.length, 2);
+    assert.strictEqual(icons.length, 2);
 });
 
 QUnit.test('Don\'t render toggle icon if item.hasChildren is false', function(assert) {
@@ -333,7 +333,7 @@ QUnit.test('Don\'t render toggle icon if item.hasChildren is false', function(as
 
 
     const icons = this.$element.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
-    assert.equal(icons.length, 2);
+    assert.strictEqual(icons.length, 2);
 });
 
 QUnit.test('Render opened icon if item is expanded', function(assert) {
@@ -348,7 +348,7 @@ QUnit.test('Render opened icon if item is expanded', function(assert) {
     });
 
     const icons = this.$element.find('.' + internals.TOGGLE_ITEM_VISIBILITY_OPENED_CLASS);
-    assert.equal(icons.length, 1);
+    assert.strictEqual(icons.length, 1);
 });
 
 QUnit.test('Add leaf class if item.hasItems is false', function(assert) {
@@ -378,10 +378,10 @@ QUnit.test('Render empty checkboxes on root level', function(assert) {
 
 
     const $checkboxes = this.$element.find('.dx-checkbox');
-    assert.equal($checkboxes.length, 3, 'number of checkboxes is right');
+    assert.strictEqual($checkboxes.length, 3, 'number of checkboxes is right');
 
     $.each($checkboxes, function(index, checkbox) {
-        assert.equal($(checkbox).dxCheckBox('instance').option('value'), false, index + ' checkbox is not checked');
+        assert.strictEqual($(checkbox).dxCheckBox('instance').option('value'), false, index + ' checkbox is not checked');
     });
 });
 
@@ -399,10 +399,10 @@ QUnit.test('Render empty checkboxes on nested level', function(assert) {
 
     const $checkboxes = this.$element.find('.dx-checkbox');
 
-    assert.equal($checkboxes.length, 6, 'number of checkboxes is right');
+    assert.strictEqual($checkboxes.length, 6, 'number of checkboxes is right');
 
     $.each($checkboxes, function(index, checkbox) {
-        assert.equal($(checkbox).dxCheckBox('instance').option('value'), false, index + ' checkbox is not checked');
+        assert.strictEqual($(checkbox).dxCheckBox('instance').option('value'), false, index + ' checkbox is not checked');
     });
 });
 
@@ -438,10 +438,10 @@ QUnit.test('Check rendered children items if parent item is checked', function(a
 
     $checkboxes.eq(0).trigger('dxclick');
 
-    assert.equal($checkboxes.eq(0).dxCheckBox('instance').option('value'), true);
-    assert.equal($checkboxes.eq(1).dxCheckBox('instance').option('value'), true);
-    assert.equal($checkboxes.eq(2).dxCheckBox('instance').option('value'), true);
-    assert.equal($checkboxes.eq(3).dxCheckBox('instance').option('value'), true);
+    assert.strictEqual($checkboxes.eq(0).dxCheckBox('instance').option('value'), true);
+    assert.strictEqual($checkboxes.eq(1).dxCheckBox('instance').option('value'), true);
+    assert.strictEqual($checkboxes.eq(2).dxCheckBox('instance').option('value'), true);
+    assert.strictEqual($checkboxes.eq(3).dxCheckBox('instance').option('value'), true);
 });
 
 QUnit.test('Render checked children items if parent item is checked', function(assert) {
@@ -458,10 +458,10 @@ QUnit.test('Render checked children items if parent item is checked', function(a
     treeView.expandItem(1);
 
     const $checkboxes = this.$element.find('.dx-checkbox');
-    assert.equal($checkboxes.eq(0).dxCheckBox('instance').option('value'), true, 'checked');
-    assert.equal($checkboxes.eq(1).dxCheckBox('instance').option('value'), true, 'child checked');
-    assert.equal($checkboxes.eq(2).dxCheckBox('instance').option('value'), true, 'child checked');
-    assert.equal($checkboxes.eq(3).dxCheckBox('instance').option('value'), true, 'child checked');
+    assert.strictEqual($checkboxes.eq(0).dxCheckBox('instance').option('value'), true, 'checked');
+    assert.strictEqual($checkboxes.eq(1).dxCheckBox('instance').option('value'), true, 'child checked');
+    assert.strictEqual($checkboxes.eq(2).dxCheckBox('instance').option('value'), true, 'child checked');
+    assert.strictEqual($checkboxes.eq(3).dxCheckBox('instance').option('value'), true, 'child checked');
 });
 
 QUnit.test('Change parent check if child item became unselected', function(assert) {
@@ -494,12 +494,12 @@ QUnit.test('Check root level rendering with slow dataSource', function(assert) {
 
     let items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
 
-    assert.equal(items.length, 0, 'items was not rendered yet because dataSource is slow');
+    assert.strictEqual(items.length, 0, 'items was not rendered yet because dataSource is slow');
 
     this.clock.tick(300);
     items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
 
-    assert.equal(items.length, 3, 'items was rendered');
+    assert.strictEqual(items.length, 3, 'items was rendered');
 });
 
 QUnit.test('Check nested level rendering with slow dataSource', function(assert) {
@@ -514,11 +514,11 @@ QUnit.test('Check nested level rendering with slow dataSource', function(assert)
     treeView.expandItem(1);
 
     let items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
-    assert.equal(items.length, 3, 'nested items was not rendered yet because dataSource is slow');
+    assert.strictEqual(items.length, 3, 'nested items was not rendered yet because dataSource is slow');
 
     this.clock.tick(300);
     items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
-    assert.equal(items.length, 6, 'nested items was rendered');
+    assert.strictEqual(items.length, 6, 'nested items was rendered');
 });
 
 QUnit.test('Change root checkbox\'s value if new rendered child is selected with slow dataSource', function(assert) {
@@ -580,8 +580,8 @@ QUnit.test('Create error message if dataSource is unavailable', function(assert)
     ds.on('loadError', function() {
         const items = $element.find(`.${TREEVIEW_ITEM_CLASS}`);
 
-        assert.equal(items.length, 0, 'no items');
-        assert.equal($element.text(), 'No data to display', 'error generated');
+        assert.strictEqual(items.length, 0, 'no items');
+        assert.strictEqual($element.text(), 'No data to display', 'error generated');
     });
 
     this.clock.tick(300);
@@ -691,12 +691,12 @@ QUnit.test('SearchValue in virtualMode', function(assert) {
     });
     let $items = treeView.$element().find('.dx-treeview-item');
 
-    assert.equal($items.length, 1, '1 item was rendered after filtration');
+    assert.strictEqual($items.length, 1, '1 item was rendered after filtration');
 
     treeView.expandItem(1);
 
     $items = treeView.$element().find('.dx-treeview-item');
-    assert.equal($items.length, 2, '2 items were rendered after filtration');
+    assert.strictEqual($items.length, 2, '2 items were rendered after filtration');
 });
 
 QUnit.test('Clear searchValue in virtualMode', function(assert) {
@@ -711,7 +711,7 @@ QUnit.test('Clear searchValue in virtualMode', function(assert) {
     treeView.option('searchValue', '');
 
     const items = treeView.option('items');
-    assert.equal(items.length, 6, '6 items were rendered after filtration');
+    assert.strictEqual(items.length, 6, '6 items were rendered after filtration');
 });
 
 QUnit.test('SearchValue should work after sublevels were expanded', function(assert) {
@@ -726,7 +726,7 @@ QUnit.test('SearchValue should work after sublevels were expanded', function(ass
     treeView.option('searchValue', 'a');
 
     const $items = treeView.$element().find('.dx-treeview-item');
-    assert.equal($items.length, 2, '2 items were rendered after filtration');
+    assert.strictEqual($items.length, 2, '2 items were rendered after filtration');
 });
 
 QUnit.test('Repaint treeView on every dataSource modified - insert', function(assert) {
@@ -767,7 +767,7 @@ QUnit.test('Repaint treeView on every dataSource modified - insert', function(as
     });
 
     items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
-    assert.equal(items.length, 4);
+    assert.strictEqual(items.length, 4);
 
     dataSource.store().insert({
         id: 6,
@@ -776,11 +776,11 @@ QUnit.test('Repaint treeView on every dataSource modified - insert', function(as
     });
 
     items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
-    assert.equal(items.length, 5);
+    assert.strictEqual(items.length, 5);
 
     treeView.option('searchValue', 'Item 2');
     items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
-    assert.equal(items.length, 3);
+    assert.strictEqual(items.length, 3);
 
     dataSource.store().insert({
         id: 8,
@@ -789,7 +789,7 @@ QUnit.test('Repaint treeView on every dataSource modified - insert', function(as
     });
 
     items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
-    assert.equal(items.length, 3);
+    assert.strictEqual(items.length, 3);
 });
 
 QUnit.test('Repaint treeView on every dataSource modified - remove', function(assert) {
@@ -829,13 +829,13 @@ QUnit.test('Repaint treeView on every dataSource modified - remove', function(as
     dataSource.store().remove(4);
 
     let items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
-    assert.equal(items.length, 5);
+    assert.strictEqual(items.length, 5);
 
     dataSource.store().remove(1);
 
     items = this.$element.find(`.${TREEVIEW_ITEM_CLASS}`);
-    assert.equal(items.length, 2);
-    assert.equal(treeView.option('items').length, 2);
+    assert.strictEqual(items.length, 2);
+    assert.strictEqual(treeView.option('items').length, 2);
 });
 
 QUnit.test('Virtual mode should work with custom dataSource filter', function(assert) {
@@ -855,11 +855,11 @@ QUnit.test('Virtual mode should work with custom dataSource filter', function(as
         virtualModeEnabled: true
     });
 
-    assert.equal(this.$element.find('.dx-treeview-item').length, 1, 'root nodes should be filtered');
+    assert.strictEqual(this.$element.find('.dx-treeview-item').length, 1, 'root nodes should be filtered');
 
     treeView.expandItem(1);
 
-    assert.equal(this.$element.find('.dx-treeview-item').length, 2, 'child nodes should be filtered');
+    assert.strictEqual(this.$element.find('.dx-treeview-item').length, 2, 'child nodes should be filtered');
 });
 
 QUnit.test('Filter in virtual mode should not be lost after repaint', function(assert) {
@@ -882,7 +882,7 @@ QUnit.test('Filter in virtual mode should not be lost after repaint', function(a
 
     treeView.repaint();
 
-    assert.equal(this.$element.find('.dx-treeview-item').length, 1, 'root nodes should be filtered');
+    assert.strictEqual(this.$element.find('.dx-treeview-item').length, 1, 'root nodes should be filtered');
 });
 
 QUnit.test('DataSource change should not influence on items', function(assert) {
@@ -894,20 +894,20 @@ QUnit.test('DataSource change should not influence on items', function(assert) {
     });
 
     this.clock.tick(400);
-    assert.equal(treeView._dataSource.items().length, 3);
-    assert.equal(treeView.option('items').length, 3);
+    assert.strictEqual(treeView._dataSource.items().length, 3);
+    assert.strictEqual(treeView.option('items').length, 3);
 
     const $node = this.$element.find(`.${TREEVIEW_NODE_CLASS}`).eq(0);
     $node.find('.' + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger('dxclick');
     this.clock.tick(400);
-    assert.equal(treeView._dataSource.items().length, 3);
-    assert.equal(treeView.option('items').length, 6);
+    assert.strictEqual(treeView._dataSource.items().length, 3);
+    assert.strictEqual(treeView.option('items').length, 6);
 
     // newData = treeView.option("dataSource");
     // treeView.option("dataSource", newData);
     // this.clock.tick(400);
-    // assert.equal(treeView._dataSource.items().length, 3);
-    // assert.equal(treeView.option("items").length, 3); // will be fixed in T384846
+    // assert.strictEqual(treeView._dataSource.items().length, 3);
+    // assert.strictEqual(treeView.option("items").length, 3); // will be fixed in T384846
 });
 
 QUnit.test('Reload dataSource', function(assert) {
@@ -935,16 +935,16 @@ QUnit.test('Reload dataSource', function(assert) {
         virtualModeEnabled: true
     });
 
-    assert.equal(treeView.option('items').length, 2);
-    assert.equal(treeView.option('items')[0].text, 'Item 1-1');
+    assert.strictEqual(treeView.option('items').length, 2);
+    assert.strictEqual(treeView.option('items')[0].text, 'Item 1-1');
     numb = 2;
     ds.reload();
-    assert.equal(treeView.option('items').length, 2);
-    assert.equal(treeView.option('items')[0].text, 'Item 1-2');
+    assert.strictEqual(treeView.option('items').length, 2);
+    assert.strictEqual(treeView.option('items')[0].text, 'Item 1-2');
     numb = 1;
     ds.reload();
-    assert.equal(treeView.option('items').length, 2);
-    assert.equal(treeView.option('items')[0].text, 'Item 1-1');
+    assert.strictEqual(treeView.option('items').length, 2);
+    assert.strictEqual(treeView.option('items')[0].text, 'Item 1-1');
 });
 
 QUnit.test('Internal filter in virtual mode should be correct after datasource reloading', function(assert) {
@@ -1030,7 +1030,7 @@ QUnit.test('Items should update when dataSource changed', function(assert) {
         virtualModeEnabled: true
     });
 
-    assert.equal(treeView.option('items')[0].text, 'Item 1');
+    assert.strictEqual(treeView.option('items')[0].text, 'Item 1');
 
     treeView.option('dataSource', new DataSource({
         store: new ArrayStore([
@@ -1038,7 +1038,7 @@ QUnit.test('Items should update when dataSource changed', function(assert) {
         ])
     }));
 
-    assert.equal(treeView.option('items')[0].text, 'Item 2');
+    assert.strictEqual(treeView.option('items')[0].text, 'Item 2');
 });
 
 // T480748
@@ -1067,12 +1067,12 @@ QUnit.test('Load indicator should be shown on first loading with slow dataSource
     });
 
     this.clock.tick(200);
-    assert.equal(this.$element.find('.dx-treeview-loadindicator-wrapper').length, 1, 'load indicator wrapper was created');
-    assert.equal(this.$element.find('.dx-treeview-loadindicator').length, 1, 'load indicator was created');
+    assert.strictEqual(this.$element.find('.dx-treeview-loadindicator-wrapper').length, 1, 'load indicator wrapper was created');
+    assert.strictEqual(this.$element.find('.dx-treeview-loadindicator').length, 1, 'load indicator was created');
 
     this.clock.tick(100);
-    assert.equal(this.$element.find('.dx-treeview-loadindicator-wrapper').length, 0, 'load indicator wrapper was removed');
-    assert.equal(this.$element.find('.dx-treeview-loadindicator').length, 0, 'load indicator was removed');
+    assert.strictEqual(this.$element.find('.dx-treeview-loadindicator-wrapper').length, 0, 'load indicator wrapper was removed');
+    assert.strictEqual(this.$element.find('.dx-treeview-loadindicator').length, 0, 'load indicator was removed');
 });
 
 QUnit.test('load indicator should be removed after datasource is loaded even if init method is not finished yet', function(assert) {
@@ -1085,7 +1085,7 @@ QUnit.test('load indicator should be removed after datasource is loaded even if 
         ],
         onContentReady: function(e) {
             const $loadIndicator = $(e.element).find('.dx-treeview-loadindicator');
-            assert.equal($loadIndicator.length, 0, 'load indicator should be removed');
+            assert.strictEqual($loadIndicator.length, 0, 'load indicator should be removed');
         },
         dataStructure: 'plain',
         virtualModeEnabled: true
@@ -1122,7 +1122,7 @@ QUnit.test('Expand all method with the virtual mode', function(assert) {
     const nodes = treeView.getNodes();
     assert.ok(nodes[0].expanded, 'item 1');
     assert.notOk(nodes[0].items[0].expanded, 'item 11');
-    assert.equal(nodes[0].items[0].items.length, 0, 'children count of the item 11');
+    assert.strictEqual(nodes[0].items[0].items.length, 0, 'children count of the item 11');
 });
 
 QUnit.test('load indicator should be located inside an item', function(assert) {
@@ -1162,7 +1162,7 @@ QUnit.test('the passed function is called on widget initialization', function(as
     });
 
     assert.ok(spy.calledOnce, 'the callback function is called once after widget initialization');
-    assert.equal(spy.args[0][0], null, '\'null\' is passed as argument for the root item loading');
+    assert.strictEqual(spy.args[0][0], null, '\'null\' is passed as argument for the root item loading');
 });
 
 QUnit.test('\'createChildren\' callback didn\'t called at dblclick on item without children', function(assert) {
@@ -1191,7 +1191,7 @@ QUnit.test('the passed function is called on node expansion', function(assert) {
     treeView.expandItem(1);
 
     assert.ok(spy.calledOnce, 'the callback was fired only once on item expansion');
-    assert.equal(spy.args[0][0].itemData.id, 1, 'the correct parentNode is passed to the callback arguments');
+    assert.strictEqual(spy.args[0][0].itemData.id, 1, 'the correct parentNode is passed to the callback arguments');
 });
 
 QUnit.test('the passed function is not called on the node collapsing', function(assert) {
@@ -1205,7 +1205,7 @@ QUnit.test('the passed function is not called on the node collapsing', function(
     treeView.option('createChildren', spy);
     treeView.collapseItem(1);
 
-    assert.equal(spy.callCount, 0, 'the callback was not fired');
+    assert.strictEqual(spy.callCount, 0, 'the callback was not fired');
 });
 
 QUnit.test('the passed function is not called on the second expansion of the node', function(assert) {
@@ -1220,7 +1220,7 @@ QUnit.test('the passed function is not called on the second expansion of the nod
     treeView.option('createChildren', spy);
     treeView.expandItem(1);
 
-    assert.equal(spy.callCount, 0, 'the callback was not fired');
+    assert.strictEqual(spy.callCount, 0, 'the callback was not fired');
 });
 
 QUnit.test('the nodes returned by the callback function should be added to the widget', function(assert) {
@@ -1287,7 +1287,7 @@ QUnit.test('load indicator should be rendered on node expansion if the \'createC
     });
 
     treeView.expandItem(1);
-    assert.equal($treeView.find('.dx-treeview-node-loadindicator').length, 1, 'load indicator is created for the node expanding');
+    assert.strictEqual($treeView.find('.dx-treeview-node-loadindicator').length, 1, 'load indicator is created for the node expanding');
 
     deferred.resolve([{ id: 2, text: 'Two', parentId: 1 }]);
     assert.ok($treeView.find('.dx-treeview-node-loadindicator').is(':hidden'), 'load indicator is removed after data is fetched');
@@ -1335,10 +1335,10 @@ QUnit.test('fetched nodes should be rendered after asynchronous load via \'creat
     });
 
     treeView.expandItem(1);
-    assert.equal($treeView.find('.dx-treeview-node').length, 1, 'only root node is present');
+    assert.strictEqual($treeView.find('.dx-treeview-node').length, 1, 'only root node is present');
 
     deferred.resolve([item]);
-    assert.equal($treeView.find('.dx-treeview-node').length, 2, 'fetched node is rendered');
+    assert.strictEqual($treeView.find('.dx-treeview-node').length, 2, 'fetched node is rendered');
 });
 
 QUnit.test('load indicator should not be rendered on node expansion if the \'createChildren\' callback is specified and hasItems field is false', function(assert) {
@@ -1354,7 +1354,7 @@ QUnit.test('load indicator should not be rendered on node expansion if the \'cre
     });
 
     treeView.expandItem(1);
-    assert.equal($treeView.find('.dx-treeview-node-loadindicator').length, 0, 'load indicator is created for the node expanding');
+    assert.strictEqual($treeView.find('.dx-treeview-node-loadindicator').length, 0, 'load indicator is created for the node expanding');
 });
 
 QUnit.test('fetched nodes should be rendered after asynchronous load via \'createChildren\' on widget init', function(assert) {
@@ -1366,10 +1366,10 @@ QUnit.test('fetched nodes should be rendered after asynchronous load via \'creat
         }
     });
 
-    assert.equal($treeView.find('.dx-treeview-node').length, 0, 'no nodes are rendered');
+    assert.strictEqual($treeView.find('.dx-treeview-node').length, 0, 'no nodes are rendered');
 
     deferred.resolve([{ id: 1, text: 'One' }]);
-    assert.equal($treeView.find('.dx-treeview-node').length, 1, 'fetched node is rendered');
+    assert.strictEqual($treeView.find('.dx-treeview-node').length, 1, 'fetched node is rendered');
 });
 
 QUnit.test('arrow should be rendered for a node if the \'createChildren\' callback is specified', function(assert) {
@@ -1379,7 +1379,7 @@ QUnit.test('arrow should be rendered for a node if the \'createChildren\' callba
         createChildren: noop
     });
 
-    assert.equal($treeView.find('.dx-treeview-toggle-item-visibility').length, 1, 'arrow is rendered');
+    assert.strictEqual($treeView.find('.dx-treeview-toggle-item-visibility').length, 1, 'arrow is rendered');
 });
 
 QUnit.test('widget should not be rerendered after data is loaded with the help of \'createChildren\'', function(assert) {
@@ -1409,7 +1409,7 @@ QUnit.test('the createChildren is not called if not plain dataStructure is used'
         createChildren: spy
     });
 
-    assert.equal(spy.callCount, 0, 'the \'createChildren\' callback is not called');
+    assert.strictEqual(spy.callCount, 0, 'the \'createChildren\' callback is not called');
 });
 
 QUnit.test('data source is ignored if the \'createChildren\' callback is specified', function(assert) {
@@ -1427,7 +1427,7 @@ QUnit.test('data source is ignored if the \'createChildren\' callback is specifi
         createChildren: noop
     });
 
-    assert.equal(spy.callCount, 0, 'data source is ignored');
+    assert.strictEqual(spy.callCount, 0, 'data source is ignored');
 });
 
 QUnit.test('arrow should not be rendered for item which is explicitly has \'hasItems\' property set to false', function(assert) {
@@ -1438,7 +1438,7 @@ QUnit.test('arrow should not be rendered for item which is explicitly has \'hasI
         }
     });
 
-    assert.equal($treeView.find('.dx-treeview-toggle-item-visibility').length, 0, 'arrow is not rendered');
+    assert.strictEqual($treeView.find('.dx-treeview-toggle-item-visibility').length, 0, 'arrow is not rendered');
 });
 
 QUnit.test('the \'createChildren\' callback should not create duplicate items when search is used', function(assert) {
@@ -1457,8 +1457,8 @@ QUnit.test('the \'createChildren\' callback should not create duplicate items wh
 
     treeView.option('searchValue', 'Ro');
 
-    assert.equal($treeView.find('.dx-treeview-item').length, 1, 'only one item is rendered');
-    assert.equal($treeView.find('.dx-treeview-toggle-item-visibility').length, 0, 'arrow is not rendered');
+    assert.strictEqual($treeView.find('.dx-treeview-item').length, 1, 'only one item is rendered');
+    assert.strictEqual($treeView.find('.dx-treeview-toggle-item-visibility').length, 0, 'arrow is not rendered');
 });
 
 QUnit.test('the \'createChildren\' callback should support native promises', function(assert) {
@@ -1474,7 +1474,7 @@ QUnit.test('the \'createChildren\' callback should support native promises', fun
     }).dxTreeView('instance');
 
     promise.then(function() {
-        assert.equal(treeView.option('items').length, 1, 'items are loaded after native Promise resolution');
+        assert.strictEqual(treeView.option('items').length, 1, 'items are loaded after native Promise resolution');
         done();
     });
 });
@@ -1513,15 +1513,15 @@ module('Loadindicator', () => {
                 const $node = treeView.getNodes().eq(0);
                 const { toggleItemVisibilityCount, contentReadyCount } = expectedArgs;
 
-                assert.equal(contentReadyHandler.callCount, contentReadyCount, 'contentReady.callCount');
+                assert.strictEqual(contentReadyHandler.callCount, contentReadyCount, 'contentReady.callCount');
 
                 const $loadIndicator = treeView.getNodeLoadIndicator($node);
-                assert.equal($loadIndicator.length, 1, 'loadIndicator count');
-                assert.equal(treeView.hasInvisibleClass($loadIndicator), contentReadyCount ? true : false, 'loadIndicator has invisible class');
+                assert.strictEqual($loadIndicator.length, 1, 'loadIndicator count');
+                assert.strictEqual(treeView.hasInvisibleClass($loadIndicator), contentReadyCount ? true : false, 'loadIndicator has invisible class');
 
                 const $toggleItem = treeView.getToggleItemVisibility($node);
-                assert.equal($toggleItem.length, toggleItemVisibilityCount, 'toggle item count');
-                assert.equal($toggleItem.css('display') === 'none', contentReadyCount ? false : true, 'toggle item is hidden');
+                assert.strictEqual($toggleItem.length, toggleItemVisibilityCount, 'toggle item count');
+                assert.strictEqual($toggleItem.css('display') === 'none', contentReadyCount ? false : true, 'toggle item is hidden');
             };
 
             test(`Loadindicator: ${config}`, function() {

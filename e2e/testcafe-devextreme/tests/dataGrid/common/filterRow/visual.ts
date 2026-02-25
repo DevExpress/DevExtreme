@@ -42,7 +42,7 @@ test('FilterRow range overlay screenshot', async (t) => {
   await t
     .click(filterEditor.menu.getItemByText('Between'));
   // act
-  await testScreenshot(t, takeScreenshot, 'filter-row-overlay.png', { element: dataGrid.element });
+  await testScreenshot(t, takeScreenshot, 'filter-row-overlay.png');
   await t
     .expect(compareResults.isValid())
     .ok()

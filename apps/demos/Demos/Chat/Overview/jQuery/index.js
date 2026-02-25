@@ -23,6 +23,7 @@ $(() => {
   const userChat = $('#user-chat').dxChat({
     items: initialMessages,
     user: currentUser,
+    speechToTextEnabled: true,
     onMessageEntered,
     onTypingStart: userChatTypingStart,
     onTypingEnd: userChatTypingEnd,
@@ -31,6 +32,7 @@ $(() => {
   const supportChat = $('#support-chat').dxChat({
     items: initialMessages,
     user: supportAgent,
+    speechToTextEnabled: true,
     onMessageEntered,
     onTypingStart: supportChatTypingStart,
     onTypingEnd: supportChatTypingEnd,

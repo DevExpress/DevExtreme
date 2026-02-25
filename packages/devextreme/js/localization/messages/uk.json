@@ -272,8 +272,10 @@
         "dxScheduler-ariaLabel-currentIndicator-present": "Індикатор поточного часу відображається у поданні",
         "dxScheduler-ariaLabel-currentIndicator-not-present": "Індикатор поточного часу не відображається на екрані",
 
-        "dxScheduler-appointmentAriaLabel-group": "Група: {0}",
+        "dxScheduler-appointmentAriaDescription-group": "Група: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Повторювана подія",
+        "dxScheduler-hotkeysAriaDescription-delete": "Press Delete to delete this appointment",
+        "dxScheduler-hotkeysAriaDescription-homeEnd": "Press Home or End to quickly navigate to the first or last appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Список подій",
         "dxScheduler-newPopupTitle": "New Appointment",

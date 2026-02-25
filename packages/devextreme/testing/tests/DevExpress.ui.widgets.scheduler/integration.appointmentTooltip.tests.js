@@ -14,7 +14,7 @@ import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.j
 import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import '__internal/scheduler/m_scheduler';
 
 const dateFormat = 'monthandday';
@@ -1049,7 +1049,8 @@ module('Appointment tooltip template', moduleConfig, () => {
                 currentView: 'month',
                 currentDate: new Date(2021, 3, 27),
                 height: 600,
-                appointmentTooltipTemplate: (model) => assert.ok(model.isButtonClicked)
+                appointmentTooltipTemplate: (model) => assert.ok(model.isButtonClicked),
+                maxAppointmentsPerCell: 2
             });
 
             scheduler.appointments.compact.click(0);
@@ -1072,7 +1073,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
     };
 
     test('Title in tooltip should equals title of cell appointments in month view', async function(assert) {
-        const scheduler = await createScheduler(undefined, undefined);
+        const scheduler = await createScheduler({ maxAppointmentsPerCell: 2 }, undefined);
         assert.notOk(scheduler.tooltip.isVisible(), 'On page load tooltip should be invisible');
 
         const clock = sinon.useFakeTimers();
@@ -1149,7 +1150,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
 
     test('Compact button should hide or show after change in data source', async function(assert) {
         const dataList = getSimpleDataArray();
-        const scheduler = await createScheduler({}, dataList);
+        const scheduler = await createScheduler({ maxAppointmentsPerCell: 2 }, dataList);
 
         assert.equal(scheduler.appointments.compact.getButtonText(), '1 more', 'Value on init should be correct');
         assert.equal(scheduler.appointments.compact.getButtonCount(), 5, 'Count of compact buttons on init should be correct');
@@ -1180,7 +1181,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
     });
 
     test('Tooltip should hide after perform action', async function(assert) {
-        const scheduler = await createScheduler(undefined, undefined);
+        const scheduler = await createScheduler({ maxAppointmentsPerCell: 2 }, undefined);
 
         const clock = sinon.useFakeTimers();
         await scheduler.appointments.click(0, clock);
@@ -1246,7 +1247,8 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
 
                 templateCallCount++;
                 return $('<div />').text(`template item index - ${index}`);
-            }
+            },
+            maxAppointmentsPerCell: 2
         }, undefined);
 
         const clock = sinon.useFakeTimers();
@@ -1268,7 +1270,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
             const ITEM_FOCUSED_STATE_CLASS_NAME = 'dx-state-focused';
 
             test('List should be navigate by keyboard', async function(assert) {
-                const scheduler = await createScheduler(undefined, undefined);
+                const scheduler = await createScheduler({ maxAppointmentsPerCell: 2 }, undefined);
 
                 const checkFocusedState = index => scheduler.tooltip.getItemElement(index).hasClass(ITEM_FOCUSED_STATE_CLASS_NAME);
 
@@ -1351,6 +1353,7 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
 
     test('Tooltip should crop list, if list has many items', async function(assert) {
         const scheduler = await createScheduler({
+            maxAppointmentsPerCell: 2,
             dataSource: [
                 {
                     text: 'Prepare 2015 Marketing Plan',
@@ -1449,7 +1452,8 @@ module('New common tooltip for compact and cell appointments', moduleConfig, () 
                 $(`#button-${index}`).dxButton({ text: `test-${index}` });
             },
             startDayHour: 9,
-            height: 600
+            height: 600,
+            maxAppointmentsPerCell: 2
         }, undefined);
 
         const clock = sinon.useFakeTimers();
@@ -1586,7 +1590,8 @@ module('onAppointmentTooltipShowing event', moduleConfig, () => {
                     displayStartDate: appointment4.appointmentData.startDate,
                     displayEndDate: appointment4.appointmentData.endDate,
                 }, appointment4.currentAppointmentData);
-            }
+            },
+            maxAppointmentsPerCell: 2
         });
 
         scheduler.appointments.compact.click(0);

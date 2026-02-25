@@ -17,7 +17,7 @@ import {
 } from '../../helpers/scheduler/helpers.js';
 import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const { module, test, testStart } = QUnit;
 
@@ -83,7 +83,8 @@ module('All day appointments common', config, () => {
                     currentDate: new Date(2015, 2, 16),
                     dataSource: dataSource,
                     startDayHour: 6,
-                    currentView: 'week'
+                    currentView: 'week',
+                    maxAppointmentsPerCell: 'unlimited'
                 });
 
                 const $appointments = $(scheduler.instance.$element()).find('.dx-scheduler-appointment');
@@ -261,9 +262,9 @@ module('All day appointments common', config, () => {
                     maxAppointmentsPerCell: 2
                 });
 
-                assert.roughEqual(scheduler.appointments.getAppointmentHeight(0), 25, 1.5, 'Appointment has correct height');
-                assert.roughEqual(scheduler.appointments.getAppointmentHeight(1), 25, 1.5, 'Appointment has correct height');
-                assert.roughEqual(scheduler.appointments.getAppointmentPosition(0).top, 25, 1.5, 'Appointment has correct top');
+                assert.roughEqual(scheduler.appointments.getAppointmentHeight(0), 13.5, 1.5, 'Appointment has correct height');
+                assert.roughEqual(scheduler.appointments.getAppointmentHeight(1), 13.5, 1.5, 'Appointment has correct height');
+                assert.roughEqual(scheduler.appointments.getAppointmentPosition(0).top, 30, 1.5, 'Appointment has correct top');
 
                 assert.equal(scheduler.appointments.compact.getButtonCount(), 1, 'Appointment collector is rendered');
             });
@@ -494,17 +495,18 @@ module('All day appointments common', config, () => {
                 await waitForAsync(() => scheduler.appointments.getAppointments().length === 10);
 
                 scheduler.appointments.compact.click();
-                assert.equal(scheduler.tooltip.getItemCount(), 3, 'There are 3 drop down appts in 1st group');
+                assert.equal(scheduler.tooltip.getItemCount(), 4, 'There are 4 drop down appts in 1st group');
 
                 scheduler.appointments.compact.click(1);
-                assert.equal(scheduler.tooltip.getItemCount(), 3, 'There are 3 drop down appts in 2d group');
+                assert.equal(scheduler.tooltip.getItemCount(), 4, 'There are 4 drop down appts in 2d group');
             });
 
             test('DropDown appointment should be removed correctly when needed', async function(assert) {
                 const scheduler = await createInstance({
                     currentDate: new Date(2015, 4, 25),
                     views: ['week'],
-                    currentView: 'week'
+                    currentView: 'week',
+                    maxAppointmentsPerCell: 2,
                 });
 
                 const items = [

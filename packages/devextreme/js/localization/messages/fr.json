@@ -272,8 +272,10 @@
         "dxScheduler-ariaLabel-currentIndicator-present": "L'indicateur de temps actuel est visible dans la vue",
         "dxScheduler-ariaLabel-currentIndicator-not-present": "L'indicateur de l'heure actuelle n'est pas visible sur l'écran",
 
-        "dxScheduler-appointmentAriaLabel-group": "Groupe : {0}",
+        "dxScheduler-appointmentAriaDescription-group": "Groupe : {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Rendez-vous récurrent",
+        "dxScheduler-hotkeysAriaDescription-delete": "Press Delete to delete this appointment",
+        "dxScheduler-hotkeysAriaDescription-homeEnd": "Press Home or End to quickly navigate to the first or last appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Liste des rendez-vous ",
         "dxScheduler-newPopupTitle": "Nouveau rendez-vous",
@@ -588,7 +590,6 @@
         "dxHtmlEditor-aiCommandChangeTone": "Changer le ton",
         "dxHtmlEditor-aiCommandTranslate": "Traduire",
         "dxHtmlEditor-aiCommandAskAI": "Demander à l’IA",
-        
         "dxHtmlEditor-aiCommandChangeStyleFormal": "Formel",
         "dxHtmlEditor-aiCommandChangeStyleInformal": "Informel",
         "dxHtmlEditor-aiCommandChangeStyleTechnical": "Technique",
@@ -601,13 +602,11 @@
         "dxHtmlEditor-aiCommandChangeStyleExpository": "Expositif",
         "dxHtmlEditor-aiCommandChangeStyleDescriptive": "Descriptif",
         "dxHtmlEditor-aiCommandChangeStyleConversational": "Conversationnel",
-        
         "dxHtmlEditor-aiCommandChangeToneProfessional": "Professionnel",
         "dxHtmlEditor-aiCommandChangeToneCasual": "Décontracté",
         "dxHtmlEditor-aiCommandChangeToneStraightforward": "Direct",
         "dxHtmlEditor-aiCommandChangeToneConfident": "Confiant",
         "dxHtmlEditor-aiCommandChangeToneFriendly": "Amical",
-        
         "dxHtmlEditor-aiCommandTranslateArabic": "Arabe",
         "dxHtmlEditor-aiCommandTranslateChinese": "Chinois",
         "dxHtmlEditor-aiCommandTranslateEnglish": "Anglais",

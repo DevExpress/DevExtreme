@@ -2,6 +2,8 @@
     "jest.autoRun": {
         "watch": true,
     },
+    "jest.jestCommandLine": "pnpm run test-jest --",
+    "jest.rootPath": "packages/devextreme",
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit"
     },
