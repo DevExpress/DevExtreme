@@ -8640,10 +8640,6 @@ declare module DevExpress.pdfExporter {
 }
 declare module DevExpress.ui {
   /**
-   * [descr:dxSchedulerAppointment]
-   */
-  export type Appointment = dxSchedulerAppointment;
-  /**
    * [descr:ColCountResponsible]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -25867,16 +25863,16 @@ declare module DevExpress.ui {
     /**
      * [descr:dxScheduler.addAppointment(appointment)]
      */
-    addAppointment(appointment: Appointment): void;
+    addAppointment(appointment: DevExpress.ui.dxScheduler.Appointment): void;
     /**
      * [descr:dxScheduler.deleteAppointment(appointment)]
      */
-    deleteAppointment(appointment: Appointment): void;
+    deleteAppointment(appointment: DevExpress.ui.dxScheduler.Appointment): void;
     /**
      * [descr:dxScheduler.deleteRecurrence(appointment, date, recurrenceEditMode)]
      */
     deleteRecurrence(
-      appointmentData: Appointment,
+      appointmentData: DevExpress.ui.dxScheduler.Appointment,
       date: Date | string,
       recurrenceEditMode: DevExpress.ui.dxScheduler.RecurrenceEditMode
     ): void;
@@ -25891,7 +25887,7 @@ declare module DevExpress.ui {
     getOccurrences(
       startDate: Date,
       endDate: Date,
-      appointments: Appointment[]
+      appointments: DevExpress.ui.dxScheduler.Appointment[]
     ): DevExpress.ui.dxScheduler.Occurrence[];
     /**
      * [descr:dxScheduler.getStartViewDate()]
@@ -25925,25 +25921,85 @@ declare module DevExpress.ui {
      * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
      */
     showAppointmentPopup(
-      appointmentData?: Appointment,
+      appointmentData?: DevExpress.ui.dxScheduler.Appointment,
       createNewAppointment?: boolean,
-      currentAppointmentData?: Appointment
+      currentAppointmentData?: DevExpress.ui.dxScheduler.Appointment
     ): void;
     /**
      * [descr:dxScheduler.showAppointmentTooltip(appointmentData, target, currentAppointmentData)]
      */
     showAppointmentTooltip(
-      appointmentData: Appointment,
+      appointmentData: DevExpress.ui.dxScheduler.Appointment,
       target: string | DevExpress.core.UserDefinedElement,
-      currentAppointmentData?: Appointment
+      currentAppointmentData?: DevExpress.ui.dxScheduler.Appointment
     ): void;
     /**
      * [descr:dxScheduler.updateAppointment(target, appointment)]
      */
-    updateAppointment(target: Appointment, appointment: Appointment): void;
+    updateAppointment(
+      target: DevExpress.ui.dxScheduler.Appointment,
+      appointment: DevExpress.ui.dxScheduler.Appointment
+    ): void;
   }
   module dxScheduler {
     export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
+    /**
+     * [descr:Appointment]
+     */
+    export type Appointment = CollectionWidgetItem & {
+      /**
+       * [descr:Appointment.allDay]
+       */
+      allDay?: boolean;
+      /**
+       * [descr:Appointment.description]
+       */
+      description?: string;
+      /**
+       * [descr:Appointment.disabled]
+       */
+      disabled?: boolean;
+      /**
+       * [descr:Appointment.endDate]
+       */
+      endDate?: Date | string;
+      /**
+       * [descr:Appointment.endDateTimeZone]
+       */
+      endDateTimeZone?: string;
+      /**
+       * [descr:Appointment.html]
+       */
+      html?: string;
+      /**
+       * [descr:Appointment.recurrenceException]
+       */
+      recurrenceException?: string;
+      /**
+       * [descr:Appointment.recurrenceRule]
+       */
+      recurrenceRule?: string;
+      /**
+       * [descr:Appointment.startDate]
+       */
+      startDate?: Date | string;
+      /**
+       * [descr:Appointment.startDateTimeZone]
+       */
+      startDateTimeZone?: string;
+      /**
+       * [descr:Appointment.template]
+       */
+      template?: template;
+      /**
+       * [descr:Appointment.text]
+       */
+      text?: string;
+      /**
+       * [descr:Appointment.visible]
+       */
+      visible?: boolean;
+    } & Record<string, any>;
     /**
      * [descr:_ui_scheduler_AppointmentAddedEvent]
      */
@@ -26327,64 +26383,6 @@ declare module DevExpress.ui {
       | 'workWeek';
   }
   /**
-   * @deprecated Use the Scheduler's Appointment type instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export type dxSchedulerAppointment = CollectionWidgetItem & {
-    /**
-     * [descr:dxSchedulerAppointment.allDay]
-     */
-    allDay?: boolean;
-    /**
-     * [descr:dxSchedulerAppointment.description]
-     */
-    description?: string;
-    /**
-     * [descr:dxSchedulerAppointment.disabled]
-     */
-    disabled?: boolean;
-    /**
-     * [descr:dxSchedulerAppointment.endDate]
-     */
-    endDate?: Date | string;
-    /**
-     * [descr:dxSchedulerAppointment.endDateTimeZone]
-     */
-    endDateTimeZone?: string;
-    /**
-     * [descr:dxSchedulerAppointment.html]
-     */
-    html?: string;
-    /**
-     * [descr:dxSchedulerAppointment.recurrenceException]
-     */
-    recurrenceException?: string;
-    /**
-     * [descr:dxSchedulerAppointment.recurrenceRule]
-     */
-    recurrenceRule?: string;
-    /**
-     * [descr:dxSchedulerAppointment.startDate]
-     */
-    startDate?: Date | string;
-    /**
-     * [descr:dxSchedulerAppointment.startDateTimeZone]
-     */
-    startDateTimeZone?: string;
-    /**
-     * [descr:dxSchedulerAppointment.template]
-     */
-    template?: template;
-    /**
-     * [descr:dxSchedulerAppointment.text]
-     */
-    text?: string;
-    /**
-     * [descr:dxSchedulerAppointment.visible]
-     */
-    visible?: boolean;
-  } & Record<string, any>;
-  /**
    * [descr:dxSchedulerOptions]
    * @deprecated [depNote:dxSchedulerOptions]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -26517,7 +26515,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceLike<Appointment> | null;
+    dataSource?: DevExpress.data.DataSourceLike<DevExpress.ui.dxScheduler.Appointment> | null;
     /**
      * [descr:dxSchedulerOptions.dateCellTemplate]
      */

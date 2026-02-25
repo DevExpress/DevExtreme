@@ -9,7 +9,7 @@ import  dxDraggable from "devextreme/ui/draggable";
 import {
  AllDayPanelMode,
  ViewType,
- dxSchedulerAppointment,
+ Appointment,
  CellAppointmentsLimit,
  AppointmentAddedEvent,
  AppointmentAddingEvent,
@@ -231,7 +231,7 @@ const componentConfig = {
     currentView: String as PropType<string | ViewType>,
     customizeDateNavigatorText: Function as PropType<((info: { endDate: Date, startDate: Date, text: string }) => string)>,
     dataCellTemplate: {},
-    dataSource: [Array, Object, String] as PropType<Array<dxSchedulerAppointment> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
+    dataSource: [Array, Object, String] as PropType<Array<Appointment> | DataSource | DataSourceOptions | null | Store | string | Record<string, any>>,
     dateCellTemplate: {},
     dateSerializationFormat: String,
     descriptionExpr: String,
