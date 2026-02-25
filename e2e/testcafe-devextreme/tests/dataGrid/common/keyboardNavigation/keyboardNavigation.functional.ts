@@ -5389,11 +5389,16 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t.click(dataGrid.getDataCell(0, 0).element);
-    await t.wait(100); // wait for the focus to be set in the grid
 
     // assert
     await t
       .expect(dataGrid.getDataCell(0, 0).element.focused)
+      .ok();
+
+    await t.pressKey('tab');
+
+    await t
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
       .ok();
 
     // arrange
@@ -5412,7 +5417,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     const expectedFocusedCellChangingEventArgs = {
       newColumnIndex: 14,
       newRowIndex: 0,
-      prevColumnIndex: 0,
+      prevColumnIndex: 1,
       prevRowIndex: 0,
     };
     const expectedFocusedCellChangedEventArgs = {
@@ -5459,11 +5464,16 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t.click(dataGrid.getDataCell(0, 0).element);
-    await t.wait(100); // wait for the focus to be set in the grid
 
     // assert
     await t
       .expect(dataGrid.getDataCell(0, 0).element.focused)
+      .ok();
+
+    await t.pressKey('tab');
+
+    await t
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
       .ok();
 
     // arrange
@@ -5482,7 +5492,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     const expectedFocusedCellChangingEventArgs = {
       newColumnIndex: 34,
       newRowIndex: 0,
-      prevColumnIndex: 0,
+      prevColumnIndex: 1,
       prevRowIndex: 0,
     };
     const expectedFocusedCellChangedEventArgs = {
@@ -5530,11 +5540,16 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t.click(dataGrid.getDataCell(0, 0).element);
-    await t.wait(100); // wait for the focus to be set in the grid
 
     // assert
     await t
       .expect(dataGrid.getDataRow(0).element.focused)
+      .ok();
+
+    await t.pressKey('tab');
+
+    await t
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
       .ok();
 
     // arrange
@@ -5553,7 +5568,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     const expectedFocusedCellChangingEventArgs = {
       newColumnIndex: 14,
       newRowIndex: 0,
-      prevColumnIndex: 0,
+      prevColumnIndex: 1,
       prevRowIndex: 0,
     };
     const expectedFocusedRowChangingEventArgs = {
@@ -5607,11 +5622,16 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t.click(dataGrid.getDataCell(0, 0).element);
-    await t.wait(100); // wait for the focus to be set in the grid
 
     // assert
     await t
       .expect(dataGrid.getDataRow(0).element.focused)
+      .ok();
+
+    await t.pressKey('tab');
+
+    await t
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
       .ok();
 
     // arrange
@@ -5630,7 +5650,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     const expectedFocusedCellChangingEventArgs = {
       newColumnIndex: 34,
       newRowIndex: 0,
-      prevColumnIndex: 0,
+      prevColumnIndex: 1,
       prevRowIndex: 0,
     };
     const expectedFocusedRowChangingEventArgs = {
@@ -5686,11 +5706,16 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t.click(dataGrid.getDataCell(0, 0).element);
-    await t.wait(100); // wait for the focus to be set in the grid
 
     // assert
     await t
       .expect(dataGrid.getDataCell(0, 0).element.focused)
+      .ok();
+
+    await t.pressKey('tab');
+
+    await t
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
       .ok();
 
     // arrange
@@ -5709,7 +5734,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     const expectedFocusedCellChangingEventArgs = {
       newColumnIndex: 14,
       newRowIndex: 19,
-      prevColumnIndex: 0,
+      prevColumnIndex: 1,
       prevRowIndex: 0,
     };
     const expectedFocusedCellChangedEventArgs = {
@@ -5756,11 +5781,16 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t.click(dataGrid.getDataCell(0, 0).element);
-    await t.wait(100); // wait for the focus to be set in the grid
 
     // assert
     await t
       .expect(dataGrid.getDataCell(0, 0).element.focused)
+      .ok();
+
+    await t.pressKey('tab');
+
+    await t
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
       .ok();
 
     // arrange
@@ -5779,7 +5809,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     const expectedFocusedCellChangingEventArgs = {
       newColumnIndex: 34,
       newRowIndex: 19,
-      prevColumnIndex: 0,
+      prevColumnIndex: 1,
       prevRowIndex: 0,
     };
     const expectedFocusedCellChangedEventArgs = {
@@ -5829,11 +5859,16 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t.click(dataGrid.getDataCell(0, 0).element);
-    await t.wait(100); // wait for the focus to be set in the grid
 
     // assert
     await t
       .expect(dataGrid.getDataCell(0, 0).element.focused)
+      .ok();
+
+    await t.pressKey('tab');
+
+    await t
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
       .ok();
 
     // arrange
@@ -5853,7 +5888,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     const expectedFocusedCellChangingEventArgs = {
       newColumnIndex: 34,
       newRowIndex: 199,
-      prevColumnIndex: 0,
+      prevColumnIndex: 1,
       prevRowIndex: 0,
     };
     const expectedFocusedCellChangedEventArgs = {
@@ -5902,11 +5937,16 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t.click(dataGrid.getDataCell(0, 0).element);
-    await t.wait(100); // wait for the focus to be set in the grid
 
     // assert
     await t
       .expect(dataGrid.getDataCell(0, 0).element.focused)
+      .ok();
+
+    await t.pressKey('tab');
+
+    await t
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
       .ok();
 
     // arrange
@@ -5927,7 +5967,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     const expectedFocusedCellChangingEventArgs = {
       newColumnIndex: 14,
       newRowIndex: 19,
-      prevColumnIndex: 0,
+      prevColumnIndex: 1,
       prevRowIndex: 0,
     };
     const expectedFocusedCellChangedEventArgs = {
@@ -5975,12 +6015,17 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t
-      .click(dataGrid.getDataCell(0, 0).element)
-      .wait(100);
+      .click(dataGrid.getDataCell(0, 0).element);
 
     // assert
     await t
       .expect(dataGrid.getDataCell(0, 0).element.focused)
+      .ok();
+
+    await t.pressKey('tab');
+
+    await t
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
       .ok();
 
     // arrange
@@ -6001,7 +6046,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     const expectedFocusedCellChangingEventArgs = {
       newColumnIndex: 14,
       newRowIndex: 19,
-      prevColumnIndex: 0,
+      prevColumnIndex: 1,
       prevRowIndex: 0,
     };
     const expectedFocusedCellChangedEventArgs = {
@@ -6049,11 +6094,16 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t.click(dataGrid.getDataCell(0, 0).element);
-    await t.wait(100); // wait for the focus to be set in the grid
 
     // assert
     await t
       .expect(dataGrid.getDataRow(0).element.focused)
+      .ok();
+
+    await t.pressKey('tab');
+
+    await t
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
       .ok();
 
     // arrange
@@ -6072,7 +6122,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     const expectedFocusedCellChangingEventArgs = {
       newColumnIndex: 14,
       newRowIndex: 19,
-      prevColumnIndex: 0,
+      prevColumnIndex: 1,
       prevRowIndex: 0,
     };
     const expectedFocusedRowChangingEventArgs = {
@@ -6130,11 +6180,16 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t.click(dataGrid.getDataCell(0, 0).element);
-    await t.wait(100); // wait for the focus to be set in the grid
 
     // assert
     await t
       .expect(dataGrid.getDataRow(0).element.focused)
+      .ok();
+
+    await t.pressKey('tab');
+
+    await t
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
       .ok();
 
     // arrange
@@ -6153,7 +6208,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     const expectedFocusedCellChangingEventArgs = {
       newColumnIndex: 34,
       newRowIndex: 19,
-      prevColumnIndex: 0,
+      prevColumnIndex: 1,
       prevRowIndex: 0,
     };
     const expectedFocusedRowChangingEventArgs = {
@@ -6212,11 +6267,16 @@ test('The last cell should be focused after changing the page size (T1063530)', 
 
     // act
     await t.click(dataGrid.getDataCell(0, 0).element);
-    await t.wait(100); // wait for the focus to be set in the grid
 
     // assert
     await t
       .expect(dataGrid.getDataRow(0).element.focused)
+      .ok();
+
+    await t.pressKey('tab');
+
+    await t
+      .expect(dataGrid.getDataCell(0, 1).element.focused)
       .ok();
 
     // arrange
@@ -6236,7 +6296,7 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     const expectedFocusedCellChangingEventArgs = {
       newColumnIndex: 34,
       newRowIndex: 199,
-      prevColumnIndex: 0,
+      prevColumnIndex: 1,
       prevRowIndex: 0,
     };
     const expectedFocusedRowChangingEventArgs = {
