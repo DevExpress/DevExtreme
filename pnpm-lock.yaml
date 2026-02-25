@@ -80,8 +80,8 @@ catalogs:
       specifier: ^4.11.1
       version: 4.11.1
     devexpress-diagram:
-      specifier: 2.2.24
-      version: 2.2.24
+      specifier: 2.2.25
+      version: 2.2.25
     devexpress-gantt:
       specifier: 4.1.64
       version: 4.1.64
@@ -405,7 +405,7 @@ importers:
         version: 2.6.12
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.24
+        version: 2.2.25
       devexpress-gantt:
         specifier: 'catalog:'
         version: 4.1.64
@@ -891,8 +891,8 @@ importers:
         specifier: 6.10.0
         version: 6.10.0(webpack@5.105.0)
       minimatch:
-        specifier: 4.2.3
-        version: 4.2.3
+        specifier: 9.0.6
+        version: 9.0.6
       source-map-loader:
         specifier: 4.0.2
         version: 4.0.2(webpack@5.105.0)
@@ -1174,7 +1174,7 @@ importers:
         version: 1.8.0
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.24
+        version: 2.2.25
       devexpress-gantt:
         specifier: 'catalog:'
         version: 4.1.64
@@ -1322,7 +1322,7 @@ importers:
         version: 1.8.0
       devexpress-diagram:
         specifier: 'catalog:'
-        version: 2.2.24
+        version: 2.2.25
       devexpress-gantt:
         specifier: 'catalog:'
         version: 4.1.64
@@ -2289,8 +2289,8 @@ importers:
         specifier: 4.17.23
         version: 4.17.23
       minimatch:
-        specifier: 9.0.5
-        version: 9.0.5
+        specifier: 9.0.6
+        version: 9.0.6
       ng-packagr:
         specifier: '>=19.0.0'
         version: 19.2.2(@angular/compiler-cli@21.0.8(@angular/compiler@21.0.8)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5)
@@ -8430,6 +8430,10 @@ packages:
   balanced-match@2.0.0:
     resolution: {integrity: sha512-1ugUSr8BHXRnK23KfuYS+gVMC3LB8QGH9W1iGtDPsNWoQbgtXSExkBu2aDR4epiGWZOjZsj6lDl/N/AqqTC3UA==}
 
+  balanced-match@4.0.4:
+    resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
+    engines: {node: 18 || 20 || >=22}
+
   bare-events@2.5.4:
     resolution: {integrity: sha512-+gFfDkR8pj4/TrWCGUGWmJIkBwuxPS5F+a5yWjOHQt2hHvNZd5YLzadjmDUtFmMM4y429bnKLa8bYBMHcYdnQA==}
 
@@ -8574,6 +8578,10 @@ packages:
 
   brace-expansion@2.0.1:
     resolution: {integrity: sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==}
+
+  brace-expansion@5.0.3:
+    resolution: {integrity: sha512-fy6KJm2RawA5RcHkLa1z/ScpBeA762UF9KmZQxwIbDtRJrgLzM10depAiEQ+CXYcoiqW1/m96OAAoke2nE9EeA==}
+    engines: {node: 18 || 20 || >=22}
 
   braces@3.0.3:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
@@ -9806,8 +9814,8 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
-  devexpress-diagram@2.2.24:
-    resolution: {integrity: sha512-PD3mW50OFS44PnqUq2ywJHYDeNFWCIPhXCeLHkzg2BEdDufGGpW73Ux5z3F9NtW91sP0qNE1f1PrsR+3CIN0jA==}
+  devexpress-diagram@2.2.25:
+    resolution: {integrity: sha512-gcj+7AyH6HEzURTbexqbIciCGNFOAbypM6Gi2OuyvtQNR04WQCYozh8C3H0kLfHBNpRm2nEyjJWpV9MWThM8hA==}
 
   devexpress-gantt@4.1.64:
     resolution: {integrity: sha512-q9+diTugmzf3YNzQ4Xutr7ndgCAdpH7IyjTzGy2SiY5I+ePf2BaAZ0R3LGADBC5TuFS2OamIhF0HOj4ALgkf+A==}
@@ -14086,10 +14094,6 @@ packages:
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
 
-  minimatch@4.2.3:
-    resolution: {integrity: sha512-lIUdtK5hdofgCTu3aT0sOaHsYR37viUuIc0rwnnDXImbwFRcumyLMeZaM0t0I/fgxS6s6JMfu0rLD1Wz9pv1ng==}
-    engines: {node: '>=10'}
-
   minimatch@5.1.6:
     resolution: {integrity: sha512-lKwV/1brpG6mBUFHtb7NUmtABCb2WZZmm2wNiOA5hAb8VdCS4B3dtMWyvcoViccwAW/COERjXLt0zP1zXUN26g==}
     engines: {node: '>=10'}
@@ -14102,8 +14106,8 @@ packages:
     resolution: {integrity: sha512-RHiac9mvaRw0x3AYRgDC1CxAP7HTcNrrECeA8YYJeWnpo+2Q5CegtZjaotWTWxDG3UeGA1coE05iH1mPjT/2mg==}
     engines: {node: '>=16 || 14 >=14.17'}
 
-  minimatch@9.0.5:
-    resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
+  minimatch@9.0.6:
+    resolution: {integrity: sha512-kQAVowdR33euIqeA0+VZTDqU+qo1IeVY+hrKYtZMio3Pg0P0vuh/kwRylLUddJhB6pf3q/botcOvRtx4IN1wqQ==}
     engines: {node: '>=16 || 14 >=14.17'}
 
   minimist-options@4.1.0:
@@ -25739,7 +25743,7 @@ snapshots:
   '@ts-morph/common@0.22.0':
     dependencies:
       fast-glob: 3.3.3
-      minimatch: 9.0.5
+      minimatch: 9.0.6
       mkdirp: 3.0.1
       path-browserify: 1.0.1
 
@@ -25756,12 +25760,12 @@ snapshots:
   '@tufjs/models@3.0.1':
     dependencies:
       '@tufjs/canonical-json': 2.0.0
-      minimatch: 9.0.5
+      minimatch: 9.0.6
 
   '@tufjs/models@4.0.0':
     dependencies:
       '@tufjs/canonical-json': 2.0.0
-      minimatch: 9.0.5
+      minimatch: 9.0.6
 
   '@tybys/wasm-util@0.10.1':
     dependencies:
@@ -26495,7 +26499,7 @@ snapshots:
       debug: 4.4.3
       globby: 11.1.0
       is-glob: 4.0.3
-      minimatch: 9.0.5
+      minimatch: 9.0.6
       semver: 7.7.4
       ts-api-utils: 1.4.0(typescript@5.9.3)
     optionalDependencies:
@@ -26510,7 +26514,7 @@ snapshots:
       '@typescript-eslint/types': 8.52.0
       '@typescript-eslint/visitor-keys': 8.52.0
       debug: 4.4.3
-      minimatch: 9.0.5
+      minimatch: 9.0.6
       semver: 7.7.4
       tinyglobby: 0.2.15
       ts-api-utils: 2.4.0(typescript@4.9.5)
@@ -26525,7 +26529,7 @@ snapshots:
       '@typescript-eslint/types': 8.52.0
       '@typescript-eslint/visitor-keys': 8.52.0
       debug: 4.4.3
-      minimatch: 9.0.5
+      minimatch: 9.0.6
       semver: 7.7.4
       tinyglobby: 0.2.15
       ts-api-utils: 2.4.0(typescript@5.5.4)
@@ -26540,7 +26544,7 @@ snapshots:
       '@typescript-eslint/types': 8.52.0
       '@typescript-eslint/visitor-keys': 8.52.0
       debug: 4.4.3
-      minimatch: 9.0.5
+      minimatch: 9.0.6
       semver: 7.7.4
       tinyglobby: 0.2.15
       ts-api-utils: 2.4.0(typescript@5.9.3)
@@ -28188,6 +28192,8 @@ snapshots:
 
   balanced-match@2.0.0: {}
 
+  balanced-match@4.0.4: {}
+
   bare-events@2.5.4:
     optional: true
 
@@ -28359,6 +28365,10 @@ snapshots:
   brace-expansion@2.0.1:
     dependencies:
       balanced-match: 1.0.2
+
+  brace-expansion@5.0.3:
+    dependencies:
+      balanced-match: 4.0.4
 
   braces@3.0.3:
     dependencies:
@@ -29954,7 +29964,7 @@ snapshots:
       defined: 1.0.1
       minimist: 1.2.8
 
-  devexpress-diagram@2.2.24:
+  devexpress-diagram@2.2.25:
     dependencies:
       '@devexpress/utils': 1.4.7
       es6-object-assign: 1.1.0
@@ -32510,7 +32520,7 @@ snapshots:
     dependencies:
       foreground-child: 3.3.1
       jackspeak: 3.4.3
-      minimatch: 9.0.5
+      minimatch: 9.0.6
       minipass: 7.1.2
       package-json-from-dist: 1.0.1
       path-scurry: 1.11.1
@@ -33531,7 +33541,7 @@ snapshots:
 
   ignore-walk@7.0.0:
     dependencies:
-      minimatch: 9.0.5
+      minimatch: 9.0.6
 
   ignore-walk@8.0.0:
     dependencies:
@@ -35480,7 +35490,7 @@ snapshots:
   karma-webpack@5.0.1(webpack@5.105.0(@swc/core@1.15.3)):
     dependencies:
       glob: 7.2.3
-      minimatch: 9.0.5
+      minimatch: 9.0.6
       webpack: 5.105.0(@swc/core@1.15.3)
       webpack-merge: 4.2.2
 
@@ -36484,10 +36494,6 @@ snapshots:
     dependencies:
       brace-expansion: 1.1.11
 
-  minimatch@4.2.3:
-    dependencies:
-      brace-expansion: 1.1.11
-
   minimatch@5.1.6:
     dependencies:
       brace-expansion: 2.0.1
@@ -36500,9 +36506,9 @@ snapshots:
     dependencies:
       brace-expansion: 2.0.1
 
-  minimatch@9.0.5:
+  minimatch@9.0.6:
     dependencies:
-      brace-expansion: 2.0.1
+      brace-expansion: 5.0.3
 
   minimist-options@4.1.0:
     dependencies:
