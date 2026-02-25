@@ -178,8 +178,8 @@ overrides:
   node-forge@<1.3.2: ^1.3.2
   vite@>=6.0.0 <6.4.1: ^6.4.1
   tar@<7.5.8: ^7.5.8
-  terser@<4.8.1: ^4.8.1
-  minimatch@<10.2.1: ^10.2.1
+  terser@<4.8.1: 4.8.1
+  minimatch@<10.2.1: 10.2.1
 
 importers:
 
