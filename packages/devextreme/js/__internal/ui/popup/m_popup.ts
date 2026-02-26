@@ -52,7 +52,6 @@ import type {
   ControllerProperties,
 } from '@ts/ui/overlay/overlay_position_controller';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
-// import { TOOLBAR_CLASS } from '@ts/ui/toolbar/constants';
 import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
 
 import PopupDrag from './m_popup_drag';
@@ -545,7 +544,6 @@ class Popup<
 
     const $toolbarContainer = $('<div>')
       .addClass(POPUP_TITLE_CLASS)
-      // .addClass(TOOLBAR_CLASS)
       .insertBefore($content);
 
     this._$topToolbar = this._renderToolbar(
@@ -595,7 +593,6 @@ class Popup<
 
     const $toolbarContainer = $('<div>')
       .addClass(POPUP_BOTTOM_CLASS)
-      // .addClass(TOOLBAR_CLASS)
       .insertAfter($content);
 
     this._$bottomToolbar = this._renderToolbar(
