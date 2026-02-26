@@ -702,7 +702,7 @@ QUnit.module('dimensions', {
             integrationOptions: {
                 templates: {
                     'title': {
-                        render: function(args) {
+                        render: () => {
                             const $element = $('<span>')
                                 .addClass(TEMPLATE_WRAPPER_CLASS)
                                 .text('text');
@@ -714,7 +714,10 @@ QUnit.module('dimensions', {
             }
         }).dxPopup('instance');
 
-        assert.equal(popup.$overlayContent().text(), 'text', 'container is correct');
+        const popupOverlayContent = popup.$overlayContent();
+        const text = popupOverlayContent.text();
+
+        assert.strictEqual(text, 'text', 'container is correct');
     });
 
     QUnit.test('dimensions should be shrunk correctly with floating heights', function(assert) {

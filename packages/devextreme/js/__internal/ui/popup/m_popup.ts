@@ -14,6 +14,7 @@ import { EmptyTemplate } from '@js/core/templates/empty_template';
 import type { TemplateBase } from '@js/core/templates/template_base';
 import { noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
+import { contains } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
 import { camelize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
@@ -706,6 +707,12 @@ class Popup<
 
     // const $newContainer = $result;
 
+    const resultInContainer = contains($container.get(0), $result.get(0));
+
+    if (!resultInContainer) {
+      $container.append($result);
+    }
+
     $result.removeClass(TEMPLATE_WRAPPER_CLASS);
     $container.addClass(TEMPLATE_WRAPPER_CLASS);
 
@@ -721,6 +728,12 @@ class Popup<
     // React — контейнер уже является результатом, заменять не надо.
     // Vue — не надо заменять, надо перенести класс.
     // Нужно изменить условие — не наличие класса, а проверить, что один тот же элемент.
+    // Для случая jQuery, когда сама функция рендера не рендерит внутри контейнера,
+    // а только возвращает элемент, этот элемент должен быть вставлен в DOM в этом методе.
+    // Надо проверить, что контейнер не содержит результат и тогда вставить его в контейнер.
+    // В этом случае нужно хорошо протестировать React и убедиться, что контент
+    // правильно вставляется. Могут быть ошибки из-за React.createPortal
+
     // if (hasResultTemplateWrapperClass) {
     // if (resultClassList.length === 1 && hasResultTemplateWrapperClass) {
     // $container.replaceWith($result);
