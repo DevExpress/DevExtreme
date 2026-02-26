@@ -61,7 +61,6 @@
     <script nonce="M5H5tE">
         window.ROOT_URL = "@Url.Content("~/")";
         window.farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration));
-        window.INTRANET = @Html.Raw(Json.Serialize(Model.IsIntranet));
 
         QUnit.config.autostart = false;
         QUnit.config.failOnZeroTests = false;
