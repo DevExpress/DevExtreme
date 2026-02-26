@@ -1,11 +1,24 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
 const fs = require('fs-extra');
-const Builder = require('systemjs-builder');
 const babel = require('@babel/core');
 const url = require('url');
+const os = require('os')
+const { execSync } = require('child_process')
 
 const GRID_COMMON_STAR_IMPORT = 'exports.Grids = __importStar(require("./grids"));';
+
+const packageName = 'systemjs-builder';
+
+const tmpDirPath = path.join(os.tmpdir(), `tmp-demos-${packageName}`);
+const tmpDir = fs.mkdtempSync(tmpDirPath);
+
+console.log(`npm install ${packageName}@0.16.15 in temporary folder: ${tmpDir}`);
+
+// Temprary install systemjs-builder cos we don't want to keep it in project as dependency
+execSync(`npm install ${packageName}`, { cwd: tmpDir, stdio: 'inherit' })
+
+const Builder = require(path.join(tmpDir, 'node_modules', packageName));
 
 // https://stackoverflow.com/questions/42412965/how-to-load-named-exports-with-systemjs/47108328
 const prepareModulesToNamedImport = () => {
@@ -246,20 +259,27 @@ const prepareConfigs = (framework) => {
 };
 
 const build = async (framework) => {
-  const builder = new Builder();
-  prepareModulesToNamedImport();
-
-  const {
-    builderConfig, packages, bundlePath, bundleOpts,
-  } = prepareConfigs(framework);
-
-  builder.config(builderConfig);
-
+  let builder;
   try {
-    await builder.bundle(packages, bundlePath, bundleOpts);
-  } catch (err) {
-    console.error(`Build ${framework} error `, err);
-    process.exit(err);
+    builder = new Builder();
+
+    prepareModulesToNamedImport();
+
+    const {
+      builderConfig, packages, bundlePath, bundleOpts,
+    } = prepareConfigs(framework);
+
+    builder.config(builderConfig);
+
+    try {
+      await builder.bundle(packages, bundlePath, bundleOpts);
+    } catch (err) {
+      console.error(`Build ${framework} error `, err);
+      process.exit(err);
+    }
+  } finally {
+   // fs.rmSync(tmpDir, { recursive: true, force: true });
+    console.log(`Remove temporary folder: ${tmpDir}`);
   }
 };
 
