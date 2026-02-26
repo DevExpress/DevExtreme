@@ -58,6 +58,7 @@ const LAYOUT_MANAGER_FIRST_ROW_CLASS = 'dx-first-row';
 const LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
 const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
 const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
+const LAYOUT_MANAGER_COL_PREFIX = 'dx-col-';
 
 const MIN_COLUMN_WIDTH = 200;
 
@@ -130,7 +131,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
   _labelTemplateRenderedCallCount?: number;
 
-  _cashedColCount?: number;
+  _cashedColCount?: number | null;
 
   _getDefaultOptions(): ExtendedLayoutManagerProperties {
     return {
@@ -500,7 +501,8 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
         }
         const $itemElement = $(itemElement);
 
-        const itemRenderedCountInPreviousRows = location.row * colCount;
+        const currentColCount = that._getColCount();
+        const itemRenderedCountInPreviousRows = location.row * currentColCount;
 
         const item = that._items?.[location.col + itemRenderedCountInPreviousRows];
         if (!item) {
@@ -523,8 +525,8 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
         if (item.itemType === SIMPLE_ITEM_TYPE && isRoot) {
           $itemElement.addClass(ROOT_SIMPLE_ITEM_CLASS);
         }
-        const isLastColumn = (location.col === colCount - 1)
-          || (location.col + location.colspan === colCount);
+        const isLastColumn = (location.col === currentColCount - 1)
+          || (location.col + location.colspan === currentColCount);
         const rowsCount = that._getRowsCount();
         const isLastRow = location.row === rowsCount - 1;
 
@@ -543,7 +545,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
           itemCssClassList.push(cssItemClass);
 
           if (isDefined(item.col)) {
-            itemCssClassList.push(`dx-col-${item.col}`);
+            itemCssClassList.push(`${LAYOUT_MANAGER_COL_PREFIX}${item.col}`);
           }
         }
 
@@ -644,7 +646,6 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
   _setItems(items: ExtendedItem[]): void {
     this._items = items;
-    // @ts-expect-error ts-error
     this._cashedColCount = null; // T923489
   }
 
@@ -1128,9 +1129,76 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
   }
 
   _resetColCount(): void {
-    // @ts-expect-error ts-error
     this._cashedColCount = null;
     this._invalidate();
+  }
+
+  updateResponsiveBoxLayout(): void {
+    if (!this._responsiveBox) {
+      return;
+    }
+
+    this._cashedColCount = null;
+
+    this._items = (this._items ?? []).filter((item) => !item.merged);
+
+    const colCount = this._getColCount();
+    this._prepareItemsWithMerging(colCount);
+
+    const newLayoutItems = this._generateLayoutItems();
+
+    const { items: responsiveBoxItems } = this._responsiveBox.option();
+    const existingItems: ResponsiveBoxItem[] = responsiveBoxItems ?? [];
+
+    for (let i = 0; i < existingItems.length && i < newLayoutItems.length; i += 1) {
+      existingItems[i].location = newLayoutItems[i].location;
+    }
+
+    const newCols = this._generateRatio(colCount);
+    const newRows = this._generateRatio(this._getRowsCount(), true);
+
+    this._responsiveBox._options.silent({
+      cols: newCols,
+      rows: newRows,
+    });
+
+    this._responsiveBox.repaint();
+    this._updateItemsCssClasses();
+  }
+
+  _updateItemsCssClasses(): void {
+    const colCount = this._getColCount();
+    const rowsCount = this._getRowsCount();
+
+    this._items?.forEach((item: ExtendedItem): void => {
+      if (!item || item.merged) {
+        return;
+      }
+
+      const column = isDefined(item.col) ? item.col : 0;
+      const isFirstColumn = column === 0;
+      const isLastColumn = column === colCount - 1;
+
+      const row = isDefined(item.row) ? item.row : 0;
+      const isFirstRow = row === 0;
+      const isLastRow = row === rowsCount - 1;
+
+      const $itemContainer = this._itemsRunTimeInfo.findItemContainerByItem(item);
+      $itemContainer
+        .toggleClass(LAYOUT_MANAGER_FIRST_COL_CLASS, isFirstColumn)
+        .toggleClass(LAYOUT_MANAGER_LAST_COL_CLASS, isLastColumn)
+        .toggleClass(LAYOUT_MANAGER_FIRST_ROW_CLASS, isFirstRow)
+        .toggleClass(LAYOUT_MANAGER_LAST_ROW_CLASS, isLastRow);
+
+      const element = $itemContainer.get(0);
+      element.className = [...element.classList]
+        .filter((name: string): boolean => !name.startsWith(LAYOUT_MANAGER_COL_PREFIX))
+        .join(' ');
+
+      if (isDefined(item.col)) {
+        $itemContainer.addClass(`${LAYOUT_MANAGER_COL_PREFIX}${item.col}`);
+      }
+    });
   }
 
   linkEditorToDataField(editorInstance: Editor, dataField: string): void {
