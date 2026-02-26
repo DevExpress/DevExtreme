@@ -1,7 +1,8 @@
 import type { ColumnChooserMode } from '@js/common/grids';
 import type { DxElement } from '@js/core/element';
+import messageLocalization from '@js/localization/message';
 import type { Properties as ButtonProperties } from '@js/ui/button';
-import type { Properties as PopupProperties, ToolbarItem } from '@js/ui/popup';
+import type { Properties as PopupProperties } from '@js/ui/popup';
 import type dxPopup from '@js/ui/popup';
 import type { Properties as TreeViewProperties } from '@js/ui/tree_view';
 import type dxTreeView from '@js/ui/tree_view';
@@ -46,18 +47,10 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
   }));
 
   private readonly dragAndDropModeConfig: ReadonlySignal<TreeViewProperties> = computed(() => ({
-    noDataText: this.options.oneWay('columnChooser.emptyPanelText').value,
+    noDataText: this.options.oneWay('columnChooser.emptyPanelText').value
+      ?? messageLocalization.format('dxDataGrid-columnChooserEmptyText'),
     activeStateEnabled: false,
   }));
-
-  private readonly popupToolbarItems: ReadonlySignal<ToolbarItem[]> = computed(() => {
-    const title = this.options.oneWay('columnChooser.title').value;
-    const items = [
-      { text: title, toolbar: 'top', location: 'before' },
-    ] as ToolbarItem[];
-
-    return items;
-  });
 
   public static dependencies = [
     ToolbarController, ColumnChooserController, ColumnsController, OptionsController,
@@ -130,7 +123,6 @@ export class ColumnChooserView extends View<ColumnChooserProps> {
         height: this.options.oneWay('columnChooser.height').value,
         container: this.options.oneWay('columnChooser.container').value,
         position: this.options.oneWay('columnChooser.position').value,
-        toolbarItems: this.popupToolbarItems.value,
 
         onHidden: () => {
           this.popupVisible.value = false;

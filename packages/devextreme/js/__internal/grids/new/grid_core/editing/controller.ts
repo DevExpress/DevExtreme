@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/await-thenable */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable spellcheck/spell-checker */
 import { applyChanges } from '@js/common/data';
 import { isDefined } from '@js/core/utils/type';
+import messageLocalization from '@js/localization/message';
 import { computed, type Signal } from '@preact/signals-core';
 import { generateNewRowTempKey } from '@ts/grids/grid_core/editing/m_editing_utils';
 import { OptionsValidationController } from '@ts/grids/new/grid_core/options_validation/index';
@@ -151,7 +153,6 @@ export class EditingController {
 
     this.onInitNewCard.peek()(eventArgs);
 
-    // eslint-disable-next-line @typescript-eslint/await-thenable
     await eventArgs.promise;
 
     const newItemKey = this.dataController.getDataKey(eventArgs.data) ?? generateNewRowTempKey();
@@ -184,8 +185,8 @@ export class EditingController {
     const showDialogTitle = isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
 
     const result = await this.confirmController.confirm(
-      confirmDeleteMessage ?? '', // TODO: bad typing
-      confirmDeleteTitle ?? '', // TODO: bad typing
+      confirmDeleteMessage ?? messageLocalization.format('dxDataGrid-editingConfirmDeleteMessage'),
+      confirmDeleteTitle ?? '',
       showDialogTitle,
     );
 
@@ -258,7 +259,6 @@ export class EditingController {
 
     this.onSaving.peek()(eventArgs);
 
-    // eslint-disable-next-line @typescript-eslint/await-thenable
     await eventArgs.promise;
 
     if (eventArgs.cancel) {
@@ -288,7 +288,7 @@ export class EditingController {
 
           this.onCardUpdating.peek()(updatingArgs);
 
-          // eslint-disable-next-line no-await-in-loop, @typescript-eslint/await-thenable
+          // eslint-disable-next-line no-await-in-loop
           if (await updatingArgs.cancel) {
             break;
           }
@@ -317,7 +317,7 @@ export class EditingController {
 
           this.onCardRemoving.peek()(removingArgs);
 
-          // eslint-disable-next-line no-await-in-loop, @typescript-eslint/await-thenable
+          // eslint-disable-next-line no-await-in-loop
           if (await removingArgs.cancel) {
             break;
           }
@@ -340,7 +340,7 @@ export class EditingController {
 
           this.onCardInserting.peek()(insertingArgs);
 
-          // eslint-disable-next-line no-await-in-loop, @typescript-eslint/await-thenable
+          // eslint-disable-next-line no-await-in-loop
           if (await insertingArgs.cancel) {
             break;
           }
