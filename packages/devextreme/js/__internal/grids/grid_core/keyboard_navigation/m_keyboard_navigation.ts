@@ -2059,7 +2059,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         const isCellEditing = editingController
           && this._isCellEditMode()
           && editingController.isEditing();
-        const isRowEditingInCurrentRow = editingController && editingController.isEditRow(visibleRowIndex);
+        const isRowEditingInCurrentRow = editingController?.isEditRow(visibleRowIndex);
         const isEditing = isRowEditingInCurrentRow || isCellEditing;
 
         if (column.command) {
@@ -2107,6 +2107,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const focusedCellPosition = cellPosition || this._focusedCellPosition;
     const isRowFocusType = this.isRowFocusType();
     const includeCommandCells = isRowFocusType || ['next', 'previous'].includes(keyCode);
+    const isVerticalNavigation = ['upArrow', 'downArrow'].includes(keyCode);
     let $cell;
     let $row;
 
@@ -2117,6 +2118,26 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         keyCode,
       );
       $cell = $(this._getCell(newFocusedCellPosition));
+
+      // T1322130, T1322440: During vertical navigation in any focus mode,
+      // command cells (e.g. expand) may be invalid for focus because their
+      // column inherits groupIndex from the grouped data column.
+      // Instead of recursing to the next row (risking infinite recursion at grid boundaries),
+      // find the first valid data cell in the target row.
+      if (
+        isVerticalNavigation
+        && isElementDefined($cell)
+        && !this._isCellValid($cell)
+      ) {
+        const visibleColumns = this._columnsController.getVisibleColumns(null, true);
+        const newFocusedColumnIndex = newFocusedCellPosition.columnIndex;
+        const newFocusedColumn = visibleColumns[newFocusedColumnIndex];
+
+        if (newFocusedColumn?.command === 'expand') {
+          $cell = this.getFirstValidCellInRow($cell.parent(), newFocusedColumnIndex) ?? $cell;
+        }
+      }
+
       const isLastCellOnDirection = keyCode === 'previous'
         ? this._isFirstValidCell(newFocusedCellPosition)
         : this._isLastValidCell(newFocusedCellPosition);
