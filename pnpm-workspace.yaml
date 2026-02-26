@@ -12,7 +12,7 @@ catalog:
   inferno-create-element: ^8.2.3
   inferno-server: ^8.2.3
   devexpress-diagram: 2.2.25
-  devexpress-gantt: 4.1.64
+  devexpress-gantt: 4.1.66
   devextreme-quill: 1.7.8
   eslint: 9.18.0
   eslint-config-airbnb-typescript: 18.0.0
