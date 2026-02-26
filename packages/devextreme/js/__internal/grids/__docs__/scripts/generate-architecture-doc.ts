@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env tsx
 /* eslint-disable no-console, no-restricted-syntax */
 /**
  * Grid Core Architecture Documentation Generator
@@ -8,7 +8,7 @@
  * - grid_core_architecture.generated.html (interactive Cytoscape.js visualization)
  *
  * Usage:
- *   npx ts-node __docs__/scripts/generate-architecture-doc.ts [options]
+ *   npx tsx __docs__/scripts/generate-architecture-doc.ts [options]
  *
  * Options:
  *   --json                Generate JSON only

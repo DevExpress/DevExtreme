@@ -345,6 +345,7 @@ export function buildInheritanceChains(
 
   function buildChain(className: string): string[] {
     if (processed.has(className)) {
+      console.warn(`Circular inheritance detected in class hierarchy involving "${className}".`);
       return [];
     }
     processed.add(className);
