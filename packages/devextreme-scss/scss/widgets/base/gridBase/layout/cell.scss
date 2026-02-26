@@ -9,7 +9,7 @@
   $grid-command-expand-column-width: 30px;
   $grid-command-adaptive-column-width: 36px;
 
-  // region position & z-index
+  // #region position & z-index
 
   .dx-#{$widget-name} .dx-#{$widget-name}-sticky-column,
   .dx-#{$widget-name} .dx-#{$widget-name}-sticky-column-left,
@@ -41,9 +41,9 @@
     z-index: 4;
   }
 
-  // endregion
+  // #endregion
 
-  // region visibility & pointer-events
+  // #region visibility & pointer-events
 
   .dx-#{$widget-name} .dx-#{$widget-name}-content-fixed .dx-#{$widget-name}-table td {
     pointer-events: auto;
@@ -54,9 +54,9 @@
     pointer-events: none;
   }
 
-  // endregion
+  // #endregion
 
-  // region overflow
+  // #region overflow
 
   .dx-header-row > td {
     overflow: hidden;
@@ -76,9 +76,9 @@
     overflow: visible;
   }
 
-  // endregion
+  // #endregion
 
-  // region sizing
+  // #region sizing
 
   .dx-#{$widget-name} .dx-#{$widget-name}-content-fixed .dx-#{$widget-name}-table.dx-#{$widget-name}-table-fixed .dx-row td.dx-pointer-events-none {
     width: auto;
@@ -119,9 +119,9 @@
     min-width: $grid-command-adaptive-column-width;
   }
 
-  // endregion
+  // #endregion
 
-  // region border
+  // #region border
 
   .dx-#{$widget-name}-borders > .dx-#{$widget-name}-rowsview.dx-last-row-border tbody:last-child > .dx-data-row:nth-last-child(2) > td {
     border-bottom-width: 0;
@@ -191,9 +191,9 @@
     border-right: none;
   }
 
-  // endregion
+  // #endregion
 
-  // region padding
+  // #region padding
 
   .dx-#{$widget-name} .dx-row > td,
   .dx-#{$widget-name} .dx-row > tr > td {
@@ -247,9 +247,9 @@
     padding-bottom: $grid-total-footer-paddings * 2;
   }
 
-  // endregion
+  // #endregion
 
-  // region background
+  // #region background
 
   .dx-#{$widget-name} .dx-#{$widget-name}-content-fixed .dx-#{$widget-name}-table .dx-row td.dx-pointer-events-none {
     background-color: transparent;
@@ -259,9 +259,9 @@
     background-color: transparent;
   }
 
-  // endregion
+  // #endregion
 
-  // region typography
+  // #region typography
 
   .dx-header-row > td {
     white-space: nowrap;
@@ -280,9 +280,9 @@
     white-space: nowrap;
   }
 
-  // endregion
+  // #endregion
 
-  // region vertical-align
+  // #region vertical-align
 
   .dx-#{$widget-name} .dx-#{$widget-name}-rowsview .dx-data-row .dx-command-drag {
     vertical-align: middle;
@@ -306,9 +306,9 @@
     vertical-align: middle;
   }
 
-  // endregion
+  // #endregion
 
-  // region cursor
+  // #region cursor
 
   .dx-#{$widget-name} .dx-#{$widget-name}-rowsview .dx-data-row .dx-command-drag {
     cursor: move;
@@ -323,9 +323,9 @@
     cursor: pointer;
   }
 
-  // endregion
+  // #endregion
 
-  // region outline
+  // #region outline
 
   .dx-#{$widget-name}-rowsview .dx-data-row > td:focus {
     outline: 0;
@@ -335,13 +335,13 @@
     outline: 0;
   }
 
-  // endregion
+  // #endregion
 
-  // region other
+  // #region other
 
   .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-command-expand {
     @include user-select(none);
   }
 
-  // endregion
+  // #endregion
 }
