@@ -3685,6 +3685,12 @@
                   "/Models/SampleData/Appointments.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Appointment Overlapping",
+                "Name": "AppointmentOverlapping",
+                "Widget": "Scheduler",
+                "DemoType": "Web"
               }
             ]
           },
