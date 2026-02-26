@@ -14,6 +14,7 @@ export interface ClassRegistrationInfo {
   mixins: string[];
   sourceFile: string;
   isExported: boolean;
+  featureArea: string;
 }
 
 // ─── Extenders ───────────────────────────────────────────────────────────────
@@ -101,14 +102,6 @@ export interface CytoscapeElement {
   group: 'nodes' | 'edges';
   data: Record<string, unknown>;
   classes?: string;
-}
-
-// ─── Externally Registered Class Info ────────────────────────────────────────
-
-export interface ExternalClassInfo {
-  role: 'controller' | 'view';
-  registeredAs: string;
-  featureArea: string;
 }
 
 // ─── Global Class Info (used in registry) ────────────────────────────────────

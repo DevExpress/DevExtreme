@@ -3,7 +3,7 @@
  * Cytoscape.js graph element builder for Grid Core Architecture Documentation Generator.
  */
 
-import { MODULE_ITEM_CLASS, MODULES_PREFIX, STANDALONE_CLASS_INFO } from './constants';
+import { MODULE_ITEM_CLASS, MODULES_PREFIX } from './constants';
 import type {
   ArchitectureData,
   CytoscapeElement,
@@ -145,7 +145,6 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
   // 2. Add standalone controller/view nodes (not inside any module)
   for (const [regName, ctrl] of Object.entries(data.standaloneControllers)) {
     const nodeId = `ctrl-${regName}`;
-    const standaloneInfo = STANDALONE_CLASS_INFO[ctrl.className];
     addNode(nodeId, {
       label: regName,
       nodeType: 'controller',
@@ -153,13 +152,12 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
       baseClass: ctrl.baseClass,
       mixins: nonEmpty(ctrl.mixins.join(', ')),
       sourceFile: ctrl.sourceFile,
-      featureArea: standaloneInfo?.featureArea ?? 'Other',
+      featureArea: ctrl.featureArea,
     }, 'controller standalone');
   }
 
   for (const [regName, view] of Object.entries(data.standaloneViews)) {
     const nodeId = `view-${regName}`;
-    const standaloneInfo = STANDALONE_CLASS_INFO[view.className];
     addNode(nodeId, {
       label: regName,
       nodeType: 'view',
@@ -167,7 +165,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
       baseClass: view.baseClass,
       mixins: nonEmpty(view.mixins.join(', ')),
       sourceFile: view.sourceFile,
-      featureArea: standaloneInfo?.featureArea ?? 'Other',
+      featureArea: view.featureArea,
     }, 'view standalone');
   }
 

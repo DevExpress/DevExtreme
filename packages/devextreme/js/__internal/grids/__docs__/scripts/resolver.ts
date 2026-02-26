@@ -6,9 +6,9 @@
 
 import {
   BARE_MODULE_BASES,
+  getFeatureAreaFromPath,
   M_MODULES_PATH,
   MODULES_PREFIX,
-  STANDALONE_CLASS_INFO,
 } from './constants';
 import type {
   ClassRegistrationInfo,
@@ -189,19 +189,65 @@ export function normalizeBareModuleImports(
 
 /**
  * Derive a registration name from a class name by converting to camelCase.
- * E.g., "ColumnsView" → "columnsView", "SeparatorView" → "separatorView"
+ * Handles leading uppercase runs: "AIColumnController" → "aiColumnController",
+ * "ColumnsView" → "columnsView", "SeparatorView" → "separatorView"
  */
 function deriveRegisteredName(className: string): string {
+  const match = /^([A-Z]+)([A-Z][a-z].*)$/.exec(className);
+  if (match) {
+    return match[1].toLowerCase() + match[2];
+  }
   return className.charAt(0).toLowerCase() + className.slice(1);
+}
+
+/**
+ * Check whether a class ultimately descends from a module base
+ * (modules.Controller, modules.View, modules.ViewController).
+ */
+function isModuleBaseDescendant(
+  className: string,
+  globalClasses: Map<string, GlobalClassInfo>,
+  visited = new Set<string>(),
+): boolean {
+  if (visited.has(className)) {
+    return false;
+  }
+  visited.add(className);
+
+  const info = globalClasses.get(className);
+  if (!info?.baseClass) {
+    return false;
+  }
+
+  let baseClass = normalizeModuleRef(info.baseClass);
+  if ((BARE_MODULE_BASES as readonly string[]).includes(baseClass)
+    && !globalClasses.has(baseClass)
+  ) {
+    baseClass = `${MODULES_PREFIX}${baseClass}`;
+  }
+
+  // Strip mixin wrapper to get the innermost base
+  let rawBase = baseClass;
+  let match = /^\w+\((.+)\)$/.exec(rawBase);
+  while (match) {
+    [, rawBase] = match;
+    match = /^\w+\((.+)\)$/.exec(rawBase);
+  }
+
+  if (rawBase.startsWith(MODULES_PREFIX)) {
+    return true;
+  }
+
+  return isModuleBaseDescendant(rawBase, globalClasses, visited);
 }
 
 /**
  * Find exported classes that are not registered in any module but should appear
  * in the diagram as standalone controller/view nodes (outside any module).
  *
- * A class qualifies if it is:
- * - Listed in STANDALONE_CLASS_INFO (known base classes or externally registered), OR
- * - Exported, not registered in any module, and used as a base class by other classes
+ * A class qualifies if it is exported, not registered in any module, and either:
+ * - used as a base class by other classes, or
+ * - descends from a module base class (Controller/View/ViewController)
  */
 export function findStandaloneRegistrations(
   modules: ModuleInfo[],
@@ -230,24 +276,19 @@ export function findStandaloneRegistrations(
       continue;
     }
 
-    // Check if this class is explicitly listed in STANDALONE_CLASS_INFO
-    const standaloneInfo = STANDALONE_CLASS_INFO[className];
-
-    // If not explicitly listed, check if any other class extends or mixes in this class
-    if (!standaloneInfo) {
-      let isUsed = false;
-      for (const [otherName, otherInfo] of globalClasses) {
-        if (otherName !== className
-          && (otherInfo.baseClass.includes(className) || otherInfo.mixins.includes(className))
-        ) {
-          isUsed = true;
-          break;
-        }
+    // Include if used as a base class OR if it descends from a module base
+    let isUsed = false;
+    for (const [otherName, otherInfo] of globalClasses) {
+      if (otherName !== className
+        && (otherInfo.baseClass.includes(className) || otherInfo.mixins.includes(className))
+      ) {
+        isUsed = true;
+        break;
       }
-      if (!isUsed) {
-        // eslint-disable-next-line no-continue
-        continue;
-      }
+    }
+    if (!isUsed && !isModuleBaseDescendant(className, globalClasses)) {
+      // eslint-disable-next-line no-continue
+      continue;
     }
 
     let baseClass = normalizeModuleRef(info.baseClass);
@@ -257,9 +298,9 @@ export function findStandaloneRegistrations(
       baseClass = `${MODULES_PREFIX}${baseClass}`;
     }
 
-    // Determine role and registeredAs from STANDALONE_CLASS_INFO or heuristic
-    const role = standaloneInfo?.role ?? (className.endsWith('View') ? 'view' : 'controller');
-    const registeredAs = standaloneInfo?.registeredAs ?? deriveRegisteredName(className);
+    // Determine role and registeredAs from heuristic
+    const role = className.endsWith('View') ? 'view' : 'controller';
+    const registeredAs = deriveRegisteredName(className);
 
     const entry: ClassRegistrationInfo = {
       className,
@@ -267,6 +308,7 @@ export function findStandaloneRegistrations(
       mixins: info.mixins,
       sourceFile: info.sourceFile,
       isExported: info.isExported,
+      featureArea: getFeatureAreaFromPath(info.sourceFile),
     };
 
     if (role === 'controller') {

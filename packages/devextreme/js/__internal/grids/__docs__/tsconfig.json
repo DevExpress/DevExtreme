@@ -5,7 +5,7 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "types": ["node"],
-    "strict": false,
+    "strict": true,
     "skipLibCheck": true
   },
   "include": ["./*.ts", "./scripts/*.ts"]

@@ -4,8 +4,6 @@
 
 import * as path from 'path';
 
-import type { ExternalClassInfo } from './types';
-
 // ─── Paths ───────────────────────────────────────────────────────────────────
 
 export const GRID_CORE_ROOT = path.resolve(__dirname, '..', '..', 'grid_core');
@@ -19,78 +17,52 @@ export const MODULE_ITEM_CLASS = 'ModuleItem';
 export const M_MODULES_PATH = 'm_modules';
 export const BARE_MODULE_BASES = ['Controller', 'View', 'ViewController'] as const;
 
-// ─── Feature Areas ───────────────────────────────────────────────────────────
+// ─── Directory → Feature Area Map ────────────────────────────────────────────
 
-export const FEATURE_AREAS: Record<string, string> = {
-  dataControllerModule: 'Core',
-  columnsControllerModule: 'Core',
-  gridViewModule: 'Core',
-  rowsModule: 'Core',
-  columnHeadersModule: 'Core',
-  headerPanelModule: 'Core',
-  editorFactoryModule: 'Core',
-  errorHandlingModule: 'Core',
+const DIRECTORY_FEATURE_MAP: Record<string, string> = {
+  data_controller: 'Data',
 
-  editingModule: 'Editing',
-  editingCellBasedModule: 'Editing',
-  editingRowBasedModule: 'Editing',
-  editingFormBasedModule: 'Editing',
-  validatingModule: 'Editing',
+  views: 'Core',
+  editor_factory: 'Core',
+  error_handling: 'Core',
 
-  selectionModule: 'Selection',
+  editing: 'Editing',
+  validating: 'Editing',
 
-  filterRowModule: 'Filtering',
-  filterSyncModule: 'Filtering',
-  filterPanelModule: 'Filtering',
-  filterBuilderModule: 'Filtering',
-  headerFilterModule: 'Filtering',
-  searchModule: 'Filtering',
+  selection: 'Selection',
 
-  keyboardNavigationModule: 'Navigation',
-  headersKeyboardNavigationModule: 'Navigation',
-  focusModule: 'Navigation',
+  filter: 'Filtering',
+  header_filter: 'Filtering',
+  search: 'Filtering',
 
-  columnChooserModule: 'Column Management',
-  columnFixingModule: 'Column Management',
-  stickyColumnsModule: 'Column Management',
-  virtualColumnsModule: 'Column Management',
-  columnsResizingReorderingModule: 'Column Management',
-  adaptivityModule: 'Column Management',
+  keyboard_navigation: 'Navigation',
+  focus: 'Navigation',
 
-  virtualScrollingModule: 'Scrolling',
+  columns_controller: 'Columns Core',
+  column_headers: 'Columns Core',
+  header_panel: 'Columns Core',
 
-  masterDetailModule: 'Other',
-  stateStoringModule: 'Other',
-  rowDraggingModule: 'Other',
-  pagerModule: 'Other',
-  contextMenuModule: 'Other',
+  column_chooser: 'Column Management',
+  column_fixing: 'Column Management',
+  sticky_columns: 'Column Management',
+  virtual_columns: 'Column Management',
+  columns_resizing_reordering: 'Column Management',
+  adaptivity: 'Column Management',
+
+  virtual_scrolling: 'Scrolling',
+
+  ai_column: 'AI',
+  ai_prompt_editor: 'AI',
 };
-
-// ─── Standalone Class Info ────────────────────────────────────────────────────
 
 /**
- * All classes that should appear as standalone nodes in the diagram
- * (outside of any module compound node).
- *
- * This includes:
- * - Base classes used by multiple modules (e.g. ColumnsView, SeparatorView)
- * - Classes registered as modules externally in data_grid/tree_list
+ * Derive the feature area from a file path relative to grid_core root.
+ * Uses the first directory segment to look up the feature, defaulting to 'Other'.
  */
-export const STANDALONE_CLASS_INFO: Record<string, ExternalClassInfo> = {
-  // Base classes
-  ColumnsView: { role: 'view', registeredAs: 'columnsView', featureArea: 'Core' },
-  SeparatorView: { role: 'view', registeredAs: 'separatorView', featureArea: 'Column Management' },
-  ColumnKeyboardNavigationController: { role: 'controller', registeredAs: 'columnKeyboardNavigation', featureArea: 'Navigation' },
-
-  // Externally registered (assembled in data_grid/tree_list, not in grid_core modules)
-  ToastViewController: { role: 'controller', registeredAs: 'toastViewController', featureArea: 'Other' },
-  ToastView: { role: 'view', registeredAs: 'toastView', featureArea: 'Other' },
-  AIColumnController: { role: 'controller', registeredAs: 'aiColumn', featureArea: 'AI' },
-  AIColumnIntegrationController: { role: 'controller', registeredAs: 'aiColumnIntegration', featureArea: 'AI' },
-  AIColumnCacheController: { role: 'controller', registeredAs: 'aiColumnCache', featureArea: 'AI' },
-  AIPromptEditorViewController: { role: 'controller', registeredAs: 'aiPromptEditor', featureArea: 'AI' },
-  AIPromptEditorView: { role: 'view', registeredAs: 'aiPromptEditorView', featureArea: 'AI' },
-};
+export function getFeatureAreaFromPath(relPath: string): string {
+  const firstSegment = relPath.split('/')[0];
+  return DIRECTORY_FEATURE_MAP[firstSegment] ?? 'Other';
+}
 
 // ─── Excluded Directories for File Discovery ─────────────────────────────────
 

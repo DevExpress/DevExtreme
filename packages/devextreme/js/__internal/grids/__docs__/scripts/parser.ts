@@ -12,7 +12,11 @@ import * as path from 'path';
 import ts from 'typescript';
 
 import {
-  EXCLUDED_DIRS, EXCLUDED_FILE_NAME, FEATURE_AREAS, GRID_CORE_ROOT, MODULE_SUFFIX,
+  EXCLUDED_DIRS,
+  EXCLUDED_FILE_NAME,
+  getFeatureAreaFromPath,
+  GRID_CORE_ROOT,
+  MODULE_SUFFIX,
 } from './constants';
 import type {
   ClassRegistrationInfo, ExtenderInfo, ModuleInfo, ParsedFile, RuntimeDependency,
@@ -281,6 +285,7 @@ export function parseControllersOrViews(
       mixins: classInfo?.mixins ?? [],
       sourceFile: relPath,
       isExported: classInfo?.isExported ?? false,
+      featureArea: getFeatureAreaFromPath(relPath),
     };
   }
 }
@@ -296,7 +301,7 @@ function parseModuleDefinition(
     moduleName,
     registeredAs: guessRegisteredName(moduleName),
     sourceFile: relPath,
-    featureArea: FEATURE_AREAS[moduleName] || 'Other',
+    featureArea: getFeatureAreaFromPath(relPath),
     controllers: {},
     views: {},
     extenders: { controllers: {}, views: {} },

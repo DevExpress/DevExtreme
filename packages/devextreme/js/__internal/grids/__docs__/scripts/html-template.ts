@@ -4,7 +4,6 @@
  * Generates an interactive Cytoscape.js visualization.
  */
 
-import { STANDALONE_CLASS_INFO } from './constants';
 import { buildCytoscapeElements } from './graph-builder';
 import type { ArchitectureData } from './types';
 
@@ -13,8 +12,8 @@ export function generateHtml(data: ArchitectureData): string {
   const elementsJson = JSON.stringify(cytoscapeElements, null, 2);
   const featureAreas = [...new Set([
     ...data.modules.map((m) => m.featureArea),
-    ...Object.values(data.standaloneControllers).map((c) => STANDALONE_CLASS_INFO[c.className]?.featureArea).filter(Boolean),
-    ...Object.values(data.standaloneViews).map((v) => STANDALONE_CLASS_INFO[v.className]?.featureArea).filter(Boolean),
+    ...Object.values(data.standaloneControllers).map((c) => c.featureArea),
+    ...Object.values(data.standaloneViews).map((v) => v.featureArea),
   ])].sort();
 
   return `<!DOCTYPE html>
