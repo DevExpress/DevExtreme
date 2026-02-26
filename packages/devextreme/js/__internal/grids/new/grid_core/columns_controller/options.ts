@@ -40,8 +40,8 @@ export const defaultColumnProperties = {
   visible: true,
   allowReordering: true,
   allowHiding: true,
-  trueText: messageLocalization.format('dxDataGrid-trueText'),
-  falseText: messageLocalization.format('dxDataGrid-falseText'),
+  trueText: undefined,
+  falseText: undefined,
   showInColumnChooser: true,
   validationRules: [],
   allowEditing: true,
@@ -57,9 +57,11 @@ Exclude<ColumnProperties, string>
 > = {
   boolean: {
     customizeText({ value }): string {
+      const trueText = this.trueText ?? messageLocalization.format('dxDataGrid-trueText');
+      const falseText = this.falseText ?? messageLocalization.format('dxDataGrid-falseText');
       return value
-        ? this.trueText
-        : this.falseText;
+        ? trueText
+        : falseText;
     },
   },
   string: {
