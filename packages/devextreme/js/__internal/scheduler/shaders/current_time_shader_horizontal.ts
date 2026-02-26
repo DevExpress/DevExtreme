@@ -15,9 +15,9 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
       const $shader = isFirstShader ? this._$shader : this.createShader();
 
       if (this._workSpace.isGroupedByDate()) {
-        this._customizeGroupedByDateShader($shader, i);
+        this.customizeGroupedByDateShader($shader, i);
       } else {
-        this._customizeShader($shader, i);
+        this.customizeShader($shader, i);
       }
 
       if (!isFirstShader) {
@@ -26,11 +26,11 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
     }
   }
 
-  _customizeShader($shader: dxElementWrapper, groupIndex: number): void {
+  private customizeShader($shader: dxElementWrapper, groupIndex: number): void {
     // @ts-expect-error
     const shaderWidth = this._workSpace.getIndicationWidth() as number;
 
-    this._applyShaderWidth($shader, shaderWidth);
+    this.applyShaderWidth($shader, shaderWidth);
 
     if (groupIndex >= 1) {
       const workSpace = this._workSpace;
@@ -41,14 +41,14 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
     }
   }
 
-  _applyShaderWidth($shader: dxElementWrapper, width: number): void {
+  private applyShaderWidth($shader: dxElementWrapper, width: number): void {
     const maxWidth = getBoundingRect(this._$container.get(0)).width;
     if (width > 0) {
       setWidth($shader, Math.min(width, maxWidth));
     }
   }
 
-  _customizeGroupedByDateShader($shader: dxElementWrapper, groupIndex: number): void {
+  private customizeGroupedByDateShader($shader: dxElementWrapper, groupIndex: number): void {
     // @ts-expect-error
     const cellCount = this._workSpace.getIndicationCellCount() as number;
     const integerPart = Math.floor(cellCount);
@@ -61,7 +61,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
       : fractionPart * workSpace.getCellWidth();
     let shaderLeft = 0;
 
-    this._applyShaderWidth($shader, shaderWidth);
+    this.applyShaderWidth($shader, shaderWidth);
 
     if (isFirstShaderPart) {
       shaderLeft = workSpace._getCellCount() * workSpace.getCellWidth() * groupIndex;
