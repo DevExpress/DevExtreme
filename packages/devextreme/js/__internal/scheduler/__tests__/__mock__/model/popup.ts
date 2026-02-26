@@ -44,6 +44,10 @@ export class PopupModel {
     return queryRequiredElement(this.element, '.dx-scheduler-form-subject-group .dx-scheduler-form-icon .dx-icon');
   }
 
+  get resourceIcon(): HTMLElement {
+    return queryRequiredElement(this.element, '.dx-scheduler-form-resources-group .dx-icon');
+  }
+
   get recurrenceWeekDayButtons(): HTMLElement {
     return queryRequiredElement(this.element, '.dx-scheduler-days-of-week-buttons');
   }
