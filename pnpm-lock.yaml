@@ -1003,7 +1003,7 @@ importers:
         specifier: 3.0.2
         version: 3.0.2
       rollup:
-        specifier: ^4.59.0
+        specifier: 4.59.0
         version: 4.59.0
       vite:
         specifier: 5.4.21
