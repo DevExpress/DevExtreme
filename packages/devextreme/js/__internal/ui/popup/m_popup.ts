@@ -695,18 +695,6 @@ class Popup<
     $container: dxElementWrapper,
   ): dxElementWrapper {
     const $result = $(template.render({ container: getPublicElement($container) }));
-
-    // const resultIsContainer = $result.get(0) === $container.get(0);
-
-    // if (resultIsContainer) {
-    //   $container.addClass(TEMPLATE_WRAPPER_CLASS);
-    //   return $container;
-    // }
-
-    // $container.replaceWith($result);
-
-    // const $newContainer = $result;
-
     const resultInContainer = contains($container.get(0), $result.get(0));
 
     if (!resultInContainer) {
@@ -715,35 +703,6 @@ class Popup<
 
     $result.removeClass(TEMPLATE_WRAPPER_CLASS);
     $container.addClass(TEMPLATE_WRAPPER_CLASS);
-
-    // // eslint-disable-next-line no-debugger
-    // debugger;
-
-    // const resultClassList = Array.from($result.get(0)?.classList ?? []);
-
-    // const hasResultTemplateWrapperClass = $result.hasClass(TEMPLATE_WRAPPER_CLASS);
-    // const hasResultTemplateWrapperClass = resultClassList.includes(TEMPLATE_WRAPPER_CLASS);
-
-    // в jQuery, Angular надо заменить.
-    // React — контейнер уже является результатом, заменять не надо.
-    // Vue — не надо заменять, надо перенести класс.
-    // Нужно изменить условие — не наличие класса, а проверить, что один тот же элемент.
-    // Для случая jQuery, когда сама функция рендера не рендерит внутри контейнера,
-    // а только возвращает элемент, этот элемент должен быть вставлен в DOM в этом методе.
-    // Надо проверить, что контейнер не содержит результат и тогда вставить его в контейнер.
-    // В этом случае нужно хорошо протестировать React и убедиться, что контент
-    // правильно вставляется. Могут быть ошибки из-за React.createPortal
-
-    // if (hasResultTemplateWrapperClass) {
-    // if (resultClassList.length === 1 && hasResultTemplateWrapperClass) {
-    // $container.replaceWith($result);
-    // // eslint-disable-next-line no-param-reassign
-    // $container = $result;
-    // }
-    // else if (hasResultTemplateWrapperClass) {
-    //   $result.removeClass(TEMPLATE_WRAPPER_CLASS);
-    //   $container.addClass(TEMPLATE_WRAPPER_CLASS);
-    // }
 
     return $container;
   }
