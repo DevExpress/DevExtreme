@@ -181,7 +181,7 @@ overrides:
   tar@<7.5.8: ^7.5.8
   minimatch@<3.1.4: 3.1.4
   minimatch@>=9.0.0 < 9.0.6: 9.0.6
-  minimatch@>=10.0.0 < 10.2.1: 10.2.1
+  minimatch@>=10.0.0 < 10.2.3: 10.2.3
   terser@<4.8.1: 4.8.1
 
 importers:
@@ -896,8 +896,8 @@ importers:
         specifier: 6.10.0
         version: 6.10.0(webpack@5.105.0)
       minimatch:
-        specifier: 10.2.1
-        version: 10.2.1
+        specifier: 10.2.3
+        version: 10.2.3
       source-map-loader:
         specifier: 4.0.2
         version: 4.0.2(webpack@5.105.0)
@@ -2294,8 +2294,8 @@ importers:
         specifier: 4.17.23
         version: 4.17.23
       minimatch:
-        specifier: 10.2.1
-        version: 10.2.1
+        specifier: 10.2.3
+        version: 10.2.3
       ng-packagr:
         specifier: '>=19.0.0'
         version: 19.2.2(@angular/compiler-cli@21.0.8(@angular/compiler@21.0.8)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5)
@@ -13819,9 +13819,9 @@ packages:
   minimalistic-crypto-utils@1.0.1:
     resolution: {integrity: sha512-JIYlbt6g8i5jKfJ3xz7rF0LXmv2TkDxBLUkiBeZ7bAx4GnnNMr8xFpGnOxn6GhTEHx3SjRrZEoU+j04prX1ktg==}
 
-  minimatch@10.2.1:
-    resolution: {integrity: sha512-MClCe8IL5nRRmawL6ib/eT4oLyeKMGCghibcDWK+J0hh0Q8kqSdia6BvbRMVk6mPa6WqUa5uR2oxt6C5jd533A==}
-    engines: {node: 20 || >=22}
+  minimatch@10.2.3:
+    resolution: {integrity: sha512-Rwi3pnapEqirPSbWbrZaa6N3nmqq4Xer/2XooiOKyV3q12ML06f7MOuc5DVH8ONZIFhwIYQ3yzPH4nt7iWHaTg==}
+    engines: {node: 18 || 20 || >=22}
 
   minimatch@3.1.4:
     resolution: {integrity: sha512-twmL+S8+7yIsE9wsqgzU3E8/LumN3M3QELrBZ20OdmQ9jB2JvW5oZtBEmft84k/Gs5CG9mqtWc6Y9vW+JEzGxw==}
@@ -23941,7 +23941,7 @@ snapshots:
       '@zkochan/js-yaml': 0.0.7
       ejs: 3.1.10
       enquirer: 2.3.6
-      minimatch: 10.2.1
+      minimatch: 10.2.3
       nx: 22.4.5(@swc/core@1.15.3)
       semver: 7.7.4
       tslib: 2.6.3
@@ -23958,7 +23958,7 @@ snapshots:
       jest-config: 30.2.0(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.15.3)(@types/node@20.12.8)(typescript@5.9.3))
       jest-resolve: 30.2.0
       jest-util: 30.2.0
-      minimatch: 10.2.1
+      minimatch: 10.2.3
       picocolors: 1.1.1
       resolve.exports: 2.0.3
       semver: 7.7.4
@@ -31980,14 +31980,14 @@ snapshots:
     dependencies:
       foreground-child: 3.3.1
       jackspeak: 4.1.1
-      minimatch: 10.2.1
+      minimatch: 10.2.3
       minipass: 7.1.2
       package-json-from-dist: 1.0.1
       path-scurry: 2.0.1
 
   glob@13.0.0:
     dependencies:
-      minimatch: 10.2.1
+      minimatch: 10.2.3
       minipass: 7.1.2
       path-scurry: 2.0.1
 
@@ -32973,7 +32973,7 @@ snapshots:
 
   ignore-walk@8.0.0:
     dependencies:
-      minimatch: 10.2.1
+      minimatch: 10.2.3
 
   ignore@4.0.6: {}
 
@@ -36276,7 +36276,7 @@ snapshots:
 
   minimalistic-crypto-utils@1.0.1: {}
 
-  minimatch@10.2.1:
+  minimatch@10.2.3:
     dependencies:
       brace-expansion: 5.0.3
 
@@ -36900,7 +36900,7 @@ snapshots:
       jest-diff: 30.2.0
       jsonc-parser: 3.2.0
       lines-and-columns: 2.0.3
-      minimatch: 10.2.1
+      minimatch: 10.2.3
       node-machine-id: 1.1.12
       npm-run-path: 4.0.1
       open: 8.4.2
