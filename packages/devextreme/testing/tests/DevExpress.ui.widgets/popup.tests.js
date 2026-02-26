@@ -3108,17 +3108,22 @@ QUnit.module('templates', {
                 'dx-toolbar class is not on the container when custom template is used');
         });
 
-        QUnit.test('bottom toolbar container should not have dx-toolbar class initially', function(assert) {
-            this.popup.option('toolbarItems', [
-                { text: 'bottom text', toolbar: 'bottom', location: 'center' },
-            ]);
+        QUnit.test('bottom toolbar container should not have dx-toolbar class when custom bottomTemplate is used', function(assert) {
+            this.popup.option({
+                toolbarItems: [
+                    { text: 'bottom text', toolbar: 'bottom', location: 'center' },
+                ],
+                bottomTemplate: () => {
+                    return $('<div>').addClass('custom-bottom').text('Custom Bottom');
+                },
+            });
 
             const $overlayContent = this.popup.$overlayContent();
             const $bottomToolbarContainer = $overlayContent.find(`.${POPUP_BOTTOM_CLASS}`).first();
 
-            const hasTitleClass = $bottomToolbarContainer.hasClass(POPUP_BOTTOM_CLASS);
-
-            assert.ok(hasTitleClass, 'toolbar container has dx-popup-bottom class');
+            assert.ok($bottomToolbarContainer.hasClass(POPUP_BOTTOM_CLASS), 'toolbar container has dx-popup-bottom class');
+            assert.notOk($bottomToolbarContainer.hasClass(TOOLBAR_CLASS),
+                'dx-toolbar class is not on the container when custom template is used');
         });
 
         QUnit.test('titleTemplate result is appended inside container and container gets dx-template-wrapper class', function(assert) {
