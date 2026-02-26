@@ -3,7 +3,9 @@
         "watch": true,
     },
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
+        "source.fixAll.eslint": "explicit",
+        "source.fixAll.stylelint": "explicit"
     },
-    "typescript.tsdk": "packages/devextreme/node_modules/typescript/lib"
+    "typescript.tsdk": "packages/devextreme/node_modules/typescript/lib",
+    "stylelint.validate": ["css", "scss"]
 }
