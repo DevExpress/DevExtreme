@@ -44,6 +44,7 @@ const IS_OLD_SAFARI = IS_SAFARI && compareVersions(browser.version, [11]) < 0;
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
 const CUSTOM_ITEM_CLASS = 'custom-item-class';
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
+const TOOLBAR_CLASS = 'dx-toolbar';
 
 themes.setDefaultTimeout(0);
 
@@ -3084,6 +3085,165 @@ QUnit.module('templates', {
         const $customItemAfterRuntimeChange = this.getCustomItem();
 
         assert.strictEqual($customItemAfterRuntimeChange.length, 1, 'custom template rendered after runtime change');
+    });
+
+    QUnit.module('renderByTemplate', {
+        beforeEach: function() {
+            this.popup = $('#popup').dxPopup({
+                visible: true,
+                showTitle: true,
+            }).dxPopup('instance');
+        },
+    }, () => {
+        QUnit.test('toolbar container should not have dx-toolbar class when custom titleTemplate is used', function(assert) {
+            this.popup.option('titleTemplate', () => {
+                return $('<div>').addClass('custom-title').text('Custom');
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $topToolbarContainer = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+
+            assert.ok($topToolbarContainer.hasClass(POPUP_TITLE_CLASS), 'toolbar container has dx-popup-title class');
+            assert.notOk($topToolbarContainer.hasClass(TOOLBAR_CLASS),
+                'dx-toolbar class is not on the container when custom template is used');
+        });
+
+        QUnit.test('bottom toolbar container should not have dx-toolbar class initially', function(assert) {
+            this.popup.option('toolbarItems', [
+                { text: 'bottom text', toolbar: 'bottom', location: 'center' },
+            ]);
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $bottomToolbarContainer = $overlayContent.find(`.${POPUP_BOTTOM_CLASS}`).first();
+
+            const hasTitleClass = $bottomToolbarContainer.hasClass(POPUP_BOTTOM_CLASS);
+
+            assert.ok(hasTitleClass, 'toolbar container has dx-popup-bottom class');
+        });
+
+        QUnit.test('titleTemplate result is appended inside container and container gets dx-template-wrapper class', function(assert) {
+            const customClass = 'my-custom-title';
+
+            this.popup.option('titleTemplate', () => {
+                return $('<div>').addClass(customClass).text('Custom Title');
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $titleContainer = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+
+            assert.ok($titleContainer.hasClass(TEMPLATE_WRAPPER_CLASS), 'container has dx-template-wrapper class');
+            assert.strictEqual($titleContainer.find(`.${customClass}`).length, 1, 'custom template content is inside the container');
+            assert.strictEqual($titleContainer.find(`.${customClass}`).text(), 'Custom Title', 'custom template text is correct');
+        });
+
+        QUnit.test('bottomTemplate result is appended inside container and container gets dx-template-wrapper class', function(assert) {
+            const customClass = 'my-custom-bottom';
+
+            this.popup.option({
+                toolbarItems: [
+                    { text: 'test', toolbar: 'bottom', location: 'center' },
+                ],
+                bottomTemplate: () => {
+                    return $('<div>').addClass(customClass).text('Custom Bottom');
+                },
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $bottomContainer = $overlayContent.find('.' + POPUP_BOTTOM_CLASS).first();
+
+            assert.ok($bottomContainer.hasClass(TEMPLATE_WRAPPER_CLASS), 'container has dx-template-wrapper class');
+            assert.strictEqual($bottomContainer.find(`.${customClass}`).length, 1, 'custom template content is inside the container');
+        });
+
+        QUnit.test('dx-template-wrapper class is removed from the template result element', function(assert) {
+            this.popup.option('titleTemplate', () => {
+                return $('<div>')
+                    .addClass(TEMPLATE_WRAPPER_CLASS)
+                    .addClass('custom-title-class')
+                    .text('Title');
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $titleContainer = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+            const $customElement = $titleContainer.find('.custom-title-class');
+
+            assert.notOk($customElement.hasClass(TEMPLATE_WRAPPER_CLASS), 'dx-template-wrapper class is removed from the template result');
+            assert.ok($titleContainer.hasClass(TEMPLATE_WRAPPER_CLASS), 'dx-template-wrapper class is on the container');
+        });
+
+        QUnit.test('template result with only dx-template-wrapper class is still appended inside container', function(assert) {
+            this.popup.option('titleTemplate', () => {
+                return $('<span>')
+                    .addClass(TEMPLATE_WRAPPER_CLASS)
+                    .text('wrapper only');
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $titleContainer = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+
+            assert.ok($titleContainer.hasClass(TEMPLATE_WRAPPER_CLASS), 'container has dx-template-wrapper class');
+            assert.strictEqual($titleContainer.text(), 'wrapper only', 'template content is rendered inside the container');
+            assert.ok($titleContainer.hasClass(POPUP_TITLE_CLASS), 'container still has dx-popup-title class');
+        });
+
+        QUnit.test('template result with multiple classes preserves non-wrapper classes on result element', function(assert) {
+            this.popup.option('titleTemplate', () => {
+                return $('<div>')
+                    .addClass(TEMPLATE_WRAPPER_CLASS)
+                    .addClass('user-class-1')
+                    .addClass('user-class-2')
+                    .text('multi-class');
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $titleContainer = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+            const $innerElement = $titleContainer.find('.user-class-1');
+
+            assert.strictEqual($innerElement.length, 1, 'user class element is found');
+            assert.ok($innerElement.hasClass('user-class-2'), 'second user class is preserved');
+            assert.notOk($innerElement.hasClass(TEMPLATE_WRAPPER_CLASS), 'dx-template-wrapper removed from result element');
+        });
+
+        QUnit.test('template that renders result directly into container should work correctly (React-like scenario)', function(assert) {
+            this.popup.option('titleTemplate', (container) => {
+                const $container = $(container);
+                $('<p>').addClass('react-like-content').text('React Title').appendTo($container);
+                return $container;
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $titleContainer = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+
+            assert.ok($titleContainer.hasClass(TEMPLATE_WRAPPER_CLASS), 'container has dx-template-wrapper class');
+            assert.strictEqual($titleContainer.find('.react-like-content').length, 1, 'content is rendered inside container');
+            assert.strictEqual($titleContainer.find('.react-like-content').text(), 'React Title', 'content text is correct');
+        });
+
+        QUnit.test('container preserves its original classes after template rendering', function(assert) {
+            this.popup.option('titleTemplate', () => {
+                return $('<div>').text('test');
+            });
+
+            const $overlayContent = this.popup.$overlayContent();
+            const $titleContainer = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+
+            assert.ok($titleContainer.hasClass(POPUP_TITLE_CLASS), 'container still has dx-popup-title class');
+            assert.ok($titleContainer.hasClass(TEMPLATE_WRAPPER_CLASS), 'container also has dx-template-wrapper class');
+        });
+
+        QUnit.test('_renderByTemplate returns the original container element', function(assert) {
+            const popup = this.popup;
+
+            popup.option('titleTemplate', () => {
+                return $('<div>').text('return check');
+            });
+
+            const $overlayContent = popup.$overlayContent();
+            const $topToolbar = popup.topToolbar();
+            const $titleInDOM = $overlayContent.find(`.${POPUP_TITLE_CLASS}`).first();
+
+            assert.strictEqual($topToolbar.get(0), $titleInDOM.get(0), 'topToolbar reference points to the same DOM element as the title container');
+        });
     });
 });
 
