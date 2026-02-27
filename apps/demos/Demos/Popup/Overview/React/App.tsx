@@ -6,9 +6,9 @@ import { employees } from './data.ts';
 
 const defaultCurrentEmployee: Partial<EmployeeItemProps['employee']> = {};
 export default function App() {
-  const [currentEmployee, setCurrentEmployee] = useState<Employee | null>(null);
-  const [popupVisible, setPopupVisible] = useState<boolean>(false);
-  const [positionOf, setPositionOf] = useState<string>('');
+  const [currentEmployee, setCurrentEmployee] = useState(defaultCurrentEmployee);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [positionOf, setPositionOf] = useState('');
 
   const showInfo = useCallback((employee: EmployeeItemProps['employee']) => {
     setCurrentEmployee(employee);
@@ -37,7 +37,7 @@ export default function App() {
   }, [currentEmployee]);
 
   const showMoreInfo = useCallback(() => {
-    const message = `More info about ${currentEmployee?.FirstName} ${currentEmployee?.LastName}`;
+    const message = `More info about ${currentEmployee.FirstName} ${currentEmployee.LastName}`;
     notify(
       {
         message,
@@ -51,7 +51,7 @@ export default function App() {
     );
   }, [currentEmployee]);
 
-  const getInfoButtonOptions = useMemo((): ButtonTypes.Properties => ({
+  const getInfoButtonOptions = useMemo(() => ({
     text: 'More info',
     onClick: showMoreInfo,
   }), [showMoreInfo]);
@@ -113,20 +113,20 @@ export default function App() {
         />
         <p>
           Full Name:&nbsp;
-          <span>{currentEmployee?.FirstName}</span>&nbsp;
-          <span>{currentEmployee?.LastName}</span>
+          <span>{currentEmployee.FirstName}</span>&nbsp;
+          <span>{currentEmployee.LastName}</span>
         </p>
         <p>
-          Birth Date: <span>{currentEmployee?.BirthDate}</span>
+          Birth Date: <span>{currentEmployee.BirthDate}</span>
         </p>
         <p>
-          Address: <span>{currentEmployee?.Address}</span>
+          Address: <span>{currentEmployee.Address}</span>
         </p>
         <p>
-          Hire Date: <span>{currentEmployee?.HireDate}</span>
+          Hire Date: <span>{currentEmployee.HireDate}</span>
         </p>
         <p>
-          Position: <span>{currentEmployee?.Position}</span>
+          Position: <span>{currentEmployee.Position}</span>
         </p>
       </Popup>
     </div>
