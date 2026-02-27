@@ -260,9 +260,8 @@ const prepareConfigs = (framework) => {
 };
 
 const build = async (framework) => {
-  let builder;
   try {
-    builder = new Builder();
+    const builder = new Builder();
 
     prepareModulesToNamedImport();
 
@@ -272,12 +271,11 @@ const build = async (framework) => {
 
     builder.config(builderConfig);
 
-    try {
-      await builder.bundle(packages, bundlePath, bundleOpts);
-    } catch (err) {
-      console.error(`Build ${framework} error `, err);
-      process.exit(err);
-    }
+    await builder.bundle(packages, bundlePath, bundleOpts);
+  } catch (err) {
+    console.error(`Build ${framework} error `, err);
+    process.exit(err);
+  }
 };
 
 const copyBundlesFolder = () => {
