@@ -170,6 +170,7 @@
         "srcPattern": "./js/__internal/**/*.{ts,tsx}",
         "excludePatterns": [
           "./js/__internal/**/__tests__/**/*",
+          "./js/__internal/**/__docs__/**/*",
           "./js/__internal/**/test_utils/**/*",
           "./js/__internal/**/*.test_utils.ts",
           "./js/__internal/**/*.test.ts",
@@ -183,6 +184,7 @@
       "inputs": [
         "{projectRoot}/js/__internal/**/*.{ts,tsx}",
         "!{projectRoot}/js/__internal/**/__tests__/**/*",
+        "!{projectRoot}/js/__internal/**/__docs__/**/*",
         "!{projectRoot}/js/__internal/**/test_utils/**/*",
         "!{projectRoot}/js/__internal/**/*.test.ts",
         "!{projectRoot}/js/__internal/**/*.test_utils.ts",
