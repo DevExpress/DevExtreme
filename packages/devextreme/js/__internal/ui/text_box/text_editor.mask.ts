@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import { name as wheelEventName } from '@js/common/core/events/core/wheel';
 import {
@@ -19,9 +18,9 @@ import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import type { DxMouseWheelEvent } from '@ts/ui/scroll_view/types';
 import type { TextEditorBaseProperties } from '@ts/ui/text_box/m_text_editor.base';
 import TextEditorBase from '@ts/ui/text_box/m_text_editor.base';
-import type { HandlingArgs } from '@ts/ui/text_box/m_text_editor.mask.rule';
-import { EmptyMaskRule, MaskRule, StubMaskRule } from '@ts/ui/text_box/m_text_editor.mask.rule';
-import MaskStrategy from '@ts/ui/text_box/m_text_editor.mask.strategy';
+import type { HandlingArgs } from '@ts/ui/text_box/text_editor.mask.rule';
+import { EmptyMaskRule, MaskRule, StubMaskRule } from '@ts/ui/text_box/text_editor.mask.rule';
+import MaskStrategy from '@ts/ui/text_box/text_editor.mask.strategy';
 import type { CaretRange } from '@ts/ui/text_box/utils.caret';
 import caretUtils from '@ts/ui/text_box/utils.caret';
 
