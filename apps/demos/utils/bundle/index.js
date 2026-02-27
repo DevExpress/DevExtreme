@@ -3,8 +3,8 @@ const path = require('path');
 const fs = require('fs-extra');
 const babel = require('@babel/core');
 const url = require('url');
-const os = require('os')
-const { execSync } = require('child_process')
+const os = require('os');
+const { execSync } = require('child_process');
 
 const GRID_COMMON_STAR_IMPORT = 'exports.Grids = __importStar(require("./grids"));';
 
@@ -16,8 +16,9 @@ const tmpDir = fs.mkdtempSync(tmpDirPath);
 console.log(`npm install ${packageName}@0.16.15 in temporary folder: ${tmpDir}`);
 
 // Temprary install systemjs-builder cos we don't want to keep it in project as dependency
-execSync(`npm install ${packageName}`, { cwd: tmpDir, stdio: 'inherit' })
+execSync(`npm install ${packageName}`, { cwd: tmpDir, stdio: 'inherit' });
 
+/* eslint-disable import/no-dynamic-require */
 const Builder = require(path.join(tmpDir, 'node_modules', packageName));
 
 // https://stackoverflow.com/questions/42412965/how-to-load-named-exports-with-systemjs/47108328
@@ -278,8 +279,7 @@ const build = async (framework) => {
       process.exit(err);
     }
   } finally {
-   // fs.rmSync(tmpDir, { recursive: true, force: true });
-    console.log(`Remove temporary folder: ${tmpDir}`);
+      console.log(`Remove temporary folder: ${tmpDir}`);
   }
 };
 
