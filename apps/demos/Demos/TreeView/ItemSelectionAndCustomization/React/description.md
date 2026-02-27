@@ -1,7 +1,12 @@
 The DevExtreme [TreeView](/Documentation/Guide/UI_Components/TreeView/Overview/) allows users to select nodes (on click or using checkboxes). In this demo, selected items appear as a flat (non-hierarchical) [List](/Documentation/Guide/UI_Components/List/Overview/).
 <!--split-->
 
-This demo allows you to specify a [selection mode](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#selectionMode) for enabled and [disabled nodes](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#disabledNodeSelectionMode). You can configure the visibility of [selection checkboxes](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#showCheckBoxesMode), including the Select All checkbox. You can also toggle [selection on click](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#selectByClick) and [recursive selection](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#selectNodesRecursive).
+Use controls below the TreeView to modify selection behavior as follows:
+
+- Specify [selection mode](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#selectionMode) for enabled and [disabled nodes](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#disabledNodeSelectionMode)
+- Toggle visibility of [selection checkboxes](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#showCheckBoxesMode) (including the Select All option)
+- Allow [selection on click](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#selectByClick) 
+- Disable [recursive selection](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#selectNodesRecursive).
 
 The TreeView allows you to update node selection states programmatically. You can select/deselect items by [node keys](/Documentation/ApiReference/UI_Components/dxTreeView/Methods/#selectItemkey), [data objects](/Documentation/ApiReference/UI_Components/dxTreeView/Methods/#selectItemitemData), or [DOM elements](/Documentation/ApiReference/UI_Components/dxTreeView/Methods/#selectItemitemElement). To initially select nodes, configure [selection fields](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#selectedExpr) within item objects (default: **selected**).
 
