@@ -925,11 +925,7 @@ class Form extends Widget<FormProperties> {
       this._itemsRunTimeInfo?.extendRunTimeItemInfoByKey(item.guid ?? '', { layoutManager });
 
       const colCount = layoutManager._getColCount();
-      if (!this._groupsColCount.includes(colCount)) {
-        this._groupsColCount.push(colCount);
-      }
-      $group.addClass(GROUP_COL_COUNT_CLASS + colCount);
-      $group.attr(GROUP_COL_COUNT_ATTR, colCount);
+      this._applyGroupColCount($group, colCount);
     }
   }
 
@@ -1639,11 +1635,30 @@ class Form extends Widget<FormProperties> {
       layoutManager.updateResponsiveBoxLayout();
     });
 
-    this._updateGroupColCountClasses();
+    this._updateGroupsColCount();
     this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
   }
 
-  _updateGroupColCountClasses(): void {
+  _applyGroupColCount(
+    $group: dxElementWrapper,
+    colCount: number,
+  ): void {
+    const oldColCount = $group.attr(GROUP_COL_COUNT_ATTR);
+
+    if (oldColCount) {
+      $group.removeClass(`${GROUP_COL_COUNT_CLASS}${oldColCount}`);
+    }
+
+    if (!this._groupsColCount.includes(colCount)) {
+      this._groupsColCount.push(colCount);
+    }
+
+    $group
+      .addClass(`${GROUP_COL_COUNT_CLASS}${colCount}`)
+      .attr(GROUP_COL_COUNT_ATTR, colCount);
+  }
+
+  _updateGroupsColCount(): void {
     this._groupsColCount = [];
 
     this._cachedLayoutManagers.forEach((layoutManager: LayoutManager) => {
@@ -1656,19 +1671,8 @@ class Form extends Widget<FormProperties> {
         return;
       }
 
-      const oldColCountAttr = $group.attr(GROUP_COL_COUNT_ATTR);
       const newColCount = layoutManager._getColCount();
-
-      if (oldColCountAttr) {
-        $group.removeClass(`${GROUP_COL_COUNT_CLASS}${oldColCountAttr}`);
-      }
-
-      $group.addClass(`${GROUP_COL_COUNT_CLASS}${newColCount}`);
-      $group.attr(GROUP_COL_COUNT_ATTR, newColCount);
-
-      if (!this._groupsColCount.includes(newColCount)) {
-        this._groupsColCount.push(newColCount);
-      }
+      this._applyGroupColCount($group, newColCount);
     });
   }
 

@@ -73,6 +73,15 @@ type ExtendedItem = Item & {
   allowIndeterminateState?: boolean;
 };
 
+type Location = Required<Omit<LocationItem, 'screen'>>;
+
+interface LocationBoundaryFlags {
+  isFirstCol: boolean;
+  isLastCol: boolean;
+  isFirstRow: boolean;
+  isLastRow: boolean;
+}
+
 export interface TemplatesInfo {
   itemType?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -501,23 +510,9 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
         }
         const $itemElement = $(itemElement);
 
-        const currentColCount = that._getColCount();
-        const itemRenderedCountInPreviousRows = location.row * currentColCount;
-
-        const item = that._items?.[location.col + itemRenderedCountInPreviousRows];
+        const item = that._getLayoutManagerItemByLocation(location);
         if (!item) {
           return;
-        }
-
-        const itemCssClassList: string[] = [item.cssClass ?? ''];
-
-        $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
-
-        if (location.row === 0) {
-          itemCssClassList.push(LAYOUT_MANAGER_FIRST_ROW_CLASS);
-        }
-        if (location.col === 0) {
-          itemCssClassList.push(LAYOUT_MANAGER_FIRST_COL_CLASS);
         }
 
         const { isRoot } = that.option();
@@ -525,17 +520,11 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
         if (item.itemType === SIMPLE_ITEM_TYPE && isRoot) {
           $itemElement.addClass(ROOT_SIMPLE_ITEM_CLASS);
         }
-        const isLastColumn = (location.col === currentColCount - 1)
-          || (location.col + location.colspan === currentColCount);
-        const rowsCount = that._getRowsCount();
-        const isLastRow = location.row === rowsCount - 1;
 
-        if (isLastColumn) {
-          itemCssClassList.push(LAYOUT_MANAGER_LAST_COL_CLASS);
-        }
-        if (isLastRow) {
-          itemCssClassList.push(LAYOUT_MANAGER_LAST_ROW_CLASS);
-        }
+        $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
+
+        const itemCssClassList: string[] = [item.cssClass ?? ''];
+        itemCssClassList.push(...that._getLocationCssClasses(location));
 
         if (item.itemType !== 'empty') {
           itemCssClassList.push(FIELD_ITEM_CLASS);
@@ -1166,27 +1155,73 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     this._updateItemsCssClasses();
   }
 
-  _updateItemsCssClasses(): void {
+  _getLocationBoundaryFlags(location: Required<Omit<LocationItem, 'screen'>>): LocationBoundaryFlags {
     const colCount = this._getColCount();
     const rowsCount = this._getRowsCount();
 
-    this._items?.forEach((item: ExtendedItem): void => {
-      if (!item || item.merged) {
+    return {
+      isFirstCol: location.col === 0,
+      isLastCol: (location.col === colCount - 1)
+        || (location.col + location.colspan === colCount),
+      isFirstRow: location.row === 0,
+      isLastRow: location.row === rowsCount - 1,
+    };
+  }
+
+  _getLocationCssClasses(location: Location): string[] {
+    const cssClasses: string[] = [];
+    const locationFlags = this._getLocationBoundaryFlags(location);
+
+    if (locationFlags.isFirstRow) {
+      cssClasses.push(LAYOUT_MANAGER_FIRST_ROW_CLASS);
+    }
+    if (locationFlags.isFirstCol) {
+      cssClasses.push(LAYOUT_MANAGER_FIRST_COL_CLASS);
+    }
+    if (locationFlags.isLastCol) {
+      cssClasses.push(LAYOUT_MANAGER_LAST_COL_CLASS);
+    }
+    if (locationFlags.isLastRow) {
+      cssClasses.push(LAYOUT_MANAGER_LAST_ROW_CLASS);
+    }
+
+    return cssClasses;
+  }
+
+  _getLayoutManagerItemByLocation(location: Location): ExtendedItem | undefined {
+    const colCount = this._getColCount();
+    const index = location.row * colCount + location.col;
+    return this._items?.[index];
+  }
+
+  _updateItemsCssClasses(): void {
+    const { items: responsiveBoxItems } = this._responsiveBox.option();
+    responsiveBoxItems?.forEach((
+      responsiveBoxItem: ResponsiveBoxItem,
+    ): void => {
+      const { location } = responsiveBoxItem;
+      if (!location || Array.isArray(location)) {
         return;
       }
 
-      const column = isDefined(item.col) ? item.col : 0;
-      const isFirstColumn = column === 0;
-      const isLastColumn = column === colCount - 1;
+      const typedLocation = location as Location;
 
-      const row = isDefined(item.row) ? item.row : 0;
-      const isFirstRow = row === 0;
-      const isLastRow = row === rowsCount - 1;
+      const {
+        isFirstCol,
+        isLastCol,
+        isFirstRow,
+        isLastRow,
+      } = this._getLocationBoundaryFlags(typedLocation);
+
+      const item = this._getLayoutManagerItemByLocation(typedLocation);
+      if (!item) {
+        return;
+      }
 
       const $itemContainer = this._itemsRunTimeInfo.findItemContainerByItem(item);
       $itemContainer
-        .toggleClass(LAYOUT_MANAGER_FIRST_COL_CLASS, isFirstColumn)
-        .toggleClass(LAYOUT_MANAGER_LAST_COL_CLASS, isLastColumn)
+        .toggleClass(LAYOUT_MANAGER_FIRST_COL_CLASS, isFirstCol)
+        .toggleClass(LAYOUT_MANAGER_LAST_COL_CLASS, isLastCol)
         .toggleClass(LAYOUT_MANAGER_FIRST_ROW_CLASS, isFirstRow)
         .toggleClass(LAYOUT_MANAGER_LAST_ROW_CLASS, isLastRow);
 
@@ -1195,8 +1230,8 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
         .filter((name: string): boolean => !name.startsWith(LAYOUT_MANAGER_COL_PREFIX))
         .join(' ');
 
-      if (isDefined(item.col)) {
-        $itemContainer.addClass(`${LAYOUT_MANAGER_COL_PREFIX}${item.col}`);
+      if (isDefined(typedLocation.col)) {
+        $itemContainer.addClass(`${LAYOUT_MANAGER_COL_PREFIX}${typedLocation.col}`);
       }
     });
   }
