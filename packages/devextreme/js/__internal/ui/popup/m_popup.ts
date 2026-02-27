@@ -75,22 +75,17 @@ const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 export const POPUP_CONTENT_CLASS = 'dx-popup-content';
 export const POPUP_CONTENT_SCROLLABLE_CLASS = 'dx-popup-content-scrollable';
 
-const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
-
 const POPUP_TITLE_CLASS = 'dx-popup-title';
 export const POPUP_TITLE_CLOSEBUTTON_CLASS = 'dx-closebutton';
-
 const POPUP_BOTTOM_CLASS = 'dx-popup-bottom';
-
 const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
-
-export const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
-
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
+export const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 const ALLOWED_TOOLBAR_ITEM_ALIASES = ['cancel', 'clear', 'done'];
 
@@ -697,9 +692,6 @@ class Popup<
     if (!resultInContainer) {
       $container.append($result);
     }
-
-    // $result.removeClass(TEMPLATE_WRAPPER_CLASS);
-    // $container.addClass(TEMPLATE_WRAPPER_CLASS);
 
     return $container;
   }
