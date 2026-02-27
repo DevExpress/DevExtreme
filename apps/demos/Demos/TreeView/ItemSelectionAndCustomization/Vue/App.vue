@@ -40,7 +40,7 @@
       <div class="options-container">
         <div class="options-section">
           <div class="option">
-            <span>Show Check Boxes Mode:</span>
+            <span>Checkbox Visibility:</span>
             <div class="editor-container">
               <DxSelectBox
                 :items="showCheckBoxesModes"
@@ -78,7 +78,7 @@
             <div class="caption-placeholder">&nbsp;</div>
             <div class="editor-container">
               <DxCheckBox
-                text="Select Nodes Recursive"
+                text="Recursive Selection"
                 :disabled="isRecursiveDisabled"
                 v-model:value="selectNodesRecursiveValue"
               />
@@ -88,7 +88,7 @@
             <div class="caption-placeholder">&nbsp;</div>
             <div class="editor-container">
               <DxCheckBox
-                text="Select By Click"
+                text="Select on Click"
                 v-model:value="selectByClickValue"
               />
             </div>
