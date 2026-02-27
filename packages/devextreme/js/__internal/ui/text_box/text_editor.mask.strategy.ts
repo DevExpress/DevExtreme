@@ -5,8 +5,8 @@ import browser from '@js/core/utils/browser';
 import { clipboardText as getClipboardText } from '@js/core/utils/dom';
 import type { DxEvent } from '@js/events';
 import type { TextEditorBaseProperties } from '@ts/ui/text_box/m_text_editor.base';
-import type TextEditorMask from '@ts/ui/text_box/m_text_editor.mask';
-import type { HandlingArgs } from '@ts/ui/text_box/m_text_editor.mask.rule';
+import type TextEditorMask from '@ts/ui/text_box/text_editor.mask';
+import type { HandlingArgs } from '@ts/ui/text_box/text_editor.mask.rule';
 import type { CaretRange } from '@ts/ui/text_box/utils.caret';
 
 const MASK_EVENT_NAMESPACE = 'dxMask';

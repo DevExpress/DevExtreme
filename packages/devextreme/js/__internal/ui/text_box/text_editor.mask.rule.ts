@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable class-methods-use-this */
 /* eslint-disable max-classes-per-file */
 import { extend } from '@js/core/utils/extend';
 import { isFunction } from '@js/core/utils/type';
