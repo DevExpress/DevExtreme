@@ -1,8 +1,9 @@
 import { glob } from 'glob';
 import { join } from 'path';
-import { existsSync } from 'fs';
+import { existsSync, mkdirSync, appendFileSync } from 'fs';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { axeCheck, createReport } from '@testcafe-community/axe';
+import { ClientFunction } from 'testcafe';
 import {
   runTestAtPage,
   shouldRunFramework,
@@ -30,6 +31,26 @@ const execTestCafeCode = (t, code) => {
   // eslint-disable-next-line no-eval
   const testCafeFunction = eval(code);
   return testCafeFunction(t);
+};
+
+const getClientCspViolations = ClientFunction(() => (window as any).__cspViolations || []);
+
+const isCspEnabled = () => process.env.CSP_REPORT === 'true';
+
+const cspReportDir = join(__dirname, '..', 'csp-reports');
+
+const writeCspReport = (testName: string, framework: string, violations: any[]) => {
+  if (!violations.length) return;
+  mkdirSync(cspReportDir, { recursive: true });
+  const reportFile = join(cspReportDir, 'csp-violations.jsonl');
+  for (const v of violations) {
+    const entry = {
+      test: testName,
+      framework,
+      ...v,
+    };
+    appendFileSync(reportFile, `${JSON.stringify(entry)}\n`);
+  }
 };
 
 const getIgnoredRules = (testName) => {
@@ -101,6 +122,13 @@ const getClientScripts = () => {
 
   if (process.env.STRATEGY === 'accessibility') {
     scripts.push({ module: 'axe-core/axe.min.js' });
+  }
+
+  if (isCspEnabled()) {
+    scripts.push(
+      // @ts-expect-error
+      join(__dirname, '../utils/visual-tests/inject/csp-listener.js'),
+    );
   }
 
   scripts.push(
@@ -225,8 +253,14 @@ Object.values(FRAMEWORKS).forEach((approach) => {
         } else {
           const consoleMessages = await t.getBrowserConsoleMessages();
           const errors = [...consoleMessages.error, ...consoleMessages.warn]
-            .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
+            .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)))
+            .filter((e) => !e.startsWith('[CSP Violation]'));
           await t.expect(errors).eql([]);
+
+          if (isCspEnabled()) {
+            const cspViolations = await getClientCspViolations();
+            writeCspReport(testName, approach, cspViolations);
+          }
 
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

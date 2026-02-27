@@ -21,7 +21,8 @@
     "all:build-dev": "nx all:build-dev workflows",
     "all:pack-and-copy": "nx run-many -t pack-and-copy",
     "demos:prepare": "nx run devextreme-demos:prepare-js",
-    "demos:start": "http-server ./apps/demos --port 8080 -c-1"
+    "demos:start": "http-server ./apps/demos --port 8080 -c-1",
+    "demos:start-csp": "node apps/demos/utils/server/csp-server.js 8080"
   },
   "nx": {},
   "private": true,
