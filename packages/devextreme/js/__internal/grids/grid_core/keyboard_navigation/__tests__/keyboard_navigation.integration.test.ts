@@ -62,7 +62,7 @@ describe('Keyboard Navigation', () => {
     // Row 6: Group "C" (expanded)
     // Row 7: Data (Item 5)
 
-    it.each<{ mode: SelectionMode, key: KeyboardNavKey }>([
+    it.each<{ mode: SelectionMode; key: KeyboardNavKey }>([
       { mode: 'multiple', key: 'upArrow' },
       { mode: 'multiple', key: 'downArrow' },
       { mode: 'single', key: 'upArrow' },
@@ -104,7 +104,7 @@ describe('Keyboard Navigation', () => {
     // NOTE: { mode: 'single', key: 'downArrow' } is excluded because
     // the _scrollBy fallback in _upDownKeysHandler only fires for upArrow,
     // so single+downArrow at boundary never throws an error.
-    it.each<{ mode: SelectionMode, key: KeyboardNavKey }>([
+    it.each<{ mode: SelectionMode; key: KeyboardNavKey }>([
       { mode: 'multiple', key: 'upArrow' },
       { mode: 'multiple', key: 'downArrow' },
       { mode: 'single', key: 'upArrow' },
