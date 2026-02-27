@@ -278,9 +278,6 @@ const build = async (framework) => {
       console.error(`Build ${framework} error `, err);
       process.exit(err);
     }
-  } finally {
-      console.log(`Remove temporary folder: ${tmpDir}`);
-  }
 };
 
 const copyBundlesFolder = () => {
