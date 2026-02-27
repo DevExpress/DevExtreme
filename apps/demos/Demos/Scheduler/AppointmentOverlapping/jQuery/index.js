@@ -1,7 +1,7 @@
 $(() => {
   let popup;
   let form;
-  let shouldShowValidationError = false;
+  let showConflictError = false;
 
   const scheduler = $('#scheduler').dxScheduler({
     dataSource: data,
@@ -27,6 +27,8 @@ $(() => {
         },
       },
       form: {
+        labelMode: 'hidden',
+        elementAttr: { class: 'hide-informer' },
         onInitialized: (e) => {
           form = e.component;
 
@@ -35,24 +37,22 @@ $(() => {
           form.option('onFieldDataChanged', (e) => {
             defaultFieldDataChangedHandler?.(e);
 
-            if (shouldShowValidationError && (e.dataField === 'startDate' || e.dataField === 'endDate')) {
-              shouldShowValidationError = false;
-              form.itemOption('mainGroup.conflictInformer', { visible: false });
+            if (showConflictError && (e.dataField === 'startDate' || e.dataField === 'endDate')) {
+              showConflictError = false;
+              form.option('elementAttr.class', 'hide-informer');
               form.validate();
             }
           });
         },
-        labelMode: 'hidden',
         items: [
           {
             name: 'mainGroup',
             items: [
               {
                 name: 'conflictInformer',
-                visible: false,
-                template: () => $('<div>').dxInformer({
-                  text: 'This time slot conflicts with another appointment.',
-                }),
+                template: () => $('<div>')
+                  .addClass('conflict-informer')
+                  .text('This time slot conflicts with another appointment.'),
               },
               'subjectGroup',
               'dateGroup',
@@ -100,8 +100,8 @@ $(() => {
                 type: 'custom',
                 message: 'Time conflict',
                 ignoreEmptyValue: true,
-                reevaluate: false,
-                validationCallback: () => !shouldShowValidationError,
+                reevaluate: true,
+                validationCallback: () => !showConflictError,
               },
             ];
           }
@@ -120,15 +120,15 @@ $(() => {
     const hasConflict = detectConflict(appointmentData);
 
     if (!hasConflict) {
-      shouldShowValidationError = false;
+      showConflictError = false;
       return;
     }
 
     e.cancel = true;
 
     if (popup.option('visible')) {
-      shouldShowValidationError = true;
-      form.itemOption('mainGroup.conflictInformer', { visible: true });
+      showConflictError = true;
+      form.option('elementAttr.class', '');
       form.validate();
     } else {
       const dialog = DevExpress.ui.dialog.custom({

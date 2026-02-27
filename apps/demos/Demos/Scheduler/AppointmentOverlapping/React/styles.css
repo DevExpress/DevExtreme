@@ -1,24 +1,27 @@
+.dx-scheduler-appointment {
+  color: #242424;
+}
+
+.hide-informer .dx-scheduler-form-main-group .dx-item:has(.conflict-informer) {
+  display: none !important;
+}
+
+.hide-informer .dx-scheduler-form-main-group .dx-scheduler-form-subject-group {
+  padding-top: 0 !important;
+}
+
 .conflict-informer {
-  background-color: #fceae8;
-  color: #c50f1f;
+  background-color: #FCEAE8;
+  color: #C50F1F;
+  font-size: 13px;
   padding: 8px 12px;
-  border-radius: 4px;
 }
 
-.options {
-  padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
-  margin-top: 20px;
+.dx-dialog .dx-overlay-content {
+  width: 280px;
 }
 
-.caption {
-  font-size: 18px;
-  font-weight: 500;
-}
-
-.option {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.dx-dialog .dx-toolbar-center,
+.dx-dialog .dx-button {
+  width: 100%;
 }

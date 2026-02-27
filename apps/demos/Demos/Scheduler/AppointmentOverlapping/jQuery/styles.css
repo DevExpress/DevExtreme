@@ -1,9 +1,20 @@
-.dx-informer-error.dx-informer-bg {
-  background-color: #FCEAE8;
+.dx-scheduler-appointment {
+  color: #242424;
 }
 
-.dx-informer-text {
+.hide-informer .dx-scheduler-form-main-group .dx-item:has(.conflict-informer) {
+  display: none !important;
+}
+
+.hide-informer .dx-scheduler-form-main-group .dx-scheduler-form-subject-group {
+  padding-top: 0 !important;
+}
+
+.conflict-informer {
+  background-color: #FCEAE8;
+  color: #C50F1F;
   font-size: 13px;
+  padding: 8px 12px;
 }
 
 .dx-dialog .dx-overlay-content {
