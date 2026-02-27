@@ -245,6 +245,9 @@ importers:
       source-map:
         specifier: 0.7.4
         version: 0.7.4
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.9.3)
       tar-fs:
         specifier: 3.1.1
         version: 3.1.1
@@ -1406,7 +1409,7 @@ importers:
         version: 0.14.2
       autoprefixer:
         specifier: 10.4.21
-        version: 10.4.21(postcss@8.4.38)
+        version: 10.4.21(postcss@8.5.6)
       axe-core:
         specifier: 'catalog:'
         version: 4.11.1
@@ -10972,10 +10975,6 @@ packages:
     resolution: {integrity: sha512-rYGMRwip6lUMvYD3BTScMwT1HtAs2d71SMv66Vrxs0IekGZEjhM0pcMfjQPnknBt2zeCwQMEupiN02ZP4DiT1Q==}
     engines: {node: '>=8'}
 
-  fast-glob@3.3.2:
-    resolution: {integrity: sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==}
-    engines: {node: '>=8.6.0'}
-
   fast-glob@3.3.3:
     resolution: {integrity: sha512-7MptL8U0cqcFdzIzwOTHoilX9x5BrNqye7Z/LuC7kCMRio1EMSyqRK3BEAUD7sXRq4iT4AzTVuZdhgQ2TCvYLg==}
     engines: {node: '>=8.6.0'}
@@ -17127,10 +17126,6 @@ packages:
     resolution: {integrity: sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q==}
     engines: {node: '>=10'}
 
-  supports-hyperlinks@3.1.0:
-    resolution: {integrity: sha512-2rn0BZ+/f7puLOHZm1HOJfwBggfaHXUpPUSSG/SWM4TWp5KCfmNYwnC3hruy2rZlMnmWZ+QAGpZfchu3f3695A==}
-    engines: {node: '>=14.18'}
-
   supports-hyperlinks@3.2.0:
     resolution: {integrity: sha512-zFObLMyZeEwzAoKCyu1B91U79K2t7ApXuQfo8OuxwXLDgcKxuwM+YvcbIhm6QWqz7mHUH1TVytR1PwVVjEuMig==}
     engines: {node: '>=14.18'}
@@ -17193,10 +17188,6 @@ packages:
 
   systemjs@0.19.47:
     resolution: {integrity: sha512-6P+63y7bQhZXqOcim7QU0TKEjCmQArFkKa+CxlDchIerej7wrXLUoyGuWk+L0yC5rYrZ5LI6Eh1QOawttQq5xw==}
-
-  table@6.8.2:
-    resolution: {integrity: sha512-w2sfv80nrAh2VCbqR5AK27wswXhqcck2AhfnNW76beQXskGZ1V12GwS//yYVa3d3fcvAip2OUnbDAjW2k3v9fA==}
-    engines: {node: '>=10.0.0'}
 
   table@6.9.0:
     resolution: {integrity: sha512-9kY+CygyYM6j02t5YFHbNz2FN5QmYGv9zAjVp4lCDjlCw7amdckXlEt/bjMhUIfj4ThGRE4gCUH5+yGnNuPo5A==}
@@ -27941,16 +27932,6 @@ snapshots:
       postcss: 8.5.2
       postcss-value-parser: 4.2.0
 
-  autoprefixer@10.4.21(postcss@8.4.38):
-    dependencies:
-      browserslist: 4.28.1
-      caniuse-lite: 1.0.30001763
-      fraction.js: 4.3.7
-      normalize-range: 0.1.2
-      picocolors: 1.1.1
-      postcss: 8.4.38
-      postcss-value-parser: 4.2.0
-
   autoprefixer@10.4.21(postcss@8.5.6):
     dependencies:
       browserslist: 4.28.1
@@ -29513,7 +29494,7 @@ snapshots:
 
   cosmiconfig@8.3.6(typescript@4.9.5):
     dependencies:
-      import-fresh: 3.3.0
+      import-fresh: 3.3.1
       js-yaml: 4.1.0
       parse-json: 5.2.0
       path-type: 4.0.0
@@ -29522,7 +29503,7 @@ snapshots:
 
   cosmiconfig@8.3.6(typescript@5.9.3):
     dependencies:
-      import-fresh: 3.3.0
+      import-fresh: 3.3.1
       js-yaml: 4.1.0
       parse-json: 5.2.0
       path-type: 4.0.0
@@ -32220,14 +32201,6 @@ snapshots:
       merge2: 1.4.1
       micromatch: 4.0.8
 
-  fast-glob@3.3.2:
-    dependencies:
-      '@nodelib/fs.stat': 2.0.5
-      '@nodelib/fs.walk': 1.2.8
-      glob-parent: 5.1.2
-      merge2: 1.4.1
-      micromatch: 4.0.8
-
   fast-glob@3.3.3:
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -32444,7 +32417,7 @@ snapshots:
 
   flat-cache@3.2.0:
     dependencies:
-      flatted: 3.3.2
+      flatted: 3.3.3
       keyv: 4.5.4
       rimraf: 3.0.2
 
@@ -40388,8 +40361,8 @@ snapshots:
       cosmiconfig: 8.3.6(typescript@4.9.5)
       css-functions-list: 3.2.3
       css-tree: 2.3.1
-      debug: 4.3.7
-      fast-glob: 3.3.2
+      debug: 4.4.3
+      fast-glob: 3.3.3
       fastest-levenshtein: 1.0.16
       file-entry-cache: 7.0.2
       global-modules: 2.0.0
@@ -40415,9 +40388,9 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       style-search: 0.1.0
-      supports-hyperlinks: 3.1.0
+      supports-hyperlinks: 3.2.0
       svg-tags: 1.0.0
-      table: 6.8.2
+      table: 6.9.0
       write-file-atomic: 5.0.1
     transitivePeerDependencies:
       - supports-color
@@ -40434,8 +40407,8 @@ snapshots:
       cosmiconfig: 8.3.6(typescript@5.9.3)
       css-functions-list: 3.2.3
       css-tree: 2.3.1
-      debug: 4.3.7
-      fast-glob: 3.3.2
+      debug: 4.4.3
+      fast-glob: 3.3.3
       fastest-levenshtein: 1.0.16
       file-entry-cache: 7.0.2
       global-modules: 2.0.0
@@ -40461,9 +40434,9 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       style-search: 0.1.0
-      supports-hyperlinks: 3.1.0
+      supports-hyperlinks: 3.2.0
       svg-tags: 1.0.0
-      table: 6.8.2
+      table: 6.9.0
       write-file-atomic: 5.0.1
     transitivePeerDependencies:
       - supports-color
@@ -40668,11 +40641,6 @@ snapshots:
     dependencies:
       has-flag: 4.0.0
 
-  supports-hyperlinks@3.1.0:
-    dependencies:
-      has-flag: 4.0.0
-      supports-color: 7.2.0
-
   supports-hyperlinks@3.2.0:
     dependencies:
       has-flag: 4.0.0
@@ -40748,14 +40716,6 @@ snapshots:
   systemjs@0.19.47:
     dependencies:
       when: 3.7.8
-
-  table@6.8.2:
-    dependencies:
-      ajv: 8.17.1
-      lodash.truncate: 4.4.2
-      slice-ansi: 4.0.0
-      string-width: 4.2.3
-      strip-ansi: 6.0.1
 
   table@6.9.0:
     dependencies:
