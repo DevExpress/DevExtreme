@@ -210,6 +210,9 @@ importers:
       source-map:
         specifier: 0.7.4
         version: 0.7.4
+      stylelint:
+        specifier: 15.11.0
+        version: 15.11.0(typescript@5.9.3)
       tar-fs:
         specifier: 3.1.1
         version: 3.1.1
@@ -1287,7 +1290,7 @@ importers:
         version: 0.14.2
       autoprefixer:
         specifier: 10.4.21
-        version: 10.4.21(postcss@8.4.38)
+        version: 10.4.21(postcss@8.5.6)
       axe-core:
         specifier: 'catalog:'
         version: 4.11.1
@@ -26839,16 +26842,6 @@ snapshots:
       postcss: 8.5.2
       postcss-value-parser: 4.2.0
 
-  autoprefixer@10.4.21(postcss@8.4.38):
-    dependencies:
-      browserslist: 4.28.0
-      caniuse-lite: 1.0.30001756
-      fraction.js: 4.3.7
-      normalize-range: 0.1.2
-      picocolors: 1.1.1
-      postcss: 8.4.38
-      postcss-value-parser: 4.2.0
-
   autoprefixer@10.4.21(postcss@8.5.6):
     dependencies:
       browserslist: 4.28.0
@@ -27375,7 +27368,7 @@ snapshots:
       domhandler: 5.0.3
       htmlparser2: 10.0.0
       picocolors: 1.1.1
-      postcss: 8.5.3
+      postcss: 8.5.6
       postcss-media-query-parser: 0.2.3
 
   big.js@5.2.2: {}
@@ -38788,8 +38781,8 @@ snapshots:
       cosmiconfig: 8.3.6(typescript@4.9.5)
       css-functions-list: 3.2.3
       css-tree: 2.3.1
-      debug: 4.3.7
-      fast-glob: 3.3.2
+      debug: 4.4.0
+      fast-glob: 3.3.3
       fastest-levenshtein: 1.0.16
       file-entry-cache: 7.0.2
       global-modules: 2.0.0
@@ -38834,8 +38827,8 @@ snapshots:
       cosmiconfig: 8.3.6(typescript@5.9.3)
       css-functions-list: 3.2.3
       css-tree: 2.3.1
-      debug: 4.3.7
-      fast-glob: 3.3.2
+      debug: 4.4.0
+      fast-glob: 3.3.3
       fastest-levenshtein: 1.0.16
       file-entry-cache: 7.0.2
       global-modules: 2.0.0
