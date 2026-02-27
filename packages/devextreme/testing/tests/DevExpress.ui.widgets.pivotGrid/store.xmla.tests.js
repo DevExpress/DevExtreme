@@ -61,9 +61,6 @@ const CALENDAR_HIERARCHY_YEAR_DATA = [{
 
 const stubsEnvironment = {
     beforeEach: function() {
-        sinon.spy(errors, 'log');
-        sinon.spy(errors, 'Error');
-
         this.store = new XmlaStore(this.dataSource);
         this.sendDeferred = $.Deferred();
 
