@@ -2,7 +2,7 @@
 const { readFileSync, existsSync } = require('fs');
 const { join } = require('path');
 
-const reportFile = join(__dirname, '..', '..', 'csp-reports', 'csp-violations.jsonl');
+const reportFile = process.env.CSP_REPORT_FILE || join(__dirname, '..', '..', 'csp-reports', 'csp-violations.jsonl');
 
 if (!existsSync(reportFile)) {
   console.log('No CSP violations report found.');

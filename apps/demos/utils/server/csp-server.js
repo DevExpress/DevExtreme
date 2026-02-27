@@ -14,14 +14,22 @@ const cspViolations = [];
 let cspViolationIdCounter = 0;
 
 const CSP_DIRECTIVES = [
-  "default-src 'self'",
+  "default-src 'none'",
+
   "script-src 'self' https://esm.sh https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
   "style-src 'self' https://maxcdn.bootstrapcdn.com",
-  "img-src 'self' data: blob: https:",
-  "font-src 'self' data: https:",
-  "connect-src 'self' https:",
-  "worker-src 'self' blob:",
-  "frame-src 'self' blob:",
+
+  "img-src 'self'",
+  "font-src 'self'",
+  "connect-src 'self'",
+  "worker-src 'self'",
+  "frame-src 'self'",
+
+  "object-src 'none'",
+  "base-uri 'none'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+
   'report-uri /csp-report',
 ].join('; ');
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const { execFileSync } = require('child_process');
 const { join } = require('path');
 const {
@@ -115,12 +114,10 @@ function httpRequest(url, method) {
 
 async function main() {
   const chromePath = findChrome();
+  const framework = FRAMEWORKS[0];
   console.log(`Chrome: ${chromePath}`);
   console.log(`Server: ${SERVER_URL}`);
-  console.log(`Frameworks: ${FRAMEWORKS.join(', ')}\n`);
-
-  // Clear previous violations on server
-  await httpRequest(`${SERVER_URL}/csp-violations`, 'DELETE');
+  console.log(`Framework: ${framework}\n`);
 
   const demos = findDemos();
   console.log(`Found ${demos.length} demo page(s) to check\n`);
@@ -130,33 +127,58 @@ async function main() {
     return;
   }
 
-  let checked = 0;
-  for (const demo of demos) {
-    checked += 1;
-    if (checked % 50 === 0 || checked === demos.length || checked === 1) {
-      console.log(`  [${checked}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework}`);
-    }
+  mkdirSync(REPORT_DIR, { recursive: true });
+  const reportFile = join(REPORT_DIR, `csp-violations-${framework.toLowerCase()}.jsonl`);
+
+  let totalViolations = 0;
+  let demosWithViolations = 0;
+  const allViolations = [];
+
+  for (let i = 0; i < demos.length; i += 1) {
+    const demo = demos[i];
+
+    await httpRequest(`${SERVER_URL}/csp-violations`, 'DELETE');
+
     visitPage(chromePath, demo.url);
+
+    await new Promise((resolve) => { setTimeout(resolve, 500); });
+
+    const result = await httpRequest(`${SERVER_URL}/csp-violations`);
+    const violations = result.violations || [];
+
+    if (violations.length > 0) {
+      demosWithViolations += 1;
+      totalViolations += violations.length;
+
+      console.log(`  ❌ [${i + 1}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework} — ${violations.length} violation(s)`);
+      for (const v of violations) {
+        const blocked = v.blockedUri || 'N/A';
+        const directive = v.effectiveDirective || v.violatedDirective || '?';
+        console.log(`       ${directive}: ${blocked}`);
+        allViolations.push({ ...v, framework });
+      }
+    } else {
+      console.log(`  ✅ [${i + 1}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework}`);
+    }
   }
 
-  // Wait for in-flight CSP reports to arrive at the server
-  console.log('\nWaiting for remaining CSP reports...');
-  await new Promise((resolve) => { setTimeout(resolve, 3000); });
-
-  // Fetch violations from CSP server
-  const result = await httpRequest(`${SERVER_URL}/csp-violations`);
-  const violations = result.violations || [];
-
-  // Write JSONL report
-  mkdirSync(REPORT_DIR, { recursive: true });
-  const reportFile = join(REPORT_DIR, 'csp-violations.jsonl');
-
-  if (violations.length > 0) {
-    const lines = violations.map((v) => JSON.stringify(v)).join('\n');
+  if (allViolations.length > 0) {
+    const lines = allViolations.map((v) => JSON.stringify(v)).join('\n');
     writeFileSync(reportFile, `${lines}\n`);
-    console.log(`\n⚠️  ${violations.length} CSP violation(s) detected`);
   } else {
     writeFileSync(reportFile, '');
+  }
+
+  console.log(`\n${'='.repeat(60)}`);
+  console.log(`Framework: ${framework}`);
+  console.log(`Demos checked: ${demos.length}`);
+  console.log(`Demos with violations: ${demosWithViolations}`);
+  console.log(`Total violations: ${totalViolations}`);
+
+  if (totalViolations > 0) {
+    console.log(`\n⚠️  ${totalViolations} CSP violation(s) detected in ${demosWithViolations} demo(s)`);
+    console.log(`Report: ${reportFile}`);
+  } else {
     console.log('\n✅ No CSP violations detected');
   }
 }

@@ -1069,8 +1069,8 @@ jobs:
           pattern: accessibility-reports-*
           delete-merged: true
 
-  csp-check:
-    name: CSP violations check
+  csp-check-jquery:
+    name: CSP check (jQuery)
     needs: [check-should-run, build-devextreme]
     if: |
       always() &&
@@ -1126,24 +1126,100 @@ jobs:
     - name: Start CSP Server
       run: node apps/demos/utils/server/csp-server.js 8080 &
 
-    - name: Run CSP Check (Chrome headless)
+    - name: Run CSP Check
       working-directory: apps/demos
       env:
-        CSP_FRAMEWORKS: jQuery,React
+        CSP_FRAMEWORKS: jQuery
       run: node utils/server/csp-check.js
 
-    - name: Upload CSP violation reports
+    - name: Upload CSP report
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: csp-violations
+        name: csp-violations-jquery
+        path: apps/demos/csp-reports/
+        if-no-files-found: ignore
+
+  csp-check-frameworks:
+    name: CSP check (${{ matrix.FRAMEWORK }})
+    needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        FRAMEWORK: [React, Vue, Angular]
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-sources
+
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '145.0.7632.67'
+        runner-type: 'github-hosted'
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v4
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v4
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Install tgz
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
+    - name: Start CSP Server
+      run: node apps/demos/utils/server/csp-server.js 8080 &
+
+    - name: Run CSP Check
+      working-directory: apps/demos
+      env:
+        CSP_FRAMEWORKS: ${{ matrix.FRAMEWORK }}
+      run: node utils/server/csp-check.js
+
+    - name: Upload CSP report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: csp-violations-${{ matrix.FRAMEWORK }}
         path: apps/demos/csp-reports/
         if-no-files-found: ignore
 
   csp-report-summary:
     name: CSP Violations Summary
     runs-on: devextreme-shr2
-    needs: [check-should-run, csp-check]
+    needs: [check-should-run, csp-check-jquery, csp-check-frameworks]
     if: always() && needs.check-should-run.outputs.should-run == 'true'
     timeout-minutes: 5
 
@@ -1159,33 +1235,46 @@ jobs:
       - name: Download all CSP reports
         uses: actions/download-artifact@v4
         with:
-          pattern: csp-*
+          pattern: csp-violations-*
           path: csp-reports-all
           merge-multiple: true
         continue-on-error: true
 
-      - name: Merge and summarize CSP violations
+      - name: Summarize CSP violations
         run: |
           mkdir -p apps/demos/csp-reports
-          find csp-reports-all -name '*.jsonl' -exec cat {} + > apps/demos/csp-reports/csp-violations.jsonl 2>/dev/null || true
 
-          if [ -s apps/demos/csp-reports/csp-violations.jsonl ]; then
-            TOTAL=$(wc -l < apps/demos/csp-reports/csp-violations.jsonl | tr -d ' ')
-            echo "## ⚠️ CSP Violations Found ($TOTAL total)" >> $GITHUB_STEP_SUMMARY
-            echo '' >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            node apps/demos/utils/server/csp-report-summary.js >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            echo ''
-            echo "CSP violations found: $TOTAL"
-            node apps/demos/utils/server/csp-report-summary.js
+          echo "## CSP Violations Report" >> $GITHUB_STEP_SUMMARY
+          echo '' >> $GITHUB_STEP_SUMMARY
+
+          GRAND_TOTAL=0
+          for report in csp-reports-all/csp-violations-*.jsonl; do
+            [ -f "$report" ] || continue
+            FRAMEWORK=$(basename "$report" | sed 's/csp-violations-//;s/\.jsonl//')
+            cp "$report" "apps/demos/csp-reports/"
+
+            if [ -s "$report" ]; then
+              COUNT=$(wc -l < "$report" | tr -d ' ')
+              GRAND_TOTAL=$((GRAND_TOTAL + COUNT))
+              echo "### ⚠️ ${FRAMEWORK}: ${COUNT} violation(s)" >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              CSP_REPORT_FILE="$report" node apps/demos/utils/server/csp-report-summary.js >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+            else
+              echo "### ✅ ${FRAMEWORK}: No violations" >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+          if [ "$GRAND_TOTAL" -eq 0 ]; then
+            echo "✅ No CSP violations detected across all frameworks."
           else
-            echo "## ✅ No CSP Violations" >> $GITHUB_STEP_SUMMARY
-            echo "No CSP violations detected across all demo tests." >> $GITHUB_STEP_SUMMARY
-            echo "No CSP violations detected."
+            echo "⚠️  Total: $GRAND_TOTAL CSP violation(s)"
           fi
 
-      - name: Upload merged CSP report
+      - name: Upload merged CSP reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
