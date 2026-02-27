@@ -10,7 +10,7 @@ import {
   disabledNodeSelectionModeLabel,
 } from './data.js';
 
-const showCheckBoxesModes = ['normal', 'selectAll', 'none'];
+const checkboxVisibilityOptions = ['normal', 'selectAll', 'none'];
 const selectionModes = ['multiple', 'single'];
 const disabledNodeSelectionModes = ['never', 'recursiveAndAll'];
 const renderTreeViewItem = (item) => `${item.fullName} (${item.position})`;
@@ -18,9 +18,9 @@ const renderListItem = (item) => `${item.prefix} ${item.fullName} (${item.positi
 const App = () => {
   const treeViewRef = useRef(null);
   const [selectedEmployees, setSelectedEmployees] = useState([]);
-  const [selectNodesRecursive, setSelectNodesRecursive] = useState(true);
-  const [selectByClick, setSelectByClick] = useState(false);
-  const [showCheckBoxesMode, setShowCheckBoxesMode] = useState(showCheckBoxesModes[0]);
+  const [recursiveSelection, setRecursiveSelection] = useState(true);
+  const [selectOnClick, setSelectOnClick] = useState(false);
+  const [checkboxVisibility, setCheckboxVisibility] = useState(checkboxVisibilityOptions[0]);
   const [selectionMode, setSelectionMode] = useState(selectionModes[0]);
   const [disabledNodeSelectionMode, setDisabledNodeSelectionMode] = useState(
     disabledNodeSelectionModes[0],
@@ -45,7 +45,7 @@ const App = () => {
   );
   const showCheckBoxesModeValueChanged = useCallback((e) => {
     const value = e.value;
-    setShowCheckBoxesMode(value);
+    setCheckboxVisibility(value);
     if (value === 'selectAll') {
       setSelectionMode('multiple');
       setIsRecursiveDisabled(false);
@@ -56,7 +56,7 @@ const App = () => {
     const value = e.value;
     setSelectionMode(value);
     if (value === 'single') {
-      setSelectNodesRecursive(false);
+      setRecursiveSelection(false);
       treeViewRef.current?.instance().unselectAll();
     }
     setIsRecursiveDisabled(value === 'single');
@@ -64,11 +64,11 @@ const App = () => {
   const disabledNodeSelectionModeValueChanged = useCallback((e) => {
     setDisabledNodeSelectionMode(e.value);
   }, []);
-  const selectNodesRecursiveValueChanged = useCallback((e) => {
-    setSelectNodesRecursive(e.value);
+  const recursiveSelectionValueChanged = useCallback((e) => {
+    setRecursiveSelection(e.value);
   }, []);
-  const selectByClickValueChanged = useCallback((e) => {
-    setSelectByClick(e.value);
+  const selectOnClickValueChanged = useCallback((e) => {
+    setSelectOnClick(e.value);
   }, []);
   return (
     <div>
@@ -80,9 +80,9 @@ const App = () => {
           width={340}
           height={320}
           items={employees}
-          selectNodesRecursive={selectNodesRecursive}
-          selectByClick={selectByClick}
-          showCheckBoxesMode={showCheckBoxesMode}
+          selectNodesRecursive={recursiveSelection}
+          selectByClick={selectOnClick}
+          showCheckBoxesMode={checkboxVisibility}
           selectionMode={selectionMode}
           disabledNodeSelectionMode={disabledNodeSelectionMode}
           onSelectionChanged={treeViewSelectionChanged}
@@ -106,11 +106,11 @@ const App = () => {
         <div className="options-container">
           <div className="options-section">
             <div className="option">
-              <span>Show Check Boxes Mode:</span>
+              <span>Checkbox Visibility:</span>
               <div className="editor-container">
                 <SelectBox
-                  items={showCheckBoxesModes}
-                  value={showCheckBoxesMode}
+                  items={checkboxVisibilityOptions}
+                  value={checkboxVisibility}
                   inputAttr={showCheckboxesModeLabel}
                   onValueChanged={showCheckBoxesModeValueChanged}
                 />
@@ -145,10 +145,10 @@ const App = () => {
               <div className="caption-placeholder">&nbsp;</div>
               <div className="editor-container">
                 <CheckBox
-                  text="Select Nodes Recursive"
-                  value={selectNodesRecursive}
+                  text="Recursive Selection"
+                  value={recursiveSelection}
                   disabled={isRecursiveDisabled}
-                  onValueChanged={selectNodesRecursiveValueChanged}
+                  onValueChanged={recursiveSelectionValueChanged}
                 />
               </div>
             </div>
@@ -156,9 +156,9 @@ const App = () => {
               <div className="caption-placeholder">&nbsp;</div>
               <div className="editor-container">
                 <CheckBox
-                  text="Select By Click"
-                  value={selectByClick}
-                  onValueChanged={selectByClickValueChanged}
+                  text="Select on Click"
+                  value={selectOnClick}
+                  onValueChanged={selectOnClickValueChanged}
                 />
               </div>
             </div>
