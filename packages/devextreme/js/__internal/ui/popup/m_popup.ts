@@ -698,8 +698,8 @@ class Popup<
       $container.append($result);
     }
 
-    $result.removeClass(TEMPLATE_WRAPPER_CLASS);
-    $container.addClass(TEMPLATE_WRAPPER_CLASS);
+    // $result.removeClass(TEMPLATE_WRAPPER_CLASS);
+    // $container.addClass(TEMPLATE_WRAPPER_CLASS);
 
     return $container;
   }
