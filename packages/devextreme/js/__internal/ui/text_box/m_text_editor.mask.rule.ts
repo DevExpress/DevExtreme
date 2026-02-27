@@ -171,19 +171,19 @@ export class MaskRule extends BaseMaskRule {
   text(): string {
     const isValueEqualEmptyChar = this._value === EMPTY_CHAR;
     const value = isValueEqualEmptyChar ? this.maskChar : this._value;
-    const finalValue = `${value}${(this.next().text() ?? '')}`;
+    const finalValue = `${value}${this.next().text() ?? ''}`;
 
     return finalValue;
   }
 
   value(): string {
-    const finalValue = `${this._value}${(this.next().value() ?? '')}`;
+    const finalValue = `${this._value}${this.next().value() ?? ''}`;
 
     return finalValue;
   }
 
   rawValue(): string {
-    const finalValue = `${this._value}${(this.next().rawValue() ?? '')}`;
+    const finalValue = `${this._value}${this.next().rawValue() ?? ''}`;
 
     return finalValue;
   }
@@ -244,7 +244,7 @@ export class MaskRule extends BaseMaskRule {
 
   _accepted(): boolean;
   _accepted(value: boolean): void;
-  // eslint-disable-next-line consistent-return
+  // eslint-disable-next-line consistent-return, @typescript-eslint/no-invalid-void-type
   _accepted(value?: boolean): boolean | void {
     if (!arguments.length) {
       return !!this._isAccepted;

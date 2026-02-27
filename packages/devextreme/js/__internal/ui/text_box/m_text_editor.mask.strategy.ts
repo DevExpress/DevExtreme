@@ -45,6 +45,7 @@ export default class MaskStrategy {
     name: K,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     value?: TextEditorBaseProperties[K],
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   ): TextEditorBaseProperties[K] | void {
     // eslint-disable-next-line prefer-rest-params
     return this.editor.option(...arguments);
@@ -56,7 +57,7 @@ export default class MaskStrategy {
 
   _editorCaret(): CaretRange;
   _editorCaret(newCaret: CaretRange | undefined): void;
-  // eslint-disable-next-line consistent-return
+  // eslint-disable-next-line consistent-return, @typescript-eslint/no-invalid-void-type
   _editorCaret(newCaret?: CaretRange | undefined): CaretRange | void {
     if (!newCaret) {
       return this.editor._caret();
