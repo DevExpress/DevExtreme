@@ -73,7 +73,7 @@ $(() => {
   });
 
   const recursiveCheckBox = $('#selectNodesRecursive').dxCheckBox({
-    text: 'Recursive Selection',
+    text: 'Select Nodes Recursive',
     value: true,
     onValueChanged(e) {
       treeView.option('selectNodesRecursive', e.value);
@@ -81,7 +81,7 @@ $(() => {
   }).dxCheckBox('instance');
 
   $('#selectByClick').dxCheckBox({
-    text: 'Select on Click',
+    text: 'Select By Click',
     value: false,
     onValueChanged(e) {
       treeView.option('selectByClick', e.value);

@@ -117,7 +117,7 @@ const App = () => {
         <div className="options-container">
           <div className="options-section">
             <div className="option">
-              <span>Checkbox Visibility:</span>
+              <span>Show Check Boxes Mode:</span>
               <div className="editor-container">
                 <SelectBox
                   items={showCheckBoxesModes}
@@ -153,7 +153,7 @@ const App = () => {
               <div className="caption-placeholder">&nbsp;</div>
               <div className="editor-container">
                 <CheckBox
-                  text="Recursive Selection"
+                  text="Select Nodes Recursive"
                   value={selectNodesRecursive}
                   disabled={isRecursiveDisabled}
                   onValueChanged={selectNodesRecursiveValueChanged} />
@@ -163,7 +163,7 @@ const App = () => {
               <div className="caption-placeholder">&nbsp;</div>
               <div className="editor-container">
                 <CheckBox
-                  text="Select on Click"
+                  text="Select By Click"
                   value={selectByClick}
                   onValueChanged={selectByClickValueChanged} />
               </div>
