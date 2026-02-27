@@ -1069,20 +1069,15 @@ jobs:
           pattern: accessibility-reports-*
           delete-merged: true
 
-  testcafe-csp:
-    name: CSP violations - ${{ matrix.CONSTEL }}
+  csp-check:
+    name: CSP violations check
     needs: [check-should-run, build-devextreme]
     if: |
       always() &&
       needs.check-should-run.outputs.should-run == 'true' &&
       needs.build-devextreme.result == 'success'
-    strategy:
-      fail-fast: false
-      matrix:
-        CONSTEL: [jquery(1/3), jquery(2/3), jquery(3/3)]
-        THEME: ['fluent.blue.light']
     runs-on: devextreme-shr2
-    timeout-minutes: 30
+    timeout-minutes: 60
 
     steps:
     - name: Get sources
@@ -1128,41 +1123,25 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Run CSP Server
+    - name: Start CSP Server
       run: node apps/demos/utils/server/csp-server.js 8080 &
 
-    - name: Run TestCafe tests (CSP)
-      shell: bash
+    - name: Run CSP Check (Chrome headless)
       working-directory: apps/demos
-      env:
-        NODE_OPTIONS: --max-old-space-size=8192
-        BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
-        CONCURRENCY: 4
-        TCQUARANTINE: true
-        CONSTEL: ${{ matrix.CONSTEL }}
-        THEME: ${{ matrix.THEME }}
-        DISABLE_DEMO_TEST_SETTINGS: all
-        CI_ENV: true
-        CSP_REPORT: 'true'
-      run: pnpx nx test-testcafe
-      continue-on-error: true
-
-    - name: Prepare CSP artifact name
-      if: always()
-      run: echo "CSP_ARTIFACT=$(echo 'csp-${{ matrix.CONSTEL }}-${{ matrix.THEME }}' | tr '/()' '---')" >> $GITHUB_ENV
+      run: node utils/server/csp-check.js
 
     - name: Upload CSP violation reports
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.CSP_ARTIFACT }}
+        name: csp-violations
         path: apps/demos/csp-reports/
         if-no-files-found: ignore
 
   csp-report-summary:
     name: CSP Violations Summary
     runs-on: devextreme-shr2
-    needs: [check-should-run, testcafe-csp]
+    needs: [check-should-run, csp-check]
     if: always() && needs.check-should-run.outputs.should-run == 'true'
     timeout-minutes: 5
 
