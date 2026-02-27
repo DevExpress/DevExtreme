@@ -1,25 +1,18 @@
-/**
- * Constants and configuration for Grid Core Architecture Documentation Generator.
- */
-
 import * as path from 'path';
-
-// ─── Paths ───────────────────────────────────────────────────────────────────
 
 export const GRID_CORE_ROOT = path.resolve(__dirname, '..', '..', 'grid_core');
 export const OUTPUT_DIR = path.resolve(__dirname, '..', 'artifacts');
-
-// ─── Magic Strings ───────────────────────────────────────────────────────────
 
 export const MODULE_SUFFIX = 'Module';
 export const MODULES_PREFIX = 'modules.';
 export const MODULE_ITEM_CLASS = 'ModuleItem';
 export const M_MODULES_PATH = 'm_modules';
-export const BARE_MODULE_BASES = ['Controller', 'View', 'ViewController'] as const;
+export const BARE_MODULE_BASES = ['Controller', 'View', 'ViewController'];
 
-// ─── Directory → Feature Area Map ────────────────────────────────────────────
+export const EXCLUDED_DIRS = new Set(['__tests__', 'scripts', 'new', '__docs__']);
+export const EXCLUDED_FILE_NAMES = new Set(['m_modules.ts']);
 
-const DIRECTORY_FEATURE_MAP: Record<string, string> = {
+const CORE_DIRECTORY_FEATURE_MAP: Record<string, string> = {
   data_controller: 'Data',
 
   views: 'Core',
@@ -61,10 +54,5 @@ const DIRECTORY_FEATURE_MAP: Record<string, string> = {
  */
 export function getFeatureAreaFromPath(relPath: string): string {
   const firstSegment = relPath.split('/')[0];
-  return DIRECTORY_FEATURE_MAP[firstSegment] ?? 'Other';
+  return CORE_DIRECTORY_FEATURE_MAP[firstSegment] ?? 'Other';
 }
-
-// ─── Excluded Directories for File Discovery ─────────────────────────────────
-
-export const EXCLUDED_DIRS = new Set(['__tests__', 'scripts', 'new', '__docs__']);
-export const EXCLUDED_FILE_NAME = 'm_modules.ts';

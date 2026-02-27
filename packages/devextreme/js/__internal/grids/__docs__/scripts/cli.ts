@@ -1,8 +1,7 @@
-/**
- * CLI argument parsing for Grid Core Architecture Documentation Generator.
- */
-
-import type { CliArgs } from './types';
+interface CliArgs {
+  jsonOnly: boolean;
+  htmlOnly: boolean;
+}
 
 export function parseArgs(): CliArgs {
   const args = process.argv.slice(2);

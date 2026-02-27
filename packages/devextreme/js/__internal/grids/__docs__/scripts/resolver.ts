@@ -1,9 +1,4 @@
 /* eslint-disable spellcheck/spell-checker, no-restricted-syntax, max-depth */
-/**
- * Alias resolution, class registry building, and normalization
- * for Grid Core Architecture Documentation Generator.
- */
-
 import {
   BARE_MODULE_BASES,
   getFeatureAreaFromPath,
@@ -166,7 +161,7 @@ export function normalizeBareModuleImports(
   baseClass: string,
   parsedFile: ParsedFile,
 ): string {
-  if (!(BARE_MODULE_BASES as readonly string[]).includes(baseClass)) {
+  if (!BARE_MODULE_BASES.includes(baseClass)) {
     return baseClass;
   }
 
@@ -220,7 +215,7 @@ function isModuleBaseDescendant(
   }
 
   let baseClass = normalizeModuleRef(info.baseClass);
-  if ((BARE_MODULE_BASES as readonly string[]).includes(baseClass)
+  if (BARE_MODULE_BASES.includes(baseClass)
     && !globalClasses.has(baseClass)
   ) {
     baseClass = `${MODULES_PREFIX}${baseClass}`;
@@ -292,7 +287,7 @@ export function findStandaloneRegistrations(
     }
 
     let baseClass = normalizeModuleRef(info.baseClass);
-    if ((BARE_MODULE_BASES as readonly string[]).includes(baseClass)
+    if (BARE_MODULE_BASES.includes(baseClass)
       && !globalClasses.has(baseClass)
     ) {
       baseClass = `${MODULES_PREFIX}${baseClass}`;

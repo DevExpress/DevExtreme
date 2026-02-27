@@ -33,15 +33,18 @@ export function generateHtml(data: ArchitectureData): string {
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; height: 100vh; background: #1a1a1a; color: #E8E8E8; }
 
 #sidebar {
-  width: 260px; min-width: 260px; background: #2a2a2a; border-right: 1px solid #444;
+  width: 260px; min-width: 260px; background: #2a2a2a; border-right: 1px solid #555;
   padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px;
 }
 #sidebar h2 { font-size: 14px; color: #aaa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
 #sidebar label { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; padding: 2px 0; color: #E8E8E8; }
 #sidebar input[type="checkbox"] { accent-color: #5B9BD5; }
 #sidebar input[type="text"] {
-  width: 100%; padding: 6px 10px; border: 1px solid #555; border-radius: 4px; font-size: 13px;
-  background: #333; color: #E8E8E8;
+  width: 100%; padding: 6px 10px; border: 1px solid #444; border-radius: 4px; font-size: 13px;
+  background: #333; color: #E8E8E8; outline: none;
+}
+#sidebar input[type="text"]:focus-visible {
+  border-color: #777; outline: none;
 }
 #sidebar button {
   padding: 6px 12px; border: 1px solid #555; border-radius: 4px; background: #333;
@@ -55,7 +58,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 #cy { flex: 1; background: #212121; }
 
 #info-panel {
-  height: 140px; min-height: 80px; background: #2a2a2a; border-top: 1px solid #444;
+  height: 140px; min-height: 80px; background: #2a2a2a; border-top: 1px solid #555;
   padding: 12px 16px; overflow-y: auto; font-size: 13px; line-height: 1.5; color: #E8E8E8;
 }
 #info-panel h3 { font-size: 14px; margin-bottom: 4px; color: #E8E8E8; }
@@ -63,12 +66,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 #info-panel .tag {
   display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px; margin: 1px 2px;
 }
-#info-panel .tag-ctrl { background: #1a3a5c; color: #7CB9E8; }
-#info-panel .tag-view { background: #3a1a5c; color: #C4A8FF; }
-#info-panel .tag-ext { background: #5c3a00; color: #FFB347; }
+#info-panel .tag-ctrl { background: #243f62; color: #7CB9E8; }
+#info-panel .tag-view { background: #3e2462; color: #C4A8FF; }
+#info-panel .tag-ext { background: #3a2a1a; color: #C8884A; }
 
 #legend {
-  padding: 8px; font-size: 11px; border-top: 1px solid #444;
+  padding: 8px; font-size: 13px; border-top: 1px solid #555;
 }
 .legend-item { display: flex; align-items: center; gap: 6px; margin: 3px 0; color: #E8E8E8; }
 .legend-swatch {
@@ -78,7 +81,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   width: 24px; height: 0; flex-shrink: 0;
 }
 
-.select-all-row { border-bottom: 1px solid #444; padding-bottom: 4px; margin-bottom: 2px; }
+.select-all-row { border-bottom: 1px solid #555; padding-bottom: 4px; margin-bottom: 2px; }
 </style>
 </head>
 <body>
@@ -118,14 +121,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   </div>
   <div id="legend">
     <h2>Legend</h2>
-    <div class="legend-item"><div class="legend-swatch" style="background:#2B5C8A;border:1px solid #1E4060;"></div> Controller</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#5A3D8A;border:1px solid #3D2A60;"></div> View</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#333;border:2px dashed #FFB347;"></div> Extension-only Module</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#2B5C8A;border:2px dashed #1E4060;"></div> Standalone (not in module)</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#3D6E9E;border:1px solid #2B5580;"></div> Controller</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#6A4A9E;border:1px solid #4D3578;"></div> View</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#333;border:2px dashed #C8884A;"></div> Extension-only Module</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#3D6E9E;border:2px dashed #2B5580;"></div> Standalone (not in module)</div>
     <div class="legend-item"><div class="legend-swatch" style="background:#3a3a3a;border:1px solid #666;"></div> Module (compound)</div>
     <div class="legend-item"><div class="legend-line" style="border-top:2px solid #B0B0B0;"></div> Inheritance</div>
-    <div class="legend-item"><div class="legend-line" style="border-top:2px dashed #FFB347;"></div> Extension</div>
-    <div class="legend-item"><div class="legend-line" style="border-top:2px dotted #888;"></div> Runtime Dependency</div>
+    <div class="legend-item"><div class="legend-line" style="border-top:2px dashed #C8884A;"></div> Extension</div>
+    <div class="legend-item"><div class="legend-line" style="border-top:2px dotted #7A9DBF;"></div> Runtime Dependency</div>
   </div>
 </div>
 <div id="main">
@@ -174,7 +177,7 @@ const cy = cytoscape({
       style: {
         'border-style': 'dashed',
         'border-width': 2,
-        'border-color': '#FFB347',
+        'border-color': '#C8884A',
         'background-color': '#3a3000',
         'min-width': 80,
         'min-height': 30,
@@ -184,9 +187,9 @@ const cy = cytoscape({
     { selector: 'node.controller',
       style: {
         'shape': 'hexagon',
-        'background-color': '#2B5C8A',
+        'background-color': '#3D6E9E',
         'border-width': 1,
-        'border-color': '#1E4060',
+        'border-color': '#2B5580',
         'label': 'data(label)',
         'text-valign': 'center',
         'text-halign': 'center',
@@ -202,9 +205,9 @@ const cy = cytoscape({
     { selector: 'node.view',
       style: {
         'shape': 'round-rectangle',
-        'background-color': '#5A3D8A',
+        'background-color': '#6A4A9E',
         'border-width': 1,
-        'border-color': '#3D2A60',
+        'border-color': '#4D3578',
         'label': 'data(label)',
         'text-valign': 'center',
         'text-halign': 'center',
@@ -237,8 +240,8 @@ const cy = cytoscape({
     // Extension edges (initial bezier; switched to taxi after layout)
     { selector: 'edge.extension',
       style: {
-        'line-color': '#FFB347',
-        'target-arrow-color': '#FFB347',
+        'line-color': '#C8884A',
+        'target-arrow-color': '#C8884A',
         'target-arrow-shape': 'triangle',
         'line-style': 'dashed',
         'curve-style': 'bezier',
@@ -250,14 +253,14 @@ const cy = cytoscape({
     // Runtime dependency edges (initial bezier; switched to taxi after layout)
     { selector: 'edge.runtime',
       style: {
-        'line-color': '#888',
-        'target-arrow-color': '#888',
+        'line-color': '#7A9DBF',
+        'target-arrow-color': '#7A9DBF',
         'target-arrow-shape': 'triangle',
         'line-style': 'dotted',
         'curve-style': 'bezier',
         'width': 1,
         'arrow-scale': 0.6,
-        'opacity': 0.5,
+        'opacity': 0.7,
       }
     },
     // Highlighted state

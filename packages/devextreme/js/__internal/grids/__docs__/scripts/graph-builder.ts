@@ -1,13 +1,12 @@
 /* eslint-disable spellcheck/spell-checker, no-restricted-syntax, max-depth */
-/**
- * Cytoscape.js graph element builder for Grid Core Architecture Documentation Generator.
- */
-
 import { MODULE_ITEM_CLASS, MODULES_PREFIX } from './constants';
-import type {
-  ArchitectureData,
-  CytoscapeElement,
-} from './types';
+import type { ArchitectureData } from './types';
+
+interface CytoscapeElement {
+  group: 'nodes' | 'edges';
+  data: Record<string, unknown>;
+  classes?: string;
+}
 
 function nonEmpty(value: string): string | undefined {
   return value || undefined;

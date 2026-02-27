@@ -1,13 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
-/**
- * Type definitions for Grid Core Architecture Documentation Generator.
- */
-
-// ─── Class Registration ──────────────────────────────────────────────────────
-
-/**
- * Information about a controller or view class registered within a module.
- */
 export interface ClassRegistrationInfo {
   className: string;
   baseClass: string;
@@ -17,14 +7,10 @@ export interface ClassRegistrationInfo {
   featureArea: string;
 }
 
-// ─── Extenders ───────────────────────────────────────────────────────────────
-
 export interface ExtenderInfo {
   extenderName: string;
   pattern: 'mixin-function' | 'object';
 }
-
-// ─── Module ──────────────────────────────────────────────────────────────────
 
 export interface ModuleInfo {
   moduleName: string;
@@ -40,8 +26,6 @@ export interface ModuleInfo {
   hasDefaultOptions: boolean;
 }
 
-// ─── Runtime Dependencies ────────────────────────────────────────────────────
-
 export interface RuntimeDependency {
   from: string;
   fromModule: string;
@@ -51,14 +35,10 @@ export interface RuntimeDependency {
   location: string;
 }
 
-// ─── Inheritance ─────────────────────────────────────────────────────────────
-
 export interface InheritanceEntry {
   class: string;
   chain: string[];
 }
-
-// ─── Top-Level Output ────────────────────────────────────────────────────────
 
 export interface ArchitectureData {
   generatedAt: string;
@@ -70,16 +50,7 @@ export interface ArchitectureData {
   inheritanceChains: InheritanceEntry[];
 }
 
-// ─── CLI ─────────────────────────────────────────────────────────────────────
-
-export interface CliArgs {
-  jsonOnly: boolean;
-  htmlOnly: boolean;
-}
-
-// ─── Parser Internal Types ───────────────────────────────────────────────────
-
-export interface ImportAlias {
+interface ImportAlias {
   localName: string;
   originalName: string;
   fromPath: string;
@@ -95,16 +66,6 @@ export interface ParsedFile {
   importAliases: Map<string, ImportAlias>;
   importedNames: Map<string, string>;
 }
-
-// ─── Cytoscape ───────────────────────────────────────────────────────────────
-
-export interface CytoscapeElement {
-  group: 'nodes' | 'edges';
-  data: Record<string, unknown>;
-  classes?: string;
-}
-
-// ─── Global Class Info (used in registry) ────────────────────────────────────
 
 export interface GlobalClassInfo {
   baseClass: string;

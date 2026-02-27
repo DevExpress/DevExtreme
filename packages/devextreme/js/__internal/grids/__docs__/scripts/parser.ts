@@ -1,11 +1,4 @@
 /* eslint-disable spellcheck/spell-checker,no-restricted-syntax,max-depth */
-/**
- * AST parsing for Grid Core Architecture Documentation Generator.
- *
- * Parses TypeScript source files to extract class hierarchies,
- * module definitions, mixin patterns, and runtime dependencies.
- */
-
 import * as fs from 'fs';
 import * as path from 'path';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -13,7 +6,7 @@ import ts from 'typescript';
 
 import {
   EXCLUDED_DIRS,
-  EXCLUDED_FILE_NAME,
+  EXCLUDED_FILE_NAMES,
   getFeatureAreaFromPath,
   GRID_CORE_ROOT,
   MODULE_SUFFIX,
@@ -39,7 +32,7 @@ export function discoverSourceFiles(rootDir: string): string[] {
         walk(fullPath);
       } else if (
         entry.isFile()
-        && entry.name !== EXCLUDED_FILE_NAME
+        && !EXCLUDED_FILE_NAMES.has(entry.name)
         && entry.name.endsWith('.ts')
         && !entry.name.includes('.test.')
       ) {
@@ -103,7 +96,6 @@ function parseHeritageExpression(
 ): { baseClass: string; mixins: string[] } {
   const text = getNodeText(expr, sourceFile);
 
-  // Check if it's a local variable that should be resolved
   if (ts.isIdentifier(expr) && localVars.has(text)) {
     const resolved = localVars.get(text) ?? '';
     return parseHeritageString(resolved);
@@ -192,10 +184,6 @@ function getClassHeritage(
   return { baseClass: '', mixins: [] };
 }
 
-/**
- * Derive a registered name from a module variable name.
- * e.g. "editingModule" → "editing", "selectionModule" → "selection"
- */
 function guessRegisteredName(moduleName: string): string | null {
   if (moduleName.endsWith(MODULE_SUFFIX)) {
     return moduleName.slice(0, -MODULE_SUFFIX.length);
@@ -367,7 +355,7 @@ export function parseFile(filePath: string): ParsedFile {
     importedNames: new Map(),
   };
 
-  // Pass 0: collect import aliases (import { X as Y } from '...')
+  // Collect import aliases (import { X as Y } from '...')
   ts.forEachChild(sourceFile, (node) => {
     if (ts.isImportDeclaration(node)
       && node.importClause && node.moduleSpecifier
@@ -397,7 +385,7 @@ export function parseFile(filePath: string): ParsedFile {
     }
   });
 
-  // First pass: collect local variable assignments (for intermediate base class vars)
+  // Collect local variable assignments (for intermediate base class vars)
   ts.forEachChild(sourceFile, (node) => {
     if (ts.isVariableStatement(node)) {
       for (const decl of node.declarationList.declarations) {
@@ -410,7 +398,7 @@ export function parseFile(filePath: string): ParsedFile {
     }
   });
 
-  // Second pass: collect classes, modules, runtime deps
+  // Collect classes, modules, runtime deps
   ts.forEachChild(sourceFile, (node) => {
     // Class declarations
     if (ts.isClassDeclaration(node) && node.name) {
