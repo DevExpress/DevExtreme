@@ -7,7 +7,7 @@ import CheckBox, { type CheckBoxTypes } from 'devextreme-react/check-box';
 
 import {
   employees,
-  showCheckboxesModeLabel,
+  checkboxVisibilityLabel,
   selectionModeLabel,
   disabledNodeSelectionModeLabel,
 } from './data.ts';
@@ -47,7 +47,7 @@ const App = () => {
     syncSelection(e.component);
   }, [syncSelection]);
 
-  const showCheckBoxesModeValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent): void => {
+  const checkboxVisibilityValueChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent): void => {
     const value = e.value;
     setCheckboxVisibility(value);
 
@@ -122,8 +122,8 @@ const App = () => {
                 <SelectBox
                   items={checkboxVisibilityOptions}
                   value={checkboxVisibility}
-                  inputAttr={showCheckboxesModeLabel}
-                  onValueChanged={showCheckBoxesModeValueChanged} />
+                  inputAttr={checkboxVisibilityLabel}
+                  onValueChanged={checkboxVisibilityValueChanged} />
               </div>
             </div>
             <div className="option">

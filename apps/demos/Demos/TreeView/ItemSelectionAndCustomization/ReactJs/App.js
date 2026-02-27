@@ -5,7 +5,7 @@ import SelectBox from 'devextreme-react/select-box';
 import CheckBox from 'devextreme-react/check-box';
 import {
   employees,
-  showCheckboxesModeLabel,
+  checkboxVisibilityLabel,
   selectionModeLabel,
   disabledNodeSelectionModeLabel,
 } from './data.js';
@@ -43,7 +43,7 @@ const App = () => {
     },
     [syncSelection],
   );
-  const showCheckBoxesModeValueChanged = useCallback((e) => {
+  const checkboxVisibilityValueChanged = useCallback((e) => {
     const value = e.value;
     setCheckboxVisibility(value);
     if (value === 'selectAll') {
@@ -111,8 +111,8 @@ const App = () => {
                 <SelectBox
                   items={checkboxVisibilityOptions}
                   value={checkboxVisibility}
-                  inputAttr={showCheckboxesModeLabel}
-                  onValueChanged={showCheckBoxesModeValueChanged}
+                  inputAttr={checkboxVisibilityLabel}
+                  onValueChanged={checkboxVisibilityValueChanged}
                 />
               </div>
             </div>
