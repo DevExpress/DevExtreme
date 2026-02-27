@@ -30,3 +30,7 @@
   margin-bottom: 10px;
   margin-top: 0;
 }
+
+::ng-deep .title {
+  font-size: 30px;
+}
