@@ -3614,6 +3614,12 @@
                   "/Models/SampleData/PriorityResources.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Resolve Time Conflicts",
+                "Name": "ResolveTimeConflicts",
+                "Widget": "Scheduler",
+                "DemoType": "Web"
               }
             ]
           },
@@ -3684,12 +3690,6 @@
                   "/Models/Appointment.cs",
                   "/Models/SampleData/Appointments.cs"
                 ],
-                "DemoType": "Web"
-              },
-              {
-                "Title": "Appointment Overlapping",
-                "Name": "AppointmentOverlapping",
-                "Widget": "Scheduler",
                 "DemoType": "Web"
               }
             ]

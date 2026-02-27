@@ -126,7 +126,7 @@ $(() => {
 
     e.cancel = true;
 
-    if (popup.option('visible')) {
+    if (popup && popup.option('visible')) {
       showConflictError = true;
       form.option('elementAttr.class', '');
       form.validate();
