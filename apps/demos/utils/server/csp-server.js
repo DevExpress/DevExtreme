@@ -15,8 +15,8 @@ let cspViolationIdCounter = 0;
 
 const CSP_DIRECTIVES = [
   "default-src 'self'",
-  "script-src 'self'",
-  "style-src 'self' 'unsafe-inline'",
+  "script-src 'self' https://esm.sh https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
+  "style-src 'self' https://maxcdn.bootstrapcdn.com",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data: https:",
   "connect-src 'self' https:",
@@ -126,9 +126,9 @@ app.use(
 const server = app.listen(port, () => {
   console.log(`CSP Demo server listening on http://127.0.0.1:${port}`);
   console.log('CSP Report-Only mode enabled');
-  console.log(`  Report endpoint: POST /csp-report`);
-  console.log(`  View violations: GET /csp-violations`);
-  console.log(`  Clear violations: DELETE /csp-violations`);
+  console.log('  Report endpoint: POST /csp-report');
+  console.log('  View violations: GET /csp-violations');
+  console.log('  Clear violations: DELETE /csp-violations');
 });
 
 module.exports = { app, server };

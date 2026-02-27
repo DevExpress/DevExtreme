@@ -1128,6 +1128,8 @@ jobs:
 
     - name: Run CSP Check (Chrome headless)
       working-directory: apps/demos
+      env:
+        CSP_FRAMEWORKS: jQuery,React
       run: node utils/server/csp-check.js
 
     - name: Upload CSP violation reports
