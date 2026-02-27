@@ -1214,7 +1214,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
       } = this._getLocationBoundaryFlags(typedLocation);
 
       const item = this._getLayoutManagerItemByLocation(typedLocation);
-      if (!item) {
+      if (!item || item.itemType === 'empty') {
         return;
       }
 
