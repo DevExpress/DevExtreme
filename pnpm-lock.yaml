@@ -179,9 +179,9 @@ overrides:
   node-forge@<1.3.2: ^1.3.2
   vite@>=6.0.0 <6.4.1: ^6.4.1
   tar@<7.5.8: ^7.5.8
-  minimatch@<3.1.3: 3.1.3
-  minimatch@>=9.0.0 < 9.0.6: 9.0.6
-  minimatch@>=10.0.0 < 10.2.1: 10.2.1
+  minimatch@<3.1.4: 3.1.4
+  minimatch@>=9.0.0 < 9.0.7: 9.0.7
+  minimatch@>=10.0.0 < 10.2.3: 10.2.3
 
 importers:
 
@@ -898,8 +898,8 @@ importers:
         specifier: 6.10.0
         version: 6.10.0(webpack@5.105.0)
       minimatch:
-        specifier: 10.2.1
-        version: 10.2.1
+        specifier: 10.2.3
+        version: 10.2.3
       source-map-loader:
         specifier: 4.0.2
         version: 4.0.2(webpack@5.105.0)
@@ -2296,8 +2296,8 @@ importers:
         specifier: 4.17.23
         version: 4.17.23
       minimatch:
-        specifier: 10.2.1
-        version: 10.2.1
+        specifier: 10.2.3
+        version: 10.2.3
       ng-packagr:
         specifier: '>=19.0.0'
         version: 19.2.2(@angular/compiler-cli@21.0.8(@angular/compiler@21.0.8)(typescript@4.9.5))(tslib@2.8.1)(typescript@4.9.5)
@@ -13923,19 +13923,19 @@ packages:
   minimalistic-crypto-utils@1.0.1:
     resolution: {integrity: sha512-JIYlbt6g8i5jKfJ3xz7rF0LXmv2TkDxBLUkiBeZ7bAx4GnnNMr8xFpGnOxn6GhTEHx3SjRrZEoU+j04prX1ktg==}
 
-  minimatch@10.2.1:
-    resolution: {integrity: sha512-MClCe8IL5nRRmawL6ib/eT4oLyeKMGCghibcDWK+J0hh0Q8kqSdia6BvbRMVk6mPa6WqUa5uR2oxt6C5jd533A==}
-    engines: {node: 20 || >=22}
+  minimatch@10.2.3:
+    resolution: {integrity: sha512-Rwi3pnapEqirPSbWbrZaa6N3nmqq4Xer/2XooiOKyV3q12ML06f7MOuc5DVH8ONZIFhwIYQ3yzPH4nt7iWHaTg==}
+    engines: {node: 18 || 20 || >=22}
 
-  minimatch@3.1.3:
-    resolution: {integrity: sha512-M2GCs7Vk83NxkUyQV1bkABc4yxgz9kILhHImZiBPAZ9ybuvCb0/H7lEl5XvIg3g+9d4eNotkZA5IWwYl0tibaA==}
+  minimatch@3.1.4:
+    resolution: {integrity: sha512-twmL+S8+7yIsE9wsqgzU3E8/LumN3M3QELrBZ20OdmQ9jB2JvW5oZtBEmft84k/Gs5CG9mqtWc6Y9vW+JEzGxw==}
 
   minimatch@5.1.9:
     resolution: {integrity: sha512-7o1wEA2RyMP7Iu7GNba9vc0RWWGACJOCZBJX2GJWip0ikV+wcOsgVuY9uE8CPiyQhkGFSlhuSkZPavN7u1c2Fw==}
     engines: {node: '>=10'}
 
-  minimatch@9.0.6:
-    resolution: {integrity: sha512-kQAVowdR33euIqeA0+VZTDqU+qo1IeVY+hrKYtZMio3Pg0P0vuh/kwRylLUddJhB6pf3q/botcOvRtx4IN1wqQ==}
+  minimatch@9.0.7:
+    resolution: {integrity: sha512-MOwgjc8tfrpn5QQEvjijjmDVtMw2oL88ugTevzxQnzRLm6l3fVEF2gzU0kYeYYKD8C66+IdGX6peJ4MyUlUnPg==}
     engines: {node: '>=16 || 14 >=14.17'}
 
   minimist-options@4.1.0:
@@ -22157,7 +22157,7 @@ snapshots:
     dependencies:
       commander: 5.1.0
       glob: 7.2.3
-      minimatch: 3.1.3
+      minimatch: 3.1.4
 
   '@emnapi/core@1.7.1':
     dependencies:
@@ -22491,7 +22491,7 @@ snapshots:
     dependencies:
       '@eslint/object-schema': 2.1.7
       debug: 4.4.3
-      minimatch: 3.1.3
+      minimatch: 3.1.4
     transitivePeerDependencies:
       - supports-color
 
@@ -22516,7 +22516,7 @@ snapshots:
       ignore: 4.0.6
       import-fresh: 3.3.1
       js-yaml: 3.14.2
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
@@ -22530,7 +22530,7 @@ snapshots:
       ignore: 5.3.2
       import-fresh: 3.3.1
       js-yaml: 4.1.1
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
@@ -22584,7 +22584,7 @@ snapshots:
     dependencies:
       '@humanwhocodes/object-schema': 1.2.1
       debug: 4.4.3
-      minimatch: 3.1.3
+      minimatch: 3.1.4
     transitivePeerDependencies:
       - supports-color
 
@@ -24098,7 +24098,7 @@ snapshots:
       '@zkochan/js-yaml': 0.0.7
       ejs: 3.1.10
       enquirer: 2.3.6
-      minimatch: 10.2.1
+      minimatch: 10.2.3
       nx: 22.4.5(@swc/core@1.15.3)
       semver: 7.7.4
       tslib: 2.6.3
@@ -24115,7 +24115,7 @@ snapshots:
       jest-config: 30.2.0(@types/node@20.12.8)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.15.3)(@types/node@20.12.8)(typescript@5.9.3))
       jest-resolve: 30.2.0
       jest-util: 30.2.0
-      minimatch: 10.2.1
+      minimatch: 10.2.3
       picocolors: 1.1.1
       resolve.exports: 2.0.3
       semver: 7.7.4
@@ -25612,7 +25612,7 @@ snapshots:
   '@ts-morph/common@0.22.0':
     dependencies:
       fast-glob: 3.3.3
-      minimatch: 9.0.6
+      minimatch: 9.0.7
       mkdirp: 3.0.1
       path-browserify: 1.0.1
 
@@ -25629,12 +25629,12 @@ snapshots:
   '@tufjs/models@3.0.1':
     dependencies:
       '@tufjs/canonical-json': 2.0.0
-      minimatch: 9.0.6
+      minimatch: 9.0.7
 
   '@tufjs/models@4.0.0':
     dependencies:
       '@tufjs/canonical-json': 2.0.0
-      minimatch: 9.0.6
+      minimatch: 9.0.7
 
   '@tybys/wasm-util@0.10.1':
     dependencies:
@@ -26351,7 +26351,7 @@ snapshots:
       debug: 4.4.3
       globby: 11.1.0
       is-glob: 4.0.3
-      minimatch: 9.0.6
+      minimatch: 9.0.7
       semver: 7.7.4
       ts-api-utils: 1.4.0(typescript@5.9.3)
     optionalDependencies:
@@ -26366,7 +26366,7 @@ snapshots:
       debug: 4.4.3
       globby: 11.1.0
       is-glob: 4.0.3
-      minimatch: 9.0.6
+      minimatch: 9.0.7
       semver: 7.7.4
       ts-api-utils: 1.4.0(typescript@5.9.3)
     optionalDependencies:
@@ -26381,7 +26381,7 @@ snapshots:
       '@typescript-eslint/types': 8.52.0
       '@typescript-eslint/visitor-keys': 8.52.0
       debug: 4.4.3
-      minimatch: 9.0.6
+      minimatch: 9.0.7
       semver: 7.7.4
       tinyglobby: 0.2.15
       ts-api-utils: 2.4.0(typescript@4.9.5)
@@ -26396,7 +26396,7 @@ snapshots:
       '@typescript-eslint/types': 8.52.0
       '@typescript-eslint/visitor-keys': 8.52.0
       debug: 4.4.3
-      minimatch: 9.0.6
+      minimatch: 9.0.7
       semver: 7.7.4
       tinyglobby: 0.2.15
       ts-api-utils: 2.4.0(typescript@5.5.4)
@@ -26411,7 +26411,7 @@ snapshots:
       '@typescript-eslint/types': 8.52.0
       '@typescript-eslint/visitor-keys': 8.52.0
       debug: 4.4.3
-      minimatch: 9.0.6
+      minimatch: 9.0.7
       semver: 7.7.4
       tinyglobby: 0.2.15
       ts-api-utils: 2.4.0(typescript@5.9.3)
@@ -27678,7 +27678,7 @@ snapshots:
       debug: 2.6.9
       json5: 2.2.3
       lodash: 4.17.23
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       path-is-absolute: 1.0.1
       private: 0.1.8
       slash: 1.0.0
@@ -30004,7 +30004,7 @@ snapshots:
     dependencies:
       '@one-ini/wasm': 0.1.1
       commander: 10.0.1
-      minimatch: 9.0.6
+      minimatch: 9.0.7
       semver: 7.7.4
 
   ee-first@1.1.1: {}
@@ -30898,7 +30898,7 @@ snapshots:
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       object.fromentries: 2.0.8
       object.groupby: 1.0.3
       object.values: 1.2.1
@@ -30927,7 +30927,7 @@ snapshots:
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       object.fromentries: 2.0.8
       object.groupby: 1.0.3
       object.values: 1.2.1
@@ -30956,7 +30956,7 @@ snapshots:
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       object.fromentries: 2.0.8
       object.groupby: 1.0.3
       object.values: 1.2.1
@@ -31054,7 +31054,7 @@ snapshots:
       hasown: 2.0.2
       jsx-ast-utils: 3.3.5
       language-tags: 1.0.9
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       object.fromentries: 2.0.8
       safe-regex-test: 1.1.0
       string.prototype.includes: 2.0.1
@@ -31118,7 +31118,7 @@ snapshots:
       estraverse: 5.3.0
       hasown: 2.0.2
       jsx-ast-utils: 3.3.5
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       object.entries: 1.1.9
       object.fromentries: 2.0.8
       object.values: 1.2.1
@@ -31296,7 +31296,7 @@ snapshots:
       json-stable-stringify-without-jsonify: 1.0.1
       levn: 0.4.1
       lodash.merge: 4.6.2
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       natural-compare: 1.4.0
       optionator: 0.9.4
       progress: 2.0.3
@@ -31343,7 +31343,7 @@ snapshots:
       is-glob: 4.0.3
       json-stable-stringify-without-jsonify: 1.0.1
       lodash.merge: 4.6.2
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       natural-compare: 1.4.0
       optionator: 0.9.4
     optionalDependencies:
@@ -31991,7 +31991,7 @@ snapshots:
       deepmerge: 4.3.1
       fs-extra: 10.1.0
       memfs: 3.5.3
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       node-abort-controller: 3.1.1
       schema-utils: 3.3.0
       semver: 7.7.4
@@ -32289,7 +32289,7 @@ snapshots:
     dependencies:
       foreground-child: 3.3.1
       jackspeak: 3.4.3
-      minimatch: 9.0.6
+      minimatch: 9.0.7
       minipass: 7.1.2
       package-json-from-dist: 1.0.1
       path-scurry: 1.11.1
@@ -32298,14 +32298,14 @@ snapshots:
     dependencies:
       foreground-child: 3.3.1
       jackspeak: 4.1.1
-      minimatch: 10.2.1
+      minimatch: 10.2.3
       minipass: 7.1.2
       package-json-from-dist: 1.0.1
       path-scurry: 2.0.1
 
   glob@13.0.0:
     dependencies:
-      minimatch: 10.2.1
+      minimatch: 10.2.3
       minipass: 7.1.2
       path-scurry: 2.0.1
 
@@ -32313,7 +32313,7 @@ snapshots:
     dependencies:
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       once: 1.4.0
       path-is-absolute: 1.0.1
 
@@ -32322,7 +32322,7 @@ snapshots:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       once: 1.4.0
       path-is-absolute: 1.0.1
 
@@ -32605,12 +32605,12 @@ snapshots:
 
   gulp-match@1.1.0:
     dependencies:
-      minimatch: 3.1.3
+      minimatch: 3.1.4
 
   gulp-minify@3.1.0:
     dependencies:
       ansi-colors: 1.1.0
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       plugin-error: 0.1.2
       terser: 3.17.0
       through2: 2.0.5
@@ -33304,11 +33304,11 @@ snapshots:
 
   ignore-walk@7.0.0:
     dependencies:
-      minimatch: 9.0.6
+      minimatch: 9.0.7
 
   ignore-walk@8.0.0:
     dependencies:
-      minimatch: 10.2.1
+      minimatch: 10.2.3
 
   ignore@4.0.6: {}
 
@@ -33924,7 +33924,7 @@ snapshots:
       async: 3.2.6
       chalk: 4.1.2
       filelist: 1.0.4
-      minimatch: 3.1.3
+      minimatch: 3.1.4
 
   jasmine-core@4.6.1: {}
 
@@ -35593,7 +35593,7 @@ snapshots:
       istanbul-lib-report: 3.0.1
       istanbul-lib-source-maps: 4.0.1
       istanbul-reports: 3.1.7
-      minimatch: 3.1.3
+      minimatch: 3.1.4
     transitivePeerDependencies:
       - supports-color
 
@@ -35621,7 +35621,7 @@ snapshots:
   karma-webpack@5.0.1(webpack@5.105.0(@swc/core@1.15.3)):
     dependencies:
       glob: 7.2.3
-      minimatch: 9.0.6
+      minimatch: 9.0.7
       webpack: 5.105.0(@swc/core@1.15.3)
       webpack-merge: 4.2.2
 
@@ -35641,7 +35641,7 @@ snapshots:
       lodash: 4.17.23
       log4js: 6.9.1
       mime: 2.6.0
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       mkdirp: 0.5.6
       qjobs: 1.2.0
       range-parser: 1.2.1
@@ -36617,11 +36617,11 @@ snapshots:
 
   minimalistic-crypto-utils@1.0.1: {}
 
-  minimatch@10.2.1:
+  minimatch@10.2.3:
     dependencies:
       brace-expansion: 5.0.3
 
-  minimatch@3.1.3:
+  minimatch@3.1.4:
     dependencies:
       brace-expansion: 1.1.12
 
@@ -36629,7 +36629,7 @@ snapshots:
     dependencies:
       brace-expansion: 2.0.2
 
-  minimatch@9.0.6:
+  minimatch@9.0.7:
     dependencies:
       brace-expansion: 5.0.3
 
@@ -36777,7 +36777,7 @@ snapshots:
       array-differ: 3.0.0
       array-union: 2.1.0
       arrify: 2.0.1
-      minimatch: 3.1.3
+      minimatch: 3.1.4
 
   mustache@2.3.2: {}
 
@@ -37178,7 +37178,7 @@ snapshots:
       ansi-styles: 5.2.0
       cross-spawn: 7.0.6
       memorystream: 0.3.1
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       pidtree: 0.5.0
       read-pkg: 5.2.0
       shell-quote: 1.8.1
@@ -37241,7 +37241,7 @@ snapshots:
       jest-diff: 30.2.0
       jsonc-parser: 3.2.0
       lines-and-columns: 2.0.3
-      minimatch: 10.2.1
+      minimatch: 10.2.3
       node-machine-id: 1.1.12
       npm-run-path: 4.0.1
       open: 8.4.2
@@ -40804,7 +40804,7 @@ snapshots:
     dependencies:
       '@istanbuljs/schema': 0.1.3
       glob: 7.2.3
-      minimatch: 3.1.3
+      minimatch: 3.1.4
 
   testcafe-browser-tools@2.0.26:
     dependencies:
@@ -41691,7 +41691,7 @@ snapshots:
       diff: 4.0.4
       glob: 7.2.3
       js-yaml: 3.14.2
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       mkdirp: 0.5.6
       resolve: 1.22.11
       semver: 5.7.2
@@ -41708,7 +41708,7 @@ snapshots:
       diff: 4.0.4
       glob: 7.2.3
       js-yaml: 3.14.2
-      minimatch: 3.1.3
+      minimatch: 3.1.4
       mkdirp: 0.5.6
       resolve: 1.22.11
       semver: 5.7.2
