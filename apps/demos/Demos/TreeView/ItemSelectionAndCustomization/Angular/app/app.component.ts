@@ -46,9 +46,9 @@ export class AppComponent {
 
   selectedEmployees: Employee[] = [];
 
-  showCheckBoxesModes: DxTreeViewTypes.TreeViewCheckBoxMode[] = ['normal', 'selectAll', 'none'];
+  checkboxVisibilityOptions: DxTreeViewTypes.TreeViewCheckBoxMode[] = ['normal', 'selectAll', 'none'];
 
-  showCheckBoxesMode = this.showCheckBoxesModes[0];
+  checkboxVisibility = this.checkboxVisibilityOptions[0];
 
   selectionModes: DxTreeViewTypes.SingleOrMultiple[] = ['multiple', 'single'];
 
@@ -58,9 +58,9 @@ export class AppComponent {
 
   disabledNodeSelectionMode = this.disabledNodeSelectionModes[0];
 
-  selectNodesRecursive = true;
+  recursiveSelection = true;
 
-  selectByClick = false;
+  selectOnClick = false;
 
   isRecursiveDisabled = false;
 
@@ -85,8 +85,8 @@ export class AppComponent {
     this.selectedEmployees = selectedEmployees;
   }
 
-  showCheckBoxesModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
-    this.showCheckBoxesMode = e.value;
+  checkboxVisibilityValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
+    this.checkboxVisibility = e.value;
     this.isSelectionModeDisabled = e.value === 'selectAll';
     if (e.value === 'selectAll') {
       this.selectionMode = 'multiple';
@@ -98,7 +98,7 @@ export class AppComponent {
     this.selectionMode = e.value;
     this.isRecursiveDisabled = e.value === 'single';
     if (e.value === 'single') {
-      this.selectNodesRecursive = false;
+      this.recursiveSelection = false;
       this.treeView.instance.unselectAll();
     }
   }

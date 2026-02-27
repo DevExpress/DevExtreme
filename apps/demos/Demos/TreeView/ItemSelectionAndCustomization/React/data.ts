@@ -73,5 +73,5 @@ export const employees: Employee[] = [{
 }];
 
 export const selectionModeLabel = { 'aria-label': 'Selection Mode' };
-export const showCheckboxesModeLabel = { 'aria-label': 'Show Checkboxes Mode' };
+export const checkboxVisibilityLabel = { 'aria-label': 'Checkbox Visibility' };
 export const disabledNodeSelectionModeLabel = { 'aria-label': 'Disabled Node Selection Mode' };

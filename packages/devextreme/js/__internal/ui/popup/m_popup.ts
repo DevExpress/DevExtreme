@@ -14,6 +14,7 @@ import { EmptyTemplate } from '@js/core/templates/empty_template';
 import type { TemplateBase } from '@js/core/templates/template_base';
 import { noop } from '@js/core/utils/common';
 import type { DeferredObj } from '@js/core/utils/deferred';
+import { contains } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
 import { camelize } from '@js/core/utils/inflector';
 import { each } from '@js/core/utils/iterator';
@@ -51,7 +52,6 @@ import type {
   ControllerProperties,
 } from '@ts/ui/overlay/overlay_position_controller';
 import * as zIndexPool from '@ts/ui/overlay/z_index';
-import { TOOLBAR_CLASS } from '@ts/ui/toolbar/constants';
 import type { ToolbarBaseProperties } from '@ts/ui/toolbar/toolbar.base';
 
 import PopupDrag from './m_popup_drag';
@@ -75,22 +75,17 @@ const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 export const POPUP_CONTENT_CLASS = 'dx-popup-content';
 export const POPUP_CONTENT_SCROLLABLE_CLASS = 'dx-popup-content-scrollable';
 
-const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
-
 const POPUP_TITLE_CLASS = 'dx-popup-title';
 export const POPUP_TITLE_CLOSEBUTTON_CLASS = 'dx-closebutton';
-
 const POPUP_BOTTOM_CLASS = 'dx-popup-bottom';
-
 const POPUP_HAS_CLOSE_BUTTON_CLASS = 'dx-has-close-button';
-
-export const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
-
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
+export const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 
 const ALLOWED_TOOLBAR_ITEM_ALIASES = ['cancel', 'clear', 'done'];
 
@@ -102,7 +97,11 @@ const BUTTON_OUTLINED_MODE = 'outlined';
 
 const TOOLBAR_NAME_BASE = 'dxToolbarBase';
 
-const HEIGHT_STRATEGIES = { static: '', inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS, flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS } as const;
+const HEIGHT_STRATEGIES = {
+  static: '',
+  inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS,
+  flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS,
+} as const;
 
 type HeightStrategiesType = typeof HEIGHT_STRATEGIES[keyof typeof HEIGHT_STRATEGIES];
 type TitleRenderAction = (event?: Record<string, unknown>) => void;
@@ -537,9 +536,9 @@ class Popup<
     if (!$content) {
       return;
     }
+
     const $toolbarContainer = $('<div>')
       .addClass(POPUP_TITLE_CLASS)
-      .addClass(TOOLBAR_CLASS)
       .insertBefore($content);
 
     this._$topToolbar = this._renderToolbar(
@@ -589,7 +588,6 @@ class Popup<
 
     const $toolbarContainer = $('<div>')
       .addClass(POPUP_BOTTOM_CLASS)
-      .addClass(TOOLBAR_CLASS)
       .insertAfter($content);
 
     this._$bottomToolbar = this._renderToolbar(
@@ -689,11 +687,10 @@ class Popup<
     $container: dxElementWrapper,
   ): dxElementWrapper {
     const $result = $(template.render({ container: getPublicElement($container) }));
+    const resultInContainer = contains($container.get(0), $result.get(0));
 
-    if ($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
-      $container.replaceWith($result);
-      // eslint-disable-next-line no-param-reassign
-      $container = $result;
+    if (!resultInContainer) {
+      $container.append($result);
     }
 
     return $container;
@@ -801,6 +798,7 @@ class Popup<
         index++;
       }
 
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       item.toolbar = data.toolbar || item.toolbar || 'top';
 
       if (item && item.toolbar === toolbar) {
@@ -847,7 +845,12 @@ class Popup<
     return BUTTON_NORMAL_TYPE;
   }
 
-  _getToolbarItemByAlias(data) {
+  // eslint-disable-next-line @stylistic/max-len
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
+  _getToolbarItemByAlias(data: any): {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    template: (_: any, __: any, container: dxElementWrapper) => void;
+  } | boolean {
     const itemType = data.shortcut;
 
     if (!ALLOWED_TOOLBAR_ITEM_ALIASES.includes(itemType)) {
@@ -860,6 +863,7 @@ class Popup<
       integrationOptions: {},
       type: this._getToolbarButtonType(itemType),
       stylingMode: this._getToolbarButtonStylingMode(itemType),
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     }, data.options || {});
 
     const itemClass = `${POPUP_CLASS}-${itemType}`;
@@ -890,6 +894,7 @@ class Popup<
 
   _toggleDisabledState(value: boolean): void {
     // @ts-expect-error ts-error
+    // eslint-disable-next-line prefer-rest-params
     super._toggleDisabledState(...arguments);
 
     this.$content()?.toggleClass(DISABLED_STATE_CLASS, Boolean(value));
