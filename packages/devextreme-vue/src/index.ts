@@ -57,6 +57,7 @@ export { DxSankey } from "./sankey";
 export { DxScheduler } from "./scheduler";
 export { DxScrollView } from "./scroll-view";
 export { DxSelectBox } from "./select-box";
+export { DxSkeleton } from "./skeleton";
 export { DxSlider } from "./slider";
 export { DxSortable } from "./sortable";
 export { DxSparkline } from "./sparkline";

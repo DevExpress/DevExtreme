@@ -46,6 +46,7 @@ import dxResponsiveBox, { Properties as ResponsiveBoxProperties } from '../ui/re
 import dxScheduler, { Properties as SchedulerProperties } from '../ui/scheduler';
 import dxScrollView, { Properties as ScrollViewProperties } from '../ui/scroll_view';
 import dxSelectBox, { Properties as SelectBoxProperties } from '../ui/select_box';
+import dxSkeleton, { Properties as SkeletonProperties } from '../ui/skeleton';
 import dxSlider, { Properties as SliderProperties } from '../ui/slider';
 import dxSplitter, { Properties as SplitterProperties } from '../ui/splitter';
 import dxStepper, { Properties as StepperProperties } from '../ui/stepper';
@@ -455,6 +456,12 @@ declare global {
         dxSelectBox(options: SelectBoxProperties): JQuery;
         dxSelectBox(options: string): any;
         dxSelectBox(options: string, ...params: any[]): any;
+
+        dxSkeleton(): JQuery;
+        dxSkeleton(options: 'instance'): dxSkeleton;
+        dxSkeleton(options: SkeletonProperties): JQuery;
+        dxSkeleton(options: string): any;
+        dxSkeleton(options: string, ...params: any[]): any;
 
         dxSlider(): JQuery;
         dxSlider(options: 'instance'): dxSlider;

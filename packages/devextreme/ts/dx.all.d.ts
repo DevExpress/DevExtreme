@@ -357,6 +357,12 @@ declare global {
     dxSelectBox(options: string): any;
     dxSelectBox(options: string, ...params: any[]): any;
 
+    dxSkeleton(): JQuery;
+    dxSkeleton(options: 'instance'): DevExpress.ui.dxSkeleton;
+    dxSkeleton(options: DevExpress.ui.dxSkeleton.Properties): JQuery;
+    dxSkeleton(options: string): any;
+    dxSkeleton(options: string, ...params: any[]): any;
+
     dxSlider(): JQuery;
     dxSlider(options: 'instance'): DevExpress.ui.dxSlider;
     dxSlider(options: DevExpress.ui.dxSlider.Properties): JQuery;
@@ -27462,6 +27468,48 @@ declare module DevExpress.ui {
      * [descr:dxSelectBoxOptions.dropDownOptions]
      */
     dropDownOptions?: DevExpress.ui.dxPopup.Properties;
+  }
+  /**
+   * [descr:dxSkeleton]
+   */
+  export class dxSkeleton extends Widget<DevExpress.ui.dxSkeleton.Properties> {}
+  module dxSkeleton {
+    /**
+     * [descr:_ui_skeleton_ContentReadyEvent]
+     */
+    export type ContentReadyEvent =
+      DevExpress.common.core.events.EventInfo<dxSkeleton>;
+    export type ExplicitTypes = {
+      Properties: Properties;
+    };
+    export type Properties = dxSkeletonOptions;
+    /**
+     * [descr:SkeletonComplexType]
+     */
+    export type SkeletonComplexType = {
+      /**
+       * [descr:SkeletonComplexType.prop1]
+       */
+      prop1: string;
+      /**
+       * [descr:SkeletonComplexType.prop2]
+       */
+      prop2: boolean;
+    };
+  }
+  /**
+   * [descr:dxSkeletonOptions]
+   * @deprecated [depNote:dxSkeletonOptions]
+   */
+  export interface dxSkeletonOptions extends WidgetOptions<dxSkeleton> {
+    /**
+     * [descr:dxSkeletonOptions.rootPrimitiveOption]
+     */
+    rootPrimitiveOption?: number;
+    /**
+     * [descr:dxSkeletonOptions.rootComplexOption]
+     */
+    rootComplexOption?: DevExpress.ui.dxSkeleton.SkeletonComplexType;
   }
   /**
    * [descr:dxSlider]

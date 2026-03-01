@@ -62,6 +62,7 @@ export { DxSankeyComponent, DxSankeyModule } from 'devextreme-angular/ui/sankey'
 export { DxSchedulerComponent, DxSchedulerModule } from 'devextreme-angular/ui/scheduler';
 export { DxScrollViewComponent, DxScrollViewModule } from 'devextreme-angular/ui/scroll-view';
 export { DxSelectBoxComponent, DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
+export { DxSkeletonComponent, DxSkeletonModule } from 'devextreme-angular/ui/skeleton';
 export { DxSliderComponent, DxSliderModule } from 'devextreme-angular/ui/slider';
 export { DxSortableComponent, DxSortableModule } from 'devextreme-angular/ui/sortable';
 export { DxSparklineComponent, DxSparklineModule } from 'devextreme-angular/ui/sparkline';
