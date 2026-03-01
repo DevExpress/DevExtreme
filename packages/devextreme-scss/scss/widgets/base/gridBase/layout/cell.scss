@@ -1,14 +1,8 @@
 /* stylelint-disable no-duplicate-selectors */
 @use "../../mixins" as *;
+@use '../variables' as *;
 
 @mixin grid-base-cell($widget-name) {
-  $grid-cell-padding: 7px;
-  $grid-total-footer-paddings: 7px;
-  $grid-command-select-column-width: 70px;
-  $grid-command-edit-column-width: 100px;
-  $grid-command-edit-column-with-icons-width: 80px;
-  $grid-command-expand-column-width: 30px;
-  $grid-command-adaptive-column-width: 36px;
 
   // #region position & z-index
 
