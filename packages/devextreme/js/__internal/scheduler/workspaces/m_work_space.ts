@@ -70,7 +70,7 @@ import {
 import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
-import VerticalShader from '../shaders/m_current_time_shader_vertical';
+import VerticalShader from '../shaders/current_time_shader_vertical';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import {
   getAppointmentGroupIndex,
