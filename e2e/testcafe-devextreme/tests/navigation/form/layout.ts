@@ -6,7 +6,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import { addCaptionTo, appendElementTo, setAttribute } from '../../../helpers/domUtils';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
-const validateForm = ClientFunction(() => ($('#container') as any).dxForm('instance').validate());
+const validateForm = ClientFunction(() => { ($('#container') as any).dxForm('instance').validate(); });
 
 fixture.disablePageReloads`Form`
   .page(url(__dirname, '../../container.html'));
@@ -230,7 +230,7 @@ test('SimpleItem: item1_cSpan_2', async (t) => {
   }));
 });
 
-test('Validation errors persist after resize', async (t) => {
+test.only('Validation errors persist after resize', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await waitFont();
