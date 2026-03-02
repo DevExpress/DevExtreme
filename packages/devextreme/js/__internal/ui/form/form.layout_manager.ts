@@ -1219,6 +1219,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
       }
 
       const $itemContainer = this._itemsRunTimeInfo.findItemContainerByItem(item);
+      $itemContainer.parent().toggleClass(SINGLE_COLUMN_ITEM_CONTENT, this.isSingleColumnMode());
       $itemContainer
         .toggleClass(LAYOUT_MANAGER_FIRST_COL_CLASS, isFirstCol)
         .toggleClass(LAYOUT_MANAGER_LAST_COL_CLASS, isLastCol)
