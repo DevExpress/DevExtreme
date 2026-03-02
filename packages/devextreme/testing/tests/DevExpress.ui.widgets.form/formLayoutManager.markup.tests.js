@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import consoleUtils from 'core/utils/console';
 import messageLocalization from 'common/core/localization/message';
+import resizeCallbacks from '__internal/core/utils/m_resize_callbacks';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import {
     FORM_FIELD_ITEM_COL_CLASS,
@@ -3724,7 +3725,7 @@ QUnit.module('CSS position classes', {
                 assert.strictEqual($element.hasClass(`${FORM_FIELD_ITEM_COL_CLASS}${col}`), true, `item ${index}: should have dx-col-${col}`);
             });
         };
-    }
+    },
 }, () => {
     [[1, 1], [1, 2], [2, 1], [4, 4]].forEach(([rowCount, colCount]) => {
         test(`Form with ${rowCount} rows and ${colCount} columns`, function(assert) {
@@ -3739,62 +3740,6 @@ QUnit.module('CSS position classes', {
             assert.equal($fieldItems.length, rowCount * colCount, 'All field items are rendered');
 
             this.assertPositionCssClasses($container, colCount, assert);
-        });
-    });
-
-    QUnit.module('after screen size change', () => {
-        const screenFactors = ['xs', 'sm', 'md', 'lg'];
-
-        screenFactors.forEach((targetScreen) => {
-            test(`classes should be updated correctly when resizing from lg to ${targetScreen}`, function(assert) {
-                let screen = 'lg';
-
-                if(targetScreen === screen) {
-                    assert.ok(true, 'No need to test resizing to the same screen size');
-                    return;
-                }
-
-                const colCountByScreen = { xs: 1, sm: 2, md: 3, lg: 4 };
-                const expectedColCount = colCountByScreen[targetScreen];
-
-                const $container = $('#container');
-                const instance = $container.dxLayoutManager({
-                    items: this.generateItems(12),
-                    colCount: 4,
-                    colCountByScreen,
-                    screenByWidth: () => screen,
-                }).dxLayoutManager('instance');
-
-                screen = targetScreen;
-                instance.updateResponsiveBoxLayout();
-
-                this.assertPositionCssClasses($container, expectedColCount, assert);
-            });
-        });
-
-        test('classes should be updated correctly through multiple screen size transitions', function(assert) {
-            const colCountByScreen = { xs: 1, sm: 2, md: 3, lg: 4 };
-            let screen = 'lg';
-
-            const $container = $('#container');
-            const instance = $container.dxLayoutManager({
-                items: this.generateItems(12),
-                colCount: 4,
-                colCountByScreen,
-                screenByWidth: () => screen,
-            }).dxLayoutManager('instance');
-
-            screen = 'xs';
-            instance.updateResponsiveBoxLayout();
-            this.assertPositionCssClasses($container, colCountByScreen.xs, assert);
-
-            screen = 'sm';
-            instance.updateResponsiveBoxLayout();
-            this.assertPositionCssClasses($container, colCountByScreen.sm, assert);
-
-            screen = 'md';
-            instance.updateResponsiveBoxLayout();
-            this.assertPositionCssClasses($container, colCountByScreen.md, assert);
         });
     });
 });

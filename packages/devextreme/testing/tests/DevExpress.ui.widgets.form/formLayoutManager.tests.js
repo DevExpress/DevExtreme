@@ -323,3 +323,91 @@ QUnit.test('Change from fixed colCount to auto and vice versa', function(assert)
     instance.option('colCount', 3);
     assert.equal(instance._getColCount(), 3, 'We have only 3 columns');
 });
+
+QUnit.module('CSS position classes after screen size change', {
+    beforeEach: function() {
+        this.generateItems = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i += 1) {
+                items.push({ dataField: `field${i}` });
+            }
+            return items;
+        };
+
+        this.assertPositionCssClasses = function($container, colCount, assert) {
+            const $fieldItems = $container.find(`.${FIELD_ITEM_CLASS}`);
+            const itemCount = $fieldItems.length;
+            const rowCount = Math.ceil(itemCount / colCount);
+
+            $fieldItems.each((index, element) => {
+                const $element = $(element);
+                const row = Math.floor(index / colCount);
+                const col = index % colCount;
+
+                assert.strictEqual($element.hasClass(LAYOUT_MANAGER_FIRST_ROW_CLASS), row === 0, `item ${index}: should ${row === 0 ? '' : 'not '}have dx-first-row`);
+                assert.strictEqual($element.hasClass(LAYOUT_MANAGER_LAST_ROW_CLASS), row === rowCount - 1, `item ${index}: should ${row === rowCount - 1 ? '' : 'not '}have dx-last-row`);
+                assert.strictEqual($element.hasClass(LAYOUT_MANAGER_FIRST_COL_CLASS), col === 0, `item ${index}: should ${col === 0 ? '' : 'not '}have dx-first-col`);
+                assert.strictEqual($element.hasClass(LAYOUT_MANAGER_LAST_COL_CLASS), col === colCount - 1, `item ${index}: should ${col === colCount - 1 ? '' : 'not '}have dx-last-col`);
+                assert.strictEqual($element.hasClass(`${FORM_FIELD_ITEM_COL_CLASS}${col}`), true, `item ${index}: should have dx-col-${col}`);
+            });
+        };
+    },
+}, () => {
+    const screenFactors = ['xs', 'sm', 'md', 'lg'];
+
+    screenFactors.forEach((targetScreen) => {
+        test(`classes should be updated correctly when resizing from lg to ${targetScreen}`, function(assert) {
+            let screen = 'lg';
+
+            if(targetScreen === screen) {
+                assert.ok(true, 'No need to test resizing to the same screen size');
+                return;
+            }
+
+            const colCountByScreen = { xs: 1, sm: 2, md: 3, lg: 4 };
+            const expectedColCount = colCountByScreen[targetScreen];
+
+            const $container = $('#container');
+            const instance = $container.dxLayoutManager({
+                items: this.generateItems(12),
+                colCount: 4,
+                colCountByScreen,
+                screenByWidth: function() { return screen; },
+            }).dxLayoutManager('instance');
+
+            screen = targetScreen;
+            instance.updateResponsiveBoxLayout();
+            resizeCallbacks.fire();
+
+            this.assertPositionCssClasses($container, expectedColCount, assert);
+        });
+    });
+
+    test('classes should be updated correctly through multiple screen size transitions', function(assert) {
+        const colCountByScreen = { xs: 1, sm: 2, md: 3, lg: 4 };
+        let screen = 'lg';
+
+        const $container = $('#container');
+        const instance = $container.dxLayoutManager({
+            items: this.generateItems(12),
+            colCount: 4,
+            colCountByScreen,
+            screenByWidth: function() { return screen; },
+        }).dxLayoutManager('instance');
+
+        screen = 'xs';
+        instance.updateResponsiveBoxLayout();
+        resizeCallbacks.fire();
+        this.assertPositionCssClasses($container, colCountByScreen.xs, assert);
+
+        screen = 'sm';
+        instance.updateResponsiveBoxLayout();
+        resizeCallbacks.fire();
+        this.assertPositionCssClasses($container, colCountByScreen.sm, assert);
+
+        screen = 'md';
+        instance.updateResponsiveBoxLayout();
+        resizeCallbacks.fire();
+        this.assertPositionCssClasses($container, colCountByScreen.md, assert);
+    });
+});
