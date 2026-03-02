@@ -244,7 +244,6 @@ test.only('Validation errors persist after resize', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxForm', {
-  width: 1000,
   colCount: 2,
   formData: {},
   items: [
