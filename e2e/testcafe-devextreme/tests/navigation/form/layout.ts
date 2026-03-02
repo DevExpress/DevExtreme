@@ -6,6 +6,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import { addCaptionTo, appendElementTo, setAttribute } from '../../../helpers/domUtils';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
+const validateForm = ClientFunction(() => ($('#container') as any).dxForm('instance').validate());
 
 fixture.disablePageReloads`Form`
   .page(url(__dirname, '../../container.html'));
@@ -228,3 +229,54 @@ test('SimpleItem: item1_cSpan_2', async (t) => {
     ],
   }));
 });
+
+test.only('Validation errors persist after resize', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await waitFont();
+  await validateForm();
+
+  await t.resizeWindow(400, 800);
+
+  await testScreenshot(t, takeScreenshot, 'Form validation errors after resize.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxForm', {
+  width: 1000,
+  colCount: 2,
+  formData: {},
+  items: [
+    {
+      dataField: 'name',
+      editorType: 'dxTextBox',
+      validationRules: [{ type: 'required' }],
+    },
+    {
+      dataField: 'birthDate',
+      editorType: 'dxDateBox',
+      validationRules: [{ type: 'required' }],
+    },
+    {
+      dataField: 'role',
+      editorType: 'dxSelectBox',
+      editorOptions: {
+        dataSource: ['Dev', 'QA', 'PM'],
+      },
+      validationRules: [{ type: 'required' }],
+    },
+    {
+      dataField: 'agree',
+      editorType: 'dxCheckBox',
+      editorOptions: {
+        text: 'I agree',
+      },
+      validationRules: [{
+        type: 'custom',
+        validationCallback: () => false,
+        message: 'Required',
+      }],
+    },
+  ],
+}));
