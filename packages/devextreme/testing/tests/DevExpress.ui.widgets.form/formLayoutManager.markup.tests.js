@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import consoleUtils from 'core/utils/console';
 import messageLocalization from 'common/core/localization/message';
-import resizeCallbacks from '__internal/core/utils/m_resize_callbacks';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import {
     FORM_FIELD_ITEM_COL_CLASS,
