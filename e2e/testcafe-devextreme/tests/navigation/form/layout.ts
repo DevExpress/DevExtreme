@@ -230,7 +230,7 @@ test('SimpleItem: item1_cSpan_2', async (t) => {
   }));
 });
 
-test.only('Validation errors persist after resize', async (t) => {
+test('Validation errors persist after resize', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await waitFont();
@@ -238,7 +238,7 @@ test.only('Validation errors persist after resize', async (t) => {
 
   await t.resizeWindow(400, 800);
 
-  await testScreenshot(t, takeScreenshot, 'Form validation errors after resize.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'form_validation_errors_after_resize.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
