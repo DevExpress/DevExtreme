@@ -2,6 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type dxForm from '@js/ui/form';
 import type dxPopup from '@js/ui/popup';
+import { within } from '@testing-library/dom';
 
 const queryRequiredElement = (parent: HTMLElement, selector: string): HTMLElement => {
   const element = parent.querySelector(selector);
@@ -16,8 +17,11 @@ export class PopupModel {
 
   component: dxPopup;
 
+  private readonly queries: ReturnType<typeof within>;
+
   constructor(element: HTMLDivElement) {
     this.element = element;
+    this.queries = within(element);
 
     // @ts-expect-error
     this.component = $('.dx-scheduler-appointment-popup.dx-popup.dx-widget').dxPopup('instance') as dxPopup;
@@ -49,27 +53,27 @@ export class PopupModel {
   }
 
   get saveButton(): HTMLElement {
-    return queryRequiredElement(this.element, '.dx-button[aria-label="Save"]');
+    return this.queries.getByRole('button', { name: 'Save' }) as HTMLElement;
   }
 
   get cancelButton(): HTMLElement {
-    return queryRequiredElement(this.element, '.dx-button[aria-label="Cancel"]');
+    return this.queries.getByRole('button', { name: 'Cancel' }) as HTMLElement;
   }
 
   get closeButton(): HTMLElement {
-    return queryRequiredElement(this.element, '.dx-button[aria-label="Close"]');
+    return this.queries.getByRole('button', { name: 'Close' }) as HTMLElement;
   }
 
   get backButton(): HTMLElement {
-    return queryRequiredElement(this.element, '.dx-toolbar-button  .dx-button[aria-label="Back"]');
+    return this.queries.getByRole('button', { name: 'Back' }) as HTMLElement;
   }
 
   get editSeriesButton(): HTMLElement {
-    return queryRequiredElement(this.element, '[aria-label="Edit series"]');
+    return this.queries.getByRole('button', { name: 'Edit series' }) as HTMLElement;
   }
 
   get editAppointmentButton(): HTMLElement {
-    return queryRequiredElement(this.element, '[aria-label="Edit appointment"]');
+    return this.queries.getByRole('button', { name: 'Edit appointment' }) as HTMLElement;
   }
 
   get recurrenceSettingsButton(): HTMLElement {

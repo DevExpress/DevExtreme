@@ -1386,6 +1386,15 @@ importers:
       '@testcafe-community/axe':
         specifier: 3.5.0
         version: 3.5.0(axe-core@4.11.1)(testcafe@3.7.4)
+      '@testing-library/dom':
+        specifier: ^10.4.0
+        version: 10.4.0
+      '@testing-library/jest-dom':
+        specifier: ^6.6.3
+        version: 6.6.3
+      '@testing-library/user-event':
+        specifier: ^14.5.2
+        version: 14.5.2(@testing-library/dom@10.4.0)
       '@types/enzyme':
         specifier: 3.10.18
         version: 3.10.18
@@ -22320,7 +22329,7 @@ snapshots:
 
   '@babel/traverse@7.28.5':
     dependencies:
-      '@babel/code-frame': 7.27.1
+      '@babel/code-frame': 7.28.6
       '@babel/generator': 7.28.5
       '@babel/helper-globals': 7.28.0
       '@babel/parser': 7.28.6
@@ -32480,7 +32489,7 @@ snapshots:
 
   fork-ts-checker-webpack-plugin@9.1.0(typescript@5.9.3)(webpack@5.103.0(@swc/core@1.15.3)(esbuild@0.26.0)):
     dependencies:
-      '@babel/code-frame': 7.27.1
+      '@babel/code-frame': 7.28.6
       chalk: 4.1.2
       chokidar: 4.0.1
       cosmiconfig: 8.3.6(typescript@5.9.3)
