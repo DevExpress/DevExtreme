@@ -32,11 +32,7 @@ $(() => {
         onInitialized: (e) => {
           form = e.component;
 
-          const defaultFieldDataChangedHandler = form.option('onFieldDataChanged');
-
-          form.option('onFieldDataChanged', (e) => {
-            defaultFieldDataChangedHandler?.(e);
-
+          form.on('fieldDataChanged', (e) => {
             if (showConflictError && (e.dataField === 'startDate' || e.dataField === 'endDate')) {
               showConflictError = false;
               form.option('elementAttr.class', 'hide-informer');

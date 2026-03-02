@@ -6,6 +6,7 @@ import type { FormRef, FormTypes } from 'devextreme-react/form';
 import type { PopupRef } from 'devextreme-react/popup';
 import type { TagBoxTypes } from 'devextreme-react/tag-box';
 import { custom as customDialog } from 'devextreme/ui/dialog';
+import { Template } from 'devextreme-react/core/template';
 import dxScheduler from 'devextreme/ui/scheduler';
 import { data, assignees, type Appointment, Assignee } from './data.ts';
 
@@ -47,23 +48,15 @@ const assigneeIdEditorOptions = {
       e.component.option('value', [e.value[e.value.length - 1]]);
     }
   },
-  tagTemplate: (itemData: Assignee, tagElement: HTMLElement) => {
-    const root = document.createElement('div');
-    root.className = 'dx-tag-content';
-    root.style.backgroundColor = itemData.color;
-    root.style.borderColor = itemData.color;
-
-    const span = document.createElement('span');
-    span.textContent = itemData.text;
-    root.appendChild(span);
-
-    const div = document.createElement('div');
-    div.className = 'dx-tag-remove-button';
-    root.appendChild(div);
-
-    tagElement.appendChild(root);
-  },
+  tagTemplate: 'tagTemplate',
 };
+
+const tagTemplate = (itemData: Assignee) => (
+  <div className="dx-tag-content" style={{ backgroundColor: itemData.color, borderColor: itemData.color }}>
+    {itemData.text}
+    <div className="dx-tag-remove-button"></div>
+  </div>
+);
 
 const conflictInformerRender = () => (
   <div className="conflict-informer">This time slot conflicts with another appointment</div>
@@ -84,7 +77,7 @@ const App = () => {
 
     e.cancel = true;
 
-    if (popupRef.current.instance().option('visible')) {
+    if (popupRef.current?.instance().option('visible')) {
       showConflictErrorRef.current = true;
       formRef.current.instance().validate();
       formRef.current.instance().option('elementAttr.class', '');
@@ -122,12 +115,7 @@ const App = () => {
   const onFormInitialized = useCallback((e: FormTypes.InitializedEvent) => {
     formRef.current = e.component;
 
-    const defaultFieldDataChangedHandler = e.component.option('onFieldDataChanged');
-
-    e.component.option('onFieldDataChanged', (fieldEvent: any) => {
-      if (defaultFieldDataChangedHandler) {
-        defaultFieldDataChangedHandler(fieldEvent);
-      }
+    e.component.on('fieldDataChanged', (fieldEvent: any) => {
       if (
         showConflictErrorRef.current &&
         ['startDate', 'endDate', 'assigneeId'].includes(fieldEvent.dataField)
@@ -207,6 +195,7 @@ const App = () => {
                 isRequired={true}
                 editorOptions={assigneeIdEditorOptions}
               />
+              <Template name="tagTemplate" render={tagTemplate} />
             </Item>
           </Item>
           <Item type="group" name="recurrenceGroup" />
