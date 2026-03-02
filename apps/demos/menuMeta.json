@@ -595,6 +595,20 @@
             ]
           },
           {
+            "Name": "AI Assistant",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "AI Assistant",
+                "Name": "AIAssistant",
+                "Widget": "DataGrid",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-2026-ai-assistant.xml"
+              }
+            ]
+          },
+          {
             "Name": "Master-Detail",
             "Equivalents": "preview row",
             "Demos": [
