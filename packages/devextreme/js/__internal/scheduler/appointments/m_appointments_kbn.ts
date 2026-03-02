@@ -5,18 +5,24 @@ import { getPublicElement } from '@ts/core/m_element';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import eventsEngine from '@ts/events/core/m_events_engine';
 
+import type { AppointmentViewModelPlain } from '../view_model/types';
 import type SchedulerAppointments from './m_appointment_collection';
-import { getNextElement, getPrevElement } from './utils/sorted_index_utils';
+
+// Case when no appointments in Viewport
+// Case when focusedAppointment is outside Viewport
 
 export class AppointmentsKeyboardNavigation {
   private readonly _collection: SchedulerAppointments;
 
-  public $focusedItem: dxElementWrapper | null = null;
+  public focusedItemSortIndex = -1;
+
+  public isNavigating = false;
 
   constructor(collection: SchedulerAppointments) {
     this._collection = collection;
   }
 
+  // TODO: make disabled appointments focusable and remove this method
   public getFocusableItems(): dxElementWrapper {
     const appts = this._collection._itemElements().not('.dx-state-disabled');
     const collectors = this._collection.$element().find('.dx-scheduler-appointment-collector');
@@ -24,34 +30,34 @@ export class AppointmentsKeyboardNavigation {
     return appts.add(collectors);
   }
 
-  public getFocusableItemBySortedIndex(sortedIndex: number): dxElementWrapper {
-    const $items = this.getFocusableItems();
-    const itemElement = $items.toArray().filter((itemElement: Element) => {
-      const $item = $(itemElement);
-      const itemData = this._collection.getAppointmentSettings($item);
-      return itemData.sortedIndex === sortedIndex;
-    });
+  public focus($item?: dxElementWrapper): void {
+    const $target = $item ?? this.$focusTarget();
 
-    return $(itemElement);
-  }
-
-  public focus(): void {
-    if (this.$focusedItem) {
-      const focusedElement = getPublicElement(this.$focusedItem);
-
-      this._collection.option('focusedElement', focusedElement);
-      eventsEngine.trigger(focusedElement, 'focus');
+    if ($target.length) {
+      eventsEngine.trigger($target, 'focus');
     }
   }
 
   public focusInHandler(e: DxEvent): void {
-    this.$focusedItem = $(e.target);
-    this._collection.option('focusedElement', getPublicElement(this.$focusedItem));
+    const $target = $(e.target);
+    const itemData = this._collection.getAppointmentSettings($target);
+
+    this.focusedItemSortIndex = itemData.sortedIndex;
+    this.resetTabIndex();
+    this._collection.option('focusedElement', getPublicElement(e.target));
   }
 
-  public focusOutHandler(): void {
-    const $item = this.getFocusableItemBySortedIndex(0);
-    this._collection.option('focusedElement', getPublicElement($item));
+  public focusOutHandler(e: DxEvent<FocusEvent>): void {
+    const $container = this._collection._itemContainer();
+    const isFocusInside = $(e.relatedTarget as Element).closest($container).length > 0;
+
+    if (isFocusInside || this.isNavigating) {
+      return;
+    }
+
+    this.focusedItemSortIndex = -1;
+    this.resetTabIndex();
+    this._collection.option('focusedElement', null);
   }
 
   public getSupportedKeys(): SupportedKeys {
@@ -64,33 +70,29 @@ export class AppointmentsKeyboardNavigation {
     };
   }
 
-  public resetTabIndex($appointment: dxElementWrapper): void {
-    this.getFocusableItems().attr('tabIndex', -1);
-    $appointment.attr('tabIndex', this._collection.option('tabIndex'));
+  public $focusTarget(): dxElementWrapper {
+    const $items = this._collection.$itemBySortedIndex;
+
+    if (!$items?.length) {
+      return $();
+    }
+
+    if (this.focusedItemSortIndex === -1) {
+      const $itemsPlainArray = Object.values($items);
+
+      return this._collection.isVirtualScrolling
+        ? $itemsPlainArray.find(($item) => this.isItemVisibleInViewport($item)) ?? $()
+        : $($itemsPlainArray[0]);
+    }
+
+    const $item = $items[this.focusedItemSortIndex];
+
+    return $item || $();
   }
 
-  private tabHandler(e): void {
-    if (!this.$focusedItem) {
-      return;
-    }
-
-    const $focusableItems = this.getFocusableItems();
-    let index = this._collection.getAppointmentSettings(this.$focusedItem).sortedIndex;
-    let $nextAppointment = e.shiftKey
-      ? getPrevElement(index, this._collection.renderedElementsBySortedIndex)
-      : getNextElement(index, this._collection.renderedElementsBySortedIndex);
-    const lastIndex = $focusableItems.length - 1;
-
-    if ($nextAppointment || (index > 0 && e.shiftKey) || (index < lastIndex && !e.shiftKey)) {
-      e.preventDefault();
-
-      if (!$nextAppointment) {
-        e.shiftKey ? index-- : index++;
-        $nextAppointment = this.getFocusableItemBySortedIndex(index);
-      }
-
-      this.focusItem($nextAppointment);
-    }
+  public resetTabIndex(): void {
+    this.getFocusableItems().attr('tabIndex', -1);
+    this.$focusTarget().attr('tabIndex', this._collection.option('tabIndex'));
   }
 
   private delHandler(e: DxEvent): void {
@@ -108,7 +110,7 @@ export class AppointmentsKeyboardNavigation {
 
     this._collection.moveAppointmentBack();
 
-    const resizableInstance = (this.$focusedItem as any).dxResizable('instance');
+    const resizableInstance = (this.$focusTarget() as any).dxResizable('instance');
 
     if (resizableInstance) {
       resizableInstance._detachEventHandlers();
@@ -117,32 +119,76 @@ export class AppointmentsKeyboardNavigation {
     }
   }
 
-  private homeHandler(e: DxEvent): void {
-    e.preventDefault();
+  private tabHandler(e: DxEvent<KeyboardEvent>): void {
+    const items = this._collection.option('getLayoutManager')().sortedItems;
+    const nextIndex = this.focusedItemSortIndex + (e.shiftKey ? -1 : 1);
+    const nextItemData = items[nextIndex];
 
-    const $firstItem = this.getFocusableItems().first();
-
-    if (this.$focusedItem && $firstItem.is(this.$focusedItem)) {
+    if (!nextItemData) {
       return;
     }
 
-    this.focusItem($firstItem);
+    e.preventDefault();
+    this.focusByItemData(nextItemData);
   }
 
-  private endHandler(e: DxEvent): void {
-    e.preventDefault();
+  private homeHandler(e: DxEvent<KeyboardEvent>): void {
+    const items = this._collection.option('getLayoutManager')().sortedItems;
+    const nextItemData = items[0];
 
-    const $lastItem = this.getFocusableItems().last();
-
-    if (this.$focusedItem && $lastItem.is(this.$focusedItem)) {
+    if (!nextItemData) {
       return;
     }
 
-    this.focusItem($lastItem);
+    e.preventDefault();
+    this.focusByItemData(nextItemData);
   }
 
-  private focusItem($item: dxElementWrapper): void {
-    this.resetTabIndex($item);
-    eventsEngine.trigger($item, 'focus');
+  private endHandler(e: DxEvent<KeyboardEvent>): void {
+    const items = this._collection.option('getLayoutManager')().sortedItems;
+    const nextItemData = items[items.length - 1];
+
+    if (!nextItemData) {
+      return;
+    }
+
+    e.preventDefault();
+    this.focusByItemData(nextItemData);
+  }
+
+  private focusByItemData(itemData: AppointmentViewModelPlain): void {
+    if (this._collection.isVirtualScrolling) {
+      this.focusedItemSortIndex = itemData.sortedIndex;
+      this.isNavigating = true;
+      this.scrollToByItemData(itemData);
+    }
+
+    this.focus();
+  }
+
+  private scrollToByItemData(itemData: AppointmentViewModelPlain): void {
+    const date = new Date(Math.max(
+      this._collection.option('getStartViewDate')().getTime(),
+      (itemData as any).source.startDate,
+    ));
+
+    this._collection.option('scrollTo')(
+      date,
+      {
+        group: itemData.itemData,
+        allDay: itemData.allDay,
+      },
+    );
+  }
+
+  private isItemVisibleInViewport($item: dxElementWrapper): boolean {
+    const $container = this._collection.$element().closest('.dx-scrollable-container');
+    const containerRect = $container.get(0).getBoundingClientRect();
+    const itemRect = $item.get(0).getBoundingClientRect();
+
+    return (itemRect.top < containerRect.bottom
+      && itemRect.bottom > containerRect.top
+      && itemRect.left < containerRect.right
+      && itemRect.right > containerRect.left);
   }
 }

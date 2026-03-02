@@ -5,7 +5,7 @@ import { filterAppointments } from './filtration/filter_appointments';
 import type { Occurrence } from './filtration/get_occurrences';
 import { getOccurrences } from './filtration/get_occurrences';
 import { generateAgendaViewModel } from './generate_view_model/generate_agenda_view_model';
-import { generateGridViewModel } from './generate_view_model/generate_grid_view_model';
+import { generateGridViewModel, sortAppointments } from './generate_view_model/generate_grid_view_model';
 import type { RealSize } from './generate_view_model/steps/add_geometry/types';
 import { getAgendaAppointmentInfo, getAppointmentInfo } from './get_appointment_info';
 import { prepareAppointments } from './preparation/prepare_appointments';
@@ -16,6 +16,7 @@ import type {
   AppointmentViewModelPlain,
   ListEntity,
   MinimalAppointmentEntity,
+  SortedEntity,
   UTCDatesBeforeSplit,
 } from './types';
 
@@ -23,6 +24,12 @@ class AppointmentLayoutManager {
   preparedItems: MinimalAppointmentEntity[] = [];
 
   filteredItems: ListEntity[] = [];
+
+  private _sortedItems: SortedEntity[] = [];
+
+  public get sortedItems(): SortedEntity[] { return this._sortedItems; }
+
+  viewModel: AppointmentViewModelPlain[] = [];
 
   // NOTE: Here we should pass global store. But right now scheduler component is global store
   constructor(public schedulerStore: Scheduler) {}
@@ -33,6 +40,10 @@ class AppointmentLayoutManager {
 
   public filterAppointments(): void {
     this.filteredItems = filterAppointments(this.schedulerStore, this.preparedItems);
+  }
+
+  private sortAppointments(): void {
+    this._sortedItems = sortAppointments(this.schedulerStore, this.filteredItems);
   }
 
   public getOccurrences(
@@ -66,10 +77,11 @@ class AppointmentLayoutManager {
       }));
     }
 
+    this.sortAppointments();
     const isSkipResizing = (appointment: ListEntity): boolean => appointment.isAllDayPanelOccupied
       && viewType === 'day'
       && this.schedulerStore.currentView.intervalCount === 1;
-    const viewModel = generateGridViewModel(this.schedulerStore, this.filteredItems);
+    const viewModel = generateGridViewModel(this.schedulerStore, this._sortedItems);
     const toItem = (item: AppointmentEntity): AppointmentItemViewModel => ({
       itemData: item.itemData,
       allDay: item.isAllDayPanelOccupied,

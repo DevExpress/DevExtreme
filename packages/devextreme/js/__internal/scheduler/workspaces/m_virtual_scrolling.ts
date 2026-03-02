@@ -691,11 +691,11 @@ export class VirtualScrollingRenderer {
       clearTimeout(this._renderAppointmentTimeoutID);
 
       this._renderAppointmentTimeoutID = setTimeout(
-        () => this.workspace.updateAppointments(),
+        () => this.workspace.renderAppointments(),
         renderTimeout,
       );
     } else {
-      this.workspace.updateAppointments();
+      this.workspace.renderAppointments();
     }
   }
 }
