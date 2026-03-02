@@ -19,9 +19,9 @@
         "@angular-devkit/build-angular": "~21.1.0",
         "@angular/cli": "~21.1.5",
         "@angular/common": "~21.1.0",
-        "@angular/compiler": "~21.1.7",
-        "@angular/compiler-cli": "~21.1.7",
-        "@angular/core": "~21.1.7",
+        "@angular/compiler": "~21.1.0",
+        "@angular/compiler-cli": "~21.1.0",
+        "@angular/core": "~21.1.0",
         "@angular/forms": "~21.1.0",
         "@angular/platform-browser": "~21.1.0",
         "@angular/platform-browser-dynamic": "~21.1.0",
@@ -89,7 +89,7 @@
         "zone.js": "0.15.1"
     },
     "devDependencies": {
-        "@angular/platform-server": "21.0.5",
+        "@angular/platform-server": "~21.1.0",
         "@babel/core": "7.28.6",
         "@babel/eslint-parser": "catalog:",
         "@babel/preset-env": "7.28.6",
