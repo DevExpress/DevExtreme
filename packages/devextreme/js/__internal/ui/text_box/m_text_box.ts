@@ -5,7 +5,7 @@ import $ from '@js/core/renderer';
 import { getOuterWidth, getWidth } from '@js/core/utils/size';
 import { getWindow } from '@js/core/utils/window';
 import type { OptionChanged } from '@ts/core/widget/types';
-import TextEditor from '@ts/ui/text_box/m_text_editor.mask';
+import TextEditor from '@ts/ui/text_box/text_editor.mask';
 
 import type { TextEditorBaseProperties } from './m_text_editor.base';
 

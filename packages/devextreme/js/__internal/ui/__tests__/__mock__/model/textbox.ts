@@ -10,4 +10,8 @@ export class TextBoxModel {
   public setValue(value: string): void {
     this.getInstance()?.option('value', value);
   }
+
+  public getInput(): HTMLInputElement {
+    return this.root.querySelector('input') as HTMLInputElement;
+  }
 }
