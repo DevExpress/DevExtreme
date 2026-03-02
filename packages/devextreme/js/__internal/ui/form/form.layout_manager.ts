@@ -54,11 +54,11 @@ import ResponsiveBox from '@ts/ui/responsive_box';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
-const LAYOUT_MANAGER_FIRST_ROW_CLASS = 'dx-first-row';
-const LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
-const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
-const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
-const LAYOUT_MANAGER_COL_PREFIX = 'dx-col-';
+export const LAYOUT_MANAGER_FIRST_ROW_CLASS = 'dx-first-row';
+export const LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
+export const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
+export const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
+export const LAYOUT_MANAGER_COL_PREFIX = 'dx-col-';
 
 const MIN_COLUMN_WIDTH = 200;
 

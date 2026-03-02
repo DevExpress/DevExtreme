@@ -11,6 +11,14 @@ import {
 } from '__internal/ui/form/constants';
 
 import {
+    LAYOUT_MANAGER_FIRST_ROW_CLASS,
+    LAYOUT_MANAGER_LAST_ROW_CLASS,
+    LAYOUT_MANAGER_FIRST_COL_CLASS,
+    LAYOUT_MANAGER_LAST_COL_CLASS,
+    LAYOUT_MANAGER_COL_PREFIX,
+} from '__internal/ui/form/form.layout_manager';
+
+import {
     FIELD_ITEM_HELP_TEXT_CLASS,
     FIELD_ITEM_OPTIONAL_CLASS,
     FIELD_ITEM_REQUIRED_CLASS,
@@ -2584,10 +2592,10 @@ QUnit.module('Button item', () => {
 
         const $buttonItems = $testContainer.find('.dx-field-button-item');
 
-        assert.ok($buttonItems.first().hasClass('dx-col-0'), 'Correct column index');
-        assert.ok($buttonItems.first().hasClass('dx-first-col'), 'Correct column index');
-        assert.ok($buttonItems.last().hasClass('dx-col-1'), 'Correct column index');
-        assert.ok($buttonItems.last().hasClass('dx-last-col'), 'Correct column index');
+        assert.ok($buttonItems.first().hasClass(`${LAYOUT_MANAGER_COL_PREFIX}0`), 'Correct column index');
+        assert.ok($buttonItems.first().hasClass(LAYOUT_MANAGER_FIRST_COL_CLASS), 'Correct column index');
+        assert.ok($buttonItems.last().hasClass(`${LAYOUT_MANAGER_COL_PREFIX}1`), 'Correct column index');
+        assert.ok($buttonItems.last().hasClass(LAYOUT_MANAGER_LAST_COL_CLASS), 'Correct column index');
     });
 
     test('Horizontal alignment', function(assert) {
@@ -3685,6 +3693,108 @@ QUnit.module('ReadOnly option', () => {
 
         checkSupportedEditors((editor, className) => {
             assert.ok(isEditorReadOnly($testContainer, className), `${editor}: editor is read only`);
+        });
+    });
+});
+
+QUnit.module('CSS position classes', {
+    beforeEach: function() {
+        this.generateItems = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i += 1) {
+                items.push({ dataField: `field${i}` });
+            }
+            return items;
+        };
+
+        this.assertPositionCssClasses = function($container, colCount, assert) {
+            const $fieldItems = $container.find(`.${FIELD_ITEM_CLASS}`);
+            const itemCount = $fieldItems.length;
+            const rowCount = Math.ceil(itemCount / colCount);
+
+            $fieldItems.each((index, element) => {
+                const $element = $(element);
+                const row = Math.floor(index / colCount);
+                const col = index % colCount;
+
+                assert.strictEqual($element.hasClass(LAYOUT_MANAGER_FIRST_ROW_CLASS), row === 0, `item ${index}: should ${row === 0 ? '' : 'not '}have dx-first-row`);
+                assert.strictEqual($element.hasClass(LAYOUT_MANAGER_LAST_ROW_CLASS), row === rowCount - 1, `item ${index}: should ${row === rowCount - 1 ? '' : 'not '}have dx-last-row`);
+                assert.strictEqual($element.hasClass(LAYOUT_MANAGER_FIRST_COL_CLASS), col === 0, `item ${index}: should ${col === 0 ? '' : 'not '}have dx-first-col`);
+                assert.strictEqual($element.hasClass(LAYOUT_MANAGER_LAST_COL_CLASS), col === colCount - 1, `item ${index}: should ${col === colCount - 1 ? '' : 'not '}have dx-last-col`);
+                assert.strictEqual($element.hasClass(`${LAYOUT_MANAGER_COL_PREFIX}${col}`), true, `item ${index}: should have dx-col-${col}`);
+            });
+        };
+    }
+}, () => {
+    [[1, 1], [1, 2], [2, 1], [4, 4]].forEach(([rowCount, colCount]) => {
+        test(`Form with ${rowCount} rows and ${colCount} columns`, function(assert) {
+            const $container = $('#container');
+            $container.dxLayoutManager({
+                items: this.generateItems(rowCount * colCount),
+                colCount,
+            });
+
+            const $fieldItems = $container.find(`.${FIELD_ITEM_CLASS}`);
+
+            assert.equal($fieldItems.length, rowCount * colCount, 'All field items are rendered');
+
+            this.assertPositionCssClasses($container, colCount, assert);
+        });
+    });
+
+    QUnit.module('after screen size change', () => {
+        const screenFactors = ['xs', 'sm', 'md', 'lg'];
+
+        screenFactors.forEach((targetScreen) => {
+            test(`classes should be updated correctly when resizing from lg to ${targetScreen}`, function(assert) {
+                let screen = 'lg';
+
+                if(targetScreen === screen) {
+                    assert.ok(true, 'No need to test resizing to the same screen size');
+                    return;
+                }
+
+                const colCountByScreen = { xs: 1, sm: 2, md: 3, lg: 4 };
+                const expectedColCount = colCountByScreen[targetScreen];
+
+                const $container = $('#container');
+                const instance = $container.dxLayoutManager({
+                    items: this.generateItems(12),
+                    colCount: 4,
+                    colCountByScreen,
+                    screenByWidth: () => screen,
+                }).dxLayoutManager('instance');
+
+                screen = targetScreen;
+                instance.updateResponsiveBoxLayout();
+
+                this.assertPositionCssClasses($container, expectedColCount, assert);
+            });
+        });
+
+        test('classes should be updated correctly through multiple screen size transitions', function(assert) {
+            const colCountByScreen = { xs: 1, sm: 2, md: 3, lg: 4 };
+            let screen = 'lg';
+
+            const $container = $('#container');
+            const instance = $container.dxLayoutManager({
+                items: this.generateItems(12),
+                colCount: 4,
+                colCountByScreen,
+                screenByWidth: () => screen,
+            }).dxLayoutManager('instance');
+
+            screen = 'xs';
+            instance.updateResponsiveBoxLayout();
+            this.assertPositionCssClasses($container, colCountByScreen.xs, assert);
+
+            screen = 'sm';
+            instance.updateResponsiveBoxLayout();
+            this.assertPositionCssClasses($container, colCountByScreen.sm, assert);
+
+            screen = 'md';
+            instance.updateResponsiveBoxLayout();
+            this.assertPositionCssClasses($container, colCountByScreen.md, assert);
         });
     });
 });
