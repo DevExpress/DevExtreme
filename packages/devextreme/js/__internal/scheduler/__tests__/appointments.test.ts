@@ -82,7 +82,7 @@ describe('Appointments', () => {
       appointment.element.click();
       jest.advanceTimersByTime(1000);
 
-      const tooltipAppointment = POM.getTooltipAppointment();
+      const tooltipAppointment = POM.tooltip.getAppointmentItem();
       expect(tooltipAppointment).not.toBeNull();
 
       const tooltipTitleElement = tooltipAppointment?.querySelector('.dx-tooltip-appointment-item-content-subject');

@@ -1186,6 +1186,32 @@ describe('Appointment Form', () => {
       );
     });
 
+    it('should render FontAwesome icon with correct CSS classes (T1322161)', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{
+          text: 'Resource test app',
+          startDate: new Date(2017, 4, 9, 9, 30),
+          endDate: new Date(2017, 4, 9, 11),
+          roomId: 1,
+        }],
+        resources: [{
+          fieldExpr: 'roomId',
+          icon: 'fas fa-home',
+          dataSource: [{ text: 'Room 1', id: 1 }, { text: 'Room 2', id: 2 }],
+        }],
+      });
+      const dataSource = (scheduler as any).getDataSource();
+      const appointment = dataSource.items()[0];
+
+      scheduler.showAppointmentPopup(appointment);
+
+      const { resourceIcon } = POM.popup;
+
+      expect(resourceIcon.classList.contains('fas')).toBe(true);
+      expect(resourceIcon.classList.contains('fa-home')).toBe(true);
+    });
+
     it('should create dxTagBox for resource with multiple selection', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
@@ -2241,7 +2267,7 @@ describe('Appointment Popup', () => {
     POM.getAppointment('common-app').element?.click();
     jest.runAllTimers();
 
-    POM.getTooltipAppointment()?.click();
+    POM.tooltip.getAppointmentItem()?.click();
 
     expect(POM.isPopupVisible()).toBe(true);
     expect(POM.popup.dxForm.option('formData')).toMatchObject({ ...commonAppointment });

@@ -1,19 +1,21 @@
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+
+import type SchedulerWorkSpace from '../workspaces/m_work_space';
 
 const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 
 class CurrentTimeShader {
   _$container = this._workSpace._dateTableScrollable.$content();
 
-  // @ts-expect-error
-  _shader: any[];
+  _shader!: dxElementWrapper[];
 
-  _$shader: any;
+  _$shader!: dxElementWrapper;
 
-  constructor(public _workSpace: any) {
+  constructor(public _workSpace: SchedulerWorkSpace) {
   }
 
-  render() {
+  render(): void {
     this.initShaderElements();
 
     this.renderShader();
@@ -23,20 +25,22 @@ class CurrentTimeShader {
     });
   }
 
-  initShaderElements() {
+  initShaderElements(): void {
     this._$shader = this.createShader();
     this._shader = [];
     this._shader.push(this._$shader);
   }
 
-  renderShader() {}
+  renderShader(): void {}
 
-  createShader() {
+  createShader(): dxElementWrapper {
     return $('<div>').addClass(DATE_TIME_SHADER_CLASS);
   }
 
-  clean() {
-    this._$container && this._$container.find(`.${DATE_TIME_SHADER_CLASS}`).remove();
+  clean(): void {
+    if (this._$container) {
+      this._$container.find(`.${DATE_TIME_SHADER_CLASS}`).remove();
+    }
   }
 }
 

@@ -43,6 +43,7 @@ export type {
   ToolbarItem,
   Toolbar,
   Appointment,
+  Occurrence,
   Properties,
   dxSchedulerScrolling,
 } from './scheduler';

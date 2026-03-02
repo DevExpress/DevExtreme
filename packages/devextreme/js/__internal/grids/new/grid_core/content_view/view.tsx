@@ -3,6 +3,7 @@
   @typescript-eslint/explicit-module-boundary-types
 */
 import $ from '@js/core/renderer';
+import messageLocalization from '@js/localization/message';
 import type dxScrollable from '@js/ui/scroll_view/ui.scrollable';
 import type { ScrollEventInfo } from '@js/ui/scroll_view/ui.scrollable';
 import { computed, signal } from '@ts/core/state_manager/index';
@@ -88,7 +89,7 @@ export abstract class ContentView<TProps extends {}> extends View<TProps> {
         visible: this.dataController.isLoading.value,
       },
       noDataTextProps: {
-        text: noDataTextConfig.value,
+        text: noDataTextConfig.value ?? messageLocalization.format('dxDataGrid-noDataText'),
         template: noDataTemplateConfig.value,
         visible: this.isNoData.value,
       },

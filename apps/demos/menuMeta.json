@@ -5809,6 +5809,7 @@
                 "Name": "ItemSelectionAndCustomization",
                 "DocUrl": "Guide/UI_Components/TreeView/Select_Nodes/",
                 "Widget": "TreeView",
+                "Badge": "Updated",
                 "MvcAdditionalFiles": [
                   "/Models/TreeView/Employee.cs",
                   "/Models/SampleData/TreeViewHierarchicalDataForSelection.cs"

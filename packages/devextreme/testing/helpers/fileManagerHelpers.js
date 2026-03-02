@@ -40,6 +40,7 @@ export const Consts = {
     GRID_DATA_ROW_CLASS: 'dx-data-row',
     FILE_ACTION_BUTTON_CLASS: 'dx-filemanager-file-actions-button',
     FOLDERS_TREE_VIEW_ITEM_CLASS: 'dx-treeview-item',
+    FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS: 'dx-treeview-item-content',
     FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS: 'dx-treeview-toggle-item-visibility',
     FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS: 'dx-treeview-toggle-item-visibility-opened',
     BREADCRUMBS_CLASS: 'dx-filemanager-breadcrumbs',

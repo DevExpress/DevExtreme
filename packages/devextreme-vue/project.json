@@ -27,7 +27,6 @@
         "module": "esm"
       },
       "outputs": ["{projectRoot}/npm/esm"],
-      "cache": true,
       "inputs": ["default"]
     },
     "build:cjs": {
@@ -40,7 +39,6 @@
         "module": "cjs"
       },
       "outputs": ["{projectRoot}/npm/cjs"],
-      "cache": true,
       "inputs": ["default"]
     },
     "prepare-package-json": {
@@ -87,7 +85,6 @@
         "workingDirectory": "./npm"
       },
       "outputs": ["{projectRoot}/npm/*.tgz"],
-      "cache": true,
       "inputs": ["default"]
     },
     "generate-components": {
@@ -118,7 +115,6 @@
           }
         }
       },
-      "cache": false,
       "inputs": ["default"],
       "outputs": [
         "{projectRoot}/src/**/*",
@@ -137,7 +133,6 @@
         ],
         "parallel": false
       },
-      "cache": false,
       "inputs": ["default"],
       "outputs": [
         "{projectRoot}/src/**/*",
@@ -162,7 +157,6 @@
       "outputs": [
         "{projectRoot}/npm"
       ],
-      "cache": true,
       "inputs": ["default"]
     },
     "pack": {
@@ -184,7 +178,6 @@
         "{projectRoot}/npm",
         "{projectRoot}/npm/*.tgz"
       ],
-      "cache": true,
       "inputs": ["default"]
     },
     "test": {
@@ -195,8 +188,7 @@
       "inputs": [
         "default",
         "test"
-      ],
-      "cache": true
+      ]
     }
   },
   "namedInputs": {

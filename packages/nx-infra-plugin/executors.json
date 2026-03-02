@@ -69,6 +69,11 @@
       "implementation": "./src/executors/babel-transform/executor",
       "schema": "./src/executors/babel-transform/schema.json",
       "description": "Transform JavaScript/TypeScript files using Babel with configurable presets"
+    },
+    "create-dual-mode-manifest": {
+      "implementation": "./src/executors/create-dual-mode-manifest/executor",
+      "schema": "./src/executors/create-dual-mode-manifest/schema.json",
+      "description": "Generate package.json files for dual-mode (ESM + CJS) package support"
     }
   }
 }

@@ -281,7 +281,6 @@ namespace Runner.Controllers
             var q = Request.Query;
 
             m.IsContinuousIntegration = _runFlags.IsContinuousIntegration;
-            m.IsIntranet = _runFlags.IsIntranet;
             m.NoGlobals = q.ContainsKey("noglobals");
             m.NoTimers = q.ContainsKey("notimers");
             m.NoTryCatch = q.ContainsKey("notrycatch");

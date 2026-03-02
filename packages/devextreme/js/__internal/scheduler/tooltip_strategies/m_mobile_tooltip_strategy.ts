@@ -64,7 +64,7 @@ const createTabletDeviceConfig = (listHeight) => {
 };
 
 export class MobileTooltipStrategy extends TooltipStrategyBase {
-  _shouldUseTarget() {
+  protected override shouldUseTarget() {
     return false;
   }
 
@@ -91,8 +91,8 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
     this.setTooltipConfig();
   }
 
-  _createTooltip(target, dataList) {
-    const element = this._createTooltipElement(CLASS.slidePanel);
+  protected override createTooltip(target, dataList) {
+    const element = this.createTooltipElement(CLASS.slidePanel);
 
     return this._options.createComponent(element, Overlay, {
       target: getWindow(),
@@ -100,8 +100,8 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
       animation: animationConfig,
 
       onShowing: () => this._onShowing(),
-      onShown: this._onShown.bind(this),
-      contentTemplate: this._getContentTemplate(dataList),
+      onShown: this.onShown.bind(this),
+      contentTemplate: this.getContentTemplate(dataList),
       wrapperAttr: { class: CLASS.slidePanel },
     });
   }

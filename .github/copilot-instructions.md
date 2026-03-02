@@ -71,7 +71,7 @@ pnpm install --frozen-lockfile
   devextreme-metadata/     # Metadata generation for wrappers
   devextreme-monorepo-tools/ # Internal tooling
   nx-infra-plugin/         # Custom Nx executors for build automation
-  workflows/               # Reusable CI/CD workflow configurations
+  workflows/               # Cross-package NX build orchestration (all:build-dev, all:build-testing)
   testcafe-models/         # TestCafe page object models
 
 /apps/
@@ -154,7 +154,7 @@ pnpm run clean
 **Build process includes:**
 1. Localization generation (via `devextreme-nx-infra-plugin:localization` executor)
 2. Component generation (Renovation architecture)
-3. Transpilation (Babel)
+3. Transpilation (via native NX executors: `babel-transform` for JS, `build-typescript` for TS)
 4. Bundle creation (Webpack) - `bundle:debug` and `bundle:prod` targets
 5. TypeScript declarations - `build:declarations` target
 6. SCSS compilation (from devextreme-scss)
@@ -186,13 +186,21 @@ The `packages/nx-infra-plugin` provides custom Nx executors for build automation
 
 | Executor | Description |
 |----------|-------------|
-| `localization` | Generates localization message files and TypeScript CLDR data modules |
-| `add-license-headers` | Adds license headers to source files |
-| `copy-files` | Copies files with glob pattern support |
-| `clean` | Cleans directories with exclude pattern support |
-| `build-typescript` | Builds TypeScript projects |
-| `generate-components` | Generates Angular/React/Vue wrapper components |
-| `karma-multi-env` | Runs Karma tests across multiple Angular environments |
+| `add-license-headers` | Adds DevExtreme license headers to compiled files with version information |
+| `babel-transform` | Transforms JS/TS files using Babel with configurable presets, debug block removal, and extension renaming |
+| `build-angular-library` | Builds Angular libraries using ng-packagr programmatically |
+| `build-typescript` | Compiles TypeScript to CJS or ESM modules with configurable output format, tsconfig, and path alias resolution |
+| `clean` | Removes directories and files with support for exclusion patterns |
+| `concatenate-files` | Concatenates files with optional content extraction via regex, header/footer, and find/replace transforms |
+| `copy-files` | Copies files and directories to specified destinations with glob pattern support |
+| `create-dual-mode-manifest` | Generates package.json files for dual-mode (ESM + CJS) support with main, module, typings, and sideEffects |
+| `generate-component-names` | Generates TypeScript file with component name constants for test automation |
+| `generate-components` | Generates framework components (React/Vue/Angular) from DevExtreme metadata |
+| `karma-multi-env` | Runs Karma tests across multiple Angular environments (client, server, hydration) |
+| `localization` | Generates CLDR data and compiles localization message files from JSON to JavaScript |
+| `pack-npm` | Creates npm packages using `pnpm pack` for distribution |
+| `prepare-package-json` | Creates distribution-ready package.json with cleaned dependencies for npm publishing |
+| `prepare-submodules` | Creates package.json entry points for submodule exports |
 
 **Example executor usage in project.json:**
 ```json

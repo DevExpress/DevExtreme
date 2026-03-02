@@ -13,6 +13,7 @@ $(() => {
     width: 340,
     height: 320,
     showCheckBoxesMode: 'normal',
+    disabledNodeSelectionMode: 'never',
     onSelectionChanged(e) {
       syncSelection(e.component);
     },
@@ -31,7 +32,7 @@ $(() => {
     selectedEmployeesList.option('items', selectedEmployees);
   }
 
-  $('#showCheckBoxesMode').dxSelectBox({
+  $('#checkBoxVisibility').dxSelectBox({
     items: ['normal', 'selectAll', 'none'],
     inputAttr: { 'aria-label': 'Show Checkboxes Mode' },
     value: 'normal',
@@ -62,16 +63,25 @@ $(() => {
     },
   }).dxSelectBox('instance');
 
-  const recursiveCheckBox = $('#selectNodesRecursive').dxCheckBox({
-    text: 'Select Nodes Recursive',
+  $('#disabledNodeSelectionMode').dxSelectBox({
+    items: ['never', 'recursiveAndAll'],
+    inputAttr: { 'aria-label': 'Disabled Node Selection Mode' },
+    value: 'never',
+    onValueChanged(e) {
+      treeView.option('disabledNodeSelectionMode', e.value);
+    },
+  });
+
+  const recursiveCheckBox = $('#recursiveSelection').dxCheckBox({
+    text: 'Recursive Selection',
     value: true,
     onValueChanged(e) {
       treeView.option('selectNodesRecursive', e.value);
     },
   }).dxCheckBox('instance');
 
-  $('#selectByClick').dxCheckBox({
-    text: 'Select By Click',
+  $('#selectOnClick').dxCheckBox({
+    text: 'Select on Click',
     value: false,
     onValueChanged(e) {
       treeView.option('selectByClick', e.value);

@@ -27,7 +27,6 @@
         "module": "esm"
       },
       "outputs": ["{projectRoot}/npm/esm"],
-      "cache": true,
       "inputs": ["default"]
     },
     "build:cjs": {
@@ -40,7 +39,6 @@
         "module": "cjs"
       },
       "outputs": ["{projectRoot}/npm/cjs"],
-      "cache": true,
       "inputs": ["default"]
     },
     "prepare-package-json": {
@@ -81,7 +79,6 @@
         "workingDirectory": "./npm"
       },
       "outputs": ["{projectRoot}/npm/*.tgz"],
-      "cache": true,
       "inputs": ["default"]
    },
    "generate-components": {
@@ -102,7 +99,6 @@
         "!{projectRoot}/src/common/**/*",
         "!{projectRoot}/src/**/__tests__/**/*"
       ],
-      "cache": false,
       "inputs": ["default"]
     },
     "regenerate": {
@@ -121,7 +117,6 @@
         "!{projectRoot}/src/common/**/*",
         "!{projectRoot}/src/**/__tests__/**/*"
       ],
-      "cache": false,
       "inputs": ["default"]
     },
     "build": {
@@ -140,7 +135,6 @@
       "outputs": [
         "{projectRoot}/npm"
       ],
-      "cache": true,
       "inputs": ["default"]
     },
     "pack": {
@@ -162,7 +156,6 @@
         "{projectRoot}/npm",
         "{projectRoot}/npm/*.tgz"
       ],
-      "cache": true,
       "inputs": ["default"]
     },
     "test": {
@@ -173,8 +166,7 @@
       "inputs": [
         "default",
         "test"
-      ],
-      "cache": true
+      ]
     }
   },
   "namedInputs": {

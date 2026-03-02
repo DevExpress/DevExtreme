@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "title": "Create Dual-Mode Manifest Executor",
+  "description": "Generate package.json files for dual-mode (ESM + CJS) package support with main, module, typings, and sideEffects fields",
+  "properties": {
+    "esmDir": {
+      "type": "string",
+      "description": "Directory containing ESM transpiled files (e.g., './artifacts/transpiled-esm-npm/esm')"
+    },
+    "cjsDir": {
+      "type": "string",
+      "description": "Directory containing CJS transpiled files (e.g., './artifacts/transpiled-esm-npm/cjs')"
+    },
+    "outputDir": {
+      "type": "string",
+      "description": "Base output directory where package.json files will be created (e.g., './artifacts/transpiled-esm-npm')"
+    },
+    "srcDir": {
+      "type": "string",
+      "description": "Source directory for .d.ts file lookup (e.g., './js')"
+    },
+    "excludePatterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Glob patterns to exclude from processing (matched against relative path from esmDir)"
+    },
+    "generatedDtsFiles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of generated .d.ts files that don't exist in srcDir but are generated during build (paths relative to srcDir)"
+    }
+  },
+  "required": ["esmDir", "cjsDir", "outputDir", "srcDir"],
+  "additionalProperties": false
+}

@@ -6,13 +6,13 @@
   "properties": {
     "module": {
       "type": "string",
-      "description": "Target module format. 'esm' generates ES modules with import/export statements, 'cjs' generates CommonJS with require/module.exports. This affects output file structure, TypeScript compiler module settings, and determines the default tsconfig and output directory.",
+      "description": "Target module format",
       "enum": ["cjs", "esm"],
       "default": "esm"
     },
     "srcPattern": {
       "type": "string",
-      "description": "Glob pattern for source files to include in compilation. Supports standard glob syntax with wildcards. Default pattern includes all .ts and .tsx files in src directory recursively.",
+      "description": "Glob pattern for source files to include in compilation. Supports standard glob syntax with wildcards.",
       "default": "./src/**/*.{ts,tsx}"
     },
     "excludePatterns": {
@@ -24,11 +24,22 @@
     },
     "tsconfig": {
       "type": "string",
-      "description": "Path to TypeScript configuration file relative to project root. If not specified, defaults to './tsconfig.json' for CJS builds or './tsconfig.esm.json' for ESM builds. The tsconfig should contain appropriate module and target settings for the desired output format."
+      "default": "./tsconfig.esm.json",
+      "description": "Path to TypeScript configuration file relative to project root."
     },
     "outDir": {
       "type": "string",
-      "description": "Output directory path relative to project root where compiled JavaScript and declaration files will be written. If not specified, defaults to './npm/cjs' for CJS builds or './npm/esm' for ESM builds. Directory will be created if it doesn't exist."
+      "default": "./npm/esm",
+      "description": "Output directory path relative to project root where compiled JavaScript and declaration files will be written. Directory will be created if it doesn't exist."
+    },
+    "resolvePaths": {
+      "type": "boolean",
+      "default": false,
+      "description": "Enable path alias resolution using tsc-alias. When true, transforms import paths like '@ts/*' to relative paths based on tsconfig paths configuration. Requires resolvePathsBaseDir to be set."
+    },
+    "resolvePathsBaseDir": {
+      "type": "string",
+      "description": "Base directory for path alias resolution (used as aliasRoot for tsc-alias). Relative to project root. Required when resolvePaths is true. Example: './js' for DevExtreme's __internal TypeScript compilation."
     }
   },
   "required": [],

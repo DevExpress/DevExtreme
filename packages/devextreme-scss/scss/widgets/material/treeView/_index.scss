@@ -32,6 +32,10 @@
   }
 }
 
+.dx-treeview-item-content.dx-state-disabled {
+  color: $treeview-item-content-disabled;
+}
+
 @include treeview-item(
   $material-treeview-item-element-gap,
   $material-treeview-item-padding,

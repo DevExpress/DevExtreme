@@ -6,6 +6,7 @@ import { POPUP_DIALOG_CLASS } from '../../../m_scheduler';
 import type { AppointmentModel } from './appointment';
 import { createAppointmentModel } from './appointment';
 import { PopupModel } from './popup';
+import { TooltipModel } from './tooltip';
 
 const getTexts = (
   cells: ArrayLike<Element>,
@@ -23,6 +24,10 @@ export class SchedulerModel {
 
   get popup(): PopupModel {
     return this.getPopup();
+  }
+
+  get tooltip(): TooltipModel {
+    return new TooltipModel();
   }
 
   get toolbar(): ToolbarModel {
@@ -53,6 +58,17 @@ export class SchedulerModel {
     const allButtons = this.queries.queryAllByRole('button') as HTMLElement[];
     const collectors = allButtons.filter((btn) => btn.classList.contains('dx-scheduler-appointment-collector'));
     return getTexts(collectors);
+  }
+
+  getCollectorButton(index = 0): HTMLElement {
+    const allButtons = this.queries.queryAllByRole('button') as HTMLElement[];
+    const collectors = allButtons.filter((btn) => btn.classList.contains('dx-scheduler-appointment-collector'));
+
+    if (collectors.length === 0) {
+      throw new Error('Collector button not found');
+    }
+
+    return collectors[index];
   }
 
   getDateTableContent(): string[] {
@@ -119,8 +135,6 @@ export class SchedulerModel {
   getPopups = (): NodeListOf<Element> => document.querySelectorAll(`.dx-overlay-wrapper.${APPOINTMENT_POPUP_CLASS}, .dx-overlay-wrapper.${POPUP_DIALOG_CLASS}`);
 
   getLoadPanel = (): HTMLElement | null => document.querySelector('.dx-loadpanel');
-
-  getTooltipAppointment = (): HTMLElement | null => document.querySelector('.dx-tooltip-appointment-item');
 
   openPopupByDblClick(text?: string): AppointmentModel {
     const appointment = this.getAppointment(text) as AppointmentModel;

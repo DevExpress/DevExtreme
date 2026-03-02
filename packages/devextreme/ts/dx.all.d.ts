@@ -25886,6 +25886,14 @@ declare module DevExpress.ui {
      */
     getEndViewDate(): Date;
     /**
+     * [descr:dxScheduler.getOccurrences(startDate, endDate, appointments)]
+     */
+    getOccurrences(
+      startDate: Date,
+      endDate: Date,
+      appointments: Appointment[]
+    ): DevExpress.ui.dxScheduler.Occurrence[];
+    /**
      * [descr:dxScheduler.getStartViewDate()]
      */
     getStartViewDate(): Date;
@@ -26259,6 +26267,23 @@ declare module DevExpress.ui {
      */
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxScheduler>;
+    /**
+     * [descr:Occurrence]
+     */
+    export type Occurrence = {
+      /**
+       * [descr:Occurrence.startDate]
+       */
+      startDate: Date;
+      /**
+       * [descr:Occurrence.endDate]
+       */
+      endDate: Date;
+      /**
+       * [descr:Occurrence.appointmentData]
+       */
+      appointmentData: Appointment;
+    };
     /**
      * [descr:_ui_scheduler_OptionChangedEvent]
      */
