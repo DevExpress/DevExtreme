@@ -37,6 +37,7 @@ import { renderEmptyItem } from '@ts/ui/form/components/empty_item';
 import { renderFieldItem } from '@ts/ui/form/components/field_item';
 import {
   FIELD_ITEM_CLASS,
+  FORM_FIELD_ITEM_COL_CLASS,
   FORM_LAYOUT_MANAGER_CLASS,
   LAYOUT_MANAGER_ONE_COLUMN,
   ROOT_SIMPLE_ITEM_CLASS,
@@ -58,7 +59,6 @@ export const LAYOUT_MANAGER_FIRST_ROW_CLASS = 'dx-first-row';
 export const LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
 export const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
 export const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
-export const LAYOUT_MANAGER_COL_PREFIX = 'dx-col-';
 
 const MIN_COLUMN_WIDTH = 200;
 
@@ -534,7 +534,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
           itemCssClassList.push(cssItemClass);
 
           if (isDefined(item.col)) {
-            itemCssClassList.push(`${LAYOUT_MANAGER_COL_PREFIX}${item.col}`);
+            itemCssClassList.push(`${FORM_FIELD_ITEM_COL_CLASS}${item.col}`);
           }
         }
 
@@ -1227,11 +1227,11 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
       const element = $itemContainer.get(0);
       element.className = [...element.classList]
-        .filter((name: string): boolean => !name.startsWith(LAYOUT_MANAGER_COL_PREFIX))
+        .filter((name: string): boolean => !name.startsWith(FORM_FIELD_ITEM_COL_CLASS))
         .join(' ');
 
       if (isDefined(typedLocation.col)) {
-        $itemContainer.addClass(`${LAYOUT_MANAGER_COL_PREFIX}${typedLocation.col}`);
+        $itemContainer.addClass(`${FORM_FIELD_ITEM_COL_CLASS}${typedLocation.col}`);
       }
     });
   }

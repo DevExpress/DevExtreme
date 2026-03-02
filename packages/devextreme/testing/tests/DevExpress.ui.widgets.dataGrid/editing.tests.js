@@ -19650,7 +19650,7 @@ QUnit.module('Editing - "popup" mode', {
         triggerResizeEvent(editForm.element());
 
         assert.equal(spy1.callCount, 0, 'repaint is not thrown');
-        assert.equal(spy2.callCount, 0, 'render is called after repaint');
+        assert.equal(spy2.callCount, 0, 'render is not called');
     });
 
     // T610885

@@ -3,6 +3,7 @@ import consoleUtils from 'core/utils/console';
 import messageLocalization from 'common/core/localization/message';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import {
+    FORM_FIELD_ITEM_COL_CLASS,
     FORM_LAYOUT_MANAGER_CLASS,
     FIELD_ITEM_CLASS,
     FIELD_ITEM_LABEL_CLASS,
@@ -15,7 +16,6 @@ import {
     LAYOUT_MANAGER_LAST_ROW_CLASS,
     LAYOUT_MANAGER_FIRST_COL_CLASS,
     LAYOUT_MANAGER_LAST_COL_CLASS,
-    LAYOUT_MANAGER_COL_PREFIX,
 } from '__internal/ui/form/form.layout_manager';
 
 import {
@@ -2592,9 +2592,9 @@ QUnit.module('Button item', () => {
 
         const $buttonItems = $testContainer.find('.dx-field-button-item');
 
-        assert.ok($buttonItems.first().hasClass(`${LAYOUT_MANAGER_COL_PREFIX}0`), 'Correct column index');
+        assert.ok($buttonItems.first().hasClass(`${FORM_FIELD_ITEM_COL_CLASS}0`), 'Correct column index');
         assert.ok($buttonItems.first().hasClass(LAYOUT_MANAGER_FIRST_COL_CLASS), 'Correct column index');
-        assert.ok($buttonItems.last().hasClass(`${LAYOUT_MANAGER_COL_PREFIX}1`), 'Correct column index');
+        assert.ok($buttonItems.last().hasClass(`${FORM_FIELD_ITEM_COL_CLASS}1`), 'Correct column index');
         assert.ok($buttonItems.last().hasClass(LAYOUT_MANAGER_LAST_COL_CLASS), 'Correct column index');
     });
 
@@ -3721,7 +3721,7 @@ QUnit.module('CSS position classes', {
                 assert.strictEqual($element.hasClass(LAYOUT_MANAGER_LAST_ROW_CLASS), row === rowCount - 1, `item ${index}: should ${row === rowCount - 1 ? '' : 'not '}have dx-last-row`);
                 assert.strictEqual($element.hasClass(LAYOUT_MANAGER_FIRST_COL_CLASS), col === 0, `item ${index}: should ${col === 0 ? '' : 'not '}have dx-first-col`);
                 assert.strictEqual($element.hasClass(LAYOUT_MANAGER_LAST_COL_CLASS), col === colCount - 1, `item ${index}: should ${col === colCount - 1 ? '' : 'not '}have dx-last-col`);
-                assert.strictEqual($element.hasClass(`${LAYOUT_MANAGER_COL_PREFIX}${col}`), true, `item ${index}: should have dx-col-${col}`);
+                assert.strictEqual($element.hasClass(`${FORM_FIELD_ITEM_COL_CLASS}${col}`), true, `item ${index}: should have dx-col-${col}`);
             });
         };
     }
