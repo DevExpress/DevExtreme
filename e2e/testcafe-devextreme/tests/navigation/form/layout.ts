@@ -230,7 +230,7 @@ test('SimpleItem: item1_cSpan_2', async (t) => {
   }));
 });
 
-test.only('Validation errors persist after resize', async (t) => {
+test('Validation errors persist after resize', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await waitFont();
