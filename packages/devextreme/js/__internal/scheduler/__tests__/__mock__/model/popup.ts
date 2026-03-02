@@ -1,8 +1,13 @@
+import { within } from '@testing-library/dom';
+
 export class PopupModel {
   element: HTMLDivElement;
 
+  private readonly queries: ReturnType<typeof within>;
+
   constructor(element: HTMLDivElement) {
     this.element = element;
+    this.queries = within(element);
   }
 
   getLabelIdByText = (labelText: string): string => {
@@ -104,27 +109,25 @@ export class PopupModel {
 
   getDoneButton = (): HTMLButtonElement => {
     const doneButton = this.element.querySelector('.dx-button.dx-popup-done') as HTMLButtonElement;
+
     if (!doneButton) {
       throw new Error('Done button not found');
     }
+
     return doneButton;
   };
 
   getCancelButton = (): HTMLButtonElement => {
     const cancelButton = this.element.querySelector('.dx-button.dx-popup-cancel') as HTMLButtonElement;
+
     if (!cancelButton) {
       throw new Error('Cancel button not found');
     }
+
     return cancelButton;
   };
 
-  getCloseButton = (): HTMLButtonElement => {
-    const closeButton = this.element.querySelector('.dx-closebutton.dx-button') as HTMLButtonElement;
-    if (!closeButton) {
-      throw new Error('Close button not found');
-    }
-    return closeButton;
-  };
+  getCloseButton = (): HTMLButtonElement => this.queries.getByRole('button', { name: 'Close' }) as HTMLButtonElement;
 
   getFormEditor = (fieldName: string): HTMLElement | null => {
     const form = this.getForm();
@@ -134,11 +137,5 @@ export class PopupModel {
     return form.querySelector(`[data-field="${fieldName}"]`);
   };
 
-  getEditSeriesButton = (): HTMLElement => {
-    const editSeriesButton = document.querySelector('[aria-label="Edit series"]') as HTMLElement;
-    if (!editSeriesButton) {
-      throw new Error('Edit series button not found');
-    }
-    return editSeriesButton;
-  };
+  getEditSeriesButton = (): HTMLElement => this.queries.getByRole('button', { name: 'Edit series' }) as HTMLElement;
 }
