@@ -49,7 +49,7 @@
 // #region padding
 
 // (0,4,1)
-.dx-datagrid-rowsview .dx-row.dx-group-row:first-child td {
+.dx-datagrid-sticky-columns .dx-row.dx-group-row:first-child td {
   padding-top: $material-grid-base-cell-vertical-padding;
 }
 
