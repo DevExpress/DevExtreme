@@ -278,4 +278,6 @@ test('Validation errors persist after resize', async (t) => {
       }],
     },
   ],
-}));
+})).after(async (t) => {
+  await t.resizeWindow(1200, 800);
+});
