@@ -2,7 +2,15 @@ import $ from 'jquery';
 import {
     FIELD_ITEM_CLASS,
     FIELD_ITEM_LABEL_CLASS,
+    FORM_FIELD_ITEM_COL_CLASS,
 } from '__internal/ui/form/constants';
+
+import {
+    LAYOUT_MANAGER_FIRST_ROW_CLASS,
+    LAYOUT_MANAGER_LAST_ROW_CLASS,
+    LAYOUT_MANAGER_FIRST_COL_CLASS,
+    LAYOUT_MANAGER_LAST_COL_CLASS,
+} from '__internal/ui/form/form.layout_manager';
 
 import {
     FLEX_LAYOUT_CLASS,
@@ -356,7 +364,7 @@ QUnit.module('CSS position classes after screen size change', {
     const screenFactors = ['xs', 'sm', 'md', 'lg'];
 
     screenFactors.forEach((targetScreen) => {
-        test(`classes should be updated correctly when resizing from lg to ${targetScreen}`, function(assert) {
+        QUnit.test(`classes should be updated correctly when resizing from lg to ${targetScreen}`, function(assert) {
             let screen = 'lg';
 
             if(targetScreen === screen) {
@@ -377,13 +385,12 @@ QUnit.module('CSS position classes after screen size change', {
 
             screen = targetScreen;
             instance.updateResponsiveBoxLayout();
-            resizeCallbacks.fire();
 
             this.assertPositionCssClasses($container, expectedColCount, assert);
         });
     });
 
-    test('classes should be updated correctly through multiple screen size transitions', function(assert) {
+    QUnit.test('classes should be updated correctly through multiple screen size transitions', function(assert) {
         const colCountByScreen = { xs: 1, sm: 2, md: 3, lg: 4 };
         let screen = 'lg';
 
@@ -397,17 +404,14 @@ QUnit.module('CSS position classes after screen size change', {
 
         screen = 'xs';
         instance.updateResponsiveBoxLayout();
-        resizeCallbacks.fire();
         this.assertPositionCssClasses($container, colCountByScreen.xs, assert);
 
         screen = 'sm';
         instance.updateResponsiveBoxLayout();
-        resizeCallbacks.fire();
         this.assertPositionCssClasses($container, colCountByScreen.sm, assert);
 
         screen = 'md';
         instance.updateResponsiveBoxLayout();
-        resizeCallbacks.fire();
         this.assertPositionCssClasses($container, colCountByScreen.md, assert);
     });
 });
