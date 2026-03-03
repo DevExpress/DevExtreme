@@ -5,7 +5,8 @@ const fs = require('fs');
 const path = require('path');
 
 const { getDevExpressLCXKey } = require('./dx-get-lcx');
-const { convertLCXtoLCP } = require('./dx-lcx-2-lcp');
+const { convertLCXtoLCP, getLCPWarning } = require('./dx-lcx-2-lcp');
+const { MESSAGES } = require('./messages');
 
 const EXPORT_NAME = 'licenseKey';
 const TRIAL_VALUE = 'TRIAL';
@@ -126,24 +127,22 @@ function main() {
 
     const { key: lcx, source } = getDevExpressLCXKey() || {};
 
-    process.stdout.write(
-        `DevExpress license key (LCX) retrieved from: ${source || '(unknown source)'}\n`
-    );
-
     let lcp = TRIAL_VALUE;
 
     if(lcx) {
         try {
             lcp = convertLCXtoLCP(lcx);
+            const warning = getLCPWarning(lcp);
+            if(warning) {
+                process.stderr.write(`DevExpress license key (LCX) retrieved from: ${source}\n`);
+                process.stderr.write(`[devextreme-license] Warning: ${warning}\n`);
+            }
         } catch{
-            process.stderr.write(
-                'DevExpress license key was found but could not be converted to LCP.\n'
-            );
+            process.stderr.write(`DevExpress license key (LCX) retrieved from: ${source}\n`);
+            process.stderr.write(`[devextreme-license] Warning: ${MESSAGES.keyNotFound}\n`);
         }
     } else {
-        process.stderr.write(
-            'DevExpress license key (LCX) was not found on this machine.\n'
-        );
+        process.stderr.write(`[devextreme-license] Warning: ${MESSAGES.keyNotFound}\n`);
     }
 
     if(!opts.outPath) {
