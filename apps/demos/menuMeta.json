@@ -3671,6 +3671,14 @@
                   "/Models/SampleData/AppointmentsWorkHours.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Hidden Days",
+                "Name": "HiddenDays",
+                "Widget": "Scheduler",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-2026-hide-specific-days.xml"
               }
             ]
           },
