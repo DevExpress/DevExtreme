@@ -41,6 +41,44 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+    <style>
+        .selected-data,
+        .options {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(191, 191, 191, 0.15);
+        }
+
+        .selected-data .caption {
+            font-weight: bold;
+            font-size: 115%;
+        }
+
+        .options .caption {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .option {
+            margin-top: 10px;
+        }
+
+        .option > span {
+            width: 120px;
+            display: inline-block;
+        }
+
+        .option > .dx-widget {
+            display: inline-block;
+            vertical-align: middle;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .dx-list-item-content {
+            /*user-select: all;*/
+        }
+    </style>
 </head>
 <body class="dx-surface">
     <div role="main">
@@ -49,14 +87,138 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div class="dx-viewport demo-container">
+            <div id="list-demo">
+                <div class="widget-container">
+                    <div id="simpleList"></div>
+                    <div class="selected-data">
+                        <span class="caption">Selected IDs: </span>
+                        <span id="selectedItemKeys"></span>
+                    </div>
+                </div>
+                <div class="options">
+                    <div class="caption">Options</div>
+                    <div class="option">
+                        <span>Selection Mode</span>
+                        <div id="selectionMode"></div>
+                    </div>
+                    <div class="option">
+                        <span>Select All Mode</span>
+                        <div id="selectAllMode"></div>
+                    </div>
+                    <div class="option">
+                        <span>Select By Click</span>
+                        <div id="selectByClick"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script>
             $(() => {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
+                const listWidget = $('#simpleList').dxList({
+                    dataSource: new DevExpress.data.DataSource({
+                        store: new DevExpress.data.ArrayStore({
+                            key: 'id',
+                            data: tasks,
+                        }),
+                    }),
+                    // allowItemDeleting: true,
+                    useNativeScrolling: false,
+                    // itemDeleteMode: 'swipe',
+                    height: 400,
+                    showSelectionControls: true,
+                    selectionMode: 'all',
+                    selectByClick: false,
+                    onSelectionChanged() {
+                        $('#selectedItemKeys').text(listWidget.option('selectedItemKeys').join(', '));
+                    },
+                }).dxList('instance');
+
+                $('#selectionMode').dxSelectBox({
+                    value: 'all',
+                    items: ['none', 'single', 'multiple', 'all'],
+                    inputAttr: { 'aria-label': 'Selection Mode' },
+                    onValueChanged(data) {
+                        listWidget.option('selectionMode', data.value);
+                        selectAllModeChooser.option('disabled', data.value !== 'all');
+
+                        if (data.value === 'none') {
+                            $('#selectedItemKeys').text('');
+                        }
+                    },
+                });
+
+                const selectAllModeChooser = $('#selectAllMode').dxSelectBox({
+                    disabled: false,
+                    items: ['page', 'allPages'],
+                    value: 'page',
+                    inputAttr: { 'aria-label': 'Select All Mode' },
+                    onValueChanged(data) {
+                        listWidget.option('selectAllMode', data.value);
+                    },
+                }).dxSelectBox('instance');
+
+                $('#selectByClick').dxCheckBox({
+                    value: false,
+                    elementAttr: { 'aria-label': 'Selection By Click' },
+                    onValueChanged(e) {
+                        listWidget.option('selectByClick', e.value);
+                    },
                 });
             });
+
+
+            const tasks = [{ id: 1, text: 'Prepare 2016 Financial' },
+                { id: 2, text: 'Prepare 2016 Marketing Plan' },
+                { id: 3, text: 'Update Personnel Files' },
+                { id: 4, text: 'Review Health Insurance Options Under the Affordable Care Act' },
+                { id: 5, text: 'New Brochures' },
+                { id: 6, text: '2016 Brochure Designs' },
+                { id: 7, text: 'Brochure Design Review' },
+                { id: 8, text: 'Website Re-Design Plan' },
+                { id: 9, text: 'Rollout of New Website and Marketing Brochures' },
+                { id: 10, text: 'Create 2012 Sales Report' },
+                { id: 11, text: 'Direct vs Online Sales Comparison Report' },
+                { id: 12, text: 'Review 2012 Sales Report and Approve 2016 Plans' },
+                { id: 13, text: 'Submit Signed NDA' },
+                { id: 14, text: 'Update Revenue Projections' },
+                { id: 15, text: 'Review Revenue Projections' },
+                { id: 16, text: 'Comment on Revenue Projections' },
+                { id: 17, text: 'Scan Health Insurance Forms' },
+                { id: 18, text: 'Sign Health Insurance Forms' },
+                { id: 19, text: 'Follow up with West Coast Stores' },
+                { id: 20, text: 'Follow up with East Coast Stores' },
+                { id: 21, text: 'Submit Refund Report for 2016 Recall' },
+                { id: 22, text: 'Give Final Approval for Refunds' },
+                { id: 23, text: 'Prepare Product Recall Report' },
+                { id: 24, text: 'Review Product Recall Report by Engineering Team' },
+                { id: 25, text: 'Review Training Course for any Omissions' },
+                { id: 26, text: 'Review Overtime Report' },
+                { id: 27, text: 'Submit Overtime Request Forms' },
+                { id: 28, text: 'Overtime Approval Guidelines' },
+                { id: 29, text: 'Create Report on Customer Feedback' },
+                { id: 30, text: 'Review Customer Feedback Report' },
+                { id: 31, text: 'Customer Feedback Report Analysis' },
+                { id: 32, text: 'Prepare Shipping Cost Analysis Report' },
+                { id: 33, text: 'Complete Shipper Selection Form' },
+                { id: 34, text: 'Upgrade Server Hardware' },
+                { id: 35, text: 'Upgrade Personal Computers' },
+                { id: 36, text: 'Approve Personal Computer Upgrade Plan' },
+                { id: 37, text: 'Estimate Time Required to Touch-Enable Apps' },
+                { id: 38, text: 'Report on Tranistion to Touch-Based Apps' },
+                { id: 39, text: 'Try New Touch-Enabled WinForms Apps' },
+                { id: 40, text: 'Site Up-Time Report' },
+                { id: 41, text: 'Review Site Up-Time Report' },
+                { id: 42, text: 'Review Online Sales Report' },
+                { id: 43, text: 'Determine New Online Marketing Strategy' },
+                { id: 44, text: 'Submit New Website Design' },
+                { id: 45, text: 'Create Icons for Website' },
+                { id: 46, text: 'Review PSDs for New Website' },
+                { id: 47, text: 'Create New Shopping Cart' },
+                { id: 48, text: 'Launch New Website' },
+                { id: 49, text: 'Update Customer Shipping Profiles' },
+                { id: 50, text: 'Create New Shipping Return Labels' }];
+
         </script>
     </div>
 </body>
