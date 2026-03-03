@@ -1,6 +1,7 @@
 const { createUnplugin } = require('unplugin');
 const { getDevExpressLCXKey } = require('./dx-get-lcx');
-const { tryConvertLCXtoLCP } = require('./dx-lcx-2-lcp');
+const { tryConvertLCXtoLCP, getLCPWarning } = require('./dx-lcx-2-lcp');
+const { MESSAGES } = require('./messages');
 
 const PLACEHOLDER = '/* ___$$$$$___devextreme___lcp___placeholder____$$$$$ */';
 // Target only the specific config file to avoid scanning all files during build
@@ -26,23 +27,35 @@ const DevExtremeLicensePlugin = createUnplugin(() => {
         try {
             const { key: lcx, source } = getDevExpressLCXKey() || {};
 
-            const sourceMessage = `[devextreme-bundler-plugin] DevExpress license key (LCX) retrieved from: ${source || '(unknown source)'}`;
-            process.stdout.write(sourceMessage + '\n');
-
             if(!lcx) {
-                warnOnce(ctx, '[devextreme-bundler-plugin] LCX not found. Placeholder will remain.');
+                warnOnce(ctx, `[devextreme-bundler-plugin] Warning: ${MESSAGES.keyNotFound}`);
                 return (lcpCache = null);
             }
 
             const lcp = tryConvertLCXtoLCP(lcx);
             if(!lcp) {
-                warnOnce(ctx, '[devextreme-bundler-plugin] LCX->LCP conversion failed. Placeholder will remain.');
+                try {
+                    if(ctx && typeof ctx.warn === 'function') {
+                        ctx.warn(`[devextreme-bundler-plugin] DevExpress license key (LCX) retrieved from: ${source}`);
+                        ctx.warn(`[devextreme-bundler-plugin] Warning: ${MESSAGES.keyNotFound}`);
+                    }
+                } catch{}
                 return (lcpCache = null);
+            }
+
+            const warning = getLCPWarning(lcp);
+            if(warning) {
+                try {
+                    if(ctx && typeof ctx.warn === 'function') {
+                        ctx.warn(`[devextreme-bundler-plugin] DevExpress license key (LCX) retrieved from: ${source}`);
+                        ctx.warn(`[devextreme-bundler-plugin] Warning: ${warning}`);
+                    }
+                } catch{}
             }
 
             return (lcpCache = lcp);
         } catch{
-            warnOnce(ctx, '[devextreme-bundler-plugin] Failed to resolve license key. Placeholder will remain.');
+            warnOnce(ctx, `[devextreme-bundler-plugin] Warning: ${MESSAGES.resolveFailed}`);
             return (lcpCache = null);
         }
     }
