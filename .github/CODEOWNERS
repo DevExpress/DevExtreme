@@ -1,8 +1,3 @@
-# General d.ts files
-
-/packages/devextreme/js/**/*.d.ts                               @DevExpress/devextreme-apireviewers
-/packages/devextreme/ts/**                                      @DevExpress/devextreme-apireviewers
-
 # Localization strings
 
 /packages/devextreme/js/localization/messages/**           @DevExpress/devextreme-techwriters
@@ -10,7 +5,7 @@
 # Grids
 
 ## grid_core
-/packages/devextreme/js/common/grids.d.ts @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/common/grids.d.ts @DevExpress/devextreme-grids
 
 /packages/devextreme/js/__internal/grids/grid_core/**           @DevExpress/devextreme-grids
 /packages/devextreme/js/ui/shared/**                            @DevExpress/devextreme-grids
@@ -21,8 +16,8 @@
 /packages/devextreme-scss/scss/widgets/material/gridBase/**     @DevExpress/devextreme-grids
 
 ## data_grid
-/packages/devextreme/js/ui/data_grid.d.ts       @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/data_grid_types.d.ts @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/data_grid.d.ts       @DevExpress/devextreme-grids
+/packages/devextreme/js/ui/data_grid_types.d.ts @DevExpress/devextreme-grids
 
 /packages/devextreme/js/ui/data_grid.js                         @DevExpress/devextreme-grids
 /packages/devextreme/js/ui/data_grid/**                         @DevExpress/devextreme-grids
@@ -41,8 +36,8 @@
 /apps/demos/testing/widgets/datagrid/** @DevExpress/devextreme-grids
 
 ## tree_list
-/packages/devextreme/js/ui/tree_list.d.ts       @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/tree_list_types.d.ts @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/tree_list.d.ts       @DevExpress/devextreme-grids
+/packages/devextreme/js/ui/tree_list_types.d.ts @DevExpress/devextreme-grids
 
 /packages/devextreme/js/ui/tree_list.js                     @DevExpress/devextreme-grids
 /packages/devextreme/js/ui/tree_list/**                     @DevExpress/devextreme-grids
@@ -78,8 +73,8 @@
 /apps/demos/Demos/FilterBuilder/** @DevExpress/devextreme-grids
 
 ## sortable
-/packages/devextreme/js/ui/sortable_types.d.ts @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/sortable.d.ts       @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/sortable_types.d.ts @DevExpress/devextreme-grids
+/packages/devextreme/js/ui/sortable.d.ts       @DevExpress/devextreme-grids
 
 /packages/devextreme/js/ui/sortable.js           @DevExpress/devextreme-grids
 /packages/devextreme/js/__internal/m_sortable.ts @DevExpress/devextreme-grids
@@ -93,8 +88,8 @@
 /apps/demos/Demos/Sortable/** @DevExpress/devextreme-grids
 
 ## draggable
-/packages/devextreme/js/ui/draggable_types.d.ts @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/draggable.d.ts       @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/draggable_types.d.ts @DevExpress/devextreme-grids
+/packages/devextreme/js/ui/draggable.d.ts       @DevExpress/devextreme-grids
 
 /packages/devextreme/js/ui/draggable.js           @DevExpress/devextreme-grids
 /packages/devextreme/js/__internal/m_draggable.ts @DevExpress/devextreme-grids
@@ -106,8 +101,8 @@
 # Scheduler
 
 ## scheduler
-/packages/devextreme/js/ui/scheduler_types.d.ts @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/scheduler.d.ts       @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/scheduler_types.d.ts @DevExpress/devextreme-scheduler
+/packages/devextreme/js/ui/scheduler.d.ts       @DevExpress/devextreme-scheduler
 
 /packages/devextreme/js/ui/scheduler.js         @DevExpress/devextreme-scheduler
 /packages/devextreme/js/__internal/scheduler/** @DevExpress/devextreme-scheduler
@@ -125,8 +120,8 @@
 /apps/demos/testing/widgets/scheduler/** @DevExpress/devextreme-scheduler
 
 ## pivot_grid
-/packages/devextreme/js/ui/pivot_grid_types.d.ts @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/pivot_grid.d.ts       @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/pivot_grid_types.d.ts @DevExpress/devextreme-scheduler
+/packages/devextreme/js/ui/pivot_grid.d.ts       @DevExpress/devextreme-scheduler
 
 /packages/devextreme/js/ui/pivot_grid.js @DevExpress/devextreme-scheduler
 /packages/devextreme/js/ui/pivot_grid/** @DevExpress/devextreme-scheduler
@@ -144,13 +139,13 @@
 /apps/demos/testing/widgets/pivotgrid/** @DevExpress/devextreme-scheduler
 
 ### field chooser
-/packages/devextreme/js/ui/pivot_grid_field_chooser_types.d.ts @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/pivot_grid_field_chooser.d.ts       @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/pivot_grid_field_chooser_types.d.ts @DevExpress/devextreme-scheduler
+/packages/devextreme/js/ui/pivot_grid_field_chooser.d.ts       @DevExpress/devextreme-scheduler
 /packages/devextreme/js/ui/pivot_grid_field_chooser.js         @DevExpress/devextreme-scheduler
 
 ## pagination
-/packages/devextreme/js/ui/pagination_types.d.ts @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/pagination.d.ts       @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/pagination_types.d.ts @DevExpress/devextreme-scheduler
+/packages/devextreme/js/ui/pagination.d.ts       @DevExpress/devextreme-scheduler
 
 /packages/devextreme/js/ui/pagination.js         @DevExpress/devextreme-scheduler
 /packages/devextreme/js/__internal/pagination/** @DevExpress/devextreme-scheduler
