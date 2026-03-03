@@ -56,6 +56,9 @@ test('The noDataText element should be rendered when a lookup column is filtered
     }],
     showBorders: true,
     filterRow: { visible: true },
+    onEditorPreparing(e) {
+      e.updateValueTimeout = 0;
+    },
   });
 });
 
