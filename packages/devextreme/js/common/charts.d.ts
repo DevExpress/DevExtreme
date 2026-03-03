@@ -45,11 +45,21 @@ export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
  */
 export type ChartsDataType = 'datetime' | 'numeric' | 'string';
 
+type Tail<T extends any[]> = T extends [any, ...infer R] ? R : [];
+
+type RepeatUnion<
+    T extends string,
+    Depth extends any[],
+> = Depth['length'] extends 0
+        ? never
+        : T | `${T}${RepeatUnion<T, Tail<Depth>>}`;
+
 /**
  * @public
  * @namespace DevExpress.common.charts
+ * @type 'dash'|'dot'|'longDash'|'solid'
  */
-export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+export type DashStyle = RepeatUnion<'dash' | 'dot' | 'longDash' | 'solid', [1, 1, 1, 1, 1]>;
 
 /**
  * @public
