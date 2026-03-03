@@ -953,25 +953,15 @@ export const ControlledMode: Story = {
         focusStateEnabled,
     }) => {
         const [messages, setMessages] = useState(items);
-        const [text, setText] = useState(inputFieldText);
+        const [text, setText] = useState(inputFieldText ?? '');
 
         const onMessageEntered = useCallback(({ message }) => {
-            const updatedMessages = [...messages, message];
-            setMessages(updatedMessages);
-            setText('');
-        }, [messages]);
+            setMessages((prev) => [...prev, message]);
+        }, []);
 
         const onInputFieldTextChanged = useCallback((e: ChatTypes.InputFieldTextChangedEvent) => {
             setText(e.value ?? '');
         }, []);
-
-        useEffect(() => {
-            setMessages(items);
-        }, [items]);
-
-        useEffect(() => {
-            setText(inputFieldText);
-        }, [inputFieldText]);
 
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
