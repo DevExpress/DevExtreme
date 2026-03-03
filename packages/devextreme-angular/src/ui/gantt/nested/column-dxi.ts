@@ -14,9 +14,9 @@ import {
 
 
 
-import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
-import { FilterOperation, FilterType, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
-import { Format } from 'devextreme/common/core/localization';
+import type { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
+import type { FilterOperation, FilterType, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
+import type { Format } from 'devextreme/common/core/localization';
 
 import {
     DxIntegrationModule,

@@ -16,7 +16,7 @@ import {
 
 
 
-import { dxCardViewToolbarItem, PredefinedToolbarItem } from 'devextreme/ui/card_view';
+import type { dxCardViewToolbarItem, PredefinedToolbarItem } from 'devextreme/ui/card_view';
 
 import {
     DxIntegrationModule,

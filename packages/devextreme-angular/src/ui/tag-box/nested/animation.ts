@@ -14,7 +14,7 @@ import {
 
 
 
-import { AnimationConfig } from 'devextreme/common/core/animation';
+import type { AnimationConfig } from 'devextreme/common/core/animation';
 
 import {
     DxIntegrationModule,
