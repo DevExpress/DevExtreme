@@ -98,7 +98,7 @@ import {
   shouldPreventScroll,
 } from './m_keyboard_navigation_utils';
 import { keyboardNavigationScrollableA11yExtender } from './scrollable_a11y';
-import type { NavigationDirection, NavigationDirectionExtended, NavigationElementType } from './types';
+import type { NavigationDirection, NavigationElementType, NavigationKeyCode } from './types';
 
 export class KeyboardNavigationController extends KeyboardNavigationControllerCore {
   private _updateFocusTimeout: any;
@@ -2104,7 +2104,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   private _getNextCell(
-    keyCode: NavigationDirectionExtended,
+    keyCode: NavigationKeyCode,
     elementType?: NavigationElementType,
     cellPosition?: FocusedCellPosition,
   ): dxElementWrapper | null {
@@ -2116,19 +2116,19 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     const newPosition = this._getNewPositionByCode(focusedPosition, elementType, keyCode);
     const $cell = $(this._getCell(newPosition));
-    const $adjustedCell = this._adjustCellOnVerticalNav($cell, newPosition, keyCode);
-    const $validCell = this._resolveInvalidCell($adjustedCell, keyCode, newPosition);
+    const $adjustedCell = this.adjustCellOnVerticalNav($cell, newPosition, keyCode);
+    const $validCell = this.resolveInvalidCell($adjustedCell, newPosition, keyCode);
 
-    return this._getNextCellSkippingHiddenRow($validCell, keyCode, focusedPosition);
+    return this.resolveHiddenRowCell($validCell, focusedPosition, keyCode);
   }
 
   // T1322130, T1322440: During vertical navigation, command cells (e.g. expand)
   // may be invalid because their column inherits groupIndex from the grouped data column.
   // Find the first valid data cell in the target row instead of recursing to the next row.
-  private _adjustCellOnVerticalNav(
+  private adjustCellOnVerticalNav(
     $cell: dxElementWrapper,
     position: FocusedCellPosition,
-    keyCode: NavigationDirectionExtended,
+    keyCode: NavigationKeyCode,
   ): dxElementWrapper {
     const isVerticalNav = keyCode === 'upArrow' || keyCode === 'downArrow';
 
@@ -2146,10 +2146,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return $cell;
   }
 
-  private _resolveInvalidCell(
+  private resolveInvalidCell(
     $cell: dxElementWrapper,
-    keyCode: NavigationDirectionExtended,
     position: FocusedCellPosition,
+    keyCode: NavigationKeyCode,
   ): dxElementWrapper | undefined | null {
     if (!isElementDefined($cell) || this._isCellValid($cell)) {
       return $cell;
@@ -2170,10 +2170,10 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       : this._getNextCell(keyCode, 'cell', position);
   }
 
-  private _getNextCellSkippingHiddenRow(
+  private resolveHiddenRowCell(
     $cell: dxElementWrapper | undefined | null,
-    keyCode: NavigationDirectionExtended,
     originalPosition: FocusedCellPosition,
+    keyCode: NavigationKeyCode,
   ): dxElementWrapper | null {
     if (!isElementDefined($cell)) {
       return null;
