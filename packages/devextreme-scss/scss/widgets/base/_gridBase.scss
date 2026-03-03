@@ -199,10 +199,10 @@
 
     .dx-#{$widget-name}-sticky-column, .dx-#{$widget-name}-sticky-column-left, .dx-#{$widget-name}-sticky-column-right {
       position: sticky;
-      z-index: 3;
+      z-index: 2;
 
       &.dx-#{$widget-name}-sticky-column-right {
-        z-index: 4;
+        z-index: 3;
       }
     }
 
@@ -290,7 +290,7 @@
 
   .dx-#{$widget-name}-columns-separator {
     position: absolute;
-    z-index: 5;
+    z-index: 4;
     width: 3px;
   }
 
@@ -303,7 +303,7 @@
     width: 100%;
     position: absolute;
     top: 0;
-    z-index: 5;
+    z-index: 4;
     cursor: col-resize;
   }
 
@@ -537,8 +537,8 @@
         min-width: $grid-command-expand-column-width;
         max-width: $grid-command-expand-column-width;
 
-        /* NOTE: z-index of group row in sticky mode is 3 */
-        z-index: 4;
+        /* NOTE: z-index of group row in sticky mode is 2 */
+        z-index: 3;
 
         @include user-select(none);
       }
@@ -1093,11 +1093,11 @@
     }
 
     .dx-focused-fixed-element {
-      z-index: 4;
+      z-index: 3;
     }
 
     .dx-scrollable-scrollbar {
-      z-index: 5;
+      z-index: 4;
     }
   }
 
@@ -1147,7 +1147,7 @@
 
         .dx-#{$widget-name}-sticky-column-right {
           &.dx-command-expand {
-            z-index: 5;
+            z-index: 4;
           }
         }
       }
