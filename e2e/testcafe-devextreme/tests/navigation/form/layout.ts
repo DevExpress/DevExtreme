@@ -1,12 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
+import Form from 'devextreme-testcafe-models/form/form';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { addCaptionTo, appendElementTo, setAttribute } from '../../../helpers/domUtils';
 
 const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
-const validateForm = ClientFunction(() => { ($('#container') as any).dxForm('instance').validate(); });
 
 fixture.disablePageReloads`Form`
   .page(url(__dirname, '../../container.html'));
@@ -233,8 +233,10 @@ test('SimpleItem: item1_cSpan_2', async (t) => {
 test('Validation errors persist after resize', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  const form = new Form('#container');
+
   await waitFont();
-  await validateForm();
+  await form.validate();
 
   await t.resizeWindow(400, 800);
 
@@ -282,6 +284,4 @@ test('Validation errors persist after resize', async (t) => {
       }],
     },
   ],
-})).after(async (t) => {
-  await t.resizeWindow(1200, 800);
-});
+}));
