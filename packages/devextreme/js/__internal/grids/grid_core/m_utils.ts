@@ -211,8 +211,6 @@ export default {
 
     const noDataClass = that.addWidgetPrefix(NO_DATA_CLASS);
     let noDataElement = $element.find(`.${noDataClass}`).last();
-    const isVisible = this._dataController.isEmpty();
-    const isLoading = this._dataController.isLoading();
 
     if (!noDataElement.length) {
       noDataElement = $('<span>')
@@ -223,14 +221,17 @@ export default {
       noDataElement.appendTo($element);
     }
 
-    if (isVisible && !isLoading) {
-      noDataElement
-        .removeClass('dx-hidden')
-        .text(that._getNoDataText());
-    } else {
-      noDataElement
-        .addClass('dx-hidden');
-    }
+    this._dataController.waitReady().done(() => {
+      const isVisible = this._dataController.isEmpty();
+      if (isVisible) {
+        noDataElement
+          .removeClass('dx-hidden')
+          .text(that._getNoDataText());
+      } else {
+        noDataElement
+          .addClass('dx-hidden');
+      }
+    });
   },
 
   renderLoadPanel($element, $container, isLocalStore) {
