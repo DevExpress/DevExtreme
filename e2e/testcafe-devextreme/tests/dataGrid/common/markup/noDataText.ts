@@ -11,29 +11,6 @@ fixture.disablePageReloads`No Data`
 const GRID_CONTAINER = '#container';
 const OVERLAY_SELECTOR = '.dx-overlay-wrapper';
 
-test('The noDataText element should be centered (T1178289)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const dataGrid = new DataGrid(GRID_CONTAINER);
-
-  await dataGrid.option('dataSource', []);
-
-  await testScreenshot(t, takeScreenshot, 'grid-no-data-text-position.png', { element: dataGrid.element });
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await createWidget('dxDataGrid', {
-    columns: ['column1', 'column2', 'column3', 'column4', 'column5'],
-    showBorders: true,
-    columnMinWidth: 200,
-    width: 600,
-    stateStoring: {
-      enabled: true,
-      storageKey: 'testStorageKey',
-    },
-  });
-});
-
 test('The noDataText element should be rendered when a lookup column is filtered (T1293839)', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -48,12 +25,13 @@ test('The noDataText element should be rendered when a lookup column is filtered
   const lookupList = new List(OVERLAY_SELECTOR);
   const lookupItem = lookupList.getItem(1);
   await t.click(lookupItem.element);
-  
   await t.typeText(nameFilterEditor.element, 'test');
 
-  await dataGrid.isReady();
-
   // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
   await testScreenshot(t, takeScreenshot, 'T1293839-grid-no-data-text-rendered.png', { element: dataGrid.element });
   await t
     .expect(compareResults.isValid())
@@ -78,5 +56,28 @@ test('The noDataText element should be rendered when a lookup column is filtered
     }],
     showBorders: true,
     filterRow: { visible: true },
+  });
+});
+
+test('The noDataText element should be centered (T1178289)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(GRID_CONTAINER);
+
+  await dataGrid.option('dataSource', []);
+
+  await testScreenshot(t, takeScreenshot, 'grid-no-data-text-position.png', { element: dataGrid.element });
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    columns: ['column1', 'column2', 'column3', 'column4', 'column5'],
+    showBorders: true,
+    columnMinWidth: 200,
+    width: 600,
+    stateStoring: {
+      enabled: true,
+      storageKey: 'testStorageKey',
+    },
   });
 });
