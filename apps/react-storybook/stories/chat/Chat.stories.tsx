@@ -914,3 +914,85 @@ export const FileAttachments: Story = {
     );
   },
 };
+
+export const ControlledMode: Story = {
+    args: {
+        items: initialMessages,
+        user: firstAuthor,
+        ...commonArgs,
+    },
+    argTypes: {
+        user: {
+            control: 'select',
+            options: [firstAuthor.name, secondAuthor.name],
+            mapping: {
+                [firstAuthor.name]: firstAuthor,
+                [secondAuthor.name]: secondAuthor,
+            },
+            defaultValue: firstAuthor.name,
+        },
+        inputFieldText: {
+            control: 'text',
+        },
+        hint: {
+            control: 'text',
+        },
+    },
+    render: ({
+        width,
+        height,
+        disabled,
+        rtlEnabled,
+        user,
+        items,
+        inputFieldText,
+        visible,
+        hint,
+        activeStateEnabled,
+        hoverStateEnabled,
+        focusStateEnabled,
+    }) => {
+        const [messages, setMessages] = useState(items);
+        const [text, setText] = useState(inputFieldText);
+
+        const onMessageEntered = useCallback(({ message }) => {
+            const updatedMessages = [...messages, message];
+            setMessages(updatedMessages);
+            setText('');
+        }, [messages]);
+
+        const onInputFieldTextChanged = useCallback((e: ChatTypes.InputFieldTextChangedEvent) => {
+            setText(e.value ?? '');
+        }, []);
+
+        useEffect(() => {
+            setMessages(items);
+        }, [items]);
+
+        useEffect(() => {
+            setText(inputFieldText);
+        }, [inputFieldText]);
+
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <Chat
+                    width={width}
+                    height={height}
+                    items={messages}
+                    disabled={disabled}
+                    rtlEnabled={rtlEnabled}
+                    user={user}
+                    visible={visible}
+                    hint={hint}
+                    activeStateEnabled={activeStateEnabled}
+                    focusStateEnabled={focusStateEnabled}
+                    hoverStateEnabled={hoverStateEnabled}
+                    inputFieldText={text}
+                    onInputFieldTextChanged={onInputFieldTextChanged}
+                    onMessageEntered={onMessageEntered}
+                >
+                </Chat>
+            </div>
+        );
+    }
+}
