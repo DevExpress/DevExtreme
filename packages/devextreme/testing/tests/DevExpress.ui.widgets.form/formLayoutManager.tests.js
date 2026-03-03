@@ -2,6 +2,7 @@ import $ from 'jquery';
 import {
     FIELD_ITEM_CLASS,
     FIELD_ITEM_LABEL_CLASS,
+    FORM_FIELD_ITEM_COL_CLASS,
 } from '__internal/ui/form/constants';
 
 import {
@@ -10,6 +11,12 @@ import {
 } from '__internal/ui/form/components/field_item';
 
 import { generateFormItems, assertFormItemsPositionCssClasses } from '../../helpers/formLayoutManager.js';
+
+import {
+    LAYOUT_MANAGER_FIRST_ROW_CLASS,
+    LAYOUT_MANAGER_FIRST_COL_CLASS,
+    LAYOUT_MANAGER_LAST_COL_CLASS,
+} from '__internal/ui/form/form.layout_manager';
 
 import 'ui/form';
 import 'ui/switch';
@@ -339,7 +346,7 @@ QUnit.module('CSS position classes after screen size change', () => {
                 items: generateFormItems(12),
                 colCount: 4,
                 colCountByScreen,
-                screenByWidth: function() { return screen; },
+                screenByWidth: () => screen,
             }).dxLayoutManager('instance');
 
             screen = targetScreen;
@@ -358,7 +365,7 @@ QUnit.module('CSS position classes after screen size change', () => {
             items: generateFormItems(12),
             colCount: 4,
             colCountByScreen,
-            screenByWidth: function() { return screen; },
+            screenByWidth: () => screen,
         }).dxLayoutManager('instance');
 
         screen = 'xs';
@@ -372,5 +379,59 @@ QUnit.module('CSS position classes after screen size change', () => {
         screen = 'md';
         instance.updateResponsiveBoxLayout();
         assertFormItemsPositionCssClasses($container, colCountByScreen.md, assert);
+    });
+
+    QUnit.test('classes should be updated correctly for items with colSpan', function(assert) {
+        const colCountByScreen = { xs: 1, sm: 2, md: 3, lg: 3 };
+        let screen = 'lg';
+
+        const $container = $('#container');
+        const instance = $container.dxLayoutManager({
+            items: [
+                { dataField: 'field0', colSpan: 2 },
+                { dataField: 'field1' },
+                { dataField: 'field2' },
+                { dataField: 'field3' },
+            ],
+            colCount: 3,
+            colCountByScreen,
+            screenByWidth: () => screen,
+        }).dxLayoutManager('instance');
+
+        const assertClasses = function(expectedColCount) {
+            const $fieldItems = $container.find(`.${FIELD_ITEM_CLASS}`);
+
+            if(expectedColCount === 1) {
+                $fieldItems.each((index, element) => {
+                    const $el = $(element);
+                    assert.ok($el.hasClass(LAYOUT_MANAGER_FIRST_COL_CLASS), `item ${index}: has dx-first-col in single column`);
+                    assert.ok($el.hasClass(LAYOUT_MANAGER_LAST_COL_CLASS), `item ${index}: has dx-last-col in single column`);
+                    assert.ok($el.hasClass(`${FORM_FIELD_ITEM_COL_CLASS}0`), `item ${index}: has dx-col-0 in single column`);
+                });
+            } else if(expectedColCount === 2) {
+                const $first = $fieldItems.eq(0);
+                assert.ok($first.hasClass(LAYOUT_MANAGER_FIRST_COL_CLASS), 'colSpan item: has dx-first-col');
+                assert.ok($first.hasClass(LAYOUT_MANAGER_LAST_COL_CLASS), 'colSpan item spanning full width: has dx-last-col');
+                assert.ok($first.hasClass(LAYOUT_MANAGER_FIRST_ROW_CLASS), 'colSpan item: has dx-first-row');
+            } else if(expectedColCount === 3) {
+                const $first = $fieldItems.eq(0);
+                assert.ok($first.hasClass(LAYOUT_MANAGER_FIRST_COL_CLASS), 'colSpan item: has dx-first-col');
+                assert.notOk($first.hasClass(LAYOUT_MANAGER_LAST_COL_CLASS), 'colSpan=2 in 3 cols: no dx-last-col');
+                assert.ok($first.hasClass(LAYOUT_MANAGER_FIRST_ROW_CLASS), 'colSpan item: has dx-first-row');
+
+                const $second = $fieldItems.eq(1);
+                assert.ok($second.hasClass(LAYOUT_MANAGER_LAST_COL_CLASS), 'item after colSpan: has dx-last-col');
+            }
+        };
+
+        assertClasses(3);
+
+        screen = 'sm';
+        instance.updateResponsiveBoxLayout();
+        assertClasses(2);
+
+        screen = 'xs';
+        instance.updateResponsiveBoxLayout();
+        assertClasses(1);
     });
 });

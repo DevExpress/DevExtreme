@@ -3098,7 +3098,7 @@ QUnit.test('Column count may depend on screen factor', function(assert) {
             sm: 1,
             md: 2
         },
-        screenByWidth: function() { return screen; },
+        screenByWidth: () => screen,
         items: ['name', 'lastName', 'room', 'isDeveloper']
     });
 
@@ -3174,7 +3174,7 @@ QUnit.test('Form should repaint once when screen factor changed', function(asser
             sm: 1,
             md: 2
         },
-        screenByWidth: function() { return screen; },
+        screenByWidth: () => screen,
         items: ['name', 'lastName', 'sex', 'room', 'isDeveloper']
     }).dxForm('instance');
     const refreshStub = sinon.stub(form, '_refresh');
@@ -3289,7 +3289,7 @@ QUnit.test('Column count for group may depend on screen factor', function(assert
             room: 1,
             isDeveloper: true
         },
-        screenByWidth: function() { return screen; },
+        screenByWidth: () => screen,
         items: [{
             itemType: 'group',
             caption: 'Group 1',
@@ -3335,7 +3335,7 @@ QUnit.test('Column count for tabs may depend on screen factor', function(assert)
             room: 1,
             isDeveloper: true
         },
-        screenByWidth: function() { return screen; },
+        screenByWidth: () => screen,
         items: [{
             itemType: 'tabbed',
             caption: 'Group 1',
@@ -4298,7 +4298,7 @@ QUnit.module('reset', () => {
             const value = 'Vins et alcools Chevalier (France)';
             const form = $('#form').dxForm({
                 formData: { name: name },
-                screenByWidth: function() { return screen; },
+                screenByWidth: () => screen,
                 colCountByScreen: {
                     sm: 1,
                     lg: 2
@@ -4334,7 +4334,7 @@ QUnit.module('reset', () => {
             const value = 'Vins et alcools Chevalier (France)';
             const form = $('#form').dxForm({
                 formData: { name: name },
-                screenByWidth: function() { return screen; },
+                screenByWidth: () => screen,
                 colCountByScreen: {
                     sm: 1,
                     lg: 2
@@ -4375,7 +4375,7 @@ QUnit.module('reset', () => {
             const value = 'Vins et alcools Chevalier (France)';
             const form = $('#form').dxForm({
                 formData: { name: name },
-                screenByWidth: function() { return screen; },
+                screenByWidth: () => screen,
                 colCountByScreen: {
                     sm: 1,
                     lg: 2

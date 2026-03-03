@@ -140,7 +140,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
   _labelTemplateRenderedCallCount?: number;
 
-  _cashedColCount?: number | null;
+  _cachedColCount?: number | null;
 
   _getDefaultOptions(): ExtendedLayoutManagerProperties {
     return {
@@ -569,12 +569,12 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     }
 
     if (colCount === 'auto') {
-      if (this._cashedColCount) {
-        return this._cashedColCount;
+      if (this._cachedColCount) {
+        return this._cachedColCount;
       }
 
       colCount = this._getMaxColCount();
-      this._cashedColCount = colCount;
+      this._cachedColCount = colCount;
     }
     // @ts-expect-error ts-error
     return colCount < 1 ? 1 : colCount;
@@ -598,7 +598,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
   }
 
   isCachedColCountObsolete(): boolean {
-    return !!this._cashedColCount && this._getMaxColCount() !== this._cashedColCount;
+    return !!this._cachedColCount && this._getMaxColCount() !== this._cachedColCount;
   }
 
   _prepareItemsWithMerging(colCount: number): void {
@@ -635,7 +635,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
   _setItems(items: ExtendedItem[]): void {
     this._items = items;
-    this._cashedColCount = null; // T923489
+    this._cachedColCount = null; // T923489
   }
 
   _generateLayoutItems(): ResponsiveBoxItem[] {
@@ -1118,7 +1118,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
   }
 
   _resetColCount(): void {
-    this._cashedColCount = null;
+    this._cachedColCount = null;
     this._invalidate();
   }
 
@@ -1127,7 +1127,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
       return;
     }
 
-    this._cashedColCount = null;
+    this._cachedColCount = null;
 
     this._items = (this._items ?? []).filter((item) => !item.merged);
 
@@ -1227,9 +1227,11 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
         .toggleClass(LAYOUT_MANAGER_LAST_ROW_CLASS, isLastRow);
 
       const element = $itemContainer.get(0);
-      element.className = [...element.classList]
-        .filter((name: string): boolean => !name.startsWith(FORM_FIELD_ITEM_COL_CLASS))
-        .join(' ');
+      if (element) {
+        element.className = [...element.classList]
+          .filter((name: string): boolean => !name.startsWith(FORM_FIELD_ITEM_COL_CLASS))
+          .join(' ');
+      }
 
       if (isDefined(typedLocation.col)) {
         $itemContainer.addClass(`${FORM_FIELD_ITEM_COL_CLASS}${typedLocation.col}`);
