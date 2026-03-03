@@ -12,6 +12,7 @@ export type {
   MessageUpdatingEvent,
   MessageUpdatedEvent,
   AttachmentDownloadClickEvent,
+  InputFieldTextChangedEvent,
   User,
   Alert,
   Attachment,
