@@ -3628,6 +3628,14 @@
                   "/Models/SampleData/PriorityResources.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Appointment Snap Modes",
+                "Name": "AppointmentSnapModes",
+                "Widget": "Scheduler",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-2026-appointment-snap-modes.xml"
               }
             ]
           },
