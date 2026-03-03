@@ -13,28 +13,67 @@ const port = process.argv[2] ?? 8080;
 const cspViolations = [];
 let cspViolationIdCounter = 0;
 
-const CSP_DIRECTIVES = [
-  "default-src 'none'",
+const CSP_BASE_DIRECTIVES = {
+  'default-src': ["'none'"],
+  'script-src': ["'self'", 'https://esm.sh', 'https://cdnjs.cloudflare.com', 'https://cdn.jsdelivr.net'],
+  'style-src': ["'self'", 'https://maxcdn.bootstrapcdn.com'],
+  'img-src': ["'self'"],
+  'font-src': ["'self'"],
+  'connect-src': ["'self'", 'https://js.devexpress.com', ' https://demos.devexpress.com'],
+  'worker-src': ["'self'"],
+  'frame-src': ["'self'"],
+  'object-src': ["'none'"],
+  'base-uri': ["'none'"],
+  'form-action': ["'self'"],
+  'frame-ancestors': ["'none'"],
+};
 
-  "script-src 'self' https://esm.sh https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
-  "style-src 'self' https://maxcdn.bootstrapcdn.com",
+const CSP_DEMO_ALLOWLIST = {
+  'Button/Icons': {
+    'font-src': ['https://maxcdn.bootstrapcdn.com'],
+  },
+  Map: {
+    'script-src': ['https://atlas.microsoft.com'],
+    'connect-src': ['https://atlas.microsoft.com'],
+  },
+};
 
-  "img-src 'self'",
-  "font-src 'self'",
-  "connect-src 'self'",
-  "worker-src 'self'",
-  "frame-src 'self'",
+function buildCspHeader(demoKey) {
+  const directives = {};
+  for (const [key, values] of Object.entries(CSP_BASE_DIRECTIVES)) {
+    directives[key] = [...values];
+  }
 
-  "object-src 'none'",
-  "base-uri 'none'",
-  "form-action 'self'",
-  "frame-ancestors 'none'",
+  const widgetKey = demoKey && demoKey.split('/')[0];
+  const allowlists = [
+    demoKey && CSP_DEMO_ALLOWLIST[demoKey],
+    widgetKey && CSP_DEMO_ALLOWLIST[widgetKey],
+  ].filter(Boolean);
 
-  'report-uri /csp-report',
-].join('; ');
+  for (const allowlist of allowlists) {
+    for (const [key, values] of Object.entries(allowlist)) {
+      if (directives[key]) {
+        directives[key].push(...values);
+      } else {
+        directives[key] = [...values];
+      }
+    }
+  }
 
-function cspMiddleware(_req, res, next) {
-  res.setHeader('Content-Security-Policy-Report-Only', CSP_DIRECTIVES);
+  const parts = Object.entries(directives)
+    .map(([key, values]) => `${key} ${values.join(' ')}`);
+  parts.push('report-uri /csp-report');
+  return parts.join('; ');
+}
+
+function getDemoKey(url) {
+  const match = url.match(/\/Demos\/([^/]+)\/([^/]+)\//);
+  return match ? `${match[1]}/${match[2]}` : null;
+}
+
+function cspMiddleware(req, res, next) {
+  const demoKey = getDemoKey(req.path);
+  res.setHeader('Content-Security-Policy-Report-Only', buildCspHeader(demoKey));
   next();
 }
 

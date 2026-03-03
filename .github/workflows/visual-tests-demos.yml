@@ -1258,9 +1258,14 @@ jobs:
               GRAND_TOTAL=$((GRAND_TOTAL + COUNT))
               echo "### ⚠️ ${FRAMEWORK}: ${COUNT} violation(s)" >> $GITHUB_STEP_SUMMARY
               echo '' >> $GITHUB_STEP_SUMMARY
+              echo '<details>' >> $GITHUB_STEP_SUMMARY
+              echo '<summary>Show detailed report</summary>' >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
               echo '```' >> $GITHUB_STEP_SUMMARY
               CSP_REPORT_FILE="$report" node apps/demos/utils/server/csp-report-summary.js >> $GITHUB_STEP_SUMMARY
               echo '```' >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+              echo '</details>' >> $GITHUB_STEP_SUMMARY
               echo '' >> $GITHUB_STEP_SUMMARY
             else
               echo "### ✅ ${FRAMEWORK}: No violations" >> $GITHUB_STEP_SUMMARY
