@@ -36,6 +36,72 @@ const CSP_DEMO_ALLOWLIST = {
     'script-src': ['https://atlas.microsoft.com'],
     'connect-src': ['https://atlas.microsoft.com'],
   },
+  'DataGrid/CollaborativeEditing': {
+    'connect-src': ['wss://js.devexpress.com'],
+  },
+  'Charts/SignalRService': {
+    'connect-src': ['wss://js.devexpress.com'],
+  },
+  'DataGrid/SignalRService': {
+    'connect-src': ['wss://js.devexpress.com'],
+  },
+  'Scheduler/SignalRService': {
+    'connect-src': ['wss://js.devexpress.com'],
+  },
+  'DataGrid/Cell': {
+    'img-src': ['data:'],
+  },
+  'DataGrid/ExcelJSExportImages': {
+    'img-src': ['data:'],
+  },
+  'DataGrid/InfiniteScrolling': {
+    'img-src': ['data:'],
+  },
+  'DataGrid/LocalReordering': {
+    'img-src': ['data:'],
+  },
+  'DataGrid/PDFExportImages': {
+    'img-src': ['data:'],
+  },
+  'DataGrid/VirtualScrolling': {
+    'img-src': ['data:'],
+  },
+  Gantt: {
+    'img-src': ['data:'],
+  },
+  FilterBuilder: {
+    'font-src': ['https://maxcdn.bootstrapcdn.com'],
+  },
+  FileManager: {
+    'img-src': ['data:'],
+  },
+  'Scheduler/GoogleCalendarIntegration': {
+    'connect-src': ['https://www.googleapis.com'],
+  },
+  'Scheduler/CellTemplates': {
+    'img-src': ['data:'],
+  },
+  'ScrollView/Overview': {
+    'img-src': ['data:'],
+  },
+  'TreeList/AIColumns': {
+    'connect-src': ['https://public-api.devexpress.com'],
+  },
+  'TreeList/BatchEditing': {
+    'img-src': ['data:'],
+  },
+  'TreeList/CellEditing': {
+    'img-src': ['data:'],
+  },
+  'TreeList/FixedAndStickyColumns': {
+    'img-src': ['data:'],
+  },
+  'TreeList/MultipleSorting': {
+    'img-src': ['data:'],
+  },
+  'TreeList/SearchPanel': {
+    'img-src': ['data:'],
+  },
 };
 
 function buildCspHeader(demoKey) {
