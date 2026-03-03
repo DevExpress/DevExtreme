@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import Views from '__internal/ui/calendar/calendar.views';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -40,18 +39,13 @@ class BaseCalendarFixture {
     }
 }
 
-class MockMonthView extends Views['month'] {
-    renderHeader() {}
-    renderBody() {}
-}
-
 class CalendarFixture extends BaseCalendarFixture {
     constructor(options) {
         super();
         this.rootElement = $('<div id=\'calendar\'></div>');
         this.rootElement.appendTo('body');
         this.calendar = $('#calendar')
-            .dxCalendar($.extend({ monthViewType: MockMonthView }, options))
+            .dxCalendar(options)
             .dxCalendar('instance');
         this.navigatorLinks = {
             'prevYear': this.rootElement.find('.dx-calendar-navigator-previous-year'),
@@ -77,7 +71,6 @@ class DateBoxFixture extends BaseCalendarFixture {
             .dxDateBox($.extend(true, {
                 pickerType: 'calendar',
                 displayFormat: this.format,
-                calendarOptions: { monthViewType: MockMonthView }
             }, options))
             .dxDateBox('instance');
         this.input = this.rootElement.find(TEXTEDITOR_INPUT_SELECTOR);
@@ -91,6 +84,5 @@ class DateBoxFixture extends BaseCalendarFixture {
 }
 
 DevExpress.ui.testing.BaseCalendarFixture = BaseCalendarFixture;
-DevExpress.ui.testing.MockMonthView = MockMonthView;
 DevExpress.ui.testing.CalendarFixture = CalendarFixture;
 DevExpress.ui.testing.DateBoxFixture = DateBoxFixture;
