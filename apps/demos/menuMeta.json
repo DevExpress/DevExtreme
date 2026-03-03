@@ -4174,6 +4174,19 @@
                 "DemoType": "Web"
               }
             ]
+          },
+          {
+            "Name": "Tool Call Visualization",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Tool Call Visualization",
+                "Name": "ToolCallVisualization",
+                "Widget": "Chat",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-2026-tool-call-visualization.xml"
+              }
+            ]
           }
         ]
       }
