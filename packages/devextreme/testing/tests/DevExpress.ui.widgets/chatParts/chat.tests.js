@@ -2454,6 +2454,55 @@ QUnit.module('Chat', () => {
                 assert.strictEqual(this.getDownloadButton().length, 0, 'button is hidden after unsubscribing');
             });
         });
+
+        QUnit.module('onInputFieldTextChanged', moduleConfig, () => {
+            QUnit.test('should be called when input value is changed', function(assert) {
+                const onInputFieldTextChanged = sinon.spy();
+
+                this.reinit({ onInputFieldTextChanged });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('a');
+
+                assert.strictEqual(onInputFieldTextChanged.callCount, 1, 'called once');
+            });
+
+            QUnit.test('should be called with correct arguments', function(assert) {
+                assert.expect(6);
+
+                this.reinit({
+                    onInputFieldTextChanged: (e) => {
+                        const { component, element, event, value, previousValue } = e;
+
+                        assert.strictEqual(component, this.instance, 'component is Chat instance');
+                        assert.strictEqual($(element).is(this.$element), true, 'element matches widget root');
+
+                        assert.strictEqual(previousValue, '', 'previousValue is correct');
+                        assert.strictEqual(value, 'a', 'value is correct');
+
+                        assert.strictEqual(event.type, 'input', 'event.type is correct');
+                        assert.strictEqual(event.target, this.$input.get(0), 'event.target is correct');
+                    },
+                });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('a');
+            });
+
+            QUnit.test('should be possible to change at runtime', function(assert) {
+                const onInputFieldTextChanged = sinon.spy();
+
+                this.instance.option({ onInputFieldTextChanged });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('a');
+
+                assert.strictEqual(onInputFieldTextChanged.callCount, 1, 'called once after runtime update');
+            });
+        });
     });
 
     QUnit.module('renderMessage', moduleConfig, () => {
