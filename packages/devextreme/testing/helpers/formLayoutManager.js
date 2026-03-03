@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 import {
     FORM_FIELD_ITEM_COL_CLASS,
     FIELD_ITEM_CLASS,
