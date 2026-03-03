@@ -45,11 +45,30 @@ export type ChartsLabelOverlap = 'hide' | 'none' | 'stack';
  */
 export type ChartsDataType = 'datetime' | 'numeric' | 'string';
 
+type BuildTuple<Length extends number, Result extends unknown[] = []> = Result['length'] extends Length
+  ? Result
+  : BuildTuple<Length, [...Result, unknown]>;
+
+type Tail<T extends unknown[]> = T extends [unknown, ...infer Rest] ? Rest : [];
+
+type RepeatUnionInternal<
+  T extends string,
+  DepthTuple extends unknown[],
+> = DepthTuple['length'] extends 0
+    ? never
+    : T | `${T}${RepeatUnionInternal<T, Tail<DepthTuple>>}`;
+
+type RepeatUnion<
+  T extends string,
+  Depth extends number,
+> = RepeatUnionInternal<T, BuildTuple<Depth>>;
+
 /**
  * @public
  * @namespace DevExpress.common.charts
+ * @type 'dash'|'dot'|'longDash'|'solid'
  */
-export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+export type DashStyle = RepeatUnion<'dash' | 'dot' | 'longDash' | 'solid', 7>;
 
 /**
  * @public
