@@ -1,4 +1,3 @@
-/* eslint-disable spellcheck/spell-checker */
 import createTestCafe, { ClientFunction } from 'testcafe';
 import * as fs from 'fs';
 import * as process from 'process';
@@ -264,8 +263,9 @@ async function main() {
               // @ts-expect-error ts-errors
               const { meta } = t.testRun.test;
 
+              await t.click('body', { offsetX: 0, offsetY: 0 });
+
               await ClientFunction(() => {
-                document.body.dispatchEvent(new MouseEvent('click', { clientX: 0, clientY: 0 }));
                 if (document.activeElement && document.activeElement !== document.body) {
                   (document.activeElement as HTMLElement).blur();
                 }
