@@ -11,6 +11,7 @@ import {
  AttachmentDownloadClickEvent,
  DisposingEvent,
  InitializedEvent,
+ InputFieldTextChangedEvent,
  MessageDeletedEvent,
  MessageDeletingEvent,
  MessageEditCanceledEvent,
@@ -96,6 +97,7 @@ type AccessibleOptions = Pick<Properties,
   "onAttachmentDownloadClick" |
   "onDisposing" |
   "onInitialized" |
+  "onInputFieldTextChanged" |
   "onMessageDeleted" |
   "onMessageDeleting" |
   "onMessageEditCanceled" |
@@ -147,6 +149,7 @@ const componentConfig = {
     onAttachmentDownloadClick: Function as PropType<((e: AttachmentDownloadClickEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onInputFieldTextChanged: Function as PropType<((e: InputFieldTextChangedEvent) => void)>,
     onMessageDeleted: Function as PropType<((e: MessageDeletedEvent) => void)>,
     onMessageDeleting: Function as PropType<((e: MessageDeletingEvent) => void)>,
     onMessageEditCanceled: Function as PropType<((e: MessageEditCanceledEvent) => void)>,
@@ -194,6 +197,7 @@ const componentConfig = {
     "update:onAttachmentDownloadClick": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
+    "update:onInputFieldTextChanged": null,
     "update:onMessageDeleted": null,
     "update:onMessageDeleting": null,
     "update:onMessageEditCanceled": null,

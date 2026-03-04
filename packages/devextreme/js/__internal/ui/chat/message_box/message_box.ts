@@ -1,7 +1,7 @@
 import type { NativeEventInfo } from '@js/common/core/events';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import type { InteractionEvent } from '@js/events';
-import type { Attachment } from '@js/ui/chat';
+import type { Attachment, InputFieldTextChangedEvent } from '@js/ui/chat';
 import type { Properties as FileUploaderProperties } from '@js/ui/file_uploader';
 import type { Properties as SpeechToTextProperties } from '@js/ui/speech_to_text';
 import type { InputEvent } from '@js/ui/text_area';
@@ -49,6 +49,8 @@ export interface Properties extends DOMComponentProperties<MessageBox> {
   onMessageEditCanceled?: () => void;
 
   onMessageUpdating?: (e: { text: string }) => void;
+
+  onTextChanged?: (e: InputFieldTextChangedEvent) => void;
 }
 
 export const CHAT_MESSAGEBOX_CLASS = 'dx-chat-messagebox';
@@ -86,6 +88,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
       onMessageUpdating: undefined,
       onTypingStart: undefined,
       onTypingEnd: undefined,
+      onTextChanged: undefined,
     };
   }
 
@@ -188,8 +191,12 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         this._triggerTypingStartAction(e);
         this._updateTypingEndTimeout();
       },
-      onValueChanged: ({ value }): void => {
-        this.option('text', value);
+      onValueChanged: (e: InputFieldTextChangedEvent): void => {
+        const { onTextChanged } = this.option();
+
+        this.option('text', e.value);
+
+        onTextChanged?.(e);
       },
       onSend: (e: SendEvent): void => {
         this._sendHandler(e);
