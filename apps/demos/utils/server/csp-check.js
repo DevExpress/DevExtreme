@@ -106,24 +106,18 @@ async function main() {
   let demosWithViolations = 0;
   const allViolations = [];
 
-  // Process demos in batches for parallelism
   for (let batchStart = 0; batchStart < demos.length; batchStart += CONCURRENCY) {
     const batch = demos.slice(batchStart, batchStart + CONCURRENCY);
 
-    // Clear violations before the batch
     await httpRequest(`${SERVER_URL}/csp-violations`, 'DELETE');
 
-    // Visit all pages in the batch in parallel
     await Promise.all(batch.map((demo) => visitPage(demo.url)));
 
-    // Wait for any remaining CSP reports to be delivered
     await new Promise((resolve) => { setTimeout(resolve, 500); });
 
-    // Fetch all violations from this batch
     const result = await httpRequest(`${SERVER_URL}/csp-violations`);
     const violations = result.violations || [];
 
-    // Group violations by documentUri → match back to demos
     const violationsByUrl = {};
     for (const v of violations) {
       const uri = v.documentUri || '';
@@ -134,7 +128,6 @@ async function main() {
     for (let j = 0; j < batch.length; j += 1) {
       const demo = batch[j];
       const idx = batchStart + j + 1;
-      // Match violations by URL (documentUri may include trailing slash or index.html)
       const demoViolations = violationsByUrl[demo.url]
         || violationsByUrl[`${demo.url}index.html`]
         || [];
