@@ -43,6 +43,9 @@ const CSP_DEMO_ALLOWLIST = {
   'Charts/SignalRService': {
     'connect-src': ['wss://js.devexpress.com'],
   },
+  'Common/ListsOverview': {
+    'img-src': ['data:'],
+  },
   'DataGrid/SignalRService': {
     'connect-src': ['wss://js.devexpress.com'],
   },
@@ -189,6 +192,8 @@ function buildCspHeader(demoKey, nonce, framework) {
 
   if (nonce) {
     directives['script-src'].push(`'nonce-${nonce}'`);
+    // Allow scripts dynamically created by nonced scripts (e.g. SystemJS module evaluation)
+    directives['script-src'].push("'strict-dynamic'");
   }
 
   const widgetKey = demoKey && demoKey.split('/')[0];
@@ -230,7 +235,7 @@ function cspMiddleware(req, res, next) {
   const demoKey = getDemoKey(req.path);
   const framework = getFramework(req.path);
 
-  // Angular, React & Vue demos use inline <script> for SystemJS bootstrap — allow via nonce
+  // Angular, React & Vue demos use inline <script> for SystemJS — allow via nonce
   const needsNonce = framework === 'Angular' || framework === 'React' || framework === 'Vue';
   const nonce = needsNonce ? generateNonce() : null;
   if (nonce) {
@@ -313,11 +318,12 @@ const demoIndexHandler = (request, response) => {
     fileContent = fileContent.replace('dx.light.css', cookieTheme);
   }
 
-  // Inject nonce into inline <script> tags for Angular/Vue demos
+  // Inject nonce into all <script> tags for Angular/React/Vue demos.
+  // 'strict-dynamic' in CSP ignores 'self', so <script src> tags also need the nonce.
+  // 'strict-dynamic' propagates trust to scripts dynamically created by SystemJS.
   const { cspNonce } = response.locals;
   if (cspNonce) {
-    fileContent = fileContent.replace(/<script>(System\.import)/g, `<script nonce="${cspNonce}">$1`);
-    fileContent = fileContent.replace(/<script type="(module|text\/javascript)">(\s*\S)/g, `<script type="$1" nonce="${cspNonce}">$2`);
+    fileContent = fileContent.replace(/<script(?=\s|>)/g, `<script nonce="${cspNonce}"`);
   }
 
   response.set('Content-Type', 'text/html');

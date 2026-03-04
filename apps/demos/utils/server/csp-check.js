@@ -1,4 +1,4 @@
-const { execFileSync } = require('child_process');
+const { execFile } = require('child_process');
 const { join } = require('path');
 const {
   readdirSync, existsSync, writeFileSync, mkdirSync,
@@ -9,6 +9,7 @@ const DEMO_ROOT = join(__dirname, '..', '..');
 const REPORT_DIR = join(DEMO_ROOT, 'csp-reports');
 const SERVER_URL = process.env.CSP_SERVER_URL || 'http://localhost:8080';
 const FRAMEWORKS = (process.env.CSP_FRAMEWORKS || 'jQuery').split(',').map((f) => f.trim());
+const CONCURRENCY = parseInt(process.env.CSP_CONCURRENCY, 10) || 8;
 
 function findChrome() {
   const candidates = [
@@ -78,20 +79,19 @@ function findDemos() {
 }
 
 function visitPage(chromePath, url) {
-  try {
-    execFileSync(chromePath, [
+  return new Promise((resolve) => {
+    const child = execFile(chromePath, [
       '--headless=new',
       '--no-sandbox',
       '--disable-gpu',
       '--disable-software-rasterizer',
       '--disable-dev-shm-usage',
-      '--screenshot=/tmp/csp_check.png',
+      '--screenshot=/dev/null',
       '--window-size=100,100',
       url,
-    ], { timeout: 30000, stdio: 'ignore' });
-  } catch {
-    // timeout or crash — continue to next page
-  }
+    ], { timeout: 30000 }, () => resolve());
+    child.on('error', () => resolve());
+  });
 }
 
 function httpRequest(url, method) {
@@ -117,7 +117,8 @@ async function main() {
   const framework = FRAMEWORKS[0];
   console.log(`Chrome: ${chromePath}`);
   console.log(`Server: ${SERVER_URL}`);
-  console.log(`Framework: ${framework}\n`);
+  console.log(`Framework: ${framework}`);
+  console.log(`Concurrency: ${CONCURRENCY}\n`);
 
   const demos = findDemos();
   console.log(`Found ${demos.length} demo page(s) to check\n`);
@@ -134,31 +135,53 @@ async function main() {
   let demosWithViolations = 0;
   const allViolations = [];
 
-  for (let i = 0; i < demos.length; i += 1) {
-    const demo = demos[i];
+  // Process demos in batches for parallelism
+  for (let batchStart = 0; batchStart < demos.length; batchStart += CONCURRENCY) {
+    const batch = demos.slice(batchStart, batchStart + CONCURRENCY);
 
+    // Clear violations before the batch
     await httpRequest(`${SERVER_URL}/csp-violations`, 'DELETE');
 
-    visitPage(chromePath, demo.url);
+    // Visit all pages in the batch in parallel
+    await Promise.all(batch.map((demo) => visitPage(chromePath, demo.url)));
 
+    // Wait for any remaining CSP reports to be delivered
     await new Promise((resolve) => { setTimeout(resolve, 500); });
 
+    // Fetch all violations from this batch
     const result = await httpRequest(`${SERVER_URL}/csp-violations`);
     const violations = result.violations || [];
 
-    if (violations.length > 0) {
-      demosWithViolations += 1;
-      totalViolations += violations.length;
+    // Group violations by documentUri → match back to demos
+    const violationsByUrl = {};
+    for (const v of violations) {
+      const uri = v.documentUri || '';
+      if (!violationsByUrl[uri]) violationsByUrl[uri] = [];
+      violationsByUrl[uri].push(v);
+    }
 
-      console.log(`  ❌ [${i + 1}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework} — ${violations.length} violation(s)`);
-      for (const v of violations) {
-        const blocked = v.blockedUri || 'N/A';
-        const directive = v.effectiveDirective || v.violatedDirective || '?';
-        console.log(`       ${directive}: ${blocked}`);
-        allViolations.push({ ...v, framework });
+    for (let j = 0; j < batch.length; j += 1) {
+      const demo = batch[j];
+      const idx = batchStart + j + 1;
+      // Match violations by URL (documentUri may include trailing slash or index.html)
+      const demoViolations = violationsByUrl[demo.url]
+        || violationsByUrl[`${demo.url}index.html`]
+        || [];
+
+      if (demoViolations.length > 0) {
+        demosWithViolations += 1;
+        totalViolations += demoViolations.length;
+
+        console.log(`  ❌ [${idx}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework} — ${demoViolations.length} violation(s)`);
+        for (const v of demoViolations) {
+          const blocked = v.blockedUri || 'N/A';
+          const directive = v.effectiveDirective || v.violatedDirective || '?';
+          console.log(`       ${directive}: ${blocked}`);
+          allViolations.push({ ...v, framework });
+        }
+      } else {
+        console.log(`  ✅ [${idx}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework}`);
       }
-    } else {
-      console.log(`  ✅ [${i + 1}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework}`);
     }
   }
 
