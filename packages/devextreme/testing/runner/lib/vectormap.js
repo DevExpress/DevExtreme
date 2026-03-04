@@ -68,6 +68,8 @@ function createVectorMapService({
                     if(Date.now() - startTime > 5000) {
                         throw error;
                     }
+
+                    await wait(50);
                 }
             }
         } finally {
@@ -104,8 +106,12 @@ function createVectorMapService({
                 stdio: 'ignore',
             });
 
-            if(spawnResult.error && spawnResult.error.code === 'ETIMEDOUT') {
-                // Intentionally ignored to match legacy behavior.
+            if(spawnResult.error) {
+                if(spawnResult.error.code === 'ETIMEDOUT') {
+                    // Intentionally ignored to match legacy behavior.
+                } else {
+                    throw spawnResult.error;
+                }
             }
 
             const extension = isJson ? '.json' : '.js';
@@ -214,6 +220,12 @@ function httpGetText(targetUrl) {
         });
 
         request.on('error', reject);
+    });
+}
+
+function wait(timeout) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, timeout);
     });
 }
 
