@@ -912,6 +912,51 @@ module('Grouping By Date', {
         assert.roughEqual(result.right, lastCellPosition.left + 1.5 * cellWidth, 3, 'Area right is OK');
     });
 
+    test('\'getResizableAppointmentArea\' should return undefined for not allDay appointments in grouped timeline view', async function(assert) {
+        const priorityData = [
+            {
+                text: 'Low Priority',
+                id: 1,
+                color: '#1e90ff'
+            }, {
+                text: 'High Priority',
+                id: 2,
+                color: '#ff9747'
+            }
+        ];
+        await this.createInstance({
+            currentView: 'timelineWeek',
+            views: [{
+                type: 'timelineWeek',
+                name: 'timelineWeek',
+                groupOrientation: 'horizontal'
+            }],
+            width: 800,
+            currentDate: new Date(2018, 4, 21, 9, 0),
+            groupByDate: true,
+            groups: ['priorityId'],
+            resources: [
+                {
+                    fieldExpr: 'priorityId',
+                    allowMultiple: false,
+                    dataSource: priorityData,
+                    label: 'Priority'
+                }
+            ],
+        });
+
+        const result = this.instance.fire('getResizableAppointmentArea', {
+            allDay: false,
+            coordinates: {
+                groupIndex: 1,
+                left: 550,
+                top: 0
+            },
+        });
+
+        assert.strictEqual(result, undefined, 'Area is undefined');
+    });
+
     test('\'getResizableStep\' should return correct step, groupByDate = true, Month view', async function(assert) {
         const priorityData = [
             {
