@@ -9,6 +9,7 @@ import DataHelperMixin from '@js/data_helper';
 import type dxChat from '@js/ui/chat';
 import type {
   AttachmentDownloadClickEvent,
+  InputFieldTextChangedEvent,
   Message,
   MessageDeletedEvent,
   MessageDeletingEvent,
@@ -76,6 +77,8 @@ class Chat extends Widget<ChatProperties> {
 
   _attachmentDownloadAction?: (e: Partial<AttachmentDownloadClickEvent>) => void;
 
+  _inputFieldTextChangedAction?: (e: Partial<InputFieldTextChangedEvent>) => void;
+
   _getDefaultOptions(): ChatProperties {
     return {
       ...super._getDefaultOptions(),
@@ -112,6 +115,7 @@ class Chat extends Widget<ChatProperties> {
       onTypingEnd: undefined,
       onTypingStart: undefined,
       onAttachmentDownloadClick: undefined,
+      onInputFieldTextChanged: undefined,
     };
   }
 
@@ -133,6 +137,7 @@ class Chat extends Widget<ChatProperties> {
     this._createTypingStartAction();
     this._createTypingEndAction();
     this._createAttachmentDownloadAction();
+    this._createInputFieldTextChangedAction();
   }
 
   _dataSourceLoadErrorHandler(): void {
@@ -500,6 +505,9 @@ class Chat extends Widget<ChatProperties> {
           this.option('inputFieldText', value);
         }
       },
+      onTextChanged: (e) => {
+        this._inputFieldTextChangedAction?.(e);
+      },
     };
 
     this._messageBox = this._createComponent($messageBox, MessageBox, configuration);
@@ -586,6 +594,13 @@ class Chat extends Widget<ChatProperties> {
   _createAttachmentDownloadAction(): void {
     this._attachmentDownloadAction = this._createActionByOption(
       'onAttachmentDownloadClick',
+      { excludeValidators: ['disabled'] },
+    );
+  }
+
+  _createInputFieldTextChangedAction(): void {
+    this._inputFieldTextChangedAction = this._createActionByOption(
+      'onInputFieldTextChanged',
       { excludeValidators: ['disabled'] },
     );
   }
@@ -705,6 +720,9 @@ class Chat extends Widget<ChatProperties> {
       case 'onAttachmentDownloadClick':
         this._createAttachmentDownloadAction();
         this._updateAttachmentDownloadHandler();
+        break;
+      case 'onInputFieldTextChanged':
+        this._createInputFieldTextChangedAction();
         break;
       case 'showDayHeaders':
       case 'showAvatar':

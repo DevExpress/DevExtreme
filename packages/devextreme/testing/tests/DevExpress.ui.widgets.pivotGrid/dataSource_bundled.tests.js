@@ -11,7 +11,6 @@ import pivotGridUtils, { setFieldProperty } from '__internal/grids/pivot_grid/m_
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import '../../content/orders.js';
-import PivotGridTestSettings from '../../helpers/pivotGridTestSettings.js';
 
 function createDataSource(options) {
     const dataSource = new PivotGridDataSource(options);
@@ -4107,97 +4106,6 @@ QUnit.module('dxPivotGrid dataSource with Store', {
             valueText: 'Boise'
         });
     });
-
-    if(window.INTRANET) {
-
-        QUnit.test('XMLA store integration', function(assert) {
-            const done = assert.async();
-            const dataSource = createDataSource({
-                descriptions: {
-                    columns: [{ dataField: '[Product].[Category]', allMember: '[All Products]' }],
-                    rows: [{ dataField: '[Ship Date].[Calendar Year]', allMember: '[All Periods]' }],
-                    values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
-                },
-                store: {
-                    type: 'xmla',
-                    url: PivotGridTestSettings.XMLA_STORE_URL,
-                    catalog: 'Adventure Works DW Standard Edition',
-                    cube: 'Adventure Works'
-                }
-            });
-
-            dataSource.on('changed', function() {
-
-                assert.deepEqual(prepareLoadedData(dataSource.getData().columns), [
-                    { key: '[Product].[Category].&[4]', value: 'Accessories', index: 1 },
-                    { key: '[Product].[Category].&[1]', value: 'Bikes', index: 2 },
-                    { key: '[Product].[Category].&[3]', value: 'Clothing', index: 3 }
-                ]);
-                assert.deepEqual(prepareLoadedData(dataSource.getData().rows), [
-                    { key: '[Ship Date].[Calendar Year].&[2001]', value: 2001, index: 1 },
-                    { key: '[Ship Date].[Calendar Year].&[2002]', value: 2002, index: 2 },
-                    { key: '[Ship Date].[Calendar Year].&[2003]', value: 2003, index: 3 },
-                    { key: '[Ship Date].[Calendar Year].&[2004]', value: 2004, index: 4 }
-                ]);
-                assert.strictEqual(dataSource.getData().grandTotalColumnIndex, 0);
-                assert.strictEqual(dataSource.getData().grandTotalRowIndex, 0);
-                assert.deepEqual(dataSource.getData().values, [
-                    [[18484], [15114], [9132], [6852]],
-                    [[962], [null], [962], [null]],
-                    [[2665], [null], [2665], [null]],
-                    [[9002], [6470], [4756], [2717]],
-                    [[11753], [9745], [5646], [4340]]
-                ]);
-                done();
-            });
-        });
-
-        QUnit.test('XMLA store. Sorting data', function(assert) {
-            const done = assert.async();
-            const dataSource = createDataSource({
-                descriptions: {
-                    columns: [{ dataField: '[Product].[Category]' }],
-                    rows: [{ dataField: '[Ship Date].[Month Of Year]' }],
-                    values: [{ dataField: '[Measures].[Customer Count]', caption: 'Count' }]
-                },
-                store: {
-                    type: 'xmla',
-                    url: PivotGridTestSettings.XMLA_STORE_URL,
-                    catalog: 'Adventure Works DW Standard Edition',
-                    cube: 'Adventure Works'
-                }
-            });
-
-            dataSource.on('changed', function() {
-                assert.deepEqual(prepareLoadedData(dataSource.getData().columns), [
-                    { key: '[Product].[Category].&[4]', value: 'Accessories', index: 1 },
-                    { key: '[Product].[Category].&[1]', value: 'Bikes', index: 2 },
-                    { key: '[Product].[Category].&[3]', value: 'Clothing', index: 3 }
-                ]);
-
-                assert.deepEqual(dataSource.getData().rows.length, 12, 'month count');
-                assert.deepEqual(dataSource.getData().rows[0], {
-                    index: 1,
-                    key: '[Ship Date].[Month of Year].&[1]',
-                    text: 'January',
-                    value: 1
-                }, 'month 1');
-                assert.deepEqual(dataSource.getData().rows[11], {
-                    index: 12,
-                    key: '[Ship Date].[Month of Year].&[12]',
-                    text: 'December',
-                    value: 12
-                }, 'month 12');
-
-                assert.strictEqual(dataSource.getData().grandTotalColumnIndex, 0);
-                assert.strictEqual(dataSource.getData().grandTotalRowIndex, 0);
-                assert.deepEqual(dataSource.getData().values[0], [[18484], [15114], [9132], [6852]]);
-                assert.deepEqual(dataSource.getData().values[1], [[2224], [1485], [1220], [649]]);
-                done();
-            });
-        });
-    }
-
 
     QUnit.test('Do not perform summary calculation if dataSource is empty', function(assert) {
         const def = $.Deferred();

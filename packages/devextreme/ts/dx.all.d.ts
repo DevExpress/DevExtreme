@@ -11216,6 +11216,15 @@ declare module DevExpress.ui {
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxChat>;
     /**
+     * [descr:_ui_chat_InputFieldTextChangedEvent]
+     */
+    export type InputFieldTextChangedEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxChat,
+        DevExpress.events.InteractionEvent | Event
+      > &
+        DevExpress.ui.Editor.ValueChangedInfo;
+    /**
      * [descr:_ui_chat_MessageDeletedEvent]
      */
     export type MessageDeletedEvent =
@@ -11469,6 +11478,12 @@ declare module DevExpress.ui {
      */
     onAttachmentDownloadClick?:
       | ((e: DevExpress.ui.dxChat.AttachmentDownloadClickEvent) => void)
+      | undefined;
+    /**
+     * [descr:dxChatOptions.onInputFieldTextChanged]
+     */
+    onInputFieldTextChanged?:
+      | ((e: DevExpress.ui.dxChat.InputFieldTextChangedEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageEntered]
