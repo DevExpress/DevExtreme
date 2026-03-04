@@ -1,9 +1,11 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { RRule, RRuleSet } from 'rrule';
+import * as rrule from 'rrule';
 
 import { parseRecurrenceRule } from '../../../../recurrence/base';
 import type { DateInterval, MinimalAppointmentEntity } from '../../../types';
 import { getDateOffsetMs } from './get_date_information';
+
+const { RRule, RRuleSet } = rrule;
 
 interface Options {
   firstDayOfWeek?: number;

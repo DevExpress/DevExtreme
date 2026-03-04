@@ -70,7 +70,7 @@ function customizeTooltip(pointInfo: DxChartTypes.PointInfo) {
   const items = pointInfo.valueText?.split('\n');
   const color = pointInfo.point?.getColor();
 
-  items?.forEach((item, index) => {
+  items?.forEach((item: string, index: number) => {
     if (item.indexOf(pointInfo.seriesName) === 0) {
       const element = document.createElement('span');
 

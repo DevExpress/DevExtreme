@@ -184,7 +184,7 @@ function moveChildren(node: Node, fromDataSource: DriveItem[], toDataSource: any
     return;
   }
 
-  node.children?.forEach((child) => {
+  node.children?.forEach((child: Node) => {
     if (child.itemData?.isDirectory) {
       moveChildren(child, fromDataSource, toDataSource);
     }

@@ -654,7 +654,8 @@
     "name": "ui/widget/template",
     "exports": {
       "Template": { "path": "ui.template", "exportAs": "type" }
-    }
+    },
+    "types": "./ui/widget/template.d.ts"
   },
   {
     "name": "utils",
@@ -686,6 +687,11 @@
     "exports": {
       "default": { "path": "viz.dxCircularGauge", "isWidget": true }
     }
+  },
+  {
+    "name": "viz/common",
+    "exports": {},
+    "types": "./viz/common.d.ts"
   },
   {
     "name": "viz/export",

@@ -167,7 +167,7 @@ function moveNode(
 ) {
   const fromNodeContainingArray = getNodeContainingArray(fromNode, fromItems);
   const fromIndex = fromNodeContainingArray
-    ?.findIndex((item) => item.id === fromNode.itemData?.id) || -1;
+    ?.findIndex((item: DriveItem) => item.id === fromNode.itemData?.id) || -1;
 
   if (fromIndex !== -1 && fromNodeContainingArray) {
     fromNodeContainingArray.splice(fromIndex, 1);
@@ -179,7 +179,7 @@ function moveNode(
     const toNodeContainingArray = getNodeContainingArray(toNode, toItems);
     const toIndex = toNode === null
       ? toNodeContainingArray?.length || 0
-      : toNodeContainingArray?.findIndex((item) => item.id === toNode.itemData?.id) || 0;
+      : toNodeContainingArray?.findIndex((item: DriveItem) => item.id === toNode.itemData?.id) || 0;
     toNodeContainingArray?.splice(toIndex, 0, fromNode.itemData);
   }
 }

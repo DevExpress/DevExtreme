@@ -46,7 +46,7 @@ const textExpression = 'Full_Name';
 function onContentReady(e: DxDiagramTypes.ContentReadyEvent) {
   const diagram = e.component;
   // preselect some shape
-  const items = diagram.getItems().filter(({ itemType, dataItem }) => itemType === 'shape' && (dataItem[textExpression] === 'Greta Sims'));
+  const items = diagram.getItems().filter(({ itemType, dataItem }: DxDiagramTypes.Item) => itemType === 'shape' && (dataItem[textExpression] === 'Greta Sims'));
   if (items.length > 0) {
     diagram.setSelectedItems(items);
     diagram.scrollToItem(items[0]);
@@ -56,7 +56,7 @@ function onContentReady(e: DxDiagramTypes.ContentReadyEvent) {
 function onSelectionChanged({ items }: DxDiagramTypes.SelectionChangedEvent) {
   selectedItemNames.value = 'Nobody has been selected';
   const filteredItems = items
-    .filter((item) => item.itemType === 'shape')
+    .filter((item: DxDiagramTypes.Item) => item.itemType === 'shape')
     .map(({ text }: Record<string, any>) => text);
   if (filteredItems.length > 0) {
     selectedItemNames.value = filteredItems.join(', ');

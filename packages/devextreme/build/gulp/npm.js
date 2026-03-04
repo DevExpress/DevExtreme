@@ -11,6 +11,7 @@ const replace = require('gulp-replace');
 const lazyPipe = require('lazypipe');
 const gulpFilter = require('gulp-filter');
 const gulpRename = require('gulp-rename');
+const MODULES = require('./modules_metadata.json');
 
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
@@ -18,6 +19,8 @@ const env = require('./env-variables.js');
 const dataUri = require('./gulp-data-uri').gulpPipe;
 const headerPipes = require('./header-pipes.js');
 const { packageDir, packageDistDir, isEsmPackage, stringSrc, devextremeDistDir } = require('./utils');
+const path = require('path');
+const fs = require('fs');
 
 const resultPath = ctx.RESULT_NPM_PATH;
 
@@ -150,6 +153,58 @@ const sources = (src, dist, distGlob) => (() => merge(
 const packagePath = `${resultPath}/${packageDir}`;
 const distPath = `${resultPath}/${packageDistDir}`;
 
+function collectExports(baseDir) {
+    const exportsMap = {};
+
+    function getPath(p) {
+        return path.posix.join(p.replace(/\\/g, '/'))
+            .replace(/^.+\/esm\//, './esm/')
+            .replace(/^.+\/cjs\//, './cjs/')
+    }
+
+    function walk(currentDir, relativePath = '.') {
+        const packageJsonPath = path.join(currentDir, 'package.json');
+
+        if (fs.existsSync(packageJsonPath) && !/(cjs|esm)$/.test(currentDir)) {
+            try {
+                const pkg = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+                const exportEntry = {};
+
+                if (pkg.module) {
+                    exportEntry.import = getPath(pkg.module);
+                }
+                if (pkg.main) {
+                    exportEntry.require = getPath(pkg.main);
+                }
+                if (pkg.typings || pkg.types) {
+                    const typesFile = pkg.typings || pkg.types;
+                    exportEntry.types = path.join(currentDir, typesFile)
+                        .replace(/\\/g, '/')
+                        .replace(/^.*\/devextreme\//, './');
+                }
+
+                if (Object.keys(exportEntry).length > 0) {
+                    const exportKey = relativePath === '.' ? '.' : `./${relativePath.replace(/\\/g, '/')}`;
+                    exportsMap[exportKey] = exportEntry;
+                }
+            } catch (err) {
+                console.warn(`Failed to read package.json in ${packageJsonPath}:`, err.message);
+            }
+        }
+
+        const entries = fs.readdirSync(currentDir, { withFileTypes: true });
+
+        for (const entry of entries) {
+            if (entry.isDirectory()) {
+                walk(path.join(currentDir, entry.name), path.join(relativePath, entry.name));
+            }
+        }
+    }
+
+    walk(baseDir);
+    return exportsMap;
+}
+
 gulp.task('npm-sources', gulp.series(
     'ts-sources',
     () => gulp
@@ -162,6 +217,33 @@ gulp.task('npm-sources', gulp.series(
 gulp.task('npm-dist', () => gulp
     .src(`${packagePath}/dist/**/*`)
     .pipe(gulp.dest(distPath))
+);
+
+gulp.task('add-exports-to-package-json', () => gulp
+    .src(`${packagePath}/package.json`)
+    .pipe(
+        through.obj((file, enc, callback) => {
+            const pkg = JSON.parse(file.contents.toString(enc));
+
+            pkg.exports = {
+                "./dist/*":"./dist/*",
+                ...collectExports(path.resolve(packagePath))
+            };
+
+            MODULES.forEach((item) => {
+                const exportPath = './' + item.name;
+                if(item.types && !pkg.exports[exportPath]?.types) {
+                    pkg.exports[exportPath] = pkg.exports[exportPath] || {};
+                    pkg.exports[exportPath].types = item.types;
+                }
+            })
+
+            file.contents = Buffer.from(JSON.stringify(pkg, null, 2));
+
+            callback(null, file);
+        })
+    )
+    .pipe(gulp.dest(packagePath))
 );
 
 const scssDir = `${packagePath}/scss`;
@@ -183,4 +265,5 @@ gulp.task('npm-sass', gulp.series(
     )
 ));
 
-gulp.task('npm', gulp.series('npm-sources', 'npm-dist', 'ts-check-public-modules', 'npm-sass'));
+gulp.task('npm', gulp.series('npm-sources', 'npm-dist', 'ts-check-public-modules', 'npm-sass', 'add-exports-to-package-json'));
+

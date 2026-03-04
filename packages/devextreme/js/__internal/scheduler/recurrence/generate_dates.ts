@@ -1,10 +1,13 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { RRule, RRuleSet } from 'rrule';
+import type { RRuleSet as RRuleSetType } from 'rrule';
+import * as rrule from 'rrule';
 
 import timeZoneUtils from '../m_utils_time_zone';
 import { getDateByAsciiString, parseRecurrenceRule } from './base';
 import type { ProcessorOptions, RRuleParams } from './types';
 import { validateRRuleObject } from './validate_rule';
+
+const { RRule, RRuleSet } = rrule;
 
 const { addOffsets } = dateUtilsTs;
 
@@ -121,7 +124,7 @@ const createRRule = (
   options: ProcessorOptions,
   startDateUtc: Date,
   until?: Date | null,
-): RRuleSet => {
+): RRuleSetType => {
   const ruleOptions = RRule.parseString(String(options.rule));
   const { firstDayOfWeek } = options;
 
