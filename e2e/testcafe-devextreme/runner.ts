@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import createTestCafe, { ClientFunction } from 'testcafe';
 import * as fs from 'fs';
 import * as process from 'process';
