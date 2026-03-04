@@ -10,6 +10,7 @@ const { readFileSync, readdirSync } = require('fs');
 const root = join(__dirname, '..', '..', '..', '..');
 const indexFileName = 'index.html';
 const port = process.argv[2] ?? 8080;
+const host = process.env.CSP_SERVER_HOST || '127.0.0.1';
 
 const cspViolations = [];
 let cspViolationIdCounter = 0;
@@ -20,7 +21,7 @@ const CSP_BASE_DIRECTIVES = {
   'style-src': ["'self'", 'https://maxcdn.bootstrapcdn.com'],
   'img-src': ["'self'"],
   'font-src': ["'self'"],
-  'connect-src': ["'self'", 'https://js.devexpress.com', ' https://demos.devexpress.com'],
+  'connect-src': ["'self'", 'https://js.devexpress.com', 'https://demos.devexpress.com'],
   'worker-src': ["'self'"],
   'frame-src': ["'self'"],
   'object-src': ["'none'"],
@@ -347,8 +348,8 @@ app.use(
   serveStatic(root, { index: [indexFileName] }),
 );
 
-const server = app.listen(port, () => {
-  console.log(`CSP Demo server listening on http://127.0.0.1:${port}`);
+const server = app.listen(port, host, () => {
+  console.log(`CSP Demo server listening on http://${host}:${port}`);
   console.log('CSP Report-Only mode enabled');
   console.log('  Report endpoint: POST /csp-report');
   console.log('  View violations: GET /csp-violations');
