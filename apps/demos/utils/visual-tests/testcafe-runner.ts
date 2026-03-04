@@ -105,14 +105,14 @@ async function main() {
         test: {
           // eslint-disable-next-line no-undef
           before: async (t: TestController) => {
-            await t.click('body', { offsetX: 0, offsetY: 0 });
-
             await ClientFunction(() => {
               if (document.activeElement && document.activeElement !== document.body) {
                 (document.activeElement as HTMLElement).blur();
               }
               window.getSelection()?.removeAllRanges();
             }).with({ boundTestRun: t })();
+
+            await t.hover('html', { offsetX: -9999, offsetY: -9999 });
           },
         },
       },
