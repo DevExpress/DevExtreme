@@ -583,12 +583,12 @@ function renderRunSuitePage(model, runProps, searchParams) {
             'devextreme-cldr-data': '/packages/devextreme/artifacts/js-systemjs/devextreme-cldr-data',
             'cldr-core': '/packages/devextreme/artifacts/js-systemjs/cldr-core',
             json: '/packages/devextreme/artifacts/js-systemjs/json.js',
-            '@@preact/signals-core': '/packages/devextreme/artifacts/js-systemjs/preact-signals.js',
+            '@preact/signals-core': '/packages/devextreme/artifacts/js-systemjs/preact-signals.js',
         }
         : {
             'devextreme-cldr-data': '/packages/devextreme/node_modules/devextreme-cldr-data',
             'cldr-core': '/packages/devextreme/node_modules/cldr-core',
-            '@@preact/signals-core': '/packages/devextreme/node_modules/@preact/signals-core/dist/signals-core.js',
+            '@preact/signals-core': '/packages/devextreme/node_modules/@preact/signals-core/dist/signals-core.js',
         };
 
     const systemMap = {
@@ -898,6 +898,10 @@ function readThemeCssFiles() {
     const bundlesPath = path.join(PACKAGE_ROOT, 'scss', 'bundles');
     const result = [];
 
+    if(!fs.existsSync(bundlesPath)) {
+        return result;
+    }
+
     fs.readdirSync(bundlesPath, { withFileTypes: true })
         .filter((entry) => entry.isDirectory())
         .forEach((entry) => {
@@ -1042,7 +1046,11 @@ function executeVectorMapConsoleApp(arg, searchParams) {
                     const index = text.indexOf('=');
                     if(index > 0) {
                         variable = text.substring(0, index).trim();
-                        text = text.substring(index + 1, text.length - 2).trim();
+                        text = text.substring(index + 1).trim();
+
+                        if(text.endsWith(';')) {
+                            text = text.slice(0, -1).trim();
+                        }
                     }
                 }
 
