@@ -243,7 +243,7 @@ function cspMiddleware(req, res, next) {
     res.locals.cspNonce = nonce;
   }
 
-  res.setHeader('Content-Security-Policy-Report-Only', buildCspHeader(demoKey, nonce, framework));
+  res.setHeader('Content-Security-Policy', buildCspHeader(demoKey, nonce, framework));
   next();
 }
 

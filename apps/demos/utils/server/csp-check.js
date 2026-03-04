@@ -1,4 +1,4 @@
-const { execFile } = require('child_process');
+const { execFile, execFileSync } = require('child_process');
 const { join } = require('path');
 const {
   readdirSync, existsSync, writeFileSync, mkdirSync,
@@ -11,7 +11,34 @@ const SERVER_URL = process.env.CSP_SERVER_URL || 'http://localhost:8080';
 const FRAMEWORK = (process.env.CSP_FRAMEWORKS || 'jQuery').trim();
 const CONCURRENCY = parseInt(process.env.CSP_CONCURRENCY, 10) || 8;
 
-const CHROME_PATH = process.env.CHROME_PATH || 'google-chrome-stable';
+function findChrome() {
+  const candidates = [
+    process.env.CHROME_PATH,
+    'google-chrome-stable',
+    'google-chrome',
+    'chromium-browser',
+    'chromium',
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    '/usr/bin/google-chrome-stable',
+    '/usr/bin/google-chrome',
+  ].filter(Boolean);
+
+  for (const candidate of candidates) {
+    try {
+      if (candidate.startsWith('/')) {
+        execFileSync('test', ['-x', candidate], { stdio: 'ignore' });
+      } else {
+        execFileSync('which', [candidate], { stdio: 'ignore' });
+      }
+      return candidate;
+    } catch {
+      // try next candidate
+    }
+  }
+  throw new Error('Chrome not found. Set CHROME_PATH environment variable.');
+}
+
+const CHROME_PATH = findChrome();
 
 function findDemos() {
   const demosDir = join(DEMO_ROOT, 'Demos');
@@ -49,18 +76,21 @@ function findDemos() {
 }
 
 function visitPage(url) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const child = execFile(CHROME_PATH, [
       '--headless=new',
       '--no-sandbox',
       '--disable-gpu',
       '--disable-software-rasterizer',
       '--disable-dev-shm-usage',
-      '--screenshot=/dev/null',
+      '--dump-dom',
+      '--virtual-time-budget=5000',
       '--window-size=100,100',
       url,
     ], { timeout: 30000 }, () => resolve());
-    child.on('error', () => resolve());
+    child.on('error', (err) => {
+      reject(new Error(`Failed to launch Chrome at "${CHROME_PATH}": ${err.message}`));
+    });
   });
 }
 
