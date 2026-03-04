@@ -1,7 +1,10 @@
 /* eslint-disable spellcheck/spell-checker */
+import { getWindow } from '../../utils/m_window';
 import { EventEmitter } from './event_emitter';
 import type * as StateManagementTypes from './types';
 import { isObject } from './utils';
+
+const window = getWindow();
 
 export class ReduxDevToolsConnector implements StateManagementTypes.DevToolsConnector {
   private devTools: StateManagementTypes.ReduxDevToolsInstance | null = null;
