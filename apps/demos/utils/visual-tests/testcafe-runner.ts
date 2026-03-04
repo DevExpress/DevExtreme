@@ -114,7 +114,7 @@ async function main() {
               window.getSelection()?.removeAllRanges();
             }).with({ boundTestRun: t })();
 
-            await t.hover('html', { offsetX: -9999, offsetY: -9999 });
+            await t.hover('html', { offsetX: 1, offsetY: 1 });
           },
         },
       },
