@@ -119,6 +119,12 @@ const CSP_DEMO_ALLOWLIST = {
   'Resizable/Overview': {
     'img-src': ['data:'],
   },
+  'SelectBox/Grouping': {
+    'font-src': ['https://maxcdn.bootstrapcdn.com'],
+  },
+  'SelectBox/SearchAndEditing': {
+    'font-src': ['https://maxcdn.bootstrapcdn.com'],
+  },
   'Scheduler/GoogleCalendarIntegration': {
     'connect-src': ['https://www.googleapis.com'],
   },
@@ -127,6 +133,15 @@ const CSP_DEMO_ALLOWLIST = {
   },
   'ScrollView/Overview': {
     'img-src': ['data:'],
+  },
+  'Slider/Overview': {
+    'font-src': ['https://maxcdn.bootstrapcdn.com'],
+  },
+  'Sortable/Customization': {
+    'font-src': ['https://maxcdn.bootstrapcdn.com'],
+  },
+  'TagBox/Grouping': {
+    'font-src': ['https://maxcdn.bootstrapcdn.com'],
   },
   // AI demos use inline <script type="module"> to import OpenAI SDK from esm.sh
   'TreeList/AIColumns': {
