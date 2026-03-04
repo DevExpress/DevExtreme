@@ -13,6 +13,7 @@ const REPO_ROOT = path.resolve(PACKAGE_ROOT, '../..');
 const TESTING_ROOT = path.join(PACKAGE_ROOT, 'testing');
 const TESTS_ROOT = path.join(TESTING_ROOT, 'tests');
 const VECTOR_DATA_DIRECTORY = path.join(TESTING_ROOT, 'content', 'VectorMapData');
+const TEMPLATES_ROOT = path.join(__dirname, 'templates');
 
 const COMPLETED_SUITES_FILENAME = path.join(TESTING_ROOT, 'CompletedSuites.txt');
 const LAST_SUITE_TIME_FILENAME = path.join(TESTING_ROOT, 'LastSuiteTime.txt');
@@ -32,6 +33,7 @@ const VECTOR_MAP_TESTER_PORT = Number(PORTS['vectormap-utils-tester']);
 const PATH_TO_NODE = resolveNodePath();
 
 const logger = createRawLogger(RAW_LOG_FILENAME);
+const TEMPLATE_CACHE = new Map();
 
 const vectorMapNodeServer = {
     process: null,
@@ -466,831 +468,32 @@ function isNotEmptyDir(dirPath) {
 }
 
 function renderIndexPage() {
-    const rootUrl = '/';
-    const suitesJsonUrl = '/Main/SuitesJson';
-    const categoriesJsonUrl = '/Main/CategoriesJson';
-    const jqueryUrl = '/packages/devextreme/artifacts/js/jquery.js';
-    const knockoutUrl = '/packages/devextreme/artifacts/js/knockout-latest.js';
-
-    return `<!DOCTYPE html>
-
-<script src="${jqueryUrl}"></script>
-<script src="${knockoutUrl}"></script>
-
-<style>
-
-    a,
-    .link
-    {
-        text-decoration: none;
-        color: Blue;
-        cursor: pointer;
-    }
-
-    #cat_block,
-    #suite_block
-    {
-        border: solid 1px silver;
-        padding: 10px;
-        margin: 10px;
-        float: left;
-    }
-
-    #cat_block li .explicit
-    {
-        color: gray;
-    }
-
-</style>
-
-<body>
-    <div id="cat_block">
-        <div>
-            <b>Categories</b>
-        </div>
-        <hr />
-        <div>
-            Select:
-                <span class="link" data-bind="click: handleSelectAll">all</span>,
-                <span class="link" data-bind="click: handleUnselectAll">none</span>
-            | <a target="_blank" href="" data-bind="attr: { href: runSelectedUrl }">RUN</a>
-        </div>
-        <div>
-            <label>
-                Check for globals: <input type="checkbox" data-bind="checked: noGlobals" />
-            </label>
-        </div>
-        <div>
-            <label>
-                No try catch: <input type="checkbox" data-bind="checked: noTryCatch" />
-            </label>
-        </div>
-        <div>
-            <label>
-                Check for timers: <input type="checkbox" data-bind="checked: noTimers" />
-            </label>
-        </div>
-        <div>
-            <label>
-                No jQuery: <input type="checkbox" data-bind="checked: noJQuery" />
-            </label>
-        </div>
-        <div>
-            <label>
-                No CSP: <input type="checkbox" data-bind="checked: noCsp" />
-            </label>
-        </div>
-
-        <ul data-bind="foreach: cats">
-            <li>
-                <input type=checkbox data-bind="checked: selected">
-                <span class="link" data-bind="text: name, css: { explicit: explicit }, click: handleChoose"></span>
-            </li>
-        </ul>
-        <div>
-            <small>Greyed are explicit tests</small>
-        </div>
-    </div>
-
-    <div id="suite_block" data-bind="visible: chosenCat">
-        <div>
-            <b>Suites for category &quot;<span data-bind="text: chosenCat"></span>&quot;</b>
-            <span class="link" data-bind="click: handleRefreshSuies">(Refresh)</span>
-        </div>
-        <hr />
-        <div>
-            <a target="_blank" href="" data-bind="attr: { href: runAllInCatUrl }">Run all suites</a>
-        </div>
-        <ul data-bind="foreach: suites">
-            <li>
-                <a data-bind="text: shortName, attr: { href: url }"></a>
-            </li>
-        </ul>
-    </div>
-</body>
-
-
-<script>
-    $(function() {
-        var ROOT_URL = ${jsonString(rootUrl)};
-
-        // Category model
-
-        var CatModel = function(data) {
-            this.name = data.Name;
-            this.explicit = data.Explicit;
-            this.selected = ko.observable(CatModel.shouldSelectByDefault(this));
-        };
-
-        CatModel.shouldSelectByDefault = function(cat) {
-            return !cat.explicit;
-        };
-
-        CatModel.prototype = {
-            handleChoose: function(cat, e) {
-                vm.chosenCat(cat);
-                cat.loadSuites();
-            },
-
-            loadSuites: function() {
-                $.getJSON(${jsonString(suitesJsonUrl)}, { id: this.name })
-                    .done(function(suites) {
-                        suites = $.map(suites, function(s) { return new SuiteModel(s) });
-                        vm.suites(suites);
-
-                    });
-            },
-
-            toString: function() {
-                return this.name;
-            }
-        };
-
-
-        // Suite model
-
-        var SuiteModel = function(data) {
-            this.shortName = data.ShortName;
-            this.url = ko.computed(function() {
-                var mainModel = ko.dataFor(document.getElementById("cat_block")),
-                    qs = {};
-                $.extend(qs, mainModel._runUrlExtraParams());
-                return data.Url + "?" + $.param(qs);
-            });
-        }
-
-
-        // Main model
-
-        var MainModel = function() {
-            this.cats = ko.observableArray();
-            this.chosenCat = ko.observable();
-            this.suites = ko.observableArray();
-            this.noTryCatch = ko.observable(false);
-            this.noGlobals = ko.observable(false);
-            this.noTimers = ko.observable(true);
-            this.noJQuery = ko.observable(true);
-            this.noCsp = ko.observable(true);
-            this.hasChosenCat = ko.computed(
-                function() { return !!this.chosenCat() },
-                this
-            );
-
-            this.runAllInCatUrl = ko.computed(
-                function() {
-                    if(!this.hasChosenCat())
-                        return;
-                    return this._formatRunAllUrl([this.chosenCat().name]);
-                },
-                this
-            );
-
-            this.runSelectedUrl = ko.computed(
-                function() {
-                    var names = this.selectedCatNames();
-                    return this._formatRunAllUrl(names);
-                },
-                this
-            );
-        };
-
-        MainModel.prototype = {
-
-            handleRefreshSuies: function(s, e) {
-                this.chosenCat().loadSuites();
-            },
-
-            handleSelectAll: function(s, e) {
-                s._selectAllCore(CatModel.shouldSelectByDefault);
-            },
-
-            handleUnselectAll: function(s, e) {
-                s._selectAllCore(function() { return false });
-            },
-
-            selectedCatNames: function() {
-                return $.map(
-                    $.grep(this.cats(), function(c) { return c.selected() }),
-                    function(c) { return c.name }
-                );
-            },
-
-            implicitCategoriesCount: function() {
-                return $.grep(this.cats(), function(c) { return !c.explicit }).length;
-            },
-
-            _runUrlExtraParams: function() {
-                var result = {};
-                if(this.noGlobals())
-                    result.noglobals = "true";
-                if(this.noTryCatch())
-                    result.notrycatch = "true";
-                if(this.noTimers())
-                    result.notimers = "true";
-                if(this.noJQuery())
-                    result.nojquery = "true";
-                if(this.noCsp()) {
-                    result.nocsp = "true";
-                }
-                return result;
-            },
-
-            _formatRunAllUrl: function(include) {
-                var qs = { };
-                if(include && include.length) {
-                    if(include.length !== this.implicitCategoriesCount())
-                        qs.include = include.join();
-                }
-                $.extend(qs, this._runUrlExtraParams());
-                return ROOT_URL + "run?" + $.param(qs);
-            },
-
-            _selectAllCore: function(func) {
-                $.each(this.cats(), function() { this.selected(func(this)) });
-            }
-        };
-
-        var vm = new MainModel;
-
-        $.getJSON(${jsonString(categoriesJsonUrl)})
-            .done(function(cats) {
-                cats = $.map(cats, function(c) { return new CatModel(c) });
-                vm.cats(cats);
-            });
-
-        ko.applyBindings(vm);
+    return renderTemplate('index.template.html', {
+        JQUERY_URL: '/packages/devextreme/artifacts/js/jquery.js',
+        KNOCKOUT_URL: '/packages/devextreme/artifacts/js/knockout-latest.js',
+        ROOT_URL_JSON: jsonString('/'),
+        SUITES_JSON_URL_JSON: jsonString('/Main/SuitesJson'),
+        CATEGORIES_JSON_URL_JSON: jsonString('/Main/CategoriesJson'),
     });
-</script>
-`;
 }
 
 function renderRunAllPage(model, runProps) {
-    const jqueryUrl = '/packages/devextreme/artifacts/js/jquery.js';
-
-    return `<!DOCTYPE html>
-
-<head>
-    <title>QUnit All Suites test page</title>
-    <meta name="MobileOptimized" content="480">
-</head>
-
-<style>
-    html, body
-    {
-        height: 100%;
-    }
-
-    body
-    {
-        padding: 0;
-        margin: 0;
-        background: gray;
-    }
-
-    iframe
-    {
-        background: white;
-    }
-
-    #workers .worker
-    {
-        float: left;
-        margin: 4px;
-    }
-
-    #workers .worker iframe
-    {
-
-        width: 400px;
-        height: 300px;
-        border: solid 2px black;
-    }
-
-    #reportFrame
-    {
-        border: 0;
-        width: 100%;
-        height: 100%;
-        display: none;
-    }
-
-    h1, h2 {
-        margin: 0;
-        padding: 0;
-    }
-
-</style>
-
-<script src="${jqueryUrl}"></script>
-
-<script>
-    $(function() {
-        var TEST_TIMEOUT_SECONDS = 45,
-            TEST_TIMEOUT = TEST_TIMEOUT_SECONDS * 1000,
-            WORKER_NAME_PREFIX = "workerFrame",
-            busyCount = 0,
-            suitesDescription = {
-                constellation: ${jsonString(model.Constellation)},
-                categoriesList: ${jsonString(model.CategoriesList)},
-                version: ${jsonString(model.Version)}
-            },
-            suitesInProgress = [ ],
-            urls = ${jsonString(model.Suites)},
-            noTryCatch = ${jsonString(runProps.NoTryCatch)},
-            noGlobals = ${jsonString(runProps.NoGlobals)},
-            noTimers = ${jsonString(runProps.NoTimers)},
-            noJQuery = ${jsonString(runProps.NoJQuery)},
-            shadowDom = ${jsonString(runProps.ShadowDom)},
-            noCsp = ${jsonString(runProps.NoCsp)},
-            farmMode = ${jsonString(runProps.IsContinuousIntegration)},
-            DX_HTTP_CACHE = Date.now(),
-            runWorkerInNewWindow = ${jsonString(runProps.WorkerInWindow)},
-            maxWorkersFromEnv = ${jsonString(runProps.MaxWorkers)},
-
-            WORKER_COUNT;
-
-        var calcWorkerFrameCount = function() {
-            if(runWorkerInNewWindow)
-                return 1;
-
-            if(maxWorkersFromEnv !== null && maxWorkersFromEnv > 0)
-                return maxWorkersFromEnv;
-
-            return 2;
-        };
-
-        WORKER_COUNT = calcWorkerFrameCount();
-
-        var testResults = {
-            name: "QUnit runner output",
-            total: 0,
-            failures: 0,
-            suites: [
-                {
-                    __type: "suite",
-                    name: "Root suite",
-                    results: [ ],
-                    pureTime: 0
-                }
-            ]
-        };
-
-        var rootSuite = testResults.suites[0],
-            rootStartTime = new Date();
-
-        var titleElement  = document.getElementById("title");
-        if(suitesDescription.constellation) {
-            titleElement.innerText = suitesDescription.constellation;
-            titleElement.style.color = "yellow";
-        } else {
-            titleElement.innerText = suitesDescription.categoriesList;
-            titleElement.style.color = "white";
-        }
-
-        document.getElementById("branch").innerText = suitesDescription.version;
-
-
-        var saveResults = function() {
-            $.ajax({
-                url: ${jsonString('/Main/SaveResults')},
-                type: "post",
-                contentType: "application/json",
-                data: JSON.stringify(testResults),
-                timeout: 60000
-            }).done(function() {
-                notifyDeviceTestManager("QUnit.saveResults.done");
-                removeWorkers();
-
-                var frame = document.getElementById("reportFrame");
-                frame.style.display = "block";
-                frame.setAttribute("src", ${jsonString('/Main/DisplayResults')});
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                notifyDeviceTestManager("QUnit.saveResults.failed");
-                removeWorkers();
-            });
-        };
-
-        var resultSaving = false;
-
-        var nextUrl = function(i) {
-            if(suitesInProgress[i] !== null && suitesInProgress[i] !== undefined) {
-                return;
-            }
-
-            if(!urls.length) {
-                if(!resultSaving && !busyCount) {
-                    resultSaving = true;
-                    rootSuite.time = roundTime((new Date() - rootStartTime) / 1000);
-                    rootSuite.pureTime = roundTime(rootSuite.pureTime);
-                    saveResults();
-                    window.onbeforeunload = $.noop;
-                }
-                return;
-            }
-
-            notifyDeviceTestManager("QUnit.nextUrl");
-
-            var urlInfo = urls.shift(),
-                worker = workerByIndex(i),
-                additionalParams = { };
-
-            if(noTryCatch)
-                additionalParams.notrycatch = "true";
-            if(noGlobals)
-                additionalParams.noglobals = "true";
-            if(noTimers)
-                additionalParams.notimers = "true";
-            if(noJQuery)
-                additionalParams.nojquery = "true";
-            if(shadowDom)
-                additionalParams.shadowDom = "true";
-            if(noCsp) {
-                additionalParams.nocsp = "true";
-            }
-
-            additionalParams.DX_HTTP_CACHE = DX_HTTP_CACHE;
-            additionalParams.frame = i;
-
-            suitesInProgress[i] = {
-                __type: "suite",
-
-                name: urlInfo.FullName,
-                url: urlInfo.Url,
-                results: [ ],
-
-                startTime: new Date(),
-                pureTime: 0,
-                finalized: false,
-
-                finalize: function(success) {
-                    if(this.finalized) {
-                        return;
-                    }
-
-                    this.finalized = true;
-                    this.time = roundTime((new Date() - this.startTime) / 1000);
-                    this.pureTime = roundTime(this.pureTime);
-                    delete this.startTime;
-
-                    delete this.finalize;
-                    delete this.url;
-
-                    rootSuite.results.push(this);
-                    suitesInProgress[i] = null;
-                    busyCount--;
-                }
-            };
-
-            worker.name = WORKER_NAME_PREFIX + i;
-            busyCount++;
-            worker.location = urlInfo.Url + "?" + $.param(additionalParams);
-        };
-
-        var workers = [ ];
-
-        var createWorkers = function() {
-            var worker;
-
-            for(var i = 0; i < WORKER_COUNT; i++) {
-                if(runWorkerInNewWindow) {
-                    worker = window.open("about:blank", "popup" + Date.now(), "left=0,top=0,width=500,height=500");
-                } else {
-                    var workerWrapper = $("<div class=worker></div>")
-                        .attr("id", "worker" + i)
-                        .append(
-                            $("<iframe scrolling=no></iframe")
-                        )
-                        .appendTo("#workers")
-
-                    worker = workerWrapper.children("iframe").get(0).contentWindow;
-                }
-                workers.push(worker);
-            }
-        };
-
-        var removeWorkers = function() {
-            if(runWorkerInNewWindow) {
-                for(var i = 0; i < workers.length; i++) {
-                    workers[i].close();
-                };
-            } else {
-                $("#workers").remove();
-            }
-            workers = [];
-        };
-
-        var workerByIndex = function(index) {
-            return workers[index];
-        };
-
-        var indexFromWorkerName = function(worker) {
-            return Number(worker.name.substr(WORKER_NAME_PREFIX.length));
-        };
-
-        var runFirstBatch = function() {
-            notifyDeviceTestManager("QUnit.runFirstBatch");
-            for(var i = 0; i < WORKER_COUNT; i++)
-                nextUrl(i);
-        };
-
-        var getTestCaseName = function(testSuite, qunitData) {
-            var result = testSuite.name + " - ";
-            if(qunitData.module)
-                result += qunitData.module + ": ";
-            result += qunitData.name;
-            return result;
-        };
-
-        var getTestCaseUrl = function(testSuite, qunitData) {
-            return testSuite.url + "?filter=" + encodeURIComponent(qunitData.name);
-        };
-
-        window.RUNNER_ON_TEST_START = function(worker, qunitData) {
-            var i = indexFromWorkerName(worker),
-                testSuite = suitesInProgress[i];
-
-            notifyIsAlive();
-
-            var testCase = {
-                __type: "case",
-
-                startTime: new Date(),
-                currentAssert: 0,
-
-                stopWatch: launchStopWatch(),
-
-                finalize: function(success) {
-                    clearTimeout(this.stopWatch);
-                    delete this.stopWatch;
-
-                    var time = (new Date() - this.startTime) / 1000;
-                    this.time = this.time || time;
-
-                    testSuite.pureTime += time;
-                    rootSuite.pureTime += time;
-
-                    testResults.total++;
-                    if(!success) {
-                        testResults.failures++;
-                    }
-
-                    delete this.startTime;
-                    delete this.currentAssert;
-                    delete this.finalize;
-                }
-            };
-
-            function launchStopWatch() {
-                return setTimeout(function() {
-                    testCase.finalize(false, 0);
-                    testCase.name = getTestCaseName(testSuite, qunitData);
-                    testCase.url = getTestCaseUrl(testSuite, qunitData);
-                    testCase.failure = testCase.failure || { };
-                    testCase.failure.message = "Test timed out after " + TEST_TIMEOUT_SECONDS + " seconds!";
-                    testSuite.finalize(false, 0);
-                }, TEST_TIMEOUT);
-            }
-
-            if(testSuite) {
-                testSuite.results.push(testCase);
-            } else {
-                window.RUNNER_ON_MISC_ERROR(qunitData.suiteUrl,
-                    "The test suite has already been finalized when an test has executed in the following test" +
-                    "\nModule: " + qunitData.module +
-                    "\nTest: " + qunitData.name + "\n" +
-                    new Error().stack
-                );
-            }
-
-            $.post(${jsonString('/Main/NotifyTestStarted')}, { name: getTestCaseName(testSuite, qunitData) });
-        };
-
-        var indicateTestStatusInTitle = function(failed) {
-            document.title = [
-                    (failed ? "\u2716" : "\u2714"),
-                    document.title.replace(/^[\u2714\u2716] /i, "")
-            ].join(" ");
-        };
-
-        window.RUNNER_ON_TEST_LOG = function(worker, qunitData) {
-            var i = indexFromWorkerName(worker),
-                testSuite = suitesInProgress[i];
-
-            if(testSuite && StringEndsWith(qunitData.suiteUrl, escape(testSuite.name))) {
-                var testCases = testSuite.results,
-                    testCase = testCases[testCases.length - 1];
-
-                ++testCase.currentAssert;
-                if(!qunitData.result) {
-                    testCase.failure = testCase.failure || { message: "" };
-                    testCase.failure.message += testCase.currentAssert + ". " + (qunitData.message || "failed") + "\n";
-                    if(qunitData.hasOwnProperty("actual") && qunitData.hasOwnProperty("expected")) {
-                        testCase.failure.message += "Expected: " + JSON.stringify(qunitData.expected) + "\n"
-                                                  + "Result: " + JSON.stringify(qunitData.actual) + "\n";
-                    }
-                    testCase.failure.message += "Source:\n" + qunitData.source + "\n\n";
-                    testCase.name = getTestCaseName(testSuite, qunitData);
-                    testCase.url = getTestCaseUrl(testSuite, qunitData);
-
-                    testCase.failure.message = stripDXCache(testCase.failure.message);
-
-                    indicateTestStatusInTitle(!qunitData.failed);
-                }
-                else if(qunitData.message && qunitData.message.indexOf && qunitData.message.indexOf("TIME: ") === 0 && qunitData.actual){
-                    testCase.name = getTestCaseName(testSuite, qunitData);
-                    testCase.time = qunitData.actual;
-                }
-            } else {
-                window.RUNNER_ON_MISC_ERROR(qunitData.suiteUrl,
-                       "The test suite has already been finalized when an assert has executed in the following test" +
-                       "\nModule: " + qunitData.module +
-                       "\nTest: " + qunitData.name + "\n" +
-                       new Error().stack
-                );
-            }
-        };
-
-        window.RUNNER_ON_TEST_DONE = function(worker, qunitData) {
-            var i = indexFromWorkerName(worker),
-                testSuite = suitesInProgress[i],
-                testCases,
-                testCase;
-
-            notifyDeviceTestManager("QUnit.testCaseDone");
-            notifyIsAlive();
-
-            if(testSuite && StringEndsWith(qunitData.suiteUrl, escape(testSuite.name))) {
-                testCases = suitesInProgress[i].results;
-                testCase = testCases[testCases.length - 1];
-
-                if(qunitData.skipped) {
-                    var reason = "Unknown reason",
-                        name = qunitData.name;
-
-                    if(name.indexOf("[") > -1) {
-                        reason = name.substring(name.indexOf("[") + 1, name.indexOf("]"));
-                        name = name.substring(0, name.indexOf("["));
-                    }
-                    testCase.reason = { message: reason };
-                    qunitData.name = name;
-                    testCase.name = getTestCaseName(testSuite, qunitData);
-                    testCase.url = getTestCaseUrl(testSuite, qunitData);
-                    testCase.executed = false;
-                }
-                testCase.finalize(!qunitData.failed, qunitData.total);
-            } else {
-                window.RUNNER_ON_MISC_ERROR(qunitData.suiteUrl,
-                    "The test suite has already been finalized when the following test has finished running" +
-                    "\nModule: " + qunitData.module +
-                    "\nTest: " + qunitData.name + "\n" +
-                    new Error().stack
-                );
-            }
-
-            $.post(${jsonString('/Main/NotifyTestCompleted')}, { name: getTestCaseName(testSuite, qunitData), passed:  qunitData.passed === qunitData.total});
-        };
-
-        window.RUNNER_ON_DONE = function(worker, qunitData) {
-            var i = indexFromWorkerName(worker),
-                suite = suitesInProgress[i],
-                passed = !qunitData.failed;
-
-            if(suite) {
-                if(suite.finalized) {
-                    suitesInProgress[i] = null;
-                    return;
-                }
-
-                var suiteName = suite.name;
-                suite.finalize(passed, qunitData.total);
-
-                notifySuiteFinalized(suiteName, passed, qunitData.runtime, function() {
-                    nextUrl.call(window, i);
-                });
-            }
-        };
-
-        window.RUNNER_ON_MISC_ERROR = function(worker, msg) {
-            msg = String(worker.location || worker) + ": " + msg;
-            $.post(${jsonString('/Main/LogMiscError')}, { msg: msg });
-        };
-
-        window.onbeforeunload = function(e) {
-            if(!isWinPhone) {
-                var confirmationMessage = "Tests are Running!";
-                (e || window.event).returnValue = confirmationMessage;
-                return confirmationMessage;
-            }
-        };
-
-        function StringEndsWith(phrase, ending) {
-            return phrase.indexOf(ending, phrase.length - ending.length) !== -1;
-        };
-
-        function stripDXCache(text) {
-            return String(text).replace(/[?&]DX_HTTP_CACHE=\w+/g, "");
-        }
-
-        function notifyDeviceTestManager(text) {
-            if(window.external && "notify" in external) {
-                external.notify(text);
-            } else if("DevExtremeTestWorkerBridge" in window) {
-                DevExtremeTestWorkerBridge.notify(text);
-            }
-        }
-
-        var activeFinalizationRequests = 0;
-        var maxConcurrentFinalizations = 3;
-        var finalizationQueue = [];
-
-        function notifySuiteFinalized(name, passed, runtime, callback) {
-            finalizationQueue.push({ name: name, passed: passed, runtime: runtime, callback: callback });
-            processFinalizationQueue();
-        }
-
-        function processFinalizationQueue() {
-            while (finalizationQueue.length > 0 && activeFinalizationRequests < maxConcurrentFinalizations) {
-                var item = finalizationQueue.shift();
-                executeNotifySuiteFinalized(item.name, item.passed, item.runtime, item.callback);
-            }
-        }
-
-        function executeNotifySuiteFinalized(name, passed, runtime, callback) {
-            activeFinalizationRequests++;
-
-            var callbackCalled = false;
-            var safeCallback = function() {
-                if(callbackCalled) return;
-                callbackCalled = true;
-                if(callback) callback();
-            };
-
-            var safetyTimer = setTimeout(function() {
-                activeFinalizationRequests--;
-                safeCallback();
-                processFinalizationQueue();
-            }, 20000);
-
-            $.ajax({
-                url: ${jsonString('/Main/NotifySuiteFinalized')},
-                type: 'POST',
-                data: { name: name, passed: passed, runtime: runtime },
-                timeout: 10000
-            }).always(function() {
-                clearTimeout(safetyTimer);
-                activeFinalizationRequests--;
-                safeCallback();
-                processFinalizationQueue();
-            });
-        }
-        var lastAliveTime = 0;
-        var aliveThrottleMs = 5000;
-        var pendingAlive = false;
-
-        function notifyIsAlive(){
-            var now = Date.now();
-            var timeSinceLastAlive = now - lastAliveTime;
-
-            if (timeSinceLastAlive < aliveThrottleMs) {
-                if (!pendingAlive) {
-                    pendingAlive = true;
-                    setTimeout(function() {
-                        pendingAlive = false;
-                        notifyIsAlive();
-                    }, aliveThrottleMs - timeSinceLastAlive);
-                }
-                return;
-            }
-
-            lastAliveTime = now;
-
-            $.ajax({
-                url: ${jsonString('/Main/NotifyIsAlive')},
-                type: 'POST',
-                timeout: 10000
-            });
-        }
-
-        function roundTime(time) {
-            return +(time.toFixed(3));
-        }
-
-        createWorkers();
-        runFirstBatch();
+    return renderTemplate('run-all.template.html', {
+        JQUERY_URL: '/packages/devextreme/artifacts/js/jquery.js',
+        CONSTELLATION_JSON: jsonString(model.Constellation),
+        CATEGORIES_LIST_JSON: jsonString(model.CategoriesList),
+        VERSION_JSON: jsonString(model.Version),
+        SUITES_JSON: jsonString(model.Suites),
+        NO_TRY_CATCH_JSON: jsonString(runProps.NoTryCatch),
+        NO_GLOBALS_JSON: jsonString(runProps.NoGlobals),
+        NO_TIMERS_JSON: jsonString(runProps.NoTimers),
+        NO_JQUERY_JSON: jsonString(runProps.NoJQuery),
+        SHADOW_DOM_JSON: jsonString(runProps.ShadowDom),
+        NO_CSP_JSON: jsonString(runProps.NoCsp),
+        IS_CONTINUOUS_INTEGRATION_JSON: jsonString(runProps.IsContinuousIntegration),
+        WORKER_IN_WINDOW_JSON: jsonString(runProps.WorkerInWindow),
+        MAX_WORKERS_JSON: jsonString(runProps.MaxWorkers),
     });
-</script>
-
-<div id="workers">
-
-</div>
-<div>
-    <div>
-        <h1 id="title"></h1>
-        <h2 id="branch"></h2>
-    </div>
-</div>
-<iframe id="reportFrame" name="reportFrame"></iframe>
-`;
 }
 
 function renderRunSuitePage(model, runProps, searchParams) {
@@ -1463,10 +666,9 @@ function renderRunSuitePage(model, runProps, searchParams) {
     };
 
     const integrationImportPaths = getJQueryIntegrationImports();
-
-    return `<!DOCTYPE html>
-<head>
-    ${runProps.NoCsp ? '' : `<meta
+    const cspMetaTag = runProps.NoCsp
+        ? ''
+        : `<meta
             http-equiv="Content-Security-Policy"
             content="
                 default-src 'self';
@@ -1476,168 +678,24 @@ function renderRunSuitePage(model, runProps, searchParams) {
                 font-src 'self' https://fonts.gstatic.com;
                 connect-src 'self' https://js.devexpress.com;
             "
-        />`}
-    <title>${escapeHtml(model.Title)} - QUnit test page</title>
-    <link rel="stylesheet" href="${qunitCss}" />
-    <script src="${qunitJs}"></script>
+        />`;
 
-    <script nonce="M5H5tE">
-        window.ROOT_URL = "/";
-        window.farmMode = ${jsonString(runProps.IsContinuousIntegration)};
-
-        QUnit.config.autostart = false;
-        QUnit.config.failOnZeroTests = false;
-    </script>
-    <script src="${qunitExtensionsJs}"></script>
-
-    <style nonce="tYGMxb">
-        #qunit-fixture.qunit-fixture-visible {
-            position: fixed !important;
-            left: 0 !important;
-            top: 0 !important;
-            pointer-events: none;
-        }
-
-        #qunit-fixture.qunit-fixture-visible * {
-            pointer-events: auto;
-        }
-
-
-
-        a.up {
-            width: 30px;
-            height: 30px;
-            margin-top: 12px;
-            margin-left: 10px;
-            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAvklEQVQ4y2NgoAa4yvjH9bc0Ccr/Jv//+O/Qbxlilaf8//D///9/RGmBK/8P1nLwtyxh5e//IwB+LRjK8WvBqhyfln9ucOVfofSv/98hWv7vwqLhfzpU2ZV/dVDWxX/1UC1PcGu48sf4vw9Uw8kfHEAtP/BpuPrH+AUDQgMDA1QLDg1X/xi9ALGQNEC13MXmadc/hi8gWlE0MDB8Z/+XhkXDC8YXMLvQNICCHG98Y2ogAEamBqX/RWAYxTAgAACFCjwy8XB3SQAAAABJRU5ErkJggg==) no-repeat;
-            display: inline-block;
-            float: left;
-        }
-    </style>
-
-    <script nonce="TEiwcJ">
-        (function() {
-            var doneCount = 0,
-                parentWindow = window.opener || window.parent;
-
-            QUnit.done(function(data) {
-                if(doneCount == 1)
-                    notifyExtraDoneCall();
-
-                if(!doneCount && parentWindow && parentWindow.RUNNER_ON_DONE)
-                    parentWindow.RUNNER_ON_DONE(window, data);
-
-                doneCount++;
-            });
-
-            QUnit.testStart(function(data) {
-                data.suiteUrl = location.pathname;
-                if(parentWindow && parentWindow.RUNNER_ON_TEST_START)
-                    parentWindow.RUNNER_ON_TEST_START(window, data);
-            });
-
-            QUnit.log(function(data) {
-                data.suiteUrl = location.pathname;
-                if(parentWindow && parentWindow.RUNNER_ON_TEST_LOG)
-                    parentWindow.RUNNER_ON_TEST_LOG(window, data);
-            });
-
-            QUnit.testDone(function(data) {
-                data.suiteUrl = location.pathname;
-                if(parentWindow && parentWindow.RUNNER_ON_TEST_DONE )
-                    parentWindow.RUNNER_ON_TEST_DONE(window, data);
-            });
-
-            QUnit.config.urlConfig.push({
-                id: "nojquery",
-                label: "No jQuery",
-                tooltip: "Don't use jQuery for widget rendering"
-            });
-
-            QUnit.config.urlConfig.push({
-                id: "nocsp",
-                label: "No CSP",
-                tooltip: "Use noscp components without CSP checks",
-            });
-
-            function notifyExtraDoneCall() {
-                var msg = "QUnit.done called several times. Possible causes: extra start() calls, assertion outside test context";
-
-                if(parentWindow && parentWindow.RUNNER_ON_MISC_ERROR) {
-                    parentWindow.RUNNER_ON_MISC_ERROR(window, msg);
-                } else {
-                    alert("ALARM! DO NOT IGNORE THIS!\\n" + msg);
-                }
-            }
-        })();
-    </script>
-
-    <script src="${jqueryJs}"></script>
-
-    <script src="${sinonJs}"></script>
-
-    <script src="${systemJs}"></script>
-
-    <script nonce="IpCks6">
-        (function() {
-            window.process = window.process || {};
-            window.process.env = window.process.env || {};
-            window.process.env.NODE_ENV = 'test';
-
-            jQuery.noConflict();
-
-            var cacheBuster = ${jsonString(cacheBuster)};
-            if(cacheBuster.length) {
-                var systemLocate = SystemJS.locate;
-                SystemJS.locate = function(load) {
-                    return Promise.resolve(systemLocate.call(this, load)).then(function(address) {
-                        return address + ( address.indexOf('?') === -1 ? '?' : '&') + cacheBuster;
-                    });
-                }
-            }
-
-            SystemJS.config(${jsonString(systemConfig)});
-        })();
-    </script>
-</head>
-<a class="up" href="/"></a>
-<div id="qunit"></div>
-<div id="qunit-fixture"></div>
-
-<script nonce="Z27qXj">
-    (function() {
-        var integrationImportPaths = ${jsonString(integrationImportPaths)};
-
-        var imports = integrationImportPaths.map(function(importPath) {
-            return SystemJS.import(importPath);
-        });
-
-        imports.push(new Promise(function(resolve) {
-            jQuery(resolve);
-        }));
-
-        Promise.all(imports)
-        .then(function() {
-            var isNotWebkitBrowser = window.navigator.userAgent.toLowerCase().indexOf("webkit") < 0;
-
-            if(${jsonString(isServerSideTest)} && isNotWebkitBrowser) {
-                return;
-            }
-
-            return SystemJS.import(${jsonString(getTestUrl())});
-        })
-        .then(function() {
-            QUnit.start();
-        })
-        .catch(function (err) {
-            QUnit.start();
-            QUnit.test("load failed", function(assert) {
-                throw err;
-            });
-        });
-    })();
-</script>
-`;
+    return renderTemplate('run-suite.template.html', {
+        CSP_META_TAG: cspMetaTag,
+        TITLE: model.Title,
+        QUNIT_CSS_URL: qunitCss,
+        QUNIT_JS_URL: qunitJs,
+        QUNIT_EXTENSIONS_JS_URL: qunitExtensionsJs,
+        JQUERY_JS_URL: jqueryJs,
+        SINON_JS_URL: sinonJs,
+        SYSTEM_JS_URL: systemJs,
+        IS_CONTINUOUS_INTEGRATION_JSON: jsonString(runProps.IsContinuousIntegration),
+        CACHE_BUSTER_JSON: jsonString(cacheBuster),
+        SYSTEM_CONFIG_JSON: jsonString(systemConfig),
+        INTEGRATION_IMPORT_PATHS_JSON: jsonString(integrationImportPaths),
+        IS_SERVER_SIDE_TEST_JSON: jsonString(isServerSideTest),
+        TEST_URL_JSON: jsonString(getTestUrl()),
+    });
 }
 
 async function saveResults(req, res) {
@@ -2238,6 +1296,47 @@ function getContentType(filePath) {
 
 function jsonString(value) {
     return JSON.stringify(value);
+}
+
+function renderTemplate(templateName, vars) {
+    const template = readTemplate(templateName);
+    const data = vars || {};
+
+    return template
+        .replace(/\{\{\{([A-Za-z0-9_]+)\}\}\}/g, (_, key) => getTemplateValue(data, key, false))
+        .replace(/\{\{([A-Za-z0-9_]+)\}\}/g, (_, key) => getTemplateValue(data, key, true));
+}
+
+function readTemplate(templateName) {
+    const key = String(templateName || '');
+
+    if(TEMPLATE_CACHE.has(key)) {
+        return TEMPLATE_CACHE.get(key);
+    }
+
+    const filePath = path.resolve(TEMPLATES_ROOT, key);
+    const relativePath = path.relative(TEMPLATES_ROOT, filePath);
+
+    if(relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
+        throw new Error(`Invalid template path: ${key}`);
+    }
+
+    const templateText = fs.readFileSync(filePath, 'utf8');
+    TEMPLATE_CACHE.set(key, templateText);
+
+    return templateText;
+}
+
+function getTemplateValue(data, key, shouldEscape) {
+    const hasValue = Object.prototype.hasOwnProperty.call(data, key);
+    const value = hasValue ? data[key] : '';
+    const valueAsString = value === null || value === undefined ? '' : String(value);
+
+    if(shouldEscape) {
+        return escapeHtml(valueAsString);
+    }
+
+    return valueAsString;
 }
 
 function escapeHtml(value) {
