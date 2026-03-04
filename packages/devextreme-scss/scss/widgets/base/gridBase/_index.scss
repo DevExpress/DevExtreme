@@ -1,4 +1,7 @@
-@use "./mixins" as *;
+@use 'sass:math';
+@use "../mixins" as *;
+@use 'variables' as *;
+@use 'layout/cell' as *;
 
 // adduse
 
@@ -26,18 +29,7 @@
 }
 
 @mixin grid-base($widget-name) {
-  $grid-cell-padding: 7px;
-  $grid-texteditor-input-padding: 32px;
-  $grid-total-footer-paddings: 7px;
-  $grid-command-select-column-width: 70px;
-  $grid-command-edit-column-width: 100px;
-  $grid-command-edit-column-with-icons-width: 80px;
-  $grid-command-expand-column-width: 30px;
-  $grid-command-adaptive-column-width: 36px;
-  $grid-column-header-indicator-width: 14px;
-  $grid-text-content-margin: 3px;
-  $grid-sort-index-width: 12px;
-  $grid-sort-index-offset: 3px;
+  @include grid-base-cell($widget-name);
 
   .dx-#{$widget-name}-checkbox-size {
     vertical-align: middle;
@@ -67,10 +59,7 @@
 
     > .dx-#{$widget-name}-rowsview.dx-last-row-border {
       tbody:last-child > .dx-data-row:nth-last-child(2) {
-        &,
-        & > td {
-          border-bottom-width: 0;
-        }
+        border-bottom-width: 0;
       }
     }
   }
@@ -88,29 +77,6 @@
 
       .dx-#{$widget-name}-table {
         position: relative;
-
-        td {
-          pointer-events: auto;
-        }
-
-        .dx-row {
-          td.dx-pointer-events-none {
-            visibility: hidden;
-            background-color: transparent;
-            pointer-events: none;
-            border-top-color: transparent; // T913696
-            border-bottom-color: transparent; // T913696
-          }
-        }
-
-        // T745266
-        .dx-header-row td.dx-pointer-events-none {
-          border-bottom-color: transparent; // T672281
-        }
-
-        &.dx-#{$widget-name}-table-fixed .dx-row td.dx-pointer-events-none {
-          width: auto;
-        }
       }
     }
 
@@ -171,13 +137,6 @@
       }
     }
 
-    .dx-row {
-      & > td,
-      & > tr > td {
-        padding: $grid-cell-padding;
-      }
-    }
-
     .dx-error-row {
       @include user-select(initial);
 
@@ -189,32 +148,6 @@
         }
       }
     }
-
-    .dx-#{$widget-name}-rowsview .dx-data-row .dx-command-drag {
-      cursor: move;
-      vertical-align: middle;
-      padding: 0;
-    }
-
-    .dx-#{$widget-name}-sticky-column, .dx-#{$widget-name}-sticky-column-left, .dx-#{$widget-name}-sticky-column-right {
-      position: sticky;
-      z-index: 2;
-
-      &.dx-#{$widget-name}-sticky-column-right {
-        z-index: 3;
-      }
-    }
-
-    .dx-#{$widget-name}-total-footer {
-      td:not(.dx-#{$widget-name}-sticky-column):not(.dx-#{$widget-name}-sticky-column-left):not(.dx-#{$widget-name}-sticky-column-right) {
-        background-color: transparent;
-      }
-    }
-  }
-
-  .dx-sortable-dragging .dx-#{$widget-name}-rowsview .dx-data-row .dx-command-drag {
-    cursor: pointer;
-    cursor: grabbing;
   }
 
   .dx-sortable-without-handle .dx-data-row {
@@ -323,7 +256,6 @@
     visibility: hidden;
   }
 
-  .dx-#{$widget-name}-action,
   .dx-#{$widget-name}-drag-action {
     cursor: pointer;
   }
@@ -372,13 +304,6 @@
 
   .dx-hidden-cell {
     visibility: hidden;
-  }
-
-  .dx-row {
-    & > td,
-    & > tr > td {
-      border: none;
-    }
   }
 
   .dx-#{$widget-name}-content .dx-#{$widget-name}-table {
@@ -447,10 +372,6 @@
       .dx-text-content-alignment-right {
         margin-left: $grid-text-content-margin;
       }
-
-      .dx-master-detail-cell {
-        max-width: 0;
-      }
     }
 
     [class*="column"] + [class*="column"]:last-child {
@@ -458,29 +379,6 @@
     }
 
     .dx-row {
-      & > td,
-      & > tr > td {
-        vertical-align: top;
-
-        &:first-child,
-        &.dx-first-child {
-          border-left: 0;
-        }
-
-        &.dx-last-child {
-          border-right: 0;
-        }
-
-        &.dx-#{$widget-name}-group-space {
-          border-right: none;
-          vertical-align: top;
-
-          & + td {
-            border-left: none;
-          }
-        }
-      }
-
       .dx-editor-container {
         overflow: hidden;
       }
@@ -490,16 +388,6 @@
       }
 
       .dx-editor-cell {
-        max-width: 0;
-        vertical-align: middle;
-        padding-top: 0;
-        padding-right: 0;
-        padding-bottom: 0;
-
-        &:not(.dx-#{$widget-name}-cell-expandable) {
-          padding-left: 0;
-        }
-
         .dx-texteditor,
         .dx-texteditor-container {
           border: 0;
@@ -507,23 +395,8 @@
         }
       }
 
-      .dx-command-select {
-        padding: 0;
-        width: $grid-command-select-column-width;
-        min-width: $grid-command-select-column-width;
-        max-width: $grid-command-select-column-width;
-      }
-
       .dx-command-edit {
-        text-overflow: clip;
-        width: $grid-command-edit-column-width;
-        min-width: $grid-command-edit-column-width;
-        white-space: nowrap;
-
         &.dx-command-edit-with-icons {
-          width: $grid-command-edit-column-with-icons-width;
-          min-width: $grid-command-edit-column-with-icons-width;
-
           .dx-link {
             text-decoration: none;
           }
@@ -533,28 +406,6 @@
           display: inline-block;
         }
       }
-
-      .dx-command-expand {
-        padding: 0;
-        width: $grid-command-expand-column-width;
-        min-width: $grid-command-expand-column-width;
-        max-width: $grid-command-expand-column-width;
-
-        /* NOTE: z-index of group row in sticky mode is 2 */
-        z-index: 3;
-
-        @include user-select(none);
-      }
-
-      .dx-command-adaptive {
-        padding: 0;
-        vertical-align: middle;
-      }
-    }
-
-    .dx-data-row .dx-command-edit-with-icons {
-      line-height: 1;
-      white-space: nowrap;
     }
 
     .dx-filter-range-content {
@@ -563,22 +414,16 @@
       text-overflow: ellipsis;
       cursor: pointer;
     }
+  }
 
-    .dx-row > .dx-last-data-cell {
-      border-right: none;
-    }
-
-    .dx-row > .dx-command-adaptive-hidden {
-      border-left: none;
-    }
+  .dx-highlight-outline {
+    position: relative;
+    padding: $grid-cell-padding;
   }
 
   .dx-highlight-outline,
   .dx-cell-modified,
   .dx-#{$widget-name}-invalid {
-    position: relative;
-    padding: $grid-cell-padding;
-
     &::after {
       content: '';
       position: absolute;
@@ -604,9 +449,7 @@
       margin: 0;
     }
 
-    .dx-highlight-outline,
-    &.dx-cell-modified,
-    &.dx-#{$widget-name}-invalid {
+    .dx-highlight-outline {
       padding: 0;
     }
 
@@ -645,10 +488,7 @@
     }
 
     & > td {
-      white-space: nowrap;
-      overflow: hidden;
-
-      & > .dx-#{$widget-name}-text-content {
+      .dx-#{$widget-name}-text-content {
         display: inline-block;
         white-space: normal;
         vertical-align: top;
@@ -920,25 +760,8 @@
       outline: 0;
     }
 
-    .dx-row {
-      & > td,
-      & > tr > td {
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
-
     .dx-row.dx-row-lines:first-child {
       border-top: none;
-
-      & > td,
-      & > tr > td {
-        border-top: none;
-      }
-    }
-
-    .dx-data-row > td:focus {
-      outline: 0;
     }
 
     .dx-selection,
@@ -955,11 +778,6 @@
     .dx-#{$widget-name}-table .dx-row.dx-virtual-row {
       border-top: 0;
       border-bottom: 0;
-
-      & > td {
-        padding-top: 0;
-        padding-bottom: 0;
-      }
     }
 
     .dx-select-checkboxes-hidden > tbody > tr > td > .dx-select-checkbox {
@@ -974,16 +792,8 @@
       display: inline-block;
     }
 
-    .dx-row > .dx-master-detail-cell {
-      &:focus {
-        outline: 0;
-      }
-    }
-
     &.dx-#{$widget-name}-sticky-columns {
       .dx-row > .dx-master-detail-cell {
-        overflow: visible;
-
         .dx-#{$widget-name}-master-detail-container {
           overflow: hidden;
           text-overflow: ellipsis;
@@ -1017,27 +827,12 @@
     padding: 10px;
   }
 
-  .dx-#{$widget-name}-hidden-column {
-    white-space: nowrap;
-  }
-
-  // ie11
-  .dx-#{$widget-name} .dx-row .dx-#{$widget-name}-hidden-column {
-    border-right-width: 0;
-    border-left-width: 0;
-  }
-
   .dx-#{$widget-name}-hidden-column > * {
     display: none !important; // stylelint-disable-line declaration-no-important
   }
 
   .dx-#{$widget-name}-total-footer {
     position: relative;
-
-    & > .dx-#{$widget-name}-content .dx-row > td {
-      padding-top: $grid-total-footer-paddings * 2;
-      padding-bottom: $grid-total-footer-paddings * 2;
-    }
   }
 
   .dx-#{$widget-name}-summary-item {
@@ -1046,11 +841,6 @@
 
   .dx-#{$widget-name}-export-menu .dx-dropdownbutton-content .dx-list-item {
     display: block;
-  }
-
-  .dx-command-adaptive {
-    width: $grid-command-adaptive-column-width;
-    min-width: $grid-command-adaptive-column-width;
   }
 
   .dx-#{$widget-name}-revert-tooltip {
@@ -1129,16 +919,6 @@
     .dx-#{$widget-name}-content .dx-#{$widget-name}-table {
       direction: rtl;
 
-      .dx-row > td {
-        &.dx-#{$widget-name}-group-space {
-          border-left: none;
-
-          & + td {
-            border-right: none;
-          }
-        }
-      }
-
       .dx-row {
         .dx-editor-container .dx-editor-cell {
           .dx-checkbox.dx-checkbox-checked {
@@ -1150,12 +930,6 @@
 
         .dx-filter-range-content {
           padding: $grid-cell-padding $grid-texteditor-input-padding $grid-cell-padding $grid-cell-padding;
-        }
-
-        .dx-#{$widget-name}-sticky-column-right {
-          &.dx-command-expand {
-            z-index: 4;
-          }
         }
       }
     }
