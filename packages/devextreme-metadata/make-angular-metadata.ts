@@ -63,6 +63,7 @@ Ng.makeMetadata({
     removeMembers(/\/scheduler:dxSchedulerOptions\.resources\.icon/),
     removeMembers(/\/stepper:/),
     removeMembers(/\/speech_to_text:/),
+    removeMembers(/\/tree_list:dxTreeListColumnButton.onClick/),
   ],
   variables: {
     CollectionItems: [...commonSmdCollectionItems],

@@ -27,10 +27,10 @@ import type { OptionChanged } from '@ts/core/widget/types';
 import type { ValueChangedEvent } from '@ts/ui/editor/editor';
 import Editor from '@ts/ui/editor/editor';
 
-import ClearButton from './m_text_editor.clear';
-import { TextEditorLabel } from './m_text_editor.label';
-import type { TextEditorButtonInfo } from './texteditor_button_collection/m_index';
-import TextEditorButtonCollection from './texteditor_button_collection/m_index';
+import ClearButton from './text_editor.clear';
+import { TextEditorLabel } from './text_editor.label';
+import type { TextEditorButtonInfo } from './texteditor_button_collection/index';
+import TextEditorButtonCollection from './texteditor_button_collection/index';
 
 export const TEXTEDITOR_CLASS = 'dx-texteditor';
 export const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
@@ -600,16 +600,16 @@ class TextEditorBase<
       onClickHandler: (): void => {
         this.focus();
       },
-      onHoverHandler: (e): void => { e.stopPropagation(); },
-      onActiveHandler: (e): void => { e.stopPropagation(); },
+      onHoverHandler: (e: MouseEvent | PointerEvent): void => { e.stopPropagation(); },
+      onActiveHandler: (e: MouseEvent | PointerEvent): void => { e.stopPropagation(); },
       $editor: this.$element(),
       text: label,
       mark: labelMark,
       mode: labelMode,
       rtlEnabled,
       containsButtonsBefore: !!this._$beforeButtonsContainer,
-      getContainerWidth: () => this._getLabelContainerWidth(),
-      getBeforeWidth: () => this._getLabelBeforeWidth(),
+      getContainerWidth: (): number => this._getLabelContainerWidth(),
+      getBeforeWidth: (): number => this._getLabelBeforeWidth(),
     };
 
     this._label = new TextEditorLabelCreator(labelConfig);
@@ -931,14 +931,16 @@ class TextEditorBase<
         this._input().attr({ placeholder: this._getPlaceholderAttr() });
         break;
       case 'label':
-        this._label.updateText(value);
+        // @ts-expect-error ts-error
+        this._label.updateText(value ?? '');
         this._setFieldAria(true);
         break;
       case 'labelMark':
-        this._label.updateMark(value);
+        // @ts-expect-error ts-error
+        this._label.updateMark(value ?? '');
         break;
       case 'labelMode':
-        this._label.updateMode(value);
+        this._label.updateMode(value as LabelMode);
         this._setFieldAria();
         break;
       case 'width':

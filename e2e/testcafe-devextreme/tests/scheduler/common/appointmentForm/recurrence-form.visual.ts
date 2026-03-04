@@ -25,7 +25,7 @@ const SCHEDULER_SELECTOR = '#container';
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
     const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
 
-    await appointmentPopup.openRecurrenceForm(t, frequency);
+    await appointmentPopup.selectRepeatValue(t, frequency);
 
     await testScreenshot(
       t,
@@ -60,7 +60,7 @@ test('recurrence form with icons', async (t) => {
 
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, true);
-  await appointmentPopup.openRecurrenceSettings(t);
+  await appointmentPopup.clickRecurrenceSettingsButton(t);
 
   await testScreenshot(
     t,
@@ -95,7 +95,7 @@ test('recurrence form readonly state', async (t) => {
 
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
   const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, false);
-  await appointmentPopup.openRecurrenceSettings(t);
+  await appointmentPopup.clickRecurrenceSettingsButton(t);
 
   await testScreenshot(
     t,
@@ -123,7 +123,7 @@ test.meta({ browserSize: [450, 1000] })('recurrence form on mobile screen', asyn
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
   const appointmentPopup = await scheduler.openAppointmentPopup(t, undefined, false);
-  await appointmentPopup.openRecurrenceForm(t, 'Weekly');
+  await appointmentPopup.selectRepeatValue(t, 'Weekly');
 
   await testScreenshot(
     t,
@@ -145,3 +145,71 @@ test.meta({ browserSize: [450, 1000] })('recurrence form on mobile screen', asyn
     },
   },
 }));
+
+test.meta({ browserSize: [1500, 1500] })('recurrence form with labelMode=static', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const appointment = {
+    text: 'Readonly Recurrent Appointment',
+    startDate: new Date('2024-01-01T10:00:00'),
+    endDate: new Date('2024-01-01T11:00:00'),
+    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10',
+  };
+
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, appointment, true);
+
+  await appointmentPopup.clickRecurrenceSettingsButton(t);
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'scheduler__appointment__recurrence-form__with-labelMode-static.png',
+    { element: appointmentPopup.contentElement },
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [],
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 25),
+    editing: {
+      allowUpdating: true,
+      popup: {
+        width: 420,
+        height: 500,
+      },
+      form: {
+        iconsShowMode: 'both',
+        labelMode: 'static',
+        items: [
+          'mainGroup',
+          {
+            name: 'recurrenceGroup',
+            items: [
+              'recurrenceStartDateGroup',
+              'recurrenceRuleGroup',
+              {
+                name: 'recurrenceEndGroup',
+                items: [
+                  'recurrenceEndIcon',
+                  {
+                    name: 'recurrenceEndEditor',
+                    label: {
+                      visible: true,
+                      location: 'top',
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    },
+  });
+});

@@ -159,7 +159,7 @@ class VerticalGroupedStrategy {
   }
 
   getShaderWidth() {
-    return this._workSpace.getIndicationWidth(0);
+    return this._workSpace.getIndicationWidth();
   }
 
   getScrollableScrollTop() {

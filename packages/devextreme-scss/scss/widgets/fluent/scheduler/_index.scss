@@ -737,6 +737,11 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
     .dx-scheduler-form-repeat-editor .dx-scheduler-form-recurrence-settings-button {
       height: auto;
+
+      &.dx-button-mode-text.dx-state-focused {
+        outline: auto;
+        outline-offset: -2px;
+      }
     }
   }
 }

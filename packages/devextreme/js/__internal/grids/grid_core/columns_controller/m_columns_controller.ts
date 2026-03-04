@@ -1323,38 +1323,56 @@ export class ColumnsController extends modules.Controller {
     updateColumnChanges(this, 'columns');
   }
 
-  public updateSortingGrouping(dataSource, fromDataSource?) {
+  public updateSortingGrouping(dataSource, fromDataSource?: boolean): void {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
-    let isColumnsChanged;
-    const updateSortGroupParameterIndexes = function (columns, sortParameters, indexParameterName) {
-      each(columns, (index, column) => {
+    // eslint-disable-next-line @typescript-eslint/init-declarations
+    let isColumnsChanged: boolean | undefined;
+    // eslint-disable-next-line func-names
+    const updateSortGroupParameterIndexes = function (
+      columns,
+      sortParameters,
+      indexParameterName: string,
+    ): void {
+      const referencedGroupValues: string[] = columns
+        .filter((column) => isString(column.calculateGroupValue))
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        .map((column): string => column.calculateGroupValue);
+
+      each(columns, (_: number, column) => {
+        const isReferencedAsGroupValue = indexParameterName === 'groupIndex'
+          && referencedGroupValues.some(
+            (groupValue) => column.dataField === groupValue || column.name === groupValue,
+          );
+
+        if (!isReferencedAsGroupValue) {
         // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        delete column[indexParameterName];
-        if (sortParameters) {
-          for (let i = 0; i < sortParameters.length; i++) {
-            const { selector } = sortParameters[i];
-            const { isExpanded } = sortParameters[i];
+          delete column[indexParameterName];
+          if (sortParameters) {
+            for (let i = 0; i < sortParameters.length; i += 1) {
+              const { selector, isExpanded } = sortParameters[i];
 
-            if (selector === column.dataField
-              || selector === column.name
-              || selector === column.displayField
-              || gridCoreUtils.isEqualSelectors(selector, column.selector)
-              || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateCellValue)
-              || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateGroupValue)
-              || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateDisplayValue)
-            ) {
-              if (fromDataSource) {
-                column.sortOrder = 'sortOrder' in column ? column.sortOrder : sortParameters[i].desc ? 'desc' : 'asc';
-              } else {
-                column.sortOrder = column.sortOrder || (sortParameters[i].desc ? 'desc' : 'asc');
+              if (selector === column.dataField
+                || selector === column.name
+                || selector === column.displayField
+                || gridCoreUtils.isEqualSelectors(selector, column.selector)
+                || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateCellValue)
+                || gridCoreUtils.isEqualSelectors(selector, column.calculateGroupValue)
+                || gridCoreUtils.isSelectorEqualWithCallback(selector, column.calculateDisplayValue)
+              ) {
+                if (fromDataSource) {
+                  column.sortOrder = 'sortOrder' in column ? column.sortOrder : sortParameters[i].desc ? 'desc' : 'asc';
+                } else {
+                  column.sortOrder = column.sortOrder ?? (sortParameters[i].desc ? 'desc' : 'asc');
+                }
+
+                if (isExpanded !== undefined) {
+                  column.autoExpandGroup = isExpanded;
+                }
+
+                column[indexParameterName] = i;
+                break;
               }
-
-              if (isExpanded !== undefined) {
-                column.autoExpandGroup = isExpanded;
-              }
-
-              column[indexParameterName] = i;
-              break;
             }
           }
         }
@@ -1373,10 +1391,10 @@ export class ColumnsController extends modules.Controller {
       const groupExpandingChanged = !groupingChanged && !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters);
 
       if (!that._columns.length) {
-        each(groupParameters, (index, group) => {
+        each(groupParameters, (_: number, group) => {
           that._columns.push(group.selector);
         });
-        each(sortParameters, (index, sort) => {
+        each(sortParameters, (_: number, sort) => {
           if (!isFunction(sort.selector)) {
             that._columns.push(sort.selector);
           }
@@ -1703,7 +1721,6 @@ export class ColumnsController extends modules.Controller {
                 result = false;
               }
             } else if (gridCoreUtils.isDateType(column.dataType)) {
-              // @ts-expect-error
               parsedValue = dateLocalization.parse(text, column.format);
               if (parsedValue) {
                 result = parsedValue;

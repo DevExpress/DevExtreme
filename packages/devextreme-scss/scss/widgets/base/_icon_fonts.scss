@@ -178,7 +178,23 @@
 .dx-icon-calendardatestartoutline,
 .dx-icon-calendardatestartfilled,
 .dx-icon-calendardateendoutline,
-.dx-icon-calendardateendfilled {
+.dx-icon-calendardateendfilled,
+.dx-icon-datalineoutline,
+.dx-icon-datalinefilled,
+.dx-icon-dataareaoutline,
+.dx-icon-dataareafilled,
+.dx-icon-databaroutline,
+.dx-icon-databarfilled,
+.dx-icon-datastackedbaroutline,
+.dx-icon-datastackedbarfilled,
+.dx-icon-datapieoutline,
+.dx-icon-datapiefilled,
+.dx-icon-datadoughnutoutline,
+.dx-icon-datadoughnutfilled,
+.dx-icon-checkmarkcirclefilled,
+.dx-icon-botoutline,
+.dx-icon-botfilled,
+.dx-icon-copyfilled {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -572,6 +588,22 @@ $icons: (
     "calendardatestartfilled":"\f220",
     "calendardateendoutline":"\f221",
     "calendardateendfilled":"\f222",
+    "datalineoutline":"\f223",
+    "datalinefilled": "\f224",
+    "dataareaoutline": "\f225",
+    "dataareafilled": "\f226",
+    "databaroutline": "\f227",
+    "databarfilled": "\f228",
+    "datastackedbaroutline": "\f229",
+    "datastackedbarfilled": "\f230",
+    "datapieoutline": "\f231",
+    "datapiefilled": "\f232",
+    "datadoughnutoutline": "\f233",
+    "datadoughnutfilled": "\f234",
+    "checkmarkcirclefilled": "\f235",
+    "botoutline": "\f236",
+    "botfilled": "\f237",
+    "copyfilled": "\f238",
 );
 
 // stylelint-enable

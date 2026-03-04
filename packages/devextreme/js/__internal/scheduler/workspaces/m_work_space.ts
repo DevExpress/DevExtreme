@@ -71,7 +71,7 @@ import { CompactAppointmentsHelper } from '../m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
-import VerticalShader from '../shaders/m_current_time_shader_vertical';
+import VerticalShader from '../shaders/current_time_shader_vertical';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import {
   getAppointmentGroupIndex,
@@ -1407,26 +1407,20 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return (this.$element() as any).find(`.${GROUP_HEADER_CLASS}`);
   }
 
-  _getScrollCoordinates(hours, minutes, date, groupIndex?: any, allDay?: any) {
+  _getScrollCoordinates(date, groupIndex?: any, allDay?: any) {
     const currentDate = date || new Date(this.option('currentDate'));
-    const startDayHour = this.option('startDayHour');
-    const endDayHour = this.option('endDayHour');
 
-    if (hours < startDayHour) {
-      hours = startDayHour;
+    const cell = this.viewDataProvider.findGlobalCellPosition(currentDate, groupIndex, allDay, true);
+
+    if (!cell) {
+      return undefined;
     }
 
-    if (hours >= endDayHour) {
-      hours = endDayHour - 1;
-    }
-
-    currentDate.setHours(hours, minutes, 0, 0);
-
-    const cell = this.viewDataProvider.findGlobalCellPosition(currentDate, groupIndex, allDay);
+    currentDate.setHours(cell.cellData.startDate.getHours(), currentDate.getMinutes(), 0, 0);
 
     return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
-      cell?.cellData,
-      cell?.position,
+      cell.cellData,
+      cell.position,
       currentDate,
       isDateAndTimeView(this.type as any),
       this.viewDirection === 'vertical',
@@ -1561,31 +1555,6 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   getCellMinWidth() {
     return DATE_TABLE_MIN_CELL_WIDTH;
-  }
-
-  getRoundedCellWidth(groupIndex, startIndex, cellCount) {
-    if (groupIndex < 0 || !hasWindow()) {
-      return 0;
-    }
-
-    const $row = (this.$element() as any).find(`.${DATE_TABLE_ROW_CLASS}`).eq(0);
-    let width = 0;
-    const $cells = $row.find(`.${DATE_TABLE_CELL_CLASS}`);
-    const totalCellCount = this._getCellCount() * groupIndex;
-
-    cellCount = cellCount || this._getCellCount();
-
-    if (!isDefined(startIndex)) {
-      startIndex = totalCellCount;
-    }
-
-    for (let i = startIndex; i < totalCellCount + cellCount; i++) {
-      const element = $($cells).eq(i).get(0);
-      const elementWidth = element ? getBoundingRect(element).width : 0;
-      width += elementWidth;
-    }
-
-    return width / (totalCellCount + cellCount - startIndex);
   }
 
   // Mappings
@@ -1823,7 +1792,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return result;
   }
 
-  scrollTo(date, groupValues?: RawGroupValues | GroupValues, allDay = false, throwWarning = true) {
+  scrollTo(date: Date, groupValues?: RawGroupValues | GroupValues, allDay = false, throwWarning = true, align: 'start' | 'center' = 'center') {
     if (!this._isValidScrollDate(date, throwWarning)) {
       return;
     }
@@ -1833,7 +1802,11 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       : 0;
     const isScrollToAllDay = allDay && this.isAllDayPanelVisible;
 
-    const coordinates = this._getScrollCoordinates(date.getHours(), date.getMinutes(), date, groupIndex, isScrollToAllDay);
+    const coordinates = this._getScrollCoordinates(date, groupIndex, isScrollToAllDay);
+
+    if (!coordinates) {
+      return;
+    }
 
     const scrollable = this.getScrollable();
     const $scrollable = scrollable.$element();
@@ -1846,8 +1819,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const scrollableWidth = getWidth($scrollable);
     const cellHeight = this.getCellHeight();
 
-    const xShift = (scrollableWidth - cellWidth) / 2;
-    const yShift = (scrollableHeight - cellHeight) / 2;
+    const xShift = align === 'start' ? 0 : (scrollableWidth - cellWidth) / 2;
+    const yShift = align === 'start' ? 0 : (scrollableHeight - cellHeight) / 2;
 
     const left = coordinates.left - scrollable.scrollLeft() - xShift - offset;
     let top = coordinates.top - scrollable.scrollTop() - yShift;
@@ -1865,8 +1838,9 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _isValidScrollDate(date, throwWarning = true) {
-    const min = this.getStartViewDate();
-    const max = this.getEndViewDate();
+    const viewOffset = this.option('viewOffset') as number;
+    const min = new Date(this.getStartViewDate().getTime() + viewOffset);
+    const max = new Date(this.getEndViewDate().getTime() + viewOffset);
 
     if (date < min || date > max) {
       throwWarning && errors.log('W1008', date);

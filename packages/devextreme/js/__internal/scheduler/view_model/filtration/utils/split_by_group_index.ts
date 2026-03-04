@@ -5,17 +5,17 @@ import {
 import type { FilterOptions, GroupIndex, MinimalAppointmentEntity } from '../../types';
 
 export const splitByGroupIndex = <T extends MinimalAppointmentEntity>(
-  entities: T[],
+  appointments: T[],
   { resourceManager }: Pick<FilterOptions, 'resourceManager'>,
-): (T & GroupIndex)[] => entities
-    .reduce<(T & GroupIndex)[]>((result, entity) => {
+): (T & GroupIndex)[] => appointments
+    .reduce<(T & GroupIndex)[]>((result, appointment) => {
       if (resourceManager.groupsLeafs.length === 0) {
-        result.push({ ...entity, groupIndex: 0 });
+        result.push({ ...appointment, groupIndex: 0 });
         return result;
       }
 
       const groupValues = getAppointmentGroupValues(
-        entity.itemData,
+        appointment.itemData,
         resourceManager.resources,
       );
       const groupIndexes = getAppointmentGroupIndex(
@@ -24,7 +24,7 @@ export const splitByGroupIndex = <T extends MinimalAppointmentEntity>(
       );
 
       groupIndexes.forEach((groupIndex) => {
-        result.push({ ...entity, groupIndex });
+        result.push({ ...appointment, groupIndex });
       });
 
       return result;

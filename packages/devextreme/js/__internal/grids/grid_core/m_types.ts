@@ -23,6 +23,11 @@ export interface ColumnPoint {
   y: number;
 }
 
+export interface Coordinates {
+  x: number;
+  y: number;
+}
+
 // todo: move to upper .d.ts
 type OptionsMethod<TOptions> =
   (() => TOptions) &

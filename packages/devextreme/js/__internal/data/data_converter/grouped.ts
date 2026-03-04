@@ -8,7 +8,10 @@ const groupKey = 'key';
 export function getDataSourceOptions<TItem>(
   dataSource: DataSourceLike<TItem>,
 ): DataSourceLike<TItem> | DataSourceOptions<GroupItem<TItem>> {
-  if (!isGroupItemsArray<TItem>(dataSource)) {
+  if (
+    !isGroupItemsArray<TItem>(dataSource)
+    || (dataSource as GroupItem<TItem>[]).some((item) => Object.keys(item).length !== 2)
+  ) {
     return dataSource;
   }
 

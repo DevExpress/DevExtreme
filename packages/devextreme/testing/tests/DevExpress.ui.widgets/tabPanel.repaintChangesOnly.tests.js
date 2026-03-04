@@ -298,24 +298,6 @@ QUnit.module('repaintChangesOnly', {
             this.checkContainsEmptyMessage(assert, false);
         });
 
-        QUnit.skip('[{1, text: 1a, content: 1a_}, {2}] -> [{1, text: 1aupd, content: 1a_}, {2}]' + testContext, function(assert) {
-            const item1 = { text: '1a', content: '1a_' };
-            const item2 = { text: '2a', content: '2a_' };
-            this.createTabPanel({ items: [item1, item2] });
-
-            const item1_ = { text: '1aupd', content: '1a_' };
-            this.tabPanel.option(dataSourcePropertyName, [item1_, item2]);
-            this.clock.tick(1);
-
-            this.checkTitleRendered(assert, [item1_]);
-            this.checkItemRendered(assert, [{ data: item1_, index: 0 }]);
-            this.checkItemDeleted(assert, []);
-
-            this.checkContainsElements(assert, [item1_.text, item1_.content, item2.text]);
-            this.checkNotContainsElements(assert, ['1a', item2.content]);
-            this.checkContainsEmptyMessage(assert, false);
-        });
-
         QUnit.test('[{1, text: 1a, content: 1a_}, {2}] -> [{1, text: 1aupd, content: 1a_}, {2}] via items[0]' + testContext, function(assert) {
             if(dataSourcePropertyName === 'dataSource') {
                 assert.ok(true, 'Not supported for dataSource');

@@ -282,10 +282,22 @@ export default class ViewDataProvider {
     return startDate < groupEndDate && endDate > groupStartDate;
   }
 
-  findGlobalCellPosition(date, groupIndex = 0, allDay = false) {
+  findGlobalCellPosition(date, groupIndex = 0, allDay = false, findClosest = false) {
     const { completeViewDataMap } = this;
 
     const showAllDayPanel = this._options.isAllDayPanelVisible;
+
+    let resultDiff = Number.MAX_VALUE;
+    let resultCellData: ViewCellData | undefined;
+    let resultCellColumnIndex = -1;
+    let resultCellRowIndex = -1;
+
+    const getCellPosition = (columnIndex: number, rowIndex: number) => ({
+      columnIndex,
+      rowIndex: showAllDayPanel && !this._options.isVerticalGrouping
+        ? rowIndex - 1
+        : rowIndex,
+    });
 
     for (let rowIndex = 0; rowIndex < completeViewDataMap.length; rowIndex += 1) {
       const currentRow = completeViewDataMap[rowIndex];
@@ -293,40 +305,44 @@ export default class ViewDataProvider {
       for (let columnIndex = 0; columnIndex < currentRow.length; columnIndex += 1) {
         const cellData = currentRow[columnIndex];
         const {
-          startDate: currentStartDate,
-          endDate: currentEndDate,
-          groupIndex: currentGroupIndex,
-          allDay: currentAllDay,
+          startDate: cellStartDate,
+          endDate: cellEndDate,
+          groupIndex: cellGroupIndex,
+          allDay: cellAllDay,
         } = cellData;
 
-        if (groupIndex === currentGroupIndex
-                    && allDay === Boolean(currentAllDay)
-                    && this._compareDatesAndAllDay(date, currentStartDate, currentEndDate, allDay)) {
+        if (groupIndex !== cellGroupIndex || allDay !== Boolean(cellAllDay)) {
+          continue;
+        }
+
+        const isDateInCell = allDay
+          ? dateUtils.sameDate(date, cellStartDate)
+          : date >= cellStartDate && date < cellEndDate;
+
+        if (isDateInCell) {
           return {
-            position: {
-              columnIndex,
-              rowIndex: showAllDayPanel && !this._options.isVerticalGrouping
-                ? rowIndex - 1
-                : rowIndex,
-            },
+            position: getCellPosition(columnIndex, rowIndex),
             cellData,
           };
+        }
+
+        const diff = Math.abs(date.getTime() - cellStartDate.getTime());
+
+        if (findClosest && diff < resultDiff) {
+          resultDiff = diff;
+          resultCellData = cellData;
+          resultCellColumnIndex = columnIndex;
+          resultCellRowIndex = rowIndex;
         }
       }
     }
 
-    return undefined;
-  }
-
-  private _compareDatesAndAllDay(
-    date: Date,
-    cellStartDate: Date,
-    cellEndDate: Date,
-    allDay: boolean,
-  ): boolean {
-    return allDay
-      ? dateUtils.sameDate(date, cellStartDate)
-      : date >= cellStartDate && date < cellEndDate;
+    return resultCellData
+      ? {
+        position: getCellPosition(resultCellColumnIndex, resultCellRowIndex),
+        cellData: resultCellData,
+      }
+      : undefined;
   }
 
   getSkippedDaysCount(groupIndex, startDate, endDate, daysCount) {

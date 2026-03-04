@@ -662,10 +662,15 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   ): void {
     switch (property) {
       case 'size':
+        this._layout = this._getDefaultLayoutBasedOnSize(item);
+
+        this._applyStylesFromLayout(this.getLayout());
+        this._updateItemSizes();
+        break;
       case 'maxSize':
       case 'minSize':
       case 'collapsedSize':
-        this._layout = this._getDefaultLayoutBasedOnSize(property === 'size' ? item : undefined);
+        this._layout = this._getDefaultLayoutBasedOnSize();
 
         this._applyStylesFromLayout(this.getLayout());
         this._updateItemSizes();
@@ -977,15 +982,40 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
     this._itemRestrictions = [];
 
+    let otherPanesMinSizeSum = 0;
+
+    if (currentItem !== undefined) {
+      items.forEach((item) => {
+        if (item !== currentItem && item.visible !== false && item.collapsed !== true) {
+          const minSizeRatio = convertSizeToRatio(item.minSize, elementSize, handlesSizeSum);
+          otherPanesMinSizeSum += minSizeRatio ?? 0;
+        }
+      });
+    }
+
     items.forEach((item) => {
+      const sizeRatio = convertSizeToRatio(item.size, elementSize, handlesSizeSum);
+      const minSizeRatio = convertSizeToRatio(item.minSize, elementSize, handlesSizeSum);
+      const userMaxSize = convertSizeToRatio(item.maxSize, elementSize, handlesSizeSum);
+
+      let effectiveMaxSize = userMaxSize;
+
+      if (item === currentItem) {
+        const maxFromOtherMinSizes = 100 - otherPanesMinSizeSum;
+
+        effectiveMaxSize = isDefined(userMaxSize)
+          ? Math.min(userMaxSize, maxFromOtherMinSizes)
+          : maxFromOtherMinSizes;
+      }
+
       this._itemRestrictions.push({
         resizable: item === currentItem ? false : item.resizable !== false,
         visible: item.visible !== false,
         collapsed: item.collapsed === true,
         collapsedSize: convertSizeToRatio(item.collapsedSize, elementSize, handlesSizeSum),
-        size: convertSizeToRatio(item.size, elementSize, handlesSizeSum),
-        maxSize: convertSizeToRatio(item.maxSize, elementSize, handlesSizeSum),
-        minSize: convertSizeToRatio(item.minSize, elementSize, handlesSizeSum),
+        size: sizeRatio,
+        maxSize: effectiveMaxSize,
+        minSize: minSizeRatio,
       });
     });
   }

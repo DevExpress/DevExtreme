@@ -4580,7 +4580,7 @@ QUnit.module('Headers reordering', {
         assert.ok(!$draggingHeader.is(':visible'), 'header is not displayed');
     });
 
-    QUnit.skip('target column index equals source column index after QUnit.start dragging without moving', function(assert) {
+    QUnit.test('target column index not defined after QUnit.start dragging without moving', function(assert) {
         // arrange
         const testElement = $('#container');
         let dropParameters;
@@ -4627,7 +4627,7 @@ QUnit.module('Headers reordering', {
         // assert
         assert.ok(dropParameters);
         assert.equal(dropParameters.sourceColumnIndex, 1);
-        assert.equal(dropParameters.targetColumnIndex, 1);
+        assert.equal(dropParameters.targetColumnIndex, undefined);
     });
 
     QUnit.test('Rise element events', function(assert) {
@@ -6236,106 +6236,6 @@ QUnit.module('column chooser reordering', {
         const offset = this.draggingHeaderView.element().offset();
         assert.equal(offset.left, -9802, 'offset left');
         assert.equal(offset.top, -9491, 'offset top');
-    });
-
-    QUnit.skip('Block separator move in column chooser when dragging down', function(assert) {
-        // arrange
-        const testElement = $('#container');
-        let blockSeparator;
-
-        this.controller._rowsView = {};
-        this.controller._rowsView.toggleDraggableColumnClass = function() { };
-        this.controller._columnHeadersView.element = function() { return $('<div />'); };
-
-        this.draggingHeaderView.render(testElement);
-        this.blockSeparatorView.render(testElement);
-
-        this.draggingHeaderView.dragHeader({
-            sourceLocation: 'columnChooser',
-            draggingPanels: this.draggingPanels,
-            columnIndex: 0,
-            deltaX: 2,
-            deltaY: 1,
-            columnElement: $('<div/>'),
-            sourceColumn: {
-                caption: 'TestDrag',
-                allowHiding: true
-            }
-        });
-
-        // assert
-        blockSeparator = $('.dx-datagrid').children('.dx-block-separator');
-        assert.ok(blockSeparator.length, 'has is separator');
-
-        // act
-        this.draggingHeaderView.moveHeader({
-            event: {
-                data: {
-                    that: this.draggingHeaderView,
-                    rootElement: testElement
-                },
-                preventDefault: function() { },
-                pageX: -9800,
-                pageY: -9305,
-                type: 'mouse'
-            }
-        });
-
-        // assert
-        assert.equal($('#itemsContainerVertical').children().length, 2);
-        assert.ok($('#itemsContainerVertical').children().eq(2).hasClass('dx-block-separator'));
-        blockSeparator = $('.dx-datagrid').children('.dx-block-separator');
-        assert.ok(!blockSeparator.length, 'not has is separator');
-    });
-
-    QUnit.skip('Block separator move in column chooser when dragging up', function(assert) {
-        // arrange
-        const testElement = $('#container');
-        let blockSeparator;
-
-        this.controller._rowsView = {};
-        this.controller._rowsView.toggleDraggableColumnClass = function() { };
-        this.controller._columnHeadersView.element = function() { return $('<div />'); };
-
-        this.draggingHeaderView.render(testElement);
-        this.blockSeparatorView.render(testElement);
-
-        this.draggingHeaderView.dragHeader({
-            sourceLocation: 'columnChooser',
-            draggingPanels: this.draggingPanels,
-            columnIndex: 1,
-            deltaX: 2,
-            deltaY: 1,
-            columnElement: $('<div/>'),
-            sourceColumn: {
-                caption: 'TestDrag',
-                allowHiding: true
-            }
-        });
-
-        // assert
-        blockSeparator = $('.dx-datagrid').children('.dx-block-separator');
-        assert.ok(blockSeparator.length, 'has is separator');
-
-        // act
-        this.draggingHeaderView.moveHeader({
-            event: {
-                data: {
-                    that: this.draggingHeaderView,
-                    rootElement: testElement
-                },
-                preventDefault: function() { },
-                pageX: -9800,
-                pageY: -9495,
-                type: 'mouse'
-            }
-        });
-
-        // assert
-        assert.equal($('#itemsContainerVertical').children().length, 3);
-        assert.ok($('#itemsContainerVertical').children().eq(0).hasClass('dx-block-separator'));
-        blockSeparator = $('.dx-datagrid').children('.dx-block-separator');
-        assert.ok(!blockSeparator.length, 'not has is separator');
     });
 
     QUnit.test('Reset opacity for target element', function(assert) {

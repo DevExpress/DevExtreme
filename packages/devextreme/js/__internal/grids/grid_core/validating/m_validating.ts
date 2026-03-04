@@ -115,6 +115,34 @@ export class ValidatingController extends modules.Controller {
     this._validationStateCache = {};
   }
 
+  public resetValidationStateForChanges(changes) {
+    if (!changes?.length) {
+      return;
+    }
+
+    changes.forEach(({ key }) => {
+      this._removeValidationData(key);
+    });
+  }
+
+  private _removeValidationData(key) {
+    if (!this._validationState?.length) {
+      return;
+    }
+
+    const keyHash = getKeyHash(key);
+    const isObjectKeyHash = isObject(keyHash);
+
+    if (!isObjectKeyHash && this._validationStateCache) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this._validationStateCache[keyHash];
+    }
+
+    this._validationState = this._validationState.filter((data) => (
+      isObjectKeyHash ? !equalByValue(data.key, key) : data.key !== key
+    ));
+  }
+
   public _rowIsValidated(change) {
     const validationData = this._getValidationData(change?.key);
 
@@ -936,14 +964,7 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
       });
       this._focusEditingCell();
     } else if (!cancel) {
-      let shouldResetValidationState = true;
-
-      if (isCellEditMode) {
-        const columns = this._columnsController.getColumns();
-        const columnsWithValidatingEditors = columns.filter((col) => col.showEditorAlways && col.validationRules?.length > 0).length > 0;
-
-        shouldResetValidationState = !columnsWithValidatingEditors;
-      }
+      const shouldResetValidationState = this._shouldResetValidationState();
 
       if (shouldResetValidationState) {
         this._validatingController.initValidationState();
@@ -979,9 +1000,32 @@ export const validatingEditingExtender = (Base: ModuleType<EditingController>) =
   }
 
   protected _beforeCancelEditData() {
-    this._validatingController.initValidationState();
+    const validatingController = this._validatingController;
+    const shouldResetValidationState = this._shouldResetValidationState();
+
+    if (shouldResetValidationState) {
+      validatingController.initValidationState();
+    } else {
+      const changes = this.getChanges();
+      validatingController.resetValidationStateForChanges(changes);
+    }
 
     super._beforeCancelEditData();
+  }
+
+  private _shouldResetValidationState(): boolean {
+    const isCellEditMode = this.getEditMode() === EDIT_MODE_CELL;
+
+    if (isCellEditMode) {
+      const columns = this._columnsController.getColumns();
+      const columnsWithValidatingEditors = columns.filter(
+        (col) => col.showEditorAlways && col.validationRules?.length > 0,
+      );
+
+      return columnsWithValidatingEditors.length === 0;
+    }
+
+    return true;
   }
 
   private _showErrorRow(change) {
@@ -1390,8 +1434,9 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
 
     if (shouldSetValidationAriaAttributes) {
       const $focusElement = this._getCurrentFocusElement($focus);
-      $focusElement.attr('aria-labelledby', inputDescriptionValues.join(' '));
-      $focusElement.attr('aria-invalid', true);
+
+      this.setAria('labelledby', inputDescriptionValues.join(' '), $focusElement);
+      this.setAria('invalid', true, $focusElement);
     }
   }
 

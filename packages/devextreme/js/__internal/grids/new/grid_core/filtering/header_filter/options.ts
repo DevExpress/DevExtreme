@@ -1,5 +1,3 @@
-import messageLocalization from '@js/common/core/localization/message';
-
 import type { HeaderFilterRootOptions } from './types';
 
 export interface Options {
@@ -20,9 +18,9 @@ export const defaultOptions: Options = {
       editorOptions: {},
     },
     texts: {
-      emptyValue: messageLocalization.format('dxDataGrid-headerFilterEmptyValue'),
-      ok: messageLocalization.format('dxDataGrid-headerFilterOK'),
-      cancel: messageLocalization.format('dxDataGrid-headerFilterCancel'),
+      emptyValue: undefined,
+      ok: undefined,
+      cancel: undefined,
     },
   },
 };

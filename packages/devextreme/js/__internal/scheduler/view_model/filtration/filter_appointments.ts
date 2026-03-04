@@ -1,4 +1,5 @@
 import type Scheduler from '../../m_scheduler';
+import { getCompareOptions } from '../common/get_compare_options';
 import type {
   Duration, ListEntity, MinimalAppointmentEntity, UTCDates,
   UTCDatesBeforeSplit,
@@ -11,28 +12,29 @@ import { splitByGroupIndex } from './utils/split_by_group_index';
 import { splitByRecurrence } from './utils/split_by_recurrence/split_by_recurrence';
 
 const addDuration = <T extends MinimalAppointmentEntity & UTCDates>(
-  entities: T[],
-): (T & Duration)[] => entities.map((entity) => ({
-    ...entity,
-    duration: entity.endDateUTC - entity.startDateUTC,
+  appointments: T[],
+): (T & Duration)[] => appointments.map((appointment) => ({
+    ...appointment,
+    duration: appointment.endDateUTC - appointment.startDateUTC,
   }));
 
 const saveDatesBeforeSplit = <T extends MinimalAppointmentEntity & UTCDates>(
-  entities: T[],
-): (T & UTCDatesBeforeSplit)[] => entities.map((entity) => ({
-    ...entity,
+  appointments: T[],
+): (T & UTCDatesBeforeSplit)[] => appointments.map((appointment) => ({
+    ...appointment,
     datesBeforeSplit: {
-      startDateUTC: entity.startDateUTC,
-      endDateUTC: entity.endDateUTC,
+      startDateUTC: appointment.startDateUTC,
+      endDateUTC: appointment.endDateUTC,
     },
   }));
 
 export const filterAppointments = (
   schedulerStore: Scheduler,
-  items: MinimalAppointmentEntity[],
+  appointments: MinimalAppointmentEntity[],
 ): ListEntity[] => {
-  const options = getFilterOptions(schedulerStore);
-  const step1 = addAllDayPanelOccupation(items, options);
+  const compareOptions = getCompareOptions(schedulerStore);
+  const options = getFilterOptions(schedulerStore, compareOptions);
+  const step1 = addAllDayPanelOccupation(appointments, options);
   const step2 = filterByAttributes(step1, options);
   const step3 = splitByRecurrence(step2, options);
   const step4 = filterByIntervals(step3, options);

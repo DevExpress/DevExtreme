@@ -42,10 +42,7 @@
     <div class="task-info">
       <div class="info">
         <div id="taskSubject">{{ taskSubject }}</div>
-        <p
-          id="taskDetails"
-          v-html="taskDetails"
-        />
+        <p id="taskDetails">{{ taskDetails }}</p>
       </div>
       <div class="progress">
         <span id="taskStatus">{{ taskStatus }}</span>

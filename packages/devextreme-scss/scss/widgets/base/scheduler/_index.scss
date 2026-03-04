@@ -507,19 +507,17 @@ $scheduler-appointment-form-label-padding: 20px;
         align-items: start;
       }
 
+      .dx-scheduler-form-top-label-offset {
+        margin-top: $scheduler-appointment-popup-icon-margin-top;
+      }
+
       .dx-scheduler-form-icon {
         display: flex;
         align-items: center;
-        margin-top: $scheduler-appointment-popup-icon-margin-top;
 
         > .dx-field-item-content {
           line-height: 1;
         }
-      }
-
-      .dx-scheduler-form-date-range-group .dx-scheduler-form-icon,
-      .dx-scheduler-form-recurrence-end-group .dx-scheduler-form-icon {
-        margin-top: 0;
       }
 
       /* Editors alignment */

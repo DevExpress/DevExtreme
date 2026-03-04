@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import '__internal/scheduler/m_subscribes';
 import '__internal/scheduler/m_scheduler';
 
@@ -801,9 +801,9 @@ module('Grouping By Date', {
             const results = this.instance.getAppointmentsInstance().option('items').sort((a, b) => a.columnIndex - b.columnIndex);
 
             assert.equal(results.length, 3, 'Result length is OK');
-            this.checkNeedCoordinatesResult(assert, results[0], 1, 0, 0, 96, 1.1);
-            this.checkNeedCoordinatesResult(assert, results[1], 2, 0, 0, 160, 1.1);
-            this.checkNeedCoordinatesResult(assert, results[2], 3, 0, 0, 224, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[0], 1, 0, 0, 99, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[1], 2, 0, 0, 166, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[2], 3, 0, 0, 233, 1.1);
         });
 
         test(`"createAppointmentSettings" should work correct when groupByDate = true, Month view when renovateRender is ${isRenovatedRender}`, async function(assert) {
@@ -851,8 +851,8 @@ module('Grouping By Date', {
             const results = this.instance.getAppointmentsInstance().option('items').sort((a, b) => a.columnIndex - b.columnIndex);
 
             assert.equal(results.length, 2, 'Coordinates count is ok');
-            this.checkNeedCoordinatesResult(assert, results[0], 2, 3, cellHeight * 3 + 26, cellWidth * 5, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[1], 3, 3, cellHeight * 3 + 26, cellWidth * 7, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[0], 2, 3, cellHeight * 3 + 30, cellWidth * 5, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[1], 3, 3, cellHeight * 3 + 30, cellWidth * 7, 1.5);
         });
     });
 

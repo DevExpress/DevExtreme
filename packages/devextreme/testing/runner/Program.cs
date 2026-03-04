@@ -60,8 +60,7 @@ namespace Runner
                         services.AddSingleton(new RunFlags
                         {
                             SingleRun = argv.Contains("--single-run"),
-                            IsContinuousIntegration = IsContinuousIntegration(),
-                            IsIntranet = IsIntranet()
+                            IsContinuousIntegration = IsContinuousIntegration()
                         });
                     })
                     .Configure(app => app
@@ -123,18 +122,6 @@ namespace Runner
         {
             return !String.IsNullOrEmpty(Environment.GetEnvironmentVariable("CCNetWorkingDirectory"))
                 || !String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DEVEXTREME_TEST_CI"));
-        }
-
-        static bool IsIntranet()
-        {
-            try
-            {
-                return Dns.GetHostAddresses("corp.devexpress.com").Length > 0;
-            }
-            catch
-            {
-                return false;
-            }
         }
     }
 }

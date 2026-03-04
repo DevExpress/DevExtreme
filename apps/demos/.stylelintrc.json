@@ -1,8 +1,5 @@
 {
-    "extends": [
-        "stylelint-config-standard",
-        "stylelint-config-recommended-vue"
-    ],
+    "customSyntax": "postcss-html",
     "rules": {
         "selector-pseudo-element-no-unknown": [ true, {"ignorePseudoElements": ["ng-deep"]}],
         "font-family-no-missing-generic-family-keyword": null,

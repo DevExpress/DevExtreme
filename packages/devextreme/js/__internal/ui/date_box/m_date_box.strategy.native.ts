@@ -3,8 +3,8 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { inputType } from '@js/core/utils/support';
 
 import type { PopupProperties } from '../popup/m_popup';
+import dateUtils from './date_utils';
 import DateBoxStrategy from './m_date_box.strategy';
-import dateUtils from './m_date_utils';
 
 class NativeStrategy extends DateBoxStrategy {
   ctor(dateBox): void {
@@ -82,8 +82,8 @@ class NativeStrategy extends DateBoxStrategy {
     }[type] ?? defaultFormat;
 
     $input.attr({
-      min: dateSerialization.serializeDate(this.dateBox.dateOption('min'), format),
-      max: dateSerialization.serializeDate(this.dateBox.dateOption('max'), format),
+      min: dateSerialization.serializeDate(this.dateBox.getDateOption('min'), format),
+      max: dateSerialization.serializeDate(this.dateBox.getDateOption('max'), format),
     });
   }
 }

@@ -3791,6 +3791,68 @@ QUnit.module('regressions', moduleSetup, () => {
             done();
         });
     });
+
+    QUnit.test('custom properties should be preserved in grouped items (T1319741)', function(assert) {
+        const data = [
+            { key: 'Group 1', items: [{ text: 'Item 1' }], customProp: 'customValue' }
+        ];
+
+        const list = this.element.dxList({
+            dataSource: data,
+            grouped: true
+        }).dxList('instance');
+
+        const dataSourceItems = list.getDataSource().items();
+
+        assert.strictEqual(dataSourceItems.length, 1, 'One group loaded');
+        assert.strictEqual(dataSourceItems[0].key, 'Group 1', 'Key preserved');
+        assert.strictEqual(dataSourceItems[0].customProp, 'customValue', 'Custom property preserved');
+    });
+
+    QUnit.test('custom properties should be preserved in mixed grouped items (T1319741)', function(assert) {
+        const data = [
+            { key: 'Group 1', items: [{ text: 'Item 1' }] },
+            { key: 'Group 2', items: [{ text: 'Item 2' }], customProp: 'customValue' }
+        ];
+
+        const list = this.element.dxList({
+            dataSource: data,
+            grouped: true
+        }).dxList('instance');
+
+        const dataSourceItems = list.getDataSource().items();
+
+        assert.strictEqual(dataSourceItems.length, 2, 'Two groups loaded');
+
+        assert.strictEqual(dataSourceItems[0].key, 'Group 1');
+        assert.strictEqual(dataSourceItems[1].key, 'Group 2');
+        assert.strictEqual(dataSourceItems[1].customProp, 'customValue', 'Custom property preserved in second group');
+
+        const $groups = $(list.element()).find(`.${LIST_GROUP_CLASS}`);
+        assert.strictEqual($groups.length, 2, 'Two groups rendered');
+        assert.strictEqual($groups.eq(1).find(`.${LIST_ITEM_CLASS}`).text(), 'Item 2', 'Item in second group rendered');
+    });
+
+    QUnit.test('custom properties should be available in groupTemplate (T1319741)', function(assert) {
+        const data = [
+            { key: 'Group 1', customProp: 'customValue', items: [{ text: 'Item 1' }] }
+        ];
+
+        const groupTemplateStub = sinon.stub().returns($('<div>'));
+
+        this.element.dxList({
+            dataSource: data,
+            grouped: true,
+            groupTemplate: groupTemplateStub
+        });
+
+        assert.strictEqual(groupTemplateStub.callCount, 1, 'Template was called once');
+        const groupItem = groupTemplateStub.getCall(0).args[0];
+
+        assert.strictEqual(groupItem.key, 'Group 1', 'Key is correct in template');
+        assert.ok(Object.prototype.hasOwnProperty.call(groupItem, 'customProp'), 'Custom property is present in group item');
+        assert.strictEqual(groupItem.customProp, 'customValue', 'Custom property value is correct');
+    });
 });
 
 QUnit.module('widget sizing render', {}, () => {
@@ -4752,6 +4814,10 @@ if(devices.real().deviceType === 'desktop') {
                     role: 'listbox',
                     'aria-label': 'Items',
                 };
+                this.expectedItemsContainerMultipleModeAttrs = {
+                    ...this.expectedItemsContainerAttrs,
+                    'aria-multiselectable': 'true',
+                };
             },
             afterEach: function() {
                 this.clock.restore();
@@ -4796,7 +4862,7 @@ if(devices.real().deviceType === 'desktop') {
                 helper.createWidget({ selectedItemKeys: ['Item_1', 'Item_3'], keyExpr: 'text', selectionMode: 'multiple' });
 
                 helper.checkAttributes(helper.$itemContainer, this.expectedContainerAttrs);
-                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerMultipleModeAttrs);
                 helper.checkItemsAttributes([0, 2], { attributes: ['aria-selected'], role: 'option' });
 
                 const $item_1 = $(helper.getItems().eq(1));
@@ -4805,7 +4871,7 @@ if(devices.real().deviceType === 'desktop') {
                 this.clock.tick(10);
 
                 helper.checkAttributes(helper.$itemContainer, { ...this.expectedContainerAttrs, 'aria-activedescendant': helper.focusedItemId });
-                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerAttrs);
+                helper.checkAttributes(helper.getListContainer(), this.expectedItemsContainerMultipleModeAttrs);
                 helper.checkItemsAttributes([0, 1, 2], { attributes: ['aria-selected'], focusedItemIndex: 1, role: 'option' });
             });
         });

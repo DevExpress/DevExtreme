@@ -12,7 +12,7 @@ import SelectBox from '@ts/ui/m_select_box';
 import NumberBox from '@ts/ui/number_box/m_number_box';
 
 import type { NumberBoxMaskProperties } from '../number_box/m_number_box.mask';
-import dateUtils from './m_date_utils';
+import dateUtils from './date_utils';
 
 const TIMEVIEW_CLASS = 'dx-timeview';
 const TIMEVIEW_CLOCK_CLASS = 'dx-timeview-clock';

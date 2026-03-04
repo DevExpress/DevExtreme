@@ -1,10 +1,10 @@
 {
   "name": "devextreme-testcafe-models",
   "peerDependencies": {
-    "testcafe": "*"
+    "testcafe": "catalog:"
   },
   "devDependencies": {
     "devextreme": "workspace:*"
   },
-  "version": "25.2.3"
+  "version": "25.2.5"
 }

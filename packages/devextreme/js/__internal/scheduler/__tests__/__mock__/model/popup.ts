@@ -2,148 +2,94 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type dxForm from '@js/ui/form';
 import type dxPopup from '@js/ui/popup';
+import { within } from '@testing-library/dom';
+
+const queryRequiredElement = (parent: HTMLElement, selector: string): HTMLElement => {
+  const element = parent.querySelector(selector);
+  if (!element) {
+    throw new Error(`Element with selector "${selector}" not found`);
+  }
+  return element as HTMLElement;
+};
 
 export class PopupModel {
   element: HTMLDivElement;
 
   component: dxPopup;
 
+  private readonly queries: ReturnType<typeof within>;
+
   constructor(element: HTMLDivElement) {
     this.element = element;
+    this.queries = within(element);
 
     // @ts-expect-error
     this.component = $('.dx-scheduler-appointment-popup.dx-popup.dx-widget').dxPopup('instance') as dxPopup;
   }
 
-  get form(): dxForm {
+  get dxForm(): dxForm {
     // @ts-expect-error
     return $(this.element.querySelector('.dx-form')).dxForm('instance') as dxForm;
   }
 
-  get mainGroup(): HTMLElement | null {
-    return this.element.querySelector('.dx-scheduler-form-main-group');
+  get mainGroup(): HTMLElement {
+    return queryRequiredElement(this.element, '.dx-scheduler-form-main-group');
   }
 
-  get recurrenceGroup(): HTMLElement | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-group');
+  get recurrenceGroup(): HTMLElement {
+    return queryRequiredElement(this.element, '.dx-scheduler-form-recurrence-group');
+  }
+
+  get subjectIcon(): HTMLElement {
+    return queryRequiredElement(this.element, '.dx-scheduler-form-subject-group .dx-scheduler-form-icon .dx-icon');
+  }
+
+  get resourceIcon(): HTMLElement {
+    return queryRequiredElement(this.element, '.dx-scheduler-form-resources-group .dx-icon');
+  }
+
+  get recurrenceWeekDayButtons(): HTMLElement {
+    return queryRequiredElement(this.element, '.dx-scheduler-days-of-week-buttons');
+  }
+
+  get saveButton(): HTMLElement {
+    return this.queries.getByRole('button', { name: 'Save' }) as HTMLElement;
+  }
+
+  get cancelButton(): HTMLElement {
+    return this.queries.getByRole('button', { name: 'Cancel' }) as HTMLElement;
+  }
+
+  get closeButton(): HTMLElement {
+    return this.queries.getByRole('button', { name: 'Close' }) as HTMLElement;
+  }
+
+  get backButton(): HTMLElement {
+    return this.queries.getByRole('button', { name: 'Back' }) as HTMLElement;
+  }
+
+  get editSeriesButton(): HTMLElement {
+    return this.queries.getByRole('button', { name: 'Edit series' }) as HTMLElement;
+  }
+
+  get editAppointmentButton(): HTMLElement {
+    return this.queries.getByRole('button', { name: 'Edit appointment' }) as HTMLElement;
+  }
+
+  get recurrenceSettingsButton(): HTMLElement {
+    return queryRequiredElement(this.element, '.dx-scheduler-form-recurrence-settings-button');
   }
 
   isMainGroupVisible(): boolean {
-    const group = this.mainGroup;
-    if (!group) return false;
-    const $group = $(group);
-    return !$group.hasClass('dx-scheduler-form-main-group-hidden');
+    return !this.mainGroup.classList.contains('dx-scheduler-form-main-group-hidden');
   }
 
   isRecurrenceGroupVisible(): boolean {
-    const group = this.recurrenceGroup;
-    if (!group) return false;
-    const $group = $(group);
-    return !$group.hasClass('dx-scheduler-form-recurrence-group-hidden');
+    return !this.recurrenceGroup.classList.contains('dx-scheduler-form-recurrence-group-hidden');
   }
 
-  get subjectIcon(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-subject-group .dx-scheduler-form-icon .dx-icon');
-  }
-
-  get subjectInput(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-text-editor .dx-textbox.dx-widget');
-  }
-
-  get startDate(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-start-date-editor .dx-datebox.dx-widget');
-  }
-
-  get startTime(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-start-time-editor .dx-datebox.dx-widget');
-  }
-
-  get startTimeZone(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-start-date-timezone-editor .dx-selectbox.dx-widget');
-  }
-
-  get endDate(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-end-date-editor .dx-datebox.dx-widget');
-  }
-
-  get endTime(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-end-time-editor .dx-datebox.dx-widget');
-  }
-
-  get endTimeZone(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-end-date-timezone-editor .dx-selectbox.dx-widget');
-  }
-
-  get repeatEditor(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-repeat-editor .dx-selectbox.dx-widget');
-  }
-
-  get descriptionTextArea(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-description-editor .dx-textarea.dx-widget');
-  }
-
-  get frequencyEditor(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-frequency-editor .dx-selectbox.dx-widget');
-  }
-
-  get intervalEditor(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-interval-editor .dx-textbox.dx-widget');
-  }
-
-  get byMonthEditor(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-by-month-editor .dx-selectbox.dx-widget');
-  }
-
-  get dayOfMonthEditor(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-day-of-month-editor .dx-numberbox.dx-widget');
-  }
-
-  get countEditor(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-count-editor .dx-numberbox.dx-widget');
-  }
-
-  get repeatEndEditors(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-end-editors .dx-radiogroup.dx-widget');
-  }
-
-  get recurrenceSettingsButton(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-settings-button');
-  }
-
-  get recurrenceRepeatEveryInput(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-settings-group [type="text"]');
-  }
-
-  get recurrenceWeekDayButtons(): Element | null {
-    return this.element.querySelector('.dx-scheduler-days-of-week-buttons');
-  }
-
-  get recurrenceMonthDayInput(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-day-of-month-group [type="text"]');
-  }
-
-  get recurrenceYearlyInputs(): NodeListOf<Element> {
-    return this.element.querySelectorAll('.dx-scheduler-form-recurrence-repeat-on-yearly-group [type="text"]');
-  }
-
-  get recurrenceEndRadioGroup(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-end-editors');
-  }
-
-  get recurrenceEndInputGroup(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-recurrence-end-inputs');
-  }
-
-  get recurrenceMonthlyGroup(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-day-of-month-group');
-  }
-
-  get recurrenceYearlyGroup(): Element | null {
-    return this.element.querySelector('.dx-scheduler-form-day-of-year-group');
-  }
-
-  getInput = (editorName: string): dxElementWrapper => {
-    const editor = this.form.getEditor(editorName);
+  getInput = (editorName: string): HTMLInputElement => {
+    const editor = this.dxForm.getEditor(editorName);
 
     let $input: dxElementWrapper | undefined | null = null;
 
@@ -163,351 +109,41 @@ export class PopupModel {
       throw new Error(`Input element of editor with name "${editorName}" not found`);
     }
 
-    return $input;
+    return $input.get(0) as HTMLInputElement;
   };
 
   getInputValue = (editorName: string): string => {
-    const $input = this.getInput(editorName);
-    return $input.val() as unknown as string;
+    const input = this.getInput(editorName);
+    return input.value as unknown as string;
   };
 
   setInputValue = (editorName: string, value: string | number | Date | boolean | null): void => {
-    this.form.getEditor(editorName)?.option('value', value);
+    this.dxForm.getEditor(editorName)?.option('value', value);
   };
 
   isInputVisible = (editorName: string): boolean => {
-    const editor = this.form.getEditor(editorName);
-
-    if (!editor) {
-      return false;
-    }
-
-    return editor.$element().is(':visible');
+    const editor = this.dxForm.getEditor(editorName);
+    return !!editor?.$element().get(0).isConnected;
   };
 
   getWeekDaysSelection = (): boolean[] => {
-    const buttons = this.element.querySelectorAll('.dx-scheduler-days-of-week-buttons .dx-button');
+    const buttons = Array.from(this.recurrenceWeekDayButtons.querySelectorAll('.dx-button'));
 
-    if (buttons.length === 0) {
-      throw new Error('Week day buttons not found');
-    }
-
-    return Array.from(buttons).map((button) => button.classList.contains('dx-button-mode-contained'));
-  };
-
-  getLabelIdByText = (labelText: string): string => {
-    const labels = Array.from(this.element.querySelectorAll('label'));
-
-    const label = labels.find((l) => l?.textContent?.trim()?.startsWith(labelText));
-
-    if (!label) {
-      throw new Error(`Label with text "${labelText}" not found`);
-    }
-
-    const forId = label.getAttribute('for');
-    if (!forId) {
-      throw new Error(`Label with text "${labelText}" has no "for" attribute`);
-    }
-    return forId;
-  };
-
-  getInputByLabel = (labelText: string): HTMLInputElement => {
-    const forId = this.getLabelIdByText(labelText);
-
-    const input = this.element.querySelector(`input#${forId}`) as HTMLInputElement;
-
-    if (!input) {
-      throw new Error(`Input with id "${forId}" not found`);
-    }
-
-    return input;
-  };
-
-  setInputValueByLabel = (labelText: string, value: string): HTMLInputElement => {
-    const input = this.getInputByLabel(labelText);
-    if (!input) {
-      throw new Error(`Input with label "${labelText}" not found`);
-    }
-    input.value = '';
-
-    value.split('').forEach((char) => {
-      input.value += char;
-      input.dispatchEvent(new Event('input', { bubbles: true }));
-      input.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: char }));
-      input.dispatchEvent(new KeyboardEvent('keypress', { bubbles: true, key: char }));
-      input.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true, key: char }));
-    });
-
-    input.dispatchEvent(new Event('change', { bubbles: true }));
-    input.dispatchEvent(new Event('input', { bubbles: true }));
-
-    return input;
-  };
-
-  getSwitchByName = (name: string): HTMLInputElement => {
-    const hiddenInput = this.element.querySelector<HTMLInputElement>(`input[name=${name}]`);
-
-    if (!hiddenInput) {
-      throw new Error(`Switch with name "${name}" not found`);
-    }
-
-    return hiddenInput;
-  };
-
-  selectRadio = (value: string): Element | null => {
-    const group = this.element.querySelector('[role="radiogroup"]');
-    if (!group) throw new Error('Radiogroup not found');
-
-    const radios = Array.from(group.querySelectorAll('[role="radio"]'));
-
-    const target = radios.find((radio) => {
-      const label = radio.getAttribute('aria-label')?.trim();
-      const text = radio.textContent?.trim();
-      return label === value || text === value;
-    });
-
-    if (!target) throw new Error(`Radio with value "${value}" not found`);
-
-    radios.forEach((r) => {
-      r.setAttribute('aria-checked', 'false');
-      r.classList.remove('dx-item-selected', 'dx-radiobutton-checked');
-    });
-
-    target.setAttribute('aria-checked', 'true');
-    target.classList.add('dx-item-selected', 'dx-radiobutton-checked');
-
-    target.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-
-    return target;
-  };
-
-  getSelectedRadio = (): HTMLElement | null => this.element.querySelector('[role="radio"][aria-checked="true"]');
-
-  getSelectedRadioValue = (): string | null => {
-    const selected = this.getSelectedRadio();
-    return selected?.getAttribute('aria-label') ?? selected?.textContent?.trim() ?? null;
-  };
-
-  getForm = (): HTMLElement | null => this.element.querySelector('.dx-form');
-
-  getTitle = (): HTMLElement | null => document.querySelector('.dx-popup-title .dx-toolbar-label');
-
-  getSaveButton = (): HTMLButtonElement => {
-    const saveButton = this.element.querySelector('.dx-button[aria-label="Save"]') as HTMLButtonElement;
-    if (!saveButton) {
-      throw new Error('Done button not found');
-    }
-    return saveButton;
-  };
-
-  getBackButton = (): HTMLButtonElement => {
-    const backButton = this.element.querySelector('.dx-toolbar-button  .dx-button[aria-label="arrowleft"]') as HTMLButtonElement;
-    if (!backButton) {
-      throw new Error('Back button not found');
-    }
-    return backButton;
-  };
-
-  getCancelButton = (): HTMLButtonElement => {
-    const cancelButton = this.element.querySelector('.dx-button[aria-label="Cancel"]') as HTMLButtonElement;
-    if (!cancelButton) {
-      throw new Error('Cancel button not found');
-    }
-    return cancelButton;
-  };
-
-  getCloseButton = (): HTMLButtonElement => {
-    const closeButton = this.element.querySelector('.dx-closebutton.dx-button') as HTMLButtonElement;
-    if (!closeButton) {
-      throw new Error('Close button not found');
-    }
-    return closeButton;
-  };
-
-  getFormEditor = (fieldName: string): HTMLElement | null => {
-    const form = this.getForm();
-    if (form === null) {
-      return null;
-    }
-    return form.querySelector(`[data-field="${fieldName}"]`);
-  };
-
-  getEditSeriesButton = (): HTMLElement => {
-    const editSeriesButton = document.querySelector('[aria-label="Edit series"]') as HTMLElement;
-    if (!editSeriesButton) {
-      throw new Error('Edit series button not found');
-    }
-    return editSeriesButton;
-  };
-
-  getEditAppointmentButton = (): HTMLElement => {
-    const editAppointmentButton = document.querySelector('[aria-label="Edit appointment"]') as HTMLElement;
-    if (!editAppointmentButton) {
-      throw new Error('Edit appointment button not found');
-    }
-    return editAppointmentButton;
-  };
-
-  openRecurrenceSettings = (): void => {
-    if (!this.repeatEditor) {
-      throw new Error('Repeat editor not found');
-    }
-
-    // @ts-expect-error
-    const repeatEditorInstance = $(this.repeatEditor).dxSelectBox('instance');
-    const buttons = repeatEditorInstance.option('buttons');
-    const settingsButton = buttons?.find((btn: { name: string }) => btn.name === 'settings');
-
-    if (settingsButton?.options?.onClick) {
-      settingsButton.options.onClick();
-    } else {
-      throw new Error('Settings button not found or onClick is not defined');
-    }
-  };
-
-  openRecurrenceForm = (freq = 'Daily'): void => {
-    if (!this.repeatEditor) {
-      throw new Error('Repeat editor not found');
-    }
-
-    // @ts-expect-error
-    const repeatEditorInstance = $(this.repeatEditor).dxSelectBox('instance');
-    repeatEditorInstance.option('value', freq.toLowerCase());
-
-    // Trigger the settings to open
-    this.openRecurrenceSettings();
+    return buttons.map((button) => button.classList.contains('dx-button-mode-contained'));
   };
 
   selectRepeatValue = (value: string): void => {
-    // @ts-expect-error
-    const repeatEditor = $(this.repeatEditor).dxSelectBox('instance');
-    const previousValue = repeatEditor.option('value');
+    this.getInput('repeatEditor').click();
 
-    const originalOnValueChanged = repeatEditor.option('onValueChanged');
+    const items = document.querySelectorAll('.dx-selectbox-popup-wrapper .dx-list .dx-list-item');
 
-    repeatEditor.option('value', value);
+    const itemToSelect = Array.from(items)
+      .find((item) => item.textContent?.toLowerCase() === value.toLowerCase()) as HTMLElement;
 
-    if (originalOnValueChanged) {
-      originalOnValueChanged({
-        component: repeatEditor,
-        value,
-        previousValue,
-        event: new Event('change'),
-      });
-    }
-  };
-
-  setRecurrenceInterval = (interval: number): void => {
-    const input = this.recurrenceRepeatEveryInput as HTMLInputElement;
-    if (!input) {
-      throw new Error('Recurrence interval input not found');
+    if (!itemToSelect) {
+      throw new Error(`Repeat value "${value}" not found`);
     }
 
-    input.value = interval.toString();
-    input.dispatchEvent(new Event('input', { bubbles: true }));
-    input.dispatchEvent(new Event('change', { bubbles: true }));
-  };
-
-  selectRecurrenceWeekDays = (daysIndex: number[]): void => {
-    const buttonsContainer = this.recurrenceWeekDayButtons;
-    if (!buttonsContainer) {
-      throw new Error('Week day buttons not found');
-    }
-
-    const buttons = Array.from(buttonsContainer.querySelectorAll('.dx-button'));
-
-    buttons.forEach((button, index) => {
-      const isActive = button.classList.contains('dx-button-mode-contained');
-      const shouldBeActive = daysIndex.includes(index);
-
-      if (isActive !== shouldBeActive) {
-        (button as HTMLElement).click();
-      }
-    });
-  };
-
-  setRecurrenceMonthDay = (day: number): void => {
-    const input = this.recurrenceMonthDayInput as HTMLInputElement;
-    if (!input) {
-      throw new Error('Month day input not found');
-    }
-
-    input.value = day.toString();
-    input.dispatchEvent(new Event('input', { bubbles: true }));
-    input.dispatchEvent(new Event('change', { bubbles: true }));
-  };
-
-  setRecurrenceYearlyDate = (month: number, day: number): void => {
-    const inputs = this.recurrenceYearlyInputs;
-    if (inputs.length < 2) {
-      throw new Error('Yearly date inputs not found');
-    }
-
-    const monthInput = inputs[0] as HTMLInputElement;
-    const dayInput = inputs[1] as HTMLInputElement;
-
-    monthInput.value = month.toString();
-    monthInput.dispatchEvent(new Event('input', { bubbles: true }));
-    monthInput.dispatchEvent(new Event('change', { bubbles: true }));
-
-    dayInput.value = day.toString();
-    dayInput.dispatchEvent(new Event('input', { bubbles: true }));
-    dayInput.dispatchEvent(new Event('change', { bubbles: true }));
-  };
-
-  setRecurrenceEnd = (type: 'never' | 'count' | 'until', value?: number | string): void => {
-    const radioGroup = this.recurrenceEndRadioGroup;
-    const inputGroup = this.recurrenceEndInputGroup;
-
-    if (!radioGroup) {
-      throw new Error('Recurrence end radio group not found');
-    }
-
-    const radioButtons = radioGroup.querySelectorAll('.dx-radiobutton');
-
-    switch (type) {
-      case 'never': {
-        const neverRadio = radioButtons[0] as HTMLElement;
-        if (neverRadio) {
-          neverRadio.click();
-        }
-        break;
-      }
-      case 'until': {
-        const untilRadio = radioButtons[1] as HTMLElement;
-        if (untilRadio) {
-          untilRadio.click();
-        }
-
-        if (value !== undefined && inputGroup) {
-          const untilInput = inputGroup.querySelector('[type="text"]') as HTMLInputElement;
-          if (untilInput) {
-            untilInput.value = value.toString();
-            untilInput.dispatchEvent(new Event('input', { bubbles: true }));
-            untilInput.dispatchEvent(new Event('change', { bubbles: true }));
-          }
-        }
-        break;
-      }
-      case 'count': {
-        const countRadio = radioButtons[2] as HTMLElement;
-        if (countRadio) {
-          countRadio.click();
-        }
-
-        if (value !== undefined && inputGroup) {
-          const inputs = inputGroup.querySelectorAll('[type="text"]');
-          const countInput = inputs[1] as HTMLInputElement;
-          if (countInput) {
-            countInput.value = value.toString();
-            countInput.dispatchEvent(new Event('input', { bubbles: true }));
-            countInput.dispatchEvent(new Event('change', { bubbles: true }));
-          }
-        }
-        break;
-      }
-      default:
-        break;
-    }
+    itemToSelect.click();
   };
 }

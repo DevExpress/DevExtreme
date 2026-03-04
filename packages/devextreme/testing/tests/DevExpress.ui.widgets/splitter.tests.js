@@ -1987,6 +1987,7 @@ QUnit.module('Resizing', moduleConfig, () => {
 
         this.instance.option('items[1].size', 50);
         assert.strictEqual(this.instance.option('items[1].size'), 50, 'new item size was set');
+        this.assertLayout([75, 25]);
     });
 
     [
@@ -2361,6 +2362,465 @@ QUnit.module('Resizing', moduleConfig, () => {
         pointer.start().dragStart().drag(50, 50).dragEnd();
 
         this.assertLayout(['75', '25']);
+    });
+
+    QUnit.test('drag resize should work after setting pane size to 0 programmatically', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, minSize: 20 }, { }],
+        });
+
+        this.assertLayout(['50', '50']);
+
+        this.instance.option('items[0].size', 0);
+
+        this.assertLayout(['10', '90']);
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(50, 0).dragEnd();
+
+        this.assertLayout(['35', '65']);
+    });
+
+    QUnit.test('drag resize should work after setting pane size to max programmatically', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, minSize: 20 }, { minSize: 20 }],
+        });
+
+        this.assertLayout(['50', '50']);
+
+        this.instance.option('items[0].size', 200);
+
+        this.assertLayout(['90', '10']);
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(-50, 0).dragEnd();
+
+        this.assertLayout(['65', '35']);
+    });
+
+    QUnit.test('setting pane size to 0 should respect minSize for current item (T1310428)', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, minSize: 20 }, { }],
+        });
+
+        this.instance.option('items[0].size', 0);
+
+        this.assertLayout(['10', '90']);
+    });
+
+    QUnit.test('setting pane size below minSize should respect minSize for current item (T1310428)', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, minSize: 40 }, { }],
+        });
+
+        this.instance.option('items[0].size', 10);
+
+        this.assertLayout(['20', '80']);
+    });
+
+    QUnit.test('sequential programmatic size changes should produce consistent layout (T1321359)', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, minSize: 20 }, { size: 100, minSize: 20 }],
+        });
+
+        this.instance.option('items[0].size', 0);
+        this.instance.option('items[1].size', 200);
+
+        this.assertLayout(['10', '90']);
+    });
+
+    QUnit.test('drag resize should work after sequential programmatic size changes (T1321359)', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, minSize: 20 }, { size: 100, minSize: 20 }],
+        });
+
+        this.instance.option('items[0].size', 0);
+        this.instance.option('items[1].size', 200);
+
+        this.assertLayout(['10', '90']);
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(50, 0).dragEnd();
+
+        this.assertLayout(['35', '65']);
+    });
+
+    QUnit.test('drag resize should work correctly with three panes after programmatic size change', function(assert) {
+        this.reinit({
+            width: 232, height: 208,
+            items: [{ size: 70 }, { size: 70, minSize: 30 }, { size: 70 }],
+        });
+
+        this.instance.option('items[0].size', 0);
+
+        const layoutBefore = this.getPanes().toArray().map((p) => p.style.flexGrow);
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(30, 0).dragEnd();
+
+        const layoutAfter = this.getPanes().toArray().map((p) => p.style.flexGrow);
+        assert.notStrictEqual(layoutAfter[1], layoutBefore[1], 'middle pane size should change after drag');
+    });
+
+    QUnit.test('pane without minSize should collapse to 0 when size set to 0 programmatically', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100 }, { }],
+        });
+
+        this.instance.option('items[0].size', 0);
+
+        this.assertLayout(['0', '100']);
+    });
+
+    QUnit.test('drag should work after setting pane without minSize to 0', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100 }, { }],
+        });
+
+        this.instance.option('items[0].size', 0);
+        this.assertLayout(['0', '100']);
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(50, 0).dragEnd();
+
+        this.assertLayout(['25', '75']);
+    });
+
+    QUnit.test('setting size below minSize via option should respect minSize for current item (T1310428)', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, minSize: 60 }, { }],
+        });
+
+        this.instance.option('items[0].size', 20);
+
+        this.assertLayout(['30', '70']);
+    });
+
+    QUnit.test('non-current pane minSize should be respected during programmatic size change', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, minSize: 80 }, { size: 100, minSize: 80 }],
+        });
+
+        this.instance.option('items[1].size', 180);
+
+        this.assertLayout(['40', '60']);
+    });
+
+    QUnit.test('drag resize restores minSize enforcement after programmatic size change', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, minSize: 40 }, { }],
+        });
+
+        this.instance.option('items[0].size', 0);
+
+        this.assertLayout(['20', '80']);
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(50, 0).dragEnd();
+
+        this.assertLayout(['45', '55']);
+    });
+
+    QUnit.test('programmatic size change should work correctly for the second pane', function(assert) {
+        this.reinit({
+            width: 1016, height: 208,
+            dataSource: [{ size: '300px' }, { size: '600px' }, { size: '100px' }],
+        });
+
+        this.assertLayout(['30', '60', '10']);
+
+        this.instance.option('items[1].size', 200);
+
+        this.checkItemSizes([300, 200, 500]);
+        this.assertLayout(['30', '20', '50']);
+    });
+
+    QUnit.test('programmatic size should be capped by maxSize of currentItem', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, maxSize: 120 }, { }],
+        });
+
+        this.instance.option('items[0].size', 180);
+
+        this.assertLayout(['60', '40']);
+    });
+
+    QUnit.test('programmatic size within maxSize should apply normally', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, maxSize: 150 }, { }],
+        });
+
+        this.instance.option('items[0].size', 140);
+
+        this.assertLayout(['70', '30']);
+    });
+
+    QUnit.test('maxSize and other pane minSize should both be respected', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, maxSize: 120 }, { minSize: 40 }],
+        });
+
+        this.instance.option('items[0].size', 180);
+
+        this.assertLayout(['60', '40']);
+    });
+
+    QUnit.test('other pane minSize should tighten effectiveMaxSize below userMaxSize', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, maxSize: 120 }, { minSize: 100 }],
+        });
+
+        this.instance.option('items[0].size', 180);
+
+        this.assertLayout(['50', '50']);
+    });
+
+    QUnit.test('minSize and maxSize on same currentItem should both be enforced', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, minSize: 40, maxSize: 120 }, { }],
+        });
+
+        this.instance.option('items[0].size', 0);
+
+        this.assertLayout(['20', '80']);
+    });
+
+    QUnit.test('minSize+maxSize on currentItem with other pane minSize', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, minSize: 40, maxSize: 120 }, { minSize: 60 }],
+        });
+
+        this.instance.option('items[0].size', 0);
+
+        this.assertLayout(['20', '80']);
+    });
+
+    QUnit.test('other pane minSize should cap currentItem via effectiveMaxSize', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100 }, { minSize: 60, maxSize: 140 }],
+        });
+
+        this.instance.option('items[0].size', 180);
+
+        this.assertLayout(['70', '30']);
+    });
+
+    QUnit.test('drag should work after programmatic change with maxSize', function(assert) {
+        this.reinit({
+            width: 208, height: 208,
+            items: [{ size: 100, maxSize: 140 }, { }],
+        });
+
+        this.instance.option('items[0].size', 0);
+
+        this.assertLayout(['0', '100']);
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(50, 0).dragEnd();
+
+        this.assertLayout(['25', '75']);
+    });
+
+    QUnit.test('3 panes: setting first to 0 should respect its minSize and redistribute', function(assert) {
+        this.reinit({
+            width: 416, height: 208,
+            items: [{ size: 200, minSize: 40 }, { size: 100, minSize: 40 }, { size: 100 }],
+        });
+
+        this.instance.option('items[0].size', 0);
+
+        this.assertLayout(['10', '15', '75']);
+    });
+
+    QUnit.test('3 panes: setting first to max should respect all minSizes', function(assert) {
+        this.reinit({
+            width: 416, height: 208,
+            items: [{ size: 200, minSize: 40 }, { size: 100, minSize: 40 }, { size: 100, minSize: 40 }],
+        });
+
+        this.instance.option('items[0].size', 360);
+
+        this.assertLayout(['80', '10', '10']);
+    });
+
+    QUnit.test('3 panes: setting middle to max with maxSize should respect maxSize', function(assert) {
+        this.reinit({
+            width: 416, height: 208,
+            items: [{ size: 100 }, { size: 200, maxSize: 240 }, { size: 100 }],
+        });
+
+        this.instance.option('items[1].size', 360);
+
+        this.assertLayout(['40', '60', '0']);
+    });
+
+    QUnit.test('3 panes: maxSize on middle with minSizes on sides', function(assert) {
+        this.reinit({
+            width: 416, height: 208,
+            items: [{ size: 100, minSize: 40 }, { size: 200, maxSize: 240 }, { size: 100, minSize: 40 }],
+        });
+
+        this.instance.option('items[1].size', 360);
+
+        this.assertLayout(['30', '60', '10']);
+    });
+
+    QUnit.test('3 panes: setting middle to 0 with minSizes on all panes', function(assert) {
+        this.reinit({
+            width: 416, height: 208,
+            items: [{ size: 100, minSize: 60 }, { size: 200, minSize: 40 }, { size: 100, minSize: 60 }],
+        });
+
+        this.instance.option('items[1].size', 0);
+
+        this.assertLayout(['15', '10', '75']);
+    });
+
+    QUnit.test('3 panes: setting last pane to max, others have maxSize', function(assert) {
+        this.reinit({
+            width: 416, height: 208,
+            items: [{ size: 100, maxSize: 200 }, { size: 200, maxSize: 200 }, { size: 100 }],
+        });
+
+        this.instance.option('items[2].size', 360);
+
+        this.assertLayout(['0', '10', '90']);
+    });
+
+    QUnit.test('4 panes: setting first to 0 with all minSizes', function(assert) {
+        this.reinit({
+            width: 424, height: 208,
+            items: [
+                { size: 100, minSize: 20 }, { size: 100, minSize: 20 },
+                { size: 100, minSize: 20 }, { size: 100, minSize: 20 },
+            ],
+        });
+
+        this.instance.option('items[0].size', 0);
+
+        this.assertLayout(['5', '20', '25', '50']);
+    });
+
+    QUnit.test('4 panes: setting first to max with all minSizes', function(assert) {
+        this.reinit({
+            width: 424, height: 208,
+            items: [
+                { size: 100, minSize: 20 }, { size: 100, minSize: 20 },
+                { size: 100, minSize: 20 }, { size: 100, minSize: 20 },
+            ],
+        });
+
+        this.instance.option('items[0].size', 340);
+
+        this.assertLayout(['85', '5', '5', '5']);
+    });
+
+    QUnit.test('4 panes: setting middle pane to 0 with no minSize', function(assert) {
+        this.reinit({
+            width: 424, height: 208,
+            items: [
+                { size: 100 }, { size: 100, maxSize: 120 },
+                { size: 100 }, { size: 100 },
+            ],
+        });
+
+        this.instance.option('items[2].size', 0);
+
+        this.assertLayout(['25', '25', '0', '50']);
+    });
+
+    QUnit.test('4 panes: setting last to max, first three have minSize', function(assert) {
+        this.reinit({
+            width: 424, height: 208,
+            items: [
+                { size: 100, minSize: 40 }, { size: 100, minSize: 40 },
+                { size: 100, minSize: 40 }, { size: 100 },
+            ],
+        });
+
+        this.instance.option('items[3].size', 340);
+
+        this.assertLayout(['10', '10', '10', '70']);
+    });
+
+    QUnit.test('4 panes: mixed minSize and maxSize, setting second pane to max', function(assert) {
+        this.reinit({
+            width: 424, height: 208,
+            items: [
+                { size: 100, minSize: 40 }, { size: 100, maxSize: 160 },
+                { size: 100, minSize: 20, maxSize: 200 }, { size: 100 },
+            ],
+        });
+
+        this.instance.option('items[1].size', 300);
+
+        this.assertLayout(['55', '40', '5', '0']);
+    });
+
+    QUnit.test('4 panes: minSize+maxSize on currentItem', function(assert) {
+        this.reinit({
+            width: 424, height: 208,
+            items: [
+                { size: 100, minSize: 40, maxSize: 160 }, { size: 100 },
+                { size: 100 }, { size: 100 },
+            ],
+        });
+
+        this.instance.option('items[0].size', 0);
+
+        this.assertLayout(['10', '15', '25', '50']);
+    });
+
+    QUnit.test('4 panes: sequential changes should maintain consistent layout', function(assert) {
+        this.reinit({
+            width: 424, height: 208,
+            items: [
+                { size: 100, minSize: 20 }, { size: 100 },
+                { size: 100 }, { size: 100, minSize: 20 },
+            ],
+        });
+
+        this.instance.option('items[0].size', 0);
+        this.instance.option('items[3].size', 0);
+
+        this.assertLayout(['50', '20', '25', '5']);
+    });
+
+    QUnit.test('4 panes: drag should work after programmatic change', function(assert) {
+        this.reinit({
+            width: 424, height: 208,
+            items: [
+                { size: 100, minSize: 20 }, { size: 100, minSize: 20 },
+                { size: 100, minSize: 20 }, { size: 100, minSize: 20 },
+            ],
+        });
+
+        this.instance.option('items[0].size', 0);
+
+        this.assertLayout(['5', '20', '25', '50']);
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(40, 0).dragEnd();
+
+        this.assertLayout(['15', '10', '25', '50']);
     });
 });
 
@@ -3786,35 +4246,6 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
             assert.strictEqual(nestedSplitterResizeHandlerStub.callCount, 1);
         });
 
-        QUnit.skip(`nestedSplitter.${eventHandler} event handler should be able to be updated at runtime`, function(assert) {
-            const handlerStub = sinon.stub();
-            const handlerStubAfterUpdate = sinon.stub();
-
-            this.reinit({
-                items: [{
-                    splitter: {
-                        [eventHandler]: handlerStub,
-                        dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
-                    }
-                }]
-            });
-
-            let pointer = pointerMock(this.getResizeHandles(false).get(0));
-
-            pointer.start().dragStart().drag(0, 50).dragEnd();
-
-            assert.strictEqual(handlerStub.callCount, 1);
-            assert.strictEqual(handlerStubAfterUpdate.callCount, 0);
-            handlerStub.reset();
-
-            this.instance.option(`items[0].splitter.${eventHandler}`, handlerStubAfterUpdate);
-
-            pointer = pointerMock(this.getResizeHandles(false)[0]);
-            pointer.start().dragStart().drag(0, 50).dragEnd();
-
-            assert.strictEqual(handlerStub.callCount, 0);
-            assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
-        });
     });
 
     QUnit.test('itemRendered callback should be called when the panes of a nested splitter are rendered', function(assert) {

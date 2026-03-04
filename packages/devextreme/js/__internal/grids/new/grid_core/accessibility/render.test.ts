@@ -62,34 +62,6 @@ describe('Accessibility attributes', () => {
     });
   });
 
-  describe('Status description', () => {
-    // TODO a11y: remove "firstRender" flags, fix this test and unskip.
-    it.skip('should be displayed on the status container', () => {
-      const cardView = setup({
-        dataSource: [
-          { A: 'A_0' }, { A: 'A_1' }, { A: 'A_2' }, { A: 'A_3' }, { A: 'A_4' },
-        ],
-        columns: ['A'],
-      });
-
-      const statusContainer = rootQuerySelector(SELECTORS.statusContainer);
-      expect(statusContainer).not.toBeNull();
-      expect(statusContainer?.innerHTML).toBe('');
-
-      cardView.option('filterValue', ['A', '=', 'A_1']);
-      expect(statusContainer?.innerHTML).toBe('Card view with 1 cards. Each card has 1 fields');
-
-      cardView.option('filterValue', null);
-      expect(statusContainer?.innerHTML).toBe('Card view with 5 cards. Each card has 1 fields');
-
-      cardView.option('paging', { pageSize: 2 });
-      // TODO a11y: is it ok that page size = 2 and status message has 5 cards?
-      expect(statusContainer?.innerHTML).toBe('Card view with 5 cards. Each card has 1 fields');
-      cardView.option('paging', { pageIndex: 2 });
-      expect(statusContainer?.innerHTML).toBe('Card view with 5 cards. Each card has 1 fields');
-    });
-  });
-
   describe('Header panel', () => {
     it('should be represented as menubar', () => {
       setup({

@@ -592,7 +592,7 @@ QUnit.module('Drawer behavior', () => {
         assert.ok($content.eq(1).hasClass('dx-drawer-content'));
     });
 
-    QUnit.skip('drawer panel should be repositioned correctly after dimension changed,left position', function(assert) {
+    QUnit.test('drawer panel should be repositioned correctly after dimension changed,left position', function(assert) {
         fx.off = true;
 
         const $element = $('#drawer').dxDrawer({
@@ -611,12 +611,12 @@ QUnit.module('Drawer behavior', () => {
 
         resizeCallbacks.fire();
 
-        assert.equal($panelOverlayContent.position().left, 0, 'panel overlay content position is OK');
+        assert.equal($panelOverlayContent.position().left, -200, 'panel overlay content position is OK');
 
         fx.off = false;
     });
 
-    QUnit.skip('drawer panel should be repositioned correctly after dimension changed,top position', function(assert) {
+    QUnit.test('drawer panel should be repositioned correctly after dimension changed,top position', function(assert) {
         fx.off = true;
 
         const $element = $('#drawer').dxDrawer({
@@ -636,7 +636,7 @@ QUnit.module('Drawer behavior', () => {
 
         resizeCallbacks.fire();
 
-        assert.equal($panelOverlayContent.position().top, 0, 'panel overlay content position is OK');
+        assert.equal($panelOverlayContent.position().top, -600, 'panel overlay content position is OK');
 
         fx.off = false;
     });
@@ -694,7 +694,7 @@ QUnit.module('Drawer behavior', () => {
         fx.off = false;
     });
 
-    QUnit.skip('drawer panel should be repositioned after dimension changed, right position', function(assert) {
+    QUnit.test('drawer panel should be repositioned after dimension changed, right position', function(assert) {
         fx.off = true;
 
         const $element = $('#drawer').dxDrawer({
@@ -714,7 +714,7 @@ QUnit.module('Drawer behavior', () => {
 
         resizeCallbacks.fire();
 
-        assert.equal($panelOverlayContent.position().left, -200, 'panel overlay content position is OK');
+        assert.equal($panelOverlayContent.position().left, 1000, 'panel overlay content position is OK');
 
         fx.off = false;
     });

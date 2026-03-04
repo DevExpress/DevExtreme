@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import '@ts/ui/list/modules/selection';
 
 import dateLocalization from '@js/common/core/localization/date';
@@ -9,8 +10,9 @@ import { getWindow } from '@js/core/utils/window';
 import { getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
 import List from '@ts/ui/list/list.edit.search';
 
+import type { PopupProperties } from '../popup/m_popup';
+import dateUtils from './date_utils';
 import DateBoxStrategy from './m_date_box.strategy';
-import dateUtils from './m_date_utils';
 
 const window = getWindow();
 
@@ -51,7 +53,7 @@ class ListStrategy extends DateBoxStrategy {
     return displayFormat || 'shorttime';
   }
 
-  popupConfig(popupConfig) {
+  popupConfig(popupConfig: PopupProperties): PopupProperties {
     return popupConfig;
   }
 
@@ -174,9 +176,9 @@ class ListStrategy extends DateBoxStrategy {
   }
 
   _getTimeListItems() {
-    let min = this.dateBox.dateOption('min') || this._getBoundaryDate('min');
-    const max = this.dateBox.dateOption('max') || this._getBoundaryDate('max');
-    const value = this.dateBox.dateOption('value') || null;
+    let min = this.dateBox.getDateOption('min') || this._getBoundaryDate('min');
+    const max = this.dateBox.getDateOption('max') || this._getBoundaryDate('max');
+    const value = this.dateBox.getDateOption('value') || null;
     let delta = max - min;
     const minutes = min.getMinutes() % this.dateBox.option('interval');
 
@@ -217,7 +219,7 @@ class ListStrategy extends DateBoxStrategy {
 
   _getBoundaryDate(boundary) {
     const boundaryValue = BOUNDARY_VALUES[boundary];
-    const currentValue = new Date(ensureDefined(this.dateBox.dateOption('value'), 0));
+    const currentValue = new Date(ensureDefined(this.dateBox.getDateOption('value'), 0));
 
     return new Date(
       currentValue.getFullYear(),

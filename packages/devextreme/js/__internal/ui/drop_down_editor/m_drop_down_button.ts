@@ -6,7 +6,7 @@ import { extend } from '@js/core/utils/extend';
 import type { Properties as ButtonProperties } from '@js/ui/button';
 import Button from '@js/ui/button';
 
-import TextEditorButton from '../text_box/texteditor_button_collection/m_button';
+import TextEditorButton from '../text_box/texteditor_button_collection/button';
 
 const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_EDITOR_BUTTON_VISIBLE = 'dx-dropdowneditor-button-visible';

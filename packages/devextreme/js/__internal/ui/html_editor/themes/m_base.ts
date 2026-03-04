@@ -12,6 +12,7 @@ if (Quill) {
       this.quill.root.classList.add('dx-htmleditor-content');
       this.quill.root.setAttribute('role', 'textbox');
       this.quill.root.setAttribute('aria-label', 'Editor content');
+      this.quill.root.setAttribute('aria-multiline', 'true');
     }
   };
 } else {

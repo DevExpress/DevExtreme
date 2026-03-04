@@ -1,10 +1,11 @@
 {
   "name": "devextreme-vue",
-  "version": "25.2.3",
-  "description": "DevExtreme Vue UI and Visualization Components",
+  "version": "25.2.5",
+  "description": "DevExtreme UI and Visualization Components for Vue",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DevExpress/devextreme-vue.git"
+    "url": "https://github.com/DevExpress/DevExtreme.git",
+    "directory": "packages/devextreme-vue"
   },
   "sideEffects": false,
   "main": "./cjs/index.js",

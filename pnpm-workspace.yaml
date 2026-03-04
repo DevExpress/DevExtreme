@@ -6,12 +6,13 @@ packages:
   - '!packages/sbom'
 
 catalog:
+  axe-core: ^4.11.1
   inferno: ^8.2.3
   inferno-hydrate: ^8.2.3
   inferno-create-element: ^8.2.3
   inferno-server: ^8.2.3
-  devexpress-diagram: 2.2.24
-  devexpress-gantt: 4.1.64
+  devexpress-diagram: 2.2.25
+  devexpress-gantt: 4.1.66
   devextreme-quill: 1.7.8
   eslint: 9.18.0
   eslint-config-airbnb-typescript: 18.0.0
@@ -22,6 +23,7 @@ catalog:
   globals: 15.14.0
   gulp-eslint-new: 2.4.0
   jquery: 3.7.1
+  testcafe: 3.7.4
   "@babel/eslint-parser": 7.26.5
   "@eslint-stylistic/metadata": ^2.13.0
   "@eslint/eslintrc": 3.2.0
@@ -60,7 +62,7 @@ catalogs:
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
   tools:
-    "devextreme-internal-tools": 20.1.0
+    "devextreme-internal-tools": 20.1.1
     "prettier": 3.5.3
     "ts-node": 10.9.2
     "@types/node": 20.12.8

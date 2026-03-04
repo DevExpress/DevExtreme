@@ -1,6 +1,6 @@
 {
   "name": "devextreme-monorepo",
-  "version": "25.2.3",
+  "version": "25.2.5",
   "license": "MIT",
   "author": "Developer Express Inc.",
   "scripts": {
@@ -35,7 +35,7 @@
     "@types/tar-fs": "2.0.4",
     "@types/yargs": "17.0.32",
     "@vue/shared": "3.4.27",
-    "axe-core": "4.10.3",
+    "axe-core": "catalog:",
     "cheerio": "1.0.0-rc.10",
     "codelyzer": "6.0.2",
     "devextreme-internal-tools": "catalog:tools",
@@ -51,6 +51,7 @@
     "shelljs": "0.8.5",
     "shx": "0.4.0",
     "source-map": "0.7.4",
+    "stylelint": "15.11.0",
     "tar-fs": "3.1.1",
     "ts-node": "10.9.2",
     "vue": "3.4.27",
@@ -63,19 +64,21 @@
   "pnpm": {
     "overrides": {
       "@devexpress/callsite-record@^4.1.6": "4.1.6",
+      "@modelcontextprotocol/sdk@>=1.10.0 <=1.25.3": "^1.26.0",
       "form-data@<2.5.4": "2.5.5",
       "form-data@>=4.0.0 <4.0.4": "^4.0.5",
       "pbkdf2@<=3.1.2": "^3.1.3",
       "sha.js@<=2.4.11": "^2.4.12",
       "rollup@<2.79.2": "^4.53.3",
       "json5@<1.0.2": "^2.2.3",
-      "axios@<1.8.2": "^1.13.2",
+      "axios@<=1.13.4": "^1.13.5",
       "braces@<3.0.3": "^3.0.3",
       "semver@<5.7.2": "^5.7.2",
       "qs": ">=6.14.1",
       "glob@>=10.2.0 <10.5.0": "^10.5.0",
       "node-forge@<1.3.2": "^1.3.2",
-      "vite@>=6.0.0 <6.4.1": "^6.4.1"
+      "vite@>=6.0.0 <6.4.1": "^6.4.1",
+      "tar@<7.5.8": "^7.5.8"
     }
   },
   "packageManager": "pnpm@9.15.4"

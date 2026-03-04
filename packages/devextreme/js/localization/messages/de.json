@@ -276,19 +276,19 @@
         "dxScheduler-appointmentAriaLabel-recurring": "Wiederkehrender Termin",
 
         "dxScheduler-appointmentListAriaLabel": "Terminliste",
-        "dxScheduler-newPopupTitle": "New Appointment",
-        "dxScheduler-editPopupTitle": "Edit Appointment",
-        "dxScheduler-editPopupSaveButtonText": "Save",
+        "dxScheduler-newPopupTitle": "Neuer Termin",
+        "dxScheduler-editPopupTitle": "Termin bearbeiten",
+        "dxScheduler-editPopupSaveButtonText": "Speichern",
 
         "dxScheduler-editorLabelTitle": "Betreff",
         "dxScheduler-editorLabelStartDate": "Anfangszeit",
-        "dxScheduler-editorAriaLabelStartTime": "Start time",
+        "dxScheduler-editorAriaLabelStartTime": "Anfangszeit",
         "dxScheduler-editorLabelEndDate": "Endzeit",
-        "dxScheduler-editorAriaLabelEndTime": "End time",
+        "dxScheduler-editorAriaLabelEndTime": "Endzeit",
         "dxScheduler-editorLabelDescription": "Beschreibung",
         "dxScheduler-editorLabelRecurrence": "Wiederholen",
 
-        "dxScheduler-noSubject": "(No subject)",
+        "dxScheduler-noSubject": "(Kein Betreff)",
 
         "dxScheduler-navigationToday": "Heute",
         "dxScheduler-navigationPrevious": "Vorherige Seite",

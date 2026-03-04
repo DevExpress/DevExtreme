@@ -135,7 +135,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _updateEditRowCore(row, skipCurrentRow, isCustomSetCellValue) {
     const editForm = this._editForm;
 
@@ -219,7 +218,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
       formTemplate(this._$popupContent, templateOptions, { isPopupForm: true });
       this._rowsView.renderDelayedTemplates();
-      $(container).parent().attr('aria-label', this.localize('dxDataGrid-ariaEditForm'));
+      this.setAria('label', this.localize('dxDataGrid-ariaEditForm'), $(container).parent());
     };
   }
 

@@ -1,10 +1,11 @@
 {
   "name": "devextreme-angular",
-  "version": "25.2.3",
-  "description": "Angular UI and visualization components based on DevExtreme widgets",
+  "version": "25.2.5",
+  "description": "DevExtreme UI and Visualization Components for Angular",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DevExpress/devextreme-angular.git"
+    "url": "https://github.com/DevExpress/DevExtreme.git",
+    "directory": "packages/devextreme-angular"
   },
   "scripts": {
     "build": "pnpm --workspace-root nx build devextreme-angular",

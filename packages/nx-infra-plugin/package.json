@@ -1,6 +1,6 @@
 {
   "name": "devextreme-nx-infra-plugin",
-  "version": "25.2.3",
+  "version": "25.2.5",
   "type": "commonjs",
   "private": true,
   "executors": "./dist/executors.json",
@@ -39,7 +39,7 @@
     "typescript": "4.9.5"
   },
   "scripts": {
-    "postinstall": "npx ts-node --project scripts/tsconfig.json scripts/build.ts --force",
+    "postinstall": "npx ts-node --project scripts/tsconfig.json scripts/build.ts --force && npx nx reset",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
     "build": "npx ts-node --project scripts/tsconfig.json scripts/build.ts --force",

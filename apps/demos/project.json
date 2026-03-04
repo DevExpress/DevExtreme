@@ -104,14 +104,16 @@
       "cache": true
     },
     "prepare-js": {
-      "executor": "nx:run-script",
+      "executor": "nx:run-commands",
       "options": {
-        "script": "prepare-js"
+        "commands": [
+          "pnpm nx build devextreme",
+          "pnpm nx run-many --targets=pack --projects=devextreme-angular,devextreme-react,devextreme-vue --parallel",
+          "pnpm run prepare-js"
+        ],
+        "parallel": false,
+        "cwd": "{projectRoot}"
       },
-      "dependsOn": [
-        { "projects": ["devextreme"], "target": "build" },
-        { "projects": ["devextreme-angular", "devextreme-react", "devextreme-vue"], "target": "pack" }
-      ],
       "inputs": [
         "default",
         "{projectRoot}/gulpfile.js/**/*",

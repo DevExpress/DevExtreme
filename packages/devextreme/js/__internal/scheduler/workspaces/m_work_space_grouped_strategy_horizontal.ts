@@ -142,17 +142,17 @@ class HorizontalGroupedStrategy {
 
   _calculateOffset(groupIndex) {
     const indicatorStartPosition = this._workSpace.getIndicatorOffset(groupIndex);
-    const offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex;
+    const offset = this._workSpace._getCellCount() * this._workSpace.getCellWidth() * groupIndex;
 
     return indicatorStartPosition + offset;
   }
 
   _calculateGroupByDateOffset(groupIndex) {
-    return this._workSpace.getIndicatorOffset(0) * this._workSpace._getGroupCount() + this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex;
+    return this._workSpace.getIndicatorOffset(0) * this._workSpace._getGroupCount() + this._workSpace.getCellWidth() * groupIndex;
   }
 
   getShaderOffset(i, width) {
-    const offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1) * i;
+    const offset = this._workSpace._getCellCount() * this._workSpace.getCellWidth() * i;
     return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._workSpace._dateTableScrollable.$content().get(0)).width - offset - this._workSpace.getTimePanelWidth() - width : offset;
   }
 
@@ -170,8 +170,8 @@ class HorizontalGroupedStrategy {
     return getBoundingRect(this._workSpace._dateTableScrollable.$content().get(0)).height;
   }
 
-  getShaderWidth(i) {
-    return this._workSpace.getIndicationWidth(i);
+  getShaderWidth() {
+    return this._workSpace.getIndicationWidth();
   }
 
   getScrollableScrollTop(allDay) {

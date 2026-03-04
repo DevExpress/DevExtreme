@@ -3823,7 +3823,6 @@
                 "MvcAdditionalFiles": [
                   "/Models/RecurringAppointment.cs",
                   "/Models/RecurringAppointmentsResource.cs",
-                  "/Models/ContextMenuItem.cs",
                   "/Models/SampleData/RecurringAppointments.cs",
                   "/Models/SampleData/RecurringAppointmentsResources.cs"
                 ],

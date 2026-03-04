@@ -1,5 +1,4 @@
 import type { SingleMultipleOrNone } from '@js/common';
-import messageLocalization from '@js/localization/message';
 
 export interface SortingOptions {
   ascendingText?: string;
@@ -15,9 +14,9 @@ export interface Options {
 
 export const defaultOptions = {
   sorting: {
-    ascendingText: messageLocalization.format('dxDataGrid-sortingAscendingText'),
-    descendingText: messageLocalization.format('dxDataGrid-sortingDescendingText'),
-    clearText: messageLocalization.format('dxDataGrid-sortingClearText'),
+    ascendingText: undefined,
+    descendingText: undefined,
+    clearText: undefined,
     mode: 'single',
     showSortIndexes: true,
   },

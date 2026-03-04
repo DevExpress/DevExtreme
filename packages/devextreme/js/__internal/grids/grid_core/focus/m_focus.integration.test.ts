@@ -1,41 +1,14 @@
 import {
-  afterEach, describe, expect, it, jest,
+  afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
-import type { dxElementWrapper } from '@js/core/renderer';
-import $ from '@js/core/renderer';
-import type { Properties as DataGridProperties } from '@js/ui/data_grid';
-import DataGrid from '@js/ui/data_grid';
 
-const SELECTORS = {
-  gridContainer: '#gridContainer',
-};
-
-const GRID_CONTAINER_ID = 'gridContainer';
-
-const createDataGrid = async (
-  options: DataGridProperties = {},
-): Promise<{ $container: dxElementWrapper; instance: DataGrid }> => new Promise((resolve) => {
-  const $container = $('<div>')
-    .attr('id', GRID_CONTAINER_ID)
-    .appendTo(document.body);
-
-  const instance = new DataGrid($container.get(0) as HTMLDivElement, {
-    // @ts-ignore
-    loadingTimeout: null,
-    ...options,
-  });
-
-  resolve({ $container, instance });
-});
+import {
+  afterTest, beforeTest, createDataGrid, flushAsync,
+} from '../__tests__/__mock__/helpers/utils';
 
 describe('GridCore focus', () => {
-  afterEach(() => {
-    const $container = $(SELECTORS.gridContainer);
-    const dataGrid = ($container as any).dxDataGrid('instance') as DataGrid;
-
-    dataGrid.dispose();
-    $container.remove();
-  });
+  beforeEach(beforeTest);
+  afterEach(afterTest);
 
   const testCases: [boolean, 'insert' | 'remove' | 'update', number][] = [
     [true, 'insert', 2],
@@ -93,6 +66,8 @@ describe('GridCore focus', () => {
           default:
             break;
         }
+
+        await flushAsync();
 
         expect(onFocusedRowChanged.mock.calls.length).toBe(1);
         expect(instance.option('focusedRowKey')).toEqual(2);
