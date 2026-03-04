@@ -27,13 +27,10 @@ function findDemos() {
 
   for (const widget of widgets) {
     const widgetDir = join(demosDir, widget.name);
-    let demos;
-    try {
-      demos = readdirSync(widgetDir, { withFileTypes: true })
-        .filter((d) => d.isDirectory());
-    } catch {
-      continue;
-    }
+    let demos = [];
+
+    demos = readdirSync(widgetDir, { withFileTypes: true })
+      .filter((d) => d.isDirectory());
 
     for (const demo of demos) {
       for (const fw of FRAMEWORKS) {
