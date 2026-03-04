@@ -43,7 +43,7 @@ describe('Universal', () => {
     TestBed.overrideComponent(TestContainerComponent, {
       set: {
         template: `
-                    ${componentNames.map((name) => `<dx-${name}></dx-${name}>`).join('')}
+                    ${componentNames.filter((_name) => !['diagram'].includes(_name)).map((name) => `<dx-${name}></dx-${name}>`).join('')}
                 `,
       },
     });

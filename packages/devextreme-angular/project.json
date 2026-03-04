@@ -421,6 +421,26 @@
         "{projectRoot}/tests/dist/**/*"
       ]
     },
+    "test:ssr-components:vitest": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm --workspace-root nx build:tests devextreme-angular",
+          "vitest run --config vitest.server.config.ts"
+        ],
+        "parallel": false,
+        "cwd": "packages/devextreme-angular"
+      },
+      "dependsOn": ["build:tests"],
+      "inputs": [
+        "default",
+        "test",
+        "{projectRoot}/tests/dist/**/*",
+        "{projectRoot}/vitest.server.config.ts",
+        "{projectRoot}/tests/src/server/vitest.setup.ts"
+      ],
+      "cache": true
+    },
     "watch:test": {
       "executor": "devextreme-nx-infra-plugin:karma-multi-env",
       "options": {
@@ -492,6 +512,8 @@
       "{projectRoot}/karma.server.test.shim.js",
       "{projectRoot}/karma.hydration.test.shim.js",
       "{projectRoot}/webpack.test.js",
+      "{projectRoot}/vitest.server.config.ts",
+      "{projectRoot}/tests/src/server/vitest.setup.ts",
       "{projectRoot}/tsconfig.tests.json",
       "{projectRoot}/src/**/*.spec.ts",
       "{projectRoot}/src/**/*.test.ts"

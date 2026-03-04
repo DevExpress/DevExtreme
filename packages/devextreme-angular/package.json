@@ -13,9 +13,12 @@
     "lint": "eslint . --quiet",
     "lint:fix": "eslint . --fix",
     "test": "pnpm --workspace-root nx test devextreme-angular",
+    "test:ssr-components:vitest": "pnpm --workspace-root nx test:ssr-components:vitest devextreme-angular",
     "pack": "pnpm --workspace-root nx pack devextreme-angular",
     "pack-with-descriptions": "pnpm --workspace-root nx pack --configuration with-descriptions devextreme-angular",
-    "test:dev": "pnpm --workspace-root nx run:tests devextreme-angular"
+    "test:dev": "pnpm --workspace-root nx run:tests devextreme-angular",
+    "test:ssr": "node tests/testcafe/run-ssr-testcafe.mjs"
+
   },
   "author": "Developer Express Inc.",
   "license": "MIT",
@@ -49,6 +52,7 @@
     "core-js": "2.6.12",
     "css-loader": "6.10.0",
     "devextreme-metadata": "workspace:*",
+    "domino": "^2.1.6",
     "eslint": "catalog:",
     "eslint-config-devextreme": "catalog:",
     "eslint-plugin-import": "catalog:",
@@ -67,6 +71,7 @@
     "style-loader": "3.3.4",
     "tslib": "2.6.3",
     "typescript": "catalog:angular",
+    "vitest": "^3.0.0",
     "webpack": "5.105.0",
     "yargs": "17.7.2",
     "zone.js": "catalog:angular"

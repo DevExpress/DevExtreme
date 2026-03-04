@@ -1,0 +1,8 @@
+{
+  "name": "devextreme-angular-ssr-testcafe",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "testcafe": "3.7.2"
+  }
+}
