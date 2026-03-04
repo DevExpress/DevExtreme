@@ -237,7 +237,7 @@
     "build:testing-playground": "gulp build-renovation-testing:watch --playgroundName",
     "build:community-localization": "gulp generate-community-locales",
     "build:systemjs": "gulp transpile-systemjs",
-    "dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true gulp dev",
+    "dev": "cross-env DEVEXTREME_TEST_CI=true gulp dev",
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
     "transpile-tests": "gulp transpile-tests",
     "update-ts-reexports": "dx-tools generate-reexports --sources ./js --exclude \"((dialog|export|list_light|notify|overlay|palette|set_template_engine|splitter_control|themes|themes_callback|track_bar|utils|validation_engine|validation_message)[.d.ts])\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",

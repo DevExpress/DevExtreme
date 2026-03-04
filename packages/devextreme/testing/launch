@@ -15,8 +15,8 @@ execRunner();
 
 function execRunner () {
     spawn(
-        'dotnet',
-        [ join(__dirname, 'runner/bin/runner.dll') ],
+        'node',
+        [ join(__dirname, 'runner/index.js') ],
         { stdio: 'inherit', shell: true }
     );
 
