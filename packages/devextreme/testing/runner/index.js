@@ -593,7 +593,7 @@ function renderIndexPage() {
             },
 
             loadSuites: function() {
-                $.getJSON(${jsonString(suitesJsonUrl)} + "/" + this.name)
+                $.getJSON(${jsonString(suitesJsonUrl)}, { id: this.name })
                     .done(function(suites) {
                         suites = $.map(suites, function(s) { return new SuiteModel(s) });
                         vm.suites(suites);
@@ -2172,7 +2172,8 @@ function setStaticCacheHeaders(res, searchParams) {
 
 function getCacheBuster(searchParams) {
     if(searchParams.has('DX_HTTP_CACHE')) {
-        return `DX_HTTP_CACHE=${searchParams.get('DX_HTTP_CACHE')}`;
+        const value = searchParams.get('DX_HTTP_CACHE') || '';
+        return `DX_HTTP_CACHE=${encodeURIComponent(value)}`;
     }
 
     return '';
