@@ -799,6 +799,54 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             assert.strictEqual(this.$input.val(), '', 'textArea is empty after sending message');
         });
+
+        QUnit.module('onTextChanged event', () => {
+            QUnit.test('should be fired on textarea input', function(assert) {
+                const onTextChangedStub = sinon.stub();
+
+                this.reinit({ onTextChanged: onTextChangedStub });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('a');
+
+                assert.strictEqual(onTextChangedStub.callCount, 1, 'fired once');
+            });
+
+            QUnit.test('should update at runtime', function(assert) {
+                const onTextChangedStub = sinon.stub();
+
+                this.instance.option('onTextChanged', onTextChangedStub);
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('a');
+
+                assert.strictEqual(onTextChangedStub.callCount, 1, 'fired once after runtime update');
+            });
+
+            QUnit.test('should be fired with correct arguments', function(assert) {
+                assert.expect(5);
+
+                this.reinit({
+                    onTextChanged: (e) => {
+                        const { value, previousValue, event } = e;
+
+                        assert.strictEqual(previousValue, '', 'previousValue is correct');
+                        assert.strictEqual(value, 'a', 'value is correct');
+
+                        assert.strictEqual(event.type, 'input', 'event.type is correct');
+                        assert.strictEqual(event.target, this.$input.get(0), 'event.target is correct');
+
+                        assert.strictEqual(this.instance.option('text'), 'a', 'text option is updated before event call');
+                    },
+                });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('a');
+            });
+        });
     });
 
     QUnit.module('Integration with EditingPreview', () => {

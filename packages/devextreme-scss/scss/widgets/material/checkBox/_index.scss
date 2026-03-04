@@ -94,7 +94,7 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   &::before {
-    z-index: 2;
+    z-index: 1;
   }
 
   .dx-checkbox-checked & {

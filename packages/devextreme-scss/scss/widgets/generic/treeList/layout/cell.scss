@@ -1,0 +1,20 @@
+/* stylelint-disable no-duplicate-selectors */
+@use "../../gridBase/sizes" as *;
+
+// #region padding
+
+// (0,5,0)
+.dx-treelist-rowsview .dx-treelist-content .dx-treelist-table .dx-row .dx-editor-cell {
+  padding-left: $generic-grid-base-cell-padding;
+}
+
+// #endregion
+
+// #region typography
+
+// (0,2,0)
+.dx-treelist-rowsview .dx-treelist-cell-expandable {
+  white-space: nowrap;
+}
+
+// #endregion
