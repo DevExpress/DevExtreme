@@ -158,11 +158,30 @@ const CSP_DEMO_ALLOWLIST = {
   },
 };
 
+// Framework-specific overrides (e.g. Font Awesome loaded only in React/Vue demos)
+const CSP_FRAMEWORK_ALLOWLIST = {
+  React: {
+    Calendar: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    CheckBox: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    'DateRangeBox/Overview': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    Diagram: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    Form: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    'Lookup/Templates': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+  },
+  Vue: {
+    Calendar: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    CheckBox: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    Diagram: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    Form: { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+    'Lookup/Templates': { 'font-src': ['https://maxcdn.bootstrapcdn.com'] },
+  },
+};
+
 function generateNonce() {
   return crypto.randomBytes(16).toString('base64');
 }
 
-function buildCspHeader(demoKey, nonce) {
+function buildCspHeader(demoKey, nonce, framework) {
   const directives = {};
   for (const [key, values] of Object.entries(CSP_BASE_DIRECTIVES)) {
     directives[key] = [...values];
@@ -173,9 +192,12 @@ function buildCspHeader(demoKey, nonce) {
   }
 
   const widgetKey = demoKey && demoKey.split('/')[0];
+  const frameworkList = framework && CSP_FRAMEWORK_ALLOWLIST[framework];
   const allowlists = [
     demoKey && CSP_DEMO_ALLOWLIST[demoKey],
     widgetKey && CSP_DEMO_ALLOWLIST[widgetKey],
+    frameworkList && demoKey && frameworkList[demoKey],
+    frameworkList && widgetKey && frameworkList[widgetKey],
   ].filter(Boolean);
 
   for (const allowlist of allowlists) {
@@ -208,13 +230,14 @@ function cspMiddleware(req, res, next) {
   const demoKey = getDemoKey(req.path);
   const framework = getFramework(req.path);
 
-  // Angular demos use inline <script> for SystemJS bootstrap — allow via nonce
-  const nonce = framework === 'Angular' ? generateNonce() : null;
+  // Angular, React & Vue demos use inline <script> for SystemJS bootstrap — allow via nonce
+  const needsNonce = framework === 'Angular' || framework === 'React' || framework === 'Vue';
+  const nonce = needsNonce ? generateNonce() : null;
   if (nonce) {
     res.locals.cspNonce = nonce;
   }
 
-  res.setHeader('Content-Security-Policy-Report-Only', buildCspHeader(demoKey, nonce));
+  res.setHeader('Content-Security-Policy-Report-Only', buildCspHeader(demoKey, nonce, framework));
   next();
 }
 
@@ -290,10 +313,11 @@ const demoIndexHandler = (request, response) => {
     fileContent = fileContent.replace('dx.light.css', cookieTheme);
   }
 
-  // Inject nonce into the SystemJS bootstrap <script> for Angular demos
+  // Inject nonce into inline <script> tags for Angular/Vue demos
   const { cspNonce } = response.locals;
   if (cspNonce) {
     fileContent = fileContent.replace(/<script>(System\.import)/g, `<script nonce="${cspNonce}">$1`);
+    fileContent = fileContent.replace(/<script type="(module|text\/javascript)">(\s*\S)/g, `<script type="$1" nonce="${cspNonce}">$2`);
   }
 
   response.set('Content-Type', 'text/html');
