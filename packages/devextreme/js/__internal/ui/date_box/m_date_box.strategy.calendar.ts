@@ -199,7 +199,11 @@ class CalendarStrategy extends DateBoxStrategy {
       return;
     }
 
-    this._widget.option('value', this.dateBoxValue());
+    const dateBoxValue = this.dateBoxValue();
+
+    this._widget.option('value', dateBoxValue);
+
+    // this._widget.option('value', this.dateBoxValue());
   }
 
   textChangedHandler() {

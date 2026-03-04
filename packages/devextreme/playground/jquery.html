@@ -49,12 +49,18 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="date"></div>
         <script>
             $(() => {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: () => { alert("clicked"); }
+                $('#date').dxDateBox({
+                    type: 'date',
+                    dateSerializationFormat: "y",
+                    onOptionChanged: (e) => {
+                        if (e.name === 'value') {
+                            const { value } = e.component.option();
+                            debugger;
+                        }
+                    },
                 });
             });
         </script>
