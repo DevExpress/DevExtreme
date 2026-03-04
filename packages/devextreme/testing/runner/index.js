@@ -87,7 +87,16 @@ async function handleRequest(req, res) {
         return sendJson(res, readCategories());
     }
 
-    if(req.method === 'GET' && (pathnameLower === '/run' || pathnameLower === '/run/' || pathnameLower === '/main/runall')) {
+    if((req.method === 'GET' || req.method === 'HEAD')
+        && (pathnameLower === '/run' || pathnameLower === '/run/' || pathnameLower === '/main/runall')) {
+        if(req.method === 'HEAD') {
+            setNoCacheHeaders(res);
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/html; charset=utf-8');
+            res.end();
+            return;
+        }
+
         const model = buildRunAllModel(requestUrl.searchParams);
         const runProps = assignBaseRunProps(requestUrl.searchParams);
         return sendHtml(res, renderRunAllPage(model, runProps));
