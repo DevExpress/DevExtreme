@@ -1,6 +1,6 @@
 import { glob } from 'glob';
 import { join } from 'path';
-import { existsSync, mkdirSync, appendFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, appendFileSync } from 'fs';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { axeCheck, createReport } from '@testcafe-community/axe';
 import { ClientFunction } from 'testcafe';
@@ -40,13 +40,11 @@ const isCspEnabled = () => process.env.CSP_REPORT === 'true';
 const cspReportDir = join(__dirname, '..', 'csp-reports');
 const cspReportFile = join(cspReportDir, 'csp-violations.jsonl');
 
-if (isCspEnabled()) {
-  mkdirSync(cspReportDir, { recursive: true });
-  writeFileSync(cspReportFile, '');
-}
-
 const writeCspReport = (testName: string, framework: string, violations: any[]) => {
   if (!violations.length) return;
+  if (!existsSync(cspReportDir)) {
+    mkdirSync(cspReportDir, { recursive: true });
+  }
   for (const v of violations) {
     const entry = {
       test: testName,

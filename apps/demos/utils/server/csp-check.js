@@ -96,9 +96,6 @@ async function main() {
     return;
   }
 
-  mkdirSync(REPORT_DIR, { recursive: true });
-  const reportFile = join(REPORT_DIR, `csp-violations-${FRAMEWORK.toLowerCase()}.jsonl`);
-
   let totalViolations = 0;
   let demosWithViolations = 0;
   const allViolations = [];
@@ -146,11 +143,12 @@ async function main() {
     }
   }
 
+  const reportFile = join(REPORT_DIR, `csp-violations-${FRAMEWORK.toLowerCase()}.jsonl`);
+
   if (allViolations.length > 0) {
+    mkdirSync(REPORT_DIR, { recursive: true });
     const lines = allViolations.map((v) => JSON.stringify(v)).join('\n');
     writeFileSync(reportFile, `${lines}\n`);
-  } else {
-    writeFileSync(reportFile, '');
   }
 
   console.log(`\n${'='.repeat(60)}`);
