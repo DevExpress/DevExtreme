@@ -37,6 +37,7 @@ import { renderEmptyItem } from '@ts/ui/form/components/empty_item';
 import { renderFieldItem } from '@ts/ui/form/components/field_item';
 import {
   FIELD_ITEM_CLASS,
+  FORM_FIELD_ITEM_COL_CLASS,
   FORM_LAYOUT_MANAGER_CLASS,
   LAYOUT_MANAGER_ONE_COLUMN,
   ROOT_SIMPLE_ITEM_CLASS,
@@ -54,10 +55,10 @@ import ResponsiveBox from '@ts/ui/responsive_box';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
-const LAYOUT_MANAGER_FIRST_ROW_CLASS = 'dx-first-row';
-const LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
-const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
-const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
+export const LAYOUT_MANAGER_FIRST_ROW_CLASS = 'dx-first-row';
+export const LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
+export const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
+export const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
 
 const MIN_COLUMN_WIDTH = 200;
 
@@ -71,6 +72,15 @@ type ExtendedItem = Item & {
   disabled?: boolean;
   allowIndeterminateState?: boolean;
 };
+
+type Location = Required<Omit<LocationItem, 'screen'>>;
+
+interface LocationBoundaryFlags {
+  isFirstCol: boolean;
+  isLastCol: boolean;
+  isFirstRow: boolean;
+  isLastRow: boolean;
+}
 
 export interface TemplatesInfo {
   itemType?: string;
@@ -130,7 +140,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
   _labelTemplateRenderedCallCount?: number;
 
-  _cashedColCount?: number;
+  _cachedColCount?: number | null;
 
   _getDefaultOptions(): ExtendedLayoutManagerProperties {
     return {
@@ -500,22 +510,9 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
         }
         const $itemElement = $(itemElement);
 
-        const itemRenderedCountInPreviousRows = location.row * colCount;
-
-        const item = that._items?.[location.col + itemRenderedCountInPreviousRows];
+        const item = that._getLayoutManagerItemByLocation(location);
         if (!item) {
           return;
-        }
-
-        const itemCssClassList: string[] = [item.cssClass ?? ''];
-
-        $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
-
-        if (location.row === 0) {
-          itemCssClassList.push(LAYOUT_MANAGER_FIRST_ROW_CLASS);
-        }
-        if (location.col === 0) {
-          itemCssClassList.push(LAYOUT_MANAGER_FIRST_COL_CLASS);
         }
 
         const { isRoot } = that.option();
@@ -523,17 +520,11 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
         if (item.itemType === SIMPLE_ITEM_TYPE && isRoot) {
           $itemElement.addClass(ROOT_SIMPLE_ITEM_CLASS);
         }
-        const isLastColumn = (location.col === colCount - 1)
-          || (location.col + location.colspan === colCount);
-        const rowsCount = that._getRowsCount();
-        const isLastRow = location.row === rowsCount - 1;
 
-        if (isLastColumn) {
-          itemCssClassList.push(LAYOUT_MANAGER_LAST_COL_CLASS);
-        }
-        if (isLastRow) {
-          itemCssClassList.push(LAYOUT_MANAGER_LAST_ROW_CLASS);
-        }
+        $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
+
+        const itemCssClassList: string[] = [item.cssClass ?? ''];
+        itemCssClassList.push(...that._getLocationCssClasses(location));
 
         if (item.itemType !== 'empty') {
           itemCssClassList.push(FIELD_ITEM_CLASS);
@@ -543,7 +534,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
           itemCssClassList.push(cssItemClass);
 
           if (isDefined(item.col)) {
-            itemCssClassList.push(`dx-col-${item.col}`);
+            itemCssClassList.push(`${FORM_FIELD_ITEM_COL_CLASS}${item.col}`);
           }
         }
 
@@ -578,12 +569,12 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
     }
 
     if (colCount === 'auto') {
-      if (this._cashedColCount) {
-        return this._cashedColCount;
+      if (this._cachedColCount) {
+        return this._cachedColCount;
       }
 
       colCount = this._getMaxColCount();
-      this._cashedColCount = colCount;
+      this._cachedColCount = colCount;
     }
     // @ts-expect-error ts-error
     return colCount < 1 ? 1 : colCount;
@@ -607,7 +598,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
   }
 
   isCachedColCountObsolete(): boolean {
-    return !!this._cashedColCount && this._getMaxColCount() !== this._cashedColCount;
+    return !!this._cachedColCount && this._getMaxColCount() !== this._cachedColCount;
   }
 
   _prepareItemsWithMerging(colCount: number): void {
@@ -644,8 +635,7 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
 
   _setItems(items: ExtendedItem[]): void {
     this._items = items;
-    // @ts-expect-error ts-error
-    this._cashedColCount = null; // T923489
+    this._cachedColCount = null; // T923489
   }
 
   _generateLayoutItems(): ResponsiveBoxItem[] {
@@ -1128,9 +1118,125 @@ class LayoutManager extends Widget<LayoutManagerProperties> {
   }
 
   _resetColCount(): void {
-    // @ts-expect-error ts-error
-    this._cashedColCount = null;
+    this._cachedColCount = null;
     this._invalidate();
+  }
+
+  updateResponsiveBoxLayout(): void {
+    if (!this._responsiveBox) {
+      return;
+    }
+
+    this._cachedColCount = null;
+
+    this._items = (this._items ?? []).filter((item) => !item.merged);
+
+    const colCount = this._getColCount();
+    this._prepareItemsWithMerging(colCount);
+
+    const newLayoutItems = this._generateLayoutItems();
+
+    const { items: responsiveBoxItems } = this._responsiveBox.option();
+    const existingItems: ResponsiveBoxItem[] = responsiveBoxItems ?? [];
+
+    for (let i = 0; i < existingItems.length && i < newLayoutItems.length; i += 1) {
+      existingItems[i].location = newLayoutItems[i].location;
+    }
+
+    const newCols = this._generateRatio(colCount);
+    const newRows = this._generateRatio(this._getRowsCount(), true);
+
+    this._responsiveBox._options.silent({
+      cols: newCols,
+      rows: newRows,
+    });
+
+    this._responsiveBox.repaint();
+    this._updateItemsCssClasses();
+  }
+
+  _getLocationBoundaryFlags(location: Required<Omit<LocationItem, 'screen'>>): LocationBoundaryFlags {
+    const colCount = this._getColCount();
+    const rowsCount = this._getRowsCount();
+
+    return {
+      isFirstCol: location.col === 0,
+      isLastCol: (location.col === colCount - 1)
+        || (location.col + location.colspan === colCount),
+      isFirstRow: location.row === 0,
+      isLastRow: location.row === rowsCount - 1,
+    };
+  }
+
+  _getLocationCssClasses(location: Location): string[] {
+    const cssClasses: string[] = [];
+    const locationFlags = this._getLocationBoundaryFlags(location);
+
+    if (locationFlags.isFirstRow) {
+      cssClasses.push(LAYOUT_MANAGER_FIRST_ROW_CLASS);
+    }
+    if (locationFlags.isFirstCol) {
+      cssClasses.push(LAYOUT_MANAGER_FIRST_COL_CLASS);
+    }
+    if (locationFlags.isLastCol) {
+      cssClasses.push(LAYOUT_MANAGER_LAST_COL_CLASS);
+    }
+    if (locationFlags.isLastRow) {
+      cssClasses.push(LAYOUT_MANAGER_LAST_ROW_CLASS);
+    }
+
+    return cssClasses;
+  }
+
+  _getLayoutManagerItemByLocation(location: Location): ExtendedItem | undefined {
+    const colCount = this._getColCount();
+    const index = location.row * colCount + location.col;
+    return this._items?.[index];
+  }
+
+  _updateItemsCssClasses(): void {
+    const { items: responsiveBoxItems } = this._responsiveBox.option();
+    responsiveBoxItems?.forEach((
+      responsiveBoxItem: ResponsiveBoxItem,
+    ): void => {
+      const { location } = responsiveBoxItem;
+      if (!location || Array.isArray(location)) {
+        return;
+      }
+
+      const typedLocation = location as Location;
+
+      const {
+        isFirstCol,
+        isLastCol,
+        isFirstRow,
+        isLastRow,
+      } = this._getLocationBoundaryFlags(typedLocation);
+
+      const item = this._getLayoutManagerItemByLocation(typedLocation);
+      if (!item || item.itemType === 'empty') {
+        return;
+      }
+
+      const $itemContainer = this._itemsRunTimeInfo.findItemContainerByItem(item);
+      $itemContainer.parent().toggleClass(SINGLE_COLUMN_ITEM_CONTENT, this.isSingleColumnMode());
+      $itemContainer
+        .toggleClass(LAYOUT_MANAGER_FIRST_COL_CLASS, isFirstCol)
+        .toggleClass(LAYOUT_MANAGER_LAST_COL_CLASS, isLastCol)
+        .toggleClass(LAYOUT_MANAGER_FIRST_ROW_CLASS, isFirstRow)
+        .toggleClass(LAYOUT_MANAGER_LAST_ROW_CLASS, isLastRow);
+
+      const element = $itemContainer.get(0);
+      if (element) {
+        element.className = [...element.classList]
+          .filter((name: string): boolean => !name.startsWith(FORM_FIELD_ITEM_COL_CLASS))
+          .join(' ');
+      }
+
+      if (isDefined(typedLocation.col)) {
+        $itemContainer.addClass(`${FORM_FIELD_ITEM_COL_CLASS}${typedLocation.col}`);
+      }
+    });
   }
 
   linkEditorToDataField(editorInstance: Editor, dataField: string): void {

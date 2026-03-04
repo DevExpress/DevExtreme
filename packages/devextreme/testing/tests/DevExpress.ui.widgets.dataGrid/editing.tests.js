@@ -19616,7 +19616,7 @@ QUnit.module('Editing - "popup" mode', {
         assert.equal(selectBox.getDataSource().items().length, 2, 'lookup has 2 items');
     });
 
-    QUnit.test('Repaint of popup is should be called when form layout is changed', function(assert) {
+    QUnit.test('Repaint of popup should not be called when form layout is changed', function(assert) {
         const that = this;
         let screenFactor = 'xs';
 
@@ -19649,8 +19649,8 @@ QUnit.module('Editing - "popup" mode', {
         screenFactor = 'lg';
         triggerResizeEvent(editForm.element());
 
-        assert.equal(spy1.callCount, 1, 'repaint is thrown');
-        assert.equal(spy2.callCount, 0, 'render is called after repaint');
+        assert.equal(spy1.callCount, 0, 'repaint is not thrown');
+        assert.equal(spy2.callCount, 0, 'render is not called');
     });
 
     // T610885

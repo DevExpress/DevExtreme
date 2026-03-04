@@ -1,0 +1,99 @@
+/* stylelint-disable no-duplicate-selectors */
+@use "../../gridBase/colors" as *;
+@use "../../gridBase/sizes" as *;
+
+// #region overflow
+
+// (0,5,0)
+.dx-datagrid-rowsview .dx-row.dx-group-row .dx-group-cell.dx-datagrid-sticky-column,
+.dx-datagrid-rowsview .dx-row.dx-group-row .dx-group-cell.dx-datagrid-sticky-column-left,
+.dx-datagrid-rowsview .dx-row.dx-group-row .dx-group-cell.dx-datagrid-sticky-column-right {
+  overflow: initial;
+  overflow-x: clip;
+}
+
+// #endregion
+
+// #region border
+
+// (0,2,1)
+.dx-row.dx-datagrid-group-footer > td {
+  border-top: $datagrid-border;
+  border-top-color: $datagrid-border-color;
+  border-left-width: 0;
+  border-right-width: 0;
+}
+
+// (0,3,1)
+.dx-datagrid-rowsview .dx-row.dx-group-row td {
+  border-top-color: $datagrid-border-color;
+  border-bottom-color: $datagrid-border-color;
+}
+
+// (0,3,1)
+.dx-datagrid-sticky-columns .dx-row.dx-datagrid-group-footer > td {
+  border-bottom: $datagrid-border;
+  border-bottom-color: $datagrid-border-color;
+}
+
+// (0,3,1)-(0,5,1)
+.dx-datagrid-sticky-columns .dx-row.dx-row-lines + .dx-datagrid-group-footer td,
+.dx-datagrid-sticky-columns .dx-row.dx-row-lines + .dx-row.dx-group-row td,
+.dx-datagrid-sticky-columns .dx-row.dx-row-lines + .dx-master-detail-row td,
+.dx-datagrid-sticky-columns .dx-row.dx-row-lines + .dx-edit-row td,
+.dx-datagrid-sticky-columns .dx-row.dx-group-row + .dx-datagrid-group-footer td,
+.dx-datagrid-sticky-columns .dx-row.dx-group-row + .dx-row.dx-group-row td,
+.dx-datagrid-sticky-columns .dx-row.dx-group-row + .dx-master-detail-row td,
+.dx-datagrid-sticky-columns .dx-row.dx-group-row + .dx-edit-row td,
+.dx-datagrid-sticky-columns .dx-datagrid-group-footer + .dx-datagrid-group-footer td,
+.dx-datagrid-sticky-columns .dx-datagrid-group-footer + .dx-row.dx-group-row td,
+.dx-datagrid-sticky-columns .dx-datagrid-group-footer + .dx-master-detail-row td,
+.dx-datagrid-sticky-columns .dx-datagrid-group-footer + .dx-edit-row td,
+.dx-datagrid-sticky-columns .dx-edit-row + .dx-datagrid-group-footer td,
+.dx-datagrid-sticky-columns .dx-edit-row + .dx-row.dx-group-row td,
+.dx-datagrid-sticky-columns .dx-edit-row + .dx-master-detail-row td,
+.dx-datagrid-sticky-columns .dx-edit-row + .dx-edit-row td {
+  border-top: none;
+}
+
+// #endregion
+
+// #region padding
+
+// (0,4,1)
+.dx-datagrid-sticky-columns .dx-row.dx-group-row:first-child td {
+  padding-top: $generic-grid-base-cell-padding;
+}
+
+// (0,5,0)
+.dx-datagrid-rowsview .dx-row.dx-group-row .dx-group-cell.dx-datagrid-sticky-column,
+.dx-datagrid-rowsview .dx-row.dx-group-row .dx-group-cell.dx-datagrid-sticky-column-left,
+.dx-datagrid-rowsview .dx-row.dx-group-row .dx-group-cell.dx-datagrid-sticky-column-right {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+// #endregion
+
+// #region background
+
+// (0,2,1)
+.dx-row.dx-datagrid-group-footer > td {
+  background-color: $datagrid-summary-bg;
+}
+
+// (0,4,1)
+.dx-datagrid-rowsview .dx-row.dx-group-row td.dx-datagrid-sticky-column,
+.dx-datagrid-rowsview .dx-row.dx-group-row td.dx-datagrid-sticky-column-left,
+.dx-datagrid-rowsview .dx-row.dx-group-row td.dx-datagrid-sticky-column-right {
+  background-color: $datagrid-group-row-bg;
+}
+
+// (0,5,0)
+.dx-datagrid-rowsview .dx-row.dx-group-row .dx-group-cell.dx-datagrid-sticky-column,
+.dx-datagrid-rowsview .dx-row.dx-group-row .dx-group-cell.dx-datagrid-sticky-column-left,
+.dx-datagrid-rowsview .dx-row.dx-group-row .dx-group-cell.dx-datagrid-sticky-column-right {
+  background-color: inherit;
+}
+
+// #endregion

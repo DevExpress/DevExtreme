@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
+import Form from 'devextreme-testcafe-models/form/form';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
@@ -228,3 +229,59 @@ test('SimpleItem: item1_cSpan_2', async (t) => {
     ],
   }));
 });
+
+test('Validation errors persist after resize', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const form = new Form('#container');
+
+  await waitFont();
+  await form.validate();
+
+  await t.resizeWindow(400, 800);
+
+  await testScreenshot(t, takeScreenshot, 'form_validation_errors_after_resize.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxForm', {
+  colCountByScreen: {
+    xs: 1,
+    sm: 2,
+    md: 2,
+    lg: 2,
+  },
+  items: [
+    {
+      dataField: 'name',
+      editorType: 'dxTextBox',
+      validationRules: [{ type: 'required' }],
+    },
+    {
+      dataField: 'birthDate',
+      editorType: 'dxDateBox',
+      validationRules: [{ type: 'required' }],
+    },
+    {
+      dataField: 'role',
+      editorType: 'dxSelectBox',
+      editorOptions: {
+        dataSource: ['Dev', 'QA', 'PM'],
+      },
+      validationRules: [{ type: 'required' }],
+    },
+    {
+      dataField: 'agree',
+      editorType: 'dxCheckBox',
+      editorOptions: {
+        text: 'I agree',
+      },
+      validationRules: [{
+        type: 'custom',
+        validationCallback: () => false,
+        message: 'Required',
+      }],
+    },
+  ],
+}));
