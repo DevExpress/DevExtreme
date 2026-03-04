@@ -34,6 +34,9 @@ const CSP_DEMO_ALLOWLIST = {
   'Button/Icons': {
     'font-src': ['https://maxcdn.bootstrapcdn.com'],
   },
+  'CardView/WebAPIService': {
+    'img-src': ['data:'],
+  },
   // Azure Maps SDK: inline styles, blob workers, data: images,
   // and font glyphs from atlas.microsoft.com
   Map: {
@@ -49,6 +52,9 @@ const CSP_DEMO_ALLOWLIST = {
   },
   'Charts/SignalRService': {
     'connect-src': ['wss://js.devexpress.com'],
+  },
+  'Charts/SpiderWeb': {
+    'font-src': ['https://fonts.gstatic.com'],
   },
   'Common/ListsOverview': {
     'img-src': ['data:'],
@@ -107,11 +113,11 @@ const CSP_DEMO_ALLOWLIST = {
   Diagram: {
     'img-src': ['data:'],
   },
-  FilterBuilder: {
+  Drawer: {
     'font-src': ['https://maxcdn.bootstrapcdn.com'],
   },
-  'Charts/SpiderWeb': {
-    'font-src': ['https://fonts.gstatic.com'],
+  FilterBuilder: {
+    'font-src': ['https://maxcdn.bootstrapcdn.com'],
   },
   FileManager: {
     'img-src': ['data:'],
