@@ -8,7 +8,7 @@ const http = require('http');
 const DEMO_ROOT = join(__dirname, '..', '..', '..');
 const REPORT_DIR = join(DEMO_ROOT, 'csp-reports');
 const SERVER_URL = process.env.CSP_SERVER_URL || 'http://localhost:8080';
-const FRAMEWORKS = (process.env.CSP_FRAMEWORKS || 'jQuery').split(',').map((f) => f.trim());
+const FRAMEWORK = (process.env.CSP_FRAMEWORKS || 'jQuery').trim();
 const CONCURRENCY = parseInt(process.env.CSP_CONCURRENCY, 10) || 8;
 
 const CHROME_PATH = process.env.CHROME_PATH || 'google-chrome-stable';
@@ -33,16 +33,14 @@ function findDemos() {
       .filter((d) => d.isDirectory());
 
     for (const demo of demos) {
-      for (const fw of FRAMEWORKS) {
-        const fwDir = join(widgetDir, demo.name, fw);
-        if (existsSync(join(fwDir, 'index.html'))) {
-          result.push({
-            url: `${SERVER_URL}/apps/demos/Demos/${widget.name}/${demo.name}/${fw}/`,
-            widget: widget.name,
-            demo: demo.name,
-            framework: fw,
-          });
-        }
+      const fwDir = join(widgetDir, demo.name, FRAMEWORK);
+      if (existsSync(join(fwDir, 'index.html'))) {
+        result.push({
+          url: `${SERVER_URL}/apps/demos/Demos/${widget.name}/${demo.name}/${FRAMEWORK}/`,
+          widget: widget.name,
+          demo: demo.name,
+          framework: FRAMEWORK,
+        });
       }
     }
   }
@@ -85,10 +83,9 @@ function httpRequest(url, method) {
 }
 
 async function main() {
-  const framework = FRAMEWORKS[0];
   console.log(`Chrome: ${CHROME_PATH}`);
   console.log(`Server: ${SERVER_URL}`);
-  console.log(`Framework: ${framework}`);
+  console.log(`Framework: ${FRAMEWORK}`);
   console.log(`Concurrency: ${CONCURRENCY}\n`);
 
   const demos = findDemos();
@@ -100,7 +97,7 @@ async function main() {
   }
 
   mkdirSync(REPORT_DIR, { recursive: true });
-  const reportFile = join(REPORT_DIR, `csp-violations-${framework.toLowerCase()}.jsonl`);
+  const reportFile = join(REPORT_DIR, `csp-violations-${FRAMEWORK.toLowerCase()}.jsonl`);
 
   let totalViolations = 0;
   let demosWithViolations = 0;
@@ -141,7 +138,7 @@ async function main() {
           const blocked = v.blockedUri || 'N/A';
           const directive = v.effectiveDirective || v.violatedDirective || '?';
           console.log(`       ${directive}: ${blocked}`);
-          allViolations.push({ ...v, framework });
+          allViolations.push({ ...v, framework: FRAMEWORK });
         }
       } else {
         console.log(`  ✅ [${idx}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework}`);
@@ -157,7 +154,7 @@ async function main() {
   }
 
   console.log(`\n${'='.repeat(60)}`);
-  console.log(`Framework: ${framework}`);
+  console.log(`Framework: ${FRAMEWORK}`);
   console.log(`Demos checked: ${demos.length}`);
   console.log(`Demos with violations: ${demosWithViolations}`);
   console.log(`Total violations: ${totalViolations}`);

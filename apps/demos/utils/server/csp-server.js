@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const express = require('express');
 const serveStatic = require('serve-static');
 const cookieParser = require('cookie-parser');
-const { join, normalize } = require('path');
+const { join, normalize, resolve } = require('path');
 const { readFileSync, readdirSync } = require('fs');
 
 const root = join(__dirname, '..', '..', '..', '..');
@@ -291,15 +291,16 @@ function cspViolationsClearHandler(_req, res) {
   res.status(204).end();
 }
 
+const demosBaseDir = resolve(root, 'apps', 'demos', 'Demos');
+
 const demoIndexHandler = (request, response) => {
-  const parts = request.path.split('/');
-  parts.unshift(root);
+  const { widget, name, approach } = request.params;
+  const fileSystemPath = resolve(demosBaseDir, widget, name, approach, indexFileName);
 
-  if (parts[parts.length - 1] !== indexFileName) {
-    parts.push(indexFileName);
+  if (!fileSystemPath.startsWith(demosBaseDir)) {
+    response.status(403).send('Forbidden');
+    return;
   }
-
-  const fileSystemPath = normalize(join(...parts));
   let fileContent;
   try {
     fileContent = readFileSync(fileSystemPath).toString();
@@ -341,8 +342,6 @@ app.delete('/csp-violations', cspViolationsClearHandler);
 
 app.get('/apps/demos/Demos/:widget/:name/:approach', demoIndexHandler);
 app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
-app.get('/Demos/:widget/:name/:approach', demoIndexHandler);
-app.get(`/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
 
 app.use(
   serveStatic(root, { index: [indexFileName] }),
