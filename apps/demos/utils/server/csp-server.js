@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const express = require('express');
 const serveStatic = require('serve-static');
 const cookieParser = require('cookie-parser');
-const { join, normalize, resolve } = require('path');
+const { join, resolve } = require('path');
 const { readFileSync, readdirSync } = require('fs');
 
 const root = join(__dirname, '..', '..', '..', '..');
