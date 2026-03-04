@@ -5,7 +5,7 @@ const {
 } = require('fs');
 const http = require('http');
 
-const DEMO_ROOT = join(__dirname, '..', '..', '..');
+const DEMO_ROOT = join(__dirname, '..', '..');
 const REPORT_DIR = join(DEMO_ROOT, 'csp-reports');
 const SERVER_URL = process.env.CSP_SERVER_URL || 'http://localhost:8080';
 const FRAMEWORK = (process.env.CSP_FRAMEWORKS || 'jQuery').trim();
