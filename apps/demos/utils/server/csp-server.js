@@ -34,9 +34,15 @@ const CSP_DEMO_ALLOWLIST = {
   'Button/Icons': {
     'font-src': ['https://maxcdn.bootstrapcdn.com'],
   },
+  // Azure Maps SDK: inline styles, blob workers, data: images,
+  // and font glyphs from atlas.microsoft.com
   Map: {
     'script-src': ['https://atlas.microsoft.com'],
+    'style-src': ["'unsafe-inline'"],
     'connect-src': ['https://atlas.microsoft.com'],
+    'worker-src': ['blob:'],
+    'img-src': ['data:'],
+    'font-src': ['https://atlas.microsoft.com'],
   },
   'DataGrid/CollaborativeEditing': {
     'connect-src': ['wss://js.devexpress.com'],
@@ -73,7 +79,22 @@ const CSP_DEMO_ALLOWLIST = {
   'DataGrid/PDFExportImages': {
     'img-src': ['data:'],
   },
+  'DataGrid/RemoteCRUDOperations': {
+    'img-src': ['data:'],
+  },
+  'DataGrid/RemoteGrouping': {
+    'img-src': ['data:'],
+  },
+  'DataGrid/RemoteReordering': {
+    'img-src': ['data:'],
+  },
+  'DataGrid/RemoteVirtualScrolling': {
+    'img-src': ['data:'],
+  },
   'DataGrid/VirtualScrolling': {
+    'img-src': ['data:'],
+  },
+  'DataGrid/WebAPIService': {
     'img-src': ['data:'],
   },
   Gantt: {
@@ -121,16 +142,26 @@ const CSP_DEMO_ALLOWLIST = {
   'TreeList/FixedAndStickyColumns': {
     'img-src': ['data:'],
   },
+  'TreeList/FocusedRow': {
+    'img-src': ['data:'],
+  },
   'TreeList/MultipleSorting': {
     'img-src': ['data:'],
   },
   'TreeList/SearchPanel': {
     'img-src': ['data:'],
   },
+  'TreeList/WebAPIService': {
+    'img-src': ['data:'],
+  },
   'TreeList/Overview': {
     'img-src': ['data:'],
     // TODO: fix inline style in cellTemplate (background-image)
     'style-src': ["'unsafe-inline'"],
+  },
+  // globalize/message.js uses new Function() internally
+  'Localization/UsingGlobalize': {
+    'script-src': ["'unsafe-eval'"],
   },
   // AI demo: inline <script type="module"> for OpenAI SDK + eval() used by the SDK
   'Form/SmartPaste': {
