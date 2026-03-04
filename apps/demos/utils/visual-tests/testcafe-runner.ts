@@ -106,6 +106,7 @@ async function main() {
           // eslint-disable-next-line no-undef
           before: async (t: TestController) => {
             await ClientFunction(() => {
+              document.body.dispatchEvent(new MouseEvent('click', { clientX: 0, clientY: 0 }));
               if (document.activeElement && document.activeElement !== document.body) {
                 (document.activeElement as HTMLElement).blur();
               }
