@@ -1,0 +1,85 @@
+import * as fs from 'fs';
+import * as path from 'path';
+import executor from './executor';
+import { BundleExecutorSchema } from './schema';
+import { createTempDir, cleanupTempDir, createMockContext } from '../../utils/test-utils';
+import { writeFileText, readFileText } from '../../utils';
+
+const MINIMAL_WEBPACK_CONFIG = `
+module.exports = {
+  mode: 'production',
+  output: {
+    sourcePrefix: '    ',
+  },
+  externals: {},
+};
+`;
+
+describe('BundleExecutor E2E', () => {
+  let tempDir: string;
+  let context = createMockContext();
+  let projectDir: string;
+  let savedCwd: string;
+
+  beforeEach(async () => {
+    savedCwd = process.cwd();
+    tempDir = createTempDir('nx-bundle-e2e-');
+    context = createMockContext({ root: tempDir });
+    projectDir = path.join(tempDir, 'packages', 'test-lib');
+    fs.mkdirSync(projectDir, { recursive: true });
+
+    process.chdir(projectDir);
+
+    await writeFileText(path.join(projectDir, 'webpack.config.js'), MINIMAL_WEBPACK_CONFIG);
+
+    const sourceDir = path.join(projectDir, 'artifacts', 'transpiled-renovation-npm');
+    const bundlesDir = path.join(sourceDir, 'bundles');
+    fs.mkdirSync(bundlesDir, { recursive: true });
+
+    await writeFileText(
+      path.join(sourceDir, 'helper.js'),
+      `module.exports = { greet: function(name) { return "Hello, " + name; } };`,
+    );
+
+    await writeFileText(
+      path.join(bundlesDir, 'dx.all.js'),
+      `var helper = require('../helper');\nmodule.exports = helper;`,
+    );
+
+    await writeFileText(path.join(bundlesDir, 'dx.web.js'), `module.exports = { value: 42 };`);
+
+    fs.mkdirSync(path.join(projectDir, 'artifacts', 'js'), {
+      recursive: true,
+    });
+  });
+
+  afterEach(() => {
+    process.chdir(savedCwd);
+    cleanupTempDir(tempDir);
+  });
+
+  it('should bundle multiple entries in debug mode', async () => {
+    const options: BundleExecutorSchema = {
+      entries: ['bundles/dx.all.js', 'bundles/dx.web.js'],
+      sourceDir: './artifacts/transpiled-renovation-npm',
+      outDir: './artifacts/js',
+      mode: 'debug',
+      webpackConfigPath: './webpack.config.js',
+    };
+
+    const result = await executor(options, context);
+    expect(result.success).toBe(true);
+
+    const allDebug = path.join(projectDir, 'artifacts', 'js', 'dx.all.debug.js');
+    const webDebug = path.join(projectDir, 'artifacts', 'js', 'dx.web.debug.js');
+    expect(fs.existsSync(allDebug)).toBe(true);
+    expect(fs.existsSync(webDebug)).toBe(true);
+
+    expect(fs.existsSync(path.join(projectDir, 'artifacts', 'js', 'dx.all.js'))).toBe(false);
+    expect(fs.existsSync(path.join(projectDir, 'artifacts', 'js', 'dx.web.js'))).toBe(false);
+
+    const content = await readFileText(allDebug);
+    expect(content).toContain('greet');
+    expect(content.split('\n').length).toBeGreaterThan(3);
+  }, 60000);
+});
