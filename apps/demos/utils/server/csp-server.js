@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
+const crypto = require('crypto');
 const express = require('express');
 const serveStatic = require('serve-static');
 const cookieParser = require('cookie-parser');
@@ -51,6 +52,11 @@ const CSP_DEMO_ALLOWLIST = {
   'DataGrid/Cell': {
     'img-src': ['data:'],
   },
+  // AI demo: inline <script type="module"> to import OpenAI SDK from esm.sh
+  'DataGrid/AIColumns': {
+    'script-src': ["'unsafe-inline'"],
+    'connect-src': ['https://public-api.devexpress.com'],
+  },
   'DataGrid/ExcelJSExportImages': {
     'img-src': ['data:'],
   },
@@ -69,10 +75,23 @@ const CSP_DEMO_ALLOWLIST = {
   Gantt: {
     'img-src': ['data:'],
   },
+  // TODO: fix inline style in taskTemplate
+  'Gantt/TaskTemplate': {
+    'style-src': ["'unsafe-inline'"],
+  },
+  Diagram: {
+    'img-src': ['data:'],
+  },
   FilterBuilder: {
     'font-src': ['https://maxcdn.bootstrapcdn.com'],
   },
+  'Charts/SpiderWeb': {
+    'font-src': ['https://fonts.gstatic.com'],
+  },
   FileManager: {
+    'img-src': ['data:'],
+  },
+  'Resizable/Overview': {
     'img-src': ['data:'],
   },
   'Scheduler/GoogleCalendarIntegration': {
@@ -84,8 +103,10 @@ const CSP_DEMO_ALLOWLIST = {
   'ScrollView/Overview': {
     'img-src': ['data:'],
   },
+  // AI demos use inline <script type="module"> to import OpenAI SDK from esm.sh
   'TreeList/AIColumns': {
     'connect-src': ['https://public-api.devexpress.com'],
+    'script-src': ["'unsafe-inline'"],
   },
   'TreeList/BatchEditing': {
     'img-src': ['data:'],
@@ -102,12 +123,53 @@ const CSP_DEMO_ALLOWLIST = {
   'TreeList/SearchPanel': {
     'img-src': ['data:'],
   },
+  'TreeList/Overview': {
+    'img-src': ['data:'],
+    // TODO: fix inline style in cellTemplate (background-image)
+    'style-src': ["'unsafe-inline'"],
+  },
+  // AI demo: inline <script type="module"> for OpenAI SDK + eval() used by the SDK
+  'Form/SmartPaste': {
+    'script-src': ["'unsafe-inline'", "'unsafe-eval'"],
+  },
+  // AI demo: inline <script type="module"> to import OpenAI SDK from esm.sh
+  'HtmlEditor/AITextEditing': {
+    'script-src': ["'unsafe-inline'"],
+  },
+  // Inline <script type="module"> to import remark/rehype from esm.sh
+  'HtmlEditor/MarkdownSupport': {
+    'script-src': ["'unsafe-inline'"],
+  },
+  // TODO: fix inline style attribute
+  'FileUploader/Validation': {
+    'style-src': ["'unsafe-inline'"],
+  },
+  // TODO: fix inline style attribute
+  'DataGrid/RowSelection': {
+    'style-src': ["'unsafe-inline'"],
+  },
+  // AI demo: inline <script type="module"> to import OpenAI SDK from esm.sh
+  'Chat/AIAndChatbotIntegration': {
+    'script-src': ["'unsafe-inline'"],
+  },
+  // TODO: fix inline style attributes in SVG markup
+  'Charts/ExportCustomMarkup': {
+    'style-src': ["'unsafe-inline'"],
+  },
 };
 
-function buildCspHeader(demoKey) {
+function generateNonce() {
+  return crypto.randomBytes(16).toString('base64');
+}
+
+function buildCspHeader(demoKey, nonce) {
   const directives = {};
   for (const [key, values] of Object.entries(CSP_BASE_DIRECTIVES)) {
     directives[key] = [...values];
+  }
+
+  if (nonce) {
+    directives['script-src'].push(`'nonce-${nonce}'`);
   }
 
   const widgetKey = demoKey && demoKey.split('/')[0];
@@ -137,9 +199,22 @@ function getDemoKey(url) {
   return match ? `${match[1]}/${match[2]}` : null;
 }
 
+function getFramework(url) {
+  const match = url.match(/\/Demos\/[^/]+\/[^/]+\/([^/]+)/);
+  return match ? match[1] : null;
+}
+
 function cspMiddleware(req, res, next) {
   const demoKey = getDemoKey(req.path);
-  res.setHeader('Content-Security-Policy-Report-Only', buildCspHeader(demoKey));
+  const framework = getFramework(req.path);
+
+  // Angular demos use inline <script> for SystemJS bootstrap — allow via nonce
+  const nonce = framework === 'Angular' ? generateNonce() : null;
+  if (nonce) {
+    res.locals.cspNonce = nonce;
+  }
+
+  res.setHeader('Content-Security-Policy-Report-Only', buildCspHeader(demoKey, nonce));
   next();
 }
 
@@ -195,11 +270,11 @@ const demoIndexHandler = (request, response) => {
     parts.push(indexFileName);
   }
 
-  const fileSystemPath = normalize(join.apply(null, parts));
+  const fileSystemPath = normalize(join(...parts));
   let fileContent;
   try {
     fileContent = readFileSync(fileSystemPath).toString();
-  } catch (e) {
+  } catch {
     response.status(404).send('Not Found');
     return;
   }
@@ -209,10 +284,16 @@ const demoIndexHandler = (request, response) => {
   let availableThemes = [];
   try {
     availableThemes = readdirSync(cssDirectory).filter((f) => /^dx\.(?!common).*\.css$/i.test(f));
-  } catch (e) { /* css directory may not exist */ }
+  } catch { /* css directory may not exist */ }
 
   if (cookieTheme && availableThemes.includes(cookieTheme)) {
     fileContent = fileContent.replace('dx.light.css', cookieTheme);
+  }
+
+  // Inject nonce into the SystemJS bootstrap <script> for Angular demos
+  const { cspNonce } = response.locals;
+  if (cspNonce) {
+    fileContent = fileContent.replace(/<script>(System\.import)/g, `<script nonce="${cspNonce}">$1`);
   }
 
   response.set('Content-Type', 'text/html');

@@ -1,7 +1,8 @@
+// eslint-disable-next-line no-underscore-dangle
 window.__cspViolations = [];
 
-document.addEventListener('securitypolicyviolation', function(e) {
-  var violation = {
+document.addEventListener('securitypolicyviolation', (e) => {
+  const violation = {
     blockedURI: e.blockedURI,
     violatedDirective: e.violatedDirective,
     effectiveDirective: e.effectiveDirective,
@@ -14,12 +15,13 @@ document.addEventListener('securitypolicyviolation', function(e) {
     timestamp: new Date().toISOString(),
   };
 
+  // eslint-disable-next-line no-underscore-dangle
   window.__cspViolations.push(violation);
 
   console.warn(
-    '[CSP Violation] ' + e.violatedDirective
-    + ' | blocked: ' + e.blockedURI
-    + ' | source: ' + (e.sourceFile || 'N/A')
-    + ':' + (e.lineNumber || '?')
+    `[CSP Violation] ${e.violatedDirective}`
+    + ` | blocked: ${e.blockedURI}`
+    + ` | source: ${e.sourceFile || 'N/A'}`
+    + `:${e.lineNumber || '?'}`,
   );
 });

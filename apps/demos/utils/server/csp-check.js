@@ -178,6 +178,7 @@ async function main() {
   if (totalViolations > 0) {
     console.log(`\n⚠️  ${totalViolations} CSP violation(s) detected in ${demosWithViolations} demo(s)`);
     console.log(`Report: ${reportFile}`);
+    process.exitCode = 1;
   } else {
     console.log('\n✅ No CSP violations detected');
   }
