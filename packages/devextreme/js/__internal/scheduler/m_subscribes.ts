@@ -157,7 +157,7 @@ const subscribes = {
     const groups = this.getViewOption('groups');
 
     if (groups?.length) {
-      if (allDay || !VERTICAL_VIEW_TYPES.includes(this.currentView.type)) {
+      if (allDay || this.currentView.type === 'month') {
         const horizontalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
         return {
           left: horizontalGroupBounds.left,
