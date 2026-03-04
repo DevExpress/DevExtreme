@@ -1130,6 +1130,7 @@ jobs:
       working-directory: apps/demos
       env:
         CSP_FRAMEWORKS: jQuery
+        CHROME_PATH: google-chrome-stable
       run: node utils/server/csp-check.js
 
     - name: Upload CSP report
@@ -1206,6 +1207,7 @@ jobs:
       working-directory: apps/demos
       env:
         CSP_FRAMEWORKS: ${{ matrix.FRAMEWORK }}
+        CHROME_PATH: google-chrome-stable
       run: node utils/server/csp-check.js
 
     - name: Upload CSP report

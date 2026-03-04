@@ -11,32 +11,7 @@ const SERVER_URL = process.env.CSP_SERVER_URL || 'http://localhost:8080';
 const FRAMEWORKS = (process.env.CSP_FRAMEWORKS || 'jQuery').split(',').map((f) => f.trim());
 const CONCURRENCY = parseInt(process.env.CSP_CONCURRENCY, 10) || 8;
 
-function findChrome() {
-  const candidates = [
-    process.env.CHROME_PATH,
-    'google-chrome-stable',
-    'google-chrome',
-    'chromium-browser',
-    'chromium',
-    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-    '/usr/bin/google-chrome-stable',
-    '/usr/bin/google-chrome',
-  ].filter(Boolean);
-
-  for (const candidate of candidates) {
-    try {
-      if (candidate.startsWith('/')) {
-        execFileSync('test', ['-x', candidate], { stdio: 'ignore' });
-      } else {
-        execFileSync('which', [candidate], { stdio: 'ignore' });
-      }
-      return candidate;
-    } catch {
-      // try next candidate
-    }
-  }
-  throw new Error('Chrome not found. Set CHROME_PATH environment variable.');
-}
+const CHROME_PATH = process.env.CHROME_PATH || 'google-chrome-stable';
 
 function findDemos() {
   const demosDir = join(DEMO_ROOT, 'Demos');
@@ -78,9 +53,9 @@ function findDemos() {
   return result;
 }
 
-function visitPage(chromePath, url) {
+function visitPage(url) {
   return new Promise((resolve) => {
-    const child = execFile(chromePath, [
+    const child = execFile(CHROME_PATH, [
       '--headless=new',
       '--no-sandbox',
       '--disable-gpu',
@@ -113,9 +88,8 @@ function httpRequest(url, method) {
 }
 
 async function main() {
-  const chromePath = findChrome();
   const framework = FRAMEWORKS[0];
-  console.log(`Chrome: ${chromePath}`);
+  console.log(`Chrome: ${CHROME_PATH}`);
   console.log(`Server: ${SERVER_URL}`);
   console.log(`Framework: ${framework}`);
   console.log(`Concurrency: ${CONCURRENCY}\n`);
@@ -143,7 +117,7 @@ async function main() {
     await httpRequest(`${SERVER_URL}/csp-violations`, 'DELETE');
 
     // Visit all pages in the batch in parallel
-    await Promise.all(batch.map((demo) => visitPage(chromePath, demo.url)));
+    await Promise.all(batch.map((demo) => visitPage(demo.url)));
 
     // Wait for any remaining CSP reports to be delivered
     await new Promise((resolve) => { setTimeout(resolve, 500); });
