@@ -38,5 +38,5 @@ export const getSchedulerMock = ({
   option: (name: string) => ({ firstDayOfWeek: 0, showAllDayPanel: true }[name]),
   getViewOffsetMs: () => offsetMinutes * 60_000,
   resourceManager: resourceManager ?? new ResourceManager([]),
-  _dataAccessors: mockAppointmentDataAccessor,
+  dataAccessors: mockAppointmentDataAccessor,
 }) as unknown as Scheduler;

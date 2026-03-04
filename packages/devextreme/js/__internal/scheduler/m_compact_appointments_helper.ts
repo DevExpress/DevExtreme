@@ -65,7 +65,8 @@ export class CompactAppointmentsHelper {
 
   _clickEvent(onAppointmentClick) {
     return (e) => {
-      const clickEventArgs = this.instance._createEventArgs(e);
+      // @ts-expect-error - TODO: architectural debt — CompactAppointmentsHelper directly accesses private Scheduler.createEventArgs
+      const clickEventArgs = this.instance.createEventArgs(e);
       onAppointmentClick(clickEventArgs);
     };
   }
@@ -164,7 +165,8 @@ export class CompactAppointmentsHelper {
 
   _createTemplate(count, isCompact) {
     this._initButtonTemplate(count, isCompact);
-    return this.instance._getAppointmentTemplate('appointmentCollectorTemplate');
+    // @ts-expect-error - TODO: architectural debt — CompactAppointmentsHelper directly accesses private Scheduler.getAppointmentTemplate
+    return this.instance.getAppointmentTemplate('appointmentCollectorTemplate');
   }
 
   _initButtonTemplate(count, isCompact) {

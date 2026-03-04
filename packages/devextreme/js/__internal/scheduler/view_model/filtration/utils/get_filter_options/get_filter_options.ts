@@ -23,7 +23,7 @@ export const getFilterOptions = (
     showAllDayPanel: schedulerStore.option('showAllDayPanel'),
     resourceManager: schedulerStore.resourceManager,
     timeZone: schedulerStore.getTimeZone(),
-    dataAccessor: schedulerStore._dataAccessors,
+    dataAccessor: schedulerStore.dataAccessors,
     firstDayOfWeek: schedulerStore.option('firstDayOfWeek'),
     allDayIntervals: shiftIntervals(
       getVisibleDateTimeIntervals(compareOptions, true),

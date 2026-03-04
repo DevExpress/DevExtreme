@@ -3273,7 +3273,8 @@ const createDragBehaviorConfig = (
     const canceled = e.cancel;
     const { event } = e;
     const $itemElement = $(e.itemElement);
-    const appointments = e.component._appointments;
+    // eslint-disable-next-line prefer-destructuring
+    const appointments = e.component.appointments;
 
     state.itemData = options.getItemData(e.itemElement, appointments);
     const settings = options.getItemSettings($itemElement, e);

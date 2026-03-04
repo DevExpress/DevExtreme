@@ -10,9 +10,9 @@ import type { AppointmentViewModelPlain } from './view_model/types';
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 
 export default class AppointmentDragBehavior {
-  workspace = this.scheduler._workSpace;
+  workspace = this.scheduler.workSpace;
 
-  appointments = this.scheduler._appointments;
+  appointments = this.scheduler.appointments;
 
   initialPosition = {
     left: 0,
@@ -96,7 +96,7 @@ export default class AppointmentDragBehavior {
       e.itemData = this.getItemData(e.itemElement);
       e.itemSettings = this.getItemSettings(e.itemElement);
 
-      if (this.scheduler._isAppointmentBeingUpdated(e.itemData)) {
+      if (this.scheduler.isAppointmentBeingUpdated(e.itemData)) {
         e.cancel = true;
         return;
       }
@@ -116,7 +116,7 @@ export default class AppointmentDragBehavior {
         return;
       }
 
-      if (this.scheduler._isAppointmentBeingUpdated(this.appointmentInfo.appointment)) {
+      if (this.scheduler.isAppointmentBeingUpdated(this.appointmentInfo.appointment)) {
         e.cancel = true;
         return;
       }
@@ -156,7 +156,7 @@ export default class AppointmentDragBehavior {
       }
 
       if (e.cancel !== true && isSchedulerComponent(e.toComponent)) {
-        const targetDragBehavior = e.toComponent._getDragBehavior();
+        const targetDragBehavior = e.toComponent.getDragBehavior();
         // @ts-expect-error
         targetDragBehavior.dragBetweenComponentsPromise = new Deferred();
       }

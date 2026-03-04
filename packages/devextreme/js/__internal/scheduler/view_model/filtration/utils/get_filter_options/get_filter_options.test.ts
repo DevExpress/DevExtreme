@@ -27,7 +27,7 @@ describe('getFilterOptions', () => {
         supportAllDayPanel: false,
         isDateTimeView: false,
         resourceManager: schedulerStore.resourceManager,
-        dataAccessor: schedulerStore._dataAccessors,
+        dataAccessor: schedulerStore.dataAccessors,
         timeZone: 'Etc/UTC',
         firstDayOfWeek: 0,
         allDayIntervals: [{

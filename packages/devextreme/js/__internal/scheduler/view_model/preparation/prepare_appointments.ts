@@ -10,7 +10,7 @@ export const prepareAppointments = (
   items?: Appointment[],
 ): MinimalAppointmentEntity[] => {
   const cellDurationInMinutes = schedulerStore.getViewOption('cellDuration');
-  const dataAccessors = schedulerStore._dataAccessors;
+  const { dataAccessors } = schedulerStore;
   const safeItems = replaceIncorrectEndDate(
     items,
     cellDurationInMinutes,

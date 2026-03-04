@@ -9,7 +9,7 @@ import { prepareAppointments } from './prepare_appointments';
 const schedulerMock = {
   currentView: { type: 'agenda' },
   getViewOption: (name: string) => ({ cellDuration: 30, allDayPanelMode: 'all' }[name]),
-  _dataAccessors: mockAppointmentDataAccessor,
+  dataAccessors: mockAppointmentDataAccessor,
   timeZoneCalculator: createTimeZoneCalculator(''),
 } as unknown as Scheduler;
 

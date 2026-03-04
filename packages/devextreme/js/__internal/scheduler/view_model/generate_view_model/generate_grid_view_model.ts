@@ -31,7 +31,8 @@ export const generateGridViewModel = (
     viewOffset,
     compareOptions: { endDayHour },
   } = optionManager.options;
-  const { viewDataProvider } = schedulerStore._workSpace;
+  // @ts-expect-error - TODO: architectural debt — accesses private Scheduler.workSpace
+  const { viewDataProvider } = schedulerStore.workSpace;
 
   const step2 = maybeSplit(items, hasAllDayPanel, (entities, panelName) => {
     const byGroup = groupByGroupIndex(entities);

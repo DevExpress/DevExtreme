@@ -24,7 +24,7 @@ const isAllDay = (
   scheduler: Scheduler,
   appointmentData: SafeAppointment,
 ): boolean => {
-  const adapter = new AppointmentAdapter(appointmentData, scheduler._dataAccessors);
+  const adapter = new AppointmentAdapter(appointmentData, scheduler.dataAccessors);
 
   if (VERTICAL_VIEW_TYPES.includes(scheduler.currentView.type)) {
     return isAppointmentTakesAllDay(adapter, scheduler.option('allDayPanelMode'));
@@ -68,15 +68,15 @@ const subscribes = {
     const { info } = utils.dataAccessors.getAppointmentSettings(options.$appointment) as AppointmentItemViewModel;
     const { startDate } = info.sourceAppointment;
 
-    this._checkRecurringAppointment(options.target, options.data, startDate, () => {
+    this.checkRecurringAppointment(options.target, options.data, startDate, () => {
       this._updateAppointment(options.target, options.data, function () {
-        this._appointments.moveAppointmentBack();
+        this.appointments.moveAppointmentBack();
       });
     });
   },
 
   getUpdatedData(rawAppointment) {
-    return this._getUpdatedData(rawAppointment);
+    return this.getUpdatedData(rawAppointment);
   },
 
   updateAppointmentAfterDrag({
@@ -85,16 +85,16 @@ const subscribes = {
     const { info } = utils.dataAccessors.getAppointmentSettings(element) as AppointmentItemViewModel;
     // NOTE: enrich target appointment with additional data from the source
     // in case of one appointment of series will change
-    const targetedRawAppointment = extend({}, rawAppointment, this._getUpdatedData(rawAppointment));
+    const targetedRawAppointment = extend({}, rawAppointment, this.getUpdatedData(rawAppointment));
 
     const fromAllDay = Boolean(rawAppointment.allDay);
     const toAllDay = Boolean(targetedRawAppointment.allDay);
-    const isDropBetweenAllDay = this._workSpace.supportAllDayRow() && fromAllDay !== toAllDay;
+    const isDropBetweenAllDay = this.workSpace.supportAllDayRow() && fromAllDay !== toAllDay;
 
     const isDragAndDropBetweenComponents = event.fromComponent !== event.toComponent;
 
     const onCancel = (): void => {
-      this._appointments.moveAppointmentBack(event);
+      this.appointments.moveAppointmentBack(event);
     };
     if (!isDropToSelfScheduler && isDragAndDropBetweenComponents) {
       // drop between schedulers
@@ -102,7 +102,7 @@ const subscribes = {
     }
 
     if (isDropToSelfScheduler && (!isDropToTheSameCell || isDragAndDropBetweenComponents || isDropBetweenAllDay)) {
-      this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, () => {
+      this.checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, () => {
         this._updateAppointment(rawAppointment, targetedRawAppointment, onCancel, event);
       }, undefined, undefined, event);
     } else {
@@ -126,7 +126,7 @@ const subscribes = {
       ...appointment,
       ...targetedAppointmentRaw,
     } as TargetedAppointment;
-    const adapter = new AppointmentAdapter(targetedAppointment, this._dataAccessors);
+    const adapter = new AppointmentAdapter(targetedAppointment, this.dataAccessors);
     // pull out time zone converting from appointment adapter for knockout (T947938)
     const startDate = targetedAppointment.displayStartDate || this.timeZoneCalculator.createDate(adapter.startDate, 'toGrid');
     const endDate = targetedAppointment.displayEndDate || this.timeZoneCalculator.createDate(adapter.endDate, 'toGrid');
@@ -144,7 +144,7 @@ const subscribes = {
 
     if (groups?.length) {
       if (allDay || this.currentView.type === 'month') {
-        const horizontalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
+        const horizontalGroupBounds = this.workSpace.getGroupBounds(options.coordinates);
         return {
           left: horizontalGroupBounds.left,
           right: horizontalGroupBounds.right,
@@ -153,8 +153,8 @@ const subscribes = {
         };
       }
 
-      if (!allDay && VERTICAL_VIEW_TYPES.includes(this.currentView.type) && this._workSpace._isVerticalGroupedWorkSpace()) {
-        const verticalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
+      if (!allDay && VERTICAL_VIEW_TYPES.includes(this.currentView.type) && this.workSpace._isVerticalGroupedWorkSpace()) {
+        const verticalGroupBounds = this.workSpace.getGroupBounds(options.coordinates);
         return {
           left: 0,
           right: 0,
@@ -221,15 +221,15 @@ const subscribes = {
   },
 
   renderCompactAppointments(options: CompactAppointmentOptions): dxElementWrapper {
-    return this._compactAppointmentsHelper.render(options);
+    return this.compactAppointmentsHelper.render(options);
   },
 
   clearCompactAppointments() {
-    this._compactAppointmentsHelper.clear();
+    this.compactAppointmentsHelper.clear();
   },
 
   getGroupCount() {
-    return this._workSpace._getGroupCount();
+    return this.workSpace._getGroupCount();
   },
 
   mapAppointmentFields(config) {
@@ -248,7 +248,7 @@ const subscribes = {
   },
 
   getLayoutManager() {
-    return this._layoutManager;
+    return this.layoutManager;
   },
 
   getAgendaVerticalStepHeight() {
@@ -276,11 +276,11 @@ const subscribes = {
   },
 
   getEndDayHour() {
-    return this._workSpace.option('endDayHour') || this.option('endDayHour');
+    return this.workSpace.option('endDayHour') || this.option('endDayHour');
   },
 
   getStartDayHour() {
-    return this._workSpace.option('startDayHour') || this.option('startDayHour');
+    return this.workSpace.option('startDayHour') || this.option('startDayHour');
   },
 
   getViewOffsetMs() {
@@ -292,7 +292,7 @@ const subscribes = {
   },
 
   removeDroppableCellClass() {
-    this._workSpace.removeDroppableCellClass();
+    this.workSpace.removeDroppableCellClass();
   },
 } as const;
 
