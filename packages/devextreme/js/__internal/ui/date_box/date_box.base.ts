@@ -835,17 +835,28 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
   getDateOption(optionName: 'value' | 'min' | 'max'): Date | null {
     const { [optionName]: optionValue } = this.option();
 
-    return dateSerialization.deserializeDate(optionValue) as Date | null;
+    const deserializedDate = dateSerialization.deserializeDate(optionValue) as Date | null;
+
+    return deserializedDate;
+
+    // return dateSerialization.deserializeDate(optionValue) as Date | null;
   }
 
   setDateOption(optionName: 'value' | 'min' | 'max', value: DateLike | undefined): void {
-    this.option(optionName, this._serializeDate(value));
+    const serializedDate = this._serializeDate(value);
+
+    this.option(optionName, serializedDate);
+
+    // this.option(optionName, this._serializeDate(value));
   }
 
   _serializeDate(date?: DateLike): Date | string | null {
     const serializationFormat = this._getSerializationFormat();
 
-    return dateSerialization.serializeDate(date, serializationFormat) as Date | string | null;
+    const serializedDate = dateSerialization.serializeDate(date, serializationFormat);
+
+    return serializedDate as Date | string | null;
+    // return dateSerialization.serializeDate(date, serializationFormat) as Date | string | null;
   }
 
   _clearValue(): void {
