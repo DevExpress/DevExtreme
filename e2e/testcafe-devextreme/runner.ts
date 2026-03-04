@@ -264,8 +264,6 @@ async function main() {
               // @ts-expect-error ts-errors
               const { meta } = t.testRun.test;
 
-              await t.click('body', { offsetX: 0, offsetY: 0 });
-
               await ClientFunction(() => {
                 if (document.activeElement && document.activeElement !== document.body) {
                   (document.activeElement as HTMLElement).blur();
@@ -274,7 +272,7 @@ async function main() {
                 window.getSelection()?.removeAllRanges();
               }).with({ boundTestRun: t })();
 
-              await t.hover('html');
+              await t.hover('html', { offsetX: -9999, offsetY: -9999 });
 
               const [width, height] = meta?.browserSize || DEFAULT_BROWSER_SIZE;
               await t.resizeWindow(width, height);
