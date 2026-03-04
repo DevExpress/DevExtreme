@@ -13,7 +13,7 @@ class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
   }
 
   _calculateViewStartDate() {
-    return weekUtils.calculateViewStartDate(this.option('startDate') as any, this._firstDayOfWeek());
+    return weekUtils.calculateViewStartDate(this.option('startDate') as any, this.firstDayOfWeek());
   }
 }
 
