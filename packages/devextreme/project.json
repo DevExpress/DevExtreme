@@ -568,7 +568,7 @@
         "{projectRoot}/artifacts/js/dx.custom.debug.js"
       ]
     },
-    "bundle:debug:headers": {
+    "bundle:headers": {
       "executor": "devextreme-nx-infra-plugin:add-license-headers",
       "options": {
         "targetDirectory": "./artifacts/js",
@@ -580,12 +580,22 @@
           "dx.*.debug.js"
         ]
       },
+      "configurations": {
+        "prod": {
+          "includePatterns": [
+            "dx.all.js",
+            "dx.web.js",
+            "dx.viz.js",
+            "dx.ai-integration.js"
+          ]
+        }
+      },
       "inputs": [
-        "{projectRoot}/artifacts/js/dx.*.debug.js",
+        "{projectRoot}/artifacts/js/dx.*.js",
         "{projectRoot}/build/gulp/license-header.txt"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/js/dx.*.debug.js"
+        "{projectRoot}/artifacts/js/dx.*.js"
       ]
     },
     "bundle:debug": {
@@ -593,7 +603,7 @@
       "options": {
         "commands": [
           "pnpm nx bundle:debug:build devextreme",
-          "pnpm nx bundle:debug:headers devextreme"
+          "pnpm nx bundle:headers devextreme"
         ],
         "parallel": false
       },
@@ -613,24 +623,57 @@
         "{projectRoot}/artifacts/js/dx.custom.debug.js"
       ]
     },
-    "bundle:prod": {
-      "executor": "nx:run-commands",
+    "bundle:prod:build": {
+      "executor": "devextreme-nx-infra-plugin:bundle",
       "options": {
-        "command": "gulp js-bundles-prod",
-        "cwd": "{projectRoot}"
+        "entries": [
+          "bundles/dx.ai-integration.js",
+          "bundles/dx.all.js",
+          "bundles/dx.web.js",
+          "bundles/dx.viz.js"
+        ],
+        "sourceDir": "./artifacts/transpiled-renovation-npm",
+        "outDir": "./artifacts/js",
+        "mode": "production",
+        "webpackConfigPath": "./webpack.config.js"
       },
       "inputs": [
         {
           "env": "BUILD_TEST_INTERNAL_PACKAGE"
         },
-        "{projectRoot}/artifacts/transpiled/**/*",
-        "{projectRoot}/artifacts/transpiled-esm/**/*",
-        "{projectRoot}/build/gulp/js-bundles.js",
+        "{projectRoot}/artifacts/transpiled-renovation-npm/bundles/**/*",
+        "{projectRoot}/artifacts/transpiled-renovation-npm/**/*.js",
         "{projectRoot}/webpack.config.js"
       ],
       "outputs": [
         "{projectRoot}/artifacts/js/dx.all.js",
-        "{projectRoot}/artifacts/js/dx.all.js.map"
+        "{projectRoot}/artifacts/js/dx.web.js",
+        "{projectRoot}/artifacts/js/dx.viz.js",
+        "{projectRoot}/artifacts/js/dx.ai-integration.js"
+      ]
+    },
+    "bundle:prod": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm nx bundle:prod:build devextreme",
+          "pnpm nx bundle:headers devextreme -c prod"
+        ],
+        "parallel": false
+      },
+      "inputs": [
+        {
+          "env": "BUILD_TEST_INTERNAL_PACKAGE"
+        },
+        "{projectRoot}/artifacts/transpiled-renovation-npm/**/*",
+        "{projectRoot}/webpack.config.js",
+        "{projectRoot}/build/gulp/license-header.txt"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/js/dx.all.js",
+        "{projectRoot}/artifacts/js/dx.web.js",
+        "{projectRoot}/artifacts/js/dx.viz.js",
+        "{projectRoot}/artifacts/js/dx.ai-integration.js"
       ]
     },
     "build:vectormap": {
