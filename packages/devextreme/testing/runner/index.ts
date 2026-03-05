@@ -335,8 +335,7 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
   if (req.method === 'GET') {
     const executeConsoleAppMatch = /^\/TestVectorMapData\/ExecuteConsoleApp(?:\/(.*))?$/i.exec(pathname);
     if (executeConsoleAppMatch) {
-      const arg = safeDecodeURIComponent(executeConsoleAppMatch[1] || '');
-      const result = vectorMapService.executeVectorMapConsoleApp(arg, requestUrl.searchParams);
+      const result = vectorMapService.executeVectorMapConsoleApp(requestUrl.searchParams);
       sendJson(res, result);
       return;
     }
