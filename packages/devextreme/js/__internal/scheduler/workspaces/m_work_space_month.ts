@@ -148,11 +148,11 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   // We need these methods for now but they are useless for renovation
   // -------------
 
-  _createWorkSpaceElements() {
+  createWorkSpaceElements() {
     if (this.isVerticalGroupedWorkSpace()) {
-      this._createWorkSpaceScrollableElements();
+      this.createWorkSpaceScrollableElements();
     } else {
-      super._createWorkSpaceElements();
+      super.createWorkSpaceElements();
     }
   }
 

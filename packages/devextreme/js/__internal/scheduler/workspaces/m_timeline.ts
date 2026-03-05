@@ -329,7 +329,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return 'vertical';
   }
 
-  _toggleGroupingDirectionClass() {
+  toggleGroupingDirectionClass() {
     (this.$element() as any).toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
   }
 
@@ -339,8 +339,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     });
   }
 
-  _createWorkSpaceElements() {
-    this._createWorkSpaceScrollableElements();
+  createWorkSpaceElements() {
+    this.createWorkSpaceScrollableElements();
   }
 
   updateAllDayVisibility() { return noop(); }
@@ -499,7 +499,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       {
         groupRowClass: GROUP_ROW_CLASS,
         groupHeaderRowClass: GROUP_ROW_CLASS,
-        groupHeaderClass: this._getGroupHeaderClass.bind(this),
+        groupHeaderClass: this.getGroupHeaderClass.bind(this),
         groupHeaderContentClass: GROUP_HEADER_CONTENT_CLASS,
       },
       this._getCellCount() || 1,
