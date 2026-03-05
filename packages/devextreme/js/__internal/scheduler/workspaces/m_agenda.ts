@@ -112,7 +112,7 @@ class SchedulerAgenda extends WorkSpace {
     return false;
   }
 
-  _isVerticalGroupedWorkSpace() {
+  isVerticalGroupedWorkSpace() {
     return false;
   }
 
@@ -128,11 +128,11 @@ class SchedulerAgenda extends WorkSpace {
     return 1;
   }
 
-  _getTimePanelRowCount() {
+  getTimePanelRowCount() {
     return this.option('agendaDuration') as number;
   }
 
-  _renderAllDayPanel() { return noop(); }
+  renderAllDayPanel() { return noop(); }
 
   _updateAllDayVisibility() { return noop(); }
 
@@ -173,8 +173,8 @@ class SchedulerAgenda extends WorkSpace {
       this._setGroupHeaderCellsHeight();
     }
 
-    this._renderTimePanel();
-    this._renderDateTable();
+    this.renderTimePanel();
+    this.renderDateTable();
     this._applyCellTemplates(cellTemplates);
     this._dateTableScrollable.update();
   }
@@ -244,7 +244,7 @@ class SchedulerAgenda extends WorkSpace {
     return result;
   }
 
-  _getGroupHeaderContainer() {
+  getGroupHeaderContainer() {
     return this._$groupTable;
   }
 
@@ -336,8 +336,8 @@ class SchedulerAgenda extends WorkSpace {
     this.$element().append(this._dateTableScrollable.$element());
   }
 
-  _renderDateTable() {
-    this._renderTableBody({
+  renderDateTable() {
+    this.renderTableBody({
       container: getPublicElement(this._$dateTable),
       rowClass: DATE_TABLE_ROW_CLASS,
       cellClass: this._getDateTableCellClass(),
@@ -372,7 +372,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _renderTableBody(options: any, delayCellTemplateRendering?: any) {
+  renderTableBody(options: any, delayCellTemplateRendering?: any) {
     const cellTemplates: any[] = [];
     const cellTemplateOpt = options.cellTemplate;
 
@@ -432,10 +432,10 @@ class SchedulerAgenda extends WorkSpace {
     }
   }
 
-  _renderTimePanel() {
-    this._renderTableBody({
+  renderTimePanel() {
+    this.renderTableBody({
       container: getPublicElement(this._$timePanel),
-      rowCount: this._getTimePanelRowCount(),
+      rowCount: this.getTimePanelRowCount(),
       cellCount: 1,
       rowClass: TIME_PANEL_ROW_CLASS,
       cellClass: TIME_PANEL_CELL_CLASS,
