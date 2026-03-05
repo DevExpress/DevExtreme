@@ -462,13 +462,13 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     const width = this.getIndicationWidth();
 
     if (this.option('groupOrientation') === 'vertical') {
-      $indicator = this.createIndicator($container);
+      $indicator = this._createIndicator($container);
       setHeight($indicator, getBoundingRect($container.get(0)).height);
       $indicator.css('left', rtlOffset ? rtlOffset - width : width);
     } else {
       for (let i = 0; i < groupCount; i++) {
         const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
-        $indicator = this.createIndicator($container);
+        $indicator = this._createIndicator($container);
         setHeight($indicator, getBoundingRect($container.get(0)).height);
 
         $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);

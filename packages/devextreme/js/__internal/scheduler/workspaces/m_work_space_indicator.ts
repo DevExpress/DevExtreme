@@ -64,7 +64,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     const groupedByDate = this.isGroupedByDate();
     const repeatCount = groupedByDate ? 1 : groupCount;
     for (let i = 0; i < repeatCount; i++) {
-      const $indicator = this.createIndicator($container);
+      const $indicator = this._createIndicator($container);
 
       setWidth(
         $indicator,
@@ -74,8 +74,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
   }
 
-  // Called from SchedulerTimeline._renderIndicator
-  createIndicator($container) {
+  _createIndicator($container) {
     const $indicator = $('<div>').addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
     $container.append($indicator);
 

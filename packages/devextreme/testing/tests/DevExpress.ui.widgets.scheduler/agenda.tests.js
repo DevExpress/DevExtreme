@@ -61,7 +61,7 @@ module('Agenda', {}, () => {
         assert.deepEqual(firstViewDate, new Date(2016, 1, 17, 2), 'The first view date is OK');
     });
 
-    test('_removeEmptyRows method', async function(assert) {
+    test('removeEmptyRows method', async function(assert) {
         const rows = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 1], [0, 0, 0, 0, 0], [1, 1, 1, 0, 1]];
 
         const instance = createInstance();
