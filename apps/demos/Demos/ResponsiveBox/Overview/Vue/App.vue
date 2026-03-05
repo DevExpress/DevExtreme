@@ -114,24 +114,24 @@ const screen = ((width: number) => ((width < 700) ? 'sm' : 'lg')) as unknown as 
 }
 
 .header {
-  background-color: rgba(243, 158, 108, 0.8);
+  background-color: #C6B1DE;
   text-align: center;
 }
 
 .content {
-  background-color: rgba(245, 229, 166, 0.8);
+  background-color: #EDBBE7;
 }
 
 .left-side-bar {
-  background-color: rgba(148, 215, 199, 0.8);
+  background-color: #F9E2AE;
 }
 
 .right-side-bar {
-  background-color: rgba(119, 199, 231, 0.8);
+  background-color: #9FD89F;
 }
 
 .footer {
-  background-color: rgba(123, 155, 207, 0.8);
+  background-color: #B4D6FA;
 }
 
 .item {
@@ -142,5 +142,6 @@ const screen = ((width: number) => ((width < 700) ? 'sm' : 'lg')) as unknown as 
   font-size: 20px;
   padding-top: 10px;
   text-align: center;
+  color: #000;
 }
 </style>

@@ -26,12 +26,7 @@ const commonOptions: Options<Properties> = {
   startDatePlaceholder: [undefined, 'startDatePlaceholder'],
 };
 
-const a11yCheckConfig = {
-  rules: {
-    // NOTE: color-contrast issues
-    'color-contrast': { enabled: false },
-  },
-};
+const a11yCheckConfig = {};
 
 const deferredConfiguration: Configuration = {
   component: 'dxDateRangeBox',

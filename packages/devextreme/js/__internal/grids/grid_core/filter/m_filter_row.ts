@@ -13,6 +13,7 @@ import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type MenuInternal from '@ts/ui/menu/menu';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsResizerViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
@@ -300,6 +301,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       hideOnParentScroll: true,
       _hideOnParentScrollTarget: $overlay,
       wrapperAttr: { class: filterRangeOverlayClass },
+      container: this.element(),
       animation: false,
       position: {
         my: 'top',
@@ -337,10 +339,13 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         that._renderEditor($editor, editorOptions);
         eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), 'keydown', (e) => {
           if (normalizeKeyName(e) === 'tab' && !e.shiftKey) {
-            e.preventDefault();
             that._hideFilterRange();
-            // @ts-expect-error
-            eventsEngine.trigger($cell.next().find('[tabindex]').first(), 'focus');
+
+            if ($cell.next().length) {
+              e.preventDefault();
+              // @ts-expect-error
+              eventsEngine.trigger($cell.next().find('[tabindex]').first(), 'focus');
+            }
           }
         });
 
@@ -650,15 +655,11 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         editorFactoryController.loseFocus();
       },
       onSubmenuHiding() {
-        // @ts-expect-error
-        eventsEngine.trigger($menu, 'blur');
         restoreFocus();
       },
       onContentReady(e) {
         eventsEngine.on($menu, 'blur', () => {
-          const menu = e.component;
-          // @ts-expect-error
-          menu._hideSubmenuAfterTimeout();
+          (e.component as unknown as MenuInternal)._hideSubmenuAfterTimeout();
           restoreFocus();
         });
       },
@@ -883,22 +884,23 @@ export class ApplyFilterViewController extends modules.ViewController {
 }
 
 const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class FilterRowColumnsResizerExtender extends Base {
-  protected _startResizing() {
-    const that = this;
-
+  protected _startResizing(): void {
     // @ts-expect-error
-    super._startResizing.apply(that, arguments);
+    super._startResizing.apply(this, arguments);
 
-    if (that.isResizing()) {
+    if (this.isResizing()) {
       // @ts-expect-error
-      const overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
+      const overlayInstance = this._columnHeadersView.getFilterRangeOverlayInstance();
 
-      if (overlayInstance) {
-        const cellIndex = overlayInstance.$element().closest('td').index();
+      if (!overlayInstance || !this._targetPoint) {
+        return;
+      }
 
-        if (cellIndex === that._targetPoint.columnIndex || cellIndex === that._targetPoint.columnIndex + 1) {
-          overlayInstance.$content().hide();
-        }
+      const cellIndex = overlayInstance.$element().closest('td').index();
+      const { columnIndex: resizingColumnIndex } = this._targetPoint;
+
+      if (cellIndex === resizingColumnIndex || cellIndex === resizingColumnIndex + 1) {
+        overlayInstance.$content().hide();
       }
     }
   }

@@ -206,9 +206,6 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
 /** @public */
 export type Properties = dxButtonGroupOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxButtonGroupOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

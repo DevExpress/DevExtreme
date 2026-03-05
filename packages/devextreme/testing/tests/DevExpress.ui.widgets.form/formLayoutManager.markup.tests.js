@@ -3,12 +3,18 @@ import consoleUtils from 'core/utils/console';
 import messageLocalization from 'common/core/localization/message';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import {
+    FORM_FIELD_ITEM_COL_CLASS,
     FORM_LAYOUT_MANAGER_CLASS,
     FIELD_ITEM_CLASS,
     FIELD_ITEM_LABEL_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
     LAYOUT_MANAGER_ONE_COLUMN,
 } from '__internal/ui/form/constants';
+
+import {
+    LAYOUT_MANAGER_FIRST_COL_CLASS,
+    LAYOUT_MANAGER_LAST_COL_CLASS,
+} from '__internal/ui/form/form.layout_manager';
 
 import {
     FIELD_ITEM_HELP_TEXT_CLASS,
@@ -37,6 +43,7 @@ import Button from 'ui/button';
 import config from 'core/config';
 import { isFunction, isDefined, isRenderer } from 'core/utils/type';
 import windowUtils from 'core/utils/window';
+import { generateFormItems, assertFormItemsPositionCssClasses } from '../../helpers/formLayoutManager.js';
 
 import 'ui/switch';
 import 'ui/autocomplete';
@@ -2584,10 +2591,10 @@ QUnit.module('Button item', () => {
 
         const $buttonItems = $testContainer.find('.dx-field-button-item');
 
-        assert.ok($buttonItems.first().hasClass('dx-col-0'), 'Correct column index');
-        assert.ok($buttonItems.first().hasClass('dx-first-col'), 'Correct column index');
-        assert.ok($buttonItems.last().hasClass('dx-col-1'), 'Correct column index');
-        assert.ok($buttonItems.last().hasClass('dx-last-col'), 'Correct column index');
+        assert.ok($buttonItems.first().hasClass(`${FORM_FIELD_ITEM_COL_CLASS}0`), 'Correct column index');
+        assert.ok($buttonItems.first().hasClass(LAYOUT_MANAGER_FIRST_COL_CLASS), 'Correct column index');
+        assert.ok($buttonItems.last().hasClass(`${FORM_FIELD_ITEM_COL_CLASS}1`), 'Correct column index');
+        assert.ok($buttonItems.last().hasClass(LAYOUT_MANAGER_LAST_COL_CLASS), 'Correct column index');
     });
 
     test('Horizontal alignment', function(assert) {
@@ -3685,6 +3692,24 @@ QUnit.module('ReadOnly option', () => {
 
         checkSupportedEditors((editor, className) => {
             assert.ok(isEditorReadOnly($testContainer, className), `${editor}: editor is read only`);
+        });
+    });
+});
+
+QUnit.module('CSS position classes', () => {
+    [[1, 1], [1, 2], [2, 1], [4, 4]].forEach(([rowCount, colCount]) => {
+        test(`Form with ${rowCount} rows and ${colCount} columns`, function(assert) {
+            const $container = $('#container');
+            $container.dxLayoutManager({
+                items: generateFormItems(rowCount * colCount),
+                colCount,
+            });
+
+            const $fieldItems = $container.find(`.${FIELD_ITEM_CLASS}`);
+
+            assert.equal($fieldItems.length, rowCount * colCount, 'All field items are rendered');
+
+            assertFormItemsPositionCssClasses($container, colCount, assert);
         });
     });
 });

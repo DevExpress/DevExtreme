@@ -44,8 +44,10 @@ $(() => {
         dataType: 'number',
         format: '#0.####',
         cellTemplate(container, options) {
-          container.addClass((options.data.change > 0) ? 'inc' : 'dec');
-          container.html(options.text);
+          const wrapper = $('<div>')
+            .addClass((options.data.change > 0) ? 'inc' : 'dec')
+            .text(options.text);
+          wrapper.appendTo(container);
         },
       }, {
         dataField: 'change',
@@ -54,21 +56,24 @@ $(() => {
         format: '#0.####',
         cellTemplate(container, options) {
           const fieldData = options.data;
-          container.addClass(fieldData.change > 0 ? 'inc' : 'dec');
+          const wrapper = $('<div>')
+            .addClass(fieldData.change > 0 ? 'inc' : 'dec');
 
           $('<span>')
             .addClass('current-value')
             .text(options.text)
-            .appendTo(container);
+            .appendTo(wrapper);
 
           $('<span>')
             .addClass('arrow')
-            .appendTo(container);
+            .appendTo(wrapper);
 
           $('<span>')
             .addClass('diff')
             .text(`${fieldData.percentChange.toFixed(2)}%`)
-            .appendTo(container);
+            .appendTo(wrapper);
+
+          wrapper.appendTo(container);
         },
       }, {
         dataField: 'dayOpen',

@@ -1,68 +1,84 @@
+/* eslint-disable class-methods-use-this */
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import dateLocalization from '@js/common/core/localization/date';
 import Class from '@js/core/class';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DxEvent, InteractionEvent } from '@js/events';
+import type { Format } from '@js/localization';
+import type { ToolbarItem } from '@js/ui/popup';
+import type Calendar from '@ts/ui/calendar/calendar';
+import type List from '@ts/ui/list/list.edit.search';
 
 import type { PopupProperties } from '../popup/m_popup';
+import type Popup from '../popup/m_popup';
+import type { DateBoxBaseProperties } from './date_box.base';
+import type DateBox from './date_box.base';
+import type DateView from './date_view';
 
 // @ts-expect-error dxClass inheritance issue
 class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
   public NAME!: string;
 
-  dateBox?: any;
+  dateBox!: DateBox;
 
-  _widget?: any;
+  _widget!: Calendar | DateView | List | null;
 
-  ctor(dateBox) {
+  constructor(dateBox: DateBox) {
+    super();
     this.dateBox = dateBox;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  widgetOption(option?) {
-    return this._widget?.option.apply(this._widget, arguments);
+  widgetOption(option?: unknown): unknown {
+    return this._widget?.option(option);
   }
 
-  _renderWidget(element?) {
-    element = element || $('<div>');
+  getWidget(): Calendar | DateView | List | null {
+    return this._widget;
+  }
+
+  _renderWidget(element = $('<div>')): void {
     this._widget = this._createWidget(element);
-    this._widget.$element().appendTo(this._getWidgetContainer());
+    this._widget?.$element().appendTo(this._getWidgetContainer());
   }
 
-  _createWidget(element) {
+  _createWidget(element: dxElementWrapper | Element): Calendar | DateView | List {
     const widgetName = this._getWidgetName();
     const widgetOptions = this._getWidgetOptions();
 
+    // @ts-expect-error _createComponent is not properly typed
     return this.dateBox._createComponent(element, widgetName, widgetOptions);
   }
 
-  _getWidgetOptions() {
-    Class.abstract();
+  _getWidgetOptions(): Record<string, unknown> {
+    return {};
   }
 
-  _getWidgetName() {
-    Class.abstract();
+  _getWidgetName(): typeof Calendar | typeof DateView | typeof List | undefined {
+    return undefined;
   }
 
-  getDefaultOptions() {
+  getDefaultOptions(): DateBoxBaseProperties {
     return { mode: 'text' };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getDisplayFormat(displayFormat?) {
-    Class.abstract();
+  getDisplayFormat(displayFormat: Format): Format {
+    return displayFormat;
   }
 
-  supportedKeys() {}
+  supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
+    return {};
+  }
 
-  getKeyboardListener() {}
+  getKeyboardListener(): List | Calendar | undefined {
+    return undefined;
+  }
 
-  customizeButtons() {}
+  customizeButtons(): void {}
 
-  getParsedText(text, format) {
-    // @ts-expect-error
+  getParsedText(text = '', format?: string): Date | undefined | null {
     const value = dateLocalization.parse(text, format);
-    // @ts-expect-error
-    return value || dateLocalization.parse(text);
+    return value ?? dateLocalization.parse(text);
   }
 
   renderInputMinMax(): void {}
@@ -71,82 +87,97 @@ class DateBoxStrategy extends (Class.inherit({}) as new() => {}) {
     this._updateValue();
   }
 
-  // @ts-expect-error ts-error
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   popupConfig(popupConfig: PopupProperties): PopupProperties {
-    Class.abstract();
+    return popupConfig;
   }
 
   _dimensionChanged(): void {
     this._getPopup()?.repaint();
   }
 
-  renderPopupContent() {
+  renderPopupContent(): void {
     const popup = this._getPopup();
     this._renderWidget();
 
-    const $popupContent = popup.$content().parent();
+    const $popupContent = popup.$content()?.parent();
     eventsEngine.off($popupContent, 'mousedown');
-    eventsEngine.on($popupContent, 'mousedown', this._preventFocusOnPopup.bind(this));
+    eventsEngine.on($popupContent, 'mousedown', (e: DxEvent<MouseEvent>) => this._preventFocusOnPopup(e));
   }
 
-  _preventFocusOnPopup(e) {
+  _preventFocusOnPopup(e: DxEvent<MouseEvent>): void {
     e.preventDefault();
   }
 
-  _getWidgetContainer() {
-    return this._getPopup().$content();
+  _getWidgetContainer(): dxElementWrapper {
+    return this._getPopup().$content() as dxElementWrapper;
   }
 
-  _getPopup() {
-    return this.dateBox._popup;
+  _getPopup(): Popup {
+    return this.dateBox._popup as Popup;
   }
 
-  popupShowingHandler() {}
+  _getPopupContent(): dxElementWrapper {
+    return this._getPopup().$content() as dxElementWrapper;
+  }
 
-  popupHiddenHandler() {}
+  _getPopupWrapper(): dxElementWrapper {
+    return this._getPopup().$wrapper() as dxElementWrapper;
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _updateValue(preventDefaultValue?: boolean) {
+  popupShowingHandler(): void {}
+
+  popupHiddenHandler(): void {}
+
+  _updateValue(): void {
     this._widget?.option('value', this.dateBoxValue());
   }
 
-  useCurrentDateByDefault() {}
+  _getPopupToolbarItems(toolbarItems: ToolbarItem[]): ToolbarItem[] {
+    return toolbarItems;
+  }
 
-  getDefaultDate() {
+  useCurrentDateByDefault(): boolean {
+    return false;
+  }
+
+  getDefaultDate(): Date {
     return new Date();
   }
 
-  textChangedHandler() {}
+  textChangedHandler(): void {}
 
-  renderValue() {
-    if (this.dateBox.option('opened')) {
+  renderValue(): void {
+    const { opened } = this.dateBox.option();
+
+    if (opened) {
       this._updateValue();
     }
   }
 
-  getValue() {
-    return this._widget.option('value');
+  getValue(): Date {
+    return this._widget?.option('value') as Date;
   }
 
-  isAdaptivityChanged() {
+  isAdaptivityChanged(): boolean {
     return false;
   }
 
-  dispose() {
+  dispose(): void {
     const popup = this._getPopup();
 
     if (popup) {
-      popup.$content().empty();
+      popup.$content()?.empty();
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  dateBoxValue(value?, event?) {
-    if (arguments.length) {
-      return this.dateBox.dateValue.apply(this.dateBox, arguments);
+  dateBoxValue(
+    value?: Date | null,
+    event?: InteractionEvent | Event,
+  ): Date | null | undefined {
+    if (value !== undefined) {
+      this.dateBox.dateValue(value, event);
     }
-    return this.dateBox.dateOption.apply(this.dateBox, ['value']);
+    return this.dateBox.getDateOption('value');
   }
 }
 

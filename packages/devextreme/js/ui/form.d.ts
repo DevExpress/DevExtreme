@@ -22,6 +22,7 @@ import {
     RequiredRule,
     StringLengthRule,
     VerticalAlignment,
+    Scrollable,
 } from '../common';
 
 import {
@@ -390,6 +391,12 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @public
      */
     getEditor(dataField: string): Editor | undefined;
+    /**
+     * @docid
+     * @publicName getScrollable()
+     * @public
+     */
+    getScrollable(): Scrollable | undefined;
     /**
      * @docid
      * @publicName itemOption(id)
@@ -944,9 +951,6 @@ export interface dxFormTabbedItem {
 
 /** @public */
 export type Properties = dxFormOptions;
-
-/** @deprecated use Properties instead */
-export type Options = dxFormOptions;
 
 // TODO: temporary commented out to fix jquery generation error in R1
 

@@ -10,7 +10,9 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    QueryList
 } from '@angular/core';
 
 
@@ -23,9 +25,13 @@ import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, d
 import {
     DxIntegrationModule,
     NestedOptionHost,
+    CollectionNestedOption,
 } from 'devextreme-angular/core';
 import { NestedOption } from 'devextreme-angular/core';
 
+import {
+    PROPERTY_TOKEN_items,
+} from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxo-data-grid-form',
@@ -36,6 +42,11 @@ import { NestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxoDataGridFormComponent extends NestedOption implements OnDestroy, OnInit  {
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+    
     @Input()
     get accessKey(): string | undefined {
         return this._getOption('accessKey');

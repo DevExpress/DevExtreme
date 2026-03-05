@@ -21,7 +21,7 @@ const TestExtensionComponent = memo(function TestExtensionComponent(props: any) 
       {...props}
     />
   );
-}) as React.MemoExoticComponent<any> & NestedComponentMeta;
+}) as React.MemoExoticComponent<React.FC<any>> & NestedComponentMeta;
 
 TestExtensionComponent.componentType = 'extension';
 

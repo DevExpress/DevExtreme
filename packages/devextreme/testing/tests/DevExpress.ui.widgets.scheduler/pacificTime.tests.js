@@ -9,7 +9,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'common/core/animation/fx';
 
 import '__internal/scheduler/m_scheduler';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const { testStart, module, test, skip } = QUnit;
 
@@ -169,12 +169,12 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
         [{
             cellDuration: 120,
-            appointmentTop: 100,
+            appointmentTop: 76,
             view: 'week',
             startDate: new Date(2020, 2, 8, 4),
         }, {
             cellDuration: 90,
-            appointmentTop: 150,
+            appointmentTop: 114,
             view: 'week',
             startDate: new Date(2020, 2, 8, 4, 30),
         }, {
@@ -467,7 +467,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
                 assert.equal(scheduler.appointmentList.length, 4, 'should be render 4 appointments');
 
-                const positions = [0, 114, 228, 342];
+                const positions = [0, 119, 238, 357];
 
                 for(let i = 0; i < 4; i++) {
                     const element = scheduler.appointmentList[i].getElement();
@@ -481,19 +481,19 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
         [{
             view: 'day',
             left: 0,
-            top: 100,
+            top: 76,
         }, {
             view: 'week',
             left: 0,
-            top: 100,
+            top: 76,
         }, {
             view: 'timelineDay',
             left: 400,
-            top: 26,
+            top: 30,
         }, {
             view: 'timelineWeek',
             left: 400,
-            top: 26,
+            top: 30,
         }].forEach(({ view, left, top }) => {
             test(`Appointments should be rendered corrrectly when startViewDate is during DST change in ${view}`, async function(assert) {
                 const scheduler = await createWrapper({
@@ -697,7 +697,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                 }, {
                     firstCell: 28,
                     lastCell: 29,
-                    selectedCellCount: 17,
+                    selectedCellCount: 21,
                     currentView: 'week',
                     mustBeSelectedCells: [28, 35, 42, 56],
                     testDescription: 'Cells that cover dead zone of DST and part of next week'
@@ -779,7 +779,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
             const currentTimeIndicator = scheduler.workSpace.getCurrentTimeIndicator();
 
-            assert.roughEqual(currentTimeIndicator.eq(0).position().top, 1000, 1.5, 'Current time indicator has correct top');
+            assert.roughEqual(currentTimeIndicator.eq(0).position().top, 760, 1.5, 'Current time indicator has correct top');
 
             clock.restore();
         });

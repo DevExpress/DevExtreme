@@ -132,7 +132,6 @@ function onContextMenuPreparing(e: DxPivotGridTypes.ContextMenuPreparingEvent) {
 }
 
 #pivotgrid-demo .desc-container a {
-  color: #f05b41;
   text-decoration: underline;
   cursor: pointer;
 }

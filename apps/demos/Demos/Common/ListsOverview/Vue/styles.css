@@ -12,7 +12,6 @@
 }
 
 .left .list .dx-list-group-header {
-  color: #f05b41;
   font-weight: normal;
   font-size: 18px;
 }
@@ -102,5 +101,5 @@
   font-size: 11px;
   line-height: 12px;
   padding-left: 6px;
-  opacity: 0.7;
+  color: var(--dx-texteditor-label-color);
 }

@@ -66,28 +66,37 @@ describe('Build the state manager', () => {
 
         const devextremeDir = path.join(tempDir, 'devextreme');
         const stateManagerDir = path.join(devextremeDir, 'esm', '__internal', 'core', 'state_manager');
+        const cjsStateManagerDir = path.join(devextremeDir, 'cjs', '__internal', 'core', 'state_manager');
         const devDir = path.join(stateManagerDir, 'dev');
         const prodDir = path.join(stateManagerDir, 'prod');
+        const cjsProdDir = path.join(cjsStateManagerDir, 'prod');
 
         const devPaths = createEnvPaths(stateManagerDir, 'dev');
         const prodPaths = createEnvPaths(stateManagerDir, 'prod');
+        const cjsProdPaths = createEnvPaths(cjsStateManagerDir, 'prod');
 
         const indexFilePath = path.join(stateManagerDir, 'index.js');
+        const cjsIndexFilePath = path.join(cjsStateManagerDir, 'index.js');
         const fileOutsideOfEnvSpecificFolderFilePath = path.join(stateManagerDir, 'state_manager.test.js');
         const fileOutsideStateMangerPath = path.join(tempDir, 'other_file.js');
 
         fs.mkdirSync(stateManagerDir, { recursive: true });
+        fs.mkdirSync(cjsStateManagerDir, { recursive: true });
         fs.mkdirSync(devDir, { recursive: true });
         fs.mkdirSync(prodDir, { recursive: true });
+        fs.mkdirSync(cjsProdDir, { recursive: true });
         fs.mkdirSync(devPaths.reactivePrimitivesDir, { recursive: true });
         fs.mkdirSync(prodPaths.reactivePrimitivesDir, { recursive: true });
+        fs.mkdirSync(cjsProdPaths.reactivePrimitivesDir, { recursive: true });
 
         fs.writeFileSync(indexFilePath, INDEX_DEV_CONTENT);
+        fs.writeFileSync(cjsIndexFilePath, INDEX_DEV_CONTENT);
         fs.writeFileSync(fileOutsideOfEnvSpecificFolderFilePath, FILE_OUTSIDE_OF_ENV_SPECIFIC_FOLDER_CONTENT);
         fs.writeFileSync(fileOutsideStateMangerPath, FILE_OUTSIDE_STATE_MANGER_CONTENT);
 
         createEnvFiles(devPaths, DEV_DIR_CONTENT);
         createEnvFiles(prodPaths, PROD_DIR_CONTENT);
+        createEnvFiles(cjsProdPaths, PROD_DIR_CONTENT);
 
         originalConsoleError = console.error;
         consoleErrorSpy = jest.fn();
@@ -95,6 +104,7 @@ describe('Build the state manager', () => {
 
         const files = [
             ...createEnvSpecificStreamFileObjects(prodPaths, PROD_DIR_CONTENT),
+            ...createEnvSpecificStreamFileObjects(cjsProdPaths, PROD_DIR_CONTENT),
             ...createEnvSpecificStreamFileObjects(devPaths, DEV_DIR_CONTENT),
             new Vinyl({
                 path: fileOutsideStateMangerPath,
@@ -106,6 +116,10 @@ describe('Build the state manager', () => {
             }),
             new Vinyl({
                 path: indexFilePath,
+                contents: Buffer.from(INDEX_DEV_CONTENT)
+            }),
+            new Vinyl({
+                path: cjsIndexFilePath,
                 contents: Buffer.from(INDEX_DEV_CONTENT)
             }),
         ];
@@ -123,6 +137,7 @@ describe('Build the state manager', () => {
             devDir,
             prodPaths,
             indexFilePath,
+            cjsIndexFilePath,
             fileOutsideOfEnvSpecificFolderFilePath,
             fileOutsideStateMangerPath
         };
@@ -164,9 +179,14 @@ describe('Build the state manager', () => {
     it('should replace `index.js` content by `prod/index.js` content', runTestWithStream(() => {
         removeDevelopmentStateManagerModules(testsContext.devextremeDir);
 
-        const indexFileContent = fs.readFileSync(testsContext.indexFilePath, 'utf8');
-        expect(indexFileContent).toBe(INDEX_PROD_CONTENT);
+        const esmIndexContent = fs.readFileSync(testsContext.indexFilePath, 'utf8');
+        expect(esmIndexContent).toBe(INDEX_PROD_CONTENT);
         expect(fs.existsSync(testsContext.prodPaths.index)).toBe(true);
+
+        const cjsIndexContent = fs.readFileSync(testsContext.cjsIndexFilePath, 'utf8');
+        expect(cjsIndexContent).toContain('require("./prod/index")');
+        expect(cjsIndexContent).not.toContain('export *');
+
         expect(consoleErrorSpy).not.toHaveBeenCalled();
     }));
 });

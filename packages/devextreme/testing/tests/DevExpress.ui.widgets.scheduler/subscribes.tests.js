@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import '__internal/scheduler/m_subscribes';
 import '__internal/scheduler/m_scheduler';
 
@@ -801,9 +801,9 @@ module('Grouping By Date', {
             const results = this.instance.getAppointmentsInstance().option('items').sort((a, b) => a.columnIndex - b.columnIndex);
 
             assert.equal(results.length, 3, 'Result length is OK');
-            this.checkNeedCoordinatesResult(assert, results[0], 1, 0, 0, 96, 1.1);
-            this.checkNeedCoordinatesResult(assert, results[1], 2, 0, 0, 160, 1.1);
-            this.checkNeedCoordinatesResult(assert, results[2], 3, 0, 0, 224, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[0], 1, 0, 0, 99, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[1], 2, 0, 0, 166, 1.1);
+            this.checkNeedCoordinatesResult(assert, results[2], 3, 0, 0, 233, 1.1);
         });
 
         test(`"createAppointmentSettings" should work correct when groupByDate = true, Month view when renovateRender is ${isRenovatedRender}`, async function(assert) {
@@ -851,8 +851,8 @@ module('Grouping By Date', {
             const results = this.instance.getAppointmentsInstance().option('items').sort((a, b) => a.columnIndex - b.columnIndex);
 
             assert.equal(results.length, 2, 'Coordinates count is ok');
-            this.checkNeedCoordinatesResult(assert, results[0], 2, 3, cellHeight * 3 + 26, cellWidth * 5, 1.5);
-            this.checkNeedCoordinatesResult(assert, results[1], 3, 3, cellHeight * 3 + 26, cellWidth * 7, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[0], 2, 3, cellHeight * 3 + 30, cellWidth * 5, 1.5);
+            this.checkNeedCoordinatesResult(assert, results[1], 3, 3, cellHeight * 3 + 30, cellWidth * 7, 1.5);
         });
     });
 
@@ -910,6 +910,51 @@ module('Grouping By Date', {
         });
         assert.roughEqual(result.left, firstCellPosition.left - cellWidth / 2, 3, 'Area left is OK');
         assert.roughEqual(result.right, lastCellPosition.left + 1.5 * cellWidth, 3, 'Area right is OK');
+    });
+
+    test('\'getResizableAppointmentArea\' should return undefined for not allDay appointments in grouped timeline view', async function(assert) {
+        const priorityData = [
+            {
+                text: 'Low Priority',
+                id: 1,
+                color: '#1e90ff'
+            }, {
+                text: 'High Priority',
+                id: 2,
+                color: '#ff9747'
+            }
+        ];
+        await this.createInstance({
+            currentView: 'timelineWeek',
+            views: [{
+                type: 'timelineWeek',
+                name: 'timelineWeek',
+                groupOrientation: 'horizontal'
+            }],
+            width: 800,
+            currentDate: new Date(2018, 4, 21, 9, 0),
+            groupByDate: true,
+            groups: ['priorityId'],
+            resources: [
+                {
+                    fieldExpr: 'priorityId',
+                    allowMultiple: false,
+                    dataSource: priorityData,
+                    label: 'Priority'
+                }
+            ],
+        });
+
+        const result = this.instance.fire('getResizableAppointmentArea', {
+            allDay: false,
+            coordinates: {
+                groupIndex: 1,
+                left: 550,
+                top: 0
+            },
+        });
+
+        assert.strictEqual(result, undefined, 'Area is undefined');
     });
 
     test('\'getResizableStep\' should return correct step, groupByDate = true, Month view', async function(assert) {

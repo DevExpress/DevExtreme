@@ -122,7 +122,7 @@ export const CustomComponents: Story = {
         location: 'before',
         widget: 'dxSelectBox',
         options: {
-          items: [{ id: 1, text: 'Samantha Bright', color: '#727bd2' }],
+          items: [{ id: 1, text: 'Samantha Bright', color: '#C2185B' }],
           displayExpr: 'text',
           valueExpr: 'id',
           searchEnabled: true,

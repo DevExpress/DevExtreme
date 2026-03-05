@@ -781,9 +781,6 @@ export interface dxTreeMapNode {
 /** @public */
 export type Properties = dxTreeMapOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxTreeMapOptions;
-
 // #region deprecated in v23.1
 
 /** @deprecated Use Tooltip instead */

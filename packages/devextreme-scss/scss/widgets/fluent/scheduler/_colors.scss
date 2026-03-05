@@ -53,7 +53,7 @@ $scheduler-workspace-focused-cell-color: null !default;
 */
 $scheduler-first-month-border-color: $base-border-color !default;
 $scheduler-droppable-cell-background-color: color.adjust($base-element-bg, $lightness: -5%, $space: hsl) !default;
-$scheduler-panel-text-color: color.change($base-text-color, $alpha: 0.54) !default;
+$scheduler-panel-text-color: $base-label-color !default;
 $scheduler-workspace-background-color: $base-bg !default;
 $scheduler-workspace-accent-color: $base-accent !default;
 
@@ -66,13 +66,14 @@ $scheduler-time-indicator-color: #eb5757 !default;
 $scheduler-dd-appointment-hover-text-color: $base-inverted-text-color !default;
 $scheduler-form-icon-color: $base-icon-color !default;
 $scheduler-popup-title-bg: $scheduler-workspace-background-color !default;
-$scheduler-workspace-month-text-color: color.change($base-text-color, $alpha: 0.54) !default;
+$scheduler-workspace-month-text-color: $base-text-color !default;
+$scheduler-workspace-other-month-text-color: $base-label-color !default;
 $scheduler-dropdown-appointment-date-color: color.change($base-text-color, $alpha: 0.54) !default;
 $scheduler-workspace-active-cell-color: $scheduler-accent-border-color !default;
 $scheduler-workspace-hovered-cell-color: $scheduler-workspace-month-text-color !default;
 $scheduler-header-bg: $base-bg !default;
 $scheduler-alldaypanel-bg: $base-element-bg !default;
-$scheduler-other-month-cell-opacity: 0.5 !default;
+$scheduler-other-month-cell-opacity: 1 !default;
 $scheduler-fill-focused-appointment: false !default;
 $scheduler-is-shadow-color-for-focused-state: false !default;
 $scheduler-time-indicator-background-color: rgba(0, 0, 0, 0.03) !default;
@@ -89,9 +90,7 @@ $agenda-appointment-text-color: $base-text-color !default;
 $header-panel-cell-date: null !default;
 
 @if $mode == "light" {
-  $scheduler-workspace-month-text-color: #707070;
   $scheduler-appointment-text-color: #000 !default;
-  $scheduler-panel-text-color: #707070;
   $header-panel-cell-date: #424242;
 
   @if $color == "blue"{
@@ -110,10 +109,8 @@ $header-panel-cell-date: null !default;
 }
 
 @if $mode == "dark" {
-  $scheduler-workspace-month-text-color: #999;
   $scheduler-appointment-base-color: color.adjust($base-accent, $lightness: -48%, $space: hsl) !default;
   $scheduler-appointment-text-color: #fff !default;
-  $scheduler-panel-text-color: #999;
   $header-panel-cell-date: #adadad;
   $scheduler-cell-hover-bg: $base-hover-bg !default;
 

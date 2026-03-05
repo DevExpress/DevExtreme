@@ -57,22 +57,22 @@ export const resourcesData: Resource[] = [
   {
     text: 'Room 101',
     id: 1,
-    color: '#bbd806',
+    color: '#1564C0',
   }, {
     text: 'Room 102',
     id: 2,
-    color: '#f34c8a',
+    color: '#C2185B',
   }, {
     text: 'Room 103',
     id: 3,
-    color: '#ae7fcc',
+    color: '#7B1FA2',
   }, {
     text: 'Meeting room',
     id: 4,
-    color: '#ff8817',
+    color: '#DD2C00',
   }, {
     text: 'Conference hall',
     id: 5,
-    color: '#03bb92',
+    color: '#2E7D32',
   },
 ];

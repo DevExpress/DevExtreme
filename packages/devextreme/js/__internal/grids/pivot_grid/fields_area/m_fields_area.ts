@@ -69,9 +69,11 @@ class FieldsArea extends AreaItem {
   _getPopupOptions(row, button) {
     return {
       contentTemplate() {
-        return $('<table>').addClass('dx-area-field-container')
-          .append($('<thead>').addClass('dx-pivotgrid-fields-area-head')
-            .append(row));
+        return $('<div>').append(
+          $('<table>').addClass('dx-area-field-container')
+            .append($('<thead>').addClass('dx-pivotgrid-fields-area-head')
+              .append(row)),
+        );
       },
       height: 'auto',
       width: 'auto',

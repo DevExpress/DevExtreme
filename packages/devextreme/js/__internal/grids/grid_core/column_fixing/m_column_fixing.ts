@@ -23,7 +23,7 @@ import type {
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
-import type { ModuleType } from '../m_types';
+import type { ColumnPoint, Coordinates, ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { ColumnsView } from '../views/m_columns_view';
 import { normalizeWidth } from '../views/m_columns_view';
@@ -1130,19 +1130,23 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     }
   }
 
-  protected _getTargetPoint(pointsByColumns, currentX, deltaX) {
+  protected _getTargetPoint(
+    pointsByColumns: ColumnPoint[] | null | undefined,
+    currentPoint: Coordinates,
+    deltaX: number,
+  ): ColumnPoint | null {
     // @ts-expect-error
     const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
 
     if ($transparentColumn && $transparentColumn.length) {
       const boundingRect = getBoundingRect($transparentColumn.get(0));
 
-      if (currentX <= boundingRect.left || currentX >= boundingRect.right) {
-        return super._getTargetPoint(this._pointsByFixedColumns, currentX, deltaX);
+      if (currentPoint.x <= boundingRect.left || currentPoint.x >= boundingRect.right) {
+        return super._getTargetPoint(this._pointsByFixedColumns, currentPoint, deltaX);
       }
     }
 
-    return super._getTargetPoint(pointsByColumns, currentX, deltaX);
+    return super._getTargetPoint(pointsByColumns, currentPoint, deltaX);
   }
 };
 

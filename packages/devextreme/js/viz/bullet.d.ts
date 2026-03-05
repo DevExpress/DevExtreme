@@ -170,9 +170,6 @@ export default class dxBullet extends BaseSparkline<dxBulletOptions> { }
 /** @public */
 export type Properties = dxBulletOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxBulletOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

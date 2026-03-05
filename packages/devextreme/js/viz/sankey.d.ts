@@ -753,9 +753,6 @@ export interface dxSankeyNode {
 /** @public */
 export type Properties = dxSankeyOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxSankeyOptions;
-
 // #region deprecated in v23.1
 
 /** @deprecated Use Tooltip instead */

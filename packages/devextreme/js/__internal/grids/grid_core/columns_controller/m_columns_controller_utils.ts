@@ -30,8 +30,10 @@ import {
   UNSUPPORTED_PROPERTIES_FOR_CHILD_COLUMNS,
   USER_STATE_FIELD_NAMES,
   USER_STATE_FIELD_NAMES_15_1,
+  VIRTUAL_COMMAND_COLUMN_NAME,
 } from './const';
 import type { Column, ColumnsController } from './m_columns_controller';
+import type { ColumnIndex, DropLocationNames } from './types';
 
 const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
   if (controller?._isWarnedAboutUnsupportedProperties) return;
@@ -414,22 +416,60 @@ export const updateColumnVisibleIndexes = function (that: ColumnsController, cur
   normalizeIndexes(result, 'visibleIndex', currentColumn);
 };
 
-export const getColumnIndexByVisibleIndex = function (that: ColumnsController, visibleIndex, location) {
-  // @ts-expect-error
+function getColumnsByLocation(
+  that: ColumnsController,
+  location: DropLocationNames,
+  rowIndex: number | null,
+): Column[] {
+  switch (location) {
+    case GROUP_LOCATION:
+      return that.getGroupColumns();
+    case COLUMN_CHOOSER_LOCATION:
+      return that.getChooserColumns();
+    default:
+      return that.getVisibleColumns(rowIndex);
+  }
+}
+
+function correctVisibleIndex(
+  that: ColumnsController,
+  visibleIndex: ColumnIndex,
+): number {
+  return isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
+}
+
+function getColumnByVisibleIndex(
+  that: ColumnsController,
+  visibleIndex: ColumnIndex,
+  location: DropLocationNames,
+): Column {
   const rowIndex = isObject(visibleIndex) ? visibleIndex.rowIndex : null;
-  const columns = location === GROUP_LOCATION ? that.getGroupColumns() : location === COLUMN_CHOOSER_LOCATION ? that.getChooserColumns() : that.getVisibleColumns(rowIndex, true);
-  let column;
+  const columns = getColumnsByLocation(that, location, rowIndex);
+  const correctedVisibleIndex = correctVisibleIndex(that, visibleIndex);
+  const column = columns[correctedVisibleIndex];
 
-  // @ts-expect-error
-  visibleIndex = isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
-  column = columns[visibleIndex];
-
-  if (column && column.type === GROUP_COMMAND_COLUMN_NAME) {
-    column = that._columns.filter((col) => column.type === col.type)[0] || column;
+  if (column?.type === GROUP_COMMAND_COLUMN_NAME) {
+    return that._columns.filter((col) => column.type === col.type)[0] || column;
   }
 
-  return column && isDefined(column.index) ? column.index : -1;
-};
+  if (that.isVirtualMode() && (!column || column.command === VIRTUAL_COMMAND_COLUMN_NAME)) {
+    const columnIndexOffset = that.getColumnIndexOffset();
+
+    return that.getVisibleColumns(rowIndex, true)[correctedVisibleIndex + columnIndexOffset];
+  }
+
+  return column;
+}
+
+export function getColumnIndexByVisibleIndex(
+  that: ColumnsController,
+  visibleIndex: ColumnIndex,
+  location: DropLocationNames,
+): number {
+  const column = getColumnByVisibleIndex(that, visibleIndex, location);
+
+  return column?.index ?? -1;
+}
 
 export const moveColumnToGroup = function (that: ColumnsController, column, groupIndex) {
   const groupColumns = that.getGroupColumns();

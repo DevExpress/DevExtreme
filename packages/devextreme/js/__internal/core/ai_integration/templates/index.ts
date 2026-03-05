@@ -2,6 +2,12 @@ import type { PromptTemplate } from '@ts/core/ai_integration/core/prompt_manager
 
 export type PromptTemplates = Record<string, PromptTemplate>;
 
+export const metaTemplates: Record<string, PromptTemplate> = {
+  addLanguage: {
+    system: '{{message}} Provide an answer in {{lang}} language.',
+  },
+};
+
 export const templates: PromptTemplates = {
   changeStyle: {
     system: 'Rewrite the text provided to match the {{writingStyle}} writing style. Ensure the rewritten text follows the grammatical rules and stylistic conventions of the specified style. Preserve the original meaning and context. Use complete sentences and a professional tone. Return answer with no markdown formatting.',

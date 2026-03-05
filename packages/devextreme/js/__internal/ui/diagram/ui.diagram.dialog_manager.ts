@@ -50,8 +50,8 @@ const DiagramDialogManager = {
         const window = getWindow();
         // @ts-expect-error ts-error
         const reader = new window.FileReader();
-        reader.onload = (): void => {
-          args.component._commandParameter = e.target.result;
+        reader.onload = (evt): void => {
+          args.component._commandParameter = evt.target.result;
         };
         reader.readAsDataURL(e.value[0]);
       },

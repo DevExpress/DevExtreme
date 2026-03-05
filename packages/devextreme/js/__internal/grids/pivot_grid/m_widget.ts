@@ -135,6 +135,8 @@ class PivotGrid extends Widget {
 
   _fieldChooser: any;
 
+  _fieldChooserBase: any;
+
   _columnsArea: any;
 
   _rowsArea: any;
@@ -408,6 +410,9 @@ class PivotGrid extends Widget {
       case 'allowSortingBySummary':
       case 'scrolling':
       case 'stateStoring':
+        if (that._fieldChooserBase) {
+          that._fieldChooserBase._dispose();
+        }
         that._initDataController();
         that.getFieldChooserPopup().hide();
         that._renderFieldChooser();
@@ -1174,7 +1179,7 @@ class PivotGrid extends Widget {
 
     that.$element().addClass(OVERFLOW_HIDDEN_CLASS);
 
-    that._createComponent(that.$element(), FieldChooserBase, {
+    that._fieldChooserBase = that._createComponent(that.$element(), FieldChooserBase, {
       dataSource: that.getDataSource(),
       encodeHtml: that.option('encodeHtml'),
       allowFieldDragging: that.option('fieldPanel.allowFieldDragging'),
@@ -1266,10 +1271,16 @@ class PivotGrid extends Widget {
   _dispose() {
     const that = this;
     clearTimeout(that._hideLoadingTimeoutID);
-    super._dispose();
+
+    if (that._fieldChooserBase) {
+      that._fieldChooserBase._dispose();
+    }
+
     if (that._dataController) {
       that._dataController.dispose();
     }
+
+    super._dispose();
   }
 
   _tableElement() {

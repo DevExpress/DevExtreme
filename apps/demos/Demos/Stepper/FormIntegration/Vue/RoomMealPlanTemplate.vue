@@ -37,7 +37,7 @@ import { roomTypes, mealPlans, getInitialFormData } from './data.ts';
 const formRef = ref<DxForm>();
 
 const props = withDefaults(defineProps<{
-  formData: BookingFormData;
+  formData?: BookingFormData;
   validationGroup?: string;
 }>(), {
   formData: getInitialFormData,

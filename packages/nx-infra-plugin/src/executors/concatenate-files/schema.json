@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "type": "object",
+  "description": "Concatenate files with optional content extraction and transforms.",
+  "properties": {
+    "sourceFiles": {
+      "type": "array",
+      "description": "Ordered list of files or glob patterns to concatenate.",
+      "items": { "type": "string" }
+    },
+    "outputFile": {
+      "type": "string",
+      "description": "Output file path relative to project root."
+    },
+    "extractPattern": {
+      "type": "string",
+      "description": "Regex pattern to extract content from each file. Uses capture group $1."
+    },
+    "extractPatternFlags": {
+      "type": "string",
+      "description": "Regex flags for extractPattern (default: 'gm')",
+      "default": "gm"
+    },
+    "header": {
+      "type": "string",
+      "description": "Header to prepend to output."
+    },
+    "footer": {
+      "type": "string",
+      "description": "Footer to append to output."
+    },
+    "transforms": {
+      "type": "array",
+      "description": "Regex find/replace transforms applied after concatenation.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "find": { "type": "string" },
+          "replace": { "type": "string" },
+          "flags": { "type": "string", "default": "g" }
+        },
+        "required": ["find", "replace"]
+      }
+    },
+    "normalizeLineEndings": {
+      "type": "boolean",
+      "description": "Normalize to LF line endings (default: true)",
+      "default": true
+    },
+    "separator": {
+      "type": "string",
+      "description": "Separator between concatenated files (default: '\\n')",
+      "default": "\n"
+    }
+  },
+  "required": ["sourceFiles", "outputFile"]
+}

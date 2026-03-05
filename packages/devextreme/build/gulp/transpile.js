@@ -1,31 +1,18 @@
 'use strict';
 
 const babel = require('gulp-babel');
-const flatMap = require('gulp-flatmap');
-const fs = require('fs');
-const del = require('del');
 const gulp = require('gulp');
-
-const normalize = require('normalize-path');
 const notify = require('gulp-notify');
 const path = require('path');
 const plumber = require('gulp-plumber');
-const rename = require('gulp-rename');
-const replace = require('gulp-replace');
 const watch = require('gulp-watch');
-const cache = require('gulp-cache');
 
 const removeDebug = require('./compression-pipes.js').removeDebug;
 const ctx = require('./context.js');
-const { ifEsmPackage } = require('./utils');
 const testsConfig = require('../../testing/tests.babelrc.json');
 const transpileConfig = require('./transpile-config');
-
 const createTsCompiler = require('./typescript/compiler');
 
-const { SideEffectFinder } = require('./side-effects-finder');
-
-const sideEffectFinder = new SideEffectFinder();
 const src = [
     'js/**/*.*',
     '!js/**/*.d.ts',
@@ -33,32 +20,7 @@ const src = [
     '!js/__internal/**/*.*',
 ];
 
-const esmTranspileSrc = src.concat([
-    '!js/viz/docs/**/*',
-    '!**/*.json'
-]);
-
-const srcTsPattern = 'js/__internal/**/*.{ts,tsx}';
-const srcTsIgnorePatterns = [
-    '**/__tests__/**/*'
-];
-
-const srcDir = path.join(process.cwd(), './js');
-const generatedTs = [
-    'events/click.d.ts',
-    'events/contextmenu.d.ts',
-    'events/dblclick.d.ts',
-    'events/drag.d.ts',
-    'events/hold.d.ts',
-    'events/hover.d.ts',
-    'events/pointer.d.ts',
-    'events/swipe.d.ts',
-    'events/transform.d.ts',
-    'integration/jquery.d.ts'
-];
-
 const TS_OUTPUT_BASE_DIR = 'artifacts/dist_ts';
-const TS_OUTPUT_SRC = [`${TS_OUTPUT_BASE_DIR}/__internal/**/*.{js,jsx}`];
 const TS_COMPILER_CONFIG = {
     baseAbsPath: path.resolve(__dirname, '../..'),
     relativePath: {
@@ -73,164 +35,6 @@ const TS_COMPILER_CONFIG = {
         compilationFailed: 'TS Compilation failed',
     },
 };
-
-const createModuleConfig = (name, dir, filePath, dist) => {
-    const isIndex = name === 'index.js';
-    const relative = path.join('./', dir.replace(srcDir, ''), name);
-    const currentPath = isIndex ? path.join(relative, '../') : relative;
-    const esmFile = path.relative(currentPath, path.join('./esm', relative));
-    const esmFilePath = path.join(dist, './esm', dir.replace(srcDir, ''), name);
-    const cjsFile = path.relative(currentPath, path.join('./cjs', relative));
-    const hasRealDTS = fs.existsSync(filePath.replace(/\.js$/, '.d.ts'));
-    const hasGeneratedDTS = generatedTs.indexOf(relative.replace(/\.js$/, '.d.ts')) !== -1;
-    const hasDTS = hasRealDTS || hasGeneratedDTS;
-    const relativeEsmBase = normalize(esmFile).match(/^.*\/esm\//)[0];
-    const sideEffectFiles = sideEffectFinder.getModuleSideEffectFiles(esmFilePath)
-        .map((importPath) => importPath.replace(/^.*\/esm\//, relativeEsmBase));
-
-    const result = {
-        sideEffects: sideEffectFiles.length ? sideEffectFiles : false,
-        main: normalize(cjsFile),
-        module: normalize(esmFile),
-    };
-
-    if(hasDTS) {
-        const typingFile = name.replace(/\.js$/, '.d.ts');
-
-        result['typings'] = `${isIndex ? './' : '../'}${typingFile}`;
-    }
-
-    return JSON.stringify(result, null, 2);
-};
-
-const transpileTs = (compiler, src) => {
-    const task = () => compiler
-        .compileTs(src, srcTsIgnorePatterns)
-        .pipe(gulp.dest(TS_OUTPUT_BASE_DIR));
-
-    task.displayName = 'transpile TS';
-    return task;
-};
-
-const transpileTsClean = () =>
-    async() => await del(TS_OUTPUT_BASE_DIR, { force: true });
-
-
-const createTranspileTask = (input, output, pipes) =>
-    () => {
-        let result = gulp.src(input);
-
-        pipes.forEach(pipe => {
-            result = result.pipe(pipe);
-        });
-
-        return result.pipe(gulp.dest(output));
-    };
-
-
-const transpile = (src, dist, { jsPipes, tsPipes }) => {
-    const transpilePipes = [];
-
-    if(tsPipes) {
-        const transpileTS = createTranspileTask(TS_OUTPUT_SRC, `${dist}/__internal`, tsPipes);
-        transpileTS.displayName = `transpile TS: ${dist}`;
-        transpilePipes.push(transpileTS);
-    }
-
-    if(jsPipes) {
-        const transpileJS = createTranspileTask(src, dist, jsPipes);
-        transpileJS.displayName = `transpile JS: ${dist}`;
-        transpilePipes.push(transpileJS);
-    }
-
-
-    return gulp.series(...transpilePipes);
-};
-
-const cachedJsBabelCjs = () =>
-    cache(babel(transpileConfig.cjs), { name: 'babel-cjs' });
-
-const bundlesSrc = 'build/bundle-templates/**/*.js';
-
-const transpileBundles = (dist) => transpile(bundlesSrc, path.join(dist, './bundles'), {
-    jsPipes: [ removeDebug(), cachedJsBabelCjs() ],
-});
-
-const transpileDefault = () => gulp.series(
-    transpile(src, ctx.TRANSPILED_PATH, {
-        jsPipes: [ cachedJsBabelCjs() ],
-        tsPipes: [ babel(transpileConfig.tsCjs) ],
-    }),
-    transpileBundles(ctx.TRANSPILED_PATH),
-);
-
-const transpileProd = (dist, isEsm) => transpile(
-    src,
-    dist,
-    {
-        jsPipes: [
-            removeDebug(),
-            isEsm ? babel(transpileConfig.esm) : cachedJsBabelCjs()
-        ],
-        tsPipes: [
-            removeDebug(),
-            isEsm ? babel(transpileConfig.esm) : babel(transpileConfig.tsCjs),
-        ]
-    },
-);
-
-const transpileRenovationProd = (watch) => gulp.series(
-    transpileProd(ctx.TRANSPILED_PROD_RENOVATION_PATH, false, watch),
-    transpileBundles(ctx.TRANSPILED_PROD_RENOVATION_PATH),
-);
-
-const transpileEsm = (dist) => gulp.series.apply(gulp, [
-    transpileProd(path.join(dist, './cjs'), false),
-    transpileProd(path.join(dist, './esm'), true),
-    transpileBundles(dist),
-    () => gulp
-        .src(esmTranspileSrc)
-        .pipe(flatMap((stream, file) => {
-            const filePath = file.path;
-            const parsedPath = path.parse(filePath);
-            const fileName = parsedPath.base;
-            const fileDir = parsedPath.dir;
-
-            // NOTE: flatmap thinks that the 'js/viz/vector_map.utils' folder is a file.
-            if(file.extname === '.utils') return stream;
-
-            return stream
-                .pipe(replace(/[\s\S]*/, createModuleConfig(fileName, fileDir, filePath, dist)))
-                .pipe(rename(fPath => {
-                    const isIndexFile = parsedPath.base === 'index.js';
-                    const shouldBePlacedInSeparateDir = !isIndexFile;
-
-                    if(shouldBePlacedInSeparateDir) {
-                        fPath.dirname = path.join(fPath.dirname, fPath.basename);
-                    }
-
-                    fPath.basename = 'package';
-                    fPath.extname = '.json';
-                }));
-        }))
-        .pipe(gulp.dest(dist))
-]);
-
-gulp.task('transpile-esm', transpileEsm(ctx.TRANSPILED_PROD_ESM_PATH));
-
-gulp.task('transpile', (done) => {
-    createTsCompiler(TS_COMPILER_CONFIG).then((compiler) => {
-        gulp.series(
-            'bundler-config',
-            transpileTs(compiler, srcTsPattern),
-            transpileDefault(),
-            transpileRenovationProd(),
-            ifEsmPackage('transpile-esm'),
-            transpileTsClean(),
-        )(done);
-    });
-});
-
 
 const watchJsTask = () => {
     const watchTask = watch(src)

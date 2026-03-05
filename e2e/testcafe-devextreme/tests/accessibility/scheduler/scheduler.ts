@@ -2,7 +2,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { checkOptions } from './axe_options';
+import { a11yCheckConfig } from './axe_options';
 
 fixture.disablePageReloads`Scheduler - a11y`
   .page(url(__dirname, '../../container.html'));
@@ -13,14 +13,14 @@ test('Scheduler should have right aria attributes after view changed', async (t)
   await t.expect(scheduler.element.getAttribute('aria-label')).contains('Scheduler. Month view');
   await t.expect(scheduler.getGeneralStatusContainer().textContent).contains('Scheduler. Month view');
 
-  await t.expect(scheduler.element.getAttribute('role')).eql('group');
+  await t.expect(scheduler.element.getAttribute('role')).eql('application');
 
   await scheduler.option('currentView', 'week');
 
   await t.expect(scheduler.element.getAttribute('aria-label')).contains('Scheduler. Week view');
   await t.expect(scheduler.getGeneralStatusContainer().textContent).contains('Scheduler. Week view');
 
-  await a11yCheck(t, checkOptions, '#container');
+  await a11yCheck(t, a11yCheckConfig, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [],
@@ -40,7 +40,7 @@ test('Scheduler table elements have right aria attributes', async (t) => {
     ).eql('true');
   }
 
-  await a11yCheck(t, checkOptions, '#container');
+  await a11yCheck(t, a11yCheckConfig, '#container');
 }).before(async () => {
   await createWidget('dxScheduler', {
     dataSource: [],
@@ -52,7 +52,7 @@ test('Scheduler table elements have right aria attributes', async (t) => {
   'agenda', 'day', 'month', 'timelineDay', 'timelineMonth', 'timelineWeek', 'timelineWorkWeek', 'week', 'workWeek',
 ].forEach((currentView) => {
   test(`Scheduler has no axe errors on view ${currentView}`, async (t) => {
-    await a11yCheck(t, checkOptions, '#container');
+    await a11yCheck(t, a11yCheckConfig, '#container');
   }).before(async () => {
     await createWidget('dxScheduler', {
       timeZone: 'America/Los_Angeles',

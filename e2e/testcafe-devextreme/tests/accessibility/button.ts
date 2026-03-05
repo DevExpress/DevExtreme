@@ -14,12 +14,9 @@ const optionsWithSimpleItems: Options<Properties> = {
   disabled: [true, false],
   icon: [undefined, 'user'],
   text: [undefined, 'text'],
-  // NOTE: Doesn't matter if there are contrast issues
-  // stylingMode: ['text', 'contained', 'outlined'],
-  // type: ['danger', 'default', 'normal', 'success'],
 };
 
-const created = async (t: TestController, optionConfiguration): Promise<void> => {
+const created = async (_t: TestController, optionConfiguration): Promise<void> => {
   const { icon, text } = optionConfiguration;
 
   if (!(icon && text)) {
@@ -35,8 +32,6 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
 
 const a11yCheckConfig = {
   rules: {
-    // NOTE: color-contrast issues
-    'color-contrast': { enabled: false },
     // NOTE: false positive in isMaterialBased
     'nested-interactive': { enabled: !isMaterialBased() },
   },

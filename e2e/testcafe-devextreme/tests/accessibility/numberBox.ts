@@ -13,15 +13,10 @@ const options: Options<Properties> = {
   readOnly: [true, false],
   showClearButton: [true, false],
   showSpinButtons: [true, false],
-  // NOTE: Doesn't matter if there are contrast issues
-  // stylingMode: ['outlined', 'filled', 'underlined'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 
-const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: false } },
-};
+const a11yCheckConfig = {};
 
 const configuration: Configuration = {
   component: 'dxNumberBox',

@@ -2,7 +2,6 @@ import { Item, Properties } from 'devextreme/ui/tabs.d';
 import url from '../../helpers/getPageUrl';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { isMaterial, isMaterialBased } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'));
@@ -33,15 +32,8 @@ const created = async (t: TestController): Promise<void> => {
   await t.pressKey('tab');
 };
 
-const a11yCheckConfig = isMaterialBased() ? {
-  // NOTE: color-contrast issues in Material
-  runOnly: isMaterial() ? '' : 'color-contrast',
-  rules: { 'color-contrast': { enabled: !isMaterial() } },
-} : {};
-
 const configuration: Configuration = {
   component: 'dxTabs',
-  a11yCheckConfig,
   options,
   created,
 };

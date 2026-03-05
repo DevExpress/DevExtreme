@@ -1,5 +1,6 @@
 export {
     AIIntegration,
+    AIIntegrationOptions,
     AIProvider,
     AIResponse,
     GenerateGridColumnCommandResponse,

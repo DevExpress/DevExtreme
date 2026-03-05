@@ -106,14 +106,14 @@ module('ScrollTo', {
             scheduler.instance.scrollTo(new Date(2020, 8, 5));
             await waitAsync(0);
 
-            assert.equal(errors.log.callCount, 1, 'warning has been called once');
-            assert.equal(errors.log.getCall(0).args[0], 'W1008', 'warning has correct error id');
+            assert.equal(errors.log.callCount, 1, 'warnings have been called once');
+            assert.equal(errors.log.getCall(0).args[0], 'W1008', 'first warning has correct error id');
 
             scheduler.instance.scrollTo(new Date(2020, 8, 14));
             await waitAsync(0);
 
-            assert.equal(errors.log.callCount, 2, 'warning has been called once');
-            assert.equal(errors.log.getCall(1).args[0], 'W1008', 'warning has correct error id');
+            assert.equal(errors.log.callCount, 2, 'warnings have been called two times total');
+            assert.equal(errors.log.getCall(1).args[0], 'W1008', 'second warning has correct error id');
         });
 
         test(`A warning should not be thrown when scrolling to a valid date when ${scrolling.text} is used`, async function(assert) {
@@ -122,7 +122,7 @@ module('ScrollTo', {
             scheduler.instance.scrollTo(new Date(2020, 8, 7));
             await waitAsync(0);
 
-            assert.equal(errors.log.callCount, 0, 'warning has been called once');
+            assert.equal(errors.log.callCount, 0, 'warning has not been called');
         });
 
         [{

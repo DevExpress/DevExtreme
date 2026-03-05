@@ -11,6 +11,7 @@
       :show-avatar="false"
       :show-day-headers="false"
       :user="user"
+      :speech-to-text-enabled="true"
       message-template="message"
       v-model:typing-users="typingUsers"
       v-model:alerts="alerts"

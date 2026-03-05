@@ -21,10 +21,7 @@
   $base-focus-color: $base-focus-color,
   $datagrid-text-stub-background-image-path: $datagrid-text-stub-background-image-path,
 );
-
-// adduse
-
-
+@use 'layout/cell';
 @include grid-base(datagrid);
 
 .dx-datagrid-group-panel {
@@ -84,16 +81,6 @@
 
 
   .dx-row.dx-group-row {
-    .dx-group-cell {
-      &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
-        padding-left: 0;
-        padding-right: 0;
-        overflow: initial;
-        overflow-x: clip;
-        background-color: transparent;
-      }
-    }
-
     &:not(.dx-row-focused) {
       color: $datagrid-group-row-color;
       background-color: $datagrid-group-row-bg;
@@ -101,15 +88,6 @@
 
     font-size: $fluent-grid-base-header-cell-font-size;
     font-weight: 500;
-
-    td {
-      border-top-color: $fluent-grid-base-border-color;
-      border-bottom-color: $fluent-grid-base-border-color;
-
-      &.dx-datagrid-sticky-column, &.dx-datagrid-sticky-column-left, &.dx-datagrid-sticky-column-right {
-        background-color: $datagrid-group-row-bg;
-      }
-    }
   }
 }
 
@@ -133,33 +111,8 @@
     border-bottom-color: $datagrid-border-color;
   }
 
-  & > td {
-    border-top: $datagrid-border;
-    border-top-color: $datagrid-border-color;
-    background-color: $datagrid-summary-bg;
-    border-left-width: 0;
-    border-right-width: 0;
-  }
 }
 
-.dx-datagrid-sticky-columns {
-  .dx-row.dx-datagrid-group-footer > td {
-    border-bottom: $datagrid-border;
-    border-bottom-color: $datagrid-border-color;
-  }
-
-  .dx-row.dx-row-lines, .dx-row.dx-group-row, .dx-datagrid-group-footer, .dx-edit-row {
-    &+.dx-datagrid-group-footer, &+.dx-row.dx-group-row, &+.dx-master-detail-row, &+.dx-edit-row {
-      td {
-        border-top: none;
-      }
-    }
-  }
-
-  .dx-row.dx-group-row:first-child td {
-    padding-top: $fluent-grid-base-cell-vertical-padding;
-  }
-}
 
 .dx-rtl {
   .dx-datagrid-group-panel {

@@ -104,7 +104,9 @@ export class FilterPanelView extends modules.View {
         that.option('filterPanel.filterEnabled', e.value);
       },
     });
-    $element.attr('title', this.option('filterPanel.texts.filterEnabledHint')!);
+    const filterEnabledHint = this.option('filterPanel.texts.filterEnabledHint')
+      ?? messageLocalization.format('dxDataGrid-filterPanelFilterEnabledHint');
+    $element.attr('title', filterEnabledHint);
     return $element;
   }
 
@@ -142,7 +144,8 @@ export class FilterPanelView extends modules.View {
         $textElement.text(filterText);
       });
     } else {
-      filterText = that.option('filterPanel.texts.createFilter');
+      filterText = that.option('filterPanel.texts.createFilter')
+        ?? messageLocalization.format('dxDataGrid-filterPanelCreateFilter');
       $textElement.text(filterText);
     }
 
@@ -163,9 +166,11 @@ export class FilterPanelView extends modules.View {
     const that = this;
     // @ts-expect-error
     const clearFilterValue = () => that.option('filterValue', null);
+    const clearFilterText = that.option('filterPanel.texts.clearFilter')
+      ?? messageLocalization.format('dxDataGrid-filterPanelClearFilter');
     const $element = $('<div>')
       .addClass(that.addWidgetPrefix(FILTER_PANEL_CLEAR_FILTER_CLASS))
-      .text(that.option('filterPanel.texts.clearFilter')!);
+      .text(clearFilterText);
 
     eventsEngine.on($element, 'click', clearFilterValue);
 
@@ -232,6 +237,24 @@ export class FilterPanelView extends modules.View {
     return deferred.promise();
   }
 
+  private getFilterOperationDescriptions() {
+    return {
+      between: this.option('filterBuilder.filterOperationDescriptions.between') ?? messageLocalization.format('dxFilterBuilder-filterOperationBetween'),
+      equal: this.option('filterBuilder.filterOperationDescriptions.equal') ?? messageLocalization.format('dxFilterBuilder-filterOperationEquals'),
+      notEqual: this.option('filterBuilder.filterOperationDescriptions.notEqual') ?? messageLocalization.format('dxFilterBuilder-filterOperationNotEquals'),
+      lessThan: this.option('filterBuilder.filterOperationDescriptions.lessThan') ?? messageLocalization.format('dxFilterBuilder-filterOperationLess'),
+      lessThanOrEqual: this.option('filterBuilder.filterOperationDescriptions.lessThanOrEqual') ?? messageLocalization.format('dxFilterBuilder-filterOperationLessOrEquals'),
+      greaterThan: this.option('filterBuilder.filterOperationDescriptions.greaterThan') ?? messageLocalization.format('dxFilterBuilder-filterOperationGreater'),
+      greaterThanOrEqual: this.option('filterBuilder.filterOperationDescriptions.greaterThanOrEqual') ?? messageLocalization.format('dxFilterBuilder-filterOperationGreaterOrEquals'),
+      startsWith: this.option('filterBuilder.filterOperationDescriptions.startsWith') ?? messageLocalization.format('dxFilterBuilder-filterOperationStartsWith'),
+      contains: this.option('filterBuilder.filterOperationDescriptions.contains') ?? messageLocalization.format('dxFilterBuilder-filterOperationContains'),
+      notContains: this.option('filterBuilder.filterOperationDescriptions.notContains') ?? messageLocalization.format('dxFilterBuilder-filterOperationNotContains'),
+      endsWith: this.option('filterBuilder.filterOperationDescriptions.endsWith') ?? messageLocalization.format('dxFilterBuilder-filterOperationEndsWith'),
+      isBlank: this.option('filterBuilder.filterOperationDescriptions.isBlank') ?? messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
+      isNotBlank: this.option('filterBuilder.filterOperationDescriptions.isNotBlank') ?? messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank'),
+    };
+  }
+
   private getConditionText(filterValue, options) {
     const that = this;
     const operation = filterValue[1];
@@ -242,13 +265,14 @@ export class FilterPanelView extends modules.View {
     const field = getField(filterValue[0], options.columns);
     const fieldText = field.caption || '';
     const value = filterValue[2];
+    const filterOperationDescriptions = this.getFilterOperationDescriptions();
 
     if (customOperation) {
       operationText = customOperation.caption || inflector.captionize(customOperation.name);
     } else if (value === null) {
-      operationText = getCaptionByOperation(operation === '=' ? 'isblank' : 'isnotblank', options.filterOperationDescriptions);
+      operationText = getCaptionByOperation(operation === '=' ? 'isblank' : 'isnotblank', filterOperationDescriptions);
     } else {
-      operationText = getCaptionByOperation(operation, options.filterOperationDescriptions);
+      operationText = getCaptionByOperation(operation, filterOperationDescriptions);
     }
     this._getValueText(field, customOperation, value).done((valueText) => {
       deferred.resolve(that._getConditionText(fieldText, operationText, valueText));
@@ -291,8 +315,13 @@ export class FilterPanelView extends modules.View {
     const options = {
       customOperations,
       columns: this._columnsController.getFilteringColumns(),
-      filterOperationDescriptions: this.option('filterBuilder.filterOperationDescriptions'),
-      groupOperationDescriptions: this.option('filterBuilder.groupOperationDescriptions'),
+      filterOperationDescriptions: this.getFilterOperationDescriptions(),
+      groupOperationDescriptions: {
+        and: this.option('filterBuilder.groupOperationDescriptions.and') ?? messageLocalization.format('dxFilterBuilder-and'),
+        or: this.option('filterBuilder.groupOperationDescriptions.or') ?? messageLocalization.format('dxFilterBuilder-or'),
+        notAnd: this.option('filterBuilder.groupOperationDescriptions.notAnd') ?? messageLocalization.format('dxFilterBuilder-notAnd'),
+        notOr: this.option('filterBuilder.groupOperationDescriptions.notOr') ?? messageLocalization.format('dxFilterBuilder-notOr'),
+      },
     };
     return isCondition(filterValue) ? this.getConditionText(filterValue, options) : this.getGroupText(filterValue, options);
   }
@@ -317,11 +346,6 @@ export const filterPanelModule = {
       filterPanel: {
         visible: false,
         filterEnabled: true,
-        texts: {
-          createFilter: messageLocalization.format('dxDataGrid-filterPanelCreateFilter'),
-          clearFilter: messageLocalization.format('dxDataGrid-filterPanelClearFilter'),
-          filterEnabledHint: messageLocalization.format('dxDataGrid-filterPanelFilterEnabledHint'),
-        },
       },
     };
   },

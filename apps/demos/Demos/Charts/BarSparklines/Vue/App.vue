@@ -7,7 +7,7 @@
         border="1"
       >
         <tr>
-          <th/>
+          <th><div class="dx-screen-reader-only">Year</div></th>
           <th>Aluminium (USD/ton)</th>
           <th>Nickel (USD/ton)</th>
           <th>Copper (USD/ton)</th>

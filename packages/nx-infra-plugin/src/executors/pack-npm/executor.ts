@@ -21,7 +21,7 @@ const runExecutor: PromiseExecutor<PackNpmExecutorSchema> = async (options, cont
   }
 
   try {
-    logger.info(`Running pnpm pack from ${absoluteProjectRoot} (packaging ${distDirectory})...`);
+    logger.verbose(`Running pnpm pack from ${absoluteProjectRoot} (packaging ${distDirectory})...`);
 
     const projectPath = path.join(workspaceRoot, 'packages', context.projectName);
 
@@ -30,7 +30,7 @@ const runExecutor: PromiseExecutor<PackNpmExecutorSchema> = async (options, cont
       stdio: 'inherit',
     });
 
-    logger.info(MSG_PACK_SUCCESS);
+    logger.verbose(MSG_PACK_SUCCESS);
     return { success: true };
   } catch (error) {
     logError(MSG_PACK_FAILED, error);

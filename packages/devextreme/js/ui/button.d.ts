@@ -166,9 +166,6 @@ export default class dxButton extends Widget<dxButtonOptions> { }
 /** @public */
 export type Properties = dxButtonOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxButtonOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

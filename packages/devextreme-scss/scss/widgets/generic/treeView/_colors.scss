@@ -33,6 +33,7 @@ $treeview-border-color: $base-border-color !default;
 $treeview-item-selected-color: null !default;
 $treeview-item-selected-bg: null !default;
 $treeview-item-selected-hover-bg: null !default;
+$treeview-item-content-disabled: null !default;
 
 /**
 * $name 120. Arrow icon color
@@ -52,6 +53,7 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-item-selected-bg: color.change($base-accent, $alpha: 0.48) !default;
   $treeview-item-selected-hover-bg: color.change($base-accent, $alpha: 0.3) !default;
   $treeview-spin-icon-color: $base-header-color !default;
+  $treeview-item-content-disabled: color.adjust($base-text-color, $lightness: 40%, $space: hsl) !default;
 }
 
 @if $color == "contrast" {
@@ -63,6 +65,7 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-item-selected-bg: $base-inverted-bg !default;
   $treeview-item-selected-hover-bg: $base-inverted-bg !default;
   $treeview-spin-icon-color: $base-icon-color !default;
+  $treeview-item-content-disabled: color.adjust($base-text-color, $lightness: -48.24%, $space: hsl) !default;
 }
 
 @if $color == "dark" {
@@ -75,6 +78,7 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-item-selected-bg: color.change(#fff, $alpha: 0.12) !default;
   $treeview-item-selected-hover-bg: color.change(#fff, $alpha: 0.09) !default;
   $treeview-spin-icon-color: $base-icon-color !default;
+  $treeview-item-content-disabled: color.change($base-text-color, $lightness: 51.8%, $space: hsl) !default;
 }
 
 @if $color == "darkmoon" {
@@ -87,6 +91,7 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-item-selected-bg: color.change(#748fbc, $alpha: 0.42) !default;
   $treeview-item-selected-hover-bg: color.change(#748fbc, $alpha: 0.3) !default;
   $treeview-spin-icon-color: $base-icon-color !default;
+  $treeview-item-content-disabled: color.adjust($base-text-color, $lightness: -48.24%, $space: hsl) !default;
 }
 
 @if $color == "darkviolet" {
@@ -99,6 +104,7 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-item-selected-bg: color.change($base-accent, $alpha: 0.46) !default;
   $treeview-item-selected-hover-bg: color.change($base-accent, $alpha: 0.6) !default;
   $treeview-spin-icon-color: $base-header-color !default;
+  $treeview-item-content-disabled: color.change($base-text-color, $saturation: 0%, $lightness: 51.76%, $space: hsl) !default;
 }
 
 @if $color == "greenmist" {
@@ -111,6 +117,7 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-item-selected-bg: color.change(#000, $alpha: 0.1) !default;
   $treeview-item-selected-hover-bg: color.change(#000, $alpha: 0.2) !default;
   $treeview-spin-icon-color: $base-icon-color !default;
+  $treeview-item-content-disabled: color.change($base-text-color, $saturation: 0%, $lightness: 60%, $space: hsl) !default;
 }
 
 @if $color == "light" {
@@ -123,6 +130,7 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-item-selected-bg: color.change(#000, $alpha: 0.1) !default;
   $treeview-item-selected-hover-bg: color.change(#000, $alpha: 0.07) !default;
   $treeview-spin-icon-color: $base-icon-color !default;
+  $treeview-item-content-disabled: color.adjust($base-text-color, $lightness: 40%, $space: hsl) !default;
 }
 
 @if $color == "softblue" {
@@ -135,5 +143,5 @@ $generic-treeview-focused-row-load-indicator-color: #fff;
   $treeview-item-selected-bg: color.change(#000, $alpha: 0.1) !default;
   $treeview-item-selected-hover-bg: color.change(#000, $alpha: 0.15) !default;
   $treeview-spin-icon-color: $base-icon-color !default;
+  $treeview-item-content-disabled: color.adjust($base-text-color, $lightness: 40%, $space: hsl) !default;
 }
-

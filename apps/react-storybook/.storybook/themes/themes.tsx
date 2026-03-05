@@ -11,20 +11,20 @@ export const themeToolbarItems = [
     { title: 'Generic Dark Violet', value: 'darkviolet' },
     { title: 'Generic Green Mist', value: 'greenmist' },
     { title: 'Generic Contrast', value: 'contrast' },
-    { title: 'Material Blue Light', value: 'material.blue.light' },
-    { title: 'Material Blue Dark', value: 'material.blue.dark' },
-    { title: 'Material Lime Light', value: 'material.lime.light' },
-    { title: 'Material Lime Dark', value: 'material.lime.dark' },
-    { title: 'Material Orange Light', value: 'material.orange.light' },
-    { title: 'Material Orange Dark', value: 'material.orange.dark' },
-    { title: 'Material Purple Light', value: 'material.purple.light' },
-    { title: 'Material Purple Dark', value: 'material.purple.dark' },
-    { title: 'Material Teal Light', value: 'material.teal.light' },
-    { title: 'Material Teal Dark', value: 'material.teal.dark' },
-    { title: 'Fluent Blue Light', value: 'fluent.blue.light' },
-    { title: 'Fluent Blue Dark', value: 'fluent.blue.dark' },
-    { title: 'Fluent Saas Light', value: 'fluent.saas.light' },
-    { title: 'Fluent Saas Dark', value: 'fluent.saas.dark' },
+    { title: 'Material Blue Light', value: 'material-blue-light' },
+    { title: 'Material Blue Dark', value: 'material-blue-dark' },
+    { title: 'Material Lime Light', value: 'material-lime-light' },
+    { title: 'Material Lime Dark', value: 'material-lime-dark' },
+    { title: 'Material Orange Light', value: 'material-orange-light' },
+    { title: 'Material Orange Dark', value: 'material-orange-dark' },
+    { title: 'Material Purple Light', value: 'material-purple-light' },
+    { title: 'Material Purple Dark', value: 'material-purple-dark' },
+    { title: 'Material Teal Light', value: 'material-teal-light' },
+    { title: 'Material Teal Dark', value: 'material-teal-dark' },
+    { title: 'Fluent Blue Light', value: 'fluent-blue-light' },
+    { title: 'Fluent Blue Dark', value: 'fluent-blue-dark' },
+    { title: 'Fluent Saas Light', value: 'fluent-saas-light' },
+    { title: 'Fluent Saas Dark', value: 'fluent-saas-dark' },
 ];
 
 export const compact = [
@@ -33,9 +33,26 @@ export const compact = [
 ]
 
 export const ThemeDecorator: Decorator = (Story, ctx) => {
-    const { theme, compact } = ctx.globals;
+    const { theme: rawTheme, compact } = ctx.globals;
+    const theme = rawTheme.replaceAll('-', '.');
+
+    const [prevTheme, setPrevTheme] = React.useState<string | null>(null);
+    const [prevCompact, setPrevCompact] = React.useState<boolean | null>(null);
+
+    React.useEffect(() => {
+        if (prevTheme !== null && prevCompact !== null) {
+            if (prevTheme !== rawTheme || prevCompact !== compact) {
+                window.location.reload();
+            }
+        }
+
+        setPrevTheme(rawTheme);
+        setPrevCompact(compact);
+    }, [rawTheme, compact]);
+
     const themeName = theme.split('.').length < 3 ? 'generic' : theme.split('.')[0];
-    const cssFileHref = `css/dx.${theme}${compact ? '.compact' : ''}.css`
+    const cssFileHref = `css/dx.${theme}${compact ? '.compact' : ''}.css`;
+
     return (
         <div className={`dx-theme-${themeName}-typography storybook-theme-decorator`}>
             <link rel="stylesheet" href={cssFileHref} />

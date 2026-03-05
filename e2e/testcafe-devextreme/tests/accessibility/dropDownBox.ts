@@ -22,10 +22,7 @@ const buttonsOptions: Options<Properties> = {
   inputAttr: [{ 'aria-label': 'DropDownBox' }],
 };
 
-const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: false } },
-};
+const a11yCheckConfig = {};
 
 const deferredConfiguration: Configuration = {
   component: 'dxDropDownBox',

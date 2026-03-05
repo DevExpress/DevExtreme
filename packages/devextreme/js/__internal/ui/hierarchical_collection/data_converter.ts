@@ -72,6 +72,8 @@ class DataConverter {
 
   private _visibleItemsCount = 0;
 
+  private _disabledItemsCount = 0;
+
   _indexByKey: Record<string | number, number> = {};
 
   private _dataAccessors!: DataAccessors;
@@ -124,17 +126,26 @@ class DataConverter {
 
   _convertItemToNode(item: ItemData, parentKey?: ItemKey): InternalNode {
     this._itemsCount += 1;
+
+    const disabled = this._dataAccessors.getters.disabled(item, { defaultValue: false });
+    const expanded = this._dataAccessors.getters.expanded(item, { defaultValue: false });
+    const selected = this._dataAccessors.getters.selected(item, { defaultValue: false });
+
     if (item.visible !== false) {
       this._visibleItemsCount += 1;
+
+      if (disabled) {
+        this._disabledItemsCount += 1;
+      }
     }
 
     const { items, ...itemWithoutItems } = item;
 
     const node = {
       internalFields: {
-        disabled: this._dataAccessors.getters.disabled(item, { defaultValue: false }),
-        expanded: this._dataAccessors.getters.expanded(item, { defaultValue: false }),
-        selected: this._dataAccessors.getters.selected(item, { defaultValue: false }),
+        disabled,
+        expanded,
+        selected,
         key: this._getUniqueKey(item),
         parentKey: isDefined(parentKey) ? parentKey : this._rootValue,
         item: this._makeObjectFromPrimitive(item),
@@ -265,6 +276,10 @@ class DataConverter {
     return this._itemsCount;
   }
 
+  getDisabledItemsCount(): number {
+    return this._disabledItemsCount;
+  }
+
   getVisibleItemsCount(): number {
     return this._visibleItemsCount;
   }
@@ -302,6 +317,7 @@ class DataConverter {
   ): (InternalNode | null)[] {
     this._itemsCount = 0;
     this._visibleItemsCount = 0;
+    this._disabledItemsCount = 0;
     this._rootValue = rootValue;
     this._dataType = dataType;
     this._indexByKey = {};

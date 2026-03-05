@@ -579,6 +579,25 @@ export default [
             'devextreme-custom/no-deferred': 'off',
         },
     },
+    // Strict TypeScript rules for scheduler/header
+    {
+        files: ['js/__internal/scheduler/header/**/*.ts?(x)'],
+        languageOptions: {
+            parser: tsParser,
+            ecmaVersion: 5,
+            sourceType: 'script',
+            parserOptions: {
+                project: './tsconfig.json',
+                tsconfigRootDir: `${__dirname}/js/__internal`,
+            },
+        },
+        rules: {
+            '@typescript-eslint/no-explicit-any': 'error',
+            '@typescript-eslint/explicit-function-return-type': 'error',
+            '@typescript-eslint/no-unsafe-return': 'error',
+            '@typescript-eslint/explicit-module-boundary-types': 'error',
+        },
+    },
     // Rules for grid controls
     {
         files: [

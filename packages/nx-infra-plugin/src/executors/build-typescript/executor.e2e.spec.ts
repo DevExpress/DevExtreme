@@ -8,24 +8,27 @@ import { writeFileText, writeJson, readFileText } from '../../utils';
 describe('BuildTypescriptExecutor E2E', () => {
   let tempDir: string;
   let context = createMockContext();
+  let projectDir: string;
 
   beforeEach(async () => {
     tempDir = createTempDir('nx-build-ts-e2e-');
     context = createMockContext({ root: tempDir });
-
-    const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    projectDir = path.join(tempDir, 'packages', 'test-lib');
 
     const srcDir = path.join(projectDir, 'src');
     fs.mkdirSync(srcDir, { recursive: true });
 
+    const utilsDir = path.join(srcDir, 'utils');
+    fs.mkdirSync(utilsDir, { recursive: true });
+
     await writeFileText(
-      path.join(srcDir, 'index.ts'),
-      `export function hello(name: string): string {\n  return \`Hello, \${name}!\`;\n}\n`,
+      path.join(utilsDir, 'index.ts'),
+      `export const add = (a: number, b: number): number => a + b;\n`,
     );
 
     await writeFileText(
-      path.join(srcDir, 'utils.ts'),
-      `export const add = (a: number, b: number): number => a + b;\n`,
+      path.join(srcDir, 'index.ts'),
+      `import { add } from '@lib/utils';\nexport function hello(name: string): string {\n  return \`Hello, \${name}! Sum: \${add(1, 2)}\`;\n}\n`,
     );
 
     fs.mkdirSync(path.join(srcDir, '__tests__'), { recursive: true });
@@ -46,6 +49,10 @@ describe('BuildTypescriptExecutor E2E', () => {
         strict: true,
         esModuleInterop: true,
         skipLibCheck: true,
+        baseUrl: './src',
+        paths: {
+          '@lib/*': ['./*'],
+        },
       },
       include: ['src/**/*'],
       exclude: ['**/*.spec.ts', '**/__tests__/**'],
@@ -63,6 +70,10 @@ describe('BuildTypescriptExecutor E2E', () => {
         strict: true,
         esModuleInterop: true,
         skipLibCheck: true,
+        baseUrl: './src',
+        paths: {
+          '@lib/*': ['./*'],
+        },
       },
       include: ['src/**/*'],
       exclude: ['**/*.spec.ts', '**/__tests__/**'],
@@ -73,92 +84,92 @@ describe('BuildTypescriptExecutor E2E', () => {
     cleanupTempDir(tempDir);
   });
 
-  describe('ESM build', () => {
-    it('should compile TypeScript to ESM successfully', async () => {
+  describe.each([
+    {
+      moduleType: 'esm' as const,
+      tsconfig: './tsconfig.esm.json',
+      outDir: './npm/esm',
+      expectedExport: 'export',
+      unexpectedExport: 'module.exports',
+    },
+    {
+      moduleType: 'cjs' as const,
+      tsconfig: './tsconfig.json',
+      outDir: './npm/cjs',
+      expectedExport: 'exports',
+      unexpectedExport: 'export function',
+    },
+  ])('$moduleType build', ({ moduleType, tsconfig, outDir, expectedExport, unexpectedExport }) => {
+    it('should compile and exclude test files', async () => {
       const options: BuildTypescriptExecutorSchema = {
-        module: 'esm',
+        module: moduleType,
         srcPattern: './src/**/*.{ts,tsx}',
         excludePatterns: ['./src/**/__tests__/**/*'],
-        tsconfig: './tsconfig.esm.json',
-        outDir: './npm/esm',
+        tsconfig,
+        outDir,
       };
 
       const result = await executor(options, context);
 
       expect(result.success).toBe(true);
 
-      const projectDir = path.join(tempDir, 'packages', 'test-lib');
-      const outDir = path.join(projectDir, 'npm', 'esm');
+      const outputDir = path.join(projectDir, outDir.replace('./', ''));
 
-      expect(fs.existsSync(path.join(outDir, 'index.js'))).toBe(true);
-      expect(fs.existsSync(path.join(outDir, 'utils.js'))).toBe(true);
+      expect(fs.existsSync(path.join(outputDir, 'index.js'))).toBe(true);
+      expect(fs.existsSync(path.join(outputDir, 'utils', 'index.js'))).toBe(true);
+      expect(fs.existsSync(path.join(outputDir, 'index.d.ts'))).toBe(true);
 
-      expect(fs.existsSync(path.join(outDir, 'index.d.ts'))).toBe(true);
-      expect(fs.existsSync(path.join(outDir, 'utils.d.ts'))).toBe(true);
+      expect(fs.existsSync(path.join(outputDir, '__tests__'))).toBe(false);
 
-      const indexContent = await readFileText(path.join(outDir, 'index.js'));
-      expect(indexContent).toContain('export');
-      expect(indexContent).not.toContain('module.exports');
+      const indexContent = await readFileText(path.join(outputDir, 'index.js'));
+      expect(indexContent).toContain(expectedExport);
+      expect(indexContent).not.toContain(unexpectedExport);
+
+      expect(indexContent).toContain('@lib/utils');
     }, 10000);
-  });
 
-  describe('CJS build', () => {
-    it('should compile TypeScript to CommonJS successfully', async () => {
+    it('should resolve path aliases when resolvePaths is enabled', async () => {
       const options: BuildTypescriptExecutorSchema = {
-        module: 'cjs',
+        module: moduleType,
         srcPattern: './src/**/*.{ts,tsx}',
         excludePatterns: ['./src/**/__tests__/**/*'],
-        tsconfig: './tsconfig.json',
-        outDir: './npm/cjs',
+        tsconfig,
+        outDir,
+        resolvePaths: true,
+        resolvePathsBaseDir: './src',
       };
 
       const result = await executor(options, context);
 
       expect(result.success).toBe(true);
 
-      const projectDir = path.join(tempDir, 'packages', 'test-lib');
-      const outDir = path.join(projectDir, 'npm', 'cjs');
+      const outputDir = path.join(projectDir, outDir.replace('./', ''));
+      const indexContent = await readFileText(path.join(outputDir, 'index.js'));
 
-      expect(fs.existsSync(path.join(outDir, 'index.js'))).toBe(true);
-      expect(fs.existsSync(path.join(outDir, 'utils.js'))).toBe(true);
-
-      const indexContent = await readFileText(path.join(outDir, 'index.js'));
-      expect(indexContent).toContain('exports');
-      expect(indexContent).not.toContain('export function');
+      expect(indexContent).not.toContain('@lib/utils');
+      expect(indexContent).toContain('./utils');
     }, 10000);
   });
 
   describe('Error handling', () => {
-    it('should handle missing tsconfig file', async () => {
-      const projectDir = path.join(tempDir, 'packages', 'test-lib');
-
+    it('should fail when tsconfig is missing', async () => {
       fs.unlinkSync(path.join(projectDir, 'tsconfig.esm.json'));
 
-      const options: BuildTypescriptExecutorSchema = {
-        module: 'esm',
-        tsconfig: './tsconfig.esm.json',
-      };
-
-      const result = await executor(options, context);
+      const result = await executor({ tsconfig: './tsconfig.esm.json' }, context);
 
       expect(result.success).toBe(false);
     });
 
-    it('should handle empty source directory', async () => {
-      const projectDir = path.join(tempDir, 'packages', 'test-lib');
+    it('should fail when no files match pattern', async () => {
+      const result = await executor({ srcPattern: './nonexistent/**/*.ts' }, context);
 
-      fs.rmSync(path.join(projectDir, 'src'), { recursive: true, force: true });
-      fs.mkdirSync(path.join(projectDir, 'src'));
+      expect(result.success).toBe(false);
+    });
 
-      fs.writeFileSync(path.join(projectDir, 'src', 'empty.ts'), '');
+    it('should fail when resolvePaths is true but resolvePathsBaseDir is missing', async () => {
+      const result = await executor({ resolvePaths: true }, context);
 
-      const options: BuildTypescriptExecutorSchema = {
-        module: 'esm',
-      };
-
-      const result = await executor(options, context);
-
-      expect(result).toHaveProperty('success');
+      expect(result.success).toBe(false);
     });
   });
 });

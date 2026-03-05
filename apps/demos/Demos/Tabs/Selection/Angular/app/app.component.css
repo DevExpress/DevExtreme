@@ -45,7 +45,7 @@
 
 ::ng-deep .demo-info {
   padding-left: 8px;
-  opacity: 0.6;
+  color: var(--dx-color-icon);
 }
 
 ::ng-deep .icon-container {

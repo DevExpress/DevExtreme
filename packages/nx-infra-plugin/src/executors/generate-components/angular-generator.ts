@@ -32,7 +32,7 @@ export async function generateAngularComponents(
     path.join(path.dirname(componentsDir), 'metadata', 'generated'),
   );
 
-  logger.info('📝 Generating Angular-specific metadata...');
+  logger.verbose('📝 Generating Angular-specific metadata...');
   const metadataGenerator = new AngularMetadataGenerator();
   metadataGenerator.generate({
     outputFolderPath: metadataDir,
@@ -45,9 +45,9 @@ export async function generateAngularComponents(
     sourceMetadataFilePath: require.resolve('devextreme-metadata/NGMetaData.json'),
     imdMetadataFilePath: require.resolve('devextreme-metadata/integration-data.json'),
   });
-  logger.info('✓ Metadata generation completed');
+  logger.verbose('✓ Metadata generation completed');
 
-  logger.info('🔨 Generating component TypeScript files...');
+  logger.verbose('🔨 Generating component TypeScript files...');
   const componentGenerator = new AngularDotGenerator();
   componentGenerator.generate({
     metadataFolderPath: metadataDir,
@@ -58,9 +58,9 @@ export async function generateAngularComponents(
     nestedPathPart: 'nested',
     basePathPart: 'base',
   });
-  logger.info('✓ Component files generated');
+  logger.verbose('✓ Component files generated');
 
-  logger.info('📦 Generating module facades...');
+  logger.verbose('📦 Generating module facades...');
   const moduleFacadeGenerator = new AngularModuleFacadeGenerator();
   moduleFacadeGenerator.generate({
     moduleFacades: {
@@ -72,9 +72,9 @@ export async function generateAngularComponents(
       },
     },
   });
-  logger.info('✓ Module facades generated');
+  logger.verbose('✓ Module facades generated');
 
-  logger.info('📋 Generating index facades...');
+  logger.verbose('📋 Generating index facades...');
   const facadeGenerator = new AngularFacadeGenerator();
   facadeGenerator.generate({
     facades: {
@@ -85,13 +85,13 @@ export async function generateAngularComponents(
     commonImports: ['./common', './common/grids', './common/charts'],
     templatingOptions: config.templatingOptions,
   });
-  logger.info('✓ Index facades generated');
+  logger.verbose('✓ Index facades generated');
 
-  logger.info('🔗 Generating common reexports...');
+  logger.verbose('🔗 Generating common reexports...');
   AngularCommonReexportsGenerator.generate({
     outputPath: path.dirname(componentsDir),
     metadata: metaData,
     templatingOptions: config.templatingOptions,
   });
-  logger.info('✓ Common reexports generated');
+  logger.verbose('✓ Common reexports generated');
 }

@@ -15,11 +15,13 @@ import {
   execCode,
   injectStyle,
 } from '../utils/visual-tests/matrix-test-helper';
-import { testScreenshot } from '../utils/visual-tests/helpers/theme-utils';
+import {
+  testScreenshot,
+  isMaterial,
+  isFluent,
+} from '../utils/visual-tests/helpers/theme-utils';
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
-import { accessibilityUnsupportedComponents } from './accessibility-unsupported-components';
 import { knownWarnings } from './known-warnings';
-import { skipJsErrorsComponents } from './skip-js-errors-components';
 import { skippedTests } from './skipped-tests';
 
 import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
@@ -30,18 +32,66 @@ const execTestCafeCode = (t, code) => {
   return testCafeFunction(t);
 };
 
-const COMMON_SKIP_RULES = ['color-contrast'];
-const getTestSpecificSkipRules = (testName) => {
-  switch (testName) {
-    case 'Calendar-MultipleSelection':
-      return ['empty-table-header'];
-    case 'Localization-UsingGlobalize':
-      return ['label'];
-    case 'DataGrid-EditStateManagement':
-      return ['aria-required-parent'];
-    default:
-      return [];
+const getIgnoredRules = (testName) => {
+  const ignoredRules = [];
+
+  if ((isMaterial() || isFluent())
+    && [
+      // False positive: contrast rules do not apply to disabled tags
+      'Accordion-Overview',
+      'TagBox-Overview',
+      'TreeList-StatePersistence',
+      // False positive: contrast rules do not apply to custom orange color
+      'CardView-FieldTemplate',
+      // False positive: contrast rules do not apply to read-only editors on the custom option panel background
+      'VectorMap-DynamicViewport',
+    ].includes(testName)
+  ) {
+    ignoredRules.push('color-contrast');
   }
+
+  const specificRules = {
+    'DataGrid-EditStateManagement': ['aria-required-parent'],
+    'DataGrid-RemoteCRUDOperations': ['scrollable-region-focusable'],
+
+    'Diagram-Adaptability': ['aria-dialog-name', 'label'],
+    'Diagram-AdvancedDataBinding': ['aria-dialog-name', 'label'],
+    'Diagram-Containers': ['aria-dialog-name', 'label'],
+    'Diagram-CustomShapesWithIcons': ['aria-dialog-name', 'label'],
+    'Diagram-CustomShapesWithTemplates': ['label'],
+    'Diagram-CustomShapesWithTemplatesWithEditing': ['aria-dialog-name', 'label'],
+    'Diagram-CustomShapesWithTexts': ['aria-dialog-name', 'label'],
+    'Diagram-ImagesInShapes': ['aria-dialog-name', 'label'],
+    'Diagram-ItemSelection': ['label'],
+    'Diagram-NodesAndEdgesArrays': ['aria-dialog-name', 'label'],
+    'Diagram-NodesArrayHierarchicalStructure': ['aria-dialog-name', 'label'],
+    'Diagram-NodesArrayPlainStructure': ['aria-dialog-name', 'label'],
+    'Diagram-OperationRestrictions': ['aria-dialog-name', 'label'],
+    'Diagram-Overview': ['aria-dialog-name', 'label'],
+    'Diagram-ReadOnly': ['label'],
+    'Diagram-SimpleView': ['label'],
+    'Diagram-UICustomization': ['aria-dialog-name', 'label'],
+    'Diagram-WebAPIService': ['aria-dialog-name', 'label'],
+
+    'FileManager-BindingToEF': ['aria-command-name', 'label'],
+    'FileManager-BindingToFileSystem': ['aria-command-name', 'empty-table-header', 'label'],
+    'FileManager-BindingToHierarchicalStructure': ['aria-command-name', 'empty-table-header', 'label'],
+    'FileManager-CustomThumbnails': ['aria-allowed-attr', 'aria-command-name', 'image-alt', 'label'],
+    'FileManager-Overview': ['aria-command-name', 'empty-table-header', 'label'],
+    'FileManager-UICustomization': ['aria-command-name', 'empty-table-header', 'label'],
+
+    'Gantt-Appearance': ['aria-toggle-field-name'],
+    'Gantt-ExportToPDF': ['aria-toggle-field-name'],
+    'Gantt-StripLines': ['aria-required-parent', 'aria-valid-attr-value'],
+    'Gantt-Validation': ['aria-required-parent', 'aria-valid-attr-value'],
+
+    'Localization-UsingGlobalize': ['label'],
+  };
+
+  return [
+    ...ignoredRules,
+    ...(specificRules[testName] || []),
+  ];
 };
 
 const getClientScripts = () => {
@@ -102,10 +152,6 @@ Object.values(FRAMEWORKS).forEach((approach) => {
 
     let comparisonOptions;
     if (process.env.DISABLE_DEMO_TEST_SETTINGS !== 'all') {
-      if (process.env.STRATEGY === 'accessibility' && accessibilityUnsupportedComponents.includes(widgetName)) {
-        return;
-      }
-
       const approachLowerCase = approach.toLowerCase();
       const mergedTestSettings = (visualTestSettings && {
         ...visualTestSettings,
@@ -134,14 +180,13 @@ Object.values(FRAMEWORKS).forEach((approach) => {
       return;
     }
 
-    if (shouldSkipDemo(approach, widgetName, demoName, skippedTests)) {
+    if (shouldSkipDemo(approach, widgetName, demoName, skippedTests) && process.env.STRATEGY !== 'accessibility') {
       return;
     }
 
     runTestAtPage(
       test,
-      pageURL,
-      skipJsErrorsComponents.includes(widgetName),
+      pageURL
     )
       .clientScripts(clientScriptSource)(testName, async (t) => {
         if (visualTestStyles) {
@@ -160,10 +205,10 @@ Object.values(FRAMEWORKS).forEach((approach) => {
         }
 
         if (process.env.STRATEGY === 'accessibility') {
-          const specificSkipRules = getTestSpecificSkipRules(testName);
+          const ignoredRules = getIgnoredRules(testName);
           const options = { rules: {} };
 
-          [...COMMON_SKIP_RULES, ...specificSkipRules].forEach((ruleName) => {
+          ignoredRules.forEach((ruleName) => {
             options.rules[ruleName] = { enabled: false };
           });
 

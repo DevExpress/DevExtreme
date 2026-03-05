@@ -24,13 +24,20 @@ import { getImageContainer } from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { getHeight } from '@js/core/utils/size';
 import {
-  isDefined, isFunction, isPlainObject, isPrimitive, isString,
+  isDefined,
+  isFunction,
+  isPlainObject,
+  isPrimitive,
+  isString,
 } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import type { DxEvent, InteractionEvent, NativeEventInfo } from '@js/events';
 import type { InitializedEvent, Properties as CheckBoxProperties, ValueChangedEvent } from '@js/ui/check_box';
 import type {
-  Item, Properties, TreeViewCheckBoxMode, TreeViewExpandEvent,
+  Item,
+  Properties,
+  TreeViewCheckBoxMode,
+  TreeViewExpandEvent,
 } from '@js/ui/tree_view';
 import supportUtils from '@ts/core/utils/m_support';
 import type { OptionChanged } from '@ts/core/widget/types';
@@ -40,7 +47,10 @@ import type { ActionArgs, CollectionItemInfo, PostprocessRenderItemInfo } from '
 import type { CollectionWidgetEditProperties } from '@ts/ui/collection/collection_widget.edit';
 import type { DataAdapterOptions } from '@ts/ui/hierarchical_collection/data_adapter';
 import type {
-  InternalNode, ItemData, ItemKey, PublicNode,
+  InternalNode,
+  ItemData,
+  ItemKey,
+  PublicNode,
 } from '@ts/ui/hierarchical_collection/data_converter';
 import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/hierarchical_collection_widget';
 import type { LoadIndicatorProperties } from '@ts/ui/load_indicator';
@@ -51,13 +61,14 @@ import { getRelativeOffset } from '@ts/ui/scroll_view/utils/get_relative_offset'
 
 const WIDGET_CLASS = 'dx-treeview';
 
-const NODE_CLASS = `${WIDGET_CLASS}-node`;
-const NODE_CONTAINER_CLASS = `${NODE_CLASS}-container`;
+export const NODE_CLASS = `${WIDGET_CLASS}-node`;
+export const NODE_CONTAINER_CLASS = `${NODE_CLASS}-container`;
 const NODE_LOAD_INDICATOR_CLASS = `${NODE_CLASS}-loadindicator`;
-const OPENED_NODE_CONTAINER_CLASS = `${NODE_CLASS}-container-opened`;
+export const OPENED_NODE_CONTAINER_CLASS = `${NODE_CLASS}-container-opened`;
 const IS_LEAF = `${NODE_CLASS}-is-leaf`;
 
 export const ITEM_CLASS = `${WIDGET_CLASS}-item`;
+export const ITEM_CONTENT_CLASS = `${WIDGET_CLASS}-item-content`;
 const ITEM_WITH_CHECKBOX_CLASS = `${ITEM_CLASS}-with-checkbox`;
 const ITEM_WITH_CUSTOM_EXPANDER_ICON_CLASS = `${ITEM_CLASS}-with-custom-expander-icon`;
 const CUSTOM_EXPANDER_ICON_ITEM_CONTAINER_CLASS = `${WIDGET_CLASS}-custom-expander-icon-item-container`;
@@ -66,8 +77,8 @@ const ITEM_WITHOUT_CHECKBOX_CLASS = `${ITEM_CLASS}-without-checkbox`;
 const ITEM_DATA_KEY = `${ITEM_CLASS}-data`;
 
 export const TOGGLE_ITEM_VISIBILITY_CLASS = `${WIDGET_CLASS}-toggle-item-visibility`;
-const CUSTOM_COLLAPSE_ICON_CLASS = `${WIDGET_CLASS}-custom-collapse-icon`;
-const CUSTOM_EXPAND_ICON_CLASS = `${WIDGET_CLASS}-custom-expand-icon`;
+export const CUSTOM_COLLAPSE_ICON_CLASS = `${WIDGET_CLASS}-custom-collapse-icon`;
+export const CUSTOM_EXPAND_ICON_CLASS = `${WIDGET_CLASS}-custom-expand-icon`;
 
 const LOAD_INDICATOR_CLASS = `${WIDGET_CLASS}-loadindicator`;
 const LOAD_INDICATOR_WRAPPER_CLASS = `${WIDGET_CLASS}-loadindicator-wrapper`;
@@ -75,7 +86,9 @@ const TOGGLE_ITEM_VISIBILITY_OPENED_CLASS = `${WIDGET_CLASS}-toggle-item-visibil
 export const SELECT_ALL_ITEM_CLASS = `${WIDGET_CLASS}-select-all-item`;
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
-const DISABLED_STATE_CLASS = 'dx-state-disabled';
+export const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const DISABLED_STATE = 'disabled';
+const SELECTED_STATE = 'selected';
 const SELECTED_ITEM_CLASS = 'dx-state-selected';
 const EXPAND_EVENT_NAMESPACE = 'dxTreeView_expand';
 const DATA_ITEM_ID = 'data-item-id';
@@ -88,6 +101,7 @@ export const EXPANDER_ICON_STUB_CLASS = `${WIDGET_CLASS}-expander-icon-stub`;
 type TreeViewItem = Item & {
   url?: string;
 };
+
 type TreeViewNode = InternalNode & TreeViewItem;
 
 export interface TreeViewBaseProperties extends Properties<TreeViewNode>, Omit<
@@ -103,7 +117,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _dataSource!: any;
 
-  // eslint-disable-next-line no-restricted-globals
   _setFocusedItemTimeout?: ReturnType<typeof setTimeout>;
 
   _$selectAllItem?: dxElementWrapper;
@@ -281,6 +294,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       createChildren: null,
       onSelectAllValueChanged: null,
       _supportItemUrl: false,
+      disabledNodeSelectionMode: 'recursiveAndAll',
     };
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -314,13 +328,13 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
   _fireSelectionChanged(): void {
     this._createActionByOption('onSelectionChanged', {
-      excludeValidators: ['disabled', 'readOnly'],
+      excludeValidators: [DISABLED_STATE, 'readOnly'],
     })();
   }
 
   _createSelectAllValueChangedAction(): void {
     this._selectAllValueChangedAction = this._createActionByOption('onSelectAllValueChanged', {
-      excludeValidators: ['disabled', 'readOnly'],
+      excludeValidators: [DISABLED_STATE, 'readOnly'],
     });
   }
 
@@ -436,6 +450,10 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
         break;
       case 'expandIcon':
       case 'collapseIcon':
+        this.repaint();
+        break;
+      case 'disabledNodeSelectionMode':
+        this._dataAdapter.setOption('disabledNodeSelectionMode', args.value ?? 'recursiveAndAll');
         this.repaint();
         break;
       default:
@@ -688,6 +706,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       expandNodesRecursive = true,
       selectionRequired = false,
       dataStructure = 'tree',
+      disabledNodeSelectionMode,
     } = this.option();
 
     return {
@@ -700,6 +719,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       dataType: dataStructure,
       sort: this._dataSource?.sort(),
       langParams: this._dataSource?.loadOptions?.()?.langParams,
+      disabledNodeSelectionMode: disabledNodeSelectionMode ?? 'recursiveAndAll',
     };
   }
 
@@ -881,12 +901,11 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       $nodeContainer.addClass(CUSTOM_EXPANDER_ICON_ITEM_CONTAINER_CLASS);
     }
 
-    this.setAria('selected', nodeData.selected, $node);
-    this._toggleSelectedClass($node, nodeData.selected);
-
+    this.setAria(SELECTED_STATE, nodeData.selected, $node);
     if (nodeData.disabled) {
-      this.setAria('disabled', nodeData.disabled, $node);
+      this.setAria(DISABLED_STATE, nodeData.disabled, $node);
     }
+    this._toggleSelectedClass($node, nodeData.selected);
 
     super._renderItem(
       this._renderedItemsCount + nodeIndex,
@@ -998,8 +1017,17 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   _postprocessRenderItem(args: PostprocessRenderItemInfo<TreeViewNode>): void {
     const { itemData, itemElement } = args;
 
+    const node = this._getNode(itemData);
+
+    if (node?.internalFields.disabled) {
+      const $itemContent = $(itemElement).find(`.${ITEM_CONTENT_CLASS}`);
+      $(itemElement).removeClass(DISABLED_STATE_CLASS);
+      $(itemElement).removeAttr(`aria-${DISABLED_STATE}`);
+      $itemContent.addClass(DISABLED_STATE_CLASS);
+    }
+
     if (this._showCheckboxes()) {
-      this._renderCheckBox(itemElement, this._getNode(itemData));
+      this._renderCheckBox(itemElement, node);
     }
 
     super._postprocessRenderItem(args);
@@ -1148,9 +1176,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     if (!node) {
       return Deferred().reject().promise();
     }
-    if (node.internalFields.disabled) {
-      return Deferred().reject().promise();
-    }
 
     const currentState = node.internalFields.expanded;
     if (currentState === state) {
@@ -1207,10 +1232,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     $icon.appendTo(this._getItem($node));
     $icon.addClass(iconClass);
 
-    if (node.internalFields.disabled) {
-      $icon.addClass(DISABLED_STATE_CLASS);
-    }
-
     this._renderToggleItemVisibilityIconClick($icon, node);
   }
 
@@ -1227,10 +1248,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     if (node.internalFields.expanded) {
       $icon.addClass(TOGGLE_ITEM_VISIBILITY_OPENED_CLASS);
       $node.parent().addClass(OPENED_NODE_CONTAINER_CLASS);
-    }
-
-    if (node.internalFields.disabled) {
-      $icon.addClass(DISABLED_STATE_CLASS);
     }
 
     this._renderToggleItemVisibilityIconClick($icon, node);
@@ -1569,15 +1586,15 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
   _toggleNodeDisabledState(node: TreeViewNode, state: boolean): void {
     const $node = this._getNodeElement(node);
-    const $item = $node.find(`.${ITEM_CLASS}`).eq(0);
+    const $itemContent = $node.find(`.${ITEM_CONTENT_CLASS}`).eq(0);
 
     this._dataAdapter.toggleNodeDisabledState(node.internalFields.key, state);
 
-    $item.toggleClass(DISABLED_STATE_CLASS, !!state);
+    $itemContent.toggleClass(DISABLED_STATE_CLASS, !!state);
 
     if (this._showCheckboxes()) {
       const checkbox = this._getCheckBoxInstance($node);
-      checkbox.option('disabled', !!state);
+      checkbox.option(DISABLED_STATE, !!state);
     }
   }
 
@@ -1667,6 +1684,11 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
   ): boolean {
     const node = this._getNode(itemElement);
     if (!node || node.visible === false) {
+      return false;
+    }
+
+    const { disabledNodeSelectionMode } = this.option();
+    if (disabledNodeSelectionMode === 'never' && node.internalFields.disabled) {
       return false;
     }
 
@@ -1889,7 +1911,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
 
     const node = this._getNodeByElement($item);
 
-    if (!node) return;
+    if (!node || node.internalFields.disabled) return;
 
     this._itemDXEventHandler(e, 'onItemClick', {
       node: this._dataAdapter.getPublicNode(node),
@@ -1985,10 +2007,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     const itemElement = $target.hasClass(DISABLED_STATE_CLASS) ? null : $target;
     // @ts-expect-error ts-error
     this.option('focusedElement', getPublicElement(itemElement));
-  }
-
-  _findNonDisabledNodes($nodes: dxElementWrapper): dxElementWrapper {
-    return $nodes.not(`:has(>.${ITEM_CLASS}.${DISABLED_STATE_CLASS})`);
   }
 
   _moveFocus(location: string, e: DxEvent<KeyboardEvent>): void {
@@ -2093,7 +2111,7 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     const $node = $focusedNode.find(`.${NODE_CONTAINER_CLASS}`).eq(0);
 
     if ($node.hasClass(OPENED_NODE_CONTAINER_CLASS)) {
-      const $nextItem = this._nextItem(this._findNonDisabledNodes(this._nodeElements()));
+      const $nextItem = this._nextItem(this._nodeElements());
       this.option('focusedElement', getPublicElement($nextItem));
       this.getScrollable().scrollToElement(this._getNodeItemElement($nextItem));
       return;
@@ -2102,18 +2120,6 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
     const node = this._getNodeByElement(this._getItem($focusedNode));
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._toggleExpandedState(node, true);
-  }
-
-  _getClosestNonDisabledNode($node: dxElementWrapper): dxElementWrapper {
-    const isNodeDisabled = ($el: dxElementWrapper): boolean => $el.children(`.${ITEM_CLASS}.${DISABLED_STATE_CLASS}`).length > 0;
-
-    let currentNode = $node;
-
-    do {
-      currentNode = currentNode.parent().closest(`.${NODE_CLASS}`);
-    } while (currentNode.length && isNodeDisabled(currentNode));
-
-    return currentNode;
   }
 
   _collapseFocusedContainer(): void {
@@ -2131,13 +2137,13 @@ class TreeViewBase extends HierarchicalCollectionWidget<TreeViewBaseProperties, 
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this._toggleExpandedState(node, false);
     } else {
-      const collapsedNode = this._getClosestNonDisabledNode($focusedNode);
+      const $closestParentNode = $focusedNode.parent().closest(`.${NODE_CLASS}`);
 
-      if (collapsedNode.length) {
-        this.option('focusedElement', getPublicElement(collapsedNode));
+      if ($closestParentNode.length) {
+        this.option('focusedElement', getPublicElement($closestParentNode));
       }
 
-      this.getScrollable().scrollToElement(this._getNodeItemElement(collapsedNode));
+      this.getScrollable().scrollToElement(this._getNodeItemElement($closestParentNode));
     }
   }
 

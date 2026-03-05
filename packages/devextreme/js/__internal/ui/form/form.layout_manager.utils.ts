@@ -68,7 +68,7 @@ export interface ConvertToRenderFieldItemOptions {
   createComponentCallback: ((
     $editor: dxElementWrapper,
     component: string,
-    editorOptions: EditorProperties
+    editorOptions: EditorProperties,
   ) => Editor);
 
   item: Required<SimpleItem>;
@@ -99,7 +99,7 @@ export interface FieldItemOptions {
   createComponentCallback: ((
     $editor: dxElementWrapper,
     component: string,
-    editorOptions: EditorProperties
+    editorOptions: EditorProperties,
   ) => Editor);
 
   labelOptions: LabelOptions;

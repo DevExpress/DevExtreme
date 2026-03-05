@@ -11,10 +11,10 @@ import {
     template,
 } from '../common';
 
-import {
-    Properties as FileUploaderOptions,
-} from './file_uploader';
-
+import { Properties as FileUploaderProperties } from './file_uploader';
+import { Properties as SpeechToTextProperties } from './speech_to_text';
+import { Properties as TextAreaProperties } from './text_area';
+import { ValueChangedInfo } from './editor/editor';
 import Widget, { WidgetOptions } from './widget/ui.widget';
 import {
     EventInfo,
@@ -164,6 +164,14 @@ export type AttachmentDownloadClickEvent = EventInfo<dxChat> & {
   /** @docid _ui_chat_AttachmentDownloadClickEvent.attachment */
   readonly attachment?: Attachment;
 };
+
+/**
+ * @docid _ui_chat_InputFieldTextChangedEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo,ValueChangedInfo
+ */
+export type InputFieldTextChangedEvent = NativeEventInfo<dxChat, InteractionEvent | Event> & ValueChangedInfo;
 
 /**
  * @docid
@@ -353,11 +361,10 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     activeStateEnabled?: boolean;
     /**
      * @docid
-     * @default null
      * @type dxFileUploaderOptions
      * @public
      */
-    fileUploaderOptions?: Omit<FileUploaderOptions, 'dialogTrigger' | 'showFileList' | 'uploadMode' | 'value'>;
+    fileUploaderOptions?: Omit<FileUploaderProperties, 'dialogTrigger' | 'showFileList' | 'uploadMode' | 'value'>;
     /**
      * @docid
      * @default true
@@ -434,6 +441,13 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     alerts?: Array<Alert>;
     /**
      * @docid
+     * @default ""
+     * @type string|undefined
+     * @public
+     */
+    inputFieldText?: TextAreaProperties['value'];
+    /**
+     * @docid
      * @default null
      * @type_function_return string|Element|jQuery
      * @public
@@ -477,12 +491,32 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     showMessageTimestamp?: boolean;
     /**
      * @docid
+     * @default false
+     * @public
+     */
+    speechToTextEnabled?: boolean;
+    /**
+     * @docid
+     * @type dxSpeechToTextOptions
+     * @public
+     */
+    speechToTextOptions?: Omit<SpeechToTextProperties, 'stylingMode' | 'type'>;
+    /**
+     * @docid
      * @default undefined
      * @type_function_param1 e:{ui/chat:AttachmentDownloadClickEvent}
      * @action
      * @public
      */
     onAttachmentDownloadClick?: ((e: AttachmentDownloadClickEvent) => void) | undefined;
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:{ui/chat:InputFieldTextChangedEvent}
+     * @action
+     * @public
+     */
+    onInputFieldTextChanged?: ((e: InputFieldTextChangedEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -593,7 +627,7 @@ type FilterOutHidden<T> = Omit<T, 'onContentReady' | 'onFocusIn' | 'onFocusOut' 
 
 type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageEntered'
   | 'onTypingStart' | 'onTypingEnd' | 'onMessageDeleting' | 'onMessageDeleted'
-  | 'onMessageEditingStart' | 'onMessageEditCanceled' | 'onMessageUpdating' | 'onMessageUpdated' | 'onAttachmentDownloadClick'>;
+  | 'onMessageEditingStart' | 'onMessageEditCanceled' | 'onMessageUpdating' | 'onMessageUpdated' | 'onAttachmentDownloadClick' | 'onInputFieldTextChanged'>;
 
 /**
 * @hidden

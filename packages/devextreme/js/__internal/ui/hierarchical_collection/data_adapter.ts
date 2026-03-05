@@ -5,7 +5,9 @@ import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
+import type { DisabledNodeSelectionMode } from '@js/ui/tree_view';
 import errors from '@js/ui/widget/ui.errors';
+import { getIntersection } from '@ts/core/utils/m_array';
 import SearchBoxController, { getOperationBySearchMode } from '@ts/ui/collection/search_box_controller';
 import TextBox from '@ts/ui/text_box/m_text_box';
 
@@ -51,6 +53,8 @@ export interface DataAdapterOptions {
   onNodeChanged: (node: InternalNode) => void;
 
   searchMode: SearchMode;
+
+  disabledNodeSelectionMode: DisabledNodeSelectionMode;
 }
 
 SearchBoxController.setEditorClass(TextBox);
@@ -69,7 +73,10 @@ class DataAdapter {
     dataConverter: new HierarchicalDataConverter(),
     onNodeChanged: noop,
     sort: null,
+    disabledNodeSelectionMode: 'recursiveAndAll',
   };
+
+  _disabledNodesKeys: ItemKey[] = [];
 
   _selectedNodesKeys: ItemKey[] = [];
 
@@ -93,7 +100,7 @@ class DataAdapter {
   ): void {
     this.options[name] = value;
 
-    if (name === 'recursiveSelection') {
+    if (name === 'recursiveSelection' || name === 'disabledNodeSelectionMode') {
       this._updateSelection();
     }
   }
@@ -110,8 +117,13 @@ class DataAdapter {
 
     this.options.dataConverter._dataStructure = this._dataStructure;
 
+    this._updateDisabled();
     this._updateSelection();
     this._updateExpansion();
+  }
+
+  _updateDisabled(): void {
+    this._disabledNodesKeys = this._updateNodesKeysArray(DISABLED);
   }
 
   _updateSelection(): void {
@@ -144,7 +156,7 @@ class DataAdapter {
       }
 
       if (node.internalFields[property]) {
-        if (property === EXPANDED || this.options.multipleSelection) {
+        if (property === EXPANDED || property === DISABLED || this.options.multipleSelection) {
           array.push(node.internalFields.key);
         } else {
           if (array.length) {
@@ -162,8 +174,12 @@ class DataAdapter {
     return this.options.multipleSelection ? this.getData() : this.getFullData();
   }
 
-  _isNodeVisible(node: InternalNode): boolean {
-    return node.internalFields.item.visible !== false;
+  _isNodeVisible(node?: InternalNode): boolean {
+    return node?.internalFields.item.visible !== false;
+  }
+
+  _isNodeDisabled(node?: InternalNode | null): boolean {
+    return node?.internalFields.disabled ?? false;
   }
 
   _getByKey(data: (InternalNode | null)[], key: ItemKey): InternalNode | null {
@@ -193,6 +209,9 @@ class DataAdapter {
 
       if (parent && node.internalFields.parentKey !== this.options.rootValue) {
         this._iterateParents(node, (parentNode: InternalNode): void => {
+          if (this.options.disabledNodeSelectionMode === 'never' && this._isNodeDisabled(parentNode)) {
+            return;
+          }
           const newParentState = this._calculateSelectedState(parentNode);
           this._setFieldState(parentNode, SELECTED, newParentState);
         });
@@ -225,6 +244,10 @@ class DataAdapter {
     processedKeys?: ItemKey[],
   ): void {
     if (!isFunction(callback) || !node) {
+      return;
+    }
+
+    if (this.options.disabledNodeSelectionMode === 'never' && this._isNodeDisabled(node)) {
       return;
     }
 
@@ -273,15 +296,21 @@ class DataAdapter {
     const itemsCount = node.internalFields.childrenKeys.length;
     let selectedItemsCount = 0;
     let invisibleItemsCount = 0;
+    let disabledItemsCount = 0;
     let result: boolean | undefined = false;
+
+    const isSkipDisabled = this.options.disabledNodeSelectionMode === 'never';
 
     for (let i = 0; i <= itemsCount - 1; i += 1) {
       const childNode = this.getNodeByKey(node.internalFields.childrenKeys[i]);
       const isChildInvisible = childNode?.internalFields.item.visible === false;
+      const isChildDisabled = this._isNodeDisabled(childNode);
       const childState = childNode?.internalFields.selected;
 
       if (isChildInvisible) {
         invisibleItemsCount += 1;
+      } else if (isChildDisabled && isSkipDisabled) {
+        disabledItemsCount += 1;
       } else if (childState) {
         selectedItemsCount += 1;
       } else if (childState === undefined) {
@@ -289,8 +318,18 @@ class DataAdapter {
       }
     }
 
+    let subtractedItemsCount = invisibleItemsCount;
+
+    if (isSkipDisabled) {
+      subtractedItemsCount += disabledItemsCount;
+    }
+
+    if (itemsCount === subtractedItemsCount) {
+      return node.internalFields.selected;
+    }
+
     if (selectedItemsCount) {
-      result = selectedItemsCount === itemsCount - invisibleItemsCount ? true : undefined;
+      result = selectedItemsCount === itemsCount - subtractedItemsCount ? true : undefined;
     }
 
     return result;
@@ -298,7 +337,12 @@ class DataAdapter {
 
   _toggleChildrenSelection(node: InternalNode, state: boolean): void {
     this._iterateChildren(node, true, (child) => {
-      if (child && this._isNodeVisible(child)) {
+      if (!child || !this._isNodeVisible(child)) {
+        return;
+      }
+
+      if (this.options.disabledNodeSelectionMode === 'recursiveAndAll'
+        || !this._isNodeDisabled(child)) {
         this._setFieldState(child, SELECTED, state);
       }
     });
@@ -368,8 +412,14 @@ class DataAdapter {
 
   _updateFields(): void {
     this.options.dataConverter.updateChildrenKeys();
+
+    this._updateDisabled();
     this._updateSelection();
     this._updateExpansion();
+  }
+
+  getDisabledNodesKeys(): ItemKey[] {
+    return this._disabledNodesKeys;
   }
 
   getSelectedNodesKeys(): ItemKey[] {
@@ -432,6 +482,10 @@ class DataAdapter {
     return this.options.dataConverter.getItemsCount();
   }
 
+  _getDisabledItemsCount(): number {
+    return this.options.dataConverter.getDisabledItemsCount();
+  }
+
   getVisibleItemsCount(): number {
     return this.options.dataConverter.getVisibleItemsCount();
   }
@@ -472,6 +526,10 @@ class DataAdapter {
     const node = this._getByKey(dataArray, key);
 
     if (node) {
+      if (this.options.disabledNodeSelectionMode === 'never' && this._isNodeDisabled(node)) {
+        return;
+      }
+
       this._setFieldState(node, SELECTED, state);
 
       if (this.options.recursiveSelection && !selectRecursive) {
@@ -509,7 +567,12 @@ class DataAdapter {
       : this._dataStructure;
 
     each(dataStructure, (_index: number, node: InternalNode) => {
-      if (node && this._isNodeVisible(node)) {
+      if (!this._isNodeVisible(node)) {
+        return;
+      }
+
+      if (this.options.disabledNodeSelectionMode === 'recursiveAndAll'
+        || !this._isNodeDisabled(node)) {
         this._setFieldState(node, SELECTED, state);
       }
     });
@@ -522,10 +585,24 @@ class DataAdapter {
   }
 
   isAllSelected(): boolean | undefined {
-    if (this.getSelectedNodesKeys().length) {
-      return this.getSelectedNodesKeys().length === this.getVisibleItemsCount() ? true : undefined;
+    const selectedDisabledNodesAmount = getIntersection(
+      this.getSelectedNodesKeys(),
+      this.getDisabledNodesKeys(),
+    ).length;
+
+    const isSkipDisabled = this.options.disabledNodeSelectionMode === 'never';
+
+    const selectedNodesKeysAmount = this.getSelectedNodesKeys().length
+      - (isSkipDisabled ? selectedDisabledNodesAmount : 0);
+
+    if (!selectedNodesKeysAmount) {
+      return false;
     }
-    return false;
+
+    const subtractedNodesAmount = this.getVisibleItemsCount()
+      - (isSkipDisabled ? this._getDisabledItemsCount() : 0);
+
+    return selectedNodesKeysAmount === subtractedNodesAmount ? true : undefined;
   }
 
   toggleExpansion(key: ItemKey, state: boolean): void {

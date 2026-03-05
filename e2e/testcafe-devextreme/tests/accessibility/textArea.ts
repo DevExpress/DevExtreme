@@ -11,15 +11,10 @@ const longText = 'Prepare 2013 Marketing Plan: We need to double revenues in 201
 const options: Options<Properties> = {
   value: [undefined, longText],
   placeholder: [undefined, 'placeholder'],
-  // NOTE: Doesn't matter if there are contrast issues
-  // stylingMode: ['outlined', 'filled', 'underlined'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 
-const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: false } },
-};
+const a11yCheckConfig = {};
 
 const availabilityConfiguration: Configuration = {
   component: 'dxTextArea',

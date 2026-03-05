@@ -272,8 +272,10 @@
         "dxScheduler-ariaLabel-currentIndicator-present": "The current time indicator is visible in the view",
         "dxScheduler-ariaLabel-currentIndicator-not-present": "The current time indicator is not visible on the screen",
 
-        "dxScheduler-appointmentAriaLabel-group": "Gruppe: {0}",
+        "dxScheduler-appointmentAriaDescription-group": "Gruppe: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Tilbagevendende aftale",
+        "dxScheduler-hotkeysAriaDescription-delete": "Press Delete to delete this appointment",
+        "dxScheduler-hotkeysAriaDescription-homeEnd": "Press Home or End to quickly navigate to the first or last appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Aftaleliste",
         "dxScheduler-newPopupTitle": "New Appointment",

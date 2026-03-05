@@ -19,8 +19,8 @@ export interface Props {
   customizeItem: NonNullable<FormProperties['customizeItem']>;
   items: NonNullable<FormProperties['items']>;
   formRef: RefObject<dxForm.default>;
-  formProps: dxForm.Options;
-  popupProps: dxPopup.Options;
+  formProps: dxForm.Properties;
+  popupProps: dxPopup.Properties;
 }
 
 export class EditPopup extends Component<Props> {

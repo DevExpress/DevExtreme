@@ -321,6 +321,22 @@ const iconSet = {
   calendardatestartfilled: '\f220',
   calendardateendoutline: '\f221',
   calendardateendfilled: '\f222',
+  datalineoutline: '\f223',
+  datalinefilled: '\f224',
+  dataareaoutline: '\f225',
+  dataareafilled: '\f226',
+  databaroutline: '\f227',
+  databarfilled: '\f228',
+  datastackedbaroutline: '\f229',
+  datastackedbarfilled: '\f230',
+  datapieoutline: '\f231',
+  datapiefilled: '\f232',
+  datadoughnutoutline: '\f233',
+  datadoughnutfilled: '\f234',
+  checkmarkcirclefilled: '\f235',
+  botoutline: '\f236',
+  botfilled: '\f237',
+  copyfilled: '\f238',
 };
 
 fixture.disablePageReloads`Icons`

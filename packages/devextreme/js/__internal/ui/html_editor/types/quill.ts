@@ -21,7 +21,7 @@ export interface Delta {
   compose: (other: Delta) => Delta;
   reduce: <T>(
     callback: (accumulator: T, operation: DeltaOperation, index: number) => T,
-    initialValue?: T
+    initialValue?: T,
   ) => T;
 }
 
@@ -111,7 +111,7 @@ export interface QuillInstance {
     text: string,
     formatOrSource?: string,
     value?: unknown,
-    source?: string
+    source?: string,
   ) => Delta;
   setContents: (delta: Delta, source?: string) => Delta;
   setText: (text: string, source?: string) => Delta;
@@ -123,14 +123,14 @@ export interface QuillInstance {
     length: number,
     formats: Record<string, unknown> | string,
     value?: unknown,
-    source?: string
+    source?: string,
   ) => Delta;
   formatText: (
     index: number,
     length: number,
     formats: Record<string, unknown> | string,
     value?: unknown,
-    source?: string
+    source?: string,
   ) => Delta;
   getFormat: (range?: RangeStatic | number, length?: number) => Record<string, unknown>;
   removeFormat: {
@@ -188,7 +188,7 @@ export interface QuillStatic {
   import: (path: string) => unknown;
   register: (
     modules: Record<string, unknown> | string | BlotConstructor | AttributorConstructor,
-    overwrite?: boolean
+    overwrite?: boolean,
   ) => void;
   find: (node: Node, bubble?: boolean) => unknown;
 

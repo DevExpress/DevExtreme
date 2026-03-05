@@ -33,9 +33,15 @@ const CLASSES = {
   form: 'dx-scheduler-form',
   icon: 'dx-icon',
   hidden: 'dx-hidden',
+  fieldItemContent: 'dx-field-item-content',
+  formItem: 'dx-item',
+  labelTop: 'dx-field-item-label-location-top',
+  label: 'dx-label',
 
   groupWithIcon: 'dx-scheduler-form-group-with-icon',
   formIcon: 'dx-scheduler-form-icon',
+  formIconTopLabelOffset: 'dx-scheduler-form-top-label-offset',
+  formIconInnerLabelOffset: 'dx-scheduler-form-inner-label-offset',
   defaultResourceIcon: 'dx-scheduler-default-resources-icon',
 
   mainGroup: 'dx-scheduler-form-main-group',
@@ -305,6 +311,8 @@ export class AppointmentForm {
         const $formElement = e.component.$element();
         this._$mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
         this._$recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+
+        this.alignIconsWithEditors();
 
         onContentReady?.call(this, e);
       },
@@ -728,7 +736,7 @@ export class AppointmentForm {
           },
           editorType: 'dxTextArea',
           editorOptions: {
-            height: 100,
+            minHeight: 100,
           } as TextAreaProperties,
         },
       ],
@@ -857,7 +865,36 @@ export class AppointmentForm {
     }
   }
 
+  private alignIconsWithEditors(): void {
+    const $groups = this.dxForm.$element().find(`.${CLASSES.groupWithIcon}`);
+
+    $groups.toArray().forEach((groupElement) => {
+      const iconElement = groupElement.querySelector(`.${CLASSES.formIcon}`);
+
+      const itemElements = groupElement.querySelectorAll(`.${CLASSES.formItem}`);
+      const firstSimpleItemElement = Array.from(itemElements)
+        .find((itemElement) => {
+          const isGroup = itemElement.querySelector(`.${CLASSES.formItem}`) !== null;
+          const isIcon = itemElement.querySelector(`.${CLASSES.formIcon}`) !== null;
+
+          return !isGroup && !isIcon;
+        });
+
+      if (!firstSimpleItemElement || !iconElement) {
+        return;
+      }
+
+      const hasTopLabel = firstSimpleItemElement.querySelector(`.${CLASSES.labelTop}`) !== null;
+      const hasInnerLabel = !hasTopLabel && firstSimpleItemElement.querySelector(`.${CLASSES.label}`) !== null;
+
+      iconElement.classList.toggle(CLASSES.formIconTopLabelOffset, hasTopLabel);
+      iconElement.classList.toggle(CLASSES.formIconInnerLabelOffset, hasInnerLabel);
+    });
+  }
+
   showMainGroup(): void {
+    this._popup.updateToolbarForMainGroup();
+
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
     const editingConfig = this.scheduler.getEditingConfig();
     const configuredHeight = editingConfig?.popup?.height ?? 'auto';
@@ -866,15 +903,22 @@ export class AppointmentForm {
       this.dxPopup.option('height', configuredHeight);
     }
 
-    this._$mainGroup?.removeClass(CLASSES.mainHidden);
-    this._$mainGroup?.removeAttr('tabindex');
-    this._$recurrenceGroup?.addClass(CLASSES.recurrenceHidden);
-    this._$recurrenceGroup?.attr('tabindex', '-1');
+    if (this._$mainGroup) {
+      this._$mainGroup.removeClass(CLASSES.mainHidden);
+      this._$mainGroup.removeAttr('inert');
 
-    this._popup.updateToolbarForMainGroup();
+      this.focusFirstFocusableInGroup(this._$mainGroup);
+    }
+
+    if (this._$recurrenceGroup) {
+      this._$recurrenceGroup.addClass(CLASSES.recurrenceHidden);
+      this._$recurrenceGroup.attr('inert', true);
+    }
   }
 
   showRecurrenceGroup(): void {
+    this._popup.updateToolbarForRecurrenceGroup();
+
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
 
     if (currentHeight === 'auto' || currentHeight === undefined) {
@@ -882,12 +926,17 @@ export class AppointmentForm {
       this.dxPopup.option('height', overlayHeight);
     }
 
-    this._$mainGroup?.addClass(CLASSES.mainHidden);
-    this._$mainGroup?.attr('tabindex', '-1');
-    this._$recurrenceGroup?.removeClass(CLASSES.recurrenceHidden);
-    this._$recurrenceGroup?.removeAttr('tabindex');
+    if (this._$mainGroup) {
+      this._$mainGroup.addClass(CLASSES.mainHidden);
+      this._$mainGroup.attr('inert', true);
+    }
 
-    this._popup.updateToolbarForRecurrenceGroup();
+    if (this._$recurrenceGroup) {
+      this._$recurrenceGroup.removeClass(CLASSES.recurrenceHidden);
+      this._$recurrenceGroup.removeAttr('inert');
+
+      this.focusFirstFocusableInGroup(this._$recurrenceGroup);
+    }
   }
 
   saveRecurrenceValue(): void {
@@ -1005,5 +1054,10 @@ export class AppointmentForm {
     this.dxForm.itemOption(endDateItemName, 'colSpan', visible ? 1 : 2);
     this.dxForm.itemOption(endTimeItemName, 'visible', visible);
     this.dxForm.endUpdate();
+  }
+
+  private focusFirstFocusableInGroup($group: dxElementWrapper): void {
+    const focusTarget = $group.find(`.${CLASSES.fieldItemContent} [tabindex]`).first().get(0) as HTMLElement;
+    focusTarget?.focus({ preventScroll: true });
   }
 }

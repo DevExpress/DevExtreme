@@ -301,8 +301,10 @@ class Lookup extends DropDownList<LookupProperties> {
   }
 
   _renderInput() {
-    this._$field = $('<div>').addClass(LOOKUP_FIELD_CLASS);
-    this._applyInputAttributes(this.option('inputAttr'));
+    const { inputAttr } = this.option();
+    this._$field = $('<div>');
+    this._applyInputAttributes(inputAttr);
+    this._$field.addClass(LOOKUP_FIELD_CLASS);
 
     const $arrow = $('<div>').addClass(LOOKUP_ARROW_CLASS);
 

@@ -18,7 +18,7 @@ type Story = StoryObj<typeof SpeechToText>;
 export const DefaultSpeechToText: Story = {
     args: {
         width: 'auto',
-        startIcon: 'micoutline',
+        startIcon: 'micfilled',
         stopIcon: 'stopfilled',
         startText: '',
         stopText: '',
@@ -34,11 +34,11 @@ export const DefaultSpeechToText: Story = {
             control: { type: 'radio' }
         },
         startIcon: {
-            options: ['micoutline', 'video', 'isnotblank', undefined],
+            options: ['micfilled', 'video', 'isnotblank', undefined],
             control: { type: 'select' }
         },
         stopIcon: {
-            options: ['stopfilled', 'square', 'indeterminatestate', undefined],
+            options: ['micfilled', 'stopfilled', 'square', 'indeterminatestate', undefined],
             control: { type: 'select' }
         },
         startText: {

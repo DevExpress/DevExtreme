@@ -15,14 +15,8 @@ const options: Options<Properties> = {
   elementAttr: [{ 'aria-label': 'Progress Bar' }],
 };
 
-const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: false } },
-};
-
 const configuration: Configuration = {
   component: 'dxProgressBar',
-  a11yCheckConfig,
   options,
 };
 

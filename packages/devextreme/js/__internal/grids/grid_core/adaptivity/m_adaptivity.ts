@@ -849,7 +849,10 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
   public setCommandAdaptiveAriaLabel($row, labelName) {
     const $adaptiveCommand = $row.find('.dx-command-adaptive');
-    $adaptiveCommand.attr('aria-label', messageLocalization.format(labelName));
+
+    if ($adaptiveCommand.length) {
+      this.setAria('label', messageLocalization.format(labelName), $adaptiveCommand);
+    }
   }
 }
 

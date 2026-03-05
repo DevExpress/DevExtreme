@@ -833,6 +833,59 @@ QUnit.test('change provider and async options', function(assert) {
     });
 });
 
+QUnit.module('disposed widget', {
+    beforeEach: function() {
+        const fakeURL = '/fakeGoogleUrl?';
+
+        GoogleStaticProvider.remapConstant(fakeURL);
+
+        ajaxMock.setup({
+            url: fakeURL,
+            responseText: '',
+        });
+
+        this.instance = new Map($('#map'), {
+            provider: 'googleStatic',
+        });
+
+        this.getProvider = () => {
+            return this.instance._provider;
+        };
+
+        this.getLastAsyncAction = () => {
+            return this.instance._lastAsyncAction;
+        };
+    },
+    afterEach: function() {
+        ajaxMock.clear();
+    }
+}, () => {
+    QUnit.test('there is no error when async action is completed after widget is disposed (T914315)', function(assert) {
+        const done = assert.async();
+
+        this.instance.option('onReady', () => {
+            this.getProvider().updateZoom = () => {
+                this.instance.dispose();
+
+                return Promise.resolve(true);
+            };
+
+            this.instance.option('zoom', 10);
+
+            this.getLastAsyncAction().then(
+                () => {
+                    assert.ok(true, 'no errors');
+                    done();
+                },
+                (e) => {
+                    assert.ok(false, `error: ${e.message}`);
+                    done();
+                }
+            );
+        });
+    });
+});
+
 QUnit.module('Accessibility', {
     beforeEach: function() {
         const fakeURL = '/fakeGoogleUrl?';

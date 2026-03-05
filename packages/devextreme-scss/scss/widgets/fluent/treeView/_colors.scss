@@ -19,3 +19,28 @@ $treeview-item-selected-color: $treeview-color !default;
 $treeview-item-selected-bg: $base-selected-bg !default;
 $treeview-spin-icon-color: $base-spin-icon-color !default;
 $checkbox-border-color-focused: $base-accent-active !default;
+$treeview-checkbox-disabled-control-color-focused: null !default;
+$treeview-checkbox-disabled-background-focused: null !default;
+$treeview-item-content-disabled: null !default;
+$treeview-checkbox-border-color-focused: null !default;
+$treeview-checkbox-background-color-focused: null !default;
+$treeview-checkbox-accent-color-focused: null !default;
+
+@if $mode == "light" {
+  $treeview-item-content-disabled: color.adjust($base-bg, $lightness: -25.88%, $space: hsl) !default;
+  $treeview-checkbox-disabled-control-color-focused: color.adjust($base-bg, $lightness: -29.8%, $space: hsl) !default;
+  $treeview-checkbox-disabled-background-focused: color.adjust($base-bg, $lightness: -7.84%, $space: hsl) !default;
+  $treeview-checkbox-border-color-focused: color.adjust($base-bg, $lightness: -85.88%, $space: hsl) !default;
+  $treeview-checkbox-background-color-focused: color.adjust($base-bg, $lightness: -7.84%, $space: hsl) !default;
+  $treeview-checkbox-accent-color-focused: color.change($base-accent, $lightness: 16%, $space: hsl) !default;
+}
+
+@if $mode == "dark" {
+  $treeview-item-content-disabled: color.change($base-bg, $lightness: 36.08%, $space: hsl) !default;
+  $treeview-checkbox-disabled-control-color-focused: color.change($base-bg, $lightness: 41.96%, $space: hsl) !default;
+  $treeview-checkbox-disabled-background-focused: color.change($base-bg, $lightness: 21.96%, $space: hsl) !default;
+  $treeview-checkbox-border-color-focused: color.change($base-bg, $lightness: 100%, $space: hsl) !default;
+  $treeview-checkbox-background-color-focused: color.change($base-bg, $lightness: 21.96%, $space: hsl) !default;
+  $treeview-checkbox-accent-color-focused: color.change($base-accent, $lightness: 84%, $space: hsl) !default;
+}
+

@@ -1,9 +1,12 @@
 /* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
-  describe, expect, it, jest,
+  afterEach, describe, expect, it, jest,
 } from '@jest/globals';
+import $ from '@js/core/renderer';
 import dxCalendar from '@js/ui/calendar';
+import CardView from '@ts/grids/new/card_view/widget';
+import type { Options as GridCoreOptions } from '@ts/grids/new/grid_core/options';
 import { rerender } from 'inferno';
 
 import type { Column } from '../columns_controller/types';
@@ -15,12 +18,31 @@ import { ConfirmController } from './confirm_controller';
 import { EditingController } from './controller';
 import { EditPopupView } from './popup/view';
 
+const SELECTORS = {
+  cardView: '.dx-cardview',
+  card: '.dx-cardview-card',
+};
+
 class MockConfirmController implements ConfirmController {
   public static dependencies = [] as const;
 
   public confirm = jest.fn<ConfirmController['confirm']>()
     .mockImplementation(() => Promise.resolve(true));
 }
+
+const rootQuerySelector = (selector: string) => document.body.querySelector(selector);
+
+const setupCardView = (options: GridCoreOptions = {}): CardView => {
+  const container = document.createElement('div');
+  const { body } = document;
+  body.append(container);
+
+  const cardView = new CardView(container, options);
+
+  rerender();
+
+  return cardView;
+};
 
 const setup = (config: Options) => {
   const rootElement = document.createElement('div');
@@ -157,6 +179,11 @@ describe('ColumnProperties', () => {
 
 describe('Options', () => {
   describe('editing', () => {
+    afterEach(() => {
+      const cardView = rootQuerySelector(SELECTORS.cardView);
+      // @ts-expect-error bad typed renderer
+      $(cardView ?? undefined as any)?.dxCardView('dispose');
+    });
     describe('editCardKey', () => {
       it('should open popup with given item', () => {
         const { getForm } = setup({
@@ -188,13 +215,45 @@ describe('Options', () => {
       });
     });
     describe('allowUpdating', () => {
-      it.skip('should add "edit" button to card', () => {
-        // TODO: think how to organize test
+      it('should add "edit" button to card', () => {
+        setupCardView({
+          columns: [{
+            dataField: 'field1',
+          }, 'id'],
+          dataSource: [{
+            id: 1,
+            field1: 'value1',
+          }],
+          keyExpr: 'id',
+          editing: {
+            allowUpdating: true,
+          },
+        });
+        rerender();
+
+        const card = rootQuerySelector(SELECTORS.card);
+        expect(card?.innerHTML).toContain('aria-label="edit"');
       });
     });
     describe('allowRemoving', () => {
       it('should add "remove" button to card', () => {
-        // TODO: think how to organize test
+        setupCardView({
+          columns: [{
+            dataField: 'field1',
+          }, 'id'],
+          dataSource: [{
+            id: 1,
+            field1: 'value1',
+          }],
+          keyExpr: 'id',
+          editing: {
+            allowDeleting: true,
+          },
+        });
+        rerender();
+
+        const card = rootQuerySelector(SELECTORS.card);
+        expect(card?.innerHTML).toContain('aria-label="trash"');
       });
     });
 
@@ -222,17 +281,6 @@ describe('Options', () => {
         await editPopupView.promises.waitForAll();
 
         expect(editingController.changes.peek()).toMatchSnapshot();
-      });
-      it.skip('should update state in editor', () => {
-        const { editingController, getForm } = setup(config);
-
-        editingController.changes.value = [{
-          type: 'update',
-          key: 1,
-          data: { some_field: 'qwe' },
-        }];
-
-        expect(getForm().getEditor('some_field')?.option('value')).toBe('qwe');
       });
     });
 

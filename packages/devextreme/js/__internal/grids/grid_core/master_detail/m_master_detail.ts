@@ -396,7 +396,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
     const isEditForm = row.isEditing;
 
     if (!isEditForm) {
-      $detailCell.attr('aria-roledescription', messageLocalization.format('dxDataGrid-masterDetail'));
+      this.setAria('roledescription', messageLocalization.format('dxDataGrid-masterDetail'), $detailCell);
     }
 
     return $detailCell;

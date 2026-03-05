@@ -5,10 +5,11 @@
     [items]="employees"
     [width]="340"
     [height]="320"
-    [showCheckBoxesMode]="showCheckBoxesMode"
+    [showCheckBoxesMode]="checkboxVisibility"
     [selectionMode]="selectionMode"
-    [selectNodesRecursive]="selectNodesRecursive"
-    [selectByClick]="selectByClick"
+    [disabledNodeSelectionMode]="disabledNodeSelectionMode"
+    [selectNodesRecursive]="recursiveSelection"
+    [selectByClick]="selectOnClick"
     (onSelectionChanged)="treeViewSelectionChanged($event)"
     (onContentReady)="treeViewContentReady($event)"
   >
@@ -25,9 +26,9 @@
       [items]="selectedEmployees"
       showScrollbar="always"
     >
-      <dxi-list-item *ngFor="let item of selectedEmployees">
+      <div *dxTemplate="let item of 'item'">
         {{ item.prefix + " " + item.fullName + " (" + item.position + ")" }}
-      </dxi-list-item>
+      </div>
     </dx-list>
   </div>
 </div>
@@ -35,46 +36,61 @@
 <div class="options">
   <div class="caption">Options</div>
   <div class="options-container">
-    <div class="option">
-      <span>Show Check Boxes Mode:</span>
-      <div class="editor-container">
-        <dx-select-box
-          [items]="showCheckBoxesModes"
-          [inputAttr]="{ 'aria-label': 'Show Checkboxes Mode' }"
-          [value]="showCheckBoxesMode"
-          (onValueChanged)="showCheckBoxesModeValueChanged($event)"
-        ></dx-select-box>
+    <div class="options-section">
+      <div class="option">
+        <span>Checkbox Visibility:</span>
+        <div class="editor-container">
+          <dx-select-box
+            [items]="checkboxVisibilityOptions"
+            [inputAttr]="{ 'aria-label': 'Checkbox Visibility' }"
+            [value]="checkboxVisibility"
+            (onValueChanged)="checkboxVisibilityValueChanged($event)"
+          ></dx-select-box>
+        </div>
+      </div>
+      <div class="option">
+        <span>Selection Mode:</span>
+        <div class="editor-container">
+          <dx-select-box
+            [items]="selectionModes"
+            [value]="selectionMode"
+            [inputAttr]="{ 'aria-label': 'Selection Mode' }"
+            [disabled]="isSelectionModeDisabled"
+            (onValueChanged)="selectionModeValueChanged($event)"
+          ></dx-select-box>
+        </div>
+      </div>
+      <div class="option">
+        <span>Disabled Node Selection Mode:</span>
+        <div class="editor-container">
+          <dx-select-box
+            [items]="disabledNodeSelectionModes"
+            [value]="disabledNodeSelectionMode"
+            [inputAttr]="{ 'aria-label': 'Disabled Node Selection Mode' }"
+            (onValueChanged)="disabledNodeSelectionModeValueChanged($event)"
+          ></dx-select-box>
+        </div>
       </div>
     </div>
-    <div class="option">
-      <span>Selection Mode:</span>
-      <div class="editor-container">
-        <dx-select-box
-          [items]="selectionModes"
-          [value]="selectionMode"
-          [inputAttr]="{ 'aria-label': 'Selection Mode' }"
-          [disabled]="isSelectionModeDisabled"
-          (onValueChanged)="selectionModeValueChanged($event)"
-        ></dx-select-box>
+    <div class="options-section">
+      <div class="option">
+        <div class="caption-placeholder">&nbsp;</div>
+        <div class="editor-container">
+          <dx-check-box
+            text="Recursive Selection"
+            [disabled]="isRecursiveDisabled"
+            [(value)]="recursiveSelection"
+          ></dx-check-box>
+        </div>
       </div>
-    </div>
-    <div class="option">
-      <div class="caption-placeholder">&nbsp;</div>
-      <div class="editor-container">
-        <dx-check-box
-          text="Select Nodes Recursive"
-          [disabled]="isRecursiveDisabled"
-          [(value)]="selectNodesRecursive"
-        ></dx-check-box>
-      </div>
-    </div>
-    <div class="option">
-      <div class="caption-placeholder">&nbsp;</div>
-      <div class="editor-container">
-        <dx-check-box
-          text="Select By Click"
-          [(value)]="selectByClick"
-        ></dx-check-box>
+      <div class="option">
+        <div class="caption-placeholder">&nbsp;</div>
+        <div class="editor-container">
+          <dx-check-box
+            text="Select on Click"
+            [(value)]="selectOnClick"
+          ></dx-check-box>
+        </div>
       </div>
     </div>
   </div>

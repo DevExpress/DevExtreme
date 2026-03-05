@@ -2534,9 +2534,6 @@ export type RowDraggingTemplateDataModel = RowDraggingTemplateData;
 /** @public */
 export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<TRowData, TKey>;
 
-/** @deprecated use Properties instead */
-export type Options<TRowData = any, TKey = any> = dxDataGridOptions<TRowData, TKey>;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

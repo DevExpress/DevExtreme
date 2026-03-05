@@ -18,7 +18,7 @@ $datagrid-border-color: $base-border-color !default;
 * $name 20. Header text color
 * $type color
 */
-$datagrid-columnchooser-item-color: null !default;
+$datagrid-columnchooser-item-color: $datagrid-base-color !default;
 $datagrid-block-separator-bg: null !default;
 
 /**
@@ -37,7 +37,6 @@ $datagrid-drag-header-shadow-color: null !default;
 $datagrid-drag-header-second-shadow-color: null !default;
 $datagrid-header-drag-bg: $datagrid-base-background-color !default;
 $header-filter-color: null !default;
-$header-filter-color-empty: null !default;
 
 /**
 * $name 51. Selected row background color
@@ -117,13 +116,13 @@ $datagrid-search-bg: $base-accent !default;
 * $name 115. Error row text color
 * $type color
 */
-$datagrid-row-error-color: null !default;
+$datagrid-row-error-color: $base-inverted-text-color !default;
 
 /**
 * $name 120. Error row background color
 * $type color
 */
-$datagrid-row-error-bg: color.mix($base-invalid-color, $datagrid-base-background-color, 60%) !default;
+$datagrid-row-error-bg: $base-invalid-color !default;
 $datagrid-link-color: $base-link-color !default;
 
 /**
@@ -175,14 +174,12 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
     $datagrid-row-focused-bg: color.adjust($base-accent, $hue: -1deg, $space: hsl, $lightness: 26.47%) !default;
     $datagrid-filter-row-background-color: $base-typography-bg !default;
   }
-  $datagrid-columnchooser-item-color: $datagrid-base-color !default;
+
   $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: -12%, $space: hsl) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $header-filter-color: $datagrid-columnchooser-item-color !default;
-  $header-filter-color-empty: color.change($header-filter-color, $alpha: 0.72) !default;
-  $datagrid-row-error-color: $base-inverted-text-color !default;
   $datagrid-columnchooser-item-bg: $datagrid-columnchooser-bg !default;
   $datagrid-row-alternation-bg: color.adjust($datagrid-base-background-color, $lightness: -4%, $space: hsl) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/fluent/color-schemes/light/grid/text-stub.png') !default;
@@ -193,14 +190,11 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 @if $mode == "dark" {
   $datagrid-row-focused-bg: #0c3b5e !default;
   $datagrid-filter-row-background-color: color.adjust($datagrid-base-background-color, $lightness: 2%, $space: hsl) !default;
-  $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.6) !default;
   $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: color.adjust($datagrid-base-background-color, $lightness: 12%, $space: hsl) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
   $header-filter-color: $datagrid-columnchooser-item-color !default;
-  $header-filter-color-empty: color.change($header-filter-color, $alpha: 0.38) !default;
-  $datagrid-row-error-color: rgba(255, 255, 255, 1) !default;
   $datagrid-columnchooser-item-bg: color.adjust($datagrid-columnchooser-bg, $lightness: 3%, $space: hsl) !default;
   $datagrid-row-alternation-bg: color.adjust($datagrid-base-background-color, $lightness: 4%, $space: hsl) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/fluent/color-schemes/dark/grid/text-stub.png') !default;
@@ -208,6 +202,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-draggable-column-text-color: color.adjust($base-text-color, $lightness: -63.9%, $space: hsl) !default;
 }
 
+$header-filter-color-empty: $header-filter-color !default;
 $datagrid-border: 1px solid !default;
 
 :root {

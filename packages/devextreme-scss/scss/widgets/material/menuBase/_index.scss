@@ -22,7 +22,7 @@ $material-menu-arrow-image-size: 7px;
   }
 
   &.dx-state-disabled {
-    opacity: 0.5;
+    color: $menu-item-disabled-color;
   }
 
   &.dx-state-hover {

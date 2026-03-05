@@ -3,7 +3,7 @@ import devices from '__internal/core/m_devices';
 import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
@@ -378,7 +378,7 @@ QUnit.module('Options', () => {
             currentDate: new Date(2015, 1, 9),
             currentView: 'month',
             dataSource: data,
-            height: 500,
+            height: 800,
             width: 800
         });
 
@@ -399,7 +399,7 @@ QUnit.module('Options', () => {
             currentView: 'month',
             dataSource: data,
             maxAppointmentsPerCell: 2,
-            height: 500,
+            height: 800,
             width: 800
         });
 

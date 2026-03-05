@@ -28,8 +28,10 @@ export class AppComponent {
 
   pattern = /^\(\d{3}\) \d{3}-\d{4}$/i;
 
+  baseUrl = 'https://js.devexpress.com/Demos/NetCore';
+
   constructor(private httpClient: HttpClient) {
-    const url = 'https://js.devexpress.com/Demos/NetCore/api/DataGridEmployeesValidation';
+    const url = `${this.baseUrl}/api/DataGridEmployeesValidation`;
 
     this.dataSource = AspNetData.createStore({
       key: 'ID',
@@ -44,12 +46,13 @@ export class AppComponent {
   }
 
   asyncValidation = async (params: Record<string, unknown> & { data: Record<string, unknown> }) => {
-    const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValidation/CheckUniqueEmailAddress';
+    const emailValidationUrl = `${this.baseUrl}/RemoteValidation/CheckUniqueEmailAddress`;
 
-    const result = await lastValueFrom(this.httpClient.post(emailValidationUrl, {
-      id: params.data.ID,
-      email: params.value,
-    }, {
+    const result = await lastValueFrom(this.httpClient.get(emailValidationUrl, {
+      params: {
+        id: params.data.ID,
+        email: params.value,
+      },
       responseType: 'json',
     }));
 

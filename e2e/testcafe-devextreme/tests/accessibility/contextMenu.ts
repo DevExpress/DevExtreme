@@ -29,10 +29,7 @@ const created = async (t: TestController): Promise<void> => {
   await t.click(contextMenu.items.nth(0));
 };
 
-const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: false } },
-};
+const a11yCheckConfig = {};
 
 const configuration: Configuration = {
   component: 'dxContextMenu',

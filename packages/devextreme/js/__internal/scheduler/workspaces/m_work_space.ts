@@ -71,7 +71,7 @@ import { CompactAppointmentsHelper } from '../m_compact_appointments_helper';
 import type { SubscribeKey, SubscribeMethods } from '../m_subscribes';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
-import VerticalShader from '../shaders/m_current_time_shader_vertical';
+import VerticalShader from '../shaders/current_time_shader_vertical';
 import type { ResourceLoader } from '../utils/loader/resource_loader';
 import {
   getAppointmentGroupIndex,
@@ -1792,7 +1792,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return result;
   }
 
-  scrollTo(date, groupValues?: RawGroupValues | GroupValues, allDay = false, throwWarning = true) {
+  scrollTo(date: Date, groupValues?: RawGroupValues | GroupValues, allDay = false, throwWarning = true, align: 'start' | 'center' = 'center') {
     if (!this._isValidScrollDate(date, throwWarning)) {
       return;
     }
@@ -1819,8 +1819,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     const scrollableWidth = getWidth($scrollable);
     const cellHeight = this.getCellHeight();
 
-    const xShift = (scrollableWidth - cellWidth) / 2;
-    const yShift = (scrollableHeight - cellHeight) / 2;
+    const xShift = align === 'start' ? 0 : (scrollableWidth - cellWidth) / 2;
+    const yShift = align === 'start' ? 0 : (scrollableHeight - cellHeight) / 2;
 
     const left = coordinates.left - scrollable.scrollLeft() - xShift - offset;
     let top = coordinates.top - scrollable.scrollTop() - yShift;

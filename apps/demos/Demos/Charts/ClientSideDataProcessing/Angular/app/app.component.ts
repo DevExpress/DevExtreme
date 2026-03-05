@@ -43,7 +43,7 @@ export class AppComponent implements AfterViewInit {
     this.monthWeather = new DataSource({
       store: new CustomStore({
         load: () => lastValueFrom(this.http.get('../../../../data/monthWeather.json'))
-          .catch(() => { throw 'Data Loading Error'; }),
+          .catch(() => { throw new Error('Data Loading Error'); }),
         loadMode: 'raw',
       }),
       filter: ['t', '>', '2'],

@@ -1,0 +1,286 @@
+/* stylelint-disable no-duplicate-selectors */
+
+$datagrid-border: null !default;
+$datagrid-border-color: null !default;
+$datagrid-base-background-color: null !default;
+$datagrid-row-error-color: null !default;
+$datagrid-focused-border-color: null !default;
+
+// #region position & z-index
+
+// (0,4,1)
+.dx-datagrid .dx-datagrid-rowsview .dx-virtual-row > td:not(.dx-datagrid-sticky-column, .dx-datagrid-sticky-column-left, .dx-datagrid-sticky-column-right) {
+  position: relative;
+}
+
+// #endregion
+
+// #region border
+
+// (0,3,1)
+.dx-datagrid .dx-column-lines > td:first-child {
+  border-left: none;
+}
+
+// (0,3,1)
+.dx-datagrid .dx-column-lines > td:last-child {
+  border-right: none;
+}
+
+// (0,3,1)
+.dx-datagrid .dx-datagrid-sticky-columns .dx-column-lines > td {
+  border-right: none;
+}
+
+// (0,3,1)
+.dx-datagrid-rowsview .dx-row.dx-group-row td {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+}
+
+// (0,3,1)
+.dx-datagrid-rowsview .dx-group-row.dx-row > td {
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+// (0,4,1)
+.dx-datagrid .dx-datagrid-rowsview .dx-data-row td.dx-pointer-events-none,
+.dx-datagrid .dx-datagrid-rowsview .dx-freespace-row td.dx-pointer-events-none,
+.dx-datagrid .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none,
+.dx-datagrid .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none,
+.dx-datagrid .dx-datagrid-headers .dx-row td.dx-pointer-events-none {
+  border-left: 2px solid;
+  border-left-color: $datagrid-border-color;
+  border-right: 2px solid;
+  border-right-color: $datagrid-border-color;
+}
+
+// (0,4,1)
+.dx-header-multi-row.dx-datagrid-sticky-columns .dx-column-lines > td:first-child {
+  border-left: $datagrid-border;
+  border-left-color: $datagrid-border-color;
+}
+
+// (0,4,1)
+.dx-datagrid-rowsview .dx-row.dx-group-row:first-child td {
+  border-top: none;
+}
+
+// (0,5,1)
+.dx-datagrid .dx-datagrid-rowsview .dx-data-row td.dx-pointer-events-none.dx-first-cell,
+.dx-datagrid .dx-datagrid-rowsview .dx-freespace-row td.dx-pointer-events-none.dx-first-cell,
+.dx-datagrid .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none.dx-first-cell,
+.dx-datagrid .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none.dx-first-cell,
+.dx-datagrid .dx-datagrid-headers .dx-row td.dx-pointer-events-none.dx-first-cell {
+  border-left: none;
+}
+
+// (0,5,1)
+.dx-datagrid .dx-datagrid-rowsview .dx-data-row td.dx-pointer-events-none.dx-last-cell,
+.dx-datagrid .dx-datagrid-rowsview .dx-freespace-row td.dx-pointer-events-none.dx-last-cell,
+.dx-datagrid .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none.dx-last-cell,
+.dx-datagrid .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none.dx-last-cell,
+.dx-datagrid .dx-datagrid-headers .dx-row td.dx-pointer-events-none.dx-last-cell {
+  border-right: none;
+}
+
+// (0,5,1)
+.dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-table .dx-row td.dx-datagrid-sticky-column-border-right {
+  border-right: 2px solid;
+  border-right-color: $datagrid-border-color;
+}
+
+// (0,5,1)
+.dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-table .dx-row td.dx-datagrid-sticky-column-border-left {
+  border-left: 2px solid;
+  border-left-color: $datagrid-border-color;
+}
+
+// (0,6,0)
+.dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-content .dx-datagrid-table .dx-row .dx-datagrid-column-no-border {
+  border-left: none;
+}
+
+// (0,7,1)
+.dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-content .dx-datagrid-table .dx-row.dx-column-lines > td.dx-datagrid-first-header {
+  border-left: none;
+}
+
+// RTL
+
+// (0,4,1)
+.dx-rtl .dx-datagrid .dx-column-lines > td:first-child {
+  border-right: none;
+  border-left: $datagrid-border;
+  border-left-color: $datagrid-border-color;
+}
+
+// (0,4,1)
+.dx-rtl .dx-datagrid .dx-column-lines > td:last-child {
+  border-left: none;
+}
+
+// (0,4,1)
+.dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-column-lines > td {
+  border-left: none;
+}
+
+// (0,5,1)
+.dx-rtl .dx-datagrid .dx-datagrid-rowsview .dx-data-row td.dx-pointer-events-none,
+.dx-rtl .dx-datagrid .dx-datagrid-rowsview .dx-freespace-row td.dx-pointer-events-none,
+.dx-rtl .dx-datagrid .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none,
+.dx-rtl .dx-datagrid .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none,
+.dx-rtl .dx-datagrid .dx-datagrid-headers .dx-row td.dx-pointer-events-none {
+  border-left: 2px solid;
+  border-left-color: $datagrid-border-color;
+  border-right: 2px solid;
+  border-right-color: $datagrid-border-color;
+}
+
+// (0,5,1)
+.dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-column-lines:not(.dx-datagrid-group-footer) > td {
+  border-right: $datagrid-border;
+  border-right-color: $datagrid-border-color;
+}
+
+// (0,6,1)
+.dx-rtl .dx-datagrid .dx-datagrid-rowsview .dx-data-row td.dx-pointer-events-none.dx-first-cell,
+.dx-rtl .dx-datagrid .dx-datagrid-rowsview .dx-freespace-row td.dx-pointer-events-none.dx-first-cell,
+.dx-rtl .dx-datagrid .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none.dx-first-cell,
+.dx-rtl .dx-datagrid .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none.dx-first-cell,
+.dx-rtl .dx-datagrid .dx-datagrid-headers .dx-row td.dx-pointer-events-none.dx-first-cell {
+  border-right: none;
+}
+
+// (0,6,1)
+.dx-rtl .dx-datagrid .dx-datagrid-rowsview .dx-data-row td.dx-pointer-events-none.dx-last-cell,
+.dx-rtl .dx-datagrid .dx-datagrid-rowsview .dx-freespace-row td.dx-pointer-events-none.dx-last-cell,
+.dx-rtl .dx-datagrid .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none.dx-last-cell,
+.dx-rtl .dx-datagrid .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none.dx-last-cell,
+.dx-rtl .dx-datagrid .dx-datagrid-headers .dx-row td.dx-pointer-events-none.dx-last-cell {
+  border-left: none;
+}
+
+// (0,6,1)
+.dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-column-lines:not(.dx-datagrid-group-footer) > td:first-child {
+  border-right: none;
+}
+
+// (0,6,1)
+.dx-rtl .dx-header-multi-row.dx-datagrid-sticky-columns .dx-datagrid-table .dx-column-lines > td:first-child {
+  border-left: none;
+  border-right: $datagrid-border;
+  border-right-color: $datagrid-border-color;
+}
+
+// (0,6,1)
+.dx-rtl .dx-datagrid-content .dx-datagrid-table .dx-group-row.dx-row.dx-column-lines > td {
+  border-left: none;
+  border-right: none;
+}
+
+// (0,6,1)
+.dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-table .dx-row td.dx-datagrid-sticky-column-border-right {
+  border-right: 2px solid;
+  border-right-color: $datagrid-border-color;
+}
+
+// (0,6,1)
+.dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-table .dx-row td.dx-datagrid-sticky-column-border-left {
+  border-left: 2px solid;
+  border-left-color: $datagrid-border-color;
+}
+
+// (0,7,0)
+.dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-content .dx-datagrid-table .dx-row .dx-datagrid-column-no-border {
+  border-right: none;
+}
+
+// (0,8,0)
+.dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-content .dx-datagrid-table .dx-row .dx-datagrid-column-no-border.dx-datagrid-sticky-column-border-left {
+  border-left: 2px solid;
+  border-left-color: $datagrid-border-color;
+}
+
+// (0,8,1)
+.dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-content .dx-datagrid-table .dx-row.dx-column-lines > td.dx-datagrid-first-header {
+  border-right: none;
+}
+
+// (0,9,1)
+.dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-content .dx-datagrid-table .dx-row.dx-column-lines > td.dx-datagrid-first-header.dx-datagrid-sticky-column-border-left {
+  border-left: 2px solid;
+  border-left-color: $datagrid-border-color;
+}
+
+// #endregion
+
+// #region padding
+
+// (0,2,1)
+.dx-datagrid .dx-error-row td {
+  padding: 0;
+}
+
+// (0,5,0)
+.dx-datagrid .dx-datagrid-total-footer .dx-row.dx-footer-row .dx-datagrid-sticky-column,
+.dx-datagrid .dx-datagrid-total-footer .dx-row.dx-footer-row .dx-datagrid-sticky-column-left,
+.dx-datagrid .dx-datagrid-total-footer .dx-row.dx-footer-row .dx-datagrid-sticky-column-right {
+  padding-inline: 0;
+}
+
+// #endregion
+
+// #region background
+
+// (0,2,0)
+.dx-datagrid .dx-datagrid-sticky-column,
+.dx-datagrid .dx-datagrid-sticky-column-left,
+.dx-datagrid .dx-datagrid-sticky-column-right {
+  background-color: $datagrid-base-background-color;
+}
+
+// (0,6,1)
+.dx-datagrid .dx-datagrid-total-footer .dx-row.dx-footer-row td.dx-command-expand.dx-datagrid-sticky-column,
+.dx-datagrid .dx-datagrid-total-footer .dx-row.dx-footer-row td.dx-command-expand.dx-datagrid-sticky-column-left,
+.dx-datagrid .dx-datagrid-total-footer .dx-row.dx-footer-row td.dx-command-expand.dx-datagrid-sticky-column-right {
+  background-color: $datagrid-base-background-color;
+}
+
+// #endregion
+
+// #region typography
+
+// (0,2,1)
+.dx-datagrid .dx-error-row td {
+  color: $datagrid-row-error-color;
+}
+
+// #endregion
+
+// #region outline
+
+// (0,3,1)
+.dx-datagrid .dx-datagrid-headers .dx-header-row > td {
+  outline: none;
+}
+
+// (0,5,1)
+.dx-datagrid .dx-datagrid-headers.dx-state-focused .dx-header-row td:focus {
+  outline: 2px solid;
+  outline-color: $datagrid-focused-border-color;
+  outline-offset: -2px;
+}
+
+// #endregion
+
+// #region other
+
+// (0,2,0)
+.dx-hidden.dx-group-cell {
+  display: table-cell !important; // stylelint-disable-line declaration-no-important
+  font-size: 0 !important; // stylelint-disable-line declaration-no-important
+}
+
+// #endregion

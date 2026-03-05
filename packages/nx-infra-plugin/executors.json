@@ -54,6 +54,31 @@
       "implementation": "./src/executors/karma-multi-env/executor",
       "schema": "./src/executors/karma-multi-env/schema.json",
       "description": "Run Karma tests sequentially across multiple Angular environments (client, server, hydration)"
+    },
+    "localization": {
+      "implementation": "./src/executors/localization/executor",
+      "schema": "./src/executors/localization/schema.json",
+      "description": "Generate localization message files and TypeScript CLDR data modules"
+    },
+    "concatenate-files": {
+      "implementation": "./src/executors/concatenate-files/executor",
+      "schema": "./src/executors/concatenate-files/schema.json",
+      "description": "Concatenate files with optional content extraction and transforms"
+    },
+    "babel-transform": {
+      "implementation": "./src/executors/babel-transform/executor",
+      "schema": "./src/executors/babel-transform/schema.json",
+      "description": "Transform JavaScript/TypeScript files using Babel with configurable presets"
+    },
+    "create-dual-mode-manifest": {
+      "implementation": "./src/executors/create-dual-mode-manifest/executor",
+      "schema": "./src/executors/create-dual-mode-manifest/schema.json",
+      "description": "Generate package.json files for dual-mode (ESM + CJS) package support"
+    },
+    "bundle": {
+      "implementation": "./src/executors/bundle/executor",
+      "schema": "./src/executors/bundle/schema.json",
+      "description": "Bundle JavaScript files using webpack with debug or production mode"
     }
   }
 }

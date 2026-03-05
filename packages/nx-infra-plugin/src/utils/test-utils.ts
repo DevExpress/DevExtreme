@@ -39,5 +39,30 @@ export function createMockContext(options: MockContextOptions = {}): ExecutorCon
       },
       version: 2,
     },
+    nxJsonConfiguration: {},
+    projectGraph: {
+      nodes: {
+        [projectName]: {
+          name: projectName,
+          type: 'lib',
+          data: { root: projectRoot },
+        },
+      },
+      dependencies: {},
+    },
   };
+}
+
+export function findWorkspaceRoot(): string {
+  let dir = process.cwd();
+  while (dir !== path.dirname(dir)) {
+    if (
+      fs.existsSync(path.join(dir, 'nx.json'))
+      || fs.existsSync(path.join(dir, 'pnpm-workspace.yaml'))
+    ) {
+      return dir;
+    }
+    dir = path.dirname(dir);
+  }
+  throw new Error('Could not find workspace root');
 }

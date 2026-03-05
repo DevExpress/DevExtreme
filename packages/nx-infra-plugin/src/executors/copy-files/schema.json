@@ -1,17 +1,19 @@
 {
+  "$schema": "http://json-schema.org/schema",
   "type": "object",
   "properties": {
     "files": {
       "type": "array",
-      "description": "Files to copy (array of {from, to})",
       "items": {
         "type": "object",
         "properties": {
           "from": {
-            "type": "string"
+            "type": "string",
+            "description": "Source path relative to project root. Can be a file, directory, or glob pattern."
           },
           "to": {
-            "type": "string"
+            "type": "string",
+            "description": "Destination path relative to project root. For glob patterns, this should be a directory."
           }
         },
         "required": ["from", "to"]
