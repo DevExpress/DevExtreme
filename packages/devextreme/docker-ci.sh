@@ -79,8 +79,11 @@ function run_test_impl {
         pnpm run build
         fi
 
+        echo "Compiling TypeScript test runner..."
+        pnpm exec tsc -p ./testing/runner/tsconfig.json
+
         echo "Starting Node.js test runner..."
-        node ./testing/runner/index.js --single-run & runner_pid=$!
+        node ./testing/runner/dist/index.js --single-run & runner_pid=$!
         echo "Runner PID: $runner_pid"
 
         local max_attempts=30
