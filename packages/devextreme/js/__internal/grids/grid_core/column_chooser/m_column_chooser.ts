@@ -345,29 +345,8 @@ export class ColumnChooserView extends ColumnsView {
 
   private _prepareSelectModeConfig() {
     const selectionOptions = this.option('columnChooser.selection') ?? {};
-
-    const updateSelection = (e, nodes) => {
-      nodes
-        .filter((node) => node.itemData.allowHiding === false)
-        .forEach((node) => e.component.selectItem(node.key));
-    };
-
-    let isUpdatingSelection = false;
-
     const selectionChangedHandler = (e) => {
-      if (isUpdatingSelection) {
-        return;
-      }
-
       const nodes = this._getOrderedFlatNodes(e.component.getNodes());
-
-      e.component.beginUpdate();
-      isUpdatingSelection = true;
-
-      updateSelection(e, nodes);
-
-      e.component.endUpdate();
-      isUpdatingSelection = false;
 
       this.component.beginUpdate();
       this._isUpdatingColumnVisibility = true;
@@ -382,6 +361,7 @@ export class ColumnChooserView extends ColumnsView {
       selectByClick: selectionOptions.selectByClick,
       selectNodesRecursive: selectionOptions.recursive,
       showCheckBoxesMode: selectionOptions.allowSelectAll ? 'selectAll' : 'normal',
+      disabledNodeSelectionMode: 'never',
       onSelectionChanged: selectionChangedHandler,
     };
   }
@@ -481,12 +461,6 @@ export class ColumnChooserView extends ColumnsView {
     const isColumnHidden = !column.visible && column.allowHiding;
 
     return this.isColumnChooserVisible() && isParentColumnVisible && isColumnHidden;
-  }
-
-  private allowColumnHeaderDragging(column) {
-    const isDragMode = !this.isSelectMode();
-
-    return isDragMode && this.isColumnChooserVisible() && column.allowHiding;
   }
 
   protected getBoundingRect() {
