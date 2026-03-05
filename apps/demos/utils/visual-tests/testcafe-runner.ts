@@ -113,6 +113,8 @@ async function main() {
               }
               window.getSelection()?.removeAllRanges();
             }).with({ boundTestRun: t })();
+
+            await t.hover('html', { offsetX: 1, offsetY: 1 });
           },
         },
       },
