@@ -293,7 +293,7 @@ const onOverlappingRuleChanged = (e: any) => {
 .conflict-informer {
   background-color: #FCEAE8;
   color: #C50F1F;
-  font-size: 13px;
+  font-size: 12px;
   padding: 8px 12px;
 }
 
@@ -311,5 +311,10 @@ const onOverlappingRuleChanged = (e: any) => {
 .dx-scheduler-form-main-group .dx-item:last-child .dx-item:last-child,
 .dx-scheduler-form-main-group .dx-item:last-child .dx-item:last-child .dx-field-item-content {
   overflow: visible;
+}
+
+.dx-scheduler-form-recurrence-group.dx-scheduler-form-recurrence-group-hidden,
+.dx-scheduler-form-main-group.dx-scheduler-form-recurrence-group-hidden {
+  top: 41px;
 }
 </style>
