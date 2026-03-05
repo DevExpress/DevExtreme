@@ -47,7 +47,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return this._$sidebarTable ? getOuterWidth(this._$sidebarTable) : 0;
   }
 
-  _getTotalRowCount(groupCount) {
+  getTotalRowCount(groupCount) {
     if (this._isHorizontalGroupedWorkSpace()) {
       return this._getRowCount();
     }
@@ -504,7 +504,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       },
       this._getCellCount() || 1,
       this.option('resourceCellTemplate'),
-      this._getTotalRowCount(this._getGroupCount()),
+      this.getTotalRowCount(this._getGroupCount()),
       groupByDate,
     );
   }
