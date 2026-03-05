@@ -138,7 +138,7 @@ class SchedulerAgenda extends WorkSpace {
 
   _updateAllDayHeight() { return noop(); }
 
-  _initWorkSpaceUnits() {
+  initWorkSpaceUnits() {
     this._initGroupTable();
     this._$timePanel = $('<table>').attr('aria-hidden', true).addClass(TIME_PANEL_CLASS);
     this._$dateTable = $('<table>').attr('aria-hidden', true).addClass(DATE_TABLE_CLASS);
@@ -188,7 +188,7 @@ class SchedulerAgenda extends WorkSpace {
 
   _setTableSizes() { return noop(); }
 
-  _toggleHorizontalScrollClass() { return noop(); }
+  toggleHorizontalScrollClass() { return noop(); }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _createCrossScrollingConfig(argument?: any) { return noop(); }
@@ -265,7 +265,7 @@ class SchedulerAgenda extends WorkSpace {
       cellTag: 'th',
       groupTableClass: GROUP_TABLE_CLASS,
       groupRowClass: GROUP_ROW_CLASS,
-      groupCellClass: this._getGroupHeaderClass(),
+      groupCellClass: this.getGroupHeaderClass(),
       groupCellCustomContent(cell: HTMLDivElement, cellTextElement: HTMLElement, index: number, node: GroupNode) {
         const container = domAdapter.createElement('div');
         container.className = getGroupHeaderContentClass;
@@ -320,11 +320,11 @@ class SchedulerAgenda extends WorkSpace {
     }
   }
 
-  _createWorkSpaceElements() {
-    this._createWorkSpaceStaticElements();
+  createWorkSpaceElements() {
+    this.createWorkSpaceStaticElements();
   }
 
-  _createWorkSpaceStaticElements() {
+  createWorkSpaceStaticElements() {
     this._$dateTableContainer.append(this._$dateTable);
     this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
 
