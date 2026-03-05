@@ -112,7 +112,7 @@ class SchedulerAgenda extends WorkSpace {
     return false;
   }
 
-  _isVerticalGroupedWorkSpace() {
+  isVerticalGroupedWorkSpace() {
     return false;
   }
 
@@ -120,15 +120,15 @@ class SchedulerAgenda extends WorkSpace {
     return AGENDA_CLASS;
   }
 
-  _getRowCount() {
+  getRowCount() {
     return this.option('agendaDuration') as number;
   }
 
-  _getCellCount() {
+  getCellCount() {
     return 1;
   }
 
-  _getTimePanelRowCount() {
+  getTimePanelRowCount() {
     return this.option('agendaDuration') as number;
   }
 
@@ -169,7 +169,7 @@ class SchedulerAgenda extends WorkSpace {
     this._rows = rows;
 
     if (this._$groupTable) {
-      cellTemplates = this._renderGroupHeader();
+      cellTemplates = this.renderGroupHeader();
       this._setGroupHeaderCellsHeight();
     }
 
@@ -186,7 +186,7 @@ class SchedulerAgenda extends WorkSpace {
     this._dateTableScrollable.$content().append(this._$noDataContainer);
   }
 
-  _setTableSizes() { return noop(); }
+  setTableSizes() { return noop(); }
 
   _toggleHorizontalScrollClass() { return noop(); }
 
@@ -194,7 +194,7 @@ class SchedulerAgenda extends WorkSpace {
   _createCrossScrollingConfig(argument?: any) { return noop(); }
 
   _setGroupHeaderCellsHeight() {
-    const $cells = this._getGroupHeaderCells().filter((_, element) => !element.getAttribute('rowSpan'));
+    const $cells = this.getGroupHeaderCells().filter((_, element) => !element.getAttribute('rowSpan'));
     const rows = this._removeEmptyRows(this._rows);
 
     if (!rows.length) {
@@ -265,7 +265,7 @@ class SchedulerAgenda extends WorkSpace {
       cellTag: 'th',
       groupTableClass: GROUP_TABLE_CLASS,
       groupRowClass: GROUP_ROW_CLASS,
-      groupCellClass: this._getGroupHeaderClass(),
+      groupCellClass: this.getGroupHeaderClass(),
       groupCellCustomContent(cell: HTMLDivElement, cellTextElement: HTMLElement, index: number, node: GroupNode) {
         const container = domAdapter.createElement('div');
         container.className = getGroupHeaderContentClass;
@@ -340,11 +340,11 @@ class SchedulerAgenda extends WorkSpace {
     this._renderTableBody({
       container: getPublicElement(this._$dateTable),
       rowClass: DATE_TABLE_ROW_CLASS,
-      cellClass: this._getDateTableCellClass(),
+      cellClass: this.getDateTableCellClass(),
     });
   }
 
-  _attachTablesEvents() { return noop(); }
+  attachTablesEvents() { return noop(); }
 
   _attachEvents() { return noop(); }
 
@@ -435,7 +435,7 @@ class SchedulerAgenda extends WorkSpace {
   _renderTimePanel() {
     this._renderTableBody({
       container: getPublicElement(this._$timePanel),
-      rowCount: this._getTimePanelRowCount(),
+      rowCount: this.getTimePanelRowCount(),
       cellCount: 1,
       rowClass: TIME_PANEL_ROW_CLASS,
       cellClass: TIME_PANEL_CELL_CLASS,

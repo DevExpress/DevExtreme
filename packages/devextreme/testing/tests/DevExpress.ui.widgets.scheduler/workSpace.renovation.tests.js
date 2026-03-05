@@ -60,7 +60,7 @@ module('Renovated Render', {
                 onContentReady: function(e) {
                     const scrollable = e.component.getScrollable();
                     scrollable.option('scrollByContent', false);
-                    e.component._attachTablesEvents();
+                    e.component.attachTablesEvents();
                 },
                 ...options,
             })[workSpace]('instance');

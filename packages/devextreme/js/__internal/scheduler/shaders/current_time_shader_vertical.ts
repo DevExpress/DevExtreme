@@ -24,7 +24,7 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
     }
 
     setHeight(this._$shader, shaderHeight);
-    const groupCount = this._workSpace._getGroupCount() || 1;
+    const groupCount = this._workSpace.getGroupCount() || 1;
 
     if (this._workSpace.isGroupedByDate()) {
       this.renderGroupedByDateShaderParts(groupCount, shaderHeight, maxHeight, isSolidShader);

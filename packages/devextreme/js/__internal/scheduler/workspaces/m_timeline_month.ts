@@ -19,7 +19,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
   _renderView() {
     super._renderView();
 
-    this._updateScrollable();
+    this.updateScrollable();
   }
 
   _getElementClass() {
@@ -49,7 +49,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     return currentDate.getTime() - (firstViewDate.getTime() - (this.option('startDayHour') as any) * 3600000) - timeZoneOffset;
   }
 
-  _getViewStartByOptions() {
+  getViewStartByOptions() {
     return monthUtils.getViewStartByOptions(
       this.option('startDate') as any,
       this.option('currentDate') as any,
