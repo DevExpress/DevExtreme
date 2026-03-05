@@ -729,9 +729,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     super._handleDataChanged.apply(this, arguments);
 
     if (e.operationTypes?.filtering || e.operationTypes?.fullReload) {
-      this._dataController.waitReady().then(() => {
-        this.updateLookupDataSource(e.operationTypes?.filtering || lastLoadOptions?.filter);
-      });
+      this.updateLookupDataSource(e.operationTypes?.filtering || lastLoadOptions?.filter);
     }
   }
 
