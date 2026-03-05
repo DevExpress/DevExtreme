@@ -498,7 +498,7 @@ QUnit.module('Methods', {
         const appointments = scheduler.instance.getAppointmentsInstance();
         const focusSpy = sinon.spy(appointments, 'focus');
 
-        scheduler.instance._editAppointmentData = tasks[0];
+        scheduler.instance.editAppointmentData = tasks[0];
         scheduler.instance.focus();
 
         assert.ok(focusSpy.calledOnce, 'focus is called');

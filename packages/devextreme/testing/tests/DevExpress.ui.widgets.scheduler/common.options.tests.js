@@ -638,7 +638,7 @@ QUnit.module('Options', () => {
 
         const spyAppointmentPopupForm = sinon.spy(
             scheduler.instance,
-            '_createAppointmentPopupForm'
+            'createAppointmentPopupForm'
         );
 
         scheduler.instance.option('resources', resources);
