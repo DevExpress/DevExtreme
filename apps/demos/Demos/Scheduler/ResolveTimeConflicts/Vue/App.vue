@@ -301,6 +301,15 @@ const onOverlappingRuleChanged = (e: any) => {
   width: 280px;
 }
 
+.dx-dialog .dx-dialog-content {
+  padding-bottom: 16px;
+}
+
+.dx-dialog .dx-dialog-buttons {
+  padding-top: 0;
+  padding-bottom: 16px;
+}
+
 .dx-dialog .dx-toolbar-center,
 .dx-dialog .dx-button {
   width: 100%;

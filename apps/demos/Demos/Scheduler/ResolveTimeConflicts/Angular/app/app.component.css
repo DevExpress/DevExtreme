@@ -30,6 +30,15 @@
   width: 280px;
 }
 
+::ng-deep .dx-dialog .dx-dialog-content {
+  padding-bottom: 16px;
+}
+
+::ng-deep .dx-dialog .dx-dialog-buttons {
+  padding-top: 0;
+  padding-bottom: 16px;
+}
+
 ::ng-deep .dx-dialog .dx-toolbar-center,
 ::ng-deep .dx-dialog .dx-button {
   width: 100%;
