@@ -2,12 +2,25 @@
   color: #242424;
 }
 
-.hide-informer .dx-scheduler-form-main-group .dx-item:has(.conflict-informer) {
-  display: none !important;
+.options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
 }
 
-.hide-informer .dx-scheduler-form-main-group .dx-scheduler-form-subject-group {
-  padding-top: 0 !important;
+.option {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#overlapping-rule {
+  width: 200px;
+}
+
+.hide-informer .dx-item:has(.conflict-informer) {
+  display: none !important;
 }
 
 .conflict-informer {
@@ -24,4 +37,9 @@
 .dx-dialog .dx-toolbar-center,
 .dx-dialog .dx-button {
   width: 100%;
+}
+
+.dx-scheduler-form-main-group .dx-item:last-child,
+.dx-scheduler-form-main-group .dx-item:last-child .dx-field-item-content {
+  overflow: visible;
 }

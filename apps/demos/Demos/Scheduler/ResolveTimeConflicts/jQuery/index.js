@@ -2,6 +2,7 @@ $(() => {
   let popup;
   let form;
   let showConflictError = false;
+  let overlappingRule = 'sameResource';
 
   const scheduler = $('#scheduler').dxScheduler({
     dataSource: data,
@@ -11,7 +12,6 @@ $(() => {
     startDayHour: 9,
     endDayHour: 19,
     height: 600,
-    showAllDayPanel: false,
     resources: [{
       fieldExpr: 'assigneeId',
       dataSource: assignees,
@@ -25,6 +25,9 @@ $(() => {
         onInitialized: (e) => {
           popup = e.component;
         },
+        onHidden: () => {
+          setConflictError(false);
+        },
       },
       form: {
         labelMode: 'hidden',
@@ -33,23 +36,22 @@ $(() => {
           form = e.component;
 
           form.on('fieldDataChanged', (e) => {
-            if (showConflictError && (e.dataField === 'startDate' || e.dataField === 'endDate')) {
-              showConflictError = false;
-              form.option('elementAttr.class', 'hide-informer');
+            if (showConflictError && ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(e.dataField)) {
+              setConflictError(false);
               form.validate();
             }
           });
         },
         items: [
           {
+            name: 'conflictInformer',
+            template: () => $('<div>')
+              .addClass('conflict-informer')
+              .text('This time slot conflicts with another appointment.'),
+          },
+          {
             name: 'mainGroup',
             items: [
-              {
-                name: 'conflictInformer',
-                template: () => $('<div>')
-                  .addClass('conflict-informer')
-                  .text('This time slot conflicts with another appointment.'),
-              },
               'subjectGroup',
               'dateGroup',
               'repeatGroup',
@@ -112,19 +114,21 @@ $(() => {
     },
   }).dxScheduler('instance');
 
-  function alertConflictIfNeeded(e, appointmentData) {
-    const hasConflict = detectConflict(appointmentData);
+  function setConflictError(show) {
+    showConflictError = show;
+    form?.option('elementAttr.class', show ? '' : 'hide-informer');
+  }
 
-    if (!hasConflict) {
-      showConflictError = false;
+  function alertConflictIfNeeded(e, appointmentData) {
+    if (!detectConflict(appointmentData)) {
+      setConflictError(false);
       return;
     }
 
     e.cancel = true;
 
-    if (popup && popup.option('visible')) {
-      showConflictError = true;
-      form.option('elementAttr.class', '');
+    if (popup?.option('visible')) {
+      setConflictError(true);
       form.validate();
     } else {
       const dialog = DevExpress.ui.dialog.custom({
@@ -132,7 +136,7 @@ $(() => {
         messageHtml: 'This time slot conflicts with another appointment.',
         buttons: [{
           type: 'default',
-          text: 'cancel',
+          text: 'Close',
           stylingMode: 'contained',
           onClick: () => {
             dialog.hide();
@@ -143,17 +147,39 @@ $(() => {
     }
   }
 
+  function getNextDay(date) {
+    const next = new Date(date);
+    next.setDate(next.getDate() + 1);
+    return next;
+  }
+
+  function getEndDate(occurrence) {
+    return occurrence.appointmentData.allDay
+      ? getNextDay(occurrence.startDate)
+      : occurrence.endDate;
+  }
+
   function isOverlapping(a, b) {
-    return a.appointmentData.assigneeId[0] === b.appointmentData.assigneeId[0] &&
-      a.startDate < b.endDate && a.endDate > b.startDate;
+    const aEnd = getEndDate(a);
+    const bEnd = getEndDate(b);
+    if (a.startDate >= bEnd || b.startDate >= aEnd) return false;
+    if (overlappingRule === 'sameResource') {
+      return a.appointmentData.assigneeId[0] === b.appointmentData.assigneeId[0];
+    }
+    return true;
   }
 
   function detectConflict(newAppointment) {
     const allAppointments = scheduler.getDataSource().items();
     const startDate = new Date(newAppointment.startDate);
-    const endDate = newAppointment.recurrenceRule
-      ? scheduler.getEndViewDate()
-      : new Date(newAppointment.endDate);
+    let endDate;
+    if (newAppointment.recurrenceRule) {
+      endDate = scheduler.getEndViewDate();
+    } else if (newAppointment.allDay) {
+      endDate = getNextDay(startDate);
+    } else {
+      endDate = new Date(newAppointment.endDate);
+    }
 
     const existingOccurrences = scheduler
       .getOccurrences(startDate, endDate, allAppointments)
@@ -167,4 +193,17 @@ $(() => {
       ),
     );
   }
+
+  $('#overlapping-rule').dxSelectBox({
+    items: [
+      { value: 'sameResource', text: 'Same Resource' },
+      { value: 'allResources', text: 'All Resources' },
+    ],
+    valueExpr: 'value',
+    displayExpr: 'text',
+    value: 'sameResource',
+    onValueChanged(e) {
+      overlappingRule = e.value;
+    },
+  });
 });
