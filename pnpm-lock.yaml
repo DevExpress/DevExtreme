@@ -1925,6 +1925,9 @@ importers:
       reflect-metadata:
         specifier: 0.1.13
         version: 0.1.13
+      rxjs:
+        specifier: 7.8.2
+        version: 7.8.2
       stream-browserify:
         specifier: 3.0.0
         version: 3.0.0
