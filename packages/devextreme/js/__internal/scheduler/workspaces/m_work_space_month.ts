@@ -38,9 +38,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     return currentDate.getTime() - (firstViewDate.getTime() - (this.option('startDayHour') as any) * 3600000) - timeZoneOffset;
   }
 
-  getDateGenerationOptions() {
+  _getDateGenerationOptions() {
     return {
-      ...super.getDateGenerationOptions(),
+      ...super._getDateGenerationOptions(),
       cellCountInDay: 1,
     };
   }
@@ -55,7 +55,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
       const DAYS_IN_WEEK = 7;
 
       let averageWidth = 0;
-      const cells = this.getCells().slice(0, DAYS_IN_WEEK);
+      const cells = this._getCells().slice(0, DAYS_IN_WEEK);
       cells.each((index, element) => {
         averageWidth += hasWindow() ? getBoundingRect(element).width : 0;
       });
@@ -68,9 +68,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     return false;
   }
 
-  getCellCoordinatesByIndex(index) {
-    const rowIndex = Math.floor(index / this.getCellCount());
-    const columnIndex = index - this.getCellCount() * rowIndex;
+  _getCellCoordinatesByIndex(index) {
+    const rowIndex = Math.floor(index / this._getCellCount());
+    const columnIndex = index - this._getCellCount() * rowIndex;
 
     return {
       rowIndex,
@@ -80,10 +80,10 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
   _needCreateCrossScrolling() {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return this.option('crossScrollingEnabled') || this.isVerticalGroupedWorkSpace();
+    return this.option('crossScrollingEnabled') || this._isVerticalGroupedWorkSpace();
   }
 
-  getViewStartByOptions() {
+  _getViewStartByOptions() {
     return monthUtils.getViewStartByOptions(
       this.option('startDate') as any,
       this.option('currentDate') as any,
@@ -124,8 +124,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     return true;
   }
 
-  getHeaderDate() {
-    return this.getViewStartByOptions();
+  _getHeaderDate() {
+    return this._getViewStartByOptions();
   }
 
   renderRAllDayPanel() {}
@@ -138,7 +138,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
       this._$dateTable,
       DateTableMonthComponent,
       'renovatedDateTable',
-      this.getRDateTableProps(),
+      this._getRDateTableProps(),
     );
   }
 
@@ -147,7 +147,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   // -------------
 
   _createWorkSpaceElements() {
-    if (this.isVerticalGroupedWorkSpace()) {
+    if (this._isVerticalGroupedWorkSpace()) {
       this._createWorkSpaceScrollableElements();
     } else {
       super._createWorkSpaceElements();

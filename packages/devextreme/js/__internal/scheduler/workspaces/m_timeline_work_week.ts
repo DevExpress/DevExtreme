@@ -16,7 +16,7 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
     // @ts-expect-error
     super(...args);
 
-    this.getWeekendsCount = getWeekendsCount;
+    this._getWeekendsCount = getWeekendsCount;
   }
 
   _getElementClass() {
