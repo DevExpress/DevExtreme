@@ -786,7 +786,7 @@ module('Integration: Agenda', moduleConfig, () => {
         const rowHeight = 77;
         const $element = instance.$element();
         const expectedWidth = getOuterWidth($element.find('.dx-scheduler-date-table'));
-        const agendaStub = sinon.stub(agenda, '_getRowHeight').returns(rowHeight);
+        const agendaStub = sinon.stub(agenda, 'getRowHeight').returns(rowHeight);
 
         try {
             instance.option('dataSource', [
@@ -1565,7 +1565,7 @@ module('Integration: Agenda', moduleConfig, () => {
             instance.option('dataSource', data);
             await waitAsync(0);
 
-            const calculatedRows = agendaWorkspace._rows[0];
+            const calculatedRows = agendaWorkspace.rows[0];
             assert.equal(calculatedRows.length, 65, 'Rows are OK');
 
             $.each(calculatedRows, function(index, item) {
@@ -1606,7 +1606,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 instance.option('dataSource', data);
                 await waitAsync(0);
 
-                const calculatedRows = agendaWorkspace._rows;
+                const calculatedRows = agendaWorkspace.rows;
                 assert.deepEqual(calculatedRows, [[1, 2, 2, 2, 2]], 'Rows are OK');
             } finally {
                 endViewDateStub.restore();
@@ -1640,7 +1640,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 instance.option('dataSource', data);
                 await waitAsync(0);
 
-                const calculatedRows = agendaWorkspace._rows;
+                const calculatedRows = agendaWorkspace.rows;
                 assert.deepEqual(calculatedRows, [[0, 1, 1, 1, 0]], 'Rows are OK');
             } finally {
                 endViewDateStub.restore();
@@ -1671,7 +1671,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 instance.option('dataSource', data);
                 await waitAsync(0);
 
-                const calculatedRows = agendaWorkspace._rows;
+                const calculatedRows = agendaWorkspace.rows;
                 assert.deepEqual(calculatedRows, [[1, 1, 1, 1, 0]], 'Rows are OK');
             } finally {
                 endViewDateStub.restore();
@@ -1709,7 +1709,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 instance.option('dataSource', data);
                 await waitAsync(0);
 
-                const calculatedRows = agendaWorkspace._rows;
+                const calculatedRows = agendaWorkspace.rows;
                 assert.deepEqual(calculatedRows, [[0, 1, 1, 0, 1, 1, 0]], 'Rows are OK');
             } finally {
                 endViewDateStub.restore();

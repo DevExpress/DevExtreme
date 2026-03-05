@@ -33,7 +33,7 @@ module('Agenda', {}, () => {
         const config = {
             onContentReady: e => {
                 e.component.renderView();
-                e.component._recalculateAgenda(rows);
+                e.component.recalculateAgenda(rows);
             },
             getResourceManager: getEmptyResourceManager,
         };
@@ -65,7 +65,7 @@ module('Agenda', {}, () => {
         const rows = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 1], [0, 0, 0, 0, 0], [1, 1, 1, 0, 1]];
 
         const instance = createInstance();
-        const resultRows = instance._removeEmptyRows(rows);
+        const resultRows = instance.removeEmptyRows(rows);
 
         assert.deepEqual(resultRows, [[0, 0, 0, 0, 1], [1, 1, 1, 0, 1]], 'The empty rows was removed');
     });
@@ -140,7 +140,7 @@ module('Agenda', {}, () => {
     test('Agenda should be recalculated after rowHeight changed', async function(assert) {
         const instance = createInstance();
 
-        const recalculateStub = sinon.stub(instance, '_recalculateAgenda');
+        const recalculateStub = sinon.stub(instance, 'recalculateAgenda');
 
         instance.option('rowHeight', 100);
 
