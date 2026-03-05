@@ -1143,7 +1143,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.resourceManager.groupCount();
   }
 
-  _attachTablesEvents() {
+  attachTablesEvents() {
     const element = this.$element();
 
     this._attachDragEvents(element);
@@ -2337,7 +2337,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         break;
       case 'allDayExpanded':
         this.updateAllDayExpansion();
-        this._attachTablesEvents();
+        this.attachTablesEvents();
         this._updateScrollable();
         break;
       case 'onSelectionChanged':
