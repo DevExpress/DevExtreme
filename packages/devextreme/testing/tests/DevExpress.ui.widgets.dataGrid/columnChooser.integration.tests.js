@@ -443,7 +443,9 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         const field2 = band1.children[0];
         const field3 = band1.children[1];
 
-        assert.strictEqual(band1.selected, undefined, 'Band column is in intermediate state');
+        // Band column state was changed from undefined to false due to changing TreeView selection logic
+        assert.strictEqual(band1.selected, false, 'Band column is in unselected state');
+
         assert.strictEqual(field2.selected, false, 'Field 2 column is unselected');
         assert.strictEqual(field3.selected, true, 'Field 3 column is selected');
     });
