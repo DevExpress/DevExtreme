@@ -26,7 +26,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     return TIMELINE_CLASS;
   }
 
-  _getDateHeaderTemplate() {
+  getDateHeaderTemplate() {
     return this.option('dateCellTemplate');
   }
 

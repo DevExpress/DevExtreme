@@ -91,7 +91,7 @@ class SchedulerAgenda extends WorkSpace {
           if (this._$groupTable) {
             this._$groupTable.remove();
             this._$groupTable = null;
-            this._detachGroupCountClass();
+            this.detachGroupCountClass();
           }
         } else if (!this._$groupTable) {
           this._initGroupTable();
@@ -140,7 +140,7 @@ class SchedulerAgenda extends WorkSpace {
 
   renderAllDayPanel() { return noop(); }
 
-  _updateAllDayVisibility() { return noop(); }
+  updateAllDayVisibility() { return noop(); }
 
   _updateAllDayHeight() { return noop(); }
 
@@ -176,14 +176,14 @@ class SchedulerAgenda extends WorkSpace {
     this._rows = rows;
 
     if (this._$groupTable) {
-      cellTemplates = this._renderGroupHeader();
+      cellTemplates = this.renderGroupHeader();
       this._setGroupHeaderCellsHeight();
     }
 
     this.renderTimePanel();
     this.renderDateTable();
     (this.invoke as any)('onAgendaReady', rows);
-    this._applyCellTemplates(cellTemplates);
+    this.applyCellTemplates(cellTemplates);
     this._dateTableScrollable.update();
   }
 
@@ -232,7 +232,7 @@ class SchedulerAgenda extends WorkSpace {
     return result;
   }
 
-  _attachGroupCountClass() {
+  attachGroupCountClass() {
     const className = getVerticalGroupCountClass(this.option('groups'));
     (this.$element() as any).addClass(className);
   }
@@ -256,7 +256,7 @@ class SchedulerAgenda extends WorkSpace {
     return this._$groupTable;
   }
 
-  _makeGroupRows() {
+  makeGroupRows() {
     const resourceManager = this.option('getResourceManager')();
     const allAppointments = (this.option('getFilteredItems') as any)();
     const tree = reduceResourcesTree(
@@ -348,7 +348,7 @@ class SchedulerAgenda extends WorkSpace {
     this.renderTableBody({
       container: getPublicElement(this._$dateTable),
       rowClass: DATE_TABLE_ROW_CLASS,
-      cellClass: this._getDateTableCellClass(),
+      cellClass: this.getDateTableCellClass(),
     });
   }
 
@@ -429,7 +429,7 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     $(options.container).append($('<tbody>').append(this._$rows));
-    this._applyCellTemplates(cellTemplates);
+    this.applyCellTemplates(cellTemplates);
   }
 
   _setLastRowClass() {
