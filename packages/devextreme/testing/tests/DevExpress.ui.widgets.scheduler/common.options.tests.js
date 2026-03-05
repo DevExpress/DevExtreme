@@ -936,7 +936,7 @@ QUnit.module('Options', () => {
         });
 
         const initMarkupSpy = sinon.spy(scheduler.instance, '_initMarkup');
-        const reloadDataSourceSpy = sinon.spy(scheduler.instance, '_reloadDataSource');
+        const reloadDataSourceSpy = sinon.spy(scheduler.instance, 'reloadDataSource');
         let count = 0;
 
         const nextDataSource = new DataSource({

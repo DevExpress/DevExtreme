@@ -268,7 +268,7 @@ module('Integration: Appointment editing', {
 
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                const popup = scheduler.instance._appointmentPopup.popup;
+                const popup = scheduler.instance.appointmentPopup.popup;
             });
 
             test('Add new appointment with delay and an error(T381444)', async function(assert) {
@@ -303,7 +303,7 @@ module('Integration: Appointment editing', {
 
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                const popup = scheduler.instance._appointmentPopup.popup;
+                const popup = scheduler.instance.appointmentPopup.popup;
             });
 
             // TODO: update editors in popup

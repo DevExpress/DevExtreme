@@ -636,46 +636,46 @@ QUnit.module('Methods', {
 
     QUnit.test('showAppointmentTooltipCore, should call show tooltip', async function(assert) {
         const scheduler = await createInstance({});
-        scheduler.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(false);
-        scheduler.instance._appointmentTooltip.show = sinon.stub();
-        scheduler.instance._appointmentTooltip.hide = sinon.stub();
+        scheduler.instance.appointmentTooltip.isAlreadyShown = sinon.stub().returns(false);
+        scheduler.instance.appointmentTooltip.show = sinon.stub();
+        scheduler.instance.appointmentTooltip.hide = sinon.stub();
         scheduler.instance.showAppointmentTooltipCore('target', [], 'options');
 
-        assert.ok(!scheduler.instance._appointmentTooltip.hide.called, 'hide tooltip is not called');
-        assert.ok(scheduler.instance._appointmentTooltip.show.called, 'show tooltip is called');
+        assert.ok(!scheduler.instance.appointmentTooltip.hide.called, 'hide tooltip is not called');
+        assert.ok(scheduler.instance.appointmentTooltip.show.called, 'show tooltip is called');
     });
 
     QUnit.test('showAppointmentTooltipCore, should call hide tooltip', async function(assert) {
         const scheduler = await createInstance({});
-        scheduler.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(true);
-        scheduler.instance._appointmentTooltip.show = sinon.stub();
-        scheduler.instance._appointmentTooltip.hide = sinon.stub();
+        scheduler.instance.appointmentTooltip.isAlreadyShown = sinon.stub().returns(true);
+        scheduler.instance.appointmentTooltip.show = sinon.stub();
+        scheduler.instance.appointmentTooltip.hide = sinon.stub();
         scheduler.instance.showAppointmentTooltipCore('target', [], 'options');
 
-        assert.ok(scheduler.instance._appointmentTooltip.hide.called, 'hide tooltip is called');
-        assert.ok(!scheduler.instance._appointmentTooltip.show.called, 'show tooltip is not called');
+        assert.ok(scheduler.instance.appointmentTooltip.hide.called, 'hide tooltip is called');
+        assert.ok(!scheduler.instance.appointmentTooltip.show.called, 'show tooltip is not called');
     });
 
     QUnit.test('showAppointmentTooltip, should call show tooltip', async function(assert) {
         const scheduler = await createInstance({});
-        scheduler.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(false);
-        scheduler.instance._appointmentTooltip.show = sinon.stub();
-        scheduler.instance._appointmentTooltip.hide = sinon.stub();
+        scheduler.instance.appointmentTooltip.isAlreadyShown = sinon.stub().returns(false);
+        scheduler.instance.appointmentTooltip.show = sinon.stub();
+        scheduler.instance.appointmentTooltip.hide = sinon.stub();
         scheduler.instance.showAppointmentTooltip('appointmentData', 'target', 'currentAppointmentData');
 
-        assert.ok(!scheduler.instance._appointmentTooltip.hide.called, 'hide tooltip is not called');
-        assert.ok(scheduler.instance._appointmentTooltip.show.called, 'show tooltip is called');
+        assert.ok(!scheduler.instance.appointmentTooltip.hide.called, 'hide tooltip is not called');
+        assert.ok(scheduler.instance.appointmentTooltip.show.called, 'show tooltip is called');
     });
 
     QUnit.test('showAppointmentTooltip, should call hide tooltip', async function(assert) {
         const scheduler = await createInstance({});
-        scheduler.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(true);
-        scheduler.instance._appointmentTooltip.show = sinon.stub();
-        scheduler.instance._appointmentTooltip.hide = sinon.stub();
+        scheduler.instance.appointmentTooltip.isAlreadyShown = sinon.stub().returns(true);
+        scheduler.instance.appointmentTooltip.show = sinon.stub();
+        scheduler.instance.appointmentTooltip.hide = sinon.stub();
         scheduler.instance.showAppointmentTooltip('appointmentData', 'target', 'currentAppointmentData');
 
-        assert.ok(scheduler.instance._appointmentTooltip.hide.called, 'hide tooltip is called');
-        assert.ok(!scheduler.instance._appointmentTooltip.show.called, 'show tooltip is not called');
+        assert.ok(scheduler.instance.appointmentTooltip.hide.called, 'hide tooltip is called');
+        assert.ok(!scheduler.instance.appointmentTooltip.show.called, 'show tooltip is not called');
     });
 
     QUnit.test('_getUpdatedData for the empty data item (T906240)', async function(assert) {
