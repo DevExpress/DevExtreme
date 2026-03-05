@@ -23,7 +23,7 @@ interface VectorMapServiceOptions {
 }
 
 export interface VectorMapService {
-  executeVectorMapConsoleApp: (arg: string, searchParams: URLSearchParams) => VectorMapOutputItem[];
+  executeVectorMapConsoleApp: (searchParams: URLSearchParams) => VectorMapOutputItem[];
   readThemeCssFiles: () => string[];
   readVectorMapTestData: () => VectorMapDataItem[];
   redirectRequestToVectorMapNodeServer: (action: string, arg: string) => Promise<string>;
@@ -231,7 +231,6 @@ export function createVectorMapService({
   }
 
   function executeVectorMapConsoleApp(
-    arg: string,
     searchParams: URLSearchParams,
   ): VectorMapOutputItem[] {
     const inputDirectory = `${path.join(packageRoot, 'testing', 'content', 'VectorMapData')}${path.sep}`;

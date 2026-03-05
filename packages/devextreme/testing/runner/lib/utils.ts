@@ -114,7 +114,7 @@ export function formatDateForSuiteTimestamp(date: Date): string {
 }
 
 export function isContinuousIntegration(): boolean {
-  return Boolean(process.env.CCNetWorkingDirectory ?? process.env.DEVEXTREME_TEST_CI);
+  return Boolean(process.env.CCNetWorkingDirectory || process.env.DEVEXTREME_TEST_CI);
 }
 
 export function resolveNodePath(): string {
