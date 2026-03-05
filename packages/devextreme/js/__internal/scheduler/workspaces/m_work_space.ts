@@ -1115,7 +1115,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this._groupedStrategy.getTotalCellCount(groupCount);
   }
 
-  private getTotalRowCount(groupCount, includeAllDayPanelRows?: any) {
+  protected getTotalRowCount(groupCount, includeAllDayPanelRows?: any) {
     let result = this._groupedStrategy.getTotalRowCount(groupCount);
 
     if (includeAllDayPanelRows && this.isAllDayPanelVisible) {
