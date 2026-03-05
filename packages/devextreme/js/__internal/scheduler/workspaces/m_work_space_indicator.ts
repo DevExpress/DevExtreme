@@ -187,8 +187,8 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return false;
   }
 
-  _getHeaderPanelCellClass(i) {
-    const cellClass = super._getHeaderPanelCellClass(i);
+  getHeaderPanelCellClass(i) {
+    const cellClass = super.getHeaderPanelCellClass(i);
 
     if (this._isCurrentTimeHeaderCell(i)) {
       return `${cellClass} ${HEADER_CURRENT_TIME_CELL_CLASS}`;

@@ -154,7 +154,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
   }
 
-  _updateAllDayVisibility() { return noop(); }
+  updateAllDayVisibility() { return noop(); }
 
   _updateAllDayHeight() { return noop(); }
 
@@ -173,7 +173,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
       .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, data.otherMonth);
   }
 
-  _createAllDayPanelElements() {}
+  createAllDayPanelElements() {}
 
   renderTableBody(options) {
     options.getCellText = (rowIndex, columnIndex) => {

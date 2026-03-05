@@ -326,18 +326,18 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     this._createWorkSpaceScrollableElements();
   }
 
-  _updateAllDayVisibility() { return noop(); }
+  updateAllDayVisibility() { return noop(); }
 
   _updateAllDayHeight() { return noop(); }
 
-  _getDateHeaderTemplate() {
+  getDateHeaderTemplate() {
     return this.option('timeCellTemplate');
   }
 
   _renderView() {
     let groupCellTemplates;
     if (!this.isRenovatedRender()) {
-      groupCellTemplates = this._renderGroupHeader();
+      groupCellTemplates = this.renderGroupHeader();
     }
 
     this.renderWorkSpace();
@@ -356,7 +356,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     this.updateHeaderEmptyCellWidth();
 
-    this._applyCellTemplates(groupCellTemplates);
+    this.applyCellTemplates(groupCellTemplates);
   }
 
   _setHorizontalGroupHeaderCellsHeight() { return noop(); }
@@ -392,10 +392,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   renderAllDayPanel() { return noop(); }
 
-  _createAllDayPanelElements() { return noop(); }
+  createAllDayPanelElements() { return noop(); }
 
-  _renderDateHeader() {
-    const $headerRow = super._renderDateHeader();
+  renderDateHeader() {
+    const $headerRow = super.renderDateHeader();
     if (this._needRenderWeekHeader()) {
       const firstViewDate = new Date(this.getStartViewDate());
       let currentDate = new Date(firstViewDate);
@@ -424,7 +424,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             model: {
               text,
               date: new Date(currentDate),
-              ...this._getGroupsForDateHeaderTemplate(templateIndex, colSpan),
+              ...this.getGroupsForDateHeaderTemplate(templateIndex, colSpan),
             },
             container: $th,
             index: templateIndex,
@@ -473,7 +473,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
   }
 
-  _makeGroupRows(groups, groupByDate) {
+  makeGroupRows(groups, groupByDate) {
     const tableCreatorStrategy = this.option('groupOrientation') === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
     return tableCreator.makeGroupedTable(
