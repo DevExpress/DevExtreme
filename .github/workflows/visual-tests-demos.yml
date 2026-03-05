@@ -632,7 +632,6 @@ jobs:
       uses: ./.github/actions/setup-chrome
       with:
         chrome-version: '145.0.7632.67'
-        runner-type: 'github-hosted'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -787,7 +786,6 @@ jobs:
       uses: ./.github/actions/setup-chrome
       with:
         chrome-version: '145.0.7632.67'
-        runner-type: 'github-hosted'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -916,7 +914,6 @@ jobs:
         uses: ./.github/actions/setup-chrome
         with:
           chrome-version: '145.0.7632.67'
-          runner-type: 'github-hosted'
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -1097,7 +1094,6 @@ jobs:
       uses: ./.github/actions/setup-chrome
       with:
         chrome-version: '145.0.7632.67'
-        runner-type: 'github-hosted'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -1170,7 +1166,6 @@ jobs:
       uses: ./.github/actions/setup-chrome
       with:
         chrome-version: '145.0.7632.67'
-        runner-type: 'github-hosted'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
