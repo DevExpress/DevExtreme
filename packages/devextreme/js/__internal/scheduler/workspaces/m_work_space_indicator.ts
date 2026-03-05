@@ -18,7 +18,7 @@ const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
-  _indicatorInterval: any;
+  private indicatorInterval: any;
 
   // @ts-expect-error
   _getToday() {
@@ -59,11 +59,12 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return dateUtils.dateInRange(today, firstViewDate, endViewDate);
   }
 
-  _renderIndicator(height, rtlOffset, $container, groupCount) {
+  // Overridden in SchedulerTimeline
+  renderIndicator(height, rtlOffset, $container, groupCount) {
     const groupedByDate = this.isGroupedByDate();
     const repeatCount = groupedByDate ? 1 : groupCount;
     for (let i = 0; i < repeatCount; i++) {
-      const $indicator = this._createIndicator($container);
+      const $indicator = this.createIndicator($container);
 
       setWidth(
         $indicator,
@@ -73,14 +74,15 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
   }
 
-  _createIndicator($container) {
+  // Called from SchedulerTimeline._renderIndicator
+  createIndicator($container) {
     const $indicator = $('<div>').addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
     $container.append($indicator);
 
     return $indicator;
   }
 
-  _getRtlOffset(width) {
+  private getRtlOffset(width) {
     return this.option('rtlEnabled') ? getBoundingRect(this._dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
   }
 
@@ -89,27 +91,28 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
       return;
     }
 
-    this._clearIndicatorUpdateInterval();
+    this.clearIndicatorUpdateInterval();
 
-    this._indicatorInterval = setInterval(() => {
+    this.indicatorInterval = setInterval(() => {
       this.renderCurrentDateTimeIndication();
     }, this.option('indicatorUpdateInterval'));
   }
 
-  _clearIndicatorUpdateInterval() {
-    if (this._indicatorInterval) {
-      clearInterval(this._indicatorInterval);
-      delete this._indicatorInterval;
+  private clearIndicatorUpdateInterval() {
+    if (this.indicatorInterval) {
+      clearInterval(this.indicatorInterval);
+      delete this.indicatorInterval;
     }
   }
 
-  _isVerticalShader() {
+  // Overridden in SchedulerTimeline
+  isVerticalShader() {
     return true;
   }
 
   getIndicationWidth() {
     const cellCount = this._getCellCount();
-    const cellSpan = Math.min(this._getIndicatorDaysSpan(), cellCount);
+    const cellSpan = Math.min(this.getIndicatorDaysSpan(), cellCount);
     const width = cellSpan * this.getCellWidth();
     const maxWidth = this.getCellWidth() * cellCount;
 
@@ -117,13 +120,13 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   getIndicatorOffset() {
-    const cellSpan = this._getIndicatorDaysSpan() - 1;
+    const cellSpan = this.getIndicatorDaysSpan() - 1;
     const offset = cellSpan * this.getCellWidth();
 
     return offset;
   }
 
-  _getIndicatorDaysSpan(): number {
+  private getIndicatorDaysSpan(): number {
     const today = this._getToday();
     const viewStartTime = this.getStartViewDate().getTime();
     let timeDiff = today.getTime() - viewStartTime;
@@ -152,7 +155,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   _dispose() {
-    this._clearIndicatorUpdateInterval();
+    this.clearIndicatorUpdateInterval();
     super._dispose.apply(this, arguments as any);
   }
 
@@ -171,12 +174,13 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   renderCurrentDateTimeLineAndShader(): void {
-    this._cleanDateTimeIndicator();
+    this.cleanDateTimeIndicator();
     this._shader?.clean();
     this.renderDateTimeIndication();
   }
 
-  _isCurrentTimeHeaderCell(headerIndex: number): boolean {
+  // Overridden in SchedulerTimeline
+  isCurrentTimeHeaderCell(headerIndex: number): boolean {
     if (this.isIndicationOnView()) {
       const { completeDateHeaderMap } = this.viewDataProvider;
       const date = completeDateHeaderMap[completeDateHeaderMap.length - 1][headerIndex].startDate;
@@ -190,7 +194,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   protected override getHeaderPanelCellClass(i) {
     const cellClass = super.getHeaderPanelCellClass(i);
 
-    if (this._isCurrentTimeHeaderCell(i)) {
+    if (this.isCurrentTimeHeaderCell(i)) {
       return `${cellClass} ${HEADER_CURRENT_TIME_CELL_CLASS}`;
     }
 
@@ -200,7 +204,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   _cleanView() {
     super._cleanView();
 
-    this._cleanDateTimeIndicator();
+    this.cleanDateTimeIndicator();
   }
 
   _dimensionChanged() {
@@ -209,7 +213,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     this.renderCurrentDateTimeLineAndShader();
   }
 
-  _cleanDateTimeIndicator() {
+  private cleanDateTimeIndicator() {
     (this.$element() as any).find(`.${SCHEDULER_DATE_TIME_INDICATOR_CLASS}`).remove();
   }
 
@@ -252,7 +256,8 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     });
   }
 
-  _getCurrentTimePanelCellIndices() {
+  // Overridden in SchedulerTimeline
+  getCurrentTimePanelCellIndices() {
     const rowCountPerGroup = this.getTimePanelRowCount();
     const today = this._getToday();
     const index = this.getCellIndexByDate(today);
@@ -298,28 +303,30 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     const groupCount = this._getGroupCount() || 1;
     const $container = this._dateTableScrollable.$content();
     const height = this.getIndicationHeight();
-    const rtlOffset = this._getRtlOffset(this.getCellWidth());
+    const rtlOffset = this.getRtlOffset(this.getCellWidth());
 
-    this._renderIndicator(height, rtlOffset, $container, groupCount);
+    this.renderIndicator(height, rtlOffset, $container, groupCount);
 
     // TODO Old render: delete this code with the old render.
     if (!this.isRenovatedRender()) {
-      this._setCurrentTimeCells();
+      this.setCurrentTimeCells();
     }
   }
 
   // Temporary new render methods.
   // TODO Old render: replace base call methods by these after the deleting of the old render.
-  protected _setCurrentTimeCells(): void {
+  // Overridden in SchedulerTimeline
+  setCurrentTimeCells(): void {
     const timePanelCells = this.getTimePanelCells();
-    const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
+    const currentTimeCellIndices = this.getCurrentTimePanelCellIndices();
     currentTimeCellIndices.forEach((timePanelCellIndex) => {
       timePanelCells.eq(timePanelCellIndex)
         .addClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
     });
   }
 
-  protected _cleanCurrentTimeCells(): void {
+  // Overridden in SchedulerTimeline
+  cleanCurrentTimeCells(): void {
     (this.$element() as any)
       .find(`.${TIME_PANEL_CURRENT_TIME_CELL_CLASS}`)
       .removeClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
