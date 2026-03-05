@@ -26,8 +26,8 @@
 </template>
 <script setup lang="ts">
 const props = withDefaults(defineProps<{
-  employee: Record<string, any>
-  showInfo: Function
+  employee?: Record<string, any>
+  showInfo?: Function
 }>(), {
   employee: () => ({} as Record<string, any>),
   showInfo: () => (() => {}),

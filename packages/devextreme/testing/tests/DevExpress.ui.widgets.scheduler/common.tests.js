@@ -6,7 +6,7 @@ import { isRenderer } from 'core/utils/type';
 import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import { getTimeZones } from 'time_zone_utils';
 
@@ -590,7 +590,8 @@ QUnit.module('View with configuration', () => {
             appointmentTooltipTemplate: function() {
                 countCallTemplate1++;
             },
-            currentView: 'month'
+            currentView: 'month',
+            maxAppointmentsPerCell: 1
         });
 
         $(scheduler.instance.$element().find('.dx-scheduler-appointment-collector').eq(0)).trigger('dxclick');
@@ -630,7 +631,8 @@ QUnit.module('View with configuration', () => {
             appointmentCollectorTemplate: function() {
                 countCallTemplate1++;
             },
-            currentView: 'month'
+            currentView: 'month',
+            maxAppointmentsPerCell: 1
         });
 
         $(scheduler.instance.$element().find('.dx-scheduler-appointment-collector').eq(0)).trigger('dxclick');
@@ -706,7 +708,7 @@ QUnit.module('View with configuration', () => {
 
     ['day', 'week', 'month'].forEach(viewName => {
         QUnit.test(`Cell should have default height if view: '${viewName}'`, async function(assert) {
-            const DEFAULT_CELL_HEIGHT = 50;
+            const DEFAULT_CELL_HEIGHT = viewName === 'month' ? 100 : 38;
 
             const scheduler = await createWrapper({
                 views: [viewName],

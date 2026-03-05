@@ -1,4 +1,7 @@
 {
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "title": "Add License Headers Executor",
+  "description": "Add license headers to compiled files with support for custom templates",
   "type": "object",
   "properties": {
     "targetDirectory": {
@@ -31,6 +34,22 @@
         "type": "string"
       },
       "default": []
+    },
+    "licenseTemplateFile": {
+      "type": "string",
+      "description": "Path to custom license template file (uses default MIT template if not specified)"
+    },
+    "eulaUrl": {
+      "type": "string",
+      "description": "EULA URL for template variable <%= eula %>"
+    },
+    "prependAfterLicense": {
+      "type": "string",
+      "description": "Content to prepend after license header (e.g., '\"use strict\";\\n\\n')"
+    },
+    "version": {
+      "type": "string",
+      "description": "Version to use in template (defaults to pkg.version)"
     }
   },
   "required": []

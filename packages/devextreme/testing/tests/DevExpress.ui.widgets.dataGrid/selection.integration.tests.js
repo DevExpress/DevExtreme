@@ -319,6 +319,35 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getSelectedRowsData(), [], 'getSelectedRowsData result');
     });
 
+    QUnit.test('selection should be restored from state storing if defined', function(assert) {
+        // act
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: {
+                store: {
+                    type: 'array',
+                    key: 'id',
+                    data: [{ id: 1, text: 'Text 1' }]
+                }
+            },
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {
+                        selectedRowKeys: [1]
+                    };
+                }
+            }
+        });
+
+        this.clock.tick(10);
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'selectedRowKeys');
+        assert.deepEqual(dataGrid.getSelectedRowsData(), [{ id: 1, text: 'Text 1' }], 'getSelectedRowsData result');
+    });
+
     QUnit.test('assign null to selectedRowKeys option unselect selected items', function(assert) {
         const dataGrid = createDataGrid({
             loadingTimeout: null,

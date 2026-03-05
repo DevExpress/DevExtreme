@@ -14,6 +14,7 @@ export interface AppointmentProperties extends Record<string, unknown> {
   direction: Orientation;
   allowResize: boolean;
   allowDrag: boolean;
+  allowDelete: boolean;
   allDay: boolean;
   reduced: string;
   isCompact: boolean;

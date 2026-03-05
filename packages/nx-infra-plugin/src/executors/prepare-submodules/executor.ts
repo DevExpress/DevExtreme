@@ -44,10 +44,10 @@ const runExecutor: PromiseExecutor<PrepareSubmodulesExecutorSchema> = async (opt
   const distDirectory = path.join(absoluteProjectRoot, options.distDirectory || DEFAULT_DIST_DIR);
 
   try {
-    logger.info(MSG_PREPARING);
+    logger.verbose(MSG_PREPARING);
 
     if (options.submoduleFolders) {
-      logger.info(
+      logger.verbose(
         `Using custom submoduleFolders: ${JSON.stringify(options.submoduleFolders, null, 2)}`,
       );
     }
@@ -72,7 +72,7 @@ const runExecutor: PromiseExecutor<PrepareSubmodulesExecutorSchema> = async (opt
 
     const allModuleParams: PackParam[] = [...packParamsForModules, ...packParamsForFolders];
 
-    logger.info(`Processing ${allModuleParams.length} submodules...`);
+    logger.verbose(`Processing ${allModuleParams.length} submodules...`);
 
     await Promise.all(
       allModuleParams.map(([folder, moduleFileNames, moduleFilePath]) =>
@@ -80,7 +80,7 @@ const runExecutor: PromiseExecutor<PrepareSubmodulesExecutorSchema> = async (opt
       ),
     );
 
-    logger.info(MSG_SUCCESS);
+    logger.verbose(MSG_SUCCESS);
     return { success: true };
   } catch (error) {
     logError(ERROR_PREPARE_SUBMODULES, error);

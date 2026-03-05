@@ -2,6 +2,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import type { Appointment, Properties } from '@js/ui/scheduler';
 
 import type { ResourceLoader } from './utils/loader/resource_loader';
+import type { GroupValues, RawGroupValues } from './utils/resource_manager/types';
 import type { AppointmentViewModelPlain } from './view_model/types';
 
 export type Direction = 'vertical' | 'horizontal';
@@ -225,7 +226,7 @@ export interface ViewDataProviderType {
     rowIndex: number,
     columnIndex: number,
     isAllDay?: boolean,
-    rtlEnabled?: boolean
+    rtlEnabled?: boolean,
   ) => ViewCellData;
   getCellCount: (config: CountGenerationConfig) => number;
   getRowCount: (config: CountGenerationConfig) => number;
@@ -235,7 +236,7 @@ export interface ViewDataProviderType {
   getVisibleDayDuration: (
     startDayHour: number,
     endDayHour: number,
-    hoursInterval: number
+    hoursInterval: number,
   ) => number;
   getLastViewDateByEndDayHour: (endDayHour: number) => Date;
   getIntervalDuration: (intervalCount: number) => number;
@@ -269,3 +270,14 @@ export interface CompactAppointmentOptions {
   allowDrag: boolean;
   isCompact: boolean;
 }
+
+export interface ScrollToOptions {
+  group?: RawGroupValues | GroupValues;
+  allDay?: boolean | undefined;
+  alignInView?: 'start' | 'center';
+}
+
+export type ScrollToGroupValuesOrOptions = RawGroupValues
+  | GroupValues
+  | ScrollToOptions
+  | undefined;

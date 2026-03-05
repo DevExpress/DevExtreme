@@ -8,14 +8,22 @@
       "{projectRoot}/**/*.ts",
       "{projectRoot}/tsconfig.json",
       { "externalDependencies": [ "devextreme-internal-tools", "ts-node", "typescript"] }
+    ],
+    "devextreme-sources": [
+      "{projectRoot}/js/**/*",
+      "{projectRoot}/ts/**/*"
+    ],
+    "devextreme-build-config": [
+      "{projectRoot}/build/**/*",
+      "{projectRoot}/webpack.config.js",
+      "{projectRoot}/gulpfile.js"
     ]
   },
   "targetDefaults": {
     "build": {
       "dependsOn": [
         "^build"
-      ],
-      "cache": true
+      ]
     },
     "start": {
       "dependsOn": [
@@ -25,19 +33,17 @@
     "test": {
       "dependsOn": [
         "^build"
-      ],
-      "cache": true
+      ]
     },
-    "lint": {
-      "cache": true
-    },
-    "e2e": {
-      "cache": true
-    }
+    "lint": {},
+    "e2e": {}
   },
   "workspaceLayout": {
     "appsDir": "apps",
     "libsDir": "packages"
   },
-  "defaultBase": "master"
+  "defaultBase": "master",
+  "tui": {
+    "enabled": false
+  }
 }

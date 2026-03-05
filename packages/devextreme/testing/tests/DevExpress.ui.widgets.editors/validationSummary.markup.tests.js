@@ -51,7 +51,7 @@ QUnit.module('General', {
     });
 
 
-    QUnit.test('Summary can subscribe on group\'s Validated event', function(assert) {
+    QUnit.test('Summary can subscribe on group Validated event', function(assert) {
         const group = 'group1';
         const validator = sinon.createStubInstance(Validator);
         validator.validate.returns({ isValid: true, brokenRule: null });
@@ -173,7 +173,7 @@ QUnit.module('Regression', {
         assert.strictEqual(group, summary.option('validationGroup'));
     });
 
-    QUnit.test('T212238: Summary can subscribe on group\'s Validated event when Summary is created before any validator in group', function(assert) {
+    QUnit.test('T212238: Summary can subscribe on group Validated event when Summary is created before any validator in group', function(assert) {
         const group = 'group1';
         const validator = sinon.createStubInstance(Validator);
         validator.validate.returns({ isValid: true, brokenRule: null });
@@ -232,7 +232,7 @@ QUnit.module('Regression', {
     });
 });
 
-QUnit.module('Update on validator\'s validation', {
+QUnit.module('Update on validator validation', {
     beforeEach: function() {
         this.fixture = new Fixture();
     }
@@ -408,7 +408,7 @@ QUnit.module('Update on validator\'s validation', {
         assert.equal(items[1].text, message + ' 2', 'Message should be updated');
     });
 
-    QUnit.test('T270338: Summary should subscribe to validator\'s events only once', function(assert) {
+    QUnit.test('T270338: Summary should subscribe to validator events only once', function(assert) {
         const validator1 = this.fixture.createValidator({
             validationGroup: 'group1',
             validationRules: [{
@@ -428,7 +428,7 @@ QUnit.module('Update on validator\'s validation', {
         assert.equal(spy.callCount, 1, 'Render of validation summary should be called only once');
     });
 
-    QUnit.test('T270338 - the \'items\' option changed should not be called if validator state is not changed', function(assert) {
+    QUnit.test('T270338 - the items option changed should not be called if validator state is not changed', function(assert) {
         let itemsChangedCallCount = 0;
         const validator = this.fixture.createValidator({
             validationGroup: 'group',
@@ -450,5 +450,119 @@ QUnit.module('Update on validator\'s validation', {
         validator.validate();
 
         assert.equal(itemsChangedCallCount, 1, 'items should not be changed if the validator state is not changed');
+    });
+});
+
+QUnit.module('Accessibility', {
+    beforeEach: function() {
+        this.fixture = new Fixture();
+
+        this.summary = this.fixture.createSummary();
+        this.validator = sinon.createStubInstance(Validator);
+
+        this.formatErrors = (errors) => errors.join('. ');
+    }
+}, () => {
+    QUnit.test('ValidationSummary should have announce container with validation summary for screen reader', function(assert) {
+        const messages = ['test message 1', 'test message 2'];
+
+        this.summary._groupValidationHandler({
+            isValid: false,
+            brokenRules: [{
+                message: messages[0],
+                validator: this.validator,
+            },
+            {
+                message: messages[1],
+                validator: this.validator,
+            }],
+            validators: [this.validator],
+        });
+
+        const $announceContainer = this.summary.$element().find('.dx-screen-reader-only');
+
+        assert.strictEqual($announceContainer.length, 1, 'announce container is present');
+        assert.strictEqual($announceContainer.text(), this.formatErrors(messages), 'announce container has correct text');
+    });
+
+    QUnit.test('ValidationSummary announce container should have role=alert attribute', function(assert) {
+        this.summary._groupValidationHandler({
+            isValid: false,
+            brokenRules: [{
+                message: 'test message',
+                validator: this.validator,
+            }],
+            validators: [this.validator],
+        });
+
+        const $announceContainer = this.summary.$element().find('.dx-screen-reader-only');
+
+        assert.strictEqual($announceContainer.attr('role'), 'alert', 'role=alert is present');
+    });
+
+    QUnit.test('ValidationSummary should remove announce container when there are no validation errors', function(assert) {
+        this.summary._groupValidationHandler({
+            isValid: true,
+            validators: [this.validator],
+        });
+
+        const $announceContainer = this.summary.$element().find('.dx-screen-reader-only');
+
+        assert.strictEqual($announceContainer.length, 0, 'announce container is not present');
+    });
+
+    QUnit.test('ValidationSummary should not create announce container if errors are the same', function(assert) {
+        const message = 'test message';
+
+        const groupValidationPayload = {
+            isValid: false,
+            brokenRules: [{
+                message,
+                validator: this.validator,
+            }],
+            validators: [this.validator],
+        };
+
+        this.summary._groupValidationHandler(groupValidationPayload);
+        this.summary._groupValidationHandler(groupValidationPayload);
+
+        const $announceContainer = this.summary.$element().find('.dx-screen-reader-only');
+
+        assert.strictEqual($announceContainer.get(0), undefined, 'announce container was not created');
+    });
+
+    [
+        ['second'],
+        ['first', 'second'],
+        ['second', 'first'],
+        ['first', 'second', 'third'],
+        [''],
+        ['', ''],
+    ].forEach((errors) => {
+        QUnit.test(`ValidationSummary should accordingly update announce container when errors change from ["first"] to ${JSON.stringify(errors)}`, function(assert) {
+            this.summary._groupValidationHandler({
+                isValid: false,
+                brokenRules: [{
+                    message: 'first',
+                    validator: this.validator,
+                }],
+                validators: [this.validator],
+            });
+
+            const brokenRules = errors.map((error) => ({
+                message: error,
+                validator: this.validator,
+            }));
+
+            this.summary._groupValidationHandler({
+                isValid: false,
+                brokenRules,
+                validators: [this.validator],
+            });
+
+            const $announceContainer = this.summary.$element().find('.dx-screen-reader-only');
+
+            assert.strictEqual($announceContainer.text(), this.formatErrors(errors), 'announce container has updated text');
+        });
     });
 });

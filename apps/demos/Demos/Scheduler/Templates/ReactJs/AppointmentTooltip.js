@@ -11,7 +11,7 @@ const AppointmentTooltip = ({ data }) => {
       <div className="movie-preview-image">
         <img
           src={movieData.image}
-          alt={movieData.text}
+          alt={`${movieData.text} poster`}
         />
       </div>
       <div className="movie-details">

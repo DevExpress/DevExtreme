@@ -22,6 +22,7 @@ $scheduler-fill-focused-appointment: null !default;
 $scheduler-is-shadow-color-for-focused-state: null !default;
 $scheduler-dd-appointment-hover-text-color: null !default;
 $scheduler-tooltip-appointment-text-color: null !default;
+$scheduler-tooltip-list-focused-bg: null !default;
 $scheduler-timeline-cell-height: null !default;
 
 $scheduler-appointment-overlay-bg: null !default;
@@ -47,7 +48,8 @@ $agenda-appointment-recurrence-icon-color: null !default;
 @use "./tooltip" with (
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,
   $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
-  $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg
+  $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
+  $scheduler-tooltip-list-focused-bg: $scheduler-tooltip-list-focused-bg
 );
 
 $scheduler-appointment-min-size: 4px;
@@ -507,19 +509,17 @@ $scheduler-appointment-form-label-padding: 20px;
         align-items: start;
       }
 
+      .dx-scheduler-form-top-label-offset {
+        margin-top: $scheduler-appointment-popup-icon-margin-top;
+      }
+
       .dx-scheduler-form-icon {
         display: flex;
         align-items: center;
-        margin-top: $scheduler-appointment-popup-icon-margin-top;
 
         > .dx-field-item-content {
           line-height: 1;
         }
-      }
-
-      .dx-scheduler-form-date-range-group .dx-scheduler-form-icon,
-      .dx-scheduler-form-recurrence-end-group .dx-scheduler-form-icon {
-        margin-top: 0;
       }
 
       /* Editors alignment */

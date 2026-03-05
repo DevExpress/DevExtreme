@@ -1,8 +1,11 @@
+import { getAccentColorScheme } from '@ts/viz/core/themes/shared/accent_color_scheme';
+
 const themes = [
   {
     baseThemeName: 'material.blue.light',
     theme: {
       name: 'fluent.blue.light',
+      ...getAccentColorScheme('#0F6CBD'),
     },
   },
   {
@@ -15,6 +18,7 @@ const themes = [
     baseThemeName: 'fluent.blue.light',
     theme: {
       name: 'fluent.saas.light',
+      ...getAccentColorScheme('#5486ff'),
     },
   },
   {
@@ -27,6 +31,7 @@ const themes = [
     baseThemeName: 'material.blue.dark',
     theme: {
       name: 'fluent.blue.dark',
+      ...getAccentColorScheme('#479EF5'),
     },
   },
   {
@@ -39,6 +44,7 @@ const themes = [
     baseThemeName: 'fluent.blue.dark',
     theme: {
       name: 'fluent.saas.dark',
+      ...getAccentColorScheme('#5492F6'),
     },
   },
   {

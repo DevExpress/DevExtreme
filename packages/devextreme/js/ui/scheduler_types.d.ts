@@ -8,6 +8,7 @@ export {
   AppointmentFormIconsShowMode,
   AppointmentFormProperties,
   ViewType,
+  SchedulerScrollToAlign,
   SchedulerPredefinedToolbarItem,
   SchedulerPredefinedDateNavigatorItem,
   AppointmentAddedEvent,
@@ -42,6 +43,7 @@ export {
   ToolbarItem,
   Toolbar,
   Appointment,
+  Occurrence,
   Properties,
   dxSchedulerScrolling,
 } from './scheduler';

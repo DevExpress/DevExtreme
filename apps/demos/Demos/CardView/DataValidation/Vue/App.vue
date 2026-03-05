@@ -194,16 +194,10 @@ const emailValidationUrl = 'https://js.devexpress.com/Demos/NetCore/RemoteValida
 async function emailValidationCallback(
   params: ValidationCallbackData,
 ): Promise<boolean> {
-  const response = await fetch(emailValidationUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json;',
-    },
-    body: JSON.stringify({
-      id: params.data.id,
-      email: params.value,
-    }),
-  });
+  const response = await fetch(`${emailValidationUrl}?${new URLSearchParams({
+    id: params.data.id,
+    email: params.value,
+  })}`);
 
   const result = await response.json();
 

@@ -12,8 +12,7 @@ on:
     branches: [26_1]
 
 env:
-  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
-  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+  NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
 
 jobs:
   TS:
@@ -40,12 +39,10 @@ jobs:
     - uses: actions/cache@v4
       name: Setup pnpm cache
       with:
-        path: |
-          ${{ env.STORE_PATH }}
-          .nx/cache
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-store
+          ${{ runner.os }}-pnpm-cache
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
@@ -96,12 +93,10 @@ jobs:
     - uses: actions/cache@v4
       name: Setup pnpm cache
       with:
-        path: |
-          ${{ env.STORE_PATH }}
-          .nx/cache
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-store
+          ${{ runner.os }}-pnpm-cache
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
@@ -140,12 +135,10 @@ jobs:
     - uses: actions/cache@v4
       name: Setup pnpm cache
       with:
-        path: |
-          ${{ env.STORE_PATH }}
-          .nx/cache
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-store
+          ${{ runner.os }}-pnpm-cache
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
@@ -178,12 +171,10 @@ jobs:
     - uses: actions/cache@v4
       name: Setup pnpm cache
       with:
-        path: |
-          ${{ env.STORE_PATH }}
-          .nx/cache
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-store
+          ${{ runner.os }}-pnpm-cache
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
@@ -227,12 +218,10 @@ jobs:
     - uses: actions/cache@v4
       name: Setup pnpm cache
       with:
-        path: |
-          ${{ env.STORE_PATH }}
-          .nx/cache
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-store
+          ${{ runner.os }}-pnpm-cache
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile

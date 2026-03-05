@@ -1,23 +1,18 @@
 export const skippedTests = {
   jQuery: {
+    // WebGL initialization error at the provider. There is no point in adding a mask
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
   Angular: {
-    Common: ['PopupAndNotificationsOverview'],
-    DataGrid: ['SignalRService'],
-    Scheduler: ['Templates'],
+    // WebGL initialization error at the provider. There is no point in adding a mask
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
   React: {
-    DataGrid: ['SignalRService'],
-    // NOTE: 'GroupByDate' demo has problems with rendering
-    Scheduler: ['GroupByDate', 'Templates'],
+    // WebGL initialization error at the provider. There is no point in adding a mask
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
   Vue: {
-    Common: ['PopupAndNotificationsOverview'],
-    Scheduler: ['Templates'],
-    DataGrid: ['SignalRService'],
+    // WebGL initialization error at the provider. There is no point in adding a mask
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
 };

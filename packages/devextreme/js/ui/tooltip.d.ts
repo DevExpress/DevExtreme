@@ -91,9 +91,6 @@ export default class dxTooltip extends dxPopover<dxTooltipOptions> { }
 /** @public */
 export type Properties = dxTooltipOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxTooltipOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

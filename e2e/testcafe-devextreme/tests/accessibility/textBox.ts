@@ -11,15 +11,10 @@ const options: Options<Properties> = {
   placeholder: [undefined, 'placeholder'],
   showClearButton: [true, false],
   mode: ['password', 'email', 'search', 'tel', 'text', 'url'],
-  // NOTE: Doesn't matter if there are contrast issues
-  // stylingMode: ['outlined', 'filled', 'underlined'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
 
-const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: false } },
-};
+const a11yCheckConfig = {};
 
 const availabilityConfiguration: Configuration = {
   component: 'dxTextBox',

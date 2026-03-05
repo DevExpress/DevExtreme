@@ -19,6 +19,12 @@
   display: flex;
 }
 
+::ng-deep .accordion-item-link {
+  color: var(--dx-color-link);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 ::ng-deep .dx-theme-material #accordion .header {
   align-self: center;
 }

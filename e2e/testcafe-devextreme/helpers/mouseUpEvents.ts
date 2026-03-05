@@ -32,3 +32,37 @@ export const MouseUpEvents = {
   disable: disableMouseUpEvent,
   enable: enableMouseUpEvent,
 };
+
+/**
+ * Performs a drag operation on a row with MouseUpEvents temporarily disabled.
+ * This is useful for autoscroll tests where we need to keep the row in drag state.
+ *
+ * @param t - TestController instance
+ * @param element - Selector for the element to drag
+ * @param options - drag options
+ * @param options.offsetX - X-offset for the drag operation
+ * @param options.offsetY - Y-offset for the drag operation
+ * @param options.speed - speed of the drag operation (default is 0.1)
+ */
+export const dragWithDisabledMouseUp = async (
+  t: TestController,
+  element: Selector,
+  {
+    offsetX,
+    offsetY,
+    speed = 0.1,
+  }: {
+    offsetX: number;
+    offsetY: number;
+    speed?: number;
+  },
+): Promise<void> => {
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
+  await t.drag(
+    element,
+    offsetX,
+    offsetY,
+    { speed },
+  );
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
+};

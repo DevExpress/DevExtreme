@@ -17,8 +17,7 @@ import { DOCUMENT } from '@angular/common';
 
 
 import dxTreeList from 'devextreme/ui/tree_list';
-import { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
-import { event } from 'devextreme/events/events.types';
+import { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton, ColumnButtonClickEvent } from 'devextreme/ui/tree_list';
 
 import {
     DxIntegrationModule,
@@ -90,10 +89,10 @@ export class DxiTreeListColumnButtonComponent extends CollectionNestedOption imp
     }
 
     @Input()
-    get onClick(): ((e: { column: dxTreeListColumn, component: dxTreeList, element: any, event: event, model: any, row: dxTreeListRowObject }) => void) {
+    get onClick(): ((e: ColumnButtonClickEvent) => void) {
         return this._getOption('onClick');
     }
-    set onClick(value: ((e: { column: dxTreeListColumn, component: dxTreeList, element: any, event: event, model: any, row: dxTreeListRowObject }) => void)) {
+    set onClick(value: ((e: ColumnButtonClickEvent) => void)) {
         this._setOption('onClick', value);
     }
 

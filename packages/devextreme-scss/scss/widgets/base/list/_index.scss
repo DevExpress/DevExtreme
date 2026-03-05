@@ -53,7 +53,7 @@ $list-searchbox-margin-bottom: 5px;
   width: 100%;
 
   &::before {
-    content: "_";
+    content: "_" / "";
     color: transparent;
     display: inline-block;
     width: 0;

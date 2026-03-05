@@ -82,8 +82,8 @@ describe('integration tests', () => {
     );
 
     await user.click(testingLib.screen.getByText('Validate'));
-    const summaryElement = document.querySelector('.dx-validationsummary');
-    expect(summaryElement?.children.length).toBe(1);
+    const summaryElement = document.getElementsByClassName('dx-validationsummary-item');
+    expect(summaryElement?.length).toBe(1);
   })
 
   it('renders selectbox in strict mode when data source is specified dynamically without errors', () => {

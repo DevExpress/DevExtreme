@@ -29,7 +29,7 @@ export class Countries {
 }
 
 const countries: Countries = {
-  Russia: { totalArea: 17.12, color: '#1E90FF' },
+  Russia: { totalArea: 17.12, color: '#1564C0' },
   Canada: { totalArea: 9.98, color: '#B8860B' },
   China: { totalArea: 9.59, color: '#BDB76B' },
   'United States': { totalArea: 9.52, color: '#FFA07A' },

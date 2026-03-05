@@ -8,7 +8,7 @@ import { dateToMilliseconds } from 'core/utils/date';
 import { createWrapper, createWrapperFakeClock, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync, waitForAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const {
     module,
@@ -417,16 +417,16 @@ module('CellTemplate tests', moduleConfig, () => {
                         width: 700,
                         dataSource: [],
                         dataCellTemplate: function(cellData, cellIndex, cellElement) {
-                        // all-day table cell size
+                            // all-day table cell size
                             if(cellData.allDay && !cellIndex) {
-                                assert.roughEqual(getOuterWidth($(cellElement)), 85, 1.001, 'Data cell width is OK');
-                                assert.roughEqual(getOuterHeight($(cellElement)), 24, 1.001, 'Data cell height is OK');
+                                assert.roughEqual(getOuterWidth($(cellElement)), 89, 2, 'Data cell width is OK');
+                                assert.roughEqual(getOuterHeight($(cellElement)), 32, 1.001, 'Data cell height is OK');
                             }
 
                             // scheduler table cell size
                             if(!cellData.allDay && !cellIndex) {
-                                assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 85, 1.001, 'Data cell width is OK');
-                                assert.equal($(cellElement).get(0).getBoundingClientRect().height, 50, 'Data cell height is OK');
+                                assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 90, 1.001, 'Data cell width is OK');
+                                assert.equal($(cellElement).get(0).getBoundingClientRect().height, 38, 'Data cell height is OK');
                             }
                         },
                         renovateRender,
@@ -1576,8 +1576,8 @@ module('CellTemplate tests', moduleConfig, () => {
                         dateCellTemplate: function(cellData, cellIndex, cellElement) {
                             if(!cellIndex) {
                                 assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
-                                assert.roughEqual(getOuterWidth($(cellElement)), 85, 1.001, 'Date cell width is OK');
-                                assert.equal(getOuterHeight($(cellElement)), 50, 'Date cell height is OK');
+                                assert.roughEqual(getOuterWidth($(cellElement)), 90, 1.001, 'Date cell width is OK');
+                                assert.equal(getOuterHeight($(cellElement)), 40, 'Date cell height is OK');
                             }
                         }
                     });
@@ -1885,8 +1885,8 @@ module('CellTemplate tests', moduleConfig, () => {
                 timeCellTemplate: function(cellData, cellIndex, cellElement) {
                     if(!cellIndex) {
                         assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
-                        assert.equal($(cellElement).get(0).getBoundingClientRect().height, 50, 'Time cell height is OK');
-                        assert.roughEqual(getOuterWidth($(cellElement)), 100, 1.01, 'Time cell width is OK');
+                        assert.equal($(cellElement).get(0).getBoundingClientRect().height, 38, 'Time cell height is OK');
+                        assert.roughEqual(getOuterWidth($(cellElement)), 64.5, 1.01, 'Time cell width is OK');
                     }
                 }
             });

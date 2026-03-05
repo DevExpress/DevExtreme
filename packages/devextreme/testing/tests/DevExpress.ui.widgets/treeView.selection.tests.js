@@ -78,7 +78,7 @@ module('selection common', () => {
         treeView.instance.unselectItem(1);
 
         treeView.checkSelectedNodes([1]);
-        assert.equal(selectionChangedHandler.callCount, 2, 'selectionChanged should call twice');
+        assert.strictEqual(selectionChangedHandler.callCount, 2, 'selectionChanged should call twice');
     });
 
     test('onItemSelectionChanged should have correct arguments', function(assert) {
@@ -90,11 +90,11 @@ module('selection common', () => {
 
         treeView.instance.selectItem(2);
 
-        assert.equal(itemSelectionChangedHandler.callCount, 1, 'selection was changed once');
+        assert.strictEqual(itemSelectionChangedHandler.callCount, 1, 'selection was changed once');
         // note: other parameters are redundant but they were saved in the code to prevent a BC
-        assert.equal(itemSelectionChangedHandler.getCall(0).args[0].component.NAME, treeView.instance.NAME, 'component is correct');
+        assert.strictEqual(itemSelectionChangedHandler.getCall(0).args[0].component.NAME, treeView.instance.NAME, 'component is correct');
         assert.ok(treeView.hasWidgetClass($(itemSelectionChangedHandler.getCall(0).args[0].element)), 'element is correct');
-        assert.equal(itemSelectionChangedHandler.getCall(0).args[0].node.key, 2, 'node is correct');
+        assert.strictEqual(itemSelectionChangedHandler.getCall(0).args[0].node.key, 2, 'node is correct');
         assert.ok(treeView.hasItemClass($(itemSelectionChangedHandler.getCall(0).args[0].itemElement)), 'itemElement is correct');
     });
 
@@ -110,7 +110,7 @@ module('selection common', () => {
         treeView.instance.selectItem(2);
 
         treeView.checkSelected([0, 1], items);
-        assert.equal(itemSelectionChangedHandler.callCount, 1, 'event was fired');
+        assert.strictEqual(itemSelectionChangedHandler.callCount, 1, 'event was fired');
     });
 
     test('itemSelected should not fire when selection was not changed', function(assert) {
@@ -125,13 +125,13 @@ module('selection common', () => {
         treeView.instance.selectItem(1);
 
         treeView.checkSelected([0], items);
-        assert.equal(itemSelectionChangedHandler.callCount, 0, 'event was not fired');
+        assert.strictEqual(itemSelectionChangedHandler.callCount, 0, 'event was not fired');
     });
 
     test('disabled item should be selectable via api', function(assert) {
         const items = [{ text: 'item 1', disabled: true }, { text: 'item 2', disabled: true, selected: true }];
         const treeView = createInstance({
-            items: items,
+            items,
             showCheckBoxesMode: 'normal'
         });
 
@@ -142,6 +142,36 @@ module('selection common', () => {
         treeView.checkSelected([1], items);
     });
 
+    test('disabled item should be non selectable via api with disabledNodeSelectionMode = never', function(assert) {
+        const items = [{ text: 'item 1', disabled: true }, { text: 'item 2', disabled: true, selected: true }];
+        const treeView = createInstance({
+            items,
+            showCheckBoxesMode: 'normal',
+            disabledNodeSelectionMode: 'never',
+        });
+
+        treeView.instance.selectItem(1);
+        treeView.checkSelected([1], items);
+
+        treeView.instance.unselectItem(1);
+        treeView.checkSelected([1], items);
+    });
+
+    test('selectionChanged should not fire for disabled item with disabledNodeSelectionMode = never', function(assert) {
+        const selectionChangedHandler = sinon.spy();
+        const items = [{ text: 'item 1', disabled: true }];
+        const treeView = createInstance({
+            items,
+            showCheckBoxesMode: 'normal',
+            disabledNodeSelectionMode: 'never',
+            onSelectionChanged: selectionChangedHandler,
+        });
+
+        treeView.instance.selectItem(1);
+
+        assert.strictEqual(selectionChangedHandler.callCount, 0, 'selectionChanged should not fire');
+    });
+
     test('all nodes should have selected class if they have selected property', function(assert) {
         const items = [{ text: 'item 1', selected: true, expanded: true, items: [{ text: 'item 11', selected: true }] }, { text: 'item 2', selected: true }];
         const treeView = createInstance({
@@ -150,7 +180,7 @@ module('selection common', () => {
         });
 
         treeView.checkSelected([0, 1, 2], items);
-        assert.equal(treeView.getSelectedNodes().length, 3, 'all nodes should have selected class');
+        assert.strictEqual(treeView.getSelectedNodes().length, 3, 'all nodes should have selected class');
     });
 
     test('should not fire an error when try to select unspecified item', function(assert) {
@@ -220,7 +250,7 @@ module('selection common', () => {
 
 
             const result = config.action(wrapper.instance);
-            assert.equal(result, config.expectedResult, 'result is correct');
+            assert.strictEqual(result, config.expectedResult, 'result is correct');
             wrapper.checkSelectedKeys(config.expectedKeys, 'item1 is selected');
         });
     });
@@ -267,7 +297,7 @@ module('selection common', () => {
 
 
             const result = config.action(wrapper.instance);
-            assert.equal(result, config.expectedResult, 'result is correct');
+            assert.strictEqual(result, config.expectedResult, 'result is correct');
             wrapper.checkSelectedKeys(config.expectedKeys, 'item1 is selected');
         });
     });
@@ -554,6 +584,19 @@ module('selection single', () => {
         treeView.checkSelected([], items);
     });
 
+    test('selectByClick option should not select item with disabled: true', function(assert) {
+        const items = [{ text: 'item 1', disabled: true }, { text: 'item 2' }];
+        const treeView = createInstance({
+            items: items,
+            selectByClick: true,
+            selectionMode: 'single'
+        });
+
+        eventsEngine.trigger(treeView.getItems().eq(0), 'dxclick');
+
+        treeView.checkSelected([], items);
+    });
+
     test('selection can be prevented on itemClick', function(assert) {
         const items = [{ text: 'item 1' }, { text: 'item 2' }];
         const treeView = createInstance({
@@ -607,7 +650,7 @@ module('selection single', () => {
         eventsEngine.trigger(treeView.getItems().eq(0), 'dxclick');
         eventsEngine.trigger(treeView.getItems().eq(1), 'dxclick');
 
-        assert.equal(itemSelectionChangedHandler.callCount, 3, '\'onItemSelectionChanged\' event fires three times');
+        assert.strictEqual(itemSelectionChangedHandler.callCount, 3, '\'onItemSelectionChanged\' event fires three times');
         assert.deepEqual(itemSelectionChangedHandler.getCall(1).args[0].itemData, { selected: false, text: 'item 1' }, 'itemSelectionChangedHandler.itemData');
     });
 
@@ -627,7 +670,7 @@ module('selection single', () => {
         eventsEngine.trigger(treeView.getCheckBoxes(), 'dxclick');
         treeView.instance.option('searchValue', '');
 
-        assert.equal(treeView.getAllSelectedCheckboxes().length, 1, 'There is only one checked checkBox');
+        assert.strictEqual(treeView.getAllSelectedCheckboxes().length, 1, 'There is only one checked checkBox');
         treeView.checkSelected([0], items);
     });
 
@@ -645,6 +688,6 @@ module('selection single', () => {
         keyboardMock($input).type('s');
         eventsEngine.trigger(treeView.getItems().eq(0), 'dxclick');
 
-        assert.equal(itemClickHandler.callCount, 1, 'click works');
+        assert.strictEqual(itemClickHandler.callCount, 1, 'click works');
     });
 });

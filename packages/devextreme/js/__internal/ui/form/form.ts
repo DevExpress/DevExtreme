@@ -171,6 +171,8 @@ class Form extends Widget<FormProperties> {
 
   _isDataUpdating?: boolean;
 
+  _isDimensionChangeRefresh?: boolean;
+
   _$validationSummary?: dxElementWrapper;
 
   _loadPanel?: FormLoadPanel;
@@ -568,7 +570,7 @@ class Form extends Widget<FormProperties> {
   _getContent(): dxElementWrapper {
     const { scrollingEnabled } = this.option();
     return scrollingEnabled
-      ? $(this._scrollable?.content())
+      ? $(this.getScrollable()?.content())
       : this.$element();
   }
 
@@ -923,11 +925,7 @@ class Form extends Widget<FormProperties> {
       this._itemsRunTimeInfo?.extendRunTimeItemInfoByKey(item.guid ?? '', { layoutManager });
 
       const colCount = layoutManager._getColCount();
-      if (!this._groupsColCount.includes(colCount)) {
-        this._groupsColCount.push(colCount);
-      }
-      $group.addClass(GROUP_COL_COUNT_CLASS + colCount);
-      $group.attr(GROUP_COL_COUNT_ATTR, colCount);
+      this._applyGroupColCount($group, colCount);
     }
   }
 
@@ -1011,7 +1009,13 @@ class Form extends Widget<FormProperties> {
         this._clearAutoColCountChangedTimeout();
         // eslint-disable-next-line no-restricted-globals
         this.autoColCountChangedTimeoutId = setTimeout(
-          () => !this._disposed && this._refresh(),
+          () => {
+            if (!this._disposed) {
+              this._isDimensionChangeRefresh = true;
+              this._refresh();
+              this._isDimensionChangeRefresh = false;
+            }
+          },
           0,
         );
       },
@@ -1586,7 +1590,9 @@ class Form extends Widget<FormProperties> {
     if (this._lastMarkupScreenFactor !== currentScreenFactor) {
       if (this._isColCountChanged(this._lastMarkupScreenFactor, currentScreenFactor)) {
         this._targetScreenFactor = currentScreenFactor;
+        this._isDimensionChangeRefresh = true;
         this._refresh();
+        this._isDimensionChangeRefresh = false;
         this._targetScreenFactor = undefined;
       }
 
@@ -1616,7 +1622,58 @@ class Form extends Widget<FormProperties> {
     // @ts-expect-error ts-error
     eventsEngine.trigger(this.$element().find(editorSelector), 'change');
 
+    if (this._isDimensionChangeRefresh) {
+      this._updateLayoutsOnDimensionChange();
+      return;
+    }
+
     super._refresh();
+  }
+
+  _updateLayoutsOnDimensionChange(): void {
+    this._cachedLayoutManagers.forEach((layoutManager: LayoutManager) => {
+      layoutManager.updateResponsiveBoxLayout();
+    });
+
+    this._updateGroupsColCount();
+    this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
+  }
+
+  _applyGroupColCount(
+    $group: dxElementWrapper,
+    colCount: number,
+  ): void {
+    const oldColCount = $group.attr(GROUP_COL_COUNT_ATTR);
+
+    if (oldColCount) {
+      $group.removeClass(`${GROUP_COL_COUNT_CLASS}${oldColCount}`);
+    }
+
+    if (!this._groupsColCount.includes(colCount)) {
+      this._groupsColCount.push(colCount);
+    }
+
+    $group
+      .addClass(`${GROUP_COL_COUNT_CLASS}${colCount}`)
+      .attr(GROUP_COL_COUNT_ATTR, colCount);
+  }
+
+  _updateGroupsColCount(): void {
+    this._groupsColCount = [];
+
+    this._cachedLayoutManagers.forEach((layoutManager: LayoutManager) => {
+      if (layoutManager === this._rootLayoutManager) {
+        return;
+      }
+
+      const $group = layoutManager.$element().closest(`.${FORM_GROUP_CLASS}`);
+      if (!$group.length) {
+        return;
+      }
+
+      const newColCount = layoutManager._getColCount();
+      this._applyGroupColCount($group, newColCount);
+    });
   }
 
   _updateIsDirty(dataField: string): void {
@@ -1755,11 +1812,17 @@ class Form extends Widget<FormProperties> {
     return this._itemsRunTimeInfo.findWidgetInstanceByName<Button>(name);
   }
 
+  getScrollable(): Scrollable | undefined {
+    const { scrollingEnabled } = this.option();
+    return scrollingEnabled ? this._scrollable : undefined;
+  }
+
   updateDimensions(): Promise<unknown> {
     const deferred = Deferred<Form>();
+    const scrollable = this.getScrollable();
 
-    if (this._scrollable) {
-      this._scrollable.update().done(() => {
+    if (scrollable) {
+      scrollable.update().done(() => {
         // @ts-expect-error ts-error
         deferred.resolveWith(this);
       });

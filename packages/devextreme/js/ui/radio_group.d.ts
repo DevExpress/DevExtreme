@@ -122,9 +122,6 @@ export default class dxRadioGroup extends Editor<dxRadioGroupOptions> {
 /** @public */
 export type Properties = dxRadioGroupOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxRadioGroupOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

@@ -357,7 +357,7 @@ const DxContextToolboxConfig = {
     displayMode: String as PropType<ToolboxDisplayMode>,
     enabled: Boolean,
     shapeIconsPerRow: Number,
-    shapes: Array as PropType<Array<ShapeType>>,
+    shapes: Array as PropType<Array<ShapeType | string>>,
     width: Number
   }
 };
@@ -628,7 +628,7 @@ const DxGroupConfig = {
     commands: Array as PropType<Array<Command | CustomCommand>>,
     displayMode: String as PropType<ToolboxDisplayMode>,
     expanded: Boolean,
-    shapes: Array as PropType<Array<ShapeType>>,
+    shapes: Array as PropType<Array<ShapeType | string>>,
     title: String
   }
 };
@@ -937,7 +937,7 @@ const DxToolboxGroupConfig = {
     category: String as PropType<ShapeCategory | string>,
     displayMode: String as PropType<ToolboxDisplayMode>,
     expanded: Boolean,
-    shapes: Array as PropType<Array<ShapeType>>,
+    shapes: Array as PropType<Array<ShapeType | string>>,
     title: String
   }
 };

@@ -3,7 +3,7 @@
     <div class="movie-preview-image">
       <img
         :src="movieData.image"
-        :alt="movieData.text"
+        :alt="`${movieData.text} poster`"
       >
     </div>
     <div class="movie-details">

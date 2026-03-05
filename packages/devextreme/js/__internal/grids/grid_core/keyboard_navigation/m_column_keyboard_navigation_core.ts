@@ -1,5 +1,6 @@
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
 
+import type { Column } from '../columns_controller/m_columns_controller';
 import { Direction } from './const';
 import type { ColumnFocusDispatcher } from './m_column_focus_dispatcher';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';
@@ -12,13 +13,10 @@ export class ColumnKeyboardNavigationController extends KeyboardNavigationContro
   }
 
   protected getVisibleIndex(
-    column,
+    column: Column,
     rowIndex?: number,
   ): number {
-    const visibleIndex = this._columnsController.getVisibleIndex(column.index, rowIndex);
-    const columnIndexOffset = this.getColumnIndexOffset(visibleIndex);
-
-    return visibleIndex >= 0 ? visibleIndex + columnIndexOffset : -1;
+    return this._columnsController.getVisibleIndex(column.index, rowIndex);
   }
 
   protected getNewVisibleIndex(

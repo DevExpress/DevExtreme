@@ -12,7 +12,7 @@
 }
 
 .priority--urgent {
-  color: #f7630c;
+  color: var(--dx-color-warning);
 }
 
 .priority--high {

@@ -34,7 +34,7 @@ export const CLASS = {
   workspaceBothScrollbar: 'dx-scheduler-work-space-both-scrollbar',
 
   workSpace: 'dx-scheduler-work-space',
-  statusContainer: 'dx-scheduler-a11y-status-container ',
+  statusContainer: 'dx-screen-reader-only',
 };
 
 const ViewTypeClassesMap = {

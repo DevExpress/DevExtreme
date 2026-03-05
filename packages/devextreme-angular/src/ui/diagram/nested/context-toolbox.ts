@@ -65,10 +65,10 @@ export class DxoDiagramContextToolboxComponent extends NestedOption implements O
     }
 
     @Input()
-    get shapes(): Array<ShapeType> {
+    get shapes(): Array<ShapeType | string> {
         return this._getOption('shapes');
     }
-    set shapes(value: Array<ShapeType>) {
+    set shapes(value: Array<ShapeType | string>) {
         this._setOption('shapes', value);
     }
 

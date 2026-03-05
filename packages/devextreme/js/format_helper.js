@@ -16,8 +16,7 @@ import './common/core/localization/currency';
 export default dependencyInjector({
     format: function(value, format) {
         const formatIsValid = isString(format) && format !== '' || isPlainObject(format) || isFunction(format);
-        const valueIsValid = isNumeric(value) || isDate(value);
-
+        const valueIsValid = isNumeric(value) || (isDate(value) && !isNaN(value.getTime()));
 
         if(!formatIsValid || !valueIsValid) {
             return isDefined(value) ? value.toString() : '';

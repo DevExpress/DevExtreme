@@ -155,7 +155,7 @@ const dateLocalization = dependencyInjector({
     return formatter(date);
   },
 
-  parse(text: string, format: FormatObject | string): Date | null | undefined {
+  parse(text: string, format?: FormatObject | string): Date | null | undefined {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
     // eslint-disable-next-line @typescript-eslint/init-declarations

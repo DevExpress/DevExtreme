@@ -7,6 +7,7 @@ import  DataSource from "devextreme/data/data_source";
 import {
  dxTreeViewNode,
  dxTreeViewItem,
+ DisabledNodeSelectionMode,
  TreeViewExpandEvent,
  ContentReadyEvent,
  DisposingEvent,
@@ -85,6 +86,7 @@ type AccessibleOptions = Pick<Properties,
   "dataStructure" |
   "disabled" |
   "disabledExpr" |
+  "disabledNodeSelectionMode" |
   "displayExpr" |
   "elementAttr" |
   "expandAllEnabled" |
@@ -154,6 +156,7 @@ const componentConfig = {
     dataStructure: String as PropType<DataStructure>,
     disabled: Boolean,
     disabledExpr: [Function, String] as PropType<((() => void)) | string>,
+    disabledNodeSelectionMode: String as PropType<DisabledNodeSelectionMode>,
     displayExpr: [Function, String] as PropType<(((item: any) => string)) | string>,
     elementAttr: Object as PropType<Record<string, any>>,
     expandAllEnabled: Boolean,
@@ -219,6 +222,7 @@ const componentConfig = {
     "update:dataStructure": null,
     "update:disabled": null,
     "update:disabledExpr": null,
+    "update:disabledNodeSelectionMode": null,
     "update:displayExpr": null,
     "update:elementAttr": null,
     "update:expandAllEnabled": null,

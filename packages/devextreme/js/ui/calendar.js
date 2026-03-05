@@ -1,8 +1,6 @@
 import Calendar from '../__internal/ui/calendar/calendar';
 export default Calendar;
 
-// STYLE calendar
-
 /**
  * @name dxCalendarOptions.currentDate
  * @type Date

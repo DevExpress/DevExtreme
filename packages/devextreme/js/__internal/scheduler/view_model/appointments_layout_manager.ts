@@ -1,7 +1,8 @@
-import type { Appointment } from '@js/ui/scheduler';
+import type { Appointment, Occurrence } from '@js/ui/scheduler';
 
 import type Scheduler from '../m_scheduler';
 import { filterAppointments } from './filtration/filter_appointments';
+import { getOccurrences } from './filtration/get_occurrences';
 import { generateAgendaViewModel } from './generate_view_model/generate_agenda_view_model';
 import { generateGridViewModel } from './generate_view_model/generate_grid_view_model';
 import type { RealSize } from './generate_view_model/steps/add_geometry/types';
@@ -31,6 +32,22 @@ class AppointmentLayoutManager {
 
   public filterAppointments(): void {
     this.filteredItems = filterAppointments(this.schedulerStore, this.preparedItems);
+  }
+
+  public getOccurrences(
+    startDate: Date,
+    endDate: Date,
+    rawAppointments: Appointment[],
+  ): Occurrence[] {
+    const preparedAppointments = prepareAppointments(this.schedulerStore, rawAppointments);
+    const occurrences = getOccurrences(
+      this.schedulerStore,
+      startDate,
+      endDate,
+      preparedAppointments,
+    );
+
+    return occurrences;
   }
 
   public hasAllDayAppointments(): boolean {

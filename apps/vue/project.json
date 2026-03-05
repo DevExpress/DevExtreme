@@ -21,8 +21,7 @@
       ],
       "outputs": [
         "{projectRoot}/public/js/bundle*"
-      ],
-      "cache": true
+      ]
     }
   },
   "tags": []

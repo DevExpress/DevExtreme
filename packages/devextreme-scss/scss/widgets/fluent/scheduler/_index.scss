@@ -4,6 +4,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../list/colors" as *;
 @use "../form/sizes" as *;
 @use "../radioGroup/sizes" as *;
 @use "../toolbar/sizes" as *;
@@ -13,6 +14,7 @@
 @use "../../base/scheduler" as baseScheduler with (
   $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
+  $scheduler-tooltip-list-focused-bg: $list-item-hover-bg,
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,
   $scheduler-appointment-start-color: $scheduler-appointment-start-color,
   $scheduler-appointment-active-color: $scheduler-appointment-active-color,
@@ -421,6 +423,10 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-work-space.dx-scheduler-work-space-month {
+  .dx-scheduler-date-table-other-month {
+    color: $scheduler-workspace-other-month-text-color;
+  }
+
   .dx-scheduler-header-panel-cell-date:last-child {
     color: $header-panel-cell-date;
     border-radius: initial;
@@ -745,6 +751,11 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 
     .dx-scheduler-form-repeat-editor .dx-scheduler-form-recurrence-settings-button {
       height: auto;
+
+      &.dx-button-mode-text.dx-state-focused {
+        outline: auto;
+        outline-offset: -2px;
+      }
     }
   }
 }

@@ -10,7 +10,7 @@ $material-tabs-nav-button-background: color.change($button-default-hover-bg, $al
 * $name 10. Tab text color
 * $type color
 */
-$tabs-tab-color: color.change($base-text-color, $alpha: 0.54) !default;
+$tabs-tab-color: color.change($base-text-color, $alpha: 0.6) !default;
 
 /**
 * $name 20. Selected tab text color
@@ -22,7 +22,7 @@ $tabs-tab-selected-color: $base-accent !default;
 * $name 30. Disabled tab color
 * $type color
 */
-$tabs-tab-disabled-color: color.change($tabs-tab-color, $alpha: 0.32) !default;
+$tabs-tab-disabled-color: null !default;
 
 /**
 * $name 40. Selected tab border color
@@ -54,11 +54,7 @@ $tabs-tab-icon-color: $tabs-tab-color !default;
 */
 $tabs-tab-icon-selected-color: $tabs-tab-selected-color !default;
 
-/**
-* $name 90. Disabled tab icon color
-* $type color
-*/
-$tabs-tab-icon-disabled-color: color.change($tabs-tab-icon-color, $alpha: 0.32) !default;
+
 $tabs-tab-button-disabled-opacity: 0 !default;
 
 /**
@@ -80,9 +76,17 @@ $tabs-focused-tab-bg-color: color.change($base-accent, $alpha: 0.12) !default;
 $tabs-active-tab-bg-color: color.change($base-accent, $alpha: 0.16) !default;
 
 @if $mode == "light" {
+  $tabs-tab-disabled-color: rgba(0, 0, 0, 0.38) !default;
   $tabs-disabled-tab-border-color: color.change($tabs-tab-color, $alpha: 0.13) !default;
 }
 
 @if $mode == "dark" {
+  $tabs-tab-disabled-color: rgba(255, 255, 255, 0.38) !default;
   $tabs-disabled-tab-border-color: color.change($tabs-tab-color, $alpha: 0.4) !default;
 }
+
+/**
+* $name 90. Disabled tab icon color
+* $type color
+*/
+$tabs-tab-icon-disabled-color: $tabs-tab-disabled-color !default;

@@ -72,7 +72,7 @@ describe('SummarizeCommand', () => {
       command.execute(params, callbacks);
 
       expect(buildPromptSpy).toHaveBeenCalledTimes(1);
-      expect(promptManager.buildPrompt).toHaveBeenCalledWith('summarize', { user: { text: params.text } });
+      expect(promptManager.buildPrompt).toHaveBeenCalledWith('summarize', { user: { text: params.text } }, { applyMetaTemplates: true });
     });
 
     it('promptManager.buildPrompt should should return prompt with passed values', () => {

@@ -14,7 +14,7 @@ import ja from 'localization/messages/ja.json!';
 import pointerMock from '../../helpers/pointerMock.js';
 import support from '__internal/core/utils/m_support';
 import typeUtils from 'core/utils/type';
-import uiDateUtils from '__internal/ui/date_box/m_date_utils';
+import uiDateUtils from '__internal/ui/date_box/date_utils';
 import { normalizeKeyName } from 'common/core/events/utils/index';
 
 import '../../helpers/calendarFixtures.js';
@@ -3143,16 +3143,6 @@ QUnit.module('valueChanged handler should receive correct event', {
             this.$input.trigger($.Event('keydown', { key: 'Enter' }));
 
             this.checkEvent(assert, 'keydown', this.$input, 'enter');
-            this.testProgramChange(assert);
-        });
-
-        QUnit.skip(`on calendar cell selecting using enter when useMaskBehavior=${useMaskBehavior}`, function(assert) {
-            this.reinit({ useMaskBehavior });
-            const $calendarCell = $('.dx-calendar-today');
-
-            this.keyboard.press('enter');
-
-            this.checkEvent(assert, 'keydown', $calendarCell, 'enter');
             this.testProgramChange(assert);
         });
     });

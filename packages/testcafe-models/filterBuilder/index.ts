@@ -18,6 +18,7 @@ const CLASS = {
   itemOperation: 'dx-filterbuilder-item-operation',
   itemValue: 'dx-filterbuilder-item-value-text',
   itemAction: 'dx-filterbuilder-action',
+  checkbox: 'dx-checkbox',
 };
 
 export default class FilterBuilder extends Widget {
@@ -27,6 +28,14 @@ export default class FilterBuilder extends Widget {
 
   static getPopupTreeViewNode(index = 0): Selector {
     return Selector(`.${CLASS.treeViewLeaf}`).nth(index);
+  }
+
+  static getPopupTreeViewNodeByText(text: string): Selector {
+    return Selector(`.${CLASS.treeViewLeaf}`).withText(text).filterVisible();
+  }
+
+  static getPopupTreeViewNodeCheckboxByText(text: string): Selector {
+    return this.getPopupTreeViewNodeByText(text).find(`.${CLASS.checkbox}`);
   }
 
   // eslint-disable-next-line class-methods-use-this

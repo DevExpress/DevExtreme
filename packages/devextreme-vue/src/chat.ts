@@ -11,6 +11,7 @@ import {
  AttachmentDownloadClickEvent,
  DisposingEvent,
  InitializedEvent,
+ InputFieldTextChangedEvent,
  MessageDeletedEvent,
  MessageDeletingEvent,
  MessageEditCanceledEvent,
@@ -36,6 +37,8 @@ import {
 import {
  Format as CommonFormat,
  ValidationStatus,
+ ButtonStyle,
+ ButtonType,
 } from "devextreme/common";
 import {
  dxFileUploaderOptions,
@@ -56,6 +59,20 @@ import {
  UploadHttpMethod,
  FileUploadMode,
 } from "devextreme/ui/file_uploader";
+import {
+ dxSpeechToTextOptions,
+ CustomSpeechRecognizer,
+ ContentReadyEvent as SpeechToTextContentReadyEvent,
+ DisposingEvent as SpeechToTextDisposingEvent,
+ EndEvent,
+ ErrorEvent,
+ InitializedEvent as SpeechToTextInitializedEvent,
+ OptionChangedEvent as SpeechToTextOptionChangedEvent,
+ ResultEvent,
+ StartClickEvent,
+ StopClickEvent,
+ SpeechRecognitionConfig,
+} from "devextreme/ui/speech_to_text";
 import { prepareConfigurationComponentConfig } from "./core/index";
 
 type AccessibleOptions = Pick<Properties,
@@ -73,12 +90,14 @@ type AccessibleOptions = Pick<Properties,
   "height" |
   "hint" |
   "hoverStateEnabled" |
+  "inputFieldText" |
   "items" |
   "messageTemplate" |
   "messageTimestampFormat" |
   "onAttachmentDownloadClick" |
   "onDisposing" |
   "onInitialized" |
+  "onInputFieldTextChanged" |
   "onMessageDeleted" |
   "onMessageDeleting" |
   "onMessageEditCanceled" |
@@ -95,6 +114,8 @@ type AccessibleOptions = Pick<Properties,
   "showDayHeaders" |
   "showMessageTimestamp" |
   "showUserName" |
+  "speechToTextEnabled" |
+  "speechToTextOptions" |
   "typingUsers" |
   "user" |
   "visible" |
@@ -121,12 +142,14 @@ const componentConfig = {
     height: [Number, String],
     hint: String,
     hoverStateEnabled: Boolean,
+    inputFieldText: String,
     items: Array as PropType<Array<Message>>,
     messageTemplate: {},
     messageTimestampFormat: [Object, String, Function] as PropType<Format | CommonFormat | (((value: number | Date) => string)) | Record<string, any> | string>,
     onAttachmentDownloadClick: Function as PropType<((e: AttachmentDownloadClickEvent) => void)>,
     onDisposing: Function as PropType<((e: DisposingEvent) => void)>,
     onInitialized: Function as PropType<((e: InitializedEvent) => void)>,
+    onInputFieldTextChanged: Function as PropType<((e: InputFieldTextChangedEvent) => void)>,
     onMessageDeleted: Function as PropType<((e: MessageDeletedEvent) => void)>,
     onMessageDeleting: Function as PropType<((e: MessageDeletingEvent) => void)>,
     onMessageEditCanceled: Function as PropType<((e: MessageEditCanceledEvent) => void)>,
@@ -143,6 +166,8 @@ const componentConfig = {
     showDayHeaders: Boolean,
     showMessageTimestamp: Boolean,
     showUserName: Boolean,
+    speechToTextEnabled: Boolean,
+    speechToTextOptions: Object as PropType<dxSpeechToTextOptions | Record<string, any>>,
     typingUsers: Array as PropType<Array<User>>,
     user: Object as PropType<User | Record<string, any>>,
     visible: Boolean,
@@ -165,12 +190,14 @@ const componentConfig = {
     "update:height": null,
     "update:hint": null,
     "update:hoverStateEnabled": null,
+    "update:inputFieldText": null,
     "update:items": null,
     "update:messageTemplate": null,
     "update:messageTimestampFormat": null,
     "update:onAttachmentDownloadClick": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
+    "update:onInputFieldTextChanged": null,
     "update:onMessageDeleted": null,
     "update:onMessageDeleting": null,
     "update:onMessageEditCanceled": null,
@@ -187,6 +214,8 @@ const componentConfig = {
     "update:showDayHeaders": null,
     "update:showMessageTimestamp": null,
     "update:showUserName": null,
+    "update:speechToTextEnabled": null,
+    "update:speechToTextOptions": null,
     "update:typingUsers": null,
     "update:user": null,
     "update:visible": null,
@@ -207,6 +236,7 @@ const componentConfig = {
       fileUploaderOptions: { isCollectionItem: false, optionName: "fileUploaderOptions" },
       item: { isCollectionItem: true, optionName: "items" },
       messageTimestampFormat: { isCollectionItem: false, optionName: "messageTimestampFormat" },
+      speechToTextOptions: { isCollectionItem: false, optionName: "speechToTextOptions" },
       typingUser: { isCollectionItem: true, optionName: "typingUsers" },
       user: { isCollectionItem: false, optionName: "user" }
     };
@@ -280,6 +310,25 @@ prepareConfigurationComponentConfig(DxAuthorConfig);
 const DxAuthor = defineComponent(DxAuthorConfig);
 
 (DxAuthor as any).$_optionName = "author";
+
+const DxCustomSpeechRecognizerConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:enabled": null,
+    "update:isListening": null,
+  },
+  props: {
+    enabled: Boolean,
+    isListening: Boolean
+  }
+};
+
+prepareConfigurationComponentConfig(DxCustomSpeechRecognizerConfig);
+
+const DxCustomSpeechRecognizer = defineComponent(DxCustomSpeechRecognizerConfig);
+
+(DxCustomSpeechRecognizer as any).$_optionName = "customSpeechRecognizer";
 
 const DxDayHeaderFormatConfig = {
   emits: {
@@ -537,6 +586,108 @@ const DxMessageTimestampFormat = defineComponent(DxMessageTimestampFormatConfig)
 
 (DxMessageTimestampFormat as any).$_optionName = "messageTimestampFormat";
 
+const DxSpeechRecognitionConfigConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:continuous": null,
+    "update:grammars": null,
+    "update:interimResults": null,
+    "update:lang": null,
+    "update:maxAlternatives": null,
+  },
+  props: {
+    continuous: Boolean,
+    grammars: Array as PropType<Array<string>>,
+    interimResults: Boolean,
+    lang: String,
+    maxAlternatives: Number
+  }
+};
+
+prepareConfigurationComponentConfig(DxSpeechRecognitionConfigConfig);
+
+const DxSpeechRecognitionConfig = defineComponent(DxSpeechRecognitionConfigConfig);
+
+(DxSpeechRecognitionConfig as any).$_optionName = "speechRecognitionConfig";
+
+const DxSpeechToTextOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:accessKey": null,
+    "update:activeStateEnabled": null,
+    "update:customSpeechRecognizer": null,
+    "update:disabled": null,
+    "update:elementAttr": null,
+    "update:focusStateEnabled": null,
+    "update:height": null,
+    "update:hint": null,
+    "update:hoverStateEnabled": null,
+    "update:onContentReady": null,
+    "update:onDisposing": null,
+    "update:onEnd": null,
+    "update:onError": null,
+    "update:onInitialized": null,
+    "update:onOptionChanged": null,
+    "update:onResult": null,
+    "update:onStartClick": null,
+    "update:onStopClick": null,
+    "update:rtlEnabled": null,
+    "update:speechRecognitionConfig": null,
+    "update:startIcon": null,
+    "update:startText": null,
+    "update:stopIcon": null,
+    "update:stopText": null,
+    "update:stylingMode": null,
+    "update:tabIndex": null,
+    "update:type": null,
+    "update:visible": null,
+    "update:width": null,
+  },
+  props: {
+    accessKey: String,
+    activeStateEnabled: Boolean,
+    customSpeechRecognizer: Object as PropType<CustomSpeechRecognizer | Record<string, any>>,
+    disabled: Boolean,
+    elementAttr: Object as PropType<Record<string, any>>,
+    focusStateEnabled: Boolean,
+    height: [Number, String],
+    hint: String,
+    hoverStateEnabled: Boolean,
+    onContentReady: Function as PropType<((e: SpeechToTextContentReadyEvent) => void)>,
+    onDisposing: Function as PropType<((e: SpeechToTextDisposingEvent) => void)>,
+    onEnd: Function as PropType<((e: EndEvent) => void)>,
+    onError: Function as PropType<((e: ErrorEvent) => void)>,
+    onInitialized: Function as PropType<((e: SpeechToTextInitializedEvent) => void)>,
+    onOptionChanged: Function as PropType<((e: SpeechToTextOptionChangedEvent) => void)>,
+    onResult: Function as PropType<((e: ResultEvent) => void)>,
+    onStartClick: Function as PropType<((e: StartClickEvent) => void)>,
+    onStopClick: Function as PropType<((e: StopClickEvent) => void)>,
+    rtlEnabled: Boolean,
+    speechRecognitionConfig: Object as PropType<Record<string, any> | SpeechRecognitionConfig>,
+    startIcon: String,
+    startText: String,
+    stopIcon: String,
+    stopText: String,
+    stylingMode: String as PropType<ButtonStyle>,
+    tabIndex: Number,
+    type: String as PropType<ButtonType | string>,
+    visible: Boolean,
+    width: [Number, String]
+  }
+};
+
+prepareConfigurationComponentConfig(DxSpeechToTextOptionsConfig);
+
+const DxSpeechToTextOptions = defineComponent(DxSpeechToTextOptionsConfig);
+
+(DxSpeechToTextOptions as any).$_optionName = "speechToTextOptions";
+(DxSpeechToTextOptions as any).$_expectedChildren = {
+  customSpeechRecognizer: { isCollectionItem: false, optionName: "customSpeechRecognizer" },
+  speechRecognitionConfig: { isCollectionItem: false, optionName: "speechRecognitionConfig" }
+};
+
 const DxTypingUserConfig = {
   emits: {
     "update:isActive": null,
@@ -590,11 +741,14 @@ export {
   DxAlert,
   DxAttachment,
   DxAuthor,
+  DxCustomSpeechRecognizer,
   DxDayHeaderFormat,
   DxEditing,
   DxFileUploaderOptions,
   DxItem,
   DxMessageTimestampFormat,
+  DxSpeechRecognitionConfig,
+  DxSpeechToTextOptions,
   DxTypingUser,
   DxUser
 };

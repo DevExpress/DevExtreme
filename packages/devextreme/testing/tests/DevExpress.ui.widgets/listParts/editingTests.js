@@ -319,6 +319,62 @@ QUnit.module('keyboard navigation', {
         assert.deepEqual(list.option('items'), items, 'items were reordered');
     });
 
+    QUnit.test('shift+arrowUp on first item should not throw error (T1320189)', function(assert) {
+        const items = ['1', '2', '3'];
+
+        const $list = $('#list').dxList({
+            items: items,
+            editEnabled: true,
+            itemDragging: {
+                allowReordering: true
+            },
+            focusStateEnabled: true
+        });
+
+        const list = $list.dxList('instance');
+        const keyboard = keyboardMock($list.find('[tabindex=0]'));
+
+        const $firstItem = $list.find('.' + LIST_ITEM_CLASS).eq(0);
+        list.option('focusedElement', $firstItem.get(0));
+
+        let errorMessage = '';
+        try {
+            keyboard.keyDown('arrowUp', { shiftKey: true });
+        } catch(e) {
+            errorMessage = `error message: ${e.message}`;
+        }
+
+        assert.strictEqual(errorMessage, '', 'no error thrown when trying to move first item up');
+    });
+
+    QUnit.test('shift+arrowDown on last item should not throw error (T1320189)', function(assert) {
+        const items = ['1', '2', '3'];
+
+        const $list = $('#list').dxList({
+            items: items,
+            editEnabled: true,
+            itemDragging: {
+                allowReordering: true
+            },
+            focusStateEnabled: true
+        });
+        const list = $list.dxList('instance');
+        const keyboard = keyboardMock($list.find('[tabindex=0]'));
+
+        const $lastItem = $list.find('.' + LIST_ITEM_CLASS).eq(2);
+        list.option('focusedElement', $lastItem.get(0));
+
+        let errorMessage = '';
+        try {
+            keyboard.keyDown('arrowDown', { shiftKey: true });
+        } catch(e) {
+            errorMessage = `error message: ${e.message}`;
+        }
+
+        assert.strictEqual(errorMessage, '', 'no error thrown when trying to move last item down');
+    });
+
+
     QUnit.module('grouped', {
         beforeEach: function() {
             this.getInitialItems = () => {

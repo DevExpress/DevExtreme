@@ -468,9 +468,6 @@ export default class dxBarGauge extends BaseWidget<dxBarGaugeOptions> {
 /** @public */
 export type Properties = dxBarGaugeOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxBarGaugeOptions;
-
 // #region deprecated in v23.1
 
 /** @deprecated Use Legend instead */

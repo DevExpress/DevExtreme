@@ -160,26 +160,26 @@ export const resourcesData = [
   {
     text: 'Room 401',
     id: 1,
-    color: '#bbd806',
+    color: '#1564C0',
   },
   {
     text: 'Room 402',
     id: 2,
-    color: '#f34c8a',
+    color: '#C2185B',
   },
   {
     text: 'Room 403',
     id: 3,
-    color: '#ae7fcc',
+    color: '#7B1FA2',
   },
   {
     text: 'Room 407',
     id: 4,
-    color: '#ff8817',
+    color: '#DD2C00',
   },
   {
     text: 'Room 409',
     id: 5,
-    color: '#03bb92',
+    color: '#2E7D32',
   },
 ];

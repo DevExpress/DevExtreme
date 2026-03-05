@@ -55,7 +55,7 @@ const moviesData: MovieData[] = [{
   text: 'A Star Is Born',
   director: 'William A. Wellman',
   year: 1937,
-  image: '../../../../images/movies/AStartIsBorn.jpg',
+  image: '../../../../images/movies/AStarIsBorn.jpg',
   duration: 111,
   color: '#F9E2AE',
 }, {

@@ -608,7 +608,12 @@ class FilterBuilder extends Widget<any> {
 
   _getGroupOperations(criteria) {
     let groupOperations = this.option('groupOperations');
-    const groupOperationDescriptions = this.option('groupOperationDescriptions');
+    const groupOperationDescriptions = {
+      and: this.option('groupOperationDescriptions.and') ?? messageLocalization.format('dxFilterBuilder-and'),
+      or: this.option('groupOperationDescriptions.or') ?? messageLocalization.format('dxFilterBuilder-or'),
+      notAnd: this.option('groupOperationDescriptions.notAnd') ?? messageLocalization.format('dxFilterBuilder-notAnd'),
+      notOr: this.option('groupOperationDescriptions.notOr') ?? messageLocalization.format('dxFilterBuilder-notOr'),
+    };
 
     if (!groupOperations || !groupOperations.length) {
       groupOperations = [getGroupValue(criteria).replace('!', 'not')];

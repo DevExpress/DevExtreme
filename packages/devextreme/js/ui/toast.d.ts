@@ -208,9 +208,6 @@ export default class dxToast extends dxOverlay<dxToastOptions> { }
 /** @public */
 export type Properties = dxToastOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxToastOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

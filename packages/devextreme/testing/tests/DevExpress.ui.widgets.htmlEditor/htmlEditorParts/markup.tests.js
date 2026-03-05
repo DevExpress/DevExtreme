@@ -172,6 +172,19 @@ export default function() {
                 assert.strictEqual($editorContent.attr('aria-invalid'), 'true');
             }
         });
+
+        test('aria-multiline on textbox (T1319612)', function(assert) {
+            const $htmlEditor = $('#htmlEditor').dxHtmlEditor();
+
+            const $editorContent = $htmlEditor.find(`.${HTML_EDITOR_CONTENT_CLASS}`);
+            const isQuillRendered = Boolean($editorContent.length);
+
+            assert.expect(isQuillRendered ? 1 : 0);
+
+            if(isQuillRendered) {
+                assert.strictEqual($editorContent.attr('aria-multiline'), 'true');
+            }
+        });
     });
 
     QUnit.module('Props from global config', {

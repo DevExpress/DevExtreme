@@ -4,4 +4,6 @@ export interface BuildTypescriptExecutorSchema {
   excludePatterns?: string[];
   tsconfig?: string;
   outDir?: string;
+  resolvePaths?: boolean;
+  resolvePathsBaseDir?: string;
 }

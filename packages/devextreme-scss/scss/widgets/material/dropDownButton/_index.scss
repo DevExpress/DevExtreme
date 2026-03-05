@@ -18,6 +18,12 @@
   $material-dropdownbutton-action-horizontal-padding,
 );
 
+.dx-dropdownbutton {
+  &.dx-state-disabled {
+    opacity: 1;
+  }
+}
+
 .dx-dropdownbutton-popup-wrapper {
   @include dx-dropdownlist-list-appearance();
 }

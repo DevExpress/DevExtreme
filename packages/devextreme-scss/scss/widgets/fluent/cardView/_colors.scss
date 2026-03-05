@@ -573,7 +573,7 @@ $cardview-fluent-columnchooser--empty__message-color: null !default;
 
   // Search highlight
   $cardview-fluent-card__content__field-value--highlighted-bg-color: $base-warning !default;
-  $cardview-fluent-card__content__field-value--highlighted-text-color: $cardview-fluent-common-text-color !default;
+  $cardview-fluent-card__content__field-value--highlighted-text-color: $base-inverted-text-color !default;
   $cardview-fluent-card__content__field-value--highlighted-box-shadow-color: rgba(0, 0, 0, 0.25) !default;
 
   // Column chooser

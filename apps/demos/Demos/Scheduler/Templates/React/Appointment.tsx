@@ -19,7 +19,7 @@ const Appointment = (props: AppointmentProps) => {
   return (
     <div className="movie-preview">
       <div className="movie-preview-image">
-        <img src={movieData.image} alt={movieData.text} />
+        <img src={movieData.image} alt={`${movieData.text} poster`} />
       </div>
       <div className="movie-details">
         <div className="title">{movieData.text}</div>

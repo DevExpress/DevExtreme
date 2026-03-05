@@ -247,7 +247,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
         QUnit.test('should be fired when the Cancel button is clicked and editing is active', function(assert) {
             const onMessageEditCanceled = sinon.stub();
 
-            this.reinit({ onMessageEditCanceled, text: 'editing text' });
+            this.reinit({ onMessageEditCanceled, previewText: 'editing text' });
 
             keyboardMock(this.$input)
                 .focus()
@@ -258,7 +258,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(onMessageEditCanceled.callCount, 1, 'Event fired once on cancel');
         });
 
-        QUnit.test('should not be fired when the Cancel button is clicked and text option is empty', function(assert) {
+        QUnit.test('should not be fired when the Cancel button is clicked and previewText option is empty', function(assert) {
             const onMessageEditCanceled = sinon.stub();
 
             this.reinit({ onMessageEditCanceled });
@@ -269,14 +269,14 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             this.getCancelButton().trigger('dxclick');
 
-            assert.strictEqual(onMessageEditCanceled.callCount, 0, 'Event was not fired because text was not set');
+            assert.strictEqual(onMessageEditCanceled.callCount, 0, 'Event was not fired because previewText was not set');
         });
 
         QUnit.test('should be fired when Escape key is pressed during editing', function(assert) {
             const onMessageEditCanceled = sinon.stub();
 
             this.reinit({ onMessageEditCanceled });
-            this.instance.option('text', 'test');
+            this.instance.option('previewText', 'test');
 
             keyboardMock(this.$input)
                 .focus()
@@ -288,10 +288,10 @@ QUnit.module('MessageBox', moduleConfig, () => {
     });
 
     QUnit.module('onMessageUpdating event', () => {
-        QUnit.test('should be fired when the Send button is clicked and text is defined', function(assert) {
+        QUnit.test('should be fired when the Send button is clicked and previewText is defined', function(assert) {
             const onMessageUpdating = sinon.stub();
 
-            this.reinit({ onMessageUpdating, text: 'edited text' });
+            this.reinit({ onMessageUpdating, previewText: 'edited text' });
 
             keyboardMock(this.$input)
                 .focus()
@@ -581,7 +581,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
                 this.reinit({
                     ...options,
-                    text: 'message text'
+                    previewText: 'message text'
                 });
 
                 const editingPreview = this.getEditingPreviewInstance();
@@ -602,7 +602,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
                 this.instance.option({
                     ...options,
-                    text: 'message text'
+                    previewText: 'message text'
                 });
 
                 const editingPreview = this.getEditingPreviewInstance();
@@ -675,7 +675,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             this.reinit({
                 onMessageEntered: onMessageEnteredStub,
                 onMessageUpdating: onMessageUpdatingStub,
-                text: 'original text',
+                previewText: 'original text',
             });
 
             keyboardMock(this.$input)
@@ -695,7 +695,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             const newText = 'updated message text';
 
             this.reinit({
-                text: originalText,
+                previewText: originalText,
                 onMessageUpdating: (e) => {
                     assert.strictEqual(e.text, `${newText}${originalText}`, 'correct text passed to onMessageUpdating');
                 },
@@ -707,11 +707,151 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
             this.$sendButton.trigger('dxclick');
         });
+
+        QUnit.test('text option should set textArea text on init', function(assert) {
+            this.reinit({
+                text: 'text',
+            });
+
+            const chatTextArea = ChatTextArea.getInstance(this.$textArea);
+
+            assert.strictEqual(chatTextArea.option('text'), 'text', 'textArea text is set');
+        });
+
+        QUnit.test('text option should update textArea text on runtime change', function(assert) {
+            this.reinit({
+                text: 'old',
+            });
+            this.instance.option('text', 'new');
+
+            const chatTextArea = ChatTextArea.getInstance(this.$textArea);
+
+            assert.strictEqual(chatTextArea.option('text'), 'new', 'textArea text is updated');
+        });
+
+        QUnit.test('should pass previewText to textArea when both previewText and text are specified', function(assert) {
+            this.reinit({
+                previewText: 'preview',
+                text: 'text',
+            });
+
+            const chatTextArea = ChatTextArea.getInstance(this.$textArea);
+
+            assert.strictEqual(chatTextArea.option('text'), 'preview', 'previewText is displayed in textArea');
+        });
+
+        QUnit.test('should pass text to textArea when previewText is empty string', function(assert) {
+            this.reinit({
+                previewText: '',
+                text: 'text',
+            });
+
+            const chatTextArea = ChatTextArea.getInstance(this.$textArea);
+
+            assert.strictEqual(chatTextArea.option('text'), 'text', 'text is displayed in textArea');
+        });
+
+        QUnit.test('previewText option runtime change should update text option', function(assert) {
+            this.reinit({
+                text: 'old',
+            });
+            this.instance.option('previewText', 'new');
+
+            assert.strictEqual(this.instance.option('text'), 'new', 'text option is updated');
+        });
+
+        QUnit.test('text option should be updated on textArea input', function(assert) {
+            this.reinit({
+                text: 'some',
+            });
+
+            keyboardMock(this.$input)
+                .focus()
+                .type('three');
+
+            assert.strictEqual(this.instance.option('text'), 'threesome', 'text option is updated on textArea input');
+        });
+
+        QUnit.test('send button should be enabled if text option is specified on init', function(assert) {
+            this.reinit({
+                text: 'text',
+            });
+
+            assert.strictEqual(this.sendButton.option('disabled'), false, 'send button is enabled');
+        });
+
+        QUnit.test('send button should be disabled if text option cleared at runtime', function(assert) {
+            this.reinit({
+                text: 'text',
+            });
+
+            this.instance.option('text', '');
+
+            assert.strictEqual(this.sendButton.option('disabled'), true, 'send button is disabled');
+        });
+
+        QUnit.test('textArea should be empty when text option is specified on init and message is sent', function(assert) {
+            this.reinit({
+                text: 'text',
+            });
+
+            this.$sendButton.trigger('dxclick');
+
+            assert.strictEqual(this.$input.val(), '', 'textArea is empty after sending message');
+        });
+
+        QUnit.module('onTextChanged event', () => {
+            QUnit.test('should be fired on textarea input', function(assert) {
+                const onTextChangedStub = sinon.stub();
+
+                this.reinit({ onTextChanged: onTextChangedStub });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('a');
+
+                assert.strictEqual(onTextChangedStub.callCount, 1, 'fired once');
+            });
+
+            QUnit.test('should update at runtime', function(assert) {
+                const onTextChangedStub = sinon.stub();
+
+                this.instance.option('onTextChanged', onTextChangedStub);
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('a');
+
+                assert.strictEqual(onTextChangedStub.callCount, 1, 'fired once after runtime update');
+            });
+
+            QUnit.test('should be fired with correct arguments', function(assert) {
+                assert.expect(5);
+
+                this.reinit({
+                    onTextChanged: (e) => {
+                        const { value, previousValue, event } = e;
+
+                        assert.strictEqual(previousValue, '', 'previousValue is correct');
+                        assert.strictEqual(value, 'a', 'value is correct');
+
+                        assert.strictEqual(event.type, 'input', 'event.type is correct');
+                        assert.strictEqual(event.target, this.$input.get(0), 'event.target is correct');
+
+                        assert.strictEqual(this.instance.option('text'), 'a', 'text option is updated before event call');
+                    },
+                });
+
+                keyboardMock(this.$input)
+                    .focus()
+                    .type('a');
+            });
+        });
     });
 
     QUnit.module('Integration with EditingPreview', () => {
-        QUnit.test('should render EditingPreview when text option is set on initialization', function(assert) {
-            this.reinit({ text: 'editing text' });
+        QUnit.test('should render EditingPreview when previewText option is set on initialization', function(assert) {
+            this.reinit({ previewText: 'editing text' });
 
             const $editingPreview = this.getEditingPreview();
             const editingPreviewInstance = this.getEditingPreviewInstance();
@@ -724,16 +864,16 @@ QUnit.module('MessageBox', moduleConfig, () => {
             );
         });
 
-        QUnit.test('should not render EditingPreview when text option is empty', function(assert) {
-            this.reinit({ text: '' });
+        QUnit.test('should not render EditingPreview when previewText option is empty', function(assert) {
+            this.reinit({ previewText: '' });
 
             const $editingPreview = this.getEditingPreview();
 
             assert.strictEqual($editingPreview.length, 0, 'EditingPreview is not rendered');
         });
 
-        QUnit.test('should render EditingPreview when text option is set at runtime', function(assert) {
-            this.instance.option('text', 'new editing text');
+        QUnit.test('should render EditingPreview when previewText option is set at runtime', function(assert) {
+            this.instance.option('previewText', 'new editing text');
 
             const $editingPreview = this.getEditingPreview();
             const editingPreviewInstance = this.getEditingPreviewInstance();
@@ -746,44 +886,44 @@ QUnit.module('MessageBox', moduleConfig, () => {
             );
         });
 
-        QUnit.test('should remove EditingPreview when text option is cleared at runtime', function(assert) {
-            this.reinit({ text: 'editing text' });
+        QUnit.test('should not remove EditingPreview when previewText option is cleared at runtime', function(assert) {
+            this.reinit({ previewText: 'editing text' });
 
             assert.strictEqual(this.getEditingPreview().length, 1, 'EditingPreview initially rendered');
 
-            this.instance.option('text', '');
+            this.instance.option('previewText', '');
 
             assert.strictEqual(this.getEditingPreview().length, 1, 'EditingPreview is not removed after clearing text');
         });
 
         QUnit.test('should sync text between EditingPreview and ChatTextArea value', function(assert) {
-            this.reinit({ text: 'editing message' });
+            this.reinit({ previewText: 'editing message' });
 
             assert.strictEqual(this.$input.val(), 'editing message', 'ChatTextArea value initially synced');
 
-            this.instance.option('text', 'modified message');
+            this.instance.option('previewText', 'modified message');
 
             assert.strictEqual(this.$input.val(), 'modified message', 'ChatTextArea value updated');
         });
     });
 
     QUnit.module('Mode switching', () => {
-        QUnit.test('should switch from creation mode to editing mode when text is set', function(assert) {
-            assert.strictEqual(this.instance.option('text'), '', 'initially in creation mode');
+        QUnit.test('should switch from creation mode to editing mode when previewText is set', function(assert) {
+            assert.strictEqual(this.instance.option('previewText'), '', 'initially in creation mode');
             assert.strictEqual(this.getEditingPreview().length, 0, 'no EditingPreview in creation mode');
 
-            this.instance.option('text', 'message to edit');
+            this.instance.option('previewText', 'message to edit');
 
             assert.strictEqual(this.getEditingPreview().length, 1, 'EditingPreview appears in editing mode');
-            assert.strictEqual(this.$input.val(), 'message to edit', 'ChatTextArea filled with text');
+            assert.strictEqual(this.$input.val(), 'message to edit', 'ChatTextArea filled with previewText');
         });
 
-        QUnit.test('should switch from editing mode to creation mode when text is cleared', function(assert) {
-            this.reinit({ text: 'editing message' });
+        QUnit.test('should switch from editing mode to creation mode when previewText is cleared', function(assert) {
+            this.reinit({ previewText: 'editing message' });
 
             assert.strictEqual(this.getEditingPreview().length, 1, 'initially in editing mode');
 
-            this.instance.option('text', '');
+            this.instance.option('previewText', '');
 
             assert.strictEqual(this.getEditingPreview().length, 1, 'EditingPreview has not been removed in creation mode');
             assert.strictEqual(this.$input.val(), '', 'ChatTextArea cleared');
@@ -804,7 +944,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(onMessageEnteredStub.callCount, 1, 'onMessageEntered called in creation mode');
             assert.strictEqual(onMessageUpdatingStub.callCount, 0, 'onMessageUpdating not called in creation mode');
 
-            this.instance.option('text', 'edit this');
+            this.instance.option('previewText', 'edit this');
 
             keyboardMock(this.$input).focus().type('edited message');
             this.$sendButton.trigger('dxclick');
@@ -814,13 +954,13 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('Escape key should cancel editing and switch to creation mode', function(assert) {
-            this.reinit({ text: 'original message' });
+            this.reinit({ previewText: 'original message' });
 
             assert.strictEqual(this.getEditingPreview().length, 1, 'in editing mode');
 
             keyboardMock(this.$input).focus().press('esc');
 
-            assert.strictEqual(this.instance.option('text'), '', 'text cleared');
+            assert.strictEqual(this.instance.option('previewText'), '', 'previewText cleared');
             assert.strictEqual(this.getEditingPreview().length, 1, 'EditingPreview has not been removed');
             assert.strictEqual(this.$input.val(), '', 'ChatTextArea cleared');
         });
@@ -828,7 +968,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
 
     QUnit.module('Keyboard navigation', () => {
         QUnit.test('textarea should be cleared on escape key when some message is editing', function(assert) {
-            this.instance.option('text', 'test');
+            this.instance.option('previewText', 'test');
 
             keyboardMock(this.$input)
                 .focus()
@@ -848,7 +988,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('Editing preview should be cleared when Escape key is pressed during editing', function(assert) {
-            this.instance.option('text', 'test');
+            this.instance.option('previewText', 'test');
 
             const editingPreview = this.getEditingPreviewInstance();
             assert.strictEqual(editingPreview.option('text'), 'test', 'Initial text is set in editing preview');
@@ -861,15 +1001,15 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(editingPreview.option('text'), '', 'Editing preview text is cleared after pressing Escape');
         });
 
-        QUnit.test('Text option should update editing preview when changed at runtime', function(assert) {
-            this.instance.option('text', 'new text value');
+        QUnit.test('previewText option should update editing preview when changed at runtime', function(assert) {
+            this.instance.option('previewText', 'new text value');
 
             const editingPreview = this.getEditingPreviewInstance();
             assert.strictEqual(editingPreview.option('text'), 'new text value', 'Updated text is reflected in editing preview');
         });
 
         QUnit.testInActiveWindow('Textarea should be focused after pressing Escape key', function(assert) {
-            this.instance.option('text', 'test');
+            this.instance.option('previewText', 'test');
 
             keyboardMock(this.$input)
                 .focus()
@@ -879,8 +1019,8 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(this.$textArea.hasClass(FOCUSED_STATE_CLASS), true, 'Textarea is focused after Escape press');
         });
 
-        QUnit.testInActiveWindow('Textarea should not be focused after clicking Send button if text is not empty', function(assert) {
-            this.instance.option('text', 'test');
+        QUnit.testInActiveWindow('Textarea should not be focused after clicking Send button if previewText is not empty', function(assert) {
+            this.instance.option('previewText', 'test');
 
             this.$sendButton.trigger('dxclick');
 
@@ -888,7 +1028,7 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
         QUnit.test('Editing preview and textarea should be cleared after clicking the cancel button', function(assert) {
-            this.reinit({ text: 'edited text' });
+            this.reinit({ previewText: 'edited text' });
 
             const editingPreview = this.getEditingPreviewInstance();
 
@@ -897,5 +1037,55 @@ QUnit.module('MessageBox', moduleConfig, () => {
             assert.strictEqual(this.textArea.option('text'), '', 'Textarea is cleared after cancel');
             assert.strictEqual(editingPreview.option('text'), '', 'Editing preview is cleared after cancel');
         });
+    });
+
+    QUnit.module('SpeechToText integration', () => {
+        QUnit.test('should pass speechToTextEnabled to ChatTextArea on initialization', function(assert) {
+            this.reinit({ speechToTextEnabled: true });
+
+            assert.strictEqual(this.textArea.option('speechToTextEnabled'), true, 'speechToTextEnabled is passed to ChatTextArea');
+        });
+
+        QUnit.test('should pass speechToTextOptions to ChatTextArea on initialization', function(assert) {
+            const speechToTextOptions = {
+                speechRecognitionConfig: {
+                    continuous: true,
+                    interimResults: true,
+                },
+            };
+
+            this.reinit({ speechToTextEnabled: true, speechToTextOptions });
+
+            assert.deepEqual(
+                this.textArea.option('speechToTextOptions'),
+                speechToTextOptions,
+                'speechToTextOptions is passed to ChatTextArea',
+            );
+        });
+
+        QUnit.test('should update speechToTextEnabled in ChatTextArea at runtime', function(assert) {
+            this.instance.option('speechToTextEnabled', true);
+
+            assert.strictEqual(this.textArea.option('speechToTextEnabled'), true, 'speechToTextEnabled is updated in ChatTextArea');
+        });
+
+        QUnit.test('should update speechToTextOptions in ChatTextArea at runtime', function(assert) {
+            this.reinit({ speechToTextEnabled: true });
+
+            const newOptions = {
+                speechRecognitionConfig: {
+                    continuous: false,
+                },
+            };
+
+            this.instance.option('speechToTextOptions', newOptions);
+
+            assert.deepEqual(
+                this.textArea.option('speechToTextOptions'),
+                newOptions,
+                'speechToTextOptions is updated in ChatTextArea',
+            );
+        });
+
     });
 });

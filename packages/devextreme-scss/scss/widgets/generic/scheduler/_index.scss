@@ -4,6 +4,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../list/colors" as *;
 @use "../toolbar/sizes" as *;
 @use '../../base/scheduler/layout/header' as *;
 @use "../../base/mixins" as *;
@@ -11,6 +12,7 @@
 @use "../../base/scheduler" as baseScheduler with (
   $scheduler-tooltip-appointment-text-color: $scheduler-tooltip-appointment-text-color,
   $scheduler-appointment-overlay-bg: $scheduler-appointment-overlay-bg,
+  $scheduler-tooltip-list-focused-bg: $list-item-hover-bg,
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,
   $scheduler-appointment-start-color: $scheduler-appointment-start-color,
   $scheduler-base-border-color: $scheduler-base-border-color,
@@ -276,6 +278,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
         .dx-icon {
           font-size: $generic-scheduler-appointment-popup-icon-size;
         }
+      }
+
+      &.dx-scheduler-form-inner-label-offset {
+        margin-top: $generic-scheduler-appointment-popup-icon-inner-label-margin-top;
       }
     }
 

@@ -62,19 +62,19 @@ $base-shadow-color: null !default;
 * $name 50. Success color
 * $type color
 */
-$base-success: #8bc34a !default;
+$base-success: null !default;
 
 /**
 * $name 60. Warning color
 * $type color
 */
-$base-warning: #ffc107 !default;
+$base-warning: null !default;
 
 /**
 * $name 70. Danger color
 * $type color
 */
-$base-danger: #f44336 !default;
+$base-danger: null !default;
 
 /**
 * $name 80. Hover state text color
@@ -104,50 +104,60 @@ $base-inverted-icon-color: null !default;
 $base-disabled-opacity: 0.38 !default;
 $base-disabled-color: null !default;
 $base-dropdown-shadow-color: null !default;
-$base-invalid-color: $base-danger !default;
-$base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 $scrollview-pulldown-path: null !default;
 
 
 @if $color == "blue" {
   $material-color-accent-modificator: "blue" !default;
-  $base-accent: #03a9f4 !default;
 }
 
 @if $color == "lime" {
   $material-color-accent-modificator: "lime" !default;
   $base-accent: #cddc39 !default;
+  $base-success: #8bc34a  !default;
+  $base-warning: #ffc107 !default;
+  $base-danger: #f44336 !default;
 }
 
 @if $color == "orange" {
   $material-color-accent-modificator: "orange" !default;
   $base-accent: #ff5722 !default;
-  $base-danger: #e91e63 !default;
+  $base-success: #8bc34a  !default;
+  $base-warning: #ffc107 !default;
+  $base-danger: #f44336 !default;
 }
 
 @if $color == "purple" {
   $material-color-accent-modificator: "purple" !default;
   $base-accent: #9c27b0 !default;
+  $base-success: #8bc34a  !default;
+  $base-warning: #ffc107 !default;
+  $base-danger: #f44336 !default;
 }
 
 @if $color == "teal" {
   $material-color-accent-modificator: "teal" !default;
   $base-accent: #009688 !default;
+  $base-success: #8bc34a  !default;
+  $base-warning: #ffc107 !default;
+  $base-danger: #f44336 !default;
 }
-
-/**
-* $name 30. Link color
-* $type color
-*/
-$base-link-color: $base-accent !default;
 
 @if $mode == "light" {
   $material-color-theme-modificator: "light" !default;
+
+  @if $color == "blue" {
+    $base-accent: #1564C0 !default;
+    $base-success: #2E7D32 !default;
+    $base-warning: #DD2C00 !default;
+    $base-danger: #C62828 !default;
+  }
+
   $base-text-color: rgba(0, 0, 0, 0.87) !default;
   $base-label-color: rgba(0, 0, 0, 0.6) !default;
   $base-disabled-color: rgba(0, 0, 0, $base-disabled-opacity) !default;
-  $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
+  $base-icon-color: color.change($base-text-color, $alpha: 0.6) !default;
+  $base-spin-icon-color: color.change($base-text-color, $alpha: 0.6) !default;
   $base-bg: #fff !default;
   $base-border-color: #e0e0e0 !default;
   $base-inverted-bg: color.adjust($base-bg, $lightness: -100%, $space: hsl) !default;
@@ -165,27 +175,43 @@ $base-link-color: $base-accent !default;
 }
 
 @if $mode == "dark" {
+  @if $color == "blue" {
+    $base-accent: #90CAF9 !default;
+    $base-success: #A5D6A7 !default;
+    $base-warning: #FFAB91 !default;
+    $base-danger: #EF9A9A !default;
+  }
+
   $material-color-theme-modificator: "dark" !default;
   $base-text-color: #fff !default;
   $base-label-color: rgba(255, 255, 255, 0.6) !default;
   $base-disabled-color: rgba(255, 255, 255, $base-disabled-opacity) !default;
-  $base-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $base-spin-icon-color: color.change($base-text-color, $alpha: 0.54) !default;
-  $base-bg: #363640 !default;
+  $base-icon-color: color.change($base-text-color, $alpha: 0.6) !default;
+  $base-spin-icon-color: color.change($base-text-color, $alpha: 0.6) !default;
+  $base-bg: #292929 !default;
   $base-border-color: #515159 !default;
   $base-inverted-bg: color.adjust($base-bg, $lightness: 100%, $space: hsl) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: #000 !default;
   $base-hover-color: $base-text-color !default;
-  $base-hover-bg: color.change(#fff, $alpha: 0.05) !default;
+  $base-hover-bg: color.change(#fff, $alpha: 0.04) !default;
   $base-inverted-text-color: rgba(0, 0, 0, 0.87) !default;
   $base-focus-color: $base-inverted-text-color !default;
-  $base-focus-bg: color.change(#fff, $alpha: 0.05) !default;
+  $base-focus-bg: color.change(#fff, $alpha: 0.04) !default;
   $base-inverted-icon-color: $base-inverted-text-color !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/material/color-schemes/dark/pulldown.png') !default;
 }
+
+/**
+* $name 30. Link color
+* $type color
+*/
+$base-link-color: $base-accent !default;
+
+$base-invalid-color: $base-danger !default;
+$base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
 
 $typography-bg: $base-bg !default;
 $typography-color: $base-text-color !default;

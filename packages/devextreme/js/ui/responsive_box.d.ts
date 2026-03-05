@@ -264,12 +264,6 @@ export type Properties<
   TKey = any,
 > = dxResponsiveBoxOptions<TItem, TKey>;
 
-/** @deprecated use Properties instead */
-export type Options<
-  TItem extends ItemLike = any,
-  TKey = any,
-> = Properties<TItem, TKey>;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

@@ -4,9 +4,11 @@ import messageLocalization from '@js/common/core/localization/message';
 import $, { type dxElementWrapper } from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import Button from '@js/ui/button';
+import type { Appointment } from '@js/ui/scheduler';
 
 import { APPOINTMENT_SETTINGS_KEY, LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './constants';
-import type { AppointmentTooltipItem, CompactAppointmentOptions } from './types';
+import type Scheduler from './m_scheduler';
+import type { AppointmentTooltipItem, CompactAppointmentOptions, TargetedAppointment } from './types';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
 const COMPACT_APPOINTMENT_COLLECTOR_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-compact`;
@@ -15,7 +17,10 @@ const APPOINTMENT_COLLECTOR_CONTENT_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-cont
 export class CompactAppointmentsHelper {
   elements: any[] = [];
 
-  constructor(public instance) {
+  instance: Scheduler;
+
+  constructor(instance: Scheduler) {
+    this.instance = instance;
   }
 
   render(options: CompactAppointmentOptions): dxElementWrapper {
@@ -43,6 +48,7 @@ export class CompactAppointmentsHelper {
     const $button = $(e.element);
     this.instance.showAppointmentTooltipCore(
       $button,
+      // @ts-expect-error
       $button.data('items'),
       this._getExtraOptionsForTooltip(options, $button),
     );
@@ -96,6 +102,7 @@ export class CompactAppointmentsHelper {
   _createCompactButton(template, options: CompactAppointmentOptions) {
     const $button = this._createCompactButtonElement(options);
 
+    // @ts-expect-error
     return this.instance._createComponent($button, Button, {
       type: 'default',
       width: options.width,
@@ -127,7 +134,10 @@ export class CompactAppointmentsHelper {
   _createCompactButtonElement({
     isCompact, $container, coordinates, sortedIndex, items,
   }: CompactAppointmentOptions) {
-    const appointmentDate = this._getDateText(items[0].appointment);
+    const appointmentDate = this._getDateText(
+      items[0].appointment,
+      items[0].targetedAppointment,
+    );
     const result = $('<div>')
       .addClass(APPOINTMENT_COLLECTOR_CLASS)
       .attr('aria-roledescription', appointmentDate)
@@ -177,26 +187,18 @@ export class CompactAppointmentsHelper {
     return `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
   }
 
-  _getStartDate(appointment) {
-    const date = appointment.startDate;
-    return date ? new Date(date) : null;
-  }
+  _getDateText(
+    appointment: Appointment,
+    targetedAppointment: Appointment | TargetedAppointment | undefined,
+  ): string {
+    const startDate = targetedAppointment?.displayStartDate ?? appointment.startDate;
+    const endDate = targetedAppointment?.displayEndDate ?? appointment.endDate;
 
-  _getEndDate(appointment) {
-    const date = appointment.endDate;
-    return date ? new Date(date) : null;
-  }
+    const startDateText = this._localizeDate(startDate);
+    const endDateText = this._localizeDate(endDate);
 
-  _getDateText(appointment) {
-    const startDate = this.instance._dataAccessors.get('startDate', appointment);
-    const endDate = this.instance._dataAccessors.get('endDate', appointment);
-    const startDateText = startDate ? this._localizeDate(startDate) : '';
-    const endDateText = endDate ? this._localizeDate(endDate) : '';
-
-    const dateText = startDateText === endDateText
-      ? `${startDateText}`
+    return startDateText === endDateText
+      ? startDateText
       : `${startDateText} - ${endDateText}`;
-
-    return `${dateText}`;
   }
 }

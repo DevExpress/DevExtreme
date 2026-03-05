@@ -25,16 +25,17 @@ export const SELECTORS = {
   repeatEditor: `.dx-scheduler-form-repeat-editor .dx-selectbox.dx-widget`,
   descriptionEditor: `.dx-scheduler-form-description-editor .dx-textarea.dx-widget`,
   recurrenceGroup: '.dx-scheduler-form-recurrence-group',
-  repeatEditorButton: '.dx-scheduler-form-repeat-editor .dx-button-has-icon',
+  backButton: `.dx-button.dx-widget[aria-label="Back"]`,
+  recurrenceStartDateInput: '.dx-scheduler-form-recurrence-start-date-editor input[type="text"]',
+  recurrenceFrequencyEditor: '.dx-scheduler-form-recurrence-frequency-editor .dx-selectbox.dx-widget',
   recurrenceSettingsButton: '.dx-scheduler-form-recurrence-settings-button',
-  repeatEveryInput: '.dx-scheduler-form-recurrence-settings-group [type="text"]',
   weekDayButtons: '.dx-scheduler-days-of-week-buttons .dx-button',
   monthDayInput: '.dx-scheduler-form-day-of-month-group [type="text"]',
   yearlyMonthInput: '.dx-scheduler-form-recurrence-by-month-editor .dx-selectbox.dx-widget',
   recurrenceEndRadioGroup: '.dx-scheduler-form-recurrence-end-editors',
   recurrenceEndInputGroup: '.dx-scheduler-form-recurrence-end-group',
   dayOfMonthInput: '.dx-scheduler-form-day-of-month-editor input[type="text"]',
-  listOption: '.dx-list-item',
+  listItem: '.dx-list-item',
 };
 
 export default class AppointmentPopup {
@@ -60,15 +61,15 @@ export default class AppointmentPopup {
   endTimeZoneEditor: SelectBox = new SelectBox(this.contentElement.find(SELECTORS.endTimeZoneEditor));
 
   repeatEditor: SelectBox = new SelectBox(this.contentElement.find(SELECTORS.repeatEditor));
+  recurrenceSettingsButton: Button = new Button(this.repeatEditor.element.find(SELECTORS.recurrenceSettingsButton));
 
   descriptionEditor: TextArea = new TextArea(this.contentElement.find(SELECTORS.descriptionEditor));
 
-  // Recurrence form elements
   recurrence = {
+    backButton: Selector(SELECTORS.backButton),
     group: Selector(SELECTORS.recurrenceGroup),
-    settingsButton: Selector(SELECTORS.recurrenceSettingsButton),
-    repeatEditorButton: Selector(SELECTORS.repeatEditorButton),
-    repeatEveryInput: Selector(SELECTORS.repeatEveryInput),
+    startDateInput: Selector(SELECTORS.recurrenceStartDateInput),
+    frequencyEditor: Selector(SELECTORS.recurrenceFrequencyEditor),
     weekDayButtons: Selector(SELECTORS.weekDayButtons),
     monthDayInput: Selector(SELECTORS.monthDayInput),
     yearlyMonthInput: Selector(SELECTORS.yearlyMonthInput),
@@ -78,57 +79,17 @@ export default class AppointmentPopup {
 
   constructor(private readonly scheduler: Selector) { }
 
-  async openRecurrenceForm(t: TestController, freq = 'Daily'): Promise<void> {
+  async selectRepeatValue(t: TestController, freq = 'Daily'): Promise<void> {
     await t.click(this.repeatEditor.element);
 
-    const option = Selector(SELECTORS.listOption).withText(freq);
-    await t.click(option);
+    const listItem = Selector(SELECTORS.listItem).withText(freq);
+    await t.click(listItem);
 
     await t.wait(500);
   }
 
-  async openRecurrenceSettings(t: TestController): Promise<void> {
-    await t.click(this.recurrence.settingsButton);
+  async clickRecurrenceSettingsButton(t: TestController): Promise<void> {
+    await t.click(this.recurrenceSettingsButton.element);
     await t.wait(500);
-  }
-
-  async setRecurrenceInterval(t: TestController, interval: number): Promise<void> {
-    await t
-      .selectText(this.recurrence.repeatEveryInput)
-      .typeText(this.recurrence.repeatEveryInput, interval.toString(), { replace: true });
-  }
-
-  async selectRecurrenceWeekDays(t: TestController, daysIndex: number[]): Promise<void> {
-    const buttonsCount = await this.recurrence.weekDayButtons.count;
-
-    for (let index = 0; index < buttonsCount; index++) {
-      const button = this.recurrence.weekDayButtons.nth(index);
-      const isActive = await button.hasClass('dx-button-mode-contained');
-      const shouldBeActive = daysIndex.includes(index);
-
-      if (isActive !== shouldBeActive) {
-        await t.click(button);
-      }
-    }
-  }
-
-  async setRecurrenceMonthDay(t: TestController, day: number): Promise<void> {
-    await t
-      .selectText(this.recurrence.monthDayInput)
-      .typeText(this.recurrence.monthDayInput, day.toString(), { replace: true });
-  }
-
-  async setRecurrenceYearlyMonth(t: TestController, month: string): Promise<void> {
-    await t.click(this.recurrence.yearlyMonthInput);
-
-    const option = Selector(SELECTORS.listOption).withText(month);
-    await t.click(option);
-  }
-
-  async setRecurrenceYearlyDate(t: TestController, month: string, day: number): Promise<void> {
-   await this.setRecurrenceYearlyMonth(t, month);
-    await t
-      .selectText(SELECTORS.dayOfMonthInput)
-      .typeText(SELECTORS.dayOfMonthInput, day.toString(), { replace: true });
   }
 }

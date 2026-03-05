@@ -272,23 +272,25 @@
         "dxScheduler-ariaLabel-currentIndicator-present": "Die aktuelle Zeitanzeige ist in der Ansicht sichtbar",
         "dxScheduler-ariaLabel-currentIndicator-not-present": "Die aktuelle Zeitanzeige ist auf dem Bildschirm nicht sichtbar",
 
-        "dxScheduler-appointmentAriaLabel-group": "Gruppe: {0}",
+        "dxScheduler-appointmentAriaDescription-group": "Gruppe: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Wiederkehrender Termin",
+        "dxScheduler-hotkeysAriaDescription-delete": "Press Delete to delete this appointment",
+        "dxScheduler-hotkeysAriaDescription-homeEnd": "Press Home or End to quickly navigate to the first or last appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Terminliste",
-        "dxScheduler-newPopupTitle": "New Appointment",
-        "dxScheduler-editPopupTitle": "Edit Appointment",
-        "dxScheduler-editPopupSaveButtonText": "Save",
+        "dxScheduler-newPopupTitle": "Neuer Termin",
+        "dxScheduler-editPopupTitle": "Termin bearbeiten",
+        "dxScheduler-editPopupSaveButtonText": "Speichern",
 
         "dxScheduler-editorLabelTitle": "Betreff",
         "dxScheduler-editorLabelStartDate": "Anfangszeit",
-        "dxScheduler-editorAriaLabelStartTime": "Start time",
+        "dxScheduler-editorAriaLabelStartTime": "Anfangszeit",
         "dxScheduler-editorLabelEndDate": "Endzeit",
-        "dxScheduler-editorAriaLabelEndTime": "End time",
+        "dxScheduler-editorAriaLabelEndTime": "Endzeit",
         "dxScheduler-editorLabelDescription": "Beschreibung",
         "dxScheduler-editorLabelRecurrence": "Wiederholen",
 
-        "dxScheduler-noSubject": "(No subject)",
+        "dxScheduler-noSubject": "(Kein Betreff)",
 
         "dxScheduler-navigationToday": "Heute",
         "dxScheduler-navigationPrevious": "Vorherige Seite",

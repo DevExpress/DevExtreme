@@ -18,8 +18,7 @@
         "{projectRoot}/accessibility_report.txt",
         "{projectRoot}/accessibility_testcafe_report",
         "{projectRoot}/coverage"
-      ],
-      "cache": true
+      ]
     },
     "test-testcafe": {
       "executor": "nx:run-script",
@@ -47,8 +46,7 @@
         "{projectRoot}/accessibility_report.txt",
         "{projectRoot}/accessibility_testcafe_report",
         "{projectRoot}/testing/artifacts"
-      ],
-      "cache": true
+      ]
     },
     "prepare-bundles": {
       "executor": "nx:run-script",
@@ -65,8 +63,7 @@
       ],
       "outputs": [
         "{projectRoot}/bundles"
-      ],
-      "cache": true
+      ]
     },
     "lint-js": {
       "executor": "nx:run-script",
@@ -78,8 +75,7 @@
         "test",
         "!{projectRoot}/Demos/**/*",
         "{projectRoot}/.eslint*"
-      ],
-      "cache": true
+      ]
     },
     "lint-css": {
       "executor": "nx:run-script",
@@ -90,8 +86,7 @@
         "{projectRoot}/Demos/**/*.css",
         "{projectRoot}/Demos/**/*.vue",
         "{projectRoot}/Demos/.stylelintrc.json"
-      ],
-      "cache": true
+      ]
     },
     "lint-html": {
       "executor": "nx:run-script",
@@ -100,18 +95,19 @@
       },
       "inputs": [
         "{projectRoot}/**/*"
-      ],
-      "cache": true
+      ]
     },
     "prepare-js": {
-      "executor": "nx:run-script",
+      "executor": "nx:run-commands",
       "options": {
-        "script": "prepare-js"
+        "commands": [
+          "pnpm nx build devextreme",
+          "pnpm nx run-many --targets=pack --projects=devextreme-angular,devextreme-react,devextreme-vue --parallel",
+          "pnpm run prepare-js"
+        ],
+        "parallel": false,
+        "cwd": "{projectRoot}"
       },
-      "dependsOn": [
-        { "projects": ["devextreme"], "target": "build" },
-        { "projects": ["devextreme-angular", "devextreme-react", "devextreme-vue"], "target": "pack" }
-      ],
       "inputs": [
         "default",
         "{projectRoot}/gulpfile.js/**/*",
@@ -119,8 +115,7 @@
       ],
       "outputs": [
         "{projectRoot}/Demos/**/config.js"
-      ],
-      "cache": true
+      ]
     }
   },
   "namedInputs": {

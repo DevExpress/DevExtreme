@@ -39,8 +39,7 @@
   {
     "name": "core/dom_component",
     "exports": {
-      "default": { "path": "DOMComponent" },
-      "Options": { "path": "DOMComponentOptions", "exportAs": "type" }
+      "default": { "path": "DOMComponent" }
     }
   },
   {
@@ -511,12 +510,6 @@
     "name": "ui/scroll_view",
     "exports": {
       "default": { "path": "ui.dxScrollView", "isWidget": true }
-    }
-  },
-  {
-    "name": "ui/scroll_view/scrollable",
-    "exports": {
-      "Options": { "path": "ui.dxScrollableOptions", "exportAs": "type" }
     }
   },
   {

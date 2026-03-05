@@ -260,9 +260,6 @@ export default class dxSparkline extends BaseSparkline<dxSparklineOptions> {
 /** @public */
 export type Properties = dxSparklineOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxSparklineOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

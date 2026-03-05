@@ -8,14 +8,13 @@ QUnit.testStart(function() {
 });
 
 import 'ui/tree_view';
-import { EXPANDER_ICON_STUB_CLASS } from '__internal/ui/tree_view/tree_view.base';
+import { EXPANDER_ICON_STUB_CLASS, ITEM_CLASS, ITEM_CONTENT_CLASS, DISABLED_STATE_CLASS } from '__internal/ui/tree_view/tree_view.base';
 import localization from 'localization';
 
 const WIDGET_CLASS = 'dx-treeview';
 const NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
 const OPENED_NODE_CONTAINER_CLASS = 'dx-treeview-node-container-opened';
 const NODE_CLASS = 'dx-treeview-node';
-const ITEM_CLASS = 'dx-treeview-item';
 const ICON_CLASS = 'dx-icon';
 const SELECTED_STATE_CLASS = 'dx-state-selected';
 const ITEM_WITH_CHECKBOX_CLASS = 'dx-treeview-item-with-checkbox';
@@ -65,15 +64,15 @@ QUnit.module('aria accessibility', {
 
     QUnit.test('aria role for items', function(assert) {
         const $node = this.$element.find('.' + NODE_CLASS);
-        assert.equal($node.attr('role'), 'treeitem', 'role is correct');
+        assert.strictEqual($node.attr('role'), 'treeitem', 'role is correct');
     });
 
     QUnit.test('aria label for items', function(assert) {
         const $node1 = this.$element.find('.' + NODE_CLASS).eq(0);
         const $node2 = this.$element.find('.' + NODE_CLASS).eq(1);
 
-        assert.equal($node1.attr('aria-label'), 'Item 1', 'label for 1st item is correct');
-        assert.equal($node2.attr('aria-label'), 'Item 11', 'label for 2nd ite is correct');
+        assert.strictEqual($node1.attr('aria-label'), 'Item 1', 'label for 1st item is correct');
+        assert.strictEqual($node2.attr('aria-label'), 'Item 11', 'label for 2nd ite is correct');
     });
 
     QUnit.test('aria-label for selectAll checkbox should be localized (T1299342)', function(assert) {
@@ -102,27 +101,27 @@ QUnit.module('aria accessibility', {
 
     QUnit.test('aria role for item levels', function(assert) {
         const $node = this.$element.find('.' + NODE_CONTAINER_CLASS);
-        assert.equal($node.attr('role'), 'group', 'role is correct');
+        assert.strictEqual($node.attr('role'), 'group', 'role is correct');
     });
 
     QUnit.test('aria expanded for items', function(assert) {
         const $node = this.$element.find('.' + NODE_CLASS).eq(0);
 
-        assert.equal($node.attr('aria-expanded'), 'true', 'expanded item has aria-expanded as true');
+        assert.strictEqual($node.attr('aria-expanded'), 'true', 'expanded item has aria-expanded as true');
     });
 
     QUnit.test('aria level for items', function(assert) {
         const $node1 = this.$element.find('.' + NODE_CLASS).eq(0);
         const $node2 = this.$element.find('.' + NODE_CLASS).eq(1);
 
-        assert.equal($node1.attr('aria-level'), '1', 'level set correct');
-        assert.equal($node2.attr('aria-level'), '2', 'level set correct');
+        assert.strictEqual($node1.attr('aria-level'), '1', 'level set correct');
+        assert.strictEqual($node2.attr('aria-level'), '2', 'level set correct');
     });
 
     QUnit.test('aria selected for items', function(assert) {
         const $node = this.$element.find('.' + NODE_CLASS).eq(0);
 
-        assert.equal($node.attr('aria-selected'), 'true', 'item is selected');
+        assert.strictEqual($node.attr('aria-selected'), 'true', 'item is selected');
     });
 });
 
@@ -222,7 +221,7 @@ QUnit.module('markup', {
         treeView.option('expandIcon', null);
         treeView.option('collapseIcon', null);
 
-        assert.equal($(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`).length, 2);
+        assert.strictEqual($(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`).length, 2);
     });
 
     QUnit.test('icons should not be rendered if plain items are used', function(assert) {
@@ -232,8 +231,8 @@ QUnit.module('markup', {
             collapseIcon: 'add',
         });
 
-        assert.equal($(CUSTOM_EXPAND_ICON_CLASS_SELECTOR).length, 0);
-        assert.equal($(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).length, 0);
+        assert.strictEqual($(CUSTOM_EXPAND_ICON_CLASS_SELECTOR).length, 0);
+        assert.strictEqual($(CUSTOM_COLLAPSE_ICON_CLASS_SELECTOR).length, 0);
     });
 
     QUnit.test('expand icon should be shown if node is collapsed', function(assert) {
@@ -286,7 +285,7 @@ QUnit.module('markup', {
         });
         const $scrollableContent = $treeView.find('.dx-scrollable-content');
 
-        assert.equal($scrollableContent.find('.dx-empty-message').length, 1, 'empty message should be shown inside scrollable content');
+        assert.strictEqual($scrollableContent.find('.dx-empty-message').length, 1, 'empty message should be shown inside scrollable content');
     });
 
     QUnit.test('data expressions should work on render', function(assert) {
@@ -321,11 +320,11 @@ QUnit.module('markup', {
         const $nodeContainer = $node.children('.' + NODE_CONTAINER_CLASS).eq(0);
         const $item = $node.children('.' + ITEM_CLASS).eq(0);
 
-        assert.equal($node.data('item-id'), '2', 'keyExpr works');
-        assert.equal($item.text(), 'Item 1', 'displayExpr works');
+        assert.strictEqual($node.data('item-id'), 2, 'keyExpr works');
+        assert.strictEqual($item.text(), 'Item 1', 'displayExpr works');
         assert.ok($node.hasClass(SELECTED_STATE_CLASS), 'selectedExpr works');
         assert.ok($nodeContainer.hasClass(OPENED_NODE_CONTAINER_CLASS), 'expandedExpr works');
-        assert.equal($node.find('.' + NODE_CLASS).length, 1, 'parentIdExpr works');
+        assert.strictEqual($node.find('.' + NODE_CLASS).length, 1, 'parentIdExpr works');
     });
 
     QUnit.test('TreeView should has a right class', function(assert) {
@@ -348,7 +347,7 @@ QUnit.module('markup', {
         const $treeView = initTree({
             items: [{ key: 1, text: 'Item' }]
         });
-        assert.equal($treeView.find('.' + NODE_CONTAINER_CLASS).length, 1);
+        assert.strictEqual($treeView.find('.' + NODE_CONTAINER_CLASS).length, 1);
     });
 
     QUnit.test('Render html item', function(assert) {
@@ -359,7 +358,7 @@ QUnit.module('markup', {
         const $node = $itemContainer.find('.' + NODE_CLASS).eq(0);
         const $item = $node.find('.' + ITEM_CLASS);
 
-        assert.equal($item.text(), 'Hello', 'created');
+        assert.strictEqual($item.text(), 'Hello', 'created');
     });
 
     QUnit.test('Render first level items', function(assert) {
@@ -371,10 +370,10 @@ QUnit.module('markup', {
         const $nodes = $itemContainer.find('.' + NODE_CLASS);
         const $items = $nodes.find('.' + ITEM_CLASS);
 
-        assert.equal($items.length, 16);
-        assert.equal($($items[0]).find('span').text(), 'Animals');
-        assert.equal($($items[1]).find('span').text(), 'Cat');
-        assert.equal($($items[2]).find('span').text(), 'Dog');
+        assert.strictEqual($items.length, 16);
+        assert.strictEqual($($items[0]).find('span').text(), 'Animals');
+        assert.strictEqual($($items[1]).find('span').text(), 'Cat');
+        assert.strictEqual($($items[2]).find('span').text(), 'Dog');
     });
 
     QUnit.test('Render items with parentId set as tree', function(assert) {
@@ -384,7 +383,7 @@ QUnit.module('markup', {
         });
         const $items = $treeView.find('.' + ITEM_CLASS);
 
-        assert.equal($items.length, 16);
+        assert.strictEqual($items.length, 16);
     });
 
     QUnit.test('Render nested items', function(assert) {
@@ -420,11 +419,11 @@ QUnit.module('markup', {
         const $rootNodeFirstItem = $rootNode.find('.' + NODE_CLASS).eq(0);
         const $rootNodeSecondItem = $rootNode.find('.' + NODE_CLASS).eq(1);
 
-        assert.equal($rootNodeFirstItem.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS).length, 1);
-        assert.equal($rootNodeSecondItem.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS).length, 0);
+        assert.strictEqual($rootNodeFirstItem.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS).length, 1);
+        assert.strictEqual($rootNodeSecondItem.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS).length, 0);
     });
 
-    QUnit.test('Add disabled class for toggle icon if item is disabled', function(assert) {
+    QUnit.test('Do not add disabled class for toggle icon if item is disabled', function(assert) {
         const $treeView = initTree({
             items: [{
                 id: 1,
@@ -437,7 +436,7 @@ QUnit.module('markup', {
         const $rootNode = $treeView.find(`.${NODE_CONTAINER_CLASS}:first-child`);
         const $icon = $rootNode.find(`.${ITEM_CLASS}`).eq(0).children(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`).eq(0);
 
-        assert.ok($icon.hasClass('dx-state-disabled'));
+        assert.notOk($icon.hasClass(DISABLED_STATE_CLASS));
     });
 
     QUnit.test('Render checkboxes', function(assert) {
@@ -448,8 +447,8 @@ QUnit.module('markup', {
             showCheckBoxesMode: 'normal'
         });
 
-        assert.equal($treeView.find('.' + NODE_CLASS).find('.dx-checkbox').length, 4);
-        assert.equal($treeView.find('.' + NODE_CLASS + '.' + ITEM_WITH_CHECKBOX_CLASS).length, 4);
+        assert.strictEqual($treeView.find('.' + NODE_CLASS).find('.dx-checkbox').length, 4);
+        assert.strictEqual($treeView.find('.' + NODE_CLASS + '.' + ITEM_WITH_CHECKBOX_CLASS).length, 4);
     });
 
     QUnit.test('Render tree by id/parentId fields', function(assert) {
@@ -469,12 +468,12 @@ QUnit.module('markup', {
         const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first');
         const $rootNodeItems = $rootNode.find(' > .' + NODE_CLASS);
 
-        assert.equal($treeView.find('.' + NODE_CONTAINER_CLASS).length, 5);
-        assert.equal($rootNodeItems.length, 3);
-        assert.equal($rootNodeItems.eq(0).find('> .' + ITEM_CLASS + ' span').text(), 'Animals');
-        assert.equal($rootNodeItems.eq(1).find('> .' + ITEM_CLASS + ' span').text(), 'Birds');
-        assert.equal($rootNodeItems.eq(0).find('> .' + NODE_CONTAINER_CLASS).find('> .' + NODE_CLASS).length, 3);
-        assert.equal($rootNodeItems.eq(1).find('> .' + NODE_CONTAINER_CLASS).find('> .' + NODE_CLASS).length, 3);
+        assert.strictEqual($treeView.find('.' + NODE_CONTAINER_CLASS).length, 5);
+        assert.strictEqual($rootNodeItems.length, 3);
+        assert.strictEqual($rootNodeItems.eq(0).find('> .' + ITEM_CLASS + ' span').text(), 'Animals');
+        assert.strictEqual($rootNodeItems.eq(1).find('> .' + ITEM_CLASS + ' span').text(), 'Birds');
+        assert.strictEqual($rootNodeItems.eq(0).find('> .' + NODE_CONTAINER_CLASS).find('> .' + NODE_CLASS).length, 3);
+        assert.strictEqual($rootNodeItems.eq(1).find('> .' + NODE_CONTAINER_CLASS).find('> .' + NODE_CLASS).length, 3);
     });
 
     QUnit.test('Custom item template', function(assert) {
@@ -489,8 +488,8 @@ QUnit.module('markup', {
         const $firstRootNode = $rootNodeContainer.find('li').first();
         const $firstItem = $firstRootNode.find('> .' + ITEM_CLASS);
 
-        assert.equal($firstItem.length, 1);
-        assert.equal($firstItem.text(), 'Item 1');
+        assert.strictEqual($firstItem.length, 1);
+        assert.strictEqual($firstItem.text(), 'Item 1');
     });
 
     QUnit.test('scroll direction by default is vertical', function(assert) {
@@ -498,7 +497,7 @@ QUnit.module('markup', {
             items: this.treeItems,
         }).dxTreeView('instance');
 
-        assert.equal(treeView.getScrollable().option('direction'), 'vertical');
+        assert.strictEqual(treeView.getScrollable().option('direction'), 'vertical');
     });
 
     QUnit.test('custom scroll direction', function(assert) {
@@ -507,7 +506,7 @@ QUnit.module('markup', {
             scrollDirection: 'both'
         }).dxTreeView('instance');
 
-        assert.equal(treeView.getScrollable().option('direction'), 'both');
+        assert.strictEqual(treeView.getScrollable().option('direction'), 'both');
     });
 
     QUnit.test('Disabled class is added when disabledExpr is used', function(assert) {
@@ -515,9 +514,9 @@ QUnit.module('markup', {
             items: [{ id: 1, text: 'item 1', isDisabled: true }],
             disabledExpr: 'isDisabled'
         });
-        const $item = $treeView.find('.' + ITEM_CLASS).eq(0);
+        const $item = $treeView.find(`.${ITEM_CLASS} > .${ITEM_CONTENT_CLASS}`).eq(0);
 
-        assert.ok($item.hasClass('dx-state-disabled'));
+        assert.ok($item.hasClass(DISABLED_STATE_CLASS));
     });
 
     QUnit.test('Disabled class is added when disabledExpr is used with custom template', function(assert) {
@@ -528,9 +527,10 @@ QUnit.module('markup', {
                 return '123';
             }
         });
-        const $item = $treeView.find('.' + ITEM_CLASS).eq(0);
+        const $item = $treeView.find(`.${ITEM_CLASS} > .${ITEM_CONTENT_CLASS}`).eq(0);
 
-        assert.ok($item.hasClass('dx-state-disabled'));
+
+        assert.ok($item.hasClass(DISABLED_STATE_CLASS));
     });
 
     QUnit.test('toggle visibility icon should not render for invisible item (T323491)', function(assert) {
@@ -541,7 +541,7 @@ QUnit.module('markup', {
         });
         const $icons = $treeView.find('.' + TOGGLE_ITEM_VISIBILITY_CLASS);
 
-        assert.equal($icons.length, 1, 'only one icon should be rendered');
+        assert.strictEqual($icons.length, 1, 'only one icon should be rendered');
     });
 
     QUnit.test('Render Search editor', function(assert) {
@@ -584,7 +584,7 @@ QUnit.module('markup', {
         const expectedValues = ['Bikes', 'Stels', 'Cars', 'Audi', 'BMW', 'Motobikes', 'Honda', 'Yamaha'];
 
         $.each($items, function(index, item) {
-            assert.equal($(item).text(), expectedValues[index], 'Correct item');
+            assert.strictEqual($(item).text(), expectedValues[index], 'Correct item');
         });
     });
 
@@ -595,7 +595,7 @@ QUnit.module('markup', {
         });
         const $selectAll = $treeView.find('.' + SELECT_ALL_ITEM_CLASS);
 
-        assert.equal($selectAll.length, 1);
+        assert.strictEqual($selectAll.length, 1);
     });
 
     QUnit.test('On initialization selectAll item should be selected if all items are selected', function(assert) {

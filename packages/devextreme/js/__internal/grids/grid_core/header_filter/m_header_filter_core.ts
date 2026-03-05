@@ -290,22 +290,24 @@ export class HeaderFilterView extends Modules.View {
       focusStateEnabled: false,
       toolbarItems: [
         {
-          toolbar: 'bottom',
-          location: 'after',
-          widget: 'dxButton',
+          toolbar: 'bottom' as const,
+          location: 'after' as const,
+          widget: 'dxButton' as const,
           options: {
-            text: headerFilterOptions.texts.ok,
+            text: headerFilterOptions.texts.ok
+              ?? messageLocalization.format('dxDataGrid-headerFilterOK'),
             onClick() {
               that.applyHeaderFilter(options);
             },
           },
         },
         {
-          toolbar: 'bottom',
-          location: 'after',
-          widget: 'dxButton',
+          toolbar: 'bottom' as const,
+          location: 'after' as const,
+          widget: 'dxButton' as const,
           options: {
-            text: headerFilterOptions.texts.cancel,
+            text: headerFilterOptions.texts.cancel
+              ?? messageLocalization.format('dxDataGrid-headerFilterCancel'),
             onClick() {
               that.hideHeaderFilterMenu();
               hidePopupCallback?.();
@@ -542,9 +544,9 @@ export const headerFilterMixin = <T extends ModuleType<any>>(Base: T) => class H
 
         const indicatorLabel = (messageLocalization.format as any)('dxDataGrid-headerFilterIndicatorLabel', column.caption);
 
-        $headerFilterIndicator.attr('aria-label', indicatorLabel);
-        $headerFilterIndicator.attr('aria-haspopup', 'dialog');
-        $headerFilterIndicator.attr('role', 'button');
+        this.setAria('label', indicatorLabel, $headerFilterIndicator);
+        this.setAria('haspopup', 'dialog', $headerFilterIndicator);
+        this.setAria('role', 'button', $headerFilterIndicator);
       }
 
       return $headerFilterIndicator;

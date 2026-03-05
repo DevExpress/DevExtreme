@@ -15,7 +15,9 @@ function App() {
         >
           <tbody>
             <tr>
-              <th />
+              <th>
+                <div className="dx-screen-reader-only">Year</div>
+              </th>
               <th>Copper (USD/ton)</th>
               <th>Nickel (USD/ton)</th>
               <th>Palladium (USD/troy ounce)</th>

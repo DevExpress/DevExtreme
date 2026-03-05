@@ -16,8 +16,7 @@ const DiagramMenuHelper = {
         $itemElement.append($iconElement);
       }
     } else if (
-      contextMenu._menuHasCheckedItems
-      && contextMenu._menuHasCheckedItems[itemKey] === true
+      contextMenu._menuHasCheckedItems?.[itemKey] === true
     ) {
       const $checkElement = getImageContainer('check');
       if ($checkElement) {
@@ -26,12 +25,10 @@ const DiagramMenuHelper = {
       }
     }
     $itemElement.append(
-      // @ts-expect-error ts-error
       `<span class="dx-menu-item-text">${itemData.text}</span>`,
     );
     if (Array.isArray(itemData.items) && itemData.items.length > 0) {
       $itemElement.append(
-        // @ts-expect-error ts-error
         '<span class="dx-menu-item-popout-container"><div class="dx-menu-item-popout"></div></span>',
       );
     }

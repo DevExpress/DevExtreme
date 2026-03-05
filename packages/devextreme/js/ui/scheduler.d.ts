@@ -96,6 +96,8 @@ export type AppointmentFormProperties = FormProperties & {
 /** @public */
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 /** @public */
+export type SchedulerScrollToAlign = 'start' | 'center';
+/** @public */
 export type SchedulerPredefinedToolbarItem = 'today' | 'dateNavigator' | 'viewSwitcher';
 /** @public */
 export type SchedulerPredefinedDateNavigatorItem = 'prev' | 'next' | 'dateInterval';
@@ -1283,6 +1285,13 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     getEndViewDate(): Date;
     /**
      * @docid
+     * @publicName getOccurrences(startDate, endDate, appointments)
+     * @param3 appointments:Array<dxSchedulerAppointment>
+     * @public
+     */
+    getOccurrences(startDate: Date, endDate: Date, appointments: Appointment[]): Occurrence[];
+    /**
+     * @docid
      * @publicName getStartViewDate()
      * @public
      */
@@ -1302,10 +1311,25 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     hideAppointmentTooltip(): void;
     /**
      * @docid
+     * @publicName scrollTo(date, options)
+     * @param2 options:Object|undefined
+     * @param2_field group:Object|undefined
+     * @param2_field allDay:Boolean|undefined
+     * @param2_field alignInView:Enums.SchedulerScrollToAlign|undefined
+     * @public
+     */
+    scrollTo(date: Date, options?: {
+        group?: object;
+        allDay?: boolean;
+        alignInView?: SchedulerScrollToAlign;
+    }): void;
+    /**
+     * @docid
      * @publicName scrollTo(date, group, allDay)
      * @param2 group:Object|undefined
      * @param3 allDay:Boolean|undefined
      * @public
+     * @deprecated
      */
     scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
@@ -1419,11 +1443,31 @@ export type dxSchedulerAppointment = CollectionWidgetItem & {
     visible?: boolean;
 } & Record<string, any>;
 
+/**
+ * @docid
+ * @public
+ */
+export type Occurrence = {
+  /**
+   * @docid
+   * @public
+   */
+  startDate: Date;
+  /**
+   * @docid
+   * @public
+   */
+  endDate: Date;
+  /**
+   * @docid
+   * @public
+   * @type dxSchedulerAppointment
+   */
+  appointmentData: Appointment;
+};
+
 /** @public */
 export type Properties = dxSchedulerOptions;
-
-/** @deprecated use Properties instead */
-export type Options = dxSchedulerOptions;
 
 /**
  * @docid

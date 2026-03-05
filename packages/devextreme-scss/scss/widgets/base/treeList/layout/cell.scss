@@ -1,0 +1,223 @@
+/* stylelint-disable no-duplicate-selectors */
+
+$treelist-border: null !default;
+$treelist-border-color: null !default;
+$treelist-base-background-color: null !default;
+$treelist-row-error-color: null !default;
+$treelist-focused-border-color: null !default;
+
+// #region position & z-index
+
+// (0,4,1)
+.dx-treelist-container .dx-treelist-rowsview .dx-virtual-row > td:not(.dx-treelist-sticky-column, .dx-treelist-sticky-column-left, .dx-treelist-sticky-column-right) {
+  position: relative;
+}
+
+// #endregion
+
+// #region border
+
+// (0,3,1)
+.dx-treelist .dx-column-lines > td:first-child {
+  border-left: none;
+}
+
+// (0,3,1)
+.dx-treelist .dx-column-lines > td:last-child {
+  border-right: none;
+}
+
+// (0,3,1)
+.dx-treelist .dx-treelist-sticky-columns .dx-column-lines > td {
+  border-right: none;
+}
+
+// (0,4,1)
+.dx-treelist-container .dx-treelist-rowsview .dx-data-row td.dx-pointer-events-none,
+.dx-treelist-container .dx-treelist-rowsview .dx-freespace-row td.dx-pointer-events-none,
+.dx-treelist-container .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none,
+.dx-treelist-container .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none,
+.dx-treelist-container .dx-treelist-headers .dx-row td.dx-pointer-events-none {
+  border-left: 2px solid;
+  border-left-color: $treelist-border-color;
+  border-right: 2px solid;
+  border-right-color: $treelist-border-color;
+}
+
+// (0,4,1)
+.dx-header-multi-row.dx-treelist-sticky-columns .dx-column-lines > td:first-child {
+  border-left: $treelist-border;
+  border-left-color: $treelist-border-color;
+}
+
+// (0,5,1)
+.dx-treelist-container .dx-treelist-rowsview .dx-data-row td.dx-pointer-events-none.dx-first-cell,
+.dx-treelist-container .dx-treelist-rowsview .dx-freespace-row td.dx-pointer-events-none.dx-first-cell,
+.dx-treelist-container .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none.dx-first-cell,
+.dx-treelist-container .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none.dx-first-cell,
+.dx-treelist-container .dx-treelist-headers .dx-row td.dx-pointer-events-none.dx-first-cell {
+  border-left: none;
+}
+
+// (0,5,1)
+.dx-treelist-container .dx-treelist-rowsview .dx-data-row td.dx-pointer-events-none.dx-last-cell,
+.dx-treelist-container .dx-treelist-rowsview .dx-freespace-row td.dx-pointer-events-none.dx-last-cell,
+.dx-treelist-container .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none.dx-last-cell,
+.dx-treelist-container .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none.dx-last-cell,
+.dx-treelist-container .dx-treelist-headers .dx-row td.dx-pointer-events-none.dx-last-cell {
+  border-right: none;
+}
+
+// (0,5,1)
+.dx-treelist .dx-treelist-sticky-columns .dx-treelist-table .dx-row td.dx-treelist-sticky-column-border-right {
+  border-right: 2px solid;
+  border-right-color: $treelist-border-color;
+}
+
+// (0,5,1)
+.dx-treelist .dx-treelist-sticky-columns .dx-treelist-table .dx-row td.dx-treelist-sticky-column-border-left {
+  border-left: 2px solid;
+  border-left-color: $treelist-border-color;
+}
+
+// (0,6,0)
+.dx-treelist .dx-treelist-sticky-columns .dx-treelist-content .dx-treelist-table .dx-row .dx-treelist-column-no-border {
+  border-left: none;
+}
+
+// (0,7,1)
+.dx-treelist .dx-treelist-sticky-columns .dx-treelist-content .dx-treelist-table .dx-row.dx-column-lines > td.dx-treelist-first-header {
+  border-left: none;
+}
+
+// RTL
+
+// (0,4,1)
+.dx-rtl.dx-treelist .dx-column-lines > td:first-child {
+  border-right: none;
+  border-left: $treelist-border;
+  border-left-color: $treelist-border-color;
+}
+
+// (0,4,1)
+.dx-rtl.dx-treelist .dx-column-lines > td:last-child {
+  border-left: none;
+}
+
+// (0,4,1)
+.dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-column-lines > td {
+  border-left: none;
+  border-right: $treelist-border;
+  border-right-color: $treelist-border-color;
+}
+
+// (0,5,1)
+.dx-rtl .dx-treelist-container .dx-treelist-rowsview .dx-data-row td.dx-pointer-events-none,
+.dx-rtl .dx-treelist-container .dx-treelist-rowsview .dx-freespace-row td.dx-pointer-events-none,
+.dx-rtl .dx-treelist-container .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none,
+.dx-rtl .dx-treelist-container .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none,
+.dx-rtl .dx-treelist-container .dx-treelist-headers .dx-row td.dx-pointer-events-none {
+  border-left: 2px solid;
+  border-left-color: $treelist-border-color;
+  border-right: 2px solid;
+  border-right-color: $treelist-border-color;
+}
+
+// (0,5,1)
+.dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-column-lines > td:first-child {
+  border-right: none;
+}
+
+// (0,5,1)
+.dx-rtl .dx-header-multi-row.dx-treelist-sticky-columns .dx-column-lines > td:first-child {
+  border-left: none;
+  border-right: $treelist-border;
+  border-right-color: $treelist-border-color;
+}
+
+// (0,6,1)
+.dx-rtl .dx-treelist-container .dx-treelist-rowsview .dx-data-row td.dx-pointer-events-none.dx-first-cell,
+.dx-rtl .dx-treelist-container .dx-treelist-rowsview .dx-freespace-row td.dx-pointer-events-none.dx-first-cell,
+.dx-rtl .dx-treelist-container .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none.dx-first-cell,
+.dx-rtl .dx-treelist-container .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none.dx-first-cell,
+.dx-rtl .dx-treelist-container .dx-treelist-headers .dx-row td.dx-pointer-events-none.dx-first-cell {
+  border-right: none;
+}
+
+// (0,6,1)
+.dx-rtl .dx-treelist-container .dx-treelist-rowsview .dx-data-row td.dx-pointer-events-none.dx-last-cell,
+.dx-rtl .dx-treelist-container .dx-treelist-rowsview .dx-freespace-row td.dx-pointer-events-none.dx-last-cell,
+.dx-rtl .dx-treelist-container .dx-datagrid-rowsview .dx-virtual-row td.dx-pointer-events-none.dx-last-cell,
+.dx-rtl .dx-treelist-container .dx-datagrid-rowsview .dx-header-row td.dx-pointer-events-none.dx-last-cell,
+.dx-rtl .dx-treelist-container .dx-treelist-headers .dx-row td.dx-pointer-events-none.dx-last-cell {
+  border-left: none;
+}
+
+// (0,7,0)
+.dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-treelist-content .dx-treelist-table .dx-row .dx-treelist-column-no-border {
+  border-right: none;
+}
+
+// (0,8,0)
+.dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-treelist-content .dx-treelist-table .dx-row .dx-treelist-column-no-border.dx-treelist-sticky-column-border-left {
+  border-left: 2px solid;
+  border-left-color: $treelist-border-color;
+}
+
+// (0,8,1)
+.dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-treelist-content .dx-treelist-table .dx-row.dx-column-lines > td.dx-treelist-first-header {
+  border-right: none;
+}
+
+// (0,9,1)
+.dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-treelist-content .dx-treelist-table .dx-row.dx-column-lines > td.dx-treelist-first-header.dx-treelist-sticky-column-border-left {
+  border-left: 2px solid;
+  border-left-color: $treelist-border-color;
+}
+
+// #endregion
+
+// #region padding
+
+// (0,2,1)
+.dx-treelist-container .dx-error-row td {
+  padding: 0;
+}
+
+// #endregion
+
+// #region background
+
+// (0,2,0)
+.dx-treelist .dx-treelist-sticky-column,
+.dx-treelist .dx-treelist-sticky-column-left,
+.dx-treelist .dx-treelist-sticky-column-right {
+  background-color: $treelist-base-background-color;
+}
+
+// #endregion
+
+// #region typography
+
+// (0,2,1)
+.dx-treelist-container .dx-error-row td {
+  color: $treelist-row-error-color;
+}
+
+// #endregion
+
+// #region outline
+
+// (0,3,1)
+.dx-treelist-container .dx-treelist-headers .dx-header-row > td {
+  outline: none;
+}
+
+// (0,5,1)
+.dx-treelist-container .dx-treelist-headers.dx-state-focused .dx-header-row td:focus {
+  outline: 2px solid;
+  outline-color: $treelist-focused-border-color;
+  outline-offset: -2px;
+}
+
+// #endregion

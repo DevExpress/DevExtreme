@@ -10,20 +10,12 @@ const items = ['Download Trial For Visual Studio', 'Download Trial For All Platf
 
 const options: Options<Properties> = {
   dataSource: [[], items],
-  // NOTE: Doesn't matter if there are contrast issues
-  // stylingMode: ['contained', 'outlined', 'text'],
-  // type: ['normal', 'success', 'danger', 'default'],
   text: [undefined, 'Download Trial'],
   icon: [undefined, 'save'],
   disabled: [true, false],
 };
 
-const a11yCheckConfig = {
-  rules: {
-    // NOTE: color-contrast issues
-    'color-contrast': { enabled: false },
-  },
-};
+const a11yCheckConfig = {};
 
 const noSplitButtonConfiguration: Configuration = {
   component: 'dxDropDownButton',

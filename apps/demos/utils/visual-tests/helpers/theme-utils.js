@@ -6,6 +6,8 @@ export const THEME = {
 
 export const DEFAULT_THEME_NAME = THEME.fluent;
 
+export const isMaterial = (theme = process.env.THEME) => theme?.startsWith('material');
+export const isFluent = (theme = process.env.THEME) => theme?.startsWith('fluent');
 export const getThemePostfix = (theme = DEFAULT_THEME_NAME) => ` (${theme})`;
 
 export const getScreenshotName = (baseName, theme) => {
@@ -23,18 +25,8 @@ export async function testScreenshot(
   comparisonOptions,
 ) {
   const testTheme = process.env.THEME;
-  const isMaterialTheme = testTheme?.includes('material');
 
-  const themeOptions = isMaterialTheme ? {
-    looksSameComparisonOptions: {
-      tolerance: 100,
-      ignoreAntialiasing: true,
-      antialiasingTolerance: 100,
-      strict: false,
-      caretIgnore: true,
-    },
-    textDiffTreshold: 1,
-  } : {
+  const themeOptions = {
     looksSameComparisonOptions: {
       tolerance: 20,
       antialiasingTolerance: 20,
@@ -42,19 +34,10 @@ export async function testScreenshot(
     textDiffTreshold: 0.2,
   };
 
-  const finalOptions = isMaterialTheme && comparisonOptions?.looksSameComparisonOptions
-    ? {
-      ...comparisonOptions,
-      looksSameComparisonOptions: {
-        ...comparisonOptions.looksSameComparisonOptions,
-        ...themeOptions.looksSameComparisonOptions,
-      },
-      textDiffTreshold: themeOptions.textDiffTreshold,
-    }
-    : {
-      ...comparisonOptions,
-      ...themeOptions,
-    };
+  const finalOptions = {
+    ...comparisonOptions,
+    ...themeOptions,
+  };
 
   await t
     .expect(
