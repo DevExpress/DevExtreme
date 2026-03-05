@@ -344,7 +344,7 @@ class SchedulerAgenda extends WorkSpace {
     });
   }
 
-  attachTablesEvents() { return noop(); }
+  _attachTablesEvents() { return noop(); }
 
   _attachEvents() { return noop(); }
 
