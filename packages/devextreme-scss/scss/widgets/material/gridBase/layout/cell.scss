@@ -164,12 +164,6 @@
     border-bottom-color: $datagrid-row-selected-border-color;
   }
 
-  // (0,5,1)
-  .dx-#{$widget-name}-headers.dx-header-multi-row .dx-row.dx-header-row > td {
-    border-right: 1px solid;
-    border-right-color: $material-grid-base-border-color;
-  }
-
   // (0,7,1)
   .dx-#{$widget-name}-headers.dx-header-multi-row:not(.dx-#{$widget-name}-sticky-columns) .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row.dx-header-row > td {
     border-left: 1px solid;
