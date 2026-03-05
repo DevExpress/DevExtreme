@@ -32,7 +32,7 @@ interface XHRSurrogate {
 }
 
 interface SubscriptionLike {
-  unsubscribe(): void;
+  unsubscribe: () => void;
 }
 
 const PARSER_ERROR = 'parsererror';
@@ -303,8 +303,8 @@ export const sendRequestFactory = (httpClient: HttpClient) => (options: Options)
   }
 
   const callbacks = upload
-      ? getUploadCallbacks(options, deferred, xhrSurrogate)
-      : getRequestCallbacks(options, deferred, xhrSurrogate);
+    ? getUploadCallbacks(options, deferred, xhrSurrogate)
+    : getRequestCallbacks(options, deferred, xhrSurrogate);
 
   subscription = request.subscribe({
     next(value) {
