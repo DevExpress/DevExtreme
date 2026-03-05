@@ -6,12 +6,14 @@ $(() => {
 
   const scheduler = $('#scheduler').dxScheduler({
     dataSource: data,
-    views: ['day', 'week'],
+    views: ['day', 'week', 'workWeek', 'month'],
     currentView: 'week',
     currentDate: new Date(2026, 1, 10),
     startDayHour: 9,
     endDayHour: 19,
     height: 600,
+    showAllDayPanel: false,
+    allDayPanelMode: 'hidden',
     resources: [{
       fieldExpr: 'assigneeId',
       dataSource: assignees,
@@ -27,6 +29,7 @@ $(() => {
         },
         onHidden: () => {
           setConflictError(false);
+          form?.updateData('assigneeId', []);
         },
       },
       form: {
@@ -196,8 +199,8 @@ $(() => {
 
   $('#overlapping-rule').dxSelectBox({
     items: [
-      { value: 'sameResource', text: 'Same Resource' },
-      { value: 'allResources', text: 'All Resources' },
+      { value: 'sameResource', text: 'Allow across resources' },
+      { value: 'allResources', text: 'Disallow all overlaps' },
     ],
     valueExpr: 'value',
     displayExpr: 'text',
