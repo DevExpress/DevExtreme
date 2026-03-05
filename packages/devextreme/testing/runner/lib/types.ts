@@ -1,4 +1,27 @@
+export const KNOWN_CONSTELLATION_NAMES = [
+  'export',
+  'misc',
+  'ui',
+  'ui.widgets',
+  'ui.editors',
+  'ui.grid',
+  'ui.scheduler',
+] as const;
+
 export type RunnerLogColor = 'red' | 'green' | 'yellow' | 'white';
+export type ConstellationName = (typeof KNOWN_CONSTELLATION_NAMES)[number];
+export type ConstellationFilter = string;
+const KNOWN_CONSTELLATIONS_SET = new Set<string>(KNOWN_CONSTELLATION_NAMES);
+
+export function isConstellationName(value: string): value is ConstellationName {
+  return KNOWN_CONSTELLATIONS_SET.has(value);
+}
+
+export type JsonPrimitive = string | number | boolean | null;
+export interface JsonObject {
+  [key: string]: JsonValue;
+}
+export type JsonValue = JsonPrimitive | JsonObject | JsonValue[];
 
 export interface RunnerLogger {
   write: (message?: string, color?: RunnerLogColor) => void;
@@ -20,7 +43,7 @@ export interface BaseRunProps {
 
 export interface CategoryInfo {
   Name: string;
-  Constellation: string;
+  Constellation: ConstellationName;
   Explicit: boolean;
   RunOnDevices: boolean;
 }
@@ -37,39 +60,39 @@ export interface RunSuiteModel {
 }
 
 export interface RunAllModel {
-  Constellation: string;
+  Constellation: ConstellationFilter;
   CategoriesList: string;
   Version: string;
   Suites: SuiteInfo[];
 }
 
 export interface TestCaseIssue {
-  message?: string;
+  message: string;
 }
 
 export interface TestCaseResult {
-  name?: string;
-  url?: string;
-  time?: number | string;
-  executed?: boolean;
-  failure?: TestCaseIssue;
-  reason?: TestCaseIssue;
+  name: string;
+  url: string;
+  time: number;
+  executed: boolean;
+  failure: TestCaseIssue | null;
+  reason: TestCaseIssue | null;
 }
 
 export interface TestSuiteResult {
-  name?: string;
-  time?: number | string;
-  pureTime?: number | string;
-  results?: TestResultItem[];
+  name: string;
+  time: number;
+  pureTime: number;
+  results: TestResultItem[];
 }
 
 export type TestResultItem = TestSuiteResult | TestCaseResult;
 
 export interface TestResultsPayload {
-  name?: string;
-  total?: number | string;
-  failures?: number | string;
-  suites?: TestSuiteResult[];
+  name: string;
+  total: number;
+  failures: number;
+  suites: TestSuiteResult[];
 }
 
 export interface VectorMapDataItem {
@@ -80,9 +103,14 @@ export interface VectorMapDataItem {
 export interface VectorMapOutputItem {
   file: string;
   variable: string | null;
-  content: unknown;
+  content: JsonValue;
 }
 
-export type PortsMap = Record<string, number | string>;
+export interface PortsMap {
+  [key: string]: number | string;
+  qunit: number | string;
+  'vectormap-utils-tester': number | string;
+}
 
-export type TemplateVars = Record<string, unknown>;
+export type TemplateVarValue = JsonValue | bigint | undefined;
+export type TemplateVars = Record<string, TemplateVarValue>;

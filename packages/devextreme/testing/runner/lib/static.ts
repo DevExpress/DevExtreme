@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 import * as fs from 'node:fs';
 import { IncomingMessage, ServerResponse } from 'node:http';
 import * as path from 'node:path';
 
 interface StaticFileServiceDeps {
-  escapeHtml: (value: unknown) => string;
+  escapeHtml: (value: string) => string;
   rootDirectory: string;
   setNoCacheHeaders: (res: ServerResponse) => void;
   setStaticCacheHeaders: (res: ServerResponse, searchParams: URLSearchParams) => void;
@@ -17,125 +16,6 @@ export interface StaticFileService {
     pathname: string,
     searchParams: URLSearchParams,
   ) => boolean;
-}
-
-export function createStaticFileService({
-  escapeHtml,
-  rootDirectory,
-  setNoCacheHeaders,
-  setStaticCacheHeaders,
-}: StaticFileServiceDeps): StaticFileService {
-  function tryServeStatic(
-    _req: IncomingMessage,
-    res: ServerResponse,
-    pathname: string,
-    searchParams: URLSearchParams,
-  ): boolean {
-    const normalizedPath = pathname === '/' ? '/' : pathname.replace(/\/+$/, '');
-    const relativePath = normalizedPath.replace(/^\/+/, '');
-    const filePath = path.resolve(path.join(rootDirectory, relativePath));
-    const relativeToRoot = path.relative(rootDirectory, filePath);
-
-    if (relativeToRoot.startsWith('..') || path.isAbsolute(relativeToRoot)) {
-      setNoCacheHeaders(res);
-      res.statusCode = 403;
-      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-      res.end('Forbidden');
-      return true;
-    }
-
-    if (!fs.existsSync(filePath)) {
-      return false;
-    }
-
-    setStaticCacheHeaders(res, searchParams);
-
-    const stat = fs.statSync(filePath);
-
-    if (stat.isDirectory()) {
-      return sendDirectoryListing(res, pathname, filePath);
-    }
-
-    if (stat.isFile()) {
-      return sendStaticFile(res, filePath, stat.size);
-    }
-
-    return false;
-  }
-
-  function sendStaticFile(res: ServerResponse, filePath: string, fileSize: number): boolean {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', getContentType(filePath));
-    res.setHeader('Content-Length', String(fileSize));
-
-    const stream = fs.createReadStream(filePath);
-    stream.pipe(res);
-
-    stream.on('error', () => {
-      if (!res.headersSent) {
-        res.statusCode = 500;
-        res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-      }
-      if (!res.writableEnded) {
-        res.end('Internal Server Error');
-      }
-    });
-
-    return true;
-  }
-
-  function sendDirectoryListing(
-    res: ServerResponse,
-    requestPath: string,
-    dirPath: string,
-  ): boolean {
-    const entries = fs.readdirSync(dirPath, { withFileTypes: true });
-    const pathname = requestPath.endsWith('/') ? requestPath : `${requestPath}/`;
-
-    const items: string[] = [];
-
-    if (pathname !== '/') {
-      const parentPath = pathname
-        .split('/')
-        .filter(Boolean)
-        .slice(0, -1)
-        .join('/');
-      const href = parentPath ? `/${parentPath}/` : '/';
-      items.push(`<li><a href="${escapeHtml(href)}">..</a></li>`);
-    }
-
-    entries
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .forEach((entry) => {
-        const suffix = entry.isDirectory() ? '/' : '';
-        const href = `${pathname}${encodeURIComponent(entry.name)}${suffix}`;
-        items.push(`<li><a href="${escapeHtml(href)}">${escapeHtml(entry.name)}${suffix}</a></li>`);
-      });
-
-    const html = `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8" />
-<title>Index of ${escapeHtml(pathname)}</title>
-</head>
-<body>
-<h1>Index of ${escapeHtml(pathname)}</h1>
-<ul>
-${items.join('\n')}
-</ul>
-</body>
-</html>`;
-
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.end(html);
-
-    return true;
-  }
-
-  return {
-    tryServeStatic,
-  };
 }
 
 function getContentType(filePath: string): string {
@@ -185,4 +65,124 @@ function getContentType(filePath: string): string {
     default:
       return 'application/octet-stream';
   }
+}
+
+function sendStaticFile(res: ServerResponse, filePath: string, fileSize: number): boolean {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', getContentType(filePath));
+  res.setHeader('Content-Length', String(fileSize));
+
+  const stream = fs.createReadStream(filePath);
+  stream.pipe(res);
+
+  stream.on('error', () => {
+    if (!res.headersSent) {
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    }
+    if (!res.writableEnded) {
+      res.end('Internal Server Error');
+    }
+  });
+
+  return true;
+}
+
+function sendDirectoryListing(
+  res: ServerResponse,
+  requestPath: string,
+  dirPath: string,
+  escapeHtml: (value: string) => string,
+): boolean {
+  const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+  const pathname = requestPath.endsWith('/') ? requestPath : `${requestPath}/`;
+
+  const items: string[] = [];
+
+  if (pathname !== '/') {
+    const parentPath = pathname
+      .split('/')
+      .filter(Boolean)
+      .slice(0, -1)
+      .join('/');
+    const href = parentPath ? `/${parentPath}/` : '/';
+    items.push(`<li><a href="${escapeHtml(href)}">..</a></li>`);
+  }
+
+  entries
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .forEach((entry) => {
+      const suffix = entry.isDirectory() ? '/' : '';
+      const href = `${pathname}${encodeURIComponent(entry.name)}${suffix}`;
+      items.push(`<li><a href="${escapeHtml(href)}">${escapeHtml(entry.name)}${suffix}</a></li>`);
+    });
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Index of ${escapeHtml(pathname)}</title>
+</head>
+<body>
+<h1>Index of ${escapeHtml(pathname)}</h1>
+<ul>
+${items.join('\n')}
+</ul>
+</body>
+</html>`;
+
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.end(html);
+
+  return true;
+}
+
+export function createStaticFileService({
+  escapeHtml,
+  rootDirectory,
+  setNoCacheHeaders,
+  setStaticCacheHeaders,
+}: StaticFileServiceDeps): StaticFileService {
+  function tryServeStatic(
+    _req: IncomingMessage,
+    res: ServerResponse,
+    pathname: string,
+    searchParams: URLSearchParams,
+  ): boolean {
+    const normalizedPath = pathname === '/' ? '/' : pathname.replace(/\/+$/, '');
+    const relativePath = normalizedPath.replace(/^\/+/, '');
+    const filePath = path.resolve(path.join(rootDirectory, relativePath));
+    const relativeToRoot = path.relative(rootDirectory, filePath);
+
+    if (relativeToRoot.startsWith('..') || path.isAbsolute(relativeToRoot)) {
+      setNoCacheHeaders(res);
+      res.statusCode = 403;
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+      res.end('Forbidden');
+      return true;
+    }
+
+    if (!fs.existsSync(filePath)) {
+      return false;
+    }
+
+    setStaticCacheHeaders(res, searchParams);
+
+    const stat = fs.statSync(filePath);
+
+    if (stat.isDirectory()) {
+      return sendDirectoryListing(res, pathname, filePath, escapeHtml);
+    }
+
+    if (stat.isFile()) {
+      return sendStaticFile(res, filePath, stat.size);
+    }
+
+    return false;
+  }
+
+  return {
+    tryServeStatic,
+  };
 }

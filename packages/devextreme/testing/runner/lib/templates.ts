@@ -1,13 +1,13 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
-import { TemplateVars } from './types';
+import { TemplateVarValue, TemplateVars } from './types';
 
 export interface TemplateRenderer {
   renderTemplate: (templateName: string, vars?: TemplateVars) => string;
 }
 
-function stringifyTemplateValue(value: unknown): string {
+function stringifyTemplateValue(value: TemplateVarValue): string {
   if (value === null || value === undefined) {
     return '';
   }
@@ -25,15 +25,16 @@ function stringifyTemplateValue(value: unknown): string {
 
 export function createTemplateRenderer(
   templatesRoot: string,
-  escapeHtml: (value: unknown) => string,
+  escapeHtml: (value: string) => string,
 ): TemplateRenderer {
   const templateCache = new Map<string, string>();
 
   function readTemplate(templateName: string): string {
     const key = String(templateName || '');
 
-    if (templateCache.has(key)) {
-      return templateCache.get(key) as string;
+    const cached = templateCache.get(key);
+    if (cached !== undefined) {
+      return cached;
     }
 
     const filePath = path.resolve(templatesRoot, key);
@@ -51,7 +52,7 @@ export function createTemplateRenderer(
 
   function getTemplateValue(data: TemplateVars, key: string, shouldEscape: boolean): string {
     const hasValue = Object.prototype.hasOwnProperty.call(data, key);
-    const value = hasValue ? data[key] : '';
+    const value: TemplateVarValue = hasValue ? data[key] : '';
     const valueAsString = stringifyTemplateValue(value);
 
     if (shouldEscape) {

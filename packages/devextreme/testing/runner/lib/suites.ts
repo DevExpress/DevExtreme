@@ -2,14 +2,21 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
-import { CategoryInfo, RunSuiteModel, SuiteInfo } from './types';
+import {
+  CategoryInfo,
+  ConstellationFilter,
+  ConstellationName,
+  RunSuiteModel,
+  SuiteInfo,
+  isConstellationName,
+} from './types';
 
 export interface GetAllSuitesOptions {
   deviceMode: boolean;
-  constellation: string;
-  includeCategories: Set<string> | null;
-  excludeCategories: Set<string> | null;
-  excludeSuites: Set<string> | null;
+  constellation: ConstellationFilter;
+  includeCategories: ReadonlySet<string> | null;
+  excludeCategories: ReadonlySet<string> | null;
+  excludeSuites: ReadonlySet<string> | null;
   partIndex: number;
   partCount: number;
 }
@@ -22,8 +29,71 @@ export interface SuitesService {
 }
 
 interface SuitesServiceOptions {
-  knownConstellations: Set<string>;
+  knownConstellations: ReadonlySet<ConstellationName>;
   testsRoot: string;
+}
+
+interface CategoryMetaPayload {
+  constellation?: string | number | boolean;
+  explicit?: unknown;
+  runOnDevices?: unknown;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function toPrimitiveString(value: unknown): string {
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+    return String(value);
+  }
+
+  return '';
+}
+
+function isNotEmptyDir(dirPath: string): boolean {
+  try {
+    return fs.readdirSync(dirPath).length > 0;
+  } catch {
+    return false;
+  }
+}
+
+function readCategoryMeta(metaPath: string): CategoryMetaPayload {
+  const parsed = JSON.parse(fs.readFileSync(metaPath, 'utf8')) as unknown;
+
+  if (!isRecord(parsed)) {
+    throw new Error(`Invalid test category metadata: ${metaPath}`);
+  }
+
+  const rawConstellation = parsed.constellation;
+  const constellationValue = (
+    typeof rawConstellation === 'string'
+    || typeof rawConstellation === 'number'
+    || typeof rawConstellation === 'boolean'
+  )
+    ? rawConstellation
+    : undefined;
+
+  return {
+    constellation: constellationValue,
+    explicit: parsed.explicit,
+    runOnDevices: parsed.runOnDevices,
+  };
+}
+
+function parseConstellation(
+  rawValue: unknown,
+  metaPath: string,
+  knownConstellations: ReadonlySet<ConstellationName>,
+): ConstellationName {
+  const constellationValue = toPrimitiveString(rawValue);
+
+  if (!isConstellationName(constellationValue) || !knownConstellations.has(constellationValue)) {
+    throw new Error(`Unknown constellation (group of categories):${constellationValue} in ${metaPath}`);
+  }
+
+  return constellationValue;
 }
 
 export function createSuitesService({
@@ -31,14 +101,12 @@ export function createSuitesService({
   testsRoot,
 }: SuitesServiceOptions): SuitesService {
   function readCategories(): CategoryInfo[] {
-    const dirs = fs.readdirSync(testsRoot, { withFileTypes: true })
+    return fs.readdirSync(testsRoot, { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map((entry) => path.join(testsRoot, entry.name))
       .filter(isNotEmptyDir)
       .map(categoryFromPath)
       .sort((a, b) => a.Name.localeCompare(b.Name));
-
-    return dirs;
   }
 
   function readSuites(catName: string): SuiteInfo[] {
@@ -58,12 +126,10 @@ export function createSuitesService({
       }
     });
 
-    const suites = fs.readdirSync(catPath, { withFileTypes: true })
+    return fs.readdirSync(catPath, { withFileTypes: true })
       .filter((entry) => entry.isFile() && entry.name.endsWith('.js'))
       .map((entry) => suiteFromPath(catName, path.join(catPath, entry.name)))
       .sort((a, b) => a.ShortName.localeCompare(b.ShortName));
-
-    return suites;
   }
 
   function getAllSuites({
@@ -75,8 +141,8 @@ export function createSuitesService({
     partIndex,
     partCount,
   }: GetAllSuitesOptions): SuiteInfo[] {
-    const includeSpecified = includeCategories && includeCategories.size > 0;
-    const excludeSpecified = excludeCategories && excludeCategories.size > 0;
+    const includeSpecified = (includeCategories?.size ?? 0) > 0;
+    const excludeSpecified = (excludeCategories?.size ?? 0) > 0;
     const result: SuiteInfo[] = [];
 
     readCategories().forEach((category) => {
@@ -84,19 +150,19 @@ export function createSuitesService({
         return;
       }
 
-      if (constellation && category.Constellation !== constellation) {
+      if (constellation !== '' && category.Constellation !== constellation) {
         return;
       }
 
-      if (includeSpecified && !includeCategories.has(category.Name)) {
+      if (includeSpecified && !includeCategories?.has(category.Name)) {
         return;
       }
 
-      if (category.Explicit && (!includeSpecified || !includeCategories.has(category.Name))) {
+      if (category.Explicit && !includeCategories?.has(category.Name)) {
         return;
       }
 
-      if (excludeSpecified && excludeCategories.has(category.Name)) {
+      if (excludeSpecified && excludeCategories?.has(category.Name)) {
         return;
       }
 
@@ -134,27 +200,11 @@ export function createSuitesService({
   function categoryFromPath(categoryPath: string): CategoryInfo {
     const name = path.basename(categoryPath);
     const metaPath = path.join(categoryPath, '__meta.json');
-    const parsed = JSON.parse(fs.readFileSync(metaPath, 'utf8')) as unknown;
-
-    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-      throw new Error(`Invalid test category metadata: ${metaPath}`);
-    }
-
-    const meta = parsed as {
-      constellation?: unknown;
-      explicit?: unknown;
-      runOnDevices?: unknown;
-    };
-
-    const constellationValue = toPrimitiveString(meta.constellation);
-
-    if (!knownConstellations.has(constellationValue)) {
-      throw new Error(`Unknown constellation (group of categories):${constellationValue}`);
-    }
+    const meta = readCategoryMeta(metaPath);
 
     return {
       Name: name,
-      Constellation: constellationValue,
+      Constellation: parseConstellation(meta.constellation, metaPath, knownConstellations),
       Explicit: Boolean(meta.explicit),
       RunOnDevices: Boolean(meta.runOnDevices),
     };
@@ -177,20 +227,4 @@ export function createSuitesService({
     readCategories,
     readSuites,
   };
-}
-
-function isNotEmptyDir(dirPath: string): boolean {
-  try {
-    return fs.readdirSync(dirPath).length > 0;
-  } catch {
-    return false;
-  }
-}
-
-function toPrimitiveString(value: unknown): string {
-  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-    return String(value);
-  }
-
-  return '';
 }

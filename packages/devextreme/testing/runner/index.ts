@@ -43,9 +43,16 @@ import {
   setStaticCacheHeaders,
 } from './lib/http';
 import { createStaticFileService } from './lib/static';
-import { BaseRunProps, RunAllModel, TestResultsPayload } from './lib/types';
+import {
+  BaseRunProps,
+  ConstellationFilter,
+  ConstellationName,
+  KNOWN_CONSTELLATION_NAMES,
+  RunAllModel,
+  TestResultsPayload,
+} from './lib/types';
 
-const KNOWN_CONSTELLATIONS = new Set(['export', 'misc', 'ui', 'ui.widgets', 'ui.editors', 'ui.grid', 'ui.scheduler']);
+const KNOWN_CONSTELLATIONS = new Set<ConstellationName>(KNOWN_CONSTELLATION_NAMES);
 
 const RUNNER_ROOT = fs.existsSync(path.join(__dirname, 'templates'))
   ? __dirname
@@ -349,7 +356,7 @@ function buildRunAllModel(searchParams: URLSearchParams): RunAllModel {
   let partIndex = 0;
   let partCount = 1;
 
-  let constellation = searchParams.get('constellation');
+  let constellation: ConstellationFilter = searchParams.get('constellation') ?? '';
   const include = searchParams.get('include');
   const exclude = searchParams.get('exclude');
 
@@ -361,7 +368,7 @@ function buildRunAllModel(searchParams: URLSearchParams): RunAllModel {
     excludeSet = new Set(splitCommaList(exclude));
   }
 
-  if (constellation && constellation.includes('(') && constellation.endsWith(')')) {
+  if (constellation.includes('(') && constellation.endsWith(')')) {
     const [name, partInfo] = constellation.slice(0, -1).split('(');
     const parts = partInfo.split('/');
 
@@ -379,17 +386,13 @@ function buildRunAllModel(searchParams: URLSearchParams): RunAllModel {
     excludeSuites = new Set(completedSuites);
   }
 
-  const packageJson = JSON.parse(fs.readFileSync(path.join(PACKAGE_ROOT, 'package.json'), 'utf8')) as {
-    version?: unknown;
-  };
-
   return {
-    Constellation: constellation ?? '',
+    Constellation: constellation,
     CategoriesList: include ?? '',
-    Version: stringifyPrimitive(packageJson.version),
+    Version: readPackageVersion(),
     Suites: suitesService.getAllSuites({
       deviceMode: hasDeviceModeFlag(searchParams),
-      constellation: constellation ?? '',
+      constellation,
       includeCategories: includeSet,
       excludeCategories: excludeSet,
       excludeSuites,
@@ -400,6 +403,8 @@ function buildRunAllModel(searchParams: URLSearchParams): RunAllModel {
 }
 
 function assignBaseRunProps(searchParams: URLSearchParams): BaseRunProps {
+  const maxWorkersRaw = process.env.MAX_WORKERS;
+
   const result: BaseRunProps = {
     IsContinuousIntegration: RUN_FLAGS.isContinuousIntegration,
     NoGlobals: searchParams.has('noglobals'),
@@ -412,8 +417,8 @@ function assignBaseRunProps(searchParams: URLSearchParams): BaseRunProps {
     MaxWorkers: null,
   };
 
-  if (process.env.MAX_WORKERS && /^\d+$/.test(process.env.MAX_WORKERS)) {
-    result.MaxWorkers = Number(process.env.MAX_WORKERS);
+  if (typeof maxWorkersRaw === 'string' && /^\d+$/.test(maxWorkersRaw)) {
+    result.MaxWorkers = Number(maxWorkersRaw);
   }
 
   return result;
@@ -431,8 +436,8 @@ async function saveResults(req: http.IncomingMessage, res: http.ServerResponse):
     const json = await readBodyText(req);
     resultsReporter.validateResultsJson(json);
 
-    const parsedResults = JSON.parse(json) as TestResultsPayload;
-    hasFailure = Number(parsedResults.failures) > 0;
+    const parsedResults: TestResultsPayload = resultsReporter.parseResultsJson(json);
+    hasFailure = parsedResults.failures > 0;
     xml = resultsReporter.testResultsToXml(parsedResults);
 
     if (RUN_FLAGS.singleRun) {
@@ -475,6 +480,20 @@ function logMiscErrorCore(data: string): void {
 function stringifyPrimitive(value: unknown): string {
   if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
     return String(value);
+  }
+
+  return '';
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function readPackageVersion(): string {
+  const parsed = JSON.parse(fs.readFileSync(path.join(PACKAGE_ROOT, 'package.json'), 'utf8')) as unknown;
+
+  if (isRecord(parsed)) {
+    return stringifyPrimitive(parsed.version);
   }
 
   return '';

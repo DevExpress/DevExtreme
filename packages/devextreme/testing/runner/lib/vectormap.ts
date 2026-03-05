@@ -1,11 +1,18 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable no-await-in-loop */
 import { ChildProcess, spawn, spawnSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as http from 'node:http';
 import * as path from 'node:path';
 
-import { VectorMapDataItem, VectorMapOutputItem } from './types';
+import {
+  JsonObject,
+  JsonValue,
+  VectorMapDataItem,
+  VectorMapOutputItem,
+} from './types';
+
+const VECTOR_SERVER_RETRY_TIMEOUT_MS = 5000;
+const VECTOR_SERVER_RETRY_DELAY_MS = 50;
+const VECTOR_SERVER_KILL_DELAY_MS = 200;
 
 interface VectorMapServiceOptions {
   packageRoot: string;
@@ -26,6 +33,73 @@ interface VectorMapNodeServerState {
   process: ChildProcess | null;
   refs: number;
   killTimer: NodeJS.Timeout | null;
+}
+
+function isJsonObject(value: unknown): value is JsonObject {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isJsonValue(value: unknown): value is JsonValue {
+  if (
+    value === null
+    || typeof value === 'string'
+    || typeof value === 'number'
+    || typeof value === 'boolean'
+  ) {
+    return true;
+  }
+
+  if (Array.isArray(value)) {
+    return value.every((item) => isJsonValue(item));
+  }
+
+  if (isJsonObject(value)) {
+    return Object.values(value).every((item) => isJsonValue(item));
+  }
+
+  return false;
+}
+
+function getErrorCode(error: Error): string | null {
+  if ('code' in error && typeof error.code === 'string') {
+    return error.code;
+  }
+
+  return null;
+}
+
+function parseJsonContent(content: string, filePath: string): JsonValue {
+  const parsed = JSON.parse(content) as unknown;
+
+  if (!isJsonValue(parsed)) {
+    throw new Error(`Unsupported JSON structure in ${filePath}`);
+  }
+
+  return parsed;
+}
+
+function wait(timeout: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
+}
+
+function httpGetText(targetUrl: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const request = http.get(targetUrl, (response) => {
+      const chunks: Buffer[] = [];
+
+      response.on('data', (chunk: Buffer | string) => {
+        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+      });
+
+      response.on('end', () => {
+        resolve(Buffer.concat(chunks).toString('utf8'));
+      });
+    });
+
+    request.on('error', reject);
+  });
 }
 
 export function createVectorMapService({
@@ -79,6 +153,70 @@ export function createVectorMapService({
       });
   }
 
+  function acquireVectorMapNodeServer(): void {
+    if (vectorMapNodeServer.killTimer !== null) {
+      clearTimeout(vectorMapNodeServer.killTimer);
+      vectorMapNodeServer.killTimer = null;
+    }
+
+    if (vectorMapNodeServer.process === null || vectorMapNodeServer.process.killed) {
+      const scriptPath = path.join(testingRoot, 'helpers', 'vectormaputils-tester.js');
+
+      vectorMapNodeServer.process = spawn(
+        pathToNode,
+        [scriptPath, `${vectorDataDirectory}${path.sep}`],
+        {
+          stdio: 'ignore',
+        },
+      );
+
+      vectorMapNodeServer.process.on('exit', () => {
+        if (vectorMapNodeServer.process !== null && vectorMapNodeServer.process.exitCode !== null) {
+          vectorMapNodeServer.process = null;
+        }
+      });
+    }
+
+    vectorMapNodeServer.refs += 1;
+  }
+
+  function releaseVectorMapNodeServer(): void {
+    vectorMapNodeServer.refs -= 1;
+
+    if (vectorMapNodeServer.refs <= 0) {
+      vectorMapNodeServer.refs = 0;
+
+      vectorMapNodeServer.killTimer = setTimeout(() => {
+        if (vectorMapNodeServer.refs === 0 && vectorMapNodeServer.process !== null) {
+          try {
+            vectorMapNodeServer.process.kill();
+          } catch {
+            // Ignore process kill failures.
+          }
+          vectorMapNodeServer.process = null;
+        }
+        vectorMapNodeServer.killTimer = null;
+      }, VECTOR_SERVER_KILL_DELAY_MS);
+    }
+  }
+
+  async function requestWithRetryUntilReady(
+    action: string,
+    arg: string,
+    startTime: number,
+  ): Promise<string> {
+    try {
+      return await httpGetText(`http://127.0.0.1:${vectorMapTesterPort}/${action}/${arg}`);
+    } catch (error) {
+      if (Date.now() - startTime > VECTOR_SERVER_RETRY_TIMEOUT_MS) {
+        throw error;
+      }
+
+      await wait(VECTOR_SERVER_RETRY_DELAY_MS);
+      return requestWithRetryUntilReady(action, arg, startTime);
+    }
+  }
+
   async function redirectRequestToVectorMapNodeServer(
     action: string,
     arg: string,
@@ -86,20 +224,7 @@ export function createVectorMapService({
     acquireVectorMapNodeServer();
 
     try {
-      const startTime = Date.now();
-
-      while (true) {
-        try {
-          const text = await httpGetText(`http://127.0.0.1:${vectorMapTesterPort}/${action}/${arg}`);
-          return text;
-        } catch(error) {
-          if (Date.now() - startTime > 5000) {
-            throw error;
-          }
-
-          await wait(50);
-        }
-      }
+      return await requestWithRetryUntilReady(action, arg, Date.now());
     } finally {
       releaseVectorMapNodeServer();
     }
@@ -116,15 +241,14 @@ export function createVectorMapService({
     const vectorMapUtilsNodePath = path.resolve(path.join(packageRoot, 'artifacts/js/vectormap-utils/dx.vectormaputils.node.js'));
 
     const args = [vectorMapUtilsNodePath, inputDirectory];
-
-    if (searchParams.has('file')) {
-      args[1] += searchParams.get('file');
+    const fileArgument = searchParams.get('file');
+    if (fileArgument !== null) {
+      args[1] += fileArgument;
     }
 
     args.push('--quiet', '--output', outputDirectory, '--settings', settingsPath, '--process-file-content', processFileContentPath);
 
     const isJson = searchParams.has('json');
-
     if (isJson) {
       args.push('--json');
     }
@@ -137,13 +261,10 @@ export function createVectorMapService({
         stdio: 'ignore',
       });
 
-      const spawnError = spawnResult.error as (Error & { code?: string }) | undefined;
-
-      if (spawnError) {
-        if (spawnError.code === 'ETIMEDOUT') {
-          // Intentionally ignored to match legacy behavior.
-        } else {
-          throw spawnError;
+      if (spawnResult.error !== undefined) {
+        const errorCode = getErrorCode(spawnResult.error);
+        if (errorCode !== 'ETIMEDOUT') {
+          throw spawnResult.error;
         }
       }
 
@@ -171,7 +292,7 @@ export function createVectorMapService({
           return {
             file: `${path.basename(entry.name, extension)}${extension}`,
             variable,
-            content: JSON.parse(text),
+            content: parseJsonContent(text, filePath),
           };
         });
     } finally {
@@ -183,81 +304,10 @@ export function createVectorMapService({
     }
   }
 
-  function acquireVectorMapNodeServer(): void {
-    if (vectorMapNodeServer.killTimer) {
-      clearTimeout(vectorMapNodeServer.killTimer);
-      vectorMapNodeServer.killTimer = null;
-    }
-
-    if (!vectorMapNodeServer.process || vectorMapNodeServer.process.killed) {
-      const scriptPath = path.join(testingRoot, 'helpers', 'vectormaputils-tester.js');
-
-      vectorMapNodeServer.process = spawn(
-        pathToNode,
-        [scriptPath, `${vectorDataDirectory}${path.sep}`],
-        {
-          stdio: 'ignore',
-        },
-      );
-
-      vectorMapNodeServer.process.on('exit', () => {
-        if (vectorMapNodeServer.process && vectorMapNodeServer.process.exitCode !== null) {
-          vectorMapNodeServer.process = null;
-        }
-      });
-    }
-
-    vectorMapNodeServer.refs += 1;
-  }
-
-  function releaseVectorMapNodeServer(): void {
-    vectorMapNodeServer.refs -= 1;
-
-    if (vectorMapNodeServer.refs <= 0) {
-      vectorMapNodeServer.refs = 0;
-
-      vectorMapNodeServer.killTimer = setTimeout(() => {
-        if (vectorMapNodeServer.refs === 0 && vectorMapNodeServer.process) {
-          try {
-            vectorMapNodeServer.process.kill();
-          } catch {
-            // Ignore process kill failures.
-          }
-          vectorMapNodeServer.process = null;
-        }
-        vectorMapNodeServer.killTimer = null;
-      }, 200);
-    }
-  }
-
   return {
     executeVectorMapConsoleApp,
     readThemeCssFiles,
     readVectorMapTestData,
     redirectRequestToVectorMapNodeServer,
   };
-}
-
-function httpGetText(targetUrl: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const request = http.get(targetUrl, (response) => {
-      const chunks: Buffer[] = [];
-
-      response.on('data', (chunk: Buffer | string) => {
-        chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-      });
-
-      response.on('end', () => {
-        resolve(Buffer.concat(chunks).toString('utf8'));
-      });
-    });
-
-    request.on('error', reject);
-  });
-}
-
-function wait(timeout: number): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, timeout);
-  });
 }

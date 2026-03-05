@@ -4,6 +4,14 @@ import * as path from 'node:path';
 
 import { PortsMap } from './types';
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isPortValue(value: unknown): value is number | string {
+  return typeof value === 'number' || typeof value === 'string';
+}
+
 export function jsonString(value: unknown): string {
   return JSON.stringify(value);
 }
@@ -33,11 +41,28 @@ export function escapeXmlAttr(value: unknown): string {
 export function loadPorts(filePath: string): PortsMap {
   const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8')) as unknown;
 
-  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+  if (!isRecord(parsed)) {
     throw new Error(`Invalid ports definition: ${filePath}`);
   }
 
-  return parsed as PortsMap;
+  if (!isPortValue(parsed.qunit) || !isPortValue(parsed['vectormap-utils-tester'])) {
+    throw new Error(`Required ports are missing in ${filePath}`);
+  }
+
+  const portsMap: PortsMap = {
+    qunit: parsed.qunit,
+    'vectormap-utils-tester': parsed['vectormap-utils-tester'],
+  };
+
+  Object.entries(parsed).forEach(([key, value]) => {
+    if (!isPortValue(value)) {
+      throw new Error(`Invalid port value for "${key}" in ${filePath}`);
+    }
+
+    portsMap[key] = value;
+  });
+
+  return portsMap;
 }
 
 export function safeReadFile(filePath: string): string {
