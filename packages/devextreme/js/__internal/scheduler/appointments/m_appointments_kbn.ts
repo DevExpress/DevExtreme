@@ -5,11 +5,8 @@ import { getPublicElement } from '@ts/core/m_element';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import eventsEngine from '@ts/events/core/m_events_engine';
 
-import type { AppointmentViewModelPlain } from '../view_model/types';
+import type { SortedEntity } from '../view_model/types';
 import type SchedulerAppointments from './m_appointment_collection';
-
-// Case when no appointments in Viewport
-// Case when focusedAppointment is outside Viewport
 
 export class AppointmentsKeyboardNavigation {
   private readonly _collection: SchedulerAppointments;
@@ -36,6 +33,32 @@ export class AppointmentsKeyboardNavigation {
     if ($target.length) {
       eventsEngine.trigger($target, 'focus');
     }
+  }
+
+  public $focusTarget(): dxElementWrapper {
+    const $items = this._collection.$itemBySortedIndex;
+
+    if (!$items) {
+      return $();
+    }
+
+    if (this.focusedItemSortIndex !== -1) {
+      const $item = $items[this.focusedItemSortIndex];
+      return $item || $();
+    }
+
+    const $itemsPlainArray = Object.values($items);
+
+    const $firstItem = this._collection.isVirtualScrolling
+      ? $itemsPlainArray.find(($item) => this.isItemVisibleInViewport($item)) ?? $()
+      : $($itemsPlainArray[0]);
+
+    return $firstItem;
+  }
+
+  public resetTabIndex(): void {
+    this.getFocusableItems().attr('tabIndex', -1);
+    this.$focusTarget().attr('tabIndex', this._collection.option('tabIndex'));
   }
 
   public focusInHandler(e: DxEvent): void {
@@ -70,31 +93,6 @@ export class AppointmentsKeyboardNavigation {
     };
   }
 
-  public $focusTarget(): dxElementWrapper {
-    const $items = this._collection.$itemBySortedIndex;
-
-    if (!$items?.length) {
-      return $();
-    }
-
-    if (this.focusedItemSortIndex === -1) {
-      const $itemsPlainArray = Object.values($items);
-
-      return this._collection.isVirtualScrolling
-        ? $itemsPlainArray.find(($item) => this.isItemVisibleInViewport($item)) ?? $()
-        : $($itemsPlainArray[0]);
-    }
-
-    const $item = $items[this.focusedItemSortIndex];
-
-    return $item || $();
-  }
-
-  public resetTabIndex(): void {
-    this.getFocusableItems().attr('tabIndex', -1);
-    this.$focusTarget().attr('tabIndex', this._collection.option('tabIndex'));
-  }
-
   private delHandler(e: DxEvent): void {
     if (this._collection.option('allowDelete')) {
       e.preventDefault();
@@ -120,7 +118,7 @@ export class AppointmentsKeyboardNavigation {
   }
 
   private tabHandler(e: DxEvent<KeyboardEvent>): void {
-    const items = this._collection.option('getLayoutManager')().sortedItems;
+    const items = this._collection.sortedItems;
     const nextIndex = this.focusedItemSortIndex + (e.shiftKey ? -1 : 1);
     const nextItemData = items[nextIndex];
 
@@ -133,7 +131,7 @@ export class AppointmentsKeyboardNavigation {
   }
 
   private homeHandler(e: DxEvent<KeyboardEvent>): void {
-    const items = this._collection.option('getLayoutManager')().sortedItems;
+    const items = this._collection.sortedItems;
     const nextItemData = items[0];
 
     if (!nextItemData) {
@@ -145,7 +143,7 @@ export class AppointmentsKeyboardNavigation {
   }
 
   private endHandler(e: DxEvent<KeyboardEvent>): void {
-    const items = this._collection.option('getLayoutManager')().sortedItems;
+    const items = this._collection.sortedItems;
     const nextItemData = items[items.length - 1];
 
     if (!nextItemData) {
@@ -156,9 +154,10 @@ export class AppointmentsKeyboardNavigation {
     this.focusByItemData(nextItemData);
   }
 
-  private focusByItemData(itemData: AppointmentViewModelPlain): void {
+  private focusByItemData(itemData: SortedEntity): void {
+    this.focusedItemSortIndex = itemData.sortedIndex;
+
     if (this._collection.isVirtualScrolling) {
-      this.focusedItemSortIndex = itemData.sortedIndex;
       this.isNavigating = true;
       this.scrollToByItemData(itemData);
     }
@@ -166,10 +165,10 @@ export class AppointmentsKeyboardNavigation {
     this.focus();
   }
 
-  private scrollToByItemData(itemData: AppointmentViewModelPlain): void {
+  private scrollToByItemData(itemData: SortedEntity): void {
     const date = new Date(Math.max(
-      this._collection.option('getStartViewDate')().getTime(),
-      (itemData as any).source.startDate,
+      this._collection.invoke('getStartViewDate').getTime(),
+      itemData.source.startDate,
     ));
 
     this._collection.option('scrollTo')(

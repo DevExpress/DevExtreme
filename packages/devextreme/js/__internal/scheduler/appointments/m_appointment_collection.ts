@@ -43,6 +43,7 @@ import type {
   AppointmentCollectorViewModel,
   AppointmentItemViewModel,
   AppointmentViewModelPlain,
+  SortedEntity,
 } from '../view_model/types';
 import { AgendaAppointment } from './appointment/agenda_appointment';
 import { Appointment } from './appointment/m_appointment';
@@ -104,6 +105,10 @@ class SchedulerAppointments extends CollectionWidget<any> {
 
   get dataAccessors(): AppointmentDataAccessor {
     return this.option('dataAccessors') as AppointmentDataAccessor;
+  }
+
+  get sortedItems(): SortedEntity[] {
+    return this.option('sortedItems') as SortedEntity[];
   }
 
   getResourceManager(): ResourceManager {
@@ -228,9 +233,9 @@ class SchedulerAppointments extends CollectionWidget<any> {
 
   _optionChanged(args) {
     switch (args.name) {
+      case 'sortedItems':
+        break;
       case 'items':
-        console.log('render', this._kbn.focusedItemSortIndex);
-
         this._cleanFocusState();
 
         if (this.isAgendaView) {

@@ -113,6 +113,7 @@ class AppointmentLayoutManager {
       height: item.height,
       info: getAppointmentInfo(item),
     } as unknown as AppointmentItemViewModel);
+
     return viewModel.map((item) => {
       if (item.items.length) {
         return {
