@@ -962,7 +962,7 @@ QUnit.module('Options', () => {
         await waitForAsync(() => count === 2);
 
         assert.equal(initMarkupSpy.callCount, 2, 'Init markup was called on each dataSource changes');
-        assert.equal(reloadDataSourceSpy.callCount, 2, '_reloadDataSource was called on each changes');
+        assert.equal(reloadDataSourceSpy.callCount, 2, 'reloadDataSource was called on each changes');
     });
 
     QUnit.test('It should be possible to change views option when view names are specified (T995794)', async function(assert) {

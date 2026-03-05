@@ -385,7 +385,7 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
 
         try {
             $(this.instance.$element()).find('.dx-scheduler-navigator-previous').trigger('dxclick');
-            assert.ok(spy.calledOnce, '_setRemoteFilterIfNeeded is called');
+            assert.ok(spy.calledOnce, 'setRemoteFilterIfNeeded is called');
         } finally {
             this.instance.setRemoteFilterIfNeeded.restore();
         }
