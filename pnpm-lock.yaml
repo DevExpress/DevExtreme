@@ -89,8 +89,8 @@ catalogs:
       specifier: 4.4.5
       version: 4.4.5
     devextreme-quill:
-      specifier: 1.7.8
-      version: 1.7.8
+      specifier: 1.7.9
+      version: 1.7.9
     eslint:
       specifier: 9.39.2
       version: 9.39.2
@@ -183,6 +183,7 @@ overrides:
   minimatch@>=9.0.0 < 9.0.7: 9.0.7
   minimatch@>=10.0.0 < 10.2.4: 10.2.4
   serialize-javascript@<=7.0.2: 7.0.3
+  quill-delta>lodash.isequal: npm:fast-deep-equal@^3.1.3
 
 importers:
 
@@ -440,7 +441,7 @@ importers:
         version: 4.4.5
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.8
+        version: 1.7.9
       devextreme-react:
         specifier: workspace:*
         version: link:../../packages/devextreme-react/npm
@@ -1197,7 +1198,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.8
+        version: 1.7.9
       devextreme-react:
         specifier: workspace:~
         version: link:../../packages/devextreme-react/npm
@@ -1336,7 +1337,7 @@ importers:
         version: 4.1.66
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.8
+        version: 1.7.9
       inferno:
         specifier: 'catalog:'
         version: 8.2.3
@@ -9638,8 +9639,8 @@ packages:
     engines: {node: '>=20.0.0'}
     hasBin: true
 
-  devextreme-quill@1.7.8:
-    resolution: {integrity: sha512-0UcJNc5crQ6eJTEteizRW9qv0xJqk1nnmX0xleI3IgHKS+CV3Vk7Xi+VOlEkFJDFiybRdhVse4cyFHslc86mGQ==}
+  devextreme-quill@1.7.9:
+    resolution: {integrity: sha512-UEkR16+I/7P/4+7dUmc65lv+VRdRGk0kFvZXgHnM2UFcEBKqm1kVDdVPBolGRFwuOFuDttJxp2SXUAyiuSC8wA==}
 
   devextreme-schematics@1.7.1:
     resolution: {integrity: sha512-K+FNrji2/G7QPkfWYhWiNNaXcmxdlXDTOVpIiISoMr6fumRhz5PindoIYlOx0HXtnpvcBWzb2Fqadujr8qop2g==}
@@ -29776,7 +29777,7 @@ snapshots:
       typescript: 5.9.2
       winston: 3.17.0
 
-  devextreme-quill@1.7.8:
+  devextreme-quill@1.7.9:
     dependencies:
       core-js: 3.39.0
       eventemitter3: 4.0.7
@@ -38307,7 +38308,7 @@ snapshots:
     dependencies:
       fast-diff: 1.3.0
       lodash.clonedeep: 4.5.0
-      lodash.isequal: 4.5.0
+      lodash.isequal: fast-deep-equal@3.1.3
 
   qunit@2.24.1:
     dependencies:
