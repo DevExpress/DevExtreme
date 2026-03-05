@@ -62,3 +62,37 @@ test('DataGrid - NVDA reads column information twice (T1286287)', async (t) => {
   dataSource: getData(5, 5),
   keyExpr: 'field_0',
 }));
+
+test('T1296376 - DataGrid - TextArea doesn\'t have the aria-invalid attribute when it is the editor', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const dataCell = dataGrid.getDataCell(0, 0);
+
+  // act
+  await t
+    .click(dataCell.element)
+    .pressKey('ctrl+a backspace ctrl+enter');
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(dataCell.getEditor().element.getAttribute('aria-invalid'))
+    .eql('true');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1, text: 'value' }
+  ],
+  keyExpr: 'id',
+  columns: [{
+    dataField: 'text',
+    validationRules: [{ type: 'required' }],
+  }],
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+  },
+  onEditorPreparing(e) {
+    e.editorName = 'dxTextArea';
+  },
+}));
