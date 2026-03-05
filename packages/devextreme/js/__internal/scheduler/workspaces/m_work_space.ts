@@ -472,7 +472,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
           focusedCellData,
         });
 
-        this._processNextSelectedCell(
+        this.processNextSelectedCell(
           nextCellData,
           focusedCellData,
           isMultiSelection && isMultiSelectionAllowed,
@@ -503,7 +503,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.option('rtlEnabled');
   }
 
-  _moveToCell($cell, isMultiSelection) {
+  private moveToCell($cell, isMultiSelection) {
     if (!isDefined($cell) || !$cell.length) {
       return;
     }
@@ -520,14 +520,14 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       isVirtualCell: $cell.hasClass(VIRTUAL_CELL_CLASS),
     });
 
-    this._processNextSelectedCell(
+    this.processNextSelectedCell(
       nextFocusedCellData,
       focusedCellData,
       isMultiSelectionAllowed && isMultiSelection,
     );
   }
 
-  _processNextSelectedCell(nextCellData, focusedCellData, isMultiSelection) {
+  private processNextSelectedCell(nextCellData, focusedCellData, isMultiSelection) {
     const nextCellPosition = this.viewDataProvider.findCellPositionInMap({
       startDate: nextCellData.startDate,
       groupIndex: nextCellData.groupIndex,
@@ -541,13 +541,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         : this._dom_getDateCell(nextCellPosition);
       const isNextCellAllDay = nextCellData.allDay;
 
-      this._setSelectedCellsStateAndUpdateSelection(isNextCellAllDay, nextCellPosition, isMultiSelection, $cell);
+      this.setSelectedCellsStateAndUpdateSelection(isNextCellAllDay, nextCellPosition, isMultiSelection, $cell);
 
       this._dateTableScrollable.scrollToElement($cell);
     }
   }
 
-  _setSelectedCellsStateAndUpdateSelection(isAllDay, cellPosition, isMultiSelection, $nextFocusedCell) {
+  private setSelectedCellsStateAndUpdateSelection(isAllDay, cellPosition, isMultiSelection, $nextFocusedCell) {
     const nextCellCoordinates = {
       rowIndex: cellPosition.rowIndex,
       columnIndex: cellPosition.columnIndex,
@@ -1028,7 +1028,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     } else {
       const cellCoordinates = this._getCoordinatesByCell($target);
       const isAllDayCell = this._hasAllDayClass($target);
-      this._setSelectedCellsStateAndUpdateSelection(isAllDayCell, cellCoordinates, false, $target);
+      this.setSelectedCellsStateAndUpdateSelection(isAllDayCell, cellCoordinates, false, $target);
     }
   }
 
@@ -1078,6 +1078,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       return this._$groupTable;
     }
 
+    return this._$thead;
+  }
+
+  private getDateHeaderContainer() {
     return this._$thead;
   }
 
@@ -1213,7 +1217,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       if (isPointerDown && this._dateTableScrollable && !this._dateTableScrollable.option('scrollByContent')) {
         e.preventDefault();
         e.stopPropagation();
-        this._moveToCell($(e.target), true);
+        this.moveToCell($(e.target), true);
       }
     });
   }
@@ -2992,7 +2996,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   _renderDateHeader(): any {
-    const container = this._getDateHeaderContainer();
+    const container = this.getDateHeaderContainer();
     const $headerRow = $('<tr>').addClass(HEADER_ROW_CLASS);
     const count = this._getCellCount();
     const cellTemplate = this._getDateHeaderTemplate();
