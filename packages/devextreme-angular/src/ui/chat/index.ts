@@ -24,7 +24,7 @@ import {
 
 import DataSource from 'devextreme/data/data_source';
 import dxChat from 'devextreme/ui/chat';
-import { Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
+import { Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, InputFieldTextChangedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
 import { DataSourceOptions } from 'devextreme/data/data_source';
 import { Store } from 'devextreme/data/store';
 import { Format } from 'devextreme/common/core/localization';
@@ -522,6 +522,14 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
+     * [descr:dxChatOptions.onInputFieldTextChanged]
+    
+    
+     */
+    @Output() onInputFieldTextChanged: EventEmitter<InputFieldTextChangedEvent>;
+
+    /**
+    
      * [descr:dxChatOptions.onMessageDeleted]
     
     
@@ -826,6 +834,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { subscribe: 'attachmentDownloadClick', emit: 'onAttachmentDownloadClick' },
             { subscribe: 'disposing', emit: 'onDisposing' },
             { subscribe: 'initialized', emit: 'onInitialized' },
+            { subscribe: 'inputFieldTextChanged', emit: 'onInputFieldTextChanged' },
             { subscribe: 'messageDeleted', emit: 'onMessageDeleted' },
             { subscribe: 'messageDeleting', emit: 'onMessageDeleting' },
             { subscribe: 'messageEditCanceled', emit: 'onMessageEditCanceled' },

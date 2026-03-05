@@ -16,6 +16,7 @@ import { ConfirmationDialogModel } from './confirmation_dialog';
 import { EditFormModel } from './edit_form';
 import { FilterPanelModel } from './filter_panel';
 import { DataRowModel } from './row/data_row';
+import { GroupRowModel } from './row/group_row';
 
 const SELECTORS = {
   headerRowClass: 'dx-header-row',
@@ -91,6 +92,10 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
 
   public getGroupRows(): NodeListOf<HTMLElement> {
     return this.root.querySelectorAll(`.${SELECTORS.groupRowClass}`);
+  }
+
+  public getGroupRow(rowIndex: number): GroupRowModel {
+    return new GroupRowModel(this.getGroupRows()[rowIndex]);
   }
 
   public getHeaderByText(text: string): dxElementWrapper {
