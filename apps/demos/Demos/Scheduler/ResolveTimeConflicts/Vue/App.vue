@@ -99,7 +99,7 @@ import type { DxTagBoxTypes } from 'devextreme-vue/tag-box';
 import type dxScheduler from 'devextreme/ui/scheduler';
 import dxForm from 'devextreme/ui/form.js';
 import dxPopup from 'devextreme/ui/popup.js';
-import { data, assignees, type Appointment } from './data';
+import { data, assignees, type Appointment } from './data.ts';
 
 let form: dxForm | undefined;
 let popup: dxPopup | undefined;

@@ -77,7 +77,7 @@ const App = () => {
   const overlappingRuleRef = useRef('sameResource');
   const setConflictError = useCallback((show) => {
     showConflictErrorRef.current = show;
-    formRef.current?.instance().option('elementAttr.class', show ? '' : 'hide-informer');
+    formRef.current?.option('elementAttr.class', show ? '' : 'hide-informer');
   }, []);
   const alertConflictIfNeeded = useCallback(
     (e, appointmentData) => {
@@ -86,9 +86,9 @@ const App = () => {
         return;
       }
       e.cancel = true;
-      if (popupRef.current?.instance().option('visible')) {
+      if (popupRef.current?.option('visible')) {
         setConflictError(true);
-        formRef.current?.instance().validate();
+        formRef.current?.validate();
       } else {
         const dialog = customDialog({
           showTitle: false,
@@ -124,25 +124,28 @@ const App = () => {
   const popupOptions = useMemo(
     () => ({
       onInitialized: (e) => {
-        popupRef.current = e.component;
+        popupRef.current = e.component ?? null;
       },
       onHidden: () => {
         setConflictError(false);
-        formRef.current?.instance().updateData('assigneeId', []);
+        formRef.current?.updateData('assigneeId', []);
       },
     }),
     [setConflictError],
   );
   const onFormInitialized = useCallback(
     (e) => {
+      if (!e.component) return;
       formRef.current = e.component;
       e.component.on('fieldDataChanged', (fieldEvent) => {
         if (
           showConflictErrorRef.current &&
-          ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(fieldEvent.dataField)
+          ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(
+            fieldEvent.dataField ?? '',
+          )
         ) {
           setConflictError(false);
-          formRef.current?.instance().validate();
+          formRef.current?.validate();
         }
       });
     },
@@ -150,7 +153,7 @@ const App = () => {
   );
   const customizeItem = useCallback((item) => {
     if (item.name === 'allDayEditor' || item.name === 'recurrenceEndEditor') {
-      item.label.visible = true;
+      item.label = { ...item.label, visible: true };
     } else if (item.name === 'subjectEditor') {
       item.editorOptions = item.editorOptions || {};
       item.editorOptions.placeholder = 'Add title';

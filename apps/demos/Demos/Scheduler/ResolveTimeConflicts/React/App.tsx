@@ -2,12 +2,13 @@ import React, {
   useCallback, useMemo, useRef,
 } from 'react';
 import Scheduler, {
-  Form, Editing, Resource, Item, SchedulerTypes,
+  Form, Editing, Resource, Item,
 } from 'devextreme-react/scheduler';
+import type { SchedulerTypes } from 'devextreme-react/scheduler';
 import SelectBox from 'devextreme-react/select-box';
 import type { SelectBoxTypes } from 'devextreme-react/select-box';
-import type { FormRef, FormTypes } from 'devextreme-react/form';
-import type { PopupRef, PopupTypes } from 'devextreme-react/popup';
+import type { FormTypes } from 'devextreme-react/form';
+import type { PopupTypes } from 'devextreme-react/popup';
 import type { TagBoxTypes } from 'devextreme-react/tag-box';
 import { custom as customDialog } from 'devextreme/ui/dialog';
 import dxScheduler from 'devextreme/ui/scheduler';
@@ -97,13 +98,13 @@ const conflictInformerRender = () => (
 );
 
 const App = () => {
-  const popupRef = useRef<PopupRef>(null);
-  const formRef = useRef<FormRef>(null);
+  const popupRef = useRef<NonNullable<PopupTypes.InitializedEvent['component']> | null>(null);
+  const formRef = useRef<NonNullable<FormTypes.InitializedEvent['component']> | null>(null);
   const showConflictErrorRef = useRef(false);
   const overlappingRuleRef = useRef('sameResource');
   const setConflictError = useCallback((show: boolean) => {
     showConflictErrorRef.current = show;
-    formRef.current?.instance().option('elementAttr.class', show ? '' : 'hide-informer');
+    formRef.current?.option('elementAttr.class', show ? '' : 'hide-informer');
   }, []);
 
   const alertConflictIfNeeded = useCallback((
@@ -117,9 +118,9 @@ const App = () => {
 
     e.cancel = true;
 
-    if (popupRef.current?.instance().option('visible')) {
+    if (popupRef.current?.option('visible')) {
       setConflictError(true);
-      formRef.current?.instance().validate();
+      formRef.current?.validate();
     } else {
       const dialog = customDialog({
         showTitle: false,
@@ -147,31 +148,32 @@ const App = () => {
 
   const popupOptions = useMemo(() => ({
     onInitialized: (e: PopupTypes.InitializedEvent) => {
-      popupRef.current = e.component;
+      popupRef.current = e.component ?? null;
     },
     onHidden: () => {
       setConflictError(false);
-      formRef.current?.instance().updateData('assigneeId', []);
+      formRef.current?.updateData('assigneeId', []);
     },
   }), [setConflictError]);
 
   const onFormInitialized = useCallback((e: FormTypes.InitializedEvent) => {
+    if (!e.component) return;
     formRef.current = e.component;
 
     e.component.on('fieldDataChanged', (fieldEvent: FormTypes.FieldDataChangedEvent) => {
       if (
         showConflictErrorRef.current &&
-        ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(fieldEvent.dataField)
+        ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(fieldEvent.dataField ?? '')
       ) {
         setConflictError(false);
-        formRef.current?.instance().validate();
+        formRef.current?.validate();
       }
     });
   }, [setConflictError]);
 
   const customizeItem = useCallback((item: FormTypes.SimpleItem) => {
     if (item.name === 'allDayEditor' || item.name === 'recurrenceEndEditor') {
-      item.label.visible = true;
+      item.label = { ...item.label, visible: true };
     } else if (item.name === 'subjectEditor') {
       item.editorOptions = item.editorOptions || {};
       item.editorOptions.placeholder = 'Add title';

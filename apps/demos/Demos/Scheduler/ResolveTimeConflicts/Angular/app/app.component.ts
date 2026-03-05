@@ -196,13 +196,13 @@ export class AppComponent {
 
     const existingOccurrences = scheduler
       .getOccurrences(startDate, endDate, allAppointments)
-      .filter((occ) => (occ.appointmentData as Appointment).id !== newAppointment.id);
+      .filter((occurrence) => (occurrence.appointmentData as Appointment).id !== newAppointment.id);
 
     const newOccurrences = scheduler.getOccurrences(startDate, endDate, [newAppointment]);
 
-    return newOccurrences.some((newOcc) =>
-      existingOccurrences.some((existingOcc) =>
-        this.isOverlapping(newOcc, existingOcc),
+    return newOccurrences.some((newOccurrence) =>
+      existingOccurrences.some((existingOccurrence) =>
+        this.isOverlapping(newOccurrence, existingOccurrence),
       ),
     );
   }
