@@ -220,16 +220,20 @@ export const sendRequestFactory = (httpClient: HttpClient) => (options: Options)
   options.crossDomain = isCrossDomain(options.url);
   options.cache = isCacheNeed(options);
 
+  const clearTimeoutIfSet = () => {
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+  };
+
   const headers = getRequestHeaders(options);
   const xhrSurrogate: XHRSurrogate = {
     type: 'XMLHttpRequestSurrogate',
     aborted: false,
     abort() {
       this.aborted = true;
-      if (timeoutId !== null) {
-        clearTimeout(timeoutId);
-        timeoutId = null;
-      }
+      clearTimeoutIfSet();
       subscription?.unsubscribe();
       subscription = null;
       rejectIfAborted(deferred, this, () => options.upload?.onabort?.(this));
@@ -285,13 +289,6 @@ export const sendRequestFactory = (httpClient: HttpClient) => (options: Options)
         responseType: options.responseType || (isScript || isJSONP ? 'text' : options.dataType),
       },
     );
-
-  const clearTimeoutIfSet = () => {
-    if (timeoutId !== null) {
-      clearTimeout(timeoutId);
-      timeoutId = null;
-    }
-  };
 
   if (options.timeout) {
     timeoutId = setTimeout(() => {
