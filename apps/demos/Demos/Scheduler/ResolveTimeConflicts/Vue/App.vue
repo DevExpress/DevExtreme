@@ -20,9 +20,7 @@
       :allow-multiple="true"
     />
 
-    <DxEditing
-      :popup="popupOptions"
-    >
+    <DxEditing :popup="popupOptions">
       <DxForm
         label-mode="hidden"
         :customize-item="customizeItem"
@@ -30,13 +28,13 @@
         @initialized="onFormInitialized"
       >
         <DxItem
+          name="conflictInformer"
+          template="conflict-informer-template"
+        />
+        <DxItem
           type="group"
           name="mainGroup"
         >
-          <DxItem
-            name="conflictInformer"
-            template="conflict-informer-template"
-          />
           <DxItem name="subjectGroup"/>
           <DxItem name="dateGroup"/>
           <DxItem name="repeatGroup"/>
@@ -57,7 +55,7 @@
     </DxEditing>
 
     <template #conflict-informer-template>
-      <div class="conflict-informer">This time slot conflicts with another appointment</div>
+      <div class="conflict-informer">This time slot conflicts with another appointment.</div>
     </template>
 
     <template #tagTemplate="{ data: itemData }">
@@ -70,10 +68,23 @@
       </div>
     </template>
   </DxScheduler>
+
+  <div class="options">
+    <div class="option">
+      <span>Overlapping Rule</span>
+      <DxSelectBox
+        :items="overlappingRuleItems"
+        value-expr="value"
+        display-expr="text"
+        value="sameResource"
+        :width="200"
+        @value-changed="onOverlappingRuleChanged"
+      />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import DxScheduler, {
   DxResource,
   DxEditing,
@@ -81,6 +92,7 @@ import DxScheduler, {
   DxItem,
   type DxSchedulerTypes,
 } from 'devextreme-vue/scheduler';
+import DxSelectBox from 'devextreme-vue/select-box';
 import { custom as customDialog } from 'devextreme/ui/dialog';
 import type { DxFormTypes } from 'devextreme-vue/form';
 import type { DxTagBoxTypes } from 'devextreme-vue/tag-box';
@@ -92,40 +104,64 @@ import { data, assignees, type Appointment } from './data.ts';
 let form: dxForm | undefined;
 let popup: dxPopup | undefined;
 let showConflictError = false;
+let overlappingRule = 'sameResource';
 
 const currentDate = new Date(2026, 1, 10);
-const views: DxSchedulerTypes.ViewType[] = ['day', 'week'];
+const views: DxSchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
 
 const formElementAttr = { class: 'hide-informer' };
 
-function isOverlapping(a: DxSchedulerTypes.Occurrence, b: DxSchedulerTypes.Occurrence): boolean {
-  return a.appointmentData.assigneeId[0] === b.appointmentData.assigneeId[0] &&
-    a.startDate < b.endDate && a.endDate > b.startDate;
+const overlappingRuleItems = [
+  { value: 'sameResource', text: 'Allow across resources' },
+  { value: 'allResources', text: 'Disallow all overlaps' },
+];
+
+function getNextDay(date: Date): Date {
+  const next = new Date(date);
+  next.setDate(next.getDate() + 1);
+  return next;
 }
 
-const detectConflict = (scheduler: dxScheduler, newAppointment: Appointment): boolean => {
+function getEndDate(occurrence: DxSchedulerTypes.Occurrence): Date {
+  return (occurrence.appointmentData as Appointment).allDay
+    ? getNextDay(occurrence.startDate as Date)
+    : occurrence.endDate as Date;
+}
+
+function isOverlapping(a: DxSchedulerTypes.Occurrence, b: DxSchedulerTypes.Occurrence): boolean {
+  const aEnd = getEndDate(a);
+  const bEnd = getEndDate(b);
+  if ((a.startDate as Date) >= bEnd || (b.startDate as Date) >= aEnd) return false;
+  if (overlappingRule === 'sameResource') {
+    return (a.appointmentData as Appointment).assigneeId[0] === (b.appointmentData as Appointment).assigneeId[0];
+  }
+  return true;
+}
+
+function detectConflict(scheduler: dxScheduler, newAppointment: Appointment): boolean {
   const allAppointments = scheduler.getDataSource().items() as Appointment[];
   const startDate = new Date(newAppointment.startDate);
-  const endDate = newAppointment.recurrenceRule
-    ? scheduler.getEndViewDate()
-    : new Date(newAppointment.endDate);
+  let endDate: Date;
+  if (newAppointment.recurrenceRule) {
+    endDate = scheduler.getEndViewDate();
+  } else if (newAppointment.allDay) {
+    endDate = getNextDay(startDate);
+  } else {
+    endDate = new Date(newAppointment.endDate);
+  }
 
   const existingOccurrences = scheduler
     .getOccurrences(startDate, endDate, allAppointments)
-    .filter((occurrence) => occurrence.appointmentData.id !== newAppointment.id);
+    .filter((occurrence) => (occurrence.appointmentData as Appointment).id !== newAppointment.id);
 
-  const newOccurrences = scheduler.getOccurrences(
-    startDate,
-    endDate,
-    [newAppointment],
-  );
+  const newOccurrences = scheduler.getOccurrences(startDate, endDate, [newAppointment]);
 
   return newOccurrences.some((newOccurrence) =>
     existingOccurrences.some((existingOccurrence) =>
       isOverlapping(newOccurrence, existingOccurrence),
     ),
   );
-};
+}
 
 const assigneeIdEditorOptions = {
   onValueChanged: (e: DxTagBoxTypes.ValueChangedEvent) => {
@@ -136,9 +172,18 @@ const assigneeIdEditorOptions = {
   tagTemplate: 'tagTemplate',
 };
 
+function setConflictError(show: boolean) {
+  showConflictError = show;
+  form?.option('elementAttr.class', show ? '' : 'hide-informer');
+}
+
 const popupOptions = {
   onInitialized: (e: any) => {
     popup = e.component;
+  },
+  onHidden: () => {
+    setConflictError(false);
+    form?.updateData('assigneeId', []);
   },
 };
 
@@ -146,26 +191,23 @@ const alertConflictIfNeeded = (
   e: DxSchedulerTypes.AppointmentAddingEvent | DxSchedulerTypes.AppointmentUpdatingEvent,
   appointmentData: Appointment,
 ) => {
-  const hasConflict = detectConflict(e.component, appointmentData);
-
-  if (!hasConflict) {
-    showConflictError = false;
+  if (!detectConflict(e.component, appointmentData)) {
+    setConflictError(false);
     return;
   }
 
   e.cancel = true;
 
   if (popup?.option('visible')) {
-    showConflictError = true;
+    setConflictError(true);
     form?.validate();
-    form?.option('elementAttr.class', '');
   } else {
     const dialog = customDialog({
       showTitle: false,
       messageHtml: 'This time slot conflicts with another appointment.',
       buttons: [{
         type: 'default',
-        text: 'cancel',
+        text: 'Close',
         stylingMode: 'contained',
         onClick: () => {
           dialog.hide();
@@ -181,7 +223,7 @@ const onAppointmentAdding = (e: DxSchedulerTypes.AppointmentAddingEvent) => {
 };
 
 const onAppointmentUpdating = (e: DxSchedulerTypes.AppointmentUpdatingEvent) => {
-  alertConflictIfNeeded(e, e.newData);
+  alertConflictIfNeeded(e, { ...e.appointmentData, ...e.newData } as Appointment);
 };
 
 const onFormInitialized = (e: DxFormTypes.InitializedEvent) => {
@@ -190,10 +232,9 @@ const onFormInitialized = (e: DxFormTypes.InitializedEvent) => {
   e.component.on('fieldDataChanged', (fieldEvent: any) => {
     if (
       showConflictError &&
-      ['startDate', 'endDate', 'assigneeId'].includes(fieldEvent.dataField)
+      ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(fieldEvent.dataField)
     ) {
-      showConflictError = false;
-      form?.option('elementAttr.class', 'hide-informer');
+      setConflictError(false);
       form?.validate();
     }
   });
@@ -221,20 +262,36 @@ const customizeItem = (item: DxFormTypes.SimpleItem) => {
   }
 };
 
+const onOverlappingRuleChanged = (e: any) => {
+  overlappingRule = e.value;
+};
 </script>
 
-<style scoped>
-.hide-informer .dx-scheduler-form-main-group .dx-item:has(.conflict-informer) {
+<style>
+.dx-scheduler-appointment {
+  color: #242424;
+}
+
+.options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
+}
+
+.option {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hide-informer .dx-item:has(.conflict-informer) {
   display: none !important;
 }
 
-.hide-informer .dx-scheduler-form-main-group .dx-scheduler-form-subject-group {
-  padding-top: 0 !important;
-}
-
 .conflict-informer {
-  background-color: #fceae8;
-  color: #c50f1f;
+  background-color: #FCEAE8;
+  color: #C50F1F;
   font-size: 13px;
   padding: 8px 12px;
 }
@@ -246,5 +303,12 @@ const customizeItem = (item: DxFormTypes.SimpleItem) => {
 .dx-dialog .dx-toolbar-center,
 .dx-dialog .dx-button {
   width: 100%;
+}
+
+.dx-scheduler-form-main-group .dx-item:last-child,
+.dx-scheduler-form-main-group .dx-item:last-child .dx-field-item-content,
+.dx-scheduler-form-main-group .dx-item:last-child .dx-item:last-child,
+.dx-scheduler-form-main-group .dx-item:last-child .dx-item:last-child .dx-field-item-content {
+  overflow: visible;
 }
 </style>

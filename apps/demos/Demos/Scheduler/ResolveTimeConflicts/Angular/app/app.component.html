@@ -1,23 +1,27 @@
 <dx-scheduler
   [dataSource]="appointmentsData"
-  [views]="['day', 'week']"
+  [views]="views"
   currentView="week"
   [startDayHour]="9"
   [endDayHour]="19"
   [currentDate]="currentDate"
   [height]="600"
+  [showAllDayPanel]="false"
   [resources]="resources"
-  [editing]="editingConfig"
+  [editing]="editingOptions"
   (onAppointmentAdding)="onAppointmentAdding($event)"
   (onAppointmentUpdating)="onAppointmentUpdating($event)"
-  (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
 ></dx-scheduler>
 <div class="options">
-  <div class="caption">Options</div>
   <div class="option">
-    <span>Allow Appointment Overlapping</span>
-    <dx-switch
-      [(value)]="allowOverlapping"
-    ></dx-switch>
+    <span>Overlapping Rule</span>
+    <dx-select-box
+      [items]="overlappingRuleItems"
+      valueExpr="value"
+      displayExpr="text"
+      value="sameResource"
+      [width]="200"
+      (onValueChanged)="onOverlappingRuleChanged($event)"
+    ></dx-select-box>
   </div>
 </div>

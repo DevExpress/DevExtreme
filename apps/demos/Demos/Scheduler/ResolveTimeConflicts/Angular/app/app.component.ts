@@ -1,10 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { Component, enableProdMode, ViewChild, provideZoneChangeDetection } from '@angular/core';
-import { DxSchedulerModule, DxSchedulerComponent, DxSwitchModule } from 'devextreme-angular';
+import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
+import { DxSchedulerModule, DxSelectBoxModule } from 'devextreme-angular';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
-import notify from 'devextreme/ui/notify';
-import dxForm from 'devextreme/ui/form';
-import { Appointment, Service, projects } from './app.service';
+import { custom as customDialog } from 'devextreme/ui/dialog';
+import type dxScheduler from 'devextreme/ui/scheduler';
+import { Appointment, Assignee, Service, assignees } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -24,54 +24,124 @@ if (window && window.config?.packageConfigPaths) {
   preserveWhitespaces: true,
   imports: [
     DxSchedulerModule,
-    DxSwitchModule,
+    DxSelectBoxModule,
   ],
 })
 export class AppComponent {
-  @ViewChild(DxSchedulerComponent, { static: false }) scheduler!: DxSchedulerComponent;
-
   appointmentsData: Appointment[];
 
   currentDate: Date = new Date(2026, 1, 10);
 
-  allowOverlapping = false;
+  views: DxSchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
+
+  assignees: Assignee[] = assignees;
 
   resources = [{
-    fieldExpr: 'projectId',
-    dataSource: projects,
+    fieldExpr: 'assigneeId',
+    dataSource: assignees,
     valueExpr: 'id',
     colorExpr: 'color',
+    icon: 'user',
+    allowMultiple: true,
   }];
 
-  editingConfig = {
+  overlappingRuleItems = [
+    { value: 'sameResource', text: 'Allow across resources' },
+    { value: 'allResources', text: 'Disallow all overlaps' },
+  ];
+
+  private popup: any;
+  private form: any;
+  private showConflictError = false;
+  private overlappingRule = 'sameResource';
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  editingOptions = {
+    popup: {
+      onInitialized: (e: any) => { this.popup = e.component; },
+      onHidden: () => {
+        this.setConflictError(false);
+        this.form?.updateData('assigneeId', []);
+      },
+    },
     form: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      labelMode: 'hidden',
+      elementAttr: { class: 'hide-informer' },
+      onInitialized: (e: any) => {
+        this.form = e.component;
+        this.form.on('fieldDataChanged', (event: any) => {
+          if (this.showConflictError && ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(event.dataField)) {
+            this.setConflictError(false);
+            this.form.validate();
+          }
+        });
+      },
+      items: [
+        {
+          name: 'conflictInformer',
+          template: (_data: unknown, element: any) => {
+            const div = document.createElement('div');
+            div.className = 'conflict-informer';
+            div.textContent = 'This time slot conflicts with another appointment.';
+            (element[0] ?? element).appendChild(div);
+          },
+        },
+        {
+          name: 'mainGroup',
+          items: [
+            'subjectGroup',
+            'dateGroup',
+            'repeatGroup',
+            {
+              name: 'assigneeIdGroup',
+              items: [
+                'assigneeIdIcon',
+                {
+                  name: 'assigneeId',
+                  isRequired: true,
+                  editorOptions: {
+                    onValueChanged: (e: any) => {
+                      if (e.value.length > 1) {
+                        e.component.option('value', [e.value[e.value.length - 1]]);
+                      }
+                    },
+                    tagTemplate: (tagData: Assignee) => {
+                      const container = document.createElement('div');
+                      container.className = 'dx-tag-content';
+                      container.style.backgroundColor = tagData.color;
+                      container.style.borderColor = tagData.color;
+                      const span = document.createElement('span');
+                      span.textContent = tagData.text;
+                      const removeBtn = document.createElement('div');
+                      removeBtn.className = 'dx-tag-remove-button';
+                      container.appendChild(span);
+                      container.appendChild(removeBtn);
+                      return container;
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        'recurrenceGroup',
+      ],
       customizeItem: (item: any) => {
-        if (item.name === 'endDateEditor') {
-          const alreadyAdded = (item.validationRules ?? []).some(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (r: any) => r.type === 'custom' && r.message === 'This time slot conflicts with another appointment.',
-          );
-          if (alreadyAdded) return;
+        if (item.name === 'allDayEditor' || item.name === 'recurrenceEndEditor') {
+          item.label.visible = true;
+        } else if (item.name === 'subjectEditor') {
+          item.editorOptions.placeholder = 'Add title';
+        }
+
+        if (item.name === 'startTimeEditor' || item.name === 'endTimeEditor') {
           item.validationRules = [
-            ...(item.validationRules ?? []),
+            { type: 'required' },
             {
               type: 'custom',
-              message: 'This time slot conflicts with another appointment.',
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              validationCallback: ({ validator }: any): boolean => {
-                if (this.allowOverlapping) return true;
-                const formEl = validator.$element().closest('.dx-form')[0];
-                const formInstance = dxForm.getInstance(formEl);
-                if (!formInstance) return true;
-                const formData = formInstance.option('formData') as Appointment;
-                const hasConflict = this.detectConflict(formData);
-                const informerEl = formEl.querySelector('.conflict-informer') as HTMLElement | null;
-                if (informerEl) {
-                  informerEl.style.display = hasConflict ? '' : 'none';
-                }
-                return !hasConflict;
-              },
+              message: 'Time conflict',
+              ignoreEmptyValue: true,
+              reevaluate: true,
+              validationCallback: () => !this.showConflictError,
             },
           ];
         }
@@ -83,78 +153,99 @@ export class AppComponent {
     this.appointmentsData = service.getAppointments();
   }
 
-  private isOverlapping(
-    a: { startDate: Date; endDate: Date },
-    b: { startDate: Date; endDate: Date },
-  ): boolean {
-    return a.startDate < b.endDate && a.endDate > b.startDate;
+  private setConflictError(show: boolean): void {
+    this.showConflictError = show;
+    this.form?.option('elementAttr.class', show ? '' : 'hide-informer');
   }
 
-  detectConflict(newAppt: Appointment): boolean {
-    const instance = this.scheduler?.instance;
-    if (!instance) return false;
+  private getNextDay(date: Date): Date {
+    const next = new Date(date);
+    next.setDate(next.getDate() + 1);
+    return next;
+  }
 
-    const allItems = instance.getDataSource().items() as Appointment[];
+  private getEndDate(occurrence: DxSchedulerTypes.Occurrence): Date {
+    return (occurrence.appointmentData as Appointment).allDay
+      ? this.getNextDay(occurrence.startDate as Date)
+      : occurrence.endDate as Date;
+  }
 
-    const existingOccurrences = instance
-      .getOccurrences(new Date(newAppt.startDate), new Date(newAppt.endDate), allItems)
-      .filter((occ) => (occ.appointmentData as Appointment).id !== newAppt.id);
+  private isOverlapping(a: DxSchedulerTypes.Occurrence, b: DxSchedulerTypes.Occurrence): boolean {
+    const aEnd = this.getEndDate(a);
+    const bEnd = this.getEndDate(b);
+    if ((a.startDate as Date) >= bEnd || (b.startDate as Date) >= aEnd) return false;
+    if (this.overlappingRule === 'sameResource') {
+      return (a.appointmentData as Appointment).assigneeId[0] === (b.appointmentData as Appointment).assigneeId[0];
+    }
+    return true;
+  }
 
-    const expandEnd = new Date(newAppt.endDate);
-    expandEnd.setDate(expandEnd.getDate() + 14);
+  private detectConflict(scheduler: dxScheduler, newAppointment: Appointment): boolean {
+    const allAppointments = scheduler.getDataSource().items() as Appointment[];
+    const startDate = new Date(newAppointment.startDate);
+    let endDate: Date;
+    if (newAppointment.recurrenceRule) {
+      endDate = scheduler.getEndViewDate();
+    } else if (newAppointment.allDay) {
+      endDate = this.getNextDay(startDate);
+    } else {
+      endDate = new Date(newAppointment.endDate);
+    }
 
-    const newOccurrences = instance.getOccurrences(
-      new Date(newAppt.startDate),
-      expandEnd,
-      [newAppt],
-    );
+    const existingOccurrences = scheduler
+      .getOccurrences(startDate, endDate, allAppointments)
+      .filter((occ) => (occ.appointmentData as Appointment).id !== newAppointment.id);
+
+    const newOccurrences = scheduler.getOccurrences(startDate, endDate, [newAppointment]);
 
     return newOccurrences.some((newOcc) =>
-      existingOccurrences.some((existingOcc) => this.isOverlapping(newOcc, existingOcc)),
+      existingOccurrences.some((existingOcc) =>
+        this.isOverlapping(newOcc, existingOcc),
+      ),
     );
   }
 
-  onAppointmentFormOpening(e: DxSchedulerTypes.AppointmentFormOpeningEvent): void {
-    const { form } = e;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const items = form.option('items') as any[];
-    if (!items.some((item: any) => item.name === 'conflictInformer')) {
-      form.option('items', [
-        {
-          name: 'conflictInformer',
-          itemType: 'simple',
-          label: { visible: false },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          template: (_: unknown, element: any) => {
-            const div = document.createElement('div');
-            div.className = 'conflict-informer';
-            div.textContent = 'This time slot conflicts with another appointment.';
-            div.style.display = 'none';
-            (element[0] ?? element).appendChild(div);
+  private alertConflictIfNeeded(
+    e: DxSchedulerTypes.AppointmentAddingEvent | DxSchedulerTypes.AppointmentUpdatingEvent,
+    appointmentData: Appointment,
+  ): void {
+    if (!this.detectConflict(e.component, appointmentData)) {
+      this.setConflictError(false);
+      return;
+    }
+
+    e.cancel = true;
+
+    if (this.popup?.option('visible')) {
+      this.setConflictError(true);
+      this.form?.validate();
+    } else {
+      const dialog = customDialog({
+        showTitle: false,
+        messageHtml: 'This time slot conflicts with another appointment.',
+        buttons: [{
+          type: 'default',
+          text: 'Close',
+          stylingMode: 'contained',
+          onClick: () => {
+            dialog.hide();
           },
-        },
-        ...items,
-      ]);
+        }],
+      });
+      dialog.show();
     }
   }
 
   onAppointmentAdding(e: DxSchedulerTypes.AppointmentAddingEvent): void {
-    if (this.allowOverlapping) return;
-
-    if (this.detectConflict(e.appointmentData as Appointment)) {
-      e.cancel = true;
-      notify('Cannot create an appointment that overlaps with an existing one.', 'warning', 2000);
-    }
+    this.alertConflictIfNeeded(e, e.appointmentData as Appointment);
   }
 
   onAppointmentUpdating(e: DxSchedulerTypes.AppointmentUpdatingEvent): void {
-    if (this.allowOverlapping) return;
+    this.alertConflictIfNeeded(e, { ...e.appointmentData, ...e.newData } as Appointment);
+  }
 
-    const updatedAppt = { ...e.appointmentData, ...e.newData } as Appointment;
-    if (this.detectConflict(updatedAppt)) {
-      e.cancel = true;
-      notify('Cannot move an appointment to a time slot that is already occupied.', 'warning', 2000);
-    }
+  onOverlappingRuleChanged(e: any): void {
+    this.overlappingRule = e.value;
   }
 }
 

@@ -1,8 +1,5 @@
-::ng-deep .conflict-informer {
-  background-color: #fceae8;
-  color: #c50f1f;
-  padding: 8px 12px;
-  border-radius: 4px;
+::ng-deep .dx-scheduler-appointment {
+  color: #242424;
 }
 
 .options {
@@ -11,14 +8,36 @@
   margin-top: 20px;
 }
 
-.caption {
-  font-size: 18px;
-  font-weight: 500;
-}
-
 .option {
   margin-top: 10px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+}
+
+::ng-deep .hide-informer .dx-item:has(.conflict-informer) {
+  display: none !important;
+}
+
+::ng-deep .conflict-informer {
+  background-color: #FCEAE8;
+  color: #C50F1F;
+  font-size: 13px;
+  padding: 8px 12px;
+}
+
+::ng-deep .dx-dialog .dx-overlay-content {
+  width: 280px;
+}
+
+::ng-deep .dx-dialog .dx-toolbar-center,
+::ng-deep .dx-dialog .dx-button {
+  width: 100%;
+}
+
+::ng-deep .dx-scheduler-form-main-group .dx-item:last-child,
+::ng-deep .dx-scheduler-form-main-group .dx-item:last-child .dx-field-item-content,
+::ng-deep .dx-scheduler-form-main-group .dx-item:last-child .dx-item:last-child,
+::ng-deep .dx-scheduler-form-main-group .dx-item:last-child .dx-item:last-child .dx-field-item-content {
+  overflow: visible;
 }

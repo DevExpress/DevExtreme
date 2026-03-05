@@ -5,6 +5,7 @@ export interface Appointment {
   endDate: Date;
   assigneeId: number[];
   recurrenceRule?: string;
+  allDay?: boolean;
 }
 
 export interface Assignee {
