@@ -872,7 +872,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       ? this._layoutManager.generateViewModel()
       : [];
 
-    this._appointments.option('sortedItems', this._layoutManager.sortedItems);
     this._appointments.option('items', viewModel);
     this.appointmentDataSource.cleanState();
 
@@ -1237,6 +1236,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const config = {
       getResourceManager: () => this.resourceManager,
       getAppointmentDataSource: () => this.appointmentDataSource,
+      getSortedAppointments: () => this._layoutManager.sortedItems,
       scrollTo: this.scrollTo.bind(this),
       dataAccessors: this._dataAccessors,
       notifyScheduler: this._notifyScheduler,

@@ -108,7 +108,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
   }
 
   get sortedItems(): SortedEntity[] {
-    return this.option('sortedItems') as SortedEntity[];
+    return this.option('getSortedAppointments')() as SortedEntity[];
   }
 
   getResourceManager(): ResourceManager {
@@ -146,7 +146,8 @@ class SchedulerAppointments extends CollectionWidget<any> {
     const kbnValue = this._kbn.getSupportedKeys();
 
     return {
-      ...parentValue,
+      enter: parentValue.enter,
+      space: parentValue.space,
       ...kbnValue,
     };
   }
@@ -233,8 +234,6 @@ class SchedulerAppointments extends CollectionWidget<any> {
 
   _optionChanged(args) {
     switch (args.name) {
-      case 'sortedItems':
-        break;
       case 'items':
         this._cleanFocusState();
 
@@ -299,9 +298,11 @@ class SchedulerAppointments extends CollectionWidget<any> {
 
   protected repaintAppointments(diff: ViewModelDiff[]): void {
     this.$itemBySortedIndex = [];
+
     this._renderByFragments(($commonFragment, $allDayFragment) => {
-      const isRepaintAll = this.isAgendaView
-        || !diff.some((item) => item.needToAdd === undefined && item.needToRemove === undefined);
+      const isRepaintAll = diff.every(
+        (item) => Boolean(item.needToAdd ?? item.needToRemove),
+      );
 
       if (isRepaintAll) {
         this._getAppointmentContainer(true).html('');
@@ -508,7 +509,6 @@ class SchedulerAppointments extends CollectionWidget<any> {
   }
 
   _render() {
-    (window as any).y = this;
     super._render();
     this._attachAppointmentDblClick();
   }
