@@ -1,3 +1,4 @@
+/* tslint:disable:component-selector */
 import {
   Component,
   PLATFORM_ID,
@@ -5,9 +6,8 @@ import {
   makeStateKey,
 } from '@angular/core';
 
-import domino from 'domino';
 import { isPlatformServer } from '@angular/common';
-import { setWindow } from 'devextreme/core/utils/window';
+
 import { DxServerTransferStateModule } from 'devextreme-angular';
 
 import { DxServerModule } from 'devextreme-angular/server';
@@ -20,7 +20,6 @@ import { ServerModule } from '@angular/platform-server';
 import {
   TestBed,
 } from '@angular/core/testing';
-import {beforeAll} from "vitest";
 
 const mockSendRequest = {
   callBase() {
@@ -42,30 +41,8 @@ class TestContainerComponent {
 describe('Universal', () => {
   let sendRequest: any;
   const ajaxInject = ajax.inject;
-  
-  beforeAll(() => {
-    const dominoWindow = domino.createWindow('<!doctype html><html><body></body></html>');
-
-    Object.defineProperty(globalThis, 'window', {
-      value: dominoWindow,
-      configurable: true,
-    });
-    Object.defineProperty(globalThis, 'document', {
-      value: dominoWindow.document,
-      configurable: true,
-    });
-    Object.defineProperty(globalThis, 'navigator', {
-      value: { userAgent: 'node' },
-      configurable: true,
-    });
-
-    
-    setWindow(dominoWindow);
-  })
-
   beforeEach(() => {
     ajax.inject = function (obj) {
-      ajaxInject.call(this, obj);
       sendRequest = obj.sendRequest;
     };
     TestBed.configureTestingModule(
