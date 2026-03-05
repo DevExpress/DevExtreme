@@ -2784,7 +2784,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected attachGroupCountClass() {
-    const className = this._groupedStrategy.getCellCountClass(this.option('groups'));
+    const className = this._groupedStrategy.getGroupCountClass(this.option('groups'));
 
     this.$element().addClass(className);
   }
