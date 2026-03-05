@@ -64,7 +64,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     });
   }
 
-  _insertAllDayRowsIntoDateTable() {
+  insertAllDayRowsIntoDateTable() {
     return false;
   }
 
@@ -80,7 +80,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
   _needCreateCrossScrolling() {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return this.option('crossScrollingEnabled') || this._isVerticalGroupedWorkSpace();
+    return this.option('crossScrollingEnabled') || this.isVerticalGroupedWorkSpace();
   }
 
   _getViewStartByOptions() {
@@ -147,7 +147,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   // -------------
 
   _createWorkSpaceElements() {
-    if (this._isVerticalGroupedWorkSpace()) {
+    if (this.isVerticalGroupedWorkSpace()) {
       this._createWorkSpaceScrollableElements();
     } else {
       super._createWorkSpaceElements();
@@ -162,9 +162,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   // These methods should be deleted when we get rid of old render
   // --------------
 
-  _renderTimePanel() { return noop(); }
+  renderTimePanel() { return noop(); }
 
-  _renderAllDayPanel() { return noop(); }
+  renderAllDayPanel() { return noop(); }
 
   _setMonthClassesToCell($cell, data) {
     $cell
@@ -175,7 +175,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
   _createAllDayPanelElements() {}
 
-  _renderTableBody(options) {
+  renderTableBody(options) {
     options.getCellText = (rowIndex, columnIndex) => {
       const date = this.viewDataProvider.completeViewDataMap[rowIndex][columnIndex].startDate;
 
@@ -184,7 +184,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
     options.setAdditionalClasses = this._setMonthClassesToCell.bind(this);
 
-    super._renderTableBody(options);
+    super.renderTableBody(options);
   }
 }
 

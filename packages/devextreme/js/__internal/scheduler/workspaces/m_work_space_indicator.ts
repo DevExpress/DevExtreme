@@ -253,7 +253,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   _getCurrentTimePanelCellIndices() {
-    const rowCountPerGroup = this._getTimePanelRowCount();
+    const rowCountPerGroup = this.getTimePanelRowCount();
     const today = this._getToday();
     const index = this.getCellIndexByDate(today);
     const { rowIndex: currentTimeRowIndex } = this._getCellCoordinatesByIndex(index);
@@ -271,7 +271,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         : [currentTimeRowIndex, currentTimeRowIndex + 1];
     }
 
-    const verticalGroupCount = this._isVerticalGroupedWorkSpace()
+    const verticalGroupCount = this.isVerticalGroupedWorkSpace()
       ? this._getGroupCount()
       : 1;
 
