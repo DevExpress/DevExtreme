@@ -99,7 +99,7 @@ import type { DxTagBoxTypes } from 'devextreme-vue/tag-box';
 import type dxScheduler from 'devextreme/ui/scheduler';
 import dxForm from 'devextreme/ui/form.js';
 import dxPopup from 'devextreme/ui/popup.js';
-import { data, assignees, type Appointment } from './data.ts';
+import { data, assignees, type Appointment } from './data';
 
 let form: dxForm | undefined;
 let popup: dxPopup | undefined;
@@ -133,7 +133,8 @@ function isOverlapping(a: DxSchedulerTypes.Occurrence, b: DxSchedulerTypes.Occur
   const bEnd = getEndDate(b);
   if ((a.startDate as Date) >= bEnd || (b.startDate as Date) >= aEnd) return false;
   if (overlappingRule === 'sameResource') {
-    return (a.appointmentData as Appointment).assigneeId[0] === (b.appointmentData as Appointment).assigneeId[0];
+    return (a.appointmentData as Appointment).assigneeId[0] ===
+    (b.appointmentData as Appointment).assigneeId[0];
   }
   return true;
 }
@@ -223,13 +224,13 @@ const onAppointmentAdding = (e: DxSchedulerTypes.AppointmentAddingEvent) => {
 };
 
 const onAppointmentUpdating = (e: DxSchedulerTypes.AppointmentUpdatingEvent) => {
-  alertConflictIfNeeded(e, { ...e.appointmentData, ...e.newData } as Appointment);
+  alertConflictIfNeeded(e, { ...e.oldData, ...e.newData } as Appointment);
 };
 
 const onFormInitialized = (e: DxFormTypes.InitializedEvent) => {
   form = e.component;
 
-  e.component.on('fieldDataChanged', (fieldEvent: any) => {
+  e.component!.on('fieldDataChanged', (fieldEvent: any) => {
     if (
       showConflictError &&
       ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(fieldEvent.dataField)
@@ -242,7 +243,7 @@ const onFormInitialized = (e: DxFormTypes.InitializedEvent) => {
 
 const customizeItem = (item: DxFormTypes.SimpleItem) => {
   if (item.name === 'allDayEditor' || item.name === 'recurrenceEndEditor') {
-    item.label.visible = true;
+    item.label!.visible = true;
   } else if (item.name === 'subjectEditor') {
     item.editorOptions = item.editorOptions || {};
     item.editorOptions.placeholder = 'Add title';

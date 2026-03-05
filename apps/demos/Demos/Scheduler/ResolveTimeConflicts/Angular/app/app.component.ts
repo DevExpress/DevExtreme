@@ -51,11 +51,13 @@ export class AppComponent {
   ];
 
   private popup: any;
+
   private form: any;
+
   private showConflictError = false;
+
   private overlappingRule = 'sameResource';
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   editingOptions = {
     popup: {
       onInitialized: (e: any) => { this.popup = e.component; },
@@ -166,14 +168,14 @@ export class AppComponent {
 
   private getEndDate(occurrence: DxSchedulerTypes.Occurrence): Date {
     return (occurrence.appointmentData as Appointment).allDay
-      ? this.getNextDay(occurrence.startDate as Date)
-      : occurrence.endDate as Date;
+      ? this.getNextDay(occurrence.startDate)
+      : occurrence.endDate;
   }
 
   private isOverlapping(a: DxSchedulerTypes.Occurrence, b: DxSchedulerTypes.Occurrence): boolean {
     const aEnd = this.getEndDate(a);
     const bEnd = this.getEndDate(b);
-    if ((a.startDate as Date) >= bEnd || (b.startDate as Date) >= aEnd) return false;
+    if ((a.startDate) >= bEnd || (b.startDate) >= aEnd) return false;
     if (this.overlappingRule === 'sameResource') {
       return (a.appointmentData as Appointment).assigneeId[0] === (b.appointmentData as Appointment).assigneeId[0];
     }

@@ -5,11 +5,11 @@ import Scheduler, {
   Form, Editing, Resource, Item, SchedulerTypes,
 } from 'devextreme-react/scheduler';
 import SelectBox from 'devextreme-react/select-box';
+import type { SelectBoxTypes } from 'devextreme-react/select-box';
 import type { FormRef, FormTypes } from 'devextreme-react/form';
-import type { PopupRef } from 'devextreme-react/popup';
+import type { PopupRef, PopupTypes } from 'devextreme-react/popup';
 import type { TagBoxTypes } from 'devextreme-react/tag-box';
 import { custom as customDialog } from 'devextreme/ui/dialog';
-import { Template } from 'devextreme-react/core/template';
 import dxScheduler from 'devextreme/ui/scheduler';
 import { data, assignees, type Appointment, type Assignee } from './data.ts';
 
@@ -82,7 +82,7 @@ const assigneeIdEditorOptions = {
       e.component.option('value', [e.value[e.value.length - 1]]);
     }
   },
-  tagTemplate: 'tagTemplate',
+  tagRender: (itemData: Assignee) => tagTemplate(itemData),
 };
 
 const tagTemplate = (itemData: Assignee) => (
@@ -101,7 +101,6 @@ const App = () => {
   const formRef = useRef<FormRef>(null);
   const showConflictErrorRef = useRef(false);
   const overlappingRuleRef = useRef('sameResource');
-
   const setConflictError = useCallback((show: boolean) => {
     showConflictErrorRef.current = show;
     formRef.current?.instance().option('elementAttr.class', show ? '' : 'hide-informer');
@@ -143,11 +142,11 @@ const App = () => {
   }, [alertConflictIfNeeded]);
 
   const onAppointmentUpdating = useCallback((e: SchedulerTypes.AppointmentUpdatingEvent) => {
-    alertConflictIfNeeded(e, { ...e.appointmentData, ...e.newData } as Appointment);
+    alertConflictIfNeeded(e, { ...e.oldData, ...e.newData } as Appointment);
   }, [alertConflictIfNeeded]);
 
   const popupOptions = useMemo(() => ({
-    onInitialized: (e: any) => {
+    onInitialized: (e: PopupTypes.InitializedEvent) => {
       popupRef.current = e.component;
     },
     onHidden: () => {
@@ -159,7 +158,7 @@ const App = () => {
   const onFormInitialized = useCallback((e: FormTypes.InitializedEvent) => {
     formRef.current = e.component;
 
-    e.component.on('fieldDataChanged', (fieldEvent: any) => {
+    e.component.on('fieldDataChanged', (fieldEvent: FormTypes.FieldDataChangedEvent) => {
       if (
         showConflictErrorRef.current &&
         ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(fieldEvent.dataField)
@@ -237,7 +236,6 @@ const App = () => {
                   isRequired={true}
                   editorOptions={assigneeIdEditorOptions}
                 />
-                <Template name="tagTemplate" render={tagTemplate} />
               </Item>
             </Item>
             <Item type="group" name="recurrenceGroup" />
@@ -254,7 +252,7 @@ const App = () => {
             displayExpr="text"
             defaultValue="sameResource"
             width={200}
-            onValueChanged={(e: any) => { overlappingRuleRef.current = e.value; }}
+            onValueChanged={(e: SelectBoxTypes.ValueChangedEvent) => { overlappingRuleRef.current = e.value; }}
           />
         </div>
       </div>

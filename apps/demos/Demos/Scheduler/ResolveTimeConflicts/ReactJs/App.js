@@ -1,140 +1,176 @@
-import React, {
-  useCallback, useEffect, useMemo, useRef, useState,
-} from 'react';
-import Scheduler from 'devextreme-react/scheduler';
-import Switch from 'devextreme-react/switch';
-import notify from 'devextreme/ui/notify';
-import dxForm from 'devextreme/ui/form';
-import { data, projects } from './data.js';
+import React, { useCallback, useMemo, useRef } from 'react';
+import Scheduler, {
+  Form, Editing, Resource, Item,
+} from 'devextreme-react/scheduler';
+import SelectBox from 'devextreme-react/select-box';
+import { custom as customDialog } from 'devextreme/ui/dialog';
+import { data, assignees } from './data.js';
 
 const currentDate = new Date(2026, 1, 10);
-const views = ['day', 'week'];
-const resources = [{
-  fieldExpr: 'projectId',
-  dataSource: projects,
-  valueExpr: 'id',
-  colorExpr: 'color',
-}];
-
-function isOverlapping(a, b) {
-  return a.startDate < b.endDate && a.endDate > b.startDate;
+const views = ['day', 'week', 'workWeek', 'month'];
+const overlappingRuleItems = [
+  { value: 'sameResource', text: 'Allow across resources' },
+  { value: 'allResources', text: 'Disallow all overlaps' },
+];
+function getNextDay(date) {
+  const next = new Date(date);
+  next.setDate(next.getDate() + 1);
+  return next;
 }
-
+function getEndDate(occurrence) {
+  return occurrence.appointmentData.allDay ? getNextDay(occurrence.startDate) : occurrence.endDate;
+}
+function isOverlapping(a, b, overlappingRule) {
+  const aEnd = getEndDate(a);
+  const bEnd = getEndDate(b);
+  if (a.startDate >= bEnd || b.startDate >= aEnd) return false;
+  if (overlappingRule === 'sameResource') {
+    return a.appointmentData.assigneeId[0] === b.appointmentData.assigneeId[0];
+  }
+  return true;
+}
+function detectConflict(scheduler, newAppointment, overlappingRule) {
+  const allAppointments = scheduler.getDataSource().items();
+  const startDate = new Date(newAppointment.startDate);
+  let endDate;
+  if (newAppointment.recurrenceRule) {
+    endDate = scheduler.getEndViewDate();
+  } else if (newAppointment.allDay) {
+    endDate = getNextDay(startDate);
+  } else {
+    endDate = new Date(newAppointment.endDate);
+  }
+  const existingOccurrences = scheduler
+    .getOccurrences(startDate, endDate, allAppointments)
+    .filter((occurrence) => occurrence.appointmentData.id !== newAppointment.id);
+  const newOccurrences = scheduler.getOccurrences(startDate, endDate, [newAppointment]);
+  return newOccurrences.some((newOccurrence) =>
+    existingOccurrences.some((existingOccurrence) =>
+      isOverlapping(newOccurrence, existingOccurrence, overlappingRule),
+    ),
+  );
+}
+const assigneeIdEditorOptions = {
+  onValueChanged: (e) => {
+    if (e.value.length > 1) {
+      e.component.option('value', [e.value[e.value.length - 1]]);
+    }
+  },
+  tagRender: (itemData) => tagTemplate(itemData),
+};
+const tagTemplate = (itemData) => (
+  <div
+    className="dx-tag-content"
+    style={{ backgroundColor: itemData.color, borderColor: itemData.color }}
+  >
+    {itemData.text}
+    <div className="dx-tag-remove-button"></div>
+  </div>
+);
+const conflictInformerRender = () => (
+  <div className="conflict-informer">This time slot conflicts with another appointment.</div>
+);
 const App = () => {
-  const schedulerRef = useRef(null);
-  const [allowOverlapping, setAllowOverlapping] = useState(false);
-  const allowOverlappingRef = useRef(allowOverlapping);
-
-  useEffect(() => {
-    allowOverlappingRef.current = allowOverlapping;
-  }, [allowOverlapping]);
-
-  const detectConflict = useCallback((newAppt) => {
-    const scheduler = schedulerRef.current?.instance?.();
-    if (!scheduler) return false;
-
-    const allItems = scheduler.getDataSource().items();
-
-    const existingOccurrences = scheduler
-      .getOccurrences(newAppt.startDate, newAppt.endDate, allItems)
-      .filter((occ) => occ.appointmentData.id !== newAppt.id);
-
-    const expandEnd = new Date(newAppt.endDate);
-    expandEnd.setDate(expandEnd.getDate() + 14);
-
-    const newOccurrences = scheduler.getOccurrences(
-      newAppt.startDate,
-      expandEnd,
-      [newAppt],
-    );
-
-    return newOccurrences.some((newOcc) =>
-      existingOccurrences.some((existingOcc) => isOverlapping(newOcc, existingOcc)),
-    );
+  const popupRef = useRef(null);
+  const formRef = useRef(null);
+  const showConflictErrorRef = useRef(false);
+  const overlappingRuleRef = useRef('sameResource');
+  const setConflictError = useCallback((show) => {
+    showConflictErrorRef.current = show;
+    formRef.current?.instance().option('elementAttr.class', show ? '' : 'hide-informer');
   }, []);
-
-  const onAppointmentAdding = useCallback((e) => {
-    if (allowOverlapping) return;
-
-    if (detectConflict(e.appointmentData)) {
+  const alertConflictIfNeeded = useCallback(
+    (e, appointmentData) => {
+      if (!detectConflict(e.component, appointmentData, overlappingRuleRef.current)) {
+        setConflictError(false);
+        return;
+      }
       e.cancel = true;
-      notify('Cannot create an appointment that overlaps with an existing one.', 'warning', 2000);
-    }
-  }, [allowOverlapping, detectConflict]);
-
-  const onAppointmentUpdating = useCallback((e) => {
-    if (allowOverlapping) return;
-
-    const updatedAppt = { ...e.appointmentData, ...e.newData };
-    if (detectConflict(updatedAppt)) {
-      e.cancel = true;
-      notify('Cannot move an appointment to a time slot that is already occupied.', 'warning', 2000);
-    }
-  }, [allowOverlapping, detectConflict]);
-
-  const onAllowOverlappingChanged = useCallback((e) => {
-    setAllowOverlapping(e.value);
-  }, []);
-
-  const onAppointmentFormOpening = useCallback((e) => {
-    const { form } = e;
-    const items = form.option('items');
-    if (!items.some((item) => item.name === 'conflictInformer')) {
-      form.option('items', [
-        {
-          name: 'conflictInformer',
-          itemType: 'simple',
-          label: { visible: false },
-          template: (_, element) => {
-            const div = document.createElement('div');
-            div.className = 'conflict-informer';
-            div.textContent = 'This time slot conflicts with another appointment.';
-            div.style.display = 'none';
-            (element[0] ?? element).appendChild(div);
-          },
-        },
-        ...items,
-      ]);
-    }
-  }, []);
-
-  const editing = useMemo(() => ({
-    form: {
-      customizeItem(item) {
-        if (item.name === 'endDateEditor') {
-          const alreadyAdded = (item.validationRules ?? []).some(
-            (r) => r.type === 'custom' && r.message === 'This time slot conflicts with another appointment.',
-          );
-          if (alreadyAdded) return;
-          item.validationRules = [
-            ...(item.validationRules ?? []),
+      if (popupRef.current?.instance().option('visible')) {
+        setConflictError(true);
+        formRef.current?.instance().validate();
+      } else {
+        const dialog = customDialog({
+          showTitle: false,
+          messageHtml: 'This time slot conflicts with another appointment.',
+          buttons: [
             {
-              type: 'custom',
-              message: 'This time slot conflicts with another appointment.',
-              validationCallback({ validator }) {
-                if (allowOverlappingRef.current) return true;
-                const formEl = validator.$element().closest('.dx-form')[0];
-                const formInstance = dxForm.getInstance(formEl);
-                if (!formInstance) return true;
-                const formData = formInstance.option('formData');
-                const hasConflict = detectConflict(formData);
-                const informerEl = formEl.querySelector('.conflict-informer');
-                if (informerEl) {
-                  informerEl.style.display = hasConflict ? '' : 'none';
-                }
-                return !hasConflict;
+              type: 'default',
+              text: 'Close',
+              stylingMode: 'contained',
+              onClick: () => {
+                dialog.hide();
               },
             },
-          ];
-        }
-      },
+          ],
+        });
+        dialog.show();
+      }
     },
-  }), [detectConflict]);
-
+    [setConflictError],
+  );
+  const onAppointmentAdding = useCallback(
+    (e) => {
+      alertConflictIfNeeded(e, e.appointmentData);
+    },
+    [alertConflictIfNeeded],
+  );
+  const onAppointmentUpdating = useCallback(
+    (e) => {
+      alertConflictIfNeeded(e, { ...e.oldData, ...e.newData });
+    },
+    [alertConflictIfNeeded],
+  );
+  const popupOptions = useMemo(
+    () => ({
+      onInitialized: (e) => {
+        popupRef.current = e.component;
+      },
+      onHidden: () => {
+        setConflictError(false);
+        formRef.current?.instance().updateData('assigneeId', []);
+      },
+    }),
+    [setConflictError],
+  );
+  const onFormInitialized = useCallback(
+    (e) => {
+      formRef.current = e.component;
+      e.component.on('fieldDataChanged', (fieldEvent) => {
+        if (
+          showConflictErrorRef.current &&
+          ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(fieldEvent.dataField)
+        ) {
+          setConflictError(false);
+          formRef.current?.instance().validate();
+        }
+      });
+    },
+    [setConflictError],
+  );
+  const customizeItem = useCallback((item) => {
+    if (item.name === 'allDayEditor' || item.name === 'recurrenceEndEditor') {
+      item.label.visible = true;
+    } else if (item.name === 'subjectEditor') {
+      item.editorOptions = item.editorOptions || {};
+      item.editorOptions.placeholder = 'Add title';
+    }
+    if (item.name === 'startTimeEditor' || item.name === 'endTimeEditor') {
+      item.validationRules = [
+        { type: 'required' },
+        {
+          type: 'custom',
+          message: 'Time conflict',
+          ignoreEmptyValue: true,
+          reevaluate: true,
+          validationCallback: () => !showConflictErrorRef.current,
+        },
+      ];
+    }
+  }, []);
   return (
-    <React.Fragment>
+    <>
       <Scheduler
-        ref={schedulerRef}
         dataSource={data}
         views={views}
         defaultCurrentView="week"
@@ -142,24 +178,70 @@ const App = () => {
         startDayHour={9}
         endDayHour={19}
         height={600}
-        resources={resources}
-        editing={editing}
+        showAllDayPanel={false}
         onAppointmentAdding={onAppointmentAdding}
         onAppointmentUpdating={onAppointmentUpdating}
-        onAppointmentFormOpening={onAppointmentFormOpening}
-      />
+      >
+        <Resource
+          fieldExpr="assigneeId"
+          dataSource={assignees}
+          valueExpr="id"
+          colorExpr="color"
+          icon="user"
+          allowMultiple={true}
+        />
+
+        <Editing popup={popupOptions}>
+          <Form
+            labelMode="hidden"
+            onInitialized={onFormInitialized}
+            customizeItem={customizeItem}
+            elementAttr={{ class: 'hide-informer' }}
+          >
+            <Item
+              name="conflictInformer"
+              render={conflictInformerRender}
+            />
+            <Item
+              type="group"
+              name="mainGroup"
+            >
+              <Item name="subjectGroup" />
+              <Item name="dateGroup" />
+              <Item name="repeatGroup" />
+              <Item name="assigneeIdGroup">
+                <Item name="assigneeIdIcon" />
+                <Item
+                  name="assigneeId"
+                  isRequired={true}
+                  editorOptions={assigneeIdEditorOptions}
+                />
+              </Item>
+            </Item>
+            <Item
+              type="group"
+              name="recurrenceGroup"
+            />
+          </Form>
+        </Editing>
+      </Scheduler>
+
       <div className="options">
-        <div className="caption">Options</div>
         <div className="option">
-          <span>Allow Appointment Overlapping</span>
-          <Switch
-            value={allowOverlapping}
-            onValueChanged={onAllowOverlappingChanged}
+          <span>Overlapping Rule</span>
+          <SelectBox
+            items={overlappingRuleItems}
+            valueExpr="value"
+            displayExpr="text"
+            defaultValue="sameResource"
+            width={200}
+            onValueChanged={(e) => {
+              overlappingRuleRef.current = e.value;
+            }}
           />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
-
 export default App;
