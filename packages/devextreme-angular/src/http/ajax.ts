@@ -232,6 +232,7 @@ export const sendRequestFactory = (httpClient: HttpClient) => (options: Options)
       }
       subscription?.unsubscribe();
       subscription = null;
+      rejectIfAborted(deferred, this, () => options.upload?.onabort?.(this));
     },
   };
 
