@@ -212,7 +212,7 @@ export default {
     const noDataClass = that.addWidgetPrefix(NO_DATA_CLASS);
     let noDataElement = $element.find(`.${noDataClass}`).last();
     const isVisible = this._dataController.isEmpty();
-    const isDefaultLoading = this._dataController.isLoading() && !this._dataController.isCustomLoading();
+    const isDefaultLoading = this._dataController.isLoading() && !this._dataController.isCustomLoading?.();
 
     if (!noDataElement.length) {
       noDataElement = $('<span>')
