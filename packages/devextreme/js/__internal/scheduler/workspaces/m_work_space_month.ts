@@ -23,24 +23,24 @@ const toMs = dateUtils.dateToMilliseconds;
 class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   get type() { return VIEWS.MONTH; }
 
-  _getElementClass() {
+  getElementClass() {
     return MONTH_CLASS;
   }
 
-  _getFormat() {
+  getFormat() {
     return formatWeekday;
   }
 
-  _getIntervalBetween(currentDate) {
+  getIntervalBetween(currentDate) {
     const firstViewDate = this.getStartViewDate();
     const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
 
     return currentDate.getTime() - (firstViewDate.getTime() - (this.option('startDayHour') as any) * 3600000) - timeZoneOffset;
   }
 
-  _getDateGenerationOptions() {
+  getDateGenerationOptions() {
     return {
-      ...super._getDateGenerationOptions(),
+      ...super.getDateGenerationOptions(),
       cellCountInDay: 1,
     };
   }
@@ -55,7 +55,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
       const DAYS_IN_WEEK = 7;
 
       let averageWidth = 0;
-      const cells = this._getCells().slice(0, DAYS_IN_WEEK);
+      const cells = this.getCells().slice(0, DAYS_IN_WEEK);
       cells.each((index, element) => {
         averageWidth += hasWindow() ? getBoundingRect(element).width : 0;
       });
@@ -68,9 +68,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     return false;
   }
 
-  _getCellCoordinatesByIndex(index) {
-    const rowIndex = Math.floor(index / this._getCellCount());
-    const columnIndex = index - this._getCellCount() * rowIndex;
+  getCellCoordinatesByIndex(index) {
+    const rowIndex = Math.floor(index / this.getCellCount());
+    const columnIndex = index - this.getCellCount() * rowIndex;
 
     return {
       rowIndex,
@@ -78,12 +78,12 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     };
   }
 
-  _needCreateCrossScrolling() {
+  needCreateCrossScrolling() {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return this.option('crossScrollingEnabled') || this.isVerticalGroupedWorkSpace();
   }
 
-  _getViewStartByOptions() {
+  getViewStartByOptions() {
     return monthUtils.getViewStartByOptions(
       this.option('startDate') as any,
       this.option('currentDate') as any,
@@ -92,7 +92,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     );
   }
 
-  _updateIndex(index) {
+  updateIndex(index) {
     return index;
   }
 
@@ -124,8 +124,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     return true;
   }
 
-  _getHeaderDate() {
-    return this._getViewStartByOptions();
+  getHeaderDate() {
+    return this.getViewStartByOptions();
   }
 
   scrollToTime() { return noop(); }
@@ -140,7 +140,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
       this._$dateTable,
       DateTableMonthComponent,
       'renovatedDateTable',
-      this._getRDateTableProps(),
+      this.getRDateTableProps(),
     );
   }
 

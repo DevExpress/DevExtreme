@@ -9,7 +9,7 @@ const TIMELINE_CLASS = 'dx-scheduler-timeline-week';
 export default class SchedulerTimelineWeek extends SchedulerTimeline {
   get type() { return VIEWS.TIMELINE_WEEK; }
 
-  _getElementClass() {
+  getElementClass() {
     return TIMELINE_CLASS;
   }
 

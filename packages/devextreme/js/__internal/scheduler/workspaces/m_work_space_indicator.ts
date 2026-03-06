@@ -108,7 +108,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   getIndicationWidth() {
-    const cellCount = this._getCellCount();
+    const cellCount = this.getCellCount();
     const cellSpan = Math.min(this._getIndicatorDaysSpan(), cellCount);
     const width = cellSpan * this.getCellWidth();
     const maxWidth = this.getCellWidth() * cellCount;
@@ -129,7 +129,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     let timeDiff = today.getTime() - viewStartTime;
 
     if (this.option('type') === 'workWeek') {
-      const weekendDays = this._getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day');
+      const weekendDays = this.getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day');
       timeDiff -= weekendDays;
     }
 
@@ -256,7 +256,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     const rowCountPerGroup = this.getTimePanelRowCount();
     const today = this._getToday();
     const index = this.getCellIndexByDate(today);
-    const { rowIndex: currentTimeRowIndex } = this._getCellCoordinatesByIndex(index);
+    const { rowIndex: currentTimeRowIndex } = this.getCellCoordinatesByIndex(index);
 
     if (currentTimeRowIndex === undefined) {
       return [];
@@ -272,7 +272,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     const verticalGroupCount = this.isVerticalGroupedWorkSpace()
-      ? this._getGroupCount()
+      ? this.getGroupCount()
       : 1;
 
     return [...new Array(verticalGroupCount)]
@@ -295,7 +295,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
       return;
     }
 
-    const groupCount = this._getGroupCount() || 1;
+    const groupCount = this.getGroupCount() || 1;
     const $container = this._dateTableScrollable.$content();
     const height = this.getIndicationHeight();
     const rtlOffset = this._getRtlOffset(this.getCellWidth());
@@ -311,7 +311,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   // Temporary new render methods.
   // TODO Old render: replace base call methods by these after the deleting of the old render.
   protected _setCurrentTimeCells(): void {
-    const timePanelCells = this._getTimePanelCells();
+    const timePanelCells = this.getTimePanelCells();
     const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
     currentTimeCellIndices.forEach((timePanelCellIndex) => {
       timePanelCells.eq(timePanelCellIndex)

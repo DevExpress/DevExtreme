@@ -8,7 +8,7 @@ const DAY_CLASS = 'dx-scheduler-work-space-day';
 class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
   get type() { return VIEWS.DAY; }
 
-  _getElementClass() {
+  getElementClass() {
     return DAY_CLASS;
   }
 
