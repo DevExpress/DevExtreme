@@ -10,6 +10,9 @@ import { FlatCompat } from '@eslint/eslintrc';
 import stylistic from '@stylistic/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
 import globals from 'globals';
+import spellCheckConfig from 'eslint-config-devextreme/spell-check';
+import qunitConfig from 'eslint-config-devextreme/qunit';
+import typescriptConfig from 'eslint-config-devextreme/typescript';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
 import unicorn from 'eslint-plugin-unicorn';
@@ -43,7 +46,7 @@ export default [
             'js/common/core/localization/default_messages.js',
         ],
     },
-    ...compat.extends('devextreme/spell-check'),
+    ...spellCheckConfig,
     {
         plugins: {
             'no-only-tests': noOnlyTests,
@@ -174,7 +177,7 @@ export default [
             'import': importPlugin,
         }
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
         const newConfig = {
             ...config,
             files: ['**/*.ts?(x)'],
@@ -221,7 +224,7 @@ export default [
             'devextreme-custom/no-direct-preact-signals-core-import': 'error',
         },
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
         const newConfig = {
             ...config,
             files: ['**/*.d.ts'],
@@ -261,7 +264,7 @@ export default [
         }
     },
     //  Rules for QUnit tests
-    ...compat.extends('devextreme/qunit').map(config => ({
+    ...qunitConfig.map(config => ({
         ...config,
         files: ['testing/tests/**/*.js', 'testing/helpers/**/*.js'],
     })),
