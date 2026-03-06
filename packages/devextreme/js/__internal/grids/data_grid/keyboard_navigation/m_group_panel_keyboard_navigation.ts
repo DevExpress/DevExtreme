@@ -5,7 +5,7 @@ import {
 } from '@js/common/core/events/utils/index';
 import $ from '@js/core/renderer';
 import { hiddenFocus } from '@js/ui/shared/accessibility';
-import type { Column } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { Direction } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';
 import type { Views } from '@ts/grids/grid_core/m_types';
