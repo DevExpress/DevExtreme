@@ -3622,6 +3622,7 @@
           {
             "Name": "Timetable",
             "Equivalents": "",
+            "Badge": "Updated",
             "Demos": [
               {
                 "Title": "All Day Panel Mode",
