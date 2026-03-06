@@ -370,7 +370,7 @@ module('Work Space Month', () => {
 
         test('Tables should not be rerendered if dimension was changed and horizontal scrolling is disabled', async function(assert) {
             this.instance.option('crossScrollingEnabled', false);
-            const stub = sinon.stub(this.instance, '_setTableSizes');
+            const stub = sinon.stub(this.instance, 'setTableSizes');
 
             resizeCallbacks.fire();
 
