@@ -792,12 +792,6 @@
         {
           "env": "DEVEXTREME_TEST_CI"
         },
-        {
-          "env": "DOTNET_CLI_TELEMETRY_OPTOUT"
-        },
-        {
-          "env": "DOTNET_SKIP_FIRST_TIME_EXPERIENCE"
-        },
         "default",
         "test"
       ],

@@ -6,7 +6,7 @@
 #
 # 1. GITHUBACTION=true (GitHub Actions)
 #    - Runs NATIVELY on GitHub runner (NO Docker container!)
-#    - Uses pre-installed Chrome and dotnet
+#    - Uses pre-installed Chrome and Node.js
 #    - Dependencies already installed by workflow
 #    - Fastest and most stable mode
 #
@@ -79,8 +79,11 @@ function run_test_impl {
         pnpm run build
         fi
 
-        echo "Starting ASP.NET Core test runner..."
-        dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
+        echo "Compiling TypeScript test runner..."
+        pnpm exec tsc -p ./testing/runner/tsconfig.json
+
+        echo "Starting Node.js test runner..."
+        node ./testing/runner/dist/index.js --single-run & runner_pid=$!
         echo "Runner PID: $runner_pid"
 
         local max_attempts=30
@@ -241,7 +244,7 @@ function start_runner_watchdog {
     echo "Watchdog running in background (PID: $watchdog_pid)"
 }
 
-echo "node $(node -v), pnpm $(pnpm -v), dotnet $(dotnet --version)"
+echo "node $(node -v), pnpm $(pnpm -v)"
 
 TARGET_FUNC="run_$TARGET"
 
