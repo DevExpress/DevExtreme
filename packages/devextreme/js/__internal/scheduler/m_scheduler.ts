@@ -1278,7 +1278,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this._recalculateWorkspace();
     if (currentViewOptions.startDate) {
-      this._updateOption('header', 'currentDate', this._workSpace._getHeaderDate());
+      this._updateOption('header', 'currentDate', this._workSpace.getHeaderDate());
     }
   }
 

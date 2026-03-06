@@ -19,7 +19,7 @@ export const setupSchedulerTestEnvironment = ({
 }: SetupSchedulerTestEnvironmentOptions = {}): void => {
   jest.spyOn(logger, 'warn').mockImplementation(() => {});
   DOMComponent.prototype._isVisible = jest.fn((): boolean => true);
-  SchedulerWorkSpace.prototype._createCrossScrollingConfig = (): {
+  SchedulerWorkSpace.prototype.createCrossScrollingConfig = (): {
     direction: string;
     onScroll: jest.Mock;
     onEnd: jest.Mock;
