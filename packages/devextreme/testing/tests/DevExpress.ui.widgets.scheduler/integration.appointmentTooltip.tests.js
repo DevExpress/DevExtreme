@@ -585,7 +585,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             }
             ]
         });
-        const stub = sinon.stub(scheduler.instance, '_updateAppointment');
+        const stub = sinon.stub(scheduler.instance, 'updateAppointmentCore');
 
         const clock = sinon.useFakeTimers();
         await scheduler.appointments.click(1, clock);

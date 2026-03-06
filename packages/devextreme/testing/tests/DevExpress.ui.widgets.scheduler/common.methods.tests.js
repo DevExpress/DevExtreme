@@ -678,7 +678,7 @@ QUnit.module('Methods', {
         assert.ok(!scheduler.instance.appointmentTooltip.show.called, 'show tooltip is not called');
     });
 
-    QUnit.test('_getUpdatedData for the empty data item (T906240)', async function(assert) {
+    QUnit.test('getUpdatedData for the empty data item (T906240)', async function(assert) {
         const startCellDate = new Date(2020, 1, 2, 3);
         const endCellDate = new Date(2020, 1, 2, 4);
         const scheduler = await createWrapper({});
@@ -690,7 +690,7 @@ QUnit.module('Methods', {
             };
         };
 
-        const updatedData = scheduler.instance._getUpdatedData({ text: 'test' });
+        const updatedData = scheduler.instance.getUpdatedData({ text: 'test' });
         assert.deepEqual(updatedData, {
             endDate: endCellDate,
             startDate: startCellDate
