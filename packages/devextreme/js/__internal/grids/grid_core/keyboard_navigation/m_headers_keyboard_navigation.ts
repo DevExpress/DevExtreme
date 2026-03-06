@@ -6,7 +6,7 @@ import $ from '@js/core/renderer';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined } from '@js/core/utils/type';
 
-import type { Column } from '../columns_controller/m_columns_controller';
+import type { Column } from '../columns_controller/types';
 import type { Views } from '../m_types';
 import { StickyPosition } from '../sticky_columns/const';
 import { GridCoreStickyColumnsDom } from '../sticky_columns/dom';

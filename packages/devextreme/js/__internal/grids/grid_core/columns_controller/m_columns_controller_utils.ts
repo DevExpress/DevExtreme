@@ -30,8 +30,8 @@ import {
   USER_STATE_FIELD_NAMES_15_1,
   VIRTUAL_COMMAND_COLUMN_NAME,
 } from './const';
-import type { Column, ColumnsController } from './m_columns_controller';
-import type { ColumnIndex, DropLocationNames } from './types';
+import type { ColumnsController } from './m_columns_controller';
+import type { Column, ColumnIndex, DropLocationNames } from './types';
 
 const warnFixedInChildColumnsOnce = (controller: ColumnsController, childColumns: any[]): void => {
   if (controller?._isWarnedAboutUnsupportedProperties) return;

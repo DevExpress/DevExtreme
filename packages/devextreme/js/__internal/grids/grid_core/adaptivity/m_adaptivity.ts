@@ -19,7 +19,8 @@ import { isMaterial } from '@js/ui/themes';
 import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import type { ExportController } from '../../data_grid/export/m_export';
-import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { Column } from '../columns_controller/types';
 import type { ColumnsResizerViewController, DraggingHeaderViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { DataController } from '../data_controller/m_data_controller';
 import type { EditingController } from '../editing/m_editing';

@@ -3,7 +3,6 @@ import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
-import type { ColumnBase } from '@js/common/grids';
 import config from '@js/core/config';
 import $ from '@js/core/renderer';
 import Callbacks from '@js/core/utils/callbacks';
@@ -81,15 +80,7 @@ import {
   updateIndexes,
   updateSerializers,
 } from './m_columns_controller_utils';
-
-export interface Column extends ColumnBase {
-  parseValue: (text: string) => unknown;
-  index?: number;
-  groupIndex?: number;
-  type?: string;
-  visibleWidth?: string | number;
-  command?: string;
-}
+import type { Column } from './types';
 
 export class ColumnsController extends modules.Controller {
   public _skipProcessingColumnsChange: any;

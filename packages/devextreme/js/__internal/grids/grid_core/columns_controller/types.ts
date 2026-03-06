@@ -1,3 +1,5 @@
+import type { ColumnBase } from '@js/common/grids';
+
 import type {
   COLUMN_CHOOSER_LOCATION,
   GROUP_LOCATION,
@@ -12,3 +14,14 @@ export type ColumnIndex = number | {
   rowIndex: number;
   columnIndex: number;
 };
+
+export interface Column extends ColumnBase {
+  parseValue?: (text: string) => unknown;
+  index?: number;
+  groupIndex?: number;
+  type?: string;
+  visibleWidth?: string | number;
+  command?: string;
+  rowspan?: number;
+  colspan?: number;
+}

@@ -11,7 +11,7 @@ import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_colum
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
 
-import type { Column } from '../columns_controller/m_columns_controller';
+import type { Column } from '../columns_controller/types';
 import { CLASSES as REORDERING_CLASSES } from '../columns_resizing_reordering/const';
 import type { HeadersKeyboardNavigationController } from '../keyboard_navigation/m_headers_keyboard_navigation';
 import { registerKeyboardAction } from '../m_accessibility';

@@ -7,7 +7,7 @@ import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { compileGetter, toComparable } from '@js/core/utils/data';
 
-import type { Column } from '../columns_controller/m_columns_controller';
+import type { Column } from '../columns_controller/types';
 import type { DataController, Filter } from '../data_controller/m_data_controller';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import type { ModuleType } from '../m_types';
