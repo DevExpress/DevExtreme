@@ -74,6 +74,11 @@
       "implementation": "./src/executors/create-dual-mode-manifest/executor",
       "schema": "./src/executors/create-dual-mode-manifest/schema.json",
       "description": "Generate package.json files for dual-mode (ESM + CJS) package support"
+    },
+    "bundle": {
+      "implementation": "./src/executors/bundle/executor",
+      "schema": "./src/executors/bundle/schema.json",
+      "description": "Bundle JavaScript files using webpack with debug or production mode"
     }
   }
 }

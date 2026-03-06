@@ -4,6 +4,7 @@ import { LoadPanelIndicatorProperties } from '../ui/load_panel';
  * @docid
  * @type object
  * @namespace DevExpress
+ * @hidden
  */
 export interface ExportLoadPanel {
   /**

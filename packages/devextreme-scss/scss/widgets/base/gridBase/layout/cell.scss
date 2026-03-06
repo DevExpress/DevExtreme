@@ -1,0 +1,407 @@
+/* stylelint-disable no-duplicate-selectors */
+@use "../../mixins" as *;
+@use '../variables' as *;
+
+@mixin grid-base-cell($widget-name) {
+
+  // #region position & z-index
+
+  // (0,1,0)
+  .dx-cell-modified,
+  .dx-#{$widget-name}-invalid {
+    position: relative;
+  }
+
+  // (0,1,0)
+  .dx-command-ai {
+    position: relative;
+  }
+
+  // (0,2,0)
+  .dx-#{$widget-name} .dx-#{$widget-name}-sticky-column,
+  .dx-#{$widget-name} .dx-#{$widget-name}-sticky-column-left,
+  .dx-#{$widget-name} .dx-#{$widget-name}-sticky-column-right {
+    position: sticky;
+  }
+
+  // (0,2,0)
+  .dx-#{$widget-name} .dx-#{$widget-name}-sticky-column,
+  .dx-#{$widget-name} .dx-#{$widget-name}-sticky-column-left {
+    z-index: 2;
+  }
+
+  // (0,2,0)
+  .dx-#{$widget-name} .dx-#{$widget-name}-sticky-column-right {
+    z-index: 3;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-command-expand {
+    z-index: 3;
+  }
+
+  // (0,6,0)
+  .dx-rtl .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-#{$widget-name}-sticky-column-right.dx-command-expand {
+    z-index: 4;
+  }
+
+  // #endregion
+
+  // #region visibility & pointer-events
+
+  // (0,3,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content-fixed .dx-#{$widget-name}-table td {
+    pointer-events: auto;
+  }
+
+  // (0,5,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content-fixed .dx-#{$widget-name}-table .dx-row td.dx-pointer-events-none {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  // #endregion
+
+  // #region overflow
+
+  // (0,1,1)
+  .dx-header-row > td {
+    overflow: hidden;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name}-rowsview .dx-row > td,
+  .dx-#{$widget-name}-rowsview .dx-row > tr > td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-command-edit {
+    text-overflow: clip;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row > .dx-master-detail-cell {
+    overflow: visible;
+  }
+
+  // #endregion
+
+  // #region sizing
+
+  // (0,1,0)
+  .dx-command-adaptive {
+    width: $grid-command-adaptive-column-width;
+    min-width: $grid-command-adaptive-column-width;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table:not(.dx-#{$widget-name}-table-fixed) .dx-master-detail-cell {
+    max-width: 0;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-editor-cell {
+    max-width: 0;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-command-select {
+    width: $grid-command-select-column-width;
+    min-width: $grid-command-select-column-width;
+    max-width: $grid-command-select-column-width;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-command-edit {
+    width: $grid-command-edit-column-width;
+    min-width: $grid-command-edit-column-width;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-command-expand {
+    width: $grid-command-expand-column-width;
+    min-width: $grid-command-expand-column-width;
+    max-width: $grid-command-expand-column-width;
+  }
+
+  // (0,5,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-command-edit.dx-command-edit-with-icons {
+    width: $grid-command-edit-column-with-icons-width;
+    min-width: $grid-command-edit-column-with-icons-width;
+  }
+
+  // (0,6,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content-fixed .dx-#{$widget-name}-table.dx-#{$widget-name}-table-fixed .dx-row td.dx-pointer-events-none {
+    width: auto;
+  }
+
+  // #endregion
+
+  // #region border
+
+  // (0,1,1)
+  .dx-row > td,
+  .dx-row > tr > td {
+    border: none;
+  }
+
+  // (0,3,0)
+  .dx-#{$widget-name} .dx-row .dx-#{$widget-name}-hidden-column {
+    border-right-width: 0;
+    border-left-width: 0;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > .dx-last-data-cell {
+    border-right: none;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > .dx-command-adaptive-hidden {
+    border-left: none;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:first-child,
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-first-child,
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > tr > td:first-child,
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > tr > td.dx-first-child {
+    border-left: 0;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-last-child,
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > tr > td.dx-last-child {
+    border-right: 0;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-group-space,
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > tr > td.dx-#{$widget-name}-group-space {
+    border-right: none;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name}-rowsview .dx-row.dx-row-lines:first-child > td,
+  .dx-#{$widget-name}-rowsview .dx-row.dx-row-lines:first-child > tr > td {
+    border-top: none;
+  }
+
+  // (0,4,2)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-group-space + td,
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > tr > td.dx-#{$widget-name}-group-space + td {
+    border-left: none;
+  }
+
+  // (0,5,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content-fixed .dx-#{$widget-name}-table .dx-row td.dx-pointer-events-none {
+    border-top-color: transparent; // T913696
+    border-bottom-color: transparent; // T913696
+  }
+
+  // T745266
+
+  // (0,5,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content-fixed .dx-#{$widget-name}-table .dx-header-row td.dx-pointer-events-none {
+    border-bottom-color: transparent; // T672281
+  }
+
+  // (0,5,1)
+  .dx-rtl .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-group-space {
+    border-left: none;
+  }
+
+  // (0,5,2)
+  .dx-rtl .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-group-space + td {
+    border-right: none;
+  }
+
+  // (0,6,2)
+  .dx-#{$widget-name}-borders > .dx-#{$widget-name}-rowsview.dx-last-row-border tbody:last-child > .dx-data-row:nth-last-child(2) > td {
+    border-bottom-width: 0;
+  }
+
+  // #endregion
+
+  // #region padding
+
+  // (0,1,0)
+  .dx-cell-modified,
+  .dx-#{$widget-name}-invalid {
+    padding: $grid-cell-padding;
+  }
+
+  // (0,2,0)
+  .dx-editor-cell.dx-cell-modified,
+  .dx-editor-cell.dx-#{$widget-name}-invalid {
+    padding: 0;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name} .dx-row > td,
+  .dx-#{$widget-name} .dx-row > tr > td {
+    padding: $grid-cell-padding;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-total-footer > .dx-#{$widget-name}-content .dx-row > td {
+    padding-top: $grid-total-footer-paddings * 2;
+    padding-bottom: $grid-total-footer-paddings * 2;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name} .dx-#{$widget-name}-rowsview .dx-data-row .dx-command-drag {
+    padding: 0;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-editor-cell {
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-command-select {
+    padding: 0;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-command-expand {
+    padding: 0;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-command-adaptive {
+    padding: 0;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name}-rowsview .dx-#{$widget-name}-table .dx-row.dx-freespace-row > td,
+  .dx-#{$widget-name}-rowsview .dx-#{$widget-name}-table .dx-row.dx-virtual-row > td {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  // (0,5,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-editor-cell:not(.dx-#{$widget-name}-cell-expandable) {
+    padding-left: 0;
+  }
+
+  // #endregion
+
+  // #region background
+
+  // (0,5,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content-fixed .dx-#{$widget-name}-table .dx-row td.dx-pointer-events-none {
+    background-color: transparent;
+  }
+
+  // (0,5,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-total-footer td:not(.dx-#{$widget-name}-sticky-column):not(.dx-#{$widget-name}-sticky-column-left):not(.dx-#{$widget-name}-sticky-column-right) {
+    background-color: transparent;
+  }
+
+  // #endregion
+
+  // #region typography
+
+  // (0,1,0)
+  .dx-#{$widget-name}-hidden-column {
+    white-space: nowrap;
+  }
+
+  // (0,1,1)
+  .dx-header-row > td {
+    white-space: nowrap;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-command-edit {
+    white-space: nowrap;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-data-row .dx-command-edit-with-icons {
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  // #endregion
+
+  // #region vertical-align
+
+  // (0,3,1)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td,
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > tr > td {
+    vertical-align: top;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name} .dx-#{$widget-name}-rowsview .dx-data-row .dx-command-drag {
+    vertical-align: middle;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-editor-cell {
+    vertical-align: middle;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-command-adaptive {
+    vertical-align: middle;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-group-space,
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > tr > td.dx-#{$widget-name}-group-space {
+    vertical-align: top;
+  }
+
+  // #endregion
+
+  // #region cursor
+
+  // (0,1,0)
+  .dx-#{$widget-name}-action {
+    cursor: pointer;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name} .dx-#{$widget-name}-rowsview .dx-data-row .dx-command-drag {
+    cursor: move;
+  }
+
+  // (0,4,0)
+  .dx-sortable-dragging .dx-#{$widget-name}-rowsview .dx-data-row .dx-command-drag {
+    cursor: pointer;
+    cursor: grabbing;
+  }
+
+  // #endregion
+
+  // #region outline
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview .dx-data-row > td:focus {
+    outline: 0;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-rowsview .dx-row > .dx-master-detail-cell:focus {
+    outline: 0;
+  }
+
+  // #endregion
+
+  // #region other
+
+  // (0,4,0)
+  .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row .dx-command-expand {
+    @include user-select(none);
+  }
+
+  // #endregion
+}
