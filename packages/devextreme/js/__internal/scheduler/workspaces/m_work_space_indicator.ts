@@ -213,8 +213,8 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     (this.$element() as any).find(`.${SCHEDULER_DATE_TIME_INDICATOR_CLASS}`).remove();
   }
 
-  _cleanWorkSpace() {
-    super._cleanWorkSpace();
+  cleanWorkSpace() {
+    super.cleanWorkSpace();
 
     this._renderDateTimeIndication();
     this._setIndicationUpdateInterval();
@@ -224,7 +224,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     switch (args.name) {
       case 'showCurrentTimeIndicator':
       case 'indicatorTime':
-        this._cleanWorkSpace();
+        this.cleanWorkSpace();
         break;
       case 'indicatorUpdateInterval':
         this._setIndicationUpdateInterval();

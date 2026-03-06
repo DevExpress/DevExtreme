@@ -16,7 +16,7 @@ class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
     };
   }
 
-  _isRenderHeaderPanelEmptyCell() {
+  isRenderHeaderPanelEmptyCell() {
     return true;
   }
 }

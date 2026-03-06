@@ -16,8 +16,8 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
 
   get renovatedHeaderPanelComponent() { return HeaderPanelComponent; }
 
-  _renderView() {
-    super._renderView();
+  renderView() {
+    super.renderView();
 
     this._updateScrollable();
   }

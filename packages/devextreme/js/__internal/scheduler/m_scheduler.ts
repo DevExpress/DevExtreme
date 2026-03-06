@@ -1164,7 +1164,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   _initMarkupCore() {
     this._readyToRenderAppointments = hasWindow();
 
-    this._workSpace && this._cleanWorkspace();
+    this._workSpace && this.cleanWorkSpace();
 
     this._renderWorkSpace();
     this._appointments.option({
@@ -1418,7 +1418,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _refreshWorkSpace(): void {
-    this._cleanWorkspace();
+    this.cleanWorkSpace();
 
     delete this._workSpace;
 
@@ -1433,7 +1433,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  _cleanWorkspace() {
+  cleanWorkSpace() {
     this._appointments.$element().detach();
     this._workSpace._dispose();
     this._workSpace.$element().remove();
