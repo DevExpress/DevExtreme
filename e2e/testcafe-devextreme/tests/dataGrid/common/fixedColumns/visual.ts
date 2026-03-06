@@ -314,3 +314,73 @@ test('The grid layout should be correct after unfixing a column via the context 
     { dataField: 'State' },
   ],
 }));
+
+// T1317623
+test('Expand columns headers offsets should be correct with fixed band columns and fixed command columns (T1317623)', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  await testScreenshot(t, takeScreenshot, 'T1317623-expand-columns-with-band-columns.png', { element: dataGrid.element });
+
+  await dataGrid.scrollTo(t, { x: 5000 });
+
+  await testScreenshot(t, takeScreenshot, 'T1317623-horizontal-scroll-with-fixed-band-columns.png', { element: dataGrid.element });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    {
+      ID: 1,
+      CompanyName: 'Super Mart of the West',
+      Address: '702 SW 8th Street',
+      City: 'Bentonville',
+      State: 'Arkansas',
+      Zipcode: 72716,
+      Phone: '(800) 555-2797',
+      Fax: '(800) 555-2171',
+    },
+    {
+      ID: 2,
+      CompanyName: 'K&S Music',
+      Address: '1000 Nicllet Mall',
+      City: 'Minneapolis',
+      State: 'Minnesota',
+      Zipcode: 55403,
+      Phone: '(612) 304-6073',
+      Fax: '(612) 304-6074',
+    },
+  ],
+  keyExpr: 'ID',
+  width: '100%',
+  showBorders: true,
+  columnWidth: 200,
+  columnFixing: { enabled: true },
+  selection: { mode: 'multiple' },
+  grouping: { autoExpandAll: true },
+  masterDetail: {
+    enabled: true,
+  },
+  columns: [
+    {
+      caption: 'Company Info',
+      fixed: true,
+      fixedPosition: 'left',
+      columns: [
+        { dataField: 'CompanyName', groupIndex: 1, showWhenGrouped: true },
+        { dataField: 'Phone' },
+        { dataField: 'Fax' },
+      ],
+    },
+    'City',
+    {
+      dataField: 'State',
+      groupIndex: 0,
+    },
+    'Address',
+    'Zipcode',
+  ],
+}));
