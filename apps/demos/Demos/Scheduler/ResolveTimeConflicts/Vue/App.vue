@@ -8,6 +8,7 @@
     :end-day-hour="19"
     :height="600"
     :show-all-day-panel="false"
+    all-day-panel-mode="hidden"
     @appointment-adding="onAppointmentAdding"
     @appointment-updating="onAppointmentUpdating"
   >
@@ -92,10 +93,11 @@ import DxScheduler, {
   DxItem,
   type DxSchedulerTypes,
 } from 'devextreme-vue/scheduler';
-import DxSelectBox from 'devextreme-vue/select-box';
+import DxSelectBox, { type DxSelectBoxTypes } from 'devextreme-vue/select-box';
 import { custom as customDialog } from 'devextreme/ui/dialog';
 import type { DxFormTypes } from 'devextreme-vue/form';
 import type { DxTagBoxTypes } from 'devextreme-vue/tag-box';
+import type { DxPopupTypes } from 'devextreme-vue/popup';
 import type dxScheduler from 'devextreme/ui/scheduler';
 import dxForm from 'devextreme/ui/form.js';
 import dxPopup from 'devextreme/ui/popup.js';
@@ -124,14 +126,14 @@ function getNextDay(date: Date): Date {
 
 function getEndDate(occurrence: DxSchedulerTypes.Occurrence): Date {
   return (occurrence.appointmentData as Appointment).allDay
-    ? getNextDay(occurrence.startDate as Date)
-    : occurrence.endDate as Date;
+    ? getNextDay(occurrence.startDate)
+    : occurrence.endDate;
 }
 
 function isOverlapping(a: DxSchedulerTypes.Occurrence, b: DxSchedulerTypes.Occurrence): boolean {
   const aEnd = getEndDate(a);
   const bEnd = getEndDate(b);
-  if ((a.startDate as Date) >= bEnd || (b.startDate as Date) >= aEnd) return false;
+  if (a.startDate >= bEnd || b.startDate >= aEnd) return false;
   if (overlappingRule === 'sameResource') {
     return (a.appointmentData as Appointment).assigneeId[0] ===
     (b.appointmentData as Appointment).assigneeId[0];
@@ -179,8 +181,8 @@ function setConflictError(show: boolean) {
 }
 
 const popupOptions = {
-  onInitialized: (e: any) => {
-    popup = e.component;
+  onInitialized: (e: DxPopupTypes.InitializedEvent) => {
+    popup = e.component as dxPopup;
   },
   onHidden: () => {
     setConflictError(false);
@@ -230,7 +232,7 @@ const onAppointmentUpdating = (e: DxSchedulerTypes.AppointmentUpdatingEvent) => 
 const onFormInitialized = (e: DxFormTypes.InitializedEvent) => {
   form = e.component;
 
-  e.component!.on('fieldDataChanged', (fieldEvent: any) => {
+  e.component!.on('fieldDataChanged', (fieldEvent: { dataField: string }) => {
     if (
       showConflictError &&
       ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(fieldEvent.dataField)
@@ -263,7 +265,7 @@ const customizeItem = (item: DxFormTypes.SimpleItem) => {
   }
 };
 
-const onOverlappingRuleChanged = (e: any) => {
+const onOverlappingRuleChanged = (e: DxSelectBoxTypes.ValueChangedEvent) => {
   overlappingRule = e.value;
 };
 </script>
@@ -295,6 +297,8 @@ const onOverlappingRuleChanged = (e: any) => {
   color: #C50F1F;
   font-size: 12px;
   padding: 8px 12px;
+  height: 36px;
+  box-sizing: border-box;
 }
 
 .dx-dialog .dx-overlay-content {
@@ -322,8 +326,5 @@ const onOverlappingRuleChanged = (e: any) => {
   overflow: visible;
 }
 
-.dx-scheduler-form-recurrence-group.dx-scheduler-form-recurrence-group-hidden,
-.dx-scheduler-form-main-group.dx-scheduler-form-recurrence-group-hidden {
-  top: 41px;
-}
+
 </style>
