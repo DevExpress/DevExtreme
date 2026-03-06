@@ -249,7 +249,7 @@ module('Work Space Month', () => {
                 firstDayOfWeek: 1,
             });
 
-            const $cell = this.instance._getCells().eq(14);
+            const $cell = this.instance.getCells().eq(14);
 
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2016, 2, 14, 5, 0),
