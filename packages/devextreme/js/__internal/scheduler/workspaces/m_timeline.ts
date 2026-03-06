@@ -308,7 +308,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       .addClass(GROUP_TABLE_CLASS);
   }
 
-  _getDefaultGroupStrategy() {
+  getDefaultGroupStrategy() {
     return 'vertical';
   }
 
@@ -334,7 +334,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return this.option('timeCellTemplate');
   }
 
-  _renderView() {
+  renderView() {
     let groupCellTemplates;
     if (!this.isRenovatedRender()) {
       groupCellTemplates = this.renderGroupHeader();
