@@ -327,4 +327,9 @@ const onOverlappingRuleChanged = (e: DxSelectBoxTypes.ValueChangedEvent) => {
   overflow: visible;
 }
 
+.dx-scheduler-form-main-group,
+.dx-scheduler-form-recurrence-group {
+  padding-top: 0;
+}
+
 </style>

@@ -1,10 +1,16 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
-import { DxSchedulerModule, DxSelectBoxModule } from 'devextreme-angular';
+import { DxSchedulerModule, DxSelectBoxModule, DxTemplateModule } from 'devextreme-angular';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
+import { DxFormTypes } from 'devextreme-angular/ui/form';
+import { DxPopupTypes } from 'devextreme-angular/ui/popup';
 import { custom as customDialog } from 'devextreme/ui/dialog';
-import type dxScheduler from 'devextreme/ui/scheduler';
 import { Appointment, Assignee, Service, assignees } from './app.service';
+
+type dxScheduler = NonNullable<DxSchedulerTypes.InitializedEvent['component']>;
+type dxForm = NonNullable<DxFormTypes.InitializedEvent['component']>;
+type dxPopup = NonNullable<DxPopupTypes.InitializedEvent['component']>;
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -25,6 +31,7 @@ if (window && window.config?.packageConfigPaths) {
   imports: [
     DxSchedulerModule,
     DxSelectBoxModule,
+    DxTemplateModule,
   ],
 })
 export class AppComponent {
@@ -36,129 +43,75 @@ export class AppComponent {
 
   assignees: Assignee[] = assignees;
 
-  resources = [{
-    fieldExpr: 'assigneeId',
-    dataSource: assignees,
-    valueExpr: 'id',
-    colorExpr: 'color',
-    icon: 'user',
-    allowMultiple: true,
-  }];
-
   overlappingRuleItems = [
     { value: 'sameResource', text: 'Allow across resources' },
     { value: 'allResources', text: 'Disallow all overlaps' },
   ];
 
-  private popup: any;
-
-  private form: any;
-
-  private showConflictError = false;
-
-  private overlappingRule = 'sameResource';
-
-  editingOptions = {
-    popup: {
-      onInitialized: (e: any) => { this.popup = e.component; },
-      onHidden: () => {
-        this.setConflictError(false);
-        this.form?.updateData('assigneeId', []);
-      },
+  assigneeIdEditorOptions = {
+    onValueChanged: (e: { value: unknown[]; component: { option: (k: string, v: unknown) => void } }) => {
+      if (e.value.length > 1) {
+        e.component.option('value', [e.value[e.value.length - 1]]);
+      }
     },
-    form: {
-      labelMode: 'hidden',
-      elementAttr: { class: 'hide-informer' },
-      onInitialized: (e: any) => {
-        this.form = e.component;
-        this.form.on('fieldDataChanged', (event: any) => {
-          if (this.showConflictError && ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(event.dataField)) {
-            this.setConflictError(false);
-            this.form.validate();
-          }
-        });
-      },
-      items: [
-        {
-          name: 'conflictInformer',
-          template: (_data: unknown, element: any) => {
-            const div = document.createElement('div');
-            div.className = 'conflict-informer';
-            div.textContent = 'This time slot conflicts with another appointment.';
-            (element[0] ?? element).appendChild(div);
-          },
-        },
-        {
-          name: 'mainGroup',
-          items: [
-            'subjectGroup',
-            'dateGroup',
-            'repeatGroup',
-            {
-              name: 'assigneeIdGroup',
-              items: [
-                'assigneeIdIcon',
-                {
-                  name: 'assigneeId',
-                  isRequired: true,
-                  editorOptions: {
-                    onValueChanged: (e: any) => {
-                      if (e.value.length > 1) {
-                        e.component.option('value', [e.value[e.value.length - 1]]);
-                      }
-                    },
-                    tagTemplate: (tagData: Assignee) => {
-                      const container = document.createElement('div');
-                      container.className = 'dx-tag-content';
-                      container.style.backgroundColor = tagData.color;
-                      container.style.borderColor = tagData.color;
-                      const span = document.createElement('span');
-                      span.textContent = tagData.text;
-                      const removeBtn = document.createElement('div');
-                      removeBtn.className = 'dx-tag-remove-button';
-                      container.appendChild(span);
-                      container.appendChild(removeBtn);
-                      return container;
-                    },
-                  },
-                },
-              ],
-            },
-          ],
-        },
-        'recurrenceGroup',
-      ],
-      customizeItem: (item: any) => {
-        if (item.name === 'allDayEditor' || item.name === 'recurrenceEndEditor') {
-          item.label.visible = true;
-        } else if (item.name === 'subjectEditor') {
-          item.editorOptions.placeholder = 'Add title';
-        }
+    tagTemplate: 'assigneeTagTemplate',
+  };
 
-        if (item.name === 'startTimeEditor' || item.name === 'endTimeEditor') {
-          item.validationRules = [
-            { type: 'required' },
-            {
-              type: 'custom',
-              message: 'Time conflict',
-              ignoreEmptyValue: true,
-              reevaluate: true,
-              validationCallback: () => !this.showConflictError,
-            },
-          ];
-        }
-      },
+  popupOptions = {
+    onInitialized: (e: { component: dxPopup }) => { this.popup = e.component; },
+    onHidden: () => {
+      this.setConflictError(false);
+      this.form?.updateData('assigneeId', []);
     },
   };
+
+  private popup?: dxPopup;
+
+  private form?: dxForm;
+
+  showConflictError = false;
+
+  private overlappingRule = 'sameResource';
 
   constructor(service: Service) {
     this.appointmentsData = service.getAppointments();
   }
 
-  private setConflictError(show: boolean): void {
+  setConflictError(show: boolean): void {
     this.showConflictError = show;
-    this.form?.option('elementAttr.class', show ? '' : 'hide-informer');
   }
+
+  onFormInitialized(e: DxFormTypes.InitializedEvent): void {
+    this.form = e.component;
+    this.form.on('fieldDataChanged', (event: { dataField: string }) => {
+      if (this.showConflictError && ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(event.dataField)) {
+        this.setConflictError(false);
+        this.form.validate();
+      }
+    });
+  }
+
+  customizeItem = (item: DxFormTypes.SimpleItem): void => {
+    if (item.name === 'allDayEditor' || item.name === 'recurrenceEndEditor') {
+      item.label.visible = true;
+    } else if (item.name === 'subjectEditor') {
+      item.editorOptions = item.editorOptions || {};
+      item.editorOptions.placeholder = 'Add title';
+    }
+
+    if (item.name === 'startTimeEditor' || item.name === 'endTimeEditor') {
+      item.validationRules = [
+        { type: 'required' },
+        {
+          type: 'custom',
+          message: 'Time conflict',
+          ignoreEmptyValue: true,
+          reevaluate: true,
+          validationCallback: () => !this.showConflictError,
+        },
+      ];
+    }
+  };
 
   private getNextDay(date: Date): Date {
     const next = new Date(date);
@@ -175,7 +128,7 @@ export class AppComponent {
   private isOverlapping(a: DxSchedulerTypes.Occurrence, b: DxSchedulerTypes.Occurrence): boolean {
     const aEnd = this.getEndDate(a);
     const bEnd = this.getEndDate(b);
-    if ((a.startDate) >= bEnd || (b.startDate) >= aEnd) return false;
+    if (a.startDate >= bEnd || b.startDate >= aEnd) return false;
     if (this.overlappingRule === 'sameResource') {
       return (a.appointmentData as Appointment).assigneeId[0] === (b.appointmentData as Appointment).assigneeId[0];
     }
@@ -243,10 +196,10 @@ export class AppComponent {
   }
 
   onAppointmentUpdating(e: DxSchedulerTypes.AppointmentUpdatingEvent): void {
-    this.alertConflictIfNeeded(e, { ...e.appointmentData, ...e.newData } as Appointment);
+    this.alertConflictIfNeeded(e, { ...e.oldData, ...e.newData } as Appointment);
   }
 
-  onOverlappingRuleChanged(e: any): void {
+  onOverlappingRuleChanged(e: DxSelectBoxTypes.ValueChangedEvent): void {
     this.overlappingRule = e.value;
   }
 }

@@ -15,7 +15,7 @@
   gap: 10px;
 }
 
-::ng-deep .hide-informer .dx-item:has(.conflict-informer) {
+::ng-deep .dx-item:has(.conflict-informer[hidden]) {
   display: none !important;
 }
 
@@ -24,6 +24,8 @@
   color: #C50F1F;
   font-size: 12px;
   padding: 8px 12px;
+  height: 36px;
+  box-sizing: border-box;
 }
 
 ::ng-deep .dx-dialog .dx-overlay-content {
@@ -51,7 +53,8 @@
   overflow: visible;
 }
 
-::ng-deep .dx-scheduler-form-recurrence-group.dx-scheduler-form-recurrence-group-hidden,
-::ng-deep .dx-scheduler-form-main-group.dx-scheduler-form-recurrence-group-hidden {
-  top: 41px;
+::ng-deep .dx-scheduler-form-main-group,
+::ng-deep .dx-scheduler-form-recurrence-group {
+  padding-top: 0;
 }
+

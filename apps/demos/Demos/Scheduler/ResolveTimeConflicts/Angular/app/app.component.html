@@ -7,11 +7,61 @@
   [currentDate]="currentDate"
   [height]="600"
   [showAllDayPanel]="false"
-  [resources]="resources"
-  [editing]="editingOptions"
+  allDayPanelMode="hidden"
   (onAppointmentAdding)="onAppointmentAdding($event)"
   (onAppointmentUpdating)="onAppointmentUpdating($event)"
-></dx-scheduler>
+>
+  <dxi-scheduler-resource
+    fieldExpr="assigneeId"
+    [dataSource]="assignees"
+    valueExpr="id"
+    colorExpr="color"
+    icon="user"
+    [allowMultiple]="true"
+  ></dxi-scheduler-resource>
+
+  <dxo-scheduler-editing [popup]="popupOptions">
+    <dxo-scheduler-form
+      labelMode="hidden"
+      [customizeItem]="customizeItem"
+      (onInitialized)="onFormInitialized($event)"
+    >
+      <dxi-scheduler-item
+        name="conflictInformer"
+        template="conflictInformerTemplate"
+      ></dxi-scheduler-item>
+      <dxi-scheduler-item name="mainGroup" itemType="group">
+        <dxi-scheduler-item name="subjectGroup"></dxi-scheduler-item>
+        <dxi-scheduler-item name="dateGroup"></dxi-scheduler-item>
+        <dxi-scheduler-item name="repeatGroup"></dxi-scheduler-item>
+        <dxi-scheduler-item name="assigneeIdGroup">
+          <dxi-scheduler-item name="assigneeIdIcon"></dxi-scheduler-item>
+          <dxi-scheduler-item
+            name="assigneeId"
+            [isRequired]="true"
+            [editorOptions]="assigneeIdEditorOptions"
+          ></dxi-scheduler-item>
+        </dxi-scheduler-item>
+      </dxi-scheduler-item>
+      <dxi-scheduler-item name="recurrenceGroup" itemType="group"></dxi-scheduler-item>
+    </dxo-scheduler-form>
+  </dxo-scheduler-editing>
+
+  <div *dxTemplate="let _ of 'conflictInformerTemplate'">
+    <div class="conflict-informer" [hidden]="!showConflictError">This time slot conflicts with another appointment.</div>
+  </div>
+
+  <div *dxTemplate="let tagData of 'assigneeTagTemplate'">
+    <div
+      class="dx-tag-content"
+      [style.background-color]="tagData.color"
+      [style.border-color]="tagData.color"
+    >
+      <span>{{ tagData.text }}</span>
+      <div class="dx-tag-remove-button"></div>
+    </div>
+  </div>
+</dx-scheduler>
 <div class="options">
   <div class="option">
     <span>Overlapping Rule</span>

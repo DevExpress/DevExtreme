@@ -28,6 +28,8 @@
   color: #C50F1F;
   font-size: 12px;
   padding: 8px 12px;
+  height: 36px;
+  box-sizing: border-box;
 }
 
 .dx-dialog .dx-overlay-content {
@@ -53,7 +55,7 @@
   overflow: visible;
 }
 
-.dx-scheduler-form-recurrence-group.dx-scheduler-form-recurrence-group-hidden,
-.dx-scheduler-form-main-group.dx-scheduler-form-recurrence-group-hidden {
-  top: 41px;
+.dx-scheduler-form-main-group,
+.dx-scheduler-form-recurrence-group {
+  padding-top: 0;
 }
