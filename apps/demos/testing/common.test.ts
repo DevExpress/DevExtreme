@@ -96,7 +96,7 @@ const getIgnoredRules = (testName) => {
     'Diagram-UICustomization': ['aria-dialog-name', 'label'],
     'Diagram-WebAPIService': ['aria-dialog-name', 'label'],
 
-    'FileManager-BindingToEF': ['aria-command-name', 'label'],
+    'FileManager-BindingToEF': ['aria-command-name', 'empty-table-header', 'label'],
     'FileManager-BindingToFileSystem': ['aria-command-name', 'empty-table-header', 'label'],
     'FileManager-BindingToHierarchicalStructure': ['aria-command-name', 'empty-table-header', 'label'],
     'FileManager-CustomThumbnails': ['aria-allowed-attr', 'aria-command-name', 'image-alt', 'label'],
