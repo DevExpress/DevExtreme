@@ -76,7 +76,7 @@ module('Work Space Base', {
             if(viewName === 'Day' || viewName === 'Week') {
                 test('Scheduler workspace scrollables should be updated after allDayExpanded option changed', async function(assert) {
                     this.instance.option('allDayExpanded', false);
-                    const stub = sinon.stub(this.instance, '_updateScrollable');
+                    const stub = sinon.stub(this.instance, 'updateScrollable');
 
                     this.instance.option('allDayExpanded', true);
 
@@ -86,7 +86,7 @@ module('Work Space Base', {
                 test('Scheduler workspace scrollables should be updated after endDayHour option changed if allDayPanel is hided', async function(assert) {
                     this.instance.option('showAllDayPanel', false);
                     this.instance.option('endDayHour', 18);
-                    const stub = sinon.stub(this.instance, '_updateScrollable');
+                    const stub = sinon.stub(this.instance, 'updateScrollable');
 
                     this.instance.option('endDayHour', 24);
 
