@@ -182,6 +182,7 @@ const App = () => {
         endDayHour={19}
         height={600}
         showAllDayPanel={false}
+        allDayPanelMode="hidden"
         onAppointmentAdding={onAppointmentAdding}
         onAppointmentUpdating={onAppointmentUpdating}
       >

@@ -11,8 +11,11 @@ import type { FormTypes } from 'devextreme-react/form';
 import type { PopupTypes } from 'devextreme-react/popup';
 import type { TagBoxTypes } from 'devextreme-react/tag-box';
 import { custom as customDialog } from 'devextreme/ui/dialog';
-import dxScheduler from 'devextreme/ui/scheduler';
 import { data, assignees, type Appointment, type Assignee } from './data.ts';
+
+type dxScheduler = NonNullable<SchedulerTypes.InitializedEvent['component']>;
+type dxForm = NonNullable<FormTypes.InitializedEvent['component']>;
+type dxPopup = NonNullable<PopupTypes.InitializedEvent['component']>;
 
 const currentDate = new Date(2026, 1, 10);
 const views: SchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
@@ -41,7 +44,7 @@ function isOverlapping(
 ): boolean {
   const aEnd = getEndDate(a);
   const bEnd = getEndDate(b);
-  if ((a.startDate) >= bEnd || (b.startDate) >= aEnd) return false;
+  if (a.startDate >= bEnd || b.startDate >= aEnd) return false;
   if (overlappingRule === 'sameResource') {
     return (a.appointmentData as Appointment).assigneeId[0] === (b.appointmentData as Appointment).assigneeId[0];
   }
@@ -98,10 +101,11 @@ const conflictInformerRender = () => (
 );
 
 const App = () => {
-  const popupRef = useRef<NonNullable<PopupTypes.InitializedEvent['component']> | null>(null);
-  const formRef = useRef<NonNullable<FormTypes.InitializedEvent['component']> | null>(null);
+  const popupRef = useRef<dxPopup | null>(null);
+  const formRef = useRef<dxForm | null>(null);
   const showConflictErrorRef = useRef(false);
   const overlappingRuleRef = useRef('sameResource');
+
   const setConflictError = useCallback((show: boolean) => {
     showConflictErrorRef.current = show;
     formRef.current?.option('elementAttr.class', show ? '' : 'hide-informer');
@@ -204,6 +208,7 @@ const App = () => {
         endDayHour={19}
         height={600}
         showAllDayPanel={false}
+        allDayPanelMode="hidden"
         onAppointmentAdding={onAppointmentAdding}
         onAppointmentUpdating={onAppointmentUpdating}
       >

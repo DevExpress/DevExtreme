@@ -98,10 +98,11 @@ import { custom as customDialog } from 'devextreme/ui/dialog';
 import type { DxFormTypes } from 'devextreme-vue/form';
 import type { DxTagBoxTypes } from 'devextreme-vue/tag-box';
 import type { DxPopupTypes } from 'devextreme-vue/popup';
-import type dxScheduler from 'devextreme/ui/scheduler';
-import dxForm from 'devextreme/ui/form.js';
-import dxPopup from 'devextreme/ui/popup.js';
 import { data, assignees, type Appointment } from './data.ts';
+
+type dxScheduler = NonNullable<DxSchedulerTypes.InitializedEvent['component']>;
+type dxForm = NonNullable<DxFormTypes.InitializedEvent['component']>;
+type dxPopup = NonNullable<DxPopupTypes.InitializedEvent['component']>;
 
 let form: dxForm | undefined;
 let popup: dxPopup | undefined;
@@ -325,6 +326,5 @@ const onOverlappingRuleChanged = (e: DxSelectBoxTypes.ValueChangedEvent) => {
 .dx-scheduler-form-main-group .dx-item:last-child .dx-item:last-child .dx-field-item-content {
   overflow: visible;
 }
-
 
 </style>
