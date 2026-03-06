@@ -87,7 +87,7 @@ module('Integration: Appointments Collector Base Tests', baseConfig, () => {
                 }
                 return this.callBase(options);
             },
-            _getAppointmentTemplate(template) {
+            getAppointmentTemplate(template) {
                 return this._getTemplateByOption(template);
             },
             _dataAccessors: mockDataAccessor,
