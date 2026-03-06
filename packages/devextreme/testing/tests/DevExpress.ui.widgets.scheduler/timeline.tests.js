@@ -248,7 +248,7 @@ QUnit.test('Timeline should not have time panel offset', async function(assert) 
 
 QUnit.test('Tables should be rerendered if dimension was changed and horizontal scrolling is enabled', async function(assert) {
     this.instance.option('crossScrollingEnabled', true);
-    const stub = sinon.stub(this.instance, '_setTableSizes');
+    const stub = sinon.stub(this.instance, 'setTableSizes');
 
     resizeCallbacks.fire();
 
@@ -260,7 +260,7 @@ QUnit.test('dateUtils.getTimezonesDifference should be called when calculating i
     const minDate = new Date('Thu Mar 10 2016 00:00:00 GMT-0500');
     const maxDate = new Date('Mon Mar 15 2016 00:00:00 GMT-0400');
 
-    this.instance._getIntervalBetween(minDate, maxDate, true);
+    this.instance.getIntervalBetween(minDate, maxDate, true);
 
     assert.ok(stub.calledOnce, 'getTimezonesDifference was called');
 
