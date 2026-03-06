@@ -148,9 +148,6 @@ export class RowsView extends ColumnsView {
     this._contentChanges = [];
     this._dataController.loadingChanged.add((isLoading, messageText) => {
       this.setLoading(isLoading, messageText);
-      if (!isLoading) {
-        this.renderNoDataText();
-      }
     });
 
     this._dataController.dataSourceChanged.add(() => {
