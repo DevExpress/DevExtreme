@@ -65,6 +65,8 @@ export class AppComponent {
     },
   };
 
+  formElementAttr = { id: 'form' };
+
   private popup?: dxPopup;
 
   private form?: dxForm;
@@ -177,7 +179,7 @@ export class AppComponent {
     } else {
       const dialog = customDialog({
         showTitle: false,
-        messageHtml: 'This time slot conflicts with another appointment.',
+        messageHtml: '<p id="conflict-dialog">This time slot conflicts with another appointment.</p>',
         buttons: [{
           type: 'default',
           text: 'Close',

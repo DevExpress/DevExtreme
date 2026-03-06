@@ -112,7 +112,7 @@ let overlappingRule = 'sameResource';
 const currentDate = new Date(2026, 1, 10);
 const views: DxSchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
 
-const formElementAttr = { class: 'hide-informer' };
+const formElementAttr = { class: 'hide-informer', id: 'form' };
 
 const overlappingRuleItems = [
   { value: 'sameResource', text: 'Allow across resources' },
@@ -208,7 +208,7 @@ const alertConflictIfNeeded = (
   } else {
     const dialog = customDialog({
       showTitle: false,
-      messageHtml: 'This time slot conflicts with another appointment.',
+      messageHtml: '<p id="conflict-dialog">This time slot conflicts with another appointment.</p>',
       buttons: [{
         type: 'default',
         text: 'Close',
@@ -297,26 +297,28 @@ const onOverlappingRuleChanged = (e: DxSelectBoxTypes.ValueChangedEvent) => {
   background-color: #FCEAE8;
   color: #C50F1F;
   font-size: 12px;
-  padding: 8px 12px;
+  padding: 0 12px;
   height: 36px;
+  line-height: 36px;
   box-sizing: border-box;
+  margin-bottom: 8px;
 }
 
-.dx-dialog .dx-overlay-content {
+.dx-dialog:has(#conflict-dialog) .dx-overlay-content {
   width: 280px;
 }
 
-.dx-dialog .dx-dialog-content {
+.dx-dialog:has(#conflict-dialog) .dx-dialog-content {
   padding-bottom: 16px;
 }
 
-.dx-dialog .dx-dialog-buttons {
+.dx-dialog:has(#conflict-dialog) .dx-dialog-buttons {
   padding-top: 0;
   padding-bottom: 16px;
 }
 
-.dx-dialog .dx-toolbar-center,
-.dx-dialog .dx-button {
+.dx-dialog:has(#conflict-dialog) .dx-toolbar-center,
+.dx-dialog:has(#conflict-dialog) .dx-button {
   width: 100%;
 }
 
@@ -327,9 +329,14 @@ const onOverlappingRuleChanged = (e: DxSelectBoxTypes.ValueChangedEvent) => {
   overflow: visible;
 }
 
-.dx-scheduler-form-main-group,
-.dx-scheduler-form-recurrence-group {
+#form .dx-scheduler-form-main-group,
+#form .dx-scheduler-form-recurrence-group {
   padding-top: 0;
+}
+
+#form:not(.hide-informer) .dx-scheduler-form-recurrence-group.dx-scheduler-form-recurrence-group-hidden,
+#form:not(.hide-informer) .dx-scheduler-form-main-group.dx-scheduler-form-main-group-hidden {
+  top: 44px;
 }
 
 </style>

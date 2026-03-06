@@ -92,7 +92,7 @@ const App = () => {
       } else {
         const dialog = customDialog({
           showTitle: false,
-          messageHtml: 'This time slot conflicts with another appointment.',
+          messageHtml: '<p id="conflict-dialog">This time slot conflicts with another appointment.</p>',
           buttons: [
             {
               type: 'default',
@@ -200,7 +200,7 @@ const App = () => {
             labelMode="hidden"
             onInitialized={onFormInitialized}
             customizeItem={customizeItem}
-            elementAttr={{ class: 'hide-informer' }}
+            elementAttr={{ class: 'hide-informer', id: 'form' }}
           >
             <Item
               name="conflictInformer"

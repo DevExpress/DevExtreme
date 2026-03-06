@@ -34,7 +34,7 @@ $(() => {
       },
       form: {
         labelMode: 'hidden',
-        elementAttr: { class: 'hide-informer' },
+        elementAttr: { class: 'hide-informer', id: 'form' },
         onInitialized: (e) => {
           form = e.component;
 
@@ -136,7 +136,7 @@ $(() => {
     } else {
       const dialog = DevExpress.ui.dialog.custom({
         showTitle: false,
-        messageHtml: 'This time slot conflicts with another appointment.',
+        messageHtml: '<p id="conflict-dialog">This time slot conflicts with another appointment.</p>',
         buttons: [{
           type: 'default',
           text: 'Close',

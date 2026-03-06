@@ -23,26 +23,28 @@
   background-color: #FCEAE8;
   color: #C50F1F;
   font-size: 12px;
-  padding: 8px 12px;
+  padding: 0 12px;
   height: 36px;
+  line-height: 36px;
   box-sizing: border-box;
+  margin-bottom: 8px;
 }
 
-::ng-deep .dx-dialog .dx-overlay-content {
+::ng-deep .dx-dialog:has(#conflict-dialog) .dx-overlay-content {
   width: 280px;
 }
 
-::ng-deep .dx-dialog .dx-dialog-content {
+::ng-deep .dx-dialog:has(#conflict-dialog) .dx-dialog-content {
   padding-bottom: 16px;
 }
 
-::ng-deep .dx-dialog .dx-dialog-buttons {
+::ng-deep .dx-dialog:has(#conflict-dialog) .dx-dialog-buttons {
   padding-top: 0;
   padding-bottom: 16px;
 }
 
-::ng-deep .dx-dialog .dx-toolbar-center,
-::ng-deep .dx-dialog .dx-button {
+::ng-deep .dx-dialog:has(#conflict-dialog) .dx-toolbar-center,
+::ng-deep .dx-dialog:has(#conflict-dialog) .dx-button {
   width: 100%;
 }
 
@@ -53,8 +55,13 @@
   overflow: visible;
 }
 
-::ng-deep .dx-scheduler-form-main-group,
-::ng-deep .dx-scheduler-form-recurrence-group {
+::ng-deep #form .dx-scheduler-form-main-group,
+::ng-deep #form .dx-scheduler-form-recurrence-group {
   padding-top: 0;
+}
+
+::ng-deep #form:has(.conflict-informer:not([hidden])) .dx-scheduler-form-recurrence-group.dx-scheduler-form-recurrence-group-hidden,
+::ng-deep #form:has(.conflict-informer:not([hidden])) .dx-scheduler-form-main-group.dx-scheduler-form-main-group-hidden {
+  top: 44px;
 }
 

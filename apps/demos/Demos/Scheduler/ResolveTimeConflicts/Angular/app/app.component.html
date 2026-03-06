@@ -23,6 +23,7 @@
   <dxo-scheduler-editing [popup]="popupOptions">
     <dxo-scheduler-form
       labelMode="hidden"
+      [elementAttr]="formElementAttr"
       [customizeItem]="customizeItem"
       (onInitialized)="onFormInitialized($event)"
     >
