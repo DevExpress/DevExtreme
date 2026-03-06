@@ -88,7 +88,7 @@ export class CompactAppointmentsHelper {
         getItemSettings,
       };
 
-      workSpace._createDragBehaviorBase($element, $schedulerElement, options);
+      workSpace.createDragBehaviorBase($element, $schedulerElement, options);
     };
   }
 

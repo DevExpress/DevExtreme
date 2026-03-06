@@ -153,7 +153,7 @@ class SchedulerAgenda extends WorkSpace {
     }
   }
 
-  _renderView() {
+  renderView() {
     this._startViewDate = agendaUtils.calculateStartViewDate(this.option('currentDate') as any, this.option('startDayHour') as any);
     this._rows = [];
   }
@@ -473,7 +473,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   renderAgendaLayout(appointments: ListEntity[]): void {
-    this._renderView();
+    this.renderView();
 
     const rows = agendaUtils.calculateRows(
       appointments,
