@@ -2237,7 +2237,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   // We do not need these methods in renovation
   // --------------
 
-  private isRenderHeaderPanelEmptyCell() {
+  protected isRenderHeaderPanelEmptyCell() {
     return this.isVerticalGroupedWorkSpace();
   }
 
