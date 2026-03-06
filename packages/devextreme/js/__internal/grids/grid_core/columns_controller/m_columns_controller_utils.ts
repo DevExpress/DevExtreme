@@ -5,13 +5,14 @@ import { equalByValue } from '@js/core/utils/common';
 import { compileGetter, compileSetter } from '@js/core/utils/data';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
-import { each, map } from '@js/core/utils/iterator';
+import { each } from '@js/core/utils/iterator';
 import { deepExtendArraySafe } from '@js/core/utils/object';
 import { getDefaultAlignment } from '@js/core/utils/position';
 import {
   isDefined, isFunction, isNumeric, isObject, isString, type,
 } from '@js/core/utils/type';
 import variableWrapper from '@js/core/utils/variable_wrapper';
+import type { DataGridCommandColumnType } from '@js/ui/data_grid';
 import errors from '@js/ui/widget/ui.errors';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
@@ -853,26 +854,22 @@ export const getFixedPosition = function (that: ColumnsController, column) {
   return column.fixedPosition;
 };
 
-export const processExpandColumns = function (columns, expandColumns, type, columnIndex) {
-  let customColumnIndex;
-  const rowCount = this.getRowCount();
-  let rowspan = columns[columnIndex] && columns[columnIndex].rowspan;
-  let expandColumnsByType = expandColumns.filter((column) => column.type === type);
+export const processExpandColumns = (
+  columns: Column[],
+  expandColumns: Column[],
+  commandType: DataGridCommandColumnType,
+  columnIndex: number,
+  rowspan: number,
+): void => {
+  const expandColumnsByType = expandColumns
+    .filter((column) => column.type === commandType)
+    .map((column): Column => (rowspan > 1 ? { ...column, rowspan } : column));
 
-  columns.forEach((column, index) => {
-    if (column.type === type) {
-      customColumnIndex = index;
-      rowspan = columns[index + 1] ? columns[index + 1].rowspan : rowCount;
-    }
-  });
+  const customExpandColumnIndex = columns.findIndex((column) => column.type === commandType);
+  const targetIndex = customExpandColumnIndex >= 0 ? customExpandColumnIndex : columnIndex;
+  const deleteCount = customExpandColumnIndex >= 0 ? 1 : 0;
 
-  if (rowspan > 1) {
-    expandColumnsByType = map(expandColumnsByType, (expandColumn) => extend({}, expandColumn, { rowspan }));
-  }
-  expandColumnsByType.unshift.apply(expandColumnsByType, isDefined(customColumnIndex) ? [customColumnIndex, 1] : [columnIndex, 0]);
-  columns.splice.apply(columns, expandColumnsByType);
-
-  return rowspan || 1;
+  columns.splice(targetIndex, deleteCount, ...expandColumnsByType);
 };
 
 export const digitsCount = function (number) {
