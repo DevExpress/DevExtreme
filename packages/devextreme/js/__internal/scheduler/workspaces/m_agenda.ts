@@ -116,15 +116,15 @@ class SchedulerAgenda extends WorkSpace {
     return false;
   }
 
-  _getElementClass() {
+  getElementClass() {
     return AGENDA_CLASS;
   }
 
-  _getRowCount() {
+  getRowCount() {
     return this.option('agendaDuration') as number;
   }
 
-  _getCellCount() {
+  getCellCount() {
     return 1;
   }
 
@@ -186,15 +186,15 @@ class SchedulerAgenda extends WorkSpace {
     this._dateTableScrollable.$content().append(this._$noDataContainer);
   }
 
-  _setTableSizes() { return noop(); }
+  setTableSizes() { return noop(); }
 
   toggleHorizontalScrollClass() { return noop(); }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _createCrossScrollingConfig(argument?: any) { return noop(); }
+  createCrossScrollingConfig(argument?: any) { return noop(); }
 
   _setGroupHeaderCellsHeight() {
-    const $cells = this._getGroupHeaderCells().filter((_, element) => !element.getAttribute('rowSpan'));
+    const $cells = this.getGroupHeaderCells().filter((_, element) => !element.getAttribute('rowSpan'));
     const rows = this._removeEmptyRows(this._rows);
 
     if (!rows.length) {
@@ -346,7 +346,7 @@ class SchedulerAgenda extends WorkSpace {
 
   attachTablesEvents() { return noop(); }
 
-  _attachEvents() { return noop(); }
+  attachEvents() { return noop(); }
 
   _cleanCellDataCache() { return noop(); }
 
@@ -538,7 +538,7 @@ class SchedulerAgenda extends WorkSpace {
 
   _setSelectedCellsByCellData() {}
 
-  _getIntervalDuration() {
+  getIntervalDuration() {
     return dateUtils.dateToMilliseconds('day') * (this.option('intervalCount') as any);
   }
 

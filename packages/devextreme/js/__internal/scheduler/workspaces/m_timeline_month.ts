@@ -19,10 +19,10 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
   renderView() {
     super.renderView();
 
-    this._updateScrollable();
+    this.updateScrollable();
   }
 
-  _getElementClass() {
+  getElementClass() {
     return TIMELINE_CLASS;
   }
 
@@ -38,18 +38,18 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     return true;
   }
 
-  _getFormat() {
+  getFormat() {
     return formatWeekdayAndDay;
   }
 
-  _getIntervalBetween(currentDate) {
+  getIntervalBetween(currentDate) {
     const firstViewDate = this.getStartViewDate();
     const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
 
     return currentDate.getTime() - (firstViewDate.getTime() - (this.option('startDayHour') as any) * 3600000) - timeZoneOffset;
   }
 
-  _getViewStartByOptions() {
+  getViewStartByOptions() {
     return monthUtils.getViewStartByOptions(
       this.option('startDate') as any,
       this.option('currentDate') as any,
