@@ -81,7 +81,7 @@ test('T1296376 - DataGrid - TextArea doesn\'t have the aria-invalid attribute wh
     .eql('true');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [
-    { id: 1, text: 'value' }
+    { id: 1, text: 'value' },
   ],
   keyExpr: 'id',
   columns: [{
