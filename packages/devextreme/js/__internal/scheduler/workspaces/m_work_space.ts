@@ -424,7 +424,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       e.preventDefault();
       e.stopPropagation();
 
-      const selectedCells = this._getSelectedCellsData();
+      const selectedCells = this.getSelectedCellsData();
 
       if (selectedCells?.length) {
         const selectedCellsElement = selectedCells.map((cellData) => this._getCellByData(cellData)).filter((cell) => Boolean(cell));
@@ -574,7 +574,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     }
 
     this.updateCellsSelection();
-    this._updateSelectedCellDataOption(this._getSelectedCellsData(), $nextFocusedCell);
+    this._updateSelectedCellDataOption(this.getSelectedCellsData(), $nextFocusedCell);
   }
 
   _hasAllDayClass($cell) {
@@ -611,7 +611,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       }
 
       this.updateCellsSelection();
-      this._updateSelectedCellDataOption(this._getSelectedCellsData());
+      this._updateSelectedCellDataOption(this.getSelectedCellsData());
     }
   }
 
@@ -1036,7 +1036,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private handleSelectedCellsClick() {
-    const selectedCells = this._getSelectedCellsData();
+    const selectedCells = this.getSelectedCellsData();
 
     const firstCellData = selectedCells[0];
     const lastCellData = selectedCells[selectedCells.length - 1];
@@ -1450,7 +1450,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return false;
   }
 
-  protected _normalizeCellData(cellData) {
+  private normalizeCellData(cellData) {
     return extend(true, {}, {
       startDate: cellData.startDate,
       endDate: cellData.endDate,
@@ -1462,16 +1462,16 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  protected _getSelectedCellsData() {
+  private getSelectedCellsData() {
     const selected = this.cellsSelectionState.getSelectedCells();
 
-    return selected?.map(this._normalizeCellData.bind(this));
+    return selected?.map(this.normalizeCellData.bind(this));
   }
 
   getCellData($cell) {
     const cellData = this._getFullCellData($cell) ?? {};
 
-    return this._normalizeCellData(cellData);
+    return this.normalizeCellData(cellData);
   }
 
   _getFullCellData($cell) {
@@ -2729,8 +2729,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   _render() {
     // @ts-expect-error
     super._render();
-    this._renderDateTimeIndication();
-    this._setIndicationUpdateInterval();
+    this.renderDateTimeIndication();
+    this.setIndicationUpdateInterval();
   }
 
   private toggleGroupedClass() {
@@ -2769,13 +2769,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  protected _renderDateTimeIndication() { return noop(); }
+  protected renderDateTimeIndication() { return noop(); }
 
   protected renderCurrentDateTimeLineAndShader(): void { return noop(); }
 
   protected renderCurrentDateTimeIndication(): void { return noop(); }
 
-  protected _setIndicationUpdateInterval() { return noop(); }
+  protected setIndicationUpdateInterval() { return noop(); }
 
   protected detachGroupCountClass() {
     VERTICAL_GROUP_COUNT_CLASSES.forEach((className) => {
@@ -3194,7 +3194,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         const { cellData } = this.viewDataProvider.viewDataMap.dateTableMap[validRowIndex][columnIndex];
 
         return {
-          value: this._normalizeCellData(cellData),
+          value: this.normalizeCellData(cellData),
           fullValue: cellData,
           key: CELL_DATA,
         };
