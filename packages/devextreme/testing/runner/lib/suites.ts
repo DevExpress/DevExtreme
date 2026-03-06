@@ -67,11 +67,9 @@ function readCategoryMeta(metaPath: string): CategoryMetaPayload {
   }
 
   const rawConstellation = parsed.constellation;
-  const constellationValue = (
-    typeof rawConstellation === 'string'
+  const constellationValue = typeof rawConstellation === 'string'
     || typeof rawConstellation === 'number'
     || typeof rawConstellation === 'boolean'
-  )
     ? rawConstellation
     : undefined;
 

@@ -443,7 +443,7 @@ async function saveResults(req: http.IncomingMessage, res: http.ServerResponse):
       logger.writeLine();
       resultsReporter.printTextReport(parsedResults, logger.writeLine.bind(logger));
     }
-  } catch(error) {
+  } catch (error) {
     const message = error instanceof Error && error.stack ? error.stack : String(error);
     logMiscErrorCore(`Failed to save results. ${message}`);
     hasFailure = true;

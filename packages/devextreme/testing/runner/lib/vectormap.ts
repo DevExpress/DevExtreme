@@ -171,7 +171,7 @@ export function createVectorMapService({
       );
 
       vectorMapNodeServer.process.on('exit', () => {
-        if (vectorMapNodeServer.process !== null && vectorMapNodeServer.process.exitCode !== null) {
+        if (vectorMapNodeServer.process?.exitCode != null) {
           vectorMapNodeServer.process = null;
         }
       });
