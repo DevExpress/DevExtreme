@@ -638,7 +638,7 @@ QUnit.module('Options', () => {
 
         const spyAppointmentPopupForm = sinon.spy(
             scheduler.instance,
-            '_createAppointmentPopupForm'
+            'createAppointmentPopupForm'
         );
 
         scheduler.instance.option('resources', resources);
@@ -936,7 +936,7 @@ QUnit.module('Options', () => {
         });
 
         const initMarkupSpy = sinon.spy(scheduler.instance, '_initMarkup');
-        const reloadDataSourceSpy = sinon.spy(scheduler.instance, '_reloadDataSource');
+        const reloadDataSourceSpy = sinon.spy(scheduler.instance, 'reloadDataSource');
         let count = 0;
 
         const nextDataSource = new DataSource({
@@ -962,7 +962,7 @@ QUnit.module('Options', () => {
         await waitForAsync(() => count === 2);
 
         assert.equal(initMarkupSpy.callCount, 2, 'Init markup was called on each dataSource changes');
-        assert.equal(reloadDataSourceSpy.callCount, 2, '_reloadDataSource was called on each changes');
+        assert.equal(reloadDataSourceSpy.callCount, 2, 'reloadDataSource was called on each changes');
     });
 
     QUnit.test('It should be possible to change views option when view names are specified (T995794)', async function(assert) {
