@@ -84,7 +84,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return this.option('rtlEnabled') ? getBoundingRect(this._dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
   }
 
-  protected _setIndicationUpdateInterval() {
+  protected setIndicationUpdateInterval() {
     if (!this.option('showCurrentTimeIndicator') || this.option('indicatorUpdateInterval') === 0) {
       return;
     }
@@ -173,7 +173,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   renderCurrentDateTimeLineAndShader(): void {
     this._cleanDateTimeIndicator();
     this._shader?.clean();
-    this._renderDateTimeIndication();
+    this.renderDateTimeIndication();
   }
 
   _isCurrentTimeHeaderCell(headerIndex: number): boolean {
@@ -216,8 +216,8 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   cleanWorkSpace() {
     super.cleanWorkSpace();
 
-    this._renderDateTimeIndication();
-    this._setIndicationUpdateInterval();
+    this.renderDateTimeIndication();
+    this.setIndicationUpdateInterval();
   }
 
   _optionChanged(args) {
@@ -227,7 +227,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         this.cleanWorkSpace();
         break;
       case 'indicatorUpdateInterval':
-        this._setIndicationUpdateInterval();
+        this.setIndicationUpdateInterval();
         break;
       case 'showAllDayPanel':
       case 'allDayExpanded':
@@ -282,7 +282,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
       ], []);
   }
 
-  protected _renderDateTimeIndication(): void {
+  protected renderDateTimeIndication(): void {
     if (!this.isIndicationAvailable()) {
       return;
     }
