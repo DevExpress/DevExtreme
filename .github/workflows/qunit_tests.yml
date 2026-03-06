@@ -66,8 +66,6 @@ jobs:
       shell: bash
       env:
         DEVEXTREME_TEST_CI: "true"
-        DOTNET_CLI_TELEMETRY_OPTOUT: "true"
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
       run: pnpx nx build:systemjs
 
     - name: Zip artifacts
