@@ -3,9 +3,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Item, ItemClickEvent, Properties as DropDownProperties } from '@js/ui/drop_down_button';
 import DropDownButton from '@js/ui/drop_down_button';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 import type { ColumnHeadersView } from '../../column_headers/m_column_headers';
-import type { Column } from '../../columns_controller/m_columns_controller';
 import type { ColumnsResizerViewController } from '../../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ModuleType } from '../../m_types';
 import { AI_COLUMN_NAME, CLASSES, ICON_NAMES } from '../const';
