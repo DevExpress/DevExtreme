@@ -4,15 +4,13 @@ import i18N from 'eslint-plugin-i18n';
 import babelParser from '@babel/eslint-parser';
 import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
+import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
 import stylistic from '@stylistic/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
 import globals from 'globals';
-import spellCheckConfig from 'eslint-config-devextreme/spell-check';
-import qunitConfig from 'eslint-config-devextreme/qunit';
-import typescriptConfig from 'eslint-config-devextreme/typescript';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import { changeRulesToStylistic } from 'eslint-migration-utils';
 import unicorn from 'eslint-plugin-unicorn';
@@ -20,11 +18,31 @@ import customRules from './eslint_plugins/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const require = createRequire(import.meta.url);
 const compat = new FlatCompat({
     baseDirectory: __dirname,
     recommendedConfig: js.configs.recommended,
     allConfig: js.configs.all
 });
+
+function loadDevExtremeConfig(moduleName, legacyName) {
+    try {
+        const loadedModule = require(moduleName);
+        const normalized = loadedModule.default ?? loadedModule;
+
+        if (Array.isArray(normalized)) {
+            return normalized;
+        }
+
+        return compat.config(normalized);
+    } catch {
+        return compat.extends(legacyName);
+    }
+}
+
+const spellCheckConfig = loadDevExtremeConfig('eslint-config-devextreme/spell-check', 'devextreme/spell-check');
+const typescriptConfig = loadDevExtremeConfig('eslint-config-devextreme/typescript', 'devextreme/typescript');
+const qunitConfig = loadDevExtremeConfig('eslint-config-devextreme/qunit', 'devextreme/qunit');
 
 export default [
     {
