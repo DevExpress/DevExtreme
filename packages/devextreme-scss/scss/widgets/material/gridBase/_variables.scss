@@ -1,0 +1,10 @@
+@use "sass:math";
+@use "colors" as *;
+@use "sizes" as *;
+
+$grid-masterdetail-padding: 16px;
+$material-grid-base-border-color: $datagrid-border-color;
+$material-grid-base-header-cell-vertical-padding: math.round(math.div($material-grid-base-header-height - $material-grid-base-header-line-height, 2));
+$material-grid-base-command-select-column-width: $material-grid-base-checkbox-size + 2 * $material-grid-base-cell-horizontal-padding;
+$material-grid-base-cell-vertical-padding: math.round(math.div($material-grid-base-cell-height - $material-grid-base-cell-line-height, 2));
+$material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $material-grid-base-cell-horizontal-padding;
