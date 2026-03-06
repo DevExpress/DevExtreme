@@ -69,14 +69,14 @@ const subscribes = {
     const { startDate } = info.sourceAppointment;
 
     this._checkRecurringAppointment(options.target, options.data, startDate, () => {
-      this._updateAppointment(options.target, options.data, function () {
+      this.updateAppointmentCore(options.target, options.data, function () {
         this._appointments.moveAppointmentBack();
       });
     });
   },
 
   getUpdatedData(rawAppointment) {
-    return this._getUpdatedData(rawAppointment);
+    return this.getUpdatedData(rawAppointment);
   },
 
   updateAppointmentAfterDrag({
@@ -85,7 +85,7 @@ const subscribes = {
     const { info } = utils.dataAccessors.getAppointmentSettings(element) as AppointmentItemViewModel;
     // NOTE: enrich target appointment with additional data from the source
     // in case of one appointment of series will change
-    const targetedRawAppointment = extend({}, rawAppointment, this._getUpdatedData(rawAppointment));
+    const targetedRawAppointment = extend({}, rawAppointment, this.getUpdatedData(rawAppointment));
 
     const fromAllDay = Boolean(rawAppointment.allDay);
     const toAllDay = Boolean(targetedRawAppointment.allDay);
@@ -103,7 +103,7 @@ const subscribes = {
 
     if (isDropToSelfScheduler && (!isDropToTheSameCell || isDragAndDropBetweenComponents || isDropBetweenAllDay)) {
       this._checkRecurringAppointment(rawAppointment, targetedRawAppointment, info.sourceAppointment.startDate, () => {
-        this._updateAppointment(rawAppointment, targetedRawAppointment, onCancel, event);
+        this.updateAppointmentCore(rawAppointment, targetedRawAppointment, onCancel, event);
       }, undefined, undefined, event);
     } else {
       onCancel();

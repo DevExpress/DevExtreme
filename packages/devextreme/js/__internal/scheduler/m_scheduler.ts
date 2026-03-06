@@ -1555,7 +1555,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       });
       this.editAppointmentData = rawAppointment;
     } else {
-      this._updateAppointment(rawAppointment, appointment.source, () => {
+      this.updateAppointmentCore(rawAppointment, appointment.source, () => {
         this._appointments.moveAppointmentBack(dragEvent);
       }, dragEvent);
     }
@@ -1609,7 +1609,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this.recurrenceDialog.show();
   }
 
-  _getUpdatedData(rawAppointment) {
+  getUpdatedData(rawAppointment) {
     const viewOffset = this.getViewOffsetMs();
 
     const getConvertedFromGrid = (date: any): Date | undefined => {
@@ -1726,7 +1726,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this._workSpace.getDataByDroppableCell();
   }
 
-  _updateAppointment(target, rawAppointment, onUpdatePrevented?: any, dragEvent?: any) {
+  updateAppointmentCore(target, rawAppointment, onUpdatePrevented?: any, dragEvent?: any) {
     const updatingOptions = {
       newData: rawAppointment,
       oldData: extend({}, target),
@@ -2087,7 +2087,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   updateAppointment(target, appointment) {
-    return this._updateAppointment(target, appointment);
+    return this.updateAppointmentCore(target, appointment);
   }
 
   deleteAppointment(rawAppointment) {
