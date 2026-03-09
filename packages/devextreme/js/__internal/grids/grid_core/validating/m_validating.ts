@@ -427,8 +427,6 @@ export class ValidatingController extends modules.Controller {
         this.disposeCellPendingIndicator($container);
       }
       $container.toggleClass(this.addWidgetPrefix(INVALIDATE_CLASS), result.status === VALIDATION_STATUS.invalid);
-
-      editor?.option('isValid', result.isValid);
     }
   }
 
