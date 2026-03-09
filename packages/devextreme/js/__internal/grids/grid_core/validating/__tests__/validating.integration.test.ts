@@ -6,6 +6,8 @@ import {
   beforeTest,
   createDataGrid,
 } from '@ts/grids/grid_core/__tests__/__mock__/helpers/utils';
+import { TextAreaModel } from '@ts/ui/__tests__/__mock__/model/text_area';
+import { TextBoxModel } from '@ts/ui/__tests__/__mock__/model/textbox';
 
 describe('DataGrid Cell Editing', () => {
   beforeEach(beforeTest);
@@ -42,7 +44,7 @@ describe('DataGrid Cell Editing', () => {
       });
 
       const firstCell = component.getDataCell(0, 0);
-      const firstEditor = firstCell.getEditor();
+      const firstEditor = firstCell.getEditor(TextBoxModel);
 
       firstEditor.setValue('');
       jest.runAllTimers();
@@ -56,7 +58,7 @@ describe('DataGrid Cell Editing', () => {
       expect(component.getDataCell(0, 0).isValidCell).toBe(true);
 
       const secondCell = component.getDataCell(1, 0);
-      const secondEditor = secondCell.getEditor();
+      const secondEditor = secondCell.getEditor(TextBoxModel);
 
       secondEditor.setValue('');
       jest.runAllTimers();
@@ -68,6 +70,39 @@ describe('DataGrid Cell Editing', () => {
 
       expect(instance.cellValue(1, 'name')).toBe('Job 2');
       expect(component.getDataCell(1, 0).isValidCell).toBe(true);
+    });
+  });
+
+  // T1296376
+  describe('when a TextArea editor is invalid', () => {
+    it('should have the aria-invalid attribute set to true', async () => {
+      const { component } = await createDataGrid({
+        dataSource: [
+          { id: 1, text: 'value' },
+        ],
+        keyExpr: 'id',
+        columns: [{
+          dataField: 'text',
+          showEditorAlways: true,
+          validationRules: [{ type: 'required' }],
+        }],
+        editing: {
+          mode: 'cell',
+          allowUpdating: true,
+        },
+        onEditorPreparing(e) {
+          e.editorName = 'dxTextArea';
+        },
+      });
+
+      const dataCell = component.getDataCell(0, 0);
+      const editor = dataCell.getEditor(TextAreaModel);
+
+      editor.setValue('');
+      jest.runAllTimers();
+
+      expect(component.getDataCell(0, 0).isValidCell).toBe(false);
+      expect(editor.getInputElement().getAttribute('aria-invalid')).toBe('true');
     });
   });
 });
