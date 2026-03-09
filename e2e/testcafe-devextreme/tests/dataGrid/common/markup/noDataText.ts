@@ -20,6 +20,11 @@ test('The noDataText element should be rendered when a lookup column is filtered
   const nameFilterEditor = nameFilterCell.getEditorInput();
   const lookupFilterCell = filterRow.getFilterCell(1);
 
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
   // act
   await t.click(lookupFilterCell.element);
   const lookupList = new List(OVERLAY_SELECTOR);
