@@ -191,7 +191,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
   }
 
   _focusOutHandler(e) {
-    this._kbn.focusOutHandler(e);
+    this._kbn.focusOutHandler();
     super._focusOutHandler(e);
   }
 
@@ -259,6 +259,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
         this._attachAppointmentsEvents();
         break;
       case 'focusedElement':
+        this._kbn.resetTabIndex($(args.value));
         super._optionChanged(args);
         break;
       case 'focusStateEnabled':

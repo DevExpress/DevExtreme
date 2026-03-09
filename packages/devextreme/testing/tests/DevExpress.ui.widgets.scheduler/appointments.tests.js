@@ -8,7 +8,6 @@ import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceMan
 import $ from 'jquery';
 import '__internal/scheduler/workspaces/m_work_space_week';
 import SchedulerAppointments from '__internal/scheduler/appointments/m_appointment_collection';
-import eventsEngine from 'common/core/events/core/events_engine';
 import dblclickEvent from 'common/core/events/dblclick';
 import translator from 'common/core/animation/translator';
 import { isRenderer } from 'core/utils/type';
@@ -88,6 +87,10 @@ const createInstance = (options, subscribesConfig) => {
         }
     };
 
+    // Set 'items' using options like it is done in real scheduler
+    const items = options.items || [];
+    delete options.items;
+
     const instance = $('#scheduler-appointments').dxSchedulerAppointments({
         notifyScheduler,
         ...options,
@@ -95,6 +98,7 @@ const createInstance = (options, subscribesConfig) => {
         getLoadedResources: () => [],
         getResourceManager: getEmptyResourceManager,
         getAppointmentColor: () => new Deferred(),
+        getSortedAppointments: () => items,
         dataAccessors,
         getAppointmentDataSource: () => ({
             getUpdatedAppointment: () => false,
@@ -108,6 +112,8 @@ const createInstance = (options, subscribesConfig) => {
     }).dxSchedulerWorkSpaceWeek('instance');
 
     workspaceInstance.getWorkArea().append(instance.$element());
+
+    instance.option('items', items);
 
     const schedulerMock = {
         _appointments: instance,
@@ -502,20 +508,18 @@ QUnit.module('Appointments Actions', moduleOptions, () => {
                 startDate: new Date(2015, 2, 9, 10),
                 endDate: new Date(2015, 2, 9, 10)
             },
-            sortedIndex: -1,
+            sortedIndex: 0,
         }, {
             itemData: {
                 text: 'Appointment 2',
                 startDate: new Date(2015, 2, 10, 8),
                 endDate: new Date(2015, 2, 10, 9)
             },
-            sortedIndex: -1,
+            sortedIndex: 1,
         }];
 
         createInstance({
-            dataSource: new DataSource({
-                store: items
-            }),
+            items,
             views: ['month'],
             currentView: 'month',
             currentDate: new Date(2015, 2, 9),
@@ -748,7 +752,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
         assert.notOk(notifyStub.called, 'notify was not called');
     });
 
-    QUnit.test('Focus method should call focus on appointment', async function(assert) {
+    QUnit.test('Focus method should focus first appointment', async function(assert) {
         const items = [
             {
                 itemData: {
@@ -756,7 +760,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 10, 3, 9),
                     endDate: new Date(2015, 10, 3, 11)
                 },
-                sortedIndex: -1
+                sortedIndex: 0
             }
         ];
 
@@ -768,20 +772,9 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
 
         const $appointment = $('.dx-scheduler-appointment').eq(0);
 
-        $($appointment).trigger('focusin');
-        const initialTrigger = eventsEngine.trigger;
-
-        const focusedElement = $(instance.option('focusedElement')).get(0);
-        const focusSpy = sinon.spy(eventsEngine, 'trigger').withArgs(sinon.match(function($element) {
-            return config().useJQuery ? $element.get(0) === focusedElement : $element === focusedElement;
-        }), 'focus');
-
         instance.focus();
 
-        assert.ok(focusSpy.called, 'focus is called');
-        sinon.restore();
-
-        eventsEngine.trigger = initialTrigger;
+        assert.equal($appointment.get(0), document.activeElement, 'appointment is focused');
     });
 
     QUnit.test('Default behavior of tab button should be prevented for apps', async function(assert) {

@@ -47,18 +47,14 @@ export class AppointmentsKeyboardNavigation {
       return $item || $();
     }
 
-    const $itemsPlainArray = Object.values($items);
-
-    const $firstItem = this._collection.isVirtualScrolling
-      ? $itemsPlainArray.find(($item) => this.isItemVisibleInViewport($item)) ?? $()
-      : $($itemsPlainArray[0]);
-
-    return $firstItem;
+    return this.getFirstVisibleItem();
   }
 
-  public resetTabIndex(): void {
+  public resetTabIndex($item?: dxElementWrapper): void {
+    const $target = $item ?? this.$focusTarget();
+
     this.getFocusableItems().attr('tabIndex', -1);
-    this.$focusTarget().attr('tabIndex', this._collection.option('tabIndex'));
+    $target.attr('tabIndex', this._collection.option('tabIndex'));
   }
 
   public focusInHandler(e: DxEvent): void {
@@ -66,21 +62,11 @@ export class AppointmentsKeyboardNavigation {
     const itemData = this._collection.getAppointmentSettings($target);
 
     this.focusedItemSortIndex = itemData.sortedIndex;
-    this.resetTabIndex();
     this._collection.option('focusedElement', getPublicElement(e.target));
   }
 
-  public focusOutHandler(e: DxEvent<FocusEvent>): void {
-    const $container = this._collection._itemContainer();
-    const isFocusInside = $(e.relatedTarget as Element).closest($container).length > 0;
-
-    if (isFocusInside || this.isNavigating) {
-      return;
-    }
-
-    this.focusedItemSortIndex = -1;
-    this.resetTabIndex();
-    this._collection.option('focusedElement', null);
+  public focusOutHandler(): void {
+    this._collection.option('focusedElement', this.getFirstVisibleItem());
   }
 
   public getSupportedKeys(): SupportedKeys {
@@ -178,6 +164,17 @@ export class AppointmentsKeyboardNavigation {
         allDay: itemData.allDay,
       },
     );
+  }
+
+  private getFirstVisibleItem(): dxElementWrapper {
+    const $items = this._collection.$itemBySortedIndex;
+    const $itemsPlainArray = Object.values($items);
+
+    const $firstItem = this._collection.isVirtualScrolling
+      ? $itemsPlainArray.find(($item) => this.isItemVisibleInViewport($item)) ?? $()
+      : $($itemsPlainArray[0]);
+
+    return $firstItem;
   }
 
   private isItemVisibleInViewport($item: dxElementWrapper): boolean {
