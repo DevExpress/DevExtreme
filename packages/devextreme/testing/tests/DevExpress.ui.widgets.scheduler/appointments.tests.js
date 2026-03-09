@@ -160,7 +160,7 @@ QUnit.module('Appointments', moduleOptions, () => {
             items: [
                 {
                     itemData: data,
-                    sortedIndex: -1,
+                    sortedIndex: 0,
                 },
             ],
         }, testConfig);
@@ -179,7 +179,7 @@ QUnit.module('Appointments', moduleOptions, () => {
             items: [
                 {
                     itemData: data,
-                    sortedIndex: -1,
+                    sortedIndex: 0,
                 }
             ],
         }, testConfig);
@@ -195,14 +195,14 @@ QUnit.module('Appointments', moduleOptions, () => {
                         text: 'Appointment 1',
                         startDate: new Date()
                     },
-                    sortedIndex: -1,
+                    sortedIndex: 0,
                 },
                 {
                     itemData: {
                         text: 'Appointment 2',
                         startDate: new Date()
                     },
-                    sortedIndex: -1,
+                    sortedIndex: 1,
                 }
             ],
         }, testConfig);
@@ -220,7 +220,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                         startDate: new Date(),
                         recurrenceRule: 'FREQ=YEARLY;COUNT=1'
                     },
-                    sortedIndex: -1,
+                    sortedIndex: 0,
                 }
             ],
         }, testConfig);
@@ -238,7 +238,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                         startDate: new Date(2015, 1, 9, 8),
                         endDate: new Date(2015, 1, 9, 9)
                     },
-                    sortedIndex: -1,
+                    sortedIndex: 0,
                     height: 40,
                 }
             ],
@@ -260,7 +260,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 8),
                     endDate: new Date(2015, 1, 9, 9)
                 },
-                sortedIndex: -1,
+                sortedIndex: 0,
                 height: 30,
             }
         ]);
@@ -285,7 +285,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                         startDate: new Date(2015, 1, 9, 8),
                         endDate: new Date(2015, 1, 9, 9)
                     },
-                    sortedIndex: -1,
+                    sortedIndex: 0,
                 }
             ],
             allowResize: false,
@@ -303,7 +303,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            sortedIndex: -1,
+            sortedIndex: 0,
             height: 40,
             width: 40,
         };
@@ -406,7 +406,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 9),
                 allDay: true
             },
-            sortedIndex: -1,
+            sortedIndex: 0,
             allDay: true,
         };
 
@@ -460,7 +460,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            sortedIndex: -1,
+            sortedIndex: 0,
         };
 
         const instance = createInstance({
@@ -481,7 +481,7 @@ QUnit.module('Appointments Actions', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            sortedIndex: -1,
+            sortedIndex: 0,
         };
 
         const instance = createInstance({
@@ -541,7 +541,7 @@ QUnit.module('Appointments Actions', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            sortedIndex: -1,
+            sortedIndex: 0,
         };
 
         const instance = createInstance({
@@ -598,7 +598,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 8),
                     endDate: new Date(2015, 1, 9, 10)
                 },
-                sortedIndex: -1,
+                sortedIndex: 0,
             },
             {
                 itemData: {
@@ -606,7 +606,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 9),
                     endDate: new Date(2015, 1, 9, 10)
                 },
-                sortedIndex: -1,
+                sortedIndex: 1,
             }
         ];
 
@@ -774,7 +774,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
 
         instance.focus();
 
-        assert.equal($appointment.get(0), document.activeElement, 'appointment is focused');
+        assert.ok($appointment.hasClass('dx-state-focused'), 'appointment is focused');
     });
 
     QUnit.test('Default behavior of tab button should be prevented for apps', async function(assert) {
