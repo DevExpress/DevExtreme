@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../helpers/themeUtils';
@@ -36,10 +35,10 @@ const generateTestData = (rowCount: number) => new Array(rowCount)
         const dataGrid = new DataGrid(GRID_SELECTOR);
 
         for (let columnIdx = 0; columnIdx < 4; columnIdx += 1) {
-          const filterMenu = dataGrid.getFilterEditor(columnIdx, FilterTextBox);
+          const filterCell = dataGrid.getFilterCell(columnIdx);
           await t
-            .click(filterMenu.menuButton())
-            .click(filterMenu.menu.getItemByText('Starts with'));
+            .click(filterCell.menuButton())
+            .click(filterCell.menu.getItemByText('Starts with'));
         }
 
         await testScreenshot(
