@@ -13,8 +13,8 @@ catalog:
   inferno-server: ^8.2.3
   devexpress-diagram: 2.2.25
   devexpress-gantt: 4.1.66
-  devextreme-exceljs-fork: 4.4.5
-  devextreme-quill: 1.7.8
+  devextreme-exceljs-fork: 4.4.7
+  devextreme-quill: 1.7.9
   eslint: 9.39.2
   eslint-config-airbnb-typescript: 18.0.0
   eslint-config-devextreme: 1.1.9
@@ -42,15 +42,15 @@ catalogs:
     "@angular-devkit/architect": ~0.1902.19
     "@angular-devkit/schematics": ~19.2.19
     "@angular/cli": ~19.2.19
-    "@angular/common": ~19.2.18
-    "@angular/compiler": ~19.2.18
-    "@angular/compiler-cli": ~19.2.18
-    "@angular/core": ~19.2.18
-    "@angular/forms": ~19.2.18
-    "@angular/platform-browser": ~19.2.18
-    "@angular/platform-browser-dynamic": ~19.2.18
-    "@angular/platform-server": ~19.2.18
-    "@angular/router": ~19.2.18
+    "@angular/common": ~19.2.19
+    "@angular/compiler": ~19.2.19
+    "@angular/compiler-cli": ~19.2.19
+    "@angular/core": ~19.2.19
+    "@angular/forms": ~19.2.19
+    "@angular/platform-browser": ~19.2.19
+    "@angular/platform-browser-dynamic": ~19.2.19
+    "@angular/platform-server": ~19.2.19
+    "@angular/router": ~19.2.19
     "ng-packagr": ~19.2.2
     "typescript": 5.5.4
     "zone.js": 0.15.1

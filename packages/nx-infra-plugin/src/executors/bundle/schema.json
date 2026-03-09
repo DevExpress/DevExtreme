@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "entries": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Bundle entry point paths relative to sourceDir"
+    },
+    "sourceDir": {
+      "type": "string",
+      "description": "Source directory containing transpiled files"
+    },
+    "outDir": {
+      "type": "string",
+      "description": "Output directory for bundled files"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["debug", "production"],
+      "description": "Bundle mode"
+    },
+    "webpackConfigPath": {
+      "type": "string",
+      "description": "Path to webpack.config.js relative to project root",
+      "default": "./webpack.config.js"
+    }
+  },
+  "required": ["entries", "sourceDir", "outDir", "mode"],
+  "additionalProperties": false
+}

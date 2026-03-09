@@ -33,5 +33,7 @@ Demos/**/tsconfig.json
 **/.DS_Store
 publish-demos
 
+csp-reports
+
 .angular
 angular.json

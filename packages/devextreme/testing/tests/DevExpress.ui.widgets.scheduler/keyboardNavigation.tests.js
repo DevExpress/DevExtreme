@@ -88,13 +88,13 @@ QUnit.module('Keyboard Navigation', {
         });
 
         scheduler.appointments.compact.click();
-        assert.notOk(scheduler.instance._appointmentTooltip._list.option('focusStateEnabled'), 'focusStateEnabled was passed correctly');
+        assert.notOk(scheduler.instance.appointmentTooltip._list.option('focusStateEnabled'), 'focusStateEnabled was passed correctly');
 
-        scheduler.instance._appointmentTooltip.hide();
+        scheduler.instance.appointmentTooltip.hide();
 
         scheduler.instance.option('focusStateEnabled', true);
         scheduler.appointments.compact.click();
-        assert.ok(scheduler.instance._appointmentTooltip._list.option('focusStateEnabled'), 'focusStateEnabled was passed correctly');
+        assert.ok(scheduler.instance.appointmentTooltip._list.option('focusStateEnabled'), 'focusStateEnabled was passed correctly');
     });
 
     QUnit.test('Workspace navigation by arrows should work correctly with opened dropDown appointments', async function(assert) {

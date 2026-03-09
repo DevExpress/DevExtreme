@@ -232,3 +232,34 @@ test.meta({ browserSize: [1000, 800] })('The grid should display correctly when 
   ...defaultConfig,
   dataSource: [],
 }));
+
+test('Boolean column checkboxes should display correctly when there are fixed columns (T1303134)', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await dataGrid.scrollTo(t, { x: 100 });
+
+  await testScreenshot(t, takeScreenshot, 'T1303134_boolean_column_checkboxes_with_fixed_columns.png', { element: dataGrid.element });
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1, text: 'item 1', enabled: false },
+    { id: 2, text: 'item 2', enabled: true },
+    { id: 3, text: 'item 3' },
+  ],
+  keyExpr: 'id',
+  columns: [{
+    dataField: 'id',
+    fixed: true,
+  }, 'enabled', 'text'],
+  columnWidth: 200,
+  width: 400,
+}));
