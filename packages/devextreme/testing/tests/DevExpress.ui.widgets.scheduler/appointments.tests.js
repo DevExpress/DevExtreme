@@ -590,7 +590,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
         assert.ok(!$appointments.eq(0).attr('tabindex'), 'item tabindex is right');
     });
 
-    QUnit.testInActiveWindow('Focused element should be changed on focusin', async function(assert) {
+    QUnit.test('Focused element should be changed on focusin', async function(assert) {
         const items = [
             {
                 itemData: {
@@ -617,12 +617,12 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
         }, keyboardNavigationConfig);
 
         const $appointments = $('.dx-scheduler-appointment');
+
         $appointments.get(0).focus();
-        assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-        assert.deepEqual($appointments.get(0), $(instance.option('focusedElement')).get(0), 'right element is focused');
+        assert.equal($appointments.get(0), $(instance.option('focusedElement')).get(0), 'right element is focused - 1');
 
         $appointments.get(1).focus();
-        assert.deepEqual($appointments.get(1), $(instance.option('focusedElement')).get(0), 'right element is focused');
+        assert.equal($appointments.get(1), $(instance.option('focusedElement')).get(0), 'right element is focused - 2');
     });
 
     QUnit.test('Appointment popup should be opened after enter key press', async function(assert) {

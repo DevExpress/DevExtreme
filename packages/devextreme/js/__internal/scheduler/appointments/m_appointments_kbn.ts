@@ -61,6 +61,10 @@ export class AppointmentsKeyboardNavigation {
     const $target = $(e.target);
     const itemData = this._collection.getAppointmentSettings($target);
 
+    if (!itemData) {
+      return;
+    }
+
     this.focusedItemSortIndex = itemData.sortedIndex;
     this._collection.option('focusedElement', getPublicElement(e.target));
   }
