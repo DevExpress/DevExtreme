@@ -272,7 +272,7 @@ async function main() {
                 window.getSelection()?.removeAllRanges();
               }).with({ boundTestRun: t })();
 
-              await t.hover('html');
+              await t.hover('html', { offsetX: 1, offsetY: 1 });
 
               const [width, height] = meta?.browserSize || DEFAULT_BROWSER_SIZE;
               await t.resizeWindow(width, height);

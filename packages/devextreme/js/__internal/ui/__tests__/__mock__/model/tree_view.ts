@@ -31,7 +31,7 @@ export class TreeViewModel {
     return this.root?.querySelectorAll(`.${CLASSES.node}`) ?? null;
   }
 
-  private getNodeByText(text: string): HTMLElement | null {
+  public getNodeByText(text: string): HTMLElement | null {
     const nodes = this.getNodes();
     if (!nodes) return null;
 

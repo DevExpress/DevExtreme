@@ -13,6 +13,7 @@
 */
 import { Deferred } from '@js/core/utils/deferred';
 import { isDefined, isFunction, isObject } from '@js/core/utils/type';
+import messageLocalization from '@js/localization/message';
 import filteringUtils from '@js/ui/shared/filtering';
 import { extend } from '@ts/core/utils/m_extend';
 import { normalizeDataSourceOptions as oldNormalizeDataSourceOptions } from '@ts/data/data_source/m_utils';
@@ -38,7 +39,8 @@ export const getHeaderItemText = (
     .formatValue(displayValue, getFormatOptions(displayValue, column, currentLevel));
 
   if (!text) {
-    text = headerFilterOptions?.texts?.emptyValue ?? '(Blank)';
+    text = headerFilterOptions?.texts?.emptyValue
+      ?? messageLocalization.format('dxDataGrid-headerFilterEmptyValue');
   }
 
   return text;

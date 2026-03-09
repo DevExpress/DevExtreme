@@ -596,6 +596,20 @@
             ]
           },
           {
+            "Name": "AI Assistant",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "AI Assistant",
+                "Name": "AIAssistant",
+                "Widget": "DataGrid",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-2026-ai-assistant.xml"
+              }
+            ]
+          },
+          {
             "Name": "Master-Detail",
             "Equivalents": "preview row",
             "Demos": [
@@ -3630,6 +3644,7 @@
           {
             "Name": "Timetable",
             "Equivalents": "",
+            "Badge": "Updated",
             "Demos": [
               {
                 "Title": "All Day Panel Mode",
@@ -3679,6 +3694,14 @@
                   "/Models/SampleData/AppointmentsWorkHours.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Hidden Days",
+                "Name": "HiddenDays",
+                "Widget": "Scheduler",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-2026-hide-specific-days.xml"
               }
             ]
           },
@@ -4103,6 +4126,7 @@
                 "Name": "Overview",
                 "DocUrl": "Guide/UI_Components/Chat/Overview/",
                 "Widget": "Chat",
+                "Badge": "Updated",
                 "DemoType": "Web",
                 "MvcAdditionalFiles": [
                   "/Models/SampleData/ChatData.cs",
@@ -4184,8 +4208,23 @@
                 "Title": "AI and Chatbot Integration",
                 "Name": "AIAndChatbotIntegration",
                 "Widget": "Chat",
+                "Badge": "Updated",
                 "Modules": "html-react-parser,openai,unified",
                 "DemoType": "Web"
+              }
+            ]
+          },
+          {
+            "Name": "Tool Call Visualization",
+            "Equivalents": "",
+            "Demos": [
+              {
+                "Title": "Tool Call Visualization",
+                "Name": "ToolCallVisualization",
+                "Widget": "Chat",
+                "Badge": "Roadmap",
+                "DemoType": "Web",
+                "RoadmapSurveyUrl": "https://www.devexpress.com/support/surveys/devextreme-roadmap-2026-tool-call-visualization.xml"
               }
             ]
           }
