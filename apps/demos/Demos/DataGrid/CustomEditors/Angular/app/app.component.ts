@@ -5,6 +5,7 @@ import {
 } from 'devextreme-angular';
 import { createStore, CustomStore } from 'devextreme-aspnet-data-nojquery';
 import { Service, Status } from './app.service';
+import 'anti-forgery';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

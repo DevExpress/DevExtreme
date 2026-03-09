@@ -263,7 +263,7 @@ module('Events', {
                 scheduler.instance.showAppointmentPopup(appointments[0]);
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                const appointmentForm = scheduler.instance._appointmentPopup.form;
+                const appointmentForm = scheduler.instance.appointmentPopup.form;
 
                 assert.deepEqual(appointmentForm.formData.startDate, new Date(2015, 1, 9, 13), 'Form data is correct');
             } finally {

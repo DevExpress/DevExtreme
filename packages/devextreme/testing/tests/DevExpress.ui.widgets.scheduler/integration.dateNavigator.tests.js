@@ -381,13 +381,13 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
     QUnit.test('Tasks should be rerendered after click on next/prev button', async function(assert) {
         await this.createInstance({ currentDate: new Date(2015, 1, 24) });
 
-        const spy = sinon.spy(this.instance, '_setRemoteFilterIfNeeded');
+        const spy = sinon.spy(this.instance, 'setRemoteFilterIfNeeded');
 
         try {
             $(this.instance.$element()).find('.dx-scheduler-navigator-previous').trigger('dxclick');
-            assert.ok(spy.calledOnce, '_setRemoteFilterIfNeeded is called');
+            assert.ok(spy.calledOnce, 'setRemoteFilterIfNeeded is called');
         } finally {
-            this.instance._setRemoteFilterIfNeeded.restore();
+            this.instance.setRemoteFilterIfNeeded.restore();
         }
     });
 

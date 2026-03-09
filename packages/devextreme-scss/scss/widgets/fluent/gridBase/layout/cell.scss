@@ -1,0 +1,539 @@
+/* stylelint-disable no-duplicate-selectors */
+@use "sass:math";
+@use "../colors" as *;
+@use "../../colors" as *;
+@use "../sizes" as *;
+@use "../../sizes" as *;
+@use "../../textEditor" as *;
+@use "../../textEditor/sizes" as *;
+@use "../variables" as *;
+
+@mixin fluent-grid-base-cell($widget-name) {
+
+  // #region overflow
+
+  // (0,1,0)
+  .dx-cell-modified,
+  .dx-#{$widget-name}-invalid {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // (0,7,1) - (0,9,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-select,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending).dx-command-select,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-select {
+    overflow: visible;
+  }
+
+  // #endregion
+
+  // #region sizing
+
+  // (0,1,0)
+  .dx-command-adaptive {
+    width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
+    min-width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
+  }
+
+  // (0,2,0)
+  .dx-#{$widget-name} .dx-command-drag {
+    width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
+    min-width: 2 * $fluent-grid-base-cell-horizontal-padding + $fluent-base-icon-size;
+  }
+
+  // (0,7,1) - (0,9,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-select,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending).dx-command-select,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-select {
+    width: $fluent-grid-base-command-select-column-width;
+    min-width: $fluent-grid-base-command-select-column-width;
+  }
+
+  // (0,7,1) - (0,9,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-edit,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending).dx-command-edit,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-edit {
+    width: $fluent-grid-base-command-edit-column-width;
+    min-width: $fluent-grid-base-command-edit-column-width;
+  }
+
+  // (0,8,1) - (0,10,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-edit.dx-command-edit-with-icons,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending).dx-command-edit.dx-command-edit-with-icons,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-edit.dx-command-edit-with-icons {
+    width: $fluent-grid-base-command-edit-column-with-icons-width;
+    min-width: $fluent-grid-base-command-edit-column-with-icons-width;
+  }
+
+  // #endregion
+
+  // #region border
+
+  // (0,2,1)
+  .dx-#{$widget-name} .dx-row-lines > td {
+    border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name} .dx-column-lines > td {
+    border-left: $datagrid-border;
+    border-left-color: $datagrid-border-color;
+    border-right: $datagrid-border;
+    border-right-color: $datagrid-border-color;
+  }
+
+  // (0,3,0) - (0,4,0)
+  .dx-#{$widget-name}-rowsview .dx-master-detail-row > .dx-#{$widget-name}-group-space,
+  .dx-#{$widget-name}-rowsview .dx-master-detail-row .dx-master-detail-cell:not(.dx-row-lines) {
+    border-top: $datagrid-border;
+    border-top-color: $datagrid-border-color;
+    border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-headers .dx-#{$widget-name}-table .dx-row > td {
+    border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview .dx-row.dx-edit-row > td {
+    border-top: $datagrid-border;
+    border-top-color: $datagrid-border-color;
+    border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview .dx-row-removed.dx-row-lines > td {
+    border-top: 1px solid;
+    border-top-color: $datagrid-cell-removed-border-color;
+    border-bottom: 1px solid;
+    border-bottom-color: $datagrid-cell-removed-border-color;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview .dx-row-removed:not(.dx-row-lines) > td {
+    border-top: 1px solid;
+    border-top-color: $datagrid-hover-bg;
+  }
+
+  // (0,3,1) - (0,4,2)
+  .dx-#{$widget-name}-rowsview .dx-row-focused:not(.dx-row-lines) > td,
+  .dx-#{$widget-name}-rowsview .dx-row-focused:not(.dx-row-lines) > tr:first-child > td {
+    border-bottom: 1px solid;
+    border-bottom-color: $datagrid-row-focused-bg;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name}-headers.dx-header-multi-row .dx-row.dx-header-row > td {
+    border-right: 1px solid;
+    border-right-color: $fluent-grid-base-border-color;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name}-rowsview .dx-row.dx-edit-row:first-child > td {
+    border-top-width: 0;
+    border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
+  }
+
+  // (0,4,1) - (0,5,1)
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row-removed.dx-row-lines > td,
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-row-lines.dx-edit-row > td {
+    border-top-width: 0;
+  }
+
+  // (0,5,1) - (0,6,1)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > td.dx-#{$widget-name}-group-space,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td.dx-#{$widget-name}-group-space,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td.dx-#{$widget-name}-group-space,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td.dx-#{$widget-name}-group-space {
+    border-right-color: $datagrid-selection-bg;
+  }
+
+  // (0,5,1) - (0,6,1)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > td.dx-pointer-events-none,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td.dx-pointer-events-none,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td.dx-pointer-events-none,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td.dx-pointer-events-none {
+    border-left-color: $datagrid-row-selected-border-color;
+    border-right-color: $datagrid-row-selected-border-color;
+  }
+
+  // (0,5,1) - (0,6,1)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):not(.dx-row-lines) > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover:not(.dx-row-lines) > td {
+    border-bottom: 1px solid;
+    border-bottom-color: $datagrid-selection-bg;
+    border-top: 1px solid;
+    border-top-color: $datagrid-selection-bg;
+  }
+
+  // (0,5,1) - (0,6,1)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused).dx-row-lines > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover.dx-row-lines > td {
+    border-bottom-color: $datagrid-row-selected-border-color;
+  }
+
+  // (0,7,1)
+  .dx-#{$widget-name}-headers.dx-header-multi-row:not(.dx-#{$widget-name}-sticky-columns) .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row.dx-header-row > td {
+    border-left: 1px solid;
+    border-left-color: $fluent-grid-base-border-color;
+  }
+
+  // (0,8,1)
+  .dx-#{$widget-name}-headers.dx-header-multi-row:not(.dx-#{$widget-name}-sticky-columns) .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row.dx-header-row > td:first-child {
+    border-left: none;
+  }
+
+  // (0,8,1)
+  .dx-#{$widget-name}-headers.dx-header-multi-row:not(.dx-#{$widget-name}-sticky-columns) .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row.dx-header-row > td:last-child {
+    border-right: none;
+  }
+
+  // (0,10,1)
+  .dx-rtl .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) > td:not(.dx-focused).dx-#{$widget-name}-group-space {
+    border-left-color: $datagrid-hover-bg;
+    border-right-color: transparent;
+  }
+
+  // RTL
+
+  // (0,4,1) - (0,5,2)
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > td,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > tr > td,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > td,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > tr > td {
+    border-right-color: $datagrid-row-selected-border-color;
+  }
+
+  // (0,5,1) - (0,6,2)
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > td.dx-pointer-events-none,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > tr > td.dx-pointer-events-none,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > td.dx-pointer-events-none,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > tr > td.dx-pointer-events-none {
+    border-left-color: $datagrid-row-selected-border-color;
+  }
+
+  // (0,6,1) - (0,7,2)
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > td:not(.dx-focused).dx-#{$widget-name}-group-space,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > tr > td:not(.dx-focused).dx-#{$widget-name}-group-space,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > td:not(.dx-focused).dx-#{$widget-name}-group-space,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > tr > td:not(.dx-focused).dx-#{$widget-name}-group-space {
+    border-left-color: $datagrid-selection-bg;
+  }
+
+  // #endregion
+
+  // #region border-radius
+
+  // (0,4,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-table .dx-header-row > td:first-child {
+    border-top-left-radius: $datagrid-border-radius;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-table .dx-header-row > td:last-child {
+    border-top-right-radius: $datagrid-border-radius;
+  }
+
+  // #endregion
+
+  // #region padding
+
+  // (0,1,0)
+  .dx-cell-modified,
+  .dx-#{$widget-name}-invalid {
+    padding: $fluent-grid-base-cell-vertical-padding 0 $fluent-grid-base-cell-vertical-padding 0;
+  }
+
+  // (0,1,0)
+  .dx-editor-cell {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name} .dx-row > td {
+    padding: $fluent-grid-base-cell-vertical-padding $fluent-grid-base-cell-horizontal-padding;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name}-rowsview td.dx-validation-pending {
+    padding: 0;
+  }
+
+  // (0,3,0)
+  .dx-#{$widget-name}-rowsview .dx-master-detail-row > .dx-master-detail-cell {
+    padding: $grid-masterdetail-padding;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-table .dx-header-row > td {
+    padding-top: $fluent-grid-base-header-cell-vertical-padding;
+    padding-bottom: $fluent-grid-base-header-cell-vertical-padding;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-table .dx-#{$widget-name}-filter-row > td {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview td.dx-validation-pending.dx-cell-modified,
+  .dx-#{$widget-name}-rowsview td.dx-validation-pending .dx-#{$widget-name}-invalid {
+    padding: $fluent-grid-base-cell-padding;
+    padding-right: $fluent-texteditor-invalid-badge-size;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-master-detail-row > .dx-master-detail-cell {
+    padding: 0;
+  }
+
+  // (0,4,1)
+  .dx-rtl.dx-#{$widget-name}-rowsview td.dx-validation-pending.dx-cell-modified,
+  .dx-rtl.dx-#{$widget-name}-rowsview td.dx-validation-pending .dx-#{$widget-name}-invalid,
+  .dx-rtl .dx-#{$widget-name}-rowsview td.dx-validation-pending.dx-cell-modified,
+  .dx-rtl .dx-#{$widget-name}-rowsview td.dx-validation-pending .dx-#{$widget-name}-invalid {
+    padding-left: $fluent-texteditor-invalid-badge-size;
+    padding-right: $fluent-grid-base-cell-horizontal-padding;
+  }
+
+  // (0,5,1)
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+    padding-top: $fluent-grid-base-cell-vertical-padding + 1px;
+  }
+
+  // (0,5,1)
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-edit-row > td.dx-command-edit {
+    padding-top: $fluent-grid-base-cell-vertical-padding - 1px;
+  }
+
+  // (0,6,1)
+  .dx-#{$widget-name}-headers.dx-header-multi-row .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row.dx-header-row > td {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  // (0,6,1)
+  .dx-row.dx-group-row + .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row td:not(.dx-command-expand, .dx-editor-cell),
+  .dx-row.dx-master-detail-row + .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row td:not(.dx-command-expand, .dx-editor-cell) {
+    padding-top: $fluent-grid-base-cell-vertical-padding;
+  }
+
+  // (0,7,0)
+  .dx-#{$widget-name}-headers.dx-header-multi-row .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row.dx-header-row .dx-command-select {
+    padding-bottom: math.div($fluent-grid-base-header-height - $fluent-grid-base-checkbox-size, 2);
+  }
+
+  // (0,7,1)
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-selection:not(.dx-edit-row):not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell),
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-row-focused:not(.dx-edit-row):not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+    padding-bottom: $fluent-grid-base-cell-vertical-padding - 1px;
+  }
+
+  // (0,7,1) - (0,9,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-expand,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) .dx-#{$widget-name}-group-space,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending).dx-command-expand,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending) .dx-#{$widget-name}-group-space,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-expand,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) .dx-#{$widget-name}-group-space {
+    padding: 0 4px 0 8px;
+  }
+
+  // (0,8,1) - (0,10,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-editor-cell:not(.dx-command-select),
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending).dx-editor-cell:not(.dx-command-select),
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-editor-cell:not(.dx-command-select) {
+    padding-right: 0;
+  }
+
+  // (0,9,1) - (0,11,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-cell-expandable),
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending).dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-cell-expandable),
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-cell-expandable) {
+    padding-left: 0;
+  }
+
+  // #endregion
+
+  // #region background
+
+  // (0,2,1)
+  .dx-#{$widget-name} .dx-row-alt > td {
+    background-color: $datagrid-row-alternation-bg;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-drop-highlight > td {
+    background-color: $datagrid-drop-highlight-bg;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name}-rowsview .dx-row-removed > td {
+    background-color: $datagrid-row-removed-bg;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-rowsview .dx-master-detail-row:not(.dx-#{$widget-name}-edit-form) > .dx-#{$widget-name}-group-space,
+  .dx-#{$widget-name}-rowsview .dx-master-detail-row:not(.dx-#{$widget-name}-edit-form) .dx-master-detail-cell {
+    background-color: $datagrid-master-detail-cell-bg;
+  }
+
+  // (0,4,0) - (0,6,0)
+  .dx-#{$widget-name}-rowsview .dx-data-row:not(.dx-edit-row) .dx-cell-modified,
+  .dx-#{$widget-name}-rowsview .dx-adaptive-detail-row:not(.dx-edit-row) .dx-cell-modified,
+  .dx-#{$widget-name}-rowsview .dx-data-row.dx-selection:not(.dx-edit-row) .dx-cell-modified,
+  .dx-#{$widget-name}-rowsview .dx-adaptive-detail-row.dx-selection:not(.dx-edit-row) .dx-cell-modified,
+  .dx-#{$widget-name}-rowsview .dx-data-row.dx-selection:hover:not(.dx-edit-row) .dx-cell-modified,
+  .dx-#{$widget-name}-rowsview .dx-adaptive-detail-row.dx-selection:hover:not(.dx-edit-row) .dx-cell-modified {
+    background-color: $datagrid-cell-modified-border-color;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name}-headers.dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-filter-row > td.dx-#{$widget-name}-sticky-column,
+  .dx-#{$widget-name}-headers.dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-filter-row > td.dx-#{$widget-name}-sticky-column-left,
+  .dx-#{$widget-name}-headers.dx-#{$widget-name}-sticky-columns .dx-#{$widget-name}-filter-row > td.dx-#{$widget-name}-sticky-column-right {
+    background-color: $datagrid-filter-row-background-color;
+  }
+
+  // (0,4,1) - (0,5,2)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td {
+    background-color: $datagrid-selection-bg;
+  }
+
+  // (0,5,1)
+  .dx-#{$widget-name}-headers .dx-#{$widget-name}-table .dx-row > td:not([class*="dx-command"], .dx-editor-cell, .dx-#{$widget-name}-group-space):hover {
+    background-color: $datagrid-hover-bg;
+  }
+
+  // (0,6,1)
+  .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid) {
+    background-color: $datagrid-row-focused-bg;
+  }
+
+  // (0,7,1) - (0,7,2)
+  .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row.dx-edit-row > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid),
+  .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row.dx-edit-row > tr > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid) {
+    background-color: $datagrid-base-background-color;
+  }
+
+  // (0,8,1)
+  .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) > td:not(.dx-focused) {
+    background-color: $datagrid-hover-bg;
+  }
+
+  // (0,8,1)
+  .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) > td.dx-pointer-events-none {
+    background-color: transparent;
+  }
+
+  // #endregion
+
+  // #region color
+
+  // (0,2,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-drop-highlight > td {
+    color: $datagrid-drop-highlight-color;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name}-rowsview .dx-row-removed > td {
+    color: $datagrid-cell-removed-text-color;
+  }
+
+  // (0,4,1) - (0,5,2)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td {
+    color: $datagrid-row-selected-color;
+  }
+
+  // (0,6,1)
+  .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid) {
+    color: $datagrid-row-focused-color;
+  }
+
+  // (0,7,1)
+  .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) > td {
+    color: $datagrid-row-hovered-color;
+  }
+
+  // (0,7,1) - (0,7,2)
+  .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row.dx-edit-row > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid),
+  .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row.dx-edit-row > tr > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid) {
+    color: $datagrid-base-color;
+  }
+
+  // #endregion
+
+  // #region typography
+
+  // (0,2,1)
+  .dx-#{$widget-name} .dx-row > td {
+    font-size: $fluent-grid-base-cell-font-size;
+    line-height: $fluent-grid-base-cell-line-height;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-headers .dx-#{$widget-name}-table .dx-row > td {
+    line-height: $fluent-grid-base-header-line-height;
+    font-weight: $datagrid-columnchooser-font-weight;
+    font-size: $fluent-grid-base-header-cell-font-size;
+  }
+
+  // (0,7,1) - (0,9,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-select,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending).dx-command-select,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-select {
+    line-height: 1;
+  }
+
+  // (0,7,1) - (0,9,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-expand,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) .dx-#{$widget-name}-group-space,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending).dx-command-expand,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending) .dx-#{$widget-name}-group-space,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all).dx-command-expand,
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) .dx-#{$widget-name}-group-space {
+    line-height: 0;
+  }
+
+  // #endregion
+
+  // #region vertical-align
+
+  // (0,6,1) - (0,8,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all),
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending),
+  .dx-#{$widget-name} .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) {
+    vertical-align: middle;
+  }
+
+  // (0,6,1)
+  .dx-#{$widget-name}-headers.dx-header-multi-row .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row.dx-header-row > td {
+    vertical-align: bottom;
+  }
+
+  // #endregion
+
+  // #region position
+
+  // (0,2,1)
+  .dx-#{$widget-name}-rowsview td.dx-validation-pending {
+    position: relative;
+  }
+
+  // #endregion
+}

@@ -155,6 +155,55 @@ const meta: Meta<typeof DataGrid> = {
     }
 };
 
+const columnChooserArgTypes: Partial<Meta<typeof DataGrid>['argTypes']> = {
+    'columnChooser.enabled': {
+        control: 'boolean',
+    },
+    'columnChooser.mode': {
+        control: 'radio',
+        options: ['select', 'dragAndDrop'],
+    },
+    'columnChooser.title': {
+        control: 'text',
+    },
+    'columnChooser.height': {
+        control: 'number',
+    },
+    'columnChooser.width': {
+        control: 'number',
+    },
+    'columnChooser.sortOrder': {
+        control: 'radio',
+        options: ['asc', 'desc', 'none'],
+        mapping: {
+            asc: 'asc',
+            desc: 'desc',
+            none: undefined,
+        },
+    },
+    'columnChooser.emptyPanelText': {
+        control: 'text',
+    },
+    'columnChooser.container': {
+        control: 'text',
+    },
+    'columnChooser.search.enabled': {
+        control: 'boolean',
+    },
+    'columnChooser.search.timeout': {
+        control: 'number',
+    },
+    'columnChooser.selection.allowSelectAll': {
+        control: 'boolean',
+    },
+    'columnChooser.selection.recursive': {
+        control: 'boolean',
+    },
+    'columnChooser.selection.selectByClick': {
+        control: 'boolean',
+    },
+};
+
 export default meta;
 
 type Story = StoryObj<typeof DataGrid>;
@@ -352,4 +401,47 @@ export const AiColumn: Story = {
         allowColumnResizing: true,
         allowColumnReordering: true,
     },
+};
+
+export const ColumnChooserStory: Story = {
+    name: 'ColumnChooser',
+    argTypes: columnChooserArgTypes,
+    args: {
+        'columnChooser.enabled': true,
+        'columnChooser.mode': 'select',
+        'columnChooser.title': 'Choose Columns',
+        'columnChooser.height': 300,
+        'columnChooser.width': 250,
+        'columnChooser.sortOrder': undefined,
+        'columnChooser.emptyPanelText': 'Drag a column here to hide it',
+        'columnChooser.search.enabled': true,
+        'columnChooser.search.timeout': 0,
+        'columnChooser.selection.allowSelectAll': true,
+        'columnChooser.selection.recursive': true,
+        'columnChooser.selection.selectByClick': true,
+    },
+    render: (args) => (
+        <DataGrid
+            dataSource={countries}
+            keyExpr="ID"
+            showBorders={true}
+            allowColumnReordering={true}
+            {...args}
+        >
+            <Column dataField="ID" width={60} />
+            <Column dataField="Country" />
+            <Column dataField="Area" caption="Area, km²" format="fixedPoint" />
+            <Column caption="Population">
+                <Column dataField="Population_Total" caption="Total" format="fixedPoint" />
+                <Column dataField="Population_Urban" caption="Urban" format="percent" />
+                <Column dataField="Population_Rural" caption="Rural" format="percent" />
+            </Column>
+            <Column caption="GDP">
+                <Column dataField="GDP_Total" caption="Total, mln $" allowHiding={false} format="fixedPoint" />
+                <Column dataField="GDP_Agriculture" caption="Agriculture" format={{ type: 'percent', precision: 1 }} />
+                <Column dataField="GDP_Industry" caption="Industry" format={{ type: 'percent', precision: 1 }} />
+                <Column dataField="GDP_Services" caption="Services" format={{ type: 'percent', precision: 1 }} />
+            </Column>
+        </DataGrid>
+    ),
 };

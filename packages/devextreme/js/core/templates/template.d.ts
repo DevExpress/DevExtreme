@@ -4,6 +4,7 @@ export type {
 
 /**
  * @docid
+ * @hidden
  * @type object
  */
 export interface dxTemplateOptions {
