@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import List from 'devextreme-testcafe-models/list';
+import SelectBox from 'devextreme-testcafe-models/selectBox';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/themeUtils';
@@ -9,16 +9,13 @@ fixture.disablePageReloads`No Data`
   .page(url(__dirname, '../../../container.html'));
 
 const GRID_CONTAINER = '#container';
-const OVERLAY_SELECTOR = '.dx-overlay-wrapper';
 
 test('The noDataText element should be rendered when a lookup column is filtered (T1293839)', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(GRID_CONTAINER);
-  const filterRow = dataGrid.getHeaders().getFilterRow();
-  const nameFilterCell = filterRow.getFilterCell(0);
-  const nameFilterEditor = nameFilterCell.getEditorInput();
-  const lookupFilterCell = filterRow.getFilterCell(1);
+  const nameFilterInput = dataGrid.getFilterCell(0).getEditorInput().element;
+  const lookupFilterEditor = dataGrid.getFilterEditor(1, SelectBox);
 
   // assert
   await t
@@ -26,11 +23,16 @@ test('The noDataText element should be rendered when a lookup column is filtered
     .ok();
 
   // act
-  await t.click(lookupFilterCell.element);
-  const lookupList = new List(OVERLAY_SELECTOR);
+  await t.click(lookupFilterEditor.element);
+
+  // assert
+  await t.expect(lookupFilterEditor.isOpened()).ok();
+
+  // act
+  const lookupList = await lookupFilterEditor.getList();
   const lookupItem = lookupList.getItem(1);
   await t.click(lookupItem.element);
-  await t.typeText(nameFilterEditor.element, 'test');
+  await t.typeText(nameFilterInput, 'test');
 
   // assert
   await t
