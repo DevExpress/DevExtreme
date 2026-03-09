@@ -69,8 +69,6 @@ jobs:
       working-directory: ./packages/devextreme
       env:
         DEVEXTREME_TEST_CI: "true"
-        DOTNET_CLI_TELEMETRY_OPTOUT: "true"
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
         BUILD_INPROGRESS_RENOVATION: "true"
       run: pnpx nx build:systemjs
 

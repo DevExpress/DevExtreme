@@ -2,7 +2,7 @@
 
 const http = require('http');
 const { join } = require('path');
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 const { platform } = require('os');
 const { env, versions } = require('process');
 const PORT = require('./../ports.json').qunit;
@@ -14,9 +14,19 @@ if(parseInt(versions.node.split('.')[0]) < 6) {
 execRunner();
 
 function execRunner () {
+    const tscResult = spawnSync(
+        'pnpm',
+        [ 'exec', 'tsc', '-p', join(__dirname, 'runner/tsconfig.json') ],
+        { stdio: 'inherit', shell: true }
+    );
+
+    if(tscResult.status !== 0) {
+        throw 'Failed to compile testing runner';
+    }
+
     spawn(
-        'dotnet',
-        [ join(__dirname, 'runner/bin/runner.dll') ],
+        'node',
+        [ join(__dirname, 'runner/dist/index.js') ],
         { stdio: 'inherit', shell: true }
     );
 
