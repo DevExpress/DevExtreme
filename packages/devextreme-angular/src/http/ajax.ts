@@ -1,5 +1,11 @@
 import {
-  HttpClient, HttpEventType, HttpParams, HttpEvent, HttpErrorResponse, HttpResponse,
+  HttpClient,
+  HttpEventType,
+  HttpParams,
+  HttpEvent,
+  HttpErrorResponse,
+  HttpResponse,
+  HttpHeaders,
 } from '@angular/common/http';
 import { Deferred, DeferredObj } from 'devextreme/core/utils/deferred';
 import { isDefined } from 'devextreme/core/utils/type';
@@ -290,18 +296,24 @@ export const sendRequestFactory = (httpClient: HttpClient) => (options: Options)
       },
     );
 
-  if (options.timeout) {
-    timeoutId = setTimeout(() => {
-      timeoutId = null;
-      deferred.reject({ statusText: TIMEOUT, status: 0, ok: false });
-      subscription?.unsubscribe();
-      subscription = null;
-    }, options.timeout);
-  }
-
   const callbacks = upload
     ? getUploadCallbacks(options, deferred, xhrSurrogate)
     : getRequestCallbacks(options, deferred, xhrSurrogate);
+
+  if (options.timeout) {
+    timeoutId = setTimeout(() => {
+      timeoutId = null;
+      subscription?.unsubscribe();
+      subscription = null;
+      const timeoutError = {
+        statusText: TIMEOUT,
+        status: 0,
+        ok: false,
+        headers: new HttpHeaders(),
+      } as HttpErrorResponse;
+      callbacks.error(timeoutError);
+    }, options.timeout);
+  }
 
   subscription = request.subscribe({
     next(value) {
