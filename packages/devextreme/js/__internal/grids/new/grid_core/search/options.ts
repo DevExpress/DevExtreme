@@ -1,5 +1,3 @@
-import messageLocalization from '@js/localization/message';
-
 export interface Options {
   searchPanel?: {
     // Notifies the UI component whether search is case-sensitive
@@ -25,7 +23,7 @@ export const defaultOptions: Options = {
   searchPanel: {
     highlightCaseSensitive: false,
     highlightSearchText: true,
-    placeholder: messageLocalization.format('dxDataGrid-searchPanelPlaceholder'),
+    placeholder: undefined,
     searchVisibleColumnsOnly: false,
     text: '',
     visible: false,

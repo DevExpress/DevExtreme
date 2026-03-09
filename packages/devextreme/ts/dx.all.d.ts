@@ -8118,29 +8118,11 @@ declare module DevExpress.excelExporter {
   /**
    * [descr:CellAddress]
    */
-  export interface CellAddress {
-    /**
-     * [descr:CellAddress.row]
-     */
-    row?: number;
-    /**
-     * [descr:CellAddress.column]
-     */
-    column?: number;
-  }
+  export type CellAddress = DevExpress.exportInternal.CellAddress;
   /**
    * [descr:CellRange]
    */
-  export interface CellRange {
-    /**
-     * [descr:CellRange.from]
-     */
-    from?: CellAddress;
-    /**
-     * [descr:CellRange.to]
-     */
-    to?: CellAddress;
-  }
+  export type CellRange = DevExpress.exportInternal.CellRange;
   /**
    * @deprecated Use DataGridCell instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -8196,7 +8178,7 @@ declare module DevExpress.excelExporter {
     /**
      * [descr:ExcelExportBaseOptions.topLeftCell]
      */
-    topLeftCell?: CellAddress | string;
+    topLeftCell?: DevExpress.exportInternal.CellAddress | string;
     /**
      * [descr:ExcelExportBaseOptions.keepColumnWidths]
      */
@@ -8231,6 +8213,34 @@ declare module DevExpress.excelExporter {
      * [descr:ExcelPivotGridCell.headerType]
      */
     headerType?: 'column' | 'row' | 'data' | 'filter';
+  }
+}
+declare module DevExpress.exportInternal {
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface CellAddress {
+    /**
+     * [descr:CellAddress.row]
+     */
+    row?: number;
+    /**
+     * [descr:CellAddress.column]
+     */
+    column?: number;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface CellRange {
+    /**
+     * [descr:CellRange.from]
+     */
+    from?: CellAddress;
+    /**
+     * [descr:CellRange.to]
+     */
+    to?: CellAddress;
   }
 }
 declare module DevExpress.fileManagement {
@@ -11220,6 +11230,15 @@ declare module DevExpress.ui {
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxChat>;
     /**
+     * [descr:_ui_chat_InputFieldTextChangedEvent]
+     */
+    export type InputFieldTextChangedEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxChat,
+        DevExpress.events.InteractionEvent | Event
+      > &
+        DevExpress.ui.Editor.ValueChangedInfo;
+    /**
      * [descr:_ui_chat_MessageDeletedEvent]
      */
     export type MessageDeletedEvent =
@@ -11473,6 +11492,12 @@ declare module DevExpress.ui {
      */
     onAttachmentDownloadClick?:
       | ((e: DevExpress.ui.dxChat.AttachmentDownloadClickEvent) => void)
+      | undefined;
+    /**
+     * [descr:dxChatOptions.onInputFieldTextChanged]
+     */
+    onInputFieldTextChanged?:
+      | ((e: DevExpress.ui.dxChat.InputFieldTextChangedEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageEntered]
@@ -25886,6 +25911,14 @@ declare module DevExpress.ui {
      */
     getEndViewDate(): Date;
     /**
+     * [descr:dxScheduler.getOccurrences(startDate, endDate, appointments)]
+     */
+    getOccurrences(
+      startDate: Date,
+      endDate: Date,
+      appointments: Appointment[]
+    ): DevExpress.ui.dxScheduler.Occurrence[];
+    /**
      * [descr:dxScheduler.getStartViewDate()]
      */
     getStartViewDate(): Date;
@@ -26259,6 +26292,23 @@ declare module DevExpress.ui {
      */
     export type InitializedEvent =
       DevExpress.common.core.events.InitializedEventInfo<dxScheduler>;
+    /**
+     * [descr:Occurrence]
+     */
+    export type Occurrence = {
+      /**
+       * [descr:Occurrence.startDate]
+       */
+      startDate: Date;
+      /**
+       * [descr:Occurrence.endDate]
+       */
+      endDate: Date;
+      /**
+       * [descr:Occurrence.appointmentData]
+       */
+      appointmentData: Appointment;
+    };
     /**
      * [descr:_ui_scheduler_OptionChangedEvent]
      */

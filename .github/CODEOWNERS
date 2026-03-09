@@ -1,8 +1,3 @@
-# General d.ts files
-
-/packages/devextreme/js/**/*.d.ts                               @DevExpress/devextreme-apireviewers
-/packages/devextreme/ts/**                                      @DevExpress/devextreme-apireviewers
-
 # Localization strings
 
 /packages/devextreme/js/localization/messages/**           @DevExpress/devextreme-techwriters
@@ -10,7 +5,7 @@
 # Grids
 
 ## grid_core
-/packages/devextreme/js/common/grids.d.ts @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/common/grids.d.ts @DevExpress/devextreme-grids
 
 /packages/devextreme/js/__internal/grids/grid_core/**           @DevExpress/devextreme-grids
 /packages/devextreme/js/ui/shared/**                            @DevExpress/devextreme-grids
@@ -21,8 +16,8 @@
 /packages/devextreme-scss/scss/widgets/material/gridBase/**     @DevExpress/devextreme-grids
 
 ## data_grid
-/packages/devextreme/js/ui/data_grid.d.ts       @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/data_grid_types.d.ts @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/data_grid.d.ts       @DevExpress/devextreme-grids
+/packages/devextreme/js/ui/data_grid_types.d.ts @DevExpress/devextreme-grids
 
 /packages/devextreme/js/ui/data_grid.js                         @DevExpress/devextreme-grids
 /packages/devextreme/js/ui/data_grid/**                         @DevExpress/devextreme-grids
@@ -41,8 +36,8 @@
 /apps/demos/testing/widgets/datagrid/** @DevExpress/devextreme-grids
 
 ## tree_list
-/packages/devextreme/js/ui/tree_list.d.ts       @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/tree_list_types.d.ts @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/tree_list.d.ts       @DevExpress/devextreme-grids
+/packages/devextreme/js/ui/tree_list_types.d.ts @DevExpress/devextreme-grids
 
 /packages/devextreme/js/ui/tree_list.js                     @DevExpress/devextreme-grids
 /packages/devextreme/js/ui/tree_list/**                     @DevExpress/devextreme-grids
@@ -78,8 +73,8 @@
 /apps/demos/Demos/FilterBuilder/** @DevExpress/devextreme-grids
 
 ## sortable
-/packages/devextreme/js/ui/sortable_types.d.ts @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/sortable.d.ts       @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/sortable_types.d.ts @DevExpress/devextreme-grids
+/packages/devextreme/js/ui/sortable.d.ts       @DevExpress/devextreme-grids
 
 /packages/devextreme/js/ui/sortable.js           @DevExpress/devextreme-grids
 /packages/devextreme/js/__internal/m_sortable.ts @DevExpress/devextreme-grids
@@ -93,8 +88,8 @@
 /apps/demos/Demos/Sortable/** @DevExpress/devextreme-grids
 
 ## draggable
-/packages/devextreme/js/ui/draggable_types.d.ts @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/draggable.d.ts       @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/draggable_types.d.ts @DevExpress/devextreme-grids
+/packages/devextreme/js/ui/draggable.d.ts       @DevExpress/devextreme-grids
 
 /packages/devextreme/js/ui/draggable.js           @DevExpress/devextreme-grids
 /packages/devextreme/js/__internal/m_draggable.ts @DevExpress/devextreme-grids
@@ -104,8 +99,8 @@
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/draggable.tests.js @DevExpress/devextreme-grids
 
 ## card_view
-/packages/devextreme/js/ui/card_view.d.ts                   @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/card_view_types.d.ts             @DevExpress/devextreme-grids @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/card_view.d.ts                   @DevExpress/devextreme-grids
+/packages/devextreme/js/ui/card_view_types.d.ts             @DevExpress/devextreme-grids
 /packages/devextreme/js/ui/card_view.js                     @DevExpress/devextreme-grids
 
 /packages/devextreme/js/__internal/grids/new/card_view/**   @DevExpress/devextreme-grids
@@ -122,8 +117,8 @@
 # Scheduler
 
 ## scheduler
-/packages/devextreme/js/ui/scheduler_types.d.ts @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/scheduler.d.ts       @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/scheduler_types.d.ts @DevExpress/devextreme-scheduler
+/packages/devextreme/js/ui/scheduler.d.ts       @DevExpress/devextreme-scheduler
 
 /packages/devextreme/js/ui/scheduler.js         @DevExpress/devextreme-scheduler
 /packages/devextreme/js/__internal/scheduler/** @DevExpress/devextreme-scheduler
@@ -141,8 +136,8 @@
 /apps/demos/testing/widgets/scheduler/** @DevExpress/devextreme-scheduler
 
 ## pivot_grid
-/packages/devextreme/js/ui/pivot_grid_types.d.ts @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/pivot_grid.d.ts       @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/pivot_grid_types.d.ts @DevExpress/devextreme-scheduler
+/packages/devextreme/js/ui/pivot_grid.d.ts       @DevExpress/devextreme-scheduler
 
 /packages/devextreme/js/ui/pivot_grid.js @DevExpress/devextreme-scheduler
 /packages/devextreme/js/ui/pivot_grid/** @DevExpress/devextreme-scheduler
@@ -160,13 +155,13 @@
 /apps/demos/testing/widgets/pivotgrid/** @DevExpress/devextreme-scheduler
 
 ### field chooser
-/packages/devextreme/js/ui/pivot_grid_field_chooser_types.d.ts @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/pivot_grid_field_chooser.d.ts       @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/pivot_grid_field_chooser_types.d.ts @DevExpress/devextreme-scheduler
+/packages/devextreme/js/ui/pivot_grid_field_chooser.d.ts       @DevExpress/devextreme-scheduler
 /packages/devextreme/js/ui/pivot_grid_field_chooser.js         @DevExpress/devextreme-scheduler
 
 ## pagination
-/packages/devextreme/js/ui/pagination_types.d.ts @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/pagination.d.ts       @DevExpress/devextreme-scheduler @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/pagination_types.d.ts @DevExpress/devextreme-scheduler
+/packages/devextreme/js/ui/pagination.d.ts       @DevExpress/devextreme-scheduler
 
 /packages/devextreme/js/ui/pagination.js         @DevExpress/devextreme-scheduler
 /packages/devextreme/js/__internal/pagination/** @DevExpress/devextreme-scheduler
@@ -208,8 +203,8 @@
 /packages/devextreme/testing/tests/**/accordion.*              @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/accordionParts/**   @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/accordion_types.d.ts                @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/accordion.d.ts                      @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/accordion_types.d.ts                @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/accordion.d.ts                      @DevExpress/devextreme-navigation
 
 ## action_sheet
 /packages/devextreme/js/ui/action_sheet.js                     @DevExpress/devextreme-navigation
@@ -223,8 +218,8 @@
 /e2e/testcafe-devextreme/tests/accessibility/actionSheet.ts  @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/actionSheet.*            @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/action_sheet_types.d.ts             @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/action_sheet.d.ts                   @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/action_sheet_types.d.ts             @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/action_sheet.d.ts                   @DevExpress/devextreme-navigation
 
 ## box
 /packages/devextreme/js/ui/box.js                              @DevExpress/devextreme-navigation
@@ -237,8 +232,8 @@
 
 /packages/devextreme/testing/tests/**/box.*                    @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/box_types.d.ts                      @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/box.d.ts                            @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/box_types.d.ts                      @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/box.d.ts                            @DevExpress/devextreme-navigation
 
 
 ## button
@@ -253,8 +248,8 @@
 /e2e/testcafe-devextreme/tests/accessibility/button.ts  @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/button.*                 @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/button_types.d.ts                   @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/button.d.ts                         @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/button_types.d.ts                   @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/button.d.ts                         @DevExpress/devextreme-navigation
 
 ## button_group
 /packages/devextreme/js/ui/button_group.js                     @DevExpress/devextreme-navigation
@@ -268,8 +263,8 @@
 /e2e/testcafe-devextreme/tests/accessibility/buttonGroup.ts  @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/buttonGroup.*            @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/button_group_types.d.ts             @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/button_group.d.ts                   @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/button_group_types.d.ts             @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/button_group.d.ts                   @DevExpress/devextreme-navigation
 
 ## collection
 /packages/devextreme/js/ui/collection/**                       @DevExpress/devextreme-navigation
@@ -278,7 +273,7 @@
 /packages/devextreme/testing/tests/**/collectionWidget*.*      @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/DevExpress.ui/collectionWidgetParts/**   @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/collection/**/*.d.ts                @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/collection/**/*.d.ts                @DevExpress/devextreme-navigation
 
 ## context_menu
 /packages/devextreme/js/ui/context_menu.js                     @DevExpress/devextreme-navigation
@@ -294,9 +289,9 @@
 /e2e/testcafe-devextreme/tests/accessibility/contextMenu.ts  @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/contextMenu.*            @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/context_menu_types.d.ts             @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/context_menu.d.ts                   @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/context_menu/**/*.d.ts              @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/context_menu_types.d.ts             @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/context_menu.d.ts                   @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/context_menu/**/*.d.ts              @DevExpress/devextreme-navigation
 
 ## drawer
 /packages/devextreme/js/ui/drawer.js                           @DevExpress/devextreme-navigation
@@ -311,8 +306,8 @@
 /packages/devextreme/testing/tests/DevExpress.serverSide/drawer.tests.js   @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/drawer.*                 @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/drawer_types.d.ts                   @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/drawer.d.ts                         @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/drawer_types.d.ts                   @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/drawer.d.ts                         @DevExpress/devextreme-navigation
 
 ## form
 /packages/devextreme/js/ui/form.js                             @DevExpress/devextreme-navigation
@@ -329,9 +324,9 @@
 /packages/devextreme/testing/tests/DevExpress.ui.widgets.form/**  @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/form*                    @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/form_types.d.ts                     @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/form.d.ts                           @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/form/**/*.d.ts                      @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/form_types.d.ts                     @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/form.d.ts                           @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/form/**/*.d.ts                      @DevExpress/devextreme-navigation
 
 ## gallery
 /packages/devextreme/js/ui/gallery.js                          @DevExpress/devextreme-navigation
@@ -347,8 +342,8 @@
 /e2e/testcafe-devextreme/tests/accessibility/gallery.ts @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/gallery.*                @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/gallery_types.d.ts                  @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/gallery.d.ts                        @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/gallery_types.d.ts                  @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/gallery.d.ts                        @DevExpress/devextreme-navigation
 
 ## hierarchial_collection
 /packages/devextreme/js/ui/hierarchial_collection/**           @DevExpress/devextreme-navigation
@@ -357,7 +352,7 @@
 /packages/devextreme/testing/tests/DevExpress.ui/hierarchicalCollectionWidgetParts/**   @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/hierarchicalCollectionWidget.*   @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/hierarchial_collection/**/*.d.ts    @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/hierarchial_collection/**/*.d.ts    @DevExpress/devextreme-navigation
 
 ## list
 /packages/devextreme/js/ui/list.js                             @DevExpress/devextreme-navigation
@@ -373,8 +368,8 @@
 /packages/devextreme/testing/tests/**/listItem.*               @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/listParts/**   @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/list_types.d.ts                     @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/list.d.ts                           @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/list_types.d.ts                     @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/list.d.ts                           @DevExpress/devextreme-navigation
 
 ## load_indicator
 /packages/devextreme/js/ui/load_indicator.js                   @DevExpress/devextreme-navigation
@@ -390,8 +385,8 @@
 /e2e/testcafe-devextreme/tests/accessibility/loadIndicator.ts   @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/loadIndicator.*   @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/load_indicator_types.d.ts           @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/load_indicator.d.ts                 @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/load_indicator_types.d.ts           @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/load_indicator.d.ts                 @DevExpress/devextreme-navigation
 
 ## menu
 /packages/devextreme/js/ui/menu.js                             @DevExpress/devextreme-navigation
@@ -408,8 +403,8 @@
 /packages/devextreme/testing/tests/**/menu.*                   @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/menuBase.*               @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/menu_types.d.ts                     @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/menu.d.ts                           @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/menu_types.d.ts                     @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/menu.d.ts                           @DevExpress/devextreme-navigation
 
 ## multi_view
 /packages/devextreme/js/ui/multi_view.js                       @DevExpress/devextreme-navigation
@@ -425,8 +420,8 @@
 /e2e/testcafe-devextreme/tests/accessibility/multiView.ts   @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/multiView.*              @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/multi_view_types.d.ts               @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/multi_view.d.ts                     @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/multi_view_types.d.ts               @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/multi_view.d.ts                     @DevExpress/devextreme-navigation
 
 ## radio_group
 /packages/devextreme/js/ui/radio_group.js                      @DevExpress/devextreme-editors
@@ -442,9 +437,9 @@
 /packages/devextreme/testing/tests/**/radioGroup.*             @DevExpress/devextreme-editors
 /packages/devextreme/testing/tests/**/radioButton.*            @DevExpress/devextreme-editors
 
-/packages/devextreme/js/ui/radio_group_types.d.ts              @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/radio_group.d.ts                    @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/radio_group/**/*.d.ts               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/radio_group_types.d.ts              @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/radio_group.d.ts                    @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/radio_group/**/*.d.ts               @DevExpress/devextreme-editors
 
 ## resizable
 /packages/devextreme/js/ui/resizable.js                        @DevExpress/devextreme-navigation
@@ -457,8 +452,8 @@
 
 /packages/devextreme/testing/tests/**/resizable.*              @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/resizable_types.d.ts                @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/resizable.d.ts                      @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/resizable_types.d.ts                @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/resizable.d.ts                      @DevExpress/devextreme-navigation
 
 ## responsive_box
 /packages/devextreme/js/ui/responsive_box.js                   @DevExpress/devextreme-navigation
@@ -470,8 +465,8 @@
 
 /packages/devextreme/testing/tests/**/responsiveBox.*          @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/responsive_box_types.d.ts           @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/responsive_box.d.ts                 @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/responsive_box_types.d.ts           @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/responsive_box.d.ts                 @DevExpress/devextreme-navigation
 
 ## scroll_view
 /packages/devextreme/js/ui/scroll_view.js                      @DevExpress/devextreme-navigation
@@ -488,9 +483,9 @@
 /packages/devextreme/testing/tests/**/scrollable.*             @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/scrollableParts/**   @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/scroll_view_types.d.ts              @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/scroll_view.d.ts                    @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/scroll_view/**/*.d.ts               @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/scroll_view_types.d.ts              @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/scroll_view.d.ts                    @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/scroll_view/**/*.d.ts               @DevExpress/devextreme-navigation
 
 ## selection
 /packages/devextreme/js/__internal/ui/selection/**             @DevExpress/devextreme-navigation
@@ -510,8 +505,8 @@
 /packages/devextreme/testing/tests/**/splitter.*               @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/resizeHandle.*           @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/splitter_types.d.ts                 @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/splitter.d.ts                       @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/splitter_types.d.ts                 @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/splitter.d.ts                       @DevExpress/devextreme-navigation
 
 ## stepper
 /packages/devextreme/js/ui/stepper.js                          @DevExpress/devextreme-navigation
@@ -525,8 +520,8 @@
 /e2e/testcafe-devextreme/tests/accessibility/stepper.ts   @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/stepper.*                @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/stepper_types.d.ts                  @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/stepper.d.ts                        @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/stepper_types.d.ts                  @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/stepper.d.ts                        @DevExpress/devextreme-navigation
 
 ## tab_panel
 /packages/devextreme/js/ui/tab_panel.js                        @DevExpress/devextreme-navigation
@@ -541,8 +536,8 @@
 /e2e/testcafe-devextreme/tests/accessibility/tabPanel.ts   @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/tabPanel.*               @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/tab_panel_types.d.ts                @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/tab_panel.d.ts                      @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/tab_panel_types.d.ts                @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/tab_panel.d.ts                      @DevExpress/devextreme-navigation
 
 ## tabs
 /packages/devextreme/js/ui/tabs.js                             @DevExpress/devextreme-navigation
@@ -558,8 +553,8 @@
 /packages/devextreme/testing/tests/**/tabs.*                   @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/tabsItem.*               @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/tabs_types.d.ts                     @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/tabs.d.ts                           @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/tabs_types.d.ts                     @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/tabs.d.ts                           @DevExpress/devextreme-navigation
 
 ## tile_view
 /packages/devextreme/js/ui/tile_view.js                        @DevExpress/devextreme-navigation
@@ -573,8 +568,8 @@
 /e2e/testcafe-devextreme/tests/accessibility/tileView.ts   @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/tileView.*   @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/tile_view_types.d.ts                @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/tile_view.d.ts                      @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/tile_view_types.d.ts                @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/tile_view.d.ts                      @DevExpress/devextreme-navigation
 
 ## toolbar
 /packages/devextreme/js/ui/toolbar.js                          @DevExpress/devextreme-navigation
@@ -590,9 +585,9 @@
 /e2e/testcafe-devextreme/tests/accessibility/toolbar.ts   @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/toolbar.*   @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/toolbar_types.d.ts                  @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/toolbar.d.ts                        @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/toolbar/**/*.d.ts                   @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/toolbar_types.d.ts                  @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/toolbar.d.ts                        @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/toolbar/**/*.d.ts                   @DevExpress/devextreme-navigation
 
 ## tree_view
 /packages/devextreme/js/ui/tree_view.js                        @DevExpress/devextreme-navigation
@@ -606,8 +601,8 @@
 /e2e/testcafe-devextreme/tests/accessibility/treeView.ts   @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/**/treeView.*   @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/ui/tree_view_types.d.ts                @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/tree_view.d.ts                      @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/tree_view_types.d.ts                @DevExpress/devextreme-navigation
+/packages/devextreme/js/ui/tree_view.d.ts                      @DevExpress/devextreme-navigation
 
 ## fieldset
 
@@ -632,7 +627,7 @@
 /packages/devextreme/testing/tests/Memory\ Leaks/vizWidgets.tests.js/**  @DevExpress/devextreme-navigation
 /packages/devextreme/testing/tests/DevExpress.viz.*/**       @DevExpress/devextreme-navigation
 
-/packages/devextreme/js/viz/**/*.d.ts                          @DevExpress/devextreme-navigation @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/viz/**/*.d.ts                          @DevExpress/devextreme-navigation
 
 # Editors
 
@@ -647,8 +642,8 @@
 /apps/demos/Demos/Common/PopupAndNotificationsOverview/**            @DevExpress/devextreme-editors
 
 ## autocomplete
-/packages/devextreme/js/ui/autocomplete.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/autocomplete_types.d.ts                   @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/autocomplete.d.ts                         @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/autocomplete_types.d.ts                   @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/m_autocomplete.ts              @DevExpress/devextreme-editors
 
@@ -657,8 +652,8 @@
 /apps/demos/Demos/Autocomplete/**                                    @DevExpress/devextreme-editors
 
 ## calendar
-/packages/devextreme/js/ui/calendar.d.ts                             @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/calendar_types.d.ts                       @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/calendar.d.ts                             @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/calendar_types.d.ts                       @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/calendar/**                    @DevExpress/devextreme-editors
 
@@ -669,8 +664,8 @@
 /apps/demos/Demos/Calendar/**                                        @DevExpress/devextreme-editors
 
 ## chat
-/packages/devextreme/js/ui/chat.d.ts                                 @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/chat_types.d.ts                           @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/chat.d.ts                                 @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/chat_types.d.ts                           @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/chat/**                        @DevExpress/devextreme-editors
 
@@ -686,8 +681,8 @@
 /apps/demos/Demos/Chat/**                                            @DevExpress/devextreme-editors
 
 ## check_box
-/packages/devextreme/js/ui/check_box.d.ts                            @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/check_box_types.d.ts                      @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/check_box.d.ts                            @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/check_box_types.d.ts                      @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/check_box/**                   @DevExpress/devextreme-editors
 
@@ -698,8 +693,8 @@
 /apps/demos/Demos/CheckBox/**                                        @DevExpress/devextreme-editors
 
 ## color_box
-/packages/devextreme/js/ui/color_box.d.ts                            @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/color_box_types.d.ts                      @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/color_box.d.ts                            @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/color_box_types.d.ts                      @DevExpress/devextreme-editors
 
 /packages/devextreme/js/ui/color_box/**                              @DevExpress/devextreme-editors
 /packages/devextreme/js/__internal/ui/color_box/**                   @DevExpress/devextreme-editors
@@ -711,8 +706,8 @@
 /apps/demos/Demos/ColorBox/**                                        @DevExpress/devextreme-editors
 
 ## date_box
-/packages/devextreme/js/ui/date_box.d.ts                             @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/date_box_types.d.ts                       @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/date_box.d.ts                             @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/date_box_types.d.ts                       @DevExpress/devextreme-editors
 
 /packages/devextreme/js/ui/date_box/**                               @DevExpress/devextreme-editors
 /packages/devextreme/js/__internal/ui/date_box/**                    @DevExpress/devextreme-editors
@@ -726,8 +721,8 @@
 /apps/demos/Demos/DateBox/**                                         @DevExpress/devextreme-editors
 
 ## date_range_box
-/packages/devextreme/js/ui/date_range_box.d.ts                       @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/date_range_box_types.d.ts                 @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/date_range_box.d.ts                       @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/date_range_box_types.d.ts                 @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/date_range_box/**              @DevExpress/devextreme-editors
 
@@ -738,8 +733,8 @@
 /apps/demos/Demos/DateRangeBox/**                                    @DevExpress/devextreme-editors
 
 ## drop_down_box
-/packages/devextreme/js/ui/drop_down_box.d.ts                        @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/drop_down_box_types.d.ts                  @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/drop_down_box.d.ts                        @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/drop_down_box_types.d.ts                  @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/m_drop_down_box.ts             @DevExpress/devextreme-editors
 
@@ -748,8 +743,8 @@
 /apps/demos/Demos/DropDownBox/**                                     @DevExpress/devextreme-editors
 
 ## drop_down_button
-/packages/devextreme/js/ui/drop_down_button.d.ts                     @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/drop_down_button_types.d.ts               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/drop_down_button.d.ts                     @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/drop_down_button_types.d.ts               @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/m_drop_down_button.ts          @DevExpress/devextreme-editors
 
@@ -774,8 +769,8 @@
 /packages/devextreme/js/__internal/ui/editor/**                      @DevExpress/devextreme-editors
 
 ## file_uploader
-/packages/devextreme/js/ui/file_uploader.d.ts                        @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/file_uploader_types.d.ts                  @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/file_uploader.d.ts                        @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/file_uploader_types.d.ts                  @DevExpress/devextreme-editors
 
 /packages/devextreme-scss/scss/widgets/base/_fileUploader.scss       @DevExpress/devextreme-editors
 /packages/devextreme-scss/scss/widgets/**/fileUploader/**            @DevExpress/devextreme-editors
@@ -785,8 +780,8 @@
 /apps/demos/Demos/FileUploader/**                                    @DevExpress/devextreme-editors
 
 ## html_editor
-/packages/devextreme/js/ui/html_editor.d.ts                          @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/html_editor_types.d.ts                    @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/html_editor.d.ts                          @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/html_editor_types.d.ts                    @DevExpress/devextreme-editors
 
 /packages/devextreme/js/ui/html_editor/**                            @DevExpress/devextreme-editors
 /packages/devextreme/js/__internal/ui/html_editor/**                 @DevExpress/devextreme-editors
@@ -798,8 +793,8 @@
 /e2e/testcafe-devextreme/tests/accessibility/htmlEditor.ts    @DevExpress/devextreme-editors
 
 ## load_panel
-/packages/devextreme/js/ui/load_panel.d.ts                           @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/load_panel_types.d.ts                     @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/load_panel.d.ts                           @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/load_panel_types.d.ts                     @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/load_panel.ts                @DevExpress/devextreme-editors
 
@@ -811,8 +806,8 @@
 /apps/demos/Demos/LoadPanel/**                                       @DevExpress/devextreme-editors
 
 ## lookup
-/packages/devextreme/js/ui/lookup.d.ts                               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/lookup_types.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/lookup.d.ts                               @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/lookup_types.d.ts                         @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/m_lookup.ts                    @DevExpress/devextreme-editors
 
@@ -821,8 +816,8 @@
 /apps/demos/Demos/Lookup/**                                          @DevExpress/devextreme-editors
 
 ## map
-/packages/devextreme/js/ui/map.d.ts                                   @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/map_types.d.ts                            @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/map.d.ts                                   @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/map_types.d.ts                            @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/map/**                         @DevExpress/devextreme-editors
 
@@ -835,8 +830,8 @@
 /apps/demos/Demos/Map/**                                             @DevExpress/devextreme-editors
 
 ## number_box
-/packages/devextreme/js/ui/number_box.d.ts                           @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/number_box_types.d.ts                     @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/number_box.d.ts                           @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/number_box_types.d.ts                     @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/number_box/**                  @DevExpress/devextreme-editors
 
@@ -848,8 +843,8 @@
 /apps/demos/Demos/NumberBox/**                                       @DevExpress/devextreme-editors
 
 ## overlay
-/packages/devextreme/js/ui/overlay.d.ts                              @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/overlay_types.d.ts                        @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/overlay.d.ts                              @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/overlay_types.d.ts                        @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/overlay/**                     @DevExpress/devextreme-editors
 
@@ -859,8 +854,8 @@
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/overlay.tests.js @DevExpress/devextreme-editors
 
 ## popover
-/packages/devextreme/js/ui/popover.d.ts                              @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/popover_types.d.ts                        @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/popover.d.ts                              @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/popover_types.d.ts                        @DevExpress/devextreme-editors
 
 /packages/devextreme/js/ui/popover/**                                @DevExpress/devextreme-editors
 /packages/devextreme/js/__internal/ui/popover/**                     @DevExpress/devextreme-editors
@@ -873,8 +868,8 @@
 /apps/demos/Demos/Popover/**                                         @DevExpress/devextreme-editors
 
 ## popup
-/packages/devextreme/js/ui/popup.d.ts                                @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/popup_types.d.ts                          @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/popup.d.ts                                @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/popup_types.d.ts                          @DevExpress/devextreme-editors
 
 /packages/devextreme/js/ui/popup/**                                  @DevExpress/devextreme-editors
 /packages/devextreme/js/__internal/ui/popup/**                       @DevExpress/devextreme-editors
@@ -891,8 +886,8 @@
 /apps/demos/Demos/Popup/**                                           @DevExpress/devextreme-editors
 
 ## progress_bar
-/packages/devextreme/js/ui/progress_bar.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/progress_bar_types.d.ts                   @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/progress_bar.d.ts                         @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/progress_bar_types.d.ts                   @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/m_progress_bar.ts              @DevExpress/devextreme-editors
 
@@ -906,8 +901,8 @@
 /apps/demos/Demos/ProgressBar/**                                     @DevExpress/devextreme-editors
 
 ## range_slider
-/packages/devextreme/js/ui/range_slider.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/range_slider_types.d.ts                   @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/range_slider.d.ts                         @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/range_slider_types.d.ts                   @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/m_range_slider.ts              @DevExpress/devextreme-editors
 
@@ -919,24 +914,24 @@
 /apps/demos/Demos/RangeSlider/**                                     @DevExpress/devextreme-editors
 
 ## select_box
-/packages/devextreme/js/ui/select_box.d.ts                           @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/select_box_types.d.ts                     @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/select_box.d.ts                           @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/select_box_types.d.ts                     @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/m_select_box.ts                @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/selectBox/**     @DevExpress/devextreme-editors
 
 ## slider
-/packages/devextreme/js/ui/slider.d.ts                               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/slider_types.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/slider.d.ts                               @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/slider_types.d.ts                         @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/slider/**                      @DevExpress/devextreme-editors
 
 /e2e/testcafe-devextreme/tests/accessibility/slider.ts        @DevExpress/devextreme-editors
 
 ## speech_to_text
-/packages/devextreme/js/ui/speech_to_text.d.ts                       @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/speech_to_text_types.d.ts                 @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/speech_to_text.d.ts                       @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/speech_to_text_types.d.ts                 @DevExpress/devextreme-editors
 /packages/devextreme/js/ui/speech_to_text.js                         @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/speech_to_text/**              @DevExpress/devextreme-editors
@@ -948,8 +943,8 @@
 /packages/devextreme/testing/tests/DevExpress.ui.widgets/speechToText.markup.tests.js   @DevExpress/devextreme-editors
 
 ## switch
-/packages/devextreme/js/ui/switch.d.ts                               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/switch_types.d.ts                         @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/switch.d.ts                               @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/switch_types.d.ts                         @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/switch.ts                    @DevExpress/devextreme-editors
 
@@ -960,8 +955,8 @@
 /apps/demos/Demos/Switch/**                                          @DevExpress/devextreme-editors
 
 ## tag_box
-/packages/devextreme/js/ui/tag_box.d.ts                              @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/tag_box_types.d.ts                        @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/tag_box.d.ts                              @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/tag_box_types.d.ts                        @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/m_tag_box.ts                   @DevExpress/devextreme-editors
 
@@ -973,8 +968,8 @@
 /apps/demos/Demos/TagBox/**                                          @DevExpress/devextreme-editors
 
 ## text_area
-/packages/devextreme/js/ui/text_area.d.ts                            @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/text_area_types.d.ts                      @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/text_area.d.ts                            @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/text_area_types.d.ts                      @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/m_text_area.ts                 @DevExpress/devextreme-editors
 
@@ -985,8 +980,8 @@
 /apps/demos/Demos/TextArea/**                                        @DevExpress/devextreme-editors
 
 ## text_box
-/packages/devextreme/js/ui/text_box.d.ts                             @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/text_box_types.d.ts                       @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/text_box.d.ts                             @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/text_box_types.d.ts                       @DevExpress/devextreme-editors
 
 /packages/devextreme/js/ui/text_box/**                               @DevExpress/devextreme-editors
 /packages/devextreme/js/__internal/ui/text_box/**                    @DevExpress/devextreme-editors
@@ -998,8 +993,8 @@
 /apps/demos/Demos/TextBox/**                                         @DevExpress/devextreme-editors
 
 ## toast
-/packages/devextreme/js/ui/toast.d.ts                                @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/toast_types.d.ts                          @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/toast.d.ts                                @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/toast_types.d.ts                          @DevExpress/devextreme-editors
 
 /packages/devextreme/js/ui/toast/**                                  @DevExpress/devextreme-editors
 /packages/devextreme/js/__internal/ui/toast/**                       @DevExpress/devextreme-editors
@@ -1012,8 +1007,8 @@
 /apps/demos/Demos/Toast/**                                           @DevExpress/devextreme-editors
 
 ## tooltip
-/packages/devextreme/js/ui/tooltip.d.ts                              @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/tooltip_types.d.ts                        @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/tooltip.d.ts                              @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/tooltip_types.d.ts                        @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/tooltip/**                     @DevExpress/devextreme-editors
 /packages/devextreme/js/__internal/ui/m_tooltip.ts                   @DevExpress/devextreme-editors
@@ -1028,16 +1023,16 @@
 /apps/demos/Demos/Tooltip/**                                         @DevExpress/devextreme-editors
 
 ## validation
-/packages/devextreme/js/ui/validation_engine.d.ts                    @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/validation_group.d.ts                     @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/validation_message.d.ts                   @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/validation_summary.d.ts                   @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/validator.d.ts                            @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/validation_engine_types.d.ts              @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/validation_group_types.d.ts               @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/validation_message_types.d.ts             @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/validation_summary_types.d.ts             @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
-/packages/devextreme/js/ui/validator_types.d.ts                      @DevExpress/devextreme-editors @DevExpress/devextreme-apireviewers
+/packages/devextreme/js/ui/validation_engine.d.ts                    @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/validation_group.d.ts                     @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/validation_message.d.ts                   @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/validation_summary.d.ts                   @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/validator.d.ts                            @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/validation_engine_types.d.ts              @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/validation_group_types.d.ts               @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/validation_message_types.d.ts             @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/validation_summary_types.d.ts             @DevExpress/devextreme-editors
+/packages/devextreme/js/ui/validator_types.d.ts                      @DevExpress/devextreme-editors
 
 /packages/devextreme/js/__internal/ui/m_validation_engine.ts         @DevExpress/devextreme-editors
 /packages/devextreme/js/__internal/ui/m_validation_group.ts          @DevExpress/devextreme-editors

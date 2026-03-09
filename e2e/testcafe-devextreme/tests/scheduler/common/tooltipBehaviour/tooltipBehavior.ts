@@ -6,6 +6,7 @@ import dataSource from './init/widget.data';
 import { createScheduler, scroll } from './init/widget.setup';
 import url from '../../../../helpers/getPageUrl';
 import { DEFAULT_BROWSER_SIZE } from '../../../../helpers/const';
+import { Themes } from '../../../../helpers/themes';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
@@ -124,6 +125,55 @@ test.meta({ browserSize: [600, 400] })('The tooltip should hide after manually s
     adaptivityEnabled,
   }));
 });
+
+test.meta({
+  browserSize: DEFAULT_BROWSER_SIZE,
+  themes: [Themes.fluentBlue, Themes.genericLight, Themes.materialBlue],
+})('Collector tooltip focused list item screenshot', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const scheduler = new Scheduler('#container');
+  const collector = scheduler.collectors.find('2 more');
+  const { appointmentTooltip } = scheduler;
+
+  await t
+    .expect(collector.element.exists)
+    .ok()
+    .click(collector.element)
+    .expect(appointmentTooltip.isVisible())
+    .ok()
+    .pressKey('tab');
+
+  await testScreenshot(
+    t,
+    takeScreenshot,
+    'collector-tooltip-focused-list-item.png',
+    { element: scheduler.element },
+  );
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxScheduler', {
+  dataSource: [{
+    text: 'Text',
+    startDate: new Date(2017, 4, 22, 9, 30, 0, 0),
+    endDate: new Date(2017, 4, 22, 10, 30, 0, 0),
+  }, {
+    text: 'Text2',
+    startDate: new Date(2017, 4, 22, 9, 30, 0, 0),
+    endDate: new Date(2017, 4, 22, 10, 30, 0, 0),
+  }, {
+    text: 'Text3',
+    startDate: new Date(2017, 4, 22, 9, 30, 0, 0),
+    endDate: new Date(2017, 4, 22, 10, 30, 0, 0),
+  }],
+  views: [{
+    type: 'month',
+    maxAppointmentsPerCell: 1,
+  }],
+  currentView: 'month',
+  currentDate: new Date(2017, 4, 22),
+}));
 
 test.meta({ browserSize: [600, 1000] })('Tooltip on mobile devices should have enough hight if there are async templates (React)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

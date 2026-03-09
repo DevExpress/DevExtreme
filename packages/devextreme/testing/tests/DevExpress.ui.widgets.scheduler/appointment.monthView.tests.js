@@ -417,7 +417,7 @@ module('Integration: Appointments in Month view', {
 
                 $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
-                const popup = scheduler.instance._appointmentPopup.popup;
+                const popup = scheduler.instance.appointmentPopup.popup;
                 const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
                 assert.deepEqual($buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys');
@@ -459,7 +459,7 @@ module('Integration: Appointments in Month view', {
 
                 $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
-                const popup = scheduler.instance._appointmentPopup.popup;
+                const popup = scheduler.instance.appointmentPopup.popup;
                 const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
                 $buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys';

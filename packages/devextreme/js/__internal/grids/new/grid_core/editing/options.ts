@@ -1,4 +1,3 @@
-import messageLocalization from '@js/localization/message';
 import type * as dxForm from '@js/ui/form';
 import type * as dxPopup from '@js/ui/popup';
 
@@ -87,13 +86,13 @@ export const defaultOptions = {
     popup: {},
 
     texts: {
-      confirmDeleteMessage: messageLocalization.format('dxDataGrid-editingConfirmDeleteMessage'),
+      confirmDeleteMessage: undefined,
       confirmDeleteTitle: '',
-      deleteCard: messageLocalization.format('dxDataGrid-editingDeleteRow'),
-      editCard: messageLocalization.format('dxDataGrid-editingEditRow'),
-      saveCard: messageLocalization.format('dxDataGrid-editingSaveRowChanges'),
-      addCard: messageLocalization.format('dxDataGrid-editingAddRow'),
-      cancel: messageLocalization.format('dxDataGrid-editingCancelRowChanges'),
+      deleteCard: undefined,
+      editCard: undefined,
+      saveCard: undefined,
+      addCard: undefined,
+      cancel: undefined,
     },
   },
 } satisfies Options;

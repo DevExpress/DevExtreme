@@ -6,6 +6,7 @@ import type { RefObject } from '@ts/core/r1/types';
 import { Widget } from '@ts/core/r1/widget';
 import { createRef as infernoCreateRef } from 'inferno';
 
+import messageLocalization from '../../common/core/localization/message';
 import type { EventCallback } from '../core/r1/event_callback';
 import type { DisposeEffectReturn } from '../core/r1/utils/effect_return';
 import { combineClasses } from '../core/r1/utils/render_utils';
@@ -201,9 +202,10 @@ export class PaginationContent extends InfernoComponent<PaginationContentProps> 
   }
 
   getAria(): Record<string, string> {
+    const label = this.props.label ?? messageLocalization.format('dxPagination-ariaLabel');
     return {
       role: 'navigation',
-      label: this.props.label ?? '',
+      label,
     };
   }
 

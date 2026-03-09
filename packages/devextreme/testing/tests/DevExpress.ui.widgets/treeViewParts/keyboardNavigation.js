@@ -787,13 +787,116 @@ QUnit.module('keyboard navigation', {
         $focusedNode.find('.dx-treeview-item').trigger('dxpointerdown');
         assert.ok($focusedNode.hasClass('dx-state-focused'), 'item was focused');
 
-        keyboard.keyDown('up');
+        keyboard.keyDown('left');
         $focusedNode = $treeView.find('.dx-treeview-node[data-item-id=2]');
         assert.ok($focusedNode.hasClass('dx-state-focused'), 'first item was focused');
 
-        keyboard.keyDown('down');
+        keyboard.keyDown('right');
         $focusedNode = $treeView.find('.dx-treeview-node[data-item-id=21]');
         assert.ok($focusedNode.hasClass('dx-state-focused'), 'item was focused');
+    });
+
+    QUnit.test('right arrow should expand disabled node', function(assert) {
+        const items = [{
+            id: 1,
+            text: 'Item 1',
+            disabled: true,
+            expanded: false,
+            items: [{ id: 11, text: 'Item 11' }]
+        }];
+        const $treeView = initTree({
+            focusStateEnabled: true,
+            height: 500,
+            items: items
+        });
+        const keyboard = keyboardMock($treeView);
+        const $parentItem = $treeView.find(`.${internals.ITEM_CLASS}`).eq(0);
+        const $parentNode = $treeView.find(`.${internals.NODE_CLASS}`).eq(0);
+
+        $parentItem.trigger('dxpointerdown');
+        assert.strictEqual($parentNode.hasClass('dx-state-focused'), true, 'disabled node is focused');
+
+        keyboard.keyDown('right');
+
+        assert.strictEqual($treeView.find(`.${internals.NODE_CLASS}`).eq(1).is(':visible'), true, 'child node is visible after expanding disabled parent');
+        assert.strictEqual(items[0].expanded, true, 'disabled item expanded field is updated');
+    });
+
+    QUnit.test('left arrow should collapse disabled node', function(assert) {
+        const items = [{
+            id: 1,
+            text: 'Item 1',
+            disabled: true,
+            expanded: true,
+            items: [{ id: 11, text: 'Item 11' }]
+        }];
+        const $treeView = initTree({
+            focusStateEnabled: true,
+            height: 500,
+            items: items
+        });
+        const keyboard = keyboardMock($treeView);
+        const $parentItem = $treeView.find(`.${internals.ITEM_CLASS}`).eq(0);
+        const $parentNode = $treeView.find(`.${internals.NODE_CLASS}`).eq(0);
+
+        $parentItem.trigger('dxpointerdown');
+        assert.strictEqual($parentNode.hasClass('dx-state-focused'), true, 'disabled node is focused');
+        assert.strictEqual($treeView.find(`.${internals.NODE_CLASS}`).eq(1).is(':visible'), true, 'child node is initially visible');
+
+        keyboard.keyDown('left');
+
+        assert.strictEqual($treeView.find(`.${internals.NODE_CLASS}`).eq(1).is(':hidden'), true, 'child node is hidden after collapsing disabled parent');
+        assert.strictEqual(items[0].expanded, false, 'disabled item expanded field is updated');
+    });
+
+    QUnit.test('right arrow should fire onItemExpanded for disabled node', function(assert) {
+        const handler = sinon.spy(noop);
+        const items = [{
+            id: 1,
+            text: 'Item 1',
+            disabled: true,
+            expanded: false,
+            items: [{ id: 11, text: 'Item 11' }]
+        }];
+        const $treeView = initTree({
+            focusStateEnabled: true,
+            height: 500,
+            items: items,
+            onItemExpanded: handler
+        });
+        const keyboard = keyboardMock($treeView);
+        const $parentItem = $treeView.find(`.${internals.ITEM_CLASS}`).eq(0);
+
+        $parentItem.trigger('dxpointerdown');
+        keyboard.keyDown('right');
+
+        assert.strictEqual(handler.calledOnce, true, 'onItemExpanded was fired for disabled node');
+        assert.strictEqual(handler.getCall(0).args[0].node.expanded, true, 'node is expanded in event args');
+    });
+
+    QUnit.test('left arrow should fire onItemCollapsed for disabled node', function(assert) {
+        const handler = sinon.spy(noop);
+        const items = [{
+            id: 1,
+            text: 'Item 1',
+            disabled: true,
+            expanded: true,
+            items: [{ id: 11, text: 'Item 11' }]
+        }];
+        const $treeView = initTree({
+            focusStateEnabled: true,
+            height: 500,
+            items: items,
+            onItemCollapsed: handler
+        });
+        const keyboard = keyboardMock($treeView);
+        const $parentItem = $treeView.find(`.${internals.ITEM_CLASS}`).eq(0);
+
+        $parentItem.trigger('dxpointerdown');
+        keyboard.keyDown('left');
+
+        assert.strictEqual(handler.calledOnce, true, 'onItemCollapsed was fired for disabled node');
+        assert.strictEqual(handler.getCall(0).args[0].node.expanded, false, 'node is collapsed in event args');
     });
 
     QUnit.testInActiveWindow('First list item should be focused on the tab key press when the search editor is focused', function(assert) {

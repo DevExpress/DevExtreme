@@ -1,3 +1,5 @@
+import type { Occurrence } from '@js/ui/scheduler';
+
 import type Scheduler from '../../m_scheduler';
 import type {
   CompareOptions, FilterOptions, MinimalAppointmentEntity,
@@ -6,12 +8,6 @@ import { addAllDayPanelOccupation } from './utils/add_all_day_panel_occupation';
 import { filterByIntervals } from './utils/filter_by_intervals/filter_by_intervals';
 import { getFilterOptions } from './utils/get_filter_options/get_filter_options';
 import { splitByRecurrence } from './utils/split_by_recurrence/split_by_recurrence';
-
-export interface Occurrence {
-  startDate: Date;
-  endDate: Date;
-  appointmentData: object;
-}
 
 export const getOccurrences = (
   schedulerStore: Scheduler,
