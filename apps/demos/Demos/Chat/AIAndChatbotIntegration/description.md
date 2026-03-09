@@ -16,3 +16,7 @@ The AI model outputs responses in Markdown, while the Chat requires HTML output.
 ## Default Caption Customization
 
 The Chat component in this demo displays modified captions when the conversation is empty. The demo uses [localization](/Documentation/Guide/Common/Localization/) techniques to alter built-in text.
+
+## Speech Recognition
+
+In this demo, [speechToTextEnabled](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#speechToTextEnabled) is set to `true`, and users can enter messages with their voice. The Chat component uses the [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) for speech recognition. Use [speechToTextOptions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#speechToTextOptions) to define custom speech recognizer settings, handle related events, and customize the speech-to-text button appearance.
