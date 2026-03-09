@@ -259,7 +259,7 @@ const LoadPanelTests = {
                 });
             });
 
-            [{ type: 'default', expected: 'エクスポート...' }, { type: 'custom', expected: '!CUSTOM TEXT!' }].forEach((localizationText) => {
+            [{ type: 'default', expected: 'エクスポート中…' }, { type: 'custom', expected: '!CUSTOM TEXT!' }].forEach((localizationText) => {
                 QUnit.test(`${localizationText.type} localization text, locale('ja')`, function(assert) {
                     assert.expect(7);
                     const done = assert.async();
