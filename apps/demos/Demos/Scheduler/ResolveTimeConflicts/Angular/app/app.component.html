@@ -25,7 +25,7 @@
       labelMode="hidden"
       [elementAttr]="formElementAttr"
       [customizeItem]="customizeItem"
-      (onInitialized)="onFormInitialized($event)"
+      [onInitialized]="onFormInitialized"
     >
       <dxi-scheduler-item
         name="conflictInformer"
@@ -44,12 +44,17 @@
           ></dxi-scheduler-item>
         </dxi-scheduler-item>
       </dxi-scheduler-item>
-      <dxi-scheduler-item name="recurrenceGroup" itemType="group"></dxi-scheduler-item>
+      <dxi-scheduler-item
+        name="recurrenceGroup"
+        itemType="group"
+      ></dxi-scheduler-item>
     </dxo-scheduler-form>
   </dxo-scheduler-editing>
 
   <div *dxTemplate="let _ of 'conflictInformerTemplate'">
-    <div class="conflict-informer" [hidden]="!showConflictError">This time slot conflicts with another appointment.</div>
+    <div class="conflict-informer"
+      >This time slot conflicts with another appointment.</div
+    >
   </div>
 
   <div *dxTemplate="let tagData of 'assigneeTagTemplate'">

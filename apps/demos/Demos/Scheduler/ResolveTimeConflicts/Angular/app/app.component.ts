@@ -5,6 +5,7 @@ import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxPopupTypes } from 'devextreme-angular/ui/popup';
+import { DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
 import { custom as customDialog } from 'devextreme/ui/dialog';
 import { Appointment, Assignee, Service, assignees } from './app.service';
 
@@ -49,8 +50,8 @@ export class AppComponent {
   ];
 
   assigneeIdEditorOptions = {
-    onValueChanged: (e: { value: unknown[]; component: { option: (k: string, v: unknown) => void } }) => {
-      if (e.value.length > 1) {
+    onValueChanged: (e: DxTagBoxTypes.ValueChangedEvent) => {
+      if (e.value?.length > 1) {
         e.component.option('value', [e.value[e.value.length - 1]]);
       }
     },
@@ -58,20 +59,18 @@ export class AppComponent {
   };
 
   popupOptions = {
-    onInitialized: (e: { component: dxPopup }) => { this.popup = e.component; },
+    onInitialized: (e: DxPopupTypes.InitializedEvent) => { this.popup = e.component; },
     onHidden: () => {
       this.setConflictError(false);
       this.form?.updateData('assigneeId', []);
     },
   };
 
-  formElementAttr = { id: 'form' };
+  formElementAttr = { id: 'form', class: 'hide-informer' };
 
   private popup?: dxPopup;
 
   private form?: dxForm;
-
-  showConflictError = false;
 
   private overlappingRule = 'sameResource';
 
@@ -79,19 +78,22 @@ export class AppComponent {
     this.appointmentsData = service.getAppointments();
   }
 
+  private showConflictError = false;
+
   setConflictError(show: boolean): void {
     this.showConflictError = show;
+    this.form?.option('elementAttr.class', show ? '' : 'hide-informer');
   }
 
-  onFormInitialized(e: DxFormTypes.InitializedEvent): void {
+  onFormInitialized = (e: DxFormTypes.InitializedEvent): void => {
     this.form = e.component;
-    this.form.on('fieldDataChanged', (event: { dataField: string }) => {
+    this.form?.on('fieldDataChanged', (event: { dataField: string }) => {
       if (this.showConflictError && ['startDate', 'endDate', 'assigneeId', 'recurrenceRule'].includes(event.dataField)) {
         this.setConflictError(false);
-        this.form.validate();
+        this.form?.validate();
       }
     });
-  }
+  };
 
   customizeItem = (item: DxFormTypes.SimpleItem): void => {
     if (item.name === 'allDayEditor' || item.name === 'recurrenceEndEditor') {

@@ -80,21 +80,26 @@ function detectConflict(
   );
 }
 
+function tagTemplate(itemData: Assignee): HTMLElement {
+  const div = document.createElement('div');
+  div.className = 'dx-tag-content';
+  div.style.backgroundColor = itemData.color;
+  div.style.borderColor = itemData.color;
+  div.textContent = itemData.text;
+  const removeBtn = document.createElement('div');
+  removeBtn.className = 'dx-tag-remove-button';
+  div.appendChild(removeBtn);
+  return div;
+}
+
 const assigneeIdEditorOptions = {
   onValueChanged: (e: TagBoxTypes.ValueChangedEvent) => {
-    if (e.value.length > 1) {
+    if (e.value?.length > 1) {
       e.component.option('value', [e.value[e.value.length - 1]]);
     }
   },
-  tagRender: (itemData: Assignee) => tagTemplate(itemData),
+  tagTemplate,
 };
-
-const tagTemplate = (itemData: Assignee) => (
-  <div className="dx-tag-content" style={{ backgroundColor: itemData.color, borderColor: itemData.color }}>
-    {itemData.text}
-    <div className="dx-tag-remove-button"></div>
-  </div>
-);
 
 const conflictInformerRender = () => (
   <div className="conflict-informer">This time slot conflicts with another appointment.</div>

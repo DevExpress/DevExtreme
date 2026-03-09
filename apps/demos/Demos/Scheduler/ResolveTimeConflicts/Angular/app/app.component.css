@@ -15,7 +15,7 @@
   gap: 10px;
 }
 
-::ng-deep .dx-item:has(.conflict-informer[hidden]) {
+::ng-deep .hide-informer .dx-item:has(.conflict-informer) {
   display: none !important;
 }
 
@@ -60,8 +60,8 @@
   padding-top: 0;
 }
 
-::ng-deep #form:has(.conflict-informer:not([hidden])) .dx-scheduler-form-recurrence-group.dx-scheduler-form-recurrence-group-hidden,
-::ng-deep #form:has(.conflict-informer:not([hidden])) .dx-scheduler-form-main-group.dx-scheduler-form-main-group-hidden {
+::ng-deep #form:not(.hide-informer) .dx-scheduler-form-recurrence-group.dx-scheduler-form-recurrence-group-hidden,
+::ng-deep #form:not(.hide-informer) .dx-scheduler-form-main-group.dx-scheduler-form-main-group-hidden {
   top: 44px;
 }
 

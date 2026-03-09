@@ -15,10 +15,6 @@
   gap: 10px;
 }
 
-#overlapping-rule {
-  width: 200px;
-}
-
 .hide-informer .dx-item:has(.conflict-informer) {
   display: none !important;
 }
