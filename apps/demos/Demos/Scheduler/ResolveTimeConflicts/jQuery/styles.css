@@ -48,11 +48,6 @@
   width: 100%;
 }
 
-.dx-scheduler-form-main-group .dx-item:last-child,
-.dx-scheduler-form-main-group .dx-item:last-child .dx-field-item-content {
-  overflow: visible;
-}
-
 #form .dx-scheduler-form-main-group,
 #form .dx-scheduler-form-recurrence-group {
   padding-top: 0;

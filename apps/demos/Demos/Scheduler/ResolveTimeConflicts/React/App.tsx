@@ -11,6 +11,7 @@ import type { FormTypes } from 'devextreme-react/form';
 import type { PopupTypes } from 'devextreme-react/popup';
 import type { TagBoxTypes } from 'devextreme-react/tag-box';
 import { custom as customDialog } from 'devextreme/ui/dialog';
+import { Template } from 'devextreme-react/core/template';
 import { data, assignees, type Appointment, type Assignee } from './data.ts';
 
 type dxScheduler = NonNullable<SchedulerTypes.InitializedEvent['component']>;
@@ -80,26 +81,21 @@ function detectConflict(
   );
 }
 
-function tagTemplate(itemData: Assignee): HTMLElement {
-  const div = document.createElement('div');
-  div.className = 'dx-tag-content';
-  div.style.backgroundColor = itemData.color;
-  div.style.borderColor = itemData.color;
-  div.textContent = itemData.text;
-  const removeBtn = document.createElement('div');
-  removeBtn.className = 'dx-tag-remove-button';
-  div.appendChild(removeBtn);
-  return div;
-}
-
 const assigneeIdEditorOptions = {
   onValueChanged: (e: TagBoxTypes.ValueChangedEvent) => {
     if (e.value?.length > 1) {
       e.component.option('value', [e.value[e.value.length - 1]]);
     }
   },
-  tagTemplate,
+  tagTemplate: 'tagTemplate',
 };
+
+const tagTemplate = (itemData: Assignee) => (
+  <div className="dx-tag-content" style={{ backgroundColor: itemData.color, borderColor: itemData.color }}>
+    {itemData.text}
+    <div className="dx-tag-remove-button"></div>
+  </div>
+);
 
 const conflictInformerRender = () => (
   <div className="conflict-informer">This time slot conflicts with another appointment.</div>
@@ -253,6 +249,8 @@ const App = () => {
             <Item type="group" name="recurrenceGroup" />
           </Form>
         </Editing>
+
+        <Template name="tagTemplate" render={tagTemplate} />
       </Scheduler>
 
       <div className="options">
