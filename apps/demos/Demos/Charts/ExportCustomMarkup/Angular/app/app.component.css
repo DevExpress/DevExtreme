@@ -1,8 +1,4 @@
-::ng-deep #chart-demo {
-  height: 460px;
-}
-
-::ng-deep #chart {
+::ng-deep .chart {
   position: absolute;
   top: 12px;
   right: 35px;

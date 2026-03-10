@@ -1,8 +1,8 @@
-#chart-demo {
+.chart-demo {
   height: 460px;
 }
 
-#chart {
+.chart {
   position: absolute;
   top: 12px;
   right: 35px;

@@ -1,9 +1,10 @@
 <template>
-  <div id="chart-demo">
+  <div id="chart-demo" class="chart-demo">
     <div class="chart_environment">
       <Form ref="form"/>
       <DxChart
         id="chart"
+        class="chart"
         ref="chart"
         :data-source="dataSource"
         palette="Violet"
@@ -115,11 +116,11 @@ function onClick(): void {
 }
 </script>
 <style>
-#chart-demo {
+.chart-demo {
   height: 460px;
 }
 
-#chart {
+.chart {
   position: absolute;
   top: 12px;
   right: 35px;
