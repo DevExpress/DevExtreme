@@ -132,16 +132,12 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
   _$nextButton!: dxElementWrapper | null;
 
-  // eslint-disable-next-line no-restricted-globals
   _holdTimer?: ReturnType<typeof setTimeout>;
 
-  // eslint-disable-next-line no-restricted-globals
   _loadNextPageTimer?: ReturnType<typeof setTimeout>;
 
-  // eslint-disable-next-line no-restricted-globals
   _showLoadingIndicatorTimer?: ReturnType<typeof setTimeout>;
 
-  // eslint-disable-next-line no-restricted-globals
   _inkRippleTimer?: ReturnType<typeof setTimeout>;
 
   _isFirstLoadCompleted?: boolean;
@@ -1072,9 +1068,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._refreshItemElements();
     super._postprocessRenderItem(args);
 
-    if (this.hasActionSubscription('onItemSwipe')) {
-      this._attachSwipeEvent($(args.itemElement));
-    }
+    this._attachSwipeEvent($(args.itemElement));
   }
 
   _getElementClassToSkipRefreshId(): string {
@@ -1085,15 +1079,18 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     // @ts-expect-error ts-error
     const endEventName = addNamespace(swipeEventEnd, this.NAME);
 
+    eventsEngine.off($itemElement, endEventName);
     eventsEngine.on($itemElement, endEventName, (e) => {
       this._itemSwipeEndHandler(e);
     });
   }
 
   _itemSwipeEndHandler(e: DxEvent & { offset: number }): void {
-    this._itemDXEventHandler(e, 'onItemSwipe', {
-      direction: e.offset < 0 ? 'left' : 'right',
-    });
+    if (this.hasActionSubscription('onItemSwipe')) {
+      this._itemDXEventHandler(e, 'onItemSwipe', {
+        direction: e.offset < 0 ? 'left' : 'right',
+      });
+    }
   }
 
   _nextButtonHandler(): void {

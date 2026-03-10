@@ -1139,8 +1139,8 @@ QUnit.module('options changed', moduleSetup, () => {
         swipeItem();
     });
 
-    QUnit.test('onItemSwipe handler should not be triggered if "allowItemTextSelection" is false on init', function(assert) {
-        assert.expect(0);
+    QUnit.test('onItemSwipe handler should be triggered if it has in the config', function(assert) {
+        assert.expect(1);
 
         const swipeHandler = () => {
             assert.ok(true, 'swipe handled');
