@@ -5,6 +5,7 @@ import { DxDataGridModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { CustomStore } from 'devextreme-angular/common/data';
 import { lastValueFrom } from 'rxjs';
+import 'anti-forgery';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
