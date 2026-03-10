@@ -7,9 +7,9 @@ const NUMBER_SERIALIZATION_FORMAT = 'number';
 const DATE_SERIALIZATION_FORMAT = 'yyyy/MM/dd';
 const DATETIME_SERIALIZATION_FORMAT = 'yyyy/MM/dd HH:mm:ss';
 
+const ISO_PARTIAL_DATE_PATTERN = /^\d{4,}(-\d{2})?$/;
 const ISO8601_PATTERN = /^(\d{4,})(-)?(\d{2})(-)?(\d{2})(?:T(\d{2})(:)?(\d{2})?(:)?(\d{2}(?:\.(\d{1,3})\d*)?)?)?(Z|([+-])(\d{2})(:)?(\d{2})?)?$/;
 const ISO8601_TIME_PATTERN = /^(\d{2}):(\d{2})(:(\d{2}))?$/;
-
 const ISO8601_PATTERN_PARTS = ['', 'yyyy', '', 'MM', '', 'dd', 'THH', '', 'mm', '', 'ss', '.SSS'];
 const DATE_SERIALIZATION_PATTERN = /^(\d{4})\/(\d{2})\/(\d{2})$/;
 
@@ -29,21 +29,43 @@ function getTimePart(part) {
   return +part || 0;
 }
 
-function parseDate(text) {
-  const isDefaultSerializationFormat = getDateSerializationFormat(text) === DATE_SERIALIZATION_FORMAT;
+function createLocalDateFromUTCTimestamp(timestamp: number): Date {
+  const utc = new Date(timestamp);
+
+  return new Date(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate());
+}
+
+function isISOPartialDateString(text: string): boolean {
+  return ISO_PARTIAL_DATE_PATTERN.test(text);
+}
+
+function parseDate(text): string | Date {
+  const isDefaultSerializationFormat = getDateSerializationFormat(text)
+    === DATE_SERIALIZATION_FORMAT;
+
   const parsedValue = !isDate(text) && Date.parse(text);
+
   if (!parsedValue && isDefaultSerializationFormat) {
     const parts = text.match(DATE_SERIALIZATION_PATTERN);
+
     if (parts) {
       const newDate = new Date(getTimePart(parts[1]), getTimePart(parts[2]), getTimePart(parts[3]));
+
       newDate.setFullYear(getTimePart(parts[1]));
       newDate.setMonth(getTimePart(parts[2]) - 1);
       newDate.setDate(getTimePart(parts[3]));
+
       return newDate;
     }
   }
 
-  return isNumber(parsedValue) ? new Date(parsedValue) : text;
+  if (!isNumber(parsedValue)) {
+    return text;
+  }
+
+  return isISOPartialDateString(text)
+    ? createLocalDateFromUTCTimestamp(parsedValue)
+    : new Date(parsedValue);
 }
 
 function parseISO8601String(text) {
@@ -173,6 +195,7 @@ const getDateSerializationFormat = function (value) {
 };
 
 const dateSerialization = {
+  createLocalDateFromUTCTimestamp,
   dateParser,
   deserializeDate,
   serializeDate,
