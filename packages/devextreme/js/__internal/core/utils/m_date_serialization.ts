@@ -7,9 +7,9 @@ const NUMBER_SERIALIZATION_FORMAT = 'number';
 const DATE_SERIALIZATION_FORMAT = 'yyyy/MM/dd';
 const DATETIME_SERIALIZATION_FORMAT = 'yyyy/MM/dd HH:mm:ss';
 
+const ISO_PARTIAL_DATE_PATTERN = /^\d{4,}(-\d{2})?$/;
 const ISO8601_PATTERN = /^(\d{4,})(-)?(\d{2})(-)?(\d{2})(?:T(\d{2})(:)?(\d{2})?(:)?(\d{2}(?:\.(\d{1,3})\d*)?)?)?(Z|([+-])(\d{2})(:)?(\d{2})?)?$/;
 const ISO8601_TIME_PATTERN = /^(\d{2}):(\d{2})(:(\d{2}))?$/;
-
 const ISO8601_PATTERN_PARTS = ['', 'yyyy', '', 'MM', '', 'dd', 'THH', '', 'mm', '', 'ss', '.SSS'];
 const DATE_SERIALIZATION_PATTERN = /^(\d{4})\/(\d{2})\/(\d{2})$/;
 
@@ -35,8 +35,8 @@ function createLocalDateFromUTCTimestamp(timestamp: number): Date {
   return new Date(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate());
 }
 
-function hasNoTimeOrTimezone(text: string): boolean {
-  return isString(text) && !text.includes('T') && !text.includes(':');
+function isISOPartialDateString(text: string): boolean {
+  return ISO_PARTIAL_DATE_PATTERN.test(text);
 }
 
 function parseDate(text): string | Date {
@@ -63,7 +63,7 @@ function parseDate(text): string | Date {
     return text;
   }
 
-  return hasNoTimeOrTimezone(text)
+  return isISOPartialDateString(text)
     ? createLocalDateFromUTCTimestamp(parsedValue)
     : new Date(parsedValue);
 }
@@ -195,6 +195,7 @@ const getDateSerializationFormat = function (value) {
 };
 
 const dateSerialization = {
+  createLocalDateFromUTCTimestamp,
   dateParser,
   deserializeDate,
   serializeDate,
