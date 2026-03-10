@@ -78,7 +78,6 @@
         value-expr="value"
         display-expr="text"
         value="sameResource"
-        :width="200"
         @value-changed="onOverlappingRuleChanged"
       />
     </div>

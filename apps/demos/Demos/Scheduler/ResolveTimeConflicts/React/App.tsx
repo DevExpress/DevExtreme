@@ -261,7 +261,6 @@ const App = () => {
             valueExpr="value"
             displayExpr="text"
             defaultValue="sameResource"
-            width={200}
             onValueChanged={(e: SelectBoxTypes.ValueChangedEvent) => { overlappingRuleRef.current = e.value; }}
           />
         </div>
