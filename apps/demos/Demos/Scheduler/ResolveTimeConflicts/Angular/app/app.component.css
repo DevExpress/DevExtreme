@@ -48,13 +48,6 @@
   width: 100%;
 }
 
-::ng-deep .dx-scheduler-form-main-group .dx-item:last-child,
-::ng-deep .dx-scheduler-form-main-group .dx-item:last-child .dx-field-item-content,
-::ng-deep .dx-scheduler-form-main-group .dx-item:last-child .dx-item:last-child,
-::ng-deep .dx-scheduler-form-main-group .dx-item:last-child .dx-item:last-child .dx-field-item-content {
-  overflow: visible;
-}
-
 ::ng-deep #form .dx-scheduler-form-main-group,
 ::ng-deep #form .dx-scheduler-form-recurrence-group {
   padding-top: 0;
