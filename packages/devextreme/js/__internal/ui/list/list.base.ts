@@ -110,8 +110,6 @@ export interface ListBaseProperties extends Properties<Item>, Omit<
 
   _onItemsRendered?: () => void;
 
-  _swipeEnabled?: boolean;
-
   showChevronExpr?: (data: Item) => boolean | undefined;
 
   badgeExpr?: (data: Item) => string | undefined;
@@ -301,7 +299,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       _itemAttributes: { role: 'option' },
       useInkRipple: false,
       wrapItemText: false,
-      _swipeEnabled: true,
       showChevronExpr(data: Item): boolean | undefined {
         return data?.showChevron;
       },
@@ -1075,10 +1072,7 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._refreshItemElements();
     super._postprocessRenderItem(args);
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { _swipeEnabled } = this.option();
-
-    if (_swipeEnabled) {
+    if (this.hasActionSubscription('onItemSwipe')) {
       this._attachSwipeEvent($(args.itemElement));
     }
   }
@@ -1408,7 +1402,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       case 'badgeExpr':
         this._invalidate();
         break;
-      case '_swipeEnabled':
       case '_onItemsRendered':
       case 'selectByClick':
         break;

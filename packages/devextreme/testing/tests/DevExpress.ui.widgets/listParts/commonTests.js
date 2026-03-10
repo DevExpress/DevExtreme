@@ -1139,7 +1139,7 @@ QUnit.module('options changed', moduleSetup, () => {
         swipeItem();
     });
 
-    QUnit.test('onItemSwipe handler should not be triggered if "_swipeEnabled" is false on init', function(assert) {
+    QUnit.test('onItemSwipe handler should not be triggered if "allowItemTextSelection" is false on init', function(assert) {
         assert.expect(0);
 
         const swipeHandler = () => {
@@ -1149,7 +1149,6 @@ QUnit.module('options changed', moduleSetup, () => {
         this.element.dxList({
             items: [0],
             onItemSwipe: swipeHandler,
-            _swipeEnabled: false
         }).dxList('instance');
 
         const item = $.proxy(function() {
