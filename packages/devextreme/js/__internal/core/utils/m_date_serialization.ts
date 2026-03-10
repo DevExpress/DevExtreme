@@ -22,7 +22,6 @@ const dateParser = function (text, skipISO8601Parsing?: boolean) {
     result = parseISO8601String(text);
   }
 
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   return result || parseDate(text);
 };
 
@@ -103,7 +102,6 @@ function parseISO8601String(text) {
   const minute = getTimePart(parts[8]) - timeZoneMinute;
   const second = getTimePart(parts[10]);
   const parseMilliseconds = function (part) {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     part = part || '';
     return getTimePart(part) * 10 ** (MILLISECOND_LENGHT - part.length);
   };
