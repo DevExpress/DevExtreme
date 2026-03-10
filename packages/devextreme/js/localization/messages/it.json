@@ -447,6 +447,7 @@
         "dxFilterBuilder-notOr": "O non",
         "dxFilterBuilder-addCondition": "Aggiungi condizione",
         "dxFilterBuilder-addGroup": "Aggiungi gruppo",
+        "dxFilterBuilder-enterValueText": "<inserisci un valore>",
         "dxFilterBuilder-filterOperationEquals": "Uguale a",
         "dxFilterBuilder-filterOperationNotEquals": "Diverso da",
         "dxFilterBuilder-filterOperationLess": "Minore di",
