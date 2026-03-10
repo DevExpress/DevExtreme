@@ -26,7 +26,7 @@ test('The noDataText element should be rendered when a lookup column is filtered
   await t.click(lookupFilterEditor.element);
 
   // assert
-  await t.expect(lookupFilterEditor.isOpened()).ok();
+  await t.expect(await lookupFilterEditor.isOpened()).ok();
 
   // act
   const lookupList = await lookupFilterEditor.getList();
