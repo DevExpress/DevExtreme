@@ -23,8 +23,7 @@
   $header-filter-color-empty: $header-filter-color-empty,
   $base-focus-color: $base-focus-color,
 );
-
-// adduse
+@use 'layout/cell';
 @include grid-base(treelist);
 
 .dx-treelist-rowsview {
@@ -45,8 +44,6 @@
   }
 
   .dx-treelist-cell-expandable {
-    white-space: nowrap;
-
     .dx-treelist-text-content {
       white-space: normal;
     }
