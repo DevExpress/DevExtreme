@@ -245,7 +245,6 @@ const App = () => {
             valueExpr="value"
             displayExpr="text"
             defaultValue="sameResource"
-            width={200}
             onValueChanged={(e) => {
               overlappingRuleRef.current = e.value;
             }}
