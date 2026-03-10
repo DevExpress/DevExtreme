@@ -58,9 +58,9 @@
 <script setup lang="ts">
 
 defineExpose({
-  getMarkup(): string {
+  getMarkup(): HTMLElement {
     // @ts-ignore
-    return this.$el.innerHTML;
+    return this.$el;
   },
 });
 </script>

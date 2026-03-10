@@ -14,14 +14,36 @@ import { dataSource } from './data.js';
 import Form from './Form.js';
 
 const barPadding = 0.3;
-const prepareMarkup = (chartSVG, markup) => {
+const prepareMarkup = (chartSVG, sourceContainer) => {
+  const sourceElements = sourceContainer.querySelectorAll('*');
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
   svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
   svg.setAttribute('version', '1.1');
   svg.setAttribute('width', '820px');
   svg.setAttribute('height', '420px');
-  svg.innerHTML = markup;
+  const clonedContainer = sourceContainer.cloneNode(true);
+  const clonedElements = clonedContainer.querySelectorAll('*');
+  clonedElements.forEach((clonedEl, index) => {
+    const sourceEl = sourceElements[index];
+    if (!sourceEl) return;
+    const computed = window.getComputedStyle(sourceEl);
+    [
+      'fill',
+      'font-family',
+      'font-size',
+      'font-weight',
+      'opacity',
+      'stroke',
+      'stroke-width',
+    ].forEach((prop) => {
+      const value = computed.getPropertyValue(prop)?.trim();
+      if (value && value !== 'auto' && value !== 'normal' && value !== 'initial') {
+        clonedEl.setAttribute(prop, value);
+      }
+    });
+  });
+  svg.innerHTML = clonedContainer.innerHTML;
   const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   group.setAttribute('transform', 'translate(305,12)');
   group.innerHTML = chartSVG;
@@ -33,7 +55,10 @@ function App() {
   const chartRef = useRef(null);
   const onClick = useCallback(() => {
     exportFromMarkup(
-      prepareMarkup(chartRef.current?.instance().svg() ?? '', childRef.current?.innerHTML ?? ''),
+      prepareMarkup(
+        chartRef.current?.instance().svg() ?? '',
+        childRef.current ?? document.createElement('div'),
+      ),
       {
         width: 820,
         height: 420,
