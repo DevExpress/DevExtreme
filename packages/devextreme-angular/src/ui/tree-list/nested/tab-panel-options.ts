@@ -18,9 +18,8 @@ import {
 
 
 
-import type DataSource from 'devextreme/data/data_source';
 import type { dxTabPanelItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from 'devextreme/ui/tab_panel';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { TabsIconPosition, TabsStyle, Position } from 'devextreme/common';
 

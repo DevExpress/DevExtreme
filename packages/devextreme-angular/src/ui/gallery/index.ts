@@ -23,9 +23,8 @@ import {
 
 export type { ExplicitTypes } from 'devextreme/ui/gallery';
 
-import type DataSource from 'devextreme/data/data_source';
 import type { dxGalleryItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/gallery';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 
 import DxGallery from 'devextreme/ui/gallery';

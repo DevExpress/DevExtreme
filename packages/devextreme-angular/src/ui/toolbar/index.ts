@@ -23,9 +23,8 @@ import {
 
 export type { ExplicitTypes } from 'devextreme/ui/toolbar';
 
-import type DataSource from 'devextreme/data/data_source';
 import type { dxToolbarItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/toolbar';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 
 import DxToolbar from 'devextreme/ui/toolbar';

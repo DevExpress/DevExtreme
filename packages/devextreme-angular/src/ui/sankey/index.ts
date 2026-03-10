@@ -20,9 +20,8 @@ import {
 } from '@angular/core';
 
 
-import type DataSource from 'devextreme/data/data_source';
 import type { VerticalAlignment, ExportFormat, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { dxSankeyNode, SankeyColorMode, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LinkClickEvent, LinkHoverEvent, NodeClickEvent, NodeHoverEvent, OptionChangedEvent } from 'devextreme/viz/sankey';
 import type { Font, TextOverflow, HatchDirection, Palette, PaletteExtensionMode, Theme, WordWrap, DashStyle } from 'devextreme/common/charts';

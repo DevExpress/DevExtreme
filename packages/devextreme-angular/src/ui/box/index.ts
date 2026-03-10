@@ -23,9 +23,8 @@ import {
 
 export type { ExplicitTypes } from 'devextreme/ui/box';
 
-import type DataSource from 'devextreme/data/data_source';
 import type { Distribution, CrosswiseDistribution, dxBoxItem, BoxDirection, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/box';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 
 import DxBox from 'devextreme/ui/box';

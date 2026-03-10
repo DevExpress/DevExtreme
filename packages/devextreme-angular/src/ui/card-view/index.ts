@@ -23,11 +23,10 @@ import {
 
 export type { ExplicitTypes } from 'devextreme/ui/card_view';
 
-import type DataSource from 'devextreme/data/data_source';
 import type { CardCover, CardHeader, ColumnProperties, dxCardViewEditing, HeaderPanel, CardClickEvent, CardDblClickEvent, CardHoverChangedEvent, CardInsertedEvent, CardInsertingEvent, CardPreparedEvent, CardRemovedEvent, CardRemovingEvent, CardUpdatedEvent, CardUpdatingEvent, ContextMenuPreparingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, FieldCaptionClickEvent, FieldCaptionDblClickEvent, FieldCaptionPreparedEvent, FieldValueClickEvent, FieldValueDblClickEvent, FieldValuePreparedEvent, FocusedCardChanged, InitNewCardEvent, OptionChangedEvent, SavedEvent, SavingEvent, SelectionChangedEvent, Paging, RemoteOperations, SelectionConfiguration, dxCardViewToolbar } from 'devextreme/ui/card_view';
 import type { Mode, ScrollbarMode } from 'devextreme/common';
 import type { ColumnChooser, FilterPanel, HeaderFilter, Pager, SearchPanel, Sorting } from 'devextreme/common/grids';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
 import type { dxLoadPanelOptions } from 'devextreme/ui/load_panel';

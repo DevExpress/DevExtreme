@@ -23,9 +23,8 @@ import {
 
 export type { ExplicitTypes } from 'devextreme/ui/action_sheet';
 
-import type DataSource from 'devextreme/data/data_source';
 import type { dxActionSheetItem, CancelClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/action_sheet';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 
 import DxActionSheet from 'devextreme/ui/action_sheet';

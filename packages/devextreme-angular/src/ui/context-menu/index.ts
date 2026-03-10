@@ -23,10 +23,9 @@ import {
 
 export type { ExplicitTypes } from 'devextreme/ui/context_menu';
 
-import type DataSource from 'devextreme/data/data_source';
 import type { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
 import type { dxContextMenuItem, ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent, ContextSubmenuDirection } from 'devextreme/ui/context_menu';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { event } from 'devextreme/events/events.types';
 import type { SingleOrNone, SubmenuShowMode } from 'devextreme/common';

@@ -16,8 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import type dxTreeList from 'devextreme/ui/tree_list';
-import type { dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton, ColumnButtonClickEvent } from 'devextreme/ui/tree_list';
+import type { default as dxTreeList, dxTreeListColumn, dxTreeListRowObject, TreeListPredefinedColumnButton, ColumnButtonClickEvent } from 'devextreme/ui/tree_list';
 import type { TextEditorButtonLocation } from 'devextreme/common';
 import type { dxButtonOptions } from 'devextreme/ui/button';
 

@@ -22,9 +22,8 @@ import {
 } from '@angular/core';
 
 
-import type DataSource from 'devextreme/data/data_source';
 import type { AutoZoomMode, Command, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType, ConnectorLineEnd, ConnectorLineType, DataLayoutType, ContentReadyEvent, CustomCommandEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, OptionChangedEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, SelectionChangedEvent, PanelVisibility, Units } from 'devextreme/ui/diagram';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { Orientation, PageOrientation } from 'devextreme/common';
 

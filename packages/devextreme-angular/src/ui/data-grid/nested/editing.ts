@@ -18,8 +18,7 @@ import {
 
 
 
-import type dxDataGrid from 'devextreme/ui/data_grid';
-import type { dxDataGridRowObject } from 'devextreme/ui/data_grid';
+import type { default as dxDataGrid, dxDataGridRowObject } from 'devextreme/ui/data_grid';
 import type { DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction } from 'devextreme/common/grids';
 import type { dxFormOptions } from 'devextreme/ui/form';
 import type { dxPopupOptions } from 'devextreme/ui/popup';

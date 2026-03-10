@@ -20,9 +20,8 @@ import {
 } from '@angular/core';
 
 
-import type PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import type { PivotGridDataFieldArea, CellClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, ExportingEvent, InitializedEvent, OptionChangedEvent, PivotGridRowHeaderLayout, PivotGridTotalDisplayMode } from 'devextreme/ui/pivot_grid';
-import type { PivotGridDataSourceOptions } from 'devextreme/ui/pivot_grid/data_source';
+import type { default as PivotGridDataSource, PivotGridDataSourceOptions } from 'devextreme/ui/pivot_grid/data_source';
 import type { ApplyChangesMode, HeaderFilterSearchConfig, StateStoreType } from 'devextreme/common/grids';
 import type { FieldChooserLayout, ScrollMode, Mode } from 'devextreme/common';
 

@@ -22,10 +22,9 @@ import {
 } from '@angular/core';
 
 
-import type DataSource from 'devextreme/data/data_source';
 import type { dxVectorMapAnnotationConfig, dxVectorMapCommonAnnotationConfig, MapLayerElement, VectorMapMarkerType, VectorMapLayerType, VectorMapLegendItem, VectorMapMarkerShape, CenterChangedEvent, ClickEvent, DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, SelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomFactorChangedEvent } from 'devextreme/viz/vector_map';
 import type { HorizontalAlignment, VerticalEdge, ExportFormat, SingleMultipleOrNone, Position, Orientation } from 'devextreme/common';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { Font, Palette, DashStyle, Theme, TextOverflow, WordWrap } from 'devextreme/common/charts';
 import type { VectorMapProjection, VectorMapProjectionConfig } from 'devextreme/viz/vector_map/projection';

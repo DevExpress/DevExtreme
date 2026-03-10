@@ -24,10 +24,9 @@ import {
 } from '@angular/core';
 
 
-import type DataSource from 'devextreme/data/data_source';
 import type { ApplyValueMode, LabelMode, PageLoadMode, SimplifiedSearchMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
 import type { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { dxPopoverOptions } from 'devextreme/ui/popover';
 import type { ClosedEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OpenedEvent, OptionChangedEvent, PageLoadingEvent, PullRefreshEvent, ScrollEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/lookup';

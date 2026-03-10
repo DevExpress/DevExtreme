@@ -23,9 +23,8 @@ import {
 
 export type { ExplicitTypes } from 'devextreme/ui/tree_view';
 
-import type DataSource from 'devextreme/data/data_source';
 import type { dxTreeViewNode, dxTreeViewItem, DisabledNodeSelectionMode, TreeViewExpandEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, ItemSelectionChangedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, TreeViewCheckBoxMode } from 'devextreme/ui/tree_view';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { DataStructure, ScrollDirection, SearchMode, SingleOrMultiple } from 'devextreme/common';
 import type { dxTextBoxOptions } from 'devextreme/ui/text_box';
