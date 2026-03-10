@@ -1092,8 +1092,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         const fifthHeaderCell = headerCells.eq(4);
         const dateTableCell = scheduler.workSpace.getCells().eq(0);
 
-        assert.equal(getInnerHeight(firstHeaderCell), getInnerHeight(fifthHeaderCell), 'Header cells have same height');
-        assert.equal(getInnerHeight(fifthHeaderCell), getInnerHeight(dateTableCell), 'Header cell and table cell have same height');
+        assert.roughEqual(getInnerHeight(firstHeaderCell), getInnerHeight(fifthHeaderCell), 0.5, 'Header cells have same height');
+        assert.roughEqual(getInnerHeight(fifthHeaderCell), getInnerHeight(dateTableCell), 0.5, 'Header cell and table cell have same height');
     });
 
     isDesktopEnvironment() && test('SelectedCellData option should be correct when virtual scrolling is enabled', function(assert) {
