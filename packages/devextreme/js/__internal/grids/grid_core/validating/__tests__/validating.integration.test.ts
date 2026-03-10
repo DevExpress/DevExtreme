@@ -76,14 +76,13 @@ describe('DataGrid Cell Editing', () => {
   // T1296376
   describe('when a TextArea editor is invalid', () => {
     it('should have the aria-invalid attribute set to true', async () => {
-      const { component } = await createDataGrid({
+      const { component, instance } = await createDataGrid({
         dataSource: [
           { id: 1, text: 'value' },
         ],
         keyExpr: 'id',
         columns: [{
           dataField: 'text',
-          showEditorAlways: true,
           validationRules: [{ type: 'required' }],
         }],
         editing: {
@@ -95,10 +94,15 @@ describe('DataGrid Cell Editing', () => {
         },
       });
 
-      const dataCell = component.getDataCell(0, 0);
-      const editor = dataCell.getEditor(TextAreaModel);
+      instance.editCell(0, 0);
+      jest.runAllTimers();
+      const textCell = component.getDataCell(0, 0);
 
+      expect(textCell.isEditCell).toBe(true);
+
+      const editor = textCell.getEditor(TextAreaModel);
       editor.setValue('');
+      editor.getInputElement().blur();
       jest.runAllTimers();
 
       expect(component.getDataCell(0, 0).isValidCell).toBe(false);
