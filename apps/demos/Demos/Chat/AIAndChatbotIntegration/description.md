@@ -19,4 +19,4 @@ The Chat component in this demo displays modified captions when the conversation
 
 ## Speech Recognition
 
-Users can enter messages using their voice when [speechToTextEnabled](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#speechToTextEnabled) is set to `true`. The Chat component uses [Web Speech APIs](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) for speech recognition. Use [speechToTextOptions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#speechToTextOptions) to define custom speech recognizer settings, handle related events, and customize the speech-to-text button appearance.
+Users can enter voice-driven messages when [speechToTextEnabled](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#speechToTextEnabled) is set to `true`. Our Chat component uses [Web Speech APIs](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) for speech recognition. Use [speechToTextOptions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#speechToTextOptions) to define custom speech recognizer settings, handle related events, and customize the speech-to-text button appearance.
