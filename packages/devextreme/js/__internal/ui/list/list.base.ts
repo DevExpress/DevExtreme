@@ -1068,7 +1068,9 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._refreshItemElements();
     super._postprocessRenderItem(args);
 
-    this._attachSwipeEvent($(args.itemElement));
+    if (this.hasActionSubscription('onItemSwipe')) {
+      this._attachSwipeEvent($(args.itemElement));
+    }
   }
 
   _getElementClassToSkipRefreshId(): string {
@@ -1086,11 +1088,54 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   }
 
   _itemSwipeEndHandler(e: DxEvent & { offset: number }): void {
-    if (this.hasActionSubscription('onItemSwipe')) {
-      this._itemDXEventHandler(e, 'onItemSwipe', {
-        direction: e.offset < 0 ? 'left' : 'right',
-      });
+    this._itemDXEventHandler(e, 'onItemSwipe', {
+      direction: e.offset < 0 ? 'left' : 'right',
+    });
+  }
+
+  _onItemSwipeSubscriptionChanged(): void {
+    const $items = this._itemElements();
+
+    // @ts-expect-error ts-error
+    const endEventName = addNamespace(swipeEventEnd, this.NAME);
+
+    $items.each((_index, item) => {
+      const $item = $(item);
+
+      eventsEngine.off($item, endEventName);
+
+      if (this.hasActionSubscription('onItemSwipe')) {
+        this._attachSwipeEvent($item);
+      }
+      return true;
+    });
+  }
+
+  on(eventName: string | { [key: string]: Function }, eventHandler?: Function): this {
+    const result = super.on(eventName, eventHandler);
+
+    const isItemSwipe = eventName === 'itemSwipe'
+      || (isPlainObject(eventName) && Object.prototype.hasOwnProperty.call(eventName, 'itemSwipe'));
+
+    if (isItemSwipe) {
+      this._onItemSwipeSubscriptionChanged();
     }
+
+    return result;
+  }
+
+  off(eventName: string, eventHandler?: Function): this {
+    const result = super.off(eventName, eventHandler);
+
+    const isItemSwipe = eventName === undefined
+      || eventName === 'itemSwipe'
+      || (isPlainObject(eventName) && Object.prototype.hasOwnProperty.call(eventName, 'itemSwipe'));
+
+    if (isItemSwipe) {
+      this._onItemSwipeSubscriptionChanged();
+    }
+
+    return result;
   }
 
   _nextButtonHandler(): void {
