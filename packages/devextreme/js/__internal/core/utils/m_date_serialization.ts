@@ -29,21 +29,43 @@ function getTimePart(part) {
   return +part || 0;
 }
 
-function parseDate(text) {
-  const isDefaultSerializationFormat = getDateSerializationFormat(text) === DATE_SERIALIZATION_FORMAT;
+function createLocalDateFromUTCTimestamp(timestamp: number): Date {
+  const utc = new Date(timestamp);
+
+  return new Date(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate());
+}
+
+function hasNoTimeOrTimezone(text: string): boolean {
+  return isString(text) && !text.includes('T') && !text.includes(':');
+}
+
+function parseDate(text): string | Date {
+  const isDefaultSerializationFormat = getDateSerializationFormat(text)
+    === DATE_SERIALIZATION_FORMAT;
+
   const parsedValue = !isDate(text) && Date.parse(text);
+
   if (!parsedValue && isDefaultSerializationFormat) {
     const parts = text.match(DATE_SERIALIZATION_PATTERN);
+
     if (parts) {
       const newDate = new Date(getTimePart(parts[1]), getTimePart(parts[2]), getTimePart(parts[3]));
+
       newDate.setFullYear(getTimePart(parts[1]));
       newDate.setMonth(getTimePart(parts[2]) - 1);
       newDate.setDate(getTimePart(parts[3]));
+
       return newDate;
     }
   }
 
-  return isNumber(parsedValue) ? new Date(parsedValue) : text;
+  if (!isNumber(parsedValue)) {
+    return text;
+  }
+
+  return hasNoTimeOrTimezone(text)
+    ? createLocalDateFromUTCTimestamp(parsedValue)
+    : new Date(parsedValue);
 }
 
 function parseISO8601String(text) {
