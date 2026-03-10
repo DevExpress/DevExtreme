@@ -86,11 +86,11 @@ catalogs:
       specifier: 4.1.66
       version: 4.1.66
     devextreme-exceljs-fork:
-      specifier: 4.4.5
-      version: 4.4.5
+      specifier: 4.4.7
+      version: 4.4.7
     devextreme-quill:
-      specifier: 1.7.8
-      version: 1.7.8
+      specifier: 1.7.9
+      version: 1.7.9
     eslint:
       specifier: 9.39.2
       version: 9.39.2
@@ -437,10 +437,10 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-exceljs-fork:
         specifier: 'catalog:'
-        version: 4.4.5
+        version: 4.4.7
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.8
+        version: 1.7.9
       devextreme-react:
         specifier: workspace:*
         version: link:../../packages/devextreme-react/npm
@@ -1197,7 +1197,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.8
+        version: 1.7.9
       devextreme-react:
         specifier: workspace:~
         version: link:../../packages/devextreme-react/npm
@@ -1336,7 +1336,7 @@ importers:
         version: 4.1.66
       devextreme-quill:
         specifier: 'catalog:'
-        version: 1.7.8
+        version: 1.7.9
       inferno:
         specifier: 'catalog:'
         version: 8.2.3
@@ -1481,7 +1481,7 @@ importers:
         version: 1.0.3
       devextreme-exceljs-fork:
         specifier: 'catalog:'
-        version: 4.4.5
+        version: 4.4.7
       devextreme-screenshot-comparer:
         specifier: 2.0.17
         version: 2.0.17(testcafe@3.7.4)
@@ -9629,17 +9629,17 @@ packages:
   devextreme-cldr-data@1.0.3:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
-  devextreme-exceljs-fork@4.4.5:
-    resolution: {integrity: sha512-q4gG+tOUePkrocizE+akzz7QnikjjYt2vPMhtf/clAYGhuxYPrVgx63rJBVOVSjdop3VvPkHZCN8Tvi+au/CDQ==}
-    engines: {node: '>=16.20.2'}
+  devextreme-exceljs-fork@4.4.7:
+    resolution: {integrity: sha512-32Zao6Bn1l9owiC7hpyPynUtYY1Tae2eS2Zot3FWZSSWJW0R1O1tF7H1Nn2GOwONTFmaTFML2jo5bZL1idGSFA==}
+    engines: {node: '>=18.20.8'}
 
   devextreme-internal-tools@20.1.1:
     resolution: {integrity: sha512-heMGvQIrTSZEXDpL6GZnMhKrX2YlZgOfmd0Sr4dYBgQBRm7aoCyIrVDDo3l71qFLWM0qawqTbIKvjcMiQpBCtw==}
     engines: {node: '>=20.0.0'}
     hasBin: true
 
-  devextreme-quill@1.7.8:
-    resolution: {integrity: sha512-0UcJNc5crQ6eJTEteizRW9qv0xJqk1nnmX0xleI3IgHKS+CV3Vk7Xi+VOlEkFJDFiybRdhVse4cyFHslc86mGQ==}
+  devextreme-quill@1.7.9:
+    resolution: {integrity: sha512-UEkR16+I/7P/4+7dUmc65lv+VRdRGk0kFvZXgHnM2UFcEBKqm1kVDdVPBolGRFwuOFuDttJxp2SXUAyiuSC8wA==}
 
   devextreme-schematics@1.7.1:
     resolution: {integrity: sha512-K+FNrji2/G7QPkfWYhWiNNaXcmxdlXDTOVpIiISoMr6fumRhz5PindoIYlOx0HXtnpvcBWzb2Fqadujr8qop2g==}
@@ -29754,7 +29754,7 @@ snapshots:
 
   devextreme-cldr-data@1.0.3: {}
 
-  devextreme-exceljs-fork@4.4.5:
+  devextreme-exceljs-fork@4.4.7:
     dependencies:
       archiver: 7.0.1
       dayjs: 1.11.13
@@ -29776,7 +29776,7 @@ snapshots:
       typescript: 5.9.2
       winston: 3.17.0
 
-  devextreme-quill@1.7.8:
+  devextreme-quill@1.7.9:
     dependencies:
       core-js: 3.39.0
       eventemitter3: 4.0.7

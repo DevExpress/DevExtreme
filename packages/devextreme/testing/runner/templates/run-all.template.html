@@ -1,4 +1,3 @@
-@model RunAllViewModel
 <!DOCTYPE html>
 
 <head>
@@ -53,7 +52,7 @@
 
 </style>
 
-<script src="@Url.Content("~/packages/devextreme/artifacts/js/jquery.js")"></script>
+<script src="{{JQUERY_URL}}"></script>
 
 <script>
     $(function() {
@@ -62,28 +61,28 @@
             WORKER_NAME_PREFIX = "workerFrame",
             busyCount = 0,
             suitesDescription = {
-                constellation: "@(Model.Constellation)",
-                categoriesList: "@(Model.CategoriesList)",
-                version: "@(Model.Version)"
+                constellation: {{{CONSTELLATION_JSON}}},
+                categoriesList: {{{CATEGORIES_LIST_JSON}}},
+                version: {{{VERSION_JSON}}}
             },
             suitesInProgress = [ ],
-            urls = @Html.Raw(Json.Serialize(Model.Suites)),
-            noTryCatch = @Html.Raw(Json.Serialize(Model.NoTryCatch)),
-            noGlobals = @Html.Raw(Json.Serialize(Model.NoGlobals)),
-            noTimers = @Html.Raw(Json.Serialize(Model.NoTimers)),
-            noJQuery = @Html.Raw(Json.Serialize(Model.NoJQuery)),
-            shadowDom = @Html.Raw(Json.Serialize(Model.ShadowDom)),
-            noCsp = @Html.Raw(Json.Serialize(Model.NoCsp)),
-            farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration)),
+            urls = {{{SUITES_JSON}}},
+            noTryCatch = {{{NO_TRY_CATCH_JSON}}},
+            noGlobals = {{{NO_GLOBALS_JSON}}},
+            noTimers = {{{NO_TIMERS_JSON}}},
+            noJQuery = {{{NO_JQUERY_JSON}}},
+            shadowDom = {{{SHADOW_DOM_JSON}}},
+            noCsp = {{{NO_CSP_JSON}}},
+            farmMode = {{{IS_CONTINUOUS_INTEGRATION_JSON}}},
             DX_HTTP_CACHE = Date.now(),
-            runWorkerInNewWindow = @Html.Raw(Json.Serialize(Model.WorkerInWindow)),
-            maxWorkersFromEnv = @Html.Raw(Json.Serialize(Model.MaxWorkers)),
+            runWorkerInNewWindow = {{{WORKER_IN_WINDOW_JSON}}},
+            maxWorkersFromEnv = {{{MAX_WORKERS_JSON}}},
 
             WORKER_COUNT;
 
         var calcWorkerFrameCount = function() {
             if(runWorkerInNewWindow)
-                return 1; // NOTE: more than 1 window cause problems with tests that use focus
+                return 1;
 
             if(maxWorkersFromEnv !== null && maxWorkersFromEnv > 0)
                 return maxWorkersFromEnv;
@@ -124,7 +123,7 @@
 
         var saveResults = function() {
             $.ajax({
-                url: @Html.Raw(Json.Serialize(Url.Action("SaveResults"))),
+                url: "/Main/SaveResults",
                 type: "post",
                 contentType: "application/json",
                 data: JSON.stringify(testResults),
@@ -135,7 +134,7 @@
 
                 var frame = document.getElementById("reportFrame");
                 frame.style.display = "block";
-                frame.setAttribute("src", @Html.Raw(Json.Serialize(Url.Action("DisplayResults"))));
+                frame.setAttribute("src", "/Main/DisplayResults");
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 notifyDeviceTestManager("QUnit.saveResults.failed");
                 removeWorkers();
@@ -148,7 +147,7 @@
             if(suitesInProgress[i] !== null && suitesInProgress[i] !== undefined) {
                 return;
             }
-            
+
             if(!urls.length) {
                 if(!resultSaving && !busyCount) {
                     resultSaving = true;
@@ -198,7 +197,7 @@
                     if(this.finalized) {
                         return;
                     }
-                    
+
                     this.finalized = true;
                     this.time = roundTime((new Date() - this.startTime) / 1000);
                     this.pureTime = roundTime(this.pureTime);
@@ -334,7 +333,7 @@
                 );
             }
 
-            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyTestStarted"))), { name: getTestCaseName(testSuite, qunitData) });
+            $.post("/Main/NotifyTestStarted", { name: getTestCaseName(testSuite, qunitData) });
         };
 
         var indicateTestStatusInTitle = function(failed) {
@@ -358,7 +357,7 @@
                     testCase.failure.message += testCase.currentAssert + ". " + (qunitData.message || "failed") + "\n";
                     if(qunitData.hasOwnProperty("actual") && qunitData.hasOwnProperty("expected")) {
                         testCase.failure.message += "Expected: " + JSON.stringify(qunitData.expected) + "\n"
-                                                  + "Result: " + JSON.stringify(qunitData.actual) + "\n"
+                                                  + "Result: " + JSON.stringify(qunitData.actual) + "\n";
                     }
                     testCase.failure.message += "Source:\n" + qunitData.source + "\n\n";
                     testCase.name = getTestCaseName(testSuite, qunitData);
@@ -419,7 +418,7 @@
                 );
             }
 
-            $.post(@Html.Raw(Json.Serialize(Url.Action("NotifyTestCompleted"))), { name: getTestCaseName(testSuite, qunitData), passed:  qunitData.passed === qunitData.total});
+            $.post("/Main/NotifyTestCompleted", { name: getTestCaseName(testSuite, qunitData), passed:  qunitData.passed === qunitData.total});
         };
 
         window.RUNNER_ON_DONE = function(worker, qunitData) {
@@ -432,7 +431,7 @@
                     suitesInProgress[i] = null;
                     return;
                 }
-                
+
                 var suiteName = suite.name;
                 suite.finalize(passed, qunitData.total);
 
@@ -444,7 +443,7 @@
 
         window.RUNNER_ON_MISC_ERROR = function(worker, msg) {
             msg = String(worker.location || worker) + ": " + msg;
-            $.post(@Html.Raw(Json.Serialize(Url.Action("LogMiscError"))), { msg: msg });
+            $.post("/Main/LogMiscError", { msg: msg });
         };
 
         window.onbeforeunload = function(e) {
@@ -474,37 +473,37 @@
         var activeFinalizationRequests = 0;
         var maxConcurrentFinalizations = 3;
         var finalizationQueue = [];
-        
+
         function notifySuiteFinalized(name, passed, runtime, callback) {
             finalizationQueue.push({ name: name, passed: passed, runtime: runtime, callback: callback });
             processFinalizationQueue();
         }
-        
+
         function processFinalizationQueue() {
             while (finalizationQueue.length > 0 && activeFinalizationRequests < maxConcurrentFinalizations) {
                 var item = finalizationQueue.shift();
                 executeNotifySuiteFinalized(item.name, item.passed, item.runtime, item.callback);
             }
         }
-        
+
         function executeNotifySuiteFinalized(name, passed, runtime, callback) {
             activeFinalizationRequests++;
-            
+
             var callbackCalled = false;
             var safeCallback = function() {
                 if(callbackCalled) return;
                 callbackCalled = true;
                 if(callback) callback();
             };
-            
+
             var safetyTimer = setTimeout(function() {
                 activeFinalizationRequests--;
                 safeCallback();
                 processFinalizationQueue();
             }, 20000);
-            
+
             $.ajax({
-                url: @Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized"))),
+                url: "/Main/NotifySuiteFinalized",
                 type: 'POST',
                 data: { name: name, passed: passed, runtime: runtime },
                 timeout: 10000
@@ -518,11 +517,11 @@
         var lastAliveTime = 0;
         var aliveThrottleMs = 5000;
         var pendingAlive = false;
-        
+
         function notifyIsAlive(){
             var now = Date.now();
             var timeSinceLastAlive = now - lastAliveTime;
-            
+
             if (timeSinceLastAlive < aliveThrottleMs) {
                 if (!pendingAlive) {
                     pendingAlive = true;
@@ -533,11 +532,11 @@
                 }
                 return;
             }
-            
+
             lastAliveTime = now;
-            
+
             $.ajax({
-                url: @Html.Raw(Json.Serialize(Url.Action("NotifyIsAlive"))),
+                url: "/Main/NotifyIsAlive",
                 type: 'POST',
                 timeout: 10000
             });
