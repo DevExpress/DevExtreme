@@ -1,6 +1,5 @@
 import React from 'react';
 
-const fontFamily = "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif";
 const Form = React.forwardRef((_, ref) => (
   <div
     id="custom_markup_container"
@@ -30,12 +29,7 @@ const Form = React.forwardRef((_, ref) => (
       ></path>
       <text
         transform="translate(30,89)"
-        style={{
-          fill: '#FFFFFF',
-          fontFamily,
-          fontSize: 36,
-          fontWeight: 'bold',
-        }}
+        className="custom_markup_text custom_markup_text--title"
       >
         <tspan
           x="0"
@@ -58,12 +52,7 @@ const Form = React.forwardRef((_, ref) => (
       </text>
       <text
         transform="translate(32,199)"
-        style={{
-          opacity: 0.8,
-          fill: '#FFFFFF',
-          fontFamily,
-          fontSize: 14,
-        }}
+        className="custom_markup_text custom_markup_text--subtitle"
       >
         <tspan
           x="0"

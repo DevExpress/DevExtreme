@@ -24,11 +24,7 @@
       />
       <text
         transform="translate(30,89)"
-        :style="{ fill: '#fff',
-                  fontFamily: fontFamily,
-                  fontSize: '36px',
-                  fontWeight: 'bold',
-        }"
+        class="custom_markup_text custom_markup_text--title"
       >
         <tspan
           x="0"
@@ -45,11 +41,7 @@
       </text>
       <text
         transform="translate(32,199)"
-        :style="{ opacity: '0.8',
-                  fill: '#fff',
-                  fontFamily: fontFamily,
-                  fontSize: '14px'
-        }"
+        class="custom_markup_text custom_markup_text--subtitle"
       >
         <tspan
           x="0"
@@ -65,7 +57,6 @@
 </template>
 <script setup lang="ts">
 
-const fontFamily = "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif";
 defineExpose({
   getMarkup(): string {
     // @ts-ignore
@@ -73,3 +64,19 @@ defineExpose({
   },
 });
 </script>
+<style>
+.custom_markup_text {
+  fill: #ffffff;
+  font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif;
+}
+
+.custom_markup_text--title {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.custom_markup_text--subtitle {
+  font-size: 14px;
+  opacity: 0.8;
+}
+</style>

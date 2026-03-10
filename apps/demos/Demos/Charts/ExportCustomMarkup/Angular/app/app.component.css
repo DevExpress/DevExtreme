@@ -19,3 +19,18 @@
 ::ng-deep .controls-pane {
   text-align: center;
 }
+
+::ng-deep .custom_markup_text {
+  fill: #fff;
+  font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif;
+}
+
+::ng-deep .custom_markup_text--title {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+::ng-deep .custom_markup_text--subtitle {
+  font-size: 14px;
+  opacity: 0.8;
+}
