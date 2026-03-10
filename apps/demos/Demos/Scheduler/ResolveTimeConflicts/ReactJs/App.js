@@ -5,7 +5,7 @@ import Scheduler, {
 import SelectBox from 'devextreme-react/select-box';
 import { custom as customDialog } from 'devextreme/ui/dialog';
 import { Template } from 'devextreme-react/core/template';
-import { data, assignees } from './data';
+import { data, assignees } from './data.js';
 
 const currentDate = new Date(2026, 1, 10);
 const views = ['day', 'week', 'workWeek', 'month'];
@@ -60,12 +60,17 @@ const assigneeIdEditorOptions = {
   tagTemplate: 'tagTemplate',
 };
 const tagTemplate = (itemData) => (
-  <div className="dx-tag-content" style={{ backgroundColor: itemData.color, borderColor: itemData.color }}>
+  <div
+    className="dx-tag-content"
+    style={{ backgroundColor: itemData.color, borderColor: itemData.color }}
+  >
     {itemData.text}
     <div className="dx-tag-remove-button"></div>
   </div>
 );
-const conflictInformerRender = () => (<div className="conflict-informer">This time slot conflicts with another appointment.</div>);
+const conflictInformerRender = () => (
+  <div className="conflict-informer">This time slot conflicts with another appointment.</div>
+);
 const App = () => {
   const popupRef = useRef(null);
   const formRef = useRef(null);
@@ -225,6 +230,7 @@ const App = () => {
             />
           </Form>
         </Editing>
+
         <Template
           name="tagTemplate"
           render={tagTemplate}
