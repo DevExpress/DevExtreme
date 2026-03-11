@@ -116,11 +116,11 @@ class SchedulerAgenda extends WorkSpace {
     return false;
   }
 
-  getElementClass() {
+  protected override getElementClass() {
     return AGENDA_CLASS;
   }
 
-  getRowCount() {
+  protected override getRowCount() {
     return this.option('agendaDuration') as number;
   }
 
@@ -134,11 +134,11 @@ class SchedulerAgenda extends WorkSpace {
 
   renderAllDayPanel() { return noop(); }
 
-  updateAllDayVisibility() { return noop(); }
+  protected override updateAllDayVisibility() { return noop(); }
 
   _updateAllDayHeight() { return noop(); }
 
-  initWorkSpaceUnits() {
+  protected override initWorkSpaceUnits() {
     this._initGroupTable();
     this._$timePanel = $('<table>').attr('aria-hidden', true).addClass(TIME_PANEL_CLASS);
     this._$dateTable = $('<table>').attr('aria-hidden', true).addClass(DATE_TABLE_CLASS);
@@ -153,7 +153,7 @@ class SchedulerAgenda extends WorkSpace {
     }
   }
 
-  renderView() {
+  protected override renderView() {
     this._startViewDate = agendaUtils.calculateStartViewDate(this.option('currentDate') as any, this.option('startDayHour') as any);
     this._rows = [];
   }
@@ -186,12 +186,12 @@ class SchedulerAgenda extends WorkSpace {
     this._dateTableScrollable.$content().append(this._$noDataContainer);
   }
 
-  setTableSizes() { return noop(); }
+  protected override setTableSizes() { return noop(); }
 
-  toggleHorizontalScrollClass() { return noop(); }
+  protected override toggleHorizontalScrollClass() { return noop(); }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  createCrossScrollingConfig(argument?: any) { return noop(); }
+  protected override createCrossScrollingConfig(argument?: any) { return noop(); }
 
   _setGroupHeaderCellsHeight() {
     const $cells = this.getGroupHeaderCells().filter((_, element) => !element.getAttribute('rowSpan'));
@@ -224,7 +224,7 @@ class SchedulerAgenda extends WorkSpace {
     return result;
   }
 
-  attachGroupCountClass() {
+  protected override attachGroupCountClass() {
     const className = getVerticalGroupCountClass(this.option('groups'));
     (this.$element() as any).addClass(className);
   }
@@ -248,7 +248,7 @@ class SchedulerAgenda extends WorkSpace {
     return this._$groupTable;
   }
 
-  makeGroupRows() {
+  protected override makeGroupRows() {
     const resourceManager = this.option('getResourceManager')();
     const allAppointments = (this.option('getFilteredItems') as any)() as ListEntity[];
     const tree = reduceResourcesTree(
@@ -304,7 +304,7 @@ class SchedulerAgenda extends WorkSpace {
     };
   }
 
-  cleanView() {
+  protected override cleanView() {
     this._$dateTable.empty();
     this._$timePanel.empty();
 
@@ -320,11 +320,11 @@ class SchedulerAgenda extends WorkSpace {
     }
   }
 
-  createWorkSpaceElements() {
+  protected override createWorkSpaceElements() {
     this.createWorkSpaceStaticElements();
   }
 
-  createWorkSpaceStaticElements() {
+  protected override createWorkSpaceStaticElements() {
     this._$dateTableContainer.append(this._$dateTable);
     this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
 
@@ -344,9 +344,9 @@ class SchedulerAgenda extends WorkSpace {
     });
   }
 
-  _attachTablesEvents() { return noop(); }
+  protected override attachTablesEvents() { return noop(); }
 
-  attachEvents() { return noop(); }
+  protected override attachEvents() { return noop(); }
 
   _cleanCellDataCache() { return noop(); }
 

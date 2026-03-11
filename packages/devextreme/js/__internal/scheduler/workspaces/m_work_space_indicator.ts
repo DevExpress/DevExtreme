@@ -187,7 +187,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return false;
   }
 
-  getHeaderPanelCellClass(i) {
+  protected override getHeaderPanelCellClass(i) {
     const cellClass = super.getHeaderPanelCellClass(i);
 
     if (this._isCurrentTimeHeaderCell(i)) {
@@ -197,7 +197,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return cellClass;
   }
 
-  cleanView() {
+  protected override cleanView() {
     super.cleanView();
 
     this._cleanDateTimeIndicator();
@@ -213,7 +213,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     (this.$element() as any).find(`.${SCHEDULER_DATE_TIME_INDICATOR_CLASS}`).remove();
   }
 
-  cleanWorkSpace() {
+  protected override cleanWorkSpace() {
     super.cleanWorkSpace();
 
     this.renderDateTimeIndication();

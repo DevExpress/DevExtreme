@@ -23,22 +23,22 @@ const toMs = dateUtils.dateToMilliseconds;
 class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   get type() { return VIEWS.MONTH; }
 
-  getElementClass() {
+  protected override getElementClass() {
     return MONTH_CLASS;
   }
 
-  getFormat() {
+  protected override getFormat() {
     return formatWeekday;
   }
 
-  getIntervalBetween(currentDate) {
+  protected override getIntervalBetween(currentDate) {
     const firstViewDate = this.getStartViewDate();
     const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
 
     return currentDate.getTime() - (firstViewDate.getTime() - (this.option('startDayHour') as any) * 3600000) - timeZoneOffset;
   }
 
-  getDateGenerationOptions() {
+  protected override getDateGenerationOptions() {
     return {
       ...super.getDateGenerationOptions(),
       cellCountInDay: 1,
@@ -68,7 +68,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     return false;
   }
 
-  getCellCoordinatesByIndex(index) {
+  protected override getCellCoordinatesByIndex(index) {
     const rowIndex = Math.floor(index / this._getCellCount());
     const columnIndex = index - this._getCellCount() * rowIndex;
 
@@ -78,12 +78,12 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     };
   }
 
-  needCreateCrossScrolling() {
+  protected override needCreateCrossScrolling() {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return this.option('crossScrollingEnabled') || this.isVerticalGroupedWorkSpace();
   }
 
-  getViewStartByOptions() {
+  protected override getViewStartByOptions() {
     return monthUtils.getViewStartByOptions(
       this.option('startDate') as any,
       this.option('currentDate') as any,
@@ -92,7 +92,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     );
   }
 
-  updateIndex(index) {
+  protected override updateIndex(index) {
     return index;
   }
 
@@ -124,7 +124,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     return true;
   }
 
-  getHeaderDate() {
+  protected override getHeaderDate() {
     return this.getViewStartByOptions();
   }
 
@@ -146,7 +146,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   // We need these methods for now but they are useless for renovation
   // -------------
 
-  createWorkSpaceElements() {
+  protected override createWorkSpaceElements() {
     if (this.isVerticalGroupedWorkSpace()) {
       this.createWorkSpaceScrollableElements();
     } else {
@@ -154,7 +154,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     }
   }
 
-  updateAllDayVisibility() { return noop(); }
+  protected override updateAllDayVisibility() { return noop(); }
 
   _updateAllDayHeight() { return noop(); }
 
@@ -173,7 +173,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
       .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, data.otherMonth);
   }
 
-  createAllDayPanelElements() {}
+  protected override createAllDayPanelElements() {}
 
   renderTableBody(options) {
     options.getCellText = (rowIndex, columnIndex) => {
