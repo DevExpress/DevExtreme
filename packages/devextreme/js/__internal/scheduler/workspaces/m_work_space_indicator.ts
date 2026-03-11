@@ -108,7 +108,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   getIndicationWidth() {
-    const cellCount = this.getCellCount();
+    const cellCount = this._getCellCount();
     const cellSpan = Math.min(this._getIndicatorDaysSpan(), cellCount);
     const width = cellSpan * this.getCellWidth();
     const maxWidth = this.getCellWidth() * cellCount;
@@ -272,7 +272,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     const verticalGroupCount = this.isVerticalGroupedWorkSpace()
-      ? this.getGroupCount()
+      ? this._getGroupCount()
       : 1;
 
     return [...new Array(verticalGroupCount)]
@@ -295,7 +295,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
       return;
     }
 
-    const groupCount = this.getGroupCount() || 1;
+    const groupCount = this._getGroupCount() || 1;
     const $container = this._dateTableScrollable.$content();
     const height = this.getIndicationHeight();
     const rtlOffset = this._getRtlOffset(this.getCellWidth());
