@@ -65,8 +65,8 @@ const App = () => {
                   colCountByScreen={{ xs: 3 }}
                 >
                   <Item name="roomIdIcon" />
-                  <Item name="roomId" />
-                  <Item name="priorityId" />
+                  <Item name="roomIdEditor" />
+                  <Item name="priorityIdEditor" />
                 </Item>
                 <Item name="assigneeIdGroup" />
               </Item>
