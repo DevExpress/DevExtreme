@@ -1,4 +1,4 @@
-::ng-deep .chart {
+::ng-deep #chart {
   position: absolute;
   top: 12px;
   right: 35px;
@@ -6,7 +6,7 @@
   height: 347px;
 }
 
-::ng-deep .chart_environment {
+::ng-deep .chart-environment {
   width: 820px;
   position: relative;
   margin: 0 auto;

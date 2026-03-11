@@ -1,5 +1,5 @@
 <template>
-  <div class="custom_markup_container">
+  <div class="custom-markup-container">
     <svg
       version="1.1"
       width="820px"

@@ -2,7 +2,7 @@ import React from 'react';
 
 const Form = React.forwardRef((_, ref) => (
   <div
-    id="custom_markup_container"
+    id="custom-markup-container"
     ref={ref}
   >
     <svg

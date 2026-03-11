@@ -79,16 +79,12 @@ function App() {
     );
   }, []);
   return (
-    <div
-      id="chart-demo"
-      className="chart-demo"
-    >
-      <div className="chart_environment">
+    <div id="chart-demo">
+      <div className="chart-environment">
         <Form ref={childRef} />
         <Chart
           ref={chartRef}
           id="chart"
-          className="chart"
           dataSource={dataSource}
           palette="Violet"
         >

@@ -1,8 +1,8 @@
-.chart-demo {
+#chart-demo {
   height: 460px;
 }
 
-.chart {
+#chart {
   position: absolute;
   top: 12px;
   right: 35px;
@@ -10,7 +10,7 @@
   height: 347px;
 }
 
-.chart_environment {
+.chart-environment {
   width: 820px;
   position: relative;
   margin: 0 auto;

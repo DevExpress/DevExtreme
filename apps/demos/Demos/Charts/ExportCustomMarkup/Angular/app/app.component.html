@@ -1,5 +1,5 @@
-<div class="chart_environment">
-  <div id="custom_markup_container">
+<div class="chart-environment">
+  <div id="custom-markup-container">
     <svg version="1.1" width="820px" height="420px">
       <path
         d="M 0 0 L 820 0 L 820 420 L 0 420 L 0 0"
@@ -32,12 +32,7 @@
       </text>
     </svg>
   </div>
-  <dx-chart
-    id="chart"
-    class="chart"
-    [dataSource]="oilProductionData"
-    palette="Violet"
-  >
+  <dx-chart id="chart" [dataSource]="oilProductionData" palette="Violet">
     <dxi-chart-series valueField="year1990" name="1990"></dxi-chart-series>
     <dxi-chart-series valueField="year2000" name="2000"></dxi-chart-series>
     <dxi-chart-series valueField="year2010" name="2010"></dxi-chart-series>

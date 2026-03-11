@@ -54,7 +54,7 @@ export class AppComponent {
   }
 
   prepareMarkup() {
-    const sourceContainer = document.getElementById('custom_markup_container');
+    const sourceContainer = document.getElementById('custom-markup-container');
     const sourceElements = sourceContainer.querySelectorAll('*');
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');

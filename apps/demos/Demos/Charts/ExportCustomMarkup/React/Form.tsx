@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Form = React.forwardRef<HTMLDivElement>((_, ref) => (
-  <div id="custom_markup_container" ref={ref}>
+  <div id="custom-markup-container" ref={ref}>
     <svg width="820px" height="420px">
       <path opacity="1" d="M 0 0 L 820 0 L 820 420 L 0 420 L 0 0" stroke="#999999" strokeWidth="1"
         strokeLinecap="butt" fill="white" strokeLinejoin="miter"></path>
