@@ -163,7 +163,9 @@ class SchedulerAppointments extends CollectionWidget<any> {
   }
 
   _renderFocusTarget() {
-    this._kbn.resetTabIndex();
+    if (this.$itemBySortedIndex?.length) {
+      this._kbn.resetTabIndex(this._kbn.getFirstVisibleItem());
+    }
   }
 
   _cleanFocusState(): void {
@@ -182,6 +184,8 @@ class SchedulerAppointments extends CollectionWidget<any> {
       this._kbn.isNavigating = false;
       this._kbn.focus();
       this._focusedItemIndexBeforeRender = -1;
+    } else {
+      this._kbn.focusedItemSortIndex = -1;
     }
   }
 

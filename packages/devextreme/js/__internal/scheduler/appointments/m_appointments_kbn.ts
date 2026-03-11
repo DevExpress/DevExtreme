@@ -42,12 +42,8 @@ export class AppointmentsKeyboardNavigation {
       return $();
     }
 
-    if (this.focusedItemSortIndex !== -1) {
-      const $item = $items[this.focusedItemSortIndex];
-      return $item || $();
-    }
-
-    return this.getFirstVisibleItem();
+    const $item = $items[this.focusedItemSortIndex];
+    return $item || $();
   }
 
   public resetTabIndex($item?: dxElementWrapper): void {
@@ -170,7 +166,7 @@ export class AppointmentsKeyboardNavigation {
     );
   }
 
-  private getFirstVisibleItem(): dxElementWrapper {
+  public getFirstVisibleItem(): dxElementWrapper {
     const $items = this._collection.$itemBySortedIndex;
     const $itemsPlainArray = Object.values($items);
 
