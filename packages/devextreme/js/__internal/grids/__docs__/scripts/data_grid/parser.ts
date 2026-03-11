@@ -18,10 +18,10 @@ import {
   WIDGET_BASE_FILE,
 } from './constants';
 import type {
-  DataGridClassRef,
-  DataGridParsedFile,
+  ControllerViewRef,
   ExtenderRef,
   GridCoreModuleInfo,
+  ParsedFile,
   RegisterModuleCall,
 } from './types';
 
@@ -118,117 +118,162 @@ function isRegisterModuleCall(node: ts.Node, sf: ts.SourceFile): node is ts.Call
   if (!ts.isPropertyAccessExpression(expr)) return false;
   const methodName = expr.name.text;
   if (methodName !== 'registerModule') return false;
-  const receiverText = getNodeText(expr.expression, sf);
-  return REGISTER_MODULE_RECEIVERS.has(receiverText);
+
+  const obj = getNodeText(expr.expression, sf);
+  const baseObj = obj.split('.')[0];
+  return REGISTER_MODULE_RECEIVERS.has(baseObj);
 }
 
-function collectSpreadSources(
-  obj: ts.ObjectLiteralExpression,
+function isDataSourceAdapterExtendCall(
+  node: ts.Node,
   sf: ts.SourceFile,
-): string[] {
-  const sources: string[] = [];
-  for (const prop of obj.properties) {
-    if (ts.isSpreadAssignment(prop)) {
-      sources.push(getNodeText(prop.expression, sf));
-    }
-  }
-  return sources;
+  imports: Map<string, { localName: string; fromPath: string; isFromGridCore: boolean }>,
+): boolean {
+  if (!ts.isCallExpression(node)) return false;
+  const expr = node.expression;
+  if (!ts.isPropertyAccessExpression(expr)) return false;
+  if (expr.name.text !== 'extend') return false;
+
+  const obj = getNodeText(expr.expression, sf);
+  if (obj === DATA_SOURCE_ADAPTER_PROVIDER) return true;
+
+  const imp = imports.get(obj);
+  return imp?.localName === DATA_SOURCE_ADAPTER_PROVIDER;
 }
+
+// ─── Inline Controllers/Views/Extenders Parsing ─────────────────────────────
 
 function parseInlineControllerViews(
-  obj: ts.ObjectLiteralExpression,
+  objLiteral: ts.ObjectLiteralExpression,
   sf: ts.SourceFile,
-  parsedFile: DataGridParsedFile,
-): Record<string, DataGridClassRef> {
-  const result: Record<string, DataGridClassRef> = {};
-  for (const prop of obj.properties) {
-    let regName = '';
-    let classRef = '';
+  parsedFile: ParsedFile,
+): Record<string, ControllerViewRef> {
+  const result: Record<string, ControllerViewRef> = {};
 
-    if (ts.isPropertyAssignment(prop) && prop.name) {
-      regName = ts.isIdentifier(prop.name) ? prop.name.text : getNodeText(prop.name, sf);
-      classRef = getNodeText(prop.initializer, sf);
-    } else if (ts.isShorthandPropertyAssignment(prop)) {
-      regName = prop.name.text;
-      classRef = prop.name.text;
+  for (const prop of objLiteral.properties) {
+    if (!ts.isPropertyAssignment(prop) && !ts.isShorthandPropertyAssignment(prop)) {
+      // eslint-disable-next-line no-continue
+      continue;
     }
 
-    if (regName) {
-      const localClass = parsedFile.classes.get(classRef);
-      const importInfo = parsedFile.imports.get(classRef);
-
-      result[regName] = {
-        regName,
-        className: classRef,
-        isImportedFromGridCore: importInfo?.isFromGridCore ?? false,
-        isDefinedLocally: !!localClass,
-        baseClass: localClass?.baseClass ?? '',
-        mixins: localClass?.mixins ?? [],
-        sourceFile: localClass?.sourceFile ?? parsedFile.relPath,
-      };
+    const regName = prop.name && ts.isIdentifier(prop.name) ? prop.name.text : '';
+    if (!regName) {
+      // eslint-disable-next-line no-continue
+      continue;
     }
+
+    let className = '';
+    let isImportedFromGridCore = false;
+    let isDefinedLocally = false;
+    let baseClass = '';
+    let mixins: string[] = [];
+
+    if (ts.isShorthandPropertyAssignment(prop)) {
+      className = regName;
+    } else {
+      className = getNodeText(prop.initializer, sf);
+    }
+
+    const imp = parsedFile.imports.get(className);
+    if (imp) {
+      isImportedFromGridCore = imp.isFromGridCore;
+    }
+
+    const classInfo = parsedFile.classes.get(className);
+    if (classInfo) {
+      isDefinedLocally = true;
+      baseClass = classInfo.baseClass;
+      mixins = classInfo.mixins;
+    }
+
+    result[regName] = {
+      regName,
+      className,
+      isImportedFromGridCore,
+      isDefinedLocally,
+      baseClass,
+      mixins,
+      sourceFile: parsedFile.relPath,
+    };
   }
+
   return result;
 }
 
 function parseInlineExtenders(
-  obj: ts.ObjectLiteralExpression,
+  objLiteral: ts.ObjectLiteralExpression,
   sf: ts.SourceFile,
-  parsedFile: DataGridParsedFile,
+  parsedFile: ParsedFile,
 ): { controllers: Record<string, ExtenderRef>; views: Record<string, ExtenderRef> } {
   const result = {
     controllers: {} as Record<string, ExtenderRef>,
     views: {} as Record<string, ExtenderRef>,
   };
 
-  const processSection = (
-    sectionName: 'controllers' | 'views',
-    initializer: ts.ObjectLiteralExpression,
-  ): void => {
-    for (const extProp of initializer.properties) {
-      if (!ts.isSpreadAssignment(extProp)) {
+  for (const prop of objLiteral.properties) {
+    if (!ts.isPropertyAssignment(prop)) {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+    const sectionName = prop.name && ts.isIdentifier(prop.name) ? prop.name.text : '';
+    if (sectionName !== 'controllers' && sectionName !== 'views') {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    const initExpr = prop.initializer;
+    // Handle spread: { ...editingModule.extenders.controllers, data }
+    if (ts.isObjectLiteralExpression(initExpr)) {
+      for (const innerProp of initExpr.properties) {
+        if (ts.isSpreadAssignment(innerProp)) {
+          const spreadText = getNodeText(innerProp.expression, sf);
+          const baseIdent = spreadText.split('.')[0];
+          const imp = parsedFile.imports.get(baseIdent);
+          if (imp?.isFromGridCore) {
+            // Mark spread entries as grid_core
+          }
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
         let targetName = '';
         let extenderName = '';
+        let isImportedFromGridCore = false;
+        let isDefinedLocally = false;
 
-        if (ts.isPropertyAssignment(extProp) && extProp.name) {
-          targetName = ts.isIdentifier(extProp.name)
-            ? extProp.name.text
-            : getNodeText(extProp.name, sf);
-          extenderName = getNodeText(extProp.initializer, sf);
-        } else if (ts.isShorthandPropertyAssignment(extProp)) {
-          targetName = extProp.name.text;
-          extenderName = extProp.name.text;
+        if (ts.isPropertyAssignment(innerProp)) {
+          targetName = innerProp.name && ts.isIdentifier(innerProp.name) ? innerProp.name.text : '';
+          extenderName = getNodeText(innerProp.initializer, sf);
+        } else if (ts.isShorthandPropertyAssignment(innerProp)) {
+          targetName = innerProp.name.text;
+          extenderName = targetName;
+        } else {
+          // eslint-disable-next-line no-continue
+          continue;
         }
 
-        if (targetName) {
-          const importInfo = parsedFile.imports.get(extenderName);
-          const isLocal = parsedFile.classes.has(extenderName)
-            || parsedFile.localVars.has(extenderName);
-
-          result[sectionName][targetName] = {
-            targetName,
-            extenderName,
-            isImportedFromGridCore: importInfo?.isFromGridCore ?? false,
-            isDefinedLocally: isLocal,
-          };
+        const imp = parsedFile.imports.get(extenderName);
+        if (imp) {
+          isImportedFromGridCore = imp.isFromGridCore;
         }
+        if (parsedFile.localVars.has(extenderName) || parsedFile.classes.has(extenderName)) {
+          isDefinedLocally = true;
+        }
+
+        result[sectionName][targetName] = {
+          targetName,
+          extenderName,
+          isImportedFromGridCore,
+          isDefinedLocally,
+        };
       }
-    }
-  };
-
-  for (const prop of obj.properties) {
-    if (
-      !ts.isSpreadAssignment(prop)
-      && ts.isPropertyAssignment(prop)
-      && prop.name
-      && ts.isIdentifier(prop.name)
-    ) {
-      const sectionName = prop.name.text;
-      if (
-        (sectionName === 'controllers' || sectionName === 'views')
-        && ts.isObjectLiteralExpression(prop.initializer)
-      ) {
-        processSection(sectionName, prop.initializer);
+    } else if (ts.isIdentifier(initExpr) || ts.isPropertyAccessExpression(initExpr)) {
+      // extenders: { controllers: someModule.extenders.controllers }
+      const text = getNodeText(initExpr, sf);
+      const baseIdent = text.split('.')[0];
+      const imp = parsedFile.imports.get(baseIdent);
+      if (imp?.isFromGridCore) {
+        // forwarded from grid_core — mark as imported
       }
     }
   }
@@ -236,22 +281,19 @@ function parseInlineExtenders(
   return result;
 }
 
+// ─── registerModule Argument Parser ──────────────────────────────────────────
+
 function parseRegisterModuleCall(
-  call: ts.CallExpression,
+  moduleName: string,
+  arg: ts.Expression,
   sf: ts.SourceFile,
-  parsedFile: DataGridParsedFile,
-): RegisterModuleCall | null {
-  if (call.arguments.length < 2) return null;
-
-  const nameArg = call.arguments[0];
-  if (!ts.isStringLiteral(nameArg)) return null;
-  const moduleName = nameArg.text;
-
-  const moduleArg = call.arguments[1];
+  parsedFile: ParsedFile,
+): RegisterModuleCall {
+  const { relPath } = parsedFile;
   const reg: RegisterModuleCall = {
     moduleName,
     sourceFile: parsedFile.filePath,
-    relPath: parsedFile.relPath,
+    relPath,
     argIsIdentifier: false,
     argIdentifierName: null,
     spreadSources: [],
@@ -266,109 +308,119 @@ function parseRegisterModuleCall(
     extenders: { controllers: {}, views: {} },
   };
 
-  if (ts.isIdentifier(moduleArg)) {
+  if (ts.isIdentifier(arg)) {
     reg.argIsIdentifier = true;
-    reg.argIdentifierName = moduleArg.text;
-    const imp = parsedFile.imports.get(moduleArg.text);
+    reg.argIdentifierName = arg.text;
+    const imp = parsedFile.imports.get(arg.text);
     if (imp?.isFromGridCore) {
       reg.referencesGridCoreModule = true;
-      reg.gridCoreRefs.push(moduleArg.text);
+      reg.gridCoreRefs.push(arg.text);
     }
     return reg;
   }
 
-  if (ts.isObjectLiteralExpression(moduleArg)) {
-    reg.spreadSources = collectSpreadSources(moduleArg, sf);
+  if (!ts.isObjectLiteralExpression(arg)) return reg;
 
-    // Check spreads for grid_core references
-    for (const src of reg.spreadSources) {
-      const imp = parsedFile.imports.get(src);
+  for (const prop of arg.properties) {
+    if (ts.isSpreadAssignment(prop)) {
+      const spreadText = getNodeText(prop.expression, sf);
+      const baseIdent = spreadText.split('.')[0];
+      reg.spreadSources.push(baseIdent);
+      const imp = parsedFile.imports.get(baseIdent);
       if (imp?.isFromGridCore) {
         reg.referencesGridCoreModule = true;
-        reg.gridCoreRefs.push(src);
+        if (!reg.gridCoreRefs.includes(baseIdent)) {
+          reg.gridCoreRefs.push(baseIdent);
+        }
+      }
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    if (
+      !ts.isPropertyAssignment(prop)
+      && !ts.isMethodDeclaration(prop)
+      && !ts.isShorthandPropertyAssignment(prop)
+    ) {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    const propName = prop.name && ts.isIdentifier(prop.name)
+      ? prop.name.text : '';
+
+    if (propName === 'defaultOptions') {
+      reg.hasDefaultOptions = true;
+      if (ts.isPropertyAssignment(prop)) {
+        const initText = getNodeText(prop.initializer, sf);
+        for (const [name, imp] of parsedFile.imports) {
+          if (imp.isFromGridCore && initText.includes(name)) {
+            reg.referencesGridCoreModule = true;
+            if (!reg.gridCoreRefs.includes(name)) {
+              reg.gridCoreRefs.push(name);
+            }
+          }
+        }
       }
     }
 
-    const processModuleProp = (
-      prop: ts.ObjectLiteralElementLike,
-    ): void => {
-      if (ts.isSpreadAssignment(prop)) return;
-      if (
-        !ts.isPropertyAssignment(prop)
-        && !ts.isMethodDeclaration(prop)
-        && !ts.isShorthandPropertyAssignment(prop)
-      ) {
-        return;
-      }
-
-      const propName = prop.name && ts.isIdentifier(prop.name) ? prop.name.text : '';
-
-      if (propName === 'defaultOptions') {
-        reg.hasDefaultOptions = true;
-        // Check if defaultOptions references a grid_core module
-        if (ts.isPropertyAssignment(prop)) {
-          const initText = getNodeText(prop.initializer, sf);
-          for (const [name, imp] of parsedFile.imports) {
-            if (imp.isFromGridCore && initText.includes(name)) {
-              reg.referencesGridCoreModule = true;
-              if (!reg.gridCoreRefs.includes(name)) reg.gridCoreRefs.push(name);
-            }
-          }
-        }
-      }
-
-      if (propName === 'controllers' && ts.isPropertyAssignment(prop)) {
-        if (ts.isObjectLiteralExpression(prop.initializer)) {
-          reg.hasInlineControllers = true;
-          reg.controllers = parseInlineControllerViews(prop.initializer, sf, parsedFile);
-          // Check if inline controllers reference grid_core
-          for (const ref of Object.values(reg.controllers)) {
-            if (ref.isImportedFromGridCore) {
-              reg.referencesGridCoreModule = true;
-              if (!reg.gridCoreRefs.includes(ref.className)) reg.gridCoreRefs.push(ref.className);
-            }
-          }
-        } else {
-          // controllers: someModule.controllers — forwarded reference
-          const refText = getNodeText(prop.initializer, sf);
-          const baseIdent = refText.split('.')[0];
-          const imp = parsedFile.imports.get(baseIdent);
-          if (imp?.isFromGridCore) {
+    if (propName === 'controllers'
+      && ts.isPropertyAssignment(prop)) {
+      if (ts.isObjectLiteralExpression(prop.initializer)) {
+        reg.hasInlineControllers = true;
+        reg.controllers = parseInlineControllerViews(prop.initializer, sf, parsedFile);
+        for (const ref of Object.values(reg.controllers)) {
+          if (ref.isImportedFromGridCore) {
             reg.referencesGridCoreModule = true;
-            if (!reg.gridCoreRefs.includes(baseIdent)) reg.gridCoreRefs.push(baseIdent);
-          }
-        }
-      }
-
-      if (propName === 'views' && ts.isPropertyAssignment(prop)) {
-        if (ts.isObjectLiteralExpression(prop.initializer)) {
-          reg.hasInlineViews = true;
-          reg.views = parseInlineControllerViews(prop.initializer, sf, parsedFile);
-          for (const ref of Object.values(reg.views)) {
-            if (ref.isImportedFromGridCore) {
-              reg.referencesGridCoreModule = true;
-              if (!reg.gridCoreRefs.includes(ref.className)) reg.gridCoreRefs.push(ref.className);
+            if (!reg.gridCoreRefs.includes(ref.className)) {
+              reg.gridCoreRefs.push(ref.className);
             }
           }
-        } else {
-          const refText = getNodeText(prop.initializer, sf);
-          const baseIdent = refText.split('.')[0];
-          const imp = parsedFile.imports.get(baseIdent);
-          if (imp?.isFromGridCore) {
-            reg.referencesGridCoreModule = true;
-            if (!reg.gridCoreRefs.includes(baseIdent)) reg.gridCoreRefs.push(baseIdent);
+        }
+      } else {
+        const refText = getNodeText(prop.initializer, sf);
+        const baseIdent = refText.split('.')[0];
+        const imp = parsedFile.imports.get(baseIdent);
+        if (imp?.isFromGridCore) {
+          reg.referencesGridCoreModule = true;
+          if (!reg.gridCoreRefs.includes(baseIdent)) {
+            reg.gridCoreRefs.push(baseIdent);
           }
         }
       }
+    }
 
-      if (
-        propName === 'extenders'
-        && ts.isPropertyAssignment(prop)
-        && ts.isObjectLiteralExpression(prop.initializer)
-      ) {
+    if (propName === 'views'
+      && ts.isPropertyAssignment(prop)) {
+      if (ts.isObjectLiteralExpression(prop.initializer)) {
+        reg.hasInlineViews = true;
+        reg.views = parseInlineControllerViews(prop.initializer, sf, parsedFile);
+        for (const ref of Object.values(reg.views)) {
+          if (ref.isImportedFromGridCore) {
+            reg.referencesGridCoreModule = true;
+            if (!reg.gridCoreRefs.includes(ref.className)) {
+              reg.gridCoreRefs.push(ref.className);
+            }
+          }
+        }
+      } else {
+        const refText = getNodeText(prop.initializer, sf);
+        const baseIdent = refText.split('.')[0];
+        const imp = parsedFile.imports.get(baseIdent);
+        if (imp?.isFromGridCore) {
+          reg.referencesGridCoreModule = true;
+          if (!reg.gridCoreRefs.includes(baseIdent)) {
+            reg.gridCoreRefs.push(baseIdent);
+          }
+        }
+      }
+    }
+
+    if (propName === 'extenders'
+      && ts.isPropertyAssignment(prop)) {
+      if (ts.isObjectLiteralExpression(prop.initializer)) {
         reg.hasInlineExtenders = true;
         reg.extenders = parseInlineExtenders(prop.initializer, sf, parsedFile);
-        // Check if extenders reference grid_core
         const allExts = [
           ...Object.values(reg.extenders.controllers),
           ...Object.values(reg.extenders.views),
@@ -381,45 +433,31 @@ function parseRegisterModuleCall(
             }
           }
         }
+      } else {
+        const refText = getNodeText(prop.initializer, sf);
+        const baseIdent = refText.split('.')[0];
+        const imp = parsedFile.imports.get(baseIdent);
+        if (imp?.isFromGridCore) {
+          reg.referencesGridCoreModule = true;
+          if (!reg.gridCoreRefs.includes(baseIdent)) {
+            reg.gridCoreRefs.push(baseIdent);
+          }
+        }
       }
-    };
-
-    for (const prop of moduleArg.properties) {
-      processModuleProp(prop);
     }
   }
 
   return reg;
 }
 
-// ─── DataSourceAdapter Extension Detection ───────────────────────────────────
+// ─── Main File Parser ────────────────────────────────────────────────────────
 
-function isDataSourceAdapterExtendCall(
-  node: ts.Node,
-  sf: ts.SourceFile,
-): node is ts.CallExpression {
-  if (!ts.isCallExpression(node)) return false;
-  const expr = node.expression;
-  if (!ts.isPropertyAccessExpression(expr)) return false;
-  if (expr.name.text !== 'extend') return false;
-  const receiverText = getNodeText(expr.expression, sf);
-  return receiverText === DATA_SOURCE_ADAPTER_PROVIDER;
-}
-
-// ─── Main Parse Function ─────────────────────────────────────────────────────
-
-export function parseDataGridFile(filePath: string): DataGridParsedFile {
-  const content = fs.readFileSync(filePath, 'utf-8');
-  const sf = ts.createSourceFile(
-    filePath,
-    content,
-    ts.ScriptTarget.Latest,
-    true,
-    ts.ScriptKind.TS,
-  );
-
+export function parseDataGridFile(filePath: string): ParsedFile {
   const relPath = getRelativePath(filePath);
-  const result: DataGridParsedFile = {
+  const content = fs.readFileSync(filePath, 'utf-8');
+  const sf = ts.createSourceFile(filePath, content, ts.ScriptTarget.Latest, true);
+
+  const parsedFile: ParsedFile = {
     filePath,
     relPath,
     registerModuleCalls: [],
@@ -429,150 +467,180 @@ export function parseDataGridFile(filePath: string): DataGridParsedFile {
     localVars: new Map(),
   };
 
-  // 1. Collect imports
-  ts.forEachChild(sf, (node) => {
-    if (!ts.isImportDeclaration(node)) return;
+  // ── Pass 1: Collect imports ──
+  for (const stmt of sf.statements) {
     if (
-      !node.importClause
-      || !node.moduleSpecifier
-      || !ts.isStringLiteral(node.moduleSpecifier)
+      ts.isImportDeclaration(stmt)
+      && stmt.moduleSpecifier
+      && ts.isStringLiteral(stmt.moduleSpecifier)
     ) {
-      return;
-    }
+      const fromPath = stmt.moduleSpecifier.text;
+      const isFromGc = isGridCoreImport(fromPath);
+      const { importClause } = stmt;
 
-    const fromPath = node.moduleSpecifier.text;
-    const fromGridCore = isGridCoreImport(fromPath);
-    const { namedBindings } = node.importClause;
-
-    if (namedBindings && ts.isNamedImports(namedBindings)) {
-      for (const spec of namedBindings.elements) {
-        const localName = spec.name.text;
-        const originalName = spec.propertyName ? spec.propertyName.text : localName;
-        result.imports.set(localName, {
-          localName,
-          originalName,
-          fromPath,
-          isFromGridCore: fromGridCore,
-        });
-      }
-    }
-
-    if (node.importClause.name) {
-      const localName = node.importClause.name.text;
-      result.imports.set(localName, {
-        localName,
-        originalName: localName,
-        fromPath,
-        isFromGridCore: fromGridCore,
-      });
-    }
-  });
-
-  // 2. Collect local variables
-  ts.forEachChild(sf, (node) => {
-    if (ts.isVariableStatement(node)) {
-      for (const decl of node.declarationList.declarations) {
-        if (ts.isIdentifier(decl.name) && decl.initializer) {
-          result.localVars.set(decl.name.text, getNodeText(decl.initializer, sf));
+      if (importClause) {
+        if (importClause.name) {
+          parsedFile.imports.set(importClause.name.text, {
+            localName: importClause.name.text,
+            originalName: 'default',
+            fromPath,
+            isFromGridCore: isFromGc,
+          });
         }
-      }
-    }
-  });
-
-  // 3. Collect class declarations
-  ts.forEachChild(sf, (node) => {
-    if (ts.isClassDeclaration(node) && node.name) {
-      const className = node.name.text;
-      const heritage = getClassHeritage(node, sf, result.localVars);
-      result.classes.set(className, {
-        className,
-        baseClass: heritage.baseClass,
-        mixins: heritage.mixins,
-        sourceFile: relPath,
-        isExported: hasExportModifier(node),
-        isDefinedInDataGrid: true,
-      });
-    }
-
-    // Also check for class expressions in variable declarations:
-    // export const X = () => class extends Y {}
-    if (ts.isVariableStatement(node)) {
-      for (const decl of node.declarationList.declarations) {
-        if (ts.isIdentifier(decl.name) && decl.initializer) {
-          // Arrow function returning a class expression (mixin/extender pattern)
-          if (ts.isArrowFunction(decl.initializer) && ts.isClassExpression(decl.initializer.body)) {
-            const classExpr = decl.initializer.body;
-            const heritage = getClassHeritage(classExpr, sf, result.localVars);
-            const className = classExpr.name?.text ?? decl.name.text;
-            result.classes.set(decl.name.text, {
-              className,
-              baseClass: heritage.baseClass,
-              mixins: heritage.mixins,
-              sourceFile: relPath,
-              isExported: hasExportModifier(node),
-              isDefinedInDataGrid: true,
+        if (importClause.namedBindings) {
+          if (ts.isNamedImports(importClause.namedBindings)) {
+            for (const spec of importClause.namedBindings.elements) {
+              const localName = spec.name.text;
+              const originalName = spec.propertyName ? spec.propertyName.text : localName;
+              parsedFile.imports.set(localName, {
+                localName,
+                originalName,
+                fromPath,
+                isFromGridCore: isFromGc,
+              });
+            }
+          } else if (ts.isNamespaceImport(importClause.namedBindings)) {
+            parsedFile.imports.set(importClause.namedBindings.name.text, {
+              localName: importClause.namedBindings.name.text,
+              originalName: '*',
+              fromPath,
+              isFromGridCore: isFromGc,
             });
           }
         }
       }
     }
-  });
+  }
 
-  // 4. Collect registerModule calls and DataSourceAdapter extensions
-  let dsaOrder = 0;
-  function visitStatements(node: ts.Node): void {
-    if (isRegisterModuleCall(node, sf)) {
-      const reg = parseRegisterModuleCall(node, sf, result);
-      if (reg) {
-        result.registerModuleCalls.push(reg);
+  // ── Pass 2: Collect classes and local variables ──
+  function collectClassesAndVars(node: ts.Node): void {
+    // Class declarations
+    if (ts.isClassDeclaration(node) && node.name) {
+      const heritage = getClassHeritage(node, sf, parsedFile.localVars);
+      parsedFile.classes.set(node.name.text, {
+        className: node.name.text,
+        baseClass: heritage.baseClass,
+        mixins: heritage.mixins,
+        sourceFile: relPath,
+        isExported: hasExportModifier(node),
+      });
+    }
+
+    // Variable declarations with class expressions or arrow functions
+    if (ts.isVariableStatement(node)) {
+      for (const decl of node.declarationList.declarations) {
+        if (!decl.initializer || !ts.isIdentifier(decl.name)) {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+        const varName = decl.name.text;
+        const init = decl.initializer;
+
+        // Arrow function: const data = (Base) => class extends ...
+        if (ts.isArrowFunction(init)) {
+          let { body } = init;
+          if (ts.isParenthesizedExpression(body)) {
+            body = body.expression;
+          }
+          if (ts.isClassExpression(body)) {
+            const heritage = getClassHeritage(body, sf, parsedFile.localVars);
+            const className = body.name?.text ?? varName;
+            parsedFile.classes.set(varName, {
+              className,
+              baseClass: heritage.baseClass,
+              mixins: heritage.mixins,
+              sourceFile: relPath,
+              isExported: hasExportModifier(node),
+            });
+          }
+          // Store raw text for resolution
+          parsedFile.localVars.set(varName, getNodeText(init, sf));
+        }
+
+        // Class expression: const Foo = class extends Bar {}
+        if (ts.isClassExpression(init)) {
+          const heritage = getClassHeritage(init, sf, parsedFile.localVars);
+          parsedFile.classes.set(varName, {
+            className: init.name?.text ?? varName,
+            baseClass: heritage.baseClass,
+            mixins: heritage.mixins,
+            sourceFile: relPath,
+            isExported: hasExportModifier(node),
+          });
+        }
+
+        // Call expression (mixin): const Foo = SomeMixin(Base)
+        if (ts.isCallExpression(init)) {
+          parsedFile.localVars.set(varName, getNodeText(init, sf));
+        }
+
+        // Simple identifier or property access
+        if (ts.isIdentifier(init) || ts.isPropertyAccessExpression(init)) {
+          parsedFile.localVars.set(varName, getNodeText(init, sf));
+        }
       }
     }
 
-    if (isDataSourceAdapterExtendCall(node, sf)) {
-      const arg = node.arguments[0];
-      if (arg) {
-        const extenderName = getNodeText(arg, sf);
-        const importInfo = result.imports.get(extenderName);
-        const order = dsaOrder;
-        dsaOrder += 1;
-        result.dataSourceAdapterExtensions.push({
+    ts.forEachChild(node, collectClassesAndVars);
+  }
+
+  ts.forEachChild(sf, collectClassesAndVars);
+
+  // ── Pass 3: Find registerModule calls and DSA extensions ──
+  function findCalls(node: ts.Node): void {
+    if (isRegisterModuleCall(node, sf)) {
+      const call = node;
+      if (call.arguments.length >= 2) {
+        const moduleNameArg = call.arguments[0];
+        if (ts.isStringLiteral(moduleNameArg)) {
+          const reg = parseRegisterModuleCall(
+            moduleNameArg.text,
+            call.arguments[1],
+            sf,
+            parsedFile,
+          );
+          parsedFile.registerModuleCalls.push(reg);
+        }
+      }
+    }
+
+    if (isDataSourceAdapterExtendCall(node, sf, parsedFile.imports)) {
+      const call = node as ts.CallExpression;
+      if (call.arguments.length >= 1) {
+        const extenderArg = call.arguments[0];
+        const extenderName = getNodeText(extenderArg, sf);
+        const imp = parsedFile.imports.get(extenderName);
+        parsedFile.dataSourceAdapterExtensions.push({
           sourceFile: filePath,
           relPath,
           extenderName,
-          isImportedFromGridCore: importInfo?.isFromGridCore ?? false,
-          order,
+          isImportedFromGridCore: imp?.isFromGridCore ?? false,
+          order: 0,
         });
       }
     }
 
-    ts.forEachChild(node, visitStatements);
+    ts.forEachChild(node, findCalls);
   }
 
-  ts.forEachChild(sf, visitStatements);
+  ts.forEachChild(sf, findCalls);
 
-  return result;
+  return parsedFile;
 }
 
-// ─── Module Order Parsing ────────────────────────────────────────────────────
+// ─── Module Order Parser ─────────────────────────────────────────────────────
 
 export function parseModulesOrder(): string[] {
   const content = fs.readFileSync(WIDGET_BASE_FILE, 'utf-8');
-  const sf = ts.createSourceFile(
-    WIDGET_BASE_FILE,
-    content,
-    ts.ScriptTarget.Latest,
-    true,
-    ts.ScriptKind.TS,
-  );
+  const sf = ts.createSourceFile(WIDGET_BASE_FILE, content, ts.ScriptTarget.Latest, true);
 
   const order: string[] = [];
-
   function visit(node: ts.Node): void {
     if (
       ts.isCallExpression(node)
       && ts.isPropertyAccessExpression(node.expression)
       && node.expression.name.text === 'registerModulesOrder'
-      && node.arguments.length === 1
+      && node.arguments.length > 0
       && ts.isArrayLiteralExpression(node.arguments[0])
     ) {
       for (const elem of node.arguments[0].elements) {
@@ -599,97 +667,79 @@ function guessRegisteredName(moduleName: string): string | null {
   return null;
 }
 
-/**
- * Parse all grid_core source files and extract module definitions.
- * Returns a list of GridCoreModuleInfo — one per exported `*Module` constant.
- */
+const CORE_DIR_FEATURE_MAP: Record<string, string> = {
+  data_controller: 'Data',
+  views: 'Core',
+  editor_factory: 'Core',
+  error_handling: 'Core',
+  editing: 'Editing',
+  validating: 'Editing',
+  selection: 'Selection',
+  filter: 'Filtering',
+  header_filter: 'Filtering',
+  search: 'Filtering',
+  keyboard_navigation: 'Navigation',
+  focus: 'Navigation',
+  columns_controller: 'Columns Core',
+  column_headers: 'Columns Core',
+  header_panel: 'Columns Core',
+  column_chooser: 'Column Management',
+  column_fixing: 'Column Management',
+  sticky_columns: 'Column Management',
+  virtual_columns: 'Column Management',
+  columns_resizing_reordering: 'Column Management',
+  adaptivity: 'Column Management',
+  virtual_scrolling: 'Scrolling',
+  ai_column: 'AI',
+  ai_prompt_editor: 'AI',
+  data_source_adapter: 'Data',
+  context_menu: 'Core',
+  master_detail: 'Master Detail',
+  pager: 'Paging',
+  row_dragging: 'Row Dragging',
+  sorting: 'Sorting',
+  state_storing: 'State',
+  toast: 'Core',
+};
+
 export function parseGridCoreModules(gridCoreRoot: string): GridCoreModuleInfo[] {
   const sourceFiles = discoverGridCoreFiles(gridCoreRoot);
   const results: GridCoreModuleInfo[] = [];
 
-  // Derive featureArea from a path relative to gridCoreRoot
-  const CORE_DIR_FEATURE_MAP: Record<string, string> = {
-    data_controller: 'Data',
-    views: 'Core',
-    editor_factory: 'Core',
-    error_handling: 'Core',
-    editing: 'Editing',
-    validating: 'Editing',
-    selection: 'Selection',
-    filter: 'Filtering',
-    header_filter: 'Filtering',
-    search: 'Filtering',
-    keyboard_navigation: 'Navigation',
-    focus: 'Navigation',
-    columns_controller: 'Columns Core',
-    column_headers: 'Columns Core',
-    header_panel: 'Columns Core',
-    column_chooser: 'Column Management',
-    column_fixing: 'Column Management',
-    sticky_columns: 'Column Management',
-    virtual_columns: 'Column Management',
-    columns_resizing_reordering: 'Column Management',
-    adaptivity: 'Column Management',
-    virtual_scrolling: 'Scrolling',
-    ai_column: 'AI',
-    ai_prompt_editor: 'AI',
-  };
-
-  function featureAreaFromFile(filePath: string): string {
-    const rel = path.relative(gridCoreRoot, filePath).replace(/\\/g, '/');
-    const firstSegment = rel.split('/')[0];
-    return CORE_DIR_FEATURE_MAP[firstSegment] ?? 'Other';
-  }
-
-  function relPathFromFile(filePath: string): string {
-    return path.relative(gridCoreRoot, filePath).replace(/\\/g, '/');
-  }
-
   for (const file of sourceFiles) {
     try {
       const parsed = parseGridCoreFile(file);
-      const relPath = relPathFromFile(file);
-      const area = featureAreaFromFile(file);
+      const relFromRoot = path.relative(gridCoreRoot, file).replace(/\\/g, '/');
+      const firstSegment = relFromRoot.split('/')[0];
+      const area = CORE_DIR_FEATURE_MAP[firstSegment] ?? 'Other';
 
       for (const mod of parsed.modules) {
-        const controllers: Record<string, {
-          regName: string;
-          className: string;
-          baseClass: string;
-          mixins: string[];
-          sourceFile: string;
-        }> = {};
+        const controllers: GridCoreModuleInfo['controllers'] = {};
         for (const [regName, ctrl] of Object.entries(mod.controllers)) {
           controllers[regName] = {
             regName,
             className: ctrl.className,
             baseClass: ctrl.baseClass,
             mixins: ctrl.mixins,
-            sourceFile: ctrl.sourceFile,
+            sourceFile: relFromRoot,
           };
         }
 
-        const views: Record<string, {
-          regName: string;
-          className: string;
-          baseClass: string;
-          mixins: string[];
-          sourceFile: string;
-        }> = {};
+        const views: GridCoreModuleInfo['views'] = {};
         for (const [regName, view] of Object.entries(mod.views)) {
           views[regName] = {
             regName,
             className: view.className,
             baseClass: view.baseClass,
             mixins: view.mixins,
-            sourceFile: view.sourceFile,
+            sourceFile: relFromRoot,
           };
         }
 
         results.push({
           moduleName: mod.moduleName,
           registeredAs: guessRegisteredName(mod.moduleName),
-          sourceFile: relPath,
+          sourceFile: relFromRoot,
           featureArea: area,
           controllers,
           views,

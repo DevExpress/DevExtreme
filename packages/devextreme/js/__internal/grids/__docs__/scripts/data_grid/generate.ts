@@ -19,7 +19,7 @@ import {
   classifyModules,
   collectDataSourceAdapterChain,
 } from './resolver';
-import type { DataGridArchitectureData, DataGridParsedFile } from './types';
+import type { ArchitectureData, ParsedFile } from './types';
 
 interface CliArgs {
   jsonOnly: boolean;
@@ -52,7 +52,7 @@ function parseArgs(): CliArgs {
   return result;
 }
 
-function appendMissingModuleNames(modulesOrder: string[], parsedFiles: DataGridParsedFile[]): void {
+function appendMissingModuleNames(modulesOrder: string[], parsedFiles: ParsedFile[]): void {
   for (const pf of parsedFiles) {
     for (const reg of pf.registerModuleCalls) {
       if (!modulesOrder.includes(reg.moduleName)) {
@@ -63,7 +63,7 @@ function appendMissingModuleNames(modulesOrder: string[], parsedFiles: DataGridP
 }
 
 function main(): void {
-  console.log('DataGrid Extensions Architecture Documentation Generator');
+  console.log('DataGrid Architecture Documentation Generator');
   console.log(`DataGrid root: ${DATA_GRID_ROOT}`);
   console.log(`Output dir: ${OUTPUT_DIR}`);
 
@@ -72,8 +72,7 @@ function main(): void {
     // NOTE: registerModulesOrder defines ascending priority.
     // processModules (m_modules.ts) sorts by: orderIndex1 - orderIndex2,
     // which means index 0 processes first and the last index processes last.
-    // Extenders are applied in the same ascending order, so earlier modules
-    // are extended first, and later ones wrap on top.
+    // Extenders are applied in the same ascending order.
     const modulesOrder = parseModulesOrder();
     console.log(`Parsed ${modulesOrder.length} modules from registerModulesOrder (ascending order)`);
 
@@ -97,27 +96,20 @@ function main(): void {
       }
     });
 
-    // 5. Discover all registered module names and build full order
+    // 5. Build full module order
     appendMissingModuleNames(modulesOrder, allParsedFiles);
 
-    // 6. Classify modules (using full order)
+    // 6. Classify modules
     const allModules = classifyModules(allParsedFiles, modulesOrder);
-
     console.log(`\nClassified ${allModules.length} modules:`);
     const counts = {
-      passthrough: 0,
-      extended: 0,
-      replaced: 0,
-      new: 0,
+      passthrough: 0, extended: 0, replaced: 0, new: 0,
     };
     for (const mod of allModules) {
       counts[mod.category] += 1;
       console.log(`  [${mod.category.toUpperCase().padEnd(11)}] ${mod.moduleName} (${mod.relPath})`);
     }
-    console.log(`\n  Passthrough: ${counts.passthrough}`);
-    console.log(`  Replaced:    ${counts.replaced}`);
-    console.log(`  Extended:    ${counts.extended}`);
-    console.log(`  New:         ${counts.new}`);
+    console.log(`  Passthrough: ${counts.passthrough}, Replaced: ${counts.replaced}, Extended: ${counts.extended}, New: ${counts.new}`);
 
     // 7. Build extender pipelines
     const extenderPipelines = buildExtenderPipelines(allModules);
@@ -137,7 +129,7 @@ function main(): void {
     const inheritanceChains = buildInheritanceChains(allParsedFiles);
     console.log(`\nBuilt ${inheritanceChains.length} inheritance chains`);
 
-    // 10. Build cross-dependencies between data_grid modules
+    // 10. Build cross-dependencies
     const crossDependencies = buildCrossDependencies(allParsedFiles, allModules);
     console.log(`\nFound ${crossDependencies.length} cross-dependencies:`);
     for (const dep of crossDependencies) {
@@ -146,7 +138,7 @@ function main(): void {
     }
 
     // 11. Build output data
-    const data: DataGridArchitectureData = {
+    const data: ArchitectureData = {
       generatedAt: new Date().toISOString(),
       dataGridRoot: 'packages/devextreme/js/__internal/grids/data_grid',
       gridCoreRoot: 'packages/devextreme/js/__internal/grids/grid_core',
@@ -157,10 +149,7 @@ function main(): void {
       dataSourceAdapterChain: dsaChain,
       inheritanceChains,
       crossDependencies,
-      summary: {
-        total: allModules.length,
-        ...counts,
-      },
+      summary: { total: allModules.length, ...counts },
     };
 
     // 12. Write output files

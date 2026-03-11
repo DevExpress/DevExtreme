@@ -1,6 +1,8 @@
 /* eslint-disable spellcheck/spell-checker */
 import type { ModificationCategory } from './constants';
 
+// ─── Parsed file data ────────────────────────────────────────────────────────
+
 export interface ImportInfo {
   localName: string;
   originalName: string;
@@ -8,13 +10,12 @@ export interface ImportInfo {
   isFromGridCore: boolean;
 }
 
-export interface DataGridClassInfo {
+export interface ClassInfo {
   className: string;
   baseClass: string;
   mixins: string[];
   sourceFile: string;
   isExported: boolean;
-  isDefinedInDataGrid: boolean;
 }
 
 export interface RegisterModuleCall {
@@ -30,15 +31,15 @@ export interface RegisterModuleCall {
   hasDefaultOptions: boolean;
   referencesGridCoreModule: boolean;
   gridCoreRefs: string[];
-  controllers: Record<string, DataGridClassRef>;
-  views: Record<string, DataGridClassRef>;
+  controllers: Record<string, ControllerViewRef>;
+  views: Record<string, ControllerViewRef>;
   extenders: {
     controllers: Record<string, ExtenderRef>;
     views: Record<string, ExtenderRef>;
   };
 }
 
-export interface DataGridClassRef {
+export interface ControllerViewRef {
   regName: string;
   className: string;
   isImportedFromGridCore: boolean;
@@ -63,15 +64,17 @@ export interface DataSourceAdapterExtension {
   order: number;
 }
 
-export interface DataGridParsedFile {
+export interface ParsedFile {
   filePath: string;
   relPath: string;
   registerModuleCalls: RegisterModuleCall[];
   dataSourceAdapterExtensions: DataSourceAdapterExtension[];
-  classes: Map<string, DataGridClassInfo>;
+  classes: Map<string, ClassInfo>;
   imports: Map<string, ImportInfo>;
   localVars: Map<string, string>;
 }
+
+// ─── Resolved architecture data ──────────────────────────────────────────────
 
 export interface ClassifiedModule {
   moduleName: string;
@@ -84,8 +87,8 @@ export interface ClassifiedModule {
   gridCoreModuleName: string | null;
   gridCoreSourceModule: string | null;
 
-  controllers: Record<string, DataGridClassRef>;
-  views: Record<string, DataGridClassRef>;
+  controllers: Record<string, ControllerViewRef>;
+  views: Record<string, ControllerViewRef>;
   extenders: {
     controllers: Record<string, ExtenderRef>;
     views: Record<string, ExtenderRef>;
@@ -99,12 +102,6 @@ export interface ClassifiedModule {
   hasDefaultOptionsOverride: boolean;
 
   details: string;
-}
-
-export interface InheritanceEntry {
-  className: string;
-  chain: string[];
-  sourceFile: string;
 }
 
 export interface ExtenderPipelineStep {
@@ -121,31 +118,10 @@ export interface ExtenderPipeline {
   steps: ExtenderPipelineStep[];
 }
 
-export interface GridCoreControllerOrView {
-  regName: string;
+export interface InheritanceEntry {
   className: string;
-  baseClass: string;
-  mixins: string[];
+  chain: string[];
   sourceFile: string;
-}
-
-export interface GridCoreExtenderInfo {
-  extenderName: string;
-  pattern: 'mixin-function' | 'object';
-}
-
-export interface GridCoreModuleInfo {
-  moduleName: string;
-  registeredAs: string | null;
-  sourceFile: string;
-  featureArea: string;
-  controllers: Record<string, GridCoreControllerOrView>;
-  views: Record<string, GridCoreControllerOrView>;
-  extenders: {
-    controllers: Record<string, GridCoreExtenderInfo>;
-    views: Record<string, GridCoreExtenderInfo>;
-  };
-  hasDefaultOptions: boolean;
 }
 
 export interface CrossDependency {
@@ -158,7 +134,33 @@ export interface CrossDependency {
   label: string;
 }
 
-export interface DataGridArchitectureData {
+export interface GridCoreModuleInfo {
+  moduleName: string;
+  registeredAs: string | null;
+  sourceFile: string;
+  featureArea: string;
+  controllers: Record<string, {
+    regName: string;
+    className: string;
+    baseClass: string;
+    mixins: string[];
+    sourceFile: string;
+  }>;
+  views: Record<string, {
+    regName: string;
+    className: string;
+    baseClass: string;
+    mixins: string[];
+    sourceFile: string;
+  }>;
+  extenders: {
+    controllers: Record<string, { extenderName: string; pattern: string }>;
+    views: Record<string, { extenderName: string; pattern: string }>;
+  };
+  hasDefaultOptions: boolean;
+}
+
+export interface ArchitectureData {
   generatedAt: string;
   dataGridRoot: string;
   gridCoreRoot: string;

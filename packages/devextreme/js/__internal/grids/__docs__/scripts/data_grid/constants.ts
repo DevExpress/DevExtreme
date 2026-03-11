@@ -27,24 +27,18 @@ export type ModificationCategory = 'passthrough' | 'extended' | 'replaced' | 'ne
 const DATA_GRID_FEATURE_MAP: Record<string, string> = {
   m_data_controller: 'Data',
   m_data_source_adapter: 'Data',
-
   m_core: 'Core',
   m_widget: 'Core',
   m_widget_base: 'Core',
   m_utils: 'Core',
-
   m_editing: 'Editing',
-
   grouping: 'Grouping',
   summary: 'Summary',
   export: 'Export',
-
   keyboard_navigation: 'Navigation',
   focus: 'Navigation',
-
   m_columns_controller: 'Columns',
   m_aggregate_calculator: 'Data',
-
   module_not_extended: 'Passthrough',
 };
 
