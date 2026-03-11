@@ -1,7 +1,6 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import Popup from 'devextreme-testcafe-models/popup';
 import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
-import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
@@ -52,7 +51,7 @@ test('Proper handle custom filter operations for dates with non-date values', as
     .expect(filterPanel.getFilterText().element.innerText)
     .eql('[Order Date] Weekends');
 
-  const dateFilterCell = dataGrid.getFilterEditor(1, FilterTextBox);
+  const dateFilterCell = dataGrid.getFilterCell(1);
 
   await t
     .click(dateFilterCell.menuButton)
