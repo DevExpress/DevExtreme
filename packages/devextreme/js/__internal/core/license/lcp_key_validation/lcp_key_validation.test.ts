@@ -4,17 +4,17 @@ import { version as currentVersion } from '@js/core/version';
 import { parseVersion } from '../../../utils/version';
 import { TokenKind } from '../types';
 import { parseDevExpressProductKey } from './lcp_key_validator';
-import { LicenseInfo } from './license_info';
-import { ProductInfo } from './product_info';
+import { findLatestDevExtremeVersion, isLicenseValid } from './license_info';
+import { createProductInfo } from './product_info';
 
 const RAW_DEVELOPER_PRODUCT_LICENSE = 'LCPv1EK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEQtEpQtEpQtEpQtEpQtEpQtEpQtEpQtEpQtEpQtEpQtE>7yFIp@@I%-QpbX<!Q4$I<8;2i-Q!N<;GbRFp<!62g!Q>N-v>K-@2<!Q2pXv>K@v2%d)Ig-QIp-)I7yFI7yFI7yF';
 
-function getTrialLicense(): LicenseInfo {
+function getTrialLicense() {
   const { major, minor } = parseVersion(currentVersion);
   const products = [
-    new ProductInfo(parseInt(`${major}${minor}`, 10), 0n),
+    createProductInfo(parseInt(`${major}${minor}`, 10), 0n),
   ];
-  return new LicenseInfo(products);
+  return { products };
 }
 
 describe('LCP key validation', () => {
@@ -31,9 +31,9 @@ describe('LCP key validation', () => {
 
   it('trial fallback does not grant product access', () => {
     const trialLicense = getTrialLicense();
-    expect(trialLicense.isValid).toBe(true);
+    expect(isLicenseValid(trialLicense)).toBe(true);
 
-    const version = trialLicense.findLatestDevExtremeVersion();
+    const version = findLatestDevExtremeVersion(trialLicense);
 
     expect(version).toBe(undefined);
   });

@@ -1,24 +1,20 @@
-import type { ProductInfo } from './product_info';
+import { isProduct, type ProductInfo } from './product_info';
 import { ProductKind } from './types';
 
-export class LicenseInfo {
-  public readonly products: ProductInfo[];
+export interface LicenseInfo {
+  readonly products: ProductInfo[];
+}
 
-  constructor(products: ProductInfo[] = []) {
-    this.products = products;
+export function isLicenseValid(info: LicenseInfo): boolean {
+  return Array.isArray(info.products) && info.products.length > 0;
+}
+
+export function findLatestDevExtremeVersion(info: LicenseInfo): number | undefined {
+  if (!isLicenseValid(info)) {
+    return undefined;
   }
 
-  get isValid(): boolean {
-    return Array.isArray(this.products) && this.products.length > 0;
-  }
+  const sorted = [...info.products].sort((a, b) => b.version - a.version);
 
-  findLatestDevExtremeVersion(): number | undefined {
-    if (!this.isValid) {
-      return undefined;
-    }
-
-    const sorted = [...this.products].sort((a, b) => b.version - a.version);
-
-    return sorted.find((p) => p.isProduct(ProductKind.DevExtremeHtmlJs))?.version;
-  }
+  return sorted.find((p) => isProduct(p, ProductKind.DevExtremeHtmlJs))?.version;
 }

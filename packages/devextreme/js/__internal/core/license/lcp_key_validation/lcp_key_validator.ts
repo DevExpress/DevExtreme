@@ -13,8 +13,8 @@ import {
   RSA_PUBLIC_KEY_XML,
   SIGN_LENGTH,
 } from './const';
-import { LicenseInfo } from './license_info';
-import { ProductInfo } from './product_info';
+import { findLatestDevExtremeVersion } from './license_info';
+import { createProductInfo, type ProductInfo } from './product_info';
 import { encodeString, shiftDecodeText, verifyHash } from './utils';
 
 interface ParsedProducts {
@@ -41,7 +41,7 @@ function productsFromString(encodedString: string): ParsedProducts {
       const parts = tuple.split(',');
       const version = Number.parseInt(parts[0], 10);
       const productsValue = BigInt(parts[1]);
-      return new ProductInfo(
+      return createProductInfo(
         version,
         productsValue,
       );
@@ -86,8 +86,7 @@ export function parseDevExpressProductKey(productsLicenseSource: string): Token 
       return errorToken;
     }
 
-    const licenseInfo = new LicenseInfo(products);
-    const maxVersionAllowed = licenseInfo.findLatestDevExtremeVersion();
+    const maxVersionAllowed = findLatestDevExtremeVersion({ products });
 
     if (!maxVersionAllowed) {
       return PRODUCT_KIND_ERROR;

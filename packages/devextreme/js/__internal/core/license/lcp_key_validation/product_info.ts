@@ -1,23 +1,18 @@
 /* eslint-disable no-bitwise */
-export class ProductInfo {
-  public version: number;
+export interface ProductInfo {
+  readonly version: number;
+  readonly products: bigint;
+}
 
-  public products: bigint;
+export function createProductInfo(version: number, products: bigint): ProductInfo {
+  return { version, products: BigInt(products) };
+}
 
-  constructor(
-    version: number,
-    products: bigint,
-  ) {
-    this.version = version;
-    this.products = BigInt(products);
+export function isProduct(info: ProductInfo, ...productIds: bigint[]): boolean {
+  if (productIds.length === 1) {
+    const flag = BigInt(productIds[0]);
+    return (info.products & flag) === flag;
   }
 
-  isProduct(...productIds: bigint[]): boolean {
-    if (productIds.length === 1) {
-      const flag = BigInt(productIds[0]);
-      return (this.products & flag) === flag;
-    }
-
-    return productIds.some((id) => (this.products & BigInt(id)) === BigInt(id));
-  }
+  return productIds.some((id) => (info.products & BigInt(id)) === BigInt(id));
 }
