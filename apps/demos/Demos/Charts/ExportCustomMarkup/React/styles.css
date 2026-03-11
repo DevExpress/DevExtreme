@@ -20,17 +20,17 @@
   text-align: center;
 }
 
-.custom_markup_text {
+.custom-markup-text {
   fill: #fff;
   font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif;
 }
 
-.custom_markup_text--title {
+.custom-markup-text-title {
   font-size: 36px;
   font-weight: bold;
 }
 
-.custom_markup_text--subtitle {
+.custom-markup-text-subtitle {
   font-size: 14px;
   opacity: 0.8;
 }

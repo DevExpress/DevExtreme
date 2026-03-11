@@ -24,7 +24,7 @@
       />
       <text
         transform="translate(30,89)"
-        class="custom_markup_text custom_markup_text--title"
+        class="custom-markup-text custom-markup-text-title"
       >
         <tspan
           x="0"
@@ -41,7 +41,7 @@
       </text>
       <text
         transform="translate(32,199)"
-        class="custom_markup_text custom_markup_text--subtitle"
+        class="custom-markup-text custom-markup-text-subtitle"
       >
         <tspan
           x="0"
@@ -65,17 +65,17 @@ defineExpose({
 });
 </script>
 <style>
-.custom_markup_text {
+.custom-markup-text {
   fill: #fff;
   font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif;
 }
 
-.custom_markup_text--title {
+.custom-markup-text-title {
   font-size: 36px;
   font-weight: bold;
 }
 
-.custom_markup_text--subtitle {
+.custom-markup-text-subtitle {
   font-size: 14px;
   opacity: 0.8;
 }

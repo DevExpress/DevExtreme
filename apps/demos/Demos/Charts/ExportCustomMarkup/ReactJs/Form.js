@@ -29,7 +29,7 @@ const Form = React.forwardRef((_, ref) => (
       ></path>
       <text
         transform="translate(30,89)"
-        className="custom_markup_text custom_markup_text--title"
+        className="custom-markup-text custom-markup-text-title"
       >
         <tspan
           x="0"
@@ -52,7 +52,7 @@ const Form = React.forwardRef((_, ref) => (
       </text>
       <text
         transform="translate(32,199)"
-        className="custom_markup_text custom_markup_text--subtitle"
+        className="custom-markup-text custom-markup-text-subtitle"
       >
         <tspan
           x="0"

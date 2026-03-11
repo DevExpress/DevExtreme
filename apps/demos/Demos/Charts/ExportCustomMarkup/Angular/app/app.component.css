@@ -16,17 +16,17 @@
   text-align: center;
 }
 
-::ng-deep .custom_markup_text {
+::ng-deep .custom-markup-text {
   fill: #fff;
   font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif;
 }
 
-::ng-deep .custom_markup_text--title {
+::ng-deep .custom-markup-text-title {
   font-size: 36px;
   font-weight: bold;
 }
 
-::ng-deep .custom_markup_text--subtitle {
+::ng-deep .custom-markup-text-subtitle {
   font-size: 14px;
   opacity: 0.8;
 }
