@@ -1,6 +1,6 @@
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Column } from '../columns_controller/m_columns_controller';
 import { Direction } from './const';
 import type { ColumnFocusDispatcher } from './m_column_focus_dispatcher';
 import { KeyboardNavigationController as KeyboardNavigationControllerCore } from './m_keyboard_navigation_core';

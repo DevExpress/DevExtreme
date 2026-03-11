@@ -16,8 +16,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
-import { dxChartAnnotationConfig } from 'devextreme/viz/chart';
+import type { DashStyle, Font, TextOverflow, AnnotationType, WordWrap } from 'devextreme/common/charts';
+import type { dxChartAnnotationConfig } from 'devextreme/viz/chart';
 
 import {
     DxIntegrationModule,

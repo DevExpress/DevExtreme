@@ -12,7 +12,7 @@ import {
 
 
 
-import { AICommandNameExtended } from 'devextreme/ui/html_editor';
+import type { AICommandNameExtended } from 'devextreme/ui/html_editor';
 
 import {
     DxIntegrationModule,

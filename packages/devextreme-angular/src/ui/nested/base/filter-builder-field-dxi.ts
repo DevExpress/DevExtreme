@@ -5,11 +5,11 @@ import {
     Component,
 } from '@angular/core';
 
-import { DataType } from 'devextreme/common';
-import { Format } from 'devextreme/common/core/localization';
-import { Store } from 'devextreme/data';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { FilterBuilderOperation } from 'devextreme/ui/filter_builder';
+import type { DataType } from 'devextreme/common';
+import type { Format } from 'devextreme/common/core/localization';
+import type { Store } from 'devextreme/data';
+import type { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import type { FilterBuilderOperation } from 'devextreme/ui/filter_builder';
 
 @Component({
     template: ''

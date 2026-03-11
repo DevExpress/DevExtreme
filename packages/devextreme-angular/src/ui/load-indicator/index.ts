@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 
 
-import { LoadingAnimationType, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/load_indicator';
+import type { LoadingAnimationType, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/load_indicator';
 
 import DxLoadIndicator from 'devextreme/ui/load_indicator';
 

@@ -18,9 +18,9 @@ import {
 
 
 
-import { dxButtonGroupItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
-import { SchedulerPredefinedDateNavigatorItem } from 'devextreme/ui/scheduler';
-import { SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
+import type { dxButtonGroupItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
+import type { SchedulerPredefinedDateNavigatorItem } from 'devextreme/ui/scheduler';
+import type { SingleMultipleOrNone, ButtonStyle } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

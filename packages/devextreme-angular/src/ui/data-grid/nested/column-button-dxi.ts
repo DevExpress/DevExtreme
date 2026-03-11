@@ -16,8 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import dxDataGrid from 'devextreme/ui/data_grid';
-import { dxDataGridColumn, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
+import type { default as dxDataGrid, dxDataGridColumn, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent } from 'devextreme/ui/data_grid';
 
 import {
     DxIntegrationModule,
