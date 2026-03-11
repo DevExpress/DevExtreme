@@ -32,7 +32,12 @@
       </text>
     </svg>
   </div>
-  <dx-chart id="chart" class="chart" [dataSource]="oilProductionData" palette="Violet">
+  <dx-chart
+    id="chart"
+    class="chart"
+    [dataSource]="oilProductionData"
+    palette="Violet"
+  >
     <dxi-chart-series valueField="year1990" name="1990"></dxi-chart-series>
     <dxi-chart-series valueField="year2000" name="2000"></dxi-chart-series>
     <dxi-chart-series valueField="year2010" name="2010"></dxi-chart-series>
