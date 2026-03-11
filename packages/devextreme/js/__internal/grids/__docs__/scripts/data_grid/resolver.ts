@@ -484,6 +484,12 @@ export function buildCrossDependencies(
         continue;
       }
 
+      // Skip m_data_source_adapter imports — already shown as DSA chain
+      if (resolvedTarget.includes('m_data_source_adapter')) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
       const key = `${fromModule}→${targetFile}`;
       if (seen.has(key)) {
         // Merge importedNames
