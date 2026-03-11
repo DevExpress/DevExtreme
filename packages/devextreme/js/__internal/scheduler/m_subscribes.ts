@@ -229,7 +229,7 @@ const subscribes = {
   },
 
   getGroupCount() {
-    return this._workSpace.getGroupCount();
+    return this._workSpace._getGroupCount();
   },
 
   mapAppointmentFields(config) {
