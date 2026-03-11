@@ -8,11 +8,11 @@ const WEEK_CLASS = 'dx-scheduler-work-space-week';
 class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
   get type() { return VIEWS.WEEK; }
 
-  getElementClass() {
+  protected override getElementClass() {
     return WEEK_CLASS;
   }
 
-  calculateViewStartDate() {
+  protected override calculateViewStartDate() {
     return weekUtils.calculateViewStartDate(this.option('startDate') as any, this.firstDayOfWeek());
   }
 }

@@ -8,11 +8,11 @@ const DAY_CLASS = 'dx-scheduler-work-space-day';
 class SchedulerWorkSpaceDay extends SchedulerWorkSpaceVertical {
   get type() { return VIEWS.DAY; }
 
-  getElementClass() {
+  protected override getElementClass() {
     return DAY_CLASS;
   }
 
-  renderDateHeader() {
+  protected override renderDateHeader() {
     return this.option('intervalCount') === 1 ? null : super.renderDateHeader();
   }
 
