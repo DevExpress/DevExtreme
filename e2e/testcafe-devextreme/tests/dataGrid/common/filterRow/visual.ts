@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
+import TextBox from 'devextreme-testcafe-models/textBox';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getNumberData } from '../../helpers/generateDataSourceData';
@@ -35,12 +35,12 @@ test.meta({
 test('FilterRow range overlay screenshot', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
-  const filterEditor = dataGrid.getFilterEditor(1, FilterTextBox);
+  const filterCell = dataGrid.getFilterCell(1);
 
   await t
-    .click(filterEditor.menuButton);
+    .click(filterCell.menuButton);
   await t
-    .click(filterEditor.menu.getItemByText('Between'));
+    .click(filterCell.menu.getItemByText('Between'));
   // act
   await testScreenshot(t, takeScreenshot, 'filter-row-overlay.png');
   await t
@@ -68,7 +68,7 @@ test('FilterRow range overlay screenshot', async (t) => {
 test('Focus overlay should be visible in filter row when focusedRowEnabled is enabled', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
-  const filterEditor = dataGrid.getFilterEditor(1, FilterTextBox);
+  const filterEditor = dataGrid.getFilterEditor(1, TextBox);
 
   await t
     .click(dataGrid.getDataCell(0, 0).element)
@@ -96,13 +96,13 @@ test('Focus overlay should be visible in filter row when focusedRowEnabled is en
 test('DataGrid - The `between` filter dropdown sticks to the viewport edge during horizontal scrolling (T1280071)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
-  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
+  const filterCell = dataGrid.getFilterCell(0);
 
   await dataGrid.isReady();
 
   await t
-    .click(filterEditor.menuButton)
-    .click(filterEditor.menu.getItemByText('Between'));
+    .click(filterCell.menuButton)
+    .click(filterCell.menu.getItemByText('Between'));
 
   await dataGrid.scrollBy(t, { x: 999 });
   await testScreenshot(t, takeScreenshot, 'filter-row-filter-range-hide-on-scroll.png');

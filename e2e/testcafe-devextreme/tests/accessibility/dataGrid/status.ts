@@ -1,6 +1,6 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
-import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
+import TextBox from 'devextreme-testcafe-models/textBox';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -73,7 +73,7 @@ test('Accessibility: DataGrid general status should contains correct text after 
 test('Accessibility: DataGrid general status should contains correct text after filter row interaction', async (t) => {
   const expectedStatusText = 'Data grid with 1 rows and 2 columns';
   const dataGrid = new DataGrid('#container');
-  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
+  const filterEditor = dataGrid.getFilterEditor(0, TextBox);
 
   const applyFilterBtn = dataGrid.getHeaderPanel().getApplyFilterButton();
   await t.typeText(filterEditor.input(), 'A')
