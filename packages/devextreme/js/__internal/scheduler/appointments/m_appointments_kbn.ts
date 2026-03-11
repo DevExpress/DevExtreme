@@ -5,6 +5,7 @@ import { getPublicElement } from '@ts/core/m_element';
 import type { SupportedKeys } from '@ts/core/widget/widget';
 import eventsEngine from '@ts/events/core/m_events_engine';
 
+import { getRawAppointmentGroupValues } from '../utils/resource_manager/appointment_groups_utils';
 import type { SortedEntity } from '../view_model/types';
 import type SchedulerAppointments from './m_appointment_collection';
 
@@ -66,7 +67,7 @@ export class AppointmentsKeyboardNavigation {
   }
 
   public focusOutHandler(): void {
-    this._collection.option('focusedElement', this.getFirstVisibleItem());
+    this._collection.option('focusedElement', getPublicElement(this.getFirstVisibleItem()));
   }
 
   public getSupportedKeys(): SupportedKeys {
@@ -157,10 +158,15 @@ export class AppointmentsKeyboardNavigation {
       itemData.source.startDate,
     ));
 
+    const group = getRawAppointmentGroupValues(
+      itemData.itemData,
+      this._collection.getResourceManager().resources,
+    );
+
     this._collection.option('scrollTo')(
       date,
       {
-        group: itemData.itemData,
+        group,
         allDay: itemData.allDay,
       },
     );
