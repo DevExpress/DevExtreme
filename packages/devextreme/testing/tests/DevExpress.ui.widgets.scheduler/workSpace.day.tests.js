@@ -32,7 +32,7 @@ module('Work Space Day', {
             getResourceManager: getEmptyResourceManager,
         }).dxSchedulerWorkSpaceDay('instance');
         this.instance.initDragBehavior();
-        this.instance._attachTablesEvents();
+        this.instance.attachTablesEvents();
     }
 }, () => {
     test('Workspace getAllDayHeight() should return 0 or allDayPanel-height depending on the showAllDayPanel option', async function(assert) {

@@ -14,10 +14,10 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
     // @ts-expect-error
     super(...args);
 
-    this._getWeekendsCount = getWeekendsCount;
+    this.getWeekendsCount = getWeekendsCount;
   }
 
-  _getElementClass() {
+  protected override getElementClass() {
     return WORK_WEEK_CLASS;
   }
 }

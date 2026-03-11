@@ -32,7 +32,7 @@ module('Agenda', {}, () => {
 
         const config = {
             onContentReady: e => {
-                e.component._renderView();
+                e.component.renderView();
                 e.component._recalculateAgenda(rows);
             },
             getResourceManager: getEmptyResourceManager,
