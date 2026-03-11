@@ -20,12 +20,12 @@ import {
 export interface ValueChangedInfo {
     /**
      * @docid
-     * @type object
+     * @type any
      */
     readonly previousValue?: any;
     /**
      * @docid
-     * @type object
+     * @type any
      */
     readonly value?: any;
 }
