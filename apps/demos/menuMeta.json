@@ -3628,6 +3628,12 @@
                   "/Models/SampleData/PriorityResources.cs"
                 ],
                 "DemoType": "Web"
+              },
+              {
+                "Title": "Resolve Time Conflicts",
+                "Name": "ResolveTimeConflicts",
+                "Widget": "Scheduler",
+                "DemoType": "Web"
               }
             ]
           },
