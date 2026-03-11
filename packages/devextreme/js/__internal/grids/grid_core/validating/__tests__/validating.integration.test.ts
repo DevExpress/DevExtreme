@@ -1,6 +1,7 @@
 import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
+import type { CustomRule } from '@js/common';
 import {
   afterTest,
   beforeTest,
@@ -68,6 +69,96 @@ describe('DataGrid Cell Editing', () => {
 
       expect(instance.cellValue(1, 'name')).toBe('Job 2');
       expect(component.getDataCell(1, 0).isValidCell).toBe(true);
+    });
+
+    // T1323690
+    it('should pass real row data to validationCallback after canceling changes (T1323690)', async () => {
+      const validationCallback = jest.fn<NonNullable<CustomRule['validationCallback']>>(
+        (e) => !e.value?.toString().includes('X'),
+      );
+      const data = [
+        { id: 1, name: 'Item 1', description: 'Desc A' },
+        { id: 2, name: 'Item 2', description: 'Desc B' },
+      ];
+
+      const { component } = await createDataGrid({
+        dataSource: data,
+        keyExpr: 'id',
+        repaintChangesOnly: true,
+        editing: {
+          mode: 'cell',
+          allowUpdating: true,
+        },
+        columns: [
+          {
+            dataField: 'name',
+            showEditorAlways: true,
+            validationRules: [
+              {
+                type: 'custom',
+                validationCallback,
+              },
+            ],
+          },
+          'description',
+        ],
+      });
+
+      const firstEditor = component.getDataCell(0, 0).getEditor();
+      firstEditor.setValue('Item 1X');
+      jest.runAllTimers();
+
+      expect(validationCallback).toHaveBeenCalledTimes(1);
+      expect(component.getDataCell(0, 0).isValidCell).toBe(false);
+
+      component.getRevertButton().click();
+      jest.runAllTimers();
+
+      const secondCell = component.getDataCell(1, 0);
+      secondCell.getElement()?.click();
+      jest.runAllTimers();
+
+      expect(validationCallback).toHaveBeenCalled();
+      const lastCallData = validationCallback.mock.lastCall?.[0].data;
+      expect(lastCallData).toMatchObject(data[1]);
+    });
+
+    it('should pass edited data to validationCallback during active editing (T1323690)', async () => {
+      const validationCallback = jest.fn<NonNullable<CustomRule['validationCallback']>>(() => true);
+      const data = [
+        { id: 1, name: 'Item 1', description: 'Desc A' },
+      ];
+
+      const { component } = await createDataGrid({
+        dataSource: data,
+        keyExpr: 'id',
+        repaintChangesOnly: true,
+        editing: {
+          mode: 'cell',
+          allowUpdating: true,
+        },
+        columns: [
+          {
+            dataField: 'name',
+            showEditorAlways: true,
+            validationRules: [
+              {
+                type: 'custom',
+                validationCallback,
+              },
+            ],
+          },
+          'description',
+        ],
+      });
+
+      const editor = component.getDataCell(0, 0).getEditor();
+      editor.setValue('Changed');
+      jest.runAllTimers();
+
+      expect(validationCallback).toHaveBeenCalled();
+      const lastCallData = validationCallback.mock.lastCall?.[0].data;
+      expect(lastCallData).toMatchObject({ id: 1, name: 'Changed', description: 'Desc A' });
     });
   });
 });

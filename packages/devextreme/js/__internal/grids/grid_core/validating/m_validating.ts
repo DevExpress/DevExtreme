@@ -503,7 +503,9 @@ export class ValidatingController extends modules.Controller {
           const change = editingController.getChangeByKey(key);
           const oldData = editingController._getOldData(key);
           return {
-            data: createObjectWithChanges(oldData, change?.data),
+            data: change
+              ? createObjectWithChanges(oldData, change.data)
+              : { ...(oldData ?? parameters.data) },
             column,
           };
         },
