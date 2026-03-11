@@ -28,7 +28,7 @@ const getConfig = () => ({
       name: 'Timeline',
       groupOrientation: 'vertical',
     },
-    'week'
+    'week',
   ],
   dataSource,
   resources: [
