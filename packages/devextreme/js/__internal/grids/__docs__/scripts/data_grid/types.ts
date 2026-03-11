@@ -148,6 +148,16 @@ export interface GridCoreModuleInfo {
   hasDefaultOptions: boolean;
 }
 
+export interface CrossDependency {
+  fromModule: string;
+  fromRelPath: string;
+  toRelPath: string;
+  toModule: string | null;
+  importedNames: string[];
+  importPath: string;
+  label: string;
+}
+
 export interface DataGridArchitectureData {
   generatedAt: string;
   dataGridRoot: string;
@@ -158,6 +168,7 @@ export interface DataGridArchitectureData {
   extenderPipelines: ExtenderPipeline[];
   dataSourceAdapterChain: DataSourceAdapterExtension[];
   inheritanceChains: InheritanceEntry[];
+  crossDependencies: CrossDependency[];
   summary: {
     total: number;
     passthrough: number;

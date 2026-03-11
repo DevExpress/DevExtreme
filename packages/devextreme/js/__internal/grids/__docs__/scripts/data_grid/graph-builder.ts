@@ -207,5 +207,40 @@ export function buildCytoscapeElements(data: DataGridArchitectureData): Cytoscap
     );
   }
 
+  // ─── Cross-dependency edges ───────────────────────────────────────────────
+  for (const dep of data.crossDependencies) {
+    const sourceId = `mod-${dep.fromModule}`;
+
+    let targetId: string | null = null;
+    if (dep.toModule) {
+      targetId = `mod-${dep.toModule}`;
+    } else {
+      // Non-module file (shared mixin, utility, etc.) — create a utility node
+      const utilId = `util-${dep.toRelPath}`;
+      const fileName = dep.toRelPath.split('/').pop() ?? dep.toRelPath;
+      const shortName = fileName.replace(/\.ts$/, '').replace(/^m_/, '');
+
+      addNode(utilId, {
+        label: shortName,
+        nodeType: 'utility',
+        sourceFile: dep.toRelPath,
+        featureArea: 'Shared',
+        details: `Shared file: ${dep.toRelPath}`,
+        moduleName: shortName,
+      }, 'module utility');
+      targetId = utilId;
+    }
+
+    if (targetId && nodeIds.has(sourceId) && nodeIds.has(targetId)) {
+      addEdge(sourceId, targetId, {
+        edgeType: 'cross-dep',
+        label: dep.importedNames.join(', '),
+        targetName: dep.importedNames.join(', '),
+        importPath: dep.importPath,
+        toRelPath: dep.toRelPath,
+      }, 'edge-cross-dep');
+    }
+  }
+
   return elements;
 }

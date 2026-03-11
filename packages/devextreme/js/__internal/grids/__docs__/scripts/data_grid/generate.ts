@@ -13,6 +13,7 @@ import {
   parseModulesOrder,
 } from './parser';
 import {
+  buildCrossDependencies,
   buildExtenderPipelines,
   buildInheritanceChains,
   classifyModules,
@@ -136,7 +137,15 @@ function main(): void {
     const inheritanceChains = buildInheritanceChains(allParsedFiles);
     console.log(`\nBuilt ${inheritanceChains.length} inheritance chains`);
 
-    // 10. Build output data
+    // 10. Build cross-dependencies between data_grid modules
+    const crossDependencies = buildCrossDependencies(allParsedFiles, allModules);
+    console.log(`\nFound ${crossDependencies.length} cross-dependencies:`);
+    for (const dep of crossDependencies) {
+      const toLabel = dep.toModule ?? dep.toRelPath;
+      console.log(`  ${dep.fromModule} → ${toLabel} [${dep.importedNames.join(', ')}]`);
+    }
+
+    // 11. Build output data
     const data: DataGridArchitectureData = {
       generatedAt: new Date().toISOString(),
       dataGridRoot: 'packages/devextreme/js/__internal/grids/data_grid',
@@ -147,13 +156,14 @@ function main(): void {
       extenderPipelines,
       dataSourceAdapterChain: dsaChain,
       inheritanceChains,
+      crossDependencies,
       summary: {
         total: allModules.length,
         ...counts,
       },
     };
 
-    // 11. Write output files
+    // 12. Write output files
     if (!fs.existsSync(OUTPUT_DIR)) {
       fs.mkdirSync(OUTPUT_DIR, { recursive: true });
     }

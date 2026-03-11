@@ -130,7 +130,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     <label><input type="checkbox" class="edge-toggle" data-cls="edge-order" checked> Registration Order</label>
     <label><input type="checkbox" class="edge-toggle" data-cls="edge-gc-source" checked> Grid Core Source</label>
     <label><input type="checkbox" class="edge-toggle" data-cls="edge-ext-ctrl" checked> Controller Chains</label>
-    <label><input type="checkbox" class="edge-toggle" data-cls="edge-ext-view" checked> View Chains</label>
+    <label><input type="checkbox" class="edge-toggle" data-cls="edge-dsa" checked> DSA Chain</label>
+    <label><input type="checkbox" class="edge-toggle" data-cls="edge-cross-dep" checked> Cross-dependencies</label>
     <label><input type="checkbox" class="edge-toggle" data-cls="edge-dsa" checked> DataSourceAdapter</label>
   </div>
   <div>
@@ -171,11 +172,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
     <div class="leg-item"><div class="leg-sw" style="background:#3a1020;border:2px solid #e94560"></div> Extended</div>
     <div class="leg-item"><div class="leg-sw" style="background:#0a2a10;border:2px dashed #4ade80"></div> New</div>
     <div class="leg-item"><div class="leg-sw" style="background:#1a1a2e;border:2px dashed #f59e0b"></div> Grid Core Source</div>
+    <div class="leg-item"><div class="leg-sw" style="background:#0a2a1a;border:2px dashed #10b981;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%)"></div> Shared Mixin / Utility</div>
     <h2 style="margin-top:6px">Legend &mdash; Edges</h2>
     <div class="leg-item"><div class="leg-ln" style="border-top:1px dotted #c1c1c1"></div> Registration Order</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:1.5px dashed #f59e0b"></div> Grid Core &rarr; DataGrid</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #0ea5e9"></div> Controller Chain</div>
-    <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #a855f7"></div> View Chain</div>
+    <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #f59e0b"></div> DSA Chain</div>
+    <div class="leg-item"><div class="leg-ln" style="border-top:2px dashed #10b981"></div> Cross-dependency</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #f59e0b"></div> DataSourceAdapter</div>
   </div>
 </div>
@@ -192,6 +195,7 @@ var PIPELINES = ${pipelinesJson};
 var DSA = ${dsaJson};
 var MODULES = ${modulesJson};
 var GC_MODULES = ${gridCoreModulesJson};
+var CROSS_DEPS = ${JSON.stringify(data.crossDependencies)};
 
 var cy = cytoscape({
   container: document.getElementById('cy'),
@@ -220,6 +224,10 @@ var cy = cytoscape({
     { selector: 'node.module.grid-core', style: {
       'background-color': '#1a1a2e', 'border-width': 2, 'border-style': 'dashed', 'border-color': '#f59e0b', 'color': '#f5c040',
       'background-opacity': 0.5, 'shape': 'barrel',
+    }},
+    { selector: 'node.module.utility', style: {
+      'background-color': '#0a2a1a', 'border-width': 2, 'border-style': 'dashed', 'border-color': '#10b981', 'color': '#6ee7b7',
+      'shape': 'diamond',
     }},
 
     { selector: 'edge.edge-gc-source', style: {
@@ -257,6 +265,16 @@ var cy = cytoscape({
       'curve-style': 'bezier', 'width': 2.5, 'arrow-scale': .8,
       'label': 'data(label)', 'font-size': 9, 'color': '#f5c040',
       'text-background-color': '#1a1a2e', 'text-background-opacity': .9,
+      'text-background-padding': '3px', 'text-background-shape': 'round-rectangle',
+      'text-rotation': 'none',
+    }},
+
+    { selector: 'edge.edge-cross-dep', style: {
+      'line-color': '#10b981', 'target-arrow-color': '#10b981', 'target-arrow-shape': 'triangle',
+      'curve-style': 'bezier', 'width': 2, 'arrow-scale': .7,
+      'line-style': 'dashed', 'opacity': .6,
+      'label': 'data(label)', 'font-size': 8, 'color': '#6ee7b7',
+      'text-background-color': '#0a2a1a', 'text-background-opacity': .9,
       'text-background-padding': '3px', 'text-background-shape': 'round-rectangle',
       'text-rotation': 'none',
     }},
@@ -417,6 +435,17 @@ function showInfo(t) {
         }
       }
     } catch(e) { /* ignore parse errors */ }
+  } else if (t.isNode() && d.nodeType === 'utility') {
+    h = '<h3>' + d.label + ' <span class="tag" style="background:#0a2a1a;color:#10b981;border:1px solid #10b98144">SHARED</span></h3>';
+    h += '<p><span class="lbl">Source:</span> ' + d.sourceFile + '</p>';
+    h += '<p style="font-size:12px;color:#888;margin-top:4px">This file does not register a module. It provides shared code (mixin, utility, base class) used by other modules.</p>';
+    var crossDepsTo = CROSS_DEPS.filter(function(cd) { return cd.toRelPath === d.sourceFile; });
+    if (crossDepsTo.length > 0) {
+      h += '<h3 style="margin-top:8px">Used by:</h3>';
+      for (var ui = 0; ui < crossDepsTo.length; ui++) {
+        h += '<p style="font-size:12px;margin-left:8px"><b>' + crossDepsTo[ui].fromModule + '</b> imports <span style="color:#6ee7b7">' + crossDepsTo[ui].importedNames.join(', ') + '</span></p>';
+      }
+    }
   } else if (t.isNode() && d.nodeType === 'module') {
     h = '<h3>#' + (d.registrationOrder + 1) + ' ' + d.moduleName + ' ' + tagFor(d.category) + '</h3>';
     h += '<p><span class="lbl">Source:</span> ' + d.sourceFile + '</p>';
@@ -481,6 +510,12 @@ function showInfo(t) {
     }
     if (et === 'grid-core-source') {
       h += '<p style="font-size:12px;color:#a0a0b0;margin-top:4px">The data_grid module <b>' + (d.target || '').replace('mod-', '').replace('gc-', '') + '</b> is derived from the grid_core module <b>' + (d.source || '').replace('gc-', '').replace('mod-', '') + '</b>.</p>';
+    }
+    if (et === 'cross-dep') {
+      h += '<p style="font-size:12px;color:#a0a0b0;margin-top:4px">Module <b>' + (d.source || '').replace('mod-', '') + '</b> imports <span style="color:#6ee7b7">' + (d.label || '') + '</span> from <b>' + (d.toRelPath || (d.target || '').replace('mod-', '')) + '</b>';
+      if (d.importPath) h += ' <span class="s-file">(import path: ' + d.importPath + ')</span>';
+      h += '</p>';
+      h += '<p style="font-size:12px;color:#888;margin-top:4px">This is a direct code dependency between data_grid modules — the source file imports a class, mixin, or utility from the target.</p>';
     }
   }
   infoP.innerHTML = h;

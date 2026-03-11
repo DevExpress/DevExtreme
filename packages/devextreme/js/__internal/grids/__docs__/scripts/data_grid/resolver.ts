@@ -1,8 +1,9 @@
-/* eslint-disable spellcheck/spell-checker,no-restricted-syntax,max-depth */
+/* eslint-disable spellcheck/spell-checker,max-depth */
 import type { ModificationCategory } from './constants';
 import { getFeatureAreaFromPath } from './constants';
 import type {
   ClassifiedModule,
+  CrossDependency,
   DataGridParsedFile,
   DataSourceAdapterExtension,
   ExtenderPipeline,
@@ -167,7 +168,7 @@ function buildInheritanceChain(
   visited.add(className);
 
   const info = allClasses.get(className);
-  if (!info || !info.baseClass) return [];
+  if (!info?.baseClass) return [];
 
   const chain: string[] = [];
 
@@ -363,4 +364,152 @@ export function buildInheritanceChains(
   }
 
   return entries.sort((a, b) => a.className.localeCompare(b.className));
+}
+
+// ─── Cross-Dependency Detection ──────────────────────────────────────────────
+
+function resolveImportToRelPath(
+  fromRelPath: string,
+  importPath: string,
+): string | null {
+  const fromDir = fromRelPath.split('/').slice(0, -1).join('/');
+  const segments = importPath.split('/');
+  const resolved: string[] = fromDir ? fromDir.split('/') : [];
+
+  for (const seg of segments) {
+    if (seg === '.') {
+      // current dir
+    } else if (seg === '..') {
+      resolved.pop();
+    } else {
+      resolved.push(seg);
+    }
+  }
+
+  return resolved.join('/') || null;
+}
+
+function findTargetFile(
+  resolvedPath: string,
+  relPathToFile: Map<string, DataGridParsedFile>,
+): string | null {
+  // Try exact match
+  if (relPathToFile.has(resolvedPath)) return resolvedPath;
+
+  // Try with .ts extension
+  const withTs = `${resolvedPath}.ts`;
+  if (relPathToFile.has(withTs)) return withTs;
+
+  // Try index file
+  const asIndex = `${resolvedPath}/index.ts`;
+  if (relPathToFile.has(asIndex)) return asIndex;
+
+  return null;
+}
+
+/**
+ * Detect import dependencies between data_grid files.
+ * Returns edges where one data_grid module file imports from another data_grid file.
+ * This captures patterns like:
+ * - Shared mixins (e.g. ColumnKeyboardNavigationMixin used by multiple modules)
+ * - Direct class imports between modules (e.g. importing a base controller)
+ * - Utility imports shared across modules
+ */
+export function buildCrossDependencies(
+  parsedFiles: DataGridParsedFile[],
+  modules: ClassifiedModule[],
+): CrossDependency[] {
+  // Build map: relPath → moduleName (for files that register modules)
+  const relPathToModule = new Map<string, string>();
+  for (const mod of modules) {
+    relPathToModule.set(mod.relPath, mod.moduleName);
+  }
+
+  // Build map: relPath → file data
+  const relPathToFile = new Map<string, DataGridParsedFile>();
+  for (const pf of parsedFiles) {
+    relPathToFile.set(pf.relPath, pf);
+  }
+
+  const deps: CrossDependency[] = [];
+  const seen = new Set<string>();
+
+  for (const pf of parsedFiles) {
+    // Find which module(s) this file belongs to
+    const fromModule = relPathToModule.get(pf.relPath);
+    if (!fromModule) {
+      // eslint-disable-next-line no-continue
+      continue;
+    }
+
+    for (const [localName, imp] of pf.imports) {
+      // Skip grid_core imports — those are already handled
+      if (imp.isFromGridCore) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      // Only track imports from other data_grid files (relative paths)
+      if (!imp.fromPath.startsWith('.') && !imp.fromPath.startsWith('..')) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      // Resolve the import to a data_grid relPath
+      const resolvedTarget = resolveImportToRelPath(pf.relPath, imp.fromPath);
+      if (!resolvedTarget) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      // Find the target file
+      const targetFile = findTargetFile(resolvedTarget, relPathToFile);
+      if (!targetFile) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      // Determine the target module
+      const toModule = relPathToModule.get(targetFile) ?? null;
+
+      // Don't include self-imports or imports to the same module
+      if (toModule === fromModule) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      // Skip m_core imports (boring internal wiring)
+      if (resolvedTarget.includes('m_core')) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      const key = `${fromModule}→${targetFile}`;
+      if (seen.has(key)) {
+        // Merge importedNames
+        const existing = deps.find(
+          (d) => d.fromModule === fromModule && d.toRelPath === targetFile,
+        );
+        if (existing && !existing.importedNames.includes(localName)) {
+          existing.importedNames.push(localName);
+          existing.label = existing.importedNames.join(', ');
+        }
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+      seen.add(key);
+
+      deps.push({
+        fromModule,
+        fromRelPath: pf.relPath,
+        toRelPath: targetFile,
+        toModule,
+        importedNames: [localName],
+        importPath: imp.fromPath,
+        label: localName,
+      });
+    }
+  }
+
+  return deps.sort((a, b) => a.fromModule.localeCompare(b.fromModule));
 }
