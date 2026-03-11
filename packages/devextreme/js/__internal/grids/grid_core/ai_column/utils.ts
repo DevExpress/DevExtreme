@@ -1,6 +1,6 @@
 import { isDefined } from '@ts/core/utils/m_type';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Column } from '../columns_controller/m_columns_controller';
 import type { Item, UserData } from '../data_controller/m_data_controller';
 import { AI_COLUMN_NAME, CLASSES } from './const';
 

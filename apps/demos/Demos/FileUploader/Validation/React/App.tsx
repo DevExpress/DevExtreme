@@ -15,7 +15,7 @@ export default function App() {
           .
         </span>
       </div>
-      <div className="file-uploader-block" style={{ float: 'right' }}>
+      <div className="file-uploader-block">
         <FileUploader multiple={true} uploadMode="useButtons" uploadUrl="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload" maxFileSize={MAX_UPLOAD_FILE_SIZE} />
         <span className="note">{'Maximum file size: '}
           <span>4 MB</span>

@@ -1,5 +1,4 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
@@ -183,16 +182,16 @@ test('Grouping and Summary', async (t) => {
 
 test('Filter row - filter menu', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
+  const filterCell = dataGrid.getFilterCell(0);
 
   await t
     .expect(dataGrid.isReady())
     .ok();
 
-  await t.click(filterEditor.menuButton);
+  await t.click(filterCell.menuButton);
 
   await t
-    .expect(filterEditor.menu.isOpened)
+    .expect(filterCell.menu.isOpened)
     .ok();
 
   await a11yCheck(t, {
