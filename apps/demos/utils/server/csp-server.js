@@ -197,10 +197,6 @@ const CSP_DEMO_ALLOWLIST = {
     'script-src': ["'unsafe-inline'"],
   },
   // TODO: fix inline style attribute
-  'FileUploader/Validation': {
-    'style-src': ["'unsafe-inline'"],
-  },
-  // TODO: fix inline style attribute
   'DataGrid/RowSelection': {
     'style-src': ["'unsafe-inline'"],
   },
