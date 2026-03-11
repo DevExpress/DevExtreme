@@ -197,20 +197,12 @@ const CSP_DEMO_ALLOWLIST = {
     'script-src': ["'unsafe-inline'"],
   },
   // TODO: fix inline style attribute
-  'FileUploader/Validation': {
-    'style-src': ["'unsafe-inline'"],
-  },
-  // TODO: fix inline style attribute
   'DataGrid/RowSelection': {
     'style-src': ["'unsafe-inline'"],
   },
   // AI demo: inline <script type="module"> to import OpenAI SDK from esm.sh
   'Chat/AIAndChatbotIntegration': {
     'script-src': ["'unsafe-inline'"],
-  },
-  // TODO: fix inline style attributes in SVG markup
-  'Charts/ExportCustomMarkup': {
-    'style-src': ["'unsafe-inline'"],
   },
 };
 

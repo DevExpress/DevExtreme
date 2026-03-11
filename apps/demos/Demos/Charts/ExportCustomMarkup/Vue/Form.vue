@@ -1,5 +1,5 @@
 <template>
-  <div class="custom_markup_container">
+  <div class="custom-markup-container">
     <svg
       version="1.1"
       width="820px"
@@ -24,11 +24,7 @@
       />
       <text
         transform="translate(30,89)"
-        :style="{ fill: '#fff',
-                  fontFamily: fontFamily,
-                  fontSize: '36px',
-                  fontWeight: 'bold',
-        }"
+        class="custom-markup-text custom-markup-text-title"
       >
         <tspan
           x="0"
@@ -45,11 +41,7 @@
       </text>
       <text
         transform="translate(32,199)"
-        :style="{ opacity: '0.8',
-                  fill: '#fff',
-                  fontFamily: fontFamily,
-                  fontSize: '14px'
-        }"
+        class="custom-markup-text custom-markup-text-subtitle"
       >
         <tspan
           x="0"
@@ -65,11 +57,26 @@
 </template>
 <script setup lang="ts">
 
-const fontFamily = "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif";
 defineExpose({
-  getMarkup(): string {
+  getMarkup(): HTMLElement {
     // @ts-ignore
-    return this.$el.innerHTML;
+    return this.$el;
   },
 });
 </script>
+<style>
+.custom-markup-text {
+  fill: #fff;
+  font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif;
+}
+
+.custom-markup-text-title {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.custom-markup-text-subtitle {
+  font-size: 14px;
+  opacity: 0.8;
+}
+</style>

@@ -54,8 +54,8 @@
               name="priorityIdGroup"
             >
               <DxItem name="priorityIdIcon"/>
-              <DxItem name="priorityId"/>
-              <DxItem name="typeId"/>
+              <DxItem name="priorityIdEditor"/>
+              <DxItem name="typeIdEditor"/>
             </DxItem>
           </DxItem>
           <DxItem name="descriptionGroup"/>

@@ -64,7 +64,7 @@ $(() => {
                     colCountByScreen: {
                       xs: 3,
                     },
-                    items: ['priorityIdIcon', 'priorityId', 'typeId'],
+                    items: ['priorityIdIcon', 'priorityIdEditor', 'typeIdEditor'],
                   },
                 ],
               },
