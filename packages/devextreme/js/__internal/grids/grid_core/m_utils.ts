@@ -22,7 +22,7 @@ import sharedFiltering from '@js/ui/shared/filtering';
 import { isNumeric } from '@ts/core/utils/m_type';
 import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
 
-import type { Column } from './columns_controller/m_columns_controller';
+import type { Column } from './columns_controller/types';
 import { isEqualSelectors, isSelectorEqualWithCallback } from './utils/index';
 
 const BASE_LOAD_PANEL_Z_INDEX = 1000;

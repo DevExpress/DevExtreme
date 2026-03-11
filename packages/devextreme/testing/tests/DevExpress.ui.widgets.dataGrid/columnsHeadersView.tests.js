@@ -2795,11 +2795,15 @@ QUnit.module('Headers with band columns', {
 
         // act
         const $headerCells = $testElement.find('.dx-row.dx-column-lines.dx-header-row').children();
+        const $expandHeaders = $headerCells.filter('.dx-command-expand');
+        const $dataColumnHeaders = $headerCells.filter(':not(.dx-command-expand)');
 
         // assert
-        assert.equal($headerCells.length, 4, 'header cell count');
+        assert.equal($headerCells.length, 3, 'header cell count');
+        assert.equal($expandHeaders.length, 1, 'single expand header cell for 2 rows');
 
-        $headerCells.each((_, headerCellElement) => {
+        assert.strictEqual($expandHeaders.eq(0).attr('rowspan'), '2', 'expand header cell has correct rowspan');
+        $dataColumnHeaders.each((_, headerCellElement) => {
             assert.strictEqual($(headerCellElement).attr('rowspan'), undefined);
         });
     });

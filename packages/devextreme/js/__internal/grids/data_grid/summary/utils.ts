@@ -1,5 +1,5 @@
 import { isDefined } from '@js/core/utils/type';
-import type { Column } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 export function getSummaryCellIndex(
   column: Column,
