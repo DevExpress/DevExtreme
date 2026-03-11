@@ -5,7 +5,7 @@ import CurrentTimeShader from './m_current_time_shader';
 
 class HorizontalCurrentTimeShader extends CurrentTimeShader {
   renderShader() {
-    const groupCount = this._workSpace.isHorizontalGroupedWorkSpace() ? this._workSpace.getGroupCount() : 1;
+    const groupCount = this._workSpace._isHorizontalGroupedWorkSpace() ? this._workSpace._getGroupCount() : 1;
 
     for (let i = 0; i < groupCount; i += 1) {
       const isFirstShader = i === 0;
@@ -28,7 +28,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
 
     if (groupIndex >= 1) {
       const workSpace = this._workSpace;
-      const indicationWidth = workSpace.getCellCount() * workSpace.getCellWidth();
+      const indicationWidth = workSpace._getCellCount() * workSpace.getCellWidth();
       $shader.css('left', indicationWidth);
     } else {
       $shader.css('left', 0);
@@ -59,9 +59,9 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
     this._applyShaderWidth($shader, shaderWidth);
 
     if (isFirstShaderPart) {
-      shaderLeft = workSpace.getCellCount() * workSpace.getCellWidth() * groupIndex;
+      shaderLeft = workSpace._getCellCount() * workSpace.getCellWidth() * groupIndex;
     } else {
-      shaderLeft = workSpace.getCellWidth() * integerPart * workSpace.getGroupCount() + groupIndex * workSpace.getCellWidth();
+      shaderLeft = workSpace.getCellWidth() * integerPart * workSpace._getGroupCount() + groupIndex * workSpace.getCellWidth();
     }
 
     $shader.css('left', shaderLeft);
