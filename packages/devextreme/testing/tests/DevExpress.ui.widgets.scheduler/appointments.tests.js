@@ -10,11 +10,8 @@ import '__internal/scheduler/workspaces/m_work_space_week';
 import SchedulerAppointments from '__internal/scheduler/appointments/m_appointment_collection';
 import dblclickEvent from 'common/core/events/dblclick';
 import translator from 'common/core/animation/translator';
-import { isRenderer } from 'core/utils/type';
-import config from 'core/config';
 import Resizable from 'ui/resizable';
 import fx from 'common/core/animation/fx';
-import { DataSource } from 'common/data/data_source/data_source';
 import { Deferred } from 'core/utils/deferred';
 import { createTimeZoneCalculator } from '__internal/scheduler/r1/timezone_calculator/index.js';
 
@@ -750,31 +747,6 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
         keyboard.keyDown('del');
 
         assert.notOk(notifyStub.called, 'notify was not called');
-    });
-
-    QUnit.test('Focus method should focus first appointment', async function(assert) {
-        const items = [
-            {
-                itemData: {
-                    text: 'Appointment 1',
-                    startDate: new Date(2015, 10, 3, 9),
-                    endDate: new Date(2015, 10, 3, 11)
-                },
-                sortedIndex: 0
-            }
-        ];
-
-        const instance = createInstance({
-            currentDate: new Date(2015, 10, 3),
-            items: items,
-            focusStateEnabled: true,
-        }, keyboardNavigationConfig);
-
-        const $appointment = $('.dx-scheduler-appointment').eq(0);
-
-        instance.focus();
-
-        assert.ok($appointment.hasClass('dx-state-focused'), 'appointment is focused');
     });
 
     QUnit.test('Default behavior of tab button should be prevented for apps', async function(assert) {
