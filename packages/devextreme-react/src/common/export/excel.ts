@@ -1,10 +1,9 @@
-export {
-    CellAddress,
-    CellRange,
-    DataGridCell,
-    DataGridExportOptions,
-    exportDataGrid,
-    exportPivotGrid,
-    PivotGridCell,
-    PivotGridExportOptions,
+export { exportDataGrid, exportPivotGrid } from "devextreme/common/export/excel";
+export type {
+CellAddress,
+CellRange,
+DataGridCell,
+DataGridExportOptions,
+PivotGridCell,
+PivotGridExportOptions
 } from "devextreme/common/export/excel";
