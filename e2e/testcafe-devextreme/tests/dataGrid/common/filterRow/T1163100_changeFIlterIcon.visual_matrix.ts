@@ -37,7 +37,7 @@ const generateTestData = (rowCount: number) => new Array(rowCount)
         for (let columnIdx = 0; columnIdx < 4; columnIdx += 1) {
           const filterCell = dataGrid.getFilterCell(columnIdx);
           await t
-            .click(filterCell.menuButton())
+            .click(filterCell.menuButton)
             .click(filterCell.menu.getItemByText('Starts with'));
         }
 
