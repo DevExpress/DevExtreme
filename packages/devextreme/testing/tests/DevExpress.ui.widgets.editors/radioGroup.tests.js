@@ -238,16 +238,64 @@ module('layout', moduleConfig, () => {
         assert.strictEqual(itemsCount, items.length, `items with the "${RADIO_BUTTON_CLASS}" class were rendered`);
     });
 
-    test('radioGroup should have role="alert" attribute on validation message', function(assert) {
-        const $radioGroup = $('#radioGroup').dxRadioGroup({
+});
+
+module('accessibility', moduleConfig, () => {
+    test('validation message should not have role="alert"', function(assert) {
+        const $radioGroup = createRadioGroup({
             items: [1, 2, 3],
             isValid: false,
-            validationError: 'Some error',
+            validationError: { message: 'Some error' },
             validationMessageMode: 'always',
         });
         const $validationMessage = $radioGroup.find(`.${INVALID_MESSAGE_CONTENT}`);
 
-        assert.strictEqual($validationMessage.attr('role'), 'alert');
+        assert.notStrictEqual($validationMessage.attr('role'), 'alert', 'validation message does not have role="alert"');
+    });
+
+    test('root element should not have aria-describedby when invalid', function(assert) {
+        const $radioGroup = createRadioGroup({
+            items: [1, 2, 3],
+            isValid: false,
+            validationError: { message: 'Some error' },
+            validationMessageMode: 'always',
+        });
+
+        assert.strictEqual($radioGroup.attr('aria-describedby'), undefined, 'root element does not have aria-describedby');
+    });
+
+    test('each radio button should have aria-describedby referencing the validation message when invalid', function(assert) {
+        const $radioGroup = createRadioGroup({
+            items: [1, 2, 3],
+            isValid: false,
+            validationError: { message: 'Some error' },
+            validationMessageMode: 'always',
+        });
+        const instance = getInstance($radioGroup);
+        const contentId = $radioGroup.find(`.${INVALID_MESSAGE_CONTENT}`).attr('id');
+        const $buttons = $(instance.itemElements());
+
+        assert.ok(contentId, 'validation message content has an id');
+        $buttons.each(function() {
+            assert.strictEqual($(this).attr('aria-describedby'), contentId, 'radio button references validation message');
+        });
+    });
+
+    test('aria-describedby should be removed from radio buttons when validation state becomes valid', function(assert) {
+        const $radioGroup = createRadioGroup({
+            items: [1, 2, 3],
+            isValid: false,
+            validationError: { message: 'Some error' },
+            validationMessageMode: 'always',
+        });
+        const instance = getInstance($radioGroup);
+
+        instance.option('isValid', true);
+
+        const $buttons = $(instance.itemElements());
+        $buttons.each(function() {
+            assert.strictEqual($(this).attr('aria-describedby'), undefined, 'aria-describedby is removed from radio button');
+        });
     });
 });
 
