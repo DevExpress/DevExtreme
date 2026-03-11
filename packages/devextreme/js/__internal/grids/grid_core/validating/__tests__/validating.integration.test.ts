@@ -102,7 +102,6 @@ describe('DataGrid Cell Editing', () => {
 
       const editor = textCell.getEditor(TextAreaModel);
       editor.setValue('');
-      editor.getInputElement().blur();
       jest.runAllTimers();
 
       expect(component.getDataCell(0, 0).isValidCell).toBe(false);
