@@ -204,10 +204,6 @@ const CSP_DEMO_ALLOWLIST = {
   'Chat/AIAndChatbotIntegration': {
     'script-src': ["'unsafe-inline'"],
   },
-  // TODO: fix inline style attributes in SVG markup
-  'Charts/ExportCustomMarkup': {
-    'style-src': ["'unsafe-inline'"],
-  },
 };
 
 // Framework-specific overrides (e.g. Font Awesome loaded only in React/Vue demos)

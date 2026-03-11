@@ -1,6 +1,6 @@
 <template>
   <div id="chart-demo">
-    <div class="chart_environment">
+    <div class="chart-environment">
       <Form ref="form"/>
       <DxChart
         id="chart"
@@ -75,20 +75,32 @@ import Form from './Form.vue';
 const form = ref();
 const chart = ref();
 
-const prepareMarkup = (chartSVG: string, markup: string): SVGElement => {
+const prepareMarkup = (chartSVG: string, sourceContainer: HTMLElement): SVGElement => {
+  const sourceElements = sourceContainer.querySelectorAll('*');
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
   svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
   svg.setAttribute('version', '1.1');
   svg.setAttribute('width', '820px');
   svg.setAttribute('height', '420px');
-  svg.innerHTML = markup;
-
+  const clonedContainer = sourceContainer.cloneNode(true) as HTMLElement;
+  const clonedElements = clonedContainer.querySelectorAll('*');
+  clonedElements.forEach((clonedEl, index) => {
+    const sourceEl = sourceElements[index] as HTMLElement;
+    if (!sourceEl) return;
+    const computed = window.getComputedStyle(sourceEl);
+    ['fill', 'font-family', 'font-size', 'font-weight', 'opacity', 'stroke', 'stroke-width'].forEach((prop) => {
+      const value = computed.getPropertyValue(prop)?.trim();
+      if (value && value !== 'auto' && value !== 'normal' && value !== 'initial') {
+        (clonedEl as SVGElement).setAttribute(prop, value);
+      }
+    });
+  });
+  svg.innerHTML = clonedContainer.innerHTML;
   const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
   group.setAttribute('transform', 'translate(305,12)');
   group.innerHTML = chartSVG;
   svg.appendChild(group);
-
   return svg;
 };
 
@@ -127,7 +139,7 @@ function onClick(): void {
   height: 347px;
 }
 
-.chart_environment {
+.chart-environment {
   width: 820px;
   position: relative;
   margin: 0 auto;
