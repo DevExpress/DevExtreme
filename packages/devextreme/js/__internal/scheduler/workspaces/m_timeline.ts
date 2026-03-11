@@ -92,14 +92,14 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return false;
   }
 
-  getGroupHeaderContainer() {
+  protected override getGroupHeaderContainer() {
     if (this._isHorizontalGroupedWorkSpace()) {
       return this._$thead;
     }
     return this._$sidebarTable;
   }
 
-  insertAllDayRowsIntoDateTable() {
+  protected override insertAllDayRowsIntoDateTable() {
     return false;
   }
 
@@ -283,7 +283,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   renderRTimeTable() {}
 
-  renderGroupAllDayPanel() {}
+  protected override renderGroupAllDayPanel() {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   generateRenderOptions(argument?: any) {
@@ -388,9 +388,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   // These methods should be deleted when we get rid of old render
   // --------------
 
-  renderTimePanel() { return noop(); }
+  protected override renderTimePanel() { return noop(); }
 
-  renderAllDayPanel() { return noop(); }
+  protected override renderAllDayPanel() { return noop(); }
 
   protected override createAllDayPanelElements() { return noop(); }
 

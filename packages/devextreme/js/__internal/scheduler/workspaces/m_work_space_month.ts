@@ -64,7 +64,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     });
   }
 
-  insertAllDayRowsIntoDateTable() {
+  protected override insertAllDayRowsIntoDateTable() {
     return false;
   }
 
@@ -162,9 +162,9 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   // These methods should be deleted when we get rid of old render
   // --------------
 
-  renderTimePanel() { return noop(); }
+  protected override renderTimePanel() { return noop(); }
 
-  renderAllDayPanel() { return noop(); }
+  protected override renderAllDayPanel() { return noop(); }
 
   _setMonthClassesToCell($cell, data) {
     $cell
@@ -175,7 +175,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
   protected override createAllDayPanelElements() {}
 
-  renderTableBody(options) {
+  protected override renderTableBody(options) {
     options.getCellText = (rowIndex, columnIndex) => {
       const date = this.viewDataProvider.completeViewDataMap[rowIndex][columnIndex].startDate;
 

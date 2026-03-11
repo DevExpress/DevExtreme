@@ -112,7 +112,7 @@ class SchedulerAgenda extends WorkSpace {
     return false;
   }
 
-  isVerticalGroupedWorkSpace() {
+  protected override isVerticalGroupedWorkSpace() {
     return false;
   }
 
@@ -128,11 +128,11 @@ class SchedulerAgenda extends WorkSpace {
     return 1;
   }
 
-  getTimePanelRowCount() {
+  protected override getTimePanelRowCount() {
     return this.option('agendaDuration') as number;
   }
 
-  renderAllDayPanel() { return noop(); }
+  protected override renderAllDayPanel() { return noop(); }
 
   protected override updateAllDayVisibility() { return noop(); }
 
@@ -244,7 +244,7 @@ class SchedulerAgenda extends WorkSpace {
     return result;
   }
 
-  getGroupHeaderContainer() {
+  protected override getGroupHeaderContainer() {
     return this._$groupTable;
   }
 
@@ -336,7 +336,7 @@ class SchedulerAgenda extends WorkSpace {
     this.$element().append(this._dateTableScrollable.$element());
   }
 
-  renderDateTable() {
+  protected override renderDateTable() {
     this.renderTableBody({
       container: getPublicElement(this._$dateTable),
       rowClass: DATE_TABLE_ROW_CLASS,
@@ -372,7 +372,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  renderTableBody(options: any, delayCellTemplateRendering?: any) {
+  protected override renderTableBody(options: any, delayCellTemplateRendering?: any) {
     const cellTemplates: any[] = [];
     const cellTemplateOpt = options.cellTemplate;
 
@@ -432,7 +432,7 @@ class SchedulerAgenda extends WorkSpace {
     }
   }
 
-  renderTimePanel() {
+  protected override renderTimePanel() {
     this.renderTableBody({
       container: getPublicElement(this._$timePanel),
       rowCount: this.getTimePanelRowCount(),
