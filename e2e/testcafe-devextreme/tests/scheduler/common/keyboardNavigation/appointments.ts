@@ -4,7 +4,7 @@ import { createWidget } from '../../../../helpers/createWidget';
 import { generateAppointmentsWithResources, resources } from '../../helpers/generateAppointmentsWithResources';
 import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
 
-fixture.disablePageReloads`KeyboardNavigation.keyboardNavigation`
+fixture.disablePageReloads`KeyboardNavigation.appointments`
   .page(url(__dirname, '../../../container.html'));
 
 const SCHEDULER_SELECTOR = '#container';
