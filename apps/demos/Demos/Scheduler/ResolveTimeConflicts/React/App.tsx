@@ -240,7 +240,7 @@ const App = () => {
               <Item name="assigneeIdGroup">
                 <Item name="assigneeIdIcon" />
                 <Item
-                  name="assigneeId"
+                  name="assigneeIdEditor"
                   isRequired={true}
                   editorOptions={assigneeIdEditorOptions}
                 />
