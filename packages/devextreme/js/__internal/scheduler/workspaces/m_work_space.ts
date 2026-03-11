@@ -631,7 +631,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return this.$element();
   }
 
-  isVerticalGroupedWorkSpace() { // TODO move to the Model
+  protected isVerticalGroupedWorkSpace() { // TODO move to the Model
     return Boolean(this.option('groups')?.length) && this.option('groupOrientation') === 'vertical';
   }
 
