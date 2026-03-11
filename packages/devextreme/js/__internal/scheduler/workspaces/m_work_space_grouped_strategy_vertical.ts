@@ -45,7 +45,7 @@ class VerticalGroupedStrategy {
   }
 
   getTotalCellCount() {
-    return this._workSpace.getCellCount();
+    return this._workSpace._getCellCount();
   }
 
   getTotalRowCount() {

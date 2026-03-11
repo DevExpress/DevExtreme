@@ -14,7 +14,7 @@ class HorizontalGroupedStrategy {
     if (!groupByDay) {
       return {
         rowIndex: cellCoordinates.rowIndex,
-        columnIndex: cellCoordinates.columnIndex + groupIndex * this._workSpace.getCellCount(),
+        columnIndex: cellCoordinates.columnIndex + groupIndex * this._workSpace._getCellCount(),
       };
     }
     return {
@@ -30,7 +30,7 @@ class HorizontalGroupedStrategy {
     if (groupByDay) {
       return columnIndex % groupCount;
     }
-    return Math.floor(columnIndex / this._workSpace.getCellCount());
+    return Math.floor(columnIndex / this._workSpace._getCellCount());
   }
 
   calculateHeaderCellRepeatCount() {
@@ -44,7 +44,7 @@ class HorizontalGroupedStrategy {
   getTotalCellCount(groupCount) {
     groupCount = groupCount || 1;
 
-    return this._workSpace.getCellCount() * groupCount;
+    return this._workSpace._getCellCount() * groupCount;
   }
 
   getTotalRowCount() {
@@ -142,7 +142,7 @@ class HorizontalGroupedStrategy {
 
   _calculateOffset(groupIndex) {
     const indicatorStartPosition = this._workSpace.getIndicatorOffset(groupIndex);
-    const offset = this._workSpace.getCellCount() * this._workSpace.getCellWidth() * groupIndex;
+    const offset = this._workSpace._getCellCount() * this._workSpace.getCellWidth() * groupIndex;
 
     return indicatorStartPosition + offset;
   }
@@ -152,7 +152,7 @@ class HorizontalGroupedStrategy {
   }
 
   getShaderOffset(i, width) {
-    const offset = this._workSpace.getCellCount() * this._workSpace.getCellWidth() * i;
+    const offset = this._workSpace._getCellCount() * this._workSpace.getCellWidth() * i;
     return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._workSpace._dateTableScrollable.$content().get(0)).width - offset - this._workSpace.getTimePanelWidth() - width : offset;
   }
 
@@ -199,7 +199,7 @@ class HorizontalGroupedStrategy {
       if (index % this._workSpace.getGroupCount() === 0) {
         return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
       }
-    } else if (index % this._workSpace.getCellCount() === 0) {
+    } else if (index % this._workSpace._getCellCount() === 0) {
       return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
     }
 
@@ -217,7 +217,7 @@ class HorizontalGroupedStrategy {
       if ((index - 1) % this._workSpace.getGroupCount() === 0) {
         return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
       }
-    } else if ((index - 1) % this._workSpace.getCellCount() === 0) {
+    } else if ((index - 1) % this._workSpace._getCellCount() === 0) {
       return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
     }
 
