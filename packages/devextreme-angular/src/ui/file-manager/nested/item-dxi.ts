@@ -14,9 +14,9 @@ import {
 
 
 
-import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
-import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
+import type { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
+import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import type { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

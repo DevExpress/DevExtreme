@@ -18,7 +18,7 @@ import {
 
 
 
-import { Properties as dxBoxOptions } from 'devextreme/ui/box';
+import type { Properties as dxBoxOptions } from 'devextreme/ui/box';
 
 import {
     DxIntegrationModule,

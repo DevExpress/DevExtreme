@@ -16,7 +16,7 @@ import {
 
 
 
-import { Command, CustomCommand, PanelVisibility } from 'devextreme/ui/diagram';
+import type { Command, CustomCommand, PanelVisibility } from 'devextreme/ui/diagram';
 
 import {
     DxIntegrationModule,

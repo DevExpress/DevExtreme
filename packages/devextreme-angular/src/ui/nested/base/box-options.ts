@@ -5,9 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { BoxDirection, ContentReadyEvent, CrosswiseDistribution, DisposingEvent, Distribution, dxBoxItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxBoxOptions } from 'devextreme/ui/box';
+import type { Store } from 'devextreme/data';
+import type { default as DataSource, Options as DataSourceOptions } from 'devextreme/data/data_source';
+import type { BoxDirection, ContentReadyEvent, CrosswiseDistribution, DisposingEvent, Distribution, dxBoxItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxBoxOptions } from 'devextreme/ui/box';
 
 @Component({
     template: ''

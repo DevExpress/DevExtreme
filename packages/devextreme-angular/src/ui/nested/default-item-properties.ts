@@ -14,7 +14,7 @@ import {
 
 
 
-import { ConnectorLineEnd, ConnectorLineType } from 'devextreme/ui/diagram';
+import type { ConnectorLineEnd, ConnectorLineType } from 'devextreme/ui/diagram';
 
 import {
     DxIntegrationModule,

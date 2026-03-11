@@ -14,8 +14,8 @@ import {
 
 
 
-import { Font } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
+import type { Font } from 'devextreme/common/charts';
+import type { Format } from 'devextreme/common/core/localization';
 
 import {
     DxIntegrationModule,

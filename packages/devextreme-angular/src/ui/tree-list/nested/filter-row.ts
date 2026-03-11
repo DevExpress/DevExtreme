@@ -14,7 +14,7 @@ import {
 
 
 
-import { ApplyFilterMode } from 'devextreme/common/grids';
+import type { ApplyFilterMode } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,

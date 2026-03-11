@@ -14,8 +14,8 @@ import {
 
 
 
-import { CustomSpeechRecognizer, ContentReadyEvent, DisposingEvent, EndEvent, ErrorEvent, InitializedEvent, OptionChangedEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig } from 'devextreme/ui/speech_to_text';
-import { ButtonStyle, ButtonType } from 'devextreme/common';
+import type { CustomSpeechRecognizer, ContentReadyEvent, DisposingEvent, EndEvent, ErrorEvent, InitializedEvent, OptionChangedEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig } from 'devextreme/ui/speech_to_text';
+import type { ButtonStyle, ButtonType } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

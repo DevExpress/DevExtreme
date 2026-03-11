@@ -12,7 +12,7 @@ import {
 
 
 
-import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
+import type { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

@@ -14,7 +14,7 @@ import {
 
 
 
-import { ScaleBreakLineStyle } from 'devextreme/common/charts';
+import type { ScaleBreakLineStyle } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,

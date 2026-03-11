@@ -5,10 +5,10 @@ import {
     Component,
 } from '@angular/core';
 
-import { TextEditorButtonLocation } from 'devextreme/common';
-import { Properties as dxButtonOptions } from 'devextreme/ui/button';
-import { ColumnButtonClickEvent, DataGridPredefinedColumnButton } from 'devextreme/ui/data_grid';
-import { TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
+import type { TextEditorButtonLocation } from 'devextreme/common';
+import type { Properties as dxButtonOptions } from 'devextreme/ui/button';
+import type { ColumnButtonClickEvent, DataGridPredefinedColumnButton } from 'devextreme/ui/data_grid';
+import type { TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
 
 @Component({
     template: ''

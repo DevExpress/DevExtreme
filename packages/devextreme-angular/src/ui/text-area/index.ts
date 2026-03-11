@@ -22,8 +22,8 @@ import {
 } from '@angular/core';
 
 
-import { LabelMode, EditorStyle, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
-import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/text_area';
+import type { LabelMode, EditorStyle, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
+import type { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/text_area';
 
 import DxTextArea from 'devextreme/ui/text_area';
 

@@ -18,7 +18,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxMenuItem } from 'devextreme/ui/menu';
+import type { dxMenuItem } from 'devextreme/ui/menu';
 
 import {
     DxIntegrationModule,

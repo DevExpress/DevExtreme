@@ -22,11 +22,10 @@ import {
 } from '@angular/core';
 
 
-import DataSource from 'devextreme/data/data_source';
-import { AutoZoomMode, Command, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType, ConnectorLineEnd, ConnectorLineType, DataLayoutType, ContentReadyEvent, CustomCommandEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, OptionChangedEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, SelectionChangedEvent, PanelVisibility, Units } from 'devextreme/ui/diagram';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { Orientation, PageOrientation } from 'devextreme/common';
+import type { AutoZoomMode, Command, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType, ConnectorLineEnd, ConnectorLineType, DataLayoutType, ContentReadyEvent, CustomCommandEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, OptionChangedEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, SelectionChangedEvent, PanelVisibility, Units } from 'devextreme/ui/diagram';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { Orientation, PageOrientation } from 'devextreme/common';
 
 import DxDiagram from 'devextreme/ui/diagram';
 
