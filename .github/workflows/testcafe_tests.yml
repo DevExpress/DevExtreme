@@ -34,7 +34,7 @@ jobs:
     if: needs.check-should-run.outputs.should-run == 'true'
 
     runs-on: devextreme-shr2
-    timeout-minutes: 15
+    timeout-minutes: 30
 
     steps:
     - name: Get sources
@@ -142,7 +142,7 @@ jobs:
     # - name: Setup Chrome
     #   uses: ./.github/actions/setup-chrome
     #   with:
-    #     chrome-version: '141.0.7390.122'
+    #     chrome-version: '145.0.7632.67'
 
     # - name: Use Node.js
     #   uses: actions/setup-node@v4

@@ -121,6 +121,9 @@ export class FieldChooserBase extends mixinWidget {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _setAriaSortAttribute(_column, _ariaSortState, _$rootElement) { }
+
   _init() {
     super._init();
     this._headerFilterView = new HeaderFilterView(this);

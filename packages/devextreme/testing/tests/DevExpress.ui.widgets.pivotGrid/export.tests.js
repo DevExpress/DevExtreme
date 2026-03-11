@@ -3,10 +3,20 @@ import { DataProvider } from '__internal/grids/pivot_grid/export/m_export';
 import dateLocalization from 'common/core/localization/date';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import { checkDxFontIcon, DX_ICON_XLSX_FILE_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
+import { DX_ICON_XLSX_FILE_CONTENT_CODE } from '../../helpers/checkDxFontIconHelper.js';
 
 import 'ui/pivot_grid/ui.pivot_grid';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
+
+function checkDxFontIcon(assert, dxIconSelector, expectedIconCode) {
+    const FLUENT_BASE_ICON_SIZE = 20;
+
+    const iconBeforeElementStyle = getComputedStyle($(dxIconSelector).get(0), ':before');
+    assert.strictEqual(iconBeforeElementStyle.content.charCodeAt(1), expectedIconCode, `icon code (${dxIconSelector})`);
+    const iconElementStyle = getComputedStyle($(dxIconSelector).get(0));
+    assert.strictEqual(iconElementStyle.width, FLUENT_BASE_ICON_SIZE + 'px', `icon element width (${dxIconSelector})`);
+    assert.strictEqual(iconElementStyle.height, FLUENT_BASE_ICON_SIZE + 'px', `icon element height (${dxIconSelector})`);
+}
 
 QUnit.testStart(function() {
     const markup =

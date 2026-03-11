@@ -1076,29 +1076,15 @@ describe('Appointment Form', () => {
     it('should create resourceEditorsGroup when resources have no custom icons', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
-        dataSource: [{
-          text: 'Resource test app',
-          startDate: new Date(2017, 4, 9, 9, 30),
-          endDate: new Date(2017, 4, 9, 11),
-          roomId: 1,
-          ownerId: 2,
-        }],
-        resources: [{
-          fieldExpr: 'roomId',
-          dataSource: [{ text: 'Room 1', id: 1 }, { text: 'Room 2', id: 2 }],
-        }, {
-          fieldExpr: 'ownerId',
-          dataSource: [{ text: 'Owner 1', id: 1 }, { text: 'Owner 2', id: 2 }],
-        }],
+        resources: [
+          { fieldExpr: 'roomId' },
+          { fieldExpr: 'ownerId' },
+        ],
       });
-      const dataSource = (scheduler as any).getDataSource();
-      const appointment = dataSource.items()[0];
 
-      scheduler.showAppointmentPopup(appointment);
+      scheduler.showAppointmentPopup();
 
-      const formItems = POM.popup.dxForm.option('items') as FormItem[];
-      const mainGroup = formItems.find((item) => item.name === 'mainGroup') as GroupItem;
-      const resourcesGroup = mainGroup?.items?.find((item) => item.name === 'resourcesGroup') as GroupItem;
+      const resourcesGroup = POM.popup.dxForm.itemOption('mainGroup.resourcesGroup') as GroupItem;
 
       expect(resourcesGroup).toBeDefined();
       expect(resourcesGroup?.items?.length).toBe(2);
@@ -1106,14 +1092,17 @@ describe('Appointment Form', () => {
       expect(resourcesGroup?.items).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            name: 'resourcesGroupContent',
+            name: 'resourcesGroupIcon',
+          }),
+          expect.objectContaining({
+            name: 'resourceEditorsGroup',
             itemType: 'group',
             items: expect.arrayContaining([
               expect.objectContaining({
-                name: 'roomId',
+                name: 'roomIdEditor',
               }),
               expect.objectContaining({
-                name: 'ownerId',
+                name: 'ownerIdEditor',
               }),
             ]),
           }),
@@ -1124,34 +1113,15 @@ describe('Appointment Form', () => {
     it('should create individual resource groups when resources have custom icons', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
-        dataSource: [{
-          text: 'Resource test app',
-          startDate: new Date(2017, 4, 9, 9, 30),
-          endDate: new Date(2017, 4, 9, 11),
-          roomId: 1,
-          ownerId: 2,
-        }],
         resources: [
-          {
-            fieldExpr: 'roomId',
-            icon: 'home',
-            dataSource: [{ text: 'Room 1', id: 1 }, { text: 'Room 2', id: 2 }],
-          },
-          {
-            fieldExpr: 'ownerId',
-            icon: 'user',
-            dataSource: [{ text: 'Owner 1', id: 1 }, { text: 'Owner 2', id: 2 }],
-          },
+          { fieldExpr: 'roomId', icon: 'home' },
+          { fieldExpr: 'ownerId', icon: 'user' },
         ],
       });
-      const dataSource = (scheduler as any).getDataSource();
-      const appointment = dataSource.items()[0];
 
-      scheduler.showAppointmentPopup(appointment);
+      scheduler.showAppointmentPopup();
 
-      const formItems = POM.popup.dxForm.option('items') as FormItem[];
-      const mainGroup = formItems.find((item) => item.name === 'mainGroup') as GroupItem;
-      const resourcesGroup = mainGroup?.items?.find((item) => item.name === 'resourcesGroup') as GroupItem;
+      const resourcesGroup = POM.popup.dxForm.itemOption('mainGroup.resourcesGroup') as GroupItem;
 
       expect(resourcesGroup).toBeDefined();
       expect(resourcesGroup?.items?.length).toBe(2);
@@ -1163,10 +1133,10 @@ describe('Appointment Form', () => {
             itemType: 'group',
             items: expect.arrayContaining([
               expect.objectContaining({
-                name: 'roomId',
+                name: 'roomIdIcon',
               }),
               expect.objectContaining({
-                name: 'roomIdIcon',
+                name: 'roomIdEditor',
               }),
             ]),
           }),
@@ -1175,15 +1145,41 @@ describe('Appointment Form', () => {
             itemType: 'group',
             items: expect.arrayContaining([
               expect.objectContaining({
-                name: 'ownerId',
+                name: 'ownerIdIcon',
               }),
               expect.objectContaining({
-                name: 'ownerIdIcon',
+                name: 'ownerIdEditor',
               }),
             ]),
           }),
         ]),
       );
+    });
+
+    it('should render FontAwesome icon with correct CSS classes (T1322161)', async () => {
+      const { scheduler, POM } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{
+          text: 'Resource test app',
+          startDate: new Date(2017, 4, 9, 9, 30),
+          endDate: new Date(2017, 4, 9, 11),
+          roomId: 1,
+        }],
+        resources: [{
+          fieldExpr: 'roomId',
+          icon: 'fas fa-home',
+          dataSource: [{ text: 'Room 1', id: 1 }, { text: 'Room 2', id: 2 }],
+        }],
+      });
+      const dataSource = (scheduler as any).getDataSource();
+      const appointment = dataSource.items()[0];
+
+      scheduler.showAppointmentPopup(appointment);
+
+      const { resourceIcon } = POM.popup;
+
+      expect(resourceIcon.classList.contains('fas')).toBe(true);
+      expect(resourceIcon.classList.contains('fa-home')).toBe(true);
     });
 
     it('should create dxTagBox for resource with multiple selection', async () => {

@@ -10,7 +10,7 @@ import dataUtils from 'core/element_data';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const {
     module,
@@ -1096,7 +1096,7 @@ module('Integration: Agenda', moduleConfig, () => {
 
         const $element = instance.$element();
         const $appts = $element.find('.dx-scheduler-appointment');
-        const timePanelDate = $element.find('.dx-scheduler-agenda-date').text();
+        const timePanelDate = $element.find('.dx-scheduler-time-panel-cell').text();
 
         assert.equal($appts.length, 1, 'Appt count is OK');
         assert.equal(timePanelDate, '10 Thu', 'Time panel date is OK');
@@ -1120,7 +1120,7 @@ module('Integration: Agenda', moduleConfig, () => {
 
         const $element = instance.$element();
         const $appts = $element.find('.dx-scheduler-appointment');
-        const $timePanelDateEl = $element.find('.dx-scheduler-agenda-date');
+        const $timePanelDateEl = $element.find('.dx-scheduler-time-panel-cell');
         const timePanelDate = $timePanelDateEl.text();
 
         assert.equal($appts.length, 1, 'Appt count is OK');
@@ -1146,7 +1146,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 owner: 1
             }],
             resourceCellTemplate: function(cellData, cellIndex, cellElement) {
-                assert.equal(getOuterWidth($(cellElement)), 80, 'Resource cell width is OK');
+                assert.equal(getOuterWidth($(cellElement)), 100, 'Resource cell width is OK');
                 assert.equal(getOuterHeight($(cellElement)), 80, 'Resource cell height is OK');
             }
         });

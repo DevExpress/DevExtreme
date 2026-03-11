@@ -1,3 +1,4 @@
 .vs
 launchSettings.json
 *.user
+dist

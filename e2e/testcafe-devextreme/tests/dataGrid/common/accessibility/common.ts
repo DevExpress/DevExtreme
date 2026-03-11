@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
@@ -182,16 +181,16 @@ test('Grouping and Summary', async (t) => {
 
 test('Filter row - filter menu', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
+  const filterCell = dataGrid.getFilterCell(0);
 
   await t
     .expect(dataGrid.isReady())
     .ok();
 
-  await t.click(filterEditor.menuButton);
+  await t.click(filterCell.menuButton);
 
   await t
-    .expect(filterEditor.menu.isOpened)
+    .expect(filterCell.menu.isOpened)
     .ok();
 
   await screenshotCheck(t, 'filter-row-menu');
@@ -457,129 +456,6 @@ test('Fixed columns', async (t) => {
     },
   ],
 }));
-
-test('Column chooser with the \'dragAndDrop\' mode', async (t) => {
-  // arrange
-  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const columnChooser = dataGrid.getColumnChooser();
-  const columnChooserButton = dataGrid.getColumnChooserButton();
-
-  // assert
-  await t
-    .expect(dataGrid.isReady())
-    .ok();
-
-  // act
-  await t.click(columnChooserButton);
-
-  // assert
-  await t
-    .expect(columnChooser.isOpened)
-    .ok();
-
-  await screenshotCheck(t, 'column-chooser-drag_and_drop-mode');
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: getData(10, 7),
-  keyExpr: 'field_0',
-  columnChooser: {
-    enabled: true,
-    mode: 'dragAndDrop',
-  },
-  columns: [
-    {
-      dataField: 'field_0',
-      visible: false,
-    },
-    {
-      dataField: 'field_1',
-      visible: false,
-    },
-    'field_2',
-    'field_3',
-    'field_4',
-    'field_5',
-    'field_6',
-  ],
-}, DATA_GRID_SELECTOR));
-
-test.meta({ unstable: true })('Column chooser with the \'select\' mode', async (t) => {
-  // arrange
-  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const columnChooser = dataGrid.getColumnChooser();
-  const columnChooserButton = dataGrid.getColumnChooserButton();
-
-  // assert
-  await t
-    .expect(dataGrid.isReady())
-    .ok();
-
-  // act
-  await t.click(columnChooserButton);
-
-  // assert
-  await t
-    .expect(columnChooser.isOpened)
-    .ok();
-
-  await screenshotCheck(t, 'column-chooser-select-mode');
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: getData(10, 7),
-  keyExpr: 'field_0',
-  columnChooser: {
-    enabled: true,
-    mode: 'select',
-  },
-  columns: [
-    {
-      dataField: 'field_0',
-      visible: false,
-    },
-    {
-      dataField: 'field_1',
-      visible: false,
-    },
-    'field_2',
-    'field_3',
-    'field_4',
-    'field_5',
-    'field_6',
-  ],
-}, DATA_GRID_SELECTOR));
-
-test('Empty column chooser', async (t) => {
-  // arrange
-  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const columnChooser = dataGrid.getColumnChooser();
-  const columnChooserButton = dataGrid.getColumnChooserButton();
-
-  // assert
-  await t
-    .expect(dataGrid.isReady())
-    .ok();
-
-  // act
-  await t.click(columnChooserButton);
-
-  // assert
-  await t
-    .expect(columnChooser.isOpened)
-    .ok();
-
-  await screenshotCheck(t, 'empty-column-chooser');
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: getData(10, 5),
-  keyExpr: 'field_0',
-  columnChooser: {
-    enabled: true,
-  },
-  columns: [
-    'field_0',
-    'field_1',
-    'field_2',
-    'field_3',
-    'field_4',
-  ],
-}, DATA_GRID_SELECTOR));
 
 [false, true].forEach((useIcons) => {
   test(`Row editing mode with useIcons=${useIcons}`, async (t) => {

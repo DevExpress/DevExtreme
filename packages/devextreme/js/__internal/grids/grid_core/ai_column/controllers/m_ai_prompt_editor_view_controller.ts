@@ -1,4 +1,5 @@
-import type { Column } from '../../columns_controller/m_columns_controller';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+
 import { ViewController } from '../../m_modules';
 import type { AIPromptEditorView } from '../views/m_ai_prompt_editor_view';
 

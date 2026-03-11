@@ -4,6 +4,7 @@ import i18N from 'eslint-plugin-i18n';
 import babelParser from '@babel/eslint-parser';
 import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
+import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
@@ -17,11 +18,31 @@ import customRules from './eslint_plugins/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const require = createRequire(import.meta.url);
 const compat = new FlatCompat({
     baseDirectory: __dirname,
     recommendedConfig: js.configs.recommended,
     allConfig: js.configs.all
 });
+
+function loadDevExtremeConfig(moduleName, legacyName) {
+    try {
+        const loadedModule = require(moduleName);
+        const normalized = loadedModule.default ?? loadedModule;
+
+        if (Array.isArray(normalized)) {
+            return normalized;
+        }
+
+        return compat.config(normalized);
+    } catch {
+        return compat.extends(legacyName);
+    }
+}
+
+const spellCheckConfig = loadDevExtremeConfig('eslint-config-devextreme/spell-check', 'devextreme/spell-check');
+const typescriptConfig = loadDevExtremeConfig('eslint-config-devextreme/typescript', 'devextreme/typescript');
+const qunitConfig = loadDevExtremeConfig('eslint-config-devextreme/qunit', 'devextreme/qunit');
 
 export default [
     {
@@ -44,7 +65,7 @@ export default [
             'js/common/core/localization/default_messages.js',
         ],
     },
-    ...compat.extends('devextreme/spell-check'),
+    ...spellCheckConfig,
     {
         plugins: {
             'no-only-tests': noOnlyTests,
@@ -175,7 +196,7 @@ export default [
             'import': importPlugin,
         }
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
         const newConfig = {
             ...config,
             files: ['**/*.ts?(x)'],
@@ -222,7 +243,7 @@ export default [
             'devextreme-custom/no-direct-preact-signals-core-import': 'error',
         },
     },
-    ...compat.extends('devextreme/typescript').map(config => {
+    ...typescriptConfig.map(config => {
         const newConfig = {
             ...config,
             files: ['**/*.d.ts'],
@@ -262,7 +283,7 @@ export default [
         }
     },
     //  Rules for QUnit tests
-    ...compat.extends('devextreme/qunit').map(config => ({
+    ...qunitConfig.map(config => ({
         ...config,
         files: ['testing/tests/**/*.js', 'testing/helpers/**/*.js'],
     })),

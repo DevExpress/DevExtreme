@@ -1,4 +1,4 @@
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 
 import '__internal/scheduler/workspaces/m_work_space_month';
@@ -50,19 +50,19 @@ module('API', () => {
             this.createInstance('Week', { width: 800, height: 800, rtlEnabled: true });
             const index = this.instance.getCellIndexByCoordinates({ left: 411, top: 50 });
 
-            assert.equal(index, 9, 'Index is OK');
+            assert.equal(index, 10, 'Index is OK');
         });
 
         test('All day row', async function(assert) {
             this.createInstance('Week', { width: 800, height: 800 });
-            let index = this.instance.getCellIndexByCoordinates({ left: 298, top: 0 });
+            let index = this.instance.getCellIndexByCoordinates({ left: 350, top: 0 });
 
             assert.equal(index, 3, 'Index is OK');
 
-            index = this.instance.getCellIndexByCoordinates({ left: 298, top: 45 });
+            index = this.instance.getCellIndexByCoordinates({ left: 350, top: 25 });
             assert.equal(index, 3, 'Index is OK');
 
-            index = this.instance.getCellIndexByCoordinates({ left: 298, top: 77 });
+            index = this.instance.getCellIndexByCoordinates({ left: 350, top: 45 });
             assert.equal(index, 10, 'Index is OK');
         });
 
@@ -79,7 +79,7 @@ module('API', () => {
             });
             const index = this.instance.getCellIndexByCoordinates({ left: 100, top: 55 });
 
-            assert.equal(index, 16, 'Index is OK');
+            assert.equal(index, 15, 'Index is OK');
         });
 
         test('Vertical grouped view', async function(assert) {
@@ -105,7 +105,7 @@ module('API', () => {
                 width: 800,
                 height: 500
             });
-            const index = this.instance.getCellIndexByCoordinates({ left: 228, top: 91 });
+            const index = this.instance.getCellIndexByCoordinates({ left: 320, top: 100 });
 
             assert.equal(index, 9, 'Index is OK');
         });

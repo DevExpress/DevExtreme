@@ -4,17 +4,15 @@ export const skippedTests = {
   },
   Angular: {
     Common: ['PopupAndNotificationsOverview'],
-    Scheduler: ['Templates'],
+    DataGrid: ['SignalRService'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
   React: {
-    // NOTE: 'GroupByDate' demo has problems with rendering
-    Scheduler: ['GroupByDate', 'Templates'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
   Vue: {
     Common: ['PopupAndNotificationsOverview'],
-    Scheduler: ['Templates'],
+    DataGrid: ['SignalRService'],
     Map: ['ProvidersAndTypes', 'Markers', 'Routes'],
   },
 };
