@@ -681,7 +681,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     };
 
     if (this.needCreateCrossScrolling()) {
-      config = extend(config, this.createCrossScrollingConfig(config));
+      config = extend(config, this._createCrossScrollingConfig(config));
     }
 
     if (this.isVirtualScrolling()
@@ -701,7 +701,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return config;
   }
 
-  protected createCrossScrollingConfig({ onScroll }): any {
+  // TODO: make it private. Being used as public method by external code.
+  _createCrossScrollingConfig({ onScroll }): any {
     return {
       direction: 'both',
       onScroll: (event) => {
@@ -2314,7 +2315,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         this.cleanWorkSpace();
         break;
       case 'groups':
-        this.cleanView();
+        this._cleanView();
         this.removeAllDayElements();
         this.initGrouping();
         this.repaint();
@@ -2328,7 +2329,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         break;
       case 'showAllDayPanel':
         if (this.isVerticalGroupedWorkSpace()) {
-          this.cleanView();
+          this._cleanView();
           this.removeAllDayElements();
           this.initGrouping();
           this.repaint();
@@ -2424,7 +2425,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected cleanWorkSpace() {
-    this.cleanView();
+    this._cleanView();
     this.toggleGroupedClass();
     this.toggleWorkSpaceWithOddCells();
 
@@ -2822,7 +2823,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this._$allDayTitle?.remove();
   }
 
-  protected cleanView(): void {
+  // TODO: make it private. Being used as public method by external code.
+  _cleanView(): void {
     this.cache.clear();
     this.cleanTableWidths();
     this.cellsSelectionState.clearSelectedAndFocusedCells();

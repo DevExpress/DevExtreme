@@ -130,7 +130,7 @@ class SchedulerAgenda extends WorkSpace {
     return this.option('agendaDuration') as number;
   }
 
-  getCellCount() {
+  _getCellCount() {
     return 1;
   }
 
@@ -167,7 +167,7 @@ class SchedulerAgenda extends WorkSpace {
 
   _recalculateAgenda(rows) {
     let cellTemplates = [];
-    this.cleanView();
+    this._cleanView();
 
     if (this._rowsIsEmpty(rows)) {
       this._renderNoData();
@@ -199,7 +199,7 @@ class SchedulerAgenda extends WorkSpace {
   protected override toggleHorizontalScrollClass() { return noop(); }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected override createCrossScrollingConfig(argument?: any) { return noop(); }
+  _createCrossScrollingConfig(argument?: any) { return noop(); }
 
   _setGroupHeaderCellsHeight() {
     const $cells = this.getGroupHeaderCells().filter((_, element) => !element.getAttribute('rowSpan'));
@@ -312,7 +312,7 @@ class SchedulerAgenda extends WorkSpace {
     };
   }
 
-  protected override cleanView() {
+  _cleanView() {
     this._$dateTable.empty();
     this._$timePanel.empty();
 
