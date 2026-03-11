@@ -47,7 +47,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return this._$sidebarTable ? getOuterWidth(this._$sidebarTable) : 0;
   }
 
-  getTotalRowCount(groupCount) {
+  protected override getTotalRowCount(groupCount) {
     if (this._isHorizontalGroupedWorkSpace()) {
       return this.getRowCount();
     }
@@ -55,7 +55,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return this.getRowCount() * groupCount;
   }
 
-  getFormat(): any {
+  protected override getFormat(): any {
     return 'shorttime';
   }
 
@@ -67,7 +67,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return getBoundingRect((this.$element() as any).get(0)).height;
   }
 
-  dateTableScrollableConfig() {
+  protected override dateTableScrollableConfig() {
     const config = super.dateTableScrollableConfig();
     const timelineConfig = {
       direction: HORIZONTAL,
@@ -76,11 +76,11 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return this.option('crossScrollingEnabled') ? config : extend(config, timelineConfig);
   }
 
-  needCreateCrossScrolling() {
+  protected override needCreateCrossScrolling() {
     return true;
   }
 
-  headerScrollableConfig() {
+  protected override headerScrollableConfig() {
     const config = super.headerScrollableConfig();
 
     return extend(config, {
@@ -164,7 +164,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return false;
   }
 
-  setTableSizes() {
+  protected override setTableSizes() {
     super.setTableSizes();
 
     const minHeight = this._getWorkSpaceMinHeight();
@@ -186,7 +186,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return minHeight;
   }
 
-  getCellCoordinatesByIndex(index) {
+  protected override getCellCoordinatesByIndex(index) {
     return {
       columnIndex: index % this._getCellCount(),
       rowIndex: 0,
@@ -203,7 +203,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       .eq(indexes.columnIndex);
   }
 
-  getWorkSpaceWidth() {
+  protected override getWorkSpaceWidth() {
     return getOuterWidth(this._$dateTable, true);
   }
 
@@ -211,7 +211,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return dateUtils.trimTime(new Date(this.getStartViewDate()));
   }
 
-  getIntervalBetween(currentDate, allDay) {
+  protected override getIntervalBetween(currentDate, allDay) {
     const startDayHour = this.option('startDayHour');
     const endDayHour = this.option('endDayHour');
     const firstViewDate = this.getStartViewDate();
@@ -254,7 +254,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getWeekendsCount(argument?: any) {
+  protected override getWeekendsCount(argument?: any) {
     return 0;
   }
 
@@ -325,11 +325,11 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       .addClass(GROUP_TABLE_CLASS);
   }
 
-  getDefaultGroupStrategy() {
+  protected override getDefaultGroupStrategy() {
     return 'vertical';
   }
 
-  toggleGroupingDirectionClass() {
+  protected override toggleGroupingDirectionClass() {
     (this.$element() as any).toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
   }
 
@@ -339,19 +339,19 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     });
   }
 
-  createWorkSpaceElements() {
+  protected override createWorkSpaceElements() {
     this.createWorkSpaceScrollableElements();
   }
 
-  updateAllDayVisibility() { return noop(); }
+  protected override updateAllDayVisibility() { return noop(); }
 
   _updateAllDayHeight() { return noop(); }
 
-  getDateHeaderTemplate() {
+  protected override getDateHeaderTemplate() {
     return this.option('timeCellTemplate');
   }
 
-  renderView() {
+  protected override renderView() {
     let groupCellTemplates;
     if (!this.isRenovatedRender()) {
       groupCellTemplates = this.renderGroupHeader();
@@ -376,9 +376,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     this.applyCellTemplates(groupCellTemplates);
   }
 
-  setHorizontalGroupHeaderCellsHeight() { return noop(); }
+  protected override setHorizontalGroupHeaderCellsHeight() { return noop(); }
 
-  getTimePanelCells() {
+  protected override getTimePanelCells() {
     return (this.$element() as any)
       .find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`);
   }
@@ -409,9 +409,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   renderAllDayPanel() { return noop(); }
 
-  createAllDayPanelElements() { return noop(); }
+  protected override createAllDayPanelElements() { return noop(); }
 
-  renderDateHeader() {
+  protected override renderDateHeader() {
     const $headerRow = super.renderDateHeader();
     if (this._needRenderWeekHeader()) {
       const firstViewDate = new Date(this.getStartViewDate());
@@ -490,7 +490,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
   }
 
-  makeGroupRows(groups, groupByDate) {
+  protected override makeGroupRows(groups, groupByDate) {
     const tableCreatorStrategy = this.option('groupOrientation') === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
     return tableCreator.makeGroupedTable(

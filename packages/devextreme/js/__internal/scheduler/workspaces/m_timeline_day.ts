@@ -8,7 +8,7 @@ const TIMELINE_CLASS = 'dx-scheduler-timeline-day';
 class SchedulerTimelineDay extends SchedulerTimeline {
   get type() { return VIEWS.TIMELINE_DAY; }
 
-  getElementClass() {
+  protected override getElementClass() {
     return TIMELINE_CLASS;
   }
 

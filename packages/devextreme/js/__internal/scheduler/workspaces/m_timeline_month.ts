@@ -16,17 +16,17 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
 
   get renovatedHeaderPanelComponent() { return HeaderPanelComponent; }
 
-  renderView() {
+  protected override renderView() {
     super.renderView();
 
     this.updateScrollable();
   }
 
-  getElementClass() {
+  protected override getElementClass() {
     return TIMELINE_CLASS;
   }
 
-  getDateHeaderTemplate() {
+  protected override getDateHeaderTemplate() {
     return this.option('dateCellTemplate');
   }
 
@@ -38,18 +38,18 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
     return true;
   }
 
-  getFormat() {
+  protected override getFormat() {
     return formatWeekdayAndDay;
   }
 
-  getIntervalBetween(currentDate) {
+  protected override getIntervalBetween(currentDate) {
     const firstViewDate = this.getStartViewDate();
     const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
 
     return currentDate.getTime() - (firstViewDate.getTime() - (this.option('startDayHour') as any) * 3600000) - timeZoneOffset;
   }
 
-  getViewStartByOptions() {
+  protected override getViewStartByOptions() {
     return monthUtils.getViewStartByOptions(
       this.option('startDate') as any,
       this.option('currentDate') as any,

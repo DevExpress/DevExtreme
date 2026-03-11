@@ -19,7 +19,7 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
     this.getWeekendsCount = getWeekendsCount;
   }
 
-  getElementClass() {
+  protected override getElementClass() {
     return TIMELINE_CLASS;
   }
 

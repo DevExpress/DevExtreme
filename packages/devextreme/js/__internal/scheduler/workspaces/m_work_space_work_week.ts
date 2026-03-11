@@ -17,7 +17,7 @@ class SchedulerWorkSpaceWorkWeek extends SchedulerWorkSpaceWeek {
     this.getWeekendsCount = getWeekendsCount;
   }
 
-  getElementClass() {
+  protected override getElementClass() {
     return WORK_WEEK_CLASS;
   }
 }
