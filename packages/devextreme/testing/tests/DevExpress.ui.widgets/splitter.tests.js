@@ -2122,8 +2122,8 @@ QUnit.module('Resizing', moduleConfig, () => {
 
             this.instance.option(orientation === 'horizontal' ? 'width' : 'height', 700);
 
-            this.checkItemSizes([159.133, 159.133, 159.133, 204.602]);
-            this.assertLayout([23.3333, 23.3333, 23.3333, 30]);
+            this.checkItemSizes([0, 166.664, 215.336, 300]);
+            this.assertLayout([0, 24.4375, 31.5742, 43.9883]);
         });
     });
 
@@ -2970,6 +2970,75 @@ QUnit.module('Resizing', moduleConfig, () => {
         pointer.start().dragStart().drag(40, 0).dragEnd();
 
         this.assertLayout(['15', '10', '25', '50']);
+    });
+
+    [{
+        initialWidth: 408,
+        newWidth: 808,
+        dataSource: [{ size: '200px', maxSize: '200px' }, { }],
+        expectedLayout: ['25', '75'],
+        expectedItemSizes: [200, 600],
+    }, {
+        initialWidth: 408,
+        newWidth: 808,
+        dataSource: [{ }, { size: '200px', maxSize: '200px' }],
+        expectedLayout: ['75', '25'],
+        expectedItemSizes: [600, 200],
+    }, {
+        initialWidth: 808,
+        newWidth: 408,
+        dataSource: [{ size: '200px', minSize: '200px' }, { }],
+        expectedLayout: ['50', '50'],
+        expectedItemSizes: [200, 200],
+    }, {
+        initialWidth: 808,
+        newWidth: 408,
+        dataSource: [{ }, { size: '200px', minSize: '200px' }],
+        expectedLayout: ['50', '50'],
+        expectedItemSizes: [200, 200],
+    }, {
+        initialWidth: 416,
+        newWidth: 816,
+        dataSource: [{ size: '200px', maxSize: '200px' }, { }, { }],
+        expectedLayout: ['25', '12.5', '62.5'],
+        expectedItemSizes: [200, 100, 500],
+    }, {
+        initialWidth: 816,
+        newWidth: 416,
+        dataSource: [{ size: '200px', minSize: '200px' }, { }, { }],
+        expectedLayout: ['50', '50', '0'],
+        expectedItemSizes: [200, 200, 0],
+    }, {
+        initialWidth: 416,
+        newWidth: 816,
+        dataSource: [{ }, { size: '200px', maxSize: '200px' }, { }],
+        expectedLayout: ['12.5', '25', '62.5'],
+        expectedItemSizes: [100, 200, 500],
+    }, {
+        initialWidth: 416,
+        newWidth: 816,
+        dataSource: [{ size: '200px', minSize: '100px', maxSize: '300px' }, { }],
+        expectedLayout: ['24.7525', '75.2475'],
+        expectedItemSizes: [200, 608],
+    }, {
+        initialWidth: 208,
+        newWidth: 808,
+        dataSource: [{ size: '100px', maxSize: '200px' }, { }],
+        expectedLayout: ['12.5', '87.5'],
+        expectedItemSizes: [100, 700],
+    }].forEach(({ initialWidth, newWidth, dataSource, expectedLayout, expectedItemSizes }) => {
+        QUnit.test(`pane constraints should be respected after dimension change from ${initialWidth} to ${newWidth}, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
+            this.reinit({
+                width: initialWidth,
+                height: 408,
+                dataSource,
+            });
+
+            this.instance.option('width', newWidth);
+
+            this.checkItemSizes(expectedItemSizes);
+            this.assertLayout(expectedLayout);
+        });
     });
 });
 
