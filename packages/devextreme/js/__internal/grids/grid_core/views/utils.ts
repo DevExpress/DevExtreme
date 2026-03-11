@@ -1,5 +1,6 @@
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+
 import { AI_COLUMN_NAME } from '../ai_column/const';
-import type { Column } from '../columns_controller/m_columns_controller';
 import gridCoreUtils from '../m_utils';
 
 export const getCellText = (
