@@ -55,11 +55,10 @@ export default class Appointment {
 
   reducedIcon: Selector;
 
-  constructor(scheduler: Selector, index = 0, title?: string) {
+  constructor(scheduler: Selector, index = 0, text?: string) {
     const element = scheduler.find(`.${CLASS.appointment}`);
-    const titleElement = element.find(`.${CLASS.title}`);
 
-    this.element = (title ? titleElement.withExactText(title).parent(`.${CLASS.appointment}`) : element).nth(index);
+    this.element = (text ? element.withText(text) : element).nth(index);
 
     const appointmentContentDate = this.element.find(`.${CLASS.appointmentContentDate}`);
 
@@ -89,7 +88,7 @@ export default class Appointment {
     this.isReducedBody = this.element.hasClass(CLASS.reduced.body);
     this.isReducedTail = this.element.hasClass(CLASS.reduced.tail);
     this.isDraggableSource = this.element.hasClass(CLASS.draggableSource);
-    this.title = titleElement.innerText;
+    this.title = this.element.find(`.${CLASS.title}`).innerText;
     this.resourcesItems = this.element.find(`.${CLASS.resources.item}`);
   }
 

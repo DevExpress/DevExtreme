@@ -28,6 +28,7 @@ const getConfig = () => ({
       name: 'Timeline',
       groupOrientation: 'vertical',
     },
+    'week'
   ],
   dataSource,
   resources: [
@@ -53,11 +54,11 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
     await t
-      .click(scheduler.getAppointment('Appointment 1').element)
+      .click(scheduler.getAppointment('[Appointment 1]').element)
       .pressKey('tab');
 
     await t
-      .expect(scheduler.getAppointment('Appointment 2').element.focused).ok();
+      .expect(scheduler.getAppointment('[Appointment 2]').isFocused).ok();
   }).before(async () => {
     await insertStylesheetRulesToPage(cellStyles);
     await createWidget('dxScheduler', getConfig());
@@ -67,7 +68,7 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
     await t
-      .click(scheduler.getAppointment('Appointment 1').element)
+      .click(scheduler.getAppointment('[Appointment 1]').element)
       .pressKey('tab')
       .pressKey('tab')
       .pressKey('tab')
@@ -75,7 +76,7 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
       .pressKey('tab');
 
     await t
-      .expect(scheduler.getAppointment('Appointment 6').isFocused).ok();
+      .expect(scheduler.getAppointment('[Appointment 6]').isFocused).ok();
   }).before(async () => {
     await insertStylesheetRulesToPage(cellStyles);
     await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
@@ -84,8 +85,8 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
   test(`focus prev appointment on single shift+tab (${scrollingMode} scrolling)`, async (t) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
-    const lastAppointmentText = `Appointment ${appointmentCount}`;
-    const prevAppointmentText = `Appointment ${appointmentCount - 1}`;
+    const lastAppointmentText = `[Appointment ${appointmentCount}]`;
+    const prevAppointmentText = `[Appointment ${appointmentCount - 1}]`;
 
     await scheduler.scrollTo(new Date(2021, 1, 5), { resourceId: resourceCount - 1 });
 
@@ -94,7 +95,7 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
       .pressKey('shift+tab');
 
     await t
-      .expect(scheduler.getAppointment(prevAppointmentText).element.focused).ok();
+      .expect(scheduler.getAppointment(prevAppointmentText).isFocused).ok();
   }).before(async () => {
     await insertStylesheetRulesToPage(cellStyles);
     await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
@@ -103,8 +104,8 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
   test(`focus prev appointment on 5 shift+tab (${scrollingMode} scrolling)`, async (t) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
-    const lastAppointmentText = `Appointment ${appointmentCount}`;
-    const prevAppointmentText = `Appointment ${appointmentCount - 5}`;
+    const lastAppointmentText = `[Appointment ${appointmentCount}]`;
+    const prevAppointmentText = `[Appointment ${appointmentCount - 5}]`;
 
     await scheduler.scrollTo(new Date(2021, 1, 5), { resourceId: resourceCount - 1 });
 
@@ -117,7 +118,7 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
       .pressKey('shift+tab');
 
     await t
-      .expect(scheduler.getAppointment(prevAppointmentText).element.focused).ok();
+      .expect(scheduler.getAppointment(prevAppointmentText).isFocused).ok();
   }).before(async () => {
     await insertStylesheetRulesToPage(cellStyles);
     await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
@@ -127,11 +128,11 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
     await t
-      .click(scheduler.getAppointment('Appointment 1').element)
+      .click(scheduler.getAppointment('[Appointment 1]').element)
       .pressKey('end');
 
     await t
-      .expect(scheduler.getAppointment(`Appointment ${appointmentCount}`).element.focused).ok();
+      .expect(scheduler.getAppointment(`[Appointment ${appointmentCount}]`).isFocused).ok();
   }).before(async () => {
     await insertStylesheetRulesToPage(cellStyles);
     await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
@@ -143,11 +144,11 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
     await scheduler.scrollTo(new Date(2021, 1, 5), { resourceId: resourceCount - 1 });
 
     await t
-      .click(scheduler.getAppointment(`Appointment ${appointmentCount}`).element)
+      .click(scheduler.getAppointment(`[Appointment ${appointmentCount}]`).element)
       .pressKey('home');
 
     await t
-      .expect(scheduler.getAppointment('Appointment 1').element.focused).ok();
+      .expect(scheduler.getAppointment('[Appointment 1]').isFocused).ok();
   }).before(async () => {
     await insertStylesheetRulesToPage(cellStyles);
     await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
@@ -159,11 +160,11 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
     await scheduler.scrollTo(new Date(2021, 1, 5), { resourceId: 0 });
 
     await t
-      .click(scheduler.getAppointment('Appointment 14').element)
+      .click(scheduler.getAppointment('[Appointment 14]').element)
       .pressKey('tab');
 
     await t
-      .expect(scheduler.getAppointment('Appointment 15').element.focused).ok();
+      .expect(scheduler.getAppointment('[Appointment 15]').isFocused).ok();
   }).before(async () => {
     await insertStylesheetRulesToPage(cellStyles);
     await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
@@ -173,10 +174,10 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
     await t
-      .click(scheduler.getAppointment('Appointment 15').element)
+      .click(scheduler.getAppointment('[Appointment 15]').element)
       .pressKey('shift+tab');
     await t
-      .expect(scheduler.getAppointment('Appointment 14').element.focused).ok();
+      .expect(scheduler.getAppointment('[Appointment 14]').isFocused).ok();
   }).before(async () => {
     await insertStylesheetRulesToPage(cellStyles);
     await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
@@ -186,13 +187,13 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
     await t
-      .click(scheduler.getAppointment('Appointment 1').element)
+      .click(scheduler.getAppointment('[Appointment 1]').element)
       .pressKey('tab')
       .pressKey('enter')
       .pressKey('esc');
 
     await t
-      .expect(scheduler.getAppointment('Appointment 2').element.focused).ok();
+      .expect(scheduler.getAppointment('[Appointment 2]').isFocused).ok();
   }).before(async () => {
     await insertStylesheetRulesToPage(cellStyles);
     await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
@@ -202,35 +203,24 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
     await t
-      .click(scheduler.getAppointment('Appointment 1').element)
+      .click(scheduler.getAppointment('[Appointment 1]').element)
       .pressKey('tab')
       .click(scheduler.toolbar.viewSwitcher.element)
       .pressKey('tab')
       .pressKey('tab');
 
     await t
-      .expect(scheduler.getAppointment('Appointment 1').element.focused).ok();
+      .expect(scheduler.getAppointment('[Appointment 1]').isFocused).ok();
   }).before(async () => {
     await insertStylesheetRulesToPage(cellStyles);
-    await createWidget('dxScheduler', {
-      ...getConfig(),
-      views: [
-        {
-          type: 'timelineWorkWeek',
-          name: 'Timeline',
-          groupOrientation: 'vertical',
-        },
-        'week',
-      ],
-      scrolling: { mode: scrollingMode },
-    });
+    await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
   });
 
   test('should not reset scroll after appointment focus and scrolling down', async (t) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
     await t
-      .click(scheduler.getAppointment('Appointment 1').element)
+      .click(scheduler.getAppointment('[Appointment 1]').element)
       .pressKey('tab')
       .scroll(scheduler.workspaceScrollable, 0, 1000);
 

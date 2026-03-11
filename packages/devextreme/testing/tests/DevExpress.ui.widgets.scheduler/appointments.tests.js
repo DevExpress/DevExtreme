@@ -749,6 +749,38 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
         assert.notOk(notifyStub.called, 'notify was not called');
     });
 
+    QUnit.test('Focus method should call focus on appointment', async function(assert) {
+        const items = [
+            {
+                itemData: {
+                    text: 'Appointment 1',
+                    startDate: new Date(2015, 10, 3, 9),
+                    endDate: new Date(2015, 10, 3, 11)
+                },
+                sortedIndex: 0
+            }
+        ];
+
+        const instance = createInstance({
+            currentDate: new Date(2015, 10, 3),
+            items: items,
+            focusStateEnabled: true,
+        }, keyboardNavigationConfig);
+
+        const $appointment = $('.dx-scheduler-appointment').eq(0);
+
+        $appointment.trigger('focusin');
+
+        let focusCalled = false;
+        $appointment.on('focus', function() {
+            focusCalled = true;
+        });
+
+        instance.focus();
+        assert.ok(focusCalled, 'focus is called');
+    });
+
+
     QUnit.test('Default behavior of tab button should be prevented for apps', async function(assert) {
         assert.expect(1);
 

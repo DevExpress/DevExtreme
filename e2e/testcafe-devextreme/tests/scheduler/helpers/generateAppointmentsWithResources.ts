@@ -59,7 +59,7 @@ export const generateAppointmentsWithResources = (
     && startDate.getHours() >= startDayHour - 1
     && endDate.getHours() <= endDayHour - 1));
 
-  appointments = appointments.map((appointment, index) => ({ ...appointment, text: `Appointment ${index + 1}` }));
+  appointments = appointments.map((appointment, index) => ({ ...appointment, text: `[Appointment ${index + 1}]` }));
 
   return appointments;
 };
