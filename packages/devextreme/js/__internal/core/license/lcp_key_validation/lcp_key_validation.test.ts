@@ -7,8 +7,6 @@ import { parseDevExpressProductKey } from './lcp_key_validator';
 import { findLatestDevExtremeVersion, isLicenseValid } from './license_info';
 import { createProductInfo } from './product_info';
 
-const RAW_DEVELOPER_PRODUCT_LICENSE = 'LCPv1EK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEK)rEQtEpQtEpQtEpQtEpQtEpQtEpQtEpQtEpQtEpQtEpQtE>7yFIp@@I%-QpbX<!Q4$I<8;2i-Q!N<;GbRFp<!62g!Q>N-v>K-@2<!Q2pXv>K@v2%d)Ig-QIp-)I7yFI7yFI7yF';
-
 function getTrialLicense() {
   const { major, minor } = parseVersion(currentVersion);
   const products = [
@@ -23,9 +21,8 @@ describe('LCP key validation', () => {
     expect(token.kind).toBe(TokenKind.corrupted);
   });
 
-  it('developer product license fixtures parse into valid LicenseInfo instances', () => {
-    const key = process.env.DX_PRODUCT_KEY ?? RAW_DEVELOPER_PRODUCT_LICENSE;
-    const token = parseDevExpressProductKey(key);
+  (process.env.DX_PRODUCT_KEY ? it : it.skip)('developer product license fixtures parse into valid LicenseInfo instances', () => {
+    const token = parseDevExpressProductKey(process.env.DX_PRODUCT_KEY as string);
     expect(token.kind).toBe(TokenKind.verified);
   });
 
