@@ -254,7 +254,7 @@
   "bin": {
     "devextreme-bundler-init": "bin/bundler-init.js",
     "devextreme-bundler": "bin/bundler.js",
-    "devextreme-license": "license/devextreme-license.js"
+    "devextreme-license-verify": "license/devextreme-license.js"
   },
   "browserslist": [
     "last 2 Chrome versions",
