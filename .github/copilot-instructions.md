@@ -7,7 +7,7 @@
 **Repository Stats:**
 - **Type:** Monorepo (pnpm workspaces + Nx)
 - **Size:** Large (1000+ files across multiple packages)
-- **Languages:** TypeScript, JavaScript, SCSS, C# (.NET for test runner)
+- **Languages:** TypeScript, JavaScript, SCSS
 - **Package Manager:** pnpm 9.15.4 (specified in package.json)
 - **Node Version:** 20.x (required by CI)
 - **Build System:** Gulp + Nx + custom build scripts + custom Nx executors (via `devextreme-nx-infra-plugin`)
@@ -24,7 +24,7 @@ pnpm install --frozen-lockfile
 
 **Node.js:** Version 20.x is required (CI uses Node 20)
 **pnpm:** Version 9.15.4 (managed via packageManager field)
-**.NET SDK:** Version 8.0.x required for building the test runner (packages/devextreme/testing/runner)
+**.NET SDK:** Version 8.0.x required for running devextreme-internal-tools (uses .NET tool for code generation)
 
 ### First-Time Setup
 

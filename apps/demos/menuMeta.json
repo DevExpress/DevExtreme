@@ -3633,6 +3633,9 @@
                 "Title": "Resolve Time Conflicts",
                 "Name": "ResolveTimeConflicts",
                 "Widget": "Scheduler",
+                "MvcAdditionalFiles": [
+                  "/Models/Scheduler/ResolveTimeConflicts.cs"
+                ],
                 "DemoType": "Web"
               }
             ]

@@ -4,6 +4,8 @@ import type { SelectionSensitivity } from 'devextreme/ui/data_grid';
 import Toolbar from '../toolbar';
 import DataRow from './data/row';
 import GroupRow from './groupRow';
+import FilterRow from './filter/row';
+import FilterCell from './filter/cell';
 import EditForm from './editForm';
 import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
@@ -240,12 +242,12 @@ export default class DataGrid extends GridCore {
     return this.element.find(`.${CLASS.errorRow}`);
   }
 
-  getFilterRow(): Selector {
-    return this.element.find(`.${this.addWidgetPrefix(CLASS.filterRow)}`);
+  getFilterRow(): FilterRow {
+    return this.getHeaders().getFilterRow();
   }
 
-  getFilterCell(columnIndex: number): Selector {
-    return this.getFilterRow().find(`[aria-colindex='${columnIndex + 1}']`);
+  getFilterCell(columnIndex: number): FilterCell {
+    return this.getHeaders().getFilterRow().getFilterCell(columnIndex);
   }
 
   getFilterRangeOverlay(): Selector {
@@ -272,7 +274,7 @@ export default class DataGrid extends GridCore {
     columnIndex: number,
     EditorType: new (mainElement: Selector) => T,
   ): T {
-    return new EditorType(this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor());
+    return this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor<T>(EditorType);
   }
 
   getSearchBox(): TextBox {
