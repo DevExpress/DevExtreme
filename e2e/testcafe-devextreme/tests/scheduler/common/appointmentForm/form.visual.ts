@@ -2,6 +2,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
+import { Themes } from '../../../../helpers/themes';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`Appointment Form: Main Form`
@@ -338,7 +339,10 @@ test.meta({ browserSize: [1500, 1500] })('Recurrence settings button should have
   });
 });
 
-test.meta({ browserSize: [1500, 1500] })('appointment form with labelMode=static', async (t) => {
+test.meta({
+  browserSize: [1500, 1500],
+  themes: [Themes.genericLight, Themes.materialBlue, Themes.fluentBlue],
+})('appointment form with labelMode=static', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
