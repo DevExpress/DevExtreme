@@ -507,10 +507,6 @@ $scheduler-appointment-form-label-padding: 20px;
         padding: 0;
       }
 
-      .dx-scheduler-form-recurrence-group .dx-field-item:not(.dx-first-col) {
-        padding-inline-start: 0;
-      }
-
       /* Icons alignment */
       .dx-scheduler-form-group-with-icon .dx-item-content > .dx-box-item:has(.dx-scheduler-form-icon) {
         flex: 0 1 auto !important; // stylelint-disable-line declaration-no-important

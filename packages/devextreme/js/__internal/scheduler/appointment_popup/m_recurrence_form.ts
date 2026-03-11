@@ -182,91 +182,99 @@ export class RecurrenceForm {
     this._readOnly = value;
   }
 
-  createRecurrenceFormGroup(): GroupItem {
+  createRecurrenceFormGroup(showIcon: boolean): GroupItem {
     return {
       name: RECURRENCE_GROUP_NAME,
       itemType: 'group',
       cssClass: `${CLASSES.recurrenceGroup} ${CLASSES.recurrenceHidden}`,
       colSpan: 1,
       items: [
-        this.createRecurrenceStartDateGroup(),
-        this.createRecurrenceSettingsGroup(),
-        this.createRecurrenceEndGroup(),
+        this.createRecurrenceStartDateGroup(showIcon),
+        this.createRecurrenceSettingsGroup(showIcon),
+        this.createRecurrenceEndGroup(showIcon),
       ],
     } as GroupItem;
   }
 
-  private createRecurrenceStartDateGroup(): GroupItem {
+  private createRecurrenceStartDateGroup(showIcon: boolean): GroupItem {
+    const startDateEditor = extend(
+      true,
+      getStartDateCommonConfig(this.scheduler.getFirstDayOfWeek()),
+      {
+        name: EDITOR_NAMES.recurrenceStartDateEditor,
+        cssClass: CLASSES.recurrenceStartDateEditor,
+        label: {
+          text: messageLocalization.format('dxScheduler-editorLabelStartDate'),
+        },
+        editorOptions: {
+          onContentReady: (e): void => {
+            e.component.option('value', this.recurrenceRule.startDate);
+          },
+          onValueChanged: (e): void => {
+            this.recurrenceRule.startDate = e.value;
+          },
+        } as DateBoxProperties,
+      },
+    ) as SimpleItem;
+
     return {
       name: GROUP_NAMES.recurrenceStartDateGroup,
       itemType: 'group',
-      colCount: 2,
+      colCount: showIcon ? 2 : 1,
       colCountByScreen: {
-        xs: 2,
+        xs: showIcon ? 2 : 1,
       },
-      cssClass: CLASSES.groupWithIcon,
-      items: [
-        {
-          name: ICON_NAMES.recurrenceStartDateIcon,
-          colSpan: 1,
-          cssClass: CLASSES.formIcon,
-          template: createFormIconTemplate('clock'),
-        },
-        extend(
-          true,
-          getStartDateCommonConfig(this.scheduler.getFirstDayOfWeek()),
+      cssClass: showIcon ? CLASSES.groupWithIcon : undefined,
+      items: showIcon
+        ? [
           {
-            name: EDITOR_NAMES.recurrenceStartDateEditor,
-            cssClass: CLASSES.recurrenceStartDateEditor,
-            label: {
-              text: messageLocalization.format('dxScheduler-editorLabelStartDate'),
-            },
-            editorOptions: {
-              onContentReady: (e): void => {
-                e.component.option('value', this.recurrenceRule.startDate);
-              },
-              onValueChanged: (e): void => {
-                this.recurrenceRule.startDate = e.value;
-              },
-            } as DateBoxProperties,
+            name: ICON_NAMES.recurrenceStartDateIcon,
+            colSpan: 1,
+            cssClass: CLASSES.formIcon,
+            template: createFormIconTemplate('clock'),
           },
-        ) as SimpleItem,
-      ],
+          startDateEditor,
+        ]
+        : [startDateEditor],
     } as GroupItem;
   }
 
-  private createRecurrenceSettingsGroup(): GroupItem {
+  private createRecurrenceSettingsGroup(showIcon: boolean): GroupItem {
+    const patternGroup = {
+      itemType: 'group',
+      name: GROUP_NAMES.recurrencePatternGroup,
+      colSpan: 1,
+      colCount: 1,
+      colCountByScreen: {
+        xs: 1,
+      },
+      items: [
+        this.createRecurrenceRuleGroup(),
+        this.createDaysOfWeekGroup(),
+        this.createDayOfMonthGroup(),
+        this.createDayOfYearGroup(),
+      ],
+    };
+
     return {
       itemType: 'group',
       name: GROUP_NAMES.recurrenceRuleGroup,
-      cssClass: `${CLASSES.recurrenceSettingsGroup} ${CLASSES.groupWithIcon}`,
-      colCount: 2,
+      cssClass: showIcon ? `${CLASSES.recurrenceSettingsGroup} ${CLASSES.groupWithIcon}` : CLASSES.recurrenceSettingsGroup,
+      colCount: showIcon ? 2 : 1,
       colCountByScreen: {
-        xs: 2,
+        xs: showIcon ? 2 : 1,
       },
-      items: [
-        {
-          name: ICON_NAMES.recurrenceRuleIcon,
-          colSpan: 1,
-          cssClass: CLASSES.formIcon,
-          template: createFormIconTemplate('repeat'),
-        },
-        {
-          itemType: 'group',
-          name: GROUP_NAMES.recurrencePatternGroup,
-          colSpan: 1,
-          colCount: 1,
-          colCountByScreen: {
-            xs: 1,
+      items: showIcon
+        ? [
+          {
+            name: ICON_NAMES.recurrenceRuleIcon,
+            colSpan: 1,
+            cssClass: CLASSES.formIcon,
+            template: createFormIconTemplate('repeat'),
           },
-          items: [
-            this.createRecurrenceRuleGroup(),
-            this.createDaysOfWeekGroup(),
-            this.createDayOfMonthGroup(),
-            this.createDayOfYearGroup(),
-          ],
-        },
-      ],
+          patternGroup,
+        ]
+        : [patternGroup],
     } as GroupItem;
   }
 
@@ -440,37 +448,41 @@ export class RecurrenceForm {
     } as GroupItem;
   }
 
-  private createRecurrenceEndGroup(): GroupItem {
+  private createRecurrenceEndGroup(showIcon: boolean): GroupItem {
+    const endEditorGroup = {
+      itemType: 'group',
+      name: EDITOR_NAMES.recurrenceEndEditor,
+      colSpan: 1,
+      colCount: 2,
+      colCountByScreen: { xs: 2 },
+      label: {
+        text: messageLocalization.format('dxScheduler-recurrenceEnd'),
+      },
+      items: [
+        this.createRecurrenceEndRadioGroup(),
+        this.createRecurrenceEndEditors(),
+      ],
+    };
+
     return {
       name: GROUP_NAMES.recurrenceEndGroup,
       itemType: 'group',
-      colCount: 2,
+      colCount: showIcon ? 2 : 1,
       colCountByScreen: {
-        xs: 2,
+        xs: showIcon ? 2 : 1,
       },
-      cssClass: `${CLASSES.groupWithIcon} ${CLASSES.recurrenceEndGroup}`,
-      items: [
-        {
-          name: ICON_NAMES.recurrenceEndIcon,
-          colSpan: 1,
-          cssClass: CLASSES.formIcon,
-          template: createFormIconTemplate('description'),
-        },
-        {
-          itemType: 'group',
-          name: EDITOR_NAMES.recurrenceEndEditor,
-          colSpan: 1,
-          colCount: 2,
-          colCountByScreen: { xs: 2 },
-          label: {
-            text: messageLocalization.format('dxScheduler-recurrenceEnd'),
+      cssClass: showIcon ? `${CLASSES.groupWithIcon} ${CLASSES.recurrenceEndGroup}` : CLASSES.recurrenceEndGroup,
+      items: showIcon
+        ? [
+          {
+            name: ICON_NAMES.recurrenceEndIcon,
+            colSpan: 1,
+            cssClass: CLASSES.formIcon,
+            template: createFormIconTemplate('description'),
           },
-          items: [
-            this.createRecurrenceEndRadioGroup(),
-            this.createRecurrenceEndEditors(),
-          ],
-        },
-      ],
+          endEditorGroup,
+        ]
+        : [endEditorGroup],
     } as GroupItem;
   }
 
