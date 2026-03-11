@@ -63,7 +63,7 @@ $(() => {
                 items: [
                   'assigneeIdIcon',
                   {
-                    name: 'assigneeId',
+                    name: 'assigneeIdEditor',
                     isRequired: true,
                     editorOptions: {
                       onValueChanged: (e) => {

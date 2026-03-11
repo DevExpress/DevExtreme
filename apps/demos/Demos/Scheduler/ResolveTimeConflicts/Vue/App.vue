@@ -42,7 +42,7 @@
           <DxItem name="assigneeIdGroup">
             <DxItem name="assigneeIdIcon"/>
             <DxItem
-              name="assigneeId"
+              name="assigneeIdEditor"
               :is-required="true"
               :editor-options="assigneeIdEditorOptions"
             />
