@@ -191,7 +191,7 @@ class SchedulerAgenda extends WorkSpace {
   protected override toggleHorizontalScrollClass() { return noop(); }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _createCrossScrollingConfig(argument?: any) { return noop(); }
+  protected override createCrossScrollingConfig(argument?: any) { return noop(); }
 
   private setGroupHeaderCellsHeight() {
     const $cells = this.getGroupHeaderCells().filter((_, element) => !element.getAttribute('rowSpan'));

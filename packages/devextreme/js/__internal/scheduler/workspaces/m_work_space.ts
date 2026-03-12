@@ -688,7 +688,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     };
 
     if (this.needCreateCrossScrolling()) {
-      config = extend(config, this._createCrossScrollingConfig(config));
+      config = extend(config, this.createCrossScrollingConfig(config));
     }
 
     if (this.isVirtualScrolling()
@@ -708,8 +708,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return config;
   }
 
-  // TODO: make it private. Being used as public method by external code.
-  _createCrossScrollingConfig({ onScroll }): any {
+  protected createCrossScrollingConfig({ onScroll }): any {
     return {
       direction: 'both',
       onScroll: (event) => {
@@ -823,7 +822,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  // TODO: make it private. Being used as public method by external code.
+  // TODO: rename to getCellCount — used externally via workSpace reference:
+  // m_work_space_grouped_strategy_horizontal.ts (7 usages), m_work_space_grouped_strategy_vertical.ts, shaders/current_time_shader_horizontal.ts
   _getCellCount() {
     return this.viewDataProvider.getCellCount({
       intervalCount: this.option('intervalCount'),
