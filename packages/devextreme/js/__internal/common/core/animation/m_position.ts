@@ -399,6 +399,10 @@ const getOffsetWithoutScale = function ($startElement, $currentElement = $startE
 const position = function (what, options?) {
   const $what = $(what);
 
+  if (!$what.length) {
+    return undefined;
+  }
+
   if (!options) {
     return $what.offset();
   }
