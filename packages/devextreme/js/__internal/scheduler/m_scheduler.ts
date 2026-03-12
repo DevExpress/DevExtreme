@@ -1233,8 +1233,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private appointmentsConfig() {
     const config = {
       getResourceManager: () => this.resourceManager,
-
       getAppointmentDataSource: () => this.appointmentDataSource,
+      getSortedAppointments: () => this._layoutManager.sortedItems,
+      scrollTo: this.scrollTo.bind(this),
       dataAccessors: this._dataAccessors,
       notifyScheduler: this.notifyScheduler,
       onItemRendered: this.getAppointmentRenderedAction(),
@@ -1371,9 +1372,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       schedulerWidth: this.option('width'),
       allDayPanelMode: this.option('allDayPanelMode'),
       onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
-      onRenderAppointments: () => {
-        this.renderAppointments();
-      },
+      renderAppointments: () => { this.renderAppointments(); },
       onShowAllDayPanel: (value) => this.option('showAllDayPanel', value),
       getHeaderHeight: () => utils.DOM.getHeaderHeight(this.header),
       onScrollEnd: () => this._appointments.updateResizableArea(),

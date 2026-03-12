@@ -1,6 +1,6 @@
 import type Scheduler from '../../m_scheduler';
-import type { AppointmentEntity, ListEntity } from '../types';
-import { OptionManager } from './options/option_manager';
+import type { AppointmentEntity, ListEntity, SortedEntity } from '../types';
+import type { OptionManager } from './options/option_manager';
 import { addCollector } from './steps/add_collector/add_collector';
 import { addDirection } from './steps/add_direction';
 import { addEmptiness } from './steps/add_emptiness';
@@ -16,22 +16,16 @@ import { splitByParts } from './steps/split_by_parts/split_by_parts';
 import { cropByVirtualScreen } from './steps/virtual_screen_crop';
 import { filterByVirtualScreen } from './steps/virtual_screen_filter';
 
-export const generateGridViewModel = (
-  schedulerStore: Scheduler,
+export const sortAppointments = (
+  optionManager: OptionManager,
   items: ListEntity[],
-): AppointmentEntity[] => {
-  const optionManager = new OptionManager(schedulerStore);
+): SortedEntity[] => {
   const {
-    viewOrientation,
     isMonthView,
-    isAdaptivityEnabled,
-    isTimelineView,
     hasAllDayPanel,
-    isVirtualScrolling,
     viewOffset,
     compareOptions: { endDayHour },
   } = optionManager.options;
-  const { viewDataProvider } = schedulerStore._workSpace;
 
   const step2 = maybeSplit(items, hasAllDayPanel, (entities, panelName) => {
     const byGroup = groupByGroupIndex(entities);
@@ -57,8 +51,27 @@ export const generateGridViewModel = (
   });
 
   const step3 = addSortedIndex(step2);
+
+  return step3;
+};
+
+export const generateGridViewModel = (
+  schedulerStore: Scheduler,
+  optionManager: OptionManager,
+  items: SortedEntity[],
+): AppointmentEntity[] => {
+  const {
+    viewOrientation,
+    isMonthView,
+    isAdaptivityEnabled,
+    isTimelineView,
+    hasAllDayPanel,
+    isVirtualScrolling,
+  } = optionManager.options;
+  const { viewDataProvider } = schedulerStore._workSpace;
+
   const step4 = filterByVirtualScreen(
-    step3,
+    items,
     viewDataProvider,
     isVirtualScrolling,
   );
