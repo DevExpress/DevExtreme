@@ -72,7 +72,7 @@
     "@types/babel__core": "7.20.5",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "29.5.14",
-    "@types/lodash": "4.17.23",
+    "@types/lodash": "4.17.24",
     "@types/minimatch": "5.1.2",
     "@types/node": "18.19.130",
     "@types/normalize-path": "3.0.2",
