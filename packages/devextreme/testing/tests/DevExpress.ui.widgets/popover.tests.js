@@ -3,6 +3,7 @@ import $ from 'jquery';
 import fixtures from '../../helpers/positionFixtures.js';
 import fx from 'common/core/animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
 import positionUtils from 'common/core/animation/position';
 import uiErrors from 'ui/widget/ui.errors';
 import Popover from 'ui/popover';
@@ -2320,7 +2321,7 @@ QUnit.module('disabled option', {
     });
 });
 
-QUnit.module('aria accessibility', {
+QUnit.module('accessibility', {
     beforeEach: function() {
         fixtures.simple.create();
     },
@@ -2342,5 +2343,18 @@ QUnit.module('aria accessibility', {
         const $overlay = $(`.${OVERLAY_CONTENT_CLASS}`);
 
         assert.strictEqual($overlay.attr('role'), 'dialog');
+    });
+
+    QUnit.test('should hide visible popover on esc press', function(assert) {
+        const popover = new Popover($('#what'), {
+            target: '#where',
+            visible: true,
+        });
+        const $target = $('#where').attr('tabindex', 0);
+        const keyboard = keyboardMock($target);
+
+        keyboard.keyDown('esc');
+
+        assert.strictEqual(popover.option('visible'), false, 'popover is hidden');
     });
 });
