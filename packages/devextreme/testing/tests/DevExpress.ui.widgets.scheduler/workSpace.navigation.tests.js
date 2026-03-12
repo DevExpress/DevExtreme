@@ -999,7 +999,7 @@ module('Workspace navigation', () => {
                             const scrollable = e.component.getScrollable();
                             scrollable.option('scrollByContent', false);
                             e.component.initDragBehavior();
-                            e.component._attachTablesEvents();
+                            e.component.attachTablesEvents();
                         },
                         getResourceManager: getEmptyResourceManager,
                     }, 'dxSchedulerWorkSpaceWeek');
@@ -1027,7 +1027,7 @@ module('Workspace navigation', () => {
                         currentDate: new Date(2015, 3, 1),
                         onContentReady: function(e) {
                             e.component.initDragBehavior();
-                            e.component._attachTablesEvents();
+                            e.component.attachTablesEvents();
                         }
                     }, 'dxSchedulerWorkSpaceWeek');
 
@@ -1057,7 +1057,7 @@ module('Workspace navigation', () => {
                             const scrollable = e.component.getScrollable();
                             scrollable.option('scrollByContent', false);
                             e.component.initDragBehavior();
-                            e.component._attachTablesEvents();
+                            e.component.attachTablesEvents();
                         },
                     }, 'dxSchedulerWorkSpaceWeek');
 
@@ -1104,7 +1104,7 @@ module('Workspace navigation', () => {
                             const scrollable = e.component.getScrollable();
                             scrollable.option('scrollByContent', false);
                             e.component.initDragBehavior();
-                            e.component._attachTablesEvents();
+                            e.component.attachTablesEvents();
                         },
                         onSelectedCellsClick: () => {},
                         ...(await getWorkspaceResourceConfig(
@@ -1157,7 +1157,7 @@ module('Workspace navigation', () => {
                             const scrollable = e.component.getScrollable();
                             scrollable.option('scrollByContent', false);
                             e.component.initDragBehavior();
-                            e.component._attachTablesEvents();
+                            e.component.attachTablesEvents();
                         },
                         ...(await getWorkspaceResourceConfig(
                             [{
@@ -1335,7 +1335,7 @@ module('Workspace navigation', () => {
                             const scrollable = e.component.getScrollable();
                             scrollable.option('scrollByContent', false);
                             e.component.initDragBehavior();
-                            e.component._attachTablesEvents();
+                            e.component.attachTablesEvents();
                         },
                         intervalCount: 3,
                         groupOrientation: 'horizontal',
@@ -1383,7 +1383,7 @@ module('Workspace navigation', () => {
                             const scrollable = e.component.getScrollable();
                             scrollable.option('scrollByContent', false);
                             e.component.initDragBehavior();
-                            e.component._attachTablesEvents();
+                            e.component.attachTablesEvents();
                         },
                         intervalCount: 3,
                         groupOrientation: 'horizontal',
@@ -1459,7 +1459,7 @@ module('Workspace navigation', () => {
                                     const scrollable = e.component.getScrollable();
                                     scrollable.option('scrollByContent', false);
                                     e.component.initDragBehavior();
-                                    e.component._attachTablesEvents();
+                                    e.component.attachTablesEvents();
                                 },
                                 intervalCount,
                                 groupOrientation: 'vertical',
@@ -1515,7 +1515,7 @@ module('Workspace navigation', () => {
                         onContentReady: function(e) {
                             const scrollable = e.component.getScrollable();
                             scrollable.option('scrollByContent', false);
-                            e.component._attachTablesEvents();
+                            e.component.attachTablesEvents();
                         },
                         groupOrientation: 'vertical',
                         startDayHour: 0,

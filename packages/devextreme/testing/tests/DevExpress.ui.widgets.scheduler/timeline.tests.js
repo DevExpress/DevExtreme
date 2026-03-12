@@ -458,7 +458,7 @@ QUnit.module('Timeline Keyboard Navigation', () => {
                         const scrollable = e.component.getScrollable();
                         scrollable.option('scrollByContent', false);
                         e.component.initDragBehavior();
-                        e.component._attachTablesEvents();
+                        e.component.attachTablesEvents();
                     },
                     renovateRender: true,
                     scrolling: { mode: scrollingMode, orientation: 'vertical' },
