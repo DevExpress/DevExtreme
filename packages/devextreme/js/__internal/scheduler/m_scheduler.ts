@@ -2031,7 +2031,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       align = groupValuesOrOptions.alignInView ?? 'center';
     } else {
       if (isDefined(groupValuesOrOptions) || isDefined(allDay)) {
-        errors.log('W0002', 'dxScheduler', 'scrollTo', '26.1', 'Use an object with "group", "allDay" and "alignInView" properties instead of separate parameters.');
+        errors.log('W0002', 'dxScheduler', 'scrollTo(date, group, allDay)', '26.1', 'Use scrollTo(date, { group, allDay, alignInView }) instead.');
       }
 
       groupValues = groupValuesOrOptions;
@@ -2043,7 +2043,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private _isScrollOptionsObject(options?: ScrollToGroupValuesOrOptions): options is ScrollToOptions {
     return Boolean(options) && typeof options === 'object'
-      && ('align' in options || 'allDay' in options || 'group' in options);
+      && ('alignInView' in options || 'allDay' in options || 'group' in options);
   }
 
   private isHorizontalVirtualScrolling() {
