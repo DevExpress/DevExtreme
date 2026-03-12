@@ -1067,24 +1067,23 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   _postprocessRenderItem(args: PostprocessRenderItemInfo<Item>): void {
     this._refreshItemElements();
     super._postprocessRenderItem(args);
-
-    if (this.hasActionSubscription('onItemSwipe')) {
-      this._attachSwipeEvent($(args.itemElement));
-    }
+    this._updateSwipeEventSubscription($(args.itemElement));
   }
 
   _getElementClassToSkipRefreshId(): string {
     return LIST_GROUP_HEADER_CLASS;
   }
 
-  _attachSwipeEvent($itemElement: dxElementWrapper): void {
+  _updateSwipeEventSubscription($itemElement: dxElementWrapper = this._itemElements()): void {
     // @ts-expect-error ts-error
     const endEventName = addNamespace(swipeEventEnd, this.NAME);
-
     eventsEngine.off($itemElement, endEventName);
-    eventsEngine.on($itemElement, endEventName, (e) => {
-      this._itemSwipeEndHandler(e);
-    });
+
+    if (this.hasActionSubscription('onItemSwipe')) {
+      eventsEngine.on($itemElement, endEventName, (e) => {
+        this._itemSwipeEndHandler(e);
+      });
+    }
   }
 
   _itemSwipeEndHandler(e: DxEvent & { offset: number }): void {
@@ -1093,32 +1092,14 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     });
   }
 
-  _onItemSwipeSubscriptionChanged(): void {
-    const $items = this._itemElements();
-
-    // @ts-expect-error ts-error
-    const endEventName = addNamespace(swipeEventEnd, this.NAME);
-
-    $items.each((_index, item) => {
-      const $item = $(item);
-
-      eventsEngine.off($item, endEventName);
-
-      if (this.hasActionSubscription('onItemSwipe')) {
-        this._attachSwipeEvent($item);
-      }
-      return true;
-    });
-  }
-
   on(eventName: string | { [key: string]: Function }, eventHandler?: Function): this {
     const result = super.on(eventName, eventHandler);
 
-    const isItemSwipe = eventName === 'itemSwipe'
+    const isItemSwipeOn = eventName === 'itemSwipe'
       || (isPlainObject(eventName) && Object.prototype.hasOwnProperty.call(eventName, 'itemSwipe'));
 
-    if (isItemSwipe) {
-      this._onItemSwipeSubscriptionChanged();
+    if (isItemSwipeOn) {
+      this._updateSwipeEventSubscription();
     }
 
     return result;
@@ -1127,12 +1108,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   off(eventName: string, eventHandler?: Function): this {
     const result = super.off(eventName, eventHandler);
 
-    const isItemSwipe = eventName === undefined
-      || eventName === 'itemSwipe'
-      || (isPlainObject(eventName) && Object.prototype.hasOwnProperty.call(eventName, 'itemSwipe'));
-
-    if (isItemSwipe) {
-      this._onItemSwipeSubscriptionChanged();
+    if (eventName === 'itemSwipe') {
+      this._updateSwipeEventSubscription();
     }
 
     return result;

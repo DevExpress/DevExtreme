@@ -24,6 +24,7 @@ import eventsEngine from 'common/core/events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
+const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
 const LIST_ITEMS_CLASS = 'dx-list-items';
 const LIST_GROUP_CLASS = 'dx-list-group';
 const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
@@ -1187,7 +1188,7 @@ QUnit.module('options changed', moduleSetup, () => {
         list.off('itemSwipe');
         swipeItem();
 
-        list.on('itemSwipe', swipeHandler);
+        list.on({ 'itemSwipe': swipeHandler });
         swipeItem();
     });
 
@@ -4791,67 +4792,97 @@ QUnit.module('Search', () => {
     });
 });
 
-QUnit.module('Highlighting', () => {
+QUnit.module('Highlighting/selecting', moduleSetup, () => {
 
     const selectTextNodePart = (textNode, startOffset, endOffset) => {
         const selection = window.getSelection();
         const range = document.createRange();
-
         selection.removeAllRanges();
         range.setStart(textNode, startOffset);
         range.setEnd(textNode, endOffset);
         selection.addRange(range);
-
         return selection;
     };
 
-    QUnit.test('list item should not block native text selection events', function(assert) {
+    const getFirstListItemAndTextNode = ($list) => {
+        const $item = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
+        const textNode = $list.find(`.${LIST_ITEM_CONTENT_CLASS}`).eq(0).get(0).firstChild;
+
+        return { $item, textNode };
+    };
+
+    QUnit.test('text selection should not be cleared when dragging on list item without onItemSwipe', function(assert) {
         const $list = $('#list').dxList({
-            items: ['Item 1', 'Item 2']
+            items: ['Item 1', 'Item 2'],
         });
 
-        const item = $list.find(`.${LIST_ITEM_CLASS}`).eq(0).get(0);
+        const { $item, textNode } = getFirstListItemAndTextNode($list);
 
-        const mouseDownEvent = new MouseEvent('mousedown', {
-            bubbles: true,
-            cancelable: true,
-            clientX: 10,
-            clientY: 10,
-        });
+        assert.ok(!!textNode, 'text node found in list item');
+        if(!textNode) return;
 
-        const selectStartEvent = new Event('selectstart', {
-            bubbles: true,
-            cancelable: true,
-        });
+        selectTextNodePart(textNode, 0, 4);
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists before drag');
 
-        const mouseDownNotCanceled = item.dispatchEvent(mouseDownEvent);
-        const selectStartNotCanceled = item.dispatchEvent(selectStartEvent);
+        pointerMock($item).start().down(0, 0).move(50, 0).up();
 
-        assert.ok(mouseDownNotCanceled, 'mousedown is not canceled');
-        assert.notOk(mouseDownEvent.defaultPrevented, 'mousedown default is not prevented');
-        assert.ok(selectStartNotCanceled, 'selectstart is not canceled');
-        assert.notOk(selectStartEvent.defaultPrevented, 'selectstart default is not prevented');
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection is preserved after horizontal drag');
+        window.getSelection().removeAllRanges();
     });
 
-    QUnit.test('text node should be selectable via Selection API', function(assert) {
+    QUnit.test('text selection should be preserved after onItemSwipe handler is removed from options', function(assert) {
         const $list = $('#list').dxList({
-            items: ['Item 1', 'Item 2']
+            items: ['Item 1', 'Item 2'],
+            onItemSwipe: sinon.spy(),
+        });
+        const list = $list.dxList('instance');
+
+        list.option('onItemSwipe', null);
+
+        const { $item, textNode } = getFirstListItemAndTextNode($list);
+        assert.ok(!!textNode, 'text node found in list item');
+        if(!textNode) return;
+
+        selectTextNodePart(textNode, 0, 4);
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists before drag');
+
+        pointerMock($item).start().down(0, 0).move(50, 0).up();
+
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection is preserved after drag when swipe handler is removed');
+        window.getSelection().removeAllRanges();
+    });
+
+    QUnit.test('text selection should reflect itemSwipe on/off subscription state', function(assert) {
+        const $list = $('#list').dxList({
+            items: ['Item 1', 'Item 2'],
         });
 
-        const $item = $list.find('.dx-list-item-content').eq(0);
-        const textNode = $item.get(0).firstChild;
+        const list = $list.dxList('instance');
 
-        assert.ok(!!textNode, 'text node exists');
+        const { $item, textNode } = getFirstListItemAndTextNode($list);
 
-        if(!textNode) {
-            return;
-        }
+        assert.ok(!!textNode, 'text node found in list item');
 
-        const expected = textNode.textContent.slice(0, 4);
-        const selection = selectTextNodePart(textNode, 0, 4);
+        if(!textNode) return;
 
-        assert.strictEqual(selection.toString(), expected, 'text is selected');
-        selection.removeAllRanges();
+        list.on('itemSwipe', sinon.spy());
+
+        selectTextNodePart(textNode, 0, 4);
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists before drag with subscribed swipe handler');
+
+        pointerMock($item).start().down(0, 0).move(50, 0).up();
+
+        assert.strictEqual(window.getSelection().toString(), '', 'text selection is cleared while swipe handler is attached');
+
+        list.off('itemSwipe');
+
+        selectTextNodePart(textNode, 0, 4);
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists before drag');
+
+        pointerMock($item).start().down(0, 0).move(50, 0).up();
+
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection is preserved after drag when swipe handler is removed');
+        window.getSelection().removeAllRanges();
     });
 });
 
