@@ -69,7 +69,7 @@ interface ViewModelDiff {
 
 class SchedulerAppointments extends CollectionWidget<any> {
   // NOTE: The key of this array is `sortedIndex` of appointment rendered in Element
-  $itemBySortedIndex: dxElementWrapper[] = [];
+  $itemBySortedIndex!: dxElementWrapper[];
 
   _appointmentClickTimeout: any;
 
@@ -424,6 +424,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
 
   _init() {
     super._init();
+    this.$itemBySortedIndex = [];
     this._kbn = new AppointmentsKeyboardNavigation(this);
     this._focusedItemIndexBeforeRender = -1;
     this.$element().addClass(COMPONENT_CLASS);
