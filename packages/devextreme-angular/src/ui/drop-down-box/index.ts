@@ -24,13 +24,12 @@ import {
 } from '@angular/core';
 
 
-import DataSource from 'devextreme/data/data_source';
-import { DropDownPredefinedButton, FieldAddons } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
-import { TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { dxPopupOptions } from 'devextreme/ui/popup';
-import { ChangeEvent, ClosedEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/drop_down_box';
+import type { DropDownPredefinedButton, FieldAddons } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
+import type { TextEditorButton, LabelMode, EditorStyle, ValidationMessageMode, Mode, Position, ValidationStatus } from 'devextreme/common';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { dxPopupOptions } from 'devextreme/ui/popup';
+import type { ChangeEvent, ClosedEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/drop_down_box';
 
 import DxDropDownBox from 'devextreme/ui/drop_down_box';
 

@@ -226,12 +226,12 @@ QUnit.module('Workspace Day markup', dayModuleConfig, () => {
         this.instance.option('intervalCount', 2);
 
         let cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(cells.length, this.instance._getCellCountInDay() * 2, 'view has right cell count');
+        assert.equal(cells.length, this.instance.getCellCountInDay() * 2, 'view has right cell count');
 
         this.instance.option('intervalCount', 4);
 
         cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(cells.length, this.instance._getCellCountInDay() * 4, 'view has right cell count');
+        assert.equal(cells.length, this.instance.getCellCountInDay() * 4, 'view has right cell count');
     });
 });
 
@@ -520,12 +520,12 @@ QUnit.module('Workspace Week markup', weekModuleConfig, () => {
         this.instance.option('intervalCount', 2);
 
         let cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(cells.length, this.instance._getCellCountInDay() * 7 * 2, 'view has right cell count');
+        assert.equal(cells.length, this.instance.getCellCountInDay() * 7 * 2, 'view has right cell count');
 
         this.instance.option('intervalCount', 4);
 
         cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(cells.length, this.instance._getCellCountInDay() * 7 * 4, 'view has right cell count');
+        assert.equal(cells.length, this.instance.getCellCountInDay() * 7 * 4, 'view has right cell count');
     });
 });
 
@@ -732,12 +732,12 @@ QUnit.module('Workspace Work Week markup', workWeekModuleConfig, () => {
         this.instance.option('intervalCount', 2);
 
         let cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(cells.length, this.instance._getCellCountInDay() * 5 * 2, 'view has right cell count');
+        assert.equal(cells.length, this.instance.getCellCountInDay() * 5 * 2, 'view has right cell count');
 
         this.instance.option('intervalCount', 4);
 
         cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-        assert.equal(cells.length, this.instance._getCellCountInDay() * 5 * 4, 'view has right cell count');
+        assert.equal(cells.length, this.instance.getCellCountInDay() * 5 * 4, 'view has right cell count');
     });
 
     QUnit.test('Workspace work week view should contain 15 headers if intervalCount=3', async function(assert) {

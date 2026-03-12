@@ -1,6 +1,6 @@
 import { isCommandKeyPressed } from '@js/common/core/events/utils';
 import { isDefined } from '@js/core/utils/type';
-import type { Column } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { FocusedCellPosition } from '@ts/grids/grid_core/keyboard_navigation/const';
 import { KEY_CODES } from '@ts/grids/grid_core/keyboard_navigation/const';
 import type { ColumnKeyboardNavigationController } from '@ts/grids/grid_core/keyboard_navigation/m_column_keyboard_navigation_core';

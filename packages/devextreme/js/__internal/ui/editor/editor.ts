@@ -270,10 +270,16 @@ class Editor<
     return validationErrors;
   }
 
+  _toggleAriaDescribedBy(value?: string | null): void {
+    this.setAria('describedby', value);
+  }
+
   _disposeValidationMessage(): void {
     if (this._$validationMessage) {
       this._$validationMessage.remove();
-      this.setAria('describedby', null);
+
+      this._toggleAriaDescribedBy(null);
+
       this._$validationMessage = undefined;
       this._validationMessage = undefined;
     }
@@ -289,6 +295,7 @@ class Editor<
       validationStatus,
       _showValidationMessage: showValidationMessage,
     } = this.option();
+
     const isValid = this.option('isValid') && validationStatus !== VALIDATION_STATUS_INVALID;
     const validationErrors = this._getValidationErrors();
     const $element = this.$element();
@@ -300,6 +307,7 @@ class Editor<
     }
 
     this._disposeValidationMessage();
+
     if (!isValid && validationErrors) {
       const {
         validationMessageMode,
@@ -309,8 +317,10 @@ class Editor<
       } = this.option();
 
       this._$validationMessage = $('<div>').appendTo($element);
+
       const validationMessageContentId = `dx-${new Guid()}`;
-      this.setAria('describedby', validationMessageContentId);
+
+      this._toggleAriaDescribedBy(validationMessageContentId);
 
       // @ts-expect-error ts-error
       this._validationMessage = new ValidationMessage(this._$validationMessage, extend({
@@ -324,6 +334,7 @@ class Editor<
         boundary: validationBoundary,
         contentId: validationMessageContentId,
       }, this._options.cache('validationTooltipOptions')));
+
       this._bindInnerWidgetOptions(this._validationMessage, 'validationTooltipOptions');
     }
   }

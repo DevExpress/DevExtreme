@@ -22,11 +22,10 @@ import {
 } from '@angular/core';
 
 
-import DataSource from 'devextreme/data/data_source';
-import { dxGanttColumn, dxGanttContextMenu, dxGanttFilterRow, dxGanttHeaderFilter, ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, SelectionChangedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent, GanttScaleType, dxGanttSorting, dxGanttStripLine, GanttTaskTitlePosition, dxGanttToolbar } from 'devextreme/ui/gantt';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { FirstDayOfWeek } from 'devextreme/common';
+import type { dxGanttColumn, dxGanttContextMenu, dxGanttFilterRow, dxGanttHeaderFilter, ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, DependencyDeletedEvent, DependencyDeletingEvent, DependencyInsertedEvent, DependencyInsertingEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ResourceAssignedEvent, ResourceAssigningEvent, ResourceDeletedEvent, ResourceDeletingEvent, ResourceInsertedEvent, ResourceInsertingEvent, ResourceManagerDialogShowingEvent, ResourceUnassignedEvent, ResourceUnassigningEvent, ScaleCellPreparedEvent, SelectionChangedEvent, TaskClickEvent, TaskDblClickEvent, TaskDeletedEvent, TaskDeletingEvent, TaskEditDialogShowingEvent, TaskInsertedEvent, TaskInsertingEvent, TaskMovingEvent, TaskUpdatedEvent, TaskUpdatingEvent, GanttScaleType, dxGanttSorting, dxGanttStripLine, GanttTaskTitlePosition, dxGanttToolbar } from 'devextreme/ui/gantt';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { FirstDayOfWeek } from 'devextreme/common';
 
 import DxGantt from 'devextreme/ui/gantt';
 

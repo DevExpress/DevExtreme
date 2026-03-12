@@ -16,9 +16,9 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
-import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
-import { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
+import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import type { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
+import type { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
 
 import {
     DxIntegrationModule,

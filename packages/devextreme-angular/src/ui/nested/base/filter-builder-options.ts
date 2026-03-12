@@ -5,7 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
-import { ContentReadyEvent, DisposingEvent, dxFilterBuilderCustomOperation, dxFilterBuilderField, EditorPreparedEvent, EditorPreparingEvent, GroupOperation, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
+import type { ContentReadyEvent, DisposingEvent, dxFilterBuilderCustomOperation, dxFilterBuilderField, EditorPreparedEvent, EditorPreparingEvent, GroupOperation, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
 
 @Component({
     template: ''

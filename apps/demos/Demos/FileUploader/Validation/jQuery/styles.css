@@ -3,6 +3,10 @@
   float: left;
 }
 
+.file-uploader-block + .file-uploader-block {
+  float: right;
+}
+
 .note {
   font-size: 10pt;
   color: var(--dx-texteditor-color-label);

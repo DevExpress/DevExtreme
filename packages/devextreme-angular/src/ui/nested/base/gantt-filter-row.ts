@@ -5,8 +5,8 @@ import {
     Component,
 } from '@angular/core';
 
-import { ApplyFilterMode } from 'devextreme/common/grids';
-import { dxGanttFilterRowOperationDescriptions } from 'devextreme/ui/gantt';
+import type { ApplyFilterMode } from 'devextreme/common/grids';
+import type { dxGanttFilterRowOperationDescriptions } from 'devextreme/ui/gantt';
 
 @Component({
     template: ''

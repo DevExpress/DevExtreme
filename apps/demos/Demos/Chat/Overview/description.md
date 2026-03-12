@@ -25,3 +25,7 @@ Each message includes information about the sender ([author](/Documentation/ApiR
 If a user enters a message, the Chat component raises the [messageEntered](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onMessageEntered) event. Use the event handler to process the message. For example, you can display the message in the message feed and send the message to the server for storage.
 
 When users start or complete text entry, our Chat component raises [typingStart](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onTypingStart) and [typingEnd](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#onTypingEnd) events. Use these events to manage the [typingUsers](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#typingUsers) array. The DevExtreme Chat uses this array to display a list of active users.
+
+## Speech Recognition
+
+Users can enter voice-driven messages when [speechToTextEnabled](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#speechToTextEnabled) is set to `true`. Our Chat component uses [Web Speech APIs](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) for speech recognition. Use [speechToTextOptions](/Documentation/ApiReference/UI_Components/dxChat/Configuration/#speechToTextOptions) to define custom speech recognizer settings, handle related events, and customize the speech-to-text button appearance.

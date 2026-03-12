@@ -5,8 +5,8 @@ import {
     Component,
 } from '@angular/core';
 
-import { EditorStyle, LabelMode, MaskMode, Position, TextBoxPredefinedButton, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, TextBoxType, ValueChangedEvent } from 'devextreme/ui/text_box';
+import type { EditorStyle, LabelMode, MaskMode, Position, TextBoxPredefinedButton, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import type { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, TextBoxType, ValueChangedEvent } from 'devextreme/ui/text_box';
 
 @Component({
     template: ''

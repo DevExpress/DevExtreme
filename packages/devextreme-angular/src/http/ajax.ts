@@ -1,8 +1,12 @@
 import {
-  HttpClient, HttpEventType, HttpParams, HttpEvent, HttpErrorResponse, HttpResponse,
+  HttpClient,
+  HttpEventType,
+  HttpParams,
+  HttpEvent,
+  HttpErrorResponse,
+  HttpResponse,
+  HttpHeaders,
 } from '@angular/common/http';
-import { throwError, Subject } from 'rxjs';
-import { takeUntil, timeoutWith } from 'rxjs/operators';
 import { Deferred, DeferredObj } from 'devextreme/core/utils/deferred';
 import { isDefined } from 'devextreme/core/utils/type';
 import { getWindow } from 'devextreme/core/utils/window';
@@ -31,6 +35,10 @@ interface XHRSurrogate {
   response?: HttpResponse<object>;
   status?: number;
   statusText?: string;
+}
+
+interface SubscriptionLike {
+  unsubscribe: () => void;
 }
 
 const PARSER_ERROR = 'parsererror';
@@ -206,7 +214,9 @@ function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurro
 }
 
 export const sendRequestFactory = (httpClient: HttpClient) => (options: Options) => {
-  const abort$ = new Subject<void>();
+  let subscription: SubscriptionLike | null = null;
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
   const deferred: DeferredResult = Deferred();
   const result = deferred.promise() as Result;
   const isGet = isGetMethod(options);
@@ -216,13 +226,23 @@ export const sendRequestFactory = (httpClient: HttpClient) => (options: Options)
   options.crossDomain = isCrossDomain(options.url);
   options.cache = isCacheNeed(options);
 
+  const clearTimeoutIfSet = () => {
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+  };
+
   const headers = getRequestHeaders(options);
   const xhrSurrogate: XHRSurrogate = {
     type: 'XMLHttpRequestSurrogate',
     aborted: false,
     abort() {
       this.aborted = true;
-      abort$.next();
+      clearTimeoutIfSet();
+      subscription?.unsubscribe();
+      subscription = null;
+      rejectIfAborted(deferred, this, () => options.upload?.onabort?.(this));
     },
   };
 
@@ -276,18 +296,36 @@ export const sendRequestFactory = (httpClient: HttpClient) => (options: Options)
       },
     );
 
-  const subscriptionCallbacks = upload
-    ? getUploadCallbacks
-    : getRequestCallbacks;
+  const callbacks = upload
+    ? getUploadCallbacks(options, deferred, xhrSurrogate)
+    : getRequestCallbacks(options, deferred, xhrSurrogate);
 
-  request.pipe.apply(request, [
-    takeUntil(abort$) as any,
-    ...options.timeout
-      ? [timeoutWith(options.timeout, throwError({ statusText: TIMEOUT, status: 0, ok: false })) as any]
-      : [],
-  ]).subscribe(
-    subscriptionCallbacks(options, deferred, xhrSurrogate),
-  );
+  if (options.timeout) {
+    timeoutId = setTimeout(() => {
+      timeoutId = null;
+      subscription?.unsubscribe();
+      subscription = null;
+      const timeoutError = {
+        statusText: TIMEOUT,
+        status: 0,
+        ok: false,
+        headers: new HttpHeaders(),
+      } as HttpErrorResponse;
+      callbacks.error(timeoutError);
+    }, options.timeout);
+  }
+
+  subscription = request.subscribe({
+    next(value) {
+      clearTimeoutIfSet();
+      callbacks.next(value);
+    },
+    error(err) {
+      clearTimeoutIfSet();
+      callbacks.error(err);
+    },
+    complete: callbacks.complete,
+  });
 
   return result;
 };

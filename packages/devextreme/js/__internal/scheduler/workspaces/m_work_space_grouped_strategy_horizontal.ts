@@ -48,7 +48,7 @@ class HorizontalGroupedStrategy {
   }
 
   getTotalRowCount() {
-    return this._workSpace._getRowCount();
+    return this._workSpace.getRowCount();
   }
 
   calculateTimeCellRepeatCount() {
