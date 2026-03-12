@@ -4792,7 +4792,10 @@ QUnit.module('Search', () => {
     });
 });
 
-QUnit.module('Highlighting/selecting', moduleSetup, () => {
+QUnit.module('Highlighting/selecting', { ...moduleSetup, afterEach: function() {
+    moduleSetup.afterEach.call(this);
+    window.getSelection().removeAllRanges();
+} }, () => {
 
     const selectTextNodePart = (textNode, startOffset, endOffset) => {
         const selection = window.getSelection();
@@ -4812,12 +4815,11 @@ QUnit.module('Highlighting/selecting', moduleSetup, () => {
     };
 
     QUnit.test('text selection should not be cleared when dragging on list item without onItemSwipe', function(assert) {
-        const $list = $('#list').dxList({
+        this.element.dxList({
             items: ['Item 1', 'Item 2'],
         });
 
-        const { $item, textNode } = getFirstListItemAndTextNode($list);
-
+        const { $item, textNode } = getFirstListItemAndTextNode(this.element);
         assert.ok(!!textNode, 'text node found in list item');
         if(!textNode) return;
 
@@ -4831,15 +4833,15 @@ QUnit.module('Highlighting/selecting', moduleSetup, () => {
     });
 
     QUnit.test('text selection should be preserved after onItemSwipe handler is removed from options', function(assert) {
-        const $list = $('#list').dxList({
+        this.element.dxList({
             items: ['Item 1', 'Item 2'],
             onItemSwipe: sinon.spy(),
         });
-        const list = $list.dxList('instance');
+        const list = this.element.dxList('instance');
 
         list.option('onItemSwipe', null);
 
-        const { $item, textNode } = getFirstListItemAndTextNode($list);
+        const { $item, textNode } = getFirstListItemAndTextNode(this.element);
         assert.ok(!!textNode, 'text node found in list item');
         if(!textNode) return;
 
@@ -4853,13 +4855,13 @@ QUnit.module('Highlighting/selecting', moduleSetup, () => {
     });
 
     QUnit.test('text selection should reflect itemSwipe on/off subscription state', function(assert) {
-        const $list = $('#list').dxList({
+        this.element.dxList({
             items: ['Item 1', 'Item 2'],
         });
 
-        const list = $list.dxList('instance');
+        const list = this.element.dxList('instance');
 
-        const { $item, textNode } = getFirstListItemAndTextNode($list);
+        const { $item, textNode } = getFirstListItemAndTextNode(this.element);
 
         assert.ok(!!textNode, 'text node found in list item');
 
