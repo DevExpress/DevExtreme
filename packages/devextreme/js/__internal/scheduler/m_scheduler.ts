@@ -2031,7 +2031,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       align = groupValuesOrOptions.alignInView ?? 'center';
     } else {
       if (isDefined(groupValuesOrOptions) || isDefined(allDay)) {
-        errors.log('W0002', 'dxScheduler', 'scrollTo(date, group, allDay)', 'v26.1', 'Use scrollTo(date, { group, allDay, alignInView }) instead.');
+        errors.log('W0002', 'dxScheduler', 'scrollTo(date, group, allDay)', '26.1', 'Use scrollTo(date, { group, allDay, alignInView }) instead.');
       }
 
       groupValues = groupValuesOrOptions;

@@ -41,7 +41,7 @@ describe('Scheduler scrollTo', () => {
     document.body.innerHTML = '';
   });
 
-  it('should not log warnings when using scrollTo API', async () => {
+  it('should log deprecation warning when using scrollTo API with deprecated signature', async () => {
     const loggerWarnSpy = jest.spyOn(logger, 'warn');
 
     const { scheduler } = await createScheduler({
