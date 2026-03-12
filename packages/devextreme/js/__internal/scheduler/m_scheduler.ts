@@ -1164,7 +1164,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   _initMarkupCore() {
     this._readyToRenderAppointments = hasWindow();
 
-    this._workSpace && this._cleanWorkspace();
+    this._workSpace && this.cleanWorkSpace();
 
     this._renderWorkSpace();
     this._appointments.option({
@@ -1253,7 +1253,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getResizableStep: () => (this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0),
       getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),
       getViewDataProvider: () => this._workSpace?.viewDataProvider,
-      isVerticalGroupedWorkSpace: () => this._workSpace._isVerticalGroupedWorkSpace(),
+      isVerticalGroupedWorkSpace: () => this._workSpace.isVerticalGroupedWorkSpace(),
       isDateAndTimeView: () => isDateAndTimeView(this._workSpace.type),
       onContentReady: () => {
         this._workSpace?.option('allDayExpanded', this._isAllDayExpanded());
@@ -1297,12 +1297,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
 
     this._allowDragging() && this._workSpace.initDragBehavior(this, this._all);
-    this._workSpace._attachTablesEvents();
+    this._workSpace.attachTablesEvents();
     this._workSpace.getWorkArea().append(this._appointments.$element());
 
     this._recalculateWorkspace();
     if (currentViewOptions.startDate) {
-      this._updateOption('header', 'currentDate', this._workSpace._getHeaderDate());
+      this._updateOption('header', 'currentDate', this._workSpace.getHeaderDate());
     }
   }
 
@@ -1418,7 +1418,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   _refreshWorkSpace(): void {
-    this._cleanWorkspace();
+    this.cleanWorkSpace();
 
     delete this._workSpace;
 
@@ -1433,7 +1433,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  _cleanWorkspace() {
+  cleanWorkSpace() {
     this._appointments.$element().detach();
     this._workSpace._dispose();
     this._workSpace.$element().remove();

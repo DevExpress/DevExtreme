@@ -163,7 +163,7 @@ QUnit.module('Vertical Workspace with horizontal scrollbar', {
         const $element = this.instance.$element();
         $element.css('width', 1000);
 
-        sinon.stub(this.instance, '_getWorkSpaceWidth').returns(50);
+        sinon.stub(this.instance, 'getWorkSpaceWidth').returns(50);
 
         triggerHidingEvent($element);
         triggerShownEvent($element);

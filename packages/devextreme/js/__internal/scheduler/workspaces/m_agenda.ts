@@ -91,7 +91,7 @@ class SchedulerAgenda extends WorkSpace {
           if (this._$groupTable) {
             this._$groupTable.remove();
             this._$groupTable = null;
-            this._detachGroupCountClass();
+            this.detachGroupCountClass();
           }
         } else if (!this._$groupTable) {
           this._initGroupTable();
@@ -114,11 +114,11 @@ class SchedulerAgenda extends WorkSpace {
     return false;
   }
 
-  _isVerticalGroupedWorkSpace() {
+  protected override isVerticalGroupedWorkSpace() {
     return false;
   }
 
-  _getElementClass() {
+  protected override getElementClass() {
     return AGENDA_CLASS;
   }
 
@@ -126,7 +126,7 @@ class SchedulerAgenda extends WorkSpace {
     return agendaUtils.calculateStartViewDate(this.option('currentDate') as any, this.option('startDayHour') as any);
   }
 
-  _getRowCount() {
+  protected override getRowCount() {
     return this.option('agendaDuration') as number;
   }
 
@@ -134,17 +134,17 @@ class SchedulerAgenda extends WorkSpace {
     return 1;
   }
 
-  _getTimePanelRowCount() {
+  protected override getTimePanelRowCount() {
     return this.option('agendaDuration') as number;
   }
 
-  _renderAllDayPanel() { return noop(); }
+  protected override renderAllDayPanel() { return noop(); }
 
-  _updateAllDayVisibility() { return noop(); }
+  protected override updateAllDayVisibility() { return noop(); }
 
   _updateAllDayHeight() { return noop(); }
 
-  _initWorkSpaceUnits() {
+  protected override initWorkSpaceUnits() {
     this._initGroupTable();
     this._$timePanel = $('<table>').attr('aria-hidden', true).addClass(TIME_PANEL_CLASS);
     this._$dateTable = $('<table>').attr('aria-hidden', true).addClass(DATE_TABLE_CLASS);
@@ -159,10 +159,10 @@ class SchedulerAgenda extends WorkSpace {
     }
   }
 
-  _renderView() {
+  protected override renderView() {
     this._startViewDate = this._calculateStartViewDate();
     this._rows = [];
-    this._initPositionHelper();
+    this.initPositionHelper();
   }
 
   _recalculateAgenda(rows) {
@@ -176,14 +176,14 @@ class SchedulerAgenda extends WorkSpace {
     this._rows = rows;
 
     if (this._$groupTable) {
-      cellTemplates = this._renderGroupHeader();
+      cellTemplates = this.renderGroupHeader();
       this._setGroupHeaderCellsHeight();
     }
 
-    this._renderTimePanel();
-    this._renderDateTable();
+    this.renderTimePanel();
+    this.renderDateTable();
     (this.invoke as any)('onAgendaReady', rows);
-    this._applyCellTemplates(cellTemplates);
+    this.applyCellTemplates(cellTemplates);
     this._dateTableScrollable.update();
   }
 
@@ -194,15 +194,15 @@ class SchedulerAgenda extends WorkSpace {
     this._dateTableScrollable.$content().append(this._$noDataContainer);
   }
 
-  _setTableSizes() { return noop(); }
+  protected override setTableSizes() { return noop(); }
 
-  _toggleHorizontalScrollClass() { return noop(); }
+  protected override toggleHorizontalScrollClass() { return noop(); }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _createCrossScrollingConfig(argument?: any) { return noop(); }
 
   _setGroupHeaderCellsHeight() {
-    const $cells = this._getGroupHeaderCells().filter((_, element) => !element.getAttribute('rowSpan'));
+    const $cells = this.getGroupHeaderCells().filter((_, element) => !element.getAttribute('rowSpan'));
     const rows = this._removeEmptyRows(this._rows);
 
     if (!rows.length) {
@@ -232,7 +232,7 @@ class SchedulerAgenda extends WorkSpace {
     return result;
   }
 
-  _attachGroupCountClass() {
+  protected override attachGroupCountClass() {
     const className = getVerticalGroupCountClass(this.option('groups'));
     (this.$element() as any).addClass(className);
   }
@@ -252,11 +252,11 @@ class SchedulerAgenda extends WorkSpace {
     return result;
   }
 
-  _getGroupHeaderContainer() {
+  protected override getGroupHeaderContainer() {
     return this._$groupTable;
   }
 
-  _makeGroupRows() {
+  protected override makeGroupRows() {
     const resourceManager = this.option('getResourceManager')();
     const allAppointments = (this.option('getFilteredItems') as any)();
     const tree = reduceResourcesTree(
@@ -273,7 +273,7 @@ class SchedulerAgenda extends WorkSpace {
       cellTag: 'th',
       groupTableClass: GROUP_TABLE_CLASS,
       groupRowClass: GROUP_ROW_CLASS,
-      groupCellClass: this._getGroupHeaderClass(),
+      groupCellClass: this.getGroupHeaderClass(),
       groupCellCustomContent(cell: HTMLDivElement, cellTextElement: HTMLElement, index: number, node: GroupNode) {
         const container = domAdapter.createElement('div');
         container.className = getGroupHeaderContentClass;
@@ -328,11 +328,11 @@ class SchedulerAgenda extends WorkSpace {
     }
   }
 
-  _createWorkSpaceElements() {
-    this._createWorkSpaceStaticElements();
+  protected override createWorkSpaceElements() {
+    this.createWorkSpaceStaticElements();
   }
 
-  _createWorkSpaceStaticElements() {
+  protected override createWorkSpaceStaticElements() {
     this._$dateTableContainer.append(this._$dateTable);
     this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
 
@@ -344,17 +344,17 @@ class SchedulerAgenda extends WorkSpace {
     this.$element().append(this._dateTableScrollable.$element());
   }
 
-  _renderDateTable() {
-    this._renderTableBody({
+  protected override renderDateTable() {
+    this.renderTableBody({
       container: getPublicElement(this._$dateTable),
       rowClass: DATE_TABLE_ROW_CLASS,
-      cellClass: this._getDateTableCellClass(),
+      cellClass: this.getDateTableCellClass(),
     });
   }
 
-  _attachTablesEvents() { return noop(); }
+  protected override attachTablesEvents() { return noop(); }
 
-  _attachEvents() { return noop(); }
+  protected override attachEvents() { return noop(); }
 
   _cleanCellDataCache() { return noop(); }
 
@@ -380,7 +380,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _renderTableBody(options: any, delayCellTemplateRendering?: any) {
+  protected override renderTableBody(options: any, delayCellTemplateRendering?: any) {
     const cellTemplates: any[] = [];
     const cellTemplateOpt = options.cellTemplate;
 
@@ -429,7 +429,7 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     $(options.container).append($('<tbody>').append(this._$rows));
-    this._applyCellTemplates(cellTemplates);
+    this.applyCellTemplates(cellTemplates);
   }
 
   _setLastRowClass() {
@@ -440,10 +440,10 @@ class SchedulerAgenda extends WorkSpace {
     }
   }
 
-  _renderTimePanel() {
-    this._renderTableBody({
+  protected override renderTimePanel() {
+    this.renderTableBody({
       container: getPublicElement(this._$timePanel),
-      rowCount: this._getTimePanelRowCount(),
+      rowCount: this.getTimePanelRowCount(),
       cellCount: 1,
       rowClass: TIME_PANEL_ROW_CLASS,
       cellClass: TIME_PANEL_CELL_CLASS,
@@ -491,7 +491,7 @@ class SchedulerAgenda extends WorkSpace {
   onDataSourceChanged(appointments?: SafeAppointment[]) {
     super.onDataSourceChanged();
 
-    this._renderView();
+    this.renderView();
 
     const rows = this._calculateRows(appointments);
     this._recalculateAgenda(rows);

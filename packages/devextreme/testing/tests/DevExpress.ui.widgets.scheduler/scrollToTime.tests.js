@@ -142,7 +142,7 @@ QUnit.module('Scrolling to time', () => {
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace._getScrollCoordinates(new Date(2015, 1, 9, 9, 5)).left,
+                    scheduler.instance._workSpace.getScrollCoordinates(new Date(2015, 1, 9, 9, 5)).left,
                     1.001,
                     'scrollBy was called with right distance',
                 );
@@ -170,7 +170,7 @@ QUnit.module('Scrolling to time', () => {
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace._getScrollCoordinates(new Date(2015, 1, 9, 9, 5)).left - scrollLeft - offset,
+                    scheduler.instance._workSpace.getScrollCoordinates(new Date(2015, 1, 9, 9, 5)).left - scrollLeft - offset,
                     1.001,
                     'scrollBy was called with right distance',
                 );
@@ -196,7 +196,7 @@ QUnit.module('Scrolling to time', () => {
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace._getScrollCoordinates(new Date(2015, 1, 11, 9, 5)).left,
+                    scheduler.instance._workSpace.getScrollCoordinates(new Date(2015, 1, 11, 9, 5)).left,
                     1.001,
                     'scrollBy was called with right distance',
                 );
@@ -225,7 +225,7 @@ QUnit.module('Scrolling to time', () => {
 
                 assert.roughEqual(
                     scrollBy.getCall(0).args[0].left,
-                    scheduler.instance._workSpace._getScrollCoordinates(new Date(2015, 1, 11, 9, 5)).left - scrollLeft - offset,
+                    scheduler.instance._workSpace.getScrollCoordinates(new Date(2015, 1, 11, 9, 5)).left - scrollLeft - offset,
                     1.001,
                     'scrollBy was called with right distance',
                 );
