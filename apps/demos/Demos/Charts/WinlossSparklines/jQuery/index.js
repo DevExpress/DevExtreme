@@ -7,8 +7,10 @@ $(() => {
     showMinMax: true,
     winlossThreshold: 8000,
     tooltip: {
-      format: 'currency',
-      precision: 2,
+      format: {
+        type: 'currency',
+        precision: 2,
+      },
     },
   };
   const nickelOptions = {
@@ -22,8 +24,10 @@ $(() => {
     lossColor: '#8076bb',
     winlossThreshold: 19000,
     tooltip: {
-      format: 'currency',
-      precision: 2,
+      format: {
+        type: 'currency',
+        precision: 2,
+      },
     },
   };
   const palladiumOptions = {
@@ -36,8 +40,10 @@ $(() => {
     lossColor: '#ebdd8f',
     firstLastColor: '#e55253',
     tooltip: {
-      format: 'currency',
-      precision: 2,
+      format: {
+        type: 'currency',
+        precision: 2,
+      },
     },
   };
 

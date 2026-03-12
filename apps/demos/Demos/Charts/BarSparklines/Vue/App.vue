@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="long-title"><h3>Monthly Prices of Aluminium, Nickel and Copper</h3></div>
+    <div class="long-title"><h3>Monthly Prices of Copper, Nickel and Palladium</h3></div>
     <div id="chart-demo">
       <table
         class="demo-table"
@@ -8,9 +8,9 @@
       >
         <tr>
           <th><div class="dx-screen-reader-only">Year</div></th>
-          <th>Aluminium (USD/ton)</th>
-          <th>Nickel (USD/ton)</th>
           <th>Copper (USD/ton)</th>
+          <th>Nickel (USD/ton)</th>
+          <th>Palladium (USD/troy ounce)</th>
         </tr>
         <tbody
           v-for="(year, index) in years"
