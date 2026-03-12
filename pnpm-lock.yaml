@@ -583,7 +583,7 @@ importers:
         version: 0.15.1
     devDependencies:
       '@angular/platform-server':
-        specifier: ~21.1.0
+        specifier: 21.1.6
         version: 21.1.6(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/compiler@21.1.6)(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@21.1.6(@angular/animations@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)(zone.js@0.15.1)))(@angular/common@21.1.6(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@21.1.6(@angular/compiler@21.1.6)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)
       '@babel/core':
         specifier: 7.28.6
@@ -1413,13 +1413,13 @@ importers:
         specifier: 3.5.0
         version: 3.5.0(axe-core@4.11.1)(testcafe@3.7.4)
       '@testing-library/dom':
-        specifier: ^10.4.0
+        specifier: 10.4.0
         version: 10.4.0
       '@testing-library/jest-dom':
-        specifier: ^6.6.3
+        specifier: 6.6.3
         version: 6.6.3
       '@testing-library/user-event':
-        specifier: ^14.5.2
+        specifier: 14.5.2
         version: 14.5.2(@testing-library/dom@10.4.0)
       '@types/enzyme':
         specifier: 3.10.19
@@ -2163,7 +2163,7 @@ importers:
         specifier: 11.2.0
         version: 11.2.0
       immutable:
-        specifier: ^5.1.5
+        specifier: 5.1.5
         version: 5.1.5
       precinct:
         specifier: 11.0.5
