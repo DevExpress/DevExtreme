@@ -894,9 +894,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this._appointments.option('items', viewModel);
     this.appointmentDataSource.cleanState();
-    if (this.isAgenda()) {
-      this._workSpace.renderAgendaLayout(viewModel);
-    }
   }
 
   private initExpressions(fields: IFieldExpr) {
