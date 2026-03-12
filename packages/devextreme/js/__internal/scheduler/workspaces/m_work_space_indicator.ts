@@ -200,8 +200,8 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return cellClass;
   }
 
-  _cleanView() {
-    super._cleanView();
+  protected override cleanView() {
+    super.cleanView();
 
     this.cleanDateTimeIndicator();
   }

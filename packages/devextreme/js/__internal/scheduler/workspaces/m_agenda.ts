@@ -160,7 +160,7 @@ class SchedulerAgenda extends WorkSpace {
 
   private recalculateAgenda(rows) {
     let cellTemplates = [];
-    this._cleanView();
+    this.cleanView();
 
     if (this.rowsIsEmpty(rows)) {
       this.renderNoData();
@@ -304,8 +304,7 @@ class SchedulerAgenda extends WorkSpace {
     };
   }
 
-  _cleanView() {
-    this._$dateTable.empty();
+  protected override cleanView() {
     this._$timePanel.empty();
 
     if (this._$groupTable) {

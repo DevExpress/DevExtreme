@@ -2314,7 +2314,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         this.cleanWorkSpace();
         break;
       case 'groups':
-        this._cleanView();
+        this.cleanView();
         this.removeAllDayElements();
         this.initGrouping();
         this.repaint();
@@ -2328,7 +2328,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         break;
       case 'showAllDayPanel':
         if (this.isVerticalGroupedWorkSpace()) {
-          this._cleanView();
+          this.cleanView();
           this.removeAllDayElements();
           this.initGrouping();
           this.repaint();
@@ -2424,7 +2424,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected cleanWorkSpace() {
-    this._cleanView();
+    this.cleanView();
     this.toggleGroupedClass();
     this.toggleWorkSpaceWithOddCells();
 
@@ -2822,8 +2822,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this._$allDayTitle?.remove();
   }
 
-  // TODO: make it private. Being used as public method by external code.
-  _cleanView(): void {
+  protected cleanView(): void {
     this.cache.clear();
     this.cleanTableWidths();
     this.cellsSelectionState.clearSelectedAndFocusedCells();

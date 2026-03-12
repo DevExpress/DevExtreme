@@ -94,7 +94,7 @@ describe('scheduler workspace', () => {
       jest.spyOn(workspace.cache, 'clear');
 
       workspace.cache.memo('test', () => 'value');
-      workspace._cleanView();
+      (workspace as any).cleanView();
 
       expect(workspace.cache.clear).toHaveBeenCalledTimes(1);
       expect(workspace.cache.size).toBe(0);
