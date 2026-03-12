@@ -730,7 +730,7 @@ describe('Appointment popup form', () => {
 
       scheduler.showAppointmentPopup();
 
-      const appointmentForm = scheduler._appointmentForm.dxForm;
+      const appointmentForm = (scheduler as any).appointmentForm.dxForm;
       const startDate = appointmentForm.getEditor('startDate');
       const toolbarItemsBefore = startDate._getPopupToolbarItems();
 
