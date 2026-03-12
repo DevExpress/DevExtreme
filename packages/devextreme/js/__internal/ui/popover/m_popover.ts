@@ -163,17 +163,23 @@ class Popover<
     this.$element().addClass(POPOVER_CLASS);
     this.$wrapper()?.addClass(POPOVER_WRAPPER_CLASS);
 
-    const { toolbarItems } = this.option();
+    const { toolbarItems, visible } = this.option();
 
     const isInteractive = toolbarItems?.length;
     this.setAria('role', isInteractive ? 'dialog' : 'tooltip');
+
+    if (visible) {
+      this._attachEscapeKeyHandler();
+    }
   }
 
   _initEscapeKeyHandler(): void {
     this._documentEscapeKeyHandler = (e: KeyboardEvent): void => {
       const { visible } = this.option();
+      const overlayStack = this._overlayStack();
+      const isTopOverlay = overlayStack[overlayStack.length - 1] === this;
 
-      if (normalizeKeyName(e) === ESC_KEY_NAME && visible) {
+      if (normalizeKeyName(e) === ESC_KEY_NAME && visible && isTopOverlay) {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.hide();
       }
@@ -198,7 +204,6 @@ class Popover<
     super._render.apply(this, arguments);
     this._detachEvents(this.option('target'));
     this._attachEvents();
-    this._attachEscapeKeyHandler();
   }
 
   _detachEvents(target): void {
@@ -565,10 +570,9 @@ class Popover<
     super._clean.apply(this, arguments);
   }
 
-  _dispose(...args: unknown[]): void {
+  _dispose(): void {
     this._detachEscapeKeyHandler();
-    // @ts-expect-error ts-error
-    super._dispose(...args);
+    super._dispose();
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
@@ -602,6 +606,11 @@ class Popover<
         break;
       }
       case 'visible':
+        if (value) {
+          this._attachEscapeKeyHandler();
+        } else {
+          this._detachEscapeKeyHandler();
+        }
         this._clearEventTimeout(value ? 'show' : 'hide');
         super._optionChanged(args);
         break;

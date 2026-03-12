@@ -2357,4 +2357,50 @@ QUnit.module('accessibility', {
 
         assert.strictEqual(popover.option('visible'), false, 'popover is hidden');
     });
+
+    QUnit.test('should hide only topmost popover on esc press', function(assert) {
+        const $markup = $('<div id="popover1"></div>' +
+            '<div id="popover2"></div>' +
+            '<div id="target1" tabindex="0"></div>' +
+            '<div id="target2" tabindex="0"></div>')
+            .appendTo('body');
+
+
+        const bottomPopover = new Popover($('#popover1'), {
+            target: '#target1',
+            visible: true,
+        });
+        const topPopover = new Popover($('#popover2'), {
+            target: '#target2',
+            visible: true,
+        });
+
+        const keyboard = keyboardMock($('#target2'));
+
+        keyboard.keyDown('esc');
+
+        assert.strictEqual(topPopover.option('visible'), false, 'top popover is hidden');
+        assert.strictEqual(bottomPopover.option('visible'), true, 'bottom popover is still visible');
+
+        $markup.remove();
+    });
+
+    QUnit.test('should not call hide for hidden popover on esc press', function(assert) {
+        const popover = new Popover($('#what'), {
+            target: '#where',
+            visible: true,
+            animation: null,
+        });
+        const hideSpy = sinon.spy(popover, 'hide');
+        const $target = $('#where').attr('tabindex', 0);
+        const keyboard = keyboardMock($target);
+
+        popover.hide();
+        hideSpy.resetHistory();
+
+        keyboard.keyDown('esc');
+
+        assert.strictEqual(hideSpy.callCount, 0, 'hide is not called');
+        assert.strictEqual(popover.option('visible'), false, 'popover remains hidden');
+    });
 });
