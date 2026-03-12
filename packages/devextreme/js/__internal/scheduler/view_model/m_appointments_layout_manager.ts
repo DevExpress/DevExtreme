@@ -77,7 +77,7 @@ class AppointmentLayoutManager {
       workspace.isVerticalGroupedWorkSpace(),
       DOMMetaData,
     );
-    const rowCount = workspace._getRowCount();
+    const rowCount = workspace.getRowCount();
     const { positionHelper, viewDataProvider } = workspace;
     const visibleDayDuration = viewDataProvider.getVisibleDayDuration(
       workspace.option('startDayHour'),
@@ -119,7 +119,7 @@ class AppointmentLayoutManager {
       allowResizing: this.instance._allowResizing(),
       allowAllDayResizing: this.instance._allowAllDayResizing(),
       startViewDate: workspace.getStartViewDate(),
-      groupOrientation: workspace._getRealGroupOrientation(),
+      groupOrientation: workspace.getRealGroupOrientation(),
       cellWidth: getCellWidth(DOMMetaData),
       cellHeight: getCellHeight(DOMMetaData),
       allDayHeight,
