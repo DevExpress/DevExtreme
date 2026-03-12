@@ -1431,7 +1431,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   private refreshWorkSpace(): void {
-    this.cleanWorkspace();
+    this.cleanWorkSpace();
 
     delete this._workSpace;
 
@@ -1446,7 +1446,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  private cleanWorkspace() {
+  private cleanWorkSpace() {
     this._appointments.$element().detach();
     this._workSpace._dispose();
     this._workSpace.$element().remove();
