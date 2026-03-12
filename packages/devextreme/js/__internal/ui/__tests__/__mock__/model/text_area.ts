@@ -16,10 +16,7 @@ export class TextAreaModel {
   }
 
   public setValue(value: string): void {
-    const input = this.getInputElement();
-
-    input.value = value;
-    input.dispatchEvent(new Event('input', { bubbles: true }));
+    this.getInstance()?.option('value', value);
   }
 
   public getInstance(): TextArea {
