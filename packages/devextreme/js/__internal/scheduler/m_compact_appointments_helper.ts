@@ -146,7 +146,7 @@ export class CompactAppointmentsHelper {
 
   _createTemplate(count, isCompact) {
     this._initButtonTemplate(count, isCompact);
-    return this.instance._getAppointmentTemplate('appointmentCollectorTemplate');
+    return this.instance.getAppointmentTemplate('appointmentCollectorTemplate');
   }
 
   _initButtonTemplate(count, isCompact) {

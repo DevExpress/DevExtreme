@@ -309,7 +309,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         assert.equal(Tooltip.getInstance($('.dx-tooltip')).option('rtlEnabled'), true, 'rtlEnabled for tooltip was set to true');
     });
 
-    test('Click on tooltip-edit button should call scheduler._appointmentPopup and hide tooltip', async function(assert) {
+    test('Click on tooltip-edit button should call scheduler.appointmentPopup and hide tooltip', async function(assert) {
         const data = new DataSource({
             store: getSampleData()
         });
@@ -319,7 +319,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             dataSource: data
         });
 
-        const stub = sinon.stub(scheduler.instance._appointmentPopup, 'show');
+        const stub = sinon.stub(scheduler.instance.appointmentPopup, 'show');
 
         const clock = sinon.useFakeTimers();
         await scheduler.appointments.click(1, clock);
@@ -585,7 +585,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
             }
             ]
         });
-        const stub = sinon.stub(scheduler.instance, '_updateAppointment');
+        const stub = sinon.stub(scheduler.instance, 'updateAppointmentCore');
 
         const clock = sinon.useFakeTimers();
         await scheduler.appointments.click(1, clock);
