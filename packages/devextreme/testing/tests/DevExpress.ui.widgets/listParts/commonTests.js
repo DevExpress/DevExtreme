@@ -4791,6 +4791,70 @@ QUnit.module('Search', () => {
     });
 });
 
+QUnit.module('Highlighting', () => {
+
+    const selectTextNodePart = (textNode, startOffset, endOffset) => {
+        const selection = window.getSelection();
+        const range = document.createRange();
+
+        selection.removeAllRanges();
+        range.setStart(textNode, startOffset);
+        range.setEnd(textNode, endOffset);
+        selection.addRange(range);
+
+        return selection;
+    };
+
+    QUnit.test('list item should not block native text selection events', function(assert) {
+        const $list = $('#list').dxList({
+            items: ['Item 1', 'Item 2']
+        });
+
+        const item = $list.find(`.${LIST_ITEM_CLASS}`).eq(0).get(0);
+
+        const mouseDownEvent = new MouseEvent('mousedown', {
+            bubbles: true,
+            cancelable: true,
+            clientX: 10,
+            clientY: 10,
+        });
+
+        const selectStartEvent = new Event('selectstart', {
+            bubbles: true,
+            cancelable: true,
+        });
+
+        const mouseDownNotCanceled = item.dispatchEvent(mouseDownEvent);
+        const selectStartNotCanceled = item.dispatchEvent(selectStartEvent);
+
+        assert.ok(mouseDownNotCanceled, 'mousedown is not canceled');
+        assert.notOk(mouseDownEvent.defaultPrevented, 'mousedown default is not prevented');
+        assert.ok(selectStartNotCanceled, 'selectstart is not canceled');
+        assert.notOk(selectStartEvent.defaultPrevented, 'selectstart default is not prevented');
+    });
+
+    QUnit.test('text node should be selectable via Selection API', function(assert) {
+        const $list = $('#list').dxList({
+            items: ['Item 1', 'Item 2']
+        });
+
+        const $item = $list.find('.dx-list-item-content').eq(0);
+        const textNode = $item.get(0).firstChild;
+
+        assert.ok(!!textNode, 'text node exists');
+
+        if(!textNode) {
+            return;
+        }
+
+        const expected = textNode.textContent.slice(0, 4);
+        const selection = selectTextNodePart(textNode, 0, 4);
+
+        assert.strictEqual(selection.toString(), expected, 'text is selected');
+        selection.removeAllRanges();
+    });
+});
+
 let helper;
 if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((searchEnabled) => {
