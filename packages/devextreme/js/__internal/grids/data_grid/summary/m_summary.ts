@@ -24,7 +24,7 @@ import type { RowsView } from '../../grid_core/views/m_rows_view';
 import AggregateCalculator from '../m_aggregate_calculator';
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
-import { getSummaryCellIndex } from './utils';
+import { getColumnFromMap, getSummaryCellIndex } from './utils';
 
 const DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer';
 const DATAGRID_SUMMARY_ITEM_CLASS = 'dx-datagrid-summary-item';
@@ -554,13 +554,6 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return columnMap;
   }
 
-  private static _getColumnFromMap(
-    identifier: string | number | undefined,
-    columnMap: Map<string | number, Column>,
-  ): Column | undefined {
-    return identifier !== undefined ? columnMap.get(identifier) : undefined;
-  }
-
   private _calculateSummaryCells(
     summaryItems,
     aggregates,
@@ -575,11 +568,11 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
 
     each(summaryItems, (summaryIndex, summaryItem) => {
       const column = columnMap
-        ? SummaryDataControllerExtender._getColumnFromMap(summaryItem.column, columnMap)
+        ? getColumnFromMap(summaryItem.column, columnMap)
         : that._columnsController.columnOption(summaryItem.column);
       const showInColumn = (summaryItem.showInColumn
         && (columnMap
-          ? SummaryDataControllerExtender._getColumnFromMap(summaryItem.showInColumn, columnMap)
+          ? getColumnFromMap(summaryItem.showInColumn, columnMap)
           : that._columnsController.columnOption(summaryItem.showInColumn)))
         || column;
       const columnIndex = calculateTargetColumnIndex(summaryItem, showInColumn);
