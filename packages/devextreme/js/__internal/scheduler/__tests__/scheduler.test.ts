@@ -1,14 +1,47 @@
 import {
-  describe, expect, it, jest,
+  afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import { logger } from '@ts/core/utils/m_console';
 
 import { createScheduler } from './__mock__/create_scheduler';
 import { setupSchedulerTestEnvironment } from './__mock__/m_mock_scheduler';
 
-describe('Scheduler scrollTo deprecation', () => {
-  it('should log deprecation warning when using old scrollTo API', async () => {
+jest.mock('@ts/core/m_devices', () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const originalModule: any = jest.requireActual('@ts/core/m_devices');
+  const real = jest.fn().mockReturnValue({
+    platform: 'mac',
+    mac: true,
+    deviceType: 'desktop',
+  });
+  const current = jest.fn().mockReturnValue({
+    platform: 'mac',
+    mac: true,
+    deviceType: 'desktop',
+  });
+
+  return {
+    __esModule: true,
+    default: {
+      ...originalModule.default,
+      isSimulator: originalModule.default.isSimulator,
+      real,
+      current,
+    },
+  };
+});
+
+describe('Scheduler scrollTo', () => {
+  beforeEach(() => {
     setupSchedulerTestEnvironment();
+    jest.spyOn(logger, 'warn').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  it('should not log warnings when using scrollTo API', async () => {
     const loggerWarnSpy = jest.spyOn(logger, 'warn');
 
     const { scheduler } = await createScheduler({
@@ -25,9 +58,7 @@ describe('Scheduler scrollTo deprecation', () => {
     });
     loggerWarnSpy.mockReset();
 
-    const testDate = new Date(2025, 0, 16, 14, 0);
-
-    scheduler.scrollTo(testDate, undefined, false);
+    scheduler.scrollTo(new Date(2025, 0, 16, 14, 0), undefined, false);
 
     expect(loggerWarnSpy).toHaveBeenCalledTimes(1);
     expect(loggerWarnSpy).toHaveBeenCalledWith(
@@ -58,5 +89,28 @@ describe('Scheduler scrollTo deprecation', () => {
     scheduler.scrollTo(testDate);
 
     expect(loggerWarnSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it('should pass different left offsets for "start" vs "center" alignInView', async () => {
+    const { container, scheduler } = await createScheduler({
+      dataSource: [],
+      views: ['timelineDay'],
+      currentView: 'timelineDay',
+      currentDate: new Date(2017, 4, 25),
+    });
+
+    const scrollableElement = container.querySelector('.dx-scheduler-date-table-scrollable') as HTMLElement;
+    const scrollableContainer = scrollableElement.querySelector('.dx-scrollable-container') as HTMLElement;
+
+    scheduler.scrollTo(new Date(2017, 4, 25, 22, 0), { alignInView: 'start' });
+    const startScrollLeft = scrollableContainer.scrollLeft;
+
+    scrollableContainer.scrollLeft = 0;
+
+    scheduler.scrollTo(new Date(2017, 4, 25, 22, 0), { alignInView: 'center' });
+    const centerScrollLeft = scrollableContainer.scrollLeft;
+
+    expect(startScrollLeft).toBeCloseTo(11000);
+    expect(centerScrollLeft).toBeCloseTo(11125);
   });
 });
