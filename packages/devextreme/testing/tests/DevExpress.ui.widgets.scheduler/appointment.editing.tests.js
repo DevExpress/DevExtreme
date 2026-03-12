@@ -136,11 +136,11 @@ module('Integration: Appointment editing', {
                     currentView: 'timelineMonth'
                 });
 
-                const updateAppointment = scheduler.instance._updateAppointment;
+                const updateAppointment = scheduler.instance.updateAppointmentCore;
                 const spy = sinon.spy(noop);
                 const oldItem = data[0];
 
-                scheduler.instance._updateAppointment = spy;
+                scheduler.instance.updateAppointmentCore = spy;
 
                 const cellWidth = getOuterWidth(scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0));
 
@@ -152,7 +152,7 @@ module('Integration: Appointment editing', {
                     assert.deepEqual(spy.getCall(0).args[0], oldItem, 'Target item is correct');
                     assert.deepEqual(spy.getCall(0).args[1], $.extend(true, oldItem, { endDate: new Date(2015, 1, 3, 2, 0) }), 'New data is correct');
                 } finally {
-                    scheduler.instance._updateAppointment = updateAppointment;
+                    scheduler.instance.updateAppointmentCore = updateAppointment;
                 }
             });
 
@@ -163,11 +163,11 @@ module('Integration: Appointment editing', {
 
                 const scheduler = await this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, editing: true });
 
-                const updateAppointment = scheduler.instance._updateAppointment;
+                const updateAppointment = scheduler.instance.updateAppointmentCore;
                 const spy = sinon.spy(noop);
                 const oldItem = this.tasks[0];
 
-                scheduler.instance._updateAppointment = spy;
+                scheduler.instance.updateAppointmentCore = spy;
 
                 const cellHeight = getOuterHeight(scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0));
                 const hourHeight = cellHeight * 2;
@@ -180,7 +180,7 @@ module('Integration: Appointment editing', {
                     assert.deepEqual(spy.getCall(0).args[0], oldItem, 'Target item is correct');
                     assert.deepEqual(spy.getCall(0).args[1], $.extend(true, oldItem, { endDate: new Date(2015, 1, 9, 3, 0) }), 'New data is correct');
                 } finally {
-                    scheduler.instance._updateAppointment = updateAppointment;
+                    scheduler.instance.updateAppointmentCore = updateAppointment;
                 }
             });
 
@@ -268,7 +268,7 @@ module('Integration: Appointment editing', {
 
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                const popup = scheduler.instance._appointmentPopup.popup;
+                const popup = scheduler.instance.appointmentPopup.popup;
             });
 
             test('Add new appointment with delay and an error(T381444)', async function(assert) {
@@ -303,7 +303,7 @@ module('Integration: Appointment editing', {
 
                 $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                const popup = scheduler.instance._appointmentPopup.popup;
+                const popup = scheduler.instance.appointmentPopup.popup;
             });
 
             // TODO: update editors in popup
