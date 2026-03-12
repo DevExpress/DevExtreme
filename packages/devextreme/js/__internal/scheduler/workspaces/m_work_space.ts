@@ -949,12 +949,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return getViewStartByOptions(
       this.option('startDate'),
       this.option('currentDate'),
-      this._getIntervalDuration(),
+      this.getTotalViewDuration(),
       this.option('startDate') ? this.calculateViewStartDate() : undefined,
     );
   }
 
-  protected _getIntervalDuration() {
+  protected getTotalViewDuration() {
     return this.viewDataProvider.getIntervalDuration(this.option('intervalCount'));
   }
 

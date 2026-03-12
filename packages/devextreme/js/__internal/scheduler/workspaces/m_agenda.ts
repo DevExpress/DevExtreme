@@ -537,7 +537,7 @@ class SchedulerAgenda extends WorkSpace {
 
   private setSelectedCellsByCellData() {}
 
-  _getIntervalDuration() {
+  protected override getTotalViewDuration() {
     return dateUtils.dateToMilliseconds('day') * (this.option('intervalCount') as any);
   }
 
