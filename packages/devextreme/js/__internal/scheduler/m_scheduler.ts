@@ -2033,7 +2033,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private _isScrollOptionsObject(options?: ScrollToGroupValuesOrOptions): options is ScrollToOptions {
     return Boolean(options) && typeof options === 'object'
-      && ('align' in options || 'allDay' in options || 'group' in options);
+      && ('alignInView' in options || 'allDay' in options || 'group' in options);
   }
 
   _isHorizontalVirtualScrolling() {
