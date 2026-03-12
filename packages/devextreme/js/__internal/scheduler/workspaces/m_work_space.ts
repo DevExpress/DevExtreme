@@ -2285,7 +2285,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       draggingMode: 'outlook',
       onScrollEnd: () => {},
       getHeaderHeight: undefined,
-      onRenderAppointments: () => {},
+      renderAppointments: () => {},
       onShowAllDayPanel: () => {},
       onSelectedCellsClick: () => {},
       timeZoneCalculator: undefined,
@@ -2363,7 +2363,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         break;
       case 'allDayPanelMode':
         this.updateShowAllDayPanel();
-        this.updateAppointments();
+        this.renderAppointments();
         break;
       case 'width':
         // @ts-expect-error
@@ -2888,8 +2888,8 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this.renderer._renderGrid();
   }
 
-  updateAppointments() {
-    (this.option('onRenderAppointments') as any)();
+  renderAppointments() {
+    (this.option('renderAppointments') as any)();
     this.dragBehavior?.updateDragSource();
   }
 
