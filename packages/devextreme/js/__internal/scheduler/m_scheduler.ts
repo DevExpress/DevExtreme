@@ -415,7 +415,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this._appointments.option('items', []);
           this.refreshWorkSpace();
           if (this.readyToRenderAppointments) {
-            this._appointments.option('items', this._layoutManager.generateViewModel());
+            this._appointments.option('items', this._layoutManager.createAppointmentsMap());
           }
         });
         break;
@@ -424,7 +424,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._appointments.option('items', []);
         if (this.readyToRenderAppointments) {
           this.updateOption('workSpace', 'hoursInterval', value / 60);
-          this._appointments.option('items', this._layoutManager.generateViewModel());
+          this._appointments.option('items', this._layoutManager.createAppointmentsMap());
         }
         break;
       case 'tabIndex':
@@ -694,7 +694,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       if (isForce || (!isFixedHeight || !isFixedWidth)) {
         workspace.option('allDayExpanded', this.isAllDayExpanded());
         workspace._dimensionChanged();
-        const appointments = this._layoutManager.generateViewModel();
+        const appointments = this._layoutManager.createAppointmentsMap();
 
         this._appointments.option('items', appointments);
       }
@@ -862,7 +862,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   _dataSourceChangedHandler(result?: Appointment[]) {
     if (this.readyToRenderAppointments) {
       this.workSpaceRecalculation.done(() => {
-        this._layoutManager.prepareAppointments(result);
+        this._layoutManager.prepareItems(result);
         this.renderAppointments();
         this.updateA11yStatus();
       });
@@ -889,7 +889,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     // @ts-expect-error
     const viewModel: AppointmentViewModelPlain[] = this._isVisible()
-      ? this._layoutManager.generateViewModel()
+      ? this._layoutManager.createAppointmentsMap()
       : [];
 
     this._appointments.option('items', viewModel);
@@ -1712,6 +1712,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       appointment,
       settings,
       this._dataAccessors,
+      this.timeZoneCalculator,
       this.resourceManager,
     );
   }
