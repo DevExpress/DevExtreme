@@ -1348,7 +1348,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  protected _getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow) {
+  protected getCellElementByPosition(cellCoordinates, groupIndex, inAllDayRow) {
     const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow);
     return this.dom_getDateCell(indexes);
   }

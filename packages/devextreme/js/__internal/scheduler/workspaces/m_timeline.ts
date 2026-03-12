@@ -196,7 +196,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     };
   }
 
-  _getCellByCoordinates(cellCoordinates, groupIndex) {
+  protected override getCellElementByPosition(cellCoordinates, groupIndex) {
     const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex);
 
     return this._$dateTable
