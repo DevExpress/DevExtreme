@@ -74,7 +74,7 @@ class AppointmentLayoutManager {
     const DOMMetaData = workspace.getDOMElementsMetaData();
     const allDayHeight = getAllDayHeight(
       workspace.option('showAllDayPanel'),
-      workspace._isVerticalGroupedWorkSpace(),
+      workspace.isVerticalGroupedWorkSpace(),
       DOMMetaData,
     );
     const rowCount = workspace._getRowCount();
