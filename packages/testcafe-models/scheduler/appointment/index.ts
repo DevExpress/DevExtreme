@@ -55,9 +55,10 @@ export default class Appointment {
 
   reducedIcon: Selector;
 
-  constructor(scheduler: Selector, index = 0, title?: string) {
+  constructor(scheduler: Selector, index = 0, text?: string) {
     const element = scheduler.find(`.${CLASS.appointment}`);
-    this.element = (title ? element.withText(title) : element).nth(index);
+
+    this.element = (text ? element.withText(text) : element).nth(index);
 
     const appointmentContentDate = this.element.find(`.${CLASS.appointmentContentDate}`);
 
