@@ -305,6 +305,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   protected override cleanView() {
+    this._$dateTable.empty();
     this._$timePanel.empty();
 
     if (this._$groupTable) {
