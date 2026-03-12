@@ -162,7 +162,7 @@ class SchedulerAgenda extends WorkSpace {
   protected override renderView() {
     this._startViewDate = this._calculateStartViewDate();
     this._rows = [];
-    this._initPositionHelper();
+    this.initPositionHelper();
   }
 
   _recalculateAgenda(rows) {
@@ -491,7 +491,7 @@ class SchedulerAgenda extends WorkSpace {
   onDataSourceChanged(appointments?: SafeAppointment[]) {
     super.onDataSourceChanged();
 
-    this._renderView();
+    this.renderView();
 
     const rows = this._calculateRows(appointments);
     this._recalculateAgenda(rows);

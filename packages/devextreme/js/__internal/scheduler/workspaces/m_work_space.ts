@@ -1408,7 +1408,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return (this.$element() as any).find(`.${GROUP_HEADER_CLASS}`);
   }
 
-  private getScrollCoordinates(date, groupIndex?: any, allDay?: any) {
+  protected getScrollCoordinates(date, groupIndex?: any, allDay?: any) {
     const currentDate = date || new Date(this.option('currentDate'));
 
     const cell = this.viewDataProvider.findGlobalCellPosition(currentDate, groupIndex, allDay, true);
@@ -1794,13 +1794,13 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   scrollToTime(hours, minutes, date) {
-    if (!this._isValidScrollDate(date)) {
+    if (!this.isValidScrollDate(date)) {
       return;
     }
 
     date = date || new Date(this.option('currentDate'));
     date.setHours(hours, minutes, 0, 0);
-    const coordinates = this._getScrollCoordinates(date);
+    const coordinates = this.getScrollCoordinates(date);
 
     const scrollable = this.getScrollable();
 
@@ -2455,7 +2455,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       .addClass(this.getElementClass());
   }
 
-  private initPositionHelper() {
+  protected initPositionHelper() {
     this.positionHelper = new PositionHelper({
       key: this.option('key'),
       viewDataProvider: this.viewDataProvider,
