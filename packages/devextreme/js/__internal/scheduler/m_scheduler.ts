@@ -1372,13 +1372,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       schedulerWidth: this.option('width'),
       allDayPanelMode: this.option('allDayPanelMode'),
       onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
-<<<<<<< fix_home_end_virtual_scroll_25_2
-      renderAppointments: () => { this._renderAppointments(); },
-=======
-      onRenderAppointments: () => {
-        this.renderAppointments();
-      },
->>>>>>> 25_2
+      renderAppointments: () => { this.renderAppointments(); },
       onShowAllDayPanel: (value) => this.option('showAllDayPanel', value),
       getHeaderHeight: () => utils.DOM.getHeaderHeight(this.header),
       onScrollEnd: () => this._appointments.updateResizableArea(),
