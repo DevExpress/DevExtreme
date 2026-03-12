@@ -18,6 +18,7 @@ import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_da
 import type { EditingControllerRequired, ModuleType } from '@ts/grids/grid_core/m_types';
 import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
+import type { Column } from '../../grid_core/columns_controller/types';
 import type { EditingController } from '../../grid_core/editing/m_editing';
 import type { RowsView } from '../../grid_core/views/m_rows_view';
 import AggregateCalculator from '../m_aggregate_calculator';
@@ -471,9 +472,9 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
   private _processGroupItem(groupItem, options) {
     const that = this;
 
-    if (!options.summaryGroupItems) {
-      options.summaryGroupItems = that.option('summary.groupItems') || [];
-    }
+    options.summaryGroupItems ??= that.option('summary.groupItems') || [];
+    options.summaryColumnMap ??= this._buildColumnLookupMap();
+
     if (groupItem.rowType === 'group') {
       let groupColumnIndex = -1;
       let afterGroupColumnIndex = -1;
@@ -490,32 +491,97 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
         }
       });
 
-      groupItem.summaryCells = this._calculateSummaryCells(options.summaryGroupItems, getGroupAggregates(groupItem.data), options.visibleColumns, (summaryItem, column) => {
-        if (summaryItem.showInGroupFooter) {
-          return -1;
-        }
+      groupItem.summaryCells = this._calculateSummaryCells(
+        options.summaryGroupItems,
+        getGroupAggregates(groupItem.data),
+        options.visibleColumns,
+        (summaryItem, column) => {
+          if (summaryItem.showInGroupFooter) {
+            return -1;
+          }
 
-        if (summaryItem.alignByColumn && column && !isDefined(column.groupIndex) && (column.index !== afterGroupColumnIndex)) {
-          return column.index;
-        }
-        return groupColumnIndex;
-      }, true);
+          if (summaryItem.alignByColumn
+            && column
+            && !isDefined(column.groupIndex)
+            && (column.index !== afterGroupColumnIndex)
+          ) {
+            return column.index;
+          }
+
+          return groupColumnIndex;
+        },
+        true,
+        options.summaryColumnMap,
+      );
     }
+
     if (groupItem.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE) {
-      groupItem.summaryCells = this._calculateSummaryCells(options.summaryGroupItems, getGroupAggregates(groupItem.data), options.visibleColumns, (summaryItem, column) => (summaryItem.showInGroupFooter && that._isDataColumn(column) ? column.index : -1));
+      groupItem.summaryCells = this._calculateSummaryCells(
+        options.summaryGroupItems,
+        getGroupAggregates(groupItem.data),
+        options.visibleColumns,
+        (summaryItem, column) => (
+          summaryItem.showInGroupFooter && that._isDataColumn(column) ? column.index : -1
+        ),
+        false,
+        options.summaryColumnMap,
+      );
     }
 
     return groupItem;
   }
 
-  private _calculateSummaryCells(summaryItems, aggregates, visibleColumns, calculateTargetColumnIndex, isGroupRow?) {
+  // The map is built once per _processItems cycle (via options) and discarded after.
+  private _buildColumnLookupMap(): Map<string | number, Column> {
+    const columnMap = new Map<string | number, Column>();
+    const { _columnsController: ctrl } = this;
+    const allColumns = ctrl.getColumns()
+      .concat(ctrl._commandColumns ?? []);
+
+    for (const column of allColumns) {
+      const copy = extend({}, column) as Column;
+      const keys = [
+        column.index, column.name,
+        column.dataField, column.caption,
+      ];
+      for (const key of keys) {
+        if (key !== undefined && !columnMap.has(key)) {
+          columnMap.set(key, copy);
+        }
+      }
+    }
+
+    return columnMap;
+  }
+
+  private static _getColumnFromMap(
+    identifier: string | number | undefined,
+    columnMap: Map<string | number, Column>,
+  ): Column | undefined {
+    return identifier !== undefined ? columnMap.get(identifier) : undefined;
+  }
+
+  private _calculateSummaryCells(
+    summaryItems,
+    aggregates,
+    visibleColumns,
+    calculateTargetColumnIndex,
+    isGroupRow?,
+    columnMap?: Map<string | number, Column>,
+  ) {
     const that = this;
     const summaryCells: any = [];
     const summaryCellsByColumns = {};
 
     each(summaryItems, (summaryIndex, summaryItem) => {
-      const column = that._columnsController.columnOption(summaryItem.column);
-      const showInColumn = summaryItem.showInColumn && that._columnsController.columnOption(summaryItem.showInColumn) || column;
+      const column = columnMap
+        ? SummaryDataControllerExtender._getColumnFromMap(summaryItem.column, columnMap)
+        : that._columnsController.columnOption(summaryItem.column);
+      const showInColumn = (summaryItem.showInColumn
+        && (columnMap
+          ? SummaryDataControllerExtender._getColumnFromMap(summaryItem.showInColumn, columnMap)
+          : that._columnsController.columnOption(summaryItem.showInColumn)))
+        || column;
       const columnIndex = calculateTargetColumnIndex(summaryItem, showInColumn);
 
       if (columnIndex >= 0) {
