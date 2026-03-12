@@ -216,7 +216,7 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
     await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
   });
 
-  test('should not reset scroll after appointment focus and scrolling down', async (t) => {
+  test(`should not reset scroll after appointment focus and scrolling down (${scrollingMode} scrolling)`, async (t) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
     await t
@@ -229,4 +229,50 @@ const cellStyles = '#container .dx-scheduler-cell-sizes-vertical { height: 100px
     await insertStylesheetRulesToPage(cellStyles);
     await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
   });
+
+  test(`should focus next appointment on tab after any appointment was clicked (${scrollingMode} scrolling)`, async (t) => {
+    const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+    await t
+      .click(scheduler.getAppointment('[Appointment 15]').element)
+      .pressKey('tab');
+
+    await t
+      .expect(scheduler.getAppointment('[Appointment 16]').isFocused).ok();
+  }).before(async () => {
+    await insertStylesheetRulesToPage(cellStyles);
+    await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
+  });
+});
+
+test('should focus first visible appointment on tab (virtual scrolling)', async (t) => {
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+  await t
+    .scroll(scheduler.workspaceScrollable, 0, 1000)
+    .click(scheduler.toolbar.viewSwitcher.element)
+    .pressKey('tab')
+    .pressKey('tab');
+
+  await t
+    .expect(scheduler.getAppointment('[Appointment 135]').isFocused).ok();
+}).before(async () => {
+  await insertStylesheetRulesToPage(cellStyles);
+  await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: 'virtual' } });
+});
+
+test('should focus first rendered appointment on tab (standard scrolling)', async (t) => {
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+  await t
+    .scroll(scheduler.workspaceScrollable, 0, 1000)
+    .click(scheduler.toolbar.viewSwitcher.element)
+    .pressKey('tab')
+    .pressKey('tab');
+
+  await t
+    .expect(scheduler.getAppointment('[Appointment 1]').isFocused).ok();
+}).before(async () => {
+  await insertStylesheetRulesToPage(cellStyles);
+  await createWidget('dxScheduler', { ...getConfig(), scrolling: { mode: 'standard' } });
 });

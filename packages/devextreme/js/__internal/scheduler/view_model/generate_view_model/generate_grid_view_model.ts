@@ -1,6 +1,6 @@
 import type Scheduler from '../../m_scheduler';
 import type { AppointmentEntity, ListEntity, SortedEntity } from '../types';
-import { OptionManager } from './options/option_manager';
+import type { OptionManager } from './options/option_manager';
 import { addCollector } from './steps/add_collector/add_collector';
 import { addDirection } from './steps/add_direction';
 import { addEmptiness } from './steps/add_emptiness';
@@ -17,10 +17,9 @@ import { cropByVirtualScreen } from './steps/virtual_screen_crop';
 import { filterByVirtualScreen } from './steps/virtual_screen_filter';
 
 export const sortAppointments = (
-  schedulerStore: Scheduler,
+  optionManager: OptionManager,
   items: ListEntity[],
 ): SortedEntity[] => {
-  const optionManager = new OptionManager(schedulerStore);
   const {
     isMonthView,
     hasAllDayPanel,
@@ -58,9 +57,9 @@ export const sortAppointments = (
 
 export const generateGridViewModel = (
   schedulerStore: Scheduler,
+  optionManager: OptionManager,
   items: SortedEntity[],
 ): AppointmentEntity[] => {
-  const optionManager = new OptionManager(schedulerStore);
   const {
     viewOrientation,
     isMonthView,

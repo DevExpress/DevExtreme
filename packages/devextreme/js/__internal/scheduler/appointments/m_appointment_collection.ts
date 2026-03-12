@@ -557,10 +557,6 @@ class SchedulerAppointments extends CollectionWidget<any> {
     $item.data(APPOINTMENT_SETTINGS_KEY, item);
 
     if (item.sortedIndex !== -1) {
-      // NOTE: fallback for integration testing
-      if (!this.$itemBySortedIndex) {
-        this.$itemBySortedIndex = [];
-      }
       this.$itemBySortedIndex[item.sortedIndex] = $item;
     }
 
