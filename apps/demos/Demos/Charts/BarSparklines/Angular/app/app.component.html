@@ -1,13 +1,13 @@
 <div class="long-title"
-  ><h3>Monthly Prices of Aluminium, Nickel and Copper</h3></div
+  ><h3>Monthly Prices of Copper, Nickel and Palladium</h3></div
 >
 <div id="chart-demo">
   <table class="demo-table" border="1">
     <tr>
       <th><div class="dx-screen-reader-only">Year</div></th>
-      <th>Aluminium (USD/ton)</th>
-      <th>Nickel (USD/ton)</th>
       <th>Copper (USD/ton)</th>
+      <th>Nickel (USD/ton)</th>
+      <th>Palladium (USD/troy ounce)</th>
     </tr>
     @for(year of years; track year) {
     <tr>
@@ -17,11 +17,11 @@
           class="sparkline"
           [dataSource]="source"
           argumentField="month"
-          valueField="alum{{ year }}"
+          valueField="copper{{ year }}"
           type="bar"
           [showMinMax]="true"
         >
-          <dxo-sparkline-tooltip format="currency"></dxo-sparkline-tooltip>
+          <dxo-sparkline-tooltip [format]="{ type: 'currency', precision: 2 }"></dxo-sparkline-tooltip>
         </dx-sparkline>
       </td>
       <td>
@@ -37,7 +37,7 @@
           minColor="#9ab57e"
           maxColor="#8076bb"
         >
-          <dxo-sparkline-tooltip format="currency"></dxo-sparkline-tooltip>
+          <dxo-sparkline-tooltip [format]="{ type: 'currency', precision: 2 }"></dxo-sparkline-tooltip>
         </dx-sparkline>
       </td>
       <td>
@@ -45,12 +45,12 @@
           class="sparkline"
           [dataSource]="source"
           argumentField="month"
-          valueField="copper{{ year }}"
+          valueField="palladium{{ year }}"
           type="bar"
           barPositiveColor="#e55253"
           firstLastColor="#ebdd8f"
         >
-          <dxo-sparkline-tooltip format="currency"></dxo-sparkline-tooltip>
+          <dxo-sparkline-tooltip [format]="{ type: 'currency', precision: 2 }"></dxo-sparkline-tooltip>
         </dx-sparkline>
       </td>
     </tr>

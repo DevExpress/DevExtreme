@@ -2,7 +2,7 @@ $(() => {
   $('#pie').dxPieChart({
     palette: 'bright',
     dataSource,
-    title: 'Olympic Medals in 2008',
+    title: 'Olympic Medals in 2024',
     legend: {
       orientation: 'horizontal',
       itemTextPosition: 'right',
