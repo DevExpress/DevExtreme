@@ -16,11 +16,11 @@ const getPseudoRandomDuration = (durationState: number): number => {
 
 export const generateAppointmentsWithResources = (
   options: {
-    startDay: Date,
-    endDay: Date,
-    startDayHour: number,
-    endDayHour: number,
-    resourceCount?: number,
+    startDay: Date;
+    endDay: Date;
+    startDayHour: number;
+    endDayHour: number;
+    resourceCount?: number;
   },
 ): any[] => {
   const {
