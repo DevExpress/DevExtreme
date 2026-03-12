@@ -418,8 +418,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-exceljs-fork:
-        specifier: ^4.4.4
-        version: 4.4.5
+        specifier: ^4.4.7
+        version: 4.4.7
       devextreme-quill:
         specifier: 'catalog:'
         version: 1.7.8
@@ -1459,8 +1459,8 @@ importers:
         specifier: 1.0.3
         version: 1.0.3
       devextreme-exceljs-fork:
-        specifier: ^4.4.4
-        version: 4.4.5
+        specifier: ^4.4.7
+        version: 4.4.7
       devextreme-screenshot-comparer:
         specifier: 2.0.17
         version: 2.0.17(testcafe@3.7.4)
@@ -9843,9 +9843,9 @@ packages:
   devextreme-cldr-data@1.0.3:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
-  devextreme-exceljs-fork@4.4.5:
-    resolution: {integrity: sha512-q4gG+tOUePkrocizE+akzz7QnikjjYt2vPMhtf/clAYGhuxYPrVgx63rJBVOVSjdop3VvPkHZCN8Tvi+au/CDQ==}
-    engines: {node: '>=16.20.2'}
+  devextreme-exceljs-fork@4.4.7:
+    resolution: {integrity: sha512-32Zao6Bn1l9owiC7hpyPynUtYY1Tae2eS2Zot3FWZSSWJW0R1O1tF7H1Nn2GOwONTFmaTFML2jo5bZL1idGSFA==}
+    engines: {node: '>=18.20.8'}
 
   devextreme-internal-tools@20.1.1:
     resolution: {integrity: sha512-heMGvQIrTSZEXDpL6GZnMhKrX2YlZgOfmd0Sr4dYBgQBRm7aoCyIrVDDo3l71qFLWM0qawqTbIKvjcMiQpBCtw==}
@@ -31133,7 +31133,7 @@ snapshots:
 
   devextreme-cldr-data@1.0.3: {}
 
-  devextreme-exceljs-fork@4.4.5:
+  devextreme-exceljs-fork@4.4.7:
     dependencies:
       archiver: 7.0.1
       dayjs: 1.11.13
@@ -31141,7 +31141,7 @@ snapshots:
       jszip: 3.10.1
       readable-stream: 3.6.2
       saxes: 5.0.1
-      tmp: 0.2.3
+      tmp: 0.2.5
       unzipper: 0.12.3
       uuid: 8.3.2
 

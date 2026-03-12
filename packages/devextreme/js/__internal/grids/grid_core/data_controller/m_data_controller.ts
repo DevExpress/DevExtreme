@@ -1633,7 +1633,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
   }
 
   public isCustomLoading() {
-    return this._isCustomLoading;
+    return this._isCustomLoading || this._dataSource?.isCustomLoading();
   }
 
   public beginCustomLoading(messageText?: string) {

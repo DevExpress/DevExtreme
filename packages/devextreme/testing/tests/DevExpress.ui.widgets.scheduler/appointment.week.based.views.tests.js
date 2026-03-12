@@ -230,7 +230,7 @@ module('Integration: Appointment Day, Week views', {
                     height: 1500
                 });
 
-                const spy = sinon.spy(scheduler.instance._appointmentPopup, 'show');
+                const spy = sinon.spy(scheduler.instance.appointmentPopup, 'show');
 
                 const clock = sinon.useFakeTimers();
                 await scheduler.appointments.click(0, clock);
@@ -244,7 +244,7 @@ module('Integration: Appointment Day, Week views', {
 
                     hide();
                 } finally {
-                    scheduler.instance._appointmentPopup.show.restore();
+                    scheduler.instance.appointmentPopup.show.restore();
                 }
             });
 

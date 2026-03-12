@@ -688,16 +688,16 @@ QUnit.module('Events', {
 
         assert.equal(contentReadyFiresCount, 1, 'contentReadyFiresCount === 1');
 
-        scheduler.instance._workSpaceRecalculation = new Deferred();
+        scheduler.instance.workSpaceRecalculation = new Deferred();
         scheduler.instance._fireContentReadyAction();
 
         assert.equal(contentReadyFiresCount, 1, 'contentReadyFiresCount === 1');
 
-        scheduler.instance._workSpaceRecalculation.resolve();
+        scheduler.instance.workSpaceRecalculation.resolve();
 
         assert.equal(contentReadyFiresCount, 2, 'contentReadyFiresCount === 2');
 
-        scheduler.instance._workSpaceRecalculation = null;
+        scheduler.instance.workSpaceRecalculation = null;
         scheduler.instance._fireContentReadyAction();
 
         assert.equal(contentReadyFiresCount, 3, 'contentReadyFiresCount === 3');

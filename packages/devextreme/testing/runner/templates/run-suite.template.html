@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<head>
+    {{{CSP_META_TAG}}}
+    <title>{{TITLE}} - QUnit test page</title>
+    <link rel="stylesheet" href="{{QUNIT_CSS_URL}}" />
+    <script src="{{QUNIT_JS_URL}}"></script>
+
+    <script nonce="M5H5tE">
+        window.ROOT_URL = "/";
+        window.farmMode = {{{IS_CONTINUOUS_INTEGRATION_JSON}}};
+
+        QUnit.config.autostart = false;
+        QUnit.config.failOnZeroTests = false;
+    </script>
+    <script src="{{QUNIT_EXTENSIONS_JS_URL}}"></script>
+
+    <style nonce="tYGMxb">
+        #qunit-fixture.qunit-fixture-visible {
+            position: fixed !important;
+            left: 0 !important;
+            top: 0 !important;
+            pointer-events: none;
+        }
+
+        #qunit-fixture.qunit-fixture-visible * {
+            pointer-events: auto;
+        }
+
+
+
+        a.up {
+            width: 30px;
+            height: 30px;
+            margin-top: 12px;
+            margin-left: 10px;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAvklEQVQ4y2NgoAa4yvjH9bc0Ccr/Jv//+O/Qbxlilaf8//D///9/RGmBK/8P1nLwtyxh5e//IwB+LRjK8WvBqhyfln9ucOVfofSv/98hWv7vwqLhfzpU2ZV/dVDWxX/1UC1PcGu48sf4vw9Uw8kfHEAtP/BpuPrH+AUDQgMDA1QLDg1X/xi9ALGQNEC13MXmadc/hi8gWlE0MDB8Z/+XhkXDC8YXMLvQNICCHG98Y2ogAEamBqX/RWAYxTAgAACFCjwy8XB3SQAAAABJRU5ErkJggg==) no-repeat;
+            display: inline-block;
+            float: left;
+        }
+    </style>
+
+    <script nonce="TEiwcJ">
+        (function() {
+            var doneCount = 0,
+                parentWindow = window.opener || window.parent;
+
+            QUnit.done(function(data) {
+                if(doneCount == 1)
+                    notifyExtraDoneCall();
+
+                if(!doneCount && parentWindow && parentWindow.RUNNER_ON_DONE)
+                    parentWindow.RUNNER_ON_DONE(window, data);
+
+                doneCount++;
+            });
+
+            QUnit.testStart(function(data) {
+                data.suiteUrl = location.pathname;
+                if(parentWindow && parentWindow.RUNNER_ON_TEST_START)
+                    parentWindow.RUNNER_ON_TEST_START(window, data);
+            });
+
+            QUnit.log(function(data) {
+                data.suiteUrl = location.pathname;
+                if(parentWindow && parentWindow.RUNNER_ON_TEST_LOG)
+                    parentWindow.RUNNER_ON_TEST_LOG(window, data);
+            });
+
+            QUnit.testDone(function(data) {
+                data.suiteUrl = location.pathname;
+                if(parentWindow && parentWindow.RUNNER_ON_TEST_DONE )
+                    parentWindow.RUNNER_ON_TEST_DONE(window, data);
+            });
+
+            QUnit.config.urlConfig.push({
+                id: "nojquery",
+                label: "No jQuery",
+                tooltip: "Don't use jQuery for widget rendering"
+            });
+
+            QUnit.config.urlConfig.push({
+                id: "nocsp",
+                label: "No CSP",
+                tooltip: "Use nocsp components without CSP checks",
+            });
+
+            function notifyExtraDoneCall() {
+                var msg = "QUnit.done called several times. Possible causes: extra start() calls, assertion outside test context";
+
+                if(parentWindow && parentWindow.RUNNER_ON_MISC_ERROR) {
+                    parentWindow.RUNNER_ON_MISC_ERROR(window, msg);
+                } else {
+                    alert("ALARM! DO NOT IGNORE THIS!\\n" + msg);
+                }
+            }
+        })();
+    </script>
+
+    <script src="{{JQUERY_JS_URL}}"></script>
+
+    <script src="{{SINON_JS_URL}}"></script>
+
+    <script src="{{SYSTEM_JS_URL}}"></script>
+
+    <script nonce="IpCks6">
+        (function() {
+            window.process = window.process || {};
+            window.process.env = window.process.env || {};
+            window.process.env.NODE_ENV = 'test';
+
+            jQuery.noConflict();
+
+            var cacheBuster = {{{CACHE_BUSTER_JSON}}};
+            if(cacheBuster.length) {
+                var systemLocate = SystemJS.locate;
+                SystemJS.locate = function(load) {
+                    return Promise.resolve(systemLocate.call(this, load)).then(function(address) {
+                        return address + ( address.indexOf('?') === -1 ? '?' : '&') + cacheBuster;
+                    });
+                }
+            }
+
+            SystemJS.config({{{SYSTEM_CONFIG_JSON}}});
+        })();
+    </script>
+</head>
+<a class="up" href="/"></a>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+
+<script nonce="Z27qXj">
+    (function() {
+        var integrationImportPaths = {{{INTEGRATION_IMPORT_PATHS_JSON}}};
+
+        var imports = integrationImportPaths.map(function(importPath) {
+            return SystemJS.import(importPath);
+        });
+
+        imports.push(new Promise(function(resolve) {
+            jQuery(resolve);
+        }));
+
+        Promise.all(imports)
+        .then(function() {
+            var isNotWebkitBrowser = window.navigator.userAgent.toLowerCase().indexOf("webkit") < 0;
+
+            if({{{IS_SERVER_SIDE_TEST_JSON}}} && isNotWebkitBrowser) {
+                return;
+            }
+
+            return SystemJS.import({{{TEST_URL_JSON}}});
+        })
+        .then(function() {
+            QUnit.start();
+        })
+        .catch(function (err) {
+            QUnit.start();
+            QUnit.test("load failed", function(assert) {
+                throw err;
+            });
+        });
+    })();
+</script>
