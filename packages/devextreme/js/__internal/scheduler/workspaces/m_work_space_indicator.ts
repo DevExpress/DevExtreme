@@ -20,8 +20,7 @@ const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   private indicatorInterval: any;
 
-  // @ts-expect-error
-  _getToday() {
+  protected getToday(): Date {
     const viewOffset = this.option('viewOffset') as number;
     const today = getToday(this.option('indicatorTime') as Date, this.timeZoneCalculator);
     return dateUtilsTs.addOffsets(today, -viewOffset);
@@ -29,7 +28,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
   isIndicationOnView(): boolean {
     if (this.option('showCurrentTimeIndicator')) {
-      const today = this._getToday();
+      const today = this.getToday();
       const endViewDate = dateUtils.trimTime(this.getEndViewDate());
 
       return dateUtils.dateInRange(today, this.getStartViewDate(), new Date(endViewDate.getTime() + toMs('day')));
@@ -42,13 +41,13 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
       return false;
     }
 
-    const today = this._getToday();
+    const today = this.getToday();
 
     return today >= dateUtils.trimTime(new Date(this.getStartViewDate()));
   }
 
   isIndicatorVisible() {
-    const today = this._getToday();
+    const today = this.getToday();
 
     // Subtracts 1 ms from the real endViewDate instead of 1 minute
     const endViewDate = new Date(this.getEndViewDate().getTime() + toMs('minute') - 1);
@@ -126,7 +125,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   private getIndicatorDaysSpan(): number {
-    const today = this._getToday();
+    const today = this.getToday();
     const viewStartTime = this.getStartViewDate().getTime();
     let timeDiff = today.getTime() - viewStartTime;
 
@@ -139,7 +138,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   getIndicationHeight() {
-    const today = timezoneUtils.getDateWithoutTimezoneChange(this._getToday());
+    const today = timezoneUtils.getDateWithoutTimezoneChange(this.getToday());
     const cellHeight = this.getCellHeight();
     const date = new Date(this.getStartViewDate());
 
@@ -184,7 +183,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
       const { completeDateHeaderMap } = this.viewDataProvider;
       const date = completeDateHeaderMap[completeDateHeaderMap.length - 1][headerIndex].startDate;
 
-      return dateUtils.sameDate(date, this._getToday());
+      return dateUtils.sameDate(date, this.getToday());
     }
 
     return false;
@@ -258,7 +257,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   // Overridden in SchedulerTimeline
   getCurrentTimePanelCellIndices() {
     const rowCountPerGroup = this.getTimePanelRowCount();
-    const today = this._getToday();
+    const today = this.getToday();
     const index = this.getCellIndexByDate(today);
     const { rowIndex: currentTimeRowIndex } = this.getCellCoordinatesByIndex(index);
 

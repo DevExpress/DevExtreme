@@ -119,7 +119,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   private getTimeDiff() {
-    let today = this._getToday();
+    let today = this.getToday();
     const date = this.getIndicationFirstViewDate();
 
     const startViewDate = this.getStartViewDate();
@@ -134,7 +134,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   // Overridden in SchedulerTimelineMonth
   calculateDurationInCells(timeDiff) {
-    const today = this._getToday();
+    const today = this.getToday();
     const differenceInDays = Math.floor(timeDiff / toMs('day'));
     let duration = (timeDiff - differenceInDays * toMs('day') - (this.option('startDayHour') as any) * toMs('hour')) / this.getCellDuration();
 
@@ -371,7 +371,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   getCurrentTimePanelCellIndices() {
     const columnCountPerGroup = this._getCellCount();
-    const today = this._getToday();
+    const today = this.getToday();
     const index = this.getCellIndexByDate(today);
     const { columnIndex: currentTimeColumnIndex } = this.getCellCoordinatesByIndex(index);
 

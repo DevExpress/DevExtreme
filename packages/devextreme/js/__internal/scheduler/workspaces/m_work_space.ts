@@ -224,7 +224,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _disposed: any;
 
-  _getToday: any;
+  protected getToday?(): Date;
 
   _$allDayPanel: any;
 
@@ -878,7 +878,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       startRowIndex: 0,
       startCellIndex: 0,
       groupOrientation,
-      today: this._getToday?.(),
+      today: this.getToday?.(),
       getResourceManager: this.option('getResourceManager'),
       isProvideVirtualCellsWidth,
       isAllDayPanelVisible: this.isAllDayPanelVisible,
