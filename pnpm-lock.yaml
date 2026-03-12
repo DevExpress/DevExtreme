@@ -68,8 +68,8 @@ catalogs:
       specifier: 5.7.1
       version: 5.7.1
     '@types/jquery':
-      specifier: 3.5.33
-      version: 3.5.33
+      specifier: 3.5.34
+      version: 3.5.34
     '@typescript-eslint/eslint-plugin':
       specifier: 8.52.0
       version: 8.52.0
@@ -1034,7 +1034,7 @@ importers:
         version: 5.7.1(eslint@9.39.2(jiti@2.6.1))
       '@types/jquery':
         specifier: 'catalog:'
-        version: 3.5.33
+        version: 3.5.34
       '@typescript-eslint/eslint-plugin':
         specifier: 'catalog:'
         version: 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.5.4))(eslint@9.39.2(jiti@2.6.1))(typescript@5.5.4)
@@ -1097,7 +1097,7 @@ importers:
         version: 3.5.0(axe-core@4.11.1)(testcafe@3.7.4)
       '@types/jquery':
         specifier: 'catalog:'
-        version: 3.5.33
+        version: 3.5.34
       '@typescript-eslint/eslint-plugin':
         specifier: 'catalog:'
         version: 8.52.0(@typescript-eslint/parser@8.52.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
@@ -1426,7 +1426,7 @@ importers:
         version: 3.10.19
       '@types/jquery':
         specifier: 'catalog:'
-        version: 3.5.33
+        version: 3.5.34
       '@types/react':
         specifier: 16.14.69
         version: 16.14.69
@@ -6622,8 +6622,8 @@ packages:
   '@types/jest@29.5.14':
     resolution: {integrity: sha512-ZN+4sdnLUbo8EVvVc2ao0GFW6oVrQRPn4K2lglySj7APvSrgzxHiNNK99us4WDMi57xxA2yggblIAMNhXOotLQ==}
 
-  '@types/jquery@3.5.33':
-    resolution: {integrity: sha512-SeyVJXlCZpEki5F0ghuYe+L+PprQta6nRZqhONt9F13dWBtR/ftoaIbdRQ7cis7womE+X2LKhsDdDtkkDhJS6g==}
+  '@types/jquery@3.5.34':
+    resolution: {integrity: sha512-3m3939S3erqmTLJANS/uy0B6V7BorKx7RorcGZVjZ62dF5PAGbKEDZK1CuLtKombJkFA2T1jl8LAIIs7IV6gBQ==}
 
   '@types/jsdom@20.0.1':
     resolution: {integrity: sha512-d0r18sZPmMQr1eG35u12FZfhIXNrnsPU/g5wvRKCUf/tOGilKKwYMYGqh33BNR6ba+2gkHw1EUiHoN3mn7E5IQ==}
@@ -25802,7 +25802,7 @@ snapshots:
       expect: 29.7.0
       pretty-format: 29.7.0
 
-  '@types/jquery@3.5.33':
+  '@types/jquery@3.5.34':
     dependencies:
       '@types/sizzle': 2.3.9
 
