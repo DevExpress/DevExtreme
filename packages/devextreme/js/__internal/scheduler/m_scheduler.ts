@@ -1166,7 +1166,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private initMarkupCore() {
     this.readyToRenderAppointments = hasWindow();
 
-    this._workSpace && this.cleanWorkspace();
+    this._workSpace && this.cleanWorkSpace();
 
     this.renderWorkSpace();
     this._appointments.option({
@@ -1254,7 +1254,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getResizableStep: () => (this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0),
       getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),
       getViewDataProvider: () => this._workSpace?.viewDataProvider,
-      isVerticalGroupedWorkSpace: () => this._workSpace._isVerticalGroupedWorkSpace(),
+      isVerticalGroupedWorkSpace: () => this._workSpace.isVerticalGroupedWorkSpace(),
       isDateAndTimeView: () => isDateAndTimeView(this._workSpace.type),
       onContentReady: () => {
         this._workSpace?.option('allDayExpanded', this.isAllDayExpanded());
@@ -1278,7 +1278,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this.recalculateWorkspace();
     if (currentViewOptions.startDate) {
-      this.updateOption('header', 'currentDate', this._workSpace._getHeaderDate());
+      this.updateOption('header', 'currentDate', this._workSpace.getHeaderDate());
     }
   }
 
@@ -1300,7 +1300,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
 
     this.allowDragging() && this._workSpace.initDragBehavior(this, this.all);
-    this._workSpace._attachTablesEvents();
+    this._workSpace.attachTablesEvents();
     this._workSpace.getWorkArea().append(this._appointments.$element());
   }
 
@@ -1431,7 +1431,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   private refreshWorkSpace(): void {
-    this.cleanWorkspace();
+    this.cleanWorkSpace();
 
     delete this._workSpace;
 
@@ -1446,7 +1446,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  private cleanWorkspace() {
+  private cleanWorkSpace() {
     this._appointments.$element().detach();
     this._workSpace._dispose();
     this._workSpace.$element().remove();
