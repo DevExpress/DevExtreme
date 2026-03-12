@@ -148,5 +148,5 @@ export const dataSource = [
     year: 2020,
     country: 'Brazil',
     oil: 160,
-  }
+  },
 ];
