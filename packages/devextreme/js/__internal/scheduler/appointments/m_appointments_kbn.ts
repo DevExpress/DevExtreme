@@ -162,9 +162,9 @@ export class AppointmentsKeyboardNavigation {
     const containerRect = $container.get(0).getBoundingClientRect();
     const itemRect = $item.get(0).getBoundingClientRect();
 
-    return (itemRect.top < containerRect.bottom
+    return itemRect.top < containerRect.bottom
       && itemRect.bottom > containerRect.top
       && itemRect.left < containerRect.right
-      && itemRect.right > containerRect.left);
+      && itemRect.right > containerRect.left;
   }
 }
