@@ -7,6 +7,7 @@ import type {
   DataSourceAdapterExtension,
   ExtenderPipeline,
   ExtenderPipelineStep,
+  GridCoreModuleInfo,
   InheritanceEntry,
   ParsedFile,
   RegisterModuleCall,
@@ -34,36 +35,24 @@ function classifyModule(
   reg: RegisterModuleCall,
   parsedFile: ParsedFile,
 ): ModificationCategory {
+  // 1. No grid_core reference at all → new (data_grid-only module)
   if (!reg.referencesGridCoreModule) return 'new';
+
+  // 2. Direct passthrough: gridCore.registerModule('sorting', sortingModule)
   if (reg.argIsIdentifier) return 'passthrough';
 
-  const hasGridCoreSpreads = reg.spreadSources.some((src) => {
-    const importInfo = parsedFile.imports.get(src);
-    return importInfo?.isFromGridCore ?? false;
-  });
+  // Check for locally-defined controllers/views (→ replaced)
+  const hasLocalControllers = Object.values(reg.controllers).some((c) => c.isDefinedLocally);
+  const hasLocalViews = Object.values(reg.views).some((v) => v.isDefinedLocally);
+  if (hasLocalControllers || hasLocalViews) return 'replaced';
 
-  if (hasGridCoreSpreads) {
-    if (reg.hasInlineExtenders && hasLocallyDefinedExtenders(reg, parsedFile)) {
-      return 'extended';
-    }
-    return 'passthrough';
-  }
-
-  if (reg.hasInlineControllers || reg.hasInlineViews) {
-    const hasLocalControllers = Object.values(reg.controllers).some((c) => c.isDefinedLocally);
-    const hasLocalViews = Object.values(reg.views).some((v) => v.isDefinedLocally);
-    if (hasLocalControllers || hasLocalViews) return 'replaced';
-    if (reg.hasInlineExtenders && hasLocallyDefinedExtenders(reg, parsedFile)) {
-      return 'extended';
-    }
-    return 'passthrough';
-  }
-
-  if (reg.hasDefaultOptions) return 'replaced';
+  // Check for locally-defined extenders (→ extended)
   if (reg.hasInlineExtenders && hasLocallyDefinedExtenders(reg, parsedFile)) {
     return 'extended';
   }
 
+  // Everything else (including defaultOptions-only overrides) is passthrough
+  // defaultOptions are initial property values and do NOT affect classification
   return 'passthrough';
 }
 
@@ -85,7 +74,6 @@ function buildDetails(category: ModificationCategory, reg: RegisterModuleCall): 
           replaced.push(`view '${name}' → ${ref.className} extends ${ref.baseClass}`);
         }
       }
-      if (reg.hasDefaultOptions) replaced.push('defaultOptions overridden');
       return replaced.join('; ') || 'Controller/view replacement';
     }
     case 'extended': {
@@ -203,11 +191,24 @@ export function collectDataSourceAdapterChain(
 
 // ─── Public: buildExtenderPipelines ──────────────────────────────────────────
 
-export function buildExtenderPipelines(modules: ClassifiedModule[]): ExtenderPipeline[] {
+export function buildExtenderPipelines(
+  modules: ClassifiedModule[],
+  gridCoreModules: GridCoreModuleInfo[],
+): ExtenderPipeline[] {
   const controllerSteps = new Map<string, ExtenderPipelineStep[]>();
   const viewSteps = new Map<string, ExtenderPipelineStep[]>();
 
+  // Helper: find gc module by registration name
+  function findGcModule(dgModuleName: string): GridCoreModuleInfo | undefined {
+    return gridCoreModules.find((gc) => gc.registeredAs === dgModuleName);
+  }
+
   for (const mod of modules) {
+    const gcMod = findGcModule(mod.moduleName);
+
+    // Collect controller extenders
+    // 1. Extenders explicitly declared in data_grid registerModule call
+    const declaredCtrlTargets = new Set(Object.keys(mod.extenders.controllers));
     for (const [targetName, ext] of Object.entries(mod.extenders.controllers)) {
       const step: ExtenderPipelineStep = {
         moduleName: mod.moduleName,
@@ -215,10 +216,31 @@ export function buildExtenderPipelines(modules: ClassifiedModule[]): ExtenderPip
         extenderName: ext.extenderName,
         isFromGridCore: ext.isImportedFromGridCore,
         registrationOrder: mod.registrationOrder,
+        category: mod.category,
       };
       const existing = controllerSteps.get(targetName);
       if (existing) { existing.push(step); } else { controllerSteps.set(targetName, [step]); }
     }
+    // 2. GC extenders from passthrough modules (not already declared by dg)
+    if (gcMod && (mod.category === 'passthrough' || mod.category === 'extended')) {
+      for (const [targetName, ext] of Object.entries(gcMod.extenders.controllers)) {
+        if (!declaredCtrlTargets.has(targetName)) {
+          const step: ExtenderPipelineStep = {
+            moduleName: mod.moduleName,
+            relPath: mod.relPath,
+            extenderName: ext.extenderName,
+            isFromGridCore: true,
+            registrationOrder: mod.registrationOrder,
+            category: mod.category,
+          };
+          const existing = controllerSteps.get(targetName);
+          if (existing) { existing.push(step); } else { controllerSteps.set(targetName, [step]); }
+        }
+      }
+    }
+
+    // Collect view extenders
+    const declaredViewTargets = new Set(Object.keys(mod.extenders.views));
     for (const [targetName, ext] of Object.entries(mod.extenders.views)) {
       const step: ExtenderPipelineStep = {
         moduleName: mod.moduleName,
@@ -226,9 +248,27 @@ export function buildExtenderPipelines(modules: ClassifiedModule[]): ExtenderPip
         extenderName: ext.extenderName,
         isFromGridCore: ext.isImportedFromGridCore,
         registrationOrder: mod.registrationOrder,
+        category: mod.category,
       };
       const existing = viewSteps.get(targetName);
       if (existing) { existing.push(step); } else { viewSteps.set(targetName, [step]); }
+    }
+    // 2. GC extenders from passthrough modules (not already declared by dg)
+    if (gcMod && (mod.category === 'passthrough' || mod.category === 'extended')) {
+      for (const [targetName, ext] of Object.entries(gcMod.extenders.views)) {
+        if (!declaredViewTargets.has(targetName)) {
+          const step: ExtenderPipelineStep = {
+            moduleName: mod.moduleName,
+            relPath: mod.relPath,
+            extenderName: ext.extenderName,
+            isFromGridCore: true,
+            registrationOrder: mod.registrationOrder,
+            category: mod.category,
+          };
+          const existing = viewSteps.get(targetName);
+          if (existing) { existing.push(step); } else { viewSteps.set(targetName, [step]); }
+        }
+      }
     }
   }
 

@@ -5,9 +5,37 @@ import type { ArchitectureData } from './types';
 export function generateHtml(data: ArchitectureData): string {
   const cytoscapeElements = buildCytoscapeElements(data);
   const elementsJson = JSON.stringify(cytoscapeElements, null, 2);
-  const pipelinesJson = JSON.stringify(data.extenderPipelines);
-  const dsaJson = JSON.stringify(data.dataSourceAdapterChain);
-  const crossDepsJson = JSON.stringify(data.crossDependencies);
+  const pipelines = data.extenderPipelines.map((p) => ({
+    targetName: p.targetName,
+    targetType: p.targetType,
+    steps: p.steps.map((s) => ({
+      moduleName: s.moduleName,
+      relPath: s.relPath,
+      extenderName: s.extenderName,
+      isFromGridCore: s.isFromGridCore,
+      registrationOrder: s.registrationOrder,
+      category: s.category,
+    })),
+  }));
+  // Add synthetic pipeline for DataSourceAdapter (same mixin pattern)
+  if (data.dataSourceAdapterChain.length > 0) {
+    pipelines.push({
+      targetName: 'dataSourceAdapter',
+      targetType: 'controller',
+      steps: data.dataSourceAdapterChain.map((ext) => {
+        const mod = data.modules.find((m) => m.relPath === ext.relPath);
+        return {
+          moduleName: mod?.moduleName ?? ext.relPath,
+          relPath: ext.relPath,
+          extenderName: ext.extenderName,
+          isFromGridCore: ext.isImportedFromGridCore,
+          registrationOrder: mod?.registrationOrder ?? -1,
+          category: mod?.category ?? 'passthrough',
+        };
+      }),
+    });
+  }
+  const pipelinesJson = JSON.stringify(pipelines);
   const gridCoreModulesJson = JSON.stringify(data.gridCoreModules.map((gc) => ({
     moduleName: gc.moduleName,
     registeredAs: gc.registeredAs,
@@ -37,7 +65,7 @@ export function generateHtml(data: ArchitectureData): string {
     extenders: m.extenders,
   })));
 
-  const categories = ['passthrough', 'extended', 'replaced', 'new', 'grid-core', 'utility'];
+  const categories = ['passthrough', 'extended', 'replaced', 'new', 'grid-core', 'gc-target'];
   const featureAreas = [...new Set(data.modules.map((m) => m.featureArea))].sort();
 
   return `<!DOCTYPE html>
@@ -99,11 +127,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;d
   <div>
     <h2>Edge Types</h2>
     <label><input type="checkbox" class="edge-toggle" data-cls="edge-order" checked> Registration Order</label>
-    <label><input type="checkbox" class="edge-toggle" data-cls="edge-gc-source" checked> Grid Core Source</label>
     <label><input type="checkbox" class="edge-toggle" data-cls="edge-ext-ctrl" checked> Extender Chain (ctrl)</label>
     <label><input type="checkbox" class="edge-toggle" data-cls="edge-ext-view" checked> Extender Chain (view)</label>
-    <label><input type="checkbox" class="edge-toggle" data-cls="edge-dsa" checked> DSA Chain</label>
-    <label><input type="checkbox" class="edge-toggle" data-cls="edge-cross-dep" checked> Cross-dependencies</label>
+    <label><input type="checkbox" class="edge-toggle" data-cls="edge-gc-defines" checked> GC Defines (ctrl/view)</label>
   </div>
   <div>
     <h2>Categories</h2>
@@ -137,14 +163,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;d
     <div class="leg-item"><div class="leg-sw" style="background:#2a2a3a;border:2px solid #90cdf4"></div> Extended</div>
     <div class="leg-item"><div class="leg-sw" style="background:#3a2a2a;border:2px solid #fc8181"></div> Replaced</div>
     <div class="leg-item"><div class="leg-sw" style="background:#3a3a2a;border:2px solid #f6e05e"></div> New</div>
-    <div class="leg-item"><div class="leg-sw" style="background:#1a1a2e;border:2px dashed #f59e0b"></div> Grid Core Source</div>
-    <div class="leg-item"><div class="leg-sw" style="background:#0a2a1a;border:2px dashed #10b981;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%)"></div> Shared Mixin / Utility</div>
+    <div class="leg-item"><div class="leg-sw" style="background:#1a1a2e;border:2px dashed #f59e0b"></div> Grid Core Module</div>
+    <div class="leg-item"><div class="leg-sw" style="background:#1e1e3a;border:2px solid #c084fc;border-radius:50%"></div> GC Target (ctrl/view)</div>
+    <div class="leg-item"><div class="leg-sw" style="background:#2a2a1e;border:2px dashed #f6e05e;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%)"></div> DG Target (ctrl/view)</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:1px dotted #c1c1c1"></div> Registration Order</div>
-    <div class="leg-item"><div class="leg-ln" style="border-top:2px dashed #f59e0b"></div> Grid Core Source</div>
-    <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #0ea5e9"></div> Extender Chain (ctrl)</div>
-    <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #a855f7"></div> Extender Chain (view)</div>
-    <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #f59e0b"></div> DSA Chain</div>
-    <div class="leg-item"><div class="leg-ln" style="border-top:2px dashed #10b981"></div> Cross-dependency</div>
+    <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #0ea5e9"></div> Extender (ctrl → target)</div>
+    <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #a855f7"></div> Extender (view → target)</div>
+    <div class="leg-item"><div class="leg-ln" style="border-top:1.5px dashed #a78bfa"></div> GC Defines (ctrl/view)</div>
   </div>
 </div>
 <div id="main">
@@ -154,10 +179,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;d
 <script>
 var ELEMENTS = ${elementsJson};
 var PIPELINES = ${pipelinesJson};
-var DSA = ${dsaJson};
 var MODULES = ${modulesJson};
 var GC_MODULES = ${gridCoreModulesJson};
-var CROSS_DEPS = ${crossDepsJson};
 
 var cy = cytoscape({
   container: document.getElementById('cy'),
@@ -169,26 +192,52 @@ var cy = cytoscape({
       'font-size': 10, 'color': '#e8e8e8', 'text-wrap': 'wrap', 'text-max-width': '260px',
       'padding': '14px', 'width': 'label', 'height': 'label',
     }},
-    { selector: 'node.module.passthrough', style: { 'background-color': '#2a3a2a', 'border-color': '#68d391' }},
-    { selector: 'node.module.extended', style: { 'background-color': '#2a3a3a', 'border-color': '#90cdf4' }},
-    { selector: 'node.module.replaced', style: { 'background-color': '#3a2a2a', 'border-color': '#fc8181' }},
+    { selector: 'node.module.passthrough', style: { 'background-color': '#2a3a2a', 'border-color': '#68d391',
+      'text-valign': 'top', 'text-margin-y': 6, 'padding': '30px',
+      'min-width': '80px',
+    }},
+    { selector: 'node.module.extended', style: { 'background-color': '#2a3a3a', 'border-color': '#90cdf4',
+      'text-valign': 'top', 'text-margin-y': 6, 'padding': '30px',
+      'min-width': '80px',
+    }},
+    { selector: 'node.module.replaced', style: { 'background-color': '#3a2a2a', 'border-color': '#fc8181',
+      'text-valign': 'top', 'text-margin-y': 6, 'padding': '30px',
+      'min-width': '80px',
+    }},
     { selector: 'node.module.new', style: { 'background-color': '#3a3a2a', 'border-color': '#f6e05e' }},
     { selector: 'node.module.grid-core', style: {
       'background-color': '#1a1a2e', 'border-width': 2, 'border-style': 'dashed', 'border-color': '#f59e0b',
       'color': '#f5c040', 'background-opacity': 0.5, 'shape': 'barrel',
+      'padding': '12px',
     }},
     { selector: 'node.module.utility', style: {
       'background-color': '#0a2a1a', 'border-width': 2, 'border-style': 'dashed',
       'border-color': '#10b981', 'color': '#6ee7b7', 'shape': 'diamond',
     }},
-    { selector: 'edge.edge-gc-source', style: {
-      'line-color': '#f59e0b', 'target-arrow-color': '#f59e0b', 'target-arrow-shape': 'triangle',
-      'curve-style': 'bezier', 'width': 1.5, 'arrow-scale': .7,
-      'line-style': 'dashed', 'opacity': .5,
-      'label': 'data(label)', 'font-size': 8, 'color': '#f5c040',
-      'text-rotation': 'autorotate', 'text-margin-y': -8,
-      'text-background-color': '#1a1a2e', 'text-background-opacity': .9,
-      'text-background-padding': '2px', 'text-background-shape': 'round-rectangle',
+    { selector: 'node.gc-target', style: {
+      'background-color': '#1e1e3a', 'border-width': 2, 'border-style': 'solid',
+      'border-color': '#c084fc', 'color': '#d8b4fe', 'shape': 'ellipse',
+      'background-opacity': 0.6, 'font-size': 9,
+      'text-valign': 'center', 'text-halign': 'center',
+      'text-wrap': 'wrap', 'text-max-width': '120px',
+      'padding': '10px', 'width': 'label', 'height': 'label',
+      'label': 'data(label)',
+    }},
+    { selector: 'node.gc-target-controller', style: {
+      'border-color': '#7dd3fc', 'color': '#bae6fd',
+    }},
+    { selector: 'node.gc-target-view', style: {
+      'border-color': '#c084fc', 'color': '#d8b4fe',
+    }},
+    { selector: 'node.dg-target', style: {
+      'background-color': '#2a2a1e', 'border-style': 'dashed',
+      'border-color': '#f6e05e', 'color': '#fde68a', 'shape': 'round-diamond',
+    }},
+    { selector: 'node.dg-target.gc-target-controller', style: {
+      'border-color': '#f6e05e', 'color': '#fde68a',
+    }},
+    { selector: 'node.dg-target.gc-target-view', style: {
+      'border-color': '#fbbf24', 'color': '#fde68a',
     }},
     { selector: 'edge.edge-order', style: {
       'line-color': '#c1c1c1', 'target-arrow-color': '#c1c1c1', 'target-arrow-shape': 'triangle',
@@ -211,21 +260,13 @@ var cy = cytoscape({
       'text-background-color': '#1a1a2e', 'text-background-opacity': .9,
       'text-background-padding': '2px', 'text-background-shape': 'round-rectangle',
     }},
-    { selector: 'edge.edge-dsa', style: {
-      'line-color': '#f59e0b', 'target-arrow-color': '#f59e0b', 'target-arrow-shape': 'triangle',
-      'curve-style': 'bezier', 'width': 2.5, 'arrow-scale': .8,
-      'label': 'data(label)', 'font-size': 8, 'color': '#f5c040',
+    { selector: 'edge.edge-gc-defines', style: {
+      'line-color': '#a78bfa', 'target-arrow-color': '#a78bfa', 'target-arrow-shape': 'triangle',
+      'curve-style': 'bezier', 'width': 1.5, 'arrow-scale': .6,
+      'line-style': 'dashed', 'opacity': .4,
+      'label': 'data(label)', 'font-size': 7, 'color': '#c4b5fd',
       'text-rotation': 'autorotate', 'text-margin-y': -8,
       'text-background-color': '#1a1a2e', 'text-background-opacity': .9,
-      'text-background-padding': '2px', 'text-background-shape': 'round-rectangle',
-    }},
-    { selector: 'edge.edge-cross-dep', style: {
-      'line-color': '#10b981', 'target-arrow-color': '#10b981', 'target-arrow-shape': 'triangle',
-      'curve-style': 'bezier', 'width': 2, 'arrow-scale': .7,
-      'line-style': 'dashed', 'opacity': .6,
-      'label': 'data(label)', 'font-size': 7, 'color': '#6ee7b7',
-      'text-rotation': 'autorotate', 'text-margin-y': -8,
-      'text-background-color': '#0a2a1a', 'text-background-opacity': .9,
       'text-background-padding': '2px', 'text-background-shape': 'round-rectangle',
     }},
     { selector: '.highlighted', style: { 'opacity': 1, 'z-index': 999 }},
@@ -300,7 +341,7 @@ document.querySelectorAll('.edge-toggle').forEach(function(cb) {
 function applyCatFilters() {
   var cats = {};
   document.querySelectorAll('.cat-toggle').forEach(function(cb) { cats[cb.getAttribute('data-cat')] = cb.checked; });
-  cy.nodes('.module').forEach(function(n) {
+  cy.nodes('.module, .gc-target').forEach(function(n) {
     var cat = n.data('category');
     n.style('display', cats[cat] !== false ? 'element' : 'none');
   });
@@ -316,7 +357,7 @@ document.getElementById('cat-all').addEventListener('change', function() {
 function applyAreaFilters() {
   var areas = {};
   document.querySelectorAll('.area-toggle').forEach(function(cb) { areas[cb.getAttribute('data-area')] = cb.checked; });
-  cy.nodes('.module').forEach(function(n) {
+  cy.nodes('.module, .gc-target').forEach(function(n) {
     var area = n.data('featureArea');
     if (area && areas[area] === false) n.style('display', 'none');
     else if (n.style('display') === 'none' && areas[area] !== false) n.style('display', 'element');
@@ -331,23 +372,48 @@ document.getElementById('area-all').addEventListener('change', function() {
 
 /* ── Highlight ── */
 var selectedTarget = null;
+
+// DG module and its embedded GC module are one logical unit.
+// Expand a single node to include its partner.
+function compoundGroup(node) {
+  var col = cy.collection().union(node);
+  var nt = node.data('nodeType');
+  if (nt === 'module' && node.children().nonempty()) {
+    // dg parent → include gc child inside it
+    col = col.union(node.children());
+  } else if (nt === 'gridCoreModule' && node.data('parent')) {
+    // embedded gc child → include dg parent
+    var p = node.parent();
+    if (p && p.nonempty()) col = col.union(p);
+  }
+  return col;
+}
+
 function connSet(seeds) {
   var edges = seeds.connectedEdges().filter(function(e) { return e.style('display') !== 'none'; });
   return seeds.union(edges).union(edges.connectedNodes());
 }
 function highlightSet(t) {
   if (t.isEdge()) return cy.collection().union(t).union(t.source()).union(t.target());
-  return connSet(cy.collection().union(t));
+  var group = compoundGroup(t);
+  return connSet(group);
 }
 function applyHighlight(s) { cy.elements().addClass('faded').removeClass('highlighted'); s.removeClass('faded').addClass('highlighted'); }
 function clearHighlight() { cy.elements().removeClass('faded').removeClass('highlighted'); }
 
 cy.on('tap', 'node, edge', function(e) {
   var t = e.target;
-  if (selectedTarget && selectedTarget.id() === t.id()) { selectedTarget = null; clearHighlight(); infoP.innerHTML = '<p style="color:#888">Click a node or edge to see details.</p>'; return; }
-  selectedTarget = t;
+  // For passthrough pair, normalize: clicking embedded gc → treat as clicking dg parent
+  var infoTarget = t;
+  if (t.isNode() && t.data('nodeType') === 'gridCoreModule' && t.data('parent')) {
+    var p = t.parent();
+    if (p && p.nonempty()) infoTarget = p;
+  }
+  var checkId = infoTarget.id();
+  if (selectedTarget && selectedTarget.id() === checkId) { selectedTarget = null; clearHighlight(); infoP.innerHTML = '<p style="color:#888">Click a node or edge to see details.</p>'; return; }
+  selectedTarget = infoTarget;
   applyHighlight(highlightSet(t));
-  showInfo(t);
+  showInfo(infoTarget);
 });
 cy.on('tap', function(e) {
   if (e.target === cy && selectedTarget) { selectedTarget = null; clearHighlight(); infoP.innerHTML = '<p style="color:#888">Click a node or edge to see details.</p>'; }
@@ -374,7 +440,7 @@ searchInput.addEventListener('input', function() {
 var infoP = document.getElementById('info-panel');
 
 function tagFor(cat) {
-  var map = { passthrough: 'c-pt', extended: 'c-ext', replaced: 'c-rep', 'new': 'c-new', 'grid-core': 'c-gc', utility: 'c-util' };
+  var map = { passthrough: 'c-pt', extended: 'c-ext', replaced: 'c-rep', 'new': 'c-new', 'grid-core': 'c-gc', 'gc-target': 'c-gc' };
   var cls = map[cat] || 'c-pt';
   return '<span class="tag ' + cls + '">' + cat.toUpperCase() + '</span>';
 }
@@ -383,31 +449,21 @@ function findGcModule(name) { return GC_MODULES.find(function(gc) { return gc.re
 
 function renderChain(pip, extraClass) {
   var h = '<div class="chain-box ' + extraClass + '">';
-  h += '<div style="font-weight:bold;margin-bottom:3px">' + pip.targetType + ' "' + pip.targetName + '" chain:</div>';
+  h += '<div style="font-weight:bold;margin-bottom:3px">' + pip.targetType + ' "' + pip.targetName + '" pipeline (' + pip.steps.length + ' steps):</div>';
   for (var i = 0; i < pip.steps.length; i++) {
     var s = pip.steps[i];
+    var origin = s.isFromGridCore ? 'gc' : 'dg';
+    var catTag = s.category ? ' [' + s.category + ']' : '';
     var cls = s.isFromGridCore ? 's-gc' : 's-current';
-    h += '<div class="chain-step ' + cls + '">#' + (s.registrationOrder+1) + ' ' + s.moduleName + ' → ' + s.extenderName + '</div>';
+    h += '<div class="chain-step ' + cls + '">';
+    h += '<b>#' + (i + 1) + '</b> ';
+    h += s.moduleName + catTag + ' <span style="opacity:.7">(' + origin + ')</span>';
+    h += ' <span style="font-size:10px;opacity:.6">→ ' + s.extenderName + '</span>';
+    h += '</div>';
     if (i < pip.steps.length - 1) h += '<div class="chain-arr">&darr; extends</div>';
   }
   h += '<div class="chain-arr">&darr;</div>';
   h += '<div class="chain-step"><span class="s-final">Final ' + pip.targetType + ' "' + pip.targetName + '"</span></div>';
-  h += '</div>';
-  return h;
-}
-
-function renderDsaChain() {
-  var h = '<div class="chain-box">';
-  h += '<div style="font-weight:bold;margin-bottom:3px">DataSourceAdapter chain:</div>';
-  h += '<div class="chain-step s-gc">Base DataSourceAdapter (grid_core)</div>';
-  for (var i = 0; i < DSA.length; i++) {
-    h += '<div class="chain-arr">&darr; .extend()</div>';
-    var mod = MODULES.find(function(m) { return m.relPath === DSA[i].relPath; });
-    var cls = DSA[i].isImportedFromGridCore ? 's-gc' : 's-current';
-    h += '<div class="chain-step ' + cls + '">' + (mod ? mod.moduleName : DSA[i].relPath) + ' → ' + DSA[i].extenderName + '</div>';
-  }
-  h += '<div class="chain-arr">&darr;</div>';
-  h += '<div class="chain-step"><span class="s-final">Final DataSourceAdapterType</span></div>';
   h += '</div>';
   return h;
 }
@@ -433,12 +489,17 @@ function showInfo(t) {
       if (extViewNames.length) { h += '<h3 style="margin-top:6px">Extender Views:</h3>'; for (var evi = 0; evi < extViewNames.length; evi++) { h += '<p style="font-size:11px;margin-left:8px"><b>' + extViewNames[evi] + '</b>: ' + gcExts.views[extViewNames[evi]].extenderName + ' (' + gcExts.views[extViewNames[evi]].pattern + ')</p>'; } }
     } catch(e) {}
 
-  } else if (t.isNode() && d.nodeType === 'utility') {
-    h = '<h3>' + d.label + ' ' + tagFor('utility') + '</h3>';
-    h += '<p><span class="lbl">Source:</span> ' + d.sourceFile + '</p>';
-    h += '<p style="font-size:11px;color:#888;margin-top:4px">Shared file (mixin/utility) — not a registered module.</p>';
-    var usedBy = CROSS_DEPS.filter(function(cd) { return cd.toRelPath === d.sourceFile; });
-    if (usedBy.length) { h += '<h3 style="margin-top:6px">Used by:</h3>'; for (var ui = 0; ui < usedBy.length; ui++) { h += '<p style="font-size:11px;margin-left:8px"><b>' + usedBy[ui].fromModule + '</b> imports <span style="color:#6ee7b7">' + usedBy[ui].importedNames.join(', ') + '</span></p>'; } }
+  } else if (t.isNode() && d.nodeType === 'gcTarget') {
+    var originLabel = d.targetOrigin === 'dg' ? 'DG-defined' : 'GC-defined';
+    var originTag = d.targetOrigin === 'dg' ? tagFor('new') : tagFor('gc-target');
+    h = '<h3>' + d.targetName + ' ' + originTag + ' <span style="font-size:11px;color:#888">(' + d.targetType + ', ' + originLabel + ')</span></h3>';
+    var pip = PIPELINES.find(function(p) { return p.targetName === d.targetName && p.targetType === d.targetType; });
+    if (pip) {
+      h += '<p><span class="lbl">Extended by ' + pip.steps.length + ' module(s):</span></p>';
+      h += renderChain(pip, d.targetType === 'view' ? 'chain-view' : '');
+    } else {
+      h += '<p style="font-size:11px;color:#888;margin-top:4px">Not extended by any module.</p>';
+    }
 
   } else if (t.isNode() && d.nodeType === 'module') {
     h = '<h3>#' + (d.registrationOrder + 1) + ' ' + d.moduleName + ' ' + tagFor(d.category) + '</h3>';
@@ -463,8 +524,6 @@ function showInfo(t) {
     if (ctrlPips.length) { h += '<h3 style="margin-top:6px">Controller Chains:</h3>'; for (var i = 0; i < ctrlPips.length; i++) h += renderChain(ctrlPips[i], ''); }
     if (viewPips.length) { h += '<h3 style="margin-top:6px">View Chains:</h3>'; for (var j = 0; j < viewPips.length; j++) h += renderChain(viewPips[j], 'chain-view'); }
 
-    var inDsa = DSA.some(function(dd) { return MODULES.find(function(m) { return m.relPath === dd.relPath && m.moduleName === d.moduleName; }); });
-    if (inDsa) { h += '<h3 style="margin-top:6px">DataSourceAdapter:</h3>'; h += renderDsaChain(); }
 
     if (d.category === 'passthrough') h += '<p style="margin-top:6px;font-size:11px;color:#666">Directly re-exports a grid_core module without modifications.</p>';
 
@@ -474,14 +533,14 @@ function showInfo(t) {
     h += '<p><span class="lbl">From:</span> ' + (d.source || '').replace('mod-', '').replace('gc-', '') + '</p>';
     h += '<p><span class="lbl">To:</span> ' + (d.target || '').replace('mod-', '').replace('gc-', '') + '</p>';
     if (d.targetName) h += '<p><span class="lbl">Target:</span> ' + d.targetName + '</p>';
-    if (et === 'extender-chain') {
-      h += '<p style="font-size:11px;color:#a0a0b0;margin-top:4px">Module <b>' + (d.source || '').replace('mod-', '') + '</b> extends ' + d.targetType + ' <b>' + d.targetName + '</b>, then further extended by <b>' + (d.target || '').replace('mod-', '') + '</b>.</p>';
+    if (et === 'extender-target') {
+      h += '<p style="font-size:11px;color:#a0a0b0;margin-top:4px">Module <b>' + (d.source || '').replace('mod-', '') + '</b> extends ' + d.targetType + ' <b>' + d.targetName + '</b> (step ' + d.label + ').</p>';
       var pip = PIPELINES.find(function(p) { return p.targetName === d.targetName && p.targetType === d.targetType; });
       if (pip) h += renderChain(pip, d.targetType === 'view' ? 'chain-view' : '');
     }
-    if (et === 'dsa-chain') { h += '<p style="font-size:11px;color:#a0a0b0;margin-top:4px">Both modules wrap DataSourceAdapterType via .extend().</p>'; h += renderDsaChain(); }
-    if (et === 'grid-core-source') { h += '<p style="font-size:11px;color:#a0a0b0;margin-top:4px">data_grid module <b>' + (d.target || '').replace('mod-', '') + '</b> is derived from grid_core module <b>' + (d.source || '').replace('gc-', '') + '</b>.</p>'; }
-    if (et === 'cross-dep') { h += '<p style="font-size:11px;color:#a0a0b0;margin-top:4px">Module <b>' + (d.source || '').replace('mod-', '') + '</b> imports <span style="color:#6ee7b7">' + (d.label || '') + '</span> from <b>' + (d.toRelPath || (d.target || '').replace('mod-', '')) + '</b>.</p>'; }
+    if (et === 'gc-defines') {
+      h += '<p style="font-size:11px;color:#a0a0b0;margin-top:4px">Grid core module <b>' + (d.source || '').replace('gc-', '') + '</b> defines ' + d.targetName + '.</p>';
+    }
   }
   infoP.innerHTML = h;
 }

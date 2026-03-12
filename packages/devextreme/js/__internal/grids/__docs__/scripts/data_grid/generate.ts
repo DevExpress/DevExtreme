@@ -3,13 +3,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { DATA_GRID_ROOT, GRID_CORE_ROOT, OUTPUT_DIR } from './constants';
+import { DATA_GRID_ROOT, OUTPUT_DIR } from './constants';
 import { generateHtml } from './html-template';
 import {
   discoverDataGridFiles,
   getRelativePath,
   parseDataGridFile,
-  parseGridCoreModules,
   parseModulesOrder,
 } from './parser';
 import {
@@ -19,7 +18,9 @@ import {
   classifyModules,
   collectDataSourceAdapterChain,
 } from './resolver';
-import type { ArchitectureData, ParsedFile } from './types';
+import type { ArchitectureData, GridCoreModuleInfo, ParsedFile } from './types';
+
+const GC_JSON_PATH = path.join(OUTPUT_DIR, 'grid_core_architecture.generated.json');
 
 interface CliArgs {
   jsonOnly: boolean;
@@ -52,6 +53,31 @@ function parseArgs(): CliArgs {
   return result;
 }
 
+function loadGridCoreModules(): GridCoreModuleInfo[] {
+  if (!fs.existsSync(GC_JSON_PATH)) {
+    console.error(`ERROR: grid_core_architecture.generated.json not found at ${GC_JSON_PATH}`);
+    console.error('Please run the grid_core architecture script first:');
+    console.error('  npx tsx __docs__/scripts/grid_core/generate-architecture-doc.ts');
+    process.exit(1);
+  }
+
+  const raw = JSON.parse(fs.readFileSync(GC_JSON_PATH, 'utf-8'));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const modules: GridCoreModuleInfo[] = (raw.modules ?? []).map((m: any) => ({
+    moduleName: m.moduleName,
+    registeredAs: m.registeredAs ?? null,
+    sourceFile: m.sourceFile,
+    featureArea: m.featureArea,
+    controllers: m.controllers ?? {},
+    views: m.views ?? {},
+    extenders: m.extenders ?? { controllers: {}, views: {} },
+    hasDefaultOptions: m.hasDefaultOptions ?? false,
+  }));
+
+  console.log(`Loaded ${modules.length} grid_core modules from ${GC_JSON_PATH}`);
+  return modules;
+}
+
 function appendMissingModuleNames(modulesOrder: string[], parsedFiles: ParsedFile[]): void {
   for (const pf of parsedFiles) {
     for (const reg of pf.registerModuleCalls) {
@@ -76,9 +102,8 @@ function main(): void {
     const modulesOrder = parseModulesOrder();
     console.log(`Parsed ${modulesOrder.length} modules from registerModulesOrder (ascending order)`);
 
-    // 2. Parse grid_core modules (to show full extension/inheritance chains)
-    const gridCoreModules = parseGridCoreModules(GRID_CORE_ROOT);
-    console.log(`Parsed ${gridCoreModules.length} grid_core modules`);
+    // 2. Load grid_core modules from pre-generated JSON (prerequisite check)
+    const gridCoreModules = loadGridCoreModules();
 
     // 3. Discover data_grid source files
     const sourceFiles = discoverDataGridFiles(DATA_GRID_ROOT);
@@ -111,11 +136,11 @@ function main(): void {
     }
     console.log(`  Passthrough: ${counts.passthrough}, Replaced: ${counts.replaced}, Extended: ${counts.extended}, New: ${counts.new}`);
 
-    // 7. Build extender pipelines
-    const extenderPipelines = buildExtenderPipelines(allModules);
+    // 7. Build extender pipelines (including gc extenders from passthrough modules)
+    const extenderPipelines = buildExtenderPipelines(allModules, gridCoreModules);
     console.log(`\nBuilt ${extenderPipelines.length} extender pipelines:`);
     for (const p of extenderPipelines) {
-      console.log(`  ${p.targetType} '${p.targetName}' — ${p.steps.length} step(s): ${p.steps.map((s) => s.moduleName).join(' → ')}`);
+      console.log(`  ${p.targetType} '${p.targetName}' — ${p.steps.length} step(s): ${p.steps.map((s) => `${s.moduleName}${s.isFromGridCore ? '(gc)' : '(dg)'}`).join(' → ')}`);
     }
 
     // 8. Collect DataSourceAdapter chain

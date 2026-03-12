@@ -5,10 +5,6 @@ import * as path from 'path';
 import ts from 'typescript';
 
 import {
-  discoverSourceFiles as discoverGridCoreFiles,
-  parseFile as parseGridCoreFile,
-} from '../grid_core/parser';
-import {
   DATA_GRID_ROOT,
   DATA_SOURCE_ADAPTER_PROVIDER,
   EXCLUDED_DIRS,
@@ -20,7 +16,6 @@ import {
 import type {
   ControllerViewRef,
   ExtenderRef,
-  GridCoreModuleInfo,
   ParsedFile,
   RegisterModuleCall,
 } from './types';
@@ -200,6 +195,47 @@ function parseInlineControllerViews(
   return result;
 }
 
+function extractExtenderName(node: ts.Expression, sf: ts.SourceFile): string {
+  // Simple identifier: `data`, `GroupingDataControllerExtender`
+  if (ts.isIdentifier(node)) {
+    return node.text;
+  }
+
+  // Property access: `editingModule.extenders.controllers.data`
+  if (ts.isPropertyAccessExpression(node)) {
+    return getNodeText(node, sf);
+  }
+
+  // Arrow function: `(Base) => class FooExtender extends Base { ... }`
+  if (ts.isArrowFunction(node)) {
+    let { body } = node;
+    if (ts.isParenthesizedExpression(body)) {
+      body = body.expression;
+    }
+    if (ts.isClassExpression(body) && body.name) {
+      return body.name.text;
+    }
+    // Try to extract class name from body text
+    const text = getNodeText(node, sf);
+    const classMatch = /class\s+(\w+)/.exec(text);
+    if (classMatch) {
+      return classMatch[1];
+    }
+    return '(inline)';
+  }
+
+  // Fallback: use text but truncate if too long
+  const text = getNodeText(node, sf);
+  if (text.length > 60) {
+    const classMatch = /class\s+(\w+)/.exec(text);
+    if (classMatch) {
+      return classMatch[1];
+    }
+    return '(inline)';
+  }
+  return text;
+}
+
 function parseInlineExtenders(
   objLiteral: ts.ObjectLiteralExpression,
   sf: ts.SourceFile,
@@ -243,7 +279,7 @@ function parseInlineExtenders(
 
         if (ts.isPropertyAssignment(innerProp)) {
           targetName = innerProp.name && ts.isIdentifier(innerProp.name) ? innerProp.name.text : '';
-          extenderName = getNodeText(innerProp.initializer, sf);
+          extenderName = extractExtenderName(innerProp.initializer, sf);
         } else if (ts.isShorthandPropertyAssignment(innerProp)) {
           targetName = innerProp.name.text;
           extenderName = targetName;
@@ -654,103 +690,4 @@ export function parseModulesOrder(): string[] {
 
   ts.forEachChild(sf, visit);
   return order;
-}
-
-// ─── Grid Core Module Parsing ────────────────────────────────────────────────
-
-const MODULE_SUFFIX = 'Module';
-
-function guessRegisteredName(moduleName: string): string | null {
-  if (moduleName.endsWith(MODULE_SUFFIX)) {
-    return moduleName.slice(0, -MODULE_SUFFIX.length);
-  }
-  return null;
-}
-
-const CORE_DIR_FEATURE_MAP: Record<string, string> = {
-  data_controller: 'Data',
-  views: 'Core',
-  editor_factory: 'Core',
-  error_handling: 'Core',
-  editing: 'Editing',
-  validating: 'Editing',
-  selection: 'Selection',
-  filter: 'Filtering',
-  header_filter: 'Filtering',
-  search: 'Filtering',
-  keyboard_navigation: 'Navigation',
-  focus: 'Navigation',
-  columns_controller: 'Columns Core',
-  column_headers: 'Columns Core',
-  header_panel: 'Columns Core',
-  column_chooser: 'Column Management',
-  column_fixing: 'Column Management',
-  sticky_columns: 'Column Management',
-  virtual_columns: 'Column Management',
-  columns_resizing_reordering: 'Column Management',
-  adaptivity: 'Column Management',
-  virtual_scrolling: 'Scrolling',
-  ai_column: 'AI',
-  ai_prompt_editor: 'AI',
-  data_source_adapter: 'Data',
-  context_menu: 'Core',
-  master_detail: 'Master Detail',
-  pager: 'Paging',
-  row_dragging: 'Row Dragging',
-  sorting: 'Sorting',
-  state_storing: 'State',
-  toast: 'Core',
-};
-
-export function parseGridCoreModules(gridCoreRoot: string): GridCoreModuleInfo[] {
-  const sourceFiles = discoverGridCoreFiles(gridCoreRoot);
-  const results: GridCoreModuleInfo[] = [];
-
-  for (const file of sourceFiles) {
-    try {
-      const parsed = parseGridCoreFile(file);
-      const relFromRoot = path.relative(gridCoreRoot, file).replace(/\\/g, '/');
-      const firstSegment = relFromRoot.split('/')[0];
-      const area = CORE_DIR_FEATURE_MAP[firstSegment] ?? 'Other';
-
-      for (const mod of parsed.modules) {
-        const controllers: GridCoreModuleInfo['controllers'] = {};
-        for (const [regName, ctrl] of Object.entries(mod.controllers)) {
-          controllers[regName] = {
-            regName,
-            className: ctrl.className,
-            baseClass: ctrl.baseClass,
-            mixins: ctrl.mixins,
-            sourceFile: relFromRoot,
-          };
-        }
-
-        const views: GridCoreModuleInfo['views'] = {};
-        for (const [regName, view] of Object.entries(mod.views)) {
-          views[regName] = {
-            regName,
-            className: view.className,
-            baseClass: view.baseClass,
-            mixins: view.mixins,
-            sourceFile: relFromRoot,
-          };
-        }
-
-        results.push({
-          moduleName: mod.moduleName,
-          registeredAs: guessRegisteredName(mod.moduleName),
-          sourceFile: relFromRoot,
-          featureArea: area,
-          controllers,
-          views,
-          extenders: mod.extenders,
-          hasDefaultOptions: mod.hasDefaultOptions,
-        });
-      }
-    } catch {
-      // Skip files that fail to parse
-    }
-  }
-
-  return results.sort((a, b) => a.moduleName.localeCompare(b.moduleName));
 }

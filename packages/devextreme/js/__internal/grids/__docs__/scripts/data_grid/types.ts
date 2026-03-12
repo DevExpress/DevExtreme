@@ -110,6 +110,7 @@ export interface ExtenderPipelineStep {
   extenderName: string;
   isFromGridCore: boolean;
   registrationOrder: number;
+  category: ModificationCategory;
 }
 
 export interface ExtenderPipeline {
