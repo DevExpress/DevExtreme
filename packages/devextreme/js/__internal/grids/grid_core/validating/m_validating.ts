@@ -505,7 +505,7 @@ export class ValidatingController extends modules.Controller {
           return {
             data: change
               ? createObjectWithChanges(oldData, change.data)
-              : { ...(oldData ?? parameters.data) },
+              : { ...oldData ?? parameters.data },
             column,
           };
         },
