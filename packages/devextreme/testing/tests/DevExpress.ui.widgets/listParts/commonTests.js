@@ -4809,7 +4809,7 @@ QUnit.module('Highlighting/selecting', { ...moduleSetup, afterEach: function() {
 
     const getFirstListItemAndTextNode = ($list) => {
         const $item = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
-        const textNode = $list.find(`.${LIST_ITEM_CONTENT_CLASS}`).eq(0).get(0).firstChild;
+        const textNode = $item.find(`.${LIST_ITEM_CONTENT_CLASS}`).eq(0).get(0).firstChild;
 
         return { $item, textNode };
     };
@@ -4820,16 +4820,15 @@ QUnit.module('Highlighting/selecting', { ...moduleSetup, afterEach: function() {
         });
 
         const { $item, textNode } = getFirstListItemAndTextNode(this.element);
-        assert.ok(!!textNode, 'text node found in list item');
-        if(!textNode) return;
+
+        assert.strictEqual(!!textNode, true, 'text node found in list item');
 
         selectTextNodePart(textNode, 0, 4);
         assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists before drag');
 
         pointerMock($item).start().down(0, 0).move(50, 0).up();
 
-        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection is preserved after horizontal drag');
-        window.getSelection().removeAllRanges();
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists after drag');
     });
 
     QUnit.test('text selection should be preserved after onItemSwipe handler is removed from options', function(assert) {
@@ -4842,16 +4841,14 @@ QUnit.module('Highlighting/selecting', { ...moduleSetup, afterEach: function() {
         list.option('onItemSwipe', null);
 
         const { $item, textNode } = getFirstListItemAndTextNode(this.element);
-        assert.ok(!!textNode, 'text node found in list item');
-        if(!textNode) return;
+        assert.strictEqual(!!textNode, true, 'text node found in list item');
 
         selectTextNodePart(textNode, 0, 4);
         assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists before drag');
 
         pointerMock($item).start().down(0, 0).move(50, 0).up();
 
-        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection is preserved after drag when swipe handler is removed');
-        window.getSelection().removeAllRanges();
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists after drag');
     });
 
     QUnit.test('text selection should reflect itemSwipe on/off subscription state', function(assert) {
@@ -4863,9 +4860,7 @@ QUnit.module('Highlighting/selecting', { ...moduleSetup, afterEach: function() {
 
         const { $item, textNode } = getFirstListItemAndTextNode(this.element);
 
-        assert.ok(!!textNode, 'text node found in list item');
-
-        if(!textNode) return;
+        assert.strictEqual(!!textNode, true, 'text node found in list item');
 
         list.on('itemSwipe', sinon.spy());
 
@@ -4883,8 +4878,7 @@ QUnit.module('Highlighting/selecting', { ...moduleSetup, afterEach: function() {
 
         pointerMock($item).start().down(0, 0).move(50, 0).up();
 
-        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection is preserved after drag when swipe handler is removed');
-        window.getSelection().removeAllRanges();
+        assert.strictEqual(window.getSelection().toString(), textNode.nodeValue.slice(0, 4), 'text selection exists after drag when swipe handler is removed');
     });
 });
 

@@ -1095,10 +1095,10 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   on(eventName: string | { [key: string]: Function }, eventHandler?: Function): this {
     const result = super.on(eventName, eventHandler);
 
-    const isItemSwipeOn = eventName === 'itemSwipe'
+    const hasItemSwipeHandler = eventName === 'itemSwipe'
       || (isPlainObject(eventName) && Object.prototype.hasOwnProperty.call(eventName, 'itemSwipe'));
 
-    if (isItemSwipeOn) {
+    if (hasItemSwipeHandler) {
       this._updateSwipeEventSubscription();
     }
 
