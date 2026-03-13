@@ -37,6 +37,10 @@ export interface RegisterModuleCall {
     controllers: Record<string, ExtenderRef>;
     views: Record<string, ExtenderRef>;
   };
+  /** When controllers is a property access like `someModule.controllers` from gc */
+  forwardedControllersRef: string | null;
+  /** When views is a property access like `someModule.views` from gc */
+  forwardedViewsRef: string | null;
 }
 
 export interface ControllerViewRef {

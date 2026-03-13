@@ -342,6 +342,8 @@ function parseRegisterModuleCall(
     controllers: {},
     views: {},
     extenders: { controllers: {}, views: {} },
+    forwardedControllersRef: null,
+    forwardedViewsRef: null,
   };
 
   if (ts.isIdentifier(arg)) {
@@ -419,6 +421,7 @@ function parseRegisterModuleCall(
         const imp = parsedFile.imports.get(baseIdent);
         if (imp?.isFromGridCore) {
           reg.referencesGridCoreModule = true;
+          reg.forwardedControllersRef = baseIdent;
           if (!reg.gridCoreRefs.includes(baseIdent)) {
             reg.gridCoreRefs.push(baseIdent);
           }
@@ -445,6 +448,7 @@ function parseRegisterModuleCall(
         const imp = parsedFile.imports.get(baseIdent);
         if (imp?.isFromGridCore) {
           reg.referencesGridCoreModule = true;
+          reg.forwardedViewsRef = baseIdent;
           if (!reg.gridCoreRefs.includes(baseIdent)) {
             reg.gridCoreRefs.push(baseIdent);
           }

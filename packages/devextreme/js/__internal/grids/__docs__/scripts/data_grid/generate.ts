@@ -125,7 +125,7 @@ function main(): void {
     appendMissingModuleNames(modulesOrder, allParsedFiles);
 
     // 6. Classify modules
-    const allModules = classifyModules(allParsedFiles, modulesOrder);
+    const allModules = classifyModules(allParsedFiles, modulesOrder, gridCoreModules);
     console.log(`\nClassified ${allModules.length} modules:`);
     const counts = {
       passthrough: 0, extended: 0, replaced: 0, new: 0,

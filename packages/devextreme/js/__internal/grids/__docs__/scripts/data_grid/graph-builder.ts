@@ -112,6 +112,25 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
     });
   }
 
+  function addSynthDefinesEdge(
+    dgMod: ArchitectureData['modules'][number],
+    targetName: string,
+    targetType: 'controller' | 'view',
+    targetId: string,
+    defClass: string,
+  ): void {
+    const synthId = `gc-synth-${dgMod.moduleName}`;
+    if (!nodeIds.has(synthId)) return;
+    const ref = targetType === 'controller'
+      ? dgMod.controllers[targetName] : dgMod.views[targetName];
+    if (!ref?.isImportedFromGridCore) return;
+    addEdge(synthId, targetId, {
+      edgeType: 'gc-defines',
+      label: 'defines',
+      targetName,
+    }, defClass);
+  }
+
   // ─── Collect all controller/view targets ───────────────────────────────────
   // Targets come from: (1) extender pipelines (gc or dg origin),
   // (2) dg module new controllers/views (always shown even if not extended).
@@ -182,8 +201,13 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
   for (const mod of data.modules) {
     const moduleId = `mod-${mod.moduleName}`;
     const orderNum = mod.registrationOrder + 1;
-    const labelParts: string[] = [`#${orderNum} ${mod.moduleName}`];
-    if (mod.category !== 'passthrough') labelParts.push(`[${mod.category}]`);
+    const namePart = mod.category !== 'passthrough'
+      ? `#${orderNum} ${mod.moduleName} (${mod.category})`
+      : `#${orderNum} ${mod.moduleName}`;
+    const labelParts: string[] = [namePart];
+    if (mod.newControllers.length > 0 || mod.newViews.length > 0) {
+      labelParts.push('');
+    }
     if (mod.newControllers.length > 0) labelParts.push(`ctrl: ${mod.newControllers.join(', ')}`);
     if (mod.newViews.length > 0) labelParts.push(`view: ${mod.newViews.join(', ')}`);
 
@@ -233,6 +257,9 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
       continue;
     }
 
+    const defClass = targetType === 'controller'
+      ? 'edge-gc-defines-ctrl' : 'edge-gc-defines-view';
+
     for (const gcMod of data.gridCoreModules) {
       if (!usedGcModules.has(gcMod.moduleName)) {
         // eslint-disable-next-line no-continue
@@ -250,12 +277,14 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
           edgeType: 'gc-defines',
           label: 'defines',
           targetName,
-        }, 'edge-gc-defines');
+        }, defClass);
       }
     }
 
     for (const dgMod of data.modules) {
       if (dgMod.category === 'passthrough') {
+        // Check if this passthrough module has a synth gc node with matching controllers/views
+        addSynthDefinesEdge(dgMod, targetName, targetType, targetId, defClass);
         // eslint-disable-next-line no-continue
         continue;
       }
@@ -266,7 +295,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
           edgeType: 'gc-defines',
           label: 'defines',
           targetName,
-        }, 'edge-gc-defines');
+        }, defClass);
       }
     }
   }
@@ -291,7 +320,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         edgeType: 'extender-target',
         targetName,
         targetType,
-        label: `#${i + 1}`,
+        label: `#${i + 1} ${steps[i].moduleName}`,
         chainIndex: i,
         chainLength: steps.length,
         stepIsFromGc: steps[i].isFromGridCore,
@@ -314,7 +343,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         edgeType: 'extender-target',
         targetName: 'dataSourceAdapter',
         targetType: 'controller',
-        label: `#${i + 1}`,
+        label: `#${i + 1} ${mod.moduleName}`,
         chainIndex: i,
         chainLength: data.dataSourceAdapterChain.length,
         stepIsFromGc: ext.isImportedFromGridCore,

@@ -1,6 +1,11 @@
 /* eslint-disable spellcheck/spell-checker,max-depth */
+import * as fs from 'fs';
+import * as path from 'path';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import ts from 'typescript';
+
 import type { ModificationCategory } from './constants';
-import { getFeatureAreaFromPath } from './constants';
+import { getFeatureAreaFromPath, GRID_CORE_ROOT } from './constants';
 import type {
   ClassifiedModule,
   CrossDependency,
@@ -111,16 +116,164 @@ function buildDetails(category: ModificationCategory, reg: RegisterModuleCall): 
   }
 }
 
+// ─── Resolve forwarded controllers/views from grid_core module data ──────────
+
+function findGcModuleByImport(
+  fromPath: string,
+  gridCoreModules: GridCoreModuleInfo[],
+): GridCoreModuleInfo | undefined {
+  // fromPath is like "@ts/grids/grid_core/columns_controller/m_columns_controller"
+  // gc sourceFile is like "columns_controller/m_columns_controller.ts"
+  // Normalize: strip prefix, add .ts suffix
+  const normalized = fromPath
+    .replace(/^@ts\/grids\/grid_core\//, '')
+    .replace(/\.ts$/, '');
+  return gridCoreModules.find((gc) => {
+    const gcNorm = gc.sourceFile.replace(/\.ts$/, '');
+    return gcNorm === normalized;
+  });
+}
+
+/**
+ * Fallback: when a gc module isn't in the gc JSON (not registered via registerModule),
+ * parse the source file directly to extract controller/view names from the exported
+ * module constant (e.g. `export const columnsControllerModule = { controllers: { ... } }`).
+ */
+function parseGcSourceControllerViews(
+  importedName: string,
+  fromPath: string,
+): { controllers: string[]; views: string[] } {
+  const result: { controllers: string[]; views: string[] } = { controllers: [], views: [] };
+  // Resolve the file path from the import
+  const relToGc = fromPath.replace(/^@ts\/grids\/grid_core\//, '');
+  const filePath = path.resolve(GRID_CORE_ROOT, `${relToGc}.ts`);
+  if (!fs.existsSync(filePath)) return result;
+
+  const content = fs.readFileSync(filePath, 'utf-8');
+  const sf = ts.createSourceFile(filePath, content, ts.ScriptTarget.Latest, true);
+
+  // Find the exported variable `importedName` and extract its controllers/views property keys
+  ts.forEachChild(sf, (node) => {
+    if (!ts.isVariableStatement(node)) return;
+    for (const decl of node.declarationList.declarations) {
+      if (!ts.isIdentifier(decl.name) || decl.name.text !== importedName) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+      if (!decl.initializer || !ts.isObjectLiteralExpression(decl.initializer)) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+      for (const prop of decl.initializer.properties) {
+        if (!ts.isPropertyAssignment(prop)) {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+        const propName = prop.name && ts.isIdentifier(prop.name) ? prop.name.text : '';
+        if ((propName === 'controllers' || propName === 'views')
+          && ts.isObjectLiteralExpression(prop.initializer)) {
+          for (const inner of prop.initializer.properties) {
+            if (ts.isPropertyAssignment(inner) || ts.isShorthandPropertyAssignment(inner)) {
+              const regName = inner.name && ts.isIdentifier(inner.name) ? inner.name.text : '';
+              if (regName) {
+                result[propName].push(regName);
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+  return result;
+}
+
+function resolveForwardedControllersViews(
+  reg: RegisterModuleCall,
+  pf: ParsedFile,
+  gridCoreModules: GridCoreModuleInfo[],
+): void {
+  if (reg.forwardedControllersRef && Object.keys(reg.controllers).length === 0) {
+    const imp = pf.imports.get(reg.forwardedControllersRef);
+    if (imp?.isFromGridCore) {
+      const gcMod = findGcModuleByImport(imp.fromPath, gridCoreModules);
+      if (gcMod) {
+        for (const [regName, info] of Object.entries(gcMod.controllers)) {
+          reg.controllers[regName] = {
+            regName,
+            className: info.className,
+            isImportedFromGridCore: true,
+            isDefinedLocally: false,
+            baseClass: info.baseClass,
+            mixins: info.mixins ?? [],
+            sourceFile: info.sourceFile,
+          };
+        }
+      } else {
+        // Fallback: parse the gc source file directly
+        const parsed = parseGcSourceControllerViews(reg.forwardedControllersRef, imp.fromPath);
+        for (const regName of parsed.controllers) {
+          reg.controllers[regName] = {
+            regName,
+            className: regName,
+            isImportedFromGridCore: true,
+            isDefinedLocally: false,
+            baseClass: '',
+            mixins: [],
+            sourceFile: imp.fromPath,
+          };
+        }
+      }
+    }
+  }
+  if (reg.forwardedViewsRef && Object.keys(reg.views).length === 0) {
+    const imp = pf.imports.get(reg.forwardedViewsRef);
+    if (imp?.isFromGridCore) {
+      const gcMod = findGcModuleByImport(imp.fromPath, gridCoreModules);
+      if (gcMod) {
+        for (const [regName, info] of Object.entries(gcMod.views)) {
+          reg.views[regName] = {
+            regName,
+            className: info.className,
+            isImportedFromGridCore: true,
+            isDefinedLocally: false,
+            baseClass: info.baseClass,
+            mixins: info.mixins ?? [],
+            sourceFile: info.sourceFile,
+          };
+        }
+      } else {
+        // Fallback: parse the gc source file directly
+        const parsed = parseGcSourceControllerViews(reg.forwardedViewsRef, imp.fromPath);
+        for (const regName of parsed.views) {
+          reg.views[regName] = {
+            regName,
+            className: regName,
+            isImportedFromGridCore: true,
+            isDefinedLocally: false,
+            baseClass: '',
+            mixins: [],
+            sourceFile: imp.fromPath,
+          };
+        }
+      }
+    }
+  }
+}
+
 // ─── Public: classifyModules ─────────────────────────────────────────────────
 
 export function classifyModules(
   parsedFiles: ParsedFile[],
   modulesOrder: string[],
+  gridCoreModules: GridCoreModuleInfo[],
 ): ClassifiedModule[] {
   const results: ClassifiedModule[] = [];
 
   for (const pf of parsedFiles) {
     for (const reg of pf.registerModuleCalls) {
+      // Resolve forwarded controllers/views from gc module data before classification
+      resolveForwardedControllersViews(reg, pf, gridCoreModules);
+
       const category = classifyModule(reg, pf);
       const orderIndex = modulesOrder.indexOf(reg.moduleName);
 
