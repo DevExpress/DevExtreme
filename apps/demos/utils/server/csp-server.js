@@ -376,7 +376,26 @@ const demoIndexHandler = (request, response) => {
   response.send(fileContent);
 };
 
+const createRateLimiter = (windowMs = 60000, maxRequests = 200) => {
+  const hits = new Map();
+
+  setInterval(() => hits.clear(), windowMs);
+
+  return (req, res, next) => {
+    const key = req.ip;
+    const count = (hits.get(key) || 0) + 1;
+    hits.set(key, count);
+
+    if (count > maxRequests) {
+      res.status(429).send('Too Many Requests');
+      return;
+    }
+    next();
+  };
+};
+
 const app = express();
+app.use(createRateLimiter());
 app.use(cookieParser());
 app.use(cspMiddleware);
 
