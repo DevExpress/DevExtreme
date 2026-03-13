@@ -187,7 +187,7 @@ overrides:
   minimatch@<3.1.5: 3.1.5
   minimatch@>=9.0.0 < 9.0.7: 9.0.9
   minimatch@>=10.0.0 < 10.2.4: 10.2.4
-  serialize-javascript@<=7.0.2: 7.0.3
+  serialize-javascript@<=7.0.2: 7.0.4
 
 importers:
 
@@ -16315,8 +16315,8 @@ packages:
     resolution: {integrity: sha512-1gnZf7DFcoIcajTjTwjwuDjzuz4PPcY2StKPlsGAQ1+YH20IRVrBaXSWmdjowTJ6u8Rc01PoYOGHXfP1mYcZNQ==}
     engines: {node: '>= 18'}
 
-  serialize-javascript@7.0.3:
-    resolution: {integrity: sha512-h+cZ/XXarqDgCjo+YSyQU/ulDEESGGf8AMK9pPNmhNSl/FzPl6L8pMp1leca5z6NuG6tvV/auC8/43tmovowww==}
+  serialize-javascript@7.0.4:
+    resolution: {integrity: sha512-DuGdB+Po43Q5Jxwpzt1lhyFSYKryqoNjQSA9M92tyw0lyHIOur+XCalOUe0KTJpyqzT8+fQ5A0Jf7vCx/NKmIg==}
     engines: {node: '>=20.0.0'}
 
   serve-index@1.9.2:
@@ -29083,7 +29083,7 @@ snapshots:
       globby: 14.1.0
       normalize-path: 3.0.0
       schema-utils: 4.3.3
-      serialize-javascript: 7.0.3
+      serialize-javascript: 7.0.4
       webpack: 5.98.0(@swc/core@1.15.3)(esbuild@0.25.4)
 
   copy-webpack-plugin@13.0.1(webpack@5.105.0(@swc/core@1.15.3)(esbuild@0.27.2)):
@@ -29091,7 +29091,7 @@ snapshots:
       glob-parent: 6.0.2
       normalize-path: 3.0.0
       schema-utils: 4.3.3
-      serialize-javascript: 7.0.3
+      serialize-javascript: 7.0.4
       tinyglobby: 0.2.15
       webpack: 5.105.0(@swc/core@1.15.3)(esbuild@0.25.0)
 
@@ -39446,7 +39446,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  serialize-javascript@7.0.3: {}
+  serialize-javascript@7.0.4: {}
 
   serve-index@1.9.2:
     dependencies:
@@ -40656,7 +40656,7 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.3.3
-      serialize-javascript: 7.0.3
+      serialize-javascript: 7.0.4
       terser: 5.46.0
       webpack: 5.105.0(@swc/core@1.15.3)(esbuild@0.25.0)
     optionalDependencies:
@@ -40668,7 +40668,7 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.3.3
-      serialize-javascript: 7.0.3
+      serialize-javascript: 7.0.4
       terser: 5.46.0
       webpack: 5.98.0(@swc/core@1.15.3)(esbuild@0.25.4)
     optionalDependencies:
@@ -40680,7 +40680,7 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.3.3
-      serialize-javascript: 7.0.3
+      serialize-javascript: 7.0.4
       terser: 5.46.0
       webpack: 5.105.0(@swc/core@1.15.3)(esbuild@0.25.0)
     optionalDependencies:
@@ -40692,7 +40692,7 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.3.3
-      serialize-javascript: 7.0.3
+      serialize-javascript: 7.0.4
       terser: 5.46.0
       webpack: 5.105.0(@swc/core@1.15.3)
     optionalDependencies:
@@ -40703,7 +40703,7 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.3.3
-      serialize-javascript: 7.0.3
+      serialize-javascript: 7.0.4
       terser: 5.46.0
       webpack: 5.105.0(@swc/core@1.15.3)(webpack-cli@4.10.0)
     optionalDependencies:
@@ -40714,7 +40714,7 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.3.3
-      serialize-javascript: 7.0.3
+      serialize-javascript: 7.0.4
       terser: 5.46.0
       webpack: 5.105.2(@swc/core@1.15.3)
     optionalDependencies:
