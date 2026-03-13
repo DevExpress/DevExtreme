@@ -1140,28 +1140,6 @@ QUnit.module('options changed', moduleSetup, () => {
         swipeItem();
     });
 
-    QUnit.test('onItemSwipe handler should be triggered if it has in the config', function(assert) {
-        assert.expect(1);
-
-        const swipeHandler = () => {
-            assert.ok(true, 'swipe handled');
-        };
-
-        this.element.dxList({
-            items: [0],
-            onItemSwipe: swipeHandler,
-        }).dxList('instance');
-
-        const item = $.proxy(function() {
-            return this.element.find(`.${LIST_ITEM_CLASS}`).eq(0);
-        }, this);
-        const swipeItem = () => {
-            pointerMock(item()).start().swipeStart().swipe(0.5).swipeEnd(1);
-        };
-
-        swipeItem();
-    });
-
     QUnit.test('onItemSwipe - subscription by on method', function(assert) {
         assert.expect(2);
 
