@@ -64,6 +64,7 @@ const componentNames = [
   'scheduler',
   'scroll-view',
   'select-box',
+  'skeleton',
   'slider',
   'sortable',
   'sparkline',

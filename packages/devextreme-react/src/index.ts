@@ -58,6 +58,7 @@ export { Sankey } from "./sankey";
 export { Scheduler } from "./scheduler";
 export { ScrollView } from "./scroll-view";
 export { SelectBox } from "./select-box";
+export { Skeleton } from "./skeleton";
 export { Slider } from "./slider";
 export { Sortable } from "./sortable";
 export { Sparkline } from "./sparkline";

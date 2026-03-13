@@ -519,6 +519,12 @@
     }
   },
   {
+    "name": "ui/skeleton",
+    "exports": {
+      "default": { "path": "ui.dxSkeleton", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/set_template_engine",
     "exports": {
       "default": { "path": "setTemplateEngine" }

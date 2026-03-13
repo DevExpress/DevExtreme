@@ -58,6 +58,7 @@ import { DxSankeyModule } from 'devextreme-angular/ui/sankey';
 import { DxSchedulerModule } from 'devextreme-angular/ui/scheduler';
 import { DxScrollViewModule } from 'devextreme-angular/ui/scroll-view';
 import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
+import { DxSkeletonModule } from 'devextreme-angular/ui/skeleton';
 import { DxSliderModule } from 'devextreme-angular/ui/slider';
 import { DxSortableModule } from 'devextreme-angular/ui/sortable';
 import { DxSparklineModule } from 'devextreme-angular/ui/sparkline';
@@ -145,6 +146,7 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxSchedulerModule,
     DxScrollViewModule,
     DxSelectBoxModule,
+    DxSkeletonModule,
     DxSliderModule,
     DxSortableModule,
     DxSparklineModule,
@@ -231,6 +233,7 @@ import { DxTemplateModule } from 'devextreme-angular/core';
     DxSchedulerModule,
     DxScrollViewModule,
     DxSelectBoxModule,
+    DxSkeletonModule,
     DxSliderModule,
     DxSortableModule,
     DxSparklineModule,
