@@ -5,12 +5,12 @@
       <DxSparkline
         :data-source="source"
         :show-min-max="true"
-        :value-field="getValueField('alum')"
+        :value-field="getValueField('copper')"
         class="sparkline"
         argument-field="month"
         type="bar"
       >
-        <DxTooltip format="currency"/>
+        <DxTooltip :format="{ type: 'currency', precision: 2 }"/>
       </DxSparkline>
     </td>
     <td>
@@ -26,13 +26,13 @@
         min-color="#9ab57e"
         max-color="#8076bb"
       >
-        <DxTooltip format="currency"/>
+        <DxTooltip :format="{ type: 'currency', precision: 2 }"/>
       </DxSparkline>
     </td>
     <td>
       <DxSparkline
         :data-source="source"
-        :value-field="getValueField('copper')"
+        :value-field="getValueField('palladium')"
         class="sparkline"
         argument-field="month"
         type="bar"
@@ -41,7 +41,7 @@
 
         point-color="#e8c267"
       >
-        <DxTooltip format="currency"/>
+        <DxTooltip :format="{ type: 'currency', precision: 2 }"/>
       </DxSparkline>
     </td>
   </tr>

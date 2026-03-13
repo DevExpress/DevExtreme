@@ -270,7 +270,7 @@ const checkBoxOptions = ref({
   value: false,
 });
 const phoneEditorOptions = ref({
-  mask: '+1 (X00) 000-0000',
+  mask: '(X00) 000-0000',
   valueChangeEvent: 'keyup',
   maskRules: {
     X: /[02-9]/,

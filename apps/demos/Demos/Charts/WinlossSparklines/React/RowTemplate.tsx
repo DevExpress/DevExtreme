@@ -5,9 +5,9 @@ import Sparkline, {
 } from 'devextreme-react/sparkline';
 
 import {
-  aluminumCosts,
-  nickelCosts,
   copperCosts,
+  nickelCosts,
+  palladiumCosts,
 } from './data.ts';
 
 interface RowTemplateProps {
@@ -21,15 +21,15 @@ export default function RowTemplate(props: RowTemplateProps) {
       <th>{ props.year }</th>
       <td>
         <Sparkline
-          dataSource={aluminumCosts}
+          dataSource={copperCosts}
           showMinMax={true}
-          winlossThreshold={2100}
+          winlossThreshold={8000}
           className="sparkline"
           argumentField="month"
           valueField={props.year}
           type="winloss"
         >
-          <Tooltip format="currency" />
+          <Tooltip format={{ type: 'currency', precision: 2 }} />
         </Sparkline>
       </td>
       <td>
@@ -45,13 +45,13 @@ export default function RowTemplate(props: RowTemplateProps) {
           winColor="#6babac"
           lossColor="#8076bb"
         >
-          <Tooltip format="currency" />
+          <Tooltip format={{ type: 'currency', precision: 2 }} />
         </Sparkline>
       </td>
       <td>
         <Sparkline
-          dataSource={copperCosts}
-          winlossThreshold={8000}
+          dataSource={palladiumCosts}
+          winlossThreshold={2000}
           className="sparkline"
           argumentField="month"
           valueField={props.year}
@@ -60,7 +60,7 @@ export default function RowTemplate(props: RowTemplateProps) {
           winColor="#7e4452"
           lossColor="#ebdd8f"
         >
-          <Tooltip format="currency" />
+          <Tooltip format={{ type: 'currency', precision: 2 }} />
         </Sparkline>
       </td>
     </tr>

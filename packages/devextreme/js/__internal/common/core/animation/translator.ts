@@ -150,9 +150,6 @@ export const resetPosition = function (
   clearCache($element);
 
   if (finishTransition) {
-    // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    $element.get(0).offsetHeight;
     $element.css('transition', originalTransition);
   }
 };

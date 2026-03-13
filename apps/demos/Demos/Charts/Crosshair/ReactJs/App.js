@@ -63,7 +63,7 @@ function App() {
         horizontalAlignment="center"
         itemTextPosition="bottom"
       />
-      <Title text="Energy Consumption in 2004">
+      <Title text="Energy Consumption in 2024">
         <Subtitle text="(Millions of Tons, Oil Equivalent)" />
       </Title>
       <Export enabled={true} />

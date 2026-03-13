@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="long-title"><h3>Monthly Prices of Aluminium, Nickel and Copper</h3></div>
+    <div class="long-title"><h3>Monthly Prices of Copper, Nickel and Palladium</h3></div>
     <div id="chart-demo">
       <table
         class="demo-table"
@@ -8,9 +8,9 @@
       >
         <tr>
           <th><div class="dx-screen-reader-only">Year</div></th>
-          <th>Aluminium (USD/ton)</th>
-          <th>Nickel (USD/ton)</th>
           <th>Copper (USD/ton)</th>
+          <th>Nickel (USD/ton)</th>
+          <th>Palladium (USD/troy ounce)</th>
         </tr>
         <tbody
           v-for="(year, index) in years"
@@ -43,7 +43,7 @@ import { DataSource, CustomStore } from 'devextreme-vue/common/data';
 import RowTemplate from './RowTemplate.vue';
 
 const months = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-const years = ['2010', '2011', '2012'];
+const years = ['2021', '2022', '2023'];
 
 const source = new DataSource({
   store: new CustomStore({

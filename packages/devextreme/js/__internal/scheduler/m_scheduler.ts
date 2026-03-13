@@ -875,6 +875,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this._appointments.option('items', viewModel);
     this.appointmentDataSource.cleanState();
+
     if (this.isAgenda()) {
       this._workSpace.renderAgendaLayout(viewModel);
     }
@@ -1235,8 +1236,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private appointmentsConfig() {
     const config = {
       getResourceManager: () => this.resourceManager,
-
       getAppointmentDataSource: () => this.appointmentDataSource,
+      getSortedAppointments: () => this._layoutManager.sortedItems,
+      scrollTo: this.scrollTo.bind(this),
       dataAccessors: this._dataAccessors,
       notifyScheduler: this.notifyScheduler,
       onItemRendered: this.getAppointmentRenderedAction(),
@@ -1373,9 +1375,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       schedulerWidth: this.option('width'),
       allDayPanelMode: this.option('allDayPanelMode'),
       onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
-      onRenderAppointments: () => {
-        this.renderAppointments();
-      },
+      renderAppointments: () => { this.renderAppointments(); },
       onShowAllDayPanel: (value) => this.option('showAllDayPanel', value),
       getHeaderHeight: () => utils.DOM.getHeaderHeight(this.header),
       onScrollEnd: () => this._appointments.updateResizableArea(),
@@ -2031,7 +2031,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       align = groupValuesOrOptions.alignInView ?? 'center';
     } else {
       if (isDefined(groupValuesOrOptions) || isDefined(allDay)) {
-        errors.log('W0002', 'dxScheduler', 'scrollTo', '26.1', 'Use an object with "group", "allDay" and "alignInView" properties instead of separate parameters.');
+        errors.log('W0002', 'dxScheduler', 'scrollTo(date, group, allDay)', '26.1', 'Use scrollTo(date, { group, allDay, alignInView }) instead.');
       }
 
       groupValues = groupValuesOrOptions;
@@ -2043,7 +2043,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private _isScrollOptionsObject(options?: ScrollToGroupValuesOrOptions): options is ScrollToOptions {
     return Boolean(options) && typeof options === 'object'
-      && ('align' in options || 'allDay' in options || 'group' in options);
+      && ('alignInView' in options || 'allDay' in options || 'group' in options);
   }
 
   private isHorizontalVirtualScrolling() {
