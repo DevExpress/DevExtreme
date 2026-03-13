@@ -394,17 +394,18 @@ const createRateLimiter = (windowMs = 60000, maxRequests = 200) => {
   };
 };
 
+const rateLimiter = createRateLimiter();
+
 const app = express();
-app.use(createRateLimiter());
 app.use(cookieParser());
 app.use(cspMiddleware);
 
-app.post('/csp-report', cspReportHandler);
-app.get('/csp-violations', cspViolationsHandler);
-app.delete('/csp-violations', cspViolationsClearHandler);
+app.post('/csp-report', rateLimiter, cspReportHandler);
+app.get('/csp-violations', rateLimiter, cspViolationsHandler);
+app.delete('/csp-violations', rateLimiter, cspViolationsClearHandler);
 
-app.get('/apps/demos/Demos/:widget/:name/:approach', demoIndexHandler);
-app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
+app.get('/apps/demos/Demos/:widget/:name/:approach', rateLimiter, demoIndexHandler);
+app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, rateLimiter, demoIndexHandler);
 
 app.use(
   serveStatic(root, { index: [indexFileName] }),
