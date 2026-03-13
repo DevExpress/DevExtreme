@@ -4798,7 +4798,6 @@ QUnit.module('Highlighting/selecting', { ...moduleSetup, afterEach: function() {
         });
 
         const { $item, textNode } = getFirstListItemAndTextNode(this.element);
-
         assert.strictEqual(!!textNode, true, 'text node found in list item');
 
         selectTextNodePart(textNode, 0, 4);
@@ -4837,7 +4836,6 @@ QUnit.module('Highlighting/selecting', { ...moduleSetup, afterEach: function() {
         const list = this.element.dxList('instance');
 
         const { $item, textNode } = getFirstListItemAndTextNode(this.element);
-
         assert.strictEqual(!!textNode, true, 'text node found in list item');
 
         list.on('itemSwipe', sinon.spy());
