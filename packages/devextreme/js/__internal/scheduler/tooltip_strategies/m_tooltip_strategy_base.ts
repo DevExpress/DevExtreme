@@ -140,7 +140,6 @@ export class TooltipStrategyBase {
       onItemClick: (e) => this.onListItemClick(e),
       onItemContextMenu: this.onListItemContextMenu.bind(this),
       itemTemplate: (item, index) => this.renderTemplate(item.appointment, item.targetedAppointment, index, item.color),
-      _swipeEnabled: false,
       pageLoadMode: 'scrollBottom',
     };
   }
