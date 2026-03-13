@@ -376,16 +376,36 @@ const demoIndexHandler = (request, response) => {
   response.send(fileContent);
 };
 
+const createRateLimiter = (windowMs = 60000, maxRequests = 200) => {
+  const hits = new Map();
+
+  setInterval(() => hits.clear(), windowMs);
+
+  return (req, res, next) => {
+    const key = req.ip;
+    const count = (hits.get(key) || 0) + 1;
+    hits.set(key, count);
+
+    if (count > maxRequests) {
+      res.status(429).send('Too Many Requests');
+      return;
+    }
+    next();
+  };
+};
+
+const rateLimiter = createRateLimiter();
+
 const app = express();
 app.use(cookieParser());
 app.use(cspMiddleware);
 
-app.post('/csp-report', cspReportHandler);
-app.get('/csp-violations', cspViolationsHandler);
-app.delete('/csp-violations', cspViolationsClearHandler);
+app.post('/csp-report', rateLimiter, cspReportHandler);
+app.get('/csp-violations', rateLimiter, cspViolationsHandler);
+app.delete('/csp-violations', rateLimiter, cspViolationsClearHandler);
 
-app.get('/apps/demos/Demos/:widget/:name/:approach', demoIndexHandler);
-app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
+app.get('/apps/demos/Demos/:widget/:name/:approach', rateLimiter, demoIndexHandler);
+app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, rateLimiter, demoIndexHandler);
 
 app.use(
   serveStatic(root, { index: [indexFileName] }),
