@@ -106,7 +106,7 @@ describe('DataGrid Cell Editing', () => {
         ],
       });
 
-      const firstEditor = component.getDataCell(0, 0).getEditor();
+      const firstEditor = component.getDataCell(0, 0).getEditor(TextBoxModel);
       firstEditor.setValue('Item 1X');
       jest.runAllTimers();
 
@@ -154,7 +154,7 @@ describe('DataGrid Cell Editing', () => {
         ],
       });
 
-      const editor = component.getDataCell(0, 0).getEditor();
+      const editor = component.getDataCell(0, 0).getEditor(TextBoxModel);
       editor.setValue('Changed');
       jest.runAllTimers();
 
