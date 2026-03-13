@@ -3,15 +3,15 @@
     <th>{{ year }}</th>
     <td>
       <DxSparkline
-        :data-source="aluminumCosts"
+        :data-source="copperCosts"
         :show-min-max="true"
-        :winloss-threshold="2100"
+        :winloss-threshold="8000"
         :value-field="year"
         class="sparkline"
         argument-field="month"
         type="winloss"
       >
-        <DxTooltip format="currency"/>
+        <DxTooltip :format="{ type: 'currency', precision: 2 }"/>
       </DxSparkline>
     </td>
     <td>
@@ -27,13 +27,13 @@
         win-color="#6babac"
         loss-color="#8076bb"
       >
-        <DxTooltip format="currency"/>
+        <DxTooltip :format="{ type: 'currency', precision: 2 }"/>
       </DxSparkline>
     </td>
     <td>
       <DxSparkline
-        :data-source="copperCosts"
-        :winloss-threshold="8000"
+        :data-source="palladiumCosts"
+        :winloss-threshold="2000"
         :value-field="year"
         class="sparkline"
         argument-field="month"
@@ -42,7 +42,7 @@
         win-color="#7e4452"
         loss-color="#ebdd8f"
       >
-        <DxTooltip format="currency"/>
+        <DxTooltip :format="{ type: 'currency', precision: 2 }"/>
       </DxSparkline>
     </td>
   </tr>
@@ -53,9 +53,9 @@ import DxSparkline, {
   DxTooltip,
 } from 'devextreme-vue/sparkline';
 import {
-  aluminumCosts,
-  nickelCosts,
   copperCosts,
+  nickelCosts,
+  palladiumCosts,
 } from './data.ts';
 
 withDefaults(defineProps<{
