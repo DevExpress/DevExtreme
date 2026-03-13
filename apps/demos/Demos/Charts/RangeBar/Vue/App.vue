@@ -3,7 +3,7 @@
     id="chart"
     :data-source="oilPrices"
     palette="Violet"
-    title="Crude Oil Prices in 2005"
+    title="Crude Oil Prices in 2024"
   >
     <DxCommonSeriesSettings
       argument-field="date"

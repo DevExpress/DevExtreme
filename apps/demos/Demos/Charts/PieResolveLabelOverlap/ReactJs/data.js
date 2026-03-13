@@ -1,59 +1,59 @@
 export const dataSource = [
   {
     country: 'USA',
-    medals: 112,
+    medals: 126,
   },
   {
-    country: 'China',
-    medals: 100,
-  },
-  {
-    country: 'Russia',
-    medals: 60,
-  },
-  {
-    country: 'Britain',
-    medals: 49,
-  },
-  {
-    country: 'Australia',
-    medals: 46,
+    country: 'Great Britain',
+    medals: 65,
   },
   {
     country: 'France',
-    medals: 43,
+    medals: 64,
+  },
+  {
+    country: 'Australia',
+    medals: 53,
+  },
+  {
+    country: 'Japan',
+    medals: 45,
+  },
+  {
+    country: 'Italy',
+    medals: 40,
+  },
+  {
+    country: 'Netherlands',
+    medals: 34,
   },
   {
     country: 'Germany',
-    medals: 41,
+    medals: 33,
   },
   {
     country: 'South Korea',
     medals: 32,
   },
   {
-    country: 'Cuba',
-    medals: 29,
-  },
-  {
-    country: 'Italy',
+    country: 'Canada',
     medals: 27,
   },
   {
-    country: 'Japan',
-    medals: 25,
-  },
-  {
-    country: 'Ukraine',
-    medals: 22,
-  },
-  {
-    country: 'Canada',
+    country: 'New Zealand',
     medals: 20,
   },
   {
-    country: 'Spain',
+    country: 'Hungary',
     medals: 19,
+  },
+  {
+    country: 'Spain',
+    medals: 18,
+  },
+  {
+    country: 'Uzbekistan',
+    medals: 13,
   },
 ];
 export const resolutionModeLabel = { 'aria-label': 'Resolution Mode' };

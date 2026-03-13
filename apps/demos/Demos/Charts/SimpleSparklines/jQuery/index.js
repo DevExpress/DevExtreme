@@ -2,17 +2,20 @@ $(() => {
   const oilOptions = {
     dataSource: oilCosts,
     argumentField: 'month',
-    valueField: '2010',
+    valueField: '2021',
     type: 'line',
     showMinMax: true,
     tooltip: {
-      format: 'currency',
+      format: {
+        type: 'currency',
+        precision: 2,
+      },
     },
   };
   const goldOptions = {
     dataSource: goldCosts,
     argumentField: 'month',
-    valueField: '2010',
+    valueField: '2021',
     type: 'spline',
     lineWidth: 3,
     lineColor: '#9ab57e',
@@ -21,13 +24,16 @@ $(() => {
     showMinMax: true,
     showFirstLast: false,
     tooltip: {
-      format: 'currency',
+      format: {
+        type: 'currency',
+        precision: 2,
+      },
     },
   };
   const silverOptions = {
     dataSource: silverCosts,
     argumentField: 'month',
-    valueField: '2010',
+    valueField: '2021',
     lineColor: '#e8c267',
     firstLastColor: '#e55253',
     pointSize: 6,
@@ -35,19 +41,22 @@ $(() => {
     pointColor: '#ebdd8f',
     type: 'stepline',
     tooltip: {
-      format: 'currency',
+      format: {
+        type: 'currency',
+        precision: 2,
+      },
     },
   };
 
-  $('.line2010').dxSparkline(oilOptions);
-  $('.spline2010').dxSparkline(goldOptions);
-  $('.stepline2010').dxSparkline(silverOptions);
+  $('.line2021').dxSparkline(oilOptions);
+  $('.spline2021').dxSparkline(goldOptions);
+  $('.stepline2021').dxSparkline(silverOptions);
 
-  $('.line2011').dxSparkline($.extend(oilOptions, { valueField: '2011' }));
-  $('.spline2011').dxSparkline($.extend(goldOptions, { valueField: '2011' }));
-  $('.stepline2011').dxSparkline($.extend(silverOptions, { valueField: '2011' }));
+  $('.line2022').dxSparkline($.extend(oilOptions, { valueField: '2022' }));
+  $('.spline2022').dxSparkline($.extend(goldOptions, { valueField: '2022' }));
+  $('.stepline2022').dxSparkline($.extend(silverOptions, { valueField: '2022' }));
 
-  $('.line2012').dxSparkline($.extend(oilOptions, { valueField: '2012' }));
-  $('.spline2012').dxSparkline($.extend(goldOptions, { valueField: '2012' }));
-  $('.stepline2012').dxSparkline($.extend(silverOptions, { valueField: '2012' }));
+  $('.line2023').dxSparkline($.extend(oilOptions, { valueField: '2023' }));
+  $('.spline2023').dxSparkline($.extend(goldOptions, { valueField: '2023' }));
+  $('.stepline2023').dxSparkline($.extend(silverOptions, { valueField: '2023' }));
 });

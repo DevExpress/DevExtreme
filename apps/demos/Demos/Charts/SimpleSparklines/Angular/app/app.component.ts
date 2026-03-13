@@ -35,7 +35,7 @@ export class AppComponent {
     this.oilCosts = service.getOilCosts();
     this.goldCosts = service.getGoldCosts();
     this.silverCosts = service.getSilverCosts();
-    this.years = [2010, 2011, 2012];
+    this.years = [2021, 2022, 2023];
   }
 }
 

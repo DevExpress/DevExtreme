@@ -13,7 +13,7 @@ function App() {
       sourceField="source"
       targetField="target"
       weightField="weight"
-      title="Commodity Turnover in 2017"
+      title="Commodity Turnover in 2024"
     >
       <Tooltip
         enabled={true}
