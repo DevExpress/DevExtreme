@@ -104,12 +104,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   // Overridden in SchedulerTimelineDay, SchedulerTimelineWeek
-  needRenderWeekHeader() {
+  protected needRenderWeekHeader() {
     return false;
   }
 
   // Overridden in SchedulerTimelineWeek, SchedulerTimelineWorkWeek
-  incrementDate(date) {
+  protected incrementDate(date) {
     date.setDate(date.getDate() + 1);
   }
 
@@ -133,7 +133,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   // Overridden in SchedulerTimelineMonth
-  calculateDurationInCells(timeDiff) {
+  protected calculateDurationInCells(timeDiff) {
     const today = this.getToday();
     const differenceInDays = Math.floor(timeDiff / toMs('day'));
     let duration = (timeDiff - differenceInDays * toMs('day') - (this.option('startDayHour') as any) * toMs('hour')) / this.getCellDuration();
@@ -331,8 +331,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   protected override updateAllDayVisibility() { return noop(); }
 
-  private updateAllDayHeight() { return noop(); }
-
   protected override getDateHeaderTemplate() {
     return this.option('timeCellTemplate');
   }
@@ -505,12 +503,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       timePanelCells.eq(timePanelCellIndex)
         .addClass(HEADER_CURRENT_TIME_CELL_CLASS);
     });
-  }
-
-  cleanCurrentTimeCells(): void {
-    (this.$element() as any)
-      .find(`.${HEADER_CURRENT_TIME_CELL_CLASS}`)
-      .removeClass(HEADER_CURRENT_TIME_CELL_CLASS);
   }
 }
 

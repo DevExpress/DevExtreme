@@ -156,8 +156,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
   protected override updateAllDayVisibility() { return noop(); }
 
-  private updateAllDayHeight() { return noop(); }
-
   // --------------
   // These methods should be deleted when we get rid of old render
   // --------------

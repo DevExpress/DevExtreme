@@ -12,7 +12,7 @@ class SchedulerTimelineDay extends SchedulerTimeline {
     return TIMELINE_CLASS;
   }
 
-  needRenderWeekHeader() {
+  protected override needRenderWeekHeader() {
     return this.isWorkSpaceWithCount();
   }
 }

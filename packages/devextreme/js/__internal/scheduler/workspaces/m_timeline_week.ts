@@ -17,11 +17,11 @@ export default class SchedulerTimelineWeek extends SchedulerTimeline {
     return getBoundingRect($headerRow.children().first().get(0)).width;
   }
 
-  needRenderWeekHeader() {
+  protected override needRenderWeekHeader() {
     return true;
   }
 
-  incrementDate(date) {
+  protected override incrementDate(date) {
     date.setDate(date.getDate() + 1);
   }
 }

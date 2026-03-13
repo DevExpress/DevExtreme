@@ -255,7 +255,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   // Overridden in SchedulerTimeline
-  getCurrentTimePanelCellIndices() {
+  protected getCurrentTimePanelCellIndices() {
     const rowCountPerGroup = this.getTimePanelRowCount();
     const today = this.getToday();
     const index = this.getCellIndexByDate(today);
@@ -321,13 +321,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
       timePanelCells.eq(timePanelCellIndex)
         .addClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
     });
-  }
-
-  // Overridden in SchedulerTimeline
-  cleanCurrentTimeCells(): void {
-    (this.$element() as any)
-      .find(`.${TIME_PANEL_CURRENT_TIME_CELL_CLASS}`)
-      .removeClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
   }
 }
 
