@@ -15,7 +15,7 @@ catalog:
   devexpress-gantt: 4.1.66
   devextreme-exceljs-fork: 4.4.7
   devextreme-quill: 1.7.9
-  eslint: 9.39.2
+  eslint: 9.39.3
   eslint-config-airbnb-typescript: 18.0.0
   eslint-config-devextreme: 1.1.9
   eslint-plugin-i18n: 2.4.0
@@ -55,7 +55,7 @@ catalogs:
     "typescript": 5.5.4
     "zone.js": 0.15.1
   eslint8:
-    eslint: 9.39.2
+    eslint: 9.39.3
     eslint-config-airbnb-typescript: 17.1.0
     eslint-plugin-i18n: 2.3.0
     eslint-plugin-import: 2.29.0
