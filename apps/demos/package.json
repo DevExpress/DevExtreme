@@ -89,7 +89,7 @@
         "zone.js": "0.15.1"
     },
     "devDependencies": {
-        "@angular/platform-server": "~21.1.0",
+        "@angular/platform-server": "21.1.6",
         "@babel/core": "7.28.6",
         "@babel/eslint-parser": "catalog:",
         "@babel/preset-env": "7.28.6",
