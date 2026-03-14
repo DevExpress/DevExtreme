@@ -1,8 +1,20 @@
-export * from 'devextreme-angular/core';
-export * from './ui/all';
 import './common';
 import './common/grids';
 import './common/charts';
+import * as CommonModule from './common/index';
+import * as AiIntegrationModule from './common/ai-integration';
+import * as ChartsModule from './common/charts';
+import * as CoreAnimationModule from './common/core/animation';
+import * as CoreEnvironmentModule from './common/core/environment';
+import * as CoreEventsModule from './common/core/events';
+import * as CoreLocalizationModule from './common/core/localization';
+import * as DataModule from './common/data';
+import * as ExportExcelModule from './common/export/excel';
+import * as ExportPdfModule from './common/export/pdf';
+
+export * from 'devextreme-angular/core';
+export * from './ui/all';
+
 export { DxAccordionComponent, DxAccordionModule } from 'devextreme-angular/ui/accordion';
 export { DxActionSheetComponent, DxActionSheetModule } from 'devextreme-angular/ui/action-sheet';
 export { DxAutocompleteComponent, DxAutocompleteModule } from 'devextreme-angular/ui/autocomplete';
@@ -86,18 +98,6 @@ export { DxValidationGroupComponent, DxValidationGroupModule } from 'devextreme-
 export { DxValidationSummaryComponent, DxValidationSummaryModule } from 'devextreme-angular/ui/validation-summary';
 export { DxValidatorComponent, DxValidatorModule } from 'devextreme-angular/ui/validator';
 export { DxVectorMapComponent, DxVectorMapModule } from 'devextreme-angular/ui/vector-map';
-import * as CommonModule from './common/index';
-import * as AiIntegrationModule from './common/ai-integration';
-import * as ChartsModule from './common/charts';
-import * as CoreAnimationModule from './common/core/animation';
-import * as CoreEnvironmentModule from './common/core/environment';
-import * as CoreEventsModule from './common/core/events';
-import * as CoreLocalizationModule from './common/core/localization';
-import * as DataModule from './common/data';
-import * as ExportExcelModule from './common/export/excel';
-import * as ExportPdfModule from './common/export/pdf';
-import * as GridsModule from './common/grids';
-
 export namespace Common {
     export type ApplyValueMode = import('devextreme/common').ApplyValueMode;
     export type AsyncRule = import('devextreme/common').AsyncRule;
@@ -352,83 +352,4 @@ export namespace Common {
         }
     }
   export function Grids(): void {}
-    export namespace Grids {
-        export type AdaptiveDetailRowPreparingInfo = import('devextreme/common/grids').AdaptiveDetailRowPreparingInfo;
-        export type AIColumnMode = import('devextreme/common/grids').AIColumnMode;
-        export type AIColumnRequestCreatingInfo<TRowData = any> = import('devextreme/common/grids').AIColumnRequestCreatingInfo<TRowData>;
-        export type ApplyChangesMode = import('devextreme/common/grids').ApplyChangesMode;
-        export type ApplyFilterMode = import('devextreme/common/grids').ApplyFilterMode;
-        export type ColumnAIOptions = import('devextreme/common/grids').ColumnAIOptions;
-        export type ColumnBase<TRowData = any> = import('devextreme/common/grids').ColumnBase<TRowData>;
-        export type ColumnButtonBase = import('devextreme/common/grids').ColumnButtonBase;
-        export type ColumnChooser = import('devextreme/common/grids').ColumnChooser;
-        export type ColumnChooserMode = import('devextreme/common/grids').ColumnChooserMode;
-        export type ColumnChooserSearchConfig = import('devextreme/common/grids').ColumnChooserSearchConfig;
-        export type ColumnChooserSelectionConfig = import('devextreme/common/grids').ColumnChooserSelectionConfig;
-        export type ColumnCustomizeTextArg = import('devextreme/common/grids').ColumnCustomizeTextArg;
-        export type ColumnFixing = import('devextreme/common/grids').ColumnFixing;
-        export type ColumnFixingIcons = import('devextreme/common/grids').ColumnFixingIcons;
-        export type ColumnFixingTexts = import('devextreme/common/grids').ColumnFixingTexts;
-        export type ColumnHeaderFilter = import('devextreme/common/grids').ColumnHeaderFilter;
-        export type ColumnHeaderFilterSearchConfig = import('devextreme/common/grids').ColumnHeaderFilterSearchConfig;
-        export type ColumnLookup = import('devextreme/common/grids').ColumnLookup;
-        export type ColumnResizeMode = import('devextreme/common/grids').ColumnResizeMode;
-        export type DataChange<TRowData = any, TKey = any> = import('devextreme/common/grids').DataChange<TRowData, TKey>;
-        export type DataChangeInfo<TRowData = any, TKey = any> = import('devextreme/common/grids').DataChangeInfo<TRowData, TKey>;
-        export type DataChangeType = import('devextreme/common/grids').DataChangeType;
-        export type DataErrorOccurredInfo = import('devextreme/common/grids').DataErrorOccurredInfo;
-        export type DataRenderMode = import('devextreme/common/grids').DataRenderMode;
-        export type EditingBase<TRowData = any, TKey = any> = import('devextreme/common/grids').EditingBase<TRowData, TKey>;
-        export type EditingTextsBase = import('devextreme/common/grids').EditingTextsBase;
-        export type EnterKeyAction = import('devextreme/common/grids').EnterKeyAction;
-        export type EnterKeyDirection = import('devextreme/common/grids').EnterKeyDirection;
-        export type FilterOperation = import('devextreme/common/grids').FilterOperation;
-        export type FilterPanel<TComponent = any, TRowData = any, TKey = any> = import('devextreme/common/grids').FilterPanel<TComponent, TRowData, TKey>;
-        export type FilterPanelTexts = import('devextreme/common/grids').FilterPanelTexts;
-        export type FilterRow = import('devextreme/common/grids').FilterRow;
-        export type FilterRowOperationDescriptions = import('devextreme/common/grids').FilterRowOperationDescriptions;
-        export type FilterType = import('devextreme/common/grids').FilterType;
-        export type FixedPosition = import('devextreme/common/grids').FixedPosition;
-        export type GridBase<TRowData = any, TKey = any> = import('devextreme/common/grids').GridBase<TRowData, TKey>;
-        export type GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = import('devextreme/common/grids').GridBaseOptions<TComponent, TRowData, TKey>;
-        export type GridsContextMenuTarget = import('devextreme/common/grids').GridsContextMenuTarget;
-        export type GridsEditMode = import('devextreme/common/grids').GridsEditMode;
-        export type GridsEditRefreshMode = import('devextreme/common/grids').GridsEditRefreshMode;
-        export type GroupExpandMode = import('devextreme/common/grids').GroupExpandMode;
-        export type HeaderFilter = import('devextreme/common/grids').HeaderFilter;
-        export type HeaderFilterGroupInterval = import('devextreme/common/grids').HeaderFilterGroupInterval;
-        export type HeaderFilterSearchConfig = import('devextreme/common/grids').HeaderFilterSearchConfig;
-        export type HeaderFilterTexts = import('devextreme/common/grids').HeaderFilterTexts;
-        export type KeyboardNavigation = import('devextreme/common/grids').KeyboardNavigation;
-        export type KeyDownInfo = import('devextreme/common/grids').KeyDownInfo;
-        export type LoadPanel = import('devextreme/common/grids').LoadPanel;
-        export type NewRowInfo<TRowData = any> = import('devextreme/common/grids').NewRowInfo<TRowData>;
-        export type NewRowPosition = import('devextreme/common/grids').NewRowPosition;
-        export type Pager = import('devextreme/common/grids').Pager;
-        export type PagerPageSize = import('devextreme/common/grids').PagerPageSize;
-        export type PagingBase = import('devextreme/common/grids').PagingBase;
-        export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> = import('devextreme/common/grids').RowDragging<TComponent, TRowData, TKey>;
-        export type RowDraggingTemplateData<TRowData = any> = import('devextreme/common/grids').RowDraggingTemplateData<TRowData>;
-        export type RowInsertedInfo<TRowData = any, TKey = any> = import('devextreme/common/grids').RowInsertedInfo<TRowData, TKey>;
-        export type RowInsertingInfo<TRowData = any> = import('devextreme/common/grids').RowInsertingInfo<TRowData>;
-        export type RowKeyInfo<TKey = any> = import('devextreme/common/grids').RowKeyInfo<TKey>;
-        export type RowRemovedInfo<TRowData = any, TKey = any> = import('devextreme/common/grids').RowRemovedInfo<TRowData, TKey>;
-        export type RowRemovingInfo<TRowData = any, TKey = any> = import('devextreme/common/grids').RowRemovingInfo<TRowData, TKey>;
-        export type RowUpdatedInfo<TRowData = any, TKey = any> = import('devextreme/common/grids').RowUpdatedInfo<TRowData, TKey>;
-        export type RowUpdatingInfo<TRowData = any, TKey = any> = import('devextreme/common/grids').RowUpdatingInfo<TRowData, TKey>;
-        export type RowValidatingInfo<TRowData = any, TKey = any> = import('devextreme/common/grids').RowValidatingInfo<TRowData, TKey>;
-        export type SavingInfo<TRowData = any, TKey = any> = import('devextreme/common/grids').SavingInfo<TRowData, TKey>;
-        export type ScrollingBase = import('devextreme/common/grids').ScrollingBase;
-        export type SearchPanel = import('devextreme/common/grids').SearchPanel;
-        export type SelectedFilterOperation = import('devextreme/common/grids').SelectedFilterOperation;
-        export type SelectionBase = import('devextreme/common/grids').SelectionBase;
-        export type SelectionChangedInfo<TRowData = any, TKey = any> = import('devextreme/common/grids').SelectionChangedInfo<TRowData, TKey>;
-        export type SelectionColumnDisplayMode = import('devextreme/common/grids').SelectionColumnDisplayMode;
-        export type Sorting = import('devextreme/common/grids').Sorting;
-        export type StartEditAction = import('devextreme/common/grids').StartEditAction;
-        export type StateStoreType = import('devextreme/common/grids').StateStoreType;
-        export type StateStoring = import('devextreme/common/grids').StateStoring;
-        export type SummaryType = import('devextreme/common/grids').SummaryType;
-        export type ToolbarPreparingInfo = import('devextreme/common/grids').ToolbarPreparingInfo;
-    }
 }
