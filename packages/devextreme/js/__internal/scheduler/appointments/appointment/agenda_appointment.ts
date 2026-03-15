@@ -11,7 +11,7 @@ export class AgendaAppointment extends Appointment {
     return this.$element().find(`.${APPOINTMENT_CONTENT_CLASSES.AGENDA_MARKER}`);
   }
 
-  _renderResourceList(): void {
+  private renderResourceList(): void {
     const resourceManager = this.option('getResourceManager')();
 
     // eslint-disable-next-line no-void
@@ -42,6 +42,6 @@ export class AgendaAppointment extends Appointment {
 
   _render(): void {
     super._render();
-    this._renderResourceList();
+    this.renderResourceList();
   }
 }

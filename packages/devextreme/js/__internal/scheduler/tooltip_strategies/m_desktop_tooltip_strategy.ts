@@ -9,24 +9,24 @@ const MAX_TOOLTIP_HEIGHT = 200;
 
 export class DesktopTooltipStrategy extends TooltipStrategyBase {
   protected override prepareBeforeVisibleChanged(dataList) {
-    this._tooltip.option('position', {
+    this.tooltip.option('position', {
       my: 'bottom',
       at: 'top',
       boundary: this.getBoundary(dataList),
-      offset: this._extraOptions.offset,
+      offset: this.extraOptions.offset,
       collision: 'fit flipfit',
     });
   }
 
   private getBoundary(dataList) {
-    return this._options.isAppointmentInAllDayPanel(dataList[0].appointment) ? this._options.container : this._options.getScrollableContainer();
+    return this.options.isAppointmentInAllDayPanel(dataList[0].appointment) ? this.options.container : this.options.getScrollableContainer();
   }
 
   protected override onShown() {
     super.onShown();
-    if (this._extraOptions.isButtonClick) {
-      this._list.focus();
-      this._list.option('focusedElement', null);
+    if (this.extraOptions.isButtonClick) {
+      this.list.focus();
+      this.list.option('focusedElement', null);
     }
   }
 
@@ -43,14 +43,14 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
   protected override createTooltip(target, dataList) {
     const tooltipElement = this.createTooltipElement(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
 
-    const tooltip = this._options.createComponent(tooltipElement, Tooltip, {
+    const tooltip = this.options.createComponent(tooltipElement, Tooltip, {
       target,
       maxHeight: MAX_TOOLTIP_HEIGHT,
-      rtlEnabled: this._extraOptions.rtlEnabled,
+      rtlEnabled: this.extraOptions.rtlEnabled,
       onShown: this.onShown.bind(this),
       contentTemplate: this.getContentTemplate(dataList),
       wrapperAttr: { class: APPOINTMENT_TOOLTIP_WRAPPER_CLASS },
-      _loopFocus: this._extraOptions._loopFocus,
+      _loopFocus: this.extraOptions._loopFocus,
     });
 
     tooltip.setAria({
@@ -62,11 +62,11 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
   }
 
   protected override onListRender(e) {
-    return this._extraOptions.dragBehavior && this._extraOptions.dragBehavior(e);
+    return this.extraOptions.dragBehavior && this.extraOptions.dragBehavior(e);
   }
 
   protected override onListItemContextMenu(e) {
-    const contextMenuEventArgs = this._options.createEventArgs(e);
-    this._options.onItemContextMenu(contextMenuEventArgs);
+    const contextMenuEventArgs = this.options.createEventArgs(e);
+    this.options.onItemContextMenu(contextMenuEventArgs);
   }
 }

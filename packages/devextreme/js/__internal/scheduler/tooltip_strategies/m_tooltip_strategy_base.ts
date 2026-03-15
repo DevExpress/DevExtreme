@@ -20,24 +20,24 @@ const APPOINTMENT_TOOLTIP_TEMPLATE = 'appointmentTooltipTemplate';
 export class TooltipStrategyBase {
   protected asyncTemplatePromises = new Set<Promise<void>>();
 
-  _tooltip: any;
+  protected tooltip: any;
 
-  _options: any;
+  protected options: any;
 
-  _extraOptions: any;
+  protected extraOptions: any;
 
-  _list: any;
+  protected list: any;
 
   constructor(options) {
-    this._tooltip = null;
-    this._options = options;
-    this._extraOptions = null;
+    this.tooltip = null;
+    this.options = options;
+    this.extraOptions = null;
   }
 
   show(target, dataList, extraOptions) {
     if (this.canShowTooltip(dataList)) {
       this.hide();
-      this._extraOptions = extraOptions;
+      this.extraOptions = extraOptions;
       this.showCore(target, dataList);
     }
   }
@@ -45,15 +45,15 @@ export class TooltipStrategyBase {
   private showCore(target, dataList) {
     const describedByValue = isRenderer(target) && target.attr('aria-describedby') as string;
 
-    if (!this._tooltip) {
-      this._tooltip = this.createTooltip(target, dataList);
+    if (!this.tooltip) {
+      this.tooltip = this.createTooltip(target, dataList);
     } else {
-      this.shouldUseTarget() && this._tooltip.option('target', target);
-      this._list.option('dataSource', dataList);
+      this.shouldUseTarget() && this.tooltip.option('target', target);
+      this.list.option('dataSource', dataList);
     }
 
     this.prepareBeforeVisibleChanged(dataList);
-    this._tooltip.option('visible', true);
+    this.tooltip.option('visible', true);
 
     describedByValue && target.attr('aria-describedby', describedByValue);
   }
@@ -64,8 +64,8 @@ export class TooltipStrategyBase {
   }
 
   private isDeletingAllowed(appointment) {
-    const { editing } = this._extraOptions;
-    const disabled = this._options.getAppointmentDisabled(appointment);
+    const { editing } = this.extraOptions;
+    const disabled = this.options.getAppointmentDisabled(appointment);
     const isDeletingAllowed = editing === true || editing?.allowDeleting === true;
     return !disabled && isDeletingAllowed;
   }
@@ -74,47 +74,47 @@ export class TooltipStrategyBase {
     return (container) => {
       const listElement = $('<div>');
       $(container).append(listElement);
-      this._list = this.createList(listElement, dataList);
-      this._list.registerKeyHandler?.('escape', () => {
+      this.list = this.createList(listElement, dataList);
+      this.list.registerKeyHandler?.('escape', () => {
         this.hide();
-        this._tooltip.option('target').focus();
+        this.tooltip.option('target').focus();
       });
-      this._list.registerKeyHandler?.('del', () => {
-        const { focusedElement } = this._list.option();
+      this.list.registerKeyHandler?.('del', () => {
+        const { focusedElement } = this.list.option();
         if (!focusedElement) {
           return;
         }
 
-        const { appointment, targetedAppointment } = this._list._getItemData(focusedElement);
+        const { appointment, targetedAppointment } = this.list._getItemData(focusedElement);
         if (!appointment) {
           return;
         }
 
         if (this.isDeletingAllowed(appointment)) {
           this.hide();
-          this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
+          this.options.checkAndDeleteAppointment(appointment, targetedAppointment);
         }
       });
     };
   }
 
   isAlreadyShown(target) {
-    if (this._tooltip && this._tooltip.option('visible')) {
-      return this._tooltip.option('target')[0] === target[0];
+    if (this.tooltip && this.tooltip.option('visible')) {
+      return this.tooltip.option('target')[0] === target[0];
     }
     return undefined;
   }
 
   protected onShown() {
-    this._list.option('focusStateEnabled', this._extraOptions.focusStateEnabled);
+    this.list.option('focusStateEnabled', this.extraOptions.focusStateEnabled);
   }
 
   dispose() {
   }
 
   hide() {
-    if (this._tooltip) {
-      this._tooltip.option('visible', false);
+    if (this.tooltip) {
+      this.tooltip.option('visible', false);
     }
   }
 
@@ -148,16 +148,16 @@ export class TooltipStrategyBase {
   protected onListRender(e) { }
 
   protected createTooltipElement(wrapperClass) {
-    return $('<div>').appendTo(this._options.container).addClass(wrapperClass);
+    return $('<div>').appendTo(this.options.container).addClass(wrapperClass);
   }
 
   private createList(listElement, dataList) {
-    return this._options.createComponent(listElement, List, this.createListOption(dataList));
+    return this.options.createComponent(listElement, List, this.createListOption(dataList));
   }
 
   private renderTemplate(appointment, targetedAppointment, index, color) {
     const itemListContent = this.createItemListContent(appointment, targetedAppointment, color);
-    this._options.addDefaultTemplates({
+    this.options.addDefaultTemplates({
       // @ts-expect-error
       appointmentTooltip: new FunctionTemplate((options) => {
         const $container = $(options.container);
@@ -166,12 +166,12 @@ export class TooltipStrategyBase {
       }),
     });
 
-    const template = this._options.getAppointmentTemplate(APPOINTMENT_TOOLTIP_TEMPLATE);
+    const template = this.options.getAppointmentTemplate(APPOINTMENT_TOOLTIP_TEMPLATE);
     return this.createFunctionTemplate(template, appointment, targetedAppointment, index);
   }
 
   private createFunctionTemplate(template, appointmentData, targetedAppointmentData, index) {
-    const isButtonClicked = Boolean(this._extraOptions.isButtonClick);
+    const isButtonClicked = Boolean(this.extraOptions.isButtonClick);
 
     // @ts-expect-error
     return new FunctionTemplate((options) => {
@@ -196,8 +196,8 @@ export class TooltipStrategyBase {
 
   private onListItemClick(e) {
     this.hide();
-    this._extraOptions.clickEvent && this._extraOptions.clickEvent(e);
-    this._options.showAppointmentPopup(e.itemData.appointment, false, e.itemData.targetedAppointment);
+    this.extraOptions.clickEvent && this.extraOptions.clickEvent(e);
+    this.options.showAppointmentPopup(e.itemData.appointment, false, e.itemData.targetedAppointment);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -206,7 +206,7 @@ export class TooltipStrategyBase {
   private createItemListContent(appointment, targetedAppointment, color) {
     const $itemElement = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM);
     $itemElement.append(this.createItemListMarker(color));
-    $itemElement.append(this.createItemListInfo(this._options.createFormattedDateText(appointment, targetedAppointment)));
+    $itemElement.append(this.createItemListInfo(this.options.createFormattedDateText(appointment, targetedAppointment)));
 
     if (this.isDeletingAllowed(appointment)) {
       $itemElement.append(this.createDeleteButton(appointment, targetedAppointment));
@@ -242,14 +242,14 @@ export class TooltipStrategyBase {
     const $deleteButton = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON);
 
     $container.append($deleteButton);
-    this._options.createComponent($deleteButton, Button, {
+    this.options.createComponent($deleteButton, Button, {
       icon: 'trash',
       stylingMode: 'text',
       tabIndex: -1,
       onClick: (e) => {
         this.hide();
         e.event.stopPropagation();
-        this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
+        this.options.checkAndDeleteAppointment(appointment, targetedAppointment);
       },
     });
 

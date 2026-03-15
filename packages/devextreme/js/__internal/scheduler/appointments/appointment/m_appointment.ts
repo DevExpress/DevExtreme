@@ -111,7 +111,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
         this._invalidate();
         break;
       case 'isDragSource':
-        this._renderDragSourceClass();
+        this.renderDragSourceClass();
         break;
       default:
         // @ts-expect-error
@@ -119,7 +119,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     }
   }
 
-  _getHorizontalResizingRule() {
+  private getHorizontalResizingRule() {
     const reducedHandles = {
       head: this.option('rtlEnabled') ? 'right' : 'left',
       body: '',
@@ -137,7 +137,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     };
   }
 
-  _getVerticalResizingRule() {
+  private getVerticalResizingRule() {
     const height = Math.round(this.invoke('getCellHeight'));
 
     return {
@@ -153,24 +153,24 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     // @ts-expect-error
     super._render();
 
-    this._renderAppointmentGeometry();
-    this._renderAriaLabel();
-    this._renderEmptyClass();
-    this._renderReducedAppointment();
-    this._renderAllDayClass();
-    this._renderDragSourceClass();
-    this._renderDirection();
+    this.renderAppointmentGeometry();
+    this.renderAriaLabel();
+    this.renderEmptyClass();
+    this.renderReducedAppointment();
+    this.renderAllDayClass();
+    this.renderDragSourceClass();
+    this.renderDirection();
 
     this.$element().data('dxAppointmentStartDate', this.option('startDate'));
     this.$element().attr('role', 'button');
 
-    this._renderRecurrenceClass();
-    this._renderResizable();
+    this.renderRecurrenceClass();
+    this.renderResizable();
 
-    this._setResourceColor();
+    this.setResourceColor();
   }
 
-  _setResourceColor() {
+  private setResourceColor() {
     const appointmentConfig = {
       itemData: this.rawAppointment,
       groupIndex: this.option('groupIndex') ?? 0,
@@ -186,7 +186,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
       });
   }
 
-  _renderAriaLabel(): void {
+  private renderAriaLabel(): void {
     const $element: dxElementWrapper = this.$element();
     $element.attr('aria-label', getAriaLabel(this.option()));
 
@@ -205,7 +205,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
       });
   }
 
-  _renderAppointmentGeometry(): void {
+  private renderAppointmentGeometry(): void {
     const geometry: any = this.option('geometry');
     const $element: any = this.$element();
     move($element, {
@@ -219,7 +219,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     });
   }
 
-  _renderEmptyClass() {
+  private renderEmptyClass() {
     const geometry: any = this.option('geometry');
 
     if (geometry.empty || this.option('isCompact')) {
@@ -227,7 +227,7 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     }
   }
 
-  _renderReducedAppointment() {
+  private renderReducedAppointment() {
     const reducedPart: any = this.option('reduced');
 
     if (!reducedPart) {
@@ -238,10 +238,10 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
       .toggleClass(REDUCED_APPOINTMENT_CLASS, true)
       .toggleClass(REDUCED_APPOINTMENT_PARTS_CLASSES[reducedPart], true);
 
-    this._renderAppointmentReducedIcon();
+    this.renderAppointmentReducedIcon();
   }
 
-  _renderAppointmentReducedIcon() {
+  private renderAppointmentReducedIcon() {
     const $icon = $('<div>')
       .addClass(REDUCED_APPOINTMENT_ICON)
       .appendTo(this.$element());
@@ -259,15 +259,15 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     });
   }
 
-  _renderAllDayClass() {
+  private renderAllDayClass() {
     (this.$element() as any).toggleClass(ALL_DAY_APPOINTMENT_CLASS, Boolean(this.option('allDay')));
   }
 
-  _renderDragSourceClass() {
+  private renderDragSourceClass() {
     (this.$element() as any).toggleClass(APPOINTMENT_DRAG_SOURCE_CLASS, Boolean(this.option('isDragSource')));
   }
 
-  _renderRecurrenceClass() {
+  private renderRecurrenceClass() {
     const rule = this.dataAccessors.get('recurrenceRule', this.rawAppointment);
 
     if (validateRRule(rule)) {
@@ -275,12 +275,12 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     }
   }
 
-  _renderDirection() {
+  private renderDirection() {
     (this.$element() as any).addClass(DIRECTION_APPOINTMENT_CLASSES[this.option('direction') as any]);
   }
 
-  _createResizingConfig() {
-    const config: any = this.option('direction') === 'vertical' ? this._getVerticalResizingRule() : this._getHorizontalResizingRule();
+  private createResizingConfig() {
+    const config: any = this.option('direction') === 'vertical' ? this.getVerticalResizingRule() : this.getHorizontalResizingRule();
 
     if (!this.invoke('isGroupedByDate')) {
       config.stepPrecision = 'strict';
@@ -289,14 +289,14 @@ export class Appointment extends DOMComponent<AppointmentProperties> {
     return config;
   }
 
-  _renderResizable() {
+  private renderResizable() {
     if (this.option('allowResize')) {
       // @ts-expect-error
       this._createComponent(
         this.$element(),
         Resizable,
         extend(
-          this._createResizingConfig(),
+          this.createResizingConfig(),
           this.option('resizableConfig'),
         ),
       );
