@@ -441,6 +441,20 @@ describe('Appointment Form', () => {
       expect(POM.popup.getInputValue('roomId')).toBe('');
     });
 
+    it('should create a new form instance on each popup opening', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup(commonAppointment);
+      const firstFormInstance = POM.popup.dxForm;
+
+      POM.popup.cancelButton.click();
+
+      scheduler.showAppointmentPopup(commonAppointment);
+      const secondFormInstance = POM.popup.dxForm;
+
+      expect(secondFormInstance).not.toBe(firstFormInstance);
+    });
+
     it('should have correct repeat editor value when opening recurring appointment after common appointment', async () => {
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
