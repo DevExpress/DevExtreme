@@ -1,3 +1,4 @@
+import '../js/__internal/integration/jquery';
 import $ from 'jquery';
 import { setupThemeSelector } from './newthemeSelector';
 import Scheduler from '../js/__internal/scheduler/m_scheduler';
