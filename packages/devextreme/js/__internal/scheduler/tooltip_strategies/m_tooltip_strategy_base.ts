@@ -26,7 +26,7 @@ export class TooltipStrategyBase {
 
   protected extraOptions: any;
 
-  protected list: any;
+  public list: any;
 
   constructor(options) {
     this.tooltip = null;
