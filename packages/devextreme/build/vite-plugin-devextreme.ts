@@ -9,10 +9,66 @@ function removeUninitializedClassFields(): unknown {
           path.remove();
         }
       },
-      ClassDeclaration(path: { node: { body: { body: Array<{ type: string; value: unknown }> } } }) {
-        path.node.body.body = path.node.body.body.filter(
-          (member) => !(member.type === 'ClassProperty' && (member.value === null || member.value === undefined)),
+    },
+  };
+}
+
+function moveFieldInitializersToConstructor(): unknown {
+  return {
+    visitor: {
+      Class(path: { node: { body: { body: unknown[] } } }) {
+        const body = path.node.body.body;
+
+        type ClassMember = {
+          type: string;
+          kind?: string;
+          key?: { name: string };
+          value?: unknown;
+          static?: boolean;
+          body?: { body: unknown[] };
+        };
+
+        const fieldsToMove: ClassMember[] = [];
+        const remaining: unknown[] = [];
+
+        for (const member of body as ClassMember[]) {
+          if (
+            member.type === 'ClassProperty'
+            && member.value != null
+            && !member.static
+          ) {
+            fieldsToMove.push(member);
+          } else {
+            remaining.push(member);
+          }
+        }
+
+        if (fieldsToMove.length === 0) return;
+
+        const ctor = (remaining as ClassMember[]).find(
+          (m) => m.type === 'ClassMethod' && m.kind === 'constructor',
         );
+
+        if (!ctor) return;
+
+        const assignments = fieldsToMove.map((field) => ({
+          type: 'ExpressionStatement',
+          expression: {
+            type: 'AssignmentExpression',
+            operator: '=',
+            left: {
+              type: 'MemberExpression',
+              object: { type: 'ThisExpression' },
+              property: { type: 'Identifier', name: field.key!.name },
+              computed: false,
+            },
+            right: field.value,
+          },
+        }));
+
+        ctor.body!.body.push(...assignments);
+
+        path.node.body.body = remaining;
       },
     },
   };
@@ -47,8 +103,8 @@ export default function devextremeInfernoPlugin(): PluginOption {
 
       plugins.push(
         removeUninitializedClassFields,
+        moveFieldInitializersToConstructor,
         ['@babel/plugin-proposal-decorators', { legacy: true }],
-        ['@babel/plugin-transform-class-properties', { loose: true }],
         'babel-plugin-inferno',
       );
 
