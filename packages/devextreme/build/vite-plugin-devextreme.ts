@@ -1,7 +1,24 @@
 import { transformAsync } from '@babel/core';
-import type { Plugin } from 'vite';
+import type { PluginOption } from 'vite';
 
-export default function devextremeInfernoPlugin(): Plugin {
+function removeUninitializedClassFields(): unknown {
+  return {
+    visitor: {
+      ClassProperty(path: { node: { value: unknown }; remove: () => void }) {
+        if (path.node.value === null || path.node.value === undefined) {
+          path.remove();
+        }
+      },
+      ClassDeclaration(path: { node: { body: { body: Array<{ type: string; value: unknown }> } } }) {
+        path.node.body.body = path.node.body.body.filter(
+          (member) => !(member.type === 'ClassProperty' && (member.value === null || member.value === undefined)),
+        );
+      },
+    },
+  };
+}
+
+export default function devextremeInfernoPlugin(): PluginOption {
   return {
     name: 'devextreme-inferno',
     enforce: 'pre',
@@ -14,24 +31,30 @@ export default function devextremeInfernoPlugin(): Plugin {
       const isTSX = id.endsWith('.tsx');
       const isTS = id.endsWith('.ts') || isTSX;
 
-      const plugins: unknown[] = [
+      const plugins: unknown[] = [];
+
+      if (isTS) {
+        plugins.push([
+          '@babel/plugin-transform-typescript',
+          {
+            isTSX,
+            allExtensions: true,
+            allowDeclareFields: true,
+            optimizeConstEnums: true,
+          },
+        ]);
+      }
+
+      plugins.push(
+        removeUninitializedClassFields,
         ['@babel/plugin-proposal-decorators', { legacy: true }],
         ['@babel/plugin-transform-class-properties', { loose: true }],
         'babel-plugin-inferno',
-      ];
-
-      const presets: unknown[] = [];
-      if (isTS) {
-        presets.push([
-          '@babel/preset-typescript',
-          { isTSX, allExtensions: true },
-        ]);
-      }
+      );
 
       const result = await transformAsync(code, {
         filename: id,
         plugins,
-        presets,
         sourceMaps: true,
       });
 
