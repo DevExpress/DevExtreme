@@ -22,7 +22,7 @@ export class TooltipStrategyBase {
 
   protected tooltip: any;
 
-  protected options: any;
+  public options: any;
 
   protected extraOptions: any;
 
