@@ -416,6 +416,51 @@ QUnit.module('Aria accessibility', {
             assert.strictEqual($radioContainer.attr('aria-labelledby'), itemId, `item[${index}] radio container aria-labelledby references item element id`);
         });
     });
+
+    QUnit.test('Item with html: role="radio" is set on item element, no radio container created', function(assert) {
+        helper.createWidget({
+            items: [
+                { html: '<span>Option A</span>' },
+                { html: '<span>Option B</span>' },
+            ],
+        });
+
+        helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
+
+        helper.getItems().each((index, item) => {
+            const $item = $(item);
+            const $radioContainer = $item.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+
+            assert.strictEqual($radioContainer.length, 0, `item[${index}] has no radio container when html is provided`);
+            assert.strictEqual($item.attr('role'), 'radio', `item[${index}] element itself has role="radio"`);
+            assert.strictEqual($item.attr('aria-checked'), 'false', `item[${index}] element has aria-checked="false" by default`);
+            assert.strictEqual($item.attr('aria-labelledby'), undefined, `item[${index}] element has no aria-labelledby when html is provided`);
+        });
+    });
+
+    QUnit.test('Item with html: aria-checked on item element is updated on value change', function(assert) {
+        const items = [
+            { html: '<span>Option A</span>', value: 'a' },
+            { html: '<span>Option B</span>', value: 'b' },
+        ];
+        helper.createWidget({ items, valueExpr: 'value', value: 'a' });
+
+        helper.getItems().each((index, item) => {
+            const $item = $(item);
+            const expected = index === 0 ? 'true' : 'false';
+
+            assert.strictEqual($item.attr('aria-checked'), expected, `item[${index}] has correct aria-checked after initial render`);
+        });
+
+        helper.widget.option('value', 'b');
+
+        helper.getItems().each((index, item) => {
+            const $item = $(item);
+            const expected = index === 1 ? 'true' : 'false';
+
+            assert.strictEqual($item.attr('aria-checked'), expected, `item[${index}] has correct aria-checked after value change`);
+        });
+    });
 });
 
 module('layout', moduleConfig, () => {
