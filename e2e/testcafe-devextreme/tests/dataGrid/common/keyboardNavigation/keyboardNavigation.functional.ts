@@ -4149,7 +4149,7 @@ test('DataGrid - focusedRowIndex is -1 when the first data cell is focused with 
   },
 }));
 
-test('DataGrid - onFocusedCellChanged parameters should be correct when focusing the first cell (T1175896)', async (t) => {
+test('DataGrid - onFocusedCellChanged parameters should be correct when focusing the first cell (T1282664)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // act
@@ -4161,7 +4161,7 @@ test('DataGrid - onFocusedCellChanged parameters should be correct when focusing
   const firstDataCell = dataGrid.getDataCell(0, 0).element;
   await t
     .expect(firstDataCell.focused)
-    .ok()
+    .ok();
 
   const expectedFocusedCellChangedEventArgs = {
     cellElement: firstDataCell,
@@ -4188,7 +4188,7 @@ test('DataGrid - onFocusedCellChanged parameters should be correct when focusing
     onFocusedCellChanged(e) {
       (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
     },
-  })
+  });
 })
 .after(async () => {
   await ClientFunction(() => {
