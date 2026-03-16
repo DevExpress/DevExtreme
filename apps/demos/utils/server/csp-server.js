@@ -381,8 +381,8 @@ app.use(cookieParser());
 app.use(cspMiddleware);
 
 const demoIndexLimiter = RateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs for demo index routes
+  windowMs: 15 * 60 * 1000,
+  max: 100,
 });
 
 app.post('/csp-report', cspReportHandler);
