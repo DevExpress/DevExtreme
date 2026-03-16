@@ -9,7 +9,7 @@ const DEMO_ROOT = join(__dirname, '..', '..');
 const REPORT_DIR = join(DEMO_ROOT, 'csp-reports');
 const SERVER_URL = process.env.CSP_SERVER_URL || 'http://localhost:8080';
 const FRAMEWORK = (process.env.CSP_FRAMEWORKS || 'jQuery').trim();
-const CONCURRENCY = parseInt(process.env.CSP_CONCURRENCY, 10) || 8;
+const CONCURRENCY = parseInt(process.env.CSP_CONCURRENCY, 10) || 5;
 
 function findChrome() {
   const candidates = [
@@ -87,7 +87,7 @@ function visitPage(url) {
       '--virtual-time-budget=5000',
       '--window-size=100,100',
       url,
-    ], { timeout: 30000 }, () => resolve());
+    ], { timeout: 10000 }, () => resolve());
     child.on('error', (err) => {
       reject(new Error(`Failed to launch Chrome at "${CHROME_PATH}": ${err.message}`));
     });
