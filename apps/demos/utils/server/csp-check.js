@@ -116,7 +116,8 @@ async function runPool(items, concurrency, fn) {
   let nextIndex = 0;
   async function worker() {
     while (nextIndex < items.length) {
-      const i = nextIndex++;
+      const i = nextIndex;
+      nextIndex += 1;
       await fn(items[i], i);
     }
   }
