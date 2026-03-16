@@ -114,6 +114,7 @@ const DATE_OPTIONS_GROUP_NAME = 'dateOptionsGroup';
 const START_DATE_GROUP_NAME = 'startDateGroup';
 const END_DATE_GROUP_NAME = 'endDateGroup';
 const RESOURCES_GROUP_NAME = 'resourcesGroup';
+const RESOURCE_EDITORS_GROUP_NAME = 'resourceEditorsGroup';
 const SUBJECT_GROUP_NAME = 'subjectGroup';
 const REPEAT_GROUP_NAME = 'repeatGroup';
 const DESCRIPTION_GROUP_NAME = 'descriptionGroup';
@@ -134,6 +135,7 @@ const END_DATE_TIMEZONE_EDITOR_NAME = 'endDateTimeZoneEditor';
 const SUBJECT_ICON_NAME = 'subjectIcon';
 const DATE_ICON_NAME = 'dateIcon';
 const REPEAT_ICON_NAME = 'repeatIcon';
+const RESOURCES_GROUP_ICON_NAME = 'resourcesGroupIcon';
 const DESCRIPTION_ICON_NAME = 'descriptionIcon';
 
 export class AppointmentForm {
@@ -736,7 +738,7 @@ export class AppointmentForm {
           },
           editorType: 'dxTextArea',
           editorOptions: {
-            height: 100,
+            minHeight: 100,
           } as TextAreaProperties,
         },
       ],
@@ -749,12 +751,13 @@ export class AppointmentForm {
     let resourcesItems: FormItem[] = resourcesLoaders.map((resourceLoader) => {
       const { dataSource, dataAccessor } = resourceLoader;
       const dataField = resourceLoader.resourceIndex;
+      const name = `${dataField}Editor`;
       const label = resourceLoader.resourceName ?? dataField;
       const editorType = resourceLoader.allowMultiple ? 'dxTagBox' : 'dxSelectBox';
 
       return {
         itemType: 'simple',
-        name: dataField,
+        name,
         dataField,
         label: { text: label },
         colSpan: 1,
@@ -781,13 +784,13 @@ export class AppointmentForm {
         cssClass: `${CLASSES.resourcesGroup} ${CLASSES.groupWithIcon}`,
         items: [
           {
-            name: `${RESOURCES_GROUP_NAME}Icon`,
+            name: RESOURCES_GROUP_ICON_NAME,
             colSpan: 1,
             cssClass: `${CLASSES.formIcon} ${CLASSES.defaultResourceIcon}`,
             template: createFormIconTemplate('addcircleoutline'),
           },
           {
-            name: `${RESOURCES_GROUP_NAME}Content`,
+            name: RESOURCE_EDITORS_GROUP_NAME,
             itemType: 'group',
             colSpan: 1,
             items: resourcesItems,

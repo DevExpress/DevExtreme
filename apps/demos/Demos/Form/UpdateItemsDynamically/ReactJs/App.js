@@ -21,7 +21,7 @@ const App = () => {
   );
   const generateNewPhoneOptions = useCallback(
     (index) => ({
-      mask: '+1 (X00) 000-0000',
+      mask: '(X00) 000-0000',
       maskRules: { X: /[01-9]/ },
       buttons: [
         {

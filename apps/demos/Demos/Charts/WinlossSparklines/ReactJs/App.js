@@ -1,12 +1,12 @@
 import React from 'react';
 import RowTemplate from './RowTemplate.js';
 
-const years = ['2010', '2011', '2012'];
+const years = ['2021', '2022', '2023'];
 function App() {
   return (
     <>
       <div className="long-title">
-        <h3>Monthly Prices of Aluminium, Nickel and Copper</h3>
+        <h3>Monthly Prices of Copper, Nickel and Palladium</h3>
       </div>
       <div id="chart-demo">
         <table
@@ -15,10 +15,12 @@ function App() {
         >
           <tbody>
             <tr>
-              <th />
-              <th>Aluminium (USD/ton)</th>
-              <th>Nickel (USD/ton)</th>
+              <th>
+                <div className="dx-screen-reader-only">Year</div>
+              </th>
               <th>Copper (USD/ton)</th>
+              <th>Nickel (USD/ton)</th>
+              <th>Palladium (USD/troy ounce)</th>
             </tr>
             {years.map((year, index) => (
               <RowTemplate

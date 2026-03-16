@@ -1,3 +1,4 @@
+import messageLocalization from '@js/localization/message';
 import type { TextBoxInstance } from '@js/ui/text_box';
 import type { Signal } from '@ts/core/state_manager/index';
 import { effect, signal } from '@ts/core/state_manager/index';
@@ -26,7 +27,7 @@ export class SearchView {
   ) {
     const toolbarItem = addSearchTextBox(
       {
-        placeholder: this.searchController.searchPlaceholder.value,
+        placeholder: this.getPlaceholder(),
         value: this.searchController.searchTextOption.value,
         width: this.searchController.searchWidth.value,
         onValueChanged: (text): void => {
@@ -44,12 +45,17 @@ export class SearchView {
 
     effect(() => {
       this.searchTextBox.value?.option('value', this.searchController.searchTextOption.value);
-      this.searchTextBox.value?.option('placeholder', this.searchController.searchPlaceholder.value);
+      this.searchTextBox.value?.option('placeholder', this.getPlaceholder());
       this.searchTextBox.value?.option('width', this.searchController.searchWidth.value);
     });
 
     this.searchUIController.registerCallback('focusSearchTextBox', () => {
       this.searchTextBox.value?.focus();
     });
+  }
+
+  private getPlaceholder(): string {
+    return this.searchController.searchPlaceholder.value
+      ?? messageLocalization.format('dxDataGrid-searchPanelPlaceholder');
   }
 }

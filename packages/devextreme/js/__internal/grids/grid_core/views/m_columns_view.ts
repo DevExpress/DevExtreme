@@ -31,10 +31,11 @@ import supportUtils from '@ts/core/utils/m_support';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 
-import type { Column, ColumnsController } from '../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
@@ -43,6 +44,7 @@ const SCROLL_CONTAINER_CLASS = 'scroll-container';
 const SCROLLABLE_SIMULATED_CLASS = 'scrollable-simulated';
 const GROUP_SPACE_CLASS = 'group-space';
 const CONTENT_CLASS = 'content';
+const HEADER_TEXT_CONTENT_CLASS = 'text-content';
 const TABLE_CLASS = 'table';
 const TABLE_FIXED_CLASS = 'table-fixed';
 const CONTENT_FIXED_CLASS = 'content-fixed';
@@ -426,16 +428,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
                                     && !isGroupCellWithTemplate;
 
         if (shouldShowHint) {
-          if ($element.data(CELL_HINT_VISIBLE)) {
-            $element.removeAttr('title');
-            $element.data(CELL_HINT_VISIBLE, false);
-          }
-
-          const difference = $element[0].scrollWidth - $element[0].clientWidth;
-          if (difference > 0 && !isDefined($element.attr('title'))) {
-            $element.attr('title', $element.text());
-            $element.data(CELL_HINT_VISIBLE, true);
-          }
+          this._setCellTitleAttribute($element, isHeaderRow);
         }
       }));
     }
@@ -491,6 +484,32 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     subscribeToRowEvents(this, $table);
 
     return $table;
+  }
+
+  private _setCellTitleAttribute($cell: dxElementWrapper, isHeaderRow: boolean): void {
+    if ($cell.data(CELL_HINT_VISIBLE)) {
+      $cell.removeAttr('title');
+      $cell.data(CELL_HINT_VISIBLE, false);
+    }
+
+    let $cellContent = $cell;
+    const headerContentClass = this.addWidgetPrefix(HEADER_TEXT_CONTENT_CLASS);
+
+    if (isHeaderRow && !$cell.hasClass(headerContentClass)) {
+      const $headerContent = $cell.find(`.${headerContentClass}`);
+      $cellContent = $headerContent.length ? $headerContent : $cellContent;
+    }
+
+    const hasWidthOverflow = $cellContent[0].scrollWidth - $cellContent[0].clientWidth > 0;
+
+    if (!hasWidthOverflow || isDefined($cell.attr('title'))) {
+      return;
+    }
+
+    const hintText = $cellContent.text() || $cell.text();
+
+    $cell.attr('title', hintText);
+    $cell.data(CELL_HINT_VISIBLE, true);
   }
 
   /**

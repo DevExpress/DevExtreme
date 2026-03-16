@@ -81,7 +81,7 @@ const getDragCoordinates = async (
     await MouseUpEvents.enable(MouseAction.dragToOffset);
   });
 
-  test.meta({ unstable: true })('sortable indicator during dragging to middle place', async (t) => {
+  test('sortable indicator during dragging to middle place', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const cardView = new CardView(CARD_VIEW_SELECTOR);
 

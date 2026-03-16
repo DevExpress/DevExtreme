@@ -107,6 +107,26 @@ QUnit.test('deserializing first date (serialization format is string)', function
     assert.deepEqual(result, date, 'date is returned');
 });
 
+QUnit.test('deserializing year-only string should return correct year (T1323373)', function(assert) {
+    const result = dateSerialization.deserializeDate('2026');
+
+    assert.ok(result instanceof Date, 'result is a Date');
+    assert.equal(result.getFullYear(), 2026, 'year is 2026');
+    assert.equal(result.getMonth(), 0, 'month is January');
+    assert.equal(result.getDate(), 1, 'day is 1');
+});
+
+QUnit.test('createLocalDateFromUTCTimestamp returns local date with UTC components', function(assert) {
+    const utcTimestamp = Date.UTC(2026, 0, 1);
+    const result = dateSerialization.createLocalDateFromUTCTimestamp(utcTimestamp);
+
+    assert.ok(result instanceof Date, 'result is a Date');
+    assert.equal(result.getFullYear(), 2026, 'year matches UTC year');
+    assert.equal(result.getMonth(), 0, 'month matches UTC month');
+    assert.equal(result.getDate(), 1, 'date matches UTC date');
+    assert.equal(result.getHours(), 0, 'hours are 0');
+});
+
 QUnit.test('serialization ISO8601 dates', function(assert) {
     const date = new Date(2015, 3, 5, 6, 7, 25, 125);
 

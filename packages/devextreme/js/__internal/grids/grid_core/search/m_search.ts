@@ -1,13 +1,13 @@
 /* eslint-disable max-classes-per-file */
-/* eslint-disable @typescript-eslint/method-signature-style */
+
 import messageLocalization from '@js/common/core/localization/message';
 import type { LangParams } from '@js/common/data';
 import dataQuery from '@js/common/data/query';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
 import { compileGetter, toComparable } from '@js/core/utils/data';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Column } from '../columns_controller/m_columns_controller';
 import type { DataController, Filter } from '../data_controller/m_data_controller';
 import type { HeaderPanel } from '../header_panel/m_header_panel';
 import type { ModuleType } from '../m_types';
@@ -270,7 +270,6 @@ const rowsView = (
       for (let i = 0; i < $contents.length; i++) {
         const node = $contents.get(i);
         if (node.nodeType === 3) {
-          // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
           const normalizedText = stringNormalizer(node.textContent ?? node.nodeValue ?? '');
           if (normalizedText.includes(normalizedSearchText)) {
             resultTextNodes.push(node);

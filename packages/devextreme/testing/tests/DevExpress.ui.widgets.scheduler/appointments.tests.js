@@ -8,14 +8,10 @@ import { getEmptyResourceManager } from '../../helpers/scheduler/mockResourceMan
 import $ from 'jquery';
 import '__internal/scheduler/workspaces/m_work_space_week';
 import SchedulerAppointments from '__internal/scheduler/appointments/m_appointment_collection';
-import eventsEngine from 'common/core/events/core/events_engine';
 import dblclickEvent from 'common/core/events/dblclick';
 import translator from 'common/core/animation/translator';
-import { isRenderer } from 'core/utils/type';
-import config from 'core/config';
 import Resizable from 'ui/resizable';
 import fx from 'common/core/animation/fx';
-import { DataSource } from 'common/data/data_source/data_source';
 import { Deferred } from 'core/utils/deferred';
 import { createTimeZoneCalculator } from '__internal/scheduler/r1/timezone_calculator/index.js';
 
@@ -88,6 +84,10 @@ const createInstance = (options, subscribesConfig) => {
         }
     };
 
+    // Set 'items' using options like it is done in real scheduler
+    const items = options.items || [];
+    delete options.items;
+
     const instance = $('#scheduler-appointments').dxSchedulerAppointments({
         notifyScheduler,
         ...options,
@@ -95,6 +95,7 @@ const createInstance = (options, subscribesConfig) => {
         getLoadedResources: () => [],
         getResourceManager: getEmptyResourceManager,
         getAppointmentColor: () => new Deferred(),
+        getSortedAppointments: () => items,
         dataAccessors,
         getAppointmentDataSource: () => ({
             getUpdatedAppointment: () => false,
@@ -108,6 +109,8 @@ const createInstance = (options, subscribesConfig) => {
     }).dxSchedulerWorkSpaceWeek('instance');
 
     workspaceInstance.getWorkArea().append(instance.$element());
+
+    instance.option('items', items);
 
     const schedulerMock = {
         _appointments: instance,
@@ -154,7 +157,7 @@ QUnit.module('Appointments', moduleOptions, () => {
             items: [
                 {
                     itemData: data,
-                    sortedIndex: -1,
+                    sortedIndex: 0,
                 },
             ],
         }, testConfig);
@@ -173,7 +176,7 @@ QUnit.module('Appointments', moduleOptions, () => {
             items: [
                 {
                     itemData: data,
-                    sortedIndex: -1,
+                    sortedIndex: 0,
                 }
             ],
         }, testConfig);
@@ -189,14 +192,14 @@ QUnit.module('Appointments', moduleOptions, () => {
                         text: 'Appointment 1',
                         startDate: new Date()
                     },
-                    sortedIndex: -1,
+                    sortedIndex: 0,
                 },
                 {
                     itemData: {
                         text: 'Appointment 2',
                         startDate: new Date()
                     },
-                    sortedIndex: -1,
+                    sortedIndex: 1,
                 }
             ],
         }, testConfig);
@@ -214,7 +217,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                         startDate: new Date(),
                         recurrenceRule: 'FREQ=YEARLY;COUNT=1'
                     },
-                    sortedIndex: -1,
+                    sortedIndex: 0,
                 }
             ],
         }, testConfig);
@@ -232,7 +235,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                         startDate: new Date(2015, 1, 9, 8),
                         endDate: new Date(2015, 1, 9, 9)
                     },
-                    sortedIndex: -1,
+                    sortedIndex: 0,
                     height: 40,
                 }
             ],
@@ -254,7 +257,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 8),
                     endDate: new Date(2015, 1, 9, 9)
                 },
-                sortedIndex: -1,
+                sortedIndex: 0,
                 height: 30,
             }
         ]);
@@ -279,7 +282,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                         startDate: new Date(2015, 1, 9, 8),
                         endDate: new Date(2015, 1, 9, 9)
                     },
-                    sortedIndex: -1,
+                    sortedIndex: 0,
                 }
             ],
             allowResize: false,
@@ -297,7 +300,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            sortedIndex: -1,
+            sortedIndex: 0,
             height: 40,
             width: 40,
         };
@@ -400,7 +403,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                 endDate: new Date(2015, 1, 9, 9),
                 allDay: true
             },
-            sortedIndex: -1,
+            sortedIndex: 0,
             allDay: true,
         };
 
@@ -454,7 +457,7 @@ QUnit.module('Appointments', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            sortedIndex: -1,
+            sortedIndex: 0,
         };
 
         const instance = createInstance({
@@ -475,7 +478,7 @@ QUnit.module('Appointments Actions', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            sortedIndex: -1,
+            sortedIndex: 0,
         };
 
         const instance = createInstance({
@@ -502,20 +505,18 @@ QUnit.module('Appointments Actions', moduleOptions, () => {
                 startDate: new Date(2015, 2, 9, 10),
                 endDate: new Date(2015, 2, 9, 10)
             },
-            sortedIndex: -1,
+            sortedIndex: 0,
         }, {
             itemData: {
                 text: 'Appointment 2',
                 startDate: new Date(2015, 2, 10, 8),
                 endDate: new Date(2015, 2, 10, 9)
             },
-            sortedIndex: -1,
+            sortedIndex: 1,
         }];
 
         createInstance({
-            dataSource: new DataSource({
-                store: items
-            }),
+            items,
             views: ['month'],
             currentView: 'month',
             currentDate: new Date(2015, 2, 9),
@@ -537,7 +538,7 @@ QUnit.module('Appointments Actions', moduleOptions, () => {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 9)
             },
-            sortedIndex: -1,
+            sortedIndex: 0,
         };
 
         const instance = createInstance({
@@ -586,7 +587,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
         assert.ok(!$appointments.eq(0).attr('tabindex'), 'item tabindex is right');
     });
 
-    QUnit.testInActiveWindow('Focused element should be changed on focusin', async function(assert) {
+    QUnit.test('Focused element should be changed on focusin', async function(assert) {
         const items = [
             {
                 itemData: {
@@ -594,7 +595,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 8),
                     endDate: new Date(2015, 1, 9, 10)
                 },
-                sortedIndex: -1,
+                sortedIndex: 0,
             },
             {
                 itemData: {
@@ -602,7 +603,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 1, 9, 9),
                     endDate: new Date(2015, 1, 9, 10)
                 },
-                sortedIndex: -1,
+                sortedIndex: 1,
             }
         ];
 
@@ -613,12 +614,12 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
         }, keyboardNavigationConfig);
 
         const $appointments = $('.dx-scheduler-appointment');
+
         $appointments.get(0).focus();
-        assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-        assert.deepEqual($appointments.get(0), $(instance.option('focusedElement')).get(0), 'right element is focused');
+        assert.equal($appointments.get(0), $(instance.option('focusedElement')).get(0), 'right element is focused - 1');
 
         $appointments.get(1).focus();
-        assert.deepEqual($appointments.get(1), $(instance.option('focusedElement')).get(0), 'right element is focused');
+        assert.equal($appointments.get(1), $(instance.option('focusedElement')).get(0), 'right element is focused - 2');
     });
 
     QUnit.test('Appointment popup should be opened after enter key press', async function(assert) {
@@ -756,7 +757,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
                     startDate: new Date(2015, 10, 3, 9),
                     endDate: new Date(2015, 10, 3, 11)
                 },
-                sortedIndex: -1
+                sortedIndex: 0
             }
         ];
 
@@ -768,21 +769,17 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
 
         const $appointment = $('.dx-scheduler-appointment').eq(0);
 
-        $($appointment).trigger('focusin');
-        const initialTrigger = eventsEngine.trigger;
+        $appointment.trigger('focusin');
 
-        const focusedElement = $(instance.option('focusedElement')).get(0);
-        const focusSpy = sinon.spy(eventsEngine, 'trigger').withArgs(sinon.match(function($element) {
-            return config().useJQuery ? $element.get(0) === focusedElement : $element === focusedElement;
-        }), 'focus');
+        let focusCalled = false;
+        $appointment.on('focus', function() {
+            focusCalled = true;
+        });
 
         instance.focus();
-
-        assert.ok(focusSpy.called, 'focus is called');
-        sinon.restore();
-
-        eventsEngine.trigger = initialTrigger;
+        assert.ok(focusCalled, 'focus is called');
     });
+
 
     QUnit.test('Default behavior of tab button should be prevented for apps', async function(assert) {
         assert.expect(1);

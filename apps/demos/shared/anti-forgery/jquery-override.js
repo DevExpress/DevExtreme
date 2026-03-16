@@ -9,7 +9,7 @@ function fetchAntiForgeryToken() {
   orig$.ajax({
     url: 'https://js.devexpress.com/Demos/NetCore/api/Common/GetAntiForgeryToken',
     method: 'GET',
-    xhrFields: { withCredentials: true },
+    // xhrFields: { withCredentials: true },
     cache: false,
   }).done((data) => {
     d.resolve(data);
@@ -56,7 +56,10 @@ async function setAntiForgery() {
     }
 
     options.headers = { [tokenData.headerName]: tokenData.token, ...(options.headers || {}) };
-    options.xhrFields = { withCredentials: true, ...(options.xhrFields || {}) };
+    options.xhrFields = {
+      // withCredentials: true,
+      ...(options.xhrFields || {}),
+    };
 
     return originalAjax.call(this, options);
   };
@@ -68,7 +71,7 @@ async function setAntiForgery() {
     };
 
     options.xhrFields = {
-      withCredentials: true,
+      // withCredentials: true,
       ...(options.xhrFields || {}),
     };
 

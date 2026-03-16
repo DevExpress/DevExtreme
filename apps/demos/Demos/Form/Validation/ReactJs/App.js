@@ -42,7 +42,7 @@ const addressEditorOptions = {
   valueChangeEvent: 'keyup',
 };
 const phoneEditorOptions = {
-  mask: '+1 (X00) 000-0000',
+  mask: '(X00) 000-0000',
   valueChangeEvent: 'keyup',
   maskRules: {
     X: /[02-9]/,

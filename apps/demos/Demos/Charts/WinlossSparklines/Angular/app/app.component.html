@@ -1,13 +1,13 @@
 <div class="long-title"
-  ><h3>Monthly Prices of Aluminium, Nickel and Copper</h3></div
+  ><h3>Monthly Prices of Copper, Nickel and Palladium</h3></div
 >
 <div id="chart-demo">
   <table class="demo-table">
     <tr>
-      <th></th>
-      <th>Aluminium (USD/ton)</th>
-      <th>Nickel (USD/ton)</th>
+      <th><div class="dx-screen-reader-only">Year</div></th>
       <th>Copper (USD/ton)</th>
+      <th>Nickel (USD/ton)</th>
+      <th>Palladium (USD/troy ounce)</th>
     </tr>
     @for(year of years; track year) {
     <tr>
@@ -15,14 +15,16 @@
       <td>
         <dx-sparkline
           class="sparkline"
-          [dataSource]="aluminumCosts"
+          [dataSource]="copperCosts"
           argumentField="month"
           valueField="{{ year }}"
           type="winloss"
           [showMinMax]="true"
-          [winlossThreshold]="2100"
+          [winlossThreshold]="8000"
         >
-          <dxo-sparkline-tooltip format="currency"></dxo-sparkline-tooltip>
+          <dxo-sparkline-tooltip
+            [format]="{ type: 'currency', precision: 2 }"
+          ></dxo-sparkline-tooltip>
         </dx-sparkline>
       </td>
       <td>
@@ -38,22 +40,26 @@
           lossColor="#8076bb"
           [winlossThreshold]="19000"
         >
-          <dxo-sparkline-tooltip format="currency"></dxo-sparkline-tooltip>
+          <dxo-sparkline-tooltip
+            [format]="{ type: 'currency', precision: 2 }"
+          ></dxo-sparkline-tooltip>
         </dx-sparkline>
       </td>
       <td>
         <dx-sparkline
           class="sparkline"
-          [dataSource]="cooperCosts"
+          [dataSource]="palladiumCosts"
           argumentField="month"
           valueField="{{ year }}"
           type="winloss"
           winColor="#7e4452"
           lossColor="#ebdd8f"
           firstLastColor="#e55253"
-          [winlossThreshold]="8000"
+          [winlossThreshold]="2000"
         >
-          <dxo-sparkline-tooltip format="currency"></dxo-sparkline-tooltip>
+          <dxo-sparkline-tooltip
+            [format]="{ type: 'currency', precision: 2 }"
+          ></dxo-sparkline-tooltip>
         </dx-sparkline>
       </td>
     </tr>

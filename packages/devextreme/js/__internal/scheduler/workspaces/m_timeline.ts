@@ -17,7 +17,7 @@ import {
 } from '../m_classes';
 import tableCreatorModule from '../m_table_creator';
 import timezoneUtils from '../m_utils_time_zone';
-import HorizontalShader from '../shaders/m_current_time_shader_horizontal';
+import HorizontalShader from '../shaders/current_time_shader_horizontal';
 import SchedulerWorkSpace from './m_work_space_indicator';
 
 const { tableCreator } = tableCreatorModule;
@@ -47,15 +47,15 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return this._$sidebarTable ? getOuterWidth(this._$sidebarTable) : 0;
   }
 
-  _getTotalRowCount(groupCount) {
+  protected override getTotalRowCount(groupCount) {
     if (this._isHorizontalGroupedWorkSpace()) {
-      return this._getRowCount();
+      return this.getRowCount();
     }
     groupCount = groupCount || 1;
-    return this._getRowCount() * groupCount;
+    return this.getRowCount() * groupCount;
   }
 
-  _getFormat(): any {
+  protected override getFormat(): any {
     return 'shorttime';
   }
 
@@ -67,8 +67,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return getBoundingRect((this.$element() as any).get(0)).height;
   }
 
-  _dateTableScrollableConfig() {
-    const config = super._dateTableScrollableConfig();
+  protected override dateTableScrollableConfig() {
+    const config = super.dateTableScrollableConfig();
     const timelineConfig = {
       direction: HORIZONTAL,
     };
@@ -76,12 +76,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return this.option('crossScrollingEnabled') ? config : extend(config, timelineConfig);
   }
 
-  _needCreateCrossScrolling() {
+  protected override needCreateCrossScrolling() {
     return true;
   }
 
-  _headerScrollableConfig() {
-    const config = super._headerScrollableConfig();
+  protected override headerScrollableConfig() {
+    const config = super.headerScrollableConfig();
 
     return extend(config, {
       scrollByContent: true,
@@ -92,14 +92,14 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return false;
   }
 
-  _getGroupHeaderContainer() {
+  protected override getGroupHeaderContainer() {
     if (this._isHorizontalGroupedWorkSpace()) {
       return this._$thead;
     }
     return this._$sidebarTable;
   }
 
-  _insertAllDayRowsIntoDateTable() {
+  protected override insertAllDayRowsIntoDateTable() {
     return false;
   }
 
@@ -136,13 +136,13 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     let duration = (timeDiff - differenceInDays * toMs('day') - (this.option('startDayHour') as any) * toMs('hour')) / this.getCellDuration();
 
     if (today.getHours() > (this.option('endDayHour') as any)) {
-      duration = this._getCellCountInDay();
+      duration = this.getCellCountInDay();
     }
 
     if (duration < 0) {
       duration = 0;
     }
-    return differenceInDays * this._getCellCountInDay() + duration;
+    return differenceInDays * this.getCellCountInDay() + duration;
   }
 
   getIndicationWidth() {
@@ -164,8 +164,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return false;
   }
 
-  _setTableSizes() {
-    super._setTableSizes();
+  protected override setTableSizes() {
+    super.setTableSizes();
 
     const minHeight = this._getWorkSpaceMinHeight();
     setHeight(this._$sidebarTable, minHeight);
@@ -186,7 +186,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return minHeight;
   }
 
-  _getCellCoordinatesByIndex(index) {
+  protected override getCellCoordinatesByIndex(index) {
     return {
       columnIndex: index % this._getCellCount(),
       rowIndex: 0,
@@ -203,7 +203,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       .eq(indexes.columnIndex);
   }
 
-  _getWorkSpaceWidth() {
+  protected override getWorkSpaceWidth() {
     return getOuterWidth(this._$dateTable, true);
   }
 
@@ -211,7 +211,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return dateUtils.trimTime(new Date(this.getStartViewDate()));
   }
 
-  _getIntervalBetween(currentDate, allDay) {
+  protected override getIntervalBetween(currentDate, allDay) {
     const startDayHour = this.option('startDayHour');
     const endDayHour = this.option('endDayHour');
     const firstViewDate = this.getStartViewDate();
@@ -223,7 +223,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     const fullDays = Math.floor(fullInterval / toMs('day'));
     const tailDuration = fullInterval - (fullDays * toMs('day'));
     let tailDelta = 0;
-    const cellCount = this._getCellCountInDay() * (fullDays - this._getWeekendsCount(fullDays));
+    const cellCount = this.getCellCountInDay() * (fullDays - this.getWeekendsCount(fullDays));
     const gapBeforeAppt = apptStart - dateUtils.trimTime(new Date(currentDate)).getTime();
     let result = cellCount * (this.option('hoursInterval') as any) * toMs('hour');
 
@@ -254,7 +254,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getWeekendsCount(argument?: any) {
+  protected override getWeekendsCount(argument?: any) {
     return 0;
   }
 
@@ -283,7 +283,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   renderRTimeTable() {}
 
-  _renderGroupAllDayPanel() {}
+  protected override renderGroupAllDayPanel() {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   generateRenderOptions(argument?: any) {
@@ -308,11 +308,11 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       .addClass(GROUP_TABLE_CLASS);
   }
 
-  _getDefaultGroupStrategy() {
+  protected override getDefaultGroupStrategy() {
     return 'vertical';
   }
 
-  _toggleGroupingDirectionClass() {
+  protected override toggleGroupingDirectionClass() {
     (this.$element() as any).toggleClass(HORIZONTAL_GROUPED_WORKSPACE_CLASS, this._isHorizontalGroupedWorkSpace());
   }
 
@@ -322,22 +322,22 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     });
   }
 
-  _createWorkSpaceElements() {
-    this._createWorkSpaceScrollableElements();
+  protected override createWorkSpaceElements() {
+    this.createWorkSpaceScrollableElements();
   }
 
-  _updateAllDayVisibility() { return noop(); }
+  protected override updateAllDayVisibility() { return noop(); }
 
   _updateAllDayHeight() { return noop(); }
 
-  _getDateHeaderTemplate() {
+  protected override getDateHeaderTemplate() {
     return this.option('timeCellTemplate');
   }
 
-  _renderView() {
+  protected override renderView() {
     let groupCellTemplates;
     if (!this.isRenovatedRender()) {
-      groupCellTemplates = this._renderGroupHeader();
+      groupCellTemplates = this.renderGroupHeader();
     }
 
     this.renderWorkSpace();
@@ -350,18 +350,18 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
 
-    if (this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
+    if (this.isRenovatedRender() && this.isVerticalGroupedWorkSpace()) {
       this.renderRGroupPanel();
     }
 
     this.updateHeaderEmptyCellWidth();
 
-    this._applyCellTemplates(groupCellTemplates);
+    this.applyCellTemplates(groupCellTemplates);
   }
 
-  _setHorizontalGroupHeaderCellsHeight() { return noop(); }
+  protected override setHorizontalGroupHeaderCellsHeight() { return noop(); }
 
-  _getTimePanelCells() {
+  protected override getTimePanelCells() {
     return (this.$element() as any)
       .find(`.${HEADER_PANEL_CELL_CLASS}:not(.${HEADER_PANEL_WEEK_CELL_CLASS})`);
   }
@@ -370,7 +370,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     const columnCountPerGroup = this._getCellCount();
     const today = this._getToday();
     const index = this.getCellIndexByDate(today);
-    const { columnIndex: currentTimeColumnIndex } = this._getCellCoordinatesByIndex(index);
+    const { columnIndex: currentTimeColumnIndex } = this.getCellCoordinatesByIndex(index);
 
     if (currentTimeColumnIndex === undefined) {
       return [];
@@ -388,21 +388,21 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   // These methods should be deleted when we get rid of old render
   // --------------
 
-  _renderTimePanel() { return noop(); }
+  protected override renderTimePanel() { return noop(); }
 
-  _renderAllDayPanel() { return noop(); }
+  protected override renderAllDayPanel() { return noop(); }
 
-  _createAllDayPanelElements() { return noop(); }
+  protected override createAllDayPanelElements() { return noop(); }
 
-  _renderDateHeader() {
-    const $headerRow = super._renderDateHeader();
+  protected override renderDateHeader() {
+    const $headerRow = super.renderDateHeader();
     if (this._needRenderWeekHeader()) {
       const firstViewDate = new Date(this.getStartViewDate());
       let currentDate = new Date(firstViewDate);
 
       const $cells: any[] = [];
       const groupCount = this._getGroupCount();
-      const cellCountInDay = this._getCellCountInDay();
+      const cellCountInDay = this.getCellCountInDay();
       const colSpan = this.isGroupedByDate()
         ? cellCountInDay * groupCount
         : cellCountInDay;
@@ -424,7 +424,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             model: {
               text,
               date: new Date(currentDate),
-              ...this._getGroupsForDateHeaderTemplate(templateIndex, colSpan),
+              ...this.getGroupsForDateHeaderTemplate(templateIndex, colSpan),
             },
             container: $th,
             index: templateIndex,
@@ -473,7 +473,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
   }
 
-  _makeGroupRows(groups, groupByDate) {
+  protected override makeGroupRows(groups, groupByDate) {
     const tableCreatorStrategy = this.option('groupOrientation') === 'vertical' ? tableCreator.VERTICAL : tableCreator.HORIZONTAL;
 
     return tableCreator.makeGroupedTable(
@@ -482,12 +482,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
       {
         groupRowClass: GROUP_ROW_CLASS,
         groupHeaderRowClass: GROUP_ROW_CLASS,
-        groupHeaderClass: this._getGroupHeaderClass.bind(this),
+        groupHeaderClass: this.getGroupHeaderClass.bind(this),
         groupHeaderContentClass: GROUP_HEADER_CONTENT_CLASS,
       },
       this._getCellCount() || 1,
       this.option('resourceCellTemplate'),
-      this._getTotalRowCount(this._getGroupCount()),
+      this.getTotalRowCount(this._getGroupCount()),
       groupByDate,
     );
   }
@@ -496,7 +496,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   // TODO Old render: delete these methods with the old render.
 
   _setCurrentTimeCells(): void {
-    const timePanelCells = this._getTimePanelCells();
+    const timePanelCells = this.getTimePanelCells();
     const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
     currentTimeCellIndices.forEach((timePanelCellIndex) => {
       timePanelCells.eq(timePanelCellIndex)
