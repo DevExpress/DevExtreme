@@ -2,12 +2,6 @@ import type { Column } from '@js/ui/data_grid';
 import DataGrid from '@js/ui/data_grid';
 import { DataGridBaseModel } from '@ts/grids/grid_core/__tests__/__mock__/model/data_grid_base';
 
-const SELECTORS = {
-  summaryItem: 'dx-datagrid-summary-item',
-  groupFooter: 'dx-datagrid-group-footer',
-  footerRow: 'dx-footer-row',
-};
-
 export class DataGridModel extends DataGridBaseModel<DataGrid> {
   protected NAME = 'dxDataGrid';
 
@@ -40,17 +34,5 @@ export class DataGridModel extends DataGridBaseModel<DataGrid> {
     Object.entries(options).forEach(([optionName, optionValue]) => {
       instance.columnOption(columnName, optionName, optionValue);
     });
-  }
-
-  public getFooterRow(): HTMLElement | null {
-    return this.root.querySelector(`.${SELECTORS.footerRow}`);
-  }
-
-  public getGroupFooterRows(): NodeListOf<HTMLElement> {
-    return this.root.querySelectorAll(`.${SELECTORS.groupFooter}`);
-  }
-
-  public getSummaryItems(row: HTMLElement): NodeListOf<HTMLElement> {
-    return row.querySelectorAll(`.${SELECTORS.summaryItem}`);
   }
 }

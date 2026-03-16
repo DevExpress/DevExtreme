@@ -534,20 +534,24 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
   // The map is built once per _processItems cycle (via options) and discarded after.
   private _buildColumnLookupMap(): Map<string | number, Column> {
     const columnMap = new Map<string | number, Column>();
-    const { _columnsController: ctrl } = this;
-    const allColumns = ctrl.getColumns()
-      .concat(ctrl._commandColumns ?? []);
+    const allColumns = [
+      ...this._columnsController.getColumns(),
+      ...(this._columnsController._commandColumns ?? []),
+    ];
 
     for (const column of allColumns) {
-      const copy = extend({}, column) as Column;
+      const copiedColumn = { ...column };
       const keys = [
-        column.index, column.name,
-        column.dataField, column.caption,
-      ];
+        column.index,
+        column.name,
+        column.dataField,
+        column.caption,
+      ].filter((key) => (
+        key !== undefined && !columnMap.has(key)
+      ));
+
       for (const key of keys) {
-        if (key !== undefined && !columnMap.has(key)) {
-          columnMap.set(key, copy);
-        }
+        columnMap.set(key, copiedColumn);
       }
     }
 
@@ -562,18 +566,17 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     isGroupRow?,
     columnMap?: Map<string | number, Column>,
   ) {
-    const that = this;
     const summaryCells: any = [];
     const summaryCellsByColumns = {};
 
     each(summaryItems, (summaryIndex, summaryItem) => {
       const column = columnMap
         ? getColumnFromMap(summaryItem.column, columnMap)
-        : that._columnsController.columnOption(summaryItem.column);
+        : this._columnsController.columnOption(summaryItem.column);
       const showInColumn = (summaryItem.showInColumn
         && (columnMap
           ? getColumnFromMap(summaryItem.showInColumn, columnMap)
-          : that._columnsController.columnOption(summaryItem.showInColumn)))
+          : this._columnsController.columnOption(summaryItem.showInColumn)))
         || column;
       const columnIndex = calculateTargetColumnIndex(summaryItem, showInColumn);
 
