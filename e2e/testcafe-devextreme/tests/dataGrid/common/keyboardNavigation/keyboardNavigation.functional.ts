@@ -4189,8 +4189,7 @@ test('DataGrid - onFocusedCellChanged parameters should be correct when focusing
       (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
     },
   });
-})
-.after(async () => {
+}).after(async () => {
   await ClientFunction(() => {
     delete (window as any).focusedEventsTestData;
   })();
