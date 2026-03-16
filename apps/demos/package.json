@@ -116,6 +116,7 @@
         "babel-jest": "29.7.0",
         "consola": "3.2.3",
         "cookie-parser": "1.4.7",
+        "express-rate-limit": "7.5.0",
         "cross-env": "7.0.3",
         "devextreme-screenshot-comparer": "2.0.17",
         "eslint": "catalog:",

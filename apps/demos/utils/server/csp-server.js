@@ -2,6 +2,7 @@
 
 const crypto = require('crypto');
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const serveStatic = require('serve-static');
 const cookieParser = require('cookie-parser');
 const { join, resolve } = require('path');
@@ -376,25 +377,10 @@ const demoIndexHandler = (request, response) => {
   response.send(fileContent);
 };
 
-const createRateLimiter = (windowMs = 60000, maxRequests = 200) => {
-  const hits = new Map();
-
-  setInterval(() => hits.clear(), windowMs);
-
-  return (req, res, next) => {
-    const key = req.ip;
-    const count = (hits.get(key) || 0) + 1;
-    hits.set(key, count);
-
-    if (count > maxRequests) {
-      res.status(429).send('Too Many Requests');
-      return;
-    }
-    next();
-  };
-};
-
-const rateLimiter = createRateLimiter();
+const rateLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 200,
+});
 
 const app = express();
 app.use(cookieParser());
