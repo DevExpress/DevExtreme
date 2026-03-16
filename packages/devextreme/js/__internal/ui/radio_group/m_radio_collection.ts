@@ -59,6 +59,7 @@ class RadioCollection extends CollectionWidget<Properties> {
     const { itemData, itemElement } = args;
     const { html } = itemData;
 
+    const $itemElement = $(itemElement);
     const contentId = `dx-${new Guid()}`;
 
     if (!html) {
@@ -68,7 +69,7 @@ class RadioCollection extends CollectionWidget<Properties> {
 
       const $radioContainer = $('<div>').append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
 
-      $(itemElement).prepend($radioContainer);
+      $itemElement.prepend($radioContainer);
 
       const aria = {
         role: 'radio',
@@ -82,9 +83,10 @@ class RadioCollection extends CollectionWidget<Properties> {
     super._postprocessRenderItem(args);
 
     if (!html) {
-      const $itemContent = $(itemElement).find(`.${ITEM_CONTENT_CLASS}`);
+      const $itemContent = $itemElement.find(`.${ITEM_CONTENT_CLASS}`);
+      const $idTarget = $itemContent.length ? $itemContent : $itemElement;
 
-      $itemContent.attr('id', contentId);
+      $idTarget.attr('id', contentId);
     }
   }
 

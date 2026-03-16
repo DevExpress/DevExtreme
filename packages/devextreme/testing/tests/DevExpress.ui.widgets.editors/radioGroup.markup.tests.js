@@ -396,6 +396,29 @@ QUnit.module('Aria accessibility', {
             assert.strictEqual($radioContainer.attr('aria-labelledby'), contentId, `item[${index}] radio container aria-labelledby references content id`);
         });
     });
+
+    QUnit.test('Items with itemTemplate that replaces parent content: radio container aria-labelledby references item element id', function(assert) {
+        helper.createWidget({
+            items: ['Low', 'Normal', 'Urgent', 'High'],
+            itemTemplate(itemData, _, itemElement) {
+                itemElement.text(itemData);
+            },
+        });
+
+        helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
+        helper.checkItemsAttributes([], {});
+
+        helper.getItems().each((index, item) => {
+            const $item = $(item);
+            const $radioContainer = $item.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+            const itemId = $item.attr('id');
+
+            assert.ok(itemId, `item[${index}] has an id when item content is removed by template`);
+            assert.strictEqual($radioContainer.attr('role'), 'radio', `item[${index}] radio container has role="radio"`);
+            assert.strictEqual($radioContainer.attr('aria-checked'), 'false', `item[${index}] radio container has aria-checked="false"`);
+            assert.strictEqual($radioContainer.attr('aria-labelledby'), itemId, `item[${index}] radio container aria-labelledby references item element id`);
+        });
+    });
 });
 
 module('layout', moduleConfig, () => {
