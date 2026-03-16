@@ -699,9 +699,6 @@ importers:
       express:
         specifier: 4.22.1
         version: 4.22.1
-      express-rate-limit:
-        specifier: 8.3.1
-        version: 8.3.1(express@4.22.1)
       glob:
         specifier: 11.1.0
         version: 11.1.0
@@ -31586,11 +31583,6 @@ snapshots:
       jest-util: 30.2.0
 
   exponential-backoff@3.1.1: {}
-
-  express-rate-limit@8.3.1(express@4.22.1):
-    dependencies:
-      express: 4.22.1
-      ip-address: 10.1.0
 
   express-rate-limit@8.3.1(express@5.2.1):
     dependencies:
