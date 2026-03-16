@@ -1,3 +1,4 @@
+import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferRender } from '@js/core/utils/common';
@@ -12,6 +13,8 @@ const RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon';
 const RADIO_BUTTON_ICON_DOT_CLASS = 'dx-radiobutton-icon-dot';
 const RADIO_VALUE_CONTAINER_CLASS = 'dx-radio-value-container';
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
+
+const ITEM_CONTENT_CLASS = 'dx-item-content';
 
 export type Properties = CollectionWidgetBaseProperties<RadioCollection>;
 
@@ -29,9 +32,7 @@ class RadioCollection extends CollectionWidget<Properties> {
     const defaultOptions = super._getDefaultOptions();
 
     // @ts-expect-error
-    return extend(defaultOptions, DataExpressionMixin._dataExpressionDefaultOptions(), {
-      _itemAttributes: { role: 'radio' },
-    });
+    return extend(defaultOptions, DataExpressionMixin._dataExpressionDefaultOptions());
   }
 
   _initMarkup(): void {
@@ -47,8 +48,18 @@ class RadioCollection extends CollectionWidget<Properties> {
     return this._focusTarget();
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  _getIdTarget($target: dxElementWrapper): dxElementWrapper {
+    const $radioContainer = $target.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+
+    return $radioContainer;
+  }
+
   _postprocessRenderItem(args): void {
-    const { itemData: { html }, itemElement } = args;
+    const { itemData, itemElement } = args;
+    const { html } = itemData;
+
+    const contentId = `dx-${new Guid()}`;
 
     if (!html) {
       const $radio = $('<div>').addClass(RADIO_BUTTON_ICON_CLASS);
@@ -58,9 +69,23 @@ class RadioCollection extends CollectionWidget<Properties> {
       const $radioContainer = $('<div>').append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
 
       $(itemElement).prepend($radioContainer);
+
+      const aria = {
+        role: 'radio',
+        // eslint-disable-next-line spellcheck/spell-checker
+        labelledby: contentId,
+      };
+
+      this.setAria(aria, $radioContainer);
     }
 
     super._postprocessRenderItem(args);
+
+    if (!html) {
+      const $itemContent = $(itemElement).find(`.${ITEM_CONTENT_CLASS}`);
+
+      $itemContent.attr('id', contentId);
+    }
   }
 
   _processSelectableItem(
@@ -75,7 +100,9 @@ class RadioCollection extends CollectionWidget<Properties> {
       .first()
       .toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, isSelected);
 
-    this.setAria('checked', isSelected, $itemElement);
+    const $radioContainer = $itemElement.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+
+    this.setAria('checked', isSelected, $radioContainer);
   }
 
   _refreshContent(): void {

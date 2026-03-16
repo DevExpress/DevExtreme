@@ -156,7 +156,6 @@ class CollectionWidget<
 > extends Widget<TProperties> {
   private _focusedItemId?: string;
 
-  // eslint-disable-next-line no-restricted-globals
   private _itemFocusTimeout?: ReturnType<typeof setTimeout>;
 
   private _itemRenderAction?: (event?: ActionArgs<TItem>) => void;
@@ -605,6 +604,10 @@ class CollectionWidget<
     this.setAria('activedescendant', null, $target);
   }
 
+  _getIdTarget($target: dxElementWrapper): dxElementWrapper {
+    return $target;
+  }
+
   _refreshItemId(
     $target: dxElementWrapper,
     needCleanItemId: boolean | undefined,
@@ -616,10 +619,12 @@ class CollectionWidget<
       return;
     }
 
+    const $idTarget = this._getIdTarget($target);
+
     if (!needCleanItemId && focusedElement) {
-      this.setAria('id', this.getFocusedItemId(), $target);
+      this.setAria('id', this.getFocusedItemId(), $idTarget);
     } else {
-      this.setAria('id', null, $target);
+      this.setAria('id', null, $idTarget);
     }
   }
 
