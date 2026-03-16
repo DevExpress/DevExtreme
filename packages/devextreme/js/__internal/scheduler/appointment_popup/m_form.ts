@@ -795,7 +795,7 @@ export class AppointmentForm {
       } as GroupItem;
     }
 
-    resourcesItems = resourcesItems.map((formItem, index) => {
+    resourcesItems = resourcesItems.map((item, index) => {
       const icon = resourcesLoaders[index].icon ?? '';
       const dataField = resourcesLoaders[index].resourceIndex;
 
@@ -813,7 +813,7 @@ export class AppointmentForm {
             template: createFormIconTemplate(icon),
             visible: showIcon,
           },
-          { ...formItem, colSpan: showIcon ? 1 : 2 },
+          { ...item, colSpan: showIcon ? 1 : 2 },
         ],
       } as GroupItem;
     });
