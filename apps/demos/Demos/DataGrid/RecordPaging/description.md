@@ -18,4 +18,4 @@ In this demo, you can use the drop-down Display Mode menu to switch between full
 
 You can navigate between pages using the on-screen pager controls. Jump to the first/last row of each page by focusing on the data area and using **Ctrl+Home** or **Ctrl+End**. These shortcuts focus the first cell of the first row/last cell of the last row.
 
-The DevExtreme DataGrid also supports external pagers. You can hide the built-in pager and configure a standalone [Pagination](/Documentation/Guide/UI_Components/Pagination/Overview/) component to control the DataGrid. For more information, refer to the following example: [DevExtreme DataGrid - Display a Pager Above the Grid](https://github.com/DevExpress-Examples/devextreme-datagrid-pager-on-top)
+The DevExtreme DataGrid also supports external pagers. You can hide the built-in pager and configure a standalone [Pagination](/Documentation/Guide/UI_Components/Pagination/Overview/) component to control the DataGrid. For additional information, refer to the following example: [DevExtreme DataGrid - Display a Pager Above the Grid](https://github.com/DevExpress-Examples/devextreme-datagrid-pager-on-top).
