@@ -9,7 +9,7 @@ const DEMO_ROOT = join(__dirname, '..', '..');
 const REPORT_DIR = join(DEMO_ROOT, 'csp-reports');
 const SERVER_URL = process.env.CSP_SERVER_URL || 'http://localhost:8080';
 const FRAMEWORK = (process.env.CSP_FRAMEWORKS || 'jQuery').trim();
-const CONCURRENCY = parseInt(process.env.CSP_CONCURRENCY, 10) || 10;
+const CONCURRENCY = parseInt(process.env.CSP_CONCURRENCY, 10) || 6;
 
 function findChrome() {
   const candidates = [
@@ -87,7 +87,13 @@ function visitPage(url) {
       '--virtual-time-budget=5000',
       '--window-size=100,100',
       url,
-    ], { timeout: 10000, killSignal: 'SIGKILL' }, () => resolve());
+    ], { timeout: 50000, killSignal: 'SIGKILL' }, (error) => {
+      if (error && error.killed) {
+        reject(new Error(`Chrome timed out for ${url}`));
+      } else {
+        resolve();
+      }
+    });
     child.on('error', (err) => {
       reject(new Error(`Failed to launch Chrome at "${CHROME_PATH}": ${err.message}`));
     });
@@ -148,10 +154,14 @@ async function main() {
 
   await httpRequest(`${SERVER_URL}/csp-violations`, 'DELETE');
 
-  let visited = 0;
-  await runPool(demos, CONCURRENCY, async (demo) => {
-    await visitPage(demo.url);
-    visited += 1;
+  await runPool(demos, CONCURRENCY, async (demo, i) => {
+    const idx = i + 1;
+    try {
+      await visitPage(demo.url);
+    } catch (err) {
+      console.log(`  ⚠️ [${idx}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework} — ${err.message}`);
+      return;
+    }
 
     const result = await httpRequest(`${SERVER_URL}/csp-violations`);
     const violations = (result.violations || []).filter(
@@ -162,7 +172,7 @@ async function main() {
       demosWithViolations += 1;
       totalViolations += violations.length;
 
-      console.log(`  ❌ [${visited}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework} — ${violations.length} violation(s)`);
+      console.log(`  ❌ [${idx}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework} — ${violations.length} violation(s)`);
       for (const v of violations) {
         const blocked = v.blockedUri || 'N/A';
         const directive = v.effectiveDirective || v.violatedDirective || '?';
@@ -170,7 +180,7 @@ async function main() {
         allViolations.push({ ...v, framework: FRAMEWORK });
       }
     } else {
-      console.log(`  ✅ [${visited}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework}`);
+      console.log(`  ✅ [${idx}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework}`);
     }
   });
 
