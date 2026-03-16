@@ -2,8 +2,6 @@
 
 const crypto = require('crypto');
 const express = require('express');
-const rateLimit = require('express-rate-limit');
-const serveStatic = require('serve-static');
 const cookieParser = require('cookie-parser');
 const { join, resolve } = require('path');
 const { readFileSync, readdirSync } = require('fs');
@@ -377,15 +375,9 @@ const demoIndexHandler = (request, response) => {
   response.send(fileContent);
 };
 
-const rateLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 5000,
-});
-
 const app = express();
 app.use(cookieParser());
 app.use(cspMiddleware);
-app.use(rateLimiter);
 
 app.post('/csp-report', cspReportHandler);
 app.get('/csp-violations', cspViolationsHandler);
@@ -394,9 +386,7 @@ app.delete('/csp-violations', cspViolationsClearHandler);
 app.get('/apps/demos/Demos/:widget/:name/:approach', demoIndexHandler);
 app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
 
-app.use(
-  serveStatic(root, { index: [indexFileName] }),
-);
+app.use(express.static(root, { index: [indexFileName] }));
 
 const server = app.listen(port, host, () => {
   console.log(`CSP Demo server listening on http://${host}:${port}`);
