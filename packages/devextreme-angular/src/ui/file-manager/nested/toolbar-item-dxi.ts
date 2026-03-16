@@ -12,9 +12,9 @@ import {
 
 
 
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
-import { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
-import { FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
+import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import type { ToolbarItemLocation, ToolbarItemComponent } from 'devextreme/common';
+import type { FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
 
 import {
     DxIntegrationModule,

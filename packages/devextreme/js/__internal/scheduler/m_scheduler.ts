@@ -875,6 +875,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this._appointments.option('items', viewModel);
     this.appointmentDataSource.cleanState();
+
     if (this.isAgenda()) {
       this._workSpace.renderAgendaLayout(viewModel);
     }
@@ -1235,8 +1236,9 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private appointmentsConfig() {
     const config = {
       getResourceManager: () => this.resourceManager,
-
       getAppointmentDataSource: () => this.appointmentDataSource,
+      getSortedAppointments: () => this._layoutManager.sortedItems,
+      scrollTo: this.scrollTo.bind(this),
       dataAccessors: this._dataAccessors,
       notifyScheduler: this.notifyScheduler,
       onItemRendered: this.getAppointmentRenderedAction(),
@@ -1256,7 +1258,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getResizableStep: () => (this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0),
       getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),
       getViewDataProvider: () => this._workSpace?.viewDataProvider,
-      isVerticalGroupedWorkSpace: () => this._workSpace._isVerticalGroupedWorkSpace(),
+      isVerticalGroupedWorkSpace: () => this._workSpace.isVerticalGroupedWorkSpace(),
       isDateAndTimeView: () => isDateAndTimeView(this._workSpace.type),
       onContentReady: () => {
         this._workSpace?.option('allDayExpanded', this.isAllDayExpanded());
@@ -1280,7 +1282,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this.recalculateWorkspace();
     if (currentViewOptions.startDate) {
-      this.updateOption('header', 'currentDate', this._workSpace._getHeaderDate());
+      this.updateOption('header', 'currentDate', this._workSpace.getHeaderDate());
     }
   }
 
@@ -1302,7 +1304,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._workSpace = this._createComponent($workSpace, workSpaceComponent, workSpaceConfig);
 
     this.allowDragging() && this._workSpace.initDragBehavior(this, this.all);
-    this._workSpace._attachTablesEvents();
+    this._workSpace.attachTablesEvents();
     this._workSpace.getWorkArea().append(this._appointments.$element());
   }
 
@@ -1373,9 +1375,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       schedulerWidth: this.option('width'),
       allDayPanelMode: this.option('allDayPanelMode'),
       onSelectedCellsClick: this.showAddAppointmentPopup.bind(this),
-      onRenderAppointments: () => {
-        this.renderAppointments();
-      },
+      renderAppointments: () => { this.renderAppointments(); },
       onShowAllDayPanel: (value) => this.option('showAllDayPanel', value),
       getHeaderHeight: () => utils.DOM.getHeaderHeight(this.header),
       onScrollEnd: () => this._appointments.updateResizableArea(),
@@ -2031,7 +2031,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       align = groupValuesOrOptions.alignInView ?? 'center';
     } else {
       if (isDefined(groupValuesOrOptions) || isDefined(allDay)) {
-        errors.log('W0002', 'dxScheduler', 'scrollTo', '26.1', 'Use an object with "group", "allDay" and "alignInView" properties instead of separate parameters.');
+        errors.log('W0002', 'dxScheduler', 'scrollTo(date, group, allDay)', '26.1', 'Use scrollTo(date, { group, allDay, alignInView }) instead.');
       }
 
       groupValues = groupValuesOrOptions;
@@ -2043,7 +2043,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private _isScrollOptionsObject(options?: ScrollToGroupValuesOrOptions): options is ScrollToOptions {
     return Boolean(options) && typeof options === 'object'
-      && ('align' in options || 'allDay' in options || 'group' in options);
+      && ('alignInView' in options || 'allDay' in options || 'group' in options);
   }
 
   private isHorizontalVirtualScrolling() {

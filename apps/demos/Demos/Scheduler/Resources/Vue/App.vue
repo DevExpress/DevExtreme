@@ -46,8 +46,8 @@
                 name="roomIdGroup"
               >
                 <DxItem name="roomIdIcon"/>
-                <DxItem name="roomId"/>
-                <DxItem name="priorityId"/>
+                <DxItem name="roomIdEditor"/>
+                <DxItem name="priorityIdEditor"/>
               </DxItem>
               <DxItem name="assigneeIdGroup"/>
             </DxItem>

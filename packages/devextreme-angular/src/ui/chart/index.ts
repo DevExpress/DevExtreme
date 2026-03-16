@@ -22,15 +22,14 @@ import {
 } from '@angular/core';
 
 
-import DataSource from 'devextreme/data/data_source';
-import * as CommonChartTypes from 'devextreme/common/charts';
-import { AnimationEaseMode, TimeInterval, ChartsDataType, ScaleBreak, ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap, AxisScaleType, VisualRangeUpdateMode, ChartsColor, SeriesHoverMode, HatchDirection, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType, SeriesLabel, SeriesPoint, LegendItem, LegendHoverMode, Palette, PaletteExtensionMode, ChartsLabelOverlap, Theme, ValueAxisVisualRangeUpdateMode } from 'devextreme/common/charts';
-import { dxChartAnnotationConfig, AggregatedPointsPosition, ChartLabelDisplayMode, dxChartCommonAnnotationConfig, chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, FinancialChartReductionLevel, chartPointObject, ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, dxChartPointInfo, ChartTooltipLocation, ChartZoomAndPanMode, EventKeyModifier } from 'devextreme/viz/chart';
-import { HorizontalAlignment, VerticalAlignment, Position, ExportFormat, Orientation, VerticalEdge, SingleOrMultiple } from 'devextreme/common';
-import { Format } from 'devextreme/common/core/localization';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { ChartSeries } from 'devextreme/viz/common';
+import type * as CommonChartTypes from 'devextreme/common/charts';
+import type { AnimationEaseMode, TimeInterval, ChartsDataType, ScaleBreak, ScaleBreakLineStyle, DashStyle, Font, RelativePosition, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, ChartsAxisLabelOverlap, TextOverflow, WordWrap, AxisScaleType, VisualRangeUpdateMode, ChartsColor, SeriesHoverMode, HatchDirection, PointInteractionMode, PointSymbol, SeriesSelectionMode, SeriesType, ValueErrorBarDisplayMode, ValueErrorBarType, SeriesLabel, SeriesPoint, LegendItem, LegendHoverMode, Palette, PaletteExtensionMode, ChartsLabelOverlap, Theme, ValueAxisVisualRangeUpdateMode } from 'devextreme/common/charts';
+import type { dxChartAnnotationConfig, AggregatedPointsPosition, ChartLabelDisplayMode, dxChartCommonAnnotationConfig, chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod, FinancialChartReductionLevel, chartPointObject, ArgumentAxisClickEvent, DisposingEvent, DoneEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LegendClickEvent, OptionChangedEvent, PointClickEvent, PointHoverChangedEvent, PointSelectionChangedEvent, SeriesClickEvent, SeriesHoverChangedEvent, SeriesSelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, ZoomEndEvent, ZoomStartEvent, dxChartPointInfo, ChartTooltipLocation, ChartZoomAndPanMode, EventKeyModifier } from 'devextreme/viz/chart';
+import type { HorizontalAlignment, VerticalAlignment, Position, ExportFormat, Orientation, VerticalEdge, SingleOrMultiple } from 'devextreme/common';
+import type { Format } from 'devextreme/common/core/localization';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { ChartSeries } from 'devextreme/viz/common';
 
 import DxChart from 'devextreme/viz/chart';
 

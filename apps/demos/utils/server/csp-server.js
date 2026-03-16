@@ -197,20 +197,12 @@ const CSP_DEMO_ALLOWLIST = {
     'script-src': ["'unsafe-inline'"],
   },
   // TODO: fix inline style attribute
-  'FileUploader/Validation': {
-    'style-src': ["'unsafe-inline'"],
-  },
-  // TODO: fix inline style attribute
   'DataGrid/RowSelection': {
     'style-src': ["'unsafe-inline'"],
   },
   // AI demo: inline <script type="module"> to import OpenAI SDK from esm.sh
   'Chat/AIAndChatbotIntegration': {
     'script-src': ["'unsafe-inline'"],
-  },
-  // TODO: fix inline style attributes in SVG markup
-  'Charts/ExportCustomMarkup': {
-    'style-src': ["'unsafe-inline'"],
   },
 };
 
@@ -384,9 +376,30 @@ const demoIndexHandler = (request, response) => {
   response.send(fileContent);
 };
 
+const createRateLimiter = (windowMs = 60000, maxRequests = 200) => {
+  const hits = new Map();
+
+  setInterval(() => hits.clear(), windowMs);
+
+  return (req, res, next) => {
+    const key = req.ip;
+    const count = (hits.get(key) || 0) + 1;
+    hits.set(key, count);
+
+    if (count > maxRequests) {
+      res.status(429).send('Too Many Requests');
+      return;
+    }
+    next();
+  };
+};
+
+const rateLimiter = createRateLimiter();
+
 const app = express();
 app.use(cookieParser());
 app.use(cspMiddleware);
+app.use(rateLimiter);
 
 app.post('/csp-report', cspReportHandler);
 app.get('/csp-violations', cspViolationsHandler);

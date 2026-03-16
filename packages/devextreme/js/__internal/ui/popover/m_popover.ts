@@ -1,7 +1,7 @@
 import positionUtils from '@js/common/core/animation/position';
 import { move } from '@js/common/core/animation/translator';
 import eventsEngine from '@js/common/core/events/core/events_engine';
-import { addNamespace } from '@js/common/core/events/utils';
+import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
@@ -47,6 +47,8 @@ const POSITION_FLIP_MAP = {
   center: 'center',
 };
 
+const ESC_KEY_NAME = 'escape';
+
 type PopoverTarget = string | dxElementWrapper | Element | undefined;
 
 export interface PopoverProperties extends Omit<Properties,
@@ -69,6 +71,8 @@ class Popover<
   _positionController!: PopoverPositionController;
 
   _$arrow!: dxElementWrapper;
+
+  _documentEscapeKeyHandler!: (e: KeyboardEvent) => void;
 
   _timeouts!: Record<string, ReturnType<typeof setTimeout>>;
 
@@ -153,15 +157,46 @@ class Popover<
     super._init();
 
     this._renderArrow();
+    this._initEscapeKeyHandler();
     this._timeouts = {};
 
     this.$element().addClass(POPOVER_CLASS);
     this.$wrapper()?.addClass(POPOVER_WRAPPER_CLASS);
 
-    const { toolbarItems } = this.option();
+    const { toolbarItems, visible } = this.option();
 
     const isInteractive = toolbarItems?.length;
     this.setAria('role', isInteractive ? 'dialog' : 'tooltip');
+
+    if (visible) {
+      this._attachEscapeKeyHandler();
+    }
+  }
+
+  _initEscapeKeyHandler(): void {
+    this._documentEscapeKeyHandler = (e: KeyboardEvent): void => {
+      const { visible } = this.option();
+      const overlayStack = this._overlayStack();
+      const isTopOverlay = overlayStack[overlayStack.length - 1] === this;
+
+      if (normalizeKeyName(e) === ESC_KEY_NAME && visible && isTopOverlay) {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this.hide();
+      }
+    };
+  }
+
+  _attachEscapeKeyHandler(): void {
+    const eventName = addNamespace('keydown', this.NAME as string);
+
+    eventsEngine.off(domAdapter.getDocument(), eventName, this._documentEscapeKeyHandler);
+    eventsEngine.on(domAdapter.getDocument(), eventName, this._documentEscapeKeyHandler);
+  }
+
+  _detachEscapeKeyHandler(): void {
+    const eventName = addNamespace('keydown', this.NAME as string);
+
+    eventsEngine.off(domAdapter.getDocument(), eventName, this._documentEscapeKeyHandler);
   }
 
   _render(): void {
@@ -529,9 +564,15 @@ class Popover<
   }
 
   _clean(): void {
+    this._detachEscapeKeyHandler();
     this._detachEvents(this.option('target'));
     // @ts-expect-error ts-error
     super._clean.apply(this, arguments);
+  }
+
+  _dispose(): void {
+    this._detachEscapeKeyHandler();
+    super._dispose();
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
@@ -565,6 +606,11 @@ class Popover<
         break;
       }
       case 'visible':
+        if (value) {
+          this._attachEscapeKeyHandler();
+        } else {
+          this._detachEscapeKeyHandler();
+        }
         this._clearEventTimeout(value ? 'show' : 'hide');
         super._optionChanged(args);
         break;
