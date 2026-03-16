@@ -52,7 +52,11 @@ class RadioCollection extends CollectionWidget<Properties> {
   _getIdTarget($target: dxElementWrapper): dxElementWrapper {
     const $radioContainer = $target.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
 
-    return $radioContainer;
+    if ($radioContainer.length) {
+      return $radioContainer;
+    }
+
+    return $target;
   }
 
   _postprocessRenderItem(args): void {
@@ -62,23 +66,30 @@ class RadioCollection extends CollectionWidget<Properties> {
     const $itemElement = $(itemElement);
     const contentId = `dx-${new Guid()}`;
 
+    let $radioContainer = $itemElement.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+
     if (!html) {
       const $radio = $('<div>').addClass(RADIO_BUTTON_ICON_CLASS);
 
       $('<div>').addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
 
-      const $radioContainer = $('<div>').append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
-
+      $radioContainer = $('<div>').append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
       $itemElement.prepend($radioContainer);
-
-      const aria = {
-        role: 'radio',
-        // eslint-disable-next-line spellcheck/spell-checker
-        labelledby: contentId,
-      };
-
-      this.setAria(aria, $radioContainer);
     }
+
+    // eslint-disable-next-line spellcheck/spell-checker
+    const aria: { role: string; labelledby?: string } = {
+      role: 'radio',
+    };
+
+    if (!html) {
+      // eslint-disable-next-line spellcheck/spell-checker
+      aria.labelledby = contentId;
+    }
+
+    const $ariaTarget = $radioContainer.length ? $radioContainer : $itemElement;
+
+    this.setAria(aria, $ariaTarget);
 
     super._postprocessRenderItem(args);
 
@@ -103,8 +114,9 @@ class RadioCollection extends CollectionWidget<Properties> {
       .toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, isSelected);
 
     const $radioContainer = $itemElement.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+    const $ariaCheckedTarget = $radioContainer.length ? $radioContainer : $itemElement;
 
-    this.setAria('checked', isSelected, $radioContainer);
+    this.setAria('checked', isSelected, $ariaCheckedTarget);
   }
 
   _refreshContent(): void {
