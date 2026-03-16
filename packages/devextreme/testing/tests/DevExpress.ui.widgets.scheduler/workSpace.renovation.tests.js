@@ -60,7 +60,7 @@ module('Renovated Render', {
                 onContentReady: function(e) {
                     const scrollable = e.component.getScrollable();
                     scrollable.option('scrollByContent', false);
-                    e.component._attachTablesEvents();
+                    e.component.attachTablesEvents();
                 },
                 ...options,
             })[workSpace]('instance');
@@ -927,7 +927,7 @@ module('Renovated Render', {
 
             const disposeRenovatedComponentsStub = sinon.spy(noop);
 
-            this.instance._disposeRenovatedComponents = disposeRenovatedComponentsStub;
+            this.instance.disposeRenovatedComponents = disposeRenovatedComponentsStub;
 
             this.instance.option('currentDate', new Date(2020, 8, 2));
 
@@ -944,7 +944,7 @@ module('Renovated Render', {
 
             const disposeRenovatedComponentsStub = sinon.spy(noop);
 
-            this.instance._disposeRenovatedComponents = disposeRenovatedComponentsStub;
+            this.instance.disposeRenovatedComponents = disposeRenovatedComponentsStub;
 
             this.instance.option('showAllDayPanel', true);
 
@@ -958,7 +958,7 @@ module('Renovated Render', {
             });
 
             const disposeRenovatedComponentsStub = sinon.spy(noop);
-            this.instance._disposeRenovatedComponents = disposeRenovatedComponentsStub;
+            this.instance.disposeRenovatedComponents = disposeRenovatedComponentsStub;
             await applyWorkspaceGroups(this.instance, resources);
 
             assert.ok(disposeRenovatedComponentsStub.called, 'Renovated components weren\'t disposed');

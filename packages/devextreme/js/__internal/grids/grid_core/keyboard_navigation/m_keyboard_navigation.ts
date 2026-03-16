@@ -31,7 +31,7 @@ import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import { memoize } from '@ts/utils/memoize';
 
-import type { Column } from '../columns_controller/m_columns_controller';
+import type { Column } from '../columns_controller/types';
 import {
   EDIT_FORM_CLASS,
   EDIT_MODE_BATCH,

@@ -84,7 +84,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return this.option('rtlEnabled') ? getBoundingRect(this._dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
   }
 
-  protected _setIndicationUpdateInterval() {
+  protected setIndicationUpdateInterval() {
     if (!this.option('showCurrentTimeIndicator') || this.option('indicatorUpdateInterval') === 0) {
       return;
     }
@@ -129,7 +129,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     let timeDiff = today.getTime() - viewStartTime;
 
     if (this.option('type') === 'workWeek') {
-      const weekendDays = this._getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day');
+      const weekendDays = this.getWeekendsCount(Math.round(timeDiff / toMs('day'))) * toMs('day');
       timeDiff -= weekendDays;
     }
 
@@ -173,7 +173,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   renderCurrentDateTimeLineAndShader(): void {
     this._cleanDateTimeIndicator();
     this._shader?.clean();
-    this._renderDateTimeIndication();
+    this.renderDateTimeIndication();
   }
 
   _isCurrentTimeHeaderCell(headerIndex: number): boolean {
@@ -187,8 +187,8 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return false;
   }
 
-  _getHeaderPanelCellClass(i) {
-    const cellClass = super._getHeaderPanelCellClass(i);
+  protected override getHeaderPanelCellClass(i) {
+    const cellClass = super.getHeaderPanelCellClass(i);
 
     if (this._isCurrentTimeHeaderCell(i)) {
       return `${cellClass} ${HEADER_CURRENT_TIME_CELL_CLASS}`;
@@ -213,21 +213,21 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     (this.$element() as any).find(`.${SCHEDULER_DATE_TIME_INDICATOR_CLASS}`).remove();
   }
 
-  _cleanWorkSpace() {
-    super._cleanWorkSpace();
+  protected override cleanWorkSpace() {
+    super.cleanWorkSpace();
 
-    this._renderDateTimeIndication();
-    this._setIndicationUpdateInterval();
+    this.renderDateTimeIndication();
+    this.setIndicationUpdateInterval();
   }
 
   _optionChanged(args) {
     switch (args.name) {
       case 'showCurrentTimeIndicator':
       case 'indicatorTime':
-        this._cleanWorkSpace();
+        this.cleanWorkSpace();
         break;
       case 'indicatorUpdateInterval':
-        this._setIndicationUpdateInterval();
+        this.setIndicationUpdateInterval();
         break;
       case 'showAllDayPanel':
       case 'allDayExpanded':
@@ -253,10 +253,10 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   _getCurrentTimePanelCellIndices() {
-    const rowCountPerGroup = this._getTimePanelRowCount();
+    const rowCountPerGroup = this.getTimePanelRowCount();
     const today = this._getToday();
     const index = this.getCellIndexByDate(today);
-    const { rowIndex: currentTimeRowIndex } = this._getCellCoordinatesByIndex(index);
+    const { rowIndex: currentTimeRowIndex } = this.getCellCoordinatesByIndex(index);
 
     if (currentTimeRowIndex === undefined) {
       return [];
@@ -271,7 +271,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         : [currentTimeRowIndex, currentTimeRowIndex + 1];
     }
 
-    const verticalGroupCount = this._isVerticalGroupedWorkSpace()
+    const verticalGroupCount = this.isVerticalGroupedWorkSpace()
       ? this._getGroupCount()
       : 1;
 
@@ -282,7 +282,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
       ], []);
   }
 
-  protected _renderDateTimeIndication(): void {
+  protected renderDateTimeIndication(): void {
     if (!this.isIndicationAvailable()) {
       return;
     }
@@ -311,7 +311,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   // Temporary new render methods.
   // TODO Old render: replace base call methods by these after the deleting of the old render.
   protected _setCurrentTimeCells(): void {
-    const timePanelCells = this._getTimePanelCells();
+    const timePanelCells = this.getTimePanelCells();
     const currentTimeCellIndices = this._getCurrentTimePanelCellIndices();
     currentTimeCellIndices.forEach((timePanelCellIndex) => {
       timePanelCells.eq(timePanelCellIndex)

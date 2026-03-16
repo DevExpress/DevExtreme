@@ -67,7 +67,7 @@ QUnit.module('DateTime indicator on Day View', () => {
 
     QUnit.test('Indication should be updated by some timer', async function(assert) {
         const instance = createInstance({});
-        const renderIndicatorStub = sinon.stub(instance, '_renderDateTimeIndication');
+        const renderIndicatorStub = sinon.stub(instance, 'renderDateTimeIndication');
 
         instance.option({
             indicatorUpdateInterval: 10
@@ -82,7 +82,7 @@ QUnit.module('DateTime indicator on Day View', () => {
     QUnit.test('Indication should not be updated by some timer if indicatorUpdateInterval = 0', async function(assert) {
         const instance = createInstance({});
 
-        const renderIndicatorStub = sinon.stub(instance, '_renderDateTimeIndication');
+        const renderIndicatorStub = sinon.stub(instance, 'renderDateTimeIndication');
 
         instance.option({
             indicatorUpdateInterval: 0
@@ -95,7 +95,7 @@ QUnit.module('DateTime indicator on Day View', () => {
     QUnit.test('Indication should be updated on dimensionChanged', async function(assert) {
         const instance = createInstance({});
 
-        const renderIndicatorStub = sinon.stub(instance, '_renderDateTimeIndication');
+        const renderIndicatorStub = sinon.stub(instance, 'renderDateTimeIndication');
 
         instance.option({
             indicatorTime: new Date(2017, 8, 5, 12, 45)

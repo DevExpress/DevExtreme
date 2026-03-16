@@ -167,7 +167,7 @@ const subscribes = {
         };
       }
 
-      if (!allDay && VERTICAL_VIEW_TYPES.includes(this.currentView.type) && this._workSpace._isVerticalGroupedWorkSpace()) {
+      if (!allDay && VERTICAL_VIEW_TYPES.includes(this.currentView.type) && this._workSpace.isVerticalGroupedWorkSpace()) {
         const verticalGroupBounds = this._workSpace.getGroupBounds(options.coordinates);
         return {
           left: 0,

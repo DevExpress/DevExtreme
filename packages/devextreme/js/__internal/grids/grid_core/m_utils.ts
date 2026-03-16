@@ -22,7 +22,7 @@ import sharedFiltering from '@js/ui/shared/filtering';
 import { isNumeric } from '@ts/core/utils/m_type';
 import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
 
-import type { Column } from './columns_controller/m_columns_controller';
+import type { Column } from './columns_controller/types';
 import { isEqualSelectors, isSelectorEqualWithCallback } from './utils/index';
 
 const BASE_LOAD_PANEL_Z_INDEX = 1000;
@@ -211,7 +211,7 @@ export default {
     const noDataClass = that.addWidgetPrefix(NO_DATA_CLASS);
     let noDataElement = $element.find(`.${noDataClass}`).last();
     const isVisible = this._dataController.isEmpty();
-    const isLoading = this._dataController.isLoading();
+    const isDefaultLoading = this._dataController.isLoading() && !this._dataController.isCustomLoading?.();
 
     if (!noDataElement.length) {
       noDataElement = $('<span>')
@@ -222,7 +222,7 @@ export default {
       noDataElement.appendTo($element);
     }
 
-    if (isVisible && !isLoading) {
+    if (isVisible && !isDefaultLoading) {
       noDataElement
         .removeClass('dx-hidden')
         .text(that._getNoDataText());

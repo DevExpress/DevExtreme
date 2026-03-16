@@ -237,7 +237,7 @@ export default class ViewDataProvider {
   }
 
   getCellsByGroupIndexAndAllDay(groupIndex: number, isAllDay: boolean): ViewCellData[][] {
-    const rowsPerGroup = this._getRowCountWithAllDayRows();
+    const rowsPerGroup = this.getRowCountWithAllDayRows();
     const isShowAllDayPanel = this._options.isAllDayPanelVisible;
 
     const firstRowInGroup = this._options.isVerticalGrouping
@@ -505,7 +505,7 @@ export default class ViewDataProvider {
     return this.viewDataGenerator.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
   }
 
-  _getRowCountWithAllDayRows() {
+  getRowCountWithAllDayRows() {
     const allDayRowCount = this._options.isAllDayPanelVisible ? 1 : 0;
 
     return this.getRowCount(this._options) + allDayRowCount;
