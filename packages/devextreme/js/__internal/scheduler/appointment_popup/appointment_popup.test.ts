@@ -1307,6 +1307,28 @@ describe('Appointment Form', () => {
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(true);
     });
 
+    it('should close repeat selectbox popup when navigating to recurrence group via settings button', async () => {
+      const { POM, scheduler } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{ ...recurringAppointment }],
+      });
+
+      const dataSource = (scheduler as any).getDataSource();
+      const appointment = dataSource.items()[0];
+
+      scheduler.showAppointmentPopup(appointment);
+      POM.popup.editSeriesButton.click();
+
+      const repeatEditor = POM.popup.dxForm.getEditor('repeatEditor');
+      POM.popup.getInput('repeatEditor').click();
+
+      expect(repeatEditor?.option('opened')).toBe(true);
+
+      POM.popup.recurrenceSettingsButton.click();
+
+      expect(repeatEditor?.option('opened')).toBe(false);
+    });
+
     it('should have disabled week day buttons when allowUpdating is false', async () => {
       const { POM, scheduler } = await createScheduler({
         ...getDefaultConfig(),
