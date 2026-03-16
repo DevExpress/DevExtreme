@@ -18,12 +18,12 @@ import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_da
 import type { EditingControllerRequired, ModuleType } from '@ts/grids/grid_core/m_types';
 import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
-import type { Column } from '../../grid_core/columns_controller/types';
 import type { EditingController } from '../../grid_core/editing/m_editing';
 import type { RowsView } from '../../grid_core/views/m_rows_view';
 import AggregateCalculator from '../m_aggregate_calculator';
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
+import type { ColumnMap, SummaryItem } from './types';
 import { getColumnFromMap, getSummaryCellIndex } from './utils';
 
 const DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer';
@@ -532,8 +532,8 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
   }
 
   // The map is built once per _processItems cycle (via options) and discarded after.
-  private _buildColumnLookupMap(): Map<string | number, Column> {
-    const columnMap = new Map<string | number, Column>();
+  private _buildColumnLookupMap(): ColumnMap {
+    const columnMap: ColumnMap = new Map();
     const allColumns = [
       ...this._columnsController.getColumns(),
       ...(this._columnsController._commandColumns ?? []),
@@ -541,6 +541,9 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
 
     for (const column of allColumns) {
       const copiedColumn = { ...column };
+      // The method registers each column under a few keys: index, name, dataField, and caption.
+      // This is because the developer can specify summaryItem.column (and summaryItem.showInColumn)
+      // in any of these forms — number for column index and string for all the rest.
       const keys = [
         column.index,
         column.name,
@@ -559,12 +562,12 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
   }
 
   private _calculateSummaryCells(
-    summaryItems,
+    summaryItems: SummaryItem[],
     aggregates,
     visibleColumns,
     calculateTargetColumnIndex,
     isGroupRow?,
-    columnMap?: Map<string | number, Column>,
+    columnMap?: ColumnMap,
   ) {
     const summaryCells: any = [];
     const summaryCellsByColumns = {};
