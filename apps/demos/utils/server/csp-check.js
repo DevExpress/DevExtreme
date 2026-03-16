@@ -156,6 +156,9 @@ async function main() {
 
   await runPool(demos, CONCURRENCY, async (demo, i) => {
     const idx = i + 1;
+    const snapshot = await httpRequest(`${SERVER_URL}/csp-violations`);
+    const since = snapshot.lastId || 0;
+
     try {
       await visitPage(demo.url);
     } catch (err) {
@@ -163,7 +166,7 @@ async function main() {
       return;
     }
 
-    const result = await httpRequest(`${SERVER_URL}/csp-violations`);
+    const result = await httpRequest(`${SERVER_URL}/csp-violations?since=${since}`);
     const violations = (result.violations || []).filter(
       (v) => v.documentUri === demo.url || v.documentUri === `${demo.url}index.html`,
     );
