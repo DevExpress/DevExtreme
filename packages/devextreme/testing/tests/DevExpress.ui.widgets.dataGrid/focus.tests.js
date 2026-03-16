@@ -3314,7 +3314,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(focusedCellChangedCount, 1, 'onFocusedCellChanged fires count');
     });
 
-    QUnit.testInActiveWindow('T1282664', function(assert) {
+    QUnit.testInActiveWindow('onFocusedCellChanged row and cellElement parameter should be defined for the first cell (T1282664)', function(assert) {
         // arrange
         const that = this;
         let focusedCellChangedCount = 0;
