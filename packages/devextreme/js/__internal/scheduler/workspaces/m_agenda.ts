@@ -136,8 +136,6 @@ class SchedulerAgenda extends WorkSpace {
 
   protected override updateAllDayVisibility() { return noop(); }
 
-  private updateAllDayHeight() { return noop(); }
-
   protected override initWorkSpaceUnits() {
     this.initGroupTable();
     this._$timePanel = $('<table>').attr('aria-hidden', true).addClass(TIME_PANEL_CLASS);
@@ -348,8 +346,6 @@ class SchedulerAgenda extends WorkSpace {
 
   protected override attachEvents() { return noop(); }
 
-  private cleanCellDataCache() { return noop(); }
-
   isIndicationAvailable() {
     return false;
   }
@@ -535,8 +531,6 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   renovatedRenderSupported() { return false; }
-
-  private setSelectedCellsByCellData() {}
 
   protected override getTotalViewDuration() {
     return dateUtils.dateToMilliseconds('day') * (this.option('intervalCount') as any);

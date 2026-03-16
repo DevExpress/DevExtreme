@@ -298,7 +298,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _shader: any;
 
-  _$sidebarTable: any;
+  protected $sidebarTable: any;
 
   _interval: any;
 
@@ -822,8 +822,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  // TODO: rename to getCellCount — used externally via workSpace reference:
-  // m_work_space_grouped_strategy_horizontal.ts (7 usages), m_work_space_grouped_strategy_vertical.ts, shaders/current_time_shader_horizontal.ts
+  // TODO: rename to getCellCount (used externally by strategy classes and shaders)
   _getCellCount() {
     return this.viewDataProvider.getCellCount({
       intervalCount: this.option('intervalCount'),
@@ -2833,7 +2832,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       this._$groupTable.empty();
 
       this._$allDayTable?.empty();
-      this._$sidebarTable?.empty();
+      this.$sidebarTable?.empty();
     }
 
     this._shader?.clean();

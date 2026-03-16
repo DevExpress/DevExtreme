@@ -1,5 +1,4 @@
 import registerComponent from '@js/core/component_registrator';
-import { getBoundingRect } from '@js/core/utils/position';
 
 import { VIEWS } from '../utils/options/constants_view';
 import SchedulerTimeline from './m_timeline';
@@ -11,10 +10,6 @@ export default class SchedulerTimelineWeek extends SchedulerTimeline {
 
   protected override getElementClass() {
     return TIMELINE_CLASS;
-  }
-
-  _getHeaderPanelCellWidth($headerRow) {
-    return getBoundingRect($headerRow.children().first().get(0)).width;
   }
 
   protected override needRenderWeekHeader() {

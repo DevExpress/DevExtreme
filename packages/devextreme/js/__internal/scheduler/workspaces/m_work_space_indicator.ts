@@ -58,8 +58,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     return dateUtils.dateInRange(today, firstViewDate, endViewDate);
   }
 
-  // Overridden in SchedulerTimeline
-  renderIndicator(height, rtlOffset, $container, groupCount) {
+  protected renderIndicator(height, rtlOffset, $container, groupCount) {
     const groupedByDate = this.isGroupedByDate();
     const repeatCount = groupedByDate ? 1 : groupCount;
     for (let i = 0; i < repeatCount; i++) {
@@ -103,8 +102,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
   }
 
-  // Overridden in SchedulerTimeline
-  isVerticalShader() {
+  protected isVerticalShader() {
     return true;
   }
 
@@ -177,8 +175,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     this.renderDateTimeIndication();
   }
 
-  // Overridden in SchedulerTimeline
-  isCurrentTimeHeaderCell(headerIndex: number): boolean {
+  protected isCurrentTimeHeaderCell(headerIndex: number): boolean {
     if (this.isIndicationOnView()) {
       const { completeDateHeaderMap } = this.viewDataProvider;
       const date = completeDateHeaderMap[completeDateHeaderMap.length - 1][headerIndex].startDate;
@@ -254,7 +251,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     });
   }
 
-  // Overridden in SchedulerTimeline
   protected getCurrentTimePanelCellIndices() {
     const rowCountPerGroup = this.getTimePanelRowCount();
     const today = this.getToday();
@@ -311,10 +307,8 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
   }
 
-  // Temporary new render methods.
   // TODO Old render: replace base call methods by these after the deleting of the old render.
-  // Overridden in SchedulerTimeline
-  setCurrentTimeCells(): void {
+  protected setCurrentTimeCells(): void {
     const timePanelCells = this.getTimePanelCells();
     const currentTimeCellIndices = this.getCurrentTimePanelCellIndices();
     currentTimeCellIndices.forEach((timePanelCellIndex) => {

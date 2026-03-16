@@ -35,7 +35,7 @@ const HORIZONTAL = 'horizontal';
 const toMs = dateUtils.dateToMilliseconds;
 
 class SchedulerTimeline extends SchedulerWorkSpace {
-  _$sidebarTable: any;
+  protected override $sidebarTable: any;
 
   get verticalGroupTableClass() { return GROUP_TABLE_CLASS; }
 
@@ -44,7 +44,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   get renovatedHeaderPanelComponent() { return HeaderPanelTimelineComponent; }
 
   getGroupTableWidth() {
-    return this._$sidebarTable ? getOuterWidth(this._$sidebarTable) : 0;
+    return this.$sidebarTable ? getOuterWidth(this.$sidebarTable) : 0;
   }
 
   protected override getTotalRowCount(groupCount) {
@@ -96,19 +96,17 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     if (this._isHorizontalGroupedWorkSpace()) {
       return this._$thead;
     }
-    return this._$sidebarTable;
+    return this.$sidebarTable;
   }
 
   protected override insertAllDayRowsIntoDateTable() {
     return false;
   }
 
-  // Overridden in SchedulerTimelineDay, SchedulerTimelineWeek
   protected needRenderWeekHeader() {
     return false;
   }
 
-  // Overridden in SchedulerTimelineWeek, SchedulerTimelineWorkWeek
   protected incrementDate(date) {
     date.setDate(date.getDate() + 1);
   }
@@ -132,7 +130,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return today.getTime() - date.getTime();
   }
 
-  // Overridden in SchedulerTimelineMonth
   protected calculateDurationInCells(timeDiff) {
     const today = this.getToday();
     const differenceInDays = Math.floor(timeDiff / toMs('day'));
@@ -159,11 +156,11 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return this.getIndicationCellCount() * this.getCellWidth();
   }
 
-  isVerticalShader() {
+  protected override isVerticalShader() {
     return false;
   }
 
-  isCurrentTimeHeaderCell() {
+  protected override isCurrentTimeHeaderCell() {
     return false;
   }
 
@@ -171,7 +168,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     super.setTableSizes();
 
     const minHeight = this.getWorkSpaceMinHeight();
-    setHeight(this._$sidebarTable, minHeight);
+    setHeight(this.$sidebarTable, minHeight);
     setHeight(this._$dateTable, minHeight);
 
     this.virtualScrollingDispatcher.updateDimensions();
@@ -307,7 +304,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     super._init();
 
     (this.$element() as any).addClass(TIMELINE_CLASS);
-    this._$sidebarTable = $('<div>')
+    this.$sidebarTable = $('<div>')
       .addClass(GROUP_TABLE_CLASS);
   }
 
@@ -349,7 +346,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     this._shader = new HorizontalShader(this);
 
-    this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
+    this.$sidebarTable.appendTo(this._sidebarScrollable.$content());
 
     if (this.isRenovatedRender() && this.isVerticalGroupedWorkSpace()) {
       this.renderRGroupPanel();
@@ -455,7 +452,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
   }
 
-  renderIndicator(height, rtlOffset, $container, groupCount) {
+  protected override renderIndicator(height, rtlOffset, $container, groupCount) {
     let $indicator;
     const width = this.getIndicationWidth();
 
@@ -496,7 +493,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
   // Old render methods.
   // TODO Old render: delete these methods with the old render.
 
-  setCurrentTimeCells(): void {
+  protected override setCurrentTimeCells(): void {
     const timePanelCells = this.getTimePanelCells();
     const currentTimeCellIndices = this.getCurrentTimePanelCellIndices();
     currentTimeCellIndices.forEach((timePanelCellIndex) => {
