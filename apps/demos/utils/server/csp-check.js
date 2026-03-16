@@ -9,7 +9,7 @@ const DEMO_ROOT = join(__dirname, '..', '..');
 const REPORT_DIR = join(DEMO_ROOT, 'csp-reports');
 const SERVER_URL = process.env.CSP_SERVER_URL || 'http://localhost:8080';
 const FRAMEWORK = (process.env.CSP_FRAMEWORKS || 'jQuery').trim();
-const CONCURRENCY = parseInt(process.env.CSP_CONCURRENCY, 10) || 6;
+const CONCURRENCY = parseInt(process.env.CSP_CONCURRENCY, 10) || 10;
 
 function findChrome() {
   const candidates = [
@@ -84,7 +84,7 @@ function visitPage(url) {
       '--disable-software-rasterizer',
       '--disable-dev-shm-usage',
       '--dump-dom',
-      '--virtual-time-budget=5000',
+      '--virtual-time-budget=2000',
       '--window-size=100,100',
       url,
     ], { timeout: 50000, killSignal: 'SIGKILL' }, (error) => {
