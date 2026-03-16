@@ -9,7 +9,7 @@ const DEMO_ROOT = join(__dirname, '..', '..');
 const REPORT_DIR = join(DEMO_ROOT, 'csp-reports');
 const SERVER_URL = process.env.CSP_SERVER_URL || 'http://localhost:8080';
 const FRAMEWORK = (process.env.CSP_FRAMEWORKS || 'jQuery').trim();
-const CONCURRENCY = parseInt(process.env.CSP_CONCURRENCY, 10) || 8;
+const CONCURRENCY = parseInt(process.env.CSP_CONCURRENCY, 10) || 10;
 
 function findChrome() {
   const candidates = [
@@ -84,10 +84,16 @@ function visitPage(url) {
       '--disable-software-rasterizer',
       '--disable-dev-shm-usage',
       '--dump-dom',
-      '--virtual-time-budget=5000',
+      '--virtual-time-budget=2000',
       '--window-size=100,100',
       url,
-    ], { timeout: 30000 }, () => resolve());
+    ], { timeout: 50000, killSignal: 'SIGKILL' }, (error) => {
+      if (error && error.killed) {
+        reject(new Error(`Chrome timed out for ${url}`));
+      } else {
+        resolve();
+      }
+    });
     child.on('error', (err) => {
       reject(new Error(`Failed to launch Chrome at "${CHROME_PATH}": ${err.message}`));
     });
@@ -112,6 +118,22 @@ function httpRequest(url, method) {
   });
 }
 
+async function runPool(items, concurrency, fn) {
+  let nextIndex = 0;
+  async function worker() {
+    while (nextIndex < items.length) {
+      const i = nextIndex;
+      nextIndex += 1;
+      await fn(items[i], i);
+    }
+  }
+  const workers = [];
+  for (let w = 0; w < Math.min(concurrency, items.length); w += 1) {
+    workers.push(worker());
+  }
+  await Promise.all(workers);
+}
+
 async function main() {
   console.log(`Chrome: ${CHROME_PATH}`);
   console.log(`Server: ${SERVER_URL}`);
@@ -130,48 +152,40 @@ async function main() {
   let demosWithViolations = 0;
   const allViolations = [];
 
-  for (let batchStart = 0; batchStart < demos.length; batchStart += CONCURRENCY) {
-    const batch = demos.slice(batchStart, batchStart + CONCURRENCY);
+  await httpRequest(`${SERVER_URL}/csp-violations`, 'DELETE');
 
-    await httpRequest(`${SERVER_URL}/csp-violations`, 'DELETE');
+  await runPool(demos, CONCURRENCY, async (demo, i) => {
+    const idx = i + 1;
+    const snapshot = await httpRequest(`${SERVER_URL}/csp-violations`);
+    const since = snapshot.lastId || 0;
 
-    await Promise.all(batch.map((demo) => visitPage(demo.url)));
-
-    await new Promise((resolve) => { setTimeout(resolve, 500); });
-
-    const result = await httpRequest(`${SERVER_URL}/csp-violations`);
-    const violations = result.violations || [];
-
-    const violationsByUrl = {};
-    for (const v of violations) {
-      const uri = v.documentUri || '';
-      if (!violationsByUrl[uri]) violationsByUrl[uri] = [];
-      violationsByUrl[uri].push(v);
+    try {
+      await visitPage(demo.url);
+    } catch (err) {
+      console.log(`  ⚠️ [${idx}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework} — ${err.message}`);
+      return;
     }
 
-    for (let j = 0; j < batch.length; j += 1) {
-      const demo = batch[j];
-      const idx = batchStart + j + 1;
-      const demoViolations = violationsByUrl[demo.url]
-        || violationsByUrl[`${demo.url}index.html`]
-        || [];
+    const result = await httpRequest(`${SERVER_URL}/csp-violations?since=${since}`);
+    const violations = (result.violations || []).filter(
+      (v) => v.documentUri === demo.url || v.documentUri === `${demo.url}index.html`,
+    );
 
-      if (demoViolations.length > 0) {
-        demosWithViolations += 1;
-        totalViolations += demoViolations.length;
+    if (violations.length > 0) {
+      demosWithViolations += 1;
+      totalViolations += violations.length;
 
-        console.log(`  ❌ [${idx}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework} — ${demoViolations.length} violation(s)`);
-        for (const v of demoViolations) {
-          const blocked = v.blockedUri || 'N/A';
-          const directive = v.effectiveDirective || v.violatedDirective || '?';
-          console.log(`       ${directive}: ${blocked}`);
-          allViolations.push({ ...v, framework: FRAMEWORK });
-        }
-      } else {
-        console.log(`  ✅ [${idx}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework}`);
+      console.log(`  ❌ [${idx}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework} — ${violations.length} violation(s)`);
+      for (const v of violations) {
+        const blocked = v.blockedUri || 'N/A';
+        const directive = v.effectiveDirective || v.violatedDirective || '?';
+        console.log(`       ${directive}: ${blocked}`);
+        allViolations.push({ ...v, framework: FRAMEWORK });
       }
+    } else {
+      console.log(`  ✅ [${idx}/${demos.length}] ${demo.widget}/${demo.demo}/${demo.framework}`);
     }
-  }
+  });
 
   const reportFile = join(REPORT_DIR, `csp-violations-${FRAMEWORK.toLowerCase()}.jsonl`);
 
