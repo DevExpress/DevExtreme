@@ -399,16 +399,16 @@ const rateLimiter = createRateLimiter();
 const app = express();
 app.use(cookieParser());
 app.use(cspMiddleware);
+app.use(rateLimiter);
 
-app.post('/csp-report', rateLimiter, cspReportHandler);
-app.get('/csp-violations', rateLimiter, cspViolationsHandler);
-app.delete('/csp-violations', rateLimiter, cspViolationsClearHandler);
+app.post('/csp-report', cspReportHandler);
+app.get('/csp-violations', cspViolationsHandler);
+app.delete('/csp-violations', cspViolationsClearHandler);
 
-app.get('/apps/demos/Demos/:widget/:name/:approach', rateLimiter, demoIndexHandler);
-app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, rateLimiter, demoIndexHandler);
+app.get('/apps/demos/Demos/:widget/:name/:approach', demoIndexHandler);
+app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
 
 app.use(
-  rateLimiter,
   serveStatic(root, { index: [indexFileName] }),
 );
 
