@@ -22,8 +22,7 @@ import * as iconUtils from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { deepExtendArraySafe } from '@js/core/utils/object';
 import {
-  isDefined, isEmptyObject,
-  isFunction, isObject,
+  isDefined, isEmptyObject, isFunction, isObject,
 } from '@js/core/utils/type';
 import { confirm } from '@js/ui/dialog';
 import { current, isFluent } from '@js/ui/themes';
@@ -2254,23 +2253,33 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   public getColumnTemplate(options) {
-    const { column } = options;
-    const rowIndex = options.row && options.row.rowIndex;
+    const { column, row, rowType } = options;
+    const rowIndex = row?.rowIndex;
     let template;
+
     const isRowMode = this.isRowBasedEditMode();
     const isRowEditing = this.isEditRow(rowIndex);
     const isCellEditing = this.isEditCell(rowIndex, options.columnIndex);
-    let editingStartOptions;
 
-    if ((column.showEditorAlways || column.setCellValue && (isRowEditing && column.allowEditing || isCellEditing))
-              && (options.rowType === 'data' || options.rowType === 'detailAdaptive') && !column.command) {
-      const allowUpdating = this.allowUpdating(options);
-      if (((allowUpdating || isRowEditing) && column.allowEditing || isCellEditing) && (isRowEditing || !isRowMode)) {
+    const isEditableRowType = rowType === 'data' || rowType === 'detailAdaptive';
+    const isEditableByRowState = isRowEditing && !!column.allowEditing;
+    const needsEditorTemplate = !!column.showEditorAlways
+      || (column.setCellValue && (isEditableByRowState || isCellEditing));
+
+    if (needsEditorTemplate && isEditableRowType && !column.command) {
+      const allowUpdating = !!this.allowUpdating(options);
+      const canModifyCell = (allowUpdating || isRowEditing || !!row?.isNewRow)
+        && !!column.allowEditing;
+      const isEditable = (canModifyCell || isCellEditing) && (isRowEditing || !isRowMode);
+
+      if (isEditable) {
+        // eslint-disable-next-line @typescript-eslint/init-declarations
+        let editingStartOptions;
         if (column.showEditorAlways && !isRowMode) {
           editingStartOptions = {
             cancel: false,
-            key: options.row.isNewRow ? undefined : options.row.key,
-            data: options.row.data,
+            key: row?.isNewRow ? undefined : row.key,
+            data: row.data,
             column,
           };
           this._isEditingStart(editingStartOptions);
@@ -2282,7 +2291,7 @@ class EditingControllerImpl extends modules.ViewController {
         }
       }
       template = column.editCellTemplate || this._getDefaultEditorTemplate();
-    } else if (column.command === 'detail' && options.rowType === 'detail' && isRowEditing) {
+    } else if (column.command === 'detail' && rowType === 'detail' && isRowEditing) {
       template = (this as any)?.getEditFormTemplate(options);
     }
 

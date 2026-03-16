@@ -84,6 +84,33 @@ function wait(timeout: number): Promise<void> {
   });
 }
 
+function sanitizeVectorMapArg(arg: string): string {
+  const trimmed = arg.trim();
+
+  // Reject empty values
+  if (!trimmed) {
+    throw new Error('Vector map argument must not be empty.');
+  }
+
+  // Disallow characters and sequences that can alter the path structure
+  if (trimmed.includes('/') || trimmed.includes('\\') || trimmed.includes('?') || trimmed.includes('#')) {
+    throw new Error('Vector map argument contains invalid characters.');
+  }
+
+  // Prevent simple path traversal attempts
+  if (trimmed.includes('..')) {
+    throw new Error('Vector map argument must not contain path traversal sequences.');
+  }
+
+  // Optionally enforce a reasonable maximum length to avoid resource abuse
+  if (trimmed.length > 256) {
+    throw new Error('Vector map argument is too long.');
+  }
+
+  // Encode as a single safe URL path segment
+  return encodeURIComponent(trimmed);
+}
+
 function httpGetText(targetUrl: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const request = http.get(targetUrl, (response) => {
@@ -205,8 +232,10 @@ export function createVectorMapService({
     arg: string,
     startTime: number,
   ): Promise<string> {
+    const safeArg = sanitizeVectorMapArg(arg);
+
     try {
-      return await httpGetText(`http://127.0.0.1:${vectorMapTesterPort}/${action}/${arg}`);
+      return await httpGetText(`http://127.0.0.1:${vectorMapTesterPort}/${action}/${safeArg}`);
     } catch (error) {
       if (Date.now() - startTime > VECTOR_SERVER_RETRY_TIMEOUT_MS) {
         throw error;
