@@ -15,11 +15,11 @@ $(() => {
       },
     },
     series: [
-      { valueField: 'year2018', name: '2018' },
-      { valueField: 'year2017', name: '2017' },
-      { valueField: 'year2016', name: '2016' },
+      { valueField: 'year2024', name: '2024' },
+      { valueField: 'year2023', name: '2023' },
+      { valueField: 'year2022', name: '2022' },
     ],
-    title: 'Gross State Product within the Great Lakes Region',
+    title: 'Gross State Product within the Great Lakes Region (Billions USD)',
     legend: {
       verticalAlignment: 'bottom',
       horizontalAlignment: 'center',
