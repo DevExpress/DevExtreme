@@ -437,30 +437,6 @@ QUnit.module('Aria accessibility', {
             assert.strictEqual($item.attr('aria-labelledby'), undefined, `item[${index}] element has no aria-labelledby when html is provided`);
         });
     });
-
-    QUnit.test('Item with html: aria-checked on item element is updated on value change', function(assert) {
-        const items = [
-            { html: '<span>Option A</span>', value: 'a' },
-            { html: '<span>Option B</span>', value: 'b' },
-        ];
-        helper.createWidget({ items, valueExpr: 'value', value: 'a' });
-
-        helper.getItems().each((index, item) => {
-            const $item = $(item);
-            const expected = index === 0 ? 'true' : 'false';
-
-            assert.strictEqual($item.attr('aria-checked'), expected, `item[${index}] has correct aria-checked after initial render`);
-        });
-
-        helper.widget.option('value', 'b');
-
-        helper.getItems().each((index, item) => {
-            const $item = $(item);
-            const expected = index === 1 ? 'true' : 'false';
-
-            assert.strictEqual($item.attr('aria-checked'), expected, `item[${index}] has correct aria-checked after value change`);
-        });
-    });
 });
 
 module('layout', moduleConfig, () => {

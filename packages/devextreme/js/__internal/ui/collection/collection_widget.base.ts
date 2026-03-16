@@ -604,7 +604,7 @@ class CollectionWidget<
     this.setAria('activedescendant', null, $target);
   }
 
-  _getIdTarget($target: dxElementWrapper): dxElementWrapper {
+  _getItemIdTarget($target: dxElementWrapper): dxElementWrapper {
     return $target;
   }
 
@@ -619,7 +619,7 @@ class CollectionWidget<
       return;
     }
 
-    const $idTarget = this._getIdTarget($target);
+    const $idTarget = this._getItemIdTarget($target);
 
     if (!needCleanItemId && focusedElement) {
       this.setAria('id', this.getFocusedItemId(), $idTarget);

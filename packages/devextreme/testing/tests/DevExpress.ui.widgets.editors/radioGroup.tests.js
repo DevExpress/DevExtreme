@@ -370,6 +370,30 @@ module('accessibility', moduleConfig, () => {
             assert.strictEqual($(this).attr('aria-checked'), undefined, `item[${index}] element does not have aria-checked`);
         });
     });
+
+    test('item with html: aria-checked on item element is updated on value change', function(assert) {
+        const items = [
+            { html: '<span>Option A</span>', value: 'a' },
+            { html: '<span>Option B</span>', value: 'b' },
+        ];
+        const $radioGroup = createRadioGroup({ items, valueExpr: 'value', value: 'a' });
+        const instance = getInstance($radioGroup);
+        const $itemElements = $(instance.itemElements());
+
+        $itemElements.each(function(index) {
+            const expected = index === 0 ? 'true' : 'false';
+
+            assert.strictEqual($(this).attr('aria-checked'), expected, `item[${index}] has correct aria-checked after initial render`);
+        });
+
+        instance.option('value', 'b');
+
+        $itemElements.each(function(index) {
+            const expected = index === 1 ? 'true' : 'false';
+
+            assert.strictEqual($(this).attr('aria-checked'), expected, `item[${index}] has correct aria-checked after value change`);
+        });
+    });
 });
 
 module('hidden input', () => {

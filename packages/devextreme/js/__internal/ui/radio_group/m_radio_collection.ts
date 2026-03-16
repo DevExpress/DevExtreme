@@ -49,7 +49,7 @@ class RadioCollection extends CollectionWidget<Properties> {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _getIdTarget($target: dxElementWrapper): dxElementWrapper {
+  _getItemIdTarget($target: dxElementWrapper): dxElementWrapper {
     const $radioContainer = $target.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
 
     if ($radioContainer.length) {
@@ -64,18 +64,17 @@ class RadioCollection extends CollectionWidget<Properties> {
     const { html } = itemData;
 
     const $itemElement = $(itemElement);
-    const contentId = `dx-${new Guid()}`;
-
-    let $radioContainer = $itemElement.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
 
     if (!html) {
       const $radio = $('<div>').addClass(RADIO_BUTTON_ICON_CLASS);
 
       $('<div>').addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
 
-      $radioContainer = $('<div>').append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
+      const $radioContainer = $('<div>').append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
       $itemElement.prepend($radioContainer);
     }
+
+    super._postprocessRenderItem(args);
 
     // eslint-disable-next-line spellcheck/spell-checker
     const aria: { role: string; labelledby?: string } = {
@@ -83,22 +82,21 @@ class RadioCollection extends CollectionWidget<Properties> {
     };
 
     if (!html) {
+      const $itemContent = $itemElement.find(`.${ITEM_CONTENT_CLASS}`);
+      const $contentIdTarget = $itemContent.length ? $itemContent : $itemElement;
+
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      const contentId = $contentIdTarget.attr('id') || `dx-${new Guid()}`;
+
+      $contentIdTarget.attr('id', contentId);
+
       // eslint-disable-next-line spellcheck/spell-checker
       aria.labelledby = contentId;
     }
 
-    const $ariaTarget = $radioContainer.length ? $radioContainer : $itemElement;
+    const $ariaTarget = this._getItemIdTarget($itemElement);
 
     this.setAria(aria, $ariaTarget);
-
-    super._postprocessRenderItem(args);
-
-    if (!html) {
-      const $itemContent = $itemElement.find(`.${ITEM_CONTENT_CLASS}`);
-      const $idTarget = $itemContent.length ? $itemContent : $itemElement;
-
-      $idTarget.attr('id', contentId);
-    }
   }
 
   _processSelectableItem(
