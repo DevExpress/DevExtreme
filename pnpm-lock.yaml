@@ -461,6 +461,9 @@ importers:
       esbuild-plugin-vue3:
         specifier: 0.3.2
         version: 0.3.2(cheerio@1.0.0-rc.10)(sass@1.97.1)
+      express-rate-limit:
+        specifier: ^8.3.1
+        version: 8.3.1(express@4.22.1)
       file-saver-es:
         specifier: 2.0.5
         version: 2.0.5
@@ -31583,6 +31586,11 @@ snapshots:
       jest-util: 30.2.0
 
   exponential-backoff@3.1.1: {}
+
+  express-rate-limit@8.3.1(express@4.22.1):
+    dependencies:
+      express: 4.22.1
+      ip-address: 10.1.0
 
   express-rate-limit@8.3.1(express@5.2.1):
     dependencies:

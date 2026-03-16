@@ -5,6 +5,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const { join, resolve } = require('path');
 const { readFileSync, readdirSync } = require('fs');
+const RateLimit = require('express-rate-limit');
 
 const root = join(__dirname, '..', '..', '..', '..');
 const indexFileName = 'index.html';
@@ -379,12 +380,17 @@ const app = express();
 app.use(cookieParser());
 app.use(cspMiddleware);
 
+const demoIndexLimiter = RateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+
 app.post('/csp-report', cspReportHandler);
 app.get('/csp-violations', cspViolationsHandler);
 app.delete('/csp-violations', cspViolationsClearHandler);
 
-app.get('/apps/demos/Demos/:widget/:name/:approach', demoIndexHandler);
-app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
+app.get('/apps/demos/Demos/:widget/:name/:approach', demoIndexLimiter, demoIndexHandler);
+app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexLimiter, demoIndexHandler);
 
 app.use(express.static(root, { index: [indexFileName] }));
 
