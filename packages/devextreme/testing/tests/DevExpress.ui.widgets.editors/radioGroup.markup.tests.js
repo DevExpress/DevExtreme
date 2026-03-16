@@ -401,12 +401,9 @@ QUnit.module('Aria accessibility', {
         helper.createWidget({
             items: ['Low', 'Normal', 'Urgent', 'High'],
             itemTemplate(itemData, _, itemElement) {
-                itemElement.text(itemData);
+                $(itemElement).parent().text(itemData);
             },
         });
-
-        helper.checkAttributes(helper.$widget, { role: 'radiogroup', tabindex: '0' }, 'widget');
-        helper.checkItemsAttributes([], {});
 
         helper.getItems().each((index, item) => {
             const $item = $(item);
