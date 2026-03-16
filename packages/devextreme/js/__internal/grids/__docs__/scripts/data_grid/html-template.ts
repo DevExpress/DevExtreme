@@ -216,7 +216,7 @@ var cy = cytoscape({
       'label': 'data(label)',
     }},
     { selector: 'node.gc-target-controller', style: {
-      'border-color': '#7dd3fc', 'color': '#bae6fd', 'shape': 'round-hexagon',
+      'border-color': '#7dd3fc', 'color': '#bae6fd', 'shape': 'hexagon',
     }},
     { selector: 'node.gc-target-view', style: {
       'border-color': '#c084fc', 'color': '#d8b4fe', 'shape': 'ellipse',
@@ -226,7 +226,7 @@ var cy = cytoscape({
       'padding': '12px',
     }},
     { selector: 'node.dg-target.gc-target-controller', style: {
-      'border-color': '#7dd3fc', 'color': '#bae6fd', 'shape': 'round-hexagon',
+      'border-color': '#7dd3fc', 'color': '#bae6fd', 'shape': 'hexagon',
     }},
     { selector: 'node.dg-target.gc-target-view', style: {
       'border-color': '#c084fc', 'color': '#d8b4fe', 'shape': 'ellipse',
@@ -271,8 +271,8 @@ var cy = cytoscape({
       'text-background-padding': '2px', 'text-background-shape': 'round-rectangle',
     }},
     { selector: '.highlighted', style: { 'opacity': 1, 'z-index': 999 }},
-    { selector: 'edge.highlighted', style: { 'opacity': 1, 'z-index': 999, 'width': 4 }},
-    { selector: '.faded', style: { 'opacity': .05 }},
+    { selector: 'edge.highlighted', style: { 'opacity': 1, 'z-index': 999, 'width': 3 }},
+    { selector: '.faded', style: { 'opacity': 0.08 }},
     { selector: 'node.search-match', style: { 'border-width': 3, 'border-color': '#FF6B6B' }},
   ],
   layout: { name: 'preset' },

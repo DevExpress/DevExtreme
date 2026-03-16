@@ -1,4 +1,4 @@
-/* eslint-disable spellcheck/spell-checker, no-restricted-syntax, max-depth */
+/* eslint-disable spellcheck/spell-checker, max-depth */
 import { MODULE_ITEM_CLASS, MODULES_PREFIX } from './constants';
 import type { ArchitectureData } from './types';
 
@@ -122,7 +122,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         mixins: nonEmpty(ctrl.mixins.join(', ')),
         sourceFile: ctrl.sourceFile,
         featureArea: mod.featureArea,
-      }, 'controller');
+      }, 'gc-target gc-target-controller');
     }
 
     // Add view children
@@ -137,7 +137,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         mixins: nonEmpty(view.mixins.join(', ')),
         sourceFile: view.sourceFile,
         featureArea: mod.featureArea,
-      }, 'view');
+      }, 'gc-target gc-target-view');
     }
   }
 
@@ -152,7 +152,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
       mixins: nonEmpty(ctrl.mixins.join(', ')),
       sourceFile: ctrl.sourceFile,
       featureArea: ctrl.featureArea,
-    }, 'controller standalone');
+    }, 'gc-target gc-target-controller');
   }
 
   for (const [regName, view] of Object.entries(data.standaloneViews)) {
@@ -165,7 +165,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
       mixins: nonEmpty(view.mixins.join(', ')),
       sourceFile: view.sourceFile,
       featureArea: view.featureArea,
-    }, 'view standalone');
+    }, 'gc-target gc-target-view');
   }
 
   // 3. Add inheritance edges
@@ -184,7 +184,8 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         }
         const targetId = nodeIdMap.get(base);
         if (targetId && nodeIds.has(targetId)) {
-          addEdge(sourceId, targetId, { edgeType: 'inheritance' }, 'inheritance');
+          const inheritClass = targetId.startsWith('ctrl-') ? 'edge-inherit-ctrl' : 'edge-inherit-view';
+          addEdge(sourceId, targetId, { edgeType: 'inheritance' }, inheritClass);
           break;
         }
       }
@@ -201,7 +202,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         addEdge(moduleId, targetId, {
           edgeType: 'extension',
           extenderName: ext.extenderName,
-        }, 'extension');
+        }, 'edge-ext-ctrl');
       }
     }
 
@@ -211,7 +212,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         addEdge(moduleId, targetId, {
           edgeType: 'extension',
           extenderName: ext.extenderName,
-        }, 'extension');
+        }, 'edge-ext-view');
       }
     }
   }
@@ -225,7 +226,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
       addEdge(sourceId, targetId, {
         edgeType: 'runtime',
         via: dep.via,
-      }, 'runtime');
+      }, 'edge-runtime');
     }
   }
 

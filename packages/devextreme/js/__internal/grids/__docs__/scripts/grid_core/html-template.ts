@@ -1,4 +1,4 @@
-/* eslint-disable spellcheck/spell-checker, @stylistic/max-len */
+/* eslint-disable spellcheck/spell-checker */
 /**
  * HTML visualization template for Grid Core Architecture Documentation Generator.
  * Generates an interactive Cytoscape.js visualization.
@@ -66,9 +66,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 #info-panel .tag {
   display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px; margin: 1px 2px;
 }
-#info-panel .tag-ctrl { background: #243f62; color: #7CB9E8; }
-#info-panel .tag-view { background: #3e2462; color: #C4A8FF; }
-#info-panel .tag-ext { background: #3a2a1a; color: #C8884A; }
+#info-panel .tag-ctrl { background: #1e1e3a; color: #bae6fd; border: 1px solid #7dd3fc33; }
+#info-panel .tag-view { background: #1e1e3a; color: #d8b4fe; border: 1px solid #c084fc33; }
+#info-panel .tag-ext { background: #3a2a00; color: #f5c040; border: 1px solid #f5c04033; }
 
 #legend {
   padding: 8px; font-size: 13px; border-top: 1px solid #555;
@@ -92,9 +92,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   </div>
   <div>
     <h2>Edge Types</h2>
-    <label><input type="checkbox" id="toggle-inheritance" checked> Inheritance</label>
-    <label><input type="checkbox" id="toggle-extensions" checked> Extensions</label>
-    <label><input type="checkbox" id="toggle-runtime" checked> Runtime Dependencies</label>
+    <label><input type="checkbox" class="edge-toggle" data-cls="edge-inherit-ctrl" checked> Inheritance (ctrl)</label>
+    <label><input type="checkbox" class="edge-toggle" data-cls="edge-inherit-view" checked> Inheritance (view)</label>
+    <label><input type="checkbox" class="edge-toggle" data-cls="edge-ext-ctrl" checked> Extender Chain (ctrl)</label>
+    <label><input type="checkbox" class="edge-toggle" data-cls="edge-ext-view" checked> Extender Chain (view)</label>
+    <label><input type="checkbox" class="edge-toggle" data-cls="edge-runtime" checked> Runtime Dependencies</label>
   </div>
   <div>
     <h2>Feature Areas</h2>
@@ -121,14 +123,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   </div>
   <div id="legend">
     <h2>Legend</h2>
-    <div class="legend-item"><div class="legend-swatch" style="background:#3D6E9E;border:1px solid #2B5580;"></div> Controller</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#6A4A9E;border:1px solid #4D3578;"></div> View</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#333;border:2px dashed #C8884A;"></div> Extension-only Module</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#3D6E9E;border:2px dashed #2B5580;"></div> Standalone (not in module)</div>
-    <div class="legend-item"><div class="legend-swatch" style="background:#3a3a3a;border:1px solid #666;"></div> Module (compound)</div>
-    <div class="legend-item"><div class="legend-line" style="border-top:2px solid #B0B0B0;"></div> Inheritance</div>
-    <div class="legend-item"><div class="legend-line" style="border-top:2px dashed #C8884A;"></div> Extension</div>
-    <div class="legend-item"><div class="legend-line" style="border-top:2px dotted #7A9DBF;"></div> Runtime Dependency</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#1e1e3a;border:2px solid #7dd3fc;clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);width:20px;height:16px;"></div> Controller</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#1e1e3a;border:2px solid #c084fc;border-radius:50%;"></div> View</div>
+    <div class="legend-item"><div class="legend-swatch" style="background:#1a1a2e;border:2px dashed #f59e0b;"></div> Module (compound)</div>
+    <div class="legend-item"><div class="legend-line" style="border-top:2px dashed #0ea5e9;"></div> Inheritance (ctrl)</div>
+    <div class="legend-item"><div class="legend-line" style="border-top:2px dashed #a855f7;"></div> Inheritance (view)</div>
+    <div class="legend-item"><div class="legend-line" style="border-top:2.5px solid #0ea5e9;"></div> Extender (ctrl)</div>
+    <div class="legend-item"><div class="legend-line" style="border-top:2.5px solid #a855f7;"></div> Extender (view)</div>
+    <div class="legend-item"><div class="legend-line" style="border-top:2px dotted #f6e05e;opacity:0.5;"></div> Runtime Dependency</div>
   </div>
 </div>
 <div id="main">
@@ -154,14 +156,15 @@ const cy = cytoscape({
   container: document.getElementById('cy'),
   elements: ELEMENTS,
   style: [
-    // Compound nodes (modules)
+    // Compound nodes (modules) — styled like data_grid's node.module.grid-core
     { selector: 'node.module',
       style: {
-        'shape': 'round-rectangle',
-        'background-color': '#3a3a3a',
-        'background-opacity': 0.6,
-        'border-width': 1,
-        'border-color': '#666',
+        'shape': 'barrel',
+        'background-color': '#1a1a2e',
+        'background-opacity': 0.5,
+        'border-width': 2,
+        'border-style': 'dashed',
+        'border-color': '#f59e0b',
         'label': 'data(label)',
         'text-valign': 'top',
         'text-halign': 'center',
@@ -172,95 +175,118 @@ const cy = cytoscape({
         'text-margin-y': -4,
       }
     },
-    // Extension-only modules
+    // Extension-only modules — same style as regular modules
     { selector: 'node.module.ext-only',
       style: {
-        'border-style': 'dashed',
-        'border-width': 2,
-        'border-color': '#C8884A',
-        'background-color': '#3a3000',
         'min-width': 80,
         'min-height': 30,
       }
     },
-    // Controller nodes
-    { selector: 'node.controller',
+    // Controller nodes — styled like data_grid's gc-target-controller
+    { selector: 'node.gc-target-controller',
       style: {
         'shape': 'hexagon',
-        'background-color': '#3D6E9E',
-        'border-width': 1,
-        'border-color': '#2B5580',
+        'background-color': '#1e1e3a',
+        'background-opacity': 0.6,
+        'border-width': 2,
+        'border-style': 'dashed',
+        'border-color': '#7dd3fc',
         'label': 'data(label)',
         'text-valign': 'center',
         'text-halign': 'center',
         'font-size': 9,
-        'color': '#E8E8E8',
+        'color': '#bae6fd',
+        'text-wrap': 'wrap',
+        'text-max-width': '120px',
         'width': labelWidth(9),
         'min-width': 30,
         'height': 30,
         'padding': '12px',
       }
     },
-    // View nodes
-    { selector: 'node.view',
+    // View nodes — styled like data_grid's gc-target-view
+    { selector: 'node.gc-target-view',
       style: {
-        'shape': 'round-rectangle',
-        'background-color': '#6A4A9E',
-        'border-width': 1,
-        'border-color': '#4D3578',
+        'shape': 'ellipse',
+        'background-color': '#1e1e3a',
+        'background-opacity': 0.6,
+        'border-width': 2,
+        'border-style': 'dashed',
+        'border-color': '#c084fc',
         'label': 'data(label)',
         'text-valign': 'center',
         'text-halign': 'center',
         'font-size': 9,
-        'color': '#E8E8E8',
+        'color': '#d8b4fe',
+        'text-wrap': 'wrap',
+        'text-max-width': '120px',
         'width': labelWidth(9),
         'min-width': 30,
         'height': 26,
         'padding': '12px',
       }
     },
-    // Standalone controller/view nodes (not inside a module) — dashed border
-    { selector: 'node.standalone',
+    // Inheritance edges (ctrl) — dashed, same color as extension ctrl
+    { selector: 'edge.edge-inherit-ctrl',
       style: {
-        'border-style': 'dashed',
-        'border-width': 2,
-      }
-    },
-    // Inheritance edges (initial bezier; switched to taxi after layout)
-    { selector: 'edge.inheritance',
-      style: {
-        'line-color': '#B0B0B0',
-        'target-arrow-color': '#B0B0B0',
-        'target-arrow-shape': 'triangle',
-        'curve-style': 'bezier',
-        'width': 2,
-        'arrow-scale': 0.8,
-      }
-    },
-    // Extension edges (initial bezier; switched to taxi after layout)
-    { selector: 'edge.extension',
-      style: {
-        'line-color': '#C8884A',
-        'target-arrow-color': '#C8884A',
+        'line-color': '#0ea5e9',
+        'target-arrow-color': '#0ea5e9',
         'target-arrow-shape': 'triangle',
         'line-style': 'dashed',
         'curve-style': 'bezier',
-        'width': 1.5,
-        'arrow-scale': 0.7,
-        'opacity': 0.7,
+        'width': 2,
+        'arrow-scale': 0.8,
+        'opacity': 0.8,
       }
     },
-    // Runtime dependency edges (initial bezier; switched to taxi after layout)
-    { selector: 'edge.runtime',
+    // Inheritance edges (view) — dashed, same color as extension view
+    { selector: 'edge.edge-inherit-view',
       style: {
-        'line-color': '#7A9DBF',
-        'target-arrow-color': '#7A9DBF',
+        'line-color': '#a855f7',
+        'target-arrow-color': '#a855f7',
+        'target-arrow-shape': 'triangle',
+        'line-style': 'dashed',
+        'curve-style': 'bezier',
+        'width': 2,
+        'arrow-scale': 0.8,
+        'opacity': 0.8,
+      }
+    },
+    // Extension edges (controller) — styled like data_grid's edge-ext-ctrl
+    { selector: 'edge.edge-ext-ctrl',
+      style: {
+        'line-color': '#0ea5e9',
+        'target-arrow-color': '#0ea5e9',
+        'target-arrow-shape': 'triangle',
+        'curve-style': 'bezier',
+        'width': 2,
+        'opacity': 0.8,
+        'arrow-scale': 0.8,
+      }
+    },
+    // Extension edges (view) — styled like data_grid's edge-ext-view
+    { selector: 'edge.edge-ext-view',
+      style: {
+        'line-color': '#a855f7',
+        'target-arrow-color': '#a855f7',
+        'target-arrow-shape': 'triangle',
+        'curve-style': 'bezier',
+        'width': 2,
+        'opacity': 0.8,
+        'arrow-scale': 0.8,
+      }
+    },
+    // Runtime dependency edges — dotted, yellow
+    { selector: 'edge.edge-runtime',
+      style: {
+        'line-color': '#f6e05e',
+        'target-arrow-color': '#f6e05e',
         'target-arrow-shape': 'triangle',
         'line-style': 'dotted',
         'curve-style': 'bezier',
         'width': 1,
         'arrow-scale': 0.6,
-        'opacity': 0.7,
+        'opacity': 0.5,
       }
     },
     // Highlighted state
@@ -373,14 +399,8 @@ cy.layout(initialLayoutOpts).run();
 // ── Interactivity: hover / click-to-pin / edge highlight ──
 
 function getVisibleEdges(eles) {
-  const showInherit = document.getElementById('toggle-inheritance').checked;
-  const showExt = document.getElementById('toggle-extensions').checked;
-  const showRuntime = document.getElementById('toggle-runtime').checked;
   return eles.filter(function(ele) {
     if (!ele.isEdge()) return false;
-    if (ele.hasClass('inheritance') && !showInherit) return false;
-    if (ele.hasClass('extension') && !showExt) return false;
-    if (ele.hasClass('runtime') && !showRuntime) return false;
     return ele.style('display') !== 'none';
   });
 }
@@ -489,22 +509,18 @@ document.getElementById('search').addEventListener('input', function(e) {
 });
 
 // ── Edge Type Toggles ───────────────────────────
-function applyEdgeFilters() {
-  const showInherit = document.getElementById('toggle-inheritance').checked;
-  const showExt = document.getElementById('toggle-extensions').checked;
-  const showRuntime = document.getElementById('toggle-runtime').checked;
-  cy.edges('.inheritance').style('display', showInherit ? 'element' : 'none');
-  cy.edges('.extension').style('display', showExt ? 'element' : 'none');
-  cy.edges('.runtime').style('display', showRuntime ? 'element' : 'none');
-  if (selectedTarget) {
-    const set = computeHighlightSet(selectedTarget);
-    cy.elements().removeClass('highlighted').addClass('faded');
-    set.removeClass('faded').addClass('highlighted');
-  }
-}
-document.getElementById('toggle-inheritance').addEventListener('change', applyEdgeFilters);
-document.getElementById('toggle-extensions').addEventListener('change', applyEdgeFilters);
-document.getElementById('toggle-runtime').addEventListener('change', applyEdgeFilters);
+document.querySelectorAll('.edge-toggle').forEach(function(cb) {
+  cb.addEventListener('change', function() {
+    var cls = this.getAttribute('data-cls');
+    cy.edges('.' + cls).style('display', this.checked ? 'element' : 'none');
+    if (selectedTarget) {
+      const set = computeHighlightSet(selectedTarget);
+      cy.elements().removeClass('highlighted').addClass('faded');
+      set.removeClass('faded').addClass('highlighted');
+    }
+  });
+  if (!cb.checked) { var cls = cb.getAttribute('data-cls'); cy.edges('.' + cls).style('display', 'none'); }
+});
 
 // ── Feature Area Toggles ────────────────────────
 document.getElementById('toggle-all-areas').addEventListener('change', function() {
@@ -530,7 +546,16 @@ document.querySelectorAll('.area-toggle').forEach(cb => {
         else e.style('display', 'element');
       });
     });
-    applyEdgeFilters();
+    // Re-apply edge type visibility after area filter changes
+    document.querySelectorAll('.edge-toggle').forEach(function(ecb) {
+      var cls = ecb.getAttribute('data-cls');
+      if (!ecb.checked) cy.edges('.' + cls).style('display', 'none');
+    });
+    if (selectedTarget) {
+      const set = computeHighlightSet(selectedTarget);
+      cy.elements().removeClass('highlighted').addClass('faded');
+      set.removeClass('faded').addClass('highlighted');
+    }
     const allToggles = document.querySelectorAll('.area-toggle');
     const allChecked = Array.from(allToggles).every(t => t.checked);
     const noneChecked = Array.from(allToggles).every(t => !t.checked);
@@ -564,10 +589,7 @@ document.getElementById('btn-reset').addEventListener('click', () => {
   document.getElementById('toggle-all-areas').indeterminate = false;
   document.querySelectorAll('.area-toggle').forEach(cb => { cb.checked = true; });
   cy.elements().style('display', 'element');
-  document.getElementById('toggle-inheritance').checked = true;
-  document.getElementById('toggle-extensions').checked = true;
-  document.getElementById('toggle-runtime').checked = true;
-  applyEdgeFilters();
+  document.querySelectorAll('.edge-toggle').forEach(function(cb) { cb.checked = true; });
   document.querySelector('input[name="orientation"][value="TB"]').checked = true;
   document.querySelector('input[name="edge-routing"][value="taxi"]').checked = true;
   updateEdgeStyles('TB');
