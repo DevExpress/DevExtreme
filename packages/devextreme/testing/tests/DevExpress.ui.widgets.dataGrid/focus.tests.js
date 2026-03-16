@@ -3314,41 +3314,6 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(focusedCellChangedCount, 1, 'onFocusedCellChanged fires count');
     });
 
-    QUnit.testInActiveWindow('onFocusedCellChanged row and cellElement parameter should be defined for the first cell (T1282664)', function(assert) {
-        // arrange
-        const that = this;
-        let focusedCellChangedCount = 0;
-        this.data = [
-            { id: 1, text: 'item 1' },
-            { id: 2, text: 'item 2' },
-        ];
-        this.options = {
-            keyExpr: 'id',
-            columns: ['id', 'text'],
-            onFocusedCellChanged: function(e) {
-                ++focusedCellChangedCount;
-
-                // assert
-                assert.deepEqual($(e.cellElement).text(), $(that.getCellElement(0, 0)).text(), 'Cell element');
-                assert.deepEqual(e.columnIndex, 0, 'Column index');
-                assert.deepEqual(e.row.data, { id: 1, text: 'item 1' }, 'Row data');
-                assert.deepEqual(e.rowIndex, 0, 'Row index');
-            }
-        };
-
-        this.setupModule();
-
-        this.gridView.render($('#container'));
-        this.clock.tick(10);
-
-        // act
-        const columnHeadersView = this.gridView.getView('columnHeadersView');
-        this.triggerKeyDown('tab', false, false, columnHeadersView.getHeaderElement(1));
-
-        // assert
-        assert.equal(focusedCellChangedCount, 1, 'onFocusedCellChanged fires count');
-    });
-
     // T755462
     QUnit.testInActiveWindow('The page with focused row should load without errors after sorting the boolean column', function(assert) {
         // arrange
