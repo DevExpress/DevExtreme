@@ -2,7 +2,6 @@
 
 const crypto = require('crypto');
 const express = require('express');
-const serveStatic = require('serve-static');
 const cookieParser = require('cookie-parser');
 const { join, resolve } = require('path');
 const { readFileSync, readdirSync } = require('fs');
@@ -376,40 +375,18 @@ const demoIndexHandler = (request, response) => {
   response.send(fileContent);
 };
 
-const createRateLimiter = (windowMs = 60000, maxRequests = 200) => {
-  const hits = new Map();
-
-  setInterval(() => hits.clear(), windowMs);
-
-  return (req, res, next) => {
-    const key = req.ip;
-    const count = (hits.get(key) || 0) + 1;
-    hits.set(key, count);
-
-    if (count > maxRequests) {
-      res.status(429).send('Too Many Requests');
-      return;
-    }
-    next();
-  };
-};
-
-const rateLimiter = createRateLimiter();
-
 const app = express();
 app.use(cookieParser());
 app.use(cspMiddleware);
 
-app.post('/csp-report', rateLimiter, cspReportHandler);
-app.get('/csp-violations', rateLimiter, cspViolationsHandler);
-app.delete('/csp-violations', rateLimiter, cspViolationsClearHandler);
+app.post('/csp-report', cspReportHandler);
+app.get('/csp-violations', cspViolationsHandler);
+app.delete('/csp-violations', cspViolationsClearHandler);
 
-app.get('/apps/demos/Demos/:widget/:name/:approach', rateLimiter, demoIndexHandler);
-app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, rateLimiter, demoIndexHandler);
+app.get('/apps/demos/Demos/:widget/:name/:approach', demoIndexHandler);
+app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, demoIndexHandler);
 
-app.use(
-  serveStatic(root, { index: [indexFileName] }),
-);
+app.use(express.static(root, { index: [indexFileName] }));
 
 const server = app.listen(port, host, () => {
   console.log(`CSP Demo server listening on http://${host}:${port}`);

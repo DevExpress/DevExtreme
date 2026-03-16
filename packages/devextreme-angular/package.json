@@ -67,7 +67,7 @@
     "style-loader": "3.3.4",
     "tslib": "2.6.3",
     "typescript": "catalog:angular",
-    "webpack": "5.105.0",
+    "webpack": "5.105.4",
     "yargs": "17.7.2",
     "zone.js": "catalog:angular"
   },

@@ -1,25 +1,22 @@
 const dataSource = [{
   country: 'USA',
-  medals: 110,
+  medals: 126,
 }, {
-  country: 'China',
-  medals: 100,
-}, {
-  country: 'Russia',
-  medals: 72,
-}, {
-  country: 'Britain',
-  medals: 47,
-}, {
-  country: 'Australia',
-  medals: 46,
-}, {
-  country: 'Germany',
-  medals: 41,
+  country: 'Great Britain',
+  medals: 65,
 }, {
   country: 'France',
+  medals: 64,
+}, {
+  country: 'Australia',
+  medals: 53,
+}, {
+  country: 'Japan',
+  medals: 45,
+}, {
+  country: 'Italy',
   medals: 40,
 }, {
-  country: 'South Korea',
-  medals: 31,
+  country: 'Germany',
+  medals: 33,
 }];
