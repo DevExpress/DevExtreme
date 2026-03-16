@@ -379,7 +379,7 @@ const demoIndexHandler = (request, response) => {
 
 const rateLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 200,
+  max: 2000,
 });
 
 const app = express();
