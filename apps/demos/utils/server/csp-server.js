@@ -408,6 +408,7 @@ app.get('/apps/demos/Demos/:widget/:name/:approach', rateLimiter, demoIndexHandl
 app.get(`/apps/demos/Demos/:widget/:name/:approach/${indexFileName}`, rateLimiter, demoIndexHandler);
 
 app.use(
+  rateLimiter,
   serveStatic(root, { index: [indexFileName] }),
 );
 
