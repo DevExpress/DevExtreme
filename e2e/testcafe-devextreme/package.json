@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "catalog:eslint8",
-    "@babel/plugin-transform-runtime": "7.28.5",
+    "@babel/plugin-transform-runtime": "7.29.0",
     "@testcafe-community/axe": "3.5.0",
     "@types/jquery": "catalog:",
     "axe-core": "catalog:",
