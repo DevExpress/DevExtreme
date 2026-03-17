@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 
 
-import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/speed_dial_action';
+import type { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/speed_dial_action';
 
 import DxSpeedDialAction from 'devextreme/ui/speed_dial_action';
 

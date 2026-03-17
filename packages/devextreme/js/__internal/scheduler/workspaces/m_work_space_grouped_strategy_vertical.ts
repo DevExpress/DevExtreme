@@ -16,7 +16,7 @@ class VerticalGroupedStrategy {
   }
 
   prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow) {
-    let rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace._getRowCount();
+    let rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace.getRowCount();
 
     if (this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
       rowIndex += groupIndex;
@@ -33,7 +33,7 @@ class VerticalGroupedStrategy {
   }
 
   getGroupIndex(rowIndex) {
-    return Math.floor(rowIndex / this._workSpace._getRowCount());
+    return Math.floor(rowIndex / this._workSpace.getRowCount());
   }
 
   calculateHeaderCellRepeatCount() {
@@ -49,7 +49,7 @@ class VerticalGroupedStrategy {
   }
 
   getTotalRowCount() {
-    return this._workSpace._getRowCount() * this._workSpace._getGroupCount();
+    return this._workSpace.getRowCount() * this._workSpace._getGroupCount();
   }
 
   calculateTimeCellRepeatCount() {
@@ -57,7 +57,7 @@ class VerticalGroupedStrategy {
   }
 
   getWorkSpaceMinWidth() {
-    let minWidth = this._workSpace._getWorkSpaceWidth();
+    let minWidth = this._workSpace.getWorkSpaceWidth();
     const workSpaceElementWidth = getBoundingRect(this._workSpace.$element().get(0)).width;
     const workspaceContainerWidth = workSpaceElementWidth
       - this._workSpace.getTimePanelWidth()
@@ -118,7 +118,7 @@ class VerticalGroupedStrategy {
     const offset = this._workSpace.getIndicatorOffset(0);
     const tableOffset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
     const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
-    let verticalOffset = this._workSpace._getRowCount() * this._workSpace.getCellHeight() * i;
+    let verticalOffset = this._workSpace.getRowCount() * this._workSpace.getCellHeight() * i;
 
     if (this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
       verticalOffset += this._workSpace.getAllDayHeight() * (i + 1);
@@ -149,7 +149,7 @@ class VerticalGroupedStrategy {
   }
 
   getShaderMaxHeight() {
-    let height = this._workSpace._getRowCount() * this._workSpace.getCellHeight();
+    let height = this._workSpace.getRowCount() * this._workSpace.getCellHeight();
 
     if (this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
       height += this._workSpace.getCellHeight();
@@ -178,7 +178,7 @@ class VerticalGroupedStrategy {
   }
 
   _addLastGroupCellClass(cellClass, index) {
-    if (index % this._workSpace._getRowCount() === 0) {
+    if (index % this._workSpace.getRowCount() === 0) {
       return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
     }
 
@@ -186,7 +186,7 @@ class VerticalGroupedStrategy {
   }
 
   _addFirstGroupCellClass(cellClass, index) {
-    if ((index - 1) % this._workSpace._getRowCount() === 0) {
+    if ((index - 1) % this._workSpace.getRowCount() === 0) {
       return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
     }
 

@@ -28,7 +28,7 @@
         item-text-position="bottom"
       />
       <DxExport :enabled="true"/>
-      <DxTitle text="Energy Consumption in 2004">
+      <DxTitle text="Energy Consumption in 2024">
         <DxSubtitle text="(Millions of Tons, Oil Equivalent)"/>
       </DxTitle>
       <DxTooltip :enabled="true"/>

@@ -12,8 +12,8 @@ import {
 
 
 
-import { dxFilterBuilderField, FieldInfo } from 'devextreme/ui/filter_builder';
-import { DataType } from 'devextreme/common';
+import type { dxFilterBuilderField, FieldInfo } from 'devextreme/ui/filter_builder';
+import type { DataType } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

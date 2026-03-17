@@ -8,20 +8,23 @@ $(() => {
     paginate: false,
   });
 
-  const alumOptions = {
+  const copOptions = {
     dataSource: source,
     argumentField: 'month',
-    valueField: 'alum2010',
+    valueField: 'copper2021',
     type: 'bar',
     showMinMax: true,
     tooltip: {
-      format: 'currency',
+      format: {
+        type: 'currency',
+        precision: 2,
+      },
     },
   };
   const nickOptions = {
     dataSource: source,
     argumentField: 'month',
-    valueField: 'nickel2010',
+    valueField: 'nickel2021',
     type: 'bar',
     showMinMax: true,
     showFirstLast: false,
@@ -29,18 +32,24 @@ $(() => {
     minColor: '#9ab57e',
     maxColor: '#8076bb',
     tooltip: {
-      format: 'currency',
+      format: {
+        type: 'currency',
+        precision: 2,
+      },
     },
   };
-  const copOptions = {
+  const palOptions = {
     dataSource: source,
     argumentField: 'month',
-    valueField: 'copper2010',
+    valueField: 'palladium2021',
     type: 'bar',
     barPositiveColor: '#e55253',
     firstLastColor: '#ebdd8f',
     tooltip: {
-      format: 'currency',
+      format: {
+        type: 'currency',
+        precision: 2,
+      },
     },
   };
 
@@ -55,15 +64,15 @@ $(() => {
     },
   });
 
-  $('.alum2010').dxSparkline(alumOptions);
-  $('.nick2010').dxSparkline(nickOptions);
-  $('.cop2010').dxSparkline(copOptions);
+  $('.cop2021').dxSparkline(copOptions);
+  $('.nick2021').dxSparkline(nickOptions);
+  $('.pal2021').dxSparkline(palOptions);
 
-  $('.alum2011').dxSparkline($.extend(alumOptions, { valueField: 'alum2011' }));
-  $('.nick2011').dxSparkline($.extend(nickOptions, { valueField: 'nickel2011' }));
-  $('.cop2011').dxSparkline($.extend(copOptions, { valueField: 'copper2011' }));
+  $('.cop2022').dxSparkline($.extend(copOptions, { valueField: 'copper2022' }));
+  $('.nick2022').dxSparkline($.extend(nickOptions, { valueField: 'nickel2022' }));
+  $('.pal2022').dxSparkline($.extend(palOptions, { valueField: 'palladium2022' }));
 
-  $('.alum2012').dxSparkline($.extend(alumOptions, { valueField: 'alum2012' }));
-  $('.nick2012').dxSparkline($.extend(nickOptions, { valueField: 'nickel2012' }));
-  $('.cop2012').dxSparkline($.extend(copOptions, { valueField: 'copper2012' }));
+  $('.cop2023').dxSparkline($.extend(copOptions, { valueField: 'copper2023' }));
+  $('.nick2023').dxSparkline($.extend(nickOptions, { valueField: 'nickel2023' }));
+  $('.pal2023').dxSparkline($.extend(palOptions, { valueField: 'palladium2023' }));
 });

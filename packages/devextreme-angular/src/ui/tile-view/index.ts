@@ -21,13 +21,12 @@ import {
     QueryList
 } from '@angular/core';
 
-export { ExplicitTypes } from 'devextreme/ui/tile_view';
+export type { ExplicitTypes } from 'devextreme/ui/tile_view';
 
-import DataSource from 'devextreme/data/data_source';
-import { dxTileViewItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/tile_view';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { Orientation, ScrollbarMode } from 'devextreme/common';
+import type { dxTileViewItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/tile_view';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { Orientation, ScrollbarMode } from 'devextreme/common';
 
 import DxTileView from 'devextreme/ui/tile_view';
 

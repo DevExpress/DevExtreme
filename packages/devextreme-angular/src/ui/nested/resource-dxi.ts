@@ -12,8 +12,8 @@ import {
 
 
 
-import { Store } from 'devextreme/data';
-import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data';
+import type { default as DataSource, Options as DataSourceOptions } from 'devextreme/data/data_source';
 
 import {
     DxIntegrationModule,

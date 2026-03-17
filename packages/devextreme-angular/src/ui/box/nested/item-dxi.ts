@@ -16,7 +16,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { dxBoxOptions } from 'devextreme/ui/box';
+import type { dxBoxOptions } from 'devextreme/ui/box';
 
 import {
     DxIntegrationModule,

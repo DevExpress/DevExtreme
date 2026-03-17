@@ -5,11 +5,11 @@ import {
     Component,
 } from '@angular/core';
 
-import { Position, PositionAlignment } from 'devextreme/common';
-import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
-import { dxPopupToolbarItem } from 'devextreme/ui/popup';
+import type { Position, PositionAlignment } from 'devextreme/common';
+import type { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
+import type { UserDefinedElement } from 'devextreme/core/element';
+import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
+import type { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 @Component({
     template: ''

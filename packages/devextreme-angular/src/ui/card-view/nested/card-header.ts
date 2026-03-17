@@ -20,7 +20,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import { CardHeaderItem, CardHeaderPredefinedItem } from 'devextreme/ui/card_view';
+import type { CardHeaderItem, CardHeaderPredefinedItem } from 'devextreme/ui/card_view';
 
 import {
     DxIntegrationModule,

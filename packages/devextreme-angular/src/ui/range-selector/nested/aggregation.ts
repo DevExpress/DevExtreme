@@ -14,7 +14,7 @@ import {
 
 
 
-import { chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod } from 'devextreme/viz/chart';
+import type { chartPointAggregationInfoObject, chartSeriesObject, ChartSeriesAggregationMethod } from 'devextreme/viz/chart';
 
 import {
     DxIntegrationModule,

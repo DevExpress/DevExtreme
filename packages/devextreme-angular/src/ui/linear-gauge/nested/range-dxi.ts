@@ -12,7 +12,7 @@ import {
 
 
 
-import { ChartsColor } from 'devextreme/common/charts';
+import type { ChartsColor } from 'devextreme/common/charts';
 
 import {
     DxIntegrationModule,

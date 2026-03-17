@@ -1,4 +1,4 @@
-import { NgModule, Injector, createNgModuleRef } from '@angular/core';
+import { NgModule, Injector, createNgModule } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import devextremeAjax from 'devextreme/core/utils/ajax';
 import { sendRequestFactory } from './ajax';
@@ -13,7 +13,7 @@ export class DxHttpModule {
     let httpClient: HttpClient = injector.get(HttpClient, null);
 
     if (!httpClient) {
-      const moduleRef = createNgModuleRef(HttpClientModule, injector);
+      const moduleRef = createNgModule(HttpClientModule, injector);
 
       httpClient = moduleRef.injector.get(HttpClient);
     }

@@ -26,7 +26,7 @@ function App() {
       dataSource={exportImportData}
     >
       <Title text="Imports/Exports of Goods and Services">
-        <Subtitle text="(billion US$, 2012)" />
+        <Subtitle text="(billion US$, 2024)" />
       </Title>
 
       <CommonSeriesSettings>

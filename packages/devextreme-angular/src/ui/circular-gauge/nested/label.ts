@@ -14,9 +14,9 @@ import {
 
 
 
-import { Font, LabelOverlap } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
-import { CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
+import type { Font, LabelOverlap } from 'devextreme/common/charts';
+import type { Format } from 'devextreme/common/core/localization';
+import type { CircularGaugeLabelOverlap } from 'devextreme/viz/circular_gauge';
 
 import {
     DxIntegrationModule,

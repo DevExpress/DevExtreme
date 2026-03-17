@@ -18,13 +18,13 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 
-import * as CommonTypes from 'devextreme/common';
-import { FormItemComponent, FormItemType, LabelLocation, FormPredefinedButtonItem, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
-import { HorizontalAlignment, VerticalAlignment, ToolbarItemLocation, ToolbarItemComponent, ButtonType } from 'devextreme/common';
-import { SchedulerPredefinedToolbarItem, DateNavigatorItemProperties } from 'devextreme/ui/scheduler';
-import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
-import { dxButtonOptions } from 'devextreme/ui/button';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import type * as CommonTypes from 'devextreme/common';
+import type { FormItemComponent, FormItemType, LabelLocation, FormPredefinedButtonItem, dxFormButtonItem, dxFormEmptyItem, dxFormGroupItem, dxFormSimpleItem, dxFormTabbedItem } from 'devextreme/ui/form';
+import type { HorizontalAlignment, VerticalAlignment, ToolbarItemLocation, ToolbarItemComponent, ButtonType } from 'devextreme/common';
+import type { SchedulerPredefinedToolbarItem, DateNavigatorItemProperties } from 'devextreme/ui/scheduler';
+import type { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
+import type { dxButtonOptions } from 'devextreme/ui/button';
+import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 
 import {
     DxIntegrationModule,

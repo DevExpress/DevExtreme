@@ -52,7 +52,7 @@
     "shx": "0.4.0",
     "source-map": "0.7.6",
     "stylelint": "15.11.0",
-    "tar-fs": "3.1.1",
+    "tar-fs": "3.1.2",
     "ts-node": "10.9.2",
     "vue": "3.4.27",
     "yargs": "17.7.2"
@@ -87,9 +87,9 @@
       "express-rate-limit@>=8.2.0 <8.2.2": "^8.2.2",
       "immutable@>=5.0.0 <5.1.5": "^5.1.5",
       "minimatch@<3.1.5": "3.1.5",
-      "minimatch@>=9.0.0 < 9.0.7": "9.0.7",
+      "minimatch@>=9.0.0 < 9.0.7": "9.0.9",
       "minimatch@>=10.0.0 < 10.2.4": "10.2.4",
-      "serialize-javascript@<=7.0.2": "7.0.3"
+      "serialize-javascript@<=7.0.2": "7.0.4"
     }
   },
   "packageManager": "pnpm@9.15.9"

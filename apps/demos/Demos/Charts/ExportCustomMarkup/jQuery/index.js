@@ -9,10 +9,6 @@ $(() => {
     },
     series: [
       {
-        valueField: 'year1990',
-        name: '1990',
-      },
-      {
         valueField: 'year2000',
         name: '2000',
       },
@@ -21,12 +17,16 @@ $(() => {
         name: '2010',
       },
       {
-        valueField: 'year2016',
-        name: '2016',
+        valueField: 'year2020',
+        name: '2020',
       },
       {
-        valueField: 'year2017',
-        name: '2017',
+        valueField: 'year2021',
+        name: '2021',
+      },
+      {
+        valueField: 'year2022',
+        name: '2022',
       },
     ],
     legend: {

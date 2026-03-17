@@ -18,7 +18,7 @@ import {
 
 
 
-import { dxFilterBuilderCustomOperation, dxFilterBuilderField, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
+import type { dxFilterBuilderCustomOperation, dxFilterBuilderField, GroupOperation, ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
 
 import {
     DxIntegrationModule,

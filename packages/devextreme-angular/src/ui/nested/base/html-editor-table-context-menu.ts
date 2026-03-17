@@ -5,7 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
-import { HtmlEditorPredefinedContextMenuItem } from 'devextreme/ui/html_editor';
+import type { HtmlEditorPredefinedContextMenuItem } from 'devextreme/ui/html_editor';
 
 @Component({
     template: ''

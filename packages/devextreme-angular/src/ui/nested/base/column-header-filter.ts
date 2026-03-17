@@ -5,11 +5,11 @@ import {
     Component,
 } from '@angular/core';
 
-import { SearchMode } from 'devextreme/common';
-import { ColumnHeaderFilterSearchConfig, HeaderFilterGroupInterval, HeaderFilterSearchConfig, HeaderFilterTexts } from 'devextreme/common/grids';
-import { Store } from 'devextreme/data';
-import { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
+import type { SearchMode } from 'devextreme/common';
+import type { ColumnHeaderFilterSearchConfig, HeaderFilterGroupInterval, HeaderFilterSearchConfig, HeaderFilterTexts } from 'devextreme/common/grids';
+import type { Store } from 'devextreme/data';
+import type { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import type { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
 
 @Component({
     template: ''
