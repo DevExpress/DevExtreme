@@ -28,12 +28,12 @@ async function checkHeaderCellBorders(
 ): Promise<void> {
   const headers = dataGrid.getHeaders();
 
-  for (let r = 0; r < expectedRows.length; r += 1) {
-    const { rowIndex, cells } = expectedRows[r];
+  // eslint-disable-next-line no-restricted-syntax
+  for (const { rowIndex, cells } of expectedRows) {
     const headerRow = headers.getHeaderRow(rowIndex);
 
-    for (let c = 0; c < cells.length; c += 1) {
-      const { columnIndex, name, expected: [leftWidth, rightWidth] } = cells[c];
+    // eslint-disable-next-line no-restricted-syntax
+    for (const { columnIndex, name, expected: [leftWidth, rightWidth] } of cells) {
       const { element } = headerRow.getHeaderCell(columnIndex);
 
       const borderLeft = await element.getStyleProperty('border-left-width');
