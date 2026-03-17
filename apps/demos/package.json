@@ -54,7 +54,7 @@
         "inferno": "catalog:",
         "inferno-create-element": "catalog:",
         "jquery": "catalog:",
-        "jspdf": "4.2.0",
+        "jspdf": "4.2.1",
         "jspdf-autotable": "5.0.2",
         "jszip": "^3.10.1",
         "luxon": "3.4.4",
