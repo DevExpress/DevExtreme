@@ -10,7 +10,7 @@ import Chart, {
 import { dataSource } from './data.js';
 
 const customizeSeries = (valueFromNameField) =>
-  valueFromNameField === 2020 ? { type: 'line', label: { visible: true }, color: '#ff3f7a' } : {};
+  (valueFromNameField === 2020 ? { type: 'line', label: { visible: true }, color: '#ff3f7a' } : {});
 function App() {
   return (
     <Chart
