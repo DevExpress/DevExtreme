@@ -47,6 +47,9 @@ const POSITION_FLIP_MAP = {
   center: 'center',
 };
 
+const HOVER_HIDE_EVENTS = ['mouseleave', 'mouseout'];
+const HOVER_HIDE_DELAY = 50;
+
 const ESC_KEY_NAME = 'escape';
 
 type PopoverTarget = string | dxElementWrapper | Element | undefined;
@@ -204,6 +207,8 @@ class Popover<
     super._render.apply(this, arguments);
     this._detachEvents(this.option('target'));
     this._attachEvents();
+    this._detachHoverableOverlay();
+    this._attachHoverableOverlay();
   }
 
   _detachEvents(target): void {
@@ -216,10 +221,62 @@ class Popover<
     this._attachEvent('hide');
   }
 
-  _createEventHandler(name) {
-    const action = this._createAction(() => {
-      const delay = this._getEventDelay(`${name}Event`);
+  // eslint-disable-next-line class-methods-use-this
+  _isHoverHideEventName(eventName: string): boolean {
+    return HOVER_HIDE_EVENTS.some((hoverEvent) => eventName.split(/\s+/).includes(hoverEvent));
+  }
+
+  _attachHoverableOverlay(): void {
+    const hideEventName = this._getEventName('hideEvent');
+    if (!hideEventName || !this._isHoverHideEventName(hideEventName)) {
+      return;
+    }
+    const $overlayContent = this.$overlayContent();
+    if (!$overlayContent.length) {
+      return;
+    }
+
+    const namespace = `${this.NAME as string}Hoverable`;
+    const hoverInEventName = addNamespace('mouseenter', namespace);
+    const hoverOutEventName = addNamespace('mouseleave', namespace);
+
+    eventsEngine.off($overlayContent, hoverInEventName);
+    eventsEngine.on($overlayContent, hoverInEventName, () => {
       this._clearEventsTimeouts();
+    });
+
+    eventsEngine.off($overlayContent, hoverOutEventName);
+    eventsEngine.on($overlayContent, hoverOutEventName, (e) => {
+      const { target } = this.option();
+
+      if (target && $(e.relatedTarget).closest(target).length) {
+        return;
+      }
+      this._clearEventsTimeouts();
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.hide();
+    });
+  }
+
+  _detachHoverableOverlay(): void {
+    const $overlayContent = this.$overlayContent();
+    if (!$overlayContent.length) {
+      return;
+    }
+    const namespace = `${this.NAME as string}Hoverable`;
+    eventsEngine.off($overlayContent, addNamespace('mouseenter', namespace));
+    eventsEngine.off($overlayContent, addNamespace('mouseleave', namespace));
+  }
+
+  _createEventHandler(name: string) {
+    const action = this._createAction(() => {
+      const explicitDelay = this._getEventDelay(`${name}Event`);
+      this._clearEventsTimeouts();
+
+      const hideEventName = name === 'hide' ? this._getEventName('hideEvent') : null;
+      const isHoverHide = hideEventName && this._isHoverHideEventName(hideEventName);
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      const delay = explicitDelay || (isHoverHide ? HOVER_HIDE_DELAY : 0);
 
       if (delay) {
         this._timeouts[name] = setTimeout(() => {
@@ -566,6 +623,7 @@ class Popover<
   _clean(): void {
     this._detachEscapeKeyHandler();
     this._detachEvents(this.option('target'));
+    this._detachHoverableOverlay();
     // @ts-expect-error ts-error
     super._clean.apply(this, arguments);
   }
@@ -603,6 +661,11 @@ class Popover<
         const { target } = this.option();
         this._detachEvent(target, eventName, event);
         this._attachEvent(eventName);
+
+        if (name === 'hideEvent') {
+          this._detachHoverableOverlay();
+          this._attachHoverableOverlay();
+        }
         break;
       }
       case 'visible':
