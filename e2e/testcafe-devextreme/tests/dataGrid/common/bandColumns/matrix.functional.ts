@@ -83,14 +83,14 @@ configs.forEach((
             rowIndex: 0,
             cells: [
               { columnIndex: 0, name: 'Band Column 1', expected: rtlEnabled ? [1, 0] : [0, 1] },
-              { columnIndex: 3, name: 'Band Column 2', expected: rtlEnabled ? [0, 1] : [1, 0] },
+              { columnIndex: 3, name: 'Band Column 2', expected: rtlEnabled ? [0, 0] : [1, 0] },
             ],
           },
           {
             rowIndex: 1,
             cells: [
               { columnIndex: 0, name: 'Nested Band Column 1', expected: rtlEnabled ? [1, 0] : [0, 1] },
-              { columnIndex: 3, name: 'Nested Band Column 2', expected: rtlEnabled ? [0, 1] : [1, 0] },
+              { columnIndex: 3, name: 'Nested Band Column 2', expected: rtlEnabled ? [0, 0] : [1, 0] },
             ],
           },
           {
@@ -101,7 +101,7 @@ configs.forEach((
               { columnIndex: 2, name: 'Col3', expected: [1, 1] },
               { columnIndex: 3, name: 'Col4', expected: [1, 1] },
               { columnIndex: 4, name: 'Col5', expected: [1, 1] },
-              { columnIndex: 5, name: 'Col6', expected: rtlEnabled ? [0, 1] : [1, 0] },
+              { columnIndex: 5, name: 'Col6', expected: rtlEnabled ? [0, 0] : [1, 0] },
             ],
           },
         ];
@@ -111,26 +111,26 @@ configs.forEach((
         {
           rowIndex: 0,
           cells: [
-            { columnIndex: 0, name: 'Band Column 1', expected: rtlEnabled ? [1, 0] : [0, 0] },
-            { columnIndex: 3, name: 'Band Column 2', expected: rtlEnabled ? [0, 0] : [1, 0] },
+            { columnIndex: 0, name: 'Band Column 1', expected: rtlEnabled ? [0, 0] : [0, 0] },
+            { columnIndex: 3, name: 'Band Column 2', expected: rtlEnabled ? [0, 1] : [1, 0] },
           ],
         },
         {
           rowIndex: 1,
           cells: [
-            { columnIndex: 0, name: 'Nested Band Column 1', expected: rtlEnabled ? [1, 0] : [0, 0] },
-            { columnIndex: 3, name: 'Nested Band Column 2', expected: rtlEnabled ? [0, 0] : [1, 0] },
+            { columnIndex: 0, name: 'Nested Band Column 1', expected: rtlEnabled ? [0, 0] : [0, 0] },
+            { columnIndex: 3, name: 'Nested Band Column 2', expected: rtlEnabled ? [0, 1] : [1, 0] },
           ],
         },
         {
           rowIndex: 2,
           cells: [
-            { columnIndex: 0, name: 'Col1', expected: rtlEnabled ? [1, 0] : [0, 0] },
-            { columnIndex: 1, name: 'Col2', expected: [1, 0] },
-            { columnIndex: 2, name: 'Col3', expected: [1, 0] },
-            { columnIndex: 3, name: 'Col4', expected: [1, 0] },
-            { columnIndex: 4, name: 'Col5', expected: [1, 0] },
-            { columnIndex: 5, name: 'Col6', expected: rtlEnabled ? [0, 0] : [1, 0] },
+            { columnIndex: 0, name: 'Col1', expected: [0, 0] },
+            { columnIndex: 1, name: 'Col2', expected: rtlEnabled ? [0, 1] : [1, 0] },
+            { columnIndex: 2, name: 'Col3', expected: rtlEnabled ? [0, 1] : [1, 0] },
+            { columnIndex: 3, name: 'Col4', expected: rtlEnabled ? [0, 1] : [1, 0] },
+            { columnIndex: 4, name: 'Col5', expected: rtlEnabled ? [0, 1] : [1, 0] },
+            { columnIndex: 5, name: 'Col6', expected: rtlEnabled ? [0, 1] : [1, 0] },
           ],
         },
       ];
