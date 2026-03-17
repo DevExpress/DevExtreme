@@ -91,9 +91,9 @@
     },
     "devDependencies": {
         "@angular/platform-server": "21.1.6",
-        "@babel/core": "7.28.6",
+        "@babel/core": "7.29.0",
         "@babel/eslint-parser": "catalog:",
-        "@babel/preset-env": "7.28.6",
+        "@babel/preset-env": "7.29.0",
         "@babel/preset-react": "7.28.5",
         "@babel/preset-typescript": "7.28.5",
         "@eslint/compat": "1.4.1",
