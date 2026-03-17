@@ -19,7 +19,7 @@ function App() {
       <SeriesTemplate nameField="age" />
       <Title
         text="Age Breakdown of Facebook Users in the U.S."
-        subtitle="as of January 2017"
+        subtitle="as of January 2024"
       />
     </Chart>
   );

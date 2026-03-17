@@ -4,7 +4,7 @@
     :data-source="dataSource"
     :rotated="true"
     :bar-group-width="18"
-    title="Population Pyramid For Norway 2016"
+    title="Population Pyramid For Norway 2024"
   >
     <DxCommonSeriesSettings
       argument-field="age"
