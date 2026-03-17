@@ -25,7 +25,7 @@ if (window && window.config?.packageConfigPaths) {
   providers: [Service],
 })
 export class AppComponent {
-  private year: number = 2017;
+  private year: number = 2025;
 
   months: Month[];
 

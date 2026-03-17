@@ -151,7 +151,7 @@ function App() {
           enabled={true}
           customizeTooltip={customizeTooltip}
         />
-        <Title text="Weather in Las Vegas, NV (2017)" />
+        <Title text="Weather in Las Vegas, NV (2025)" />
       </Chart>
       <div className="options">
         <div className="caption">Options</div>

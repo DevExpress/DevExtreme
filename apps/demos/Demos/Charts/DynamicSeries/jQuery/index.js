@@ -10,7 +10,7 @@ $(() => {
     seriesTemplate: {
       nameField: 'year',
       customizeSeries(valueFromNameField) {
-        return valueFromNameField === 2009 ? { type: 'line', label: { visible: true }, color: '#ff3f7a' } : {};
+        return valueFromNameField === 2020 ? { type: 'line', label: { visible: true }, color: '#ff3f7a' } : {};
       },
     },
     title: {

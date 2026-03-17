@@ -29,7 +29,7 @@ export class AppComponent {
   }
 
   customizeSeries(valueFromNameField: number) {
-    return valueFromNameField === 2009
+    return valueFromNameField === 2020
       ? { type: 'line', label: { visible: true }, color: '#ff3f7a' } : {};
   }
 }

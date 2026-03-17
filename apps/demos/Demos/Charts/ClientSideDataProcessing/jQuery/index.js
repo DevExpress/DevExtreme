@@ -13,7 +13,7 @@ $(() => {
 
   $('#chart').dxChart({
     dataSource: source,
-    title: 'Temperature in Seattle: October 2017',
+    title: 'Temperature in Seattle: October 2025',
     size: {
       height: 420,
     },
