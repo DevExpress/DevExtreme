@@ -280,10 +280,11 @@ class Popover<
     });
 
     eventsEngine.off($overlayContent, hoverOutEventName);
-    eventsEngine.on($overlayContent, hoverOutEventName, (e) => {
+    eventsEngine.on($overlayContent, hoverOutEventName, (e: PointerEvent | MouseEvent) => {
       const { target } = this.option();
+      const { relatedTarget } = e;
 
-      if (target && $(e.relatedTarget).closest(target).length) {
+      if (target && relatedTarget instanceof Element && $(relatedTarget).closest(target).length) {
         return;
       }
 
