@@ -8,12 +8,12 @@ $(() => {
       type: 'bar',
     },
     series: [
-      { valueField: 'year1970', name: '1970' },
-      { valueField: 'year1980', name: '1980' },
       { valueField: 'year1990', name: '1990' },
       { valueField: 'year2000', name: '2000' },
-      { valueField: 'year2008', name: '2008' },
-      { valueField: 'year2009', name: '2009' },
+      { valueField: 'year2010', name: '2010' },
+      { valueField: 'year2020', name: '2020' },
+      { valueField: 'year2021', name: '2021' },
+      { valueField: 'year2022', name: '2022' },
     ],
     legend: {
       verticalAlignment: 'bottom',

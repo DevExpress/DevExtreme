@@ -1,25 +1,25 @@
 export const exportData = [{
-  country: 'China',
-  year2007: 0.18265,
-  year2008: -0.16682,
+  country: 'United Kingdom',
+  year2019: 0.142,
+  year2020: -0.153,
 }, {
   country: 'Germany',
-  year2007: 0.10467,
-  year2008: -0.20165,
+  year2019: 0.109,
+  year2020: -0.120,
 }, {
   country: 'United States',
-  year2007: 0.1232,
-  year2008: -0.17994,
+  year2019: 0.097,
+  year2020: -0.134,
 }, {
   country: 'Japan',
-  year2007: 0.10868,
-  year2008: -0.25622,
+  year2019: 0.106,
+  year2020: -0.111,
 }, {
   country: 'France',
-  year2007: 0.09526,
-  year2008: -0.23631,
+  year2019: 0.113,
+  year2020: -0.162,
 }, {
   country: 'Netherlands',
-  year2007: 0.14402,
-  year2008: -0.21923,
+  year2019: 0.128,
+  year2020: -0.147,
 }];

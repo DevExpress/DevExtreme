@@ -7,7 +7,7 @@
     palette="Ocean"
   >
     <DxTitle text="Imports/Exports of Goods and Services">
-      <DxSubtitle text="(billion US$, 2012)"/>
+      <DxSubtitle text="(billion US$, 2024)"/>
     </DxTitle>
     <DxLegend :visible="true"/>
     <DxExport :enabled="true"/>
