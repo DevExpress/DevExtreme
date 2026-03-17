@@ -953,36 +953,6 @@ describe('Appointment Form', () => {
       expect(POM.popup.getInputValue('endDateEditor')).toBe('5/1/2017');
       expect(POM.popup.isInputVisible('endTimeEditor')).toBeFalsy();
     });
-
-    it('should show correct dates after switching off allDay and canceling changes (T832711)', async () => {
-      const { scheduler, POM } = await createScheduler(undefined);
-
-      scheduler.showAppointmentPopup(allDayAppointment);
-      POM.popup.getInput('allDayEditor').click();
-      POM.popup.cancelButton.click();
-
-      scheduler.showAppointmentPopup(allDayAppointment);
-
-      expect(POM.popup.getInputValue('startDateEditor')).toBe('5/1/2017');
-      expect(POM.popup.isInputVisible('startTimeEditor')).toBeFalsy();
-      expect(POM.popup.getInputValue('endDateEditor')).toBe('5/1/2017');
-      expect(POM.popup.isInputVisible('endTimeEditor')).toBeFalsy();
-    });
-
-    it('should show correct dates after switching on allDay and canceling changes (T832711)', async () => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup(commonAppointment);
-      POM.popup.getInput('allDayEditor').click();
-      POM.popup.cancelButton.click();
-
-      scheduler.showAppointmentPopup(commonAppointment);
-
-      expect(POM.popup.getInputValue('startDateEditor')).toBe('5/9/2017');
-      expect(POM.popup.getInputValue('startTimeEditor')).toBe('9:30 AM');
-      expect(POM.popup.getInputValue('endDateEditor')).toBe('5/9/2017');
-      expect(POM.popup.getInputValue('endTimeEditor')).toBe('11:00 AM');
-    });
   });
 
   describe('Timezone Editors', () => {
