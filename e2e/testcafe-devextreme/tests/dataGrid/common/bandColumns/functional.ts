@@ -75,3 +75,49 @@ test('Changing dataField for a banded column with the columnOption method does n
     },
   }, '#otherContainer');
 });
+
+test('The first header class should update correctly when the first data column is hidden in responsive mode', async (t) => {
+  const dataGrid = new DataGrid(GRID_CONTAINER);
+  const firstHeaderRow = dataGrid.getHeaders().getHeaderRow(0);
+  const secondHeaderRow = dataGrid.getHeaders().getHeaderRow(1);
+
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(firstHeaderRow.getHeaderCell(0).isFirstHeader)
+    .ok()
+    .expect(firstHeaderRow.getHeaderCell(2).isFirstHeader)
+    .notOk()
+    .expect(secondHeaderRow.getHeaderCell(0).isFirstHeader)
+    .ok()
+    .expect(secondHeaderRow.getHeaderCell(1).isFirstHeader)
+    .notOk();
+
+  await dataGrid.apiOption('width', 275);
+
+  await t
+    .expect(firstHeaderRow.getHeaderCell(0).isFirstHeader)
+    .ok()
+    .expect(firstHeaderRow.getHeaderCell(2).isFirstHeader)
+    .notOk()
+    .expect(secondHeaderRow.getHeaderCell(0).isFirstHeader)
+    .notOk()
+    .expect(secondHeaderRow.getHeaderCell(1).isFirstHeader)
+    .ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    width: 350,
+    columnWidth: 100,
+    columnHidingEnabled: true,
+    dataSource: [{ field1: 1, field2: 2, field3: 3 }],
+    columns: [
+      {
+        caption: 'Band 1',
+        columns: [
+          { dataField: 'field1', hidingPriority: 0 },
+          { dataField: 'field2', hidingPriority: 1 },
+        ],
+      },
+      { dataField: 'field3', hidingPriority: 2 },
+    ],
+  });
+});

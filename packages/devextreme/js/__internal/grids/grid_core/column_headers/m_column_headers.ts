@@ -77,6 +77,35 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
       .toggleClass(HEADER_FILTER_INDICATOR_CLASS, !!$visibleIndicatorElements.filter(`.${this._getIndicatorClassName('headerFilter')}`).length);
   }
 
+  private toggleFirstHeaderClass(
+    $cell: dxElementWrapper,
+    column: Column,
+    rowIndex: number | null,
+  ): void {
+    const columnsController = this._columnsController;
+    const isFirstColumn = columnsController?.isFirstColumn(column, rowIndex);
+
+    $cell.toggleClass(this.addWidgetPrefix(CLASSES.firstHeader), isFirstColumn);
+  }
+
+  private updateFirstHeaderClasses(): void {
+    const $rows = this._getRowElementsCore().toArray();
+
+    $rows.forEach((row: Element, rowIndex: number) => {
+      const $cells = $(row).children('td').toArray();
+      const columns = this.getColumns(rowIndex);
+
+      $cells.forEach((cell: Element, cellIndex: number) => {
+        const $cell = $(cell);
+        const column = columns[cellIndex];
+
+        if (column) {
+          this.toggleFirstHeaderClass($cell, column, rowIndex);
+        }
+      });
+    });
+  }
+
   protected createCellContent(
     $cell: dxElementWrapper,
     column: Column,
@@ -359,8 +388,15 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     const { column } = options;
     // @ts-expect-error
     const $cellElement = super._createCell.apply(this, arguments);
+    const rowCount = this.getRowCount();
 
-    column.rowspan > 1 && options.rowType === 'header' && $cellElement.attr('rowSpan', column.rowspan);
+    if (rowCount > 1) {
+      this.toggleFirstHeaderClass($cellElement, column, options.rowIndex);
+    }
+
+    if (column.rowspan > 1 && options.rowType === 'header') {
+      $cellElement.attr('rowSpan', column.rowspan);
+    }
 
     return $cellElement;
   }
@@ -457,6 +493,17 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     const $indicatorsContainer = super._getIndicatorContainer($cell);
 
     return returnAll ? $indicatorsContainer : $indicatorsContainer.filter(`:not(.${VISIBILITY_HIDDEN_CLASS})`);
+  }
+
+  protected _resizeCore(): void {
+    const rowCount = this.getRowCount();
+    const columnHidingEnabled = this.option('columnHidingEnabled');
+
+    super._resizeCore.apply(this);
+
+    if (rowCount > 1 && columnHidingEnabled) {
+      this.updateFirstHeaderClasses();
+    }
   }
 
   /**

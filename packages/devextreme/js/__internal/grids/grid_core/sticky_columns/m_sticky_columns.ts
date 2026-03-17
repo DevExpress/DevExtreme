@@ -9,6 +9,7 @@ import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
 import { HIDDEN_COLUMNS_WIDTH } from '../adaptivity/const';
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
+import type { Column } from '../columns_controller/types';
 import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
@@ -83,9 +84,9 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     }
   }
 
-  private updateBorderCellClasses(
+  private toggleColumnNoBorderClass(
     $cell: dxElementWrapper,
-    column,
+    column: Column,
     rowIndex: number | null,
   ): void {
     const columnsController = this._columnsController;
@@ -96,15 +97,12 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
       rowIndex,
       isRowsView,
     );
-    const isFirstColumn = columnsController?.isFirstColumn(column, rowIndex);
 
     GridCoreStickyColumnsDom
       .toggleColumnNoBorderClass($cell, needToRemoveBorder, this.addWidgetPrefix.bind(this));
-    GridCoreStickyColumnsDom
-      .toggleFirstHeaderClass($cell, isFirstColumn, this.addWidgetPrefix.bind(this));
   }
 
-  private _updateBorderClasses(): void {
+  private updateColumnNoBorderClasses(): void {
     const isColumnHeadersView = this.name === 'columnHeadersView';
     const $rows = this._getRowElementsCore().not(`.${MASTER_DETAIL_CLASSES.detailRow}`).toArray();
 
@@ -120,7 +118,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
         const column = columns[cellIndex];
 
         if (column.visibleWidth !== HIDDEN_COLUMNS_WIDTH) {
-          this.updateBorderCellClasses($cell, column, rowIndex);
+          this.toggleColumnNoBorderClass($cell, column, rowIndex);
         }
       });
     });
@@ -156,7 +154,7 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     const isExpandColumn = column.command && column.command === 'expand';
 
     if (hasStickyColumns && !needToDisableStickyColumn(this._columnsController, column)) {
-      this.updateBorderCellClasses($cell, column, rowIndex);
+      this.toggleColumnNoBorderClass($cell, column, rowIndex);
 
       if (column.fixed) {
         const fixedPosition = getColumnFixedPosition(this._columnsController, column);
@@ -243,19 +241,20 @@ const baseStickyColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class 
     }
   }
 
-  protected _resizeCore() {
+  protected _resizeCore(): void {
     const hasStickyColumns = this.hasStickyColumns();
-    const adaptiveColumns = this.getController('adaptiveColumns');
-    const hidingColumnsQueue = adaptiveColumns?.getHidingColumnsQueue();
+    const columnHidingEnabled = this.option('columnHidingEnabled');
 
-    super._resizeCore.apply(this, arguments as any);
+    super._resizeCore.apply(this);
 
-    if (hasStickyColumns) {
-      this.setStickyOffsets();
+    if (!hasStickyColumns) {
+      return;
+    }
 
-      if (hidingColumnsQueue?.length) {
-        this._updateBorderClasses();
-      }
+    this.setStickyOffsets();
+
+    if (columnHidingEnabled) {
+      this.updateColumnNoBorderClasses();
     }
   }
 
