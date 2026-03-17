@@ -68,9 +68,14 @@ class RadioCollection extends CollectionWidget<Properties> {
     if (!html) {
       const $radio = $('<div>').addClass(RADIO_BUTTON_ICON_CLASS);
 
-      $('<div>').addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
+      $('<div>')
+        .addClass(RADIO_BUTTON_ICON_DOT_CLASS)
+        .appendTo($radio);
 
-      const $radioContainer = $('<div>').append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
+      const $radioContainer = $('<div>')
+        .append($radio)
+        .addClass(RADIO_VALUE_CONTAINER_CLASS);
+
       $itemElement.prepend($radioContainer);
     }
 
@@ -83,12 +88,11 @@ class RadioCollection extends CollectionWidget<Properties> {
 
     if (!html) {
       const $itemContent = $itemElement.find(`.${ITEM_CONTENT_CLASS}`);
-      const $contentIdTarget = $itemContent.length ? $itemContent : $itemElement;
 
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      const contentId = $contentIdTarget.attr('id') || `dx-${new Guid()}`;
+      const contentId = $itemContent.attr('id') || `dx-${new Guid()}`;
 
-      $contentIdTarget.attr('id', contentId);
+      $itemContent.attr('id', contentId);
 
       // eslint-disable-next-line spellcheck/spell-checker
       aria.labelledby = contentId;

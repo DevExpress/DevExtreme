@@ -45,9 +45,6 @@ const interactiveItemsConfiguration: Configuration = {
 
         itemElement.append($button);
       },
-      (itemData, _, itemElement) => {
-        $(itemElement).parent().text(itemData);
-      },
     ],
   },
 };
