@@ -6,7 +6,7 @@ $(() => {
     title: {
       text: 'Imports/Exports of Goods and Services',
       subtitle: {
-        text: '(billion US$, 2012)',
+        text: '(billion US$, 2024)',
       },
     },
     legend: {
