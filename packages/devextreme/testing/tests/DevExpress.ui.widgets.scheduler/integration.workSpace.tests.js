@@ -914,7 +914,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             ]
         });
 
-        const refreshStub = sinon.stub(scheduler.instance, '_refreshWorkSpace');
+        const refreshStub = sinon.stub(scheduler.instance, 'refreshWorkSpace');
 
         try {
             scheduler.instance.option('groups', ['resource2']);
