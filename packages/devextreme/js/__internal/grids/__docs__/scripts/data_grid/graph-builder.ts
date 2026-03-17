@@ -1,10 +1,24 @@
 /* eslint-disable spellcheck/spell-checker */
-import type { ArchitectureData, GridCoreModuleInfo } from './types';
+import type { CytoscapeElement } from '../shared/graph-context';
+import { createGraphContext } from '../shared/graph-context';
+import { buildGcRegistrationLookup } from './resolver';
+import type {
+  ArchitectureData, ClassifiedModule, ControllerViewRef, GridCoreModuleInfo,
+} from './types';
 
-interface CytoscapeElement {
-  group: 'nodes' | 'edges';
-  data: Record<string, unknown>;
-  classes?: string;
+/**
+ * A controller/view is "locally new" when it's authored
+ * in data_grid, not forwarded from grid_core.
+ */
+function isLocallyNew(ref: ControllerViewRef): boolean {
+  return ref.isDefinedLocally && !ref.isImportedFromGridCore;
+}
+
+/** Returns names of controllers/views that are locally defined and not imported from grid_core. */
+function getLocalNames(refs: Record<string, ControllerViewRef>): string[] {
+  return Object.entries(refs)
+    .filter(([, ref]) => isLocallyNew(ref))
+    .map(([name]) => name);
 }
 
 interface EdgeData extends Record<string, unknown> {
@@ -12,14 +26,10 @@ interface EdgeData extends Record<string, unknown> {
   targetName?: string;
 }
 
-function findGridCoreModule(
-  dgModuleName: string,
-  gridCoreModules: GridCoreModuleInfo[],
-): GridCoreModuleInfo | undefined {
-  return gridCoreModules.find((gc) => gc.registeredAs === dgModuleName);
-}
+/** Target name used for the DataSourceAdapter extender pipeline visualization. */
+const DSA_TARGET_NAME = 'dataSourceAdapter';
 
-interface ClassInfo {
+interface GraphClassInfo {
   className: string;
   baseClass: string;
   sourceFile: string;
@@ -29,8 +39,15 @@ function buildGcLabel(gcMod: GridCoreModuleInfo): string {
   const parts: string[] = [gcMod.registeredAs ?? gcMod.moduleName];
   const ctrls = Object.keys(gcMod.controllers);
   const vws = Object.keys(gcMod.views);
-  if (ctrls.length > 0) parts.push(`ctrl: ${ctrls.join(', ')}`);
-  if (vws.length > 0) parts.push(`view: ${vws.join(', ')}`);
+
+  if (ctrls.length > 0) {
+    parts.push(`ctrl: ${ctrls.join(', ')}`);
+  }
+
+  if (vws.length > 0) {
+    parts.push(`view: ${vws.join(', ')}`);
+  }
+
   return parts.join('\n');
 }
 
@@ -40,9 +57,13 @@ function buildSynthGcData(
 ): { id: string; data: Record<string, unknown> } | null {
   const gcCtrls = Object.entries(mod.controllers)
     .filter(([, ref]) => ref.isImportedFromGridCore);
+
   const gcViews = Object.entries(mod.views)
     .filter(([, ref]) => ref.isImportedFromGridCore);
-  if (gcCtrls.length === 0 && gcViews.length === 0) return null;
+
+  if (gcCtrls.length === 0 && gcViews.length === 0) {
+    return null;
+  }
 
   const labelParts: string[] = [mod.moduleName];
   if (gcCtrls.length > 0) {
@@ -52,7 +73,7 @@ function buildSynthGcData(
     labelParts.push(`view: ${gcViews.map(([n]) => n).join(', ')}`);
   }
 
-  const ctrlInfo: Record<string, ClassInfo> = {};
+  const ctrlInfo: Record<string, GraphClassInfo> = {};
   for (const [regName, ref] of gcCtrls) {
     ctrlInfo[regName] = {
       className: ref.className,
@@ -60,7 +81,7 @@ function buildSynthGcData(
       sourceFile: ref.sourceFile,
     };
   }
-  const viewInfo: Record<string, ClassInfo> = {};
+  const viewInfo: Record<string, GraphClassInfo> = {};
   for (const [regName, ref] of gcViews) {
     viewInfo[regName] = {
       className: ref.className,
@@ -87,15 +108,24 @@ function buildSynthGcData(
   };
 }
 
-export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement[] {
-  const elements: CytoscapeElement[] = [];
-  const nodeIds = new Set<string>();
-  const edgeIds = new Set<string>();
+export function buildCytoscapeElements(
+  data: ArchitectureData,
+  modulesByRelPath: Map<string, ClassifiedModule>,
+): CytoscapeElement[] {
+  const {
+    elements, nodeIds, edgeIds, addNode,
+  } = createGraphContext();
 
-  function addNode(id: string, nodeData: Record<string, unknown>, classes: string): void {
-    if (nodeIds.has(id)) return;
-    nodeIds.add(id);
-    elements.push({ group: 'nodes', data: { id, ...nodeData }, classes });
+  // ─── Pre-built lookup maps (O(1) instead of repeated linear scans) ────────
+  const gcModuleLookup = buildGcRegistrationLookup(data.gridCoreModules);
+
+  // Cache getLocalNames per module to avoid recomputing across sections
+  const localCtrlCache = new Map<string, string[]>();
+  const localViewCache = new Map<string, string[]>();
+
+  for (const mod of data.modules) {
+    localCtrlCache.set(mod.moduleName, getLocalNames(mod.controllers));
+    localViewCache.set(mod.moduleName, getLocalNames(mod.views));
   }
 
   function addEdge(source: string, target: string, edgeData: EdgeData, classes: string): void {
@@ -120,10 +150,16 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
     defClass: string,
   ): void {
     const synthId = `gc-synth-${dgMod.moduleName}`;
-    if (!nodeIds.has(synthId)) return;
+    if (!nodeIds.has(synthId)) {
+      return;
+    }
     const ref = targetType === 'controller'
       ? dgMod.controllers[targetName] : dgMod.views[targetName];
-    if (!ref?.isImportedFromGridCore) return;
+
+    if (!ref?.isImportedFromGridCore) {
+      return;
+    }
+
     addEdge(synthId, targetId, {
       edgeType: 'gc-defines',
       label: 'defines',
@@ -152,18 +188,19 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
   }
   // DataSourceAdapter has the same mixin nature as other extender targets
   if (data.dataSourceAdapterChain.length > 0) {
-    allTargets.set('dataSourceAdapter', {
+    allTargets.set(DSA_TARGET_NAME, {
       type: 'controller', origin: 'gc',
     });
   }
   for (const mod of data.modules) {
-    for (const name of mod.newControllers) {
+    for (const name of localCtrlCache.get(mod.moduleName) ?? []) {
       if (!allTargets.has(name)) {
         const origin = gcDefinedNames.has(name) ? 'gc' : 'dg';
         allTargets.set(name, { type: 'controller', origin });
       }
     }
-    for (const name of mod.newViews) {
+
+    for (const name of localViewCache.get(mod.moduleName) ?? []) {
       if (!allTargets.has(name)) {
         const origin = gcDefinedNames.has(name) ? 'gc' : 'dg';
         allTargets.set(name, { type: 'view', origin });
@@ -176,6 +213,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
     const targetId = `gc-target-${targetName}`;
     const typeLabel = info.type === 'controller' ? 'ctrl' : 'view';
     const originClass = info.origin === 'dg' ? 'dg-target' : 'gc-target';
+
     addNode(targetId, {
       label: `${targetName}\n(${typeLabel})`,
       nodeType: 'gcTarget',
@@ -191,7 +229,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
   // ─── Identify which gc modules are used ───────────────────────────────────
   const usedGcModules = new Set<string>();
   for (const mod of data.modules) {
-    const gc = findGridCoreModule(mod.moduleName, data.gridCoreModules);
+    const gc = gcModuleLookup.get(mod.moduleName);
     if (gc) {
       usedGcModules.add(gc.moduleName);
     }
@@ -205,11 +243,20 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
       ? `#${orderNum} ${mod.moduleName} (${mod.category})`
       : `#${orderNum} ${mod.moduleName}`;
     const labelParts: string[] = [namePart];
-    if (mod.newControllers.length > 0 || mod.newViews.length > 0) {
+    const localCtrls = localCtrlCache.get(mod.moduleName) ?? [];
+    const localViews = localViewCache.get(mod.moduleName) ?? [];
+
+    if (localCtrls.length > 0 || localViews.length > 0) {
       labelParts.push('');
     }
-    if (mod.newControllers.length > 0) labelParts.push(`ctrl: ${mod.newControllers.join(', ')}`);
-    if (mod.newViews.length > 0) labelParts.push(`view: ${mod.newViews.join(', ')}`);
+
+    if (localCtrls.length > 0) {
+      labelParts.push(`ctrl: ${localCtrls.join(', ')}`);
+    }
+
+    if (localViews.length > 0) {
+      labelParts.push(`view: ${localViews.join(', ')}`);
+    }
 
     addNode(moduleId, {
       label: labelParts.join('\n'),
@@ -218,13 +265,12 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
       sourceFile: mod.relPath,
       featureArea: mod.featureArea,
       registrationOrder: mod.registrationOrder,
-      details: mod.details,
       gridCoreSource: mod.gridCoreSourceModule ?? '',
       moduleName: mod.moduleName,
     }, `module ${mod.category}`);
 
     // GC module node — always embedded inside the dg module
-    const gc = findGridCoreModule(mod.moduleName, data.gridCoreModules);
+    const gc = gcModuleLookup.get(mod.moduleName);
     if (gc) {
       const gcId = `gc-${gc.moduleName}`;
       addNode(gcId, {
@@ -288,8 +334,9 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         // eslint-disable-next-line no-continue
         continue;
       }
-      const defines = (targetType === 'controller' && dgMod.newControllers.includes(targetName))
-        || (targetType === 'view' && dgMod.newViews.includes(targetName));
+      const ref = targetType === 'controller'
+        ? dgMod.controllers[targetName] : dgMod.views[targetName];
+      const defines = ref !== undefined && isLocallyNew(ref);
       if (defines) {
         addEdge(`mod-${dgMod.moduleName}`, targetId, {
           edgeType: 'gc-defines',
@@ -330,18 +377,20 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
   }
 
   // ─── DataSourceAdapter extender edges (same pattern as other targets) ──────
-  const dsaTargetId = 'gc-target-dataSourceAdapter';
+  const dsaTargetId = `gc-target-${DSA_TARGET_NAME}`;
   if (nodeIds.has(dsaTargetId)) {
     for (let i = 0; i < data.dataSourceAdapterChain.length; i += 1) {
       const ext = data.dataSourceAdapterChain[i];
-      const mod = data.modules.find((m) => m.relPath === ext.relPath);
+      const mod = modulesByRelPath.get(ext.relPath);
+
       if (!mod) {
         // eslint-disable-next-line no-continue
         continue;
       }
+
       addEdge(`mod-${mod.moduleName}`, dsaTargetId, {
         edgeType: 'extender-target',
-        targetName: 'dataSourceAdapter',
+        targetName: DSA_TARGET_NAME,
         targetType: 'controller',
         label: `#${i + 1} ${mod.moduleName}`,
         chainIndex: i,

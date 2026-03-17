@@ -1,9 +1,12 @@
 /* eslint-disable spellcheck/spell-checker */
+import { BASE_CSS, HIGHLIGHT_CYTOSCAPE_STYLES, SHARED_INTERACTIVE_JS } from '../shared/html-helpers';
 import { buildCytoscapeElements } from './graph-builder';
+import { buildModulesByRelPath } from './resolver';
 import type { ArchitectureData } from './types';
 
 export function generateHtml(data: ArchitectureData): string {
-  const cytoscapeElements = buildCytoscapeElements(data);
+  const modulesByRelPath = buildModulesByRelPath(data.modules);
+  const cytoscapeElements = buildCytoscapeElements(data, modulesByRelPath);
   const elementsJson = JSON.stringify(cytoscapeElements, null, 2);
   const pipelines = data.extenderPipelines.map((p) => ({
     targetName: p.targetName,
@@ -23,7 +26,7 @@ export function generateHtml(data: ArchitectureData): string {
       targetName: 'dataSourceAdapter',
       targetType: 'controller',
       steps: data.dataSourceAdapterChain.map((ext) => {
-        const mod = data.modules.find((m) => m.relPath === ext.relPath);
+        const mod = modulesByRelPath.get(ext.relPath);
         return {
           moduleName: mod?.moduleName ?? ext.relPath,
           relPath: ext.relPath,
@@ -52,13 +55,7 @@ export function generateHtml(data: ArchitectureData): string {
     relPath: m.relPath,
     featureArea: m.featureArea,
     registrationOrder: m.registrationOrder,
-    details: m.details,
     gridCoreSourceModule: m.gridCoreSourceModule,
-    newControllers: m.newControllers,
-    newViews: m.newViews,
-    overriddenControllers: m.overriddenControllers,
-    overriddenExtenderControllers: m.overriddenExtenderControllers,
-    overriddenExtenderViews: m.overriddenExtenderViews,
     hasDefaultOptionsOverride: m.hasDefaultOptionsOverride,
     controllers: m.controllers,
     views: m.views,
@@ -78,24 +75,7 @@ export function generateHtml(data: ArchitectureData): string {
 <!-- Generated at: ${data.generatedAt} -->
 <script src="https://unpkg.com/cytoscape@3.30.4/dist/cytoscape.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;display:flex;height:100vh;background:#1a1a1a;color:#e8e8e8}
-#sidebar{width:270px;min-width:270px;background:#2a2a2a;border-right:1px solid #555;padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
-#sidebar h2{font-size:13px;color:#aaa;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
-#sidebar label{display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;padding:1px 0;color:#e8e8e8}
-#sidebar input[type="checkbox"]{accent-color:#5B9BD5}
-#sidebar input[type="text"]{width:100%;padding:6px 10px;border:1px solid #444;border-radius:4px;font-size:13px;background:#333;color:#e8e8e8;outline:none}
-#sidebar input[type="text"]:focus-visible{border-color:#777}
-#sidebar button{padding:5px 10px;border:1px solid #555;border-radius:4px;background:#333;cursor:pointer;font-size:12px;color:#e8e8e8}
-#sidebar button:hover{background:#444}
-.radio-group{display:flex;flex-direction:column;gap:3px}
-.radio-group label{font-size:11px}
-#main{flex:1;display:flex;flex-direction:column}
-#cy{flex:1;background:#212121}
-#info-panel{height:180px;min-height:80px;background:#2a2a2a;border-top:1px solid #555;padding:12px 16px;overflow-y:auto;font-size:12px;line-height:1.5;color:#e8e8e8}
-#info-panel h3{font-size:13px;margin-bottom:4px}
-#info-panel .lbl{color:#aaa;font-weight:500}
-.tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;margin:1px 2px}
+${BASE_CSS}
 .s-file{color:#888;font-size:11px}
 .c-pt{background:#2a3a2a;color:#68d391;border:1px solid #68d39133}
 .c-ext{background:#2a2a3a;color:#90cdf4;border:1px solid #90cdf433}
@@ -103,17 +83,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;d
 .c-new{background:#3a3a2a;color:#f6e05e;border:1px solid #f6e05e33}
 .c-gc{background:#3a2a00;color:#f5c040;border:1px solid #f5c04033}
 .c-util{background:#0a2a1a;color:#6ee7b7;border:1px solid #10b98133}
-#legend{padding:8px;font-size:12px;border-top:1px solid #555}
-.leg-item{display:flex;align-items:center;gap:6px;margin:2px 0}
-.leg-sw{width:18px;height:12px;border-radius:2px;flex-shrink:0}
-.leg-ln{width:24px;height:0;flex-shrink:0}
 .chain-box{margin:4px 0;padding:6px;background:#1a1a2e;border:1px solid #334;border-radius:4px;font-size:11px}
 .chain-step{padding:2px 6px;border-radius:3px;margin:2px 0;display:inline-block}
 .chain-arr{color:#666;font-size:10px;margin:1px 0}
 .s-current{background:#2a3a5a;color:#90cdf4}
 .s-gc{background:#3a2a1a;color:#f5c040}
 .s-final{background:#1a3a1a;color:#68d391}
-.select-all-row{border-bottom:1px solid #555;padding-bottom:3px;margin-bottom:2px}
 </style>
 </head>
 <body>
@@ -132,12 +107,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;d
   </div>
   <div>
     <h2>Categories</h2>
-    <label class="select-all-row"><input type="checkbox" id="cat-all" checked> All</label>
+    <label class="select-all-row"><input type="checkbox" id="cat-all" checked> Select / Unselect All</label>
     ${categories.map((c) => `<label><input type="checkbox" class="cat-toggle" data-cat="${c}" checked> ${c}</label>`).join('\n    ')}
   </div>
   <div>
     <h2>Feature Areas</h2>
-    <label class="select-all-row"><input type="checkbox" id="area-all" checked> All</label>
+    <label class="select-all-row"><input type="checkbox" id="area-all" checked> Select / Unselect All</label>
     ${featureAreas.map((a) => `<label><input type="checkbox" class="area-toggle" data-area="${a}" checked> ${a}</label>`).join('\n    ')}
   </div>
   <div>
@@ -270,26 +245,20 @@ var cy = cytoscape({
       'text-background-color': '#1a1a2e', 'text-background-opacity': .9,
       'text-background-padding': '2px', 'text-background-shape': 'round-rectangle',
     }},
-    { selector: '.highlighted', style: { 'opacity': 1, 'z-index': 999 }},
-    { selector: 'edge.highlighted', style: { 'opacity': 1, 'z-index': 999, 'width': 3 }},
-    { selector: '.faded', style: { 'opacity': 0.08 }},
-    { selector: 'node.search-match', style: { 'border-width': 3, 'border-color': '#FF6B6B' }},
+    ${HIGHLIGHT_CYTOSCAPE_STYLES}
   ],
   layout: { name: 'preset' },
 });
 
 /* ── Custom Layout ── */
-function getEdgeRouting() { var c = document.querySelector('input[name="edge-routing"]:checked'); return c ? c.value : 'bezier'; }
+// Note: getEdgeRouting() and hasOverlappingBounds() are provided by SHARED_INTERACTIVE_JS
 
 function updateEdgeStyles() {
   var routing = getEdgeRouting();
   if (routing === 'taxi') {
     cy.edges().style({ 'curve-style': 'taxi', 'taxi-direction': 'downward', 'taxi-turn': '50%' });
     cy.edges().forEach(function(edge) {
-      var sb = edge.source().boundingBox();
-      var tb = edge.target().boundingBox();
-      var overlaps = !(sb.x2 < tb.x1 || tb.x2 < sb.x1 || sb.y2 < tb.y1 || tb.y2 < sb.y1);
-      if (overlaps) edge.style({ 'curve-style': 'bezier', 'taxi-direction': null, 'taxi-turn': null });
+      if (hasOverlappingBounds(edge)) edge.style({ 'curve-style': 'bezier', 'taxi-direction': null, 'taxi-turn': null });
     });
   } else {
     cy.edges().style({ 'curve-style': 'bezier', 'taxi-direction': null, 'taxi-turn': null });
@@ -454,17 +423,6 @@ function staggerExtenderLabels() {
 }
 runLayout();
 
-/* ── Edge routing ── */
-document.querySelectorAll('input[name="edge-routing"]').forEach(function(r) { r.addEventListener('change', function() { updateEdgeStyles(); }); });
-
-/* ── Edge toggles ── */
-document.querySelectorAll('.edge-toggle').forEach(function(cb) {
-  cb.addEventListener('change', function() {
-    var cls = this.getAttribute('data-cls');
-    cy.edges('.' + cls).style('display', this.checked ? 'element' : 'none');
-  });
-  if (!cb.checked) { var cls = cb.getAttribute('data-cls'); cy.edges('.' + cls).style('display', 'none'); }
-});
 
 /* ── Category toggles ── */
 function applyCatFilters() {
@@ -531,51 +489,22 @@ function connSet(seeds) {
   });
   return seeds.union(edges).union(nodes).union(extra);
 }
-function highlightSet(t) {
+function computeHighlightSet(t) {
   if (t.isEdge()) return cy.collection().union(t).union(t.source()).union(t.target());
   var group = compoundGroup(t);
   return connSet(group);
 }
-function applyHighlight(s) { cy.elements().addClass('faded').removeClass('highlighted'); s.removeClass('faded').addClass('highlighted'); }
-function clearHighlight() { cy.elements().removeClass('faded').removeClass('highlighted'); }
 
-cy.on('tap', 'node, edge', function(e) {
-  var t = e.target;
-  // For passthrough pair, normalize: clicking embedded gc → treat as clicking dg parent
-  var infoTarget = t;
+// Normalize: clicking embedded gc child → treat as clicking dg parent
+function normalizeClickTarget(t) {
   if (t.isNode() && t.data('nodeType') === 'gridCoreModule' && t.data('parent')) {
     var p = t.parent();
-    if (p && p.nonempty()) infoTarget = p;
+    if (p && p.nonempty()) return p;
   }
-  var checkId = infoTarget.id();
-  if (selectedTarget && selectedTarget.id() === checkId) { selectedTarget = null; clearHighlight(); infoP.innerHTML = '<p style="color:#888">Click a node or edge to see details.</p>'; return; }
-  selectedTarget = infoTarget;
-  applyHighlight(highlightSet(t));
-  showInfo(infoTarget);
-});
-cy.on('tap', function(e) {
-  if (e.target === cy && selectedTarget) { selectedTarget = null; clearHighlight(); infoP.innerHTML = '<p style="color:#888">Click a node or edge to see details.</p>'; }
-});
-
-/* ── Buttons ── */
-document.getElementById('btn-fit').addEventListener('click', function() { cy.fit(undefined, 30); });
-document.getElementById('btn-reset').addEventListener('click', function() { clearHighlight(); runLayout(); });
-
-/* ── Search ── */
-var searchInput = document.getElementById('search');
-searchInput.addEventListener('input', function() {
-  var q = this.value.toLowerCase().trim();
-  cy.nodes().removeClass('search-match');
-  if (!q) return;
-  cy.nodes().forEach(function(n) {
-    var label = (n.data('label') || '').toLowerCase();
-    var name = (n.data('moduleName') || '').toLowerCase();
-    if (label.indexOf(q) >= 0 || name.indexOf(q) >= 0) n.addClass('search-match');
-  });
-});
+  return t;
+}
 
 /* ── Info Panel ── */
-var infoP = document.getElementById('info-panel');
 
 function tagFor(cat) {
   var map = { passthrough: 'c-pt', extended: 'c-ext', replaced: 'c-rep', 'new': 'c-new', 'grid-core': 'c-gc', 'gc-target': 'c-gc' };
@@ -643,7 +572,6 @@ function showInfo(t) {
     h = '<h3>#' + (d.registrationOrder + 1) + ' ' + d.moduleName + ' ' + tagFor(d.category) + '</h3>';
     h += '<p><span class="lbl">Source:</span> ' + d.sourceFile + '</p>';
     h += '<p><span class="lbl">Area:</span> ' + d.featureArea + '</p>';
-    if (d.details) h += '<p><span class="lbl">Details:</span> ' + d.details + '</p>';
     if (d.gridCoreSource) h += '<p><span class="lbl">Grid Core Source:</span> ' + d.gridCoreSource + '</p>';
 
     var gc = findGcModule(d.moduleName);
@@ -680,8 +608,14 @@ function showInfo(t) {
       h += '<p style="font-size:11px;color:#a0a0b0;margin-top:4px">Grid core module <b>' + (d.source || '').replace('gc-', '') + '</b> defines ' + d.targetName + '.</p>';
     }
   }
-  infoP.innerHTML = h;
+  document.getElementById('info-panel').innerHTML = h;
 }
+
+// ── Shared interactive JS (highlight, edge toggles, search, click handlers, fit button, routing radio) ──
+${SHARED_INTERACTIVE_JS}
+
+// ── Data_grid-specific: Reset Button ──
+document.getElementById('btn-reset').addEventListener('click', function() { clearHighlight(); runLayout(); });
 </script>
 </body>
 </html>`;

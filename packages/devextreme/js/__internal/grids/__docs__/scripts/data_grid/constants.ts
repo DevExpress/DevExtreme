@@ -16,11 +16,17 @@ export const REGISTER_MODULE_RECEIVERS = new Set([
 
 export const DATA_SOURCE_ADAPTER_PROVIDER = 'dataSourceAdapterProvider';
 
-export const GRID_CORE_IMPORT_PATTERNS = [
-  '@ts/grids/grid_core/',
-  '../../grid_core/',
-  '../../../grid_core/',
-];
+export const GRID_CORE_IMPORT_REGEXP = /grid_core\//;
+
+/**
+ * Import path segments that are considered "boring" internal imports
+ * and should be excluded from cross-dependency analysis.
+ * Matched as exact path segments (not substrings).
+ */
+export const CROSS_DEP_IGNORED_SEGMENTS = new Set([
+  'm_core',
+  'm_data_source_adapter',
+]);
 
 export type ModificationCategory = 'passthrough' | 'extended' | 'replaced' | 'new';
 

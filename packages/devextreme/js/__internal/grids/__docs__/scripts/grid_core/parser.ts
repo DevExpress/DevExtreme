@@ -1,12 +1,16 @@
-/* eslint-disable spellcheck/spell-checker,no-restricted-syntax,max-depth */
+/* eslint-disable spellcheck/spell-checker,max-depth */
 import * as fs from 'fs';
-import * as path from 'path';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import ts from 'typescript';
 
 import {
-  EXCLUDED_DIRS,
-  EXCLUDED_FILE_NAMES,
+  collectImportSpecs,
+  getClassHeritage,
+  getNodeText,
+  hasExportModifier,
+} from '../shared/ast-helpers';
+import { getRelativePath } from '../shared/file-discovery';
+import {
   getFeatureAreaFromPath,
   GRID_CORE_ROOT,
   MODULE_SUFFIX,
@@ -15,97 +19,7 @@ import type {
   ClassRegistrationInfo, ExtenderInfo, ModuleInfo, ParsedFile, RuntimeDependency,
 } from './types';
 
-// ─── File Discovery ──────────────────────────────────────────────────────────
-
-export function discoverSourceFiles(rootDir: string): string[] {
-  const results: string[] = [];
-
-  function walk(dir: string): void {
-    const entries = fs.readdirSync(dir, { withFileTypes: true });
-    for (const entry of entries) {
-      const fullPath = path.join(dir, entry.name);
-      if (entry.isDirectory()) {
-        if (EXCLUDED_DIRS.has(entry.name)) {
-          // eslint-disable-next-line no-continue
-          continue;
-        }
-        walk(fullPath);
-      } else if (
-        entry.isFile()
-        && !EXCLUDED_FILE_NAMES.has(entry.name)
-        && entry.name.endsWith('.ts')
-        && !entry.name.includes('.test.')
-      ) {
-        results.push(fullPath);
-      }
-    }
-  }
-
-  walk(rootDir);
-  return results.sort();
-}
-
-// ─── AST Helpers ─────────────────────────────────────────────────────────────
-
-export function getRelativePath(filePath: string): string {
-  return path.relative(GRID_CORE_ROOT, filePath).replace(/\\/g, '/');
-}
-
-function getNodeText(node: ts.Node, sourceFile: ts.SourceFile): string {
-  return node.getText(sourceFile).trim();
-}
-
-/**
- * Parse a heritage string like "Mixin(Base)" or "Mixin(Mixin2(Base))".
- *
- * Note: only handles single-argument mixin calls (which is the pattern used
- * throughout the grid_core codebase). Multi-argument patterns are not supported.
- */
-export function parseHeritageString(text: string): { baseClass: string; mixins: string[] } {
-  const mixins: string[] = [];
-
-  let current = text;
-  while (true) {
-    const match = /^(\w+)\((.+)\)$/.exec(current);
-    if (match) {
-      const [, mixinName, innerExpr] = match;
-      mixins.push(mixinName);
-      current = innerExpr;
-    } else {
-      break;
-    }
-  }
-
-  return { baseClass: mixins.length > 0 ? `${mixins[mixins.length - 1]}(${current})` : current, mixins };
-}
-
-/**
- * Parse a class heritage expression like:
- * - `modules.Controller`
- * - `ColumnsView`
- * - `ColumnStateMixin(modules.View)`
- * - `ColumnContextMenuMixin(ColumnsView)`
- * - `EditorFactoryMixin(modules.ViewController)`
- *
- * Returns { baseClass, mixins }
- */
-function parseHeritageExpression(
-  expr: ts.Expression,
-  sourceFile: ts.SourceFile,
-  localVars: Map<string, string>,
-): { baseClass: string; mixins: string[] } {
-  const text = getNodeText(expr, sourceFile);
-
-  if (ts.isIdentifier(expr) && localVars.has(text)) {
-    const resolved = localVars.get(text) ?? '';
-    return parseHeritageString(resolved);
-  }
-
-  return parseHeritageString(text);
-}
-
 // ─── Runtime Dependency Collection ───────────────────────────────────────────
-
 function collectRuntimeDeps(
   node: ts.Node,
   sourceFile: ts.SourceFile,
@@ -157,32 +71,6 @@ function collectRuntimeDeps(
 }
 
 // ─── Module Parsing ──────────────────────────────────────────────────────────
-
-function hasExportModifier(node: ts.Node): boolean {
-  if (!ts.canHaveModifiers(node)) {
-    return false;
-  }
-  const modifiers = ts.getModifiers(node);
-  return modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword) ?? false;
-}
-
-function getClassHeritage(
-  node: ts.ClassDeclaration | ts.ClassExpression,
-  sourceFile: ts.SourceFile,
-  localVars: Map<string, string>,
-): { baseClass: string; mixins: string[] } {
-  if (!node.heritageClauses) {
-    return { baseClass: '', mixins: [] };
-  }
-
-  for (const clause of node.heritageClauses) {
-    if (clause.token === ts.SyntaxKind.ExtendsKeyword && clause.types.length > 0) {
-      return parseHeritageExpression(clause.types[0].expression, sourceFile, localVars);
-    }
-  }
-
-  return { baseClass: '', mixins: [] };
-}
 
 function guessRegisteredName(moduleName: string): string | null {
   if (moduleName.endsWith(MODULE_SUFFIX)) {
@@ -343,7 +231,7 @@ export function parseFile(filePath: string): ParsedFile {
     ts.ScriptKind.TS,
   );
 
-  const relPath = getRelativePath(filePath);
+  const relPath = getRelativePath(filePath, GRID_CORE_ROOT);
   const result: ParsedFile = {
     filePath,
     relPath,
@@ -356,32 +244,19 @@ export function parseFile(filePath: string): ParsedFile {
   };
 
   // Collect import aliases (import { X as Y } from '...')
-  ts.forEachChild(sourceFile, (node) => {
-    if (ts.isImportDeclaration(node)
-      && node.importClause && node.moduleSpecifier
-      && ts.isStringLiteral(node.moduleSpecifier)
-    ) {
-      const fromPath = node.moduleSpecifier.text;
-      const { namedBindings } = node.importClause;
-      if (namedBindings && ts.isNamedImports(namedBindings)) {
-        for (const spec of namedBindings.elements) {
-          const localName = spec.name.text;
-          const originalName = spec.propertyName ? spec.propertyName.text : spec.name.text;
-          result.importedNames.set(localName, originalName);
-          if (spec.propertyName) {
-            result.importAliases.set(localName, {
-              localName,
-              originalName,
-              fromPath,
-            });
-          }
-        }
-      }
-      // Handle default imports: import X from '...'
-      if (node.importClause.name) {
-        const localName = node.importClause.name.text;
-        result.importedNames.set(localName, localName);
-      }
+  collectImportSpecs(sourceFile).forEach((spec) => {
+    if (!spec.isNamespace) {
+      result.importedNames.set(
+        spec.localName,
+        spec.isDefault ? spec.localName : spec.originalName,
+      );
+    }
+    if (spec.isRenamed) {
+      result.importAliases.set(spec.localName, {
+        localName: spec.localName,
+        originalName: spec.originalName,
+        fromPath: spec.fromPath,
+      });
     }
   });
 

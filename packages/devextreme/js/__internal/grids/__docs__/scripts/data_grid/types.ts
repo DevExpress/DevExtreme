@@ -1,4 +1,4 @@
-/* eslint-disable spellcheck/spell-checker */
+import type { BaseClassInfo, HeritageInfo, InheritanceEntry as SharedInheritanceEntry } from '../shared/types';
 import type { ModificationCategory } from './constants';
 
 // ─── Parsed file data ────────────────────────────────────────────────────────
@@ -10,13 +10,7 @@ export interface ImportInfo {
   isFromGridCore: boolean;
 }
 
-export interface ClassInfo {
-  className: string;
-  baseClass: string;
-  mixins: string[];
-  sourceFile: string;
-  isExported: boolean;
-}
+export interface ClassInfo extends BaseClassInfo {}
 
 export interface RegisterModuleCall {
   moduleName: string;
@@ -43,13 +37,11 @@ export interface RegisterModuleCall {
   forwardedViewsRef: string | null;
 }
 
-export interface ControllerViewRef {
+export interface ControllerViewRef extends HeritageInfo {
   regName: string;
   className: string;
   isImportedFromGridCore: boolean;
   isDefinedLocally: boolean;
-  baseClass: string;
-  mixins: string[];
   sourceFile: string;
 }
 
@@ -98,14 +90,7 @@ export interface ClassifiedModule {
     views: Record<string, ExtenderRef>;
   };
 
-  newControllers: string[];
-  newViews: string[];
-  overriddenControllers: string[];
-  overriddenExtenderControllers: string[];
-  overriddenExtenderViews: string[];
   hasDefaultOptionsOverride: boolean;
-
-  details: string;
 }
 
 export interface ExtenderPipelineStep {
@@ -123,9 +108,7 @@ export interface ExtenderPipeline {
   steps: ExtenderPipelineStep[];
 }
 
-export interface InheritanceEntry {
-  className: string;
-  chain: string[];
+export interface InheritanceEntry extends SharedInheritanceEntry {
   sourceFile: string;
 }
 
@@ -136,7 +119,13 @@ export interface CrossDependency {
   toModule: string | null;
   importedNames: string[];
   importPath: string;
-  label: string;
+}
+
+/** Controller/view entry as serialized in the grid_core JSON output. */
+export interface GridCoreControllerViewInfo extends HeritageInfo {
+  regName: string;
+  className: string;
+  sourceFile: string;
 }
 
 export interface GridCoreModuleInfo {
@@ -144,20 +133,8 @@ export interface GridCoreModuleInfo {
   registeredAs: string | null;
   sourceFile: string;
   featureArea: string;
-  controllers: Record<string, {
-    regName: string;
-    className: string;
-    baseClass: string;
-    mixins: string[];
-    sourceFile: string;
-  }>;
-  views: Record<string, {
-    regName: string;
-    className: string;
-    baseClass: string;
-    mixins: string[];
-    sourceFile: string;
-  }>;
+  controllers: Record<string, GridCoreControllerViewInfo>;
+  views: Record<string, GridCoreControllerViewInfo>;
   extenders: {
     controllers: Record<string, { extenderName: string; pattern: string }>;
     views: Record<string, { extenderName: string; pattern: string }>;
@@ -176,11 +153,5 @@ export interface ArchitectureData {
   dataSourceAdapterChain: DataSourceAdapterExtension[];
   inheritanceChains: InheritanceEntry[];
   crossDependencies: CrossDependency[];
-  summary: {
-    total: number;
-    passthrough: number;
-    extended: number;
-    replaced: number;
-    new: number;
-  };
+  summary: Record<ModificationCategory, number> & { total: number };
 }

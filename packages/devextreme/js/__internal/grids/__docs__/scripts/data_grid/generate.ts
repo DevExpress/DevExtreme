@@ -3,11 +3,14 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { DATA_GRID_ROOT, OUTPUT_DIR } from './constants';
+import { discoverSourceFiles, getRelativePath } from '../shared/file-discovery';
+import { writeOutputFiles } from '../shared/output-writer';
+import {
+  DATA_GRID_ROOT, EXCLUDED_DIRS, EXCLUDED_FILE_NAMES, type ModificationCategory,
+  OUTPUT_DIR,
+} from './constants';
 import { generateHtml } from './html-template';
 import {
-  discoverDataGridFiles,
-  getRelativePath,
   parseDataGridFile,
   parseModulesOrder,
 } from './parser';
@@ -22,42 +25,11 @@ import type { ArchitectureData, GridCoreModuleInfo, ParsedFile } from './types';
 
 const GC_JSON_PATH = path.join(OUTPUT_DIR, 'grid_core_architecture.generated.json');
 
-interface CliArgs {
-  jsonOnly: boolean;
-  htmlOnly: boolean;
-}
-
-function parseArgs(): CliArgs {
-  const args = process.argv.slice(2);
-  const result: CliArgs = { jsonOnly: false, htmlOnly: false };
-
-  for (const arg of args) {
-    switch (arg) {
-      case '--json':
-        result.jsonOnly = true;
-        break;
-      case '--html':
-        result.htmlOnly = true;
-        break;
-      default:
-        console.error(`Error: Unknown argument "${arg}"`);
-        process.exit(1);
-    }
-  }
-
-  if (result.jsonOnly && result.htmlOnly) {
-    console.error('Error: Cannot specify both --json and --html. Use neither to generate both.');
-    process.exit(1);
-  }
-
-  return result;
-}
-
 function loadGridCoreModules(): GridCoreModuleInfo[] {
   if (!fs.existsSync(GC_JSON_PATH)) {
     console.error(`ERROR: grid_core_architecture.generated.json not found at ${GC_JSON_PATH}`);
     console.error('Please run the grid_core architecture script first:');
-    console.error('  npx tsx __docs__/scripts/grid_core/generate-architecture-doc.ts');
+    console.error('  npx tsx __docs__/scripts/grid_core/generate.ts --json');
     process.exit(1);
   }
 
@@ -106,17 +78,18 @@ function main(): void {
     const gridCoreModules = loadGridCoreModules();
 
     // 3. Discover data_grid source files
-    const sourceFiles = discoverDataGridFiles(DATA_GRID_ROOT);
+    const sourceFiles = discoverSourceFiles(DATA_GRID_ROOT, EXCLUDED_DIRS, EXCLUDED_FILE_NAMES);
     console.log(`Discovered ${sourceFiles.length} data_grid source files`);
 
     // 4. Parse all files
     const allParsedFiles = sourceFiles.flatMap((file) => {
-      console.log(`  Parsing: ${getRelativePath(file)}`);
+      const relPath = getRelativePath(file, DATA_GRID_ROOT);
+      console.log(`  Parsing: ${relPath}`);
       try {
         return [parseDataGridFile(file)];
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
-        console.warn(`  WARN: Failed to parse ${getRelativePath(file)}: ${msg}`);
+        console.warn(`  WARN: Failed to parse ${relPath}: ${msg}`);
         return [];
       }
     });
@@ -127,7 +100,7 @@ function main(): void {
     // 6. Classify modules
     const allModules = classifyModules(allParsedFiles, modulesOrder, gridCoreModules);
     console.log(`\nClassified ${allModules.length} modules:`);
-    const counts = {
+    const counts: Record<ModificationCategory, number> = {
       passthrough: 0, extended: 0, replaced: 0, new: 0,
     };
     for (const mod of allModules) {
@@ -178,23 +151,7 @@ function main(): void {
     };
 
     // 12. Write output files
-    if (!fs.existsSync(OUTPUT_DIR)) {
-      fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-    }
-
-    const args = parseArgs();
-
-    if (!args.htmlOnly) {
-      const jsonPath = path.join(OUTPUT_DIR, 'data_grid_architecture.generated.json');
-      fs.writeFileSync(jsonPath, `${JSON.stringify(data, null, 2)}\n`);
-      console.log(`\nJSON written to: ${jsonPath}`);
-    }
-
-    if (!args.jsonOnly) {
-      const htmlPath = path.join(OUTPUT_DIR, 'data_grid_architecture.generated.html');
-      fs.writeFileSync(htmlPath, generateHtml(data));
-      console.log(`HTML written to: ${htmlPath}`);
-    }
+    writeOutputFiles(OUTPUT_DIR, 'data_grid_architecture', data, generateHtml);
 
     console.log('\nDone.');
   } catch (e) {
