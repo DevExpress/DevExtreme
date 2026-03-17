@@ -209,7 +209,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   _layoutManager!: AppointmentLayoutManager;
 
-  private appointmentForm: any;
+  appointmentForm: any;
 
   private mainContainer: any;
 
@@ -563,11 +563,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return this.editing.allowDragging && !this.isAgenda();
   }
 
-  private allowResizing() {
+  allowResizing() {
     return this.editing.allowResizing && !this.isAgenda();
   }
 
-  private allowAllDayResizing() {
+  allowAllDayResizing() {
     return this.editing.allowResizing && this.supportAllDayResizing();
   }
 
