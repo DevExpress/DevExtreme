@@ -1,12 +1,12 @@
 /* eslint-disable spellcheck/spell-checker */
 import { BASE_CSS, HIGHLIGHT_CYTOSCAPE_STYLES, SHARED_INTERACTIVE_JS } from '../shared/html-helpers';
 import { buildCytoscapeElements } from './graph-builder';
-import { buildModulesByRelPath } from './resolver';
+import { buildModulesBySourceFile } from './resolver';
 import type { ArchitectureData } from './types';
 
 export function generateHtml(data: ArchitectureData): string {
-  const modulesByRelPath = buildModulesByRelPath(data.modules);
-  const cytoscapeElements = buildCytoscapeElements(data, modulesByRelPath);
+  const modulesBySourceFile = buildModulesBySourceFile(data.modules);
+  const cytoscapeElements = buildCytoscapeElements(data, modulesBySourceFile);
   const elementsJson = JSON.stringify(cytoscapeElements, null, 2);
   const pipelines = data.extenderPipelines.map((p) => ({
     targetName: p.targetName,
@@ -26,7 +26,7 @@ export function generateHtml(data: ArchitectureData): string {
       targetName: 'dataSourceAdapter',
       targetType: 'controller',
       steps: data.dataSourceAdapterChain.map((ext) => {
-        const mod = modulesByRelPath.get(ext.relPath);
+        const mod = modulesBySourceFile.get(ext.relPath);
         return {
           moduleName: mod?.moduleName ?? ext.relPath,
           relPath: ext.relPath,
@@ -52,7 +52,7 @@ export function generateHtml(data: ArchitectureData): string {
   const modulesJson = JSON.stringify(data.modules.map((m) => ({
     moduleName: m.moduleName,
     category: m.category,
-    relPath: m.relPath,
+    sourceFile: m.sourceFile,
     featureArea: m.featureArea,
     registrationOrder: m.registrationOrder,
     gridCoreSourceModule: m.gridCoreSourceModule,
@@ -63,6 +63,13 @@ export function generateHtml(data: ArchitectureData): string {
   })));
 
   const categories = ['passthrough', 'extended', 'replaced', 'new', 'gc-target'];
+  const categoryDisplayNames: Record<string, string> = {
+    passthrough: 'Passthrough',
+    extended: 'Extended',
+    replaced: 'Replaced',
+    new: 'New',
+    'gc-target': 'Grid Core Target',
+  };
   const featureAreas = [...new Set(data.modules.map((m) => m.featureArea))].sort();
 
   return `<!DOCTYPE html>
@@ -108,7 +115,7 @@ ${BASE_CSS}
   <div>
     <h2>Categories</h2>
     <label class="select-all-row"><input type="checkbox" id="cat-all" checked> Select / Unselect All</label>
-    ${categories.map((c) => `<label><input type="checkbox" class="cat-toggle" data-cat="${c}" checked> ${c}</label>`).join('\n    ')}
+    ${categories.map((c) => `<label><input type="checkbox" class="cat-toggle" data-cat="${c}" checked> ${categoryDisplayNames[c] ?? c}</label>`).join('\n    ')}
   </div>
   <div>
     <h2>Feature Areas</h2>
@@ -133,8 +140,8 @@ ${BASE_CSS}
     <div class="leg-item"><div class="leg-sw" style="background:#3a2a2a;border:2px solid #fc8181"></div> Replaced</div>
     <div class="leg-item"><div class="leg-sw" style="background:#3a3a2a;border:2px solid #f6e05e"></div> New</div>
     <div class="leg-item"><div class="leg-sw" style="background:#1a1a2e;border:2px dashed #f59e0b"></div> Grid Core Module</div>
-    <div class="leg-item"><div class="leg-sw" style="background:#1e1e3a;border:2px solid #c084fc;border-radius:50%"></div> GC Target (ctrl/view)</div>
-    <div class="leg-item"><div class="leg-sw" style="background:#2a2a1e;border:2px dashed #f6e05e;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%)"></div> DG Target (ctrl/view)</div>
+    <div class="leg-item"><div class="leg-sw" style="background:#1e1e3a;border:2px solid #c084fc;border-radius:50%"></div> Grid Core Target (ctrl/view)</div>
+    <div class="leg-item"><div class="leg-sw" style="background:#2a2a1e;border:2px dashed #f6e05e;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%)"></div> DataGrid Target (ctrl/view)</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:1px dotted #c1c1c1"></div> Registration Order</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #0ea5e9"></div> Extender (ctrl → target)</div>
     <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #a855f7"></div> Extender (view → target)</div>
@@ -144,7 +151,12 @@ ${BASE_CSS}
 </div>
 <div id="main">
   <div id="cy"></div>
-  <div id="info-panel"><p style="color:#888">Click a node or edge to see details.</p></div>
+  <div id="info-panel-wrap">
+    <div id="info-panel">
+      <button id="btn-toggle-panel" title="Move panel to right">&#x2192;</button>
+      <div id="info-content"><p style="color:#888">Click a node or edge to see details.</p></div>
+    </div>
+  </div>
 </div>
 <script>
 var ELEMENTS = ${elementsJson};
@@ -506,10 +518,16 @@ function normalizeClickTarget(t) {
 
 /* ── Info Panel ── */
 
+function pathWrap(p) {
+  return '<span class="path">' + p.split('/').join('/<wbr>') + '</span>';
+}
+
 function tagFor(cat) {
   var map = { passthrough: 'c-pt', extended: 'c-ext', replaced: 'c-rep', 'new': 'c-new', 'grid-core': 'c-gc', 'gc-target': 'c-gc' };
+  var displayMap = { passthrough: 'Passthrough', extended: 'Extended', replaced: 'Replaced', 'new': 'New', 'grid-core': 'Grid Core', 'gc-target': 'Grid Core Target' };
   var cls = map[cat] || 'c-pt';
-  return '<span class="tag ' + cls + '">' + cat.toUpperCase() + '</span>';
+  var label = displayMap[cat] || cat;
+  return '<span class="tag ' + cls + '">' + label + '</span>';
 }
 
 function findGcModule(name) { return GC_MODULES.find(function(gc) { return gc.registeredAs === name || gc.moduleName === name; }); }
@@ -539,8 +557,9 @@ function showInfo(t) {
   var d = t.data(), h = '';
 
   if (t.isNode() && d.nodeType === 'gridCoreModule') {
-    h = '<h3>' + d.moduleName + ' ' + tagFor('grid-core') + '</h3>';
-    h += '<p><span class="lbl">Source:</span> grid_core/' + d.sourceFile + '</p>';
+    h = '<div>' + tagFor('grid-core') + '</div>';
+    h += '<h3>' + d.moduleName + '</h3>';
+    h += '<p><span class="lbl">Source:</span> ' + pathWrap('grid_core/' + d.sourceFile) + '</p>';
     h += '<p><span class="lbl">Area:</span> ' + d.featureArea + '</p>';
     try {
       var gcCtrls = JSON.parse(d.controllers || '{}');
@@ -559,7 +578,8 @@ function showInfo(t) {
   } else if (t.isNode() && d.nodeType === 'gcTarget') {
     var originLabel = d.targetOrigin === 'dg' ? 'DG-defined' : 'GC-defined';
     var originTag = d.targetOrigin === 'dg' ? tagFor('new') : tagFor('gc-target');
-    h = '<h3>' + d.targetName + ' ' + originTag + ' <span style="font-size:11px;color:#888">(' + d.targetType + ', ' + originLabel + ')</span></h3>';
+    h = '<div>' + originTag + '</div>';
+    h += '<h3>' + d.targetName + ' <span style="font-size:11px;color:#888">(' + d.targetType + ', ' + originLabel + ')</span></h3>';
     var pip = PIPELINES.find(function(p) { return p.targetName === d.targetName && p.targetType === d.targetType; });
     if (pip) {
       h += '<p><span class="lbl">Extended by ' + pip.steps.length + ' module(s):</span></p>';
@@ -569,10 +589,11 @@ function showInfo(t) {
     }
 
   } else if (t.isNode() && d.nodeType === 'module') {
-    h = '<h3>#' + (d.registrationOrder + 1) + ' ' + d.moduleName + ' ' + tagFor(d.category) + '</h3>';
-    h += '<p><span class="lbl">Source:</span> ' + d.sourceFile + '</p>';
+    h = '<div>' + tagFor(d.category) + '</div>';
+    h += '<h3>#' + (d.registrationOrder + 1) + ' ' + d.moduleName + '</h3>';
+    h += '<p><span class="lbl">Source:</span> ' + pathWrap(d.sourceFile) + '</p>';
     h += '<p><span class="lbl">Area:</span> ' + d.featureArea + '</p>';
-    if (d.gridCoreSource) h += '<p><span class="lbl">Grid Core Source:</span> ' + d.gridCoreSource + '</p>';
+    if (d.gridCoreSource) h += '<p><span class="lbl">Grid Core Source:</span> ' + pathWrap(d.gridCoreSource) + '</p>';
 
     var gc = findGcModule(d.moduleName);
     if (gc) {
@@ -589,7 +610,6 @@ function showInfo(t) {
     var viewPips = PIPELINES.filter(function(p) { return p.targetType === 'view' && p.steps.some(function(s) { return s.moduleName === d.moduleName; }); });
     if (ctrlPips.length) { h += '<h3 style="margin-top:6px">Controller Chains:</h3>'; for (var i = 0; i < ctrlPips.length; i++) h += renderChain(ctrlPips[i], ''); }
     if (viewPips.length) { h += '<h3 style="margin-top:6px">View Chains:</h3>'; for (var j = 0; j < viewPips.length; j++) h += renderChain(viewPips[j], 'chain-view'); }
-
 
     if (d.category === 'passthrough') h += '<p style="margin-top:6px;font-size:11px;color:#666">Directly re-exports a grid_core module without modifications.</p>';
 
@@ -608,7 +628,7 @@ function showInfo(t) {
       h += '<p style="font-size:11px;color:#a0a0b0;margin-top:4px">Grid core module <b>' + (d.source || '').replace('gc-', '') + '</b> defines ' + d.targetName + '.</p>';
     }
   }
-  document.getElementById('info-panel').innerHTML = h;
+  document.getElementById('info-content').innerHTML = h;
 }
 
 // ── Shared interactive JS (highlight, edge toggles, search, click handlers, fit button, routing radio) ──

@@ -76,7 +76,6 @@ export interface ClassifiedModule {
   moduleName: string;
   category: ModificationCategory;
   sourceFile: string;
-  relPath: string;
   featureArea: string;
   registrationOrder: number;
 

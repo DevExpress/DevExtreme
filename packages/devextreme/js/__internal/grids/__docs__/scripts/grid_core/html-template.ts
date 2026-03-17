@@ -83,8 +83,13 @@ ${BASE_CSS}
 </div>
 <div id="main">
   <div id="cy"></div>
-  <div id="info-panel">
-    <p style="color:#888;">Click a node or edge to see details.</p>
+  <div id="info-panel-wrap">
+    <div id="info-panel">
+      <button id="btn-toggle-panel" title="Move panel to right">&#x2192;</button>
+      <div id="info-content">
+        <p style="color:#888;">Click a node or edge to see details.</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -142,6 +147,10 @@ const cy = cytoscape({
         'line-color': '#0ea5e9', 'target-arrow-color': '#0ea5e9',
         'target-arrow-shape': 'triangle', 'line-style': 'dashed',
         'curve-style': 'bezier', 'width': 2, 'arrow-scale': 0.8, 'opacity': 0.8,
+        'target-label': 'data(label)', 'font-size': 8, 'color': '#5bb8e8',
+        'target-text-offset': 80,
+        'text-background-color': '#1a1a2e', 'text-background-opacity': .9,
+        'text-background-padding': '2px', 'text-background-shape': 'round-rectangle',
       }
     },
     // Inheritance edges (view) — dashed, same color as extension view
@@ -150,13 +159,32 @@ const cy = cytoscape({
         'line-color': '#a855f7', 'target-arrow-color': '#a855f7',
         'target-arrow-shape': 'triangle', 'line-style': 'dashed',
         'curve-style': 'bezier', 'width': 2, 'arrow-scale': 0.8, 'opacity': 0.8,
+        'target-label': 'data(label)', 'font-size': 8, 'color': '#c090f0',
+        'target-text-offset': 80,
+        'text-background-color': '#1a1a2e', 'text-background-opacity': .9,
+        'text-background-padding': '2px', 'text-background-shape': 'round-rectangle',
       }
     },
     // Extension edges (shared base styles)
     ${EXTENDER_EDGE_BASE_STYLES}
-    // Grid_core-specific: add opacity to extender edges
-    { selector: 'edge.edge-ext-ctrl, edge.edge-ext-view',
-      style: { 'opacity': 0.8 }
+    // Grid_core-specific: add opacity and label styles to extender edges
+    { selector: 'edge.edge-ext-ctrl',
+      style: {
+        'opacity': 0.8,
+        'target-label': 'data(label)', 'font-size': 8, 'color': '#5bb8e8',
+        'target-text-offset': 80,
+        'text-background-color': '#1a1a2e', 'text-background-opacity': .9,
+        'text-background-padding': '2px', 'text-background-shape': 'round-rectangle',
+      }
+    },
+    { selector: 'edge.edge-ext-view',
+      style: {
+        'opacity': 0.8,
+        'target-label': 'data(label)', 'font-size': 8, 'color': '#c090f0',
+        'target-text-offset': 80,
+        'text-background-color': '#1a1a2e', 'text-background-opacity': .9,
+        'text-background-padding': '2px', 'text-background-shape': 'round-rectangle',
+      }
     },
     // Runtime dependency edges — dotted, yellow
     { selector: 'edge.edge-runtime',
@@ -555,8 +583,32 @@ function runDepLevelsLayout() {
     },
     animate: true,
     animationDuration: 400,
-    stop: function() { updateEdgeStyles(); },
+    stop: function() { updateEdgeStyles(); staggerEdgeLabels(); },
   }).run();
+}
+
+/* ── Stagger edge labels near arrow to avoid overlap ── */
+function staggerEdgeLabels() {
+  var byTarget = {};
+  cy.edges('[label]').forEach(function(e) {
+    if (e.style('display') === 'none') return;
+    var tgt = e.data('target');
+    if (!byTarget[tgt]) byTarget[tgt] = [];
+    byTarget[tgt].push(e);
+  });
+  for (var tgt in byTarget) {
+    var edges = byTarget[tgt];
+    edges.sort(function(a, b) { return (a.data('label') || '').localeCompare(b.data('label') || ''); });
+    var step = 16;
+    var baseOffset = 80;
+    var maxOffset = 200;
+    for (var i = 0; i < edges.length; i++) {
+      var offset = Math.min(baseOffset + i * step, maxOffset);
+      edges[i].style('target-text-offset', offset);
+      var marginY = (i % 2 === 0) ? -16 : 16;
+      edges[i].style('target-text-margin-y', marginY);
+    }
+  }
 }
 
 // Run initial layout
@@ -601,6 +653,10 @@ function computeHighlightSet(target) {
 var selectedTarget = null;
 
 // ── Info Panel (grid_core-specific) ─────
+function pathWrap(p) {
+  return '<span class="path">' + p.split('/').join('/<wbr>') + '</span>';
+}
+
 function showInfo(target) {
   var d = target.data();
   var html = '<h3>' + (d.label || d.id) + '</h3>';
@@ -610,7 +666,7 @@ function showInfo(target) {
       + '<p><span class="lbl">To:</span> ' + d.target + '</p>'
       + (d.extenderName ? '<p><span class="lbl">Extender:</span> ' + d.extenderName + '</p>' : '');
   } else if (d.nodeType === 'module') {
-    html += '<p><span class="lbl">Source:</span> ' + (d.sourceFile || '') + '</p>';
+    html += '<p><span class="lbl">Source:</span> ' + pathWrap(d.sourceFile || '') + '</p>';
     html += '<p><span class="lbl">Area:</span> ' + (d.featureArea || '') + '</p>';
     if (d.definesControllers) html += '<p><span class="lbl">Controllers:</span> ' + d.definesControllers + '</p>';
     if (d.definesViews) html += '<p><span class="lbl">Views:</span> ' + d.definesViews + '</p>';
@@ -621,9 +677,9 @@ function showInfo(target) {
     html += '<p><span class="lbl">Class:</span> ' + (d.className || '') + '</p>';
     html += '<p><span class="lbl">Base:</span> ' + (d.baseClass || '') + '</p>';
     if (d.mixins) html += '<p><span class="lbl">Mixins:</span> ' + d.mixins + '</p>';
-    html += '<p><span class="lbl">Source:</span> ' + (d.sourceFile || '') + '</p>';
+    html += '<p><span class="lbl">Source:</span> ' + pathWrap(d.sourceFile || '') + '</p>';
   }
-  document.getElementById('info-panel').innerHTML = html;
+  document.getElementById('info-content').innerHTML = html;
 }
 
 // ── Shared interactive JS (highlight, edge toggles, search, click handlers, fit button, routing radio) ──

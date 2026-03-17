@@ -172,7 +172,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         const targetId = nodeIdMap.get(base);
         if (targetId && nodeIds.has(targetId)) {
           const inheritClass = targetId.startsWith('ctrl-') ? 'edge-inherit-ctrl' : 'edge-inherit-view';
-          addEdge(sourceId, targetId, { edgeType: 'inheritance' }, inheritClass);
+          addEdge(sourceId, targetId, { edgeType: 'inheritance', label: sourceId.replace(/^(ctrl|view)-/, '') }, inheritClass);
           break;
         }
       }
@@ -189,6 +189,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         addEdge(moduleId, targetId, {
           edgeType: 'extension',
           extenderName: ext.extenderName,
+          label: mod.registeredAs ?? mod.moduleName,
         }, 'edge-ext-ctrl');
       }
     }
@@ -199,6 +200,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         addEdge(moduleId, targetId, {
           edgeType: 'extension',
           extenderName: ext.extenderName,
+          label: mod.registeredAs ?? mod.moduleName,
         }, 'edge-ext-view');
       }
     }

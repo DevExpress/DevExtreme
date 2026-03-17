@@ -97,11 +97,11 @@ export function buildGcRegistrationLookup(
   return map;
 }
 
-/** Build a lookup map: relPath → ClassifiedModule for O(1) access. */
-export function buildModulesByRelPath(
+/** Build a lookup map: sourceFile → ClassifiedModule for O(1) access. */
+export function buildModulesBySourceFile(
   modules: ClassifiedModule[],
 ): Map<string, ClassifiedModule> {
-  return new Map(modules.map((m) => [m.relPath, m]));
+  return new Map(modules.map((m) => [m.sourceFile, m]));
 }
 
 function resolveForwardedRefs(
@@ -170,7 +170,7 @@ export function classifyModules(
       for (const ref of reg.gridCoreRefs) {
         const imp = pf.imports.get(ref);
         if (imp?.isFromGridCore) {
-          gridCoreSourceModule = imp.fromPath;
+          gridCoreSourceModule = imp.fromPath.replace(/^@ts\/grids\//, '');
           break;
         }
       }
@@ -178,8 +178,7 @@ export function classifyModules(
       results.push({
         moduleName: reg.moduleName,
         category,
-        sourceFile: pf.filePath,
-        relPath: reg.relPath,
+        sourceFile: reg.relPath,
         featureArea: getFeatureAreaFromPath(reg.relPath),
         registrationOrder: orderIndex >= 0 ? orderIndex : modulesOrder.length,
         gridCoreModuleName: reg.argIsIdentifier ? reg.argIdentifierName : null,
@@ -234,7 +233,7 @@ function collectExtenderSteps(
   for (const [targetName, ext] of Object.entries(mod.extenders[kind])) {
     addPipelineStep(stepsMap, targetName, {
       moduleName: mod.moduleName,
-      relPath: mod.relPath,
+      relPath: mod.sourceFile,
       extenderName: ext.extenderName,
       isFromGridCore: ext.isImportedFromGridCore,
       registrationOrder: mod.registrationOrder,
@@ -247,7 +246,7 @@ function collectExtenderSteps(
       if (!declaredTargets.has(targetName)) {
         addPipelineStep(stepsMap, targetName, {
           moduleName: mod.moduleName,
-          relPath: mod.relPath,
+          relPath: mod.sourceFile,
           extenderName: ext.extenderName,
           isFromGridCore: true,
           registrationOrder: mod.registrationOrder,
@@ -358,7 +357,7 @@ export function buildCrossDependencies(
 ): CrossDependency[] {
   const relPathToModule = new Map<string, string>();
   for (const mod of modules) {
-    relPathToModule.set(mod.relPath, mod.moduleName);
+    relPathToModule.set(mod.sourceFile, mod.moduleName);
   }
 
   const allRelPaths = new Set<string>();

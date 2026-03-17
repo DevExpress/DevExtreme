@@ -96,7 +96,7 @@ function buildSynthGcData(
       label: labelParts.join('\n'),
       nodeType: 'gridCoreModule',
       category: 'grid-core',
-      sourceFile: mod.gridCoreSourceModule ?? mod.relPath,
+      sourceFile: mod.gridCoreSourceModule ?? mod.sourceFile,
       featureArea: mod.featureArea,
       registrationOrder: -1,
       moduleName: mod.moduleName,
@@ -110,7 +110,7 @@ function buildSynthGcData(
 
 export function buildCytoscapeElements(
   data: ArchitectureData,
-  modulesByRelPath: Map<string, ClassifiedModule>,
+  modulesBySourceFile: Map<string, ClassifiedModule>,
 ): CytoscapeElement[] {
   const {
     elements, nodeIds, edgeIds, addNode,
@@ -262,7 +262,7 @@ export function buildCytoscapeElements(
       label: labelParts.join('\n'),
       nodeType: 'module',
       category: mod.category,
-      sourceFile: mod.relPath,
+      sourceFile: mod.sourceFile,
       featureArea: mod.featureArea,
       registrationOrder: mod.registrationOrder,
       gridCoreSource: mod.gridCoreSourceModule ?? '',
@@ -381,7 +381,7 @@ export function buildCytoscapeElements(
   if (nodeIds.has(dsaTargetId)) {
     for (let i = 0; i < data.dataSourceAdapterChain.length; i += 1) {
       const ext = data.dataSourceAdapterChain[i];
-      const mod = modulesByRelPath.get(ext.relPath);
+      const mod = modulesBySourceFile.get(ext.relPath);
 
       if (!mod) {
         // eslint-disable-next-line no-continue

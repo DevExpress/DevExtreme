@@ -6,7 +6,7 @@ export const BASE_CSS = `
   box-sizing: border-box; margin: 0; padding: 0
 }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; height: 100vh; background: #1a1a1a; color: #e8e8e8
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; height: 100vh; background: #1a1a1a; color: #e8e8e8; overflow: hidden
 }
 #sidebar {
   width: 270px; min-width: 270px; background: #2a2a2a; border-right: 1px solid #555; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px
@@ -39,13 +39,32 @@ body {
   font-size: 11px
 }
 #main {
-  flex: 1; display: flex; flex-direction: column
+  flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0; min-width: 0
 }
 #cy {
-  flex: 1; background: #212121
+  flex: 1; background: #212121; min-height: 0; min-width: 0
+}
+#info-panel-wrap {
+  background: #2a2a2a; font-size: 12px; line-height: 1.5; color: #e8e8e8;
+  height: 180px; min-height: 80px; border-top: 1px solid #555;
+  width: auto; border-left: none; flex-shrink: 0
 }
 #info-panel {
-  height: 180px; min-height: 80px; background: #2a2a2a; border-top: 1px solid #555; padding: 12px 16px; overflow-y: auto; font-size: 12px; line-height: 1.5; color: #e8e8e8
+  height: 100%; padding: 12px 16px; overflow-y: auto
+}
+#btn-toggle-panel {
+  float: right; margin: 0 0 4px 8px;
+  padding: 2px 6px; border: 1px solid #777; border-radius: 3px;
+  background: #333; color: #aaa; cursor: pointer; font-size: 11px; line-height: 1
+}
+#btn-toggle-panel:hover {
+  background: #444; color: #e8e8e8
+}
+#main.panel-right {
+  flex-direction: row
+}
+#main.panel-right #info-panel-wrap {
+  width: 350px; min-width: 350px; height: auto; min-height: 0; border-top: none; border-left: 1px solid #555
 }
 #info-panel h3 {
   font-size: 13px; margin-bottom: 4px
@@ -87,7 +106,7 @@ export const HIGHLIGHT_CYTOSCAPE_STYLES = `
       style: { 'opacity': 0.08 }
     },
     { selector: 'node.search-match',
-      style: { 'border-width': 3, 'border-color': '#FF6B6B' }
+      style: { 'border-width': 4, 'border-color': '#39FF14', 'border-opacity': 0.9 }
     },`;
 
 /**
@@ -216,10 +235,11 @@ document.getElementById('search').addEventListener('input', function() {
 });
 
 /* ── Shared: Click-to-select / deselect ── */
-var infoPanel = document.getElementById('info-panel');
+var infoPanel = document.getElementById('info-content');
 var defaultInfoHtml = '<p style="color:#888;">Click a node or edge to see details.</p>';
 
 cy.on('tap', 'node, edge', function(e) {
+  cy.nodes().removeClass('search-match');
   var t = e.target;
   var infoTarget = typeof normalizeClickTarget === 'function' ? normalizeClickTarget(t) : t;
   var checkId = infoTarget.id();
@@ -234,7 +254,9 @@ cy.on('tap', 'node, edge', function(e) {
   showInfo(infoTarget);
 });
 cy.on('tap', function(e) {
-  if (e.target === cy && selectedTarget) {
+  if (e.target !== cy) return;
+  cy.nodes().removeClass('search-match');
+  if (selectedTarget) {
     selectedTarget = null;
     clearHighlight();
     infoPanel.innerHTML = defaultInfoHtml;
@@ -247,5 +269,15 @@ document.getElementById('btn-fit').addEventListener('click', function() { cy.fit
 /* ── Shared: Edge routing radio ── */
 document.querySelectorAll('input[name="edge-routing"]').forEach(function(r) {
   r.addEventListener('change', function() { updateEdgeStyles(); });
+});
+
+/* ── Shared: Details panel position toggle ── */
+var togglePanelBtn = document.getElementById('btn-toggle-panel');
+togglePanelBtn.addEventListener('click', function() {
+  var main = document.getElementById('main');
+  var isRight = main.classList.toggle('panel-right');
+  togglePanelBtn.textContent = isRight ? '\\u2193' : '\\u2192';
+  togglePanelBtn.title = isRight ? 'Move panel to bottom' : 'Move panel to right';
+  cy.resize();
 });
 `;

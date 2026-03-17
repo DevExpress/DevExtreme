@@ -250,7 +250,7 @@ function parseRegisterModuleCall(
   const { relPath } = parsedFile;
   const reg: RegisterModuleCall = {
     moduleName,
-    sourceFile: parsedFile.filePath,
+    sourceFile: relPath,
     relPath,
     argIsIdentifier: false,
     argIdentifierName: null,
@@ -537,7 +537,7 @@ export function parseDataGridFile(filePath: string): ParsedFile {
         const extenderName = getNodeText(extenderArg, sf);
         const imp = parsedFile.imports.get(extenderName);
         parsedFile.dataSourceAdapterExtensions.push({
-          sourceFile: filePath,
+          sourceFile: relPath,
           relPath,
           extenderName,
           isImportedFromGridCore: imp?.isFromGridCore ?? false,

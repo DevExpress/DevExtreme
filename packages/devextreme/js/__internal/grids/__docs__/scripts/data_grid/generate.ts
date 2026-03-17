@@ -105,7 +105,7 @@ function main(): void {
     };
     for (const mod of allModules) {
       counts[mod.category] += 1;
-      console.log(`  [${mod.category.toUpperCase().padEnd(11)}] ${mod.moduleName} (${mod.relPath})`);
+      console.log(`  [${mod.category.toUpperCase().padEnd(11)}] ${mod.moduleName} (${mod.sourceFile})`);
     }
     console.log(`  Passthrough: ${counts.passthrough}, Replaced: ${counts.replaced}, Extended: ${counts.extended}, New: ${counts.new}`);
 
