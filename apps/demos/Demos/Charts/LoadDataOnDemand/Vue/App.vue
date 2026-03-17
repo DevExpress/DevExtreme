@@ -3,7 +3,7 @@
     id="chart"
     ref="chart"
     :data-source="chartDataSource"
-    title="Temperature in Toronto (2017)"
+    title="Temperature in Toronto (2025)"
   >
     <DxZoomAndPan argument-axis="pan"/>
     <DxScrollBar :visible="true"/>
@@ -62,8 +62,8 @@ type AjaxArgs = { startVisible: string; endVisible: string; startBound?: string;
 const HALFDAY = 43200000;
 const chart = ref();
 const visualRange = ref({
-  startValue: new Date(2017, 3, 1),
-  endValue: new Date(2017, 3, 15),
+  startValue: new Date(2025, 3, 1),
+  endValue: new Date(2025, 3, 15),
 });
 const chartDataSource = ref(new DataSource({
   store: [],
@@ -71,8 +71,8 @@ const chartDataSource = ref(new DataSource({
   paginate: false,
 }));
 const bounds = ref({
-  startValue: new Date(2017, 0, 1),
-  endValue: new Date(2017, 11, 31),
+  startValue: new Date(2025, 0, 1),
+  endValue: new Date(2025, 11, 31),
 });
 
 let packetsLock = 0;
