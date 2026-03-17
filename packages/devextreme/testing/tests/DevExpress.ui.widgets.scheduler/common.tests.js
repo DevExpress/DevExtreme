@@ -444,7 +444,7 @@ QUnit.module('View with configuration', () => {
         });
 
         assert.equal(scheduler.instance._workSpace.option('firstDayOfWeek'), 0, 'value of the firstDayOfWeek in workSpace');
-        assert.equal(scheduler.instance._header.option('firstDayOfWeek'), 0, 'value of the firstDayOfWeek in header');
+        assert.equal(scheduler.instance.header.option('firstDayOfWeek'), 0, 'value of the firstDayOfWeek in header');
     });
 
     QUnit.test('Scheduler should have specific groups setting of the view', async function(assert) {
