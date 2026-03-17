@@ -451,7 +451,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         break;
       case 'editing': {
         this.initEditing();
-        const editing = this.editing;
+        const { editing } = this;
 
         this.bringEditingModeToAppointments(editing);
 
