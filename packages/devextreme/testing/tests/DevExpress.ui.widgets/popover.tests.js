@@ -2481,5 +2481,45 @@ QUnit.module('accessibility', {
 
             assert.notOk(instance.option('visible'), 'popover hides immediately for non-hover hide event');
         });
+
+        QUnit.test('should respect hideEvent.delay when pointer leaves overlay content', function(assert) {
+            const instance = new Popover($('#what'), {
+                target: '#where',
+                showEvent: 'mouseenter',
+                hideEvent: { name: 'mouseleave', delay: 300 },
+                visible: true,
+            });
+
+            const $overlayContent = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
+
+            $overlayContent.trigger('mouseenter');
+            $overlayContent.trigger('mouseleave');
+
+            assert.ok(instance.option('visible'), 'popover is still visible during delay period');
+
+            this.clock.tick(300);
+
+            assert.notOk(instance.option('visible'), 'popover hides after the configured delay');
+        });
+
+        QUnit.test('should cancel scheduled overlay hide when pointer re-enters overlay content before delay expires', function(assert) {
+            const instance = new Popover($('#what'), {
+                target: '#where',
+                showEvent: 'mouseenter',
+                hideEvent: { name: 'mouseleave', delay: 300 },
+                visible: true,
+            });
+
+            const $overlayContent = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
+
+            $overlayContent.trigger('mouseenter');
+            $overlayContent.trigger('mouseleave');
+
+            this.clock.tick(150);
+            $overlayContent.trigger('mouseenter');
+            this.clock.tick(300);
+
+            assert.ok(instance.option('visible'), 'popover remains visible when pointer re-enters overlay before delay expires');
+        });
     });
 });

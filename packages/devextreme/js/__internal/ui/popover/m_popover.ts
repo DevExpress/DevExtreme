@@ -233,6 +233,22 @@ class Popover<
     this._attachEvent('hide');
   }
 
+  _scheduleHoverHide(): void {
+    this._clearEventsTimeouts();
+    const hideDelay = this._getEventDelay('hideEvent');
+
+    if (hideDelay) {
+      // eslint-disable-next-line no-restricted-globals
+      this._timeouts.hide = setTimeout(() => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        this.hide();
+      }, hideDelay);
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.hide();
+    }
+  }
+
   // eslint-disable-next-line class-methods-use-this
   _isHoverHideEventName(eventName: string): boolean {
     return HOVER_HIDE_EVENTS.some((hoverEvent) => eventName.split(/\s+/).includes(hoverEvent));
@@ -270,9 +286,8 @@ class Popover<
       if (target && $(e.relatedTarget).closest(target).length) {
         return;
       }
-      this._clearEventsTimeouts();
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.hide();
+
+      this._scheduleHoverHide();
     });
   }
 
