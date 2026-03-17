@@ -1,6 +1,6 @@
 The DevExtreme DataGrid supports data paging. The component can load rows in chunks to improve performance when working with large data sets. This demo allows you to navigate between pages using the DataGrid pager.
 
-You can use controls below the DataGrid to change the pager display mode and toggle the visibility of individual pager elements. Note: in compact mode, navigation buttons are always visible.
+You can use controls below the DataGrid to change pager display mode and toggle the visibility of individual pager elements. Note: navigation buttons are always visible in compact mode.
 <!--split-->
 
 The built-in [pager](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/pager/) contains the following elements:
