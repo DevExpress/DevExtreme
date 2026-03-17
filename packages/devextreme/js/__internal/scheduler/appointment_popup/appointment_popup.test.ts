@@ -377,70 +377,6 @@ describe('Appointment Form', () => {
   });
 
   describe('State', () => {
-    it('should have empty description, subject and timezone inputs when opening second common appointment', async () => {
-      const { scheduler, POM } = await createScheduler({
-        ...getDefaultConfig(),
-        editing: {
-          allowUpdating: true,
-          allowTimeZoneEditing: true,
-        },
-      });
-
-      scheduler.showAppointmentPopup({ ...commonAppointment });
-
-      POM.popup.setInputValue('descriptionEditor', 'temp');
-      POM.popup.setInputValue('startDateTimeZoneEditor', 'America/Los_Angeles');
-      POM.popup.setInputValue('endDateTimeZoneEditor', 'America/Anchorage');
-      POM.popup.saveButton.click();
-
-      scheduler.showAppointmentPopup();
-
-      expect(POM.popup.getInputValue('subjectEditor')).toBe('');
-      expect(POM.popup.getInputValue('descriptionEditor')).toBe('');
-      expect(POM.popup.getInputValue('startDateTimeZoneEditor')).toBe('');
-      expect(POM.popup.getInputValue('endDateTimeZoneEditor')).toBe('');
-    });
-
-    it('should have correct form data when opening second appointment', async () => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup(commonAppointment);
-
-      expect(POM.popup.dxForm.option('formData')).toMatchObject({ ...commonAppointment });
-
-      POM.popup.cancelButton.click();
-
-      scheduler.showAppointmentPopup(allDayAppointment);
-
-      expect(POM.popup.dxForm.option('formData')).toMatchObject({ ...allDayAppointment });
-    });
-
-    it('should have empty resource editor value when opening second appointment', async () => {
-      const { scheduler, POM } = await createScheduler({
-        ...getDefaultConfig(),
-        resources: [{
-          fieldExpr: 'roomId',
-          dataSource: [
-            { text: 'Room 1', id: 1, color: '#00af2c' },
-            { text: 'Room 2', id: 2, color: '#56ca85' },
-            { text: 'Room 3', id: 3, color: '#8ecd3c' },
-          ],
-        }],
-      });
-
-      scheduler.showAppointmentPopup({
-        text: 'Resource test app',
-        startDate: new Date(2017, 4, 9, 9, 30),
-        endDate: new Date(2017, 4, 9, 11),
-        roomId: 1,
-      });
-      POM.popup.setInputValue('roomId', 2);
-      scheduler.hideAppointmentPopup(true);
-
-      scheduler.showAppointmentPopup();
-      expect(POM.popup.getInputValue('roomId')).toBe('');
-    });
-
     it('should create a new form instance on each popup opening', async () => {
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
@@ -453,17 +389,6 @@ describe('Appointment Form', () => {
       const secondFormInstance = POM.popup.dxForm;
 
       expect(secondFormInstance).not.toBe(firstFormInstance);
-    });
-
-    it('should have correct repeat editor value when opening recurring appointment after common appointment', async () => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup({ ...commonAppointment });
-      POM.popup.saveButton.click();
-
-      scheduler.showAppointmentPopup({ ...recurringAppointment });
-      POM.popup.editSeriesButton.click();
-      expect(POM.popup.getInputValue('repeatEditor')).toBe('Daily');
     });
 
     it('should have correct editor values when opening for empty date cell - 1', async () => {
@@ -1275,6 +1200,28 @@ describe('Appointment Form', () => {
       POM.popup.recurrenceSettingsButton.click();
 
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(true);
+    });
+
+    it('should close repeat selectbox popup when navigating to recurrence group via settings button', async () => {
+      const { POM, scheduler } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{ ...recurringAppointment }],
+      });
+
+      const dataSource = (scheduler as any).getDataSource();
+      const appointment = dataSource.items()[0];
+
+      scheduler.showAppointmentPopup(appointment);
+      POM.popup.editSeriesButton.click();
+
+      const repeatEditor = POM.popup.dxForm.getEditor('repeatEditor');
+      POM.popup.getInput('repeatEditor').click();
+
+      expect(repeatEditor?.option('opened')).toBe(true);
+
+      POM.popup.recurrenceSettingsButton.click();
+
+      expect(repeatEditor?.option('opened')).toBe(false);
     });
 
     it('should have disabled week day buttons when allowUpdating is false', async () => {

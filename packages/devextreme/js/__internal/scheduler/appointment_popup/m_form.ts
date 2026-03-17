@@ -920,6 +920,8 @@ export class AppointmentForm {
   }
 
   showRecurrenceGroup(): void {
+    this.dxForm.getEditor(REPEAT_EDITOR_NAME)?.close?.();
+
     this._popup.updateToolbarForRecurrenceGroup();
 
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
