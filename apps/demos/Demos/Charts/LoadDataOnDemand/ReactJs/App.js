@@ -23,13 +23,13 @@ const chartDataSource = new DataSource({
   paginate: false,
 });
 const wholeRange = {
-  startValue: new Date(2017, 0, 1),
-  endValue: new Date(2017, 11, 31),
+  startValue: new Date(2025, 0, 1),
+  endValue: new Date(2025, 11, 31),
 };
 function App() {
   const [visualRange, setVisualRange] = useState({
-    startValue: new Date(2017, 3, 1),
-    endValue: new Date(2017, 3, 15),
+    startValue: new Date(2025, 3, 1),
+    endValue: new Date(2025, 3, 15),
   });
   const handleChange = (e) => {
     if (e.fullName === 'argumentAxis.visualRange') {
@@ -44,7 +44,7 @@ function App() {
   return (
     <Chart
       id="chart"
-      title="Temperature in Toronto (2017)"
+      title="Temperature in Toronto (2025)"
       dataSource={chartDataSource}
       onOptionChanged={handleChange}
     >

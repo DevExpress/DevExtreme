@@ -45,7 +45,7 @@ function App() {
     <div id="chart-demo">
       {monthWeather && (
         <Chart
-          title="Temperature in Seattle: October 2017"
+          title="Temperature in Seattle: October 2025"
           dataSource={monthWeather}
           customizePoint={customizePoint}
         >
