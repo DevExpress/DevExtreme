@@ -309,7 +309,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           items: [],
           allowDrag: this.allowDragging(),
           allowResize: this.allowResizing(),
-          itemTemplate: this._getAppointmentTemplate('appointmentTemplate'),
+          itemTemplate: this.getAppointmentTemplate('appointmentTemplate'),
         });
 
         this.postponeResourceLoading().done(() => {
@@ -1007,7 +1007,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     // @ts-expect-error
     this._appointments = this._createComponent('<div>', AppointmentCollection, this.appointmentsConfig());
-    this._appointments.option('itemTemplate', this._getAppointmentTemplate('appointmentTemplate'));
+    this._appointments.option('itemTemplate', this.getAppointmentTemplate('appointmentTemplate'));
 
     this.appointmentTooltip = new (this.option('adaptivityEnabled')
       ? MobileTooltipStrategy
@@ -1101,7 +1101,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       container: that.$element(),
       getScrollableContainer: that.getWorkSpaceScrollableContainer.bind(that),
       addDefaultTemplates: that._templateManager.addDefaultTemplates.bind(that._templateManager),
-      getAppointmentTemplate: that._getAppointmentTemplate.bind(that),
+      getAppointmentTemplate: that.getAppointmentTemplate.bind(that),
       showAppointmentPopup: that.showAppointmentPopup.bind(that),
       checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
       isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
@@ -1404,7 +1404,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  _getAppointmentTemplate(optionName) {
+  getAppointmentTemplate(optionName) {
     if (this.currentView?.[optionName]) {
       return this._getTemplate(this.currentView[optionName]);
     }
