@@ -62,8 +62,8 @@ catalogs:
       specifier: ^2.13.0
       version: 2.13.0
     '@eslint/eslintrc':
-      specifier: 3.3.4
-      version: 3.3.4
+      specifier: 3.3.5
+      version: 3.3.5
     '@stylistic/eslint-plugin':
       specifier: 5.7.1
       version: 5.7.1
@@ -608,7 +608,7 @@ importers:
         version: 1.4.1(eslint@9.39.3(jiti@2.6.1))
       '@eslint/eslintrc':
         specifier: 'catalog:'
-        version: 3.3.4
+        version: 3.3.5
       '@rollup/plugin-babel':
         specifier: 6.1.0
         version: 6.1.0(@babel/core@7.28.6)(@types/babel__core@7.20.5)(rollup@4.59.0)
@@ -947,7 +947,7 @@ importers:
     devDependencies:
       '@eslint/eslintrc':
         specifier: 'catalog:'
-        version: 3.3.4
+        version: 3.3.5
       '@rollup/plugin-alias':
         specifier: 3.1.9
         version: 3.1.9(rollup@4.59.0)
@@ -1031,7 +1031,7 @@ importers:
         version: 19.2.19(@angular/core@21.2.4(@angular/compiler@21.1.6)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2)
       '@eslint/eslintrc':
         specifier: 'catalog:'
-        version: 3.3.4
+        version: 3.3.5
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.7.1(eslint@9.39.3(jiti@2.6.1))
@@ -1091,7 +1091,7 @@ importers:
         version: 7.28.5(@babel/core@7.28.6)
       '@eslint/eslintrc':
         specifier: 'catalog:'
-        version: 3.3.4
+        version: 3.3.5
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.7.1(eslint@9.39.3(jiti@2.6.1))
@@ -1405,7 +1405,7 @@ importers:
         version: 2.13.0
       '@eslint/eslintrc':
         specifier: 'catalog:'
-        version: 3.3.4
+        version: 3.3.5
       '@jest/globals':
         specifier: 29.7.0
         version: 29.7.0
@@ -1863,7 +1863,7 @@ importers:
         version: 2.13.0
       '@eslint/eslintrc':
         specifier: 'catalog:'
-        version: 3.3.4
+        version: 3.3.5
       '@stylistic/eslint-plugin':
         specifier: 'catalog:'
         version: 5.7.1(eslint@9.39.3(jiti@2.6.1))
@@ -4457,8 +4457,8 @@ packages:
     resolution: {integrity: sha512-J6KFFz5QCYUJq3pf0mjEcCJVERbzv71PUIDczuh9JkwGEzced6CO5ADLHB1rbf/+oPBtoPfMYNOpGDzCANlbXw==}
     engines: {node: ^10.12.0 || >=12.0.0}
 
-  '@eslint/eslintrc@3.3.4':
-    resolution: {integrity: sha512-4h4MVF8pmBsncB60r0wSJiIeUKTSD4m7FmTFThG8RHlsg9ajqckLm9OraguFGZE4vVdpiI1Q4+hFnisopmG6gQ==}
+  '@eslint/eslintrc@3.3.5':
+    resolution: {integrity: sha512-4IlJx0X0qftVsN5E+/vGujTRIFtwuLbNsVUe7TO6zYPDR1O6nFwvwhIKEKSrl6dZchmYBITazxKoUYOjdtjlRg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/js@9.39.3':
@@ -22535,7 +22535,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@eslint/eslintrc@3.3.4':
+  '@eslint/eslintrc@3.3.5':
     dependencies:
       ajv: 6.14.0
       debug: 4.4.3
@@ -27094,6 +27094,10 @@ snapshots:
     dependencies:
       acorn: 8.15.0
 
+  acorn-jsx@5.3.2(acorn@8.16.0):
+    dependencies:
+      acorn: 8.16.0
+
   acorn-node@1.8.2:
     dependencies:
       acorn: 7.4.1
@@ -31367,7 +31371,7 @@ snapshots:
       '@eslint/config-array': 0.21.1
       '@eslint/config-helpers': 0.4.2
       '@eslint/core': 0.17.0
-      '@eslint/eslintrc': 3.3.4
+      '@eslint/eslintrc': 3.3.5
       '@eslint/js': 9.39.3
       '@eslint/plugin-kit': 0.4.1
       '@humanfs/node': 0.16.6
@@ -31419,8 +31423,8 @@ snapshots:
 
   espree@10.4.0:
     dependencies:
-      acorn: 8.15.0
-      acorn-jsx: 5.3.2(acorn@8.15.0)
+      acorn: 8.16.0
+      acorn-jsx: 5.3.2(acorn@8.16.0)
       eslint-visitor-keys: 4.2.1
 
   espree@6.2.1:
@@ -42107,7 +42111,7 @@ snapshots:
   unplugin@2.3.11:
     dependencies:
       '@jridgewell/remapping': 2.3.5
-      acorn: 8.15.0
+      acorn: 8.16.0
       picomatch: 4.0.3
       webpack-virtual-modules: 0.6.2
 
