@@ -74,7 +74,7 @@ import { DataSource } from 'devextreme-vue/common/data';
 
 import { months } from './data.ts';
 
-const year = 2017;
+const year = 2025;
 let selectedMonth = 1;
 
 const startOfMonthStr = (month: number): string => `${month}/01/${year}`;

@@ -23,12 +23,12 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
     return TIMELINE_CLASS;
   }
 
-  _incrementDate(date) {
+  protected override incrementDate(date) {
     const day = date.getDay();
     if (day === LAST_DAY_WEEK_INDEX) {
       date.setDate(date.getDate() + 2);
     }
-    super._incrementDate(date);
+    super.incrementDate(date);
   }
 }
 
