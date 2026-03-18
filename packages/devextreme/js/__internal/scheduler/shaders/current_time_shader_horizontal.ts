@@ -6,8 +6,8 @@ import CurrentTimeShader from './current_time_shader';
 
 class HorizontalCurrentTimeShader extends CurrentTimeShader {
   renderShader(): void {
-    const groupCount = this._workSpace.isHorizontalGroupedWorkSpace()
-      ? this._workSpace.getGroupCount()
+    const groupCount = this._workSpace._isHorizontalGroupedWorkSpace()
+      ? this._workSpace._getGroupCount()
       : 1;
 
     for (let i = 0; i < groupCount; i += 1) {
@@ -34,7 +34,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
 
     if (groupIndex >= 1) {
       const workSpace = this._workSpace;
-      const indicationWidth = workSpace.getCellCount() * workSpace.getCellWidth();
+      const indicationWidth = workSpace._getCellCount() * workSpace.getCellWidth();
       $shader.css('left', indicationWidth);
     } else {
       $shader.css('left', 0);
@@ -64,9 +64,9 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
     this.applyShaderWidth($shader, shaderWidth);
 
     if (isFirstShaderPart) {
-      shaderLeft = workSpace.getCellCount() * workSpace.getCellWidth() * groupIndex;
+      shaderLeft = workSpace._getCellCount() * workSpace.getCellWidth() * groupIndex;
     } else {
-      shaderLeft = workSpace.getCellWidth() * integerPart * workSpace.getGroupCount()
+      shaderLeft = workSpace.getCellWidth() * integerPart * workSpace._getGroupCount()
         + groupIndex * workSpace.getCellWidth();
     }
 

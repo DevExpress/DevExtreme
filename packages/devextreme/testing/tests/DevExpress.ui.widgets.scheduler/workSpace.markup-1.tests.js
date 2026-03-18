@@ -261,7 +261,7 @@ QUnit.module('Workspace Day markup with vertical grouping', dayWithGroupingModul
     });
 
     QUnit.test('Scheduler workspace day should have right groupedStrategy, groupOrientation = vertical', async function(assert) {
-        assert.ok(this.instance.groupedStrategy instanceof SchedulerWorkSpaceVerticalStrategy, 'Grouped strategy is right');
+        assert.ok(this.instance._groupedStrategy instanceof SchedulerWorkSpaceVerticalStrategy, 'Grouped strategy is right');
     });
 
     QUnit.test('Scheduler all day rows should be built into dateTable', async function(assert) {

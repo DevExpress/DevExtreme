@@ -63,7 +63,7 @@ QUnit.module('Timeline markup', moduleConfig, () => {
     });
 
     QUnit.test('Scheduler timeline should have right groupedStrategy by default', async function(assert) {
-        assert.ok(this.instance.groupedStrategy instanceof SchedulerWorkSpaceVerticalStrategy, 'Grouped strategy is right');
+        assert.ok(this.instance._groupedStrategy instanceof SchedulerWorkSpaceVerticalStrategy, 'Grouped strategy is right');
     });
 
     QUnit.test('Two scrollable elements should be rendered', async function(assert) {
@@ -440,7 +440,7 @@ timelineDayModuleConfig = {
 
 QUnit.module('TimelineDay with horizontal grouping markup', timelineDayModuleConfig, () => {
     QUnit.test('Scheduler timeline day should have right groupedStrategy, groupOrientation = horizontal', async function(assert) {
-        assert.ok(this.instance.groupedStrategy instanceof SchedulerWorkSpaceHorizontalStrategy, 'Grouped strategy is right');
+        assert.ok(this.instance._groupedStrategy instanceof SchedulerWorkSpaceHorizontalStrategy, 'Grouped strategy is right');
     });
 
     QUnit.test('Scheduler timeline day should have a right css class, groupOrientation = horizontal', async function(assert) {

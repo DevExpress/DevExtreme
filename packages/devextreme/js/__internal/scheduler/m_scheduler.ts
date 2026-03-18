@@ -400,7 +400,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         break;
       case 'onAppointmentContextMenu':
         this._appointments.option('onItemContextMenu', this._createActionByOption(name));
-        this.appointmentTooltip.options.onItemContextMenu = this._createActionByOption(name);
+        this.appointmentTooltip._options.onItemContextMenu = this._createActionByOption(name);
         break;
       case 'noDataText':
       case 'allowMultipleCellSelection':

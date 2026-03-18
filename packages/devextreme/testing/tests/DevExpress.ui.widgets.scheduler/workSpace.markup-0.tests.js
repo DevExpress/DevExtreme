@@ -137,7 +137,7 @@ const VERTICAL_SIZES_CLASS = 'dx-scheduler-cell-sizes-vertical';
             });
 
             QUnit.test('Scheduler workspace day should have right groupedStrategy by default', async function(assert) {
-                assert.ok(this.instance.groupedStrategy instanceof SchedulerWorkSpaceHorizontalStrategy, 'Grouped strategy is right');
+                assert.ok(this.instance._groupedStrategy instanceof SchedulerWorkSpaceHorizontalStrategy, 'Grouped strategy is right');
             });
         }
 
