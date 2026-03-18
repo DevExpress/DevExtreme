@@ -896,8 +896,6 @@ export class AppointmentForm {
   }
 
   showMainGroup(): void {
-    this._popup.updateToolbarForMainGroup();
-
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
     const editingConfig = this.scheduler.getEditingConfig();
     const configuredHeight = editingConfig?.popup?.height ?? 'auto';
@@ -917,11 +915,14 @@ export class AppointmentForm {
       this._$recurrenceGroup.addClass(CLASSES.recurrenceHidden);
       this._$recurrenceGroup.attr('inert', true);
     }
+
+    // Note: Updating toolbar causes popup position recalculation,
+    // so it should be called after changing groups visibility.
+    // Alternatively, dxPopup.repaint() can be called.
+    this._popup.updateToolbarForMainGroup();
   }
 
   showRecurrenceGroup(): void {
-    this._popup.updateToolbarForRecurrenceGroup();
-
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
 
     if (currentHeight === 'auto' || currentHeight === undefined) {
@@ -940,6 +941,11 @@ export class AppointmentForm {
 
       this.focusFirstFocusableInGroup(this._$recurrenceGroup);
     }
+
+    // Note: Updating toolbar causes popup position recalculation,
+    // so it should be called after changing groups visibility.
+    // Alternatively, dxPopup.repaint() can be called.
+    this._popup.updateToolbarForRecurrenceGroup();
   }
 
   saveRecurrenceValue(): void {
