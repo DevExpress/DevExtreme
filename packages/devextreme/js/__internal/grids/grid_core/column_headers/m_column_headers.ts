@@ -497,11 +497,12 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
 
   protected _resizeCore(): void {
     const rowCount = this.getRowCount();
-    const columnHidingEnabled = this.option('columnHidingEnabled');
+    const hasHidingColumnsQueue = !!this._adaptiveColumnsController
+      ?.getHidingColumnsQueue()?.length;
 
     super._resizeCore.apply(this);
 
-    if (rowCount > 1 && columnHidingEnabled) {
+    if (rowCount > 1 && hasHidingColumnsQueue) {
       this.updateFirstHeaderClasses();
     }
   }
