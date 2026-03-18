@@ -131,10 +131,6 @@ export function isUnsupportedKeyFormat(licenseKey: string | undefined): boolean 
     errors.log('W0000', 'config', 'licenseKey', 'LCXv1 is specified in the license key');
     return true;
   }
-  if (hasLicensePrefix(licenseKey, 'egow')) {
-    errors.log('W0000', 'config', 'licenseKey', 'DevExtreme key is specified in the license key');
-    return true;
-  }
 
   return false;
 }
