@@ -2112,18 +2112,18 @@ QUnit.module('Resizing', moduleConfig, () => {
             });
         });
 
-        QUnit.test(`non resizable panes shouldn't change their sizes after update splitter dimension, ${orientation} orientation`, function(assert) {
+        QUnit.test(`non resizable panes with restrictions shouldn't change their sizes after update splitter dimension, ${orientation} orientation`, function(assert) {
             this.reinit({
                 width: 1018,
                 height: 1018,
-                dataSource: [{ }, { }, { }, { resizable: false, size: '300px' }],
+                dataSource: [{ }, { }, { }, { resizable: false, minSize: '300px', maxSize: '300px' }],
                 orientation,
             });
 
             this.instance.option(orientation === 'horizontal' ? 'width' : 'height', 700);
 
-            this.checkItemSizes([0, 166.664, 215.336, 300]);
-            this.assertLayout([0, 24.4375, 31.5742, 43.9883]);
+            this.checkItemSizes([104.602, 138.695, 138.703, 300]);
+            this.assertLayout(['15.3372', '20.3372', '20.3372', '43.9883']);
         });
     });
 
@@ -3000,32 +3000,32 @@ QUnit.module('Resizing', moduleConfig, () => {
         initialWidth: 416,
         newWidth: 816,
         dataSource: [{ size: '200px', maxSize: '200px' }, { }, { }],
-        expectedLayout: ['25', '12.5', '62.5'],
-        expectedItemSizes: [200, 100, 500],
+        expectedLayout: ['25', '37.5', '37.5'],
+        expectedItemSizes: [200, 300, 300],
     }, {
         initialWidth: 816,
         newWidth: 416,
         dataSource: [{ size: '200px', minSize: '200px' }, { }, { }],
-        expectedLayout: ['50', '50', '0'],
-        expectedItemSizes: [200, 200, 0],
+        expectedLayout: ['50', '25', '25'],
+        expectedItemSizes: [200, 100, 100],
     }, {
         initialWidth: 416,
         newWidth: 816,
         dataSource: [{ }, { size: '200px', maxSize: '200px' }, { }],
-        expectedLayout: ['12.5', '25', '62.5'],
-        expectedItemSizes: [100, 200, 500],
+        expectedLayout: ['37.5', '25', '37.5'],
+        expectedItemSizes: [300, 200, 300],
     }, {
-        initialWidth: 416,
-        newWidth: 816,
+        initialWidth: 408,
+        newWidth: 808,
         dataSource: [{ size: '200px', minSize: '100px', maxSize: '300px' }, { }],
-        expectedLayout: ['24.7525', '75.2475'],
-        expectedItemSizes: [200, 608],
+        expectedLayout: ['37.5', '62.5'],
+        expectedItemSizes: [300, 500],
     }, {
         initialWidth: 208,
         newWidth: 808,
         dataSource: [{ size: '100px', maxSize: '200px' }, { }],
-        expectedLayout: ['12.5', '87.5'],
-        expectedItemSizes: [100, 700],
+        expectedLayout: ['25', '75'],
+        expectedItemSizes: [200, 600],
     }].forEach(({ initialWidth, newWidth, dataSource, expectedLayout, expectedItemSizes }) => {
         QUnit.test(`pane constraints should be respected after dimension change from ${initialWidth} to ${newWidth}, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
             this.reinit({
@@ -3039,6 +3039,51 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.checkItemSizes(expectedItemSizes);
             this.assertLayout(expectedLayout);
         });
+    });
+
+    QUnit.test('layout should be restored after shrinking and expanding back', function(assert) {
+        this.reinit({
+            width: 416,
+            height: 408,
+            dataSource: [{ }, { }, { }],
+        });
+
+        this.assertLayout(['33.3333', '33.3333', '33.3333']);
+
+        this.instance.option('width', 40);
+        this.instance.option('width', 416);
+
+        this.assertLayout(['33.3333', '33.3333', '33.3333']);
+    });
+
+    QUnit.test('layout should be restored after shrinking and expanding with minSize', function(assert) {
+        this.reinit({
+            width: 416,
+            height: 408,
+            dataSource: [{ minSize: '100px' }, { }, { }],
+        });
+
+        this.assertLayout(['33.3333', '33.3333', '33.3333']);
+
+        this.instance.option('width', 40);
+        this.instance.option('width', 416);
+
+        this.assertLayout(['33.3333', '33.3333', '33.3333']);
+    });
+
+    QUnit.test('layout should be restored after shrinking and expanding with maxSize', function(assert) {
+        this.reinit({
+            width: 816,
+            height: 408,
+            dataSource: [{ size: '200px', maxSize: '200px' }, { }, { }],
+        });
+
+        this.assertLayout(['25', '37.5', '37.5']);
+
+        this.instance.option('width', 40);
+        this.instance.option('width', 816);
+
+        this.assertLayout(['25', '37.5', '37.5']);
     });
 });
 
