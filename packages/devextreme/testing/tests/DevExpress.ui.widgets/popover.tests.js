@@ -2345,62 +2345,181 @@ QUnit.module('accessibility', {
         assert.strictEqual($overlay.attr('role'), 'dialog');
     });
 
-    QUnit.test('should hide visible popover on esc press', function(assert) {
-        const popover = new Popover($('#what'), {
-            target: '#where',
-            visible: true,
+    QUnit.module('WCAG - dismissible', () => {
+        QUnit.test('should hide visible popover on esc press', function(assert) {
+            const popover = new Popover($('#what'), {
+                target: '#where',
+                visible: true,
+            });
+            const $target = $('#where').attr('tabindex', 0);
+            const keyboard = keyboardMock($target);
+
+            keyboard.keyDown('esc');
+
+            assert.strictEqual(popover.option('visible'), false, 'popover is hidden');
         });
-        const $target = $('#where').attr('tabindex', 0);
-        const keyboard = keyboardMock($target);
 
-        keyboard.keyDown('esc');
-
-        assert.strictEqual(popover.option('visible'), false, 'popover is hidden');
-    });
-
-    QUnit.test('should hide only topmost popover on esc press', function(assert) {
-        const $markup = $('<div id="popover1"></div>' +
+        QUnit.test('should hide only topmost popover on esc press', function(assert) {
+            const $markup = $('<div id="popover1"></div>' +
             '<div id="popover2"></div>' +
             '<div id="target1" tabindex="0"></div>' +
             '<div id="target2" tabindex="0"></div>')
-            .appendTo('body');
+                .appendTo('body');
 
 
-        const bottomPopover = new Popover($('#popover1'), {
-            target: '#target1',
-            visible: true,
+            const bottomPopover = new Popover($('#popover1'), {
+                target: '#target1',
+                visible: true,
+            });
+            const topPopover = new Popover($('#popover2'), {
+                target: '#target2',
+                visible: true,
+            });
+
+            const keyboard = keyboardMock($('#target2'));
+
+            keyboard.keyDown('esc');
+
+            assert.strictEqual(topPopover.option('visible'), false, 'top popover is hidden');
+            assert.strictEqual(bottomPopover.option('visible'), true, 'bottom popover is still visible');
+
+            $markup.remove();
         });
-        const topPopover = new Popover($('#popover2'), {
-            target: '#target2',
-            visible: true,
+
+        QUnit.test('should not call hide for hidden popover on esc press', function(assert) {
+            const popover = new Popover($('#what'), {
+                target: '#where',
+                visible: true,
+                animation: null,
+            });
+            const hideSpy = sinon.spy(popover, 'hide');
+            const $target = $('#where').attr('tabindex', 0);
+            const keyboard = keyboardMock($target);
+
+            popover.hide();
+            hideSpy.resetHistory();
+
+            keyboard.keyDown('esc');
+
+            assert.strictEqual(hideSpy.callCount, 0, 'hide is not called');
+            assert.strictEqual(popover.option('visible'), false, 'popover remains hidden');
         });
-
-        const keyboard = keyboardMock($('#target2'));
-
-        keyboard.keyDown('esc');
-
-        assert.strictEqual(topPopover.option('visible'), false, 'top popover is hidden');
-        assert.strictEqual(bottomPopover.option('visible'), true, 'bottom popover is still visible');
-
-        $markup.remove();
     });
 
-    QUnit.test('should not call hide for hidden popover on esc press', function(assert) {
-        const popover = new Popover($('#what'), {
-            target: '#where',
-            visible: true,
-            animation: null,
+    QUnit.module('WCAG - hoverable', {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+        },
+        afterEach: function() {
+            this.clock.restore();
+        }
+    }, () => {
+        QUnit.test('should stay visible when pointer moves from target to overlay content', function(assert) {
+            const instance = new Popover($('#what'), {
+                target: '#where',
+                showEvent: 'mouseenter',
+                hideEvent: 'mouseleave',
+                visible: true,
+            });
+
+            const $overlayContent = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
+
+            $('#where').trigger('mouseleave');
+            $overlayContent.trigger('mouseenter');
+            this.clock.tick(200);
+
+            assert.ok(instance.option('visible'), 'popover remains visible after pointer moves to overlay content');
         });
-        const hideSpy = sinon.spy(popover, 'hide');
-        const $target = $('#where').attr('tabindex', 0);
-        const keyboard = keyboardMock($target);
 
-        popover.hide();
-        hideSpy.resetHistory();
+        QUnit.test('should hide when pointer leaves overlay content', function(assert) {
+            const instance = new Popover($('#what'), {
+                target: '#where',
+                showEvent: 'mouseenter',
+                hideEvent: 'mouseleave',
+                visible: true,
+            });
 
-        keyboard.keyDown('esc');
+            const $overlayContent = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
 
-        assert.strictEqual(hideSpy.callCount, 0, 'hide is not called');
-        assert.strictEqual(popover.option('visible'), false, 'popover remains hidden');
+            $overlayContent.trigger('mouseenter');
+            $overlayContent.trigger('mouseleave');
+
+            assert.notOk(instance.option('visible'), 'popover hides when pointer leaves overlay content');
+        });
+
+        QUnit.test('should stay visible when pointer moves from overlay back to target', function(assert) {
+            const instance = new Popover($('#what'), {
+                target: '#where',
+                showEvent: 'mouseenter',
+                hideEvent: 'mouseleave',
+                visible: true,
+            });
+
+            const $overlayContent = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
+
+            $overlayContent.trigger('mouseenter');
+
+            const mouseLeaveEvent = $.Event('mouseleave');
+            mouseLeaveEvent.relatedTarget = $('#where')[0];
+            $overlayContent.trigger(mouseLeaveEvent);
+
+            this.clock.tick(200);
+
+            assert.ok(instance.option('visible'), 'popover stays visible when pointer moves from overlay back to target');
+        });
+
+        QUnit.test('should not apply hoverable behavior for non-hover hide events', function(assert) {
+            const instance = new Popover($('#what'), {
+                target: '#where',
+                showEvent: 'dxclick',
+                hideEvent: 'dxclick',
+                visible: true,
+            });
+
+            $('#where').trigger('dxclick');
+            this.clock.tick(0);
+
+            assert.notOk(instance.option('visible'), 'popover hides immediately for non-hover hide event');
+        });
+
+        QUnit.test('should respect hideEvent.delay when pointer leaves overlay content', function(assert) {
+            const instance = new Popover($('#what'), {
+                target: '#where',
+                showEvent: 'mouseenter',
+                hideEvent: { name: 'mouseleave', delay: 300 },
+                visible: true,
+            });
+
+            const $overlayContent = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
+
+            $overlayContent.trigger('mouseenter');
+            $overlayContent.trigger('mouseleave');
+
+            assert.ok(instance.option('visible'), 'popover is still visible during delay period');
+
+            this.clock.tick(300);
+
+            assert.notOk(instance.option('visible'), 'popover hides after the configured delay');
+        });
+
+        QUnit.test('should cancel scheduled overlay hide when pointer re-enters overlay content before delay expires', function(assert) {
+            const instance = new Popover($('#what'), {
+                target: '#where',
+                showEvent: 'mouseenter',
+                hideEvent: { name: 'mouseleave', delay: 300 },
+                visible: true,
+            });
+
+            const $overlayContent = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
+
+            $overlayContent.trigger('mouseenter');
+            $overlayContent.trigger('mouseleave');
+
+            this.clock.tick(150);
+            $overlayContent.trigger('mouseenter');
+            this.clock.tick(300);
+
+            assert.ok(instance.option('visible'), 'popover remains visible when pointer re-enters overlay before delay expires');
+        });
     });
 });

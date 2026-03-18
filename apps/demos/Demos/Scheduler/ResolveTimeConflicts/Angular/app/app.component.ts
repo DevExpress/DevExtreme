@@ -62,7 +62,6 @@ export class AppComponent {
     onInitialized: (e: DxPopupTypes.InitializedEvent) => { this.popup = e.component; },
     onHidden: () => {
       this.setConflictError(false);
-      this.form?.updateData('assigneeId', []);
     },
   };
 
