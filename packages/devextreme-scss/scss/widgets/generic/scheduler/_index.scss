@@ -278,13 +278,6 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
       }
     }
 
-    // Fix icon height and padding for floating and static input's label modes
-    .dx-item-content:has(.dx-texteditor-with-floating-label):not(:has(.dx-scheduler-form-all-day-switch)) .dx-scheduler-form-icon.dx-field-item,
-    .dx-item-content:has(.dx-texteditor-with-label):not(:has(.dx-scheduler-form-all-day-switch)) .dx-scheduler-form-icon.dx-field-item {
-      height: $generic-scheduler-appointment-popup-icon-static-label-container-height;
-      padding-top: $generic-scheduler-appointment-popup-icon-static-label-padding-top;
-    }
-
     .dx-scheduler-form-icon-sized-gap {
       width: $generic-scheduler-appointment-popup-icon-size;
     }
