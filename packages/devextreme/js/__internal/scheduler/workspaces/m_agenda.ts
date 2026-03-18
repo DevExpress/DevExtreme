@@ -138,10 +138,10 @@ class SchedulerAgenda extends WorkSpace {
 
   protected override initWorkSpaceUnits() {
     this.initGroupTable();
-    this._$timePanel = $('<table>').attr('aria-hidden', true).addClass(TIME_PANEL_CLASS);
+    this.$timePanel = $('<table>').attr('aria-hidden', true).addClass(TIME_PANEL_CLASS);
     this._$dateTable = $('<table>').attr('aria-hidden', true).addClass(DATE_TABLE_CLASS);
     this._$dateTableScrollableContent = $('<div>').addClass('dx-scheduler-date-table-scrollable-content');
-    this._$dateTableContainer = $('<div>').addClass('dx-scheduler-date-table-container');
+    this.$dateTableContainer = $('<div>').addClass('dx-scheduler-date-table-container');
   }
 
   private initGroupTable() {
@@ -304,7 +304,7 @@ class SchedulerAgenda extends WorkSpace {
 
   protected override cleanView() {
     this._$dateTable.empty();
-    this._$timePanel.empty();
+    this.$timePanel.empty();
 
     if (this._$groupTable) {
       this._$groupTable.empty();
@@ -323,14 +323,14 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   protected override createWorkSpaceStaticElements() {
-    this._$dateTableContainer.append(this._$dateTable);
+    this.$dateTableContainer.append(this._$dateTable);
     this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
 
     if (this._$groupTable) {
       this._$dateTableScrollableContent.prepend(this._$groupTable);
     }
 
-    this._$dateTableScrollableContent.append(this._$timePanel, this._$dateTableContainer);
+    this._$dateTableScrollableContent.append(this.$timePanel, this.$dateTableContainer);
     this.$element().append(this._dateTableScrollable.$element());
   }
 
@@ -430,7 +430,7 @@ class SchedulerAgenda extends WorkSpace {
 
   protected override renderTimePanel() {
     this.renderTableBody({
-      container: getPublicElement(this._$timePanel),
+      container: getPublicElement(this.$timePanel),
       rowCount: this.getTimePanelRowCount(),
       cellCount: 1,
       rowClass: TIME_PANEL_ROW_CLASS,
