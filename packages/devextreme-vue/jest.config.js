@@ -1,3 +1,4 @@
+const path = require('path');
 const base = require('../../jest.config.base.js');
 const pack = require('./package');
 
@@ -5,8 +6,8 @@ const packageName = pack.name;
 
 module.exports = {
   ...base,
-  name: packageName,
   displayName: packageName,
+  testEnvironment: 'jsdom',
   testEnvironmentOptions: {
     url: 'http://localhost',
   },
@@ -18,7 +19,8 @@ module.exports = {
     '^.+\\.(ts|tsx)$': [
       'ts-jest',
       {
-        tsconfig: '<rootDir>/tsconfig.json',
+        tsconfig: path.join(__dirname, 'tsconfig.jest.json'),
+        tsconfigRootDir: __dirname,
         diagnostics: false,
       },
     ],
