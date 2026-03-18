@@ -76,6 +76,8 @@ export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
 /** @public */
 export type CellAppointmentsLimit = 'auto' | 'unlimited';
 /** @public */
+export type SnapToCellsMode = 'always' | 'auto' | 'never';
+/** @public */
 export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
 /** @public */
 export type AppointmentFormIconsShowMode = 'both' | 'main' | 'recurrence' | 'none';
@@ -1017,6 +1019,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     allDayPanelMode?: AllDayPanelMode;
     /**
      * @docid
+     * @public
+     */
+    snapToCellsMode?: SnapToCellsMode;
+    /**
+     * @docid
      * @default 0
      * @public
      */
@@ -1145,6 +1152,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default "all"
        */
        allDayPanelMode?: AllDayPanelMode;
+       /**
+        * @docid
+        */
+       snapToCellsMode?: SnapToCellsMode;
        /**
         * @docid
         * @default 0
