@@ -69,8 +69,8 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   }
 
   protected override getCellCoordinatesByIndex(index) {
-    const rowIndex = Math.floor(index / this.getCellCount());
-    const columnIndex = index - this.getCellCount() * rowIndex;
+    const rowIndex = Math.floor(index / this._getCellCount());
+    const columnIndex = index - this._getCellCount() * rowIndex;
 
     return {
       rowIndex,

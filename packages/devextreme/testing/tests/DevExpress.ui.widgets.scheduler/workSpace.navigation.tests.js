@@ -787,7 +787,7 @@ module('Workspace navigation', () => {
                         height: 400,
                         allowMultipleCellSelection: true,
                         onContentReady: function(e) {
-                            const scrollable = e.component.dateTableScrollable;
+                            const scrollable = e.component._dateTableScrollable;
                             scrollable.option('scrollByContent', true);
                         },
                     }, 'dxSchedulerWorkSpaceMonth');

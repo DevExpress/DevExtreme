@@ -93,7 +93,7 @@ class SchedulerAgenda extends WorkSpace {
           }
         } else if (!this._$groupTable) {
           this.initGroupTable();
-          this.dateTableScrollable.$content().prepend(this._$groupTable);
+          this._dateTableScrollable.$content().prepend(this._$groupTable);
         }
         super._optionChanged(args);
         break;
@@ -124,7 +124,7 @@ class SchedulerAgenda extends WorkSpace {
     return this.option('agendaDuration') as number;
   }
 
-  override getCellCount() {
+  _getCellCount() {
     return 1;
   }
 
@@ -174,14 +174,14 @@ class SchedulerAgenda extends WorkSpace {
     this.renderTimePanel();
     this.renderDateTable();
     this.applyCellTemplates(cellTemplates);
-    this.dateTableScrollable.update();
+    this._dateTableScrollable.update();
   }
 
   private renderNoData() {
     this.$noDataContainer = $('<div>').addClass(NODATA_CONTAINER_CLASS)
       .html(this.option('noDataText') as any);
 
-    this.dateTableScrollable.$content().append(this.$noDataContainer);
+    this._dateTableScrollable.$content().append(this.$noDataContainer);
   }
 
   protected override setTableSizes() { return noop(); }
@@ -324,14 +324,14 @@ class SchedulerAgenda extends WorkSpace {
 
   protected override createWorkSpaceStaticElements() {
     this._$dateTableContainer.append(this._$dateTable);
-    this.dateTableScrollable.$content().append(this._$dateTableScrollableContent);
+    this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
 
     if (this._$groupTable) {
       this._$dateTableScrollableContent.prepend(this._$groupTable);
     }
 
     this._$dateTableScrollableContent.append(this._$timePanel, this._$dateTableContainer);
-    this.$element().append(this.dateTableScrollable.$element());
+    this.$element().append(this._dateTableScrollable.$element());
   }
 
   protected override renderDateTable() {
