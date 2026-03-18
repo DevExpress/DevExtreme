@@ -22,7 +22,8 @@ export class TooltipStrategyBase {
 
   protected tooltip: any;
 
-  options: any;
+  // used externally by m_scheduler.ts
+  _options: any;
 
   protected extraOptions: any;
 
@@ -30,7 +31,7 @@ export class TooltipStrategyBase {
 
   constructor(options) {
     this.tooltip = null;
-    this.options = options;
+    this._options = options;
     this.extraOptions = null;
   }
 
@@ -65,7 +66,7 @@ export class TooltipStrategyBase {
 
   private isDeletingAllowed(appointment) {
     const { editing } = this.extraOptions;
-    const disabled = this.options.getAppointmentDisabled(appointment);
+    const disabled = this._options.getAppointmentDisabled(appointment);
     const isDeletingAllowed = editing === true || editing?.allowDeleting === true;
     return !disabled && isDeletingAllowed;
   }
@@ -92,7 +93,7 @@ export class TooltipStrategyBase {
 
         if (this.isDeletingAllowed(appointment)) {
           this.hide();
-          this.options.checkAndDeleteAppointment(appointment, targetedAppointment);
+          this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
         }
       });
     };
@@ -148,16 +149,16 @@ export class TooltipStrategyBase {
   protected onListRender(e) { }
 
   protected createTooltipElement(wrapperClass) {
-    return $('<div>').appendTo(this.options.container).addClass(wrapperClass);
+    return $('<div>').appendTo(this._options.container).addClass(wrapperClass);
   }
 
   private createList(listElement, dataList) {
-    return this.options.createComponent(listElement, List, this.createListOption(dataList));
+    return this._options.createComponent(listElement, List, this.createListOption(dataList));
   }
 
   private renderTemplate(appointment, targetedAppointment, index, color) {
     const itemListContent = this.createItemListContent(appointment, targetedAppointment, color);
-    this.options.addDefaultTemplates({
+    this._options.addDefaultTemplates({
       // @ts-expect-error
       appointmentTooltip: new FunctionTemplate((options) => {
         const $container = $(options.container);
@@ -166,7 +167,7 @@ export class TooltipStrategyBase {
       }),
     });
 
-    const template = this.options.getAppointmentTemplate(APPOINTMENT_TOOLTIP_TEMPLATE);
+    const template = this._options.getAppointmentTemplate(APPOINTMENT_TOOLTIP_TEMPLATE);
     return this.createFunctionTemplate(template, appointment, targetedAppointment, index);
   }
 
@@ -197,7 +198,7 @@ export class TooltipStrategyBase {
   private onListItemClick(e) {
     this.hide();
     this.extraOptions.clickEvent && this.extraOptions.clickEvent(e);
-    this.options.showAppointmentPopup(e.itemData.appointment, false, e.itemData.targetedAppointment);
+    this._options.showAppointmentPopup(e.itemData.appointment, false, e.itemData.targetedAppointment);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -206,7 +207,7 @@ export class TooltipStrategyBase {
   private createItemListContent(appointment, targetedAppointment, color) {
     const $itemElement = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM);
     $itemElement.append(this.createItemListMarker(color));
-    $itemElement.append(this.createItemListInfo(this.options.createFormattedDateText(appointment, targetedAppointment)));
+    $itemElement.append(this.createItemListInfo(this._options.createFormattedDateText(appointment, targetedAppointment)));
 
     if (this.isDeletingAllowed(appointment)) {
       $itemElement.append(this.createDeleteButton(appointment, targetedAppointment));
@@ -242,14 +243,14 @@ export class TooltipStrategyBase {
     const $deleteButton = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON);
 
     $container.append($deleteButton);
-    this.options.createComponent($deleteButton, Button, {
+    this._options.createComponent($deleteButton, Button, {
       icon: 'trash',
       stylingMode: 'text',
       tabIndex: -1,
       onClick: (e) => {
         this.hide();
         e.event.stopPropagation();
-        this.options.checkAndDeleteAppointment(appointment, targetedAppointment);
+        this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
       },
     });
 
