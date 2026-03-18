@@ -58,6 +58,18 @@ export const setupSchedulerTestEnvironment = ({
           y: 0,
           toJSON: (): void => {},
         };
+      case classList.includes('dx-scheduler-form-main-group'):
+        return {
+          width: 0,
+          height: 0,
+          top: 50,
+          left: 0,
+          bottom: 50,
+          right: 0,
+          x: 0,
+          y: 50,
+          toJSON: (): void => {},
+        };
       default:
         return {
           width: 0,

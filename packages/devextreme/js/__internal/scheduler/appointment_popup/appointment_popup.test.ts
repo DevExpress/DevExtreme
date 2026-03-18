@@ -1594,6 +1594,18 @@ describe('Appointment Form', () => {
         expect(document.activeElement).toBe(frequencyEditorInputElement);
       });
     });
+
+    it('should set animation offset CSS variable when switching to recurrence form', async () => {
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup();
+
+      POM.popup.selectRepeatValue('weekly');
+
+      const formElement = POM.popup.dxForm.$element()[0];
+      const animationTop = formElement.style.getPropertyValue('--dx-scheduler-animation-top');
+      expect(animationTop).toBe('50px');
+    });
   });
 
   describe('firstDayOfWeek', () => {
