@@ -1,5 +1,6 @@
 /* eslint-disable spellcheck/spell-checker, max-depth */
 import { parseMixinCall, stripAllMixins } from '../shared/ast-helpers';
+import type { BuildChainOptions } from '../shared/inheritance';
 import { buildInheritanceChainCore } from '../shared/inheritance';
 import type { HeritageInfo } from '../shared/types';
 import {
@@ -342,7 +343,7 @@ export function buildInheritanceChains(
   const visited = new Set<string>();
 
   const getClassInfo = (name: string): HeritageInfo | undefined => allClasses.get(name);
-  const chainOptions = {
+  const chainOptions: BuildChainOptions = {
     resolveNext: (rawBase: string): string => rawBase.replace(MODULES_PREFIX, ''),
     onTerminal: (rawBase: string): string[] => {
       switch (rawBase) {

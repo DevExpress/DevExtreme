@@ -1,7 +1,6 @@
 import * as path from 'path';
 
 export const DATA_GRID_ROOT = path.resolve(__dirname, '..', '..', '..', 'data_grid');
-export const GRID_CORE_ROOT = path.resolve(__dirname, '..', '..', '..', 'grid_core');
 export const OUTPUT_DIR = path.resolve(__dirname, '..', '..', 'artifacts');
 
 export const EXCLUDED_DIRS = new Set(['__tests__', '__mock__', 'scripts', 'new', '__docs__']);
