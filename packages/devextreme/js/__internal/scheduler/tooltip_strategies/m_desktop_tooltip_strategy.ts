@@ -19,7 +19,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
   }
 
   private getBoundary(dataList) {
-    return this.options.isAppointmentInAllDayPanel(dataList[0].appointment) ? this.options.container : this.options.getScrollableContainer();
+    return this._options.isAppointmentInAllDayPanel(dataList[0].appointment) ? this._options.container : this._options.getScrollableContainer();
   }
 
   protected override onShown() {
@@ -43,7 +43,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
   protected override createTooltip(target, dataList) {
     const tooltipElement = this.createTooltipElement(APPOINTMENT_TOOLTIP_WRAPPER_CLASS);
 
-    const tooltip = this.options.createComponent(tooltipElement, Tooltip, {
+    const tooltip = this._options.createComponent(tooltipElement, Tooltip, {
       target,
       maxHeight: MAX_TOOLTIP_HEIGHT,
       rtlEnabled: this.extraOptions.rtlEnabled,
@@ -66,7 +66,7 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
   }
 
   protected override onListItemContextMenu(e) {
-    const contextMenuEventArgs = this.options.createEventArgs(e);
-    this.options.onItemContextMenu(contextMenuEventArgs);
+    const contextMenuEventArgs = this._options.createEventArgs(e);
+    this._options.onItemContextMenu(contextMenuEventArgs);
   }
 }

@@ -94,7 +94,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
   _createTooltip(target, dataList) {
     const element = this._createTooltipElement(CLASS.slidePanel);
 
-    return this.options.createComponent(element, Overlay, {
+    return this._options.createComponent(element, Overlay, {
       target: getWindow(),
       hideOnOutsideClick: true,
       animation: animationConfig,
