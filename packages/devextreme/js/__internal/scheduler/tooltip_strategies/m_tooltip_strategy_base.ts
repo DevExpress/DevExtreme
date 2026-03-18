@@ -20,122 +20,145 @@ const APPOINTMENT_TOOLTIP_TEMPLATE = 'appointmentTooltipTemplate';
 export class TooltipStrategyBase {
   protected asyncTemplatePromises = new Set<Promise<void>>();
 
-  _tooltip: any;
+  protected tooltip: any;
 
-  _options: any;
+  options: any;
 
-  _extraOptions: any;
+  protected extraOptions: any;
 
-  _list: any;
+  protected list: any;
 
   constructor(options) {
-    this._tooltip = null;
-    this._options = options;
-    this._extraOptions = null;
+    this.tooltip = null;
+    this.options = options;
+    this.extraOptions = null;
   }
 
   show(target, dataList, extraOptions) {
-    if (this._canShowTooltip(dataList)) {
+    if (this.canShowTooltip(dataList)) {
       this.hide();
-      this._extraOptions = extraOptions;
-      this._showCore(target, dataList);
+      this.extraOptions = extraOptions;
+      this.showCore(target, dataList);
     }
   }
 
-  _showCore(target, dataList) {
+  private showCore(target, dataList) {
     const describedByValue = isRenderer(target) && target.attr('aria-describedby') as string;
 
-    if (!this._tooltip) {
-      this._tooltip = this._createTooltip(target, dataList);
+    if (!this.tooltip) {
+      this.tooltip = this.createTooltip(target, dataList);
     } else {
-      this._shouldUseTarget() && this._tooltip.option('target', target);
-      this._list.option('dataSource', dataList);
+      this.shouldUseTarget() && this.tooltip.option('target', target);
+      this.list.option('dataSource', dataList);
     }
 
-    this._prepareBeforeVisibleChanged(dataList);
-    this._tooltip.option('visible', true);
+    this.prepareBeforeVisibleChanged(dataList);
+    this.tooltip.option('visible', true);
 
     describedByValue && target.attr('aria-describedby', describedByValue);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _prepareBeforeVisibleChanged(dataList) {
+  protected prepareBeforeVisibleChanged(dataList) {
 
   }
 
-  _getContentTemplate(dataList) {
+  private isDeletingAllowed(appointment) {
+    const { editing } = this.extraOptions;
+    const disabled = this.options.getAppointmentDisabled(appointment);
+    const isDeletingAllowed = editing === true || editing?.allowDeleting === true;
+    return !disabled && isDeletingAllowed;
+  }
+
+  protected getContentTemplate(dataList) {
     return (container) => {
       const listElement = $('<div>');
       $(container).append(listElement);
-      this._list = this._createList(listElement, dataList);
-      this._list.registerKeyHandler?.('escape', () => {
+      this.list = this.createList(listElement, dataList);
+      this.list.registerKeyHandler?.('escape', () => {
         this.hide();
-        this._tooltip.option('target').focus();
+        this.tooltip.option('target').focus();
+      });
+      this.list.registerKeyHandler?.('del', () => {
+        const { focusedElement } = this.list.option();
+        if (!focusedElement) {
+          return;
+        }
+
+        const { appointment, targetedAppointment } = this.list._getItemData(focusedElement);
+        if (!appointment) {
+          return;
+        }
+
+        if (this.isDeletingAllowed(appointment)) {
+          this.hide();
+          this.options.checkAndDeleteAppointment(appointment, targetedAppointment);
+        }
       });
     };
   }
 
   isAlreadyShown(target) {
-    if (this._tooltip && this._tooltip.option('visible')) {
-      return this._tooltip.option('target')[0] === target[0];
+    if (this.tooltip && this.tooltip.option('visible')) {
+      return this.tooltip.option('target')[0] === target[0];
     }
     return undefined;
   }
 
-  _onShown() {
-    this._list.option('focusStateEnabled', this._extraOptions.focusStateEnabled);
+  protected onShown() {
+    this.list.option('focusStateEnabled', this.extraOptions.focusStateEnabled);
   }
 
   dispose() {
   }
 
   hide() {
-    if (this._tooltip) {
-      this._tooltip.option('visible', false);
+    if (this.tooltip) {
+      this.tooltip.option('visible', false);
     }
   }
 
-  _shouldUseTarget() {
+  protected shouldUseTarget() {
     return true;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _createTooltip(target, dataList) {
+  protected createTooltip(target, dataList) {
   }
 
-  _canShowTooltip(dataList) {
+  private canShowTooltip(dataList) {
     if (!dataList.length) {
       return false;
     }
     return true;
   }
 
-  _createListOption(dataList) {
+  protected createListOption(dataList) {
     return {
       dataSource: dataList,
-      onContentReady: this._onListRender.bind(this),
-      onItemClick: (e) => this._onListItemClick(e),
-      onItemContextMenu: this._onListItemContextMenu.bind(this),
-      itemTemplate: (item, index) => this._renderTemplate(item.appointment, item.targetedAppointment, index, item.color),
+      onContentReady: this.onListRender.bind(this),
+      onItemClick: (e) => this.onListItemClick(e),
+      onItemContextMenu: this.onListItemContextMenu.bind(this),
+      itemTemplate: (item, index) => this.renderTemplate(item.appointment, item.targetedAppointment, index, item.color),
       _swipeEnabled: false,
       pageLoadMode: 'scrollBottom',
     };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _onListRender(e) {}
+  protected onListRender(e) { }
 
-  _createTooltipElement(wrapperClass) {
-    return $('<div>').appendTo(this._options.container).addClass(wrapperClass);
+  protected createTooltipElement(wrapperClass) {
+    return $('<div>').appendTo(this.options.container).addClass(wrapperClass);
   }
 
-  _createList(listElement, dataList) {
-    return this._options.createComponent(listElement, List, this._createListOption(dataList));
+  private createList(listElement, dataList) {
+    return this.options.createComponent(listElement, List, this.createListOption(dataList));
   }
 
-  _renderTemplate(appointment, targetedAppointment, index, color) {
-    const itemListContent = this._createItemListContent(appointment, targetedAppointment, color);
-    this._options.addDefaultTemplates({
+  private renderTemplate(appointment, targetedAppointment, index, color) {
+    const itemListContent = this.createItemListContent(appointment, targetedAppointment, color);
+    this.options.addDefaultTemplates({
       // @ts-expect-error
       appointmentTooltip: new FunctionTemplate((options) => {
         const $container = $(options.container);
@@ -144,12 +167,12 @@ export class TooltipStrategyBase {
       }),
     });
 
-    const template = this._options.getAppointmentTemplate(APPOINTMENT_TOOLTIP_TEMPLATE);
-    return this._createFunctionTemplate(template, appointment, targetedAppointment, index);
+    const template = this.options.getAppointmentTemplate(APPOINTMENT_TOOLTIP_TEMPLATE);
+    return this.createFunctionTemplate(template, appointment, targetedAppointment, index);
   }
 
-  _createFunctionTemplate(template, appointmentData, targetedAppointmentData, index) {
-    const isButtonClicked = Boolean(this._extraOptions.isButtonClick);
+  private createFunctionTemplate(template, appointmentData, targetedAppointmentData, index) {
+    const isButtonClicked = Boolean(this.extraOptions.isButtonClick);
 
     // @ts-expect-error
     return new FunctionTemplate((options) => {
@@ -172,31 +195,28 @@ export class TooltipStrategyBase {
     });
   }
 
-  _onListItemClick(e) {
+  private onListItemClick(e) {
     this.hide();
-    this._extraOptions.clickEvent && this._extraOptions.clickEvent(e);
-    this._options.showAppointmentPopup(e.itemData.appointment, false, e.itemData.targetedAppointment);
+    this.extraOptions.clickEvent && this.extraOptions.clickEvent(e);
+    this.options.showAppointmentPopup(e.itemData.appointment, false, e.itemData.targetedAppointment);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _onListItemContextMenu(e) {}
+  protected onListItemContextMenu(e) { }
 
-  _createItemListContent(appointment, targetedAppointment, color) {
-    const { editing } = this._extraOptions;
+  private createItemListContent(appointment, targetedAppointment, color) {
     const $itemElement = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM);
-    $itemElement.append(this._createItemListMarker(color));
-    $itemElement.append(this._createItemListInfo(this._options.createFormattedDateText(appointment, targetedAppointment)));
+    $itemElement.append(this.createItemListMarker(color));
+    $itemElement.append(this.createItemListInfo(this.options.createFormattedDateText(appointment, targetedAppointment)));
 
-    const disabled = this._options.getAppointmentDisabled(appointment);
-
-    if (!disabled && (editing && editing.allowDeleting === true || editing === true)) {
-      $itemElement.append(this._createDeleteButton(appointment, targetedAppointment));
+    if (this.isDeletingAllowed(appointment)) {
+      $itemElement.append(this.createDeleteButton(appointment, targetedAppointment));
     }
 
     return $itemElement;
   }
 
-  _createItemListMarker(color) {
+  private createItemListMarker(color) {
     const $marker = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_MARKER);
     const $markerBody = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_MARKER_BODY);
 
@@ -210,7 +230,7 @@ export class TooltipStrategyBase {
     return $marker;
   }
 
-  _createItemListInfo(object) {
+  private createItemListInfo(object) {
     const result = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_CONTENT);
     const $title = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_CONTENT_SUBJECT).text(object.text);
     const $date = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_CONTENT_DATE).text(object.formatDate);
@@ -218,18 +238,18 @@ export class TooltipStrategyBase {
     return result.append($title).append($date);
   }
 
-  _createDeleteButton(appointment, targetedAppointment) {
+  private createDeleteButton(appointment, targetedAppointment) {
     const $container = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON_CONTAINER);
     const $deleteButton = $('<div>').addClass(TOOLTIP_APPOINTMENT_ITEM_DELETE_BUTTON);
 
     $container.append($deleteButton);
-    this._options.createComponent($deleteButton, Button, {
+    this.options.createComponent($deleteButton, Button, {
       icon: 'trash',
       stylingMode: 'text',
       onClick: (e) => {
         this.hide();
         e.event.stopPropagation();
-        this._options.checkAndDeleteAppointment(appointment, targetedAppointment);
+        this.options.checkAndDeleteAppointment(appointment, targetedAppointment);
       },
     });
 
