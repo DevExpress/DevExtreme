@@ -9,7 +9,11 @@ import {
   parseVersion,
 } from '../../utils/version';
 import { base64ToBytes } from './byte_utils';
+import {
+  BUY_NOW_LINK, FORMAT, KEY_SPLITTER, LICENSING_DOC_LINK, RTM_MIN_PATCH_VERSION, SUBSCRIPTION_NAMES,
+} from './const';
 import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
+import { isProductOnlyLicense, parseDevExpressProductKey } from './lcp_key_validation/lcp_key_validator';
 import { pad } from './pkcs1';
 import { compareSignatures } from './rsa_bigint';
 import { sha1 } from './sha1';
@@ -19,29 +23,20 @@ import type {
   LicenseCheckParams,
   Token,
 } from './types';
-import { TokenKind } from './types';
+import {
+  DECODING_ERROR,
+  DESERIALIZATION_ERROR,
+  GENERAL_ERROR,
+  PAYLOAD_ERROR,
+  TokenKind,
+  VERIFICATION_ERROR,
+  VERSION_ERROR,
+} from './types';
 
 interface Payload extends Partial<License> {
   readonly format?: number;
   readonly internalUsageId?: string;
 }
-
-const FORMAT = 1;
-const RTM_MIN_PATCH_VERSION = 3;
-const KEY_SPLITTER = '.';
-
-const BUY_NOW_LINK = 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeJQuery.aspx';
-const LICENSING_DOC_LINK = 'https://go.devexpress.com/Licensing_Documentation_DevExtremeJQuery.aspx';
-
-const NBSP = '\u00A0';
-const SUBSCRIPTION_NAMES = `Universal, DXperience, ASP.NET${NBSP}and${NBSP}Blazor, DevExtreme${NBSP}Complete`;
-
-const GENERAL_ERROR: Token = { kind: TokenKind.corrupted, error: 'general' };
-const VERIFICATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'verification' };
-const DECODING_ERROR: Token = { kind: TokenKind.corrupted, error: 'decoding' };
-const DESERIALIZATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'deserialization' };
-const PAYLOAD_ERROR: Token = { kind: TokenKind.corrupted, error: 'payload' };
-const VERSION_ERROR: Token = { kind: TokenKind.corrupted, error: 'version' };
 
 let validationPerformed = false;
 
@@ -60,6 +55,10 @@ function verifySignature({ text, signature: encodedSignature }: {
 export function parseLicenseKey(encodedKey: string | undefined): Token {
   if (encodedKey === undefined) {
     return GENERAL_ERROR;
+  }
+
+  if (isProductOnlyLicense(encodedKey)) {
+    return parseDevExpressProductKey(encodedKey);
   }
 
   const parts = encodedKey.split(KEY_SPLITTER);
@@ -119,8 +118,27 @@ function isPreview(patch: number): boolean {
   return isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
 }
 
-function isDevExpressLicenseKey(licenseKey: string): boolean {
-  return licenseKey.startsWith('LCX') || licenseKey.startsWith('LCP');
+function hasLicensePrefix(licenseKey: string, prefix: string): boolean {
+  return licenseKey.trim().startsWith(prefix);
+}
+
+export function isUnsupportedKeyFormat(licenseKey: string | undefined): boolean {
+  if (!licenseKey) {
+    return false;
+  }
+
+  if (hasLicensePrefix(licenseKey, 'LCXv1')) {
+    errors.log('W0000', 'config', 'licenseKey', 'LCXv1 is specified in the license key');
+    return true;
+  }
+
+  return false;
+}
+
+function displayTrialPanel(): void {
+  const buyNowLink = config().buyNowLink ?? BUY_NOW_LINK;
+  const licensingDocLink = config().licensingDocLink ?? LICENSING_DOC_LINK;
+  showTrialPanel(buyNowLink, licensingDocLink, fullVersion, SUBSCRIPTION_NAMES);
 }
 
 function getLicenseCheckParams({
@@ -141,7 +159,7 @@ function getLicenseCheckParams({
       return { preview, error: 'W0019' };
     }
 
-    if (isDevExpressLicenseKey(licenseKey)) {
+    if (hasLicensePrefix(licenseKey, 'LCX')) {
       return { preview, error: 'W0024' };
     }
 
@@ -175,6 +193,11 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
   }
   validationPerformed = true;
 
+  if (isUnsupportedKeyFormat(licenseKey)) {
+    displayTrialPanel();
+    return;
+  }
+
   const version = parseVersion(versionStr);
 
   const versionsCompatible = assertedVersionsCompatible(version);
@@ -189,9 +212,7 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
   }
 
   if (error && !internal) {
-    const buyNowLink = config().buyNowLink ?? BUY_NOW_LINK;
-    const licensingDocLink = config().licensingDocLink ?? LICENSING_DOC_LINK;
-    showTrialPanel(buyNowLink, licensingDocLink, fullVersion, SUBSCRIPTION_NAMES);
+    displayTrialPanel();
   }
 
   const preview = isPreview(version.patch);

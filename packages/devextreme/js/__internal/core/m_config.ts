@@ -19,6 +19,7 @@ const config = {
   useLegacyVisibleIndex: false,
   versionAssertions: [],
   copyStylesToShadowDom: true,
+  licenseKey: '/* ___$$$$$___devextreme___lcp___placeholder____$$$$$ */',
 
   floatingActionButtonConfig: {
     icon: 'add',
