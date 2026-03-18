@@ -55,7 +55,7 @@ module('Integration: Appointment tooltip', {
                 height: 600
             });
 
-            const getAppointmentDisabled = sinon.spy(scheduler.instance.appointmentTooltip.options, 'getAppointmentDisabled');
+            const getAppointmentDisabled = sinon.spy(scheduler.instance.appointmentTooltip._options, 'getAppointmentDisabled');
 
             const clock = sinon.useFakeTimers();
             await scheduler.appointments.click(0, clock);
