@@ -186,7 +186,6 @@ const popupOptions = {
   },
   onHidden: () => {
     setConflictError(false);
-    form?.updateData('assigneeId', []);
   },
 };
 

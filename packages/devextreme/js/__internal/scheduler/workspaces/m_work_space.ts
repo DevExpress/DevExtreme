@@ -224,7 +224,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _disposed: any;
 
-  _getToday: any;
+  protected getToday?(): Date;
 
   _$allDayPanel: any;
 
@@ -298,7 +298,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   _shader: any;
 
-  _$sidebarTable: any;
+  protected $sidebarTable: any;
 
   _interval: any;
 
@@ -688,7 +688,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     };
 
     if (this.needCreateCrossScrolling()) {
-      config = extend(config, this._createCrossScrollingConfig(config));
+      config = extend(config, this.createCrossScrollingConfig(config));
     }
 
     if (this.isVirtualScrolling()
@@ -708,8 +708,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return config;
   }
 
-  // TODO: make it private. Being used as public method by external code.
-  _createCrossScrollingConfig({ onScroll }): any {
+  protected createCrossScrollingConfig({ onScroll }): any {
     return {
       direction: 'both',
       onScroll: (event) => {
@@ -823,7 +822,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  // TODO: make it private. Being used as public method by external code.
+  // TODO: rename to getCellCount (used externally by strategy classes and shaders)
   _getCellCount() {
     return this.viewDataProvider.getCellCount({
       intervalCount: this.option('intervalCount'),
@@ -878,7 +877,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       startRowIndex: 0,
       startCellIndex: 0,
       groupOrientation,
-      today: this._getToday?.(),
+      today: this.getToday?.(),
       getResourceManager: this.option('getResourceManager'),
       isProvideVirtualCellsWidth,
       isAllDayPanelVisible: this.isAllDayPanelVisible,
@@ -949,12 +948,12 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return getViewStartByOptions(
       this.option('startDate'),
       this.option('currentDate'),
-      this._getIntervalDuration(),
+      this.getTotalViewDuration(),
       this.option('startDate') ? this.calculateViewStartDate() : undefined,
     );
   }
 
-  protected _getIntervalDuration() {
+  protected getTotalViewDuration() {
     return this.viewDataProvider.getIntervalDuration(this.option('intervalCount'));
   }
 
@@ -1348,7 +1347,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  protected _getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow) {
+  protected getCellElementByPosition(cellCoordinates, groupIndex, inAllDayRow) {
     const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow);
     return this.dom_getDateCell(indexes);
   }
@@ -2314,7 +2313,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         this.cleanWorkSpace();
         break;
       case 'groups':
-        this._cleanView();
+        this.cleanView();
         this.removeAllDayElements();
         this.initGrouping();
         this.repaint();
@@ -2328,7 +2327,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
         break;
       case 'showAllDayPanel':
         if (this.isVerticalGroupedWorkSpace()) {
-          this._cleanView();
+          this.cleanView();
           this.removeAllDayElements();
           this.initGrouping();
           this.repaint();
@@ -2424,7 +2423,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   protected cleanWorkSpace() {
-    this._cleanView();
+    this.cleanView();
     this.toggleGroupedClass();
     this.toggleWorkSpaceWithOddCells();
 
@@ -2822,8 +2821,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     this._$allDayTitle?.remove();
   }
 
-  // TODO: make it private. Being used as public method by external code.
-  _cleanView(): void {
+  protected cleanView(): void {
     this.cache.clear();
     this.cleanTableWidths();
     this.cellsSelectionState.clearSelectedAndFocusedCells();
@@ -2834,7 +2832,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
       this._$groupTable.empty();
 
       this._$allDayTable?.empty();
-      this._$sidebarTable?.empty();
+      this.$sidebarTable?.empty();
     }
 
     this._shader?.clean();
