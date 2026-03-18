@@ -182,21 +182,21 @@ export class RecurrenceForm {
     this._readOnly = value;
   }
 
-  createRecurrenceFormGroup(showIcon: boolean): GroupItem {
+  createRecurrenceFormGroup(): GroupItem {
     return {
       name: RECURRENCE_GROUP_NAME,
       itemType: 'group',
       cssClass: `${CLASSES.recurrenceGroup} ${CLASSES.recurrenceHidden}`,
       colSpan: 1,
       items: [
-        this.createRecurrenceStartDateGroup(showIcon),
-        this.createRecurrenceSettingsGroup(showIcon),
-        this.createRecurrenceEndGroup(showIcon),
+        this.createRecurrenceStartDateGroup(),
+        this.createRecurrenceSettingsGroup(),
+        this.createRecurrenceEndGroup(),
       ],
     } as GroupItem;
   }
 
-  private createRecurrenceStartDateGroup(showIcon: boolean): GroupItem {
+  private createRecurrenceStartDateGroup(): GroupItem {
     return {
       name: GROUP_NAMES.recurrenceStartDateGroup,
       itemType: 'group',
@@ -209,14 +209,13 @@ export class RecurrenceForm {
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('clock'),
-          visible: showIcon,
         },
         extend(
           true,
           getStartDateCommonConfig(this.scheduler.getFirstDayOfWeek()),
           {
             name: EDITOR_NAMES.recurrenceStartDateEditor,
-            colSpan: showIcon ? 1 : 2,
+            colSpan: 1,
             cssClass: CLASSES.recurrenceStartDateEditor,
             label: {
               text: messageLocalization.format('dxScheduler-editorLabelStartDate'),
@@ -235,7 +234,7 @@ export class RecurrenceForm {
     } as GroupItem;
   }
 
-  private createRecurrenceSettingsGroup(showIcon: boolean): GroupItem {
+  private createRecurrenceSettingsGroup(): GroupItem {
     return {
       itemType: 'group',
       name: GROUP_NAMES.recurrenceRuleGroup,
@@ -248,12 +247,11 @@ export class RecurrenceForm {
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('repeat'),
-          visible: showIcon,
         },
         {
           itemType: 'group',
           name: GROUP_NAMES.recurrencePatternGroup,
-          colSpan: showIcon ? 1 : 2,
+          colSpan: 1,
           colCount: 1,
           colCountByScreen: { xs: 1 },
           items: [
@@ -437,7 +435,7 @@ export class RecurrenceForm {
     } as GroupItem;
   }
 
-  private createRecurrenceEndGroup(showIcon: boolean): GroupItem {
+  private createRecurrenceEndGroup(): GroupItem {
     return {
       name: GROUP_NAMES.recurrenceEndGroup,
       itemType: 'group',
@@ -450,12 +448,11 @@ export class RecurrenceForm {
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('description'),
-          visible: showIcon,
         },
         {
           itemType: 'group',
           name: EDITOR_NAMES.recurrenceEndEditor,
-          colSpan: showIcon ? 1 : 2,
+          colSpan: 1,
           colCount: 2,
           colCountByScreen: { xs: 2 },
           label: {

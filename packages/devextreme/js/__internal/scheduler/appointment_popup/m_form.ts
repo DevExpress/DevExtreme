@@ -223,11 +223,11 @@ export class AppointmentForm {
     const showMainGroupIcons = ['main', 'both'].includes(iconsShowMode);
     const showRecurrenceGroupIcons = ['recurrence', 'both'].includes(iconsShowMode);
 
-    const mainGroup = this.createMainFormGroup(showMainGroupIcons);
+    const mainGroup = this.createMainFormGroup();
 
     this._recurrenceForm = new RecurrenceForm(this.scheduler);
     const recurrenceGroup = this._recurrenceForm
-      .createRecurrenceFormGroup(showRecurrenceGroupIcons);
+      .createRecurrenceFormGroup();
 
     const items = [mainGroup, recurrenceGroup];
 
@@ -325,23 +325,23 @@ export class AppointmentForm {
     return this.scheduler.createComponent(element, dxForm, formOptions) as dxForm;
   }
 
-  private createMainFormGroup(showIcon: boolean): GroupItem {
+  private createMainFormGroup(): GroupItem {
     return {
       name: MAIN_GROUP_NAME,
       itemType: 'group',
       colSpan: 1,
       cssClass: CLASSES.mainGroup,
       items: [
-        this.createSubjectGroup(showIcon),
-        this.createDateRangeGroup(showIcon),
-        this.createRepeatGroup(showIcon),
-        this.createResourcesGroup(showIcon),
-        this.createDescriptionGroup(showIcon),
+        this.createSubjectGroup(),
+        this.createDateRangeGroup(),
+        this.createRepeatGroup(),
+        this.createResourcesGroup(),
+        this.createDescriptionGroup(),
       ],
     } as GroupItem;
   }
 
-  private createSubjectGroup(showIcon: boolean): GroupItem {
+  private createSubjectGroup(): GroupItem {
     const { textExpr } = this.scheduler.getDataAccessors().expr;
 
     return {
@@ -356,11 +356,10 @@ export class AppointmentForm {
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('isnotblank'),
-          visible: showIcon,
         },
         {
           name: SUBJECT_EDITOR_NAME,
-          colSpan: showIcon ? 1 : 2,
+          colSpan: 1,
           itemType: 'simple',
           cssClass: CLASSES.textEditor,
           dataField: textExpr,
@@ -373,7 +372,7 @@ export class AppointmentForm {
     } as GroupItem;
   }
 
-  private createDateRangeGroup(showIcon: boolean): GroupItem {
+  private createDateRangeGroup(): GroupItem {
     return {
       name: DATE_GROUP_NAME,
       itemType: 'group',
@@ -386,10 +385,9 @@ export class AppointmentForm {
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('clock'),
-          visible: showIcon,
         },
         {
-          colSpan: showIcon ? 1 : 2,
+          colSpan: 1,
           name: DATE_OPTIONS_GROUP_NAME,
           itemType: 'group',
           items: [
@@ -652,7 +650,7 @@ export class AppointmentForm {
     } as GroupItem;
   }
 
-  private createRepeatGroup(showIcon: boolean): GroupItem {
+  private createRepeatGroup(): GroupItem {
     const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
 
     return {
@@ -667,11 +665,10 @@ export class AppointmentForm {
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('repeat'),
-          visible: showIcon,
         },
         {
           name: REPEAT_EDITOR_NAME,
-          colSpan: showIcon ? 1 : 2,
+          colSpan: 1,
           itemType: 'simple',
           cssClass: CLASSES.repeatEditor,
           label: {
@@ -707,7 +704,7 @@ export class AppointmentForm {
     } as GroupItem;
   }
 
-  private createDescriptionGroup(showIcon: boolean): GroupItem {
+  private createDescriptionGroup(): GroupItem {
     const { descriptionExpr } = this.scheduler.getDataAccessors().expr;
 
     return {
@@ -722,12 +719,11 @@ export class AppointmentForm {
           colSpan: 1,
           cssClass: CLASSES.formIcon,
           template: createFormIconTemplate('description'),
-          visible: showIcon,
         },
         {
           name: DESCRIPTION_EDITOR_NAME,
           dataField: descriptionExpr,
-          colSpan: showIcon ? 1 : 2,
+          colSpan: 1,
           itemType: 'simple',
           cssClass: CLASSES.descriptionEditor,
           label: {
@@ -742,7 +738,7 @@ export class AppointmentForm {
     } as GroupItem;
   }
 
-  private createResourcesGroup(showIcon: boolean): GroupItem {
+  private createResourcesGroup(): GroupItem {
     const resourcesLoaders: ResourceLoader[] = Object.values(this.scheduler.getResourceById());
 
     let resourcesItems: FormItem[] = resourcesLoaders.map((resourceLoader) => {
@@ -783,12 +779,11 @@ export class AppointmentForm {
             colSpan: 1,
             cssClass: `${CLASSES.formIcon} ${CLASSES.defaultResourceIcon}`,
             template: createFormIconTemplate('addcircleoutline'),
-            visible: showIcon,
           },
           {
             name: RESOURCE_EDITORS_GROUP_NAME,
             itemType: 'group',
-            colSpan: showIcon ? 1 : 2,
+            colSpan: 1,
             items: resourcesItems,
           },
         ],
@@ -811,9 +806,8 @@ export class AppointmentForm {
             name: `${dataField}Icon`,
             cssClass: CLASSES.formIcon,
             template: createFormIconTemplate(icon),
-            visible: showIcon,
           },
-          { ...item, colSpan: showIcon ? 1 : 2 },
+          { ...item },
         ],
       } as GroupItem;
     });
@@ -851,6 +845,19 @@ export class AppointmentForm {
 
     if (item.itemType === 'group') {
       const groupItem = item as GroupItem;
+
+      if (itemClasses.includes(CLASSES.groupWithIcon)) {
+        groupItem.items?.forEach((child) => {
+          const childClasses = (child.cssClass ?? '').split(' ');
+
+          if (childClasses.includes(CLASSES.formIcon)) {
+            (child as SimpleItem).visible = showIcon;
+          } else {
+            (child as SimpleItem).colSpan = showIcon ? 1 : 2;
+          }
+        });
+      }
+
       groupItem.items?.forEach((child) => {
         this.setStylingModeToEditors(child, showIcon);
       });
