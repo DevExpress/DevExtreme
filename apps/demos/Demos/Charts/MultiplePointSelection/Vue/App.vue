@@ -4,7 +4,7 @@
     :data-source="medalStatistics"
     :rotated="true"
     point-selection-mode="multiple"
-    title="Olympic Medals in 2008"
+    title="Olympic Medals in 2024"
     @point-click="onPointClick"
   >
     <DxCommonSeriesSettings

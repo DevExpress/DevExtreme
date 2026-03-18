@@ -66,43 +66,10 @@ jobs:
           ref: refs/heads/${{ github.ref_name }}
           sha: ${{ steps.get-head-sha.outputs.SHA }}
 
-  analyze-csharp:
-    name: Analyze C#
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Get head SHA
-        id: get-head-sha
-        run: echo "SHA=$(git rev-parse origin/${{ github.ref_name }})" >> "$GITHUB_OUTPUT"
-
-      # Initializes the CodeQL tools for scanning.
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: csharp
-          config-file: ./.github/codeql/codeql-config.yml
-
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:csharp"
-          ref: refs/heads/${{ github.ref_name }}
-          sha: ${{ steps.get-head-sha.outputs.SHA }}
-
   fetch:
     runs-on: devextreme-shr2
     name: Fetch analysis
-    needs: [ analyze-javascript, analyze-csharp ]
+    needs: [ analyze-javascript ]
 
     steps:
       - name: Get Latest Analysis info

@@ -149,14 +149,16 @@ export interface Direction {
   direction: Orientation;
 }
 
-export type AppointmentEntity = ListEntity
-  & UTCDatesBeforeSplit
+export type SortedEntity = ListEntity
   & AppointmentPart
-  & Level
   & Position
+  & Level
+  & AppointmentCollector
+  & SortedIndex;
+
+export type AppointmentEntity = SortedEntity
   & Direction
   & Empty
-  & SortedIndex
   & Geometry
   & AppointmentCollectorWithGeometry;
 

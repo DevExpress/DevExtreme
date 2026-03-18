@@ -18,7 +18,7 @@ $(() => {
       itemTextPosition: 'right',
     },
     title: {
-      text: 'Energy Consumption in 2004',
+      text: 'Energy Consumption in 2024',
       subtitle: {
         text: '(Millions of Tons, Oil Equivalent)',
       },

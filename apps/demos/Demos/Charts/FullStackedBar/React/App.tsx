@@ -26,7 +26,7 @@ function App() {
       dataSource={dataSource}
     >
       <Title
-        text="Energy Consumption in 2004"
+        text="Energy Consumption in 2024"
         subtitle="(Millions of Tons, Oil Equivalent)"
       />
       <CommonSeriesSettings argumentField="country" type="fullstackedbar" />
