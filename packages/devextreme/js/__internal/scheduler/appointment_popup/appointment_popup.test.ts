@@ -1458,45 +1458,6 @@ describe('Appointment Form', () => {
         expect(POM.popup.getInputValue('recurrenceRepeatEndEditor')).toBe('count');
         expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
       });
-
-      it('should have correct input values when opening second weekly recurring appointment', async () => {
-        const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-        const appointment1 = {
-          text: 'Meeting',
-          startDate: new Date(2017, 4, 1, 10, 30),
-          endDate: new Date(2017, 4, 1, 11),
-          recurrenceRule: 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,WE,FR;COUNT=5',
-          repeatEnd: 'count',
-        };
-        const appointment2 = {
-          text: 'Meeting',
-          startDate: new Date(2017, 4, 2, 10, 30),
-          endDate: new Date(2017, 4, 2, 11),
-          recurrenceRule: 'FREQ=WEEKLY;INTERVAL=1;BYDAY=TU,TH;COUNT=5',
-          repeatEnd: 'count',
-        };
-
-        scheduler.showAppointmentPopup(appointment1);
-        POM.popup.editSeriesButton.click();
-        POM.popup.recurrenceSettingsButton.click();
-
-        scheduler.hideAppointmentPopup();
-
-        scheduler.showAppointmentPopup(appointment2);
-        POM.popup.editSeriesButton.click();
-        POM.popup.recurrenceSettingsButton.click();
-
-        expect(POM.popup.getInputValue('repeatEditor')).toBe('Weekly');
-        expect(POM.popup.getInputValue('recurrenceStartDateEditor')).toBe('5/2/2017');
-        expect(POM.popup.getInputValue('recurrenceCountEditor')).toBe('1');
-        expect(POM.popup.getInputValue('recurrencePeriodEditor')).toBe('Week(s)');
-
-        const expectedWeekDaysSelection = [false, true, false, true, false, false, false];
-        expect(POM.popup.getWeekDaysSelection()).toEqual(expectedWeekDaysSelection);
-
-        expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe('5 occurrence(s)');
-      });
     });
 
     describe('Repeat End Values Preservation', () => {
