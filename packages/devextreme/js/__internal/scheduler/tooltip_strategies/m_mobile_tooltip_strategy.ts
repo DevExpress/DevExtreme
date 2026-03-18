@@ -71,8 +71,8 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
   private setTooltipConfig(): void {
     const isTabletWidth = getWidth(getWindow()) > 700;
 
-    const listHeight = getOuterHeight(this._list.$element().find(CLASS.scrollableContent));
-    this._tooltip.option(
+    const listHeight = getOuterHeight(this.list.$element().find(CLASS.scrollableContent));
+    this.tooltip.option(
       isTabletWidth
         ? createTabletDeviceConfig(listHeight)
         : createPhoneDeviceConfig(listHeight),
@@ -80,7 +80,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
   }
 
   private async _onShowing(): Promise<void> {
-    this._tooltip.option('height', MAX_HEIGHT.DEFAULT);
+    this.tooltip.option('height', MAX_HEIGHT.DEFAULT);
     /*
     NOTE: there are two setTooltipConfig calls to reduce blinking of overlay.
     The first one sets initial sizes, the second updates them after rendering async templates
@@ -94,7 +94,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
   protected override createTooltip(target, dataList) {
     const element = this.createTooltipElement(CLASS.slidePanel);
 
-    return this._options.createComponent(element, Overlay, {
+    return this.options.createComponent(element, Overlay, {
       target: getWindow(),
       hideOnOutsideClick: true,
       animation: animationConfig,

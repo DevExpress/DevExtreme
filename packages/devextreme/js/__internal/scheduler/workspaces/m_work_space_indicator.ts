@@ -68,7 +68,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         $indicator,
         groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth(),
       );
-      this._groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
+      this.groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
     }
   }
 
@@ -80,7 +80,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   private getRtlOffset(width) {
-    return this.option('rtlEnabled') ? getBoundingRect(this._dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
+    return this.option('rtlEnabled') ? getBoundingRect(this.dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
   }
 
   protected setIndicationUpdateInterval() {
@@ -107,7 +107,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
   }
 
   getIndicationWidth() {
-    const cellCount = this._getCellCount();
+    const cellCount = this.getCellCount();
     const cellSpan = Math.min(this.getIndicatorDaysSpan(), cellCount);
     const width = cellSpan * this.getCellWidth();
     const maxWidth = this.getCellWidth() * cellCount;
@@ -171,7 +171,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
   renderCurrentDateTimeLineAndShader(): void {
     this.cleanDateTimeIndicator();
-    this._shader?.clean();
+    this.shader?.clean();
     this.renderDateTimeIndication();
   }
 
@@ -271,7 +271,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     const verticalGroupCount = this.isVerticalGroupedWorkSpace()
-      ? this._getGroupCount()
+      ? this.getGroupCount()
       : 1;
 
     return [...new Array(verticalGroupCount)]
@@ -287,15 +287,15 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     if (this.option('shadeUntilCurrentTime')) {
-      this._shader.render();
+      this.shader.render();
     }
 
     if (!this.isIndicationOnView() || !this.isIndicatorVisible()) {
       return;
     }
 
-    const groupCount = this._getGroupCount() || 1;
-    const $container = this._dateTableScrollable.$content();
+    const groupCount = this.getGroupCount() || 1;
+    const $container = this.dateTableScrollable.$content();
     const height = this.getIndicationHeight();
     const rtlOffset = this.getRtlOffset(this.getCellWidth());
 

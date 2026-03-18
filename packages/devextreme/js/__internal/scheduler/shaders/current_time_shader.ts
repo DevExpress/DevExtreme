@@ -6,7 +6,7 @@ import type SchedulerWorkSpace from '../workspaces/m_work_space';
 const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 
 class CurrentTimeShader {
-  _$container = this._workSpace._dateTableScrollable.$content();
+  _$container = this._workSpace.dateTableScrollable.$content();
 
   _shader!: dxElementWrapper[];
 
