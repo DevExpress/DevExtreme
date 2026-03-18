@@ -103,9 +103,9 @@ const getIgnoredRules = (testName) => {
     'FileManager-Overview': ['aria-command-name', 'empty-table-header', 'label'],
     'FileManager-UICustomization': ['aria-command-name', 'empty-table-header', 'label'],
 
-    'Gantt-Overview': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-Appearance': ['aria-toggle-field-name'],
     'Gantt-ExportToPDF': ['aria-toggle-field-name'],
+    'Gantt-Overview': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-StripLines': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-Validation': ['aria-required-parent', 'aria-valid-attr-value'],
 
