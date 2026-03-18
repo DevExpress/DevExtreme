@@ -1,16 +1,16 @@
-.low.dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
+.low .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
   background: gray;
 }
 
-.normal.dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
+.normal .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
   background: green;
 }
 
-.urgent.dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
+.urgent .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
   background: orange;
 }
 
-.high.dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
+.high .dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
   background: red;
 }
 
