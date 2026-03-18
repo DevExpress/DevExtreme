@@ -259,7 +259,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private showPopup: any;
 
-  private NAME: any;
+  private readonly NAME: any;
 
   private contextMenuAction: any;
 
