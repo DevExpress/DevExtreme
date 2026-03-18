@@ -171,6 +171,38 @@ export const EXTENDER_EDGE_BASE_STYLES = `
     },`;
 
 /**
+ * JavaScript helper functions for computing node sizes from labels.
+ * Replaces deprecated Cytoscape `width: 'label'` / `height: 'label'` sizing.
+ */
+export const LABEL_SIZE_HELPERS_JS = `
+// Helper: compute node width from label (replaces deprecated 'width': 'label')
+function labelWidth(fontSize, maxWidth) {
+  return function(ele) {
+    var text = ele.data('label') || '';
+    var lines = text.split('\\n');
+    var maxLen = 0;
+    for (var i = 0; i < lines.length; i++) {
+      if (lines[i].length > maxLen) maxLen = lines[i].length;
+    }
+    var charWidth = fontSize * 0.65;
+    var maxLineWidth = maxLen * charWidth;
+    var maxAllowedWidth = maxWidth ? Math.min(maxWidth, maxLineWidth) : maxLineWidth;
+    return Math.max(30, maxAllowedWidth);
+  };
+}
+
+// Helper: compute node height from label line count (replaces deprecated 'height': 'label')
+function labelHeight(fontSize) {
+  return function(ele) {
+    var text = ele.data('label') || '';
+    var lines = text.split('\\n').length;
+    var lineHeight = fontSize * 1.4;
+    return Math.max(24, lines * lineHeight);
+  };
+}
+`;
+
+/**
  * Shared interactive JavaScript helpers for diagram templates.
  * Contains: highlight/clear, edge toggle wiring, search, click handlers,
  * fit button, getEdgeRouting(), and overlap-detection for taxi routing.

@@ -10,8 +10,8 @@ export interface CytoscapeElement {
 }
 
 /**
- * Provides shared addNode/addEdge helpers backed by common state (elements, nodeIds, edgeIds).
- * Each graph-builder creates its own context and can extend edge creation via `buildEdgeId`.
+ * Provides shared graph state (elements, nodeIds, edgeIds) and an addNode helper.
+ * Each graph-builder creates its own context and may implement its own edge creation helpers.
  */
 export interface GraphContext {
   elements: CytoscapeElement[];

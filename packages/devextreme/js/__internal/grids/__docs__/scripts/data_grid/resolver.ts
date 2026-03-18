@@ -186,7 +186,7 @@ export function classifyModules(
         controllers: reg.controllers,
         views: reg.views,
         extenders: reg.extenders,
-        hasDefaultOptionsOverride: reg.hasDefaultOptions && category !== 'passthrough',
+        hasDefaultOptionsOverride: reg.hasDefaultOptions,
       });
     }
   }

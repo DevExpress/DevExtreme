@@ -217,7 +217,7 @@ export function buildCytoscapeElements(
     addNode(targetId, {
       label: `${targetName}\n(${typeLabel})`,
       nodeType: 'gcTarget',
-      category: 'gc-target',
+      category: info.origin === 'dg' ? 'dg-target' : 'gc-target',
       targetName,
       targetType: info.type,
       targetOrigin: info.origin,

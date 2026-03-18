@@ -1,5 +1,10 @@
 /* eslint-disable spellcheck/spell-checker */
-import { BASE_CSS, HIGHLIGHT_CYTOSCAPE_STYLES, SHARED_INTERACTIVE_JS } from '../shared/html-helpers';
+import {
+  BASE_CSS,
+  HIGHLIGHT_CYTOSCAPE_STYLES,
+  LABEL_SIZE_HELPERS_JS,
+  SHARED_INTERACTIVE_JS,
+} from '../shared/html-helpers';
 import { buildCytoscapeElements } from './graph-builder';
 import { buildModulesBySourceFile } from './resolver';
 import type { ArchitectureData } from './types';
@@ -62,13 +67,14 @@ export function generateHtml(data: ArchitectureData): string {
     extenders: m.extenders,
   })));
 
-  const categories = ['passthrough', 'extended', 'replaced', 'new', 'gc-target'];
+  const categories = ['passthrough', 'extended', 'replaced', 'new', 'gc-target', 'dg-target'];
   const categoryDisplayNames: Record<string, string> = {
-    passthrough: 'Passthrough',
-    extended: 'Extended',
-    replaced: 'Replaced',
-    new: 'New',
-    'gc-target': 'Grid Core Target',
+    passthrough: 'Passthrough Modules',
+    extended: 'Extended Modules',
+    replaced: 'Replaced Modules',
+    new: 'New Modules',
+    'gc-target': 'Grid Core Targets (ctrl/view)',
+    'dg-target': 'DataGrid Targets (ctrl/view)',
   };
   const featureAreas = [...new Set(data.modules.map((m) => m.featureArea))].sort();
 
@@ -89,6 +95,7 @@ ${BASE_CSS}
 .c-rep{background:#3a2a2a;color:#fc8181;border:1px solid #fc818133}
 .c-new{background:#3a3a2a;color:#f6e05e;border:1px solid #f6e05e33}
 .c-gc{background:#3a2a00;color:#f5c040;border:1px solid #f5c04033}
+.c-dg{background:#2a2a1e;color:#f6e05e;border:1px solid #f6e05e33}
 .c-util{background:#0a2a1a;color:#6ee7b7;border:1px solid #10b98133}
 .chain-box{margin:4px 0;padding:6px;background:#1a1a2e;border:1px solid #334;border-radius:4px;font-size:11px}
 .chain-step{padding:2px 6px;border-radius:3px;margin:2px 0;display:inline-block}
@@ -164,6 +171,9 @@ var PIPELINES = ${pipelinesJson};
 var MODULES = ${modulesJson};
 var GC_MODULES = ${gridCoreModulesJson};
 
+// Shared label sizing helpers (replaces deprecated 'width': 'label' / 'height': 'label')
+${LABEL_SIZE_HELPERS_JS}
+
 var cy = cytoscape({
   container: document.getElementById('cy'),
   elements: ELEMENTS,
@@ -172,7 +182,7 @@ var cy = cytoscape({
       'shape': 'round-rectangle', 'background-opacity': 0.8,
       'border-width': 2, 'label': 'data(label)', 'text-valign': 'center', 'text-halign': 'center',
       'font-size': 10, 'color': '#e8e8e8', 'text-wrap': 'wrap', 'text-max-width': '260px',
-      'padding': '14px', 'width': 'label', 'height': 'label',
+      'width': labelWidth(10, 260), 'height': labelHeight(10),
     }},
     { selector: 'node.module.passthrough', style: { 'background-color': '#2a3a2a', 'border-color': '#68d391',
       'text-valign': 'top', 'text-margin-y': 16, 'padding': '30px',
@@ -199,7 +209,7 @@ var cy = cytoscape({
       'background-opacity': 0.6, 'font-size': 9,
       'text-valign': 'center', 'text-halign': 'center',
       'text-wrap': 'wrap', 'text-max-width': '120px',
-      'padding': '12px', 'width': 'label', 'height': 'label',
+      'padding': '12px', 'width': labelWidth(9), 'height': labelHeight(9),
       'label': 'data(label)',
     }},
     { selector: 'node.gc-target-controller', style: {
@@ -210,7 +220,7 @@ var cy = cytoscape({
     }},
     { selector: 'node.dg-target', style: {
       'background-color': '#3a3a2a', 'border-style': 'solid',
-      'padding': '12px',
+      'width': labelWidth(9), 'height': labelHeight(9),
     }},
     { selector: 'node.dg-target.gc-target-controller', style: {
       'border-color': '#7dd3fc', 'color': '#bae6fd', 'shape': 'hexagon',
@@ -356,7 +366,7 @@ function runLayout() {
       y = moduleYMap[targetDefiner[tName]];
     } else if (targetFirstExt[tName] && moduleYMap[targetFirstExt[tName].mod] !== undefined) {
       // A bit below the first extender module
-      y = moduleYMap[targetFirstExt[tName].mod] + 25;
+      y = moduleYMap[targetFirstExt[tName].mod] + 30;
     } else {
       y = 0; // fallback
     }
@@ -371,7 +381,7 @@ function runLayout() {
 
   function assignTargetPositions(targets, xSign) {
     var colWidth = 160;
-    var minYGap = 50;
+    var minYGap = 60;
     var lastY = -Infinity;
     for (var t = 0; t < targets.length; t++) {
       var entry = targets[t];
@@ -523,8 +533,8 @@ function pathWrap(p) {
 }
 
 function tagFor(cat) {
-  var map = { passthrough: 'c-pt', extended: 'c-ext', replaced: 'c-rep', 'new': 'c-new', 'grid-core': 'c-gc', 'gc-target': 'c-gc' };
-  var displayMap = { passthrough: 'Passthrough', extended: 'Extended', replaced: 'Replaced', 'new': 'New', 'grid-core': 'Grid Core', 'gc-target': 'Grid Core Target' };
+  var map = { passthrough: 'c-pt', extended: 'c-ext', replaced: 'c-rep', 'new': 'c-new', 'grid-core': 'c-gc', 'gc-target': 'c-gc', 'dg-target': 'c-dg' };
+  var displayMap = { passthrough: 'Passthrough', extended: 'Extended', replaced: 'Replaced', 'new': 'New', 'grid-core': 'Grid Core', 'gc-target': 'Grid Core Target', 'dg-target': 'DataGrid Target' };
   var cls = map[cat] || 'c-pt';
   var label = displayMap[cat] || cat;
   return '<span class="tag ' + cls + '">' + label + '</span>';
@@ -577,7 +587,7 @@ function showInfo(t) {
 
   } else if (t.isNode() && d.nodeType === 'gcTarget') {
     var originLabel = d.targetOrigin === 'dg' ? 'DG-defined' : 'GC-defined';
-    var originTag = d.targetOrigin === 'dg' ? tagFor('new') : tagFor('gc-target');
+    var originTag = d.targetOrigin === 'dg' ? tagFor('dg-target') : tagFor('gc-target');
     h = '<div>' + originTag + '</div>';
     h += '<h3>' + d.targetName + ' <span style="font-size:11px;color:#888">(' + d.targetType + ', ' + originLabel + ')</span></h3>';
     var pip = PIPELINES.find(function(p) { return p.targetName === d.targetName && p.targetType === d.targetType; });
@@ -610,8 +620,6 @@ function showInfo(t) {
     var viewPips = PIPELINES.filter(function(p) { return p.targetType === 'view' && p.steps.some(function(s) { return s.moduleName === d.moduleName; }); });
     if (ctrlPips.length) { h += '<h3 style="margin-top:6px">Controller Chains:</h3>'; for (var i = 0; i < ctrlPips.length; i++) h += renderChain(ctrlPips[i], ''); }
     if (viewPips.length) { h += '<h3 style="margin-top:6px">View Chains:</h3>'; for (var j = 0; j < viewPips.length; j++) h += renderChain(viewPips[j], 'chain-view'); }
-
-    if (d.category === 'passthrough') h += '<p style="margin-top:6px;font-size:11px;color:#666">Directly re-exports a grid_core module without modifications.</p>';
 
   } else if (t.isEdge()) {
     var et = d.edgeType;

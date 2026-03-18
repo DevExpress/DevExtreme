@@ -9,6 +9,7 @@ import {
   EXTENDER_EDGE_BASE_STYLES,
   GC_TARGET_CYTOSCAPE_STYLES,
   HIGHLIGHT_CYTOSCAPE_STYLES,
+  LABEL_SIZE_HELPERS_JS,
   SHARED_INTERACTIVE_JS,
 } from '../shared/html-helpers';
 import { buildCytoscapeElements } from './graph-builder';
@@ -96,14 +97,8 @@ ${BASE_CSS}
 <script>
 const ELEMENTS = ${elementsJson};
 
-// Helper: compute node width from label (replaces deprecated 'width': 'label')
-function labelWidth(fontSize) {
-  return function(ele) {
-    const text = ele.data('label') || '';
-    const charWidth = fontSize * 0.65;
-    return Math.max(30, text.length * charWidth + 24);
-  };
-}
+// Shared label sizing helpers (replaces deprecated 'width': 'label' / 'height': 'label')
+${LABEL_SIZE_HELPERS_JS}
 
 const cy = cytoscape({
   container: document.getElementById('cy'),
@@ -136,10 +131,10 @@ const cy = cytoscape({
     ${GC_TARGET_CYTOSCAPE_STYLES}
     // Grid_core-specific: explicit sizing for gc-target nodes
     { selector: 'node.gc-target-controller',
-      style: { 'width': labelWidth(9), 'min-width': 30, 'height': 30 }
+      style: { 'width': labelWidth(9), 'height': 30 }
     },
     { selector: 'node.gc-target-view',
-      style: { 'width': labelWidth(9), 'min-width': 30, 'height': 26 }
+      style: { 'width': labelWidth(9), 'height': 26 }
     },
     // Inheritance edges (ctrl) — dashed, same color as extension ctrl
     { selector: 'edge.edge-inherit-ctrl',
