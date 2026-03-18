@@ -901,8 +901,8 @@ importers:
         specifier: 3.3.4
         version: 3.3.4
       '@vue/test-utils':
-        specifier: 2.0.0-beta.7
-        version: 2.0.0-beta.7(vue@3.2.47)
+        specifier: 2.4.6
+        version: 2.4.6
       css-loader:
         specifier: 6.10.0
         version: 6.10.0(webpack@5.105.4)
@@ -2206,8 +2206,8 @@ importers:
         specifier: 3.4.26
         version: 3.4.26
       '@vue/test-utils':
-        specifier: 2.0.0-beta.7
-        version: 2.0.0-beta.7(vue@3.2.47)
+        specifier: 2.4.6
+        version: 2.4.6
       devextreme-metadata:
         specifier: workspace:*
         version: link:../devextreme-metadata
@@ -7393,10 +7393,8 @@ packages:
   '@vue/shared@3.5.13':
     resolution: {integrity: sha512-/hnE/qP5ZoGpol0a5mDi45bOd7t3tjYJBjsgCsivow7D48cJeV5l05RD82lPqi7gRiphZM37rnhW1l6ZoCNNnQ==}
 
-  '@vue/test-utils@2.0.0-beta.7':
-    resolution: {integrity: sha512-cAe7VqoxxkxTr/2N93UpW/LQbcUVKC+QRA3ZBq5ZWImtAf/8jtcdC2mQ9g4AKmSvyaKQtqxrRn4i/y5z7yrrKA==}
-    peerDependencies:
-      vue: ^3.0.1
+  '@vue/test-utils@2.4.6':
+    resolution: {integrity: sha512-FMxEjOpYNYiFe0GkaHsnJPXFHxQ6m4t8vI/ElPGpMWxZKpmRvQ33OIrvRXemy6yha03RxhOlQuy+gZMC3CQSow==}
 
   '@vue/tsconfig@0.7.0':
     resolution: {integrity: sha512-ku2uNz5MaZ9IerPPUyOHzyjhXoX2kVJaVf7hL315DC17vS6IiZRmmCPfggNbU16QTvM80+uYYy3eYJB59WCtvg==}
@@ -18249,6 +18247,9 @@ packages:
   vscode-uri@3.1.0:
     resolution: {integrity: sha512-/BpdSx+yCQGnCvecbyXdxHDkuk55/G3xwnC0GqY4gmQ3j+A+g8kzzgB4Nk/SINjqn6+waqw3EgbVF2QKExkRxQ==}
 
+  vue-component-type-helpers@2.2.12:
+    resolution: {integrity: sha512-YbGqHZ5/eW4SnkPNR44mKVc6ZKQoRs/Rux1sxC6rdwXb4qpbOSYfDr9DsTHolOTGmIKgM9j141mZbBeg05R1pw==}
+
   vue-eslint-parser@10.0.0:
     resolution: {integrity: sha512-xGtmOQJzWUIi6opA7CfJTJsJyCRjibJKHNzq39yqJ/f4AJ+N7Ngr7lDZMl/9ePaobBnsZgifu+7G6bST+gaYJA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -27700,9 +27701,10 @@ snapshots:
 
   '@vue/shared@3.5.13': {}
 
-  '@vue/test-utils@2.0.0-beta.7(vue@3.2.47)':
+  '@vue/test-utils@2.4.6':
     dependencies:
-      vue: 3.2.47
+      js-beautify: 1.15.1
+      vue-component-type-helpers: 2.2.12
 
   '@vue/tsconfig@0.7.0(typescript@5.9.3)(vue@3.4.27(typescript@5.9.3))':
     optionalDependencies:
@@ -43417,6 +43419,8 @@ snapshots:
   void-elements@2.0.1: {}
 
   vscode-uri@3.1.0: {}
+
+  vue-component-type-helpers@2.2.12: {}
 
   vue-eslint-parser@10.0.0(eslint@9.39.4(jiti@2.6.1)):
     dependencies:
