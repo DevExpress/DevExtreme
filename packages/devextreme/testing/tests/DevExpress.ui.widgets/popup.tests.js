@@ -2695,6 +2695,25 @@ QUnit.module('keyboard navigation', {
 
         assert.strictEqual(this.popup.option('visible'), false, 'popup is closed after pressing esc on a child element');
     });
+
+    QUnit.test('should remain visible when child element prevents default on escape key press', function(assert) {
+        this.init({ dragEnabled: false });
+
+        const $input = $('<input>').appendTo(this.popup.$content());
+
+        $input.on('keydown', (e) => {
+            const isEscape = e.key === 'Escape' || e.which === 27;
+            if(isEscape) {
+                e.preventDefault();
+            }
+        });
+
+        const keyboard = keyboardMock($input);
+
+        keyboard.keyDown('esc');
+
+        assert.strictEqual(this.popup.option('visible'), true, 'popup remains visible after pressing esc on a child element that prevents default');
+    });
 });
 
 QUnit.module('rendering', {
