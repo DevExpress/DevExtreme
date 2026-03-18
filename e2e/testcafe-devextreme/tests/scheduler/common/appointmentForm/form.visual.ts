@@ -231,13 +231,13 @@ test.meta({ browserSize: [1500, 1500] })('main form without icons', async (t) =>
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-
-  await scheduler.openAppointmentPopup(t, undefined, false);
+  const appointmentPopup = await scheduler.openAppointmentPopup(t, undefined, false);
 
   await testScreenshot(
     t,
     takeScreenshot,
     'scheduler__appointment__main-form__icons-mode-none.png',
+    { element: appointmentPopup.contentElement },
   );
 
   await t
