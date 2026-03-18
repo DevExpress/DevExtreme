@@ -2684,6 +2684,17 @@ QUnit.module('keyboard navigation', {
 
         assert.ok(isOk, 'arrows handling should not throw an error');
     });
+
+    QUnit.test('should be closed on escape key press when focus is on a child element', function(assert) {
+        this.init({ dragEnabled: false });
+
+        const $input = $('<input>').appendTo(this.popup.$content());
+        const keyboard = keyboardMock($input);
+
+        keyboard.keyDown('esc');
+
+        assert.strictEqual(this.popup.option('visible'), false, 'popup is closed after pressing esc on a child element');
+    });
 });
 
 QUnit.module('rendering', {
