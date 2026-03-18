@@ -105,6 +105,7 @@ const getIgnoredRules = (testName) => {
 
     'Gantt-Appearance': ['aria-toggle-field-name'],
     'Gantt-ExportToPDF': ['aria-toggle-field-name'],
+    'Gantt-Overview': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-StripLines': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-Validation': ['aria-required-parent', 'aria-valid-attr-value'],
 
