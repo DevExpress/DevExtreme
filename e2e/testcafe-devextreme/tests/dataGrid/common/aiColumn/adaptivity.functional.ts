@@ -8,17 +8,24 @@ fixture`Ai Column.Adaptivity`
 
 const DATA_GRID_SELECTOR = '#container';
 
-const resolveAIRequest = ClientFunction((): void => {
-  const { aiResponseData } = (window as any);
-  const { aiResolve } = (window as any);
+const resolveAIRequest = ClientFunction((): Promise<void> => new Promise<void>((resolve) => {
+  const tryResolve = (): void => {
+    const { aiResponseData } = (window as any);
+    const { aiResolve } = (window as any);
+    if (aiResponseData && aiResolve) {
+      aiResolve(aiResponseData);
 
-  if (aiResponseData && aiResolve) {
-    aiResolve(aiResponseData);
+      (window as any).aiResponseData = null;
+      (window as any).aiResolve = null;
 
-    (window as any).aiResponseData = null;
-    (window as any).aiResolve = null;
-  }
-});
+      resolve();
+    } else {
+      setTimeout(tryResolve, 50);
+    }
+  };
+
+  tryResolve();
+}));
 
 const deleteGlobalVariables = ClientFunction((): void => {
   delete (window as any).aiResponseData;
@@ -150,12 +157,12 @@ test('The AI column should not be hidden when there is a second AI column with a
 
 test('The AI column should have value in the adaptive detail row', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
   await resolveAIRequest();
 
   // assert
-  await t.expect(dataGrid.isReady()).ok();
 
   const adaptiveButton = dataGrid.getAdaptiveButton();
 
