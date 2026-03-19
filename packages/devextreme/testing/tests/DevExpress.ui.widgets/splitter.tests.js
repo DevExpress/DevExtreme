@@ -1361,6 +1361,31 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
         resizeObserverSingleton.unobserve.restore();
     });
+
+
+    QUnit.test('initial collapsed pane should restore size from configuration', function(assert) {
+
+        const EXPECTED_SIZE = 200;
+
+        this.reinit({
+            width: 600,
+            height: 600,
+            items: [
+                { text: 'first pane' },
+                {
+                    text: 'second pane',
+                    size: `${EXPECTED_SIZE}px`,
+                    collapsed: true,
+                    collapsible: true,
+                }
+            ]
+        });
+
+        this.instance.option('items[1].collapsed', false);
+
+        assert.strictEqual(this.instance.option('items[1].size'), EXPECTED_SIZE, 'items[1].size');
+
+    });
 });
 
 QUnit.module('Pane visibility', moduleConfig, () => {
