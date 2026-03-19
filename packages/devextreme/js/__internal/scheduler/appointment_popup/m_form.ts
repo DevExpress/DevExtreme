@@ -916,9 +916,6 @@ export class AppointmentForm {
       this._$recurrenceGroup.attr('inert', true);
     }
 
-    // Note: Updating toolbar causes popup position recalculation,
-    // so it should be called after changing groups visibility.
-    // Alternatively, dxPopup.repaint() can be called.
     this._popup.updateToolbarForMainGroup();
   }
 
