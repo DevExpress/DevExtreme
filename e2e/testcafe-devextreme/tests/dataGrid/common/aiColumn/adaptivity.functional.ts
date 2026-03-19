@@ -8,24 +8,17 @@ fixture`Ai Column.Adaptivity`
 
 const DATA_GRID_SELECTOR = '#container';
 
-const resolveAIRequest = ClientFunction((): Promise<void> => new Promise<void>((resolve) => {
-  const tryResolve = (): void => {
-    const { aiResponseData } = (window as any);
-    const { aiResolve } = (window as any);
-    if (aiResponseData && aiResolve) {
-      aiResolve(aiResponseData);
+const resolveAIRequest = ClientFunction((): void => {
+  const { aiResponseData } = (window as any);
+  const { aiResolve } = (window as any);
 
-      (window as any).aiResponseData = null;
-      (window as any).aiResolve = null;
+  if (aiResponseData && aiResolve) {
+    aiResolve(aiResponseData);
 
-      resolve();
-    } else {
-      setTimeout(tryResolve, 50);
-    }
-  };
-
-  tryResolve();
-}));
+    (window as any).aiResponseData = null;
+    (window as any).aiResolve = null;
+  }
+});
 
 const deleteGlobalVariables = ClientFunction((): void => {
   delete (window as any).aiResponseData;
