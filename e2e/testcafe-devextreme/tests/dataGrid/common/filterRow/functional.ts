@@ -237,7 +237,7 @@ test('Lookup filter should not change to (All) after searching twice in another 
   const dataGrid = new DataGrid('#container');
   const lookupFilterEditor = dataGrid.getFilterEditor(0, SelectBox);
   const textFilterEditor = dataGrid.getFilterEditor(1, TextBox);
-  
+
   // assert
   await t.expect(dataGrid.isReady()).ok();
 
@@ -262,7 +262,7 @@ test('Lookup filter should not change to (All) after searching twice in another 
   // act
   await t.typeText(textFilterEditor.input, 'a');
 
-  // asert
+  // assert
   await t
     .expect(lookupFilterEditor.value)
     .eql('Lookup Item 1')
