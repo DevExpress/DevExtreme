@@ -93,6 +93,10 @@ const ORIENTATION: Record<string, Orientation> = {
   vertical: 'vertical',
 };
 
+type InternalSplitterItem = Item & {
+  _initialSizeBeforeCollapse?: Item['size'];
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ItemLike<TKey> = string | Item<TKey> | any;
 
@@ -235,15 +239,13 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     return isElementVisible($(this.element())[0]);
   }
 
-  _captureInitialCollapsedItemSizes(items: Item[]): void {
+  _captureInitialCollapsedItemSizes(items: InternalSplitterItem[]): void {
     items.forEach((item) => {
       if (
-        // @ts-expect-error
         item._initialSizeBeforeCollapse === undefined
         && item.collapsed === true
         && isDefined(item.size)
       ) {
-        // @ts-expect-error
         item._initialSizeBeforeCollapse = item.size;
       }
     });
@@ -926,14 +928,13 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     paneCache: PaneCache | undefined,
     direction: CollapseExpandDirection | undefined,
     collapsedSize: number,
-    item: Item,
+    item: InternalSplitterItem,
     itemIndex: number,
   ): number {
     if (paneCache && paneCache.direction === direction) {
       return paneCache.size - collapsedSize;
     }
 
-    // @ts-expect-error
     if (!isDefined(item._initialSizeBeforeCollapse)) {
       return direction === CollapseExpandDirection.Previous
         ? this._calculateExpandToLeftSize(itemIndex - 1)
@@ -941,11 +942,12 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     }
 
     const sizeRatio = convertSizeToRatio(
-      // @ts-expect-error
       item._initialSizeBeforeCollapse,
       getElementSize($(this.element()), this.option().orientation),
       this._getResizeHandlesSize(),
     );
+
+    item._initialSizeBeforeCollapse = undefined;
 
     if (!isDefined(sizeRatio)) {
       return direction === CollapseExpandDirection.Previous
@@ -953,8 +955,6 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
         : this._calculateExpandToRightSize(itemIndex + 1);
     }
 
-    // @ts-expect-error
-    item._initialSizeBeforeCollapse = undefined;
     return sizeRatio - collapsedSize;
   }
 

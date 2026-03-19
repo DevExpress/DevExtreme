@@ -18,10 +18,6 @@ import {
 
 import 'fluent_blue_light.css!';
 
-// const SPLITTER_CLASS = 'dx-splitter';
-// const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
-// const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
-// const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
 const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
