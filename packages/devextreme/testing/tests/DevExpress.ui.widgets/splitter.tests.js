@@ -9,19 +9,25 @@ import { createEvent } from 'common/core/events/utils/index';
 import { name as DOUBLE_CLICK_EVENT } from 'common/core/events/double_click';
 import { name as CLICK_EVENT } from 'common/core/events/click';
 import resizeObserverSingleton from 'core/resize_observer';
+import {
+    SPLITTER_CLASS,
+    SPLITTER_ITEM_CLASS,
+    SPLITTER_ITEM_HIDDEN_CONTENT_CLASS,
+    INVISIBLE_STATE_CLASS as STATE_INVISIBLE_CLASS
+} from '__internal/ui/splitter/splitter';
 
 import 'fluent_blue_light.css!';
 
-const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
-const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
+// const SPLITTER_CLASS = 'dx-splitter';
+// const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
+// const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
+// const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
 const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
 const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
-const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 const STATE_ACTIVE_CLASS = 'dx-state-active';
 const STATE_FOCUSED_CLASS = 'dx-state-focused';
-const SPLITTER_CLASS = 'dx-splitter';
 
 QUnit.testStart(() => {
     const markup =
@@ -1008,14 +1014,14 @@ QUnit.module('Pane sizing', moduleConfig, () => {
             ]
         },
         {
-            items: [{ collapsed: true, size: '150px', collapsible: true }, { collapsible: true }, { collapsed: true, collapsible: true }, { }],
+            items: [{ collapsed: true, collapsible: true }, { collapsible: true }, { collapsed: true, collapsible: true }, { }],
             scenarios: [
                 { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['25', '25', '0', '50'] },
                 { newCollapsedValue: false, paneIndex: 2, expectedLayout: ['25', '25', '25', '25'] },
             ]
         },
         {
-            items: [{ collapsed: false, collapsible: true }, { collapsed: true, collapsible: true }, { collapsible: true }, { collapsed: true, size: '150px', collapsible: true }],
+            items: [{ collapsed: false, collapsible: true }, { collapsed: true, collapsible: true }, { collapsible: true }, { collapsed: true, collapsible: true }],
             scenarios: [
                 { newCollapsedValue: false, paneIndex: 3, expectedLayout: ['50', '0', '25', '25'] },
                 { newCollapsedValue: false, paneIndex: 1, expectedLayout: ['50', '12.5', '12.5', '25'] },
@@ -1362,30 +1368,97 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         resizeObserverSingleton.unobserve.restore();
     });
 
+    [150, 200, 250].forEach(expectedSize => {
+        QUnit.test(`initial collapsed pane should restore size from configuration (left pane) size ${expectedSize}`, function(assert) {
 
-    QUnit.test('initial collapsed pane should restore size from configuration', function(assert) {
+            this.reinit({
+                width: 600,
+                height: 600,
+                items: [
+                    { size: `${expectedSize}px`, collapsed: true, collapsible: true, },
+                    { }
+                ]
+            });
 
-        const EXPECTED_SIZE = 200;
+            this.instance.option('items[0].collapsed', false);
 
+            assert.strictEqual(this.instance.option('items[0].size'), expectedSize, 'items[0].size');
+
+        });
+
+        QUnit.test(`initial collapsed pane should restore size from configuration (right pane) size ${expectedSize}`, function(assert) {
+
+            this.reinit({
+                width: 600,
+                height: 600,
+                items: [
+                    { },
+                    { size: `${expectedSize}px`, collapsed: true, collapsible: true, }
+                ]
+            });
+
+            this.instance.option('items[1].collapsed', false);
+
+            assert.strictEqual(this.instance.option('items[1].size'), expectedSize, 'items[1].size');
+
+        });
+
+        QUnit.test(`initial collapsed pane should restore size from configuration (right and left pane) size ${expectedSize}`, function(assert) {
+
+            this.reinit({
+                width: 600,
+                height: 600,
+                items: [
+                    { size: `${expectedSize}px`, collapsed: true, collapsible: true, },
+                    { },
+                    { size: `${expectedSize}px`, collapsed: true, collapsible: true, }
+                ]
+            });
+
+            this.instance.option('items[0].collapsed', false);
+            this.instance.option('items[2].collapsed', false);
+
+            assert.strictEqual(this.instance.option('items[0].size'), expectedSize, 'items[0].size');
+            assert.strictEqual(this.instance.option('items[2].size'), expectedSize, 'items[2].size');
+
+        });
+
+        QUnit.test(`_initialSizeBeforeCollapse should create when item has collapsed:true and size = ${expectedSize}`, function(assert) {
+            this.reinit({
+                width: 600,
+                height: 600,
+                items: [
+                    { size: `${expectedSize}px`, collapsed: true, collapsible: true, },
+                    { },
+                ]
+            });
+
+            const items = this.instance.option('items');
+
+            assert.strictEqual(items[0]._initialSizeBeforeCollapse, `${expectedSize}px`, 'items[0]._initialSizeBeforeCollapse');
+            assert.strictEqual(items[1]._initialSizeBeforeCollapse, undefined, 'items[1]._initialSizeBeforeCollapse');
+
+        });
+    });
+
+    QUnit.test('_initialSizeBeforeCollapse should be undefined after first expand', function(assert) {
         this.reinit({
             width: 600,
             height: 600,
             items: [
-                { text: 'first pane' },
-                {
-                    text: 'second pane',
-                    size: `${EXPECTED_SIZE}px`,
-                    collapsed: true,
-                    collapsible: true,
-                }
+                { size: '150px', collapsed: true, collapsible: true, },
+                { },
             ]
         });
 
-        this.instance.option('items[1].collapsed', false);
+        this.instance.option('items[0].collapsed', false);
 
-        assert.strictEqual(this.instance.option('items[1].size'), EXPECTED_SIZE, 'items[1].size');
+        const item0 = this.instance.option('items[0]');
+
+        assert.strictEqual(item0._initialSizeBeforeCollapse, undefined, 'items[0]._initialSizeBeforeCollapse');
 
     });
+
 });
 
 QUnit.module('Pane visibility', moduleConfig, () => {

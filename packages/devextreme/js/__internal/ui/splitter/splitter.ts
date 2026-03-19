@@ -69,13 +69,13 @@ import {
   type RenderQueueItem,
 } from './utils/types';
 
-const SPLITTER_CLASS = 'dx-splitter';
-const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
-const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
+export const SPLITTER_CLASS = 'dx-splitter';
+export const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
+export const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
+export const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
 const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
-const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 
@@ -235,6 +235,20 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     return isElementVisible($(this.element())[0]);
   }
 
+  _captureInitialCollapsedItemSizes(items: Item[]): void {
+    items.forEach((item) => {
+      if (
+        // @ts-expect-error
+        item._initialSizeBeforeCollapse === undefined
+        && item.collapsed === true
+        && isDefined(item.size)
+      ) {
+        // @ts-expect-error
+        item._initialSizeBeforeCollapse = item.size;
+      }
+    });
+  }
+
   _resizeHandler(): void {
     if (this._shouldRecalculateLayout && this._isAttached() && this._isVisible()) {
       this._layout = this._getDefaultLayoutBasedOnSize();
@@ -248,6 +262,8 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   _renderItems(items: Item[]): void {
     super._renderItems(items);
+
+    this._captureInitialCollapsedItemSizes(items);
 
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
@@ -662,6 +678,12 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   ): void {
     switch (property) {
       case 'size':
+
+        if (item.collapsed) {
+          // @ts-expect-error
+          item._initialSizeBeforeCollapse = value;
+        }
+
         this._layout = this._getDefaultLayoutBasedOnSize(item);
 
         this._applyStylesFromLayout(this.getLayout());
@@ -900,6 +922,42 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     return 0;
   }
 
+  _getTargetPaneSize(
+    paneCache: PaneCache | undefined,
+    direction: CollapseExpandDirection | undefined,
+    collapsedSize: number,
+    item: Item,
+    itemIndex: number,
+  ): number {
+    if (paneCache && paneCache.direction === direction) {
+      return paneCache.size - collapsedSize;
+    }
+
+    // @ts-expect-error
+    if (!isDefined(item._initialSizeBeforeCollapse)) {
+      return direction === CollapseExpandDirection.Previous
+        ? this._calculateExpandToLeftSize(itemIndex - 1)
+        : this._calculateExpandToRightSize(itemIndex + 1);
+    }
+
+    const sizeRatio = convertSizeToRatio(
+      // @ts-expect-error
+      item._initialSizeBeforeCollapse,
+      getElementSize($(this.element()), this.option().orientation),
+      this._getResizeHandlesSize(),
+    );
+
+    if (!isDefined(sizeRatio)) {
+      return direction === CollapseExpandDirection.Previous
+        ? this._calculateExpandToLeftSize(itemIndex - 1)
+        : this._calculateExpandToRightSize(itemIndex + 1);
+    }
+
+    // @ts-expect-error
+    item._initialSizeBeforeCollapse = undefined;
+    return sizeRatio - collapsedSize;
+  }
+
   _getCollapseDelta(
     item: Item,
     newCollapsedState: boolean | undefined,
@@ -934,15 +992,13 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     const paneCache = panesCacheSize[itemIndex];
     panesCacheSize[itemIndex] = undefined;
 
-    let targetPaneSize = 0;
-
-    if (paneCache && paneCache.direction === direction) {
-      targetPaneSize = paneCache.size - collapsedSize;
-    } else {
-      targetPaneSize = direction === CollapseExpandDirection.Previous
-        ? this._calculateExpandToLeftSize(itemIndex - 1)
-        : this._calculateExpandToRightSize(itemIndex + 1);
-    }
+    const targetPaneSize = this._getTargetPaneSize(
+      paneCache,
+      direction,
+      collapsedSize,
+      item,
+      itemIndex,
+    );
 
     let adjustedSize = compareNumbersWithPrecision(targetPaneSize, minSize) < 0
       ? minSize
