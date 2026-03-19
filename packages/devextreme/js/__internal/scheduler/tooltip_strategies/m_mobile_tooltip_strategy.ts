@@ -79,7 +79,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
     );
   }
 
-  private async _onShowing(): Promise<void> {
+  private async onShowing(): Promise<void> {
     this.tooltip.option('height', MAX_HEIGHT.DEFAULT);
     /*
     NOTE: there are two setTooltipConfig calls to reduce blinking of overlay.
@@ -99,7 +99,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
       hideOnOutsideClick: true,
       animation: animationConfig,
 
-      onShowing: () => this._onShowing(),
+      onShowing: () => this.onShowing(),
       onShown: this.onShown.bind(this),
       contentTemplate: this.getContentTemplate(dataList),
       wrapperAttr: { class: CLASS.slidePanel },
