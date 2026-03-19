@@ -1609,7 +1609,7 @@ describe('Appointment Form', () => {
       scheduler.showAppointmentPopup();
       POM.popup.selectRepeatValue('weekly');
 
-      const animationTop = POM.popup.dxForm.element().style.getPropertyValue('--dx-scheduler-animation-top');
+      const animationTop = POM.popup.dxForm.$element()[0].style.getPropertyValue('--dx-scheduler-animation-top');
       expect(animationTop).toBe('50px');
     });
   });
