@@ -939,9 +939,6 @@ export class AppointmentForm {
       this.focusFirstFocusableInGroup(this._$recurrenceGroup);
     }
 
-    // Note: Updating toolbar causes popup position recalculation,
-    // so it should be called after changing groups visibility.
-    // Alternatively, dxPopup.repaint() can be called.
     this._popup.updateToolbarForRecurrenceGroup();
   }
 
