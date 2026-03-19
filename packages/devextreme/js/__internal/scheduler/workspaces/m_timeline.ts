@@ -67,8 +67,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return getBoundingRect((this.$element() as any).get(0)).height;
   }
 
-  protected override _dateTableScrollableConfig() {
-    const config = super._dateTableScrollableConfig();
+  protected override dateTableScrollableConfig() {
+    const config = super.dateTableScrollableConfig();
     const timelineConfig = {
       direction: HORIZONTAL,
     };

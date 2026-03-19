@@ -22,7 +22,7 @@ export class TooltipStrategyBase {
 
   protected tooltip: any;
 
-  // used externally by m_scheduler.ts
+  // TODO: used externally by m_scheduler.ts
   _options: any;
 
   protected extraOptions: any;
