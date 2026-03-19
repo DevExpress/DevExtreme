@@ -1,3 +1,4 @@
+import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { deferRender } from '@js/core/utils/common';
@@ -12,6 +13,8 @@ const RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon';
 const RADIO_BUTTON_ICON_DOT_CLASS = 'dx-radiobutton-icon-dot';
 const RADIO_VALUE_CONTAINER_CLASS = 'dx-radio-value-container';
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
+
+const ITEM_CONTENT_CLASS = 'dx-item-content';
 
 export type Properties = CollectionWidgetBaseProperties<RadioCollection>;
 
@@ -29,9 +32,7 @@ class RadioCollection extends CollectionWidget<Properties> {
     const defaultOptions = super._getDefaultOptions();
 
     // @ts-expect-error
-    return extend(defaultOptions, DataExpressionMixin._dataExpressionDefaultOptions(), {
-      _itemAttributes: { role: 'radio' },
-    });
+    return extend(defaultOptions, DataExpressionMixin._dataExpressionDefaultOptions());
   }
 
   _initMarkup(): void {
@@ -47,20 +48,59 @@ class RadioCollection extends CollectionWidget<Properties> {
     return this._focusTarget();
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  _getItemIdTarget($target: dxElementWrapper): dxElementWrapper {
+    const $radioContainer = $target.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+
+    if ($radioContainer.length) {
+      return $radioContainer;
+    }
+
+    return $target;
+  }
+
   _postprocessRenderItem(args): void {
-    const { itemData: { html }, itemElement } = args;
+    const { itemData, itemElement } = args;
+    const { html } = itemData;
+
+    const $itemElement = $(itemElement);
 
     if (!html) {
       const $radio = $('<div>').addClass(RADIO_BUTTON_ICON_CLASS);
 
-      $('<div>').addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
+      $('<div>')
+        .addClass(RADIO_BUTTON_ICON_DOT_CLASS)
+        .appendTo($radio);
 
-      const $radioContainer = $('<div>').append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
+      const $radioContainer = $('<div>')
+        .append($radio)
+        .addClass(RADIO_VALUE_CONTAINER_CLASS);
 
-      $(itemElement).prepend($radioContainer);
+      $itemElement.prepend($radioContainer);
     }
 
     super._postprocessRenderItem(args);
+
+    // eslint-disable-next-line spellcheck/spell-checker
+    const aria: { role: string; labelledby?: string } = {
+      role: 'radio',
+    };
+
+    if (!html) {
+      const $itemContent = $itemElement.find(`.${ITEM_CONTENT_CLASS}`);
+
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      const contentId = $itemContent.attr('id') || `dx-${new Guid()}`;
+
+      $itemContent.attr('id', contentId);
+
+      // eslint-disable-next-line spellcheck/spell-checker
+      aria.labelledby = contentId;
+    }
+
+    const $ariaTarget = this._getItemIdTarget($itemElement);
+
+    this.setAria(aria, $ariaTarget);
   }
 
   _processSelectableItem(
@@ -75,7 +115,10 @@ class RadioCollection extends CollectionWidget<Properties> {
       .first()
       .toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, isSelected);
 
-    this.setAria('checked', isSelected, $itemElement);
+    const $radioContainer = $itemElement.find(`.${RADIO_VALUE_CONTAINER_CLASS}`);
+    const $ariaCheckedTarget = $radioContainer.length ? $radioContainer : $itemElement;
+
+    this.setAria('checked', isSelected, $ariaCheckedTarget);
   }
 
   _refreshContent(): void {

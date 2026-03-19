@@ -130,7 +130,6 @@ const App = () => {
       },
       onHidden: () => {
         setConflictError(false);
-        formRef.current?.updateData('assigneeId', []);
       },
     }),
     [setConflictError],
