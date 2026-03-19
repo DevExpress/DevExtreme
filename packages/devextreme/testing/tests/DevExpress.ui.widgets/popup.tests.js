@@ -2714,6 +2714,17 @@ QUnit.module('keyboard navigation', {
 
         assert.strictEqual(this.popup.option('visible'), true, 'popup remains visible after pressing esc on a child element that prevents default');
     });
+
+    QUnit.test('should remain visible when child element presses escape and _ignoreCloseOnChildEscape is true', function(assert) {
+        this.init({ dragEnabled: false, _ignoreCloseOnChildEscape: true });
+
+        const $input = $('<input>').appendTo(this.popup.$content());
+        const keyboard = keyboardMock($input);
+
+        keyboard.keyDown('esc');
+
+        assert.strictEqual(this.popup.option('visible'), true, 'popup remains visible when _closeOnChildEscape is false');
+    });
 });
 
 QUnit.module('rendering', {

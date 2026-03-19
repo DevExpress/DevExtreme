@@ -180,6 +180,8 @@ export interface PopupProperties extends Properties {
   useDefaultToolbarButtons?: boolean;
 
   useFlatToolbarButtons?: boolean;
+
+  _ignoreCloseOnChildEscape?: boolean;
 }
 
 class Popup<
@@ -227,18 +229,19 @@ class Popup<
   }
 
   _keyboardHandler(options: KeyboardKeyDownEvent, onlyChildProcessing?: boolean): void {
-    if (!onlyChildProcessing) {
-      const e = options.originalEvent;
-      const $target = $(e.target);
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _ignoreCloseOnChildEscape } = this.option();
+    const e = options.originalEvent;
+    const $target = $(e.target);
 
-      if (this._$content && !$target.is(this._$content)
+    if (this._$content && !$target.is(this._$content)
         && options.keyName === ESC_KEY_NAME
-        && !e.isDefaultPrevented()) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this.hide();
+        && !e.isDefaultPrevented()
+        && !_ignoreCloseOnChildEscape) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.hide();
 
-        return;
-      }
+      return;
     }
 
     super._keyboardHandler(options, onlyChildProcessing);

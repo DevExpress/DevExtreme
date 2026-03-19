@@ -286,6 +286,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       showTitle: false,
       fullScreen: false,
       ignoreChildEvents: false,
+      _ignoreCloseOnChildEscape: true,
       _fixWrapperPosition: true,
     });
     this._popup.registerKeyHandler('space', (
