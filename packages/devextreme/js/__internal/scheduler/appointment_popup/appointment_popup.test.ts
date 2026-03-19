@@ -1602,7 +1602,7 @@ describe('Appointment Form', () => {
 
       POM.popup.selectRepeatValue('weekly');
 
-      const formElement = POM.popup.dxForm.$element()[0];
+      const formElement = POM.popup.dxForm.element();
       const animationTop = formElement.style.getPropertyValue('--dx-scheduler-animation-top');
       expect(animationTop).toBe('50px');
     });

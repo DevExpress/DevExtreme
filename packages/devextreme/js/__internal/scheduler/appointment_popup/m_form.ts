@@ -1073,15 +1073,12 @@ export class AppointmentForm {
       return;
     }
 
-    const formElement = this.dxForm.$element()[0];
+    const formElement = this.dxForm.element();
     const mainGroupElement = this._$mainGroup[0];
-
-    if (formElement && mainGroupElement) {
-      const formRect = formElement.getBoundingClientRect();
-      const groupRect = mainGroupElement.getBoundingClientRect();
-      const topOffset = groupRect.top - formRect.top;
-      formElement.style.setProperty('--dx-scheduler-animation-top', `${topOffset}px`);
-    }
+    const formRect = formElement.getBoundingClientRect();
+    const groupRect = mainGroupElement.getBoundingClientRect();
+    const topOffset = groupRect.top - formRect.top;
+    formElement.style.setProperty('--dx-scheduler-animation-top', `${topOffset}px`);
   }
 
   private focusFirstFocusableInGroup($group: dxElementWrapper): void {
