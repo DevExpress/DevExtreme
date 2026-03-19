@@ -897,8 +897,6 @@ export class AppointmentForm {
   }
 
   showMainGroup(): void {
-    this._popup.updateToolbarForMainGroup();
-
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
     const editingConfig = this.scheduler.getEditingConfig();
     const configuredHeight = editingConfig?.popup?.height ?? 'auto';
@@ -918,6 +916,8 @@ export class AppointmentForm {
       this._$recurrenceGroup.addClass(CLASSES.recurrenceHidden);
       this._$recurrenceGroup.attr('inert', true);
     }
+
+    this._popup.updateToolbarForMainGroup();
   }
 
   showRecurrenceGroup(): void {
@@ -925,8 +925,6 @@ export class AppointmentForm {
     if (repeatEditor instanceof DropDownEditor) {
       repeatEditor.close();
     }
-
-    this._popup.updateToolbarForRecurrenceGroup();
 
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
 
@@ -946,6 +944,8 @@ export class AppointmentForm {
 
       this.focusFirstFocusableInGroup(this._$recurrenceGroup);
     }
+
+    this._popup.updateToolbarForRecurrenceGroup();
   }
 
   saveRecurrenceValue(): void {

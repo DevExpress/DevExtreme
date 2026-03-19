@@ -250,8 +250,8 @@ export default class Scheduler extends Widget {
 
   async openAppointmentPopup(
     t: TestController,
-    appointment: any,
-    isRecurringAppointment: boolean,
+    appointment?: any,
+    isRecurringAppointment?: boolean,
   ): Promise<AppointmentPopup> {
     const { getInstance } = this;
 
