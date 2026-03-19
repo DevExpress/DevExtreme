@@ -2723,7 +2723,7 @@ QUnit.module('keyboard navigation', {
 
         keyboard.keyDown('esc');
 
-        assert.strictEqual(this.popup.option('visible'), true, 'popup remains visible when _closeOnChildEscape is false');
+        assert.strictEqual(this.popup.option('visible'), true, 'popup remains visible when _ignoreCloseOnChildEscape is true');
     });
 });
 

@@ -237,12 +237,9 @@ class Popup<
     if (this._$content && !$target.is(this._$content)
         && options.keyName === ESC_KEY_NAME
         && !e.isDefaultPrevented()
-        && !onlyChildProcessing
         && !_ignoreCloseOnChildEscape) {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.hide();
-
-      return;
     }
 
     super._keyboardHandler(options, onlyChildProcessing);
