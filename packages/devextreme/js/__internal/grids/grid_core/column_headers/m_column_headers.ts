@@ -89,10 +89,10 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
   }
 
   private updateFirstHeaderClasses(): void {
-    const $rows = this._getRowElementsCore().toArray();
+    const $headerRows = this._getRowElementsCore().filter(`.${HEADER_ROW_CLASS}`).toArray();
 
-    $rows.forEach((row: Element, rowIndex: number) => {
-      const $cells = $(row).children('td').toArray();
+    $headerRows.forEach((headerRow: Element, rowIndex: number) => {
+      const $cells = $(headerRow).children('td').toArray();
       const columns = this.getColumns(rowIndex);
 
       $cells.forEach((cell: Element, cellIndex: number) => {
@@ -388,13 +388,18 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     const { column } = options;
     // @ts-expect-error
     const $cellElement = super._createCell.apply(this, arguments);
+
+    if (options.rowType !== 'header') {
+      return $cellElement;
+    }
+
     const rowCount = this.getRowCount();
 
     if (rowCount > 1) {
       this.toggleFirstHeaderClass($cellElement, column, options.rowIndex);
     }
 
-    if (column.rowspan > 1 && options.rowType === 'header') {
+    if (column.rowspan > 1) {
       $cellElement.attr('rowSpan', column.rowspan);
     }
 
