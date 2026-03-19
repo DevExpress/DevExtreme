@@ -676,11 +676,12 @@ export class VirtualScrollingRenderer {
   get workspace() { return this.workspaceValue; }
 
   updateRender() {
-    this.renderGrid();
+    this._renderGrid();
     this.renderAppointments();
   }
 
-  private renderGrid() {
+  // TODO: make private once external usage in m_work_space.ts is removed
+  _renderGrid() {
     this.workspace.renderWorkSpace(false);
   }
 
