@@ -1596,14 +1596,20 @@ describe('Appointment Form', () => {
     });
 
     it('should set animation offset CSS variable when switching to recurrence form', async () => {
+      setupSchedulerTestEnvironment({
+        height: 600,
+        classRects: {
+          'dx-form': { top: 10 },
+          'dx-scheduler-form-main-group': { top: 60 },
+        },
+      });
+
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
       scheduler.showAppointmentPopup();
-
       POM.popup.selectRepeatValue('weekly');
 
-      const formElement = POM.popup.dxForm.element();
-      const animationTop = formElement.style.getPropertyValue('--dx-scheduler-animation-top');
+      const animationTop = POM.popup.dxForm.element().style.getPropertyValue('--dx-scheduler-animation-top');
       expect(animationTop).toBe('50px');
     });
   });
