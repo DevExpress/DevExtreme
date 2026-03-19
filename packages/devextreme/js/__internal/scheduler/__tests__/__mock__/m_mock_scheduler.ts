@@ -4,9 +4,12 @@ import DOMComponent from '@ts/core/widget/dom_component';
 
 import SchedulerWorkSpace from '../../workspaces/m_work_space';
 
+type ClassRects = Record<string, Partial<DOMRect>>;
+
 interface SetupSchedulerTestEnvironmentOptions {
   width?: number;
   height?: number;
+  classRects?: ClassRects;
 }
 
 export const DEFAULT_CELL_WIDTH = 250;
@@ -16,6 +19,7 @@ export const DEFAULT_TIMELINE_CELL_HEIGHT = 450;
 export const setupSchedulerTestEnvironment = ({
   width = DEFAULT_CELL_WIDTH,
   height = DEFAULT_CELL_HEIGHT,
+  classRects = {},
 }: SetupSchedulerTestEnvironmentOptions = {}): void => {
   jest.spyOn(logger, 'warn').mockImplementation(() => {});
   DOMComponent.prototype._isVisible = jest.fn((): boolean => true);
@@ -42,8 +46,18 @@ export const setupSchedulerTestEnvironment = ({
     return styles;
   });
 
+  const defaultRect: DOMRect = {
+    width: 0, height: 0, top: 0, left: 0, bottom: 0, right: 0, x: 0, y: 0, toJSON: (): void => {},
+  };
+
   Element.prototype.getBoundingClientRect = jest.fn(function (): DOMRect {
     const classList: string[] = Array.from(this.classList);
+
+    const matchedClass = classList.find((className) => classRects[className]);
+    if (matchedClass) {
+      return { ...defaultRect, ...classRects[matchedClass] };
+    }
+
     switch (true) {
       case classList.includes('dx-scheduler-date-table-cell')
         || classList.includes('dx-scheduler-all-day-table-cell'):
@@ -58,30 +72,8 @@ export const setupSchedulerTestEnvironment = ({
           y: 0,
           toJSON: (): void => {},
         };
-      case classList.includes('dx-scheduler-form-main-group'):
-        return {
-          width: 0,
-          height: 0,
-          top: 50,
-          left: 0,
-          bottom: 50,
-          right: 0,
-          x: 0,
-          y: 50,
-          toJSON: (): void => {},
-        };
       default:
-        return {
-          width: 0,
-          height: 0,
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
-          x: 0,
-          y: 0,
-          toJSON: (): void => {},
-        };
+        return defaultRect;
     }
   });
 };
