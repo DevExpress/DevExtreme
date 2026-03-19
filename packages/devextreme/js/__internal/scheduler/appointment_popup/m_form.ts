@@ -926,7 +926,6 @@ export class AppointmentForm {
       repeatEditor.close();
     }
 
-    this._popup.updateToolbarForRecurrenceGroup();
     this.updateAnimationOffset();
 
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
