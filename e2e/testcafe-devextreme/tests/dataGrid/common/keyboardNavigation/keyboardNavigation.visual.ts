@@ -13,6 +13,9 @@ test('Focus the last cell in the row that contains focus when pressing the End k
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   // act
   await t
@@ -40,6 +43,9 @@ test('Focus the first cell in the row that contains focus when pressing the Home
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   // act
   await t
@@ -67,6 +73,9 @@ test('Navigate to last cell in the row that contains focus when pressing the End
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   // act
   await t
@@ -94,6 +103,9 @@ test('Navigate to first cell in the row that contains focus when pressing the Ho
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await dataGrid.scrollTo(t, { x: 700 });
 
@@ -128,6 +140,9 @@ test('Navigate to last cell in the row that contains focus when focusedRowEnable
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   // act
   await t
@@ -156,6 +171,9 @@ test('Navigate to first cell in the row that contains focus when row dragging is
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await dataGrid.scrollTo(t, { x: 700 });
 
@@ -194,6 +212,9 @@ test('Navigation should not work when pressing the End key when the row is in ed
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   // act
   await t
@@ -225,6 +246,9 @@ test('Navigate to last cell in the row that contains focus when virtual columns 
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   // act
   await t
@@ -254,6 +278,9 @@ test('Navigate to first cell in the row that contains focus when virtual columns
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await dataGrid.scrollTo(t, { x: 4200 });
 
@@ -290,6 +317,9 @@ test('Navigate to last cell in the row that contains focus when adaptivity is en
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   // act
   await t
@@ -321,6 +351,9 @@ test('Navigate to first cell in the row that contains focus when adaptivity is e
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await dataGrid.scrollTo(t, { x: 4200 });
 
@@ -360,6 +393,9 @@ test('Focus the last cell in the last row when pressing the Ctrl+End key', async
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   // act
   await t
@@ -385,6 +421,10 @@ test('Focus the first cell in the firs row when pressing the Ctrl+Home key', asy
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
   // act
   await t
     .click(dataGrid.getDataCell(4, 6).element)
@@ -408,6 +448,9 @@ test('Navigate to last cell in the last row when pressing the Ctrl+End key', asy
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   // act
   await t
@@ -435,6 +478,9 @@ test('Navigate to first cell in the first row when pressing the Ctrl + Home key'
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await dataGrid.scrollTo(t, { x: 700, y: 1000 });
 
@@ -471,6 +517,9 @@ test('Navigate to last cell in the last row when virtual scrolling is enabled', 
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   // act
   await t
@@ -501,6 +550,9 @@ test('Navigate to first cell in the first row when virtual scrolling is enabled'
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await dataGrid
     .scrollTo(t, { x: 700, y: 10000 });
@@ -541,6 +593,9 @@ test.meta({ unstable: true })('Navigate to last cell in the last row when virtua
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   // act
   await t
@@ -574,6 +629,9 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await dataGrid.scrollTo(t, { x: 3000, y: 10000 });
 
@@ -617,6 +675,9 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     // arrange
     const dataGrid = new DataGrid('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
 
     // act
     await t
@@ -663,6 +724,9 @@ test('Navigate to first cell in the first row when virtual scrolling and columns
     // arrange
     const dataGrid = new DataGrid('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    await t
+      .expect(dataGrid.isReady())
+      .ok();
 
     await t.expect(dataGrid.isReady()).ok();
 
