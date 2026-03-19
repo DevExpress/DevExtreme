@@ -1,5 +1,6 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import TextBox from 'devextreme-testcafe-models/textBox';
+import SelectBox from 'devextreme-testcafe-models/selectBox';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
@@ -229,4 +230,78 @@ test('DataGrid - filter range overlay in last column on Tab pressed moves focus 
       selectedFilterOperation: 'between',
     },
   ],
+}));
+
+test('Lookup filter should not change to (All) after searching twice in another column (T1284002)', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const lookupFilterEditor = dataGrid.getFilterEditor(0, SelectBox);
+  const textFilterEditor = dataGrid.getFilterEditor(1, TextBox);
+  
+  // assert
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await t.click(lookupFilterEditor.element);
+
+  // assert
+  await t.expect(await lookupFilterEditor.isOpened()).ok();
+
+  // act
+  const lookupList = await lookupFilterEditor.getList();
+  const lookupItem = lookupList.getItem(1);
+  await t.click(lookupItem.element);
+
+  // assert
+  await t
+    .expect(lookupFilterEditor.value)
+    .eql('Lookup Item 1')
+    .expect(dataGrid.dataRows.count)
+    .eql(1);
+
+  // act
+  await t.typeText(textFilterEditor.input, 'a');
+
+  // asert
+  await t
+    .expect(lookupFilterEditor.value)
+    .eql('Lookup Item 1')
+    .expect(dataGrid.dataRows.count)
+    .eql(0);
+
+  // act
+  await t.typeText(textFilterEditor.input, 'b');
+
+  // assert
+  await t
+    .expect(lookupFilterEditor.value)
+    .eql('Lookup Item 1')
+    .expect(dataGrid.dataRows.count)
+    .eql(0);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { ID: 1, Lookup: 1, Text: 'Item 1' },
+    { ID: 2, Lookup: 2, Text: 'Item 2' },
+    { ID: 3, Lookup: 3, Text: 'Item 3' },
+  ],
+  keyExpr: 'ID',
+  syncLookupFilterValues: true,
+  filterRow: { visible: true },
+  columns: [{
+    dataField: 'Lookup',
+    lookup: {
+      valueExpr: 'ID',
+      displayExpr: 'Text',
+      dataSource: [
+        { ID: 1, Text: 'Lookup Item 1' },
+        { ID: 2, Text: 'Lookup Item 2' },
+        { ID: 3, Text: 'Lookup Item 3' },
+      ],
+    },
+  }, 'Text'],
+  onEditorPreparing(e) {
+    if (e.dataField === 'Text') {
+      e.updateValueTimeout = 0;
+    }
+  },
 }));
