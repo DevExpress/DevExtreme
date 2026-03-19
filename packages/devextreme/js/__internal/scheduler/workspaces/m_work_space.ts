@@ -214,7 +214,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private cellsSelectionControllerValue: any;
 
-  // TODO: used externally by shaders, grouped strategies, m_agenda.ts
+  // TODO: make private once external usages in shaders, grouped strategies, m_agenda.ts are removed
   _dateTableScrollable!: Scrollable;
 
   private selectionChangedAction: any;
@@ -227,24 +227,24 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   protected getToday?(): Date;
 
-  // TODO: used externally by current_time_shader_vertical.ts
+  // TODO: make private once external usages in current_time_shader_vertical.ts are removed
   _$allDayPanel: any;
 
   private $allDayTitle: any;
 
   private $headerPanelEmptyCell: any;
 
-  // TODO: used externally by m_timeline.ts, m_work_space_indicator.ts
+  // TODO: make private once external usages in m_timeline.ts, m_work_space_indicator.ts are removed
   _groupedStrategy: any;
 
   public virtualScrollingDispatcher: any;
 
   private scrollSync: any;
 
-  // TODO: used externally by m_work_space_grouped_strategy_vertical.ts
+  // TODO: make private once external usages in m_work_space_grouped_strategy_vertical.ts are removed
   _$headerPanel: any;
 
-  // TODO: used externally by m_timeline.ts, m_agenda.ts, m_work_space_month.ts
+  // TODO: make private once external usages in m_timeline.ts, m_agenda.ts, m_work_space_month.ts are removed
   _$dateTable: any;
 
   private $allDayTable: any;
@@ -263,15 +263,15 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private contextMenuAction: any;
 
-  // TODO: used externally by m_agenda.ts
+  // TODO: make private once external usages in m_agenda.ts are removed
   _$groupTable: any;
 
-  // TODO: used externally by m_timeline.ts
+  // TODO: make private once external usages in m_timeline.ts are removed
   _$thead: any;
 
   private headerScrollable: any;
 
-  // TODO: used externally by m_timeline.ts
+  // TODO: make private once external usages in m_timeline.ts are removed
   _sidebarScrollable: any;
 
   private preventDefaultDragging: any;
@@ -284,7 +284,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   positionHelper!: PositionHelper;
 
-  // TODO: used externally by m_work_space_grouped_strategy_vertical.ts
+  // TODO: make private once external usages in m_work_space_grouped_strategy_vertical.ts are removed
   _$headerPanelContainer: any;
 
   private $headerTablesContainer: any;
@@ -293,7 +293,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private $allDayContainer: any;
 
-  // TODO: used externally by m_agenda.ts
+  // TODO: make private once external usages in m_agenda.ts are removed
   _$dateTableScrollableContent: any;
 
   private $sidebarScrollableContent: any;
@@ -304,10 +304,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
 
   private allDayPanels!: any[];
 
-  // TODO: used externally by m_timeline.ts
+  // TODO: make private once external usages in m_timeline.ts are removed
   _$flexContainer: any;
 
-  // TODO: used externally by shaders, m_timeline.ts, m_work_space_indicator.ts
+  // TODO: make private once external usages in shaders, m_timeline.ts, m_work_space_indicator.ts are removed
   _shader: any;
 
   protected $sidebarTable: any;
@@ -647,7 +647,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     return Boolean(this.option('groups')?.length) && this.option('groupOrientation') === 'vertical';
   }
 
-  // TODO: used externally by shaders, m_timeline.ts
+  // TODO: make private once external usages in shaders, m_timeline.ts are removed
   _isHorizontalGroupedWorkSpace() {
     return Boolean(this.option('groups')?.length) && this.option('groupOrientation') === 'horizontal';
   }
@@ -834,7 +834,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     });
   }
 
-  // TODO: used externally by grouped strategies, shaders, m_timeline.ts
+  // TODO: make private once external usages in grouped strategies, shaders, m_timeline.ts are removed
   _getCellCount() {
     return this.viewDataProvider.getCellCount({
       intervalCount: this.option('intervalCount'),
@@ -1153,7 +1153,7 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
     );
   }
 
-  // TODO: used externally by grouped strategies, shaders, m_subscribes.ts, m_timeline.ts
+  // TODO: make private once external usages in grouped strategies, shaders, m_subscribes.ts, m_timeline.ts are removed
   _getGroupCount() {
     return this.resourceManager.groupCount();
   }
