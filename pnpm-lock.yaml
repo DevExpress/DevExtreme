@@ -803,8 +803,8 @@ importers:
         specifier: 18.3.7
         version: 18.3.7(@types/react@18.3.28)
       css-loader:
-        specifier: 6.10.0
-        version: 6.10.0(webpack@5.105.4)
+        specifier: 6.11.0
+        version: 6.11.0(webpack@5.105.4)
       source-map-loader:
         specifier: 4.0.2
         version: 4.0.2(webpack@5.105.4)
@@ -904,8 +904,8 @@ importers:
         specifier: 2.0.0-beta.7
         version: 2.0.0-beta.7(vue@3.2.47)
       css-loader:
-        specifier: 6.10.0
-        version: 6.10.0(webpack@5.105.4)
+        specifier: 6.11.0
+        version: 6.11.0(webpack@5.105.4)
       minimatch:
         specifier: 10.2.4
         version: 10.2.4
@@ -1889,8 +1889,8 @@ importers:
         specifier: 2.6.12
         version: 2.6.12
       css-loader:
-        specifier: 6.10.0
-        version: 6.10.0(webpack@5.105.4(@swc/core@1.15.3))
+        specifier: 6.11.0
+        version: 6.11.0(webpack@5.105.4(@swc/core@1.15.3))
       devextreme-metadata:
         specifier: workspace:*
         version: link:../devextreme-metadata
@@ -9297,8 +9297,8 @@ packages:
   css-line-break@2.1.0:
     resolution: {integrity: sha512-FHcKFCZcAha3LwfVBhCQbW2nCNbkZXn7KVUJcsT5/P8YmfsVja0FMPJr0B903j/E69HUphKiV9iQArX8SDYA4w==}
 
-  css-loader@6.10.0:
-    resolution: {integrity: sha512-LTSA/jWbwdMlk+rhmElbDR2vbtQoTBPr7fkJE+mxrHj+7ru0hUmHafDRzWIjIHTwpitWVaqY2/UWGRca3yUgRw==}
+  css-loader@6.11.0:
+    resolution: {integrity: sha512-CTJ+AEQJjq5NzLga5pE39qdiSV56F8ywCIsqNIRF0r7BDgWsN25aazToqAFg7ZrtA/U016xudB3ffgweORxX7g==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
       '@rspack/core': 0.x || 1.x
@@ -16414,11 +16414,6 @@ packages:
 
   semver@7.5.3:
     resolution: {integrity: sha512-QBlUtyVk/5EeHbi7X0fw6liDZc7BBmEaSYn01fMU1OUYbf6GPsbTtd8WmnqbI20SeycoHSeiybkE/q1Q+qlThQ==}
-    engines: {node: '>=10'}
-    hasBin: true
-
-  semver@7.6.3:
-    resolution: {integrity: sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -27590,7 +27585,7 @@ snapshots:
       '@vue/shared': 3.5.13
       estree-walker: 2.0.2
       magic-string: 0.30.19
-      postcss: 8.5.6
+      postcss: 8.5.8
       source-map-js: 1.2.1
 
   '@vue/compiler-ssr@3.2.47':
@@ -29093,7 +29088,7 @@ snapshots:
       domhandler: 5.0.3
       htmlparser2: 10.0.0
       picocolors: 1.1.1
-      postcss: 8.5.6
+      postcss: 8.5.8
       postcss-media-query-parser: 0.2.3
 
   beasties@0.3.5:
@@ -29104,7 +29099,7 @@ snapshots:
       domhandler: 5.0.3
       htmlparser2: 10.0.0
       picocolors: 1.1.1
-      postcss: 8.5.6
+      postcss: 8.5.8
       postcss-media-query-parser: 0.2.3
 
   big.js@5.2.2: {}
@@ -30302,7 +30297,7 @@ snapshots:
       utrie: 1.0.2
     optional: true
 
-  css-loader@6.10.0(webpack@5.105.4(@swc/core@1.15.3)):
+  css-loader@6.11.0(webpack@5.105.4(@swc/core@1.15.3)):
     dependencies:
       icss-utils: 5.1.0(postcss@8.4.38)
       postcss: 8.4.38
@@ -30311,11 +30306,11 @@ snapshots:
       postcss-modules-scope: 3.2.1(postcss@8.4.38)
       postcss-modules-values: 4.0.0(postcss@8.4.38)
       postcss-value-parser: 4.2.0
-      semver: 7.6.3
+      semver: 7.7.4
     optionalDependencies:
       webpack: 5.105.4(@swc/core@1.15.3)
 
-  css-loader@6.10.0(webpack@5.105.4):
+  css-loader@6.11.0(webpack@5.105.4):
     dependencies:
       icss-utils: 5.1.0(postcss@8.4.38)
       postcss: 8.4.38
@@ -30324,7 +30319,7 @@ snapshots:
       postcss-modules-scope: 3.2.1(postcss@8.4.38)
       postcss-modules-values: 4.0.0(postcss@8.4.38)
       postcss-value-parser: 4.2.0
-      semver: 7.6.3
+      semver: 7.7.4
     optionalDependencies:
       webpack: 5.105.4(@swc/core@1.15.3)(webpack-cli@5.1.4)
 
@@ -40475,8 +40470,6 @@ snapshots:
     dependencies:
       lru-cache: 6.0.0
 
-  semver@7.6.3: {}
-
   semver@7.7.1: {}
 
   semver@7.7.2: {}
@@ -43483,7 +43476,7 @@ snapshots:
       esbuild: 0.27.2
       fdir: 6.5.0(picomatch@4.0.3)
       picomatch: 4.0.3
-      postcss: 8.5.6
+      postcss: 8.5.8
       rollup: 4.59.0
       tinyglobby: 0.2.15
     optionalDependencies:
