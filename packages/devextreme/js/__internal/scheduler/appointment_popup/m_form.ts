@@ -1072,7 +1072,7 @@ export class AppointmentForm {
       return;
     }
 
-    const formElement = this.dxForm.element();
+    const formElement = this.dxForm.$element()[0];
     const mainGroupElement = this._$mainGroup[0];
     const formRect = formElement.getBoundingClientRect();
     const groupRect = mainGroupElement.getBoundingClientRect();
