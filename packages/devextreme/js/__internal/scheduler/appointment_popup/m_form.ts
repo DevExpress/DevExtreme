@@ -852,9 +852,9 @@ export class AppointmentForm {
           const childClasses = (child.cssClass ?? '').split(' ');
 
           if (childClasses.includes(CLASSES.formIcon)) {
-            (child as SimpleItem).visible = showIcon;
+            child.visible = showIcon;
           } else {
-            (child as SimpleItem).colSpan = showIcon ? 1 : 2;
+            child.colSpan = showIcon ? 1 : 2;
           }
         });
       }
