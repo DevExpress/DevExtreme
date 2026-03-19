@@ -926,6 +926,8 @@ export class AppointmentForm {
       repeatEditor.close();
     }
 
+    this.updateAnimationOffset();
+
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
 
     if (currentHeight === 'auto' || currentHeight === undefined) {
@@ -1063,6 +1065,19 @@ export class AppointmentForm {
     this.dxForm.itemOption(endDateItemName, 'colSpan', visible ? 1 : 2);
     this.dxForm.itemOption(endTimeItemName, 'visible', visible);
     this.dxForm.endUpdate();
+  }
+
+  private updateAnimationOffset(): void {
+    if (!this._$mainGroup) {
+      return;
+    }
+
+    const formElement = this.dxForm.$element()[0];
+    const mainGroupElement = this._$mainGroup[0];
+    const formRect = formElement.getBoundingClientRect();
+    const groupRect = mainGroupElement.getBoundingClientRect();
+    const topOffset = groupRect.top - formRect.top;
+    formElement.style.setProperty('--dx-scheduler-animation-top', `${topOffset}px`);
   }
 
   private focusFirstFocusableInGroup($group: dxElementWrapper): void {
