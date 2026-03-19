@@ -2251,6 +2251,12 @@ fixture`Editing - ShowEditorAlways`
 test.meta({ unstable: true })('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
+  const getStoredName = ClientFunction((id: number) => (window as any).myStore
+    .byKey(id)
+    .then((item) => item.Name));
+
+  await t.expect(dataGrid.isReady()).ok();
+
   // act
   await t
     .click(dataGrid.getDataCell(0, 0).getEditor().element);
@@ -2265,8 +2271,9 @@ test.meta({ unstable: true })('Cells should be focused correctly on click when c
   // act
   await t
     .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '1')
-    .wait(50)
     .click(dataGrid.getDataCell(1, 0).getEditor().element);
+
+  await t.expect(getStoredName(1)).eql('Name 11');
 
   // assert
   await t
@@ -2280,8 +2287,9 @@ test.meta({ unstable: true })('Cells should be focused correctly on click when c
   // act
   await t
     .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
-    .wait(50)
     .click(dataGrid.getDataCell(2, 0).getEditor().element);
+
+  await t.expect(getStoredName(2)).eql('Name 22');
 
   // assert
   await t
@@ -2295,8 +2303,9 @@ test.meta({ unstable: true })('Cells should be focused correctly on click when c
   // act
   await t
     .typeText(dataGrid.getDataCell(2, 0).getEditor().element, '3')
-    .wait(50)
     .click(dataGrid.getDataCell(1, 0).getEditor().element);
+
+  await t.expect(getStoredName(3)).eql('Name 33');
 
   // assert
   await t
@@ -2310,8 +2319,9 @@ test.meta({ unstable: true })('Cells should be focused correctly on click when c
   // act
   await t
     .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
-    .wait(50)
     .click(dataGrid.getDataCell(0, 0).getEditor().element);
+
+  await t.expect(getStoredName(2)).eql('Name 222');
 
   // assert
   await t
