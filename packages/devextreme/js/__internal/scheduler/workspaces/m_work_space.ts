@@ -1443,10 +1443,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private isOutsideScrollable(target, event) {
-    const $_dateTableScrollableElement = this._dateTableScrollable.$element();
-    const scrollableSize = getBoundingRect($_dateTableScrollableElement.get(0));
+    const $dateTableScrollableElement = this._dateTableScrollable.$element();
+    const scrollableSize = getBoundingRect($dateTableScrollableElement.get(0));
     const window = getWindow();
-    const isTargetInAllDayPanel = !$(target).closest($_dateTableScrollableElement).length;
+    const isTargetInAllDayPanel = !$(target).closest($dateTableScrollableElement).length;
     const isOutsideHorizontalScrollable = event.pageX < scrollableSize.left || event.pageX > (scrollableSize.left + scrollableSize.width + (window.scrollX || 0));
     const isOutsideVerticalScrollable = event.pageY < scrollableSize.top || event.pageY > (scrollableSize.top + scrollableSize.height + (window.scrollY || 0));
 
@@ -2576,10 +2576,10 @@ class SchedulerWorkSpace extends Widget<WorkspaceOptionsInternal> {
   }
 
   private initDateTableScrollable() {
-    const $_dateTableScrollable = $('<div>').addClass(SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS);
+    const $dateTableScrollable = $('<div>').addClass(SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS);
 
     // @ts-expect-error
-    this._dateTableScrollable = this._createComponent($_dateTableScrollable, Scrollable, this.dateTableScrollableConfig());
+    this._dateTableScrollable = this._createComponent($dateTableScrollable, Scrollable, this.dateTableScrollableConfig());
     this.scrollSync.dateTable = getMemoizeScrollTo(() => this._dateTableScrollable);
   }
 
