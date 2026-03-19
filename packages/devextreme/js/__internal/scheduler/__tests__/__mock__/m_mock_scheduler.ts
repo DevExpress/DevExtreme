@@ -50,30 +50,24 @@ export const setupSchedulerTestEnvironment = ({
     width: 0, height: 0, top: 0, left: 0, bottom: 0, right: 0, x: 0, y: 0, toJSON: (): void => {},
   };
 
+  const cellRect = {
+    width, height, bottom: height, right: width,
+  };
+
+  const mergedRects: ClassRects = {
+    'dx-scheduler-date-table-cell': cellRect,
+    'dx-scheduler-all-day-table-cell': cellRect,
+    ...classRects,
+  };
+
   Element.prototype.getBoundingClientRect = jest.fn(function (): DOMRect {
     const classList: string[] = Array.from(this.classList);
 
-    const matchedClass = classList.find((className) => classRects[className]);
+    const matchedClass = classList.find((className) => mergedRects[className]);
     if (matchedClass) {
-      return { ...defaultRect, ...classRects[matchedClass] };
+      return { ...defaultRect, ...mergedRects[matchedClass] };
     }
 
-    switch (true) {
-      case classList.includes('dx-scheduler-date-table-cell')
-        || classList.includes('dx-scheduler-all-day-table-cell'):
-        return {
-          width,
-          height,
-          top: 0,
-          left: 0,
-          bottom: height,
-          right: width,
-          x: 0,
-          y: 0,
-          toJSON: (): void => {},
-        };
-      default:
-        return defaultRect;
-    }
+    return defaultRect;
   });
 };
