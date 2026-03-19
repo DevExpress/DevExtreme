@@ -115,7 +115,7 @@
         "@vue/tsconfig": "0.9.0",
         "axe-core": "catalog:",
         "babel-jest": "29.7.0",
-        "consola": "3.2.3",
+        "consola": "3.4.2",
         "cookie-parser": "1.4.7",
         "cross-env": "7.0.3",
         "devextreme-screenshot-comparer": "2.0.17",
