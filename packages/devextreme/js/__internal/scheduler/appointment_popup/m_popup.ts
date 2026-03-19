@@ -69,10 +69,10 @@ export class AppointmentPopup {
     this.state.allowSaving = config.allowSaving;
     this.state.excludeInfo = config.excludeInfo;
 
-    if (!this._popup) {
-      const popupConfig = this._createPopupConfig();
-      this._createPopup(popupConfig);
-    }
+    this._disposePopup();
+
+    const popupConfig = this._createPopupConfig();
+    this._createPopup(popupConfig);
 
     this._popup!.show();
   }
@@ -82,9 +82,17 @@ export class AppointmentPopup {
   }
 
   dispose() {
-    this.form.dispose();
-    this._popup?.dispose();
-    this._popup = undefined;
+    this._disposePopup();
+  }
+
+  private _disposePopup(): void {
+    if (this._popup) {
+      const $element = this._popup.$element();
+      this.form.dispose();
+      this._popup.dispose();
+      $element.remove();
+      this._popup = undefined;
+    }
   }
 
   _createPopup(options): void {
