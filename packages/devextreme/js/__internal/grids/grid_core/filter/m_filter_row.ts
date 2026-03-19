@@ -769,6 +769,13 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
           || !equalByValue(editorDataSource.__dataGridSourceFilter || null, filter);
 
         if (shouldUpdateFilter) {
+          const selectedItem = editor.option('selectedItem');
+          const items = editor.option('items') ?? [];
+          const hasSelectedItem = items.some((item) => equalByValue(item, selectedItem));
+          if (!hasSelectedItem) {
+            editor.option('items', [...items, selectedItem]);
+          }
+
           const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
           editor.option('dataSource', lookupDataSource);
         }
