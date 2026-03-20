@@ -79,31 +79,36 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
 
   private toggleFirstHeaderClass(
     $cell: dxElementWrapper,
-    column: Column,
-    rowIndex: number | null,
+    isFirstValue: boolean,
   ): void {
-    const columnsController = this._columnsController;
-    const isFirstColumn = columnsController?.isFirstColumn(column, rowIndex);
-
-    $cell.toggleClass(this.addWidgetPrefix(CLASSES.firstHeader), isFirstColumn);
+    $cell.toggleClass(this.addWidgetPrefix(CLASSES.firstHeader), isFirstValue);
   }
 
   private updateFirstHeaderClasses(): void {
-    const $headerRows = this._getRowElementsCore().filter(`.${HEADER_ROW_CLASS}`).toArray();
+    this._columnsController.getColumns()
+      .filter((column: Column): boolean => !!column.visible)
+      .map((column: Column): {
+        cell: dxElementWrapper | undefined,
+        column: Column,
+        rowIndex: number,
+      } => {
+        const rowIndex = this._columnsController.getRowIndex(column.index);
 
-    $headerRows.forEach((headerRow: Element, rowIndex: number) => {
-      const $cells = $(headerRow).children('td').toArray();
-      const columns = this.getColumns(rowIndex);
+        return {
+          cell: this._getCellElement(rowIndex, `index:${column.index}`),
+          column,
+          rowIndex,
+        };
+      })
+      .forEach(({ cell, column, rowIndex }: {
+        cell: dxElementWrapper | undefined,
+        column: Column,
+        rowIndex: number,
+      }): void => {
+        const isFirstColumn = this._columnsController.isFirstColumn(column, rowIndex);
 
-      $cells.forEach((cell: Element, cellIndex: number) => {
-        const $cell = $(cell);
-        const column = columns[cellIndex];
-
-        if (column) {
-          this.toggleFirstHeaderClass($cell, column, rowIndex);
-        }
+        this.toggleFirstHeaderClass($(cell), isFirstColumn);
       });
-    });
   }
 
   protected createCellContent(
@@ -396,7 +401,10 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     const rowCount = this.getRowCount();
 
     if (rowCount > 1) {
-      this.toggleFirstHeaderClass($cellElement, column, options.rowIndex);
+      this.toggleFirstHeaderClass(
+        $cellElement,
+        this._columnsController.isFirstColumn(column, options.rowIndex),
+      );
     }
 
     if (column.rowspan > 1) {

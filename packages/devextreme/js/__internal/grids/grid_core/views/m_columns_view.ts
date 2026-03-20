@@ -1398,7 +1398,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   protected _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
     if (isString(columnIdentifier)) {
       const columnIndex = this._columnsController.columnOption(columnIdentifier, 'index');
-      return this._columnsController.getVisibleIndex(columnIndex);
+      return this._columnsController.getVisibleIndex(columnIndex, rowIndex);
     }
 
     return columnIdentifier;

@@ -193,4 +193,46 @@ describe('Column Headers', () => {
       expect($secondCellOfSecondRow.hasClass('dx-datagrid-first-header')).toBe(false);
     });
   });
+
+  describe('_getCellElement', () => {
+    it('should return correct cell for nested column using string identifier', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 1, field2: 2, field3: 3 }],
+        columns: [
+          'field1',
+          {
+            caption: 'Band',
+            columns: ['field2', 'field3'],
+          },
+        ],
+      });
+
+      const columnHeadersView = (instance as any).getView('columnHeadersView');
+
+      const $cell = columnHeadersView._getCellElement(1, 'index:2');
+
+      expect($cell).toBeDefined();
+      expect($cell.length).toBe(1);
+      expect($cell.text()).toBe('Field 2');
+    });
+
+    it('should return correct cell for band header using string identifier', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ field1: 1, field2: 2, field3: 3 }],
+        columns: [
+          'field1',
+          {
+            caption: 'Band',
+            columns: ['field2', 'field3'],
+          },
+        ],
+      });
+
+      const columnHeadersView = (instance as any).getView('columnHeadersView');
+      const $bandCell = columnHeadersView._getCellElement(0, 'index:1');
+
+      expect($bandCell).toBeDefined();
+      expect($bandCell.text()).toBe('Band');
+    });
+  });
 });

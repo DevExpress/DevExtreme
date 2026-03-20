@@ -76,6 +76,27 @@ test('Changing dataField for a banded column with the columnOption method does n
   }, '#otherContainer');
 });
 
+// Initial state (width: 350px, all columns visible):
+//
+// Header Rows:
+// ┌───────────────────────┬──────────┬──────────┐
+// │  Band 1 (colspan=2)   │  field3  │ adaptive │
+// │     [FIRST ✓]         │(rowspan2)│(rowspan2)│
+// ├───────────┬───────────┤          │          │
+// │  field1   │  field2   │          │          │
+// │ [FIRST ✓] │           │          │          │
+// └───────────┴───────────┴──────────┴──────────┘
+//
+// After resize (width: 275px, field1 hidden — hidingPriority: 0):
+//
+// Header Rows:
+// ┌───────────────────────┬──────────┬──────────┐
+// │  Band 1 (colspan=2)   │  field3  │ adaptive │
+// │     [FIRST ✓]         │(rowspan2)│(rowspan2)│
+// ├───────────┬───────────┤          │          │
+// │  field1   │  field2   │          │          │
+// │ [HIDDEN]  │ [FIRST ✓] │          │          │
+// └───────────┴───────────┴──────────┴──────────┘
 test('The first header class should update correctly when the first data column is hidden in responsive mode', async (t) => {
   const dataGrid = new DataGrid(GRID_CONTAINER);
   const firstHeaderRow = dataGrid.getHeaders().getHeaderRow(0);
@@ -83,25 +104,25 @@ test('The first header class should update correctly when the first data column 
 
   await t
     .expect(dataGrid.isReady()).ok()
-    .expect(firstHeaderRow.getHeaderCell(0).isFirstHeader)
+    .expect(firstHeaderRow.getHeaderCell(0).isFirstHeader) // Band 1
     .ok()
-    .expect(firstHeaderRow.getHeaderCell(2).isFirstHeader)
+    .expect(firstHeaderRow.getHeaderCell(2).isFirstHeader) // field3
     .notOk()
-    .expect(secondHeaderRow.getHeaderCell(0).isFirstHeader)
+    .expect(secondHeaderRow.getHeaderCell(0).isFirstHeader) // field1
     .ok()
-    .expect(secondHeaderRow.getHeaderCell(1).isFirstHeader)
+    .expect(secondHeaderRow.getHeaderCell(1).isFirstHeader) // field2
     .notOk();
 
   await dataGrid.apiOption('width', 275);
 
   await t
-    .expect(firstHeaderRow.getHeaderCell(0).isFirstHeader)
+    .expect(firstHeaderRow.getHeaderCell(0).isFirstHeader) // Band 1
     .ok()
-    .expect(firstHeaderRow.getHeaderCell(2).isFirstHeader)
+    .expect(firstHeaderRow.getHeaderCell(2).isFirstHeader) // field3
     .notOk()
-    .expect(secondHeaderRow.getHeaderCell(0).isFirstHeader)
+    .expect(secondHeaderRow.getHeaderCell(0).isFirstHeader) // field1
     .notOk()
-    .expect(secondHeaderRow.getHeaderCell(1).isFirstHeader)
+    .expect(secondHeaderRow.getHeaderCell(1).isFirstHeader) // field2
     .ok();
 }).before(async () => {
   await createWidget('dxDataGrid', {
@@ -118,6 +139,73 @@ test('The first header class should update correctly when the first data column 
         ],
       },
       { dataField: 'field3', hidingPriority: 2 },
+    ],
+  });
+});
+
+// Initial state (width: 350px, all columns visible):
+//
+// Header Rows:
+// ┌──────────┬───────────────────────┬──────────┐
+// │  field1  │  Band 1 (colspan=2)   │ adaptive │
+// │(rowspan2)│                       │(rowspan2)│
+// │[FIRST ✓] ├───────────┬───────────┤          │
+// │          │  field2   │  field3   │          │
+// │          │           │           │          │
+// └──────────┴───────────┴───────────┴──────────┘
+//
+// After resize (width: 275px, field1 hidden):
+//
+// Header Rows:
+// ┌──────────┬───────────────────────┬──────────┐
+// │  field1  │  Band 1 (colspan=2)   │ adaptive │
+// │(rowspan2)│       [FIRST ✓]       │(rowspan2)│
+// │ [HIDDEN] ├───────────┬───────────┤          │
+// │          │  field2   │  field3   │          │
+// │          │ [FIRST ✓] │           │          │
+// └──────────┴───────────┴───────────┴──────────┘
+test('The first header class should update correctly when the first nested data column is hidden in responsive mode', async (t) => {
+  const dataGrid = new DataGrid(GRID_CONTAINER);
+  const firstHeaderRow = dataGrid.getHeaders().getHeaderRow(0);
+  const secondHeaderRow = dataGrid.getHeaders().getHeaderRow(1);
+
+  await t
+    .expect(dataGrid.isReady()).ok()
+    .expect(firstHeaderRow.getHeaderCell(0).isFirstHeader) // field 1
+    .ok()
+    .expect(firstHeaderRow.getHeaderCell(1).isFirstHeader) // Band 1
+    .notOk()
+    .expect(secondHeaderRow.getHeaderCell(0).isFirstHeader) // field2
+    .notOk()
+    .expect(secondHeaderRow.getHeaderCell(1).isFirstHeader) // field3
+    .notOk();
+
+  await dataGrid.apiOption('width', 275);
+
+  await t
+    .expect(firstHeaderRow.getHeaderCell(0).isFirstHeader) // field 1
+    .notOk()
+    .expect(firstHeaderRow.getHeaderCell(1).isFirstHeader) // Band 1
+    .ok()
+    .expect(secondHeaderRow.getHeaderCell(0).isFirstHeader) // field2
+    .ok()
+    .expect(secondHeaderRow.getHeaderCell(1).isFirstHeader) // field3
+    .notOk();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    width: 350,
+    columnWidth: 100,
+    columnHidingEnabled: true,
+    dataSource: [{ field1: 1, field2: 2, field3: 3 }],
+    columns: [
+      { dataField: 'field1', hidingPriority: 0 },
+      {
+        caption: 'Band 1',
+        columns: [
+          { dataField: 'field2', hidingPriority: 1 },
+          { dataField: 'field3', hidingPriority: 2 },
+        ],
+      },
     ],
   });
 });
