@@ -592,14 +592,13 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
           } else if (summaryItem.summaryType !== 'count') {
             valueFormat = gridCore.getFormatByDataType(column && column.dataType);
           }
-          summaryCellsByColumns[columnIndex].push({
-            ...summaryItem,
+          summaryCellsByColumns[columnIndex].push(extend({}, summaryItem, {
             value: isString(aggregate) && column && column.deserializeValue
               ? column.deserializeValue(aggregate)
               : aggregate,
             valueFormat,
             columnCaption: column && column.index !== columnIndex ? column.caption : undefined,
-          });
+          }));
         }
       }
     });
