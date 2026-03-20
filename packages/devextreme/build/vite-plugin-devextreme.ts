@@ -22,7 +22,6 @@ function removeCjsExportsAssignments(): unknown {
     },
   };
 }
-
 function removeUninitializedClassFields(): unknown {
   return {
     visitor: {

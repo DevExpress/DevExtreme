@@ -15,17 +15,23 @@ import { groupResources } from './group_utils';
 import type { GroupLeaf, GroupNode } from './types';
 
 export class ResourceManager {
-  public resources: ResourceLoader[] = [];
+  public resources: ResourceLoader[];
 
-  public resourceById: Record<string, ResourceLoader> = {};
+  public resourceById: Record<string, ResourceLoader>;
 
-  public groups: string[] = [];
+  public groups: string[];
 
-  public groupsLeafs: GroupLeaf[] = [];
+  public groupsLeafs: GroupLeaf[];
 
-  public groupsTree: GroupNode[] = [];
+  public groupsTree: GroupNode[];
 
   constructor(config: ResourceConfig[]) {
+    this.resources = [];
+    this.resourceById = {};
+    this.groups = [];
+    this.groupsLeafs = [];
+    this.groupsTree = [];
+
     config?.filter(getResourceIndex)
       .forEach((item) => {
         const loader = new ResourceLoader(item);

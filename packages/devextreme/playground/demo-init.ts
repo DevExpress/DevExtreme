@@ -1,5 +1,23 @@
+import jq from 'jquery';
 import '../js/integration/jquery';
 import { setLicenseCheckSkipCondition } from '../js/__internal/core/license/license_validation';
+import ArrayStore from '../js/data/array_store';
+import CustomStore from '../js/data/custom_store';
+import DataSource from '../js/data/data_source';
+import query from '../js/data/query';
+import notify from '../js/ui/notify';
+import * as dialog from '../js/ui/dialog';
+import * as localization from '../js/localization';
+import * as timeZoneUtils from '../js/time_zone_utils';
+
+(window as any).$ = (window as any).jQuery = jq;
+
+(window as any).DevExpress = {
+    data: { ArrayStore, CustomStore, DataSource, query },
+    ui: { notify, dialog },
+    localization,
+    utils: { getTimeZones: timeZoneUtils.getTimeZones },
+};
 
 import '../js/ui/accordion';
 import '../js/ui/action_sheet';
@@ -92,10 +110,13 @@ const themeKey = themeId
     : Object.keys(themeLoaders)[0];
 
 if (themeKey) {
-    (themeLoaders[themeKey] as () => Promise<string>)().then((url: string) => {
+    const url = await (themeLoaders[themeKey] as () => Promise<string>)();
+    await new Promise<void>((resolve) => {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
         link.href = url;
+        link.onload = () => resolve();
+        link.onerror = () => resolve();
         document.head.appendChild(link);
     });
 }

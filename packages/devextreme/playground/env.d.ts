@@ -1,4 +1,6 @@
 declare module 'virtual:demos-meta' {
-    const demosMap: Record<string, { title: string; name: string }[]>;
-    export default demosMap;
+    interface DemoEntry { title: string; name: string; files: string[] }
+    interface DemosMeta { demosRoot: string; demos: Record<string, DemoEntry[]> }
+    const demosMeta: DemosMeta;
+    export default demosMeta;
 }

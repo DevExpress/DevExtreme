@@ -3,10 +3,20 @@ import path from 'path';
 import type { PluginOption, ViteDevServer } from 'vite';
 
 const demosRoot = path.resolve(__dirname, '../../../apps/demos/Demos');
+const demosImagesRoot = path.resolve(__dirname, '../../../apps/demos/images');
 const menuMetaPath = path.resolve(__dirname, '../../../apps/demos/menuMeta.json');
 
-type DemoEntry = { title: string; name: string };
+type DemoEntry = { title: string; name: string; files: string[] };
 type DemosMap = Record<string, DemoEntry[]>;
+
+const DEMO_FILE_EXTENSIONS = ['.html', '.js', '.css', '.json'];
+
+function getDemoFiles(jqueryDir: string): string[] {
+    if (!fs.existsSync(jqueryDir)) return [];
+    return fs.readdirSync(jqueryDir)
+        .filter((f) => DEMO_FILE_EXTENSIONS.includes(path.extname(f)))
+        .sort();
+}
 
 function buildDemosMap(): DemosMap {
     const result: DemosMap = {};
@@ -17,10 +27,10 @@ function buildDemosMap(): DemosMap {
             if (group.Demos) {
                 for (const demo of group.Demos) {
                     if (!demo.Widget || !demo.Name) continue;
-                    const jqueryPath = path.join(demosRoot, demo.Widget, demo.Name, 'jQuery', 'index.html');
-                    if (!fs.existsSync(jqueryPath)) continue;
+                    const jqueryDir = path.join(demosRoot, demo.Widget, demo.Name, 'jQuery');
+                    if (!fs.existsSync(path.join(jqueryDir, 'index.html'))) continue;
                     if (!result[demo.Widget]) result[demo.Widget] = [];
-                    result[demo.Widget].push({ title: demo.Title, name: demo.Name });
+                    result[demo.Widget].push({ title: demo.Title, name: demo.Name, files: getDemoFiles(jqueryDir) });
                 }
             }
             if (group.Groups) traverse(group.Groups);
@@ -73,7 +83,10 @@ function serveFile(res: import('http').ServerResponse, filePath: string): boolea
         '.json': 'application/json; charset=utf-8',
         '.png': 'image/png',
         '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.gif': 'image/gif',
         '.svg': 'image/svg+xml',
+        '.webp': 'image/webp',
     };
     const content = fs.readFileSync(filePath);
     res.setHeader('Content-Type', contentTypes[ext] ?? 'application/octet-stream');
@@ -96,13 +109,19 @@ export default function demoHtmlPlugin(): PluginOption {
 
         load(id: string) {
             if (id === RESOLVED_ID) {
-                return `export default ${JSON.stringify(demosMap)}`;
+                return `export default ${JSON.stringify({ demosRoot, demos: demosMap })}`;
             }
             return null;
         },
 
         configureServer(server: ViteDevServer) {
             server.watcher.add(path.join(demosRoot, '**', 'jQuery', '*.{js,css,html}'));
+
+            server.middlewares.use('/images', (req, res, next) => {
+                const filePath = path.join(demosImagesRoot, decodeURIComponent(req.url ?? '/'));
+                if (serveFile(res, filePath)) return;
+                next();
+            });
 
             server.middlewares.use('/demos', (req, res, next) => {
                 const urlPath = decodeURIComponent(req.url ?? '/');

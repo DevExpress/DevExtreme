@@ -338,17 +338,22 @@ export class VirtualScrollingDispatcher {
 }
 
 class VirtualScrollingBase {
-  _state = this.defaultState;
+  _state: any;
 
-  viewportSize = this.options.viewportSize;
+  viewportSize: number;
 
-  _itemSize = this.options.itemSize;
+  _itemSize: number;
 
-  _position = -1;
+  _position: number;
 
-  _itemSizeChanged = false;
+  _itemSizeChanged: boolean;
 
   constructor(public options: any) {
+    this._state = this.defaultState;
+    this.viewportSize = options.viewportSize;
+    this._itemSize = options.itemSize;
+    this._position = -1;
+    this._itemSizeChanged = false;
     this.updateState(0);
   }
 
