@@ -1,10 +1,11 @@
 import path from 'path';
 import { defineConfig } from 'vite';
 import devextremeInferno from './build/vite-plugin-devextreme';
+import demoHtmlPlugin from './build/vite-plugin-demo-html';
 
 export default defineConfig({
   root: './playground',
-  plugins: [devextremeInferno()],
+  plugins: [devextremeInferno(), demoHtmlPlugin()],
   esbuild: false,
   server: {
     port: 3000,

@@ -5,6 +5,7 @@ import { registry } from './widgets/registry';
 import type { WidgetInit } from './widgets/registry';
 import { setupThemeSelector } from './newThemeSelector';
 import type { WidgetId } from './widget-ids';
+import demosMap from 'virtual:demos-meta';
 
 setLicenseCheckSkipCondition();
 
@@ -131,6 +132,27 @@ function setActiveLink(id: string): void {
 const $header = $('#header');
 const $container = $('#container');
 
+function getWidgetName(id: WidgetId): string {
+    return registry[id].label.replace(/\s/g, '');
+}
+
+function renderDemoLinks(id: WidgetId): void {
+    const widgetName = getWidgetName(id);
+    const demos = demosMap[widgetName] ?? [];
+    if (demos.length === 0) return;
+
+    const $section = $('<div class="demo-list">').appendTo($container);
+    $('<div class="demo-list-caption">').text('Official Demos').appendTo($section);
+    const $chips = $('<div class="demo-chips">').appendTo($section);
+
+    demos.forEach(({ title, name }) => {
+        $('<a class="demo-chip">')
+            .attr('href', `#demo/${widgetName}/${name}`)
+            .text(title)
+            .appendTo($chips);
+    });
+}
+
 function loadWidget(id: string): void {
     const entry = registry[id as WidgetId];
     if (!entry) return;
@@ -142,8 +164,27 @@ function loadWidget(id: string): void {
     const $el = $('<div>').appendTo($container);
     (entry.init as WidgetInit)($el);
 
+    renderDemoLinks(id as WidgetId);
+
     pushRecent(id as WidgetId);
     setActiveLink(id);
+}
+
+function loadDemo(widget: string, name: string): void {
+    $header.html(
+        `<a class="demo-back" href="#${findWidgetId(widget) ?? ''}">← ${widget}</a> &nbsp; ${name}`,
+    );
+    $container.empty();
+    $('<iframe>')
+        .attr('src', `/demos/${widget}/${name}/`)
+        .css({ width: '100%', height: 'calc(100vh - 53px)', border: 'none', display: 'block' })
+        .appendTo($container);
+}
+
+function findWidgetId(widgetName: string): WidgetId | undefined {
+    return Object.keys(registry).find(
+        (id) => registry[id as WidgetId].label.replace(/\s/g, '') === widgetName,
+    ) as WidgetId | undefined;
 }
 
 $('#search').on('input', function () {
@@ -151,17 +192,29 @@ $('#search').on('input', function () {
 });
 
 window.addEventListener('hashchange', () => {
-    loadWidget(location.hash.slice(1));
+    const hash = location.hash.slice(1);
+    if (hash.startsWith('demo/')) {
+        const parts = hash.split('/');
+        loadDemo(parts[1], parts[2]);
+    } else {
+        loadWidget(hash);
+    }
 });
 
 setupThemeSelector('theme-selector').then(() => {
     buildNav('');
     renderRecents();
 
-    const initial = location.hash.slice(1);
+    const hash = location.hash.slice(1);
+    if (hash.startsWith('demo/')) {
+        const parts = hash.split('/');
+        loadDemo(parts[1], parts[2]);
+        return;
+    }
+
     const lastRecent = getRecents()[0];
-    const target = (initial && registry[initial as WidgetId])
-        ? initial
+    const target = (hash && registry[hash as WidgetId])
+        ? hash
         : (lastRecent ?? widgetGroups[0].ids[0]);
     location.hash = target;
 });
