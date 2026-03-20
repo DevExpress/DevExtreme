@@ -23,7 +23,7 @@ import type { RowsView } from '../../grid_core/views/m_rows_view';
 import AggregateCalculator from '../m_aggregate_calculator';
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
-import type { ColumnMap, SummaryItem } from './types';
+import type { CalculateSummaryCellsArgs, ColumnMap } from './types';
 import { getColumnFromMap, getSummaryCellIndex } from './utils';
 
 const DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer';
@@ -470,9 +470,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
   }
 
   private _processGroupItem(groupItem, options) {
-    const that = this;
-
-    options.summaryGroupItems ??= that.option('summary.groupItems') || [];
+    options.summaryGroupItems ??= this.option('summary.groupItems') || [];
     options.summaryColumnMap ??= this._buildColumnLookupMap();
 
     if (groupItem.rowType === 'group') {
@@ -491,11 +489,11 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
         }
       });
 
-      groupItem.summaryCells = this._calculateSummaryCells(
-        options.summaryGroupItems,
-        getGroupAggregates(groupItem.data),
-        options.visibleColumns,
-        (summaryItem, column) => {
+      groupItem.summaryCells = this._calculateSummaryCells({
+        summaryItems: options.summaryGroupItems,
+        aggregates: getGroupAggregates(groupItem.data),
+        visibleColumns: options.visibleColumns,
+        calculateTargetColumnIndex: (summaryItem, column) => {
           if (summaryItem.showInGroupFooter) {
             return -1;
           }
@@ -510,22 +508,22 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
 
           return groupColumnIndex;
         },
-        true,
-        options.summaryColumnMap,
-      );
+        isGroupRow: true,
+        columnMap: options.summaryColumnMap,
+      });
     }
 
     if (groupItem.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE) {
-      groupItem.summaryCells = this._calculateSummaryCells(
-        options.summaryGroupItems,
-        getGroupAggregates(groupItem.data),
-        options.visibleColumns,
-        (summaryItem, column) => (
-          summaryItem.showInGroupFooter && that._isDataColumn(column) ? column.index : -1
+      groupItem.summaryCells = this._calculateSummaryCells({
+        summaryItems: options.summaryGroupItems,
+        aggregates: getGroupAggregates(groupItem.data),
+        visibleColumns: options.visibleColumns,
+        calculateTargetColumnIndex: (summaryItem, column) => (
+          summaryItem.showInGroupFooter && this._isDataColumn(column) ? column.index : -1
         ),
-        false,
-        options.summaryColumnMap,
-      );
+        isGroupRow: false,
+        columnMap: options.summaryColumnMap,
+      });
     }
 
     return groupItem;
@@ -534,10 +532,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
   // The map is built once per _processItems cycle (via options) and discarded after.
   private _buildColumnLookupMap(): ColumnMap {
     const columnMap: ColumnMap = new Map();
-    const allColumns = [
-      ...this._columnsController.getColumns(),
-      ...(this._columnsController._commandColumns ?? []),
-    ];
+    const allColumns = this._columnsController.getColumns();
 
     for (const column of allColumns) {
       const copiedColumn = { ...column };
@@ -561,14 +556,14 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return columnMap;
   }
 
-  private _calculateSummaryCells(
-    summaryItems: SummaryItem[],
+  private _calculateSummaryCells({
+    summaryItems,
     aggregates,
     visibleColumns,
     calculateTargetColumnIndex,
-    isGroupRow?,
-    columnMap?: ColumnMap,
-  ) {
+    isGroupRow,
+    columnMap,
+  }: CalculateSummaryCellsArgs) {
     const summaryCells: any = [];
     const summaryCellsByColumns = {};
 
@@ -597,7 +592,9 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
             valueFormat = gridCore.getFormatByDataType(column && column.dataType);
           }
           summaryCellsByColumns[columnIndex].push(extend({}, summaryItem, {
-            value: isString(aggregate) && column && column.deserializeValue ? column.deserializeValue(aggregate) : aggregate,
+            value: isString(aggregate) && column && column.deserializeValue
+              ? column.deserializeValue(aggregate)
+              : aggregate,
             valueFormat,
             columnCaption: column && column.index !== columnIndex ? column.caption : undefined,
           }));
@@ -618,10 +615,16 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
   }
 
   private _getSummaryCells(summaryTotalItems, totalAggregates) {
-    const that = this;
-    const columnsController = that._columnsController;
+    const columnsController = this._columnsController;
 
-    return that._calculateSummaryCells(summaryTotalItems, totalAggregates, columnsController.getVisibleColumns(), (summaryItem, column) => (that._isDataColumn(column) ? column.index : -1));
+    return this._calculateSummaryCells({
+      summaryItems: summaryTotalItems,
+      aggregates: totalAggregates,
+      visibleColumns: columnsController.getVisibleColumns(),
+      calculateTargetColumnIndex: (_, column) => (
+        this._isDataColumn(column) ? column.index : -1
+      ),
+    });
   }
 
   protected _updateItemsCore(change) {

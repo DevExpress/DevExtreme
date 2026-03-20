@@ -18,3 +18,12 @@ export interface SummaryItem {
 }
 
 export type ColumnMap = Map<string | number, Column>;
+
+export interface CalculateSummaryCellsArgs {
+  summaryItems: SummaryItem[];
+  aggregates: unknown[];
+  visibleColumns: Column[];
+  calculateTargetColumnIndex: (summaryItem: SummaryItem, column) => number;
+  isGroupRow?: boolean;
+  columnMap?: ColumnMap;
+}
