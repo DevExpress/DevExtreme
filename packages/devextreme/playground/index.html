@@ -3,23 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevExtreme HMR Playground</title>
+    <title>DevExtreme Playground</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { display: flex; height: 100vh; font-family: sans-serif; }
+        #sidebar {
+            width: 220px;
+            min-width: 220px;
+            overflow-y: auto;
+            border-right: 1px solid #ddd;
+            background: #f9f9f9;
+        }
+        #sidebar h2 { padding: 12px 16px; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #ddd; }
+        #nav { list-style: none; padding: 8px 0; }
+        #nav li a { display: block; padding: 6px 16px; font-size: 13px; color: #333; text-decoration: none; }
+        #nav li a:hover { background: #e8e8e8; }
+        #nav li a.active { background: #0d6efd; color: #fff; }
+        #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        #header { padding: 12px 20px; border-bottom: 1px solid #ddd; font-size: 16px; font-weight: 600; color: #333; }
+        #container { flex: 1; padding: 20px; overflow: auto; }
+    </style>
 </head>
-<body>
-    <div id="app">
-        <select id="theme-selector" style="display: block;">
-        </select>
+<body class="dx-viewport">
+    <div id="sidebar">
+        <h2>Widgets</h2>
+        <ul id="nav"></ul>
+    </div>
+    <div id="main">
+        <div id="header">Select a widget</div>
         <div id="container"></div>
     </div>
-    <script type="module" src="./scheduler-example.ts"></script>
-    <script type="module">
-        if (import.meta.hot) {
-            import.meta.hot.accept('./scheduler-example.ts', () => {
-                console.log('HMR: Scheduler example updated');
-                location.reload();
-            });
-            console.log('HMR enabled for playground');
-        }
-    </script>
+    <script type="module" src="./catalog.ts"></script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 import '../js/integration/jquery';
+import '../js/ui/scheduler';
 import $ from 'jquery';
 import { setupThemeSelector } from './newthemeSelector';
 
