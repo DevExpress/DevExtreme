@@ -39,6 +39,7 @@ QUnit.module('OptionChanged', {
                 name === 'templatesRenderAsynchronously' ||
                 name === 'ignoreChildEvents' ||
                 name === '_dataController' ||
+                name === '_ignoreCloseOnChildEscape' ||
                 name === '_ignorePreventScrollEventsDeprecation' ||
                 name === '_checkParentVisibility') {
                 return;
