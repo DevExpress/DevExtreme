@@ -122,7 +122,7 @@
     "eslint-plugin-jest": "29.15.0",
     "eslint-plugin-jest-formatting": "3.1.0",
     "eslint-plugin-jsx-a11y": "catalog:",
-    "eslint-plugin-n": "17.23.2",
+    "eslint-plugin-n": "17.24.0",
     "eslint-plugin-no-only-tests": "catalog:",
     "eslint-plugin-qunit": "catalog:",
     "eslint-plugin-react": "7.37.5",
