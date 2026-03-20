@@ -17,6 +17,11 @@ export interface SummaryItem {
   displayFormat?: string | undefined;
 }
 
+export interface SummaryCellItem extends SummaryItem {
+  value?: unknown;
+  columnCaption?: string;
+}
+
 export type ColumnMap = Map<string | number, Column>;
 
 export interface CalculateSummaryCellsArgs {

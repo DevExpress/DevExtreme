@@ -23,7 +23,7 @@ import type { RowsView } from '../../grid_core/views/m_rows_view';
 import AggregateCalculator from '../m_aggregate_calculator';
 import gridCore from '../m_core';
 import dataSourceAdapterProvider from '../m_data_source_adapter';
-import type { CalculateSummaryCellsArgs, ColumnMap } from './types';
+import type { CalculateSummaryCellsArgs, ColumnMap, SummaryCellItem } from './types';
 import { getColumnFromMap, getSummaryCellIndex } from './utils';
 
 const DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer';
@@ -564,8 +564,8 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     isGroupRow,
     columnMap,
   }: CalculateSummaryCellsArgs) {
-    const summaryCells: any = [];
-    const summaryCellsByColumns = {};
+    const summaryCells: SummaryCellItem[][] = [];
+    const summaryCellsByColumns: Record<number, SummaryCellItem[]> = {};
 
     each(summaryItems, (summaryIndex, summaryItem) => {
       const column = columnMap
@@ -629,7 +629,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
 
   protected _updateItemsCore(change) {
     const that = this;
-    let summaryCells;
+    let summaryCells: SummaryCellItem[][] | undefined;
     const dataSource = that._dataSource;
     const footerItems = that._footerItems;
     const oldSummaryCells = footerItems && footerItems[0] && footerItems[0].summaryCells;
