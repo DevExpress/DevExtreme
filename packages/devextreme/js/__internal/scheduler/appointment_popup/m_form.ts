@@ -858,8 +858,9 @@ export class AppointmentForm {
       const groupItem = item as GroupItem;
 
       if (itemClasses.includes(CLASSES.groupWithIcon)) {
-        groupItem.colCount = showIcon ? 2 : 1;
-        groupItem.colCountByScreen = { xs: showIcon ? 2 : 1 };
+        const colCount = showIcon ? 2 : 1;
+        groupItem.colCount = colCount;
+        groupItem.colCountByScreen = { xs: colCount };
       }
 
       groupItem.items?.forEach((child) => {
