@@ -7,18 +7,135 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { display: flex; height: 100vh; font-family: sans-serif; }
+
         #sidebar {
-            width: 220px;
-            min-width: 220px;
-            overflow-y: auto;
+            width: 230px;
+            min-width: 230px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
             border-right: 1px solid #ddd;
             background: #f9f9f9;
         }
-        #sidebar h2 { padding: 12px 16px; font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #ddd; }
-        #nav { list-style: none; padding: 8px 0; }
-        #nav li a { display: block; padding: 6px 16px; font-size: 13px; color: #333; text-decoration: none; }
-        #nav li a:hover { background: #e8e8e8; }
-        #nav li a.active { background: #0d6efd; color: #fff; }
+        #sidebar h2 {
+            padding: 10px 12px 6px;
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #e8e8e8;
+            flex-shrink: 0;
+        }
+
+        #theme-selector {
+            margin: 6px 8px 0;
+            padding: 4px 6px;
+            font-size: 12px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        #search {
+            margin: 6px 8px;
+            padding: 5px 8px;
+            font-size: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fff;
+            outline: none;
+            flex-shrink: 0;
+        }
+        #search:focus { border-color: #0d6efd; }
+
+        #sidebar-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 8px;
+        }
+
+        #recents-section { border-bottom: 1px solid #e8e8e8; padding-bottom: 4px; margin-bottom: 4px; }
+        .section-label {
+            padding: 6px 12px 2px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #recents-list { list-style: none; padding: 0; }
+        .recent-item {
+            display: flex;
+            align-items: center;
+        }
+        .recent-item a {
+            flex: 1;
+            display: block;
+            padding: 4px 12px;
+            font-size: 12px;
+            color: #555;
+            text-decoration: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .recent-item a:hover { background: #efefef; color: #222; }
+        .recent-item a.active { background: #0d6efd; color: #fff; }
+        .btn-remove-recent {
+            flex-shrink: 0;
+            padding: 0 8px;
+            height: 100%;
+            min-height: 24px;
+            background: none;
+            border: none;
+            color: #bbb;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+        }
+        .btn-remove-recent:hover { color: #e53e3e; }
+
+        #groups-nav details { }
+        .group-summary {
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            user-select: none;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .group-summary::-webkit-details-marker { display: none; }
+        .group-summary::before {
+            content: '▾';
+            font-size: 10px;
+            color: #bbb;
+            transition: transform 0.15s;
+        }
+        details:not([open]) .group-summary::before { transform: rotate(-90deg); }
+        .group-summary:hover { color: #555; }
+
+        .group-list { list-style: none; padding: 0; margin-bottom: 4px; }
+        .group-list li a {
+            display: block;
+            padding: 4px 12px 4px 20px;
+            font-size: 12px;
+            color: #444;
+            text-decoration: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .group-list li a:hover { background: #efefef; color: #111; }
+        .group-list li a.active { background: #0d6efd; color: #fff; }
+
         #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
         #header { padding: 12px 20px; border-bottom: 1px solid #ddd; font-size: 16px; font-weight: 600; color: #333; }
         #container { flex: 1; padding: 20px; overflow: auto; }
@@ -26,8 +143,16 @@
 </head>
 <body class="dx-viewport">
     <div id="sidebar">
-        <h2>Widgets</h2>
-        <ul id="nav"></ul>
+        <h2>DevExtreme</h2>
+        <select id="theme-selector"></select>
+        <input id="search" type="search" placeholder="Filter widgets…">
+        <div id="sidebar-scroll">
+            <div id="recents-section" style="display:none">
+                <div class="section-label">Recent</div>
+                <ul id="recents-list"></ul>
+            </div>
+            <nav id="groups-nav"></nav>
+        </div>
     </div>
     <div id="main">
         <div id="header">Select a widget</div>
