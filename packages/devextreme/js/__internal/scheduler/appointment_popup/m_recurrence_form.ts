@@ -201,7 +201,9 @@ export class RecurrenceForm {
       name: GROUP_NAMES.recurrenceStartDateGroup,
       itemType: 'group',
       colCount: 2,
-      colCountByScreen: { xs: 2 },
+      colCountByScreen: {
+        xs: 2,
+      },
       cssClass: CLASSES.groupWithIcon,
       items: [
         {
@@ -215,7 +217,6 @@ export class RecurrenceForm {
           getStartDateCommonConfig(this.scheduler.getFirstDayOfWeek()),
           {
             name: EDITOR_NAMES.recurrenceStartDateEditor,
-            colSpan: 1,
             cssClass: CLASSES.recurrenceStartDateEditor,
             label: {
               text: messageLocalization.format('dxScheduler-editorLabelStartDate'),
@@ -240,7 +241,9 @@ export class RecurrenceForm {
       name: GROUP_NAMES.recurrenceRuleGroup,
       cssClass: `${CLASSES.recurrenceSettingsGroup} ${CLASSES.groupWithIcon}`,
       colCount: 2,
-      colCountByScreen: { xs: 2 },
+      colCountByScreen: {
+        xs: 2,
+      },
       items: [
         {
           name: ICON_NAMES.recurrenceRuleIcon,
@@ -253,7 +256,9 @@ export class RecurrenceForm {
           name: GROUP_NAMES.recurrencePatternGroup,
           colSpan: 1,
           colCount: 1,
-          colCountByScreen: { xs: 1 },
+          colCountByScreen: {
+            xs: 1,
+          },
           items: [
             this.createRecurrenceRuleGroup(),
             this.createDaysOfWeekGroup(),
@@ -440,7 +445,9 @@ export class RecurrenceForm {
       name: GROUP_NAMES.recurrenceEndGroup,
       itemType: 'group',
       colCount: 2,
-      colCountByScreen: { xs: 2 },
+      colCountByScreen: {
+        xs: 2,
+      },
       cssClass: `${CLASSES.groupWithIcon} ${CLASSES.recurrenceEndGroup}`,
       items: [
         {
