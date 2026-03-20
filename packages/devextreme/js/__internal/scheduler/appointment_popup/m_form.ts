@@ -218,17 +218,16 @@ export class AppointmentForm {
   create(popup: any): void {
     this._popup = popup;
 
-    const iconsShowMode = this.getIconsShowMode();
-    const showMainGroupIcons = ['main', 'both'].includes(iconsShowMode);
-    const showRecurrenceGroupIcons = ['recurrence', 'both'].includes(iconsShowMode);
-
     const mainGroup = this.createMainFormGroup();
 
     this._recurrenceForm = new RecurrenceForm(this.scheduler);
-    const recurrenceGroup = this._recurrenceForm
-      .createRecurrenceFormGroup();
+    const recurrenceGroup = this._recurrenceForm.createRecurrenceFormGroup();
 
     const items = [mainGroup, recurrenceGroup];
+
+    const iconsShowMode = this.getIconsShowMode();
+    const showMainGroupIcons = ['main', 'both'].includes(iconsShowMode);
+    const showRecurrenceGroupIcons = ['recurrence', 'both'].includes(iconsShowMode);
 
     this.setStylingModeToEditors(mainGroup, showMainGroupIcons);
     this.setStylingModeToEditors(recurrenceGroup, showRecurrenceGroupIcons);
@@ -348,7 +347,9 @@ export class AppointmentForm {
       itemType: 'group',
       cssClass: `${CLASSES.subjectGroup} ${CLASSES.groupWithIcon}`,
       colCount: 2,
-      colCountByScreen: { xs: 2 },
+      colCountByScreen: {
+        xs: 2,
+      },
       items: [
         {
           name: SUBJECT_ICON_NAME,
@@ -377,7 +378,9 @@ export class AppointmentForm {
       itemType: 'group',
       cssClass: `${CLASSES.dateRangeGroup} ${CLASSES.groupWithIcon}`,
       colCount: 2,
-      colCountByScreen: { xs: 2 },
+      colCountByScreen: {
+        xs: 2,
+      },
       items: [
         {
           name: DATE_ICON_NAME,
@@ -656,7 +659,9 @@ export class AppointmentForm {
       name: REPEAT_GROUP_NAME,
       itemType: 'group',
       colCount: 2,
-      colCountByScreen: { xs: 2 },
+      colCountByScreen: {
+        xs: 2,
+      },
       cssClass: `${CLASSES.repeatGroup} ${CLASSES.groupWithIcon}`,
       items: [
         {
@@ -710,7 +715,9 @@ export class AppointmentForm {
       name: DESCRIPTION_GROUP_NAME,
       itemType: 'group',
       colCount: 2,
-      colCountByScreen: { xs: 2 },
+      colCountByScreen: {
+        xs: 2,
+      },
       cssClass: `${CLASSES.descriptionGroup} ${CLASSES.groupWithIcon}`,
       items: [
         {
@@ -770,7 +777,9 @@ export class AppointmentForm {
         itemType: 'group',
         visible: resourcesItems.length > 0,
         colCount: 2,
-        colCountByScreen: { xs: 2 },
+        colCountByScreen: {
+          xs: 2,
+        },
         cssClass: `${CLASSES.resourcesGroup} ${CLASSES.groupWithIcon}`,
         items: [
           {
@@ -797,7 +806,9 @@ export class AppointmentForm {
         itemType: 'group',
         name: `${dataField}Group`,
         colCount: 2,
-        colCountByScreen: { xs: 2 },
+        colCountByScreen: {
+          xs: 2,
+        },
         cssClass: CLASSES.groupWithIcon,
         items: [
           {
@@ -806,7 +817,7 @@ export class AppointmentForm {
             cssClass: CLASSES.formIcon,
             template: createFormIconTemplate(icon),
           },
-          { ...item },
+          item,
         ],
       } as GroupItem;
     });
