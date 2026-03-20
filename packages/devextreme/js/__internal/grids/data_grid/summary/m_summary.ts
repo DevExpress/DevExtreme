@@ -594,7 +594,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
           }
           summaryCellsByColumns[columnIndex].push({
             ...summaryItem,
-            value: isString(aggregate) && column?.deserializeValue
+            value: isString(aggregate) && column && column.deserializeValue
               ? column.deserializeValue(aggregate)
               : aggregate,
             valueFormat,
