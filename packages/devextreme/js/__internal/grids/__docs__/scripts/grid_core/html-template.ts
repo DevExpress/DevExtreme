@@ -1,0 +1,743 @@
+/* eslint-disable spellcheck/spell-checker */
+/**
+ * HTML visualization template for Grid Core Architecture Documentation Generator.
+ * Generates an interactive Cytoscape.js visualization.
+ */
+
+import {
+  BASE_CSS,
+  EXTENDER_EDGE_BASE_STYLES,
+  GC_TARGET_CYTOSCAPE_STYLES,
+  HIGHLIGHT_CYTOSCAPE_STYLES,
+  LABEL_SIZE_HELPERS_JS,
+  SHARED_INTERACTIVE_JS,
+} from '../shared/html-helpers';
+import { buildCytoscapeElements } from './graph-builder';
+import type { ArchitectureData } from './types';
+
+export function generateHtml(data: ArchitectureData): string {
+  const cytoscapeElements = buildCytoscapeElements(data);
+  const elementsJson = JSON.stringify(cytoscapeElements, null, 2);
+  const featureAreas = [...new Set([
+    ...data.modules.map((m) => m.featureArea),
+    ...Object.values(data.standaloneControllers).map((c) => c.featureArea),
+    ...Object.values(data.standaloneViews).map((v) => v.featureArea),
+  ])].sort();
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grid Core Architecture</title>
+<!-- AUTO-GENERATED FILE. DO NOT EDIT MANUALLY. -->
+<!-- Generated at: ${data.generatedAt} -->
+<script src="https://unpkg.com/cytoscape@3.30.4/dist/cytoscape.min.js"></script>
+<style>
+${BASE_CSS}
+.tag-ctrl{background:#1e1e3a;color:#bae6fd;border:1px solid #7dd3fc33}
+.tag-view{background:#1e1e3a;color:#d8b4fe;border:1px solid #c084fc33}
+.tag-ext{background:#3a2a00;color:#f5c040;border:1px solid #f5c04033}
+</style>
+</head>
+<body>
+<div id="sidebar">
+  <div>
+    <h2>Search</h2>
+    <input type="text" id="search" placeholder="Type to search..." />
+  </div>
+  <div>
+    <h2>Edge Types</h2>
+    <label><input type="checkbox" class="edge-toggle" data-cls="edge-inherit-ctrl" checked> Inheritance (ctrl)</label>
+    <label><input type="checkbox" class="edge-toggle" data-cls="edge-inherit-view" checked> Inheritance (view)</label>
+    <label><input type="checkbox" class="edge-toggle" data-cls="edge-ext-ctrl" checked> Extender Chain (ctrl)</label>
+    <label><input type="checkbox" class="edge-toggle" data-cls="edge-ext-view" checked> Extender Chain (view)</label>
+    <label><input type="checkbox" class="edge-toggle" data-cls="edge-runtime" checked> Runtime Dependencies</label>
+  </div>
+  <div>
+    <h2>Feature Areas</h2>
+    <label class="select-all-row"><input type="checkbox" id="toggle-all-areas" checked> Select / Unselect All</label>
+    ${featureAreas.map((area) => `<label><input type="checkbox" class="area-toggle" data-area="${area}" checked> ${area}</label>`).join('\n    ')}
+  </div>
+  <div>
+    <h2>Edge Routing</h2>
+    <div class="radio-group">
+      <label><input type="radio" name="edge-routing" value="taxi" checked> Orthogonal</label>
+      <label><input type="radio" name="edge-routing" value="unbundled-bezier"> Bezier</label>
+    </div>
+  </div>
+  <div>
+    <button id="btn-fit">Fit View</button>
+    <button id="btn-reset">Reset</button>
+  </div>
+  <div id="legend">
+    <h2>Legend</h2>
+    <div class="leg-item"><div class="leg-sw" style="background:#1e1e3a;border:2px solid #7dd3fc;clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);width:20px;height:16px"></div> Controller</div>
+    <div class="leg-item"><div class="leg-sw" style="background:#1e1e3a;border:2px solid #c084fc;border-radius:50%"></div> View</div>
+    <div class="leg-item"><div class="leg-sw" style="background:#1a1a2e;border:2px dashed #f59e0b"></div> Module (compound)</div>
+    <div class="leg-item"><div class="leg-ln" style="border-top:2px dashed #0ea5e9"></div> Inheritance (ctrl)</div>
+    <div class="leg-item"><div class="leg-ln" style="border-top:2px dashed #a855f7"></div> Inheritance (view)</div>
+    <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #0ea5e9"></div> Extender (ctrl)</div>
+    <div class="leg-item"><div class="leg-ln" style="border-top:2.5px solid #a855f7"></div> Extender (view)</div>
+    <div class="leg-item"><div class="leg-ln" style="border-top:2px dotted #f6e05e;opacity:0.5"></div> Runtime Dependency</div>
+  </div>
+</div>
+<div id="main">
+  <div id="cy"></div>
+  <div id="info-panel-wrap">
+    <div id="info-panel">
+      <button id="btn-toggle-panel" title="Move panel to right">&#x2192;</button>
+      <div id="info-content">
+        <p style="color:#888;">Click a node or edge to see details.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ELEMENTS = ${elementsJson};
+
+// Shared label sizing helpers (replaces deprecated 'width': 'label' / 'height': 'label')
+${LABEL_SIZE_HELPERS_JS}
+
+const cy = cytoscape({
+  container: document.getElementById('cy'),
+  elements: ELEMENTS,
+  style: [
+    // Compound nodes (modules) — grid-core barrel style with label overrides
+    { selector: 'node.module',
+      style: {
+        'shape': 'barrel',
+        'background-color': '#1a1a2e',
+        'background-opacity': 0.5,
+        'border-width': 2,
+        'border-style': 'dashed',
+        'border-color': '#f59e0b',
+        'label': 'data(label)',
+        'text-valign': 'top',
+        'text-halign': 'center',
+        'font-size': 11,
+        'font-weight': 'bold',
+        'color': '#E8E8E8',
+        'padding': '12px',
+        'text-margin-y': -4,
+      }
+    },
+    // Extension-only modules
+    { selector: 'node.module.ext-only',
+      style: { 'min-width': 80, 'min-height': 30 }
+    },
+    // GC-target nodes (shared styles for controller/view)
+    ${GC_TARGET_CYTOSCAPE_STYLES}
+    // Grid_core-specific: explicit sizing for gc-target nodes
+    { selector: 'node.gc-target-controller',
+      style: { 'width': labelWidth(9), 'height': 30 }
+    },
+    { selector: 'node.gc-target-view',
+      style: { 'width': labelWidth(9), 'height': 26 }
+    },
+    // Inheritance edges (ctrl) — dashed, same color as extension ctrl
+    { selector: 'edge.edge-inherit-ctrl',
+      style: {
+        'line-color': '#0ea5e9', 'target-arrow-color': '#0ea5e9',
+        'target-arrow-shape': 'triangle', 'line-style': 'dashed',
+        'curve-style': 'bezier', 'width': 2, 'arrow-scale': 0.8, 'opacity': 0.8,
+        'target-label': 'data(label)', 'font-size': 8, 'color': '#5bb8e8',
+        'target-text-offset': 80,
+        'text-background-color': '#1a1a2e', 'text-background-opacity': .9,
+        'text-background-padding': '2px', 'text-background-shape': 'round-rectangle',
+      }
+    },
+    // Inheritance edges (view) — dashed, same color as extension view
+    { selector: 'edge.edge-inherit-view',
+      style: {
+        'line-color': '#a855f7', 'target-arrow-color': '#a855f7',
+        'target-arrow-shape': 'triangle', 'line-style': 'dashed',
+        'curve-style': 'bezier', 'width': 2, 'arrow-scale': 0.8, 'opacity': 0.8,
+        'target-label': 'data(label)', 'font-size': 8, 'color': '#c090f0',
+        'target-text-offset': 80,
+        'text-background-color': '#1a1a2e', 'text-background-opacity': .9,
+        'text-background-padding': '2px', 'text-background-shape': 'round-rectangle',
+      }
+    },
+    // Extension edges (shared base styles)
+    ${EXTENDER_EDGE_BASE_STYLES}
+    // Grid_core-specific: add opacity and label styles to extender edges
+    { selector: 'edge.edge-ext-ctrl',
+      style: {
+        'opacity': 0.8,
+        'target-label': 'data(label)', 'font-size': 8, 'color': '#5bb8e8',
+        'target-text-offset': 80,
+        'text-background-color': '#1a1a2e', 'text-background-opacity': .9,
+        'text-background-padding': '2px', 'text-background-shape': 'round-rectangle',
+      }
+    },
+    { selector: 'edge.edge-ext-view',
+      style: {
+        'opacity': 0.8,
+        'target-label': 'data(label)', 'font-size': 8, 'color': '#c090f0',
+        'target-text-offset': 80,
+        'text-background-color': '#1a1a2e', 'text-background-opacity': .9,
+        'text-background-padding': '2px', 'text-background-shape': 'round-rectangle',
+      }
+    },
+    // Runtime dependency edges — dotted, yellow
+    { selector: 'edge.edge-runtime',
+      style: {
+        'line-color': '#f6e05e', 'target-arrow-color': '#f6e05e',
+        'target-arrow-shape': 'triangle', 'line-style': 'dotted',
+        'curve-style': 'bezier', 'width': 1, 'arrow-scale': 0.6, 'opacity': 0.5,
+      }
+    },
+    // Highlighted state
+    ${HIGHLIGHT_CYTOSCAPE_STYLES}
+    // Cross-compound edges must use bezier to avoid "invalid endpoints" warnings with taxi routing
+    { selector: 'edge.cross-compound',
+      style: { 'curve-style': 'bezier' }
+    },
+  ],
+  layout: { name: 'preset' },
+});
+
+// ── Edge Routing Helper ─────────────────────────
+// Note: getEdgeRouting() and hasOverlappingBounds() are provided by SHARED_INTERACTIVE_JS
+
+function updateEdgeStyles() {
+  const curveStyle = getEdgeRouting();
+
+  if (curveStyle === 'taxi') {
+    // Apply taxi only to non-cross-compound edges
+    cy.edges().not('.cross-compound').style({
+      'curve-style': 'taxi',
+      'taxi-direction': 'downward',
+      'taxi-turn': '50%',
+    });
+    // Force bezier for cross-compound edges (siblings / parent-child)
+    cy.edges('.cross-compound').style({
+      'curve-style': 'bezier',
+      'taxi-direction': null,
+      'taxi-turn': null,
+    });
+    // Revert to bezier for edges with overlapping/adjacent endpoints
+    cy.edges().not('.cross-compound').forEach(function(edge) {
+      const src = edge.source();
+      const tgt = edge.target();
+      if (tgt.data('parent') === src.id() || src.data('parent') === tgt.id() || hasOverlappingBounds(edge)) {
+        edge.style({ 'curve-style': 'bezier', 'taxi-direction': null, 'taxi-turn': null });
+      }
+    });
+  } else {
+    cy.edges().not('.cross-compound').style({
+      'curve-style': curveStyle,
+      'taxi-direction': null,
+      'taxi-turn': null,
+    });
+    cy.edges('.cross-compound').style({
+      'curve-style': 'bezier',
+      'taxi-direction': null,
+      'taxi-turn': null,
+    });
+    cy.edges().not('.cross-compound').forEach(function(edge) {
+      var src = edge.source();
+      var tgt = edge.target();
+      if (tgt.data('parent') === src.id() || src.data('parent') === tgt.id() || hasOverlappingBounds(edge)) {
+        edge.style({ 'curve-style': 'bezier' });
+      }
+    });
+  }
+}
+
+// ── Dependency-levels custom layout ──────────────
+
+function runDepLevelsLayout() {
+  // 1. Collect targets (leaf nodes: controllers & views)
+  var targets = cy.nodes('.gc-target-controller, .gc-target-view');
+  var modules = cy.nodes('.module');
+
+  // 2. Build dependency map: target → set of target ids it depends on
+  //    via inheritance edges and extension edges (module extends target → module's children depend on that target)
+  var deps = {};
+  targets.forEach(function(n) { deps[n.id()] = new Set(); });
+
+  // Inheritance: target → target
+  cy.edges('.edge-inherit-ctrl, .edge-inherit-view').forEach(function(e) {
+    var src = e.source().id();
+    var tgt = e.target().id();
+    if (deps[src]) deps[src].add(tgt);
+  });
+
+  // Extension: module → target. All children of that module depend on the extended target.
+  cy.edges('.edge-ext-ctrl, .edge-ext-view').forEach(function(e) {
+    var modNode = e.source();
+    var extTarget = e.target().id();
+    modNode.children().forEach(function(child) {
+      if (deps[child.id()] && child.id() !== extTarget) {
+        deps[child.id()].add(extTarget);
+      }
+    });
+  });
+
+  // 3. Compute global levels via recursive topological sort
+  var level = {};
+  function getLevel(id, visiting) {
+    if (level[id] !== undefined) return level[id];
+    if (!visiting) visiting = {};
+    if (visiting[id]) return 0; // cycle guard
+    visiting[id] = true;
+    var maxDep = -1;
+    deps[id].forEach(function(depId) {
+      var dl = getLevel(depId, visiting);
+      if (dl > maxDep) maxDep = dl;
+    });
+    level[id] = maxDep + 1;
+    delete visiting[id];
+    return level[id];
+  }
+  targets.forEach(function(n) { getLevel(n.id()); });
+
+  // 4. Determine module level = max level of its children; ext-only modules = max level of targets they extend + 1
+  var moduleLevel = {};
+  modules.forEach(function(mod) {
+    var children = mod.children();
+    if (children.length > 0) {
+      var maxLv = 0;
+      children.forEach(function(c) {
+        var lv = level[c.id()] || 0;
+        if (lv > maxLv) maxLv = lv;
+      });
+      moduleLevel[mod.id()] = maxLv;
+    } else {
+      var maxExt = -1;
+      mod.connectedEdges('.edge-ext-ctrl, .edge-ext-view').forEach(function(e) {
+        if (e.source().id() === mod.id()) {
+          var tgtLv = level[e.target().id()] || 0;
+          if (tgtLv > maxExt) maxExt = tgtLv;
+        }
+      });
+      moduleLevel[mod.id()] = maxExt >= 0 ? maxExt + 1 : 0;
+    }
+  });
+
+  targets.forEach(function(n) {
+    if (!n.data('parent')) {
+      moduleLevel[n.id()] = level[n.id()] || 0;
+    }
+  });
+
+  // 5. Compute inner levels for children within each module.
+  //    Inner level is based only on inheritance edges between siblings in the same module.
+  //    Children that don't inherit from any sibling are at inner level 0 (bottom).
+  var innerLevel = {}; // childId → inner level within its module
+  modules.forEach(function(mod) {
+    var children = mod.children();
+    if (children.length <= 1) {
+      children.forEach(function(c) { innerLevel[c.id()] = 0; });
+      return;
+    }
+    var childIds = new Set();
+    children.forEach(function(c) { childIds.add(c.id()); });
+
+    // Build sibling inheritance deps (only edges between children of this module)
+    var sibDeps = {};
+    children.forEach(function(c) { sibDeps[c.id()] = new Set(); });
+    cy.edges('.edge-inherit-ctrl, .edge-inherit-view').forEach(function(e) {
+      var src = e.source().id();
+      var tgt = e.target().id();
+      if (childIds.has(src) && childIds.has(tgt)) {
+        sibDeps[src].add(tgt);
+      }
+    });
+
+    // Compute inner levels
+    var innerLv = {};
+    function getInnerLevel(id, vis) {
+      if (innerLv[id] !== undefined) return innerLv[id];
+      if (!vis) vis = {};
+      if (vis[id]) return 0;
+      vis[id] = true;
+      var maxD = -1;
+      sibDeps[id].forEach(function(did) {
+        var dl = getInnerLevel(did, vis);
+        if (dl > maxD) maxD = dl;
+      });
+      innerLv[id] = maxD + 1;
+      delete vis[id];
+      return innerLv[id];
+    }
+    children.forEach(function(c) { getInnerLevel(c.id()); });
+    children.forEach(function(c) { innerLevel[c.id()] = innerLv[c.id()] || 0; });
+  });
+
+  // 6. Group top-level items by level
+  var byLevel = {};
+  modules.forEach(function(mod) {
+    var lv = moduleLevel[mod.id()] || 0;
+    if (!byLevel[lv]) byLevel[lv] = [];
+    byLevel[lv].push(mod);
+  });
+  targets.forEach(function(n) {
+    if (!n.data('parent')) {
+      var lv = level[n.id()] || 0;
+      if (!byLevel[lv]) byLevel[lv] = [];
+      byLevel[lv].push(n);
+    }
+  });
+
+  // 7. Compute child sub-layouts within each module to determine real module dimensions.
+  //    For each module, arrange children in sub-rows by inner level.
+  var CHILD_COL_GAP = 16;
+  var CHILD_ROW_GAP = 12;
+  var CHILD_PAD = 24; // padding inside module for label at top + border
+
+  // childLayout[modId] = { width, height, childPositions: { childId: {dx, dy} } }
+  var childLayout = {};
+  modules.forEach(function(mod) {
+    var children = mod.children();
+    if (children.length === 0) {
+      childLayout[mod.id()] = { width: mod.outerWidth() || 100, height: mod.outerHeight() || 50, childPositions: {} };
+      return;
+    }
+
+    // Group children by inner level
+    var byInner = {};
+    var maxInner = 0;
+    children.forEach(function(c) {
+      var il = innerLevel[c.id()] || 0;
+      if (!byInner[il]) byInner[il] = [];
+      byInner[il].push(c);
+      if (il > maxInner) maxInner = il;
+    });
+
+    // Lay out each inner row
+    var innerYAccum = CHILD_PAD;
+    var maxRowWidth = 0;
+    var cp = {};
+
+    for (var il = maxInner; il >= 0; il--) {
+      var row = byInner[il];
+      if (!row) continue;
+      row.sort(function(a, b) { return (a.data('label') || '').localeCompare(b.data('label') || ''); });
+      var rowX = 0;
+      var rowH = 0;
+      for (var ri = 0; ri < row.length; ri++) {
+        var child = row[ri];
+        var cw = child.outerWidth() || 80;
+        var ch = child.outerHeight() || 30;
+        if (ch > rowH) rowH = ch;
+        cp[child.id()] = { dx: rowX + cw / 2, dy: innerYAccum + ch / 2 };
+        rowX += cw + CHILD_COL_GAP;
+      }
+      var rw = rowX - CHILD_COL_GAP;
+      if (rw > maxRowWidth) maxRowWidth = rw;
+      innerYAccum += rowH + CHILD_ROW_GAP;
+    }
+
+    var modW = Math.max(maxRowWidth + CHILD_PAD * 2, 100);
+    var modH = innerYAccum - CHILD_ROW_GAP + CHILD_PAD;
+
+    // Center each inner row horizontally within modW
+    for (var il2 = 0; il2 <= maxInner; il2++) {
+      var row2 = byInner[il2];
+      if (!row2) continue;
+      var rowMinX = Infinity, rowMaxX = -Infinity;
+      row2.forEach(function(c) {
+        var p = cp[c.id()];
+        var hw = (c.outerWidth() || 80) / 2;
+        if (p.dx - hw < rowMinX) rowMinX = p.dx - hw;
+        if (p.dx + hw > rowMaxX) rowMaxX = p.dx + hw;
+      });
+      var rowW2 = rowMaxX - rowMinX;
+      var rowOff = (modW - CHILD_PAD * 2 - rowW2) / 2 - rowMinX;
+      row2.forEach(function(c) { cp[c.id()].dx += rowOff; });
+    }
+
+    childLayout[mod.id()] = { width: modW, height: modH, childPositions: cp };
+  });
+
+  // 8. Position top-level items in rows by level.
+  //    All items on the same level share the same Y center.
+  //    Ext-only modules (no children) are sized as squares matching the row height.
+  var ROW_GAP = 120;
+  var COL_GAP = 50;
+  var positions = {};
+  var maxGlobalLevel = 0;
+  Object.keys(byLevel).forEach(function(k) { if (+k > maxGlobalLevel) maxGlobalLevel = +k; });
+
+  // First pass: compute row heights (find the tallest item per level)
+  var rowHeights = {};
+  for (var lvH = 0; lvH <= maxGlobalLevel; lvH++) {
+    var itemsH = byLevel[lvH];
+    if (!itemsH || itemsH.length === 0) continue;
+    var maxH = 0;
+    for (var iH = 0; iH < itemsH.length; iH++) {
+      var nH = itemsH[iH];
+      var isModH = nH.data('nodeType') === 'module';
+      var clH = isModH ? childLayout[nH.id()] : null;
+      var hH = clH ? clH.height : (nH.outerHeight() || 40);
+      if (hH > maxH) maxH = hH;
+    }
+    rowHeights[lvH] = maxH;
+  }
+
+  // Resize ext-only modules (no children) to squares matching their row height
+  modules.forEach(function(mod) {
+    var cl = childLayout[mod.id()];
+    if (cl && Object.keys(cl.childPositions).length === 0) {
+      var modLv = moduleLevel[mod.id()] || 0;
+      var rh = rowHeights[modLv] || 50;
+      cl.width = rh;
+      cl.height = rh;
+    }
+  });
+
+  // Second pass: position items, center-aligning vertically within each row
+  var yAccum = 0;
+  for (var lv = 0; lv <= maxGlobalLevel; lv++) {
+    var items = byLevel[lv];
+    if (!items || items.length === 0) continue;
+    var rowHeight = rowHeights[lv] || 40;
+
+    items.sort(function(a, b) {
+      var aIsModule = a.data('nodeType') === 'module' ? 0 : 1;
+      var bIsModule = b.data('nodeType') === 'module' ? 0 : 1;
+      if (aIsModule !== bIsModule) return aIsModule - bIsModule;
+      return (a.data('label') || '').localeCompare(b.data('label') || '');
+    });
+
+    var rowCenterY = -yAccum - rowHeight / 2;
+    var xAccum = 0;
+    for (var i = 0; i < items.length; i++) {
+      var node = items[i];
+      var isModule = node.data('nodeType') === 'module';
+      var cl = isModule ? childLayout[node.id()] : null;
+      var w = cl ? cl.width : (node.outerWidth() || 80);
+      var h = cl ? cl.height : (node.outerHeight() || 40);
+
+      var nodeCenterX = xAccum + w / 2;
+      positions[node.id()] = { x: nodeCenterX, y: rowCenterY };
+
+      // Position children using computed sub-layout offsets, centered within the module
+      if (isModule && cl && Object.keys(cl.childPositions).length > 0) {
+        var originX = xAccum;
+        var originY = rowCenterY - h / 2;
+        Object.keys(cl.childPositions).forEach(function(cid) {
+          var off = cl.childPositions[cid];
+          positions[cid] = { x: originX + CHILD_PAD + off.dx, y: originY + off.dy };
+        });
+      }
+
+      xAccum += w + COL_GAP;
+    }
+    yAccum += rowHeight + ROW_GAP;
+  }
+
+  // 9. Center rows horizontally
+  var globalMaxX = 0;
+  Object.keys(byLevel).forEach(function(k) {
+    var items = byLevel[k];
+    if (!items) return;
+    items.forEach(function(n) {
+      var p = positions[n.id()];
+      var cl = childLayout[n.id()];
+      var hw = cl ? cl.width / 2 : ((n.outerWidth() || 80) / 2);
+      if (p && p.x + hw > globalMaxX) globalMaxX = p.x + hw;
+    });
+  });
+
+  for (var lv2 = 0; lv2 <= maxGlobalLevel; lv2++) {
+    var rowItems = byLevel[lv2];
+    if (!rowItems || rowItems.length === 0) continue;
+    var minX = Infinity, maxX = -Infinity;
+    rowItems.forEach(function(n) {
+      var p = positions[n.id()];
+      if (p) {
+        var cl = childLayout[n.id()];
+        var hw = cl ? cl.width / 2 : ((n.outerWidth() || 80) / 2);
+        if (p.x - hw < minX) minX = p.x - hw;
+        if (p.x + hw > maxX) maxX = p.x + hw;
+      }
+    });
+    var rowWidth = maxX - minX;
+    var offset = (globalMaxX - rowWidth) / 2 - minX;
+    rowItems.forEach(function(n) {
+      var p = positions[n.id()];
+      if (p) p.x += offset;
+      // Shift children too
+      n.children().forEach(function(child) {
+        var cp = positions[child.id()];
+        if (cp) cp.x += offset;
+      });
+    });
+  }
+
+  // 10. Apply positions
+  cy.layout({
+    name: 'preset',
+    positions: function(node) {
+      return positions[node.id()] || { x: 0, y: 0 };
+    },
+    animate: true,
+    animationDuration: 400,
+    stop: function() { updateEdgeStyles(); staggerEdgeLabels(); },
+  }).run();
+}
+
+/* ── Stagger edge labels near arrow to avoid overlap ── */
+function staggerEdgeLabels() {
+  var byTarget = {};
+  cy.edges('[label]').forEach(function(e) {
+    if (e.style('display') === 'none') return;
+    var tgt = e.data('target');
+    if (!byTarget[tgt]) byTarget[tgt] = [];
+    byTarget[tgt].push(e);
+  });
+  for (var tgt in byTarget) {
+    var edges = byTarget[tgt];
+    edges.sort(function(a, b) { return (a.data('label') || '').localeCompare(b.data('label') || ''); });
+    var step = 16;
+    var baseOffset = 80;
+    var maxOffset = 200;
+    for (var i = 0; i < edges.length; i++) {
+      var offset = Math.min(baseOffset + i * step, maxOffset);
+      edges[i].style('target-text-offset', offset);
+      var marginY = (i % 2 === 0) ? -16 : 16;
+      edges[i].style('target-text-margin-y', marginY);
+    }
+  }
+}
+
+// Run initial layout
+runDepLevelsLayout();
+
+// ── Interactivity: hover / click-to-pin / edge highlight ──
+
+function getVisibleEdges(eles) {
+  return eles.filter(function(ele) {
+    if (!ele.isEdge()) return false;
+    return ele.style('display') !== 'none';
+  });
+}
+
+function connectedSet(seeds) {
+  const edges = getVisibleEdges(seeds.connectedEdges());
+  const neighbors = edges.connectedNodes();
+  const parents = neighbors.parent();
+  return seeds.union(edges).union(neighbors).union(parents);
+}
+
+function computeHighlightSet(target) {
+  if (target.isEdge()) {
+    const src = target.source();
+    const tgt = target.target();
+    return cy.collection().union(target).union(src).union(tgt)
+      .union(src.parent()).union(tgt.parent());
+  }
+  const nodeType = target.data('nodeType');
+  if (nodeType === 'module') {
+    const children = target.children();
+    const seeds = cy.collection().union(target).union(children);
+    return connectedSet(seeds);
+  }
+  let leafSet = cy.collection().union(target);
+  const par = target.parent();
+  if (par.nonempty()) { leafSet = leafSet.union(par); }
+  return connectedSet(leafSet);
+}
+
+// ── State ──────────────
+var selectedTarget = null;
+
+// ── Info Panel (grid_core-specific) ─────
+function pathWrap(p) {
+  return '<span class="path">' + p.split('/').join('/<wbr>') + '</span>';
+}
+
+function showInfo(target) {
+  var d = target.data();
+  var html = '<h3>' + (d.label || d.id) + '</h3>';
+  if (target.isEdge()) {
+    html = '<h3>Edge: ' + d.edgeType + '</h3>'
+      + '<p><span class="lbl">From:</span> ' + d.source + '</p>'
+      + '<p><span class="lbl">To:</span> ' + d.target + '</p>'
+      + (d.extenderName ? '<p><span class="lbl">Extender:</span> ' + d.extenderName + '</p>' : '');
+  } else if (d.nodeType === 'module') {
+    html += '<p><span class="lbl">Source:</span> ' + pathWrap(d.sourceFile || '') + '</p>';
+    html += '<p><span class="lbl">Area:</span> ' + (d.featureArea || '') + '</p>';
+    if (d.definesControllers) html += '<p><span class="lbl">Controllers:</span> ' + d.definesControllers + '</p>';
+    if (d.definesViews) html += '<p><span class="lbl">Views:</span> ' + d.definesViews + '</p>';
+    if (d.extendsControllers) html += '<p><span class="lbl">Extends (ctrl):</span> ' + d.extendsControllers + '</p>';
+    if (d.extendsViews) html += '<p><span class="lbl">Extends (view):</span> ' + d.extendsViews + '</p>';
+  } else if (d.nodeType === 'controller' || d.nodeType === 'view') {
+    html += '<p><span class="lbl">Type:</span> ' + d.nodeType + '</p>';
+    html += '<p><span class="lbl">Class:</span> ' + (d.className || '') + '</p>';
+    html += '<p><span class="lbl">Base:</span> ' + (d.baseClass || '') + '</p>';
+    if (d.mixins) html += '<p><span class="lbl">Mixins:</span> ' + d.mixins + '</p>';
+    html += '<p><span class="lbl">Source:</span> ' + pathWrap(d.sourceFile || '') + '</p>';
+  }
+  document.getElementById('info-content').innerHTML = html;
+}
+
+// ── Shared interactive JS (highlight, edge toggles, search, click handlers, fit button, routing radio) ──
+${SHARED_INTERACTIVE_JS}
+
+// ── Grid_core-specific: Feature Area Toggles ────────────────────────
+document.getElementById('toggle-all-areas').addEventListener('change', function() {
+  const checked = this.checked;
+  document.querySelectorAll('.area-toggle').forEach(cb => {
+    cb.checked = checked;
+    cb.dispatchEvent(new Event('change'));
+  });
+});
+document.querySelectorAll('.area-toggle').forEach(cb => {
+  cb.addEventListener('change', function() {
+    const area = this.dataset.area;
+    const show = this.checked;
+    cy.nodes('[featureArea="' + area + '"]').forEach(n => {
+      n.style('display', show ? 'element' : 'none');
+      n.children().style('display', show ? 'element' : 'none');
+      n.connectedEdges().forEach(e => {
+        if (!show) e.style('display', 'none');
+        else e.style('display', 'element');
+      });
+      n.children().connectedEdges().forEach(e => {
+        if (!show) e.style('display', 'none');
+        else e.style('display', 'element');
+      });
+    });
+    // Re-apply edge type visibility after area filter changes
+    document.querySelectorAll('.edge-toggle').forEach(function(ecb) {
+      var cls = ecb.getAttribute('data-cls');
+      if (!ecb.checked) cy.edges('.' + cls).style('display', 'none');
+    });
+    if (selectedTarget) {
+      const set = computeHighlightSet(selectedTarget);
+      cy.elements().removeClass('highlighted').addClass('faded');
+      set.removeClass('faded').addClass('highlighted');
+    }
+    const allToggles = document.querySelectorAll('.area-toggle');
+    const allChecked = Array.from(allToggles).every(t => t.checked);
+    const noneChecked = Array.from(allToggles).every(t => !t.checked);
+    const selectAll = document.getElementById('toggle-all-areas');
+    selectAll.checked = allChecked;
+    selectAll.indeterminate = !allChecked && !noneChecked;
+  });
+});
+
+// ── Grid_core-specific: Reset Button ─────────────────────────────
+document.getElementById('btn-reset').addEventListener('click', () => {
+  selectedTarget = null;
+  clearHighlight();
+  cy.elements().removeClass('search-match');
+  document.getElementById('search').value = '';
+  document.getElementById('toggle-all-areas').checked = true;
+  document.getElementById('toggle-all-areas').indeterminate = false;
+  document.querySelectorAll('.area-toggle').forEach(cb => { cb.checked = true; });
+  cy.elements().style('display', 'element');
+  document.querySelectorAll('.edge-toggle').forEach(function(cb) { cb.checked = true; });
+  document.querySelector('input[name="edge-routing"][value="taxi"]').checked = true;
+  runDepLevelsLayout();
+});
+</script>
+</body>
+</html>`;
+}

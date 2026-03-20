@@ -47,7 +47,7 @@
     "@webcomponents/custom-elements": "1.6.0",
     "codelyzer": "6.0.2",
     "core-js": "2.6.12",
-    "css-loader": "6.10.0",
+    "css-loader": "6.11.0",
     "devextreme-metadata": "workspace:*",
     "eslint": "catalog:",
     "eslint-config-devextreme": "catalog:",
