@@ -566,17 +566,18 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
   }: CalculateSummaryCellsArgs) {
     const summaryCells: SummaryCellItem[][] = [];
     const summaryCellsByColumns: Record<number, SummaryCellItem[]> = {};
+    const getColumnByKey = (key) => (
+      columnMap
+        ? getColumnFromMap(key, columnMap)
+        : this._columnsController.columnOption(key)
+    );
 
     each(summaryItems, (summaryIndex, summaryItem) => {
-      const column = columnMap
-        ? getColumnFromMap(summaryItem.column, columnMap)
-        : this._columnsController.columnOption(summaryItem.column);
-      const showInColumn = (summaryItem.showInColumn
-        && (columnMap
-          ? getColumnFromMap(summaryItem.showInColumn, columnMap)
-          : this._columnsController.columnOption(summaryItem.showInColumn)))
-        || column;
-      const columnIndex = calculateTargetColumnIndex(summaryItem, showInColumn);
+      const column = getColumnByKey(summaryItem.column);
+      const showInColumn = summaryItem.showInColumn
+        ? getColumnByKey(summaryItem.showInColumn)
+        : undefined;
+      const columnIndex = calculateTargetColumnIndex(summaryItem, showInColumn ?? column);
 
       if (columnIndex >= 0) {
         if (!summaryCellsByColumns[columnIndex]) {
@@ -591,13 +592,14 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
           } else if (summaryItem.summaryType !== 'count') {
             valueFormat = gridCore.getFormatByDataType(column && column.dataType);
           }
-          summaryCellsByColumns[columnIndex].push(extend({}, summaryItem, {
-            value: isString(aggregate) && column && column.deserializeValue
+          summaryCellsByColumns[columnIndex].push({
+            ...summaryItem,
+            value: isString(aggregate) && column?.deserializeValue
               ? column.deserializeValue(aggregate)
               : aggregate,
             valueFormat,
             columnCaption: column && column.index !== columnIndex ? column.caption : undefined,
-          }));
+          });
         }
       }
     });
