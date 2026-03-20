@@ -291,30 +291,14 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
   // T1284612
   test.meta({
     browserSize: [900, 800],
-    unstable: true,
-  })(`DataGrid - Group summaries are shown over sticky columns on a horizontal scroll (rtl=${rtlEnabled})`, async (t) => {
+  })(`DataGrid - Group summaries are shown over sticky columns on a horizontal scroll - intersection (rtl=${rtlEnabled})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
 
     await t.expect(dataGrid.isReady()).ok();
 
-    await dataGrid.scrollTo(t, { x: rtlEnabled ? 100 : 250 });
-    await t.wait(300);
     await testScreenshot(t, takeScreenshot, `grouping-scroll-total_summary_intersection-rtl=${rtlEnabled}.png`, { element: dataGrid.element });
-
-    await dataGrid.apiOption('summary.totalItems', [{
-      column: 'SaleAmount',
-      summaryType: 'max',
-      valueFormat: 'currency',
-    }]);
-    await t.wait(300);
-    await dataGrid.scrollTo(t, { x: 0 });
-    await t.wait(200);
-    await dataGrid.scrollTo(t, { x: rtlEnabled ? 100 : 250 });
-    await t.wait(300);
-
-    await testScreenshot(t, takeScreenshot, `grouping-scroll-total_summary-rtl=${rtlEnabled}.png`, { element: dataGrid.element });
 
     await t
       .expect(compareResults.isValid())
@@ -324,6 +308,8 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
     rtlEnabled,
     customizeColumns(columns) {
       columns[2].groupIndex = 0;
+      columns[1].visible = false;
+      columns[3].width = 200;
     },
     summary: {
       groupItems: [{
@@ -366,6 +352,64 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
         summaryType: 'sum',
         valueFormat: 'currency',
         displayFormat: 'Total: {0}',
+      }],
+    },
+  }));
+});
+
+[false, true].forEach((rtlEnabled) => {
+  // T1284612
+  test.meta({
+    browserSize: [900, 800],
+  })(`DataGrid - Group summaries are shown over sticky columns on a horizontal scroll (rtl=${rtlEnabled})`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+    await t.expect(dataGrid.isReady()).ok();
+
+    await testScreenshot(t, takeScreenshot, `grouping-scroll-total_summary-rtl=${rtlEnabled}.png`, { element: dataGrid.element });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxDataGrid', {
+    ...defaultConfig,
+    rtlEnabled,
+    customizeColumns(columns) {
+      columns[2].groupIndex = 0;
+      columns[1].visible = false;
+      columns[4].width = 150;
+    },
+    summary: {
+      groupItems: [{
+        column: 'OrderNumber',
+        summaryType: 'count',
+        displayFormat: '{0} orders',
+      }, {
+        column: 'City',
+        summaryType: 'max',
+        valueFormat: 'currency',
+        showInGroupFooter: false,
+        alignByColumn: true,
+      }, {
+        column: 'TotalAmount',
+        summaryType: 'max',
+        valueFormat: 'currency',
+        showInGroupFooter: false,
+        alignByColumn: true,
+      }, {
+        column: 'TotalAmount',
+        summaryType: 'sum',
+        valueFormat: 'currency',
+        displayFormat: 'Total: {0}',
+        showInGroupFooter: true,
+      }],
+      totalItems: [{
+        column: 'SaleAmount',
+        summaryType: 'max',
+        valueFormat: 'currency',
+        displayFormat: 'MAXMAXMAXMAX: {0}',
       }],
     },
   }));
