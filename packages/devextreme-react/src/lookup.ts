@@ -204,6 +204,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   deferRendering?: boolean;
   disabled?: boolean;
   enableBodyScroll?: boolean;
+  focusLoopEnabled?: boolean;
   height?: number | string;
   hideEvent?: Record<string, any> | string | undefined | {
     delay?: number | undefined;

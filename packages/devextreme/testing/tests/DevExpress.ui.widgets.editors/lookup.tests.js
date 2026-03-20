@@ -2192,7 +2192,7 @@ QUnit.module('popup options', {
     [true, false].forEach(dropDownCentered => {
         [true, false].forEach(_scrollToSelectedItemEnabled => {
             [true, false].forEach(usePopover => {
-                QUnit.test(`Popup should have correct _loopFocus option value if usePopover=${usePopover}, _scrollToSelectedItemEnabled=${_scrollToSelectedItemEnabled}, dropDownCentered=${dropDownCentered}`, function(assert) {
+                QUnit.test(`Popup should have correct focusLoopEnabled option value if usePopover=${usePopover}, _scrollToSelectedItemEnabled=${_scrollToSelectedItemEnabled}, dropDownCentered=${dropDownCentered}`, function(assert) {
                     const instance = $('#lookupOptions').dxLookup({
                         _scrollToSelectedItemEnabled,
                         usePopover,
@@ -2211,9 +2211,9 @@ QUnit.module('popup options', {
                         ? dropDownCentered
                         : !usePopover;
 
-                    const { _loopFocus } = popup.option();
+                    const { focusLoopEnabled } = popup.option();
 
-                    assert.strictEqual(_loopFocus, expectedValue, `_loopFocus: ${_loopFocus} is correct`);
+                    assert.strictEqual(focusLoopEnabled, expectedValue, `focusLoopEnabled: ${focusLoopEnabled} is correct`);
                 });
             });
         });

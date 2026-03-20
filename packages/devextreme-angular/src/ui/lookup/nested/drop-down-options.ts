@@ -98,6 +98,14 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
+    get focusLoopEnabled(): boolean {
+        return this._getOption('focusLoopEnabled');
+    }
+    set focusLoopEnabled(value: boolean) {
+        this._setOption('focusLoopEnabled', value);
+    }
+
+    @Input()
     get height(): number | string {
         return this._getOption('height');
     }

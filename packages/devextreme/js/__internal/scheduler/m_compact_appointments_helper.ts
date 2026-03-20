@@ -59,7 +59,7 @@ export class CompactAppointmentsHelper {
       clickEvent: this._clickEvent(options.onAppointmentClick).bind(this),
       dragBehavior: options.allowDrag && this._createTooltipDragBehavior($appointmentCollector).bind(this),
       isButtonClick: true,
-      _loopFocus: true,
+      focusLoopEnabled: true,
     };
   }
 

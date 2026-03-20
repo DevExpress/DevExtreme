@@ -51,6 +51,7 @@ type AccessibleOptions = Pick<Properties,
   "dragEnabled" |
   "dragOutsideBoundary" |
   "enableBodyScroll" |
+  "focusLoopEnabled" |
   "focusStateEnabled" |
   "fullScreen" |
   "height" |
@@ -107,6 +108,7 @@ const componentConfig = {
     dragEnabled: Boolean,
     dragOutsideBoundary: Boolean,
     enableBodyScroll: Boolean,
+    focusLoopEnabled: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
     height: [Number, String],
@@ -159,6 +161,7 @@ const componentConfig = {
     "update:dragEnabled": null,
     "update:dragOutsideBoundary": null,
     "update:enableBodyScroll": null,
+    "update:focusLoopEnabled": null,
     "update:focusStateEnabled": null,
     "update:fullScreen": null,
     "update:height": null,

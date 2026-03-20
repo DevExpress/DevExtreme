@@ -50,6 +50,7 @@ import {
         'dragEnabled',
         'dragOutsideBoundary',
         'enableBodyScroll',
+        'focusLoopEnabled',
         'focusStateEnabled',
         'fullScreen',
         'height',

@@ -180,6 +180,19 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
 
 
     /**
+     * [descr:dxPopupOptions.focusLoopEnabled]
+    
+     */
+    @Input()
+    get focusLoopEnabled(): boolean {
+        return this._getOption('focusLoopEnabled');
+    }
+    set focusLoopEnabled(value: boolean) {
+        this._setOption('focusLoopEnabled', value);
+    }
+
+
+    /**
      * [descr:dxPopoverOptions.height]
     
      */
@@ -609,6 +622,13 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() focusLoopEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() heightChange: EventEmitter<number | string>;
 
     /**
@@ -800,6 +820,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
             { emit: 'deferRenderingChange' },
             { emit: 'disabledChange' },
             { emit: 'enableBodyScrollChange' },
+            { emit: 'focusLoopEnabledChange' },
             { emit: 'heightChange' },
             { emit: 'hideEventChange' },
             { emit: 'hideOnOutsideClickChange' },

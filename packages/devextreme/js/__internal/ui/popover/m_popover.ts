@@ -191,6 +191,7 @@ class Popover<
   _initEscapeKeyHandler(): void {
     this._documentEscapeKeyHandler = (e: KeyboardEvent): void => {
       const { visible } = this.option();
+
       const overlayStack = this._overlayStack();
       const isTopOverlay = overlayStack[overlayStack.length - 1] === this;
 

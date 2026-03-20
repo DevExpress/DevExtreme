@@ -38,6 +38,7 @@ type AccessibleOptions = Pick<Properties,
   "contentTemplate" |
   "deferRendering" |
   "disabled" |
+  "focusLoopEnabled" |
   "height" |
   "hideEvent" |
   "hideOnOutsideClick" |
@@ -78,6 +79,7 @@ const componentConfig = {
     contentTemplate: {},
     deferRendering: Boolean,
     disabled: Boolean,
+    focusLoopEnabled: Boolean,
     height: [Number, String],
     hideEvent: [Object, String] as PropType<Record<string, any> | string>,
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
@@ -114,6 +116,7 @@ const componentConfig = {
     "update:contentTemplate": null,
     "update:deferRendering": null,
     "update:disabled": null,
+    "update:focusLoopEnabled": null,
     "update:height": null,
     "update:hideEvent": null,
     "update:hideOnOutsideClick": null,

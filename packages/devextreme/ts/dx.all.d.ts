@@ -25196,6 +25196,10 @@ declare module DevExpress.ui {
      */
     dragOutsideBoundary?: boolean;
     /**
+     * [descr:dxPopupOptions.focusLoopEnabled]
+     */
+    focusLoopEnabled?: boolean;
+    /**
      * [descr:dxPopupOptions.focusStateEnabled]
      */
     focusStateEnabled?: boolean;

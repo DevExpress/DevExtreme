@@ -133,6 +133,14 @@ export class DxoDataGridFilterBuilderPopupComponent extends NestedOption impleme
     }
 
     @Input()
+    get focusLoopEnabled(): boolean {
+        return this._getOption('focusLoopEnabled');
+    }
+    set focusLoopEnabled(value: boolean) {
+        this._setOption('focusLoopEnabled', value);
+    }
+
+    @Input()
     get focusStateEnabled(): boolean {
         return this._getOption('focusStateEnabled');
     }

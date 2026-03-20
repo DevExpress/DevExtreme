@@ -228,6 +228,19 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
+     * [descr:dxPopupOptions.focusLoopEnabled]
+    
+     */
+    @Input()
+    get focusLoopEnabled(): boolean {
+        return this._getOption('focusLoopEnabled');
+    }
+    set focusLoopEnabled(value: boolean) {
+        this._setOption('focusLoopEnabled', value);
+    }
+
+
+    /**
      * [descr:dxPopupOptions.focusStateEnabled]
     
      */
@@ -735,6 +748,13 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() focusLoopEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -947,6 +967,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
             { emit: 'dragEnabledChange' },
             { emit: 'dragOutsideBoundaryChange' },
             { emit: 'enableBodyScrollChange' },
+            { emit: 'focusLoopEnabledChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'fullScreenChange' },
             { emit: 'heightChange' },

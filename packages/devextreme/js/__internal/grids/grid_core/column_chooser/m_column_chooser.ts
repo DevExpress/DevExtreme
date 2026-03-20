@@ -173,7 +173,7 @@ export class ColumnChooserView extends ColumnsView {
       height: columnChooserOptions.height,
       rtlEnabled: that.option('rtlEnabled'),
       container: columnChooserOptions.container,
-      _loopFocus: true,
+      focusLoopEnabled: true,
       _ignoreCloseOnChildEscape: true,
     } as PopupProperties;
 
