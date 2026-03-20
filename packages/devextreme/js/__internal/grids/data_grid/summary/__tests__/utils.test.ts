@@ -93,14 +93,12 @@ describe('getSummaryCellIndex', () => {
 describe('getColumnFromMap', () => {
   const colA = makeColumn({ index: 0, dataField: 'fieldA' });
   const colB = makeColumn({ index: 1, dataField: 'fieldB' });
-  const getColumnMap = (): Map<string | number, Column> => (
-    new Map<string | number, Column>([
-      [0, colA],
-      ['fieldA', colA],
-      [1, colB],
-      ['fieldB', colB],
-    ])
-  );
+  const getColumnMap = (): Map<string | number, Column> => new Map<string | number, Column>([
+    [0, colA],
+    ['fieldA', colA],
+    [1, colB],
+    ['fieldB', colB],
+  ]);
 
   it('should return column by numeric index', () => {
     const columnMap = getColumnMap();

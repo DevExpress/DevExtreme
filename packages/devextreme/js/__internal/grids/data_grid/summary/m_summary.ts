@@ -544,9 +544,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
         column.name,
         column.dataField,
         column.caption,
-      ].filter((key) => (
-        key !== undefined && !columnMap.has(key)
-      ));
+      ].filter((key) => key !== undefined && !columnMap.has(key));
 
       for (const key of keys) {
         columnMap.set(key, copiedColumn);
