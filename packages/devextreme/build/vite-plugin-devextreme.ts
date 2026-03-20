@@ -37,16 +37,33 @@ function removeUninitializedClassFields(): unknown {
 function moveFieldInitializersToConstructor(): unknown {
   return {
     visitor: {
-      Class(path: { node: { body: { body: unknown[] } } }) {
+      Class(path: {
+        node: {
+          body: { body: unknown[] };
+          superClass?: unknown;
+        };
+      }) {
         const body = path.node.body.body;
 
+        type CtorParam = { type: string; name?: string; left?: { name?: string } };
+        type CtorBodyStmt = {
+          type: string;
+          expression?: {
+            type: string;
+            callee?: { type: string };
+            operator?: string;
+            left?: { type: string; object?: { type: string }; property?: { name: string } };
+            right?: { type: string; name?: string };
+          };
+        };
         type ClassMember = {
           type: string;
           kind?: string;
           key?: { name: string };
           value?: unknown;
           static?: boolean;
-          body?: { body: unknown[] };
+          params?: CtorParam[];
+          body?: { body: CtorBodyStmt[] };
         };
 
         const fieldsToMove: ClassMember[] = [];
@@ -87,7 +104,38 @@ function moveFieldInitializersToConstructor(): unknown {
           },
         }));
 
-        ctor.body!.body.push(...assignments);
+        const ctorBody = ctor.body!.body;
+
+        const paramNames = new Set(
+          (ctor.params ?? []).map((p) => p.name ?? p.left?.name).filter(Boolean),
+        );
+
+        const superCallIdx = ctorBody.findIndex(
+          (stmt) => stmt.type === 'ExpressionStatement'
+            && stmt.expression?.type === 'CallExpression'
+            && stmt.expression?.callee?.type === 'Super',
+        );
+
+        let insertIdx = superCallIdx !== -1 ? superCallIdx + 1 : 0;
+
+        while (insertIdx < ctorBody.length) {
+          const stmt = ctorBody[insertIdx];
+          if (
+            stmt.type === 'ExpressionStatement'
+            && stmt.expression?.type === 'AssignmentExpression'
+            && stmt.expression.operator === '='
+            && stmt.expression.left?.type === 'MemberExpression'
+            && stmt.expression.left.object?.type === 'ThisExpression'
+            && stmt.expression.right?.type === 'Identifier'
+            && paramNames.has(stmt.expression.right.name)
+          ) {
+            insertIdx += 1;
+          } else {
+            break;
+          }
+        }
+
+        ctorBody.splice(insertIdx, 0, ...assignments);
 
         path.node.body.body = remaining;
       },

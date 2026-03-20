@@ -9,17 +9,72 @@ import notify from '../js/ui/notify';
 import * as dialog from '../js/ui/dialog';
 import * as localization from '../js/localization';
 import * as timeZoneUtils from '../js/time_zone_utils';
+import config from '../js/core/config';
+import setTemplateEngine from '../js/core/set_template_engine';
+import { Guid } from '../js/__internal/core/m_guid';
+import {
+    getPalette,
+    registerPalette,
+    currentPalette,
+    generateColors,
+} from '../js/viz/palette';
+import repaintFloatingActionButton from '../js/ui/speed_dial_action/repaint_floating_action_button';
+import Ajax from '../js/core/utils/ajax';
+import RemoteFileSystemProvider from '../js/file_management/remote_provider';
+import { registerPattern, registerGradient } from '../js/common/charts';
 
 (window as any).$ = (window as any).jQuery = jq;
 
+const AspNet = {
+    createStore(options: any) {
+        return new CustomStore({
+            key: options.key,
+            load: (loadOptions: any) => Ajax.sendRequest({
+                url: options.loadUrl,
+                method: 'GET',
+                data: loadOptions,
+                dataType: 'json',
+            }),
+            insert: options.insertUrl ? (values: any) => Ajax.sendRequest({
+                url: options.insertUrl,
+                method: 'POST',
+                data: JSON.stringify(values),
+                contentType: 'application/json',
+                dataType: 'json',
+            }) : undefined,
+            update: options.updateUrl ? (key: any, values: any) => Ajax.sendRequest({
+                url: options.updateUrl,
+                method: 'PUT',
+                data: JSON.stringify({ key, values }),
+                contentType: 'application/json',
+                dataType: 'json',
+            }) : undefined,
+            remove: options.deleteUrl ? (key: any) => Ajax.sendRequest({
+                url: options.deleteUrl,
+                method: 'DELETE',
+                data: JSON.stringify(key),
+                contentType: 'application/json',
+                dataType: 'json',
+            }) : undefined,
+        });
+    },
+    sendRequest: (options: any) => Ajax.sendRequest(options),
+};
+
 (window as any).DevExpress = {
-    data: { ArrayStore, CustomStore, DataSource, query },
-    ui: { notify, dialog },
+    config,
+    setTemplateEngine,
+    data: { ArrayStore, CustomStore, DataSource, query, Guid, AspNet },
+    ui: { notify, dialog, repaintFloatingActionButton },
     localization,
-    utils: { getTimeZones: timeZoneUtils.getTimeZones },
+    utils: { getTimeZones: timeZoneUtils.getTimeZones, ajax: Ajax },
+    viz: { getPalette, registerPalette, currentPalette, generateColors, map: { sources: {} } },
+    fileManagement: { RemoteFileSystemProvider },
+    common: { charts: { registerPattern, registerGradient } },
 };
 
 import '../js/ui/accordion';
+import '../js/ui/card_view';
 import '../js/ui/action_sheet';
 import '../js/ui/autocomplete';
 import '../js/ui/box';
@@ -103,14 +158,15 @@ import '../js/viz/vector_map';
 
 setLicenseCheckSkipCondition();
 
-const themeLoaders = import.meta.glob('../artifacts/css/dx.*.css', { as: 'url' });
+const themeLoaders = import.meta.glob('../artifacts/css/dx.*.css', { query: '?url', import: 'default' });
 const themeId = localStorage.getItem('currentThemeId');
 const themeKey = themeId
     ? Object.keys(themeLoaders).find((p) => p.includes(`dx.${themeId}.css`))
     : Object.keys(themeLoaders)[0];
 
 if (themeKey) {
-    const url = await (themeLoaders[themeKey] as () => Promise<string>)();
+    const rawUrl = await (themeLoaders[themeKey] as () => Promise<string>)();
+    const url = new URL(rawUrl, import.meta.url).href;
     await new Promise<void>((resolve) => {
         const link = document.createElement('link');
         link.rel = 'stylesheet';

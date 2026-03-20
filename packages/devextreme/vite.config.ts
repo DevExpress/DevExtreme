@@ -5,6 +5,7 @@ import demoHtmlPlugin from './build/vite-plugin-demo-html';
 
 export default defineConfig({
   root: './playground',
+  base: './',
   plugins: [devextremeInferno(), demoHtmlPlugin()],
   esbuild: false,
   server: {
@@ -23,6 +24,20 @@ export default defineConfig({
       '@js': path.resolve(__dirname, './js'),
       '@ts': path.resolve(__dirname, './js/__internal'),
       '__internal': path.resolve(__dirname, './js/__internal'),
+    },
+  },
+  build: {
+    outDir: path.resolve(__dirname, 'dist/playground'),
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        catalog: path.resolve(__dirname, 'playground/index.html'),
+        'demo-init': path.resolve(__dirname, 'playground/demo-init.ts'),
+      },
+      output: {
+        entryFileNames: (chunk) =>
+          chunk.name === 'demo-init' ? 'demo-init.js' : 'assets/[name]-[hash].js',
+      },
     },
   },
 });

@@ -4,6 +4,10 @@ import type { PluginOption, ViteDevServer } from 'vite';
 
 const demosRoot = path.resolve(__dirname, '../../../apps/demos/Demos');
 const demosImagesRoot = path.resolve(__dirname, '../../../apps/demos/images');
+const demosDataRoot = path.resolve(__dirname, '../../../apps/demos/data');
+const demosSharedRoot = path.resolve(__dirname, '../../../apps/demos/shared');
+const mustacheRoot = path.resolve(__dirname, '../../../apps/demos/node_modules/mustache');
+const vectormapDataRoot = path.resolve(__dirname, '../artifacts/js/vectormap-data');
 const menuMetaPath = path.resolve(__dirname, '../../../apps/demos/menuMeta.json');
 
 type DemoEntry = { title: string; name: string; files: string[] };
@@ -73,6 +77,55 @@ function transformDemoHtml(html: string): string {
         .replace(/<head>/, `<head>\n  <script type="module" src="/@vite/client"></script>`);
 }
 
+function transformDemoHtmlForBuild(html: string): string {
+    const relativeScripts: string[] = [];
+
+    const scriptRe = /<script\s+src="([^"]+)"\s*><\/script>/gi;
+    let m: RegExpExecArray | null;
+    while ((m = scriptRe.exec(html)) !== null) {
+        const src = m[1];
+        if (src.includes('node_modules')) {
+            const vmMatch = src.match(/\/vectormap-data\/([^"]+)/);
+            if (vmMatch) {
+                relativeScripts.push(`../../../vectormap-data/${vmMatch[1]}`);
+                continue;
+            }
+            const mustacheMatch = src.match(/\/mustache\/(mustache(?:\.min)?\.js)/);
+            if (mustacheMatch) {
+                relativeScripts.push(`../../../mustache/${mustacheMatch[1]}`);
+                continue;
+            }
+        } else {
+            relativeScripts.push(src);
+        }
+    }
+
+    const indexIdx = relativeScripts.indexOf('index.js');
+    if (indexIdx !== -1) {
+        relativeScripts.splice(indexIdx, 1);
+        relativeScripts.push('index.js');
+    }
+
+    const loaderScript = `<script type="module">
+  import '../../../demo-init.js';
+  const srcs = ${JSON.stringify(relativeScripts)};
+  for (const src of srcs) {
+    await new Promise((resolve) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      document.body.appendChild(s);
+    });
+  }
+</script>`;
+
+    return html
+        .replace(/<script[^>]+node_modules[^>]*><\/script>/gi, '')
+        .replace(/<link[^>]+(devextreme-dist|node_modules)[^>]*>/gi, '')
+        .replace(/<script\s+src="(?!http)[^"]*\.js"[^>]*><\/script>/gi, '')
+        .replace(/<\/body>/, `${loaderScript}\n</body>`);
+}
+
 function serveFile(res: import('http').ServerResponse, filePath: string): boolean {
     if (!fs.existsSync(filePath)) return false;
     const ext = path.extname(filePath);
@@ -112,6 +165,51 @@ export default function demoHtmlPlugin(): PluginOption {
                 return `export default ${JSON.stringify({ demosRoot, demos: demosMap })}`;
             }
             return null;
+        },
+
+        writeBundle(options: { dir?: string }) {
+            const outDir = options.dir ?? 'dist';
+            const demosOut = path.join(outDir, 'demos');
+
+            if (fs.existsSync(demosImagesRoot)) {
+                fs.cpSync(demosImagesRoot, path.join(outDir, 'images'), { recursive: true });
+            }
+            if (fs.existsSync(demosDataRoot)) {
+                fs.cpSync(demosDataRoot, path.join(outDir, 'data'), { recursive: true });
+            }
+            if (fs.existsSync(demosSharedRoot)) {
+                fs.cpSync(demosSharedRoot, path.join(outDir, 'shared'), { recursive: true });
+            }
+            if (fs.existsSync(vectormapDataRoot)) {
+                fs.cpSync(vectormapDataRoot, path.join(outDir, 'vectormap-data'), { recursive: true });
+            }
+            if (fs.existsSync(mustacheRoot)) {
+                fs.mkdirSync(path.join(outDir, 'mustache'), { recursive: true });
+                const mustacheFile = path.join(mustacheRoot, 'mustache.min.js');
+                if (fs.existsSync(mustacheFile)) {
+                    fs.copyFileSync(mustacheFile, path.join(outDir, 'mustache', 'mustache.min.js'));
+                }
+            }
+
+            for (const [widget, demos] of Object.entries(demosMap)) {
+                for (const { name } of demos) {
+                    const jqueryDir = path.join(demosRoot, widget, name, 'jQuery');
+                    if (!fs.existsSync(jqueryDir)) continue;
+
+                    const demoOut = path.join(demosOut, widget, name);
+                    fs.mkdirSync(demoOut, { recursive: true });
+
+                    for (const file of fs.readdirSync(jqueryDir)) {
+                        const src = path.join(jqueryDir, file);
+                        const dest = path.join(demoOut, file);
+                        if (path.extname(file) === '.html') {
+                            fs.writeFileSync(dest, transformDemoHtmlForBuild(fs.readFileSync(src, 'utf-8')));
+                        } else {
+                            fs.copyFileSync(src, dest);
+                        }
+                    }
+                }
+            }
         },
 
         configureServer(server: ViteDevServer) {
