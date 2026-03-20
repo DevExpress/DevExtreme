@@ -267,6 +267,7 @@ class Popup<
       useDefaultToolbarButtons: false,
       useFlatToolbarButtons: false,
       autoResizeEnabled: true,
+      _ignoreCloseOnChildEscape: false,
     };
   }
 
