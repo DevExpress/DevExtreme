@@ -668,7 +668,7 @@ QUnit.module('Events', {
             dataSource: [appointment]
         });
 
-        const $element = scheduler.instance.$element();
+        const $element = $(scheduler.instance.$element());
         const initialAppointmentWidth = $element.find('.dx-scheduler-appointment').outerWidth();
 
         scheduler.instance.option('width', 400);
