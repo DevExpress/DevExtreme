@@ -830,6 +830,7 @@ export class AppointmentForm {
     const isIconItem = itemClasses.includes(CLASSES.formIcon);
 
     if (isIconItem) {
+      item.visible = showIcon;
       return;
     }
 
@@ -848,15 +849,8 @@ export class AppointmentForm {
       const groupItem = item as GroupItem;
 
       if (itemClasses.includes(CLASSES.groupWithIcon)) {
-        groupItem.items?.forEach((child) => {
-          const childClasses = (child.cssClass ?? '').split(' ');
-
-          if (childClasses.includes(CLASSES.formIcon)) {
-            child.visible = showIcon;
-          } else {
-            child.colSpan = showIcon ? 1 : 2;
-          }
-        });
+        groupItem.colCount = showIcon ? 2 : 1;
+        groupItem.colCountByScreen = { xs: showIcon ? 2 : 1 };
       }
 
       groupItem.items?.forEach((child) => {
