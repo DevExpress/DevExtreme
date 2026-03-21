@@ -1,0 +1,73 @@
+const dataSource = [{
+  age: '0-4',
+  male: -2.99,
+  female: 2.83,
+}, {
+  age: '5-9',
+  male: -2.93,
+  female: 2.77,
+}, {
+  age: '10-14',
+  male: -3.04,
+  female: 2.88,
+}, {
+  age: '15-19',
+  male: -3.24,
+  female: 3.09,
+}, {
+  age: '20-24',
+  male: -3.24,
+  female: 3.09,
+}, {
+  age: '25-29',
+  male: -3.15,
+  female: 3,
+}, {
+  age: '30-34',
+  male: -3.19,
+  female: 3.04,
+}, {
+  age: '35-39',
+  male: -3.38,
+  female: 3.24,
+}, {
+  age: '40-44',
+  male: -3.58,
+  female: 3.42,
+}, {
+  age: '45-49',
+  male: -3.38,
+  female: 3.22,
+}, {
+  age: '50-54',
+  male: -3.1,
+  female: 2.97,
+}, {
+  age: '55-59',
+  male: -2.9,
+  female: 2.83,
+}, {
+  age: '60-64',
+  male: -2.72,
+  female: 2.66,
+}, {
+  age: '65-69',
+  male: -2.34,
+  female: 2.44,
+}, {
+  age: '70-74',
+  male: -1.51,
+  female: 1.68,
+}, {
+  age: '75-79',
+  male: -1.11,
+  female: 1.38,
+}, {
+  age: '80-84',
+  male: -0.84,
+  female: 1.22,
+}, {
+  age: '85+',
+  male: -0.48,
+  female: 1.39,
+}];

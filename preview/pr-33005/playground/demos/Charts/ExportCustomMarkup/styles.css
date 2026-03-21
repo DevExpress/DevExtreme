@@ -1,0 +1,36 @@
+#chart-demo {
+  height: 460px;
+}
+
+#chart {
+  position: absolute;
+  top: 12px;
+  right: 35px;
+  width: 480px;
+  height: 347px;
+}
+
+.chart-environment {
+  width: 820px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.controls-pane {
+  text-align: center;
+}
+
+.custom-markup-text {
+  fill: #fff;
+  font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif;
+}
+
+.custom-markup-text-title {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.custom-markup-text-subtitle {
+  font-size: 14px;
+  opacity: 0.8;
+}

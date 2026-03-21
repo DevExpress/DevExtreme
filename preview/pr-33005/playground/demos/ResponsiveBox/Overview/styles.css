@@ -1,0 +1,37 @@
+.demo-container,
+#page {
+  height: 100%;
+  min-height: 300px;
+}
+
+#page .header {
+  background-color: #C6B1DE;
+  text-align: center;
+}
+
+#page .content {
+  background-color: #EDBBE7;
+}
+
+#page .left-side-bar {
+  background-color: #F9E2AE;
+}
+
+#page .right-side-bar {
+  background-color: #9FD89F;
+}
+
+#page .footer {
+  background-color: #B4D6FA;
+}
+
+.item {
+  height: 100%;
+}
+
+#page p {
+  font-size: 20px;
+  padding-top: 10px;
+  text-align: center;
+  color: #000;
+}

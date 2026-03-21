@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    
+    
+    
+    
+    
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    
+  </head>
+  <body class="dx-viewport">
+    <div class="demo-container">
+      <div class="container">
+        <div class="left-content">
+          <div id="treeview"></div>
+        </div>
+        <div class="right-content">
+          <div class="title-container">
+            <img alt="country flag" class="flag" id="country-flag" src="/" />
+            <div>
+              <div class="country-name" id="full-country-name"></div>
+              <div id="country-description"></div>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div>
+              <div class="sub-title">Area, km<sup>2</sup></div>
+              <div class="stat-value" id="country-area"></div>
+            </div>
+            <div>
+              <div class="sub-title">Population</div>
+              <div class="stat-value" id="country-population"></div>
+            </div>
+            <div>
+              <div class="sub-title">GDP, billion</div>
+              <div class="stat-value" id="country-gdp"></div>
+            </div>
+          </div>
+
+          <div class="sub-title">Largest cities</div>
+          <div id="tabpanel"></div>
+        </div>
+      </div>
+
+      <script type="text/html" id="title">
+        <span class="tab-panel-title">{{ text }}</span>
+      </script>
+
+      <script type="text/html" id="city-template">
+        <div>
+          <img alt="country flag" class="flag" src="{{ flag }}" />
+          <div class="right-content">
+            <div><b>{{ #capital }}Capital. {{ /capital }}</b>{{ description }}</div>
+            <div class="stats">
+              <div>
+                <div>Population</div>
+                <div><b>{{ population }} people</b></div>
+              </div>
+              <div>
+                <div>Area</div>
+                <div
+                  ><b>{{ area }} km<sup>2</sup></b></div
+                >
+              </div>
+              <div>
+                <div>Density</div>
+                <div
+                  ><b>{{ density }}/km<sup>2</sup></b></div
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </script>
+    </div>
+  <script type="module">
+  import '../../../demo-init.js';
+  const srcs = ["../../../mustache/mustache.min.js","data.js","index.js"];
+  for (const src of srcs) {
+    await new Promise((resolve) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      document.body.appendChild(s);
+    });
+  }
+</script>
+</body>
+</html>

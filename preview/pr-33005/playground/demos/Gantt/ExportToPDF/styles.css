@@ -1,0 +1,42 @@
+#gantt {
+  height: 700px;
+}
+
+.options {
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
+  display: flex;
+}
+
+.column {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  margin: 15px 3%;
+  text-align: left;
+}
+
+.option {
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+}
+
+.label,
+.value {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.label {
+  width: 180px;
+}
+
+.value {
+  width: 30%;
+}
+
+.caption {
+  font-size: 18px;
+  font-weight: 500;
+}

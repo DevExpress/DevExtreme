@@ -1,0 +1,9 @@
+.custom-icon .icon {
+  color: #f05b41;
+}
+
+.custom-icon {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
