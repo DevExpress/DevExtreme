@@ -124,7 +124,7 @@ function generateChartTicks(): any[] {
     let price = 150;
     for (let i = 200; i >= 0; i--) {
         price += (Math.sin(i * 0.3) + (Math.random() - 0.5)) * 1.5;
-        ticks.push({ date: new Date(now - i * 10000), price: Math.round(price * 100) / 100, volume: Math.floor(Math.random() * 10000 + 1000) });
+        ticks.push({ date: new Date(now - i * 10000).toISOString(), price: Math.round(price * 100) / 100, volume: Math.floor(Math.random() * 10000 + 1000) });
     }
     return ticks;
 }
@@ -167,7 +167,7 @@ export function patchAspNetCreateStore(AspNet: any): void {
         return new CustomStore({
             key: options.key,
             load() {
-                return Promise.resolve([...data]);
+                return Promise.resolve({ data: [...data], totalCount: data.length });
             },
             insert(values: any) {
                 const maxId = data.reduce((m: any, r: any) => Math.max(m, r[options.key] ?? 0), 0);
@@ -235,7 +235,7 @@ class FakeHubConnection {
             this._timers.push(setInterval(() => {
                 const last = CHART_TICKS[CHART_TICKS.length - 1];
                 const delta = (Math.random() - 0.48) * 2;
-                const tick = { date: new Date(), price: Math.round((last.price + delta) * 100) / 100, volume: Math.floor(Math.random() * 10000 + 1000) };
+                const tick = { date: new Date().toISOString(), price: Math.round((last.price + delta) * 100) / 100, volume: Math.floor(Math.random() * 10000 + 1000) };
                 CHART_TICKS.push(tick);
                 this._handlers.get('updateStockPrice')?.({ ...tick });
             }, 1000));
