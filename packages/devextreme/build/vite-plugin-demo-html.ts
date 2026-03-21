@@ -77,7 +77,7 @@ function transformDemoHtml(html: string): string {
         .replace(/<head>/, `<head>\n  <script type="module" src="/@vite/client"></script>`);
 }
 
-function transformDemoHtmlForBuild(html: string): string {
+function transformDemoHtmlForBuild(html: string, existingFiles?: Set<string>): string {
     const relativeScripts: string[] = [];
 
     const scriptRe = /<script\s+src="([^"]+)"\s*><\/script>/gi;
@@ -95,7 +95,7 @@ function transformDemoHtmlForBuild(html: string): string {
                 relativeScripts.push(`../../../mustache/${mustacheMatch[1]}`);
                 continue;
             }
-        } else {
+        } else if (!existingFiles || existingFiles.has(path.basename(src))) {
             relativeScripts.push(src);
         }
     }
@@ -123,7 +123,8 @@ function transformDemoHtmlForBuild(html: string): string {
         .replace(/<script[^>]+node_modules[^>]*><\/script>/gi, '')
         .replace(/<link[^>]+(devextreme-dist|node_modules)[^>]*>/gi, '')
         .replace(/<script\s+src="(?!http)[^"]*\.js"[^>]*><\/script>/gi, '')
-        .replace(/<\/body>/, `${loaderScript}\n</body>`);
+        .replace(/<\/body>/, `${loaderScript}\n</body>`)
+        .replaceAll('../../../../', '../../../');
 }
 
 function serveFile(res: import('http').ServerResponse, filePath: string): boolean {
@@ -210,7 +211,8 @@ export default function demoHtmlPlugin(): PluginOption {
                         const dest = path.join(demoOut, file);
                         const ext = path.extname(file);
                         if (ext === '.html') {
-                            fs.writeFileSync(dest, transformDemoHtmlForBuild(fs.readFileSync(src, 'utf-8')));
+                            const existingFiles = new Set(fs.readdirSync(jqueryDir));
+                            fs.writeFileSync(dest, transformDemoHtmlForBuild(fs.readFileSync(src, 'utf-8'), existingFiles));
                         } else if (ext === '.js' || ext === '.css') {
                             fs.writeFileSync(dest, fs.readFileSync(src, 'utf-8').replaceAll('../../../../', '../../../'));
                         } else {

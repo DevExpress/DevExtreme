@@ -24,7 +24,7 @@ interface RecentDemo { widget: string; name: string }
 const widgetGroups: { label: string; ids: WidgetId[] }[] = [
     {
         label: 'Grids',
-        ids: ['dataGrid', 'treeList', 'filterBuilder', 'sortable', 'draggable'],
+        ids: ['dataGrid', 'cardView', 'treeList', 'filterBuilder', 'sortable', 'draggable'],
     },
     {
         label: 'Scheduler',

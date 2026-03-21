@@ -8,6 +8,7 @@ import '../../js/ui/box';
 import '../../js/ui/button';
 import '../../js/ui/button_group';
 import '../../js/ui/calendar';
+import '../../js/ui/card_view';
 import '../../js/ui/chat';
 import '../../js/ui/check_box';
 import '../../js/ui/color_box';
@@ -174,6 +175,19 @@ export const registry: Record<WidgetId, RegistryEntry> = {
     calendar: {
         label: 'Calendar',
         init: ($el) => dx($el).dxCalendar({ value: new Date(), width: 280 }),
+    },
+    cardView: {
+        label: 'CardView',
+        init: ($el) => dx($el).dxCardView({
+            dataSource: [
+                { id: 1, name: 'Alice', city: 'London', age: 32 },
+                { id: 2, name: 'Bob', city: 'Paris', age: 25 },
+                { id: 3, name: 'Carol', city: 'Berlin', age: 41 },
+            ],
+            keyExpr: 'id',
+            columns: ['name', 'city', 'age'],
+            height: 400,
+        }),
     },
     chat: {
         label: 'Chat',

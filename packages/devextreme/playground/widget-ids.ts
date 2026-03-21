@@ -1,6 +1,6 @@
 export const widgetIds = [
     'accordion', 'actionSheet', 'autocomplete', 'barGauge', 'box',
-    'bullet', 'button', 'buttonGroup', 'calendar', 'chat', 'checkBox',
+    'bullet', 'button', 'buttonGroup', 'calendar', 'cardView', 'chat', 'checkBox',
     'chart', 'circularGauge', 'colorBox', 'contextMenu', 'dataGrid',
     'dateBox', 'dateRangeBox', 'diagram', 'draggable', 'drawer',
     'dropDownBox', 'dropDownButton', 'fileManager', 'fileUploader',
