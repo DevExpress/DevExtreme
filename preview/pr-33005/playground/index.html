@@ -272,15 +272,38 @@
         }
         .btn-pin-demo-header:hover { color: #666; }
         .btn-pin-demo-header.pinned { color: #888; }
+
+        .demo-search-results {
+            list-style: none;
+            padding: 0;
+            margin: 1px 0 2px 20px;
+        }
+        .demo-search-link {
+            display: block;
+            padding: 2px 12px 2px 8px;
+            font-size: 11px;
+            color: #0d6efd;
+            text-decoration: none;
+            border-left: 2px solid #dce8ff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .demo-search-link:hover { background: #f0f5ff; border-left-color: #0d6efd; }
+        .demo-search-link.active { background: #0d6efd; color: #fff; border-left-color: #0d6efd; }
+        .group-list li:has(.demo-search-results) { flex-wrap: wrap; }
+        .group-list li:has(.demo-search-results) > a,
+        .group-list li:has(.demo-search-results) > button { flex-shrink: 0; }
+        .group-list li:has(.demo-search-results) > .demo-search-results { width: 100%; }
     </style>
-  <script type="module" crossorigin src="./assets/catalog-D8D-o5XU.js"></script>
+  <script type="module" crossorigin src="./assets/catalog-jVhn867v.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/preload-helper-LFsGM7aE.js">
 </head>
 <body class="dx-viewport">
     <div id="sidebar">
         <h2>DevExtreme</h2>
         <select id="theme-selector"></select>
-        <input id="search" type="search" placeholder="Filter widgets…">
+        <input id="search" type="search" placeholder="Search widgets &amp; demos…">
         <div id="sidebar-scroll">
             <div id="pinned-section" style="display:none">
                 <div class="section-label">Pinned</div>
