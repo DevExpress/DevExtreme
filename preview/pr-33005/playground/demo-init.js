@@ -25,16 +25,99 @@ const localization = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProper
 }, Symbol.toStringTag, { value: 'Module' }));
 
 const MOCK_BASE = 'https://js.devexpress.com/Demos/NetCore/';
+const SETTINGS_KEY = 'dx-fake-server-settings';
+
+// ---- Settings ----
+
+const DELAY_STEPS = [0, 50, 100, 300, 1000, 3000, 10000];
+const INTERVAL_STEPS = [100, 200, 400, 1000, 2000, 5000];
+function getSettings() {
+  try {
+    return JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? 'null') ?? {
+      delay: 0,
+      interval: 400
+    };
+  } catch {
+    return {
+      delay: 0,
+      interval: 400
+    };
+  }
+}
+function saveSettings(s) {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+}
+function formatMs(ms) {
+  if (ms === 0) return 'instant';
+  if (ms >= 1000) return `${ms / 1000}s`;
+  return `${ms}ms`;
+}
+function delayedResolve(value) {
+  const ms = getSettings().delay;
+  if (ms === 0) return Promise.resolve(value);
+  return new Promise(resolve => setTimeout(() => resolve(value), ms));
+}
 
 // ---- Banner ----
 
+function makeSlider(labelText, steps, initialIdx, onChange) {
+  const container = document.createElement('label');
+  container.style.cssText = 'display:flex;flex-direction:column;gap:3px;';
+  const lbl = document.createElement('span');
+  const valSpan = document.createElement('b');
+  valSpan.textContent = formatMs(steps[initialIdx]);
+  lbl.appendChild(document.createTextNode(`${labelText}: `));
+  lbl.appendChild(valSpan);
+  const input = document.createElement('input');
+  input.type = 'range';
+  input.min = '0';
+  input.max = String(steps.length - 1);
+  input.step = '1';
+  input.value = String(initialIdx);
+  input.style.cssText = 'width:100%;accent-color:#c8a000;';
+  input.oninput = () => {
+    const v = steps[parseInt(input.value)];
+    valSpan.textContent = formatMs(v);
+    onChange(v);
+  };
+  container.appendChild(lbl);
+  container.appendChild(input);
+  return container;
+}
 function showBanner() {
   if (document.getElementById('dx-fake-server-banner')) return;
-  const el = document.createElement('div');
-  el.id = 'dx-fake-server-banner';
-  el.style.cssText = ['position:fixed;top:0;left:0;right:0;z-index:99999', 'background:#fff3cd;border-bottom:2px solid #e6a817', 'color:#664d03;padding:5px 16px', 'font:12px/1.6 -apple-system,BlinkMacSystemFont,sans-serif', 'text-align:center;pointer-events:none'].join(';');
-  el.innerHTML = '&#9888;&nbsp;<b>Simulated server</b> &mdash; data is generated locally and changes are not persisted.';
-  document.body.appendChild(el);
+  const s = getSettings();
+  const delayIdx = Math.max(0, DELAY_STEPS.indexOf(s.delay));
+  const intervalIdx = Math.max(0, INTERVAL_STEPS.indexOf(s.interval));
+  const wrap = document.createElement('div');
+  wrap.id = 'dx-fake-server-banner';
+  wrap.style.cssText = ['position:fixed;top:0;left:0;right:0;z-index:99999', 'font:12px/1.5 -apple-system,BlinkMacSystemFont,sans-serif', 'box-shadow:0 2px 6px rgba(0,0,0,0.12)'].join(';');
+  const bar = document.createElement('div');
+  bar.style.cssText = 'background:#fff3cd;border-bottom:1px solid #e6a817;color:#664d03;padding:5px 12px;display:flex;align-items:center;gap:8px;';
+  const msg = document.createElement('span');
+  msg.style.flex = '1';
+  msg.innerHTML = '&#9888;&nbsp;<b>Simulated server</b> &mdash; data is generated locally, changes are not persisted.';
+  const toggleBtn = document.createElement('button');
+  toggleBtn.style.cssText = 'background:none;border:1px solid #c8a000;border-radius:3px;color:#664d03;cursor:pointer;font-size:11px;padding:2px 8px;line-height:1.4;';
+  toggleBtn.textContent = '⚙ Settings';
+  bar.appendChild(msg);
+  bar.appendChild(toggleBtn);
+  const panel = document.createElement('div');
+  panel.style.cssText = ['display:none;background:#fffbe6;border-bottom:2px solid #e6a817', 'color:#664d03;padding:8px 16px', 'grid-template-columns:1fr 1fr;gap:6px 24px'].join(';');
+  panel.appendChild(makeSlider('Response delay', DELAY_STEPS, delayIdx, v => saveSettings({
+    ...getSettings(),
+    delay: v
+  })));
+  panel.appendChild(makeSlider('Update interval', INTERVAL_STEPS, intervalIdx, v => saveSettings({
+    ...getSettings(),
+    interval: v
+  })));
+  toggleBtn.onclick = () => {
+    panel.style.display = panel.style.display === 'none' ? 'grid' : 'none';
+  };
+  wrap.appendChild(bar);
+  wrap.appendChild(panel);
+  document.body.appendChild(wrap);
 }
 
 // ---- Mock data ----
@@ -368,6 +451,17 @@ const DIAGRAM_EMPLOYEES = [{
   HireDate: '2012-07-09',
   HeadID: 6
 }];
+const PRODUCT_CATEGORIES = ['Beverages', 'Condiments', 'Confections', 'Dairy Products', 'Grains/Cereals', 'Meat/Poultry', 'Produce', 'Seafood'];
+const PRODUCT_NAMES = ['Chai', 'Chang', 'Aniseed Syrup', 'Chef Anton\'s Cajun Seasoning', 'Grandma\'s Boysenberry Spread', 'Uncle Bob\'s Organic Dried Pears', 'Queso Cabrales', 'Queso Manchego La Pastora', 'Konbu', 'Tofu', 'Genen Shouyu', 'Pavlova', 'Alice Mutton', 'Carnarvon Tigers', 'Teatime Chocolate Biscuits', 'Sir Rodney\'s Marmalade', 'Sir Rodney\'s Scones', 'Gustaf\'s Knäckebröd', 'Tunnbröd', 'Guaraná Fantástica'];
+const LIST_DATA = PRODUCT_NAMES.map((name, i) => ({
+  ProductID: i + 1,
+  ProductName: name,
+  UnitPrice: Math.round(((i * 3.7 + 8) % 150 + 5) * 100) / 100,
+  Category: {
+    CategoryName: PRODUCT_CATEGORIES[i % PRODUCT_CATEGORIES.length]
+  },
+  UnitsInStock: (i * 7 + 3) % 120
+}));
 const COLLABORATIVE_ROWS = Array.from({
   length: 20
 }, (_, i) => ({
@@ -420,6 +514,7 @@ function getStoreData(loadUrl, method) {
   if (loadUrl.includes('/SchedulerData') || loadUrl.includes('/SchedulerSignalR')) return APPOINTMENTS;
   if (loadUrl.includes('/DiagramEmployees/Employees')) return DIAGRAM_EMPLOYEES;
   if (loadUrl.includes('/DataGridCollaborativeEditing')) return COLLABORATIVE_ROWS;
+  if (loadUrl.includes('/api/ListData')) return LIST_DATA;
   return null;
 }
 function isMockUrl(url) {
@@ -439,7 +534,7 @@ function patchAspNetCreateStore(AspNet) {
     return new CustomStore({
       key: options.key,
       load() {
-        return Promise.resolve({
+        return delayedResolve({
           data: [...data],
           totalCount: data.length
         });
@@ -451,17 +546,17 @@ function patchAspNetCreateStore(AspNet) {
           ...values
         };
         data.push(item);
-        return Promise.resolve(item);
+        return delayedResolve(item);
       },
       update(key, values) {
         const idx = data.findIndex(r => r[options.key] === key);
         if (idx !== -1) Object.assign(data[idx], values);
-        return Promise.resolve(data[idx]);
+        return delayedResolve(data[idx]);
       },
       remove(key) {
         const idx = data.findIndex(r => r[options.key] === key);
         if (idx !== -1) data.splice(idx, 1);
-        return Promise.resolve();
+        return delayedResolve(undefined);
       }
     });
   };
@@ -479,6 +574,9 @@ class FakeHubConnection {
     this._handlers.set(event, handler);
   }
   async invoke(method) {
+    const ms = getSettings().delay;
+    const wait = ms > 0 ? new Promise(r => setTimeout(r, ms)) : Promise.resolve();
+    await wait;
     if (this._url.includes('liveUpdateSignalRHub') && method === 'getAllStocks') {
       return [...STOCKS];
     }
@@ -490,7 +588,7 @@ class FakeHubConnection {
   async start() {
     showBanner();
     if (this._url.includes('liveUpdateSignalRHub')) {
-      this._timers.push(setInterval(() => {
+      const tick = () => {
         const stock = STOCKS[Math.floor(Math.random() * STOCKS.length)];
         const delta = (Math.random() - 0.48) * stock.price * 0.005;
         stock.price = Math.round((stock.price + delta) * 10000) / 10000;
@@ -502,26 +600,30 @@ class FakeHubConnection {
         this._handlers.get('updateStockPrice')?.({
           ...stock
         });
-      }, 400));
+        this._timers.push(setTimeout(tick, getSettings().interval));
+      };
+      this._timers.push(setTimeout(tick, getSettings().interval));
     }
     if (this._url.includes('stockTickDataHub')) {
-      this._timers.push(setInterval(() => {
+      const tick = () => {
         const last = CHART_TICKS[CHART_TICKS.length - 1];
         const delta = (Math.random() - 0.48) * 2;
-        const tick = {
+        const item = {
           date: new Date().toISOString(),
           price: Math.round((last.price + delta) * 100) / 100,
           volume: Math.floor(Math.random() * 10000 + 1000)
         };
-        CHART_TICKS.push(tick);
+        CHART_TICKS.push(item);
         this._handlers.get('updateStockPrice')?.({
-          ...tick
+          ...item
         });
-      }, 1000));
+        this._timers.push(setTimeout(tick, getSettings().interval));
+      };
+      this._timers.push(setTimeout(tick, getSettings().interval));
     }
   }
   async stop() {
-    this._timers.forEach(clearInterval);
+    this._timers.forEach(clearTimeout);
     this._timers = [];
   }
 }
@@ -597,6 +699,14 @@ const AspNet = {
 };
 patchAspNetCreateStore(AspNet);
 setupFakeSignalR();
+function AiIntegrationStub(_options) {
+  const noop = () => Promise.resolve(null);
+  const methods = ['changeStyle', 'changeTone', 'execute', 'expand', 'proofread', 'shorten', 'summarize', 'translate', 'smartPaste', 'generateGridColumn', 'dispose'];
+  const inst = {
+    ...Object.fromEntries(methods.map(m => [m, noop]))
+  };
+  return inst;
+}
 window.DevExpress = {
   config: configMethod,
   setTemplateEngine,
@@ -635,7 +745,8 @@ window.DevExpress = {
       registerPattern,
       registerGradient
     }
-  }
+  },
+  aiIntegration: AiIntegrationStub
 };
 setLicenseCheckSkipCondition();
 const themeLoaders = /* #__PURE__ */ Object.assign({"../artifacts/css/dx.carmine.compact.css": () => __vitePreload(() => import('./assets/dx.carmine.compact-YllJu5_J.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.carmine.css": () => __vitePreload(() => import('./assets/dx.carmine-C1YYn_Pr.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.common.css": () => __vitePreload(() => import('./assets/dx.common-Cph7l5t5.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.contrast.compact.css": () => __vitePreload(() => import('./assets/dx.contrast.compact-Bdix6ycS.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.contrast.css": () => __vitePreload(() => import('./assets/dx.contrast-CCJfr63A.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.dark.compact.css": () => __vitePreload(() => import('./assets/dx.dark.compact-O6E787Fw.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.dark.css": () => __vitePreload(() => import('./assets/dx.dark-DcMkMmJv.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.darkmoon.compact.css": () => __vitePreload(() => import('./assets/dx.darkmoon.compact-QaEi2_DF.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.darkmoon.css": () => __vitePreload(() => import('./assets/dx.darkmoon-CkY3vlwz.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.darkviolet.compact.css": () => __vitePreload(() => import('./assets/dx.darkviolet.compact-BP06fhf-.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.darkviolet.css": () => __vitePreload(() => import('./assets/dx.darkviolet-BUVSS95y.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.fluent.blue.dark.compact.css": () => __vitePreload(() => import('./assets/dx.fluent.blue.dark.compact-BmKrEcsK.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.fluent.blue.dark.css": () => __vitePreload(() => import('./assets/dx.fluent.blue.dark-DPzmpIFd.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.fluent.blue.light.compact.css": () => __vitePreload(() => import('./assets/dx.fluent.blue.light.compact-5EkRDMg7.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.fluent.blue.light.css": () => __vitePreload(() => import('./assets/dx.fluent.blue.light-DwYbJb6s.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.fluent.saas.dark.compact.css": () => __vitePreload(() => import('./assets/dx.fluent.saas.dark.compact-D_zm3SEh.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.fluent.saas.dark.css": () => __vitePreload(() => import('./assets/dx.fluent.saas.dark-DaH3pB9D.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.fluent.saas.light.compact.css": () => __vitePreload(() => import('./assets/dx.fluent.saas.light.compact-CHQH74Ou.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.fluent.saas.light.css": () => __vitePreload(() => import('./assets/dx.fluent.saas.light-C5tQaRIq.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.greenmist.compact.css": () => __vitePreload(() => import('./assets/dx.greenmist.compact-DNm8tlcv.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.greenmist.css": () => __vitePreload(() => import('./assets/dx.greenmist-CYyv6lLW.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.light.compact.css": () => __vitePreload(() => import('./assets/dx.light.compact-DxXnqUJb.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.light.css": () => __vitePreload(() => import('./assets/dx.light-DNFvzA8L.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.blue.dark.compact.css": () => __vitePreload(() => import('./assets/dx.material.blue.dark.compact-D2SaaS3r.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.blue.dark.css": () => __vitePreload(() => import('./assets/dx.material.blue.dark-LMYrcgv3.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.blue.light.compact.css": () => __vitePreload(() => import('./assets/dx.material.blue.light.compact-D-yGg2P5.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.blue.light.css": () => __vitePreload(() => import('./assets/dx.material.blue.light-JGZJeQXZ.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.lime.dark.compact.css": () => __vitePreload(() => import('./assets/dx.material.lime.dark.compact-DreUfwQE.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.lime.dark.css": () => __vitePreload(() => import('./assets/dx.material.lime.dark-BIdf2ltL.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.lime.light.compact.css": () => __vitePreload(() => import('./assets/dx.material.lime.light.compact-BhZppYYb.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.lime.light.css": () => __vitePreload(() => import('./assets/dx.material.lime.light-DwNfNtE3.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.orange.dark.compact.css": () => __vitePreload(() => import('./assets/dx.material.orange.dark.compact-CsEKtEmX.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.orange.dark.css": () => __vitePreload(() => import('./assets/dx.material.orange.dark-z32eD6ru.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.orange.light.compact.css": () => __vitePreload(() => import('./assets/dx.material.orange.light.compact-_L81zkS6.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.orange.light.css": () => __vitePreload(() => import('./assets/dx.material.orange.light-_ROrgN8j.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.purple.dark.compact.css": () => __vitePreload(() => import('./assets/dx.material.purple.dark.compact-B12LVY9h.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.purple.dark.css": () => __vitePreload(() => import('./assets/dx.material.purple.dark-CHqDA5WC.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.purple.light.compact.css": () => __vitePreload(() => import('./assets/dx.material.purple.light.compact-BkB2Q6qf.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.purple.light.css": () => __vitePreload(() => import('./assets/dx.material.purple.light-CHcMxH3e.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.teal.dark.compact.css": () => __vitePreload(() => import('./assets/dx.material.teal.dark.compact-C6boEXn3.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.teal.dark.css": () => __vitePreload(() => import('./assets/dx.material.teal.dark-leicWruz.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.teal.light.compact.css": () => __vitePreload(() => import('./assets/dx.material.teal.light.compact-rKSjL-pp.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.material.teal.light.css": () => __vitePreload(() => import('./assets/dx.material.teal.light-IwM9xBmn.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.softblue.compact.css": () => __vitePreload(() => import('./assets/dx.softblue.compact-QiUNrA2R.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"]),"../artifacts/css/dx.softblue.css": () => __vitePreload(() => import('./assets/dx.softblue-CD3XC5nY.js'),true              ?[]:void 0,import.meta.url).then(m => m["default"])
