@@ -225,13 +225,17 @@ function buildNav(filter: string): void {
     const $nav = $('#groups-nav');
     $nav.empty();
     const lc = filter.toLowerCase();
-    const currentId = location.hash.slice(1);
+    const currentHash = location.hash.slice(1);
 
     widgetGroups.forEach((group) => {
         const matching = group.ids.filter((id) => {
             if (!registry[id]) return false;
             if (!lc) return true;
-            return registry[id].label.toLowerCase().includes(lc) || id.toLowerCase().includes(lc);
+            const widgetMatches = registry[id].label.toLowerCase().includes(lc) || id.toLowerCase().includes(lc);
+            const demoMatches = (demosMap[getWidgetName(id as WidgetId)] ?? []).some(
+                (d) => d.title.toLowerCase().includes(lc) || d.name.toLowerCase().includes(lc),
+            );
+            return widgetMatches || demoMatches;
         });
 
         if (matching.length === 0) return;
@@ -245,7 +249,7 @@ function buildNav(filter: string): void {
             $('<a>')
                 .attr('href', `#${id}`)
                 .text(registry[id].label)
-                .toggleClass('active', id === currentId)
+                .toggleClass('active', id === currentHash)
                 .appendTo($li);
             $('<button class="btn-pin" title="Pin">')
                 .text('◈')
@@ -255,6 +259,26 @@ function buildNav(filter: string): void {
                     togglePin(id);
                 })
                 .appendTo($li);
+
+            if (lc) {
+                const widgetName = getWidgetName(id as WidgetId);
+                const widgetMatches = registry[id].label.toLowerCase().includes(lc) || id.toLowerCase().includes(lc);
+                const matchingDemos = (demosMap[widgetName] ?? []).filter(
+                    (d) => d.title.toLowerCase().includes(lc) || d.name.toLowerCase().includes(lc),
+                );
+                if (!widgetMatches && matchingDemos.length > 0) {
+                    const $demos = $('<ul class="demo-search-results">').appendTo($li);
+                    matchingDemos.forEach((d) => {
+                        const hash = `demo/${widgetName}/${d.name}`;
+                        $('<li>').append(
+                            $('<a class="demo-search-link">')
+                                .attr('href', `#${hash}`)
+                                .toggleClass('active', currentHash === hash)
+                                .text(d.title),
+                        ).appendTo($demos);
+                    });
+                }
+            }
         });
     });
 }
