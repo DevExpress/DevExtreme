@@ -1,6 +1,7 @@
 import jq from 'jquery';
 import '../js/integration/jquery';
 import { setLicenseCheckSkipCondition } from '../js/__internal/core/license/license_validation';
+import { patchAspNetCreateStore, setupFakeSignalR } from './fake-server';
 import ArrayStore from '../js/data/array_store';
 import CustomStore from '../js/data/custom_store';
 import DataSource from '../js/data/data_source';
@@ -60,6 +61,9 @@ const AspNet = {
     },
     sendRequest: (options: any) => Ajax.sendRequest(options),
 };
+
+patchAspNetCreateStore(AspNet);
+setupFakeSignalR();
 
 (window as any).DevExpress = {
     config,
