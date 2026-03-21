@@ -151,9 +151,14 @@ export default function demoHtmlPlugin(): PluginOption {
     const demosMap = buildDemosMap();
     const VIRTUAL_ID = 'virtual:demos-meta';
     const RESOLVED_ID = `\0${VIRTUAL_ID}`;
+    let isBuild = false;
 
     return {
         name: 'devextreme-demo-html',
+
+        configResolved(config: { command: string }) {
+            isBuild = config.command === 'build';
+        },
 
         resolveId(id: string) {
             if (id === VIRTUAL_ID) return RESOLVED_ID;
@@ -162,7 +167,8 @@ export default function demoHtmlPlugin(): PluginOption {
 
         load(id: string) {
             if (id === RESOLVED_ID) {
-                return `export default ${JSON.stringify({ demosRoot, demos: demosMap })}`;
+                const root = isBuild ? '' : demosRoot;
+                return `export default ${JSON.stringify({ demosRoot: root, demos: demosMap })}`;
             }
             return null;
         },

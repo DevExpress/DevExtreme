@@ -325,7 +325,7 @@ function loadDemo(widget: string, name: string): void {
 
     $container.empty();
 
-    if (entry?.files.length) {
+    if (demosRoot && entry?.files.length) {
         const jqueryDir = `${demosRoot}/${widget}/${name}/jQuery`;
         const $bar = $('<div class="demo-files-bar">').appendTo($container);
         $('<span class="demo-files-label">').text('Source:').appendTo($bar);
@@ -338,7 +338,7 @@ function loadDemo(widget: string, name: string): void {
     }
 
     $('<iframe>')
-        .attr('src', `/demos/${widget}/${name}/`)
+        .attr('src', `demos/${widget}/${name}/`)
         .css({ width: '100%', border: 'none', display: 'block', flex: '1' })
         .appendTo($container);
 
