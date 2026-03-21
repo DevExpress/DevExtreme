@@ -1,6 +1,6 @@
 const data = [
   {
-    text: 'Website Re-Design Plan',
+    text: 'Webapp Re-Design Plan',
     startDate: new Date('2021-04-26T16:30:00.000Z'),
     endDate: new Date('2021-04-26T18:30:00.000Z'),
   }, {

@@ -399,7 +399,7 @@ function generateChartTicks() {
   for (let i = 200; i >= 0; i--) {
     price += (Math.sin(i * 0.3) + (Math.random() - 0.5)) * 1.5;
     ticks.push({
-      date: new Date(now - i * 10000),
+      date: new Date(now - i * 10000).toISOString(),
       price: Math.round(price * 100) / 100,
       volume: Math.floor(Math.random() * 10000 + 1000)
     });
@@ -439,7 +439,10 @@ function patchAspNetCreateStore(AspNet) {
     return new CustomStore({
       key: options.key,
       load() {
-        return Promise.resolve([...data]);
+        return Promise.resolve({
+          data: [...data],
+          totalCount: data.length
+        });
       },
       insert(values) {
         const maxId = data.reduce((m, r) => Math.max(m, r[options.key] ?? 0), 0);
@@ -506,7 +509,7 @@ class FakeHubConnection {
         const last = CHART_TICKS[CHART_TICKS.length - 1];
         const delta = (Math.random() - 0.48) * 2;
         const tick = {
-          date: new Date(),
+          date: new Date().toISOString(),
           price: Math.round((last.price + delta) * 100) / 100,
           volume: Math.floor(Math.random() * 10000 + 1000)
         };
