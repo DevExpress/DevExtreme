@@ -208,8 +208,11 @@ export default function demoHtmlPlugin(): PluginOption {
                     for (const file of fs.readdirSync(jqueryDir)) {
                         const src = path.join(jqueryDir, file);
                         const dest = path.join(demoOut, file);
-                        if (path.extname(file) === '.html') {
+                        const ext = path.extname(file);
+                        if (ext === '.html') {
                             fs.writeFileSync(dest, transformDemoHtmlForBuild(fs.readFileSync(src, 'utf-8')));
+                        } else if (ext === '.js' || ext === '.css') {
+                            fs.writeFileSync(dest, fs.readFileSync(src, 'utf-8').replaceAll('../../../../', '../../../'));
                         } else {
                             fs.copyFileSync(src, dest);
                         }
