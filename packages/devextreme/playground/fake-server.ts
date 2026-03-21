@@ -1,22 +1,133 @@
 import CustomStore from '../js/data/custom_store';
 
 const MOCK_BASE = 'https://js.devexpress.com/Demos/NetCore/';
+const SETTINGS_KEY = 'dx-fake-server-settings';
+
+// ---- Settings ----
+
+interface FakeServerSettings {
+    delay: number;
+    interval: number;
+}
+
+const DELAY_STEPS = [0, 50, 100, 300, 1000, 3000, 10000];
+const INTERVAL_STEPS = [100, 200, 400, 1000, 2000, 5000];
+
+function getSettings(): FakeServerSettings {
+    try {
+        return JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? 'null') ?? { delay: 0, interval: 400 };
+    } catch {
+        return { delay: 0, interval: 400 };
+    }
+}
+
+function saveSettings(s: FakeServerSettings): void {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+}
+
+function formatMs(ms: number): string {
+    if (ms === 0) return 'instant';
+    if (ms >= 1000) return `${ms / 1000}s`;
+    return `${ms}ms`;
+}
+
+function delayedResolve<T>(value: T): Promise<T> {
+    const ms = getSettings().delay;
+    if (ms === 0) return Promise.resolve(value);
+    return new Promise((resolve) => setTimeout(() => resolve(value), ms));
+}
 
 // ---- Banner ----
 
+function makeSlider(
+    labelText: string,
+    steps: number[],
+    initialIdx: number,
+    onChange: (val: number) => void,
+): HTMLElement {
+    const container = document.createElement('label');
+    container.style.cssText = 'display:flex;flex-direction:column;gap:3px;';
+
+    const lbl = document.createElement('span');
+    const valSpan = document.createElement('b');
+    valSpan.textContent = formatMs(steps[initialIdx]);
+    lbl.appendChild(document.createTextNode(`${labelText}: `));
+    lbl.appendChild(valSpan);
+
+    const input = document.createElement('input');
+    input.type = 'range';
+    input.min = '0';
+    input.max = String(steps.length - 1);
+    input.step = '1';
+    input.value = String(initialIdx);
+    input.style.cssText = 'width:100%;accent-color:#c8a000;';
+    input.oninput = () => {
+        const v = steps[parseInt(input.value)];
+        valSpan.textContent = formatMs(v);
+        onChange(v);
+    };
+
+    container.appendChild(lbl);
+    container.appendChild(input);
+    return container;
+}
+
 function showBanner(): void {
     if (document.getElementById('dx-fake-server-banner')) return;
-    const el = document.createElement('div');
-    el.id = 'dx-fake-server-banner';
-    el.style.cssText = [
+
+    const s = getSettings();
+    const delayIdx = Math.max(0, DELAY_STEPS.indexOf(s.delay));
+    const intervalIdx = Math.max(0, INTERVAL_STEPS.indexOf(s.interval));
+
+    const wrap = document.createElement('div');
+    wrap.id = 'dx-fake-server-banner';
+    wrap.style.cssText = [
         'position:fixed;top:0;left:0;right:0;z-index:99999',
-        'background:#fff3cd;border-bottom:2px solid #e6a817',
-        'color:#664d03;padding:5px 16px',
-        'font:12px/1.6 -apple-system,BlinkMacSystemFont,sans-serif',
-        'text-align:center;pointer-events:none',
+        'font:12px/1.5 -apple-system,BlinkMacSystemFont,sans-serif',
+        'box-shadow:0 2px 6px rgba(0,0,0,0.12)',
     ].join(';');
-    el.innerHTML = '&#9888;&nbsp;<b>Simulated server</b> &mdash; data is generated locally and changes are not persisted.';
-    document.body.appendChild(el);
+
+    const bar = document.createElement('div');
+    bar.style.cssText = 'background:#fff3cd;border-bottom:1px solid #e6a817;color:#664d03;padding:5px 12px;display:flex;align-items:center;gap:8px;';
+
+    const msg = document.createElement('span');
+    msg.style.flex = '1';
+    msg.innerHTML = '&#9888;&nbsp;<b>Simulated server</b> &mdash; data is generated locally, changes are not persisted.';
+
+    const toggleBtn = document.createElement('button');
+    toggleBtn.style.cssText = 'background:none;border:1px solid #c8a000;border-radius:3px;color:#664d03;cursor:pointer;font-size:11px;padding:2px 8px;line-height:1.4;';
+    toggleBtn.textContent = '⚙ Settings';
+
+    bar.appendChild(msg);
+    bar.appendChild(toggleBtn);
+
+    const panel = document.createElement('div');
+    panel.style.cssText = [
+        'display:none;background:#fffbe6;border-bottom:2px solid #e6a817',
+        'color:#664d03;padding:8px 16px',
+        'grid-template-columns:1fr 1fr;gap:6px 24px',
+    ].join(';');
+
+    panel.appendChild(makeSlider(
+        'Response delay',
+        DELAY_STEPS,
+        delayIdx,
+        (v) => saveSettings({ ...getSettings(), delay: v }),
+    ));
+    panel.appendChild(makeSlider(
+        'Update interval',
+        INTERVAL_STEPS,
+        intervalIdx,
+        (v) => saveSettings({ ...getSettings(), interval: v }),
+    ));
+
+    toggleBtn.onclick = () => {
+        panel.style.display = panel.style.display === 'none' ? 'grid' : 'none';
+    };
+
+    wrap.appendChild(bar);
+    wrap.appendChild(panel);
+    document.body.appendChild(wrap);
 }
 
 // ---- Mock data ----
@@ -103,6 +214,21 @@ const DIAGRAM_EMPLOYEES: any[] = [
     { ID: 10, FullName: 'Kent Nelson', Prefix: 'Mr.', Title: 'Jr. Developer', City: 'Atlanta', State: 'GA', HireDate: '2012-07-09', HeadID: 6 },
 ];
 
+const PRODUCT_CATEGORIES = ['Beverages', 'Condiments', 'Confections', 'Dairy Products', 'Grains/Cereals', 'Meat/Poultry', 'Produce', 'Seafood'];
+const PRODUCT_NAMES = [
+    'Chai', 'Chang', 'Aniseed Syrup', 'Chef Anton\'s Cajun Seasoning', 'Grandma\'s Boysenberry Spread',
+    'Uncle Bob\'s Organic Dried Pears', 'Queso Cabrales', 'Queso Manchego La Pastora', 'Konbu', 'Tofu',
+    'Genen Shouyu', 'Pavlova', 'Alice Mutton', 'Carnarvon Tigers', 'Teatime Chocolate Biscuits',
+    'Sir Rodney\'s Marmalade', 'Sir Rodney\'s Scones', 'Gustaf\'s Knäckebröd', 'Tunnbröd', 'Guaraná Fantástica',
+];
+const LIST_DATA: any[] = PRODUCT_NAMES.map((name, i) => ({
+    ProductID: i + 1,
+    ProductName: name,
+    UnitPrice: Math.round(((i * 3.7 + 8) % 150 + 5) * 100) / 100,
+    Category: { CategoryName: PRODUCT_CATEGORIES[i % PRODUCT_CATEGORIES.length] },
+    UnitsInStock: (i * 7 + 3) % 120,
+}));
+
 const COLLABORATIVE_ROWS: any[] = Array.from({ length: 20 }, (_, i) => ({
     ID: i + 1,
     Name: `Item ${i + 1}`,
@@ -143,6 +269,7 @@ function getStoreData(loadUrl: string, method: string): any[] | null {
     if (loadUrl.includes('/SchedulerData') || loadUrl.includes('/SchedulerSignalR')) return APPOINTMENTS;
     if (loadUrl.includes('/DiagramEmployees/Employees')) return DIAGRAM_EMPLOYEES;
     if (loadUrl.includes('/DataGridCollaborativeEditing')) return COLLABORATIVE_ROWS;
+    if (loadUrl.includes('/api/ListData')) return LIST_DATA;
     if (method === 'INSERT' || method === 'UPDATE' || method === 'DELETE') return [];
     return null;
 }
@@ -167,23 +294,23 @@ export function patchAspNetCreateStore(AspNet: any): void {
         return new CustomStore({
             key: options.key,
             load() {
-                return Promise.resolve({ data: [...data], totalCount: data.length });
+                return delayedResolve({ data: [...data], totalCount: data.length });
             },
             insert(values: any) {
                 const maxId = data.reduce((m: any, r: any) => Math.max(m, r[options.key] ?? 0), 0);
                 const item = { [options.key]: maxId + 1, ...values };
                 data.push(item);
-                return Promise.resolve(item);
+                return delayedResolve(item);
             },
             update(key: any, values: any) {
                 const idx = data.findIndex((r: any) => r[options.key] === key);
                 if (idx !== -1) Object.assign(data[idx], values);
-                return Promise.resolve(data[idx]);
+                return delayedResolve(data[idx]);
             },
             remove(key: any) {
                 const idx = data.findIndex((r: any) => r[options.key] === key);
                 if (idx !== -1) data.splice(idx, 1);
-                return Promise.resolve();
+                return delayedResolve(undefined);
             },
         });
     };
@@ -205,6 +332,10 @@ class FakeHubConnection {
     }
 
     async invoke(method: string): Promise<any> {
+        const ms = getSettings().delay;
+        const wait = ms > 0 ? new Promise((r) => setTimeout(r, ms)) : Promise.resolve();
+        await wait;
+
         if (this._url.includes('liveUpdateSignalRHub') && method === 'getAllStocks') {
             return [...STOCKS];
         }
@@ -218,7 +349,7 @@ class FakeHubConnection {
         showBanner();
 
         if (this._url.includes('liveUpdateSignalRHub')) {
-            this._timers.push(setInterval(() => {
+            const tick = (): void => {
                 const stock = STOCKS[Math.floor(Math.random() * STOCKS.length)];
                 const delta = (Math.random() - 0.48) * stock.price * 0.005;
                 stock.price = Math.round((stock.price + delta) * 10000) / 10000;
@@ -228,22 +359,26 @@ class FakeHubConnection {
                 stock.dayMax = Math.max(stock.dayMax, stock.price);
                 stock.lastUpdate = new Date();
                 this._handlers.get('updateStockPrice')?.({ ...stock });
-            }, 400));
+                this._timers.push(setTimeout(tick, getSettings().interval));
+            };
+            this._timers.push(setTimeout(tick, getSettings().interval));
         }
 
         if (this._url.includes('stockTickDataHub')) {
-            this._timers.push(setInterval(() => {
+            const tick = (): void => {
                 const last = CHART_TICKS[CHART_TICKS.length - 1];
                 const delta = (Math.random() - 0.48) * 2;
-                const tick = { date: new Date().toISOString(), price: Math.round((last.price + delta) * 100) / 100, volume: Math.floor(Math.random() * 10000 + 1000) };
-                CHART_TICKS.push(tick);
-                this._handlers.get('updateStockPrice')?.({ ...tick });
-            }, 1000));
+                const item = { date: new Date().toISOString(), price: Math.round((last.price + delta) * 100) / 100, volume: Math.floor(Math.random() * 10000 + 1000) };
+                CHART_TICKS.push(item);
+                this._handlers.get('updateStockPrice')?.({ ...item });
+                this._timers.push(setTimeout(tick, getSettings().interval));
+            };
+            this._timers.push(setTimeout(tick, getSettings().interval));
         }
     }
 
     async stop(): Promise<void> {
-        this._timers.forEach(clearInterval);
+        this._timers.forEach(clearTimeout);
         this._timers = [];
     }
 }

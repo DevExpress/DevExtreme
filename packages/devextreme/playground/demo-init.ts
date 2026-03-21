@@ -65,6 +65,17 @@ const AspNet = {
 patchAspNetCreateStore(AspNet);
 setupFakeSignalR();
 
+function AiIntegrationStub(_options: any): void {
+    const noop = () => Promise.resolve(null);
+    const methods = [
+        'changeStyle', 'changeTone', 'execute', 'expand', 'proofread',
+        'shorten', 'summarize', 'translate', 'smartPaste', 'generateGridColumn',
+        'dispose',
+    ];
+    const inst: any = { ...Object.fromEntries(methods.map((m) => [m, noop])) };
+    return inst;
+}
+
 (window as any).DevExpress = {
     config,
     setTemplateEngine,
@@ -75,6 +86,7 @@ setupFakeSignalR();
     viz: { getPalette, registerPalette, currentPalette, generateColors, map: { sources: {} } },
     fileManagement: { RemoteFileSystemProvider },
     common: { charts: { registerPattern, registerGradient } },
+    aiIntegration: AiIntegrationStub,
 };
 
 import '../js/ui/accordion';
