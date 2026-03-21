@@ -33,7 +33,7 @@ $(() => {
   }).dxGantt('instance');
 
   function getImagePath(taskId) {
-    const imgPath = '../../../../images/employees/';
+    const imgPath = '../../../images/employees/';
     let img = taskId < 10 ? `0${taskId}` : taskId;
     img = `${imgPath + img}.png`;
     return img;

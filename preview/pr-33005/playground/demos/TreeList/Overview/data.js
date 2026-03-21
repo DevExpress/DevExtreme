@@ -1813,203 +1813,203 @@ const tasks = [{
 const employees = [{
   ID: 1,
   Name: 'John Heart',
-  Picture: '../../../../images/employees/01.png',
+  Picture: '../../../images/employees/01.png',
 }, {
   ID: 2,
   Name: 'Samantha Bright',
-  Picture: '../../../../images/employees/04.png',
+  Picture: '../../../images/employees/04.png',
 }, {
   ID: 3,
   Name: 'Arthur Miller',
-  Picture: '../../../../images/employees/02.png',
+  Picture: '../../../images/employees/02.png',
 }, {
   ID: 4,
   Name: 'Robert Reagan',
-  Picture: '../../../../images/employees/03.png',
+  Picture: '../../../images/employees/03.png',
 }, {
   ID: 5,
   Name: 'Greta Sims',
-  Picture: '../../../../images/employees/06.png',
+  Picture: '../../../images/employees/06.png',
 }, {
   ID: 6,
   Name: 'Brett Wade',
-  Picture: '../../../../images/employees/05.png',
+  Picture: '../../../images/employees/05.png',
 }, {
   ID: 7,
   Name: 'Sandra Johnson',
-  Picture: '../../../../images/employees/08.png',
+  Picture: '../../../images/employees/08.png',
 }, {
   ID: 8,
   Name: 'Ed Holmes',
-  Picture: '../../../../images/employees/07.png',
+  Picture: '../../../images/employees/07.png',
 }, {
   ID: 9,
   Name: 'Barb Banks',
-  Picture: '../../../../images/employees/09.png',
+  Picture: '../../../images/employees/09.png',
 }, {
   ID: 10,
   Name: 'Kevin Carter',
-  Picture: '../../../../images/employees/10.png',
+  Picture: '../../../images/employees/10.png',
 }, {
   ID: 11,
   Name: 'Cindy Stanwick',
-  Picture: '../../../../images/employees/15.png',
+  Picture: '../../../images/employees/15.png',
 }, {
   ID: 12,
   Name: 'Sammy Hill',
-  Picture: '../../../../images/employees/11.png',
+  Picture: '../../../images/employees/11.png',
 }, {
   ID: 13,
   Name: 'Davey Jones',
-  Picture: '../../../../images/employees/12.png',
+  Picture: '../../../images/employees/12.png',
 }, {
   ID: 14,
   Name: 'Victor Norris',
-  Picture: '../../../../images/employees/13.png',
+  Picture: '../../../images/employees/13.png',
 }, {
   ID: 15,
   Name: 'Mary Stern',
-  Picture: '../../../../images/employees/16.png',
+  Picture: '../../../images/employees/16.png',
 }, {
   ID: 16,
   Name: 'Robin Cosworth',
-  Picture: '../../../../images/employees/14.png',
+  Picture: '../../../images/employees/14.png',
 }, {
   ID: 17,
   Name: 'Kelly Rodriguez',
-  Picture: '../../../../images/employees/17.png',
+  Picture: '../../../images/employees/17.png',
 }, {
   ID: 18,
   Name: 'James Anderson',
-  Picture: '../../../../images/employees/18.png',
+  Picture: '../../../images/employees/18.png',
 }, {
   ID: 19,
   Name: 'Antony Remmen',
-  Picture: '../../../../images/employees/19.png',
+  Picture: '../../../images/employees/19.png',
 }, {
   ID: 20,
   Name: 'Olivia Peyton',
-  Picture: '../../../../images/employees/20.png',
+  Picture: '../../../images/employees/20.png',
 }, {
   ID: 21,
   Name: 'Taylor Riley',
-  Picture: '../../../../images/employees/21.png',
+  Picture: '../../../images/employees/21.png',
 }, {
   ID: 22,
   Name: 'Amelia Harper',
-  Picture: '../../../../images/employees/22.png',
+  Picture: '../../../images/employees/22.png',
 }, {
   ID: 23,
   Name: 'Wally Hobbs',
-  Picture: '../../../../images/employees/23.png',
+  Picture: '../../../images/employees/23.png',
 }, {
   ID: 24,
   Name: 'Brad Jameson',
-  Picture: '../../../../images/employees/24.png',
+  Picture: '../../../images/employees/24.png',
 }, {
   ID: 25,
   Name: 'Karen Goodson',
-  Picture: '../../../../images/employees/25.png',
+  Picture: '../../../images/employees/25.png',
 }, {
   ID: 26,
   Name: 'Marcus Orbison',
-  Picture: '../../../../images/employees/26.png',
+  Picture: '../../../images/employees/26.png',
 }, {
   ID: 27,
   Name: 'Sandy Bright',
-  Picture: '../../../../images/employees/27.png',
+  Picture: '../../../images/employees/27.png',
 }, {
   ID: 28,
   Name: 'Morgan Kennedy',
-  Picture: '../../../../images/employees/28.png',
+  Picture: '../../../images/employees/28.png',
 }, {
   ID: 29,
   Name: 'Violet Bailey',
-  Picture: '../../../../images/employees/29.png',
+  Picture: '../../../images/employees/29.png',
 }, {
   ID: 30,
   Name: 'Ken Samuelson',
-  Picture: '../../../../images/employees/32.png',
+  Picture: '../../../images/employees/32.png',
 }, {
   ID: 31,
   Name: 'Nat Maguiree',
-  Picture: '../../../../images/employees/34.png',
+  Picture: '../../../images/employees/34.png',
 }, {
   ID: 32,
   Name: 'Bart Arnaz',
-  Picture: '../../../../images/employees/37.png',
+  Picture: '../../../images/employees/37.png',
 }, {
   ID: 33,
   Name: 'Leah Simpson',
-  Picture: '../../../../images/employees/38.png',
+  Picture: '../../../images/employees/38.png',
 }, {
   ID: 34,
   Name: 'Arnie Schwartz',
-  Picture: '../../../../images/employees/40.png',
+  Picture: '../../../images/employees/40.png',
 }, {
   ID: 35,
   Name: 'Billy Zimmer',
-  Picture: '../../../../images/employees/42.png',
+  Picture: '../../../images/employees/42.png',
 }, {
   ID: 36,
   Name: 'Samantha Piper',
-  Picture: '../../../../images/employees/30.png',
+  Picture: '../../../images/employees/30.png',
 }, {
   ID: 37,
   Name: 'Maggie Boxter',
-  Picture: '../../../../images/employees/31.png',
+  Picture: '../../../images/employees/31.png',
 }, {
   ID: 38,
   Name: 'Terry Bradley',
-  Picture: '../../../../images/employees/33.png',
+  Picture: '../../../images/employees/33.png',
 }, {
   ID: 39,
   Name: 'Gabe Jones',
-  Picture: '../../../../images/employees/35.png',
+  Picture: '../../../images/employees/35.png',
 }, {
   ID: 40,
   Name: 'Lucy Ball',
-  Picture: '../../../../images/employees/36.png',
+  Picture: '../../../images/employees/36.png',
 }, {
   ID: 41,
   Name: 'Jim Packard',
-  Picture: '../../../../images/employees/43.png',
+  Picture: '../../../images/employees/43.png',
 }, {
   ID: 42,
   Name: 'Hannah Brookly',
-  Picture: '../../../../images/employees/39.png',
+  Picture: '../../../images/employees/39.png',
 }, {
   ID: 43,
   Name: 'Harv Mudd',
-  Picture: '../../../../images/employees/44.png',
+  Picture: '../../../images/employees/44.png',
 }, {
   ID: 44,
   Name: 'Clark Morgan',
-  Picture: '../../../../images/employees/45.png',
+  Picture: '../../../images/employees/45.png',
 }, {
   ID: 45,
   Name: 'Todd Hoffman',
-  Picture: '../../../../images/employees/46.png',
+  Picture: '../../../images/employees/46.png',
 }, {
   ID: 46,
   Name: 'Jackie Garmin',
-  Picture: '../../../../images/employees/47.png',
+  Picture: '../../../images/employees/47.png',
 }, {
   ID: 47,
   Name: 'Lincoln Bartlett',
-  Picture: '../../../../images/employees/49.png',
+  Picture: '../../../images/employees/49.png',
 }, {
   ID: 48,
   Name: 'Brad Farkus',
-  Picture: '../../../../images/employees/50.png',
+  Picture: '../../../images/employees/50.png',
 }, {
   ID: 49,
   Name: 'Jenny Hobbs',
-  Picture: '../../../../images/employees/48.png',
+  Picture: '../../../images/employees/48.png',
 }, {
   ID: 50,
   Name: 'Dallas Lou',
-  Picture: '../../../../images/employees/41.png',
+  Picture: '../../../images/employees/41.png',
 }, {
   ID: 51,
   Name: 'Stu Pizaro',

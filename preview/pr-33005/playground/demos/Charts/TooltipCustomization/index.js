@@ -13,7 +13,7 @@ $(() => {
     tooltip: {
       enabled: true,
       contentTemplate(info, container) {
-        const contentItems = [`<div class='state-tooltip'><img src='../../../../images/flags/${
+        const contentItems = [`<div class='state-tooltip'><img src='../../../images/flags/${
           info.point.data.name.replace(/\s/, '')}.svg' />`,
         "<h4 class='state'></h4>",
         "<div class='capital'><span class='caption'>Capital</span>: </div>",

@@ -33,7 +33,7 @@ $(() => {
       $('<img>')
         .addClass('button-img')
         .attr({
-          src: '../../../../images/employees/51.png',
+          src: '../../../images/employees/51.png',
           alt: 'employee',
         }).appendTo($imageContainer);
 

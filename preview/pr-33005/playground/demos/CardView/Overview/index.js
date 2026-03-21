@@ -8,7 +8,7 @@ $(() => {
       pageSize: 4,
     },
     cardCover: {
-      imageExpr: ({ First_Name, Last_Name }) => `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`,
+      imageExpr: ({ First_Name, Last_Name }) => `../../../images/employees/new/${First_Name} ${Last_Name}.jpg`,
       altExpr: ({ First_Name, Last_Name }) => `Photo of ${First_Name} ${Last_Name}`,
     },
     columns: [

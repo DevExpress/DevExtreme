@@ -34,7 +34,7 @@ $(() => {
     const imageWrapper = $('<div>').addClass('vehicle__img-wrapper');
     const img = $('<img>').addClass('vehicle__img');
     img.attr({
-      src: `../../../../images/vehicles/image_${ID}.png`,
+      src: `../../../images/vehicles/image_${ID}.png`,
       alt: `${TrademarkName} ${Name}`,
     });
 

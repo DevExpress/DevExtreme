@@ -43,7 +43,7 @@ $(() => {
 
   function getAnnotationSources() {
     annotations.forEach((a, index, array) => {
-      array[index].image = `../../../../images/flags/3x2/${a.argument.replace(/\s/, '')}.svg`;
+      array[index].image = `../../../images/flags/3x2/${a.argument.replace(/\s/, '')}.svg`;
       array[index].data = $.extend({}, dataSource.filter((d) => d.country === a.argument)[0]);
       if (a.location === 'edge') {
         array[index] = $.extend({}, a, edgeAnnotationSettings);

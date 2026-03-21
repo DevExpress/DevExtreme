@@ -13,7 +13,7 @@ const currentUser = {
 const supportAgent = {
   id: 'd16d1a4c-5c67-4e20-b70e-2991c22747c3',
   name: 'Support Agent',
-  avatarUrl: '../../../../images/petersmith.png',
+  avatarUrl: '../../../images/petersmith.png',
 };
 
 const initialMessages = [

@@ -91,7 +91,7 @@ $(() => {
     const imgWrapper = $('<div>').addClass('name__img-wrapper');
     const img = $('<img>').addClass('name__img');
     img.attr({
-      src: `../../../../images/employees/new/${First_Name} ${Last_Name}.jpg`,
+      src: `../../../images/employees/new/${First_Name} ${Last_Name}.jpg`,
       alt: `${First_Name} ${Last_Name}`,
     });
 

@@ -16,18 +16,18 @@ $(() => {
       download: true,
     },
     customizeThumbnail(fileSystemItem) {
-      if (fileSystemItem.isDirectory) { return '../../../../images/thumbnails/folder.svg'; }
+      if (fileSystemItem.isDirectory) { return '../../../images/thumbnails/folder.svg'; }
 
       const fileExtension = fileSystemItem.getFileExtension();
       switch (fileExtension) {
         case '.txt':
-          return '../../../../images/thumbnails/doc-txt.svg';
+          return '../../../images/thumbnails/doc-txt.svg';
         case '.rtf':
-          return '../../../../images/thumbnails/doc-rtf.svg';
+          return '../../../images/thumbnails/doc-rtf.svg';
         case '.xml':
-          return '../../../../images/thumbnails/doc-xml.svg';
+          return '../../../images/thumbnails/doc-xml.svg';
         default:
-          return '../../../../images/thumbnails/doc-txt.svg';
+          return '../../../images/thumbnails/doc-txt.svg';
       }
     },
   });

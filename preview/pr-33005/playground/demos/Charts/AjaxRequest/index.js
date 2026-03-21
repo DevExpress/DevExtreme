@@ -1,7 +1,7 @@
 $(() => {
   $('#chart').dxChart({
     rotated: true,
-    dataSource: '../../../../data/simpleJSON.json',
+    dataSource: '../../../data/simpleJSON.json',
     series: {
       label: {
         visible: true,

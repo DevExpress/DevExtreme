@@ -15,7 +15,7 @@ $(() => {
       loadMode: 'raw',
       key: 'ID',
       load() {
-        return $.getJSON(`../../../../data/${jsonFile}`);
+        return $.getJSON(`../../../data/${jsonFile}`);
       },
     });
   };

@@ -17,7 +17,7 @@ $(() => {
   });
 
   $('#image-indicator').dxLoadIndicator({
-    indicatorSrc: '../../../../images/Loading.gif',
+    indicatorSrc: '../../../images/Loading.gif',
   });
 
   $('#button').dxButton({

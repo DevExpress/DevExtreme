@@ -13,7 +13,7 @@ const currentUser = {
 const supportAgent = {
   id: 'd16d1a4c-5c67-4e20-b70e-2991c22747c3',
   name: 'Support Agent',
-  avatarUrl: '../../../../images/petersmith.png',
+  avatarUrl: '../../../images/petersmith.png',
 };
 
 const messages = [
@@ -25,17 +25,17 @@ const messages = [
     attachments: [
       {
         name: 'Pic1.png',
-        url: '../../../../images/Chat/FileAttachments/Pic1.png',
+        url: '../../../images/Chat/FileAttachments/Pic1.png',
         size: 1024 * 10,
       },
       {
         name: 'Pic2.png',
-        url: '../../../../images/Chat/FileAttachments/Pic2.png',
+        url: '../../../images/Chat/FileAttachments/Pic2.png',
         size: 1024 * 10,
       },
       {
         name: 'Pic3.png',
-        url: '../../../../images/Chat/FileAttachments/Pic3.png',
+        url: '../../../images/Chat/FileAttachments/Pic3.png',
         size: 1024 * 10,
       },
     ],
@@ -48,7 +48,7 @@ const messages = [
     attachments: [
       {
         name: 'Instructions.pdf',
-        url: '../../../../images/Chat/FileAttachments/Instructions.pdf',
+        url: '../../../images/Chat/FileAttachments/Instructions.pdf',
         size: 1024 * 10,
       },
     ],

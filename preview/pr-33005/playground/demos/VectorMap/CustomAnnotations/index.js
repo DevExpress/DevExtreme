@@ -7,7 +7,7 @@ $(() => {
       template(annotation, container) {
         const { data } = annotation;
         const contentItems = ["<svg class='annotation'>",
-          "<image href='../../../../images/flags/",
+          "<image href='../../../images/flags/",
           data.name.replace(/\s/, '').toLowerCase(), ".svg' width='60' height='40' />",
           "<rect class='border' x='0' y='0' />",
           "<text x='70' y='25' class='state'/>",

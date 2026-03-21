@@ -6,7 +6,7 @@ $(() => {
     cardMinWidth: 350,
     wordWrapEnabled: true,
     cardCover: {
-      imageExpr: ({ ID }) => `../../../../images/houses/${ID}.jpg`,
+      imageExpr: ({ ID }) => `../../../images/houses/${ID}.jpg`,
       altExpr: () => 'Photo of the house',
     },
     columns: [

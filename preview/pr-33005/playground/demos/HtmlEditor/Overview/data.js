@@ -2,7 +2,7 @@ const tabs = [{ name: 'From This Device', value: ['file'] }, { name: 'From the W
 
 const markup = `
     <h2>
-        <img src="../../../../images/widgets/HtmlEditor.svg" alt="HtmlEditor">
+        <img src="../../../images/widgets/HtmlEditor.svg" alt="HtmlEditor">
         Formatted Text Editor (HTML Editor)
     </h2>
     <br>

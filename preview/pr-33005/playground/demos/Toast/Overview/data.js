@@ -6,7 +6,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 55,
   Category: 'Televisions',
-  ImageSrc: '../../../../images/products/4.png',
+  ImageSrc: '../../../images/products/4.png',
 }, {
   ID: 5,
   Name: 'SuperLED 42',
@@ -15,7 +15,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 0,
   Category: 'Televisions',
-  ImageSrc: '../../../../images/products/5.png',
+  ImageSrc: '../../../images/products/5.png',
 }, {
   ID: 6,
   Name: 'SuperLCD 55',
@@ -24,7 +24,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 5,
   Category: 'Televisions',
-  ImageSrc: '../../../../images/products/6.png',
+  ImageSrc: '../../../images/products/6.png',
 }, {
   ID: 7,
   Name: 'SuperLCD 42',
@@ -33,5 +33,5 @@ const products = [{
   Backorder: 0,
   Manufacturing: 20,
   Category: 'Televisions',
-  ImageSrc: '../../../../images/products/7.png',
+  ImageSrc: '../../../images/products/7.png',
 }];

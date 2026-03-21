@@ -4,7 +4,7 @@ $(() => {
   }).dxDiagram('instance');
 
   $.ajax({
-    url: '../../../../data/diagram-structure.json',
+    url: '../../../data/diagram-structure.json',
     dataType: 'text',
     success(data) {
       diagram.import(data);

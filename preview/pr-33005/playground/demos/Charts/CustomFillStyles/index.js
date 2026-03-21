@@ -80,7 +80,7 @@ function getPatternImage(color) {
       image.setAttribute('y', 0);
       image.setAttribute('width', imagePatternSize);
       image.setAttribute('height', imagePatternSize);
-      image.setAttribute('href', '../../../../images/Charts/PieWithCustomStyles/diamond.svg');
+      image.setAttribute('href', '../../../images/Charts/PieWithCustomStyles/diamond.svg');
       image.setAttribute('opacity', '0.6');
 
       container.appendChild(rect);

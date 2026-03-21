@@ -41,7 +41,7 @@ $(() => {
         y: 58,
         width: 60,
         height: 40,
-        href: `../../../../images/flags/${country.replace(/\s/, '').toLowerCase()}.svg`,
+        href: `../../../images/flags/${country.replace(/\s/, '').toLowerCase()}.svg`,
       });
       const text = createText({
         x: 100,

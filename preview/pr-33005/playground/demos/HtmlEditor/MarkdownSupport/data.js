@@ -1,4 +1,4 @@
-const markup = `## ![HtmlEditor](../../../../images/widgets/HtmlEditor.svg) Formatted Text Editor (HTML Editor)
+const markup = `## ![HtmlEditor](../../../images/widgets/HtmlEditor.svg) Formatted Text Editor (HTML Editor)
 
 Lists:
 

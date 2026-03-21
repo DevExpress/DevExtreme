@@ -9,7 +9,7 @@ $(() => {
   });
 
   $('#icon-weather').dxButton({
-    icon: '../../../../images/icons/weather.png',
+    icon: '../../../images/icons/weather.png',
     text: 'Weather',
     onClick() {
       DevExpress.ui.notify('The Weather button was clicked');
@@ -46,7 +46,7 @@ $(() => {
   });
 
   $('#icon-disabled-weather').dxButton({
-    icon: '../../../../images/icons/weather.png',
+    icon: '../../../images/icons/weather.png',
     text: 'Weather',
     disabled: true,
   });

@@ -1,7 +1,7 @@
 $(() => {
   const source = new DevExpress.data.DataSource({
     load() {
-      return $.getJSON('../../../../data/resourceData.json');
+      return $.getJSON('../../../data/resourceData.json');
     },
     loadMode: 'raw',
     filter: ['month', '<=', '12'],

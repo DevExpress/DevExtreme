@@ -34,21 +34,21 @@ const data = [
 const moviesData = [{
   id: 1,
   text: 'His Girl Friday',
-  image: '../../../../images/movies/HisGirlFriday.jpg',
+  image: '../../../images/movies/HisGirlFriday.jpg',
 }, {
   id: 2,
   text: 'Royal Wedding',
-  image: '../../../../images/movies/RoyalWedding.jpg',
+  image: '../../../images/movies/RoyalWedding.jpg',
 }, {
   id: 3,
   text: 'A Star Is Born',
-  image: '../../../../images/movies/AStarIsBorn.jpg',
+  image: '../../../images/movies/AStarIsBorn.jpg',
 }, {
   id: 4,
   text: 'The Screaming Skull',
-  image: '../../../../images/movies/ScreamingSkull.jpg',
+  image: '../../../images/movies/ScreamingSkull.jpg',
 }, {
   id: 5,
   text: "It's a Wonderful Life",
-  image: '../../../../images/movies/ItsAWonderfulLife.jpg',
+  image: '../../../images/movies/ItsAWonderfulLife.jpg',
 }];

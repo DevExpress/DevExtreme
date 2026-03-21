@@ -3,7 +3,7 @@ const moviesData = [{
   text: 'His Girl Friday',
   director: 'Howard Hawks',
   year: 1940,
-  image: '../../../../images/movies/HisGirlFriday.jpg',
+  image: '../../../images/movies/HisGirlFriday.jpg',
   duration: 92,
   color: '#9FD89F',
 }, {
@@ -11,7 +11,7 @@ const moviesData = [{
   text: 'Royal Wedding',
   director: 'Stanley Donen',
   year: 1951,
-  image: '../../../../images/movies/RoyalWedding.jpg',
+  image: '../../../images/movies/RoyalWedding.jpg',
   duration: 93,
   color: '#F1BBBC',
 }, {
@@ -19,7 +19,7 @@ const moviesData = [{
   text: 'A Star Is Born',
   director: 'William A. Wellman',
   year: 1937,
-  image: '../../../../images/movies/AStarIsBorn.jpg',
+  image: '../../../images/movies/AStarIsBorn.jpg',
   duration: 111,
   color: '#F9E2AE',
 }, {
@@ -27,7 +27,7 @@ const moviesData = [{
   text: 'The Screaming Skull',
   director: 'Alex Nicol',
   year: 1958,
-  image: '../../../../images/movies/ScreamingSkull.jpg',
+  image: '../../../images/movies/ScreamingSkull.jpg',
   duration: 68,
   color: '#EDBBE7',
 }, {
@@ -35,7 +35,7 @@ const moviesData = [{
   text: "It's a Wonderful Life",
   director: 'Frank Capra',
   year: 1946,
-  image: '../../../../images/movies/ItsAWonderfulLife.jpg',
+  image: '../../../images/movies/ItsAWonderfulLife.jpg',
   duration: 130,
   color: '#B4D6FA',
 }, {
@@ -43,7 +43,7 @@ const moviesData = [{
   text: 'City Lights',
   director: 'Charlie Chaplin',
   year: 1931,
-  image: '../../../../images/movies/CityLights.jpg',
+  image: '../../../images/movies/CityLights.jpg',
   duration: 87,
   color: '#C6B1DE',
 }];

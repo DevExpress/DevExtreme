@@ -131,7 +131,7 @@ $(() => {
     const imgWrapper = $('<div>').addClass('trademark__img-wrapper');
     const img = $('<img>').addClass('trademark__img');
     img.attr({
-      src: `../../../../images/vehicles/image_${ID}.png`,
+      src: `../../../images/vehicles/image_${ID}.png`,
       alt: `${TrademarkName} ${Name}`,
       tabindex: 0,
       role: 'button',

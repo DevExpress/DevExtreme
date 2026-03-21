@@ -11,7 +11,7 @@ $(() => {
     columns: ['FullName', 'Position', 'Phone', 'Email'],
     cardCover: {
       altExpr: ({ FullName }) => `Photo of ${FullName}`,
-      imageExpr: ({ FullName }) => `../../../../images/employees/new/${FullName}.jpg`,
+      imageExpr: ({ FullName }) => `../../../images/employees/new/${FullName}.jpg`,
     },
   }).dxCardView('instance');
 

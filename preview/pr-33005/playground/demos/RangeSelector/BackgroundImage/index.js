@@ -6,7 +6,7 @@ $(() => {
     },
     background: {
       image: {
-        url: '../../../../images/RangeSelector/background.png',
+        url: '../../../images/RangeSelector/background.png',
         location: 'full',
       },
     },

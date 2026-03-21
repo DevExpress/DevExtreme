@@ -15,11 +15,11 @@ const houses = [{
   YearBuilt: '2008',
   Type: '0',
   Status: '1',
-  Image: '../../../../images/gallery/1.jpg',
+  Image: '../../../images/gallery/1.jpg',
   Agent: {
     Name: 'John Heart',
     Phone: '(213) 555-9392',
-    Picture: '../../../../images/employees/01.png',
+    Picture: '../../../images/employees/01.png',
   },
 },
 {
@@ -39,11 +39,11 @@ const houses = [{
   YearBuilt: '2009',
   Type: '0',
   Status: '0',
-  Image: '../../../../images/gallery/2.jpg',
+  Image: '../../../images/gallery/2.jpg',
   Agent: {
     Name: 'Olivia Peyton',
     Phone: '(310) 555-2728',
-    Picture: '../../../../images/employees/09.png',
+    Picture: '../../../images/employees/09.png',
   },
 },
 {
@@ -63,11 +63,11 @@ const houses = [{
   YearBuilt: '2010',
   Type: '0',
   Status: '0',
-  Image: '../../../../images/gallery/3.jpg',
+  Image: '../../../images/gallery/3.jpg',
   Agent: {
     Name: 'Robert Reagan',
     Phone: '(818) 555-2387',
-    Picture: '../../../../images/employees/03.png',
+    Picture: '../../../images/employees/03.png',
   },
 },
 {
@@ -87,11 +87,11 @@ const houses = [{
   YearBuilt: '2007',
   Type: '0',
   Status: '1',
-  Image: '../../../../images/gallery/4.jpg',
+  Image: '../../../images/gallery/4.jpg',
   Agent: {
     Name: 'Greta Sims',
     Phone: '(818) 555-6546',
-    Picture: '../../../../images/employees/04.png',
+    Picture: '../../../images/employees/04.png',
   },
 },
 {
@@ -111,11 +111,11 @@ const houses = [{
   YearBuilt: '2010',
   Type: '0',
   Status: '0',
-  Image: '../../../../images/gallery/5.jpg',
+  Image: '../../../images/gallery/5.jpg',
   Agent: {
     Name: 'John Heart',
     Phone: '(213) 555-9392',
-    Picture: '../../../../images/employees/01.png',
+    Picture: '../../../images/employees/01.png',
   },
 },
 {
@@ -135,11 +135,11 @@ const houses = [{
   YearBuilt: '2011',
   Type: '0',
   Status: '0',
-  Image: '../../../../images/gallery/6.jpg',
+  Image: '../../../images/gallery/6.jpg',
   Agent: {
     Name: 'Olivia Peyton',
     Phone: '(310) 555-2728',
-    Picture: '../../../../images/employees/09.png',
+    Picture: '../../../images/employees/09.png',
   },
 },
 {
@@ -159,11 +159,11 @@ const houses = [{
   YearBuilt: '2008',
   Type: '0',
   Status: '1',
-  Image: '../../../../images/gallery/7.jpg',
+  Image: '../../../images/gallery/7.jpg',
   Agent: {
     Name: 'Robert Reagan',
     Phone: '(818) 555-2387',
-    Picture: '../../../../images/employees/03.png',
+    Picture: '../../../images/employees/03.png',
   },
 },
 {
@@ -183,11 +183,11 @@ const houses = [{
   YearBuilt: '2010',
   Type: '0',
   Status: '0',
-  Image: '../../../../images/gallery/8.jpg',
+  Image: '../../../images/gallery/8.jpg',
   Agent: {
     Name: 'Greta Sims',
     Phone: '(818) 555-6546',
-    Picture: '../../../../images/employees/04.png',
+    Picture: '../../../images/employees/04.png',
   },
 },
 {
@@ -207,11 +207,11 @@ const houses = [{
   YearBuilt: '2011',
   Type: '0',
   Status: '0',
-  Image: '../../../../images/gallery/9.jpg',
+  Image: '../../../images/gallery/9.jpg',
   Agent: {
     Name: 'John Heart',
     Phone: '(213) 555-9392',
-    Picture: '../../../../images/employees/01.png',
+    Picture: '../../../images/employees/01.png',
   },
 },
 ].map((dataItem) => ({

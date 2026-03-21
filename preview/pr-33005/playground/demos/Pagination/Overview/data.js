@@ -4,7 +4,7 @@ const employees = [
     FullName: 'John Heart',
     Title: 'CEO',
     Employee_Picture: '01.png',
-    Picture: '../../../../images/employees/01.png',
+    Picture: '../../../images/employees/01.png',
     MobilePhone: '2135559392',
   },
   {
@@ -12,7 +12,7 @@ const employees = [
     FullName: 'Samantha Bright',
     Title: 'COO',
     Employee_Picture: '30.png',
-    Picture: '../../../../images/employees/30.png',
+    Picture: '../../../images/employees/30.png',
     MobilePhone: '2135552858',
   },
   {
@@ -20,7 +20,7 @@ const employees = [
     FullName: 'Arthur Miller',
     Title: 'CTO',
     Employee_Picture: '10.png',
-    Picture: '../../../../images/employees/10.png',
+    Picture: '../../../images/employees/10.png',
     MobilePhone: '3105558583',
   },
   {
@@ -28,7 +28,7 @@ const employees = [
     FullName: 'Robert Reagan',
     Title: 'CMO',
     Employee_Picture: '03.png',
-    Picture: '../../../../images/employees/03.png',
+    Picture: '../../../images/employees/03.png',
     MobilePhone: '8185552387',
   },
   {
@@ -36,7 +36,7 @@ const employees = [
     FullName: 'Greta Sims',
     Title: 'HR Manager',
     Employee_Picture: '04.png',
-    Picture: '../../../../images/employees/04.png',
+    Picture: '../../../images/employees/04.png',
     MobilePhone: '8185556546',
   },
   {
@@ -44,7 +44,7 @@ const employees = [
     FullName: 'Brett Wade',
     Title: 'IT Manager',
     Employee_Picture: '05.png',
-    Picture: '../../../../images/employees/05.png',
+    Picture: '../../../images/employees/05.png',
     MobilePhone: '6265550358',
   },
   {
@@ -52,7 +52,7 @@ const employees = [
     FullName: 'Sandra Johnson',
     Title: 'Controller',
     Employee_Picture: '06.png',
-    Picture: '../../../../images/employees/06.png',
+    Picture: '../../../images/employees/06.png',
     MobilePhone: '5625552082',
   },
   {
@@ -60,7 +60,7 @@ const employees = [
     FullName: 'Ed Holmes',
     Title: 'Sales Manager',
     Employee_Picture: '11.png',
-    Picture: '../../../../images/employees/11.png',
+    Picture: '../../../images/employees/11.png',
     MobilePhone: '3105551288',
   },
   {
@@ -68,7 +68,7 @@ const employees = [
     FullName: 'Barb Banks',
     Title: 'Support Manager',
     Employee_Picture: '20.png',
-    Picture: '../../../../images/employees/20.png',
+    Picture: '../../../images/employees/20.png',
     MobilePhone: '3105553355',
   },
   {
@@ -76,7 +76,7 @@ const employees = [
     FullName: 'Kevin Carter',
     Title: 'Shipping Manager',
     Employee_Picture: '07.png',
-    Picture: '../../../../images/employees/07.png',
+    Picture: '../../../images/employees/07.png',
     MobilePhone: '2135552840',
   },
   {
@@ -84,7 +84,7 @@ const employees = [
     FullName: 'Cindy Stanwick',
     Title: 'HR Assistant',
     Employee_Picture: '08.png',
-    Picture: '../../../../images/employees/08.png',
+    Picture: '../../../images/employees/08.png',
     MobilePhone: '8185556655',
   },
   {
@@ -92,7 +92,7 @@ const employees = [
     FullName: 'Sammy Hill',
     Title: 'Sales Assistant',
     Employee_Picture: '12.png',
-    Picture: '../../../../images/employees/12.png',
+    Picture: '../../../images/employees/12.png',
     MobilePhone: '6265557292',
   },
   {
@@ -100,7 +100,7 @@ const employees = [
     FullName: 'Davey Jones',
     Title: 'Shipping Assistant',
     Employee_Picture: '13.png',
-    Picture: '../../../../images/employees/13.png',
+    Picture: '../../../images/employees/13.png',
     MobilePhone: '6265550281',
   },
   {
@@ -108,7 +108,7 @@ const employees = [
     FullName: 'Victor Norris',
     Title: 'Shipping Assistant',
     Employee_Picture: '14.png',
-    Picture: '../../../../images/employees/14.png',
+    Picture: '../../../images/employees/14.png',
     MobilePhone: '2135559278',
   },
   {
@@ -116,7 +116,7 @@ const employees = [
     FullName: 'Mary Stern',
     Title: 'Shipping Assistant',
     Employee_Picture: '15.png',
-    Picture: '../../../../images/employees/15.png',
+    Picture: '../../../images/employees/15.png',
     MobilePhone: '8185557857',
   },
   {
@@ -124,7 +124,7 @@ const employees = [
     FullName: 'Robin Cosworth',
     Title: 'Shipping Assistant',
     Employee_Picture: '16.png',
-    Picture: '../../../../images/employees/16.png',
+    Picture: '../../../images/employees/16.png',
     MobilePhone: '8185550942',
   },
   {
@@ -132,7 +132,7 @@ const employees = [
     FullName: 'Kelly Rodriguez',
     Title: 'Support Assistant',
     Employee_Picture: '17.png',
-    Picture: '../../../../images/employees/17.png',
+    Picture: '../../../images/employees/17.png',
     MobilePhone: '8185559248',
   },
   {
@@ -140,7 +140,7 @@ const employees = [
     FullName: 'James Anderson',
     Title: 'Support Assistant',
     Employee_Picture: '18.png',
-    Picture: '../../../../images/employees/18.png',
+    Picture: '../../../images/employees/18.png',
     MobilePhone: '3235554702',
   },
   {
@@ -148,7 +148,7 @@ const employees = [
     FullName: 'Antony Remmen',
     Title: 'Support Assistant',
     Employee_Picture: '19.png',
-    Picture: '../../../../images/employees/19.png',
+    Picture: '../../../images/employees/19.png',
     MobilePhone: '3105556625',
   },
   {
@@ -156,7 +156,7 @@ const employees = [
     FullName: 'Olivia Peyton',
     Title: 'Sales Assistant',
     Employee_Picture: '09.png',
-    Picture: '../../../../images/employees/09.png',
+    Picture: '../../../images/employees/09.png',
     MobilePhone: '3105552728',
   },
   {
@@ -164,7 +164,7 @@ const employees = [
     FullName: 'Taylor Riley',
     Title: 'Network Admin',
     Employee_Picture: '21.png',
-    Picture: '../../../../images/employees/21.png',
+    Picture: '../../../images/employees/21.png',
     MobilePhone: '3105557276',
   },
   {
@@ -172,7 +172,7 @@ const employees = [
     FullName: 'Amelia Harper',
     Title: 'Network Admin',
     Employee_Picture: '22.png',
-    Picture: '../../../../images/employees/22.png',
+    Picture: '../../../images/employees/22.png',
     MobilePhone: '2135554276',
   },
   {
@@ -180,7 +180,7 @@ const employees = [
     FullName: 'Wally Hobbs',
     Title: 'Programmer',
     Employee_Picture: '23.png',
-    Picture: '../../../../images/employees/23.png',
+    Picture: '../../../images/employees/23.png',
     MobilePhone: '8185558872',
   },
   {
@@ -188,7 +188,7 @@ const employees = [
     FullName: 'Brad Jameson',
     Title: 'Programmer',
     Employee_Picture: '24.png',
-    Picture: '../../../../images/employees/24.png',
+    Picture: '../../../images/employees/24.png',
     MobilePhone: '8185554646',
   },
   {
@@ -196,7 +196,7 @@ const employees = [
     FullName: 'Karen Goodson',
     Title: 'Programmer',
     Employee_Picture: '25.png',
-    Picture: '../../../../images/employees/25.png',
+    Picture: '../../../images/employees/25.png',
     MobilePhone: '6265550908',
   },
   {
@@ -204,7 +204,7 @@ const employees = [
     FullName: 'Marcus Orbison',
     Title: 'Travel Coordinator',
     Employee_Picture: '26.png',
-    Picture: '../../../../images/employees/26.png',
+    Picture: '../../../images/employees/26.png',
     MobilePhone: '2135557098',
   },
   {
@@ -212,7 +212,7 @@ const employees = [
     FullName: 'Sandy Bright',
     Title: 'Benefits Coordinator',
     Employee_Picture: '27.png',
-    Picture: '../../../../images/employees/27.png',
+    Picture: '../../../images/employees/27.png',
     MobilePhone: '8185550524',
   },
   {
@@ -220,7 +220,7 @@ const employees = [
     FullName: 'Morgan Kennedy',
     Title: 'Graphic Designer',
     Employee_Picture: '28.png',
-    Picture: '../../../../images/employees/28.png',
+    Picture: '../../../images/employees/28.png',
     MobilePhone: '8185558238',
   },
   {
@@ -228,7 +228,7 @@ const employees = [
     FullName: 'Violet Bailey',
     Title: 'Jr Graphic Designer',
     Employee_Picture: '29.png',
-    Picture: '../../../../images/employees/29.png',
+    Picture: '../../../images/employees/29.png',
     MobilePhone: '8185552478',
   },
   {
@@ -236,7 +236,7 @@ const employees = [
     FullName: 'Ken Samuelson',
     Title: 'Ombudsman',
     Employee_Picture: '02.png',
-    Picture: '../../../../images/employees/02.png',
+    Picture: '../../../images/employees/02.png',
     MobilePhone: '5625559282',
   },
   {
@@ -244,7 +244,7 @@ const employees = [
     FullName: 'Nat Maguiree',
     Title: 'Trainer',
     Employee_Picture: '31.png',
-    Picture: '../../../../images/employees/31.png',
+    Picture: '../../../images/employees/31.png',
     MobilePhone: '5625558377',
   },
   {
@@ -252,7 +252,7 @@ const employees = [
     FullName: 'Bart Arnaz',
     Title: 'Director of Engineering',
     Employee_Picture: '32.png',
-    Picture: '../../../../images/employees/32.png',
+    Picture: '../../../images/employees/32.png',
     MobilePhone: '7145552000',
   },
   {
@@ -260,7 +260,7 @@ const employees = [
     FullName: 'Leah Simpson',
     Title: 'Test Coordinator',
     Employee_Picture: '33.png',
-    Picture: '../../../../images/employees/33.png',
+    Picture: '../../../images/employees/33.png',
     MobilePhone: '5625595830',
   },
   {
@@ -268,7 +268,7 @@ const employees = [
     FullName: 'Arnie Schwartz',
     Title: 'Engineer',
     Employee_Picture: '34.png',
-    Picture: '../../../../images/employees/34.png',
+    Picture: '../../../images/employees/34.png',
     MobilePhone: '7145558882',
   },
   {
@@ -276,7 +276,7 @@ const employees = [
     FullName: 'Billy Zimmer',
     Title: 'Engineer',
     Employee_Picture: '51.png',
-    Picture: '../../../../images/employees/51.png',
+    Picture: '../../../images/employees/51.png',
     MobilePhone: '9095556939',
   },
   {
@@ -284,7 +284,7 @@ const employees = [
     FullName: 'Samantha Piper',
     Title: 'Engineer',
     Employee_Picture: '35.png',
-    Picture: '../../../../images/employees/35.png',
+    Picture: '../../../images/employees/35.png',
     MobilePhone: '3235554512',
   },
   {
@@ -292,7 +292,7 @@ const employees = [
     FullName: 'Maggie Boxter',
     Title: 'Engineer',
     Employee_Picture: '36.png',
-    Picture: '../../../../images/employees/36.png',
+    Picture: '../../../images/employees/36.png',
     MobilePhone: '7145557239',
   },
   {
@@ -300,7 +300,7 @@ const employees = [
     FullName: 'Terry Bradley',
     Title: 'QA Engineer',
     Employee_Picture: '37.png',
-    Picture: '../../../../images/employees/37.png',
+    Picture: '../../../images/employees/37.png',
     MobilePhone: '8055552788',
   },
   {
@@ -308,7 +308,7 @@ const employees = [
     FullName: 'Gabe Jones',
     Title: 'Retail Coordinator',
     Employee_Picture: '38.png',
-    Picture: '../../../../images/employees/38.png',
+    Picture: '../../../images/employees/38.png',
     MobilePhone: '3105555395',
   },
   {
@@ -316,7 +316,7 @@ const employees = [
     FullName: 'Lucy Ball',
     Title: 'Sales Assistant',
     Employee_Picture: '39.png',
-    Picture: '../../../../images/employees/39.png',
+    Picture: '../../../images/employees/39.png',
     MobilePhone: '3105553357',
   },
   {
@@ -324,7 +324,7 @@ const employees = [
     FullName: 'Jim Packard',
     Title: 'Retail Sales Manager',
     Employee_Picture: '40.png',
-    Picture: '../../../../images/employees/40.png',
+    Picture: '../../../images/employees/40.png',
     MobilePhone: '6615558224',
   },
   {
@@ -332,7 +332,7 @@ const employees = [
     FullName: 'Hannah Brookly',
     Title: 'Online Sales Manager',
     Employee_Picture: '41.png',
-    Picture: '../../../../images/employees/41.png',
+    Picture: '../../../images/employees/41.png',
     MobilePhone: '8055553627',
   },
   {
@@ -340,7 +340,7 @@ const employees = [
     FullName: 'Harv Mudd',
     Title: 'Retail Sales Manager',
     Employee_Picture: '42.png',
-    Picture: '../../../../images/employees/42.png',
+    Picture: '../../../images/employees/42.png',
     MobilePhone: '8315553895',
   },
   {
@@ -348,7 +348,7 @@ const employees = [
     FullName: 'Clark Morgan',
     Title: 'Retail Sales Manager',
     Employee_Picture: '43.png',
-    Picture: '../../../../images/employees/43.png',
+    Picture: '../../../images/employees/43.png',
     MobilePhone: '9255552525',
   },
   {
@@ -356,7 +356,7 @@ const employees = [
     FullName: 'Todd Hoffman',
     Title: 'Retail Sales Manager',
     Employee_Picture: '44.png',
-    Picture: '../../../../images/employees/44.png',
+    Picture: '../../../images/employees/44.png',
     MobilePhone: '9255553579',
   },
   {
@@ -364,7 +364,7 @@ const employees = [
     FullName: 'Jackie Garmin',
     Title: 'Support Assistant',
     Employee_Picture: '45.png',
-    Picture: '../../../../images/employees/45.png',
+    Picture: '../../../images/employees/45.png',
     MobilePhone: '2135551824',
   },
   {
@@ -372,7 +372,7 @@ const employees = [
     FullName: 'Lincoln Bartlett',
     Title: 'Sales Assistant',
     Employee_Picture: '46.png',
-    Picture: '../../../../images/employees/46.png',
+    Picture: '../../../images/employees/46.png',
     MobilePhone: '2135558272',
   },
   {
@@ -380,7 +380,7 @@ const employees = [
     FullName: 'Brad Farkus',
     Title: 'Engineer',
     Employee_Picture: '47.png',
-    Picture: '../../../../images/employees/47.png',
+    Picture: '../../../images/employees/47.png',
     MobilePhone: '2135553626',
   },
   {
@@ -388,7 +388,7 @@ const employees = [
     FullName: 'Jenny Hobbs',
     Title: 'Shipping Assistant',
     Employee_Picture: '48.png',
-    Picture: '../../../../images/employees/48.png',
+    Picture: '../../../images/employees/48.png',
     MobilePhone: '3105552668',
   },
   {
@@ -396,7 +396,7 @@ const employees = [
     FullName: 'Dallas Lou',
     Title: 'Shipping Assistant',
     Employee_Picture: '49.png',
-    Picture: '../../../../images/employees/49.png',
+    Picture: '../../../images/employees/49.png',
     MobilePhone: '2135558357',
   },
   {
@@ -404,7 +404,7 @@ const employees = [
     FullName: 'Stu Pizaro',
     Title: 'Engineer',
     Employee_Picture: '50.png',
-    Picture: '../../../../images/employees/50.png',
+    Picture: '../../../images/employees/50.png',
     MobilePhone: '2135552552',
   },
 ];

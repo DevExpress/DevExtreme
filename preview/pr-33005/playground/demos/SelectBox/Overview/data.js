@@ -23,7 +23,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 10,
   Category: 'Video Players',
-  ImageSrc: '../../../../images/products/1-small.png',
+  ImageSrc: '../../../images/products/1-small.png',
 }, {
   ID: 2,
   Name: 'SuperHD Player',
@@ -32,7 +32,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 25,
   Category: 'Video Players',
-  ImageSrc: '../../../../images/products/2-small.png',
+  ImageSrc: '../../../images/products/2-small.png',
 }, {
   ID: 3,
   Name: 'SuperPlasma 50',
@@ -41,7 +41,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 0,
   Category: 'Televisions',
-  ImageSrc: '../../../../images/products/3-small.png',
+  ImageSrc: '../../../images/products/3-small.png',
 }, {
   ID: 4,
   Name: 'SuperLED 50',
@@ -50,7 +50,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 55,
   Category: 'Televisions',
-  ImageSrc: '../../../../images/products/4-small.png',
+  ImageSrc: '../../../images/products/4-small.png',
 }, {
   ID: 5,
   Name: 'SuperLED 42',
@@ -59,7 +59,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 0,
   Category: 'Televisions',
-  ImageSrc: '../../../../images/products/5-small.png',
+  ImageSrc: '../../../images/products/5-small.png',
 }, {
   ID: 6,
   Name: 'SuperLCD 55',
@@ -68,7 +68,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 5,
   Category: 'Televisions',
-  ImageSrc: '../../../../images/products/6-small.png',
+  ImageSrc: '../../../images/products/6-small.png',
 }, {
   ID: 7,
   Name: 'SuperLCD 42',
@@ -77,7 +77,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 20,
   Category: 'Televisions',
-  ImageSrc: '../../../../images/products/7-small.png',
+  ImageSrc: '../../../images/products/7-small.png',
 }, {
   ID: 8,
   Name: 'SuperPlasma 65',
@@ -86,7 +86,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 0,
   Category: 'Televisions',
-  ImageSrc: '../../../../images/products/8-small.png',
+  ImageSrc: '../../../images/products/8-small.png',
 }, {
   ID: 9,
   Name: 'SuperLCD 70',
@@ -95,7 +95,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 5,
   Category: 'Televisions',
-  ImageSrc: '../../../../images/products/9-small.png',
+  ImageSrc: '../../../images/products/9-small.png',
 }, {
   ID: 10,
   Name: 'DesktopLED 21',
@@ -104,7 +104,7 @@ const products = [{
   Backorder: 425,
   Manufacturing: 75,
   Category: 'Monitors',
-  ImageSrc: '../../../../images/products/10-small.png',
+  ImageSrc: '../../../images/products/10-small.png',
 }, {
   ID: 11,
   Name: 'DesktopLED 19',
@@ -113,7 +113,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 110,
   Category: 'Monitors',
-  ImageSrc: '../../../../images/products/11-small.png',
+  ImageSrc: '../../../images/products/11-small.png',
 }, {
   ID: 12,
   Name: 'DesktopLCD 21',
@@ -122,7 +122,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 60,
   Category: 'Monitors',
-  ImageSrc: '../../../../images/products/12-small.png',
+  ImageSrc: '../../../images/products/12-small.png',
 }, {
   ID: 13,
   Name: 'DesktopLCD 19',
@@ -131,7 +131,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 210,
   Category: 'Monitors',
-  ImageSrc: '../../../../images/products/13-small.png',
+  ImageSrc: '../../../images/products/13-small.png',
 }, {
   ID: 14,
   Name: 'Projector Plus',
@@ -140,7 +140,7 @@ const products = [{
   Backorder: 55,
   Manufacturing: 10,
   Category: 'Projectors',
-  ImageSrc: '../../../../images/products/14-small.png',
+  ImageSrc: '../../../images/products/14-small.png',
 }, {
   ID: 15,
   Name: 'Projector PlusHD',
@@ -149,7 +149,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 90,
   Category: 'Projectors',
-  ImageSrc: '../../../../images/products/15-small.png',
+  ImageSrc: '../../../images/products/15-small.png',
 }, {
   ID: 16,
   Name: 'Projector PlusHT',
@@ -158,7 +158,7 @@ const products = [{
   Backorder: 75,
   Manufacturing: 57,
   Category: 'Projectors',
-  ImageSrc: '../../../../images/products/16-small.png',
+  ImageSrc: '../../../images/products/16-small.png',
 }, {
   ID: 17,
   Name: 'ExcelRemote IR',
@@ -167,7 +167,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 190,
   Category: 'Automation',
-  ImageSrc: '../../../../images/products/17-small.png',
+  ImageSrc: '../../../images/products/17-small.png',
 }, {
   ID: 18,
   Name: 'ExcelRemote BT',
@@ -176,7 +176,7 @@ const products = [{
   Backorder: 0,
   Manufacturing: 0,
   Category: 'Automation',
-  ImageSrc: '../../../../images/products/18-small.png',
+  ImageSrc: '../../../images/products/18-small.png',
 }, {
   ID: 19,
   Name: 'ExcelRemote IP',
@@ -185,5 +185,5 @@ const products = [{
   Backorder: 325,
   Manufacturing: 225,
   Category: 'Automation',
-  ImageSrc: '../../../../images/products/19-small.png',
+  ImageSrc: '../../../images/products/19-small.png',
 }];

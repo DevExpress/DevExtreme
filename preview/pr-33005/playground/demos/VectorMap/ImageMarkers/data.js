@@ -1,5 +1,5 @@
 function getImageUrl(name) {
-  return `../../../../images/VectorMap/${name}.png`;
+  return `../../../images/VectorMap/${name}.png`;
 }
 
 const weatherData = {

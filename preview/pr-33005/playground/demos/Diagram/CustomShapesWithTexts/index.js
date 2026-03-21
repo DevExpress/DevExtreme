@@ -15,7 +15,7 @@ $(() => {
   }).dxDiagram('instance');
 
   $.ajax({
-    url: '../../../../data/diagram-employees.json',
+    url: '../../../data/diagram-employees.json',
     dataType: 'text',
     success(data) {
       diagram.import(data);
