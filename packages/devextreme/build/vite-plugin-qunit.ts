@@ -209,6 +209,51 @@ export default __result;
   return result;
 }
 
+function transformCjsToEsm(code: string): string | null {
+  if (!/\brequire\s*\(/.test(code)) return null;
+
+  const imports: string[] = [];
+  let importIdx = 0;
+  let modified = code;
+
+  modified = modified.replace(
+    /^(const|let|var)\s+\{\s*([^}]+)\s*\}\s*=\s*require\s*\(\s*['"]([^'"]+)['"]\s*\)\s*;?/gm,
+    (match, decl, names, source) => {
+      const cleanNames = names.split(',').map((n: string) => n.trim()).filter(Boolean).join(', ');
+      imports.push(`import { ${cleanNames} } from '${source}';`);
+      return '';
+    },
+  );
+
+  modified = modified.replace(
+    /^(const|let|var)\s+([$\w]+)\s*=\s*require\s*\(\s*['"]([^'"]+)['"]\s*\)\.([$\w]+)\s*;?/gm,
+    (match, decl, varName, source, prop) => {
+      imports.push(`import { ${prop} as ${varName} } from '${source}';`);
+      return '';
+    },
+  );
+
+  modified = modified.replace(
+    /^(const|let|var)\s+([$\w]+)\s*=\s*require\s*\(\s*['"]([^'"]+)['"]\s*\)\s*;?/gm,
+    (match, decl, varName, source) => {
+      imports.push(`import ${varName} from '${source}';`);
+      return '';
+    },
+  );
+
+  modified = modified.replace(
+    /^require\s*\(\s*['"]([^'"]+)['"]\s*\)\s*;?/gm,
+    (match, source) => {
+      imports.push(`import '${source}';`);
+      return '';
+    },
+  );
+
+  if (imports.length === 0) return null;
+
+  return imports.join('\n') + '\n' + modified;
+}
+
 function postTransformPlugin(): PluginOption {
   const defaultCache = new Map<string, boolean>();
 
@@ -373,6 +418,13 @@ export default function qunitPlugin(): PluginOption[] {
           if (transformed) {
             return { code: transformed, map: null };
           }
+        }
+      }
+
+      if (id.includes('/testing/') && id.endsWith('.js') && code.includes('require(')) {
+        const transformed = transformCjsToEsm(code);
+        if (transformed) {
+          return { code: transformed, map: null };
         }
       }
 
