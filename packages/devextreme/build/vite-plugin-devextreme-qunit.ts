@@ -133,6 +133,10 @@ export default function devextremeQunitBabelPlugin(): PluginOption {
         return null;
       }
 
+      if (id.includes('/testing/helpers/') && /define\s*\(\s*function\s*\(\s*require/.test(code)) {
+        return null;
+      }
+
       const isTSX = id.endsWith('.tsx');
       const isTS = id.endsWith('.ts') || isTSX;
 

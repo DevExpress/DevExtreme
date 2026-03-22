@@ -145,7 +145,7 @@ function generateTestPageHtml(category: string, testFile: string): string {
 }
 
 function transformAmdHelper(code: string, id: string): string | null {
-  const amdPattern = /\(function\s*\(\s*root\s*,\s*factory\s*\)\s*\{[\s\S]*?define\s*\(\s*function\s*\(\s*require\s*,\s*exports\s*,\s*module\s*\)\s*\{([\s\S]*?)\}\s*\)\s*;[\s\S]*?\}\s*\(\s*(?:window|this)\s*,\s*function\s*\(([\s\S]*?)\)\s*\{([\s\S]*)\}\s*\)\s*\)\s*;?\s*$/;
+  const amdPattern = /\(function\s*\(\s*root\s*,\s*factory\s*\)\s*\{[\s\S]*?define\s*\(\s*function\s*\(\s*require\s*,\s*exports\s*,\s*module\s*\)\s*\{([\s\S]*?)\}\s*\)\s*;[\s\S]*?\}\s*\(\s*(?:window|this)\s*,\s*function\s*\(([\s\S]*?)\)\s*\{([\s\S]*)\}\s*\)\s*\)\s*;?\s*$/s;
 
   const match = code.match(amdPattern);
   if (!match) return null;
@@ -154,55 +154,82 @@ function transformAmdHelper(code: string, id: string): string | null {
   const factoryParams = match[2].trim();
   const factoryBody = match[3];
 
-  const requireCalls: Array<{ varName: string; modulePath: string; property?: string }> = [];
-  const requirePattern = /(?:(\w+)\s*=\s*)?(?:root\.(\w+)\s*=\s*)?(?:module\.exports\s*=\s*)?(?:require\(\s*'([^']+)'\s*\)(?:\.(\w+))?)/g;
-  let reqMatch;
-  while ((reqMatch = requirePattern.exec(amdBody)) !== null) {
-    const modulePath = reqMatch[3];
-    const property = reqMatch[4];
-    const varName = reqMatch[1] || reqMatch[2] || property || path.basename(modulePath, path.extname(modulePath));
-    requireCalls.push({ varName, modulePath, property });
+  const factoryRequires: Array<{ modulePath: string; property?: string }> = [];
+  const factoryCallMatch = amdBody.match(/factory\s*\(([\s\S]*)\)/);
+  if (factoryCallMatch) {
+    const factoryArgs = factoryCallMatch[1];
+    const argReqPattern = /require\(\s*'([^']+)'\s*\)(?:\.(\w+))?/g;
+    let argMatch;
+    while ((argMatch = argReqPattern.exec(factoryArgs)) !== null) {
+      factoryRequires.push({ modulePath: argMatch[1], property: argMatch[2] });
+    }
   }
 
-  const imports = requireCalls.map((r) => {
-    if (r.property) {
-      return `import { ${r.property} as ${r.varName} } from '${r.modulePath}';`;
+  const standaloneRequires: Array<{ varName: string; modulePath: string; property?: string }> = [];
+  const standalonePattern = /(\w+)\s*=\s*require\(\s*'([^']+)'\s*\)(?:\.(\w+))?\s*;/g;
+  let stMatch;
+  while ((stMatch = standalonePattern.exec(amdBody)) !== null) {
+    const isInFactory = factoryCallMatch && amdBody.indexOf(stMatch[0]) > amdBody.indexOf('factory(');
+    if (!isInFactory) {
+      standaloneRequires.push({ varName: stMatch[1], modulePath: stMatch[2], property: stMatch[3] });
     }
-    return `import ${r.varName} from '${r.modulePath}';`;
-  }).join('\n');
+  }
 
+  const paramList = factoryParams.split(',').map((p) => p.trim()).filter(Boolean);
+
+  const standaloneVarNames = new Set(standaloneRequires.map((sr) => sr.varName));
   const preambleLines: string[] = [];
-  const lines = code.split('\n');
-  for (const line of lines) {
-    if (line.match(/^\s*(?:let|var|const)\s+\w+/) && !line.match(/function\s*\(\s*root/)) {
-      preambleLines.push(line);
+  const codeLines = code.split('\n');
+  for (const line of codeLines) {
+    const varMatch = line.match(/^\s*(?:let|var|const)\s+(\w+)/);
+    if (varMatch && !line.match(/function\s*\(\s*root/)) {
+      if (!standaloneVarNames.has(varMatch[1])) {
+        preambleLines.push(line);
+      }
     } else {
       break;
     }
   }
   const preamble = preambleLines.join('\n');
 
-  const paramList = factoryParams.split(',').map((p) => p.trim()).filter(Boolean);
-  const paramImports = paramList.map((param, i) => {
-    const existing = requireCalls.find((r) => r.varName === param);
-    if (existing) return '';
+  const imports: string[] = [];
+  const callArgs: string[] = [];
 
-    if (param === '$' || param === 'jQuery') return `import $ from 'jquery';`;
-    if (param === 'inferno') return `import inferno from 'inferno';`;
-    return '';
-  }).filter(Boolean).join('\n');
+  for (const sr of standaloneRequires) {
+    if (sr.property) {
+      imports.push(`import { ${sr.property} as ${sr.varName} } from '${sr.modulePath}';`);
+    } else {
+      imports.push(`import ${sr.varName} from '${sr.modulePath}';`);
+    }
+  }
 
-  const result = `${preamble ? preamble + '\n' : ''}${imports}
-${paramImports}
+  for (let i = 0; i < paramList.length; i++) {
+    const param = paramList[i];
+    const req = factoryRequires[i];
+
+    if (req) {
+      const alias = `__amd_${i}`;
+      if (req.property) {
+        imports.push(`import { ${req.property} as ${alias} } from '${req.modulePath}';`);
+      } else {
+        imports.push(`import ${alias} from '${req.modulePath}';`);
+      }
+      callArgs.push(alias);
+    } else if (param === '$' || param === 'jQuery') {
+      imports.push(`import $ from 'jquery';`);
+      callArgs.push('$');
+    } else if (param === 'inferno') {
+      imports.push(`import inferno from 'inferno';`);
+      callArgs.push('inferno');
+    } else {
+      callArgs.push('undefined');
+    }
+  }
+
+  const result = `${preamble ? preamble + '\n' : ''}${imports.join('\n')}
 
 const __factory = (function(${factoryParams}) {${factoryBody}});
-const __result = __factory(${paramList.map((p) => {
-    if (p === '$' || p === 'jQuery') return '$';
-    if (p === 'inferno') return 'inferno';
-    const req = requireCalls.find((r) => r.varName === p);
-    if (req) return req.varName;
-    return 'undefined';
-  }).join(', ')});
+const __result = __factory(${callArgs.join(', ')});
 export default __result;
 `;
 
@@ -352,6 +379,22 @@ function postTransformPlugin(): PluginOption {
         };
       }
 
+      const starExportPattern = /\bexport\s*\*\s*from\s*["']([^"']+)["']/g;
+      const starSources: string[] = [];
+      while ((m = starExportPattern.exec(code)) !== null) {
+        starSources.push(m[1]);
+      }
+      if (starSources.length > 0) {
+        const starImports = starSources.map((s, i) =>
+          `import * as __star${i} from ${JSON.stringify(s)};`
+        ).join('\n');
+        const spread = starSources.map((_, i) => `...(__star${i})`).join(', ');
+        return {
+          code: code + `\n${starImports}\nexport default { ${spread} };\n`,
+          map: null,
+        };
+      }
+
       return undefined;
     },
   };
@@ -413,7 +456,7 @@ export default function qunitPlugin(): PluginOption[] {
 
     transform(code: string, id: string) {
       if (id.includes('/testing/helpers/') && id.endsWith('.js')) {
-        if (code.includes('define(function(require')) {
+        if (/define\s*\(\s*function\s*\(\s*require/.test(code)) {
           const transformed = transformAmdHelper(code, id);
           if (transformed) {
             return { code: transformed, map: null };
