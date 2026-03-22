@@ -1260,6 +1260,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       groups: this.getViewOption('groups'),
       groupByDate: this.getViewOption('groupByDate'),
       timeZoneCalculator: this.timeZoneCalculator,
+      scale: this._scale,
       getResizableStep: () => this._scale.getResizableStep(),
       getDOMElementsMetaData: () => this._scale.getDOMElementsMetaData(),
       getViewDataProvider: () => this._scale.viewDataProvider,

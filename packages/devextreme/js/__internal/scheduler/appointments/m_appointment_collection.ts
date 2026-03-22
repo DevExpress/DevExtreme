@@ -776,22 +776,24 @@ class SchedulerAppointments extends CollectionWidget<any> {
     const $element = $(e.element);
     const timeZoneCalculator = this.option('timeZoneCalculator');
 
+    const scale = this.option('scale');
+
     return getAppointmentDateRange({
       handles: e.handles,
       appointmentSettings: $element.data(APPOINTMENT_SETTINGS_KEY) as any,
-      isVerticalGroupedWorkSpace: this.option('isVerticalGroupedWorkSpace')(),
+      isVerticalGroupedWorkSpace: scale.isVerticalGroupedWorkSpace(),
       appointmentRect: getBoundingRect($element[0]),
       parentAppointmentRect: getBoundingRect($element.parent()[0]),
-      viewDataProvider: this.option('getViewDataProvider')(),
-      getCellDateInfo: this.option('getCellDateInfo'),
-      getCellGeometry: this.option('getCellGeometry'),
-      isDateAndTimeView: this.option('isDateAndTimeView')(),
+      viewDataProvider: scale.viewDataProvider,
+      getCellDateInfo: scale.getCellDateInfo.bind(scale),
+      getCellGeometry: scale.getCellGeometry.bind(scale),
+      isDateAndTimeView: scale.isDateAndTimeView(),
       startDayHour: this.invoke('getStartDayHour'),
       endDayHour: this.invoke('getEndDayHour'),
       timeZoneCalculator,
       dataAccessors: this.dataAccessors,
       rtlEnabled: this.option('rtlEnabled'),
-      DOMMetaData: this.option('getDOMElementsMetaData')(),
+      DOMMetaData: scale.getDOMElementsMetaData(),
       viewOffset: this.invoke('getViewOffsetMs'),
     });
   }
