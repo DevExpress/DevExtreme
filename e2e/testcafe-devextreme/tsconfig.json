@@ -4,5 +4,11 @@
     "types": [
       "jquery"
     ]
-  }
+  },
+  "exclude": [
+    "playwright-tests",
+    "playwright-helpers",
+    "playwright-results",
+    "playwright-report"
+  ]
 }
