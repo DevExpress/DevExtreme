@@ -42,6 +42,8 @@ import { ACTION_TO_APPOINTMENT, AppointmentPopup as AppointmentLegacyPopup } fro
 import { AppointmentPopup } from './appointment_popup/m_popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import NotifyScheduler from './base/m_widget_notify_scheduler';
+import type { Scale } from './entieties/scale';
+import { WorkspaceScale } from './entieties/scale';
 import { SchedulerHeader } from './header/m_header';
 import type { HeaderOptions } from './header/types';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
@@ -56,7 +58,6 @@ import {
   excludeFromRecurrence,
   getToday,
   isAppointmentTakesAllDay,
-  isDateAndTimeView,
   isTimelineView,
 } from './r1/utils/index';
 import { validateRRule } from './recurrence/validate_rule';
@@ -170,6 +171,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private a11yStatus!: dxElementWrapper;
 
   _workSpace: any;
+
+  private _scale: Scale;
 
   private header?: SchedulerHeader;
 
@@ -735,6 +738,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     super._init();
 
+    this._scale = new WorkspaceScale(() => this._workSpace);
+
     this.initAllDayPanel();
 
     // @ts-expect-error
@@ -1255,11 +1260,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       groups: this.getViewOption('groups'),
       groupByDate: this.getViewOption('groupByDate'),
       timeZoneCalculator: this.timeZoneCalculator,
-      getResizableStep: () => (this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0),
-      getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),
-      getViewDataProvider: () => this._workSpace?.viewDataProvider,
-      isVerticalGroupedWorkSpace: () => this._workSpace.isVerticalGroupedWorkSpace(),
-      isDateAndTimeView: () => isDateAndTimeView(this._workSpace.type),
+      getResizableStep: () => this._scale.getResizableStep(),
+      getDOMElementsMetaData: () => this._scale.getDOMElementsMetaData(),
+      getViewDataProvider: () => this._scale.viewDataProvider,
+      isVerticalGroupedWorkSpace: () => this._scale.isVerticalGroupedWorkSpace(),
+      isDateAndTimeView: () => this._scale.isDateAndTimeView(),
       onContentReady: () => {
         this._workSpace?.option('allDayExpanded', this.isAllDayExpanded());
       },
