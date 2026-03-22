@@ -255,8 +255,6 @@
     "dev:playground": "vite",
     "build:playground": "vite build",
     "test:playground": "playwright test --config playground/playwright.config.ts",
-    "test:qunit-vite": "tsx testing/vite-qunit-runner.ts",
-    "dev:qunit": "vite --config vite-qunit.config.ts",
     "test-jest": "cross-env NODE_OPTIONS='--expose-gc' jest --no-coverage --runInBand --selectProjects jsdom-tests",
     "test-jest:watch": "jest --watch",
     "test-jest:node": "jest --no-coverage --runInBand --selectProjects node-tests",
