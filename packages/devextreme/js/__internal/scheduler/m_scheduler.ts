@@ -172,7 +172,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   _workSpace: any;
 
-  private _scale: Scale;
+  private _scale!: Scale;
 
   private header?: SchedulerHeader;
 
