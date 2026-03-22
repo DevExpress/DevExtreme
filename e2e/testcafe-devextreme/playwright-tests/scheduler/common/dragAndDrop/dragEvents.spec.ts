@@ -1,187 +1,108 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
-import path from 'path';
+import { createWidget, getContainerUrl, setupTestPage } from '../../../../playwright-helpers';
 
-const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
-
-test.describe('Scheduler dragging - drag events', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto(containerUrl);
-    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
-    await page.evaluate((theme) => new Promise<void>((resolve) => {
-      (window as any).DevExpress.ui.themes.ready(resolve);
-      (window as any).DevExpress.ui.themes.current(theme);
-    }), process.env.THEME || 'fluent.blue.light');
-  });
-
-);
-
-const SCHEDULER_SELECTOR = '#container';
-
-const initCallbackTesting = async () => {
-  await CallbackTestHelper.initClientTesting([
-    'onDragStartItemData',
-    'onDragMoveItemData',
-    'onDragEndItemData',
-    'onDragEndToItemData',
-  ]);
-};
-
-const clearCallbackTesting = async () => {
-  await CallbackTestHelper.clearClientData([
-    'onDragStartItemData',
-    'onDragMoveItemData',
-    'onDragEndItemData',
-    'onDragEndToItemData',
-  ]);
-};
-
-const collectEventsCallbackResults = async () => [
-  await CallbackTestHelper.getClientResults<any>('onDragStartItemData'),
-  await CallbackTestHelper.getClientResults<any>('onDragMoveItemData'),
-  await CallbackTestHelper.getClientResults<any>('onDragEndItemData'),
-  await CallbackTestHelper.getClientResults<any>('onDragEndToItemData'),
-];
+const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
 
 const INITIAL_APPOINTMENT = {
   text: 'Test',
   startDate: '2023-01-01T01:00:00',
   endDate: '2023-01-01T02:00:00',
 };
+
 const TEST_CASES = [
   {
     view: 'month',
-    expectedToItemData: {
-      text: 'Test',
-      startDate: '2023-01-05T01:00:00',
-      endDate: '2023-01-05T02:00:00',
-    },
+    expectedToItemData: { text: 'Test', startDate: '2023-01-05T01:00:00', endDate: '2023-01-05T02:00:00' },
   },
   {
     view: 'week',
-    expectedToItemData: {
-      text: 'Test',
-      startDate: '2023-01-05T00:00:00',
-      endDate: '2023-01-05T01:00:00',
-      allDay: true,
-    },
+    expectedToItemData: { text: 'Test', startDate: '2023-01-05T00:00:00', endDate: '2023-01-05T01:00:00', allDay: true },
   },
   {
     view: 'timelineDay',
-    expectedToItemData: {
-      text: 'Test',
-      startDate: '2023-01-01T01:30:00',
-      endDate: '2023-01-01T02:30:00',
-      allDay: false,
-    },
+    expectedToItemData: { text: 'Test', startDate: '2023-01-01T01:30:00', endDate: '2023-01-01T02:30:00', allDay: false },
   },
 ];
 
-TEST_CASES.forEach(({ view, expectedToItemData }) => {
-  test(`Should fire correct events with correct itemData inside during drag-n-drop in ${view} view.`, async ({ page }) => {
-  // --- setup ---
-await initCallbackTesting();
-    await createWidget(page, 'dxScheduler', {
-      dataSource: [INITIAL_APPOINTMENT],
-      currentView: view,
-      currentDate: '2023-01-01',
-      appointmentDragging: {
-        onDragStart: ({ itemData }) => {
-          (window as WindowCallbackExtended)
-            .clientTesting!
-            .addCallbackResult('onDragStartItemData', { ...itemData
-  // --- test ---
-const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-    const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Test' });
-    const targetCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(4);
-
-    await t
-      .dragToElement(appointment.element, targetCell, { speed: 0.5 });
-
-    const [
-      onDragStartItemData,
-      onDragMoveItemData,
-      onDragEndItemData,
-      onDragEndToItemData,
-    ] = await collectEventsCallbackResults();
-
-    expect(onDragStartItemData.length).toBe(1)
-      .expect(onDragStartItemData[0]).toBe(INITIAL_APPOINTMENT);
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const itemData of onDragMoveItemData) {
-      expect(itemData).toBe(INITIAL_APPOINTMENT);
-    }
-
-    expect(onDragEndItemData.length).toBe(1)
-      .expect(onDragEndToItemData.length).toBe(1)
-      .expect(onDragEndItemData[0])
-      .eql(INITIAL_APPOINTMENT)
-      .expect(onDragEndToItemData[0])
-      .eql(expectedToItemData);
-});
-        },
-        onDragMove: ({ itemData }) => {
-          (window as WindowCallbackExtended)
-            .clientTesting!
-            .addCallbackResult('onDragMoveItemData', { ...itemData });
-        },
-        onDragEnd: ({ itemData, toItemData }) => {
-          const clientTesting = (window as WindowCallbackExtended).clientTesting!;
-          clientTesting.addCallbackResult('onDragEndItemData', { ...itemData });
-          clientTesting.addCallbackResult('onDragEndToItemData', { ...toItemData });
-        },
-      },
-    });
-  }).after(async () => {
-    await clearCallbackTesting();
+test.describe('Scheduler dragging - drag events', () => {
+  test.beforeEach(async ({ page }) => {
+    await setupTestPage(page, containerUrl);
   });
-});
 
-test('Should block appointment dragging while onAppointmentUpdating Promise is pending (T1308596)', async ({ page }) => {
-  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-  const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Test Appointment' });
-
-  const targetCell1 = page.locator('.dx-scheduler-date-table-row').nth(18).locator('.dx-scheduler-date-table-cell').nth(2);
-  const targetCell2 = page.locator('.dx-scheduler-date-table-row').nth(18).locator('.dx-scheduler-date-table-cell').nth(5);
-
-  const initialPosition = await appointment.element.boundingClientRect;
-
-  await /* TODO: dragToElement(appointment.element, targetCell1, { speed: 1 }) */;
-  await /* TODO: dragToElement(appointment.element, targetCell2, { speed: 1 }) */;
-  await /* TODO: dragToElement(appointment.element, targetCell2, { speed: 1 }) */;
-  await /* TODO: dragToElement(appointment.element, targetCell2, { speed: 1 }) */;
-
-  await await page.waitForTimeout(6000);
-
-  const positionAfterPromiseResolved = await appointment.element.boundingClientRect;
-  const cell1Position = await targetCell1.boundingClientRect;
-
-  expect(positionAfterPromiseResolved.left)
-    .notEql(initialPosition.left)
-    .expect(positionAfterPromiseResolved.left)
-    .eql(cell1Position.left);
-});
-
-// TODO: .before() block not converted - move to test setup
-// {
-  await createWidget(page, 'dxScheduler', {
-    dataSource: [{
-      text: 'Test Appointment',
-      startDate: new Date(2023, 0, 2, 10, 0),
-      endDate: new Date(2023, 0, 2, 11, 0),
-    }],
-    views: ['week'],
-    currentView: 'week',
-    currentDate: new Date(2023, 0, 2),
-    height: 600,
-    onAppointmentUpdating: (e) => {
-      e.cancel = new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(false);
-        }, 5000);
+  TEST_CASES.forEach(({ view, expectedToItemData }) => {
+    test(`Should fire correct events with correct itemData inside during drag-n-drop in ${view} view.`, async ({ page }) => {
+      await page.evaluate(() => {
+        (window as any).clientTestingResults = {
+          onDragStartItemData: [],
+          onDragMoveItemData: [],
+          onDragEndItemData: [],
+          onDragEndToItemData: [],
+        };
       });
-    },
+
+      await createWidget(page, 'dxScheduler', {
+        dataSource: [INITIAL_APPOINTMENT],
+        currentView: view,
+        currentDate: '2023-01-01',
+        appointmentDragging: {
+          onDragStart: new Function('e', 'window.clientTestingResults.onDragStartItemData.push(Object.assign({}, e.itemData));') as any,
+          onDragMove: new Function('e', 'window.clientTestingResults.onDragMoveItemData.push(Object.assign({}, e.itemData));') as any,
+          onDragEnd: new Function('e', 'window.clientTestingResults.onDragEndItemData.push(Object.assign({}, e.itemData)); window.clientTestingResults.onDragEndToItemData.push(Object.assign({}, e.toItemData));') as any,
+        },
+      });
+
+      const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Test' });
+      const targetCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(4);
+
+      await appointment.dragTo(targetCell);
+
+      const results = await page.evaluate(() => (window as any).clientTestingResults);
+
+      expect(results.onDragStartItemData.length).toBe(1);
+      expect(results.onDragStartItemData[0]).toEqual(INITIAL_APPOINTMENT);
+
+      for (const itemData of results.onDragMoveItemData) {
+        expect(itemData).toEqual(INITIAL_APPOINTMENT);
+      }
+
+      expect(results.onDragEndItemData.length).toBe(1);
+      expect(results.onDragEndToItemData.length).toBe(1);
+      expect(results.onDragEndItemData[0]).toEqual(INITIAL_APPOINTMENT);
+      expect(results.onDragEndToItemData[0]).toEqual(expectedToItemData);
+    });
   });
-});
+
+  test('Should block appointment dragging while onAppointmentUpdating Promise is pending (T1308596)', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [{
+        text: 'Test Appointment',
+        startDate: new Date(2023, 0, 2, 10, 0),
+        endDate: new Date(2023, 0, 2, 11, 0),
+      }],
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date(2023, 0, 2),
+      height: 600,
+      onAppointmentUpdating: new Function('e', 'e.cancel = new Promise(function(resolve) { setTimeout(function() { resolve(false); }, 5000); });') as any,
+    });
+
+    const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Test Appointment' });
+    const targetCell1 = page.locator('.dx-scheduler-date-table-row').nth(18).locator('.dx-scheduler-date-table-cell').nth(2);
+    const targetCell2 = page.locator('.dx-scheduler-date-table-row').nth(18).locator('.dx-scheduler-date-table-cell').nth(5);
+
+    const initialPosition = await appointment.boundingBox();
+
+    await appointment.dragTo(targetCell1);
+    await appointment.dragTo(targetCell2);
+    await appointment.dragTo(targetCell2);
+    await appointment.dragTo(targetCell2);
+
+    await page.waitForTimeout(6000);
+
+    const positionAfterPromiseResolved = await appointment.boundingBox();
+    const cell1Position = await targetCell1.boundingBox();
+
+    expect(positionAfterPromiseResolved!.x).not.toBe(initialPosition!.x);
+    expect(positionAfterPromiseResolved!.x).toBe(cell1Position!.x);
+  });
 });
