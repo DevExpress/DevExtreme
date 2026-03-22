@@ -4,6 +4,8 @@ import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
 
+// TODO: import defaultConfig from sticky helpers or inline the data
+
 test.describe('FixedColumns - MasterDetail', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
