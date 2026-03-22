@@ -55,7 +55,7 @@ test.describe('DataGrid - contrast', () => {
       .getSearchIcon()
       .element;
 
-    await (page.locator('.dx-datagrid-filter-row td').click().nth(0).element);
+    await (page.locator('.dx-datagrid-filter-row td').nth(0).element).click();
     await page.keyboard.press('tab');
     expect(await searchIconContainer.focused);
     await t.ok();

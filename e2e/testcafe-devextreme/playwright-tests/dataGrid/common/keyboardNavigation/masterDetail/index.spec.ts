@@ -21,13 +21,11 @@ test.describe('DataGrid Tests', () => {
   test('Focus goes inside master detail on tab', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', gridOptions);
 
-      await (page.locator('.dx-data-row').click().nth(0).locator('.dx-command-edit').nth(0),
-    );
+      await (page.locator('.dx-data-row').nth(0).locator('.dx-command-edit').nth(0),).click();
 
     const innerDataGrid = new DataGrid(page.locator('.dx-master-detail-row').nth(0).element.find('.dx-datagrid').parent());
 
-    await (page.locator('.dx-data-row').click().nth(0).locator('td').nth(4),
-    )
+    await (page.locator('.dx-data-row').nth(0).locator('td').nth(4),).click()
       .pressKey('tab')
       .pressKey('tab');
 

@@ -57,7 +57,7 @@ test.describe('Header Filter T1163100 change filter icon', () => {
                   for (let columnIdx = 0; columnIdx < 4; columnIdx += 1) {
             const filterCell = page.locator('.dx-datagrid-filter-row td').nth(columnIdx);
             await (filterCell.menuButton).click();
-            await (filterCell.menu.getItemByText('Starts with').click());
+            await (filterCell.menu.getItemByText('Starts with')).click();
           }
 
           await testScreenshot(page,

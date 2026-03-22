@@ -32,7 +32,7 @@ test.describe('XSS', () => {
 
     await (group.element).click();
     expect(await FilterBuilder.getPopupTreeView().visible).toBeTruthy();
-    await (FilterBuilder.getPopupTreeViewNode().click());
+    await (FilterBuilder.getPopupTreeViewNode()).click();
     expect(await true);
     await t.ok();
   });

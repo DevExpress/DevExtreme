@@ -111,17 +111,17 @@ test.describe('Filtering', () => {
     let filterBuilderPopup = await filterPanel.openFilterBuilderPopup(t);
     let filterBuilder = filterBuilderPopup.getFilterBuilder();
 
-    await (filterBuilder.getAddButton().click());
+    await (filterBuilder.getAddButton()).click();
     expect(await FilterBuilder.getPopupTreeView().visible).toBeTruthy();
-    await (FilterBuilder.getPopupTreeViewNodeByText('Add Condition').click());
-    await (filterBuilder.getField(0, 'item').click().element);
-    await (FilterBuilder.getPopupTreeViewNodeByText('Order Date').click());
-    await (filterBuilder.getField(0, 'itemOperation').click().element);
-    await (FilterBuilder.getPopupTreeViewNodeByText('Is any of').click());
-    await (filterBuilder.getField(0, 'itemValue').click().element);
-    await (FilterBuilder.getPopupTreeViewNodeCheckboxByText('Weekends').click());
-    await (new Popup(FilterBuilder.getPopupTreeView().click()).getOkButton().element);
-    await (filterBuilderPopup.asPopup().click().getOkButton().element);
+    await (FilterBuilder.getPopupTreeViewNodeByText('Add Condition')).click();
+    await (filterBuilder.getField(0, 'item').element).click();
+    await (FilterBuilder.getPopupTreeViewNodeByText('Order Date')).click();
+    await (filterBuilder.getField(0, 'itemOperation').element).click();
+    await (FilterBuilder.getPopupTreeViewNodeByText('Is any of')).click();
+    await (filterBuilder.getField(0, 'itemValue').element).click();
+    await (FilterBuilder.getPopupTreeViewNodeCheckboxByText('Weekends')).click();
+    await (new Popup(FilterBuilder.getPopupTreeView()).getOkButton().element).click();
+    await (filterBuilderPopup.asPopup().getOkButton().element).click();
 
     expect(await dataGrid.getRows().count);
     await t.eql(3);
@@ -131,9 +131,9 @@ test.describe('Filtering', () => {
     filterBuilderPopup = await filterPanel.openFilterBuilderPopup(t);
     filterBuilder = filterBuilderPopup.getFilterBuilder();
 
-    await (filterBuilder.getField(0, 'itemOperation').click().element);
-    await (FilterBuilder.getPopupTreeViewNodeByText('Weekends').click());
-    await (filterBuilderPopup.asPopup().click().getOkButton().element);
+    await (filterBuilder.getField(0, 'itemOperation').element).click();
+    await (FilterBuilder.getPopupTreeViewNodeByText('Weekends')).click();
+    await (filterBuilderPopup.asPopup().getOkButton().element).click();
 
     expect(await dataGrid.getRows().count);
     await t.eql(3);
@@ -143,7 +143,7 @@ test.describe('Filtering', () => {
     const dateFilterCell = page.locator('.dx-datagrid-filter-row td').nth(1);
 
     await (dateFilterCell.menuButton).click();
-    await (dateFilterCell.menu.getItemByText('Between').click());
+    await (dateFilterCell.menu.getItemByText('Between')).click();
     expect(await dataGrid.getFilterRangeOverlay().exists).toBeTruthy();
     await (dataGrid.getFilterRangeStartEditor().locator('input')).fill('2/1/2017');
     await (dataGrid.getFilterRangeEndEditor().locator('input')).fill('2/28/2017');

@@ -114,16 +114,16 @@ test.describe('Grouping Panel - One group on different pages', () => {
         },
       }));
 
-      await (page.locator('.dx-group-row').click().nth(0).getCell(0).element);
+      await (page.locator('.dx-group-row').nth(0).getCell(0).element).click();
     await testScreenshot(page, 'group-panel_loaded_first-page.png');
 
-    await (page.locator('.dx-pager').click().locator('.dx-page').filter({hasText: '2'}).element);
+    await (page.locator('.dx-pager').locator('.dx-page').filter({hasText: '2'}).element).click();
     await testScreenshot(page, 'group-panel_loaded_second-page.png');
 
-    await (page.locator('.dx-pager').click().locator('.dx-page').filter({hasText: '1'}).element);
+    await (page.locator('.dx-pager').locator('.dx-page').filter({hasText: '1'}).element).click();
     await testScreenshot(page, 'group-panel_restored_first-page.png');
 
-    await (page.locator('.dx-pager').click().locator('.dx-page').filter({hasText: '2'}).element);
+    await (page.locator('.dx-pager').locator('.dx-page').filter({hasText: '2'}).element).click();
     await testScreenshot(page, 'group-panel_restored_second-page.png');
   });
     // TODO: .after() block removed

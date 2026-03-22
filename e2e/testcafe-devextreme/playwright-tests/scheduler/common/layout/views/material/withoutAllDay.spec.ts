@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { createWidget, testScreenshot } from '../../../../../../playwright-helpers';
 import path from 'path';
 
@@ -14,22 +14,8 @@ test.describe('Scheduler: Material theme without all-day panel', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-);
-
-// visual: material.blue.light
-test('Week view without all-day panel should be rendered correctly', async ({ page }) => {
-  // Scheduler on '#container'
-    await testScreenshot(page, 'week-without-all-day-panel.png', {
-    element: page.locator('.dx-scheduler-work-space'),
+  test('Week view without all-day panel should be rendered correctly', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', { dataSource: [], currentDate: new Date(2020, 6, 15), views: ['week'], currentView: 'week', height: 500 });
+    await testScreenshot(page, 'week-without-all-day-panel.png', { element: page.locator('.dx-scheduler-work-space') });
   });
-
-  expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget(page, 'dxScheduler', {
-  dataSource: [],
-  currentDate: new Date(2020, 6, 15),
-  views: ['week'],
-  currentView: 'week',
-  height: 500,
-}));
 });

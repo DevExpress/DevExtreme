@@ -45,7 +45,7 @@ test.describe('Header Panel', () => {
       const headerPanel = page.locator('.dx-datagrid-header-panel');
 
     // act
-    await (headerPanel.locator('.dx-dropdownmenu-button').click());
+    await (headerPanel.locator('.dx-dropdownmenu-button')).click();
 
     // assert
     const selectPopup = headerPanel.getDropDownSelectPopup();
@@ -57,7 +57,7 @@ test.describe('Header Panel', () => {
     await t.ok();
 
     // act
-    await (selectPopup.editButton().click());
+    await (selectPopup.editButton()).click();
 
     // assert
     const menuItem = selectPopup.getSelectItem(1);

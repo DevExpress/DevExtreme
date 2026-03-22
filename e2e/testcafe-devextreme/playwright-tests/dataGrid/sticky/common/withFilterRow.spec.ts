@@ -27,7 +27,7 @@ test.describe('Sticky columns - Filter row', () => {
 
       expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
 
-    await (page.locator('.dx-header-row').click().getFilterRow().getFilterCell(1).element);
+    await (page.locator('.dx-header-row').getFilterRow().getFilterCell(1).element).click();
 
     await testScreenshot(page, 'filter_row_with_sticky_columns_1.png', { element: page.locator('#container') });
 

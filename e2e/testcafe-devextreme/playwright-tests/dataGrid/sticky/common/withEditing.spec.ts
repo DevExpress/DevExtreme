@@ -28,7 +28,7 @@ test.describe('Sticky columns - Editing', () => {
       expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
 
     await dataGrid.apiEditRow(1);
-    await (page.locator('.dx-data-row').click().nth(1).locator('td').nth(1));
+    await (page.locator('.dx-data-row').nth(1).locator('td').nth(1)).click();
 
     await testScreenshot(page, 'edit_row_with_sticky_columns_1.png', { element: page.locator('#container') });
 

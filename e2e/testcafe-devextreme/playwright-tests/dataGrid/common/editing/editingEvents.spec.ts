@@ -108,10 +108,10 @@ test.describe('Editing events', () => {
 
           const dataRow = page.locator('.dx-data-row').nth(0);
 
-      await (dataRow.locator('td').nth(1).click().getLinkEdit());
+      await (dataRow.locator('td').nth(1).getLinkEdit()).click();
 
       await (dataRow.locator('td').nth(0).locator('.dx-editor-cell')).fill('test text');
-      await (dataRow.locator('td').nth(1).click().getLinkSave());
+      await (dataRow.locator('td').nth(1).getLinkSave()).click();
 
       expect(await dataRow.locator('td').nth(1).getLinkSave().exists).toBe(expected);
     });

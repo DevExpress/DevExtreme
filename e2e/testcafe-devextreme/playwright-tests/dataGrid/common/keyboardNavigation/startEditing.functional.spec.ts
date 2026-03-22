@@ -36,7 +36,7 @@ test.describe('Keyboard Navigation - editOnKeyPress', () => {
 
     await page.evaluate((opts) => ($('#container') as any).dxDataGrid('instance').getScrollable().scrollBy(opts), { y: 10000 });
 
-    await (page.locator('.dx-data-row').click().nth(49).locator('td').nth(1));
+    await (page.locator('.dx-data-row').nth(49).locator('td').nth(1)).click();
     await page.keyboard.press('enter');
 
     expect(await page.locator('.dx-data-row').nth(49).locator('td').nth(1).locator('.dx-editor-cell').focused).toBeTruthy();

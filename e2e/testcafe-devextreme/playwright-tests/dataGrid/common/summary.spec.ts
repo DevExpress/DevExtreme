@@ -39,7 +39,7 @@ test.describe('Summary', () => {
       },
     });
 
-      await (page.locator('.dx-data-row').click().nth(4).locator('td').nth(1));
+      await (page.locator('.dx-data-row').nth(4).locator('td').nth(1)).click();
     await page.keyboard.press('tab');
 
     await testScreenshot(page, 'group-summary-focused.png', { element: page.locator('#container') });

@@ -39,7 +39,7 @@ test.describe('Editing.Visual', () => {
 
       // act
     await (dataGrid.getFormItemEditor(0)).fill('new');
-    await (dataGrid.getEditForm().click().saveButton);
+    await (dataGrid.getEditForm().saveButton).click();
 
     // assert
     await testScreenshot(page, 'grid-form-editing-T1193894.png', { element: page.locator('#container') });

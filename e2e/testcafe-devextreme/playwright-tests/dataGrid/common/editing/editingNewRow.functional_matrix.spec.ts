@@ -193,7 +193,7 @@ test.describe('Editing.NewRow', () => {
           const saveButton = getSaveButton(mode, form);
 
           if (saveButton) {
-            await (saveButton).click({ offsetX: 5, offsetY: 5 });
+            await (saveButton, { offsetX: 5, offsetY: 5 }).click();
           }
 
           await checkSavedCell(t, columnInfo, page.locator('.dx-data-row').nth(2).locator('td').nth(columnInfo.columnIndex));
@@ -221,7 +221,7 @@ test.describe('Editing.NewRow', () => {
           const saveButton = getSaveButton(mode, form);
 
           if (saveButton) {
-            await (saveButton).click({ offsetX: 5, offsetY: 5 });
+            await (saveButton, { offsetX: 5, offsetY: 5 }).click();
           }
 
           // eslint-disable-next-line no-restricted-syntax

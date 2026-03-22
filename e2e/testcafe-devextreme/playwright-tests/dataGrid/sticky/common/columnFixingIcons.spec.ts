@@ -29,7 +29,7 @@ test.describe('Column Fixing', () => {
       expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
 
     await t.rightClick(page.locator('.dx-header-row').nth(0).element);
-    await (dataGrid.getContextMenu().click().getItemByText('Set Fixed Position'));
+    await (dataGrid.getContextMenu().getItemByText('Set Fixed Position')).click();
     await testScreenshot(page, 'sticky_columns_context_menu.png');
   });
 });

@@ -30,11 +30,11 @@ test.describe('filterPanel', () => {
     ).getFilterBuilder();
 
     await testScreenshot(page, 'dataGrid-filterPanel-popup-focused.png');
-  await (filterBuilder.getField().click().getValueText());
+  await (filterBuilder.getField().getValueText()).click();
     await testScreenshot(page, 'dataGrid-filterPanel-popup.-with-editor-popup.png');
-  await (filterBuilder.getField().click().getValueText());
+  await (filterBuilder.getField().getValueText()).click();
     await testScreenshot(page, 'dataGrid-filterPanel-popup.png');
-  await (filterBuilder.getField().click().getValueText());
+  await (filterBuilder.getField().getValueText()).click();
     await testScreenshot(page, 'dataGrid-filterPanel-popup.-with-editor-popup.png');
   });
 });

@@ -62,9 +62,9 @@ test.describe('FixedColumns - appearance', () => {
 
         await testScreenshot(page, `datagrid_default_state_with_${showRowLinesState}.png`, { element: page.locator('#container') });
 
-        await (page.locator('.dx-data-row').click().nth(2).locator('.dx-command-edit').nth(41).locator('.dx-link').nth(0));
-        await (page.locator('.dx-data-row').click().nth(3).locator('.dx-command-edit').nth(0));
-        await (page.locator('.dx-data-row').click().nth(4).locator('td').nth(4));
+        await (page.locator('.dx-data-row').nth(2).locator('.dx-command-edit').nth(41).locator('.dx-link').nth(0)).click();
+        await (page.locator('.dx-data-row').nth(3).locator('.dx-command-edit').nth(0)).click();
+        await (page.locator('.dx-data-row').nth(4).locator('td').nth(4)).click();
 
         await testScreenshot(page, `datagrid_selected_focused_edit_state_with_${showRowLinesState}.png`, { element: page.locator('#container') });
       });

@@ -43,7 +43,7 @@ test.describe('Ai Column - Sticky columns.Visual', () => {
 
     // act
     await t.rightClick(page.locator('.dx-header-row').nth(0).locator('td').nth(0));
-    await (dataGrid.getContextMenu().click().getItemByText('Set Fixed Position'));
+    await (dataGrid.getContextMenu().getItemByText('Set Fixed Position')).click();
 
     await testScreenshot(page, 'datagrid__ai-column-and-sticky-columns__context-menu.png', { element: page.locator('#container') });
 

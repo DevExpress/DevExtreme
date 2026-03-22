@@ -39,15 +39,15 @@ test.describe('Header Filter', () => {
     const list = headerFilter.getList();
 
     await (filterIconElement).click();
-    await (list.getItem(1).click().element) // Select second item with value 'Item 1';
-    await (buttons.nth(0).click()); // Click OK;
+    await (list.getItem(1).element).click() // Select second item with value 'Item 1';
+    await (buttons.nth(0)).click(); // Click OK;
 
     result[0] = await dataCell.element().innerText;
 
     await (filterIconElement).click();
-    await (list.getItem(1).click().element) // Deselect second item with value 'Item 1';
-    await (list.getItem(0).click().element) // Select second item with value '(Blanks)';
-    await (buttons.nth(0).click()); // Click OK;
+    await (list.getItem(1).element).click() // Deselect second item with value 'Item 1';
+    await (list.getItem(0).element).click() // Select second item with value '(Blanks)';
+    await (buttons.nth(0)).click(); // Click OK;
 
     result[1] = await dataCell.element().innerText;
 
