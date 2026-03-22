@@ -1263,6 +1263,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       getResizableStep: () => this._scale.getResizableStep(),
       getDOMElementsMetaData: () => this._scale.getDOMElementsMetaData(),
       getViewDataProvider: () => this._scale.viewDataProvider,
+      getCellDateInfo: this._scale.getCellDateInfo.bind(this._scale),
+      getCellGeometry: this._scale.getCellGeometry.bind(this._scale),
       isVerticalGroupedWorkSpace: () => this._scale.isVerticalGroupedWorkSpace(),
       isDateAndTimeView: () => this._scale.isDateAndTimeView(),
       onContentReady: () => {

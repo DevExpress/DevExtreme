@@ -1,3 +1,4 @@
+import type { CellDateInfo } from '../../entieties/scale';
 import type { TimeZoneCalculator } from '../../r1/timezone_calculator';
 import type { ViewDataProviderType } from '../../types';
 import type { AppointmentDataAccessor } from '../../utils/data_accessor/appointment_data_accessor';
@@ -15,6 +16,17 @@ export interface GetAppointmentDateRangeOptions {
   appointmentRect: Rect;
   parentAppointmentRect: Rect;
   viewDataProvider: ViewDataProviderType;
+  getCellDateInfo: (
+    rowIndex: number,
+    columnIndex: number,
+    isAllDay: boolean,
+    rtlEnabled: boolean,
+  ) => CellDateInfo | undefined;
+  getCellGeometry: (
+    rowIndex: number,
+    columnIndex: number,
+    isAllDay: boolean,
+  ) => CellsInfo | undefined;
   isDateAndTimeView: boolean;
   startDayHour: number;
   endDayHour: number;

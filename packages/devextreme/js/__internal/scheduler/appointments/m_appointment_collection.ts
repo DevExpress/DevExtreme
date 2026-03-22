@@ -783,6 +783,8 @@ class SchedulerAppointments extends CollectionWidget<any> {
       appointmentRect: getBoundingRect($element[0]),
       parentAppointmentRect: getBoundingRect($element.parent()[0]),
       viewDataProvider: this.option('getViewDataProvider')(),
+      getCellDateInfo: this.option('getCellDateInfo'),
+      getCellGeometry: this.option('getCellGeometry'),
       isDateAndTimeView: this.option('isDateAndTimeView')(),
       startDayHour: this.invoke('getStartDayHour'),
       endDayHour: this.invoke('getEndDayHour'),

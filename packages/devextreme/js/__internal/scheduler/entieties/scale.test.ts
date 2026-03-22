@@ -12,7 +12,13 @@ const createMockWorkspace = (overrides: Record<string, unknown> = {}) => ({
       left: 0, top: 0, width: 100, height: 30,
     }],
   })),
-  viewDataProvider: { getCellData: jest.fn() },
+  viewDataProvider: {
+    getCellData: jest.fn((rowIndex: number, columnIndex: number) => ({
+      startDate: new Date(2024, 0, 1 + columnIndex),
+      endDate: new Date(2024, 0, 2 + columnIndex),
+      index: rowIndex * 7 + columnIndex,
+    })),
+  },
   isVerticalGroupedWorkSpace: jest.fn(() => false),
   type: 'day' as const,
   ...overrides,
@@ -72,6 +78,115 @@ describe('WorkspaceScale', () => {
       const scale = new WorkspaceScale(() => undefined);
 
       expect(scale.viewDataProvider).toBeUndefined();
+    });
+  });
+
+  describe('getCellDateInfo', () => {
+    it('should return startDate, endDate, and index from viewDataProvider', () => {
+      const workspace = createMockWorkspace();
+      const scale = new WorkspaceScale(() => workspace);
+
+      const info = scale.getCellDateInfo(0, 2, false, false);
+
+      expect(info).toEqual({
+        startDate: new Date(2024, 0, 3),
+        endDate: new Date(2024, 0, 4),
+        index: 2,
+      });
+      expect(workspace.viewDataProvider.getCellData).toHaveBeenCalledWith(0, 2, false, false);
+    });
+
+    it('should pass isAllDay and rtlEnabled to viewDataProvider', () => {
+      const workspace = createMockWorkspace();
+      const scale = new WorkspaceScale(() => workspace);
+
+      scale.getCellDateInfo(1, 3, true, true);
+
+      expect(workspace.viewDataProvider.getCellData).toHaveBeenCalledWith(1, 3, true, true);
+    });
+
+    it('should return undefined when workspace is undefined', () => {
+      const scale = new WorkspaceScale(() => undefined);
+
+      expect(scale.getCellDateInfo(0, 0, false, false)).toBeUndefined();
+    });
+  });
+
+  describe('getCellGeometry', () => {
+    it('should return cellWidth, cellHeight, cellCountInRow from dateTable', () => {
+      const workspace = createMockWorkspace({
+        getDOMElementsMetaData: jest.fn(() => ({
+          dateTableCellsMeta: [[
+            {
+              left: 0, top: 0, width: 120, height: 60,
+            },
+            {
+              left: 120, top: 0, width: 120, height: 60,
+            },
+          ]],
+          allDayPanelCellsMeta: [{
+            left: 0, top: 0, width: 120, height: 30,
+          }],
+        })),
+      });
+      const scale = new WorkspaceScale(() => workspace);
+
+      const geometry = scale.getCellGeometry(0, 0, false);
+
+      expect(geometry).toEqual({
+        cellWidth: 120,
+        cellHeight: 60,
+        cellCountInRow: 2,
+      });
+    });
+
+    it('should use allDayPanelCellsMeta when isAllDay and not vertical grouped', () => {
+      const workspace = createMockWorkspace({
+        getDOMElementsMetaData: jest.fn(() => ({
+          dateTableCellsMeta: [[{
+            left: 0, top: 0, width: 100, height: 50,
+          }]],
+          allDayPanelCellsMeta: [
+            {
+              left: 0, top: 0, width: 200, height: 40,
+            },
+            {
+              left: 200, top: 0, width: 200, height: 40,
+            },
+          ],
+        })),
+        isVerticalGroupedWorkSpace: jest.fn(() => false),
+      });
+      const scale = new WorkspaceScale(() => workspace);
+
+      const geometry = scale.getCellGeometry(0, 1, true);
+
+      expect(geometry).toEqual({
+        cellWidth: 200,
+        cellHeight: 40,
+        cellCountInRow: 2,
+      });
+    });
+
+    it('should use dateTableCellsMeta when isAllDay but vertical grouped', () => {
+      const workspace = createMockWorkspace({
+        isVerticalGroupedWorkSpace: jest.fn(() => true),
+      });
+      const scale = new WorkspaceScale(() => workspace);
+
+      const geometry = scale.getCellGeometry(0, 0, true);
+
+      expect(geometry).toEqual({
+        cellWidth: 100,
+        cellHeight: 50,
+        cellCountInRow: 1,
+      });
+    });
+
+    it('should return undefined when workspace is undefined', () => {
+      const scale = new WorkspaceScale(() => undefined);
+
+      expect(scale.getCellGeometry(0, 0, false)).toBeUndefined();
     });
   });
 

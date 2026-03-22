@@ -1,7 +1,7 @@
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { dateUtils } from '@ts/core/utils/m_date';
 
-import type { ViewCellData } from '../../types';
+import type { CellDateInfo } from '../../entieties/scale';
 import type {
   CellsInfo,
   DateRange,
@@ -12,25 +12,21 @@ import type {
 
 const toMs = dateUtils.dateToMilliseconds;
 
-// NOTE: View data generator shifts all day cell dates by offset
-// and return equal start and end dates.
 const getCellData = (
-  { viewDataProvider }: GetAppointmentDateRangeOptionsExtended,
+  { getCellDateInfo }: GetAppointmentDateRangeOptionsExtended,
   cellRowIndex: number,
   cellColumnIndex: number,
   isOccupiedAllDay: boolean,
   isAllDay = false,
   rtlEnabled = false,
-): ViewCellData => {
-  const cellData = viewDataProvider.getCellData(
+): CellDateInfo => {
+  const cellData = getCellDateInfo(
     cellRowIndex,
     cellColumnIndex,
     isOccupiedAllDay,
     rtlEnabled,
-  );
-  // NOTE: All day appointments occupy day if they start at the beginning of the day,
-  // but long appointments are not. So for all day appointments endDate === startDate,
-  // for long appointments endDate = startDate + 1 day.
+  )!;
+
   if (!isAllDay) {
     cellData.endDate = dateUtilsTs.addOffsets(cellData.startDate, toMs('day'));
   }
@@ -38,7 +34,7 @@ const getCellData = (
   return cellData;
 };
 
-const getAppointmentLeftCell = (options: GetAppointmentDateRangeOptionsExtended): ViewCellData => {
+const getAppointmentLeftCell = (options: GetAppointmentDateRangeOptionsExtended): CellDateInfo => {
   const {
     cellHeight,
     cellWidth,
@@ -165,25 +161,16 @@ const getRelativeAppointmentRect = (appointmentRect: Rect, parentAppointmentRect
 const getAppointmentCellsInfo = (options: GetAppointmentDateRangeOptions): CellsInfo => {
   const {
     appointmentSettings,
-    isVerticalGroupedWorkSpace,
-    DOMMetaData,
+    getCellGeometry,
   } = options;
 
-  const DOMMetaTable = appointmentSettings.allDay && !isVerticalGroupedWorkSpace
-    ? [DOMMetaData.allDayPanelCellsMeta]
-    : DOMMetaData.dateTableCellsMeta;
+  const geometry = getCellGeometry(
+    appointmentSettings.rowIndex,
+    appointmentSettings.columnIndex,
+    Boolean(appointmentSettings.allDay),
+  );
 
-  const {
-    height: cellHeight,
-    width: cellWidth,
-  } = DOMMetaTable[appointmentSettings.rowIndex][appointmentSettings.columnIndex];
-  const cellCountInRow = DOMMetaTable[appointmentSettings.rowIndex].length;
-
-  return {
-    cellWidth,
-    cellHeight,
-    cellCountInRow,
-  };
+  return geometry ?? { cellWidth: 0, cellHeight: 0, cellCountInRow: 0 };
 };
 
 export const getAppointmentDateRange = (options: GetAppointmentDateRangeOptions): DateRange => {
