@@ -175,10 +175,29 @@ async function runTestSuite(
     });
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout });
 
-    await page.waitForFunction(
-      () => typeof QUnit !== 'undefined' && (window as any).__testModuleLoaded === true,
-      { timeout, polling: 200 },
-    );
+    const waitStart = Date.now();
+    while (Date.now() - waitStart < timeout) {
+      try {
+        await page.waitForFunction(
+          () => typeof QUnit !== 'undefined' && (window as any).__testModuleLoaded === true,
+          { timeout: Math.max(timeout - (Date.now() - waitStart), 1000), polling: 200 },
+        );
+        break;
+      } catch (e: any) {
+        if (e.message?.includes('navigat') || e.message?.includes('context')) {
+          continue;
+        }
+        throw e;
+      }
+    }
+
+    const loadError = await page.evaluate(() => (window as any).__testLoadError);
+    if (loadError) {
+      result.error = `Module load error: ${loadError}`;
+      result.totalFailed = 1;
+      result.totalTests = 1;
+      return result;
+    }
 
     await page.evaluate(() => {
       const win = window as any;

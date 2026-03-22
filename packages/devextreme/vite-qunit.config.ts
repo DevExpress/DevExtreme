@@ -1,13 +1,13 @@
 /* eslint-disable */
 import path from 'path';
 import { defineConfig } from 'vite';
-import devextremeInferno from './build/vite-plugin-devextreme';
+import devextremeQunitBabel from './build/vite-plugin-devextreme-qunit';
 import qunitPlugin from './build/vite-plugin-qunit';
 
 export default defineConfig({
   root: '.',
   base: './',
-  plugins: [devextremeInferno(), qunitPlugin()],
+  plugins: [devextremeQunitBabel(), qunitPlugin()],
   esbuild: false,
   server: {
     port: 3939,
@@ -37,6 +37,7 @@ export default defineConfig({
       excel_exporter: path.resolve(__dirname, './js/excel_exporter.js'),
       data_helper: path.resolve(__dirname, './js/data_helper.js'),
       mobile: path.resolve(__dirname, './js/mobile'),
+      bundles: path.resolve(__dirname, './js/bundles'),
       '@js': path.resolve(__dirname, './js'),
       '@ts': path.resolve(__dirname, './js/__internal'),
       __internal: path.resolve(__dirname, './js/__internal'),
@@ -68,9 +69,11 @@ export default defineConfig({
       'jquery',
       'sinon',
       'inferno',
+      'inferno-create-element',
       'rrule',
     ],
     exclude: ['virtual:demos-meta'],
+    noDiscovery: true,
     entries: [],
     esbuildOptions: {
       target: 'es2020',

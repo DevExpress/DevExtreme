@@ -128,9 +128,14 @@ function generateTestPageHtml(category: string, testFile: string): string {
   <div id="qunit"></div>
   <div id="qunit-fixture"></div>
   <script type="module">
-    import '/js/integration/jquery.js';
-    await import('${testPath}');
-    window.__testModuleLoaded = true;
+    try {
+      await import('/testing/vite-qunit-bootstrap.ts');
+      await import('${testPath}');
+      window.__testModuleLoaded = true;
+    } catch (e) {
+      window.__testLoadError = e.message;
+      window.__testModuleLoaded = true;
+    }
     if (!window.__qunitRunnerMode) {
       QUnit.start();
     }
@@ -204,35 +209,46 @@ export default __result;
   return result;
 }
 
-function syntheticDefaultPlugin(): PluginOption {
-  const cache = new Map<string, boolean>();
+function postTransformPlugin(): PluginOption {
+  const defaultCache = new Map<string, boolean>();
 
   function sourceHasDefault(filePath: string): boolean {
-    if (cache.has(filePath)) return cache.get(filePath)!;
-
+    if (defaultCache.has(filePath)) return defaultCache.get(filePath)!;
     try {
       const src = fs.readFileSync(filePath, 'utf8');
       const has = /\bexport\s+default\b/.test(src) ||
         /\bexport\s*\{[^}]*\bdefault\b/.test(src);
-      cache.set(filePath, has);
+      defaultCache.set(filePath, has);
       return has;
     } catch {
-      cache.set(filePath, true);
+      defaultCache.set(filePath, true);
       return true;
     }
   }
 
   return {
-    name: 'devextreme-synthetic-default',
+    name: 'devextreme-post-transform',
     enforce: 'post',
 
     transform(code: string, id: string) {
       if (id.includes('node_modules')) return undefined;
       if (!id.includes('/js/')) return undefined;
-      if (id.includes('/testing/') || id.includes('.test.')) return undefined;
+      if (id.includes('/testing/')) return undefined;
+
+      let modified = code;
+      let changed = false;
+
+      const namespaceDefaultPattern = /import\s*\*\s*as\s+(\w+)\s+from\s*['"]([^'"]+)['"]\s*;\s*export\s+default\s+\1\s*;/g;
+      modified = modified.replace(namespaceDefaultPattern, (match, varName, source) => {
+        changed = true;
+        return `import * as ${varName} from '${source}'; export default { ...${varName} };`;
+      });
+
+      if (changed) {
+        return { code: modified, map: null };
+      }
 
       if (sourceHasDefault(id)) return undefined;
-
       if (!/\bexport\s/.test(code)) return undefined;
 
       const localNames: string[] = [];
@@ -245,13 +261,10 @@ function syntheticDefaultPlugin(): PluginOption {
       const localExportEntries: Array<{ local: string; exported: string }> = [];
       const localExportPattern = /\bexport\s*\{\s*([^}]+?)\s*\}(?!\s*from)/g;
       while ((m = localExportPattern.exec(code)) !== null) {
-        const entries = m[1].split(',').map((n) => {
+        const entries = m[1].split(',').map((n: string) => {
           const parts = n.trim().split(/\s+as\s+/);
-          return {
-            local: parts[0].trim(),
-            exported: (parts[1] || parts[0]).trim(),
-          };
-        }).filter((e) => e.local && e.exported);
+          return { local: parts[0].trim(), exported: (parts[1] || parts[0]).trim() };
+        }).filter((e: { local: string; exported: string }) => e.local && e.exported);
         localExportEntries.push(...entries);
       }
 
@@ -275,7 +288,7 @@ function syntheticDefaultPlugin(): PluginOption {
       const reExportPattern = /\bexport\s*\{\s*([^}]+?)\s*\}\s*from\s*["']([^"']+)["']/g;
       let idx = 0;
       while ((m = reExportPattern.exec(code)) !== null) {
-        const names = m[1].split(',').map((n) => {
+        const names = m[1].split(',').map((n: string) => {
           const parts = n.trim().split(/\s+as\s+/);
           return { original: parts[0].trim(), exported: (parts[1] || parts[0]).trim() };
         });
@@ -367,7 +380,7 @@ export default function qunitPlugin(): PluginOption[] {
     },
   };
 
-  return [syntheticDefaultPlugin(), mainPlugin];
+  return [mainPlugin, postTransformPlugin()];
 }
 
 export { discoverTests, type TestSuite };
