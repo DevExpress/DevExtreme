@@ -1,65 +1,68 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, appendElementTo } from '../../../../playwright-helpers';
-import path from 'path';
+import { createWidget, getContainerUrl, setupTestPage, appendElementTo } from '../../../../playwright-helpers';
 
-const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
+const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
+
+const defaultSchedulerOptions = {
+  views: ['day'],
+  dataSource: [],
+  resources: [{
+    fieldExpr: 'resourceId',
+    dataSource: [{ id: 0, color: '#e01e38' }, { id: 1, color: '#f98322' }, { id: 2, color: '#1e65e8' }],
+    label: 'Color',
+  }],
+  width: 1666,
+  height: 833,
+  startDayHour: 9,
+  firstDayOfWeek: 1,
+  maxAppointmentsPerCell: 5,
+  currentView: 'day',
+  currentDate: new Date(2019, 3, 1),
+};
 
 test.describe('Drag-n-drop from another draggable area', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(containerUrl);
-    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
-    await page.evaluate((theme) => new Promise<void>((resolve) => {
-      (window as any).DevExpress.ui.themes.ready(resolve);
-      (window as any).DevExpress.ui.themes.current(theme);
-    }), process.env.THEME || 'fluent.blue.light');
+    await setupTestPage(page, containerUrl);
   });
 
-);
+  test('Drag-n-drop an appointment when "cellDuration" changes dynamically', async ({ page }) => {
+    await appendElementTo(page, '#container', 'div', { id: 'drag-area' });
 
-test('Drag-n-drop an appointment when "cellDuration" changes dynamically', async ({ page }) => {
-  // --- setup ---
-await appendElementTo('#container', 'div', 'drag-area');
+    await page.evaluate(() => {
+      $('<div id="group">').text('New Brochures').addClass('item').appendTo('#drag-area');
+    });
 
-  await ClientFunction(() => {
-    $('<div id=\'group\'>')
-      .text('New Brochures')
-      .addClass('item')
-      .appendTo('#drag-area');
-  })();
+    await appendElementTo(page, '#container', 'div', { id: 'scheduler' });
 
-  await appendElementTo('#container', 'div', 'scheduler');
-
-  await createWidget(page, 'dxDraggable', {
-    group: 'draggableGroup',
-    data: { text: 'New Brochures' },
-    onDragStart(e) {
-      e.itemData = e.fromData;
-    },
-  }, '#group');
-
-  await createWidget(page, 'dxDraggable', {
-    group: 'draggableGroup',
-  }, '#drag-area');
-
-  return createScheduler({
-    views: ['week'],
-    currentView: 'week',
-    appointmentDragging: {
+    await createWidget(page, 'dxDraggable', {
       group: 'draggableGroup',
-      onAdd(e) {
-        e.component.addAppointment(e.itemData);
-        e.itemElement.remove();
+      data: { text: 'New Brochures' },
+      onDragStart: new Function('e', 'e.itemData = e.fromData;') as any,
+    }, '#group');
+
+    await createWidget(page, 'dxDraggable', { group: 'draggableGroup' }, '#drag-area');
+
+    await createWidget(page, 'dxScheduler', {
+      ...defaultSchedulerOptions,
+      views: ['week'],
+      currentView: 'week',
+      appointmentDragging: {
+        group: 'draggableGroup',
+        onAdd: new Function('e', 'e.component.addAppointment(e.itemData); e.itemElement.remove();') as any,
       },
-    },
-  }, '#scheduler');
-  // --- test ---
-// Scheduler on '#scheduler'
+    }, '#scheduler');
 
-  await scheduler.option('cellDuration', 10);
+    await page.evaluate(() => {
+      ($('#scheduler') as any).dxScheduler('instance').option('cellDuration', 10);
+    });
 
-  await t
-    .dragToElement(Selector('.item'), page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0))
-    .expect(page.locator('.dx-scheduler-appointment').nth(0).date.time)
-    .eql('9:00 AM - 9:10 AM');
-});
+    const dragItem = page.locator('.item');
+    const targetCell = page.locator('#scheduler .dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0);
+
+    await dragItem.dragTo(targetCell);
+
+    const appointment = page.locator('#scheduler .dx-scheduler-appointment').first();
+    const timeText = await appointment.locator('.dx-scheduler-appointment-content-date').textContent();
+    expect(timeText).toContain('9:00 AM - 9:10 AM');
+  });
 });
