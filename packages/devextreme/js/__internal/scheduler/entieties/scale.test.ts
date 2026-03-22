@@ -21,6 +21,20 @@ const createMockWorkspace = (overrides: Record<string, unknown> = {}) => ({
   },
   isVerticalGroupedWorkSpace: jest.fn(() => false),
   type: 'day' as const,
+  getCellWidth: jest.fn(() => 100),
+  getCellHeight: jest.fn(() => 50),
+  option: jest.fn((name: string) => {
+    const options = { cellDuration: 30, startDayHour: 9, endDayHour: 18 };
+    return options[name];
+  }),
+  _getGroupCount: jest.fn(() => 2),
+  needRecalculateResizableArea: jest.fn(() => true),
+  getGroupBounds: jest.fn(() => ({
+    left: 10, right: 200, top: 5, bottom: 300,
+  })),
+  getAgendaVerticalStepHeight: jest.fn(() => 80),
+  supportAllDayRow: jest.fn(() => true),
+  isGroupedByDate: jest.fn(() => false),
   ...overrides,
 });
 
@@ -255,6 +269,90 @@ describe('WorkspaceScale', () => {
       current = workspaceB;
 
       expect(scale.getResizableStep()).toBe(20);
+    });
+  });
+
+  describe('getCellWidth / getCellHeight', () => {
+    it('should delegate to workspace', () => {
+      const workspace = createMockWorkspace();
+      const scale = new WorkspaceScale(() => workspace);
+
+      expect(scale.getCellWidth()).toBe(100);
+      expect(scale.getCellHeight()).toBe(50);
+    });
+
+    it('should return 0 when workspace is undefined', () => {
+      const scale = new WorkspaceScale(() => undefined);
+
+      expect(scale.getCellWidth()).toBe(0);
+      expect(scale.getCellHeight()).toBe(0);
+    });
+  });
+
+  describe('cellDuration / startDayHour / endDayHour', () => {
+    it('should read from workspace options', () => {
+      const workspace = createMockWorkspace();
+      const scale = new WorkspaceScale(() => workspace);
+
+      expect(scale.cellDuration).toBe(30);
+      expect(scale.startDayHour).toBe(9);
+      expect(scale.endDayHour).toBe(18);
+    });
+  });
+
+  describe('groupCount', () => {
+    it('should delegate to workspace _getGroupCount', () => {
+      const workspace = createMockWorkspace();
+      const scale = new WorkspaceScale(() => workspace);
+
+      expect(scale.groupCount).toBe(2);
+    });
+  });
+
+  describe('needRecalculateResizableArea', () => {
+    it('should delegate to workspace', () => {
+      const workspace = createMockWorkspace();
+      const scale = new WorkspaceScale(() => workspace);
+
+      expect(scale.needRecalculateResizableArea()).toBe(true);
+    });
+  });
+
+  describe('getGroupBounds', () => {
+    it('should delegate to workspace', () => {
+      const workspace = createMockWorkspace();
+      const scale = new WorkspaceScale(() => workspace);
+
+      const bounds = scale.getGroupBounds({ groupIndex: 0 });
+
+      expect(bounds).toEqual({
+        left: 10, right: 200, top: 5, bottom: 300,
+      });
+    });
+
+    it('should return undefined when workspace is undefined', () => {
+      const scale = new WorkspaceScale(() => undefined);
+
+      expect(scale.getGroupBounds({})).toBeUndefined();
+    });
+  });
+
+  describe('agendaVerticalStepHeight', () => {
+    it('should delegate to workspace', () => {
+      const workspace = createMockWorkspace();
+      const scale = new WorkspaceScale(() => workspace);
+
+      expect(scale.agendaVerticalStepHeight).toBe(80);
+    });
+  });
+
+  describe('supportAllDayRow / isGroupedByDate', () => {
+    it('should delegate to workspace', () => {
+      const workspace = createMockWorkspace();
+      const scale = new WorkspaceScale(() => workspace);
+
+      expect(scale.supportAllDayRow).toBe(true);
+      expect(scale.isGroupedByDate).toBe(false);
     });
   });
 });
