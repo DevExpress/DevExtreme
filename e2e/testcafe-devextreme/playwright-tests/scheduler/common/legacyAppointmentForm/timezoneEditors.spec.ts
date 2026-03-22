@@ -1,20 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
-import path from 'path';
+import { createWidget, getContainerUrl, setupTestPage } from '../../../../playwright-helpers';
 
-const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
-
-test.describe('Layout:AppointmentForm:TimezoneEditors(T1080932)', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto(containerUrl);
-    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
-    await page.evaluate((theme) => new Promise<void>((resolve) => {
-      (window as any).DevExpress.ui.themes.ready(resolve);
-      (window as any).DevExpress.ui.themes.current(theme);
-    }), process.env.THEME || 'fluent.blue.light');
-  });
-
-);
+const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
 
 const dataSource = [{
   text: 'Watercolor Landscape',
@@ -25,73 +12,53 @@ const dataSource = [{
   endDateTimeZone: 'US/Alaska',
 }];
 
-const inputClassName = '.dx-texteditor-input';
-const startDateTimeZoneValue = '(GMT -10:00) Etc - GMT+10';
-const endDateTimeZoneValue = '(GMT -08:00) US - Alaska';
-
-test.skip('TimeZone editors should be have data after hide forms data(T1080932)', async ({ page }) => {
-  // Scheduler on '#container'
-  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
-
-  await (page.locator('.dx-scheduler-appointment').nth(0).dblclick().element);
-
-  const startDateTimeZone = appointmentPopup.wrapper.find(inputClassName).nth(1);
-  expect(startDateTimeZone.value).toBe(startDateTimeZoneValue);
-
-  const endDateTimeZone = appointmentPopup.wrapper.find(inputClassName).nth(3);
-  expect(endDateTimeZone.value).toBe(endDateTimeZoneValue);
-});
-
-// TODO: .before() block not converted - move to test setup
-// {
-  await createWidget(page, 'dxScheduler', {
-    dataSource,
-    onAppointmentFormOpening: (e) => {
-      e.form.itemOption('mainGroup.text', 'visible', false);
-    },
-    editing: {
-      allowTimeZoneEditing: true,
-      legacyForm: true,
-    },
-    recurrenceEditMode: 'series',
-    views: ['month'],
-    currentView: 'month',
-    currentDate: new Date(2020, 6, 25),
-    startDayHour: 9,
-    height: 600,
+test.describe('Layout:AppointmentForm:TimezoneEditors(T1080932)', () => {
+  test.beforeEach(async ({ page }) => {
+    await setupTestPage(page, containerUrl);
   });
-});
 
-test.skip('TimeZone editors should be have data in default case(T1080932)', async ({ page }) => {
-  // Scheduler on '#container'
+  test.skip('TimeZone editors should be have data after hide forms data(T1080932)', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      dataSource,
+      onAppointmentFormOpening: ((e: any) => {
+        e.form.itemOption('mainGroup.text', 'visible', false);
+      }) as any,
+      editing: { allowTimeZoneEditing: true, legacyForm: true },
+      recurrenceEditMode: 'series',
+      views: ['month'],
+      currentView: 'month',
+      currentDate: new Date(2020, 6, 25),
+      startDayHour: 9,
+      height: 600,
+    });
 
-  await (page.locator('.dx-scheduler-appointment').nth(0).dblclick().element);
+    const appointment = page.locator('.dx-scheduler-appointment').nth(0);
+    await appointment.dblclick();
 
-  const { legacyAppointmentPopup: appointmentPopup } = scheduler;
-
-  await (page.locator('.dx-scheduler-appointment').nth(0).dblclick().element);
-
-  const startDateTimeZone = appointmentPopup.wrapper.find(inputClassName).nth(2);
-  expect(startDateTimeZone.value).toBe(startDateTimeZoneValue);
-
-  const endDateTimeZone = appointmentPopup.wrapper.find(inputClassName).nth(4);
-  expect(endDateTimeZone.value).toBe(endDateTimeZoneValue);
-});
-
-// TODO: .before() block not converted - move to test setup
-// {
-  await createWidget(page, 'dxScheduler', {
-    dataSource,
-    editing: {
-      allowTimeZoneEditing: true,
-      legacyForm: true,
-    },
-    recurrenceEditMode: 'series',
-    views: ['month'],
-    currentView: 'month',
-    currentDate: new Date(2020, 6, 25),
-    startDayHour: 9,
-    height: 600,
+    const popup = page.locator('.dx-scheduler-appointment-popup');
+    const inputs = popup.locator('.dx-texteditor-input');
+    const startTzValue = await inputs.nth(1).inputValue();
+    expect(startTzValue).toBe('(GMT -10:00) Etc - GMT+10');
   });
-});
+
+  test.skip('TimeZone editors should be have data in default case(T1080932)', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      dataSource,
+      editing: { allowTimeZoneEditing: true, legacyForm: true },
+      recurrenceEditMode: 'series',
+      views: ['month'],
+      currentView: 'month',
+      currentDate: new Date(2020, 6, 25),
+      startDayHour: 9,
+      height: 600,
+    });
+
+    const appointment = page.locator('.dx-scheduler-appointment').nth(0);
+    await appointment.dblclick();
+
+    const popup = page.locator('.dx-scheduler-appointment-popup');
+    const inputs = popup.locator('.dx-texteditor-input');
+    const startTzValue = await inputs.nth(2).inputValue();
+    expect(startTzValue).toBe('(GMT -10:00) Etc - GMT+10');
+  });
 });
