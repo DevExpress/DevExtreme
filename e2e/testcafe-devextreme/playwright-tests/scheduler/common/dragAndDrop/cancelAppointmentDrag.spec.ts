@@ -1,49 +1,47 @@
 import { test, expect } from '@playwright/test';
-import path from 'path';
+import { createWidget, getContainerUrl, setupTestPage } from '../../../../playwright-helpers';
 
-const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
+const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
+
+const APPOINTMENT_DRAG_SOURCE_CLASS = 'dx-scheduler-appointment-drag-source';
 
 test.describe('Cancel appointment Drag-and-Drop', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(containerUrl);
-    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
-    await page.evaluate((theme) => new Promise<void>((resolve) => {
-      (window as any).DevExpress.ui.themes.ready(resolve);
-      (window as any).DevExpress.ui.themes.current(theme);
-    }), process.env.THEME || 'fluent.blue.light');
+    await setupTestPage(page, containerUrl);
   });
 
-);
+  test('on escape - date should not changed when it\'s pressed during dragging (T832754)', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      _draggingMode: 'default',
+      height: 600,
+      views: ['day'],
+      currentView: 'day',
+      cellDuration: 30,
+      dataSource: [{
+        text: 'Appointment',
+        startDate: new Date(2020, 9, 14, 10, 0),
+        endDate: new Date(2020, 9, 14, 10, 30),
+      }],
+      currentDate: new Date(2020, 9, 14),
+      showAllDayPanel: false,
+    });
 
-const APPOINTMENT_DRAG_SOURCE_CLASS = '.dx-scheduler-appointment-drag-source';
+    const draggableAppointment = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Appointment' });
+    const targetCell = page.locator('.dx-scheduler-date-table-row').nth(4).locator('.dx-scheduler-date-table-cell').nth(0);
 
-test('on escape - date should not changed when it\'s pressed during dragging (T832754)', async ({ page }) => {
-  // Scheduler on '#container'
-  const draggableAppointment = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Appointment' });
-  await MouseUpEvents.disable(MouseAction.dragToElement);
+    // TODO: Original test uses MouseUpEvents.disable/enable to prevent mouseup during drag.
+    // Simulating: drag without releasing, press escape, then release.
+    const targetBox = await targetCell.boundingBox();
+    await draggableAppointment.hover();
+    await page.mouse.down();
+    await page.mouse.move(targetBox!.x + targetBox!.width / 2, targetBox!.y + targetBox!.height / 2, { steps: 10 });
+    await page.keyboard.press('Escape');
+    await page.mouse.up();
 
-  await t
-    .dragToElement(draggableAppointment.element, page.locator('.dx-scheduler-date-table-row').nth(4).locator('.dx-scheduler-date-table-cell').nth(0))
-    .pressKey('esc');
+    const dragSourceCount = await page.locator(`.${APPOINTMENT_DRAG_SOURCE_CLASS}`).count();
+    expect(dragSourceCount).toBe(0);
 
-  await MouseUpEvents.enable(MouseAction.dragToElement);
-
-  expect(page.locator('.dx-scheduler').find(APPOINTMENT_DRAG_SOURCE_CLASS).exists)
-    .notOk()
-    .expect(draggableAppointment.date.time)
-    .eql('10:00 AM - 10:30 AM');
-}).before(async () => createScheduler({
-  _draggingMode: 'default',
-  height: 600,
-  views: ['day'],
-  currentView: 'day',
-  cellDuration: 30,
-  dataSource: [{
-    text: 'Appointment',
-    startDate: new Date(2020, 9, 14, 10, 0),
-    endDate: new Date(2020, 9, 14, 10, 30),
-  }],
-  currentDate: new Date(2020, 9, 14),
-  showAllDayPanel: false,
-}));
+    const timeText = await draggableAppointment.locator('.dx-scheduler-appointment-content-date').textContent();
+    expect(timeText).toContain('10:00 AM - 10:30 AM');
+  });
 });
