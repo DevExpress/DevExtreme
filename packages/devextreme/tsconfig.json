@@ -48,6 +48,9 @@
     "js/**/*.d.ts",
     "../devextreme-themebuilder",
     "testing/testcafe",
-    "testing/runner/**/*.ts"
+    "testing/runner/**/*.ts",
+    "testing/vite-qunit-runner.ts",
+    "vite-qunit.config.ts",
+    "build/vite-plugin-qunit.ts"
   ]
 }

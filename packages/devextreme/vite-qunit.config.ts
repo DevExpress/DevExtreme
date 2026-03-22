@@ -1,0 +1,79 @@
+/* eslint-disable */
+import path from 'path';
+import { defineConfig } from 'vite';
+import devextremeInferno from './build/vite-plugin-devextreme';
+import qunitPlugin from './build/vite-plugin-qunit';
+
+export default defineConfig({
+  root: '.',
+  base: './',
+  plugins: [devextremeInferno(), qunitPlugin()],
+  esbuild: false,
+  server: {
+    port: 3939,
+    fs: {
+      allow: ['..', '.', '../..'],
+    },
+    hmr: false,
+  },
+  resolve: {
+    alias: {
+      core: path.resolve(__dirname, './js/core'),
+      common: path.resolve(__dirname, './js/common'),
+      data: path.resolve(__dirname, './js/data'),
+      ui: path.resolve(__dirname, './js/ui'),
+      viz: path.resolve(__dirname, './js/viz'),
+      animation: path.resolve(__dirname, './js/animation'),
+      'events/utils': path.resolve(__dirname, './js/events/utils/index.js'),
+      events: path.resolve(__dirname, './js/events'),
+      exporter: path.resolve(__dirname, './js/exporter'),
+      localization: path.resolve(__dirname, './js/localization'),
+      integration: path.resolve(__dirname, './js/integration'),
+      file_management: path.resolve(__dirname, './js/file_management'),
+      format_helper: path.resolve(__dirname, './js/format_helper.js'),
+      time_zone_utils: path.resolve(__dirname, './js/time_zone_utils.js'),
+      color: path.resolve(__dirname, './js/color.js'),
+      pdf_exporter: path.resolve(__dirname, './js/pdf_exporter.js'),
+      excel_exporter: path.resolve(__dirname, './js/excel_exporter.js'),
+      data_helper: path.resolve(__dirname, './js/data_helper.js'),
+      mobile: path.resolve(__dirname, './js/mobile'),
+      '@js': path.resolve(__dirname, './js'),
+      '@ts': path.resolve(__dirname, './js/__internal'),
+      __internal: path.resolve(__dirname, './js/__internal'),
+
+      rrule: path.resolve(__dirname, './node_modules/rrule/dist/es5/rrule.js'),
+      'devextreme-quill': path.resolve(__dirname, './node_modules/devextreme-quill/dist/dx-quill.js'),
+      'devexpress-diagram': path.resolve(__dirname, './artifacts/js/dx-diagram.js'),
+      'devexpress-gantt': path.resolve(__dirname, './artifacts/js/dx-gantt.js'),
+      jspdf: path.resolve(__dirname, './node_modules/jspdf/dist/jspdf.umd.js'),
+      'jspdf-autotable': path.resolve(__dirname, './node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js'),
+      jszip: path.resolve(__dirname, './artifacts/js/jszip.js'),
+      inferno: path.resolve(__dirname, './node_modules/inferno/dist/inferno.js'),
+      'inferno-hydrate': path.resolve(__dirname, './node_modules/inferno-hydrate/dist/inferno-hydrate.js'),
+      'inferno-compat': path.resolve(__dirname, './node_modules/inferno-compat/dist/inferno-compat.js'),
+      'inferno-clone-vnode': path.resolve(__dirname, './node_modules/inferno-clone-vnode/dist/index.cjs.js'),
+      'inferno-create-element': path.resolve(__dirname, './node_modules/inferno-create-element/dist/index.cjs.js'),
+      'inferno-create-class': path.resolve(__dirname, './node_modules/inferno-create-class/dist/index.cjs.js'),
+      'inferno-extras': path.resolve(__dirname, './node_modules/inferno-extras/dist/index.cjs.js'),
+      '@@devextreme/vdom': path.resolve(__dirname, './node_modules/@devextreme/vdom'),
+      globalize: path.resolve(__dirname, './node_modules/globalize/dist/globalize'),
+      cldr: path.resolve(__dirname, './node_modules/cldrjs/dist/cldr'),
+      knockout: path.resolve(__dirname, './node_modules/knockout/build/output/knockout-latest.debug.js'),
+      fflate: path.resolve(__dirname, './node_modules/fflate/esm/browser.js'),
+      '@preact/signals-core': path.resolve(__dirname, './node_modules/@preact/signals-core/dist/signals-core.js'),
+    },
+  },
+  optimizeDeps: {
+    include: [
+      'jquery',
+      'sinon',
+      'inferno',
+      'rrule',
+    ],
+    exclude: ['virtual:demos-meta'],
+    entries: [],
+    esbuildOptions: {
+      target: 'es2020',
+    },
+  },
+});
