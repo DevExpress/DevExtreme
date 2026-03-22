@@ -1,0 +1,428 @@
+import { test, expect } from '@playwright/test';
+import { testScreenshot, appendElementTo } from '../../playwright-helpers';
+import path from 'path';
+
+const containerUrl = `file://${path.resolve(__dirname, '../../tests/container.html')}`;
+
+test.describe('Icons', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto(containerUrl);
+    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+    await page.evaluate((theme) => new Promise<void>((resolve) => {
+      (window as any).DevExpress.ui.themes.ready(resolve);
+      (window as any).DevExpress.ui.themes.current(theme);
+    }), process.env.THEME || 'fluent.blue.light');
+  });
+
+  const ICON_CLASS = 'dx-icon';
+  const iconSet = {
+    add: '\f00b',
+    airplane: '\f000',
+    bookmark: '\f017',
+    box: '\f018',
+    car: '\f01b',
+    card: '\f019',
+    cart: '\f01a',
+    chart: '\f01c',
+    check: '\f005',
+    clear: '\f008',
+    clock: '\f01d',
+    close: '\f00a',
+    coffee: '\f02a',
+    comment: '\f01e',
+    doc: '\f021',
+    file: '\f021',
+    download: '\f022',
+    dragvertical: '\f038',
+    edit: '\f023',
+    email: '\f024',
+    event: '\f026',
+    eventall: '\f043',
+    favorites: '\f025',
+    find: '\f027',
+    filter: '\f050',
+    folder: '\f028',
+    activefolder: '\f028',
+    food: '\f029',
+    gift: '\f02b',
+    globe: '\f02c',
+    group: '\f02e',
+    help: '\f02f',
+    home: '\f030',
+    image: '\f031',
+    info: '\f032',
+    key: '\f033',
+    like: '\f034',
+    map: '\f035',
+    menu: '\f00c',
+    message: '\f024',
+    money: '\f036',
+    music: '\f037',
+    overflow: '\f00d',
+    percent: '\f039',
+    photo: '\f03a',
+    plus: '\f00b',
+    minus: '\f074',
+    preferences: '\f03b',
+    product: '\f03c',
+    pulldown: '\f062',
+    refresh: '\f03d',
+    remove: '\f00a',
+    revert: '\f04c',
+    runner: '\f040',
+    save: '\f041',
+    search: '\f027',
+    tags: '\f009',
+    tel: '\f003',
+    tips: '\f004',
+    todo: '\f005',
+    toolbox: '\f007',
+    trash: '\f03e',
+    user: '\f02d',
+    upload: '\f006',
+    floppy: '\f073',
+    arrowleft: '\f011',
+    arrowdown: '\f015',
+    arrowright: '\f00e',
+    arrowup: '\f013',
+    spinleft: '\f04f',
+    spinprev: '\f04f',
+    spinright: '\f04e',
+    spinnext: '\f04e',
+    spindown: '\f001',
+    spinup: '\f002',
+    chevronleft: '\f012',
+    chevronprev: '\f012',
+    back: '\f012',
+    chevronright: '\f010',
+    chevronnext: '\f010',
+    chevrondown: '\f016',
+    chevronup: '\f014',
+    chevrondoubleleft: '\f042',
+    chevrondoubleright: '\f03f',
+    equal: '\f044',
+    notequal: '\f045',
+    less: '\f046',
+    greater: '\f047',
+    lessorequal: '\f048',
+    greaterorequal: '\f049',
+    isblank: '\f075',
+    isnotblank: '\f076',
+    sortup: '\f051',
+    sortdown: '\f052',
+    sortuptext: '\f053',
+    sortdowntext: '\f054',
+    sorted: '\f055',
+    expand: '\f04a',
+    collapse: '\f04b',
+    columnfield: '\f057',
+    rowfield: '\f058',
+    datafield: '\f101',
+    fields: '\f059',
+    fieldchooser: '\f05a',
+    columnchooser: '\f04d',
+    pin: '\f05b',
+    unpin: '\f05c',
+    pinleft: '\f05d',
+    pinright: '\f05e',
+    contains: '\f063',
+    startswith: '\f064',
+    endswith: '\f065',
+    doesnotcontain: '\f066',
+    range: '\f06a',
+    export: '\f05f',
+    exportxlsx: '\f060',
+    exportpdf: '\f061',
+    exportselected: '\f06d',
+    ordersbox: '\f06e',
+    warning: '\f06b',
+    taskhelpneeded: '\f06f',
+    more: '\f06c',
+    square: '\f067',
+    clearsquare: '\f068',
+    repeat: '\f069',
+    selectall: '\f070',
+    unselectall: '\f071',
+    print: '\f072',
+    bold: '\f077',
+    italic: '\f078',
+    underline: '\f079',
+    strike: '\f07a',
+    indent: '\f07b',
+    increaselinespacing: '\f07b',
+    font: '\f11b',
+    fontsize: '\f07c',
+    shrinkfont: '\f07d',
+    growfont: '\f07e',
+    color: '\f07f',
+    background: '\f080',
+    fill: '\f10d',
+    palette: '\f120',
+    superscript: '\f081',
+    subscript: '\f082',
+    header: '\f083',
+    blockquote: '\f084',
+    formula: '\f056',
+    codeblock: '\f085',
+    orderedlist: '\f086',
+    bulletlist: '\f087',
+    increaseindent: '\f088',
+    decreaseindent: '\f089',
+    decreaselinespacing: '\f106',
+    alignleft: '\f08a',
+    alignright: '\f08b',
+    aligncenter: '\f08c',
+    alignjustify: '\f08d',
+    link: '\f08e',
+    video: '\f08f',
+    mention: '\f090',
+    variable: '\f091',
+    clearformat: '\f092',
+    accountbox: '\f094',
+    fullscreen: '\f11a',
+    hierarchy: '\f124',
+    docfile: '\f111',
+    docxfile: '\f110',
+    pdffile: '\f118',
+    pptfile: '\f114',
+    pptxfile: '\f115',
+    rtffile: '\f112',
+    txtfile: '\f113',
+    xlsfile: '\f116',
+    xlsxfile: '\f117',
+    copy: '\f107',
+    cut: '\f10a',
+    paste: '\f108',
+    share: '\f11f',
+    inactivefolder: '\f105',
+    newfolder: '\f123',
+    movetofolder: '\f121',
+    parentfolder: '\f122',
+    rename: '\f109',
+    detailslayout: '\f10b',
+    contentlayout: '\f11e',
+    smalliconslayout: '\f119',
+    mediumiconslayout: '\f10c',
+    undo: '\f04c',
+    redo: '\f093',
+    hidepanel: '\f11c',
+    showpanel: '\f11d',
+    checklist: '\f141',
+    verticalaligntop: '\f14f',
+    verticalaligncenter: '\f14e',
+    verticalalignbottom: '\f14d',
+    rowproperties: '\f14c',
+    columnproperties: '\f14b',
+    cellproperties: '\f14a',
+    tableproperties: '\f140',
+    splitcells: '\f139',
+    mergecells: '\f138',
+    deleterow: '\f137',
+    deletecolumn: '\f136',
+    insertrowabove: '\f135',
+    insertrowbelow: '\f134',
+    insertcolumnleft: '\f133',
+    insertcolumnright: '\f132',
+    inserttable: '\f130',
+    deletetable: '\f131',
+    edittableheader: '\f142',
+    addtableheader: '\f143',
+    pasteplaintext: '\f144',
+    importselected: '\f145',
+    import: '\f146',
+    textdocument: '\f147',
+    jpgfile: '\f148',
+    bmpfile: '\f149',
+    svgfile: '\f150',
+    attach: '\f151',
+    return: '\f152',
+    indeterminatestate: '\f153',
+    lock: '\f154',
+    unlock: '\f155',
+    imgarlock: '\f156',
+    imgarunlock: '\f157',
+    bell: '\f158',
+    sun: '\f159',
+    arrowback: '\f15a',
+    taskcomplete: '\f15b',
+    taskrejected: '\f15c',
+    taskinprogress: '\f15d',
+    taskstop: '\f15e',
+    clearcircle: '\f15f',
+    send: '\f160',
+    pinmap: '\f179',
+    photooutline: '\f162',
+    panelright: '\f163',
+    panelleft: '\f164',
+    optionsgear: '\f165',
+    moon: '\f166',
+    login: '\f167',
+    eyeopen: '\f168',
+    eyeclose: '\f169',
+    expandform: '\f170',
+    description: '\f171',
+    belloutline: '\f172',
+    to: '\f173',
+    errorcircle: '\f174',
+    datatrending: '\f175',
+    dataarea: '\f176',
+    datausage: '\f177',
+    datapie: '\f178',
+    handlevertical: '\f161',
+    handlehorizontal: '\f16a',
+    triangleup: '\f16b',
+    triangledown: '\f16c',
+    triangleright: '\f16d',
+    triangleleft: '\f16e',
+    sendfilled: '\f09a',
+    chat: '\f17e',
+    fixcolumn: '\f16f',
+    unfixcolumn: '\f17a',
+    fixcolumnleft: '\f17b',
+    stickcolumn: '\f17c',
+    fixcolumnright: '\f17d',
+    ratingoutline: '\f17f',
+    ratingfilled: '\f180',
+    csv: '\f181',
+    packagebox: '\f182',
+    checkmarkcircle: '\f183',
+    clipboardtasklist: '\f184',
+    today: '\f185',
+    daterangepicker: '\f186',
+    cardcontent: '\f187',
+    cursormove: '\f188',
+    cursorprohibition: '\f189',
+    arrowsortup: '\f190',
+    arrowsortdown: '\f191',
+    imagethumbnail: '\f192',
+    sparkle: '\f193',
+    servicebell: '\f194',
+    dropzone: '\f195',
+    restore: '\f196',
+    groupbycolumn: '\f197',
+    ungroupcolumn: '\f198',
+    ungroupallcolumns: '\f199',
+    chatadd: '\f200',
+    colordismiss: '\f201',
+    clipboardpastesparkle: '\f202',
+    micoutline: '\f203',
+    micfilled: '\f204',
+    stopoutline: '\f205',
+    stopfilled: '\f206',
+    optionsoutline: '\f207',
+    optionsfilled: '\f208',
+    conferenceroomoutline: '\f209',
+    conferenceroomfilled: '\f210',
+    chatsparkleoutline: '\f211',
+    chatsparklefilled: '\f212',
+    addcircleoutline: '\f213',
+    addcirclefilled: '\f214',
+    zoomoutoutline: '\f215',
+    zoomoutfilled: '\f216',
+    zoominoutline: '\f217',
+    zoominfilled: '\f218',
+    calendardatestartoutline: '\f219',
+    calendardatestartfilled: '\f220',
+    calendardateendoutline: '\f221',
+    calendardateendfilled: '\f222',
+    datalineoutline: '\f223',
+    datalinefilled: '\f224',
+    dataareaoutline: '\f225',
+    dataareafilled: '\f226',
+    databaroutline: '\f227',
+    databarfilled: '\f228',
+    datastackedbaroutline: '\f229',
+    datastackedbarfilled: '\f230',
+    datapieoutline: '\f231',
+    datapiefilled: '\f232',
+    datadoughnutoutline: '\f233',
+    datadoughnutfilled: '\f234',
+    checkmarkcirclefilled: '\f235',
+    botoutline: '\f236',
+    botfilled: '\f237',
+    copyfilled: '\f238',
+  };
+
+  test('Icon set', async ({ page }) => {
+
+    const icons = Object.entries(iconSet).map(([iconName, glyph]) => ({
+      id: `dx-${new Guid()}`,
+      iconName,
+      glyph,
+    }));
+
+      await ClientFunction((icons, ICON_CLASS) => {
+      const container = document.querySelector('#container');
+      if (!container) return;
+
+      const fragment = document.createDocumentFragment();
+
+      for (const { id, iconName, glyph } of icons) {
+        const element = document.createElement('div');
+        element.id = id;
+        Object.assign(element.style, {
+          display: 'inline-flex',
+          padding: '3px',
+          border: '1px solid black',
+          alignItems: 'center',
+          flexDirection: 'column',
+          fontSize: '10px',
+        });
+
+        const iconDiv = document.createElement('div');
+        iconDiv.classList.add(ICON_CLASS, `${ICON_CLASS}-${iconName}`);
+
+        const nameDiv = document.createElement('div');
+        nameDiv.textContent = iconName;
+
+        const glyphDiv = document.createElement('div');
+        glyphDiv.textContent = glyph.replace('\f', '\\f');
+
+        element.append(iconDiv, nameDiv, glyphDiv);
+        fragment.append(element);
+      }
+
+      container.append(fragment);
+    }, { dependencies: { iconSet, ICON_CLASS } })(icons, ICON_CLASS);
+
+    await testScreenshot(page, 'Icon set.png');
+
+    });
+
+  test('SVG icon set', async ({ page }) => {
+
+    const themeName = (process.env.theme ?? 'fluent.blue.light');
+    const icons = Object.keys(iconSet).map((iconName) => ({
+      id: `dx-${new Guid()}`,
+      iconName,
+      src: `../../../packages/devextreme-scss/images/icons/${themeName}/${iconName}.svg`,
+    }));
+
+      await ClientFunction((icons, appendElementTo) => {
+      for (const { id, iconName, src } of icons) {
+        appendElementTo(page, '#container', 'div', id, {
+          display: 'inline-flex',
+          padding: '3px',
+          border: '1px solid black',
+          alignItems: 'center',
+          flexDirection: 'column',
+          fontSize: '10px',
+        });
+
+        const el = document.getElementById(id);
+        if (el) {
+          const img = document.createElement('img');
+          img.src = src;
+
+          const nameDiv = document.createElement('div');
+          nameDiv.textContent = iconName;
+
+          el.append(img, nameDiv);
+        }
+      }
+    }, { dependencies: { appendElementTo } })(icons, appendElementTo);
+
+    await testScreenshot(page, 'SVG icon set.png');
+
+    });
+});
