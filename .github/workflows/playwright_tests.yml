@@ -1,0 +1,170 @@
+name: Playwright tests (POC)
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-playwright
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      repeat_count:
+        description: 'Number of times to run tests (for stability check)'
+        required: false
+        default: '1'
+        type: string
+
+env:
+  NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
+
+jobs:
+  build:
+    name: Build DevExtreme
+    runs-on: devextreme-shr2
+    timeout-minutes: 15
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v4
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Build
+      shell: bash
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+      run: |
+        pnpx nx build devextreme-scss
+        pnpx nx build devextreme -c testing
+
+    - name: Zip artifacts
+      working-directory: ./packages/devextreme
+      run: 7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: devextreme-artifacts
+        path: ./packages/devextreme/artifacts.zip
+        retention-days: 1
+
+  playwright:
+    name: ${{ matrix.ARGS.name }}
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        ARGS: [
+          { componentFolder: "scheduler/common", name: "scheduler / common (1/3)", shard: "1/3" },
+          { componentFolder: "scheduler/common", name: "scheduler / common (2/3)", shard: "2/3" },
+          { componentFolder: "scheduler/common", name: "scheduler / common (3/3)", shard: "3/3" },
+          { componentFolder: "scheduler/timezones", name: "scheduler / timezones" },
+          { componentFolder: "scheduler/viewOffset", name: "scheduler / viewOffset" },
+        ]
+    runs-on: devextreme-shr2
+    timeout-minutes: 30
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-artifacts
+        path: ./packages/devextreme
+
+    - name: Unpack artifacts
+      working-directory: ./packages/devextreme
+      run: 7z x artifacts.zip -aoa
+
+    - uses: pnpm/action-setup@v4
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v4
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Install Playwright browsers
+      working-directory: ./e2e/testcafe-devextreme
+      run: pnpx playwright install chromium
+
+    - name: Run Playwright tests
+      working-directory: ./e2e/testcafe-devextreme
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+        THEME: fluent.blue.light
+      run: |
+        REPEAT_COUNT="${{ github.event.inputs.repeat_count || '1' }}"
+        SHARD_ARG=""
+        if [ "${{ matrix.ARGS.shard }}" != "" ]; then
+          SHARD_ARG="--shard=${{ matrix.ARGS.shard }}"
+        fi
+
+        for i in $(seq 1 $REPEAT_COUNT); do
+          echo "=== Run $i / $REPEAT_COUNT ==="
+          pnpx playwright test \
+            --config playwright.config.ts \
+            playwright-tests/${{ matrix.ARGS.componentFolder }}/ \
+            $SHARD_ARG \
+            --reporter=list \
+            2>&1 | tee -a playwright-output-run-$i.log
+          echo ""
+        done
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-results-${{ matrix.ARGS.name }}
+        path: |
+          e2e/testcafe-devextreme/playwright-results/
+          e2e/testcafe-devextreme/playwright-output-*.log
+          e2e/testcafe-devextreme/test-results/
+
+  merge-results:
+    name: Merge Playwright results
+    if: always()
+    needs: playwright
+    runs-on: devextreme-shr2
+    steps:
+    - name: Merge artifacts
+      uses: actions/upload-artifact/merge@v4
+      with:
+        name: playwright-all-results
+        pattern: playwright-results-*
+        delete-merged: true
