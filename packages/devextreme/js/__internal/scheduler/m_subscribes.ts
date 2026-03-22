@@ -292,7 +292,7 @@ const subscribes = {
   },
 
   removeDroppableCellClass() {
-    this._workSpace.removeDroppableCellClass();
+    this._scale.removeDroppableCellClass();
   },
 } as const;
 

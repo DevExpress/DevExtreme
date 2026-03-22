@@ -37,6 +37,9 @@ interface Workspace {
   getAgendaVerticalStepHeight: () => number;
   supportAllDayRow: () => boolean;
   isGroupedByDate: () => boolean;
+  getDroppableCell: () => unknown;
+  getCellByCoordinates: (coordinates: unknown, isAllDay: boolean) => unknown;
+  removeDroppableCellClass: () => void;
 }
 
 export interface Scale {
@@ -65,6 +68,9 @@ export interface Scale {
   agendaVerticalStepHeight: number;
   supportAllDayRow: boolean;
   isGroupedByDate: boolean;
+  getDroppableCell: () => unknown;
+  getCellByCoordinates: (coordinates: unknown, isAllDay: boolean) => unknown;
+  removeDroppableCellClass: () => void;
   isVerticalGroupedWorkSpace: () => boolean;
   isDateAndTimeView: () => boolean;
 }
@@ -173,6 +179,18 @@ export class WorkspaceScale implements Scale {
 
   get isGroupedByDate(): boolean {
     return this.getWorkspace()?.isGroupedByDate() ?? false;
+  }
+
+  getDroppableCell(): unknown {
+    return this.getWorkspace()?.getDroppableCell();
+  }
+
+  getCellByCoordinates(coordinates: unknown, isAllDay: boolean): unknown {
+    return this.getWorkspace()?.getCellByCoordinates(coordinates, isAllDay);
+  }
+
+  removeDroppableCellClass(): void {
+    this.getWorkspace()?.removeDroppableCellClass();
   }
 
   isVerticalGroupedWorkSpace(): boolean {

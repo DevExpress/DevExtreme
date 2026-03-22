@@ -10,7 +10,7 @@ import type { AppointmentViewModelPlain } from './view_model/types';
 const APPOINTMENT_ITEM_CLASS = 'dx-scheduler-appointment';
 
 export default class AppointmentDragBehavior {
-  workspace = this.scheduler._workSpace;
+  scale = this.scheduler._scale;
 
   appointments = this.scheduler._appointments;
 
@@ -62,8 +62,8 @@ export default class AppointmentDragBehavior {
     const container = this.appointments._getAppointmentContainer(isAllDay);
     container.append(element);
 
-    const $targetCell = this.workspace.getDroppableCell();
-    const $dragCell = this.workspace.getCellByCoordinates(this.initialPosition, isAllDay);
+    const $targetCell: any = this.scale.getDroppableCell();
+    const $dragCell = this.scale.getCellByCoordinates(this.initialPosition, isAllDay);
 
     this.appointments.notifyObserver('updateAppointmentAfterDrag', {
       event,
@@ -150,7 +150,6 @@ export default class AppointmentDragBehavior {
         }
       }
 
-      // NOTE: event.cancel may be promise or different type, so we need strict check here.
       if (e.cancel === true) {
         options.onDragCancel(e);
       }
@@ -212,6 +211,6 @@ export default class AppointmentDragBehavior {
 
   removeDroppableClasses() {
     this.appointments._removeDragSourceClassFromDraggedAppointment();
-    this.workspace.removeDroppableCellClass();
+    this.scale.removeDroppableCellClass();
   }
 }
