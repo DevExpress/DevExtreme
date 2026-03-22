@@ -1,5 +1,4 @@
 import { defineConfig } from '@playwright/test';
-import path from 'path';
 
 const CHROME_FLAGS = [
   '--no-sandbox',
