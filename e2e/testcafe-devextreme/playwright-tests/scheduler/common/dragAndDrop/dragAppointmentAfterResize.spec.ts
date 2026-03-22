@@ -1,79 +1,108 @@
 import { test, expect } from '@playwright/test';
-import path from 'path';
+import { createWidget, getContainerUrl, setupTestPage } from '../../../../playwright-helpers';
 
-const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
+const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
+
+const defaultSchedulerOptions = {
+  views: ['day'],
+  dataSource: [],
+  resources: [
+    {
+      fieldExpr: 'resourceId',
+      dataSource: [
+        { id: 0, color: '#e01e38' },
+        { id: 1, color: '#f98322' },
+        { id: 2, color: '#1e65e8' },
+      ],
+      label: 'Color',
+    },
+  ],
+  width: 1666,
+  height: 833,
+  startDayHour: 9,
+  firstDayOfWeek: 1,
+  maxAppointmentsPerCell: 5,
+  currentView: 'day',
+  currentDate: new Date(2019, 3, 1),
+};
 
 test.describe('Drag-n-drop appointment after resize (T835545)', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(containerUrl);
-    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
-    await page.evaluate((theme) => new Promise<void>((resolve) => {
-      (window as any).DevExpress.ui.themes.ready(resolve);
-      (window as any).DevExpress.ui.themes.current(theme);
-    }), process.env.THEME || 'fluent.blue.light');
+    await setupTestPage(page, containerUrl);
   });
 
-);
+  ['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'].forEach((view) => {
+    test(`After drag-n-drop appointment, size of appointment shouldn't change in the '${view}' view`, async ({ page }) => {
+      await createWidget(page, 'dxScheduler', {
+        ...defaultSchedulerOptions,
+        views: [view],
+        currentView: view,
+        startDayHour: 9,
+        currentDate: new Date(2017, 4, 1),
+        dataSource: [{
+          text: 'app',
+          startDate: new Date(2017, 4, 1, 9, 0),
+          endDate: new Date(2017, 4, 1, 10, 0),
+        }],
+      });
 
-['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'].forEach((view) => test(`After drag-n-drop appointment, size of appointment shouldn't change in the '${view}' view`, async (t) => {
-  // Scheduler on '#container'
-  const { element, resizableHandle } = page.locator('.dx-scheduler-appointment').filter({ hasText: 'app' });
+      const element = page.locator('.dx-scheduler-appointment').filter({ hasText: 'app' });
 
-  const initSize = {
-    width: await element.clientWidth,
-    height: await element.clientHeight,
-  };
+      const initSize = await element.evaluate((el) => ({
+        width: el.clientWidth,
+        height: el.clientHeight,
+      }));
 
-  const isVertical = await resizableHandle.bottom.count !== 0;
+      const bottomHandle = element.locator('.dx-resizable-handle-bottom');
+      const rightHandle = element.locator('.dx-resizable-handle-right');
+      const isVertical = await bottomHandle.count() > 0;
 
-  await t
-    .drag(isVertical ? resizableHandle.bottom : resizableHandle.right, 50, 50);
+      const handle = isVertical ? bottomHandle : rightHandle;
+      const handleBox = await handle.boundingBox();
+      await page.mouse.move(handleBox!.x + handleBox!.width / 2, handleBox!.y + handleBox!.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(handleBox!.x + handleBox!.width / 2 + 50, handleBox!.y + handleBox!.height / 2 + 50, { steps: 5 });
+      await page.mouse.up();
 
-  const size = isVertical ? await element.clientHeight : await element.clientWidth;
-  expect(size)
-    .gt(isVertical ? initSize.height : initSize.width);
+      const sizeAfterResize = await element.evaluate((el) => ({
+        width: el.clientWidth,
+        height: el.clientHeight,
+      }));
 
-  const sizeBeforeDrag = {
-    width: await element.clientWidth,
-    height: await element.clientHeight,
-  };
-  const positionBeforeDrag = {
-    left: await element.clientLeft,
-    top: await element.clientTop,
-  };
+      if (isVertical) {
+        expect(sizeAfterResize.height).toBeGreaterThan(initSize.height);
+      } else {
+        expect(sizeAfterResize.width).toBeGreaterThan(initSize.width);
+      }
 
-  await t
-    .drag(element, 10, 10, {
-      offsetX: 0,
-      offsetY: 0,
+      const sizeBeforeDrag = await element.evaluate((el) => ({
+        width: el.clientWidth,
+        height: el.clientHeight,
+      }));
+      const positionBeforeDrag = await element.evaluate((el) => ({
+        left: el.clientLeft,
+        top: el.clientTop,
+      }));
+
+      const box = await element.boundingBox();
+      await page.mouse.move(box!.x, box!.y);
+      await page.mouse.down();
+      await page.mouse.move(box!.x + 10, box!.y + 10, { steps: 5 });
+      await page.mouse.up();
+
+      const sizeAfterDrag = await element.evaluate((el) => ({
+        width: el.clientWidth,
+        height: el.clientHeight,
+      }));
+      const positionAfterDrag = await element.evaluate((el) => ({
+        left: el.clientLeft,
+        top: el.clientTop,
+      }));
+
+      expect(sizeBeforeDrag.width).toBe(sizeAfterDrag.width);
+      expect(sizeBeforeDrag.height).toBe(sizeAfterDrag.height);
+      expect(positionBeforeDrag.left).toBe(positionAfterDrag.left);
+      expect(positionBeforeDrag.top).toBe(positionAfterDrag.top);
     });
-
-  const elementClientWidth = await element.clientWidth;
-  const elementClientHeight = await element.clientHeight;
-
-  const elementClientLeft = await element.clientLeft;
-  const elementClientTop = await element.clientTop;
-
-  expect(sizeBeforeDrag.width)
-    .eql(elementClientWidth)
-
-    .expect(sizeBeforeDrag.height)
-    .eql(elementClientHeight)
-
-    .expect(positionBeforeDrag.left)
-    .eql(elementClientLeft)
-
-    .expect(positionBeforeDrag.top)
-    .eql(elementClientTop);
-}).before(async () => createScheduler({
-  views: [view],
-  currentView: view,
-  startDayHour: 9,
-  currentDate: new Date(2017, 4, 1),
-  dataSource: [{
-    text: 'app',
-    startDate: new Date(2017, 4, 1, 9, 0),
-    endDate: new Date(2017, 4, 1, 10, 0),
-  }],
-})));
+  });
 });
