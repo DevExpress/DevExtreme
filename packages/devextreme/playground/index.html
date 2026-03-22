@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevExtreme Playground</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { display: flex; height: 100vh; font-family: sans-serif; }
+
+        #sidebar {
+            width: 230px;
+            min-width: 230px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-right: 1px solid #ddd;
+            background: #f9f9f9;
+        }
+        #sidebar h2 {
+            padding: 10px 12px 6px;
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #e8e8e8;
+            flex-shrink: 0;
+        }
+
+        #theme-selector {
+            margin: 6px 8px 0;
+            padding: 4px 6px;
+            font-size: 12px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        #search {
+            margin: 6px 8px;
+            padding: 5px 8px;
+            font-size: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fff;
+            outline: none;
+            flex-shrink: 0;
+        }
+        #search:focus { border-color: #0d6efd; }
+
+        #sidebar-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 8px;
+        }
+
+        #recents-section { border-bottom: 1px solid #e8e8e8; padding-bottom: 4px; margin-bottom: 4px; }
+        .section-label {
+            padding: 6px 12px 2px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #recents-list { list-style: none; padding: 0; }
+        .recent-item {
+            display: flex;
+            align-items: center;
+        }
+        .recent-item a {
+            flex: 1;
+            display: block;
+            padding: 4px 12px;
+            font-size: 12px;
+            color: #555;
+            text-decoration: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .recent-item a:hover { background: #efefef; color: #222; }
+        .recent-item a.active { background: #0d6efd; color: #fff; }
+        .btn-remove-recent {
+            flex-shrink: 0;
+            padding: 0 8px;
+            height: 100%;
+            min-height: 24px;
+            background: none;
+            border: none;
+            color: #bbb;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+        }
+        .btn-remove-recent:hover { color: #e53e3e; }
+
+        #groups-nav details { }
+        .group-summary {
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            user-select: none;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .group-summary::-webkit-details-marker { display: none; }
+        .group-summary::before {
+            content: '▾';
+            font-size: 10px;
+            color: #bbb;
+            transition: transform 0.15s;
+        }
+        details:not([open]) .group-summary::before { transform: rotate(-90deg); }
+        .group-summary:hover { color: #555; }
+
+        #pinned-section { border-bottom: 1px solid #e8e8e8; padding-bottom: 4px; margin-bottom: 4px; }
+        #pinned-list { list-style: none; padding: 0; }
+        .pinned-item {
+            display: flex;
+            align-items: center;
+        }
+        .pinned-item a {
+            flex: 1;
+            display: block;
+            padding: 4px 8px 4px 10px;
+            font-size: 12px;
+            color: #555;
+            text-decoration: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .pinned-item a::before {
+            content: '◈';
+            font-size: 9px;
+            color: #888;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        .pinned-item a:hover { background: #efefef; color: #222; }
+        .pinned-item a.active { background: #0d6efd; color: #fff; }
+        .pinned-item a.active::before { color: rgba(255,255,255,0.7); }
+        .pinned-demo-badge {
+            display: inline-block;
+            font-size: 9px;
+            font-weight: 600;
+            color: #888;
+            background: #eee;
+            border-radius: 3px;
+            padding: 1px 4px;
+            margin-right: 5px;
+            vertical-align: middle;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+        .pinned-item.pinned-demo a::before { content: '▶'; font-size: 8px; }
+        .pinned-item a.active .pinned-demo-badge { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.2); }
+        .btn-unpin {
+            flex-shrink: 0;
+            padding: 0 8px;
+            height: 100%;
+            min-height: 24px;
+            background: none;
+            border: none;
+            color: #bbb;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+        }
+        .btn-unpin:hover { color: #e53e3e; }
+
+        .group-list { list-style: none; padding: 0; margin-bottom: 4px; }
+        .group-list li {
+            display: flex;
+            align-items: center;
+        }
+        .group-list li a {
+            flex: 1;
+            display: block;
+            padding: 4px 12px 4px 20px;
+            font-size: 12px;
+            color: #444;
+            text-decoration: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .group-list li a:hover { background: #efefef; color: #111; }
+        .group-list li a.active { background: #0d6efd; color: #fff; }
+        .btn-pin {
+            flex-shrink: 0;
+            padding: 0 7px;
+            height: 100%;
+            min-height: 24px;
+            background: none;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 11px;
+            line-height: 1;
+            opacity: 0;
+            transition: opacity 0.1s;
+        }
+        .group-list li:hover .btn-pin { opacity: 1; }
+        .btn-pin:hover { color: #666; }
+        .btn-pin.pinned { color: #888; opacity: 1; }
+
+        #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        #header { padding: 12px 20px; border-bottom: 1px solid #ddd; font-size: 16px; font-weight: 600; color: #333; display: flex; align-items: center; }
+        #container { flex: 1; padding: 20px; overflow: auto; }
+        #container:has(iframe) { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+
+        .demo-files-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            background: #f5f5f5;
+            border-bottom: 1px solid #e0e0e0;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+        .demo-files-label {
+            font-size: 11px;
+            color: #999;
+            font-weight: 500;
+            margin-right: 2px;
+        }
+        .demo-file-link {
+            font-size: 11px;
+            color: #555;
+            text-decoration: none;
+            padding: 2px 8px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .demo-file-link:hover { background: #0d6efd; color: #fff; border-color: #0d6efd; }
+
+        .demo-list { margin-top: 20px; border-top: 1px solid #eee; padding-top: 14px; }
+        .demo-list-caption { font-size: 11px; font-weight: 600; color: #aaa;
+                             text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+        .demo-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+        .demo-chip {
+            display: inline-block;
+            padding: 4px 12px; border-radius: 12px;
+            font-size: 12px; text-decoration: none; color: #444;
+            border: 1px solid #ddd;
+            transition: opacity 0.15s;
+        }
+        .demo-chip:hover { background: #0d6efd !important; color: #fff !important; border-color: #0d6efd !important; }
+
+        .demo-back { font-size: 13px; font-weight: 400; color: #0d6efd; text-decoration: none; }
+        .demo-back:hover { text-decoration: underline; }
+        .demo-header-title { font-size: 16px; font-weight: 600; color: #333; }
+        .btn-pin-demo-header {
+            margin-left: 8px;
+            background: none; border: none; cursor: pointer;
+            font-size: 14px; color: #ccc; padding: 0 4px;
+            vertical-align: middle;
+            transition: color 0.1s;
+        }
+        .btn-pin-demo-header:hover { color: #666; }
+        .btn-pin-demo-header.pinned { color: #888; }
+
+        .demo-search-results {
+            list-style: none;
+            padding: 0;
+            margin: 1px 0 2px 20px;
+        }
+        .demo-search-link {
+            display: block;
+            padding: 2px 12px 2px 8px;
+            font-size: 11px;
+            color: #0d6efd;
+            text-decoration: none;
+            border-left: 2px solid #dce8ff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .demo-search-link:hover { background: #f0f5ff; border-left-color: #0d6efd; }
+        .demo-search-link.active { background: #0d6efd; color: #fff; border-left-color: #0d6efd; }
+        .group-list li:has(.demo-search-results) { flex-wrap: wrap; }
+        .group-list li:has(.demo-search-results) > a,
+        .group-list li:has(.demo-search-results) > button { flex-shrink: 0; }
+        .group-list li:has(.demo-search-results) > .demo-search-results { width: 100%; }
+    </style>
+</head>
+<body class="dx-viewport">
+    <div id="sidebar">
+        <h2>DevExtreme</h2>
+        <select id="theme-selector"></select>
+        <input id="search" type="search" placeholder="Search widgets &amp; demos…">
+        <div id="sidebar-scroll">
+            <div id="pinned-section" style="display:none">
+                <div class="section-label">Pinned</div>
+                <ul id="pinned-list"></ul>
+            </div>
+            <div id="recents-section" style="display:none">
+                <div class="section-label">Recent</div>
+                <ul id="recents-list"></ul>
+            </div>
+            <nav id="groups-nav"></nav>
+        </div>
+    </div>
+    <div id="main">
+        <div id="header">Select a widget</div>
+        <div id="container"></div>
+    </div>
+    <script type="module" src="./catalog.ts"></script>
+</body>
+</html>

@@ -85,6 +85,17 @@ jobs:
         run: |
           pnpx nx build devextreme-react-storybook
 
+      - name: Build playground (static)
+        if: inputs.action == 'deploy'
+        run: |
+          cd packages/devextreme
+          pnpm run build:playground
+
+      - name: Copy playground into Storybook output
+        if: inputs.action == 'deploy'
+        run: |
+          cp -r packages/devextreme/dist/playground apps/react-storybook/storybook-static/playground
+
       - name: Deploy/remove PR preview
         uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1.8.1
         with:

@@ -60,33 +60,39 @@ export interface DataAdapterOptions {
 SearchBoxController.setEditorClass(TextBox);
 
 class DataAdapter {
-  options: DataAdapterOptions = {
-    dataAccessors: {} as DataAccessors,
-    items: [],
-    multipleSelection: true,
-    recursiveSelection: false,
-    recursiveExpansion: false,
-    rootValue: 0,
-    searchValue: '',
-    dataType: 'tree',
-    searchMode: 'contains',
-    dataConverter: new HierarchicalDataConverter(),
-    onNodeChanged: noop,
-    sort: null,
-    disabledNodeSelectionMode: 'recursiveAndAll',
-  };
+  options: DataAdapterOptions;
 
-  _disabledNodesKeys: ItemKey[] = [];
+  _disabledNodesKeys: ItemKey[];
 
-  _selectedNodesKeys: ItemKey[] = [];
+  _selectedNodesKeys: ItemKey[];
 
-  _expandedNodesKeys: ItemKey[] = [];
+  _expandedNodesKeys: ItemKey[];
 
-  _dataStructure: (InternalNode | null)[] = [];
+  _dataStructure: (InternalNode | null)[];
 
-  _initialDataStructure: (InternalNode | null)[] = [];
+  _initialDataStructure: (InternalNode | null)[];
 
   constructor(options: DataAdapterOptions) {
+    this.options = {
+      dataAccessors: {} as DataAccessors,
+      items: [],
+      multipleSelection: true,
+      recursiveSelection: false,
+      recursiveExpansion: false,
+      rootValue: 0,
+      searchValue: '',
+      dataType: 'tree',
+      searchMode: 'contains',
+      dataConverter: new HierarchicalDataConverter(),
+      onNodeChanged: noop,
+      sort: null,
+      disabledNodeSelectionMode: 'recursiveAndAll',
+    };
+    this._disabledNodesKeys = [];
+    this._selectedNodesKeys = [];
+    this._expandedNodesKeys = [];
+    this._dataStructure = [];
+    this._initialDataStructure = [];
     extend(this.options, options);
     this.options.dataConverter.setDataAccessors(this.options.dataAccessors);
 
