@@ -1,55 +1,43 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, appendElementTo } from '../../../../playwright-helpers';
-import path from 'path';
+import { createWidget, getContainerUrl, setupTestPage, appendElementTo } from '../../../../playwright-helpers';
 
-const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
+const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
 
 test.describe('Drag-n-drop to fake cell', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(containerUrl);
-    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
-    await page.evaluate((theme) => new Promise<void>((resolve) => {
-      (window as any).DevExpress.ui.themes.ready(resolve);
-      (window as any).DevExpress.ui.themes.current(theme);
-    }), process.env.THEME || 'fluent.blue.light');
+    await setupTestPage(page, containerUrl);
   });
 
-);
+  test('Should not select cells outside the scheduler(T1040795)', async ({ page }) => {
+    await appendElementTo(page, '#container', 'div', { id: 'scheduler' });
+    await appendElementTo(page, '#container', 'div', { id: 'fake', style: 'width: 400px; height: 100px;' });
+    await page.evaluate(() => {
+      $('#fake').addClass('scheduler-date-table-cell');
+    });
 
-test('Should not select cells outside the scheduler(T1040795)', async () => {
-  // Scheduler on '#container'
-
-  const { element } = page.locator('.dx-scheduler-appointment').filter({ hasText: 'app' });
-
-  await t
-    .drag(element, 0, 200)
-
-    .expect(Selector('#fake').hasClass('dx-scheduler-date-table-droppable-cell'))
-    .eql(false);
-});
-
-// TODO: .before() block not converted - move to test setup
-// {
-  await appendElementTo('#container', 'div', 'scheduler');
-  await appendElementTo('#container', 'div', 'fake', {
-    width: '400px', height: '100px',
-  });
-  await ClientFunction(() => {
-    $('#fake').addClass('scheduler-date-table-cell');
-  })();
-
-  return createWidget(page, 'dxScheduler', {
-    dataSource: [
-      {
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [{
         text: 'app',
         startDate: new Date(2021, 3, 26, 2),
         endDate: new Date(2021, 3, 26, 2, 30),
-      },
-    ],
-    views: ['day'],
-    currentDate: new Date(2021, 3, 26),
-    height: 200,
-    width: 400,
-  }, '#scheduler');
-});
+      }],
+      views: ['day'],
+      currentDate: new Date(2021, 3, 26),
+      height: 200,
+      width: 400,
+    }, '#scheduler');
+
+    const element = page.locator('#scheduler .dx-scheduler-appointment').filter({ hasText: 'app' });
+
+    const box = await element.boundingBox();
+    await element.hover();
+    await page.mouse.down();
+    await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2 + 200, { steps: 10 });
+    await page.mouse.up();
+
+    const hasDraggableClass = await page.locator('#fake').evaluate(
+      (el) => el.classList.contains('dx-scheduler-date-table-droppable-cell'),
+    );
+    expect(hasDraggableClass).toBe(false);
+  });
 });
