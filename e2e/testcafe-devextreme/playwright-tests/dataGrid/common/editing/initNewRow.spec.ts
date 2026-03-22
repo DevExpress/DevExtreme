@@ -33,14 +33,12 @@ test.describe('initNewRow', () => {
       });
 
       await (;
-        page.locator('.dx-datagrid-header-panel').click().getAddRowButton(),
-      )
+        page.locator('.dx-datagrid-header-panel').getAddRowButton(),).click()
       .click(
         dataGrid.getPopupEditForm().cancelButton,
       );
 
-    await (page.locator('.dx-datagrid-header-panel').click().getAddRowButton(),
-    );
+    await (page.locator('.dx-datagrid-header-panel').getAddRowButton(),).click();
 
     expect(await 
       dataGrid.getPopupEditForm().element.exists,

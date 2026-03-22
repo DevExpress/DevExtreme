@@ -38,7 +38,7 @@ test.describe('Validation', () => {
     });
 
       await t.maximizeWindow();
-      await (page.locator('.dx-data-row').click().nth(0).locator('td').nth(0));
+      await (page.locator('.dx-data-row').nth(0).locator('td').nth(0)).click();
       await page.keyboard.press('ctrl+a backspace enter');
 
     // act

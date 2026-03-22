@@ -98,17 +98,17 @@ test.describe('FixedColumns - Focus Overlay', () => {
 
       expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
 
-    await (page.locator('.dx-group-row').click().nth(0).getCell(1).element);
+    await (page.locator('.dx-group-row').nth(0).getCell(1).element).click();
     await page.keyboard.press('tab');
 
     await testScreenshot(page, 'datagrid_group_row_focused.png', { element: page.locator('#container') });
 
-    await (page.locator('.dx-data-row').click().nth(2).locator('.dx-command-edit').nth(40).getAdaptiveButton());
+    await (page.locator('.dx-data-row').nth(2).locator('.dx-command-edit').nth(40).getAdaptiveButton()).click();
     await page.keyboard.press('tab');
 
     await testScreenshot(page, 'datagrid_adaptive_item_focused.png', { element: page.locator('#container') });
 
-    await (dataGrid.getGroupFooterRow().click().nth(0), { offsetX: 5, offsetY: 5 });
+    await (dataGrid.getGroupFooterRow().nth(0), { offsetX: 5, offsetY: 5 }).click();
     await page.keyboard.press('tab');
 
     await testScreenshot(page, 'datagrid_group_footer_row_focused.png', { element: page.locator('#container') });

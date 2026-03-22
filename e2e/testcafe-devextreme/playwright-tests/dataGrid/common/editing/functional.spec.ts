@@ -52,7 +52,7 @@ test.describe('Editing.Functional', () => {
 
       const resolveOnSavingDeferred = ClientFunction(() => (window as any).deferred.resolve());
 
-    await (page.locator('.dx-data-row').click().nth(0).locator('td').nth(0));
+    await (page.locator('.dx-data-row').nth(0).locator('td').nth(0)).click();
     await (page.locator('.dx-data-row').nth(0).locator('td').nth(0)).fill('new_value');
     await page.keyboard.press('tab tab');
     await resolveOnSavingDeferred();

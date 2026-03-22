@@ -421,7 +421,7 @@ test.describe('Editing.FunctionalMatrix', () => {
           const saveButton = getSaveButton(mode, form);
 
           if (saveButton) {
-            await (saveButton).click({ offsetX: 5, offsetY: 5 });
+            await (saveButton, { offsetX: 5, offsetY: 5 }).click();
           }
 
           // eslint-disable-next-line no-restricted-syntax
@@ -459,7 +459,7 @@ test.describe('Editing.FunctionalMatrix', () => {
               await ('body').click();
             }
 
-            await (saveButton).click({ offsetX: 5, offsetY: 5 });
+            await (saveButton, { offsetX: 5, offsetY: 5 }).click();
           }
 
           const expectedColumnResult: ColumnInfo[] = [
@@ -525,7 +525,7 @@ test.describe('Editing.FunctionalMatrix', () => {
             const saveButton = getSaveButton(mode, form);
 
             if (saveButton) {
-              await (saveButton).click({ offsetX: 5, offsetY: 5 });
+              await (saveButton, { offsetX: 5, offsetY: 5 }).click();
             }
           }
 

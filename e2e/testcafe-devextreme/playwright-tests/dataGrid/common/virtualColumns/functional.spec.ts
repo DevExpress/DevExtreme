@@ -39,7 +39,7 @@ test.describe('Virtual Columns.Functional', () => {
       },
     });
 
-      await (page.locator('.dx-data-row').click().nth(0).locator('td').nth(0));
+      await (page.locator('.dx-data-row').nth(0).locator('td').nth(0)).click();
       expect(await page.locator('.dx-data-row').nth(0).locator('td').nth(0).focused);
       await t.ok();
 

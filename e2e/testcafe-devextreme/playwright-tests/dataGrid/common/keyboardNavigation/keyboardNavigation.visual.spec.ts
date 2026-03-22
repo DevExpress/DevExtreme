@@ -32,7 +32,7 @@ test.describe('Keyboard Navigation.Visual', () => {
       await t.ok();
 
     // act
-    await (page.locator('.dx-data-row').click().nth(0).locator('td').nth(0));
+    await (page.locator('.dx-data-row').nth(0).locator('td').nth(0)).click();
     await page.keyboard.press('end');
 
     await testScreenshot(page, 'focus_last_cell_in_row_that_contains_focus_when_pressing_End_key.png', { element: page.locator('#container') });

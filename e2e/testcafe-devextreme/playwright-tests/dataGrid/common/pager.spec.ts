@@ -47,21 +47,21 @@ test.describe('Pager', () => {
     expect(await page.locator('.dx-data-row').nth(29).locator('td').nth(2).textContent());
     await t.eql('29');
     // set page sige to 10
-    await (pager.locator('.dx-page-size').nth(1).click().element);
+    await (pager.locator('.dx-page-size').nth(1).element).click();
     expect(await page.locator('.dx-data-row').nth(10 * 6 - 1).locator('td').nth(2).textContent());
     await t.eql('59');
     // set page index 7
-    await (pager.locator('.dx-page').filter({hasText: '7'}).click().element);
+    await (pager.locator('.dx-page').filter({hasText: '7'}).element).click();
     expect(await page.locator('.dx-data-row').nth(10 * 7 - 1).locator('td').nth(2).textContent());
     await t.eql('69');
     expect(await pager.locator('.dx-info').textContent);
     await t.eql('Page 7 of 10 (100 items)');
     // navigate to prev page (6)
-    await (pager.locator('.dx-navigate-button.dx-prev-button').click().element);
+    await (pager.locator('.dx-navigate-button.dx-prev-button').element).click();
     expect(await pager.locator('.dx-info').textContent);
     await t.eql('Page 6 of 10 (100 items)');
     // navigate to next page (7)
-    await (pager.locator('.dx-navigate-button.dx-next-button').click().element);
+    await (pager.locator('.dx-navigate-button.dx-next-button').element).click();
     expect(await pager.locator('.dx-info').textContent);
     await t.eql('Page 7 of 10 (100 items)');
 

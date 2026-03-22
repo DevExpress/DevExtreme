@@ -40,7 +40,7 @@ test.describe('Ai Column.KeyboardNavigation.Visual', () => {
     expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
 
     // act
-    await (headerRow.locator('td').nth(0).click().element);
+    await (headerRow.locator('td').nth(0).element).click();
     await page.keyboard.press('tab');
 
     // assert

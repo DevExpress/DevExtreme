@@ -56,7 +56,7 @@ test.describe('Fixed Columns - keyboard navigation', () => {
     expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
 
     // act
-    await (headerRow.locator('td').nth(0).click().element);
+    await (headerRow.locator('td').nth(0).element).click();
 
     // assert
     expect(await headerRow.locator('td').nth(0).isFocused);

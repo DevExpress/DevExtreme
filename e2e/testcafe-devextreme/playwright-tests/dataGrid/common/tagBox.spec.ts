@@ -52,7 +52,7 @@ test.describe('Tagbox Columns', () => {
           editing: { mode: 'batch', allowUpdating: true },
         });
 
-      await (page.locator('.dx-data-row').click().nth(0).locator('td').nth(1));
+      await (page.locator('.dx-data-row').nth(0).locator('td').nth(1)).click();
     await testScreenshot(page, 'T1228720-grid-tagbox-on-edit.png', { element: page.locator('#container') });
   });
 });

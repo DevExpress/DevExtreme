@@ -48,7 +48,7 @@ test.describe('Validation', () => {
         }],
       });
 
-          await (grid.locator('td').nth(0, 0).click().element);
+          await (grid.locator('td').nth(0, 0)).click();
 
       const editor = grid.locator('td').nth(0, 0).locator('.dx-editor-cell');
 

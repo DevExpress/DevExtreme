@@ -39,7 +39,7 @@ test.describe('Search Panel', () => {
     });
 
       // act
-    await (page.locator('.dx-data-row').click().nth(0).locator('.dx-command-edit').nth(0));
+    await (page.locator('.dx-data-row').nth(0).locator('.dx-command-edit').nth(0)).click();
 
     const masterRow = page.locator('.dx-master-detail-row').nth(0);
     const masterGrid = masterRow.getDataGrid();

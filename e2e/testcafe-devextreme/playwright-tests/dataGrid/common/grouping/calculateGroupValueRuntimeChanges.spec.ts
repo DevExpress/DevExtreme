@@ -42,8 +42,8 @@ test.describe('Grouping API - calculateGroupValue runtime changes', () => {
       await t.eql(0);
 
       await (dataGrid
-        .getGroupRow(0).click()
-        .getExpandCell());
+        .getGroupRow(0)
+        .getExpandCell()).click();
 
       expect(await page.locator('.dx-group-row').nth(0).isExpanded);
       await t.ok();
@@ -83,8 +83,8 @@ test.describe('Grouping API - calculateGroupValue runtime changes', () => {
       await t.eql(0);
 
       await (dataGrid
-        .getGroupRow(0).click()
-        .getExpandCell());
+        .getGroupRow(0)
+        .getExpandCell()).click();
 
       expect(await page.locator('.dx-group-row').nth(0).isExpanded);
       await t.ok();
@@ -122,8 +122,8 @@ test.describe('Grouping API - calculateGroupValue runtime changes', () => {
       await t.eql(0);
 
       await (dataGrid
-        .getGroupRow(0).click()
-        .getExpandCell());
+        .getGroupRow(0)
+        .getExpandCell()).click();
 
       expect(await page.locator('.dx-group-row').nth(0).isExpanded);
       await t.ok();
@@ -172,8 +172,8 @@ test.describe('Grouping API - calculateGroupValue runtime changes', () => {
       await t.eql(0);
 
       await (dataGrid
-        .getGroupRow(0).click()
-        .getExpandCell());
+        .getGroupRow(0)
+        .getExpandCell()).click();
 
       expect(await page.locator('.dx-group-row').nth(0).isExpanded);
       await t.ok();

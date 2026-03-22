@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { createWidget, testScreenshot } from '../../../../../../playwright-helpers';
 import path from 'path';
 
@@ -14,24 +14,9 @@ test.describe('Scheduler: Layout Views: Timeline Month', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-);
-
-test('Header cells should be aligned with date-table cells in timeline-month when current date changes', async ({ page }) => {
-  // --- setup ---
-await createWidget(page, 'dxScheduler', {
-    currentDate: new Date(2020, 10, 1),
-    currentView: 'timelineMonth',
-    height: 600,
-    views: ['timelineMonth'],
-    crossScrollingEnabled: true,
-  // --- test ---
-// Scheduler on '#container'
-    await scheduler.option('currentDate', new Date(2020, 11, 1));
-
-  await testScreenshot(page, 'timeline-month-change-current-date.png');
-
-  expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-});
-});
+  test('Header cells should be aligned with date-table cells in timeline-month when current date changes', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', { currentDate: new Date(2020, 10, 1), currentView: 'timelineMonth', height: 600, views: ['timelineMonth'], crossScrollingEnabled: true });
+    await page.evaluate(() => { ($('#container') as any).dxScheduler('instance').option('currentDate', new Date(2020, 11, 1)); });
+    await testScreenshot(page, 'timeline-month-change-current-date.png');
+  });
 });
