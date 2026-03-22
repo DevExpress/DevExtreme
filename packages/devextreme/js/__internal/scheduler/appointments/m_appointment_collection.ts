@@ -784,7 +784,6 @@ class SchedulerAppointments extends CollectionWidget<any> {
       isVerticalGroupedWorkSpace: scale.isVerticalGroupedWorkSpace(),
       appointmentRect: getBoundingRect($element[0]),
       parentAppointmentRect: getBoundingRect($element.parent()[0]),
-      viewDataProvider: scale.viewDataProvider,
       getCellDateInfo: scale.getCellDateInfo.bind(scale),
       getCellGeometry: scale.getCellGeometry.bind(scale),
       isDateAndTimeView: scale.isDateAndTimeView(),
@@ -793,7 +792,6 @@ class SchedulerAppointments extends CollectionWidget<any> {
       timeZoneCalculator,
       dataAccessors: this.dataAccessors,
       rtlEnabled: this.option('rtlEnabled'),
-      DOMMetaData: scale.getDOMElementsMetaData(),
       viewOffset: this.invoke('getViewOffsetMs'),
     });
   }

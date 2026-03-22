@@ -62,15 +62,15 @@ export default class AppointmentDragBehavior {
     const container = this.appointments._getAppointmentContainer(isAllDay);
     container.append(element);
 
-    const $targetCell: any = this.scale.getDroppableCell();
+    const $targetCell = this.scale.getDroppableCell();
     const $dragCell = this.scale.getCellByCoordinates(this.initialPosition, isAllDay);
 
     this.appointments.notifyObserver('updateAppointmentAfterDrag', {
       event,
       element,
       rawAppointment,
-      isDropToTheSameCell: $targetCell.is($dragCell),
-      isDropToSelfScheduler: $targetCell.length > 0,
+      isDropToTheSameCell: $targetCell?.is($dragCell),
+      isDropToSelfScheduler: ($targetCell?.length ?? 0) > 0,
     });
   }
 

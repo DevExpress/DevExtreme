@@ -1,3 +1,5 @@
+import type { dxElementWrapper } from '@js/core/renderer';
+
 import type { CellsInfo, Rect } from '../appointments/resizing/types';
 import { isDateAndTimeView } from '../r1/utils/index';
 import type { ViewDataProviderType } from '../types';
@@ -20,10 +22,17 @@ export interface GroupBounds {
   bottom: number;
 }
 
+export interface CellCoordinates {
+  left: number;
+  top: number;
+}
+
+export interface GroupCoordinates {
+  groupIndex: number;
+}
+
 interface Workspace {
-  positionHelper: {
-    getResizableStep: () => number;
-  };
+  positionHelper: { getResizableStep: () => number };
   getDOMElementsMetaData: () => DOMElementsMetaData;
   viewDataProvider: ViewDataProviderType;
   isVerticalGroupedWorkSpace: () => boolean;
@@ -33,47 +42,60 @@ interface Workspace {
   option: (name: string) => unknown;
   _getGroupCount: () => number;
   needRecalculateResizableArea: () => boolean;
-  getGroupBounds: (coordinates: unknown) => GroupBounds;
+  getGroupBounds: (coordinates: GroupCoordinates) => GroupBounds;
   getAgendaVerticalStepHeight: () => number;
   supportAllDayRow: () => boolean;
   isGroupedByDate: () => boolean;
-  getDroppableCell: () => unknown;
-  getCellByCoordinates: (coordinates: unknown, isAllDay: boolean) => unknown;
+  getDroppableCell: () => dxElementWrapper;
+  getCellByCoordinates: (coordinates: CellCoordinates, isAllDay: boolean) => dxElementWrapper;
   removeDroppableCellClass: () => void;
 }
 
-export interface Scale {
-  readonly viewDataProvider: ViewDataProviderType | undefined;
+export interface ScaleGeometry {
+  getCellWidth: () => number;
+  getCellHeight: () => number;
   getResizableStep: () => number;
+  getCellGeometry: (
+    rowIndex: number,
+    columnIndex: number,
+    isAllDay: boolean,
+  ) => CellsInfo | undefined;
   getDOMElementsMetaData: () => DOMElementsMetaData | undefined;
+}
+
+export interface ScaleData {
+  readonly viewDataProvider: ViewDataProviderType | undefined;
   getCellDateInfo: (
     rowIndex: number,
     columnIndex: number,
     isAllDay: boolean,
     rtlEnabled: boolean,
   ) => CellDateInfo | undefined;
-  getCellGeometry: (
-    rowIndex: number,
-    columnIndex: number,
-    isAllDay: boolean,
-  ) => CellsInfo | undefined;
-  getCellWidth: () => number;
-  getCellHeight: () => number;
   cellDuration: number;
   startDayHour: number;
   endDayHour: number;
   groupCount: number;
-  needRecalculateResizableArea: () => boolean;
-  getGroupBounds: (coordinates: unknown) => GroupBounds | undefined;
   agendaVerticalStepHeight: number;
   supportAllDayRow: boolean;
   isGroupedByDate: boolean;
-  getDroppableCell: () => unknown;
-  getCellByCoordinates: (coordinates: unknown, isAllDay: boolean) => unknown;
-  removeDroppableCellClass: () => void;
   isVerticalGroupedWorkSpace: () => boolean;
   isDateAndTimeView: () => boolean;
 }
+
+export interface ScaleDragDrop {
+  getDroppableCell: () => dxElementWrapper | undefined;
+  getCellByCoordinates: (
+    coordinates: CellCoordinates, isAllDay: boolean,
+  ) => dxElementWrapper | undefined;
+  removeDroppableCellClass: () => void;
+}
+
+export interface ScaleInteraction {
+  needRecalculateResizableArea: () => boolean;
+  getGroupBounds: (coordinates: GroupCoordinates) => GroupBounds | undefined;
+}
+
+export type Scale = ScaleGeometry & ScaleData & ScaleDragDrop & ScaleInteraction;
 
 export class WorkspaceScale implements Scale {
   private readonly getWorkspace: () => Workspace | undefined;
@@ -103,12 +125,8 @@ export class WorkspaceScale implements Scale {
   ): CellDateInfo | undefined {
     const workspace = this.getWorkspace();
     if (!workspace) return undefined;
-    const cellData = workspace.viewDataProvider.getCellData(
-      rowIndex,
-      columnIndex,
-      isAllDay,
-      rtlEnabled,
-    );
+    const { viewDataProvider } = workspace;
+    const cellData = viewDataProvider.getCellData(rowIndex, columnIndex, isAllDay, rtlEnabled);
     return {
       startDate: cellData.startDate,
       endDate: cellData.endDate,
@@ -165,7 +183,7 @@ export class WorkspaceScale implements Scale {
     return this.getWorkspace()?.needRecalculateResizableArea() ?? false;
   }
 
-  getGroupBounds(coordinates: unknown): GroupBounds | undefined {
+  getGroupBounds(coordinates: GroupCoordinates): GroupBounds | undefined {
     return this.getWorkspace()?.getGroupBounds(coordinates);
   }
 
@@ -181,11 +199,14 @@ export class WorkspaceScale implements Scale {
     return this.getWorkspace()?.isGroupedByDate() ?? false;
   }
 
-  getDroppableCell(): unknown {
+  getDroppableCell(): dxElementWrapper | undefined {
     return this.getWorkspace()?.getDroppableCell();
   }
 
-  getCellByCoordinates(coordinates: unknown, isAllDay: boolean): unknown {
+  getCellByCoordinates(
+    coordinates: CellCoordinates,
+    isAllDay: boolean,
+  ): dxElementWrapper | undefined {
     return this.getWorkspace()?.getCellByCoordinates(coordinates, isAllDay);
   }
 
