@@ -474,10 +474,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     }
 
 
-    /**
-     * [descr:dxPopupOptions.tabFocusLoopEnabled]
     
-     */
     @Input()
     get tabFocusLoopEnabled(): boolean {
         return this._getOption('tabFocusLoopEnabled');

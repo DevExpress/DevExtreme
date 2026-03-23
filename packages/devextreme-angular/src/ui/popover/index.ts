@@ -400,10 +400,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     }
 
 
-    /**
-     * [descr:dxPopupOptions.tabFocusLoopEnabled]
     
-     */
     @Input()
     get tabFocusLoopEnabled(): boolean {
         return this._getOption('tabFocusLoopEnabled');

@@ -343,10 +343,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     }
 
 
-    /**
-     * [descr:dxPopupOptions.tabFocusLoopEnabled]
     
-     */
     @Input()
     get tabFocusLoopEnabled(): boolean {
         return this._getOption('tabFocusLoopEnabled');
