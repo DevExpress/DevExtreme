@@ -346,10 +346,6 @@ export class AppointmentForm {
       name: SUBJECT_GROUP_NAME,
       itemType: 'group',
       cssClass: `${CLASSES.subjectGroup} ${CLASSES.groupWithIcon}`,
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2,
-      },
       items: [
         {
           name: SUBJECT_ICON_NAME,
@@ -377,10 +373,6 @@ export class AppointmentForm {
       name: DATE_GROUP_NAME,
       itemType: 'group',
       cssClass: `${CLASSES.dateRangeGroup} ${CLASSES.groupWithIcon}`,
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2,
-      },
       items: [
         {
           name: DATE_ICON_NAME,
@@ -658,10 +650,6 @@ export class AppointmentForm {
     return {
       name: REPEAT_GROUP_NAME,
       itemType: 'group',
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2,
-      },
       cssClass: `${CLASSES.repeatGroup} ${CLASSES.groupWithIcon}`,
       items: [
         {
@@ -714,10 +702,6 @@ export class AppointmentForm {
     return {
       name: DESCRIPTION_GROUP_NAME,
       itemType: 'group',
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2,
-      },
       cssClass: `${CLASSES.descriptionGroup} ${CLASSES.groupWithIcon}`,
       items: [
         {
@@ -776,10 +760,6 @@ export class AppointmentForm {
         name: RESOURCES_GROUP_NAME,
         itemType: 'group',
         visible: resourcesItems.length > 0,
-        colCount: 2,
-        colCountByScreen: {
-          xs: 2,
-        },
         cssClass: `${CLASSES.resourcesGroup} ${CLASSES.groupWithIcon}`,
         items: [
           {
@@ -805,10 +785,6 @@ export class AppointmentForm {
       return {
         itemType: 'group',
         name: `${dataField}Group`,
-        colCount: 2,
-        colCountByScreen: {
-          xs: 2,
-        },
         cssClass: CLASSES.groupWithIcon,
         items: [
           {
