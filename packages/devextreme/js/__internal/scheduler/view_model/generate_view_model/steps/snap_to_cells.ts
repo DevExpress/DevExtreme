@@ -25,15 +25,24 @@ export const snapToCells = <T extends ListEntity & Position>(
 ): T[] => {
   if (mode === 'never') return entities;
 
-  const threshold = mode === 'always' ? 0 : 0.5;
+  if (mode === 'always') {
+    return entities.map((entity) => {
+      const startDateUTC = cells[entity.cellIndex].min;
+      const endDateUTC = cells[entity.endCellIndex].max;
+
+      return {
+        ...entity, startDateUTC, endDateUTC, duration: endDateUTC - startDateUTC,
+      };
+    });
+  }
 
   return entities.map((entity) => {
     const startCell = cells[entity.cellIndex];
     const endCell = cells[entity.endCellIndex];
 
-    const startDateUTC = getCellFill(entity.startDateUTC, entity.endDateUTC, startCell) > threshold
+    const startDateUTC = getCellFill(entity.startDateUTC, entity.endDateUTC, startCell) > 0.5
       ? startCell.min : entity.startDateUTC;
-    const endDateUTC = getCellFill(entity.startDateUTC, entity.endDateUTC, endCell) > threshold
+    const endDateUTC = getCellFill(entity.startDateUTC, entity.endDateUTC, endCell) > 0.5
       ? endCell.max : entity.endDateUTC;
 
     return {
