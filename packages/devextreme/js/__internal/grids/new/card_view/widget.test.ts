@@ -224,3 +224,88 @@ describe('absence of multiple re-render', () => {
     });
   });
 });
+
+describe('reactivity to column option changes', () => {
+  const dataSource = [
+    { id: 1, name: 'Audi' },
+    { id: 2, name: 'BMW' },
+  ];
+
+  const columns = [
+    { dataField: 'id', caption: 'ID' },
+    { dataField: 'name', caption: 'Name' },
+  ];
+
+  it('should re-render cards when column caption changes', () => {
+    const cardTemplate = jest.fn();
+
+    const container = document.createElement('div');
+    const cardView = new CardView(container, {
+      keyExpr: 'id',
+      dataSource,
+      columns,
+      cardTemplate,
+    } as CardViewOptions);
+
+    cardTemplate.mockClear();
+    cardView.columnOption('name', 'caption', 'Vehicle');
+
+    expect(cardTemplate).toBeCalledTimes(dataSource.length);
+  });
+
+  it('should re-render cards when column format changes', () => {
+    const cardTemplate = jest.fn();
+
+    const container = document.createElement('div');
+    const cardView = new CardView(container, {
+      keyExpr: 'id',
+      dataSource,
+      columns,
+      cardTemplate,
+    } as CardViewOptions);
+
+    cardTemplate.mockClear();
+    cardView.columnOption('id', 'format', 'currency');
+
+    expect(cardTemplate).toBeCalledTimes(dataSource.length);
+  });
+
+  it('should re-render cards when column alignment changes', () => {
+    const cardTemplate = jest.fn();
+
+    const container = document.createElement('div');
+    const cardView = new CardView(container, {
+      keyExpr: 'id',
+      dataSource,
+      columns,
+      cardTemplate,
+    } as CardViewOptions);
+
+    cardTemplate.mockClear();
+    cardView.columnOption('name', 'alignment', 'right');
+
+    expect(cardTemplate).toBeCalledTimes(dataSource.length);
+  });
+
+  it('should not re-render cards when sort/filter options change without data change', () => {
+    const cardTemplate = jest.fn();
+
+    const container = document.createElement('div');
+    const cardView = new CardView(container, {
+      keyExpr: 'id',
+      dataSource,
+      columns,
+      cardTemplate,
+      sorting: {
+        mode: 'single',
+      },
+    } as CardViewOptions);
+
+    cardTemplate.mockClear();
+    cardView.columnOption('name', 'sortOrder', 'asc');
+
+    // Should be called dataSource.length times (once per card for data update),
+    // not dataSource.length * 2 (which would indicate extra re-render from column metadata).
+    expect(cardTemplate).toBeCalledTimes(dataSource.length);
+  });
+});
