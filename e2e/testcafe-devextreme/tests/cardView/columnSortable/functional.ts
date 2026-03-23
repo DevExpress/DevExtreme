@@ -323,6 +323,9 @@ test('cards should update when columns are reordered (T1324855)', async (t) => {
     speed: 0.5,
   });
 
+  // Wait for headers to update after drag
+  await t.expect(cardView.getHeaders().getHeaderItemNth(0).element.innerText).notEql('A');
+
   const headerCaptions: string[] = [];
   const headersCount = await cardView.getHeaders().getHeaderItemsElements().count;
   for (let i = 0; i < headersCount; i += 1) {
