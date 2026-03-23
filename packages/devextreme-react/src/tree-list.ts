@@ -1409,7 +1409,6 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   dragEnabled?: boolean;
   dragOutsideBoundary?: boolean;
   enableBodyScroll?: boolean;
-  focusLoopEnabled?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;
   height?: number | string;
@@ -1441,6 +1440,7 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   shadingColor?: string;
   showCloseButton?: boolean;
   showTitle?: boolean;
+  tabFocusLoopEnabled?: boolean;
   tabIndex?: number;
   title?: string;
   titleTemplate?: ((titleElement: any) => string | any) | template;
@@ -2465,7 +2465,6 @@ type IPopupProps = React.PropsWithChildren<{
   dragEnabled?: boolean;
   dragOutsideBoundary?: boolean;
   enableBodyScroll?: boolean;
-  focusLoopEnabled?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;
   height?: number | string;
@@ -2497,6 +2496,7 @@ type IPopupProps = React.PropsWithChildren<{
   shadingColor?: string;
   showCloseButton?: boolean;
   showTitle?: boolean;
+  tabFocusLoopEnabled?: boolean;
   tabIndex?: number;
   title?: string;
   titleTemplate?: ((titleElement: any) => string | any) | template;

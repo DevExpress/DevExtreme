@@ -710,7 +710,7 @@ class Lookup extends DropDownList<LookupProperties> {
       shading: dropDownOptions.shading,
       // @ts-expect-error ts-error
       hideOnOutsideClick: dropDownOptions.hideOnOutsideClick,
-      focusLoopEnabled: shouldLoopFocusInsidePopup,
+      tabFocusLoopEnabled: shouldLoopFocusInsidePopup,
     });
 
     delete result.animation;

@@ -50,7 +50,6 @@ type AccessibleOptions = Pick<Properties,
   "deferRendering" |
   "disabled" |
   "enableBodyScroll" |
-  "focusLoopEnabled" |
   "height" |
   "hideEvent" |
   "hideOnOutsideClick" |
@@ -77,6 +76,7 @@ type AccessibleOptions = Pick<Properties,
   "showCloseButton" |
   "showEvent" |
   "showTitle" |
+  "tabFocusLoopEnabled" |
   "target" |
   "title" |
   "titleTemplate" |
@@ -98,7 +98,6 @@ const componentConfig = {
     deferRendering: Boolean,
     disabled: Boolean,
     enableBodyScroll: Boolean,
-    focusLoopEnabled: Boolean,
     height: [Number, String],
     hideEvent: [Object, String] as PropType<Record<string, any> | string>,
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
@@ -125,6 +124,7 @@ const componentConfig = {
     showCloseButton: Boolean,
     showEvent: [Object, String] as PropType<Record<string, any> | string>,
     showTitle: Boolean,
+    tabFocusLoopEnabled: Boolean,
     target: {},
     title: String,
     titleTemplate: {},
@@ -142,7 +142,6 @@ const componentConfig = {
     "update:deferRendering": null,
     "update:disabled": null,
     "update:enableBodyScroll": null,
-    "update:focusLoopEnabled": null,
     "update:height": null,
     "update:hideEvent": null,
     "update:hideOnOutsideClick": null,
@@ -169,6 +168,7 @@ const componentConfig = {
     "update:showCloseButton": null,
     "update:showEvent": null,
     "update:showTitle": null,
+    "update:tabFocusLoopEnabled": null,
     "update:target": null,
     "update:title": null,
     "update:titleTemplate": null,

@@ -128,12 +128,6 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     dragOutsideBoundary?: boolean;
     /**
      * @docid
-     * @default false
-     * @public
-     */
-    focusLoopEnabled?: boolean;
-    /**
-     * @docid
      * @default true &for(desktop)
      * @public
      */
@@ -226,6 +220,12 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @public
      */
     showTitle?: boolean;
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    tabFocusLoopEnabled?: boolean;
     /**
      * @docid
      * @default ""

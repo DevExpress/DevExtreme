@@ -51,7 +51,6 @@ type AccessibleOptions = Pick<Properties,
   "dragEnabled" |
   "dragOutsideBoundary" |
   "enableBodyScroll" |
-  "focusLoopEnabled" |
   "focusStateEnabled" |
   "fullScreen" |
   "height" |
@@ -83,6 +82,7 @@ type AccessibleOptions = Pick<Properties,
   "shadingColor" |
   "showCloseButton" |
   "showTitle" |
+  "tabFocusLoopEnabled" |
   "tabIndex" |
   "title" |
   "titleTemplate" |
@@ -108,7 +108,6 @@ const componentConfig = {
     dragEnabled: Boolean,
     dragOutsideBoundary: Boolean,
     enableBodyScroll: Boolean,
-    focusLoopEnabled: Boolean,
     focusStateEnabled: Boolean,
     fullScreen: Boolean,
     height: [Number, String],
@@ -140,6 +139,7 @@ const componentConfig = {
     shadingColor: String,
     showCloseButton: Boolean,
     showTitle: Boolean,
+    tabFocusLoopEnabled: Boolean,
     tabIndex: Number,
     title: String,
     titleTemplate: {},
@@ -161,7 +161,6 @@ const componentConfig = {
     "update:dragEnabled": null,
     "update:dragOutsideBoundary": null,
     "update:enableBodyScroll": null,
-    "update:focusLoopEnabled": null,
     "update:focusStateEnabled": null,
     "update:fullScreen": null,
     "update:height": null,
@@ -193,6 +192,7 @@ const componentConfig = {
     "update:shadingColor": null,
     "update:showCloseButton": null,
     "update:showTitle": null,
+    "update:tabFocusLoopEnabled": null,
     "update:tabIndex": null,
     "update:title": null,
     "update:titleTemplate": null,

@@ -204,7 +204,6 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   deferRendering?: boolean;
   disabled?: boolean;
   enableBodyScroll?: boolean;
-  focusLoopEnabled?: boolean;
   height?: number | string;
   hideEvent?: Record<string, any> | string | undefined | {
     delay?: number | undefined;
@@ -237,6 +236,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
     name?: string | undefined;
   };
   showTitle?: boolean;
+  tabFocusLoopEnabled?: boolean;
   target?: any | string | undefined;
   title?: string;
   titleTemplate?: ((titleElement: any) => string | any) | template;

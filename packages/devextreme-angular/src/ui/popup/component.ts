@@ -228,19 +228,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:dxPopupOptions.focusLoopEnabled]
-    
-     */
-    @Input()
-    get focusLoopEnabled(): boolean {
-        return this._getOption('focusLoopEnabled');
-    }
-    set focusLoopEnabled(value: boolean) {
-        this._setOption('focusLoopEnabled', value);
-    }
-
-
-    /**
      * [descr:dxPopupOptions.focusStateEnabled]
     
      */
@@ -484,6 +471,19 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     }
     set showTitle(value: boolean) {
         this._setOption('showTitle', value);
+    }
+
+
+    /**
+     * [descr:dxPopupOptions.tabFocusLoopEnabled]
+    
+     */
+    @Input()
+    get tabFocusLoopEnabled(): boolean {
+        return this._getOption('tabFocusLoopEnabled');
+    }
+    set tabFocusLoopEnabled(value: boolean) {
+        this._setOption('tabFocusLoopEnabled', value);
     }
 
 
@@ -748,13 +748,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() focusLoopEnabledChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() focusStateEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -888,6 +881,13 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() tabFocusLoopEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
@@ -967,7 +967,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
             { emit: 'dragEnabledChange' },
             { emit: 'dragOutsideBoundaryChange' },
             { emit: 'enableBodyScrollChange' },
-            { emit: 'focusLoopEnabledChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'fullScreenChange' },
             { emit: 'heightChange' },
@@ -987,6 +986,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
             { emit: 'shadingColorChange' },
             { emit: 'showCloseButtonChange' },
             { emit: 'showTitleChange' },
+            { emit: 'tabFocusLoopEnabledChange' },
             { emit: 'tabIndexChange' },
             { emit: 'titleChange' },
             { emit: 'titleTemplateChange' },

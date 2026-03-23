@@ -85,13 +85,6 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('enableBodyScroll', value);
     }
 
-    get focusLoopEnabled(): boolean {
-        return this._getOption('focusLoopEnabled');
-    }
-    set focusLoopEnabled(value: boolean) {
-        this._setOption('focusLoopEnabled', value);
-    }
-
     get focusStateEnabled(): boolean {
         return this._getOption('focusStateEnabled');
     }
@@ -307,6 +300,13 @@ export abstract class DxoPopupOptions extends NestedOption {
     }
     set showTitle(value: boolean) {
         this._setOption('showTitle', value);
+    }
+
+    get tabFocusLoopEnabled(): boolean {
+        return this._getOption('tabFocusLoopEnabled');
+    }
+    set tabFocusLoopEnabled(value: boolean) {
+        this._setOption('tabFocusLoopEnabled', value);
     }
 
     get tabIndex(): number {

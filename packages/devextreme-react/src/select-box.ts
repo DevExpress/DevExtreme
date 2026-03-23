@@ -255,7 +255,6 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   dragEnabled?: boolean;
   dragOutsideBoundary?: boolean;
   enableBodyScroll?: boolean;
-  focusLoopEnabled?: boolean;
   focusStateEnabled?: boolean;
   fullScreen?: boolean;
   height?: number | string;
@@ -287,6 +286,7 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   shadingColor?: string;
   showCloseButton?: boolean;
   showTitle?: boolean;
+  tabFocusLoopEnabled?: boolean;
   tabIndex?: number;
   title?: string;
   titleTemplate?: ((titleElement: any) => string | any) | template;

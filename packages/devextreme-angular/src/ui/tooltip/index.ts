@@ -149,19 +149,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
 
 
     /**
-     * [descr:dxPopupOptions.focusLoopEnabled]
-    
-     */
-    @Input()
-    get focusLoopEnabled(): boolean {
-        return this._getOption('focusLoopEnabled');
-    }
-    set focusLoopEnabled(value: boolean) {
-        this._setOption('focusLoopEnabled', value);
-    }
-
-
-    /**
      * [descr:dxPopoverOptions.height]
     
      */
@@ -357,6 +344,19 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
 
 
     /**
+     * [descr:dxPopupOptions.tabFocusLoopEnabled]
+    
+     */
+    @Input()
+    get tabFocusLoopEnabled(): boolean {
+        return this._getOption('tabFocusLoopEnabled');
+    }
+    set tabFocusLoopEnabled(value: boolean) {
+        this._setOption('tabFocusLoopEnabled', value);
+    }
+
+
+    /**
      * [descr:dxPopoverOptions.target]
     
      */
@@ -511,13 +511,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() focusLoopEnabledChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() heightChange: EventEmitter<number | string>;
 
     /**
@@ -623,6 +616,13 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() tabFocusLoopEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() targetChange: EventEmitter<any | string | undefined>;
 
     /**
@@ -671,7 +671,6 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
             { emit: 'contentTemplateChange' },
             { emit: 'deferRenderingChange' },
             { emit: 'disabledChange' },
-            { emit: 'focusLoopEnabledChange' },
             { emit: 'heightChange' },
             { emit: 'hideEventChange' },
             { emit: 'hideOnOutsideClickChange' },
@@ -687,6 +686,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
             { emit: 'shadingChange' },
             { emit: 'shadingColorChange' },
             { emit: 'showEventChange' },
+            { emit: 'tabFocusLoopEnabledChange' },
             { emit: 'targetChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' },

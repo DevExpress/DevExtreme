@@ -38,7 +38,6 @@ type AccessibleOptions = Pick<Properties,
   "contentTemplate" |
   "deferRendering" |
   "disabled" |
-  "focusLoopEnabled" |
   "height" |
   "hideEvent" |
   "hideOnOutsideClick" |
@@ -62,6 +61,7 @@ type AccessibleOptions = Pick<Properties,
   "shading" |
   "shadingColor" |
   "showEvent" |
+  "tabFocusLoopEnabled" |
   "target" |
   "visible" |
   "width" |
@@ -79,7 +79,6 @@ const componentConfig = {
     contentTemplate: {},
     deferRendering: Boolean,
     disabled: Boolean,
-    focusLoopEnabled: Boolean,
     height: [Number, String],
     hideEvent: [Object, String] as PropType<Record<string, any> | string>,
     hideOnOutsideClick: [Boolean, Function] as PropType<boolean | (((event: event) => boolean))>,
@@ -103,6 +102,7 @@ const componentConfig = {
     shading: Boolean,
     shadingColor: String,
     showEvent: [Object, String] as PropType<Record<string, any> | string>,
+    tabFocusLoopEnabled: Boolean,
     target: {},
     visible: Boolean,
     width: [Number, String],
@@ -116,7 +116,6 @@ const componentConfig = {
     "update:contentTemplate": null,
     "update:deferRendering": null,
     "update:disabled": null,
-    "update:focusLoopEnabled": null,
     "update:height": null,
     "update:hideEvent": null,
     "update:hideOnOutsideClick": null,
@@ -140,6 +139,7 @@ const componentConfig = {
     "update:shading": null,
     "update:shadingColor": null,
     "update:showEvent": null,
+    "update:tabFocusLoopEnabled": null,
     "update:target": null,
     "update:visible": null,
     "update:width": null,

@@ -133,14 +133,6 @@ export class DxoDropDownButtonDropDownOptionsComponent extends NestedOption impl
     }
 
     @Input()
-    get focusLoopEnabled(): boolean {
-        return this._getOption('focusLoopEnabled');
-    }
-    set focusLoopEnabled(value: boolean) {
-        this._setOption('focusLoopEnabled', value);
-    }
-
-    @Input()
     get focusStateEnabled(): boolean {
         return this._getOption('focusStateEnabled');
     }
@@ -386,6 +378,14 @@ export class DxoDropDownButtonDropDownOptionsComponent extends NestedOption impl
     }
     set showTitle(value: boolean) {
         this._setOption('showTitle', value);
+    }
+
+    @Input()
+    get tabFocusLoopEnabled(): boolean {
+        return this._getOption('tabFocusLoopEnabled');
+    }
+    set tabFocusLoopEnabled(value: boolean) {
+        this._setOption('tabFocusLoopEnabled', value);
     }
 
     @Input()

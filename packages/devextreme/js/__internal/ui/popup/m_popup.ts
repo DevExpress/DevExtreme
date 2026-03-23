@@ -267,7 +267,7 @@ class Popup<
       useDefaultToolbarButtons: false,
       useFlatToolbarButtons: false,
       autoResizeEnabled: true,
-      focusLoopEnabled: false,
+      tabFocusLoopEnabled: false,
       _ignoreCloseOnChildEscape: false,
     };
   }
