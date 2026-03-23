@@ -1,24 +1,43 @@
+import type { SnapToCellsModeType } from '../../../types';
 import type {
   CellInterval, ListEntity, Position,
 } from '../../types';
 
+const getCellFill = (
+  startDateUTC: number,
+  endDateUTC: number,
+  cell: CellInterval,
+): number => {
+  const cellDuration = cell.max - cell.min;
+  if (cellDuration <= 0) return 0;
+
+  const overlapStart = Math.max(startDateUTC, cell.min);
+  const overlapEnd = Math.min(endDateUTC, cell.max);
+  const overlapDuration = Math.max(0, overlapEnd - overlapStart);
+
+  return overlapDuration / cellDuration;
+};
+
 export const snapToCells = <T extends ListEntity & Position>(
   entities: T[],
   cells: CellInterval[],
-  isSnapToCell = true,
+  mode: SnapToCellsModeType = 'always',
 ): T[] => {
-  if (!isSnapToCell) {
-    return entities;
-  }
+  if (mode === 'never') return entities;
+
+  const threshold = mode === 'always' ? 0 : 0.5;
 
   return entities.map((entity) => {
-    const { cellIndex, endCellIndex } = entity;
+    const startCell = cells[entity.cellIndex];
+    const endCell = cells[entity.endCellIndex];
+
+    const startDateUTC = getCellFill(entity.startDateUTC, entity.endDateUTC, startCell) > threshold
+      ? startCell.min : entity.startDateUTC;
+    const endDateUTC = getCellFill(entity.startDateUTC, entity.endDateUTC, endCell) > threshold
+      ? endCell.max : entity.endDateUTC;
 
     return {
-      ...entity,
-      startDateUTC: cells[cellIndex].min,
-      endDateUTC: cells[endCellIndex].max,
-      duration: cells[endCellIndex].max - cells[cellIndex].min,
+      ...entity, startDateUTC, endDateUTC, duration: endDateUTC - startDateUTC,
     };
   });
 };
