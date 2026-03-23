@@ -135,6 +135,7 @@ const END_DATE_TIMEZONE_EDITOR_NAME = 'endDateTimeZoneEditor';
 const SUBJECT_ICON_NAME = 'subjectIcon';
 const DATE_ICON_NAME = 'dateIcon';
 const REPEAT_ICON_NAME = 'repeatIcon';
+const RESOURCES_GROUP_ICON_NAME = 'resourcesGroupIcon';
 const DESCRIPTION_ICON_NAME = 'descriptionIcon';
 
 export class AppointmentForm {
@@ -763,7 +764,7 @@ export class AppointmentForm {
         cssClass: `${CLASSES.resourcesGroup} ${CLASSES.groupWithIcon}`,
         items: [
           {
-            name: `${RESOURCES_GROUP_NAME}Icon`,
+            name: RESOURCES_GROUP_ICON_NAME,
             colSpan: 1,
             cssClass: `${CLASSES.formIcon} ${CLASSES.defaultResourceIcon}`,
             template: createFormIconTemplate('addcircleoutline'),
