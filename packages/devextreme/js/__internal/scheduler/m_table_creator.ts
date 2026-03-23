@@ -133,9 +133,9 @@ class SchedulerTableCreator {
     let rows: any = [];
 
     if (type === this.VERTICAL) {
-      rows = this._makeVerticalGroupedRows(groups, cssClasses, cellTemplate, rowCount);
+      rows = this.makeVerticalGroupedRows(groups, cssClasses, cellTemplate, rowCount);
     } else {
-      rows = this._makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate, groupByDate);
+      rows = this.makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate, groupByDate);
     }
 
     return rows;
@@ -244,7 +244,7 @@ class SchedulerTableCreator {
     return table;
   }
 
-  _makeFlexGroupedRowCells(group, repeatCount, cssClasses, cellTemplate, repeatByDate = 1) {
+  private makeFlexGroupedRowCells(group, repeatCount, cssClasses, cellTemplate, repeatByDate = 1) {
     const cells: any[] = [];
     const { items } = group;
     const itemCount = items.length;
@@ -283,7 +283,7 @@ class SchedulerTableCreator {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _makeVerticalGroupedRows(groups, cssClasses, cellTemplate, rowCount?: any) {
+  private makeVerticalGroupedRows(groups, cssClasses, cellTemplate, rowCount?: any) {
     const cellTemplates: any = [];
     let repeatCount = 1;
     const cellsArray: any = [];
@@ -300,7 +300,7 @@ class SchedulerTableCreator {
         repeatCount = groups[i - 1].items.length * repeatCount;
       }
 
-      const cells = this._makeFlexGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate);
+      const cells = this.makeFlexGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate);
       cells.forEach(cellIterator);
       cellsArray.push(cells);
     }
@@ -325,7 +325,7 @@ class SchedulerTableCreator {
     };
   }
 
-  _makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate, groupByDate) {
+  private makeHorizontalGroupedRows(groups, cssClasses, cellCount, cellTemplate, groupByDate) {
     let repeatCount = 1;
     const groupCount = groups.length;
     const rows: any = [];
@@ -346,7 +346,7 @@ class SchedulerTableCreator {
         repeatCount = groups[i - 1].items.length * repeatCount;
       }
 
-      const cells: any = this._makeGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate, repeatByDate);
+      const cells: any = this.makeGroupedRowCells(groups[i], repeatCount, cssClasses, cellTemplate, repeatByDate);
 
       rows.push(
         $('<tr>')
@@ -375,7 +375,7 @@ class SchedulerTableCreator {
     };
   }
 
-  _makeGroupedRowCells(group, repeatCount, cssClasses, cellTemplate, repeatByDate) {
+  private makeGroupedRowCells(group, repeatCount, cssClasses, cellTemplate, repeatByDate) {
     repeatByDate = repeatByDate || 1;
     repeatCount *= repeatByDate;
 
