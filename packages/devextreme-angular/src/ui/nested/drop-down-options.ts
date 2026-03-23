@@ -81,6 +81,7 @@ import {
         'shadingColor',
         'showCloseButton',
         'showTitle',
+        'tabFocusLoopEnabled',
         'tabIndex',
         'title',
         'titleTemplate',

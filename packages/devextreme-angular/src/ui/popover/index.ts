@@ -401,6 +401,19 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
 
 
     /**
+     * [descr:dxPopupOptions.tabFocusLoopEnabled]
+    
+     */
+    @Input()
+    get tabFocusLoopEnabled(): boolean {
+        return this._getOption('tabFocusLoopEnabled');
+    }
+    set tabFocusLoopEnabled(value: boolean) {
+        this._setOption('tabFocusLoopEnabled', value);
+    }
+
+
+    /**
      * [descr:dxPopoverOptions.target]
     
      */
@@ -728,6 +741,13 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() tabFocusLoopEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() targetChange: EventEmitter<any | string | undefined>;
 
     /**
@@ -817,6 +837,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
             { emit: 'showCloseButtonChange' },
             { emit: 'showEventChange' },
             { emit: 'showTitleChange' },
+            { emit: 'tabFocusLoopEnabledChange' },
             { emit: 'targetChange' },
             { emit: 'titleChange' },
             { emit: 'titleTemplateChange' },

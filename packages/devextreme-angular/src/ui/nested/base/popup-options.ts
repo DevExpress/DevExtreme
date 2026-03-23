@@ -302,6 +302,13 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('showTitle', value);
     }
 
+    get tabFocusLoopEnabled(): boolean {
+        return this._getOption('tabFocusLoopEnabled');
+    }
+    set tabFocusLoopEnabled(value: boolean) {
+        this._setOption('tabFocusLoopEnabled', value);
+    }
+
     get tabIndex(): number {
         return this._getOption('tabIndex');
     }
