@@ -4269,6 +4269,52 @@ test('DataGrid - focusedRowIndex is -1 when the first data cell is focused with 
   },
 }));
 
+test('DataGrid - onFocusedCellChanged parameters should be correct when focusing the first cell (T1282664)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t
+    .click(dataGrid.getSearchBox().input)
+    .pressKey('tab tab tab');
+
+  // assert
+  const firstDataCell = dataGrid.getDataCell(0, 0).element;
+  await t
+    .expect(firstDataCell.focused)
+    .ok();
+
+  const expectedFocusedCellChangedEventArgs = {
+    cellElement: firstDataCell,
+    columnIndex: 0,
+    row: {
+      data: {
+        field_0: 'val_0_0',
+        field_1: 'val_0_1',
+      },
+    },
+    rowIndex: 0,
+  };
+  await checkFocusedCellChangedEventArgs(t, expectedFocusedCellChangedEventArgs);
+}).before(async () => {
+  await resetFocusedEventsTestData();
+
+  await createWidget('dxDataGrid', {
+    dataSource: getData(1, 2),
+    keyExpr: 'field_0',
+    showBorders: true,
+    searchPanel: {
+      visible: true,
+    },
+    onFocusedCellChanged(e) {
+      (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
+    },
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).focusedEventsTestData;
+  })();
+});
+
 test('DataGrid - Cell focus in edit mode does not work correctly if a cell has a disabled editor (T1177434)', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t
