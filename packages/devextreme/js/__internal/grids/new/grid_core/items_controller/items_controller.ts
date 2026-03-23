@@ -42,9 +42,10 @@ export class ItemsController {
   // Sort/filter properties are excluded — data changes from sort/filter arrive
   // separately via dataController.items, so subscribing to them causes extra re-renders.
   private readonly visibleColumnsLayout = computed(
-    () => this.columnsController.visibleColumns.value
-      .map(getColumnLayoutKey)
-      .join(';'),
+    () => JSON.stringify(
+      this.columnsController.visibleColumns.value
+        .map(getColumnLayoutKey),
+    ),
   );
 
   public readonly items = computed(
