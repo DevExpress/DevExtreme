@@ -350,3 +350,4 @@ export namespace Grids {
     export type SummaryType = GridsModule.SummaryType;
     export type ToolbarPreparingInfo = GridsModule.ToolbarPreparingInfo;
 }
+
