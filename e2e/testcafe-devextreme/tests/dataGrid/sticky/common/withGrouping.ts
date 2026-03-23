@@ -289,9 +289,7 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
 
 [false, true].forEach((rtlEnabled) => {
   // T1284612
-  test.meta({
-    browserSize: [900, 800],
-  })(`DataGrid - Group summaries are shown over sticky columns on a horizontal scroll - intersection (rtl=${rtlEnabled})`, async (t) => {
+  test(`DataGrid - Group summaries are shown over sticky columns on a horizontal scroll - intersection (rtl=${rtlEnabled})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -359,9 +357,7 @@ test('DataGrid - Group row content is scrolled if repaintChangesOnly is enabled 
 
 [false, true].forEach((rtlEnabled) => {
   // T1284612
-  test.meta({
-    browserSize: [900, 800],
-  })(`DataGrid - Group summaries are shown over sticky columns on a horizontal scroll (rtl=${rtlEnabled})`, async (t) => {
+  test(`DataGrid - Group summaries are shown over sticky columns on a horizontal scroll (rtl=${rtlEnabled})`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
