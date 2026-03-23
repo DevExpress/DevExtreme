@@ -231,8 +231,8 @@ export class AppointmentForm {
     const showMainGroupIcons = ['main', 'both'].includes(iconsShowMode);
     const showRecurrenceGroupIcons = ['recurrence', 'both'].includes(iconsShowMode);
 
-    this.setStylingModeToEditors(mainGroup, showMainGroupIcons);
-    this.setStylingModeToEditors(recurrenceGroup, showRecurrenceGroupIcons);
+    this.applyFormItemDefaults(mainGroup, showMainGroupIcons);
+    this.applyFormItemDefaults(recurrenceGroup, showRecurrenceGroupIcons);
 
     const editingConfig = this.scheduler.getEditingConfig();
     const customizedItems = customizeFormItems(items, editingConfig?.form?.items);
@@ -812,7 +812,7 @@ export class AppointmentForm {
     } as GroupItem;
   }
 
-  private setStylingModeToEditors(item: FormItem, showIcon: boolean): void {
+  private applyFormItemDefaults(item: FormItem, showIcon: boolean): void {
     const itemClasses = (item.cssClass ?? '').split(' ');
     const isIconItem = itemClasses.includes(CLASSES.formIcon);
 
@@ -842,7 +842,7 @@ export class AppointmentForm {
       }
 
       groupItem.items?.forEach((child) => {
-        this.setStylingModeToEditors(child, showIcon);
+        this.applyFormItemDefaults(child, showIcon);
       });
     }
   }
