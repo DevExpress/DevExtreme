@@ -38,7 +38,7 @@ export interface ViewModelOptions {
   isVirtualScrolling: boolean;
 }
 
-const getDefaultSnapToCellsModeForView = (type: ViewType): SnapToCellsModeType => (
+export const getDefaultSnapToCellsModeForView = (type: ViewType): SnapToCellsModeType => (
   ['month', 'agenda', 'timelineMonth'].includes(type) ? 'always' : 'never'
 );
 
