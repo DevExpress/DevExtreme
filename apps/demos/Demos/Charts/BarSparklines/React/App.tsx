@@ -4,7 +4,7 @@ import { DataSource, CustomStore } from 'devextreme-react/common/data';
 import RowTemplate from './RowTemplate.tsx';
 
 const months = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-const years = ['2010', '2011', '2012'];
+const years = ['2021', '2022', '2023'];
 const monthLabel = { 'aria-label': 'Month' };
 
 const dataSource = new DataSource({
@@ -26,7 +26,7 @@ function App() {
 
   return (
     <>
-      <div className="long-title"><h3>Monthly Prices of Aluminium, Nickel and Copper</h3></div>
+      <div className="long-title"><h3>Monthly Prices of Copper, Nickel and Palladium</h3></div>
       <div id="chart-demo">
         <table
           className="demo-table"
@@ -35,9 +35,9 @@ function App() {
           <tbody>
             <tr>
               <th><div className="dx-screen-reader-only">Year</div></th>
-              <th>Aluminium (USD/ton)</th>
-              <th>Nickel (USD/ton)</th>
               <th>Copper (USD/ton)</th>
+              <th>Nickel (USD/ton)</th>
+              <th>Palladium (USD/troy ounce)</th>
             </tr>
             {
               years.map((year, index) => <RowTemplate

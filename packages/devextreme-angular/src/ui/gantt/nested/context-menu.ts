@@ -16,7 +16,7 @@ import {
 
 
 
-import { dxGanttContextMenuItem, GanttPredefinedContextMenuItem } from 'devextreme/ui/gantt';
+import type { dxGanttContextMenuItem, GanttPredefinedContextMenuItem } from 'devextreme/ui/gantt';
 
 import {
     DxIntegrationModule,

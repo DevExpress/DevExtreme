@@ -14,7 +14,7 @@ import {
 
 
 
-import { LoadingAnimationType } from 'devextreme/ui/load_indicator';
+import type { LoadingAnimationType } from 'devextreme/ui/load_indicator';
 
 import {
     DxIntegrationModule,

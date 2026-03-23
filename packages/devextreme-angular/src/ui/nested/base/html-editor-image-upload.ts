@@ -5,8 +5,8 @@ import {
     Component,
 } from '@angular/core';
 
-import { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
-import { dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadMode, HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
+import type { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
+import type { dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadMode, HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 @Component({
     template: ''

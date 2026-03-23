@@ -16,7 +16,7 @@ import {
 
 
 
-import { dxTreeListToolbarItem, TreeListPredefinedToolbarItem } from 'devextreme/ui/tree_list';
+import type { dxTreeListToolbarItem, TreeListPredefinedToolbarItem } from 'devextreme/ui/tree_list';
 
 import {
     DxIntegrationModule,

@@ -26,12 +26,12 @@ import * as accessibility from '@js/ui/shared/accessibility';
 import { isElementInDom } from '@ts/core/utils/m_dom';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import { memoize } from '@ts/utils/memoize';
 
-import type { Column } from '../columns_controller/m_columns_controller';
 import {
   EDIT_FORM_CLASS,
   EDIT_MODE_BATCH,
@@ -239,6 +239,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const isCell = $element.is('td');
     const needSetFocusPosition = (this.option('focusedRowIndex') ?? -1) < 0;
     if (isCell && needSetFocusPosition) {
+      this._focusView();
       this._updateFocusedCellPosition($element);
     }
   }

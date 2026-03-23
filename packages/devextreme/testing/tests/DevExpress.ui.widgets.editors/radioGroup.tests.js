@@ -238,16 +238,161 @@ module('layout', moduleConfig, () => {
         assert.strictEqual(itemsCount, items.length, `items with the "${RADIO_BUTTON_CLASS}" class were rendered`);
     });
 
-    test('radioGroup should have role="alert" attribute on validation message', function(assert) {
-        const $radioGroup = $('#radioGroup').dxRadioGroup({
+});
+
+module('accessibility', moduleConfig, () => {
+    test('validation message should not have role="alert"', function(assert) {
+        const $radioGroup = createRadioGroup({
             items: [1, 2, 3],
             isValid: false,
-            validationError: 'Some error',
+            validationError: { message: 'Some error' },
             validationMessageMode: 'always',
         });
         const $validationMessage = $radioGroup.find(`.${INVALID_MESSAGE_CONTENT}`);
 
-        assert.strictEqual($validationMessage.attr('role'), 'alert');
+        assert.notStrictEqual($validationMessage.attr('role'), 'alert', 'validation message does not have role="alert"');
+    });
+
+    test('root element should not have aria-describedby when invalid', function(assert) {
+        const $radioGroup = createRadioGroup({
+            items: [1, 2, 3],
+            isValid: false,
+            validationError: { message: 'Some error' },
+            validationMessageMode: 'always',
+        });
+
+        assert.strictEqual($radioGroup.attr('aria-describedby'), undefined, 'root element does not have aria-describedby');
+    });
+
+    test('each radio button should have aria-describedby referencing the validation message when invalid', function(assert) {
+        const $radioGroup = createRadioGroup({
+            items: [1, 2, 3],
+            isValid: false,
+            validationError: { message: 'Some error' },
+            validationMessageMode: 'always',
+        });
+        const instance = getInstance($radioGroup);
+        const contentId = $radioGroup.find(`.${INVALID_MESSAGE_CONTENT}`).attr('id');
+        const $buttons = $(instance.itemElements());
+
+        assert.ok(contentId, 'validation message content has an id');
+        $buttons.each(function() {
+            assert.strictEqual($(this).attr('aria-describedby'), contentId, 'radio button references validation message');
+        });
+    });
+
+    test('aria-describedby should be removed from radio buttons when validation state becomes valid', function(assert) {
+        const $radioGroup = createRadioGroup({
+            items: [1, 2, 3],
+            isValid: false,
+            validationError: { message: 'Some error' },
+            validationMessageMode: 'always',
+        });
+        const instance = getInstance($radioGroup);
+
+        instance.option('isValid', true);
+
+        const $buttons = $(instance.itemElements());
+        $buttons.each(function() {
+            assert.strictEqual($(this).attr('aria-describedby'), undefined, 'aria-describedby is removed from radio button');
+        });
+    });
+
+    test('with itemTemplate, radio container should have role="radio", aria-labelledby and aria-checked', function(assert) {
+        const items = [
+            { text: 'custom 1' },
+            { text: 'custom 2' },
+        ];
+        const $radioGroup = createRadioGroup({
+            items,
+            itemTemplate(itemData, _, itemElement) {
+                const $button = $('<button>').text(itemData.text);
+                itemElement.append($button);
+            },
+        });
+        const instance = getInstance($radioGroup);
+        const $buttons = $(instance.itemElements());
+
+        $buttons.each(function(index) {
+            const $radioContainer = $(this).find('.dx-radio-value-container');
+            const $itemContent = $(this).find('.dx-item-content');
+            const contentId = $itemContent.attr('id');
+
+            assert.ok(contentId, `item[${index}] content element has an id`);
+            assert.strictEqual($radioContainer.attr('role'), 'radio', `item[${index}] radio container has role="radio"`);
+            assert.strictEqual($radioContainer.attr('aria-checked'), 'false', `item[${index}] radio container has aria-checked="false" initially`);
+            assert.strictEqual($radioContainer.attr('aria-labelledby'), contentId, `item[${index}] radio container aria-labelledby references content id`);
+        });
+    });
+
+    test('with itemTemplate, aria-checked on radio container should be updated on value change', function(assert) {
+        const items = [
+            { text: 'custom 1' },
+            { text: 'custom 2' },
+        ];
+        const $radioGroup = createRadioGroup({
+            items,
+            itemTemplate(itemData, _, itemElement) {
+                const $button = $('<button>').text(itemData.text);
+                itemElement.append($button);
+            },
+        });
+        const instance = getInstance($radioGroup);
+        const $itemElements = $(instance.itemElements());
+        const $firstRadioContainer = $itemElements.eq(0).find('.dx-radio-value-container');
+        const $secondRadioContainer = $itemElements.eq(1).find('.dx-radio-value-container');
+
+        assert.strictEqual($firstRadioContainer.attr('aria-checked'), 'false', 'first item radio container has aria-checked="false" before selection');
+
+        $itemElements.eq(0).trigger('dxclick');
+
+        assert.strictEqual($firstRadioContainer.attr('aria-checked'), 'true', 'first item radio container has aria-checked="true" after selection');
+        assert.strictEqual($secondRadioContainer.attr('aria-checked'), 'false', 'second item radio container has aria-checked="false" after first item selected');
+    });
+
+    test('with itemTemplate, item element should not have role="radio" set directly', function(assert) {
+        const items = [
+            { text: 'custom 1' },
+            { text: 'custom 2' },
+        ];
+        const $radioGroup = createRadioGroup({
+            items,
+            itemTemplate(itemData, _, itemElement) {
+                const $button = $('<button>').text(itemData.text);
+                itemElement.append($button);
+            },
+        });
+        const instance = getInstance($radioGroup);
+        const $buttons = $(instance.itemElements());
+
+        $buttons.each(function(index) {
+            assert.notStrictEqual($(this).attr('role'), 'radio', `item[${index}] element itself does not have role="radio"`);
+            assert.strictEqual($(this).attr('aria-checked'), undefined, `item[${index}] element does not have aria-checked`);
+        });
+    });
+
+    test('item with html: aria-checked on item element is updated on value change', function(assert) {
+        const items = [
+            { html: '<span>Option A</span>', value: 'a' },
+            { html: '<span>Option B</span>', value: 'b' },
+        ];
+        const $radioGroup = createRadioGroup({ items, valueExpr: 'value', value: 'a' });
+        const instance = getInstance($radioGroup);
+        const $itemElements = $(instance.itemElements());
+
+        $itemElements.each(function(index) {
+            const expected = index === 0 ? 'true' : 'false';
+
+            assert.strictEqual($(this).attr('aria-checked'), expected, `item[${index}] has correct aria-checked after initial render`);
+        });
+
+        instance.option('value', 'b');
+
+        $itemElements.each(function(index) {
+            const expected = index === 1 ? 'true' : 'false';
+
+            assert.strictEqual($(this).attr('aria-checked'), expected, `item[${index}] has correct aria-checked after value change`);
+        });
     });
 });
 

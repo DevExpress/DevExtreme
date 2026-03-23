@@ -22,16 +22,16 @@ function App() {
       id="chart"
       dataSource={inflationData}
       palette="Violet"
-      title="Annual Inflation Rate in 2010 and 2011"
+      title="Annual Inflation Rate in 2024 and 2025"
     >
       <CommonSeriesSettings
         argumentField="date"
         type="rangearea"
       />
       <Series
-        rangeValue1Field="val2010"
-        rangeValue2Field="val2011"
-        name="2010 - 2011"
+        rangeValue1Field="val2024"
+        rangeValue2Field="val2025"
+        name="2024 - 2025"
       />
 
       <ArgumentAxis valueMarginsEnabled={false}>

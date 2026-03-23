@@ -31,6 +31,7 @@ import {
  OptionChangedEvent,
  RecurrenceEditMode,
  dxSchedulerScrolling,
+ SnapToCellsMode,
  dxSchedulerToolbar,
  AppointmentFormIconsShowMode,
  SchedulerPredefinedToolbarItem,
@@ -197,6 +198,7 @@ type AccessibleOptions = Pick<Properties,
   "shadeUntilCurrentTime" |
   "showAllDayPanel" |
   "showCurrentTimeIndicator" |
+  "snapToCellsMode" |
   "startDateExpr" |
   "startDateTimeZoneExpr" |
   "startDayHour" |
@@ -283,6 +285,7 @@ const componentConfig = {
     shadeUntilCurrentTime: Boolean,
     showAllDayPanel: Boolean,
     showCurrentTimeIndicator: Boolean,
+    snapToCellsMode: String as PropType<SnapToCellsMode>,
     startDateExpr: String,
     startDateTimeZoneExpr: String,
     startDayHour: Number,
@@ -365,6 +368,7 @@ const componentConfig = {
     "update:shadeUntilCurrentTime": null,
     "update:showAllDayPanel": null,
     "update:showCurrentTimeIndicator": null,
+    "update:snapToCellsMode": null,
     "update:startDateExpr": null,
     "update:startDateTimeZoneExpr": null,
     "update:startDayHour": null,
@@ -1776,6 +1780,7 @@ const DxViewConfig = {
     "update:offset": null,
     "update:resourceCellTemplate": null,
     "update:scrolling": null,
+    "update:snapToCellsMode": null,
     "update:startDate": null,
     "update:startDayHour": null,
     "update:timeCellTemplate": null,
@@ -1801,6 +1806,7 @@ const DxViewConfig = {
     offset: Number,
     resourceCellTemplate: {},
     scrolling: Object as PropType<dxSchedulerScrolling>,
+    snapToCellsMode: String as PropType<SnapToCellsMode>,
     startDate: [Date, Number, String],
     startDayHour: Number,
     timeCellTemplate: {},

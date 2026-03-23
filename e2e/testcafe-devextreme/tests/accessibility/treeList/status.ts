@@ -1,5 +1,5 @@
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
-import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
+import TextBox from 'devextreme-testcafe-models/textBox';
 import TreeList from 'devextreme-testcafe-models/treeList';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
@@ -96,7 +96,7 @@ test('Accessibility: TreeList general status should contains correct text after 
 test('Accessibility: TreeList general status should contains correct text after filter row interaction', async (t) => {
   const expectedStatusText = 'Tree list with 2 rows and 2 columns';
   const treeList = new TreeList('#container');
-  const filterEditor = treeList.getFilterEditor(0, FilterTextBox);
+  const filterEditor = treeList.getFilterEditor(0, TextBox);
 
   const applyFilterBtn = treeList.getHeaderPanel().getApplyFilterButton();
   await t.typeText(filterEditor.input(), 'B')

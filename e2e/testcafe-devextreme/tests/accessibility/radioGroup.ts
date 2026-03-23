@@ -24,3 +24,29 @@ const configuration: Configuration = {
 };
 
 testAccessibility(configuration);
+
+const buttons = [
+  {
+    text: 'custom 1',
+  },
+  {
+    text: 'custom 2',
+  },
+];
+
+const interactiveItemsConfiguration: Configuration = {
+  component: 'dxRadioGroup',
+  a11yCheckConfig,
+  options: {
+    items: [buttons],
+    itemTemplate: [
+      (itemData, _, itemElement) => {
+        const $button = $('<button>').text(itemData.text);
+
+        itemElement.append($button);
+      },
+    ],
+  },
+};
+
+testAccessibility(interactiveItemsConfiguration);

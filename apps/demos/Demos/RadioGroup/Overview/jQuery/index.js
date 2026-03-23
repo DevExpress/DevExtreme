@@ -19,12 +19,18 @@ $(() => {
   $('#radio-group-with-template').dxRadioGroup({
     items: priorities,
     value: priorities[2],
-    itemTemplate(itemData, _, itemElement) {
-      itemElement
-        .parent().addClass(itemData.toLowerCase())
-        .text(itemData);
+    itemTemplate: (itemData, _, itemElement) => {
+      itemElement.text(itemData);
     },
-  });
+    onValueChanged: (e) => {
+      const $element = $(e.element);
+      const priorityClass = e.previousValue.toLowerCase();
+      const newPriorityClass = e.value.toLowerCase();
+
+      $element.removeClass(priorityClass);
+      $element.addClass(newPriorityClass);
+    },
+  }).addClass(priorities[2].toLowerCase());
 
   const radioGroup = $('#radio-group-with-selection').dxRadioGroup({
     items: priorityEntities,

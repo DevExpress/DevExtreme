@@ -14,7 +14,7 @@ import {
 
 
 
-import { ExportFormat } from 'devextreme/common';
+import type { ExportFormat } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

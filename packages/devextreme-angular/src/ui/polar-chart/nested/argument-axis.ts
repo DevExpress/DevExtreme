@@ -16,8 +16,8 @@ import {
 
 
 
-import { ChartsDataType, DashStyle, Font, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, LabelOverlap, TimeInterval, AxisScaleType } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
+import type { ChartsDataType, DashStyle, Font, DiscreteAxisDivisionMode, ArgumentAxisHoverMode, LabelOverlap, TimeInterval, AxisScaleType } from 'devextreme/common/charts';
+import type { Format } from 'devextreme/common/core/localization';
 
 import {
     DxIntegrationModule,

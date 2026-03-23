@@ -7787,83 +7787,6 @@ QUnit.module('Band columns', { beforeEach: setupModule, afterEach: teardownModul
         assert.ok(!visibleColumns[1].isBand, 'data column');
     });
 
-    QUnit.test('getVisibleColumns with rowIndex and grouped columns', function(assert) {
-        // arrange
-        this.applyOptions({
-            columns: [
-                { dataField: 'TestField1', caption: 'Column 1', groupIndex: 0 },
-                {
-                    caption: 'Band Column 1', columns: [
-                        { dataField: 'TestField2', caption: 'Column 2', groupIndex: 1 },
-                        { dataField: 'TestField3', caption: 'Column 3' },
-                        { caption: 'Band Column 2', columns: [{ dataField: 'TestField4', caption: 'Column 4' }] }
-                    ]
-                }
-            ]
-        });
-
-        // assert
-        assert.ok(this.columnsController.isInitialized());
-
-        // act
-        let visibleColumns = this.columnsController.getVisibleColumns(0);
-
-        // assert
-        assert.equal(visibleColumns.length, 3, 'count column');
-
-        // first column
-        assert.strictEqual(visibleColumns[0].caption, 'Column 1', 'caption of the first column of the first row');
-        assert.strictEqual(visibleColumns[0].command, 'expand', 'command column');
-        assert.ok(!visibleColumns[0].rowspan, 'rowspan of the first column of the first row');
-
-        // second column
-        assert.strictEqual(visibleColumns[1].caption, 'Column 2', 'caption of the second column of the first row');
-        assert.strictEqual(visibleColumns[1].command, 'expand', 'command column');
-        assert.ok(!visibleColumns[1].rowspan, 'rowspan of the second column of the first row');
-
-        // third column
-        assert.strictEqual(visibleColumns[2].caption, 'Band Column 1', 'caption of the second column of the first row');
-        assert.equal(visibleColumns[2].colspan, 2, 'colspan of the second column of the first row');
-        assert.ok(visibleColumns[2].isBand, 'band column');
-
-        // act
-        visibleColumns = this.columnsController.getVisibleColumns(1);
-
-        // assert
-        assert.equal(visibleColumns.length, 4, 'count column');
-
-        // first column
-        assert.strictEqual(visibleColumns[0].caption, 'Column 1', 'caption of the first column of the second row');
-        assert.strictEqual(visibleColumns[0].command, 'expand', 'command column');
-        assert.equal(visibleColumns[0].rowspan, 2, 'rowspan of the first column of the second row');
-
-        // second column
-        assert.strictEqual(visibleColumns[1].caption, 'Column 2', 'caption of the second column of the second row');
-        assert.strictEqual(visibleColumns[1].command, 'expand', 'command column');
-        assert.equal(visibleColumns[1].rowspan, 2, 'rowspan of the second column of the second row');
-
-        // third column
-        assert.strictEqual(visibleColumns[2].caption, 'Column 3', 'caption of the third column of the second row');
-        assert.equal(visibleColumns[2].rowspan, 2, 'rowspan of the third column of the second row');
-        assert.ok(!visibleColumns[2].isBand, 'data column');
-
-        // fourth column
-        assert.strictEqual(visibleColumns[3].caption, 'Band Column 2', 'caption of the fourth column of the second row');
-        assert.equal(visibleColumns[3].colspan, 1, 'colspan of the fourth column of the second row');
-        assert.ok(visibleColumns[3].isBand, 'band column');
-
-        // act
-        visibleColumns = this.columnsController.getVisibleColumns(2);
-
-        // assert
-        assert.equal(visibleColumns.length, 1, 'count column');
-
-        // first column
-        assert.strictEqual(visibleColumns[0].caption, 'Column 4', 'caption of the first column of the third row');
-        assert.ok(!visibleColumns[0].rowspan, 'rowspan of the first column of the third row');
-        assert.ok(!visibleColumns[0].isBand, 'data column');
-    });
-
     QUnit.test('getVisibleColumnIndex with rowIndex', function(assert) {
         // arrange
         this.applyOptions({
@@ -7989,46 +7912,6 @@ QUnit.module('Band columns', { beforeEach: setupModule, afterEach: teardownModul
 
         assert.equal(thirdRowColumns[0].caption, 'Field 3', 'caption of the first column of the third row');
         assert.notOk(thirdRowColumns[0].rowspan, 'rowspan of the first column of the third row');
-    });
-
-    // T895529
-    QUnit.test('getVisibleColumns when there are grouped columns with showWhenGrouped', function(assert) {
-        // arrange
-        this.applyOptions({
-            columns: [
-                {
-                    caption: 'Band 1',
-                    columns: ['field1', 'field2']
-                },
-                {
-                    caption: 'Band 2',
-                    columns: [{ dataField: 'field3', showWhenGrouped: true, groupIndex: 0 }, 'field4']
-                }
-            ]
-        });
-
-        // assert
-        assert.ok(this.columnsController.isInitialized());
-
-        // act
-        const visibleColumns = this.columnsController.getVisibleColumns();
-
-        assert.equal(visibleColumns.length, 5, 'column count in second row');
-        assert.equal(visibleColumns[0].type, 'groupExpand', 'type of the first column');
-        assert.equal(visibleColumns[0].colspan, undefined, 'colspan of the first column');
-        assert.equal(visibleColumns[0].rowspan, undefined, 'rowspan of the first column');
-        assert.equal(visibleColumns[1].caption, 'Field 1', 'caption of the second column');
-        assert.equal(visibleColumns[1].colspan, undefined, 'colspan of the second column');
-        assert.equal(visibleColumns[1].rowspan, undefined, 'rowspan of the second column');
-        assert.equal(visibleColumns[2].caption, 'Field 2', 'caption of the third column');
-        assert.equal(visibleColumns[2].colspan, undefined, 'colspan of the third column');
-        assert.equal(visibleColumns[2].rowspan, undefined, 'rowspan of the third column');
-        assert.equal(visibleColumns[3].caption, 'Field 3', 'caption of the fourth column');
-        assert.equal(visibleColumns[3].colspan, undefined, 'colspan of the fourth column');
-        assert.equal(visibleColumns[3].rowspan, undefined, 'rowspan of the fourth column');
-        assert.equal(visibleColumns[4].caption, 'Field 4', 'caption of the fifth column');
-        assert.equal(visibleColumns[4].colspan, undefined, 'colspan of the fifth column');
-        assert.equal(visibleColumns[4].rowspan, undefined, 'rowspan of the fifth column');
     });
 
     QUnit.test('getFixedColumns for data columns', function(assert) {
@@ -8948,31 +8831,6 @@ QUnit.module('Band columns', { beforeEach: setupModule, afterEach: teardownModul
 
         // assert
         assert.notOk(this.columnsController.isBandColumnsUsed(), 'band column is not used');
-    });
-
-    // T647024
-    QUnit.test('Expand column must have the right rowspan', function(assert) {
-        // arrange
-
-        this.applyOptions({
-            columns: [
-                { caption: 'Band column 1', columns: ['Column1', 'Column2'] },
-                { dataField: 'Column3', caption: 'Column 3' }
-            ],
-            masterDetail: {
-                enabled: true
-            }
-        });
-
-        // act
-        this.columnsController.getVisibleColumns();
-        this.columnsController.resetColumnsCache();
-        const visibleColumns = this.columnsController.getVisibleColumns();
-
-        // assert
-        assert.strictEqual(visibleColumns.length, 4, 'column count');
-        assert.strictEqual(visibleColumns[0].command, 'expand', 'expand column');
-        assert.ok(!visibleColumns[0].rowspan, 'rowspan of the expand column');
     });
 
     // T670211

@@ -14,7 +14,7 @@ import {
 
 
 
-import { Orientation } from 'devextreme/common';
+import type { Orientation } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

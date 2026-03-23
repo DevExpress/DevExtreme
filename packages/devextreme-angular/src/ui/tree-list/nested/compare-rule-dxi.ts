@@ -12,7 +12,7 @@ import {
 
 
 
-import { ComparisonOperator, ValidationRuleType } from 'devextreme/common';
+import type { ComparisonOperator, ValidationRuleType } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

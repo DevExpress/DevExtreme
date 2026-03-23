@@ -14,11 +14,11 @@ import {
 
 
 
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from 'devextreme/common/grids';
-import { SearchMode } from 'devextreme/common';
-import { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
+import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import type { SearchMode } from 'devextreme/common';
+import type { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
 
 import {
     DxIntegrationModule,

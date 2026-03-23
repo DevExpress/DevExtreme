@@ -14,9 +14,9 @@ import {
 
 
 
-import { ChartsColor, Palette, Font } from 'devextreme/common/charts';
-import { HorizontalEdge, VerticalEdge } from 'devextreme/common';
-import { Format } from 'devextreme/common/core/localization';
+import type { ChartsColor, Palette, Font } from 'devextreme/common/charts';
+import type { HorizontalEdge, VerticalEdge } from 'devextreme/common';
+import type { Format } from 'devextreme/common/core/localization';
 
 import {
     DxIntegrationModule,

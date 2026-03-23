@@ -17,7 +17,7 @@ import Chart, {
 import SelectBox from 'devextreme-react/select-box';
 import { months, monthLabel } from './data.js';
 
-const year = 2017;
+const year = 2025;
 let selectedMonth = 1;
 const startOfMonthStr = (month) => `${month}/01/${year}`;
 const endOfMonthStr = (month) => {

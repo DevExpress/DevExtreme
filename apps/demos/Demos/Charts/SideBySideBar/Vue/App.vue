@@ -2,7 +2,7 @@
   <DxChart
     id="chart"
     :data-source="dataSource"
-    title="Gross State Product within the Great Lakes Region"
+    title="Gross State Product within the Great Lakes Region (Billions USD)"
     @pointClick="onPointClick"
   >
     <DxCommonSeriesSettings
@@ -19,16 +19,16 @@
       </DxLabel>
     </DxCommonSeriesSettings>
     <DxSeries
-      value-field="year2018"
-      name="2018"
+      value-field="year2024"
+      name="2024"
     />
     <DxSeries
-      value-field="year2017"
-      name="2017"
+      value-field="year2023"
+      name="2023"
     />
     <DxSeries
-      value-field="year2016"
-      name="2016"
+      value-field="year2022"
+      name="2022"
     />
     <DxLegend
       vertical-alignment="bottom"

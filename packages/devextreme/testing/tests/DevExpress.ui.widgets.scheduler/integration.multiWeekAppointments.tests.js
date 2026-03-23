@@ -15,12 +15,12 @@ const { testStart } = QUnit;
 testStart(() => initTestMarkup());
 
 const mockWorkSpaceRendering = function(schedulerInst, cellSize, bounds) {
-    const base = schedulerInst._renderWorkSpace;
+    const base = schedulerInst.renderWorkSpace;
     const getMaxAllowedPosition = (groupIndex) => {
         return bounds[groupIndex];
     };
 
-    sinon.stub(schedulerInst, '_renderWorkSpace').callsFake(function(groups) {
+    sinon.stub(schedulerInst, 'renderWorkSpace').callsFake(function(groups) {
         base.call(this, groups);
 
         sinon.stub(this._workSpace, 'getCellWidth').returns(cellSize);

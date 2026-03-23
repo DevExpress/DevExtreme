@@ -5,24 +5,24 @@ import {
     Component,
 } from '@angular/core';
 
-import { AsyncRule, ButtonStyle, ButtonType, CompareRule, CustomRule, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule, ToolbarItemComponent, ToolbarItemLocation, VerticalAlignment } from 'devextreme/common';
-import { Properties as dxBoxOptions } from 'devextreme/ui/box';
-import { Properties as dxButtonOptions } from 'devextreme/ui/button';
-import { User } from 'devextreme/ui/chat';
-import { dxContextMenuItem } from 'devextreme/ui/context_menu';
-import { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
-import { Command, CustomCommand } from 'devextreme/ui/diagram';
-import { ItemClickEvent } from 'devextreme/ui/drop_down_button';
-import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
-import { ButtonItem, EmptyItem, FormItemComponent, FormItemType, GroupItem, LabelLocation, SimpleItem, TabbedItem } from 'devextreme/ui/form';
-import { GanttPredefinedContextMenuItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
-import { AICommand, AICommandName, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
-import { dxMenuItem } from 'devextreme/ui/menu';
-import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
-import { Properties as dxTabPanelOptions } from 'devextreme/ui/tab_panel';
-import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
-import { TreeListPredefinedToolbarItem } from 'devextreme/ui/tree_list';
-import { dxTreeViewItem } from 'devextreme/ui/tree_view';
+import type { AsyncRule, ButtonStyle, ButtonType, CompareRule, CustomRule, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule, ToolbarItemComponent, ToolbarItemLocation, VerticalAlignment } from 'devextreme/common';
+import type { Properties as dxBoxOptions } from 'devextreme/ui/box';
+import type { Properties as dxButtonOptions } from 'devextreme/ui/button';
+import type { User } from 'devextreme/ui/chat';
+import type { dxContextMenuItem } from 'devextreme/ui/context_menu';
+import type { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
+import type { Command, CustomCommand } from 'devextreme/ui/diagram';
+import type { ItemClickEvent } from 'devextreme/ui/drop_down_button';
+import type { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
+import type { ButtonItem, EmptyItem, FormItemComponent, FormItemType, GroupItem, LabelLocation, SimpleItem, TabbedItem } from 'devextreme/ui/form';
+import type { GanttPredefinedContextMenuItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
+import type { AICommand, AICommandName, HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
+import type { dxMenuItem } from 'devextreme/ui/menu';
+import type { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
+import type { Properties as dxTabPanelOptions } from 'devextreme/ui/tab_panel';
+import type { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
+import type { TreeListPredefinedToolbarItem } from 'devextreme/ui/tree_list';
+import type { dxTreeViewItem } from 'devextreme/ui/tree_view';
 
 @Component({
     template: ''

@@ -18,10 +18,10 @@ import {
 
 
 
-import { AIIntegration } from 'devextreme/common/ai-integration';
-import { Mode } from 'devextreme/common';
-import { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent, SmartPastedEvent, SmartPastingEvent } from 'devextreme/ui/form';
-import { AppointmentFormIconsShowMode } from 'devextreme/ui/scheduler';
+import type { AIIntegration } from 'devextreme/common/ai-integration';
+import type { Mode } from 'devextreme/common';
+import type { dxFormSimpleItem, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, InitializedEvent, OptionChangedEvent, SmartPastedEvent, SmartPastingEvent } from 'devextreme/ui/form';
+import type { AppointmentFormIconsShowMode } from 'devextreme/ui/scheduler';
 
 import {
     DxIntegrationModule,

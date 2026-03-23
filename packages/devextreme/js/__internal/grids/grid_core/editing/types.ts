@@ -1,4 +1,5 @@
-import type { Column } from '../columns_controller/m_columns_controller';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
+
 import type { Item, UserData } from '../data_controller/m_data_controller';
 import type { RowKey } from '../m_types';
 import type { INSERT_INDEX } from './const';

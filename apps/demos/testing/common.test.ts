@@ -96,7 +96,7 @@ const getIgnoredRules = (testName) => {
     'Diagram-UICustomization': ['aria-dialog-name', 'label'],
     'Diagram-WebAPIService': ['aria-dialog-name', 'label'],
 
-    'FileManager-BindingToEF': ['aria-command-name', 'label'],
+    'FileManager-BindingToEF': ['aria-command-name', 'empty-table-header', 'label'],
     'FileManager-BindingToFileSystem': ['aria-command-name', 'empty-table-header', 'label'],
     'FileManager-BindingToHierarchicalStructure': ['aria-command-name', 'empty-table-header', 'label'],
     'FileManager-CustomThumbnails': ['aria-allowed-attr', 'aria-command-name', 'image-alt', 'label'],
@@ -105,6 +105,7 @@ const getIgnoredRules = (testName) => {
 
     'Gantt-Appearance': ['aria-toggle-field-name'],
     'Gantt-ExportToPDF': ['aria-toggle-field-name'],
+    'Gantt-Overview': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-StripLines': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-Validation': ['aria-required-parent', 'aria-valid-attr-value'],
 

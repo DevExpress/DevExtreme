@@ -22,14 +22,12 @@ import {
 } from '@angular/core';
 
 
-import DataSource from 'devextreme/data/data_source';
-import dxChat from 'devextreme/ui/chat';
-import { Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, InputFieldTextChangedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { Format } from 'devextreme/common/core/localization';
-import { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
-import { dxSpeechToTextOptions } from 'devextreme/ui/speech_to_text';
+import type { default as dxChat, Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, InputFieldTextChangedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { Format } from 'devextreme/common/core/localization';
+import type { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
+import type { dxSpeechToTextOptions } from 'devextreme/ui/speech_to_text';
 
 import DxChat from 'devextreme/ui/chat';
 

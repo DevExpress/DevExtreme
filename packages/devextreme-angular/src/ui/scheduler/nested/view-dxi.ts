@@ -12,8 +12,8 @@ import {
 
 
 
-import { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, ViewType } from 'devextreme/ui/scheduler';
-import { FirstDayOfWeek, Orientation } from 'devextreme/common';
+import type { AllDayPanelMode, CellAppointmentsLimit, dxSchedulerScrolling, SnapToCellsMode, ViewType } from 'devextreme/ui/scheduler';
+import type { FirstDayOfWeek, Orientation } from 'devextreme/common';
 
 import {
     DxIntegrationModule,
@@ -188,6 +188,14 @@ export class DxiSchedulerViewComponent extends CollectionNestedOption {
     }
     set scrolling(value: dxSchedulerScrolling) {
         this._setOption('scrolling', value);
+    }
+
+    @Input()
+    get snapToCellsMode(): SnapToCellsMode {
+        return this._getOption('snapToCellsMode');
+    }
+    set snapToCellsMode(value: SnapToCellsMode) {
+        this._setOption('snapToCellsMode', value);
     }
 
     @Input()

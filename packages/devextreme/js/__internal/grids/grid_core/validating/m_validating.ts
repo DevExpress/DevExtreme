@@ -31,7 +31,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import { EDITORS_INPUT_SELECTOR } from '../editing/const';
+import { EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR } from '../editing/const';
 import type { EditingController } from '../editing/m_editing';
 import type { NormalizedEditCellOptions } from '../editing/types';
 import modules from '../m_modules';
@@ -503,7 +503,9 @@ export class ValidatingController extends modules.Controller {
           const change = editingController.getChangeByKey(key);
           const oldData = editingController._getOldData(key);
           return {
-            data: createObjectWithChanges(oldData, change?.data),
+            data: change
+              ? createObjectWithChanges(oldData, change.data)
+              : { ...(oldData ?? parameters.data) },
             column,
           };
         },
@@ -1442,7 +1444,8 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
 
   private _getCurrentFocusElement($focus) {
     if (this._editingController.isEditing()) {
-      return $focus.find(EDITORS_INPUT_SELECTOR).first();
+      const selector = [EDITORS_INPUT_SELECTOR, EDITORS_TEXTAREA_SELECTOR].join(', ');
+      return $focus.find(selector).first();
     }
     return $focus;
   }

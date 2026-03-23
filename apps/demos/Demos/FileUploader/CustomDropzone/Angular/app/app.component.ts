@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxFileUploaderModule, DxProgressBarModule } from 'devextreme-angular';
+import 'anti-forgery';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();

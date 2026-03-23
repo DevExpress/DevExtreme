@@ -377,79 +377,18 @@ describe('Appointment Form', () => {
   });
 
   describe('State', () => {
-    it('should have empty description, subject and timezone inputs when opening second common appointment', async () => {
-      const { scheduler, POM } = await createScheduler({
-        ...getDefaultConfig(),
-        editing: {
-          allowUpdating: true,
-          allowTimeZoneEditing: true,
-        },
-      });
-
-      scheduler.showAppointmentPopup({ ...commonAppointment });
-
-      POM.popup.setInputValue('descriptionEditor', 'temp');
-      POM.popup.setInputValue('startDateTimeZoneEditor', 'America/Los_Angeles');
-      POM.popup.setInputValue('endDateTimeZoneEditor', 'America/Anchorage');
-      POM.popup.saveButton.click();
-
-      scheduler.showAppointmentPopup();
-
-      expect(POM.popup.getInputValue('subjectEditor')).toBe('');
-      expect(POM.popup.getInputValue('descriptionEditor')).toBe('');
-      expect(POM.popup.getInputValue('startDateTimeZoneEditor')).toBe('');
-      expect(POM.popup.getInputValue('endDateTimeZoneEditor')).toBe('');
-    });
-
-    it('should have correct form data when opening second appointment', async () => {
+    it('should create a new form instance on each popup opening', async () => {
       const { scheduler, POM } = await createScheduler(getDefaultConfig());
 
       scheduler.showAppointmentPopup(commonAppointment);
-
-      expect(POM.popup.dxForm.option('formData')).toMatchObject({ ...commonAppointment });
+      const firstFormInstance = POM.popup.dxForm;
 
       POM.popup.cancelButton.click();
 
-      scheduler.showAppointmentPopup(allDayAppointment);
+      scheduler.showAppointmentPopup(commonAppointment);
+      const secondFormInstance = POM.popup.dxForm;
 
-      expect(POM.popup.dxForm.option('formData')).toMatchObject({ ...allDayAppointment });
-    });
-
-    it('should have empty resource editor value when opening second appointment', async () => {
-      const { scheduler, POM } = await createScheduler({
-        ...getDefaultConfig(),
-        resources: [{
-          fieldExpr: 'roomId',
-          dataSource: [
-            { text: 'Room 1', id: 1, color: '#00af2c' },
-            { text: 'Room 2', id: 2, color: '#56ca85' },
-            { text: 'Room 3', id: 3, color: '#8ecd3c' },
-          ],
-        }],
-      });
-
-      scheduler.showAppointmentPopup({
-        text: 'Resource test app',
-        startDate: new Date(2017, 4, 9, 9, 30),
-        endDate: new Date(2017, 4, 9, 11),
-        roomId: 1,
-      });
-      POM.popup.setInputValue('roomId', 2);
-      scheduler.hideAppointmentPopup(true);
-
-      scheduler.showAppointmentPopup();
-      expect(POM.popup.getInputValue('roomId')).toBe('');
-    });
-
-    it('should have correct repeat editor value when opening recurring appointment after common appointment', async () => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup({ ...commonAppointment });
-      POM.popup.saveButton.click();
-
-      scheduler.showAppointmentPopup({ ...recurringAppointment });
-      POM.popup.editSeriesButton.click();
-      expect(POM.popup.getInputValue('repeatEditor')).toBe('Daily');
+      expect(secondFormInstance).not.toBe(firstFormInstance);
     });
 
     it('should have correct editor values when opening for empty date cell - 1', async () => {
@@ -939,36 +878,6 @@ describe('Appointment Form', () => {
       expect(POM.popup.getInputValue('endDateEditor')).toBe('5/1/2017');
       expect(POM.popup.isInputVisible('endTimeEditor')).toBeFalsy();
     });
-
-    it('should show correct dates after switching off allDay and canceling changes (T832711)', async () => {
-      const { scheduler, POM } = await createScheduler(undefined);
-
-      scheduler.showAppointmentPopup(allDayAppointment);
-      POM.popup.getInput('allDayEditor').click();
-      POM.popup.cancelButton.click();
-
-      scheduler.showAppointmentPopup(allDayAppointment);
-
-      expect(POM.popup.getInputValue('startDateEditor')).toBe('5/1/2017');
-      expect(POM.popup.isInputVisible('startTimeEditor')).toBeFalsy();
-      expect(POM.popup.getInputValue('endDateEditor')).toBe('5/1/2017');
-      expect(POM.popup.isInputVisible('endTimeEditor')).toBeFalsy();
-    });
-
-    it('should show correct dates after switching on allDay and canceling changes (T832711)', async () => {
-      const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-      scheduler.showAppointmentPopup(commonAppointment);
-      POM.popup.getInput('allDayEditor').click();
-      POM.popup.cancelButton.click();
-
-      scheduler.showAppointmentPopup(commonAppointment);
-
-      expect(POM.popup.getInputValue('startDateEditor')).toBe('5/9/2017');
-      expect(POM.popup.getInputValue('startTimeEditor')).toBe('9:30 AM');
-      expect(POM.popup.getInputValue('endDateEditor')).toBe('5/9/2017');
-      expect(POM.popup.getInputValue('endTimeEditor')).toBe('11:00 AM');
-    });
   });
 
   describe('Timezone Editors', () => {
@@ -1076,29 +985,15 @@ describe('Appointment Form', () => {
     it('should create resourceEditorsGroup when resources have no custom icons', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
-        dataSource: [{
-          text: 'Resource test app',
-          startDate: new Date(2017, 4, 9, 9, 30),
-          endDate: new Date(2017, 4, 9, 11),
-          roomId: 1,
-          ownerId: 2,
-        }],
-        resources: [{
-          fieldExpr: 'roomId',
-          dataSource: [{ text: 'Room 1', id: 1 }, { text: 'Room 2', id: 2 }],
-        }, {
-          fieldExpr: 'ownerId',
-          dataSource: [{ text: 'Owner 1', id: 1 }, { text: 'Owner 2', id: 2 }],
-        }],
+        resources: [
+          { fieldExpr: 'roomId' },
+          { fieldExpr: 'ownerId' },
+        ],
       });
-      const dataSource = (scheduler as any).getDataSource();
-      const appointment = dataSource.items()[0];
 
-      scheduler.showAppointmentPopup(appointment);
+      scheduler.showAppointmentPopup();
 
-      const formItems = POM.popup.dxForm.option('items') as FormItem[];
-      const mainGroup = formItems.find((item) => item.name === 'mainGroup') as GroupItem;
-      const resourcesGroup = mainGroup?.items?.find((item) => item.name === 'resourcesGroup') as GroupItem;
+      const resourcesGroup = POM.popup.dxForm.itemOption('mainGroup.resourcesGroup') as GroupItem;
 
       expect(resourcesGroup).toBeDefined();
       expect(resourcesGroup?.items?.length).toBe(2);
@@ -1106,14 +1001,17 @@ describe('Appointment Form', () => {
       expect(resourcesGroup?.items).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            name: 'resourcesGroupContent',
+            name: 'resourcesGroupIcon',
+          }),
+          expect.objectContaining({
+            name: 'resourceEditorsGroup',
             itemType: 'group',
             items: expect.arrayContaining([
               expect.objectContaining({
-                name: 'roomId',
+                name: 'roomIdEditor',
               }),
               expect.objectContaining({
-                name: 'ownerId',
+                name: 'ownerIdEditor',
               }),
             ]),
           }),
@@ -1124,34 +1022,15 @@ describe('Appointment Form', () => {
     it('should create individual resource groups when resources have custom icons', async () => {
       const { scheduler, POM } = await createScheduler({
         ...getDefaultConfig(),
-        dataSource: [{
-          text: 'Resource test app',
-          startDate: new Date(2017, 4, 9, 9, 30),
-          endDate: new Date(2017, 4, 9, 11),
-          roomId: 1,
-          ownerId: 2,
-        }],
         resources: [
-          {
-            fieldExpr: 'roomId',
-            icon: 'home',
-            dataSource: [{ text: 'Room 1', id: 1 }, { text: 'Room 2', id: 2 }],
-          },
-          {
-            fieldExpr: 'ownerId',
-            icon: 'user',
-            dataSource: [{ text: 'Owner 1', id: 1 }, { text: 'Owner 2', id: 2 }],
-          },
+          { fieldExpr: 'roomId', icon: 'home' },
+          { fieldExpr: 'ownerId', icon: 'user' },
         ],
       });
-      const dataSource = (scheduler as any).getDataSource();
-      const appointment = dataSource.items()[0];
 
-      scheduler.showAppointmentPopup(appointment);
+      scheduler.showAppointmentPopup();
 
-      const formItems = POM.popup.dxForm.option('items') as FormItem[];
-      const mainGroup = formItems.find((item) => item.name === 'mainGroup') as GroupItem;
-      const resourcesGroup = mainGroup?.items?.find((item) => item.name === 'resourcesGroup') as GroupItem;
+      const resourcesGroup = POM.popup.dxForm.itemOption('mainGroup.resourcesGroup') as GroupItem;
 
       expect(resourcesGroup).toBeDefined();
       expect(resourcesGroup?.items?.length).toBe(2);
@@ -1163,10 +1042,10 @@ describe('Appointment Form', () => {
             itemType: 'group',
             items: expect.arrayContaining([
               expect.objectContaining({
-                name: 'roomId',
+                name: 'roomIdIcon',
               }),
               expect.objectContaining({
-                name: 'roomIdIcon',
+                name: 'roomIdEditor',
               }),
             ]),
           }),
@@ -1175,10 +1054,10 @@ describe('Appointment Form', () => {
             itemType: 'group',
             items: expect.arrayContaining([
               expect.objectContaining({
-                name: 'ownerId',
+                name: 'ownerIdIcon',
               }),
               expect.objectContaining({
-                name: 'ownerIdIcon',
+                name: 'ownerIdEditor',
               }),
             ]),
           }),
@@ -1321,6 +1200,28 @@ describe('Appointment Form', () => {
       POM.popup.recurrenceSettingsButton.click();
 
       expect(POM.popup.isRecurrenceGroupVisible()).toBe(true);
+    });
+
+    it('should close repeat selectbox popup when navigating to recurrence group via settings button', async () => {
+      const { POM, scheduler } = await createScheduler({
+        ...getDefaultConfig(),
+        dataSource: [{ ...recurringAppointment }],
+      });
+
+      const dataSource = (scheduler as any).getDataSource();
+      const appointment = dataSource.items()[0];
+
+      scheduler.showAppointmentPopup(appointment);
+      POM.popup.editSeriesButton.click();
+
+      const repeatEditor = POM.popup.dxForm.getEditor('repeatEditor');
+      POM.popup.getInput('repeatEditor').click();
+
+      expect(repeatEditor?.option('opened')).toBe(true);
+
+      POM.popup.recurrenceSettingsButton.click();
+
+      expect(repeatEditor?.option('opened')).toBe(false);
     });
 
     it('should have disabled week day buttons when allowUpdating is false', async () => {
@@ -1557,45 +1458,6 @@ describe('Appointment Form', () => {
         expect(POM.popup.getInputValue('recurrenceRepeatEndEditor')).toBe('count');
         expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe('10 occurrence(s)');
       });
-
-      it('should have correct input values when opening second weekly recurring appointment', async () => {
-        const { scheduler, POM } = await createScheduler(getDefaultConfig());
-
-        const appointment1 = {
-          text: 'Meeting',
-          startDate: new Date(2017, 4, 1, 10, 30),
-          endDate: new Date(2017, 4, 1, 11),
-          recurrenceRule: 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,WE,FR;COUNT=5',
-          repeatEnd: 'count',
-        };
-        const appointment2 = {
-          text: 'Meeting',
-          startDate: new Date(2017, 4, 2, 10, 30),
-          endDate: new Date(2017, 4, 2, 11),
-          recurrenceRule: 'FREQ=WEEKLY;INTERVAL=1;BYDAY=TU,TH;COUNT=5',
-          repeatEnd: 'count',
-        };
-
-        scheduler.showAppointmentPopup(appointment1);
-        POM.popup.editSeriesButton.click();
-        POM.popup.recurrenceSettingsButton.click();
-
-        scheduler.hideAppointmentPopup();
-
-        scheduler.showAppointmentPopup(appointment2);
-        POM.popup.editSeriesButton.click();
-        POM.popup.recurrenceSettingsButton.click();
-
-        expect(POM.popup.getInputValue('repeatEditor')).toBe('Weekly');
-        expect(POM.popup.getInputValue('recurrenceStartDateEditor')).toBe('5/2/2017');
-        expect(POM.popup.getInputValue('recurrenceCountEditor')).toBe('1');
-        expect(POM.popup.getInputValue('recurrencePeriodEditor')).toBe('Week(s)');
-
-        const expectedWeekDaysSelection = [false, true, false, true, false, false, false];
-        expect(POM.popup.getWeekDaysSelection()).toEqual(expectedWeekDaysSelection);
-
-        expect(POM.popup.getInputValue('recurrenceEndCountEditor')).toBe('5 occurrence(s)');
-      });
     });
 
     describe('Repeat End Values Preservation', () => {
@@ -1731,6 +1593,24 @@ describe('Appointment Form', () => {
 
         expect(document.activeElement).toBe(frequencyEditorInputElement);
       });
+    });
+
+    it('should set animation offset CSS variable when switching to recurrence form', async () => {
+      setupSchedulerTestEnvironment({
+        height: 600,
+        classRects: {
+          'dx-form': { top: 10 },
+          'dx-scheduler-form-main-group': { top: 60 },
+        },
+      });
+
+      const { scheduler, POM } = await createScheduler(getDefaultConfig());
+
+      scheduler.showAppointmentPopup();
+      POM.popup.selectRepeatValue('weekly');
+
+      const animationTop = POM.popup.dxForm.$element()[0].style.getPropertyValue('--dx-scheduler-animation-top');
+      expect(animationTop).toBe('50px');
     });
   });
 

@@ -14,7 +14,7 @@ import {
 
 
 
-import { SliderValueChangeMode } from 'devextreme/common';
+import type { SliderValueChangeMode } from 'devextreme/common';
 
 import {
     DxIntegrationModule,

@@ -3,16 +3,16 @@
     id="chart"
     :data-source="inflationData"
     palette="Violet"
-    title="Annual Inflation Rate in 2010 and 2011"
+    title="Annual Inflation Rate in 2024 and 2025"
   >
     <DxCommonSeriesSettings
       argument-field="date"
       type="rangearea"
     />
     <DxSeries
-      range-value1-field="val2010"
-      range-value2-field="val2011"
-      name="2010 - 2011"
+      range-value1-field="val2024"
+      range-value2-field="val2025"
+      name="2024 - 2025"
     />
 
     <DxArgumentAxis :value-margins-enabled="false">
