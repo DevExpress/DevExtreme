@@ -1365,6 +1365,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     });
 
     [150, 200, 250].forEach(expectedSize => {
+
         QUnit.test(`initial collapsed pane should restore size from configuration (left pane) size ${expectedSize}`, function(assert) {
 
             this.reinit({
@@ -1379,6 +1380,24 @@ QUnit.module('Pane sizing', moduleConfig, () => {
             this.instance.option('items[0].collapsed', false);
 
             assert.strictEqual(this.instance.option('items[0].size'), expectedSize, 'items[0].size');
+
+        });
+
+        QUnit.test(`initial collapsed pane should restore size from configuration even size was updated in real time ${expectedSize} + 20`, function(assert) {
+
+            this.reinit({
+                width: 600,
+                height: 600,
+                items: [
+                    { size: `${expectedSize}px`, collapsed: true, collapsible: true, },
+                    { }
+                ]
+            });
+
+            this.instance.option('items[0].size', `${expectedSize + 20}px`);
+            this.instance.option('items[0].collapsed', false);
+
+            assert.strictEqual(this.instance.option('items[0].size'), expectedSize + 20, 'items[0].size');
 
         });
 
@@ -1418,40 +1437,6 @@ QUnit.module('Pane sizing', moduleConfig, () => {
             assert.strictEqual(this.instance.option('items[2].size'), expectedSize, 'items[2].size');
 
         });
-
-        QUnit.test(`_initialSizeBeforeCollapse should create when item has collapsed:true and size = ${expectedSize}`, function(assert) {
-            this.reinit({
-                width: 600,
-                height: 600,
-                items: [
-                    { size: `${expectedSize}px`, collapsed: true, collapsible: true, },
-                    { },
-                ]
-            });
-
-            const items = this.instance.option('items');
-
-            assert.strictEqual(items[0]._initialSizeBeforeCollapse, `${expectedSize}px`, 'items[0]._initialSizeBeforeCollapse');
-            assert.strictEqual(items[1]._initialSizeBeforeCollapse, undefined, 'items[1]._initialSizeBeforeCollapse');
-
-        });
-    });
-
-    QUnit.test('_initialSizeBeforeCollapse should be undefined after first expand', function(assert) {
-        this.reinit({
-            width: 600,
-            height: 600,
-            items: [
-                { size: '150px', collapsed: true, collapsible: true, },
-                { },
-            ]
-        });
-
-        this.instance.option('items[0].collapsed', false);
-
-        const item0 = this.instance.option('items[0]');
-
-        assert.strictEqual(item0._initialSizeBeforeCollapse, undefined, 'items[0]._initialSizeBeforeCollapse');
 
     });
 
