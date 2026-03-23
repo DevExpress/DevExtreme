@@ -1,7 +1,7 @@
 import type { Orientation } from '@js/common';
 import type Scheduler from '@ts/scheduler/m_scheduler';
 
-import type { ViewType } from '../../../types';
+import type { SnapToCellsModeType, ViewType } from '../../../types';
 import { getCompareOptions } from '../../common/get_compare_options';
 import type { CompareOptions } from '../../types';
 
@@ -22,6 +22,7 @@ const configByView: Record<Exclude<ViewType, 'agenda'>, {
 
 export interface ViewModelOptions {
   type: ViewType;
+  snapToCellsMode: SnapToCellsModeType;
   viewOffset: number;
   groupOrientation?: Orientation;
   isGroupByDate: boolean;
@@ -36,6 +37,10 @@ export interface ViewModelOptions {
   cellDurationMinutes: number;
   isVirtualScrolling: boolean;
 }
+
+const getDefaultSnapToCellsModeForView = (type: ViewType): SnapToCellsModeType => (
+  ['month', 'agenda', 'timelineMonth'].includes(type) ? 'always' : 'never'
+);
 
 export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions => {
   const viewOffset = schedulerStore.getViewOffsetMs();
@@ -52,11 +57,13 @@ export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions
   const isAdaptivityEnabled = Boolean(schedulerStore.option('adaptivityEnabled'));
   const cellDurationMinutes = schedulerStore.getViewOption('cellDuration');
   const allDayPanelMode = schedulerStore.getViewOption('allDayPanelMode');
+  const snapToCellsMode = schedulerStore.getViewOption('snapToCellsMode');
   const showAllDayPanel = schedulerStore.getViewOption('showAllDayPanel');
   const isVirtualScrolling = schedulerStore.isVirtualScrolling();
 
   return {
     type,
+    snapToCellsMode: snapToCellsMode ?? getDefaultSnapToCellsModeForView(type),
     viewOffset,
     groupOrientation,
     isGroupByDate,
