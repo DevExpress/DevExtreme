@@ -3,6 +3,7 @@ import TreeView from 'devextreme-testcafe-models/treeView';
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { getCardFieldCaptions } from '../helpers/cardUtils';
 import {
   arrayMoveToGap,
   dragToColumnChooser,
@@ -304,4 +305,36 @@ test('drag from columnChooser to headerPanel: when allowReordering: false', asyn
     enabled: true,
     mode: 'dragAndDrop',
   },
+}));
+
+test('cards should update when columns are reordered (T1324855)', async (t) => {
+  const cardView = new CardView('#container');
+
+  const initialCaptions = await getCardFieldCaptions(t, cardView, 3);
+  await t.expect(initialCaptions).eql(['A', 'B', 'C']);
+
+  const headerPanel = cardView.getHeaderPanel();
+  const firstHeader = headerPanel.getHeaderItem(0).element;
+  const secondHeader = headerPanel.getHeaderItem(1).element;
+
+  await t.dragToElement(firstHeader, secondHeader, {
+    destinationOffsetX: -5,
+    destinationOffsetY: -20,
+    speed: 0.5,
+  });
+
+  const headerCaptions: string[] = [];
+  const headersCount = await cardView.getHeaders().getHeaderItemsElements().count;
+  for (let i = 0; i < headersCount; i += 1) {
+    headerCaptions.push(await cardView.getHeaders().getHeaderItemNth(i).element.innerText);
+  }
+
+  const cardCaptions = await getCardFieldCaptions(t, cardView, headersCount);
+  await t.expect(cardCaptions).eql(headerCaptions);
+}).before(async () => createWidget('dxCardView', {
+  dataSource: [
+    { a: 1, b: 2, c: 3 },
+  ],
+  columns: ['a', 'b', 'c'],
+  allowColumnReordering: true,
 }));

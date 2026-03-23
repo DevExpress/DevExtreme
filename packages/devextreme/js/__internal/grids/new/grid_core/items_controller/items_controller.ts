@@ -19,12 +19,23 @@ export class ItemsController {
 
   public readonly additionalItems = signal<CardInfo[]>([]);
 
+  // NOTE: Tracks only identity and order of visible columns (not sort/filter metadata).
+  // Prevents extra re-renders when only sort or filter changes on the same set of columns.
+  private readonly visibleColumnsLayout = computed(
+    () => this.columnsController.visibleColumns.value
+      .map((column) => column.name)
+      .join(','),
+  );
+
   public readonly items = computed(
     () => {
       // NOTE: We should trigger computed by search options change,
       // But all work with these options encapsulated in SearchHighlightTextProcessor
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       this.searchController.highlightTextOptions.value;
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      this.visibleColumnsLayout.value;
+
       return this.dataController.items.value.map(
         (item, itemIndex) => this.createCardInfo(
           item,
