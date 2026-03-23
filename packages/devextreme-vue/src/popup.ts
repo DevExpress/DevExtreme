@@ -82,7 +82,6 @@ type AccessibleOptions = Pick<Properties,
   "shadingColor" |
   "showCloseButton" |
   "showTitle" |
-  "tabFocusLoopEnabled" |
   "tabIndex" |
   "title" |
   "titleTemplate" |
@@ -139,7 +138,6 @@ const componentConfig = {
     shadingColor: String,
     showCloseButton: Boolean,
     showTitle: Boolean,
-    tabFocusLoopEnabled: Boolean,
     tabIndex: Number,
     title: String,
     titleTemplate: {},
@@ -192,7 +190,6 @@ const componentConfig = {
     "update:shadingColor": null,
     "update:showCloseButton": null,
     "update:showTitle": null,
-    "update:tabFocusLoopEnabled": null,
     "update:tabIndex": null,
     "update:title": null,
     "update:titleTemplate": null,

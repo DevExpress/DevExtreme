@@ -1671,7 +1671,6 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   shadingColor?: string;
   showCloseButton?: boolean;
   showTitle?: boolean;
-  tabFocusLoopEnabled?: boolean;
   tabIndex?: number;
   title?: string;
   titleTemplate?: ((titleElement: any) => string | any) | template;
@@ -2864,7 +2863,6 @@ type IPopupProps = React.PropsWithChildren<{
   shadingColor?: string;
   showCloseButton?: boolean;
   showTitle?: boolean;
-  tabFocusLoopEnabled?: boolean;
   tabIndex?: number;
   title?: string;
   titleTemplate?: ((titleElement: any) => string | any) | template;

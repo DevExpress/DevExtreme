@@ -236,7 +236,6 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
     name?: string | undefined;
   };
   showTitle?: boolean;
-  tabFocusLoopEnabled?: boolean;
   target?: any | string | undefined;
   title?: string;
   titleTemplate?: ((titleElement: any) => string | any) | template;

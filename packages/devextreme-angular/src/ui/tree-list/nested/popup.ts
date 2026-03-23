@@ -381,14 +381,6 @@ export class DxoTreeListPopupComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get tabFocusLoopEnabled(): boolean {
-        return this._getOption('tabFocusLoopEnabled');
-    }
-    set tabFocusLoopEnabled(value: boolean) {
-        this._setOption('tabFocusLoopEnabled', value);
-    }
-
-    @Input()
     get tabIndex(): number {
         return this._getOption('tabIndex');
     }

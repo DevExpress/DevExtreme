@@ -76,7 +76,6 @@ type AccessibleOptions = Pick<Properties,
   "showCloseButton" |
   "showEvent" |
   "showTitle" |
-  "tabFocusLoopEnabled" |
   "target" |
   "title" |
   "titleTemplate" |
@@ -124,7 +123,6 @@ const componentConfig = {
     showCloseButton: Boolean,
     showEvent: [Object, String] as PropType<Record<string, any> | string>,
     showTitle: Boolean,
-    tabFocusLoopEnabled: Boolean,
     target: {},
     title: String,
     titleTemplate: {},
@@ -168,7 +166,6 @@ const componentConfig = {
     "update:showCloseButton": null,
     "update:showEvent": null,
     "update:showTitle": null,
-    "update:tabFocusLoopEnabled": null,
     "update:target": null,
     "update:title": null,
     "update:titleTemplate": null,
