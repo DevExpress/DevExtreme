@@ -131,6 +131,30 @@ export const keyboard = {
     }
   },
 
+  disposeProcessorsForSubtree(root: Element): void {
+    if (!root?.nodeType) {
+      return;
+    }
+
+    const touchesRoot = (node: Element | null | undefined): boolean => !!node
+      && (node === root || root.contains(node));
+
+    Object.keys(keyboardProcessors).forEach((id) => {
+      const keyboardProcessor = keyboardProcessors[id];
+
+      if (!keyboardProcessor) {
+        return;
+      }
+
+      const listenerEl = keyboardProcessor._element?.[0];
+      const focusTarget = keyboardProcessor._focusTarget;
+
+      if (touchesRoot(listenerEl) || touchesRoot(focusTarget)) {
+        keyboard.off(id);
+      }
+    });
+  },
+
   // NOTE: For tests
   _getProcessor: (listenerId) => keyboardProcessors[listenerId],
 };
