@@ -239,18 +239,6 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     return isElementVisible($(this.element())[0]);
   }
 
-  _captureInitialCollapsedItemSizes(items: InternalSplitterItem[]): void {
-    items.forEach((item) => {
-      if (
-        item._initialSizeBeforeCollapse === undefined
-        && item.collapsed === true
-        && isDefined(item.size)
-      ) {
-        item._initialSizeBeforeCollapse = item.size;
-      }
-    });
-  }
-
   _resizeHandler(): void {
     if (this._shouldRecalculateLayout && this._isAttached() && this._isVisible()) {
       this._layout = this._getDefaultLayoutBasedOnSize();
@@ -264,8 +252,6 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   _renderItems(items: Item[]): void {
     super._renderItems(items);
-
-    this._captureInitialCollapsedItemSizes(items);
 
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
@@ -322,12 +308,24 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     return index === findLastIndexOfVisibleItem(items);
   }
 
+  _captureInitialCollapsedItemSize(item: InternalSplitterItem): void {
+    if (
+      item._initialSizeBeforeCollapse === undefined
+        && item.collapsed === true
+        && isDefined(item.size)
+    ) {
+      item._initialSizeBeforeCollapse = item.size;
+    }
+  }
+
   _renderItem(
     index: number,
     itemData: Item,
     $container: dxElementWrapper,
     $itemToReplace: dxElementWrapper,
   ): dxElementWrapper {
+    this._captureInitialCollapsedItemSize(itemData);
+
     const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
 
     const itemElement = $itemFrame.get(0) as HTMLElement;
