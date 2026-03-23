@@ -11,45 +11,41 @@ export class ExportImportEntry {
 }
 
 const exportImportData: ExportImportEntry[] = [{
-  Country: 'Brazil',
-  Export: 241,
-  Import: 225,
-}, {
-  Country: 'Russia',
-  Export: 536,
-  Import: 284,
-}, {
-  Country: 'India',
-  Export: 317,
-  Import: 453,
-}, {
-  Country: 'China',
-  Export: 1702,
-  Import: 1717,
-}, {
-  Country: 'Japan',
-  Export: 699,
-  Import: 800,
-}, {
-  Country: 'USA',
-  Export: 1448,
-  Import: 2795,
-}, {
-  Country: 'Canada',
-  Export: 522,
-  Import: 440,
-}, {
-  Country: 'France',
-  Export: 626,
-  Import: 717,
-}, {
-  Country: 'England',
-  Export: 424,
-  Import: 568,
+  Country: 'United States',
+  Export: 2065,
+  Import: 3359,
 }, {
   Country: 'Germany',
-  Export: 1403,
-  Import: 1000,
+  Export: 1683,
+  Import: 1425,
+}, {
+  Country: 'Japan',
+  Export: 707,
+  Import: 743,
+}, {
+  Country: 'United Kingdom',
+  Export: 513,
+  Import: 816,
+}, {
+  Country: 'France',
+  Export: 640,
+  Import: 750,
+}, {
+  Country: 'Italy',
+  Export: 674,
+  Import: 615,
+}, {
+  Country: 'Canada',
+  Export: 568,
+  Import: 573,
+}, {
+  Country: 'India',
+  Export: 443,
+  Import: 702,
+}, {
+  Country: 'Brazil',
+  Export: 337,
+  Import: 278,
 }];
 
 @Injectable()

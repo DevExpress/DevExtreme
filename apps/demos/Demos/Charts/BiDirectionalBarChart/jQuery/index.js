@@ -1,6 +1,6 @@
 $(() => {
   $('#chart').dxChart({
-    title: 'Population Pyramid For Norway 2016',
+    title: 'Population Pyramid For Norway 2024',
     dataSource,
     rotated: true,
     barGroupWidth: 18,

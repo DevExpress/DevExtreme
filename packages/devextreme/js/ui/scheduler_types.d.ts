@@ -4,6 +4,7 @@ export {
   ScrollMode,
   AllDayPanelMode,
   CellAppointmentsLimit,
+  SnapToCellsMode,
   RecurrenceEditMode,
   AppointmentFormIconsShowMode,
   AppointmentFormProperties,

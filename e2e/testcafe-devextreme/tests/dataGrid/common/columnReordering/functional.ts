@@ -24,6 +24,8 @@ fixture.disablePageReloads`Column reordering`
 // T975549
 test('The column reordering should work correctly when there is a fixed column with zero width', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
+
   const headers = dataGrid.getHeaders();
   const headerRow = headers.getHeaderRow(0);
 
@@ -72,6 +74,7 @@ test('The column reordering should work correctly when there is a fixed column w
 // T1038094
 test('The separator should display correctly when dragging column', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
 
   await dataGrid.moveHeader(0, 200, 5, true);
 

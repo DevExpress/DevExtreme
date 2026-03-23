@@ -17,7 +17,7 @@
   "devDependencies": {
     "@types/react": "18.3.28",
     "@types/react-dom": "18.3.7",
-    "css-loader": "6.10.0",
+    "css-loader": "6.11.0",
     "source-map-loader": "4.0.2",
     "style-loader": "3.3.4",
     "ts-loader": "9.5.4",

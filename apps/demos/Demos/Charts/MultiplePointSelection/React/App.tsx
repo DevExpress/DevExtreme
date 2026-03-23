@@ -26,7 +26,7 @@ function App() {
       rotated={true}
       pointSelectionMode="multiple"
       onPointClick={onPointClick}
-      title="Olympic Medals in 2008"
+      title="Olympic Medals in 2024"
     >
       <CommonSeriesSettings
         argumentField="country"

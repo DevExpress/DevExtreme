@@ -997,7 +997,7 @@ module('Renovated Render', {
             showAllDayPanel: true,
         }, 'dxSchedulerWorkSpaceWeek');
 
-        assert.ok(this.instance._$allDayTable, 'All-day panel has been initialized');
+        assert.ok(this.instance.$allDayTable, 'All-day panel has been initialized');
     });
 
     // Remove after complete workspace renovation

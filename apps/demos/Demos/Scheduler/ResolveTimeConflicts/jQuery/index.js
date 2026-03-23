@@ -29,7 +29,6 @@ $(() => {
         },
         onHidden: () => {
           setConflictError(false);
-          form?.updateData('assigneeId', []);
         },
       },
       form: {
