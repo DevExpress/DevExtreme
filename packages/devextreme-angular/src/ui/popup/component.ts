@@ -878,6 +878,13 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() tabFocusLoopEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
@@ -976,6 +983,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
             { emit: 'shadingColorChange' },
             { emit: 'showCloseButtonChange' },
             { emit: 'showTitleChange' },
+            { emit: 'tabFocusLoopEnabledChange' },
             { emit: 'tabIndexChange' },
             { emit: 'titleChange' },
             { emit: 'titleTemplateChange' },
