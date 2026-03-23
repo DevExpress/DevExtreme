@@ -306,14 +306,6 @@ export class DxoLookupDropDownOptionsComponent extends NestedOption implements O
     }
 
     @Input()
-    get tabFocusLoopEnabled(): boolean {
-        return this._getOption('tabFocusLoopEnabled');
-    }
-    set tabFocusLoopEnabled(value: boolean) {
-        this._setOption('tabFocusLoopEnabled', value);
-    }
-
-    @Input()
     get target(): any | string | undefined {
         return this._getOption('target');
     }
