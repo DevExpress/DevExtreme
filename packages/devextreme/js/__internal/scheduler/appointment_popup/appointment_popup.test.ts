@@ -1762,21 +1762,8 @@ describe('Appointment Form', () => {
         const mainFormIcons = POM.popup.mainGroup.querySelectorAll(`.${CLASSES.icon}`);
         const recurrenceFormIcons = POM.popup.recurrenceGroup.querySelectorAll(`.${CLASSES.icon}`);
 
-        expect(mainFormIcons.length).toBe(4);
-        expect(recurrenceFormIcons.length).toBe(3);
-
-        const mainIconsCorrect = Array.from(mainFormIcons).every((icon) => {
-          const isVisible = !icon.classList.contains(CLASSES.hidden);
-          return isVisible === visibleMain;
-        });
-
-        const recurrenceIconsCorrect = Array.from(recurrenceFormIcons).every((icon) => {
-          const isVisible = !icon.classList.contains(CLASSES.hidden);
-          return isVisible === visibleRecurrence;
-        });
-
-        expect(mainIconsCorrect).toBe(true);
-        expect(recurrenceIconsCorrect).toBe(true);
+        expect(mainFormIcons.length).toBe(visibleMain ? 4 : 0);
+        expect(recurrenceFormIcons.length).toBe(visibleRecurrence ? 3 : 0);
       });
     });
   });
