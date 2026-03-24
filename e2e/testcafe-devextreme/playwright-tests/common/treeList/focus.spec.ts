@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../playwright-helpers';
+import { createWidget, TreeList } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -16,64 +16,60 @@ test.describe('Focus', () => {
 
   const TREE_LIST_SELECTOR = '#container';
 
-  // T1294363
   test('Focus method should focus the first data cell', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
-    dataSource: [
-      { id: 1, parentId: 0, name: 'name 1' },
-      { id: 2, parentId: 1, name: 'name 2' },
-      { id: 3, parentId: 0, name: 'name 3' },
-    ],
-    keyExpr: 'id',
-    parentId: 'parentId',
-    columns: [
-      'id',
-      {
-        dataField: 'name',
-        cellTemplate: (_, options) => $('<div>').attr('tabindex', 0).text(options.text),
-      },
-    ],
-  });
+      dataSource: [
+        { id: 1, parentId: 0, name: 'name 1' },
+        { id: 2, parentId: 1, name: 'name 2' },
+        { id: 3, parentId: 0, name: 'name 3' },
+      ],
+      keyExpr: 'id',
+      parentId: 'parentId',
+      columns: [
+        'id',
+        {
+          dataField: 'name',
+          cellTemplate: (_: any, options: any) => $('<div>').attr('tabindex', 0).text(options.text),
+        },
+      ],
+    });
 
-    const treeList = new TreeList(TREE_LIST_SELECTOR);
+    const treeList = new TreeList(page, TREE_LIST_SELECTOR);
 
-    await expect(treeList.isReady()).ok();
+    expect(await treeList.isReady()).toBe(true);
 
     await treeList.apiFocus();
 
-    await page.expect(treeList.getDataCell(0, 0).element.focused)
-      .ok();
+    const firstCell = treeList.getDataCell(0, 0);
+    await expect(firstCell).toBeFocused();
+  });
 
-    });
-
-  // T1294363
   test('Focus method should focus the first data row when focusedRowEnabled = true', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
-    dataSource: [
-      { id: 1, parentId: 0, name: 'name 1' },
-      { id: 2, parentId: 1, name: 'name 2' },
-      { id: 3, parentId: 0, name: 'name 3' },
-    ],
-    keyExpr: 'id',
-    parentId: 'parentId',
-    focusedRowEnabled: true,
-    columns: [
-      'id',
-      {
-        dataField: 'name',
-        cellTemplate: (_, options) => $('<div>').attr('tabindex', 0).text(options.text),
-      },
-    ],
-  });
+      dataSource: [
+        { id: 1, parentId: 0, name: 'name 1' },
+        { id: 2, parentId: 1, name: 'name 2' },
+        { id: 3, parentId: 0, name: 'name 3' },
+      ],
+      keyExpr: 'id',
+      parentId: 'parentId',
+      focusedRowEnabled: true,
+      columns: [
+        'id',
+        {
+          dataField: 'name',
+          cellTemplate: (_: any, options: any) => $('<div>').attr('tabindex', 0).text(options.text),
+        },
+      ],
+    });
 
-    const treeList = new TreeList(TREE_LIST_SELECTOR);
+    const treeList = new TreeList(page, TREE_LIST_SELECTOR);
 
-    await expect(treeList.isReady()).ok();
+    expect(await treeList.isReady()).toBe(true);
 
     await treeList.apiFocus();
 
-    await page.expect(treeList.getDataRow(0).element.focused)
-      .ok();
-
-    });
+    const firstRow = treeList.getDataRow(0).element;
+    await expect(firstRow).toBeFocused();
+  });
 });

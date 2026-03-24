@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,15 +14,17 @@ test.describe('Accessibility - CardView columnSortable', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('headerPanel dragging column', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('dropzone in headerPanel from columnChooser', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('dropzone with allowReordering false', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
+  test('column sortable accessibility check', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      allowColumnReordering: true,
+      columnChooser: { enabled: true },
+      headerFilter: { visible: true },
+      columns: [{
+        dataField: 'test',
+        allowReordering: true,
+        sortOrder: 'asc',
+      }],
+    });
+    await a11yCheck(page, { rules: { 'color-contrast': { enabled: false } } }, '#container');
   });
 });

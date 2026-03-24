@@ -22,7 +22,7 @@ test.describe('Popup', () => {
     // skipped: requires .before() setup, asyncForEach, getBoundingClientRectProperty
   });
 
-  test.skip('There should not be any errors when position.of is html (T946851)', async ({ page }) => {
+  test('There should not be any errors when position.of is html (T946851)', async ({ page }) => {
     await createWidget(page, 'dxPopup', {
       position: { of: 'html' },
       visible: true,

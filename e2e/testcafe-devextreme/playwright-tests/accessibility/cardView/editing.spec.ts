@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,15 +14,13 @@ test.describe('Accessibility - CardView editing', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('default render', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('render of add card popup', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('render of edit card popup', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
+  test('default render', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      columns: ['name', 'value'],
+      dataSource: [{ id: 1, name: 'Item 1', value: 100 }],
+      keyExpr: 'id',
+      editing: { allowUpdating: true, allowDeleting: true, allowAdding: true },
+    });
+    await a11yCheck(page, {}, '#container');
   });
 });

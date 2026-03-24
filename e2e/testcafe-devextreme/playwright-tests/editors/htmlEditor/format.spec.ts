@@ -14,7 +14,7 @@ test.describe('HtmlEditor - formats', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('HtmlEditor should keep actual format after "enter" key pressed (T922236)', async ({ page }) => {
+  test('HtmlEditor should keep actual format after "enter" key pressed (T922236)', async ({ page }) => {
 
     await createWidget(page, 'dxHtmlEditor', {
       height: 400,
@@ -31,18 +31,18 @@ test.describe('HtmlEditor - formats', () => {
     });
 
     const selectBox = page.locator('.dx-font-format');
-
     await selectBox.click();
 
-    const list = await selectBox.getList();
+    await page.locator('.dx-list-item').first().click();
 
-    await list.getItem().element.click();
+    const value = await selectBox.locator('.dx-texteditor-input').inputValue();
+    expect(value).toBe('Arial');
 
-    expect(selectBox.value).toBe('Arial')
-      .pressKey('k')
-      .pressKey('enter')
-      .expect(selectBox.value)
-      .eql('Arial');
+    await page.locator('.dx-htmleditor-content').click();
+    await page.keyboard.type('k');
+    await page.keyboard.press('Enter');
 
-    });
+    const valueAfterEnter = await selectBox.locator('.dx-texteditor-input').inputValue();
+    expect(valueAfterEnter).toBe('Arial');
+  });
 });

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -13,7 +13,6 @@ test.describe('Filtering', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
-  const GRID_CONTAINER = '#container';
 
   test('Data should be filtered if True is selected via the filter method when case sensitivity is enabled', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
@@ -33,21 +32,16 @@ test.describe('Filtering', () => {
       showBorders: true,
     });
 
-    // arrange
-      // act
+    const dataGrid = new DataGrid(page);
+
     await dataGrid.apiFilter(['text', '=', 'true']);
 
-    // assert
-    expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
-
+    await expect(page.locator('.dx-datagrid').first()).toBeVisible();
     await testScreenshot(page, 'filter-method-with-case-sensitive-1.png', { element: page.locator('#container') });
 
-    // act
     await dataGrid.apiFilter(['text', '=', 'True']);
 
-    // assert
-    expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
-
+    await expect(page.locator('.dx-datagrid').first()).toBeVisible();
     await testScreenshot(page, 'filter-method-with-case-sensitive-2.png', { element: page.locator('#container') });
   });
 });

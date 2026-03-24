@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -13,6 +13,7 @@ test.describe('Icon Sizes', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
+
   test('Load panel should support string height and width', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: [],
@@ -27,11 +28,14 @@ test.describe('Icon Sizes', () => {
       },
     });
 
-      await dataGrid.apiBeginCustomLoading('test');
+    const dataGrid = new DataGrid(page);
+    await dataGrid.apiBeginCustomLoading('test');
 
-    expect(await dataGrid.getLoadPanel().getContent().getStyleProperty('height'));
-    await t.eql('400px');
-    expect(await dataGrid.getLoadPanel().getContent().getStyleProperty('width'));
-    await t.eql('330px');
+    const loadPanelContent = dataGrid.getLoadPanel().getContent();
+    const height = await loadPanelContent.evaluate((el) => getComputedStyle(el).height);
+    const width = await loadPanelContent.evaluate((el) => getComputedStyle(el).width);
+
+    expect(height).toBe('400px');
+    expect(width).toBe('330px');
   });
 });

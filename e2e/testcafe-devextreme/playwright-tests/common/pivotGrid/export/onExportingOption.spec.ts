@@ -4,7 +4,7 @@ import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
 
-test.describe('PivotGrid_fieldChooser', () => {
+test.describe('PivotGrid_export', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
@@ -14,30 +14,26 @@ test.describe('PivotGrid_fieldChooser', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Should call \'onExporting\' when export button clicked', async ({ page }) => {
+  test('Should call \'onExporting\' when export button clicked', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
-    dataSource: {
-      fields: [{
-        caption: 'data A',
-        dataField: 'data_A',
-      }],
-      store: [],
-    },
-    export: {
-      enabled: true,
-    },
-    onExporting() {
-          (window as any).__exportCalled = true;
-    },
+      dataSource: {
+        fields: [{
+          caption: 'data A',
+          dataField: 'data_A',
+        }],
+        store: [],
+      },
+      export: {
+        enabled: true,
+      },
+      onExporting() {
+        (window as any).__exportCalled = true;
+      },
     });
 
-    const pivotGrid = page.locator('#container');
-    const exportBtn = pivotGrid.getExportButton();
+    await page.locator('#container .dx-pivotgrid-export-button').click();
 
-    await click(exportBtn);
-      const exportCalled = await ClientFunction(() => (window as any).__exportCalled as boolean)();
-
+    const exportCalled = await page.evaluate(() => (window as any).__exportCalled as boolean);
     expect(exportCalled).toBeTruthy();
-
-    });
+  });
 });

@@ -1,8 +1,11 @@
 import { test, expect } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { createWidget, testScreenshot, appendElementTo, setAttribute } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
+
+const waitFont = async (page: Page) => page.evaluate(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
 test.describe('Form', () => {
   test.beforeEach(async ({ page }) => {
@@ -14,11 +17,8 @@ test.describe('Form', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  const waitFont = async () => page.evaluate(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
-
-  test.skip('SimpleItem: item1_cSpan_2', async ({ page }) => {
-
-    await waitFont();
+  test('SimpleItem: item1_cSpan_2', async ({ page }) => {
+    await waitFont(page);
     await setAttribute(page, '#container', 'style', 'width: 500px;');
 
     for (let colCount = 1; colCount <= 4; colCount += 1) {
@@ -38,14 +38,12 @@ test.describe('Form', () => {
     }
 
     await testScreenshot(page, 'SimpleItem,item1_cSpan_2.png', { element: '#container' });
-
-    });
+  });
 
   [[1, 2], [2, 1], [2, 2]].forEach(([colSpan1, colSpan2]) => {
     const testName = `SimpleItem,item1_cSpan_${colSpan1},item2_cSpan_${colSpan2}`;
-    test.skip(testName, async ({ page }) => {
-
-      await waitFont();
+    test(testName, async ({ page }) => {
+      await waitFont(page);
       await setAttribute(page, '#container', 'style', 'width: 600px;');
 
       for (let colCount = 1; colCount <= 4; colCount += 1) {
@@ -67,24 +65,21 @@ test.describe('Form', () => {
         await createWidget(page, 'dxForm', formOptions, `#${formId}`);
       }
 
-
       await testScreenshot(page, `${testName}.png`, { element: '#container' });
-
     });
   });
 
   [false, true].forEach((rtlEnabled) => {
     [1, 2, 3, 4, 5, 6].forEach((itemsCount) => {
       const testName = `colCount,rtl_${rtlEnabled},itemsCount_${itemsCount}`;
-      test.skip(testName, async ({ page }) => {
-
-        await waitFont();
+      test(testName, async ({ page }) => {
+        await waitFont(page);
         const containerStyle = `
-            display: grid; 
-            grid-template-columns: repeat(3, 300px); 
-            grid-template-rows: 0px auto; 
+            display: grid;
+            grid-template-columns: repeat(3, 300px);
+            grid-template-rows: 0px auto;
             grid-auto-flow: column;
-            grid-gap: 30px; 
+            grid-gap: 30px;
             width: 960px;`;
         await setAttribute(page, '#container', 'style', containerStyle);
 
@@ -104,17 +99,14 @@ test.describe('Form', () => {
           await createWidget(page, 'dxForm', formOptions, `#${formId}`);
         }
 
-
         await testScreenshot(page, `${testName}.png`, { element: '#container' });
-
-    });
+      });
     });
   });
 
   ['left', 'right', 'top'].forEach((labelLocation) => {
-    test.skip(`widget alignment (T1086611), labelLocation=${labelLocation}`, async ({ page }) => {
-
-      await waitFont();
+    test(`widget alignment (T1086611), labelLocation=${labelLocation}`, async ({ page }) => {
+      await waitFont(page);
 
       await createWidget(page, 'dxForm', {
         labelLocation,
@@ -136,140 +128,84 @@ test.describe('Form', () => {
         }],
       });
 
-
       await testScreenshot(page, `Form with labelLocation=${labelLocation}.png`, { element: '#container' });
-
     });
   });
 
   [() => 'xs', () => 'md', () => 'lg'].forEach((screenByWidth) => {
     const testName = `Form item padding with screenByWidth=${screenByWidth()}`;
-    test.skip(`${testName} (T1088451)`, async ({ page }) => {
-    await createWidget(page, 'dxForm', {
-      screenByWidth,
-      width: 1000,
-      formData: {},
-      items: [
-        'Name1', 'Name2',
-        {
-          itemType: 'group',
-          items: [
-            {
-              itemType: 'group',
-              items: [
-                {
-                  itemType: 'group',
-                  items: [
-                    {
-                      itemType: 'group',
-                      colCount: 2,
-                      items: [
-                        {
-                          dataField: 'Name3',
-                        },
-                        {
-                          dataField: 'Name4',
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-        {
-          itemType: 'group',
-          items: [
-            {
-              itemType: 'group',
-              items: [
-                {
-                  itemType: 'group',
-                  items: [
-                    {
-                      itemType: 'group',
-                      colCount: 2,
-                      items: [
-                        {
-                          itemType: 'group',
-                          colCount: 2,
-                          items: ['Name7', 'Name8'],
-                        },
-                        {
-                          itemType: 'group',
-                          colCount: 2,
-                          items: ['Name9', 'Name10'],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-        'Name11', 'Name12',
-      ],
-    });
+    test(`${testName} (T1088451)`, async ({ page }) => {
+      await createWidget(page, 'dxForm', {
+        screenByWidth,
+        width: 1000,
+        formData: {},
+        items: [
+          'Name1', 'Name2',
+          {
+            itemType: 'group',
+            items: [
+              {
+                itemType: 'group',
+                items: [
+                  {
+                    itemType: 'group',
+                    items: [
+                      {
+                        itemType: 'group',
+                        colCount: 2,
+                        items: [
+                          { dataField: 'Name3' },
+                          { dataField: 'Name4' },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            itemType: 'group',
+            items: [
+              {
+                itemType: 'group',
+                items: [
+                  {
+                    itemType: 'group',
+                    items: [
+                      {
+                        itemType: 'group',
+                        colCount: 2,
+                        items: [
+                          {
+                            itemType: 'group',
+                            colCount: 2,
+                            items: ['Name7', 'Name8'],
+                          },
+                          {
+                            itemType: 'group',
+                            colCount: 2,
+                            items: ['Name9', 'Name10'],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          'Name11', 'Name12',
+        ],
+      });
 
-      await waitFont();
+      await waitFont(page);
 
       await testScreenshot(page, `${testName}.png`, { element: '#container' });
-
     });
   });
 
   test.skip('Validation errors persist after resize', async ({ page }) => {
-    await createWidget(page, 'dxForm', {
-    colCountByScreen: {
-      xs: 1,
-      sm: 2,
-      md: 2,
-      lg: 2,
-    },
-    items: [
-      {
-        dataField: 'name',
-        editorType: 'dxTextBox',
-        validationRules: [{ type: 'required' }],
-      },
-      {
-        dataField: 'birthDate',
-        editorType: 'dxDateBox',
-        validationRules: [{ type: 'required' }],
-      },
-      {
-        dataField: 'role',
-        editorType: 'dxSelectBox',
-        editorOptions: {
-          dataSource: ['Dev', 'QA', 'PM'],
-        },
-        validationRules: [{ type: 'required' }],
-      },
-      {
-        dataField: 'agree',
-        editorType: 'dxCheckBox',
-        editorOptions: {
-          text: 'I agree',
-        },
-        validationRules: [{
-          type: 'custom',
-          validationCallback: () => false,
-          message: 'Required',
-        }],
-      },
-    ],
+    // skipped: requires form.validate() API call and resizeWindow helper
   });
-
-    const form = page.locator('#container');
-
-    await waitFont();
-    await form.validate();
-
-    await resizeWindow(400, 800);
-
-    await testScreenshot(page, 'form_validation_errors_after_resize.png', { element: '#container' });
-
-    });
 });

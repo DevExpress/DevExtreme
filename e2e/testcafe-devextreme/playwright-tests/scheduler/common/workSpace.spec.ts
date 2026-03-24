@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, getContainerUrl, setupTestPage } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, getContainerUrl, setupTestPage, Scheduler } from '../../../playwright-helpers';
 
 const containerUrl = getContainerUrl(__dirname, '../../../tests/container.html');
 
@@ -26,8 +26,7 @@ test.describe('Scheduler: Workspace', () => {
       name: idx.toString(),
     }));
 
-  // TODO: needs Scheduler page object (t.dragToElement for cell selection)
-  test.skip('Vertical selection between two workspace cells should focus cells between them (T804954)', async ({ page }) => {
+  test('Vertical selection between two workspace cells should focus cells between them (T804954)', async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       views: [{ name: '2 Days', type: 'day', intervalCount: 2 }],
       currentDate: new Date(2015, 1, 9),
@@ -36,17 +35,43 @@ test.describe('Scheduler: Workspace', () => {
       startDayHour: 9,
       height: 600,
     });
+
+    const scheduler = new Scheduler(page, '#container');
+    const startCell = scheduler.getDateTableCell(0, 0);
+    const endCell = scheduler.getDateTableCell(3, 0);
+
+    await startCell.dragTo(endCell);
+    const focusedCount = await scheduler.getSelectedCells().count();
+    expect(focusedCount).toBe(4);
   });
 
-  // TODO: needs Scheduler page object (t.dragToElement for cell selection)
-  test.skip('Horizontal selection between two workspace cells should focus cells between them', async ({ page }) => {
+  test('Horizontal selection between two workspace cells should focus cells between them', async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
-      views: ['month'],
-      currentView: 'month',
-      currentDate: new Date(2019, 4, 1),
-      height: 250,
+      views: ['timelineWeek'],
+      currentView: 'timelineWeek',
+      currentDate: new Date(2015, 1, 9),
+      groups: ['roomId'],
+      resources: [{
+        fieldExpr: 'roomId',
+        label: 'Room',
+        dataSource: [{
+          text: '1', id: 1,
+        }, {
+          text: '2', id: 2,
+        }],
+      }],
       dataSource: [],
+      startDayHour: 9,
+      height: 600,
     });
+
+    const scheduler = new Scheduler(page, '#container');
+    const startCell = scheduler.getDateTableCell(0, 0);
+    const endCell = scheduler.getDateTableCell(0, 3);
+
+    await startCell.dragTo(endCell);
+    const focusedCount = await scheduler.getSelectedCells().count();
+    expect(focusedCount).toBe(4);
   });
 
   test('Vertical grouping should work correctly when there is one group', async ({ page }) => {
@@ -159,14 +184,50 @@ test.describe('Scheduler: Workspace', () => {
     await testScreenshot(page, 'scrollable-month-workspace.png', { element: page.locator('.dx-scheduler-work-space') });
   });
 
-  // TODO: needs Scheduler page object (CLASS.hoverCell, CLASS.activeCell, t.dispatchEvent)
-  test.skip('Check cell hover state', async ({ page }) => {
-    // Uses TestCafe CLASS constants and t.dispatchEvent
+  test('Check cell hover state', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date(2019, 4, 1),
+      height: 500,
+    });
+
+    const scheduler = new Scheduler(page, '#container');
+    const firstDateTableCell = scheduler.getDateTableCell(0, 0);
+
+    await firstDateTableCell.hover();
+    await expect(firstDateTableCell).toHaveClass(/dx-state-hover/);
+
+    await testScreenshot(page, 'scheduler-week-cell-hover-state.png', { element: scheduler.workSpace });
+
+    await scheduler.getDateTableCell(0, 1).hover();
+    await expect(scheduler.getDateTableCell(0, 1)).toHaveClass(/dx-state-hover/);
   });
 
-  // TODO: needs Scheduler page object (CLASS.hoverCell, CLASS.activeCell, t.dispatchEvent)
-  test.skip('Check cell active state', async ({ page }) => {
-    // Uses TestCafe CLASS constants and t.dispatchEvent
+  test('Check cell active state', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date(2019, 4, 1),
+      height: 500,
+    });
+
+    const scheduler = new Scheduler(page, '#container');
+    const firstDateTableCell = scheduler.getDateTableCell(0, 0);
+
+    await firstDateTableCell.hover();
+    await expect(firstDateTableCell).toHaveClass(/dx-state-hover/);
+
+    await firstDateTableCell.dispatchEvent('mousedown');
+    await expect(firstDateTableCell).toHaveClass(/dx-state-active/);
+
+    await testScreenshot(page, 'scheduler-week-cell-active-state.png', { element: scheduler.workSpace });
+
+    await firstDateTableCell.dispatchEvent('mouseup');
+    await expect(firstDateTableCell).not.toHaveClass(/dx-state-active/);
+
+    await scheduler.getDateTableCell(0, 1).hover();
+    await expect(scheduler.getDateTableCell(0, 1)).toHaveClass(/dx-state-hover/);
   });
 
   [
@@ -223,8 +284,41 @@ test.describe('Scheduler: Workspace', () => {
     expect(hasHorizontalScroll).toBe(true);
   });
 
-  // TODO: needs Scheduler page object (button.element, #otherContainer scheduler)
-  test.skip('Scheduler appointments should change color on update resources', async ({ page }) => {
-    // Uses two widgets on different containers and button click
+  test('Scheduler appointments should change color on update resources', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      timeZone: 'America/Los_Angeles',
+      dataSource: [{
+        text: 'Website Re-Design Plan',
+        startDate: new Date('2021-03-29T16:30:00.000Z'),
+        endDate: new Date('2021-03-29T18:30:00.000Z'),
+        resource: 1,
+      }],
+      views: ['week', 'month'],
+      currentView: 'week',
+      currentDate: new Date(2021, 2, 28),
+      startDayHour: 9,
+      height: 730,
+      resources: [{
+        fieldExpr: 'resource',
+        dataSource: [{ id: 1, text: 'res 1', color: 'red' }],
+      }],
+    }, '#otherContainer');
+
+    await createWidget(page, 'dxButton', {
+      text: 'Change resources',
+      onClick() {
+        const schedulerWidget = ($('#otherContainer') as any).dxScheduler('instance');
+        schedulerWidget.option('resources', [{
+          fieldExpr: 'resource',
+          dataSource: [{ id: 1, text: 'new res 1', color: 'pink' }],
+        }]);
+        schedulerWidget.getDataSource().reload();
+      },
+    }, '#container');
+
+    await page.locator('#container .dx-button').click();
+
+    const otherScheduler = new Scheduler(page, '#otherContainer');
+    await testScreenshot(page, 'scheduler-appointments-should-update-color.png', { element: otherScheduler.workSpace });
   });
 });

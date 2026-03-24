@@ -14,67 +14,60 @@ test.describe('ButtonGroup_Selection', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('selected class should not be added to the button after hovering (T1222079)', async ({ page }) => {
+  test('selected class should not be added to the button after hovering (T1222079)', async ({ page }) => {
     await createWidget(page, 'dxButtonGroup', {
-    items: [
-      { text: 'Button_1' },
-      { text: 'Button_2' },
-    ],
-    selectedItemKeys: ['Button_1'],
-    disabled: true,
+      items: [
+        { text: 'Button_1' },
+        { text: 'Button_2' },
+      ],
+      selectedItemKeys: ['Button_1'],
+      disabled: true,
+    });
+
+    await page.evaluate(() => {
+      ($('#container') as any).dxButtonGroup('instance').option('disabled', false);
+    });
+
+    const items = page.locator('#container .dx-buttongroup-item');
+
+    await items.nth(1).click();
+    expect(await items.nth(1).evaluate((el) => el.classList.contains('dx-item-selected'))).toBe(true);
+
+    await items.nth(0).hover();
+    expect(await items.nth(0).evaluate((el) => el.classList.contains('dx-item-selected'))).toBe(false);
   });
 
-    const buttonGroup = page.locator('#container');
-
-    await buttonGroup.option('disabled', false);
-
-    await buttonGroup.getItem(1).element.click();
-
-    await page.expect(buttonGroup.getItem(1).isSelected)
-      .ok()
-      .expect(buttonGroup.isItemSelected(1))
-      .ok();
-
-    await page.hover(buttonGroup.getItem(0).element);
-
-    await page.expect(buttonGroup.getItem(0).isSelected)
-      .notOk()
-      .expect(buttonGroup.isItemSelected(0))
-      .notOk();
-
-    });
-  test.skip('selected class should be set after reenabling (T1308601)', async ({ page }) => {
+  test('selected class should be set after reenabling (T1308601)', async ({ page }) => {
     await createWidget(page, 'dxButtonGroup', {
-    items: [
-      { text: 'Button_1' },
-      { text: 'Button_2' },
-    ],
-    selectedItemKeys: ['Button_1'],
-  });
-
-    const buttonGroup = page.locator('#container');
-
-    await buttonGroup.option('disabled', true);
-    await buttonGroup.option('disabled', false);
-
-    await buttonGroup.getItem(1).element.click();
-
-    await buttonGroup.option('disabled', true);
-    await buttonGroup.option('disabled', false);
-
-    await buttonGroup.getItem(0).element.click();
-
-    await page.expect(buttonGroup.getItem(0).isSelected)
-      .ok()
-      .expect(buttonGroup.isItemSelected(0))
-      .ok();
-
-    await page.hover(buttonGroup.getItem(1).element);
-
-    await page.expect(buttonGroup.getItem(0).isSelected)
-      .ok()
-      .expect(buttonGroup.isItemSelected(0))
-      .ok();
-
+      items: [
+        { text: 'Button_1' },
+        { text: 'Button_2' },
+      ],
+      selectedItemKeys: ['Button_1'],
     });
+
+    await page.evaluate(() => {
+      const instance = ($('#container') as any).dxButtonGroup('instance');
+      instance.option('disabled', true);
+      instance.option('disabled', false);
+    });
+
+    const items = page.locator('#container .dx-buttongroup-item');
+
+    await items.nth(1).click();
+
+    await page.evaluate(() => {
+      const instance = ($('#container') as any).dxButtonGroup('instance');
+      instance.option('disabled', true);
+      instance.option('disabled', false);
+    });
+
+    await items.nth(0).click();
+
+    expect(await items.nth(0).evaluate((el) => el.classList.contains('dx-item-selected'))).toBe(true);
+
+    await items.nth(1).hover();
+
+    expect(await items.nth(0).evaluate((el) => el.classList.contains('dx-item-selected'))).toBe(true);
+  });
 });

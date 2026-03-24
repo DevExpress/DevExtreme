@@ -17,7 +17,7 @@ test.describe('Layout:AppointmentForm:TimezoneEditors(T1080932)', () => {
     await setupTestPage(page, containerUrl);
   });
 
-  test.skip('TimeZone editors should be have data after hide forms data(T1080932)', async ({ page }) => {
+  test('TimeZone editors should be have data after hide forms data(T1080932)', async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       dataSource,
       onAppointmentFormOpening: ((e: any) => {
@@ -41,7 +41,7 @@ test.describe('Layout:AppointmentForm:TimezoneEditors(T1080932)', () => {
     expect(startTzValue).toBe('(GMT -10:00) Etc - GMT+10');
   });
 
-  test.skip('TimeZone editors should be have data in default case(T1080932)', async ({ page }) => {
+  test('TimeZone editors should be have data in default case(T1080932)', async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       dataSource,
       editing: { allowTimeZoneEditing: true, legacyForm: true },

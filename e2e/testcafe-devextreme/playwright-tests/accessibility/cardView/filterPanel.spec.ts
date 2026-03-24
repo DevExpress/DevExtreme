@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,7 +14,16 @@ test.describe('Accessibility - CardView filterPanel', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('FilterPanel and FilterBuilderPopup', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
+  test('filter panel accessibility check', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [
+        { name: 'Item 1', title: 'Mr.' },
+        { name: 'Item 2', title: 'Mrs.' },
+      ],
+      columns: ['name', 'title'],
+      filterPanel: { visible: true },
+      filterValue: ['title', '=', 'Mr.'],
+    });
+    await a11yCheck(page, {}, '#container');
   });
 });

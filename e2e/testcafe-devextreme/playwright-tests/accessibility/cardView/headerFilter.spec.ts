@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,15 +14,16 @@ test.describe('Accessibility - CardView headerFilter', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('popup with list', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('popup with search', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('popup with tree', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
+  test('header filter accessibility check', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [
+        { A: 'A_0', B: 'B_0' },
+        { A: 'A_1', B: 'B_1' },
+      ],
+      columns: ['A', 'B'],
+      headerFilter: { visible: true },
+      height: 600,
+    });
+    await a11yCheck(page, {}, '#container');
   });
 });

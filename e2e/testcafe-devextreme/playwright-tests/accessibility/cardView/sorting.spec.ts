@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,31 +14,24 @@ test.describe('Accessibility - CardView sorting', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Default render', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
+  test('default render', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ A: 'A_0', B: 'B_0' }, { A: 'A_1', B: 'B_1' }],
+      columns: [{ dataField: 'A', sortOrder: 'asc' }, 'B'],
+      sorting: { mode: 'single' },
+    });
+    await a11yCheck(page, {}, '#container');
   });
 
-  test.skip('Default multiple sorting render', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('Sort index API', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('ShowSortIndexes API', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('AllowSorting API', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('CalculateSortValue API', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('SortingMethod API', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
+  test('multiple sorting', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ A: 'A_0', B: 'B_0' }, { A: 'A_1', B: 'B_1' }],
+      columns: [
+        { dataField: 'A', sortOrder: 'asc', sortIndex: 0 },
+        { dataField: 'B', sortOrder: 'desc', sortIndex: 1 },
+      ],
+      sorting: { mode: 'multiple' },
+    });
+    await a11yCheck(page, {}, '#container');
   });
 });

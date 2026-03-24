@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,15 +14,13 @@ test.describe('Accessibility - CardView sortable', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('sortable indicator first', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('sortable indicator middle', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('sortable indicator last', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
+  test('sortable accessibility check', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ id: 1, A: 'A_0' }, { id: 2, A: 'A_1' }, { id: 3, A: 'A_2' }],
+      keyExpr: 'id',
+      columns: ['A'],
+      rowDragging: { allowReordering: true },
+    });
+    await a11yCheck(page, {}, '#container');
   });
 });

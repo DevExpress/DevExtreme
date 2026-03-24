@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, getContainerUrl, setupTestPage } from '../../../playwright-helpers';
+import { createWidget, getContainerUrl, setupTestPage, Scheduler } from '../../../playwright-helpers';
 
 const containerUrl = getContainerUrl(__dirname, '../../../tests/container.html');
 
@@ -57,15 +57,13 @@ test.describe('Scheduler: ScrollTo', () => {
       height: 580,
     });
 
+    const scheduler = new Scheduler(page, '#container');
     const views = [{ name: 'week', initValue: 0 }, { name: 'day', initValue: 0 }];
 
     for (const view of views) {
       const { name, initValue } = view;
 
-      await page.evaluate((v) => {
-        const instance = ($('#container') as any).dxScheduler('instance');
-        instance.option('currentView', v);
-      }, name);
+      await scheduler.option('currentView', name);
       await page.waitForTimeout(1000);
 
       await scrollToDate(page);
@@ -96,10 +94,6 @@ test.describe('Scheduler: ScrollTo', () => {
       height: 580,
     });
 
-    await page.evaluate(() => {
-      const instance = ($('#container') as any).dxScheduler('instance');
-      instance.option('currentView', 'week');
-    });
     await page.waitForTimeout(1000);
 
     const initialTop = await getScrollTop(page);
@@ -149,11 +143,10 @@ test.describe('Scheduler: ScrollTo', () => {
       height: 580,
     });
 
-    await page.evaluate(() => {
-      const instance = ($('#container') as any).dxScheduler('instance');
-      instance.option('currentView', 'week');
-      instance.option('rtlEnabled', true);
-    });
+    const scheduler = new Scheduler(page, '#container');
+
+    await scheduler.option('currentView', 'week');
+    await scheduler.option('rtlEnabled', true);
     await page.waitForTimeout(1000);
 
     const initialBrowserTop = await getScrollTop(page);
@@ -165,17 +158,91 @@ test.describe('Scheduler: ScrollTo', () => {
     expect(browserTop).toBeGreaterThan(initialBrowserTop);
   });
 
-  // TODO: needs Scheduler page object (scheduler.option, getWSLeft/getHeaderLeft helpers need proper conversion)
-  test.skip('ScrollTo works correctly with timeline views (native, sync header/workspace) (T749957)', async ({ page }) => {
-    // Complex test using scheduler.option and scroll synchronization checks
+  test('ScrollTo works correctly with timeline views (native, sync header/workspace) (T749957)', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [],
+      views: ['timelineDay', 'timelineWeek'],
+      currentView: 'timelineDay',
+      currentDate: new Date(2019, 5, 1, 9, 40),
+      firstDayOfWeek: 0,
+      startDayHour: 0,
+      endDayHour: 20,
+      height: 580,
+    });
+
+    const scheduler = new Scheduler(page, '#container');
+    const views = [{ name: 'timelineDay' }, { name: 'timelineWeek' }];
+
+    for (const view of views) {
+      const { name } = view;
+
+      await scheduler.option('currentView', name);
+      await page.waitForTimeout(200);
+
+      const getWSLeft = () => page.evaluate(() =>
+        ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable().scrollLeft(),
+      );
+      const getHeaderLeft = () => page.evaluate(() =>
+        ($('.dx-scheduler-header-scrollable .dx-scrollable-container') as any).scrollLeft(),
+      );
+
+      const initialLeft = await getWSLeft();
+      const initialHeaderLeft = await getHeaderLeft();
+
+      expect(initialLeft).toBe(initialHeaderLeft);
+
+      await scrollToDate(page);
+      await page.waitForTimeout(300);
+
+      const left = await getWSLeft();
+      const headerLeft = await getHeaderLeft();
+
+      expect(left).not.toBe(initialLeft);
+      expect(headerLeft).toBe(left);
+    }
   });
 
-  // TODO: needs Scheduler page object (scheduler.option)
-  test.skip('ScrollTo works correctly in timeline RTL (native, sync header/workspace)', async ({ page }) => {
-    // Complex test using scheduler.option and scroll synchronization checks
+  test('ScrollTo works correctly in timeline RTL (native, sync header/workspace)', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [],
+      views: ['timelineWeek'],
+      currentView: 'timelineWeek',
+      currentDate: new Date(2019, 5, 1, 9, 40),
+      firstDayOfWeek: 0,
+      startDayHour: 0,
+      endDayHour: 20,
+      height: 580,
+      rtlEnabled: true,
+    });
+
+    const scheduler = new Scheduler(page, '#container');
+
+    await scheduler.option('currentView', 'timelineWeek');
+    await scheduler.option('rtlEnabled', true);
+    await page.waitForTimeout(200);
+
+    const getWSLeft = () => page.evaluate(() =>
+      ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable().scrollLeft(),
+    );
+    const getHeaderLeft = () => page.evaluate(() =>
+      ($('.dx-scheduler-header-scrollable .dx-scrollable-container') as any).scrollLeft(),
+    );
+
+    const initialLeft = await getWSLeft();
+    const initialHeaderLeft = await getHeaderLeft();
+
+    expect(initialLeft).toBe(initialHeaderLeft);
+
+    await scrollToDate(page);
+    await page.waitForTimeout(300);
+
+    const left = await getWSLeft();
+    const headerLeft = await getHeaderLeft();
+
+    expect(left).not.toBe(initialLeft);
+    expect(headerLeft).toBe(left);
   });
 
-  // TODO: needs Scheduler page object (scheduler.getCellDataAtViewportCenter)
   [
     { offset: 0, targetDate: new Date(2021, 1, 3, 4, 0), expectedDate: new Date(2021, 1, 3, 6, 0) },
     { offset: 0, targetDate: new Date(2021, 1, 3, 12, 0), expectedDate: new Date(2021, 1, 3, 12, 0) },
@@ -189,8 +256,28 @@ test.describe('Scheduler: ScrollTo', () => {
     { offset: -720, targetDate: new Date(2021, 1, 4, 3, 0), expectedDate: new Date(2021, 1, 4, 3, 0) },
     { offset: -720, targetDate: new Date(2021, 1, 3, 7, 0), expectedDate: new Date(2021, 1, 3, 6, 0) },
   ].forEach(({ offset, targetDate, expectedDate }) => {
-    test.skip(`scrollTo should scroll to date with offset=${offset}, targetDate=${targetDate.toString()} (T1310544)`, async ({ page }) => {
-      // needs scheduler.getCellDataAtViewportCenter() page object
+    test(`scrollTo should scroll to date with offset=${offset}, targetDate=${targetDate.toString()} (T1310544)`, async ({ page }) => {
+      await createWidget(page, 'dxScheduler', {
+        dataSource: [],
+        views: [{
+          type: 'timelineWeek',
+          offset,
+          cellDuration: 60,
+        }],
+        currentView: 'timelineWeek',
+        currentDate: new Date(2021, 1, 2),
+        startDayHour: 6,
+        endDayHour: 18,
+        height: 580,
+      });
+
+      const scheduler = new Scheduler(page, '#container');
+      await scheduler.scrollTo(targetDate);
+
+      const cellData = await scheduler.getCellDataAtViewportCenter() as any;
+
+      expect(expectedDate.getTime()).toBeGreaterThanOrEqual(new Date(cellData.startDate).getTime());
+      expect(expectedDate.getTime()).toBeLessThanOrEqual(new Date(cellData.endDate).getTime());
     });
   });
 });

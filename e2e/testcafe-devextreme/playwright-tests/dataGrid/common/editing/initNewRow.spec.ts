@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -14,7 +14,30 @@ test.describe('initNewRow', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('No errors should be thrown if inserting new row after cancelling insert on second page (T1274123)', async ({ page }) => {
-    // TODO: requires TestCafe dataGrid.getPopupEditForm page object conversion
+  test('No errors should be thrown if inserting new row after cancelling insert on second page (T1274123)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [...new Array(40)].map((_, index) => ({ id: index + 1, text: `item ${index + 1}` })),
+      keyExpr: 'id',
+      paging: {
+        pageIndex: 1,
+      },
+      columns: ['id', 'text'],
+      showBorders: true,
+      editing: { mode: 'popup', allowAdding: true },
+      onInitNewRow(e: any) {
+        e.data.id = 0;
+        e.data.text = 'test';
+      },
+      height: 300,
+    });
+
+    const dataGrid = new DataGrid(page);
+
+    await dataGrid.getHeaderPanel().getAddRowButton().click();
+    await dataGrid.getPopupEditForm().cancelButton.click();
+
+    await dataGrid.getHeaderPanel().getAddRowButton().click();
+
+    await expect(dataGrid.getPopupEditForm().element).toBeVisible();
   });
 });

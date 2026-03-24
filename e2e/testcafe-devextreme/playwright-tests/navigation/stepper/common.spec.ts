@@ -23,7 +23,7 @@ test.describe('Stepper_common', () => {
   ];
 
   ['horizontal', 'vertical'].forEach((orientation) => {
-    test.skip(`Stepper common properties, orientation=${orientation}`, async ({ page }) => {
+    test(`Stepper common properties, orientation=${orientation}`, async ({ page }) => {
 
       await appendElementTo(page, '#container', 'div', 'stepper');
       await appendElementTo(page, '#container', 'div', 'stepper2');
@@ -43,18 +43,15 @@ test.describe('Stepper_common', () => {
       };
 
       await createWidget(page, 'dxStepper', stepperOptions, '#stepper');
-
       await createWidget(page, 'dxStepper', stepperRTLOptions, '#stepper2');
-
 
       await testScreenshot(page, `Stepper orient=${orientation}.png`, {
         element: '#container',
       });
-
     });
   });
 
-  test.skip('Stepper text overflow in horizontal orientation', async ({ page }) => {
+  test('Stepper text overflow in horizontal orientation', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'stepper');
     await setAttribute(page, '#container', 'style', 'width: 200px; height: 150px; overflow: auto;');
@@ -69,14 +66,12 @@ test.describe('Stepper_common', () => {
     };
 
     await createWidget(page, 'dxStepper', stepperOptions, '#stepper');
-
     await createWidget(page, 'dxStepper', stepperOptions, '#stepper2');
 
     await testScreenshot(page, 'Stepper text overflow orient=horizontal.png', { element: '#parentContainer' });
+  });
 
-    });
-
-  test.skip('Stepper text overflow in vertical orientation', async ({ page }) => {
+  test('Stepper text overflow in vertical orientation', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'stepper');
     await appendElementTo(page, '#container', 'div', 'stepper2');
@@ -95,15 +90,13 @@ test.describe('Stepper_common', () => {
     };
 
     await createWidget(page, 'dxStepper', stepperOptions, '#stepper');
-
     await createWidget(page, 'dxStepper', stepperRTLOptions, '#stepper2');
 
     await testScreenshot(page, 'Stepper text overflow orient=vertical.png', { element: '#container' });
-
-    });
+  });
 
   [true, false].forEach((selectOnFocus) => {
-    test.skip(`Stepper item states, selectOnFocus=${selectOnFocus}`, async ({ page }) => {
+    test(`Stepper item states, selectOnFocus=${selectOnFocus}`, async ({ page }) => {
 
       await appendElementTo(page, '#container', 'div', 'stepper');
       await setAttribute(page, '#container', 'style', 'width: 800px; height: 150px;');
@@ -127,7 +120,6 @@ test.describe('Stepper_common', () => {
 
       await createWidget(page, 'dxStepper', stepperOptions, '#stepper');
 
-
       const state = selectOnFocus ? 'selected' : 'focused';
 
       await page.keyboard.press('Tab');
@@ -150,43 +142,10 @@ test.describe('Stepper_common', () => {
 
       await page.keyboard.press('ArrowRight');
       await testScreenshot(page, `Stepper last step ${state},selectOnFocus=${selectOnFocus}.png`, { element: '#stepper' });
-
     });
   });
 
   test.skip('Stepper completed item states', async ({ page }) => {
-
-    await appendElementTo(page, '#container', 'div', 'stepper');
-    await setAttribute(page, '#container', 'style', 'width: 800px; height: 150px;');
-
-    const dataSource: any[] = [
-      { label: 'Default' },
-      { label: 'Valid', isValid: true, optional: true },
-      { label: 'Invalid', isValid: false, optional: true },
-      { label: 'With Text', text: 'T', optional: true },
-    ];
-
-    const stepperOptions = {
-      selectOnFocus: false,
-      dataSource,
-      selectedIndex: 3,
-    };
-
-    await createWidget(page, 'dxStepper', stepperOptions, '#stepper');
-
-    const stepper = page.locator('#container');
-    await stepper.getItem(3).element.click();
-
-    await page.keyboard.press('ArrowLeft');
-    await testScreenshot(page, 'Completed invalid step focused.png', { element: '#stepper' });
-
-    await page.keyboard.press('ArrowLeft');
-    await testScreenshot(page, 'Completed valid step focused.png', { element: '#stepper' });
-
-    await page.keyboard.press('ArrowLeft');
-    await testScreenshot(page, 'Completed step focused.png', { element: '#stepper' });
-
-    await page.locator('body').click();
-
-    });
+    // skipped: requires stepper.getItem(3).element page object accessor
+  });
 });

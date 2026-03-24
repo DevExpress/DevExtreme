@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { fields, filter } from './data';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,41 +15,35 @@ test.describe('Editing events', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  // T1310528
-  test.skip('Change value editor to checkbox', async ({ page }) => {
-
+  test('Change value editor to checkbox', async ({ page }) => {
     await createWidget(page, 'dxFilterBuilder', {
       fields,
       value: filter,
       allowHierarchicalFields: true,
-      onEditorPreparing: (data) => {
+      onEditorPreparing: (data: any) => {
         data.editorName = 'dxCheckBox';
       },
     });
 
     const filterBuilder = page.locator('#container');
-    await filterBuilder.getField(0, 'itemValue').element.click();
+    await filterBuilder.locator('.dx-filterbuilder-item-value-text').first().click();
 
-    await testScreenshot(page, 'value-editor-checkbox.png', { element: filterBuilder.element });
+    await testScreenshot(page, 'value-editor-checkbox.png', { element: '#container' });
+  });
 
-    });
-
-  // T1310528
-  test.skip('Change value editor to switch', async ({ page }) => {
-
+  test('Change value editor to switch', async ({ page }) => {
     await createWidget(page, 'dxFilterBuilder', {
       fields,
       value: filter,
       allowHierarchicalFields: true,
-      onEditorPreparing: (data) => {
+      onEditorPreparing: (data: any) => {
         data.editorName = 'dxSwitch';
       },
     });
 
     const filterBuilder = page.locator('#container');
-    await filterBuilder.getField(0, 'itemValue').element.click();
+    await filterBuilder.locator('.dx-filterbuilder-item-value-text').first().click();
 
-    await testScreenshot(page, 'value-editor-switch.png', { element: filterBuilder.element });
-
-    });
+    await testScreenshot(page, 'value-editor-switch.png', { element: '#container' });
+  });
 });

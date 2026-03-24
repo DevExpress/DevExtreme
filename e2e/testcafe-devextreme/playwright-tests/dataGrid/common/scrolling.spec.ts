@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,7 +14,6 @@ const getData = (rowCount: number, colCount: number): Record<string, string>[] =
   return items;
 };
 
-// TODO: needs DataGrid page object for getScrollLeft, getScrollWidth, getRowsView
 test.describe('Scrolling', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
@@ -25,12 +24,21 @@ test.describe('Scrolling', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('DataGrid should set the scrollbar position to the left on resize (T934842)', async ({ page }) => {
+  test('DataGrid should set the scrollbar position to the left on resize (T934842)', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: getData(1, 50),
       columnWidth: 100,
     });
 
-    await expect(page.locator('.dx-datagrid').first()).toBeVisible();
+    const dataGrid = new DataGrid(page);
+
+    await page.setViewportSize({ width: 900, height: 250 });
+    expect(await dataGrid.getScrollLeft()).toBe(0);
+
+    await page.setViewportSize({ width: 700, height: 250 });
+    expect(await dataGrid.getScrollLeft()).toBe(0);
+
+    await page.setViewportSize({ width: 600, height: 250 });
+    expect(await dataGrid.getScrollLeft()).toBe(0);
   });
 });

@@ -15,75 +15,10 @@ test.describe('Radio Group', () => {
   });
 
   test.skip('Radio buttons placed into the template should not be selected after clicking the parent radio button (T816449)', async ({ page }) => {
-    await createWidget(page, 'dxRadioGroup', {
-    items: [{}, {}, {}],
-    itemTemplate: () => ($('<div>') as any).dxRadioGroup({
-      dataSource: [{}, {}, {}],
-      layout: 'horizontal',
-    }),
+    // skipped: requires RadioGroup page object with getItem/radioButton nested accessors
   });
 
-    const parentGroup = page.locator('#container');
-    const firstChildGroup = new RadioGroup(parentGroup.getItem().content.child().nth(0));
-    const secondChildGroup = new RadioGroup(parentGroup.getItem(1).content.child());
-    const thirdChildGroup = new RadioGroup(parentGroup.getItem(2).content.child());
-
-    const checkGroup = async (
-      group: RadioGroup,
-      firstChecked = false,
-      secondChecked = false,
-      thirdChecked = false,
-    ): Promise<void> => {
-      await page.expect(group.getItem().radioButton.isChecked).eql(firstChecked)
-        .expect(group.getItem(1).radioButton.isChecked).eql(secondChecked)
-        .expect(group.getItem(2).radioButton.isChecked)
-        .eql(thirdChecked);
-    };
-
-    await checkGroup(parentGroup);
-    await checkGroup(firstChildGroup);
-    await checkGroup(secondChildGroup);
-    await checkGroup(thirdChildGroup);
-
-    await parentGroup.getItem().radioButton.element.click();
-    await checkGroup(parentGroup, true);
-    await checkGroup(firstChildGroup);
-    await checkGroup(secondChildGroup);
-    await checkGroup(thirdChildGroup);
-
-    await parentGroup.getItem(1).radioButton.element.click();
-    await checkGroup(parentGroup, false, true);
-    await checkGroup(firstChildGroup);
-    await checkGroup(secondChildGroup);
-    await checkGroup(thirdChildGroup);
-
-    await parentGroup.getItem(2).radioButton.element.click();
-    await checkGroup(parentGroup, false, false, true);
-    await checkGroup(firstChildGroup);
-    await checkGroup(secondChildGroup);
-    await checkGroup(thirdChildGroup);
-
-    await firstChildGroup.getItem().radioButton.element.click();
-    await checkGroup(parentGroup, false, false, true);
-    await checkGroup(firstChildGroup, true);
-    await checkGroup(secondChildGroup);
-    await checkGroup(thirdChildGroup);
-
-    await secondChildGroup.getItem(1).radioButton.element.click();
-    await checkGroup(parentGroup, false, false, true);
-    await checkGroup(firstChildGroup, true);
-    await checkGroup(secondChildGroup, false, true);
-    await checkGroup(thirdChildGroup);
-
-    await thirdChildGroup.getItem(2).radioButton.element.click();
-    await checkGroup(parentGroup, false, false, true);
-    await checkGroup(firstChildGroup, true);
-    await checkGroup(secondChildGroup, false, true);
-    await checkGroup(thirdChildGroup, false, false, true);
-
-    });
-
-  test.skip('Dot of Radio button placed in scaled container should have valid centering(T1165339)', async ({ page }) => {
+  test('Dot of Radio button placed in scaled container should have valid centering(T1165339)', async ({ page }) => {
 
     await setStyleAttribute(page, '#container', 'width: 600px; height: 100px;');
 
@@ -96,6 +31,5 @@ test.describe('Radio Group', () => {
     }, '#radioGroup');
 
     await testScreenshot(page, 'RadioGroup in scaled container.png', { element: '#container' });
-
-    });
+  });
 });

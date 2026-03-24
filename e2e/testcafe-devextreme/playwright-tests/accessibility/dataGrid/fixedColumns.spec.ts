@@ -1,8 +1,18 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
+
+function getData(rowCount: number, fieldCount: number): Record<string, string>[] {
+  return Array.from({ length: rowCount }, (_, rowIdx) => {
+    const row: Record<string, string> = {};
+    for (let colIdx = 0; colIdx < fieldCount; colIdx += 1) {
+      row[`field_${colIdx}`] = `val_${rowIdx}_${colIdx}`;
+    }
+    return row;
+  });
+}
 
 test.describe('Accessibility - DataGrid fixedColumns', () => {
   test.beforeEach(async ({ page }) => {
@@ -14,7 +24,18 @@ test.describe('Accessibility - DataGrid fixedColumns', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('accessibility test', async ({ page }) => {
-    // TODO: Convert testAccessibility() / a11yCheck() to Playwright
+  test('fixed columns accessibility check', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 7),
+      keyExpr: 'field_0',
+      columns: [
+        { dataField: 'field_0', fixed: true },
+        { dataField: 'field_1', fixed: true },
+        'field_2', 'field_3', 'field_4',
+        { dataField: 'field_5', fixed: true, fixedPosition: 'right' },
+        { dataField: 'field_6', fixed: true, fixedPosition: 'right' },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
   });
 });

@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, getContainerUrl, setupTestPage } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, testScreenshot, getContainerUrl, setupTestPage, Scheduler } from '../../../playwright-helpers';
 
 const containerUrl = getContainerUrl(__dirname, '../../../tests/container.html');
 
@@ -11,8 +11,7 @@ test.describe('Scheduler loading panel', () => {
     await setupTestPage(page, containerUrl);
   });
 
-  // TODO: needs Scheduler page object (new Scheduler, scheduler.getAppointment, appointmentPopup)
-  test.skip('Save appointment loading panel screenshot', async ({ page }) => {
+  test('Save appointment loading panel screenshot', async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       dataSource: [{
         id: 1,
@@ -29,6 +28,18 @@ test.describe('Scheduler loading panel', () => {
       onAppointmentUpdating: (e) => {
         e.cancel = new Promise(() => {});
       },
+    });
+
+    const scheduler = new Scheduler(page, '#container');
+    const appointment = scheduler.getAppointment(INITIAL_APPOINTMENT_TITLE);
+
+    await appointment.element.dblclick();
+    await scheduler.appointmentPopup.textEditor.click();
+    await page.keyboard.type(ADDITIONAL_TITLE_TEXT);
+    await scheduler.appointmentPopup.saveButton.click();
+
+    await testScreenshot(page, 'save-appointment-loading-panel-screenshot.png', {
+      element: scheduler.element,
     });
   });
 });

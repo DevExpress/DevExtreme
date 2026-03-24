@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,23 +14,29 @@ test.describe('Accessibility - CardView headerPanel', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Default render', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
+  test('default render', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ A: 'A_0', B: 'B_0' }],
+      columns: ['A', 'B'],
+    });
+    await a11yCheck(page, {}, '#container');
   });
 
-  test.skip('render with header filter enabled', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
+  test('with header filter', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ A: 'A_0', B: 'B_0' }],
+      columns: ['A', 'B'],
+      headerFilter: { visible: true },
+    });
+    await a11yCheck(page, {}, '#container');
   });
 
-  test.skip('render with single sorting', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('render with multiple sorting', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('headerPanel column chooser link', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
+  test('with sorting', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ A: 'A_0', B: 'B_0' }],
+      columns: [{ dataField: 'A', sortOrder: 'asc' }, 'B'],
+      sorting: { mode: 'single' },
+    });
+    await a11yCheck(page, {}, '#container');
   });
 });
