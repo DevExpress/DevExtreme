@@ -125,3 +125,34 @@ test('DataGrid - The `between` filter dropdown sticks to the viewport edge durin
   columnWidth: 400,
   width: 500,
 }));
+
+test('DataGrid – `between` filter dropdown should not change its position when columns are reordered (T1303927)', async (t) => {
+  // arrange
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  const filterCell = dataGrid.getFilterCell(0);
+
+  // assert
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await t.click(filterCell.element);
+  await dataGrid.resizeHeader(1, 30);
+
+  // assert
+  await testScreenshot(t, takeScreenshot, 'filter-row-filter-range-position-on-resize.png');
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  allowColumnResizing: true,
+  filterRow: { visible: true },
+  showBorders: true,
+  columns: [{
+    dataField: 'field1',
+    dataType: 'number',
+    selectedFilterOperation: 'between',
+  }, {
+    dataField: 'field2',
+  }],
+}));
