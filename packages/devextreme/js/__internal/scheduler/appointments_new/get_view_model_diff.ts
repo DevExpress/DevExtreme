@@ -3,7 +3,7 @@ import { equalByValue } from '@js/core/utils/common';
 import type { SafeAppointment } from '../types';
 import type { AppointmentDataSource } from '../view_model/m_appointment_data_source';
 import type { AppointmentViewModelPlain } from '../view_model/types';
-import { isAgendaAppointmentViewModel, isCollectorViewModel } from './utils';
+import { isAgendaAppointmentViewModel, isCollectorViewModel } from './utils/type_helpers';
 
 type Item = AppointmentViewModelPlain;
 

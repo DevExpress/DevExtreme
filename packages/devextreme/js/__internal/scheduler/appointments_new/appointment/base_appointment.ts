@@ -9,14 +9,13 @@ import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { DefaultActionArgs } from '@ts/core/widget/component';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
-import { createFormattedDateText, DateFormatType } from '@ts/scheduler/appointments/m_text_utils';
 import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
-import { getTargetedAppointment } from '@ts/scheduler/utils/get_targeted_appointment';
 import type { ResourceManager } from '@ts/scheduler/utils/resource_manager/resource_manager';
 import type { AppointmentAgendaViewModel, AppointmentItemViewModel } from '@ts/scheduler/view_model/types';
 
 import { APPOINTMENT_CLASSES } from '../const';
+import { DateFormatType, getDateTextFromTargetAppointment } from '../utils/appointment_text';
 
 export interface AppointmentRenderedEvent extends DefaultActionArgs<BaseAppointment> {
   appointmentData: SafeAppointment;
@@ -28,6 +27,7 @@ export interface BaseAppointmentProperties
   extends DOMComponentProperties<BaseAppointment<any>>
 {
   viewModel: AppointmentItemViewModel | AppointmentAgendaViewModel;
+  targetedAppointmentData: TargetedAppointment;
   appointmentTemplate: SchedulerProperties['appointmentTemplate'];
 
   onAppointmentRendered: (e: AppointmentRenderedEvent) => void;
@@ -39,20 +39,18 @@ export interface BaseAppointmentProperties
 export class BaseAppointment<
   TProperties extends BaseAppointmentProperties = BaseAppointmentProperties,
 > extends DOMComponent<BaseAppointment<TProperties>, TProperties> {
-  protected targetedAppointmentData!: TargetedAppointment;
+  protected get targetedAppointmentData(): TargetedAppointment {
+    return this.option().targetedAppointmentData;
+  }
+
+  protected get appointmentData(): SafeAppointment {
+    return this.option().viewModel.itemData;
+  }
 
   private appointmentRenderedAction!: BaseAppointmentProperties['onAppointmentRendered'];
 
   override _init(): void {
     super._init();
-
-    const { viewModel } = this.option();
-    this.targetedAppointmentData = getTargetedAppointment(
-      viewModel.itemData,
-      viewModel,
-      this.option().getDataAccessor(),
-      this.option().getResourceManager(),
-    );
 
     this._templateManager.addDefaultTemplates({
       appointment: new FunctionTemplate((options) => {
@@ -95,18 +93,16 @@ export class BaseAppointment<
 
   protected getTitleText(): string {
     const dataAccessor = this.option().getDataAccessor();
-    const titleText = dataAccessor.get('text', this.targetedAppointmentData) ?? messageLocalization.format('dxScheduler-noSubject');
+    const titleText = dataAccessor.get('text', this.appointmentData)
+      ?? messageLocalization.format('dxScheduler-noSubject');
 
     return titleText;
   }
 
   protected getDateText(): string {
-    const dataAccessor = this.option().getDataAccessor();
-    const allDay = dataAccessor.get('allDay', this.targetedAppointmentData);
-
-    const dateText = createFormattedDateText(
+    const dateText = getDateTextFromTargetAppointment(
       this.targetedAppointmentData,
-      allDay ? DateFormatType.DATE : DateFormatType.TIME,
+      this.isAllDay() ? DateFormatType.DATE : DateFormatType.TIME,
     );
 
     return dateText;
@@ -114,14 +110,14 @@ export class BaseAppointment<
 
   protected isRecurring(): boolean {
     const dataAccessor = this.option().getDataAccessor();
-    const recurrenceRule = dataAccessor.get('recurrenceRule', this.targetedAppointmentData);
+    const recurrenceRule = dataAccessor.get('recurrenceRule', this.appointmentData);
 
     return Boolean(recurrenceRule);
   }
 
   protected isAllDay(): boolean {
     const dataAccessor = this.option().getDataAccessor();
-    const allDay = dataAccessor.get('allDay', this.targetedAppointmentData);
+    const allDay = dataAccessor.get('allDay', this.appointmentData);
 
     return Boolean(allDay);
   }
