@@ -117,7 +117,7 @@ jobs:
 
     - name: Install Playwright browsers
       working-directory: ./e2e/testcafe-devextreme
-      run: pnpx playwright install chromium
+      run: npx playwright install chromium
 
     - name: Generate baselines (pass 1)
       working-directory: ./e2e/testcafe-devextreme
@@ -129,7 +129,7 @@ jobs:
         if [ "${{ matrix.ARGS.shard }}" != "" ]; then
           SHARD_ARG="--shard=${{ matrix.ARGS.shard }}"
         fi
-        pnpx playwright test \
+        npx playwright test \
           --config playwright.config.ts \
           playwright-tests/${{ matrix.ARGS.componentFolder }}/ \
           $SHARD_ARG \
@@ -151,7 +151,7 @@ jobs:
 
         for i in $(seq 1 $REPEAT_COUNT); do
           echo "=== Run $i / $REPEAT_COUNT ==="
-          pnpx playwright test \
+          npx playwright test \
             --config playwright.config.ts \
             playwright-tests/${{ matrix.ARGS.componentFolder }}/ \
             $SHARD_ARG \
