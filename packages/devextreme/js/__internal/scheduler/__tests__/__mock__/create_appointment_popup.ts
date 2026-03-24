@@ -83,9 +83,9 @@ interface CreateAppointmentPopupResult {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const createComponent = (element: any, Component: any, opts: any): any => (
-  new Component($(element), opts)
-);
+function createComponent(element: any, Component: any, opts: any): any {
+  return new Component($(element), opts);
+}
 
 const disposables: (() => void)[] = [];
 
@@ -114,9 +114,7 @@ export const createAppointmentPopup = async (
   const updateScrollPosition = jest.fn();
 
   const formSchedulerProxy = {
-    getResourceById: (): Record<string, unknown> => (
-      resourceManager.resourceById
-    ),
+    getResourceById: (): Record<string, unknown> => resourceManager.resourceById,
     getDataAccessors: (): AppointmentDataAccessor => dataAccessors,
     createComponent,
     getEditingConfig: (): typeof editing => editing,
@@ -128,9 +126,7 @@ export const createAppointmentPopup = async (
       endDate.setHours(endDate.getHours() + 1);
       return endDate;
     },
-    getTimeZoneCalculator: (): typeof timeZoneCalculator => (
-      timeZoneCalculator
-    ),
+    getTimeZoneCalculator: (): typeof timeZoneCalculator => timeZoneCalculator,
   };
 
   const form = new AppointmentForm(formSchedulerProxy);
@@ -143,13 +139,12 @@ export const createAppointmentPopup = async (
     focus,
     getResourceManager: (): ResourceManager => resourceManager,
     getEditingConfig: (): typeof editing => editing,
-    getTimeZoneCalculator: (): typeof timeZoneCalculator => (
-      timeZoneCalculator
-    ),
+    getTimeZoneCalculator: (): typeof timeZoneCalculator => timeZoneCalculator,
     getDataAccessors: (): AppointmentDataAccessor => dataAccessors,
-    getAppointmentFormOpening: (): (
-      (...args: unknown[]) => void
-    ) => options.onAppointmentFormOpening ?? noop,
+    getAppointmentFormOpening():
+    (...args: unknown[]) => void {
+      return options.onAppointmentFormOpening ?? noop;
+    },
     processActionResult: (
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       arg: any,
