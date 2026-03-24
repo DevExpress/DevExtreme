@@ -17,7 +17,7 @@ test.describe('CardView - Common Behavior', () => {
     });
 
     const headerVisible = await page.evaluate(() => {
-      return ( as any).dxCardView('instance').option('cardHeader.visible');
+      return ($('#container') as any).dxCardView('instance').option('cardHeader.visible');
     });
     expect(headerVisible).toBe(true);
 

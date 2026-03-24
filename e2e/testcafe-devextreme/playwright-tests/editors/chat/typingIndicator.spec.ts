@@ -93,18 +93,18 @@ test.describe('ChatTypingIndicator', () => {
 
     const chat = page.locator('#chat');
 
-    const userFirst = createUser(1, 'Camille');
-    const userSecond = createUser(2, 'Sophie');
+    const userCamille = createUser(1, 'Camille');
+    const userSophie = createUser(2, 'Sophie');
     const userThird = createUser(3, 'Antoine');
     const userFourth = createUser(4, 'Julien');
 
-    await chat.option('typingUsers', [userFirst, userSecond]);
+    await chat.option('typingUsers', [userCamille, userSophie]);
     await testScreenshot(page, 'Typing indicator with 2 users.png', { element: '#chat' });
 
-    await chat.option('typingUsers', [userFirst, userSecond, userThird]);
+    await chat.option('typingUsers', [userCamille, userSophie, userThird]);
     await testScreenshot(page, 'Typing indicator with 3 users.png', { element: '#chat' });
 
-    await chat.option('typingUsers', [userFirst, userSecond, userThird, userFourth]);
+    await chat.option('typingUsers', [userCamille, userSophie, userThird, userFourth]);
     await testScreenshot(page, 'Typing indicator with 4 users.png', { element: '#chat' });
 
     await chat.option('typingUsers', [{ name: 'Marie-Francoise Isabelle Antoinette de La Rochefoucauld' }]);

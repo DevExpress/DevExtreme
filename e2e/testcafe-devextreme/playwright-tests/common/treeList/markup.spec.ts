@@ -14,10 +14,6 @@ test.describe('TreeList - Markup', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  fixture.disablePageReloads`TreeList - Markup`
-    .disablePageReloads
-    .page(url(__dirname, '../../container.html'));
-
   const tasksT1223168 = [{
     Task_ID: 1,
     Task_Subject: 'Plans 2015',
@@ -136,7 +132,7 @@ test.describe('TreeList - Markup', () => {
       cellTemplate(_, cellInfo) {
         return $('<div>').append(
           $('<span>').text(cellInfo.data.Title),
-
+        );
       },
     }, 'Full_Name', 'City', 'State', {
       dataField: 'Hire_Date',
@@ -217,11 +213,7 @@ test.describe('TreeList - Markup', () => {
           async ({ page }) => {
             const treeList = page.locator('#container');
 
-            await testScreenshot(page, `markup-selection=${selectionMode}-rtl=${rtlEnabled}-content=${contentType}`, { element: treeList.element });
-
-    });,
-        ).before(async () => {
-          await createWidget(page, 'dxTreeList', {
+            await createWidget(page, 'dxTreeList', {
             dataSource: [
               {
                 id: 1, parentId: 0, first: 'Alice', last: 'Blue', age: 30, position: 'CEO',
@@ -265,7 +257,10 @@ test.describe('TreeList - Markup', () => {
             },
             selectedRowKeys: selectionMode === 'single' ? [3] : [3, 4],
           });
-        });
+
+            await testScreenshot(page, `markup-selection=${selectionMode}-rtl=${rtlEnabled}-content=${contentType}`, { element: treeList });
+          },
+        );
       });
     });
   });

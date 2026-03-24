@@ -23,14 +23,10 @@ test.describe('Column chooser', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
-  // visual: generic.light
-  // visual: material.blue.light
-  // visual: fluent.blue.light
-  // visual: fluent.blue.dark
-  ['dragAndDrop', 'select'].forEach((mode: any) => {
 
-  test(`Column chooser screenshot in mode=${mode}`, async ({ page }) => {
-    await createWidget(page, 'dxDataGrid', {
+  ['dragAndDrop', 'select'].forEach((mode: any) => {
+    test(`Column chooser screenshot in mode=${mode}`, async ({ page }) => {
+      await createWidget(page, 'dxDataGrid', {
         dataSource: getData(20, 3),
         height: 400,
         showBorders: true,
@@ -51,12 +47,11 @@ test.describe('Column chooser', () => {
         },
       });
 
-          await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').showColumnChooser());
+      await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').showColumnChooser());
 
-      expect(await page.locator('.dx-datagrid-column-chooser').isVisible());
-      await t.ok();
+      expect(await page.locator('.dx-datagrid-column-chooser').isVisible()).toBeTruthy();
 
       await testScreenshot(page, `column-chooser-${mode}-mode.png`, { element: page.locator('#container') });
     });
-    // TODO: .after() block removed
+  });
 });

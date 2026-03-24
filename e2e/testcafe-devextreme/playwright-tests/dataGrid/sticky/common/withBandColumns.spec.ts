@@ -13,11 +13,10 @@ test.describe('Band sticky columns', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
-  [false, true].forEach((rtlEnabled) => {
-    // T1279722
 
-  test(`Headers and filter row should display correctly after scrolling to the max right position when there is a grouped column (rtl=${rtlEnabled})`, async ({ page }) => {
-    await createWidget(page, 'dxDataGrid', {
+  [false, true].forEach((rtlEnabled) => {
+    test(`Headers and filter row should display correctly after scrolling to the max right position when there is a grouped column (rtl=${rtlEnabled}) (T1279722)`, async ({ page }) => {
+      await createWidget(page, 'dxDataGrid', {
         dataSource: [
           {
             field0: 1, field1: 1, field2: 1, field3: 1, field4: 1, field5: 1, field6: 1, field7: 1,
@@ -44,9 +43,10 @@ test.describe('Band sticky columns', () => {
         rtlEnabled,
       });
 
-          expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+      expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
 
       await page.evaluate((opts) => ($('#container') as any).dxDataGrid('instance').getScrollable().scrollTo(opts), { x: rtlEnabled ? 0 : 10000 });
       await testScreenshot(page, `T1279722_band_sticky_columns-headers_with_filter_row_and_grouped_column_(rtl=${rtlEnabled}).png`, { element: page.locator('#container') });
     });
+  });
 });

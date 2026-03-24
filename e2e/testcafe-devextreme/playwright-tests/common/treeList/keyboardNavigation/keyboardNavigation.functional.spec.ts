@@ -137,7 +137,7 @@ test.describe('Keyboard Navigation - common', () => {
           dataField: 'Task_Assigned_Employee_ID',
         },
       ],
-    }),;
+    });
 
     const treeList = page.locator('#container');
     const target = treeList.getDataRow(0).getDataCell(0);

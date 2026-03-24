@@ -111,7 +111,7 @@ test.describe('Menu_common', () => {
           { text: 'Items 2' },
           { text: 'Items 3' },
           { text: 'Items 4' },
-
+        );
       }
 
       await createWidget(page, 'dxMenu', {

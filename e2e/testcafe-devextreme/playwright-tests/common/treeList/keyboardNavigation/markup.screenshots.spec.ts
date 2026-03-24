@@ -14,10 +14,6 @@ test.describe('Tests', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  fixture
-    .disablePageReloads`Keyboard Navigation - screenshots`
-    .page(url(__dirname, '../../../container.html'));
-
   const TREE_LIST_SELECTOR = '#container';
 
   test('Focused cells should look correctly', async ({ page }) => {

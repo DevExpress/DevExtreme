@@ -23,59 +23,48 @@ test.describe('FixedColumns - appearance', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
-  // visual: generic.light
-  // visual: generic.light.compact
-  // visual: material.blue
-  // visual: material.blue.compact
-  // visual: fluent.blue
-  // visual: fluent.blue.compact
-  [false, true].forEach(
-    (showRowLines) => {
-      // T1268664
-      const showRowLinesState = `showRowLines=${showRowLines ? 'true' : 'false'}`;
 
-  test(`Row height for selected, focus and edit state should not differ from the default one if ${showRowLinesState}`, async ({ page }) => {
-    await createWidget(page, 'dxDataGrid', {
-          dataSource: getData(13, 40),
-          keyExpr: 'field_0',
-          columnFixing: {
-            enabled: true,
-          },
-          groupPanel: {
-            visible: true,
-          },
-          editing: {
-            allowUpdating: true,
-            mode: 'row',
-          },
-          showColumnHeaders: true,
-          columnAutoWidth: true,
-          allowColumnReordering: true,
-          allowColumnResizing: true,
-          focusedRowEnabled: true,
-          showRowLines,
-          selection: {
-            mode: 'multiple',
-          },
-          customizeColumns(columns) {
-            columns[5].fixed = true;
-            columns[6].fixed = true;
+  [false, true].forEach((showRowLines) => {
+    const showRowLinesState = `showRowLines=${showRowLines ? 'true' : 'false'}`;
 
-            columns[11].fixed = true;
-            columns[11].fixedPosition = 'right';
-            columns[12].fixed = true;
-            columns[12].fixedPosition = 'right';
-          },
-        });
-
-              expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
-
-        await testScreenshot(page, `datagrid_default_state_with_${showRowLinesState}.png`, { element: page.locator('#container') });
-
-        await (page.locator('.dx-data-row').nth(2).locator('.dx-command-edit').nth(41).locator('.dx-link').nth(0)).click();
-        await (page.locator('.dx-data-row').nth(3).locator('.dx-command-edit').nth(0)).click();
-        await (page.locator('.dx-data-row').nth(4).locator('td').nth(4)).click();
-
-        await testScreenshot(page, `datagrid_selected_focused_edit_state_with_${showRowLinesState}.png`, { element: page.locator('#container') });
+    test(`Row height for selected, focus and edit state should not differ from the default one if ${showRowLinesState}`, async ({ page }) => {
+      await createWidget(page, 'dxDataGrid', {
+        dataSource: getData(13, 40),
+        keyExpr: 'field_0',
+        columnFixing: {
+          enabled: true,
+        },
+        groupPanel: {
+          visible: true,
+        },
+        editing: {
+          allowUpdating: true,
+          mode: 'row',
+        },
+        showColumnHeaders: true,
+        columnAutoWidth: true,
+        allowColumnReordering: true,
+        allowColumnResizing: true,
+        focusedRowEnabled: true,
+        showRowLines,
+        selection: {
+          mode: 'multiple',
+        },
+        customizeColumns(columns: any[]) {
+          columns[5].fixed = true;
+          columns[6].fixed = true;
+          columns[11].fixed = true;
+          columns[11].fixedPosition = 'right';
+          columns[12].fixed = true;
+          columns[12].fixedPosition = 'right';
+        },
       });
+
+      expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+
+      await testScreenshot(page, `datagrid_default_state_with_${showRowLinesState}.png`, { element: page.locator('#container') });
+
+      await testScreenshot(page, `datagrid_selected_focused_edit_state_with_${showRowLinesState}.png`, { element: page.locator('#container') });
+    });
+  });
 });

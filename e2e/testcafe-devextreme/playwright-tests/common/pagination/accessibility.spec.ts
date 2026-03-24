@@ -40,6 +40,7 @@ test.describe('Pagination', () => {
                   + `snb_${showNavigationButtons.toString()}-`
                   + `spss_${showPageSizeSelector.toString()}`
                   + '.png',
+              );
 
     });
           });

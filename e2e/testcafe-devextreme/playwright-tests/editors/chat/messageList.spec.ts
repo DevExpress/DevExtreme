@@ -272,6 +272,7 @@ test.describe('ChatMessageList', () => {
     await testScreenshot(page,
       'Messagelist with showDayHeaders, showUserName and showMessageTimestamp options set to false.png',
       { element: '#container' },
+    );
 
     });
 
@@ -308,55 +309,7 @@ test.describe('ChatMessageList', () => {
 
     });
 
-  test.skip([
-    { module: 'mockdate' },
-    { content: 'window.MockDate = MockDate;' },
-  ])('Messagelist with date headers', async ({ page }) => {
-
-    await testScreenshot(page, 'Messagelist with date headers.png', { element: '#container' });
-  }).before(async () => {
-    await page.evaluate(() => {
-      (window as any).MockDate.set('2024/10/27');
-    });
-
-    const userFirst = createUser(1, 'First');
-    const userSecond = createUser(2, 'Second');
-    const msInDay = 86400000;
-    const today = new Date('2024/10/27').setHours(7, 22, 0, 0);
-    const yesterday = today - msInDay;
-
-    const items = [{
-      timestamp: new Date('05.01.2024'),
-      author: userFirst,
-      text: 'AAA',
-    }, {
-      timestamp: new Date('06.01.2024'),
-      author: userFirst,
-      text: 'BBB',
-    }, {
-      timestamp: new Date('06.01.2024'),
-      author: userSecond,
-      text: 'CCC',
-    }, {
-      timestamp: yesterday,
-      author: userSecond,
-      text: 'DDD',
-    }, {
-      timestamp: today,
-      author: userFirst,
-      text: 'EEE',
-    }];
-
-    await createWidget(page, 'dxChat', {
-      items,
-      user: userSecond,
-      width: 400,
-      height: 600,
-    });
-  }).after(async () => {
-    await page.evaluate(() => {
-      (window as any).MockDate.reset();
-      delete (window as any).MockDate;
-    });
+  test.skip('Messagelist with date headers', async ({ page }) => {
+    // skipped: requires MockDate client scripts injection and .before()/.after() setup
   });
 });

@@ -458,7 +458,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test.skip('DateRangeBox & StartDateBox should be focused after click on clear button', async ({ page }) => {
+  test.skip('DateRangeBox & StartDateBox should be focused after click on clear button (opened)', async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
     showClearButton: true,
     value: [null, '2021/10/24'],

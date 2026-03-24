@@ -14,11 +14,6 @@ test.describe('Tests', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  // T1147695
-  fixture
-    .disablePageReloads`Keyboard Navigation - skip drag cell`
-    .page(url(__dirname, '../../../container.html'));
-
   const TREE_LIST_SELECTOR = '#container';
   const DATA_SOURCE = [
     {

@@ -59,7 +59,7 @@ test.describe('Tabs_common', () => {
     });
 
   [true, false].forEach((rtlEnabled) => {
-    test('Tabs icon position', async ({ page }) => {
+    test(`Tabs icon position, rtl=${rtlEnabled}`, async ({ page }) => {
 
       await setAttribute(page, '#container', 'style', 'display: flex; flex-direction: column; gap: 20px; width: 800px');
 
@@ -106,7 +106,7 @@ test.describe('Tabs_common', () => {
 
   ['primary', 'secondary'].forEach((stylingMode) => {
     ['horizontal', 'vertical'].forEach((orientation) => {
-      test('Tabs item selected states', async ({ page }) => {
+      test(`Tabs item selected states, stylingMode=${stylingMode}, orientation=${orientation}`, async ({ page }) => {
 
         await appendElementTo(page, '#container', 'div', 'tabs');
         await appendElementTo(page, '#container', 'div', 'tabs-rtl');
