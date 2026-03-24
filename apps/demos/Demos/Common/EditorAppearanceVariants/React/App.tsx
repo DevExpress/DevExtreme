@@ -159,7 +159,7 @@ export default function App() {
         <TextBox
           id="phone"
           stylingMode={stylingMode}
-          mask="(000) 000-0000"
+          mask="(X00) 000-0000"
           inputAttr={phoneLabel}
           maskRules={phoneRules}
           label="Phone"
