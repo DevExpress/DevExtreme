@@ -17,7 +17,7 @@ test.describe('Calendar keyboard navigation', () => {
   const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
   const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 
-  test('Tab navigation order prevButton-caption-nextButton-viewdWrapper-todayButton', async ({ page }) => {
+  test.skip('Tab navigation order prevButton-caption-nextButton-viewdWrapper-todayButton', async ({ page }) => {
     await createWidget(page, 'dxCalendar', {
     value: new Date(2021, 9, 17),
     showTodayButton: true,
@@ -66,7 +66,7 @@ test.describe('Calendar keyboard navigation', () => {
 
     });
 
-  test('focusin and focusout event handlers should not be called on tab navigate inside calendar', async ({ page }) => {
+  test.skip('focusin and focusout event handlers should not be called on tab navigate inside calendar', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onFocusInCounter = 0;

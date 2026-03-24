@@ -13,22 +13,6 @@ test.describe('Ai Column.Adaptivity', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
-  const resolveAIRequest = ClientFunction((): void => {
-    const { aiResponseData } = (window as any);
-    const { aiResolve } = (window as any);
-
-    if (aiResponseData && aiResolve) {
-      aiResolve(aiResponseData);
-
-      (window as any).aiResponseData = null;
-      (window as any).aiResolve = null;
-    }
-  });
-
-  const deleteGlobalVariables = ClientFunction((): void => {
-    delete (window as any).aiResponseData;
-    delete (window as any).aiResolve;
-  });
 
   test('The AI column should be hidden when columnHidingEnabled is true', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
@@ -52,17 +36,13 @@ test.describe('Ai Column.Adaptivity', () => {
       ],
     });
 
-    // arrange, act
-      expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+    await expect(page.locator('.dx-datagrid').first()).toBeVisible();
 
     const fourthHeaderCell = page.locator('.dx-header-row').nth(0).locator('td').nth(3);
 
-    // assert: the AI column is hidden
-    expect(await fourthHeaderCell.element.textContent).toBe('AI Column');
-    expect(await fourthHeaderCell.isHidden).toBeTruthy();
+    await expect(fourthHeaderCell).toHaveText('AI Column');
+    await expect(fourthHeaderCell).toBeHidden();
 
-    // assert: the adaptive button is visible
-    expect(await page.locator('.dx-data-row').nth(0).locator('.dx-command-edit').nth(4).getAdaptiveButton().visible).toBeTruthy();
+    await expect(page.locator('.dx-data-row').nth(0).locator('.dx-command-adaptive')).toBeVisible();
   });
-    // TODO: .after() block removed
 });

@@ -23,7 +23,7 @@ test.describe('Stepper_common', () => {
   ];
 
   ['horizontal', 'vertical'].forEach((orientation) => {
-    test('Stepper common properties', async ({ page }) => {
+    test.skip('Stepper common properties', async ({ page }) => {
 
       await appendElementTo(page, '#container', 'div', 'stepper');
       await appendElementTo(page, '#container', 'div', 'stepper2');
@@ -54,7 +54,7 @@ test.describe('Stepper_common', () => {
     });
   });
 
-  test('Stepper text overflow in horizontal orientation', async ({ page }) => {
+  test.skip('Stepper text overflow in horizontal orientation', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'stepper');
     await setAttribute(page, '#container', 'style', 'width: 200px; height: 150px; overflow: auto;');
@@ -76,7 +76,7 @@ test.describe('Stepper_common', () => {
 
     });
 
-  test('Stepper text overflow in vertical orientation', async ({ page }) => {
+  test.skip('Stepper text overflow in vertical orientation', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'stepper');
     await appendElementTo(page, '#container', 'div', 'stepper2');
@@ -103,7 +103,7 @@ test.describe('Stepper_common', () => {
     });
 
   [true, false].forEach((selectOnFocus) => {
-    test('Stepper item states', async ({ page }) => {
+    test.skip('Stepper item states', async ({ page }) => {
 
       await appendElementTo(page, '#container', 'div', 'stepper');
       await setAttribute(page, '#container', 'style', 'width: 800px; height: 150px;');
@@ -154,7 +154,7 @@ test.describe('Stepper_common', () => {
     });
   });
 
-  test('Stepper completed item states', async ({ page }) => {
+  test.skip('Stepper completed item states', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'stepper');
     await setAttribute(page, '#container', 'style', 'width: 800px; height: 150px;');

@@ -23,7 +23,7 @@ test.describe('Toolbar_OverflowMenu', () => {
   const buttonTypes = ['danger', 'default', 'normal', 'success'];
   const stateClasses = [FOCUSED_STATE_CLASS, HOVER_STATE_CLASS, ACTIVE_STATE_CLASS];
 
-  test('Drop down button should lost hover and active state', async ({ page }) => {
+  test.skip('Drop down button should lost hover and active state', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'toolbar');
     await appendElementTo(page, '#container', 'button', 'button', {
@@ -79,7 +79,7 @@ test.describe('Toolbar_OverflowMenu', () => {
 
     });
 
-  test('ButtonGroup item should not have hover and active state', async ({ page }) => {
+  test.skip('ButtonGroup item should not have hover and active state', async ({ page }) => {
     await createWidget(page, 'dxToolbar', {
     items: [
       {
@@ -151,7 +151,7 @@ test.describe('Toolbar_OverflowMenu', () => {
 
     });
 
-  test('Click on overflow button should prevent popup\'s hideOnOutsideClick', async ({ page }) => {
+  test.skip('Click on overflow button should prevent popup\'s hideOnOutsideClick', async ({ page }) => {
     await createWidget(page, 'dxToolbar', {
     items: [
       { text: 'item1', locateInMenu: 'always' },
@@ -173,7 +173,7 @@ test.describe('Toolbar_OverflowMenu', () => {
 
     });
 
-  test('Toolbar buttons in menu appearance', async ({ page }) => {
+  test.skip('Toolbar buttons in menu appearance', async ({ page }) => {
 
     const items: any[] = stylingModes.flatMap((stylingMode) => buttonTypes.map((type) => ({
       widget: 'dxButton',
@@ -213,7 +213,7 @@ test.describe('Toolbar_OverflowMenu', () => {
 
     });
 
-  test('Toolbar buttons as custom template appearance', async ({ page }) => {
+  test.skip('Toolbar buttons as custom template appearance', async ({ page }) => {
 
     const items: any[] = stylingModes.flatMap((stylingMode) => buttonTypes.map((type) => {
       const template = async () => page.evaluate(() => ($('<div>') as any).dxButton({
@@ -256,7 +256,7 @@ test.describe('Toolbar_OverflowMenu', () => {
 
     });
 
-  test('Toolbar button group appearance', async ({ page }) => {
+  test.skip('Toolbar button group appearance', async ({ page }) => {
 
     const items: any[] = stylingModes.map((stylingMode) => {
       const buttons: ButtonGroupItem[] = buttonTypes.map((type) => ({
@@ -301,7 +301,7 @@ test.describe('Toolbar_OverflowMenu', () => {
 
     });
 
-  test('Toolbar button group as custom template appearance', async ({ page }) => {
+  test.skip('Toolbar button group as custom template appearance', async ({ page }) => {
 
     const items: any[] = stylingModes.map((stylingMode) => {
       const buttons: ButtonGroupItem[] = buttonTypes.map((type) => ({

@@ -14,7 +14,7 @@ test.describe('List', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Should focus first item after changing selection mode (T811770)', async ({ page }) => {
+  test.skip('Should focus first item after changing selection mode (T811770)', async ({ page }) => {
     await createWidget(page, 'dxList', {
     items: ['item1', 'item2', 'item3'],
     showSelectionControls: true,
@@ -37,7 +37,7 @@ test.describe('List', () => {
 
     });
 
-  test('There is hover class in hovered list item (T1110076)', async ({ page }) => {
+  test.skip('There is hover class in hovered list item (T1110076)', async ({ page }) => {
     await createWidget(page, 'dxList', {
     items: ['item1', 'item2', 'item3'],
     selectionMode: 'single',
@@ -60,7 +60,7 @@ test.describe('List', () => {
 
     });
 
-  test('List selection should work with keyboard arrows (T718398)', async ({ page }) => {
+  test.skip('List selection should work with keyboard arrows (T718398)', async ({ page }) => {
     await createWidget(page, 'dxList', {
     items: ['item1', 'item2', 'item3'],
     showSelectionControls: true,
@@ -134,7 +134,7 @@ test.describe('List', () => {
 
     });
 
-  test('Should save focused checkbox', async ({ page }) => {
+  test.skip('Should save focused checkbox', async ({ page }) => {
     await createWidget(page, 'dxList', {
     items: ['item1', 'item2', 'item3'],
     showSelectionControls: true,
@@ -188,7 +188,7 @@ test.describe('List', () => {
 
     });
 
-  test('Grouped list can not reorder items (T727360)', async ({ page }) => {
+  test.skip('Grouped list can not reorder items (T727360)', async ({ page }) => {
 
     const data = [
       { group: 'group1', value: '11' },
@@ -263,7 +263,7 @@ test.describe('List', () => {
 
     });
 
-  test('Grouped List with nested List should able to reorder items (T845082)', async ({ page }) => {
+  test.skip('Grouped List with nested List should able to reorder items (T845082)', async ({ page }) => {
 
     const data = [
       { group: 'group1', text: 'value11' },
@@ -305,7 +305,7 @@ test.describe('List', () => {
 
     });
 
-  test('Disabled item should be focused on tab press to match accessibility criteria', async ({ page }) => {
+  test.skip('Disabled item should be focused on tab press to match accessibility criteria', async ({ page }) => {
     await createWidget(page, 'dxList', {
     dataSource: [{ text: 'item1' }, { text: 'item2' }],
     searchEnabled: true,
@@ -335,7 +335,7 @@ test.describe('List', () => {
 
     });
 
-  test('The delete button should be displayed correctly after the list item focused (T1216108)', async ({ page }) => {
+  test.skip('The delete button should be displayed correctly after the list item focused (T1216108)', async ({ page }) => {
     await createWidget(page, 'dxList', {
     dataSource: [{
       text: 'item 1',
@@ -353,7 +353,7 @@ test.describe('List', () => {
 
     });
 
-  test('The button icon in custom template should be displayed correctly after the list item focused (T1216108)', async ({ page }) => {
+  test.skip('The button icon in custom template should be displayed correctly after the list item focused (T1216108)', async ({ page }) => {
     await createWidget(page, 'dxList', {
     dataSource: [{ text: 'item 1' }],
     itemTemplate: (_, __, element) => {

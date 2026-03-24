@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../../playwright-helpers';
+import { createWidget } from '../../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../../tests/container.html')}`;
@@ -13,6 +13,7 @@ test.describe('Focused row', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
+
   test('onFocusedRowChanged event should fire once after changing focusedRowKey if paging.enabled = false (T755722)', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: [
@@ -35,12 +36,14 @@ test.describe('Focused row', () => {
       },
     });
 
-      expect(await ClientFunction(() => (window as any).onFocusedRowChangedCounter)()).toBe(1);
+    const counter1 = await page.evaluate(() => (window as any).onFocusedRowChangedCounter);
+    expect(counter1).toBe(1);
 
-    await ClientFunction(() => (window as any).widget.option('focusedRowKey', 'Ben'))();
+    await page.evaluate(() => (window as any).widget.option('focusedRowKey', 'Ben'));
 
-    expect(await dataGrid.getFocusedRow().exists).toBeTruthy();
-    expect(await ClientFunction(() => (window as any).onFocusedRowChangedCounter)()).toBe(2);
+    await expect(page.locator('.dx-row-focused')).toBeVisible();
+
+    const counter2 = await page.evaluate(() => (window as any).onFocusedRowChangedCounter);
+    expect(counter2).toBe(2);
   });
-    // TODO: .after() block removed
 });

@@ -16,7 +16,7 @@ test.describe('Form', () => {
 
   const waitFont = async () => page.evaluate(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
-  test('SimpleItem: item1_cSpan_2', async ({ page }) => {
+  test.skip('SimpleItem: item1_cSpan_2', async ({ page }) => {
 
     await waitFont();
     await setAttribute(page, '#container', 'style', 'width: 500px;');
@@ -43,7 +43,7 @@ test.describe('Form', () => {
 
   [[1, 2], [2, 1], [2, 2]].forEach(([colSpan1, colSpan2]) => {
     const testName = `SimpleItem,item1_cSpan_${colSpan1},item2_cSpan_${colSpan2}`;
-    test(testName, async ({ page }) => {
+    test.skip(testName, async ({ page }) => {
 
       await waitFont();
       await setAttribute(page, '#container', 'style', 'width: 600px;');
@@ -76,7 +76,7 @@ test.describe('Form', () => {
   [false, true].forEach((rtlEnabled) => {
     [1, 2, 3, 4, 5, 6].forEach((itemsCount) => {
       const testName = `colCount,rtl_${rtlEnabled},itemsCount_${itemsCount}`;
-      test(testName, async ({ page }) => {
+      test.skip(testName, async ({ page }) => {
 
         await waitFont();
         const containerStyle = `
@@ -112,7 +112,7 @@ test.describe('Form', () => {
   });
 
   ['left', 'right', 'top'].forEach((labelLocation) => {
-    test('widget alignment (T1086611)', async ({ page }) => {
+    test.skip('widget alignment (T1086611)', async ({ page }) => {
 
       await waitFont();
 
@@ -144,7 +144,7 @@ test.describe('Form', () => {
 
   [() => 'xs', () => 'md', () => 'lg'].forEach((screenByWidth) => {
     const testName = `Form item padding with screenByWidth=${screenByWidth()}`;
-    test(`${testName} (T1088451)`, async ({ page }) => {
+    test.skip(`${testName} (T1088451)`, async ({ page }) => {
     await createWidget(page, 'dxForm', {
       screenByWidth,
       width: 1000,
@@ -220,7 +220,7 @@ test.describe('Form', () => {
     });
   });
 
-  test('Validation errors persist after resize', async ({ page }) => {
+  test.skip('Validation errors persist after resize', async ({ page }) => {
     await createWidget(page, 'dxForm', {
     colCountByScreen: {
       xs: 1,

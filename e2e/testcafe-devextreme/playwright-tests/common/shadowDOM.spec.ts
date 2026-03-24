@@ -16,42 +16,39 @@ test.describe('Shadow DOM - Adopted DX css styles', () => {
   const dxWidgetHostStyles = '.dx-widget-shadow { font-size: 20px; }';
   const dxWidgetShadowStyles = '.dx-widget-shadow { font-size: 40px; }';
 
-  const setupShadowDomTest = (copyStylesToShadowDom) => ClientFunction((copyStyles) => {
-    if (!copyStyles) {
-      (window as any).DevExpress.config({ copyStylesToShadowDom: copyStyles });
-    }
+  const setupShadowDomTest = async (page, copyStylesToShadowDom, hostStyles, shadowStyles) => {
+    await page.evaluate(({ copyStyles, hostCss, shadowCss }) => {
+      if (!copyStyles) {
+        (window as any).DevExpress.config({ copyStylesToShadowDom: copyStyles });
+      }
 
-    const container = document.createElement('div');
-    container.id = 'shadow-host';
-    document.body.appendChild(container);
+      const container = document.createElement('div');
+      container.id = 'shadow-host';
+      document.body.appendChild(container);
 
-    const hostStyleElement = document.createElement('style');
-    hostStyleElement.innerHTML = dxWidgetHostStyles;
-    document.head.appendChild(hostStyleElement);
+      const hostStyleElement = document.createElement('style');
+      hostStyleElement.innerHTML = hostCss;
+      document.head.appendChild(hostStyleElement);
 
-    const shadowRoot = container.attachShadow({ mode: 'open' });
+      const shadowRoot = container.attachShadow({ mode: 'open' });
 
-    const shadowStyleElement = shadowRoot.ownerDocument.createElement('style');
-    shadowStyleElement.innerHTML = dxWidgetShadowStyles;
-    shadowRoot.appendChild(shadowStyleElement);
+      const shadowStyleElement = shadowRoot.ownerDocument.createElement('style');
+      shadowStyleElement.innerHTML = shadowCss;
+      shadowRoot.appendChild(shadowStyleElement);
 
-    const shadowContainerElement = document.createElement('div');
-    shadowContainerElement.id = 'shadow-container';
-    shadowRoot.appendChild(shadowContainerElement);
+      const shadowContainerElement = document.createElement('div');
+      shadowContainerElement.id = 'shadow-container';
+      shadowRoot.appendChild(shadowContainerElement);
 
-    (window as any).testShadowRoot = shadowRoot;
+      (window as any).testShadowRoot = shadowRoot;
 
       new (window as any).DevExpress.ui.dxButton(shadowContainerElement, {
-      text: 'Test button',
-    });
-  }, {
-    dependencies: {
-      dxWidgetHostStyles,
-      dxWidgetShadowStyles,
-    },
-  })(copyStylesToShadowDom);
+        text: 'Test button',
+      });
+    }, { copyStyles: copyStylesToShadowDom, hostCss: hostStyles, shadowCss: shadowStyles });
+  };
 
-  const getAdoptedStyleSheets = async () => page.evaluate(() => {
+  const getAdoptedStyleSheets = async (page) => page.evaluate(() => {
     const shadowRoot = (window as any).testShadowRoot;
     const { adoptedStyleSheets } = shadowRoot;
 
@@ -72,24 +69,21 @@ test.describe('Shadow DOM - Adopted DX css styles', () => {
   });
 
   test('Copies DX css styles from the host to the shadow root when rendering a DX widget', async ({ page }) => {
-    await setupShadowDomTest(true);
+    await setupShadowDomTest(page, true, dxWidgetHostStyles, dxWidgetShadowStyles);
 
-    const { firstSheetRules, secondSheetRules } = await getAdoptedStyleSheets();
+    const { firstSheetRules, secondSheetRules } = await getAdoptedStyleSheets(page);
 
     const hasHostStyle = firstSheetRules?.some((rule) => rule === dxWidgetHostStyles);
-    await expect(hasHostStyle).ok('First adopted stylesheet contains host styles');
+    expect(hasHostStyle).toBeTruthy();
 
     const hasShadowStyle = secondSheetRules?.some((rule) => rule === dxWidgetShadowStyles);
-    await expect(hasShadowStyle).ok('Second adopted stylesheet contains shadow styles');
-
-    });
+    expect(hasShadowStyle).toBeTruthy();
+  });
 
   test('Does not copy DX css styles when copyStylesToShadowDom is disabled', async ({ page }) => {
-    await setupShadowDomTest(false);
+    await setupShadowDomTest(page, false, dxWidgetHostStyles, dxWidgetShadowStyles);
 
-    const { firstSheetRules, secondSheetRules } = await getAdoptedStyleSheets();
-    await expect(firstSheetRules === null && secondSheetRules === null)
-      .ok('No adopted stylesheets should be created when copyStylesToShadowDom is disabled');
-
-    });
+    const { firstSheetRules, secondSheetRules } = await getAdoptedStyleSheets(page);
+    expect(firstSheetRules === null && secondSheetRules === null).toBeTruthy();
+  });
 });

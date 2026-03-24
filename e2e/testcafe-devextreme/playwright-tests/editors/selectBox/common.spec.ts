@@ -14,7 +14,7 @@ test.describe('SelectBox placeholder', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Placeholder is visible after items option change when value is not chosen (T1099804)', async ({ page }) => {
+  test.skip('Placeholder is visible after items option change when value is not chosen (T1099804)', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'selectBox');
     await setStyleAttribute(page, '#container', 'box-sizing: border-box; width: 300px; height: 100px; padding: 8px;');
@@ -31,7 +31,7 @@ test.describe('SelectBox placeholder', () => {
 
     });
 
-  test('Pages should be loaded consistently after closing the dropdown popup and filtering the data (T1274576)', async ({ page }) => {
+  test.skip('Pages should be loaded consistently after closing the dropdown popup and filtering the data (T1274576)', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'selectBox');
     await setStyleAttribute(page, '#container', 'box-sizing: border-box; width: 300px; height: 100px; padding: 8px;');

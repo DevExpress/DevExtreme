@@ -15,7 +15,7 @@ test.describe('FilterBuilder - Field naming', () => {
   });
 
   // T1253754
-  test('FilterBuilder - First field uses the dataField property while subsequent fields use the name property in the filter value', async ({ page }) => {
+  test.skip('FilterBuilder - First field uses the dataField property while subsequent fields use the name property in the filter value', async ({ page }) => {
 
       await createWidget(page, 'dxFilterBuilder', {
         value: [

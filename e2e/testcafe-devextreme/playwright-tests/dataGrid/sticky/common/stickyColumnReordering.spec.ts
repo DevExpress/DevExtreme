@@ -23,6 +23,7 @@ test.describe('Reorder columns', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
+
   test('Move left fixed column to the right', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: getData(5, 25),
@@ -39,14 +40,17 @@ test.describe('Reorder columns', () => {
       },
     });
 
-    // arrange
-      expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+    await expect(page.locator('.dx-datagrid').first()).toBeVisible();
 
-    // act
-    await t.drag(page.locator('.dx-header-row').nth(0).locator('td').nth(0), 400, 0);
+    const firstHeader = page.locator('.dx-header-row').nth(0).locator('td').nth(0);
+    const box = await firstHeader.boundingBox();
+    if (box) {
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(box.x + box.width / 2 + 400, box.y + box.height / 2, { steps: 10 });
+      await page.mouse.up();
+    }
 
     await testScreenshot(page, 'move_left_fixed_column_to_right.png', { element: page.locator('#container') });
-
-    // assert
   });
 });

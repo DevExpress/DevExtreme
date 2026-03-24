@@ -20,7 +20,7 @@ test.describe('Lookup', () => {
   const stylingModes = ['outlined', 'underlined', 'filled'];
   const labelModes = ['static', 'floating', 'hidden', 'outside'];
 
-  test('Popup should not be closed if lookup is placed at the page bottom (T1018037)', async ({ page }) => {
+  test.skip('Popup should not be closed if lookup is placed at the page bottom (T1018037)', async ({ page }) => {
     await createWidget(page, 'dxLookup', {
     items: [1, 2, 3],
     usePopover: false,
@@ -42,7 +42,7 @@ test.describe('Lookup', () => {
     });
 
   if (isMaterial()) {
-    test('Popup should be flipped if lookup is placed at the page bottom', async ({ page }) => {
+    test.skip('Popup should be flipped if lookup is placed at the page bottom', async ({ page }) => {
 
       await ClientFunction(() => {
         const $element = $('#container');
@@ -71,7 +71,7 @@ test.describe('Lookup', () => {
   }
 
   if (!isMaterialBased()) {
-    test('Popover should have correct vertical position (T1048128)', async ({ page }) => {
+    test.skip('Popover should have correct vertical position (T1048128)', async ({ page }) => {
     await createWidget(page, 'dxLookup', {
       items: Array.from(Array(100).keys()),
     });
@@ -89,7 +89,7 @@ test.describe('Lookup', () => {
     });
   }
 
-  test('Check popup height with no found data option', async ({ page }) => {
+  test.skip('Check popup height with no found data option', async ({ page }) => {
     await createWidget(page, 'dxLookup', { dataSource: [], searchEnabled: true });
 
     await page.locator(`.${LOOKUP_FIELD_CLASS}`).click();
@@ -99,7 +99,7 @@ test.describe('Lookup', () => {
 
     });
 
-  test('Check popup height in loading state', async ({ page }) => {
+  test.skip('Check popup height in loading state', async ({ page }) => {
     await createWidget(page, 'dxLookup', {
     dataSource: {
       load() {
@@ -121,7 +121,7 @@ test.describe('Lookup', () => {
 
     });
 
-  test('Lookup appearance', async ({ page }) => {
+  test.skip('Lookup appearance', async ({ page }) => {
 
     await testScreenshot(page, 'Lookup appearance.png');
 

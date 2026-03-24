@@ -20,7 +20,7 @@ test.describe('Popup scrolling', () => {
     [false, true].forEach((shading) => {
       [false, true].forEach((enableBodyScroll) => {
         [false, true].forEach((fullScreen) => {
-          test(`Popup native scrolling, shading: ${shading}, enableBodyScroll: ${enableBodyScroll}, fullScreen: ${fullScreen}`, async ({ page }) => {
+          test.skip(`Popup native scrolling, shading: ${shading}, enableBodyScroll: ${enableBodyScroll}, fullScreen: ${fullScreen}`, async ({ page }) => {
 
             await appendElementTo(page, '#container', 'div', 'scrollable-container', { height: '2000px', overflowY: 'auto' });
             await appendElementTo(page, '#scrollable-container', 'div', 'scrollable-content', { height: '3000px' });

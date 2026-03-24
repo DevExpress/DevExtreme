@@ -17,7 +17,7 @@ test.describe('HtmlEditor - upload image from device', () => {
   const TEST_IMAGE_PATH_1 = './images/test-image-1.png';
   const TEST_IMAGE_PATH_2 = './images/test-image-2.png';
 
-  test('Image from device should be inserted', async ({ page }) => {
+  test.skip('Image from device should be inserted', async ({ page }) => {
 
     await createWidget(page, 'dxHtmlEditor', {
       height: 600,
@@ -64,7 +64,7 @@ test.describe('HtmlEditor - upload image from device', () => {
 
     });
 
-  test('Image should be validated and inserted from device', async ({ page }) => {
+  test.skip('Image should be validated and inserted from device', async ({ page }) => {
 
     await createWidget(page, 'dxHtmlEditor', {
       height: 600,

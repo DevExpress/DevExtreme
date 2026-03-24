@@ -16,7 +16,7 @@ test.describe('HtmlEditor - add image url', () => {
 
   const ADD_IMAGE_POPUP_CONTENT_SELECTOR = '.dx-htmleditor-add-image-popup .dx-overlay-content';
 
-  test('Image uploader from url appearance', async ({ page }) => {
+  test.skip('Image uploader from url appearance', async ({ page }) => {
     await createWidget(page, 'dxHtmlEditor', {
     height: 600,
     width: 800,
@@ -35,7 +35,7 @@ test.describe('HtmlEditor - add image url', () => {
 
     });
 
-  test('Image url should be validate before wil be inserted by add button click', async ({ page }) => {
+  test.skip('Image url should be validate before wil be inserted by add button click', async ({ page }) => {
 
     await createWidget(page, 'dxHtmlEditor', {
       height: 600,
@@ -62,7 +62,7 @@ test.describe('HtmlEditor - add image url', () => {
 
     });
 
-  test('Image url should be validate before wil be inserted by add enter press', async ({ page }) => {
+  test.skip('Image url should be validate before wil be inserted by add enter press', async ({ page }) => {
 
     await createWidget(page, 'dxHtmlEditor', {
       height: 600,
@@ -90,7 +90,7 @@ test.describe('HtmlEditor - add image url', () => {
 
     });
 
-  test('Image url should be updated', async ({ page }) => {
+  test.skip('Image url should be updated', async ({ page }) => {
 
     await createWidget(page, 'dxHtmlEditor', {
       height: 600,

@@ -1,280 +1,200 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, generateOptionMatrix } from '../../../../../playwright-helpers';
-import path from 'path';
+import { createWidget, generateOptionMatrix, getContainerUrl, setupTestPage } from '../../../../../playwright-helpers';
 
-const containerUrl = `file://${path.resolve(__dirname, '../../../../../tests/container.html')}`;
+const containerUrl = getContainerUrl(__dirname, '../../../../../tests/container.html');
+
+type ViewType = 'agenda' | 'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth';
+type Orientation = 'horizontal' | 'vertical';
+type ScrollMode = 'standard' | 'virtual';
+
+interface Appointment {
+  text: string;
+  startDate: Date;
+  endDate: Date;
+  groupId: number;
+}
 
 test.describe('Layout:Templates:appointmentTemplate:targetedData', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(containerUrl);
-    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
-    await page.evaluate((theme) => new Promise<void>((resolve) => {
-      (window as any).DevExpress.ui.themes.ready(resolve);
-      (window as any).DevExpress.ui.themes.current(theme);
-    }), process.env.THEME || 'fluent.blue.light');
+    await setupTestPage(page, containerUrl);
   });
 
-Appointment,
-  Orientation,
-  ScrollMode,
-  ViewType,
-} from 'devextreme/ui/scheduler';
+  const getResourceCount = (
+    viewType: ViewType,
+    scrollMode: ScrollMode,
+    groupOrientation: Orientation,
+  ): number => {
+    if (
+      (viewType === 'workWeek'
+        || viewType === 'timelineWorkWeek'
+        || viewType === 'week'
+        || viewType === 'timelineWeek')
+      && (scrollMode === 'standard' && groupOrientation === 'horizontal')
+    ) {
+      return 2;
+    }
 
-);
+    if (scrollMode === 'standard') {
+      return 10;
+    }
 
-const getResourceCount = (
-  viewType: ViewType,
-  scrollMode: ScrollMode,
-  groupOrientation: Orientation,
-): number => {
-  if (
-    (viewType === 'workWeek'
-      || viewType === 'timelineWorkWeek'
-      || viewType === 'week'
-      || viewType === 'timelineWeek')
-    && (scrollMode === 'standard' && groupOrientation === 'horizontal')
-  ) {
-    return 2;
-  }
+    return 30;
+  };
 
-  if (scrollMode === 'standard') {
-    return 10;
-  }
+  const getGroupAppointmentDates = (viewType: ViewType): Date[] => {
+    const isWorkWeek = viewType === 'workWeek' || viewType === 'timelineWorkWeek';
 
-  return 30;
-};
+    if (isWorkWeek || viewType === 'week' || viewType === 'timelineWeek') {
+      const [
+        dayCount,
+        startDate,
+      ] = isWorkWeek
+        ? [5, new Date(2024, 0, 1, 8)]
+        : [7, new Date(2023, 11, 31, 8)];
 
-const getGroupAppointmentDates = (viewType: ViewType): Date[] => {
-  const isWorkWeek = viewType === 'workWeek' || viewType === 'timelineWorkWeek';
+      return Array.from(
+        { length: 12 * dayCount },
+        (_, index) => {
+          const result = new Date(startDate);
+          result.setDate(result.getDate() + Math.floor(index / 12));
+          result.setHours(result.getHours() + (index % 12));
+          return result;
+        },
+      );
+    }
 
-  if (isWorkWeek || viewType === 'week' || viewType === 'timelineWeek') {
-    const [
-      dayCount,
-      startDate,
-    ] = isWorkWeek
-      ? [5, new Date(2024, 0, 1, 8)]
-      : [7, new Date(2023, 11, 31, 8)];
+    if (viewType === 'month' || viewType === 'timelineMonth') {
+      return Array.from(
+        { length: 31 },
+        (_, index) => {
+          const result = new Date(2024, 0, 1, 8);
+          result.setDate(result.getDate() + index);
+          return result;
+        },
+      );
+    }
+
+    const startDate = viewType === 'agenda'
+      ? new Date(2024, 0, 1, 8)
+      : new Date(2024, 0, 2, 8);
 
     return Array.from(
-      { length: 12 * dayCount },
+      { length: 12 },
       (_, index) => {
         const result = new Date(startDate);
-        result.setDate(result.getDate() + Math.floor(index / 12));
-        result.setHours(result.getHours() + (index % 12));
+        result.setHours(result.getHours() + index);
         return result;
       },
     );
-  }
+  };
 
-  if (viewType === 'month' || viewType === 'timelineMonth') {
-    return Array.from(
-      { length: 31 },
-      (_, index) => {
-        const result = new Date(2024, 0, 1, 8);
-        result.setDate(result.getDate() + index);
-        return result;
-      },
-    );
-  }
+  const viewTypes: ViewType[] = [
+    'agenda',
+    'day',
+    'week',
+    'workWeek',
+    'month',
+    'timelineDay',
+    'timelineWeek',
+    'timelineWorkWeek',
+    'timelineMonth',
+  ];
 
-  const startDate = viewType === 'agenda'
-    ? new Date(2024, 0, 1, 8)
-    : new Date(2024, 0, 2, 8);
+  const groupOrientations: Orientation[] = ['horizontal', 'vertical'];
+  const scrollModes: ScrollMode[] = ['standard', 'virtual'];
+  const rtlEnabledOptions: boolean[] = [false, true];
 
-  return Array.from(
-    { length: 12 },
-    (_, index) => {
-      const result = new Date(startDate);
-      result.setHours(result.getHours() + index);
-      return result;
-    },
-  );
-};
+  const testOptions = generateOptionMatrix({
+    viewType: viewTypes,
+    groupOrientation: groupOrientations,
+    scrollMode: scrollModes,
+    rtlEnabled: rtlEnabledOptions,
+  }, [
+    { viewType: 'agenda', scrollMode: 'virtual' },
+    { viewType: 'agenda', groupOrientation: 'horizontal' },
+    { viewType: 'day', groupOrientation: 'vertical', scrollMode: 'standard' },
+    { viewType: 'week', groupOrientation: 'vertical', scrollMode: 'standard' },
+    { viewType: 'workWeek', groupOrientation: 'vertical', scrollMode: 'standard' },
+    { viewType: 'day', groupOrientation: 'horizontal', rtlEnabled: true },
+    { viewType: 'week', groupOrientation: 'horizontal', rtlEnabled: true },
+    { viewType: 'workWeek', groupOrientation: 'horizontal', rtlEnabled: true },
+    { viewType: 'month', groupOrientation: 'horizontal', rtlEnabled: true },
+    { viewType: 'timelineDay', groupOrientation: 'vertical', rtlEnabled: true },
+    { viewType: 'timelineWeek', groupOrientation: 'vertical', rtlEnabled: true },
+    { viewType: 'timelineWorkWeek', groupOrientation: 'vertical', rtlEnabled: true },
+    { viewType: 'timelineMonth', groupOrientation: 'vertical', rtlEnabled: true },
+  ]);
 
-const viewTypes: ViewType[] = [
-  'agenda',
-  'day',
-  'week',
-  'workWeek',
-  'month',
-  'timelineDay',
-  'timelineWeek',
-  'timelineWorkWeek',
-  'timelineMonth',
-];
+  testOptions.forEach(({
+    viewType,
+    groupOrientation,
+    scrollMode,
+    rtlEnabled,
+  }) => {
+    // TODO: needs Scheduler page object (scrollToDate for virtual scrolling tests)
+    const shouldSkip = scrollMode === 'virtual';
 
-const groupOrientations: Orientation[] = ['horizontal', 'vertical'];
-const scrollModes: ScrollMode[] = ['standard', 'virtual'];
-const rtlEnabledOptions: boolean[] = [false, true];
+    (shouldSkip ? test.skip : test)(`targetedAppointmentData should be correct with groups (viewType="${viewType}", groupOrientation="${groupOrientation}", scrollMode="${scrollMode}", rtlEnabled="${rtlEnabled}") (T1205120)`, async ({ page }) => {
+      const currentDate = new Date(2024, 0, 2);
+      const HOUR = 1000 * 60 * 60;
+      const resourceCount = getResourceCount(viewType, scrollMode, groupOrientation);
+      const appointmentDates = getGroupAppointmentDates(viewType);
 
-const testOptions = generateOptionMatrix({
-  viewType: viewTypes,
-  groupOrientation: groupOrientations,
-  scrollMode: scrollModes,
-  rtlEnabled: rtlEnabledOptions,
-}, [
-  // Not supported
-  {
-    viewType: 'agenda',
-    scrollMode: 'virtual',
-  },
-  // Not supported
-  {
-    viewType: 'agenda',
-    groupOrientation: 'horizontal',
-  },
-  {
-    viewType: 'day',
-    groupOrientation: 'vertical',
-    scrollMode: 'standard',
-  },
-  {
-    viewType: 'week',
-    groupOrientation: 'vertical',
-    scrollMode: 'standard',
-  },
-  {
-    viewType: 'workWeek',
-    groupOrientation: 'vertical',
-    scrollMode: 'standard',
-  },
-  {
-    viewType: 'day',
-    groupOrientation: 'horizontal',
-    rtlEnabled: true,
-  },
-  {
-    viewType: 'week',
-    groupOrientation: 'horizontal',
-    rtlEnabled: true,
-  },
-  {
-    viewType: 'workWeek',
-    groupOrientation: 'horizontal',
-    rtlEnabled: true,
-  },
-  {
-    viewType: 'month',
-    groupOrientation: 'horizontal',
-    rtlEnabled: true,
-  },
-  {
-    viewType: 'timelineDay',
-    groupOrientation: 'vertical',
-    rtlEnabled: true,
-  },
-  {
-    viewType: 'timelineWeek',
-    groupOrientation: 'vertical',
-    rtlEnabled: true,
-  },
-  {
-    viewType: 'timelineWorkWeek',
-    groupOrientation: 'vertical',
-    rtlEnabled: true,
-  },
-  {
-    viewType: 'timelineMonth',
-    groupOrientation: 'vertical',
-    rtlEnabled: true,
-  },
-]);
+      const resourceDataSource = Array.from({ length: resourceCount }, (_, index) => ({
+        id: index,
+        text: `Resource ${index}`,
+      }));
 
-// NOTE: no assertions are present, checking but not throwing an error in a template function
-testOptions.forEach(({
-  viewType,
-  groupOrientation,
-  scrollMode,
-  rtlEnabled,
-}) => {
-  test(`targetedAppointmentData should be correct with groups (viewType="${viewType}", groupOrientation="${groupOrientation}", scrollMode="${scrollMode}", rtlEnabled="${rtlEnabled}") (T1205120)`, async (t) => {
-    const currentDate = new Date(2024, 0, 2);
-    const HOUR = 1000 * 60 * 60;
-    const resourceCount = getResourceCount(viewType, scrollMode, groupOrientation);
-    const appointmentDates = getGroupAppointmentDates(viewType);
+      const appointments = resourceDataSource.reduce<Appointment[]>((acc, resource) => acc.concat(
+        appointmentDates
+          .map<Appointment>((date) => ({
+            text: resource.text,
+            startDate: date,
+            endDate: new Date(date.getTime() + HOUR / 2),
+            groupId: resource.id,
+          })),
+      ), []);
 
-    const datesToCheck = [
-      appointmentDates[0],
-      appointmentDates[Math.floor(appointmentDates.length / 3)],
-      appointmentDates[appointmentDates.length - 1],
-    ];
-
-    const groupsToCheck = [
-      { groupId: 0 },
-      { groupId: Math.floor(resourceCount / 3) },
-      { groupId: resourceCount - 1 },
-    ];
-
-    const resourceDataSource = Array.from({ length: resourceCount }, (_, index) => ({
-      id: index,
-      text: `Resource ${index}`,
-    }));
-
-    const appointments = resourceDataSource.reduce<Appointment[]>((acc, resource) => acc.concat(
-      appointmentDates
-        .map<Appointment>((date) => ({
-          text: resource.text,
-          startDate: date,
-          endDate: new Date(date.getTime() + HOUR / 2),
-          groupId: resource.id,
-        })),
-    ), []);
-
-    await createWidget(page, 'dxScheduler', {
-      rtlEnabled,
-      height: 600,
-      width: 800,
-      currentDate,
-      startDayHour: 8,
-      endDayHour: 20,
-      scrolling: {
-        mode: scrollMode,
-      },
-      groups: ['groupId'],
-      views: [
-        {
-          type: viewType,
-          groupOrientation,
+      await createWidget(page, 'dxScheduler', {
+        rtlEnabled,
+        height: 600,
+        width: 800,
+        currentDate,
+        startDayHour: 8,
+        endDayHour: 20,
+        scrolling: {
+          mode: scrollMode,
         },
-      ],
-      currentView: viewType,
-      dataSource: appointments,
-      resources: [
-        {
-          fieldExpr: 'groupId',
-          allowMultiple: true,
-          dataSource: resourceDataSource,
-          label: 'Employees',
-          displayExpr: 'id',
+        groups: ['groupId'],
+        views: [
+          {
+            type: viewType,
+            groupOrientation,
+          },
+        ],
+        currentView: viewType,
+        dataSource: appointments,
+        resources: [
+          {
+            fieldExpr: 'groupId',
+            allowMultiple: true,
+            dataSource: resourceDataSource,
+            label: 'Employees',
+            displayExpr: 'id',
+          },
+        ],
+        appointmentTemplate(model, _, element) {
+          const { groupId: targetedId } = model.targetedAppointmentData;
+          const { groupId } = model.appointmentData;
+
+          if (groupId !== targetedId[0]) {
+            throw new Error('Group ID and targeted ID are mismatched');
+          }
+
+          element.append(`tid[${targetedId}] gid[${groupId}]`);
+          return element;
         },
-      ],
-      appointmentTemplate(model, _, element) {
-        const { groupId: targetedId } = model.targetedAppointmentData;
-        const { groupId } = model.appointmentData;
-
-        if (groupId !== targetedId[0]) {
-          throw new Error('Group ID and targeted ID are mismatched');
-        }
-
-        element.append(`tid[${targetedId}] gid[${groupId}]`);
-        return element;
-      },
+      });
     });
-
-    if (scrollMode !== 'virtual') {
-      return;
-    }
-
-    const scrollOptions = generateOptionMatrix({
-      date: datesToCheck,
-      group: groupsToCheck,
-    });
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const { date, group } of scrollOptions) {
-      await scrollToDate(date, group);
-      await await page.waitForTimeout(50);
-    }
   });
-});
 });

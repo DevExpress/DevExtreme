@@ -17,12 +17,12 @@ test.describe('Toast', () => {
   const types = ['info', 'warning', 'error', 'success'];
   const STACK_CONTAINER_SELECTOR = '.dx-toast-stack';
 
-  const showToast = ClientFunction(
-    (type) => {
+  const showToast = async (page, type) => {
+    await page.evaluate((t) => {
       (window as any).DevExpress.ui.notify(
         {
-          message: `Toast ${type}`,
-          type,
+          message: `Toast ${t}`,
+          type: t,
           displayTime: 35000000,
           animation: {
             show: {
@@ -35,21 +35,18 @@ test.describe('Toast', () => {
           position: 'top center',
           direction: 'down-push',
         },
-
-    },
-
-  const hideAllToasts = async () => page.evaluate(() => {
-    (window as any).DevExpress.ui.hideToasts();
-  });
+      );
+    }, type);
+  };
 
   test('Toasts', async ({ page }) => {
-
-    await Promise.all(types.map((type) => showToast(type)));
+    for (const type of types) {
+      await showToast(page, type);
+    }
 
     await insertStylesheetRulesToPage(page, `${STACK_CONTAINER_SELECTOR} { padding: 20px; }`);
-    await setClassAttribute(page, Selector(STACK_CONTAINER_SELECTOR), `dx-theme-${(process.env.theme ?? 'fluent.blue.light')}-typography`);
+    await setClassAttribute(page, STACK_CONTAINER_SELECTOR, `dx-theme-${(process.env.theme ?? 'fluent.blue.light')}-typography`);
 
     await testScreenshot(page, 'Toasts.png', { element: STACK_CONTAINER_SELECTOR });
-
-    });
+  });
 });

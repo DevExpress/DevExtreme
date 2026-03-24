@@ -4,18 +4,6 @@ import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
 
-const getData = (rowCount: number, colCount: number): Record<string, string>[] => {
-  const items: Record<string, string>[] = [];
-  for (let i = 0; i < rowCount; i++) {
-    const item: Record<string, string> = {};
-    for (let j = 0; j < colCount; j++) item[`field_${j}`] = `val_${i}_${j}`;
-    items.push(item);
-  }
-  return items;
-};
-
-// TODO: import defaultConfig from sticky helpers or inline the data
-
 test.describe('Editing.Functional', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
@@ -25,50 +13,43 @@ test.describe('Editing.Functional', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
-  const getGridConfig = (config): Record<string, unknown> => {
-    const defaultConfig = {
-      errorRowEnabled: true,
-      dataSource: [{
-        id: 1, name: 'Alex', age: 15, lastName: 'John',
-      }],
-      keyExpr: 'id',
-      legacyRendering: false,
-    };
-
-    return config ? { ...defaultConfig, ...config } : defaultConfig;
-  };
 
   test('Focused cell should be switched to the editing mode after onSaving\'s promise is resolved (T1190566)', async ({ page }) => {
     await page.evaluate(() => {
-        (window as any).deferred = $.Deferred();
-      });
+      (window as any).deferred = $.Deferred();
+    });
 
-      return createWidget(page, 'dxDataGrid', {
-        dataSource: [
-          { id: 1, field1: 'value1' },
-          { id: 2, field1: 'value2' },
-          { id: 3, field1: 'value3' },
-          { id: 4, field1: 'value4' },
-        ],
-        keyExpr: 'id',
-        showBorders: true,
-        columns: ['field1'],
-        editing: {
-          mode: 'cell',
-          allowUpdating: true,
-        },
-        onSaving(e) {
-          e.promise = (window as any).deferred;
-        },
-      });
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 1, field1: 'value1' },
+        { id: 2, field1: 'value2' },
+        { id: 3, field1: 'value3' },
+        { id: 4, field1: 'value4' },
+      ],
+      keyExpr: 'id',
+      showBorders: true,
+      columns: ['field1'],
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+      },
+      onSaving(e) {
+        e.promise = (window as any).deferred;
+      },
+    });
 
-      const resolveOnSavingDeferred = ClientFunction(() => (window as any).deferred.resolve());
+    const firstCell = page.locator('.dx-data-row').nth(0).locator('td').nth(0);
+    await firstCell.click();
 
-    await (page.locator('.dx-data-row').nth(0).locator('td').nth(0)).click();
-    await (page.locator('.dx-data-row').nth(0).locator('td').nth(0)).fill('new_value');
-    await page.keyboard.press('tab tab');
-    await resolveOnSavingDeferred();
-    expect(await page.locator('.dx-data-row').nth(2).locator('td').nth(0).isEditCell).toBeTruthy();
+    const editor = page.locator('.dx-data-row').nth(0).locator('.dx-texteditor-input').first();
+    await editor.fill('new_value');
+
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+
+    await page.evaluate(() => (window as any).deferred.resolve());
+
+    const thirdCell = page.locator('.dx-data-row').nth(2).locator('td').nth(0);
+    await expect(thirdCell.locator('.dx-texteditor')).toBeVisible();
   });
-    // TODO: .after() block removed
 });

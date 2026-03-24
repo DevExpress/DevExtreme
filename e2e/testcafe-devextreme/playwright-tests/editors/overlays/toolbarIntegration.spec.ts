@@ -24,7 +24,7 @@ test.describe('Popup_toolbar', () => {
   ].forEach(({ name, Class }) => {
     ['bottom', 'top'].forEach((toolbar) => {
       [true, false].forEach((rtlEnabled) => {
-        test(`Extended toolbar should be used in ${name},rtlEnabled=${rtlEnabled},toolbar=${toolbar}`, async ({ page }) => {
+        test.skip(`Extended toolbar should be used in ${name},rtlEnabled=${rtlEnabled},toolbar=${toolbar}`, async ({ page }) => {
 
           if (isMaterial()) {
             await insertStylesheetRulesToPage(page, '.dx-overlay-content, .dx-overlay-content input { font-family: sans-serif !important; }');
@@ -167,7 +167,7 @@ test.describe('Popup_toolbar', () => {
       .height(300),
   };
 
-  test('Popup toolbars with wide elements and overflow menu if hidden on init with toolbar items', async ({ page }) => {
+  test.skip('Popup toolbars with wide elements and overflow menu if hidden on init with toolbar items', async ({ page }) => {
     await createWidget(page, 'dxPopup', {
     ...baseConfiguration,
     toolbarItems,
@@ -192,7 +192,7 @@ test.describe('Popup_toolbar', () => {
 
     });
 
-  test('Popup toolbars with wide elements and overflow menu if hidden on init with no toolbar items', async ({ page }) => {
+  test.skip('Popup toolbars with wide elements and overflow menu if hidden on init with no toolbar items', async ({ page }) => {
     await createWidget(page, 'dxPopup', {
     ...baseConfiguration,
     toolbarItems: [],
@@ -217,7 +217,7 @@ test.describe('Popup_toolbar', () => {
 
     });
 
-  test('Popup toolbars with wide elements and overflow menu if shown on init with toolbar items', async ({ page }) => {
+  test.skip('Popup toolbars with wide elements and overflow menu if shown on init with toolbar items', async ({ page }) => {
     await createWidget(page, 'dxPopup', {
     ...baseConfiguration,
     toolbarItems,

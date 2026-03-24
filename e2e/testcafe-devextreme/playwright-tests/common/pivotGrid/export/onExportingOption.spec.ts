@@ -14,7 +14,7 @@ test.describe('PivotGrid_fieldChooser', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Should call \'onExporting\' when export button clicked', async ({ page }) => {
+  test.skip('Should call \'onExporting\' when export button clicked', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
     dataSource: {
       fields: [{

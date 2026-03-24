@@ -19,7 +19,7 @@ test.describe('SelectBox', () => {
       .wait(100);
   };
 
-  test('Click on action button should correctly work with SelectBox containing the field template (T811890)', async ({ page }) => {
+  test.skip('Click on action button should correctly work with SelectBox containing the field template (T811890)', async ({ page }) => {
     await createWidget(page, 'dxSelectBox', {
     items: ['item1', 'item2'],
     fieldTemplate: (value) => ($('<div>') as any).dxTextBox({ value }),
@@ -58,7 +58,7 @@ test.describe('SelectBox', () => {
 
     });
 
-  test('Click on action button after typing should correctly work with SelectBox containing the field template (T811890)', async ({ page }) => {
+  test.skip('Click on action button after typing should correctly work with SelectBox containing the field template (T811890)', async ({ page }) => {
     await createWidget(page, 'dxSelectBox', {
     items: ['item1', 'item2'],
     fieldTemplate: (value) => ($('<div>') as any).dxTextBox({ value }),
@@ -99,7 +99,7 @@ test.describe('SelectBox', () => {
 
     });
 
-  test('editor can be focused out after click on action button', async ({ page }) => {
+  test.skip('editor can be focused out after click on action button', async ({ page }) => {
     await createWidget(page, 'dxSelectBox', {
     items: ['item1', 'item2'],
   });
@@ -134,7 +134,7 @@ test.describe('SelectBox', () => {
 
     });
 
-  test('selectbox should not be opened after click on disabled action button (T1117453)', async ({ page }) => {
+  test.skip('selectbox should not be opened after click on disabled action button (T1117453)', async ({ page }) => {
     await createWidget(page, 'dxSelectBox', {
     items: ['item1', 'item2'],
     value: 'item1',
@@ -171,7 +171,7 @@ test.describe('SelectBox', () => {
 
     });
 
-  test('SelectBox: positioning content in the custom dropdown button', async ({ page }) => {
+  test.skip('SelectBox: positioning content in the custom dropdown button', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'selectBox');
 

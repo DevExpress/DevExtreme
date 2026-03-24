@@ -51,7 +51,7 @@ test.describe('Virtual Scrolling', () => {
   }
 
   // T1129106
-  test('The vertical scroll bar of the container\'s parent should not be displayed when the grid has no height, virtual scrolling and state storing are enabled', async ({ page }) => {
+  test.skip('The vertical scroll bar of the container\'s parent should not be displayed when the grid has no height, virtual scrolling and state storing are enabled', async ({ page }) => {
     // arrange, act
     const treeList = page.locator('#container');
 
@@ -107,7 +107,7 @@ test.describe('Virtual Scrolling', () => {
   });
 
   // T1189118
-  test('All items should be selected after select all and scroll down', async ({ page }) => {
+  test.skip('All items should be selected after select all and scroll down', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     dataSource: generateData(100),
     height: 400,

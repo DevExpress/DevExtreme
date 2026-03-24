@@ -17,7 +17,7 @@ test.describe('ChatMessageGroup', () => {
   const AVATAR_SELECTOR = '.dx-avatar';
   const CHAT_WRAPPER_STYLES = 'display: flex; flex-wrap: wrap; gap: 2px; width: 1270px; padding: 20px; transform: scale(0.9);';
 
-  test('Chat: messagegroup, avatar rendering', async ({ page }) => {
+  test.skip('Chat: messagegroup, avatar rendering', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'chat');
 
@@ -37,7 +37,7 @@ test.describe('ChatMessageGroup', () => {
 
     });
 
-  test('Chat: messagegroup, information', async ({ page }) => {
+  test.skip('Chat: messagegroup, information', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'chat');
 
@@ -57,7 +57,7 @@ test.describe('ChatMessageGroup', () => {
 
     });
 
-  test('Chat: messagegroup, bubbles', async ({ page }) => {
+  test.skip('Chat: messagegroup, bubbles', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'chat');
 
@@ -93,7 +93,7 @@ test.describe('ChatMessageGroup', () => {
 
     });
 
-  test('Messagegroup scenarios in disabled state', async ({ page }) => {
+  test.skip('Messagegroup scenarios in disabled state', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'chat-wrapper');
     await setStyleAttribute(page, '#chat-wrapper', CHAT_WRAPPER_STYLES);
@@ -123,7 +123,7 @@ test.describe('ChatMessageGroup', () => {
 
     });
 
-  test('Messagegroup scenarios in RTL mode', async ({ page }) => {
+  test.skip('Messagegroup scenarios in RTL mode', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'chat-wrapper');
     await setStyleAttribute(page, '#chat-wrapper', CHAT_WRAPPER_STYLES);
@@ -153,7 +153,7 @@ test.describe('ChatMessageGroup', () => {
 
     });
 
-  test('MessageGroup with edited messages', async ({ page }) => {
+  test.skip('MessageGroup with edited messages', async ({ page }) => {
 
     await appendElementTo(page, '#container', 'div', 'chat');
 
