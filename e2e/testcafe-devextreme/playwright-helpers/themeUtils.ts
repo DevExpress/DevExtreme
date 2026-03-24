@@ -57,14 +57,14 @@ export async function testScreenshot(
     ? page.locator(element)
     : element ?? page.locator('#container');
 
-  await expect(locator).toHaveScreenshot(getScreenshotName(screenshotName, theme));
+  await expect(locator).toHaveScreenshot([getScreenshotName(screenshotName, theme)]);
 
   if (shouldTestInCompact) {
     const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
     await changeTheme(page, `${themeName}.compact`);
 
     await expect(locator).toHaveScreenshot(
-      getScreenshotName(screenshotName, `${themeName}.compact`),
+      [getScreenshotName(screenshotName, `${themeName}.compact`)],
     );
   }
 

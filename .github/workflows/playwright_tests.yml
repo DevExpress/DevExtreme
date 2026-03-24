@@ -123,7 +123,25 @@ jobs:
       working-directory: ./e2e/testcafe-devextreme
       run: pnpx playwright install chromium
 
-    - name: Run Playwright tests
+    - name: Generate baselines (pass 1)
+      working-directory: ./e2e/testcafe-devextreme
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+        THEME: fluent.blue.light
+      run: |
+        SHARD_ARG=""
+        if [ "${{ matrix.ARGS.shard }}" != "" ]; then
+          SHARD_ARG="--shard=${{ matrix.ARGS.shard }}"
+        fi
+        pnpx playwright test \
+          --config playwright.config.ts \
+          playwright-tests/${{ matrix.ARGS.componentFolder }}/ \
+          $SHARD_ARG \
+          --reporter=list \
+          --update-snapshots \
+          2>&1 | tee playwright-output-pass1.log || true
+
+    - name: Run Playwright tests (pass 2)
       working-directory: ./e2e/testcafe-devextreme
       env:
         NODE_OPTIONS: --max-old-space-size=8192
