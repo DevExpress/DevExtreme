@@ -123,8 +123,7 @@ test.describe('Gantt', () => {
   };
 
   test('Gantt - show resources button should not have focus state (T1264485)', async ({ page }) => {
-
-    const id = `${new Guid()}`;
+    const id = `gantt-${Date.now()}`;
     await appendElementTo(page, '#container', 'div', id, {});
     await createWidget(page, 'dxGantt', {
       tasks: { dataSource: data.tasks },
@@ -134,14 +133,12 @@ test.describe('Gantt', () => {
       resourceAssignments: { dataSource: data.resourceAssignments },
     }, `#${id}`);
 
-    await page.click(Selector(TOOLBAR_ITEM_BUTTON));
+    await page.locator(TOOLBAR_ITEM_BUTTON).first().click();
     await testScreenshot(page, 'Gantt show resourced.png', { element: '#container' });
-
-    });
+  });
 
   test('Gantt - show dependencies button should not have focus state (T1264485)', async ({ page }) => {
-
-    const id = `${new Guid()}`;
+    const id = `gantt-${Date.now()}`;
     await appendElementTo(page, '#container', 'div', id, {});
     await createWidget(page, 'dxGantt', {
       tasks: { dataSource: data.tasks },
@@ -151,8 +148,7 @@ test.describe('Gantt', () => {
       resourceAssignments: { dataSource: data.resourceAssignments },
     }, `#${id}`);
 
-    await page.click(Selector(TOOLBAR_ITEM_BUTTON));
+    await page.locator(TOOLBAR_ITEM_BUTTON).first().click();
     await testScreenshot(page, 'Gantt show dependencies.png', { element: '#container' });
-
-    });
+  });
 });

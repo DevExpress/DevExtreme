@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -14,105 +14,63 @@ test.describe('Editing events', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  /* eslint-disable @typescript-eslint/no-misused-promises */
-
-  );
-
-  // T1186997
   const testCases = [{
     caseName: 'e.cancel = promise:true',
     expected: true,
-
-    onRowUpdating: ClientFunction((e) => {
-      e.cancel = new Promise((resolve) => {
-        resolve(true);
-      });
-    }),
-    onRowInserting: ClientFunction((e) => {
-      e.cancel = new Promise((resolve) => {
-        resolve(true);
-      });
-    }),
-    onRowRemoving: ClientFunction((e) => {
-      e.cancel = new Promise((resolve) => {
-        resolve(true);
-      });
-    }),
+    onRowUpdating: `(e) => { e.cancel = new Promise((resolve) => { resolve(true); }); }`,
   }, {
     caseName: 'e.cancel = true',
     expected: true,
-
-    onRowUpdating: ClientFunction((e) => {
-      e.cancel = true;
-    }),
-    onRowInserting: ClientFunction((e) => {
-      e.cancel = true;
-    }),
-    onRowRemoving: ClientFunction((e) => {
-      e.cancel = true;
-    }),
+    onRowUpdating: `(e) => { e.cancel = true; }`,
   }, {
     caseName: 'e.cancel = promise:false',
     expected: false,
-
-    onRowUpdating: ClientFunction((e) => {
-      e.cancel = new Promise((resolve) => {
-        resolve(false);
-      });
-    }),
-    onRowInserting: ClientFunction((e) => {
-      e.cancel = new Promise((resolve) => {
-        resolve(false);
-      });
-    }),
-    onRowRemoving: ClientFunction((e) => {
-      e.cancel = new Promise((resolve) => {
-        resolve(false);
-      });
-    }),
+    onRowUpdating: `(e) => { e.cancel = new Promise((resolve) => { resolve(false); }); }`,
   }, {
     caseName: 'e.cancel = false',
     expected: false,
-
-    onRowUpdating: ClientFunction((e) => {
-      e.cancel = false;
-    }),
-    onRowInserting: ClientFunction((e) => {
-      e.cancel = false;
-    }),
-    onRowRemoving: ClientFunction((e) => {
-      e.cancel = false;
-    }),
+    onRowUpdating: `(e) => { e.cancel = false; }`,
   }];
 
-  // onRowUpdating
   testCases.forEach(({ caseName, expected, onRowUpdating }) => {
-
-  test(`onRowUpdating event should be work valid in case '${caseName}'`, async ({ page }) => {
-    await createWidget(page, 'dxDataGrid', {
+    test(`onRowUpdating event should be work valid in case '${caseName}'`, async ({ page }) => {
+      await page.evaluate((handler) => {
+        ($('#container') as any).dxDataGrid({
           dataSource: [{
             ID: 1,
             FirstName: 'John',
           }],
           columns: [{
             dataField: 'FirstName',
-            caption: 'Firs tName',
+            caption: 'First Name',
           }],
           height: 300,
           editing: {
             mode: 'row',
             allowUpdating: true,
           },
-          onRowUpdating,
+          // eslint-disable-next-line no-eval
+          onRowUpdating: eval(handler),
         });
+      }, onRowUpdating);
 
-          const dataRow = page.locator('.dx-data-row').nth(0);
+      await page.waitForSelector('.dx-datagrid-rowsview');
 
-      await (dataRow.locator('td').nth(1).getLinkEdit()).click();
+      const dataRow = page.locator('.dx-data-row').nth(0);
+      const editLink = dataRow.locator('.dx-link-edit');
+      await editLink.click();
 
-      await (dataRow.locator('td').nth(0).locator('.dx-editor-cell')).fill('test text');
-      await (dataRow.locator('td').nth(1).getLinkSave()).click();
+      const editor = dataRow.locator('.dx-texteditor-input').first();
+      await editor.fill('test text');
 
-      expect(await dataRow.locator('td').nth(1).getLinkSave().exists).toBe(expected);
+      const saveLink = dataRow.locator('.dx-link-save');
+      await saveLink.click();
+
+      if (expected) {
+        await expect(dataRow.locator('.dx-link-save')).toBeVisible();
+      } else {
+        await expect(dataRow.locator('.dx-link-save')).toBeHidden();
+      }
     });
+  });
 });

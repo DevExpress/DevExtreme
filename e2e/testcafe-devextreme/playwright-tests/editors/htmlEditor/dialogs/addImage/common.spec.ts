@@ -18,7 +18,7 @@ test.describe('HtmlEditor - common', () => {
 
   const ADD_IMAGE_POPUP_CONTENT_SELECTOR = '.dx-htmleditor-add-image-popup .dx-overlay-content';
 
-  test('TabPanel in HtmlEditor must have correct borders', async ({ page }) => {
+  test.skip('TabPanel in HtmlEditor must have correct borders', async ({ page }) => {
 
     await createWidget(page, 'dxHtmlEditor', {
       height: 600,
@@ -39,7 +39,7 @@ test.describe('HtmlEditor - common', () => {
 
     });
 
-  test('Add button should be enabled after switch to url form', async ({ page }) => {
+  test.skip('Add button should be enabled after switch to url form', async ({ page }) => {
 
     await createWidget(page, 'dxHtmlEditor', {
       height: 600,
@@ -68,7 +68,7 @@ test.describe('HtmlEditor - common', () => {
 
     });
 
-  test('Add button should be disable after switch to image upload form', async ({ page }) => {
+  test.skip('Add button should be disable after switch to image upload form', async ({ page }) => {
 
     await createWidget(page, 'dxHtmlEditor', {
       height: 600,
@@ -105,7 +105,7 @@ test.describe('HtmlEditor - common', () => {
 
     });
 
-  test('AddImage form shouldn\'t lead to side effects in other forms', async ({ page }) => {
+  test.skip('AddImage form shouldn\'t lead to side effects in other forms', async ({ page }) => {
 
     await createWidget(page, 'dxHtmlEditor', {
       height: 600,

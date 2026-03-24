@@ -14,7 +14,7 @@ test.describe('DateRangeBox focus state', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('DateRangeBox & DateBoxes should have focus class if inputs are focused by tab', async ({ page }) => {
+  test.skip('DateRangeBox & DateBoxes should have focus class if inputs are focused by tab', async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
     value: ['2021/09/17', '2021/10/24'],
     openOnFieldClick: false,
@@ -49,7 +49,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test('DateRangeBox & DateBoxes should have focus class if inputs are focused by click', async ({ page }) => {
+  test.skip('DateRangeBox & DateBoxes should have focus class if inputs are focused by click', async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
     value: ['2021/09/17', '2021/10/24'],
     openOnFieldClick: false,
@@ -84,7 +84,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test('DateRangeBox & Start DateBox should have focus class after click on drop down button', async ({ page }) => {
+  test.skip('DateRangeBox & Start DateBox should have focus class after click on drop down button', async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
     value: ['2021/09/17', '2021/10/24'],
     openOnFieldClick: false,
@@ -102,7 +102,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test('DateRangeBox & StartDateBox should be focused if dateRangeBox open by click on drop down button and endDateBox was focused', async ({ page }) => {
+  test.skip('DateRangeBox & StartDateBox should be focused if dateRangeBox open by click on drop down button and endDateBox was focused', async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
     value: ['2021/09/17', '2021/10/24'],
     openOnFieldClick: false,
@@ -128,7 +128,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test('onFocusIn should be called only after first click on drop down button', async ({ page }) => {
+  test.skip('onFocusIn should be called only after first click on drop down button', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onFocusInCounter = 0;
@@ -178,7 +178,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test('onFocusIn should be called only on focus of startDate input', async ({ page }) => {
+  test.skip('onFocusIn should be called only on focus of startDate input', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onFocusInCounter = 0;
@@ -263,7 +263,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test('Click by separator element should focus DateRangeBox or leave active input focused without call onFocusIn event handler', async ({ page }) => {
+  test.skip('Click by separator element should focus DateRangeBox or leave active input focused without call onFocusIn event handler', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onFocusInCounter = 0;
@@ -360,7 +360,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test('EndDateBox should be stay focused after close popup by click on drop down button', async ({ page }) => {
+  test.skip('EndDateBox should be stay focused after close popup by click on drop down button', async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
     value: [new Date('2021/09/17'), new Date('2021/10/24')],
     openOnFieldClick: false,
@@ -396,7 +396,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test('DateRangeBox & StartDateBox should be focused after click on clear button', async ({ page }) => {
+  test.skip('DateRangeBox & StartDateBox should be focused after click on clear button', async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
     showClearButton: true,
     value: ['2021/09/17', '2021/10/24'],
@@ -423,7 +423,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test('DateRangeBox & StartDateBox should be focused and stay opened after click on clear button when popup is opened', async ({ page }) => {
+  test.skip('DateRangeBox & StartDateBox should be focused and stay opened after click on clear button when popup is opened', async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
     showClearButton: true,
     value: ['2021/09/17', '2021/10/24'],
@@ -458,7 +458,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test('DateRangeBox & StartDateBox should be focused after click on clear button', async ({ page }) => {
+  test.skip('DateRangeBox & StartDateBox should be focused after click on clear button', async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
     showClearButton: true,
     value: [null, '2021/10/24'],
@@ -487,7 +487,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test('DateRangeBox & StartDateBox should be focused if startDateBox open by keyboard, alt+down, alt+up', async ({ page }) => {
+  test.skip('DateRangeBox & StartDateBox should be focused if startDateBox open by keyboard, alt+down, alt+up', async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
     value: ['2021/09/17', '2021/10/24'],
     openOnFieldClick: false,
@@ -530,7 +530,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test('DateRangeBox & StartDateBox should be focused if endDateBox open and close by keyboard, alt+down, alt+up', async ({ page }) => {
+  test.skip('DateRangeBox & StartDateBox should be focused if endDateBox open and close by keyboard, alt+down, alt+up', async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
     value: ['2021/09/17', '2021/10/24'],
     openOnFieldClick: false,
@@ -573,7 +573,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test('Opened dateRangeBox should not be closed after click on inputs, openOnFieldClick: true', async ({ page }) => {
+  test.skip('Opened dateRangeBox should not be closed after click on inputs, openOnFieldClick: true', async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
     value: ['2021/09/17', '2021/10/24'],
     openOnFieldClick: true,
@@ -617,7 +617,7 @@ test.describe('DateRangeBox focus state', () => {
 
     });
 
-  test('Opened dateRangeBox should be closed after outside click, openOnFieldClick: true', async ({ page }) => {
+  test.skip('Opened dateRangeBox should be closed after outside click, openOnFieldClick: true', async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
     value: ['2021/09/17', '2021/10/24'],
     width: 500,

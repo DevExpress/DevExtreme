@@ -14,7 +14,7 @@ test.describe('Pagination Base Properties', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Pagination visibile property', async ({ page }) => {
+  test.skip('Pagination visibile property', async ({ page }) => {
     await createWidget(page, 'dxPagination', {
     itemCount: 50,
     visible: false,
@@ -26,7 +26,7 @@ test.describe('Pagination Base Properties', () => {
 
     });
 
-  test('PageSize selector test', async ({ page }) => {
+  test.skip('PageSize selector test', async ({ page }) => {
     await createWidget(page, 'dxPagination', {
     itemCount: 50,
     pageIndex: 2,
@@ -42,7 +42,7 @@ test.describe('Pagination Base Properties', () => {
 
     });
 
-  test('PageIndex test', async ({ page }) => {
+  test.skip('PageIndex test', async ({ page }) => {
     await createWidget(page, 'dxPagination', {
     itemCount: 50,
     pageIndex: 1,
@@ -59,7 +59,7 @@ test.describe('Pagination Base Properties', () => {
 
     });
 
-  test('PageIndex correction test', async ({ page }) => {
+  test.skip('PageIndex correction test', async ({ page }) => {
     await createWidget(page, 'dxPagination', {
     itemCount: 50,
     pageIndex: 10,

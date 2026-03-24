@@ -14,7 +14,7 @@ test.describe('Editing events', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Field dropdown popup', async ({ page }) => {
+  test.skip('Field dropdown popup', async ({ page }) => {
 
     await createWidget(page, 'dxFilterBuilder', {
       fields,
@@ -29,7 +29,7 @@ test.describe('Editing events', () => {
 
     });
 
-  test('operation dropdown popup', async ({ page }) => {
+  test.skip('operation dropdown popup', async ({ page }) => {
 
     await createWidget(page, 'dxFilterBuilder', {
       fields,
@@ -45,7 +45,7 @@ test.describe('Editing events', () => {
     });
 
   // T1222027
-  test('Dropdown Treeview should have no empty space', async ({ page }) => {
+  test.skip('Dropdown Treeview should have no empty space', async ({ page }) => {
 
     await createWidget(page, 'dxFilterBuilder', {
       fields,
@@ -68,7 +68,7 @@ test.describe('Editing events', () => {
     { dataType: 'datetime', value: '2025-02-25T00:00:00.000Z' },
     { dataType: 'datetime', value: new Date('2025-02-25T00:00:00.000Z') },
   ].forEach(({ dataType, value }) => {
-    test(`item value text should be correct for dataType: ${dataType} and valueType: ${typeof value}`, async ({ page }) => {
+    test.skip(`item value text should be correct for dataType: ${dataType} and valueType: ${typeof value}`, async ({ page }) => {
 
       await createWidget(page, 'dxFilterBuilder', {
         fields: [

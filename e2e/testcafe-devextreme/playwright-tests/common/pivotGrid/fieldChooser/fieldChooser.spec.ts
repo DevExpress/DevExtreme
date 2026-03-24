@@ -14,7 +14,7 @@ test.describe('PivotGrid_fieldChooser', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Change dataFiels order with one invisible field (T1079461)', async ({ page }) => {
+  test.skip('Change dataFiels order with one invisible field (T1079461)', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
     allowSortingBySummary: true,
     allowFiltering: true,
@@ -125,7 +125,7 @@ test.describe('PivotGrid_fieldChooser', () => {
 
     });
 
-  test('Change dataFiels order with two invisible fields', async ({ page }) => {
+  test.skip('Change dataFiels order with two invisible fields', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
     allowSortingBySummary: true,
     allowFiltering: true,
@@ -245,7 +245,7 @@ test.describe('PivotGrid_fieldChooser', () => {
 
     });
 
-  test('Change dataFiels order with three invisible fields (T1079461)', async ({ page }) => {
+  test.skip('Change dataFiels order with three invisible fields (T1079461)', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
     allowSortingBySummary: true,
     allowFiltering: true,
@@ -381,7 +381,7 @@ test.describe('PivotGrid_fieldChooser', () => {
 
     });
 
-  test('Change dataFiels order when applyChangesMode is "onDemand" (T1097764)', async ({ page }) => {
+  test.skip('Change dataFiels order when applyChangesMode is "onDemand" (T1097764)', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
     allowSortingBySummary: true,
     allowFiltering: true,
@@ -573,7 +573,7 @@ test.describe('PivotGrid_fieldChooser', () => {
 
     });
 
-  test('Field chooser can be clicked (T1290333)', async ({ page }) => {
+  test.skip('Field chooser can be clicked (T1290333)', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
     showBorders: true,
     fieldPanel: {

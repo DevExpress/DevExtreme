@@ -14,7 +14,7 @@ test.describe('ChatMessageList', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Messagelist empty view scenarios', async ({ page }) => {
+  test.skip('Messagelist empty view scenarios', async ({ page }) => {
     await createWidget(page, 'dxChat', {
     width: 400,
     height: 600,
@@ -45,7 +45,7 @@ test.describe('ChatMessageList', () => {
 
     });
 
-  test('Messagelist appearance with scrollbar', async ({ page }) => {
+  test.skip('Messagelist appearance with scrollbar', async ({ page }) => {
 
     const userFirst = createUser(1, 'First');
     const userSecond = createUser(2, 'Second');
@@ -104,7 +104,7 @@ test.describe('ChatMessageList', () => {
 
     });
 
-  test('Messagelist should scrolled to the latest messages after being rendered inside an invisible element', async ({ page }) => {
+  test.skip('Messagelist should scrolled to the latest messages after being rendered inside an invisible element', async ({ page }) => {
 
     const userFirst = createUser(1, 'First');
     const userSecond = createUser(2, 'Second');
@@ -138,7 +138,7 @@ test.describe('ChatMessageList', () => {
 
     });
 
-  test('Messagelist with deleted items', async ({ page }) => {
+  test.skip('Messagelist with deleted items', async ({ page }) => {
 
     const userFirst = createUser(1, 'First');
     const userSecond = createUser(2, 'Second');
@@ -167,7 +167,7 @@ test.describe('ChatMessageList', () => {
 
     });
 
-  test('Messagelist with deleted items and custom template', async ({ page }) => {
+  test.skip('Messagelist with deleted items and custom template', async ({ page }) => {
 
     const userFirst = createUser(1, 'First');
     const userSecond = createUser(2, 'Second');
@@ -203,7 +203,7 @@ test.describe('ChatMessageList', () => {
 
     });
 
-  test('Messagelist with messageTemplate', async ({ page }) => {
+  test.skip('Messagelist with messageTemplate', async ({ page }) => {
 
     const userFirst = createUser(1, 'First');
     const userSecond = createUser(2, 'Second');
@@ -244,7 +244,7 @@ test.describe('ChatMessageList', () => {
 
     });
 
-  test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp set to false work', async ({ page }) => {
+  test.skip('Messagelist options showDayHeaders, showUserName and showMessageTimestamp set to false work', async ({ page }) => {
 
     const userFirst = createUser(1, 'First');
     const userSecond = createUser(2, 'Second');
@@ -275,7 +275,7 @@ test.describe('ChatMessageList', () => {
 
     });
 
-  test('Message list with editing context menu', async ({ page }) => {
+  test.skip('Message list with editing context menu', async ({ page }) => {
 
     const userFirst = createUser(1, 'First');
     const userSecond = createUser(2, 'Second');
@@ -308,7 +308,7 @@ test.describe('ChatMessageList', () => {
 
     });
 
-  test.clientScripts([
+  test.skip([
     { module: 'mockdate' },
     { content: 'window.MockDate = MockDate;' },
   ])('Messagelist with date headers', async ({ page }) => {

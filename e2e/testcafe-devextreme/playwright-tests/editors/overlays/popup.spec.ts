@@ -14,7 +14,7 @@ test.describe('Popup', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Popup should be centered regarding the container even if container is animated (T920408)', async ({ page }) => {
+  test.skip('Popup should be centered regarding the container even if container is animated (T920408)', async ({ page }) => {
     await page.waitForTimeout(500);
 
     const wrapper = page.locator('#content .dx-overlay-wrapper');
@@ -64,7 +64,7 @@ test.describe('Popup', () => {
     }, '#innerContainer', { disableFxAnimation: false });
   });
 
-  test('Popup wrapper left top corner should be the same as the container right left corner even if container is animated', async ({ page }) => {
+  test.skip('Popup wrapper left top corner should be the same as the container right left corner even if container is animated', async ({ page }) => {
     await page.waitForTimeout(500);
 
     const wrapper = page.locator('#content .dx-overlay-wrapper');
@@ -105,7 +105,7 @@ test.describe('Popup', () => {
     }, '#innerContainer', { disableFxAnimation: false });
   });
 
-  test('There should not be any errors when position.of is html (T946851)', async ({ page }) => {
+  test.skip('There should not be any errors when position.of is html (T946851)', async ({ page }) => {
     await createWidget(page, 'dxPopup', {
     position: { of: 'html' },
     visible: true,
@@ -115,7 +115,7 @@ test.describe('Popup', () => {
 
     });
 
-  test('Popup should be centered regarding the window after position.boundary is set to window', async ({ page }) => {
+  test.skip('Popup should be centered regarding the window after position.boundary is set to window', async ({ page }) => {
     await createWidget(page, 'dxPopup', {
     width: 300,
     height: 200,

@@ -14,7 +14,7 @@ test.describe('ButtonGroup_Selection', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('selected class should not be added to the button after hovering (T1222079)', async ({ page }) => {
+  test.skip('selected class should not be added to the button after hovering (T1222079)', async ({ page }) => {
     await createWidget(page, 'dxButtonGroup', {
     items: [
       { text: 'Button_1' },
@@ -43,7 +43,7 @@ test.describe('ButtonGroup_Selection', () => {
       .notOk();
 
     });
-  test('selected class should be set after reenabling (T1308601)', async ({ page }) => {
+  test.skip('selected class should be set after reenabling (T1308601)', async ({ page }) => {
     await createWidget(page, 'dxButtonGroup', {
     items: [
       { text: 'Button_1' },

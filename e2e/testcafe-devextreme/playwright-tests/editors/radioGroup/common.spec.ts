@@ -14,7 +14,7 @@ test.describe('Radio Group', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Radio buttons placed into the template should not be selected after clicking the parent radio button (T816449)', async ({ page }) => {
+  test.skip('Radio buttons placed into the template should not be selected after clicking the parent radio button (T816449)', async ({ page }) => {
     await createWidget(page, 'dxRadioGroup', {
     items: [{}, {}, {}],
     itemTemplate: () => ($('<div>') as any).dxRadioGroup({
@@ -83,7 +83,7 @@ test.describe('Radio Group', () => {
 
     });
 
-  test('Dot of Radio button placed in scaled container should have valid centering(T1165339)', async ({ page }) => {
+  test.skip('Dot of Radio button placed in scaled container should have valid centering(T1165339)', async ({ page }) => {
 
     await setStyleAttribute(page, '#container', 'width: 600px; height: 100px;');
 

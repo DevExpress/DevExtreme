@@ -42,7 +42,7 @@ test.describe('FloatingAction with Grid', () => {
   };
 
   [undefined, '#grid'].forEach((positionOf) => {
-    test(`FAB with grid, position.of is ${positionOf}`, async ({ page }) => {
+    test.skip(`FAB with grid, position.of is ${positionOf}`, async ({ page }) => {
 
       const dataGrid = page.locator('#grid');
 

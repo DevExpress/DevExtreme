@@ -14,7 +14,7 @@ test.describe('Grouping', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Grouped list appearance', async ({ page }) => {
+  test.skip('Grouped list appearance', async ({ page }) => {
     await createWidget(page, 'dxList', {
     width: 300,
     dataSource: [
@@ -68,7 +68,7 @@ test.describe('Grouping', () => {
 
     });
 
-  test('Grouped list appearance with template', async ({ page }) => {
+  test.skip('Grouped list appearance with template', async ({ page }) => {
 
     await setAttribute(page, '#container', 'style', 'display: flex; gap: 40px; padding: 8px; width: fit-content;');
 

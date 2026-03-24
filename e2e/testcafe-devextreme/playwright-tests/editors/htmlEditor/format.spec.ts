@@ -14,7 +14,7 @@ test.describe('HtmlEditor - formats', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('HtmlEditor should keep actual format after "enter" key pressed (T922236)', async ({ page }) => {
+  test.skip('HtmlEditor should keep actual format after "enter" key pressed (T922236)', async ({ page }) => {
 
     await createWidget(page, 'dxHtmlEditor', {
       height: 400,

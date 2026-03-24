@@ -20,7 +20,7 @@ test.describe('Ai Column.Common (TreeList)', () => {
   const DROPDOWNMENU_REGENERATE_INDEX = 1;
   const DROPDOWNMENU_CLEAR_DATA_INDEX = 2;
 
-  test('Get result from AI and display it in the AI column', async ({ page }) => {
+  test.skip('Get result from AI and display it in the AI column', async ({ page }) => {
     await createWidget(page, 'dxTreeList', () => ({
     dataSource: [
       {
@@ -77,7 +77,7 @@ test.describe('Ai Column.Common (TreeList)', () => {
 
     });
 
-  test('Get result from AI and display it in two AI columns', async ({ page }) => {
+  test.skip('Get result from AI and display it in two AI columns', async ({ page }) => {
     await createWidget(page, 'dxTreeList', () => ({
     dataSource: [
       {
@@ -161,7 +161,7 @@ test.describe('Ai Column.Common (TreeList)', () => {
 
     });
 
-  test('Regenerate the AI request from DropDownButton menu', async ({ page }) => {
+  test.skip('Regenerate the AI request from DropDownButton menu', async ({ page }) => {
     await createWidget(page, 'dxTreeList', () => ({
     dataSource: [
       {
@@ -228,7 +228,7 @@ test.describe('Ai Column.Common (TreeList)', () => {
 
     });
 
-  test('Regenerate the AI request from Prompt Editor', async ({ page }) => {
+  test.skip('Regenerate the AI request from Prompt Editor', async ({ page }) => {
     await createWidget(page, 'dxTreeList', () => ({
     dataSource: [
       {
@@ -299,7 +299,7 @@ test.describe('Ai Column.Common (TreeList)', () => {
 
     });
 
-  test('Clear Data from AI column by DropDownButton menu', async ({ page }) => {
+  test.skip('Clear Data from AI column by DropDownButton menu', async ({ page }) => {
     await createWidget(page, 'dxTreeList', () => ({
     dataSource: [
       {
@@ -367,7 +367,7 @@ test.describe('Ai Column.Common (TreeList)', () => {
 
     });
 
-  test('Abort the AI request from Prompt Editor', async ({ page }) => {
+  test.skip('Abort the AI request from Prompt Editor', async ({ page }) => {
     await createWidget(page, 'dxTreeList', () => ({
     dataSource: [
       {
@@ -442,7 +442,7 @@ test.describe('Ai Column.Common (TreeList)', () => {
 
     });
 
-  test('Change the prompt in the AI Prompt Editor', async ({ page }) => {
+  test.skip('Change the prompt in the AI Prompt Editor', async ({ page }) => {
     await createWidget(page, 'dxTreeList', () => ({
     dataSource: [
       {

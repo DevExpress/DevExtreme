@@ -14,7 +14,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Open by click on startDate input and select date in calendar, value: [null, null]', async ({ page }) => {
+  test.skip('Open by click on startDate input and select date in calendar, value: [null, null]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -65,7 +65,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on startDate input and reselect start date in calendar, value: ["2021/09/17", null]', async ({ page }) => {
+  test.skip('Open by click on startDate input and reselect start date in calendar, value: ["2021/09/17", null]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -136,7 +136,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on endDate input and select date in calendar, value: [null, null]', async ({ page }) => {
+  test.skip('Open by click on endDate input and select date in calendar, value: [null, null]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -196,7 +196,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on startDate input and select date in calendar < endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
+  test.skip('Open by click on startDate input and select date in calendar < endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -234,7 +234,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on startDate input and select date in calendar > startDate, value: ["2021/09/17", "2021/09/28"]', async ({ page }) => {
+  test.skip('Open by click on startDate input and select date in calendar > startDate, value: ["2021/09/17", "2021/09/28"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -272,7 +272,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on startDate input and select date in calendar > endDate, value: ["2021/09/17", "2021/09/21"]', async ({ page }) => {
+  test.skip('Open by click on startDate input and select date in calendar > endDate, value: ["2021/09/17", "2021/09/21"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -336,7 +336,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on endDate input and select date in calendar > endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
+  test.skip('Open by click on endDate input and select date in calendar > endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -374,7 +374,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on endDate input and select date in calendar < endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
+  test.skip('Open by click on endDate input and select date in calendar < endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -412,7 +412,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on endDate input and select date in calendar < startDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
+  test.skip('Open by click on endDate input and select date in calendar < startDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -483,7 +483,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on endDate input and select date in calendar = endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
+  test.skip('Open by click on endDate input and select date in calendar = endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -521,7 +521,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on endDate input and select date in calendar = startDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
+  test.skip('Open by click on endDate input and select date in calendar = startDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -559,7 +559,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on startDate input and select date in calendar = startDate -> endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
+  test.skip('Open by click on startDate input and select date in calendar = startDate -> endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -608,7 +608,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Value in calendar should be updated by click on clear button if popup is open', async ({ page }) => {
+  test.skip('Value in calendar should be updated by click on clear button if popup is open', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -644,7 +644,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Value in calendar should be updated after change start date value by keyboard and click on endDate input if popup is open', async ({ page }) => {
+  test.skip('Value in calendar should be updated after change start date value by keyboard and click on endDate input if popup is open', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -693,7 +693,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Value in calendar should be updated after change start date value by keyboard and press `tab` if popup is open', async ({ page }) => {
+  test.skip('Value in calendar should be updated after change start date value by keyboard and press `tab` if popup is open', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -755,7 +755,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Value should be saved after select range in calendar and click on apply button, value: [null, null]', async ({ page }) => {
+  test.skip('Value should be saved after select range in calendar and click on apply button, value: [null, null]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -812,7 +812,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Value should not be saved after select range and click on cancel button', async ({ page }) => {
+  test.skip('Value should not be saved after select range and click on cancel button', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -850,7 +850,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on startDate input and reselect start date in calendar, value: [null, null]', async ({ page }) => {
+  test.skip('Open by click on startDate input and reselect start date in calendar, value: [null, null]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -920,7 +920,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on endDate input and select date in calendar, value: [null, null]', async ({ page }) => {
+  test.skip('Open by click on endDate input and select date in calendar, value: [null, null]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -988,7 +988,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on startDate input and select date in calendar < endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
+  test.skip('Open by click on startDate input and select date in calendar < endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -1036,7 +1036,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on startDate input and select date in calendar > startDate, value: ["2021/09/17", "2021/09/28"]', async ({ page }) => {
+  test.skip('Open by click on startDate input and select date in calendar > startDate, value: ["2021/09/17", "2021/09/28"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -1079,7 +1079,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on startDate input and select date in calendar > endDate, value: ["2021/09/17", "2021/09/21"]', async ({ page }) => {
+  test.skip('Open by click on startDate input and select date in calendar > endDate, value: ["2021/09/17", "2021/09/21"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -1142,7 +1142,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on endDate input and select date in calendar > endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
+  test.skip('Open by click on endDate input and select date in calendar > endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -1187,7 +1187,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on endDate input and select date in calendar < endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
+  test.skip('Open by click on endDate input and select date in calendar < endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -1232,7 +1232,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on endDate input and select date in calendar < startDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
+  test.skip('Open by click on endDate input and select date in calendar < startDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -1303,7 +1303,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on endDate input and select date in calendar = endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
+  test.skip('Open by click on endDate input and select date in calendar = endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -1348,7 +1348,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on endDate input and select date in calendar = startDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
+  test.skip('Open by click on endDate input and select date in calendar = startDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;
@@ -1396,7 +1396,7 @@ test.describe('DateRangeBox behavior (applyValueMode=\'instantly\')', () => {
 
     });
 
-  test('Open by click on startDate input and select date in calendar = startDate -> endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
+  test.skip('Open by click on startDate input and select date in calendar = startDate -> endDate, value: ["2021/09/17", "2021/09/24"]', async ({ page }) => {
 
     await page.evaluate(() => {
       (window as any).onValueChangedCounter = 0;

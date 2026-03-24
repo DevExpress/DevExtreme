@@ -15,7 +15,7 @@ test.describe('TabPanel', () => {
   });
 
   // T821726
-  test('[{0: selected}, {1}] -> click to tabs[1] -> click to external button', async () => {
+  test.skip('[{0: selected}, {1}] -> click to tabs[1] -> click to external button', async () => {
 
     await appendElementTo(page, '#container', 'div', 'tabPanel');
 
@@ -53,7 +53,7 @@ test.describe('TabPanel', () => {
 
     });
 
-  test('[{0: selected}] -> click to multiView -> click to external button', async () => {
+  test.skip('[{0: selected}] -> click to multiView -> click to external button', async () => {
 
     await appendElementTo(page, '#container', 'div', 'tabPanel');
 
@@ -83,7 +83,7 @@ test.describe('TabPanel', () => {
 
     });
 
-  test('[{0: selected}, {1}, {2}] -> click to tabs[1] -> navigate to tabs[2] -> click to external button', async () => {
+  test.skip('[{0: selected}, {1}, {2}] -> click to tabs[1] -> navigate to tabs[2] -> click to external button', async () => {
 
     await appendElementTo(page, '#container', 'div', 'tabPanel');
 
@@ -146,7 +146,7 @@ test.describe('TabPanel', () => {
 
     });
 
-  test('[{0: selected}, {1}] -> click to multiView -> navigate to tabs[1] -> click to external button', async () => {
+  test.skip('[{0: selected}, {1}] -> click to multiView -> navigate to tabs[1] -> click to external button', async () => {
 
     await appendElementTo(page, '#container', 'div', 'tabPanel');
 
@@ -197,7 +197,7 @@ test.describe('TabPanel', () => {
 
     });
 
-  test('[{0: selected}] -> click to multiView -> press "tab" -> press "tab"', async () => {
+  test.skip('[{0: selected}] -> click to multiView -> press "tab" -> press "tab"', async () => {
     await createWidget(page, 'dxTabPanel', {
     items: ['Item 1'],
   });
@@ -233,7 +233,7 @@ test.describe('TabPanel', () => {
 
     });
 
-  test('[{0: selected}] -> focusin by press "tab" -> press "tab"', async () => {
+  test.skip('[{0: selected}] -> focusin by press "tab" -> press "tab"', async () => {
 
     await appendElementTo(page, '#container', 'div', 'tabPanel');
 

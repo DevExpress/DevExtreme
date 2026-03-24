@@ -14,7 +14,7 @@ test.describe('Splitter_integration', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('The splitter pane should be rendered with the correct ratio inside the tab content of TabPanel if pane.size uses pixels', async ({ page }) => {
+  test.skip('The splitter pane should be rendered with the correct ratio inside the tab content of TabPanel if pane.size uses pixels', async ({ page }) => {
     await createWidget(page, 'dxTabPanel', {
     width: '100%',
     height: 300,

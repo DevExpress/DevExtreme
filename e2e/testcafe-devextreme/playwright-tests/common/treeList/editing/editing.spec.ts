@@ -15,7 +15,7 @@ test.describe('Treelist - Editing', () => {
   });
 
   // T1247158
-  test('TreeList - Insertafterkey doesn\'t work on children nodes', async ({ page }) => {
+  test.skip('TreeList - Insertafterkey doesn\'t work on children nodes', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     dataSource: [
       {

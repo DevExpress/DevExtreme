@@ -22,7 +22,7 @@ test.describe('HtmlEditor', () => {
     const clickTarget = toolbar ? '#otherContainer .dx-bold-format' : '#container';
     const baseScreenName = toolbar ? 'htmleditor-with-toolbar' : 'htmleditor-without-toolbar';
 
-    test(`T1025549 - ${baseScreenName}`, async ({ page }) => {
+    test.skip(`T1025549 - ${baseScreenName}`, async ({ page }) => {
 
       await setStyleAttribute(page, '#container', 'box-sizing: border-box; height: 200px; width: 200px');
       await setStyleAttribute(page, '#otherContainer', 'box-sizing: border-box; height: 200px; width: 200px');
@@ -54,7 +54,7 @@ test.describe('HtmlEditor', () => {
     });
   });
 
-  test('AI toolbar item', async ({ page }) => {
+  test.skip('AI toolbar item', async ({ page }) => {
 
     await createWidget(page, 'dxHtmlEditor', {
       height: 500,

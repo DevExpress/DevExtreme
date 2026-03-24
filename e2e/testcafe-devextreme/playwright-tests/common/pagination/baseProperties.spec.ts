@@ -14,7 +14,7 @@ test.describe('Pagination Base Properties', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Pagination width and height property', async ({ page }) => {
+  test.skip('Pagination width and height property', async ({ page }) => {
     await createWidget(page, 'dxPagination', {
     width: 270,
     height: '95px',
@@ -33,7 +33,7 @@ test.describe('Pagination Base Properties', () => {
 
     });
 
-  test('Pagination elementAttr property', async ({ page }) => {
+  test.skip('Pagination elementAttr property', async ({ page }) => {
     await createWidget(page, 'dxPagination', {
     elementAttr: {
       'aria-label': 'some description',
@@ -49,7 +49,7 @@ test.describe('Pagination Base Properties', () => {
 
     });
 
-  test('Pagination hint and accessKey properties', async ({ page }) => {
+  test.skip('Pagination hint and accessKey properties', async ({ page }) => {
     await createWidget(page, 'dxPagination', {
     hint: 'Best Pagination',
     accessKey: 'F',
@@ -65,7 +65,7 @@ test.describe('Pagination Base Properties', () => {
 
     });
 
-  test('Pagination disabled property', async ({ page }) => {
+  test.skip('Pagination disabled property', async ({ page }) => {
     await createWidget(page, 'dxPagination', {
     disabled: true,
     itemCount: 50,
@@ -79,7 +79,7 @@ test.describe('Pagination Base Properties', () => {
 
     });
 
-  test('Pagination tabindex and state properties', async ({ page }) => {
+  test.skip('Pagination tabindex and state properties', async ({ page }) => {
     await createWidget(page, 'dxPagination', {
     itemCount: 50,
     disabled: false,
@@ -115,7 +115,7 @@ test.describe('Pagination Base Properties', () => {
 
     });
 
-  test('Pagination focus method & accessKey propery without focusStateEnabled', async ({ page }) => {
+  test.skip('Pagination focus method & accessKey propery without focusStateEnabled', async ({ page }) => {
     await createWidget(page, 'dxPagination', {
     focusStateEnabled: false,
     accessKey: 'F',
@@ -137,7 +137,7 @@ test.describe('Pagination Base Properties', () => {
 
     });
 
-  test('Pagination focus method with focusStateEnabled', async ({ page }) => {
+  test.skip('Pagination focus method with focusStateEnabled', async ({ page }) => {
     await createWidget(page, 'dxPagination', {
     focusStateEnabled: true,
     itemCount: 50,

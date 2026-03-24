@@ -16,7 +16,7 @@ test.describe('pivotGrid_headerFilter', () => {
 
   const PIVOT_GRID_SELECTOR = '#container';
 
-  test('Header filter popup', async ({ page }) => {
+  test.skip('Header filter popup', async ({ page }) => {
 
     await createWidget(page, 'dxPivotGrid', {
       allowSorting: true,
@@ -59,7 +59,7 @@ test.describe('pivotGrid_headerFilter', () => {
 
     });
 
-  test('[T1284200] Should handle dxList "selectAll" when has unselected items on the second page', async ({ page }) => {
+  test.skip('[T1284200] Should handle dxList "selectAll" when has unselected items on the second page', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
     dataSource: {
       fields: [

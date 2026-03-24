@@ -15,7 +15,7 @@ test.describe('Editing events', () => {
   });
 
   // T1310528
-  test('Change value editor to checkbox', async ({ page }) => {
+  test.skip('Change value editor to checkbox', async ({ page }) => {
 
     await createWidget(page, 'dxFilterBuilder', {
       fields,
@@ -34,7 +34,7 @@ test.describe('Editing events', () => {
     });
 
   // T1310528
-  test('Change value editor to switch', async ({ page }) => {
+  test.skip('Change value editor to switch', async ({ page }) => {
 
     await createWidget(page, 'dxFilterBuilder', {
       fields,

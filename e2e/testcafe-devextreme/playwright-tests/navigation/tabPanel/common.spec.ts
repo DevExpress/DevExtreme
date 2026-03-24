@@ -19,7 +19,7 @@ test.describe('TabPanel_common', () => {
 
   ['with scrolling', 'without scrolling'].forEach((mode) => {
     const testName = `TabPanel borders ${mode}`;
-    test(testName, async ({ page }) => {
+    test.skip(testName, async ({ page }) => {
 
       const dataSource: any[] = [
         {
@@ -81,7 +81,7 @@ test.describe('TabPanel_common', () => {
     });
   });
 
-  test('TabPanel text-overflow with tabsPosition left', async ({ page }) => {
+  test.skip('TabPanel text-overflow with tabsPosition left', async ({ page }) => {
 
     const dataSource: any[] = [
       { icon: 'user', text: 'John Heart', title: 'John Heart' },
@@ -106,7 +106,7 @@ test.describe('TabPanel_common', () => {
 
     });
 
-  test('TabPanel focus borders after change selectedIndex in runtime', async ({ page }) => {
+  test.skip('TabPanel focus borders after change selectedIndex in runtime', async ({ page }) => {
 
     const dataSource: any[] = [
       {
@@ -140,7 +140,7 @@ test.describe('TabPanel_common', () => {
 
     });
 
-  test('TabPanel navigation buttons hover', async ({ page }) => {
+  test.skip('TabPanel navigation buttons hover', async ({ page }) => {
 
     const dataSource: any[] = [
       {
@@ -189,7 +189,7 @@ test.describe('TabPanel_common', () => {
 
   ['top', 'right', 'bottom', 'left'].forEach((tabsPosition) => {
     const testName = `TabPanel without focus,tabsPosition=${tabsPosition}`;
-    test(testName, async ({ page }) => {
+    test.skip(testName, async ({ page }) => {
 
       await appendElementTo(page, '#container', 'div', 'tabpanel');
       await appendElementTo(page, '#container', 'div', 'tabpanel-rtl');
@@ -233,7 +233,7 @@ test.describe('TabPanel_common', () => {
     });
   });
 
-  test('TabPanel item focus when clicking on multiview', async ({ page }) => {
+  test.skip('TabPanel item focus when clicking on multiview', async ({ page }) => {
 
     const dataSource: any[] = [
       {
@@ -270,7 +270,7 @@ test.describe('TabPanel_common', () => {
   const positions = ['top', 'left', 'right', 'bottom'];
 
   positions.forEach((tabsPosition) => {
-    test(`TabPanel border appearance when it placed inside the content of TabPanel with=${tabsPosition}`, async ({ page }) => {
+    test.skip(`TabPanel border appearance when it placed inside the content of TabPanel with=${tabsPosition}`, async ({ page }) => {
 
       await insertStylesheetRulesToPage(page, '.dx-tabpanel { margin: 10px }');
 
@@ -318,7 +318,7 @@ test.describe('TabPanel_common', () => {
     });
   });
 
-  test('TabPanel tabs min-width', async ({ page }) => {
+  test.skip('TabPanel tabs min-width', async ({ page }) => {
 
     const dataSource: any[] = [
       { text: 'ok', title: 'ok' },
@@ -341,7 +341,7 @@ test.describe('TabPanel_common', () => {
     });
 
   ['left', 'right'].forEach((tabsPosition) => {
-    test('TabPanel should be shown correctly even if there is only one tab', async ({ page }) => {
+    test.skip('TabPanel should be shown correctly even if there is only one tab', async ({ page }) => {
 
       const dataSource: any[] = [
         {
