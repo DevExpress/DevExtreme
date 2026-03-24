@@ -22,7 +22,7 @@ const CHROME_FLAGS = [
 export default defineConfig({
   testDir: './playwright-tests',
   outputDir: './playwright-results',
-  snapshotDir: './playwright-tests',
+  snapshotDir: './tests',
   snapshotPathTemplate: '{snapshotDir}/{testFileDir}/etalons/{arg}{ext}',
 
   expect: {
