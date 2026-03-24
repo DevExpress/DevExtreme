@@ -937,12 +937,15 @@ QUnit.module('Options', () => {
         });
 
         let loadCount = 0;
+        const deferreds = [];
 
         const nextDataSource = new DataSource({
             store: new CustomStore({
                 load: function() {
                     loadCount++;
-                    return $.Deferred().resolve([]).promise();
+                    const d = $.Deferred();
+                    deferreds.push(d);
+                    return d.promise();
                 }
             })
         });
@@ -955,6 +958,8 @@ QUnit.module('Options', () => {
         });
 
         assert.equal(loadCount, 2, 'Data source load was called exactly twice — once per option change');
+
+        deferreds.forEach(function(d) { d.resolve([]); });
     });
 
     QUnit.test('It should be possible to change views option when view names are specified (T995794)', async function(assert) {
