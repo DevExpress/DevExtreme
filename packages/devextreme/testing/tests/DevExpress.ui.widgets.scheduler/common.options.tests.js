@@ -941,13 +941,8 @@ QUnit.module('Options', () => {
         const nextDataSource = new DataSource({
             store: new CustomStore({
                 load: function() {
-                    const d = $.Deferred();
-                    setTimeout(function() {
-                        loadCount++;
-                        d.resolve([]);
-                    }, 100);
-
-                    return d.promise();
+                    loadCount++;
+                    return $.Deferred().resolve([]).promise();
                 }
             })
         });
@@ -958,8 +953,6 @@ QUnit.module('Options', () => {
             'views[2].intervalCount': 2,
             'views[2].startDate': new Date(),
         });
-        await waitForAsync(() => loadCount === 2);
-        await waitAsync(200);
 
         assert.equal(loadCount, 2, 'Data source load was called exactly twice — once per option change');
     });
