@@ -937,14 +937,16 @@ QUnit.module('Options', () => {
         });
 
         let loadCount = 0;
-        const deferreds = [];
 
         const nextDataSource = new DataSource({
             store: new CustomStore({
                 load: function() {
-                    loadCount++;
                     const d = $.Deferred();
-                    deferreds.push(d);
+                    setTimeout(function() {
+                        loadCount++;
+                        d.resolve([]);
+                    }, 100);
+
                     return d.promise();
                 }
             })
@@ -956,10 +958,9 @@ QUnit.module('Options', () => {
             'views[2].intervalCount': 2,
             'views[2].startDate': new Date(),
         });
+        await waitForAsync(() => loadCount === 2);
 
         assert.equal(loadCount, 2, 'Data source load was called exactly twice — once per option change');
-
-        deferreds.forEach(function(d) { d.resolve([]); });
     });
 
     QUnit.test('It should be possible to change views option when view names are specified (T995794)', async function(assert) {
