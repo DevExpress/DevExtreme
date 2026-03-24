@@ -77,7 +77,11 @@ jobs:
       fail-fast: false
       matrix:
         ARGS: [
-          { componentFolder: "scheduler/common/month", name: "scheduler / common / month" },
+          { componentFolder: "scheduler/common", name: "scheduler / common (1/3)", shard: "1/3" },
+          { componentFolder: "scheduler/common", name: "scheduler / common (2/3)", shard: "2/3" },
+          { componentFolder: "scheduler/common", name: "scheduler / common (3/3)", shard: "3/3" },
+          { componentFolder: "scheduler/timezones", name: "scheduler / timezones" },
+          { componentFolder: "scheduler/viewOffset", name: "scheduler / viewOffset" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 30
