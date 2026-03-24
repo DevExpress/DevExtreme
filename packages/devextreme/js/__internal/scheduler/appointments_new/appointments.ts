@@ -40,7 +40,7 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
 
   getAppointmentDataSource: () => AppointmentDataSource;
   getResourceManager: () => ResourceManager;
-  getDataAccessor: () => AppointmentDataAccessor
+  getDataAccessor: () => AppointmentDataAccessor;
 }
 
 type AppointmentComponent = GridAppointment | AgendaAppointment | AppointmentCollector;
@@ -225,5 +225,6 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   }
 }
 
+// TODO<Appointments>: rename to dxSchedulerAppointments when old impl is removed
 // eslint-disable-next-line
-registerComponent('dxSchedulerAppointments', Appointments as any);
+registerComponent('dxSchedulerNewAppointments', Appointments as any);

@@ -5,7 +5,7 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 
 import { getDeltaTime } from './appointments/resizing/get_delta_time';
-import { getDateText, getFormatType } from './appointments_new/utils/appointment_text';
+import { getDateFormatType, getDateText } from './appointments_new/utils/get_date_text';
 import { VERTICAL_VIEW_TYPES } from './constants';
 import type Scheduler from './m_scheduler';
 import { utils } from './m_utils';
@@ -132,7 +132,7 @@ const subscribes = {
     // pull out time zone converting from appointment adapter for knockout (T947938)
     const startDate = targetedAppointment.displayStartDate || this.timeZoneCalculator.createDate(adapter.startDate, 'toGrid');
     const endDate = targetedAppointment.displayEndDate || this.timeZoneCalculator.createDate(adapter.endDate, 'toGrid');
-    const formatType = format ?? getFormatType(startDate, endDate, adapter.allDay, this.currentView.type);
+    const formatType = format ?? getDateFormatType(startDate, endDate, adapter.allDay, this.currentView.type);
 
     return {
       text: adapter.text || messageLocalization.format('dxScheduler-noSubject'),

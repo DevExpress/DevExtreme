@@ -109,4 +109,4 @@ export class AppointmentCollector
 }
 
 // eslint-disable-next-line
-registerComponent('dxSchedulerAppointmentCollector', AppointmentCollector as any);
+registerComponent('dxSchedulerNewAppointmentCollector', AppointmentCollector as any);

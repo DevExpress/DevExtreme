@@ -11,9 +11,14 @@ export const APPOINTMENT_COLLECTOR_CLASSES = {
   CONTENT: 'dx-scheduler-appointment-collector-content',
 };
 
+export const APPOINTMENT_TYPE_CLASSES = {
+  EMPTY: 'dx-scheduler-appointment-empty',
+  ALL_DAY: 'dx-scheduler-all-day-appointment',
+  RECURRING: 'dx-scheduler-appointment-recurrence',
+};
+
 export const APPOINTMENT_CLASSES = {
   CONTAINER: 'dx-scheduler-appointment',
-  RECURRING: 'dx-scheduler-appointment-recurrence',
   CONTENT: 'dx-scheduler-appointment-content',
   ARIA_DESCRIPTION: 'dx-scheduler-appointment-aria-description',
   STRIP: 'dx-scheduler-appointment-strip',

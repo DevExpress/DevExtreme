@@ -2,7 +2,9 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
 import type { AppointmentItemViewModel } from '../../view_model/types';
-import { ALL_DAY_TEXT, APPOINTMENT_CLASSES, RECURRING_LABEL } from '../const';
+import {
+  ALL_DAY_TEXT, APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES, RECURRING_LABEL,
+} from '../const';
 import type { BaseAppointmentProperties } from './base_appointment';
 import { BaseAppointment } from './base_appointment';
 
@@ -27,12 +29,11 @@ export class GridAppointment extends BaseAppointment<GridAppointmentProperties> 
     });
   }
 
-  private async applyElementColor(): Promise<void> {
-    const color = await super.getColor();
+  protected override applyElementClasses(): void {
+    super.applyElementClasses();
 
-    if (color) {
-      this.$element().css('backgroundColor', color);
-    }
+    this.$element()
+      .toggleClass(APPOINTMENT_TYPE_CLASSES.EMPTY, this.option().viewModel.empty);
   }
 
   protected override defaultAppointmentTemplate(
@@ -68,5 +69,13 @@ export class GridAppointment extends BaseAppointment<GridAppointmentProperties> 
     }
 
     return $container;
+  }
+
+  private async applyElementColor(): Promise<void> {
+    const color = await super.getResourceColor();
+
+    if (color) {
+      this.$element().css('backgroundColor', color);
+    }
   }
 }
