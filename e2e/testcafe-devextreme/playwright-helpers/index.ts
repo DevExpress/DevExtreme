@@ -24,3 +24,13 @@ export {
   setupTestPage,
 } from './testPageUtils';
 export { generateOptionMatrix } from './generateOptionMatrix';
+export {
+  Scheduler,
+  SchedulerAppointment,
+  SchedulerAppointmentPopup,
+  SchedulerAppointmentTooltip,
+  SchedulerAppointmentDialog,
+  SchedulerToolbar,
+  SchedulerNavigator,
+  SchedulerTooltipListItem,
+} from './scheduler';
