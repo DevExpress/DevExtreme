@@ -7,6 +7,7 @@ import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
+import type { TargetedAppointment } from '../types';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type { AppointmentDataSource } from '../view_model/m_appointment_data_source';
@@ -18,7 +19,8 @@ import { AppointmentCollector } from './appointment_collector';
 import { APPOINTMENTS_CONTAINER_CLASS } from './const';
 import type { DiffItem } from './get_view_model_diff';
 import { getViewModelDiff } from './get_view_model_diff';
-import { isCollectorViewModel as isAppointmentCollectorViewModel, isGridAppointmentViewModel } from './utils';
+import { getTargetedAppointment } from './utils/get_targeted_appointment';
+import { isCollectorViewModel as isAppointmentCollectorViewModel, isGridAppointmentViewModel } from './utils/type_helpers';
 
 export interface AppointmentsProperties extends DOMComponentProperties<Appointments> {
   tabIndex: number;
@@ -169,17 +171,19 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
     fragment.appendChild($element.get(0));
 
+    const targetedAppointmentData = this.getTargetedAppointmentData(appointmentViewModel);
+
     if (isAppointmentCollectorViewModel(appointmentViewModel)) {
       return this._createComponent($element, AppointmentCollector, {
         viewModel: appointmentViewModel,
+        targetedAppointmentData,
         appointmentCollectorTemplate: this.option().appointmentCollectorTemplate,
-        getResourceManager: this.option().getResourceManager,
-        getDataAccessor: this.option().getDataAccessor,
       });
     }
 
     const config = {
       appointmentTemplate: this.option().appointmentTemplate,
+      targetedAppointmentData,
       onAppointmentRendered: this.option().onAppointmentRendered,
       getResourceManager: this.option().getResourceManager,
       getDataAccessor: this.option().getDataAccessor,
@@ -203,6 +207,20 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         ...config,
         viewModel: appointmentViewModel,
       },
+    );
+  }
+
+  private getTargetedAppointmentData(
+    appointmentViewModel: AppointmentViewModelPlain,
+  ): TargetedAppointment {
+    const normalizedAppointmentViewModel = isAppointmentCollectorViewModel(appointmentViewModel)
+      ? appointmentViewModel.items[0]
+      : appointmentViewModel;
+
+    return getTargetedAppointment(
+      normalizedAppointmentViewModel,
+      this.option().getDataAccessor(),
+      this.option().getResourceManager(),
     );
   }
 }

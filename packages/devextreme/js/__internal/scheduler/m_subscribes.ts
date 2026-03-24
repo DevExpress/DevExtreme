@@ -4,8 +4,8 @@ import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 
-import { createFormattedDateText } from './appointments/m_text_utils';
 import { getDeltaTime } from './appointments/resizing/get_delta_time';
+import { getDateText, getFormatType } from './appointments_new/utils/appointment_text';
 import { VERTICAL_VIEW_TYPES } from './constants';
 import type Scheduler from './m_scheduler';
 import { utils } from './m_utils';
@@ -120,30 +120,24 @@ const subscribes = {
   // TODO<Appointments>: delete this method when old impl is removed
   createFormattedDateText(
     appointment: AppointmentTooltipItem['appointment'],
-    targetedAppointment: TargetedAppointment,
+    targetedAppointmentRaw: TargetedAppointment,
     format?: string,
   ) {
-    const text = this._dataAccessors.get('text', targetedAppointment) ?? '';
+    const targetedAppointment = {
+      ...appointment,
+      ...targetedAppointmentRaw,
+    } as TargetedAppointment;
+
+    const adapter = new AppointmentAdapter(targetedAppointment, this._dataAccessors);
+    // pull out time zone converting from appointment adapter for knockout (T947938)
+    const startDate = targetedAppointment.displayStartDate || this.timeZoneCalculator.createDate(adapter.startDate, 'toGrid');
+    const endDate = targetedAppointment.displayEndDate || this.timeZoneCalculator.createDate(adapter.endDate, 'toGrid');
+    const formatType = format ?? getFormatType(startDate, endDate, adapter.allDay, this.currentView.type);
+
     return {
-      text: text || messageLocalization.format('dxScheduler-noSubject'),
-      formatDate: createFormattedDateText(targetedAppointment, format as any, this.currentView.type),
+      text: adapter.text || messageLocalization.format('dxScheduler-noSubject'),
+      formatDate: getDateText(startDate, endDate, formatType as any),
     };
-    // return createFormattedDateText(targetedAppointment, format as any, this.currentView.type);
-
-    // const targetedAppointment = {
-    //   ...appointment,
-    //   ...targetedAppointmentRaw,
-    // } as TargetedAppointment;
-    // const adapter = new AppointmentAdapter(targetedAppointment, this._dataAccessors);
-    // // pull out time zone converting from appointment adapter for knockout (T947938)
-    // const startDate = targetedAppointment.displayStartDate || this.timeZoneCalculator.createDate(adapter.startDate, 'toGrid');
-    // const endDate = targetedAppointment.displayEndDate || this.timeZoneCalculator.createDate(adapter.endDate, 'toGrid');
-    // const formatType = format ?? getFormatType(startDate, endDate, adapter.allDay, this.currentView.type !== 'month');
-
-    // return {
-    //   text: adapter.text || messageLocalization.format('dxScheduler-noSubject'),
-    //   formatDate: formatDates(startDate, endDate, formatType),
-    // };
   },
 
   getResizableAppointmentArea(options) {

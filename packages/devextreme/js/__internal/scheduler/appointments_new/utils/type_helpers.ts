@@ -3,7 +3,7 @@ import type {
   AppointmentCollectorViewModel,
   AppointmentItemViewModel,
   AppointmentViewModelPlain,
-} from '../view_model/types';
+} from '../../view_model/types';
 
 export const isAgendaAppointmentViewModel = (appointmentViewModel: AppointmentViewModelPlain):
   appointmentViewModel is AppointmentAgendaViewModel => 'isAgendaModel' in appointmentViewModel;

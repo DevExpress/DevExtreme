@@ -3,16 +3,13 @@ import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import Button from '@js/ui/button';
 import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { TargetedAppointment } from '@ts/scheduler/types';
-import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
-import { getTargetedAppointment } from '@ts/scheduler/utils/get_targeted_appointment';
-import type { ResourceManager } from '@ts/scheduler/utils/resource_manager/resource_manager';
-import type { AppointmentCollectorViewModel, AppointmentItemViewModel } from '@ts/scheduler/view_model/types';
-import Button from '@ts/ui/button';
+import type { AppointmentCollectorViewModel } from '@ts/scheduler/view_model/types';
 
 import { APPOINTMENT_COLLECTOR_CLASSES } from './const';
 
@@ -20,28 +17,14 @@ export interface AppointmentCollectorProperties
   extends DOMComponentProperties<AppointmentCollector>
 {
   viewModel: AppointmentCollectorViewModel;
+  targetedAppointmentData: TargetedAppointment;
   appointmentCollectorTemplate: SchedulerProperties['appointmentCollectorTemplate'];
-
-  getResourceManager: () => ResourceManager;
-  getDataAccessor: () => AppointmentDataAccessor;
 }
 
 export class AppointmentCollector
   extends DOMComponent<AppointmentCollector, AppointmentCollectorProperties> {
-  private targetedAppointmentsData!: TargetedAppointment[];
-
   override _init(): void {
     super._init();
-
-    const { viewModel } = this.option();
-    this.targetedAppointmentsData = viewModel.items.map((item: AppointmentItemViewModel) => (
-      getTargetedAppointment(
-        item.itemData,
-        item,
-        this.option().getDataAccessor(),
-        this.option().getResourceManager(),
-      )
-    ));
 
     this._templateManager.addDefaultTemplates({
       appointmentCollector: new FunctionTemplate((options) => {
@@ -81,8 +64,10 @@ export class AppointmentCollector
       `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`
     );
 
-    const startDateText = localizeDate(this.targetedAppointmentsData[0].displayStartDate);
-    const endDateText = localizeDate(this.targetedAppointmentsData[0].displayEndDate);
+    const { targetedAppointmentData } = this.option();
+
+    const startDateText = localizeDate(targetedAppointmentData.displayStartDate);
+    const endDateText = localizeDate(targetedAppointmentData.displayEndDate);
 
     const dateText = startDateText === endDateText
       ? startDateText
@@ -100,9 +85,6 @@ export class AppointmentCollector
       width: this.option().viewModel.width,
       height: this.option().viewModel.height,
       template,
-      onClick: () => {
-        // TODO: show tooltip
-      },
     });
   }
 

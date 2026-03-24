@@ -1,3 +1,4 @@
+// TODO<Appointments>: remove this file after old impl is deleted
 import type { SafeAppointment, TargetedAppointment } from '../types';
 import type {
   AppointmentAgendaViewModel,
@@ -10,67 +11,59 @@ import { getLeafGroupValues } from './resource_manager/group_utils';
 import type { ResourceManager } from './resource_manager/resource_manager';
 
 const setTargetedAppointmentResources = (
-  targetedAppointment: TargetedAppointment,
-  appointmentViewModel: AppointmentAgendaViewModel | AppointmentItemViewModel,
+  rawAppointment: SafeAppointment,
+  settings: AppointmentAgendaViewModel | AppointmentItemViewModel,
   resourceManager: ResourceManager,
 ): void => {
   const { groups, resourceById, groupsLeafs } = resourceManager;
   if (groups.length) {
-    const cellGroups = getLeafGroupValues(groupsLeafs, appointmentViewModel.groupIndex);
-    setAppointmentGroupValues(targetedAppointment, resourceById, cellGroups);
+    const cellGroups = getLeafGroupValues(groupsLeafs, settings.groupIndex);
+    setAppointmentGroupValues(rawAppointment, resourceById, cellGroups);
   }
 };
 
-// TODO<Appointments>: remove first parameter when old impl is removed
 export const getTargetedAppointmentFromInfo = (
   rawAppointment: SafeAppointment,
-  appointmentViewModel: AppointmentAgendaViewModel | AppointmentItemViewModel,
+  settings: AppointmentAgendaViewModel | AppointmentItemViewModel,
   dataAccessor: AppointmentDataAccessor,
   resourceManager: ResourceManager,
   usePartialDates = false,
 ): TargetedAppointment => {
-  const { itemData, info } = appointmentViewModel;
+  const { info } = settings;
 
+  const rawTargetedAppointment = { ...rawAppointment } as TargetedAppointment;
+  dataAccessor.set('startDate', rawTargetedAppointment, new Date(info.sourceAppointment.startDate));
+  dataAccessor.set('endDate', rawTargetedAppointment, new Date(info.sourceAppointment.endDate));
   const displayDates = usePartialDates && 'partialDates' in info
     ? info.partialDates
     : info.appointment;
+  rawTargetedAppointment.displayStartDate = new Date(displayDates.startDate);
+  rawTargetedAppointment.displayEndDate = new Date(displayDates.endDate);
+  setTargetedAppointmentResources(rawTargetedAppointment, settings, resourceManager);
 
-  const targetedAppointment: TargetedAppointment = {
-    ...itemData,
-    displayStartDate: new Date(displayDates.startDate),
-    displayEndDate: new Date(displayDates.endDate),
-  };
-
-  dataAccessor.set('startDate', targetedAppointment, new Date(info.sourceAppointment.startDate));
-  dataAccessor.set('endDate', targetedAppointment, new Date(info.sourceAppointment.endDate));
-
-  setTargetedAppointmentResources(targetedAppointment, appointmentViewModel, resourceManager);
-
-  return targetedAppointment;
+  return rawTargetedAppointment;
 };
 
-// TODO<Appointments>: remove first parameter when old impl is removed
 export const getTargetedAppointment = (
   rawAppointment: SafeAppointment,
-  appointmentViewModel: AppointmentViewModelPlain,
+  settings: AppointmentViewModelPlain,
   dataAccessor: AppointmentDataAccessor,
   resourceManager: ResourceManager,
 ): TargetedAppointment => {
-  const { itemData } = appointmentViewModel;
-  const startDate = dataAccessor.get('startDate', itemData);
-  const endDate = dataAccessor.get('endDate', itemData);
+  const startDate = dataAccessor.get('startDate', rawAppointment);
+  const endDate = dataAccessor.get('endDate', rawAppointment);
 
-  if (!('info' in appointmentViewModel)) {
+  if (!('info' in settings)) {
     return {
-      ...itemData,
+      ...rawAppointment,
       displayStartDate: startDate,
       displayEndDate: endDate,
     };
   }
 
   return getTargetedAppointmentFromInfo(
-    itemData,
-    appointmentViewModel,
+    rawAppointment,
+    settings,
     dataAccessor,
     resourceManager,
   );

@@ -1761,6 +1761,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return rawResult;
   }
 
+  // TODO<Appointments>: delete this method when old impl is removed
   getTargetedAppointment(appointment: SafeAppointment, element: dxElementWrapper): TargetedAppointment {
     const settings = utils.dataAccessors.getAppointmentSettings(element)!;
     return getTargetedAppointment(
