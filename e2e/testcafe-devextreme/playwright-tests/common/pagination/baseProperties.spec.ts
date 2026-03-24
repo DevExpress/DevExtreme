@@ -67,7 +67,7 @@ test.describe('Pagination Base Properties', () => {
     expect(await pagination.evaluate((el) => el.classList.contains('dx-state-disabled'))).toBe(true);
   });
 
-  test.skip('Pagination tabindex and state properties', async ({ page }) => {
+  test('Pagination tabindex and state properties', async ({ page }) => {
     await createWidget(page, 'dxPagination', {
       itemCount: 50,
       disabled: false,

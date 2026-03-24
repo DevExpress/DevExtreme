@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../playwright-helpers';
+import { createWidget, List } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -16,139 +16,127 @@ test.describe('List', () => {
 
   const LIST_ITEM_DELETE_BUTTON = 'dx-list-static-delete-button';
 
-  const createList = (selectionMode, allowItemDeleting = false) => createWidget(page, 'dxList', {
-    items: ['item1', 'item2', 'item3'],
-    showSelectionControls: true,
-    selectionMode,
-    allowItemDeleting,
-  });
+  const createList = async (page: any, selectionMode: string, allowItemDeleting = false) => {
+    await createWidget(page, 'dxList', {
+      items: ['item1', 'item2', 'item3'],
+      showSelectionControls: true,
+      selectionMode,
+      allowItemDeleting,
+    });
+  };
 
   [true, false].forEach((focusStateEnabled) => {
     test(`Should${focusStateEnabled ? '' : ' not'} focus item when deleting when focusStateEnabled=${focusStateEnabled} (T1226030)`, async ({ page }) => {
-    await createWidget(page, 'dxList', {
-      items: ['item1', 'item2', 'item3'],
-      selectionMode: 'none',
-      allowItemDeleting: true,
-      itemDeleteMode: 'static',
-      focusStateEnabled,
-    });
+      await createWidget(page, 'dxList', {
+        items: ['item1', 'item2', 'item3'],
+        selectionMode: 'none',
+        allowItemDeleting: true,
+        itemDeleteMode: 'static',
+        focusStateEnabled,
+      });
 
-      const list = page.locator('#container');
+      const list = new List(page);
       const firstItem = list.getItem(0);
-      const $firstDeleteBtn = firstItem.element.find(`.${LIST_ITEM_DELETE_BUTTON}`);
+      const deleteBtn = firstItem.element.locator(`.${LIST_ITEM_DELETE_BUTTON}`);
 
-      await page.click($firstDeleteBtn)
-        .expect(firstItem.isFocused)
-        .eql(focusStateEnabled);
-
+      await deleteBtn.click();
+      expect(await firstItem.isFocused).toBe(focusStateEnabled);
     });
   });
 
   test('Should apply styles on selectAll checkbox after tab button press', async ({ page }) => {
-    await createList('all');
+    await createList(page, 'all');
 
-    const list = page.locator('#container');
+    const list = new List(page);
 
-    await page.keyboard.press('Tab')
-      .expect(list.selectAll.checkBox.isFocused)
-      .ok();
-
-    });
+    await page.keyboard.press('Tab');
+    expect(await list.selectAll.checkBox.isFocused).toBe(true);
+  });
 
   test('Should apply styles on selectAll checkbox after enter button press on it', async ({ page }) => {
-    await createList('all');
+    await createList(page, 'all');
 
-    const list = page.locator('#container');
+    const list = new List(page);
 
-    await page.keyboard.press('Tab')
-      .pressKey('enter')
-      .expect(list.selectAll.checkBox.isChecked)
-      .ok();
-
-    });
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+    expect(await list.selectAll.checkBox.isChecked).toBe(true);
+  });
 
   ['single', 'multiple'].forEach((selectionMode) => {
     test(`Should apply styles on list item after tab button press, ${selectionMode} mode`, async ({ page }) => {
-    await createList(selectionMode);
+      await createList(page, selectionMode);
 
-      const list = page.locator('#container');
+      const list = new List(page);
 
-      await page.keyboard.press('Tab')
-        .expect(list.getItem(0).isFocused)
-        .ok();
-
+      await page.keyboard.press('Tab');
+      expect(await list.getItem(0).isFocused).toBe(true);
     });
 
     test(`Should apply styles on list item after enter button press on it, ${selectionMode} mode`, async ({ page }) => {
-    await createList(selectionMode);
+      await createList(page, selectionMode);
 
-      const list = page.locator('#container');
+      const list = new List(page);
+
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Enter');
 
       const firstItem = list.getItem(0);
-      const firstItemType = selectionMode === 'single' ? firstItem.radioButton : firstItem.checkBox;
-
-      await page.keyboard.press('Tab')
-        .pressKey('enter')
-        .expect(firstItemType.isChecked)
-        .ok();
-
+      const checkedProp = selectionMode === 'single'
+        ? firstItem.radioButton.isChecked
+        : firstItem.checkBox.isChecked;
+      expect(await checkedProp).toBe(true);
     });
   });
 
   test('Should select next item after delete by keyboard', async ({ page }) => {
-    await createList('none', true);
+    await createList(page, 'none', true);
 
-    const list = page.locator('#container');
+    const list = new List(page);
     const firstItem = list.getItem(0);
 
-    await page.expect(list.getVisibleItems().count).eql(3)
-      .click(firstItem.element)
-      .pressKey('delete');
+    expect(await list.getVisibleItems().count()).toBe(3);
+    await firstItem.element.click();
+    await page.keyboard.press('Delete');
 
     const item = list.getItem(0);
-
-    expect(item.isFocused).toBeTruthy();
-    expect(item.text).toBe('item2');
-    await expect(list.getItems().count).eql(2);
-
-    });
+    expect(await item.isFocused).toBe(true);
+    expect(await item.text).toBe('item2');
+    expect(await list.getItems().count()).toBe(2);
+  });
 
   test('Should select previous item after delete last item', async ({ page }) => {
-    await createList('none', true);
+    await createList(page, 'none', true);
 
-    const list = page.locator('#container');
+    const list = new List(page);
     const lastItem = list.getItem(2);
 
-    await page.expect(list.getVisibleItems().count).eql(3)
-      .click(lastItem.element)
-      .pressKey('delete');
+    expect(await list.getVisibleItems().count()).toBe(3);
+    await lastItem.element.click();
+    await page.keyboard.press('Delete');
 
     const item = list.getItem(1);
-
-    expect(item.isFocused).toBeTruthy();
-    expect(item.text).toBe('item2');
-    await expect(list.getItems().count).eql(2);
-
-    });
+    expect(await item.isFocused).toBe(true);
+    expect(await item.text).toBe('item2');
+    expect(await list.getItems().count()).toBe(2);
+  });
 
   [[2, 0], [1, 2]].forEach(([selectItemIdx, deleteItemIdx]) => {
     test(`Should not change selection after delete another (not selected) item (${selectItemIdx}, ${deleteItemIdx})`, async ({ page }) => {
-    await createList('none', true);
+      await createList(page, 'none', true);
 
-      const list = page.locator('#container');
+      const list = new List(page);
       const itemToSelect = list.getItem(selectItemIdx);
       const itemToDelete = list.getItem(deleteItemIdx);
 
-      await page.expect(list.getVisibleItems().count).eql(3)
-        .click(itemToSelect.element)
-        .click(itemToDelete.element.find('.dx-button'));
+      expect(await list.getVisibleItems().count()).toBe(3);
+      await itemToSelect.element.click();
+      await itemToDelete.element.locator('.dx-button').click();
 
       const item = list.getItem(deleteItemIdx > selectItemIdx ? selectItemIdx : selectItemIdx - 1);
-
-      expect(item.isFocused).toBeTruthy();
-      expect(item.text).toBe(`item${selectItemIdx + 1}`);
-      await expect(list.getItems().count).eql(2);
-
+      expect(await item.isFocused).toBe(true);
+      expect(await item.text).toBe(`item${selectItemIdx + 1}`);
+      expect(await list.getItems().count()).toBe(2);
     });
   });
 });

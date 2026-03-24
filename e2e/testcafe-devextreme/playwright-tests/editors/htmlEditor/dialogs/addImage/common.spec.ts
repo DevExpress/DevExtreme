@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../../playwright-helpers';
+import { createWidget, testScreenshot, HtmlEditor } from '../../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../../tests/container-extended.html')}`;
@@ -14,12 +14,9 @@ test.describe('HtmlEditor - common', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  const TEST_IMAGE_PATH_1 = './images/test-image-1.png';
-
   const ADD_IMAGE_POPUP_CONTENT_SELECTOR = '.dx-htmleditor-add-image-popup .dx-overlay-content';
 
-  test.skip('TabPanel in HtmlEditor must have correct borders', async ({ page }) => {
-
+  test('TabPanel in HtmlEditor must have correct borders', async ({ page }) => {
     await createWidget(page, 'dxHtmlEditor', {
       height: 600,
       width: 800,
@@ -29,18 +26,16 @@ test.describe('HtmlEditor - common', () => {
       toolbar: { items: ['image'] },
     });
 
-    const htmlEditor = page.locator('#container');
+    const htmlEditor = new HtmlEditor(page);
 
-    await click(htmlEditor.toolbar.getItemByName('image'));
+    await htmlEditor.toolbar.getItemByName('image').click();
 
     await testScreenshot(page, 'tabpanel-in-htmleditor.png', {
       element: ADD_IMAGE_POPUP_CONTENT_SELECTOR,
     });
+  });
 
-    });
-
-  test.skip('Add button should be enabled after switch to url form', async ({ page }) => {
-
+  test('Add button should be enabled after switch to url form', async ({ page }) => {
     await createWidget(page, 'dxHtmlEditor', {
       height: 600,
       width: 800,
@@ -50,26 +45,18 @@ test.describe('HtmlEditor - common', () => {
       toolbar: { items: ['image'] },
     });
 
-    const htmlEditor = page.locator('#container');
+    const htmlEditor = new HtmlEditor(page);
 
-    await page.click(htmlEditor.toolbar.getItemByName('image'))
+    await htmlEditor.toolbar.getItemByName('image').click();
 
-      .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
-      .eql(true);
+    expect(await htmlEditor.dialog.footerToolbar.addButton.isDisabled).toBe(true);
 
     await htmlEditor.dialog.tabs.getItem(1).element.click();
 
-    expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled).toBe(false)
+    expect(await htmlEditor.dialog.footerToolbar.addButton.isDisabled).toBe(false);
+  });
 
-      .typeText(htmlEditor.dialog.addImageUrlForm.url.element, BASE64_IMAGE_1, {
-        paste: true,
-      })
-      .click(htmlEditor.dialog.footerToolbar.addButton.element);
-
-    });
-
-  test.skip('Add button should be disable after switch to image upload form', async ({ page }) => {
-
+  test('Add button should be disable after switch to image upload form', async ({ page }) => {
     await createWidget(page, 'dxHtmlEditor', {
       height: 600,
       width: 800,
@@ -79,34 +66,22 @@ test.describe('HtmlEditor - common', () => {
       toolbar: { items: ['image'] },
     });
 
-    const htmlEditor = page.locator('#container');
+    const htmlEditor = new HtmlEditor(page);
 
-    await page.click(htmlEditor.toolbar.getItemByName('image'))
+    await htmlEditor.toolbar.getItemByName('image').click();
 
-      .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
-      .notOk()
+    expect(await htmlEditor.dialog.footerToolbar.addButton.isDisabled).toBe(false);
 
-      .click(htmlEditor.dialog.footerToolbar.addButton.element)
-      .expect(htmlEditor.dialog.addImageUrlForm.url.isInvalid)
-      .ok();
+    await htmlEditor.dialog.footerToolbar.addButton.element.click();
+
+    expect(await htmlEditor.dialog.addImageUrlForm.url.isInvalid).toBe(true);
 
     await htmlEditor.dialog.tabs.getItem(1).element.click();
 
-    expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled).toBeTruthy();
+    expect(await htmlEditor.dialog.footerToolbar.addButton.isDisabled).toBe(true);
+  });
 
-    const { fileUploader } = htmlEditor.dialog.addImageFileForm;
-
-    await fileUploader.input.setInputFiles([TEST_IMAGE_PATH_1])
-
-      .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
-      .notOk()
-
-      .click(htmlEditor.dialog.footerToolbar.addButton.element);
-
-    });
-
-  test.skip('AddImage form shouldn\'t lead to side effects in other forms', async ({ page }) => {
-
+  test('AddImage form shouldn\'t lead to side effects in other forms', async ({ page }) => {
     await createWidget(page, 'dxHtmlEditor', {
       height: 600,
       width: 800,
@@ -116,37 +91,20 @@ test.describe('HtmlEditor - common', () => {
       toolbar: { items: ['image', 'link', 'color'] },
     });
 
-    const htmlEditor = page.locator('#container');
+    const htmlEditor = new HtmlEditor(page);
 
-    await page.click(htmlEditor.toolbar.getItemByName('image'))
+    await htmlEditor.toolbar.getItemByName('image').click();
 
-      .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
-      .ok()
+    expect(await htmlEditor.dialog.footerToolbar.addButton.isDisabled).toBe(true);
+    expect(await htmlEditor.dialog.footerToolbar.cancelButton.isDisabled).toBe(false);
 
-      .expect(htmlEditor.dialog.footerToolbar.cancelButton.isDisabled)
-      .notOk()
+    await htmlEditor.dialog.footerToolbar.cancelButton.element.click();
 
-      .click(htmlEditor.dialog.footerToolbar.cancelButton.element);
+    await htmlEditor.toolbar.getItemByName('link').click();
 
-    await page.click(htmlEditor.toolbar.getItemByName('link'))
+    expect(await htmlEditor.dialog.footerToolbar.addButton.isDisabled).toBe(false);
+    expect(await htmlEditor.dialog.footerToolbar.cancelButton.isDisabled).toBe(false);
 
-      .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
-      .notOk()
-
-      .expect(htmlEditor.dialog.footerToolbar.cancelButton.isDisabled)
-      .notOk()
-
-      .click(htmlEditor.dialog.footerToolbar.addButton.element);
-
-    await page.click(htmlEditor.toolbar.getItemByName('color'))
-
-      .expect(htmlEditor.dialog.footerToolbar.addButton.isDisabled)
-      .notOk()
-
-      .expect(htmlEditor.dialog.footerToolbar.cancelButton.isDisabled)
-      .notOk()
-
-      .click(htmlEditor.dialog.footerToolbar.cancelButton.element);
-
-    });
+    await htmlEditor.dialog.footerToolbar.addButton.element.click();
+  });
 });

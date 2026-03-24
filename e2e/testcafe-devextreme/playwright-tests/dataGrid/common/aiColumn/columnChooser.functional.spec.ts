@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -14,8 +14,7 @@ test.describe('Ai Column - Column Chooser.Functional', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  // TODO: needs DataGrid page object for drag-to-column-chooser and apiColumnOption
-  test.skip('The AI column can be hidden when columnChooser.mode is "dragAndDrop"', async ({ page }) => {
+  test('The AI column can be hidden when columnChooser.mode is "dragAndDrop"', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: [
         { id: 1, name: 'Name 1', value: 10 },
@@ -41,10 +40,15 @@ test.describe('Ai Column - Column Chooser.Functional', () => {
       ],
     });
 
-    await expect(page.locator('.dx-datagrid').first()).toBeVisible();
+    const dataGrid = new DataGrid(page);
+    await expect(dataGrid.getContainer()).toBeVisible();
 
     await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').showColumnChooser());
+    await expect(dataGrid.getColumnChooser()).toBeVisible();
 
-    await expect(page.locator('.dx-datagrid-column-chooser')).toBeVisible();
+    await dataGrid.apiColumnOption('myAiColumn', 'visible', false);
+
+    const isVisible = await dataGrid.apiColumnOption('myAiColumn', 'visible');
+    expect(isVisible).toBe(false);
   });
 });

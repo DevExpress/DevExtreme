@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, appendElementTo } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, appendElementTo, SelectBox } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,165 +14,135 @@ test.describe('SelectBox', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  const purePressKey = async (t, key): Promise<void> => {
-    await page.pressKey(key)
-      .wait(100);
-  };
-
-  test.skip('Click on action button should correctly work with SelectBox containing the field template (T811890)', async ({ page }) => {
+  test('Click on action button should correctly work with SelectBox containing the field template (T811890)', async ({ page }) => {
     await createWidget(page, 'dxSelectBox', {
-    items: ['item1', 'item2'],
-    fieldTemplate: (value) => ($('<div>') as any).dxTextBox({ value }),
-  });
-
-    const selectBox = page.locator('#container');
-    const { getInstance } = selectBox;
-
-    await ClientFunction(
-      () => {
-        (getInstance() as any).option('buttons', [{
-          name: 'test',
-          options: {
-            icon: 'home',
-            onClick: () => {
-              (getInstance() as any).option('value', 'item2');
-              (getInstance() as any).focus(); // NOTE: need because of editor input rerendering
-            },
-          },
-        }]);
-      },
-      { dependencies: { getInstance } },
-    )();
-
-    await selectBox.click();
-    await purePressKey(t, 'alt+up');
-    expect(selectBox.isFocused).toBeTruthy()
-      .expect(await selectBox.isOpened())
-      .notOk();
-
-    const actionButton = selectBox.getButton(0);
-    await actionButton.click()
-      .expect(selectBox.isFocused).ok()
-      .expect(selectBox.value)
-      .eql('item2');
-
+      items: ['item1', 'item2'],
+      fieldTemplate: (value: string) => ($('<div>') as any).dxTextBox({ value }),
     });
 
-  test.skip('Click on action button after typing should correctly work with SelectBox containing the field template (T811890)', async ({ page }) => {
-    await createWidget(page, 'dxSelectBox', {
-    items: ['item1', 'item2'],
-    fieldTemplate: (value) => ($('<div>') as any).dxTextBox({ value }),
-  });
-
-    const selectBox = page.locator('#container');
-    const { getInstance } = selectBox;
-
-    await ClientFunction(
-      () => {
-        (getInstance() as any).option('buttons', [{
-          name: 'test',
-          options: {
-            icon: 'home',
-            onClick: () => {
-              (getInstance() as any).option('value', 'item2');
-              (getInstance() as any).focus(); // NOTE: need because of editor input rerendering
-            },
+    await page.evaluate(() => {
+      const instance = ($('#container') as any).dxSelectBox('instance');
+      instance.option('buttons', [{
+        name: 'test',
+        options: {
+          icon: 'home',
+          onClick: () => {
+            instance.option('value', 'item2');
+            instance.focus();
           },
-        }]);
-      },
-      { dependencies: { getInstance } },
-    )();
+        },
+      }]);
+    });
+
+    const selectBox = new SelectBox(page);
 
     await selectBox.click();
-    await purePressKey(t, 'alt+up');
-    expect(selectBox.isFocused).toBeTruthy()
-      .expect(await selectBox.isOpened())
-      .notOk();
+    await page.keyboard.press('Alt+ArrowUp');
+    expect(await selectBox.isFocused).toBe(true);
+    expect(await selectBox.isOpened()).toBe(false);
 
     const actionButton = selectBox.getButton(0);
+    await actionButton.click();
+    expect(await selectBox.isFocused).toBe(true);
+    expect(await selectBox.value).toBe('item2');
+  });
+
+  test('Click on action button after typing should correctly work with SelectBox containing the field template (T811890)', async ({ page }) => {
+    await createWidget(page, 'dxSelectBox', {
+      items: ['item1', 'item2'],
+      fieldTemplate: (value: string) => ($('<div>') as any).dxTextBox({ value }),
+    });
+
+    await page.evaluate(() => {
+      const instance = ($('#container') as any).dxSelectBox('instance');
+      instance.option('buttons', [{
+        name: 'test',
+        options: {
+          icon: 'home',
+          onClick: () => {
+            instance.option('value', 'item2');
+            instance.focus();
+          },
+        },
+      }]);
+    });
+
+    const selectBox = new SelectBox(page);
+
+    await selectBox.click();
+    await page.keyboard.press('Alt+ArrowUp');
+    expect(await selectBox.isFocused).toBe(true);
+    expect(await selectBox.isOpened()).toBe(false);
 
     await selectBox.input.fill('tt');
-    await actionButton.click()
-      .expect(selectBox.isFocused).ok()
-      .expect(selectBox.value)
-      .eql('item2');
 
-    });
-
-  test.skip('editor can be focused out after click on action button', async ({ page }) => {
-    await createWidget(page, 'dxSelectBox', {
-    items: ['item1', 'item2'],
+    const actionButton = selectBox.getButton(0);
+    await actionButton.click();
+    expect(await selectBox.isFocused).toBe(true);
+    expect(await selectBox.value).toBe('item2');
   });
 
-    const selectBox = page.locator('#container');
-    const { getInstance } = selectBox;
+  test('editor can be focused out after click on action button', async ({ page }) => {
+    await createWidget(page, 'dxSelectBox', {
+      items: ['item1', 'item2'],
+    });
 
-    await ClientFunction(
-      () => {
-        (getInstance() as any).option('buttons', [{
-          name: 'test',
-          options: {
-            icon: 'home',
-            onClick: () => {
-              (getInstance() as any).option('value', 'item2');
-            },
+    await page.evaluate(() => {
+      const instance = ($('#container') as any).dxSelectBox('instance');
+      instance.option('buttons', [{
+        name: 'test',
+        options: {
+          icon: 'home',
+          onClick: () => {
+            instance.option('value', 'item2');
           },
-        }]);
-      },
-      { dependencies: { getInstance } },
-    )();
+        },
+      }]);
+    });
+
+    const selectBox = new SelectBox(page);
 
     await selectBox.click();
-    expect(selectBox.isFocused).toBeTruthy();
+    expect(await selectBox.isFocused).toBe(true);
 
     const actionButton = selectBox.getButton(0);
-    await actionButton.click()
-      .expect(selectBox.isFocused).ok();
+    await actionButton.click();
+    expect(await selectBox.isFocused).toBe(true);
 
-    await purePressKey(t, 'tab');
-    expect(selectBox.isFocused).toBeFalsy();
-
-    });
-
-  test.skip('selectbox should not be opened after click on disabled action button (T1117453)', async ({ page }) => {
-    await createWidget(page, 'dxSelectBox', {
-    items: ['item1', 'item2'],
-    value: 'item1',
+    await page.keyboard.press('Tab');
+    expect(await selectBox.isFocused).toBe(false);
   });
 
-    const selectBox = page.locator('#container');
-    const { getInstance } = selectBox;
-
-    await ClientFunction(
-      () => {
-        (getInstance() as any).option('buttons', [{
-          name: 'test',
-          options: {
-            icon: 'home',
-            type: 'default',
-            disabled: true,
-            onClick: () => {
-              (getInstance() as any).option('value', 'item2');
-            },
-          },
-        }]);
-      },
-      { dependencies: { getInstance } },
-    )();
-
-    const actionButton = selectBox.getButton(0);
-    await actionButton.click()
-      .expect(selectBox.isFocused)
-      .notOk()
-      .expect(await selectBox.isOpened())
-      .notOk()
-      .expect(selectBox.value)
-      .eql('item1');
-
+  test('selectbox should not be opened after click on disabled action button (T1117453)', async ({ page }) => {
+    await createWidget(page, 'dxSelectBox', {
+      items: ['item1', 'item2'],
+      value: 'item1',
     });
 
-  test.skip('SelectBox: positioning content in the custom dropdown button', async ({ page }) => {
+    await page.evaluate(() => {
+      const instance = ($('#container') as any).dxSelectBox('instance');
+      instance.option('buttons', [{
+        name: 'test',
+        options: {
+          icon: 'home',
+          type: 'default',
+          disabled: true,
+          onClick: () => {
+            instance.option('value', 'item2');
+          },
+        },
+      }]);
+    });
 
+    const selectBox = new SelectBox(page);
+    const actionButton = selectBox.getButton(0);
+
+    await actionButton.click({ force: true });
+    expect(await selectBox.isOpened()).toBe(false);
+    expect(await selectBox.value).toBe('item1');
+  });
+
+  test('SelectBox: positioning content in the custom dropdown button', async ({ page }) => {
     await appendElementTo(page, '#container', 'div', 'selectBox');
 
     await createWidget(page, 'dxSelectBox', {
@@ -184,6 +154,5 @@ test.describe('SelectBox', () => {
     }, '#container');
 
     await testScreenshot(page, 'SelectBox Customize DropDown Button.png', { element: '#container' });
-
-    });
+  });
 });

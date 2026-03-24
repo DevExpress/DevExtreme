@@ -101,8 +101,27 @@ test.describe('DateRangeBox render', () => {
   });
 
   labelModes.forEach((labelMode) => {
-    test.skip(`Custom placeholders and labels appearance labelMode=${labelMode}`, async ({ page }) => {
-      // skipped: requires .before() setup with t.ctx.id and DateRangeBox page objects
+    test(`Custom placeholders and labels appearance labelMode=${labelMode}`, async ({ page }) => {
+      await insertStylesheetRulesToPage(page, `.${DATERANGEBOX_CLASS} { display: inline-flex; margin: 5px; }`);
+
+      await createDateRangeBox(page, {
+        labelMode,
+        startDateLabel: 'Start Date',
+        endDateLabel: 'End Date',
+        startDatePlaceholder: 'Start placeholder',
+        endDatePlaceholder: 'End placeholder',
+      });
+
+      await createDateRangeBox(page, {
+        value: TEST_VALUE,
+        labelMode,
+        startDateLabel: 'Start Date',
+        endDateLabel: 'End Date',
+        startDatePlaceholder: 'Start placeholder',
+        endDatePlaceholder: 'End placeholder',
+      });
+
+      await testScreenshot(page, `DateRangeBox custom placeholders labels labelMode=${labelMode}.png`, { element: '#container' });
     });
   });
 });

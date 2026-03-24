@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, appendElementTo, setAttribute, setStyleAttribute } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, appendElementTo, setAttribute, setStyleAttribute, Toolbar } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,14 +14,14 @@ test.describe('Toolbar_common', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  ['never', 'always'].forEach((locateInMenu: LocateInMenuMode) => {
+  ['never', 'always'].forEach((locateInMenu) => {
     [true, false].forEach((rtlEnabled) => {
       test(`Default nested widgets render,items[].locateInMenu=${locateInMenu},rtl=${rtlEnabled}`, async ({ page }) => {
 
         await appendElementTo(page, '#container', 'div', 'toolbar');
         await setAttribute(page, '#container', 'style', 'width: 1184px;');
 
-        const supportedWidgets: ToolbarItemComponent[] = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
+        const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
         const toolbarItems: any[] = supportedWidgets.map((widgetName) => ({
           location: 'before',
           locateInMenu,
@@ -49,25 +49,26 @@ test.describe('Toolbar_common', () => {
           width: locateInMenu === 'auto' ? 50 : '100%',
         }, '#toolbar');
 
-
-        const toolbar = page.locator('#toolbar');
-        let targetContainer = page.locator('#container');
-
-        const overflowMenu = toolbar.getOverflowMenu();
+        const toolbar = new Toolbar(page, '#toolbar');
+        let targetSelector = '#container';
 
         if (locateInMenu !== 'never') {
+          const overflowMenu = toolbar.getOverflowMenu();
           await overflowMenu.click();
 
-          targetContainer = overflowMenu.getPopup().getContent();
+          const popup = overflowMenu.getPopup();
+          const content = popup.getContent();
+          await content.evaluate((el) => { el.setAttribute('style', `${el.getAttribute('style') || ''} background-color: gold;`); });
+
+          await testScreenshot(page, `Toolbar widgets render${rtlEnabled ? ' rtl=true' : ''},items[]locateInMenu=${locateInMenu}.png`);
+        } else {
+          await setStyleAttribute(page, targetSelector, 'background-color: gold;');
+
+          await testScreenshot(page, `Toolbar widgets render${rtlEnabled ? ' rtl=true' : ''},items[]locateInMenu=${locateInMenu}.png`, {
+            element: targetSelector,
+          });
         }
-
-        await setStyleAttribute(page, targetContainer, 'background-color: gold;');
-
-        await testScreenshot(page, `Toolbar widgets render${rtlEnabled ? ' rtl=true' : ''},items[]locateInMenu=${locateInMenu}.png`, {
-          element: targetContainer,
-        });
-
-    });
+      });
     });
   });
 
@@ -77,7 +78,7 @@ test.describe('Toolbar_common', () => {
       await setAttribute(page, '#container', 'style', 'box-sizing: border-box; width: 400px; height: 400px; padding: 8px;');
       await appendElementTo(page, '#container', 'div', 'toolbar');
 
-      const supportedWidgets: ToolbarItemComponent[] = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
+      const supportedWidgets = ['dxAutocomplete', 'dxButton', 'dxCheckBox', 'dxDateBox', 'dxMenu', 'dxSelectBox', 'dxTabs', 'dxTextBox', 'dxButtonGroup', 'dxDropDownButton'];
       const toolbarItems: any[] = supportedWidgets.map((widgetName) => ({
         location: 'before',
         widget: widgetName,
@@ -101,11 +102,9 @@ test.describe('Toolbar_common', () => {
         rtlEnabled,
       }, '#toolbar');
 
-
       await testScreenshot(page, `Toolbar nested widgets render in multiline rtl=${rtlEnabled}.png`, {
         element: '#toolbar',
       });
-
     });
   });
 });

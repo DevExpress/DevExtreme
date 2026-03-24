@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, generateOptionMatrix, getContainerUrl, setupTestPage } from '../../../../../playwright-helpers';
+import { createWidget, generateOptionMatrix, getContainerUrl, setupTestPage, Scheduler } from '../../../../../playwright-helpers';
 
 const containerUrl = getContainerUrl(__dirname, '../../../../../tests/container.html');
 
@@ -131,10 +131,7 @@ test.describe('Layout:Templates:appointmentTemplate:targetedData', () => {
     scrollMode,
     rtlEnabled,
   }) => {
-    // TODO: needs Scheduler page object (scrollToDate for virtual scrolling tests)
-    const shouldSkip = scrollMode === 'virtual';
-
-    (shouldSkip ? test.skip : test)(`targetedAppointmentData should be correct with groups (viewType="${viewType}", groupOrientation="${groupOrientation}", scrollMode="${scrollMode}", rtlEnabled="${rtlEnabled}") (T1205120)`, async ({ page }) => {
+    test(`targetedAppointmentData should be correct with groups (viewType="${viewType}", groupOrientation="${groupOrientation}", scrollMode="${scrollMode}", rtlEnabled="${rtlEnabled}") (T1205120)`, async ({ page }) => {
       const currentDate = new Date(2024, 0, 2);
       const HOUR = 1000 * 60 * 60;
       const resourceCount = getResourceCount(viewType, scrollMode, groupOrientation);
@@ -195,6 +192,12 @@ test.describe('Layout:Templates:appointmentTemplate:targetedData', () => {
           return element;
         },
       });
+
+      const scheduler = new Scheduler(page);
+      await expect(scheduler.workSpace).toBeVisible();
+
+      const errors = await page.evaluate(() => (window as any).__schedulerErrors || []);
+      expect(errors).toHaveLength(0);
     });
   });
 });

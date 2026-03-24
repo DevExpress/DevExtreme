@@ -14,8 +14,7 @@ test.describe('Filter Builder', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  // TODO: needs FilterBuilder page object for getField, getPopupTreeView
-  test.skip('Field menu should be opened on field click if window scroll exists (T852701)', async ({ page }) => {
+  test('Field menu should be opened on field click if window scroll exists (T852701)', async ({ page }) => {
     const filter = [] as any[];
     const fields = [] as any[];
 
@@ -34,5 +33,11 @@ test.describe('Filter Builder', () => {
     });
 
     await page.evaluate(() => window.scrollTo(0, 10000));
+
+    const lastFieldButton = page.locator('.dx-filterbuilder-item-field').last();
+    await lastFieldButton.click();
+
+    const popupTreeView = page.locator('.dx-treeview.dx-widget');
+    await expect(popupTreeView).toBeVisible();
   });
 });

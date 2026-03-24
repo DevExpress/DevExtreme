@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -18,8 +18,44 @@ test.describe('Keyboard Navigation - editOnKeyPress', () => {
     { name: 'input' },
     { name: 'div' },
   ].forEach(({ name }) => {
-    test.skip(`should render edit cell template without errors, template: ${name}`, async ({ page }) => {
-      // TODO: requires TestCafe jQuery template and makeRowsViewTemplatesAsync conversion
+    test(`should render edit cell template without errors, template: ${name}`, async ({ page }) => {
+      await createWidget(page, 'dxDataGrid', {
+        dataSource: [
+          { id: 1, value: 'test1' },
+          { id: 2, value: 'test2' },
+        ],
+        keyExpr: 'id',
+        editing: {
+          mode: 'cell',
+          allowUpdating: true,
+          startEditAction: 'click',
+        },
+        keyboardNavigation: {
+          editOnKeyPress: true,
+        },
+        columns: [{
+          dataField: 'value',
+          editCellTemplate(container) {
+            const el = document.createElement(name);
+            if (name === 'input') {
+              (el as HTMLInputElement).type = 'text';
+              (el as HTMLInputElement).className = 'dx-texteditor-input';
+            }
+            container.get(0).appendChild(el);
+          },
+        }],
+      });
+
+      const dataGrid = new DataGrid(page);
+      const cell = dataGrid.getDataCell(0, 0);
+      await cell.element.click();
+
+      const hasErrors = await page.evaluate(() => {
+        const errors = (window as any).__testErrors || [];
+        return errors.length;
+      });
+
+      expect(hasErrors).toBe(0);
     });
   });
 });

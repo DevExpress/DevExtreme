@@ -42,16 +42,10 @@ test.describe('Label', () => {
           stylingMode,
         }, '#selectBox2');
 
-
-        const selectBox2 = page.locator('#selectBox2');
-
         await page.locator('#selectBox2').click();
 
         await testScreenshot(page, `SelectBox with label-labelMode=${labelMode}-stylingMode=${stylingMode}.png`, { element: '#container' });
-
-        await click(await selectBox2.getPopup());
-
-    });
+      });
     });
   });
 });

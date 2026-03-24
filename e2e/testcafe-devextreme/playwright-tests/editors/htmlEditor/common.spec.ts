@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, appendElementTo, setStyleAttribute } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, appendElementTo, setStyleAttribute, HtmlEditor } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container-extended.html')}`;
@@ -49,7 +49,19 @@ test.describe('HtmlEditor', () => {
     });
   });
 
-  test.skip('AI toolbar item', async ({ page }) => {
-    // skipped: requires HtmlEditor page object with toolbar.getItemByName
+  test('AI toolbar item', async ({ page }) => {
+    await createWidget(page, 'dxHtmlEditor', {
+      height: 400,
+      width: 600,
+      toolbar: {
+        items: ['ai'],
+      },
+    });
+
+    const htmlEditor = new HtmlEditor(page);
+
+    await htmlEditor.toolbar.getItemByName('ai').click();
+
+    await testScreenshot(page, 'htmleditor-ai-toolbar-item.png', { element: '#container' });
   });
 });

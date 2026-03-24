@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -14,8 +14,7 @@ test.describe('Ai Column.Virtual Scrolling.Functional', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  // TODO: needs DataGrid page object for getLoadPanel, apiPageIndex, getVisibleRows
-  test.skip('DataGrid should send an AI request for rendered rows after scrolling without changing the page index', async ({ page }) => {
+  test('DataGrid should send an AI request for rendered rows after scrolling without changing the page index', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', () => {
         const generateData = (rowCount: number): Record<string, number | string>[] => {
           const result: Record<string, number | string>[] = [];
@@ -71,6 +70,25 @@ test.describe('Ai Column.Virtual Scrolling.Functional', () => {
         };
       });
 
-    await expect(page.locator('.dx-datagrid').first()).toBeVisible();
+    const dataGrid = new DataGrid(page);
+    await expect(dataGrid.getContainer()).toBeVisible();
+
+    await page.evaluate(() => {
+      const resolve = (window as any).aiResolve;
+      const data = (window as any).aiResponseData;
+      if (resolve && data) {
+        resolve(data);
+      }
+    });
+
+    await page.waitForTimeout(500);
+
+    const pageIndexBefore = await dataGrid.apiPageIndex() as number;
+
+    await dataGrid.scrollTo({ top: 500 });
+    await page.waitForTimeout(500);
+
+    const pageIndexAfter = await dataGrid.apiPageIndex() as number;
+    expect(pageIndexAfter).toBe(pageIndexBefore);
   });
 });

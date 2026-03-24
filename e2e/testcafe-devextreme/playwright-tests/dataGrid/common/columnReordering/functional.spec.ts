@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -14,8 +14,7 @@ test.describe('Column reordering', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  // TODO: needs DataGrid page object for getVisibleColumns, getHeaderRow, drag
-  test.skip('The column reordering should work correctly when there is a fixed column with zero width', async ({ page }) => {
+  test('The column reordering should work correctly when there is a fixed column with zero width', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       width: 800,
       dataSource: [
@@ -50,6 +49,15 @@ test.describe('Column reordering', () => {
       allowColumnReordering: true,
     });
 
-    await expect(page.locator('.dx-datagrid').first()).toBeVisible();
+    const dataGrid = new DataGrid(page);
+    await expect(dataGrid.getContainer()).toBeVisible();
+
+    const columnsBefore = await dataGrid.apiGetVisibleColumns();
+
+    await dataGrid.moveHeader(2, 200, 0, true);
+    await dataGrid.dropHeader(2);
+
+    const columnsAfter = await dataGrid.apiGetVisibleColumns();
+    expect(columnsAfter.length).toBe(columnsBefore.length);
   });
 });

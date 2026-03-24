@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, appendElementTo } from '../../../playwright-helpers';
+import { Chat } from '../../../playwright-helpers/chat';
+import { createUser } from './data';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,7 +16,27 @@ test.describe('ChatConfirmationPopup', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Chat: confirmation popup', async ({ page }) => {
-    // skipped: requires createUser helper and rightClick/getMessage page objects
+  test('Chat: confirmation popup', async ({ page }) => {
+    await appendElementTo(page, '#container', 'div', 'chat');
+
+    const userFirst = createUser(1, 'First');
+    const items = [
+      { author: userFirst, text: 'Hello' },
+      { author: userFirst, text: 'Delete me' },
+    ];
+
+    await createWidget(page, 'dxChat', {
+      width: 400,
+      height: 600,
+      items,
+      user: userFirst,
+    }, '#chat');
+
+    const chat = new Chat(page, '#chat');
+
+    await chat.getMessage(1).click({ button: 'right' });
+    await page.waitForTimeout(300);
+
+    await testScreenshot(page, 'Chat confirmation popup context menu.png', { element: '#chat' });
   });
 });

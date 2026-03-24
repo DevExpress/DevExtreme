@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, appendElementTo, setAttribute } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, appendElementTo, setAttribute, List } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,62 +14,60 @@ test.describe('Grouping', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Grouped list appearance', async ({ page }) => {
+  test('Grouped list appearance', async ({ page }) => {
     await createWidget(page, 'dxList', {
-    width: 300,
-    dataSource: [
-      {
-        key: 'group_1',
-        items: ['item_1_1', 'item_1_2', 'item_1_3'],
-        expanded: false,
+      width: 300,
+      dataSource: [
+        {
+          key: 'group_1',
+          items: ['item_1_1', 'item_1_2', 'item_1_3'],
+          expanded: false,
+        },
+        {
+          key: 'group_2',
+          items: [
+            { text: 'item_2_1', disabled: true },
+            { text: 'item_2_2', icon: 'home' },
+            { text: 'item_2_3', showChevron: true, badge: 'item_2_3' },
+            { text: 'item_2_4', badge: 'item_2_4' },
+            'item_2_5',
+          ],
+        },
+        {
+          key: 'group_3',
+          items: ['item_3_1', 'item_3_2', 'item_3_3'],
+          expanded: false,
+        },
+      ],
+      collapsibleGroups: true,
+      grouped: true,
+      allowItemDeleting: true,
+      itemDeleteMode: 'static',
+      itemDragging: {
+        allowReordering: true,
       },
-      {
-        key: 'group_2',
-        items: [
-          { text: 'item_2_1', disabled: true },
-          { text: 'item_2_2', icon: 'home' },
-          { text: 'item_2_3', showChevron: true, badge: 'item_2_3' },
-          { text: 'item_2_4', badge: 'item_2_4' },
-          'item_2_5',
-        ],
-      },
-      {
-        key: 'group_3',
-        items: ['item_3_1', 'item_3_2', 'item_3_3'],
-        expanded: false,
-      },
-    ],
-    collapsibleGroups: true,
-    grouped: true,
-    allowItemDeleting: true,
-    itemDeleteMode: 'static',
-    itemDragging: {
-      allowReordering: true,
-    },
-  });
+    });
 
-    const list = page.locator('#container');
+    const list = new List(page);
 
-    await list.getItem(2).element.click()
-      .pressKey('down');
+    await list.getItem(2).element.click();
+    await page.keyboard.press('ArrowDown');
 
     await testScreenshot(page, 'Grouped list appearance, header focused.png', { element: '#container' });
 
-    await page.click(list.getGroup(0).header)
-      .click(list.getGroup(2).header)
-      .click(list.getItem(4).element)
-      .hover(list.getGroup(1).header);
+    await list.getGroup(0).header.click();
+    await list.getGroup(2).header.click();
+    await list.getItem(4).element.click();
+    await list.getGroup(1).header.hover();
 
     await testScreenshot(page, 'Grouped list appearance, item focused, header hovered.png', { element: '#container' });
 
     await list.option('collapsibleGroups', false);
 
     await testScreenshot(page, 'Grouped list appearance,collapsibleGroups=false.png', { element: '#container' });
+  });
 
-    });
-
-  test.skip('Grouped list appearance with template', async ({ page }) => {
-
+  test('Grouped list appearance with template', async ({ page }) => {
     await setAttribute(page, '#container', 'style', 'display: flex; gap: 40px; padding: 8px; width: fit-content;');
 
     const dataSource = [
@@ -78,33 +76,32 @@ test.describe('Grouping', () => {
       { key: 'Three', items: ['3_1', '3_2', '3_3'] },
     ];
 
-    await Promise.all([false, true].map((rtlEnabled) => appendElementTo(page, '#container', 'div', `list-rtl-${rtlEnabled}`)));
-    await Promise.all([false, true].map((rtlEnabled) => createWidget(page, 'dxList', {
-      dataSource,
-      width: 300,
-      groupTemplate(data) {
-        const wrapper = $('<div>');
+    for (const rtlEnabled of [false, true]) {
+      await appendElementTo(page, '#container', 'div', `list-rtl-${rtlEnabled}`);
+      await createWidget(page, 'dxList', {
+        dataSource,
+        width: 300,
+        groupTemplate(data: any) {
+          const wrapper = $('<div>');
+          $(`<span>${data.key}</span>`).appendTo(wrapper);
+          $('<div>second row</div>').appendTo(wrapper);
+          return wrapper;
+        },
+        collapsibleGroups: true,
+        grouped: true,
+        rtlEnabled,
+      }, `#list-rtl-${rtlEnabled}`);
+    }
 
-        $(`<span>${data.key}</span>`).appendTo(wrapper);
-        $('<div>second row</div>').appendTo(wrapper);
+    const list = new List(page, '#list-rtl-false');
+    const list2 = new List(page, '#list-rtl-true');
 
-        return wrapper;
-      },
-      collapsibleGroups: true,
-      grouped: true,
-      rtlEnabled,
-    }, `#list-rtl-${rtlEnabled}`)));
-
-    const list = page.locator('#list-rtl-false');
-    const list2 = page.locator('#list-rtl-true');
-
-    await page.click(list.getGroup(0).header)
-      .click(list.getGroup(2).header)
-      .click(list2.getGroup(0).header)
-      .click(list2.getGroup(2).header)
-      .click('#container');
+    await list.getGroup(0).header.click();
+    await list.getGroup(2).header.click();
+    await list2.getGroup(0).header.click();
+    await list2.getGroup(2).header.click();
+    await page.locator('#container').click();
 
     await testScreenshot(page, 'Grouped list appearance with template.png', { element: '#container' });
-
-    });
+  });
 });

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, appendElementTo, setClassAttribute } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, appendElementTo, setClassAttribute, Toolbar } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,31 +14,158 @@ test.describe('Toolbar_OverflowMenu', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Drop down button should lost hover and active state', async ({ page }) => {
-    // skipped: requires Toolbar page object with getOverflowMenu, dispatchEvent chaining
+  test('Drop down button should lost hover and active state', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [
+        { text: 'item1', locateInMenu: 'always' },
+        { text: 'item2', locateInMenu: 'always' },
+      ],
+    });
+
+    const toolbar = new Toolbar(page);
+    const overflowMenu = toolbar.getOverflowMenu();
+
+    await overflowMenu.element.hover();
+    await testScreenshot(page, 'Toolbar overflow button hovered.png', { element: '#container' });
+
+    await overflowMenu.click();
+    await testScreenshot(page, 'Toolbar overflow menu opened.png');
+
+    await page.mouse.move(0, 0);
+    await testScreenshot(page, 'Toolbar overflow button lost hover.png', { element: '#container' });
   });
 
-  test.skip('ButtonGroup item should not have hover and active state', async ({ page }) => {
-    // skipped: requires Toolbar page object with getOverflowMenu, getList, find
+  test('ButtonGroup item should not have hover and active state', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [
+        {
+          locateInMenu: 'always',
+          widget: 'dxButtonGroup',
+          options: {
+            items: [{ text: 'B1' }, { text: 'B2' }],
+          },
+        },
+      ],
+    });
+
+    const toolbar = new Toolbar(page);
+    const overflowMenu = toolbar.getOverflowMenu();
+
+    await overflowMenu.click();
+
+    const buttonGroupItem = overflowMenu.getList().locator('.dx-buttongroup-item').first();
+    await buttonGroupItem.hover();
+
+    await testScreenshot(page, 'Toolbar overflow ButtonGroup item hovered.png');
   });
 
-  test.skip('Click on overflow button should prevent popup hideOnOutsideClick', async ({ page }) => {
-    // skipped: requires Toolbar page object with getOverflowMenu, getPopup
+  test('Click on overflow button should prevent popup hideOnOutsideClick', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [
+        { text: 'item1', locateInMenu: 'always' },
+      ],
+    });
+
+    const toolbar = new Toolbar(page);
+    const overflowMenu = toolbar.getOverflowMenu();
+
+    await overflowMenu.click();
+
+    const popup = overflowMenu.getPopup();
+    expect(await popup.isVisible()).toBe(true);
+
+    await overflowMenu.click();
+    expect(await popup.isVisible()).toBe(false);
+
+    await overflowMenu.click();
+    expect(await popup.isVisible()).toBe(true);
   });
 
-  test.skip('Toolbar buttons in menu appearance', async ({ page }) => {
-    // skipped: requires Toolbar page object with getOverflowMenu, duplicate const items
+  test('Toolbar buttons in menu appearance', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [
+        { text: 'Button 1', locateInMenu: 'always', widget: 'dxButton', options: { text: 'Button 1', icon: 'home' } },
+        { text: 'Button 2', locateInMenu: 'always', widget: 'dxButton', options: { text: 'Button 2', type: 'default' } },
+        { text: 'Button 3', locateInMenu: 'always', widget: 'dxButton', options: { text: 'Button 3', stylingMode: 'outlined' } },
+      ],
+    });
+
+    const toolbar = new Toolbar(page);
+    const overflowMenu = toolbar.getOverflowMenu();
+
+    await overflowMenu.click();
+
+    await testScreenshot(page, 'Toolbar buttons in menu.png');
   });
 
-  test.skip('Toolbar buttons as custom template appearance', async ({ page }) => {
-    // skipped: requires jQuery template, Toolbar page object, duplicate const items
+  test('Toolbar buttons as custom template appearance', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [
+        {
+          locateInMenu: 'always',
+          template() {
+            return $('<div>').text('Custom template item');
+          },
+        },
+      ],
+    });
+
+    const toolbar = new Toolbar(page);
+    const overflowMenu = toolbar.getOverflowMenu();
+
+    await overflowMenu.click();
+
+    await testScreenshot(page, 'Toolbar custom template in menu.png');
   });
 
-  test.skip('Toolbar button group appearance', async ({ page }) => {
-    // skipped: requires Toolbar page object with getOverflowMenu, duplicate const items
+  test('Toolbar button group appearance', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [
+        {
+          locateInMenu: 'always',
+          widget: 'dxButtonGroup',
+          options: {
+            items: [
+              { text: 'Left', icon: 'alignleft' },
+              { text: 'Center', icon: 'aligncenter' },
+              { text: 'Right', icon: 'alignright' },
+            ],
+          },
+        },
+      ],
+    });
+
+    const toolbar = new Toolbar(page);
+    const overflowMenu = toolbar.getOverflowMenu();
+
+    await overflowMenu.click();
+
+    await testScreenshot(page, 'Toolbar button group in menu.png');
   });
 
-  test.skip('Toolbar button group as custom template appearance', async ({ page }) => {
-    // skipped: requires jQuery template, Toolbar page object, duplicate const items
+  test('Toolbar button group as custom template appearance', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [
+        {
+          locateInMenu: 'always',
+          template() {
+            return ($('<div>') as any).dxButtonGroup({
+              items: [
+                { text: 'Left' },
+                { text: 'Center' },
+                { text: 'Right' },
+              ],
+            });
+          },
+        },
+      ],
+    });
+
+    const toolbar = new Toolbar(page);
+    const overflowMenu = toolbar.getOverflowMenu();
+
+    await overflowMenu.click();
+
+    await testScreenshot(page, 'Toolbar button group template in menu.png');
   });
 });

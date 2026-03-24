@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { createWidget, testScreenshot, appendElementTo } from '../../../playwright-helpers';
+import { createUser, generateMessages, avatarUrl } from './data';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,11 +15,36 @@ test.describe('ChatAvatar', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Chat: avatar', async ({ page }) => {
-    // skipped: requires createUser/generateMessages helpers not available
+  test('Chat: avatar', async ({ page }) => {
+    await appendElementTo(page, '#container', 'div', 'chat');
+
+    const userFirst = createUser(1, 'First', avatarUrl);
+    const userSecond = createUser(2, 'Second', avatarUrl);
+    const items = generateMessages(3, userFirst, userSecond);
+
+    await createWidget(page, 'dxChat', {
+      width: 400,
+      height: 600,
+      items,
+    }, '#chat');
+
+    await testScreenshot(page, 'Chat avatar with image.png', { element: '#chat' });
   });
 
-  test.skip('Chat: showAvatar set to false', async ({ page }) => {
-    // skipped: requires createUser/generateMessages helpers not available
+  test('Chat: showAvatar set to false', async ({ page }) => {
+    await appendElementTo(page, '#container', 'div', 'chat');
+
+    const userFirst = createUser(1, 'First');
+    const userSecond = createUser(2, 'Second');
+    const items = generateMessages(3, userFirst, userSecond);
+
+    await createWidget(page, 'dxChat', {
+      width: 400,
+      height: 600,
+      items,
+      showAvatar: false,
+    }, '#chat');
+
+    await testScreenshot(page, 'Chat with showAvatar false.png', { element: '#chat' });
   });
 });

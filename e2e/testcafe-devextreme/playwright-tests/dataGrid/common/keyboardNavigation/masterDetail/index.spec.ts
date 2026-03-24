@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../../tests/container.html')}`;
@@ -14,7 +14,41 @@ test.describe('Keyboard Navigation - Master Detail', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Focus goes inside master detail on tab', async ({ page }) => {
-    // TODO: requires TestCafe DataGrid page object and gridOptions conversion
+  test('Focus goes inside master detail on tab', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 1, name: 'Item 1' },
+        { id: 2, name: 'Item 2' },
+      ],
+      keyExpr: 'id',
+      keyboardNavigation: {
+        enabled: true,
+      },
+      masterDetail: {
+        enabled: true,
+        template(container) {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.className = 'master-detail-input';
+          input.setAttribute('tabindex', '0');
+          container.get(0).appendChild(input);
+        },
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.apiExpandRow(1);
+
+    const masterDetailRow = dataGrid.getMasterRow(0);
+    await expect(masterDetailRow).toBeVisible();
+
+    const firstCell = dataGrid.getDataCell(0, 0);
+    await firstCell.element.click();
+
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+
+    const masterDetailInput = masterDetailRow.locator('.master-detail-input');
+    await expect(masterDetailInput).toBeFocused();
   });
 });

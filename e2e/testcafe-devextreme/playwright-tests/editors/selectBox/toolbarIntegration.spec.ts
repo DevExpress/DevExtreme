@@ -16,32 +16,28 @@ test.describe('SelectBox as Toolbar item', () => {
 
   test('SelectBox should correctly render its buttons if editor is rendered as a Toolbar item with fieldTemplate (T949859)', async ({ page }) => {
     await createWidget(page, 'dxToolbar', {
-    items: [
-      {
-        widget: 'dxSelectBox',
-        options: {
-          buttons: [
-            {
-              name: 'test',
-              options: {
-                text: 'test',
+      items: [
+        {
+          widget: 'dxSelectBox',
+          options: {
+            buttons: [
+              {
+                name: 'test',
+                options: {
+                  text: 'test',
+                },
               },
+            ],
+            fieldTemplate: (_: unknown, wrapper: any) => {
+              ($('<div>').appendTo(wrapper) as any).dxTextBox();
             },
-          ],
-          fieldTemplate: (_, wrapper) => {
-            ($('<div>').appendTo(wrapper) as any).dxTextBox();
+            items: [1, 2, 3, 4],
           },
-          items: [1, 2, 3, 4],
         },
-      },
-    ],
-  });
-
-    const selectBox = page.locator('#container');
-    const actionButton = selectBox.getButton(0);
-
-    await page.expect(actionButton.getText().innerText)
-      .eql(isMaterial() ? 'TEST' : 'test');
-
+      ],
     });
+
+    const buttonText = await page.locator('#container .dx-texteditor-button-container .dx-button .dx-button-text').innerText();
+    expect(buttonText.toLowerCase()).toBe('test');
+  });
 });

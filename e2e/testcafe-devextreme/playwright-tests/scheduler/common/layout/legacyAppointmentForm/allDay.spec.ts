@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, getContainerUrl, setupTestPage } from '../../../../../playwright-helpers';
+import { createWidget, getContainerUrl, setupTestPage, Scheduler } from '../../../../../playwright-helpers';
 
 const containerUrl = getContainerUrl(__dirname, '../../../../../tests/container.html');
 
@@ -8,8 +8,7 @@ test.describe('Layout:AppointmentForm:AllDay', () => {
     await setupTestPage(page, containerUrl);
   });
 
-  // TODO: needs Scheduler page object (scheduler.appointmentTooltip, legacyAppointmentPopup)
-  test.skip('Start and end dates should be reflect the current day(appointment is already available case)', async ({ page }) => {
+  test('Start and end dates should be reflect the current day(appointment is already available case)', async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       dataSource: [{
         text: 'Text',
@@ -23,10 +22,30 @@ test.describe('Layout:AppointmentForm:AllDay', () => {
       startDayHour: 9,
       height: 600,
     });
+
+    const scheduler = new Scheduler(page);
+    const appointment = scheduler.getAppointment('Text');
+    await appointment.element.click();
+
+    const tooltipItem = scheduler.appointmentTooltip.getListItem('Text');
+    await tooltipItem.element.click();
+
+    await expect(scheduler.appointmentPopup.element).toBeVisible();
+
+    const allDaySwitch = scheduler.appointmentPopup.allDaySwitch;
+    await allDaySwitch.click();
+
+    const startDateInput = scheduler.appointmentPopup.startDateEditor.locator('.dx-texteditor-input');
+    const endDateInput = scheduler.appointmentPopup.endDateEditor.locator('.dx-texteditor-input');
+
+    const startValue = await startDateInput.inputValue();
+    const endValue = await endDateInput.inputValue();
+
+    expect(startValue).toContain('4/28/2021');
+    expect(endValue).toContain('4/28/2021');
   });
 
-  // TODO: needs Scheduler page object (legacyAppointmentPopup)
-  test.skip('Start and end dates should be reflect the current day(create new appointment case)', async ({ page }) => {
+  test('Start and end dates should be reflect the current day(create new appointment case)', async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       dataSource: [],
       views: ['week'],
@@ -36,13 +55,50 @@ test.describe('Layout:AppointmentForm:AllDay', () => {
       startDayHour: 9,
       height: 600,
     });
+
+    const scheduler = new Scheduler(page);
+    const cell = scheduler.getDateTableCell(0, 0);
+    await cell.dblclick();
+
+    await expect(scheduler.appointmentPopup.element).toBeVisible();
+
+    const allDaySwitch = scheduler.appointmentPopup.allDaySwitch;
+    await allDaySwitch.click();
+
+    const startDateInput = scheduler.appointmentPopup.startDateEditor.locator('.dx-texteditor-input');
+    const endDateInput = scheduler.appointmentPopup.endDateEditor.locator('.dx-texteditor-input');
+
+    const startValue = await startDateInput.inputValue();
+    const endValue = await endDateInput.inputValue();
+
+    expect(startValue).toBeTruthy();
+    expect(endValue).toBeTruthy();
   });
 
-  // TODO: needs Scheduler page object (legacyAppointmentPopup)
-  test.skip('StartDate and endDate should have correct type after "allDay" and "repeat" option are changed (T1002864)', async ({ page }) => {
+  test('StartDate and endDate should have correct type after "allDay" and "repeat" option are changed (T1002864)', async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       currentDate: new Date(2021, 1, 1),
       editing: { legacyForm: true },
     });
+
+    const scheduler = new Scheduler(page);
+    const cell = scheduler.getDateTableCell(0, 0);
+    await cell.dblclick();
+
+    await expect(scheduler.appointmentPopup.element).toBeVisible();
+
+    const allDaySwitch = scheduler.appointmentPopup.allDaySwitch;
+    await allDaySwitch.click();
+
+    const recurrenceSwitch = scheduler.appointmentPopup.recurrenceGroup.locator('.dx-switch').first();
+    if (await recurrenceSwitch.isVisible()) {
+      await recurrenceSwitch.click();
+    }
+
+    await allDaySwitch.click();
+
+    const startDateInput = scheduler.appointmentPopup.startDateEditor.locator('.dx-texteditor-input');
+    const startValue = await startDateInput.inputValue();
+    expect(startValue).toBeTruthy();
   });
 });
