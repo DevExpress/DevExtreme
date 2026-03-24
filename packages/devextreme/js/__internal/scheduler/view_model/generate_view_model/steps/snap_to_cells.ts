@@ -38,7 +38,10 @@ export const snapToCells = <T extends ListEntity & Position>(
     const endDateUTC = snapEnd ? endCell.max : entity.endDateUTC;
 
     return {
-      ...entity, startDateUTC, endDateUTC, duration: endDateUTC - startDateUTC,
+      ...entity,
+      startDateUTC,
+      endDateUTC,
+      duration: endDateUTC - startDateUTC,
     };
   });
 };
