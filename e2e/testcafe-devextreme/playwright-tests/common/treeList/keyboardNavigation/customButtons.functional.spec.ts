@@ -14,10 +14,6 @@ test.describe('Tests', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  fixture
-    .disablePageReloads`Keyboard Navigation - custom buttons`
-    .page(url(__dirname, '../../../container.html'));
-
   const TREE_LIST_SELECTOR = '#container';
   const createTreeList = async () => createWidget(page, 'dxTreeList', {
     dataSource: [

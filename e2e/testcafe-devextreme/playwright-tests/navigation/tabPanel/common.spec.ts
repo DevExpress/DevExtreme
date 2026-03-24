@@ -341,7 +341,7 @@ test.describe('TabPanel_common', () => {
     });
 
   ['left', 'right'].forEach((tabsPosition) => {
-    test.skip('TabPanel should be shown correctly even if there is only one tab', async ({ page }) => {
+    test.skip(`TabPanel should be shown correctly even if there is only one tab, tabsPosition=${tabsPosition}`, async ({ page }) => {
 
       const dataSource: any[] = [
         {

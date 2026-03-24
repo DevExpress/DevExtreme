@@ -108,12 +108,14 @@ test.describe('pivotGrid_sort', () => {
     await testScreenshot(page,
       'T1173442_before_sort_with_summary_display_mode.png',
       { element: pivotGrid.element },
+    );
 
     await click(pivotGrid.getColumnHeaderArea().getField());
     await click(pivotGrid.getRowHeaderArea().getField());
     await testScreenshot(page,
       'T1173442_after_sort_with_summary_display_mode.png',
       { element: pivotGrid.element },
+    );
 
     });
 });

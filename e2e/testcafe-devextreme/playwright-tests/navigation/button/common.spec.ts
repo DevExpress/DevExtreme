@@ -61,7 +61,7 @@ test.describe('Button', () => {
         if (state !== 'default' && state !== 'disabled') {
           await Promise.all(
             buttons.map((_, index) => setClassAttribute(page, `#button-${state}-${index}`, `dx-state-${state}`)),
-
+          );
         }
       }
 

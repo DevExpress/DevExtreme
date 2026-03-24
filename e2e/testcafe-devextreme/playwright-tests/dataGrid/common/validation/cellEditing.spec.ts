@@ -13,10 +13,10 @@ test.describe('Validation', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
-  [true, false].forEach((repaintChangesOnly) => {
 
-  test(`Navigation with tab without saving should not throw an error (repaintChangesOnly: ${repaintChangesOnly})`, async ({ page }) => {
-    await createWidget(page, 'dxDataGrid', {
+  [true, false].forEach((repaintChangesOnly) => {
+    test(`Navigation with tab without saving should not throw an error (repaintChangesOnly: ${repaintChangesOnly})`, async ({ page }) => {
+      await createWidget(page, 'dxDataGrid', {
         dataSource: [{
           id: 1,
           col2: 30,
@@ -48,13 +48,13 @@ test.describe('Validation', () => {
         }],
       });
 
-          await (grid.locator('td').nth(0, 0)).click();
+      await page.locator('.dx-data-row').nth(0).locator('td').nth(0).click();
 
-      const editor = grid.locator('td').nth(0, 0).locator('.dx-editor-cell');
+      const editor = page.locator('.dx-data-row').nth(0).locator('td').nth(0).locator('input');
+      await editor.fill('123');
+      await page.keyboard.press('Tab');
 
-      await (editor.element).fill('123');
-      await page.keyboard.press('tab');
-
-      expect(await true).toBeTruthy();
+      expect(true).toBeTruthy();
     });
+  });
 });

@@ -1202,7 +1202,7 @@ test.describe('DateRangeBox keyboard navigation', () => {
 
     });
 
-    test('Selection in calendar should be started with current startDate value after select startDate if endDate is not specified', async ({ page }) => {
+    test(`Selection in calendar should be started with current startDate value after select startDate if endDate is not specified (key=${key})`, async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
       value: [initialValue[0], null],
     });
@@ -1231,7 +1231,7 @@ test.describe('DateRangeBox keyboard navigation', () => {
 
     });
 
-    test('Selection in calendar should be started with endDate value after select startDate if endDate is specified', async ({ page }) => {
+    test(`Selection in calendar should be started with endDate value after select startDate if endDate is specified (key=${key})`, async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
       value: initialValue,
       openOnFieldClick: false,

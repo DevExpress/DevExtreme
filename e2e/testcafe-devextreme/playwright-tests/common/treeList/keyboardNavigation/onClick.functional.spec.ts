@@ -14,10 +14,6 @@ test.describe('Tests', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  fixture
-    .disablePageReloads`Keyboard Navigation - focus on click`
-    .page(url(__dirname, '../../../container.html'));
-
   // T861048
   test('The row should be selected on click if less than half of a row is visible', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {

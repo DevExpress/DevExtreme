@@ -112,7 +112,7 @@ test.describe('Form', () => {
   });
 
   ['left', 'right', 'top'].forEach((labelLocation) => {
-    test.skip('widget alignment (T1086611)', async ({ page }) => {
+    test.skip(`widget alignment (T1086611), labelLocation=${labelLocation}`, async ({ page }) => {
 
       await waitFont();
 

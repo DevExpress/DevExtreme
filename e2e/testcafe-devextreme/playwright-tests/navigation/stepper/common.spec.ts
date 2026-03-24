@@ -23,7 +23,7 @@ test.describe('Stepper_common', () => {
   ];
 
   ['horizontal', 'vertical'].forEach((orientation) => {
-    test.skip('Stepper common properties', async ({ page }) => {
+    test.skip(`Stepper common properties, orientation=${orientation}`, async ({ page }) => {
 
       await appendElementTo(page, '#container', 'div', 'stepper');
       await appendElementTo(page, '#container', 'div', 'stepper2');
@@ -103,7 +103,7 @@ test.describe('Stepper_common', () => {
     });
 
   [true, false].forEach((selectOnFocus) => {
-    test.skip('Stepper item states', async ({ page }) => {
+    test.skip(`Stepper item states, selectOnFocus=${selectOnFocus}`, async ({ page }) => {
 
       await appendElementTo(page, '#container', 'div', 'stepper');
       await setAttribute(page, '#container', 'style', 'width: 800px; height: 150px;');

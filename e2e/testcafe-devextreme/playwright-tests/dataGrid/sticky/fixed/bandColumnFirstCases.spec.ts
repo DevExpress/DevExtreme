@@ -30,18 +30,18 @@ test.describe('FixedColumns', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
+
   borderConfigs.forEach(({ showColumnLines, showBorders }) => {
     [true, false].forEach((rtlEnabled) => {
-
-  test(`Band sticky columns: left and right positions (showColumnLines = ${showColumnLines}, showBorders = ${showBorders})`, async ({ page }) => {
-    await createWidget(page, 'dxDataGrid', {
+      test(`Band sticky columns: left and right positions (showColumnLines = ${showColumnLines}, showBorders = ${showBorders}, rtl = ${rtlEnabled})`, async ({ page }) => {
+        await createWidget(page, 'dxDataGrid', {
           dataSource: getData(5, 25),
           width: 984,
           showColumnLines,
           showBorders,
           rtlEnabled,
           columnAutoWidth: true,
-          customizeColumns: (columns) => {
+          customizeColumns: (columns: any[]) => {
             columns.push({
               caption: 'Band column 1',
               fixed: true,
@@ -78,14 +78,14 @@ test.describe('FixedColumns', () => {
           },
         });
 
-        // arrange
-              expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+        expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
 
         await testScreenshot(page, `band-columns-1-(case-1)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: page.locator('#container') });
 
-        // act
         await page.evaluate((opts) => ($('#container') as any).dxDataGrid('instance').getScrollable().scrollTo(opts), { x: rtlEnabled ? 0 : 10000 });
 
         await testScreenshot(page, `band-columns-2-(case-1)(cLines_=_${showColumnLines}_borders_=_${showBorders}_rtl_=_${rtlEnabled}).png`, { element: page.locator('#container') });
       });
+    });
+  });
 });

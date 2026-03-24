@@ -165,6 +165,7 @@ test.describe('PivotGrid_scrolling', () => {
       await testScreenshot(page,
         `PivotGrid rows content height=100%(${height}px),useNative=${useNative}.png`,
         { element: '#container' },
+      );
 
     });
   });
@@ -173,7 +174,7 @@ test.describe('PivotGrid_scrolling', () => {
     rtlEnabled: [false, true],
     nativeScrolling: [false, true],
   }).forEach(({ rtlEnabled, nativeScrolling }) => {
-    test('Should set margin for scroll-bar correctly (T1214743)', async ({ page }) => {
+    test(`Should set margin for scroll-bar correctly (T1214743), rtl=${rtlEnabled}, nativeScrolling=${nativeScrolling}`, async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
       height: 400,
       scrolling: { useNative: nativeScrolling },

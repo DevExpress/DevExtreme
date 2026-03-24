@@ -42,7 +42,7 @@ test.describe('CardView - Pager', () => {
       await createCardViewWithPager(page, { remoteOperations: remoteOperation });
 
       await page.evaluate(() => {
-        ( as any).dxCardView('instance').option('filterValue', [
+        ($('#container') as any).dxCardView('instance').option('filterValue', [
           ['value', '=', '1'],
           'or', ['value', '=', '2'],
           'or', ['value', '=', '3'],
@@ -60,14 +60,14 @@ test.describe('CardView - Pager', () => {
     await createCardViewWithPager(page, { filterPanel: { visible: true } });
 
     await page.evaluate(() => {
-      ( as any).dxCardView('instance').option('filterValue', ['text', '=', '0']);
+      ($('#container') as any).dxCardView('instance').option('filterValue', ['text', '=', '0']);
     });
 
     const pager = page.locator('.dx-pager');
     await expect(pager).not.toBeVisible();
 
     await page.evaluate(() => {
-      ( as any).dxCardView('instance').clearFilter();
+      ($('#container') as any).dxCardView('instance').clearFilter();
     });
 
     await expect(pager).toBeVisible();

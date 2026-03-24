@@ -63,6 +63,7 @@ test.describe('Form', () => {
 
               return alignments.map((labelAlignment) => getGroup(labelVisible, labelAlignment));
             },
+          );
 
           await createWidget(page, 'dxForm', {
             rtlEnabled,
@@ -244,7 +245,7 @@ test.describe('Form', () => {
       }],
     }, '#form');
 
-    await removeStylesheetRulesFromPage(page, );
+    await removeStylesheetRulesFromPage(page);
 
     await testScreenshot(page, 'Form labels width after render in invisible container.png');
 
