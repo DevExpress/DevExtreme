@@ -56,11 +56,12 @@ function createWebpackConfig(
     },
   };
 
+  config.optimization = {
+    ...(config.optimization || {}),
+    minimize: false,
+  };
+
   if (mode === 'debug') {
-    config.optimization = {
-      ...(config.optimization || {}),
-      minimize: false,
-    };
     config.output = {
       ...(config.output || {}),
       pathinfo: true,
