@@ -97,7 +97,7 @@
         :mask-rules="phoneRules"
         :input-attr="{ 'aria-label': 'Phone' }"
         id="phone"
-        mask="(000) 000-0000"
+        mask="(X00) 000-0000"
         label="Phone"
       >
         <DxValidator>
