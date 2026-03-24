@@ -74,7 +74,7 @@ $(() => {
 
   const phone = $('#phone').dxTextBox({
     label: 'Phone',
-    mask: '+1 (000) 000-0000',
+    mask: '(000) 000-0000',
     inputAttr: { 'aria-label': 'Phone' },
     maskRules: {
       X: /[02-9]/,
