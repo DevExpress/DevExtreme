@@ -136,8 +136,8 @@ test.describe('Scheduler render during DST - drag and drop', () => {
       cellIdxArray,
       expectedTopPosition,
     },
-  }) => {
-    test(`Should drag-n-drop appointment correctly during around DST (${timezone}, ${season}, ${offset})`, async ({ page }) => {
+  }, idx) => {
+    test(`Should drag-n-drop appointment correctly during around DST (${timezone}, ${season}, ${offset}, #${idx})`, async ({ page }) => {
       const browserTimezone = await page.evaluate(
         () => Intl.DateTimeFormat().resolvedOptions().timeZone,
       );
