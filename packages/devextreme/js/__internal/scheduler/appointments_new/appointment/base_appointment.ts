@@ -14,8 +14,8 @@ import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/
 import type { ResourceManager } from '@ts/scheduler/utils/resource_manager/resource_manager';
 import type { AppointmentAgendaViewModel, AppointmentItemViewModel } from '@ts/scheduler/view_model/types';
 
-import { APPOINTMENT_CLASSES } from '../const';
-import { DateFormatType, getDateTextFromTargetAppointment } from '../utils/appointment_text';
+import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
+import { DateFormatType, getDateTextFromTargetAppointment } from '../utils/get_date_text';
 
 export interface AppointmentRenderedEvent extends DefaultActionArgs<BaseAppointment> {
   appointmentData: SafeAppointment;
@@ -68,6 +68,7 @@ export class BaseAppointment<
 
     this.resize();
     this.applyElementClasses();
+    this.applyAria();
     this.renderContentTemplate();
   }
 
@@ -76,10 +77,16 @@ export class BaseAppointment<
   protected applyElementClasses(): void {
     this.$element()
       .addClass(APPOINTMENT_CLASSES.CONTAINER)
-      .toggleClass(APPOINTMENT_CLASSES.RECURRING, this.isRecurring());
+      .toggleClass(APPOINTMENT_TYPE_CLASSES.RECURRING, this.isRecurring())
+      .toggleClass(APPOINTMENT_TYPE_CLASSES.ALL_DAY, this.isAllDay());
   }
 
-  protected async getColor(): Promise<string | undefined> {
+  protected applyAria(): void {
+    this.$element()
+      .attr('role', 'button');
+  }
+
+  protected async getResourceColor(): Promise<string | undefined> {
     const { viewModel } = this.option();
     const resourceManager = this.option().getResourceManager();
 
@@ -152,5 +159,6 @@ export class BaseAppointment<
   }
 }
 
+// TODO<Appointments>: rename to dxSchedulerAppointment when old impl is removed
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-registerComponent('dxSchedulerAppointment', BaseAppointment as any);
+registerComponent('dxSchedulerNewAppointment', BaseAppointment as any);

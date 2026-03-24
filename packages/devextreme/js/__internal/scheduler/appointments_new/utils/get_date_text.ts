@@ -9,7 +9,7 @@ export enum DateFormatType {
   DATE = 'DATE',
 }
 
-export const getFormatType = (
+export const getDateFormatType = (
   startDate: Date,
   endDate: Date,
   isAllDay?: boolean,
@@ -50,11 +50,11 @@ export const getDateText = (startDate: Date, endDate: Date, formatType: DateForm
 
 export const getDateTextFromTargetAppointment = (
   targetedAppointmentData: TargetedAppointment,
-  format: DateFormatType,
+  format?: DateFormatType,
   viewType?: ViewType,
 ): string => {
   const { displayStartDate: startDate, displayEndDate: endDate, allDay } = targetedAppointmentData;
-  const formatType = format ?? getFormatType(startDate, endDate, allDay, viewType);
+  const formatType = format ?? getDateFormatType(startDate, endDate, allDay, viewType);
 
   return getDateText(startDate, endDate, formatType);
 };

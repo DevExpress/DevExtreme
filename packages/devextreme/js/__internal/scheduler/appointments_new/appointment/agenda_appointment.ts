@@ -39,7 +39,7 @@ export class AgendaAppointment extends BaseAppointment<AgendaAppointmentProperti
       .appendTo($leftContainer);
 
     // eslint-disable-next-line no-void
-    void super.getColor().then((color) => {
+    void super.getResourceColor().then((color) => {
       if (color) {
         $marker.css('backgroundColor', color);
       }
