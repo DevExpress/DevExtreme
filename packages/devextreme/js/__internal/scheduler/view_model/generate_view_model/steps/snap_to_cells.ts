@@ -25,25 +25,17 @@ export const snapToCells = <T extends ListEntity & Position>(
 ): T[] => {
   if (mode === 'never') return entities;
 
-  if (mode === 'always') {
-    return entities.map((entity) => {
-      const startDateUTC = cells[entity.cellIndex].min;
-      const endDateUTC = cells[entity.endCellIndex].max;
-
-      return {
-        ...entity, startDateUTC, endDateUTC, duration: endDateUTC - startDateUTC,
-      };
-    });
-  }
-
   return entities.map((entity) => {
     const startCell = cells[entity.cellIndex];
     const endCell = cells[entity.endCellIndex];
 
-    const startDateUTC = getCellFill(entity.startDateUTC, entity.endDateUTC, startCell) > 0.5
-      ? startCell.min : entity.startDateUTC;
-    const endDateUTC = getCellFill(entity.startDateUTC, entity.endDateUTC, endCell) > 0.5
-      ? endCell.max : entity.endDateUTC;
+    const snapStart = mode === 'always'
+      || getCellFill(entity.startDateUTC, entity.endDateUTC, startCell) > 0.5;
+    const snapEnd = mode === 'always'
+      || getCellFill(entity.startDateUTC, entity.endDateUTC, endCell) > 0.5;
+
+    const startDateUTC = snapStart ? startCell.min : entity.startDateUTC;
+    const endDateUTC = snapEnd ? endCell.max : entity.endDateUTC;
 
     return {
       ...entity, startDateUTC, endDateUTC, duration: endDateUTC - startDateUTC,
