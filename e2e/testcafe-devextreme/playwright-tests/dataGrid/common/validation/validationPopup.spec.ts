@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -24,7 +24,36 @@ test.describe('Validation', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Validation popup screenshot', async ({ page }) => {
-    // TODO: requires TestCafe dataGrid page object conversion (getRevertTooltip, getInvalidMessageTooltip)
+  test('Validation popup screenshot', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(20, 2),
+      height: 400,
+      showBorders: true,
+      columns: [{
+        dataField: 'field_0',
+        validationRules: [{ type: 'required' }],
+      }, {
+        dataField: 'field_1',
+        validationRules: [{ type: 'required' }],
+      }],
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+        allowAdding: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await dataGrid.getDataCell(0, 0).click();
+    await page.keyboard.press('Control+a');
+    await page.keyboard.press('Backspace');
+    await page.keyboard.press('Enter');
+
+    await testScreenshot(page, 'validation-popup.png', { element: page.locator('#container') });
+
+    await expect(dataGrid.getRevertTooltip()).toBeVisible();
+    await expect(dataGrid.getInvalidMessageTooltip()).toBeVisible();
   });
 });

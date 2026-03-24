@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,7 +14,16 @@ test.describe('Accessibility - CardView cover', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('default render', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
+  test('default render', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      width: 1000,
+      height: 600,
+      columns: ['FirstName', 'LastName'],
+      dataSource: [
+        { ID: 1, FirstName: 'John', LastName: 'Heart' },
+        { ID: 2, FirstName: 'Olivia', LastName: 'Peyton' },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
   });
 });

@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,7 +14,12 @@ test.describe('Accessibility - Scheduler legacyPopup', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('accessibility test', async ({ page }) => {
-    // TODO: Convert testAccessibility() / a11yCheck() to Playwright
+  test('legacy popup accessibility check', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [],
+      currentView: 'week',
+      currentDate: new Date(2021, 3, 29),
+    });
+    await a11yCheck(page, {}, '#container');
   });
 });

@@ -14,59 +14,57 @@ test.describe('Treelist - Editing', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  // T1247158
-  test.skip('TreeList - Insertafterkey doesn\'t work on children nodes', async ({ page }) => {
+  test('TreeList - Insertafterkey doesn\'t work on children nodes', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
-    dataSource: [
-      {
-        ID: 1,
-        Head_ID: -1,
-        Full_Name: 'John Heart',
+      dataSource: [
+        {
+          ID: 1,
+          Head_ID: -1,
+          Full_Name: 'John Heart',
+        },
+        {
+          ID: 2,
+          Head_ID: 1,
+          Full_Name: 'Samantha Bright',
+        },
+      ],
+      rootValue: -1,
+      keyExpr: 'ID',
+      parentIdExpr: 'Head_ID',
+      columns: ['Full_Name'],
+      editing: {
+        mode: 'batch',
+        allowAdding: true,
+        allowUpdating: true,
+        useIcons: true,
       },
-      {
-        ID: 2,
-        Head_ID: 1,
-        Full_Name: 'Samantha Bright',
+      focusedRowEnabled: true,
+      expandedRowKeys: [1],
+      onKeyDown(e: any) {
+        if (e.event.ctrlKey && e.event.key === 'Enter') {
+          const currentSelectedParentTaskId = e.component.getNodeByKey(
+            e.component.option('focusedRowKey'),
+          )?.parent?.key;
+          const key = new (window as any).DevExpress.data.Guid().toString();
+          const data = { Head_ID: currentSelectedParentTaskId };
+          e.component.option('editing.changes', [
+            {
+              key,
+              type: 'insert',
+              insertAfterKey: e.component.option('focusedRowKey'),
+              data,
+            },
+          ]);
+        }
       },
-    ],
-    rootValue: -1,
-    keyExpr: 'ID',
-    parentIdExpr: 'Head_ID',
-    columns: ['Full_Name'],
-    editing: {
-      mode: 'batch',
-      allowAdding: true,
-      allowUpdating: true,
-      useIcons: true,
-    },
-    focusedRowEnabled: true,
-    expandedRowKeys: [1],
-    onKeyDown(e) {
-      if (e.event.ctrlKey && e.event.key === 'Enter') {
-        const currentSelectedParentTaskId = e.component.getNodeByKey(
-          e.component.option('focusedRowKey'),
-        )?.parent?.key;
-        const key = new (window as any).DevExpress.data.Guid().toString();
-        const data = { Head_ID: currentSelectedParentTaskId };
-        e.component.option('editing.changes', [
-          {
-            key,
-            type: 'insert',
-            insertAfterKey: e.component.option('focusedRowKey'),
-            data,
-          },
-        ]);
-      }
-    },
-  });
-
-    const treeList = page.locator('#container');
-    const expectedInsertedRowIndex = 2;
-
-    await treeList.getDataCell(1, 0).element.click()
-      .pressKey('ctrl+enter')
-      .expect(treeList.getDataRow(expectedInsertedRowIndex).isInserted)
-      .ok();
-
     });
+
+    const dataRows = page.locator('#container .dx-data-row');
+    await dataRows.nth(1).locator('td').first().click();
+    await page.keyboard.press('Control+Enter');
+
+    const expectedInsertedRowIndex = 2;
+    const insertedRow = dataRows.nth(expectedInsertedRowIndex);
+    await expect(insertedRow).toHaveClass(/dx-row-inserted/);
+  });
 });

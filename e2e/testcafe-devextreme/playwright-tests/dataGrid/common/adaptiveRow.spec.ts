@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -13,6 +13,7 @@ test.describe('Adaptive Row', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
+
   test('Should be shown and hidden when the window is resized', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: [{
@@ -50,17 +51,19 @@ test.describe('Adaptive Row', () => {
       ],
     });
 
-      await page.locator('.dx-datagrid').first().isVisible();
+    const dataGrid = new DataGrid(page);
+
+    await expect(page.locator('.dx-datagrid').first()).toBeVisible();
 
     const adaptiveButton = dataGrid.getAdaptiveButton();
-    expect(await adaptiveButton.exists).toBeTruthy();
-    await (adaptiveButton).click();
+    await expect(adaptiveButton).toBeVisible();
+    await adaptiveButton.click();
 
-    expect(await dataGrid.getAdaptiveRow(0).element.exists).toBeTruthy();
+    await expect(dataGrid.getAdaptiveRow(0).element).toBeVisible();
 
     await page.setViewportSize({ width: 1200, height: 400 });
 
     expect(await dataGrid.isAdaptiveColumnHidden()).toBeTruthy();
-    expect(await dataGrid.getAdaptiveRow(0).element.exists).toBeFalsy();
+    await expect(dataGrid.getAdaptiveRow(0).element).not.toBeVisible();
   });
 });

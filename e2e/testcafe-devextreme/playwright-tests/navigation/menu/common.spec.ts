@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, appendElementTo, setAttribute, insertStylesheetRulesToPage } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, appendElementTo, setAttribute, insertStylesheetRulesToPage, Menu } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -65,23 +65,22 @@ test.describe('Menu_common', () => {
 
     await createWidget(page, 'dxMenu', { items: menuItems, cssClass: 'custom-class' }, '#menu');
 
-    const menu = new Menu();
+    const menu = new Menu(page);
 
-    await page.click(menu.getItem(0))
-      .pressKey('down')
-      .pressKey('down')
-      .pressKey('right');
+    await menu.getItem(0).click();
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowRight');
 
     await testScreenshot(page, 'Menu render items.png', { element: '#container' });
 
-    await page.click(menu.getItem(1))
-      .pressKey('down');
+    await menu.getItem(1).click();
+    await page.keyboard.press('ArrowDown');
 
     await testScreenshot(page, 'Menu selected focused item.png', {
       element: '#container',
     });
-
-    });
+  });
 
   [true, false].forEach((adaptivityEnabled) => {
     test(`Menu item with link, adaptivityEnabled=${adaptivityEnabled}`, async ({ page }) => {
@@ -119,24 +118,22 @@ test.describe('Menu_common', () => {
         items,
       }, '#menu');
 
-
-      const menu = new Menu(adaptivityEnabled);
+      const menu = new Menu(page, adaptivityEnabled);
 
       if (adaptivityEnabled) {
-        await click(menu.getHamburgerButton());
+        await menu.getHamburgerButton().click();
       }
 
-      await page.click(menu.getItem(0))
-        .pressKey('down')
-        .pressKey('down');
+      await menu.getItem(0).click();
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowDown');
 
       await testScreenshot(page, `Menu item with link and icon focused, adaptivityEnabled=${adaptivityEnabled}.png`);
 
-      await page.keyboard.press('ArrowDown')
-        .pressKey('down');
+      await page.keyboard.press('ArrowDown');
+      await page.keyboard.press('ArrowDown');
 
       await testScreenshot(page, `Menu item with link focused, adaptivityEnabled=${adaptivityEnabled}.png`);
-
     });
   });
 
@@ -157,15 +154,14 @@ test.describe('Menu_common', () => {
       hideSubmenuOnMouseLeave: true,
     });
 
-    const menu = new Menu();
+    const menu = new Menu(page);
 
-    await page.click(menu.getItem(0))
-      .pressKey('down')
-      .pressKey('up')
-      .pressKey('right')
-      .pressKey('up');
+    await menu.getItem(0).click();
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowUp');
 
     await testScreenshot(page, 'Menu scrolling.png');
-
-    });
+  });
 });

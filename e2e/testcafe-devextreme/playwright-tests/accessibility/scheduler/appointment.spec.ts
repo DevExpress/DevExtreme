@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,7 +14,19 @@ test.describe('Accessibility - Scheduler appointment', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('accessibility test', async ({ page }) => {
-    // TODO: Convert testAccessibility() / a11yCheck() to Playwright
+  ['month', 'week', 'day'].forEach((currentView) => {
+    test(`appointment accessibility in ${currentView} view`, async ({ page }) => {
+      await createWidget(page, 'dxScheduler', {
+        timeZone: 'UTC',
+        dataSource: [{
+          text: 'App 1',
+          startDate: new Date(Date.UTC(2021, 1, 1, 12)),
+          endDate: new Date(Date.UTC(2021, 1, 1, 13)),
+        }],
+        currentView,
+        currentDate: new Date(Date.UTC(2021, 1, 1)),
+      });
+      await a11yCheck(page, {}, '#container');
+    });
   });
 });

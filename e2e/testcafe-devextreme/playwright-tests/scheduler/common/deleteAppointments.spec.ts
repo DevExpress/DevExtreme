@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, getContainerUrl, setupTestPage } from '../../../playwright-helpers';
+import { createWidget, getContainerUrl, setupTestPage, Scheduler } from '../../../playwright-helpers';
 
 const containerUrl = getContainerUrl(__dirname, '../../../tests/container.html');
 
@@ -25,7 +25,7 @@ test.describe('Delete appointments', () => {
     EndDate: new Date(2017, 4, 22, 13, 0, 0, 0),
   }];
 
-  const createScheduler = async (page, data): Promise<void> => {
+  const createSchedulerWidget = async (page, data): Promise<void> => {
     await createWidget(page, 'dxScheduler', {
       dataSource: data,
       views: ['week'],
@@ -40,57 +40,64 @@ test.describe('Delete appointments', () => {
     });
   };
 
-  // TODO: needs Scheduler page object (getDeleteRecurrenceDialog, appointmentTooltip)
-  test.skip('Recurrence appointments should be deleted by click on \'delete\' button', async ({ page }) => {
-    await createScheduler(page, createRecurrenceData());
+  test('Recurrence appointments should be deleted by click on \'delete\' button', async ({ page }) => {
+    await createSchedulerWidget(page, createRecurrenceData());
+    const scheduler = new Scheduler(page, '#container');
 
     await expect(page.locator('.dx-scheduler-appointment')).toHaveCount(6);
 
-    await page.locator('.dx-scheduler-appointment').filter({ hasText: 'Text' }).first().click();
-    await page.locator('.dx-tooltip-appointment-item-delete-button').first().click();
-    await page.locator('.dx-dialog').locator('.dx-dialog-button').first().click();
+    await scheduler.getAppointment('Text', 3).element.click();
+
+    await expect(scheduler.appointmentTooltip.element).toBeVisible();
+    await scheduler.appointmentTooltip.deleteButton.click();
+    const dialog = scheduler.getDeleteRecurrenceDialog();
+    await dialog.appointment.click();
     await page.waitForTimeout(100);
 
     await expect(page.locator('.dx-scheduler-appointment')).toHaveCount(5);
 
-    await page.locator('.dx-scheduler-appointment').filter({ hasText: 'Text' }).first().click();
-    await page.locator('.dx-tooltip-appointment-item-delete-button').first().click();
-    await page.locator('.dx-dialog').locator('.dx-dialog-button').last().click();
+    await scheduler.getAppointment('Text', 3).element.click();
+    await scheduler.appointmentTooltip.deleteButton.click();
+    const dialog2 = scheduler.getDeleteRecurrenceDialog();
+    await dialog2.series.click();
 
     await expect(page.locator('.dx-scheduler-appointment')).toHaveCount(0);
   });
 
-  // TODO: needs Scheduler page object (getDeleteRecurrenceDialog)
-  test.skip('Recurrence appointments should be deleted by press \'delete\' key', async ({ page }) => {
-    await createScheduler(page, createRecurrenceData());
+  test('Recurrence appointments should be deleted by press \'delete\' key', async ({ page }) => {
+    await createSchedulerWidget(page, createRecurrenceData());
+    const scheduler = new Scheduler(page, '#container');
 
     await expect(page.locator('.dx-scheduler-appointment')).toHaveCount(6);
 
-    await page.locator('.dx-scheduler-appointment').filter({ hasText: 'Text' }).first().click();
+    await scheduler.getAppointment('Text', 3).element.click();
     await page.keyboard.press('Delete');
-    await page.locator('.dx-dialog').locator('.dx-dialog-button').first().click();
+    const dialog = scheduler.getDeleteRecurrenceDialog();
+    await dialog.appointment.click();
     await page.waitForTimeout(100);
 
     await expect(page.locator('.dx-scheduler-appointment')).toHaveCount(5);
 
-    await page.locator('.dx-scheduler-appointment').filter({ hasText: 'Text' }).first().click();
+    await scheduler.getAppointment('Text', 3).element.click();
     await page.keyboard.press('Delete');
-    await page.locator('.dx-dialog').locator('.dx-dialog-button').last().click();
+    const dialog2 = scheduler.getDeleteRecurrenceDialog();
+    await dialog2.series.click();
 
     await expect(page.locator('.dx-scheduler-appointment')).toHaveCount(0);
   });
 
   test('Common appointments should be deleted by click on \'delete\' button and press \'delete\' key', async ({ page }) => {
-    await createScheduler(page, createSimpleData());
+    await createSchedulerWidget(page, createSimpleData());
+    const scheduler = new Scheduler(page, '#container');
 
     await expect(page.locator('.dx-scheduler-appointment')).toHaveCount(2);
 
-    await page.locator('.dx-scheduler-appointment').filter({ hasText: 'Text' }).first().click();
-    await page.locator('.dx-tooltip-appointment-item-delete-button').first().click();
+    await scheduler.getAppointment('Text').element.click();
+    await scheduler.appointmentTooltip.deleteButton.click();
 
     await expect(page.locator('.dx-scheduler-appointment')).toHaveCount(1);
 
-    await page.locator('.dx-scheduler-appointment').filter({ hasText: 'Text2' }).first().click();
+    await scheduler.getAppointment('Text2').element.click();
     await page.keyboard.press('Delete');
 
     await expect(page.locator('.dx-scheduler-appointment')).toHaveCount(0);

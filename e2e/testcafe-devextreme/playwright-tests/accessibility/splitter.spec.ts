@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../tests/container.html')}`;
@@ -14,7 +14,8 @@ test.describe('Accessibility - splitter', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('accessibility test', async ({ page }) => {
-    // TODO: Convert testAccessibility() to Playwright
+  test('accessibility check', async ({ page }) => {
+    await createWidget(page, 'dxSplitter', { dataSource: [{ text: 'Left Pane', size: '140px' }, { text: 'Right Pane', size: '140px' }], height: 400, width: 450 });
+    await a11yCheck(page, { rules: { 'scrollable-region-focusable': { enabled: false } } }, '#container');
   });
 });

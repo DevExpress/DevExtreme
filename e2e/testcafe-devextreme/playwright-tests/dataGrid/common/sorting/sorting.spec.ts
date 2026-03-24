@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -13,17 +13,18 @@ test.describe('Sorting', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
+
   test('Filter expression should be valid when sortingMethod, remoteOperations, and autoNavigateToFocusedRow are specified (T1200546)', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', () => {
       const sampleData = Array.from({ length: 20 }, (_, i) => ({ ID: i + 1, Name: `Name ${i + 1}` }));
       const sampleAPI = new (window as any).DevExpress.data.ArrayStore(sampleData);
       const store = new (window as any).DevExpress.data.CustomStore({
         key: 'ID',
-        load(o) {
+        load(o: any) {
           if (o.filter && typeof o.filter[0] === 'function') {
             return Promise.reject();
           }
-          return Promise.all([sampleAPI.load(o), sampleAPI.totalCount(o)]).then((res) => ({
+          return Promise.all([sampleAPI.load(o), sampleAPI.totalCount(o)]).then((res: any) => ({
             data: res[0],
             totalCount: res[1],
           }));
@@ -49,10 +50,9 @@ test.describe('Sorting', () => {
       };
     });
 
-      // assert
-    expect(await dataGrid.dataRows.count);
-    await t.eql(6);
-    expect(await dataGrid.getErrorRow().exists);
-    await t.eql(false);
+    const dataGrid = new DataGrid(page);
+
+    await expect(dataGrid.dataRows).toHaveCount(6);
+    await expect(dataGrid.getErrorRow()).not.toBeVisible();
   });
 });

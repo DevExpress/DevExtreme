@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,7 +14,12 @@ test.describe('Accessibility - CardView pager', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Runtime filterValue change updates paging', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
+  test('pager accessibility check', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: Array.from({ length: 50 }, (_, i) => ({ value: `value_${i}` })),
+      columns: [{ dataField: 'value' }],
+      paging: { pageSize: 10 },
+    });
+    await a11yCheck(page, {}, '#container');
   });
 });

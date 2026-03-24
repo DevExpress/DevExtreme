@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../tests/container.html')}`;
@@ -14,7 +14,8 @@ test.describe('Accessibility - tabs', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('accessibility test', async ({ page }) => {
-    // TODO: Convert testAccessibility() to Playwright
+  test('accessibility check', async ({ page }) => {
+    await createWidget(page, 'dxTabs', { dataSource: [{ text: 'John Heart' }, { text: 'Robert Reagan' }], width: 450, height: 250 });
+    await a11yCheck(page, {}, '#container');
   });
 });

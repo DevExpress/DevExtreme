@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../tests/container.html')}`;
@@ -14,7 +14,8 @@ test.describe('Accessibility - stepper', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('accessibility test', async ({ page }) => {
-    // TODO: Convert testAccessibility() to Playwright
+  test('accessibility check', async ({ page }) => {
+    await createWidget(page, 'dxStepper', { dataSource: [{ icon: 'cart', label: 'Cart' }, { icon: 'gift', label: 'Promo Code' }, { icon: 'checkmarkcircle', label: 'Ordered' }], selectedIndex: 0, width: 800, height: 600 });
+    await a11yCheck(page, {}, '#container');
   });
 });

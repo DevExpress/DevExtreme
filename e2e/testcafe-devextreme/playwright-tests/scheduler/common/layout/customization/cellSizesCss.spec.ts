@@ -32,7 +32,7 @@ test.describe('Scheduler: Layout Customization: Cell Sizes CSS classes', () => {
 
   cases.forEach(({ views, expected, crossScrollingEnabled }) => {
     views.forEach((view) => {
-      test.skip(`Cells should have correct sizes and css classes (view:${view}, crossScrolling:${crossScrollingEnabled})`, async ({ page }) => {
+      test(`Cells should have correct sizes and css classes (view:${view}, crossScrolling:${crossScrollingEnabled})`, async ({ page }) => {
         await insertStylesheetRulesToPage(page, CELL_SIZE_CSS);
         await createWidget(page, 'dxScheduler', {
           dataSource: [],

@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, a11yCheck } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,23 +14,23 @@ test.describe('Accessibility - CardView selection', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Single mode', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
+  test('single mode', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ id: 1, A: 'A_0' }, { id: 2, A: 'A_1' }],
+      keyExpr: 'id',
+      columns: ['A'],
+      selection: { mode: 'single' },
+    });
+    await a11yCheck(page, {}, '#container');
   });
 
-  test.skip('Multiple mode always', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('Multiple mode onClick', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('Multiple mode onLongTap', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
-  });
-
-  test.skip('Multiple mode without Select All', async ({ page }) => {
-    // TODO: Convert a11yCheck() to Playwright with @axe-core/playwright
+  test('multiple mode', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ id: 1, A: 'A_0' }, { id: 2, A: 'A_1' }],
+      keyExpr: 'id',
+      columns: ['A'],
+      selection: { mode: 'multiple', showCheckBoxesMode: 'always' },
+    });
+    await a11yCheck(page, {}, '#container');
   });
 });

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, appendElementTo, setAttribute } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, appendElementTo, setAttribute, Menu } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -42,26 +42,23 @@ test.describe('Menu_common', () => {
   ['horizontal', 'vertical'].forEach((orientation) => {
     const testName = `Menu delimiter, orientation=${orientation}`;
     test(testName, async ({ page }) => {
-    await createWidget(page, 
-      'dxMenu',
-      {
-        items,
-        orientation,
-      },
-      '#container',
-    );
-
-      const menu = page.locator('#menu');
+      await createWidget(page,
+        'dxMenu',
+        {
+          items,
+          orientation,
+        },
+        '#container',
+      );
 
       await testScreenshot(page, `${testName}.png`);
-
     });
   });
 
   ['horizontal', 'vertical'].forEach((orientation) => {
     ['bottom', 'right', 'bottom right'].forEach((collision) => {
       const testName = `Menu delimiter ${collision} collision, orientation=${orientation}`;
-      test.skip(testName, async ({ page }) => {
+      test(testName, async ({ page }) => {
 
         await appendElementTo(page, '#container', 'div', 'menu');
         const additionalStyles: Record<string, string> = {
@@ -82,13 +79,11 @@ test.describe('Menu_common', () => {
           '#menu',
         );
 
-        const menu = page.locator('#menu');
-
-        await click(menu.getItem(3));
+        const menu = new Menu(page);
+        await menu.getItem(3).click();
 
         await testScreenshot(page, `${testName}.png`);
-
-    });
+      });
     });
   });
 
@@ -132,11 +127,9 @@ test.describe('Menu_common', () => {
       width: '100%',
     }, '#container');
 
-    const menu = new Menu();
-
-    await click(menu.getItem(1));
+    const menu = new Menu(page);
+    await menu.getItem(1).click();
 
     await testScreenshot(page, 'Menu delimiter, menu as toolbar item.png');
-
-    });
+  });
 });

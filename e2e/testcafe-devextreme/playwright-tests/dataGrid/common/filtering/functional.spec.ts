@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -13,9 +13,6 @@ test.describe('Filtering', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
-  const GRID_CONTAINER = '#container';
-
-  // T1311818
 
   test('Don\'t calculate additional filter when filtering column list is empty', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
@@ -26,10 +23,8 @@ test.describe('Filtering', () => {
       showBorders: true,
     });
 
-    // arrange
-      const consoleMessages = await t.getBrowserConsoleMessages();
+    const dataGrid = new DataGrid(page);
 
-    // act
     await dataGrid.option({
       columns: [
         { dataField: 'id', caption: 'ID', dataType: 'number' },
@@ -42,17 +37,16 @@ test.describe('Filtering', () => {
       ],
     });
 
-    // assert
-    expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+    await expect(page.locator('.dx-datagrid').first()).toBeVisible();
 
-    // act
     await dataGrid.option({
       columns: [],
       dataSource: undefined,
     });
 
-    // assert
-    expect(await consoleMessages.error.every((msg) => !msg.includes('E1047')));
-    await t.ok();
+    const consoleErrors: string[] = [];
+    page.on('pageerror', (err) => { consoleErrors.push(err.message); });
+
+    expect(consoleErrors.every((msg) => !msg.includes('E1047'))).toBeTruthy();
   });
 });
