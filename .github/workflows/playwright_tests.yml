@@ -169,16 +169,4 @@ jobs:
           e2e/testcafe-devextreme/playwright-results/
           e2e/testcafe-devextreme/playwright-output-*.log
           e2e/testcafe-devextreme/test-results/
-
-  merge-results:
-    name: Merge Playwright results
-    if: always()
-    needs: playwright
-    runs-on: devextreme-shr2
-    steps:
-    - name: Merge artifacts
-      uses: actions/upload-artifact/merge@v4
-      with:
-        name: playwright-all-results
-        pattern: playwright-results-*
-        delete-merged: true
+        if-no-files-found: ignore
