@@ -160,11 +160,15 @@ jobs:
           echo ""
         done
 
+    - name: Sanitize job name
+      if: always()
+      run: echo "JOB_NAME=$(echo "${{ matrix.ARGS.name }}" | tr '/' '-' | tr ' ' '-')" >> $GITHUB_ENV
+
     - name: Upload test results
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: playwright-results-${{ matrix.ARGS.name }}
+        name: playwright-results-${{ env.JOB_NAME }}
         path: |
           e2e/testcafe-devextreme/playwright-results/
           e2e/testcafe-devextreme/playwright-output-*.log
