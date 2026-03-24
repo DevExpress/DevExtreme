@@ -11,7 +11,6 @@ export const getSchedulerMock = ({
   resourceManager,
   dateRange,
   skippedDays,
-  isVirtualScrolling = false,
 }: {
   type: string;
   startDayHour: number;
@@ -20,7 +19,6 @@ export const getSchedulerMock = ({
   resourceManager?: ResourceManager;
   skippedDays?: number[];
   dateRange?: Date[];
-  isVirtualScrolling?: boolean;
 }): Scheduler => ({
   timeZoneCalculator: mockTimeZoneCalculator,
   currentView: { type, skippedDays: skippedDays ?? [] },
@@ -39,7 +37,6 @@ export const getSchedulerMock = ({
   }[name]),
   option: (name: string) => ({ firstDayOfWeek: 0, showAllDayPanel: true }[name]),
   getViewOffsetMs: () => offsetMinutes * 60_000,
-  isVirtualScrolling: () => isVirtualScrolling,
   resourceManager: resourceManager ?? new ResourceManager([]),
   _dataAccessors: mockAppointmentDataAccessor,
 }) as unknown as Scheduler;

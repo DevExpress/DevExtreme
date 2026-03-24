@@ -5,41 +5,19 @@ import type { SnapToCellsModeType, ViewType } from '../../../types';
 import { getCompareOptions } from '../../common/get_compare_options';
 import type { CompareOptions } from '../../types';
 
-interface ViewConfig {
+const configByView: Record<Exclude<ViewType, 'agenda'>, {
   isTimelineView: boolean;
   isMonthView: boolean;
   viewOrientation: 'horizontal' | 'vertical';
-  snapToCellsMode: SnapToCellsModeType;
-}
-
-const configByView: Record<ViewType, ViewConfig> = {
-  day: {
-    isTimelineView: false, isMonthView: false, viewOrientation: 'vertical', snapToCellsMode: 'never',
-  },
-  week: {
-    isTimelineView: false, isMonthView: false, viewOrientation: 'vertical', snapToCellsMode: 'never',
-  },
-  workWeek: {
-    isTimelineView: false, isMonthView: false, viewOrientation: 'vertical', snapToCellsMode: 'never',
-  },
-  month: {
-    isTimelineView: false, isMonthView: true, viewOrientation: 'horizontal', snapToCellsMode: 'always',
-  },
-  timelineDay: {
-    isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal', snapToCellsMode: 'never',
-  },
-  timelineWeek: {
-    isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal', snapToCellsMode: 'never',
-  },
-  timelineWorkWeek: {
-    isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal', snapToCellsMode: 'never',
-  },
-  timelineMonth: {
-    isTimelineView: true, isMonthView: true, viewOrientation: 'horizontal', snapToCellsMode: 'always',
-  },
-  agenda: {
-    isTimelineView: false, isMonthView: false, viewOrientation: 'vertical', snapToCellsMode: 'always',
-  },
+}> = {
+  day: { isTimelineView: false, isMonthView: false, viewOrientation: 'vertical' },
+  week: { isTimelineView: false, isMonthView: false, viewOrientation: 'vertical' },
+  workWeek: { isTimelineView: false, isMonthView: false, viewOrientation: 'vertical' },
+  month: { isTimelineView: false, isMonthView: true, viewOrientation: 'horizontal' },
+  timelineDay: { isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal' },
+  timelineWeek: { isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal' },
+  timelineWorkWeek: { isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal' },
+  timelineMonth: { isTimelineView: true, isMonthView: true, viewOrientation: 'horizontal' },
 };
 
 export interface ViewModelOptions {
@@ -60,6 +38,10 @@ export interface ViewModelOptions {
   isVirtualScrolling: boolean;
 }
 
+export const getDefaultSnapToCellsModeForView = (type: ViewType): SnapToCellsModeType => (
+  ['month', 'agenda', 'timelineMonth'].includes(type) ? 'always' : 'never'
+);
+
 export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions => {
   const viewOffset = schedulerStore.getViewOffsetMs();
   const { groupOrientation, type } = schedulerStore.currentView;
@@ -70,12 +52,7 @@ export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions
     && schedulerStore.getViewOption('groupByDate'),
   );
   const compareOptions = getCompareOptions(schedulerStore);
-  const {
-    isTimelineView,
-    isMonthView,
-    viewOrientation,
-    snapToCellsMode: defaultSnapToCellsMode,
-  } = configByView[type];
+  const { isTimelineView, isMonthView, viewOrientation } = configByView[type];
   const isRTLEnabled = Boolean(schedulerStore.option('rtlEnabled'));
   const isAdaptivityEnabled = Boolean(schedulerStore.option('adaptivityEnabled'));
   const cellDurationMinutes = schedulerStore.getViewOption('cellDuration');
@@ -86,7 +63,7 @@ export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions
 
   return {
     type,
-    snapToCellsMode: snapToCellsMode ?? defaultSnapToCellsMode,
+    snapToCellsMode: snapToCellsMode ?? getDefaultSnapToCellsModeForView(type),
     viewOffset,
     groupOrientation,
     isGroupByDate,
