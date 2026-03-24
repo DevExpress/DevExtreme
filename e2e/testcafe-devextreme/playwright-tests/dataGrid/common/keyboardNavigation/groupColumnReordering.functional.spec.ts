@@ -1,10 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
 
-// TODO: needs DataGrid page object for getGroupPanel
 test.describe('DataGrid Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
@@ -15,7 +14,7 @@ test.describe('DataGrid Tests', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('The column should be grouped when pressing Ctrl + G if grouping.contextMenuEnabled is false', async ({ page }) => {
+  test('The column should be grouped when pressing Ctrl + G if grouping.contextMenuEnabled is false', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       width: 550,
       columnWidth: 100,
@@ -33,11 +32,14 @@ test.describe('DataGrid Tests', () => {
       }],
     });
 
-    const firstVisibleHeader = page.locator('.dx-header-row').nth(0).locator('td').nth(0);
+    const dataGrid = new DataGrid(page);
+    const firstVisibleHeader = dataGrid.getHeaderRow().locator('td').nth(0);
 
     await firstVisibleHeader.click();
     await page.keyboard.press('Control+g');
 
-    await expect(page.locator('.dx-datagrid').first()).toBeVisible();
+    const groupPanel = dataGrid.getGroupPanel();
+    const groupItems = groupPanel.locator('.dx-group-panel-item');
+    await expect(groupItems).toHaveCount(1);
   });
 });

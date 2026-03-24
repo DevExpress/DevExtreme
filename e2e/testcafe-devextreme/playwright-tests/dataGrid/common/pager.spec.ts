@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -32,7 +32,29 @@ test.describe('Pager', () => {
     });
   }
 
-  test.skip('Full size pager', async ({ page }) => {
-    // TODO: requires TestCafe t.ok/t.eql assertion conversion
+  test('Full size pager', async ({ page }) => {
+    await createDataGridWithPager(page);
+
+    const dataGrid = new DataGrid(page);
+    const pager = dataGrid.getPager();
+
+    await expect(pager).toBeVisible();
+
+    const pageSizeSelector = pager.locator('.dx-page-sizes');
+    await expect(pageSizeSelector).toBeVisible();
+
+    const infoText = pager.locator('.dx-info');
+    await expect(infoText).toBeVisible();
+
+    const navButtons = pager.locator('.dx-navigate-button');
+    const navCount = await navButtons.count();
+    expect(navCount).toBeGreaterThan(0);
+
+    const pages = pager.locator('.dx-page');
+    const pageCount = await pages.count();
+    expect(pageCount).toBeGreaterThan(0);
+
+    const selectedPage = pager.locator('.dx-page.dx-selection');
+    await expect(selectedPage).toHaveText('6');
   });
 });

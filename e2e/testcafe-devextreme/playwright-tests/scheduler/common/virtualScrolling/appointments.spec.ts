@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, getContainerUrl, setupTestPage, setStyleAttribute, getStyleAttribute } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, getContainerUrl, setupTestPage } from '../../../../playwright-helpers';
 
 const containerUrl = getContainerUrl(__dirname, '../../../../tests/container.html');
 
@@ -15,7 +15,7 @@ test.describe('Scheduler: Virtual Scrolling', () => {
     await setupTestPage(page, containerUrl);
   });
 
-  test.skip('Appointment should not repaint after scrolling if present on viewport', async ({ page }) => {
+  test('Appointment should not repaint after scrolling if present on viewport', async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       height: 600,
       width: 800,
@@ -37,16 +37,20 @@ test.describe('Scheduler: Virtual Scrolling', () => {
       }],
     });
 
-    const element = page.locator('.dx-scheduler-appointment').nth(0);
+    const appointment = page.locator('.dx-scheduler-appointment').nth(0);
+    await expect(appointment).toBeVisible();
 
-    await setStyleAttribute(page, element, 'background-color: red;');
-    const style1 = await getStyleAttribute(page, element);
-    expect(style1).toBe('transform: translate(525px, 200px); width: 49px; height: 100px; background-color: red;');
+    await appointment.evaluate((el) => {
+      el.style.backgroundColor = 'red';
+    });
+
+    const styleBefore = await appointment.getAttribute('style');
+    expect(styleBefore).toContain('background-color: red');
 
     await scrollToDate(page, new Date(2020, 8, 17, 4));
 
-    const style2 = await getStyleAttribute(page, element);
-    expect(style2).toBe('transform: translate(525px, 200px); width: 49px; height: 100px; background-color: red;');
+    const styleAfter = await appointment.getAttribute('style');
+    expect(styleAfter).toContain('background-color: red');
   });
 
   test('The appointment should render correctly when scrolling vertically (T1263428)', async ({ page }) => {

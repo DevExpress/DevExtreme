@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -15,8 +15,36 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
   });
 
   [true, false].forEach((rtlEnabled) => {
-    test.skip(`reorder group column when ${rtlEnabled ? 'left' : 'right'} arrow is pressed when rtlEnabled = ${rtlEnabled}`, async ({ page }) => {
-      // TODO: requires TestCafe dataGrid.getGroupPanel page object conversion
+    test(`reorder group column when ${rtlEnabled ? 'left' : 'right'} arrow is pressed when rtlEnabled = ${rtlEnabled}`, async ({ page }) => {
+      await createWidget(page, 'dxDataGrid', {
+        dataSource: [
+          {
+            field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4',
+          },
+        ],
+        rtlEnabled,
+        groupPanel: { visible: true },
+        columns: [
+          { dataField: 'field1', groupIndex: 0 },
+          { dataField: 'field2', groupIndex: 1 },
+          { dataField: 'field3' },
+          { dataField: 'field4' },
+        ],
+      });
+
+      const dataGrid = new DataGrid(page);
+      const groupPanel = dataGrid.getGroupPanel();
+      await expect(groupPanel).toBeVisible();
+
+      const firstGroupItem = groupPanel.locator('.dx-group-panel-item').first();
+      await firstGroupItem.click();
+
+      const arrowKey = rtlEnabled ? 'ArrowLeft' : 'ArrowRight';
+      await page.keyboard.press(arrowKey);
+
+      await testScreenshot(page, `group-column-reorder-rtl-${rtlEnabled}.png`, {
+        element: '#container',
+      });
     });
   });
 });

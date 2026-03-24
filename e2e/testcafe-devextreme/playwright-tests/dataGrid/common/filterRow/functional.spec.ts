@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -14,7 +14,31 @@ test.describe('FilterRow', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Filter should reset if the filter row editor text is cleared (T1257261)', async ({ page }) => {
-    // TODO: requires TestCafe dataGrid page object conversion (getFilterEditor, getFilterPanel)
+  test('Filter should reset if the filter row editor text is cleared (T1257261)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 1, name: 'Alice' },
+        { id: 2, name: 'Bob' },
+        { id: 3, name: 'Charlie' },
+      ],
+      keyExpr: 'id',
+      filterRow: { visible: true },
+      columns: ['id', 'name'],
+    });
+
+    const dataGrid = new DataGrid(page);
+    const filterEditor = await dataGrid.getFilterEditor(1);
+
+    await filterEditor.click();
+    await filterEditor.fill('Alice');
+    await page.keyboard.press('Enter');
+
+    await expect(dataGrid.dataRows).toHaveCount(1);
+
+    await filterEditor.click();
+    await filterEditor.fill('');
+    await page.keyboard.press('Enter');
+
+    await expect(dataGrid.dataRows).toHaveCount(3);
   });
 });

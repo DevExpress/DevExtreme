@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -15,8 +15,34 @@ test.describe('Keyboard Navigation - Column Reordering', () => {
   });
 
   [true, false].forEach((rtlEnabled) => {
-    test.skip(`reorder column when ${rtlEnabled ? 'left' : 'right'} arrow is pressed when rtlEnabled = ${rtlEnabled}`, async ({ page }) => {
-      // TODO: requires TestCafe pressKey shortcut conversion
+    test(`reorder column when ${rtlEnabled ? 'left' : 'right'} arrow is pressed when rtlEnabled = ${rtlEnabled}`, async ({ page }) => {
+      await createWidget(page, 'dxDataGrid', {
+        dataSource: [
+          {
+            field1: 'test1', field2: 'test2', field3: 'test3',
+          },
+        ],
+        rtlEnabled,
+        allowColumnReordering: true,
+        columns: [
+          { dataField: 'field1' },
+          { dataField: 'field2' },
+          { dataField: 'field3' },
+        ],
+      });
+
+      const dataGrid = new DataGrid(page);
+      const headerRow = dataGrid.getHeaderRow();
+      const firstHeaderCell = headerRow.locator('td').nth(0);
+
+      await firstHeaderCell.click();
+
+      const arrowKey = rtlEnabled ? 'ArrowLeft' : 'ArrowRight';
+      await page.keyboard.press(arrowKey);
+
+      await testScreenshot(page, `column-reorder-keyboard-rtl-${rtlEnabled}.png`, {
+        element: '#container',
+      });
     });
   });
 });

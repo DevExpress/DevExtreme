@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -14,7 +14,37 @@ test.describe('Keyboard Navigation - skip drag cell', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('The drag cell should be skipped when navigating from the header cell by tab keypress (T1147695)', async ({ page }) => {
-    // TODO: requires TestCafe isFocused and pressKey conversion
+  test('The drag cell should be skipped when navigating from the header cell by tab keypress (T1147695)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 1, name: 'Item 1' },
+        { id: 2, name: 'Item 2' },
+      ],
+      keyExpr: 'id',
+      keyboardNavigation: {
+        enabled: true,
+      },
+      rowDragging: {
+        allowReordering: true,
+        showDragIcons: true,
+      },
+      columns: ['name'],
+    });
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.focus();
+
+    const headerCell = dataGrid.getHeaderRow().locator('td').first();
+    await headerCell.click();
+
+    await page.keyboard.press('Tab');
+
+    const firstDataCell = dataGrid.getDataCell(0, 0);
+    const activeElement = await page.evaluate(() => {
+      const el = document.activeElement;
+      return el ? el.className : '';
+    });
+
+    expect(activeElement).not.toContain('dx-command-drag');
   });
 });

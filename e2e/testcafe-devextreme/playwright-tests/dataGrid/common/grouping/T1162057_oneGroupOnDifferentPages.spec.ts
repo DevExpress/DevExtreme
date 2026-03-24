@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -14,7 +14,37 @@ test.describe('Grouping Panel - One group on different pages', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Group panel restored from cache and ends at the next page (T1162057)', async ({ page }) => {
-    // TODO: requires TestCafe RequestMock API mock conversion
+  test('Group panel restored from cache and ends at the next page (T1162057)', async ({ page }) => {
+    const data = Array.from({ length: 50 }, (_, i) => ({
+      id: i,
+      name: `Item ${i}`,
+      group: i < 25 ? 'Group A' : 'Group B',
+    }));
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: data,
+      keyExpr: 'id',
+      columns: [
+        { dataField: 'group', groupIndex: 0 },
+        'name',
+      ],
+      paging: {
+        pageSize: 20,
+      },
+      grouping: {
+        autoExpandAll: true,
+      },
+      groupPanel: {
+        visible: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await expect(dataGrid.getContainer()).toBeVisible();
+
+    await dataGrid.apiPageIndex(1);
+
+    const groupRows = dataGrid.getGroupRowSelector();
+    await expect(groupRows.first()).toBeVisible();
   });
 });

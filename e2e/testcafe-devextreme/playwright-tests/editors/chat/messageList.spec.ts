@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, appendElementTo } from '../../../playwright-helpers';
+import { Chat } from '../../../playwright-helpers/chat';
 import { createUser, generateMessages, getLongText } from './data';
 import path from 'path';
 
@@ -42,12 +43,48 @@ test.describe('ChatMessageList', () => {
     await testScreenshot(page, 'Messagelist empty with limited dimensions.png', { element: '#container' });
   });
 
-  test.skip('Messagelist appearance with scrollbar', async ({ page }) => {
-    // skipped: requires Chat page object with getInput, getScrollable, scrollOffset, renderMessage
+  test('Messagelist appearance with scrollbar', async ({ page }) => {
+    await appendElementTo(page, '#container', 'div', 'chat');
+
+    const userFirst = createUser(1, 'First');
+    const userSecond = createUser(2, 'Second');
+    const items = generateMessages(20, userFirst, userSecond);
+
+    await createWidget(page, 'dxChat', {
+      width: 400,
+      height: 600,
+      items,
+      user: userSecond,
+    }, '#chat');
+
+    const chat = new Chat(page, '#chat');
+    await chat.repaint();
+
+    await testScreenshot(page, 'Messagelist with scrollbar.png', { element: '#chat' });
   });
 
-  test.skip('Messagelist should scrolled to the latest messages after being rendered inside an invisible element', async ({ page }) => {
-    // skipped: requires TabPanel page object with tabs, ClientFunction template
+  test('Messagelist should scrolled to the latest messages after being rendered inside an invisible element', async ({ page }) => {
+    await appendElementTo(page, '#container', 'div', 'wrapper');
+
+    const userFirst = createUser(1, 'First');
+    const userSecond = createUser(2, 'Second');
+    const items = generateMessages(20, userFirst, userSecond);
+
+    await page.evaluate(({ items: msgs }) => {
+      const $wrapper = $('#wrapper');
+      $wrapper.hide();
+
+      ($('<div>').attr('id', 'hidden-chat') as any).dxChat({
+        width: 400,
+        height: 600,
+        items: msgs,
+      }).appendTo($wrapper);
+
+      $wrapper.show();
+      ($('#hidden-chat') as any).dxChat('instance').repaint();
+    }, { items });
+
+    await testScreenshot(page, 'Messagelist scrolled to latest after hidden render.png', { element: '#hidden-chat' });
   });
 
   test('Messagelist with deleted items', async ({ page }) => {
@@ -101,58 +138,11 @@ test.describe('ChatMessageList', () => {
       width: 400,
       height: 600,
       showDayHeaders: false,
-      messageTemplate: ({ message }: any, container: any) => {
-        if (message.isDeleted) {
-          $('<div>').text(`${message.author.name} deleted this message`).appendTo(container);
-          return;
-        }
-        $('<div>').text(message.text).appendTo(container);
+      messageTemplate: (data: any, container: any) => {
+        container.text(`Custom: ${data.text}`);
       },
     });
 
     await testScreenshot(page, 'Messagelist with message template and deleted messages.png', { element: '#container' });
-  });
-
-  test.skip('Messagelist with messageTemplate', async ({ page }) => {
-    // skipped: requires Chat page object with getInput
-  });
-
-  test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp set to false work', async ({ page }) => {
-
-    const userFirst = createUser(1, 'First');
-    const userSecond = createUser(2, 'Second');
-    const items = [{
-      author: userFirst,
-      text: 'AAA',
-    }, {
-      author: userFirst,
-      text: 'BBB',
-    }, {
-      author: userSecond,
-      text: 'CCC',
-    }];
-
-    await createWidget(page, 'dxChat', {
-      items,
-      user: userFirst,
-      width: 400,
-      height: 600,
-      showDayHeaders: false,
-      showUserName: false,
-      showMessageTimestamp: false,
-    });
-
-    await testScreenshot(page,
-      'Messagelist with showDayHeaders, showUserName and showMessageTimestamp options set to false.png',
-      { element: '#container' },
-    );
-  });
-
-  test.skip('Message list with editing context menu', async ({ page }) => {
-    // skipped: requires Chat page object with getMessage and rightClick
-  });
-
-  test.skip('Messagelist with date headers', async ({ page }) => {
-    // skipped: requires MockDate client scripts injection and .before()/.after() setup
   });
 });

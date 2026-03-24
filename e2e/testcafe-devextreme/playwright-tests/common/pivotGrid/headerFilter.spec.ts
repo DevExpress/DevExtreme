@@ -59,7 +59,46 @@ test.describe('pivotGrid_headerFilter', () => {
     await testScreenshot(page, 'headerFilter - before scroll.png');
   });
 
-  test.skip('[T1284200] Should handle dxList "selectAll" when has unselected items on the second page', async ({ page }) => {
-    // skipped: requires complex HeaderFilter list interaction with checkboxes
+  test('[T1284200] Should handle dxList "selectAll" when has unselected items on the second page', async ({ page }) => {
+    const largeData = Array.from({ length: 100 }, (_, i) => ({
+      region: `Region ${i}`,
+      date: '2015/01/01',
+      amount: i * 100,
+    }));
+
+    await createWidget(page, 'dxPivotGrid', {
+      allowSorting: true,
+      allowFiltering: true,
+      headerFilter: {
+        allowSearch: true,
+      },
+      dataSource: {
+        fields: [{
+          dataField: 'region',
+          area: 'row',
+        }, {
+          dataField: 'amount',
+          area: 'data',
+          summaryType: 'sum',
+        }],
+        store: largeData,
+      },
+    });
+
+    const pivotGrid = new PivotGrid(page);
+    await pivotGrid.getRowHeaderArea().getHeaderFilterIcon().click();
+
+    const headerFilter = new HeaderFilter(page);
+    const list = headerFilter.getList();
+
+    const firstItem = list.getItem(0);
+    const firstCheckbox = firstItem.locator('.dx-checkbox');
+    await firstCheckbox.click();
+
+    const selectAll = list.getSelectAll();
+    await selectAll.checkBox.click();
+
+    const isChecked = await selectAll.isChecked();
+    expect(isChecked).toBe(true);
   });
 });

@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { createWidget, testScreenshot, appendElementTo, setAttribute, insertStylesheetRulesToPage } from '../../../playwright-helpers';
+import { TabPanel } from '../../../playwright-helpers/tabPanel';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -19,49 +20,27 @@ test.describe('TabPanel_common', () => {
 
   ['with scrolling', 'without scrolling'].forEach((mode) => {
     const testName = `TabPanel borders ${mode}`;
-    test.skip(testName, async ({ page }) => {
+    test(testName, async ({ page }) => {
 
       const dataSource: any[] = [
-        {
-          title: 'John Heart',
-          text: 'John Heart',
-        }, {
-          title: 'Olivia Peyton',
-          text: 'Olivia Peyton',
-        }, {
-          title: 'Robert Reagan',
-          text: 'Robert Reagan',
-        }, {
-          title: 'Greta Sims',
-          text: 'Greta Sims',
-        }, {
-          title: 'Olivia Peyton',
-          text: 'Olivia Peyton',
-        },
+        { title: 'John Heart', text: 'John Heart' },
+        { title: 'Olivia Peyton', text: 'Olivia Peyton' },
+        { title: 'Robert Reagan', text: 'Robert Reagan' },
+        { title: 'Greta Sims', text: 'Greta Sims' },
+        { title: 'Olivia Peyton', text: 'Olivia Peyton' },
       ];
 
       const tabPanelOptions = {
         dataSource,
-        itemTemplate: (_, __, itemElement) => {
+        itemTemplate: (data: any, index: any, itemElement: any) => {
           ($('<div>').css('marginTop', '10px') as any)
             .dxTabs({
               items: [
-                {
-                  title: 'John Heart',
-                  text: 'John Heart',
-                }, {
-                  title: 'Olivia Peyton',
-                  text: 'Olivia Peyton',
-                }, {
-                  title: 'Robert Reagan',
-                  text: 'Robert Reagan',
-                }, {
-                  title: 'Greta Sims',
-                  text: 'Greta Sims',
-                }, {
-                  title: 'Olivia Peyton',
-                  text: 'Olivia Peyton',
-                },
+                { title: 'John Heart', text: 'John Heart' },
+                { title: 'Olivia Peyton', text: 'Olivia Peyton' },
+                { title: 'Robert Reagan', text: 'Robert Reagan' },
+                { title: 'Greta Sims', text: 'Greta Sims' },
+                { title: 'Olivia Peyton', text: 'Olivia Peyton' },
               ],
               width: 300,
               showNavButtons: true,
@@ -75,13 +54,11 @@ test.describe('TabPanel_common', () => {
 
       await createWidget(page, 'dxTabPanel', tabPanelOptions);
 
-
       await testScreenshot(page, `${testName}.png`, { element: '#container' });
-
     });
   });
 
-  test.skip('TabPanel text-overflow with tabsPosition left', async ({ page }) => {
+  test('TabPanel text-overflow with tabsPosition left', async ({ page }) => {
 
     const dataSource: any[] = [
       { icon: 'user', text: 'John Heart', title: 'John Heart' },
@@ -103,28 +80,16 @@ test.describe('TabPanel_common', () => {
     await setAttribute(page, '.dx-tabs-wrapper', 'style', 'max-width: 130px;');
 
     await testScreenshot(page, 'TabPanel text-overflow when tabs wrapper width is limited.png', { element: '#container' });
+  });
 
-    });
-
-  test.skip('TabPanel focus borders after change selectedIndex in runtime', async ({ page }) => {
+  test('TabPanel focus borders after change selectedIndex in runtime', async ({ page }) => {
 
     const dataSource: any[] = [
-      {
-        title: 'John Heart',
-        text: 'John Heart',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      }, {
-        title: 'Robert Reagan',
-        text: 'Robert Reagan',
-      }, {
-        title: 'Greta Sims',
-        text: 'Greta Sims',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      },
+      { title: 'John Heart', text: 'John Heart' },
+      { title: 'Olivia Peyton', text: 'Olivia Peyton' },
+      { title: 'Robert Reagan', text: 'Robert Reagan' },
+      { title: 'Greta Sims', text: 'Greta Sims' },
+      { title: 'Olivia Peyton', text: 'Olivia Peyton' },
     ];
 
     await createWidget(page, 'dxTabPanel', {
@@ -133,32 +98,20 @@ test.describe('TabPanel_common', () => {
       width: 300,
     });
 
-    const tabPanel = page.locator('#container');
+    const tabPanel = new TabPanel(page);
     await tabPanel.option('selectedIndex', 1);
 
     await testScreenshot(page, 'TabPanel focus borders.png', { element: '#container' });
+  });
 
-    });
-
-  test.skip('TabPanel navigation buttons hover', async ({ page }) => {
+  test('TabPanel navigation buttons hover', async ({ page }) => {
 
     const dataSource: any[] = [
-      {
-        title: 'John Heart',
-        text: 'John Heart',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      }, {
-        title: 'Robert Reagan',
-        text: 'Robert Reagan',
-      }, {
-        title: 'Greta Sims',
-        text: 'Greta Sims',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      },
+      { title: 'John Heart', text: 'John Heart' },
+      { title: 'Olivia Peyton', text: 'Olivia Peyton' },
+      { title: 'Robert Reagan', text: 'Robert Reagan' },
+      { title: 'Greta Sims', text: 'Greta Sims' },
+      { title: 'Olivia Peyton', text: 'Olivia Peyton' },
     ];
 
     const tabPanelOptions = {
@@ -175,8 +128,8 @@ test.describe('TabPanel_common', () => {
     await page.locator('body').click();
 
     const rightNavButton = page.locator(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`);
-    await page.click(rightNavButton)
-      .hover(rightNavButton);
+    await rightNavButton.click();
+    await rightNavButton.hover();
 
     await testScreenshot(page, 'TabPanel right navigation button hovered.png', { element: '#container' });
 
@@ -184,34 +137,22 @@ test.describe('TabPanel_common', () => {
     await leftNavButton.hover();
 
     await testScreenshot(page, 'TabPanel left navigation button hovered.png', { element: '#container' });
-
-    });
+  });
 
   ['top', 'right', 'bottom', 'left'].forEach((tabsPosition) => {
     const testName = `TabPanel without focus,tabsPosition=${tabsPosition}`;
-    test.skip(testName, async ({ page }) => {
+    test(testName, async ({ page }) => {
 
       await appendElementTo(page, '#container', 'div', 'tabpanel');
       await appendElementTo(page, '#container', 'div', 'tabpanel-rtl');
       await setAttribute(page, '#container', 'style', 'display: flex; gap: 40px; flex-direction: column; width: fit-content;');
 
       const dataSource: any[] = [
-        {
-          title: 'John Heart',
-          text: 'John Heart',
-        }, {
-          title: 'Olivia Peyton',
-          text: 'Olivia Peyton',
-        }, {
-          title: 'Robert Reagan',
-          text: 'Robert Reagan',
-        }, {
-          title: 'Greta Sims',
-          text: 'Greta Sims',
-        }, {
-          title: 'Olivia Peyton',
-          text: 'Olivia Peyton',
-        },
+        { title: 'John Heart', text: 'John Heart' },
+        { title: 'Olivia Peyton', text: 'Olivia Peyton' },
+        { title: 'Robert Reagan', text: 'Robert Reagan' },
+        { title: 'Greta Sims', text: 'Greta Sims' },
+        { title: 'Olivia Peyton', text: 'Olivia Peyton' },
       ];
 
       const tabPanelOptions = {
@@ -225,33 +166,20 @@ test.describe('TabPanel_common', () => {
       await createWidget(page, 'dxTabPanel', tabPanelOptions, '#tabpanel');
       await createWidget(page, 'dxTabPanel', { ...tabPanelOptions, rtlEnabled: true }, '#tabpanel-rtl');
 
-
       await page.locator('body').click();
 
       await testScreenshot(page, `${testName}.png`, { element: '#container' });
-
     });
   });
 
-  test.skip('TabPanel item focus when clicking on multiview', async ({ page }) => {
+  test('TabPanel item focus when clicking on multiview', async ({ page }) => {
 
     const dataSource: any[] = [
-      {
-        title: 'John Heart',
-        text: 'John Heart',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      }, {
-        title: 'Robert Reagan',
-        text: 'Robert Reagan',
-      }, {
-        title: 'Greta Sims',
-        text: 'Greta Sims',
-      }, {
-        title: 'Olivia Peyton',
-        text: 'Olivia Peyton',
-      },
+      { title: 'John Heart', text: 'John Heart' },
+      { title: 'Olivia Peyton', text: 'Olivia Peyton' },
+      { title: 'Robert Reagan', text: 'Robert Reagan' },
+      { title: 'Greta Sims', text: 'Greta Sims' },
+      { title: 'Olivia Peyton', text: 'Olivia Peyton' },
     ];
 
     await createWidget(page, 'dxTabPanel', {
@@ -261,64 +189,52 @@ test.describe('TabPanel_common', () => {
       useInkRipple: false,
     });
 
-    const tabPanel = page.locator('#container');
+    const tabPanel = new TabPanel(page);
     await tabPanel.multiView.element.click();
     await testScreenshot(page, 'TabPanel item focus when clicking on multiview.png', { element: '#container' });
-
-    });
+  });
 
   const positions = ['top', 'left', 'right', 'bottom'];
 
   positions.forEach((tabsPosition) => {
-    test.skip(`TabPanel border appearance when it placed inside the content of TabPanel with=${tabsPosition}`, async ({ page }) => {
+    test(`TabPanel border appearance when it placed inside the content of TabPanel with=${tabsPosition}`, async ({ page }) => {
 
       await insertStylesheetRulesToPage(page, '.dx-tabpanel { margin: 10px }');
 
       const dataSource: any[] = [
-        {
-          title: 'John Heart',
-          text: 'John Heart',
-        }, {
-          title: 'Olivia Peyton',
-          text: 'Olivia Peyton',
-        },
+        { title: 'John Heart', text: 'John Heart' },
+        { title: 'Olivia Peyton', text: 'Olivia Peyton' },
       ];
 
-      await createWidget(page, 'dxTabPanel', {
-        dataSource,
-        height: 700,
-        width: 500,
-        tabsPosition,
-        selectedIndex: 1,
-        deferRendering: true,
-        itemTemplate: ClientFunction(() => {
-          const $container = $('<div>');
-
-          positions.forEach((position) => {
-            const $tabPanel = ($('<div>') as any).dxTabPanel({
-              height: 120,
-              tabsPosition: position,
-              dataSource,
+      await page.evaluate(({ ds, tp, pos }) => {
+        ($('#container') as any).dxTabPanel({
+          dataSource: ds,
+          height: 700,
+          width: 500,
+          tabsPosition: tp,
+          selectedIndex: 1,
+          deferRendering: true,
+          itemTemplate: () => {
+            const $container = $('<div>');
+            pos.forEach((position: string) => {
+              const $tabPanel = ($('<div>') as any).dxTabPanel({
+                height: 120,
+                tabsPosition: position,
+                dataSource: ds,
+              });
+              $container.append($tabPanel);
+              $container.append($('<hr>'));
             });
-
-            $container.append($tabPanel);
-
-            $container.append($('<hr>'));
-          });
-
-          return $container;
-        }, {
-          dependencies: { dataSource, positions },
-        }),
-      });
-
+            return $container;
+          },
+        });
+      }, { ds: dataSource, tp: tabsPosition, pos: positions });
 
       await testScreenshot(page, `Nested TabPanel borders appearance,tabsPos=${tabsPosition}.png`, { element: '#container' });
-
     });
   });
 
-  test.skip('TabPanel tabs min-width', async ({ page }) => {
+  test('TabPanel tabs min-width', async ({ page }) => {
 
     const dataSource: any[] = [
       { text: 'ok', title: 'ok' },
@@ -337,17 +253,13 @@ test.describe('TabPanel_common', () => {
     });
 
     await testScreenshot(page, 'TabPanel tabs min-width.png', { element: '#container' });
-
-    });
+  });
 
   ['left', 'right'].forEach((tabsPosition) => {
-    test.skip(`TabPanel should be shown correctly even if there is only one tab, tabsPosition=${tabsPosition}`, async ({ page }) => {
+    test(`TabPanel should be shown correctly even if there is only one tab, tabsPosition=${tabsPosition}`, async ({ page }) => {
 
       const dataSource: any[] = [
-        {
-          title: 'John Heart',
-          text: 'John Heart',
-        },
+        { title: 'John Heart', text: 'John Heart' },
       ];
 
       await createWidget(page, 'dxTabPanel', {
@@ -357,9 +269,7 @@ test.describe('TabPanel_common', () => {
         tabsPosition,
       });
 
-
       await testScreenshot(page, `TabPanel with single tab, tabPosition=${tabsPosition}.png`, { element: '#container' });
-
     });
   });
 });

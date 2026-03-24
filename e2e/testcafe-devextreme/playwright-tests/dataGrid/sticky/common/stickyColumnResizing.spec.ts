@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -14,7 +14,6 @@ const getData = (rowCount: number, colCount: number): Record<string, string>[] =
   return items;
 };
 
-// TODO: needs DataGrid page object for resizeHeader
 test.describe('Resize columns - nextColumn mode', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
@@ -26,7 +25,7 @@ test.describe('Resize columns - nextColumn mode', () => {
   });
 
   [false, true].forEach((rtlEnabled) => {
-    test.skip(`Resize first fixed column width with left position (rtlEnabled = ${rtlEnabled})`, async ({ page }) => {
+    test(`Resize first fixed column width with left position (rtlEnabled = ${rtlEnabled})`, async ({ page }) => {
       await createWidget(page, 'dxDataGrid', {
         dataSource: getData(5, 25),
         rtlEnabled,
@@ -42,7 +41,15 @@ test.describe('Resize columns - nextColumn mode', () => {
         },
       });
 
-      await expect(page.locator('.dx-datagrid').first()).toBeVisible();
+      const dataGrid = new DataGrid(page);
+
+      await expect(dataGrid.getContainer()).toBeVisible();
+
+      const initialWidth = await dataGrid.apiColumnOption(5, 'width') as number;
+      await dataGrid.resizeHeader(5, 50);
+
+      const newWidth = await dataGrid.apiColumnOption(5, 'width') as number;
+      expect(newWidth).not.toBe(initialWidth);
     });
   });
 });

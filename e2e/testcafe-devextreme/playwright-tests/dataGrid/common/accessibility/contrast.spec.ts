@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -24,11 +24,36 @@ test.describe('DataGrid - contrast', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('DataGrid - Contrast between icons in the Filter Row menu and their background (T1257970)', async ({ page }) => {
-    // TODO: requires TestCafe filterCell page object conversion
+  test('DataGrid - Contrast between icons in the Filter Row menu and their background (T1257970)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(3, 3),
+      filterRow: { visible: true },
+    });
+
+    const dataGrid = new DataGrid(page);
+    const filterCell = dataGrid.getFilterCell(0);
+    const menuButton = filterCell.locator('.dx-editor-with-menu .dx-menu');
+
+    await menuButton.click();
+
+    await testScreenshot(page, 'filter-row-menu-contrast-T1257970.png', {
+      element: '#container',
+    });
   });
 
-  test.skip('DataGrid - Filter icon should remain visible when it is focused (T1286345)', async ({ page }) => {
-    // TODO: requires TestCafe dataGrid page object conversion
+  test('DataGrid - Filter icon should remain visible when it is focused (T1286345)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(3, 3),
+      filterRow: { visible: true },
+      headerFilter: { visible: true },
+    });
+
+    const dataGrid = new DataGrid(page);
+    const headerFilterIcon = page.locator('.dx-header-filter').first();
+    await headerFilterIcon.click();
+
+    await testScreenshot(page, 'filter-icon-focused-T1286345.png', {
+      element: '#container',
+    });
   });
 });

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -35,8 +35,26 @@ test.describe('Header Filter T1163100 change filter icon', () => {
         ['usual', undefined],
         ['virtual', { columnRenderingMode: 'virtual', rowRenderingMode: 'virtual' }],
       ] as const).forEach(([scrollingName, scrolling]) => {
-        test.skip(`Should change filter row icon (columns ${firstColumnsName} ${secondColumnsName}, scrolling ${scrollingName}`, async ({ page }) => {
-          // TODO: requires TestCafe filterCell page object conversion (menuButton, menu.getItemByText)
+        test(`Should change filter row icon (columns ${firstColumnsName} ${secondColumnsName}, scrolling ${scrollingName}`, async ({ page }) => {
+          await createWidget(page, 'dxDataGrid', {
+            dataSource: generateTestData(10),
+            filterRow: { visible: true },
+            scrolling,
+            columns: [...(firstColumns as any[]), ...(secondColumns as any[])],
+          });
+
+          const dataGrid = new DataGrid(page);
+          const filterCell = dataGrid.getFilterCell(0);
+          const menuButton = filterCell.locator('.dx-editor-with-menu .dx-menu');
+
+          await menuButton.click();
+
+          const menuItem = page.locator('.dx-menu-item').filter({ hasText: 'Does not equal' });
+          await menuItem.click();
+
+          await testScreenshot(page, `filter-icon-changed-${firstColumnsName as string}-${secondColumnsName as string}-${scrollingName}.png`, {
+            element: '#container',
+          });
         });
       });
     });

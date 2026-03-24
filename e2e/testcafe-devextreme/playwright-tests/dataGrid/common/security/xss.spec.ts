@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { createWidget } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -13,7 +14,23 @@ test.describe('XSS', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('The XSS script does not run when the markup has been replaced with text', async ({ page }) => {
-    // TODO: requires TestCafe FilterBuilder page object and XSS page conversion
+  test('The XSS script does not run when the markup has been replaced with text', async ({ page }) => {
+    await page.evaluate(() => {
+      (window as any).xssAttackResult = false;
+    });
+
+    await createWidget(page, 'dxFilterBuilder', {
+      fields: [{
+        dataField: 'field',
+        caption: '<img src=x onerror="window.xssAttackResult=true">',
+      }],
+      value: ['field', '=', 'test'],
+    });
+
+    const xssResult = await page.evaluate(() => (window as any).xssAttackResult);
+    expect(xssResult).toBe(false);
+
+    const filterBuilderText = await page.locator('.dx-filterbuilder-item-field').textContent();
+    expect(filterBuilderText).toContain('<img');
   });
 });
