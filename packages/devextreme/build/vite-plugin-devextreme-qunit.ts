@@ -2,6 +2,28 @@
 import { transformAsync } from '@babel/core';
 import type { PluginOption } from 'vite';
 
+function removeCjsExportsAssignments(): unknown {
+  return {
+    visitor: {
+      ExpressionStatement(path: {
+        node: { expression: { type: string; operator?: string; left?: { type: string; object?: { type: string; name?: string } } } };
+        remove: () => void;
+      }) {
+        const { expression } = path.node;
+        if (
+          expression.type === 'AssignmentExpression'
+          && expression.operator === '='
+          && expression.left?.type === 'MemberExpression'
+          && expression.left.object?.type === 'Identifier'
+          && expression.left.object.name === 'exports'
+        ) {
+          path.remove();
+        }
+      },
+    },
+  };
+}
+
 function removeUninitializedClassFields(): unknown {
   return {
     visitor: {
@@ -154,6 +176,9 @@ export default function devextremeQunitBabelPlugin(): PluginOption {
         ]);
       }
 
+      if (!id.includes('/testing/')) {
+        plugins.push(removeCjsExportsAssignments);
+      }
       plugins.push(
         removeUninitializedClassFields,
         moveFieldInitializersToConstructor,

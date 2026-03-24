@@ -237,7 +237,7 @@ export default __result;
 }
 
 function transformCjsToEsm(code: string): string | null {
-  if (!/\brequire\s*\(/.test(code)) return null;
+  if (!/\brequire\s*\(/.test(code) && !/\bexports\./.test(code)) return null;
 
   const imports: string[] = [];
   let importIdx = 0;
@@ -276,9 +276,36 @@ function transformCjsToEsm(code: string): string | null {
     },
   );
 
-  if (imports.length === 0) return null;
+  const exportNames: string[] = [];
+  modified = modified.replace(
+    /^exports\.([$\w]+)\s*=\s*/gm,
+    (match, name) => {
+      exportNames.push(name);
+      return `const __export_${name} = `;
+    },
+  );
 
-  return imports.join('\n') + '\n' + modified;
+  modified = modified.replace(
+    /^module\.exports\s*=\s*/gm,
+    () => {
+      exportNames.push('__moduleDefault');
+      return 'const __moduleDefault = ';
+    },
+  );
+
+  if (imports.length === 0 && exportNames.length === 0) return null;
+
+  let result = imports.join('\n') + '\n' + modified;
+
+  if (exportNames.includes('__moduleDefault')) {
+    result += '\nexport default __moduleDefault;\n';
+  } else if (exportNames.length > 0) {
+    const defaultObj = exportNames.map((n) => `${n}: __export_${n}`).join(', ');
+    result += `\nexport default { ${defaultObj} };\n`;
+    result += exportNames.map((n) => `export { __export_${n} as ${n} };`).join('\n') + '\n';
+  }
+
+  return result;
 }
 
 function postTransformPlugin(): PluginOption {
@@ -304,8 +331,8 @@ function postTransformPlugin(): PluginOption {
 
     transform(code: string, id: string) {
       if (id.includes('node_modules')) return undefined;
-      if (!id.includes('/js/')) return undefined;
-      if (id.includes('/testing/')) return undefined;
+      if (!id.includes('/js/') && !id.includes('/testing/helpers/')) return undefined;
+      if (id.includes('/testing/tests/')) return undefined;
 
       let modified = code;
       let changed = false;
@@ -464,10 +491,30 @@ export default function qunitPlugin(): PluginOption[] {
         }
       }
 
-      if (id.includes('/testing/') && id.endsWith('.js') && code.includes('require(')) {
-        const transformed = transformCjsToEsm(code);
-        if (transformed) {
-          return { code: transformed, map: null };
+      if (id.includes('/testing/') && id.endsWith('.js')) {
+        const needsCjsTransform = code.includes('require(') || code.includes('exports.');
+        const needsHelperImportFix = /import\s*\{[^}]+\}\s*from\s*['"][^'"]*helpers\//.test(code);
+
+        if (needsHelperImportFix) {
+          code = code.replace(
+            /import\s*\{\s*([^}]+)\s*\}\s*from\s*(['"][^'"]*helpers\/[^'"]+['"])/g,
+            (match, names, source) => {
+              const alias = `__helper_${Math.random().toString(36).slice(2, 8)}`;
+              const destructured = names.split(',').map((n: string) => n.trim()).join(', ');
+              return `import ${alias} from ${source};\nconst { ${destructured} } = ${alias}`;
+            },
+          );
+        }
+
+        if (!needsCjsTransform && !needsHelperImportFix) return undefined;
+        if (needsCjsTransform) {
+          const transformed = transformCjsToEsm(code);
+          if (transformed) {
+            return { code: transformed, map: null };
+          }
+        }
+        if (needsHelperImportFix) {
+          return { code, map: null };
         }
       }
 
