@@ -126,7 +126,7 @@ test('DataGrid - The `between` filter dropdown sticks to the viewport edge durin
   width: 500,
 }));
 
-test('DataGrid – `between` filter dropdown should not change its position when columns are reordered (T1303927)', async (t) => {
+test('DataGrid – `between` filter dropdown should not change its position when columns are resized (T1303927)', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
