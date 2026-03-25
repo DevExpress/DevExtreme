@@ -1,4 +1,4 @@
-export type {
+export {
   Paging,
   RemoteOperations,
   PredefinedToolbarItem,

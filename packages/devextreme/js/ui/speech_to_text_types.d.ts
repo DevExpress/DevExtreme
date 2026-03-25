@@ -1,4 +1,4 @@
-export type {
+export {
   SpeechRecognitionConfig,
   CustomSpeechRecognizer,
   StartClickEvent,

@@ -1,4 +1,4 @@
-export type {
+export {
   SelectAllMode,
   ScrollbarMode,
   PageLoadMode,

@@ -1,4 +1,4 @@
-export type {
+export {
   SingleOrMultiple,
   Orientation,
   TabsIconPosition,

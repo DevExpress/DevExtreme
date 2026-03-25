@@ -1,4 +1,4 @@
-export type {
+export {
   TooltipShowMode,
   VerticalEdge,
   ContentReadyEvent,

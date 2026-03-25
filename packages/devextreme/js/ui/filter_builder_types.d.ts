@@ -1,4 +1,4 @@
-export type {
+export {
   DataType,
   FilterOperation,
   GroupOperation,

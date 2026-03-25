@@ -1,4 +1,4 @@
-export type {
+export {
   DisposingEvent,
   InitializedEvent,
   OptionChangedEvent,

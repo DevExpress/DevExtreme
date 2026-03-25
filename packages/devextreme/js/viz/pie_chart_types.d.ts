@@ -1,4 +1,4 @@
-export type {
+export {
   ChartsDataType,
   DashStyle,
   HatchDirection,

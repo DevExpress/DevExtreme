@@ -1,4 +1,4 @@
-export type {
+export {
   DateLike,
   DateType,
   DatePickerType,

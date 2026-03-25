@@ -1,4 +1,4 @@
-export type {
+export {
   LoadingAnimationType,
   LoadPanelIndicatorProperties,
   ContentReadyEvent,

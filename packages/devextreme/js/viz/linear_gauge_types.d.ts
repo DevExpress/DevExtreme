@@ -1,4 +1,4 @@
-export type {
+export {
   HorizontalAlignment,
   Orientation,
   VerticalAlignment,

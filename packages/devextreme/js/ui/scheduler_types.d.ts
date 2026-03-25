@@ -1,4 +1,4 @@
-export type {
+export {
   FirstDayOfWeek,
   Orientation,
   ScrollMode,

@@ -1,4 +1,4 @@
-export type {
+export {
   ChangeEvent,
   ContentReadyEvent,
   CopyEvent,

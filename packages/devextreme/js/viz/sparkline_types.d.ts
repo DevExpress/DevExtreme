@@ -1,4 +1,4 @@
-export type {
+export {
   PointSymbol,
   SparklineType,
   DisposingEvent,
