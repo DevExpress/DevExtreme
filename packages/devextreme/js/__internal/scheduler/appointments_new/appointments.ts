@@ -39,18 +39,6 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
 
 type AppointmentComponent = GridAppointment | AgendaAppointment | AppointmentCollector;
 
-/*
-- Rename viewModel types
-- change default value of appointmentTemplate from 'item' to 'appointment' (Need update d.ts)
-- Remove CollectionWidgetItem extension from dxSchedulerAppointment d.ts
-
-What is left:
-- There is code for buttonColor of collector
-
-Create tasks for:
-- Aria-label & aria-description
-- Reduced appointment
-*/
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {
   private appointmentBySortIndex: Record<number, AppointmentComponent> = {};
 
