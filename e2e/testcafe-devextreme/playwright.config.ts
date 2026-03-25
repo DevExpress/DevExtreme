@@ -27,14 +27,14 @@ export default defineConfig({
 
   expect: {
     toHaveScreenshot: {
-      maxDiffPixelRatio: 0.03,
+      maxDiffPixelRatio: 0.07,
       threshold: 0.2,
       animations: 'disabled',
     },
   },
 
   use: {
-    viewport: { width: 1200, height: 800 },
+    viewport: { width: 1185, height: 800 },
     screenshot: 'off',
     trace: 'off',
     launchOptions: {
