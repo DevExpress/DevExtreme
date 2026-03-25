@@ -86,23 +86,3 @@ export const Overview: Story = {
     currentView: { control: 'select', options: viewNames },
   },
 };
-
-export const PerViewOverrides: Story = {
-  args: {
-    height: 600,
-    views: viewNames,
-    currentView: 'timelineMonth',
-    currentDate: new Date(2026, 2, 15),
-    startDayHour: 9,
-    endDayHour: 22,
-    dataSource: data,
-    resources,
-    snapToCellsMode: 'never',
-  },
-  argTypes: {
-    height: { control: 'number' },
-    views: { control: 'object' },
-    snapToCellsMode: { control: 'select', options: ['always', 'auto', 'never'] },
-    currentView: { control: 'select', options: viewNames },
-  },
-};
