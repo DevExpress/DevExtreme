@@ -738,7 +738,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const rows = this._getRows();
 
     rows.forEach((row, index) => {
-      const rowIndex = row.type === 'header' ? index : null;
+      const rowIndex = row.rowType === 'header' ? index : null;
       const firstColumn = this._columnsController.getFirstColumn(rowIndex);
 
       if (firstColumn) {
