@@ -7,10 +7,10 @@ import type { ResourceConfig } from '@ts/scheduler/utils/loader/types';
 import type { AppointmentAgendaViewModel } from '@ts/scheduler/view_model/types';
 
 import fx from '../../../common/core/animation/fx';
+import { getMockedBaseAppointmentProperties, mockAgendaViewModel } from '../__mock__/appointment_properties';
 import { AGENDA_APPOINTMENT_CLASSES, APPOINTMENT_CLASSES } from '../const';
 import type { AgendaAppointmentProperties } from './agenda_appointment';
 import { AgendaAppointment } from './agenda_appointment';
-import { getBaseMockedAppointmentProperties, mockAgendaViewModel } from './utils.test';
 
 const getAgendaAppointmentProperties = (options: {
   appointmentData: SafeAppointment;
@@ -18,7 +18,7 @@ const getAgendaAppointmentProperties = (options: {
   resources?: ResourceConfig[]
 }): AgendaAppointmentProperties => {
   const viewModel = mockAgendaViewModel(options.appointmentData, options.partialViewModel);
-  const result = getBaseMockedAppointmentProperties({ ...options, viewModel });
+  const result = getMockedBaseAppointmentProperties({ ...options, viewModel });
 
   return {
     ...result,

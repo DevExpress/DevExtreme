@@ -11,7 +11,7 @@ import {
   mockAgendaViewModel,
   mockAppointmentCollectorViewModel,
   mockGridViewModel,
-} from './appointment/utils.test';
+} from './__mock__/appointment_properties';
 import type { AppointmentsProperties } from './appointments';
 import { Appointments } from './appointments';
 import {

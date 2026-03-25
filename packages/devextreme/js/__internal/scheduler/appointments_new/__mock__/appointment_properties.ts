@@ -5,8 +5,8 @@ import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/
 import type { ResourceConfig } from '@ts/scheduler/utils/loader/types';
 import type { AppointmentAgendaViewModel, AppointmentCollectorViewModel, AppointmentItemViewModel } from '@ts/scheduler/view_model/types';
 
+import type { BaseAppointmentProperties } from '../appointment/base_appointment';
 import { getTargetedAppointment } from '../utils/get_targeted_appointment';
-import type { BaseAppointmentProperties } from './base_appointment';
 
 export const mockGridViewModel = (
   appointmentData: SafeAppointment,
@@ -98,7 +98,7 @@ export const mockAppointmentCollectorViewModel = (
   ...partialViewModel,
 });
 
-export const getBaseMockedAppointmentProperties = <
+export const getMockedBaseAppointmentProperties = <
   TViewModel extends AppointmentItemViewModel | AppointmentAgendaViewModel,
 >(options: {
   appointmentData: SafeAppointment;
