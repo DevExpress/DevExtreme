@@ -180,7 +180,7 @@
           <DxTextBox
             :mask-rules="phoneRules"
             :input-attr="{ 'aria-label': 'Mask' }"
-            mask="+1 (X00) 000-0000"
+            mask="(X00) 000-0000"
             mask-invalid-message="The phone must have a correct USA phone format"
             validation-message-position="left"
           >
