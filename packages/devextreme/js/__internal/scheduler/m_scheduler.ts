@@ -1041,7 +1041,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (this.option('_newAppointments')) {
       const appointmentsConfig: Partial<AppointmentsProperties> = {
-        // TODO: set custom templates
+        // TODO<Appointments>: set custom templates
         appointmentTemplate: 'appointment',
         appointmentCollectorTemplate: 'appointmentCollector',
         onAppointmentRendered: (e) => {
