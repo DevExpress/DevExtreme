@@ -1,18 +1,28 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getData } from '../../dataGrid/helpers/generateDataSourceData';
-import { isMaterialBased } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DataGrid - Common`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';
 
-const a11yCheckConfig = isMaterialBased() ? { runOnly: 'color-contrast' } : { };
+const a11yCheckConfig = {};
+
+test('Grid without config', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [],
+}));
 
 test('Grid without data', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
@@ -24,6 +34,9 @@ test('Grid without data', async (t) => {
   await a11yCheck(t, a11yCheckConfig, DATA_GRID_SELECTOR);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [],
+  columns: [
+    'test',
+  ],
 }));
 
 test('Sorting and group panel', async (t) => {
@@ -169,16 +182,16 @@ test('Grouping and Summary', async (t) => {
 
 test('Filter row - filter menu', async (t) => {
   const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
-  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
+  const filterCell = dataGrid.getFilterCell(0);
 
   await t
     .expect(dataGrid.isReady())
     .ok();
 
-  await t.click(filterEditor.menuButton);
+  await t.click(filterCell.menuButton);
 
   await t
-    .expect(filterEditor.menu.isOpened)
+    .expect(filterCell.menu.isOpened)
     .ok();
 
   await a11yCheck(t, {
@@ -288,9 +301,6 @@ test('Filter panel - popup with filter builder', async (t) => {
   await a11yCheck(t, {
     ...a11yCheckConfig,
     runOnly: '',
-    rules: {
-      'color-contrast': { enabled: false },
-    },
   });
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
@@ -340,9 +350,6 @@ test('Search panel - highlight', async (t) => {
   await a11yCheck(t, {
     ...a11yCheckConfig,
     runOnly: '',
-    rules: {
-      'color-contrast': { enabled: false },
-    },
   }, DATA_GRID_SELECTOR);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 5),
@@ -468,7 +475,7 @@ test('Column chooser with the \'dragAndDrop\' mode', async (t) => {
     .expect(columnChooser.isOpened)
     .ok();
 
-  await a11yCheck(t, a11yCheckConfig);
+  await a11yCheck(t);
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(10, 7),
   keyExpr: 'field_0',

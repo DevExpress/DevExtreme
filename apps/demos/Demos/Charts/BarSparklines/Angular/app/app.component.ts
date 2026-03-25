@@ -36,13 +36,13 @@ export class AppComponent {
     this.source = new DataSource({
       store: new CustomStore({
         load: () => lastValueFrom(http.get('../../../../data/resourceData.json'))
-          .catch(() => { throw 'Data Loading Error'; }),
+          .catch(() => { throw new Error('Data Loading Error'); }),
         loadMode: 'raw',
       }),
       filter: ['month', '<=', '12'],
       paginate: false,
     });
-    this.years = [2010, 2011, 2012];
+    this.years = [2021, 2022, 2023];
   }
 
   onValueChanged(e) {

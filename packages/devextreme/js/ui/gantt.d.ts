@@ -1665,9 +1665,6 @@ export interface dxGanttHeaderFilterTexts {
 /** @public */
 export type Properties = dxGanttOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxGanttOptions;
-
 /** @public */
 export type Column<TRowData = any, TKey = any> = dxGanttColumn<TRowData, TKey>;
 
@@ -1683,7 +1680,7 @@ export type dxGanttColumn<TRowData = any, TKey = any> = Omit<dxGanttColumnBlank<
  * @inherits dxTreeListColumn
  * @namespace DevExpress.ui
  */
- interface dxGanttColumnBlank<TRowData = any, TKey = any> extends TreeListColumn<TRowData, TKey> {
+ interface dxGanttColumnBlank<TRowData = any, TKey = any> extends Omit<TreeListColumn<TRowData, TKey>, 'ai'> {
     /**
      * @hidden
      * @docid dxGanttColumn.allowEditing

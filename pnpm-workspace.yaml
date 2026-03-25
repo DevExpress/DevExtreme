@@ -6,15 +6,16 @@ packages:
   - '!packages/sbom'
 
 catalog:
+  axe-core: ^4.11.1
   inferno: ^8.2.3
   inferno-hydrate: ^8.2.3
   inferno-create-element: ^8.2.3
   inferno-server: ^8.2.3
-  devexpress-diagram: 2.2.24
-  devexpress-gantt: 4.1.64
-  devextreme-exceljs-fork: 4.4.5
-  devextreme-quill: 1.7.8
-  eslint: 9.26.0
+  devexpress-diagram: 2.2.25
+  devexpress-gantt: 4.1.66
+  devextreme-exceljs-fork: 4.4.7
+  devextreme-quill: 1.7.9
+  eslint: 9.39.4
   eslint-config-airbnb-typescript: 18.0.0
   eslint-config-devextreme: 1.1.9
   eslint-plugin-i18n: 2.4.0
@@ -29,9 +30,9 @@ catalog:
   jquery: 4.0.0
   "@babel/eslint-parser": 7.28.6
   "@eslint-stylistic/metadata": ^2.13.0
-  "@eslint/eslintrc": 3.2.0
-  "@stylistic/eslint-plugin": 5.4.0
-  "@types/jquery": 3.5.33
+  "@eslint/eslintrc": 3.3.5
+  "@stylistic/eslint-plugin": 5.10.0
+  "@types/jquery": 3.5.34
   "@typescript-eslint/eslint-plugin": 8.52.0
   "@typescript-eslint/parser": 8.52.0
 
@@ -41,31 +42,31 @@ catalogs:
     "@angular-devkit/architect": ~0.1902.19
     "@angular-devkit/schematics": ~19.2.19
     "@angular/cli": ~19.2.19
-    "@angular/common": ~19.2.18
-    "@angular/compiler": ~19.2.18
-    "@angular/compiler-cli": ~19.2.18
-    "@angular/core": ~19.2.18
-    "@angular/forms": ~19.2.18
-    "@angular/platform-browser": ~19.2.18
-    "@angular/platform-browser-dynamic": ~19.2.18
-    "@angular/platform-server": ~19.2.18
-    "@angular/router": ~19.2.18
+    "@angular/common": ~19.2.19
+    "@angular/compiler": ~19.2.19
+    "@angular/compiler-cli": ~19.2.19
+    "@angular/core": ~19.2.19
+    "@angular/forms": ~19.2.19
+    "@angular/platform-browser": ~19.2.19
+    "@angular/platform-browser-dynamic": ~19.2.19
+    "@angular/platform-server": ~19.2.19
+    "@angular/router": ~19.2.19
     "ng-packagr": ~19.2.2
     "typescript": 5.5.4
     "zone.js": 0.15.1
   eslint8:
-    eslint: 9.26.0
+    eslint: 9.39.4
     eslint-config-airbnb-typescript: 17.1.0
-    eslint-plugin-i18n: 2.3.0
-    eslint-plugin-import: 2.29.0
-    eslint-plugin-no-only-tests: 3.1.0
+    eslint-plugin-i18n: 2.4.0
+    eslint-plugin-import: 2.32.0
+    eslint-plugin-no-only-tests: 3.3.0
     eslint-plugin-qunit: 7.3.4
     gulp-eslint-new: 1.9.1
     "@babel/eslint-parser": 7.28.6
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
   tools:
-    "devextreme-internal-tools": 20.1.0
+    "devextreme-internal-tools": 20.2.0
     "prettier": 3.5.3
     "ts-node": 10.9.2
     "@types/node": 20.12.8

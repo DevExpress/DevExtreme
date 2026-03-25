@@ -21,12 +21,11 @@ import {
     QueryList
 } from '@angular/core';
 
-export { ExplicitTypes } from 'devextreme/ui/accordion';
+export type { ExplicitTypes } from 'devextreme/ui/accordion';
 
-import DataSource from 'devextreme/data/data_source';
-import { dxAccordionItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, ItemTitleClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/accordion';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
+import type { dxAccordionItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, ItemTitleClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/accordion';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
 
 import DxAccordion from 'devextreme/ui/accordion';
 

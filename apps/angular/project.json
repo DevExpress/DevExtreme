@@ -17,8 +17,7 @@
       ],
       "outputs": [
         "{projectRoot}/dist"
-      ],
-      "cache": true
+      ]
     }
   },
   "tags": []

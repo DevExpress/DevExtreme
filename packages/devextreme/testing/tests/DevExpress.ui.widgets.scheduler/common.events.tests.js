@@ -671,12 +671,14 @@ QUnit.module('Events', {
             dataSource: [appointment]
         });
 
-        const workspaceSpy = sinon.spy(scheduler.instance._workSpace, '_dimensionChanged');
-        const appointmentsSpy = sinon.spy(scheduler.instance._appointments, 'repaintAppointments');
+        const $element = $(scheduler.instance.$element());
+        const initialAppointmentWidth = $element.find('.dx-scheduler-appointment').outerWidth();
 
+        scheduler.instance.option('width', 400);
         resizeCallbacks.fire();
 
-        assert.ok(appointmentsSpy.calledAfter(workspaceSpy), 'workSpace dimension changing was called before appointments repainting');
+        const updatedAppointmentWidth = $element.find('.dx-scheduler-appointment').outerWidth();
+        assert.ok(updatedAppointmentWidth < initialAppointmentWidth, 'appointment width is recalculated after resize');
     });
 
     QUnit.test('ContentReady event should be fired after render completely ready (T902483)', async function(assert) {
@@ -688,16 +690,16 @@ QUnit.module('Events', {
 
         assert.equal(contentReadyFiresCount, 1, 'contentReadyFiresCount === 1');
 
-        scheduler.instance._workSpaceRecalculation = new Deferred();
+        scheduler.instance.workSpaceRecalculation = new Deferred();
         scheduler.instance._fireContentReadyAction();
 
         assert.equal(contentReadyFiresCount, 1, 'contentReadyFiresCount === 1');
 
-        scheduler.instance._workSpaceRecalculation.resolve();
+        scheduler.instance.workSpaceRecalculation.resolve();
 
         assert.equal(contentReadyFiresCount, 2, 'contentReadyFiresCount === 2');
 
-        scheduler.instance._workSpaceRecalculation = null;
+        scheduler.instance.workSpaceRecalculation = null;
         scheduler.instance._fireContentReadyAction();
 
         assert.equal(contentReadyFiresCount, 3, 'contentReadyFiresCount === 3');

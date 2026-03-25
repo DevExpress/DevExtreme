@@ -5,6 +5,11 @@ import $ from '@js/core/renderer';
 import type { Properties as DataGridProperties } from '@js/ui/data_grid';
 import DataGrid from '@js/ui/data_grid';
 import { DataGridModel } from '@ts/grids/data_grid/__tests__/__mock__/model/data_grid';
+import type { Controllers } from '@ts/grids/grid_core/m_types';
+
+export interface DataGridInstance extends DataGrid {
+  getController: <T extends keyof Controllers>(name: T) => Controllers[T];
+}
 
 export const SELECTORS = {
   gridContainer: '#gridContainer',
@@ -17,7 +22,7 @@ export const createDataGrid = async (
 ): Promise<{
   $container: dxElementWrapper;
   component: DataGridModel;
-  instance: DataGrid;
+  instance: DataGridInstance;
 }> => new Promise((resolve) => {
   const $container = $('<div>')
     .attr('id', GRID_CONTAINER_ID)
@@ -28,7 +33,10 @@ export const createDataGrid = async (
     ...options,
   };
 
-  const instance = new DataGrid($container.get(0) as HTMLDivElement, dataGridOptions);
+  const instance = new DataGrid(
+    $container.get(0) as HTMLDivElement,
+    dataGridOptions,
+  ) as DataGridInstance;
   const component = new DataGridModel($container.get(0) as HTMLElement);
 
   jest.runAllTimers();

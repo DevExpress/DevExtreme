@@ -74,6 +74,7 @@ export default function App() {
       alerts={alerts}
       typingUsers={typingUsers}
       messageRender={messageRender}
+      speechToTextEnabled={true}
     />
   );
 }

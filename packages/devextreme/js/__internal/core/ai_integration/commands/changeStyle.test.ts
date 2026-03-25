@@ -79,7 +79,7 @@ describe('ChangeStyleCommand', () => {
       expect(promptManager.buildPrompt).toHaveBeenCalledWith('changeStyle', {
         system: { writingStyle: params.writingStyle },
         user: { text: params.text },
-      });
+      }, { applyMetaTemplates: true });
     });
 
     it('promptManager.buildPrompt should should return prompt with passed values', () => {

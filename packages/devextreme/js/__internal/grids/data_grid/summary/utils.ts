@@ -1,5 +1,5 @@
 import { isDefined } from '@js/core/utils/type';
-import type { Column } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
 export function getSummaryCellIndex(
   column: Column,
@@ -17,4 +17,11 @@ export function getSummaryCellIndex(
   }
 
   return !isDefined(column.groupIndex) ? cellIndex : -1;
+}
+
+export function getColumnFromMap(
+  identifier: string | number | undefined,
+  columnMap: Map<string | number, Column>,
+): Column | undefined {
+  return identifier !== undefined ? columnMap.get(identifier) : undefined;
 }

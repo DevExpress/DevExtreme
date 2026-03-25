@@ -218,6 +218,7 @@ $(() => {
     reloadOnChange: false,
     showAvatar: false,
     showDayHeaders: false,
+    speechToTextEnabled: true,
     onMessageEntered: (e) => {
       const { message, event } = e;
 

@@ -7,7 +7,7 @@
         border="1"
       >
         <tr>
-          <th/>
+          <th><div class="dx-screen-reader-only">Year</div></th>
           <th>Copper (USD/ton)</th>
           <th>Nickel (USD/ton)</th>
           <th>Palladium (USD/troy ounce)</th>
@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import RowTemplate from './RowTemplate.vue';
 
-const years = ['2010', '2011', '2012'];
+const years = ['2021', '2022', '2023'];
 </script>
 <style>
 #chart-demo {

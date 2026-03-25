@@ -1572,13 +1572,13 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         const $folderNodes = this.wrapper.getFolderNodes(true);
         assert.strictEqual($folderNodes.length, 4, 'there are only 4 nodes');
-        assert.ok($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
+        assert.ok($folderNodes.eq(0).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
         assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
-        assert.ok($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is disabled');
+        assert.ok($folderNodes.eq(1).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is disabled');
         assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
-        assert.notOk($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
+        assert.notOk($folderNodes.eq(2).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
         assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
-        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.notOk($folderNodes.eq(3).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
         assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
     });
 
@@ -1593,13 +1593,13 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         const $folderNodes = this.wrapper.getFolderNodes(true);
         assert.strictEqual($folderNodes.length, 4, 'there are only 4 nodes');
-        assert.ok($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
+        assert.ok($folderNodes.eq(0).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
         assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
-        assert.ok($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is disabled');
+        assert.ok($folderNodes.eq(1).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is disabled');
         assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
-        assert.notOk($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
+        assert.notOk($folderNodes.eq(2).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
         assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
-        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.notOk($folderNodes.eq(3).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
         assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
     });
 
@@ -1625,13 +1625,13 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         const $folderNodes = this.wrapper.getFolderNodes(true);
         assert.strictEqual($folderNodes.length, 4, 'there are only 4 nodes');
-        assert.ok($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
+        assert.ok($folderNodes.eq(0).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
         assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
-        assert.ok($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is disabled');
+        assert.ok($folderNodes.eq(1).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is disabled');
         assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
-        assert.ok($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is disabled');
+        assert.ok($folderNodes.eq(2).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is disabled');
         assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
-        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.notOk($folderNodes.eq(3).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
         assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
         implementationsMap.getWidth = originalFunc;
     });
@@ -1652,27 +1652,27 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         const $folderNodes = this.wrapper.getFolderNodes(true);
         assert.strictEqual($folderNodes.length, 9, 'there are only 9 nodes');
-        assert.notOk($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is enabled');
+        assert.notOk($folderNodes.eq(0).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is enabled');
         assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
-        assert.notOk($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is enabled');
+        assert.notOk($folderNodes.eq(1).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is enabled');
         assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
 
-        assert.notOk($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1\' node is enabled');
+        assert.notOk($folderNodes.eq(2).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1\' node is enabled');
         assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 1.1\' node is visible');
-        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1\' node is enabled');
+        assert.notOk($folderNodes.eq(3).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1\' node is enabled');
         assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 1.1.1\' node is visible');
 
-        assert.ok($folderNodes.eq(4).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1.1\' node is disabled');
+        assert.ok($folderNodes.eq(4).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1.1\' node is disabled');
         assert.ok($folderNodes.eq(4).is(':visible'), '\'Folder 1.1.1.1\' node is visible');
-        assert.ok($folderNodes.eq(5).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1.1.1\' node is disabled');
+        assert.ok($folderNodes.eq(5).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1.1.1\' node is disabled');
         assert.ok($folderNodes.eq(5).is(':visible'), '\'Folder 1.1.1.1.1\' node is visible');
 
-        assert.notOk($folderNodes.eq(6).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.2\' node is enabled');
+        assert.notOk($folderNodes.eq(6).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.2\' node is enabled');
         assert.ok($folderNodes.eq(6).is(':visible'), '\'Folder 1.2\' node is visible');
 
-        assert.notOk($folderNodes.eq(7).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
+        assert.notOk($folderNodes.eq(7).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
         assert.ok($folderNodes.eq(7).is(':visible'), '\'Folder 2\' node is visible');
-        assert.notOk($folderNodes.eq(8).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.notOk($folderNodes.eq(8).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
         assert.ok($folderNodes.eq(8).is(':visible'), '\'Folder 3\' node is visible');
     });
 
@@ -1706,27 +1706,27 @@ QUnit.module('Editing operations', moduleConfig, () => {
         $folderNodes = this.wrapper.getFolderNodes(true);
         assert.ok(this.wrapper.getFolderChooserDialog().is(':visible'), 'Folder chooser dialog is visible');
         assert.strictEqual($folderNodes.length, 9, 'there are only 9 nodes');
-        assert.notOk($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is enabled');
+        assert.notOk($folderNodes.eq(0).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is enabled');
         assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
-        assert.ok($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is disabled');
+        assert.ok($folderNodes.eq(1).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is disabled');
         assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
 
-        assert.ok($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1\' node is disabled');
+        assert.ok($folderNodes.eq(2).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1\' node is disabled');
         assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 1.1\' node is visible');
-        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1\' node is enabled');
+        assert.notOk($folderNodes.eq(3).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1\' node is enabled');
         assert.notOk($folderNodes.eq(3).is(':visible'), '\'Folder 1.1.1\' node is invisible');
 
-        assert.notOk($folderNodes.eq(4).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1.1\' node is enabled');
+        assert.notOk($folderNodes.eq(4).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1.1\' node is enabled');
         assert.notOk($folderNodes.eq(4).is(':visible'), '\'Folder 1.1.1.1\' node is invisible');
-        assert.notOk($folderNodes.eq(5).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1.1.1\' node is enabled');
+        assert.notOk($folderNodes.eq(5).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.1.1.1.1\' node is enabled');
         assert.notOk($folderNodes.eq(5).is(':visible'), '\'Folder 1.1.1.1.1\' node is invisible');
 
-        assert.notOk($folderNodes.eq(6).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.2\' node is enabled');
+        assert.notOk($folderNodes.eq(6).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1.2\' node is enabled');
         assert.ok($folderNodes.eq(6).is(':visible'), '\'Folder 1.2\' node is visible');
 
-        assert.notOk($folderNodes.eq(7).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
+        assert.notOk($folderNodes.eq(7).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
         assert.ok($folderNodes.eq(7).is(':visible'), '\'Folder 2\' node is visible');
-        assert.notOk($folderNodes.eq(8).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.notOk($folderNodes.eq(8).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
         assert.ok($folderNodes.eq(8).is(':visible'), '\'Folder 3\' node is visible');
     });
 
@@ -1739,13 +1739,13 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         const $folderNodes = this.wrapper.getFolderNodes(true);
         assert.strictEqual($folderNodes.length, 4, 'there are only 4 nodes');
-        assert.ok($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
+        assert.ok($folderNodes.eq(0).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
         assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
-        assert.notOk($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is enabled');
+        assert.notOk($folderNodes.eq(1).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is enabled');
         assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
-        assert.notOk($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
+        assert.notOk($folderNodes.eq(2).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
         assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
-        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.notOk($folderNodes.eq(3).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
         assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
 
         $folderNodes.eq(1).trigger('dxclick');
@@ -2069,19 +2069,19 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getFolderToggles(true).length, 2, 'there are 2 node toggles');
 
         assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
-        assert.ok($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
+        assert.ok($folderNodes.eq(0).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files', true), true, '\'Files\' toggle is opened');
 
         assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
-        assert.notOk($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is enabled');
+        assert.notOk($folderNodes.eq(1).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is enabled');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1', true), false, '\'Folder 1\' toggle is closed');
 
         assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
-        assert.notOk($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is ensabled');
+        assert.notOk($folderNodes.eq(2).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is enabled');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 2', true), null, '\'Folder 2\' toggle is absent');
 
         assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
-        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.notOk($folderNodes.eq(3).find(`.${Consts.FOLDERS_TREE_VIEW_ITEM_CONTENT_CLASS}`).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
         assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 3', true), null, '\'Folder 3\' toggle is absent');
 
         this.wrapper.getDialogButton('Cancel').trigger('dxclick');

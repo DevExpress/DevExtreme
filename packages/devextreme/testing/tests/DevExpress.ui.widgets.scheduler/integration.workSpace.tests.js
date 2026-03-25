@@ -19,7 +19,7 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import { getOuterHeight, getInnerHeight, getOuterWidth } from 'core/utils/size';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
 const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
@@ -854,9 +854,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             height: 600
         });
         const $headerContent = getOuterHeight(scheduler.workSpace.groups.getGroupHeader(0));
-        const cellHeight = getOuterHeight(scheduler.workSpace.getCell(1));
 
-        assert.roughEqual($headerContent, 7 * cellHeight, 1, 'Group header content has right height');
+        assert.roughEqual($headerContent, 277.5, 1, 'Group header content has right height');
     });
 
     test('WorkSpace should be refreshed after groups changed', async function(assert) {
@@ -881,7 +880,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             ]
         });
 
-        const refreshStub = sinon.stub(scheduler.instance, '_refreshWorkSpace');
+        const refreshStub = sinon.stub(scheduler.instance, 'refreshWorkSpace');
 
         try {
             scheduler.instance.option('groups', ['resource2']);
@@ -1102,8 +1101,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         const fifthHeaderCell = headerCells.eq(4);
         const dateTableCell = scheduler.workSpace.getCells().eq(0);
 
-        assert.equal(getInnerHeight(firstHeaderCell), getInnerHeight(fifthHeaderCell), 'Header cells have same height');
-        assert.equal(getInnerHeight(fifthHeaderCell), getInnerHeight(dateTableCell), 'Header cell and table cell have same height');
+        assert.roughEqual(getInnerHeight(firstHeaderCell), getInnerHeight(fifthHeaderCell), 0.5, 'Header cells have same height');
+        assert.roughEqual(getInnerHeight(fifthHeaderCell), getInnerHeight(dateTableCell), 0.5, 'Header cell and table cell have same height');
     });
 
     isDesktopEnvironment() && test('SelectedCellData option should be correct when virtual scrolling is enabled', async function(assert) {
@@ -1611,7 +1610,7 @@ module('Resource Cell Template', () => {
                         if(!cellIndex) {
                             assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
                             const $cell = $(cellElement).parent();
-                            assert.roughEqual(getOuterWidth($cell), 299, 2.001, 'Resource cell width is OK');
+                            assert.roughEqual(getOuterWidth($cell), 316, 2.001, 'Resource cell width is OK');
                             assert.equal(getOuterHeight($cell), 30, 'Resource cell height is OK');
                         }
                     }
@@ -1640,7 +1639,7 @@ module('Resource Cell Template', () => {
                             if(!cellIndex) {
                                 const $cell = $(cellElement);
                                 assert.equal(getOuterWidth($cell), 100, 'Resource cell width is OK');
-                                assert.roughEqual(getOuterHeight($cell), 271, 1.001, 'Resource cell height is OK');
+                                assert.roughEqual(getOuterHeight($cell), 288, 1.001, 'Resource cell height is OK');
                             }
                             done();
                         });

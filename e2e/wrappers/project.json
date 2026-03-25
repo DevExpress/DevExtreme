@@ -15,8 +15,7 @@
       ],
       "outputs": [
         "{projectRoot}/dist/react19/**/*"
-      ],
-      "cache": true
+      ]
     },
     "build:vue": {
       "executor": "nx:run-script",
@@ -29,8 +28,7 @@
       ],
       "outputs": [
         "{projectRoot}/dist/vue/**/*"
-      ],
-      "cache": true
+      ]
     },
     "build:angular": {
       "executor": "nx:run-script",
@@ -43,8 +41,7 @@
       ],
       "outputs": [
         "{projectRoot}/dist/angular/**/*"
-      ],
-      "cache": true
+      ]
     }
   },
   "tags": []

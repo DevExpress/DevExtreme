@@ -12,8 +12,7 @@
       "inputs": [
         "{projectRoot}/**/*.js",
         "{projectRoot}/**/*.ts"
-      ],
-      "cache": true
+      ]
     },
     "test": {
       "executor": "nx:run-script",
@@ -27,8 +26,7 @@
         "{projectRoot}/.testcaferc.json",
         "{projectRoot}/runner.ts",
         "{projectRoot}/tsconfig.json"
-      ],
-      "cache": true
+      ]
     }
   },
   "tags": []

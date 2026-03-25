@@ -443,7 +443,9 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         const field2 = band1.children[0];
         const field3 = band1.children[1];
 
-        assert.strictEqual(band1.selected, undefined, 'Band column is in intermediate state');
+        // Band column state was changed from undefined to false due to changing TreeView selection logic
+        assert.strictEqual(band1.selected, false, 'Band column is in unselected state');
+
         assert.strictEqual(field2.selected, false, 'Field 2 column is unselected');
         assert.strictEqual(field3.selected, true, 'Field 3 column is selected');
     });
@@ -466,10 +468,10 @@ QUnit.module('Column chooser', baseModuleConfig, () => {
         // act
         dataGrid.showColumnChooser();
 
-        const items = $('.dx-item.dx-treeview-item');
+        const item = $('.dx-item.dx-treeview-item > .dx-treeview-item-content').eq(2);
 
         // assert
-        assert.ok(items.eq(2).hasClass('dx-state-disabled'), 'Column with allowHiding=false is disabled');
+        assert.ok(item.hasClass('dx-state-disabled'), 'Column with allowHiding=false is disabled');
     });
 
     QUnit.test('Column chooser search.editorOptions option should work', function(assert) {

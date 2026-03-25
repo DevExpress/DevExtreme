@@ -29,7 +29,7 @@ const MovieInfoContainer = ({ formInstanceRef }) => {
           <div className="movie-preview-image">
             <img
               src={movie.image}
-              alt={movie.text}
+              alt={`${movie.text} poster`}
             />
           </div>
           <div className="movie-details">

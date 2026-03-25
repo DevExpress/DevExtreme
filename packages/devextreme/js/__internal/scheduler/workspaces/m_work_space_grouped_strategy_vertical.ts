@@ -8,15 +8,16 @@ import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../m_classes';
 class VerticalGroupedStrategy {
   cache = new Cache();
 
-  _groupBoundsOffset: any;
+  private groupBoundsOffset: any;
 
-  _$container: any;
+  private readonly $container: any;
 
+  // TODO: make private once external usages in current_time_shader.ts, current_time_shader_vertical.ts are removed
   constructor(public _workSpace) {
   }
 
   prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow) {
-    let rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace._getRowCount();
+    let rowIndex = cellCoordinates.rowIndex + groupIndex * this._workSpace.getRowCount();
 
     if (this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
       rowIndex += groupIndex;
@@ -33,7 +34,7 @@ class VerticalGroupedStrategy {
   }
 
   getGroupIndex(rowIndex) {
-    return Math.floor(rowIndex / this._workSpace._getRowCount());
+    return Math.floor(rowIndex / this._workSpace.getRowCount());
   }
 
   calculateHeaderCellRepeatCount() {
@@ -49,7 +50,7 @@ class VerticalGroupedStrategy {
   }
 
   getTotalRowCount() {
-    return this._workSpace._getRowCount() * this._workSpace._getGroupCount();
+    return this._workSpace.getRowCount() * this._workSpace._getGroupCount();
   }
 
   calculateTimeCellRepeatCount() {
@@ -57,7 +58,7 @@ class VerticalGroupedStrategy {
   }
 
   getWorkSpaceMinWidth() {
-    let minWidth = this._workSpace._getWorkSpaceWidth();
+    let minWidth = this._workSpace.getWorkSpaceWidth();
     const workSpaceElementWidth = getBoundingRect(this._workSpace.$element().get(0)).width;
     const workspaceContainerWidth = workSpaceElementWidth
       - this._workSpace.getTimePanelWidth()
@@ -103,14 +104,14 @@ class VerticalGroupedStrategy {
 
       const { left } = $firstCell.getBoundingClientRect();
       const { right } = $lastCell.getBoundingClientRect();
-      this._groupBoundsOffset = {
+      this.groupBoundsOffset = {
         left,
         right,
         top: topOffset,
         bottom: bottomOffset,
       };
 
-      return this._groupBoundsOffset;
+      return this.groupBoundsOffset;
     });
   }
 
@@ -118,7 +119,7 @@ class VerticalGroupedStrategy {
     const offset = this._workSpace.getIndicatorOffset(0);
     const tableOffset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
     const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
-    let verticalOffset = this._workSpace._getRowCount() * this._workSpace.getCellHeight() * i;
+    let verticalOffset = this._workSpace.getRowCount() * this._workSpace.getCellHeight() * i;
 
     if (this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
       verticalOffset += this._workSpace.getAllDayHeight() * (i + 1);
@@ -130,7 +131,7 @@ class VerticalGroupedStrategy {
 
   getShaderOffset(i, width) {
     const offset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
-    return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._$container.get(0)).width - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
+    return this._workSpace.option('rtlEnabled') ? getBoundingRect(this.$container.get(0)).width - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -149,7 +150,7 @@ class VerticalGroupedStrategy {
   }
 
   getShaderMaxHeight() {
-    let height = this._workSpace._getRowCount() * this._workSpace.getCellHeight();
+    let height = this._workSpace.getRowCount() * this._workSpace.getCellHeight();
 
     if (this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
       height += this._workSpace.getCellHeight();
@@ -172,21 +173,21 @@ class VerticalGroupedStrategy {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   addAdditionalGroupCellClasses(cellClass, index, i, j) {
-    cellClass = this._addLastGroupCellClass(cellClass, i + 1);
+    cellClass = this.addLastGroupCellClass(cellClass, i + 1);
 
-    return this._addFirstGroupCellClass(cellClass, i + 1);
+    return this.addFirstGroupCellClass(cellClass, i + 1);
   }
 
-  _addLastGroupCellClass(cellClass, index) {
-    if (index % this._workSpace._getRowCount() === 0) {
+  private addLastGroupCellClass(cellClass, index) {
+    if (index % this._workSpace.getRowCount() === 0) {
       return `${cellClass} ${LAST_GROUP_CELL_CLASS}`;
     }
 
     return cellClass;
   }
 
-  _addFirstGroupCellClass(cellClass, index) {
-    if ((index - 1) % this._workSpace._getRowCount() === 0) {
+  private addFirstGroupCellClass(cellClass, index) {
+    if ((index - 1) % this._workSpace.getRowCount() === 0) {
       return `${cellClass} ${FIRST_GROUP_CELL_CLASS}`;
     }
 

@@ -12,10 +12,7 @@ const options: Options<Properties> = {
   elementAttr: [{ 'aria-label': 'Checked' }],
 };
 
-const a11yCheckConfig = {
-  // NOTE: color-contrast issues
-  rules: { 'color-contrast': { enabled: false } },
-};
+const a11yCheckConfig = {};
 
 const availabilityConfiguration: Configuration = {
   component: 'dxCheckBox',

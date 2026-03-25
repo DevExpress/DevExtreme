@@ -6705,34 +6705,54 @@ QUnit.module('Remote paging', {
         assert.strictEqual(changedSpy.callCount, 3, 'changed call count');
     });
 
-    QUnit.skip('load with CustomStore', function(assert) {
+    QUnit.test('load with CustomStore', function(assert) {
         const that = this;
 
-        const dataController = that.setup({
-            paginate: true,
-            fields: [{ dataField: 'row', area: 'row' }],
+        const CustomPivotStore = Class.inherit({
+            ctor: function() {},
+            getFields: function() {
+                return $.Deferred().resolve([]).promise();
+            },
+            supportPaging: function() {
+                return true;
+            },
             load: function(loadOptions) {
                 that.loadArgs.push(loadOptions);
-                return $.Deferred().resolve([{ key: 'row 1' }, { key: 'row 2' }], {
-                    groupCount: 10
-                });
+                return $.Deferred().resolve({
+                    rows: [
+                        { value: 'row 1', text: 'row 1', index: 1 },
+                        { value: 'row 2', text: 'row 2', index: 2 }
+                    ],
+                    columns: [],
+                    values: [[null], [null], [null]],
+                    grandTotalRowIndex: 0,
+                    grandTotalColumnIndex: 0
+                }).promise();
             }
         });
 
-        assert.strictEqual(this.loadArgs.length, 1, 'one load');
-        assert.deepEqual(this.loadArgs[0], {
-            group: [{
-                desc: false,
-                groupInterval: undefined,
-                isExpanded: false,
-                selector: 'row'
-            }],
-            groupSummary: [],
-            requireGroupCount: true,
-            skip: 0,
-            take: 2,
-            totalSummary: []
-        }, 'load args');
+        const dataController = that.setup({
+            paginate: true,
+            store: new CustomPivotStore(),
+            fields: [{ dataField: 'row', area: 'row' }, { area: 'data' }]
+        });
+
+        assert.strictEqual(that.loadArgs.length, 1, 'one load');
+
+        const loadOptions = that.loadArgs[0];
+        assert.strictEqual(loadOptions.rows.length, 1, 'rows count');
+        assert.strictEqual(loadOptions.rows[0].dataField, 'row', 'rows dataField');
+        assert.deepEqual(loadOptions.columns, [], 'columns');
+        assert.strictEqual(loadOptions.values.length, 1, 'values count');
+        assert.strictEqual(loadOptions.values[0].area, 'data', 'values area');
+        assert.deepEqual(loadOptions.filters, [], 'filters');
+        assert.deepEqual(loadOptions.columnExpandedPaths, [], 'columnExpandedPaths');
+        assert.deepEqual(loadOptions.rowExpandedPaths, [], 'rowExpandedPaths');
+        assert.strictEqual(loadOptions.pageSize, 40, 'pageSize');
+        assert.strictEqual(loadOptions.rowSkip, 0, 'rowSkip');
+        assert.strictEqual(loadOptions.rowTake, 2, 'rowTake');
+        assert.strictEqual(loadOptions.columnSkip, 0, 'columnSkip');
+        assert.strictEqual(loadOptions.columnTake, 2, 'columnTake');
 
         assert.deepEqual(dataController.getRowsInfo(), [
             [{ dataSourceIndex: 1, text: 'row 1', path: ['row 1'], type: 'D', isLast: true }],

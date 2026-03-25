@@ -10,7 +10,7 @@
   height: 347px;
 }
 
-.chart_environment {
+.chart-environment {
   width: 820px;
   position: relative;
   margin: 0 auto;
@@ -18,4 +18,19 @@
 
 .controls-pane {
   text-align: center;
+}
+
+.custom-markup-text {
+  fill: #fff;
+  font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif;
+}
+
+.custom-markup-text-title {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.custom-markup-text-subtitle {
+  font-size: 14px;
+  opacity: 0.8;
 }

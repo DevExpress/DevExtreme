@@ -128,9 +128,6 @@ export default class dxRangeSlider extends dxTrackBar<dxRangeSliderOptions> {
 /** @public */
 export type Properties = dxRangeSliderOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxRangeSliderOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

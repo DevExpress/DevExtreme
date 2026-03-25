@@ -4,6 +4,8 @@ import type { SelectionSensitivity } from 'devextreme/ui/data_grid';
 import Toolbar from '../toolbar';
 import DataRow from './data/row';
 import GroupRow from './groupRow';
+import FilterRow from './filter/row';
+import FilterCell from './filter/cell';
 import EditForm from './editForm';
 import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
@@ -24,6 +26,7 @@ import { GroupPanel } from './groupPanel';
 import GridCore from '../gridCore';
 import { CLASS as CLASS_BASE } from '../gridCore';
 import { AIPromptEditor } from './aiPromptEditor';
+import EditPopup from './editPopup';
 
 export const CLASS = {
   ...CLASS_BASE,
@@ -239,12 +242,12 @@ export default class DataGrid extends GridCore {
     return this.element.find(`.${CLASS.errorRow}`);
   }
 
-  getFilterRow(): Selector {
-    return this.element.find(`.${this.addWidgetPrefix(CLASS.filterRow)}`);
+  getFilterRow(): FilterRow {
+    return this.getHeaders().getFilterRow();
   }
 
-  getFilterCell(columnIndex: number): Selector {
-    return this.getFilterRow().find(`[aria-colindex='${columnIndex + 1}']`);
+  getFilterCell(columnIndex: number): FilterCell {
+    return this.getHeaders().getFilterRow().getFilterCell(columnIndex);
   }
 
   getFilterRangeOverlay(): Selector {
@@ -271,7 +274,7 @@ export default class DataGrid extends GridCore {
     columnIndex: number,
     EditorType: new (mainElement: Selector) => T,
   ): T {
-    return new EditorType(this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor());
+    return this.getHeaders().getFilterRow().getFilterCell(columnIndex).getEditor<T>(EditorType);
   }
 
   getSearchBox(): TextBox {
@@ -442,6 +445,10 @@ export default class DataGrid extends GridCore {
     const buttons = element.find(`.${CLASS.toolbar} .${CLASS.button}`);
 
     return new EditForm(element, buttons);
+  }
+
+  getEditPopup(): EditPopup {
+    return new EditPopup(Selector(`.${this.addWidgetPrefix(CLASS.popupEdit)}`));
   }
 
   getToolbar(): Toolbar {
@@ -748,12 +755,18 @@ export default class DataGrid extends GridCore {
     )();
   }
 
-  apiPageIndex(): Promise<number> {
+  apiPageIndex(pageIndex?: number): Promise<number | void> {
     const { getInstance } = this;
 
     return ClientFunction(
-      () => (getInstance() as any).pageIndex(),
-      { dependencies: { getInstance } },
+      () => {
+        if (pageIndex === undefined) {
+          return (getInstance() as any).pageIndex();
+        }
+
+        (getInstance() as any).pageIndex(pageIndex);
+      },
+      { dependencies: { getInstance, pageIndex } },
     )();
   }
 

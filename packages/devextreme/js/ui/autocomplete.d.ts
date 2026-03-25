@@ -237,9 +237,6 @@ export default class dxAutocomplete extends dxDropDownList<dxAutocompleteOptions
 /** @public */
 export type Properties = dxAutocompleteOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxAutocompleteOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

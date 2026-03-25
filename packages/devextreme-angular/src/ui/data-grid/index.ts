@@ -21,24 +21,22 @@ import {
     QueryList
 } from '@angular/core';
 
-export { ExplicitTypes } from 'devextreme/ui/data_grid';
+export type { ExplicitTypes } from 'devextreme/ui/data_grid';
 
-import DataSource from 'devextreme/data/data_source';
-import dxDataGrid from 'devextreme/ui/data_grid';
-import dxSortable from 'devextreme/ui/sortable';
-import dxDraggable from 'devextreme/ui/draggable';
-import { AIIntegration } from 'devextreme/common/ai-integration';
-import { ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, GroupExpandMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, GridBase, DataRenderMode, SearchPanel, SelectionColumnDisplayMode, Sorting, StateStoreType, SummaryType } from 'devextreme/common/grids';
-import { dxDataGridColumn, dxDataGridRowObject, DataGridExportFormat, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, DataGridScrollMode, SelectionSensitivity, dxDataGridToolbar } from 'devextreme/ui/data_grid';
-import { Mode, DragDirection, DragHighlight, ScrollbarMode, SingleMultipleOrNone, SelectAllMode, SortOrder, HorizontalAlignment } from 'devextreme/common';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { dxFormOptions } from 'devextreme/ui/form';
-import { dxPopupOptions } from 'devextreme/ui/popup';
-import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
-import { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
-import { event } from 'devextreme/events/events.types';
-import { Format } from 'devextreme/common/core/localization';
+import type dxSortable from 'devextreme/ui/sortable';
+import type dxDraggable from 'devextreme/ui/draggable';
+import type { AIIntegration } from 'devextreme/common/ai-integration';
+import type { ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, GroupExpandMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, GridBase, DataRenderMode, SearchPanel, SelectionColumnDisplayMode, Sorting, StateStoreType, SummaryType } from 'devextreme/common/grids';
+import type { default as dxDataGrid, dxDataGridColumn, dxDataGridRowObject, DataGridExportFormat, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, DataGridScrollMode, SelectionSensitivity, dxDataGridToolbar } from 'devextreme/ui/data_grid';
+import type { Mode, DragDirection, DragHighlight, ScrollbarMode, SingleMultipleOrNone, SelectAllMode, SortOrder, HorizontalAlignment } from 'devextreme/common';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { dxFormOptions } from 'devextreme/ui/form';
+import type { dxPopupOptions } from 'devextreme/ui/popup';
+import type { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
+import type { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
+import type { event } from 'devextreme/events/events.types';
+import type { Format } from 'devextreme/common/core/localization';
 
 import DxDataGrid from 'devextreme/ui/data_grid';
 
@@ -126,6 +124,8 @@ import { DxiDataGridAsyncRuleModule } from 'devextreme-angular/ui/data-grid/nest
 import { DxoDataGridAtModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridBoundaryOffsetModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridButtonModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridButtonItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridButtonOptionsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridChangeModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridColCountByScreenModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridCollisionModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -147,11 +147,13 @@ import { DxoDataGridDataGridHeaderFilterModule } from 'devextreme-angular/ui/dat
 import { DxoDataGridDataGridHeaderFilterSearchModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridDataGridHeaderFilterTextsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridDataGridSelectionModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridDataGridToolbarItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridEditingModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridEditingTextsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridEditorOptionsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridEditorOptionsButtonModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridEmailRuleModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridEmptyItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridExportModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridExportTextsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridFieldModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -164,6 +166,7 @@ import { DxoDataGridFilterPanelTextsModule } from 'devextreme-angular/ui/data-gr
 import { DxoDataGridFilterRowModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridFormModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridFormatModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridFormGroupItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridFormItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridFromModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridGroupingModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -200,12 +203,17 @@ import { DxoDataGridSearchModule } from 'devextreme-angular/ui/data-grid/nested'
 import { DxoDataGridSearchPanelModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridSelectionModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridShowModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridSimpleItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridSortByGroupSummaryInfoModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridSortingModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridStateStoringModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxiDataGridStringLengthRuleModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridSummaryModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridSummaryTextsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridTabModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridTabbedItemModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxoDataGridTabPanelOptionsModule } from 'devextreme-angular/ui/data-grid/nested';
+import { DxiDataGridTabPanelOptionsItemModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridTextsModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridToModule } from 'devextreme-angular/ui/data-grid/nested';
 import { DxoDataGridToolbarModule } from 'devextreme-angular/ui/data-grid/nested';
@@ -216,13 +224,14 @@ import { DxoDataGridValueFormatModule } from 'devextreme-angular/ui/data-grid/ne
 import { 
            PROPERTY_TOKEN_validationRules,
            PROPERTY_TOKEN_buttons,
+           PROPERTY_TOKEN_items,
            PROPERTY_TOKEN_changes,
            PROPERTY_TOKEN_columns,
            PROPERTY_TOKEN_customOperations,
            PROPERTY_TOKEN_fields,
            PROPERTY_TOKEN_groupItems,
-           PROPERTY_TOKEN_items,
            PROPERTY_TOKEN_sortByGroupSummaryInfo,
+           PROPERTY_TOKEN_tabs,
            PROPERTY_TOKEN_toolbarItems,
            PROPERTY_TOKEN_totalItems,
      } from 'devextreme-angular/core/tokens';
@@ -257,6 +266,11 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
         this.setChildren('buttons', value);
     }
 
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     @ContentChildren(PROPERTY_TOKEN_changes)
     set _changesContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('changes', value);
@@ -282,14 +296,14 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
         this.setChildren('groupItems', value);
     }
 
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('items', value);
-    }
-
     @ContentChildren(PROPERTY_TOKEN_sortByGroupSummaryInfo)
     set _sortByGroupSummaryInfoContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('sortByGroupSummaryInfo', value);
+    }
+
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
@@ -2422,6 +2436,8 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridAtModule,
     DxoDataGridBoundaryOffsetModule,
     DxiDataGridButtonModule,
+    DxiDataGridButtonItemModule,
+    DxoDataGridButtonOptionsModule,
     DxiDataGridChangeModule,
     DxoDataGridColCountByScreenModule,
     DxoDataGridCollisionModule,
@@ -2443,11 +2459,13 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridDataGridHeaderFilterSearchModule,
     DxoDataGridDataGridHeaderFilterTextsModule,
     DxoDataGridDataGridSelectionModule,
+    DxiDataGridDataGridToolbarItemModule,
     DxoDataGridEditingModule,
     DxoDataGridEditingTextsModule,
     DxoDataGridEditorOptionsModule,
     DxiDataGridEditorOptionsButtonModule,
     DxiDataGridEmailRuleModule,
+    DxiDataGridEmptyItemModule,
     DxoDataGridExportModule,
     DxoDataGridExportTextsModule,
     DxiDataGridFieldModule,
@@ -2460,6 +2478,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridFilterRowModule,
     DxoDataGridFormModule,
     DxoDataGridFormatModule,
+    DxiDataGridFormGroupItemModule,
     DxoDataGridFormItemModule,
     DxoDataGridFromModule,
     DxoDataGridGroupingModule,
@@ -2496,12 +2515,17 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridSearchPanelModule,
     DxoDataGridSelectionModule,
     DxoDataGridShowModule,
+    DxiDataGridSimpleItemModule,
     DxiDataGridSortByGroupSummaryInfoModule,
     DxoDataGridSortingModule,
     DxoDataGridStateStoringModule,
     DxiDataGridStringLengthRuleModule,
     DxoDataGridSummaryModule,
     DxoDataGridSummaryTextsModule,
+    DxiDataGridTabModule,
+    DxiDataGridTabbedItemModule,
+    DxoDataGridTabPanelOptionsModule,
+    DxiDataGridTabPanelOptionsItemModule,
     DxoDataGridTextsModule,
     DxoDataGridToModule,
     DxoDataGridToolbarModule,
@@ -2585,6 +2609,8 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridAtModule,
     DxoDataGridBoundaryOffsetModule,
     DxiDataGridButtonModule,
+    DxiDataGridButtonItemModule,
+    DxoDataGridButtonOptionsModule,
     DxiDataGridChangeModule,
     DxoDataGridColCountByScreenModule,
     DxoDataGridCollisionModule,
@@ -2606,11 +2632,13 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridDataGridHeaderFilterSearchModule,
     DxoDataGridDataGridHeaderFilterTextsModule,
     DxoDataGridDataGridSelectionModule,
+    DxiDataGridDataGridToolbarItemModule,
     DxoDataGridEditingModule,
     DxoDataGridEditingTextsModule,
     DxoDataGridEditorOptionsModule,
     DxiDataGridEditorOptionsButtonModule,
     DxiDataGridEmailRuleModule,
+    DxiDataGridEmptyItemModule,
     DxoDataGridExportModule,
     DxoDataGridExportTextsModule,
     DxiDataGridFieldModule,
@@ -2623,6 +2651,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridFilterRowModule,
     DxoDataGridFormModule,
     DxoDataGridFormatModule,
+    DxiDataGridFormGroupItemModule,
     DxoDataGridFormItemModule,
     DxoDataGridFromModule,
     DxoDataGridGroupingModule,
@@ -2659,12 +2688,17 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     DxoDataGridSearchPanelModule,
     DxoDataGridSelectionModule,
     DxoDataGridShowModule,
+    DxiDataGridSimpleItemModule,
     DxiDataGridSortByGroupSummaryInfoModule,
     DxoDataGridSortingModule,
     DxoDataGridStateStoringModule,
     DxiDataGridStringLengthRuleModule,
     DxoDataGridSummaryModule,
     DxoDataGridSummaryTextsModule,
+    DxiDataGridTabModule,
+    DxiDataGridTabbedItemModule,
+    DxoDataGridTabPanelOptionsModule,
+    DxiDataGridTabPanelOptionsItemModule,
     DxoDataGridTextsModule,
     DxoDataGridToModule,
     DxoDataGridToolbarModule,

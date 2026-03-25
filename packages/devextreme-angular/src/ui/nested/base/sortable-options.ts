@@ -5,9 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
-import { DragDirection, DragHighlight, Orientation } from 'devextreme/common';
-import { UserDefinedElement } from 'devextreme/core/element';
-import { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
+import type { DragDirection, DragHighlight, Orientation } from 'devextreme/common';
+import type { UserDefinedElement } from 'devextreme/core/element';
+import type { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, OptionChangedEvent, RemoveEvent, ReorderEvent } from 'devextreme/ui/sortable';
 
 @Component({
     template: ''

@@ -3,9 +3,13 @@
   float: left;
 }
 
+.file-uploader-block + .file-uploader-block {
+  float: right;
+}
+
 .note {
   font-size: 10pt;
-  color: #484848;
+  color: var(--dx-texteditor-color-label);
   margin-left: 9px;
 }
 

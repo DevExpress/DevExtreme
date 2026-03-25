@@ -258,7 +258,7 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
       excludePatterns: options.excludePatterns ?? DEFAULTS.EXCLUDE_PATTERNS,
     });
 
-    logger.info(`Adding license headers to ${files.length} files...`);
+    logger.verbose(`Adding license headers to ${files.length} files...`);
 
     const compiledTemplate = useCustomTemplate ? _.template(bannerTemplate) : null;
 
@@ -277,7 +277,7 @@ const runExecutor: PromiseExecutor<AddLicenseHeadersExecutorSchema> = async (opt
       ),
     );
 
-    logger.info('License headers added successfully');
+    logger.verbose('License headers added successfully');
     return { success: true };
   } catch (error) {
     logError('Failed to add license headers', error);

@@ -21,23 +21,21 @@ import {
     QueryList
 } from '@angular/core';
 
-export { ExplicitTypes } from 'devextreme/ui/tree_list';
+export type { ExplicitTypes } from 'devextreme/ui/tree_list';
 
-import DataSource from 'devextreme/data/data_source';
-import dxTreeList from 'devextreme/ui/tree_list';
-import dxSortable from 'devextreme/ui/sortable';
-import dxDraggable from 'devextreme/ui/draggable';
-import { AIIntegration } from 'devextreme/common/ai-integration';
-import { ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, GridBase, DataRenderMode, SearchPanel, Sorting, StateStoreType } from 'devextreme/common/grids';
-import { dxTreeListColumn, dxTreeListRowObject, TreeListFilterMode, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxTreeListToolbar } from 'devextreme/ui/tree_list';
-import { Mode, DataStructure, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone } from 'devextreme/common';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { dxFormOptions } from 'devextreme/ui/form';
-import { dxPopupOptions } from 'devextreme/ui/popup';
-import { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
-import { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
-import { event } from 'devextreme/events/events.types';
+import type dxSortable from 'devextreme/ui/sortable';
+import type dxDraggable from 'devextreme/ui/draggable';
+import type { AIIntegration } from 'devextreme/common/ai-integration';
+import type { ColumnChooser, ColumnResizeMode, DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction, FilterPanel, ApplyFilterMode, HeaderFilter, EnterKeyAction, EnterKeyDirection, Pager, GridBase, DataRenderMode, SearchPanel, Sorting, StateStoreType } from 'devextreme/common/grids';
+import type { default as dxTreeList, dxTreeListColumn, dxTreeListRowObject, TreeListFilterMode, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellHoverChangedEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, FocusedCellChangedEvent, FocusedCellChangingEvent, FocusedRowChangedEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, NodesInitializedEvent, OptionChangedEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, SelectionChangedEvent, ToolbarPreparingEvent, dxTreeListToolbar } from 'devextreme/ui/tree_list';
+import type { Mode, DataStructure, DragDirection, DragHighlight, ScrollMode, ScrollbarMode, SingleMultipleOrNone } from 'devextreme/common';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { dxFormOptions } from 'devextreme/ui/form';
+import type { dxPopupOptions } from 'devextreme/ui/popup';
+import type { dxFilterBuilderOptions } from 'devextreme/ui/filter_builder';
+import type { LoadPanelIndicatorProperties } from 'devextreme/ui/load_panel';
+import type { event } from 'devextreme/events/events.types';
 
 import DxTreeList from 'devextreme/ui/tree_list';
 
@@ -116,6 +114,8 @@ import { DxiTreeListAsyncRuleModule } from 'devextreme-angular/ui/tree-list/nest
 import { DxoTreeListAtModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListBoundaryOffsetModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListButtonModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListButtonItemModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListButtonOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListChangeModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListColCountByScreenModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListCollisionModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -138,6 +138,7 @@ import { DxoTreeListEditingTextsModule } from 'devextreme-angular/ui/tree-list/n
 import { DxoTreeListEditorOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListEditorOptionsButtonModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListEmailRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListEmptyItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListFieldModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFieldLookupModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFilterBuilderModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -150,6 +151,7 @@ import { DxoTreeListFormModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFormatModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFormItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListFromModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListGroupItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListGroupOperationDescriptionsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListHeaderFilterModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListHideModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -179,9 +181,14 @@ import { DxoTreeListSearchModule } from 'devextreme-angular/ui/tree-list/nested'
 import { DxoTreeListSearchPanelModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListShowModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListSimpleItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListSortingModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListStateStoringModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListStringLengthRuleModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListTabModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListTabbedItemModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxoTreeListTabPanelOptionsModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListTabPanelOptionsItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListTextsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListToModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListToolbarModule } from 'devextreme-angular/ui/tree-list/nested';
@@ -190,15 +197,17 @@ import { DxoTreeListTreeListHeaderFilterModule } from 'devextreme-angular/ui/tre
 import { DxoTreeListTreeListHeaderFilterSearchModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListTreeListHeaderFilterTextsModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxoTreeListTreeListSelectionModule } from 'devextreme-angular/ui/tree-list/nested';
+import { DxiTreeListTreeListToolbarItemModule } from 'devextreme-angular/ui/tree-list/nested';
 import { DxiTreeListValidationRuleModule } from 'devextreme-angular/ui/tree-list/nested';
 import { 
            PROPERTY_TOKEN_validationRules,
            PROPERTY_TOKEN_buttons,
+           PROPERTY_TOKEN_items,
            PROPERTY_TOKEN_changes,
            PROPERTY_TOKEN_columns,
            PROPERTY_TOKEN_customOperations,
            PROPERTY_TOKEN_fields,
-           PROPERTY_TOKEN_items,
+           PROPERTY_TOKEN_tabs,
            PROPERTY_TOKEN_toolbarItems,
      } from 'devextreme-angular/core/tokens';
 
@@ -232,6 +241,11 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this.setChildren('buttons', value);
     }
 
+    @ContentChildren(PROPERTY_TOKEN_items)
+    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('items', value);
+    }
+
     @ContentChildren(PROPERTY_TOKEN_changes)
     set _changesContentChildren(value: QueryList<CollectionNestedOption>) {
         this.setChildren('changes', value);
@@ -252,9 +266,9 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
         this.setChildren('fields', value);
     }
 
-    @ContentChildren(PROPERTY_TOKEN_items)
-    set _itemsContentChildren(value: QueryList<CollectionNestedOption>) {
-        this.setChildren('items', value);
+    @ContentChildren(PROPERTY_TOKEN_tabs)
+    set _tabsContentChildren(value: QueryList<CollectionNestedOption>) {
+        this.setChildren('tabs', value);
     }
 
     @ContentChildren(PROPERTY_TOKEN_toolbarItems)
@@ -2367,6 +2381,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListAtModule,
     DxoTreeListBoundaryOffsetModule,
     DxiTreeListButtonModule,
+    DxiTreeListButtonItemModule,
+    DxoTreeListButtonOptionsModule,
     DxiTreeListChangeModule,
     DxoTreeListColCountByScreenModule,
     DxoTreeListCollisionModule,
@@ -2389,6 +2405,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListEditorOptionsModule,
     DxiTreeListEditorOptionsButtonModule,
     DxiTreeListEmailRuleModule,
+    DxiTreeListEmptyItemModule,
     DxiTreeListFieldModule,
     DxoTreeListFieldLookupModule,
     DxoTreeListFilterBuilderModule,
@@ -2401,6 +2418,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListFormatModule,
     DxoTreeListFormItemModule,
     DxoTreeListFromModule,
+    DxiTreeListGroupItemModule,
     DxoTreeListGroupOperationDescriptionsModule,
     DxoTreeListHeaderFilterModule,
     DxoTreeListHideModule,
@@ -2430,9 +2448,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListSearchPanelModule,
     DxoTreeListSelectionModule,
     DxoTreeListShowModule,
+    DxiTreeListSimpleItemModule,
     DxoTreeListSortingModule,
     DxoTreeListStateStoringModule,
     DxiTreeListStringLengthRuleModule,
+    DxiTreeListTabModule,
+    DxiTreeListTabbedItemModule,
+    DxoTreeListTabPanelOptionsModule,
+    DxiTreeListTabPanelOptionsItemModule,
     DxoTreeListTextsModule,
     DxoTreeListToModule,
     DxoTreeListToolbarModule,
@@ -2441,6 +2464,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListTreeListHeaderFilterSearchModule,
     DxoTreeListTreeListHeaderFilterTextsModule,
     DxoTreeListTreeListSelectionModule,
+    DxiTreeListTreeListToolbarItemModule,
     DxiTreeListValidationRuleModule,
     DxIntegrationModule,
     DxTemplateModule
@@ -2509,6 +2533,8 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListAtModule,
     DxoTreeListBoundaryOffsetModule,
     DxiTreeListButtonModule,
+    DxiTreeListButtonItemModule,
+    DxoTreeListButtonOptionsModule,
     DxiTreeListChangeModule,
     DxoTreeListColCountByScreenModule,
     DxoTreeListCollisionModule,
@@ -2531,6 +2557,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListEditorOptionsModule,
     DxiTreeListEditorOptionsButtonModule,
     DxiTreeListEmailRuleModule,
+    DxiTreeListEmptyItemModule,
     DxiTreeListFieldModule,
     DxoTreeListFieldLookupModule,
     DxoTreeListFilterBuilderModule,
@@ -2543,6 +2570,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListFormatModule,
     DxoTreeListFormItemModule,
     DxoTreeListFromModule,
+    DxiTreeListGroupItemModule,
     DxoTreeListGroupOperationDescriptionsModule,
     DxoTreeListHeaderFilterModule,
     DxoTreeListHideModule,
@@ -2572,9 +2600,14 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListSearchPanelModule,
     DxoTreeListSelectionModule,
     DxoTreeListShowModule,
+    DxiTreeListSimpleItemModule,
     DxoTreeListSortingModule,
     DxoTreeListStateStoringModule,
     DxiTreeListStringLengthRuleModule,
+    DxiTreeListTabModule,
+    DxiTreeListTabbedItemModule,
+    DxoTreeListTabPanelOptionsModule,
+    DxiTreeListTabPanelOptionsItemModule,
     DxoTreeListTextsModule,
     DxoTreeListToModule,
     DxoTreeListToolbarModule,
@@ -2583,6 +2616,7 @@ export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent
     DxoTreeListTreeListHeaderFilterSearchModule,
     DxoTreeListTreeListHeaderFilterTextsModule,
     DxoTreeListTreeListSelectionModule,
+    DxiTreeListTreeListToolbarItemModule,
     DxiTreeListValidationRuleModule,
     DxTemplateModule
   ]

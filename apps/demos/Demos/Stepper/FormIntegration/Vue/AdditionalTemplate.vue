@@ -19,7 +19,7 @@ import type { BookingFormData } from './types.ts';
 import { initialFormData } from './data.ts';
 
 const props = withDefaults(defineProps<{
-  formData: BookingFormData;
+  formData?: BookingFormData;
 }>(), {
   formData: () => initialFormData,
 });

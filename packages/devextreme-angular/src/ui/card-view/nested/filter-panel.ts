@@ -16,7 +16,7 @@ import {
 
 
 
-import { FilterPanel, FilterPanelTexts } from 'devextreme/common/grids';
+import type { FilterPanel, FilterPanelTexts } from 'devextreme/common/grids';
 
 import {
     DxIntegrationModule,

@@ -1,6 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
 import { getData } from '../../helpers/generateDataSourceData';
@@ -15,9 +14,9 @@ fixture.disablePageReloads`DataGrid - contrast`
 // visual: material.blue.light
 test('DataGrid - Contrast between icons in the Filter Row menu and their background doesn\'t comply with WCAG accessibility standards', async (t) => {
   const dataGrid = new DataGrid('#container');
-  const filterEditor = dataGrid.getFilterEditor(0, FilterTextBox);
-  const searchButton = filterEditor.menuButton;
-  const filterMenu = filterEditor.menu;
+  const filterCell = dataGrid.getFilterCell(0);
+  const searchButton = filterCell.menuButton;
+  const filterMenu = filterCell.menu;
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
@@ -63,7 +62,7 @@ test('DataGrid - Filter icon should remain visible when it\'s focused', async (t
     .element;
 
   await t
-    .click(dataGrid.getFilterCell(0))
+    .click(dataGrid.getFilterCell(0).element)
     .pressKey('tab')
     .expect(searchIconContainer.focused)
     .ok();

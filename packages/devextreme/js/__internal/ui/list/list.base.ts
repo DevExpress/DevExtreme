@@ -110,8 +110,6 @@ export interface ListBaseProperties extends Properties<Item>, Omit<
 
   _onItemsRendered?: () => void;
 
-  _swipeEnabled?: boolean;
-
   showChevronExpr?: (data: Item) => boolean | undefined;
 
   badgeExpr?: (data: Item) => string | undefined;
@@ -134,16 +132,12 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
 
   _$nextButton!: dxElementWrapper | null;
 
-  // eslint-disable-next-line no-restricted-globals
   _holdTimer?: ReturnType<typeof setTimeout>;
 
-  // eslint-disable-next-line no-restricted-globals
   _loadNextPageTimer?: ReturnType<typeof setTimeout>;
 
-  // eslint-disable-next-line no-restricted-globals
   _showLoadingIndicatorTimer?: ReturnType<typeof setTimeout>;
 
-  // eslint-disable-next-line no-restricted-globals
   _inkRippleTimer?: ReturnType<typeof setTimeout>;
 
   _isFirstLoadCompleted?: boolean;
@@ -301,7 +295,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       _itemAttributes: { role: 'option' },
       useInkRipple: false,
       wrapItemText: false,
-      _swipeEnabled: true,
       showChevronExpr(data: Item): boolean | undefined {
         return data?.showChevron;
       },
@@ -1008,6 +1001,11 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     this._setListAria();
   }
 
+  _isMultiSelectMode(): boolean {
+    const { selectionMode } = this.option();
+    return selectionMode === 'multiple' || selectionMode === 'all';
+  }
+
   _setListAria(): void {
     const { items, allowItemDeleting, collapsibleGroups } = this.option();
 
@@ -1020,6 +1018,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
     const listArea = {
       role: shouldSetAria ? 'listbox' : undefined,
       label: shouldSetAria ? label : undefined,
+      // eslint-disable-next-line spellcheck/spell-checker
+      multiselectable: shouldSetAria && this._isMultiSelectMode() ? 'true' : undefined,
     };
 
     this.setAria(listArea, this._$listContainer);
@@ -1067,32 +1067,52 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
   _postprocessRenderItem(args: PostprocessRenderItemInfo<Item>): void {
     this._refreshItemElements();
     super._postprocessRenderItem(args);
-
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { _swipeEnabled } = this.option();
-
-    if (_swipeEnabled) {
-      this._attachSwipeEvent($(args.itemElement));
-    }
+    this._updateSwipeEventSubscription($(args.itemElement));
   }
 
   _getElementClassToSkipRefreshId(): string {
     return LIST_GROUP_HEADER_CLASS;
   }
 
-  _attachSwipeEvent($itemElement: dxElementWrapper): void {
+  _updateSwipeEventSubscription($itemElement: dxElementWrapper = this._itemElements()): void {
     // @ts-expect-error ts-error
     const endEventName = addNamespace(swipeEventEnd, this.NAME);
+    eventsEngine.off($itemElement, endEventName);
 
-    eventsEngine.on($itemElement, endEventName, (e) => {
-      this._itemSwipeEndHandler(e);
-    });
+    if (this.hasActionSubscription('onItemSwipe')) {
+      eventsEngine.on($itemElement, endEventName, (e) => {
+        this._itemSwipeEndHandler(e);
+      });
+    }
   }
 
   _itemSwipeEndHandler(e: DxEvent & { offset: number }): void {
     this._itemDXEventHandler(e, 'onItemSwipe', {
       direction: e.offset < 0 ? 'left' : 'right',
     });
+  }
+
+  on(eventName: string | { [key: string]: Function }, eventHandler?: Function): this {
+    const result = super.on(eventName, eventHandler);
+
+    const hasItemSwipeHandler = eventName === 'itemSwipe'
+      || (isPlainObject(eventName) && Object.prototype.hasOwnProperty.call(eventName, 'itemSwipe'));
+
+    if (hasItemSwipeHandler) {
+      this._updateSwipeEventSubscription();
+    }
+
+    return result;
+  }
+
+  off(eventName: string, eventHandler?: Function): this {
+    const result = super.off(eventName, eventHandler);
+
+    if (eventName === 'itemSwipe') {
+      this._updateSwipeEventSubscription();
+    }
+
+    return result;
   }
 
   _nextButtonHandler(): void {
@@ -1145,6 +1165,8 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       role: collapsibleGroups ? 'listbox' : undefined,
       // eslint-disable-next-line spellcheck/spell-checker
       labelledby: collapsibleGroups ? groupHeaderId : undefined,
+      // eslint-disable-next-line spellcheck/spell-checker
+      multiselectable: collapsibleGroups && this._isMultiSelectMode() ? 'true' : undefined,
     };
 
     this.setAria(groupHeaderAria, $groupBody);
@@ -1399,7 +1421,6 @@ export class ListBase extends CollectionWidget<ListBaseProperties, Item> {
       case 'badgeExpr':
         this._invalidate();
         break;
-      case '_swipeEnabled':
       case '_onItemsRendered':
       case 'selectByClick':
         break;

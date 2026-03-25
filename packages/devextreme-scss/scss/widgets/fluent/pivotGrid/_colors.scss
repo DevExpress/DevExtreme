@@ -33,7 +33,7 @@ $pivotgrid-grandtotalcolor: null !default;
 * $name 40. Field area text color
 * $type color
 */
-$pivotgrid-field-area-text-color: color.change(color.adjust($pivotgrid-area-color, $lightness: -26.2%, $space: hsl), $alpha: 0.3) !default;
+$pivotgrid-field-area-text-color: $base-label-color !default;
 $pivotgrid-accent-color: $base-accent !default;
 $pivotgrid-drag-header-border-color: color.change($pivotgrid-accent-color, $alpha: 0.5) !default;
 $pivotgrid-drag-header-first-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;

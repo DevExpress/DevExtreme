@@ -23,8 +23,7 @@
     "build": {
       "dependsOn": [
         "^build"
-      ],
-      "cache": true
+      ]
     },
     "start": {
       "dependsOn": [
@@ -34,19 +33,17 @@
     "test": {
       "dependsOn": [
         "^build"
-      ],
-      "cache": true
+      ]
     },
-    "lint": {
-      "cache": true
-    },
-    "e2e": {
-      "cache": true
-    }
+    "lint": {},
+    "e2e": {}
   },
   "workspaceLayout": {
     "appsDir": "apps",
     "libsDir": "packages"
   },
-  "defaultBase": "master"
+  "defaultBase": "master",
+  "tui": {
+    "enabled": false
+  }
 }

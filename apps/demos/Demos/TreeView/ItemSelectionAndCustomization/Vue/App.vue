@@ -8,10 +8,11 @@
         :width="340"
         :height="320"
         :items="employees"
-        :show-check-boxes-mode="showCheckBoxesModeValue"
+        :show-check-boxes-mode="checkboxVisibility"
         :selection-mode="selectionModeValue"
-        :select-nodes-recursive="selectNodesRecursiveValue"
-        :select-by-click="selectByClickValue"
+        :disabled-node-selection-mode="disabledNodeSelectionModeValue"
+        :select-nodes-recursive="recursiveSelection"
+        :select-by-click="selectOnClick"
         @selection-changed="treeViewSelectionChanged"
         @content-ready="treeViewContentReady"
       >
@@ -37,46 +38,60 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="options-container">
-        <div class="option">
-          <span>Show Check Boxes Mode:</span>
-          <div class="editor-container">
-            <DxSelectBox
-              :items="showCheckBoxesModes"
-              :input-attr="{ 'aria-label': 'Show Checkboxes Mode' }"
-              v-model:value="showCheckBoxesModeValue"
-              @value-changed="showCheckBoxesModeValueChanged"
-            />
+        <div class="options-section">
+          <div class="option">
+            <span>Checkbox Visibility:</span>
+            <div class="editor-container">
+              <DxSelectBox
+                :items="checkboxVisibilityOptions"
+                :input-attr="{ 'aria-label': 'Checkbox Visibility' }"
+                v-model:value="checkboxVisibility"
+                @value-changed="checkboxVisibilityValueChanged"
+              />
+            </div>
+          </div>
+          <div class="option">
+            <span>Selection Mode:</span>
+            <div class="editor-container">
+              <DxSelectBox
+                :items="selectionModes"
+                v-model:value="selectionModeValue"
+                :input-attr="{ 'aria-label': 'Selection Mode' }"
+                :disabled="isSelectionModeDisabled"
+                @value-changed="selectionModeValueChanged"
+              />
+            </div>
+          </div>
+          <div class="option">
+            <span>Disabled Node Selection Mode:</span>
+            <div class="editor-container">
+              <DxSelectBox
+                :items="disabledNodeSelectionModes"
+                v-model:value="disabledNodeSelectionModeValue"
+                :input-attr="{ 'aria-label': 'Disabled Node Selection Mode' }"
+              />
+            </div>
           </div>
         </div>
-        <div class="option">
-          <span>Selection Mode:</span>
-          <div class="editor-container">
-            <DxSelectBox
-              :items="selectionModes"
-              v-model:value="selectionModeValue"
-              :input-attr="{ 'aria-label': 'Selection Mode' }"
-              :disabled="isSelectionModeDisabled"
-              @value-changed="selectionModeValueChanged"
-            />
+        <div class="options-section">
+          <div class="option">
+            <div class="caption-placeholder">&nbsp;</div>
+            <div class="editor-container">
+              <DxCheckBox
+                text="Recursive Selection"
+                :disabled="isRecursiveDisabled"
+                v-model:value="recursiveSelection"
+              />
+            </div>
           </div>
-        </div>
-        <div class="option">
-          <div class="caption-placeholder">&nbsp;</div>
-          <div class="editor-container">
-            <DxCheckBox
-              text="Select Nodes Recursive"
-              :disabled="isRecursiveDisabled"
-              v-model:value="selectNodesRecursiveValue"
-            />
-          </div>
-        </div>
-        <div class="option">
-          <div class="caption-placeholder">&nbsp;</div>
-          <div class="editor-container">
-            <DxCheckBox
-              text="Select By Click"
-              v-model:value="selectByClickValue"
-            />
+          <div class="option">
+            <div class="caption-placeholder">&nbsp;</div>
+            <div class="editor-container">
+              <DxCheckBox
+                text="Select on Click"
+                v-model:value="selectOnClick"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -94,14 +109,16 @@ import { employees } from './data.ts';
 import type { Employee } from './types';
 
 const selectionModes: SingleOrMultiple[] = ['multiple', 'single'];
-const showCheckBoxesModes: DxTreeViewTypes.TreeViewCheckBoxMode[] = ['normal', 'selectAll', 'none'];
+const checkboxVisibilityOptions: DxTreeViewTypes.TreeViewCheckBoxMode[] = ['normal', 'selectAll', 'none'];
+const disabledNodeSelectionModes: DxTreeViewTypes.DisabledNodeSelectionMode[] = ['never', 'recursiveAndAll'];
 const selectedEmployees = ref([]);
-const showCheckBoxesModeValue = ref(showCheckBoxesModes[0]);
+const checkboxVisibility = ref(checkboxVisibilityOptions[0]);
 const selectionModeValue = ref(selectionModes[0]);
+const disabledNodeSelectionModeValue = ref(disabledNodeSelectionModes[0]);
 const isSelectionModeDisabled = ref(false);
 const isRecursiveDisabled = ref(false);
-const selectNodesRecursiveValue = ref(true);
-const selectByClickValue = ref(false);
+const recursiveSelection = ref(true);
+const selectOnClick = ref(false);
 const treeViewRef = ref();
 
 function treeViewSelectionChanged() {
@@ -115,7 +132,7 @@ function syncSelection() {
     .getSelectedNodes()
     .map((node: DxTreeViewTypes.Node<Employee>) => node.itemData);
 }
-function showCheckBoxesModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
+function checkboxVisibilityValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
   if (e.value === 'selectAll') {
     selectionModeValue.value = 'multiple';
     isRecursiveDisabled.value = false;
@@ -124,7 +141,7 @@ function showCheckBoxesModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
 }
 function selectionModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
   if (e.value === 'single') {
-    selectNodesRecursiveValue.value = false;
+    recursiveSelection.value = false;
     treeViewRef.value.instance.unselectAll();
   }
   isRecursiveDisabled.value = e.value === 'single';
@@ -170,7 +187,7 @@ function selectionModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
 }
 
 .option {
-  width: 24%;
+  width: 30%;
   margin-top: 10px;
   margin-right: 9px;
   box-sizing: border-box;
@@ -181,8 +198,11 @@ function selectionModeValueChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
 
 .options-container {
   display: flex;
-  justify-content: space-between;
-  align-items: stretch;
+  flex-direction: column;
+}
+
+.options-section {
+  display: flex;
 }
 
 .editor-container {

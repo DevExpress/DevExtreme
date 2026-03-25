@@ -286,6 +286,7 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       showTitle: false,
       fullScreen: false,
       ignoreChildEvents: false,
+      _ignoreCloseOnChildEscape: true,
       _fixWrapperPosition: true,
     });
     this._popup.registerKeyHandler('space', (
@@ -353,6 +354,12 @@ export default class DropDownMenu extends Widget<DropDownMenuProperties> {
       activeStateEnabled: true,
       onItemRendered,
       _itemAttributes: { role: 'menuitem' },
+      _onItemsRendered: (): void => {
+        // T1322123
+        if (this.option('templatesRenderAsynchronously')) {
+          this._popup?._renderGeometry();
+        }
+      },
     });
   }
 

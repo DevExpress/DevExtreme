@@ -154,10 +154,10 @@ export default function App() {
       >
         <AutoLayout type="tree" />
       </Nodes>
-      <ContextToolbox shapeIconsPerRow={2} width={100} shapes={shapes as any}>
+      <ContextToolbox shapeIconsPerRow={2} width={100} shapes={shapes}>
       </ContextToolbox>
       <Toolbox shapeIconsPerRow={2}>
-        <Group title="Items" shapes={shapes as any} />
+        <Group title="Items" shapes={shapes} />
       </Toolbox>
       <PropertiesPanel visibility="disabled">
       </PropertiesPanel>

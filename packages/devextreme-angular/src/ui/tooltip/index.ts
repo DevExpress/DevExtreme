@@ -17,10 +17,10 @@ import {
 } from '@angular/core';
 
 
-import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
-import { event } from 'devextreme/events/events.types';
-import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/tooltip';
-import { Position } from 'devextreme/common';
+import type { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
+import type { event } from 'devextreme/events/events.types';
+import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/tooltip';
+import type { Position } from 'devextreme/common';
 
 import DxTooltip from 'devextreme/ui/tooltip';
 
@@ -343,6 +343,16 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     }
 
 
+    
+    @Input()
+    get tabFocusLoopEnabled(): boolean {
+        return this._getOption('tabFocusLoopEnabled');
+    }
+    set tabFocusLoopEnabled(value: boolean) {
+        this._setOption('tabFocusLoopEnabled', value);
+    }
+
+
     /**
      * [descr:dxPopoverOptions.target]
     
@@ -603,6 +613,13 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() tabFocusLoopEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() targetChange: EventEmitter<any | string | undefined>;
 
     /**
@@ -666,6 +683,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
             { emit: 'shadingChange' },
             { emit: 'shadingColorChange' },
             { emit: 'showEventChange' },
+            { emit: 'tabFocusLoopEnabledChange' },
             { emit: 'targetChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' },

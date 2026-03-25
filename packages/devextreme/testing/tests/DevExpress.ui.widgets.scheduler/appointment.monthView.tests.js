@@ -17,7 +17,8 @@ import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
 import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
-import 'generic_light.css!';
+
+import 'fluent_blue_light.css!';
 
 const {
     module,
@@ -30,7 +31,7 @@ testStart(() => initTestMarkup());
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const APPOINTMENT_CLASS = 'dx-scheduler-appointment';
 
-const APPOINTMENT_DEFAULT_TOP_OFFSET = 26;
+const APPOINTMENT_DEFAULT_TOP_OFFSET = 30;
 
 const getAppointmentColor = ($task, checkedProperty) => {
     checkedProperty = checkedProperty || 'backgroundColor';
@@ -416,7 +417,7 @@ module('Integration: Appointments in Month view', {
 
                 $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
-                const popup = scheduler.instance._appointmentPopup.popup;
+                const popup = scheduler.instance.appointmentPopup.popup;
                 const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
                 assert.deepEqual($buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys');
@@ -458,7 +459,7 @@ module('Integration: Appointments in Month view', {
 
                 $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
 
-                const popup = scheduler.instance._appointmentPopup.popup;
+                const popup = scheduler.instance.appointmentPopup.popup;
                 const $buttonGroup = $(popup.$content()).find('.dx-buttongroup');
 
                 $buttonGroup.eq(0).dxButtonGroup('instance').option('selectedItemKeys'), ['MO', 'TH'], 'Right button group select item keys';
@@ -509,28 +510,28 @@ module('Integration: Appointments in Month view', {
                 assert.deepEqual(parts, [
                     {
                         level: 0,
-                        maxLevel: 2,
+                        maxLevel: 3,
                         partIndex: 0,
                         partTotalCount: 2,
                         reduced: 'head',
                     },
                     {
                         level: 1,
-                        maxLevel: 2,
+                        maxLevel: 3,
                         partIndex: 0,
                         partTotalCount: 0,
                         reduced: undefined,
                     },
                     {
                         level: 0,
-                        maxLevel: 2,
+                        maxLevel: 3,
                         partIndex: 1,
                         partTotalCount: 2,
                         reduced: 'tail',
                     },
                     {
                         level: 1,
-                        maxLevel: 2,
+                        maxLevel: 3,
                         partIndex: 0,
                         partTotalCount: 0,
                         reduced: undefined,
@@ -579,7 +580,7 @@ module('Integration: Appointments in Month view', {
                     }],
                     currentView: 'month',
                     firstDayOfWeek: 1,
-                    height: 800
+                    height: 1200,
                 });
 
                 const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);

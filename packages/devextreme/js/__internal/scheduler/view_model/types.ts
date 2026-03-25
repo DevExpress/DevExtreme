@@ -46,7 +46,6 @@ export interface FilterOptions {
   resourceManager: ResourceManager;
   timeZone: string;
   dataAccessor: AppointmentDataAccessor;
-  viewOffset: number;
   firstDayOfWeek?: number;
   allDayIntervals: DateInterval[];
   regularIntervals: DateInterval[];
@@ -150,14 +149,16 @@ export interface Direction {
   direction: Orientation;
 }
 
-export type AppointmentEntity = ListEntity
-  & UTCDatesBeforeSplit
+export type SortedEntity = ListEntity
   & AppointmentPart
-  & Level
   & Position
+  & Level
+  & AppointmentCollector
+  & SortedIndex;
+
+export type AppointmentEntity = SortedEntity
   & Direction
   & Empty
-  & SortedIndex
   & Geometry
   & AppointmentCollectorWithGeometry;
 

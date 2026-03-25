@@ -36,7 +36,7 @@
 }
 
 .option {
-  width: 24%;
+  width: 30%;
   margin-top: 10px;
   margin-right: 9px;
   box-sizing: border-box;
@@ -47,8 +47,11 @@
 
 .options-container {
   display: flex;
-  justify-content: space-between;
-  align-items: stretch;
+  flex-direction: column;
+}
+
+.options-section {
+  display: flex;
 }
 
 ::ng-deep .editor-container {

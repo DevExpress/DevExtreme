@@ -19,7 +19,15 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 
   &.dx-state-readonly,
   &.dx-state-disabled {
-    border-color: color.change($checkbox-border-color, $alpha: 0.26);
+    opacity: 1;
+
+    .dx-checkbox-icon {
+      border-color: $base-disabled-color;
+    }
+
+    .dx-checkbox-text {
+      color: $base-disabled-color;
+    }
   }
 
   &.dx-state-focused,
@@ -43,7 +51,7 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     &.dx-state-readonly,
     &.dx-state-disabled {
       .dx-checkbox-icon {
-        background-color: color.change($checkbox-border-color, $alpha: 0.26);
+        background-color: $base-disabled-color;
       }
     }
   }
@@ -86,7 +94,7 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   &::before {
-    z-index: 2;
+    z-index: 1;
   }
 
   .dx-checkbox-checked & {

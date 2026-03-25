@@ -60,6 +60,9 @@ fixture`Row dragging.Functional`
 // T903351
 test('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await scrollTo(0, 10000);
   await dataGrid.moveRow(6, 500, 0, true);
@@ -152,6 +155,9 @@ test('The placeholder should appear when a cross-component dragging rows after s
 
 test('The cross-component drag and drop rows should work when there are fixed columns', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
 
   await dataGrid.moveRow(0, 500, 0, true);
   await dataGrid.moveRow(0, 550, 0);
@@ -262,6 +268,11 @@ test('The cross-component drag and drop rows should work when there are fixed co
 test('The cross-component drag and drop rows should not block rows', async (t) => {
   const dataGrid = new DataGrid('#container');
   const otherDataGrid = new DataGrid('#otherContainer');
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(otherDataGrid.isReady())
+    .ok();
 
   await t.drag(dataGrid.getDataRow(2).element.find('.dx-datagrid-drag-icon'), 500, 0);
 
@@ -368,6 +379,9 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
 
 test('Virtual rendering during auto scrolling should not cause errors in onDragChange', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
   await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 100, { speed: 0.1 });
 
   const lastRow = dataGrid.getDataRow(9);
@@ -413,6 +427,9 @@ test('Virtual rendering during auto scrolling should not cause errors in onDragC
 // T1078513
 test('Headers should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
   await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.1 });
 
   const headerRow = dataGrid.getHeaders().getHeaderRow(0).element;
@@ -469,6 +486,9 @@ test('Headers should not be hidden during auto scrolling when virtual scrollling
 // T1078513
 test('Footer should not be hidden during auto scrolling when virtual scrolling is specified', async (t) => {
   const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
   await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.1 });
 
   const footerRow = dataGrid.getFooterRow();
@@ -531,7 +551,9 @@ test('Footer should not be hidden during auto scrolling when virtual scrolling i
 // T1082538
 test('The draggable element should be displayed correctly after horizontal scrolling when columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
-
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
   await dataGrid.scrollTo(t, { x: 2500 });
 
   await t
@@ -773,31 +795,21 @@ test('toIndex should not be corrected when source item gets removed from DOM', a
 
 // T1139685
 test('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
-  const fromIndex = 2;
-  const toIndex = 4;
-
   const dataGrid = new DataGrid('#container');
-  await dataGrid.moveRow(fromIndex, 0, 50, true);
-  await dataGrid.moveRow(fromIndex, 0, 95);
-  await t.wait(500);
-  await dataGrid.moveRow(toIndex, 0, 5);
 
-  await t.wait(200);
+  await t.expect(dataGrid.isReady()).ok();
+  await t.drag(dataGrid.getDataRow(2).getDragCommand(), 0, 32, { speed: 0.95 });
 
-  await ClientFunction((grid) => {
-    const instance = grid.getInstance();
-    $(instance.element()).trigger($.Event('dxpointerup'));
-  })(dataGrid);
-  await t.wait(200);
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+  const visibleRowKeys = visibleRows.map((row) => row.key);
+  const expectedSequence = ['5-1', '3-1', '6-1'];
 
-  const getDraggedRowIndexFunc = ClientFunction((grid) => grid.getInstance()
-    .getVisibleRows()
-    .findIndex(({ key }, index: number, rows) => key > rows[index + 1]?.key))(dataGrid);
+  const startIndex = visibleRowKeys.findIndex(
+    (_, i) => expectedSequence.every((val, j) => visibleRowKeys[i + j] === val),
+  );
 
-  await t.expect(getDraggedRowIndexFunc)
-    .eql(toIndex - 2);
-}).before(async (t) => {
-  await t.maximizeWindow();
+  await t.expect(startIndex).gte(0);
+}).before(async () => {
   const items = generateData(20, 1);
   return createWidget('dxDataGrid', {
     height: 250,

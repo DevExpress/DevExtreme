@@ -223,7 +223,7 @@ async function generateMessageFiles(
 
   const locales = getLocales(messagesDir);
 
-  logger.info(`Processing ${locales.length} locales...`);
+  logger.verbose(`Processing ${locales.length} locales...`);
 
   await Promise.all(
     locales.map(async (locale) => {
@@ -414,13 +414,13 @@ const runExecutor: PromiseExecutor<LocalizationExecutorSchema> = async (options,
     }
 
     if (!skipMessageGeneration) {
-      logger.info('Generating localization message files...');
+      logger.verbose('Generating localization message files...');
       await generateMessageFiles(messagesDir, messageTemplate, messageOutputDir);
-      logger.info(`Message files generated in ${messageOutputDir}`);
+      logger.verbose(`Message files generated in ${messageOutputDir}`);
     }
 
     if (!skipCldrGeneration) {
-      logger.info('Generating CLDR TypeScript modules...');
+      logger.verbose('Generating CLDR TypeScript modules...');
       await generateCldrModules(
         absoluteProjectRoot,
         messagesDir,
@@ -429,10 +429,10 @@ const runExecutor: PromiseExecutor<LocalizationExecutorSchema> = async (options,
         defaultMessagesOutputDir,
         lintGeneratedFiles,
       );
-      logger.info(`CLDR modules generated in ${cldrDataOutputDir}`);
+      logger.verbose(`CLDR modules generated in ${cldrDataOutputDir}`);
     }
 
-    logger.info('Localization generation completed successfully');
+    logger.verbose('Localization generation completed successfully');
     return { success: true };
   } catch (error) {
     logError('Localization executor failed', error);

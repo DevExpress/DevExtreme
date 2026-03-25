@@ -4,6 +4,7 @@ export {
   ScrollMode,
   AllDayPanelMode,
   CellAppointmentsLimit,
+  SnapToCellsMode,
   RecurrenceEditMode,
   AppointmentFormIconsShowMode,
   AppointmentFormProperties,
@@ -43,6 +44,7 @@ export {
   ToolbarItem,
   Toolbar,
   Appointment,
+  Occurrence,
   Properties,
   dxSchedulerScrolling,
 } from './scheduler';

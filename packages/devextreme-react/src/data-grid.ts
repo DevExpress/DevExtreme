@@ -9,25 +9,26 @@ import dxDataGrid, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent, dxDataGridColumnButton, DataGridCommandColumnType, SelectionSensitivity, DataGridExportFormat, DataGridPredefinedToolbarItem, DataGridScrollMode, dxDataGridToolbarItem } from "devextreme/ui/data_grid";
+import type { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, AIColumnRequestCreatingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxDataGridRowObject, DataGridPredefinedColumnButton, ColumnButtonClickEvent, dxDataGridColumnButton, DataGridCommandColumnType, SelectionSensitivity, DataGridPredefinedToolbarItem, DataGridExportFormat, DataGridScrollMode, dxDataGridToolbarItem } from "devextreme/ui/data_grid";
 import type { DataChange, AIColumnMode, DataChangeType, ColumnAIOptions, FilterOperation, FilterType, FixedPosition, ColumnHeaderFilter as GridsColumnHeaderFilter, SelectedFilterOperation, ColumnChooserMode, ColumnChooserSearchConfig, ColumnChooserSelectionConfig, HeaderFilterGroupInterval, ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig, HeaderFilterTexts, SelectionColumnDisplayMode, GridsEditMode, NewRowPosition, GridsEditRefreshMode, StartEditAction, FilterPanel as GridsFilterPanel, FilterPanelTexts as GridsFilterPanelTexts, ApplyFilterMode, GroupExpandMode, SummaryType, EnterKeyAction, EnterKeyDirection, PagerPageSize, GridBase, DataRenderMode, StateStoreType } from "devextreme/common/grids";
-import type { Mode, ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, TextEditorButtonLocation, DataType, Format as CommonFormat, SortOrder, SearchMode, ComparisonOperator, SingleMultipleOrNone, SelectAllMode, TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorStyle, ValidationMessageMode, Position as CommonPosition, ValidationStatus, PositionAlignment, Direction, ToolbarItemLocation, ToolbarItemComponent, ButtonStyle, ButtonType, DisplayMode, DragDirection, DragHighlight, ScrollbarMode } from "devextreme/common";
-import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as TextBoxDisposingEvent, InitializedEvent as TextBoxInitializedEvent, KeyDownEvent as TextBoxKeyDownEvent, dxTextBoxOptions, TextBoxType, ChangeEvent, CopyEvent, CutEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InputEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
-import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, dxFilterBuilderField, FieldInfo, OptionChangedEvent as FilterBuilderOptionChangedEvent, ValueChangedEvent as FilterBuilderValueChangedEvent, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation } from "devextreme/ui/filter_builder";
-import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, dxFormSimpleItem, dxFormOptions, OptionChangedEvent as FormOptionChangedEvent, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, SmartPastedEvent, SmartPastingEvent, FormItemComponent, FormItemType } from "devextreme/ui/form";
-import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, OptionChangedEvent as ButtonOptionChangedEvent, ClickEvent } from "devextreme/ui/button";
+import type { Mode, ValidationRuleType, HorizontalAlignment, VerticalAlignment, template, TextEditorButtonLocation, ButtonStyle, ButtonType, DataType, Format as CommonFormat, SortOrder, SearchMode, ComparisonOperator, SingleMultipleOrNone, SelectAllMode, ToolbarItemLocation, ToolbarItemComponent, TextBoxPredefinedButton, TextEditorButton, LabelMode, MaskMode, EditorStyle, ValidationMessageMode, Position as CommonPosition, ValidationStatus, PositionAlignment, Direction, DisplayMode, DragDirection, DragHighlight, ScrollbarMode, TabsIconPosition, TabsStyle } from "devextreme/common";
+import type { ContentReadyEvent as ButtonContentReadyEvent, DisposingEvent as ButtonDisposingEvent, InitializedEvent as ButtonInitializedEvent, dxButtonOptions, ClickEvent, OptionChangedEvent } from "devextreme/ui/button";
+import type { ContentReadyEvent as TextBoxContentReadyEvent, DisposingEvent as TextBoxDisposingEvent, InitializedEvent as TextBoxInitializedEvent, KeyDownEvent as TextBoxKeyDownEvent, dxTextBoxOptions, OptionChangedEvent as TextBoxOptionChangedEvent, TextBoxType, ChangeEvent, CopyEvent, CutEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InputEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
+import type { ContentReadyEvent as FilterBuilderContentReadyEvent, DisposingEvent as FilterBuilderDisposingEvent, EditorPreparedEvent as FilterBuilderEditorPreparedEvent, EditorPreparingEvent as FilterBuilderEditorPreparingEvent, InitializedEvent as FilterBuilderInitializedEvent, OptionChangedEvent as FilterBuilderOptionChangedEvent, dxFilterBuilderField, FieldInfo, ValueChangedEvent as FilterBuilderValueChangedEvent, FilterBuilderOperation, dxFilterBuilderCustomOperation, GroupOperation } from "devextreme/ui/filter_builder";
+import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as FormDisposingEvent, InitializedEvent as FormInitializedEvent, FormItemType, FormPredefinedButtonItem, OptionChangedEvent as FormOptionChangedEvent, dxFormSimpleItem, dxFormOptions, dxFormGroupItem, dxFormTabbedItem, dxFormEmptyItem, dxFormButtonItem, LabelLocation, FormLabelMode, EditorEnterKeyEvent, FieldDataChangedEvent, SmartPastedEvent, SmartPastingEvent, FormItemComponent } from "devextreme/ui/form";
+import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as TabPanelDisposingEvent, InitializedEvent as TabPanelInitializedEvent, OptionChangedEvent as TabPanelOptionChangedEvent, dxTabPanelOptions, dxTabPanelItem, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, SelectionChangedEvent, SelectionChangingEvent, TitleClickEvent, TitleHoldEvent, TitleRenderedEvent } from "devextreme/ui/tab_panel";
 import type { AIIntegration } from "devextreme/common/ai-integration";
 import type { AnimationConfig, CollisionResolution, PositionConfig, AnimationState, AnimationType, CollisionResolutionCombination } from "devextreme/common/core/animation";
 import type { Format as LocalizationFormat } from "devextreme/common/core/localization";
 import type { DataSourceOptions } from "devextreme/data/data_source";
 import type { Store } from "devextreme/data/store";
+import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
+import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { dxPopupOptions, dxPopupToolbarItem, ToolbarLocation } from "devextreme/ui/popup";
 import type { event } from "devextreme/events/events.types";
 import type { EventInfo } from "devextreme/common/core/events";
 import type { Component } from "devextreme/core/component";
 import type { LoadingAnimationType } from "devextreme/ui/load_indicator";
-import type { LocateInMenuMode, ShowTextMode } from "devextreme/ui/toolbar";
-import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { LoadPanelIndicatorProperties } from "devextreme/ui/load_panel";
 
 import type dxOverlay from "devextreme/ui/overlay";
@@ -36,6 +37,7 @@ import type dxPopup from "devextreme/ui/popup";
 import type dxForm from "devextreme/ui/form";
 import type dxSortable from "devextreme/ui/sortable";
 import type dxDraggable from "devextreme/ui/draggable";
+import type DataSource from "devextreme/data/data_source";
 
 import type * as CommonTypes from "devextreme/common";
 
@@ -237,6 +239,7 @@ const AI = Object.assign<typeof _componentAI, NestedComponentMeta>(_componentAI,
 
 // owners:
 // FormItem
+// SimpleItem
 type IAIOptionsProps = React.PropsWithChildren<{
   disabled?: boolean;
   instruction?: string | undefined;
@@ -281,6 +284,7 @@ const Animation = Object.assign<typeof _componentAnimation, NestedComponentMeta>
 // owners:
 // FormItem
 // Column
+// SimpleItem
 type IAsyncRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
@@ -384,6 +388,87 @@ const Button = Object.assign<typeof _componentButton, NestedComponentMeta>(_comp
 });
 
 // owners:
+// Form
+type IButtonItemProps = React.PropsWithChildren<{
+  buttonOptions?: dxButtonOptions | undefined;
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  horizontalAlignment?: HorizontalAlignment;
+  itemType?: FormItemType;
+  name?: FormPredefinedButtonItem | string | undefined;
+  verticalAlignment?: VerticalAlignment;
+  visible?: boolean;
+  visibleIndex?: number | undefined;
+}>
+const _componentButtonItem = (props: IButtonItemProps) => {
+  return React.createElement(NestedOption<IButtonItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        buttonOptions: { optionName: "buttonOptions", isCollectionItem: false }
+      },
+      PredefinedProps: {
+        itemType: "button"
+      },
+    },
+  });
+};
+
+const ButtonItem = Object.assign<typeof _componentButtonItem, NestedComponentMeta>(_componentButtonItem, {
+  componentType: "option",
+});
+
+// owners:
+// ButtonItem
+type IButtonOptionsProps = React.PropsWithChildren<{
+  accessKey?: string | undefined;
+  activeStateEnabled?: boolean;
+  disabled?: boolean;
+  elementAttr?: Record<string, any>;
+  focusStateEnabled?: boolean;
+  height?: number | string | undefined;
+  hint?: string | undefined;
+  hoverStateEnabled?: boolean;
+  icon?: string;
+  onClick?: ((e: ClickEvent) => void);
+  onContentReady?: ((e: ButtonContentReadyEvent) => void);
+  onDisposing?: ((e: ButtonDisposingEvent) => void);
+  onInitialized?: ((e: ButtonInitializedEvent) => void);
+  onOptionChanged?: ((e: OptionChangedEvent) => void);
+  rtlEnabled?: boolean;
+  stylingMode?: ButtonStyle;
+  tabIndex?: number;
+  template?: ((buttonData: { icon: string, text: string }, contentElement: any) => string | any) | template;
+  text?: string;
+  type?: ButtonType | string;
+  useSubmitBehavior?: boolean;
+  validationGroup?: string | undefined;
+  visible?: boolean;
+  width?: number | string | undefined;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentButtonOptions = (props: IButtonOptionsProps) => {
+  return React.createElement(NestedOption<IButtonOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "buttonOptions",
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
+
+const ButtonOptions = Object.assign<typeof _componentButtonOptions, NestedComponentMeta>(_componentButtonOptions, {
+  componentType: "option",
+});
+
+// owners:
 // Editing
 type IChangeProps = React.PropsWithChildren<{
   data?: any;
@@ -408,6 +493,8 @@ const Change = Object.assign<typeof _componentChange, NestedComponentMeta>(_comp
 
 // owners:
 // Form
+// FormGroupItem
+// Tab
 type IColCountByScreenProps = React.PropsWithChildren<{
   lg?: number | undefined;
   md?: number | undefined;
@@ -852,6 +939,7 @@ const ColumnLookup = Object.assign<typeof _componentColumnLookup, NestedComponen
 // owners:
 // FormItem
 // Column
+// SimpleItem
 type ICompareRuleProps = React.PropsWithChildren<{
   comparisonTarget?: (() => any);
   comparisonType?: ComparisonOperator;
@@ -931,6 +1019,7 @@ const CustomOperation = Object.assign<typeof _componentCustomOperation, NestedCo
 // owners:
 // FormItem
 // Column
+// SimpleItem
 type ICustomRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
@@ -1047,6 +1136,50 @@ const _componentDataGridSelection = (props: IDataGridSelectionProps) => {
 };
 
 const DataGridSelection = Object.assign<typeof _componentDataGridSelection, NestedComponentMeta>(_componentDataGridSelection, {
+  componentType: "option",
+});
+
+// owners:
+// Toolbar
+type IDataGridToolbarItemProps = React.PropsWithChildren<{
+  cssClass?: string | undefined;
+  disabled?: boolean;
+  html?: string;
+  locateInMenu?: LocateInMenuMode;
+  location?: ToolbarItemLocation;
+  menuItemTemplate?: (() => string | any) | template;
+  name?: DataGridPredefinedToolbarItem | string;
+  options?: any;
+  showText?: ShowTextMode;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  text?: string;
+  visible?: boolean;
+  widget?: ToolbarItemComponent;
+  menuItemRender?: (...params: any) => React.ReactNode;
+  menuItemComponent?: React.ComponentType<any>;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentDataGridToolbarItem = (props: IDataGridToolbarItemProps) => {
+  return React.createElement(NestedOption<IDataGridToolbarItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "menuItemTemplate",
+        render: "menuItemRender",
+        component: "menuItemComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
+
+const DataGridToolbarItem = Object.assign<typeof _componentDataGridToolbarItem, NestedComponentMeta>(_componentDataGridToolbarItem, {
   componentType: "option",
 });
 
@@ -1177,7 +1310,7 @@ type IEditorOptionsProps = React.PropsWithChildren<{
   onInput?: ((e: InputEvent) => void);
   onKeyDown?: ((e: TextBoxKeyDownEvent) => void);
   onKeyUp?: ((e: KeyUpEvent) => void);
-  onOptionChanged?: ((e: OptionChangedEvent) => void);
+  onOptionChanged?: ((e: TextBoxOptionChangedEvent) => void);
   onPaste?: ((e: PasteEvent) => void);
   onValueChanged?: ((e: ValueChangedEvent) => void);
   placeholder?: string;
@@ -1249,6 +1382,7 @@ const EditorOptionsButton = Object.assign<typeof _componentEditorOptionsButton, 
 // owners:
 // FormItem
 // Column
+// SimpleItem
 type IEmailRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
@@ -1268,6 +1402,33 @@ const _componentEmailRule = (props: IEmailRuleProps) => {
 };
 
 const EmailRule = Object.assign<typeof _componentEmailRule, NestedComponentMeta>(_componentEmailRule, {
+  componentType: "option",
+});
+
+// owners:
+// Form
+type IEmptyItemProps = React.PropsWithChildren<{
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  itemType?: FormItemType;
+  name?: string | undefined;
+  visible?: boolean;
+  visibleIndex?: number | undefined;
+}>
+const _componentEmptyItem = (props: IEmptyItemProps) => {
+  return React.createElement(NestedOption<IEmptyItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      PredefinedProps: {
+        itemType: "empty"
+      },
+    },
+  });
+};
+
+const EmptyItem = Object.assign<typeof _componentEmptyItem, NestedComponentMeta>(_componentEmptyItem, {
   componentType: "option",
 });
 
@@ -1510,6 +1671,7 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   shadingColor?: string;
   showCloseButton?: boolean;
   showTitle?: boolean;
+  tabFocusLoopEnabled?: boolean;
   tabIndex?: number;
   title?: string;
   titleTemplate?: ((titleElement: any) => string | any) | template;
@@ -1747,7 +1909,13 @@ const _componentForm = (props: IFormProps) => {
         defaultFormData: "formData"
       },
       ExpectedChildren: {
-        colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false }
+        ButtonItem: { optionName: "items", isCollectionItem: true },
+        colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false },
+        EmptyItem: { optionName: "items", isCollectionItem: true },
+        FormGroupItem: { optionName: "items", isCollectionItem: true },
+        item: { optionName: "items", isCollectionItem: true },
+        SimpleItem: { optionName: "items", isCollectionItem: true },
+        TabbedItem: { optionName: "items", isCollectionItem: true }
       },
     },
   });
@@ -1778,6 +1946,61 @@ const _componentFormat = (props: IFormatProps) => {
 };
 
 const Format = Object.assign<typeof _componentFormat, NestedComponentMeta>(_componentFormat, {
+  componentType: "option",
+});
+
+// owners:
+// Form
+type IFormGroupItemProps = React.PropsWithChildren<{
+  alignItemLabels?: boolean;
+  caption?: string | undefined;
+  captionTemplate?: ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template;
+  colCount?: number;
+  colCountByScreen?: Record<string, any> | {
+    lg?: number | undefined;
+    md?: number | undefined;
+    sm?: number | undefined;
+    xs?: number | undefined;
+  };
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
+  itemType?: FormItemType;
+  name?: string | undefined;
+  template?: ((data: { component: dxForm, formData: Record<string, any> }, itemElement: any) => string | any) | template;
+  visible?: boolean;
+  visibleIndex?: number | undefined;
+  captionRender?: (...params: any) => React.ReactNode;
+  captionComponent?: React.ComponentType<any>;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentFormGroupItem = (props: IFormGroupItemProps) => {
+  return React.createElement(NestedOption<IFormGroupItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "captionTemplate",
+        render: "captionRender",
+        component: "captionComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+      PredefinedProps: {
+        itemType: "group"
+      },
+    },
+  });
+};
+
+const FormGroupItem = Object.assign<typeof _componentFormGroupItem, NestedComponentMeta>(_componentFormGroupItem, {
   componentType: "option",
 });
 
@@ -2110,25 +2333,88 @@ const IndicatorOptions = Object.assign<typeof _componentIndicatorOptions, Nested
 });
 
 // owners:
+// TabPanelOptions
+// Form
 // Toolbar
 type IItemProps = React.PropsWithChildren<{
-  cssClass?: string | undefined;
+  badge?: string;
   disabled?: boolean;
   html?: string;
+  icon?: string;
+  tabTemplate?: (() => string | any) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  text?: string;
+  title?: string;
+  visible?: boolean;
+  aiOptions?: Record<string, any> | {
+    disabled?: boolean;
+    instruction?: string | undefined;
+  };
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  dataField?: string | undefined;
+  editorOptions?: any | undefined;
+  editorType?: FormItemComponent;
+  helpText?: string | undefined;
+  isRequired?: boolean | undefined;
+  itemType?: FormItemType;
+  label?: Record<string, any> | {
+    alignment?: HorizontalAlignment;
+    location?: LabelLocation;
+    showColon?: boolean;
+    template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
+    text?: string | undefined;
+    visible?: boolean;
+  };
+  name?: string | undefined | FormPredefinedButtonItem | DataGridPredefinedToolbarItem;
+  validationRules?: Array<CommonTypes.ValidationRule>;
+  visibleIndex?: number | undefined;
+  alignItemLabels?: boolean;
+  caption?: string | undefined;
+  captionTemplate?: ((data: { caption: string, component: dxForm, name: string }, itemElement: any) => string | any) | template;
+  colCount?: number;
+  colCountByScreen?: Record<string, any> | {
+    lg?: number | undefined;
+    md?: number | undefined;
+    sm?: number | undefined;
+    xs?: number | undefined;
+  };
+  items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
+  tabPanelOptions?: dxTabPanelOptions | undefined;
+  tabs?: Array<Record<string, any>> | {
+    alignItemLabels?: boolean;
+    badge?: string | undefined;
+    colCount?: number;
+    colCountByScreen?: Record<string, any> | {
+      lg?: number | undefined;
+      md?: number | undefined;
+      sm?: number | undefined;
+      xs?: number | undefined;
+    };
+    disabled?: boolean;
+    icon?: string | undefined;
+    items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
+    tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+    template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+    title?: string | undefined;
+  }[];
+  buttonOptions?: dxButtonOptions | undefined;
+  horizontalAlignment?: HorizontalAlignment;
+  verticalAlignment?: VerticalAlignment;
   locateInMenu?: LocateInMenuMode;
   location?: ToolbarItemLocation;
   menuItemTemplate?: (() => string | any) | template;
-  name?: DataGridPredefinedToolbarItem | string;
   options?: any;
   showText?: ShowTextMode;
-  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
-  text?: string;
-  visible?: boolean;
   widget?: ToolbarItemComponent;
-  menuItemRender?: (...params: any) => React.ReactNode;
-  menuItemComponent?: React.ComponentType<any>;
+  tabRender?: (...params: any) => React.ReactNode;
+  tabComponent?: React.ComponentType<any>;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
+  captionRender?: (...params: any) => React.ReactNode;
+  captionComponent?: React.ComponentType<any>;
+  menuItemRender?: (...params: any) => React.ReactNode;
+  menuItemComponent?: React.ComponentType<any>;
 }>
 const _componentItem = (props: IItemProps) => {
   return React.createElement(NestedOption<IItemProps>, {
@@ -2136,14 +2422,40 @@ const _componentItem = (props: IItemProps) => {
     elementDescriptor: {
       OptionName: "items",
       IsCollectionItem: true,
+      ExpectedChildren: {
+        aiOptions: { optionName: "aiOptions", isCollectionItem: false },
+        AsyncRule: { optionName: "validationRules", isCollectionItem: true },
+        buttonOptions: { optionName: "buttonOptions", isCollectionItem: false },
+        colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false },
+        CompareRule: { optionName: "validationRules", isCollectionItem: true },
+        CustomRule: { optionName: "validationRules", isCollectionItem: true },
+        EmailRule: { optionName: "validationRules", isCollectionItem: true },
+        label: { optionName: "label", isCollectionItem: false },
+        NumericRule: { optionName: "validationRules", isCollectionItem: true },
+        PatternRule: { optionName: "validationRules", isCollectionItem: true },
+        RangeRule: { optionName: "validationRules", isCollectionItem: true },
+        RequiredRule: { optionName: "validationRules", isCollectionItem: true },
+        StringLengthRule: { optionName: "validationRules", isCollectionItem: true },
+        tab: { optionName: "tabs", isCollectionItem: true },
+        tabPanelOptions: { optionName: "tabPanelOptions", isCollectionItem: false },
+        validationRule: { optionName: "validationRules", isCollectionItem: true }
+      },
       TemplateProps: [{
-        tmplOption: "menuItemTemplate",
-        render: "menuItemRender",
-        component: "menuItemComponent"
+        tmplOption: "tabTemplate",
+        render: "tabRender",
+        component: "tabComponent"
       }, {
         tmplOption: "template",
         render: "render",
         component: "component"
+      }, {
+        tmplOption: "captionTemplate",
+        render: "captionRender",
+        component: "captionComponent"
+      }, {
+        tmplOption: "menuItemTemplate",
+        render: "menuItemRender",
+        component: "menuItemComponent"
       }],
     },
   });
@@ -2176,6 +2488,7 @@ const KeyboardNavigation = Object.assign<typeof _componentKeyboardNavigation, Ne
 
 // owners:
 // FormItem
+// SimpleItem
 type ILabelProps = React.PropsWithChildren<{
   alignment?: HorizontalAlignment;
   location?: LabelLocation;
@@ -2306,6 +2619,7 @@ const My = Object.assign<typeof _componentMy, NestedComponentMeta>(_componentMy,
 // owners:
 // FormItem
 // Column
+// SimpleItem
 type INumericRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
@@ -2388,10 +2702,10 @@ type IOptionsProps = React.PropsWithChildren<{
   hoverStateEnabled?: boolean;
   icon?: string;
   onClick?: ((e: ClickEvent) => void);
-  onContentReady?: ((e: ButtonContentReadyEvent) => void);
-  onDisposing?: ((e: ButtonDisposingEvent) => void);
-  onInitialized?: ((e: ButtonInitializedEvent) => void);
-  onOptionChanged?: ((e: ButtonOptionChangedEvent) => void);
+  onContentReady?: ((e: ContentReadyEvent) => void);
+  onDisposing?: ((e: DisposingEvent) => void);
+  onInitialized?: ((e: InitializedEvent) => void);
+  onOptionChanged?: ((e: OptionChangedEvent) => void);
   rtlEnabled?: boolean;
   stylingMode?: ButtonStyle;
   tabIndex?: number;
@@ -2479,6 +2793,7 @@ const Paging = Object.assign<typeof _componentPaging, NestedComponentMeta>(_comp
 // owners:
 // FormItem
 // Column
+// SimpleItem
 type IPatternRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
@@ -2549,6 +2864,7 @@ type IPopupProps = React.PropsWithChildren<{
   shadingColor?: string;
   showCloseButton?: boolean;
   showTitle?: boolean;
+  tabFocusLoopEnabled?: boolean;
   tabIndex?: number;
   title?: string;
   titleTemplate?: ((titleElement: any) => string | any) | template;
@@ -2655,6 +2971,7 @@ const Position = Object.assign<typeof _componentPosition, NestedComponentMeta>(_
 // owners:
 // FormItem
 // Column
+// SimpleItem
 type IRangeRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   max?: Date | number | string;
@@ -2706,6 +3023,7 @@ const RemoteOperations = Object.assign<typeof _componentRemoteOperations, Nested
 // owners:
 // FormItem
 // Column
+// SimpleItem
 type IRequiredRuleProps = React.PropsWithChildren<{
   message?: string;
   trim?: boolean;
@@ -2918,6 +3236,73 @@ const Show = Object.assign<typeof _componentShow, NestedComponentMeta>(_componen
 });
 
 // owners:
+// Form
+type ISimpleItemProps = React.PropsWithChildren<{
+  aiOptions?: Record<string, any> | {
+    disabled?: boolean;
+    instruction?: string | undefined;
+  };
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  dataField?: string | undefined;
+  editorOptions?: any | undefined;
+  editorType?: FormItemComponent;
+  helpText?: string | undefined;
+  isRequired?: boolean | undefined;
+  itemType?: FormItemType;
+  label?: Record<string, any> | {
+    alignment?: HorizontalAlignment;
+    location?: LabelLocation;
+    showColon?: boolean;
+    template?: ((itemData: { component: dxForm, dataField: string, editorOptions: any, editorType: string, name: string, text: string }, itemElement: any) => string | any) | template;
+    text?: string | undefined;
+    visible?: boolean;
+  };
+  name?: string | undefined;
+  template?: ((data: { component: dxForm, dataField: string, editorOptions: Record<string, any>, editorType: string, name: string }, itemElement: any) => string | any) | template;
+  validationRules?: Array<CommonTypes.ValidationRule>;
+  visible?: boolean;
+  visibleIndex?: number | undefined;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentSimpleItem = (props: ISimpleItemProps) => {
+  return React.createElement(NestedOption<ISimpleItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        aiOptions: { optionName: "aiOptions", isCollectionItem: false },
+        AsyncRule: { optionName: "validationRules", isCollectionItem: true },
+        CompareRule: { optionName: "validationRules", isCollectionItem: true },
+        CustomRule: { optionName: "validationRules", isCollectionItem: true },
+        EmailRule: { optionName: "validationRules", isCollectionItem: true },
+        label: { optionName: "label", isCollectionItem: false },
+        NumericRule: { optionName: "validationRules", isCollectionItem: true },
+        PatternRule: { optionName: "validationRules", isCollectionItem: true },
+        RangeRule: { optionName: "validationRules", isCollectionItem: true },
+        RequiredRule: { optionName: "validationRules", isCollectionItem: true },
+        StringLengthRule: { optionName: "validationRules", isCollectionItem: true },
+        validationRule: { optionName: "validationRules", isCollectionItem: true }
+      },
+      TemplateProps: [{
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+      PredefinedProps: {
+        itemType: "simple"
+      },
+    },
+  });
+};
+
+const SimpleItem = Object.assign<typeof _componentSimpleItem, NestedComponentMeta>(_componentSimpleItem, {
+  componentType: "option",
+});
+
+// owners:
 // DataGrid
 type ISortByGroupSummaryInfoProps = React.PropsWithChildren<{
   groupColumn?: string | undefined;
@@ -2986,6 +3371,7 @@ const StateStoring = Object.assign<typeof _componentStateStoring, NestedComponen
 // owners:
 // FormItem
 // Column
+// SimpleItem
 type IStringLengthRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   max?: number;
@@ -3099,6 +3485,234 @@ const SummaryTexts = Object.assign<typeof _componentSummaryTexts, NestedComponen
 });
 
 // owners:
+// TabbedItem
+type ITabProps = React.PropsWithChildren<{
+  alignItemLabels?: boolean;
+  badge?: string | undefined;
+  colCount?: number;
+  colCountByScreen?: Record<string, any> | {
+    lg?: number | undefined;
+    md?: number | undefined;
+    sm?: number | undefined;
+    xs?: number | undefined;
+  };
+  disabled?: boolean;
+  icon?: string | undefined;
+  items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
+  tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+  template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+  title?: string | undefined;
+  tabRender?: (...params: any) => React.ReactNode;
+  tabComponent?: React.ComponentType<any>;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentTab = (props: ITabProps) => {
+  return React.createElement(NestedOption<ITabProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tabs",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false }
+      },
+      TemplateProps: [{
+        tmplOption: "tabTemplate",
+        render: "tabRender",
+        component: "tabComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
+
+const Tab = Object.assign<typeof _componentTab, NestedComponentMeta>(_componentTab, {
+  componentType: "option",
+});
+
+// owners:
+// Form
+type ITabbedItemProps = React.PropsWithChildren<{
+  colSpan?: number | undefined;
+  cssClass?: string | undefined;
+  itemType?: FormItemType;
+  name?: string | undefined;
+  tabPanelOptions?: dxTabPanelOptions | undefined;
+  tabs?: Array<Record<string, any>> | {
+    alignItemLabels?: boolean;
+    badge?: string | undefined;
+    colCount?: number;
+    colCountByScreen?: Record<string, any> | {
+      lg?: number | undefined;
+      md?: number | undefined;
+      sm?: number | undefined;
+      xs?: number | undefined;
+    };
+    disabled?: boolean;
+    icon?: string | undefined;
+    items?: Array<dxFormButtonItem | dxFormEmptyItem | dxFormGroupItem | dxFormSimpleItem | dxFormTabbedItem>;
+    tabTemplate?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+    template?: ((tabData: any, tabIndex: number, tabElement: any) => any) | template | undefined;
+    title?: string | undefined;
+  }[];
+  visible?: boolean;
+  visibleIndex?: number | undefined;
+}>
+const _componentTabbedItem = (props: ITabbedItemProps) => {
+  return React.createElement(NestedOption<ITabbedItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      ExpectedChildren: {
+        tab: { optionName: "tabs", isCollectionItem: true },
+        tabPanelOptions: { optionName: "tabPanelOptions", isCollectionItem: false }
+      },
+      PredefinedProps: {
+        itemType: "tabbed"
+      },
+    },
+  });
+};
+
+const TabbedItem = Object.assign<typeof _componentTabbedItem, NestedComponentMeta>(_componentTabbedItem, {
+  componentType: "option",
+});
+
+// owners:
+// TabbedItem
+type ITabPanelOptionsProps = React.PropsWithChildren<{
+  accessKey?: string | undefined;
+  activeStateEnabled?: boolean;
+  animationEnabled?: boolean;
+  dataSource?: Array<any | dxTabPanelItem | string> | DataSource | DataSourceOptions | null | Store | string;
+  deferRendering?: boolean;
+  disabled?: boolean;
+  elementAttr?: Record<string, any>;
+  focusStateEnabled?: boolean;
+  height?: number | string | undefined;
+  hint?: string | undefined;
+  hoverStateEnabled?: boolean;
+  iconPosition?: TabsIconPosition;
+  itemHoldTimeout?: number;
+  items?: Array<any | dxTabPanelItem | string>;
+  itemTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
+  itemTitleTemplate?: ((itemData: any, itemIndex: number, itemElement: any) => string | any) | template;
+  keyExpr?: (() => void) | string;
+  loop?: boolean;
+  noDataText?: string;
+  onContentReady?: ((e: TabPanelContentReadyEvent) => void);
+  onDisposing?: ((e: TabPanelDisposingEvent) => void);
+  onInitialized?: ((e: TabPanelInitializedEvent) => void);
+  onItemClick?: ((e: ItemClickEvent) => void);
+  onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+  onItemHold?: ((e: ItemHoldEvent) => void);
+  onItemRendered?: ((e: ItemRenderedEvent) => void);
+  onOptionChanged?: ((e: TabPanelOptionChangedEvent) => void);
+  onSelectionChanged?: ((e: SelectionChangedEvent) => void);
+  onSelectionChanging?: ((e: SelectionChangingEvent) => void);
+  onTitleClick?: ((e: TitleClickEvent) => void);
+  onTitleHold?: ((e: TitleHoldEvent) => void);
+  onTitleRendered?: ((e: TitleRenderedEvent) => void);
+  repaintChangesOnly?: boolean;
+  rtlEnabled?: boolean;
+  scrollByContent?: boolean;
+  scrollingEnabled?: boolean;
+  selectedIndex?: number;
+  selectedItem?: any;
+  showNavButtons?: boolean;
+  stylingMode?: TabsStyle;
+  swipeEnabled?: boolean;
+  tabIndex?: number;
+  tabsPosition?: CommonPosition;
+  visible?: boolean;
+  width?: number | string | undefined;
+  defaultItems?: Array<any | dxTabPanelItem | string>;
+  onItemsChange?: (value: Array<any | dxTabPanelItem | string>) => void;
+  defaultSelectedIndex?: number;
+  onSelectedIndexChange?: (value: number) => void;
+  defaultSelectedItem?: any;
+  onSelectedItemChange?: (value: any) => void;
+  itemRender?: (...params: any) => React.ReactNode;
+  itemComponent?: React.ComponentType<any>;
+  itemTitleRender?: (...params: any) => React.ReactNode;
+  itemTitleComponent?: React.ComponentType<any>;
+}>
+const _componentTabPanelOptions = (props: ITabPanelOptionsProps) => {
+  return React.createElement(NestedOption<ITabPanelOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "tabPanelOptions",
+      DefaultsProps: {
+        defaultItems: "items",
+        defaultSelectedIndex: "selectedIndex",
+        defaultSelectedItem: "selectedItem"
+      },
+      ExpectedChildren: {
+        item: { optionName: "items", isCollectionItem: true },
+        tabPanelOptionsItem: { optionName: "items", isCollectionItem: true }
+      },
+      TemplateProps: [{
+        tmplOption: "itemTemplate",
+        render: "itemRender",
+        component: "itemComponent"
+      }, {
+        tmplOption: "itemTitleTemplate",
+        render: "itemTitleRender",
+        component: "itemTitleComponent"
+      }],
+    },
+  });
+};
+
+const TabPanelOptions = Object.assign<typeof _componentTabPanelOptions, NestedComponentMeta>(_componentTabPanelOptions, {
+  componentType: "option",
+});
+
+// owners:
+// TabPanelOptions
+type ITabPanelOptionsItemProps = React.PropsWithChildren<{
+  badge?: string;
+  disabled?: boolean;
+  html?: string;
+  icon?: string;
+  tabTemplate?: (() => string | any) | template;
+  template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
+  text?: string;
+  title?: string;
+  visible?: boolean;
+  tabRender?: (...params: any) => React.ReactNode;
+  tabComponent?: React.ComponentType<any>;
+  render?: (...params: any) => React.ReactNode;
+  component?: React.ComponentType<any>;
+}>
+const _componentTabPanelOptionsItem = (props: ITabPanelOptionsItemProps) => {
+  return React.createElement(NestedOption<ITabPanelOptionsItemProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "items",
+      IsCollectionItem: true,
+      TemplateProps: [{
+        tmplOption: "tabTemplate",
+        render: "tabRender",
+        component: "tabComponent"
+      }, {
+        tmplOption: "template",
+        render: "render",
+        component: "component"
+      }],
+    },
+  });
+};
+
+const TabPanelOptionsItem = Object.assign<typeof _componentTabPanelOptionsItem, NestedComponentMeta>(_componentTabPanelOptionsItem, {
+  componentType: "option",
+});
+
+// owners:
 // Editing
 // Export
 // Grouping
@@ -3199,6 +3813,7 @@ const _componentToolbar = (props: IToolbarProps) => {
     elementDescriptor: {
       OptionName: "toolbar",
       ExpectedChildren: {
+        dataGridToolbarItem: { optionName: "items", isCollectionItem: true },
         item: { optionName: "items", isCollectionItem: true }
       },
     },
@@ -3288,6 +3903,7 @@ const TotalItem = Object.assign<typeof _componentTotalItem, NestedComponentMeta>
 // owners:
 // FormItem
 // Column
+// SimpleItem
 type IValidationRuleProps = React.PropsWithChildren<{
   message?: string;
   trim?: boolean;
@@ -3361,6 +3977,10 @@ export {
   IBoundaryOffsetProps,
   Button,
   IButtonProps,
+  ButtonItem,
+  IButtonItemProps,
+  ButtonOptions,
+  IButtonOptionsProps,
   Change,
   IChangeProps,
   ColCountByScreen,
@@ -3403,6 +4023,8 @@ export {
   IDataGridHeaderFilterTextsProps,
   DataGridSelection,
   IDataGridSelectionProps,
+  DataGridToolbarItem,
+  IDataGridToolbarItemProps,
   Editing,
   IEditingProps,
   EditingTexts,
@@ -3413,6 +4035,8 @@ export {
   IEditorOptionsButtonProps,
   EmailRule,
   IEmailRuleProps,
+  EmptyItem,
+  IEmptyItemProps,
   Export,
   IExportProps,
   ExportTexts,
@@ -3437,6 +4061,8 @@ export {
   IFormProps,
   Format,
   IFormatProps,
+  FormGroupItem,
+  IFormGroupItemProps,
   FormItem,
   IFormItemProps,
   From,
@@ -3509,6 +4135,8 @@ export {
   ISelectionProps,
   Show,
   IShowProps,
+  SimpleItem,
+  ISimpleItemProps,
   SortByGroupSummaryInfo,
   ISortByGroupSummaryInfoProps,
   Sorting,
@@ -3521,6 +4149,14 @@ export {
   ISummaryProps,
   SummaryTexts,
   ISummaryTextsProps,
+  Tab,
+  ITabProps,
+  TabbedItem,
+  ITabbedItemProps,
+  TabPanelOptions,
+  ITabPanelOptionsProps,
+  TabPanelOptionsItem,
+  ITabPanelOptionsItemProps,
   Texts,
   ITextsProps,
   To,

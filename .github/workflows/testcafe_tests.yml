@@ -13,9 +13,7 @@ on:
   workflow_dispatch:
 
 env:
-  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
-  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
-  BUILD_TEST_INTERNAL_PACKAGE: true
+  NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
   RUN_TESTS: true
 
 jobs:
@@ -24,10 +22,21 @@ jobs:
     runs-on: devextreme-shr2
     outputs:
       should-run: ${{ steps.check.outputs.should-run }}
+      styles-changed: ${{ steps.changes.outputs.styles }}
     steps:
+      - uses: actions/checkout@v4
       - name: Check RUN_TESTS flag
         id: check
         run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            styles:
+              - 'packages/devextreme-scss/**'
+              - 'packages/devextreme/js/**/themes/**'
+              - 'e2e/testcafe-devextreme/helpers/accessibility/**'
 
   build:
     name: Build DevExtreme
@@ -59,9 +68,9 @@ jobs:
       name: Setup pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-store
+          ${{ runner.os }}-pnpm-cache
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
@@ -72,7 +81,7 @@ jobs:
         NODE_OPTIONS: --max-old-space-size=8192
       run: |
         pnpx nx build devextreme-scss
-        pnpx nx build devextreme
+        pnpx nx build devextreme -c testing
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -95,6 +104,9 @@ jobs:
       matrix:
         ARGS: [
           { componentFolder: "accessibility", name: "accessibility" },
+          { componentFolder: "accessibility", name: "accessibility - fluent.dark", theme: 'fluent.blue.dark', styleDependent: true },
+          { componentFolder: "accessibility", name: "accessibility - material.light", theme: 'material.blue.light', styleDependent: true },
+          { componentFolder: "accessibility", name: "accessibility - material.dark", theme: 'material.blue.dark', styleDependent: true },
           { componentFolder: "common", name: "common" },
 
           { name: "generic", theme: 'generic.light' },
@@ -143,7 +155,7 @@ jobs:
     # - name: Setup Chrome
     #   uses: ./.github/actions/setup-chrome
     #   with:
-    #     chrome-version: '141.0.7390.122'
+    #     chrome-version: '145.0.7632.67'
 
     # - name: Use Node.js
     #   uses: actions/setup-node@v4
@@ -163,9 +175,9 @@ jobs:
       name: Restore pnpm cache
       with:
         path: ${{ env.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-store
+          ${{ runner.os }}-pnpm-cache
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
@@ -178,6 +190,7 @@ jobs:
 
     - name: Run TestCafe tests
       working-directory: ./e2e/testcafe-devextreme
+      if: ${{ !matrix.ARGS.styleDependent || needs.check-should-run.outputs.styles-changed == 'true' }}
       env:
         NODE_OPTIONS: --max-old-space-size=8192
       run: |

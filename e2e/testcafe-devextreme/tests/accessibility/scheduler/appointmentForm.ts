@@ -2,7 +2,7 @@ import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { checkOptions } from './axe_options';
+import { a11yCheckConfig } from './axe_options';
 
 fixture.disablePageReloads`Scheduler - Appointment Form`
   .page(url(__dirname, '../../container.html'));
@@ -17,7 +17,7 @@ test('Appointment Form with axe', async (t) => {
   await t.doubleClick(appointment.element);
   await t.wait(300);
 
-  await a11yCheck(t, checkOptions, APPOINTMENT_POPUP_CONTENT_SELECTOR);
+  await a11yCheck(t, a11yCheckConfig, APPOINTMENT_POPUP_CONTENT_SELECTOR);
 }).before(async () => {
   await createWidget('dxScheduler', {
     timeZone: 'UTC',

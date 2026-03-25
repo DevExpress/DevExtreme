@@ -57,9 +57,9 @@ $(() => {
     onFocusedRowChanged(e) {
       const taskItem = getTaskDataItem(e.row);
       const focusedRowKey = e.component.option('focusedRowKey');
-      $('#taskSubject').html(taskItem.subject);
-      $('#taskDetails').html(taskItem.description);
-      $('#taskStatus').html(taskItem.status);
+      $('#taskSubject').text(taskItem.subject);
+      $('#taskDetails').text(taskItem.description);
+      $('#taskStatus').text(taskItem.status);
       $('#taskProgress').text(taskItem.progress);
       $('#taskId').dxNumberBox('instance').option('value', focusedRowKey);
     },

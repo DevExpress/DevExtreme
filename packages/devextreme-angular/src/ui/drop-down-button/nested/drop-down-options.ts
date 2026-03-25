@@ -18,15 +18,14 @@ import {
 
 
 
-import dxOverlay from 'devextreme/ui/overlay';
-import DOMComponent from 'devextreme/core/dom_component';
-import dxPopup from 'devextreme/ui/popup';
-import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
-import { event } from 'devextreme/events/events.types';
-import { EventInfo } from 'devextreme/common/core/events';
-import { Component as CoreComponent } from 'devextreme/core/component';
-import { PositionAlignment } from 'devextreme/common';
-import { dxPopupToolbarItem } from 'devextreme/ui/popup';
+import type dxOverlay from 'devextreme/ui/overlay';
+import type DOMComponent from 'devextreme/core/dom_component';
+import type { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
+import type { event } from 'devextreme/events/events.types';
+import type { EventInfo } from 'devextreme/common/core/events';
+import type { Component as CoreComponent } from 'devextreme/core/component';
+import type { PositionAlignment } from 'devextreme/common';
+import type { default as dxPopup, dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import {
     DxIntegrationModule,
@@ -379,6 +378,14 @@ export class DxoDropDownButtonDropDownOptionsComponent extends NestedOption impl
     }
     set showTitle(value: boolean) {
         this._setOption('showTitle', value);
+    }
+
+    @Input()
+    get tabFocusLoopEnabled(): boolean {
+        return this._getOption('tabFocusLoopEnabled');
+    }
+    set tabFocusLoopEnabled(value: boolean) {
+        this._setOption('tabFocusLoopEnabled', value);
     }
 
     @Input()

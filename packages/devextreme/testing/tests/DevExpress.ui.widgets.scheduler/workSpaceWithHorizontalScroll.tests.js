@@ -1,7 +1,7 @@
 import { getOuterWidth } from 'core/utils/size';
 import devices from '__internal/core/m_devices';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from 'common/core/events/visibility_change';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 import '__internal/scheduler/m_scheduler';
 
@@ -154,16 +154,16 @@ QUnit.module('Vertical Workspace with horizontal scrollbar', {
         const allDayTableWidth = getOuterWidth($element.find('.dx-scheduler-all-day-table'));
         const dateTableWidth = getOuterWidth($element.find('.dx-scheduler-date-table'));
 
-        assert.roughEqual(headerPanelWidth, 896, 5, 'Width of the header panel is OK');
-        assert.roughEqual(allDayTableWidth, 896, 5, 'Width of the allDay table is OK');
-        assert.roughEqual(dateTableWidth, 896, 5, 'Width of the date table is OK');
+        assert.roughEqual(headerPanelWidth, 932, 5, 'Width of the header panel is OK');
+        assert.roughEqual(allDayTableWidth, 932, 5, 'Width of the allDay table is OK');
+        assert.roughEqual(dateTableWidth, 932, 5, 'Width of the date table is OK');
     });
 
     QUnit.test('Workspace tables width should not be less than element width', async function(assert) {
         const $element = this.instance.$element();
         $element.css('width', 1000);
 
-        sinon.stub(this.instance, '_getWorkSpaceWidth').returns(50);
+        sinon.stub(this.instance, 'getWorkSpaceWidth').returns(50);
 
         triggerHidingEvent($element);
         triggerShownEvent($element);
@@ -243,7 +243,7 @@ QUnit.module('Vertical Workspace with horizontal scrollbar, groupOrientation = v
         const headerPanelWidth = getOuterWidth($element.find('.dx-scheduler-header-panel'), true);
         const dateTableWidth = getOuterWidth($element.find('.dx-scheduler-date-table'), true);
 
-        assert.roughEqual(headerPanelWidth, 797, 1.01, 'Width is OK');
-        assert.roughEqual(dateTableWidth, 797, 1.01, 'Width is OK');
+        assert.roughEqual(headerPanelWidth, 867, 1.01, 'Width is OK');
+        assert.roughEqual(dateTableWidth, 867, 1.01, 'Width is OK');
     });
 });

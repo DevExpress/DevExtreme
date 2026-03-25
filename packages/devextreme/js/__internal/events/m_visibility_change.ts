@@ -8,7 +8,6 @@ const triggerVisibilityChangeEvent = function (eventName) {
     const $element = $(element || 'body');
 
     const changeHandlers = $element.filter(VISIBILITY_CHANGE_SELECTOR)
-    // @ts-expect-error
       .add($element.find(VISIBILITY_CHANGE_SELECTOR));
 
     for (let i = 0; i < changeHandlers.length; i++) {

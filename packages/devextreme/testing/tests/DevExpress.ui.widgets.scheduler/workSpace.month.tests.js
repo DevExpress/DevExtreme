@@ -1,6 +1,6 @@
 import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 import $ from 'jquery';
 
 import '__internal/scheduler/workspaces/m_work_space_month';
@@ -249,7 +249,7 @@ module('Work Space Month', () => {
                 firstDayOfWeek: 1,
             });
 
-            const $cell = this.instance._getCells().eq(14);
+            const $cell = this.instance.getCells().eq(14);
 
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2016, 2, 14, 5, 0),
@@ -335,8 +335,8 @@ module('Work Space Month', () => {
         test('Group table content should have right height', async function(assert) {
             const $groupHeaderContents = this.instance.$element().find('.dx-scheduler-group-header');
             resizeCallbacks.fire();
-            assert.roughEqual(getOuterHeight($groupHeaderContents.eq(0)), 449, 5, 'Group header content height is OK');
-            assert.roughEqual(getOuterHeight($groupHeaderContents.eq(1)), 449, 5, 'Group header content height is OK');
+            assert.roughEqual(getOuterHeight($groupHeaderContents.eq(0)), 599, 5, 'Group header content height is OK');
+            assert.roughEqual(getOuterHeight($groupHeaderContents.eq(1)), 599, 5, 'Group header content height is OK');
         });
 
         test('Group width calculation', async function(assert) {
@@ -365,12 +365,12 @@ module('Work Space Month', () => {
                 }
             );
 
-            assert.equal(groupWidth, 525, 'Group width is OK');
+            assert.roughEqual(groupWidth, 532, 3, 'Group width is OK');
         });
 
         test('Tables should not be rerendered if dimension was changed and horizontal scrolling is disabled', async function(assert) {
             this.instance.option('crossScrollingEnabled', false);
-            const stub = sinon.stub(this.instance, '_setTableSizes');
+            const stub = sinon.stub(this.instance, 'setTableSizes');
 
             resizeCallbacks.fire();
 

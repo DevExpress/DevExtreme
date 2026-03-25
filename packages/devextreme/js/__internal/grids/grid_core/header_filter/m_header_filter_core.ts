@@ -290,22 +290,24 @@ export class HeaderFilterView extends Modules.View {
       focusStateEnabled: false,
       toolbarItems: [
         {
-          toolbar: 'bottom',
-          location: 'after',
-          widget: 'dxButton',
+          toolbar: 'bottom' as const,
+          location: 'after' as const,
+          widget: 'dxButton' as const,
           options: {
-            text: headerFilterOptions.texts.ok,
+            text: headerFilterOptions.texts.ok
+              ?? messageLocalization.format('dxDataGrid-headerFilterOK'),
             onClick() {
               that.applyHeaderFilter(options);
             },
           },
         },
         {
-          toolbar: 'bottom',
-          location: 'after',
-          widget: 'dxButton',
+          toolbar: 'bottom' as const,
+          location: 'after' as const,
+          widget: 'dxButton' as const,
           options: {
-            text: headerFilterOptions.texts.cancel,
+            text: headerFilterOptions.texts.cancel
+              ?? messageLocalization.format('dxDataGrid-headerFilterCancel'),
             onClick() {
               that.hideHeaderFilterMenu();
               hidePopupCallback?.();
@@ -328,7 +330,7 @@ export class HeaderFilterView extends Modules.View {
         // T321243
         component.option('animation', component._getDefaultOptions().animation);
       },
-      _loopFocus: true,
+      tabFocusLoopEnabled: true,
     };
 
     if (!isDefined(that._popupContainer)) {

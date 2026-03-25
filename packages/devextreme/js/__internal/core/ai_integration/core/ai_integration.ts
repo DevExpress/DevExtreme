@@ -1,5 +1,6 @@
 import type {
   AIIntegration as IAIIntegration,
+  AIIntegrationOptions,
   AIProvider,
   ChangeStyleCommandParams,
   ChangeStyleCommandResult,
@@ -96,8 +97,8 @@ export class AIIntegration implements IAIIntegration {
 
   private readonly commands: Map<CommandNames, Commands[CommandNames]['command']>;
 
-  constructor(provider: AIProvider) {
-    this.promptManager = new PromptManager();
+  constructor(provider: AIProvider, options?: AIIntegrationOptions) {
+    this.promptManager = new PromptManager({ lang: options?.lang });
     this.requestManager = new RequestManager(provider);
     this.commands = new Map();
   }

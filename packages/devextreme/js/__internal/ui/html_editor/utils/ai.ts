@@ -125,7 +125,7 @@ const aiCommandNames = {
 export type AICommandNameEnum = typeof aiCommandNames[keyof typeof aiCommandNames];
 
 const getLocalizedCommandOption = (command: AICommandNameExtended): (
-  option: AIChangeStyleOption | AIChangeToneOption | AITranslateOption
+  option: AIChangeStyleOption | AIChangeToneOption | AITranslateOption,
 ) => string => (
   option: AIChangeStyleOption | AIChangeToneOption | AITranslateOption,
 ): string => localizationMessage.format(`dxHtmlEditor-aiCommand${capitalize(command)}${capitalize(option)}`);

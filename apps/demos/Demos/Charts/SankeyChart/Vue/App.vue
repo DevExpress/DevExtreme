@@ -5,7 +5,7 @@
     source-field="source"
     target-field="target"
     weight-field="weight"
-    title="Commodity Turnover in 2017"
+    title="Commodity Turnover in 2024"
   >
     <DxTooltip
       :enabled="true"

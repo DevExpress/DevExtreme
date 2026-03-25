@@ -5,5 +5,6 @@ export type Employee = {
   position: string;
   expanded?: boolean;
   selected?: boolean;
+  disabled?: boolean;
   items?: Employee[];
 };

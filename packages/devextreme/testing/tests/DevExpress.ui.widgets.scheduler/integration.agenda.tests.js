@@ -10,7 +10,7 @@ import dataUtils from 'core/element_data';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { waitAsync } from '../../helpers/scheduler/waitForAsync.js';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 const {
     module,
@@ -786,7 +786,7 @@ module('Integration: Agenda', moduleConfig, () => {
         const rowHeight = 77;
         const $element = instance.$element();
         const expectedWidth = getOuterWidth($element.find('.dx-scheduler-date-table'));
-        const agendaStub = sinon.stub(agenda, '_getRowHeight').returns(rowHeight);
+        const agendaStub = sinon.stub(agenda, 'getRowHeight').returns(rowHeight);
 
         try {
             instance.option('dataSource', [
@@ -1096,7 +1096,7 @@ module('Integration: Agenda', moduleConfig, () => {
 
         const $element = instance.$element();
         const $appts = $element.find('.dx-scheduler-appointment');
-        const timePanelDate = $element.find('.dx-scheduler-agenda-date').text();
+        const timePanelDate = $element.find('.dx-scheduler-time-panel-cell').text();
 
         assert.equal($appts.length, 1, 'Appt count is OK');
         assert.equal(timePanelDate, '10 Thu', 'Time panel date is OK');
@@ -1120,7 +1120,7 @@ module('Integration: Agenda', moduleConfig, () => {
 
         const $element = instance.$element();
         const $appts = $element.find('.dx-scheduler-appointment');
-        const $timePanelDateEl = $element.find('.dx-scheduler-agenda-date');
+        const $timePanelDateEl = $element.find('.dx-scheduler-time-panel-cell');
         const timePanelDate = $timePanelDateEl.text();
 
         assert.equal($appts.length, 1, 'Appt count is OK');
@@ -1146,7 +1146,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 owner: 1
             }],
             resourceCellTemplate: function(cellData, cellIndex, cellElement) {
-                assert.equal(getOuterWidth($(cellElement)), 80, 'Resource cell width is OK');
+                assert.equal(getOuterWidth($(cellElement)), 100, 'Resource cell width is OK');
                 assert.equal(getOuterHeight($(cellElement)), 80, 'Resource cell height is OK');
             }
         });
@@ -1565,7 +1565,7 @@ module('Integration: Agenda', moduleConfig, () => {
             instance.option('dataSource', data);
             await waitAsync(0);
 
-            const calculatedRows = agendaWorkspace._rows[0];
+            const calculatedRows = agendaWorkspace.rows[0];
             assert.equal(calculatedRows.length, 65, 'Rows are OK');
 
             $.each(calculatedRows, function(index, item) {
@@ -1606,7 +1606,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 instance.option('dataSource', data);
                 await waitAsync(0);
 
-                const calculatedRows = agendaWorkspace._rows;
+                const calculatedRows = agendaWorkspace.rows;
                 assert.deepEqual(calculatedRows, [[1, 2, 2, 2, 2]], 'Rows are OK');
             } finally {
                 endViewDateStub.restore();
@@ -1640,7 +1640,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 instance.option('dataSource', data);
                 await waitAsync(0);
 
-                const calculatedRows = agendaWorkspace._rows;
+                const calculatedRows = agendaWorkspace.rows;
                 assert.deepEqual(calculatedRows, [[0, 1, 1, 1, 0]], 'Rows are OK');
             } finally {
                 endViewDateStub.restore();
@@ -1671,7 +1671,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 instance.option('dataSource', data);
                 await waitAsync(0);
 
-                const calculatedRows = agendaWorkspace._rows;
+                const calculatedRows = agendaWorkspace.rows;
                 assert.deepEqual(calculatedRows, [[1, 1, 1, 1, 0]], 'Rows are OK');
             } finally {
                 endViewDateStub.restore();
@@ -1709,7 +1709,7 @@ module('Integration: Agenda', moduleConfig, () => {
                 instance.option('dataSource', data);
                 await waitAsync(0);
 
-                const calculatedRows = agendaWorkspace._rows;
+                const calculatedRows = agendaWorkspace.rows;
                 assert.deepEqual(calculatedRows, [[0, 1, 1, 0, 1, 1, 0]], 'Rows are OK');
             } finally {
                 endViewDateStub.restore();

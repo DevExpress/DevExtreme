@@ -25,7 +25,7 @@
 );
 
 // adduse
-
+@use 'layout/cell';
 @include grid-base(treelist);
 
 .dx-treelist-rowsview {
@@ -40,8 +40,6 @@
   }
 
   .dx-treelist-cell-expandable {
-    white-space: nowrap;
-
     .dx-treelist-text-content {
       white-space: normal;
     }
@@ -53,10 +51,6 @@
         white-space: nowrap;
       }
     }
-  }
-
-  .dx-treelist-content .dx-treelist-table .dx-row .dx-editor-cell {
-    padding-left: $generic-grid-base-cell-padding;
   }
 }
 

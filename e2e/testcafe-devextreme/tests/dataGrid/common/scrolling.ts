@@ -1,7 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { ClassNames as CLASS } from 'devextreme-testcafe-models/dataGrid/classNames';
+import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 import { insertStylesheetRulesToPage } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -225,15 +225,26 @@ test('DataGrid should not reset its top scroll position after cell modification 
   },
 }));
 
-test.meta({ unstable: true })('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
+// Theme dependent test
+test('Ungrouping after grouping should work correctly if row rendering mode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
-
   await t.expect(dataGrid.isReady()).ok();
 
   // act
   await dataGrid.scrollTo(t, { top: 500 });
-  await dataGrid.apiColumnOption('group', 'groupIndex', 0);
   let visibleRows = await dataGrid.apiGetVisibleRows();
+
+  // assert
+  await t
+    .expect(visibleRows[0].rowType)
+    .eql('data')
+    .expect(visibleRows[0].key)
+    .notEql(1);
+
+  // act
+  await dataGrid.apiColumnOption('group', 'groupIndex', 0);
+  await t.expect(dataGrid.isReady()).ok();
+  visibleRows = await dataGrid.apiGetVisibleRows();
 
   // assert
   await t
@@ -250,17 +261,16 @@ test.meta({ unstable: true })('Ungrouping after grouping should work correctly i
 
   // act
   await dataGrid.apiColumnOption('group', 'groupIndex', 'undefined');
-
-  // assert
+  await t.expect(dataGrid.isReady()).ok();
   const groupRow = dataGrid.getGroupRowSelector();
 
+  // assert
   await t
     .expect(groupRow.exists)
     .notOk();
 
   visibleRows = await dataGrid.apiGetVisibleRows();
 
-  // assert
   await t
     .expect(visibleRows[0].rowType)
     .eql('data')
@@ -279,8 +289,7 @@ test.meta({ unstable: true })('Ungrouping after grouping should work correctly i
     return items;
   };
   return createWidget('dxDataGrid', {
-    height: 400,
-    loadingTimeout: null,
+    height: 500,
     keyExpr: 'id',
     dataSource: getItems(),
     scrolling: {
@@ -494,13 +503,23 @@ test('Header container should have padding-right if grid has max-height and scro
   });
 });
 
-test.meta({ unstable: true })('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
+test('New virtual mode. A detail row should be rendered when the last master row is expanded', async (t) => {
+  const ROWS_AMOUNT = 100;
   const dataGrid = new DataGrid('#container');
+  const dataRowSelector = `.${ClassNames.dataRow}`;
+
+  const getFirstVisibleRowHeight = ClientFunction(() => $((window as any).widget.element())
+    .find(dataRowSelector)
+    .first()
+    .height() ?? 0, { dependencies: { dataRowSelector } });
 
   await t.expect(dataGrid.isReady()).ok();
 
   // act
-  await dataGrid.scrollTo(t, { top: 3300 });
+  const firstVisibleRowHeight = await getFirstVisibleRowHeight();
+  const scrollTopOffset = ROWS_AMOUNT * firstVisibleRowHeight;
+
+  await dataGrid.scrollTo(t, { top: scrollTopOffset });
   await t
     .wait(300)
     .click(dataGrid.getDataRow(99).getCommandCell(0).element);
@@ -515,11 +534,11 @@ test.meta({ unstable: true })('New virtual mode. A detail row should be rendered
     .expect(penultimateRow.rowType)
     .eql('data')
     .expect(penultimateRow.key)
-    .eql(100)
+    .eql(ROWS_AMOUNT)
     .expect(lastRow.rowType)
     .eql('detail')
     .expect(lastRow.key)
-    .eql(100);
+    .eql(ROWS_AMOUNT);
 }).before(async () => {
   const getItems = (): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
@@ -548,11 +567,23 @@ test.meta({ unstable: true })('New virtual mode. A detail row should be rendered
   });
 });
 
-test.meta({ unstable: true })('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
+test('New virtual mode. An adaptive row should be rendered when the last row is expanded', async (t) => {
+  const ROWS_AMOUNT = 100;
   const dataGrid = new DataGrid('#container');
+  const dataRowSelector = `.${ClassNames.dataRow}`;
+
+  const getFirstVisibleRowHeight = ClientFunction(() => $((window as any).widget.element())
+    .find(dataRowSelector)
+    .first()
+    .height() ?? 0, { dependencies: { dataRowSelector } });
+
+  await t.expect(dataGrid.isReady()).ok();
 
   // act
-  await dataGrid.scrollTo(t, { top: 3300 });
+  const firstVisibleRowHeight = await getFirstVisibleRowHeight();
+  const scrollTopOffset = ROWS_AMOUNT * firstVisibleRowHeight;
+
+  await dataGrid.scrollTo(t, { top: scrollTopOffset });
   await t
     .wait(300)
     .click(dataGrid.getDataRow(99).getCommandCell(3).element);
@@ -567,11 +598,11 @@ test.meta({ unstable: true })('New virtual mode. An adaptive row should be rende
     .expect(penultimateRow.rowType)
     .eql('data')
     .expect(penultimateRow.key)
-    .eql(100)
+    .eql(ROWS_AMOUNT)
     .expect(lastRow.rowType)
     .eql('detailAdaptive')
     .expect(lastRow.key)
-    .eql(100);
+    .eql(ROWS_AMOUNT);
 }).before(async () => {
   const getItems = (): Record<string, unknown>[] => {
     const items: Record<string, unknown>[] = [];
@@ -604,11 +635,14 @@ test.meta({ unstable: true })('New virtual mode. An adaptive row should be rende
   });
 });
 
-test.meta({ unstable: true })('New virtual mode. Virtual rows should not be in view port', async (t) => {
+// Theme dependent test
+test('New virtual mode. Virtual rows should not be in view port', async (t) => {
   const dataGrid = new DataGrid('#container');
+  const virtualRowSelector = `.${ClassNames.virtualRow}`;
+  const dataRowSelector = `.${ClassNames.dataRow}`;
   const getVirtualRowInfo = ClientFunction(() => {
     const result: any = {};
-    const $virtualRows = $((window as any).widget.element()).find(CLASS.virtualRow);
+    const $virtualRows = $((window as any).widget.element()).find(virtualRowSelector);
 
     result.count = $virtualRows.length;
     $virtualRows.each((index, el) => {
@@ -620,17 +654,17 @@ test.meta({ unstable: true })('New virtual mode. Virtual rows should not be in v
     });
 
     return result;
-  });
+  }, { dependencies: { virtualRowSelector } });
   const getVisibleRowsHeight = ClientFunction(() => {
     let result = 0;
-    const $rows = $((window as any).widget.element()).find(CLASS.dataRow);
+    const $rows = $((window as any).widget.element()).find(dataRowSelector);
 
     $rows.each((_, el) => {
       result += $(el).height() ?? 0;
     });
 
     return result;
-  });
+  }, { dependencies: { dataRowSelector } });
 
   await t.wait(350);
   let visibleRows = await dataGrid.apiGetVisibleRows();
@@ -640,16 +674,16 @@ test.meta({ unstable: true })('New virtual mode. Virtual rows should not be in v
   // assert
   await t
     .expect(visibleRows.length)
-    .eql(20)
+    .eql(16)
     .expect(virtualRowInfo.count)
     .eql(1)
     .expect(virtualRowInfo[0].top >= visibleRowsHeight)
     .ok();
 
   // act
-  await dataGrid.scrollTo(t, { top: 1580 });
+  await dataGrid.scrollTo(t, { top: 2520 });
   await t.wait(300);
-  await dataGrid.scrollTo(t, { top: 3250 });
+  await dataGrid.scrollTo(t, { top: 4580 });
   await t.wait(600);
 
   visibleRows = await dataGrid.apiGetVisibleRows();
@@ -662,16 +696,16 @@ test.meta({ unstable: true })('New virtual mode. Virtual rows should not be in v
   // assert
   await t
     .expect(visibleRows.length)
-    .eql(10)
+    .eql(8)
     .expect(visibleRows[0].key)
-    .eql(91)
+    .eql(93)
     .expect(virtualRowInfo.count)
     .eql(1)
     .expect(bottomVirtualRowPosition <= topScrollPosition)
     .ok();
 
   // act
-  await dataGrid.scrollTo(t, { top: 1580 });
+  await dataGrid.scrollTo(t, { top: 2520 });
   await t.wait(300);
   await dataGrid.scrollTo(t, { top: 0 });
   await t.wait(300);
@@ -683,7 +717,7 @@ test.meta({ unstable: true })('New virtual mode. Virtual rows should not be in v
   // assert
   await t
     .expect(visibleRows.length)
-    .eql(10)
+    .eql(8)
     .expect(visibleRows[0].key)
     .eql(1)
     .expect(virtualRowInfo.count)
@@ -727,7 +761,7 @@ test.meta({ unstable: true })('New virtual mode. Virtual rows should not be in v
         return (window as any).myStore.totalCount(loadOptions);
       },
     } as any, // todo check
-    height: 300,
+    height: 420,
     remoteOperations: true,
     scrolling: {
       mode: 'virtual',
@@ -883,7 +917,8 @@ test.meta({ browserSize: [800, 700] })('New mode. Rows should be rendered proper
   });
 });
 
-test.meta({ unstable: true, browserSize: [800, 800] })('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
+// Theme dependent test
+test.meta({ browserSize: [800, 800] })('Rows are rendered properly when window content is scrolled (T1070388)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.expect(dataGrid.isReady()).ok();
@@ -910,12 +945,12 @@ test.meta({ unstable: true, browserSize: [800, 800] })('Rows are rendered proper
     .ok();
 
   // act
-  await scrollWindowTo(3000);
+  await scrollWindowTo(3100);
 
   // assert
   await t
     .expect(getWindowScrollPosition())
-    .eql(3000)
+    .eql(3100)
     .wait(300);
 
   visibleRows = await dataGrid.apiGetVisibleRows();
@@ -923,10 +958,10 @@ test.meta({ unstable: true, browserSize: [800, 800] })('Rows are rendered proper
   // assert
   await t
     .expect(visibleRows.length)
-    .eql(26)
-    .expect(visibleRows[0].key > 30)
+    .eql(19)
+    .expect(visibleRows[0].key > 20)
     .ok()
-    .expect(visibleRows[25].key > 55)
+    .expect(visibleRows[18].key > 35)
     .ok();
 
   // act
@@ -938,12 +973,12 @@ test.meta({ unstable: true, browserSize: [800, 800] })('Rows are rendered proper
     .eql(6000);
 
   // act
-  await scrollWindowTo(3000);
+  await scrollWindowTo(3100);
 
   // assert
   await t
     .expect(getWindowScrollPosition())
-    .eql(3000)
+    .eql(3100)
     .wait(300);
 
   visibleRows = await dataGrid.apiGetVisibleRows();
@@ -951,10 +986,10 @@ test.meta({ unstable: true, browserSize: [800, 800] })('Rows are rendered proper
   // assert
   await t
     .expect(visibleRows.length)
-    .eql(26)
-    .expect(visibleRows[0].key > 30)
+    .eql(19)
+    .expect(visibleRows[0].key > 20)
     .ok()
-    .expect(visibleRows[25].key > 55)
+    .expect(visibleRows[18].key > 35)
     .ok();
 
   // act
@@ -1837,7 +1872,7 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
 [true, false].forEach((nativeScroll) => {
   type TestCaseWindow = typeof window & { dataGridScrollableEventValues?: number[] };
 
-  test.meta({ unstable: true })(`Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`, async (t) => {
+  test(`Should not scroll back on top with virtual scrolling and adaptive master detail (nativeScroll: ${nativeScroll}) [T1278804]`, async (t) => {
     // NOTE: idx + 1 logic inside POM
     const adaptiveCellIdx = 101;
     const scrollValuesThreshold = 100;
@@ -1852,9 +1887,11 @@ test('DataGrid - The "row" parameter in the FocusedRowChanged event refers to a 
       .click(adaptiveCell.element);
 
     await dataGrid
-      .scrollBy(t, { y: 1000 });
+      .scrollTo(t, { y: 2000 });
+    await t.wait(300);
     await dataGrid
-      .scrollBy(t, { y: 1000 });
+      .scrollTo(t, { y: 1000 });
+    await t.wait(300);
 
     const scrollOffsets = await t
       .eval(() => (window as TestCaseWindow).dataGridScrollableEventValues) as number[];

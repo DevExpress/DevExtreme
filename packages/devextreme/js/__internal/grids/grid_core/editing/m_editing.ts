@@ -7,7 +7,7 @@ import { removeEvent } from '@js/common/core/events/remove';
 import { addNamespace } from '@js/common/core/events/utils/index';
 import messageLocalization from '@js/common/core/localization/message';
 import { createObjectWithChanges } from '@js/common/data/array_utils';
-import type { GridsEditMode } from '@js/common/grids';
+import type { DataChange, GridsEditMode } from '@js/common/grids';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
 import Guid from '@js/core/guid';
@@ -22,8 +22,7 @@ import * as iconUtils from '@js/core/utils/icon';
 import { each } from '@js/core/utils/iterator';
 import { deepExtendArraySafe } from '@js/core/utils/object';
 import {
-  isDefined, isEmptyObject,
-  isFunction, isObject,
+  isDefined, isEmptyObject, isFunction, isObject,
 } from '@js/core/utils/type';
 import { confirm } from '@js/ui/dialog';
 import { current, isFluent } from '@js/ui/themes';
@@ -33,7 +32,9 @@ import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_pane
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import modules from '../m_modules';
-import type { Controllers, ModuleType, Views } from '../m_types';
+import type {
+  Controllers, ModuleType, RowKey, Views,
+} from '../m_types';
 import gridCoreUtils from '../m_utils';
 import {
   ACTION_OPTION_NAMES,
@@ -92,7 +93,9 @@ import {
   isEditingCell,
   isEditingOrShowEditorAlwaysDataCell,
 } from './m_editing_utils';
-import type { NormalizedEditCellOptions } from './types';
+import type {
+  InsertInfo, InternalEditData, NormalizedEditCellOptions,
+} from './types';
 
 class EditingControllerImpl extends modules.ViewController {
   protected _columnsController!: Controllers['columns'];
@@ -133,7 +136,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   protected _saveEditorHandler: any;
 
-  private _internalState!: Map<unknown, any>;
+  private _internalState!: Map<RowKey, InternalEditData>;
 
   protected _refocusEditCell: any;
 
@@ -274,18 +277,15 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  private _getInternalData(key) {
+  private _getInternalData(key: RowKey): InternalEditData | undefined {
     return this._internalState.get(getKeyHash(key));
   }
 
-  public _addInternalData(params) {
-    const internalData = this._getInternalData(params.key);
+  public _addInternalData(params: InternalEditData): InternalEditData {
+    const internalData = this._getInternalData(params.key) ?? {};
 
-    if (internalData) {
-      return extend(internalData, params);
-    }
+    this._internalState.set(getKeyHash(params.key), { ...internalData, ...params });
 
-    this._internalState.set(getKeyHash(params.key), params);
     return params;
   }
 
@@ -774,6 +774,7 @@ class EditingControllerImpl extends modules.ViewController {
     this.update(changeType);
 
     const changes = this.getChanges();
+
     changes.forEach((change) => {
       const isInsert = change.type === DATA_EDIT_DATA_INSERT_TYPE;
 
@@ -783,10 +784,10 @@ class EditingControllerImpl extends modules.ViewController {
 
       let { key } = change;
 
-      let insertInfo = this._getInternalData(key)?.insertInfo;
+      const insertInfo = this._getInternalData(key)?.insertInfo;
+
       if (!isDefined(key) || !isDefined(insertInfo)) {
-        insertInfo = this._addInsertInfo(change);
-        key = insertInfo.key;
+        key = this._addInsertInfo(change).key;
       }
 
       const loadedRowIndex = this._getLoadedRowIndex(items, change);
@@ -857,20 +858,22 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  private _createInsertInfo() {
-    const insertInfo = {};
-
-    insertInfo[INSERT_INDEX] = this._getInsertIndex();
-
-    return insertInfo;
+  private _createInsertInfo(): InsertInfo {
+    return { [INSERT_INDEX]: this._getInsertIndex() };
   }
 
-  private _addInsertInfo(change, parentKey?) {
-    let insertInfo;
+  private _addInsertInfo(
+    change: Partial<DataChange>,
+    parentKey?: RowKey,
+  ): { insertInfo: InsertInfo; key: RowKey } {
+    let insertInfo: InsertInfo | undefined;
+
     change.key = this.getChangeKeyValue(change);
+
     const { key } = change;
 
     insertInfo = this._getInternalData(key)?.insertInfo;
+
     if (!isDefined(insertInfo)) {
       const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
 
@@ -1042,7 +1045,7 @@ class EditingControllerImpl extends modules.ViewController {
    * @exteded: TreeList's editing
    */
   protected _addRowCore(data, parentKey, initialOldEditRowIndex) {
-    const change = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
+    const change: Partial<DataChange> = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
     const editRowIndex = this._getVisibleEditRowIndex();
     const insertInfo = this._addInsertInfo(change, parentKey);
     const { key } = insertInfo;
@@ -1322,8 +1325,15 @@ class EditingControllerImpl extends modules.ViewController {
     return buttonConfig;
   }
 
-  private _removeInternalData(key) {
+  private _removeInternalData(key: RowKey): void {
     this._internalState.delete(getKeyHash(key));
+  }
+
+  private updateInternalDataKey(oldKey: RowKey, newKey: RowKey): void {
+    const internalData = this._getInternalData(oldKey) ?? {};
+
+    this._removeInternalData(oldKey);
+    this._addInternalData({ ...internalData, key: newKey });
   }
 
   private _updateInsertAfterOrBeforeKeys(changes, index) {
@@ -1612,7 +1622,10 @@ class EditingControllerImpl extends modules.ViewController {
           params = { data, cancel: false };
           deferred = this._executeEditingAction('onRowInserting', params, () => store.insert(params.data).done((data, key) => {
             if (isDefined(key)) {
+              const initialKey = changeCopy.key;
+
               changeCopy.key = key;
+              this.updateInternalDataKey(initialKey, key);
             }
             if (data && isObject(data) && data !== params.data) {
               changeCopy.data = data;
@@ -1715,17 +1728,17 @@ class EditingControllerImpl extends modules.ViewController {
 
   private _fireSaveEditDataEvents(changes) {
     each(changes, (_, { data, key, type }) => {
-      const internalData = this._addInternalData({ key });
+      const internalData = this._getInternalData(key);
       const params: any = { key, data };
 
-      if (internalData.error) {
+      if (internalData?.error) {
         params.error = internalData.error;
       }
 
       // eslint-disable-next-line default-case
       switch (type) {
         case DATA_EDIT_DATA_REMOVE_TYPE:
-          this.executeAction('onRowRemoved', extend({}, params, { data: internalData.oldData }));
+          this.executeAction('onRowRemoved', { ...params, data: internalData?.oldData });
           break;
         case DATA_EDIT_DATA_INSERT_TYPE:
           this.executeAction('onRowInserted', params);
@@ -1734,6 +1747,8 @@ class EditingControllerImpl extends modules.ViewController {
           this.executeAction('onRowUpdated', params);
           break;
       }
+
+      this._removeInternalData(key);
     });
 
     this.executeAction('onSaved', { changes });
@@ -2238,23 +2253,33 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   public getColumnTemplate(options) {
-    const { column } = options;
-    const rowIndex = options.row && options.row.rowIndex;
+    const { column, row, rowType } = options;
+    const rowIndex = row?.rowIndex;
     let template;
+
     const isRowMode = this.isRowBasedEditMode();
     const isRowEditing = this.isEditRow(rowIndex);
     const isCellEditing = this.isEditCell(rowIndex, options.columnIndex);
-    let editingStartOptions;
 
-    if ((column.showEditorAlways || column.setCellValue && (isRowEditing && column.allowEditing || isCellEditing))
-              && (options.rowType === 'data' || options.rowType === 'detailAdaptive') && !column.command) {
-      const allowUpdating = this.allowUpdating(options);
-      if (((allowUpdating || isRowEditing) && column.allowEditing || isCellEditing) && (isRowEditing || !isRowMode)) {
+    const isEditableRowType = rowType === 'data' || rowType === 'detailAdaptive';
+    const isEditableByRowState = isRowEditing && !!column.allowEditing;
+    const needsEditorTemplate = !!column.showEditorAlways
+      || (column.setCellValue && (isEditableByRowState || isCellEditing));
+
+    if (needsEditorTemplate && isEditableRowType && !column.command) {
+      const allowUpdating = !!this.allowUpdating(options);
+      const canModifyCell = (allowUpdating || isRowEditing || !!row?.isNewRow)
+        && !!column.allowEditing;
+      const isEditable = (canModifyCell || isCellEditing) && (isRowEditing || !isRowMode);
+
+      if (isEditable) {
+        // eslint-disable-next-line @typescript-eslint/init-declarations
+        let editingStartOptions;
         if (column.showEditorAlways && !isRowMode) {
           editingStartOptions = {
             cancel: false,
-            key: options.row.isNewRow ? undefined : options.row.key,
-            data: options.row.data,
+            key: row?.isNewRow ? undefined : row.key,
+            data: row.data,
             column,
           };
           this._isEditingStart(editingStartOptions);
@@ -2266,7 +2291,7 @@ class EditingControllerImpl extends modules.ViewController {
         }
       }
       template = column.editCellTemplate || this._getDefaultEditorTemplate();
-    } else if (column.command === 'detail' && options.rowType === 'detail' && isRowEditing) {
+    } else if (column.command === 'detail' && rowType === 'detail' && isRowEditing) {
       template = (this as any)?.getEditFormTemplate(options);
     }
 
@@ -2475,6 +2500,12 @@ class EditingControllerImpl extends modules.ViewController {
   protected _isRowDeleteAllowed(): any {}
 
   protected _prepareEditCell(parameters: NormalizedEditCellOptions): boolean { return false; }
+
+  /// #DEBUG
+  public getInternalStateSize(): number {
+    return this._internalState.size;
+  }
+  /// #ENDDEBUG
 
   public shouldHighlightCell(parameters) {
     const cellModified = this.isCellModified(parameters);

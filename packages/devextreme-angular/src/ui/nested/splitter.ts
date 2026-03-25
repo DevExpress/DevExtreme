@@ -18,7 +18,7 @@ import {
 
 
 
-import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
+import type { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
 
 import {
     DxIntegrationModule,

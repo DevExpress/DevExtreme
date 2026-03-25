@@ -4,7 +4,7 @@
 <div id="chart-demo">
   <table class="demo-table" border="1">
     <tr>
-      <th></th>
+      <th><div class="dx-screen-reader-only">Year</div></th>
       <th>Copper (USD/ton)</th>
       <th>Nickel (USD/ton)</th>
       <th>Palladium (USD/troy ounce)</th>
@@ -21,7 +21,9 @@
           type="area"
           [showMinMax]="true"
         >
-          <dxo-sparkline-tooltip format="currency"></dxo-sparkline-tooltip>
+          <dxo-sparkline-tooltip
+            [format]="{ type: 'currency', precision: 2 }"
+          ></dxo-sparkline-tooltip>
         </dx-sparkline>
       </td>
       <td>
@@ -38,7 +40,9 @@
           [showMinMax]="true"
           [showFirstLast]="false"
         >
-          <dxo-sparkline-tooltip format="currency"></dxo-sparkline-tooltip>
+          <dxo-sparkline-tooltip
+            [format]="{ type: 'currency', precision: 2 }"
+          ></dxo-sparkline-tooltip>
         </dx-sparkline>
       </td>
       <td>
@@ -54,7 +58,9 @@
           pointColor="#e8c267"
           pointSymbol="polygon"
         >
-          <dxo-sparkline-tooltip format="currency"></dxo-sparkline-tooltip>
+          <dxo-sparkline-tooltip
+            [format]="{ type: 'currency', precision: 2 }"
+          ></dxo-sparkline-tooltip>
         </dx-sparkline>
       </td>
     </tr>

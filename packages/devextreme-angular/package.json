@@ -1,10 +1,11 @@
 {
   "name": "devextreme-angular",
   "version": "26.1.0",
-  "description": "Angular UI and visualization components based on DevExtreme widgets",
+  "description": "DevExtreme UI and Visualization Components for Angular",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DevExpress/devextreme-angular.git"
+    "url": "https://github.com/DevExpress/DevExtreme.git",
+    "directory": "packages/devextreme-angular"
   },
   "scripts": {
     "build": "pnpm --workspace-root nx build devextreme-angular",
@@ -46,7 +47,7 @@
     "@webcomponents/custom-elements": "1.6.0",
     "codelyzer": "6.0.2",
     "core-js": "2.6.12",
-    "css-loader": "6.10.0",
+    "css-loader": "6.11.0",
     "devextreme-metadata": "workspace:*",
     "eslint": "catalog:",
     "eslint-config-devextreme": "catalog:",
@@ -66,7 +67,7 @@
     "style-loader": "3.3.4",
     "tslib": "2.6.3",
     "typescript": "catalog:angular",
-    "webpack": "5.96.1",
+    "webpack": "5.105.4",
     "yargs": "17.7.2",
     "zone.js": "catalog:angular"
   },

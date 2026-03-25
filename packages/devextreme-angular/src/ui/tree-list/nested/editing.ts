@@ -18,11 +18,10 @@ import {
 
 
 
-import dxTreeList from 'devextreme/ui/tree_list';
-import { dxTreeListRowObject } from 'devextreme/ui/tree_list';
-import { DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction } from 'devextreme/common/grids';
-import { dxFormOptions } from 'devextreme/ui/form';
-import { dxPopupOptions } from 'devextreme/ui/popup';
+import type { default as dxTreeList, dxTreeListRowObject } from 'devextreme/ui/tree_list';
+import type { DataChange, GridsEditMode, GridsEditRefreshMode, StartEditAction } from 'devextreme/common/grids';
+import type { dxFormOptions } from 'devextreme/ui/form';
+import type { dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
     DxIntegrationModule,

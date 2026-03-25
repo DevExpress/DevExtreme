@@ -59,7 +59,7 @@ export class CompactAppointmentsHelper {
       clickEvent: this._clickEvent(options.onAppointmentClick).bind(this),
       dragBehavior: options.allowDrag && this._createTooltipDragBehavior($appointmentCollector).bind(this),
       isButtonClick: true,
-      _loopFocus: true,
+      tabFocusLoopEnabled: true,
     };
   }
 
@@ -88,7 +88,7 @@ export class CompactAppointmentsHelper {
         getItemSettings,
       };
 
-      workSpace._createDragBehaviorBase($element, $schedulerElement, options);
+      workSpace.createDragBehaviorBase($element, $schedulerElement, options);
     };
   }
 
@@ -164,7 +164,7 @@ export class CompactAppointmentsHelper {
 
   _createTemplate(count, isCompact) {
     this._initButtonTemplate(count, isCompact);
-    return this.instance._getAppointmentTemplate('appointmentCollectorTemplate');
+    return this.instance.getAppointmentTemplate('appointmentCollectorTemplate');
   }
 
   _initButtonTemplate(count, isCompact) {

@@ -1,6 +1,7 @@
 const SELECTORS = {
   editCell: 'dx-editor-cell',
   invalidCell: 'invalid',
+  widget: 'dx-widget',
 };
 
 export class DataCellModel {
@@ -26,5 +27,10 @@ export class DataCellModel {
 
   public getHTML(): string {
     return this.root?.innerHTML ?? '';
+  }
+
+  public getEditor<T>(EditorModel: new (element: HTMLElement) => T): T {
+    const editorElement = this.root?.querySelector(`.${SELECTORS.widget}`) as HTMLElement;
+    return new EditorModel(editorElement);
   }
 }

@@ -222,6 +222,12 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     showTitle?: boolean;
     /**
      * @docid
+     * @default false
+     * @public
+     */
+    tabFocusLoopEnabled?: boolean;
+    /**
+     * @docid
      * @default ""
      * @public
      */
@@ -299,6 +305,3 @@ interface PopupInstance extends dxPopup<Properties> { }
 
 /** @public */
 export type Properties = dxPopupOptions<PopupInstance>;
-
-/** @deprecated use Properties instead */
-export type Options = Properties;

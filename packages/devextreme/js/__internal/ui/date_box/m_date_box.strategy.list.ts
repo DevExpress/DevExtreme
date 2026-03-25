@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import '@ts/ui/list/modules/selection';
 
 import dateLocalization from '@js/common/core/localization/date';
@@ -6,11 +7,17 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { getHeight, getOuterHeight } from '@js/core/utils/size';
 import { isDate } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
+import type { Format } from '@js/localization';
+import type { ItemClickEvent } from '@js/ui/list';
 import { getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
 import List from '@ts/ui/list/list.edit.search';
 
+import type { PopupProperties } from '../popup/m_popup';
+import type { DateBoxBaseProperties } from './date_box.base';
+import type DateBox from './date_box.base';
+import dateUtils from './date_utils';
 import DateBoxStrategy from './m_date_box.strategy';
-import dateUtils from './m_date_utils';
 
 const window = getWindow();
 
@@ -26,13 +33,17 @@ class ListStrategy extends DateBoxStrategy {
 
   _widgetItems!: Date[];
 
-  ctor(dateBox): void {
-    super.ctor(dateBox);
+  constructor(dateBox: DateBox) {
+    super(dateBox);
 
     this.NAME = 'List';
   }
 
-  supportedKeys() {
+  getWidget(): List {
+    return this._widget as List;
+  }
+
+  supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
     return {
       space: noop,
       home: noop,
@@ -40,26 +51,28 @@ class ListStrategy extends DateBoxStrategy {
     };
   }
 
-  getDefaultOptions() {
+  getDefaultOptions(): DateBoxBaseProperties {
     return {
       ...super.getDefaultOptions(),
       applyValueMode: 'instantly',
     };
   }
 
-  getDisplayFormat(displayFormat) {
+  getDisplayFormat(displayFormat?: Format): Format {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return displayFormat || 'shorttime';
   }
 
-  popupConfig(popupConfig) {
+  popupConfig(popupConfig: PopupProperties): PopupProperties {
     return popupConfig;
   }
 
-  getValue() {
-    const selectedIndex = this._widget.option('selectedIndex');
+  getValue(): Date {
+    const { selectedIndex = -1 } = this.getWidget().option();
 
     if (selectedIndex === -1) {
-      return this.dateBox.option('value');
+      const { value } = this.dateBox.option();
+      return value as Date;
     }
 
     const itemData = this._widgetItems[selectedIndex];
@@ -70,9 +83,8 @@ class ListStrategy extends DateBoxStrategy {
     return true;
   }
 
-  getDefaultDate() {
-    // @ts-expect-error ts-error
-    return new Date(null);
+  getDefaultDate(): Date {
+    return new Date(0);
   }
 
   popupShowingHandler(): void {
@@ -84,28 +96,30 @@ class ListStrategy extends DateBoxStrategy {
     this._refreshItems();
   }
 
-  _getWidgetName() {
+  _getWidgetName(): typeof List {
     return List;
   }
 
-  _getWidgetOptions() {
+  _getWidgetOptions(): Record<string, unknown> {
     return {
       itemTemplate: this._timeListItemTemplate.bind(this),
       onItemClick: this._listItemClickHandler.bind(this),
       tabIndex: -1,
-      onFocusedItemChanged: this._refreshActiveDescendant.bind(this),
+      onFocusedItemChanged: (
+        e: DxEvent & { actionValue: string },
+      ) => this._refreshActiveDescendant(e),
       selectionMode: 'single',
     };
   }
 
-  _refreshActiveDescendant(e): void {
+  _refreshActiveDescendant(e: DxEvent & { actionValue: string }): void {
     this.dateBox.setAria('activedescendant', '');
     this.dateBox.setAria('activedescendant', e.actionValue);
   }
 
   _refreshItems(): void {
     this._widgetItems = this._getTimeListItems();
-    this._widget.option('items', this._widgetItems);
+    this.getWidget().option('items', this._widgetItems);
   }
 
   renderOpenedState(): void {
@@ -116,7 +130,9 @@ class ListStrategy extends DateBoxStrategy {
     this._widget.option('focusedElement', null);
 
     this._setSelectedItemsByValue();
-    if (this._widget.option('templatesRenderAsynchronously')) {
+    const { templatesRenderAsynchronously } = this.getWidget().option();
+    if (templatesRenderAsynchronously) {
+      // eslint-disable-next-line no-restricted-globals
       this._asyncScrollTimeout = setTimeout(this._scrollToSelectedItem.bind(this));
     } else {
       this._scrollToSelectedItem();
@@ -142,22 +158,23 @@ class ListStrategy extends DateBoxStrategy {
   _setSelectedItemsByValue(): void {
     const value = this.dateBoxValue();
     const dateIndex = this._getDateIndex(value);
+    const widget = this.getWidget();
 
     if (dateIndex === -1) {
-      this._widget.option('selectedItems', []);
+      widget.option('selectedItems', []);
     } else {
-      this._widget.option('selectedIndex', dateIndex);
+      widget.option('selectedIndex', dateIndex);
     }
   }
 
   _scrollToSelectedItem(): void {
-    this._widget.scrollToItem(this._widget.option('selectedIndex'));
+    this.getWidget().scrollToItem(this.getWidget().option('selectedIndex'));
   }
 
-  _getDateIndex(date) {
+  _getDateIndex(date?: Date | null): number {
     let result = -1;
 
-    for (let i = 0, n = this._widgetItems.length; i < n; i++) {
+    for (let i = 0, n = this._widgetItems.length; i < n; i += 1) {
       if (this._areDatesEqual(date, this._widgetItems[i])) {
         result = i;
         break;
@@ -167,18 +184,20 @@ class ListStrategy extends DateBoxStrategy {
     return result;
   }
 
-  _areDatesEqual(first, second) {
+  _areDatesEqual(first?: Date | null, second?: Date | null): boolean {
     return isDate(first) && isDate(second)
-    && first.getHours() === second.getHours()
-    && first.getMinutes() === second.getMinutes();
+      && first.getHours() === second.getHours()
+      && first.getMinutes() === second.getMinutes();
   }
 
-  _getTimeListItems() {
-    let min = this.dateBox.dateOption('min') || this._getBoundaryDate('min');
-    const max = this.dateBox.dateOption('max') || this._getBoundaryDate('max');
-    const value = this.dateBox.dateOption('value') || null;
+  _getTimeListItems(): Date[] {
+    let min = this.dateBox.getDateOption('min') ?? this._getBoundaryDate('min');
+    const max = this.dateBox.getDateOption('max') ?? this._getBoundaryDate('max');
+    const value = this.dateBox.getDateOption('value') ?? null;
+    // @ts-expect-error ts-error
     let delta = max - min;
-    const minutes = min.getMinutes() % this.dateBox.option('interval');
+    const { interval = 30 } = this.dateBox.option();
+    const minutes = min.getMinutes() % interval;
 
     if (delta < 0) {
       return [];
@@ -187,7 +206,7 @@ class ListStrategy extends DateBoxStrategy {
     if (delta > dateUtils.ONE_DAY) {
       delta = dateUtils.ONE_DAY;
     }
-
+    // @ts-expect-error ts-error
     if (value - min < dateUtils.ONE_DAY) {
       return this._getRangeItems(min, new Date(min), delta);
     }
@@ -195,6 +214,7 @@ class ListStrategy extends DateBoxStrategy {
     min = this._getBoundaryDate('min');
     min.setMinutes(minutes);
 
+    // @ts-expect-error ts-error
     if (value && Math.abs(value - max) < dateUtils.ONE_DAY) {
       delta = (max.getHours() * 60 + Math.abs(max.getMinutes() - minutes)) * dateUtils.ONE_MINUTE;
     }
@@ -202,12 +222,12 @@ class ListStrategy extends DateBoxStrategy {
     return this._getRangeItems(min, new Date(min), delta);
   }
 
-  _getRangeItems(startValue, currentValue, rangeDuration) {
-    const rangeItems = [];
-    const interval = this.dateBox.option('interval');
+  _getRangeItems(startValue: Date, currentValue: Date, rangeDuration: number): Date[] {
+    const rangeItems: Date[] = [];
+    const { interval = 30 } = this.dateBox.option();
 
+    // @ts-expect-error ts-error
     while (currentValue - startValue <= rangeDuration) {
-      // @ts-expect-error
       rangeItems.push(new Date(currentValue));
       currentValue.setMinutes(currentValue.getMinutes() + interval);
     }
@@ -215,9 +235,9 @@ class ListStrategy extends DateBoxStrategy {
     return rangeItems;
   }
 
-  _getBoundaryDate(boundary) {
+  _getBoundaryDate(boundary: 'min' | 'max'): Date {
     const boundaryValue = BOUNDARY_VALUES[boundary];
-    const currentValue = new Date(ensureDefined(this.dateBox.dateOption('value'), 0));
+    const currentValue = new Date(ensureDefined(this.dateBox.getDateOption('value'), new Date(0)));
 
     return new Date(
       currentValue.getFullYear(),
@@ -228,13 +248,14 @@ class ListStrategy extends DateBoxStrategy {
     );
   }
 
-  _timeListItemTemplate(itemData) {
-    const displayFormat = this.dateBox.option('displayFormat');
-    return dateLocalization.format(itemData, this.getDisplayFormat(displayFormat));
+  _timeListItemTemplate(itemData: Date): string {
+    const { displayFormat } = this.dateBox.option();
+    return dateLocalization.format(itemData, this.getDisplayFormat(displayFormat)) as string;
   }
 
-  _listItemClickHandler(e): void {
-    if (this.dateBox.option('applyValueMode') === 'useButtons') {
+  _listItemClickHandler(e: ItemClickEvent): void {
+    const { applyValueMode } = this.dateBox.option();
+    if (applyValueMode === 'useButtons') {
       return;
     }
 
@@ -244,8 +265,8 @@ class ListStrategy extends DateBoxStrategy {
     this.dateBoxValue(date, e.event);
   }
 
-  _getDateByItemData(itemData) {
-    let date = this.dateBox.option('value');
+  _getDateByItemData(itemData: Date): Date {
+    let { value: date } = this.dateBox.option();
     const hours = itemData.getHours();
     const minutes = itemData.getMinutes();
     const seconds = itemData.getSeconds();
@@ -254,8 +275,9 @@ class ListStrategy extends DateBoxStrategy {
     const day = itemData.getDate();
 
     if (date) {
-      if (this.dateBox.option('dateSerializationFormat')) {
-        date = dateSerialization.deserializeDate(date);
+      const { dateSerializationFormat } = this.dateBox.option();
+      if (dateSerializationFormat) {
+        date = dateSerialization.deserializeDate(date) as Date;
       } else {
         date = new Date(date);
       }
@@ -273,23 +295,21 @@ class ListStrategy extends DateBoxStrategy {
     return date;
   }
 
-  getKeyboardListener() {
-    return this._widget;
+  getKeyboardListener(): List {
+    return this.getWidget();
   }
 
   _updatePopupHeight(): void {
     const dropDownOptionsHeight = getSizeValue(this.dateBox.option('dropDownOptions.height'));
     if (dropDownOptionsHeight === undefined || dropDownOptionsHeight === 'auto') {
       this.dateBox._setPopupOption('height', 'auto');
-      const popupHeight = getOuterHeight(this._widget.$element());
+      const popupHeight = getOuterHeight(this.getWidget().$element());
       const maxHeight = getHeight(window) * 0.45;
       this.dateBox._setPopupOption('height', Math.min(popupHeight, maxHeight));
     }
-
-    this.dateBox._timeList?.updateDimensions();
   }
 
-  getParsedText(text, format) {
+  getParsedText(text?: string, format?: string): Date | undefined | null {
     let value = super.getParsedText(text, format);
 
     if (value) {

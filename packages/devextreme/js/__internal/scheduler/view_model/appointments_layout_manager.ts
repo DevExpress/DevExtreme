@@ -1,9 +1,11 @@
-import type { Appointment } from '@js/ui/scheduler';
+import type { Appointment, Occurrence } from '@js/ui/scheduler';
 
 import type Scheduler from '../m_scheduler';
 import { filterAppointments } from './filtration/filter_appointments';
+import { getOccurrences } from './filtration/get_occurrences';
 import { generateAgendaViewModel } from './generate_view_model/generate_agenda_view_model';
-import { generateGridViewModel } from './generate_view_model/generate_grid_view_model';
+import { generateGridViewModel, sortAppointments } from './generate_view_model/generate_grid_view_model';
+import { OptionManager } from './generate_view_model/options/option_manager';
 import type { RealSize } from './generate_view_model/steps/add_geometry/types';
 import { getAgendaAppointmentInfo, getAppointmentInfo } from './get_appointment_info';
 import { prepareAppointments } from './preparation/prepare_appointments';
@@ -14,13 +16,20 @@ import type {
   AppointmentViewModelPlain,
   ListEntity,
   MinimalAppointmentEntity,
+  SortedEntity,
   UTCDatesBeforeSplit,
 } from './types';
 
 class AppointmentLayoutManager {
-  preparedItems: MinimalAppointmentEntity[] = [];
+  private preparedItems: MinimalAppointmentEntity[] = [];
 
-  filteredItems: ListEntity[] = [];
+  private _filteredItems: ListEntity[] = [];
+
+  public get filteredItems(): ListEntity[] { return this._filteredItems; }
+
+  private _sortedItems: SortedEntity[] = [];
+
+  public get sortedItems(): SortedEntity[] { return this._sortedItems; }
 
   // NOTE: Here we should pass global store. But right now scheduler component is global store
   constructor(public schedulerStore: Scheduler) {}
@@ -30,17 +39,33 @@ class AppointmentLayoutManager {
   }
 
   public filterAppointments(): void {
-    this.filteredItems = filterAppointments(this.schedulerStore, this.preparedItems);
+    this._filteredItems = filterAppointments(this.schedulerStore, this.preparedItems);
+  }
+
+  public getOccurrences(
+    startDate: Date,
+    endDate: Date,
+    rawAppointments: Appointment[],
+  ): Occurrence[] {
+    const preparedAppointments = prepareAppointments(this.schedulerStore, rawAppointments);
+    const occurrences = getOccurrences(
+      this.schedulerStore,
+      startDate,
+      endDate,
+      preparedAppointments,
+    );
+
+    return occurrences;
   }
 
   public hasAllDayAppointments(): boolean {
-    return this.filteredItems.filter((item: ListEntity) => item.isAllDayPanelOccupied).length > 0;
+    return this._filteredItems.filter((item: ListEntity) => item.isAllDayPanelOccupied).length > 0;
   }
 
   public generateViewModel(): AppointmentViewModelPlain[] {
     const viewType = this.schedulerStore.currentView.type;
     if (viewType === 'agenda') {
-      const viewModel = generateAgendaViewModel(this.schedulerStore, this.filteredItems);
+      const viewModel = generateAgendaViewModel(this.schedulerStore, this._filteredItems);
       return viewModel.map((item) => ({
         ...item,
         isAgendaModel: true,
@@ -48,10 +73,19 @@ class AppointmentLayoutManager {
       }));
     }
 
+    const optionManager = new OptionManager(this.schedulerStore);
+
+    this._sortedItems = sortAppointments(optionManager, this._filteredItems);
+
+    const viewModel = generateGridViewModel(
+      this.schedulerStore,
+      optionManager,
+      this._sortedItems,
+    );
+
     const isSkipResizing = (appointment: ListEntity): boolean => appointment.isAllDayPanelOccupied
       && viewType === 'day'
       && this.schedulerStore.currentView.intervalCount === 1;
-    const viewModel = generateGridViewModel(this.schedulerStore, this.filteredItems);
     const toItem = (item: AppointmentEntity): AppointmentItemViewModel => ({
       itemData: item.itemData,
       allDay: item.isAllDayPanelOccupied,
@@ -83,6 +117,7 @@ class AppointmentLayoutManager {
       height: item.height,
       info: getAppointmentInfo(item),
     } as unknown as AppointmentItemViewModel);
+
     return viewModel.map((item) => {
       if (item.items.length) {
         return {

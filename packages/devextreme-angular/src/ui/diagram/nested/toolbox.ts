@@ -16,7 +16,7 @@ import {
 
 
 
-import { ShapeCategory, ToolboxDisplayMode, ShapeType, PanelVisibility } from 'devextreme/ui/diagram';
+import type { ShapeCategory, ToolboxDisplayMode, ShapeType, PanelVisibility } from 'devextreme/ui/diagram';
 
 import {
     DxIntegrationModule,
@@ -44,10 +44,10 @@ export class DxoDiagramToolboxComponent extends NestedOption implements OnDestro
     }
     
     @Input()
-    get groups(): { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType>, title?: string }[] {
+    get groups(): { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }[] {
         return this._getOption('groups');
     }
-    set groups(value: { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType>, title?: string }[]) {
+    set groups(value: { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }[]) {
         this._setOption('groups', value);
     }
 

@@ -1,39 +1,54 @@
+/* eslint-disable class-methods-use-this */
 import messageLocalization from '@js/common/core/localization/message';
+import type { Device } from '@js/core/devices';
 import $ from '@js/core/renderer';
 import { inputType } from '@js/core/utils/support';
 import { getWindow } from '@js/core/utils/window';
+import type { Format } from '@js/localization';
 
+import type { PopupProperties } from '../popup/m_popup';
+import type DateBox from './date_box.base';
+import type { DateBoxBaseProperties } from './date_box.base';
+import dateUtils from './date_utils';
 import DateView from './date_view';
 import DateBoxStrategy from './m_date_box.strategy';
-import dateUtils from './m_date_utils';
 
 const window = getWindow();
 
 class DateViewStrategy extends DateBoxStrategy {
-  ctor(dateBox): void {
-    super.ctor(dateBox);
+  constructor(dateBox: DateBox) {
+    super(dateBox);
 
     this.NAME = 'DateView';
   }
 
-  getDefaultOptions() {
+  getWidget(): DateView {
+    return this._widget as DateView;
+  }
+
+  getDefaultOptions(): DateBoxBaseProperties {
     return {
       ...super.getDefaultOptions(),
       openOnFieldClick: true,
       applyButtonText: messageLocalization.format('OK'),
-      'dropDownOptions.showTitle': true,
+      dropDownOptions: {
+        showTitle: true,
+      },
     };
   }
 
-  getDisplayFormat(displayFormat) {
-    return displayFormat || dateUtils.FORMATS_MAP[this.dateBox.option('type')];
+  getDisplayFormat(displayFormat: Format): Format {
+    const { type = 'date' } = this.dateBox.option();
+
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return displayFormat || dateUtils.FORMATS_MAP[type];
   }
 
-  popupConfig(config) {
+  popupConfig(config: PopupProperties): PopupProperties {
     return {
       toolbarItems: this.dateBox._popupToolbarItemsConfig(),
       onInitialized: config.onInitialized,
-
+      // @ts-expect-error ts-error
       defaultOptionsRules: [
         {
           device: { platform: 'android' },
@@ -43,7 +58,7 @@ class DateViewStrategy extends DateBoxStrategy {
           },
         },
         {
-          device(device) {
+          device(device: Device): boolean {
             const { platform } = device;
             return platform === 'generic' || platform === 'ios';
           },
@@ -53,11 +68,11 @@ class DateViewStrategy extends DateBoxStrategy {
           },
         },
         {
-          device(device) {
+          device(device: Device): boolean {
             const { platform } = device;
             const { phone } = device;
 
-            return platform === 'generic' && phone;
+            return platform === 'generic' && Boolean(phone);
           },
           options: {
             width: 333,
@@ -84,8 +99,9 @@ class DateViewStrategy extends DateBoxStrategy {
     };
   }
 
-  _renderWidget() {
-    if (inputType(this.dateBox.option('mode')) && this.dateBox._isNativeType() || this.dateBox.option('readOnly')) {
+  _renderWidget(): void {
+    const { mode, readOnly } = this.dateBox.option();
+    if ((inputType(mode) && this.dateBox._isNativeType()) || readOnly) {
       if (this._widget) {
         this._widget.$element().remove();
         this._widget = null;
@@ -94,39 +110,41 @@ class DateViewStrategy extends DateBoxStrategy {
       return;
     }
 
-    const popup = this._getPopup();
+    const $popupContent = this._getPopupContent();
 
     if (this._widget) {
       this._widget.option(this._getWidgetOptions());
     } else {
-      const element = $('<div>').appendTo(popup.$content());
+      const element = $('<div>').appendTo($popupContent);
       this._widget = this._createWidget(element);
     }
 
     this._widget.$element().appendTo(this._getWidgetContainer());
   }
 
-  _getWidgetName() {
+  _getWidgetName(): typeof DateView {
     return DateView;
   }
 
   renderOpenedState(): void {
     super.renderOpenedState();
+    const widget = this.getWidget();
 
-    if (this._widget) {
-      this._widget.option('value', this._widget._getCurrentDate());
+    if (widget) {
+      widget.option('value', widget._getCurrentDate());
     }
   }
 
-  _getWidgetOptions() {
+  _getWidgetOptions(): Record<string, unknown> {
+    const { type = 'date' } = this.dateBox.option();
     return {
-      value: this.dateBoxValue() || new Date(),
-      type: this.dateBox.option('type'),
-      minDate: this.dateBox.dateOption('min') || new Date(1900, 0, 1),
-      maxDate: this.dateBox.dateOption('max') || new Date(Date.now() + 50 * dateUtils.ONE_YEAR),
-      onDisposing: function () {
+      value: this.dateBoxValue() ?? new Date(),
+      type,
+      minDate: this.dateBox.getDateOption('min') ?? new Date(1900, 0, 1),
+      maxDate: this.dateBox.getDateOption('max') ?? new Date(Date.now() + 50 * dateUtils.ONE_YEAR),
+      onDisposing: (): void => {
         this._widget = null;
-      }.bind(this),
+      },
     };
   }
 }

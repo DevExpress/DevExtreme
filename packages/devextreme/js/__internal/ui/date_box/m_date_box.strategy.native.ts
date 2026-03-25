@@ -1,19 +1,24 @@
+/* eslint-disable class-methods-use-this */
 import devices from '@js/core/devices';
+import type { dxElementWrapper } from '@js/core/renderer';
 import dateSerialization from '@js/core/utils/date_serialization';
 import { inputType } from '@js/core/utils/support';
+import type { Format } from '@js/localization';
+import type { TextBoxType } from '@js/ui/text_box';
 
 import type { PopupProperties } from '../popup/m_popup';
+import type { DateBoxBaseProperties } from './date_box.base';
+import type DateBox from './date_box.base';
+import dateUtils from './date_utils';
 import DateBoxStrategy from './m_date_box.strategy';
-import dateUtils from './m_date_utils';
 
 class NativeStrategy extends DateBoxStrategy {
-  ctor(dateBox): void {
-    super.ctor(dateBox);
+  constructor(dateBox: DateBox) {
+    super(dateBox);
 
     this.NAME = 'Native';
   }
 
-  // eslint-disable-next-line class-methods-use-this
   popupConfig(popupConfig: PopupProperties): PopupProperties {
     return {
       ...popupConfig,
@@ -21,13 +26,14 @@ class NativeStrategy extends DateBoxStrategy {
     };
   }
 
-  getParsedText(text) {
+  getParsedText(text?: string): Date | undefined | null {
     if (!text) {
       return null;
     }
 
+    const { type } = this.dateBox.option();
     // NOTE: Required for correct date parsing when native picker is used (T418155)
-    if (this.dateBox.option('type') === 'datetime') {
+    if (type === 'datetime') {
       return new Date(text.replace(/-/g, '/').replace('T', ' ').split('.')[0]);
     }
 
@@ -36,44 +42,43 @@ class NativeStrategy extends DateBoxStrategy {
 
   renderPopupContent(): void {}
 
-  _getWidgetName(): void {}
-
-  _getWidgetOptions(): void {}
-
-  _getDateBoxType() {
-    let { type } = this.dateBox.option();
+  _getDateBoxType(): string {
+    const { type = 'date' } = this.dateBox.option();
 
     if (!dateUtils.SUPPORTED_FORMATS.includes(type)) {
-      type = 'date';
-    } else if (type === 'datetime' && !inputType(type)) {
-      type = 'datetime-local';
+      return 'date';
+    }
+    if (type === 'datetime' && !inputType(type)) {
+      return 'datetime-local';
     }
 
     return type;
   }
 
-  customizeButtons() {
+  customizeButtons(): void {
     const dropDownButton = this.dateBox.getButton('dropDown');
     if (devices.real().android && dropDownButton) {
       dropDownButton.on('click', () => {
-        this.dateBox._input().get(0).click();
+        (this.dateBox._input().get(0) as HTMLInputElement).click();
       });
     }
   }
 
-  getDefaultOptions() {
+  getDefaultOptions(): DateBoxBaseProperties {
     return {
-      mode: this._getDateBoxType(),
+      mode: this._getDateBoxType() as TextBoxType,
     };
   }
 
-  getDisplayFormat(displayFormat?) {
+  getDisplayFormat(displayFormat?: Format): Format {
     const type = this._getDateBoxType();
-    return displayFormat || dateUtils.FORMATS_MAP[type];
+
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return displayFormat || dateUtils.FORMATS_MAP[type] as string;
   }
 
-  renderInputMinMax($input?): void {
-    const type = this.dateBox.option('type');
+  renderInputMinMax($input?: dxElementWrapper): void {
+    const { type = 'date' } = this.dateBox.option();
     const defaultFormat = 'yyyy-MM-dd';
     const format = {
       datetime: 'yyyy-MM-ddTHH:mm:ss',
@@ -81,9 +86,10 @@ class NativeStrategy extends DateBoxStrategy {
       time: 'HH:mm:ss',
     }[type] ?? defaultFormat;
 
+    // @ts-expect-error requires renderer types improvements
     $input.attr({
-      min: dateSerialization.serializeDate(this.dateBox.dateOption('min'), format),
-      max: dateSerialization.serializeDate(this.dateBox.dateOption('max'), format),
+      min: dateSerialization.serializeDate(this.dateBox.getDateOption('min'), format),
+      max: dateSerialization.serializeDate(this.dateBox.getDateOption('max'), format),
     });
   }
 }

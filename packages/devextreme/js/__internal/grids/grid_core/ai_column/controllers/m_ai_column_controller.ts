@@ -1,8 +1,9 @@
 import type { DataChange } from '@js/common/grids';
 import type { Callback } from '@js/core/utils/callbacks';
 import { isDefined } from '@ts/core/utils/m_type';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 
-import type { Column, ColumnsController } from '../../columns_controller/m_columns_controller';
+import type { ColumnsController } from '../../columns_controller/m_columns_controller';
 import type { DataController, HandleDataChangedArguments, UserData } from '../../data_controller/m_data_controller';
 import { Controller } from '../../m_modules';
 import gridCoreUtils from '../../m_utils';

@@ -382,7 +382,7 @@ $cardview-material-nodata-view__icon-bg-color: null !default;
 * $name 1100. Background color
 * $type color
 */
-$cardview-material-card__content__field-value--highlighted-bg-color: null !default;
+$cardview-material-card__content__field-value--highlighted-bg-color: #FFE082 !default;
 
 /**
 * $name 1102. Text color
@@ -484,8 +484,7 @@ $cardview-material-columnchooser--empty__message-color: null !default;
   $cardview-material-nodata-view__icon-bg-color: color.adjust($base-bg, $lightness: -7.84%, $space: hsl) !default;
 
   // Search highlight
-  $cardview-material-card__content__field-value--highlighted-bg-color: $base-warning !default;
-  $cardview-material-card__content__field-value--highlighted-text-color: $cardview-material-common-text-color !default;
+  $cardview-material-card__content__field-value--highlighted-text-color: rgba(0, 0, 0, 1) !default;
   $cardview-material-card__content__field-value--highlighted-box-shadow-color: rgba(0, 0, 0, 0.25) !default;
 
   // Column chooser
@@ -572,8 +571,7 @@ $cardview-material-columnchooser--empty__message-color: null !default;
   $cardview-material-nodata-view__icon-bg-color: color.adjust($base-bg, $saturation: -0.3%, $space: hsl, $lightness: 8.04%) !default;
 
   // Search highlight
-  $cardview-material-card__content__field-value--highlighted-bg-color: $base-warning !default;
-  $cardview-material-card__content__field-value--highlighted-text-color: $cardview-material-common-text-color !default;
+  $cardview-material-card__content__field-value--highlighted-text-color: $base-inverted-text-color !default;
   $cardview-material-card__content__field-value--highlighted-box-shadow-color: rgba(0, 0, 0, 0.25) !default;
 
   // Column chooser

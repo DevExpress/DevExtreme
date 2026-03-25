@@ -272,8 +272,10 @@
         "dxScheduler-ariaLabel-currentIndicator-present": "Aktuell tidsindikator visas i vyn",
         "dxScheduler-ariaLabel-currentIndicator-not-present": "Aktuell tidsindikator visas inte på skärmen",
 
-        "dxScheduler-appointmentAriaLabel-group": "Grupp: {0}",
+        "dxScheduler-appointmentAriaDescription-group": "Grupp: {0}",
         "dxScheduler-appointmentAriaLabel-recurring": "Återkommande bokning",
+        "dxScheduler-hotkeysAriaDescription-delete": "Press Delete to delete this appointment",
+        "dxScheduler-hotkeysAriaDescription-homeEnd": "Press Home or End to quickly navigate to the first or last appointment",
 
         "dxScheduler-appointmentListAriaLabel": "Bokningslista",
         "dxScheduler-newPopupTitle": "Ny bokning",

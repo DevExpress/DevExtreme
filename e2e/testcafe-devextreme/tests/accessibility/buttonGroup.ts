@@ -19,17 +19,9 @@ const optionsWithSimpleItems: Options<Properties> = {
   disabled: [true, false],
   selectionMode: ['multiple', 'none', 'single'],
   selectedItemKeys: [['text_1']],
-  // NOTE: Doesn't matter if there are contrast issues
-  // stylingMode: ['text', 'contained', 'outlined'],
-  // type: ['danger', 'default', 'normal', 'success'],
 };
 
-const a11yCheckConfig = {
-  rules: {
-    // NOTE: color-contrast issues
-    'color-contrast': { enabled: false },
-  },
-};
+const a11yCheckConfig = {};
 
 const configurationWithSimpleItems: Configuration = {
   component: 'dxButtonGroup',

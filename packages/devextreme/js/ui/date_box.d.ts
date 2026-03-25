@@ -409,9 +409,6 @@ export default class dxDateBox extends DateBoxBase<Properties> {
  */
 export type Properties = dxDateBoxOptions;
 
-/** @deprecated use Properties instead */
-export type Options = Properties;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

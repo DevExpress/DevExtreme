@@ -356,19 +356,19 @@ export const resourcesData: Resource[] = [
   {
     text: 'Samantha Bright',
     id: 1,
-    color: '#cb6bb2',
+    color: '#C2185B',
   }, {
     text: 'John Heart',
     id: 2,
-    color: '#56ca85',
+    color: '#2E7D32',
   }, {
     text: 'Todd Hoffman',
     id: 3,
-    color: '#1e90ff',
+    color: '#1564C0',
   }, {
     text: 'Sandra Johnson',
     id: 4,
-    color: '#ff9747',
+    color: '#DD2C00',
   },
 ];
 
@@ -376,10 +376,10 @@ export const priorityData: Resource[] = [
   {
     text: 'Low Priority',
     id: 1,
-    color: '#1e90ff',
+    color: '#1564C0',
   }, {
     text: 'High Priority',
     id: 2,
-    color: '#ff9747',
+    color: '#DD2C00',
   },
 ];

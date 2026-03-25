@@ -435,9 +435,6 @@ export default class dxMap extends Widget<dxMapOptions> {
 /** @public */
 export type Properties = dxMapOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxMapOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

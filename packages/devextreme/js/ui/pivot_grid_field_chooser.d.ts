@@ -279,9 +279,6 @@ export default class dxPivotGridFieldChooser extends Widget<dxPivotGridFieldChoo
 /** @public */
 export type Properties = dxPivotGridFieldChooserOptions;
 
-/** @deprecated use Properties instead */
-export type Options = dxPivotGridFieldChooserOptions;
-
 /// #DEBUG
 // eslint-disable-next-line import/first
 import { CheckedEvents } from '../core';

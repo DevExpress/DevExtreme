@@ -47,6 +47,7 @@
   "include": [
     "js/**/*.d.ts",
     "../devextreme-themebuilder",
-    "testing/testcafe"
+    "testing/testcafe",
+    "testing/runner/**/*.ts"
   ]
 }

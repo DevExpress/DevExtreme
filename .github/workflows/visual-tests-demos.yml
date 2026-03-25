@@ -1,0 +1,1286 @@
+name: Demos Visual Tests
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    paths-ignore:
+      - 'apps/**/*.md'
+  push:
+    branches: [26_1]
+  workflow_dispatch:
+
+env:
+  NX_SKIP_NX_CACHE: ${{ contains(github.event.pull_request.labels.*.name, 'skip-cache') && 'true' || 'false' }}
+  RUN_TESTS: true
+
+jobs:
+  check-should-run:
+    name: Check if tests should run
+    runs-on: devextreme-shr2
+    outputs:
+      should-run: ${{ steps.check.outputs.should-run }}
+    steps:
+      - name: Check RUN_TESTS flag
+        id: check
+        run: echo "should-run=${{ env.RUN_TESTS }}" >> $GITHUB_OUTPUT
+
+  get-changes:
+    runs-on: devextreme-shr2
+    needs: check-should-run
+    if: github.event_name == 'pull_request' && needs.check-should-run.outputs.should-run == 'true'
+    name: Get changed demos
+    timeout-minutes: 5
+    outputs:
+      has-changed-demos: ${{ steps.check-changes.outputs.has-changed-demos }}
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Get changed files
+        uses: DevExpress/github-actions/get-changed-files@v1
+        with:
+          gh-token: ${{ secrets.GITHUB_TOKEN }}
+          paths: 'apps/demos/Demos/**/*'
+          output: apps/demos/changed-files.json
+
+      - name: Display changed files
+        id: check-changes
+        run: |
+          HAS_CHANGED="false"
+          if [ -f "apps/demos/changed-files.json" ]; then
+            DEMO_COUNT=$(jq length apps/demos/changed-files.json)
+            echo "Found changed-files.json"
+            echo "Content of changed-files.json:"
+            cat apps/demos/changed-files.json
+            echo "Number of changed files: $DEMO_COUNT"
+            if [ "$DEMO_COUNT" -gt 0 ]; then
+              HAS_CHANGED="true"
+            fi
+          else
+            echo "changed-files.json not found"
+          fi
+          echo "has-changed-demos=${HAS_CHANGED}" >> $GITHUB_OUTPUT
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: changed-demos
+          path: apps/demos/changed-files.json
+          retention-days: 1
+
+  determine-framework-tests-scope:
+    runs-on: devextreme-shr2
+    name: Determine scope for framework tests
+    needs: [check-should-run, get-changes]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      (needs.get-changes.result == 'success' || needs.get-changes.result == 'skipped')
+    outputs:
+      framework-tests-scope: ${{ steps.determine.outputs.framework-tests-scope }}
+
+    steps:
+      - name: Determine framework tests scope
+        id: determine
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ] || [ "${{ contains(github.event.pull_request.labels.*.name, 'force all tests') }}" = "true" ]; then
+            echo "Framework tests scope: all demos"
+            echo "framework-tests-scope=all" >> $GITHUB_OUTPUT
+          elif [ "${{ needs.get-changes.outputs.has-changed-demos }}" = "true" ]; then
+            echo "Framework tests scope: changed demos"
+            echo "framework-tests-scope=changed" >> $GITHUB_OUTPUT
+          else
+            echo "Framework tests NOT needed"
+            echo "framework-tests-scope=none" >> $GITHUB_OUTPUT
+          fi
+
+  build-devextreme:
+    runs-on: devextreme-shr2
+    name: Build DevExtreme
+    needs: [check-should-run, determine-framework-tests-scope]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success'
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+    timeout-minutes: 30
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cache
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: DevExtreme - Build
+        if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'none'
+        shell: bash
+        run: |
+          pnpx nx build devextreme-scss
+          pnpx nx build devextreme -c testing
+
+      - name: DevExtreme - Build-all
+        if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+        run: pnpm nx all:build-testing workflows
+
+      - name: Zip artifacts (for jQuery tests)
+        working-directory: ./packages/devextreme
+        run: |
+          7z a -tzip -mx3 -mmt2 artifacts.zip artifacts ../devextreme-scss/scss/bundles
+
+      - name: Upload build artifacts (for jQuery tests)
+        uses: actions/upload-artifact@v4
+        with:
+          name: devextreme-artifacts-jquery
+          path: ./packages/devextreme/artifacts.zip
+          retention-days: 1
+
+      - name: Move packages
+        if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+        run: |
+          mv ./packages/devextreme/artifacts/npm/devextreme/*.tgz ./devextreme-installer.tgz
+          mv ./packages/devextreme/artifacts/npm/devextreme-dist/*.tgz ./devextreme-dist-installer.tgz
+          mv ./packages/devextreme-angular/npm/dist/*.tgz ./devextreme-angular-installer.tgz
+          mv ./packages/devextreme-react/npm/*.tgz ./devextreme-react-installer.tgz
+          mv ./packages/devextreme-vue/npm/*.tgz ./devextreme-vue-installer.tgz
+
+      - name: Copy build artifacts
+        if: needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none'
+        uses: actions/upload-artifact@v4
+        with:
+          name: devextreme-sources
+          path: |
+            devextreme-installer.tgz
+            devextreme-dist-installer.tgz
+            devextreme-angular-installer.tgz
+            devextreme-react-installer.tgz
+            devextreme-vue-installer.tgz
+          retention-days: 1
+
+  build-demos:
+    runs-on: devextreme-shr2
+    name: Build Demos Bundles
+    timeout-minutes: 30
+    needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success'
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Download devextreme sources
+        uses: actions/download-artifact@v4
+        with:
+          name: devextreme-sources
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache/restore@v4
+        name: Restore pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cache
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install tgz
+        working-directory: apps/demos
+        run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
+#    - name: Build wrappers
+#      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
+
+#    - name: Link wrappers packages
+#      run: pnpm install --frozen-lockfile
+
+      - name: Prepare bundles
+        working-directory: apps/demos
+        run: pnpx nx prepare-bundles
+
+      - name: Demos - Run tsc
+        working-directory: apps/demos
+        run: pnpm exec tsc --noEmit
+
+      - name: Copy build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: devextreme-bundles
+          path: |
+            apps/demos/bundles/
+          retention-days: 1
+
+  check-ts:
+    name: Check TS
+    needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success'
+    runs-on: devextreme-shr2
+    timeout-minutes: 30
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Download devextreme packages
+        uses: actions/download-artifact@v4
+        with:
+          name: devextreme-sources
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache/restore@v4
+        name: Restore pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cache
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install tgz
+        run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
+
+      - name: Demos - Check Vue TS
+        working-directory: apps/demos
+        run: pnpm run ts-check-vue
+
+      # - name: Run check TS for Angular
+      #   working-directory: apps/demos
+      #   run: pnpm run ts-check-ng
+
+      - name: Demos - Check React TS
+        working-directory: apps/demos
+        run: pnpm run ts-check-react
+
+  lint:
+    name: Lint code base
+    needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success'
+
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Download artifacts
+      if: github.event_name == 'pull_request'
+      uses: actions/download-artifact@v4
+      with:
+        name: changed-demos
+        path: apps/demos
+      continue-on-error: true
+
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-sources
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v4
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v4
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Install tgz
+      run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
+
+    - name: Run lint on all demos
+      if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all'
+      working-directory: apps/demos
+      env:
+        DEBUG: 'eslint:cli-engine,stylelint:standalone'
+        NODE_OPTIONS: --max-old-space-size=8192
+      run: pnpx nx lint
+
+    - name: Run lint on changed demos
+      if: needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed'
+      working-directory: apps/demos
+      env:
+        DEBUG: 'eslint:cli-engine,stylelint:standalone'
+      run: |
+        pnpx nx lint-non-demos
+
+        if [ -f "changed-files.json" ]; then
+          echo "Running lint-demos on changed files"
+          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json \
+            | grep '^apps/demos/Demos/' \
+            | sed 's|^apps/demos/||' \
+            | while read f; do
+                [ -f "$f" ] && echo "$f"
+              done \
+            | tr '\n' ' ')
+          if [ ! -z "$CHANGED_DEMOS" ]; then
+            echo "Changed demo files: $CHANGED_DEMOS"
+            pnpm run eslint $CHANGED_DEMOS
+          else
+            echo "No demo files changed, skipping lint-demos"
+          fi
+        else
+          echo "changed-files.json not found"
+          pnpm run lint-demos
+        fi
+
+  check-generated-demos-changed:
+    name: Check generated demos (changed only)
+    runs-on: devextreme-shr2
+    timeout-minutes: 10
+    needs: [check-should-run, get-changes, build-devextreme, determine-framework-tests-scope]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed' &&
+      needs.build-devextreme.result == 'success'
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Download changed demos
+      uses: actions/download-artifact@v4
+      with:
+        name: changed-demos
+        path: apps/demos
+      continue-on-error: true
+
+    - uses: pnpm/action-setup@v4
+      with:
+        run_install: false
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-sources
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v4
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Install tgz
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
+    - name: Prepare JS
+      working-directory: apps/demos
+      run: pnpm run prepare-js
+
+    - name: Check generated JS demos
+      working-directory: apps/demos
+      run: |
+        if [ -f "changed-files.json" ]; then
+          echo "Running convert-to-js on changed files only"
+
+          CHANGED_DEMOS=$(jq -r '.[].filename' changed-files.json | grep '/React/' | grep '\.tsx$' | sed 's|^apps/demos/||' | sed 's|/[^/]*\.tsx$||' | sort | uniq)
+
+          if [ -z "$CHANGED_DEMOS" ]; then
+            echo "No React demos found in changed files, skipping conversion"
+          else
+            echo "Changed React demos:"
+            echo "$CHANGED_DEMOS"
+
+            echo "$CHANGED_DEMOS" | while read -r demo_dir; do
+              if [ ! -z "$demo_dir" ]; then
+                echo "Converting: $demo_dir"
+                pnpm run convert-to-js "$demo_dir"
+              fi
+            done
+          fi
+        fi
+
+        git add ./Demos -N
+
+        if git diff --exit-code . ':!package.json' ; then
+          echo "Generated JS demos are up-to-date"
+        else
+          echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js split' and commit changes."
+          echo "If you see another diff, ensure that extra listed files have LF endings."
+          exit 1
+        fi
+
+  check-generated-demos-all:
+    name: Check generated demos (${{ matrix.CONSTEL }})
+    runs-on: devextreme-shr2
+    timeout-minutes: 15
+    needs: [check-should-run, build-devextreme, determine-framework-tests-scope]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all' &&
+      needs.build-devextreme.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: ['1/5', '2/5', '3/5', '4/5', '5/5']
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - uses: pnpm/action-setup@v4
+      with:
+        run_install: false
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-sources
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v4
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Install tgz
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
+    - name: Prepare JS
+      working-directory: apps/demos
+      run: pnpm run prepare-js
+
+    - name: Check generated JS demos
+      working-directory: apps/demos
+      env:
+        CONSTEL: ${{ matrix.CONSTEL }}
+      run: |
+        echo "Running convert-to-js for split $CONSTEL"
+        pnpm run convert-to-js
+
+        git add ./Demos -N
+
+        if git diff --exit-code . ':!package.json' ; then
+          echo "Generated JS demos are up-to-date for split $CONSTEL"
+        else
+          echo "Generated JS demos are outdated for split $CONSTEL. Execute 'pnpm run convert-to-js split' and commit changes."
+          echo "If you see another diff, ensure that extra listed files have LF endings."
+          exit 1
+        fi
+
+  testcafe-jquery:
+    needs: [check-should-run, build-devextreme, determine-framework-tests-scope]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.build-devextreme.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        STRATEGY: [screenshots, accessibility]
+        THEME: ['material.blue.light', 'fluent.blue.light', 'material.blue.dark', 'fluent.blue.dark']
+        CONSTEL: [jquery(1/3), jquery(2/3), jquery(3/3), jquery]
+        exclude:
+          - STRATEGY: accessibility
+            CONSTEL: jquery(1/3)
+          - STRATEGY: accessibility
+            CONSTEL: jquery(2/3)
+          - STRATEGY: accessibility
+            CONSTEL: jquery(3/3)
+          - STRATEGY: screenshots
+            CONSTEL: jquery
+          - STRATEGY: screenshots
+            THEME: 'material.blue.dark'
+          - STRATEGY: screenshots
+            THEME: 'fluent.blue.dark'
+    env:
+      ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
+
+    runs-on: devextreme-shr2
+    name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}
+    timeout-minutes: 30
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-artifacts-jquery
+        path: ./packages/devextreme
+
+    - name: Unpack artifacts
+      working-directory: ./packages/devextreme
+      run: 7z x artifacts.zip -aoa
+
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '145.0.7632.67'
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v4
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v4
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Cache Roboto font
+      if: contains(matrix.THEME, 'material')
+      id: cache-roboto
+      uses: actions/cache@v4
+      with:
+        path: /usr/share/fonts/truetype/roboto
+        key: roboto-font-${{ runner.os }}
+
+    - name: Install Roboto font for Material theme
+      if: contains(matrix.THEME, 'material') && steps.cache-roboto.outputs.cache-hit != 'true'
+      run: |
+        echo "Installing Roboto font..."
+        sudo apt-get update -qq
+        sudo apt-get install -y -qq fonts-roboto fonts-roboto-unhinted
+        sudo fc-cache -f -v > /dev/null 2>&1 || true
+        echo "Roboto font installed"
+
+    - name: Run Web Server
+      run: python -m http.server 8080 &
+
+    - name: Set Chrome flags
+      id: chrome-flags
+      run: |
+        BASE_FLAGS="chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647"
+
+        # For Material theme, enable better font rendering to avoid instability
+        if [[ "${{ matrix.THEME }}" != *"material"* ]]; then
+          BASE_FLAGS="$BASE_FLAGS --font-render-hinting=none --disable-font-subpixel-positioning"
+        fi
+
+        echo "flags=$BASE_FLAGS" >> $GITHUB_OUTPUT
+
+    - name: Run TestCafe tests (jQuery)
+      shell: bash
+      working-directory: apps/demos
+      if: ${{ !contains(matrix.THEME, 'dark') || needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' }}
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+        STRATEGY: ${{ matrix.STRATEGY }}
+        CHANGEDFILEINFOSPATH: changed-files.json
+        BROWSERS: ${{ steps.chrome-flags.outputs.flags }}
+        #DEBUG: hammerhead:*,testcafe:*
+        CONCURRENCY: 4
+        TCQUARANTINE: true
+        CONSTEL: ${{ matrix.CONSTEL }}
+        THEME: ${{ matrix.THEME }}
+        # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
+        # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
+        # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
+        CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
+      run: pnpx nx test-testcafe
+
+    - name: Show accessibility warnings
+      if: matrix.STRATEGY == 'accessibility'
+      working-directory: apps/demos
+      run: |
+        if [ -f "$ACCESSIBILITY_TESTCAFE_REPORT_PATH" ]; then
+          message=$(cat $ACCESSIBILITY_TESTCAFE_REPORT_PATH)
+          echo "::warning ::$message"
+        else
+          echo "Accessibility report not found. Skipping warning generation."
+        fi
+
+    - name: Sanitize job name
+      if: ${{ failure() }}
+      run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
+    - name: Copy screenshots artifacts
+      if: failure() && matrix.STRATEGY == 'screenshots'
+      uses: actions/upload-artifact@v4
+      with:
+        name: screenshots-${{ env.JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
+        if-no-files-found: ignore
+
+    - name: Copy accessibility report
+      if: matrix.STRATEGY == 'accessibility'
+      uses: actions/upload-artifact@v4
+      with:
+        name: accessibility-reports-${{ env.JOB_NAME }}-${{ matrix.THEME }}
+        path: apps/demos/testing/artifacts/axe-reports/*
+        if-no-files-found: ignore
+
+  testcafe-frameworks-all:
+    needs: [check-should-run, determine-framework-tests-scope, build-demos]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'all' &&
+      needs.build-demos.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: [
+          react(1/3),
+          react(2/3),
+          react(3/3),
+          vue(1/5),
+          vue(2/5),
+          vue(3/5),
+          vue(4/5),
+          vue(5/5),
+          angular(1/10),
+          angular(2/10),
+          angular(3/10),
+          angular(4/10),
+          angular(5/10),
+          angular(6/10),
+          angular(7/10),
+          angular(8/10),
+          angular(9/10),
+          angular(10/10),
+        ]
+        THEME: ['fluent.blue.light']
+
+    runs-on: devextreme-shr2
+    name: ${{ matrix.CONSTEL }}-screenshots-${{ matrix.THEME }}
+    timeout-minutes: 60
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '145.0.7632.67'
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-sources
+
+    - uses: pnpm/action-setup@v4
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v4
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Install tgz
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
+    - name: Prepare JS
+      working-directory: apps/demos
+      run: pnpm run prepare-js
+
+    - name: Update bundles config
+      working-directory: apps/demos
+      run: pnpx gulp update-config
+
+    - name: Create bundles dir
+      run: mkdir -p apps/demos/bundles
+
+    - name: Download bundles artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-bundles
+        path: apps/demos/bundles
+
+    - name: Run Web Server
+      run: |
+        python -m http.server 8080 &
+
+    - name: Check runner resources
+      run: |
+        echo "CPU cores: $(nproc)"
+        echo "Memory: $(free -h)"
+        echo "Disk: $(df -h)"
+
+    - name: Set concurrency based on framework
+      id: set-concurrency
+      run: |
+        if [[ "${{ matrix.CONSTEL }}" == react* ]]; then
+          echo "concurrency=4" >> $GITHUB_OUTPUT
+        elif [[ "${{ matrix.CONSTEL }}" == angular* ]]; then
+          echo "concurrency=2" >> $GITHUB_OUTPUT
+        else
+          echo "concurrency=2" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Run TestCafe tests
+      shell: bash
+      working-directory: apps/demos
+      env:
+        NODE_OPTIONS: --max-old-space-size=8192
+        BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+        # DEBUG: hammerhead:*,testcafe:*
+        CONCURRENCY: ${{ steps.set-concurrency.outputs.concurrency }}
+        TCQUARANTINE: true
+        CONSTEL: ${{ matrix.CONSTEL }}
+        THEME: ${{ matrix.THEME }}
+        # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
+        # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
+        # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
+        CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
+      run: pnpx nx test-testcafe
+
+    - name: Sanitize job name
+      if: ${{ failure() }}
+      run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
+    - name: Copy screenshots artifacts
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: screenshots-${{ env.JOB_NAME }}
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
+        if-no-files-found: ignore
+
+  testcafe-frameworks-changed:
+    needs: [check-should-run, determine-framework-tests-scope, build-demos]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope == 'changed' &&
+      needs.build-demos.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        CONSTEL: [react, vue, angular]
+        THEME: ['fluent.blue.light']
+
+    runs-on: devextreme-shr2
+    name: ${{ matrix.CONSTEL }}-screenshots-${{ matrix.THEME }}
+    timeout-minutes: 60
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Setup Chrome
+        uses: ./.github/actions/setup-chrome
+        with:
+          chrome-version: '145.0.7632.67'
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Download devextreme sources
+        uses: actions/download-artifact@v4
+        with:
+          name: devextreme-sources
+
+      - name: Download changed demos
+        uses: actions/download-artifact@v4
+        with:
+          name: changed-demos
+          path: apps/demos
+        continue-on-error: true
+
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache/restore@v4
+        name: Restore pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cache
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install tgz
+        working-directory: apps/demos
+        run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
+      - name: Prepare JS
+        working-directory: apps/demos
+        run: pnpm run prepare-js
+
+      - name: Update bundles config
+        working-directory: apps/demos
+        run: pnpx gulp update-config
+
+      - name: Create bundles dir
+        run: mkdir -p apps/demos/bundles
+
+      - name: Download bundles artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: devextreme-bundles
+          path: apps/demos/bundles
+
+      - name: Download changes artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: changed-demos
+          path: apps/demos
+
+      - name: Run Web Server
+        run: |
+          python -m http.server 8080 &
+          python -m http.server 8081 &
+          python -m http.server 8082 &
+          python -m http.server 8083 &
+
+      - name: Run TestCafe tests
+        shell: bash
+        working-directory: apps/demos
+        env:
+          CHANGEDFILEINFOSPATH: changed-files.json
+          BROWSERS: chrome:headless --window-size=1200,800 --disable-gpu --no-sandbox --disable-dev-shm-usage --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl=swiftshader --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+          # DEBUG: hammerhead:*,testcafe:*
+          CONCURRENCY: 1
+          TCQUARANTINE: true
+          CONSTEL: ${{ matrix.CONSTEL }}
+          THEME: ${{ matrix.THEME }}
+          # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
+          # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
+          # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
+          CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
+        run: pnpx nx test-testcafe
+
+      - name: Sanitize job name
+        if: ${{ failure() }}
+        run: echo "JOB_NAME=$(echo "${{ matrix.CONSTEL }}-${{ matrix.THEME }}" | tr '/' '-')" >> $GITHUB_ENV
+
+      - name: Copy screenshots artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-${{ env.JOB_NAME }}
+          path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
+          if-no-files-found: ignore
+
+  merge-artifacts:
+    runs-on: devextreme-shr2
+    needs: [testcafe-jquery, testcafe-frameworks-all, testcafe-frameworks-changed]
+    if: always() && (needs.testcafe-jquery.result == 'failure' || needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure')
+
+    steps:
+      - name: Merge jQuery screenshot artifacts
+        if: needs.testcafe-jquery.result == 'failure'
+        uses: actions/upload-artifact/merge@v4
+        continue-on-error: true
+        with:
+          name: screenshots-jquery
+          pattern: screenshots-jquery*
+          delete-merged: true
+
+      - name: Merge React screenshot artifacts
+        if: needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure'
+        uses: actions/upload-artifact/merge@v4
+        continue-on-error: true
+        with:
+          name: screenshots-react
+          pattern: screenshots-react*
+          delete-merged: true
+
+      - name: Merge Vue screenshot artifacts
+        if: needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure'
+        uses: actions/upload-artifact/merge@v4
+        continue-on-error: true
+        with:
+          name: screenshots-vue
+          pattern: screenshots-vue*
+          delete-merged: true
+
+      - name: Merge Angular screenshot artifacts
+        if: needs.testcafe-frameworks-all.result == 'failure' || needs.testcafe-frameworks-changed.result == 'failure'
+        uses: actions/upload-artifact/merge@v4
+        continue-on-error: true
+        with:
+          name: screenshots-angular
+          pattern: screenshots-angular*
+          delete-merged: true
+
+      - name: Merge jQuery accessibility reports
+        if: needs.testcafe-jquery.result == 'failure'
+        uses: actions/upload-artifact/merge@v4
+        continue-on-error: true
+        with:
+          name: accessibility-reports-jquery
+          pattern: accessibility-reports-*
+          delete-merged: true
+
+  csp-check-jquery:
+    name: CSP check (jQuery)
+    needs: [check-should-run, build-devextreme]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.build-devextreme.result == 'success'
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-artifacts-jquery
+        path: ./packages/devextreme
+
+    - name: Unpack artifacts
+      working-directory: ./packages/devextreme
+      run: 7z x artifacts.zip -aoa
+
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '145.0.7632.67'
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v4
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v4
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Start CSP Server
+      run: node apps/demos/utils/server/csp-server.js 8080 &
+
+    - name: Run CSP Check
+      working-directory: apps/demos
+      env:
+        CSP_FRAMEWORKS: jQuery
+        CHROME_PATH: google-chrome-stable
+      run: node utils/server/csp-check.js
+
+    - name: Upload CSP report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: csp-violations-jquery
+        path: apps/demos/csp-reports/
+        if-no-files-found: ignore
+
+  csp-check-frameworks:
+    name: CSP check (${{ matrix.FRAMEWORK }})
+    needs: [check-should-run, determine-framework-tests-scope, build-devextreme]
+    if: |
+      always() &&
+      needs.check-should-run.outputs.should-run == 'true' &&
+      needs.determine-framework-tests-scope.result == 'success' &&
+      needs.determine-framework-tests-scope.outputs.framework-tests-scope != 'none' &&
+      needs.build-devextreme.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix:
+        FRAMEWORK: [React, Vue, Angular]
+    runs-on: devextreme-shr2
+    timeout-minutes: 60
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-sources
+
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '145.0.7632.67'
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v4
+      with:
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v4
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Install tgz
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
+    - name: Start CSP Server
+      run: node apps/demos/utils/server/csp-server.js 8080 &
+
+    - name: Run CSP Check
+      working-directory: apps/demos
+      env:
+        CSP_FRAMEWORKS: ${{ matrix.FRAMEWORK }}
+        CHROME_PATH: google-chrome-stable
+      run: node utils/server/csp-check.js
+
+    - name: Upload CSP report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: csp-violations-${{ matrix.FRAMEWORK }}
+        path: apps/demos/csp-reports/
+        if-no-files-found: ignore
+
+  csp-report-summary:
+    name: CSP Violations Summary
+    runs-on: devextreme-shr2
+    needs: [check-should-run, csp-check-jquery, csp-check-frameworks]
+    if: always() && needs.check-should-run.outputs.should-run == 'true'
+    timeout-minutes: 5
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Download all CSP reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: csp-violations-*
+          path: csp-reports-all
+          merge-multiple: true
+        continue-on-error: true
+
+      - name: Summarize CSP violations
+        run: |
+          mkdir -p apps/demos/csp-reports
+
+          echo "## CSP Violations Report" >> $GITHUB_STEP_SUMMARY
+          echo '' >> $GITHUB_STEP_SUMMARY
+
+          GRAND_TOTAL=0
+          for report in csp-reports-all/csp-violations-*.jsonl; do
+            [ -f "$report" ] || continue
+            FRAMEWORK=$(basename "$report" | sed 's/csp-violations-//;s/\.jsonl//')
+            cp "$report" "apps/demos/csp-reports/"
+
+            if [ -s "$report" ]; then
+              COUNT=$(wc -l < "$report" | tr -d ' ')
+              GRAND_TOTAL=$((GRAND_TOTAL + COUNT))
+              echo "### ⚠️ ${FRAMEWORK}: ${COUNT} violation(s)" >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+              echo '<details>' >> $GITHUB_STEP_SUMMARY
+              echo '<summary>Show detailed report</summary>' >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              CSP_REPORT_FILE="$report" node apps/demos/utils/server/csp-report-summary.js >> $GITHUB_STEP_SUMMARY
+              echo '```' >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+              echo '</details>' >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+            else
+              echo "### ✅ ${FRAMEWORK}: No violations" >> $GITHUB_STEP_SUMMARY
+              echo '' >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+          if [ "$GRAND_TOTAL" -eq 0 ]; then
+            echo "✅ No CSP violations detected across all frameworks."
+          else
+            echo "⚠️  Total: $GRAND_TOTAL CSP violation(s)"
+          fi
+
+      - name: Upload merged CSP reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: csp-violations-report
+          path: apps/demos/csp-reports/
+          if-no-files-found: ignore
+

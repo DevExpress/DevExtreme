@@ -14,7 +14,7 @@ import {
 
 
 
-import { Command, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType } from 'devextreme/ui/diagram';
+import type { Command, CustomCommand, ShapeCategory, ToolboxDisplayMode, ShapeType } from 'devextreme/ui/diagram';
 
 import {
     DxIntegrationModule,
@@ -88,10 +88,10 @@ export class DxiDiagramGroupComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get shapes(): Array<ShapeType> {
+    get shapes(): Array<ShapeType | string> {
         return this._getOption('shapes');
     }
-    set shapes(value: Array<ShapeType>) {
+    set shapes(value: Array<ShapeType | string>) {
         this._setOption('shapes', value);
     }
 

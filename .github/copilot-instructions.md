@@ -7,10 +7,10 @@
 **Repository Stats:**
 - **Type:** Monorepo (pnpm workspaces + Nx)
 - **Size:** Large (1000+ files across multiple packages)
-- **Languages:** TypeScript, JavaScript, SCSS, C# (.NET for test runner)
+- **Languages:** TypeScript, JavaScript, SCSS
 - **Package Manager:** pnpm 9.15.4 (specified in package.json)
 - **Node Version:** 20.x (required by CI)
-- **Build System:** Gulp + Nx + custom build scripts
+- **Build System:** Gulp + Nx + custom build scripts + custom Nx executors (via `devextreme-nx-infra-plugin`)
 - **Test Frameworks:** QUnit, Jest, TestCafe, Karma (Angular)
 
 ## Critical Setup Requirements
@@ -24,7 +24,7 @@ pnpm install --frozen-lockfile
 
 **Node.js:** Version 20.x is required (CI uses Node 20)
 **pnpm:** Version 9.15.4 (managed via packageManager field)
-**.NET SDK:** Version 8.0.x required for building the test runner (packages/devextreme/testing/runner)
+**.NET SDK:** Version 8.0.x required for running devextreme-internal-tools (uses .NET tool for code generation)
 
 ### First-Time Setup
 
@@ -70,6 +70,8 @@ pnpm install --frozen-lockfile
   devextreme-themebuilder/ # Theme builder package
   devextreme-metadata/     # Metadata generation for wrappers
   devextreme-monorepo-tools/ # Internal tooling
+  nx-infra-plugin/         # Custom Nx executors for build automation
+  workflows/               # Cross-package NX build orchestration (all:build-dev, all:build-testing)
   testcafe-models/         # TestCafe page object models
 
 /apps/
@@ -150,19 +152,69 @@ pnpm run clean
 ```
 
 **Build process includes:**
-1. Localization generation
+1. Localization generation (via `devextreme-nx-infra-plugin:localization` executor)
 2. Component generation (Renovation architecture)
-3. Transpilation (Babel)
-4. Bundle creation (Webpack)
-5. TypeScript declarations
+3. Transpilation (via native NX executors: `babel-transform` for JS, `build-typescript` for TS)
+4. Bundle creation (Webpack via `devextreme-nx-infra-plugin:bundle` executor) - `bundle:debug` and `bundle:prod` targets
+5. TypeScript declarations - `build:declarations` target
 6. SCSS compilation (from devextreme-scss)
-7. NPM package preparation
+7. NPM package preparation - `build:npm` target
+
+**Granular Nx build targets (can be run individually):**
+```bash
+pnpx nx build:localization devextreme  # Generate localization files
+pnpx nx build:transpile devextreme     # Transpile source code
+pnpx nx bundle:debug devextreme        # Create debug bundle
+pnpx nx bundle:prod devextreme         # Create production bundle
+pnpx nx build:npm devextreme           # Prepare NPM packages
+```
+
+**Build with testing configuration (for CI):**
+```bash
+pnpx nx build devextreme -c=testing
+```
 
 **Important environment variables:**
 - `DEVEXTREME_TEST_CI=true` - Enables test mode (skips building npm package)
 - `BUILD_ESM_PACKAGE=true` - Builds ESM modules (skips building npm package)
 - `BUILD_TESTCAFE=true` - Builds for TestCafe tests
 - `BUILD_TEST_INTERNAL_PACKAGE=true` - Builds internal test package
+
+## Custom Nx Executors (nx-infra-plugin)
+
+The `packages/nx-infra-plugin` provides custom Nx executors for build automation:
+
+| Executor | Description |
+|----------|-------------|
+| `add-license-headers` | Adds DevExtreme license headers to compiled files with version information |
+| `babel-transform` | Transforms JS/TS files using Babel with configurable presets, debug block removal, and extension renaming |
+| `build-angular-library` | Builds Angular libraries using ng-packagr programmatically |
+| `build-typescript` | Compiles TypeScript to CJS or ESM modules with configurable output format, tsconfig, and path alias resolution |
+| `bundle` | Bundles JavaScript files using webpack with debug or production mode, supporting multiple entry points and license validation |
+| `clean` | Removes directories and files with support for exclusion patterns |
+| `concatenate-files` | Concatenates files with optional content extraction via regex, header/footer, and find/replace transforms |
+| `copy-files` | Copies files and directories to specified destinations with glob pattern support |
+| `create-dual-mode-manifest` | Generates package.json files for dual-mode (ESM + CJS) support with main, module, typings, and sideEffects |
+| `generate-component-names` | Generates TypeScript file with component name constants for test automation |
+| `generate-components` | Generates framework components (React/Vue/Angular) from DevExtreme metadata |
+| `karma-multi-env` | Runs Karma tests across multiple Angular environments (client, server, hydration) |
+| `localization` | Generates CLDR data and compiles localization message files from JSON to JavaScript |
+| `pack-npm` | Creates npm packages using `pnpm pack` for distribution |
+| `prepare-package-json` | Creates distribution-ready package.json with cleaned dependencies for npm publishing |
+| `prepare-submodules` | Creates package.json entry points for submodule exports |
+
+**Example executor usage in project.json:**
+```json
+{
+  "build:localization:generate": {
+    "executor": "devextreme-nx-infra-plugin:localization",
+    "options": {
+      "messagesDir": "./js/localization/messages",
+      "cldrDataOutputDir": "./js/__internal/core/localization/cldr-data"
+    }
+  }
+}
+```
 
 ## Testing
 
@@ -348,8 +400,8 @@ pnpm run lint-ts -- --fix
 - `packages/devextreme-react/src/**/*` (except templates)
 - `packages/devextreme-vue/src/**/*` (except templates)
 - `packages/devextreme/js/renovation/**/*.j.tsx`
-- `packages/devextreme/js/common/core/localization/default_messages.js`
-- `packages/devextreme/js/common/core/localization/cldr-data/**/*`
+- `packages/devextreme/js/__internal/core/localization/default_messages.ts`
+- `packages/devextreme/js/__internal/core/localization/cldr-data/**/*`
 
 **Source files (EDIT THESE):**
 - `packages/devextreme/js/**/*.js` (core logic)
@@ -378,6 +430,7 @@ pnpm run lint-ts -- --fix
 ## Key Facts
 
 - **Nx is used for task orchestration** - prefer `pnpx nx` commands over direct npm scripts
+- **Custom Nx executors** - `devextreme-nx-infra-plugin` provides specialized executors for localization, file operations, and build tasks
 - **Frozen lockfile is mandatory** - CI will fail without it
 - **Build artifacts are in gitignore** - never commit `artifacts/` directories
 - **Wrappers are generated** - modify generators, not generated code
@@ -385,6 +438,7 @@ pnpm run lint-ts -- --fix
 - **Monorepo uses pnpm workspaces** - dependencies are hoisted
 - **CI uses custom runners** - `devextreme-shr2` for most jobs, `ubuntu-latest` for some
 - **Timeouts are strict** - optimize for speed, use caching
+- **Granular build caching** - individual build steps have proper Nx caching for faster rebuilds
 
 ## Quick Reference
 
@@ -397,6 +451,14 @@ pnpm run all:build-dev
 
 # Build (prod)
 pnpm run all:build
+
+# Build with testing configuration (for CI)
+pnpx nx build devextreme -c=testing
+
+# Build specific targets
+pnpx nx build:localization devextreme
+pnpx nx build:transpile devextreme
+pnpx nx bundle:debug devextreme
 
 # Test
 pnpx nx run-many -t test
@@ -411,6 +473,7 @@ pnpm run regenerate-all
 
 # Clean
 pnpm run clean              # From devextreme package
+pnpx nx clean:artifacts devextreme  # Clean build artifacts only
 
 # Run demos
 pnpm run webserver          # From root, then visit localhost:8080

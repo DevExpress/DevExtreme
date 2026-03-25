@@ -4705,45 +4705,6 @@ describe('AI data', () => {
       );
     });
   });
-
-  describe('when repaintChangesOnly is enabled', () => {
-    /* TODO: We skip this test for now until we refactor columnsChanged callback */
-    it.skip('should render only AI cells', async () => {
-      const { component } = await createDataGrid({
-        dataSource: items,
-        keyExpr: 'id',
-        repaintChangesOnly: true,
-        columns: [
-          { dataField: 'id', caption: 'ID' },
-          { dataField: 'name', caption: 'Name' },
-          { dataField: 'value', caption: 'Value' },
-          {
-            type: 'ai',
-            caption: 'AI Column',
-            name: 'myColumn',
-            ai: {
-              aiIntegration: new AIIntegration({
-                sendRequest(): RequestResult {
-                  return {
-                    promise: new Promise<string>((resolve) => {
-                      resolve('{"1":"AI Response 1","2":"AI Response 2"}');
-                    }),
-                    abort: (): void => {},
-                  };
-                },
-              }),
-            },
-          },
-        ],
-      });
-      const cells = [...component.getDataCells(0), ...component.getDataCells(1)];
-
-      component.apiColumnOption('myColumn', 'ai.prompt', 'Initial prompt');
-      await Promise.resolve();
-
-      compareCellNodes(cells, [...component.getDataCells(0), ...component.getDataCells(1)]);
-    });
-  });
 });
 
 describe('Load panel', () => {

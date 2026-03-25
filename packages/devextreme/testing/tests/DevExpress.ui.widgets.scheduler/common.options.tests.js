@@ -3,7 +3,7 @@ import devices from '__internal/core/m_devices';
 import { CustomStore } from 'common/data/custom_store';
 import { DataSource } from 'common/data/data_source/data_source';
 
-import 'generic_light.css!';
+import 'fluent_blue_light.css!';
 
 import { triggerHidingEvent, triggerShownEvent } from 'common/core/events/visibility_change';
 import $ from 'jquery';
@@ -378,7 +378,7 @@ QUnit.module('Options', () => {
             currentDate: new Date(2015, 1, 9),
             currentView: 'month',
             dataSource: data,
-            height: 500,
+            height: 800,
             width: 800
         });
 
@@ -399,7 +399,7 @@ QUnit.module('Options', () => {
             currentView: 'month',
             dataSource: data,
             maxAppointmentsPerCell: 2,
-            height: 500,
+            height: 800,
             width: 800
         });
 
@@ -636,15 +636,16 @@ QUnit.module('Options', () => {
             view: 'timelineWeek',
         });
 
-        const spyAppointmentPopupForm = sinon.spy(
-            scheduler.instance,
-            '_createAppointmentPopupForm'
-        );
-
         scheduler.instance.option('resources', resources);
         await waitAsync(10);
 
-        assert.ok(spyAppointmentPopupForm.calledOnce, 'Appointment form was recreated');
+        scheduler.instance.showAppointmentPopup({
+            startDate: new Date(2017, 11, 18, 10),
+            endDate: new Date(2017, 11, 18, 11),
+        }, true);
+
+        const resourceEditor = scheduler.appointmentForm.getEditor('TestResources');
+        assert.ok(resourceEditor, 'Appointment form contains the resource editor after changing resources');
     });
 
     QUnit.test('Filter options should be updated when dataSource is changed', async function(assert) {
@@ -935,16 +936,14 @@ QUnit.module('Options', () => {
             dataSource,
         });
 
-        const initMarkupSpy = sinon.spy(scheduler.instance, '_initMarkup');
-        const reloadDataSourceSpy = sinon.spy(scheduler.instance, '_reloadDataSource');
-        let count = 0;
+        let loadCount = 0;
 
         const nextDataSource = new DataSource({
             store: new CustomStore({
                 load: function() {
                     const d = $.Deferred();
                     setTimeout(function() {
-                        count++;
+                        loadCount++;
                         d.resolve([]);
                     }, 100);
 
@@ -959,10 +958,10 @@ QUnit.module('Options', () => {
             'views[2].intervalCount': 2,
             'views[2].startDate': new Date(),
         });
-        await waitForAsync(() => count === 2);
+        await waitForAsync(() => loadCount === 2);
+        await waitAsync(200);
 
-        assert.equal(initMarkupSpy.callCount, 2, 'Init markup was called on each dataSource changes');
-        assert.equal(reloadDataSourceSpy.callCount, 2, '_reloadDataSource was called on each changes');
+        assert.equal(loadCount, 2, 'Data source load was called exactly twice — once per option change');
     });
 
     QUnit.test('It should be possible to change views option when view names are specified (T995794)', async function(assert) {

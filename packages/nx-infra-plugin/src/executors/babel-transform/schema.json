@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "title": "Babel Transform Executor",
+  "properties": {
+    "babelConfigPath": {
+      "type": "string",
+      "description": "Path to Babel config file relative to project root (e.g., './build/gulp/transpile-config.js')"
+    },
+    "configKey": {
+      "type": "string",
+      "description": "Key in the config object to use (e.g., 'cjs', 'tsCjs', 'esm')"
+    },
+    "sourcePattern": {
+      "type": "string",
+      "description": "Primary glob pattern for source files to transform (e.g., './js/**/*.js')"
+    },
+    "excludePatterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Glob patterns to exclude from processing"
+    },
+    "outDir": {
+      "type": "string",
+      "description": "Output directory relative to project root where transformed files will be written"
+    },
+    "removeDebug": {
+      "type": "boolean",
+      "default": false,
+      "description": "Remove #DEBUG...#ENDDEBUG blocks before transpilation (for production builds)"
+    },
+    "renameExtensions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Map of file extension renames to apply to output files"
+    }
+  },
+  "required": ["babelConfigPath", "configKey", "sourcePattern", "outDir"],
+  "additionalProperties": false
+}

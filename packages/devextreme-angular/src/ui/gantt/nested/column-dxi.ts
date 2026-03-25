@@ -14,9 +14,9 @@ import {
 
 
 
-import { ColumnAIOptions, FilterOperation, FilterType, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
-import { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
-import { Format } from 'devextreme/common/core/localization';
+import type { HorizontalAlignment, DataType, SortOrder } from 'devextreme/common';
+import type { FilterOperation, FilterType, ColumnHeaderFilter, SelectedFilterOperation } from 'devextreme/common/grids';
+import type { Format } from 'devextreme/common/core/localization';
 
 import {
     DxIntegrationModule,
@@ -41,14 +41,6 @@ import { PROPERTY_TOKEN_columns } from 'devextreme-angular/core/tokens';
     ]
 })
 export class DxiGanttColumnComponent extends CollectionNestedOption {
-    @Input()
-    get ai(): ColumnAIOptions {
-        return this._getOption('ai');
-    }
-    set ai(value: ColumnAIOptions) {
-        this._setOption('ai', value);
-    }
-
     @Input()
     get alignment(): HorizontalAlignment | undefined {
         return this._getOption('alignment');

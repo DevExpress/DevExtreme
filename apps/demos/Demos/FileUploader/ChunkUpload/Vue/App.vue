@@ -76,7 +76,7 @@ function onUploadProgress(e: DxFileUploaderTypes.ProgressEvent) {
 .note {
   display: block;
   font-size: 10pt;
-  color: #484848;
+  color: var(--dx-texteditor-color-label);
   margin-left: 9px;
 }
 

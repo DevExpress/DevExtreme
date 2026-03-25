@@ -2,7 +2,7 @@
 <div id="chart-demo">
   <table class="demo-table">
     <tr>
-      <th></th>
+      <th><div class="dx-screen-reader-only">Year</div></th>
       <th>Oil (USD/barrel)</th>
       <th>Gold (USD/troy ounce)</th>
       <th>Silver (USD/troy ounce)</th>
@@ -19,7 +19,9 @@
           type="line"
           [showMinMax]="true"
         >
-          <dxo-sparkline-tooltip format="currency"></dxo-sparkline-tooltip>
+          <dxo-sparkline-tooltip
+            [format]="{ type: 'currency', precision: 2 }"
+          ></dxo-sparkline-tooltip>
         </dx-sparkline>
       </td>
       <td>
@@ -36,7 +38,9 @@
           [showMinMax]="true"
           [showFirstLast]="false"
         >
-          <dxo-sparkline-tooltip format="currency"></dxo-sparkline-tooltip>
+          <dxo-sparkline-tooltip
+            [format]="{ type: 'currency', precision: 2 }"
+          ></dxo-sparkline-tooltip>
         </dx-sparkline>
       </td>
       <td>
@@ -52,7 +56,9 @@
           pointSymbol="square"
           pointColor="#ebdd8f"
         >
-          <dxo-sparkline-tooltip format="currency"></dxo-sparkline-tooltip>
+          <dxo-sparkline-tooltip
+            [format]="{ type: 'currency', precision: 2 }"
+          ></dxo-sparkline-tooltip>
         </dx-sparkline>
       </td>
     </tr>

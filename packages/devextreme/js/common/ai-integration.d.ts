@@ -265,12 +265,21 @@ export type AIProvider = {
  * @namespace DevExpress.aiIntegration
  * @public
  */
-export class AIIntegration {
+export type AIIntegrationOptions = {
   /**
    * @docid
-   * @param provider
+   * @public
    */
-  constructor(provider: AIProvider);
+  lang?: string;
+};
+
+/**
+ * @docid
+ * @namespace DevExpress.aiIntegration
+ * @public
+ */
+export class AIIntegration {
+  constructor(provider: AIProvider, options?: AIIntegrationOptions);
   /**
    * @publicName changeStyle(params, callbacks)
    */

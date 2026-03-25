@@ -32,7 +32,7 @@ const runExecutor: PromiseExecutor<NpmPackageExecutorSchema> = async (options, c
     const distPackageJson = path.join(distDirectory, PACKAGE_JSON_FILE);
     await writeJson(distPackageJson, pkg, JSON_INDENT);
 
-    logger.info(`Created ${distPackageJson}`);
+    logger.verbose(`Created ${distPackageJson}`);
 
     return { success: true };
   } catch (error) {

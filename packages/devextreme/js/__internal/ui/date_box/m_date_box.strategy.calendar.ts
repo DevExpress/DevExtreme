@@ -1,12 +1,21 @@
+/* eslint-disable class-methods-use-this */
 import messageLocalization from '@js/common/core/localization/message';
-// @ts-expect-error
-import { splitPair } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isEmptyObject, isFunction } from '@js/core/utils/type';
-import Calendar from '@js/ui/calendar';
-import { isMaterial } from '@js/ui/themes';
+import type { DxEvent } from '@js/events';
+import type { Format } from '@js/localization';
+import type { ClickEvent } from '@js/ui/button';
+import type { ValueChangedEvent } from '@js/ui/calendar';
+import type { ToolbarItem } from '@js/ui/popup';
+import { current, isMaterial } from '@js/ui/themes';
+import { splitPair } from '@ts/core/utils/m_common';
+import Calendar from '@ts/ui/calendar/calendar';
 
+import type { CellEvent } from '../calendar/calendar.base_view';
+import type { PopupProperties } from '../popup/m_popup';
+import type { DateBoxBaseProperties } from './date_box.base';
+import type DateBox from './date_box.base';
 import DateBoxStrategy from './m_date_box.strategy';
 
 const TODAY_BUTTON_CLASS = 'dx-button-today';
@@ -14,23 +23,27 @@ const TODAY_BUTTON_CLASS = 'dx-button-today';
 class CalendarStrategy extends DateBoxStrategy {
   _lastActionElement?: string;
 
-  ctor(dateBox): void {
-    super.ctor(dateBox);
+  constructor(dateBox: DateBox) {
+    super(dateBox);
 
     this.NAME = 'Calendar';
   }
 
-  getDefaultOptions() {
+  getWidget(): Calendar {
+    return this._widget as Calendar;
+  }
+
+  getDefaultOptions(): DateBoxBaseProperties {
+    const { todayButtonText } = this.dateBox.option();
     return {
       ...super.getDefaultOptions(),
-      todayButtonText: this.dateBox.option('todayButtonText') ?? messageLocalization.format('dxCalendar-todayButtonText'),
+      todayButtonText: todayButtonText ?? messageLocalization.format('dxCalendar-todayButtonText'),
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-  supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | void> {
-    const homeEndHandler = function (e) {
-      if (this.option('opened')) {
+  supportedKeys(): Record<string, (e: KeyboardEvent) => boolean | undefined> {
+    const homeEndHandler = (e: KeyboardEvent): boolean | undefined => {
+      if (this.dateBox.option('opened')) {
         e.preventDefault();
         return true;
       }
@@ -38,24 +51,23 @@ class CalendarStrategy extends DateBoxStrategy {
     };
 
     return {
-      // @ts-expect-error
-      rightArrow() {
+      rightArrow(): boolean | undefined {
         if (this.option('opened')) {
           return true;
         }
+        return undefined;
       },
-      // @ts-expect-error
-      leftArrow() {
+      leftArrow(): boolean | undefined {
         if (this.option('opened')) {
           return true;
         }
+        return undefined;
       },
-      // @ts-expect-error
-      enter: function (e) {
+      enter: (e): boolean | undefined => {
         if (this.dateBox.option('opened')) {
           e.preventDefault();
-
-          if (this._widget.option('zoomLevel') === this._widget.option('maxZoomLevel')) {
+          const { zoomLevel, maxZoomLevel } = this.getWidget().option();
+          if (zoomLevel === maxZoomLevel) {
             const viewValue = this._getContouredValue();
             const lastActionElement = this._lastActionElement;
             const shouldCloseDropDown = this._closeDropDownByEnter();
@@ -64,7 +76,9 @@ class CalendarStrategy extends DateBoxStrategy {
               this.dateBoxValue(viewValue, e);
             }
 
-            shouldCloseDropDown && this.dateBox.close();
+            if (shouldCloseDropDown) {
+              this.dateBox.close();
+            }
             this.dateBox._valueChangeEventHandler(e);
 
             return !shouldCloseDropDown;
@@ -72,78 +86,82 @@ class CalendarStrategy extends DateBoxStrategy {
           return true;
         }
         this.dateBox._valueChangeEventHandler(e);
-      }.bind(this),
+        return undefined;
+      },
       home: homeEndHandler,
       end: homeEndHandler,
     };
   }
 
-  getDisplayFormat(displayFormat) {
+  getDisplayFormat(displayFormat?: Format): Format {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return displayFormat || 'shortdate';
   }
 
-  _closeDropDownByEnter() {
+  _closeDropDownByEnter(): boolean {
     return true;
   }
 
-  _getWidgetName() {
+  _getWidgetName(): typeof Calendar {
     return Calendar;
   }
 
-  _getContouredValue() {
-    return this._widget._view.option('contouredDate');
+  _getContouredValue(): Date | undefined {
+    const { contouredDate } = this.getWidget()._view.option();
+    return contouredDate;
   }
 
-  getKeyboardListener() {
-    return this._widget;
+  getKeyboardListener(): Calendar {
+    return this.getWidget();
   }
 
-  _getWidgetOptions() {
+  _getWidgetOptions(): Record<string, unknown> {
     const {
-      disabledDates, min, max, todayButtonText,
+      disabledDates, min, max, todayButtonText, calendarOptions = {},
     } = this.dateBox.option();
 
-    return extend(this.dateBox.option('calendarOptions'), {
-      value: this.dateBoxValue() || null,
+    return extend(calendarOptions, {
+      value: this.dateBoxValue() ?? null,
       selectionMode: 'single',
       dateSerializationFormat: null,
       min,
       max,
       onValueChanged: this._valueChangedHandler.bind(this),
       onCellClick: this._cellClickHandler.bind(this),
-      disabledDates: isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this.dateBox)) : disabledDates,
+      disabledDates: isFunction(disabledDates)
+        ? this._injectComponent(disabledDates.bind(this.dateBox))
+        : disabledDates,
       onContouredChanged: this._refreshActiveDescendant.bind(this),
       skipFocusCheck: true,
       todayButtonText,
-    });
+    }) as Record<string, unknown>;
   }
 
-  _injectComponent(func) {
-    const that = this;
-    return function (params) {
-      extend(params, { component: that.dateBox });
-      return func(params);
-    };
+  _injectComponent<T>(
+    func: (params: T & { component: DateBox }) => boolean,
+  ): (params: T) => boolean {
+    return (params: T): boolean => func({ ...params, component: this.dateBox });
   }
 
-  _refreshActiveDescendant(e) {
+  _refreshActiveDescendant(e: DxEvent & { actionValue: string }): void {
     this._lastActionElement = 'calendar';
     this.dateBox.setAria('activedescendant', e.actionValue);
   }
 
-  _getTodayButtonConfig() {
-    const buttonsLocation = this.dateBox.option('buttonsLocation');
+  _getTodayButtonConfig(): ToolbarItem {
+    const { buttonsLocation } = this.dateBox.option();
     const isButtonsLocationDefault = buttonsLocation === 'default';
     const position = isButtonsLocationDefault ? ['bottom', 'center'] : splitPair(buttonsLocation);
-    // @ts-expect-error
-    const stylingMode = isMaterial() ? 'text' : 'outlined';
+    const stylingMode = isMaterial(current()) ? 'text' : 'outlined';
 
     return {
       widget: 'dxButton',
       toolbar: position[0],
       location: position[1] === 'after' ? 'before' : position[1],
       options: {
-        onClick: (args) => { this._widget._toTodayView(args); },
+        onClick: (
+          args: DxEvent<ClickEvent>,
+        ): void => { this.getWidget()._toTodayView(args); },
         text: this.dateBox.option('todayButtonText'),
         elementAttr: { class: TODAY_BUTTON_CLASS },
         stylingMode,
@@ -151,14 +169,15 @@ class CalendarStrategy extends DateBoxStrategy {
     };
   }
 
-  _isCalendarVisible() {
-    const { calendarOptions } = this.dateBox.option();
+  _isCalendarVisible(): boolean {
+    const { calendarOptions = {} } = this.dateBox.option();
 
     return isEmptyObject(calendarOptions) || calendarOptions.visible !== false;
   }
 
-  _getPopupToolbarItems(toolbarItems) {
-    const useButtons = this.dateBox.option('applyValueMode') === 'useButtons';
+  _getPopupToolbarItems(toolbarItems: ToolbarItem[]): ToolbarItem[] {
+    const { applyValueMode } = this.dateBox.option();
+    const useButtons = applyValueMode === 'useButtons';
     const shouldRenderTodayButton = useButtons && this._isCalendarVisible();
 
     if (shouldRenderTodayButton) {
@@ -173,14 +192,14 @@ class CalendarStrategy extends DateBoxStrategy {
     return toolbarItems;
   }
 
-  popupConfig(popupConfig) {
+  popupConfig(popupConfig: PopupProperties): PopupProperties {
     return extend(true, popupConfig, {
       position: { collision: 'flipfit flip' },
       width: 'auto',
-    });
+    }) as PopupProperties;
   }
 
-  _valueChangedHandler(e) {
+  _valueChangedHandler(e: ValueChangedEvent): void {
     const { value } = e;
     const prevValue = e.previousValue;
 
@@ -188,32 +207,36 @@ class CalendarStrategy extends DateBoxStrategy {
       return;
     }
 
-    if (this.dateBox.option('applyValueMode') === 'instantly') {
+    const { applyValueMode } = this.dateBox.option();
+
+    if (applyValueMode === 'instantly') {
       this.dateBoxValue(this.getValue(), e.event);
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _updateValue(preventDefaultValue?: boolean) {
+  _updateValue(): void {
     if (!this._widget) {
       return;
     }
 
-    this._widget.option('value', this.dateBoxValue());
+    const value = this.dateBoxValue();
+
+    this._widget.option({ value });
   }
 
-  textChangedHandler() {
+  textChangedHandler(): void {
     this._lastActionElement = 'input';
 
     if (this.dateBox.option('opened') && this._widget) {
-      this._updateValue(true);
+      this._updateValue();
     }
   }
 
-  _cellClickHandler(e) {
+  _cellClickHandler(e: CellEvent): void {
     const { dateBox } = this;
+    const { applyValueMode } = dateBox.option();
 
-    if (dateBox.option('applyValueMode') === 'instantly') {
+    if (applyValueMode === 'instantly') {
       dateBox.option('opened', false);
       this.dateBoxValue(this.getValue(), e.event);
     }

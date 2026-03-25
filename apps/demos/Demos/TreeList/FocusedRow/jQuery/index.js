@@ -71,12 +71,12 @@ $(() => {
           assigned = item.Name;
         });
 
-        $('.task-subject').html(rowData.Task_Subject);
+        $('.task-subject').text(rowData.Task_Subject);
 
-        $('.task-assigned').html(assigned);
-        $('.start-date').html(new Date(rowData.Task_Start_Date).toLocaleDateString());
+        $('.task-assigned').text(assigned);
+        $('.start-date').text(new Date(rowData.Task_Start_Date).toLocaleDateString());
 
-        $('.task-status').html(rowData.Task_Status);
+        $('.task-status').text(rowData.Task_Status);
 
         const progress = rowData.Task_Completion ? `${rowData.Task_Completion}%` : '';
         $('.task-progress').text(progress);

@@ -28,6 +28,7 @@ import 'ui/validator';
 import errors from 'ui/widget/ui.errors';
 import { getCells, generateItems, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import { DataSource } from 'common/data/data_source/data_source';
@@ -8196,10 +8197,8 @@ QUnit.module('Editing with real dataController', {
     });
 
     // T729713
-    QUnit.skip('Cell mode - The editCellTemplate of the column should not be called when editing another column', function(assert) {
+    QUnit.test('Cell mode - The editCellTemplate of the column should not be called when editing another column', function(assert) {
         // arrange
-        const that = this;
-        const rowsView = that.rowsView;
         const $testElement = $('#container');
         const editCellTemplate = sinon.spy(function(_, options) {
             return $('<div>').dxTextBox({
@@ -8210,31 +8209,34 @@ QUnit.module('Editing with real dataController', {
             });
         });
 
-        $.extend(that.options.editing, {
+        $.extend(this.options.editing, {
             allowUpdating: true,
             mode: 'cell'
         });
 
-        rowsView.render($testElement);
-        that.columnOption('name', 'editCellTemplate', editCellTemplate);
+        this.rowsView.render($testElement);
+        this.columnOption('name', 'editCellTemplate', editCellTemplate);
 
         // act
-        $(rowsView.getCellElement(0, 0)).trigger('dxclick');
-        that.clock.tick(10);
-
-        const $inputElement = getInputElements($(rowsView.getCellElement(0, 0))).first();
-        $inputElement.val('test');
+        pointerMock($(this.rowsView.getCellElement(0, 0))).click();
 
         // assert
-        assert.strictEqual(editCellTemplate.callCount, 1);
+        assert.strictEqual(editCellTemplate.callCount, 1, 'editCellTemplate is called on cell click');
 
         // act
-        eventsEngine.trigger($inputElement[0], 'change');
-        $(rowsView.getCellElement(0, 1)).trigger('dxclick');
-        that.clock.tick(10);
+        const $inputElement = getInputElements($(this.rowsView.getCellElement(0, 0))).first();
+        keyboardMock($inputElement).type('test').change();
+        this.clock.tick(10);
+        pointerMock($('body')).click();
 
         // assert
-        assert.strictEqual(editCellTemplate.callCount, 1);
+        assert.strictEqual(editCellTemplate.callCount, 2, 'editCellTemplate is called on cell outside click after change');
+
+        // act
+        pointerMock($(this.rowsView.getCellElement(0, 1))).click();
+
+        // assert
+        assert.strictEqual(editCellTemplate.callCount, 2, 'editCellTemplate is not called on cell in another column click');
     });
 
     // T725319
@@ -9472,7 +9474,6 @@ QUnit.module('Editing with real dataController', {
             rowsView.render($testElement);
             this.option('onRowRemoving', (e) => {
                 changesInOnRowRemoving = this.option('editing.changes');
-
             });
 
             // act
@@ -9491,8 +9492,7 @@ QUnit.module('Editing with real dataController', {
             });
         });
 
-        // TODO
-        QUnit.skip('Changes - update row (custom store)', function(assert) {
+        QUnit.test('Changes - update row (custom store)', function(assert) {
             // arrange
             const that = this;
             let countCallOnRowUpdated = 0;
@@ -16693,56 +16693,6 @@ QUnit.module('Editing with scrolling', {
     });
 
     // T258714
-    QUnit.skip('Change position of the inserted row when virtual scrolling', function(assert) {
-        // arrange
-        const testElement = $('#container');
-        let items;
-
-        this.options.scrolling = {
-            mode: 'virtual',
-            useNative: false
-        };
-
-        this.options.dataSource = generateDataSource(100, 2);
-
-        this.setupDataGrid();
-        this.rowsView.render(testElement);
-        this.rowsView.height(130);
-        this.rowsView.resize();
-
-        // assert
-        assert.equal(this.dataController.pageIndex(), 0, 'page index');
-
-        // arrange
-        this.rowsView.scrollTo({ y: 3500 });
-        this.clock.tick(10);
-
-        // assert
-        items = this.dataController.items();
-        assert.equal(this.dataController.pageIndex(), 24, 'page index');
-        assert.equal(items.length, 8, 'count items');
-
-        // act
-        this.addRow();
-        this.clock.tick(10);
-
-        // assert
-        items = this.dataController.items();
-        assert.equal(items.length, 9, 'count items');
-        assert.ok(items[4].isNewRow, 'insert item');
-
-        // act
-        this.rowsView.scrollTo({ y: 0 });
-        this.clock.tick(10);
-
-        // assert
-        items = this.dataController.items();
-        assert.equal(this.dataController.pageIndex(), 0, 'page index');
-        assert.equal(items.length, 5, 'count items');
-        assert.ok(items[0].isNewRow, 'insert item');
-    });
-
-    // T258714
     QUnit.test('Edit row after the virtual scrolling when there is inserted row', function(assert) {
         // arrange
         const testElement = $('#container');
@@ -19666,7 +19616,7 @@ QUnit.module('Editing - "popup" mode', {
         assert.equal(selectBox.getDataSource().items().length, 2, 'lookup has 2 items');
     });
 
-    QUnit.test('Repaint of popup is should be called when form layout is changed', function(assert) {
+    QUnit.test('Repaint of popup should not be called when form layout is changed', function(assert) {
         const that = this;
         let screenFactor = 'xs';
 
@@ -19699,8 +19649,8 @@ QUnit.module('Editing - "popup" mode', {
         screenFactor = 'lg';
         triggerResizeEvent(editForm.element());
 
-        assert.equal(spy1.callCount, 1, 'repaint is thrown');
-        assert.equal(spy2.callCount, 0, 'render is called after repaint');
+        assert.equal(spy1.callCount, 0, 'repaint is not thrown');
+        assert.equal(spy2.callCount, 0, 'render is not called');
     });
 
     // T610885

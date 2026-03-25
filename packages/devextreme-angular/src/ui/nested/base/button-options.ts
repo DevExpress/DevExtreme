@@ -5,8 +5,8 @@ import {
     Component,
 } from '@angular/core';
 
-import { ButtonStyle, ButtonType } from 'devextreme/common';
-import { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/button';
+import type { ButtonStyle, ButtonType } from 'devextreme/common';
+import type { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/button';
 
 @Component({
     template: ''

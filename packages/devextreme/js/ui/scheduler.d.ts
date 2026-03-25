@@ -76,6 +76,8 @@ export type AllDayPanelMode = 'all' | 'allDay' | 'hidden';
 /** @public */
 export type CellAppointmentsLimit = 'auto' | 'unlimited';
 /** @public */
+export type SnapToCellsMode = 'always' | 'auto' | 'never';
+/** @public */
 export type RecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
 /** @public */
 export type AppointmentFormIconsShowMode = 'both' | 'main' | 'recurrence' | 'none';
@@ -1017,6 +1019,11 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     allDayPanelMode?: AllDayPanelMode;
     /**
      * @docid
+     * @public
+     */
+    snapToCellsMode?: SnapToCellsMode;
+    /**
+     * @docid
      * @default 0
      * @public
      */
@@ -1145,6 +1152,10 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default "all"
        */
        allDayPanelMode?: AllDayPanelMode;
+       /**
+        * @docid
+        */
+       snapToCellsMode?: SnapToCellsMode;
        /**
         * @docid
         * @default 0
@@ -1285,6 +1296,13 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     getEndViewDate(): Date;
     /**
      * @docid
+     * @publicName getOccurrences(startDate, endDate, appointments)
+     * @param3 appointments:Array<dxSchedulerAppointment>
+     * @public
+     */
+    getOccurrences(startDate: Date, endDate: Date, appointments: Appointment[]): Occurrence[];
+    /**
+     * @docid
      * @publicName getStartViewDate()
      * @public
      */
@@ -1304,14 +1322,6 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
     hideAppointmentTooltip(): void;
     /**
      * @docid
-     * @publicName scrollTo(date, group, allDay)
-     * @param2 group:Object|undefined
-     * @param3 allDay:Boolean|undefined
-     * @public
-     */
-    scrollTo(date: Date, group?: object, allDay?: boolean): void;
-    /**
-     * @docid
      * @publicName scrollTo(date, options)
      * @param2 options:Object|undefined
      * @param2_field group:Object|undefined
@@ -1324,6 +1334,15 @@ export default class dxScheduler extends Widget<dxSchedulerOptions> {
         allDay?: boolean;
         alignInView?: SchedulerScrollToAlign;
     }): void;
+    /**
+     * @docid
+     * @publicName scrollTo(date, group, allDay)
+     * @param2 group:Object|undefined
+     * @param3 allDay:Boolean|undefined
+     * @public
+     * @deprecated
+     */
+    scrollTo(date: Date, group?: object, allDay?: boolean): void;
     /**
      * @docid
      * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)
@@ -1435,11 +1454,31 @@ export type dxSchedulerAppointment = CollectionWidgetItem & {
     visible?: boolean;
 } & Record<string, any>;
 
+/**
+ * @docid
+ * @public
+ */
+export type Occurrence = {
+  /**
+   * @docid
+   * @public
+   */
+  startDate: Date;
+  /**
+   * @docid
+   * @public
+   */
+  endDate: Date;
+  /**
+   * @docid
+   * @public
+   * @type dxSchedulerAppointment
+   */
+  appointmentData: Appointment;
+};
+
 /** @public */
 export type Properties = dxSchedulerOptions;
-
-/** @deprecated use Properties instead */
-export type Options = dxSchedulerOptions;
 
 /**
  * @docid

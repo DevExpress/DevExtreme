@@ -12,10 +12,7 @@
         <span>.jpg, .jpeg, .gif, .png</span>.
       </span>
     </div>
-    <div
-      class="file-uploader-block"
-      style="float: right;"
-    >
+    <div class="file-uploader-block">
       <DxFileUploader
         :multiple="true"
         :max-file-size="4000000"
@@ -38,9 +35,13 @@ import DxFileUploader from 'devextreme-vue/file-uploader';
   float: left;
 }
 
+.file-uploader-block + .file-uploader-block {
+  float: right;
+}
+
 .note {
   font-size: 10pt;
-  color: #484848;
+  color: var(--dx-texteditor-color-label);
   margin-left: 9px;
 }
 

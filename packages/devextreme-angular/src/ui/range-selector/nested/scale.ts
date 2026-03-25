@@ -16,9 +16,9 @@ import {
 
 
 
-import { TimeInterval, ScaleBreak, ScaleBreakLineStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, ChartsDataType } from 'devextreme/common/charts';
-import { Format } from 'devextreme/common/core/localization';
-import { AxisScale } from 'devextreme/viz/range_selector';
+import type { TimeInterval, ScaleBreak, ScaleBreakLineStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, ChartsDataType } from 'devextreme/common/charts';
+import type { Format } from 'devextreme/common/core/localization';
+import type { AxisScale } from 'devextreme/viz/range_selector';
 
 import {
     DxIntegrationModule,

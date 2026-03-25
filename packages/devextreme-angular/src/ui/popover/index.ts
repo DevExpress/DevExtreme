@@ -22,11 +22,11 @@ import {
 } from '@angular/core';
 
 
-import { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
-import { event } from 'devextreme/events/events.types';
-import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
-import { Position } from 'devextreme/common';
-import { dxPopupToolbarItem } from 'devextreme/ui/popup';
+import type { AnimationConfig, PositionConfig } from 'devextreme/common/core/animation';
+import type { event } from 'devextreme/events/events.types';
+import type { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
+import type { Position } from 'devextreme/common';
+import type { dxPopupToolbarItem } from 'devextreme/ui/popup';
 
 import DxPopover from 'devextreme/ui/popover';
 
@@ -400,6 +400,16 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     }
 
 
+    
+    @Input()
+    get tabFocusLoopEnabled(): boolean {
+        return this._getOption('tabFocusLoopEnabled');
+    }
+    set tabFocusLoopEnabled(value: boolean) {
+        this._setOption('tabFocusLoopEnabled', value);
+    }
+
+
     /**
      * [descr:dxPopoverOptions.target]
     
@@ -728,6 +738,13 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() tabFocusLoopEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() targetChange: EventEmitter<any | string | undefined>;
 
     /**
@@ -817,6 +834,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
             { emit: 'showCloseButtonChange' },
             { emit: 'showEventChange' },
             { emit: 'showTitleChange' },
+            { emit: 'tabFocusLoopEnabledChange' },
             { emit: 'targetChange' },
             { emit: 'titleChange' },
             { emit: 'titleTemplateChange' },

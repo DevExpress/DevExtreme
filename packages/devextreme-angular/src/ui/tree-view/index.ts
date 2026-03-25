@@ -21,14 +21,13 @@ import {
     QueryList
 } from '@angular/core';
 
-export { ExplicitTypes } from 'devextreme/ui/tree_view';
+export type { ExplicitTypes } from 'devextreme/ui/tree_view';
 
-import DataSource from 'devextreme/data/data_source';
-import { dxTreeViewNode, dxTreeViewItem, TreeViewExpandEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, ItemSelectionChangedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, TreeViewCheckBoxMode } from 'devextreme/ui/tree_view';
-import { DataSourceOptions } from 'devextreme/data/data_source';
-import { Store } from 'devextreme/data/store';
-import { DataStructure, ScrollDirection, SearchMode, SingleOrMultiple } from 'devextreme/common';
-import { dxTextBoxOptions } from 'devextreme/ui/text_box';
+import type { dxTreeViewNode, dxTreeViewItem, DisabledNodeSelectionMode, TreeViewExpandEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, ItemSelectionChangedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, TreeViewCheckBoxMode } from 'devextreme/ui/tree_view';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
+import type { Store } from 'devextreme/data/store';
+import type { DataStructure, ScrollDirection, SearchMode, SingleOrMultiple } from 'devextreme/common';
+import type { dxTextBoxOptions } from 'devextreme/ui/text_box';
 
 import DxTreeView from 'devextreme/ui/tree_view';
 
@@ -204,6 +203,19 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
     }
     set disabledExpr(value: Function | string) {
         this._setOption('disabledExpr', value);
+    }
+
+
+    /**
+     * [descr:dxTreeViewOptions.disabledNodeSelectionMode]
+    
+     */
+    @Input()
+    get disabledNodeSelectionMode(): DisabledNodeSelectionMode {
+        return this._getOption('disabledNodeSelectionMode');
+    }
+    set disabledNodeSelectionMode(value: DisabledNodeSelectionMode) {
+        this._setOption('disabledNodeSelectionMode', value);
     }
 
 
@@ -885,6 +897,13 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() disabledNodeSelectionModeChange: EventEmitter<DisabledNodeSelectionMode>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() displayExprChange: EventEmitter<((item: any) => string) | string>;
 
     /**
@@ -1188,6 +1207,7 @@ export class DxTreeViewComponent<TItem = any, TKey = any> extends DxComponent im
             { emit: 'dataStructureChange' },
             { emit: 'disabledChange' },
             { emit: 'disabledExprChange' },
+            { emit: 'disabledNodeSelectionModeChange' },
             { emit: 'displayExprChange' },
             { emit: 'elementAttrChange' },
             { emit: 'expandAllEnabledChange' },
