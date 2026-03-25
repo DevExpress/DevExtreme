@@ -45,8 +45,8 @@ $(() => {
                     },
                     items: [
                       'roomIdIcon',
-                      'roomId',
-                      'priorityId',
+                      'roomIdEditor',
+                      'priorityIdEditor',
                     ],
                   },
                   'assigneeIdGroup',

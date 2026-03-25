@@ -7,7 +7,7 @@
 **Repository Stats:**
 - **Type:** Monorepo (pnpm workspaces + Nx)
 - **Size:** Large (1000+ files across multiple packages)
-- **Languages:** TypeScript, JavaScript, SCSS, C# (.NET for test runner)
+- **Languages:** TypeScript, JavaScript, SCSS
 - **Package Manager:** pnpm 9.15.4 (specified in package.json)
 - **Node Version:** 20.x (required by CI)
 - **Build System:** Gulp + Nx + custom build scripts + custom Nx executors (via `devextreme-nx-infra-plugin`)
@@ -24,7 +24,7 @@ pnpm install --frozen-lockfile
 
 **Node.js:** Version 20.x is required (CI uses Node 20)
 **pnpm:** Version 9.15.4 (managed via packageManager field)
-**.NET SDK:** Version 8.0.x required for building the test runner (packages/devextreme/testing/runner)
+**.NET SDK:** Version 8.0.x required for running devextreme-internal-tools (uses .NET tool for code generation)
 
 ### First-Time Setup
 
@@ -155,7 +155,7 @@ pnpm run clean
 1. Localization generation (via `devextreme-nx-infra-plugin:localization` executor)
 2. Component generation (Renovation architecture)
 3. Transpilation (via native NX executors: `babel-transform` for JS, `build-typescript` for TS)
-4. Bundle creation (Webpack) - `bundle:debug` and `bundle:prod` targets
+4. Bundle creation (Webpack via `devextreme-nx-infra-plugin:bundle` executor) - `bundle:debug` and `bundle:prod` targets
 5. TypeScript declarations - `build:declarations` target
 6. SCSS compilation (from devextreme-scss)
 7. NPM package preparation - `build:npm` target
@@ -190,6 +190,7 @@ The `packages/nx-infra-plugin` provides custom Nx executors for build automation
 | `babel-transform` | Transforms JS/TS files using Babel with configurable presets, debug block removal, and extension renaming |
 | `build-angular-library` | Builds Angular libraries using ng-packagr programmatically |
 | `build-typescript` | Compiles TypeScript to CJS or ESM modules with configurable output format, tsconfig, and path alias resolution |
+| `bundle` | Bundles JavaScript files using webpack with debug or production mode, supporting multiple entry points and license validation |
 | `clean` | Removes directories and files with support for exclusion patterns |
 | `concatenate-files` | Concatenates files with optional content extraction via regex, header/footer, and find/replace transforms |
 | `copy-files` | Copies files and directories to specified destinations with glob pattern support |

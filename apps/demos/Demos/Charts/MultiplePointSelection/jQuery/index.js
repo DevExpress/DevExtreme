@@ -18,7 +18,7 @@ $(() => {
       { valueField: 'bronze', name: 'Bronze Medals', color: '#cd7f32' },
     ],
     title: {
-      text: 'Olympic Medals in 2008',
+      text: 'Olympic Medals in 2024',
     },
     export: {
       enabled: true,

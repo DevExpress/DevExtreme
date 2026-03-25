@@ -138,11 +138,16 @@ class RadioGroup extends Editor<RadioGroupProperties> {
     this._setCollectionWidgetOption('selectedItemKeys', this._getSelectedItemKeys(value));
   }
 
-  _renderValidationState(): void {
-    super._renderValidationState();
+  _toggleAriaDescribedBy(value?: string | null): void {
+    const targets = this.itemElements()?.toArray();
 
-    // @ts-expect-error
-    this._validationMessage?.$content().attr('role', 'alert');
+    if (!targets?.length) {
+      return;
+    }
+
+    targets.forEach((element) => {
+      this.setAria('describedby', value, $(element));
+    });
   }
 
   _optionChanged(args: OptionChanged<RadioGroupProperties>): void {

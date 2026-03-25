@@ -16,12 +16,12 @@ function App() {
         type="bar"
         barPadding={0.5}
       />
-      <Series valueField="year1970" name="1970" />
-      <Series valueField="year1980" name="1980" />
       <Series valueField="year1990" name="1990" />
       <Series valueField="year2000" name="2000" />
-      <Series valueField="year2008" name="2008" />
-      <Series valueField="year2009" name="2009" />
+      <Series valueField="year2010" name="2010" />
+      <Series valueField="year2020" name="2020" />
+      <Series valueField="year2021" name="2021" />
+      <Series valueField="year2022" name="2022" />
       <Legend
         verticalAlignment="bottom"
         horizontalAlignment="center"

@@ -10,7 +10,7 @@
         argument-field="month"
         type="area"
       >
-        <DxTooltip format="currency"/>
+        <DxTooltip :format="{ type: 'currency', precision: 2 }"/>
       </DxSparkline>
     </td>
     <td>
@@ -27,7 +27,7 @@
         min-color="#6babac"
         max-color="#8076bb"
       >
-        <DxTooltip format="currency"/>
+        <DxTooltip :format="{ type: 'currency', precision: 2 }"/>
       </DxSparkline>
     </td>
     <td>
@@ -43,7 +43,7 @@
         point-color="#e8c267"
         point-symbol="polygon"
       >
-        <DxTooltip format="currency"/>
+        <DxTooltip :format="{ type: 'currency', precision: 2 }"/>
       </DxSparkline>
     </td>
   </tr>

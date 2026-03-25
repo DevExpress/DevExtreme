@@ -26,12 +26,12 @@ import * as accessibility from '@js/ui/shared/accessibility';
 import { isElementInDom } from '@ts/core/utils/m_dom';
 import { focused } from '@ts/core/utils/m_selectors';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
+import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 import { memoize } from '@ts/utils/memoize';
 
-import type { Column } from '../columns_controller/m_columns_controller';
 import {
   EDIT_FORM_CLASS,
   EDIT_MODE_BATCH,
@@ -98,7 +98,7 @@ import {
   shouldPreventScroll,
 } from './m_keyboard_navigation_utils';
 import { keyboardNavigationScrollableA11yExtender } from './scrollable_a11y';
-import type { NavigationDirection } from './types';
+import type { NavigationDirection, NavigationElementType, NavigationKeyCode } from './types';
 
 export class KeyboardNavigationController extends KeyboardNavigationControllerCore {
   private _updateFocusTimeout: any;
@@ -239,6 +239,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const isCell = $element.is('td');
     const needSetFocusPosition = (this.option('focusedRowIndex') ?? -1) < 0;
     if (isCell && needSetFocusPosition) {
+      this._focusView();
       this._updateFocusedCellPosition($element);
     }
   }
@@ -1698,7 +1699,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         return;
       }
 
-      let $cell = this._getFocusedCell();
+      let $cell: dxElementWrapper | null = this._getFocusedCell();
       const isEditing = this._editingController.isEditing();
 
       if (!this.getMasterDetailCell($cell) || this._isRowEditMode()) {
@@ -1708,7 +1709,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
             : 'downArrow';
           $cell = this._getNextCell(direction);
         }
-        if (isElementDefined($cell)) {
+        if ($cell && isElementDefined($cell)) {
           if (
             $cell.is('td')
             || $cell.hasClass(this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))
@@ -2103,77 +2104,98 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return $result;
   }
 
-  private _getNextCell(keyCode, elementType?, cellPosition?) {
-    const focusedCellPosition = cellPosition || this._focusedCellPosition;
-    const isRowFocusType = this.isRowFocusType();
-    const includeCommandCells = isRowFocusType || ['next', 'previous'].includes(keyCode);
-    const isVerticalNavigation = ['upArrow', 'downArrow'].includes(keyCode);
-    let $cell;
-    let $row;
+  private _getNextCell(
+    keyCode: NavigationKeyCode,
+    elementType?: NavigationElementType,
+    cellPosition?: FocusedCellPosition,
+  ): dxElementWrapper | null {
+    const focusedPosition = cellPosition ?? this._focusedCellPosition;
 
-    if (this._focusedView && focusedCellPosition) {
-      const newFocusedCellPosition = this._getNewPositionByCode(
-        focusedCellPosition,
-        elementType,
-        keyCode,
-      );
-      $cell = $(this._getCell(newFocusedCellPosition));
-
-      // T1322130, T1322440: During vertical navigation in any focus mode,
-      // command cells (e.g. expand) may be invalid for focus because their
-      // column inherits groupIndex from the grouped data column.
-      // Instead of recursing to the next row (risking infinite recursion at grid boundaries),
-      // find the first valid data cell in the target row.
-      if (
-        isVerticalNavigation
-        && isElementDefined($cell)
-        && !this._isCellValid($cell)
-      ) {
-        const visibleColumns = this._columnsController.getVisibleColumns(null, true);
-        const newFocusedColumnIndex = newFocusedCellPosition.columnIndex;
-        const newFocusedColumn = visibleColumns[newFocusedColumnIndex];
-
-        if (newFocusedColumn?.command === 'expand') {
-          $cell = this.getFirstValidCellInRow($cell.parent(), newFocusedColumnIndex) ?? $cell;
-        }
-      }
-
-      const isLastCellOnDirection = keyCode === 'previous'
-        ? this._isFirstValidCell(newFocusedCellPosition)
-        : this._isLastValidCell(newFocusedCellPosition);
-
-      if (
-        isElementDefined($cell)
-        && !this._isCellValid($cell)
-        && this._isCellInRow(newFocusedCellPosition, includeCommandCells)
-        && !isLastCellOnDirection
-      ) {
-        if (isRowFocusType) {
-          $cell = this.getFirstValidCellInRow(
-            $cell.parent(),
-            newFocusedCellPosition.columnIndex,
-          );
-        } else {
-          $cell = this._getNextCell(keyCode, 'cell', newFocusedCellPosition);
-        }
-      }
-
-      $row = isElementDefined($cell) && $cell.parent();
-      if (this._hasSkipRow($row)) {
-        const rowIndex = this._getRowIndex($row);
-        if (!this._isLastRow(rowIndex)) {
-          $cell = this._getNextCell(keyCode, 'row', {
-            columnIndex: focusedCellPosition.columnIndex,
-            rowIndex,
-          });
-        } else {
-          return null;
-        }
-      }
-
-      return isElementDefined($cell) ? $cell : null;
+    if (!this._focusedView || !focusedPosition) {
+      return null;
     }
-    return null;
+
+    const newPosition = this._getNewPositionByCode(focusedPosition, elementType, keyCode);
+    const $cell = $(this._getCell(newPosition));
+    const $adjustedCell = this.adjustCellOnVerticalNav($cell, newPosition, keyCode);
+    const $validCell = this.resolveInvalidCell($adjustedCell, newPosition, keyCode);
+
+    return this.resolveHiddenRowCell($validCell, focusedPosition, keyCode);
+  }
+
+  // T1322130, T1322440: During vertical navigation, command cells (e.g. expand)
+  // may be invalid because their column inherits groupIndex from the grouped data column.
+  // Find the first valid data cell in the target row instead of recursing to the next row.
+  private adjustCellOnVerticalNav(
+    $cell: dxElementWrapper,
+    position: FocusedCellPosition,
+    keyCode: NavigationKeyCode,
+  ): dxElementWrapper {
+    const isVerticalNav = keyCode === 'upArrow' || keyCode === 'downArrow';
+
+    if (!isVerticalNav || !isElementDefined($cell) || this._isCellValid($cell)) {
+      return $cell;
+    }
+
+    const visibleColumns = this._columnsController.getVisibleColumns(null, true);
+    const column = visibleColumns[position.columnIndex];
+
+    if (column?.command === 'expand') {
+      return this.getFirstValidCellInRow($cell.parent(), position.columnIndex) ?? $cell;
+    }
+
+    return $cell;
+  }
+
+  private resolveInvalidCell(
+    $cell: dxElementWrapper,
+    position: FocusedCellPosition,
+    keyCode: NavigationKeyCode,
+  ): dxElementWrapper | undefined | null {
+    if (!isElementDefined($cell) || this._isCellValid($cell)) {
+      return $cell;
+    }
+
+    const isRowFocus = this.isRowFocusType();
+    const includeCommandCells = isRowFocus || keyCode === 'next' || keyCode === 'previous';
+    const isBoundaryCell = keyCode === 'previous'
+      ? this._isFirstValidCell(position)
+      : this._isLastValidCell(position);
+
+    if (!this._isCellInRow(position, includeCommandCells) || isBoundaryCell) {
+      return $cell;
+    }
+
+    return isRowFocus
+      ? this.getFirstValidCellInRow($cell.parent(), position.columnIndex)
+      : this._getNextCell(keyCode, 'cell', position);
+  }
+
+  private resolveHiddenRowCell(
+    $cell: dxElementWrapper | undefined | null,
+    originalPosition: FocusedCellPosition,
+    keyCode: NavigationKeyCode,
+  ): dxElementWrapper | null {
+    if (!isElementDefined($cell)) {
+      return null;
+    }
+
+    const $row = $cell!.parent();
+
+    if (!this._hasSkipRow($row)) {
+      return $cell!;
+    }
+
+    const rowIndex = this._getRowIndex($row);
+
+    if (this._isLastRow(rowIndex)) {
+      return null;
+    }
+
+    return this._getNextCell(keyCode, 'row', {
+      columnIndex: originalPosition.columnIndex,
+      rowIndex,
+    });
   }
 
   // #endregion DOM_Manipulation

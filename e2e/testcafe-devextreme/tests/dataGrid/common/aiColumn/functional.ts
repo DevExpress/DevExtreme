@@ -93,7 +93,7 @@ test('Get result from AI and display it in the AI column', async (t) => {
       ai: {
         prompt: 'first AI column',
         // eslint-disable-next-line new-cap
-        aiIntegration: new (window as any).DevExpress.aiIntegration({
+        aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
           sendRequest(prompt) {
             return {
               promise: new Promise<string>((resolve) => {
@@ -143,7 +143,7 @@ test('Get result from AI and display it in two AI columns', async (t) => {
       ai: {
         prompt: 'first AI column',
         // eslint-disable-next-line new-cap
-        aiIntegration: new (window as any).DevExpress.aiIntegration({
+        aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
           sendRequest(prompt) {
             return {
               promise: new Promise<string>((resolve) => {
@@ -168,7 +168,7 @@ test('Get result from AI and display it in two AI columns', async (t) => {
       ai: {
         prompt: 'second AI column',
         // eslint-disable-next-line new-cap
-        aiIntegration: new (window as any).DevExpress.aiIntegration({
+        aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
           sendRequest(prompt) {
             return {
               promise: new Promise<string>((resolve) => {
@@ -228,7 +228,7 @@ test('Regenerate the AI request from DropDownButton menu', async (t) => {
         mode: 'manual',
         prompt: 'first AI column',
         // eslint-disable-next-line new-cap
-        aiIntegration: new (window as any).DevExpress.aiIntegration({
+        aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
           sendRequest(prompt) {
             return {
               promise: new Promise<string>((resolve) => {
@@ -291,7 +291,7 @@ test('Regenerate the AI request from Prompt Editor', async (t) => {
         mode: 'manual',
         prompt: 'first AI column',
         // eslint-disable-next-line new-cap
-        aiIntegration: new (window as any).DevExpress.aiIntegration({
+        aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
           sendRequest(prompt) {
             return {
               promise: new Promise<string>((resolve) => {
@@ -351,7 +351,7 @@ test('Clear Data from AI column by DropDownButton menu', async (t) => {
       ai: {
         prompt: 'first AI column',
         // eslint-disable-next-line new-cap
-        aiIntegration: new (window as any).DevExpress.aiIntegration({
+        aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
           sendRequest(prompt) {
             return {
               promise: new Promise<string>((resolve) => {
@@ -417,7 +417,7 @@ test('Abort the AI request from Prompt Editor', async (t) => {
         prompt: 'first AI column',
         mode: 'manual',
         // eslint-disable-next-line new-cap
-        aiIntegration: new (window as any).DevExpress.aiIntegration({
+        aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
           sendRequest(prompt) {
             return {
               promise: new Promise<string>((resolve) => {
@@ -483,7 +483,7 @@ test('Change the prompt in the AI Prompt Editor', async (t) => {
       ai: {
         prompt: 'first AI column',
         // eslint-disable-next-line new-cap
-        aiIntegration: new (window as any).DevExpress.aiIntegration({
+        aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
           sendRequest(prompt) {
             return {
               promise: new Promise<string>((resolve) => {
@@ -536,7 +536,7 @@ test('The scroll position should not reset when the ai.prompt changes at runtime
         name: 'aiColumn',
         ai: {
           // eslint-disable-next-line new-cap
-          aiIntegration: new (window as any).DevExpress.aiIntegration({
+          aiIntegration: new (window as any).DevExpress.aiIntegration.AIIntegration({
             sendRequest() {
               return {
                 promise: new Promise<string>((resolve) => {

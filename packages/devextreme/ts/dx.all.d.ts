@@ -8118,29 +8118,11 @@ declare module DevExpress.excelExporter {
   /**
    * [descr:CellAddress]
    */
-  export interface CellAddress {
-    /**
-     * [descr:CellAddress.row]
-     */
-    row?: number;
-    /**
-     * [descr:CellAddress.column]
-     */
-    column?: number;
-  }
+  export type CellAddress = DevExpress.exportInternal.CellAddress;
   /**
    * [descr:CellRange]
    */
-  export interface CellRange {
-    /**
-     * [descr:CellRange.from]
-     */
-    from?: CellAddress;
-    /**
-     * [descr:CellRange.to]
-     */
-    to?: CellAddress;
-  }
+  export type CellRange = DevExpress.exportInternal.CellRange;
   /**
    * @deprecated Use DataGridCell instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -8196,7 +8178,7 @@ declare module DevExpress.excelExporter {
     /**
      * [descr:ExcelExportBaseOptions.topLeftCell]
      */
-    topLeftCell?: CellAddress | string;
+    topLeftCell?: DevExpress.exportInternal.CellAddress | string;
     /**
      * [descr:ExcelExportBaseOptions.keepColumnWidths]
      */
@@ -8231,6 +8213,34 @@ declare module DevExpress.excelExporter {
      * [descr:ExcelPivotGridCell.headerType]
      */
     headerType?: 'column' | 'row' | 'data' | 'filter';
+  }
+}
+declare module DevExpress.exportInternal {
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface CellAddress {
+    /**
+     * [descr:CellAddress.row]
+     */
+    row?: number;
+    /**
+     * [descr:CellAddress.column]
+     */
+    column?: number;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export interface CellRange {
+    /**
+     * [descr:CellRange.from]
+     */
+    from?: CellAddress;
+    /**
+     * [descr:CellRange.to]
+     */
+    to?: CellAddress;
   }
 }
 declare module DevExpress.fileManagement {
@@ -25244,6 +25254,10 @@ declare module DevExpress.ui {
      */
     showTitle?: boolean;
     /**
+     * [descr:dxPopupOptions.tabFocusLoopEnabled]
+     */
+    tabFocusLoopEnabled?: boolean;
+    /**
      * [descr:dxPopupOptions.title]
      */
     title?: string;
@@ -26316,6 +26330,7 @@ declare module DevExpress.ui {
       | 'dateNavigator'
       | 'viewSwitcher';
     export type SchedulerScrollToAlign = 'start' | 'center';
+    export type SnapToCellsMode = 'always' | 'auto' | 'never';
     /**
      * [descr:TargetedAppointmentInfo]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -26851,6 +26866,10 @@ declare module DevExpress.ui {
      */
     allDayPanelMode?: DevExpress.ui.dxScheduler.AllDayPanelMode;
     /**
+     * [descr:dxSchedulerOptions.snapToCellsMode]
+     */
+    snapToCellsMode?: DevExpress.ui.dxScheduler.SnapToCellsMode;
+    /**
      * [descr:dxSchedulerOptions.offset]
      */
     offset?: number;
@@ -26999,6 +27018,10 @@ declare module DevExpress.ui {
            * [descr:dxSchedulerOptions.views.allDayPanelMode]
            */
           allDayPanelMode?: DevExpress.ui.dxScheduler.AllDayPanelMode;
+          /**
+           * [descr:dxSchedulerOptions.views.snapToCellsMode]
+           */
+          snapToCellsMode?: DevExpress.ui.dxScheduler.SnapToCellsMode;
           /**
            * [descr:dxSchedulerOptions.views.offset]
            */

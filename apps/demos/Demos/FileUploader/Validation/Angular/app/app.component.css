@@ -3,6 +3,10 @@
   float: left;
 }
 
+::ng-deep .file-uploader-block + .file-uploader-block {
+  float: right;
+}
+
 ::ng-deep .note {
   font-size: 10pt;
   color: var(--dx-texteditor-color-label);

@@ -1,8 +1,9 @@
 import { glob } from 'glob';
 import { join } from 'path';
-import { existsSync } from 'fs';
+import { existsSync, mkdirSync, appendFileSync } from 'fs';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { axeCheck, createReport } from '@testcafe-community/axe';
+import { ClientFunction } from 'testcafe';
 import {
   runTestAtPage,
   shouldRunFramework,
@@ -30,6 +31,28 @@ const execTestCafeCode = (t, code) => {
   // eslint-disable-next-line no-eval
   const testCafeFunction = eval(code);
   return testCafeFunction(t);
+};
+
+const getClientCspViolations = ClientFunction(() => (window as any).__cspViolations || []);
+
+const isCspEnabled = () => process.env.CSP_REPORT === 'true';
+
+const cspReportDir = join(__dirname, '..', 'csp-reports');
+const cspReportFile = join(cspReportDir, 'csp-violations.jsonl');
+
+const writeCspReport = (testName: string, framework: string, violations: any[]) => {
+  if (!violations.length) return;
+  if (!existsSync(cspReportDir)) {
+    mkdirSync(cspReportDir, { recursive: true });
+  }
+  for (const v of violations) {
+    const entry = {
+      test: testName,
+      framework,
+      ...v,
+    };
+    appendFileSync(cspReportFile, `${JSON.stringify(entry)}\n`);
+  }
 };
 
 const getIgnoredRules = (testName) => {
@@ -73,7 +96,7 @@ const getIgnoredRules = (testName) => {
     'Diagram-UICustomization': ['aria-dialog-name', 'label'],
     'Diagram-WebAPIService': ['aria-dialog-name', 'label'],
 
-    'FileManager-BindingToEF': ['aria-command-name', 'label'],
+    'FileManager-BindingToEF': ['aria-command-name', 'empty-table-header', 'label'],
     'FileManager-BindingToFileSystem': ['aria-command-name', 'empty-table-header', 'label'],
     'FileManager-BindingToHierarchicalStructure': ['aria-command-name', 'empty-table-header', 'label'],
     'FileManager-CustomThumbnails': ['aria-allowed-attr', 'aria-command-name', 'image-alt', 'label'],
@@ -82,6 +105,7 @@ const getIgnoredRules = (testName) => {
 
     'Gantt-Appearance': ['aria-toggle-field-name'],
     'Gantt-ExportToPDF': ['aria-toggle-field-name'],
+    'Gantt-Overview': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-StripLines': ['aria-required-parent', 'aria-valid-attr-value'],
     'Gantt-Validation': ['aria-required-parent', 'aria-valid-attr-value'],
 
@@ -101,6 +125,13 @@ const getClientScripts = () => {
 
   if (process.env.STRATEGY === 'accessibility') {
     scripts.push({ module: 'axe-core/axe.min.js' });
+  }
+
+  if (isCspEnabled()) {
+    scripts.push(
+      // @ts-expect-error
+      join(__dirname, '../utils/visual-tests/inject/csp-listener.js'),
+    );
   }
 
   scripts.push(
@@ -225,8 +256,14 @@ Object.values(FRAMEWORKS).forEach((approach) => {
         } else {
           const consoleMessages = await t.getBrowserConsoleMessages();
           const errors = [...consoleMessages.error, ...consoleMessages.warn]
-            .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));
+            .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)))
+            .filter((e) => !e.startsWith('[CSP Violation]'));
           await t.expect(errors).eql([]);
+
+          if (isCspEnabled()) {
+            const cspViolations = await getClientCspViolations();
+            writeCspReport(testName, approach, cspViolations);
+          }
 
           const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

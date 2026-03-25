@@ -1,0 +1,478 @@
+/* stylelint-disable no-duplicate-selectors */
+@use "../colors" as *;
+@use "../sizes" as *;
+@use "../../textEditor" as *;
+@use "../variables" as *;
+
+@mixin generic-grid-base-cell($widget-name) {
+
+  // #region position
+
+  // (0,2,1)
+  .dx-#{$widget-name}-rowsview td.dx-validation-pending {
+    position: relative;
+  }
+
+  // #endregion
+
+  // #region overflow
+
+  // (0,10,1)
+  .dx-#{$widget-name}-table .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) > td:not(.dx-focused).dx-command-select {
+    overflow: inherit;
+  }
+
+  // #endregion
+
+  // #region sizing
+
+  // (0,2,0)
+  .dx-#{$widget-name} .dx-command-drag {
+    width: $generic-grid-base-command-handle-column-width;
+    min-width: $generic-grid-base-command-handle-column-width;
+  }
+
+  // (0,3,0)
+  .dx-#{$widget-name}-table .dx-row .dx-command-select {
+    width: $generic-grid-base-command-select-column-width;
+    min-width: $generic-grid-base-command-select-column-width;
+  }
+
+  // (0,3,0)
+  .dx-#{$widget-name}-table .dx-row .dx-command-edit {
+    width: $generic-grid-base-command-edit-column-width;
+    min-width: $generic-grid-base-command-edit-column-width;
+  }
+
+  // (0,3,0)
+  .dx-#{$widget-name}-table .dx-row .dx-command-expand {
+    width: $generic-grid-base-command-expand-column-width;
+    min-width: $generic-grid-base-command-expand-column-width;
+  }
+
+  // #endregion
+
+  // #region border
+
+  // (0,2,1)
+  .dx-#{$widget-name} .dx-row-lines > td {
+    border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name} .dx-column-lines > td {
+    border-left: $datagrid-border;
+    border-left-color: $datagrid-border-color;
+    border-right: $datagrid-border;
+    border-right-color: $datagrid-border-color;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name}-rowsview .dx-row-removed > td {
+    border-top: 1px solid;
+    border-top-color: $datagrid-cell-removed-border-color;
+    border-bottom: 1px solid;
+    border-bottom-color: $datagrid-cell-removed-border-color;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview .dx-row.dx-edit-row > td {
+    border-top: $datagrid-border;
+    border-top-color: $datagrid-border-color;
+    border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview .dx-row-removed:not(.dx-row-lines) > td {
+    border-top-color: $datagrid-row-removed-bg;
+    border-bottom-width: 0;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row > td {
+    border-bottom: 1px solid;
+    border-bottom-color: $datagrid-focused-border-color;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-headers .dx-#{$widget-name}-table .dx-row > td {
+    border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview .dx-master-detail-row > .dx-#{$widget-name}-group-space {
+    border-top: $datagrid-border;
+    border-top-color: $datagrid-border-color;
+    border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
+  }
+
+  // (0,3,2)
+  .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row > tr:last-child > td {
+    border-bottom: 1px solid;
+    border-bottom-color: $datagrid-focused-border-color;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name}-rowsview .dx-row.dx-edit-row:first-child > td {
+    border-top-width: 0;
+    border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row:not(.dx-row-lines) > td {
+    border-top: 1px solid;
+    border-top-color: $datagrid-row-focused-bg;
+    border-bottom: 1px solid;
+    border-bottom-color: $datagrid-row-focused-bg;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name}-rowsview .dx-master-detail-row .dx-master-detail-cell:not(.dx-row-lines) {
+    border-top: $datagrid-border;
+    border-top-color: $datagrid-border-color;
+    border-bottom: $datagrid-border;
+    border-bottom-color: $datagrid-border-color;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name}-rowsview .dx-data-row .dx-cell-modified.dx-cell-modified::after,
+  .dx-#{$widget-name}-rowsview .dx-data-row .dx-cell-modified.dx-#{$widget-name}-invalid::after {
+    border-color: $datagrid-cell-modified-border-color;
+  }
+
+  // (0,4,1)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > td.dx-#{$widget-name}-group-space,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td.dx-#{$widget-name}-group-space,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td.dx-#{$widget-name}-group-space,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td.dx-#{$widget-name}-group-space {
+    border-right-color: $datagrid-selection-bg;
+  }
+
+  // (0,4,1) - (0,4,2)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > td.dx-pointer-events-none,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td.dx-pointer-events-none,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td.dx-pointer-events-none,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td.dx-pointer-events-none {
+    border-left-color: $datagrid-row-selected-border-color;
+    border-right-color: $datagrid-row-selected-border-color;
+  }
+
+  // (0,4,2)
+  .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row:not(.dx-row-lines) > tr:first-child > td {
+    border-top: 1px solid;
+    border-top-color: $datagrid-row-focused-bg;
+    border-bottom: 1px solid;
+    border-bottom-color: $datagrid-row-focused-bg;
+  }
+
+  // (0,5,1)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):not(.dx-row-lines) > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover:not(.dx-row-lines) > td {
+    border-bottom: 1px solid;
+    border-bottom-color: $datagrid-selection-bg;
+    border-top: 1px solid;
+    border-top-color: $datagrid-selection-bg;
+  }
+
+  // (0,5,1) - (0,5,2)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused).dx-column-lines > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused).dx-column-lines > tr > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover.dx-column-lines > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover.dx-column-lines > tr > td {
+    border-left-color: $datagrid-row-selected-border-color;
+    border-right-color: $datagrid-row-selected-border-color;
+  }
+
+  // (0,5,1) - (0,5,2)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused).dx-row-lines > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused).dx-row-lines > tr > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover.dx-row-lines > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover.dx-row-lines > tr > td {
+    border-bottom-color: $datagrid-row-selected-border-color;
+  }
+
+  // (0,5,1)
+  .dx-#{$widget-name}-rowsview .dx-data-row .dx-validator.dx-#{$widget-name}-invalid.dx-cell-modified::after,
+  .dx-#{$widget-name}-rowsview .dx-data-row .dx-validator.dx-#{$widget-name}-invalid.dx-#{$widget-name}-invalid::after {
+    border: 1px solid;
+    border-color: $datagrid-row-invalid-faded-border-color;
+  }
+
+  // (0,5,2)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):not(.dx-row-lines) > tr:first-child > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover:not(.dx-row-lines) > tr:first-child > td {
+    border-top: 1px solid;
+    border-top-color: $datagrid-selection-bg;
+  }
+
+  // (0,5,2)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):not(.dx-row-lines) > tr:last-child > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover:not(.dx-row-lines) > tr:last-child > td {
+    border-bottom: 1px solid;
+    border-bottom-color: $datagrid-selection-bg;
+  }
+
+  // (0,6,1)
+  .dx-#{$widget-name}-rowsview .dx-data-row .dx-validator.dx-#{$widget-name}-invalid.dx-focused.dx-cell-modified::after,
+  .dx-#{$widget-name}-rowsview .dx-data-row .dx-validator.dx-#{$widget-name}-invalid.dx-focused.dx-#{$widget-name}-invalid::after {
+    border: 1px solid;
+    border-color: $datagrid-row-invalid-border-color;
+  }
+
+  // (0,10,1)
+  .dx-#{$widget-name}-table .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) > td:not(.dx-focused).dx-#{$widget-name}-group-space {
+    border-right-color: $datagrid-hover-bg;
+  }
+
+  // sticky-columns border
+
+  // (0,4,1)
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-row-lines.dx-edit-row > td {
+    border-top-width: 0;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row-removed:not(.dx-row-lines) > td {
+    border-bottom-width: 0;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row-removed.dx-row-lines > td {
+    border-top-width: 0;
+  }
+
+  // RTL border
+
+  // (0,10,1)
+  .dx-rtl .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) > td:not(.dx-focused).dx-#{$widget-name}-group-space {
+    border-left-color: $datagrid-hover-bg;
+    border-right-color: transparent;
+  }
+
+  // (0,4,1) - (0,4,2)
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > td,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > tr > td,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > td,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > tr > td {
+    border-right-color: $datagrid-row-selected-border-color;
+  }
+
+  // (0,5,1) - (0,5,2)
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > td:not(.dx-focused).dx-#{$widget-name}-group-space,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > tr > td:not(.dx-focused).dx-#{$widget-name}-group-space,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > td:not(.dx-focused).dx-#{$widget-name}-group-space,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > tr > td:not(.dx-focused).dx-#{$widget-name}-group-space {
+    border-left-color: $datagrid-selection-bg;
+  }
+
+  // (0,4,1) - (0,4,2)
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > td.dx-pointer-events-none,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row > tr > td.dx-pointer-events-none,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > td.dx-pointer-events-none,
+  .dx-rtl .dx-#{$widget-name}-rowsview .dx-selection.dx-row:hover > tr > td.dx-pointer-events-none {
+    border-left-color: $datagrid-row-selected-border-color;
+  }
+
+  // #endregion
+
+  // #region padding
+
+  // (0,1,0)
+  .dx-cell-modified,
+  .dx-#{$widget-name}-invalid {
+    padding: $generic-grid-base-cell-padding;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name} .dx-row > td {
+    padding: $generic-grid-base-cell-padding;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name}-rowsview td.dx-validation-pending {
+    padding: 0;
+  }
+
+  // (0,3,0)
+  .dx-editor-cell.dx-editor-inline-block:not(.dx-command-select)::before {
+    padding-top: $generic-grid-base-cell-padding;
+    padding-bottom: $generic-grid-base-cell-padding;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview .dx-master-detail-row > .dx-master-detail-cell {
+    padding: $grid-masterdetail-padding;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview td.dx-validation-pending.dx-cell-modified,
+  .dx-#{$widget-name}-rowsview td.dx-validation-pending.dx-#{$widget-name}-invalid {
+    padding: $generic-grid-base-cell-padding;
+    padding-right: $generic-texteditor-invalid-badge-size;
+  }
+
+  // (0,4,0)
+  .dx-#{$widget-name}-table .dx-row .dx-command-expand.dx-#{$widget-name}-group-space {
+    padding-top: $generic-grid-base-cell-padding;
+  }
+
+  // sticky-columns padding
+
+  // (0,4,1)
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-master-detail-row > .dx-master-detail-cell {
+    padding: 0;
+  }
+
+  // (0,7,1)
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row:not(.dx-row-lines, .dx-edit-row, .dx-selection, .dx-row-focused, .dx-row-removed) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+    padding-top: $generic-grid-base-cell-padding + 1px;
+  }
+
+  // (0,6,1)
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-selection:not(.dx-edit-row):not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell),
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-row-focused:not(.dx-edit-row):not(.dx-row-lines) > td:not(.dx-editor-cell, .dx-master-detail-cell) {
+    padding-bottom: $generic-grid-base-cell-padding - 1px;
+  }
+
+  // (0,5,1)
+  .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-row.dx-edit-row > td.dx-command-edit {
+    padding-top: $generic-grid-base-cell-padding - 1px;
+  }
+
+  // (0,5,1)
+  .dx-row.dx-group-row + .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row td:not(.dx-command-expand, .dx-editor-cell),
+  .dx-row.dx-master-detail-row + .dx-#{$widget-name}-rowsview.dx-#{$widget-name}-sticky-columns .dx-data-row td:not(.dx-command-expand, .dx-editor-cell) {
+    padding-top: $generic-grid-base-cell-padding;
+  }
+
+  // RTL padding
+
+  // (0,3,1)
+  .dx-rtl.dx-#{$widget-name}-rowsview td.dx-validation-pending.dx-cell-modified,
+  .dx-rtl.dx-#{$widget-name}-rowsview td.dx-validation-pending.dx-#{$widget-name}-invalid,
+  .dx-rtl .dx-#{$widget-name}-rowsview td.dx-validation-pending.dx-cell-modified,
+  .dx-rtl .dx-#{$widget-name}-rowsview td.dx-validation-pending.dx-#{$widget-name}-invalid {
+    padding-left: $generic-texteditor-invalid-badge-size;
+    padding-right: $generic-grid-base-cell-padding;
+  }
+
+  // #endregion
+
+  // #region background
+
+  // (0,2,1)
+  .dx-#{$widget-name} .dx-row-alt > td,
+  .dx-#{$widget-name} .dx-row-alt > tr > td {
+    background-color: $datagrid-row-alternation-bg;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-drop-highlight > td {
+    background-color: $datagrid-drop-highlight-bg;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name}-rowsview .dx-row-removed > td {
+    background-color: $datagrid-row-removed-bg;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row > td:not(.dx-focused),
+  .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row > tr > td:not(.dx-focused) {
+    background-color: $datagrid-row-focused-bg;
+  }
+
+  // (0,3,0)
+  .dx-#{$widget-name}-rowsview .dx-master-detail-row:not(.dx-#{$widget-name}-edit-form) > .dx-#{$widget-name}-group-space {
+    background-color: $datagrid-master-detail-cell-bg;
+  }
+
+  // (0,3,0) - (0,4,0)
+  .dx-#{$widget-name}-rowsview .dx-master-detail-row:not(.dx-#{$widget-name}-edit-form) .dx-master-detail-cell {
+    background-color: $datagrid-master-detail-cell-bg;
+  }
+
+  // (0,4,1) - (0,4,2)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td {
+    background-color: $datagrid-selection-bg;
+  }
+
+  // (0,5,1) - (0,5,2)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > td.dx-focused,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td.dx-focused,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td.dx-focused,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td.dx-focused {
+    background-color: $datagrid-base-background-color;
+  }
+
+  // (0,9,1)
+  .dx-#{$widget-name}-table .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) > td:not(.dx-focused) {
+    background-color: $datagrid-hover-bg;
+  }
+
+  // (0,9,1)
+  .dx-#{$widget-name}-table .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) > td.dx-pointer-events-none {
+    background-color: transparent;
+  }
+
+  // #endregion
+
+  // #region color
+
+  // (0,2,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-drop-highlight > td {
+    color: $datagrid-drop-highlight-color;
+  }
+
+  // (0,2,1)
+  .dx-#{$widget-name}-rowsview .dx-row-removed > td {
+    color: $datagrid-cell-removed-text-color;
+  }
+
+  // (0,3,1)
+  .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row > td:not(.dx-focused),
+  .dx-#{$widget-name}-rowsview .dx-row-focused.dx-data-row > tr > td:not(.dx-focused) {
+    color: $datagrid-row-focused-color;
+  }
+
+  // (0,4,1) - (0,4,2)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td {
+    color: $datagrid-row-selected-color;
+  }
+
+  // (0,5,1) - (0,5,2)
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > td.dx-focused,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td.dx-focused,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td.dx-focused,
+  .dx-#{$widget-name}-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td.dx-focused {
+    color: $datagrid-base-color;
+  }
+
+  // (0,9,1)
+  .dx-#{$widget-name}-table .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) > td:not(.dx-focused) {
+    color: $datagrid-row-hovered-color;
+  }
+
+  // #endregion
+
+  // #region other
+
+  // (0,3,1)
+  .dx-#{$widget-name} .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]::before {
+    background-position-y: 34px;
+  }
+
+  // #endregion
+
+}

@@ -70,8 +70,8 @@ const App = () => (
               colCountByScreen={{ xs: 3 }}
             >
               <Item name="priorityIdIcon" />
-              <Item name="priorityId" />
-              <Item name="typeId" />
+              <Item name="priorityIdEditor" />
+              <Item name="typeIdEditor" />
             </Item>
           </Item>
           <Item name="descriptionGroup" />

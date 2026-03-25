@@ -14,10 +14,9 @@ import {
 
 
 
-import type DataSource from 'devextreme/data/data_source';
 import type { DataLayoutType } from 'devextreme/ui/diagram';
 import type { Orientation } from 'devextreme/common';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 
 import {

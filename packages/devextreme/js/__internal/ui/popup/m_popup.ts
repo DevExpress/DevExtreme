@@ -45,6 +45,7 @@ import type Toolbar from '@js/ui/toolbar';
 import windowUtils from '@ts/core/utils/m_window';
 import type { OptionChanged } from '@ts/core/widget/types';
 import type { SupportedKeys } from '@ts/core/widget/widget';
+import type { KeyboardKeyDownEvent } from '@ts/events/core/m_keyboard_processor';
 import type { GeometryOptions, OverlayActions } from '@ts/ui/overlay/overlay';
 import Overlay from '@ts/ui/overlay/overlay';
 import type {
@@ -102,6 +103,8 @@ const HEIGHT_STRATEGIES = {
   inherit: POPUP_CONTENT_INHERIT_HEIGHT_CLASS,
   flex: POPUP_CONTENT_FLEX_HEIGHT_CLASS,
 } as const;
+
+const ESC_KEY_NAME = 'escape';
 
 type HeightStrategiesType = typeof HEIGHT_STRATEGIES[keyof typeof HEIGHT_STRATEGIES];
 type TitleRenderAction = (event?: Record<string, unknown>) => void;
@@ -177,6 +180,8 @@ export interface PopupProperties extends Properties {
   useDefaultToolbarButtons?: boolean;
 
   useFlatToolbarButtons?: boolean;
+
+  _ignoreCloseOnChildEscape?: boolean;
 }
 
 class Popup<
@@ -223,6 +228,23 @@ class Popup<
     };
   }
 
+  _keyboardHandler(options: KeyboardKeyDownEvent, onlyChildProcessing?: boolean): void {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _ignoreCloseOnChildEscape } = this.option();
+    const e = options.originalEvent;
+    const $target = $(e.target);
+
+    if (this._$content && !$target.is(this._$content)
+        && options.keyName === ESC_KEY_NAME
+        && !e.isDefaultPrevented()
+        && !_ignoreCloseOnChildEscape) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.hide();
+    }
+
+    super._keyboardHandler(options, onlyChildProcessing);
+  }
+
   _getDefaultOptions(): TProperties {
     return {
       ...super._getDefaultOptions(),
@@ -245,6 +267,8 @@ class Popup<
       useDefaultToolbarButtons: false,
       useFlatToolbarButtons: false,
       autoResizeEnabled: true,
+      tabFocusLoopEnabled: false,
+      _ignoreCloseOnChildEscape: false,
     };
   }
 

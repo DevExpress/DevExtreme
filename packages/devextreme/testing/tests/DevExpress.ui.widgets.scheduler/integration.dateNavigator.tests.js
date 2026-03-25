@@ -379,16 +379,13 @@ QUnit.module('Integration: Date navigator', moduleConfig, function() {
     });
 
     QUnit.test('Tasks should be rerendered after click on next/prev button', async function(assert) {
-        await this.createInstance({ currentDate: new Date(2015, 1, 24) });
+        const initialDate = new Date(2015, 1, 24);
+        await this.createInstance({ currentDate: initialDate });
 
-        const spy = sinon.spy(this.instance, '_setRemoteFilterIfNeeded');
+        $(this.instance.$element()).find('.dx-scheduler-navigator-previous').trigger('dxclick');
 
-        try {
-            $(this.instance.$element()).find('.dx-scheduler-navigator-previous').trigger('dxclick');
-            assert.ok(spy.calledOnce, '_setRemoteFilterIfNeeded is called');
-        } finally {
-            this.instance._setRemoteFilterIfNeeded.restore();
-        }
+        const currentDate = this.instance.option('currentDate');
+        assert.ok(currentDate < initialDate, 'currentDate changed to an earlier date after clicking previous');
     });
 
     QUnit.test('Tasks should have correct position after click on next/prev button & calendar', async function(assert) {

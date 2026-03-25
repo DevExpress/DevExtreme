@@ -47,7 +47,7 @@
     "@webcomponents/custom-elements": "1.6.0",
     "codelyzer": "6.0.2",
     "core-js": "2.6.12",
-    "css-loader": "6.10.0",
+    "css-loader": "6.11.0",
     "devextreme-metadata": "workspace:*",
     "eslint": "catalog:",
     "eslint-config-devextreme": "catalog:",
@@ -67,7 +67,7 @@
     "style-loader": "3.3.4",
     "tslib": "2.8.1",
     "typescript": "catalog:angular",
-    "webpack": "5.105.0",
+    "webpack": "5.105.4",
     "yargs": "17.7.2",
     "zone.js": "catalog:angular"
   },

@@ -20,10 +20,9 @@ import {
 } from '@angular/core';
 
 
-import type DataSource from 'devextreme/data/data_source';
 import type { Palette, PaletteExtensionMode, Font, TextOverflow, Theme, WordWrap, DashStyle } from 'devextreme/common/charts';
 import type { TreeMapColorizerType, TreeMapLayoutAlgorithm, TreeMapLayoutDirection, ClickEvent, DisposingEvent, DrawnEvent, DrillEvent, ExportedEvent, ExportingEvent, FileSavingEvent, HoverChangedEvent, IncidentOccurredEvent, InitializedEvent, NodesInitializedEvent, NodesRenderingEvent, OptionChangedEvent, SelectionChangedEvent, dxTreeMapNode } from 'devextreme/viz/tree_map';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { ExportFormat, SingleMultipleOrNone, HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 import type { Format } from 'devextreme/common/core/localization';

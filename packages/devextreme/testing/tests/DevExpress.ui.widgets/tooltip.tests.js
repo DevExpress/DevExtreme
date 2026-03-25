@@ -3,10 +3,12 @@ import fx from 'common/core/animation/fx';
 import Tooltip from 'ui/tooltip';
 import renderer from 'core/renderer';
 import uiErrors from 'ui/widget/ui.errors';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_WRAPPER_CLASS = 'dx-tooltip-wrapper';
 const DX_INVISIBILITY_CLASS = 'dx-state-invisible';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 
 const wrapper = function() {
     return $('body').find('.' + TOOLTIP_WRAPPER_CLASS);
@@ -162,11 +164,11 @@ QUnit.module('base z-index', () => {
     });
 });
 
-QUnit.module('aria accessibility', () => {
+QUnit.module('accessibility', () => {
     QUnit.test('role="tooltip" attribute should be added to tooltip', function(assert) {
         const $tooltip = $('#tooltip');
         new Tooltip($tooltip);
-        const $overlayContent = $tooltip.find('.dx-overlay-content');
+        const $overlayContent = $tooltip.find(`.${OVERLAY_CONTENT_CLASS}`);
 
         assert.equal($overlayContent.attr('role'), 'tooltip');
     });
@@ -175,10 +177,71 @@ QUnit.module('aria accessibility', () => {
         const $target = $('#target');
         const $element = $('#tooltip');
         new Tooltip($element, { target: $target, visible: false });
-        const $overlay = $element.find('.dx-overlay-content');
+        const $overlay = $element.find(`.${OVERLAY_CONTENT_CLASS}`);
 
         assert.notEqual($target.attr('aria-describedby'), undefined, 'aria-describedby exists on target');
         assert.equal($target.attr('aria-describedby'), $overlay.attr('id'), 'aria-describedby and overlay\'s id are equal');
 
+    });
+
+    QUnit.module('WCAG - dismissible', () => {
+        QUnit.test('should hide visible tooltip on Escape key press', function(assert) {
+            const tooltip = new Tooltip($('#tooltip'), {
+                target: '#target',
+                visible: true,
+            });
+            const $target = $('#target').attr('tabindex', 0);
+            const keyboard = keyboardMock($target);
+
+            keyboard.keyDown('esc');
+
+            assert.strictEqual(tooltip.option('visible'), false, 'tooltip is hidden');
+        });
+    });
+
+    QUnit.module('WCAG - hoverable', {
+        beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+            fx.off = true;
+        },
+        afterEach: function() {
+            this.clock.restore();
+            fx.off = false;
+        }
+    }, () => {
+        QUnit.test('should stay visible when pointer moves from target to tooltip content', function(assert) {
+            const instance = new Tooltip($('#tooltip'), {
+                target: '#target',
+                showEvent: 'mouseenter',
+                hideEvent: 'mouseleave',
+                visible: true,
+                animation: null,
+            });
+
+            const $overlayContent = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
+
+            $('#target').trigger('mouseleave');
+            $overlayContent.trigger('mouseenter');
+            this.clock.tick(200);
+
+            assert.ok(instance.option('visible'), 'tooltip remains visible after pointer moves to tooltip content');
+        });
+
+        QUnit.test('should hide when pointer leaves tooltip content', function(assert) {
+            const instance = new Tooltip($('#tooltip'), {
+                target: '#target',
+                showEvent: 'mouseenter',
+                hideEvent: 'mouseleave',
+                visible: true,
+                animation: null,
+            });
+
+            const $overlayContent = wrapper().find(`.${OVERLAY_CONTENT_CLASS}`);
+
+            $overlayContent.trigger('mouseenter');
+            $overlayContent.trigger('mouseleave');
+
+            assert.notOk(instance.option('visible'), 'tooltip hides when pointer leaves tooltip content');
+        });
     });
 });

@@ -12,8 +12,7 @@ import {
 
 
 
-import type DataSource from 'devextreme/data/data_source';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 
 import {

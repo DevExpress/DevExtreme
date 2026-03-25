@@ -18,10 +18,7 @@ export default function App() {
           <span>.jpg, .jpeg, .gif, .png</span>.
         </span>
       </div>
-      <div
-        className="file-uploader-block"
-        style={{ float: 'right' }}
-      >
+      <div className="file-uploader-block">
         <FileUploader
           multiple={true}
           uploadMode="useButtons"

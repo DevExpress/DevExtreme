@@ -43,6 +43,7 @@ import type {
   AppointmentCollectorViewModel,
   AppointmentItemViewModel,
   AppointmentViewModelPlain,
+  SortedEntity,
 } from '../view_model/types';
 import { AgendaAppointment } from './appointment/agenda_appointment';
 import { Appointment } from './appointment/m_appointment';
@@ -68,7 +69,7 @@ interface ViewModelDiff {
 
 class SchedulerAppointments extends CollectionWidget<any> {
   // NOTE: The key of this array is `sortedIndex` of appointment rendered in Element
-  renderedElementsBySortedIndex: dxElementWrapper[] = [];
+  $itemBySortedIndex!: dxElementWrapper[];
 
   _appointmentClickTimeout: any;
 
@@ -82,17 +83,19 @@ class SchedulerAppointments extends CollectionWidget<any> {
 
   private _kbn!: AppointmentsKeyboardNavigation;
 
+  private _focusedItemIndexBeforeRender!: number;
+
   private _isResizing = false;
 
   public get isResizing(): boolean {
     return this._isResizing;
   }
 
-  get isAgendaView() {
+  get isAgendaView(): boolean {
     return this.invoke('isCurrentViewAgenda');
   }
 
-  get isVirtualScrolling() {
+  get isVirtualScrolling(): boolean {
     return this.invoke('isVirtualScrolling');
   }
 
@@ -102,6 +105,10 @@ class SchedulerAppointments extends CollectionWidget<any> {
 
   get dataAccessors(): AppointmentDataAccessor {
     return this.option('dataAccessors') as AppointmentDataAccessor;
+  }
+
+  get sortedItems(): SortedEntity[] {
+    return this.option('getSortedAppointments')() as SortedEntity[];
   }
 
   getResourceManager(): ResourceManager {
@@ -138,7 +145,11 @@ class SchedulerAppointments extends CollectionWidget<any> {
     const parentValue = super._supportedKeys();
     const kbnValue = this._kbn.getSupportedKeys();
 
-    return extend(parentValue, kbnValue) as SupportedKeys;
+    return {
+      enter: parentValue.enter,
+      space: parentValue.space,
+      ...kbnValue,
+    };
   }
 
   public getAppointmentSettings($item: dxElementWrapper): AppointmentViewModelPlain {
@@ -152,8 +163,30 @@ class SchedulerAppointments extends CollectionWidget<any> {
   }
 
   _renderFocusTarget() {
-    const $item = this._kbn.getFocusableItemBySortedIndex(0);
-    this._kbn.resetTabIndex($item);
+    if (this.$itemBySortedIndex?.length) {
+      this._kbn.resetTabIndex(this._kbn.getFirstVisibleItem());
+    }
+  }
+
+  _cleanFocusState(): void {
+    this._focusedItemIndexBeforeRender = this._kbn.isNavigating
+      ? this._kbn.focusedItemSortIndex
+      : -1;
+
+    super._cleanFocusState();
+  }
+
+  _renderFocusState(): void {
+    super._renderFocusState();
+
+    if (this._focusedItemIndexBeforeRender !== -1) {
+      this._kbn.focusedItemSortIndex = this._focusedItemIndexBeforeRender;
+      this._kbn.isNavigating = false;
+      this._kbn.focus();
+      this._focusedItemIndexBeforeRender = -1;
+    } else {
+      this._kbn.focusedItemSortIndex = -1;
+    }
   }
 
   _focusInHandler(e) {
@@ -192,7 +225,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
     value: AppointmentViewModelPlain[] = [],
   ): ViewModelDiff[] {
     const elementsInRenderOrder = previousValue
-      .map(({ sortedIndex }) => this.renderedElementsBySortedIndex[sortedIndex]);
+      .map(({ sortedIndex }) => this.$itemBySortedIndex[sortedIndex]);
     const diff = getViewModelDiff(previousValue, value, this.appointmentDataSource);
     diff
       .filter((item) => !isNeedToAdd(item))
@@ -206,7 +239,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
   _optionChanged(args) {
     switch (args.name) {
       case 'items':
-        (this as any)._cleanFocusState();
+        this._cleanFocusState();
 
         if (this.isAgendaView) {
           this.forceRepaintAllAppointments(args.value || []);
@@ -225,7 +258,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
       case 'allowResize':
       case 'allowDelete':
       case 'allowAllDayResize':
-        (this as any)._cleanFocusState();
+        this._cleanFocusState();
         this.forceRepaintAllAppointments(this.option('items') || []);
         this._attachAppointmentsEvents();
         break;
@@ -251,7 +284,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
   }
 
   protected forceRepaintAllAppointments(items: AppointmentViewModelPlain[]): void {
-    this.renderedElementsBySortedIndex = [];
+    this.$itemBySortedIndex = [];
     this._renderByFragments(($commonFragment, $allDayFragment) => {
       this._getAppointmentContainer(true).html('');
       this._getAppointmentContainer(false).html('');
@@ -269,10 +302,12 @@ class SchedulerAppointments extends CollectionWidget<any> {
   }
 
   protected repaintAppointments(diff: ViewModelDiff[]): void {
-    this.renderedElementsBySortedIndex = [];
+    this.$itemBySortedIndex = [];
+
     this._renderByFragments(($commonFragment, $allDayFragment) => {
-      const isRepaintAll = this.isAgendaView
-        || !diff.some((item) => item.needToAdd === undefined && item.needToRemove === undefined);
+      const isRepaintAll = diff.every(
+        (item) => Boolean(item.needToAdd ?? item.needToRemove),
+      );
 
       if (isRepaintAll) {
         this._getAppointmentContainer(true).html('');
@@ -303,7 +338,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
 
         if (item.element) {
           item.element.data(APPOINTMENT_SETTINGS_KEY, item.item);
-          this.renderedElementsBySortedIndex[item.item.sortedIndex] = item.element;
+          this.$itemBySortedIndex[item.item.sortedIndex] = item.element;
         }
       });
     });
@@ -334,14 +369,14 @@ class SchedulerAppointments extends CollectionWidget<any> {
   }
 
   _attachAppointmentsEvents() {
-    (this as any)._attachClickEvent();
-    (this as any)._attachHoldEvent();
-    (this as any)._attachContextMenuEvent();
-    (this as any)._attachAppointmentDblClick();
+    this._attachClickEvent();
+    this._attachHoldEvent();
+    this._attachContextMenuEvent();
+    this._attachAppointmentDblClick();
 
-    (this as any)._renderFocusState();
-    (this as any)._attachFeedbackEvents();
-    (this as any)._attachHoverEvents();
+    this._renderFocusState();
+    this._attachFeedbackEvents();
+    this._attachHoverEvents();
   }
 
   _clearDropDownItemsElements() {
@@ -389,8 +424,10 @@ class SchedulerAppointments extends CollectionWidget<any> {
 
   _init() {
     super._init();
+    this.$itemBySortedIndex = [];
     this._kbn = new AppointmentsKeyboardNavigation(this);
-    (this as any).$element().addClass(COMPONENT_CLASS);
+    this._focusedItemIndexBeforeRender = -1;
+    this.$element().addClass(COMPONENT_CLASS);
     this._preventSingleAppointmentClick = false;
   }
 
@@ -519,12 +556,9 @@ class SchedulerAppointments extends CollectionWidget<any> {
     const $item = super._renderItem(index, item.itemData, container);
 
     $item.data(APPOINTMENT_SETTINGS_KEY, item);
+
     if (item.sortedIndex !== -1) {
-      // NOTE: fallback for integration testing
-      if (!this.renderedElementsBySortedIndex) {
-        this.renderedElementsBySortedIndex = [];
-      }
-      this.renderedElementsBySortedIndex[item.sortedIndex] = $item;
+      this.$itemBySortedIndex[item.sortedIndex] = $item;
     }
 
     return $item;
@@ -673,7 +707,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
         const $appointment = $(e.element);
 
         this._isResizing = true;
-        this._kbn.$focusedItem = $appointment;
+        this._kbn.focus($appointment);
 
         if (this.invoke('needRecalculateResizableArea')) {
           const updatedArea = this._calculateResizableArea(
@@ -983,13 +1017,13 @@ class SchedulerAppointments extends CollectionWidget<any> {
       allowDrag: this.option('allowDrag'),
       isCompact: appointment.isCompact,
     });
-    this.renderedElementsBySortedIndex[appointment.sortedIndex] = $item;
+    this.$itemBySortedIndex[appointment.sortedIndex] = $item;
 
     return $item;
   }
 
   moveAppointmentBack(dragEvent?) {
-    const $appointment = this._kbn.$focusedItem;
+    const $appointment = this._kbn.$focusTarget();
     const size = this._initialSize;
     const coords = this._initialCoordinates;
 
@@ -1005,7 +1039,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
       }
     }
 
-    if ($appointment && !dragEvent) {
+    if ($appointment.get(0) && !dragEvent) {
       if (coords) {
         move($appointment, coords);
         delete this._initialSize;

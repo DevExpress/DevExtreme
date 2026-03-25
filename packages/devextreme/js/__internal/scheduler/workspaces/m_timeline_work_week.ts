@@ -16,19 +16,19 @@ class SchedulerTimelineWorkWeek extends SchedulerTimelineWeek {
     // @ts-expect-error
     super(...args);
 
-    this._getWeekendsCount = getWeekendsCount;
+    this.getWeekendsCount = getWeekendsCount;
   }
 
-  _getElementClass() {
+  protected override getElementClass() {
     return TIMELINE_CLASS;
   }
 
-  _incrementDate(date) {
+  protected override incrementDate(date) {
     const day = date.getDay();
     if (day === LAST_DAY_WEEK_INDEX) {
       date.setDate(date.getDate() + 2);
     }
-    super._incrementDate(date);
+    super.incrementDate(date);
   }
 }
 

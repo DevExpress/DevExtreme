@@ -24,9 +24,8 @@ import {
 } from '@angular/core';
 
 
-import type DataSource from 'devextreme/data/data_source';
 import type { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
-import type { DataSourceOptions } from 'devextreme/data/data_source';
+import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { Orientation, ValidationMessageMode, Position, ValidationStatus } from 'devextreme/common';
 import type { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/radio_group';
