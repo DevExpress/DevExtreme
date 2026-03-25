@@ -1,7 +1,5 @@
 import CardView from 'devextreme-testcafe-models/cardView';
 
-const FIELD_CAPTION_SELECTOR = '.dx-cardview-field-caption';
-
 const getCardFieldCaptions = async (
   t: TestController,
   cardView: CardView,
@@ -9,16 +7,9 @@ const getCardFieldCaptions = async (
   cardIndex = 0,
 ): Promise<string[]> => {
   const card = cardView.getCard(cardIndex);
-  const captionElements = card.element.find(FIELD_CAPTION_SELECTOR);
+  const captions = await card.getCaptions();
 
-  await t.expect(captionElements.count).eql(expectedCount);
-
-  const captions: string[] = [];
-
-  for (let i = 0; i < expectedCount; i += 1) {
-    const caption = await captionElements.nth(i).innerText;
-    captions.push(caption.replace(/:$/, ''));
-  }
+  await t.expect(captions.length).eql(expectedCount);
 
   return captions;
 };
