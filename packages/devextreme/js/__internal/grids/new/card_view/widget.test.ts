@@ -287,7 +287,7 @@ describe('reactivity to column option changes', () => {
     expect(cardTemplate).toBeCalledTimes(dataSource.length);
   });
 
-  it('should not re-render cards when sort/filter options change without data change', () => {
+  it('should not cause extra re-render when sort/filter options change', () => {
     const cardTemplate = jest.fn();
 
     const container = document.createElement('div');
@@ -305,7 +305,7 @@ describe('reactivity to column option changes', () => {
     cardView.columnOption('name', 'sortOrder', 'asc');
 
     // Should be called dataSource.length times (once per card for data update),
-    // not dataSource.length * 2 (which would indicate extra re-render from column metadata).
+    // not dataSource.length * 2 (which would indicate extra re-render).
     expect(cardTemplate).toBeCalledTimes(dataSource.length);
   });
 });
