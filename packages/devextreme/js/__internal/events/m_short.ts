@@ -136,8 +136,38 @@ export const keyboard = {
       return;
     }
 
-    const touchesRoot = (node: Element | null | undefined): boolean => !!node
-      && (node === root || root.contains(node));
+    const toElements = (value: unknown): Element[] => {
+      if (!value) {
+        return [];
+      }
+
+      if (value instanceof Element) {
+        return [value];
+      }
+
+      if (Array.isArray(value)) {
+        return value.filter((item): item is Element => item instanceof Element);
+      }
+
+      const v = value as { toArray?: () => unknown[]; 0?: unknown };
+
+      if (typeof v.toArray === 'function') {
+        const arr = v.toArray();
+
+        if (Array.isArray(arr)) {
+          return arr.filter((item): item is Element => item instanceof Element);
+        }
+      }
+
+      const first = v[0];
+
+      return first instanceof Element ? [first] : [];
+    };
+
+    const touchesRoot = (value: unknown): boolean => {
+      const elements = toElements(value);
+      return elements.some((el) => el === root || root.contains(el));
+    };
 
     Object.keys(keyboardProcessors).forEach((id) => {
       const keyboardProcessor = keyboardProcessors[id];
@@ -146,10 +176,7 @@ export const keyboard = {
         return;
       }
 
-      const listenerEl = keyboardProcessor._element?.[0];
-      const focusTarget = keyboardProcessor._focusTarget;
-
-      if (touchesRoot(listenerEl) || touchesRoot(focusTarget)) {
+      if (touchesRoot(keyboardProcessor._element) || touchesRoot(keyboardProcessor._focusTarget)) {
         keyboard.off(id);
       }
     });
