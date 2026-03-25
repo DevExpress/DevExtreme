@@ -57,6 +57,10 @@ export async function testScreenshot(
     ? page.locator(element)
     : element ?? page.locator('#container');
 
+  await page.evaluate(() => {
+    (document.activeElement as HTMLElement)?.blur();
+  });
+
   await expect(locator).toHaveScreenshot([getScreenshotName(screenshotName, theme)]);
 
   if (shouldTestInCompact) {

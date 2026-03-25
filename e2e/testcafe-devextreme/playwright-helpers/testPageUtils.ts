@@ -46,4 +46,8 @@ export async function setupTestPage(page: Page, containerUrl: string, theme = 'f
     (window as any).DevExpress.ui.themes.ready(resolve);
     (window as any).DevExpress.ui.themes.current(themeName);
   }), theme);
+
+  await page.addStyleTag({
+    content: '*, *::before, *::after { caret-color: transparent !important; } ::-webkit-scrollbar { display: none !important; }',
+  });
 }
