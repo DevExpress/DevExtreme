@@ -98,8 +98,8 @@ describe('Column Headers', () => {
     });
   });
 
-  describe('toggleFirstHeaderClass', () => {
-    it('should add first-header class to the first column', async () => {
+  describe('toggleFirstCellClass', () => {
+    it('should add first-cell class to the first column', async () => {
       const { component } = await createDataGrid({
         dataSource: [{ field1: 1, field2: 2, field3: 3 }],
         columns: [
@@ -112,10 +112,10 @@ describe('Column Headers', () => {
       });
 
       const $headerCell = $(component.getHeaderCell(0).getElement());
-      expect($headerCell.hasClass('dx-datagrid-first-header')).toBe(true);
+      expect($headerCell.hasClass('dx-datagrid-first-cell')).toBe(true);
     });
 
-    it('should not add first-header class to non-first columns', async () => {
+    it('should not add first-cell class to non-first columns', async () => {
       const { component } = await createDataGrid({
         dataSource: [{ field1: 1, field2: 2, field3: 3 }],
         columns: [
@@ -131,12 +131,12 @@ describe('Column Headers', () => {
       const $firstCellOfSecondRow = $(component.getHeaderCell(0, 1).getElement());
       const $secondCellOfSecondRow = $(component.getHeaderCell(1, 1).getElement());
 
-      expect($secondCellOfFirstRow.hasClass('dx-datagrid-first-header')).toBe(false);
-      expect($firstCellOfSecondRow.hasClass('dx-datagrid-first-header')).toBe(false);
-      expect($secondCellOfSecondRow.hasClass('dx-datagrid-first-header')).toBe(false);
+      expect($secondCellOfFirstRow.hasClass('dx-datagrid-first-cell')).toBe(false);
+      expect($firstCellOfSecondRow.hasClass('dx-datagrid-first-cell')).toBe(false);
+      expect($secondCellOfSecondRow.hasClass('dx-datagrid-first-cell')).toBe(false);
     });
 
-    it('should update first-header class when first column visibility changes', async () => {
+    it('should update first-cell class when first column visibility changes', async () => {
       const { component } = await createDataGrid({
         dataSource: [{ field1: 1, field2: 2, field3: 3 }],
         columns: [
@@ -152,10 +152,10 @@ describe('Column Headers', () => {
 
       const $firstHeaderCell = $(component.getHeaderCell(0).getElement());
       expect($firstHeaderCell.text()).toBe('Band');
-      expect($firstHeaderCell.hasClass('dx-datagrid-first-header')).toBe(true);
+      expect($firstHeaderCell.hasClass('dx-datagrid-first-cell')).toBe(true);
     });
 
-    it('should add first-header class when band column is first', async () => {
+    it('should add first-cell class when band column is first', async () => {
       const { component } = await createDataGrid({
         dataSource: [{ field1: 1, field2: 2, field3: 3 }],
         columns: [
@@ -170,11 +170,11 @@ describe('Column Headers', () => {
       const $firstCellOfFirstRow = $(component.getHeaderCell(0).getElement());
       const $firstCellOfSecondRow = $(component.getHeaderCell(0, 1).getElement());
 
-      expect($firstCellOfFirstRow.hasClass('dx-datagrid-first-header')).toBe(true);
-      expect($firstCellOfSecondRow.hasClass('dx-datagrid-first-header')).toBe(true);
+      expect($firstCellOfFirstRow.hasClass('dx-datagrid-first-cell')).toBe(true);
+      expect($firstCellOfSecondRow.hasClass('dx-datagrid-first-cell')).toBe(true);
     });
 
-    it('should not add first-header class to non-first columns when band column is first', async () => {
+    it('should not add first-cell class to non-first columns when band column is first', async () => {
       const { component } = await createDataGrid({
         dataSource: [{ field1: 1, field2: 2, field3: 3 }],
         columns: [
@@ -189,8 +189,8 @@ describe('Column Headers', () => {
       const $secondCellOfFirstRow = $(component.getHeaderCell(1).getElement());
       const $secondCellOfSecondRow = $(component.getHeaderCell(1, 1).getElement());
 
-      expect($secondCellOfFirstRow.hasClass('dx-datagrid-first-header')).toBe(false);
-      expect($secondCellOfSecondRow.hasClass('dx-datagrid-first-header')).toBe(false);
+      expect($secondCellOfFirstRow.hasClass('dx-datagrid-first-cell')).toBe(false);
+      expect($secondCellOfSecondRow.hasClass('dx-datagrid-first-cell')).toBe(false);
     });
   });
 

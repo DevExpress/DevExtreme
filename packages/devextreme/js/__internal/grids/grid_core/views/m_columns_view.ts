@@ -39,6 +39,7 @@ import type { ColumnsController } from '../columns_controller/m_columns_controll
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import { CLASSES } from './const';
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
 const SCROLLABLE_SIMULATED_CLASS = 'scrollable-simulated';
@@ -55,7 +56,6 @@ const DETAIL_ROW_CLASS = 'dx-master-detail-row';
 const FILTER_ROW_CLASS = 'filter-row';
 const ERROR_ROW_CLASS = 'dx-error-row';
 const CELL_UPDATED_ANIMATION_CLASS = 'cell-updated-animation';
-const GROUP_ROW_CONTAINER = 'group-row-container';
 
 const HIDDEN_COLUMNS_WIDTH = '0.0001px';
 
@@ -720,6 +720,35 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     appendTemplate.render({ content: $row, container: $table });
   }
 
+  protected toggleFirstCellClass(
+    $cell: dxElementWrapper | undefined,
+    isFirstValue: boolean,
+  ): void {
+    $cell?.toggleClass(this.addWidgetPrefix(CLASSES.firstCell), isFirstValue);
+  }
+
+  protected needToUpdateFirstCellClasses(): boolean {
+    const hasHidingColumnsQueue = !!this._adaptiveColumnsController
+      ?.getHidingColumnsQueue()?.length;
+
+    return hasHidingColumnsQueue;
+  }
+
+  protected updateFirstCellClasses(): void {
+    const rows = this._getRows();
+
+    rows.forEach((row, index) => {
+      const rowIndex = row.type === 'header' ? index : null;
+      const firstColumn = this._columnsController.getFirstColumn(rowIndex);
+
+      if (firstColumn) {
+        const $cell = this._getCellElement(index, firstColumn.index);
+
+        this.toggleFirstCellClass($cell, true);
+      }
+    });
+  }
+
   /**
    * @extended: column_fixing, filter_row, row_dragging, virtual_columns
    */
@@ -729,6 +758,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     if (scrollLeft >= 0) {
       this._scrollLeft = 0;
       this.scrollTo({ left: scrollLeft });
+    }
+
+    if (this.needToUpdateFirstCellClasses()) {
+      this.updateFirstCellClasses();
     }
   }
 

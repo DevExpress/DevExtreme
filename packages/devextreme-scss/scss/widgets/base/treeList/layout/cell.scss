@@ -86,12 +86,12 @@ $treelist-focused-border-color: null !default;
 }
 
 // (0,6,1)
-.dx-treelist:not(.dx-rtl) > .dx-gridbase-container > .dx-header-multi-row .dx-row > td.dx-treelist-first-header {
+.dx-treelist:not(.dx-rtl) > .dx-gridbase-container .dx-treelist-table .dx-row > td.dx-treelist-first-cell {
   border-left: none;
 }
 
 // (0,7,1)
-.dx-treelist:not(.dx-rtl) > .dx-gridbase-container > .dx-header-multi-row .dx-row > td.dx-treelist-first-header.dx-treelist-sticky-column-border-left {
+.dx-treelist:not(.dx-rtl) > .dx-gridbase-container .dx-treelist-table .dx-row > td.dx-treelist-first-cell.dx-treelist-sticky-column-border-left {
   border-left: 2px solid;
   border-left-color: $treelist-border-color;
 }
@@ -99,7 +99,7 @@ $treelist-focused-border-color: null !default;
 // RTL
 
 // (0,4,1)
-.dx-rtl.dx-treelist .dx-column-lines > td:first-child {
+.dx-rtl.dx-treelist .dx-column-lines > td:first-child:not(.dx-datagrid-hidden-column) {
   border-right: none;
   border-left: $treelist-border;
   border-left-color: $treelist-border-color;
@@ -159,18 +159,18 @@ $treelist-focused-border-color: null !default;
   border-left: none;
 }
 
+// (0,6,1)
+.dx-rtl > .dx-gridbase-container .dx-treelist-content .dx-treelist-table .dx-row > td.dx-treelist-first-cell {
+  border-right: none;
+}
+
 // (0,7,0)
 .dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-treelist-content .dx-treelist-table .dx-row .dx-treelist-column-no-border {
   border-right: none;
 }
 
 // (0,7,1)
-.dx-rtl > .dx-gridbase-container > .dx-header-multi-row .dx-treelist-content .dx-treelist-table .dx-row > td.dx-treelist-first-header {
-  border-right: none;
-}
-
-// (0,8,1)
-.dx-rtl > .dx-gridbase-container > .dx-header-multi-row .dx-treelist-content .dx-treelist-table .dx-row > td.dx-treelist-first-header.dx-treelist-sticky-column-border-left {
+.dx-rtl > .dx-gridbase-container .dx-treelist-content .dx-treelist-table .dx-row > td.dx-treelist-first-cell.dx-treelist-sticky-column-border-left {
   border-left: 2px solid;
   border-left-color: $treelist-border-color;
 }

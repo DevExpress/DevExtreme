@@ -77,40 +77,6 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
       .toggleClass(HEADER_FILTER_INDICATOR_CLASS, !!$visibleIndicatorElements.filter(`.${this._getIndicatorClassName('headerFilter')}`).length);
   }
 
-  private toggleFirstHeaderClass(
-    $cell: dxElementWrapper,
-    isFirstValue: boolean,
-  ): void {
-    $cell.toggleClass(this.addWidgetPrefix(CLASSES.firstHeader), isFirstValue);
-  }
-
-  private updateFirstHeaderClasses(): void {
-    this._columnsController.getColumns()
-      .filter((column: Column): boolean => !!column.visible)
-      .map((column: Column): {
-        cell: dxElementWrapper | undefined,
-        column: Column,
-        rowIndex: number,
-      } => {
-        const rowIndex = this._columnsController.getRowIndex(column.index);
-
-        return {
-          cell: this._getCellElement(rowIndex, `index:${column.index}`),
-          column,
-          rowIndex,
-        };
-      })
-      .forEach(({ cell, column, rowIndex }: {
-        cell: dxElementWrapper | undefined,
-        column: Column,
-        rowIndex: number,
-      }): void => {
-        const isFirstColumn = this._columnsController.isFirstColumn(column, rowIndex);
-
-        this.toggleFirstHeaderClass($(cell), isFirstColumn);
-      });
-  }
-
   protected createCellContent(
     $cell: dxElementWrapper,
     column: Column,
@@ -401,7 +367,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     const rowCount = this.getRowCount();
 
     if (rowCount > 1) {
-      this.toggleFirstHeaderClass(
+      this.toggleFirstCellClass(
         $cellElement,
         this._columnsController.isFirstColumn(column, options.rowIndex),
       );
@@ -508,16 +474,11 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     return returnAll ? $indicatorsContainer : $indicatorsContainer.filter(`:not(.${VISIBILITY_HIDDEN_CLASS})`);
   }
 
-  protected _resizeCore(): void {
+  protected needToUpdateFirstCellClasses(): boolean {
+    const showColumnLines = this.option('showColumnLines');
     const rowCount = this.getRowCount();
-    const hasHidingColumnsQueue = !!this._adaptiveColumnsController
-      ?.getHidingColumnsQueue()?.length;
 
-    super._resizeCore.apply(this);
-
-    if (rowCount > 1 && hasHidingColumnsQueue) {
-      this.updateFirstHeaderClasses();
-    }
+    return (!showColumnLines && rowCount > 1) || super.needToUpdateFirstCellClasses();
   }
 
   /**

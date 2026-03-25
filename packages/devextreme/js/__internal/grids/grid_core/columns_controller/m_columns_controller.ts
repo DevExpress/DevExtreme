@@ -2000,6 +2000,12 @@ export class ColumnsController extends modules.Controller {
   public getColumnOptionNameByFullName(fullName: string): string {
     return fullName.replace(COLUMN_OPTION_REGEXP, '');
   }
+
+  public getFirstColumn(rowIndex: number | null): Column | undefined {
+    const visibleColumns = this.getVisibleColumns(rowIndex);
+
+    return visibleColumns.find((column: Column) => this.isFirstColumn(column, rowIndex));
+  }
 }
 
 export const columnsControllerModule: Module = {
