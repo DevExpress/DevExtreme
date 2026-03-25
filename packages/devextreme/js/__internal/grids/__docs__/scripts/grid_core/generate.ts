@@ -1,12 +1,13 @@
 #!/usr/bin/env tsx
-/* eslint-disable no-console, no-restricted-syntax */
-import * as fs from 'fs';
-import * as path from 'path';
+/* eslint-disable no-console */
 
-import { parseArgs } from './cli';
-import { GRID_CORE_ROOT, OUTPUT_DIR } from './constants';
+import { discoverSourceFiles, getRelativePath } from '../shared/file-discovery';
+import { writeOutputFiles } from '../shared/output-writer';
+import {
+  EXCLUDED_DIRS, EXCLUDED_FILE_NAMES, GRID_CORE_ROOT, OUTPUT_DIR,
+} from './constants';
 import { generateHtml } from './html-template';
-import { discoverSourceFiles, getRelativePath, parseFile } from './parser';
+import { parseFile } from './parser';
 import {
   buildGlobalAliasMap,
   buildGlobalClassRegistry,
@@ -30,17 +31,18 @@ function main(): void {
 
   try {
     // 1. Discover source files
-    const sourceFiles = discoverSourceFiles(GRID_CORE_ROOT);
+    const sourceFiles = discoverSourceFiles(GRID_CORE_ROOT, EXCLUDED_DIRS, EXCLUDED_FILE_NAMES);
     console.log(`Discovered ${sourceFiles.length} source files`);
 
     // 2. Parse all files
     const allParsedFiles = sourceFiles.flatMap((file) => {
-      console.log(`Parsing: ${getRelativePath(file)}`);
+      const relPath = getRelativePath(file, GRID_CORE_ROOT);
+      console.log(`Parsing: ${relPath}`);
       try {
         return [parseFile(file)];
       } catch (e) {
         const errorMessage = e instanceof Error ? e.message : String(e);
-        console.warn(`WARN: Failed to parse ${getRelativePath(file)}: ${errorMessage}`);
+        console.warn(`WARN: Failed to parse ${relPath}: ${errorMessage}`);
 
         return [];
       }
@@ -58,10 +60,11 @@ function main(): void {
     resolveAliasesInClasses(globalClasses, globalAliasMap);
 
     // 3. Collect modules and re-resolve cross-file class references
+    const fileByRelPath = new Map(allParsedFiles.map((pf) => [pf.relPath, pf]));
     const modules: ModuleInfo[] = [];
     for (const pf of allParsedFiles) {
       for (const mod of pf.modules) {
-        resolveModuleClassRefs(mod, pf, globalClasses, allParsedFiles, globalAliasMap);
+        resolveModuleClassRefs(mod, pf, globalClasses, fileByRelPath, globalAliasMap);
         modules.push(mod);
       }
     }
@@ -103,22 +106,7 @@ function main(): void {
     };
 
     // 9. Write output files
-    if (!fs.existsSync(OUTPUT_DIR)) {
-      fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-    }
-
-    const args = parseArgs();
-    if (!args.htmlOnly) {
-      const jsonPath = path.join(OUTPUT_DIR, 'grid_core_architecture.generated.json');
-      fs.writeFileSync(jsonPath, `${JSON.stringify(data, null, 2)}\n`);
-      console.log(`✓ JSON written to: ${jsonPath}`);
-    }
-
-    if (!args.jsonOnly) {
-      const htmlPath = path.join(OUTPUT_DIR, 'grid_core_architecture.generated.html');
-      fs.writeFileSync(htmlPath, generateHtml(data));
-      console.log(`✓ HTML written to: ${htmlPath}`);
-    }
+    writeOutputFiles(OUTPUT_DIR, 'grid_core_architecture', data, generateHtml);
 
     console.log('\nSummary:');
     console.log(`  Modules: ${modules.length}`);
@@ -132,6 +120,9 @@ function main(): void {
   } catch (e) {
     const errorMessage = e instanceof Error ? e.message : String(e);
     console.error(`ERROR: ${errorMessage}`);
+    if (e instanceof Error && e.stack) {
+      console.error(e.stack);
+    }
     process.exit(1);
   }
 }

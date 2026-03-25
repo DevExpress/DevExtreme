@@ -474,6 +474,16 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     }
 
 
+    
+    @Input()
+    get tabFocusLoopEnabled(): boolean {
+        return this._getOption('tabFocusLoopEnabled');
+    }
+    set tabFocusLoopEnabled(value: boolean) {
+        this._setOption('tabFocusLoopEnabled', value);
+    }
+
+
     /**
      * [descr:WidgetOptions.tabIndex]
     
@@ -868,6 +878,13 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() tabFocusLoopEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() tabIndexChange: EventEmitter<number>;
 
     /**
@@ -966,6 +983,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
             { emit: 'shadingColorChange' },
             { emit: 'showCloseButtonChange' },
             { emit: 'showTitleChange' },
+            { emit: 'tabFocusLoopEnabledChange' },
             { emit: 'tabIndexChange' },
             { emit: 'titleChange' },
             { emit: 'titleTemplateChange' },

@@ -6,7 +6,7 @@ import RangeSelector, {
 
 import { dataSource } from './data.ts';
 
-const range = [new Date(2011, 11, 25), new Date(2012, 0, 1)];
+const range = [new Date(2024, 11, 25), new Date(2025, 0, 1)];
 
 const App = () => (
   <RangeSelector
