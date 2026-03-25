@@ -742,7 +742,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
       const firstColumn = this._columnsController.getFirstColumn(rowIndex);
 
       if (firstColumn) {
-        const $cell = this._getCellElement(index, firstColumn.index);
+        const $cell = this._getCellElement(index, `index:${firstColumn.index}`);
 
         this.toggleFirstCellClass($cell, true);
       }
