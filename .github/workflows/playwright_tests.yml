@@ -135,6 +135,7 @@ jobs:
           SHARD_ARG="--shard=${{ matrix.ARGS.shard }}"
         fi
 
+        set -o pipefail
         for i in $(seq 1 $REPEAT_COUNT); do
           echo "=== Run $i / $REPEAT_COUNT ==="
           npx playwright test \
