@@ -99,13 +99,6 @@ $treelist-focused-border-color: null !default;
 // RTL
 
 // (0,4,1)
-.dx-rtl.dx-treelist .dx-column-lines > td:first-child:not(.dx-datagrid-hidden-column) {
-  border-right: none;
-  border-left: $treelist-border;
-  border-left-color: $treelist-border-color;
-}
-
-// (0,4,1)
 .dx-rtl.dx-treelist .dx-column-lines > td:last-child {
   border-left: none;
 }
@@ -115,6 +108,13 @@ $treelist-focused-border-color: null !default;
   border-left: none;
   border-right: $treelist-border;
   border-right-color: $treelist-border-color;
+}
+
+// (0,5,1)
+.dx-rtl.dx-treelist .dx-column-lines > td:first-child:not(.dx-datagrid-hidden-column) {
+  border-right: none;
+  border-left: $treelist-border;
+  border-left-color: $treelist-border-color;
 }
 
 // (0,5,1)
@@ -132,6 +132,7 @@ $treelist-focused-border-color: null !default;
 // (0,5,1)
 .dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-column-lines > td:first-child {
   border-right: none;
+  border-left: none;
 }
 
 // (0,5,1)

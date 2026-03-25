@@ -116,13 +116,6 @@ $datagrid-focused-border-color: null !default;
 // RTL
 
 // (0,4,1)
-.dx-rtl .dx-datagrid .dx-column-lines > td:first-child:not(.dx-datagrid-hidden-column) {
-  border-right: none;
-  border-left: $datagrid-border;
-  border-left-color: $datagrid-border-color;
-}
-
-// (0,4,1)
 .dx-rtl .dx-datagrid .dx-column-lines > td:last-child {
   border-left: none;
 }
@@ -130,6 +123,13 @@ $datagrid-focused-border-color: null !default;
 // (0,4,1)
 .dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-column-lines > td {
   border-left: none;
+}
+
+// (0,5,1)
+.dx-rtl .dx-datagrid .dx-column-lines > td:first-child:not(.dx-datagrid-hidden-column) {
+  border-right: none;
+  border-left: $datagrid-border;
+  border-left-color: $datagrid-border-color;
 }
 
 // (0,5,1)
@@ -171,6 +171,7 @@ $datagrid-focused-border-color: null !default;
 // (0,6,1)
 .dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-column-lines:not(.dx-datagrid-group-footer) > td:first-child {
   border-right: none;
+  border-left: none;
 }
 
 // (0,6,1)
