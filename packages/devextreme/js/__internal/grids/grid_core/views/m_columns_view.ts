@@ -1373,7 +1373,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    * @extended: adaptivity
    */
   public _getCellElement(rowIndex, columnIdentifier): dxElementWrapper | undefined {
-    const $cells = this.getCellElements(rowIndex);
+    const $cells = this.getCellElements(rowIndex) ?? $();
     const columnVisibleIndex = this._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
 
     if (!$cells?.length || columnVisibleIndex < 0) {
@@ -1426,12 +1426,16 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   /**
-   * @extended: editing_form_based
+   * @extended: editing_form_based, column_headers
    */
-  protected _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
+  protected _getVisibleColumnIndex(
+    $cells: dxElementWrapper,
+    rowIndex: number,
+    columnIdentifier: string | number,
+  ): number {
     if (isString(columnIdentifier)) {
       const columnIndex = this._columnsController.columnOption(columnIdentifier, 'index');
-      return this._columnsController.getVisibleIndex(columnIndex, rowIndex);
+      return this._columnsController.getVisibleIndex(columnIndex);
     }
 
     return columnIdentifier;

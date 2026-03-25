@@ -6,7 +6,7 @@ import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getHeight } from '@js/core/utils/size';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isString } from '@js/core/utils/type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_column_context_menu_mixin';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
@@ -602,6 +602,20 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     const $columnElements = this.getColumnElements();
 
     return $columnElements ? $columnElements.length : 0;
+  }
+
+  protected _getVisibleColumnIndex(
+    $cells: dxElementWrapper,
+    rowIndex: number,
+    columnIdentifier: string | number,
+  ): number {
+    if (isString(columnIdentifier)) {
+      const columnIndex = this._columnsController.columnOption(columnIdentifier, 'index');
+
+      return this._columnsController.getVisibleIndex(columnIndex, rowIndex);
+    }
+
+    return super._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
   }
 
   /**
