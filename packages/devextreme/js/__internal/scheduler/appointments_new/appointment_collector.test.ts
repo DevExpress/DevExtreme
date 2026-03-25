@@ -9,7 +9,7 @@ import { getResourceManagerMock } from '../__mock__/resource_manager.mock';
 import type { SafeAppointment } from '../types';
 import type { ResourceConfig } from '../utils/loader/types';
 import type { AppointmentCollectorViewModel } from '../view_model/types';
-import { mockAppointmentCollectorViewModel } from './appointment/utils.test';
+import { mockAppointmentCollectorViewModel } from './__mock__/appointment_properties';
 import type { AppointmentCollectorProperties } from './appointment_collector';
 import { AppointmentCollector } from './appointment_collector';
 import { APPOINTMENT_COLLECTOR_CLASSES } from './const';

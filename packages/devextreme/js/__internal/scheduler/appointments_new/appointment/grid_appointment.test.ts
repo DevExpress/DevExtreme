@@ -7,10 +7,10 @@ import type { ResourceConfig } from '@ts/scheduler/utils/loader/types';
 import type { AppointmentItemViewModel } from '@ts/scheduler/view_model/types';
 
 import fx from '../../../common/core/animation/fx';
+import { getMockedBaseAppointmentProperties, mockGridViewModel } from '../__mock__/appointment_properties';
 import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
 import type { GridAppointmentProperties } from './grid_appointment';
 import { GridAppointment } from './grid_appointment';
-import { getBaseMockedAppointmentProperties, mockGridViewModel } from './utils.test';
 
 const getGridAppointmentProperties = (options: {
   appointmentData: SafeAppointment;
@@ -18,7 +18,7 @@ const getGridAppointmentProperties = (options: {
   resources?: ResourceConfig[]
 }): GridAppointmentProperties => {
   const viewModel = mockGridViewModel(options.appointmentData, options.partialViewModel);
-  const result = getBaseMockedAppointmentProperties({ ...options, viewModel });
+  const result = getMockedBaseAppointmentProperties({ ...options, viewModel });
 
   return {
     ...result,
