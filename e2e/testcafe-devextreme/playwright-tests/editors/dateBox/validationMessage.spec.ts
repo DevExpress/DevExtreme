@@ -14,7 +14,46 @@ test.describe('DateBox ValidationMessagePosition', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('DateBox ValidationMessage position is correct', async ({ page }) => {
-    // skipped: requires .before() setup with t.ctx.ids, Guid, dxValidator
+  test('DateBox ValidationMessage position is correct', async ({ page }) => {
+    await page.setViewportSize({ width: 600, height: 400 });
+
+    const positions = ['top', 'right', 'bottom', 'left'];
+    const ids: string[] = [];
+
+    for (const position of positions) {
+      const id = `db-${position}`;
+      ids.push(id);
+
+      await page.evaluate(({ parentSel, elId }) => {
+        const div = document.createElement('div');
+        div.id = elId;
+        document.querySelector(parentSel)?.appendChild(div);
+      }, { parentSel: '#container', elId: id });
+
+      await createWidget(page, 'dxDateBox', {
+        elementAttr: { style: 'display: inline-block; margin: 50px 100px 0 0;' },
+        width: 150,
+        height: 40,
+        validationMessageMode: 'always',
+        validationMessagePosition: position,
+      }, `#${id}`);
+
+      await createWidget(page, 'dxValidator', {
+        validationRules: [{
+          type: 'range',
+          max: new Date(1),
+          message: 'out of range',
+        }],
+      }, `#${id}`);
+    }
+
+    for (const id of ids) {
+      await page.evaluate((sel) => {
+        const instance = ($(sel) as any).dxDateBox('instance');
+        instance.option('value', new Date(2022, 6, 14));
+      }, `#${id}`);
+    }
+
+    await testScreenshot(page, 'Datebox validation message.png');
   });
 });

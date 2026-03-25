@@ -17,57 +17,56 @@ test.describe('Calendar keyboard navigation', () => {
   const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
   const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 
-  test.skip('Tab navigation order prevButton-caption-nextButton-viewdWrapper-todayButton', async ({ page }) => {
+  test('Tab navigation order prevButton-caption-nextButton-viewdWrapper-todayButton', async ({ page }) => {
     await createWidget(page, 'dxCalendar', {
-    value: new Date(2021, 9, 17),
-    showTodayButton: true,
-  });
+      value: new Date(2021, 9, 17),
+      showTodayButton: true,
+    });
 
-    const calendar = page.locator('#container');
+    await page.locator('body').click();
+    await page.keyboard.press('Tab');
 
-    await page.locator('body').click()
-      .pressKey('tab');
+    const prevButton = page.locator('#container .dx-calendar-navigator-previous-view');
+    await expect(prevButton).toHaveClass(/dx-state-focused/);
 
-    await page.expect(calendar.getNavigatorPrevButton().isFocused)
-      .ok()
-      .pressKey('tab')
-      .expect(calendar.getNavigatorCaption().isFocused)
-      .ok()
-      .pressKey('tab')
-      .expect(calendar.getNavigatorNextButton().isFocused)
-      .ok()
-      .pressKey('tab');
+    await page.keyboard.press('Tab');
+    const caption = page.locator('#container .dx-calendar-caption-button');
+    await expect(caption).toHaveClass(/dx-state-focused/);
 
-    const cell = calendar.getView().getCellByDate(new Date(2021, 9, 17));
-    await page.expect(cell.hasClass(CALENDAR_CONTOURED_DATE_CLASS))
-      .ok()
-      .expect(cell.hasClass(CALENDAR_SELECTED_DATE_CLASS))
-      .ok();
+    await page.keyboard.press('Tab');
+    const nextButton = page.locator('#container .dx-calendar-navigator-next-view');
+    await expect(nextButton).toHaveClass(/dx-state-focused/);
 
     await page.keyboard.press('Tab');
 
-    await page.expect(calendar.getTodayButton().isFocused)
-      .ok();
+    const cell = page.locator(`#container td[data-value="2021/10/17"]`);
+    await expect(cell).toHaveClass(new RegExp(CALENDAR_CONTOURED_DATE_CLASS));
+    await expect(cell).toHaveClass(new RegExp(CALENDAR_SELECTED_DATE_CLASS));
+
+    await page.keyboard.press('Tab');
+
+    const todayButton = page.locator('#container .dx-button-today');
+    await expect(todayButton).toHaveClass(/dx-state-focused/);
 
     await page.keyboard.press('Enter');
 
-    const currentDate = await calendar.option('value') as Date;
+    const currentValue = await page.evaluate(() => {
+      const instance = ($('#container') as any).dxCalendar('instance');
+      return instance.option('value');
+    });
+    const currentDate = new Date(currentValue);
     const today = new Date();
 
-    currentDate.setHours(0, 0, 0, 0);
-    today.setHours(0, 0, 0, 0);
+    expect(currentDate.getFullYear()).toBe(today.getFullYear());
+    expect(currentDate.getMonth()).toBe(today.getMonth());
+    expect(currentDate.getDate()).toBe(today.getDate());
 
-    expect(currentDate).toBe(today);
+    const todayFormatted = `${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}`;
+    const todayCell = page.locator(`#container td[data-value="${todayFormatted}"]`);
+    await expect(todayCell).toHaveClass(new RegExp(CALENDAR_SELECTED_DATE_CLASS));
+  });
 
-    const todayCell = calendar.getView().getCellByDate(today);
-
-    await page.expect(todayCell.hasClass(CALENDAR_SELECTED_DATE_CLASS))
-      .ok();
-
-    });
-
-  test.skip('focusin and focusout event handlers should not be called on tab navigate inside calendar', async ({ page }) => {
-
+  test('focusin and focusout event handlers should not be called on tab navigate inside calendar', async ({ page }) => {
     await page.evaluate(() => {
       (window as any).onFocusInCounter = 0;
       (window as any).onFocusOutCounter = 0;
@@ -84,64 +83,45 @@ test.describe('Calendar keyboard navigation', () => {
       },
     });
 
-    const calendar = page.locator('#container');
-
-    await page.locator('body').click()
-      .pressKey('tab');
-
-    await page.expect(calendar.getNavigatorPrevButton().isFocused)
-      .ok()
-      .expect(ClientFunction(() => (window as any).onFocusInCounter)())
-      .eql(1)
-      .expect(ClientFunction(() => (window as any).onFocusOutCounter)())
-      .eql(0);
-
+    await page.locator('body').click();
     await page.keyboard.press('Tab');
 
-    await page.expect(calendar.getNavigatorCaption().isFocused)
-      .ok()
-      .expect(ClientFunction(() => (window as any).onFocusInCounter)())
-      .eql(1)
-      .expect(ClientFunction(() => (window as any).onFocusOutCounter)())
-      .eql(0);
+    const prevButton = page.locator('#container .dx-calendar-navigator-previous-view');
+    await expect(prevButton).toHaveClass(/dx-state-focused/);
+    expect(await page.evaluate(() => (window as any).onFocusInCounter)).toBe(1);
+    expect(await page.evaluate(() => (window as any).onFocusOutCounter)).toBe(0);
 
     await page.keyboard.press('Tab');
-
-    await page.expect(calendar.getNavigatorNextButton().isFocused)
-      .ok()
-      .expect(ClientFunction(() => (window as any).onFocusInCounter)())
-      .eql(1)
-      .expect(ClientFunction(() => (window as any).onFocusOutCounter)())
-      .eql(0);
+    const caption = page.locator('#container .dx-calendar-caption-button');
+    await expect(caption).toHaveClass(/dx-state-focused/);
+    expect(await page.evaluate(() => (window as any).onFocusInCounter)).toBe(1);
+    expect(await page.evaluate(() => (window as any).onFocusOutCounter)).toBe(0);
 
     await page.keyboard.press('Tab');
-
-    const cell = calendar.getView().getCellByDate(new Date(2021, 9, 17));
-    await page.expect(cell.hasClass(CALENDAR_CONTOURED_DATE_CLASS))
-      .ok()
-      .expect(cell.hasClass(CALENDAR_SELECTED_DATE_CLASS))
-      .ok()
-      .expect(ClientFunction(() => (window as any).onFocusInCounter)())
-      .eql(1)
-      .expect(ClientFunction(() => (window as any).onFocusOutCounter)())
-      .eql(0);
+    const nextButton = page.locator('#container .dx-calendar-navigator-next-view');
+    await expect(nextButton).toHaveClass(/dx-state-focused/);
+    expect(await page.evaluate(() => (window as any).onFocusInCounter)).toBe(1);
+    expect(await page.evaluate(() => (window as any).onFocusOutCounter)).toBe(0);
 
     await page.keyboard.press('Tab');
-
-    await page.expect(calendar.getTodayButton().isFocused)
-      .ok()
-      .expect(ClientFunction(() => (window as any).onFocusInCounter)())
-      .eql(1)
-      .expect(ClientFunction(() => (window as any).onFocusOutCounter)())
-      .eql(0);
+    const cell = page.locator(`#container td[data-value="2021/10/17"]`);
+    await expect(cell).toHaveClass(new RegExp(CALENDAR_CONTOURED_DATE_CLASS));
+    await expect(cell).toHaveClass(new RegExp(CALENDAR_SELECTED_DATE_CLASS));
+    expect(await page.evaluate(() => (window as any).onFocusInCounter)).toBe(1);
+    expect(await page.evaluate(() => (window as any).onFocusOutCounter)).toBe(0);
 
     await page.keyboard.press('Tab');
+    const todayButton = page.locator('#container .dx-button-today');
+    await expect(todayButton).toHaveClass(/dx-state-focused/);
+    expect(await page.evaluate(() => (window as any).onFocusInCounter)).toBe(1);
+    expect(await page.evaluate(() => (window as any).onFocusOutCounter)).toBe(0);
 
-    expect(calendar.isFocused).toBeFalsy()
-      .expect(ClientFunction(() => (window as any).onFocusInCounter)())
-      .eql(1)
-      .expect(ClientFunction(() => (window as any).onFocusOutCounter)())
-      .eql(1);
-
+    await page.keyboard.press('Tab');
+    const calendarFocused = await page.evaluate(() => {
+      return document.querySelector('#container')?.classList.contains('dx-state-focused') ?? false;
     });
+    expect(calendarFocused).toBe(false);
+    expect(await page.evaluate(() => (window as any).onFocusInCounter)).toBe(1);
+    expect(await page.evaluate(() => (window as any).onFocusOutCounter)).toBe(1);
+  });
 });

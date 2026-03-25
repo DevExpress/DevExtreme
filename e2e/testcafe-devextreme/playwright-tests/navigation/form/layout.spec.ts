@@ -205,7 +205,56 @@ test.describe('Form', () => {
     });
   });
 
-  test.skip('Validation errors persist after resize', async ({ page }) => {
-    // skipped: requires form.validate() API call and resizeWindow helper
+  test('Validation errors persist after resize', async ({ page }) => {
+    await createWidget(page, 'dxForm', {
+      colCountByScreen: {
+        xs: 1,
+        sm: 2,
+        md: 2,
+        lg: 2,
+      },
+      items: [
+        {
+          dataField: 'name',
+          editorType: 'dxTextBox',
+          validationRules: [{ type: 'required' }],
+        },
+        {
+          dataField: 'birthDate',
+          editorType: 'dxDateBox',
+          validationRules: [{ type: 'required' }],
+        },
+        {
+          dataField: 'role',
+          editorType: 'dxSelectBox',
+          editorOptions: {
+            dataSource: ['Dev', 'QA', 'PM'],
+          },
+          validationRules: [{ type: 'required' }],
+        },
+        {
+          dataField: 'agree',
+          editorType: 'dxCheckBox',
+          editorOptions: {
+            text: 'I agree',
+          },
+          validationRules: [{
+            type: 'custom',
+            validationCallback: () => false,
+            message: 'Required',
+          }],
+        },
+      ],
+    });
+
+    await waitFont(page);
+
+    await page.evaluate(() => {
+      ($('#container') as any).dxForm('instance').validate();
+    });
+
+    await page.setViewportSize({ width: 400, height: 800 });
+
+    await testScreenshot(page, 'form_validation_errors_after_resize.png', { element: '#container' });
   });
 });

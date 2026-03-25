@@ -32,7 +32,12 @@ test.describe('TextBox_Label', () => {
   const createTextBox = async (page: any, options?: any, state?: string): Promise<string> => {
     const id = `tb-${Math.random().toString(36).slice(2, 8)}`;
 
-    await appendElementTo(page, '#container', 'div', id, {});
+    await page.evaluate(({ parentSel, elId }: any) => {
+      const div = document.createElement('div');
+      div.id = elId;
+      document.querySelector(parentSel)?.appendChild(div);
+    }, { parentSel: '#container', elId: id });
+
     await createWidget(page, 'dxTextBox', {
       labelMode: 'floating',
       stylingMode: 'outlined',
@@ -53,8 +58,41 @@ test.describe('TextBox_Label', () => {
     { labelMode: 'floating' },
     { labelMode: 'outside' },
   ].forEach(({ labelMode }) => {
-    test.skip(`Label max-width should be changed after container width was changed, labelMode is ${labelMode}`, async ({ page }) => {
-      // skipped: requires .before() setup with t.ctx, TextBox page object with getLabel
+    test(`Label max-width should be changed after container width was changed, labelMode is ${labelMode}`, async ({ page }) => {
+      const initialWidth = 100;
+      const deltaWidth = 300;
+
+      await createWidget(page, 'dxTextBox', {
+        width: initialWidth,
+        label: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        labelMode,
+      });
+
+      const labelMaxWidth = await page.evaluate(() => {
+        const label = document.querySelector('#container .dx-label');
+        if (!label) return 'none';
+        return getComputedStyle(label).maxWidth;
+      });
+
+      const containerId = await page.evaluate(() => document.querySelector('#container')?.getAttribute('id'));
+
+      await setStyleAttribute(page, '#container', `width: ${initialWidth + deltaWidth}px;`);
+
+      const newLabelMaxWidth = await page.evaluate(() => {
+        const label = document.querySelector('#container .dx-label');
+        if (!label) return 'none';
+        return getComputedStyle(label).maxWidth;
+      });
+
+      if (labelMode === 'outside') {
+        expect(labelMaxWidth).toBe('none');
+        expect(newLabelMaxWidth).toBe('none');
+      } else {
+        const initialPx = parseFloat(labelMaxWidth);
+        const newPx = parseFloat(newLabelMaxWidth);
+        expect(newPx).toBeGreaterThan(initialPx);
+        expect(Math.abs(newPx - initialPx - deltaWidth)).toBeLessThanOrEqual(2);
+      }
     });
   });
 
@@ -141,12 +179,40 @@ test.describe('TextBox_Label', () => {
   });
 
   stylingModes.forEach((stylingMode) => {
-    test.skip(`TextBox should not be hovered after hover of outside label, stylingMode=${stylingMode}`, async ({ page }) => {
-      // skipped: requires TextBox page object with getLabelSpan, isHovered
+    test(`TextBox should not be hovered after hover of outside label, stylingMode=${stylingMode}`, async ({ page }) => {
+      await createWidget(page, 'dxTextBox', {
+        value: 'text',
+        label: 'Label text',
+        labelMode: 'outside',
+        stylingMode,
+        width: 500,
+      });
+
+      const labelSpan = page.locator('#container .dx-label span');
+      await labelSpan.hover();
+
+      const isHovered = await page.evaluate(() => {
+        return document.querySelector('#container')?.classList.contains('dx-state-hover') ?? false;
+      });
+      expect(isHovered).toBe(false);
     });
 
-    test.skip(`TextBox should be focused after click on outside label, stylingMode=${stylingMode}`, async ({ page }) => {
-      // skipped: requires TextBox page object with getLabelSpan, isFocused
+    test(`TextBox should be focused after click on outside label, stylingMode=${stylingMode}`, async ({ page }) => {
+      await createWidget(page, 'dxTextBox', {
+        value: 'text',
+        label: 'Label text',
+        labelMode: 'outside',
+        stylingMode,
+        width: 500,
+      });
+
+      const labelSpan = page.locator('#container .dx-label span');
+      await labelSpan.click();
+
+      const isFocused = await page.evaluate(() => {
+        return document.querySelector('#container')?.classList.contains('dx-state-focused') ?? false;
+      });
+      expect(isFocused).toBe(true);
     });
   });
 });
