@@ -248,6 +248,8 @@ export default class MaskStrategy {
 
       editor._handleChain({ text: restText, start: newCaret, length: restText.length });
       editor._caret({ start: newCaret, end: newCaret });
+
+      return undefined;
     });
   }
 
