@@ -1,7 +1,7 @@
 import * as path from 'path';
 
-export const GRID_CORE_ROOT = path.resolve(__dirname, '..', '..', 'grid_core');
-export const OUTPUT_DIR = path.resolve(__dirname, '..', 'artifacts');
+export const GRID_CORE_ROOT = path.resolve(__dirname, '..', '..', '..', 'grid_core');
+export const OUTPUT_DIR = path.resolve(__dirname, '..', '..', 'artifacts');
 
 export const MODULE_SUFFIX = 'Module';
 export const MODULES_PREFIX = 'modules.';

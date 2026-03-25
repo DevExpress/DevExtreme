@@ -1,12 +1,8 @@
-/* eslint-disable spellcheck/spell-checker, no-restricted-syntax, max-depth */
+/* eslint-disable spellcheck/spell-checker, max-depth */
+import type { CytoscapeElement } from '../shared/graph-context';
+import { createGraphContext } from '../shared/graph-context';
 import { MODULE_ITEM_CLASS, MODULES_PREFIX } from './constants';
 import type { ArchitectureData } from './types';
-
-interface CytoscapeElement {
-  group: 'nodes' | 'edges';
-  data: Record<string, unknown>;
-  classes?: string;
-}
 
 function nonEmpty(value: string): string | undefined {
   return value || undefined;
@@ -43,23 +39,11 @@ function buildNodeIdMap(data: ArchitectureData): Map<string, string> {
 }
 
 export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement[] {
-  const elements: CytoscapeElement[] = [];
-  const nodeIds = new Set<string>();
-  const edgeIds = new Set<string>();
-  const nodeParent = new Map<string, string>(); // nodeId → parentId
+  const ctx = createGraphContext({ trackParent: true });
+  const {
+    elements, nodeIds, edgeIds, nodeParent, addNode,
+  } = ctx;
   const nodeIdMap = buildNodeIdMap(data);
-
-  function addNode(id: string, nodeData: Record<string, unknown>, classes: string): void {
-    if (nodeIds.has(id)) {
-      return;
-    }
-
-    nodeIds.add(id);
-    if (nodeData.parent) {
-      nodeParent.set(id, nodeData.parent as string);
-    }
-    elements.push({ group: 'nodes', data: { id, ...nodeData }, classes });
-  }
 
   function addEdge(
     source: string,
@@ -67,6 +51,9 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
     edgeData: Record<string, unknown>,
     classes: string,
   ): void {
+    // ID keyed by classes — safe because each edge type (inheritance, extension,
+    // runtime) uses a distinct class string, and at most one edge of each type
+    // exists per source→target pair.
     const id = `e-${source}-${target}-${classes}`;
 
     if (!nodeIds.has(source) || !nodeIds.has(target) || edgeIds.has(id)) {
@@ -122,7 +109,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         mixins: nonEmpty(ctrl.mixins.join(', ')),
         sourceFile: ctrl.sourceFile,
         featureArea: mod.featureArea,
-      }, 'controller');
+      }, 'gc-target gc-target-controller');
     }
 
     // Add view children
@@ -137,7 +124,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         mixins: nonEmpty(view.mixins.join(', ')),
         sourceFile: view.sourceFile,
         featureArea: mod.featureArea,
-      }, 'view');
+      }, 'gc-target gc-target-view');
     }
   }
 
@@ -152,7 +139,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
       mixins: nonEmpty(ctrl.mixins.join(', ')),
       sourceFile: ctrl.sourceFile,
       featureArea: ctrl.featureArea,
-    }, 'controller standalone');
+    }, 'gc-target gc-target-controller');
   }
 
   for (const [regName, view] of Object.entries(data.standaloneViews)) {
@@ -165,12 +152,12 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
       mixins: nonEmpty(view.mixins.join(', ')),
       sourceFile: view.sourceFile,
       featureArea: view.featureArea,
-    }, 'view standalone');
+    }, 'gc-target gc-target-view');
   }
 
   // 3. Add inheritance edges
   for (const entry of data.inheritanceChains) {
-    const sourceId = nodeIdMap.get(entry.class);
+    const sourceId = nodeIdMap.get(entry.className);
     if (!sourceId || !nodeIds.has(sourceId)) {
       // eslint-disable-next-line no-continue
       continue;
@@ -184,7 +171,8 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         }
         const targetId = nodeIdMap.get(base);
         if (targetId && nodeIds.has(targetId)) {
-          addEdge(sourceId, targetId, { edgeType: 'inheritance' }, 'inheritance');
+          const inheritClass = targetId.startsWith('ctrl-') ? 'edge-inherit-ctrl' : 'edge-inherit-view';
+          addEdge(sourceId, targetId, { edgeType: 'inheritance', label: sourceId.replace(/^(ctrl|view)-/, '') }, inheritClass);
           break;
         }
       }
@@ -201,7 +189,8 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         addEdge(moduleId, targetId, {
           edgeType: 'extension',
           extenderName: ext.extenderName,
-        }, 'extension');
+          label: mod.registeredAs ?? mod.moduleName,
+        }, 'edge-ext-ctrl');
       }
     }
 
@@ -211,7 +200,8 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
         addEdge(moduleId, targetId, {
           edgeType: 'extension',
           extenderName: ext.extenderName,
-        }, 'extension');
+          label: mod.registeredAs ?? mod.moduleName,
+        }, 'edge-ext-view');
       }
     }
   }
@@ -225,7 +215,7 @@ export function buildCytoscapeElements(data: ArchitectureData): CytoscapeElement
       addEdge(sourceId, targetId, {
         edgeType: 'runtime',
         via: dep.via,
-      }, 'runtime');
+      }, 'edge-runtime');
     }
   }
 

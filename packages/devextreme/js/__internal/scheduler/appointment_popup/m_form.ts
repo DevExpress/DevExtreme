@@ -231,8 +231,8 @@ export class AppointmentForm {
     const showMainGroupIcons = ['main', 'both'].includes(iconsShowMode);
     const showRecurrenceGroupIcons = ['recurrence', 'both'].includes(iconsShowMode);
 
-    this.setStylingModeToEditors(mainGroup, showMainGroupIcons);
-    this.setStylingModeToEditors(recurrenceGroup, showRecurrenceGroupIcons);
+    this.applyFormItemDefaults(mainGroup, showMainGroupIcons);
+    this.applyFormItemDefaults(recurrenceGroup, showRecurrenceGroupIcons);
 
     const editingConfig = this.scheduler.getEditingConfig();
     const customizedItems = customizeFormItems(items, editingConfig?.form?.items);
@@ -348,10 +348,6 @@ export class AppointmentForm {
       name: SUBJECT_GROUP_NAME,
       itemType: 'group',
       cssClass: `${CLASSES.subjectGroup} ${CLASSES.groupWithIcon}`,
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2,
-      },
       items: [
         {
           name: SUBJECT_ICON_NAME,
@@ -379,10 +375,6 @@ export class AppointmentForm {
       name: DATE_GROUP_NAME,
       itemType: 'group',
       cssClass: `${CLASSES.dateRangeGroup} ${CLASSES.groupWithIcon}`,
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2,
-      },
       items: [
         {
           name: DATE_ICON_NAME,
@@ -660,10 +652,6 @@ export class AppointmentForm {
     return {
       name: REPEAT_GROUP_NAME,
       itemType: 'group',
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2,
-      },
       cssClass: `${CLASSES.repeatGroup} ${CLASSES.groupWithIcon}`,
       items: [
         {
@@ -716,10 +704,6 @@ export class AppointmentForm {
     return {
       name: DESCRIPTION_GROUP_NAME,
       itemType: 'group',
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2,
-      },
       cssClass: `${CLASSES.descriptionGroup} ${CLASSES.groupWithIcon}`,
       items: [
         {
@@ -778,10 +762,6 @@ export class AppointmentForm {
         name: RESOURCES_GROUP_NAME,
         itemType: 'group',
         visible: resourcesItems.length > 0,
-        colCount: 2,
-        colCountByScreen: {
-          xs: 2,
-        },
         cssClass: `${CLASSES.resourcesGroup} ${CLASSES.groupWithIcon}`,
         items: [
           {
@@ -807,10 +787,6 @@ export class AppointmentForm {
       return {
         itemType: 'group',
         name: `${dataField}Group`,
-        colCount: 2,
-        colCountByScreen: {
-          xs: 2,
-        },
         cssClass: CLASSES.groupWithIcon,
         items: [
           {
@@ -836,17 +812,12 @@ export class AppointmentForm {
     } as GroupItem;
   }
 
-  private setStylingModeToEditors(item: FormItem, showIcon: boolean): void {
+  private applyFormItemDefaults(item: FormItem, showIcon: boolean): void {
     const itemClasses = (item.cssClass ?? '').split(' ');
     const isIconItem = itemClasses.includes(CLASSES.formIcon);
 
     if (isIconItem) {
-      const isHidden = itemClasses.includes(CLASSES.hidden);
-
-      if (!showIcon && !isHidden) {
-        item.cssClass += ` ${CLASSES.hidden}`;
-      }
-
+      item.visible = showIcon;
       return;
     }
 
@@ -863,8 +834,15 @@ export class AppointmentForm {
 
     if (item.itemType === 'group') {
       const groupItem = item as GroupItem;
+
+      if (itemClasses.includes(CLASSES.groupWithIcon)) {
+        const colCount = showIcon ? 2 : 1;
+        groupItem.colCount = colCount;
+        groupItem.colCountByScreen = { xs: colCount };
+      }
+
       groupItem.items?.forEach((child) => {
-        this.setStylingModeToEditors(child, showIcon);
+        this.applyFormItemDefaults(child, showIcon);
       });
     }
   }
@@ -897,8 +875,6 @@ export class AppointmentForm {
   }
 
   showMainGroup(): void {
-    this._popup.updateToolbarForMainGroup();
-
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
     const editingConfig = this.scheduler.getEditingConfig();
     const configuredHeight = editingConfig?.popup?.height ?? 'auto';
@@ -918,6 +894,8 @@ export class AppointmentForm {
       this._$recurrenceGroup.addClass(CLASSES.recurrenceHidden);
       this._$recurrenceGroup.attr('inert', true);
     }
+
+    this._popup.updateToolbarForMainGroup();
   }
 
   showRecurrenceGroup(): void {
@@ -926,7 +904,7 @@ export class AppointmentForm {
       repeatEditor.close();
     }
 
-    this._popup.updateToolbarForRecurrenceGroup();
+    this.updateAnimationOffset();
 
     const currentHeight = this.dxPopup.option('height') as string | number | undefined;
 
@@ -946,6 +924,8 @@ export class AppointmentForm {
 
       this.focusFirstFocusableInGroup(this._$recurrenceGroup);
     }
+
+    this._popup.updateToolbarForRecurrenceGroup();
   }
 
   saveRecurrenceValue(): void {
@@ -1063,6 +1043,19 @@ export class AppointmentForm {
     this.dxForm.itemOption(endDateItemName, 'colSpan', visible ? 1 : 2);
     this.dxForm.itemOption(endTimeItemName, 'visible', visible);
     this.dxForm.endUpdate();
+  }
+
+  private updateAnimationOffset(): void {
+    if (!this._$mainGroup) {
+      return;
+    }
+
+    const formElement = this.dxForm.$element()[0];
+    const mainGroupElement = this._$mainGroup[0];
+    const formRect = formElement.getBoundingClientRect();
+    const groupRect = mainGroupElement.getBoundingClientRect();
+    const topOffset = groupRect.top - formRect.top;
+    formElement.style.setProperty('--dx-scheduler-animation-top', `${topOffset}px`);
   }
 
   private focusFirstFocusableInGroup($group: dxElementWrapper): void {

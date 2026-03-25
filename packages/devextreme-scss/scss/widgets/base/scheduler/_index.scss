@@ -486,7 +486,7 @@ $scheduler-appointment-form-label-padding: 20px;
         &.dx-scheduler-form-main-group-hidden {
           transform: translateX(-110%);
           position: absolute;
-          top: 0;
+          top: var(--dx-scheduler-animation-top, 0);
         }
       }
 
@@ -499,8 +499,12 @@ $scheduler-appointment-form-label-padding: 20px;
         &.dx-scheduler-form-recurrence-group-hidden {
           transform: translateX(110%);
           position: absolute;
-          top: 0;
+          top: var(--dx-scheduler-animation-top, 0);
         }
+      }
+
+      .dx-scheduler-form-recurrence-group.dx-field-item {
+        padding: 0;
       }
 
       /* Icons alignment */

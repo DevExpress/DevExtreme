@@ -1,9 +1,8 @@
-export interface ClassRegistrationInfo {
-  className: string;
-  baseClass: string;
-  mixins: string[];
-  sourceFile: string;
-  isExported: boolean;
+import type { BaseClassInfo, HeritageInfo, InheritanceEntry } from '../shared/types';
+
+export type { InheritanceEntry };
+
+export interface ClassRegistrationInfo extends BaseClassInfo {
   featureArea: string;
 }
 
@@ -35,11 +34,6 @@ export interface RuntimeDependency {
   location: string;
 }
 
-export interface InheritanceEntry {
-  class: string;
-  chain: string[];
-}
-
 export interface ArchitectureData {
   generatedAt: string;
   sourceRoot: string;
@@ -60,16 +54,11 @@ export interface ParsedFile {
   filePath: string;
   relPath: string;
   modules: ModuleInfo[];
-  classes: Map<string, { baseClass: string; mixins: string[]; isExported: boolean }>;
+  classes: Map<string, HeritageInfo & { isExported: boolean }>;
   runtimeDeps: RuntimeDependency[];
   localVars: Map<string, string>;
   importAliases: Map<string, ImportAlias>;
   importedNames: Map<string, string>;
 }
 
-export interface GlobalClassInfo {
-  baseClass: string;
-  mixins: string[];
-  sourceFile: string;
-  isExported: boolean;
-}
+export interface GlobalClassInfo extends BaseClassInfo {}

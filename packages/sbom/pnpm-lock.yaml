@@ -11,6 +11,7 @@ overrides:
   minimatch@>=10.0.0 <10.2.3: ^10.2.4
   qs: '>=6.14.1'
   tar@<=7.5.9: ^7.5.10
+  undici@<7.24.0: ^7.24.0
 
 importers:
 
@@ -1117,8 +1118,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  undici@7.22.0:
-    resolution: {integrity: sha512-RqslV2Us5BrllB+JeiZnK4peryVTndy9Dnqq62S3yYRRTj0tFQCwEniUy2167skdGOy3vqRzEvl1Dm4sV2ReDg==}
+  undici@7.24.4:
+    resolution: {integrity: sha512-BM/JzwwaRXxrLdElV2Uo6cTLEjhSb3WXboncJamZ15NgUURmvlXvxa6xkwIOILIjPNo9i8ku136ZvWV0Uly8+w==}
     engines: {node: '>=20.18.1'}
 
   unique-filename@5.0.0:
@@ -1640,7 +1641,7 @@ snapshots:
       parse5: 7.3.0
       parse5-htmlparser2-tree-adapter: 7.1.0
       parse5-parser-stream: 7.1.2
-      undici: 7.22.0
+      undici: 7.24.4
       whatwg-mimetype: 4.0.0
 
   chownr@1.1.4:
@@ -2551,7 +2552,7 @@ snapshots:
   typescript@5.9.3:
     optional: true
 
-  undici@7.22.0: {}
+  undici@7.24.4: {}
 
   unique-filename@5.0.0:
     dependencies:

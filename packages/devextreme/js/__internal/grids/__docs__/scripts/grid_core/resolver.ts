@@ -1,4 +1,8 @@
-/* eslint-disable spellcheck/spell-checker, no-restricted-syntax, max-depth */
+/* eslint-disable spellcheck/spell-checker, max-depth */
+import { parseMixinCall, stripAllMixins } from '../shared/ast-helpers';
+import type { BuildChainOptions } from '../shared/inheritance';
+import { buildInheritanceChainCore } from '../shared/inheritance';
+import type { HeritageInfo } from '../shared/types';
 import {
   BARE_MODULE_BASES,
   getFeatureAreaFromPath,
@@ -33,7 +37,7 @@ export function buildGlobalClassRegistry(
 
   for (const pf of allParsedFiles) {
     for (const [className, info] of pf.classes) {
-      const entry: GlobalClassInfo = { ...info, sourceFile: pf.relPath };
+      const entry: GlobalClassInfo = { ...info, className, sourceFile: pf.relPath };
       const existingEntry = registry.get(className);
       if (!existingEntry) {
         registry.set(className, entry);
@@ -57,6 +61,8 @@ export function buildGlobalClassRegistry(
     });
     if (baseEntry) {
       registry.set(className, baseEntry);
+    } else {
+      console.warn(`WARN: Duplicate class "${className}" found in ${entries.map((e) => e.sourceFile).join(', ')}; keeping first-seen entry (no entry matched the base-class heuristic).`);
     }
   }
 
@@ -104,11 +110,10 @@ export function resolveAliasInString(text: string, aliasMap: Map<string, string>
   }
 
   // Mixin pattern: "Mixin(AliasName)" -> "Mixin(RealName)"
-  const mixinMatch = /^(\w+)\((.+)\)$/.exec(text);
-  if (mixinMatch) {
-    const [, mixinPart, innerPart] = mixinMatch;
-    const mixin = resolveAliasInString(mixinPart, aliasMap);
-    const inner = resolveAliasInString(innerPart, aliasMap);
+  const parsed = parseMixinCall(text);
+  if (parsed) {
+    const mixin = resolveAliasInString(parsed.mixinName, aliasMap);
+    const inner = resolveAliasInString(parsed.inner, aliasMap);
     return `${mixin}(${inner})`;
   }
 
@@ -143,10 +148,9 @@ export function normalizeModuleRef(baseClass: string): string {
   result = result.replace(/^core\./, 'modules.');
 
   // Also normalize inside mixin calls: "Mixin(Modules.View)" → "Mixin(modules.View)"
-  const mixinMatch = /^(\w+)\((.+)\)$/.exec(result);
-  if (mixinMatch) {
-    const [, mixinName, mixinInner] = mixinMatch;
-    return `${mixinName}(${normalizeModuleRef(mixinInner)})`;
+  const parsed = parseMixinCall(result);
+  if (parsed) {
+    return `${parsed.mixinName}(${normalizeModuleRef(parsed.inner)})`;
   }
 
   return result;
@@ -222,12 +226,7 @@ function isModuleBaseDescendant(
   }
 
   // Strip mixin wrapper to get the innermost base
-  let rawBase = baseClass;
-  let match = /^\w+\((.+)\)$/.exec(rawBase);
-  while (match) {
-    [, rawBase] = match;
-    match = /^\w+\((.+)\)$/.exec(rawBase);
-  }
+  const rawBase = stripAllMixins(baseClass);
 
   if (rawBase.startsWith(MODULES_PREFIX)) {
     return true;
@@ -262,6 +261,19 @@ export function findStandaloneRegistrations(
     }
   }
 
+  // Pre-build a set of class names that are used as a base class or mixin by any other class.
+  // Uses exact name matching (via stripAllMixins) instead of substring includes().
+  const usedAsBaseOrMixin = new Set<string>();
+  for (const [, info] of globalClasses) {
+    const rawBase = stripAllMixins(info.baseClass);
+    if (rawBase) {
+      usedAsBaseOrMixin.add(rawBase);
+    }
+    for (const mixin of info.mixins) {
+      usedAsBaseOrMixin.add(mixin);
+    }
+  }
+
   const controllers: Record<string, ClassRegistrationInfo> = {};
   const views: Record<string, ClassRegistrationInfo> = {};
 
@@ -271,16 +283,8 @@ export function findStandaloneRegistrations(
       continue;
     }
 
-    // Include if used as a base class OR if it descends from a module base
-    let isUsed = false;
-    for (const [otherName, otherInfo] of globalClasses) {
-      if (otherName !== className
-        && (otherInfo.baseClass.includes(className) || otherInfo.mixins.includes(className))
-      ) {
-        isUsed = true;
-        break;
-      }
-    }
+    // Include if used as a base class or mixin OR if it descends from a module base
+    const isUsed = usedAsBaseOrMixin.has(className);
     if (!isUsed && !isModuleBaseDescendant(className, globalClasses)) {
       // eslint-disable-next-line no-continue
       continue;
@@ -324,7 +328,7 @@ export function buildInheritanceChains(
   standaloneViews: Record<string, ClassRegistrationInfo>,
   globalClasses: Map<string, GlobalClassInfo>,
 ): InheritanceEntry[] {
-  const allClasses = new Map<string, { baseClass: string; mixins: string[] }>();
+  const allClasses = new Map<string, HeritageInfo>();
   const bareModuleBasesSet = new Set<string>(BARE_MODULE_BASES);
 
   for (const [className, info] of globalClasses) {
@@ -336,61 +340,41 @@ export function buildInheritanceChains(
   }
 
   const entries: InheritanceEntry[] = [];
-  const processed = new Set<string>();
+  const visited = new Set<string>();
 
-  function buildChain(className: string): string[] {
-    if (processed.has(className)) {
-      console.warn(`Circular inheritance detected in class hierarchy involving "${className}".`);
-      return [];
-    }
-    processed.add(className);
-    const info = allClasses.get(className);
-    if (!info?.baseClass) {
-      return [];
-    }
-
-    const chain: string[] = [];
-
-    for (const mixin of info.mixins) {
-      chain.push(mixin);
-    }
-
-    let rawBase = info.baseClass;
-    const mixinMatch = /^\w+\((.+)\)$/.exec(rawBase);
-    if (mixinMatch) {
-      [, rawBase] = mixinMatch;
-    }
-
-    chain.push(rawBase);
-
-    const baseName = rawBase.replace(MODULES_PREFIX, '');
-    if (allClasses.has(baseName)) {
-      chain.push(...buildChain(baseName));
-    } else if (rawBase.startsWith(MODULES_PREFIX)) {
-      if (rawBase === 'modules.View' || rawBase === 'modules.Controller') {
-        chain.push('ModuleItem');
-      } else if (rawBase === 'modules.ViewController') {
-        chain.push('modules.Controller', 'ModuleItem');
+  const getClassInfo = (name: string): HeritageInfo | undefined => allClasses.get(name);
+  const chainOptions: BuildChainOptions = {
+    resolveNext: (rawBase: string): string => rawBase.replace(MODULES_PREFIX, ''),
+    onTerminal: (rawBase: string): string[] => {
+      switch (rawBase) {
+        case 'modules.View':
+        case 'modules.Controller':
+          return ['ModuleItem'];
+        case 'modules.ViewController':
+          return ['modules.Controller', 'ModuleItem'];
+        default:
+          return [];
       }
-    }
-
-    return chain;
-  }
+    },
+    onCycle: (name: string): void => {
+      console.warn(`Circular inheritance detected in class hierarchy involving "${name}".`);
+    },
+  };
 
   // Build chains for all controllers and views in modules
   for (const mod of modules) {
     for (const ctrl of Object.values(mod.controllers)) {
-      processed.clear();
-      const chain = buildChain(ctrl.className);
+      visited.clear();
+      const chain = buildInheritanceChainCore(ctrl.className, getClassInfo, visited, chainOptions);
       if (chain.length > 0) {
-        entries.push({ class: ctrl.className, chain });
+        entries.push({ className: ctrl.className, chain });
       }
     }
     for (const view of Object.values(mod.views)) {
-      processed.clear();
-      const chain = buildChain(view.className);
+      visited.clear();
+      const chain = buildInheritanceChainCore(view.className, getClassInfo, visited, chainOptions);
       if (chain.length > 0) {
-        entries.push({ class: view.className, chain });
+        entries.push({ className: view.className, chain });
       }
     }
   }
@@ -401,14 +385,14 @@ export function buildInheritanceChains(
     ...Object.values(standaloneViews),
   ];
   for (const entry of standAloneEntries) {
-    processed.clear();
-    const chain = buildChain(entry.className);
+    visited.clear();
+    const chain = buildInheritanceChainCore(entry.className, getClassInfo, visited, chainOptions);
     if (chain.length > 0) {
-      entries.push({ class: entry.className, chain });
+      entries.push({ className: entry.className, chain });
     }
   }
 
-  return entries.sort((a, b) => a.class.localeCompare(b.class));
+  return entries.sort((a, b) => a.className.localeCompare(b.className));
 }
 
 // ─── Runtime Dependency Resolution ───────────────────────────────────────────
@@ -441,20 +425,18 @@ export function resolveRuntimeDeps(
     }
   }
 
+  // Build a map: sourceFile → moduleName (for fallback lookup)
+  const sourceFileToModule = new Map<string, string>();
+  for (const mod of modules) {
+    sourceFileToModule.set(mod.sourceFile, mod.moduleName);
+  }
+
   for (const pf of allParsedFiles) {
     for (const dep of pf.runtimeDeps) {
-      let fromModule = classToModule.get(dep.from) ?? '';
-      if (!fromModule) {
-        fromModule = extenderToModule.get(dep.from) ?? '';
-      }
-      if (!fromModule) {
-        for (const mod of modules) {
-          if (mod.sourceFile === pf.relPath) {
-            fromModule = mod.moduleName;
-            break;
-          }
-        }
-      }
+      const fromModule = classToModule.get(dep.from)
+        ?? extenderToModule.get(dep.from)
+        ?? sourceFileToModule.get(pf.relPath)
+        ?? '';
 
       allDeps.push({ ...dep, fromModule });
     }
@@ -480,19 +462,21 @@ export function resolveRuntimeDeps(
  * Re-resolve controllers and views in a module definition using the global class registry.
  * This fixes the case where a class is defined in one file and referenced
  * in the module definition in another file.
+ *
+ * @param mod
+ * @param parsedFile
+ * @param globalClasses
+ * @param fileByRelPath - Pre-built map from relPath to ParsedFile.
+ *   Build once with: `new Map(allParsedFiles.map(pf => [pf.relPath, pf]))`
+ * @param globalAliasMap
  */
 export function resolveModuleClassRefs(
   mod: ModuleInfo,
   parsedFile: ParsedFile,
   globalClasses: Map<string, GlobalClassInfo>,
-  allParsedFiles: ParsedFile[],
+  fileByRelPath: Map<string, ParsedFile>,
   globalAliasMap: Map<string, string>,
 ): void {
-  const fileByRelPath = new Map<string, ParsedFile>();
-  for (const pf of allParsedFiles) {
-    fileByRelPath.set(pf.relPath, pf);
-  }
-
   const resolveEntry = (
     entry: {
       baseClass: string;

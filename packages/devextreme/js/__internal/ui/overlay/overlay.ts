@@ -120,7 +120,7 @@ export interface OverlayProperties extends Properties {
 
   zIndex?: number;
 
-  _loopFocus?: boolean;
+  tabFocusLoopEnabled?: boolean;
 
   _ignorePreventScrollEventsDeprecation?: boolean;
 
@@ -294,7 +294,7 @@ class Overlay<
       ignoreChildEvents: true,
       _checkParentVisibility: true,
       _fixWrapperPosition: false,
-      _loopFocus: false,
+      tabFocusLoopEnabled: false,
       _ignorePreventScrollEventsDeprecation: false,
       // NOTE: private option
       hideTopOverlayHandler: (): void => {
@@ -939,12 +939,11 @@ class Overlay<
   }
 
   _toggleTabTerminator(enabled: boolean): void {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const { _loopFocus } = this.option();
+    const { tabFocusLoopEnabled } = this.option();
     // @ts-expect-error NAME has string | undefined type
     const eventName = addNamespace('keydown', this.NAME);
 
-    if (_loopFocus || enabled) {
+    if (tabFocusLoopEnabled || enabled) {
       eventsEngine.on(domAdapter.getDocument(), eventName, this._proxiedTabTerminatorHandler);
     } else {
       this._destroyTabTerminator();
@@ -1527,7 +1526,7 @@ class Overlay<
     switch (name) {
       case 'animation':
         break;
-      case '_loopFocus':
+      case 'tabFocusLoopEnabled':
       case 'shading': {
         this._toggleShading(this._isVisible());
         this._toggleSafariScrolling();
