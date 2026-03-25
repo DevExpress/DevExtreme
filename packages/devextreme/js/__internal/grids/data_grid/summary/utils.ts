@@ -18,3 +18,10 @@ export function getSummaryCellIndex(
 
   return !isDefined(column.groupIndex) ? cellIndex : -1;
 }
+
+export function getColumnFromMap(
+  identifier: string | number | undefined,
+  columnMap: Map<string | number, Column>,
+): Column | undefined {
+  return identifier !== undefined ? columnMap.get(identifier) : undefined;
+}

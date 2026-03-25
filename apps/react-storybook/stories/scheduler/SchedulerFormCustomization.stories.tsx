@@ -383,6 +383,40 @@ export const ResourcesColumnLayout: Story = {
   },
 };
 
+export const CustomItemBeforeMainGroup: Story = {
+  args: {
+    ...baseConfig,
+    resources,
+  },
+  argTypes: iconsShowModeArgType,
+  render: (args) => {
+    return (
+      <Scheduler
+        {...baseConfig}
+        resources={resources}
+        editing={{
+          form: {
+            items: [
+              {
+                name: "customNotice",
+                template: () => {
+                  const element = document.createElement("div");
+                  element.className = "custom-form-notice";
+                  element.textContent = "This is a custom element placed before mainGroup. The slide animation should not overlap this area.";
+                  return element;
+                },
+              },
+              "mainGroup",
+              "recurrenceGroup",
+            ],
+            iconsShowMode: args["editing.form.iconsShowMode"],
+          },
+        } as Properties["editing"]}
+      />
+    );
+  },
+};
+
 export const RTL: Story = {
   args: {
     ...baseConfig,
