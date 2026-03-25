@@ -111,6 +111,7 @@ const TabFocusLoopExample: Story['render'] = ({
                 When enabled, pressing Tab cycles focus only within the popup.
                 When disabled, Tab can move focus outside the popup.
             </p>
+
             <Button text="Open Popup" type="default" onClick={show} />
 
             <Popup
