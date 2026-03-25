@@ -2077,6 +2077,21 @@ QUnit.module('paste', moduleConfig, () => {
 
         assert.strictEqual(textEditor.option('text'), '16___', 'only pasted digit is added');
     });
+
+    QUnit.test('paste should not throw error when paste event has no clipboard data (T1325081)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '+1 (000) 000-0000',
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        try {
+            $input.trigger('paste');
+            assert.ok(true, 'no error is thrown when paste event has no clipboard data');
+        } catch(e) {
+            assert.ok(false, `error is thrown: ${e.message}`);
+        }
+    });
 });
 
 QUnit.module('drag text', moduleConfig, () => {
