@@ -281,11 +281,16 @@ export default class MaskStrategy {
 
     this.editor._maskKeyHandler(event, () => {
       const pastedText = getClipboardText(event);
+
+      if (!pastedText) {
+        return undefined;
+      }
+
       const restText = this.editor._maskRulesChain?.text().substring(caret?.end ?? 0);
       const accepted = this.editor._handleChain({
         text: pastedText,
         start: caret?.start,
-        length: pastedText?.length,
+        length: pastedText.length,
       });
       const newCaret = (caret?.start ?? 0) + accepted;
 
