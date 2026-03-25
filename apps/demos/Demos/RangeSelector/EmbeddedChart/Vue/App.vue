@@ -37,7 +37,7 @@ import {
 } from 'devextreme-vue/range-selector';
 import { dataSource } from './data.ts';
 
-const range = reactive([new Date(2011, 11, 25), new Date(2012, 0, 1)]);
+const range = reactive([new Date(2024, 11, 25), new Date(2025, 0, 1)]);
 </script>
 <style scoped>
 #range-selector {
