@@ -281,6 +281,11 @@ export default class MaskStrategy {
 
     this.editor._maskKeyHandler(event, () => {
       const pastedText = getClipboardText(event);
+
+      if (!pastedText) {
+        return undefined;
+      }
+
       const restText = this.editor._maskRulesChain?.text().substring(caret?.end ?? 0);
       const accepted = this.editor._handleChain({
         text: pastedText,
