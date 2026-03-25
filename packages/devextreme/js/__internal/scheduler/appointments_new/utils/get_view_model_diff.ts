@@ -1,11 +1,18 @@
 import { equalByValue } from '@js/core/utils/common';
 
-import type { SafeAppointment } from '../types';
-import type { AppointmentDataSource } from '../view_model/m_appointment_data_source';
-import type { AppointmentViewModelPlain } from '../view_model/types';
-import { isAgendaAppointmentViewModel, isCollectorViewModel } from './utils/type_helpers';
+import type { SafeAppointment } from '../../types';
+import type { AppointmentDataSource } from '../../view_model/m_appointment_data_source';
+import type { AppointmentViewModelPlain } from '../../view_model/types';
+import { isAgendaAppointmentViewModel, isCollectorViewModel } from './type_helpers';
 
 type Item = AppointmentViewModelPlain;
+
+export interface DiffItem {
+  needToAdd?: boolean;
+  needToRemove?: boolean;
+  needToResize?: boolean
+  item: Item;
+}
 
 const getObjectToCompare = (item: Item, includeDimensions: boolean): object => {
   if (isAgendaAppointmentViewModel(item)) {
@@ -55,14 +62,7 @@ const isAppointmentDataChanged = (
   return updateAppointmentKeys.some((item) => appointmentData[item.key] === item.value);
 };
 
-export interface DiffItem {
-  needToAdd?: boolean;
-  needToRemove?: boolean;
-  needToResize?: boolean
-  item: Item;
-}
-
-export function getArraysDiff(options: {
+function getArraysDiff(options: {
   a: Item[],
   b: Item[],
   match: (x: Item, y: Item) => boolean,

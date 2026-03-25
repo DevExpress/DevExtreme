@@ -42,10 +42,6 @@ export class AppointmentCollector
     this.renderContentTemplate();
   }
 
-  override dispose(): void {
-    super.dispose();
-  }
-
   public resize(): void {
     this.$element().css({
       top: this.option().viewModel.top,
@@ -79,7 +75,6 @@ export class AppointmentCollector
 
   private renderContentTemplate(): void {
     const template = this._getTemplateByOption('appointmentCollectorTemplate');
-
     this._createComponent(this.$element(), Button, {
       type: 'default',
       width: this.option().viewModel.width,

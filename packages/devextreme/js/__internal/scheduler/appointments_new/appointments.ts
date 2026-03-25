@@ -17,26 +17,20 @@ import type { BaseAppointmentProperties } from './appointment/base_appointment';
 import { GridAppointment } from './appointment/grid_appointment';
 import { AppointmentCollector } from './appointment_collector';
 import { APPOINTMENTS_CONTAINER_CLASS } from './const';
-import type { DiffItem } from './get_view_model_diff';
-import { getViewModelDiff } from './get_view_model_diff';
 import { getTargetedAppointment } from './utils/get_targeted_appointment';
+import type { DiffItem } from './utils/get_view_model_diff';
+import { getViewModelDiff } from './utils/get_view_model_diff';
 import { isCollectorViewModel as isAppointmentCollectorViewModel, isGridAppointmentViewModel } from './utils/type_helpers';
 
 export interface AppointmentsProperties extends DOMComponentProperties<Appointments> {
-  tabIndex: number;
   viewModel: AppointmentViewModelPlain[];
   items: AppointmentViewModelPlain[]; // TODO: legacy compatibility
-  allowDrag: boolean;
-  allowResize: boolean;
   $allDayContainer: dxElementWrapper | null;
 
   appointmentTemplate: SchedulerProperties['appointmentTemplate'];
   appointmentCollectorTemplate: SchedulerProperties['appointmentCollectorTemplate'];
 
   onAppointmentRendered: BaseAppointmentProperties['onAppointmentRendered'];
-  onAppointmentClick: () => void;
-  onAppointmentDblClick: () => void;
-  onAppointmentContextMenu: () => void;
 
   getAppointmentDataSource: () => AppointmentDataSource;
   getResourceManager: () => ResourceManager;
@@ -65,17 +59,11 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   override _getDefaultOptions(): AppointmentsProperties {
     return {
       ...super._getDefaultOptions(),
-      tabIndex: 0,
       viewModel: [],
-      allowDrag: false,
-      allowResize: false,
       $allDayContainer: null,
       appointmentTemplate: 'appointment',
       appointmentCollectorTemplate: 'appointmentCollector',
       onAppointmentRendered: (): void => {},
-      onAppointmentClick: (): void => {},
-      onAppointmentDblClick: (): void => {},
-      onAppointmentContextMenu: (): void => {},
     };
   }
 
