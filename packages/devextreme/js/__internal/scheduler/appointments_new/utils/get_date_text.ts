@@ -27,7 +27,7 @@ export const getDateFormatType = (
 export const getDateText = (startDate: Date, endDate: Date, formatType: DateFormatType): string => {
   const dateFormat = 'monthandday';
   const timeFormat = 'shorttime';
-  const isSameDate = startDate.getDate() === endDate.getDate();
+  const isSameDate = dateUtils.sameDate(startDate, endDate);
 
   switch (formatType) {
     case DateFormatType.DATETIME:

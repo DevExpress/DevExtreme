@@ -100,8 +100,11 @@ export class BaseAppointment<
 
   protected getTitleText(): string {
     const dataAccessor = this.option().getDataAccessor();
-    const titleText = dataAccessor.get('text', this.appointmentData)
-      ?? messageLocalization.format('dxScheduler-noSubject');
+    const titleText = dataAccessor.get('text', this.appointmentData);
+
+    if (!titleText) {
+      return messageLocalization.format('dxScheduler-noSubject');
+    }
 
     return titleText;
   }

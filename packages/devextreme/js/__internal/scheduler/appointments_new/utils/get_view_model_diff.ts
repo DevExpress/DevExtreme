@@ -10,7 +10,7 @@ type Item = AppointmentViewModelPlain;
 export interface DiffItem {
   needToAdd?: boolean;
   needToRemove?: boolean;
-  needToResize?: boolean
+  needToResize?: boolean;
   item: Item;
 }
 
