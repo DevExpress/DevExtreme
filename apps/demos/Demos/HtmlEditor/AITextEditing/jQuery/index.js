@@ -21,7 +21,7 @@ $(() => {
     return result;
   }
 
-  const aiIntegration = new DevExpress.aiIntegration({
+  const aiIntegration = new DevExpress.aiIntegration.AIIntegration({
     sendRequest({ prompt }) {
       const controller = new AbortController();
       const signal = controller.signal;
