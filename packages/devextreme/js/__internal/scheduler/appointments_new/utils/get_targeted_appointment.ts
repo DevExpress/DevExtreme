@@ -21,7 +21,6 @@ const setTargetedAppointmentResources = (
   }
 };
 
-// what's the diff between info.appointment and info.sourceAppointment
 export const getTargetedAppointment = (
   appointmentViewModel: AppointmentItemViewModel | AppointmentAgendaViewModel,
   dataAccessor: AppointmentDataAccessor,
