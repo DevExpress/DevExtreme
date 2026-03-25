@@ -285,7 +285,7 @@ export default class MaskStrategy {
       const accepted = this.editor._handleChain({
         text: pastedText,
         start: caret?.start,
-        length: pastedText.length,
+        length: pastedText?.length,
       });
       const newCaret = (caret?.start ?? 0) + accepted;
 
