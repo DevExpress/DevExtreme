@@ -6,26 +6,10 @@ import { DataController } from '@ts/grids/new/grid_core/data_controller/data_con
 import { SearchController } from '@ts/grids/new/grid_core/search/index';
 
 import type {
-  CardInfo, Column, FieldInfo, VisibleColumn,
+  CardInfo, Column, FieldInfo,
 } from '../columns_controller/types';
 import type { DataObject, Key } from '../data_controller/types';
-
-// NOTE: Column properties that do NOT affect card rendering.
-// Changes to these properties trigger data reload via dataController.items,
-// so subscribing to them in visibleColumns causes extra re-renders (T1306983, T1309423).
-const NON_LAYOUT_COLUMN_KEYS: ReadonlySet<string> = new Set([
-  'sortOrder',
-  'sortIndex',
-  'filterValues',
-  'filterType',
-]);
-
-const getColumnLayoutKey = (column: VisibleColumn): string => {
-  const entries = Object.entries(column)
-    .filter(([key]) => !NON_LAYOUT_COLUMN_KEYS.has(key));
-
-  return JSON.stringify(entries);
-};
+import { getColumnLayoutKey } from './utils';
 
 export class ItemsController {
   private readonly selectedCardKeys = signal<Key[]>([]);
@@ -38,9 +22,6 @@ export class ItemsController {
 
   public readonly additionalItems = signal<CardInfo[]>([]);
 
-  // NOTE: Tracks column properties that affect card rendering.
-  // Sort/filter properties are excluded — data changes from sort/filter arrive
-  // separately via dataController.items, so subscribing to them causes extra re-renders.
   private readonly visibleColumnsLayout = computed(
     () => JSON.stringify(
       this.columnsController.visibleColumns.value
