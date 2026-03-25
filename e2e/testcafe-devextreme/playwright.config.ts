@@ -34,7 +34,7 @@ export default defineConfig({
   },
 
   use: {
-    viewport: { width: 1185, height: 800 },
+    viewport: { width: 1200, height: 800 },
     screenshot: 'off',
     trace: 'off',
     launchOptions: {
