@@ -14,9 +14,49 @@ test.describe('DateBox', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Rollers should be scrolled correctly when value is changed (T948310)', async ({ page }) => {
-    // skipped: requires DateBox page object with getRollerScrollTop, getDoneButton
-  });
+  const ITEM_HEIGHT = 40;
+
+  if (!isMaterialBased()) {
+    [[11, 12, 1925], [10, 23, 2001]].forEach(([month, day, year]) => {
+      test(`Rollers should be scrolled correctly when value is changed to ${day}/${month}/${year} using kbn and valueChangeEvent=keyup (T948310)`, async ({ page }) => {
+        await createWidget(page, 'dxDateBox', {
+          pickerType: 'rollers',
+          openOnFieldClick: false,
+          useMaskBehavior: true,
+          valueChangeEvent: 'keyup',
+        });
+
+        const dropDownButton = page.locator('#container .dx-dropdowneditor-button');
+        const input = page.locator('#container .dx-texteditor-input');
+
+        await dropDownButton.click();
+
+        const doneButton = page.locator('.dx-popup-done');
+        await doneButton.click();
+
+        await input.fill('');
+        await input.type(`${month}${day}${year}`, { delay: 50 });
+
+        await dropDownButton.click();
+
+        const views: Record<string, number> = {
+          month: month - 1,
+          day: day - 1,
+          year: year - 1900,
+        };
+
+        for (const viewName of Object.keys(views)) {
+          const scrollTop = await page.evaluate((vn) => {
+            const roller = document.querySelector(`.dx-dateviewroller-${vn}`);
+            const scrollable = roller?.querySelector('.dx-scrollable-container');
+            return scrollable ? scrollable.scrollTop : 0;
+          }, viewName);
+
+          expect(scrollTop).toBe(views[viewName] * ITEM_HEIGHT);
+        }
+      });
+    });
+  }
 
   test('DateBox with datetime and root element as container (T1193495)', async ({ page }) => {
     await createWidget(page, 'dxDateBox', {

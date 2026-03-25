@@ -145,7 +145,35 @@ test.describe('Stepper_common', () => {
     });
   });
 
-  test.skip('Stepper completed item states', async ({ page }) => {
-    // skipped: requires stepper.getItem(3).element page object accessor
+  test('Stepper completed item states', async ({ page }) => {
+    await appendElementTo(page, '#container', 'div', 'stepper');
+    await setAttribute(page, '#container', 'style', 'width: 800px; height: 150px;');
+
+    const dataSource: any[] = [
+      { label: 'Default' },
+      { label: 'Valid', isValid: true, optional: true },
+      { label: 'Invalid', isValid: false, optional: true },
+      { label: 'With Text', text: 'T', optional: true },
+    ];
+
+    await createWidget(page, 'dxStepper', {
+      selectOnFocus: false,
+      dataSource,
+      selectedIndex: 3,
+    }, '#stepper');
+
+    const items = page.locator('#stepper .dx-stepper-item');
+    await items.nth(3).click();
+
+    await page.keyboard.press('ArrowLeft');
+    await testScreenshot(page, 'Completed invalid step focused.png', { element: '#stepper' });
+
+    await page.keyboard.press('ArrowLeft');
+    await testScreenshot(page, 'Completed valid step focused.png', { element: '#stepper' });
+
+    await page.keyboard.press('ArrowLeft');
+    await testScreenshot(page, 'Completed step focused.png', { element: '#stepper' });
+
+    await page.locator('body').click({ position: { x: 0, y: 0 } });
   });
 });

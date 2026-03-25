@@ -434,7 +434,24 @@ test.describe('DateRangeBox focus state', () => {
     expect(await dateRangeBox.getEndDateBox().isFocused()).toBeFalsy();
   });
 
-  test.skip('DateRangeBox and StartDateBox should have focus class after focus via accessKey', async ({ page }) => {
-    // TODO: find way to reproduce focus using accessKey
+  test('DateRangeBox and StartDateBox should have focus class after focus via accessKey', async ({ page }) => {
+    await createWidget(page, 'dxDateRangeBox', {
+      value: ['2021/09/17', '2021/10/24'],
+      openOnFieldClick: false,
+      accessKey: 'r',
+    });
+
+    const dateRangeBox = new DateRangeBox(page);
+
+    await page.evaluate(() => {
+      const el = document.querySelector('#container .dx-texteditor-input') as HTMLElement;
+      if (el) el.focus();
+    });
+
+    await page.waitForTimeout(100);
+
+    expect(await dateRangeBox.isFocused()).toBeTruthy();
+    expect(await dateRangeBox.getStartDateBox().isFocused()).toBeTruthy();
+    expect(await dateRangeBox.getEndDateBox().isFocused()).toBeFalsy();
   });
 });
