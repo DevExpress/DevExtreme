@@ -95,10 +95,21 @@ describe('AgendaAppointment', () => {
       expect($title.text()).toBe('Test title');
     });
 
-    it('should have emptry title text if appointment has no text', async () => {
+    it('should have (No subject) title text if appointment text is undefined', async () => {
       const instance = await createAgendaAppointment(
         getAgendaAppointmentProperties({
           appointmentData: { ...defaultAppointmentData, text: undefined },
+        }),
+      );
+
+      const $title = instance.$element().find(`.${APPOINTMENT_CLASSES.TITLE}`);
+      expect($title.text()).toBe('(No subject)');
+    });
+
+    it('should have (No subject) title text if appointment text is empty', async () => {
+      const instance = await createAgendaAppointment(
+        getAgendaAppointmentProperties({
+          appointmentData: { ...defaultAppointmentData, text: '' },
         }),
       );
 

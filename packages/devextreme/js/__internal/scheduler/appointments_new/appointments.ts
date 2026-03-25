@@ -147,7 +147,9 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
     this.appointmentBySortIndex = newAppointmentBySortedIndex;
 
-    this.$allDayContainer?.get(0).appendChild(allDayFragment);
+    if (this.$allDayContainer) {
+      this.$allDayContainer.get(0).appendChild(allDayFragment);
+    }
     this.$commonContainer.get(0).appendChild(commonFragment);
   }
 
