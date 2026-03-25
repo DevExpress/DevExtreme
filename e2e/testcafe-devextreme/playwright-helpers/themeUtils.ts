@@ -34,6 +34,25 @@ const getScreenshotName = (baseName: string, theme?: string): string => {
     : `${baseName}${themePostfix}.png`;
 };
 
+async function takeScreenshotForTarget(
+  page: Page,
+  element: Locator | string | null | undefined,
+  name: string,
+): Promise<void> {
+  await page.evaluate(() => {
+    (document.activeElement as HTMLElement)?.blur();
+  });
+
+  if (element === undefined || element === null) {
+    await expect(page).toHaveScreenshot([name], { fullPage: true });
+  } else {
+    const locator = typeof element === 'string'
+      ? page.locator(element)
+      : element;
+    await expect(locator).toHaveScreenshot([name]);
+  }
+}
+
 export async function testScreenshot(
   page: Page,
   screenshotName: string,
@@ -53,23 +72,12 @@ export async function testScreenshot(
     await changeTheme(page, theme);
   }
 
-  const locator = typeof element === 'string'
-    ? page.locator(element)
-    : element ?? page.locator('#container');
-
-  await page.evaluate(() => {
-    (document.activeElement as HTMLElement)?.blur();
-  });
-
-  await expect(locator).toHaveScreenshot([getScreenshotName(screenshotName, theme)]);
+  await takeScreenshotForTarget(page, element, getScreenshotName(screenshotName, theme));
 
   if (shouldTestInCompact) {
     const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
     await changeTheme(page, `${themeName}.compact`);
-
-    await expect(locator).toHaveScreenshot(
-      [getScreenshotName(screenshotName, `${themeName}.compact`)],
-    );
+    await takeScreenshotForTarget(page, element, getScreenshotName(screenshotName, `${themeName}.compact`));
   }
 
   if (theme || shouldTestInCompact) {
