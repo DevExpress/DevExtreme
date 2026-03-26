@@ -10,32 +10,33 @@ interface ViewConfig {
   isTimelineView: boolean;
   isMonthView: boolean;
   viewOrientation: 'horizontal' | 'vertical';
+  snapToCellsMode: SnapToCellsMode;
 }
 
 const configByView: Record<Exclude<ViewType, 'agenda'>, ViewConfig> = {
   day: {
-    isTimelineView: false, isMonthView: false, viewOrientation: 'vertical',
+    isTimelineView: false, isMonthView: false, viewOrientation: 'vertical', snapToCellsMode: 'never',
   },
   week: {
-    isTimelineView: false, isMonthView: false, viewOrientation: 'vertical',
+    isTimelineView: false, isMonthView: false, viewOrientation: 'vertical', snapToCellsMode: 'never',
   },
   workWeek: {
-    isTimelineView: false, isMonthView: false, viewOrientation: 'vertical',
+    isTimelineView: false, isMonthView: false, viewOrientation: 'vertical', snapToCellsMode: 'never',
   },
   month: {
-    isTimelineView: false, isMonthView: true, viewOrientation: 'horizontal',
+    isTimelineView: false, isMonthView: true, viewOrientation: 'horizontal', snapToCellsMode: 'always',
   },
   timelineDay: {
-    isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal',
+    isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal', snapToCellsMode: 'never',
   },
   timelineWeek: {
-    isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal',
+    isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal', snapToCellsMode: 'never',
   },
   timelineWorkWeek: {
-    isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal',
+    isTimelineView: true, isMonthView: false, viewOrientation: 'horizontal', snapToCellsMode: 'never',
   },
   timelineMonth: {
-    isTimelineView: true, isMonthView: true, viewOrientation: 'horizontal',
+    isTimelineView: true, isMonthView: true, viewOrientation: 'horizontal', snapToCellsMode: 'always',
   },
 };
 
@@ -71,6 +72,7 @@ export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions
     isTimelineView,
     isMonthView,
     viewOrientation,
+    snapToCellsMode: defaultSnapToCellsMode,
   } = configByView[type];
   const isRTLEnabled = Boolean(schedulerStore.option('rtlEnabled'));
   const isAdaptivityEnabled = Boolean(schedulerStore.option('adaptivityEnabled'));
@@ -82,7 +84,7 @@ export const getViewModelOptions = (schedulerStore: Scheduler): ViewModelOptions
 
   return {
     type,
-    snapToCellsMode,
+    snapToCellsMode: snapToCellsMode ?? defaultSnapToCellsMode,
     viewOffset,
     groupOrientation,
     isGroupByDate,
