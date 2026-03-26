@@ -24,7 +24,7 @@ test.describe('DataGrid - contrast', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('DataGrid - Contrast between icons in the Filter Row menu and their background (T1257970)', async ({ page }) => {
+  test.skip('DataGrid - Contrast between icons in the Filter Row menu and their background doesn\'t comply with WCAG accessibility standards', async ({ page }) => {
     // TODO: Playwright migration - filter menu button not visible (requires hover before click)
     await createWidget(page, 'dxDataGrid', {
       dataSource: getData(3, 3),
@@ -42,7 +42,7 @@ test.describe('DataGrid - contrast', () => {
     });
   });
 
-  test('DataGrid - Filter icon should remain visible when it is focused (T1286345)', async ({ page }) => {
+  test('DataGrid - Filter icon should remain visible when it\'s focused', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: getData(3, 3),
       filterRow: { visible: true },

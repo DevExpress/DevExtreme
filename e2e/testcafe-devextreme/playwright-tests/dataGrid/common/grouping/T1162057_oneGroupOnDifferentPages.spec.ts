@@ -14,7 +14,7 @@ test.describe('Grouping Panel - One group on different pages', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Group panel restored from cache and ends at the next page (T1162057)', async ({ page }) => {
+  test('Group panel restored from cache and ends at the next page', async ({ page }) => {
     const data = Array.from({ length: 50 }, (_, i) => ({
       id: i,
       name: `Item ${i}`,

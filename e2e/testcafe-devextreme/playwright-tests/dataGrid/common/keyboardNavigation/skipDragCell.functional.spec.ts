@@ -14,7 +14,7 @@ test.describe('Keyboard Navigation - skip drag cell', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('The drag cell should be skipped when navigating from the header cell by tab keypress (T1147695)', async ({ page }) => {
+  test('The drag cell should be skipped when navigating from the header cell by tab keypress', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: [
         { id: 1, name: 'Item 1' },

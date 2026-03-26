@@ -14,7 +14,7 @@ test.describe('initNewRow', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('No errors should be thrown if inserting new row after cancelling insert on second page (T1274123)', async ({ page }) => {
+  test('No errors should be thrown if inserting new row after cancelling insert on second page', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: [...new Array(40)].map((_, index) => ({ id: index + 1, text: `item ${index + 1}` })),
       keyExpr: 'id',

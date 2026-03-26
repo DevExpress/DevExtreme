@@ -15,7 +15,7 @@ test.describe('Band sticky columns', () => {
   });
 
   [false, true].forEach((rtlEnabled) => {
-    test(`Headers and filter row should display correctly after scrolling to the max right position when there is a grouped column (rtl=${rtlEnabled}) (T1279722)`, async ({ page }) => {
+    test(`Headers and filter row should display correctly after scrolling to the max right position when there is a grouped column (rtl=${rtlEnabled})`, async ({ page }) => {
       await createWidget(page, 'dxDataGrid', {
         dataSource: [
           {

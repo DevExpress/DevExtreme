@@ -14,7 +14,7 @@ test.describe('Editing - cell focus', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Should allow focus next editor in the same column after save changes with local data source (T1154721)', async ({ page }) => {
+  test('Should allow focus next editor in the same column after save changes with local data source', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       keyExpr: 'id',
       dataSource: [{
