@@ -24,11 +24,11 @@ const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 485;
 
 const DAY_IN_MS = dateUtils.dateToMilliseconds('day');
 
-export const ACTION_TO_APPOINTMENT = {
-  CREATE: 0,
-  UPDATE: 1,
-  EXCLUDE_FROM_SERIES: 2,
-};
+export interface AppointmentPopupConfig {
+  onDone: (appointment: Record<string, unknown>) => PromiseLike<unknown>;
+  title: string;
+  readOnly: boolean;
+}
 
 export class AppointmentPopup {
   scheduler: any;
@@ -40,6 +40,8 @@ export class AppointmentPopup {
   private customPopupOptions?: PopupProperties;
 
   state: any;
+
+  private config!: AppointmentPopupConfig;
 
   get popup(): dxPopup {
     return this._popup as dxPopup;
@@ -54,7 +56,6 @@ export class AppointmentPopup {
     this.form = form;
 
     this.state = {
-      action: null,
       lastEditData: null,
       saveChangesLocker: false,
       appointment: {
@@ -63,11 +64,9 @@ export class AppointmentPopup {
     };
   }
 
-  show(appointment, config) {
+  show(appointment, config: AppointmentPopupConfig) {
     this.state.appointment.data = appointment;
-    this.state.action = config.action;
-    this.state.allowSaving = config.allowSaving;
-    this.state.excludeInfo = config.excludeInfo;
+    this.config = config;
 
     this.disposePopup();
 
@@ -173,16 +172,8 @@ export class AppointmentPopup {
     });
   }
 
-  private isReadOnly(appointmentAdapter: AppointmentAdapter): boolean {
-    if (Boolean(appointmentAdapter.source) && appointmentAdapter.disabled) {
-      return true;
-    }
-
-    if (this.state.action === ACTION_TO_APPOINTMENT.CREATE) {
-      return false;
-    }
-
-    return !this.scheduler.getEditingConfig().allowUpdating;
+  private isReadOnly(): boolean {
+    return this.config.readOnly;
   }
 
   private createAppointmentAdapter(rawAppointment): AppointmentAdapter {
@@ -200,7 +191,7 @@ export class AppointmentPopup {
 
     const formData = this.createFormData(appointmentAdapter);
 
-    this.form.readOnly = this.isReadOnly(appointmentAdapter);
+    this.form.readOnly = this.isReadOnly();
     this.form.formData = formData;
 
     this.form.showMainGroup();
@@ -286,20 +277,7 @@ export class AppointmentPopup {
 
       const appointment = clonedAdapter.source;
 
-      switch (this.state.action) {
-        case ACTION_TO_APPOINTMENT.CREATE:
-          this.scheduler.addAppointment(appointment).done(deferred.resolve);
-          break;
-        case ACTION_TO_APPOINTMENT.UPDATE:
-          this.scheduler.updateAppointment(this.state.appointment.data, appointment).done(deferred.resolve);
-          break;
-        case ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES:
-          this.scheduler.updateAppointment(this.state.excludeInfo.sourceAppointment, this.state.excludeInfo.updatedAppointment);
-          this.scheduler.addAppointment(appointment).done(deferred.resolve);
-          break;
-        default:
-          break;
-      }
+      when(this.config.onDone(appointment)).done(deferred.resolve);
 
       deferred.done(() => {
         hideLoading();
@@ -413,13 +391,10 @@ export class AppointmentPopup {
       return;
     }
 
-    const isCreating = this.state.action === ACTION_TO_APPOINTMENT.CREATE;
-    const formTitleKey = isCreating ? 'dxScheduler-newPopupTitle' : 'dxScheduler-editPopupTitle';
-
     const toolbarItems: ToolbarItem[] = [{
       toolbar: 'top',
       location: 'before',
-      text: messageLocalization.format(formTitleKey),
+      text: this.config.title,
       cssClass: 'dx-toolbar-label',
     }];
 
