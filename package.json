@@ -16,6 +16,7 @@
     "regenerate-all": "nx run-many -t regenerate",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
+    "all:set-timestamp-version": "ts-node tools/scripts/set-timestamp-version.ts",
     "all:update-version": "ts-node tools/scripts/update-version.ts",
     "all:build": "ts-node tools/scripts/build-all.ts",
     "all:build-dev": "pnpm run all:build --dev",
