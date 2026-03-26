@@ -39,6 +39,23 @@ export async function clearTestPage(page: Page): Promise<void> {
   await removeStylesheetRulesFromPage(page);
 }
 
+const TARGET_CONTENT_WIDTH = 1184;
+
+export async function adjustViewportForContent(page: Page): Promise<void> {
+  const currentContentWidth = await page.evaluate(
+    () => document.body.clientWidth,
+  );
+
+  if (currentContentWidth === TARGET_CONTENT_WIDTH) return;
+
+  const current = page.viewportSize();
+  if (!current) return;
+
+  const diff = TARGET_CONTENT_WIDTH - currentContentWidth;
+  await page.setViewportSize({ width: current.width + diff, height: current.height });
+  await page.waitForTimeout(100);
+}
+
 export async function setupTestPage(page: Page, containerUrl: string, theme = 'fluent.blue.light'): Promise<void> {
   await page.goto(containerUrl);
   await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
@@ -48,6 +65,8 @@ export async function setupTestPage(page: Page, containerUrl: string, theme = 'f
   }), theme);
 
   await page.addStyleTag({
-    content: '*, *::before, *::after { caret-color: transparent !important; } html { overflow-y: scroll; scrollbar-gutter: stable; } ::-webkit-scrollbar { width: 15px !important; background: transparent !important; } ::-webkit-scrollbar-thumb { background: transparent !important; }',
+    content: '*, *::before, *::after { caret-color: transparent !important; }',
   });
+
+  await adjustViewportForContent(page);
 }
