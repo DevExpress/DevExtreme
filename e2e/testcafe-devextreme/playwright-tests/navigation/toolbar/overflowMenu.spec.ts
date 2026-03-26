@@ -59,7 +59,7 @@ test.describe('Toolbar_OverflowMenu', () => {
     await testScreenshot(page, 'Toolbar overflow ButtonGroup item hovered.png');
   });
 
-  test('Click on overflow button should prevent popup hideOnOutsideClick', async ({ page }) => {
+  test("Click on overflow button should prevent popup's hideOnOutsideClick", async ({ page }) => {
     await createWidget(page, 'dxToolbar', {
       items: [
         { text: 'item1', locateInMenu: 'always' },

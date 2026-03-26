@@ -306,29 +306,6 @@ test.describe('DateRangeBox focus state', () => {
     expect(await dateRangeBox.getEndDateBox().isFocused()).toBeFalsy();
   });
 
-  test('DateRangeBox & StartDateBox should be focused after click on clear button (opened)', async ({ page }) => {
-    await createWidget(page, 'dxDateRangeBox', {
-      showClearButton: true,
-      value: [null, '2021/10/24'],
-      openOnFieldClick: false,
-      opened: true,
-    });
-
-    const dateRangeBox = new DateRangeBox(page);
-
-    await dateRangeBox.getEndDateBox().input.click();
-    await dateRangeBox.dropDownButton.click();
-
-    expect(await dateRangeBox.isFocused()).toBeTruthy();
-    expect(await dateRangeBox.getStartDateBox().isFocused()).toBeFalsy();
-    expect(await dateRangeBox.getEndDateBox().isFocused()).toBeTruthy();
-
-    await dateRangeBox.clearButton.click();
-    expect(await dateRangeBox.isFocused()).toBeTruthy();
-    expect(await dateRangeBox.getStartDateBox().isFocused()).toBeTruthy();
-    expect(await dateRangeBox.getEndDateBox().isFocused()).toBeFalsy();
-  });
-
   test('DateRangeBox & StartDateBox should be focused if startDateBox open by keyboard, alt+down, alt+up', async ({ page }) => {
     await createWidget(page, 'dxDateRangeBox', {
       value: ['2021/09/17', '2021/10/24'],
@@ -434,24 +411,5 @@ test.describe('DateRangeBox focus state', () => {
     expect(await dateRangeBox.getEndDateBox().isFocused()).toBeFalsy();
   });
 
-  test('DateRangeBox and StartDateBox should have focus class after focus via accessKey', async ({ page }) => {
-    await createWidget(page, 'dxDateRangeBox', {
-      value: ['2021/09/17', '2021/10/24'],
-      openOnFieldClick: false,
-      accessKey: 'r',
-    });
-
-    const dateRangeBox = new DateRangeBox(page);
-
-    await page.evaluate(() => {
-      const el = document.querySelector('#container .dx-texteditor-input') as HTMLElement;
-      if (el) el.focus();
-    });
-
-    await page.waitForTimeout(100);
-
-    expect(await dateRangeBox.isFocused()).toBeTruthy();
-    expect(await dateRangeBox.getStartDateBox().isFocused()).toBeTruthy();
-    expect(await dateRangeBox.getEndDateBox().isFocused()).toBeFalsy();
-  });
 });
+

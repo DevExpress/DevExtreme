@@ -145,4 +145,156 @@ test.describe('ChatMessageList', () => {
 
     await testScreenshot(page, 'Messagelist with message template and deleted messages.png', { element: '#container' });
   });
+
+  test('Messagelist with messageTemplate', async ({ page }) => {
+    const userFirst = createUser(1, 'First');
+    const userSecond = createUser(2, 'Second');
+    const items = [{
+      author: userFirst,
+      text: 'AAA',
+    }, {
+      author: userFirst,
+      text: 'BBB',
+    }, {
+      author: userSecond,
+      text: 'CCC',
+    }];
+
+    await createWidget(page, 'dxChat', {
+      items,
+      user: userFirst,
+      width: 400,
+      height: 600,
+      showDayHeaders: false,
+      onMessageEntered: ({ component, message }: any) => {
+        message.timestamp = undefined;
+        component.renderMessage(message);
+      },
+      messageTemplate: ({ message }: any, container: any) => {
+        $('<div>').text(`${message.author.name} says: ${message.text}`).appendTo(container);
+      },
+    });
+
+    const chat = new Chat(page);
+
+    await testScreenshot(page, 'Messagelist with message template.png', { element: '#container' });
+
+    await chat.getInput().fill('New last message');
+    await page.keyboard.press('Enter');
+
+    await testScreenshot(page, 'Messagelist with message template after new message add.png', { element: '#container' });
+  });
+
+  test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp set to false work', async ({ page }) => {
+    const userFirst = createUser(1, 'First');
+    const userSecond = createUser(2, 'Second');
+    const items = [{
+      author: userFirst,
+      text: 'AAA',
+    }, {
+      author: userFirst,
+      text: 'BBB',
+    }, {
+      author: userSecond,
+      text: 'CCC',
+    }];
+
+    await createWidget(page, 'dxChat', {
+      items,
+      user: userFirst,
+      width: 400,
+      height: 600,
+      showDayHeaders: false,
+      showUserName: false,
+      showMessageTimestamp: false,
+    });
+
+    await testScreenshot(page, 'Messagelist with showDayHeaders showUserName and showMessageTimestamp options set to false.png', { element: '#container' });
+  });
+
+  test('Message list with editing context menu', async ({ page }) => {
+    const userFirst = createUser(1, 'First');
+    const userSecond = createUser(2, 'Second');
+
+    const items = [
+      { author: userFirst, text: 'AAA' },
+      { author: userFirst, text: 'BBB' },
+      { author: userSecond, text: 'CCC' },
+    ];
+
+    await createWidget(page, 'dxChat', {
+      items,
+      editing: {
+        allowUpdating: true,
+        allowDeleting: true,
+      },
+      user: userSecond,
+      width: 400,
+      height: 600,
+      showDayHeaders: false,
+    });
+
+    const chat = new Chat(page);
+
+    await chat.rightClick(chat.getMessage(2));
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+
+    await testScreenshot(page, 'Messagelist with editing context menu.png', { element: '#container' });
+  });
+
+  test('Messagelist with date headers', async ({ page }) => {
+    const userFirst = createUser(1, 'First');
+    const userSecond = createUser(2, 'Second');
+    const msInDay = 86400000;
+    const today = new Date('2024/10/27').setHours(7, 22, 0, 0);
+    const yesterday = today - msInDay;
+
+    const items = [{
+      timestamp: new Date('05.01.2024'),
+      author: userFirst,
+      text: 'AAA',
+    }, {
+      timestamp: new Date('06.01.2024'),
+      author: userFirst,
+      text: 'BBB',
+    }, {
+      timestamp: new Date('06.01.2024'),
+      author: userSecond,
+      text: 'CCC',
+    }, {
+      timestamp: new Date(yesterday),
+      author: userSecond,
+      text: 'DDD',
+    }, {
+      timestamp: new Date(today),
+      author: userFirst,
+      text: 'EEE',
+    }];
+
+    await page.addInitScript({ content: `
+      const OrigDate = Date;
+      const MOCK_NOW = new OrigDate('2024/10/27').getTime();
+      class MockDate extends OrigDate {
+        constructor(...args) {
+          if (args.length === 0) {
+            super(MOCK_NOW);
+          } else {
+            super(...args);
+          }
+        }
+        static now() { return MOCK_NOW; }
+      }
+      window.Date = MockDate;
+    ` });
+
+    await createWidget(page, 'dxChat', {
+      items,
+      user: userSecond,
+      width: 400,
+      height: 600,
+    });
+
+    await testScreenshot(page, 'Messagelist with date headers.png', { element: '#container' });
+  });
 });

@@ -14,7 +14,7 @@ test.describe('Selection', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('TreeList with selection and boolean data in first column should render right (T1109666)', async ({ page }) => {
+  test('TreeList with selection and boolean data in first column should render right', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
       dataSource: [
         { id: 1, parentId: 0, value: true, value1: 'text' },
@@ -45,7 +45,7 @@ test.describe('Selection', () => {
     await testScreenshot(page, 'T1109666-selection', { element: treeList });
   });
 
-  test.skip('TreeList restore selection after the search panel has cleared (T1264312)', async ({ page }) => {
+  test.skip('TreeList restore selection after the search panel has cleared', async ({ page }) => {
     const tasksData = [
       {
         Task_ID: 1, Task_Subject: 'Plans 2015', Task_Parent_ID: 0,

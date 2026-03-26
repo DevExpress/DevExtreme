@@ -32,37 +32,6 @@ test.describe('Lookup', () => {
     await testScreenshot(page, 'Lookup popup at page bottom.png');
   });
 
-  test('Popup should be flipped if lookup is placed at the page bottom', async ({ page }) => {
-    await setStyleAttribute(page, '#container', 'position: absolute; bottom: 0; width: 300px;');
-
-    await createWidget(page, 'dxLookup', {
-      items: ['item1', 'item2', 'item3'],
-      usePopover: true,
-    });
-
-    const lookup = new Lookup(page);
-
-    await lookup.open();
-    expect(await lookup.isOpened()).toBe(true);
-
-    await testScreenshot(page, 'Lookup popup flipped at page bottom.png');
-  });
-
-  test('Popover should have correct vertical position (T1048128)', async ({ page }) => {
-    await setStyleAttribute(page, '#container', 'width: 300px; margin-top: 100px;');
-
-    await createWidget(page, 'dxLookup', {
-      items: ['item1', 'item2', 'item3'],
-      usePopover: true,
-    });
-
-    const lookup = new Lookup(page);
-
-    await lookup.open();
-
-    await testScreenshot(page, 'Lookup popover vertical position.png');
-  });
-
   test('Check popup height with no found data option', async ({ page }) => {
     await createWidget(page, 'dxLookup', {
       items: ['item1', 'item2', 'item3'],

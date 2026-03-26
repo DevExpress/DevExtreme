@@ -169,7 +169,7 @@ test.describe('Icons', () => {
     tableoptions: '\f095',
   };
 
-  test('Font icon set', async ({ page }) => {
+  test('Icon set', async ({ page }) => {
     await page.evaluate(({ iconSetData, iconClass }) => {
       const container = document.querySelector('#container');
       if (!container) return;

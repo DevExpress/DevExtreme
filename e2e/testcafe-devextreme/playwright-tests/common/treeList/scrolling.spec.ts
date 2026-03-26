@@ -14,7 +14,7 @@ test.describe('Virtual Scrolling', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('The vertical scroll bar of the container\'s parent should not be displayed when the grid has no height, virtual scrolling and state storing are enabled (T1129106)', async ({ page }) => {
+  test.skip('The vertical scroll bar of the container\'s parent should not be displayed when the grid has no height, virtual scrolling and state storing are enabled', async ({ page }) => {
     const data = Array.from({ length: 100 }, (_, i) => ({
       id: i + 1,
       parentId: i === 0 ? 0 : 1,
@@ -49,7 +49,7 @@ test.describe('Virtual Scrolling', () => {
     expect(parentScrollHeight).toBeLessThanOrEqual(parentClientHeight + 1);
   });
 
-  test('All items should be selected after select all and scroll down (T1189118)', async ({ page }) => {
+  test('All items should be selected after select all and scroll down', async ({ page }) => {
     const data = Array.from({ length: 50 }, (_, i) => ({
       id: i + 1,
       parentId: 0,

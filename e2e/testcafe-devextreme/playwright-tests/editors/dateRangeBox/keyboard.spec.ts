@@ -782,12 +782,12 @@ test.describe('DateRangeBox keyboard navigation', () => {
   });
 
   [
-    { key: 'ArrowLeft', offsetInDays: -1 },
-    { key: 'ArrowRight', offsetInDays: 1 },
-    { key: 'ArrowUp', offsetInDays: -7 },
-    { key: 'ArrowDown', offsetInDays: 7 },
-  ].forEach(({ key, offsetInDays }) => {
-    test(`DateRangeBox start value should be changed after after opening and navigation by '${key}' key and click on 'enter' key`, async ({ page }) => {
+    { key: 'ArrowLeft', keyName: 'left', offsetInDays: -1 },
+    { key: 'ArrowRight', keyName: 'right', offsetInDays: 1 },
+    { key: 'ArrowUp', keyName: 'up', offsetInDays: -7 },
+    { key: 'ArrowDown', keyName: 'down', offsetInDays: 7 },
+  ].forEach(({ key, keyName, offsetInDays }) => {
+    test(`DateRangeBox start value should be changed after after opening and navigation by '${keyName}' key and click on 'enter' key`, async ({ page }) => {
       await createWidget(page, 'dxDateRangeBox', {
         value: initialValue,
         openOnFieldClick: false,
