@@ -13,7 +13,7 @@ interface ViewConfig {
   snapToCellsMode: SnapToCellsMode;
 }
 
-const configByView: Record<ViewType, ViewConfig> = {
+const configByView: Record<Exclude<ViewType, 'agenda'>, ViewConfig> = {
   day: {
     isTimelineView: false, isMonthView: false, viewOrientation: 'vertical', snapToCellsMode: 'never',
   },
@@ -37,9 +37,6 @@ const configByView: Record<ViewType, ViewConfig> = {
   },
   timelineMonth: {
     isTimelineView: true, isMonthView: true, viewOrientation: 'horizontal', snapToCellsMode: 'always',
-  },
-  agenda: {
-    isTimelineView: false, isMonthView: false, viewOrientation: 'vertical', snapToCellsMode: 'always',
   },
 };
 
