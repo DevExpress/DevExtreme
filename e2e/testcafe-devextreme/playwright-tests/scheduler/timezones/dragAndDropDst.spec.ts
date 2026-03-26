@@ -126,6 +126,25 @@ const ALL_TEST_CASES = [
   ...OFFSET_TEST_CASES,
 ];
 
+interface TcTestCase {
+  timezone: MachineTimezonesType;
+  season: string;
+  offset: number;
+  testCase: TestCase;
+}
+
+const TC_NAMED_TEST_CASES: TcTestCase[] = [
+  { timezone: MACHINE_TIMEZONES.AmericaLosAngeles, season: 'summer', offset: -360, testCase: LOS_ANGELES_SUMMER_CASE_OFFSET },
+  { timezone: MACHINE_TIMEZONES.AmericaLosAngeles, season: 'summer', offset: 0, testCase: LOS_ANGELES_SUMMER_CASE },
+  { timezone: MACHINE_TIMEZONES.AmericaLosAngeles, season: 'summer', offset: 360, testCase: LOS_ANGELES_SUMMER_CASE_OFFSET },
+  { timezone: MACHINE_TIMEZONES.EuropeBerlin, season: 'summer', offset: -360, testCase: BERLIN_SUMMER_CASE_OFFSET },
+  { timezone: MACHINE_TIMEZONES.EuropeBerlin, season: 'summer', offset: 0, testCase: BERLIN_SUMMER_CASE },
+  { timezone: MACHINE_TIMEZONES.EuropeBerlin, season: 'summer', offset: 360, testCase: BERLIN_SUMMER_CASE_OFFSET },
+  { timezone: MACHINE_TIMEZONES.EuropeBerlin, season: 'winter', offset: -360, testCase: BERLIN_WINTER_CASE },
+  { timezone: MACHINE_TIMEZONES.EuropeBerlin, season: 'winter', offset: 0, testCase: BERLIN_WINTER_CASE },
+  { timezone: MACHINE_TIMEZONES.EuropeBerlin, season: 'winter', offset: 360, testCase: BERLIN_WINTER_CASE },
+];
+
 ([
   MACHINE_TIMEZONES.EuropeBerlin,
   MACHINE_TIMEZONES.AmericaLosAngeles,
@@ -153,6 +172,62 @@ const ALL_TEST_CASES = [
       }, idx) => {
         test(`Should drag-n-drop appointment correctly during around DST (${timezone}, ${season}, ${offset}, #${idx})`, async ({ page }) => {
           // TODO: Playwright migration - DST spring-forward causes appointment height to double (50px) when dropped at 01:00 AM on transition day; test expects constant initialHeight
+          test.skip(skipInPlaywright === true && offset !== 360, 'Playwright drag-and-drop produces incorrect appointment height during DST spring-forward transition');
+          await insertStylesheetRulesToPage(page, CUSTOM_CSS);
+
+          const dataSource = [getAppointmentFromStartDate(startDate, offset)];
+          await createWidget(page, 'dxScheduler', {
+            timeZone: timezone,
+            dataSource,
+            currentView: 'week',
+            currentDate,
+            offset,
+            showCurrentTimeIndicator: false,
+            showAllDayPanel: false,
+            firstDayOfWeek: 4,
+            cellDuration: 60,
+            height: 800,
+          });
+
+          const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: APPOINTMENT_TEXT });
+          const initialHeight = await appointment.evaluate((el) => el.getBoundingClientRect().height);
+          const [[firstCellRowIdx, firstCellColIdx]] = cellIdxArray;
+          const firstCell = page.locator('.dx-scheduler-date-table-row').nth(firstCellRowIdx)
+            .locator('.dx-scheduler-date-table-cell').nth(firstCellColIdx);
+          const firstCellTop = await firstCell.evaluate((el) => el.getBoundingClientRect().top);
+
+          for (let i = 0; i < cellIdxArray.length; i += 1) {
+            const [rowIdx, colIdx] = cellIdxArray[i];
+            const cell = page.locator('.dx-scheduler-date-table-row').nth(rowIdx)
+              .locator('.dx-scheduler-date-table-cell').nth(colIdx);
+
+            await appointment.dragTo(cell, { force: true });
+
+            const currentHeight = await appointment.evaluate((el) => el.getBoundingClientRect().height);
+            const currentTop = await appointment.evaluate((el) => el.getBoundingClientRect().top);
+            const relativeTop = currentTop - firstCellTop;
+
+            expect(currentHeight).toBe(initialHeight);
+            expect(relativeTop).toBe(expectedTopPosition[i]);
+          }
+        });
+      });
+
+    TC_NAMED_TEST_CASES
+      .filter(({ timezone }) => timezone === tz)
+      .forEach(({
+        timezone,
+        season,
+        offset,
+        testCase: {
+          currentDate,
+          startDate,
+          cellIdxArray,
+          expectedTopPosition,
+          skipInPlaywright,
+        },
+      }) => {
+        test(`Should drag-n-drop appointment correctly during around DST (${timezone}, ${season}, ${offset})`, async ({ page }) => {
           test.skip(skipInPlaywright === true && offset !== 360, 'Playwright drag-and-drop produces incorrect appointment height during DST spring-forward transition');
           await insertStylesheetRulesToPage(page, CUSTOM_CSS);
 

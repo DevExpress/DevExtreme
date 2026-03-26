@@ -174,5 +174,36 @@ const ALL_CASES = [
         );
       });
     });
+
+    ALL_CASES.filter((c) => c.timezone === tz).forEach(({
+      timezone,
+      caseName,
+      currentDate,
+      dataSource,
+    }) => {
+      test(`Should correctly render appointments with local machine date crossing DST (${timezone}, ${caseName})`, async ({ page }) => {
+        const currentView = 'week';
+        const offset = 0;
+        await insertStylesheetRulesToPage(page, CUSTOM_CSS);
+        await createWidget(page, 'dxScheduler', {
+          dataSource,
+          currentView,
+          currentDate,
+          offset,
+          showCurrentTimeIndicator: false,
+          firstDayOfWeek: 4,
+          cellDuration: 60,
+          height: 800,
+        });
+
+        const workSpace = page.locator('.dx-scheduler-work-space');
+        const timezoneName = normalizeTimezoneName(timezone);
+        await testScreenshot(
+          page,
+          `${currentView}_appts-render-cross-dts_t-${timezoneName}-${caseName}_offset-${offset}.png`,
+          { element: workSpace },
+        );
+      });
+    });
   });
 });
