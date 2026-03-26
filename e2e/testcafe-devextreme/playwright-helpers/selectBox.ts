@@ -6,7 +6,7 @@ const CLASS = {
   list: 'dx-list',
   focused: 'dx-state-focused',
   invisible: 'dx-state-invisible',
-  actionButton: 'dx-texteditor-button-container',
+  actionButton: 'dx-texteditor-buttons-container',
   button: 'dx-button',
 } as const;
 

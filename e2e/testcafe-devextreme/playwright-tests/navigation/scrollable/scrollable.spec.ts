@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, appendElementTo } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, appendElementTo, Scrollable } from '../../../playwright-helpers';
 import path from 'path';
+
+let _guidCounter = 0;
+class Guid { toString() { return `guid${Date.now()}${++_guidCounter}`; } }
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
 
@@ -78,7 +81,7 @@ test.describe('Scrollable_ScrollToElement', () => {
               showScrollbar: 'always',
             }, `#${id}`);
 
-            const scrollable = new Scrollable(`#${id}`, { useNative, direction });
+            const scrollable = new Scrollable(page, `#${id}`, { useNative, direction });
 
             await scrollable.scrollTo(initialScrollOffset);
             await scrollable.scrollToElement(`#${id}element`);
@@ -160,7 +163,7 @@ test.describe('Scrollable_ScrollToElement', () => {
               rtlEnabled,
             }, `#${id}`);
 
-            const scrollable = new Scrollable(`#${id}`, { useNative, direction });
+            const scrollable = new Scrollable(page, `#${id}`, { useNative, direction });
 
             await scrollable.scrollTo(initialScrollOffset);
             await scrollable.scrollToElement(`#${id}element`);
@@ -232,7 +235,7 @@ test.describe('Scrollable_ScrollToElement', () => {
               rtlEnabled,
             }, `#${id}`);
 
-            const scrollable = new Scrollable(`#${id}`, { useNative, direction });
+            const scrollable = new Scrollable(page, `#${id}`, { useNative, direction });
 
             await scrollable.scrollTo(initialScrollOffset);
             await scrollable.scrollToElement(`#${id}element`);
@@ -267,7 +270,7 @@ test.describe('Scrollable_ScrollToElement', () => {
           }, '#scrollable');
 
 
-          const scrollable = new Scrollable('#scrollable', { direction, useNative, useSimulatedScrollbar });
+          const scrollable = new Scrollable(page, '#scrollable', { direction, useNative, useSimulatedScrollbar });
 
           await scrollable.setContainerCssWidth(75);
 
@@ -335,7 +338,7 @@ test.describe('Scrollable_ScrollToElement', () => {
             }, '#scrollable');
 
 
-            const scrollable = new Scrollable('#scrollable', { direction, useNative, useSimulatedScrollbar });
+            const scrollable = new Scrollable(page, '#scrollable', { direction, useNative, useSimulatedScrollbar });
 
             await scrollable.scrollTo({ left: 50 - scrollOffset });
             await scrollable.update();
@@ -415,7 +418,7 @@ test.describe('Scrollable_ScrollToElement', () => {
             }, '#scrollable');
 
 
-            const scrollable = new Scrollable('#scrollable', { direction, useNative, useSimulatedScrollbar });
+            const scrollable = new Scrollable(page, '#scrollable', { direction, useNative, useSimulatedScrollbar });
 
             await scrollable.scrollTo({ left: scrollOffset });
             await scrollable.update();

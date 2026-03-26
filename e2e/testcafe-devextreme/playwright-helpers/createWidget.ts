@@ -39,4 +39,14 @@ export async function createWidget(
     $('${selector}')['${widgetName}'](${optionsStr});
   `;
   await page.evaluate(script);
+
+  await page.evaluate(() => {
+    document.querySelectorAll('dx-license').forEach((el) => {
+      const btn = el.querySelector('div[style*="cursor: pointer"]') as HTMLElement | null;
+      if (btn) btn.click();
+    });
+    if (document.activeElement && document.activeElement !== document.body) {
+      (document.activeElement as HTMLElement).blur();
+    }
+  });
 }

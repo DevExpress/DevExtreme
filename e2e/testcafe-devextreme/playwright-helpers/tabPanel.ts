@@ -2,7 +2,7 @@ import type { Page, Locator } from '@playwright/test';
 
 const CLASS = {
   tabs: 'dx-tabs',
-  multiView: 'dx-multiview',
+  multiView: 'dx-multiview-wrapper',
   tab: 'dx-tab',
   multiViewItem: 'dx-multiview-item',
   focused: 'dx-state-focused',
