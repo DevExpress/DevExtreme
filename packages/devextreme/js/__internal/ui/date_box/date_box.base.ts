@@ -788,8 +788,11 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
   _getSerializationFormat(): string | undefined {
     const { value, dateSerializationFormat } = this.option();
 
-    if (dateSerializationFormat && config().forceIsoDateParsing) {
-      return dateSerializationFormat;
+    const effectiveDateSerializationFormat = (
+      dateSerializationFormat ?? config().dateSerializationFormat
+    );
+    if (effectiveDateSerializationFormat && config().forceIsoDateParsing) {
+      return effectiveDateSerializationFormat;
     }
 
     if (isNumeric(value)) {

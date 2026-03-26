@@ -8,6 +8,7 @@ import { getFormat as getLDMLDateFormat } from '@ts/core/localization/ldml/date.
 import { getFormatter as getLDMLDateFormatter } from '@ts/core/localization/ldml/date.formatter';
 import { getParser as getLDMLDateParser } from '@ts/core/localization/ldml/date.parser';
 import numberLocalization from '@ts/core/localization/number';
+import config from '@ts/core/m_config';
 import errors from '@ts/core/m_errors';
 import { injector as dependencyInjector } from '@ts/core/utils/m_dependency_injector';
 import { each } from '@ts/core/utils/m_iterator';
@@ -55,11 +56,27 @@ const possiblePartPatterns = {
   milliseconds: ['S', 'SS', 'SSS'],
 };
 
+const getGlobalDateFormatOverride = (
+  format: string,
+): string | ((value: Date) => string) | undefined => {
+  const globalDateFormats = config().dateFormats;
+  if (!globalDateFormats) {
+    return undefined;
+  }
+  const lowerFormat = format.toLowerCase();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return globalDateFormats[format] ?? globalDateFormats[lowerFormat];
+};
+
 const dateLocalization = dependencyInjector({
   engine(): string {
     return 'base';
   },
   _getPatternByFormat(format: string): string | undefined {
+    const globalOverride = getGlobalDateFormatOverride(format);
+    if (typeof globalOverride === 'string') {
+      return globalOverride;
+    }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return FORMATS_TO_PATTERN_MAP[format.toLowerCase()];
   },
@@ -139,8 +156,14 @@ const dateLocalization = dependencyInjector({
       // eslint-disable-next-line no-param-reassign
       format = (format as FormatObject).type ?? format;
       if (isString(format)) {
+        const globalOverride = getGlobalDateFormatOverride(format as string);
+        if (typeof globalOverride === 'function') {
+          return globalOverride(date);
+        }
         // eslint-disable-next-line no-param-reassign
-        format = (FORMATS_TO_PATTERN_MAP[(format as string).toLowerCase()] || format) as string;
+        format = (
+          globalOverride ?? FORMATS_TO_PATTERN_MAP[(format as string).toLowerCase()] ?? format
+        ) as string;
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return numberLocalization.convertDigits(getLDMLDateFormatter(format, this)(date));
@@ -176,9 +199,16 @@ const dateLocalization = dependencyInjector({
       return (format.parser as DateParser)(text);
     }
 
-    if (typeof format === 'string' && !FORMATS_TO_PATTERN_MAP[format.toLowerCase()]) {
-      ldmlFormat = format;
-    } else {
+    if (typeof format === 'string') {
+      const globalOverride = getGlobalDateFormatOverride(format);
+      if (typeof globalOverride === 'string') {
+        ldmlFormat = globalOverride;
+      } else if (!FORMATS_TO_PATTERN_MAP[format.toLowerCase()] && !globalOverride) {
+        ldmlFormat = format;
+      }
+    }
+
+    if (!ldmlFormat) {
       formatter = (value: Date): string => {
         // eslint-disable-next-line @typescript-eslint/no-shadow
         const text: string = that.format(value, format);

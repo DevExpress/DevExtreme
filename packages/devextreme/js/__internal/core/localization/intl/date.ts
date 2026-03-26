@@ -2,6 +2,7 @@
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
 import localizationCoreUtils from '@ts/core/localization/core';
 import type { DateFormatter, Format } from '@ts/core/localization/date';
+import config from '@ts/core/m_config';
 import { extend } from '@ts/core/utils/m_extend';
 
 interface DateArgs {
@@ -140,8 +141,20 @@ Object.defineProperty(intlFormats, 'shortdateshorttime', {
   },
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-const getIntlFormat = (format): Intl.DateTimeFormatOptions => typeof format === 'string' && intlFormats[format.toLowerCase()];
+const getIntlFormat = (format): Intl.DateTimeFormatOptions | false => {
+  if (typeof format !== 'string') {
+    return false;
+  }
+  const globalDateFormats = config().dateFormats;
+  if (globalDateFormats) {
+    const lowerFormat = format.toLowerCase();
+    if (globalDateFormats[format] || globalDateFormats[lowerFormat]) {
+      return false;
+    }
+  }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return intlFormats[format.toLowerCase()] ?? false;
+};
 
 const monthNameStrategies = {
   standalone(monthIndex: number, monthFormat: Intl.DateTimeFormatOptions['month']): string {

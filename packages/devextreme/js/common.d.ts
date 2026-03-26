@@ -411,6 +411,21 @@ export type GlobalConfig = {
   licenseKey?: string;
   buyNowLink?: string;
   licensingDocLink?: string;
+  /**
+   * @docid
+   * @public
+   * @type object
+   * @default {}
+   */
+  dateFormats?: {
+    [K in Format]?: string | ((value: Date) => string);
+  };
+  /**
+   * @docid
+   * @public
+   * @default undefined
+   */
+  dateSerializationFormat?: string;
 };
 
 /**

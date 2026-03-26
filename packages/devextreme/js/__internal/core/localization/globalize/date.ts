@@ -6,6 +6,7 @@ import 'globalize/date';
 import type { Format as LocalizationFormat, FormatObject } from '@js/localization';
 import type { DateFormatter, DateParser, Format } from '@ts/core/localization/date';
 import dateLocalization from '@ts/core/localization/date';
+import config from '@ts/core/m_config';
 import * as iteratorUtils from '@ts/core/utils/m_iterator';
 import { isObject } from '@ts/core/utils/m_type';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -99,6 +100,15 @@ if (Globalize?.formatDate) {
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       const that = this;
       const lowerFormat = format.toLowerCase();
+
+      const globalDateFormats = config().dateFormats;
+      if (globalDateFormats) {
+        const globalOverride = globalDateFormats[format] ?? globalDateFormats[lowerFormat];
+        if (typeof globalOverride === 'string') {
+          return globalOverride;
+        }
+      }
+
       const globalizeFormat: GlobalizeFormat | undefined = FORMATS_TO_GLOBALIZE_MAP[lowerFormat];
 
       if (lowerFormat === 'datetime-local') {
@@ -186,6 +196,17 @@ if (Globalize?.formatDate) {
       format = (format as FormatObject).type ?? format;
 
       if (typeof format === 'string') {
+        const globalDateFormats = config().dateFormats;
+        if (globalDateFormats) {
+          const globalOverride = (
+            globalDateFormats[format] ?? globalDateFormats[format.toLowerCase()]
+          );
+          if (typeof globalOverride === 'function') {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            return this.removeRtlMarks(globalOverride(date));
+          }
+        }
+
         formatCacheKey = `${Globalize.locale().locale}:${format}`;
         formatter = formattersCache[formatCacheKey];
         if (!formatter) {

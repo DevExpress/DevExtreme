@@ -229,8 +229,12 @@ export const getColumnFormat = (
     return column.format;
   }
 
-  if (column.dataType === 'date' || column.dataType === 'datetime') {
+  if (column.dataType === 'date') {
     return 'shortDate';
+  }
+
+  if (column.dataType === 'datetime') {
+    return 'shortDateShortTime';
   }
 
   return undefined;
