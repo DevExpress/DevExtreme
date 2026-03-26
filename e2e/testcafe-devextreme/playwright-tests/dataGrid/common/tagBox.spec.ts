@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, DataGrid } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -18,8 +18,7 @@ test.describe('Tagbox Columns', () => {
   // visual: material.blue.light
   // visual: fluent.blue.light
 
-  test.skip('Datagrid tagbox column should not look broken', async ({ page }) => {
-    // TODO: Playwright migration - screenshot mismatch
+  test('Datagrid tagbox column should not look broken', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
           showBorders: true,
           allowColumnResizing: true,
@@ -53,7 +52,15 @@ test.describe('Tagbox Columns', () => {
           editing: { mode: 'batch', allowUpdating: true },
         });
 
-      await (page.locator('.dx-data-row').nth(0).locator('td').nth(1)).click();
+    const dataGrid = new DataGrid(page, '#container');
+    await expect(dataGrid.getContainer()).toBeVisible();
+
+    await dataGrid.getDataCell(0, 1).click();
+    await page.waitForTimeout(100);
+
+    const tagBox = page.locator('.dx-tagbox');
+    await expect(tagBox).toBeVisible();
+
     await testScreenshot(page, 'T1228720-grid-tagbox-on-edit.png', { element: page.locator('#container') });
   });
 });

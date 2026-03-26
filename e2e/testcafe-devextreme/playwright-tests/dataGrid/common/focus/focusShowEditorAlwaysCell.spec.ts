@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -14,64 +14,30 @@ test.describe('Focus - cell with showEditorAlways', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
   const SELECTOR = '#container';
-  const OVERLAY_SELECTOR = '.dx-overlay-wrapper';
 
-  const createDataGrid = () => createWidget(page, 'dxDataGrid', {
+  const createDataGrid = async (page: any) => createWidget(page, 'dxDataGrid', {
     dataSource: [
-      {
-        A: 'A_0',
-        B: 'B_0',
-        C: 0,
-        D: 'D_0',
-      },
-      {
-        A: 'A_1',
-        B: 'B_1',
-        C: 1,
-        D: 'D_1',
-      },
-      {
-        A: 'A_2',
-        B: 'B_2',
-        C: 2,
-        D: 'D_2',
-      },
+      { A: 'A_0', B: 'B_0', C: 0, D: 'D_0' },
+      { A: 'A_1', B: 'B_1', C: 1, D: 'D_1' },
+      { A: 'A_2', B: 'B_2', C: 2, D: 'D_2' },
     ],
     columns: [
-      {
-        dataField: 'A',
-        showEditorAlways: true,
-      },
-      {
-        dataField: 'B',
-        showEditorAlways: true,
-      },
+      { dataField: 'A', showEditorAlways: true },
+      { dataField: 'B', showEditorAlways: true },
       {
         dataField: 'C',
         showEditorAlways: true,
         lookup: {
           dataSource: [
-            {
-              id: 0,
-              name: 'LOOKUP_0',
-            },
-            {
-              id: 1,
-              name: 'LOOKUP_1',
-            },
-            {
-              id: 2,
-              name: 'LOOKUP_2',
-            },
+            { id: 0, name: 'LOOKUP_0' },
+            { id: 1, name: 'LOOKUP_1' },
+            { id: 2, name: 'LOOKUP_2' },
           ],
           displayExpr: 'name',
           valueExpr: 'id',
         },
       },
-      {
-        dataField: 'D',
-        showEditorAlways: true,
-      },
+      { dataField: 'D', showEditorAlways: true },
     ],
     editing: {
       mode: 'cell',
@@ -83,19 +49,34 @@ test.describe('Focus - cell with showEditorAlways', () => {
 
   test.skip('Should switch focus after the lookup value change [T1194403]', async ({ page }) => {
     // TODO: Playwright migration - TestCafe API remnants (new List, item.element, lookupCell.element)
-    await createDataGrid();
+    await createDataGrid(page);
 
       const editorTextCell = page.locator('.dx-data-row').nth(0).locator('td').nth(1);
     const lookupCell = page.locator('.dx-data-row').nth(0).locator('td').nth(2).locator('.dx-editor-cell');
 
     await (lookupCell.element).click();
 
-    const list = new List(OVERLAY_SELECTOR);
+    const list = new List(SELECTOR);
     const item = list.getItem(2);
 
     await (item.element).click();
     await (editorTextCell.element).click();
 
     await testScreenshot(page, 'focus-edit-cell_after-lookup-change.png', { element: page.locator('#container') });
+  });
+
+  test('Should switch focus after the textBox value change [T1194403]', async ({ page }) => {
+    await createDataGrid(page);
+
+    const dataGrid = new DataGrid(page, SELECTOR);
+    const editorCellOne = dataGrid.getDataCell(0, 1).locator('input');
+    const editorCellTwo = dataGrid.getDataCell(0, 0).locator('input');
+
+    await editorCellOne.click();
+    await editorCellOne.fill('TEST_TEXT');
+    await editorCellTwo.click();
+    await page.waitForTimeout(100);
+
+    await testScreenshot(page, 'focus-edit-cell_after-text-editor-change.png', { element: page.locator('#container') });
   });
 });

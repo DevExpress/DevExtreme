@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, DataGrid } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -88,5 +88,86 @@ test.describe('Header Panel', () => {
     await t.eql(3);
 
     await testScreenshot(page, 'grid-toolbar-dropdown-menu.png', { element: 'body' });
+  });
+
+  test('Disabled toolbar buttons are not grayed out in Material themes (T1217416)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(5, 3),
+      keyExpr: 'field_0',
+      showBorders: true,
+      toolbar: {
+        items: ['saveButton', 'revertButton', 'applyFilterButton'],
+      },
+      filterRow: { visible: true, applyFilter: 'onClick' },
+      editing: { mode: 'batch', allowUpdating: true },
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+    await expect(dataGrid.getContainer()).toBeVisible();
+
+    await testScreenshot(page, 'disabled-toolbar-buttons.png', { element: page.locator('#container') });
+  });
+
+  test('Toolbar should render on changing visibility if visibility is false initially', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      showBorders: true,
+      toolbar: {
+        items: [{
+          location: 'before',
+          widget: 'dxButton',
+          options: { text: 'myTestButton' },
+        }],
+        visible: false,
+      },
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+
+    const headerPanel = dataGrid.getHeaderPanel();
+    await expect(headerPanel.element).not.toBeVisible();
+
+    await dataGrid.option('toolbar.visible', true);
+    await page.waitForTimeout(100);
+
+    await expect(headerPanel.element).toBeVisible();
+    await expect(headerPanel.element.locator('.dx-button')).toContainText('myTestButton');
+
+    await dataGrid.option('toolbar.visible', false);
+    await page.waitForTimeout(100);
+
+    await expect(headerPanel.element).not.toBeVisible();
+  });
+
+  test('Toolbar should not reset its widget values when changing the disabled property', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      showBorders: true,
+      toolbar: {
+        items: [{ widget: 'dxTextBox' }],
+      },
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+    const textBoxInput = dataGrid.getToolbar().locator('input').first();
+
+    await textBoxInput.fill('test');
+    expect(await textBoxInput.inputValue()).toBe('test');
+
+    await dataGrid.option('toolbar.disabled', false);
+    await page.waitForTimeout(100);
+
+    expect(await textBoxInput.inputValue()).toBe('test');
+  });
+
+  test("Invisible toolbar doesn't have additional paddings (T1261773)", async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(5, 3),
+      keyExpr: 'field_0',
+      toolbar: {
+        items: ['columnChooserButton'],
+        visible: false,
+      },
+    });
+
+    await testScreenshot(page, 'invisible-toolbar-buttons.png');
   });
 });
