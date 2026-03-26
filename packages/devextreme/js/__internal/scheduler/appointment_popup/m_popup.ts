@@ -79,15 +79,15 @@ export class AppointmentPopup {
     this.state.excludeInfo = config.excludeInfo;
 
     if (!this.popup) {
-      const popupConfig = this._createPopupConfig();
-      this.popup = this._createPopup(popupConfig);
+      const popupConfig = this.createPopupConfig();
+      this.popup = this.createPopup(popupConfig);
     }
 
     this.popup.option(
       'toolbarItems',
       getPopupToolbarItems(
         config.isToolbarVisible,
-        (e) => this._doneButtonClickHandler(e),
+        (e) => this.doneButtonClickHandler(e),
       ),
     );
 
@@ -102,7 +102,7 @@ export class AppointmentPopup {
     this.popup?.$element().remove();
   }
 
-  _createPopup(options) {
+  private createPopup(options) {
     const popupElement = $('<div>')
       .addClass(APPOINTMENT_POPUP_CLASS)
       .appendTo(this.scheduler.getElement());
@@ -110,18 +110,18 @@ export class AppointmentPopup {
     return this.scheduler.createComponent(popupElement, Popup, options);
   }
 
-  _createPopupConfig() {
+  private createPopupConfig() {
     return {
       ...POPUP_CONFIG,
       onHiding: () => this.scheduler.focus(),
-      contentTemplate: () => this._createPopupContent(),
-      onShowing: (e) => this._onShowing(e),
+      contentTemplate: () => this.createPopupContent(),
+      onShowing: (e) => this.onShowing(e),
       wrapperAttr: { class: APPOINTMENT_POPUP_CLASS },
     };
   }
 
-  _onShowing(e) {
-    this._updateForm();
+  private onShowing(e) {
+    this.updateForm();
 
     e.component.$overlayContent().attr(
       'aria-label',
@@ -145,13 +145,13 @@ export class AppointmentPopup {
     });
   }
 
-  _createPopupContent() {
-    this._createForm();
+  private createPopupContent() {
+    this.createForm();
     return this.form.dxForm.$element(); // TODO
   }
 
-  _createFormData(rawAppointment) {
-    const appointment = this._createAppointmentAdapter(rawAppointment);
+  private createFormData(rawAppointment) {
+    const appointment = this.createAppointmentAdapter(rawAppointment);
     const resourceManager = this.scheduler.getResourceManager();
     const rawAppointmentGroupValues = getRawAppointmentGroupValues(
       rawAppointment,
@@ -165,15 +165,15 @@ export class AppointmentPopup {
     };
   }
 
-  _createForm() {
+  private createForm() {
     const rawAppointment = this.state.appointment.data;
-    const formData = this._createFormData(rawAppointment);
+    const formData = this.createFormData(rawAppointment);
 
     this.form.create(this.triggerResize.bind(this), this.changeSize.bind(this), formData); // TODO
   }
 
-  _isReadOnly(rawAppointment) {
-    const appointment = this._createAppointmentAdapter(rawAppointment);
+  private isReadOnly(rawAppointment) {
+    const appointment = this.createAppointmentAdapter(rawAppointment);
 
     if (rawAppointment && appointment.disabled) {
       return true;
@@ -186,22 +186,22 @@ export class AppointmentPopup {
     return !this.scheduler.getEditingConfig().allowUpdating;
   }
 
-  _createAppointmentAdapter(rawAppointment) {
+  private createAppointmentAdapter(rawAppointment) {
     return new AppointmentAdapter(
       rawAppointment,
       this.scheduler.getDataAccessors(),
     );
   }
 
-  _updateForm() {
+  private updateForm() {
     const { data } = this.state.appointment;
-    const appointment = this._createFormData(data);
-    const formData = this._createAppointmentAdapter(appointment)
+    const appointment = this.createFormData(data);
+    const formData = this.createAppointmentAdapter(appointment)
       .clone()
       .calculateDates(this.scheduler.getTimeZoneCalculator(), 'toAppointment')
       .source;
 
-    this.form.readOnly = this._isReadOnly(formData);
+    this.form.readOnly = this.isReadOnly(formData);
     this.form.updateFormData(formData);
   }
 
@@ -237,7 +237,7 @@ export class AppointmentPopup {
     const deferred = new Deferred();
     const validation = this.form.dxForm.validate();
 
-    isShowLoadPanel && this._showLoadPanel();
+    isShowLoadPanel && this.showLoadPanel();
 
     when(validation?.complete || validation).done((validation) => {
       if (validation && !validation.isValid) {
@@ -247,13 +247,13 @@ export class AppointmentPopup {
       }
 
       const { repeat } = this.form.formData;
-      const adapter = this._createAppointmentAdapter(this.form.formData);
+      const adapter = this.createAppointmentAdapter(this.form.formData);
       const clonedAdapter = adapter
         .clone()
         .calculateDates(this.scheduler.getTimeZoneCalculator(), 'fromAppointment');
       const shouldClearRecurrenceRule = !repeat && Boolean(clonedAdapter.recurrenceRule);
 
-      this._addMissingDSTTime(adapter, clonedAdapter);
+      this.addMissingDSTTime(adapter, clonedAdapter);
 
       if (shouldClearRecurrenceRule) {
         clonedAdapter.recurrenceRule = '';
@@ -286,7 +286,7 @@ export class AppointmentPopup {
     return deferred.promise();
   }
 
-  _doneButtonClickHandler(e) {
+  private doneButtonClickHandler(e) {
     e.cancel = true;
     this.saveEditDataAsync();
   }
@@ -295,10 +295,10 @@ export class AppointmentPopup {
     // @ts-expect-error
     const deferred = new Deferred();
 
-    if (this._tryLockSaveChanges()) {
+    if (this.tryLockSaveChanges()) {
       when(this.saveChangesAsync(true)).done(() => {
         if (this.state.lastEditData) { // TODO
-          const adapter = this._createAppointmentAdapter(this.state.lastEditData);
+          const adapter = this.createAppointmentAdapter(this.state.lastEditData);
 
           const { startDate, endDate, allDay } = adapter;
 
@@ -316,7 +316,7 @@ export class AppointmentPopup {
           this.state.lastEditData = null;
         }
 
-        this._unlockSaveChanges();
+        this.unlockSaveChanges();
 
         deferred.resolve();
       });
@@ -325,7 +325,7 @@ export class AppointmentPopup {
     return deferred.promise();
   }
 
-  _showLoadPanel() {
+  private showLoadPanel() {
     const container = this.popup.$overlayContent();
 
     showLoading({
@@ -336,7 +336,7 @@ export class AppointmentPopup {
     });
   }
 
-  _tryLockSaveChanges() {
+  private tryLockSaveChanges() {
     if (this.state.saveChangesLocker === false) {
       this.state.saveChangesLocker = true;
       return true;
@@ -344,22 +344,22 @@ export class AppointmentPopup {
     return false;
   }
 
-  _unlockSaveChanges() {
+  private unlockSaveChanges() {
     this.state.saveChangesLocker = false;
   }
 
   // NOTE: Fix ticket T1102713
-  _addMissingDSTTime(formAppointmentAdapter, clonedAppointmentAdapter) {
+  private addMissingDSTTime(formAppointmentAdapter, clonedAppointmentAdapter) {
     const timeZoneCalculator = this.scheduler.getTimeZoneCalculator();
 
-    clonedAppointmentAdapter.startDate = this._addMissingDSTShiftToDate(
+    clonedAppointmentAdapter.startDate = this.addMissingDSTShiftToDate(
       timeZoneCalculator,
       formAppointmentAdapter.startDate,
       clonedAppointmentAdapter.startDate,
     );
 
     if (clonedAppointmentAdapter.endDate) {
-      clonedAppointmentAdapter.endDate = this._addMissingDSTShiftToDate(
+      clonedAppointmentAdapter.endDate = this.addMissingDSTShiftToDate(
         timeZoneCalculator,
         formAppointmentAdapter.endDate,
         clonedAppointmentAdapter.endDate,
@@ -367,7 +367,7 @@ export class AppointmentPopup {
     }
   }
 
-  _addMissingDSTShiftToDate(timeZoneCalculator, originFormDate, clonedDate) {
+  private addMissingDSTShiftToDate(timeZoneCalculator, originFormDate, clonedDate) {
     const originTimezoneShift = timeZoneCalculator.getOffsets(originFormDate)?.common;
     const clonedTimezoneShift = timeZoneCalculator.getOffsets(clonedDate)?.common;
     const shiftDifference = originTimezoneShift - clonedTimezoneShift;
