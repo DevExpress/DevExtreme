@@ -48,9 +48,9 @@ const ITEM_NAMES = {
 export class SchedulerHeader extends Widget<HeaderOptions> {
   eventMap!: Map<string, EventMapHandler[]>;
 
-  _toolbar?: Toolbar;
+  private toolbar?: Toolbar;
 
-  _calendar?: SchedulerCalendar;
+  private calendar?: SchedulerCalendar;
 
   get captionText(): string {
     return this._getCaption().text;
@@ -115,16 +115,16 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
         this.repaint();
         break;
       case fullName === 'toolbar.items':
-        this._toolbar?.option(
+        this.toolbar?.option(
           'items',
           (value as []).map((item: ToolbarItem) => this._parseItem(item)),
         );
         break;
       case parts[1] === 'items' && parts.length === 3:
-        this._toolbar?.option(optionName, this._parseItem(value as ToolbarItem));
+        this.toolbar?.option(optionName, this._parseItem(value as ToolbarItem));
         break;
       default:
-        this._toolbar?.option(optionName, value);
+        this.toolbar?.option(optionName, value);
     }
   }
 
@@ -149,7 +149,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     const toolbarElement = $('<div>');
     toolbarElement.appendTo(this.$element());
 
-    this._toolbar = this._createComponent(toolbarElement, Toolbar, config);
+    this.toolbar = this._createComponent(toolbarElement, Toolbar, config);
   }
 
   public _toggleVisibility(): void {
@@ -210,7 +210,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
 
   private _updateCalendarValueAndCurrentDate(date: Date): void {
     this._updateCurrentDate(date);
-    this._calendar?.option('value', date);
+    this.calendar?.option('value', date);
   }
 
   public _updateCurrentDate(date: Date): void {
@@ -223,7 +223,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     const {
       currentDate, min, max, firstDayOfWeek, focusStateEnabled, tabIndex,
     } = this.option();
-    this._calendar = this._createComponent('<div>', SchedulerCalendar, {
+    this.calendar = this._createComponent('<div>', SchedulerCalendar, {
       value: currentDate,
       min,
       max,
@@ -232,17 +232,17 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
       tabIndex,
       onValueChanged: async (e) => {
         this._updateCurrentDate(e.value);
-        await this._calendar?.hide();
+        await this.calendar?.hide();
       },
     });
 
-    this._calendar.$element().appendTo(this.$element());
+    this.calendar.$element().appendTo(this.$element());
   }
 
   private _getCalendarOptionUpdater(name: string) {
     return (value: unknown): void => {
-      if (this._calendar) {
-        this._calendar.option(name, value);
+      if (this.calendar) {
+        this.calendar.option(name, value);
       }
     };
   }
@@ -290,7 +290,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
   }
 
   public async _showCalendar(e: ItemClickEvent): Promise<void> {
-    await this._calendar?.show(e.element);
+    await this.calendar?.show(e.element);
   }
 }
 
