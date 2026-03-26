@@ -137,7 +137,7 @@ jobs:
           echo "=== Run $i / $REPEAT_COUNT ==="
           npx playwright test \
             --config playwright.config.ts \
-            playwright-tests/${{ matrix.ARGS.componentFolder }}/ \
+            playwright-tests/${{ matrix.ARGS.componentFolder }} \
             $SHARD_ARG \
             --reporter=list \
             2>&1 | tee -a playwright-output-run-$i.log
