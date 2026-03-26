@@ -14,6 +14,46 @@ test.describe('Keyboard Navigation - screenshots', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
+  test('Focused custom buttons should look correctly', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 1, columnA: 'A_0', columnB: 'B_0' },
+        { id: 2, columnA: 'A_1', columnB: 'B_1' },
+        { id: 3, columnA: 'A_2', columnB: 'B_2' },
+      ],
+      keyExpr: 'id',
+      columns: [
+        {
+          type: 'buttons',
+          buttons: [
+            {
+              hint: 'button_1',
+              icon: 'edit',
+            },
+            {
+              hint: 'button_2',
+              icon: 'remove',
+            },
+          ],
+        },
+        'id',
+        'columnA',
+        'columnB',
+      ],
+      sorting: {
+        mode: 'none',
+      },
+    });
+
+    const headerCellToFocus = page.locator('.dx-header-row').nth(0).locator('td').nth(3);
+    await headerCellToFocus.click();
+    await page.keyboard.press('Tab');
+    await testScreenshot(page, 'data-grid_keyboard-navigation-custom-buttons-cell-focused.png');
+
+    await page.keyboard.press('Tab');
+    await testScreenshot(page, 'data-grid_keyboard-navigation-custom-button-focused.png');
+  });
+
   test.skip('Focused cells should look correctly', async ({ page }) => {
     // TODO: Playwright migration - screenshot mismatch
     await createWidget(page, 'dxDataGrid', {
