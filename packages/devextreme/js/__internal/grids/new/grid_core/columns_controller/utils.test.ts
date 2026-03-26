@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { getVisibleIndexes, normalizeColumn } from './utils';
+import { getColumnFormat, getVisibleIndexes, normalizeColumn } from './utils';
 
 describe('getVisibleIndexes', () => {
   it('should create visible indexes if not present', () => {
@@ -44,5 +44,29 @@ describe('normalizeColumn', () => {
     it('should have allowHeaderFiltering=false by default', () => {
       expect(column.allowSorting).toBe(false);
     });
+  });
+});
+
+describe('getColumnFormat', () => {
+  it('should return column.format when explicitly set', () => {
+    expect(getColumnFormat({ format: 'yyyy-MM-dd', dataType: 'date' })).toBe('yyyy-MM-dd');
+  });
+
+  it('should return shortDate for date dataType', () => {
+    expect(getColumnFormat({ dataType: 'date' })).toBe('shortDate');
+  });
+
+  it('should return shortDateShortTime for datetime dataType', () => {
+    expect(getColumnFormat({ dataType: 'datetime' })).toBe('shortDateShortTime');
+  });
+
+  it('should return undefined for non-date dataType', () => {
+    expect(getColumnFormat({ dataType: 'string' })).toBeUndefined();
+    expect(getColumnFormat({ dataType: 'number' })).toBeUndefined();
+    expect(getColumnFormat({ dataType: 'boolean' })).toBeUndefined();
+  });
+
+  it('should return undefined when no format and no dataType', () => {
+    expect(getColumnFormat({})).toBeUndefined();
   });
 });
