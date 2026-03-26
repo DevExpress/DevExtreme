@@ -901,6 +901,62 @@ QUnit.module('Pane sizing', moduleConfig, () => {
                 { targetButton: 'next', resizeHandleIndex: 1, expectedLayout: ['10.1626', '89.8374', '0'] },
                 { targetButton: 'prev', resizeHandleIndex: 1, expectedLayout: ['10.1626', '79.6748', '10.1626'] },
             ],
+        },
+        {
+            items: [ { resizable: true, collapsed: false, collapsible: true, size: '200px', minSize: '100px', maxSize: '250px' }, { resizable: true, size: '200px', minSize: '100px', maxSize: '200px' }, { }],
+            scenarios: [
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['0', '20.3252', '79.6748'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['20.3252', '10.1626', '69.5122'] },
+            ],
+        },
+        {
+            items: [{ collapsible: true }, { collapsible: true, maxSize: 300 }],
+            scenarios: [
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['0', '100'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['69.7581', '30.2419'] },
+            ],
+        },
+        {
+            items: [{ collapsible: true, maxSize: 300 }, { collapsible: true }],
+            scenarios: [
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['0', '100'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['30.2419', '69.7581'] },
+            ],
+        },
+        {
+            items: [{ collapsible: true, maxSize: 300 }, { collapsible: true }],
+            scenarios: [
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['0', '100'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['30.2419', '69.7581'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['100', '0'] },
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['30.2419', '69.7581'] },
+            ],
+        },
+        {
+            items: [{ collapsible: true }, { collapsible: true, maxSize: 200 }, { collapsible: true }],
+            scenarios: [
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['0', '20.3252', '79.6748'] },
+            ],
+        },
+        {
+            items: [{ collapsible: true }, { collapsible: true, maxSize: 200 }, { collapsible: true, maxSize: 200 }],
+            scenarios: [
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['0', '79.6748', '20.3252'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['59.3496', '20.3252', '20.3252'] },
+            ],
+        },
+        {
+            items: [{ collapsible: true }, { collapsible: true, maxSize: 200 }, { collapsible: true }],
+            scenarios: [
+                { targetButton: 'next', resizeHandleIndex: 1, expectedLayout: ['79.6748', '20.3252', '0'] },
+            ],
+        },
+        {
+            items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, maxSize: 300 }],
+            scenarios: [
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['10.0806', '89.9194'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['69.7581', '30.2419'] },
+            ],
         }
     ].forEach(({ items, scenarios }) => {
         QUnit.test(`The pane should restore its size after collapsing and expanding by click, items: ${JSON.stringify(items)}`, function(assert) {
@@ -1603,9 +1659,102 @@ QUnit.module('Pane visibility', moduleConfig, () => {
                 paneIndex: 1,
                 visible: false,
                 expected: {
-                    layout: ['10.2459', '0', '69.2623', '20.4918'],
-                    itemSizes: [100.812, 0, 681.539, 201.617],
+                    layout: ['10.2459', '0', '25.4065', '64.3476'],
+                    itemSizes: [100.812, 0, 250, 633.18],
                     handlesCount: 2
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true }, { size: '300px', maxSize: '300px' }],
+            scenarios: [{
+                paneIndex: 0,
+                visible: false,
+                expected: {
+                    layout: ['0', '100'],
+                    itemSizes: [0, 1000],
+                    handlesCount: 0
+                }
+            }, {
+                paneIndex: 0,
+                visible: true,
+                expected: {
+                    layout: ['69.7581', '30.2419'],
+                    itemSizes: [692, 300],
+                    handlesCount: 1
+                }
+            }]
+        }, {
+            dataSource: [{ size: '300px', maxSize: '300px' }, { visible: true }],
+            scenarios: [{
+                paneIndex: 1,
+                visible: false,
+                expected: {
+                    layout: ['100', '0'],
+                    itemSizes: [1000, 0],
+                    handlesCount: 0
+                }
+            }, {
+                paneIndex: 1,
+                visible: true,
+                expected: {
+                    layout: ['30.2419', '69.7581'],
+                    itemSizes: [300, 692],
+                    handlesCount: 1
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true, size: '400px' }, { size: '200px', maxSize: '250px' }, {}],
+            scenarios: [{
+                paneIndex: 0,
+                visible: false,
+                expected: {
+                    layout: ['0', '25.2016', '74.7984'],
+                    itemSizes: [0, 250, 742],
+                    handlesCount: 1
+                }
+            }]
+        }, {
+            dataSource: [{ size: 200, maxSize: 250 }, { visible: true }, { size: 200, maxSize: 250 }],
+            scenarios: [{
+                paneIndex: 1,
+                visible: false,
+                expected: {
+                    layout: ['20.3252', '0', '79.6748'],
+                    itemSizes: [201.625, 0, 790.375],
+                    handlesCount: 1
+                }
+            }]
+        }, {
+            dataSource: [{}, { size: '200px', maxSize: '250px' }, { visible: true, size: '300px' }],
+            scenarios: [{
+                paneIndex: 2,
+                visible: false,
+                expected: {
+                    layout: ['74.7984', '25.2016', '0'],
+                    itemSizes: [742, 250, 0],
+                    handlesCount: 1
+                }
+            }]
+        }, {
+            dataSource: [{ visible: true, size: '300px' }, { size: '100px', minSize: '80px', maxSize: '200px' }, {}],
+            scenarios: [{
+                paneIndex: 0,
+                visible: false,
+                expected: {
+                    layout: ['0', '20.1613', '79.8387'],
+                    itemSizes: [0, 200, 792],
+                    handlesCount: 1
+                }
+            }]
+        }, {
+            dataSource: [{ visible: false }, { maxSize: '300px' }],
+            scenarios: [{
+                paneIndex: 0,
+                visible: true,
+                expected: {
+                    layout: ['69.7581', '30.2419'],
+                    itemSizes: [692, 300],
+                    handlesCount: 1
                 }
             }]
         }].forEach(({ dataSource, scenarios }) => {
