@@ -138,15 +138,16 @@ function productsFromString(encodedString) {
         return { products: [], errorToken: GENERAL_ERROR };
     }
     try {
-        const productTuples = encodedString.split(';').slice(1).filter(e => e.length > 0);
+        const splitInfo = encodedString.split(';');
+        const licenseId = splitInfo[0];
+        const productTuples = splitInfo.slice(1).filter((entry) => entry.length > 0);
         const products = productTuples.map(tuple => {
             const parts = tuple.split(',');
-            return {
-                version: Number.parseInt(parts[0], 10),
-                products: BigInt(parts[1]),
-            };
+            const version = Number.parseInt(parts[0], 10);
+            const products = BigInt(parts[1]);
+            return { version, products };
         });
-        return { products };
+        return { products, licenseId };
     } catch{
         return { products: [], errorToken: DESERIALIZATION_ERROR };
     }
@@ -174,7 +175,7 @@ function parseLCP(lcpString) {
 
         const productsPayload = decoded.slice(SIGN_LENGTH);
         const decodedPayload = mapString(productsPayload, DECODE_MAP);
-        const { products, errorToken } = productsFromString(decodedPayload);
+        const { products, errorToken, licenseId } = productsFromString(decodedPayload);
         if(errorToken) {
             return errorToken;
         }
@@ -186,7 +187,7 @@ function parseLCP(lcpString) {
 
         return {
             kind: TokenKind.verified,
-            payload: { customerId: '', maxVersionAllowed },
+            payload: { customerId: '', maxVersionAllowed, licenseId },
         };
     } catch{
         return GENERAL_ERROR;
@@ -211,36 +212,43 @@ function readDevExtremeVersion() {
     return null;
 }
 
-function getLCPWarning(lcpString) {
+function getLCPInfo(lcpString) {
     const token = parseLCP(lcpString);
+    let warning = null;
+    let licenseId = null;
 
     if(token.kind === TokenKind.corrupted) {
         if(token.error === 'product-kind') {
-            return MESSAGES.trial;
+            warning = MESSAGES.trial;
         }
-        return null;
+    } else {
+        // token.kind === TokenKind.verified — check version compatibility
+        licenseId = token.payload.licenseId || null;
+        const devExtremeVersion = readDevExtremeVersion();
+        if(devExtremeVersion) {
+            const { major, minor, code: currentCode } = devExtremeVersion;
+            const { maxVersionAllowed } = token.payload;
+            if(maxVersionAllowed < currentCode) {
+                warning = MESSAGES.versionIncompatible(
+                    formatVersionCode(maxVersionAllowed),
+                    `v${major}.${minor}`,
+                );
+            }
+        }
     }
 
-    // token.kind === TokenKind.verified — check version compatibility
-    const devExtremeVersion = readDevExtremeVersion();
-    if(devExtremeVersion) {
-        const { major, minor, code: currentCode } = devExtremeVersion;
-        const { maxVersionAllowed } = token.payload;
-        if(maxVersionAllowed < currentCode) {
-            return MESSAGES.versionIncompatible(
-                formatVersionCode(maxVersionAllowed),
-                `v${major}.${minor}`,
-            );
-        }
-    }
+    return { warning, licenseId };
+}
 
-    return null;
+function getLCPWarning(lcpString) {
+    return getLCPInfo(lcpString).warning;
 }
 
 module.exports = {
     convertLCXtoLCP,
     tryConvertLCXtoLCP,
     parseLCP,
+    getLCPInfo,
     getLCPWarning,
     TokenKind,
     LCX_SIGNATURE,
