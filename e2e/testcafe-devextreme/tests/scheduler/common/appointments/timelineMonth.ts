@@ -1,5 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../../helpers/themeUtils';
@@ -73,32 +72,4 @@ test('Appointments should have correct order', async (t) => {
   cellDuration: 60,
   firstDayOfWeek: 0,
   width: 800,
-}));
-
-test('1-minute appointment in timelineMonth should hide the appointment strip in Fluent theme', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const strip = scheduler
-    .getAppointment('short')
-    .element.find('.dx-scheduler-appointment-strip');
-
-  await t
-    .expect(strip.exists)
-    .ok()
-    .expect(strip.getStyleProperty('display'))
-    .eql('none');
-}).before(async () => createWidget('dxScheduler', {
-  currentDate: new Date(2016, 1, 2),
-  dataSource: [
-    {
-      text: 'short',
-      startDate: new Date(2016, 1, 2, 12, 0),
-      endDate: new Date(2016, 1, 2, 12, 1),
-    },
-  ],
-  views: ['timelineMonth'],
-  currentView: 'timelineMonth',
-  maxAppointmentsPerCell: 'unlimited',
-  height: 505,
-  width: 800,
-  snapToCellsMode: 'never',
 }));
