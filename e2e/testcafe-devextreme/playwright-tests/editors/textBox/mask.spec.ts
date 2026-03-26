@@ -22,11 +22,12 @@ test.describe('TextBox_mask', () => {
       mask: '9',
     }, '#textBox');
 
-    const textBox = page.locator('#textBox');
-    const { input } = textBox;
+    const input = page.locator('#textBox .dx-texteditor-input');
 
-    await input.fill('!')
-      .expect(input.value).eql('_');
+    await input.click();
+    await page.keyboard.type('!');
+
+    expect(await input.inputValue()).toBe('_');
 
     });
 });

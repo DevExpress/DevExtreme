@@ -23,7 +23,7 @@ test.describe('FileManager', () => {
 
     const viewModeButton = page.locator('.dx-filemanager-toolbar-viewmode-item');
 
-    await page.click(viewModeButton);
+    await viewModeButton.click();
 
     await testScreenshot(page, 'drop down width.png', { element: '#container' });
 

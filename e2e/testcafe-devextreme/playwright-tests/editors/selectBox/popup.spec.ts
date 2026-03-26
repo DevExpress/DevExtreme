@@ -15,6 +15,8 @@ test.describe('popup height after load', () => {
   });
 
   test('SelectBox without data', async ({ page }) => {
+    await page.setViewportSize({ width: 300, height: 400 });
+
     await createWidget(page, 'dxSelectBox', {
       dataSource: {
         store: [],
@@ -31,6 +33,8 @@ test.describe('popup height after load', () => {
   });
 
   test('SelectBox has a correct popup height for the first opening if the pageSize is equal to dataSource length (T942881)', async ({ page }) => {
+    await page.setViewportSize({ width: 300, height: 400 });
+
     await createWidget(page, 'dxSelectBox', {
       dataSource: {
         store: [],
@@ -53,6 +57,8 @@ test.describe('popup height after load', () => {
   });
 
   test('SelectBox has a correct popup height for the first opening if the pageSize is less than dataSource items count', async ({ page }) => {
+    await page.setViewportSize({ width: 300, height: 400 });
+
     await createWidget(page, 'dxSelectBox', {
       dataSource: {
         store: [],
@@ -75,6 +81,8 @@ test.describe('popup height after load', () => {
   });
 
   test('SelectBox has a correct popup height for the first opening if the pageSize is more than dataSource items count', async ({ page }) => {
+    await page.setViewportSize({ width: 300, height: 400 });
+
     await createWidget(page, 'dxSelectBox', {
       dataSource: {
         store: [],
@@ -97,6 +105,8 @@ test.describe('popup height after load', () => {
   });
 
   test('SelectBox does not change a popup height after load the last page', async ({ page }) => {
+    await page.setViewportSize({ width: 300, height: 400 });
+
     await createWidget(page, 'dxSelectBox', {
       dataSource: {
         store: [],

@@ -16,8 +16,8 @@ test.describe('NumberBox_Label', () => {
 
   const NUMBERBOX_CLASS = 'dx-numberbox';
 
-  const stylingModes: EditorStyle[] = ['outlined', 'underlined', 'filled'];
-  const buttonsList: (TextEditorButton | NumberBoxPredefinedButton)[][] = [
+  const stylingModes = ['outlined', 'underlined', 'filled'];
+  const buttonsList = [
     ['clear'],
     [{ name: 'custom', location: 'after', options: { icon: 'home' } }, 'clear', 'spins'],
     ['clear', { name: 'custom', location: 'after', options: { icon: 'home' } }, 'spins'],
@@ -25,11 +25,11 @@ test.describe('NumberBox_Label', () => {
     [{ name: 'custom', location: 'before', options: { icon: 'home' } }, 'clear', 'spins'],
   ];
 
-  const createNumberBox = async (options?: Properties): Promise<string> => {
-    const id = `${`dx${new Guid()}`}`;
+  const createNumberBox = async (p: any, options?: Record<string, unknown>): Promise<string> => {
+    const id = `dx${Math.random().toString(36).slice(2, 10)}`;
 
-    await appendElementTo(page, '#container', 'div', id, {});
-    await createWidget(page, 'dxNumberBox', {
+    await appendElementTo(p, '#container', 'div', id, {});
+    await createWidget(p, 'dxNumberBox', {
       value: Math.PI,
       showClearButton: true,
       showSpinButtons: true,
@@ -39,6 +39,7 @@ test.describe('NumberBox_Label', () => {
     return id;
   };
   test('Label for dxNumberBox', async ({ page }) => {
+    await page.setViewportSize({ width: 350, height: 450 });
 
     await insertStylesheetRulesToPage(page, '#container { display: flex; flex-direction: column; width: 300px; height: 400px; gap: 8px; }');
     if (isMaterial()) {
@@ -51,12 +52,11 @@ test.describe('NumberBox_Label', () => {
         label: 'label text',
         stylingMode,
       };
-      await createNumberBox({
+      await createNumberBox(page, {
         ...options,
-        // @ts-expect-error string instead of number
         value: 'text',
       });
-      await createNumberBox({
+      await createNumberBox(page, {
         ...options,
         value: 123,
       });
@@ -72,11 +72,11 @@ test.describe('NumberBox_Label', () => {
 
       for (const stylingMode of stylingModes) {
           for (const buttons of buttonsList) {
-        await createNumberBox({ stylingMode, buttons });
+        await createNumberBox(page, { stylingMode, buttons });
       }
 
-      await createNumberBox({ stylingMode, rtlEnabled: true });
-      await createNumberBox({ stylingMode, isValid: false });
+      await createNumberBox(page, { stylingMode, rtlEnabled: true });
+      await createNumberBox(page, { stylingMode, isValid: false });
     }
 
     await testScreenshot(page, 'NumberBox render with buttons container.png');

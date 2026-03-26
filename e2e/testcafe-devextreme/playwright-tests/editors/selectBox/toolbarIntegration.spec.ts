@@ -37,7 +37,7 @@ test.describe('SelectBox as Toolbar item', () => {
       ],
     });
 
-    const buttonText = await page.locator('#container .dx-texteditor-button-container .dx-button .dx-button-text').innerText();
+    const buttonText = await page.locator('#container .dx-texteditor-buttons-container .dx-button .dx-button-text').innerText();
     expect(buttonText.toLowerCase()).toBe('test');
   });
 });

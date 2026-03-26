@@ -25,9 +25,9 @@ test.describe('Label', () => {
     label: 'label text',
   });
 
-    const textArea = page.locator('#container');
+    const input = page.locator('#container .dx-texteditor-input');
 
-    await scroll(textArea.getInput(), 0, 20);
+    await input.evaluate((el) => { el.scrollTop = 20; });
 
     await testScreenshot(page, 'TextArea label after scroll.png', { element: '#container' });
 
@@ -36,6 +36,7 @@ test.describe('Label', () => {
   stylingModes.forEach((stylingMode) => {
     labelModes.forEach((labelMode) => {
       test(`Label for dxTextArea labelMode=${labelMode} stylingMode=${stylingMode}`, async ({ page }) => {
+        await page.setViewportSize({ width: 300, height: 400 });
 
         await appendElementTo(page, '#container', 'div', 'textArea1', { });
         await appendElementTo(page, '#container', 'div', 'textArea2', { });

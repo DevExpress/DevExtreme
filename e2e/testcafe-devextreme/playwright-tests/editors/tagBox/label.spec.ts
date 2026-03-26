@@ -19,6 +19,7 @@ test.describe('TagBox_Label', () => {
 
   stylingModes.forEach((stylingMode) => {
     test(`Label for dxTagBox stylingMode=${stylingMode}`, async ({ page }) => {
+      await page.setViewportSize({ width: 300, height: 800 });
 
       const componentOptions = {
         label: 'label text',
@@ -53,6 +54,7 @@ test.describe('TagBox_Label', () => {
 
     labelModes.forEach((labelMode) => {
       test(`Label shouldn't be cutted for dxTagBox in stylingMode=${stylingMode}, labelMode=${labelMode} (T1104913)`, async ({ page }) => {
+        await page.setViewportSize({ width: 300, height: 400 });
 
         await setStyleAttribute(page, '#container', 'top: 250px;');
 

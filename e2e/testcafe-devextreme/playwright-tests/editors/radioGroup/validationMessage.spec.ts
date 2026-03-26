@@ -43,13 +43,15 @@ test.describe('Radio Group Validation Message', () => {
     }],
   });
 
-    const form = page.locator('#container');
-
-    await form.validate();
+    await page.evaluate(() => {
+      ($('#container') as any).dxForm('instance').validate();
+    });
 
     const radioGroup = page.locator(`.${RADIO_GROUP_CLASS}`);
 
-    await radioGroup.focus();
+    await page.evaluate((cls) => {
+      ($(`.${cls}`) as any).dxRadioGroup('instance').focus();
+    }, RADIO_GROUP_CLASS);
 
     await testScreenshot(page, 'RadioGroup horizontal validation.png', { element: '#container' });
 

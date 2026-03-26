@@ -217,6 +217,7 @@ test.describe('Calendar', () => {
     });
 
     test(`Calendar ${zoomLevel} view with today button rendered correct`, async ({ page }) => {
+      await page.setViewportSize({ width: 1200, height: 1000 });
 
       await setStyleAttribute(page, '#container', 'width: 600px; height: 800px;');
       await appendElementTo(page, '#container', 'div', 'calendar');
@@ -253,6 +254,7 @@ test.describe('Calendar', () => {
     const testName = `Calendar ${cellClass === CALENDAR_TODAY_CLASS ? 'today ' : ''}cell styles`;
 
     test(testName, async ({ page }) => {
+      await page.setViewportSize({ width: 1200, height: 1000 });
 
       await setStyleAttribute(page, '#container', 'width: 600px; height: 800px;');
       await appendElementTo(page, '#container', 'div', 'calendar');
@@ -317,6 +319,7 @@ test.describe('Calendar', () => {
     const testName = `Calendar ${zoomLevel} view cell styles`;
 
     test(testName, async ({ page }) => {
+      await page.setViewportSize({ width: 1200, height: 1000 });
 
       await setStyleAttribute(page, '#container', 'width: 600px; height: 800px;');
       await appendElementTo(page, '#container', 'div', 'calendar');

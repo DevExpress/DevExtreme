@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, appendElementTo, setAttribute } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, appendElementTo, setAttribute, addFocusableElementBefore, removeAttribute } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -17,6 +17,7 @@ test.describe('ValidationMessage', () => {
   const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
   test('Validation Message position should be correct after change visibility of parent container (T1095900)', async ({ page }) => {
+    await page.setViewportSize({ width: 300, height: 200 });
 
     await appendElementTo(page, '#container', 'div', 'textbox', {});
 
@@ -33,15 +34,17 @@ test.describe('ValidationMessage', () => {
       ],
     }, '#textbox');
 
-    await addFocusableElementBefore('#container');
+    await addFocusableElementBefore(page, '#container');
 
-    await page.locator(`.${TEXTEDITOR_INPUT_CLASS}`).click()
-      .pressKey('backspace')
-      .pressKey('enter')
-      .click(page.locator('#focusable-start'));
+    await page.locator(`.${TEXTEDITOR_INPUT_CLASS}`).click();
+    await page.keyboard.press('Backspace');
+    await page.keyboard.press('Enter');
+    await page.evaluate(() => {
+      (document.getElementById('focusable-start') as HTMLElement)?.focus();
+    });
 
     await setAttribute(page, '#container', 'hidden', 'true');
-    await removeAttribute('#container', 'hidden');
+    await removeAttribute(page, '#container', 'hidden');
 
     await testScreenshot(page, 'Textbox validation message.png');
 
