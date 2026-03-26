@@ -18,4 +18,48 @@ test.describe('Accessibility - form', () => {
     await createWidget(page, 'dxForm', { height: 200, formData: { ID: 1, FirstName: 'John', LastName: 'Heart' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('form with alignItemLabels false', async ({ page }) => {
+    await createWidget(page, 'dxForm', {
+      height: 200,
+      alignItemLabels: false,
+      formData: { ID: 1, FirstName: 'John', LastName: 'Heart', Position: 'CEO', Active: true },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('form with showOptionalMark', async ({ page }) => {
+    await createWidget(page, 'dxForm', {
+      height: 200,
+      showOptionalMark: true,
+      formData: { ID: 1, FirstName: 'John', LastName: 'Heart', Position: 'CEO', Active: true },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('form with required mark', async ({ page }) => {
+    await createWidget(page, 'dxForm', {
+      height: 200,
+      showRequiredMark: true,
+      items: [{
+        itemType: 'simple',
+        dataField: 'Email',
+        validationRules: [{ type: 'required', message: 'Email is required' }],
+      }],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('form with validation summary', async ({ page }) => {
+    await createWidget(page, 'dxForm', {
+      height: 200,
+      showValidationSummary: true,
+      items: [{
+        itemType: 'simple',
+        dataField: 'Email',
+        validationRules: [{ type: 'required', message: 'Email is required' }],
+      }],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

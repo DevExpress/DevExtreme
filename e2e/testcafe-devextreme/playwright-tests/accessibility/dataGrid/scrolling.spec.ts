@@ -34,4 +34,26 @@ test.describe('Accessibility - DataGrid scrolling', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('infinite scrolling', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(1000, 2),
+      height: 400,
+      showBorders: true,
+      scrolling: { mode: 'infinite' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('horizontal virtual scrolling', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(20, 100),
+      columnWidth: 100,
+      height: 400,
+      width: 900,
+      showBorders: true,
+      scrolling: { columnRenderingMode: 'virtual' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -53,4 +53,65 @@ test.describe('Accessibility - DataGrid editing', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('cell editing mode', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+        allowDeleting: true,
+        allowAdding: true,
+      },
+      columns: ['field_1', 'field_2', 'field_3', 'field_4'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('form editing mode', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      editing: {
+        mode: 'form',
+        allowUpdating: true,
+        allowDeleting: true,
+        allowAdding: true,
+      },
+      columns: ['field_1', 'field_2', 'field_3', 'field_4'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('popup editing mode', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      editing: {
+        mode: 'popup',
+        allowUpdating: true,
+        allowDeleting: true,
+        allowAdding: true,
+      },
+      columns: ['field_1', 'field_2', 'field_3', 'field_4'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('row editing mode with useIcons', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+        allowDeleting: true,
+        allowAdding: true,
+        useIcons: true,
+      },
+      columns: ['field_1', 'field_2', 'field_3', 'field_4'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

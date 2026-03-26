@@ -38,4 +38,29 @@ test.describe('Accessibility - DataGrid fixedColumns', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('fixed columns with scrollable content', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      columnWidth: 150,
+      width: 800,
+      keyExpr: 'id',
+      scrolling: { useNative: true },
+      dataSource: [
+        { id: 0, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a' },
+        { id: 1, column1: 'a', column2: 'a', column3: 'a', column4: 'a', column5: 'a', column6: 'a', column7: 'a', column8: 'a' },
+      ],
+      columnFixing: { legacyMode: true } as any,
+      columns: [
+        { dataField: 'column1', fixed: true },
+        { dataField: 'column2', fixed: true },
+        { dataField: 'column3' },
+        { dataField: 'column4' },
+        { dataField: 'column5' },
+        { dataField: 'column6' },
+        { dataField: 'column7', fixed: true, fixedPosition: 'right' },
+        { dataField: 'column8', fixed: true, fixedPosition: 'right' },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

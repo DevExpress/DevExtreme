@@ -22,7 +22,7 @@ test.describe('Accessibility - Scheduler', () => {
     await a11yCheck(page, {}, '#container');
   });
 
-  ['day', 'week', 'workWeek', 'month', 'agenda'].forEach((currentView) => {
+  ['day', 'week', 'workWeek', 'month', 'agenda', 'timelineDay', 'timelineMonth', 'timelineWeek', 'timelineWorkWeek'].forEach((currentView) => {
     test(`${currentView} view with appointment`, async ({ page }) => {
       await createWidget(page, 'dxScheduler', {
         timeZone: 'America/Los_Angeles',
@@ -37,5 +37,57 @@ test.describe('Accessibility - Scheduler', () => {
       });
       await a11yCheck(page, {}, '#container');
     });
+  });
+
+  test('month view with grouping by resource', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      timeZone: 'UTC',
+      dataSource: [{
+        text: 'App 1',
+        startDate: new Date(Date.UTC(2021, 1, 1, 12)),
+        endDate: new Date(Date.UTC(2021, 1, 1, 13)),
+        groupId: 1,
+      }],
+      currentView: 'month',
+      currentDate: new Date(Date.UTC(2021, 1, 1)),
+      groups: ['groupId'],
+      resources: [{
+        fieldExpr: 'groupId',
+        dataSource: [{ text: 'Resource A', id: 1 }, { text: 'Resource B', id: 2 }],
+        label: 'Group',
+      }],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('week view with recurring appointment', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      timeZone: 'America/Los_Angeles',
+      dataSource: [{
+        text: 'Website Re-Design Plan',
+        startDate: new Date('2021-04-29T16:30:00.000Z'),
+        endDate: new Date('2021-04-29T18:30:00.000Z'),
+        recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10',
+      }],
+      currentView: 'week',
+      currentDate: new Date('2021-04-29T18:30:00.000Z'),
+      startDayHour: 9,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('week view with all-day appointments', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      timeZone: 'UTC',
+      dataSource: [{
+        text: 'All Day Event',
+        startDate: new Date(Date.UTC(2021, 3, 29)),
+        endDate: new Date(Date.UTC(2021, 3, 29)),
+        allDay: true,
+      }],
+      currentView: 'week',
+      currentDate: new Date(2021, 3, 29),
+    });
+    await a11yCheck(page, {}, '#container');
   });
 });

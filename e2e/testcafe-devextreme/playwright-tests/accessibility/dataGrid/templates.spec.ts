@@ -32,4 +32,25 @@ test.describe('Accessibility - DataGrid templates', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('dataRowTemplate', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [...new Array(10)].map((_, i) => ({
+        ID: i + 1,
+        CompanyName: `company name ${i + 1}`,
+        City: `city ${i + 1}`,
+        Notes: `test ${i + 1}`,
+      })),
+      keyExpr: 'ID',
+      columns: ['ID', 'CompanyName', 'City'],
+      dataRowTemplate: (container, { data }) => {
+        const markup = `<tr class='main-row'><td>${data.ID}</td><td>${data.CompanyName}</td><td>${data.City}</td></tr><tr class='notes-row'><td colspan='3'><div>${data.Notes}</div></td></tr>`;
+        container.append(markup);
+      },
+      rowAlternationEnabled: true,
+      columnAutoWidth: true,
+      showBorders: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });
