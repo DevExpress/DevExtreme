@@ -51,4 +51,30 @@ test.describe('HeaderFilter.Visual', () => {
       element: page.locator('#container'),
     });
   });
+
+  test('popup with tree', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [
+        { A: '2024-01-01', B: 'B_0', C: 'C_0' },
+        { A: '2024-01-01', B: 'B_1', C: 'C_1' },
+        { A: '2024-01-01', B: 'B_2', C: 'C_2' },
+        { A: '2025-01-01', B: 'B_3', C: 'C_3' },
+        { A: '2025-01-01', B: 'B_4', C: 'C_4' },
+        { A: '2026-01-01', B: 'B_5', C: 'C_5' },
+      ],
+      columns: [
+        { dataField: 'A', dataType: 'date' },
+        'B',
+        'C',
+      ],
+      headerFilter: { visible: true },
+      height: 600,
+    });
+
+    await page.locator('.dx-header-filter-icon').first().click();
+
+    await testScreenshot(page, 'card-view_header-filter_popup-with-tree.png', {
+      element: page.locator('#container'),
+    });
+  });
 });
