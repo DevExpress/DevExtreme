@@ -1,4 +1,5 @@
-import type { SnapToCellsModeType } from '../../../types';
+import type { SnapToCellsMode } from '@js/ui/scheduler';
+
 import type {
   CellInterval, ListEntity, Position,
 } from '../../types';
@@ -21,7 +22,7 @@ const getCellFill = (
 export const snapToCells = <T extends ListEntity & Position>(
   entities: T[],
   cells: CellInterval[],
-  mode: SnapToCellsModeType = 'always',
+  mode: SnapToCellsMode = 'always',
 ): T[] => {
   if (mode === 'never') return entities;
 

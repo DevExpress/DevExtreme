@@ -1,7 +1,8 @@
 import type { Orientation } from '@js/common';
+import type { SnapToCellsMode } from '@js/ui/scheduler';
 import type Scheduler from '@ts/scheduler/m_scheduler';
 
-import type { SnapToCellsModeType, ViewType } from '../../../types';
+import type { ViewType } from '../../../types';
 import { getCompareOptions } from '../../common/get_compare_options';
 import type { CompareOptions } from '../../types';
 
@@ -9,7 +10,7 @@ interface ViewConfig {
   isTimelineView: boolean;
   isMonthView: boolean;
   viewOrientation: 'horizontal' | 'vertical';
-  snapToCellsMode: SnapToCellsModeType;
+  snapToCellsMode: SnapToCellsMode;
 }
 
 const configByView: Record<ViewType, ViewConfig> = {
@@ -44,7 +45,7 @@ const configByView: Record<ViewType, ViewConfig> = {
 
 export interface ViewModelOptions {
   type: ViewType;
-  snapToCellsMode: SnapToCellsModeType;
+  snapToCellsMode: SnapToCellsMode;
   viewOffset: number;
   groupOrientation?: Orientation;
   isGroupByDate: boolean;
