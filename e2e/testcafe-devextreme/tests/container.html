@@ -22,13 +22,8 @@
         .dx-scheduler .dx-scrollable-scroll { visibility: hidden !important; }
         body:has(#tabPanel) { min-height: 500px; }
 
-        /* Match TestCafe headless Chrome scrollbar (15px classic scrollbar always visible).
-           scrollbar-gutter: stable reserves space even without overflow.
-           ::-webkit-scrollbar sets width to 15px (matching Chrome headless on Linux). */
-        html {
-            overflow-y: auto !important;
-            scrollbar-gutter: stable !important;
-        }
+        /* Match TestCafe headless Chrome scrollbar behavior:
+           scrollbar appears only on overflow, width 15px when present */
         ::-webkit-scrollbar { width: 15px !important; }
         ::-webkit-scrollbar-track { background: transparent !important; }
         ::-webkit-scrollbar-thumb { background: transparent !important; }
