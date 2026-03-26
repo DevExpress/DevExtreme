@@ -11,7 +11,6 @@ type MachineTimezonesType = typeof MACHINE_TIMEZONES[keyof typeof MACHINE_TIMEZO
 
 const normalizeTimezoneName = (timezone: string): string => timezone.replace(/\//g, '-');
 
-const SCHEDULER_SELECTOR = '#container';
 const CUSTOM_CSS = `
 #container .dx-scheduler-header-panel-cell {
   color: rgba(0,0,0,.54);
@@ -117,59 +116,63 @@ const WINTER_LOS_ANGELES_UTC_DATE_CASE = {
   ],
 };
 
-test.describe('Scheduler render during DST - cross DST rendering', () => {
-  test.beforeEach(async ({ page }) => {
-    await setupTestPage(page, containerUrl);
-  });
+const ALL_CASES = [
+  SUMMER_BERLIN_LOCAL_DATE_CASE,
+  SUMMER_BERLIN_UTC_DATE_CASE,
+  WINTER_BERLIN_LOCAL_DATE_CASE,
+  WINTER_BERLIN_UTC_DATE_CASE,
+  SUMMER_LOS_ANGELES_LOCAL_DATE_CASE,
+  SUMMER_LOS_ANGELES_UTC_DATE_CASE,
+  WINTER_LOS_ANGELES_LOCAL_DATE_CASE,
+  WINTER_LOS_ANGELES_UTC_DATE_CASE,
+];
 
-  generateOptionMatrix({
-    currentView: ['week'] as string[],
-    offset: [-360, 0, 360],
-    location: [
-      SUMMER_BERLIN_LOCAL_DATE_CASE,
-      SUMMER_BERLIN_UTC_DATE_CASE,
-      WINTER_BERLIN_LOCAL_DATE_CASE,
-      WINTER_BERLIN_UTC_DATE_CASE,
-      SUMMER_LOS_ANGELES_LOCAL_DATE_CASE,
-      SUMMER_LOS_ANGELES_UTC_DATE_CASE,
-      WINTER_LOS_ANGELES_LOCAL_DATE_CASE,
-      WINTER_LOS_ANGELES_UTC_DATE_CASE,
-    ],
-  }).forEach(({
-    currentView,
-    offset,
-    location: {
-      timezone,
-      caseName,
-      currentDate,
-      dataSource,
-    },
-  }) => {
-    test(`Should correctly render appointments with local machine date crossing DST (${timezone}, ${caseName}, offset: ${offset})`, async ({ page }) => {
-      const browserTimezone = await page.evaluate(
-        () => Intl.DateTimeFormat().resolvedOptions().timeZone,
-      );
-      test.skip(browserTimezone !== timezone, `Skipping: machine timezone is ${browserTimezone}, expected ${timezone}`);
+([
+  MACHINE_TIMEZONES.EuropeBerlin,
+  MACHINE_TIMEZONES.AmericaLosAngeles,
+] as MachineTimezonesType[]).forEach((tz) => {
+  test.describe(`Scheduler render during DST - cross DST rendering [${tz}]`, () => {
+    test.use({ timezoneId: tz });
 
-      await insertStylesheetRulesToPage(page, CUSTOM_CSS);
-      await createWidget(page, 'dxScheduler', {
-        dataSource,
-        currentView,
+    test.beforeEach(async ({ page }) => {
+      await setupTestPage(page, containerUrl);
+    });
+
+    generateOptionMatrix({
+      currentView: ['week'] as string[],
+      offset: [-360, 0, 360],
+      location: ALL_CASES.filter((c) => c.timezone === tz),
+    }).forEach(({
+      currentView,
+      offset,
+      location: {
+        timezone,
+        caseName,
         currentDate,
-        offset,
-        showCurrentTimeIndicator: false,
-        firstDayOfWeek: 4,
-        cellDuration: 60,
-        height: 800,
-      });
+        dataSource,
+      },
+    }) => {
+      test(`Should correctly render appointments with local machine date crossing DST (${timezone}, ${caseName}, offset: ${offset})`, async ({ page }) => {
+        await insertStylesheetRulesToPage(page, CUSTOM_CSS);
+        await createWidget(page, 'dxScheduler', {
+          dataSource,
+          currentView,
+          currentDate,
+          offset,
+          showCurrentTimeIndicator: false,
+          firstDayOfWeek: 4,
+          cellDuration: 60,
+          height: 800,
+        });
 
-      const workSpace = page.locator('.dx-scheduler-work-space');
-      const timezoneName = normalizeTimezoneName(timezone);
-      await testScreenshot(
-        page,
-        `${currentView}_appts-render-cross-dts_t-${timezoneName}-${caseName}_offset-${offset}.png`,
-        { element: workSpace },
-      );
+        const workSpace = page.locator('.dx-scheduler-work-space');
+        const timezoneName = normalizeTimezoneName(timezone);
+        await testScreenshot(
+          page,
+          `${currentView}_appts-render-cross-dts_t-${timezoneName}-${caseName}_offset-${offset}.png`,
+          { element: workSpace },
+        );
+      });
     });
   });
 });

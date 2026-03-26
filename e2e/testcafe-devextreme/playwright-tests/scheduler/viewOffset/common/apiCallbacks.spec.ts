@@ -245,7 +245,7 @@ test.describe('Offset: Api callbacks', () => {
       const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: APPOINTMENT_TITLE });
       await appointment.click();
 
-      const tooltip = page.locator('.dx-scheduler-appointment-tooltip');
+      const tooltip = page.locator('.dx-overlay-wrapper.dx-scheduler-appointment-tooltip-wrapper');
       await expect(tooltip).toBeVisible();
 
       await appointment.dblclick();
@@ -284,7 +284,7 @@ test.describe('Offset: Api callbacks', () => {
       const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: APPOINTMENT_TITLE });
       await appointment.click();
 
-      const tooltip = page.locator('.dx-scheduler-appointment-tooltip');
+      const tooltip = page.locator('.dx-overlay-wrapper.dx-scheduler-appointment-tooltip-wrapper');
       await expect(tooltip).toBeVisible();
 
       const deleteButton = page.locator('.dx-tooltip-appointment-item-delete-button');
