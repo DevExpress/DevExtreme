@@ -38,7 +38,7 @@ test.describe('Selection.Visual', () => {
     });
   });
 
-  test("Multiple mode with showCheckBoxesMode = 'always'", async ({ page }) => {
+  test("Multiple mode with Select All/Deselect All and showCheckBoxesMode = 'always'", async ({ page }) => {
     await createWidget(page, 'dxCardView', {
       dataSource: selectionData,
       cardHeader: { captionExpr: () => 'title' },

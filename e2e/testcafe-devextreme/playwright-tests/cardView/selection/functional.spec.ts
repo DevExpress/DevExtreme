@@ -76,7 +76,7 @@ test.describe('Selection.Functional', () => {
     await expect(secondCard).not.toHaveClass(/dx-cardview-card-selection/);
   });
 
-  test('Select all when selectAllMode = allPages', async ({ page }) => {
+  test("Select all when selectAllMode = 'allPages'", async ({ page }) => {
     await createWidget(page, 'dxCardView', {
       dataSource: selectionData,
       cardHeader: { captionExpr: () => 'title' },

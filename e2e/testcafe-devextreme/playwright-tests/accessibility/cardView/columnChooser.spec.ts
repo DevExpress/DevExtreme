@@ -14,7 +14,7 @@ test.describe('Accessibility - CardView columnChooser', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('select mode', async ({ page }) => {
+  test("column chooser in 'select' mode", async ({ page }) => {
     await createWidget(page, 'dxCardView', {
       columnChooser: { enabled: true, mode: 'select', height: 400, width: 400 },
       columns: [
@@ -29,7 +29,7 @@ test.describe('Accessibility - CardView columnChooser', () => {
     await a11yCheck(page, {}, '#container');
   });
 
-  test('dragAndDrop mode', async ({ page }) => {
+  test("column chooser in 'dragAndDrop' mode", async ({ page }) => {
     await createWidget(page, 'dxCardView', {
       columnChooser: { enabled: true, mode: 'dragAndDrop', height: 400, width: 400 },
       columns: [
