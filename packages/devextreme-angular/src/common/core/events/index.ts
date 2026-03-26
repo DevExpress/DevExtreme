@@ -1,4 +1,10 @@
 export {
+    off,
+    on,
+    one,
+    trigger,
+} from 'devextreme/common/core/events';
+export type {
     AsyncCancelable,
     Cancelable,
     ChangedOptionInfo,
@@ -7,8 +13,4 @@ export {
     InitializedEventInfo,
     ItemInfo,
     NativeEventInfo,
-    off,
-    on,
-    one,
-    trigger,
 } from 'devextreme/common/core/events';
