@@ -853,6 +853,115 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.assertLayout(['10.0806', '89.9194']);
     });
 
+    QUnit.test('Initially collapsed first pane with size should expand to user-specified size via UI', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 300 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+        const $collapseButton = this.getCollapseNextButton($resizeHandle);
+
+        $collapseButton.trigger('dxclick');
+
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+
+    QUnit.test('Initially collapsed last pane with size should expand to user-specified size via UI', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true }, { collapsible: true, collapsed: true, size: 300 }]
+        });
+
+        this.assertLayout(['100', '0']);
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+        const $collapseButton = this.getCollapsePrevButton($resizeHandle);
+
+        $collapseButton.trigger('dxclick');
+
+        this.assertLayout(['69.7581', '30.2419']);
+    });
+
+    QUnit.test('Initially collapsed first pane with size should expand to user-specified size via option', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 300 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        this.instance.option('items[0].collapsed', false);
+
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+
+    QUnit.test('Initially collapsed last pane with size should expand to user-specified size via option', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true }, { collapsible: true, collapsed: true, size: 300 }]
+        });
+
+        this.assertLayout(['100', '0']);
+
+        this.instance.option('items[1].collapsed', false);
+
+        this.assertLayout(['69.7581', '30.2419']);
+    });
+
+    QUnit.test('Initially collapsed middle pane with size should expand to user-specified size via option', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true }, { collapsible: true, collapsed: true, size: 300 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['50', '0', '50']);
+
+        this.instance.option('items[1].collapsed', false);
+
+        this.assertLayout(['50', '30.4878', '19.5122']);
+    });
+
+    QUnit.test('Initially collapsed first pane with small size should expand to user-specified size in 3-pane layout (T0000)', function(assert) {
+        this.reinit({
+            items: [
+                { text: 'pane_1', size: 50, collapsible: true, collapsed: true },
+                { text: 'pane_2', collapsible: true },
+                { text: 'pane_3' },
+            ],
+        });
+
+        this.assertLayout(['0', '50', '50']);
+
+        this.instance.option('items[0].collapsed', false);
+
+        this.assertLayout(['5.0813', '44.9187', '50']);
+    });
+
+    QUnit.test('Initially collapsed pane without size should use fallback expand behavior', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+        const $collapseButton = this.getCollapseNextButton($resizeHandle);
+
+        $collapseButton.trigger('dxclick');
+
+        this.assertLayout(['50', '50']);
+    });
+
+    QUnit.test('Initially hidden pane with size should restore to user-specified size when made visible', function(assert) {
+        this.reinit({
+            items: [{ visible: false, size: 300 }, { }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        this.instance.option('items[0].visible', true);
+
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+
     [
         {
             items: [{ size: '30%', collapsible: true }, { size: '10%', collapsible: true }, { collapsible: true }, { collapsible: true }, { collapsible: true }],

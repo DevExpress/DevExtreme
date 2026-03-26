@@ -118,9 +118,11 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   private _renderQueue: RenderQueueItem[] = [];
 
-  private _panesCacheSize: (PaneCache | undefined)[] = [];
+  // @ts-expect-error ts-error
+  private _panesCacheSize: (PaneCache | undefined)[];
 
-  private _panesCacheSizeVisible: (PaneCache | undefined)[] = [];
+  // @ts-expect-error ts-error
+  private _panesCacheSizeVisible: (PaneCache | undefined)[];
 
   private _savedCollapsingEvent?: DxEvent<InteractionEvent>;
 
@@ -201,10 +203,10 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
     this._toggleOrientationClass();
 
-    super._initMarkup();
-
     this._panesCacheSize = [];
     this._panesCacheSizeVisible = [];
+
+    super._initMarkup();
 
     this._attachResizeObserverSubscription();
   }
@@ -240,6 +242,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
       this._layout = this._getDefaultLayoutBasedOnSize();
 
       this._applyStylesFromLayout(this._layout);
+      this._initPanesCacheSize();
       this._updateItemSizes();
 
       this._shouldRecalculateLayout = false;
@@ -255,6 +258,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     if (this._isVisible()) {
       this._layout = this._getDefaultLayoutBasedOnSize();
       this._applyStylesFromLayout(this._layout);
+      this._initPanesCacheSize();
 
       this._updateItemSizes();
     } else {
@@ -262,6 +266,45 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     }
 
     this._processRenderQueue();
+  }
+
+  _initPanesCacheSize(): void {
+    const { items = [] } = this.option();
+
+    items.forEach((item, index) => {
+      const restriction = this._itemRestrictions[index];
+
+      if (!isDefined(restriction?.size)) {
+        return;
+      }
+
+      if (item.collapsed === true && !this._panesCacheSize[index]) {
+        const isLastNonCollapsed = index >= findLastIndexOfNonCollapsedItem(items);
+        const isLastVisible = this._isLastVisibleItem(index);
+
+        const direction = isLastVisible || isLastNonCollapsed
+          ? CollapseExpandDirection.Previous
+          : CollapseExpandDirection.Next;
+
+        this._panesCacheSize[index] = {
+          size: restriction.size,
+          direction,
+        };
+      }
+
+      if (item.visible === false && !this._panesCacheSizeVisible[index]) {
+        const isLastVisible = index >= findLastIndexOfVisibleItem(items);
+
+        const direction = isLastVisible
+          ? CollapseExpandDirection.Previous
+          : CollapseExpandDirection.Next;
+
+        this._panesCacheSizeVisible[index] = {
+          size: restriction.size,
+          direction,
+        };
+      }
+    });
   }
 
   _processRenderQueue(): void {
