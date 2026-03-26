@@ -20,9 +20,9 @@
   "author": "Developer Express Inc.",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common": ">=19.0.0",
-    "@angular/core": ">=19.0.0",
-    "@angular/forms": ">=19.0.0",
+    "@angular/common": ">=20.0.0",
+    "@angular/core": ">=20.0.0",
+    "@angular/forms": ">=20.0.0",
     "devextreme": "workspace:*"
   },
   "devDependencies": {
@@ -41,7 +41,7 @@
     "@eslint-stylistic/metadata": "catalog:",
     "@stylistic/eslint-plugin": "catalog:",
     "@types/jasmine": "~6.0.0",
-    "@types/node": "~24.1.0",
+    "@types/node": "~20.19.0",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
     "@webcomponents/custom-elements": "1.6.0",
