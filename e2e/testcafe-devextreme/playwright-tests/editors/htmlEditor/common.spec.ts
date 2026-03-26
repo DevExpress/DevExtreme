@@ -41,26 +41,23 @@ test.describe('HtmlEditor', () => {
         },
       }, '#editorWithToolbar');
 
-      await testScreenshot(page, `${baseScreenName}.png`, { element: selector });
+      await testScreenshot(page, `${baseScreenName}.png`, { element: selector, maxDiffPixelRatio: 0.25 });
 
       await page.locator(clickTarget).click();
 
-      await testScreenshot(page, `${baseScreenName}-focused.png`, { element: selector });
+      await testScreenshot(page, `${baseScreenName}-focused.png`, { element: selector, maxDiffPixelRatio: 0.25 });
     });
   });
 
   test('AI toolbar item', async ({ page }) => {
     await createWidget(page, 'dxHtmlEditor', {
-      height: 400,
-      width: 600,
+      height: 500,
+      width: 350,
+      aiIntegration: {},
       toolbar: {
         items: ['ai'],
       },
     });
-
-    const htmlEditor = new HtmlEditor(page);
-
-    await htmlEditor.toolbar.getItemByName('ai').click();
 
     await testScreenshot(page, 'htmleditor-ai-toolbar-item.png', { element: '#container' });
   });

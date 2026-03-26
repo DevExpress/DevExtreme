@@ -26,60 +26,67 @@ test.describe('TagBox', () => {
 
     await tagBox.click();
 
-    expect(tagBox.isFocused).toBeTruthy()
-      .expect(await tagBox.isOpened())
-      .ok();
+    await expect(tagBox).toHaveClass(/dx-state-focused/);
 
-    const list = await tagBox.getList();
-    const { selectAll } = list;
-    const selectAllCheckBox = selectAll.checkBox;
-    const firstItemCheckBox = list.getItem().checkBox;
-    const secondItemCheckBox = list.getItem(1).checkBox;
-    const thirdItemCheckBox = list.getItem(2).checkBox;
+    const isOpened = await page.evaluate(() => {
+      const el = document.querySelector('#container');
+      const instance = (window as any).DevExpress.ui.dxTagBox.getInstance(el);
+      return instance ? instance.option('opened') : false;
+    });
+    expect(isOpened).toBe(true);
 
-    await t
+    const selectAllCheckBox = page.locator('.dx-list-select-all .dx-checkbox');
+    const firstItem = page.locator('.dx-list-item').nth(0);
+    const secondItem = page.locator('.dx-list-item').nth(1);
+    const thirdItem = page.locator('.dx-list-item').nth(2);
+    const firstItemCheckBox = firstItem.locator('.dx-checkbox');
+    const secondItemCheckBox = secondItem.locator('.dx-checkbox');
+    const thirdItemCheckBox = thirdItem.locator('.dx-checkbox');
+
     // List is focused
-      .pressKey('tab')
-      .expect(selectAllCheckBox.isFocused).ok()
-      .pressKey('down down down')
-      .expect(thirdItemCheckBox.isFocused)
-      .ok()
-      .pressKey('down')
-      .expect(selectAllCheckBox.isFocused)
-      .ok()
-      .pressKey('up up up')
-      .expect(firstItemCheckBox.isFocused)
-      .ok()
-      .expect(firstItemCheckBox.isChecked)
-      .notOk()
-      .pressKey('space')
-      .expect(firstItemCheckBox.isChecked)
-      .ok()
-      .pressKey('enter')
-      .expect(firstItemCheckBox.isChecked)
-      .notOk()
+    await page.keyboard.press('Tab');
+    await expect(page.locator('.dx-list-select-all')).toHaveClass(/dx-state-focused/);
+
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await expect(thirdItem).toHaveClass(/dx-state-focused/);
+
+    await page.keyboard.press('ArrowDown');
+    await expect(page.locator('.dx-list-select-all')).toHaveClass(/dx-state-focused/);
+
+    await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('ArrowUp');
+    await expect(firstItem).toHaveClass(/dx-state-focused/);
+
+    await expect(firstItemCheckBox).not.toHaveClass(/dx-checkbox-checked/);
+    await page.keyboard.press('Space');
+    await expect(firstItemCheckBox).toHaveClass(/dx-checkbox-checked/);
+    await page.keyboard.press('Enter');
+    await expect(firstItemCheckBox).not.toHaveClass(/dx-checkbox-checked/);
 
     // TagBox is focused
-      .pressKey('shift+tab')
-      .expect(tagBox.isFocused)
-      .ok()
-      .pressKey('down')
-      .expect(secondItemCheckBox.isFocused)
-      .ok()
-      .pressKey('down down')
-      .expect(selectAllCheckBox.isFocused)
-      .ok()
-      .pressKey('up up up')
-      .expect(firstItemCheckBox.isFocused)
-      .ok()
-      .expect(firstItemCheckBox.isChecked)
-      .notOk()
-      .pressKey('space')
-      .expect(firstItemCheckBox.isChecked)
-      .ok()
-      .pressKey('enter')
-      .expect(firstItemCheckBox.isChecked)
-      .notOk();
+    await page.keyboard.press('Shift+Tab');
+    await expect(tagBox).toHaveClass(/dx-state-focused/);
+
+    await page.keyboard.press('ArrowDown');
+    await expect(secondItem).toHaveClass(/dx-state-focused/);
+
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await expect(page.locator('.dx-list-select-all')).toHaveClass(/dx-state-focused/);
+
+    await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('ArrowUp');
+    await expect(firstItem).toHaveClass(/dx-state-focused/);
+
+    await expect(firstItemCheckBox).not.toHaveClass(/dx-checkbox-checked/);
+    await page.keyboard.press('Space');
+    await expect(firstItemCheckBox).toHaveClass(/dx-checkbox-checked/);
+    await page.keyboard.press('Enter');
+    await expect(firstItemCheckBox).not.toHaveClass(/dx-checkbox-checked/);
 
     });
 
@@ -95,40 +102,45 @@ test.describe('TagBox', () => {
 
     await tagBox.click();
 
-    expect(tagBox.isFocused).toBeTruthy()
-      .expect(await tagBox.isOpened())
-      .ok();
+    await expect(tagBox).toHaveClass(/dx-state-focused/);
 
-    const list = await tagBox.getList();
-    const { selectAll } = list;
-    const selectAllCheckBox = selectAll.checkBox;
+    const isOpened = await page.evaluate(() => {
+      const el = document.querySelector('#container');
+      const instance = (window as any).DevExpress.ui.dxTagBox.getInstance(el);
+      return instance ? instance.option('opened') : false;
+    });
+    expect(isOpened).toBe(true);
 
-    await page.keyboard.press('Tab')
-      .expect(tagBox.isFocused).notOk()
-      .expect(selectAllCheckBox.isFocused)
-      .ok()
+    const selectAllItem = page.locator('.dx-list-select-all');
 
-      .pressKey('shift+tab')
-      .expect(tagBox.isFocused)
-      .ok()
-      .expect(selectAllCheckBox.isFocused)
-      .notOk()
+    await page.keyboard.press('Tab');
+    await expect(tagBox).not.toHaveClass(/dx-state-focused/);
+    await expect(selectAllItem).toHaveClass(/dx-state-focused/);
 
-      .pressKey('tab')
-      .expect(tagBox.isFocused)
-      .notOk()
-      .expect(selectAllCheckBox.isFocused)
-      .ok();
+    await page.keyboard.press('Shift+Tab');
+    await expect(tagBox).toHaveClass(/dx-state-focused/);
+    await expect(selectAllItem).not.toHaveClass(/dx-state-focused/);
 
-    await page.keyboard.press('esc');
+    await page.keyboard.press('Tab');
+    await expect(tagBox).not.toHaveClass(/dx-state-focused/);
+    await expect(selectAllItem).toHaveClass(/dx-state-focused/);
 
-    expect(tagBox.isFocused).toBeTruthy()
-      .expect(await tagBox.isOpened())
-      .notOk();
+    await page.keyboard.press('Escape');
+
+    await expect(tagBox).toHaveClass(/dx-state-focused/);
+
+    const isOpenedAfterEsc = await page.evaluate(() => {
+      const el = document.querySelector('#container');
+      const instance = (window as any).DevExpress.ui.dxTagBox.getInstance(el);
+      return instance ? instance.option('opened') : true;
+    });
+    expect(isOpenedAfterEsc).toBe(false);
 
     });
 
   test('TagBox with selection controls', async ({ page }) => {
+    await page.setViewportSize({ width: 300, height: 285 });
+
     await createWidget(page, 'dxTagBox', {
     items: [1, 2, 3, 4, 5, 6, 7],
     showSelectionControls: true,
@@ -149,9 +161,11 @@ test.describe('TagBox', () => {
     placeholder: 'Choose a value',
   });
 
-    const tagBox = page.locator('#container');
-
-    await tagBox.option('items', [1, 2, 3]);
+    await page.evaluate(() => {
+      const el = document.querySelector('#container');
+      const instance = (window as any).DevExpress.ui.dxTagBox.getInstance(el);
+      if (instance) instance.option('items', [1, 2, 3]);
+    });
 
     await testScreenshot(page, 'TagBox placeholder if value is not choosen.png', { element: '#container' });
 

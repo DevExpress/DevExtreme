@@ -23,11 +23,13 @@ export async function setStyleAttribute(
   selector: string,
   styleValue: string,
 ): Promise<void> {
-  await page.evaluate(({ sel, style }) => {
+  await page.evaluate(({ sel, style }) => new Promise<void>((resolve) => {
     const element = document.querySelector(sel);
     const styles = element?.getAttribute('style') ?? '';
     element?.setAttribute('style', `${styles} ${style}`);
-  }, { sel: selector, style: styleValue });
+    window.dispatchEvent(new Event('resize'));
+    requestAnimationFrame(() => resolve());
+  }), { sel: selector, style: styleValue });
 }
 
 export async function insertStylesheetRulesToPage(
@@ -52,18 +54,30 @@ export async function appendElementTo(
   page: Page,
   parentSelector: string,
   childSelector: string,
-  idOrAttrs?: string | Record<string, string>,
+  idOrStyles?: string | Record<string, string>,
+  additionalStyles?: Record<string, string>,
 ): Promise<void> {
-  const attrs: Record<string, string> | undefined = typeof idOrAttrs === 'string'
-    ? { id: idOrAttrs }
-    : idOrAttrs;
-  await page.evaluate(({ parent, tag, attributes }) => {
+  const id = typeof idOrStyles === 'string' ? idOrStyles : undefined;
+  const styles = additionalStyles ?? (typeof idOrStyles === 'object' ? idOrStyles : undefined);
+  await page.evaluate(({ parent, tag, elemId, elemStyles }) => {
     const el = document.createElement(tag);
-    if (attributes) {
-      Object.entries(attributes).forEach(([key, val]) => el.setAttribute(key, val));
+    if (elemId) el.setAttribute('id', elemId);
+    if (elemStyles) {
+      Object.entries(elemStyles).forEach(([key, val]) => {
+        if (key === 'id') {
+          el.setAttribute('id', val as string);
+        } else {
+          (el.style as any)[key] = val;
+        }
+      });
     }
     document.querySelector(parent)?.appendChild(el);
-  }, { parent: parentSelector, tag: childSelector, attributes: attrs });
+  }, {
+    parent: parentSelector,
+    tag: childSelector,
+    elemId: id,
+    elemStyles: styles,
+  });
 }
 
 export async function setClassAttribute(
@@ -78,6 +92,37 @@ export async function setClassAttribute(
       el.setAttribute('class', `${existing} ${cls}`.trim());
     }
   }, { sel: selector, cls: className });
+}
+
+export async function removeAttribute(
+  page: Page,
+  selector: string,
+  attribute: string,
+): Promise<void> {
+  await page.evaluate(({ sel, attr }) => {
+    document.querySelector(sel)?.removeAttribute(attr);
+  }, { sel: selector, attr: attribute });
+}
+
+export async function addFocusableElementBefore(
+  page: Page,
+  targetSelector: string,
+  elementId = 'focusable-start',
+): Promise<void> {
+  await page.evaluate(({ target, id }) => {
+    const existing = document.getElementById(id);
+    existing?.remove();
+    const targetEl = document.querySelector(target);
+    const button = document.createElement('button');
+    button.id = id;
+    button.textContent = 'Start';
+    button.style.position = 'fixed';
+    button.style.top = '0';
+    button.style.left = '0';
+    button.style.zIndex = '-1';
+    button.style.opacity = '0';
+    targetEl?.parentElement?.insertBefore(button, targetEl);
+  }, { target: targetSelector, id: elementId });
 }
 
 export async function addCaptionTo(

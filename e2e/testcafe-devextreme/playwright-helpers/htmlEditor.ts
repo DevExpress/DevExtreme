@@ -165,7 +165,7 @@ export class HtmlEditorFileUploaderFile {
 
   get cancelButton(): HtmlEditorButton {
     return new HtmlEditorButton(
-      this.element.locator(`.${CLASS.fileUploaderFileCancelButton} .${CLASS.button}`),
+      this.element.locator('xpath=..').locator(`.${CLASS.fileUploaderFileCancelButton}`),
     );
   }
 }
@@ -188,7 +188,7 @@ export class HtmlEditorDialog {
 
   constructor(page: Page) {
     this.page = page;
-    this.element = page.locator(`.${CLASS.popup}.${CLASS.formDialog}`);
+    this.element = page.locator(`.dx-overlay-wrapper.${CLASS.formDialog}`);
   }
 
   get footerToolbar(): HtmlEditorDialogFooterToolbar {

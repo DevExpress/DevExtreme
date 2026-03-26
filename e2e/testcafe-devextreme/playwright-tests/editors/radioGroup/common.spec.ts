@@ -43,14 +43,14 @@ test.describe('Radio Group', () => {
       `${parentSel} > .dx-scrollable-wrapper .dx-item:nth-child(${index + 1}) .dx-item-content`;
 
     const checkParentGroup = async (first = false, second = false, third = false) => {
-      const items = page.locator('#container > .dx-scrollable-wrapper .dx-radiobutton');
+      const items = page.locator('#container > .dx-widget.dx-collection > .dx-radiobutton');
       expect(await items.nth(0).evaluate((el) => el.classList.contains('dx-radiobutton-checked'))).toBe(first);
       expect(await items.nth(1).evaluate((el) => el.classList.contains('dx-radiobutton-checked'))).toBe(second);
       expect(await items.nth(2).evaluate((el) => el.classList.contains('dx-radiobutton-checked'))).toBe(third);
     };
 
     const getChildGroupButtons = (parentItemIndex: number) => {
-      return page.locator(`#container .dx-item`).nth(parentItemIndex)
+      return page.locator('#container > .dx-widget.dx-collection > .dx-radiobutton').nth(parentItemIndex)
         .locator('.dx-radiogroup .dx-radiobutton');
     };
 
@@ -66,7 +66,7 @@ test.describe('Radio Group', () => {
     await checkChildGroup(1);
     await checkChildGroup(2);
 
-    const parentButtons = page.locator('#container > .dx-scrollable-wrapper .dx-radiobutton');
+    const parentButtons = page.locator('#container > .dx-widget.dx-collection > .dx-radiobutton');
 
     await parentButtons.nth(0).click();
     await checkParentGroup(true);

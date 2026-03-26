@@ -17,6 +17,8 @@ test.describe('Drop Down Box\'s Popup', () => {
   const BUTTON_CLASS = 'dx-dropdowneditor-button';
 
   test('Popup should have correct height when DropDownBox is opened first time (T1130045)', async ({ page }) => {
+    await page.setViewportSize({ width: 900, height: 600 });
+
     await createWidget(page, 'dxDropDownBox', {
     dropDownOptions: {
       templatesRenderAsynchronously: true,
