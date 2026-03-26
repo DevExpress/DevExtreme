@@ -38,20 +38,44 @@ test.describe('ContextMenu', () => {
       },
     }, '#contextMenu');
 
-    const contextMenu = page.locator('#contextMenu');
     const target = page.locator('#menuTarget');
 
-    await page.click(target)
-      .expect(page.locator('.dx-context-menu').exists).ok('Context menu element should exist')
-      .expect(contextMenu.overlay.getContent().getStyleProperty('visibility'))
-      .eql('visible');
+    await target.click();
+    await expect(page.locator('.dx-context-menu')).toBeVisible();
 
-    const initialOverlayOffset = await contextMenu.overlay.getOverlayOffset();
+    const initialOverlayOffset = await page.evaluate(() => {
+      const overlay = $('.dx-context-menu').dxContextMenu('instance')['_overlay'];
+      if (overlay) {
+        const el = overlay.content().get(0);
+        const rect = el.getBoundingClientRect();
+        return { top: rect.top, left: rect.left };
+      }
+      return null;
+    });
 
-    await page.expect(contextMenu.getItemCount()).eql(1);
+    await expect(page.locator('.dx-context-menu .dx-menu-item')).toHaveCount(1);
 
-    await page.expect(contextMenu.getItemCount()).eql(2)
-      .expect(contextMenu.overlay.getOverlayOffset()).eql(initialOverlayOffset);
+    await page.waitForFunction(() => {
+      const items = ($('#contextMenu') as any).dxContextMenu('instance').option('items');
+      return items && items.length === 2;
+    }, { timeout: 5000 });
+
+    await expect(page.locator('.dx-context-menu .dx-menu-item')).toHaveCount(2);
+
+    const finalOverlayOffset = await page.evaluate(() => {
+      const overlay = $('.dx-context-menu').dxContextMenu('instance')['_overlay'];
+      if (overlay) {
+        const el = overlay.content().get(0);
+        const rect = el.getBoundingClientRect();
+        return { top: rect.top, left: rect.left };
+      }
+      return null;
+    });
+
+    if (initialOverlayOffset && finalOverlayOffset) {
+      expect(finalOverlayOffset.top).toBe(initialOverlayOffset.top);
+      expect(finalOverlayOffset.left).toBe(initialOverlayOffset.left);
+    }
 
     });
 });

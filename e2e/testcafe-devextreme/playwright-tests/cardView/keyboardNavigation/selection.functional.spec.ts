@@ -37,7 +37,7 @@ test.describe('KeyboardNavigation.Selection', () => {
 
       for (let i = 0; i < 3; i++) {
         const isSelected = await page.locator('.dx-cardview-card').nth(i).evaluate(
-          el => el.classList.contains('dx-selection')
+          el => el.classList.contains('dx-cardview-card-selection')
         );
         expect(isSelected).toBe(result[i]);
       }
@@ -58,7 +58,7 @@ test.describe('KeyboardNavigation.Selection', () => {
 
     for (let i = 0; i < 3; i++) {
       const isSelected = await page.locator('.dx-cardview-card').nth(i).evaluate(
-        el => el.classList.contains('dx-selection')
+        el => el.classList.contains('dx-cardview-card-selection')
       );
       expect(isSelected).toBe(true);
     }

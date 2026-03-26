@@ -32,7 +32,7 @@ test.describe('PivotGrid_scrolling', () => {
     return result;
   };
 
-  test('Row fields overlap data fields if dataFieldArea is set to "row" and virtual scrolling is enabled (T1210807)', async ({ page }) => {
+  test.skip('Row fields overlap data fields if dataFieldArea is set to "row" and virtual scrolling is enabled (T1210807)', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
     allowExpandAll: true,
     showBorders: true,

@@ -27,22 +27,22 @@ test.describe('Dialog', () => {
         ? { title: 'custom', messageHtml: 'message', buttons: [{ text: 'Custom button' }] }
         : dialogType;
 
-      await page.evaluate(() => {
-        const dialogFunction = (window as any).DevExpress.ui.dialog[dialogType];
+      await page.evaluate(({ type, args }) => {
+        const dialogFunction = (window as any).DevExpress.ui.dialog[type];
 
-        if (dialogType === 'custom') {
-          dialogFunction(dialogArgs).show();
+        if (type === 'custom') {
+          dialogFunction(args).show();
         } else {
-          dialogFunction(dialogArgs);
+          dialogFunction(args);
         }
-      });
+      }, { type: dialogType, args: dialogArgs });
 
 
       await testScreenshot(page, `Dialog appearance (${dialogType}).png`);
 
-      await page.evaluate(() => {
-        $(`.${DX_DIALOG_CLASS}`).remove();
-      });
+      await page.evaluate((cls) => {
+        $(`.${cls}`).remove();
+      }, DX_DIALOG_CLASS);
 
     });
   });

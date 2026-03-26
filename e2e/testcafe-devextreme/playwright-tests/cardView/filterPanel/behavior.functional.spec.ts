@@ -23,10 +23,10 @@ test.describe('CardView - FilterPanel Behavior', () => {
       filterPanel: { visible: true },
     });
 
-    const popup = page.locator('.dx-filterbuilder-popup');
+    const popup = page.locator('.dx-popup-wrapper:has(.dx-filterbuilder)');
     await expect(popup).not.toBeVisible();
 
-    await page.locator('.dx-cardview-filter-panel .dx-icon-filter').click();
+    await page.locator('.dx-datagrid-filter-panel .dx-icon-filter').click();
     await expect(popup).toBeVisible();
   });
 
@@ -39,10 +39,10 @@ test.describe('CardView - FilterPanel Behavior', () => {
       filterPanel: { visible: true },
     });
 
-    const popup = page.locator('.dx-filterbuilder-popup');
+    const popup = page.locator('.dx-popup-wrapper:has(.dx-filterbuilder)');
     await expect(popup).not.toBeVisible();
 
-    await page.locator('.dx-cardview-filter-panel .dx-cardview-filter-panel-text').click();
+    await page.locator('.dx-datagrid-filter-panel .dx-datagrid-filter-panel-text').click();
     await expect(popup).toBeVisible();
   });
 
@@ -59,7 +59,7 @@ test.describe('CardView - FilterPanel Behavior', () => {
       filterValue: ['title', '=', 'Mr.'],
     });
 
-    await page.locator('.dx-cardview-filter-panel .dx-cardview-filter-panel-clear-filter').click();
+    await page.locator('.dx-datagrid-filter-panel .dx-datagrid-filter-panel-clear-filter').click();
 
     const filterValue = await page.evaluate(() => {
       return ($('#container') as any).dxCardView('instance').option('filterValue');

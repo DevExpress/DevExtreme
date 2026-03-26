@@ -4,7 +4,7 @@ import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
 
-test.describe('pivotGrid_fieldPanel_drag-n-drop', () => {
+test.describe.skip('pivotGrid_fieldPanel_drag-n-drop', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);

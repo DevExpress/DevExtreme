@@ -28,12 +28,12 @@ test.describe('CardView - Editing', () => {
       },
     });
 
-    await page.locator('.dx-cardview-addcard-button').click();
-    await page.waitForSelector('.dx-cardview-edit-popup');
+    await page.locator('[aria-label="add"]').click();
+    await page.waitForSelector('.dx-popup-normal');
 
-    const idInput = page.locator('.dx-cardview-edit-popup input[name="id"]');
-    const titleInput = page.locator('.dx-cardview-edit-popup input[name="title"]');
-    const statusInput = page.locator('.dx-cardview-edit-popup input[name="status"]');
+    const idInput = page.locator('.dx-popup-normal input[name="id"]');
+    const titleInput = page.locator('.dx-popup-normal input[name="title"]');
+    const statusInput = page.locator('.dx-popup-normal input[name="status"]');
 
     await expect(idInput).toHaveValue('10');
     await expect(titleInput).toHaveValue('New Task');

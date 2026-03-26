@@ -151,7 +151,7 @@ test.describe('Popup_toolbar', () => {
 
     await page.waitForTimeout(ANIMATION_DELAY);
 
-    const overflowButton = page.locator('#container .dx-popup-title .dx-dropdownmenu-button, #container .dx-popup-title .dx-toolbar-menu-container .dx-button');
+    const overflowButton = page.locator('.dx-overlay-wrapper .dx-popup-title .dx-dropdownmenu-button, .dx-overlay-wrapper .dx-popup-title .dx-toolbar-menu-container .dx-button');
     await overflowButton.first().click();
 
     await testScreenshot(page, 'Popup toolbars with wide elements and overflow menu before items rebinding.png');
@@ -183,7 +183,7 @@ test.describe('Popup_toolbar', () => {
 
     await page.waitForTimeout(ANIMATION_DELAY);
 
-    const overflowButton = page.locator('#container .dx-popup-title .dx-dropdownmenu-button, #container .dx-popup-title .dx-toolbar-menu-container .dx-button');
+    const overflowButton = page.locator('.dx-overlay-wrapper .dx-popup-title .dx-dropdownmenu-button, .dx-overlay-wrapper .dx-popup-title .dx-toolbar-menu-container .dx-button');
     await overflowButton.first().click();
 
     await testScreenshot(page, 'Toolbar before items rebinding if it was hidden without items on init.png');
@@ -209,7 +209,7 @@ test.describe('Popup_toolbar', () => {
       visible: true,
     });
 
-    const overflowButton = page.locator('#container .dx-popup-title .dx-dropdownmenu-button, #container .dx-popup-title .dx-toolbar-menu-container .dx-button');
+    const overflowButton = page.locator('.dx-overlay-wrapper .dx-popup-title .dx-dropdownmenu-button, .dx-overlay-wrapper .dx-popup-title .dx-toolbar-menu-container .dx-button');
     await overflowButton.first().click();
 
     await testScreenshot(page, 'Toolbar before items rebinding if it was visible with items on init.png');

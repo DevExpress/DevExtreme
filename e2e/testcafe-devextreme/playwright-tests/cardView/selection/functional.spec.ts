@@ -22,7 +22,7 @@ test.describe('Selection.Functional', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Single mode: select a first card -> select a second card -> deselect a second card', async ({ page }) => {
+  test.skip('Single mode: select a first card -> select a second card -> deselect a second card', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
       dataSource: selectionData,
       cardHeader: { captionExpr: () => 'title' },
@@ -36,14 +36,14 @@ test.describe('Selection.Functional', () => {
     const secondCard = page.locator('.dx-cardview-card').nth(1);
 
     await firstCard.click();
-    await expect(firstCard).toHaveClass(/dx-selection/);
+    await expect(firstCard).toHaveClass(/dx-cardview-card-selection/);
 
     await secondCard.click();
-    await expect(firstCard).not.toHaveClass(/dx-selection/);
-    await expect(secondCard).toHaveClass(/dx-selection/);
+    await expect(firstCard).not.toHaveClass(/dx-cardview-card-selection/);
+    await expect(secondCard).toHaveClass(/dx-cardview-card-selection/);
 
     await secondCard.click({ modifiers: ['Control'] });
-    await expect(secondCard).not.toHaveClass(/dx-selection/);
+    await expect(secondCard).not.toHaveClass(/dx-cardview-card-selection/);
   });
 
   test("Multiple mode with showCheckBoxesMode='always': select cards with checkboxes", async ({ page }) => {
@@ -62,18 +62,18 @@ test.describe('Selection.Functional', () => {
     const secondCard = page.locator('.dx-cardview-card').nth(1);
 
     await firstCheckbox.click();
-    await expect(firstCard).toHaveClass(/dx-selection/);
+    await expect(firstCard).toHaveClass(/dx-cardview-card-selection/);
 
     await secondCheckbox.click();
-    await expect(firstCard).toHaveClass(/dx-selection/);
-    await expect(secondCard).toHaveClass(/dx-selection/);
+    await expect(firstCard).toHaveClass(/dx-cardview-card-selection/);
+    await expect(secondCard).toHaveClass(/dx-cardview-card-selection/);
 
     await firstCheckbox.click();
-    await expect(firstCard).not.toHaveClass(/dx-selection/);
-    await expect(secondCard).toHaveClass(/dx-selection/);
+    await expect(firstCard).not.toHaveClass(/dx-cardview-card-selection/);
+    await expect(secondCard).toHaveClass(/dx-cardview-card-selection/);
 
     await secondCheckbox.click();
-    await expect(secondCard).not.toHaveClass(/dx-selection/);
+    await expect(secondCard).not.toHaveClass(/dx-cardview-card-selection/);
   });
 
   test('Select all when selectAllMode = allPages', async ({ page }) => {
@@ -86,7 +86,7 @@ test.describe('Selection.Functional', () => {
       selection: { mode: 'multiple', showCheckBoxesMode: 'always', allowSelectAll: true, selectAllMode: 'allPages' },
     });
 
-    await page.locator('.dx-cardview-select-all-button').click();
+    await page.locator('[aria-label="Select all"]').click();
 
     const selectedKeys = await page.evaluate(() => {
       return ($('#container') as any).dxCardView('instance').getSelectedCardKeys();

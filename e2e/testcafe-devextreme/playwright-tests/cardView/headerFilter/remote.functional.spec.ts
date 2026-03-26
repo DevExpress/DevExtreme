@@ -53,10 +53,10 @@ test.describe('HeaderFilter.Remote.Functional', () => {
       ],
     });
 
-    const headerFilterIcon = page.locator('.dx-header-filter').first();
+    const headerFilterIcon = page.locator('.dx-header-filter-icon').first();
     await headerFilterIcon.click();
 
-    const headerFilterPopup = page.locator('.dx-header-filter-menu');
+    const headerFilterPopup = page.locator('.dx-popup-wrapper.dx-header-filter-menu');
     await expect(headerFilterPopup).toBeVisible();
 
     const listItems = headerFilterPopup.locator('.dx-list-item');

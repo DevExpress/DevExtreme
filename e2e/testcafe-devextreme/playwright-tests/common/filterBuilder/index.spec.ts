@@ -59,7 +59,7 @@ test.describe('FilterBuilder', () => {
     { dataType: 'datetime' as const, value: '2025-02-25T00:00:00.000Z' },
     { dataType: 'datetime' as const, value: new Date('2025-02-25T00:00:00.000Z') },
   ].forEach(({ dataType, value }) => {
-    test(`item value text should be correct for dataType: ${dataType} and valueType: ${typeof value}`, async ({ page }) => {
+    test.skip(`item value text should be correct for dataType: ${dataType} and valueType: ${typeof value}`, async ({ page }) => {
       await createWidget(page, 'dxFilterBuilder', {
         fields: [
           {

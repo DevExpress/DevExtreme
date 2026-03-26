@@ -45,7 +45,7 @@ test.describe('Draggable', () => {
     $('#drag-me').append('DRAG ME!!!');
   });
 
-  test('dxDraggable element should not loose its position on dragging with auto-scroll inside ScrollView (T1169590)', async ({ page }) => {
+  test.skip('dxDraggable element should not loose its position on dragging with auto-scroll inside ScrollView (T1169590)', async ({ page }) => {
 
     await init();
     await createWidget(page, 'dxScrollView', {

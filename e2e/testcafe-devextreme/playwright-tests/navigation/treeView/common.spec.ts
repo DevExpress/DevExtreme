@@ -1,8 +1,28 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, setAttribute } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, setAttribute, Scrollable } from '../../../playwright-helpers';
+import { employees } from '../../../tests/navigation/treeView/data';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
+
+const CLASS = {
+  searchBar: 'dx-treeview-search',
+  selectAllItem: 'dx-treeview-select-all-item',
+  node: 'dx-treeview-node',
+};
+
+async function dismissLicenseAndBlur(page: any): Promise<void> {
+  await page.evaluate(() => {
+    document.querySelectorAll('dx-license').forEach(
+      (el: Element) => {
+        (el as HTMLElement).innerHTML = '';
+        (el as HTMLElement).style.display = 'none';
+        (el as HTMLElement).setAttribute('inert', '');
+      },
+    );
+    if (document.activeElement) (document.activeElement as HTMLElement).blur();
+  });
+}
 
 test.describe('TreeView', () => {
   test.beforeEach(async ({ page }) => {
@@ -21,26 +41,21 @@ test.describe('TreeView', () => {
     items: employees,
   });
 
-    const treeView = page.locator('#container');
-    const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
-    const searchTextBox = treeView.getSearchTextBox();
-    const node = treeView.getNode(0);
+    const searchTextBox = page.locator(`#container .${CLASS.searchBar} input`);
+    const selectAllItemCheckBox = page.locator(`#container .${CLASS.selectAllItem}`);
+    const node = page.locator(`#container .${CLASS.node}`).first();
 
-    await page.keyboard.press('Tab')
-      .expect(searchTextBox.isFocused)
-      .ok()
-      .pressKey('tab')
-      .expect(selectAllItemCheckBox.isFocused)
-      .ok()
-      .pressKey('tab')
-      .expect(node.isFocused)
-      .ok()
-      .pressKey('shift+tab')
-      .expect(selectAllItemCheckBox.isFocused)
-      .ok()
-      .pressKey('shift+tab')
-      .expect(searchTextBox.isFocused)
-      .ok();
+    await dismissLicenseAndBlur(page);
+    await page.keyboard.press('Tab');
+    await expect(searchTextBox).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(selectAllItemCheckBox).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(node).toHaveClass(/dx-state-focused/);
+    await page.keyboard.press('Shift+Tab');
+    await expect(selectAllItemCheckBox).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
+    await expect(searchTextBox).toBeFocused();
 
     });
 
@@ -50,19 +65,19 @@ test.describe('TreeView', () => {
     items: employees,
   });
 
-    const treeView = page.locator('#container');
-    const node = treeView.getNode(0);
+    const node = page.locator(`#container .${CLASS.node}`).first();
 
-    await treeView.option('showCheckBoxesMode', 'selectAll');
+    await page.evaluate(() => {
+      ($('#container') as any).dxTreeView('instance').option('showCheckBoxesMode', 'selectAll');
+    });
 
-    const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
+    const selectAllItemCheckBox = page.locator(`#container .${CLASS.selectAllItem}`);
 
-    await page.keyboard.press('Tab')
-      .expect(selectAllItemCheckBox.isFocused)
-      .ok()
-      .pressKey('tab')
-      .expect(node.isFocused)
-      .ok();
+    await dismissLicenseAndBlur(page);
+    await page.keyboard.press('Tab');
+    await expect(selectAllItemCheckBox).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(node).toHaveClass(/dx-state-focused/);
 
     });
 
@@ -72,19 +87,19 @@ test.describe('TreeView', () => {
     items: employees,
   });
 
-    const treeView = page.locator('#container');
-    const node = treeView.getNode(0);
+    const node = page.locator(`#container .${CLASS.node}`).first();
 
-    await treeView.option('showCheckBoxesMode', 'selectAll');
+    await page.evaluate(() => {
+      ($('#container') as any).dxTreeView('instance').option('showCheckBoxesMode', 'selectAll');
+    });
 
-    const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
+    const selectAllItemCheckBox = page.locator(`#container .${CLASS.selectAllItem}`);
 
-    await page.keyboard.press('Tab')
-      .expect(selectAllItemCheckBox.isFocused)
-      .ok()
-      .pressKey('tab')
-      .expect(node.isFocused)
-      .ok();
+    await dismissLicenseAndBlur(page);
+    await page.keyboard.press('Tab');
+    await expect(selectAllItemCheckBox).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(node).toHaveClass(/dx-state-focused/);
 
     });
 
@@ -95,23 +110,22 @@ test.describe('TreeView', () => {
     items: employees,
   });
 
-    const treeView = page.locator('#container');
-    const searchBar = treeView.getSearchTextBox();
-    const node = treeView.getNode(0);
+    const searchBar = page.locator(`#container .${CLASS.searchBar} input`);
+    const node = page.locator(`#container .${CLASS.node}`).first();
 
-    await treeView.option('showCheckBoxesMode', 'selectAll');
+    await page.evaluate(() => {
+      ($('#container') as any).dxTreeView('instance').option('showCheckBoxesMode', 'selectAll');
+    });
 
-    const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
+    const selectAllItemCheckBox = page.locator(`#container .${CLASS.selectAllItem}`);
 
-    await page.keyboard.press('Tab')
-      .expect(searchBar.isFocused)
-      .ok()
-      .pressKey('tab')
-      .expect(selectAllItemCheckBox.isFocused)
-      .ok()
-      .pressKey('tab')
-      .expect(node.isFocused)
-      .ok();
+    await dismissLicenseAndBlur(page);
+    await page.keyboard.press('Tab');
+    await expect(searchBar).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(selectAllItemCheckBox).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(node).toHaveClass(/dx-state-focused/);
 
     });
 
@@ -122,23 +136,22 @@ test.describe('TreeView', () => {
     items: employees,
   });
 
-    const treeView = page.locator('#container');
-    const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
-    const node = treeView.getNode(0);
+    const selectAllItemCheckBox = page.locator(`#container .${CLASS.selectAllItem}`);
+    const node = page.locator(`#container .${CLASS.node}`).first();
 
-    await treeView.option('searchEnabled', 'true');
+    await page.evaluate(() => {
+      ($('#container') as any).dxTreeView('instance').option('searchEnabled', true);
+    });
 
-    const searchBar = treeView.getSearchTextBox();
+    const searchBar = page.locator(`#container .${CLASS.searchBar} input`);
 
-    await page.keyboard.press('Tab')
-      .expect(searchBar.isFocused)
-      .ok()
-      .pressKey('tab')
-      .expect(selectAllItemCheckBox.isFocused)
-      .ok()
-      .pressKey('tab')
-      .expect(node.isFocused)
-      .ok();
+    await dismissLicenseAndBlur(page);
+    await page.keyboard.press('Tab');
+    await expect(searchBar).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(selectAllItemCheckBox).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(node).toHaveClass(/dx-state-focused/);
 
     });
 
@@ -148,16 +161,14 @@ test.describe('TreeView', () => {
     items: employees,
   });
 
-    const treeView = page.locator('#container');
-    const selectAllItemCheckBox = treeView.getSelectAllCheckBox();
-    const node = treeView.getNode(0);
+    const selectAllItemCheckBox = page.locator(`#container .${CLASS.selectAllItem}`);
+    const node = page.locator(`#container .${CLASS.node}`).first();
 
-    await page.keyboard.press('Tab')
-      .expect(selectAllItemCheckBox.isFocused)
-      .ok()
-      .pressKey('tab')
-      .expect(node.isFocused)
-      .ok();
+    await dismissLicenseAndBlur(page);
+    await page.keyboard.press('Tab');
+    await expect(selectAllItemCheckBox).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(node).toHaveClass(/dx-state-focused/);
 
     });
 
@@ -172,8 +183,7 @@ test.describe('TreeView', () => {
     },
   });
 
-    const treeView = page.locator('#container');
-    const scrollable = treeView.getScrollable();
+    const scrollable = new Scrollable(page, '#container .dx-scrollable');
 
     await scrollable.scrollTo({ top: 1000 });
 
@@ -220,7 +230,7 @@ test.describe('TreeView', () => {
       },
     });
 
-      await click(page.locator('.dx-treeview-item').nth(1));
+      await page.locator('.dx-treeview-item').nth(1).click();
 
       await testScreenshot(page, `${testName}.png`, { element: '#container' });
 

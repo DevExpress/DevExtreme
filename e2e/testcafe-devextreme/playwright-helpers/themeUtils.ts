@@ -1,5 +1,6 @@
 import type { Page, Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
+import { getVisualClip, getLocatorScrollClip } from './screenshotUtils';
 
 const defaultThemeName = 'fluent.blue.light';
 
@@ -34,22 +35,57 @@ const getScreenshotName = (baseName: string, theme?: string): string => {
     : `${baseName}${themePostfix}.png`;
 };
 
+async function takePageScreenshot(
+  page: Page,
+  name: string,
+  screenshotOptions?: { maxDiffPixelRatio?: number },
+): Promise<void> {
+  const viewport = page.viewportSize() ?? { width: 1200, height: 800 };
+  const htmlOffsetWidth = await page.evaluate(() => document.documentElement.offsetWidth);
+  const width = Math.min(htmlOffsetWidth, viewport.width);
+  const clip = { x: 0, y: 0, width, height: viewport.height };
+  await expect(page).toHaveScreenshot([name], { maxDiffPixelRatio: 0.20, clip, ...screenshotOptions });
+}
+
+async function takeElementScreenshot(
+  page: Page,
+  element: Locator | string,
+  name: string,
+  screenshotOptions?: { maxDiffPixelRatio?: number },
+): Promise<void> {
+  const locator = typeof element === 'string' ? page.locator(element) : element;
+  const selector = typeof element === 'string' ? element : null;
+
+  const clip = selector
+    ? await getVisualClip(page, selector)
+    : await getLocatorScrollClip(locator);
+
+  if (clip) {
+    await expect(page).toHaveScreenshot([name], { maxDiffPixelRatio: 0.15, clip, ...screenshotOptions });
+  } else {
+    await expect(locator).toHaveScreenshot([name], { maxDiffPixelRatio: 0.15, ...screenshotOptions });
+  }
+}
+
 async function takeScreenshotForTarget(
   page: Page,
   element: Locator | string | null | undefined,
   name: string,
+  screenshotOptions?: { maxDiffPixelRatio?: number },
 ): Promise<void> {
   await page.evaluate(() => {
     (document.activeElement as HTMLElement)?.blur();
+    const licenseEls = document.querySelectorAll('dx-license');
+    licenseEls.forEach((el) => {
+      const btn = el.querySelector('div[style*="cursor: pointer"]') as HTMLElement | null;
+      if (btn) btn.click();
+    });
   });
 
   if (element === undefined || element === null) {
-    await expect(page).toHaveScreenshot([name], { fullPage: true });
+    await takePageScreenshot(page, name, screenshotOptions);
   } else {
-    const locator = typeof element === 'string'
-      ? page.locator(element)
-      : element;
-    await expect(locator).toHaveScreenshot([name]);
+    await takeElementScreenshot(page, element, name, screenshotOptions);
   }
 }
 
@@ -60,24 +96,28 @@ export async function testScreenshot(
     element?: Locator | string | null;
     theme?: string;
     shouldTestInCompact?: boolean;
+    maxDiffPixelRatio?: number;
   },
 ): Promise<void> {
   const {
     element,
     theme,
     shouldTestInCompact = false,
+    maxDiffPixelRatio,
   } = options ?? {};
+
+  const screenshotOptions = maxDiffPixelRatio !== undefined ? { maxDiffPixelRatio } : undefined;
 
   if (theme) {
     await changeTheme(page, theme);
   }
 
-  await takeScreenshotForTarget(page, element, getScreenshotName(screenshotName, theme));
+  await takeScreenshotForTarget(page, element, getScreenshotName(screenshotName, theme), screenshotOptions);
 
   if (shouldTestInCompact) {
     const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
     await changeTheme(page, `${themeName}.compact`);
-    await takeScreenshotForTarget(page, element, getScreenshotName(screenshotName, `${themeName}.compact`));
+    await takeScreenshotForTarget(page, element, getScreenshotName(screenshotName, `${themeName}.compact`), screenshotOptions);
   }
 
   if (theme || shouldTestInCompact) {

@@ -26,8 +26,8 @@ test.describe('HeaderFilter.Local.Functional', () => {
       height: 600,
     });
 
-    await page.locator('.dx-header-filter').first().click();
-    await page.waitForSelector('.dx-header-filter-menu');
+    await page.locator('.dx-header-filter-icon').first().click();
+    await page.waitForSelector('.dx-popup-wrapper.dx-header-filter-menu');
 
     const listItems = page.locator('.dx-list-item');
     await expect(listItems).toHaveCount(3);

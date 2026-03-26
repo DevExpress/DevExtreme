@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { createWidget, testScreenshot, appendElementTo, setAttribute } from '../../../playwright-helpers';
+import { DateRangeBox } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -27,7 +28,7 @@ test.describe('DateRangeBox range selection', () => {
       opened: true,
     }, '#dateRangeBox');
 
-    const dateRangeBox = page.locator('#dateRangeBox');
+    const dateRangeBox = new DateRangeBox(page, '#dateRangeBox');
 
     await dateRangeBox.option('rtlEnabled', true);
 
@@ -49,54 +50,36 @@ test.describe('DateRangeBox range selection', () => {
       },
     }, '#dateRangeBox');
 
-    const dateRangeBox = page.locator('#dateRangeBox');
+    const dateRangeBox = new DateRangeBox(page, '#dateRangeBox');
 
-    await page.click(dateRangeBox.getStartDateBox().input);
+    await dateRangeBox.getStartDateBox().input.click();
 
     const calendar = dateRangeBox.getCalendar();
 
-    await page.expect(calendar.getSelectedRangeCells().count)
-      .eql(0)
-      .expect(calendar.getSelectedRangeStartCell().count)
-      .eql(0)
-      .expect(calendar.getSelectedRangeEndCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeCells().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeStartCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeEndCell().count)
-      .eql(0);
+    expect(await calendar.getSelectedRangeCells().count()).toBe(0);
+    expect(await calendar.getSelectedRangeStartCell().count()).toBe(0);
+    expect(await calendar.getSelectedRangeEndCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeCells().count()).toBe(0);
+    expect(await calendar.getHoveredRangeStartCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeEndCell().count()).toBe(0);
 
-    await page.hover(calendar.getCellByDate('2021/10/12'));
+    await calendar.getCellByDate('2021/10/12').hover();
 
-    await page.expect(calendar.getSelectedRangeCells().count)
-      .eql(0)
-      .expect(calendar.getSelectedRangeStartCell().count)
-      .eql(0)
-      .expect(calendar.getSelectedRangeEndCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeCells().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeStartCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeEndCell().count)
-      .eql(0);
+    expect(await calendar.getSelectedRangeCells().count()).toBe(0);
+    expect(await calendar.getSelectedRangeStartCell().count()).toBe(0);
+    expect(await calendar.getSelectedRangeEndCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeCells().count()).toBe(0);
+    expect(await calendar.getHoveredRangeStartCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeEndCell().count()).toBe(0);
 
-    await page.hover(calendar.getCellByDate('2021/10/25'));
+    await calendar.getCellByDate('2021/10/25').hover();
 
-    await page.expect(calendar.getSelectedRangeCells().count)
-      .eql(0)
-      .expect(calendar.getSelectedRangeStartCell().count)
-      .eql(0)
-      .expect(calendar.getSelectedRangeEndCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeCells().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeStartCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeEndCell().count)
-      .eql(0);
+    expect(await calendar.getSelectedRangeCells().count()).toBe(0);
+    expect(await calendar.getSelectedRangeStartCell().count()).toBe(0);
+    expect(await calendar.getSelectedRangeEndCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeCells().count()).toBe(0);
+    expect(await calendar.getHoveredRangeStartCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeEndCell().count()).toBe(0);
 
     });
 
@@ -114,54 +97,36 @@ test.describe('DateRangeBox range selection', () => {
       },
     }, '#dateRangeBox');
 
-    const dateRangeBox = page.locator('#dateRangeBox');
+    const dateRangeBox = new DateRangeBox(page, '#dateRangeBox');
 
-    await page.click(dateRangeBox.getStartDateBox().input);
+    await dateRangeBox.getStartDateBox().input.click();
 
     const calendar = dateRangeBox.getCalendar();
 
-    await page.expect(calendar.getSelectedRangeCells().count)
-      .eql(0)
-      .expect(calendar.getSelectedRangeStartCell().count)
-      .eql(1)
-      .expect(calendar.getSelectedRangeEndCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeCells().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeStartCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeEndCell().count)
-      .eql(0);
+    expect(await calendar.getSelectedRangeCells().count()).toBe(0);
+    expect(await calendar.getSelectedRangeStartCell().count()).toBe(1);
+    expect(await calendar.getSelectedRangeEndCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeCells().count()).toBe(0);
+    expect(await calendar.getHoveredRangeStartCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeEndCell().count()).toBe(0);
 
-    await page.hover(calendar.getCellByDate('2021/10/12'));
+    await calendar.getCellByDate('2021/10/12').hover();
 
-    await page.expect(calendar.getSelectedRangeCells().count)
-      .eql(0)
-      .expect(calendar.getSelectedRangeStartCell().count)
-      .eql(1)
-      .expect(calendar.getSelectedRangeEndCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeCells().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeStartCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeEndCell().count)
-      .eql(0);
+    expect(await calendar.getSelectedRangeCells().count()).toBe(0);
+    expect(await calendar.getSelectedRangeStartCell().count()).toBe(1);
+    expect(await calendar.getSelectedRangeEndCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeCells().count()).toBe(0);
+    expect(await calendar.getHoveredRangeStartCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeEndCell().count()).toBe(0);
 
-    await page.hover(calendar.getCellByDate('2021/10/25'));
+    await calendar.getCellByDate('2021/10/25').hover();
 
-    await page.expect(calendar.getSelectedRangeCells().count)
-      .eql(0)
-      .expect(calendar.getSelectedRangeStartCell().count)
-      .eql(1)
-      .expect(calendar.getSelectedRangeEndCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeCells().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeStartCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeEndCell().count)
-      .eql(0);
+    expect(await calendar.getSelectedRangeCells().count()).toBe(0);
+    expect(await calendar.getSelectedRangeStartCell().count()).toBe(1);
+    expect(await calendar.getSelectedRangeEndCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeCells().count()).toBe(0);
+    expect(await calendar.getHoveredRangeStartCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeEndCell().count()).toBe(0);
 
     });
 
@@ -179,39 +144,27 @@ test.describe('DateRangeBox range selection', () => {
       },
     }, '#dateRangeBox');
 
-    const dateRangeBox = page.locator('#dateRangeBox');
+    const dateRangeBox = new DateRangeBox(page, '#dateRangeBox');
 
-    await page.click(dateRangeBox.getEndDateBox().input);
+    await dateRangeBox.getEndDateBox().input.click();
 
     const calendar = dateRangeBox.getCalendar();
 
-    await page.expect(calendar.getSelectedRangeCells().count)
-      .eql(0)
-      .expect(calendar.getSelectedRangeStartCell().count)
-      .eql(1)
-      .expect(calendar.getSelectedRangeEndCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeCells().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeStartCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeEndCell().count)
-      .eql(0);
+    expect(await calendar.getSelectedRangeCells().count()).toBe(0);
+    expect(await calendar.getSelectedRangeStartCell().count()).toBe(1);
+    expect(await calendar.getSelectedRangeEndCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeCells().count()).toBe(0);
+    expect(await calendar.getHoveredRangeStartCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeEndCell().count()).toBe(0);
 
-    await page.hover(calendar.getCellByDate('2021/10/12'));
+    await calendar.getCellByDate('2021/10/12').hover();
 
-    await page.expect(calendar.getSelectedRangeCells().count)
-      .eql(0)
-      .expect(calendar.getSelectedRangeStartCell().count)
-      .eql(1)
-      .expect(calendar.getSelectedRangeEndCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeCells().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeStartCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeEndCell().count)
-      .eql(0);
+    expect(await calendar.getSelectedRangeCells().count()).toBe(0);
+    expect(await calendar.getSelectedRangeStartCell().count()).toBe(1);
+    expect(await calendar.getSelectedRangeEndCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeCells().count()).toBe(0);
+    expect(await calendar.getHoveredRangeStartCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeEndCell().count()).toBe(0);
 
     });
 
@@ -229,39 +182,27 @@ test.describe('DateRangeBox range selection', () => {
       },
     }, '#dateRangeBox');
 
-    const dateRangeBox = page.locator('#dateRangeBox');
+    const dateRangeBox = new DateRangeBox(page, '#dateRangeBox');
 
-    await page.click(dateRangeBox.getEndDateBox().input);
+    await dateRangeBox.getEndDateBox().input.click();
 
     const calendar = dateRangeBox.getCalendar();
 
-    await page.expect(calendar.getSelectedRangeCells().count)
-      .eql(0)
-      .expect(calendar.getSelectedRangeStartCell().count)
-      .eql(1)
-      .expect(calendar.getSelectedRangeEndCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeCells().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeStartCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeEndCell().count)
-      .eql(0);
+    expect(await calendar.getSelectedRangeCells().count()).toBe(0);
+    expect(await calendar.getSelectedRangeStartCell().count()).toBe(1);
+    expect(await calendar.getSelectedRangeEndCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeCells().count()).toBe(0);
+    expect(await calendar.getHoveredRangeStartCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeEndCell().count()).toBe(0);
 
-    await page.hover(calendar.getCellByDate('2021/10/24'));
+    await calendar.getCellByDate('2021/10/24').hover();
 
-    await page.expect(calendar.getSelectedRangeCells().count)
-      .eql(0)
-      .expect(calendar.getSelectedRangeStartCell().count)
-      .eql(1)
-      .expect(calendar.getSelectedRangeEndCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeCells().count)
-      .eql(8)
-      .expect(calendar.getHoveredRangeStartCell().count)
-      .eql(1)
-      .expect(calendar.getHoveredRangeEndCell().count)
-      .eql(1);
+    expect(await calendar.getSelectedRangeCells().count()).toBe(0);
+    expect(await calendar.getSelectedRangeStartCell().count()).toBe(1);
+    expect(await calendar.getSelectedRangeEndCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeCells().count()).toBe(8);
+    expect(await calendar.getHoveredRangeStartCell().count()).toBe(1);
+    expect(await calendar.getHoveredRangeEndCell().count()).toBe(1);
 
     });
 
@@ -279,41 +220,29 @@ test.describe('DateRangeBox range selection', () => {
       },
     }, '#dateRangeBox');
 
-    const dateRangeBox = page.locator('#dateRangeBox');
+    const dateRangeBox = new DateRangeBox(page, '#dateRangeBox');
 
-    await page.click(dateRangeBox.getEndDateBox().input);
+    await dateRangeBox.getEndDateBox().input.click();
 
     const calendar = dateRangeBox.getCalendar();
 
-    await page.expect(calendar.getSelectedRangeCells().count)
-      .eql(1)
-      .expect(calendar.getSelectedRangeStartCell().count)
-      .eql(1)
-      .expect(calendar.getSelectedRangeEndCell().count)
-      .eql(1)
-      .expect(calendar.getHoveredRangeCells().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeStartCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeEndCell().count)
-      .eql(0);
+    expect(await calendar.getSelectedRangeCells().count()).toBe(1);
+    expect(await calendar.getSelectedRangeStartCell().count()).toBe(1);
+    expect(await calendar.getSelectedRangeEndCell().count()).toBe(1);
+    expect(await calendar.getHoveredRangeCells().count()).toBe(0);
+    expect(await calendar.getHoveredRangeStartCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeEndCell().count()).toBe(0);
 
     await testScreenshot(page, 'DRB range, endDate = startDate.png', { element: '#container' });
 
-    await page.hover(calendar.getCellByDate('2021/10/18'));
+    await calendar.getCellByDate('2021/10/18').hover();
 
-    await page.expect(calendar.getSelectedRangeCells().count)
-      .eql(1)
-      .expect(calendar.getSelectedRangeStartCell().count)
-      .eql(1)
-      .expect(calendar.getSelectedRangeEndCell().count)
-      .eql(1)
-      .expect(calendar.getHoveredRangeCells().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeStartCell().count)
-      .eql(0)
-      .expect(calendar.getHoveredRangeEndCell().count)
-      .eql(0);
+    expect(await calendar.getSelectedRangeCells().count()).toBe(1);
+    expect(await calendar.getSelectedRangeStartCell().count()).toBe(1);
+    expect(await calendar.getSelectedRangeEndCell().count()).toBe(1);
+    expect(await calendar.getHoveredRangeCells().count()).toBe(0);
+    expect(await calendar.getHoveredRangeStartCell().count()).toBe(0);
+    expect(await calendar.getHoveredRangeEndCell().count()).toBe(0);
 
     });
 
@@ -328,92 +257,92 @@ test.describe('DateRangeBox range selection', () => {
       width: 500,
     }, '#dateRangeBox');
 
-    const dateRangeBox = page.locator('#dateRangeBox');
+    const dateRangeBox = new DateRangeBox(page, '#dateRangeBox');
 
-    await page.click(dateRangeBox.getStartDateBox().input);
+    await dateRangeBox.getStartDateBox().input.click();
 
     const calendar = dateRangeBox.getCalendar();
 
-    await page.hover(calendar.getCellByDate('2021/10/01'));
+    await calendar.getCellByDate('2021/10/01').hover();
 
     await testScreenshot(page, 'DRB range, startDate is start in row, hover is start in view.png', { element: '#container' });
 
-    await page.click(calendar.getCellByDate('2021/10/31'))
-      .click(dateRangeBox.getStartDateBox().input)
-      .hover(calendar.getCellByDate('2021/10/16'));
+    await calendar.getCellByDate('2021/10/31').click();
+    await dateRangeBox.getStartDateBox().input.click();
+    await calendar.getCellByDate('2021/10/16').hover();
 
     await testScreenshot(page, 'DRB range, startDate is end in view & start row, hover is end row.png', { element: '#container' });
 
-    await page.click(calendar.getCellByDate('2021/10/23'))
-      .click(dateRangeBox.getStartDateBox().input)
-      .hover(calendar.getCellByDate('2021/10/03'));
+    await calendar.getCellByDate('2021/10/23').click();
+    await dateRangeBox.getStartDateBox().input.click();
+    await calendar.getCellByDate('2021/10/03').hover();
 
     await testScreenshot(page, 'DRB range, startDate is end cell row, hover is start in row.png', { element: '#container' });
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 8, 1));
 
-    await page.click(calendar.getCellByDate('2021/10/01'))
-      .click(dateRangeBox.getStartDateBox().input);
+    await calendar.getCellByDate('2021/10/01').click();
+    await dateRangeBox.getStartDateBox().input.click();
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 8, 1));
 
-    await page.hover(calendar.getCellByDate('2021/09/30'));
+    await calendar.getCellByDate('2021/09/30').hover();
 
     await testScreenshot(page, 'DRB range, startDate is start in view, hover is end in view.png', { element: '#container' });
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 8, 1));
 
-    await page.click(calendar.getCellByDate('2021/09/30'))
-      .click(dateRangeBox.getStartDateBox().input)
-      .hover(calendar.getCellByDate('2021/09/15'));
+    await calendar.getCellByDate('2021/09/30').click();
+    await dateRangeBox.getStartDateBox().input.click();
+    await calendar.getCellByDate('2021/09/15').hover();
 
     await testScreenshot(page, 'DRB range, startDate is end in view, hover inside row.png', { element: '#container' });
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 7, 1));
 
-    await page.click(calendar.getCellByDate('2021/09/15'))
-      .click(dateRangeBox.getStartDateBox().input);
+    await calendar.getCellByDate('2021/09/15').click();
+    await dateRangeBox.getStartDateBox().input.click();
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 7, 1));
 
-    await page.hover(calendar.getCellByDate('2021/08/01'));
+    await calendar.getCellByDate('2021/08/01').hover();
 
     await testScreenshot(page, 'DRB range, startDate inside row, hover is start in view & row.png', { element: '#container' });
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 6, 1));
 
-    await page.click(calendar.getCellByDate('2021/08/01'))
-      .click(dateRangeBox.getStartDateBox().input);
+    await calendar.getCellByDate('2021/08/01').click();
+    await dateRangeBox.getStartDateBox().input.click();
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 6, 1));
 
-    await page.hover(calendar.getCellByDate('2021/07/31'));
+    await calendar.getCellByDate('2021/07/31').hover();
 
     await testScreenshot(page, 'DRB range, startDate is start view & row, hover is end view & row.png', { element: '#container' });
 
-    await page.click(calendar.getCellByDate('2021/07/31'))
-      .click(dateRangeBox.getStartDateBox().input);
+    await calendar.getCellByDate('2021/07/31').click();
+    await dateRangeBox.getStartDateBox().input.click();
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 6, 1));
 
-    await page.hover(calendar.getCellByDate('2021/07/02'));
+    await calendar.getCellByDate('2021/07/02').hover();
 
     await testScreenshot(page, 'DRB range, startDate is end in view & row, hover inside row.png', { element: '#container' });
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 4, 1));
 
-    await page.hover(calendar.getCellByDate('2021/05/01'));
+    await calendar.getCellByDate('2021/05/01').hover();
 
     await testScreenshot(page, 'DRB range, hover is start in view & end cell row.png', { element: '#container' });
 
-    await page.click(calendar.getCellByDate('2021/05/01'))
-      .click(dateRangeBox.getStartDateBox().input);
+    await calendar.getCellByDate('2021/05/01').click();
+    await dateRangeBox.getStartDateBox().input.click();
 
     await testScreenshot(page, 'DRB range, startDate cell is start in view & end cell row.png', { element: '#container' });
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 1, 1));
 
-    await page.hover(calendar.getCellByDate('2021/02/28'));
+    await calendar.getCellByDate('2021/02/28').hover();
 
     await testScreenshot(page, 'DRB range, hover is end in view & start in row.png', { element: '#container' });
 
@@ -430,59 +359,59 @@ test.describe('DateRangeBox range selection', () => {
       width: 500,
     }, '#dateRangeBox');
 
-    const dateRangeBox = page.locator('#dateRangeBox');
+    const dateRangeBox = new DateRangeBox(page, '#dateRangeBox');
 
-    await page.click(dateRangeBox.getEndDateBox().input);
+    await dateRangeBox.getEndDateBox().input.click();
 
     const calendar = dateRangeBox.getCalendar();
 
-    await page.click(calendar.getCellByDate('2021/10/24'))
-      .click(dateRangeBox.getEndDateBox().input)
-      .hover(calendar.getCellByDate('2021/10/31'));
+    await calendar.getCellByDate('2021/10/24').click();
+    await dateRangeBox.getEndDateBox().input.click();
+    await calendar.getCellByDate('2021/10/31').hover();
 
     await testScreenshot(page, 'DRB range, endDate is start in row, hover is end view & start row.png', { element: '#container' });
 
-    await page.click(calendar.getCellByDate('2021/10/25'))
-      .click(dateRangeBox.getEndDateBox().input)
-      .hover(calendar.getCellByDate('2021/11/01'));
+    await calendar.getCellByDate('2021/10/25').click();
+    await dateRangeBox.getEndDateBox().input.click();
+    await calendar.getCellByDate('2021/11/01').hover();
 
     await testScreenshot(page, 'DRB range, endDate is cell inside row, hover is start in view.png', { element: '#container' });
 
-    await page.click(calendar.getCellByDate('2021/10/30'))
-      .click(dateRangeBox.getEndDateBox().input)
-      .hover(calendar.getCellByDate('2021/11/30'));
+    await calendar.getCellByDate('2021/10/30').click();
+    await dateRangeBox.getEndDateBox().input.click();
+    await calendar.getCellByDate('2021/11/30').hover();
 
     await testScreenshot(page, 'DRB range, endDate is end cell row, hover is end in view.png', { element: '#container' });
 
-    await page.click(calendar.getCellByDate('2021/10/31'))
-      .click(dateRangeBox.getEndDateBox().input)
-      .hover(calendar.getCellByDate('2021/11/21'));
+    await calendar.getCellByDate('2021/10/31').click();
+    await dateRangeBox.getEndDateBox().input.click();
+    await calendar.getCellByDate('2021/11/21').hover();
 
     await testScreenshot(page, 'DRB range, endDate is end in view & start row, hover is start row.png', { element: '#container' });
 
-    await page.click(calendar.getCellByDate('2021/11/01'))
-      .click(dateRangeBox.getEndDateBox().input)
-      .hover(calendar.getCellByDate('2021/11/21'));
+    await calendar.getCellByDate('2021/11/01').click();
+    await dateRangeBox.getEndDateBox().input.click();
+    await calendar.getCellByDate('2021/11/21').hover();
 
     await testScreenshot(page, 'DRB range, endDate is start in view, hover is end in row.png', { element: '#container' });
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 11, 15));
 
-    await page.click(calendar.getCellByDate('2021/12/31'))
-      .click(dateRangeBox.getEndDateBox().input);
+    await calendar.getCellByDate('2021/12/31').click();
+    await dateRangeBox.getEndDateBox().input.click();
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 12, 15));
 
-    await page.hover(calendar.getCellByDate('2022/01/01'));
+    await calendar.getCellByDate('2022/01/01').hover();
 
     await testScreenshot(page, 'DRB range, endDate is end in view, hover is start view & end row.png', { element: '#container' });
 
-    await page.click(calendar.getCellByDate('2022/01/01'))
-      .click(dateRangeBox.getEndDateBox().input);
+    await calendar.getCellByDate('2022/01/01').click();
+    await dateRangeBox.getEndDateBox().input.click();
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 12, 15));
 
-    await page.hover(calendar.getCellByDate('2022/01/25'));
+    await calendar.getCellByDate('2022/01/25').hover();
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2021, 12, 15));
 
@@ -490,24 +419,24 @@ test.describe('DateRangeBox range selection', () => {
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2022, 3, 15));
 
-    await page.hover(calendar.getCellByDate('2022/04/30'));
+    await calendar.getCellByDate('2022/04/30').hover();
 
     await testScreenshot(page, 'DRB range, hover is end in view & end cell row.png', { element: '#container' });
 
-    await page.click(calendar.getCellByDate('2022/04/30'))
-      .click(dateRangeBox.getEndDateBox().input);
+    await calendar.getCellByDate('2022/04/30').click();
+    await dateRangeBox.getEndDateBox().input.click();
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2022, 2, 15));
     await testScreenshot(page, 'DRB range, endDate is end in view & end cell row.png', { element: '#container' });
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2022, 3, 15));
 
-    await page.hover(calendar.getCellByDate('2022/05/01'));
+    await calendar.getCellByDate('2022/05/01').hover();
 
     await testScreenshot(page, 'DRB range, hover is start in view & start in row.png', { element: '#container' });
 
-    await page.click(calendar.getCellByDate('2022/05/01'))
-      .click(dateRangeBox.getEndDateBox().input);
+    await calendar.getCellByDate('2022/05/01').click();
+    await dateRangeBox.getEndDateBox().input.click();
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2022, 3, 15));
 
@@ -527,7 +456,7 @@ test.describe('DateRangeBox range selection', () => {
       width: 500,
     }, '#dateRangeBox');
 
-    const dateRangeBox = page.locator('#dateRangeBox');
+    const dateRangeBox = new DateRangeBox(page, '#dateRangeBox');
 
     await dateRangeBox.getCalendar().option('currentDate', new Date(2023, 2, 1));
 
@@ -552,13 +481,13 @@ test.describe('DateRangeBox range selection', () => {
       },
     }, '#dateRangeBox');
 
-    const dateRangeBox = page.locator('#dateRangeBox');
+    const dateRangeBox = new DateRangeBox(page, '#dateRangeBox');
 
-    await page.click(dateRangeBox.getStartDateBox().input);
+    await dateRangeBox.getStartDateBox().input.click();
 
     const calendar = dateRangeBox.getCalendar();
 
-    await page.click(calendar.getCellByDate('2020/02/20'));
+    await calendar.getCellByDate('2020/02/20').click();
 
     await testScreenshot(page, 'DRB disabled dates before start date select.png', { element: '#container' });
 
@@ -577,13 +506,13 @@ test.describe('DateRangeBox range selection', () => {
       },
     }, '#dateRangeBox');
 
-    const dateRangeBox = page.locator('#dateRangeBox');
+    const dateRangeBox = new DateRangeBox(page, '#dateRangeBox');
 
-    await page.click(dateRangeBox.getEndDateBox().input);
+    await dateRangeBox.getEndDateBox().input.click();
 
     const calendar = dateRangeBox.getCalendar();
 
-    await page.click(calendar.getCellByDate('2020/02/22'));
+    await calendar.getCellByDate('2020/02/22').click();
 
     await testScreenshot(page, 'DRB disabled dates after end date select.png', { element: '#container' });
 
@@ -600,20 +529,20 @@ test.describe('DateRangeBox range selection', () => {
       disableOutOfRangeSelection: true,
     }, '#dateRangeBox');
 
-    const dateRangeBox = page.locator('#dateRangeBox');
+    const dateRangeBox = new DateRangeBox(page, '#dateRangeBox');
 
-    await page.click(dateRangeBox.getStartDateBox().input)
-      .hover(dateRangeBox.getStartDateBox().input);
+    await dateRangeBox.getStartDateBox().input.click();
+    await dateRangeBox.getStartDateBox().input.hover();
 
     await testScreenshot(page, 'DRB disabled dates on popup opening.png', { element: '#container' });
 
-    await page.click(dateRangeBox.getEndDateBox().input)
-      .hover(dateRangeBox.getEndDateBox().input);
+    await dateRangeBox.getEndDateBox().input.click();
+    await dateRangeBox.getEndDateBox().input.hover();
 
     await testScreenshot(page, 'DRB disabled dates on end date input focus.png', { element: '#container' });
 
-    await page.click(dateRangeBox.getStartDateBox().input)
-      .hover(dateRangeBox.getStartDateBox().input);
+    await dateRangeBox.getStartDateBox().input.click();
+    await dateRangeBox.getStartDateBox().input.hover();
 
     await testScreenshot(page, 'DRB disabled dates on start date input focus.png', { element: '#container' });
 
@@ -627,18 +556,17 @@ test.describe('DateRangeBox range selection', () => {
     },
   }, '#container');
 
-    const dateRangeBox = page.locator('#container');
+    const dateRangeBox = new DateRangeBox(page, '#container');
 
-    await page.click(dateRangeBox.getStartDateBox().input);
+    await dateRangeBox.getStartDateBox().input.click();
 
     const calendar = dateRangeBox.getCalendar();
 
-    await page.click(calendar.getCellByDate('2020/02/20'));
+    await calendar.getCellByDate('2020/02/20').click();
 
     const targetCell = calendar.getView().getCellByDate(new Date('2020/02/22'));
-    await targetCell.hover()
-      .expect(targetCell.hasClass(STATE_HOVER_CLASS))
-      .eql(true);
+    await targetCell.hover();
+    expect(await targetCell.evaluate((el, cls) => el.classList.contains(cls), STATE_HOVER_CLASS)).toBe(true);
 
     });
 
@@ -652,22 +580,22 @@ test.describe('DateRangeBox range selection', () => {
       focusStateEnabled: false,
     }, '#dateRangeBox');
 
-    const dateRangeBox = page.locator('#dateRangeBox');
+    const dateRangeBox = new DateRangeBox(page, '#dateRangeBox');
     const calendar = dateRangeBox.getCalendar();
 
-    await page.click(dateRangeBox.getStartDateBox().input);
+    await dateRangeBox.getStartDateBox().input.click();
 
-    await page.click(calendar.getCellByDate('2020/02/10'));
+    await calendar.getCellByDate('2020/02/10').click();
 
-    await page.click(calendar.getCellByDate('2020/02/25'));
+    await calendar.getCellByDate('2020/02/25').click();
 
-    const expectedStartDate = new Date('2020/02/10');
-    const expectedEndDate = new Date('2020/02/25');
+    const expectedStartDate = new Date('2020/02/10').toISOString();
+    const expectedEndDate = new Date('2020/02/25').toISOString();
 
-    await page.expect(dateRangeBox.option('opened'))
-      .eql(false)
-      .expect(dateRangeBox.option('value'))
-      .eql([expectedStartDate, expectedEndDate]);
+    expect(await dateRangeBox.option('opened')).toBe(false);
+    const value = await dateRangeBox.option('value') as string[];
+    expect(value[0]).toBe(expectedStartDate);
+    expect(value[1]).toBe(expectedEndDate);
 
     });
 });

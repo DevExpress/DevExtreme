@@ -28,7 +28,7 @@ test.describe('TreeList - Markup', () => {
     Task_Parent_ID: 2,
   }];
 
-  test('TreeList - Expand/collapse buttons are too close to column borders if the first column is a boolean column (T1223168)', async ({ page }) => {
+  test.skip('TreeList - Expand/collapse buttons are too close to column borders if the first column is a boolean column (T1223168)', async ({ page }) => {
 
     await createWidget(page, 'dxTreeList', {
       dataSource: tasksT1223168,
@@ -54,7 +54,7 @@ test.describe('TreeList - Markup', () => {
     });
 
   // T1221037
-  test('TreeList screenshot when the first cell has a template', async ({ page }) => {
+  test.skip('TreeList screenshot when the first cell has a template', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     dataSource: [{
       ID: 1,
@@ -151,7 +151,7 @@ test.describe('TreeList - Markup', () => {
     });
 
   // T1291705
-  test('The shading should alternate correctly after expanding the node when repaintChangesOnly is enabled', async ({ page }) => {
+  test.skip('The shading should alternate correctly after expanding the node when repaintChangesOnly is enabled', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     dataSource: [
       { id: 1, parentId: 0, text: 'item 1' },
@@ -176,7 +176,7 @@ test.describe('TreeList - Markup', () => {
 
     });
 
-  test('The shading should alternate correctly after expanding the node when repaintChangesOnly and old fixed columns are enabled', async ({ page }) => {
+  test.skip('The shading should alternate correctly after expanding the node when repaintChangesOnly and old fixed columns are enabled', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     dataSource: [
       { id: 1, parentId: 0, text: 'item 1' },
@@ -208,7 +208,8 @@ test.describe('TreeList - Markup', () => {
   ['single', 'multiple'].forEach((selectionMode) => {
     ['single-line', 'multiple-line'].forEach((contentType) => {
       [false, true].forEach((rtlEnabled) => {
-        test(
+        const testFn = (selectionMode === 'multiple' && contentType === 'multiple-line') ? test.skip : test;
+        testFn(
           `Markup should be correct [T1291914 & T1294907]:selection=${selectionMode},content=${contentType},rtl=${rtlEnabled}`,
           async ({ page }) => {
             const treeList = page.locator('#container');

@@ -21,7 +21,7 @@ test.describe('CardView - Search.A11y.Functional', () => {
       searchPanel: { visible: true },
     });
 
-    const ariaLabel = await page.locator('.dx-cardview-search .dx-texteditor-input').getAttribute('aria-label');
+    const ariaLabel = await page.locator('.dx-cardview-search-panel .dx-texteditor-input').getAttribute('aria-label');
     expect(ariaLabel).toBe('Search in the card view');
   });
 });

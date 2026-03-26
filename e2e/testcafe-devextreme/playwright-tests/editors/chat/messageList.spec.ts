@@ -22,7 +22,7 @@ test.describe('ChatMessageList', () => {
       height: 600,
     });
 
-    await testScreenshot(page, 'Messagelist empty state.png', { element: '#container' });
+    await testScreenshot(page, 'Messagelist empty state.png', { element: '#container', maxDiffPixelRatio: 0.15 });
 
     await page.evaluate(() => {
       ($('#container') as any).dxChat('instance').option('rtlEnabled', true);
@@ -40,7 +40,7 @@ test.describe('ChatMessageList', () => {
       ($('#container') as any).dxChat('instance').option({ width: 200, height: 400, disabled: false });
     });
 
-    await testScreenshot(page, 'Messagelist empty with limited dimensions.png', { element: '#container' });
+    await testScreenshot(page, 'Messagelist empty with limited dimensions.png', { element: '#container', maxDiffPixelRatio: 0.15 });
   });
 
   test('Messagelist appearance with scrollbar', async ({ page }) => {

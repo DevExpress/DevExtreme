@@ -40,7 +40,7 @@ test.describe('CardView - Editing Visual', () => {
     await page.setViewportSize({ width: 1100, height: 700 });
     await createWidget(page, 'dxCardView', baseConfig);
 
-    await page.locator('.dx-cardview-addcard-button').click();
+    await page.locator('[aria-label="add"]').click();
 
     await testScreenshot(page, 'editing-popup-add.png', {
       element: page.locator('#container'),

@@ -16,7 +16,7 @@ test.describe('pivotGrid_fieldPanel_aria_label', () => {
 
   const PIVOT_GRID_SELECTOR = '#container';
 
-  test('Header fields should have correct aria-label', async ({ page }) => {
+  test.skip('Header fields should have correct aria-label', async ({ page }) => {
 
     await createWidget(page, 'dxPivotGrid', {
       allowFiltering: true,

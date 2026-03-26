@@ -35,17 +35,17 @@ test.describe('Colorbox', () => {
         editAlphaChannel: true,
       }, '#container');
 
-        const colorBox = page.locator('#container');
+        const input = page.locator('#container .dx-texteditor-input');
         const expectedValue = 'rgba(0, 255, 255, 1)';
 
-        await page.click(colorBox.input);
+        await input.click();
+        await input.fill(inputText);
+        await page.keyboard.press(key === 'enter' ? 'Enter' : 'Tab');
 
-        await page.typeText(colorBox.input, inputText)
-          .pressKey(key)
-          .expect(colorBox.option('text'))
-          .eql(expectedValue)
-          .expect(colorBox.option('value'))
-          .eql(expectedValue);
+        const text = await page.evaluate(() => ($('#container') as any).dxColorBox('instance').option('text'));
+        const value = await page.evaluate(() => ($('#container') as any).dxColorBox('instance').option('value'));
+        expect(text).toBe(expectedValue);
+        expect(value).toBe(expectedValue);
 
     });
     });

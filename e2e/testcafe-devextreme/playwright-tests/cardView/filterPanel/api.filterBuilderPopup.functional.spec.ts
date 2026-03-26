@@ -24,10 +24,10 @@ test.describe('CardView - FilterBuilderPopup API', () => {
       filterBuilderPopup: { height: 500 },
     });
 
-    await page.locator('.dx-cardview-filter-panel .dx-icon-filter').click();
-    await page.waitForSelector('.dx-filterbuilder-popup');
+    await page.locator('.dx-datagrid-filter-panel .dx-icon-filter').click();
+    await page.waitForSelector('.dx-popup-normal:has(.dx-filterbuilder)');
 
-    const contentHeight = await page.locator('.dx-filterbuilder-popup .dx-overlay-content').evaluate(el => el.offsetHeight);
+    const contentHeight = await page.locator('.dx-popup-normal:has(.dx-filterbuilder)').evaluate(el => el.offsetHeight);
     expect(contentHeight).toBe(500);
   });
 
@@ -41,10 +41,10 @@ test.describe('CardView - FilterBuilderPopup API', () => {
       filterBuilderPopup: { title: 'Test' },
     });
 
-    await page.locator('.dx-cardview-filter-panel .dx-icon-filter').click();
-    await page.waitForSelector('.dx-filterbuilder-popup');
+    await page.locator('.dx-datagrid-filter-panel .dx-icon-filter').click();
+    await page.waitForSelector('.dx-popup-normal:has(.dx-filterbuilder)');
 
-    const titleText = await page.locator('.dx-filterbuilder-popup .dx-toolbar').innerText();
+    const titleText = await page.locator('.dx-popup-normal:has(.dx-filterbuilder) .dx-popup-title.dx-toolbar').innerText();
     expect(titleText).toBe('Test');
   });
 });

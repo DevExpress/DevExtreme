@@ -25,20 +25,20 @@ test.describe('Splitter_events', () => {
     dataSource: [{ size: '200px' }, { size: '200px' }],
   });
 
-    const splitter = page.locator('#container');
+    const resizeHandle = page.locator('#container .dx-resize-handle').nth(0);
 
-    await (async () => {
-        const box = await splitter.resizeHandles.nth(0).boundingBox();
-        if (box) {
-          await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-          await page.mouse.down();
-          await page.mouse.move(box.x + box.width / 2 + 100, box.y + box.height / 2 + 0, { steps: 10 });
-          await page.mouse.up();
-        }
-      })();
+    const box = await resizeHandle.boundingBox();
+    if (box) {
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(box.x + box.width / 2 + 100, box.y + box.height / 2, { steps: 10 });
+      await page.mouse.up();
+    }
 
-    await expect(splitter.option('items[0].size')).eql(200);
-    await expect(splitter.option('items[1].size')).eql(200);
+    const item0Size = await page.evaluate(() => ($('#container') as any).dxSplitter('instance').option('items[0].size'));
+    const item1Size = await page.evaluate(() => ($('#container') as any).dxSplitter('instance').option('items[1].size'));
+    expect(item0Size).toBe(200);
+    expect(item1Size).toBe(200);
 
     });
 });

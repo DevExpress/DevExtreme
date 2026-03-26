@@ -57,10 +57,13 @@ test.describe('Splitter_integration', () => {
       });
     });
 
+    await page.setViewportSize({ width: 400, height: 400 });
+
     const tabPanel = new TabPanel(page);
 
     await tabPanel.tabs.getItem(1).element.click();
-    await tabPanel.multiView.element.click();
+    await page.locator('.dx-multiview').waitFor({ state: 'visible' });
+    await page.locator('.dx-multiview').click({ force: true });
 
     await testScreenshot(page, 'Splitter in tab content, pane_1.size=`100px`.png', { element: '#container' });
 

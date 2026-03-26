@@ -45,24 +45,24 @@ test.describe('Splitter_common', () => {
     }],
   });
 
-    const splitter = page.locator('#container');
+    const resizeHandles = page.locator('#container .dx-resize-handle');
 
-    await click(page.locator('body'), { offsetX: -50 });
+    await page.locator('body').click({ position: { x: 1, y: 1 }, force: true });
 
     await testScreenshot(page, getScreenshotName('normal'), { element: '#container' });
 
-    await hover(splitter.resizeHandles.nth(0));
+    await resizeHandles.nth(0).hover();
 
     await testScreenshot(page, getScreenshotName('hover'), { element: '#container' });
 
-    await page.dispatchEvent(splitter.resizeHandles.nth(0), 'mousedown')
-      .wait(500);
+    await resizeHandles.nth(0).dispatchEvent('mousedown');
+    await page.waitForTimeout(500);
 
     await testScreenshot(page, getScreenshotName('active'), { element: '#container' });
 
-    await dispatchEvent(splitter.resizeHandles.nth(0), 'mouseup');
+    await resizeHandles.nth(0).dispatchEvent('mouseup');
 
-    await click(splitter.resizeHandles.nth(0));
+    await resizeHandles.nth(0).click();
 
     await testScreenshot(page, getScreenshotName('focused'), { element: '#container' });
 

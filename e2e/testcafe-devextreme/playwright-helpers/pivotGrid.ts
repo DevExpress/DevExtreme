@@ -21,50 +21,71 @@ const CLASS = {
 } as const;
 
 export class PivotGrid {
-  readonly page: Page;
+  readonly page: Page | null;
   readonly selector: string;
-  readonly element: Locator;
+  readonly element: Locator | string;
 
-  constructor(page: Page, selector = '#container') {
-    this.page = page;
-    this.selector = selector;
-    this.element = page.locator(selector);
+  constructor(pageOrSelector: Page | string, selector = '#container') {
+    if (typeof pageOrSelector === 'string') {
+      this.page = null;
+      this.selector = pageOrSelector;
+      this.element = pageOrSelector;
+    } else {
+      this.page = pageOrSelector;
+      this.selector = selector;
+      this.element = pageOrSelector.locator(selector);
+    }
+  }
+
+  private getPage(): Page {
+    if (!this.page) {
+      throw new Error('PivotGrid: page is required for this operation');
+    }
+    return this.page;
+  }
+
+  private getLocator(): Locator {
+    if (typeof this.element === 'string') {
+      throw new Error('PivotGrid: page is required for this operation');
+    }
+    return this.element;
   }
 
   async option(name: string, value?: unknown): Promise<unknown> {
     const sel = this.selector;
+    const page = this.getPage();
     if (arguments.length === 2) {
-      return this.page.evaluate(
+      return page.evaluate(
         ({ sel: s, name: n, value: v }) => {
           ($(s) as any).dxPivotGrid('instance').option(n, v);
         },
         { sel, name, value },
       );
     }
-    return this.page.evaluate(
+    return page.evaluate(
       ({ sel: s, name: n }) => ($(s) as any).dxPivotGrid('instance').option(n),
       { sel, name },
     );
   }
 
   getColumnHeaderArea(): PivotGridHeaderArea {
-    return new PivotGridHeaderArea(this.element.locator(`.${CLASS.fieldAreaColumn}`));
+    return new PivotGridHeaderArea(this.getLocator().locator(`.${CLASS.fieldAreaColumn}`));
   }
 
   getRowHeaderArea(): PivotGridHeaderArea {
-    return new PivotGridHeaderArea(this.element.locator(`.${CLASS.fieldAreaRow}`));
+    return new PivotGridHeaderArea(this.getLocator().locator(`.${CLASS.fieldAreaRow}`));
   }
 
   getDataArea(): Locator {
-    return this.element.locator(`.${CLASS.fieldAreaData}`);
+    return this.getLocator().locator(`.${CLASS.fieldAreaData}`);
   }
 
   getFieldPanel(): PivotGridFieldPanel {
-    return new PivotGridFieldPanel(this.page, this.element);
+    return new PivotGridFieldPanel(this.getPage(), this.getLocator());
   }
 
   getFieldChooserButton(): Locator {
-    return this.element.locator(`.${CLASS.fieldChooserButton}`);
+    return this.getLocator().locator(`.${CLASS.fieldChooserButton}`);
   }
 }
 

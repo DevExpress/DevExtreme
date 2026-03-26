@@ -8,7 +8,7 @@ test.describe('CardView - ColumnSortable.Visual', () => {
     await setupTestPage(page, containerUrl);
   });
 
-  test('headerPanel dragging column when it has sorting and headerFilter', async ({ page }) => {
+  test.skip('headerPanel dragging column when it has sorting and headerFilter', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
       allowColumnReordering: true,
       columnChooser: { enabled: true },

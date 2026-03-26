@@ -15,6 +15,8 @@ test.describe('Splitter_integration', () => {
   });
 
   test('non resizable pane should not change its size during resize', async ({ page }) => {
+    await page.setViewportSize({ width: 800, height: 800 });
+
     await createWidget(page, 'dxSplitter', {
     width: '100%',
     height: 300,
@@ -29,15 +31,21 @@ test.describe('Splitter_integration', () => {
     }],
   });
 
-    const splitter = page.locator('#container');
+    const pane3Width = await page.evaluate(() => {
+      const items = document.querySelectorAll('.dx-splitter-item');
+      const item = items[2] as HTMLElement;
+      return item ? item.clientWidth : null;
+    });
+    expect(pane3Width).toBe(300);
 
-    await page.expect(splitter.getItem(2).element.clientWidth)
-      .eql(300);
+    await page.setViewportSize({ width: 400, height: 400 });
 
-    await resizeWindow(400, 400);
-
-    await page.expect(splitter.getItem(2).element.clientWidth)
-      .eql(145);
+    const pane3WidthAfterResize = await page.evaluate(() => {
+      const items = document.querySelectorAll('.dx-splitter-item');
+      const item = items[2] as HTMLElement;
+      return item ? item.clientWidth : null;
+    });
+    expect(pane3WidthAfterResize).toBe(145);
 
     });
 });

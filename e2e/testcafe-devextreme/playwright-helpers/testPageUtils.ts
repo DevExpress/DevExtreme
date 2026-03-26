@@ -48,6 +48,6 @@ export async function setupTestPage(page: Page, containerUrl: string, theme = 'f
   }), theme);
 
   await page.addStyleTag({
-    content: '*, *::before, *::after { caret-color: transparent !important; scrollbar-width: none !important; } ::-webkit-scrollbar { display: none !important; }',
+    content: '*, *::before, *::after { caret-color: transparent !important; } html { overflow-y: scroll; scrollbar-gutter: stable; } ::-webkit-scrollbar { width: 15px !important; background: transparent !important; } ::-webkit-scrollbar-thumb { background: transparent !important; }',
   });
 }

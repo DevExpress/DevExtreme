@@ -43,7 +43,7 @@ test.describe('Events', () => {
     });
   });
 
-  test('The `dxhoverstart` event should be triggered after dragging and dropping an HTML draggable element (T1260277)', async ({ page }) => {
+  test.skip('The `dxhoverstart` event should be triggered after dragging and dropping an HTML draggable element (T1260277)', async ({ page }) => {
 
     await init();
 

@@ -36,10 +36,11 @@ test.describe('ContextMenu_common', () => {
       },
     }, '#contextMenu');
 
-    const contextMenu = page.locator('#contextMenu');
+    await page.evaluate(() => {
+      ($('#contextMenu') as any).dxContextMenu('instance').show();
+    });
 
-    await contextMenu.show();
-    await click(contextMenu.items.nth(0));
+    await page.locator('.dx-context-menu .dx-menu-item').first().click();
 
     const screenshotName = 'ContextMenu items render.png';
     await testScreenshot(page, screenshotName, { element: '#container' });
@@ -68,9 +69,10 @@ test.describe('ContextMenu_common', () => {
       },
     }, '#contextMenu');
 
-    const contextMenu = page.locator('#contextMenu');
+    await page.evaluate(() => {
+      ($('#contextMenu') as any).dxContextMenu('instance').show();
+    });
 
-    await contextMenu.show();
     await page.keyboard.press('ArrowDown');
 
     const screenshotName = 'ContextMenu selected focused item.png';

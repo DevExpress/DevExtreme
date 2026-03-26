@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { createWidget, testScreenshot, appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../playwright-helpers';
+import type { HorizontalAlignment } from 'devextreme/common';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -14,7 +15,7 @@ test.describe('Form', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  const waitFont = async () => page.evaluate(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
+  const waitFont = async (page: any) => page.evaluate(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
   [false, true].forEach((rtlEnabled) => {
     ['left', 'right', 'top'].forEach((formLabelLocation) => {
@@ -23,7 +24,7 @@ test.describe('Form', () => {
 
         test(testName, async ({ page }) => {
 
-          await waitFont();
+          await waitFont(page);
 
           const getGroup = (visible: boolean, alignment: HorizontalAlignment) => ({
             itemType: 'group',

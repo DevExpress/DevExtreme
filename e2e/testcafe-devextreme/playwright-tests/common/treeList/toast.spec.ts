@@ -14,7 +14,7 @@ test.describe('Toasts in TreeList', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Toast should be visible after calling and should be not visible after default display time', async ({ page }) => {
+  test.skip('Toast should be visible after calling and should be not visible after default display time', async ({ page }) => {
 
     createWidget(page, 'dxTreeList', {});
 

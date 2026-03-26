@@ -24,9 +24,9 @@ test.describe('Autocomplete_placeholder', () => {
       placeholder: 'Choose a value',
     }, '#autocomplete');
 
-    const autocomplete = page.locator('#autocomplete');
-
-    await autocomplete.option('items', [1, 2, 3]);
+    await page.evaluate(() => {
+      ($('#autocomplete') as any).dxAutocomplete('instance').option('items', [1, 2, 3]);
+    });
 
     await testScreenshot(page, 'Autocomplete placeholder if value is not choosen.png', { element: '#container' });
 

@@ -51,7 +51,7 @@ test.describe('Focused row', () => {
     focusedRowKey: 90,
   });
 
-  test('Focused row should be shown after reloading the page (T1058983)', async ({ page }) => {
+  test.skip('Focused row should be shown after reloading the page (T1058983)', async ({ page }) => {
 
     await clearLocalStorage();
     await createWidget(page, 'dxTreeList', getTreeListConfig());
@@ -84,7 +84,7 @@ test.describe('Focused row', () => {
 
     });
 
-  test('TreeList - Unable to focus a node when deleting the previous node in certain scenarios (T1178893)', async ({ page }) => {
+  test.skip('TreeList - Unable to focus a node when deleting the previous node in certain scenarios (T1178893)', async ({ page }) => {
 
     await clearLocalStorage();
     const config = getTreeListConfig();

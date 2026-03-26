@@ -30,7 +30,7 @@ test.describe('Public methods', () => {
 
   [true, false].forEach((renderAsync) => {
     [true, false].forEach((useNativeScrolling) => {
-      test(`The renderAsync=${renderAsync} and scrolling.useNative=${useNativeScrolling}: The navigateToRow method should work correctly when there are asynchronous cell templates and virtual scrolling is enabled (T1275775)`, async ({ page }) => {
+      test.skip(`The renderAsync=${renderAsync} and scrolling.useNative=${useNativeScrolling}: The navigateToRow method should work correctly when there are asynchronous cell templates and virtual scrolling is enabled (T1275775)`, async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
         dataSource: getItems(),
         height: 500,

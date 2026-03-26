@@ -27,7 +27,7 @@ test.describe('KeyboardNavigation.Search', () => {
     await card.click();
     await card.dispatchEvent('keydown', { key: 'f', ctrlKey: true });
 
-    const searchInput = page.locator('.dx-cardview-search .dx-texteditor-input');
+    const searchInput = page.locator('.dx-cardview-search-panel .dx-texteditor-input');
     await expect(searchInput).toBeFocused();
   });
 });

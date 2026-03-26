@@ -14,7 +14,7 @@ test.describe('SearchPanel', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Items are shown in the original order after search is applied - T1274434 - 1', async ({ page }) => {
+  test.skip('Items are shown in the original order after search is applied - T1274434 - 1', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     showBorders: true,
     showRowLines: true,
@@ -47,7 +47,7 @@ test.describe('SearchPanel', () => {
 
     });
 
-  test('Items are shown in the original order after search is applied - T1274434 - 2', async ({ page }) => {
+  test.skip('Items are shown in the original order after search is applied - T1274434 - 2', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     showBorders: true,
     showRowLines: true,

@@ -21,7 +21,7 @@ test.describe('CardView - SearchPanel API', () => {
       searchPanel: { visible: true },
     });
 
-    const searchBox = page.locator('.dx-cardview-search');
+    const searchBox = page.locator('.dx-cardview-search-panel');
     await expect(searchBox).toBeVisible();
 
     await page.evaluate(() => {
@@ -42,7 +42,7 @@ test.describe('CardView - SearchPanel API', () => {
       searchPanel: { visible: true, text: 'rt' },
     });
 
-    const input = page.locator('.dx-cardview-search .dx-texteditor-input');
+    const input = page.locator('.dx-cardview-search-panel .dx-texteditor-input');
     await expect(input).toHaveValue('rt');
 
     await page.evaluate(() => {

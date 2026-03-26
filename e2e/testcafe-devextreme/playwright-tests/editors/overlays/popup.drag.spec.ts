@@ -15,6 +15,7 @@ test.describe('Popup', () => {
   });
 
   test('Popup can not be dragged outside of the container (window)', async ({ page }) => {
+    await page.setViewportSize({ width: 700, height: 700 });
     await createWidget(page, 'dxPopup', {
     width: 100,
     height: 100,
@@ -23,10 +24,8 @@ test.describe('Popup', () => {
     animation: undefined,
   });
 
-    const popup = page.locator('#container');
-
-    const content = popup.getContent();
-    const toolbar = popup.getToolbar();
+    const content = page.locator('.dx-overlay-content');
+    const toolbar = page.locator('.dx-popup-title');
 
     const popupRect: { bottom: number; top: number; left: number; right: number } = {
       bottom: 0, top: 0, left: 0, right: 0,
@@ -42,9 +41,11 @@ test.describe('Popup', () => {
         }
       })();
 
-    await asyncForEach(['bottom', 'left', 'top', 'right'], async (prop) => {
-      popupRect[prop] = await content.getBoundingClientRectProperty(prop);
-    });
+    const rect1 = await content.evaluate((el) => el.getBoundingClientRect());
+    popupRect.top = rect1.top;
+    popupRect.left = rect1.left;
+    popupRect.right = rect1.right;
+    popupRect.bottom = rect1.bottom;
 
     expect(popupRect.top).toBe(0);
 
@@ -60,9 +61,11 @@ test.describe('Popup', () => {
         }
       })();
 
-    await asyncForEach(['bottom', 'left', 'top', 'right'], async (prop) => {
-      popupRect[prop] = await content.getBoundingClientRectProperty(prop);
-    });
+    const rect2 = await content.evaluate((el) => el.getBoundingClientRect());
+    popupRect.top = rect2.top;
+    popupRect.left = rect2.left;
+    popupRect.right = rect2.right;
+    popupRect.bottom = rect2.bottom;
 
     expect(popupRect.bottom).toBe(700);
 
@@ -84,10 +87,8 @@ test.describe('Popup', () => {
       animation: undefined,
     }, '#popup');
 
-    const popup = page.locator('#popup');
-
-    const content = popup.getContent();
-    const toolbar = popup.getToolbar();
+    const content = page.locator('.dx-overlay-content');
+    const toolbar = page.locator('.dx-popup-title');
 
     const popupPosition: { top: number; left: number } = {
       top: 0, left: 0,
@@ -97,9 +98,9 @@ test.describe('Popup', () => {
       top: 0, left: 0,
     };
 
-    await asyncForEach(['left', 'top'], async (prop) => {
-      popupPosition[prop] = await content.getBoundingClientRectProperty(prop);
-    });
+    const rect1 = await content.evaluate((el) => el.getBoundingClientRect());
+    popupPosition.left = rect1.left;
+    popupPosition.top = rect1.top;
 
     await (async () => {
         const box = await toolbar.boundingBox();
@@ -111,9 +112,9 @@ test.describe('Popup', () => {
         }
       })();
 
-    await asyncForEach(['left', 'top'], async (prop) => {
-      newPopupPosition[prop] = await content.getBoundingClientRectProperty(prop);
-    });
+    const rect2 = await content.evaluate((el) => el.getBoundingClientRect());
+    newPopupPosition.left = rect2.left;
+    newPopupPosition.top = rect2.top;
 
     expect(popupPosition.top).toBe(newPopupPosition.top);
 
@@ -131,10 +132,8 @@ test.describe('Popup', () => {
     animation: undefined,
   });
 
-    const popup = page.locator('#container');
-
-    const content = popup.getContent();
-    const toolbar = popup.getToolbar();
+    const content = page.locator('.dx-overlay-content');
+    const toolbar = page.locator('.dx-popup-title');
 
     const popupPosition: { top: number; left: number } = {
       top: 0, left: 0,
@@ -150,9 +149,9 @@ test.describe('Popup', () => {
         }
       })();
 
-    await asyncForEach(['left', 'top'], async (prop) => {
-      popupPosition[prop] = await content.getBoundingClientRectProperty(prop);
-    });
+    const rect = await content.evaluate((el) => el.getBoundingClientRect());
+    popupPosition.left = rect.left;
+    popupPosition.top = rect.top;
 
     expect(popupPosition.top).toBeLessThan(0);
 

@@ -17,7 +17,7 @@ test.describe('FloatingAction - default theme', () => {
   const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
   const FA_MAIN_BUTTON_CLASS = 'dx-fa-button-main';
 
-  const setGlobalConfig = async () => page.evaluate(() => {
+  const setGlobalConfig = async (page: any) => page.evaluate(() => {
     (window as any).DevExpress.config({
       floatingActionButtonConfig: {
         icon: 'edit',
@@ -40,7 +40,7 @@ test.describe('FloatingAction - default theme', () => {
         await appendElementTo(page, '#container', 'div', 'speed-dial-action');
         await appendElementTo(page, '#container', 'div', 'speed-dial-action-trash');
 
-        await setGlobalConfig();
+        await setGlobalConfig(page);
         if (isMaterial()) {
           await insertStylesheetRulesToPage(page, '.dx-overlay-wrapper { font-family: sans-serif !important; }');
         }
@@ -60,8 +60,8 @@ test.describe('FloatingAction - default theme', () => {
         }, '#speed-dial-action-trash');
 
 
-        await page.locator('body').click()
-          .click(page.locator(`.${FA_MAIN_BUTTON_CLASS} .${OVERLAY_CONTENT_CLASS}`));
+        await page.locator('body').click();
+        await page.locator(`.${FA_MAIN_BUTTON_CLASS} .${OVERLAY_CONTENT_CLASS}`).click();
 
         await testScreenshot(page, `FAB is opened with two speed dial actions,label='${label}',icon='${icon}'.png`, {
           element: '#container',
@@ -77,7 +77,7 @@ test.describe('FloatingAction - default theme', () => {
         }
         await appendElementTo(page, '#container', 'div', 'speed-dial-action');
 
-        await setGlobalConfig();
+        await setGlobalConfig(page);
 
         await createWidget(page, 'dxSpeedDialAction', {
           label,
