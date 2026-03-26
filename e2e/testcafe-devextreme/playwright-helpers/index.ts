@@ -22,7 +22,6 @@ export {
   setStyleAttribute,
 } from './domUtils';
 export {
-  adjustViewportForContent,
   clearTestPage,
   getContainerUrl,
   setupTestPage,

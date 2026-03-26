@@ -39,26 +39,6 @@ export async function clearTestPage(page: Page): Promise<void> {
   await removeStylesheetRulesFromPage(page);
 }
 
-const TARGET_CONTENT_WIDTH = 1184;
-
-export async function adjustViewportForContent(page: Page): Promise<void> {
-  const currentContentWidth = await page.evaluate(
-    () => document.body.clientWidth,
-  );
-
-  if (currentContentWidth === TARGET_CONTENT_WIDTH) return;
-
-  const current = page.viewportSize();
-  if (!current) return;
-
-  const diff = TARGET_CONTENT_WIDTH - currentContentWidth;
-  await page.setViewportSize({ width: current.width + diff, height: current.height });
-  await page.evaluate(() => new Promise<void>((resolve) => {
-    window.dispatchEvent(new Event('resize'));
-    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
-  }));
-}
-
 export async function setupTestPage(page: Page, containerUrl: string, theme = 'fluent.blue.light'): Promise<void> {
   await page.goto(containerUrl);
   await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
