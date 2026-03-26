@@ -71,4 +71,67 @@ test.describe('KeyboardNavigation.ContentView', () => {
     const firstCard = page.locator('.dx-cardview-card').first();
     await expect(firstCard).toBeFocused();
   });
+
+  [
+    { caseName: 'arrows -> no left overflow', keys: ['ArrowLeft', 'ArrowLeft', 'ArrowLeft', 'ArrowLeft', 'ArrowLeft'], resultIndex: 3 },
+    { caseName: 'arrows -> no right overflow', keys: ['ArrowRight', 'ArrowRight', 'ArrowRight', 'ArrowRight', 'ArrowRight'], resultIndex: 5 },
+    { caseName: 'arrows -> no top overflow', keys: ['ArrowUp', 'ArrowUp', 'ArrowUp', 'ArrowUp', 'ArrowUp'], resultIndex: 1 },
+    { caseName: 'arrows -> no bottom overflow', keys: ['ArrowDown', 'ArrowDown', 'ArrowDown', 'ArrowDown', 'ArrowDown'], resultIndex: 7 },
+    { caseName: 'first in same row', keys: ['Home'], resultIndex: 3 },
+    { caseName: 'last in same row', keys: ['End'], resultIndex: 5 },
+    { caseName: 'first in first row', keys: ['Control+Home'], resultIndex: 0 },
+    { caseName: 'last in last row', keys: ['Control+End'], resultIndex: 8 },
+  ].forEach(({ caseName, keys, resultIndex }) => {
+    test(`Should move between cards: ${caseName}`, async ({ page }) => {
+      await createWidget(page, 'dxCardView', {
+        dataSource: new Array(9).fill(undefined).map((_, idx) => ({ id: idx })),
+        columns: ['id'],
+        keyExpr: 'id',
+        paging: { pageSize: 9 },
+        height: 700,
+      });
+
+      const card4 = page.locator('.dx-cardview-card').nth(4);
+      await card4.click();
+
+      for (const key of keys) {
+        await page.keyboard.press(key);
+      }
+
+      const targetCard = page.locator('.dx-cardview-card').nth(resultIndex);
+      await expect(targetCard).toBeFocused();
+    });
+  });
+
+  test('Should do nothing if pageup pressed on first page', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: new Array(9).fill(undefined).map((_, idx) => ({ id: idx })),
+      columns: ['id'],
+      keyExpr: 'id',
+      paging: { pageSize: 3, pageIndex: 0 },
+      height: 700,
+    });
+
+    const card = page.locator('.dx-cardview-card').nth(2);
+    await card.click();
+    await page.keyboard.press('PageUp');
+
+    await expect(card).toBeFocused();
+  });
+
+  test('Should do nothing if pagedown pressed on last page', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: new Array(9).fill(undefined).map((_, idx) => ({ id: idx })),
+      columns: ['id'],
+      keyExpr: 'id',
+      paging: { pageSize: 3, pageIndex: 2 },
+      height: 700,
+    });
+
+    const card = page.locator('.dx-cardview-card').nth(2);
+    await card.click();
+    await page.keyboard.press('PageDown');
+
+    await expect(card).toBeFocused();
+  });
 });

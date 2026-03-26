@@ -30,4 +30,21 @@ test.describe('KeyboardNavigation.Search', () => {
     const searchInput = page.locator('.dx-cardview-search-panel .dx-texteditor-input');
     await expect(searchInput).toBeFocused();
   });
+
+  test('Should do nothing after ctrl+f if card is not focused', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: new Array(6).fill(undefined).map((_, idx) => ({ id: idx })),
+      columns: ['id'],
+      keyExpr: 'id',
+      searchPanel: { visible: true },
+      height: 700,
+    });
+
+    const toolbar = page.locator('.dx-cardview-toolbar');
+    await toolbar.click();
+    await toolbar.dispatchEvent('keydown', { key: 'f', ctrlKey: true });
+
+    const searchInput = page.locator('.dx-cardview-search-panel .dx-texteditor-input');
+    await expect(searchInput).not.toBeFocused();
+  });
 });

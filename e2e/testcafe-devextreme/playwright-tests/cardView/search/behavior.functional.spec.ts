@@ -36,4 +36,34 @@ test.describe('CardView - SearchPanel Behavior', () => {
     await input.fill('');
     await expect(cards).toHaveCount(4);
   });
+
+  test('Search panel should take into account calculateFilterExpression', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [
+        { id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' },
+        { id: 2, title: 'Mrs.', name: 'Olivia', lastName: 'Peyton' },
+        { id: 3, title: 'Mr.', name: 'Robert', lastName: 'Reagan' },
+        { id: 4, title: 'Mr.', name: 'Greta', lastName: 'Sims' },
+      ],
+      columns: [
+        {
+          dataField: 'id',
+          calculateFilterExpression() {
+            return [this.dataField, '>', '2'];
+          },
+        },
+        { dataField: 'title' },
+        { dataField: 'name' },
+        { dataField: 'lastName' },
+      ],
+      searchPanel: { visible: true },
+    });
+
+    const cards = page.locator('.dx-cardview-card');
+    await expect(cards).toHaveCount(4);
+
+    const input = page.locator('.dx-cardview-search-panel .dx-texteditor-input');
+    await input.fill('1');
+    await expect(cards).toHaveCount(2);
+  });
 });

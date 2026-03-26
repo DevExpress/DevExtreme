@@ -33,6 +33,44 @@ test.describe('KeyboardNavigation.OnKeyDown', () => {
     expect(result).toEqual([{ handled: false, key: 'a' }]);
   });
 
+  test('Should be called on header item handled event', async ({ page }) => {
+    await page.evaluate(() => { (window as any).onKeyDownArgs = []; });
+    await createWidget(page, 'dxCardView', {
+      dataSource: new Array(6).fill(undefined).map((_, idx) => ({ id: idx })),
+      columns: ['id'],
+      keyExpr: 'id',
+      onKeyDown: ({ handled, event: { key } }) => {
+        (window as any).onKeyDownArgs.push({ handled, key });
+      },
+      height: 700,
+    });
+
+    const headerItem = page.locator('.dx-cardview-headers .dx-cardview-header-item').first();
+    await headerItem.dispatchEvent('keydown', { key: 'ArrowRight' });
+
+    const result = await page.evaluate(() => (window as any).onKeyDownArgs);
+    expect(result).toEqual([{ handled: true, key: 'ArrowRight' }]);
+  });
+
+  test('Should be called on card unhandled event', async ({ page }) => {
+    await page.evaluate(() => { (window as any).onKeyDownArgs = []; });
+    await createWidget(page, 'dxCardView', {
+      dataSource: new Array(6).fill(undefined).map((_, idx) => ({ id: idx })),
+      columns: ['id'],
+      keyExpr: 'id',
+      onKeyDown: ({ handled, event: { key } }) => {
+        (window as any).onKeyDownArgs.push({ handled, key });
+      },
+      height: 700,
+    });
+
+    const card = page.locator('.dx-cardview-card').first();
+    await card.dispatchEvent('keydown', { key: 'b' });
+
+    const result = await page.evaluate(() => (window as any).onKeyDownArgs);
+    expect(result).toEqual([{ handled: false, key: 'b' }]);
+  });
+
   test('Should be called on card handled event', async ({ page }) => {
     await page.evaluate(() => { (window as any).onKeyDownArgs = []; });
     await createWidget(page, 'dxCardView', {
@@ -50,5 +88,45 @@ test.describe('KeyboardNavigation.OnKeyDown', () => {
 
     const result = await page.evaluate(() => (window as any).onKeyDownArgs);
     expect(result).toEqual([{ handled: true, key: 'ArrowRight' }]);
+  });
+
+  test('Should be called on card unhandled event inside focus trap', async ({ page }) => {
+    await page.evaluate(() => { (window as any).onKeyDownArgs = []; });
+    await createWidget(page, 'dxCardView', {
+      dataSource: new Array(6).fill(undefined).map((_, idx) => ({ id: idx })),
+      columns: ['id'],
+      keyExpr: 'id',
+      onKeyDown: ({ handled, event: { key } }) => {
+        (window as any).onKeyDownArgs.push({ handled, key });
+      },
+      selection: { mode: 'multiple' },
+      height: 700,
+    });
+
+    const checkbox = page.locator('.dx-cardview-card').first().locator('.dx-checkbox');
+    await checkbox.dispatchEvent('keydown', { key: 'c' });
+
+    const result = await page.evaluate(() => (window as any).onKeyDownArgs);
+    expect(result).toEqual([{ handled: false, key: 'c' }]);
+  });
+
+  test('Should be called on card handled event inside focus trap', async ({ page }) => {
+    await page.evaluate(() => { (window as any).onKeyDownArgs = []; });
+    await createWidget(page, 'dxCardView', {
+      dataSource: new Array(6).fill(undefined).map((_, idx) => ({ id: idx })),
+      columns: ['id'],
+      keyExpr: 'id',
+      onKeyDown: ({ handled, event: { key } }) => {
+        (window as any).onKeyDownArgs.push({ handled, key });
+      },
+      selection: { mode: 'multiple' },
+      height: 700,
+    });
+
+    const checkbox = page.locator('.dx-cardview-card').first().locator('.dx-checkbox');
+    await checkbox.dispatchEvent('keydown', { key: 'Escape' });
+
+    const result = await page.evaluate(() => (window as any).onKeyDownArgs);
+    expect(result).toEqual([{ handled: true, key: 'Escape' }]);
   });
 });

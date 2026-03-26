@@ -44,6 +44,56 @@ test.describe('KeyboardNavigation.Selection', () => {
     });
   });
 
+  [
+    { caseName: 'card selection', keys: ['Space'], result: [false, true, false] },
+    { caseName: 'card deselection', keys: ['Space', 'Space'], result: [false, false, false] },
+    { caseName: 'the next card selection', keys: ['Space', 'ArrowRight', 'Space'], result: [false, true, true] },
+  ].forEach(({ caseName, keys, result }) => {
+    test(`Should handle selection in multiple mode: ${caseName}`, async ({ page }) => {
+      await createWidget(page, 'dxCardView', {
+        dataSource: new Array(3).fill(undefined).map((_, idx) => ({ id: idx })),
+        columns: ['id'],
+        keyExpr: 'id',
+        selection: { mode: 'multiple' },
+        height: 700,
+      });
+
+      const card = page.locator('.dx-cardview-card').nth(1);
+      await card.click();
+
+      for (const key of keys) {
+        await page.keyboard.press(key);
+      }
+
+      for (let i = 0; i < 3; i++) {
+        const isSelected = await page.locator('.dx-cardview-card').nth(i).evaluate(
+          el => el.classList.contains('dx-cardview-card-selection')
+        );
+        expect(isSelected).toBe(result[i]);
+      }
+    });
+  });
+
+  test('Should do nothing after ctrl+a with selection single mode', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: new Array(3).fill(undefined).map((_, idx) => ({ id: idx })),
+      columns: ['id'],
+      keyExpr: 'id',
+      selection: { mode: 'single' },
+      height: 700,
+    });
+
+    const card = page.locator('.dx-cardview-card').nth(1);
+    await card.dispatchEvent('keydown', { key: 'a', ctrlKey: true });
+
+    for (let i = 0; i < 3; i++) {
+      const isSelected = await page.locator('.dx-cardview-card').nth(i).evaluate(
+        el => el.classList.contains('dx-cardview-card-selection')
+      );
+      expect(isSelected).toBe(false);
+    }
+  });
+
   test('Should select all cards after ctrl+a with selection multiple mode', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
       dataSource: new Array(3).fill(undefined).map((_, idx) => ({ id: idx })),

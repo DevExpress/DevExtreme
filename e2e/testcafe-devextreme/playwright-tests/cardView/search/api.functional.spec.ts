@@ -50,4 +50,118 @@ test.describe('CardView - SearchPanel API', () => {
     });
     await expect(input).toHaveValue('');
   });
+
+  test('searchPanel.width API', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' }],
+      columns: [{ dataField: 'id' }, { dataField: 'title' }, { dataField: 'name' }, { dataField: 'lastName' }],
+      searchPanel: { visible: true, width: 300 },
+    });
+
+    const searchBox = page.locator('.dx-cardview-search-panel');
+    const initialWidth = await searchBox.evaluate(el => el.getBoundingClientRect().width);
+    expect(Math.round(initialWidth)).toBe(300);
+
+    await page.evaluate(() => {
+      ($('#container') as any).dxCardView('instance').option('searchPanel.width', 200);
+    });
+
+    const newWidth = await searchBox.evaluate(el => el.getBoundingClientRect().width);
+    expect(Math.round(newWidth)).toBe(200);
+  });
+
+  test('searchPanel.placeholder API', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' }],
+      columns: [{ dataField: 'id' }, { dataField: 'title' }, { dataField: 'name' }, { dataField: 'lastName' }],
+      searchPanel: { visible: true, placeholder: 'Test placeholder' },
+    });
+
+    const input = page.locator('.dx-cardview-search-panel .dx-texteditor-input');
+    await expect(input).toHaveAttribute('placeholder', 'Test placeholder');
+
+    await page.evaluate(() => {
+      ($('#container') as any).dxCardView('instance').option('searchPanel.placeholder', 'Test placeholder 2');
+    });
+    await expect(input).toHaveAttribute('placeholder', 'Test placeholder 2');
+  });
+
+  test('searchPanel.text API from UI', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [
+        { id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' },
+        { id: 2, title: 'Mrs.', name: 'Olivia', lastName: 'Peyton' },
+        { id: 3, title: 'Mr.', name: 'Robert', lastName: 'Reagan' },
+        { id: 4, title: 'Mr.', name: 'Greta', lastName: 'Sims' },
+      ],
+      columns: [{ dataField: 'id' }, { dataField: 'title' }, { dataField: 'name' }, { dataField: 'lastName' }],
+      searchPanel: { visible: true, text: '' },
+    });
+
+    const input = page.locator('.dx-cardview-search-panel .dx-texteditor-input');
+    await input.fill('rt');
+
+    const searchText = await page.evaluate(() => {
+      return ($('#container') as any).dxCardView('instance').option('searchPanel.text');
+    });
+    expect(searchText).toBe('rt');
+  });
+
+  test('searchPanel.searchVisibleColumnsOnly API', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [
+        { id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' },
+        { id: 2, title: 'Mrs.', name: 'Olivia', lastName: 'Peyton' },
+        { id: 3, title: 'Mr.', name: 'Robert', lastName: 'Reagan' },
+        { id: 4, title: 'Mr.', name: 'Greta', lastName: 'Sims' },
+      ],
+      columns: [
+        { dataField: 'id', visible: false },
+        { dataField: 'title' },
+        { dataField: 'name' },
+        { dataField: 'lastName' },
+      ],
+      searchPanel: { visible: true },
+    });
+
+    const cards = page.locator('.dx-cardview-card');
+    await expect(cards).toHaveCount(4);
+
+    const input = page.locator('.dx-cardview-search-panel .dx-texteditor-input');
+    await input.fill('2');
+    await expect(cards).toHaveCount(1);
+
+    await page.evaluate(() => {
+      ($('#container') as any).dxCardView('instance').option('searchPanel.searchVisibleColumnsOnly', true);
+    });
+    await expect(cards).toHaveCount(0);
+  });
+
+  test('searchPanel.highlightSearchText API', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [
+        { id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' },
+        { id: 2, title: 'Mrs.', name: 'Olivia', lastName: 'Peyton' },
+        { id: 3, title: 'Mr.', name: 'Robert', lastName: 'Reagan' },
+        { id: 4, title: 'Mr.', name: 'Greta', lastName: 'Sims' },
+      ],
+      columns: [{ dataField: 'id' }, { dataField: 'title' }, { dataField: 'name' }, { dataField: 'lastName' }],
+      searchPanel: { visible: true },
+    });
+
+    const cards = page.locator('.dx-cardview-card');
+    const input = page.locator('.dx-cardview-search-panel .dx-texteditor-input');
+    await input.fill('rt');
+    await expect(cards).toHaveCount(2);
+
+    const highlights = page.locator('.dx-cardview-card').first().locator('.dx-highlight-text');
+    await expect(highlights).toHaveCount(1);
+
+    await page.evaluate(() => {
+      ($('#container') as any).dxCardView('instance').option('searchPanel.highlightSearchText', false);
+    });
+
+    await expect(cards).toHaveCount(2);
+    await expect(highlights).toHaveCount(0);
+  });
 });
