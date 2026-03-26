@@ -1,5 +1,5 @@
 import {
-  afterEach, beforeEach, describe, expect, it,
+  afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 
 import fx from '../../../common/core/animation/fx';
@@ -112,5 +112,36 @@ describe('Isolated AppointmentPopup environment', () => {
     expect(popup.visible).toBe(true);
     POM.cancelButton.click();
     expect(popup.visible).toBe(false);
+  });
+
+  it('should support composite onDone for exclude-from-series scenario', async () => {
+    const updateAppointment = jest.fn();
+    const addAppointment = jest.fn(() => Promise.resolve());
+
+    const sourceAppointment = { text: 'Series', recurrenceRule: 'FREQ=DAILY' };
+    const updatedAppointment = { text: 'Series', recurrenceException: '20210426' };
+
+    const onDone = jest.fn((newAppointment) => {
+      updateAppointment(sourceAppointment, updatedAppointment);
+      return addAppointment(newAppointment);
+    });
+
+    const { POM } = await createAppointmentPopup({
+      appointmentData: {
+        text: 'Single occurrence',
+        startDate: new Date(2021, 3, 26, 9, 30),
+        endDate: new Date(2021, 3, 26, 11, 0),
+      },
+      title: 'Edit Appointment',
+      onDone,
+    });
+
+    POM.saveButton.click();
+
+    expect(onDone).toHaveBeenCalledTimes(1);
+    expect(updateAppointment).toHaveBeenCalledWith(sourceAppointment, updatedAppointment);
+    expect(addAppointment).toHaveBeenCalledWith(
+      expect.objectContaining({ text: 'Single occurrence' }),
+    );
   });
 });

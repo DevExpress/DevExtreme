@@ -41,7 +41,11 @@ export class AppointmentPopup {
 
   state: any;
 
-  private config!: AppointmentPopupConfig;
+  private config: AppointmentPopupConfig = {
+    onDone: () => Promise.resolve(),
+    title: '',
+    readOnly: false,
+  };
 
   get popup(): dxPopup {
     return this._popup as dxPopup;
