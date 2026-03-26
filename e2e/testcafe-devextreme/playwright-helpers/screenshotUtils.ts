@@ -2,14 +2,19 @@ import type { Page, Locator } from '@playwright/test';
 
 export async function getLocatorScrollClip(
   locator: Locator,
-): Promise<{ x: number; y: number; width: number; height: number }> {
+): Promise<{ x: number; y: number; width: number; height: number } | null> {
   return locator.evaluate((el) => {
     const r = el.getBoundingClientRect();
+    const width = Math.max(el.scrollWidth, el.offsetWidth);
+    const height = Math.max(el.scrollHeight, el.offsetHeight);
+    if (width === Math.round(r.width) && height === Math.round(r.height)) {
+      return null;
+    }
     return {
       x: Math.round(r.x),
       y: Math.round(r.y),
-      width: Math.max(el.scrollWidth, el.offsetWidth),
-      height: Math.max(el.scrollHeight, el.offsetHeight),
+      width,
+      height,
     };
   });
 }

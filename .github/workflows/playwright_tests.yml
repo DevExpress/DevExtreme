@@ -81,7 +81,7 @@ jobs:
           { componentFolder: "scheduler/common", name: "scheduler / common (2/3)", shard: "2/3" },
           { componentFolder: "scheduler/common", name: "scheduler / common (3/3)", shard: "3/3" },
           { componentFolder: "scheduler/timezones", name: "scheduler / timezones" },
-          { componentFolder: "scheduler/viewOffset", name: "scheduler / viewOffset" },
+          { componentFolder: "scheduler/viewOffset", name: "scheduler / viewOffset", project: "chromium-1185" },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (1/2)", shard: "1/2" },
           { componentFolder: "dataGrid/common", name: "dataGrid / common (2/2)", shard: "2/2" },
           { componentFolder: "dataGrid/sticky", name: "dataGrid / sticky" },
@@ -144,6 +144,8 @@ jobs:
         if [ "${{ matrix.ARGS.shard }}" != "" ]; then
           SHARD_ARG="--shard=${{ matrix.ARGS.shard }}"
         fi
+        PROJECT="${{ matrix.ARGS.project || 'chromium' }}"
+        PROJECT_ARG="--project=$PROJECT"
 
         set -o pipefail
         for i in $(seq 1 $REPEAT_COUNT); do
@@ -152,6 +154,7 @@ jobs:
             --config playwright.config.ts \
             playwright-tests/${{ matrix.ARGS.componentFolder }} \
             $SHARD_ARG \
+            $PROJECT_ARG \
             --reporter=list \
             2>&1 | tee -a playwright-output-run-$i.log
           echo ""

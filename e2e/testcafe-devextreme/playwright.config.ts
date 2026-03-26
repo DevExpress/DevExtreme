@@ -122,6 +122,13 @@ export default defineConfig({
         browserName: 'chromium',
       },
     },
+    {
+      name: 'chromium-1185',
+      use: {
+        browserName: 'chromium',
+        viewport: { width: 1185, height: 800 },
+      },
+    },
   ],
 
   reporter: [['html', { open: 'never' }]],
