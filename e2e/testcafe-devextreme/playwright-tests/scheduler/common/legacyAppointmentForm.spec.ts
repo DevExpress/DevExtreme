@@ -85,6 +85,62 @@ test.describe('Legacy appointment popup form', () => {
     await expect(popup).toBeVisible();
   });
 
+  test("Custom form shouldn't throw exception, after second show appointment form(T812654)", async ({ page }) => {
+    const APPOINTMENT_TEXT = 'Website Re-Design Plan';
+
+    await createWidget(page, 'dxScheduler', {
+      views: ['month'],
+      currentView: 'month',
+      currentDate: new Date(2017, 4, 22),
+      height: 600,
+      width: 600,
+      editing: { legacyForm: true },
+      onAppointmentFormOpening: (e) => {
+        const items = [{
+          name: 'show1',
+          dataField: 'show1',
+          editorType: 'dxCheckBox',
+          editorOptions: {
+            type: 'boolean',
+            onValueChanged: (args) => e.form.itemOption('text1', 'visible', args.value),
+          },
+        }, {
+          name: 'text1',
+          dataField: 'text',
+          editorType: 'dxTextArea',
+          colSpan: 6,
+          visible: false,
+        }];
+        e.form.option('items', items);
+      },
+      dataSource: [{
+        show1: false,
+        text: APPOINTMENT_TEXT,
+        startDate: new Date(2017, 4, 22, 9, 30),
+        endDate: new Date(2017, 4, 22, 11, 30),
+      }],
+    });
+
+    const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: APPOINTMENT_TEXT });
+    await appointment.dblclick();
+
+    const popup = page.locator('.dx-scheduler-appointment-popup');
+    await expect(popup).toBeVisible();
+
+    const cancelButton = popup.locator('.dx-popup-cancel.dx-button');
+    await cancelButton.click();
+    await expect(popup).not.toBeVisible();
+
+    await appointment.click();
+
+    const tooltipItem = page.locator('.dx-tooltip-appointment-item').filter({ hasText: APPOINTMENT_TEXT });
+    if (await tooltipItem.isVisible()) {
+      await tooltipItem.click();
+    }
+
+    await expect(popup).not.toBeVisible();
+  });
+
   test('From elements for disabled appointments should be read only (T835731)', async ({ page }) => {
     const APPOINTMENT_TEXT = 'Install New Router in Dev Room';
 

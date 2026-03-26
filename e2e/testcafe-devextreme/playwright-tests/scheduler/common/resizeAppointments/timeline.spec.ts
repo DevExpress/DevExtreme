@@ -94,7 +94,7 @@ test.describe('Resize appointments in the Scheduler timeline views', () => {
     expect(width).toBe('200px');
   });
 
-  test('Resize should work correctly when cell width is not an integer', async ({ page }) => {
+  test("Resize should work correctly when cell's width is not an integer", async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       views: [{ type: 'timelineDay', cellDuration: 120 }],
       currentView: 'timelineDay',
@@ -177,5 +177,35 @@ test.describe('Resize appointments in the Scheduler timeline views', () => {
 
     const width = await appointment.evaluate((el) => getComputedStyle(el).width);
     expect(width).toBe('400px');
+  });
+
+  ['timelineWeek', 'timelineWorkWeek'].forEach((view) => {
+    test(`Resize in the "${view}" view with start and end day hour (T1134583)`, async ({ page }) => {
+      await createWidget(page, 'dxScheduler', {
+        dataSource: [{
+          text: 'Appointment',
+          startDate: new Date(2024, 0, 3, 9, 30),
+          endDate: new Date(2024, 0, 3, 12, 30),
+        }],
+        views: [view],
+        currentView: view,
+        currentDate: new Date(2024, 0, 2),
+        cellDuration: 60,
+        startDayHour: 10,
+        endDayHour: 12,
+        height: 600,
+      });
+
+      const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Appointment' });
+      const rightHandle = appointment.locator('.dx-resizable-handle-right');
+
+      await rightHandle.hover();
+      await page.mouse.down();
+      await page.mouse.move(200, 0, { steps: 5 });
+      await page.mouse.up();
+
+      const width = await appointment.evaluate((el) => getComputedStyle(el).width);
+      expect(parseInt(width, 10)).toBeGreaterThan(0);
+    });
   });
 });

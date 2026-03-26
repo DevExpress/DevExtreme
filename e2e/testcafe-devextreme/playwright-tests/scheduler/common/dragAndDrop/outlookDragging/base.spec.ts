@@ -134,6 +134,203 @@ test.describe('Outlook dragging base tests', () => {
     });
   });
 
+  test('Basic drag-n-drop movements from tooltip in week view', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [
+        { text: 'Appointment 1', startDate: new Date(2021, 2, 21, 9, 30), endDate: new Date(2021, 2, 21, 12, 0) },
+        { text: 'Appointment 2', startDate: new Date(2021, 2, 21, 9, 30), endDate: new Date(2021, 2, 21, 12, 0) },
+        { text: 'Appointment 3', startDate: new Date(2021, 2, 21, 9, 30), endDate: new Date(2021, 2, 21, 11, 0) },
+        { text: 'Appointment 4', startDate: new Date(2021, 2, 21, 9, 30), endDate: new Date(2021, 2, 21, 12, 30) },
+      ],
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date(2021, 2, 21),
+      startDayHour: 8,
+      height: 600,
+      width: 1000,
+    });
+
+    const collector = page.locator('.dx-scheduler-appointment-collector').filter({ hasText: '2' });
+    await collector.click();
+    await expect(page.locator('.dx-scheduler-appointment-tooltip-wrapper')).toBeVisible();
+
+    const tooltipItem = page.locator('.dx-tooltip-appointment-item').filter({ hasText: 'Appointment 3' });
+    const box = await tooltipItem.boundingBox();
+    await tooltipItem.hover();
+    await page.mouse.down();
+    await page.mouse.move(box!.x + box!.width / 2 + 200, box!.y + box!.height / 2 + 50, { steps: 10 });
+    await page.mouse.up();
+
+    await testScreenshot(page, "drag-n-drop-'Appointment 3'-from-tooltip-in-week.png", {
+      element: page.locator('.dx-scheduler-work-space'),
+    });
+  });
+
+  test('Basic drag-n-drop movements with mouse offset', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [{
+        text: 'Website Re-Design Plan',
+        startDate: new Date(2021, 2, 22, 10),
+        endDate: new Date(2021, 2, 22, 12, 30),
+      }],
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date(2021, 2, 22),
+      startDayHour: 9,
+      height: 600,
+      width: 1000,
+    });
+
+    const appt = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Website Re-Design Plan' });
+    const ws = page.locator('.dx-scheduler-work-space');
+
+    let box = await appt.boundingBox();
+    await page.mouse.move(box!.x + 10, box!.y + 200);
+    await page.mouse.down();
+    await page.mouse.move(box!.x + 10 + 100, box!.y + 200, { steps: 10 });
+    await page.mouse.up();
+    await testScreenshot(page, 'drag-n-drop-mouse-offset-to-right.png', { element: ws });
+
+    box = await appt.boundingBox();
+    await page.mouse.move(box!.x + 10, box!.y + 200);
+    await page.mouse.down();
+    await page.mouse.move(box!.x + 10 - 100, box!.y + 200, { steps: 10 });
+    await page.mouse.up();
+    await testScreenshot(page, 'drag-n-drop-mouse-offset-to-left.png', { element: ws });
+  });
+
+  test('Basic drag-n-drop all day appointment movements', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [{
+        text: 'Website Re-Design Plan',
+        startDate: new Date(2021, 2, 23, 10),
+        endDate: new Date(2021, 2, 25, 12, 30),
+      }],
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date(2021, 2, 23),
+      startDayHour: 9,
+      height: 600,
+      width: 1000,
+    });
+
+    const appt = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Website Re-Design Plan' });
+    const ws = page.locator('.dx-scheduler-work-space');
+
+    let box = await appt.boundingBox();
+    await appt.hover();
+    await page.mouse.down();
+    await page.mouse.move(box!.x + box!.width / 2 + 200, box!.y + box!.height / 2, { steps: 10 });
+    await page.mouse.up();
+    await testScreenshot(page, 'drag-n-drop-all-day-to-right.png', { element: ws });
+
+    box = await appt.boundingBox();
+    await appt.hover();
+    await page.mouse.down();
+    await page.mouse.move(box!.x + box!.width / 2 - 200, box!.y + box!.height / 2, { steps: 10 });
+    await page.mouse.up();
+    await testScreenshot(page, 'drag-n-drop-all-day-to-left.png', { element: ws });
+  });
+
+  test('Basic drag-n-drop movements within the cell', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [{
+        text: 'Website Re-Design Plan',
+        startDate: new Date(2021, 2, 22, 10),
+        endDate: new Date(2021, 2, 22, 12, 30),
+      }],
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date(2021, 2, 22),
+      startDayHour: 9,
+      height: 600,
+      width: 1000,
+    });
+
+    const appt = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Website Re-Design Plan' });
+    const ws = page.locator('.dx-scheduler-work-space');
+
+    let box = await appt.boundingBox();
+    await appt.hover();
+    await page.mouse.down();
+    await page.mouse.move(box!.x + box!.width / 2 + 55, box!.y + box!.height / 2, { steps: 5 });
+    await page.mouse.up();
+    await testScreenshot(page, 'drag-n-drop-within-cell-to-right.png', { element: ws });
+
+    box = await appt.boundingBox();
+    await appt.hover();
+    await page.mouse.down();
+    await page.mouse.move(box!.x + box!.width / 2 - 50, box!.y + box!.height / 2, { steps: 5 });
+    await page.mouse.up();
+    await testScreenshot(page, 'drag-n-drop-within-cell-to-left.png', { element: ws });
+  });
+
+  test('Basic drag-n-drop small appointments', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [{
+        text: 'Website Re-Design Plan',
+        startDate: new Date(2021, 2, 17, 10),
+        endDate: new Date(2021, 2, 17, 12, 30),
+      }],
+      views: ['month'],
+      currentView: 'month',
+      currentDate: new Date(2021, 2, 17),
+      startDayHour: 9,
+      height: 600,
+      width: 1000,
+    });
+
+    const appt = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Website Re-Design Plan' });
+    const ws = page.locator('.dx-scheduler-work-space');
+
+    let box = await appt.boundingBox();
+    await appt.hover();
+    await page.mouse.down();
+    await page.mouse.move(box!.x + box!.width / 2 + 250, box!.y + box!.height / 2, { steps: 10 });
+    await page.mouse.up();
+    await testScreenshot(page, 'drag-n-drop-small-appoint-to-right.png', { element: ws });
+
+    box = await appt.boundingBox();
+    await appt.hover();
+    await page.mouse.down();
+    await page.mouse.move(box!.x + box!.width / 2 - 250, box!.y + box!.height / 2, { steps: 10 });
+    await page.mouse.up();
+    await testScreenshot(page, 'drag-n-drop-small-appoint-to-left.png', { element: ws });
+  });
+
+  test('Basic drag-n-drop long appointments', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [{
+        text: 'Website Re-Design Plan',
+        startDate: new Date(2021, 2, 16, 10),
+        endDate: new Date(2021, 2, 18, 12, 30),
+      }],
+      views: ['month'],
+      currentView: 'month',
+      currentDate: new Date(2021, 2, 16),
+      startDayHour: 9,
+      height: 600,
+      width: 1000,
+    });
+
+    const appt = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Website Re-Design Plan' });
+    const ws = page.locator('.dx-scheduler-work-space');
+
+    let box = await appt.boundingBox();
+    await appt.hover();
+    await page.mouse.down();
+    await page.mouse.move(box!.x + box!.width / 2 + 150, box!.y + box!.height / 2, { steps: 10 });
+    await page.mouse.up();
+    await testScreenshot(page, 'drag-n-drop-long-appoint-to-right.png', { element: ws });
+
+    box = await appt.boundingBox();
+    await appt.hover();
+    await page.mouse.down();
+    await page.mouse.move(box!.x + box!.width / 2 - 30, box!.y + box!.height / 2, { steps: 10 });
+    await page.mouse.up();
+    await testScreenshot(page, 'drag-n-drop-long-appoint-to-left.png', { element: ws });
+  });
+
   test('Narrow appointment dragging on minimal distance should be expected(1171520)', async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       dataSource: [{

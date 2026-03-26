@@ -24,7 +24,7 @@ test.describe('Appointment popup form:date editors', () => {
     await setupTestPage(page, containerUrl);
   });
 
-  test('Form date editors should pass numeric chars according by date mask', async ({ page }) => {
+  test('Form date editors should be pass numeric chars according by date mask', async ({ page }) => {
     await createWidget(page, 'dxScheduler', schedulerOptions);
 
     const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Website Re-Design Plan' });
@@ -41,7 +41,7 @@ test.describe('Appointment popup form:date editors', () => {
     expect(startDateValue).toBe('11/11/1111, 11:11 AM');
   });
 
-  test('Form date editors should not pass chars according by date mask', async ({ page }) => {
+  test('Form date editors should not be pass chars according by date mask', async ({ page }) => {
     await createWidget(page, 'dxScheduler', schedulerOptions);
 
     const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Website Re-Design Plan' });
@@ -53,5 +53,25 @@ test.describe('Appointment popup form:date editors', () => {
     await startDateInput.fill('TEXT');
     const startDateValue = await startDateInput.inputValue();
     expect(startDateValue).toBe('3/30/2021, 11:00 AM');
+  });
+
+  test('Form date editors should not be pass chars after remove all characters according by date mask', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', schedulerOptions);
+
+    const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Website Re-Design Plan' });
+    await appointment.dblclick();
+
+    const popup = page.locator('.dx-scheduler-appointment-popup');
+    const startDateInput = popup.locator('.dx-texteditor-input').nth(2);
+    await startDateInput.click();
+    await startDateInput.selectText();
+    await page.keyboard.press('Backspace');
+    await startDateInput.fill('TEXT');
+    const startDateValueAfterText = await startDateInput.inputValue();
+    expect(startDateValueAfterText).toBe('');
+
+    await startDateInput.fill('1');
+    const startDateValueAfterNum = await startDateInput.inputValue();
+    expect(startDateValueAfterNum).toContain('1');
   });
 });

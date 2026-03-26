@@ -40,7 +40,7 @@ test.describe('Rendering of the recurrence appointments in Scheduler', () => {
     await testScreenshot(page, 'basic-recurrence-appointment-after-drag.png');
   });
 
-  test('Appointments in DST should not have offset when recurring appointment timezone not equal to scheduler timezone', async ({ page }) => {
+  test('Appointments in DST should not have offset when recurring appointment timezoine not equal to scheduler timezone', async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       timeZone: 'America/New_York',
       dataSource: [{

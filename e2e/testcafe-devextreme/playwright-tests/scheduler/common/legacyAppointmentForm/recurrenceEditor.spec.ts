@@ -77,4 +77,55 @@ test.describe('Appointment Form: recurrence editor', () => {
     const appointmentCount = await page.locator('.dx-scheduler-appointment').count();
     expect(appointmentCount).toBe(7);
   });
+
+  test('Should correctly create recurrent appointment after repeat toggle', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [],
+      views: ['week'],
+      currentView: 'week',
+      currentDate: '2024-01-01T10:00:00',
+      editing: { legacyForm: true },
+    });
+
+    const cell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0);
+    await cell.dblclick();
+
+    const popup = page.locator('.dx-scheduler-appointment-popup');
+    const recurrenceSwitch = popup.locator('.dx-recurrence-switch-container .dx-switch');
+    await recurrenceSwitch.click();
+    await recurrenceSwitch.click();
+    await recurrenceSwitch.click();
+
+    const doneButton = popup.locator('.dx-popup-done.dx-button');
+    await doneButton.click();
+
+    const appointmentCount = await page.locator('.dx-scheduler-appointment').count();
+    expect(appointmentCount).toBe(7);
+  });
+
+  test('Should reset the recurrence editor value after the popup reopening', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [],
+      views: ['week'],
+      currentView: 'week',
+      currentDate: '2024-01-01T10:00:00',
+      editing: { legacyForm: true },
+    });
+
+    const cell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0);
+    await cell.dblclick();
+
+    const popup = page.locator('.dx-scheduler-appointment-popup');
+    const recurrenceSwitch = popup.locator('.dx-recurrence-switch-container .dx-switch');
+    await recurrenceSwitch.click();
+
+    const cancelButton = popup.locator('.dx-popup-cancel.dx-button');
+    await cancelButton.click();
+
+    await cell.dblclick();
+    await recurrenceSwitch.click();
+
+    const content = popup.locator('.dx-popup-content');
+    await testScreenshot(page, 'recurrence-editor_after-popup-reopen.png', { element: content });
+  });
 });

@@ -139,6 +139,31 @@ test.describe('Appointment Form: Main Form', () => {
     );
   });
 
+  test('main form without icons', async ({ page }) => {
+    await page.setViewportSize({ width: 1500, height: 1500 });
+
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [],
+      views: ['week'],
+      currentView: 'week',
+      currentDate: new Date(2021, 2, 25),
+      resources: getResources(true),
+      editing: {
+        form: {
+          iconsShowMode: 'none',
+        },
+      },
+    });
+
+    await openAppointmentPopup(page, undefined, false);
+
+    await testScreenshot(
+      page,
+      'scheduler__appointment__main-form__icons-mode-none.png',
+      { element: page.locator('.dx-popup-content') },
+    );
+  });
+
   test('appointment form readonly state', async ({ page }) => {
     await page.setViewportSize({ width: 1500, height: 1500 });
 

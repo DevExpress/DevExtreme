@@ -31,7 +31,7 @@ test.describe('Scheduler: take into account start and end day hour', () => {
     await expect(page.locator('.dx-scheduler-appointment').filter({ hasText: 'test' })).toBeVisible();
   });
 
-  test('Should not show appointment in month view', async ({ page }) => {
+  test("Shouldn't show appointment in month view", async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       dataSource: [{
         startDate: '2024-01-01T11:00:00',

@@ -62,7 +62,7 @@ test.describe('Cancel appointment Resizing', () => {
     expect(newEndDate2).toBe(etalonEndDateIso);
   });
 
-  test('on escape - date should not changed when it is pressed after resize (T1125615)', async ({ page }) => {
+  test("on escape - date should not changed when it's pressed after resize (T1125615)", async ({ page }) => {
     await createWidget(page, 'dxScheduler', defaultSetupOptions);
 
     const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Test Resize' });
@@ -88,7 +88,7 @@ test.describe('Cancel appointment Resizing', () => {
     expect(timeText2).toContain('1:00 AM - 12:00 AM');
   });
 
-  test('on escape - date should not changed when it is pressed during resize (T1125615)', async ({ page }) => {
+  test("on escape - date should not changed when it's pressed during resize (T1125615)", async ({ page }) => {
     await createWidget(page, 'dxScheduler', defaultSetupOptions);
 
     const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: 'Test Resize' });

@@ -136,4 +136,63 @@ test.describe('Appointment tooltip behavior during scrolling in the Scheduler (T
     const scheduler = page.locator('.dx-scheduler');
     await testScreenshot(page, 'collector-tooltip-focused-list-item.png', { element: scheduler });
   });
+
+  test('Tooltip on mobile devices should have enough hight if there are async templates (React)', async ({ page }) => {
+    await page.setViewportSize({ width: 600, height: 1000 });
+
+    await page.evaluate(() => {
+      (window as any).deferreds = [];
+    });
+
+    await createWidget(page, 'dxScheduler', {
+      currentDate: new Date(2017, 4, 25),
+      currentView: 'month',
+      adaptivityEnabled: true,
+      templatesRenderAsynchronously: true,
+      integrationOptions: {
+        templates: {
+          appointmentTooltip: {
+            render: (args: any) => {
+              const deferred = (window as any).$.Deferred();
+              (window as any).deferreds.push(deferred);
+              deferred.done(() => {
+                $(args.container).append(
+                  $('<div>').height(50).text(args.model.appointmentData.text),
+                );
+                args.onRendered();
+              });
+            },
+          },
+        },
+      },
+      dataSource: [
+        { text: 'A', startDate: new Date(2017, 4, 22, 0, 30), endDate: new Date(2017, 4, 22, 0, 30) },
+        { text: 'B', startDate: new Date(2017, 4, 22, 0, 30), endDate: new Date(2017, 4, 22, 0, 30) },
+        { text: 'C', startDate: new Date(2017, 4, 22, 0, 30), endDate: new Date(2017, 4, 22, 0, 30) },
+        { text: 'D', startDate: new Date(2017, 4, 22, 0, 30), endDate: new Date(2017, 4, 22, 0, 30) },
+        { text: 'E', startDate: new Date(2017, 4, 22, 0, 30), endDate: new Date(2017, 4, 22, 0, 30) },
+        { text: 'F', startDate: new Date(2017, 4, 22, 0, 30), endDate: new Date(2017, 4, 22, 0, 30) },
+        { text: 'G', startDate: new Date(2017, 4, 22, 0, 30), endDate: new Date(2017, 4, 22, 0, 30) },
+      ],
+    });
+
+    const resolveAllRenderDeferreds = () => page.evaluate(() => {
+      (window as any).deferreds
+        .filter((d: any) => d.state() === 'pending')
+        .forEach((d: any) => d.resolve());
+    });
+
+    await page.locator('.dx-scheduler-header').click();
+    const collector = page.locator('.dx-scheduler-appointment-collector').filter({ hasText: '7' });
+    await collector.click();
+    await resolveAllRenderDeferreds();
+
+    await testScreenshot(page, 'tooltip-rendering-with-react.png');
+
+    await page.locator('.dx-scheduler-header').click();
+    await collector.click();
+    await resolveAllRenderDeferreds();
+
+    await testScreenshot(page, 'tooltip-rendering-with-react.png');
+  });
 });

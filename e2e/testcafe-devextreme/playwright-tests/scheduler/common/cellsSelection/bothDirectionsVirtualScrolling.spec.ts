@@ -43,7 +43,7 @@ test.describe('Scheduler: Cells Selection in Both Directions Virtual Scrolling',
     await setupTestPage(page, containerUrl);
   });
 
-  test('Selected cells shouldn\'t disappear on scroll', async ({ page }) => {
+  test('Selected cells shouldn\'t disapppear on scroll', async ({ page }) => {
     await createSchedulerWidget(page, { ...baseConfig });
 
     const firstCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0);
@@ -60,6 +60,125 @@ test.describe('Scheduler: Cells Selection in Both Directions Virtual Scrolling',
 
     await scrollTo(page, 0, 0);
     selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
+  });
+
+  test('Selected cells shouldn\'t disapppear on scroll when horizontal grouping is used', async ({ page }) => {
+    await createSchedulerWidget(page, {
+      ...baseConfig,
+      groups: ['resourceId0'],
+    });
+
+    const firstCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0);
+    const secondCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(1);
+
+    await firstCell.dragTo(secondCell);
+
+    let selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
+
+    await scrollTo(page, 1000, 0);
+    selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBe(0);
+
+    await scrollTo(page, 0, 0);
+    selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
+  });
+
+  test('Selected cells shouldn\'t disapppear on scroll when appointments are grouped by date', async ({ page }) => {
+    await createSchedulerWidget(page, {
+      ...baseConfig,
+      groups: ['resourceId0'],
+      views: [{ type: 'week', groupOrientation: 'horizontal', groupByDate: true }],
+    });
+
+    const firstCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0);
+    const secondCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(2);
+
+    await firstCell.dragTo(secondCell);
+
+    let selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
+
+    await scrollTo(page, 1000, 0);
+    selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBe(0);
+
+    await scrollTo(page, 0, 0);
+    selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
+  });
+
+  test('Selected cells shouldn\'t disapppear on scroll when appointments are grouped vertically', async ({ page }) => {
+    await createSchedulerWidget(page, {
+      ...baseConfig,
+      groups: ['resourceId0'],
+      views: [{ type: 'week', groupOrientation: 'vertical', intervalCount: 3 }],
+    });
+
+    const firstCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0);
+    const secondCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(1);
+
+    await firstCell.dragTo(secondCell);
+
+    let selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
+
+    await scrollTo(page, 1000, 0);
+    selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBe(0);
+
+    await scrollTo(page, 0, 0);
+    selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
+  });
+
+  test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when horizontal grouping is used', async ({ page }) => {
+    await createSchedulerWidget(page, {
+      ...baseConfig,
+      showAllDayPanel: true,
+    });
+
+    const firstAllDayCell = page.locator('.dx-scheduler-all-day-table-cell').nth(0);
+    const secondAllDayCell = page.locator('.dx-scheduler-all-day-table-cell').nth(1);
+
+    await firstAllDayCell.dragTo(secondAllDayCell);
+
+    let selectedCount = await page.locator(`.dx-scheduler-all-day-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
+
+    await scrollTo(page, 1000, 0);
+    selectedCount = await page.locator(`.dx-scheduler-all-day-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBe(0);
+
+    await scrollTo(page, 0, 0);
+    selectedCount = await page.locator(`.dx-scheduler-all-day-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
+  });
+
+  test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when vertical grouping is used', async ({ page }) => {
+    await createSchedulerWidget(page, {
+      ...baseConfig,
+      showAllDayPanel: true,
+      groups: ['resourceId0'],
+      views: [{ type: 'week', groupOrientation: 'vertical' }],
+    });
+
+    const firstAllDayCell = page.locator('.dx-scheduler-all-day-table-cell').nth(0);
+    const secondAllDayCell = page.locator('.dx-scheduler-all-day-table-cell').nth(1);
+
+    await firstAllDayCell.dragTo(secondAllDayCell);
+
+    let selectedCount = await page.locator(`.dx-scheduler-all-day-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
+
+    await scrollTo(page, 0, 500);
+    selectedCount = await page.locator(`.dx-scheduler-all-day-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBe(0);
+
+    await scrollTo(page, 0, 0);
+    selectedCount = await page.locator(`.dx-scheduler-all-day-table-cell.${SELECTED_CELL_CLASS}`).count();
     expect(selectedCount).toBeGreaterThan(0);
   });
 

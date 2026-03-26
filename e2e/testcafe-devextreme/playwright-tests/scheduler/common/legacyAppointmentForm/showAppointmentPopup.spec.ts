@@ -8,7 +8,7 @@ test.describe('Appointment Form', () => {
     await setupTestPage(page, containerUrl);
   });
 
-  test('Invoke showAppointmentPopup method should not raise error if value of currentDate property as a string', async ({ page }) => {
+  test("Invoke showAppointmentPopup method shouldn't raise error if value of currentDate property as a string", async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       dataSource: [],
       views: ['week'],
@@ -29,7 +29,7 @@ test.describe('Appointment Form', () => {
     expect(startDateValue).toBe('3/25/2021, 12:00 AM');
   });
 
-  test('Show appointment popup if deferredRendering is false (T1069753)', async ({ page }) => {
+  test('Show appointment popup if deffereRendering is false (T1069753)', async ({ page }) => {
     await page.evaluate(() => {
       (window as any).DevExpress.ui.dxPopup.defaultOptions({
         options: { deferRendering: false },

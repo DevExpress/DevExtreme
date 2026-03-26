@@ -38,7 +38,7 @@ test.describe('Scheduler: Cells Selection in Virtual Scrolling', () => {
   });
 
   [true, false].forEach((showAllDayPanel) => {
-    test(`Selected cells shouldn't disappear on scroll when showAllDayPanel is equal to ${showAllDayPanel}`, async ({ page }) => {
+    test(`Selected cells shouldn't disapppear on scroll when showAllDayPanel is equal to ${showAllDayPanel}`, async ({ page }) => {
       await createSchedulerWidget(page, { showAllDayPanel });
 
       const firstCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0);
@@ -56,6 +56,130 @@ test.describe('Scheduler: Cells Selection in Virtual Scrolling', () => {
       selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
       expect(selectedCount).toBeGreaterThan(0);
     });
+  });
+
+  [true, false].forEach((showAllDayPanel) => {
+    test(`Selected cells shouldn't disapppear on scroll when showAllDayPanel is equal to ${showAllDayPanel} and horizontal grouping is used`, async ({ page }) => {
+      await createSchedulerWidget(page, {
+        showAllDayPanel,
+        groups: ['resourceId0'],
+      });
+
+      const firstCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0);
+      const secondCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(1);
+
+      await firstCell.dragTo(secondCell);
+
+      let selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+      expect(selectedCount).toBeGreaterThan(0);
+
+      await scrollTo(page, 0, 500);
+      selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+
+      await scrollTo(page, 0, 0);
+      selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+      expect(selectedCount).toBeGreaterThan(0);
+    });
+
+    test(`Selected cells shouldn't disapppear on scroll when showAllDayPanel is equal to ${showAllDayPanel} and appointments are grouped by date`, async ({ page }) => {
+      await createSchedulerWidget(page, {
+        showAllDayPanel,
+        groups: ['resourceId0'],
+        views: [{ type: 'week', groupOrientation: 'horizontal', groupByDate: true }],
+      });
+
+      const firstCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0);
+      const secondCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(2);
+
+      await firstCell.dragTo(secondCell);
+
+      let selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+      expect(selectedCount).toBeGreaterThan(0);
+
+      await scrollTo(page, 0, 500);
+      selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+
+      await scrollTo(page, 0, 0);
+      selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+      expect(selectedCount).toBeGreaterThan(0);
+    });
+
+    test(`Selected cells shouldn't disapppear on scroll when showAllDayPanel is equal to ${showAllDayPanel} and appointments are grouped vertically`, async ({ page }) => {
+      await createSchedulerWidget(page, {
+        showAllDayPanel,
+        groups: ['resourceId0'],
+        views: [{ type: 'week', groupOrientation: 'vertical' }],
+      });
+
+      const firstCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0);
+      const secondCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(1);
+
+      await firstCell.dragTo(secondCell);
+
+      let selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+      expect(selectedCount).toBeGreaterThan(0);
+
+      await scrollTo(page, 0, 1100);
+      selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+
+      await scrollTo(page, 0, 0);
+      selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+      expect(selectedCount).toBeGreaterThan(0);
+    });
+  });
+
+  test('Selection should work correctly while scrolling', async ({ page }) => {
+    await createSchedulerWidget(page, { groups: ['resourceId0'] });
+
+    const firstCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0);
+    const secondCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(1);
+
+    await firstCell.dragTo(secondCell);
+
+    let selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
+
+    await scrollTo(page, 0, 500);
+    await scrollTo(page, 0, 0);
+
+    selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
+  });
+
+  test('Selection should work correctly while scrolling when appointments are grouped vertically', async ({ page }) => {
+    await createSchedulerWidget(page, {
+      groups: ['resourceId0'],
+      views: [{ type: 'week', groupOrientation: 'vertical' }],
+    });
+
+    const firstCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0);
+    const secondCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(1);
+
+    await firstCell.dragTo(secondCell);
+
+    let selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
+
+    await scrollTo(page, 0, 500);
+    await scrollTo(page, 0, 0);
+
+    selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
+  });
+
+  test('Selection should work in timeline views', async ({ page }) => {
+    await createSchedulerWidget(page, {
+      views: ['timelineDay', 'timelineWeek', 'timelineMonth'],
+      currentView: 'timelineDay',
+    });
+
+    const firstCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(0);
+    const secondCell = page.locator('.dx-scheduler-date-table-row').nth(0).locator('.dx-scheduler-date-table-cell').nth(1);
+
+    await firstCell.dragTo(secondCell);
+
+    const selectedCount = await page.locator(`.dx-scheduler-date-table-cell.${SELECTED_CELL_CLASS}`).count();
+    expect(selectedCount).toBeGreaterThan(0);
   });
 
   test('Selection should work in month view', async ({ page }) => {

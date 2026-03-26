@@ -129,6 +129,109 @@ test.describe('KeyboardNavigation.Appointments', () => {
       expect(isFocused).toBe(true);
     });
 
+    test(`focus prev appointment on single shift+tab (${scrollingMode} scrolling)`, async ({ page }) => {
+      await insertStylesheetRulesToPage(page, cellStyles);
+      await createWidget(page, 'dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
+
+      const lastAppt = page.locator('.dx-scheduler-appointment').filter({ hasText: `[Appointment ${appointmentCount}]` });
+      await lastAppt.scrollIntoViewIfNeeded();
+      await lastAppt.click();
+      await page.keyboard.press('Shift+Tab');
+
+      const prevAppt = page.locator('.dx-scheduler-appointment').filter({ hasText: `[Appointment ${appointmentCount - 1}]` });
+      const isFocused = await prevAppt.evaluate((el) => el.classList.contains('dx-state-focused'));
+      expect(isFocused).toBe(true);
+    });
+
+    test(`focus prev appointment on 5 shift+tab (${scrollingMode} scrolling)`, async ({ page }) => {
+      await insertStylesheetRulesToPage(page, cellStyles);
+      await createWidget(page, 'dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
+
+      const lastAppt = page.locator('.dx-scheduler-appointment').filter({ hasText: `[Appointment ${appointmentCount}]` });
+      await lastAppt.scrollIntoViewIfNeeded();
+      await lastAppt.click();
+      for (let i = 0; i < 5; i++) {
+        await page.keyboard.press('Shift+Tab');
+      }
+
+      const targetAppt = page.locator('.dx-scheduler-appointment').filter({ hasText: `[Appointment ${appointmentCount - 5}]` });
+      const isFocused = await targetAppt.evaluate((el) => el.classList.contains('dx-state-focused'));
+      expect(isFocused).toBe(true);
+    });
+
+    test(`focus first appointment on Home (${scrollingMode} scrolling)`, async ({ page }) => {
+      await insertStylesheetRulesToPage(page, cellStyles);
+      await createWidget(page, 'dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
+
+      const lastAppt = page.locator('.dx-scheduler-appointment').filter({ hasText: `[Appointment ${appointmentCount}]` });
+      await lastAppt.scrollIntoViewIfNeeded();
+      await lastAppt.click();
+      await page.keyboard.press('Home');
+
+      const firstAppt = page.locator('.dx-scheduler-appointment').filter({ hasText: '[Appointment 1]' });
+      const isFocused = await firstAppt.evaluate((el) => el.classList.contains('dx-state-focused'));
+      expect(isFocused).toBe(true);
+    });
+
+    test(`focus first appointment in the next group by tab (${scrollingMode} scrolling)`, async ({ page }) => {
+      await insertStylesheetRulesToPage(page, cellStyles);
+      await createWidget(page, 'dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
+
+      await page.locator('.dx-scheduler-appointment').filter({ hasText: '[Appointment 14]' }).click();
+      await page.keyboard.press('Tab');
+
+      const appt15 = page.locator('.dx-scheduler-appointment').filter({ hasText: '[Appointment 15]' });
+      const isFocused = await appt15.evaluate((el) => el.classList.contains('dx-state-focused'));
+      expect(isFocused).toBe(true);
+    });
+
+    test(`focus last appointment in the prev group by shift+tab (${scrollingMode} scrolling)`, async ({ page }) => {
+      await insertStylesheetRulesToPage(page, cellStyles);
+      await createWidget(page, 'dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
+
+      await page.locator('.dx-scheduler-appointment').filter({ hasText: '[Appointment 15]' }).click();
+      await page.keyboard.press('Shift+Tab');
+
+      const appt14 = page.locator('.dx-scheduler-appointment').filter({ hasText: '[Appointment 14]' });
+      const isFocused = await appt14.evaluate((el) => el.classList.contains('dx-state-focused'));
+      expect(isFocused).toBe(true);
+    });
+
+    test(`first appointment should be focusable when navigating by tab second time (${scrollingMode} scrolling)`, async ({ page }) => {
+      await insertStylesheetRulesToPage(page, cellStyles);
+      await createWidget(page, 'dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
+
+      await page.locator('.dx-scheduler-appointment').filter({ hasText: '[Appointment 1]' }).click();
+      await page.keyboard.press('Tab');
+      await page.locator('.dx-scheduler-view-switcher').click();
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Tab');
+
+      const appt1 = page.locator('.dx-scheduler-appointment').filter({ hasText: '[Appointment 1]' });
+      const isFocused = await appt1.evaluate((el) => el.classList.contains('dx-state-focused'));
+      expect(isFocused).toBe(true);
+    });
+
+    test(`should not reset scroll after appointment focus and scrolling down (${scrollingMode} scrolling)`, async ({ page }) => {
+      await insertStylesheetRulesToPage(page, cellStyles);
+      await createWidget(page, 'dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
+
+      await page.locator('.dx-scheduler-appointment').filter({ hasText: '[Appointment 1]' }).click();
+      await page.keyboard.press('Tab');
+
+      await page.evaluate(() => {
+        const scrollable = ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable();
+        scrollable.scrollTo({ y: 1000 });
+      });
+      await page.waitForTimeout(200);
+
+      const scrollTop = await page.evaluate(() => {
+        const scrollable = ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable();
+        return scrollable.scrollTop();
+      });
+      expect(scrollTop).toBeGreaterThan(0);
+    });
+
     test(`should focus next appointment on tab after any appointment was clicked (${scrollingMode} scrolling)`, async ({ page }) => {
       await insertStylesheetRulesToPage(page, cellStyles);
       await createWidget(page, 'dxScheduler', { ...getConfig(), scrolling: { mode: scrollingMode } });
@@ -141,5 +244,42 @@ test.describe('KeyboardNavigation.Appointments', () => {
       );
       expect(isFocused).toBe(true);
     });
+  });
+
+  test('should focus first visible appointment on tab (virtual scrolling)', async ({ page }) => {
+    await insertStylesheetRulesToPage(page, cellStyles);
+    await createWidget(page, 'dxScheduler', { ...getConfig(), scrolling: { mode: 'virtual' } });
+
+    await page.evaluate(() => {
+      const scrollable = ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable();
+      scrollable.scrollTo({ y: 1000 });
+    });
+    await page.waitForTimeout(300);
+
+    await page.locator('.dx-scheduler-view-switcher').click();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+
+    const firstVisible = page.locator('.dx-scheduler-appointment.dx-state-focused');
+    await expect(firstVisible).toBeVisible();
+  });
+
+  test('should focus first rendered appointment on tab (standard scrolling)', async ({ page }) => {
+    await insertStylesheetRulesToPage(page, cellStyles);
+    await createWidget(page, 'dxScheduler', { ...getConfig(), scrolling: { mode: 'standard' } });
+
+    await page.evaluate(() => {
+      const scrollable = ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable();
+      scrollable.scrollTo({ y: 1000 });
+    });
+    await page.waitForTimeout(200);
+
+    await page.locator('.dx-scheduler-view-switcher').click();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+
+    const appt1 = page.locator('.dx-scheduler-appointment').filter({ hasText: '[Appointment 1]' });
+    const isFocused = await appt1.evaluate((el) => el.classList.contains('dx-state-focused'));
+    expect(isFocused).toBe(true);
   });
 });

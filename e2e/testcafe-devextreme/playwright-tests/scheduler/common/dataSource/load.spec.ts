@@ -34,6 +34,69 @@ test.describe('Scheduler - DataSource loading', () => {
     await expect(appointment0).toBeVisible();
   });
 
+  [true, false].forEach((groupByDate) => {
+    test(`it should have start and end date in load options groupByDate=${groupByDate}`, async ({ page }) => {
+      await page.evaluate((gbd) => {
+        (window as any).testOptions = {};
+        ($('#container') as any).dxScheduler({
+          dataSource: {
+            load: (loadOptions) => {
+              const { startDate, endDate } = loadOptions;
+              (window as any).testOptions = { startDate, endDate };
+              return [];
+            },
+          },
+          currentDate: new Date(2021, 4, 11),
+          width: 700,
+          height: 500,
+          startDayHour: 0,
+          endDayHour: 3,
+          groupByDate: gbd,
+          views: ['week'],
+          currentView: 'week',
+        });
+      }, groupByDate);
+
+      await page.waitForTimeout(200);
+
+      const result = await page.evaluate(() => (window as any).testOptions);
+      expect(result.startDate).toBeTruthy();
+      expect(result.endDate).toBeTruthy();
+    });
+
+    test(`it should have dates in load options when view dates changing. groupByDate=${groupByDate}`, async ({ page }) => {
+      await page.evaluate((gbd) => {
+        (window as any).testOptions = {};
+        ($('#container') as any).dxScheduler({
+          dataSource: {
+            load: (loadOptions) => {
+              const { startDate, endDate } = loadOptions;
+              (window as any).testOptions = { startDate, endDate };
+              return [];
+            },
+          },
+          currentDate: new Date(2021, 4, 11),
+          width: 700,
+          height: 500,
+          startDayHour: 0,
+          endDayHour: 3,
+          groupByDate: gbd,
+          views: ['week'],
+          currentView: 'week',
+        });
+      }, groupByDate);
+
+      await page.waitForTimeout(200);
+
+      await page.locator('.dx-scheduler-navigator-next').click();
+      await page.waitForTimeout(200);
+
+      const result = await page.evaluate(() => (window as any).testOptions);
+      expect(result.startDate).toBeTruthy();
+      expect(result.endDate).toBeTruthy();
+    });
+  });
+
   test('it should not call additional DataSource loads after repaint', async ({ page }) => {
     await page.evaluate(() => {
       (window as any).testOptions = { loadCount: 0 };

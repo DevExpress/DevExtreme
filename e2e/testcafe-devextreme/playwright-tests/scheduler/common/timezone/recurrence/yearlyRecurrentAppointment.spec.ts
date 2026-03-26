@@ -54,28 +54,63 @@ test.describe('Yearly recurrent appointments with timezones', () => {
     await setupTestPage(page, containerUrl);
   });
 
-  test('same timezone', async ({ page }) => {
+  test('Should correctly display the recurrent yearly appointment with the same timezone', async ({ page }) => {
     await createWidget(page, 'dxScheduler', makeOptions('Etc/GMT+1', 'Etc/GMT+1', new Date(2021, 3, 28, 10, 0, 0), new Date(2021, 3, 28, 12, 0, 0)));
     await screenshotTest(page, 'same-date__same-timezone');
   });
 
-  test('greater timezone', async ({ page }) => {
+  test('Should correctly display the recurrent yearly appointment with a greater time timezone', async ({ page }) => {
     await createWidget(page, 'dxScheduler', makeOptions('Etc/GMT+10', 'Etc/GMT-2', new Date(2021, 3, 28, 14, 0, 0), new Date(2021, 3, 28, 16, 0, 0)));
     await screenshotTest(page, 'same-date__greater-timezone');
   });
 
-  test('lower timezone', async ({ page }) => {
+  test('Should correctly display the recurrent yearly appointment with a lower time timezone', async ({ page }) => {
     await createWidget(page, 'dxScheduler', makeOptions('Etc/GMT-2', 'Etc/GMT+10', new Date(2021, 3, 28, 4, 0, 0), new Date(2021, 3, 28, 6, 0, 0)));
     await screenshotTest(page, 'same-date__lower-timezone');
   });
 
-  test('lower date same timezone', async ({ page }) => {
+  test('Should correctly display the recurrent yearly appointment if start date\nlower than recurrent date with the same timezone', async ({ page }) => {
     await createWidget(page, 'dxScheduler', makeOptions('Etc/GMT+1', 'Etc/GMT+1', new Date(2021, 3, 26, 10, 0, 0), new Date(2021, 3, 26, 12, 0, 0)));
     await screenshotTest(page, 'lower-date__same-timezone');
   });
 
-  test('greater date same timezone next view date', async ({ page }) => {
+  test('Should correctly display the recurrent yearly appointment if start date\nlower than recurrent date with a greater time timezone', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', makeOptions('Etc/GMT+10', 'Etc/GMT-2', new Date(2021, 3, 26, 14, 0, 0), new Date(2021, 3, 26, 16, 0, 0)));
+    await screenshotTest(page, 'lower-date__greater-timezone');
+  });
+
+  test('Should correctly display the recurrent yearly appointment if start date\nlower than recurrent date with a lower time timezone', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', makeOptions('Etc/GMT-2', 'Etc/GMT+10', new Date(2021, 3, 26, 4, 0, 0), new Date(2021, 3, 26, 6, 0, 0)));
+    await screenshotTest(page, 'lower-date__lower-timezone');
+  });
+
+  test('Should correctly display the recurrent yearly appointment at first date if start date\ngreater than recurrent date with the same timezone', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', makeOptions('Etc/GMT+1', 'Etc/GMT+1', new Date(2021, 3, 29, 10, 0, 0), new Date(2021, 3, 29, 12, 0, 0)));
+    await screenshotTest(page, 'greater-date__same-timezone__same-view-date');
+  });
+
+  test('Should correctly display the recurrent yearly appointment at next date if start date\ngreater than recurrent date with the same timezone', async ({ page }) => {
     await createWidget(page, 'dxScheduler', makeOptions('Etc/GMT+1', 'Etc/GMT+1', new Date(2021, 3, 29, 10, 0, 0), new Date(2021, 3, 29, 12, 0, 0), new Date(2022, 3, 28)));
     await screenshotTest(page, 'greater-date__same-timezone__next-view-date');
+  });
+
+  test('Should correctly display the recurrent yearly appointment at first date if start date\ngreater than recurrent date with a greater time timezone', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', makeOptions('Etc/GMT+10', 'Etc/GMT-2', new Date(2021, 3, 29, 14, 0, 0), new Date(2021, 3, 29, 16, 0, 0)));
+    await screenshotTest(page, 'greater-date__greater-timezone__same-view-date');
+  });
+
+  test('Should correctly display the recurrent yearly appointment at next date if start date\ngreater than recurrent date with a greater time timezone', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', makeOptions('Etc/GMT+10', 'Etc/GMT-2', new Date(2021, 3, 29, 14, 0, 0), new Date(2021, 3, 29, 16, 0, 0), new Date(2022, 3, 28)));
+    await screenshotTest(page, 'greater-date__greater-timezone__next-view-date');
+  });
+
+  test('Should correctly display the recurrent yearly appointment at first date if start date\ngreater than recurrent date with a lower time timezone', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', makeOptions('Etc/GMT-2', 'Etc/GMT+10', new Date(2021, 3, 29, 4, 0, 0), new Date(2021, 3, 29, 6, 0, 0)));
+    await screenshotTest(page, 'greater-date__lower-timezone__same-view-date');
+  });
+
+  test('Should correctly display the recurrent yearly appointment at next date if start date\ngreater than recurrent date with a lower time timezone', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', makeOptions('Etc/GMT-2', 'Etc/GMT+10', new Date(2021, 3, 29, 4, 0, 0), new Date(2021, 3, 29, 6, 0, 0), new Date(2022, 3, 28)));
+    await screenshotTest(page, 'greater-date__lower-timezone__next-view-date');
   });
 });

@@ -14,7 +14,7 @@ test.describe('Layout:Appointments:AllDay', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Long all day appointment should be render, if him ended on next view day in currentView: day(T1021963)', async ({ page }) => {
+  test("Long all day appointment should be render, if him ended on next view day in currentView: 'day'(T1021963)", async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       dataSource: [{ allDay: true, startDate: new Date(2021, 2, 28), endDate: new Date(2021, 2, 29) }],
       views: ['day'], currentView: 'day', currentDate: new Date(2021, 2, 28),
@@ -35,7 +35,7 @@ test.describe('Layout:Appointments:AllDay', () => {
     await testScreenshot(page, '30-march-day-view.png', { element: workSpace });
   });
 
-  test('Long all day appointment should be render, if him ended on next view day in currentView: week', async ({ page }) => {
+  test('Long all day appointment should be render, if him ended on next view day in currentView:', async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       dataSource: [{ allDay: true, startDate: new Date(2021, 2, 27), endDate: new Date(2021, 3, 4) }],
       views: ['week'], currentView: 'week', currentDate: new Date(2021, 2, 28),

@@ -17,7 +17,7 @@ test.describe('Layout:Views:Day:AllDay', () => {
   [1, 2].forEach((intervalCount) => {
     ['horizontal', 'vertical'].forEach((groupOrientation) => {
       [true, false].forEach((showAllDayPanel) => {
-        test(`Day view with interval and crossScrollingEnabled(groupOrientation='${groupOrientation}', showAllDayPanel='${showAllDayPanel}', intervalCount='${intervalCount}') layout test`, async ({ page }) => {
+        test(`Day view with interval and crossScrollingEnabled(groupOrientation='${groupOrientation}', showAllDayPanel='${showAllDayPanel}', intervalCount='${intervalCount}')`, async ({ page }) => {
           await createWidget(page, 'dxScheduler', {
             resources: [{ fieldExpr: 'roomId', dataSource: [{ text: 'Room 1', id: 1 }, { text: 'Room 2', id: 2 }], label: 'Room' }],
             dataSource: [], views: [{ name: 'dayView', type: 'day', intervalCount, groupOrientation }],

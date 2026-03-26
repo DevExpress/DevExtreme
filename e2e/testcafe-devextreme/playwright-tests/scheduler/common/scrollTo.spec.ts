@@ -244,19 +244,19 @@ test.describe('Scheduler: ScrollTo', () => {
   });
 
   [
-    { offset: 0, targetDate: new Date(2021, 1, 3, 4, 0), expectedDate: new Date(2021, 1, 3, 6, 0) },
-    { offset: 0, targetDate: new Date(2021, 1, 3, 12, 0), expectedDate: new Date(2021, 1, 3, 12, 0) },
-    { offset: 0, targetDate: new Date(2021, 1, 3, 20, 0), expectedDate: new Date(2021, 1, 3, 18, 0) },
-    { offset: 720, targetDate: new Date(2021, 1, 3, 10, 0), expectedDate: new Date(2021, 1, 3, 6, 0) },
-    { offset: 720, targetDate: new Date(2021, 1, 3, 20, 0), expectedDate: new Date(2021, 1, 3, 20, 0) },
-    { offset: 720, targetDate: new Date(2021, 1, 4, 1, 0), expectedDate: new Date(2021, 1, 4, 1, 0) },
-    { offset: 720, targetDate: new Date(2021, 1, 4, 7, 0), expectedDate: new Date(2021, 1, 4, 6, 0) },
-    { offset: -720, targetDate: new Date(2021, 1, 3, 16, 0), expectedDate: new Date(2021, 1, 3, 18, 0) },
-    { offset: -720, targetDate: new Date(2021, 1, 3, 21, 0), expectedDate: new Date(2021, 1, 3, 21, 0) },
-    { offset: -720, targetDate: new Date(2021, 1, 4, 3, 0), expectedDate: new Date(2021, 1, 4, 3, 0) },
-    { offset: -720, targetDate: new Date(2021, 1, 3, 7, 0), expectedDate: new Date(2021, 1, 3, 6, 0) },
-  ].forEach(({ offset, targetDate, expectedDate }) => {
-    test(`scrollTo should scroll to date with offset=${offset}, targetDate=${targetDate.toString()} (T1310544)`, async ({ page }) => {
+    { offset: 0, targetDate: new Date(2021, 1, 3, 4, 0), expectedDate: new Date(2021, 1, 3, 6, 0), targetDateStr: 'Wed Feb 03 2021 04:00:00 GMT+0000 (Greenwich Mean Time)' },
+    { offset: 0, targetDate: new Date(2021, 1, 3, 12, 0), expectedDate: new Date(2021, 1, 3, 12, 0), targetDateStr: 'Wed Feb 03 2021 12:00:00 GMT+0000 (Greenwich Mean Time)' },
+    { offset: 0, targetDate: new Date(2021, 1, 3, 20, 0), expectedDate: new Date(2021, 1, 3, 18, 0), targetDateStr: 'Wed Feb 03 2021 20:00:00 GMT+0000 (Greenwich Mean Time)' },
+    { offset: 720, targetDate: new Date(2021, 1, 3, 10, 0), expectedDate: new Date(2021, 1, 3, 6, 0), targetDateStr: 'Wed Feb 03 2021 10:00:00 GMT+0000 (Greenwich Mean Time)' },
+    { offset: 720, targetDate: new Date(2021, 1, 3, 20, 0), expectedDate: new Date(2021, 1, 3, 20, 0), targetDateStr: 'Wed Feb 03 2021 20:00:00 GMT+0000 (Greenwich Mean Time)' },
+    { offset: 720, targetDate: new Date(2021, 1, 4, 1, 0), expectedDate: new Date(2021, 1, 4, 1, 0), targetDateStr: 'Thu Feb 04 2021 01:00:00 GMT+0000 (Greenwich Mean Time)' },
+    { offset: 720, targetDate: new Date(2021, 1, 4, 7, 0), expectedDate: new Date(2021, 1, 4, 6, 0), targetDateStr: 'Thu Feb 04 2021 07:00:00 GMT+0000 (Greenwich Mean Time)' },
+    { offset: -720, targetDate: new Date(2021, 1, 3, 16, 0), expectedDate: new Date(2021, 1, 3, 18, 0), targetDateStr: 'Wed Feb 03 2021 16:00:00 GMT+0000 (Greenwich Mean Time)' },
+    { offset: -720, targetDate: new Date(2021, 1, 3, 21, 0), expectedDate: new Date(2021, 1, 3, 21, 0), targetDateStr: 'Wed Feb 03 2021 21:00:00 GMT+0000 (Greenwich Mean Time)' },
+    { offset: -720, targetDate: new Date(2021, 1, 4, 3, 0), expectedDate: new Date(2021, 1, 4, 3, 0), targetDateStr: 'Thu Feb 04 2021 03:00:00 GMT+0000 (Greenwich Mean Time)' },
+    { offset: -720, targetDate: new Date(2021, 1, 3, 7, 0), expectedDate: new Date(2021, 1, 3, 6, 0), targetDateStr: 'Wed Feb 03 2021 07:00:00 GMT+0000 (Greenwich Mean Time)' },
+  ].forEach(({ offset, targetDate, expectedDate, targetDateStr }) => {
+    test(`scrollTo should scroll to date with offset=${offset}, targetDate=${targetDateStr} (T1310544)`, async ({ page }) => {
       await createWidget(page, 'dxScheduler', {
         dataSource: [],
         views: [{

@@ -44,7 +44,7 @@ test.describe('Scheduler: Resources layout', () => {
 
   [undefined, resourceDataSource].forEach((resourcesValue) => {
     ['agenda', 'day', 'week', 'month', 'workWeek'].forEach((view) => {
-      test(`Base views layout test with resources(view='${view}'), resource=${!!resourcesValue}`, async ({ page }) => {
+      test(`Base views layout test with resources(view='${view})', resource=${!!resourcesValue}`, async ({ page }) => {
         await createWidget(page, 'dxScheduler', {
           dataSource: createDataSetForScreenShotTests(),
           currentDate: new Date(2020, 6, 15),
@@ -65,7 +65,7 @@ test.describe('Scheduler: Resources layout', () => {
 
   [undefined, resourceDataSource].forEach((resourcesValue) => {
     ['timelineDay', 'timelineWeek', 'timelineMonth', 'timelineWorkWeek'].forEach((view) => {
-      test(`Timeline views layout test with resources(view='${view}'), resource=${!!resourcesValue}`, async ({ page }) => {
+      test(`Timeline views layout test with resources(view='${view})', resource=${!!resourcesValue}`, async ({ page }) => {
         await createWidget(page, 'dxScheduler', {
           dataSource: createDataSetForScreenShotTests(),
           currentDate: new Date(2020, 6, 15),

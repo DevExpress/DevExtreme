@@ -8,7 +8,7 @@ test.describe('Appointment tooltip with recurrence appointment and custom time z
     await setupTestPage(page, containerUrl);
   });
 
-  test('Time in appointment tooltip should has valid value (T848058)', async ({ page }) => {
+  test('Time in appointment tooltip should has valid value in case with recurrence appointment and custom time zone(T848058)', async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       dataSource: [{
         text: 'Stand-up meeting',

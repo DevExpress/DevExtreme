@@ -34,7 +34,7 @@ test.describe('Scheduler: long appointments in month view', () => {
 
   for (const rtlEnabled of [false, true]) {
     for (const appointment of appointments) {
-      test(`Long appointment (rtl=${rtlEnabled}, text=${appointment.text})`, async ({ page }) => {
+      test(`Long appointment should display valid on month view(rtl='${rtlEnabled}', text='${appointment.text}')`, async ({ page }) => {
         await createWidget(page, 'dxScheduler', {
           dataSource: [appointment],
           views: ['month'],
@@ -52,7 +52,7 @@ test.describe('Scheduler: long appointments in month view', () => {
   }
 
   for (const rtlEnabled of [false, true]) {
-    test(`Long appointment several months (rtl=${rtlEnabled})`, async ({ page }) => {
+    test(`Long appointment(several months) should display valid on month view(rtl='${rtlEnabled})`, async ({ page }) => {
       await createWidget(page, 'dxScheduler', {
         dataSource: [{
           text: 'Text',
@@ -90,7 +90,7 @@ test.describe('Scheduler: long appointments in month view', () => {
     });
   }
 
-  test('Long recurrence appointment several months', async ({ page }) => {
+  test('Long recurrence appointment should display valid on month view', async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       dataSource: [{
         text: 'Text',

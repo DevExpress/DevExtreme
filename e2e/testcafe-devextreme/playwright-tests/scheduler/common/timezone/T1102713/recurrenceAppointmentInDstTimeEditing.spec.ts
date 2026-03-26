@@ -33,7 +33,7 @@ test.describe('Editing recurrent appointment in DST time', () => {
     await setupTestPage(page, containerUrl);
   });
 
-  test('Editing popup: winter time', async ({ page }) => {
+  test('Editing popup: should have correctly been edited from editing popup. DST - winter time', async ({ page }) => {
     await configureScheduler(page, APPOINTMENT_DATETIME.winter);
     const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: TEST_APPOINTMENT_TEXT });
     await appointment.dblclick();
@@ -50,7 +50,7 @@ test.describe('Editing recurrent appointment in DST time', () => {
     await testScreenshot(page, `${SCREENSHOT_BASE_NAME}__popup__winter-time.png`, { element: workSpace });
   });
 
-  test('Editing popup: summer time', async ({ page }) => {
+  test('Editing popup: should have correctly been edited from editing popup. DST - summer time', async ({ page }) => {
     await configureScheduler(page, APPOINTMENT_DATETIME.summer);
     const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: TEST_APPOINTMENT_TEXT });
     await appointment.dblclick();
@@ -67,7 +67,7 @@ test.describe('Editing recurrent appointment in DST time', () => {
     await testScreenshot(page, `${SCREENSHOT_BASE_NAME}__popup__summer-time.png`, { element: workSpace });
   });
 
-  test('Drag-n-drop up: winter time', async ({ page }) => {
+  test('Drag-n-drop up: should have correctly been edited. DST - winter time', async ({ page }) => {
     await configureScheduler(page, APPOINTMENT_DATETIME.winter);
     const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: TEST_APPOINTMENT_TEXT });
     const targetCell = page.locator('.dx-scheduler-date-table-row').nth(1).locator('.dx-scheduler-date-table-cell').nth(1);
@@ -81,7 +81,67 @@ test.describe('Editing recurrent appointment in DST time', () => {
     await testScreenshot(page, `${SCREENSHOT_BASE_NAME}__drag-n-drop-up__winter-time.png`, { element: workSpace });
   });
 
-  test('Resize bottom: winter time', async ({ page }) => {
+  test('Drag-n-drop down: should have correctly been edited. DST - winter time', async ({ page }) => {
+    await configureScheduler(page, APPOINTMENT_DATETIME.winter);
+    const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: TEST_APPOINTMENT_TEXT });
+    const targetCell = page.locator('.dx-scheduler-date-table-row').nth(4).locator('.dx-scheduler-date-table-cell').nth(1);
+    await appointment.dragTo(targetCell);
+
+    const dialog = page.locator('.dx-dialog');
+    const seriesBtn = dialog.locator('.dx-dialog-button').last();
+    await seriesBtn.click();
+
+    const workSpace = page.locator('.dx-scheduler-work-space');
+    await testScreenshot(page, `${SCREENSHOT_BASE_NAME}__drag-n-drop-down__winter-time.png`, { element: workSpace });
+  });
+
+  test('Drag-n-drop up: should have correctly been edited. DST - summer time', async ({ page }) => {
+    await configureScheduler(page, APPOINTMENT_DATETIME.summer);
+    const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: TEST_APPOINTMENT_TEXT });
+    const targetCell = page.locator('.dx-scheduler-date-table-row').nth(1).locator('.dx-scheduler-date-table-cell').nth(1);
+    await appointment.dragTo(targetCell);
+
+    const dialog = page.locator('.dx-dialog');
+    const seriesBtn = dialog.locator('.dx-dialog-button').last();
+    await seriesBtn.click();
+
+    const workSpace = page.locator('.dx-scheduler-work-space');
+    await testScreenshot(page, `${SCREENSHOT_BASE_NAME}__drag-n-drop-up__summer-time.png`, { element: workSpace });
+  });
+
+  test('Drag-n-drop down: should have correctly been edited. DST - summer time', async ({ page }) => {
+    await configureScheduler(page, APPOINTMENT_DATETIME.summer);
+    const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: TEST_APPOINTMENT_TEXT });
+    const targetCell = page.locator('.dx-scheduler-date-table-row').nth(4).locator('.dx-scheduler-date-table-cell').nth(1);
+    await appointment.dragTo(targetCell);
+
+    const dialog = page.locator('.dx-dialog');
+    const seriesBtn = dialog.locator('.dx-dialog-button').last();
+    await seriesBtn.click();
+
+    const workSpace = page.locator('.dx-scheduler-work-space');
+    await testScreenshot(page, `${SCREENSHOT_BASE_NAME}__drag-n-drop-down__summer-time.png`, { element: workSpace });
+  });
+
+  test('Resize top: should have correctly been edited. DST - winter time', async ({ page }) => {
+    await configureScheduler(page, APPOINTMENT_DATETIME.winter);
+    const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: TEST_APPOINTMENT_TEXT });
+    const topHandle = appointment.locator('.dx-resizable-handle-top');
+
+    await topHandle.hover();
+    await page.mouse.down();
+    await page.mouse.move(0, 100, { steps: 5 });
+    await page.mouse.up();
+
+    const dialog = page.locator('.dx-dialog');
+    const seriesBtn = dialog.locator('.dx-dialog-button').last();
+    await seriesBtn.click();
+
+    const workSpace = page.locator('.dx-scheduler-work-space');
+    await testScreenshot(page, `${SCREENSHOT_BASE_NAME}__resize-top__winter-time.png`, { element: workSpace });
+  });
+
+  test('Resize bottom: should have correctly been edited. DST - winter time', async ({ page }) => {
     await configureScheduler(page, APPOINTMENT_DATETIME.winter);
     const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: TEST_APPOINTMENT_TEXT });
     const bottomHandle = appointment.locator('.dx-resizable-handle-bottom');
@@ -97,5 +157,41 @@ test.describe('Editing recurrent appointment in DST time', () => {
 
     const workSpace = page.locator('.dx-scheduler-work-space');
     await testScreenshot(page, `${SCREENSHOT_BASE_NAME}__resize-bottom__winter-time.png`, { element: workSpace });
+  });
+
+  test('Resize top: should have correctly been edited. DST - summer time', async ({ page }) => {
+    await configureScheduler(page, APPOINTMENT_DATETIME.summer);
+    const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: TEST_APPOINTMENT_TEXT });
+    const topHandle = appointment.locator('.dx-resizable-handle-top');
+
+    await topHandle.hover();
+    await page.mouse.down();
+    await page.mouse.move(0, 100, { steps: 5 });
+    await page.mouse.up();
+
+    const dialog = page.locator('.dx-dialog');
+    const seriesBtn = dialog.locator('.dx-dialog-button').last();
+    await seriesBtn.click();
+
+    const workSpace = page.locator('.dx-scheduler-work-space');
+    await testScreenshot(page, `${SCREENSHOT_BASE_NAME}__resize-top__summer-time.png`, { element: workSpace });
+  });
+
+  test('Resize bottom: should have correctly been edited. DST - summer time', async ({ page }) => {
+    await configureScheduler(page, APPOINTMENT_DATETIME.summer);
+    const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: TEST_APPOINTMENT_TEXT });
+    const bottomHandle = appointment.locator('.dx-resizable-handle-bottom');
+
+    await bottomHandle.hover();
+    await page.mouse.down();
+    await page.mouse.move(0, 100, { steps: 5 });
+    await page.mouse.up();
+
+    const dialog = page.locator('.dx-dialog');
+    const seriesBtn = dialog.locator('.dx-dialog-button').last();
+    await seriesBtn.click();
+
+    const workSpace = page.locator('.dx-scheduler-work-space');
+    await testScreenshot(page, `${SCREENSHOT_BASE_NAME}__resize-bottom__summer-time.png`, { element: workSpace });
   });
 });

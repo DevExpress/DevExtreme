@@ -124,4 +124,27 @@ test.describe('Hotkeys for appointments update and navigation', () => {
     const isFocused = await prevButton.evaluate((el) => el.classList.contains('dx-state-focused'));
     expect(isFocused).toBe(true);
   });
+
+  test('Navigate between custom toolbar items', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      ...defaultSchedulerOptions,
+      views: ['day', 'week'],
+      currentView: 'day',
+      toolbar: {
+        items: [
+          { location: 'before', name: 'viewSwitcher' },
+          { location: 'before', widget: 'dxButton', options: { text: 'Today' } },
+          { location: 'after', name: 'dateNavigator' },
+        ],
+      },
+    });
+
+    const toolbar = page.locator('.dx-scheduler-header');
+    await toolbar.click();
+    await page.keyboard.press('Tab');
+
+    const viewSwitcherDayButton = page.locator('.dx-scheduler-view-switcher .dx-button').filter({ hasText: 'Day' });
+    const isFocused = await viewSwitcherDayButton.evaluate((el) => el.classList.contains('dx-state-focused'));
+    expect(isFocused).toBe(true);
+  });
 });

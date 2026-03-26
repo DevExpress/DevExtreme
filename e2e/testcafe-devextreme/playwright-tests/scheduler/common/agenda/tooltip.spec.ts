@@ -8,7 +8,7 @@ test.describe('Agenda:Tooltip', () => {
     await setupTestPage(page, containerUrl);
   });
 
-  test('Tooltip date should be equal to date of current appointment(T1037028)', async ({ page }) => {
+  test("Tooltip's date should be equal to date of current appointment(T1037028)", async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       dataSource: [{
         text: 'Text',

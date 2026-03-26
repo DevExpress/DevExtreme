@@ -39,7 +39,7 @@ test.describe('Agenda:layout', () => {
 
   [false, true].forEach((rtlEnabled) => {
     [undefined, resourcesData].forEach((resources) => {
-      test(`Agenda test layout(rtl=${rtlEnabled}, resources=${!!resources})`, async ({ page }) => {
+      test(`Agenda test layout(rtl=${rtlEnabled}, resources=${!!resources}`, async ({ page }) => {
         await createScheduler(page, rtlEnabled, resources, undefined);
         await testScreenshot(page, `agenda-layout-rtl=${rtlEnabled}-resources=${!!resources}.png`);
       });
@@ -47,7 +47,7 @@ test.describe('Agenda:layout', () => {
   });
 
   [false, true].forEach((rtlEnabled) => {
-    test(`Agenda test layout with groups(rtl=${rtlEnabled})`, async ({ page }) => {
+    test(`Agenda test layout with groups(rtl=${rtlEnabled}`, async ({ page }) => {
       await createScheduler(page, rtlEnabled, resourcesData, ['roomId']);
       await testScreenshot(page, `agenda-layout-groups-rtl=${rtlEnabled}.png`);
     });

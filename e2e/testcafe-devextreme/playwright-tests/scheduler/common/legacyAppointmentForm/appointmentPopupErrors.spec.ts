@@ -8,7 +8,7 @@ test.describe('Appointment Popup errors check', () => {
     await setupTestPage(page, containerUrl);
   });
 
-  test('Appointment popup should not raise error if appointment is recursive', async ({ page }) => {
+  test("Appointment popup shouldn't raise error if appointment is recursive", async ({ page }) => {
     const consoleErrors: string[] = [];
     page.on('console', (msg) => {
       if (msg.type() === 'error') {

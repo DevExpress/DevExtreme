@@ -66,7 +66,7 @@ test.describe('Scheduler: Adaptive layout in themes', () => {
 
   [false, true].forEach((rtlEnabled) => {
     [false, true].forEach((crossScrollingEnabled) => {
-      test(`Adaptive views layout test, crossScrollingEnabled=${crossScrollingEnabled}${rtlEnabled ? ' in RTL' : ''}`, async ({ page }) => {
+      test(`Adaptive views layout test, crossScrollingEnabled=${crossScrollingEnabled}${rtlEnabled ? 'in RTL' : ''}`, async ({ page }) => {
         await page.setViewportSize({ width: 400, height: 600 });
 
         await createWidget(page, 'dxScheduler', {

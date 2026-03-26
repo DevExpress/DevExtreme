@@ -14,7 +14,7 @@ test.describe('Layout:Appointments:two-schedulers', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test('Appointment dragging should work properly with two dxSchedulers(T1020820)', async ({ page }) => {
+  test("Appointment's dragging should be work properly, if on page placed two dxSchedulers(T1020820)", async ({ page }) => {
     await createWidget(page, 'dxScheduler', {
       maxAppointmentsPerCell: 'unlimited',
       dataSource: [

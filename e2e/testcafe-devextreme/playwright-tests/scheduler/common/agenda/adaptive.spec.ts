@@ -38,7 +38,7 @@ test.describe('Agenda:adaptive', () => {
       { groups: undefined, text: 'without-groups' },
       { groups: ['priorityId'], text: 'groups' },
     ].forEach((testCase) => {
-      test(`${testCase.text} adaptive rtl=${rtlEnabled}`, async ({ page }) => {
+      test(`${testCase.text}(rtl=${rtlEnabled})`, async ({ page }) => {
         await createScheduler(page, testCase.groups, rtlEnabled);
         await testScreenshot(page, `agenda-${testCase.text}-adaptive-rtl=${rtlEnabled}.png`);
       });

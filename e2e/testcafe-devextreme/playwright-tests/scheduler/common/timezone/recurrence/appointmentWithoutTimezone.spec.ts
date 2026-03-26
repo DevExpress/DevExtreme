@@ -63,7 +63,67 @@ test.describe('Recurrent appointments without timezone in scheduler with timezon
     await testScreenshot(page, getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-appointment__lower-timezone'), { element: schedulerWorkspace });
   });
 
-  test('Should correctly display morning weekly recurrent appointment in a greater timezone', async ({ page }) => {
+  test('Should correctly display the recurrent monthly appointment without timezone', async ({ page }) => {
+    await createTimezoneSelect(page, TEST_TIMEZONES);
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [{
+        allDay: false,
+        startDate: new Date('2021-04-28T11:00:00.000Z'),
+        endDate: new Date('2021-04-28T13:00:00.000Z'),
+        recurrenceRule: 'FREQ=MONTHLY;BYMONTHDAY=28',
+        text: 'Test',
+      }],
+      timeZone: TEST_TIMEZONES[1],
+      currentView: 'week',
+      currentDate: new Date(2021, 3, 28),
+      startDayHour: 0,
+      cellDuration: 180,
+      width: 1000,
+      height: 585,
+    }, '#otherContainer');
+
+    const schedulerWorkspace = page.locator('#otherContainer .dx-scheduler-work-space');
+
+    await testScreenshot(page, getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__same-timezone'), { element: schedulerWorkspace });
+
+    await selectTimezoneInUI(page, 0);
+    await testScreenshot(page, getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__greater-timezone'), { element: schedulerWorkspace });
+
+    await selectTimezoneInUI(page, 2);
+    await testScreenshot(page, getScreenshotName(SCREENSHOT_BASE_NAME, 'monthly-appointment__lower-timezone'), { element: schedulerWorkspace });
+  });
+
+  test('Should correctly display the recurrent yearly appointment without timezone', async ({ page }) => {
+    await createTimezoneSelect(page, TEST_TIMEZONES);
+    await createWidget(page, 'dxScheduler', {
+      dataSource: [{
+        allDay: false,
+        startDate: new Date('2021-04-28T11:00:00.000Z'),
+        endDate: new Date('2021-04-28T13:00:00.000Z'),
+        recurrenceRule: 'FREQ=YEARLY;BYMONTHDAY=28;BYMONTH=4',
+        text: 'Test',
+      }],
+      timeZone: TEST_TIMEZONES[1],
+      currentView: 'week',
+      currentDate: new Date(2021, 3, 28),
+      startDayHour: 0,
+      cellDuration: 180,
+      width: 1000,
+      height: 585,
+    }, '#otherContainer');
+
+    const schedulerWorkspace = page.locator('#otherContainer .dx-scheduler-work-space');
+
+    await testScreenshot(page, getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__same-timezone'), { element: schedulerWorkspace });
+
+    await selectTimezoneInUI(page, 0);
+    await testScreenshot(page, getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__greater-timezone'), { element: schedulerWorkspace });
+
+    await selectTimezoneInUI(page, 2);
+    await testScreenshot(page, getScreenshotName(SCREENSHOT_BASE_NAME, 'yearly-appointment__lower-timezone'), { element: schedulerWorkspace });
+  });
+
+  test('Should correctly display morning weekly recurrent appointment in a greater timezone.', async ({ page }) => {
     await createTimezoneSelect(page, TEST_TIMEZONES);
     await createWidget(page, 'dxScheduler', {
       dataSource: [{
@@ -85,7 +145,7 @@ test.describe('Recurrent appointments without timezone in scheduler with timezon
     await testScreenshot(page, getScreenshotName(SCREENSHOT_BASE_NAME, 'weekly-morning-appointment__greater-timezone'), { element: schedulerWorkspace });
   });
 
-  test('Should correctly display corner weekly recurrent appointments in a greater timezone', async ({ page }) => {
+  test("Should correctly display 'corner' weekly recurrent appointments in a greater timezone.", async ({ page }) => {
     await createTimezoneSelect(page, TEST_TIMEZONES);
     await createWidget(page, 'dxScheduler', {
       dataSource: [
