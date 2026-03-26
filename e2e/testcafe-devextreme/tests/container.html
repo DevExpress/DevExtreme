@@ -22,6 +22,11 @@
         .dx-scheduler .dx-scrollable-scroll { visibility: hidden !important; }
         body:has(#tabPanel) { min-height: 500px; }
 
+        /* Match TestCafe headless Chrome scrollbar behavior:
+           scrollbar appears only on overflow, width 15px when present */
+        ::-webkit-scrollbar { width: 15px !important; }
+        ::-webkit-scrollbar-track { background: transparent !important; }
+        ::-webkit-scrollbar-thumb { background: transparent !important; }
     </style>
 </head>
 <body class="dx-surface">

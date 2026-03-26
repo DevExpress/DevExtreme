@@ -1,7 +1,6 @@
 import type { Page, Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
 import { getVisualClip, getLocatorScrollClip } from './screenshotUtils';
-import { adjustViewportForContent } from './testPageUtils';
 
 const defaultThemeName = 'fluent.blue.light';
 
@@ -108,8 +107,6 @@ export async function testScreenshot(
   } = options ?? {};
 
   const screenshotOptions = maxDiffPixelRatio !== undefined ? { maxDiffPixelRatio } : undefined;
-
-  await adjustViewportForContent(page);
 
   if (theme) {
     await changeTheme(page, theme);
