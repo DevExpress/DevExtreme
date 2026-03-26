@@ -147,6 +147,75 @@ test.describe('Editing.Visual', () => {
     await testScreenshot(page, 'grid-form-editing-with-color-box.png', { element: page.locator('#container') });
   });
 
+  test('An exception should not throw after pressing enter on the save button and onSaving\'s promise is resolved (T1201724)', async ({ page }) => {
+    await page.evaluate(() => {
+      (window as any).deferred = $.Deferred();
+    });
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 1, field1: 'value1', field2: 'value2', field3: 'value3' },
+        { id: 2, field1: 'value4', field2: 'value5', field3: 'value6' },
+      ],
+      keyExpr: 'id',
+      showBorders: true,
+      columns: ['field1', 'field2', 'field3'],
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+      },
+      onSaving(e: any) {
+        e.promise = (window as any).deferred;
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    const dataRow = dataGrid.getDataRow(0);
+
+    const editButton = dataRow.element.locator('.dx-link-edit');
+    await editButton.click();
+
+    await expect(dataRow.element).toHaveClass(/dx-edit-row/);
+
+    const editor = dataGrid.getDataCell(0, 0).locator('.dx-texteditor-input');
+    await editor.fill('new_value');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+
+    await page.evaluate(() => (window as any).deferred.resolve());
+
+    await expect(dataRow.element).not.toHaveClass(/dx-edit-row/);
+
+    await testScreenshot(page, 'grid-editing-with-onSaving-T1201724.png', { element: page.locator('#container') });
+  });
+
+  test('DataGrid cell with checkbox should have outline on focused', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      height: 150,
+      width: 200,
+      dataSource: [{
+        Id: 0,
+        Checkbox: true,
+      }],
+      keyExpr: 'Id',
+      editing: {
+        allowUpdating: true,
+        mode: 'cell',
+      },
+      columns: ['Id', 'Checkbox'],
+    });
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.getDataCell(0, 0).click();
+    await expect(dataGrid.getDataCell(0, 0)).toHaveClass(/dx-focused/);
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Tab');
+
+    await testScreenshot(page, 'grid-checkbox-outline.png', { element: page.locator('#container') });
+  });
+
   [true, false].forEach((useIcons) => {
     test(`The disabled state should be correct for a custom button when given as a SVG image (useIcons=${useIcons})`, async ({ page }) => {
       const encodedIcon = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgIHdpZHRoPSIyMHB4IiBoZWlnaHQ9IjIwcHgiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0iIzAwMDAwMCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPg0KCTxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIC8+DQo8L3N2Zz4NCg==';

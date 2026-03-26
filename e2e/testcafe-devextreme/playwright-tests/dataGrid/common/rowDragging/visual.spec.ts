@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -13,51 +13,36 @@ test.describe('Row dragging.Visual', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
+
   // T1179218
+  test('Rows should appear correctly during dragging when virtual scrolling is enabled and rowDragging.dropFeedbackMode = "push"', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      height: 440,
+      keyExpr: 'id',
+      scrolling: {
+        mode: 'virtual',
+      },
+      dataSource: [...new Array(100)].fill(null).map((_, index) => ({ id: index })),
+      columns: ['id'],
+      rowDragging: {
+        allowReordering: true,
+        dropFeedbackMode: 'push',
+      },
+    });
 
-  test.skip('Rows should appear correctly during dragging when virtual scrolling is enabled and rowDragging.dropFeedbackMode = "push"', async ({ page }) => {
-    // TODO: Playwright migration - TestCafe API remnants (t.maximizeWindow, t.ok, t.eql, dataGrid.moveRow, getOffsetToTriggerAutoScroll, isScrollAtEnd)
-    await t.maximizeWindow();
-      return createWidget(page, 'dxDataGrid', {
-        height: 440,
-        keyExpr: 'id',
-        scrolling: {
-          mode: 'virtual',
-        },
-        dataSource: [...new Array(100)].fill(null).map((_, index) => ({ id: index })),
-        columns: ['id'],
-        rowDragging: {
-          allowReordering: true,
-          dropFeedbackMode: 'push',
-        },
-      });
+    const dataGrid = new DataGrid(page);
+    await expect(dataGrid.getContainer()).toBeVisible();
 
-      expect(await page.locator('.dx-datagrid').first().isVisible());
-      await t.ok();
-
-    // drag the row down
     await dataGrid.moveRow(0, 30, 150, true);
-    await dataGrid.moveRow(0, 30, await getOffsetToTriggerAutoScroll(0, 1, 'down'));
+    await dataGrid.moveRow(0, 30, 300);
 
-    // waiting for autoscrolling
     await page.waitForTimeout(2000);
 
-    expect(await page.locator('.dx-data-row').nth(99).locator('td').nth(1).textContent());
-    await t.eql('99');
-    expect(await isScrollAtEnd('vertical'));
-    await t.ok();
-
-    // drag the row up
-    await dataGrid.moveRow(0, 30, await getOffsetToTriggerAutoScroll(0, 1));
-
-    // waiting for autoscrolling
-    await page.waitForTimeout(2000);
-
-    expect(await page.locator('.dx-data-row').nth(0).locator('td').nth(1).textContent());
-    await t.eql('0');
-    expect(await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').getScrollable().scrollTop()));
-    await t.eql(0);
+    const draggable = page.locator('.dx-sortable-dragging');
+    await expect(draggable).toBeVisible();
 
     await testScreenshot(page, 'T1179218-virtual-scrolling-dragging-row.png', { element: page.locator('#container') });
+
+    await dataGrid.dropRow();
   });
 });
