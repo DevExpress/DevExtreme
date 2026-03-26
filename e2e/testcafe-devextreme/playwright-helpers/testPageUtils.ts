@@ -53,7 +53,10 @@ export async function adjustViewportForContent(page: Page): Promise<void> {
 
   const diff = TARGET_CONTENT_WIDTH - currentContentWidth;
   await page.setViewportSize({ width: current.width + diff, height: current.height });
-  await page.waitForTimeout(100);
+  await page.evaluate(() => new Promise<void>((resolve) => {
+    window.dispatchEvent(new Event('resize'));
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }));
 }
 
 export async function setupTestPage(page: Page, containerUrl: string, theme = 'fluent.blue.light'): Promise<void> {
