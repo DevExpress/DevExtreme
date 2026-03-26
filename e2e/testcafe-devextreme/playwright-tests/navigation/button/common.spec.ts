@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, appendElementTo, setAttribute, setStyleAttribute, setClassAttribute, insertStylesheetRulesToPage } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, appendElementTo, setAttribute, setStyleAttribute, setClassAttribute, insertStylesheetRulesToPage, addCaptionTo } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -44,7 +44,7 @@ test.describe('Button', () => {
           for (const state of states) {
         await appendElementTo(page, '#container', 'div', `mode${state}`, {});
         await setAttribute(page, `#mode${state}`, 'style', 'display: flex; gap: 8px; margin-bottom: 16px;');
-        await addCaptionTo(`#mode${state}`, state);
+        await addCaptionTo(page, `#mode${state}`, state);
 
         await Promise.all(buttons.map(
           (_, index) => appendElementTo(page, `#mode${state}`, 'div', `button-${state}-${index}`, {}),

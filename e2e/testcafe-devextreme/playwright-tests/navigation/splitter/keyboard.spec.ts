@@ -4,6 +4,12 @@ import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
 
+const CLASS = {
+  resizeHandle: 'dx-resize-handle',
+  focused: 'dx-state-focused',
+  collapsePrev: 'dx-resize-handle-collapse-prev-pane',
+};
+
 test.describe('Splitter_keyboard', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
@@ -25,21 +31,17 @@ test.describe('Splitter_keyboard', () => {
     ],
   });
 
-    const splitter = page.locator('#container');
+    const resizeHandles = page.locator(`#container .${CLASS.resizeHandle}`);
 
-    await page.click(splitter.resizeHandles.nth(0));
+    await resizeHandles.nth(0).click();
 
-    await page.expect(splitter.getResizeHandle(0).isFocused)
-      .ok()
-      .expect(splitter.getResizeHandle(1).isFocused)
-      .notOk();
+    await expect(resizeHandles.nth(0)).toHaveClass(new RegExp(CLASS.focused));
+    expect(await resizeHandles.nth(1).evaluate((el, cls) => el.classList.contains(cls), CLASS.focused)).toBe(false);
 
     await page.keyboard.press('Tab');
 
-    await page.expect(splitter.getResizeHandle(0).isFocused)
-      .notOk()
-      .expect(splitter.getResizeHandle(1).isFocused)
-      .ok();
+    expect(await resizeHandles.nth(0).evaluate((el, cls) => el.classList.contains(cls), CLASS.focused)).toBe(false);
+    await expect(resizeHandles.nth(1)).toHaveClass(new RegExp(CLASS.focused));
 
     });
 
@@ -54,21 +56,17 @@ test.describe('Splitter_keyboard', () => {
     ],
   });
 
-    const splitter = page.locator('#container');
+    const resizeHandles = page.locator(`#container .${CLASS.resizeHandle}`);
 
-    await page.click(splitter.resizeHandles.nth(1));
+    await resizeHandles.nth(1).click();
 
-    await page.expect(splitter.getResizeHandle(1).isFocused)
-      .ok()
-      .expect(splitter.getResizeHandle(0).isFocused)
-      .notOk();
+    await expect(resizeHandles.nth(1)).toHaveClass(new RegExp(CLASS.focused));
+    expect(await resizeHandles.nth(0).evaluate((el, cls) => el.classList.contains(cls), CLASS.focused)).toBe(false);
 
-    await page.keyboard.press('shift+tab');
+    await page.keyboard.press('Shift+Tab');
 
-    await page.expect(splitter.getResizeHandle(1).isFocused)
-      .notOk()
-      .expect(splitter.getResizeHandle(0).isFocused)
-      .ok();
+    expect(await resizeHandles.nth(1).evaluate((el, cls) => el.classList.contains(cls), CLASS.focused)).toBe(false);
+    await expect(resizeHandles.nth(0)).toHaveClass(new RegExp(CLASS.focused));
 
     });
 
@@ -84,16 +82,15 @@ test.describe('Splitter_keyboard', () => {
       ],
     });
 
-      const splitter = page.locator('#container');
+      const resizeHandle = page.locator(`#container .${CLASS.resizeHandle}`).nth(0);
+      const collapsePrevBtn = resizeHandle.locator(`.${CLASS.collapsePrev}`);
 
-      await page.click(splitter.getResizeHandle(0).getCollapsePrev());
+      await collapsePrevBtn.click();
 
       if (allowKeyboardNavigation) {
-        await page.expect(splitter.getResizeHandle(0).isFocused)
-          .ok();
+        await expect(resizeHandle).toHaveClass(new RegExp(CLASS.focused));
       } else {
-        await page.expect(splitter.getResizeHandle(0).isFocused)
-          .notOk();
+        expect(await resizeHandle.evaluate((el, cls) => el.classList.contains(cls), CLASS.focused)).toBe(false);
       }
 
     });

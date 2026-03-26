@@ -137,8 +137,9 @@ test.describe('Popup', () => {
     await page.waitForTimeout(500);
 
     const rects = await page.evaluate(() => {
-      const wrapper = document.querySelector('#container .dx-overlay-wrapper');
-      const content = document.querySelector('#container .dx-overlay-content');
+      const wrappers = document.querySelectorAll('.dx-overlay-wrapper');
+      const wrapper = wrappers[wrappers.length - 1];
+      const content = document.querySelector('.dx-overlay-content');
       return {
         wrapper: wrapper?.getBoundingClientRect(),
         content: content?.getBoundingClientRect(),

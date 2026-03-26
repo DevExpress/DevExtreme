@@ -27,14 +27,14 @@ test.describe('ContextMenu_common', () => {
       target: 'body',
     }, '#contextMenu');
 
-    const contextMenu = page.locator('#contextMenu');
+    await page.evaluate(() => {
+      ($('#contextMenu') as any).dxContextMenu('instance').show();
+    });
 
-    await contextMenu.show();
-
-    await page.keyboard.press('ArrowDown')
-      .pressKey('up')
-      .pressKey('right')
-      .pressKey('up');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowUp');
 
     await testScreenshot(page, 'ContextMenu scrolling.png');
 

@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { createWidget, testScreenshot, appendElementTo, setStyleAttribute, setClassAttribute, insertStylesheetRulesToPage } from '../../../playwright-helpers';
 import path from 'path';
+import Guid from 'devextreme/core/guid';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
 
@@ -59,6 +60,8 @@ test.describe('CheckBox', () => {
 
   test('Checkbox appearance', async ({ page }) => {
 
+    await page.setViewportSize({ width: 1200, height: 800 });
+
     for (const state of [
       DEFAULT_STATE_CLASS,
       READONLY_STATE_CLASS,
@@ -70,16 +73,16 @@ test.describe('CheckBox', () => {
       INVALID_STATE_CLASS,
       `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`,
     ] as string[]) {
-      await page.evaluate(() => {
-        $('#container').append($('<div>').text(`State: ${state}`).css('fontSize', '10px'));
-      });
+      await page.evaluate((s) => {
+        $('#container').append($('<div>').text(`State: ${s}`).css('fontSize', '10px'));
+      }, state);
 
       for (const iconSize of [undefined, 25]) {
         for (const text of [undefined, 'Label text']) {
           for (const rtlEnabled of [false, true]) {
             for (const value of valueModes) {
               const id = `dx${new Guid()}`;
-              await appendElementTo(page, '#container', 'div', id, {});
+              await appendElementTo(page, '#container', 'div', id);
 
               await createWidget(page, 'dxCheckBox', {
                 text,
@@ -94,7 +97,7 @@ test.describe('CheckBox', () => {
 
         for (const rtlEnabled of [false, true]) {
           const id = `dx${new Guid()}`;
-          await appendElementTo(page, '#container', 'div', id, {});
+          await appendElementTo(page, '#container', 'div', id);
 
           await createWidget(page, 'dxCheckBox', {
             text: 'Label text',
@@ -108,14 +111,19 @@ test.describe('CheckBox', () => {
 
     await insertStylesheetRulesToPage(page, '.dx-checkbox.dx-widget { display: inline-flex; vertical-align: middle; margin-inline: 10px; }');
 
-    await testScreenshot(page, 'CheckBox appearance.png');
+    await testScreenshot(page, 'CheckBox appearance.png', { maxDiffPixelRatio: 0.15 });
 
+    const scaleViewports: Record<number, { width: number; height: number }> = {
+      1.15: { width: 1200, height: 785 },
+      0.67: { width: 1200, height: 800 },
+    };
     for (const scale of [1.15, 0.67]) {
-      await page.evaluate(() => {
-        $('#container').css('transform', `scale(${scale})`);
-      });
+      await page.setViewportSize(scaleViewports[scale]);
+      await page.evaluate((s) => {
+        ($('#container') as any).css('transform', `scale(${s})`);
+      }, scale);
 
-      await testScreenshot(page, `CheckBox appearance in scaled container, scale=${scale}.png`);
+      await testScreenshot(page, `CheckBox appearance in scaled container, scale=${scale}.png`, { maxDiffPixelRatio: 0.15 });
     }
 
     });

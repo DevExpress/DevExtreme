@@ -4,6 +4,15 @@ const CLASS = {
   popup: 'dx-popup',
   calendar: 'dx-calendar',
   calendarCell: 'dx-calendar-cell',
+  calendarWidget: 'dx-widget',
+  calendarViewsWrapper: 'dx-calendar-views-wrapper',
+  cellInRange: 'dx-calendar-cell-in-range',
+  cellInRangeStart: 'dx-calendar-range-start-date',
+  cellInRangeEnd: 'dx-calendar-range-end-date',
+  cellInHoveredRange: 'dx-calendar-cell-range-hover',
+  cellInHoveredRangeStart: 'dx-calendar-cell-range-hover-start',
+  cellInHoveredRangeEnd: 'dx-calendar-cell-range-hover-end',
+  otherMonth: 'dx-calendar-other-month',
   startDateDateBox: 'dx-start-datebox',
   endDateDateBox: 'dx-end-datebox',
   dropDownButton: 'dx-dropdowneditor-button',
@@ -20,6 +29,90 @@ const CLASS = {
   navigatorCaption: 'dx-calendar-caption-button',
   button: 'dx-button',
 } as const;
+
+function serializeDateToCalendarFormat(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}/${m}/${d}`;
+}
+
+export class CalendarViewHelper {
+  readonly element: Locator;
+
+  constructor(element: Locator) {
+    this.element = element;
+  }
+
+  getCellByDate(date: Date): Locator {
+    const dateStr = serializeDateToCalendarFormat(date);
+    return this.element.locator(`td[data-value='${dateStr}']`);
+  }
+}
+
+export class CalendarHelper {
+  readonly element: Locator;
+  private readonly page: Page;
+
+  constructor(page: Page, element: Locator) {
+    this.page = page;
+    this.element = element;
+  }
+
+  getSelectedRangeCells(): Locator {
+    return this.element.locator(`.${CLASS.cellInRange}`);
+  }
+
+  getSelectedRangeStartCell(): Locator {
+    return this.element.locator(`.${CLASS.cellInRangeStart}:not(.${CLASS.otherMonth})`);
+  }
+
+  getSelectedRangeEndCell(): Locator {
+    return this.element.locator(`.${CLASS.cellInRangeEnd}`);
+  }
+
+  getHoveredRangeCells(): Locator {
+    return this.element.locator(`.${CLASS.cellInHoveredRange}`);
+  }
+
+  getHoveredRangeStartCell(): Locator {
+    return this.element.locator(`.${CLASS.cellInHoveredRangeStart}`);
+  }
+
+  getHoveredRangeEndCell(): Locator {
+    return this.element.locator(`.${CLASS.cellInHoveredRangeEnd}`);
+  }
+
+  getCellByDate(dateStr: string): Locator {
+    return this.element.locator(`[data-value="${dateStr}"]:not(.${CLASS.otherMonth})`);
+  }
+
+  getView(): CalendarViewHelper {
+    const viewEl = this.element.locator(`.${CLASS.calendarViewsWrapper} .${CLASS.calendarWidget}`).first();
+    return new CalendarViewHelper(viewEl);
+  }
+
+  async option(name: string, value?: unknown): Promise<unknown> {
+    const elementHandle = await this.element.elementHandle();
+    if (!elementHandle) throw new Error('Calendar element not found');
+    if (value !== undefined) {
+      return this.page.evaluate(
+        ({ el, name: n, value: v }) => {
+          const instance = (window as any).DevExpress.ui.dxCalendar.getInstance(el);
+          if (instance) instance.option(n, v);
+        },
+        { el: elementHandle, name, value },
+      );
+    }
+    return this.page.evaluate(
+      ({ el, name: n }) => {
+        const instance = (window as any).DevExpress.ui.dxCalendar.getInstance(el);
+        return instance ? instance.option(n) : undefined;
+      },
+      { el: elementHandle, name },
+    );
+  }
+}
 
 export class DateBoxHelper {
   readonly element: Locator;
@@ -119,6 +212,14 @@ export class DateRangeBoxPopup {
       isFocused: () => el.evaluate((e, cls) => e.classList.contains(cls), CLASS.focused),
     };
   }
+
+  getViewsWrapper(): { element: Locator; isFocused: () => Promise<boolean> } {
+    const el = this.getWrapper().locator('.dx-calendar-views-wrapper');
+    return {
+      element: el,
+      isFocused: () => el.evaluate((e) => e === document.activeElement || e.contains(document.activeElement)),
+    };
+  }
 }
 
 export class DateRangeBox {
@@ -165,23 +266,9 @@ export class DateRangeBox {
     return new DateRangeBoxPopup(this.page, this.element);
   }
 
-  getCalendar(): { element: Locator; option: (name: string) => Promise<unknown> } {
+  getCalendar(): CalendarHelper {
     const calendarLocator = this.page.locator(`.${CLASS.calendar}`);
-    const page = this.page;
-    return {
-      element: calendarLocator,
-      async option(name: string): Promise<unknown> {
-        return page.evaluate(
-          ({ cls, n }) => {
-            const el = document.querySelector(`.${cls}`);
-            if (!el) return undefined;
-            const instance = (window as any).DevExpress.ui.dxCalendar.getInstance(el);
-            return instance ? instance.option(n) : undefined;
-          },
-          { cls: CLASS.calendar, n: name },
-        );
-      },
-    };
+    return new CalendarHelper(this.page, calendarLocator);
   }
 
   getCalendarCell(index: number): Locator {
@@ -199,7 +286,13 @@ export class DateRangeBox {
       );
     }
     return this.page.evaluate(
-      ({ sel: s, name: n }) => ($(s) as any).dxDateRangeBox('instance').option(n),
+      ({ sel: s, name: n }) => {
+        const result = ($(s) as any).dxDateRangeBox('instance').option(n);
+        if (Array.isArray(result)) {
+          return result.map((v: unknown) => (v instanceof Date ? v.toISOString() : v));
+        }
+        return result instanceof Date ? result.toISOString() : result;
+      },
       { sel, name },
     );
   }

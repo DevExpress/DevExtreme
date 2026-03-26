@@ -17,7 +17,7 @@ test.describe('CardView - Security', () => {
       dataSource: [{ id: 1, caption: UNSAFE_TEXT }],
     });
 
-    await page.locator('.dx-cardview-headers .dx-header-filter').first().click();
+    await page.locator('.dx-cardview-headers .dx-header-filter-icon').first().click();
 
     const itemText = await page.locator('.dx-list-item').first().textContent();
     expect(itemText).toBe(UNSAFE_TEXT);

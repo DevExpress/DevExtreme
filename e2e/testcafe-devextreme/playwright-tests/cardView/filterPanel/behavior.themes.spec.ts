@@ -28,13 +28,13 @@ test.describe('CardView - FilterPanel Appearance', () => {
     });
 
     await testScreenshot(page, 'cardView_FilterPanel.png', {
-      element: page.locator('.dx-cardview-filter-panel'),
+      element: page.locator('.dx-datagrid-filter-panel'),
     });
 
-    await page.locator('.dx-cardview-filter-panel .dx-icon-filter').click();
+    await page.locator('.dx-datagrid-filter-panel .dx-icon-filter').click();
 
     await testScreenshot(page, 'cardView_FilterBuilderPopup.png', {
-      element: page.locator('.dx-filterbuilder-popup'),
+      element: page.locator('.dx-popup-wrapper:has(.dx-filterbuilder)'),
     });
   });
 });

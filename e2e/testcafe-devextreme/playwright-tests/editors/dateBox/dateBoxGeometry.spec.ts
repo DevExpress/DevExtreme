@@ -14,11 +14,10 @@ test.describe('DateBox (datetime) geometry (T896846)', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  const waitFont = async () => page.evaluate(() => (window as any).DevExpress.ui.themes.waitWebFont('1234567890APM/:', 400));
-
   test('Geometry is good', async ({ page }) => {
+    await page.setViewportSize({ width: 600, height: 550 });
 
-    await waitFont();
+    await page.evaluate(() => (window as any).DevExpress.ui.themes.waitWebFont('1234567890APM/:', 400));
 
     await createWidget(page, 'dxDateBox', {
       pickerType: 'calendar',
@@ -26,29 +25,34 @@ test.describe('DateBox (datetime) geometry (T896846)', () => {
       value: new Date(1.5e12),
     });
 
-    const dateBox = page.locator('#container');
-
-    await dateBox.option('opened', true);
+    await page.evaluate(() => {
+      ($('#container') as any).dxDateBox('instance').option('opened', true);
+    });
 
     await testScreenshot(page, 'Datebox with calendar.png');
 
-    await dateBox.option('opened', false);
-    await dateBox.option('type', 'datetime');
-    await dateBox.option('opened', true);
+    await page.evaluate(() => {
+      ($('#container') as any).dxDateBox('instance').option('opened', false);
+      ($('#container') as any).dxDateBox('instance').option('type', 'datetime');
+      ($('#container') as any).dxDateBox('instance').option('opened', true);
+    });
 
     await testScreenshot(page, 'Datebox with datetime.png');
 
-    await dateBox.option('opened', false);
-    await dateBox.option({ showAnalogClock: false });
-    await dateBox.option('opened', true);
+    await page.evaluate(() => {
+      ($('#container') as any).dxDateBox('instance').option('opened', false);
+      ($('#container') as any).dxDateBox('instance').option({ showAnalogClock: false });
+      ($('#container') as any).dxDateBox('instance').option('opened', true);
+    });
 
     await testScreenshot(page, 'Datebox with datetime without analog clock.png');
 
-    await dateBox.option('opened', false);
-    await dateBox.option({ displayFormat: 'HH:mm', calendarOptions: { visible: false }, showAnalogClock: true });
-    await dateBox.option('opened', true);
+    await page.evaluate(() => {
+      ($('#container') as any).dxDateBox('instance').option('opened', false);
+      ($('#container') as any).dxDateBox('instance').option({ displayFormat: 'HH:mm', calendarOptions: { visible: false }, showAnalogClock: true });
+      ($('#container') as any).dxDateBox('instance').option('opened', true);
+    });
 
     await testScreenshot(page, 'Datebox with datetime without calendar.png');
-
-    });
+  });
 });

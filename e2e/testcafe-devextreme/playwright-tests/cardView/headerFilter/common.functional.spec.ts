@@ -25,9 +25,9 @@ test.describe('HeaderFilter.Common.Functional', () => {
       height: 600,
     });
 
-    await page.locator('.dx-header-filter').first().click();
+    await page.locator('.dx-header-filter-icon').first().click();
 
-    const popup = page.locator('.dx-header-filter-menu');
+    const popup = page.locator('.dx-popup-wrapper.dx-header-filter-menu');
     await expect(popup).toBeVisible();
   });
 });

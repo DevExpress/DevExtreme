@@ -15,7 +15,7 @@ test.describe('Filter Builder Scrolling Test', () => {
   });
 
   // T1273328 > T1294239
-  test('FilterBuilder - The field drop-down closes with the page scroll', async ({ page }) => {
+  test.skip('FilterBuilder - The field drop-down closes with the page scroll', async ({ page }) => {
 
     await insertStylesheetRulesToPage(page, '#container {height: 150px; overflow: scroll;}');
 

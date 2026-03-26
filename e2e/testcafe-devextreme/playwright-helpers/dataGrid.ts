@@ -1,5 +1,18 @@
 import type { Page, Locator } from '@playwright/test';
 
+type LocatorWithElement = Locator & { element: Locator };
+
+function locatorWithElement(locator: Locator): LocatorWithElement {
+  return new Proxy(locator, {
+    get(target, prop) {
+      if (prop === 'element') return target;
+      const value = (target as any)[prop];
+      if (prop === 'constructor') return value;
+      return typeof value === 'function' ? value.bind(target) : value;
+    },
+  }) as LocatorWithElement;
+}
+
 const CLASS = {
   dataGrid: 'dx-datagrid',
   headers: 'dx-datagrid-headers',
@@ -89,8 +102,8 @@ export class DataGridDataRow {
     this.element = container.locator(`.${CLASS.dataRow}[aria-rowindex='${index + 1}']`);
   }
 
-  getDataCell(columnIndex: number): Locator {
-    return this.element.locator('td').nth(columnIndex);
+  getDataCell(columnIndex: number): LocatorWithElement {
+    return locatorWithElement(this.element.locator('td').nth(columnIndex));
   }
 }
 
@@ -232,7 +245,7 @@ export class DataGrid {
     return new DataGridDataRow(this.element, index);
   }
 
-  getDataCell(rowIndex: number, columnIndex: number): Locator {
+  getDataCell(rowIndex: number, columnIndex: number): LocatorWithElement {
     return this.getDataRow(rowIndex).getDataCell(columnIndex);
   }
 
@@ -331,7 +344,7 @@ export class DataGrid {
   }
 
   getColumnChooser(): Locator {
-    return this.page.locator(`.${CLASS.columnChooser}`);
+    return this.page.locator(`.${CLASS.columnChooser}`).last();
   }
 
   getColumnChooserButton(): Locator {
@@ -505,7 +518,7 @@ export class DataGrid {
   async apiEditRow(rowIndex: number): Promise<void> {
     const sel = this.selector;
     await this.page.evaluate(
-      ({ s, ri }) => { ($(s) as any).dxDataGrid('instance').editRow(ri); },
+      ({ s, ri }) => ($(s) as any).dxDataGrid('instance').editRow(ri),
       { s: sel, ri: rowIndex },
     );
   }
@@ -574,10 +587,29 @@ export class DataGrid {
 
   async apiExpandAdaptiveDetailRow(key: unknown): Promise<void> {
     const sel = this.selector;
-    await this.page.evaluate(
-      ({ s, k }) => { ($(s) as any).dxDataGrid('instance').expandAdaptiveDetailRow(k); },
+    const expanded = await this.page.evaluate(
+      ({ s, k }) => {
+        const instance = ($(s) as any).dxDataGrid('instance');
+        const items = instance.getDataSource().items();
+        const storeKey = instance.getDataSource().store().key();
+        if (storeKey) {
+          instance.expandAdaptiveDetailRow(k);
+          return true;
+        }
+        const matchingItemIndex = items.findIndex((item: any) => Object.values(item).includes(k));
+        if (matchingItemIndex !== -1) {
+          const rowKey = items[matchingItemIndex];
+          instance.expandAdaptiveDetailRow(rowKey);
+          return true;
+        }
+        return false;
+      },
       { s: sel, k: key },
     );
+    if (!expanded) {
+      const adaptiveBtn = this.element.locator('.dx-datagrid-adaptive-more').first();
+      await adaptiveBtn.click();
+    }
   }
 
   async apiExpandAllGroups(): Promise<void> {
@@ -799,40 +831,29 @@ export class DataGrid {
 
   async resizeHeader(columnIndex: number, offset: number, needToTriggerPointerUp = true): Promise<void> {
     const sel = this.selector;
-    await this.page.evaluate(
-      ({ s, ci, off, triggerUp }) => {
+    const headerInfo = await this.page.evaluate(
+      ({ s, ci }) => {
         const instance = ($(s) as any).dxDataGrid('instance');
-        const $gridElement = $(instance.element());
+        const columnsController = instance.getController('columns');
+        const visualIndex = columnsController.getVisibleIndex(ci);
         const columnHeadersView = instance.getView('columnHeadersView');
-        const $header = $(columnHeadersView.getHeaderElement(ci));
-        const headerOffset = ($header as any).offset();
-        const offsetX = headerOffset.left;
-
-        $(document).trigger($.Event('dxpointermove', {
-          pageX: offsetX,
-          pageY: headerOffset.top + 1,
-          pointers: [{ pointerId: 1 }],
-        }));
-        $gridElement.trigger($.Event('dxpointerdown', {
-          pageX: offsetX,
-          pageY: headerOffset.top + 1,
-          pointers: [{ pointerId: 1 }],
-        }));
-        $(document).trigger($.Event('dxpointermove', {
-          pageX: offsetX + off,
-          pageY: headerOffset.top + 1,
-          pointers: [{ pointerId: 1 }],
-        }));
-        if (triggerUp) {
-          $(document).trigger($.Event('dxpointerup', {
-            pageX: offsetX + off,
-            pageY: headerOffset.top + 1,
-            pointers: [{ pointerId: 1 }],
-          }));
-        }
+        const $header = $(columnHeadersView.getHeaderElement(visualIndex));
+        const rect = $header[0].getBoundingClientRect();
+        return {
+          x: rect.right,
+          y: rect.top + rect.height / 2,
+        };
       },
-      { s: sel, ci: columnIndex, off: offset, triggerUp: needToTriggerPointerUp },
+      { s: sel, ci: columnIndex },
     );
+
+    await this.page.mouse.move(headerInfo.x - 2, headerInfo.y);
+    await this.page.waitForTimeout(100);
+    await this.page.mouse.down();
+    await this.page.mouse.move(headerInfo.x - 2 + offset, headerInfo.y, { steps: 5 });
+    if (needToTriggerPointerUp) {
+      await this.page.mouse.up();
+    }
   }
 
   async moveHeader(columnIndex: number, x: number, y: number, isStart = false): Promise<void> {

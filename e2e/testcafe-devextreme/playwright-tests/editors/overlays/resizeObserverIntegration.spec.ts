@@ -4,6 +4,37 @@ import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
 
+async function getPopupRects(page: any) {
+  return page.evaluate(() => {
+    const wrappers = document.querySelectorAll('.dx-overlay-wrapper');
+    const wrapper = wrappers[wrappers.length - 1];
+    const content = document.querySelector('.dx-overlay-content');
+    return {
+      wrapper: wrapper ? {
+        bottom: wrapper.getBoundingClientRect().bottom,
+        top: wrapper.getBoundingClientRect().top,
+        left: wrapper.getBoundingClientRect().left,
+        right: wrapper.getBoundingClientRect().right,
+      } : null,
+      content: content ? {
+        bottom: content.getBoundingClientRect().bottom,
+        top: content.getBoundingClientRect().top,
+        left: content.getBoundingClientRect().left,
+        right: content.getBoundingClientRect().right,
+        width: content.getBoundingClientRect().width,
+        height: content.getBoundingClientRect().height,
+      } : null,
+    };
+  });
+}
+
+async function showPopup(page: any) {
+  await page.evaluate(() => {
+    const instance = (window as any).DevExpress.ui.dxPopup.getInstance($('#container').get(0));
+    if (instance) instance.show();
+  });
+}
+
 test.describe('Popup', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
@@ -19,39 +50,25 @@ test.describe('Popup', () => {
     width: 'auto',
     height: 'auto',
     contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: '100px', height: '100px' }),
-  }, undefined, { disableFxAnimation: false });
+  }, undefined, false);
 
-    const popup = page.locator('#container');
-
-    await popup.show();
+    await showPopup(page);
+    await page.waitForTimeout(400);
     await setStyleAttribute(page, '#content', 'width: 300px; height: 300px;');
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(400);
 
-    const wrapper = popup.getWrapper();
-    const content = popup.getContent();
+    const rects = await getPopupRects(page);
 
-    const wrapperRect: { bottom: number; top: number; left: number; right: number } = {
-      bottom: 0, top: 0, left: 0, right: 0,
-    };
-    const contentRect: { bottom: number; top: number; left: number; right: number } = {
-      bottom: 0, top: 0, left: 0, right: 0,
-    };
+    const wrapperVerticalCenter = (rects.wrapper!.bottom + rects.wrapper!.top) / 2;
+    const wrapperHorizontalCenter = (rects.wrapper!.left + rects.wrapper!.right) / 2;
+    const contentVerticalCenter = (rects.content!.bottom + rects.content!.top) / 2;
+    const contentHorizontalCenter = (rects.content!.left + rects.content!.right) / 2;
 
-    await asyncForEach(['bottom', 'left', 'right', 'top'], async (prop) => {
-      wrapperRect[prop] = await wrapper.getBoundingClientRectProperty(prop);
-      contentRect[prop] = await content.getBoundingClientRectProperty(prop);
-    });
+    expect(wrapperVerticalCenter).toBeGreaterThanOrEqual(contentVerticalCenter - 0.5);
+    expect(wrapperVerticalCenter).toBeLessThanOrEqual(contentVerticalCenter + 0.5);
 
-    const wrapperVerticalCenter = (wrapperRect.bottom + wrapperRect.top) / 2;
-    const wrapperHorizontalCenter = (wrapperRect.left + wrapperRect.right) / 2;
-    const contentVerticalCenter = (contentRect.bottom + contentRect.top) / 2;
-    const contentHorizontalCenter = (contentRect.left + contentRect.right) / 2;
-
-    await page.expect(wrapperVerticalCenter)
-      .within(contentVerticalCenter - 0.5, contentVerticalCenter + 0.5);
-
-    await page.expect(wrapperHorizontalCenter)
-      .within(contentHorizontalCenter - 0.5, contentHorizontalCenter + 0.5);
+    expect(wrapperHorizontalCenter).toBeGreaterThanOrEqual(contentHorizontalCenter - 0.5);
+    expect(wrapperHorizontalCenter).toBeLessThanOrEqual(contentHorizontalCenter + 0.5);
 
     });
 
@@ -60,39 +77,25 @@ test.describe('Popup', () => {
     width: 'auto',
     height: 'auto',
     contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: '100px', height: '100px' }),
-  }, undefined, { disableFxAnimation: false });
+  }, undefined, false);
 
-    const popup = page.locator('#container');
-
-    await popup.show();
+    await showPopup(page);
+    await page.waitForTimeout(400);
     await setStyleAttribute(page, '#content', 'width: 300px; height: 300px;');
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(400);
 
-    const wrapper = popup.getWrapper();
-    const content = popup.getContent();
+    const rects = await getPopupRects(page);
 
-    const wrapperRect: { bottom: number; top: number; left: number; right: number } = {
-      bottom: 0, top: 0, left: 0, right: 0,
-    };
-    const contentRect: { bottom: number; top: number; left: number; right: number } = {
-      bottom: 0, top: 0, left: 0, right: 0,
-    };
+    const wrapperVerticalCenter = (rects.wrapper!.bottom + rects.wrapper!.top) / 2;
+    const wrapperHorizontalCenter = (rects.wrapper!.left + rects.wrapper!.right) / 2;
+    const contentVerticalCenter = (rects.content!.bottom + rects.content!.top) / 2;
+    const contentHorizontalCenter = (rects.content!.left + rects.content!.right) / 2;
 
-    await asyncForEach(['bottom', 'left', 'right', 'top'], async (prop) => {
-      wrapperRect[prop] = await wrapper.getBoundingClientRectProperty(prop);
-      contentRect[prop] = await content.getBoundingClientRectProperty(prop);
-    });
+    expect(wrapperVerticalCenter).toBeGreaterThanOrEqual(contentVerticalCenter - 0.5);
+    expect(wrapperVerticalCenter).toBeLessThanOrEqual(contentVerticalCenter + 0.5);
 
-    const wrapperVerticalCenter = (wrapperRect.bottom + wrapperRect.top) / 2;
-    const wrapperHorizontalCenter = (wrapperRect.left + wrapperRect.right) / 2;
-    const contentVerticalCenter = (contentRect.bottom + contentRect.top) / 2;
-    const contentHorizontalCenter = (contentRect.left + contentRect.right) / 2;
-
-    await page.expect(wrapperVerticalCenter)
-      .within(contentVerticalCenter - 0.5, contentVerticalCenter + 0.5);
-
-    await page.expect(wrapperHorizontalCenter)
-      .within(contentHorizontalCenter - 0.5, contentHorizontalCenter + 0.5);
+    expect(wrapperHorizontalCenter).toBeGreaterThanOrEqual(contentHorizontalCenter - 0.5);
+    expect(wrapperHorizontalCenter).toBeLessThanOrEqual(contentHorizontalCenter + 0.5);
 
     });
 
@@ -102,77 +105,48 @@ test.describe('Popup', () => {
     height: 'auto',
     contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: '100px', height: '100px' }),
     animation: null,
-  }, undefined, { disableFxAnimation: false });
+  }, undefined, false);
 
-    const popup = page.locator('#container');
-
-    await popup.show();
+    await showPopup(page);
     await setStyleAttribute(page, '#content', 'width: 300px; height: 300px;');
     await page.waitForTimeout(100);
 
-    const wrapper = popup.getWrapper();
-    const content = popup.getContent();
+    const rects = await getPopupRects(page);
 
-    const wrapperRect: { bottom: number; top: number; left: number; right: number } = {
-      bottom: 0, top: 0, left: 0, right: 0,
-    };
-    const contentRect: { bottom: number; top: number; left: number; right: number } = {
-      bottom: 0, top: 0, left: 0, right: 0,
-    };
+    const wrapperVerticalCenter = (rects.wrapper!.bottom + rects.wrapper!.top) / 2;
+    const wrapperHorizontalCenter = (rects.wrapper!.left + rects.wrapper!.right) / 2;
+    const contentVerticalCenter = (rects.content!.bottom + rects.content!.top) / 2;
+    const contentHorizontalCenter = (rects.content!.left + rects.content!.right) / 2;
 
-    await asyncForEach(['bottom', 'left', 'right', 'top'], async (prop) => {
-      wrapperRect[prop] = await wrapper.getBoundingClientRectProperty(prop);
-      contentRect[prop] = await content.getBoundingClientRectProperty(prop);
-    });
+    expect(wrapperVerticalCenter).toBeGreaterThanOrEqual(contentVerticalCenter - 0.5);
+    expect(wrapperVerticalCenter).toBeLessThanOrEqual(contentVerticalCenter + 0.5);
 
-    const wrapperVerticalCenter = (wrapperRect.bottom + wrapperRect.top) / 2;
-    const wrapperHorizontalCenter = (wrapperRect.left + wrapperRect.right) / 2;
-    const contentVerticalCenter = (contentRect.bottom + contentRect.top) / 2;
-    const contentHorizontalCenter = (contentRect.left + contentRect.right) / 2;
-
-    await page.expect(wrapperVerticalCenter)
-      .within(contentVerticalCenter - 0.5, contentVerticalCenter + 0.5);
-
-    await page.expect(wrapperHorizontalCenter)
-      .within(contentHorizontalCenter - 0.5, contentHorizontalCenter + 0.5);
+    expect(wrapperHorizontalCenter).toBeGreaterThanOrEqual(contentHorizontalCenter - 0.5);
+    expect(wrapperHorizontalCenter).toBeLessThanOrEqual(contentHorizontalCenter + 0.5);
 
     });
 
   test('popup should be repositioned after window resize', async ({ page }) => {
+    await page.setViewportSize({ width: 200, height: 200 });
     await createWidget(page, 'dxPopup', {
     animation: null,
     visible: true,
     width: 100,
     height: 100,
-  }, undefined, { disableFxAnimation: false });
+  }, undefined, false);
 
-    const popup = page.locator('#container');
+    const rects = await getPopupRects(page);
 
-    const wrapper = popup.getWrapper();
-    const content = popup.getContent();
+    const wrapperVerticalCenter = (rects.wrapper!.bottom + rects.wrapper!.top) / 2;
+    const wrapperHorizontalCenter = (rects.wrapper!.left + rects.wrapper!.right) / 2;
+    const contentVerticalCenter = (rects.content!.bottom + rects.content!.top) / 2;
+    const contentHorizontalCenter = (rects.content!.left + rects.content!.right) / 2;
 
-    const wrapperRect: { bottom: number; top: number; left: number; right: number } = {
-      bottom: 0, top: 0, left: 0, right: 0,
-    };
-    const contentRect: { bottom: number; top: number; left: number; right: number } = {
-      bottom: 0, top: 0, left: 0, right: 0,
-    };
+    expect(wrapperVerticalCenter).toBeGreaterThanOrEqual(contentVerticalCenter - 0.5);
+    expect(wrapperVerticalCenter).toBeLessThanOrEqual(contentVerticalCenter + 0.5);
 
-    await asyncForEach(['bottom', 'left', 'right', 'top'], async (prop) => {
-      wrapperRect[prop] = await wrapper.getBoundingClientRectProperty(prop);
-      contentRect[prop] = await content.getBoundingClientRectProperty(prop);
-    });
-
-    const wrapperVerticalCenter = (wrapperRect.bottom + wrapperRect.top) / 2;
-    const wrapperHorizontalCenter = (wrapperRect.left + wrapperRect.right) / 2;
-    const contentVerticalCenter = (contentRect.bottom + contentRect.top) / 2;
-    const contentHorizontalCenter = (contentRect.left + contentRect.right) / 2;
-
-    await page.expect(wrapperVerticalCenter)
-      .within(contentVerticalCenter - 0.5, contentVerticalCenter + 0.5);
-
-    await page.expect(wrapperHorizontalCenter)
-      .within(contentHorizontalCenter - 0.5, contentHorizontalCenter + 0.5);
+    expect(wrapperHorizontalCenter).toBeGreaterThanOrEqual(contentHorizontalCenter - 0.5);
+    expect(wrapperHorizontalCenter).toBeLessThanOrEqual(contentHorizontalCenter + 0.5);
 
     });
 
@@ -185,24 +159,15 @@ test.describe('Popup', () => {
         to: { width: '300px', height: '300px' },
       },
     },
-  }, undefined, { disableFxAnimation: false });
-
-    const popup = page.locator('#container');
-    const content = popup.getContent();
+  }, undefined, false);
 
     await page.waitForTimeout(500);
 
-    const contentRect: { width: number; height: number } = {
-      width: 0, height: 0,
-    };
+    const rects = await getPopupRects(page);
 
-    await asyncForEach(['width', 'height'], async (prop) => {
-      contentRect[prop] = await content.getBoundingClientRectProperty(prop);
-    });
+    expect(rects.content!.width).toBe(300);
 
-    expect(contentRect.width).toBe(300);
-
-    expect(contentRect.height).toBe(300);
+    expect(rects.content!.height).toBe(300);
 
     });
 
@@ -211,32 +176,32 @@ test.describe('Popup', () => {
     width: 'auto',
     height: 'auto',
     contentTemplate: () => $('<div>').attr({ id: 'content' }).css({ width: '100px', height: '100px' }),
-  }, undefined, { disableFxAnimation: false });
-
-    const popup = page.locator('#container');
+  }, undefined, false);
 
     await page.evaluate(() => {
       (window as any).shownCallCount = 0;
       (window as any).showingCallCount = 0;
     });
 
-    const incShown = async () => page.evaluate(() => { ((window as any).shownCallCount as number) += 1; });
-    const incShowing = async () => page.evaluate(() => { ((window as any).showingCallCount as number) += 1; });
-
-    const getShownCounter = async () => page.evaluate(() => (window as any).shownCallCount);
-    const getShowingCounter = async () => page.evaluate(() => (window as any).shownCallCount);
-
-    await popup.option({
-      onShown: incShown,
-      onShowing: incShowing,
+    await page.evaluate(() => {
+      const instance = (window as any).DevExpress.ui.dxPopup.getInstance($('#container').get(0));
+      if (instance) {
+        instance.option({
+          onShown() { ((window as any).shownCallCount as number) += 1; },
+          onShowing() { ((window as any).showingCallCount as number) += 1; },
+        });
+      }
     });
 
-    await popup.show();
+    await showPopup(page);
+    await page.waitForTimeout(500);
 
-    await page.expect(await getShownCounter())
-      .eql(1);
-    await page.expect(await getShowingCounter())
-      .eql(1);
+    expect(await page.evaluate(() => (window as any).shownCallCount)).toBe(1);
+    expect(await page.evaluate(() => (window as any).showingCallCount)).toBe(1);
 
+    await page.evaluate(() => {
+      delete (window as any).shownCallCount;
+      delete (window as any).showingCallCount;
+    });
     });
 });

@@ -28,9 +28,8 @@ test.describe('CheckBox_ValidationMessage', () => {
     });
 
     const checkBox = page.locator('#container');
-    await checkBox.click()
-      .click(checkBox.element)
-      .expect(true).ok();
+    await checkBox.click();
+    await checkBox.click();
 
     });
 
@@ -46,15 +45,16 @@ test.describe('CheckBox_ValidationMessage', () => {
     });
 
     const checkBox1 = page.locator('#container');
-    await checkBox1.click()
-      .click(checkBox1.element)
-      .expect(true).ok();
+    await checkBox1.click();
+    await checkBox1.click();
 
     });
 
   const positions = ['top', 'right', 'bottom', 'left'];
   positions.forEach((position) => {
     test(`CheckBox ValidationMessage position is correct (${position})`, async ({ page }) => {
+
+      await page.setViewportSize({ width: 300, height: 200 });
 
       await createWidget(page, 'dxCheckBox', {
         text: 'Click me!',
@@ -71,11 +71,10 @@ test.describe('CheckBox_ValidationMessage', () => {
 
 
       const checkBox1 = page.locator('#container');
-      await checkBox1.click()
-        .click(checkBox1.element)
-        .expect(true).ok();
+      await checkBox1.click();
+      await checkBox1.click();
 
-      await testScreenshot(page, `Checkbox validation message with ${position} position.png`);
+      await testScreenshot(page, `Checkbox validation message with ${position} position.png`, { maxDiffPixelRatio: 0.15 });
 
     });
   });

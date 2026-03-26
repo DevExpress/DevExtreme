@@ -10,6 +10,7 @@ export {
   testScreenshot,
 } from './themeUtils';
 export {
+  addCaptionTo,
   appendElementTo,
   getStyleAttribute,
   insertStylesheetRulesToPage,
@@ -69,6 +70,8 @@ export {
   DateRangeBox,
   DateRangeBoxPopup,
   DateBoxHelper,
+  CalendarHelper,
+  CalendarViewHelper,
 } from './dateRangeBox';
 export { Chat } from './chat';
 export {

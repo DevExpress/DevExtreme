@@ -56,7 +56,7 @@ test.describe('CardView - HeaderPanel Visual', () => {
       columnChooser: { enabled: true },
     });
 
-    await page.locator('.dx-cardview-headers .dx-cardview-column-chooser-link').click();
+    await page.locator('.dx-cardview-headers .dx-link').click();
 
     await testScreenshot(page, 'card-view-column-chooser-opened-on-empty-header-panel-link-click.png', {
       element: page.locator('#container'),

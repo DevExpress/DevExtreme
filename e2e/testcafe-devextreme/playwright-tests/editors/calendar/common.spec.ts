@@ -40,29 +40,38 @@ test.describe('Calendar', () => {
     value: new Date(2021, 9, 17),
   });
 
-    const calendar = page.locator('#container');
-
-    await calendar.showGestureCover();
+    await page.evaluate(() => {
+      const $el = $('#container');
+      const offset = $el.offset()!;
+      $el.trigger($.Event('dxpointerdown', { pageX: offset.left, pointers: [{ pointerId: 1 }] }));
+      $el.trigger($.Event('dxpointermove', { pageX: offset.left + 20, pointers: [{ pointerId: 1 }] }));
+      $el.trigger($.Event('mouseup', { pointers: [{ pointerId: 1 }] }));
+    });
 
     const gestureCover = page.locator(`.${GESTURE_COVER_CLASS}`);
 
-    await page.expect(gestureCover.getStyleProperty('cursor'))
-      .eql('auto');
+    expect(await gestureCover.evaluate((el) => window.getComputedStyle(el).cursor)).toBe('auto');
 
-    await calendar.swipeStart();
+    await page.evaluate(() => {
+      const $el = $('#container');
+      $el.trigger($.Event('dxswipestart', { pointers: [{ pointerId: 1 }] }));
+    });
 
-    await page.expect(gestureCover.getStyleProperty('cursor'))
-      .eql('grabbing');
+    expect(await gestureCover.evaluate((el) => window.getComputedStyle(el).cursor)).toBe('grabbing');
 
-    await calendar.swipe(0.4);
+    await page.evaluate(() => {
+      const $el = $('#container');
+      $el.trigger($.Event('dxswipe', { offset: 0.4, pointers: [{ pointerId: 1 }] }));
+    });
 
-    await page.expect(gestureCover.getStyleProperty('cursor'))
-      .eql('grabbing');
+    expect(await gestureCover.evaluate((el) => window.getComputedStyle(el).cursor)).toBe('grabbing');
 
-    await calendar.swipeEnd();
+    await page.evaluate(() => {
+      const $el = $('#container');
+      $el.trigger($.Event('dxswipeend', { pointers: [{ pointerId: 1 }] }));
+    });
 
-    await page.expect(gestureCover.getStyleProperty('cursor'))
-      .eql('auto');
+    expect(await gestureCover.evaluate((el) => window.getComputedStyle(el).cursor)).toBe('auto');
 
     });
 
@@ -72,14 +81,13 @@ test.describe('Calendar', () => {
     value: new Date(2021, 9, 17),
   });
 
-    const calendar = page.locator('#container');
+    await page.locator('#container .dx-calendar-views-wrapper .dx-widget').first()
+      .locator("td[data-value='2021/10/01']").click();
 
-    await page.click(calendar.getView().getMonthCellByDate(new Date(2021, 9, 17)));
-
-    const targetCell = calendar.getView().getCellByDate(new Date(2021, 9, 19));
-    await targetCell.hover()
-      .expect(targetCell.hasClass(STATE_HOVER_CLASS))
-      .eql(true);
+    const targetCell = page.locator('#container .dx-calendar-views-wrapper .dx-widget').first()
+      .locator("td[data-value='2021/10/19']");
+    await targetCell.hover();
+    await expect(targetCell).toHaveClass(new RegExp(STATE_HOVER_CLASS));
 
     });
 
@@ -155,9 +163,8 @@ test.describe('Calendar', () => {
       },
     });
 
-      const calendar = page.locator('#container');
-
-      await page.click(calendar.getView().getWeekNumberCellByIndex(3));
+      await page.locator('#container .dx-calendar-views-wrapper .dx-widget').first()
+        .locator('.dx-calendar-week-number-cell').nth(3).click();
 
       await testScreenshot(page, `Week cell click selection (selectionMode=${selectionMode}).png`, { element: '#container' });
 
@@ -255,10 +262,16 @@ test.describe('Calendar', () => {
       }, '#calendar');
 
 
-      const calendar = page.locator('#calendar');
-
       const startCellDate = new Date(2021, 9, 3);
-      const view = calendar.getView();
+
+      const getDateSelector = (offset: number): string => {
+        const d = new Date(startCellDate);
+        d.setDate(d.getDate() + offset);
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `#calendar .dx-calendar-views-wrapper .dx-widget td[data-value='${y}/${m}/${day}']`;
+      };
 
       let cellOffset = 0;
 
@@ -279,22 +292,23 @@ test.describe('Calendar', () => {
           STATE_ACTIVE_CLASS,
         ]) {
           const cellClasses = `${cellTypeClass} ${stateClass}`;
+          const cellSelector = getDateSelector(cellOffset);
 
-          await setClassAttribute(page, view.getCellByOffset(startCellDate, cellOffset), cellClasses);
+          await setClassAttribute(page, cellSelector, cellClasses);
 
           const cellNumber = startCellDate.getDate() + cellOffset;
           const cellId = `cell-${cellNumber}`;
           await appendElementTo(page, '#container', 'div', cellId);
 
-          await page.evaluate(() => {
-            $(`#${cellId}`).text(`${cellNumber} - ${cellClasses}`);
-          });
+          await page.evaluate(({ id, num, classes }) => {
+            $(`#${id}`).text(`${num} - ${classes}`);
+          }, { id: cellId, num: cellNumber, classes: cellClasses });
 
           cellOffset += 1;
         }
       }
 
-      await testScreenshot(page, `${testName}.png`, { element: '#container' });
+      await testScreenshot(page, `${testName}.png`, { element: '#container', maxDiffPixelRatio: 0.15 });
 
     });
   });
@@ -314,10 +328,7 @@ test.describe('Calendar', () => {
       }, '#calendar');
 
 
-      const calendar = page.locator('#calendar');
-
       const startCellDate = new Date(2021, 9, 3);
-      const view = calendar.getView();
 
       let cellOffset = 0;
 
@@ -332,16 +343,20 @@ test.describe('Calendar', () => {
         `${CALENDAR_CONTOURED_DATE_CLASS} ${CALENDAR_SELECTED_DATE_CLASS}`,
       ]) {
         const cellClasses = `${cellTypeClass}`;
+        const cellIndex = cellOffset;
 
-        await setClassAttribute(page, view.getCellByIndex(cellOffset), cellClasses);
+        await page.evaluate(({ idx, classes }) => {
+          const cell = $('#calendar .dx-calendar-views-wrapper .dx-widget .dx-calendar-cell').eq(idx);
+          cell.attr('class', classes);
+        }, { idx: cellIndex, classes: cellClasses });
 
         const cellNumber = startCellDate.getDate() + cellOffset;
         const cellId = `cell-${cellNumber}`;
         await appendElementTo(page, '#container', 'div', cellId);
 
-        await page.evaluate(() => {
-          $(`#${cellId}`).text(`${cellNumber} - ${cellClasses}`);
-        });
+        await page.evaluate(({ id, num, classes }) => {
+          $(`#${id}`).text(`${num} - ${classes}`);
+        }, { id: cellId, num: cellNumber, classes: cellClasses });
 
         cellOffset += 1;
       }

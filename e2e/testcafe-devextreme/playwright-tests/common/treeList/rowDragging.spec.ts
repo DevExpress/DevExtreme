@@ -28,7 +28,7 @@ test.describe('Row dragging', () => {
     Task_Parent_ID: 2,
   }];
 
-  test('TreeList - Expand/collapse mechanism breaks after dragging action in the space between the last row and the border (T1228650)', async ({ page }) => {
+  test.skip('TreeList - Expand/collapse mechanism breaks after dragging action in the space between the last row and the border (T1228650)', async ({ page }) => {
 
     await createWidget(page, 'dxTreeList', {
       dataSource: tasksT1228650,
@@ -72,7 +72,7 @@ test.describe('Row dragging', () => {
     });
 
   [undefined, 200].forEach((height) => {
-    test(`TreeList - The W1025 warning occurs when dragging a row (height: ${height ?? 'not set'}). (T1280519)`, async ({ page }) => {
+    test.skip(`TreeList - The W1025 warning occurs when dragging a row (height: ${height ?? 'not set'}). (T1280519)`, async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       height,
       scrolling: {

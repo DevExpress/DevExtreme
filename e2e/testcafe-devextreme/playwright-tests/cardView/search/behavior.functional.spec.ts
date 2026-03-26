@@ -29,7 +29,7 @@ test.describe('CardView - SearchPanel Behavior', () => {
     const cards = page.locator('.dx-cardview-card');
     await expect(cards).toHaveCount(4);
 
-    const input = page.locator('.dx-cardview-search .dx-texteditor-input');
+    const input = page.locator('.dx-cardview-search-panel .dx-texteditor-input');
     await input.fill('rt');
     await expect(cards).toHaveCount(2);
 

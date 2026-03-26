@@ -45,7 +45,7 @@ test.describe('Calendar keyboard navigation', () => {
 
     await page.keyboard.press('Tab');
 
-    const todayButton = page.locator('#container .dx-button-today');
+    const todayButton = page.locator('#container .dx-calendar-today-button');
     await expect(todayButton).toHaveClass(/dx-state-focused/);
 
     await page.keyboard.press('Enter');
@@ -111,7 +111,7 @@ test.describe('Calendar keyboard navigation', () => {
     expect(await page.evaluate(() => (window as any).onFocusOutCounter)).toBe(0);
 
     await page.keyboard.press('Tab');
-    const todayButton = page.locator('#container .dx-button-today');
+    const todayButton = page.locator('#container .dx-calendar-today-button');
     await expect(todayButton).toHaveClass(/dx-state-focused/);
     expect(await page.evaluate(() => (window as any).onFocusInCounter)).toBe(1);
     expect(await page.evaluate(() => (window as any).onFocusOutCounter)).toBe(0);

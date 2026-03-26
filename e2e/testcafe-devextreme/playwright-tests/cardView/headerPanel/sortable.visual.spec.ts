@@ -32,10 +32,10 @@ test.describe('CardView - HeaderPanel Sortable Visual', () => {
       ],
     });
 
-    const headerPanel = page.locator('.dx-cardview-header-panel');
+    const headerPanel = page.locator('.dx-cardview-headers');
     await expect(headerPanel).toBeVisible();
 
-    const firstItem = headerPanel.locator('.dx-cardview-header-panel-item').first();
+    const firstItem = headerPanel.locator('.dx-cardview-header-item').first();
     const box = await firstItem.boundingBox();
     if (box) {
       await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);

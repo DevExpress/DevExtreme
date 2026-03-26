@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { createWidget, testScreenshot, appendElementTo, setStyleAttribute, insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../playwright-helpers';
 import path from 'path';
+import Guid from 'devextreme/core/guid';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
 
@@ -28,7 +29,7 @@ test.describe('DateBox_Label', () => {
       for (const labelMode of visibleLabelModes) {
         const id = `${`dx${new Guid()}`}`;
 
-        await appendElementTo(page, '#container', 'div', id, { });
+        await appendElementTo(page, '#container', 'div', id);
 
         await createWidget(page, 'dxDateBox', {
           label: 'qwerty QWERTY 1234567890',
@@ -56,7 +57,7 @@ test.describe('DateBox_Label', () => {
         for (const isValid of [true, false]) {
           const id = `${`dx${new Guid()}`}`;
 
-          await appendElementTo(page, '#container', 'div', id, { });
+          await appendElementTo(page, '#container', 'div', id);
 
           await createWidget(page, 'dxDateBox', {
             value: new Date(2021, 9, 17),

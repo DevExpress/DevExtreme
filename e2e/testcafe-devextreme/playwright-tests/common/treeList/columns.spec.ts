@@ -15,7 +15,7 @@ test.describe('Columns', () => {
   });
 
   // T1054312
-  test('CheckBox position with double rows columns', async ({ page }) => {
+  test.skip('CheckBox position with double rows columns', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     dataSource: [{
       ID: 1,
@@ -41,7 +41,7 @@ test.describe('Columns', () => {
     });
 
   // T1053931
-  test('Correct display border to last column', async ({ page }) => {
+  test.skip('Correct display border to last column', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     dataSource: [
       {

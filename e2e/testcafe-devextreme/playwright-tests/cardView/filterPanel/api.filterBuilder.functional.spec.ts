@@ -27,8 +27,8 @@ test.describe('CardView - FilterBuilder API', () => {
       filterBuilder: { height: 500 },
     });
 
-    await page.locator('.dx-cardview-filter-panel .dx-icon-filter').click();
-    await page.waitForSelector('.dx-filterbuilder-popup');
+    await page.locator('.dx-datagrid-filter-panel .dx-icon-filter').click();
+    await page.waitForSelector('.dx-popup-wrapper:has(.dx-filterbuilder)');
 
     const fbHeight = await page.locator('.dx-filterbuilder').evaluate(el => el.clientHeight);
     expect(fbHeight).toBe(500);
@@ -54,8 +54,8 @@ test.describe('CardView - FilterBuilder API', () => {
       filterBuilder: { hint: 'Test' },
     });
 
-    await page.locator('.dx-cardview-filter-panel .dx-icon-filter').click();
-    await page.waitForSelector('.dx-filterbuilder-popup');
+    await page.locator('.dx-datagrid-filter-panel .dx-icon-filter').click();
+    await page.waitForSelector('.dx-popup-wrapper:has(.dx-filterbuilder)');
 
     const hint = await page.locator('.dx-filterbuilder').getAttribute('title');
     expect(hint).toBe('Test');

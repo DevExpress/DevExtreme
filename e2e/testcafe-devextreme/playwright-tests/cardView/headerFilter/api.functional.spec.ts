@@ -22,7 +22,7 @@ test.describe('HeaderFilter.API.Functional', () => {
       height: 600,
     });
 
-    const filterIcon = page.locator('.dx-header-filter');
+    const filterIcon = page.locator('.dx-header-filter-icon');
     await expect(filterIcon).not.toBeVisible();
 
     await page.evaluate(() => {

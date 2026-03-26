@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, PivotGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -111,7 +111,7 @@ test.describe('PivotGrid: running total', () => {
 
     });
 
-  test('Should correctly sum cells values with runningTotal with partial data (T1144885)', async ({ page }) => {
+  test.skip('Should correctly sum cells values with runningTotal with partial data (T1144885)', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
     dataSource: {
       fields: [

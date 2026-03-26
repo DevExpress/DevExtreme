@@ -26,7 +26,7 @@ test.describe('HeaderFilter.Visual', () => {
       height: 600,
     });
 
-    await page.locator('.dx-header-filter').first().click();
+    await page.locator('.dx-header-filter-icon').first().click();
 
     await testScreenshot(page, 'card-view_header-filter_popup-with-list.png', {
       element: page.locator('#container'),
@@ -45,7 +45,7 @@ test.describe('HeaderFilter.Visual', () => {
       height: 600,
     });
 
-    await page.locator('.dx-header-filter').first().click();
+    await page.locator('.dx-header-filter-icon').first().click();
 
     await testScreenshot(page, 'card-view_header-filter_popup-with-search.png', {
       element: page.locator('#container'),

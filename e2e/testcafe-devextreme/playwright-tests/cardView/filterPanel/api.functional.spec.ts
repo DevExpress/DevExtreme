@@ -24,7 +24,7 @@ test.describe('CardView - FilterPanel API', () => {
       filterValue: ['title', '=', 'Mr.'],
     });
 
-    const filterPanel = page.locator('.dx-cardview-filter-panel');
+    const filterPanel = page.locator('.dx-datagrid-filter-panel');
     await expect(filterPanel).not.toBeVisible();
 
     await page.evaluate(() => {

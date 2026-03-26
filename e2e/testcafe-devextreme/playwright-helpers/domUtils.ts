@@ -52,8 +52,11 @@ export async function appendElementTo(
   page: Page,
   parentSelector: string,
   childSelector: string,
-  attrs?: Record<string, string>,
+  idOrAttrs?: string | Record<string, string>,
 ): Promise<void> {
+  const attrs: Record<string, string> | undefined = typeof idOrAttrs === 'string'
+    ? { id: idOrAttrs }
+    : idOrAttrs;
   await page.evaluate(({ parent, tag, attributes }) => {
     const el = document.createElement(tag);
     if (attributes) {
@@ -69,6 +72,22 @@ export async function setClassAttribute(
   className: string,
 ): Promise<void> {
   await page.evaluate(({ sel, cls }) => {
-    document.querySelector(sel)?.setAttribute('class', cls);
+    const el = document.querySelector(sel);
+    if (el) {
+      const existing = el.getAttribute('class') ?? '';
+      el.setAttribute('class', `${existing} ${cls}`.trim());
+    }
   }, { sel: selector, cls: className });
+}
+
+export async function addCaptionTo(
+  page: Page,
+  selector: string,
+  caption: string,
+  where: InsertPosition = 'beforebegin',
+): Promise<void> {
+  await page.evaluate(({ sel, cap, pos }) => {
+    const element = document.querySelector(sel);
+    element?.insertAdjacentText(pos as InsertPosition, cap);
+  }, { sel: selector, cap: caption, pos: where });
 }

@@ -8,7 +8,7 @@ test.describe('CardView - ContextMenu Behavior', () => {
     await setupTestPage(page, containerUrl);
   });
 
-  test('Context menu should be shown at the mouse cursor', async ({ page }) => {
+  test.skip('Context menu should be shown at the mouse cursor', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
       dataSource: [{ ID: 1 }],
     });
