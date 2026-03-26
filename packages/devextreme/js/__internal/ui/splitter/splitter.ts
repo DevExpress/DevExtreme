@@ -726,17 +726,37 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
       direction,
     );
 
+    this._recalculateLayout(collapsedDelta, paneIndex);
+  }
+
+  _recalculateLayout(delta: number, paneIndex: number | undefined): void {
     this._itemRestrictions.forEach((pane) => {
-      pane.maxSize = undefined;
       pane.resizable = undefined;
     });
 
-    this._layout = getNextLayout(
-      this.getLayout(),
-      collapsedDelta,
+    const currentLayout = this.getLayout();
+
+    let newLayout = getNextLayout(
+      currentLayout,
+      delta,
       paneIndex,
       this._itemRestrictions,
     );
+
+    if (newLayout === currentLayout) {
+      this._itemRestrictions.forEach((pane) => {
+        pane.maxSize = undefined;
+      });
+
+      newLayout = getNextLayout(
+        currentLayout,
+        delta,
+        paneIndex,
+        this._itemRestrictions,
+      );
+    }
+
+    this._layout = newLayout;
 
     this._applyStylesFromLayout(this.getLayout());
     this._updateItemSizes();
@@ -846,22 +866,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
       this._collapseDirection,
     );
 
-    this._itemRestrictions.forEach((pane) => {
-      if (item.collapsed) {
-        pane.maxSize = undefined;
-      }
-      pane.resizable = undefined;
-    });
-
-    this._layout = getNextLayout(
-      this.getLayout(),
-      collapsedDelta,
-      this._activeResizeHandleIndex,
-      this._itemRestrictions,
-    );
-
-    this._applyStylesFromLayout(this.getLayout());
-    this._updateItemSizes();
+    this._recalculateLayout(collapsedDelta, this._activeResizeHandleIndex);
 
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
