@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, appendElementTo } from '../../../playwright-helpers';
+import { createWidget, appendElementTo, ScrollView } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -39,13 +39,13 @@ test.describe('ScrollView', () => {
           }, '#scrollView');
 
 
-          const scrollView = new ScrollView('#scrollView', { direction });
+          const scrollView = new ScrollView(page, '#scrollView', { direction });
 
-          await expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseLeave);
-          await hover(scrollView.getContainer());
-          await expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseEnter);
+          await expect(await scrollView.isScrollbarVisible(direction)).toBe(scrollBarVisibleAfterMouseLeave);
+          await scrollView.getContainer().hover();
+          await expect(await scrollView.isScrollbarVisible(direction)).toBe(scrollBarVisibleAfterMouseEnter);
           await page.locator('body').click();
-          await expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseLeave);
+          await expect(await scrollView.isScrollbarVisible(direction)).toBe(scrollBarVisibleAfterMouseLeave);
 
     });
       });

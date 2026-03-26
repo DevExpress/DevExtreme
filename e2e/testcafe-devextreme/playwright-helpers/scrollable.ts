@@ -47,6 +47,15 @@ export class Scrollable {
     );
   }
 
+  async scrollToElement(elementSelector: string): Promise<void> {
+    await this.page.evaluate(
+      ({ sel, elemSel }) => {
+        ($(sel) as any).dxScrollable('instance').scrollToElement($(elemSel)[0]);
+      },
+      { sel: this.selector, elemSel: elementSelector },
+    );
+  }
+
   async scrollTop(): Promise<number> {
     return this.page.evaluate(
       ({ sel }) => ($(sel) as any).dxScrollable('instance').scrollTop(),
@@ -57,6 +66,71 @@ export class Scrollable {
   async scrollLeft(): Promise<number> {
     return this.page.evaluate(
       ({ sel }) => ($(sel) as any).dxScrollable('instance').scrollLeft(),
+      { sel: this.selector },
+    );
+  }
+
+  async isScrollbarVisible(direction: 'horizontal' | 'vertical' = 'vertical'): Promise<boolean> {
+    const cls = direction === 'horizontal' ? CLASS.scrollbar : CLASS.scrollbarVertical;
+    return this.page.evaluate(
+      ({ sel, scrollbarCls }) => {
+        const scrollbarTrack = document.querySelector(`${sel} .${scrollbarCls}`);
+        if (!scrollbarTrack) return false;
+        const scrollThumb = scrollbarTrack.querySelector('.dx-scrollable-scroll');
+        if (!scrollThumb) return false;
+        return !scrollThumb.classList.contains('dx-state-invisible');
+      },
+      { sel: this.selector, scrollbarCls: cls },
+    );
+  }
+
+  readonly hScrollbar: null = null;
+
+  async setContainerCssWidth(width: number): Promise<void> {
+    await this.page.evaluate(
+      ({ sel, w }) => {
+        const el = document.querySelector(sel) as HTMLElement | null;
+        if (el) el.style.width = `${w}px`;
+        const inst = ($(sel) as any).dxScrollable('instance');
+        inst.option('width', w);
+        inst.update();
+      },
+      { sel: this.selector, w: width },
+    );
+  }
+
+  async update(): Promise<void> {
+    await this.page.evaluate(
+      ({ sel }) => {
+        ($(sel) as any).dxScrollable('instance').update();
+      },
+      { sel: this.selector },
+    );
+  }
+
+  async scrollOffset(): Promise<{ left: number; top: number }> {
+    return this.page.evaluate(
+      ({ sel }) => {
+        const inst = ($(sel) as any).dxScrollable('instance');
+        return inst.scrollOffset();
+      },
+      { sel: this.selector },
+    );
+  }
+
+  async getMaxScrollOffset(): Promise<{ horizontal: number; vertical: number }> {
+    return this.page.evaluate(
+      ({ sel }) => {
+        const inst = ($(sel) as any).dxScrollable('instance');
+        const scrollWidth = inst.scrollWidth();
+        const clientWidth = inst.clientWidth();
+        const scrollHeight = inst.scrollHeight();
+        const clientHeight = inst.clientHeight();
+        return {
+          horizontal: Math.max(0, scrollWidth - clientWidth),
+          vertical: Math.max(0, scrollHeight - clientHeight),
+        };
+      },
       { sel: this.selector },
     );
   }

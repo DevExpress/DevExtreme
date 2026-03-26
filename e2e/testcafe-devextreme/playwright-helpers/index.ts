@@ -11,9 +11,11 @@ export {
 } from './themeUtils';
 export {
   addCaptionTo,
+  addFocusableElementBefore,
   appendElementTo,
   getStyleAttribute,
   insertStylesheetRulesToPage,
+  removeAttribute,
   removeStylesheetRulesFromPage,
   setAttribute,
   setClassAttribute,
