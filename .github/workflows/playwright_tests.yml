@@ -76,9 +76,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # DIAGNOSTIC: only one test to debug viewport/scrollbar issue
         ARGS: [
-          { componentFolder: "scheduler/common/_diagnostic.spec.ts", name: "diagnostic" },
+          { componentFolder: "scheduler/common", name: "scheduler / common (1/3)", shard: "1/3" },
+          { componentFolder: "scheduler/common", name: "scheduler / common (2/3)", shard: "2/3" },
+          { componentFolder: "scheduler/common", name: "scheduler / common (3/3)", shard: "3/3" },
+          { componentFolder: "scheduler/timezones", name: "scheduler / timezones" },
+          { componentFolder: "scheduler/viewOffset", name: "scheduler / viewOffset" },
+          { componentFolder: "dataGrid/common", name: "dataGrid / common (1/2)", shard: "1/2" },
+          { componentFolder: "dataGrid/common", name: "dataGrid / common (2/2)", shard: "2/2" },
+          { componentFolder: "dataGrid/sticky", name: "dataGrid / sticky" },
+          { componentFolder: "common", name: "common (1/2)", shard: "1/2" },
+          { componentFolder: "common", name: "common (2/2)", shard: "2/2" },
+          { componentFolder: "editors", name: "editors (1/2)", shard: "1/2" },
+          { componentFolder: "editors", name: "editors (2/2)", shard: "2/2" },
+          { componentFolder: "navigation", name: "navigation" },
+          { componentFolder: "cardView", name: "cardView" },
+          { componentFolder: "accessibility", name: "accessibility" },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 30
