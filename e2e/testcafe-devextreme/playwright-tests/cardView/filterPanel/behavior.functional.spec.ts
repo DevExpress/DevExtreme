@@ -4,6 +4,15 @@ import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
 
+const baseData = [
+  { id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' },
+  { id: 2, title: 'Mrs.', name: 'Olivia', lastName: 'Peyton' },
+  { id: 3, title: 'Mr.', name: 'Robert', lastName: 'Reagan' },
+  { id: 4, title: 'Mr.', name: 'Greta', lastName: 'Sims' },
+];
+
+const baseColumns = [{ dataField: 'id' }, { dataField: 'title' }, { dataField: 'name' }, { dataField: 'lastName' }];
+
 test.describe('CardView - FilterPanel Behavior', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
@@ -14,12 +23,29 @@ test.describe('CardView - FilterPanel Behavior', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
+  test('filterEnabled checkbox switches the filter by click', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: baseData,
+      columns: baseColumns,
+      filterPanel: { visible: true, filterEnabled: false },
+      filterValue: ['title', '=', 'Mr.'],
+    });
+
+    const cards = page.locator('.dx-cardview-card');
+    await expect(cards).toHaveCount(4);
+
+    const checkbox = page.locator('.dx-datagrid-filter-panel .dx-checkbox');
+    await checkbox.click();
+    await expect(cards).toHaveCount(3);
+
+    await checkbox.click();
+    await expect(cards).toHaveCount(4);
+  });
+
   test('FilterIcon opens popup by click', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
-      dataSource: [
-        { id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' },
-      ],
-      columns: [{ dataField: 'id' }, { dataField: 'title' }, { dataField: 'name' }, { dataField: 'lastName' }],
+      dataSource: [{ id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' }],
+      columns: baseColumns,
       filterPanel: { visible: true },
     });
 
@@ -32,10 +58,8 @@ test.describe('CardView - FilterPanel Behavior', () => {
 
   test('FilterText opens popup by click', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
-      dataSource: [
-        { id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' },
-      ],
-      columns: [{ dataField: 'id' }, { dataField: 'title' }, { dataField: 'name' }, { dataField: 'lastName' }],
+      dataSource: [{ id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' }],
+      columns: baseColumns,
       filterPanel: { visible: true },
     });
 
@@ -48,13 +72,8 @@ test.describe('CardView - FilterPanel Behavior', () => {
 
   test('ClearFilter button clears filter by click', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
-      dataSource: [
-        { id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' },
-        { id: 2, title: 'Mrs.', name: 'Olivia', lastName: 'Peyton' },
-        { id: 3, title: 'Mr.', name: 'Robert', lastName: 'Reagan' },
-        { id: 4, title: 'Mr.', name: 'Greta', lastName: 'Sims' },
-      ],
-      columns: [{ dataField: 'id' }, { dataField: 'title' }, { dataField: 'name' }, { dataField: 'lastName' }],
+      dataSource: baseData,
+      columns: baseColumns,
       filterPanel: { visible: true },
       filterValue: ['title', '=', 'Mr.'],
     });
@@ -65,5 +84,23 @@ test.describe('CardView - FilterPanel Behavior', () => {
       return ($('#container') as any).dxCardView('instance').option('filterValue');
     });
     expect(filterValue).toBeNull();
+  });
+
+  test('Focus returns to FilterIcon after FilterPopup is closed', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: baseData,
+      columns: baseColumns,
+      filterPanel: { visible: true },
+    });
+
+    await page.locator('.dx-datagrid-filter-panel .dx-icon-filter').click();
+    const popup = page.locator('.dx-popup-wrapper:has(.dx-filterbuilder)');
+    await expect(popup).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(popup).not.toBeVisible();
+
+    const filterIcon = page.locator('.dx-datagrid-filter-panel .dx-icon-filter');
+    await expect(filterIcon).toBeFocused();
   });
 });

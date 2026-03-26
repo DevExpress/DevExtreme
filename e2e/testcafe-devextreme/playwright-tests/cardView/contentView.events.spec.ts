@@ -26,6 +26,36 @@ const CONFIG = {
     window.dxCardViewEventTest.onCardPrepared ??= [];
     window.dxCardViewEventTest.onCardPrepared.push(e);
   },
+  onFieldCaptionClick(e) {
+    window.dxCardViewEventTest ??= {};
+    window.dxCardViewEventTest.onFieldCaptionClick ??= [];
+    window.dxCardViewEventTest.onFieldCaptionClick.push(e);
+  },
+  onFieldCaptionDblClick(e) {
+    window.dxCardViewEventTest ??= {};
+    window.dxCardViewEventTest.onFieldCaptionDblClick ??= [];
+    window.dxCardViewEventTest.onFieldCaptionDblClick.push(e);
+  },
+  onFieldCaptionPrepared(e) {
+    window.dxCardViewEventTest ??= {};
+    window.dxCardViewEventTest.onFieldCaptionPrepared ??= [];
+    window.dxCardViewEventTest.onFieldCaptionPrepared.push(e);
+  },
+  onFieldValueClick(e) {
+    window.dxCardViewEventTest ??= {};
+    window.dxCardViewEventTest.onFieldValueClick ??= [];
+    window.dxCardViewEventTest.onFieldValueClick.push(e);
+  },
+  onFieldValueDblClick(e) {
+    window.dxCardViewEventTest ??= {};
+    window.dxCardViewEventTest.onFieldValueDblClick ??= [];
+    window.dxCardViewEventTest.onFieldValueDblClick.push(e);
+  },
+  onFieldValuePrepared(e) {
+    window.dxCardViewEventTest ??= {};
+    window.dxCardViewEventTest.onFieldValuePrepared ??= [];
+    window.dxCardViewEventTest.onFieldValuePrepared.push(e);
+  },
   onDisposing() {
     delete window.dxCardViewEventTest;
   },
@@ -59,5 +89,55 @@ test.describe('CardView - ContentView - events', () => {
 
     const count = await page.evaluate(() => (window as any).dxCardViewEventTest?.onCardPrepared?.length);
     expect(count).toBe(5);
+  });
+
+  test('onFieldCaptionClick', async ({ page }) => {
+    await createWidget(page, 'dxCardView', CONFIG);
+
+    await page.locator('.dx-cardview-card').first().locator('.dx-cardview-field-caption').first().click();
+
+    const count = await page.evaluate(() => (window as any).dxCardViewEventTest?.onFieldCaptionClick?.length);
+    expect(count).toBe(1);
+  });
+
+  test('onFieldCaptionDblClick', async ({ page }) => {
+    await createWidget(page, 'dxCardView', CONFIG);
+
+    await page.locator('.dx-cardview-card').first().locator('.dx-cardview-field-caption').first().dblclick();
+
+    const count = await page.evaluate(() => (window as any).dxCardViewEventTest?.onFieldCaptionDblClick?.length);
+    expect(count).toBe(1);
+  });
+
+  test('onFieldCaptionPrepared', async ({ page }) => {
+    await createWidget(page, 'dxCardView', CONFIG);
+
+    const count = await page.evaluate(() => (window as any).dxCardViewEventTest?.onFieldCaptionPrepared?.length);
+    expect(count).toBe(15);
+  });
+
+  test('onFieldValueClick', async ({ page }) => {
+    await createWidget(page, 'dxCardView', CONFIG);
+
+    await page.locator('.dx-cardview-card').first().locator('.dx-cardview-field-value').first().click();
+
+    const count = await page.evaluate(() => (window as any).dxCardViewEventTest?.onFieldValueClick?.length);
+    expect(count).toBe(1);
+  });
+
+  test('onFieldValueDblClick', async ({ page }) => {
+    await createWidget(page, 'dxCardView', CONFIG);
+
+    await page.locator('.dx-cardview-card').first().locator('.dx-cardview-field-value').first().dblclick();
+
+    const count = await page.evaluate(() => (window as any).dxCardViewEventTest?.onFieldValueDblClick?.length);
+    expect(count).toBe(1);
+  });
+
+  test('onFieldValuePrepared', async ({ page }) => {
+    await createWidget(page, 'dxCardView', CONFIG);
+
+    const count = await page.evaluate(() => (window as any).dxCardViewEventTest?.onFieldValuePrepared?.length);
+    expect(count).toBe(15);
   });
 });

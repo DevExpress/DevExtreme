@@ -164,4 +164,35 @@ test.describe('CardView - SearchPanel API', () => {
     await expect(cards).toHaveCount(2);
     await expect(highlights).toHaveCount(0);
   });
+
+  test('searchPanel.highlightCaseSensitive API', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [
+        { id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' },
+        { id: 2, title: 'Mrs.', name: 'Olivia', lastName: 'Peyton' },
+        { id: 3, title: 'Mr.', name: 'Robert', lastName: 'Reagan' },
+        { id: 4, title: 'Mr.', name: 'Greta', lastName: 'Sims' },
+      ],
+      columns: [{ dataField: 'id' }, { dataField: 'title' }, { dataField: 'name' }, { dataField: 'lastName' }],
+      searchPanel: { visible: true, highlightCaseSensitive: true },
+    });
+
+    const cards = page.locator('.dx-cardview-card');
+    const input = page.locator('.dx-cardview-search-panel .dx-texteditor-input');
+    await input.fill('rt');
+    await expect(cards).toHaveCount(2);
+
+    const highlights = page.locator('.dx-cardview-card').first().locator('.dx-highlight-text');
+    await expect(highlights).toHaveCount(1);
+
+    await input.fill('RT');
+    await expect(cards).toHaveCount(2);
+    await expect(highlights).toHaveCount(0);
+
+    await page.evaluate(() => {
+      ($('#container') as any).dxCardView('instance').option('searchPanel.highlightCaseSensitive', false);
+    });
+
+    await expect(highlights).toHaveCount(1);
+  });
 });

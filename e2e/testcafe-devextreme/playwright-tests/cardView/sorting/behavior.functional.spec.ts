@@ -60,6 +60,145 @@ test.describe('CardView - Sorting Behavior - Functional', () => {
     expect(newFirstValue).toBe('str_3');
   });
 
+  (
+    [
+      ['none', false, false, false, [undefined, undefined]],
+      ['single', false, false, false, ['desc', undefined]],
+      ['multiple', false, false, false, ['desc', 0]],
+      ['multiple', false, true, false, [undefined, undefined]],
+      ['multiple', false, false, true, [undefined, undefined]],
+    ] as [string, boolean, boolean, boolean, [string | undefined, number | undefined]][]
+  ).forEach(([mode, shift, ctrl, meta, [titleSortOrder, titleSortIndex]]) => {
+    test(`Change sorting of sorted item in ${mode} mode with shift=${shift}, ctrl=${ctrl}, meta=${meta}`, async ({ page }) => {
+      await createWidget(page, 'dxCardView', {
+        dataSource: data,
+        sorting: { mode },
+        columns: [{ dataField: 'title' }, { dataField: 'name' }],
+      });
+
+      const titleHeader = page.locator('.dx-cardview-headers .dx-cardview-header-item').first();
+      await titleHeader.click();
+      await titleHeader.click({ modifiers: [...(shift ? ['Shift'] : []), ...(ctrl ? ['Control'] : []), ...(meta ? ['Meta'] : [])] as any });
+
+      const actualSortOrder = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('title', 'sortOrder'));
+      const actualSortIndex = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('title', 'sortIndex'));
+
+      expect(actualSortOrder).toBe(titleSortOrder);
+      expect(actualSortIndex).toBe(titleSortIndex);
+    });
+  });
+
+  (
+    [
+      ['none', false, false, false, [undefined, undefined], [undefined, undefined]],
+      ['single', false, false, false, [undefined, undefined], ['asc', undefined]],
+      ['multiple', false, false, false, [undefined, undefined], ['asc', 0]],
+      ['multiple', true, false, false, ['asc', 0], ['asc', 1]],
+      ['multiple', false, true, false, ['asc', 0], [undefined, undefined]],
+    ] as [string, boolean, boolean, boolean, [string | undefined, number | undefined], [string | undefined, number | undefined]][]
+  ).forEach(([mode, shift, ctrl, meta, [titleSortOrder, titleSortIndex], [nameSortOrder, nameSortIndex]]) => {
+    test(`Change sorting of neighbour non sorted item in ${mode} mode with shift=${shift}, ctrl=${ctrl}, meta=${meta}`, async ({ page }) => {
+      await createWidget(page, 'dxCardView', {
+        dataSource: data,
+        sorting: { mode },
+        columns: [{ dataField: 'title' }, { dataField: 'name' }],
+      });
+
+      const titleHeader = page.locator('.dx-cardview-headers .dx-cardview-header-item').first();
+      const nameHeader = page.locator('.dx-cardview-headers .dx-cardview-header-item').nth(1);
+      await titleHeader.click();
+      await nameHeader.click({ modifiers: [...(shift ? ['Shift'] : []), ...(ctrl ? ['Control'] : []), ...(meta ? ['Meta'] : [])] as any });
+
+      const actualTitleSortOrder = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('title', 'sortOrder'));
+      const actualTitleSortIndex = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('title', 'sortIndex'));
+      const actualNameSortOrder = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('name', 'sortOrder'));
+      const actualNameSortIndex = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('name', 'sortIndex'));
+
+      expect(actualTitleSortOrder).toBe(titleSortOrder);
+      expect(actualTitleSortIndex).toBe(titleSortIndex);
+      expect(actualNameSortOrder).toBe(nameSortOrder);
+      expect(actualNameSortIndex).toBe(nameSortIndex);
+    });
+  });
+
+  const SORT_ASCENDING_MENUITEM_INDEX = 0;
+  const SORT_DESCENDING_MENUITEM_INDEX = 1;
+  const CLEAR_SORTING_MENUITEM_INDEX = 2;
+
+  (
+    [
+      ['none', SORT_ASCENDING_MENUITEM_INDEX, [undefined, undefined]],
+      ['none', SORT_DESCENDING_MENUITEM_INDEX, [undefined, undefined]],
+      ['none', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined]],
+      ['single', SORT_ASCENDING_MENUITEM_INDEX, ['asc', undefined]],
+      ['single', SORT_DESCENDING_MENUITEM_INDEX, ['desc', undefined]],
+      ['single', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined]],
+      ['multiple', SORT_ASCENDING_MENUITEM_INDEX, ['asc', 0]],
+      ['multiple', SORT_DESCENDING_MENUITEM_INDEX, ['desc', 0]],
+      ['multiple', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined]],
+    ] as [string, number, [string | undefined, number | undefined]][]
+  ).forEach(([mode, menuItemIndex, [titleSortOrder, titleSortIndex]]) => {
+    test(`Change sorting of sorted item in ${mode} mode with ${menuItemIndex} context menu item`, async ({ page }) => {
+      await createWidget(page, 'dxCardView', {
+        dataSource: data,
+        sorting: { mode },
+        columns: [{ dataField: 'title' }, { dataField: 'name' }],
+      });
+
+      const titleHeader = page.locator('.dx-cardview-headers .dx-cardview-header-item').first();
+      await titleHeader.click({ button: 'right' });
+      await page.locator('.dx-context-menu .dx-menu-item').nth(menuItemIndex).click();
+
+      const actualSortOrder = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('title', 'sortOrder'));
+      const actualSortIndex = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('title', 'sortIndex'));
+
+      expect(actualSortOrder).toBe(titleSortOrder);
+      expect(actualSortIndex).toBe(titleSortIndex);
+
+      await page.locator('body').click();
+      await expect(page.locator('.dx-context-menu')).not.toBeVisible();
+    });
+  });
+
+  (
+    [
+      ['none', SORT_ASCENDING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
+      ['single', SORT_ASCENDING_MENUITEM_INDEX, [undefined, undefined], ['asc', undefined]],
+      ['single', SORT_DESCENDING_MENUITEM_INDEX, [undefined, undefined], ['desc', undefined]],
+      ['single', CLEAR_SORTING_MENUITEM_INDEX, ['asc', undefined], [undefined, undefined]],
+      ['multiple', SORT_ASCENDING_MENUITEM_INDEX, ['asc', 0], ['asc', 1]],
+      ['multiple', SORT_DESCENDING_MENUITEM_INDEX, ['asc', 0], ['desc', 1]],
+      ['multiple', CLEAR_SORTING_MENUITEM_INDEX, ['asc', 0], [undefined, undefined]],
+    ] as [string, number, [string | undefined, number | undefined], [string | undefined, number | undefined]][]
+  ).forEach(([mode, menuItemIndex, [titleSortOrder, titleSortIndex], [nameSortOrder, nameSortIndex]]) => {
+    test(`Change sorting of neighbour non sorted item in ${mode} mode with ${menuItemIndex} context menu item`, async ({ page }) => {
+      await createWidget(page, 'dxCardView', {
+        dataSource: data,
+        sorting: { mode },
+        columns: [{ dataField: 'title' }, { dataField: 'name' }],
+      });
+
+      const titleHeader = page.locator('.dx-cardview-headers .dx-cardview-header-item').first();
+      const nameHeader = page.locator('.dx-cardview-headers .dx-cardview-header-item').nth(1);
+      await titleHeader.click();
+      await nameHeader.click({ button: 'right' });
+      await page.locator('.dx-context-menu .dx-menu-item').nth(menuItemIndex).click();
+
+      const actualTitleSortOrder = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('title', 'sortOrder'));
+      const actualTitleSortIndex = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('title', 'sortIndex'));
+      const actualNameSortOrder = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('name', 'sortOrder'));
+      const actualNameSortIndex = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('name', 'sortIndex'));
+
+      expect(actualTitleSortOrder).toBe(titleSortOrder);
+      expect(actualTitleSortIndex).toBe(titleSortIndex);
+      expect(actualNameSortOrder).toBe(nameSortOrder);
+      expect(actualNameSortIndex).toBe(nameSortIndex);
+
+      await page.locator('body').click();
+      await expect(page.locator('.dx-context-menu')).not.toBeVisible();
+    });
+  });
+
   test('Change sorting via context menu', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
       dataSource: data,

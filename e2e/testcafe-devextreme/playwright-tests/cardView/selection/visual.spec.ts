@@ -38,6 +38,21 @@ test.describe('Selection.Visual', () => {
     });
   });
 
+  test("Multiple mode with Select All/Deselect All and showCheckBoxesMode = 'none'", async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: selectionData,
+      cardHeader: { captionExpr: () => 'title' },
+      columns: ['A', 'B', 'C'],
+      keyExpr: 'id',
+      height: 700,
+      selection: { mode: 'multiple', showCheckBoxesMode: 'none', allowSelectAll: true },
+    });
+
+    await testScreenshot(page, 'card-view_miltiple_selection_with_showCheckBoxesMode_=_none.png', {
+      element: page.locator('#container'),
+    });
+  });
+
   test("Multiple mode with Select All/Deselect All and showCheckBoxesMode = 'always'", async ({ page }) => {
     await createWidget(page, 'dxCardView', {
       dataSource: selectionData,
@@ -49,6 +64,80 @@ test.describe('Selection.Visual', () => {
     });
 
     await testScreenshot(page, 'card-view_miltiple_selection_with_showCheckBoxesMode_=_always.png', {
+      element: page.locator('#container'),
+    });
+  });
+
+  test("Multiple mode with Select All/Deselect All and showCheckBoxesMode = 'onClick'", async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: selectionData,
+      cardHeader: { captionExpr: () => 'title' },
+      columns: ['A', 'B', 'C'],
+      keyExpr: 'id',
+      height: 700,
+      selection: { mode: 'multiple', showCheckBoxesMode: 'onClick', allowSelectAll: true },
+    });
+
+    await testScreenshot(page, 'card-view_miltiple_selection_with_showCheckBoxesMode_=_onClick_1.png', {
+      element: page.locator('#container'),
+    });
+
+    await page.locator('.dx-cardview-card').first().locator('.dx-cardview-card-toolbar-item').first().hover();
+
+    await testScreenshot(page, 'card-view_miltiple_selection_with_showCheckBoxesMode_=_onClick_2.png', {
+      element: page.locator('#container'),
+    });
+  });
+
+  test("Multiple mode with a selected card and showCheckBoxesMode = 'onClick'", async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: selectionData,
+      cardHeader: { captionExpr: () => 'title' },
+      columns: ['A', 'B', 'C'],
+      selectedCardKeys: [0],
+      keyExpr: 'id',
+      height: 700,
+      selection: { mode: 'multiple', showCheckBoxesMode: 'onClick', allowSelectAll: true },
+    });
+
+    await testScreenshot(page, 'card-view_checkbox_visibility_with_showCheckBoxesMode_=_onClick.png', {
+      element: page.locator('#container'),
+    });
+  });
+
+  test("Multiple mode with selected cards and showCheckBoxesMode = 'onClick'", async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: selectionData,
+      cardHeader: { captionExpr: () => 'title' },
+      columns: ['A', 'B', 'C'],
+      selectedCardKeys: [0, 1],
+      keyExpr: 'id',
+      height: 700,
+      selection: { mode: 'multiple', showCheckBoxesMode: 'onClick', allowSelectAll: true },
+    });
+
+    await testScreenshot(page, 'card-view_checkboxes_visibility_with_showCheckBoxesMode_=_onClick.png', {
+      element: page.locator('#container'),
+    });
+  });
+
+  test("Multiple mode with Select All/Deselect All and showCheckBoxesMode = 'onLongTap'", async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: selectionData,
+      cardHeader: { captionExpr: () => 'title' },
+      columns: ['A', 'B', 'C'],
+      keyExpr: 'id',
+      height: 700,
+      selection: { mode: 'multiple', showCheckBoxesMode: 'onLongTap', allowSelectAll: true },
+    });
+
+    await testScreenshot(page, 'card-view_miltiple_selection_with_showCheckBoxesMode_=_onLongTap_1.png', {
+      element: page.locator('#container'),
+    });
+
+    await page.locator('.dx-cardview-card').first().dispatchEvent('dxhold');
+
+    await testScreenshot(page, 'card-view_miltiple_selection_with_showCheckBoxesMode_=_onLongTap_2.png', {
       element: page.locator('#container'),
     });
   });

@@ -20,4 +20,25 @@ test.describe('CardView - ContextMenu Behavior', () => {
       element: page.locator('#container'),
     });
   });
+
+  test('Context menu should be shown at center of the header item if shown with the keyboard', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ ID: 1 }],
+    });
+
+    const headerItem = page.locator('.dx-cardview-headers .dx-cardview-header-item').first();
+    const box = await headerItem.boundingBox();
+
+    await page.evaluate(([x, y]) => {
+      const element = document.querySelector('.dx-cardview-headers .dx-cardview-header-item');
+      const event = new MouseEvent('contextmenu');
+      Object.defineProperty(event, 'pageX', { value: x });
+      Object.defineProperty(event, 'pageY', { value: y });
+      element!.dispatchEvent(event);
+    }, [box!.x + box!.width / 2, box!.y + box!.height / 2]);
+
+    await testScreenshot(page, 'card-view_context-menu_keyboard_position.png', {
+      element: page.locator('#container'),
+    });
+  });
 });

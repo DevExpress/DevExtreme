@@ -38,6 +38,93 @@ test.describe('CardView - Sorting API Themes', () => {
     });
   });
 
+  test('ShowSortIndexes API', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: data,
+      height: 500,
+      sorting: { showSortIndexes: false },
+      columns: [
+        { dataField: 'id' },
+        { dataField: 'title', sortOrder: 'desc', sortIndex: 1 },
+        { dataField: 'name', sortOrder: 'asc', sortIndex: 0 },
+        { dataField: 'lastName' },
+      ],
+    });
+
+    await testScreenshot(page, 'cardview_show_sort_indexes_api.png', {
+      element: page.locator('#container'),
+    });
+  });
+
+  test('AllowSorting API', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: data,
+      height: 500,
+      sorting: { showSortIndexes: false },
+      columns: [
+        { dataField: 'id' },
+        { dataField: 'title', sortOrder: 'desc', sortIndex: 1, allowSorting: false },
+        { dataField: 'name', sortOrder: 'asc', sortIndex: 0 },
+        { dataField: 'lastName' },
+      ],
+    });
+
+    const titleHeader = page.locator('.dx-cardview-headers .dx-cardview-header-item').nth(1);
+    await titleHeader.click();
+
+    await testScreenshot(page, 'cardview_allow_sorting_api.png', {
+      element: page.locator('#container'),
+    });
+  });
+
+  test('CalculateSortValue API', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: data,
+      height: 500,
+      sorting: { showSortIndexes: false },
+      columns: [
+        { dataField: 'id' },
+        {
+          dataField: 'title',
+          sortOrder: 'asc',
+          calculateSortValue: 'name',
+        },
+        { dataField: 'name' },
+        { dataField: 'lastName' },
+      ],
+    });
+
+    await testScreenshot(page, 'cardview_calculate_sort_value_is_filed_api.png', {
+      element: page.locator('#container'),
+    });
+  });
+
+  test('SortingMethod API', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: data,
+      height: 500,
+      sorting: { showSortIndexes: false },
+      columns: [
+        { dataField: 'id' },
+        {
+          dataField: 'title',
+          sortOrder: 'asc',
+          sortingMethod(value1, value2) {
+            if (value1 === 'Mr.' && value2 !== 'Mr.') return 1;
+            if (value1 !== 'Mr.' && value2 === 'Mr.') return -1;
+            return value1.localeCompare(value2);
+          },
+        },
+        { dataField: 'name' },
+        { dataField: 'lastName' },
+      ],
+    });
+
+    await testScreenshot(page, 'cardview_sorting_method_api.png', {
+      element: page.locator('#container'),
+    });
+  });
+
   test('Default render', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
       dataSource: data,

@@ -22,7 +22,7 @@ test.describe('Selection.Functional', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Single mode: select a first card -> select a second card -> deselect a second card', async ({ page }) => {
+  test('Single mode: select a first card -> select a second card -> deselect a second card', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
       dataSource: selectionData,
       cardHeader: { captionExpr: () => 'title' },
