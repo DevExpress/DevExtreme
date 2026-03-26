@@ -21,16 +21,15 @@ test.describe('Runner machine timezone checks', () => {
   });
 
   checks.forEach(([timezone, expectedResult]) => {
-    test(`${timezone} check`, async ({ page }) => {
-      const browserTimezone = await page.evaluate(
-        () => Intl.DateTimeFormat().resolvedOptions().timeZone,
-      );
-      test.skip(browserTimezone !== timezone, `Skipping: machine timezone is ${browserTimezone}, expected ${timezone}`);
+    test.describe(`timezone: ${timezone}`, () => {
+      test.use({ timezoneId: timezone });
 
-      const dateFromBrowser = await page.evaluate(
-        () => new Date(2024, 0, 1, 10).toString(),
-      );
-      expect(dateFromBrowser).toBe(expectedResult);
+      test(`${timezone} check`, async ({ page }) => {
+        const dateFromBrowser = await page.evaluate(
+          () => new Date(2024, 0, 1, 10).toString(),
+        );
+        expect(dateFromBrowser).toBe(expectedResult);
+      });
     });
   });
 });
