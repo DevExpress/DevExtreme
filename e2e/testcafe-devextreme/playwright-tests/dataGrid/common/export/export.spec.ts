@@ -15,18 +15,52 @@ test.describe('Export', () => {
   });
   const GRID_CONTAINER = '#container';
 
-  test.skip('Warning should be thrown in console if exporting is enabled, but onExporting is not specified', async ({ page }) => {
-    // TODO: Playwright migration - TestCafe API remnants (t.getBrowserConsoleMessages)
+  test('Warning should be thrown in console if exporting is enabled, but onExporting is not specified', async ({ page }) => {
+    const warnings: string[] = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'warning') warnings.push(msg.text());
+    });
+
     await createWidget(page, 'dxDataGrid', {
-        dataSource: [],
-        export: {
-          enabled: true,
-        },
-      });
+      dataSource: [],
+      export: {
+        enabled: true,
+      },
+    });
 
-    const consoleMessages = await t.getBrowserConsoleMessages();
-    const isWarningExist = !!consoleMessages?.warn.find((message) => message.startsWith('W1024'));
+    const isWarningExist = warnings.some((message) => message.startsWith('W1024'));
+    expect(isWarningExist).toBeTruthy();
+  });
 
-    expect(await isWarningExist).toBeTruthy();
+  test('Warning should be thrown in console if exporting is enabled dynamically with \'export\' option, but onExporting is not specified', async ({ page }) => {
+    const warnings: string[] = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'warning') warnings.push(msg.text());
+    });
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [],
+    });
+
+    await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').option('export', { enabled: true }));
+
+    const isWarningExist = warnings.some((message) => message.startsWith('W1024'));
+    expect(isWarningExist).toBeTruthy();
+  });
+
+  test('Warning should be thrown in console if exporting is enabled dynamically with \'export.enabled\' option, but onExporting is not specified', async ({ page }) => {
+    const warnings: string[] = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'warning') warnings.push(msg.text());
+    });
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [],
+    });
+
+    await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').option('export.enabled', true));
+
+    const isWarningExist = warnings.some((message) => message.startsWith('W1024'));
+    expect(isWarningExist).toBeTruthy();
   });
 });

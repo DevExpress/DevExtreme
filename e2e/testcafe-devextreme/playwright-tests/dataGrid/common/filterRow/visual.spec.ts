@@ -65,4 +65,56 @@ test.describe('FilterRow', () => {
 
     await testScreenshot(page, 'filter-row-overlay.png');
   });
+
+  test('Focus overlay should be visible in filter row when focusedRowEnabled is enabled', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { ID: 1, Field: 'Item 1' },
+        { ID: 2, Field: 'Item 2' },
+        { ID: 3, Field: 'Item 3' },
+      ],
+      keyExpr: 'ID',
+      focusedRowEnabled: true,
+      filterRow: { visible: true },
+      showBorders: true,
+      columns: ['ID', 'Field'],
+    });
+
+    await page.locator('.dx-data-row').first().locator('td').first().click();
+
+    const filterInput = page.locator('.dx-datagrid-filter-row td').nth(1).locator('input');
+    await filterInput.click();
+
+    await expect(filterInput).toBeFocused();
+    await testScreenshot(page, 'filter-row-focus-overlay.png', { element: page.locator('#container') });
+  });
+
+  test('DataGrid - The `between` filter dropdown sticks to the viewport edge during horizontal scrolling (T1280071)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { ID: 1, Text: 'Item 1' },
+        { ID: 2, Text: '' },
+        { ID: 3, Text: 'Item 3' },
+      ],
+      keyExpr: 'ID',
+      filterRow: {
+        visible: true,
+      },
+      scrolling: {
+        useNative: true,
+      },
+      columnWidth: 400,
+      width: 500,
+    });
+
+    const filterMenuButton = page.locator('.dx-datagrid-filter-row td').first().locator('.dx-menu-item');
+    await filterMenuButton.click();
+
+    const betweenItem = page.locator('.dx-menu-item-text').filter({ hasText: 'Between' });
+    await betweenItem.click();
+
+    await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').getScrollable().scrollTo({ x: 999 }));
+
+    await testScreenshot(page, 'filter-row-filter-range-hide-on-scroll.png');
+  });
 });

@@ -15,20 +15,37 @@ test.describe('Sticky columns - Row Selection', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
-  // visual: generic.light
-  // visual: material.blue.light
-  // visual: fluent.blue.light
+  const defaultDataSource = [
+    { ID: 1, OrderNumber: 35703, OrderDate: '2014-04-10', SaleAmount: 11800, TotalAmount: 12175, Employee: 'Harv Mudd' },
+    { ID: 4, OrderNumber: 35711, OrderDate: '2014-01-12', SaleAmount: 16050, TotalAmount: 16550, Employee: 'Jim Packard' },
+    { ID: 5, OrderNumber: 35714, OrderDate: '2014-01-22', SaleAmount: 14750, TotalAmount: 15250, Employee: 'Harv Mudd' },
+    { ID: 7, OrderNumber: 35983, OrderDate: '2014-02-07', SaleAmount: 3725, TotalAmount: 3850, Employee: 'Todd Hoffman' },
+    { ID: 9, OrderNumber: 36987, OrderDate: '2014-03-11', SaleAmount: 14200, TotalAmount: 14800, Employee: 'Clark Morgan' },
+  ];
+
+  const defaultColumns = [
+    { dataField: 'OrderNumber', width: 130, fixed: true, fixedPosition: 'left' },
+    { dataField: 'OrderDate', dataType: 'date' },
+    { dataField: 'Employee' },
+    { dataField: 'SaleAmount', width: 160, alignment: 'right', format: 'currency' },
+    { dataField: 'TotalAmount', width: 160, alignment: 'right', format: 'currency', fixed: true, fixedPosition: 'right' },
+  ];
 
   test('The selected row should be displayed correctly when there are sticky columns (generic.light theme)', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
-        ...defaultConfig,
-        selection: {
-          mode: 'multiple',
-        },
-        selectedRowKeys: [4],
-      });
+      width: 700,
+      height: 500,
+      dataSource: defaultDataSource,
+      columnAutoWidth: true,
+      keyExpr: 'ID',
+      columns: defaultColumns,
+      selection: {
+        mode: 'multiple',
+      },
+      selectedRowKeys: [4],
+    });
 
-      expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+    expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
 
     await testScreenshot(page, 'row_selection_with_sticky_columns_1.png', { element: page.locator('#container') });
 

@@ -64,4 +64,30 @@ test.describe('Sticky columns - Virtual Scrolling', () => {
 
     // assert
   });
+
+  test('Fixed columns should display correctly when horizontal scrolling', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(400, 15),
+      height: 700,
+      columnWidth: 100,
+      showColumnLines: true,
+      scrolling: {
+        mode: 'virtual',
+      },
+      customizeColumns(columns: any[]) {
+        columns[0].fixed = true;
+        columns[1].fixed = true;
+        columns[2].fixed = true;
+
+        columns[13].fixed = true;
+        columns[13].fixedPosition = 'sticky';
+      },
+    });
+
+    expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+
+    await page.evaluate((opts) => ($('#container') as any).dxDataGrid('instance').getScrollable().scrollTo(opts), { x: 10000 });
+
+    await testScreenshot(page, 'fixed_columns_with_horizontal_scrolling.png', { element: page.locator('#container') });
+  });
 });

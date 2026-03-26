@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, DataGrid } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -54,5 +54,52 @@ test.describe('Sorting', () => {
 
     await expect(dataGrid.dataRows).toHaveCount(6);
     await expect(dataGrid.getErrorRow()).not.toBeVisible();
+  });
+
+  test('Multiple sorting alphabetical icons should be correct in Fluent Theme (T1243658)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ ID: 1, FirstName: 'John' }],
+      keyExpr: 'ID',
+      sorting: {
+        mode: 'multiple',
+      },
+      columns: [
+        {
+          dataField: 'FirstName',
+          sortOrder: 'asc',
+        },
+      ],
+    });
+
+    await page.locator('.dx-datagrid-headers').click({ button: 'right', position: { x: 10, y: 10 } });
+
+    await testScreenshot(page, 'datagrid-alphabetical-icons-should-be-correct.png');
+  });
+
+  test('Sorting and filtering should be applied correctly when they change at runtime (T1237863)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { ID: 1, FirstName: 'Bob', room: 1 },
+        { ID: 2, FirstName: 'Alex', room: 2 },
+        { ID: 3, FirstName: 'John', room: 1 },
+      ],
+      keyExpr: 'ID',
+      sorting: {
+        mode: 'multiple',
+      },
+    });
+
+    await expect(page.locator('.dx-datagrid').first()).toBeVisible();
+
+    await page.evaluate(() => {
+      const grid = ($('#container') as any).dxDataGrid('instance');
+      grid.option('columns[1].sortIndex', 0);
+      grid.option('columns[1].sortOrder', 'desc');
+      grid.option('filterValue', ['room', '=', '1']);
+    });
+
+    await expect(page.locator('.dx-datagrid').first()).toBeVisible();
+
+    await testScreenshot(page, 'T1237863_datagrid-sorting_and_filtering.png', { element: page.locator('#container') });
   });
 });
