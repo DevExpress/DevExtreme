@@ -35,7 +35,7 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import { createA11yStatusContainer } from './a11y_status/a11y_status_render';
 import { getA11yStatusText } from './a11y_status/a11y_status_text';
 import { AppointmentForm } from './appointment_popup/m_form';
-import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
+import { AppointmentPopup } from './appointment_popup/m_popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
 import NotifyScheduler from './base/m_widget_notify_scheduler';
 import { SchedulerHeader } from './header/m_header';
@@ -1532,12 +1532,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (isPopupEditing) {
       this.appointmentPopup.show(singleRawAppointment, {
-        isToolbarVisible: true,
-        action: ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
-        excludeInfo: {
-          sourceAppointment: rawAppointment,
-          updatedAppointment: appointment.source,
+        onDone: (newAppointment) => {
+          this.updateAppointment(rawAppointment, appointment.source);
+          return this.addAppointment(newAppointment);
         },
+        readOnly: false,
+        isToolbarVisible: true,
       });
       this.editAppointmentData = rawAppointment;
     } else {
@@ -1912,19 +1912,27 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (isCreateAppointment) {
       delete this.editAppointmentData; // TODO
-      this.editing.allowAdding && this.appointmentPopup.show(rawAppointment, {
-        isToolbarVisible: true,
-        action: ACTION_TO_APPOINTMENT.CREATE,
-      });
+      if (this.editing.allowAdding) {
+        this.appointmentPopup.show(rawAppointment, {
+          onDone: (appointment) => this.addAppointment(appointment),
+          readOnly: false,
+          isToolbarVisible: true,
+        });
+      }
     } else {
       const startDate = this._dataAccessors.get('startDate', newRawTargetedAppointment || rawAppointment);
 
       this.checkRecurringAppointment(rawAppointment, newTargetedAppointment, startDate, () => {
         this.editAppointmentData = rawAppointment; // TODO
 
+        const adapter = new AppointmentAdapter(rawAppointment, this._dataAccessors);
+        const isDisabled = Boolean(adapter.source) && adapter.disabled;
+        const readOnly = isDisabled || !this.editing.allowUpdating;
+
         this.appointmentPopup.show(rawAppointment, {
+          onDone: (appointment) => this.updateAppointment(rawAppointment, appointment),
+          readOnly,
           isToolbarVisible: this.editing.allowUpdating,
-          action: ACTION_TO_APPOINTMENT.UPDATE,
         });
       }, false, true);
     }

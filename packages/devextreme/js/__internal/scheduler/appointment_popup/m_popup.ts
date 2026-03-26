@@ -39,11 +39,11 @@ const POPUP_CONFIG = {
   _ignorePreventScrollEventsDeprecation: true,
 };
 
-export const ACTION_TO_APPOINTMENT = {
-  CREATE: 0,
-  UPDATE: 1,
-  EXCLUDE_FROM_SERIES: 2,
-};
+export interface AppointmentPopupConfig {
+  onDone: (appointment: Record<string, unknown>) => PromiseLike<unknown>;
+  readOnly: boolean;
+  isToolbarVisible: boolean;
+}
 
 export class AppointmentPopup {
   scheduler: any;
@@ -54,13 +54,18 @@ export class AppointmentPopup {
 
   state: any;
 
+  private config: AppointmentPopupConfig = {
+    onDone: () => Promise.resolve(),
+    readOnly: false,
+    isToolbarVisible: true,
+  };
+
   constructor(scheduler, form) {
     this.scheduler = scheduler;
     this.form = form;
     this.popup = null;
 
     this.state = {
-      action: null,
       lastEditData: null,
       saveChangesLocker: false,
       appointment: {
@@ -73,10 +78,9 @@ export class AppointmentPopup {
     return this.popup ? this.popup.option('visible') : false;
   }
 
-  show(appointment, config) {
+  show(appointment, config: AppointmentPopupConfig) {
     this.state.appointment.data = appointment;
-    this.state.action = config.action;
-    this.state.excludeInfo = config.excludeInfo;
+    this.config = config;
 
     if (!this.popup) {
       const popupConfig = this._createPopupConfig();
@@ -172,18 +176,8 @@ export class AppointmentPopup {
     this.form.create(this.triggerResize.bind(this), this.changeSize.bind(this), formData); // TODO
   }
 
-  _isReadOnly(rawAppointment) {
-    const appointment = this._createAppointmentAdapter(rawAppointment);
-
-    if (rawAppointment && appointment.disabled) {
-      return true;
-    }
-
-    if (this.state.action === ACTION_TO_APPOINTMENT.CREATE) {
-      return false;
-    }
-
-    return !this.scheduler.getEditingConfig().allowUpdating;
+  _isReadOnly() {
+    return this.config.readOnly;
   }
 
   _createAppointmentAdapter(rawAppointment) {
@@ -201,7 +195,7 @@ export class AppointmentPopup {
       .calculateDates(this.scheduler.getTimeZoneCalculator(), 'toAppointment')
       .source;
 
-    this.form.readOnly = this._isReadOnly(formData);
+    this.form.readOnly = this._isReadOnly();
     this.form.updateFormData(formData);
   }
 
@@ -262,20 +256,7 @@ export class AppointmentPopup {
       const appointment = clonedAdapter.source;
       delete appointment.repeat; // TODO
 
-      switch (this.state.action) {
-        case ACTION_TO_APPOINTMENT.CREATE:
-          this.scheduler.addAppointment(appointment).done(deferred.resolve);
-          break;
-        case ACTION_TO_APPOINTMENT.UPDATE:
-          this.scheduler.updateAppointment(this.state.appointment.data, appointment).done(deferred.resolve);
-          break;
-        case ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES:
-          this.scheduler.updateAppointment(this.state.excludeInfo.sourceAppointment, this.state.excludeInfo.updatedAppointment);
-          this.scheduler.addAppointment(appointment).done(deferred.resolve);
-          break;
-        default:
-          break;
-      }
+      when(this.config.onDone(appointment)).done(deferred.resolve);
 
       deferred.done(() => {
         hideLoading();
