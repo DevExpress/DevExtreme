@@ -36,7 +36,15 @@ export class ListItemCheckBox {
 
   get isFocused(): Promise<boolean> {
     return this.element.evaluate(
-      (el, cls) => el.classList.contains(cls),
+      (el, focusCls) => {
+        let node: Element | null = el;
+        while (node) {
+          if (node.classList.contains(focusCls)) return true;
+          if (node.classList.contains('dx-list-item') || node.classList.contains('dx-list-select-all')) break;
+          node = node.parentElement;
+        }
+        return false;
+      },
       CLASS.focused,
     );
   }

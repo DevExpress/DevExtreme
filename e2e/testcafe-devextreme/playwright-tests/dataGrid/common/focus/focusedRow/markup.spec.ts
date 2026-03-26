@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { createWidget, testScreenshot, insertStylesheetRulesToPage } from '../../../../../playwright-helpers';
 import path from 'path';
 
@@ -13,53 +13,55 @@ test.describe('Focused row - markup', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
-  // TODO: Enable multi-theming testcafe run in the future.
-  // visual: generic.light
-  // visual: material.blue.light
 
-  test.skip('markup - generic.light', async ({ page }) => {
-    // TODO: Playwright migration - TestCafe API remnants (firstCell.element, locator.fill on non-input)
+  test('markup - generic.light', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
-        keyExpr: 'id',
-        focusedRowEnabled: true,
-        editing: {
-          mode: 'batch',
-          allowUpdating: true,
-        },
-        dataSource: [{
-          id: 0,
-          dataA: 'dataA_1',
-          dataB: 'dataB_1',
-          dataC: 'dataC_1',
-        }, {
-          id: 1,
-          dataA: 'dataA_2',
-          dataB: 'dataB_2',
-          dataC: 'dataC_2',
-        }],
-        columns: [{
-          dataField: 'dataA',
-          validationRules: [{ type: 'required' }],
-        }, {
-          dataField: 'dataB',
-          validationRules: [{ type: 'required' }],
-        }, {
-          dataField: 'dataC',
-          validationRules: [{ type: 'required' }],
-        }],
-      });
+      keyExpr: 'id',
+      focusedRowEnabled: true,
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+      },
+      dataSource: [{
+        id: 0,
+        dataA: 'dataA_1',
+        dataB: 'dataB_1',
+        dataC: 'dataC_1',
+      }, {
+        id: 1,
+        dataA: 'dataA_2',
+        dataB: 'dataB_2',
+        dataC: 'dataC_2',
+      }],
+      columns: [{
+        dataField: 'dataA',
+        validationRules: [{ type: 'required' }],
+      }, {
+        dataField: 'dataB',
+        validationRules: [{ type: 'required' }],
+      }, {
+        dataField: 'dataC',
+        validationRules: [{ type: 'required' }],
+      }],
+    });
 
-      const firstCell = page.locator('.dx-data-row').nth(0).locator('td').nth(0);
+    const firstCell = page.locator('.dx-data-row').nth(0).locator('td').nth(0);
     const secondCell = page.locator('.dx-data-row').nth(0).locator('td').nth(1);
     const thirdCell = page.locator('.dx-data-row').nth(0).locator('td').nth(2);
 
-    await (firstCell.element).click();
-    await (firstCell.locator('.dx-editor-cell')).fill('TEST');
+    await firstCell.click();
+    await page.evaluate(() => {
+      const instance = ($('#container') as any).dxDataGrid('instance');
+      instance.cellValue(0, 0, 'TEST');
+    });
 
-    await (secondCell.element).click();
-    await (secondCell.locator('.dx-editor-cell')).fill(' ');
+    await secondCell.click();
+    await page.evaluate(() => {
+      const instance = ($('#container') as any).dxDataGrid('instance');
+      instance.cellValue(0, 1, ' ');
+    });
 
-    await (thirdCell.element).click();
+    await thirdCell.click();
 
     await testScreenshot(page, 'focused-row_markup.png', { element: page.locator('#container') });
   });

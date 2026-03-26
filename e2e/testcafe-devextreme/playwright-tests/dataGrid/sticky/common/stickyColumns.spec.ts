@@ -60,4 +60,28 @@ test.describe('FixedColumns', () => {
     await testScreenshot(page, 'simulated_scrollbar_with_sticky_columns_2.png', { element: page.locator('#container') });
   });
     // TODO: .after() block removed
+
+  test('Alternating rows should display correctly when there are fixed columns (generic.light theme)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(20, 15),
+      columnWidth: 100,
+      columnAutoWidth: true,
+      rowAlternationEnabled: true,
+      customizeColumns: (columns: any[]) => {
+        columns[5].fixed = true;
+        columns[5].fixedPosition = 'left';
+        columns[6].fixed = true;
+        columns[6].fixedPosition = 'left';
+
+        columns[8].fixed = true;
+        columns[8].fixedPosition = 'right';
+        columns[9].fixed = true;
+        columns[9].fixedPosition = 'right';
+      },
+    });
+
+    expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+
+    await testScreenshot(page, 'datagrid_row_alt_with_fixed_columns.png', { element: page.locator('#container') });
+  });
 });

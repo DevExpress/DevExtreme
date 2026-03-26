@@ -24,9 +24,8 @@ test.describe('Column chooser', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  ['dragAndDrop', 'select'].forEach((mode: any) => {
-    test.skip(`Column chooser screenshot in mode=${mode}`, async ({ page }) => {
-      // TODO: Playwright migration - strict mode violation: .dx-datagrid-column-chooser resolves to 2 elements
+  (['dragAndDrop', 'select'] as const).forEach((mode) => {
+    test(`Column chooser screenshot in mode=${mode}`, async ({ page }) => {
       await createWidget(page, 'dxDataGrid', {
         dataSource: getData(20, 3),
         height: 400,
@@ -50,7 +49,8 @@ test.describe('Column chooser', () => {
 
       await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').showColumnChooser());
 
-      expect(await page.locator('.dx-datagrid-column-chooser').isVisible()).toBeTruthy();
+      const columnChooser = page.locator('.dx-datagrid-column-chooser').last();
+      await expect(columnChooser).toBeVisible();
 
       await testScreenshot(page, `column-chooser-${mode}-mode.png`, { element: page.locator('#container') });
     });

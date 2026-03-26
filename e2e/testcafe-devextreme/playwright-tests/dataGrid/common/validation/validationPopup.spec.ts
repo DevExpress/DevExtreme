@@ -24,8 +24,7 @@ test.describe('Validation', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Validation popup screenshot', async ({ page }) => {
-    // TODO: Playwright migration - screenshot mismatch
+  test('Validation popup screenshot', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: getData(20, 2),
       height: 400,
@@ -46,15 +45,14 @@ test.describe('Validation', () => {
 
     const dataGrid = new DataGrid(page);
 
-    await page.setViewportSize({ width: 1280, height: 720 });
     await dataGrid.getDataCell(0, 0).click();
     await page.keyboard.press('Control+a');
     await page.keyboard.press('Backspace');
     await page.keyboard.press('Enter');
 
-    await testScreenshot(page, 'validation-popup.png', { element: page.locator('#container') });
-
     await expect(dataGrid.getRevertTooltip()).toBeVisible();
     await expect(dataGrid.getInvalidMessageTooltip()).toBeVisible();
+
+    await testScreenshot(page, 'validation-popup.png', { element: page.locator('#container') });
   });
 });

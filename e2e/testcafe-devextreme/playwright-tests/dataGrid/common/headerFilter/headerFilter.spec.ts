@@ -25,6 +25,24 @@ test.describe('Header Filter', () => {
   });
   const GRID_CONTAINER = '#container';
 
+  test('HeaderFilter popup screenshot', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(20, 2),
+      height: 400,
+      showBorders: true,
+      headerFilter: {
+        visible: true,
+      },
+    });
+
+    const filterIcon = page.locator('.dx-header-row').nth(0).locator('td').nth(0).locator('.dx-header-filter');
+    await filterIcon.click();
+
+    await expect(page.locator('.dx-header-filter-menu')).toBeVisible();
+
+    await testScreenshot(page, 'header-filter-popup.png', { element: page.locator(GRID_CONTAINER) });
+  });
+
   test.skip('Data should be filtered if (Blank) is selected in the header filter (T1257261)', async ({ page }) => {
     // TODO: Playwright migration - TestCafe API remnants (headerCell.getFilterIcon, new HeaderFilter, t.click)
     await createWidget(page, 'dxDataGrid', {
