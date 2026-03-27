@@ -429,6 +429,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this._appointments.option('items', this._layoutManager.generateViewModel());
         }
         break;
+      case 'snapToCellsMode':
+        this._appointments.option('items', []);
+        if (this.readyToRenderAppointments) {
+          this._appointments.option('items', this._layoutManager.generateViewModel());
+        }
+        break;
       case 'tabIndex':
       case 'focusStateEnabled':
         this.updateOption('header', name, value);
