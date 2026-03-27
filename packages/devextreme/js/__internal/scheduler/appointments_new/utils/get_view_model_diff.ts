@@ -130,12 +130,15 @@ export const getViewModelDiff = (
   appointmentDataSource: AppointmentDataSource,
 ): DiffItem[] => {
   const match = (a: Item, b: Item): boolean =>
+    // eslint-disable-next-line @stylistic/implicit-arrow-linebreak
     a.itemData === b.itemData && !isAppointmentDataChanged(b.itemData, appointmentDataSource);
 
   const equal = (a: Item, b: Item): boolean =>
+    // eslint-disable-next-line @stylistic/implicit-arrow-linebreak
     equalByValue(getObjectToCompare(a, true), getObjectToCompare(b, true));
 
   const canResize = (a: Item, b: Item): boolean =>
+    // eslint-disable-next-line @stylistic/implicit-arrow-linebreak
     equalByValue(getObjectToCompare(a, false), getObjectToCompare(b, false));
 
   const result = getArraysDiff({

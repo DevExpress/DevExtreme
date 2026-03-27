@@ -70,6 +70,7 @@ export class AppointmentCollector
 
   private applyElementAria(): void {
     const localizeDate = (date: Date): string =>
+      // eslint-disable-next-line @stylistic/implicit-arrow-linebreak
       `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
 
     const { targetedAppointmentData } = this.option();
