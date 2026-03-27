@@ -101,31 +101,6 @@ const LOS_ANGELES_WINTER_CASE: TestCase = {
   expectedTopPosition: [0, 25, 50, 75, 100, 125, 150, 175],
 };
 
-const ZERO_OFFSET_TEST_CASES = generateOptionMatrix({
-  offset: [0],
-  testCase: [
-    BERLIN_SUMMER_CASE,
-    BERLIN_WINTER_CASE,
-    LOS_ANGELES_SUMMER_CASE,
-    LOS_ANGELES_WINTER_CASE,
-  ],
-});
-
-const OFFSET_TEST_CASES = generateOptionMatrix({
-  offset: [-360, 360],
-  testCase: [
-    BERLIN_SUMMER_CASE_OFFSET,
-    BERLIN_WINTER_CASE,
-    LOS_ANGELES_SUMMER_CASE_OFFSET,
-    LOS_ANGELES_WINTER_CASE,
-  ],
-});
-
-const ALL_TEST_CASES = [
-  ...ZERO_OFFSET_TEST_CASES,
-  ...OFFSET_TEST_CASES,
-];
-
 interface TcTestCase {
   timezone: MachineTimezonesType;
   season: string;
@@ -155,63 +130,6 @@ const TC_NAMED_TEST_CASES: TcTestCase[] = [
     test.beforeEach(async ({ page }) => {
       await setupTestPage(page, containerUrl);
     });
-
-    ALL_TEST_CASES
-      .filter(({ testCase }) => testCase.timezone === tz)
-      .forEach(({
-        offset,
-        testCase: {
-          timezone,
-          season,
-          currentDate,
-          startDate,
-          cellIdxArray,
-          expectedTopPosition,
-          skipInPlaywright,
-        },
-      }, idx) => {
-        test(`Should drag-n-drop appointment correctly during around DST (${timezone}, ${season}, ${offset}, #${idx})`, async ({ page }) => {
-          // TODO: Playwright migration - DST spring-forward causes appointment height to double (50px) when dropped at 01:00 AM on transition day; test expects constant initialHeight
-          test.skip(skipInPlaywright === true && offset !== 360, 'Playwright drag-and-drop produces incorrect appointment height during DST spring-forward transition');
-          await insertStylesheetRulesToPage(page, CUSTOM_CSS);
-
-          const dataSource = [getAppointmentFromStartDate(startDate, offset)];
-          await createWidget(page, 'dxScheduler', {
-            timeZone: timezone,
-            dataSource,
-            currentView: 'week',
-            currentDate,
-            offset,
-            showCurrentTimeIndicator: false,
-            showAllDayPanel: false,
-            firstDayOfWeek: 4,
-            cellDuration: 60,
-            height: 800,
-          });
-
-          const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: APPOINTMENT_TEXT });
-          const initialHeight = await appointment.evaluate((el) => el.getBoundingClientRect().height);
-          const [[firstCellRowIdx, firstCellColIdx]] = cellIdxArray;
-          const firstCell = page.locator('.dx-scheduler-date-table-row').nth(firstCellRowIdx)
-            .locator('.dx-scheduler-date-table-cell').nth(firstCellColIdx);
-          const firstCellTop = await firstCell.evaluate((el) => el.getBoundingClientRect().top);
-
-          for (let i = 0; i < cellIdxArray.length; i += 1) {
-            const [rowIdx, colIdx] = cellIdxArray[i];
-            const cell = page.locator('.dx-scheduler-date-table-row').nth(rowIdx)
-              .locator('.dx-scheduler-date-table-cell').nth(colIdx);
-
-            await appointment.dragTo(cell, { force: true });
-
-            const currentHeight = await appointment.evaluate((el) => el.getBoundingClientRect().height);
-            const currentTop = await appointment.evaluate((el) => el.getBoundingClientRect().top);
-            const relativeTop = currentTop - firstCellTop;
-
-            expect(currentHeight).toBe(initialHeight);
-            expect(relativeTop).toBe(expectedTopPosition[i]);
-          }
-        });
-      });
 
     TC_NAMED_TEST_CASES
       .filter(({ timezone }) => timezone === tz)

@@ -21,8 +21,8 @@ test.describe('Scheduler: Layout Customization: Group Panel', () => {
     { type: 'timelineMonth', groupOrientation: 'vertical' },
   ];
 
-  [false, true].forEach((crossScrollingEnabled) => {
-    test(`Group panel customization should work (crossScrollingEnabled=${crossScrollingEnabled})`, async ({ page }) => {
+  test('Group panel customization should work', async ({ page }) => {
+    for (const crossScrollingEnabled of [false, true]) {
       await insertStylesheetRulesToPage(page, '#container .dx-scheduler-group-header { width: 200px;}');
 
       await createWidget(page, 'dxScheduler', {
@@ -66,6 +66,6 @@ test.describe('Scheduler: Layout Customization: Group Panel', () => {
           { element: page.locator('.dx-scheduler') },
         );
       }
-    });
+    }
   });
 });

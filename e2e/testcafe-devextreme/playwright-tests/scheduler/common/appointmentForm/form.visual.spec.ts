@@ -50,24 +50,24 @@ test.describe('Appointment Form: Main Form', () => {
     await setupTestPage(page, containerUrl);
   });
 
-  [
-    { isRecurringAppointment: false, isAllDay: true },
-    { isRecurringAppointment: false, isAllDay: false },
-    { isRecurringAppointment: true, isAllDay: true },
-    { isRecurringAppointment: true, isAllDay: false },
-  ].forEach(({ isRecurringAppointment, isAllDay }) => {
-    const appointment = {
-      text: 'Appointment',
-      startDate: new Date('2021-04-26T16:30:00.000Z'),
-      endDate: new Date('2021-04-26T18:30:00.000Z'),
-      allDay: isAllDay,
-      recurrenceRule: isRecurringAppointment ? 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10' : undefined,
-      assigneeId: [1, 2],
-      roomId: 1,
-      priorityId: 1,
-    };
+  test('appointment main form', async ({ page }) => {
+    for (const { isRecurringAppointment, isAllDay } of [
+      { isRecurringAppointment: false, isAllDay: true },
+      { isRecurringAppointment: false, isAllDay: false },
+      { isRecurringAppointment: true, isAllDay: true },
+      { isRecurringAppointment: true, isAllDay: false },
+    ]) {
+      const appointment = {
+        text: 'Appointment',
+        startDate: new Date('2021-04-26T16:30:00.000Z'),
+        endDate: new Date('2021-04-26T18:30:00.000Z'),
+        allDay: isAllDay,
+        recurrenceRule: isRecurringAppointment ? 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10' : undefined,
+        assigneeId: [1, 2],
+        roomId: 1,
+        priorityId: 1,
+      };
 
-    test(`appointment main form (recurring=${isRecurringAppointment},allDay=${isAllDay})`, async ({ page }) => {
       await page.setViewportSize({ width: 1500, height: 1500 });
 
       await createWidget(page, 'dxScheduler', {
@@ -84,9 +84,27 @@ test.describe('Appointment Form: Main Form', () => {
         `scheduler__appointment__main-form (recurring=${isRecurringAppointment},allDay=${isAllDay}).png`,
         { element: page.locator('.dx-popup-content') },
       );
-    });
+    }
+  });
 
-    test(`appointment main form with resources and timezones (recurring=${isRecurringAppointment},allDay=${isAllDay})`, async ({ page }) => {
+  test('appointment main form with resources and timezones', async ({ page }) => {
+    for (const { isRecurringAppointment, isAllDay } of [
+      { isRecurringAppointment: false, isAllDay: true },
+      { isRecurringAppointment: false, isAllDay: false },
+      { isRecurringAppointment: true, isAllDay: true },
+      { isRecurringAppointment: true, isAllDay: false },
+    ]) {
+      const appointment = {
+        text: 'Appointment',
+        startDate: new Date('2021-04-26T16:30:00.000Z'),
+        endDate: new Date('2021-04-26T18:30:00.000Z'),
+        allDay: isAllDay,
+        recurrenceRule: isRecurringAppointment ? 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10' : undefined,
+        assigneeId: [1, 2],
+        roomId: 1,
+        priorityId: 1,
+      };
+
       await page.setViewportSize({ width: 1500, height: 1500 });
 
       await createWidget(page, 'dxScheduler', {
@@ -107,7 +125,7 @@ test.describe('Appointment Form: Main Form', () => {
         `scheduler__appointment__main-form__with-resources-and-timezones (recurring=${isRecurringAppointment},allDay=${isAllDay}).png`,
         { element: page.locator('.dx-popup-content') },
       );
-    });
+    }
   });
 
   test('main form with resources that have icons', async ({ page }) => {

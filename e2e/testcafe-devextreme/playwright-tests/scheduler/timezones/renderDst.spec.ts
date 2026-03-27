@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
-import { createWidget, setupTestPage, getContainerUrl, insertStylesheetRulesToPage, testScreenshot, generateOptionMatrix } from '../../../playwright-helpers';
+import { createWidget, setupTestPage, getContainerUrl, insertStylesheetRulesToPage, testScreenshot } from '../../../playwright-helpers';
 
 const containerUrl = getContainerUrl(__dirname, '../../../tests/container.html');
 
@@ -65,139 +65,65 @@ const dayLocations: [MachineTimezonesType, string, string, Date][] = [
       await setupTestPage(page, containerUrl);
     });
 
-    generateOptionMatrix({
-      currentView: ['week'] as string[],
-      offset: [-360, 0, 360],
-      location: weekLocations.filter(([timezone]) => timezone === tz),
-    }).forEach(({
-      currentView,
-      offset,
-      location: [timezone, caseName, currentDate, startDate],
-    }) => {
-      const dataSource = generateAppointments(startDate, 60, 120);
-
-      test(`Should correctly render hourly appointments at DST (${timezone}, ${caseName}, offset: ${offset})`, async ({ page }) => {
-        await insertStylesheetRulesToPage(page, CUSTOM_CSS);
-        await createWidget(page, 'dxScheduler', {
-          timeZone: timezone,
-          dataSource,
-          currentView,
-          currentDate,
-          offset,
-          showCurrentTimeIndicator: false,
-          firstDayOfWeek: 4,
-          cellDuration: 60,
-          height: 800,
-        });
-
-        const workSpace = page.locator('.dx-scheduler-work-space');
-        const timezoneName = normalizeTimezoneName(timezone);
-        await testScreenshot(
-          page,
-          `${currentView}_usual-appts-render-dts_t-${timezoneName}-${caseName}_offset-${offset}.png`,
-          { element: workSpace },
-        );
-      });
-    });
-
     weekLocations.filter(([timezone]) => timezone === tz).forEach(([timezone, caseName, currentDate, startDate]) => {
-      const dataSource = generateAppointments(startDate, 60, 120);
-
       test(`Should correctly render hourly appointments at DST (${timezone}, ${caseName})`, async ({ page }) => {
         const currentView = 'week';
-        const offset = 0;
-        await insertStylesheetRulesToPage(page, CUSTOM_CSS);
-        await createWidget(page, 'dxScheduler', {
-          timeZone: timezone,
-          dataSource,
-          currentView,
-          currentDate,
-          offset,
-          showCurrentTimeIndicator: false,
-          firstDayOfWeek: 4,
-          cellDuration: 60,
-          height: 800,
-        });
+        for (const offset of [-360, 0, 360]) {
+          const dataSource = generateAppointments(startDate, 60, 120);
+          await insertStylesheetRulesToPage(page, CUSTOM_CSS);
+          await createWidget(page, 'dxScheduler', {
+            timeZone: timezone,
+            dataSource,
+            currentView,
+            currentDate,
+            offset,
+            showCurrentTimeIndicator: false,
+            firstDayOfWeek: 4,
+            cellDuration: 60,
+            height: 800,
+          });
 
-        const workSpace = page.locator('.dx-scheduler-work-space');
-        const timezoneName = normalizeTimezoneName(timezone);
-        await testScreenshot(
-          page,
-          `${currentView}_usual-appts-render-dts_t-${timezoneName}-${caseName}_offset-${offset}.png`,
-          { element: workSpace },
-        );
-      });
-    });
-
-    generateOptionMatrix({
-      currentView: ['day'] as string[],
-      offset: [-60, 0, 60],
-      location: dayLocations.filter(([timezone]) => timezone === tz),
-    }).forEach(({
-      currentView,
-      offset,
-      location: [timezone, caseName, currentDate, startDate],
-    }) => {
-      const dataSource = [
-        ...generateAppointments(startDate, 60, 5, 'A_'),
-        ...generateAppointments(startDate, 30, 10, 'B_'),
-      ];
-
-      test(`Should resolve appointment start cell correctly during DST (${timezone}, ${caseName}, offset: ${offset})`, async ({ page }) => {
-        await insertStylesheetRulesToPage(page, CUSTOM_CSS);
-        await createWidget(page, 'dxScheduler', {
-          timeZone: timezone,
-          dataSource,
-          currentView,
-          currentDate,
-          offset,
-          showCurrentTimeIndicator: false,
-          maxAppointmentsPerCell: 'unlimited',
-          firstDayOfWeek: 4,
-          cellDuration: 30,
-          height: 800,
-        });
-
-        const workSpace = page.locator('.dx-scheduler-work-space');
-        const timezoneName = normalizeTimezoneName(timezone);
-        await testScreenshot(
-          page,
-          `${currentView}_usual-appts-start-cell-dts_t-${timezoneName}-${caseName}_offset-${offset}.png`,
-          { element: workSpace },
-        );
+          const workSpace = page.locator('.dx-scheduler-work-space');
+          const timezoneName = normalizeTimezoneName(timezone);
+          await testScreenshot(
+            page,
+            `${currentView}_usual-appts-render-dts_t-${timezoneName}-${caseName}_offset-${offset}.png`,
+            { element: workSpace },
+          );
+        }
       });
     });
 
     dayLocations.filter(([timezone]) => timezone === tz).forEach(([timezone, caseName, currentDate, startDate]) => {
-      const dataSource = [
-        ...generateAppointments(startDate, 60, 5, 'A_'),
-        ...generateAppointments(startDate, 30, 10, 'B_'),
-      ];
-
       test(`Should resolve appointment start cell correctly during DST (${timezone}, ${caseName})`, async ({ page }) => {
         const currentView = 'day';
-        const offset = 0;
-        await insertStylesheetRulesToPage(page, CUSTOM_CSS);
-        await createWidget(page, 'dxScheduler', {
-          timeZone: timezone,
-          dataSource,
-          currentView,
-          currentDate,
-          offset,
-          showCurrentTimeIndicator: false,
-          maxAppointmentsPerCell: 'unlimited',
-          firstDayOfWeek: 4,
-          cellDuration: 30,
-          height: 800,
-        });
+        for (const offset of [-60, 0, 60]) {
+          const dataSource = [
+            ...generateAppointments(startDate, 60, 5, 'A_'),
+            ...generateAppointments(startDate, 30, 10, 'B_'),
+          ];
+          await insertStylesheetRulesToPage(page, CUSTOM_CSS);
+          await createWidget(page, 'dxScheduler', {
+            timeZone: timezone,
+            dataSource,
+            currentView,
+            currentDate,
+            offset,
+            showCurrentTimeIndicator: false,
+            maxAppointmentsPerCell: 'unlimited',
+            firstDayOfWeek: 4,
+            cellDuration: 30,
+            height: 800,
+          });
 
-        const workSpace = page.locator('.dx-scheduler-work-space');
-        const timezoneName = normalizeTimezoneName(timezone);
-        await testScreenshot(
-          page,
-          `${currentView}_usual-appts-start-cell-dts_t-${timezoneName}-${caseName}_offset-${offset}.png`,
-          { element: workSpace },
-        );
+          const workSpace = page.locator('.dx-scheduler-work-space');
+          const timezoneName = normalizeTimezoneName(timezone);
+          await testScreenshot(
+            page,
+            `${currentView}_usual-appts-start-cell-dts_t-${timezoneName}-${caseName}_offset-${offset}.png`,
+            { element: workSpace },
+          );
+        }
       });
     });
   });

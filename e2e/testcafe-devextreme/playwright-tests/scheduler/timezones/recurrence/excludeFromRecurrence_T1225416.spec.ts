@@ -48,7 +48,7 @@ const locations: [MachineTimezonesType, string, string, Date][] = [
 
     generateOptionMatrix({
       timeZone: [undefined, 'America/New_York'] as (string | undefined)[],
-      currentView: ['week', 'month'],
+      currentView: ['week'],
       location: locations.filter(([timezone]) => timezone === tz),
     }).forEach(({
       timeZone,

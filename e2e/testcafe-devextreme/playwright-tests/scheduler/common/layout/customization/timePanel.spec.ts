@@ -14,9 +14,9 @@ test.describe('Scheduler: Layout Customization: Time Panel', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  [false, true].forEach((crossScrollingEnabled) => {
-    ['week', 'agenda'].forEach((view) => {
-      test(`Time panel customization should work in ${view} view (crossScrollingEnabled=${crossScrollingEnabled})`, async ({ page }) => {
+  ['week', 'agenda'].forEach((view) => {
+    test(`Time panel customization should work in ${view} view`, async ({ page }) => {
+      for (const crossScrollingEnabled of [false, true]) {
         await insertStylesheetRulesToPage(page, '#container .dx-scheduler-time-panel { width: 150px;}');
 
         await createWidget(page, 'dxScheduler', {
@@ -75,7 +75,7 @@ test.describe('Scheduler: Layout Customization: Time Panel', () => {
           `custom-time-panel-in-${view}-cross-scrolling=${crossScrollingEnabled}.png`,
           { element: '#container' },
         );
-      });
+      }
     });
   });
 });

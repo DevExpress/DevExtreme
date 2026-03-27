@@ -21,8 +21,8 @@ test.describe('Scheduler: Layout Customization: Header Panel', () => {
     { type: 'timelineMonth', groupOrientation: 'horizontal' },
   ];
 
-  [false, true].forEach((crossScrollingEnabled) => {
-    test(`Header panel customization should work (crossScrollingEnabled=${crossScrollingEnabled})`, async ({ page }) => {
+  test('Header panel customization should work', async ({ page }) => {
+    for (const crossScrollingEnabled of [false, true]) {
       await insertStylesheetRulesToPage(page, '#container .dx-scheduler-group-header, #container .dx-scheduler-header-panel-cell { height: 100px; }');
 
       await createWidget(page, 'dxScheduler', {
@@ -66,6 +66,6 @@ test.describe('Scheduler: Layout Customization: Header Panel', () => {
           { element: page.locator('.dx-scheduler') },
         );
       }
-    });
+    }
   });
 });
