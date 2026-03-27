@@ -13,39 +13,7 @@ test.describe('Selection', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
-  test.skip('selectAll state should be correct after unselect item if refresh(true) is called inside onSelectionChanged (T1048081)', async ({ page }) => {
-    // TODO: Playwright migration - TestCafe API remnants (new CheckBox, checkBox.option, firstRowSelectionCheckBox.element)
-    await createWidget(page, 'dxDataGrid', {
-      dataSource: [
-        { id: 1 },
-        { id: 2 },
-        { id: 3 },
-        { id: 4 },
-      ],
-      keyExpr: 'id',
-      selectedRowKeys: [1, 2],
-      paging: {
-        pageSize: 3,
-      },
-      selection: {
-        mode: 'multiple',
-      },
-      onSelectionChanged(e) {
-        e.component.refresh(true);
-      },
-    });
-
-      const firstRowSelectionCheckBox = new CheckBox(page.locator('.dx-data-row').nth(0).locator('td').nth(0).locator('.dx-editor-cell'));
-    const selectAllCheckBox = new CheckBox(
-      page.locator('.dx-header-row').nth(0).locator('td').nth(0).locator('.dx-editor-cell'),
-    );
-
-    // act
-    await (firstRowSelectionCheckBox.element).click();
-    // assert
-    expect(await selectAllCheckBox.option('value')).toBe(undefined);
-    expect(await firstRowSelectionCheckBox.option('value')).toBe(false);
-  });
+  // Duplicate removed — reimplemented version exists below
 
   test('The Select All checkbox should be visible when a column headerCellTemplate is specified (React)', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {

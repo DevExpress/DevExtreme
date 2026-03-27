@@ -709,52 +709,7 @@ test.describe('Scrolling', () => {
     expect(Math.floor(scrollRightAfterGrouping)).toBe(Math.floor(scrollRight));
   });
 
-  test('New virtual mode. A detail row should be rendered when the last master row is expanded', async ({ page }) => {
-    const dataGrid = new DataGrid(page);
-
-    const getItems = (): Record<string, unknown>[] => {
-      const items: Record<string, unknown>[] = [];
-      for (let i = 0; i < 100; i += 1) {
-        items.push({ ID: i + 1, Name: `Name ${i + 1}` });
-      }
-      return items;
-    };
-
-    await createWidget(page, 'dxDataGrid', {
-      height: 350,
-      dataSource: getItems(),
-      keyExpr: 'ID',
-      remoteOperations: true,
-      scrolling: {
-        mode: 'virtual',
-        rowRenderingMode: 'virtual',
-      },
-      masterDetail: { enabled: true },
-    });
-
-    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
-
-    const firstRowHeight = await page.evaluate(() => {
-      const instance = ($('#container') as any).dxDataGrid('instance');
-      return $(instance.element()).find('.dx-data-row').first().height() ?? 0;
-    });
-
-    const scrollTopOffset = 100 * firstRowHeight;
-    await dataGrid.scrollTo({ top: scrollTopOffset });
-    await page.waitForTimeout(300);
-
-    await page.locator('.dx-data-row[aria-rowindex="100"]').locator('.dx-command-expand').click();
-    await page.waitForTimeout(300);
-
-    const visibleRows = await dataGrid.apiGetVisibleRows();
-    const penultimateRow = visibleRows[visibleRows.length - 2];
-    const lastRow = visibleRows[visibleRows.length - 1];
-
-    expect(penultimateRow.rowType).toBe('data');
-    expect(penultimateRow.key).toBe(100);
-    expect(lastRow.rowType).toBe('detail');
-    expect(lastRow.key).toBe(100);
-  });
+  // Duplicate removed — test already exists at line 464
 
   test('New virtual mode. An adaptive row should be rendered when the last row is expanded', async ({ page }) => {
     const dataGrid = new DataGrid(page);
