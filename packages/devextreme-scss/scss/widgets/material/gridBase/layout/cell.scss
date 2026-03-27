@@ -170,7 +170,8 @@
     .dx-#{$widget-name}-hidden-column,
     .dx-command-adaptive-hidden,
     .dx-#{$widget-name}-sticky-column-border-left,
-    .dx-#{$widget-name}-column-no-border
+    .dx-#{$widget-name}-column-no-border,
+    .dx-pointer-events-none
   ) {
     border-left: 1px solid;
     border-left-color: $datagrid-border-color;
@@ -229,9 +230,10 @@
   .dx-rtl .dx-#{$widget-name}-headers.dx-header-multi-row .dx-header-row:not(.dx-column-lines) > td:not(
     .dx-#{$widget-name}-first-cell,
     .dx-#{$widget-name}-hidden-column,
-    .dx-command-adaptive-hidden
+    .dx-command-adaptive-hidden,
     .dx-#{$widget-name}-sticky-column-border-right,
-    .dx-#{$widget-name}-column-no-border
+    .dx-#{$widget-name}-column-no-border,
+    .dx-pointer-events-none
   ) {
     border-right: 1px solid;
     border-right-color: $datagrid-border-color;
