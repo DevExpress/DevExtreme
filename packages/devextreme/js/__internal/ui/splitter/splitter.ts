@@ -108,6 +108,7 @@ export interface Properties<
     keyof PublicProperties<TItem, TKey>
   > {
   _renderQueue?: RenderQueueItem[];
+  _ignoreSizeConstraints?: boolean;
 }
 
 interface PaneCache {
@@ -165,6 +166,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
         role: 'group',
       },
       _renderQueue: undefined,
+      _ignoreSizeConstraints: false,
     };
   }
 
@@ -246,6 +248,9 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _ignoreSizeConstraints } = this.option();
+
     if (this._shouldRecalculateLayout) {
       this._layout = this._getDefaultLayoutBasedOnSize();
       this._idealLayout = this._layout;
@@ -254,7 +259,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
       this._updateItemSizes();
 
       this._shouldRecalculateLayout = false;
-    } else {
+    } else if (!_ignoreSizeConstraints) {
       this._dimensionChanged();
     }
   }
@@ -1125,6 +1130,16 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   }
 
   _dimensionChanged(): void {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _ignoreSizeConstraints } = this.option();
+
+    if (_ignoreSizeConstraints) {
+      this._updateItemSizes();
+
+      this._layout = this._getDefaultLayoutBasedOnSize();
+      return;
+    }
+
     const idealLayout = this._idealLayout;
 
     if (!idealLayout || idealLayout.length === 0) {
