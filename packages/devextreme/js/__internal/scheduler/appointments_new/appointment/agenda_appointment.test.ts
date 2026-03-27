@@ -25,6 +25,10 @@ const getAgendaAppointmentProperties = (
     modifiers: {
       isLastInGroup: false,
     },
+    geometry: {
+      height: 50,
+      width: '100%',
+    },
     getResourcesValues: (): Promise<AppointmentResource[]> => Promise.resolve([]),
   };
 };
@@ -193,6 +197,23 @@ describe('AgendaAppointment', () => {
       const $resourceItems = instance.$element().find(`.${AGENDA_APPOINTMENT_CLASSES.RESOURCE_ITEM}`);
 
       expect($resourceItems.length).toBe(0);
+    });
+  });
+
+  describe('Geometry', () => {
+    it('should have correct height and width', async () => {
+      const instance = await createAgendaAppointment(
+        getAgendaAppointmentProperties({
+          ...defaultAppointmentData,
+          geometry: {
+            height: 60,
+            width: '80%',
+          },
+        }),
+      );
+
+      expect(instance.$element().css('height')).toBe('60px');
+      expect(instance.$element().css('width')).toBe('80%');
     });
   });
 });

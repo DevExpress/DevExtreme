@@ -14,6 +14,11 @@ export interface AgendaAppointmentProperties extends BaseAppointmentProperties {
     isLastInGroup: boolean;
   };
 
+  geometry: {
+    height: number;
+    width: string;
+  };
+
   getResourcesValues: (
     appointmentData: SafeAppointment,
   ) => Promise<AppointmentResource[]>;
@@ -25,6 +30,13 @@ export class AgendaAppointment extends BaseAppointment<AgendaAppointmentProperti
 
     this.$element()
       .toggleClass(AGENDA_APPOINTMENT_CLASSES.LAST_IN_DATE, this.option().modifiers.isLastInGroup);
+  }
+
+  public override resize(): void {
+    this.$element().css({
+      height: this.option().geometry.height,
+      width: this.option().geometry.width,
+    });
   }
 
   protected override defaultAppointmentContent(
