@@ -16,12 +16,14 @@ import { ConfirmationDialogModel } from './confirmation_dialog';
 import { EditFormModel } from './edit_form';
 import { FilterPanelModel } from './filter_panel';
 import { DataRowModel } from './row/data_row';
+import { FilterRowModel } from './row/filter_row';
 import { GroupRowModel } from './row/group_row';
 
 const SELECTORS = {
   headerRowClass: 'dx-header-row',
   dataRowClass: 'dx-data-row',
   groupRowClass: 'dx-group-row',
+  filterRowClass: 'filter-row',
   aiDialog: 'dx-aidialog',
   aiPromptEditor: 'dx-ai-prompt-editor',
   toast: 'dx-toast',
@@ -88,6 +90,13 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
       this.getDataCells(rowIndex)[columnIndex],
       this.addWidgetPrefix.bind(this),
     );
+  }
+
+  public getFilterRow(): FilterRowModel {
+    const filterRowElement = this.root.querySelector(
+      `.${this.addWidgetPrefix(SELECTORS.filterRowClass)}`,
+    );
+    return new FilterRowModel(filterRowElement as HTMLElement);
   }
 
   public getGroupRows(): NodeListOf<HTMLElement> {
