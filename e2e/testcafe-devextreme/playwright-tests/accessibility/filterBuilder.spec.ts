@@ -43,4 +43,38 @@ test.describe('Accessibility - filterBuilder', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('filterBuilder with date field', async ({ page }) => {
+    await createWidget(page, 'dxFilterBuilder', {
+      fields: [{ dataField: 'BirthDate', caption: 'Birth Date', dataType: 'date' }],
+      value: ['BirthDate', '>', new Date(1990, 0, 1)],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('filterBuilder with boolean field', async ({ page }) => {
+    await createWidget(page, 'dxFilterBuilder', {
+      fields: [{ dataField: 'Active', caption: 'Active', dataType: 'boolean' }],
+      value: ['Active', '=', true],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('filterBuilder with OR group condition', async ({ page }) => {
+    await createWidget(page, 'dxFilterBuilder', {
+      fields: [
+        { dataField: 'CompanyName', caption: 'Company Name' },
+        { dataField: 'City', caption: 'City' },
+      ],
+      value: [['CompanyName', 'contains', 'Dev'], 'or', ['City', '=', 'London']],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('filterBuilder with single field no value', async ({ page }) => {
+    await createWidget(page, 'dxFilterBuilder', {
+      fields: [{ dataField: 'Name', caption: 'Name' }],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -65,4 +65,37 @@ test.describe('Accessibility - contextMenu', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('context menu with disabled item shown', async ({ page }) => {
+    await createWidget(page, 'dxContextMenu', {
+      target: '#container',
+      items: [{ text: 'Item 1' }, { text: 'Item 2', disabled: true }, { text: 'Item 3' }],
+    });
+    await page.evaluate(() => {
+      (window as any).$('#container').dxContextMenu('show');
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('context menu hidden', async ({ page }) => {
+    await createWidget(page, 'dxContextMenu', {
+      target: '#container',
+      items: [{ text: 'Item 1' }, { text: 'Item 2' }],
+      visible: false,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('context menu with single selection mode and selected item', async ({ page }) => {
+    await createWidget(page, 'dxContextMenu', {
+      target: '#container',
+      items: [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }],
+      selectionMode: 'single',
+      selectedItem: { text: 'Item 1' },
+    });
+    await page.evaluate(() => {
+      (window as any).$('#container').dxContextMenu('show');
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -74,4 +74,19 @@ test.describe('Accessibility - rangeSlider', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('range slider with min and max', async ({ page }) => {
+    await createWidget(page, 'dxRangeSlider', { start: 20, end: 80, min: 0, max: 100 });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('range slider with step', async ({ page }) => {
+    await createWidget(page, 'dxRangeSlider', { start: 40, end: 60, step: 10 });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('range slider at extremes', async ({ page }) => {
+    await createWidget(page, 'dxRangeSlider', { start: 0, end: 100, min: 0, max: 100 });
+    await a11yCheck(page, {}, '#container');
+  });
 });

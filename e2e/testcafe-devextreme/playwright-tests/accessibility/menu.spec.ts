@@ -54,4 +54,33 @@ test.describe('Accessibility - menu', () => {
     await createWidget(page, 'dxMenu', { items: [{ text: 'remove', icon: 'remove' }, { text: 'user', icon: 'user' }], width: 1024, orientation: 'horizontal' });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('menu with selection mode single', async ({ page }) => {
+    await createWidget(page, 'dxMenu', {
+      items: [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }],
+      width: 400,
+      selectionMode: 'single',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('menu with disabled item', async ({ page }) => {
+    await createWidget(page, 'dxMenu', {
+      items: [{ text: 'Item 1' }, { text: 'Item 2', disabled: true }, { text: 'Item 3' }],
+      width: 400,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('menu with hideSubmenuOnMouseLeave', async ({ page }) => {
+    await createWidget(page, 'dxMenu', {
+      items: [{
+        text: 'Parent',
+        items: [{ text: 'Child 1' }, { text: 'Child 2' }],
+      }],
+      width: 400,
+      hideSubmenuOnMouseLeave: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

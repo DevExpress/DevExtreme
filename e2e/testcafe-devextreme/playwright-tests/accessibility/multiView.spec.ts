@@ -38,4 +38,24 @@ test.describe('Accessibility - multiView', () => {
     await createWidget(page, 'dxMultiView', { dataSource: [], height: 300, loop: true, noDataText: 'no data text', focusStateEnabled: true });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('multi view with selectedIndex set', async ({ page }) => {
+    await createWidget(page, 'dxMultiView', { dataSource: ['Item_1', 'Item_2', 'Item_3'], height: 300, selectedIndex: 1 });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('multi view with swipe disabled', async ({ page }) => {
+    await createWidget(page, 'dxMultiView', { dataSource: ['Item_1', 'Item_2', 'Item_3'], height: 300, swipeEnabled: false });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('multi view with single item', async ({ page }) => {
+    await createWidget(page, 'dxMultiView', { dataSource: ['Only Item'], height: 300 });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('multi view with deferRendering false', async ({ page }) => {
+    await createWidget(page, 'dxMultiView', { dataSource: ['Item_1', 'Item_2', 'Item_3'], height: 300, deferRendering: false });
+    await a11yCheck(page, {}, '#container');
+  });
 });

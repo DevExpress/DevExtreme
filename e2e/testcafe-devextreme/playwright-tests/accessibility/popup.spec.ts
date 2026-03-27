@@ -77,4 +77,19 @@ test.describe('Accessibility - popup', () => {
     await createWidget(page, 'dxPopup', { visible: true, width: 300, height: 280, showTitle: true, showCloseButton: true, dragEnabled: true });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('popup fullscreen', async ({ page }) => {
+    await createWidget(page, 'dxPopup', { visible: true, fullScreen: true, showTitle: true, title: 'Fullscreen Popup' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('popup with resizing enabled', async ({ page }) => {
+    await createWidget(page, 'dxPopup', { visible: true, width: 400, height: 300, showTitle: true, title: 'Resizable', resizeEnabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('popup with shading', async ({ page }) => {
+    await createWidget(page, 'dxPopup', { visible: true, width: 300, height: 280, showTitle: true, title: 'Modal', shading: true });
+    await a11yCheck(page, {}, '#container');
+  });
 });

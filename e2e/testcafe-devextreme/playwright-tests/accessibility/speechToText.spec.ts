@@ -33,4 +33,19 @@ test.describe('Accessibility - speechToText', () => {
     await createWidget(page, 'dxSpeechToText', { startText: 'custom text', stopIcon: '' });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('speechToText with start icon', async ({ page }) => {
+    await createWidget(page, 'dxSpeechToText', { startText: 'Record', startIcon: 'audio' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('speechToText disabled', async ({ page }) => {
+    await createWidget(page, 'dxSpeechToText', { startText: 'disabled', disabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('speechToText with both icons', async ({ page }) => {
+    await createWidget(page, 'dxSpeechToText', { startText: 'Start', startIcon: 'audio', stopIcon: 'close' });
+    await a11yCheck(page, {}, '#container');
+  });
 });

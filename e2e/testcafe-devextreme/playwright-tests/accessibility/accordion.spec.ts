@@ -45,4 +45,24 @@ test.describe('Accessibility - accordion', () => {
     await createWidget(page, 'dxAccordion', { dataSource: ['Item_1', 'Item_2', 'Item_3'], deferRendering: false, multiple: true, focusStateEnabled: true });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('accordion with single item', async ({ page }) => {
+    await createWidget(page, 'dxAccordion', { dataSource: ['Only Item'], focusStateEnabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('accordion with collapsible false', async ({ page }) => {
+    await createWidget(page, 'dxAccordion', { dataSource: ['Item_1', 'Item_2', 'Item_3'], collapsible: false, focusStateEnabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('accordion empty datasource', async ({ page }) => {
+    await createWidget(page, 'dxAccordion', { dataSource: [] });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('accordion with selected index', async ({ page }) => {
+    await createWidget(page, 'dxAccordion', { dataSource: ['Item_1', 'Item_2', 'Item_3'], selectedIndex: 1, focusStateEnabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
 });

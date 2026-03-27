@@ -54,4 +54,19 @@ test.describe('Accessibility - textArea', () => {
     await createWidget(page, 'dxTextArea', { value: longText, inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('textArea with height', async ({ page }) => {
+    await createWidget(page, 'dxTextArea', { value: 'Test text', height: 150, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textArea with maxLength', async ({ page }) => {
+    await createWidget(page, 'dxTextArea', { value: 'Test', maxLength: 100, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textArea disabled with label', async ({ page }) => {
+    await createWidget(page, 'dxTextArea', { value: 'Disabled text', disabled: true, label: 'Notes', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

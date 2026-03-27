@@ -76,4 +76,40 @@ test.describe('Accessibility - toolbar', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('toolbar with button widget items', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [
+        { location: 'before', widget: 'dxButton', options: { icon: 'back', text: 'Back' } },
+        { location: 'center', text: 'Page Title' },
+        { location: 'after', widget: 'dxButton', options: { icon: 'search' } },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('toolbar with selectBox item', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [
+        {
+          location: 'before',
+          widget: 'dxSelectBox',
+          options: { dataSource: ['Option 1', 'Option 2'], value: 'Option 1', inputAttr: { 'aria-label': 'Options' } },
+        },
+        { location: 'after', widget: 'dxButton', options: { text: 'Submit' } },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('toolbar with menu always items', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [
+        { text: 'visible item', location: 'before' },
+        { text: 'menu item 1', locateInMenu: 'always' },
+        { text: 'menu item 2', locateInMenu: 'always' },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

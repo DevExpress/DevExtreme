@@ -33,4 +33,19 @@ test.describe('Accessibility - floatingActionButton', () => {
     await createWidget(page, 'dxSpeedDialAction', { label: '' });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('floatingActionButton with index', async ({ page }) => {
+    await createWidget(page, 'dxSpeedDialAction', { label: 'Action 1', icon: 'save', index: 1 });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('floatingActionButton disabled', async ({ page }) => {
+    await createWidget(page, 'dxSpeedDialAction', { label: 'Disabled', icon: 'trash', disabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('floatingActionButton with different icon', async ({ page }) => {
+    await createWidget(page, 'dxSpeedDialAction', { label: 'Add', icon: 'add' });
+    await a11yCheck(page, {}, '#container');
+  });
 });

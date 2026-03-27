@@ -33,4 +33,24 @@ test.describe('Accessibility - loadIndicator', () => {
     await createWidget(page, 'dxLoadIndicator', { height: 40, width: 40 });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('loadIndicator large size', async ({ page }) => {
+    await createWidget(page, 'dxLoadIndicator', { height: 80, width: 80 });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('loadIndicator with indicatorSrc', async ({ page }) => {
+    await createWidget(page, 'dxLoadIndicator', { indicatorSrc: '' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('loadIndicator default size visible', async ({ page }) => {
+    await createWidget(page, 'dxLoadIndicator', { visible: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('loadIndicator not visible', async ({ page }) => {
+    await createWidget(page, 'dxLoadIndicator', { visible: false });
+    await a11yCheck(page, {}, '#container');
+  });
 });

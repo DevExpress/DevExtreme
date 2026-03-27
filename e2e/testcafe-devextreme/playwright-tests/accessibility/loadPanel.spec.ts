@@ -38,4 +38,19 @@ test.describe('Accessibility - loadPanel', () => {
     await createWidget(page, 'dxLoadPanel', { visible: true, showIndicator: false, showPane: false, message: 'message' });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('loadPanel not visible', async ({ page }) => {
+    await createWidget(page, 'dxLoadPanel', { visible: false, showIndicator: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('loadPanel with width and height', async ({ page }) => {
+    await createWidget(page, 'dxLoadPanel', { visible: true, width: 200, height: 90, message: 'Loading...' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('loadPanel with shading', async ({ page }) => {
+    await createWidget(page, 'dxLoadPanel', { visible: true, shading: true, shadingColor: 'rgba(0,0,0,0.4)', message: 'Please wait...' });
+    await a11yCheck(page, {}, '#container');
+  });
 });

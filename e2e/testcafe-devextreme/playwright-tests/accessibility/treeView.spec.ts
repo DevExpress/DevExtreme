@@ -85,4 +85,38 @@ test.describe('Accessibility - treeView', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('treeView disabled', async ({ page }) => {
+    await createWidget(page, 'dxTreeView', {
+      items: [{ text: 'Item 1', items: [{ text: 'Item 1.1' }] }, { text: 'Item 2' }],
+      disabled: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('treeView with single selection', async ({ page }) => {
+    await createWidget(page, 'dxTreeView', {
+      items: treeViewItems,
+      selectionMode: 'single',
+      showCheckBoxesMode: 'none',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('treeView with multiple selection', async ({ page }) => {
+    await createWidget(page, 'dxTreeView', {
+      items: treeViewItems,
+      selectionMode: 'multiple',
+      showCheckBoxesMode: 'normal',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('treeView with virtualModeEnabled', async ({ page }) => {
+    await createWidget(page, 'dxTreeView', {
+      items: treeViewItems,
+      virtualModeEnabled: false,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

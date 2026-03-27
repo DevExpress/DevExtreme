@@ -45,4 +45,27 @@ test.describe('Accessibility - popover', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('popover not visible', async ({ page }) => {
+    await createWidget(page, 'dxPopover', { visible: false, target: '#container', width: 300, height: 280, title: 'Popover' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('popover with position bottom', async ({ page }) => {
+    await createWidget(page, 'dxPopover', { visible: true, target: '#container', width: 300, height: 200, position: 'bottom', title: 'Bottom Popover' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('popover with hideOnOutsideClick false', async ({ page }) => {
+    await createWidget(page, 'dxPopover', {
+      visible: true,
+      target: '#container',
+      width: 300,
+      height: 280,
+      hideOnOutsideClick: false,
+      showTitle: true,
+      title: 'Pinned',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

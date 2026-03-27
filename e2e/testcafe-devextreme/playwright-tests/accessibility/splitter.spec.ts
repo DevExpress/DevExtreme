@@ -67,4 +67,31 @@ test.describe('Accessibility - splitter', () => {
     });
     await a11yCheck(page, { rules: { 'scrollable-region-focusable': { enabled: false } } }, '#container');
   });
+
+  test('splitter with three panes', async ({ page }) => {
+    await createWidget(page, 'dxSplitter', {
+      dataSource: [{ text: 'Left', size: '150px' }, { text: 'Center' }, { text: 'Right', size: '150px' }],
+      height: 400,
+      width: 500,
+    });
+    await a11yCheck(page, { rules: { 'scrollable-region-focusable': { enabled: false } } }, '#container');
+  });
+
+  test('splitter with collapsed pane', async ({ page }) => {
+    await createWidget(page, 'dxSplitter', {
+      dataSource: [{ text: 'Left Pane', size: '140px', collapsed: true }, { text: 'Right Pane' }],
+      height: 400,
+      width: 450,
+    });
+    await a11yCheck(page, { rules: { 'scrollable-region-focusable': { enabled: false } } }, '#container');
+  });
+
+  test('splitter with resizable false pane', async ({ page }) => {
+    await createWidget(page, 'dxSplitter', {
+      dataSource: [{ text: 'Fixed Pane', size: '140px', resizable: false }, { text: 'Flexible Pane' }],
+      height: 400,
+      width: 450,
+    });
+    await a11yCheck(page, { rules: { 'scrollable-region-focusable': { enabled: false } } }, '#container');
+  });
 });

@@ -50,4 +50,28 @@ test.describe('Accessibility - actionSheet', () => {
     await createWidget(page, 'dxActionSheet', { dataSource: [], title: 'title', showTitle: true });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('action sheet with disabled item', async ({ page }) => {
+    await createWidget(page, 'dxActionSheet', {
+      dataSource: [{ text: 'Call' }, { text: 'Delete', disabled: true }],
+      title: 'Actions',
+      showTitle: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('action sheet with single item', async ({ page }) => {
+    await createWidget(page, 'dxActionSheet', { dataSource: [{ text: 'Confirm' }], showCancelButton: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('action sheet without cancel and with title', async ({ page }) => {
+    await createWidget(page, 'dxActionSheet', {
+      dataSource: [{ text: 'Call' }, { text: 'Send message' }],
+      showCancelButton: false,
+      showTitle: true,
+      title: 'Choose action',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

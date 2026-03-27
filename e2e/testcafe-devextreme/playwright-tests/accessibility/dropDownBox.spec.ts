@@ -75,4 +75,32 @@ test.describe('Accessibility - dropDownBox', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('dropDownBox with placeholder', async ({ page }) => {
+    await createWidget(page, 'dxDropDownBox', {
+      dataSource: ['Item_1', 'Item_2', 'Item_3'],
+      placeholder: 'Select a value',
+      inputAttr: { 'aria-label': 'DropDownBox' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dropDownBox with value and readOnly', async ({ page }) => {
+    await createWidget(page, 'dxDropDownBox', {
+      dataSource: ['Item_1', 'Item_2', 'Item_3'],
+      value: 'Item_2',
+      readOnly: true,
+      inputAttr: { 'aria-label': 'DropDownBox' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dropDownBox with single item datasource', async ({ page }) => {
+    await createWidget(page, 'dxDropDownBox', {
+      dataSource: ['OnlyItem'],
+      value: 'OnlyItem',
+      inputAttr: { 'aria-label': 'DropDownBox' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

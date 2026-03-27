@@ -61,4 +61,43 @@ test.describe('Accessibility - tabs', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('tabs with icons', async ({ page }) => {
+    await createWidget(page, 'dxTabs', {
+      dataSource: [{ text: 'Info', icon: 'info' }, { text: 'Settings', icon: 'preferences' }],
+      width: 450,
+      height: 250,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tabs with orientation vertical', async ({ page }) => {
+    await createWidget(page, 'dxTabs', {
+      dataSource: [{ text: 'Tab 1' }, { text: 'Tab 2' }, { text: 'Tab 3' }],
+      width: 200,
+      height: 250,
+      orientation: 'vertical',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tabs disabled', async ({ page }) => {
+    await createWidget(page, 'dxTabs', {
+      dataSource: [{ text: 'Tab 1' }, { text: 'Tab 2' }],
+      width: 450,
+      height: 250,
+      disabled: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tabs with selectedIndex 1', async ({ page }) => {
+    await createWidget(page, 'dxTabs', {
+      dataSource: [{ text: 'Tab 1' }, { text: 'Tab 2' }, { text: 'Tab 3' }],
+      width: 450,
+      height: 250,
+      selectedIndex: 1,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

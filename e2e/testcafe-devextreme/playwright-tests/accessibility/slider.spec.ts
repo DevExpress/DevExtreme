@@ -61,4 +61,19 @@ test.describe('Accessibility - slider', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('slider at maximum value', async ({ page }) => {
+    await createWidget(page, 'dxSlider', { value: 100, min: 0, max: 100 });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('slider at minimum value', async ({ page }) => {
+    await createWidget(page, 'dxSlider', { value: 0, min: 0, max: 100 });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('slider with step', async ({ page }) => {
+    await createWidget(page, 'dxSlider', { value: 50, step: 10, min: 0, max: 100 });
+    await a11yCheck(page, {}, '#container');
+  });
 });

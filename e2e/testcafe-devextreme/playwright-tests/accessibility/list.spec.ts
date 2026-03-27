@@ -148,4 +148,30 @@ test.describe('Accessibility - list', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('list with noDataText', async ({ page }) => {
+    await createWidget(page, 'dxList', { dataSource: [], height: 400, noDataText: 'No items available' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('list disabled', async ({ page }) => {
+    await createWidget(page, 'dxList', { dataSource: ['Item_1', 'Item_2', 'Item_3'], height: 400, disabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('list with pullingDownText', async ({ page }) => {
+    await createWidget(page, 'dxList', {
+      dataSource: ['Item_1', 'Item_2', 'Item_3'],
+      height: 400,
+      pullingDownText: 'Pull to refresh',
+      pulledDownText: 'Release to refresh',
+      refreshingText: 'Refreshing...',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('list with single item', async ({ page }) => {
+    await createWidget(page, 'dxList', { dataSource: ['Only Item'], height: 400 });
+    await a11yCheck(page, {}, '#container');
+  });
 });

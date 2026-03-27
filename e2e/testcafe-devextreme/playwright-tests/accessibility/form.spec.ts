@@ -86,4 +86,53 @@ test.describe('Accessibility - form', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('form with group items', async ({ page }) => {
+    await createWidget(page, 'dxForm', {
+      height: 300,
+      formData: { FirstName: 'John', LastName: 'Heart', Phone: '555-0100', Email: 'john@example.com' },
+      items: [
+        {
+          itemType: 'group',
+          caption: 'Personal',
+          items: ['FirstName', 'LastName'],
+        },
+        {
+          itemType: 'group',
+          caption: 'Contact',
+          items: ['Phone', 'Email'],
+        },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('form with tabbed items', async ({ page }) => {
+    await createWidget(page, 'dxForm', {
+      height: 300,
+      formData: { FirstName: 'John', LastName: 'Heart', Notes: 'Some notes' },
+      items: [
+        {
+          itemType: 'tabbed',
+          tabs: [
+            { title: 'Personal', items: ['FirstName', 'LastName'] },
+            { title: 'Notes', items: ['Notes'] },
+          ],
+        },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('form with empty formData', async ({ page }) => {
+    await createWidget(page, 'dxForm', {
+      height: 200,
+      formData: {},
+      items: [
+        { itemType: 'simple', dataField: 'Name', label: { text: 'Name' } },
+        { itemType: 'simple', dataField: 'Age', label: { text: 'Age' }, editorType: 'dxNumberBox' },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

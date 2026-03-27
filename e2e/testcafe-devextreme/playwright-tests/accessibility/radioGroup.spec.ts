@@ -43,4 +43,29 @@ test.describe('Accessibility - radioGroup', () => {
     await createWidget(page, 'dxRadioGroup', { items: ['Item_1', 'Item_2', 'Item_3'], readOnly: true, layout: 'horizontal' });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('radioGroup with value selected', async ({ page }) => {
+    await createWidget(page, 'dxRadioGroup', { items: ['Item_1', 'Item_2', 'Item_3'], value: 'Item_2' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('radioGroup with single item', async ({ page }) => {
+    await createWidget(page, 'dxRadioGroup', { items: ['Only Item'] });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('radioGroup with object items', async ({ page }) => {
+    await createWidget(page, 'dxRadioGroup', {
+      items: [{ id: 1, text: 'Option A' }, { id: 2, text: 'Option B' }, { id: 3, text: 'Option C' }],
+      valueExpr: 'id',
+      displayExpr: 'text',
+      value: 2,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('radioGroup empty items', async ({ page }) => {
+    await createWidget(page, 'dxRadioGroup', { items: [] });
+    await a11yCheck(page, {}, '#container');
+  });
 });

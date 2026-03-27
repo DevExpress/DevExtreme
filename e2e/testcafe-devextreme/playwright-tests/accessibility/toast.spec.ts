@@ -53,4 +53,19 @@ test.describe('Accessibility - toast', () => {
     await createWidget(page, 'dxToast', { visible: true, type: 'success' });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('toast not visible', async ({ page }) => {
+    await createWidget(page, 'dxToast', { visible: false, message: 'hidden toast', type: 'info' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('toast warning without message', async ({ page }) => {
+    await createWidget(page, 'dxToast', { visible: true, type: 'warning' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('toast with long message', async ({ page }) => {
+    await createWidget(page, 'dxToast', { visible: true, message: 'A very long notification message that spans multiple lines and provides detailed information to the user', type: 'info', width: 400 });
+    await a11yCheck(page, {}, '#container');
+  });
 });

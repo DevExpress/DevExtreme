@@ -68,4 +68,43 @@ test.describe('Accessibility - drawer', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('drawer with openedStateMode overlap', async ({ page }) => {
+    await createWidget(page, 'dxDrawer', {
+      height: 400,
+      opened: true,
+      openedStateMode: 'overlap',
+      template: () => {
+        const $drawerContent = (window as any).$('<div>').width(200).css('height', '100%');
+        return $drawerContent;
+      },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('drawer with openedStateMode push', async ({ page }) => {
+    await createWidget(page, 'dxDrawer', {
+      height: 400,
+      opened: true,
+      openedStateMode: 'push',
+      template: () => {
+        const $drawerContent = (window as any).$('<div>').width(200).css('height', '100%');
+        return $drawerContent;
+      },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('drawer with position right', async ({ page }) => {
+    await createWidget(page, 'dxDrawer', {
+      height: 400,
+      opened: true,
+      position: 'right',
+      template: () => {
+        const $drawerContent = (window as any).$('<div>').width(200).css('height', '100%');
+        return $drawerContent;
+      },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

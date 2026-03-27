@@ -79,4 +79,36 @@ test.describe('Accessibility - tabPanel', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('tab panel with swipe enabled', async ({ page }) => {
+    await createWidget(page, 'dxTabPanel', {
+      dataSource: [{ title: 'Tab 1', text: 'Content 1' }, { title: 'Tab 2', text: 'Content 2' }],
+      width: 450,
+      height: 250,
+      swipeEnabled: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tab panel with loop enabled', async ({ page }) => {
+    await createWidget(page, 'dxTabPanel', {
+      dataSource: [{ title: 'Tab 1', text: 'Content 1' }, { title: 'Tab 2', text: 'Content 2' }, { title: 'Tab 3', text: 'Content 3' }],
+      width: 450,
+      height: 250,
+      loop: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tab panel with icon in tab', async ({ page }) => {
+    await createWidget(page, 'dxTabPanel', {
+      dataSource: [
+        { title: 'Info', icon: 'info', text: 'Information tab' },
+        { title: 'Settings', icon: 'preferences', text: 'Settings tab' },
+      ],
+      width: 450,
+      height: 250,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

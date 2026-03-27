@@ -44,4 +44,24 @@ test.describe('Accessibility - tooltip', () => {
     await createWidget(page, 'dxTooltip', { visible: false, target: '#container', width: 50, height: 25, disabled: true });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('tooltip with position bottom', async ({ page }) => {
+    await createWidget(page, 'dxTooltip', { visible: true, target: '#container', width: 100, height: 30, position: 'bottom' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tooltip with position top', async ({ page }) => {
+    await createWidget(page, 'dxTooltip', { visible: true, target: '#container', width: 100, height: 30, position: 'top' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tooltip with position left', async ({ page }) => {
+    await createWidget(page, 'dxTooltip', { visible: true, target: '#container', width: 100, height: 30, position: 'left' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tooltip with closeOnOutsideClick', async ({ page }) => {
+    await createWidget(page, 'dxTooltip', { visible: true, target: '#container', width: 100, height: 30, closeOnOutsideClick: false });
+    await a11yCheck(page, {}, '#container');
+  });
 });

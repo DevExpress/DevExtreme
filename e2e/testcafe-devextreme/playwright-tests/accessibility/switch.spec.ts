@@ -43,4 +43,19 @@ test.describe('Accessibility - switch', () => {
     await createWidget(page, 'dxSwitch', { value: true, name: 'switchName' });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('switch readOnly off', async ({ page }) => {
+    await createWidget(page, 'dxSwitch', { value: false, readOnly: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('switch with switchedOnText and switchedOffText', async ({ page }) => {
+    await createWidget(page, 'dxSwitch', { value: true, switchedOnText: 'YES', switchedOffText: 'NO' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('switch off with custom labels', async ({ page }) => {
+    await createWidget(page, 'dxSwitch', { value: false, switchedOnText: 'ON', switchedOffText: 'OFF' });
+    await a11yCheck(page, {}, '#container');
+  });
 });

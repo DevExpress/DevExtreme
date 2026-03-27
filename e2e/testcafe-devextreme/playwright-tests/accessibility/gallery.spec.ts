@@ -60,4 +60,34 @@ test.describe('Accessibility - gallery', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('gallery with stretchImages', async ({ page }) => {
+    await createWidget(page, 'dxGallery', {
+      height: 300,
+      width: 300,
+      dataSource: [{ imageAlt: 'Image 1', imageSrc: '' }, { imageAlt: 'Image 2', imageSrc: '' }],
+      stretchImages: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('gallery with focusStateEnabled', async ({ page }) => {
+    await createWidget(page, 'dxGallery', {
+      height: 300,
+      width: 300,
+      dataSource: [{ imageAlt: 'Image 1', imageSrc: '' }, { imageAlt: 'Image 2', imageSrc: '' }],
+      focusStateEnabled: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('gallery with second item selected', async ({ page }) => {
+    await createWidget(page, 'dxGallery', {
+      height: 300,
+      width: 300,
+      dataSource: [{ imageAlt: 'Image 1', imageSrc: '' }, { imageAlt: 'Image 2', imageSrc: '' }, { imageAlt: 'Image 3', imageSrc: '' }],
+      selectedIndex: 1,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

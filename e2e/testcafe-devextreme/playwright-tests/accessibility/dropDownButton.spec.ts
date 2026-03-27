@@ -65,4 +65,37 @@ test.describe('Accessibility - dropDownButton', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('dropDownButton with useSelectMode and selected item', async ({ page }) => {
+    await createWidget(page, 'dxDropDownButton', {
+      dataSource: [{ id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }],
+      text: 'Select',
+      splitButton: false,
+      useSelectMode: true,
+      selectedItemKey: 1,
+      keyExpr: 'id',
+      displayExpr: 'text',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dropDownButton opened without split', async ({ page }) => {
+    await createWidget(page, 'dxDropDownButton', {
+      dataSource: ['Item_1', 'Item_2', 'Item_3'],
+      text: 'Options',
+      splitButton: false,
+      opened: true,
+      deferRendering: false,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dropDownButton with stylingMode text', async ({ page }) => {
+    await createWidget(page, 'dxDropDownButton', {
+      dataSource: ['Item_1', 'Item_2'],
+      text: 'Options',
+      stylingMode: 'text',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

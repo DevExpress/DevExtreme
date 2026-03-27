@@ -43,4 +43,24 @@ test.describe('Accessibility - button', () => {
     await createWidget(page, 'dxButton', { icon: 'save', disabled: true, elementAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, { rules: { 'nested-interactive': { enabled: false } } }, '#container');
   });
+
+  test('button with stylingMode outlined', async ({ page }) => {
+    await createWidget(page, 'dxButton', { text: 'Outlined', stylingMode: 'outlined' });
+    await a11yCheck(page, { rules: { 'nested-interactive': { enabled: false } } }, '#container');
+  });
+
+  test('button with stylingMode text', async ({ page }) => {
+    await createWidget(page, 'dxButton', { text: 'Text Button', stylingMode: 'text' });
+    await a11yCheck(page, { rules: { 'nested-interactive': { enabled: false } } }, '#container');
+  });
+
+  test('button with type danger', async ({ page }) => {
+    await createWidget(page, 'dxButton', { text: 'Delete', type: 'danger' });
+    await a11yCheck(page, { rules: { 'nested-interactive': { enabled: false } } }, '#container');
+  });
+
+  test('button with type success', async ({ page }) => {
+    await createWidget(page, 'dxButton', { text: 'Save', type: 'success' });
+    await a11yCheck(page, { rules: { 'nested-interactive': { enabled: false } } }, '#container');
+  });
 });

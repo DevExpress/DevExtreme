@@ -53,4 +53,19 @@ test.describe('Accessibility - numberBox', () => {
     await createWidget(page, 'dxNumberBox', { value: 20.5, disabled: true, showSpinButtons: true, inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('numberBox with min and max', async ({ page }) => {
+    await createWidget(page, 'dxNumberBox', { value: 50, min: 0, max: 100, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('numberBox with name', async ({ page }) => {
+    await createWidget(page, 'dxNumberBox', { value: 20.5, name: 'quantity', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('numberBox with label', async ({ page }) => {
+    await createWidget(page, 'dxNumberBox', { value: 20.5, label: 'Amount', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -90,4 +90,19 @@ test.describe('Accessibility - calendar', () => {
     });
     await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
   });
+
+  test('calendar with first day of week set', async ({ page }) => {
+    await createWidget(page, 'dxCalendar', { zoomLevel: 'month', firstDayOfWeek: 1 });
+    await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
+  });
+
+  test('calendar with week numbers and year zoom level', async ({ page }) => {
+    await createWidget(page, 'dxCalendar', { zoomLevel: 'year', showWeekNumbers: true });
+    await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
+  });
+
+  test('calendar readOnly with selected value', async ({ page }) => {
+    await createWidget(page, 'dxCalendar', { zoomLevel: 'month', readOnly: true, value: Date.now() });
+    await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
+  });
 });

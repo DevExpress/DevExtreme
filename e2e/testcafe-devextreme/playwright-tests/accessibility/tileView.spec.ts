@@ -45,4 +45,38 @@ test.describe('Accessibility - tileView', () => {
     await page.keyboard.press('Tab');
     await a11yCheck(page, {}, '#container');
   });
+
+  test('tile view disabled', async ({ page }) => {
+    await createWidget(page, 'dxTileView', {
+      items: [{ text: 'Tile 1' }, { text: 'Tile 2' }],
+      disabled: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tile view with direction vertical', async ({ page }) => {
+    await createWidget(page, 'dxTileView', {
+      items: [{ text: 'Tile 1' }, { text: 'Tile 2' }, { text: 'Tile 3' }],
+      direction: 'vertical',
+      height: 400,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tile view with base dimensions', async ({ page }) => {
+    await createWidget(page, 'dxTileView', {
+      items: [{ text: 'Tile 1' }, { text: 'Tile 2' }],
+      baseItemHeight: 100,
+      baseItemWidth: 100,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tile view with item margin', async ({ page }) => {
+    await createWidget(page, 'dxTileView', {
+      items: [{ text: 'Tile 1' }, { text: 'Tile 2' }, { text: 'Tile 3' }],
+      itemMargin: 5,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

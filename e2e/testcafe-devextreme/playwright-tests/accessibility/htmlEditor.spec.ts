@@ -83,4 +83,22 @@ test.describe('Accessibility - htmlEditor', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('with mention module', async ({ page }) => {
+    await createWidget(page, 'dxHtmlEditor', {
+      value: '<p>Hello</p>',
+      focusStateEnabled: true,
+      mentions: [{ dataSource: ['Alice', 'Bob'], searchExpr: 'this', displayExpr: 'this' }],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('with full toolbar', async ({ page }) => {
+    await createWidget(page, 'dxHtmlEditor', {
+      value: '<p>He<em>llo</em></p>',
+      focusStateEnabled: true,
+      toolbar: { items: ['bold', 'italic', 'underline', 'separator', 'alignLeft', 'alignCenter', 'alignRight'] },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

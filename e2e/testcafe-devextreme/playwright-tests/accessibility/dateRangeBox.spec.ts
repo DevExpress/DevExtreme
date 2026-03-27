@@ -95,4 +95,40 @@ test.describe('Accessibility - dateRangeBox', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('dateRangeBox with label', async ({ page }) => {
+    const msInDay = 1000 * 60 * 60 * 24;
+    const now = new Date();
+    await createWidget(page, 'dxDateRangeBox', {
+      value: [new Date(now.getTime() - msInDay * 3), new Date(now.getTime() + msInDay * 3)],
+      label: 'Date Range',
+      endDateInputAttr: { 'aria-label': 'aria-label' },
+      startDateInputAttr: { 'aria-label': 'aria-label' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dateRangeBox readOnly with value', async ({ page }) => {
+    const msInDay = 1000 * 60 * 60 * 24;
+    const now = new Date();
+    await createWidget(page, 'dxDateRangeBox', {
+      value: [new Date(now.getTime() - msInDay * 3), new Date(now.getTime() + msInDay * 3)],
+      readOnly: true,
+      endDateInputAttr: { 'aria-label': 'aria-label' },
+      startDateInputAttr: { 'aria-label': 'aria-label' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dateRangeBox disabled with value', async ({ page }) => {
+    const msInDay = 1000 * 60 * 60 * 24;
+    const now = new Date();
+    await createWidget(page, 'dxDateRangeBox', {
+      value: [new Date(now.getTime() - msInDay * 3), new Date(now.getTime() + msInDay * 3)],
+      disabled: true,
+      endDateInputAttr: { 'aria-label': 'aria-label' },
+      startDateInputAttr: { 'aria-label': 'aria-label' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

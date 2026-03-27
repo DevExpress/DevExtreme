@@ -83,4 +83,39 @@ test.describe('Accessibility - stepper', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('stepper with middle step selected', async ({ page }) => {
+    await createWidget(page, 'dxStepper', {
+      dataSource: [{ label: 'Step 1' }, { label: 'Step 2' }, { label: 'Step 3' }, { label: 'Step 4' }],
+      selectedIndex: 1,
+      width: 800,
+      height: 600,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('stepper with only icons', async ({ page }) => {
+    await createWidget(page, 'dxStepper', {
+      dataSource: [{ icon: 'user' }, { icon: 'email' }, { icon: 'check' }],
+      selectedIndex: 0,
+      width: 800,
+      height: 600,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('stepper vertical with invalid step', async ({ page }) => {
+    await createWidget(page, 'dxStepper', {
+      dataSource: [
+        { label: 'Step 1', isValid: true },
+        { label: 'Step 2', isValid: false },
+        { label: 'Step 3' },
+      ],
+      selectedIndex: 1,
+      orientation: 'vertical',
+      width: 800,
+      height: 600,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

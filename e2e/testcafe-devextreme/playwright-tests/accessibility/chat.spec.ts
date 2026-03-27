@@ -46,4 +46,33 @@ test.describe('Accessibility - chat', () => {
     await createWidget(page, 'dxChat', { items: [], user: { id: 2, name: 'User Without Avatar' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('chat disabled', async ({ page }) => {
+    await createWidget(page, 'dxChat', { items: [], user: { id: 1, name: 'User' }, disabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('chat with multiple messages from same author', async ({ page }) => {
+    const user = { id: 1, name: 'User' };
+    const other = { id: 2, name: 'Other' };
+    await createWidget(page, 'dxChat', {
+      user,
+      items: [
+        { timestamp: new Date(), text: 'Hello', author: other },
+        { timestamp: new Date(), text: 'How are you?', author: other },
+        { timestamp: new Date(), text: 'Fine, thanks!', author: user },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('chat with many typing users', async ({ page }) => {
+    const user = { id: 1, name: 'User' };
+    await createWidget(page, 'dxChat', {
+      items: [],
+      user,
+      typingUsers: [{ id: 2, name: 'Alice' }, { id: 3, name: 'Bob' }],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

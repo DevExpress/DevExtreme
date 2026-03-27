@@ -83,4 +83,23 @@ test.describe('Accessibility - textBox', () => {
     await createWidget(page, 'dxTextBox', { placeholder: 'placeholder', disabled: true, inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('textBox with maxLength', async ({ page }) => {
+    await createWidget(page, 'dxTextBox', { value: 'value', maxLength: 50, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textBox with custom button', async ({ page }) => {
+    await createWidget(page, 'dxTextBox', {
+      value: 'value',
+      inputAttr: { 'aria-label': 'aria-label' },
+      buttons: [{ name: 'custom', location: 'after', options: { icon: 'search', stylingMode: 'text' } }],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textBox mode number', async ({ page }) => {
+    await createWidget(page, 'dxTextBox', { value: '42', mode: 'number', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

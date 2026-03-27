@@ -68,4 +68,24 @@ test.describe('Accessibility - dateBox', () => {
     await createWidget(page, 'dxDateBox', { type: 'date', value: new Date(), showDropDownButton: false, inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('dateBox with name', async ({ page }) => {
+    await createWidget(page, 'dxDateBox', { type: 'date', name: 'dateBox', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dateBox disabled with value', async ({ page }) => {
+    await createWidget(page, 'dxDateBox', { type: 'date', value: new Date(), disabled: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dateBox type date with custom button', async ({ page }) => {
+    await createWidget(page, 'dxDateBox', {
+      type: 'date',
+      value: new Date(),
+      inputAttr: { 'aria-label': 'aria-label' },
+      buttons: [{ name: 'today', location: 'before', options: { text: 'Today', stylingMode: 'text' } }],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });
