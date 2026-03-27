@@ -41,8 +41,8 @@ async function takePageScreenshot(
   screenshotOptions?: { maxDiffPixelRatio?: number },
 ): Promise<void> {
   const viewport = page.viewportSize() ?? { width: 1200, height: 800 };
-  const hasPadding = await page.evaluate(() => !!document.documentElement.style.paddingRight);
-  const width = hasPadding ? viewport.width - 15 : viewport.width;
+  const htmlOffsetWidth = await page.evaluate(() => document.documentElement.offsetWidth);
+  const width = Math.min(htmlOffsetWidth, viewport.width);
   const clip = { x: 0, y: 0, width, height: viewport.height };
   await expect(page).toHaveScreenshot([name], { maxDiffPixelRatio: 0.20, clip, ...screenshotOptions });
 }
@@ -56,21 +56,15 @@ async function takeElementScreenshot(
   const locator = typeof element === 'string' ? page.locator(element) : element;
   const selector = typeof element === 'string' ? element : null;
 
-  const overflowClip = selector
+  const clip = selector
     ? await getVisualClip(page, selector)
     : await getLocatorScrollClip(locator);
 
-  const clip = overflowClip ?? await locator.evaluate((el) => {
-    const r = el.getBoundingClientRect();
-    return {
-      x: Math.round(r.x),
-      y: Math.round(r.y),
-      width: Math.round(r.width),
-      height: Math.floor(r.height),
-    };
-  });
-
-  await expect(page).toHaveScreenshot([name], { maxDiffPixelRatio: 0.15, clip, ...screenshotOptions });
+  if (clip) {
+    await expect(page).toHaveScreenshot([name], { maxDiffPixelRatio: 0.15, clip, ...screenshotOptions });
+  } else {
+    await expect(locator).toHaveScreenshot([name], { maxDiffPixelRatio: 0.15, ...screenshotOptions });
+  }
 }
 
 async function simulateTestCafeScrollbar(page: Page): Promise<boolean> {
