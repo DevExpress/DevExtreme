@@ -6,6 +6,7 @@ const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container
 
 test.describe('Toolbar_OverflowMenu_Popup', () => {
   test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 400, height: 400 });
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
     await page.evaluate((theme) => new Promise<void>((resolve) => {
@@ -71,7 +72,6 @@ test.describe('Toolbar_OverflowMenu_Popup', () => {
     });
 
     test(`Popup above container should be limited in height,rtlEnabled=${rtlEnabled}`, async ({ page }) => {
-
       await setAttribute(page, '#container', 'style', 'margin-top: 200px');
 
       await createWidget(page, 'dxToolbar', {

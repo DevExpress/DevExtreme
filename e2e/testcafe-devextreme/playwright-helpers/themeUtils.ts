@@ -72,13 +72,20 @@ async function simulateTestCafeScrollbar(page: Page): Promise<boolean> {
   if (viewport && viewport.width !== 1200) return false;
 
   return page.evaluate(() => {
+    if (document.documentElement.style.paddingRight) return false;
+
+    document.documentElement.style.paddingRight = '15px';
+    document.documentElement.style.boxSizing = 'border-box';
+
+    void document.body.offsetHeight;
+
     const hasOverflow = document.body.scrollHeight > window.innerHeight;
-    if (hasOverflow && !document.documentElement.style.paddingRight) {
-      document.documentElement.style.paddingRight = '15px';
-      document.documentElement.style.boxSizing = 'border-box';
-      return true;
+    if (!hasOverflow) {
+      document.documentElement.style.paddingRight = '';
+      document.documentElement.style.boxSizing = '';
+      return false;
     }
-    return false;
+    return true;
   });
 }
 

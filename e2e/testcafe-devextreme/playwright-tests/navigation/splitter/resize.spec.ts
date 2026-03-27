@@ -6,6 +6,7 @@ const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container
 
 test.describe('Splitter_integration', () => {
   test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 800, height: 800 });
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
     await page.evaluate((theme) => new Promise<void>((resolve) => {
@@ -15,8 +16,6 @@ test.describe('Splitter_integration', () => {
   });
 
   test('non resizable pane should not change its size during resize', async ({ page }) => {
-    await page.setViewportSize({ width: 800, height: 800 });
-
     await createWidget(page, 'dxSplitter', {
     width: '100%',
     height: 300,

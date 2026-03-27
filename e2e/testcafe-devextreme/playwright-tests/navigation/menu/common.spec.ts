@@ -84,6 +84,7 @@ test.describe('Menu_common', () => {
 
   [true, false].forEach((adaptivityEnabled) => {
     test(`Menu item with link, adaptivityEnabled=${adaptivityEnabled}`, async ({ page }) => {
+      await page.setViewportSize({ width: 250, height: 500 });
 
       await appendElementTo(page, '#container', 'div', 'menu');
       await setAttribute(page, '#container', 'style', 'width: 200px; height: 400px;');
@@ -138,6 +139,7 @@ test.describe('Menu_common', () => {
   });
 
   test('Menu scrolling', async ({ page }) => {
+    await page.setViewportSize({ width: 500, height: 500 });
 
     const items: any[] = new Array(99).fill(null).map((_, idx) => ({ text: `item ${idx}` }));
 

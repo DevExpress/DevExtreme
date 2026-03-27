@@ -51,6 +51,7 @@ test.describe('Appointment Form: Main Form', () => {
   });
 
   test('appointment main form', async ({ page }) => {
+    await page.setViewportSize({ width: 1500, height: 1500 });
     for (const { isRecurringAppointment, isAllDay } of [
       { isRecurringAppointment: false, isAllDay: true },
       { isRecurringAppointment: false, isAllDay: false },
@@ -88,6 +89,7 @@ test.describe('Appointment Form: Main Form', () => {
   });
 
   test('appointment main form with resources and timezones', async ({ page }) => {
+    await page.setViewportSize({ width: 1500, height: 1500 });
     for (const { isRecurringAppointment, isAllDay } of [
       { isRecurringAppointment: false, isAllDay: true },
       { isRecurringAppointment: false, isAllDay: false },

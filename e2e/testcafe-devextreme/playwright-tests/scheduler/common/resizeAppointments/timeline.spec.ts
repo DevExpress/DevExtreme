@@ -21,6 +21,7 @@ const defaultOptions = {
 
 test.describe('Resize appointments in the Scheduler timeline views', () => {
   test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 1400, height: 800 });
     await setupTestPage(page, containerUrl);
   });
 

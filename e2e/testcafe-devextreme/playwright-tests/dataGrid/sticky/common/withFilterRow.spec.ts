@@ -22,6 +22,7 @@ const defaultColumns = [
 
 test.describe('Sticky columns - Filter row', () => {
   test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 800, height: 800 });
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
     await page.evaluate((theme) => new Promise<void>((resolve) => {

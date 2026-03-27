@@ -39,6 +39,7 @@ test.describe('Week view in adaptive mode', () => {
   });
 
   test('Compact appointment should be center by vertical alignment', async ({ page }) => {
+    await page.setViewportSize({ width: 350, height: 600 });
     await createScheduler(page, sampleDataNotRoundedMinutes);
 
     const appointmentCount = await page.locator('.dx-scheduler-appointment').count();

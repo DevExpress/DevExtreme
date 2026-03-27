@@ -13,6 +13,7 @@ async function scrollTo(page, x: number, y: number): Promise<void> {
 
 test.describe('Scheduler: Virtual scrolling', () => {
   test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 600, height: 800 });
     await setupTestPage(page, containerUrl);
   });
 

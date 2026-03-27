@@ -23,6 +23,7 @@ const masterDetailLoremText = 'Lorem ipsum dolor sit amet, consectetur adipiscin
 
 test.describe('FixedColumns - MasterDetail', () => {
   test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 900, height: 800 });
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
     await page.evaluate((theme) => new Promise<void>((resolve) => {

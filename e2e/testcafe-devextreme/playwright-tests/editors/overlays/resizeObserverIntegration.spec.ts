@@ -37,6 +37,7 @@ async function showPopup(page: any) {
 
 test.describe('Popup', () => {
   test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 200, height: 200 });
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
     await page.evaluate((theme) => new Promise<void>((resolve) => {

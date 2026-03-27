@@ -30,6 +30,7 @@ const createScheduler = async (page, groups: undefined | string[], rtlEnabled: b
 
 test.describe('Agenda:adaptive', () => {
   test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 400, height: 600 });
     await setupTestPage(page, containerUrl);
   });
 

@@ -26,6 +26,7 @@ test.describe('FixedColumns', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
   test('The simulated scrollbar should display correctly when there are sticky columns', async ({ page }) => {
+    await page.setViewportSize({ width: 1000, height: 800 });
     await createWidget(page, 'dxDataGrid', {
       dataSource: getData(5, 25),
       width: 984,
@@ -62,6 +63,7 @@ test.describe('FixedColumns', () => {
     // TODO: .after() block removed
 
   test('Alternating rows should display correctly when there are fixed columns (generic.light theme)', async ({ page }) => {
+    await page.setViewportSize({ width: 900, height: 800 });
     await createWidget(page, 'dxDataGrid', {
       dataSource: getData(20, 15),
       columnWidth: 100,
@@ -86,6 +88,7 @@ test.describe('FixedColumns', () => {
   });
 
   test('Header hover should display correctly when there are fixed columns (generic.light theme)', async ({ page }) => {
+    await page.setViewportSize({ width: 900, height: 800 });
     await createWidget(page, 'dxDataGrid', {
       dataSource: getData(20, 15),
       columnWidth: 100,
@@ -112,6 +115,7 @@ test.describe('FixedColumns', () => {
   });
 
   test('Row hover should display correctly when there are fixed columns (generic.light theme)', async ({ page }) => {
+    await page.setViewportSize({ width: 900, height: 800 });
     await createWidget(page, 'dxDataGrid', {
       dataSource: getData(20, 15),
       columnWidth: 100,
@@ -138,6 +142,7 @@ test.describe('FixedColumns', () => {
   });
 
   test('The grid should display correctly when there is no data and there are fixed columns (T1269088)', async ({ page }) => {
+    await page.setViewportSize({ width: 1000, height: 800 });
     const defaultColumns = [
       { dataField: 'OrderNumber', width: 130, fixed: true, fixedPosition: 'left' },
       { dataField: 'OrderDate', dataType: 'date' },
@@ -180,6 +185,7 @@ test.describe('FixedColumns', () => {
 
   [90, 125, 150].forEach((zoomPercent) => {
     test(`Fixed columns should display correctly at ${zoomPercent}% zoom (generic.light theme)`, async ({ page }) => {
+      await page.setViewportSize({ width: 900, height: 800 });
       await createWidget(page, 'dxDataGrid', {
         dataSource: getData(20, 15),
         columnWidth: 100,

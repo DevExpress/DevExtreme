@@ -570,6 +570,7 @@ test.describe('Scrolling', () => {
   });
 
   test('Rows are rendered properly when window content is scrolled (T1070388)', async ({ page }) => {
+    await page.setViewportSize({ width: 800, height: 800 });
     const dataGrid = new DataGrid(page);
 
     await page.evaluate(() => {
@@ -956,6 +957,7 @@ test.describe('Scrolling', () => {
   });
 
   test('New mode. Rows should be rendered properly when rowRenderingMode is virtual and max height (T1054920)', async ({ page }) => {
+    await page.setViewportSize({ width: 800, height: 700 });
     await page.evaluate(() => {
       document.querySelector('#container')?.setAttribute('style', 'max-height: 600px');
     });
@@ -1024,6 +1026,7 @@ test.describe('Scrolling', () => {
   });
 
   test('Editing buttons should rerender correctly after scrolling if repaintChangesOnly=true', async ({ page }) => {
+    await page.setViewportSize({ width: 800, height: 200 });
     const data = Array.from({ length: 14 }, (_, i) => ({ id: i + 1 }));
 
     await createWidget(page, 'dxDataGrid', {
@@ -1230,6 +1233,7 @@ test.describe('Scrolling', () => {
   });
 
   test('The page should not be changed when hiding/showing the grid view after the data has been edited', async ({ page }) => {
+    await page.setViewportSize({ width: 800, height: 800 });
     const dataGrid = new DataGrid(page);
 
     let testLoadCount = 0;

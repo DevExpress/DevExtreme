@@ -6,6 +6,7 @@ const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container
 
 test.describe('Menu_common', () => {
   test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 500, height: 500 });
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
     await page.evaluate((theme) => new Promise<void>((resolve) => {
@@ -59,6 +60,7 @@ test.describe('Menu_common', () => {
     ['bottom', 'right', 'bottom right'].forEach((collision) => {
       const testName = `Menu delimiter ${collision} collision, orientation=${orientation}`;
       test(testName, async ({ page }) => {
+        await page.setViewportSize({ width: 515, height: 515 });
 
         await appendElementTo(page, '#container', 'div', 'menu');
         const additionalStyles: Record<string, string> = {
@@ -88,7 +90,6 @@ test.describe('Menu_common', () => {
   });
 
   test('Menu delimiter appearance when the Menu is used as a toolbar item', async ({ page }) => {
-
     const toolbarItems = [
       {
         location: 'before',

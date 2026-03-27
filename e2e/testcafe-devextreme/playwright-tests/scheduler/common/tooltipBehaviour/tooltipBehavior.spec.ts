@@ -27,6 +27,7 @@ test.describe('Appointment tooltip behavior during scrolling in the Scheduler (T
   });
 
   test('The tooltip of collector should not scroll page and immediately hide', async ({ page }) => {
+    await page.setViewportSize({ width: 600, height: 450 });
     await createWidget(page, 'dxScheduler', {
       ...defaultSchedulerOptions,
       views: [{
@@ -56,6 +57,7 @@ test.describe('Appointment tooltip behavior during scrolling in the Scheduler (T
   });
 
   test('The tooltip should not hide after automatic scrolling during an appointment click', async ({ page }) => {
+    await page.setViewportSize({ width: 600, height: 400 });
     await createWidget(page, 'dxScheduler', {
       ...defaultSchedulerOptions,
       views: ['week'],
@@ -71,6 +73,7 @@ test.describe('Appointment tooltip behavior during scrolling in the Scheduler (T
   });
 
   test('The tooltip should hide after manually scrolling in the browser', async ({ page }) => {
+    await page.setViewportSize({ width: 600, height: 400 });
     await createWidget(page, 'dxScheduler', {
       ...defaultSchedulerOptions,
       views: ['week'],

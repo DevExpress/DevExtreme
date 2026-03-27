@@ -6,6 +6,7 @@ const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container
 
 test.describe('ContextMenu_common', () => {
   test.beforeEach(async ({ page }) => {
+    await page.setViewportSize({ width: 500, height: 500 });
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
     await page.evaluate((theme) => new Promise<void>((resolve) => {
@@ -15,7 +16,6 @@ test.describe('ContextMenu_common', () => {
   });
 
   test('ContextMenu items render', async ({ page }) => {
-
     await appendElementTo(page, '#container', 'div', 'contextMenu');
 
     const items: any[] = new Array(99).fill(null).map((_, idx) => ({ text: `item ${idx}` }));
