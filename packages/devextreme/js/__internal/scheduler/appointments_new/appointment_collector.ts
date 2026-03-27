@@ -14,8 +14,7 @@ import type { TargetedAppointment } from '@ts/scheduler/types';
 import { APPOINTMENT_COLLECTOR_CLASSES } from './const';
 
 export interface AppointmentCollectorProperties
-  extends DOMComponentProperties<AppointmentCollector>
-{
+  extends DOMComponentProperties<AppointmentCollector> {
   appointmentsCount: number;
   isCompact: boolean;
   geometry: {
@@ -23,7 +22,7 @@ export interface AppointmentCollectorProperties
     width: number;
     top: number;
     left: number;
-  },
+  };
   targetedAppointmentData: TargetedAppointment;
   appointmentCollectorTemplate: TemplateBase;
 }
@@ -70,9 +69,8 @@ export class AppointmentCollector
   }
 
   private applyElementAria(): void {
-    const localizeDate = (date: Date): string => (
-      `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`
-    );
+    const localizeDate = (date: Date): string =>
+      `${dateLocalization.format(date, 'monthAndDay')}, ${dateLocalization.format(date, 'year')}`;
 
     const { targetedAppointmentData } = this.option();
 

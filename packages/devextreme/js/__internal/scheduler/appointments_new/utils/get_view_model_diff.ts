@@ -59,11 +59,11 @@ const isAppointmentDataChanged = (
 };
 
 function getArraysDiff(options: {
-  a: Item[],
-  b: Item[],
-  match: (x: Item, y: Item) => boolean,
-  equal: (x: Item, y: Item) => boolean,
-  canResize: (x: Item, y: Item) => boolean,
+  a: Item[];
+  b: Item[];
+  match: (x: Item, y: Item) => boolean;
+  equal: (x: Item, y: Item) => boolean;
+  canResize: (x: Item, y: Item) => boolean;
 }): DiffItem[] {
   const {
     a, b, match, equal, canResize,
@@ -129,17 +129,14 @@ export const getViewModelDiff = (
   newViewModel: Item[],
   appointmentDataSource: AppointmentDataSource,
 ): DiffItem[] => {
-  const match = (a: Item, b: Item): boolean => (
-    a.itemData === b.itemData && !isAppointmentDataChanged(b.itemData, appointmentDataSource)
-  );
+  const match = (a: Item, b: Item): boolean =>
+    a.itemData === b.itemData && !isAppointmentDataChanged(b.itemData, appointmentDataSource);
 
-  const equal = (a: Item, b: Item): boolean => (
-    equalByValue(getObjectToCompare(a, true), getObjectToCompare(b, true))
-  );
+  const equal = (a: Item, b: Item): boolean =>
+    equalByValue(getObjectToCompare(a, true), getObjectToCompare(b, true));
 
-  const canResize = (a: Item, b: Item): boolean => (
-    equalByValue(getObjectToCompare(a, false), getObjectToCompare(b, false))
-  );
+  const canResize = (a: Item, b: Item): boolean =>
+    equalByValue(getObjectToCompare(a, false), getObjectToCompare(b, false));
 
   const result = getArraysDiff({
     a: oldViewModel,
