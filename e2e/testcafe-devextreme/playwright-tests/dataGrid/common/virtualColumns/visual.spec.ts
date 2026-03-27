@@ -175,6 +175,96 @@ test.describe('Virtual Columns.Visual', () => {
     await testScreenshot(page, 'T1176161-master-detail-with-virtual-columns-2.png', { element: page.locator('#container') });
   });
 
+  test('Columns reordering should work with virtual columns', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+    const columns = generateColumns(30);
+
+    await createWidget(page, 'dxDataGrid', {
+      height: 440,
+      width: 600,
+      dataSource: generateData(10, 30),
+      columns,
+      columnWidth: 100,
+      allowColumnReordering: true,
+      scrolling: { columnRenderingMode: 'virtual' },
+    });
+
+    await expect(dataGrid.element).toBeVisible();
+    const scrollLeft = await dataGrid.getScrollLeft();
+    expect(scrollLeft).toBe(0);
+
+    await dataGrid.moveHeader(0, 200, 0, true);
+    await dataGrid.dropHeader(0);
+
+    await testScreenshot(page, 'grid-virtual-columns-reordering.png', { element: page.locator('#container') });
+  });
+
+  test('Grouping should work with virtual columns', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+    const columns = generateColumns(20);
+
+    await createWidget(page, 'dxDataGrid', {
+      height: 440,
+      width: 600,
+      dataSource: generateData(10, 20),
+      columns: [{ ...columns[0], groupIndex: 0 }, ...columns.slice(1)],
+      columnWidth: 100,
+      scrolling: { columnRenderingMode: 'virtual' },
+    });
+
+    await expect(dataGrid.element).toBeVisible();
+    await dataGrid.scrollTo({ x: 500 });
+
+    await testScreenshot(page, 'grid-virtual-columns-grouping.png', { element: page.locator('#container') });
+  });
+
+  test('Column chooser should work with virtual columns', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+    const columns = generateColumns(30);
+
+    await createWidget(page, 'dxDataGrid', {
+      height: 440,
+      width: 600,
+      dataSource: generateData(10, 30),
+      columns,
+      columnWidth: 100,
+      scrolling: { columnRenderingMode: 'virtual' },
+      columnChooser: { enabled: true },
+    });
+
+    await expect(dataGrid.element).toBeVisible();
+    await page.locator('.dx-datagrid-column-chooser-button').click();
+
+    const columnChooser = page.locator('.dx-datagrid-column-chooser');
+    await expect(columnChooser).toBeVisible();
+
+    await testScreenshot(page, 'grid-virtual-columns-column-chooser.png', { element: page.locator('body') });
+  });
+
+  test('Header, fixed columns and virtual scroll bar should have stable position during async render', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+    const columns = generateColumns(50);
+
+    await createWidget(page, 'dxDataGrid', {
+      height: 440,
+      width: 600,
+      dataSource: generateData(20, 50),
+      columns: [
+        { ...columns[0], fixed: true },
+        { ...columns[1], fixed: true },
+        ...columns.slice(2),
+      ],
+      columnWidth: 100,
+      scrolling: { columnRenderingMode: 'virtual', useNative: false },
+    });
+
+    await expect(dataGrid.element).toBeVisible();
+    await dataGrid.scrollTo({ x: 1000 });
+    await page.waitForTimeout(200);
+
+    await testScreenshot(page, 'grid-virtual-columns-fixed-stable-position.png', { element: page.locator('#container') });
+  });
+
   test.skip('The updateDimensions method should render the grid if a container was hidden and columnRenderingMode is virtual', async ({ page }) => {
     // TODO: Playwright migration - screenshot mismatch
     await page.setViewportSize({ width: 1280, height: 720 });

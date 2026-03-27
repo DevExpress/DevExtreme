@@ -14,8 +14,7 @@ test.describe('Icon Sizes', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Load panel should support string height and width', async ({ page }) => {
-    // TODO: Playwright migration - load panel content locator times out (loadPanel not shown)
+  test('Load panel should support string height and width', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: [],
       columns: [
@@ -33,6 +32,8 @@ test.describe('Icon Sizes', () => {
     await dataGrid.apiBeginCustomLoading('test');
 
     const loadPanelContent = dataGrid.getLoadPanel().getContent();
+    await expect(loadPanelContent).toBeVisible();
+
     const height = await loadPanelContent.evaluate((el) => getComputedStyle(el).height);
     const width = await loadPanelContent.evaluate((el) => getComputedStyle(el).width);
 

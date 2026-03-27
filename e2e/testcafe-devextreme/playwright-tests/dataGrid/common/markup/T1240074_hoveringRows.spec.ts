@@ -23,26 +23,38 @@ test.describe('HoveringRows', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
-  test.skip('Hover over rows in the middle', async ({ page }) => {
-    // TODO: Playwright migration - TestCafe API remnants (row.element.hover().expect().ok(), row.isHovered)
-    await createWidget(page, 'dxDataGrid',
-        {
-          dataSource: getData(20, 3),
-          hoverStateEnabled: true,
-        },
-      );
 
-      const firstRow = page.locator('.dx-data-row').nth(10);
+  test('Hover over rows in the middle', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(20, 3),
+      hoverStateEnabled: true,
+    });
+
+    const firstRow = page.locator('.dx-data-row').nth(10);
     const secondRow = page.locator('.dx-data-row').nth(11);
 
-    await (firstRow.element).hover()
-      .expect(firstRow.isHovered)
-      .ok();
+    await firstRow.hover();
+    await expect(firstRow).toHaveClass(/dx-state-hover/);
 
-    await (secondRow.element).hover()
-      .expect(firstRow.isHovered)
-      .notOk()
-      .expect(secondRow.isHovered)
-      .ok();
+    await secondRow.hover();
+    await expect(firstRow).not.toHaveClass(/dx-state-hover/);
+    await expect(secondRow).toHaveClass(/dx-state-hover/);
+  });
+
+  test('Hover over first and last rows', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(20, 3),
+      hoverStateEnabled: true,
+    });
+
+    const firstRow = page.locator('.dx-data-row').first();
+    const lastRow = page.locator('.dx-data-row').last();
+
+    await firstRow.hover();
+    await expect(firstRow).toHaveClass(/dx-state-hover/);
+
+    await lastRow.hover();
+    await expect(firstRow).not.toHaveClass(/dx-state-hover/);
+    await expect(lastRow).toHaveClass(/dx-state-hover/);
   });
 });

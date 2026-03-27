@@ -1,5 +1,7 @@
 import type { Page } from '@playwright/test';
-import { expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+import { generateOptionMatrix } from './generateOptionMatrix';
+import { createWidget } from './createWidget';
 
 export interface A11yCheckOptions {
   runOnly?: string;
@@ -80,4 +82,68 @@ export async function testAccessibility(
   }, { name: widgetName, opts: widgetOptions, sel: selector });
 
   await a11yCheck(page, a11yCheckConfig, selector);
+}
+
+type OptionMatrix<T> = { [K in keyof T]: T[K][] };
+
+export interface MatrixAccessibilityConfig<TOptions = Record<string, unknown>> {
+  component: string;
+  options?: OptionMatrix<TOptions>;
+  a11yCheckConfig?: A11yCheckOptions;
+  selector?: string;
+  containerUrl: string;
+  created?: (page: Page, optionConfiguration: TOptions) => Promise<void>;
+}
+
+const componentsWithDisabledColorContrastIssues = ['dxTagBox', 'dxFileUploader', 'dxDateRangeBox'];
+
+export function testAccessibilityMatrix<TOptions extends Record<string, unknown> = Record<string, unknown>>(
+  config: MatrixAccessibilityConfig<TOptions>,
+): void {
+  const {
+    component,
+    options,
+    selector = '#container',
+    a11yCheckConfig = {},
+    containerUrl,
+    created,
+  } = config;
+
+  const optionConfigurations: TOptions[] = options && Object.keys(options).length
+    ? generateOptionMatrix(options as OptionMatrix<TOptions>)
+    : [{} as TOptions];
+
+  optionConfigurations.forEach((optionConfiguration, index) => {
+    test(`${component}: test with axe #${index}`, async ({ page }) => {
+      await page.goto(containerUrl);
+      await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+      await page.evaluate((theme) => new Promise<void>((resolve) => {
+        (window as any).DevExpress.ui.themes.ready(resolve);
+        (window as any).DevExpress.ui.themes.current(theme);
+      }), process.env.THEME || 'fluent.blue.light');
+
+      const currentA11yCheckConfig = { ...a11yCheckConfig } as A11yCheckOptions;
+      const isComponentDisabled = (optionConfiguration as Record<string, unknown>).disabled;
+      const shouldIgnoreColorContrast = componentsWithDisabledColorContrastIssues
+        .includes(component) && isComponentDisabled;
+
+      if (shouldIgnoreColorContrast) {
+        if (currentA11yCheckConfig.runOnly === 'color-contrast') {
+          return;
+        }
+        currentA11yCheckConfig.rules = {
+          ...currentA11yCheckConfig.rules,
+          'color-contrast': { enabled: false },
+        };
+      }
+
+      await createWidget(page, component, optionConfiguration as Record<string, unknown>, selector);
+
+      if (created) {
+        await created(page, optionConfiguration);
+      }
+
+      await a11yCheck(page, currentA11yCheckConfig, selector);
+    });
+  });
 }

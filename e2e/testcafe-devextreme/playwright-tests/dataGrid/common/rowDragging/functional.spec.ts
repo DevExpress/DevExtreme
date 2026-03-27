@@ -214,4 +214,85 @@ test.describe('Row dragging.Functional', () => {
 
     await dataGrid.dropRow();
   });
+
+  test('The draggable element should be displayed correctly after horizontal scrolling when columnRenderingMode is virtual', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      width: 300,
+      height: 300,
+      keyExpr: 'id',
+      scrolling: { columnRenderingMode: 'virtual' },
+      dataSource: [...new Array(5)].map((_, i) => ({ id: i + 1 })),
+      columns: [...new Array(10)].map((_, i) => ({ dataField: `col${i}`, width: 100 })),
+      rowDragging: { allowReordering: true, showDragIcons: true },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await expect(dataGrid.getContainer()).toBeVisible();
+
+    await dataGrid.scrollTo({ x: 300 });
+    await page.waitForTimeout(200);
+
+    await dataGrid.moveRow(0, 0, 0, true);
+    await dataGrid.moveRow(0, 0, 60);
+
+    const draggable = page.locator('.dx-sortable-dragging');
+    await expect(draggable).toBeVisible();
+
+    await dataGrid.dropRow();
+  });
+
+  test('The placeholder should have correct position after dragging the row to the end when there is free space', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      height: 400,
+      keyExpr: 'id',
+      dataSource: [
+        { id: 1, name: 'Item 1' },
+        { id: 2, name: 'Item 2' },
+        { id: 3, name: 'Item 3' },
+      ],
+      rowDragging: {
+        allowReordering: true,
+        showDragIcons: true,
+        dropFeedbackMode: 'push',
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await expect(dataGrid.getContainer()).toBeVisible();
+
+    await dataGrid.moveRow(0, 0, 0, true);
+    await dataGrid.moveRow(0, 0, 200);
+
+    await page.waitForTimeout(200);
+
+    await dataGrid.dropRow();
+
+    await expect(dataGrid.getDataRow(0).element).toBeVisible();
+  });
+
+  test('toIndex should not be corrected when source item gets removed from DOM', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      height: 200,
+      keyExpr: 'id',
+      scrolling: { mode: 'virtual' },
+      dataSource: [...new Array(20)].map((_, i) => ({ id: i + 1, name: `Item ${i + 1}` })),
+      columns: ['id', 'name'],
+      rowDragging: {
+        allowReordering: true,
+        showDragIcons: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await expect(dataGrid.getContainer()).toBeVisible();
+
+    await dataGrid.moveRow(0, 0, 0, true);
+    await dataGrid.moveRow(0, 0, 100);
+
+    await page.waitForTimeout(300);
+
+    await dataGrid.dropRow();
+
+    await expect(dataGrid.getDataRow(0).element).toBeVisible();
+  });
 });

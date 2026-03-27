@@ -28,8 +28,8 @@ export {
   setupTestPage,
 } from './testPageUtils';
 export { generateOptionMatrix } from './generateOptionMatrix';
-export { a11yCheck, testAccessibility } from './accessibility';
-export type { A11yCheckOptions, TestAccessibilityConfig } from './accessibility';
+export { a11yCheck, testAccessibility, testAccessibilityMatrix } from './accessibility';
+export type { A11yCheckOptions, TestAccessibilityConfig, MatrixAccessibilityConfig } from './accessibility';
 export {
   Scheduler,
   SchedulerAppointment,
