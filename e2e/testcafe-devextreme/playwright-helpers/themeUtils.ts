@@ -67,6 +67,25 @@ async function takeElementScreenshot(
   }
 }
 
+async function simulateTestCafeScrollbar(page: Page): Promise<boolean> {
+  return page.evaluate(() => {
+    const hasOverflow = document.body.scrollHeight > window.innerHeight;
+    if (hasOverflow && !document.documentElement.style.paddingRight) {
+      document.documentElement.style.paddingRight = '15px';
+      document.documentElement.style.boxSizing = 'border-box';
+      return true;
+    }
+    return false;
+  });
+}
+
+async function removeSimulatedScrollbar(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    document.documentElement.style.paddingRight = '';
+    document.documentElement.style.boxSizing = '';
+  });
+}
+
 async function takeScreenshotForTarget(
   page: Page,
   element: Locator | string | null | undefined,
@@ -82,10 +101,24 @@ async function takeScreenshotForTarget(
     });
   });
 
-  if (element === undefined || element === null) {
-    await takePageScreenshot(page, name, screenshotOptions);
-  } else {
-    await takeElementScreenshot(page, element, name, screenshotOptions);
+  const addedPadding = await simulateTestCafeScrollbar(page);
+  if (addedPadding) {
+    await page.evaluate(() => new Promise<void>((resolve) => {
+      window.dispatchEvent(new Event('resize'));
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+    }));
+  }
+
+  try {
+    if (element === undefined || element === null) {
+      await takePageScreenshot(page, name, screenshotOptions);
+    } else {
+      await takeElementScreenshot(page, element, name, screenshotOptions);
+    }
+  } finally {
+    if (addedPadding) {
+      await removeSimulatedScrollbar(page);
+    }
   }
 }
 
