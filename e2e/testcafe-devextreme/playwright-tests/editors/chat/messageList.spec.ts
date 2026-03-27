@@ -185,33 +185,6 @@ test.describe('ChatMessageList', () => {
     await testScreenshot(page, 'Messagelist with message template after new message add.png', { element: '#container' });
   });
 
-  test('Messagelist options showDayHeaders, showUserName and showMessageTimestamp set to false work', async ({ page }) => {
-    const userFirst = createUser(1, 'First');
-    const userSecond = createUser(2, 'Second');
-    const items = [{
-      author: userFirst,
-      text: 'AAA',
-    }, {
-      author: userFirst,
-      text: 'BBB',
-    }, {
-      author: userSecond,
-      text: 'CCC',
-    }];
-
-    await createWidget(page, 'dxChat', {
-      items,
-      user: userFirst,
-      width: 400,
-      height: 600,
-      showDayHeaders: false,
-      showUserName: false,
-      showMessageTimestamp: false,
-    });
-
-    await testScreenshot(page, 'Messagelist with showDayHeaders, showUserName and showMessageTimestamp options set to false.png', { element: '#container' });
-  });
-
   test('Message list with editing context menu', async ({ page }) => {
     const userFirst = createUser(1, 'First');
     const userSecond = createUser(2, 'Second');

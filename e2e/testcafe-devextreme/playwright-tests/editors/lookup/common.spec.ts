@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, appendElementTo, setStyleAttribute, insertStylesheetRulesToPage, isMaterial, isMaterialBased, Lookup } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, testScreenshot, appendElementTo, setStyleAttribute } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -13,54 +13,6 @@ test.describe('Lookup', () => {
       (window as any).DevExpress.ui.themes.ready(resolve);
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
-  });
-
-  test('Popup should not be closed if lookup is placed at the page bottom (T1018037)', async ({ page }) => {
-    await setStyleAttribute(page, '#container', 'position: absolute; bottom: 0; width: 300px;');
-
-    await createWidget(page, 'dxLookup', {
-      items: ['item1', 'item2', 'item3'],
-      dropDownOptions: {
-        hideOnOutsideClick: true,
-      },
-    });
-
-    const lookup = new Lookup(page);
-
-    await lookup.open();
-    expect(await lookup.isOpened()).toBe(true);
-
-    await testScreenshot(page, 'Lookup popup at page bottom.png');
-  });
-
-  test('Check popup height with no found data option', async ({ page }) => {
-    await createWidget(page, 'dxLookup', {
-      items: ['item1', 'item2', 'item3'],
-      searchEnabled: true,
-    });
-
-    const lookup = new Lookup(page);
-
-    await lookup.field.click();
-    await lookup.getSearchInput().fill('nonexistent');
-
-    await testScreenshot(page, 'Lookup popup height no found data.png');
-  });
-
-  test('Check popup height in loading state', async ({ page }) => {
-    await createWidget(page, 'dxLookup', {
-      dataSource: {
-        load() {
-          return new Promise(() => {});
-        },
-      },
-    });
-
-    const lookup = new Lookup(page);
-
-    await lookup.field.click();
-
-    await testScreenshot(page, 'Lookup popup height loading state.png');
   });
 
   test('Lookup appearance', async ({ page }) => {

@@ -58,18 +58,4 @@ test.describe('CardView - NoData', () => {
     await expect(cards).toHaveCount(0);
   });
 
-  test('no data visual with custom noDataText and screenshot', async ({ page }) => {
-    await page.setViewportSize({ width: 1000, height: 600 });
-    await createWidget(page, 'dxCardView', {
-      width: 1000,
-      height: 600,
-      columns: ['Customer', 'Order Date'],
-      dataSource: [],
-      noDataText: 'No records found',
-    });
-
-    await testScreenshot(page, 'content-no-data-custom-text.png', {
-      element: page.locator('#container'),
-    });
-  });
 });

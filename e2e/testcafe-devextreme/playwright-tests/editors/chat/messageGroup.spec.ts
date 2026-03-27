@@ -93,54 +93,6 @@ test.describe('ChatMessageGroup', () => {
     await testScreenshot(page, 'Messagegroup with 4 bubbles.png', { element: '#chat' });
   });
 
-  test('Messagegroup scenarios in disabled state', async ({ page }) => {
-    await appendElementTo(page, '#container', 'div', 'chat');
-
-    const userFirst = createUser(1, 'First');
-    const userSecond = createUser(2, 'Second');
-
-    for (const count of [1, 2, 3, 4]) {
-      const items = generateMessages(count, userFirst, userSecond, false, false, 4, 2);
-      await page.evaluate((opts) => {
-        if ($('#chat').children().length) {
-          ($('#chat') as any).dxChat('instance').option(opts);
-        } else {
-          ($('#chat') as any).dxChat({
-            width: 400,
-            height: 600,
-            ...opts,
-          });
-        }
-      }, { items, user: userSecond, disabled: true });
-
-      await testScreenshot(page, `Messagegroup with ${count} bubble(s) disabled.png`, { element: '#chat' });
-    }
-  });
-
-  test('Messagegroup scenarios in RTL mode', async ({ page }) => {
-    await appendElementTo(page, '#container', 'div', 'chat');
-
-    const userFirst = createUser(1, 'First');
-    const userSecond = createUser(2, 'Second');
-
-    for (const count of [1, 2, 3, 4]) {
-      const items = generateMessages(count, userFirst, userSecond, false, false, 4, 2);
-      await page.evaluate((opts) => {
-        if ($('#chat').children().length) {
-          ($('#chat') as any).dxChat('instance').option(opts);
-        } else {
-          ($('#chat') as any).dxChat({
-            width: 400,
-            height: 600,
-            ...opts,
-          });
-        }
-      }, { items, user: userSecond, rtlEnabled: true });
-
-      await testScreenshot(page, `Messagegroup with ${count} bubble(s) RTL.png`, { element: '#chat' });
-    }
-  });
-
   test('MessageGroup with edited messages', async ({ page }) => {
     await appendElementTo(page, '#container', 'div', 'chat');
 

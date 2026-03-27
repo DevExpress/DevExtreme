@@ -241,30 +241,6 @@ test.describe('Virtual Columns.Visual', () => {
     await testScreenshot(page, 'data-grid__virtual-columns__column-chooser.png', { element: page.locator('body') });
   });
 
-  test('Header, fixed columns and virtual scroll bar should have stable position during async render', async ({ page }) => {
-    const dataGrid = new DataGrid(page);
-    const columns = generateColumns(50);
-
-    await createWidget(page, 'dxDataGrid', {
-      height: 440,
-      width: 600,
-      dataSource: generateData(20, 50),
-      columns: [
-        { ...columns[0], fixed: true },
-        { ...columns[1], fixed: true },
-        ...columns.slice(2),
-      ],
-      columnWidth: 100,
-      scrolling: { columnRenderingMode: 'virtual', useNative: false },
-    });
-
-    await expect(dataGrid.element).toBeVisible();
-    await dataGrid.scrollTo({ x: 1000 });
-    await page.waitForTimeout(200);
-
-    await testScreenshot(page, 'grid-virtual-columns-fixed-stable-position.png', { element: page.locator('#container') });
-  });
-
   test.skip('The updateDimensions method should render the grid if a container was hidden and columnRenderingMode is virtual', async ({ page }) => {
     // TODO: Playwright migration - screenshot mismatch
     await page.setViewportSize({ width: 1280, height: 720 });

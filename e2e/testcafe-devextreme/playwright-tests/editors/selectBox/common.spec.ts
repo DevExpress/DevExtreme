@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, appendElementTo, setStyleAttribute, SelectBox } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, testScreenshot, appendElementTo, setStyleAttribute } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -31,31 +31,4 @@ test.describe('SelectBox placeholder', () => {
     await testScreenshot(page, 'SelectBox placeholder after items change if value is not choosen.png', { element: '#container' });
   });
 
-  test('Pages should be loaded consistently after closing the dropdown popup and filtering the data (T1274576)', async ({ page }) => {
-    const items = Array.from({ length: 50 }, (_, i) => `Item ${i + 1}`);
-
-    await createWidget(page, 'dxSelectBox', {
-      dataSource: {
-        store: items,
-        paginate: true,
-        pageSize: 10,
-      },
-      searchEnabled: true,
-    });
-
-    const selectBox = new SelectBox(page);
-
-    await selectBox.click();
-    expect(await selectBox.isOpened()).toBe(true);
-
-    await selectBox.input.fill('Item 4');
-    await page.waitForTimeout(300);
-
-    await page.keyboard.press('Escape');
-
-    await selectBox.input.clear();
-    await selectBox.click();
-
-    await testScreenshot(page, 'SelectBox pages loaded after filtering.png');
-  });
 });

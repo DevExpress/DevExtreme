@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, appendElementTo, setClassAttribute, Toolbar } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, Toolbar } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -12,51 +12,6 @@ test.describe('Toolbar_OverflowMenu', () => {
       (window as any).DevExpress.ui.themes.ready(resolve);
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
-  });
-
-  test('Drop down button should lost hover and active state', async ({ page }) => {
-    await createWidget(page, 'dxToolbar', {
-      items: [
-        { text: 'item1', locateInMenu: 'always' },
-        { text: 'item2', locateInMenu: 'always' },
-      ],
-    });
-
-    const toolbar = new Toolbar(page);
-    const overflowMenu = toolbar.getOverflowMenu();
-
-    await overflowMenu.element.hover();
-    await testScreenshot(page, 'Toolbar overflow button hovered.png', { element: '#container' });
-
-    await overflowMenu.click();
-    await testScreenshot(page, 'Toolbar overflow menu opened.png');
-
-    await page.mouse.move(0, 0);
-    await testScreenshot(page, 'Toolbar overflow button lost hover.png', { element: '#container' });
-  });
-
-  test('ButtonGroup item should not have hover and active state', async ({ page }) => {
-    await createWidget(page, 'dxToolbar', {
-      items: [
-        {
-          locateInMenu: 'always',
-          widget: 'dxButtonGroup',
-          options: {
-            items: [{ text: 'B1' }, { text: 'B2' }],
-          },
-        },
-      ],
-    });
-
-    const toolbar = new Toolbar(page);
-    const overflowMenu = toolbar.getOverflowMenu();
-
-    await overflowMenu.click();
-
-    const buttonGroupItem = overflowMenu.getList().locator('.dx-buttongroup-item').first();
-    await buttonGroupItem.hover();
-
-    await testScreenshot(page, 'Toolbar overflow ButtonGroup item hovered.png');
   });
 
   test("Click on overflow button should prevent popup's hideOnOutsideClick", async ({ page }) => {

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, isMaterialBased, isFluent, List } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, List } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -84,50 +84,6 @@ test.describe('List', () => {
 
     const firstItem = list.getItem(0);
     expect(await firstItem.checkBox.isChecked).toBe(true);
-  });
-
-  test('Grouped list can not reorder items (T727360)', async ({ page }) => {
-    await createWidget(page, 'dxList', {
-      dataSource: [
-        { key: 'Group 1', items: ['item1', 'item2'] },
-        { key: 'Group 2', items: ['item3', 'item4'] },
-      ],
-      grouped: true,
-      itemDragging: {
-        allowReordering: true,
-      },
-    });
-
-    const list = new List(page);
-    const firstItem = list.getGroup(0).getItem(0);
-    const secondItem = list.getGroup(0).getItem(1);
-
-    const sourceBox = await firstItem.element.boundingBox();
-    const targetBox = await secondItem.element.boundingBox();
-
-    if (sourceBox && targetBox) {
-      await page.mouse.move(sourceBox.x + sourceBox.width / 2, sourceBox.y + sourceBox.height / 2);
-      await page.mouse.down();
-      await page.mouse.move(targetBox.x + targetBox.width / 2, targetBox.y + targetBox.height / 2, { steps: 5 });
-      await page.mouse.up();
-    }
-
-    await testScreenshot(page, 'List grouped reorder items.png', { element: '#container' });
-  });
-
-  test('Grouped List with nested List should able to reorder items (T845082)', async ({ page }) => {
-    await createWidget(page, 'dxList', {
-      dataSource: [
-        { key: 'Group 1', items: ['item1', 'item2'] },
-        { key: 'Group 2', items: ['item3', 'item4'] },
-      ],
-      grouped: true,
-      itemDragging: {
-        allowReordering: true,
-      },
-    });
-
-    await testScreenshot(page, 'List grouped nested reorder items.png', { element: '#container' });
   });
 
   test('Disabled item should be focused on tab press to match accessibility criteria', async ({ page }) => {

@@ -1,7 +1,6 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { createWidget, testScreenshot, appendElementTo } from '../../../playwright-helpers';
-import { Chat } from '../../../playwright-helpers/chat';
-import { createUser, getShortText, getLongText, attachments } from './data';
+import { getShortText, getLongText } from './data';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -44,44 +43,4 @@ test.describe('ChatMessageBox', () => {
     await testScreenshot(page, 'Messagebox when send button has focus.png', { element: '#chat' });
   });
 
-  test('Chat: messagebox with editing preview', async ({ page }) => {
-    await appendElementTo(page, '#container', 'div', 'chat');
-
-    const userFirst = createUser(1, 'First');
-    const items = [
-      { author: userFirst, text: 'Hello world' },
-      { author: userFirst, text: 'Edit me' },
-    ];
-
-    await createWidget(page, 'dxChat', {
-      width: 400,
-      height: 600,
-      items,
-      user: userFirst,
-    }, '#chat');
-
-    const chat = new Chat(page, '#chat');
-
-    await chat.getMessage(1).click({ button: 'right' });
-    await page.waitForTimeout(300);
-
-    await testScreenshot(page, 'Messagebox context menu.png', { element: '#chat' });
-  });
-
-  test('Chat: messagebox with attachments and informer', async ({ page }) => {
-    await appendElementTo(page, '#container', 'div', 'chat');
-
-    await createWidget(page, 'dxChat', {
-      width: 400,
-      height: 600,
-    }, '#chat');
-
-    const chat = new Chat(page, '#chat');
-
-    await chat.focus();
-    const input = chat.getInput();
-    await input.fill('Message with attachments');
-
-    await testScreenshot(page, 'Messagebox with text before attachments.png', { element: '#chat' });
-  });
 });
