@@ -855,7 +855,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.assertLayout(['10.0806', '89.9194']);
     });
 
-    QUnit.test('Initially collapsed first pane with size, spesified in %, should expand to user-specified size via UI', function(assert) {
+    QUnit.test('Initially collapsed first pane with size, specified in %, should expand to user-specified size via UI', function(assert) {
         this.reinit({
             items: [{ collapsible: true, collapsed: true, size: '20%' }, { collapsible: true }]
         });
@@ -993,7 +993,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
     });
 
-    QUnit.test('Pane should restore current size, when it was collapsed, then size was change in real time, then it was expanded', function(assert) {
+    QUnit.test('Pane should restore current size, when it was collapsed, then size was changed in real time, then it was expanded', function(assert) {
 
         this.reinit({
             items: [ { size: 200, collapsible: true, }, { } ]
