@@ -48,6 +48,7 @@ test.describe('KeyboardNavigation.Selection', () => {
     { caseName: 'card selection', keys: ['Space'], result: [false, true, false] },
     { caseName: 'card deselection', keys: ['Space', 'Space'], result: [false, false, false] },
     { caseName: 'the next card selection', keys: ['Space', 'ArrowRight', 'Space'], result: [false, true, true] },
+    { caseName: 'range selection', keys: ['ArrowLeft', 'Space', 'ArrowRight', 'ArrowRight', 'Shift+Space'], result: [true, true, true] },
   ].forEach(({ caseName, keys, result }) => {
     test(`Should handle selection in multiple mode: ${caseName}`, async ({ page }) => {
       await createWidget(page, 'dxCardView', {

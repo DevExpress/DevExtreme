@@ -23,6 +23,40 @@ test.describe('CardView - FilterPanel Behavior', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
+  test('filterEnabled checkbox switches the filter by keyboard', async ({ page }) => {
+    await page.evaluate(() => {
+      const el = document.createElement('button');
+      el.id = 'other-btn';
+      document.body.appendChild(el);
+    });
+
+    await createWidget(page, 'dxCardView', {
+      dataSource: baseData,
+      columns: baseColumns,
+      filterPanel: { visible: true, filterEnabled: false },
+      filterValue: ['title', '=', 'Mr.'],
+    });
+
+    const cards = page.locator('.dx-cardview-card');
+    await expect(cards).toHaveCount(4);
+
+    await page.locator('#other-btn').click();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Space');
+    await expect(cards).toHaveCount(3);
+
+    await page.locator('#other-btn').click();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Space');
+    await expect(cards).toHaveCount(4);
+  });
+
   test('filterEnabled checkbox switches the filter by click', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
       dataSource: baseData,
@@ -68,6 +102,75 @@ test.describe('CardView - FilterPanel Behavior', () => {
 
     await page.locator('.dx-datagrid-filter-panel .dx-datagrid-filter-panel-text').click();
     await expect(popup).toBeVisible();
+  });
+
+  test('FilterIcon opens popup by keyboard', async ({ page }) => {
+    await page.evaluate(() => {
+      const el = document.createElement('button');
+      el.id = 'other-btn';
+      document.body.appendChild(el);
+    });
+
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' }],
+      columns: baseColumns,
+      filterPanel: { visible: true },
+    });
+
+    const popup = page.locator('.dx-popup-wrapper:has(.dx-filterbuilder)');
+    await expect(popup).not.toBeVisible();
+
+    await page.locator('#other-btn').click();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Enter');
+    await expect(popup).toBeVisible();
+  });
+
+  test('FilterText opens popup by click by keyboard', async ({ page }) => {
+    await page.evaluate(() => {
+      const el = document.createElement('button');
+      el.id = 'other-btn';
+      document.body.appendChild(el);
+    });
+
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ id: 1, title: 'Mr.', name: 'John', lastName: 'Heart' }],
+      columns: baseColumns,
+      filterPanel: { visible: true },
+    });
+
+    const popup = page.locator('.dx-popup-wrapper:has(.dx-filterbuilder)');
+    await expect(popup).not.toBeVisible();
+
+    await page.locator('#other-btn').click();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Enter');
+    await expect(popup).toBeVisible();
+  });
+
+  test('ClearFilter button clears filter by keyboard', async ({ page }) => {
+    await page.evaluate(() => {
+      const el = document.createElement('button');
+      el.id = 'other-btn';
+      document.body.appendChild(el);
+    });
+
+    await createWidget(page, 'dxCardView', {
+      dataSource: baseData,
+      columns: baseColumns,
+      filterPanel: { visible: true },
+      filterValue: ['title', '=', 'Mr.'],
+    });
+
+    await page.locator('#other-btn').click();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Enter');
+
+    const filterValue = await page.evaluate(() => {
+      return ($('#container') as any).dxCardView('instance').option('filterValue');
+    });
+    expect(filterValue).toBeNull();
   });
 
   test('ClearFilter button clears filter by click', async ({ page }) => {

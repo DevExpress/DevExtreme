@@ -15,10 +15,11 @@ test.describe('KeyboardNavigation.ContentView', () => {
   });
 
   [
-    { caseName: 'arrows -> left item', keys: 'ArrowLeft', resultIndex: 3 },
-    { caseName: 'arrows -> right item', keys: 'ArrowRight', resultIndex: 5 },
-    { caseName: 'arrows -> top item', keys: 'ArrowUp', resultIndex: 1 },
-    { caseName: 'arrows -> bottom item', keys: 'ArrowDown', resultIndex: 7 },
+    { caseName: 'arrows -> same first item', keys: ['ArrowRight', 'ArrowLeft'], resultIndex: 4 },
+    { caseName: 'arrows -> left item', keys: ['ArrowLeft'], resultIndex: 3 },
+    { caseName: 'arrows -> right item', keys: ['ArrowRight'], resultIndex: 5 },
+    { caseName: 'arrows -> top item', keys: ['ArrowUp'], resultIndex: 1 },
+    { caseName: 'arrows -> bottom item', keys: ['ArrowDown'], resultIndex: 7 },
   ].forEach(({ caseName, keys, resultIndex }) => {
     test(`Should move between cards: ${caseName}`, async ({ page }) => {
       await createWidget(page, 'dxCardView', {
@@ -31,7 +32,9 @@ test.describe('KeyboardNavigation.ContentView', () => {
 
       const card4 = page.locator('.dx-cardview-card').nth(4);
       await card4.click();
-      await page.keyboard.press(keys);
+      for (const key of keys) {
+        await page.keyboard.press(key);
+      }
 
       const targetCard = page.locator('.dx-cardview-card').nth(resultIndex);
       await expect(targetCard).toBeFocused();

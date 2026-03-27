@@ -63,8 +63,11 @@ test.describe('CardView - Sorting Behavior - Functional', () => {
   (
     [
       ['none', false, false, false, [undefined, undefined]],
+      ['none', true, false, false, [undefined, undefined]],
       ['single', false, false, false, ['desc', undefined]],
+      ['single', true, false, false, ['desc', undefined]],
       ['multiple', false, false, false, ['desc', 0]],
+      ['multiple', true, false, false, ['desc', 0]],
       ['multiple', false, true, false, [undefined, undefined]],
       ['multiple', false, false, true, [undefined, undefined]],
     ] as [string, boolean, boolean, boolean, [string | undefined, number | undefined]][]
@@ -91,10 +94,17 @@ test.describe('CardView - Sorting Behavior - Functional', () => {
   (
     [
       ['none', false, false, false, [undefined, undefined], [undefined, undefined]],
+      ['none', true, false, false, [undefined, undefined], [undefined, undefined]],
+      ['none', false, true, false, [undefined, undefined], [undefined, undefined]],
+      ['none', false, false, true, [undefined, undefined], [undefined, undefined]],
       ['single', false, false, false, [undefined, undefined], ['asc', undefined]],
+      ['single', true, false, false, [undefined, undefined], ['asc', undefined]],
+      ['single', false, true, false, ['asc', undefined], [undefined, undefined]],
+      ['single', false, false, true, ['asc', undefined], [undefined, undefined]],
       ['multiple', false, false, false, [undefined, undefined], ['asc', 0]],
       ['multiple', true, false, false, ['asc', 0], ['asc', 1]],
       ['multiple', false, true, false, ['asc', 0], [undefined, undefined]],
+      ['multiple', false, false, true, ['asc', 0], [undefined, undefined]],
     ] as [string, boolean, boolean, boolean, [string | undefined, number | undefined], [string | undefined, number | undefined]][]
   ).forEach(([mode, shift, ctrl, meta, [titleSortOrder, titleSortIndex], [nameSortOrder, nameSortIndex]]) => {
     test(`Change sorting of neighbour non sorted item in ${mode} mode with shift=${shift}, ctrl=${ctrl}, meta=${meta}`, async ({ page }) => {
@@ -162,10 +172,91 @@ test.describe('CardView - Sorting Behavior - Functional', () => {
 
   (
     [
+      ['none', false, false, false, [undefined, undefined], [undefined, undefined]],
+      ['none', true, false, false, [undefined, undefined], [undefined, undefined]],
+      ['none', false, true, false, [undefined, undefined], [undefined, undefined]],
+      ['none', false, false, true, [undefined, undefined], [undefined, undefined]],
+      ['single', false, false, false, [undefined, undefined], ['desc', undefined]],
+      ['single', true, false, false, [undefined, undefined], ['desc', undefined]],
+      ['single', false, true, false, [undefined, undefined], [undefined, undefined]],
+      ['single', false, false, true, [undefined, undefined], [undefined, undefined]],
+      ['multiple', false, false, false, [undefined, undefined], ['desc', 0]],
+      ['multiple', true, false, false, ['asc', 0], ['desc', 1]],
+      ['multiple', false, true, false, ['asc', 0], [undefined, undefined]],
+      ['multiple', false, false, true, ['asc', 0], [undefined, undefined]],
+    ] as [string, boolean, boolean, boolean, [string | undefined, number | undefined], [string | undefined, number | undefined]][]
+  ).forEach(([mode, shift, ctrl, meta, [titleSortOrder, titleSortIndex], [nameSortOrder, nameSortIndex]]) => {
+    test(`Change sorting of neighbour sorted item in ${mode} mode with shift=${shift}, ctrl=${ctrl}, meta=${meta}`, async ({ page }) => {
+      await createWidget(page, 'dxCardView', {
+        dataSource: data,
+        sorting: { mode },
+        columns: [{ dataField: 'title' }, { dataField: 'name' }],
+      });
+
+      const titleHeader = page.locator('.dx-cardview-headers .dx-cardview-header-item').first();
+      const nameHeader = page.locator('.dx-cardview-headers .dx-cardview-header-item').nth(1);
+      await titleHeader.click();
+      await nameHeader.click({ modifiers: ['Shift'] });
+      await nameHeader.click({ modifiers: [...(shift ? ['Shift'] : []), ...(ctrl ? ['Control'] : []), ...(meta ? ['Meta'] : [])] as any });
+
+      const actualTitleSortOrder = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('title', 'sortOrder'));
+      const actualTitleSortIndex = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('title', 'sortIndex'));
+      const actualNameSortOrder = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('name', 'sortOrder'));
+      const actualNameSortIndex = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('name', 'sortIndex'));
+
+      expect(actualTitleSortOrder).toBe(titleSortOrder);
+      expect(actualTitleSortIndex).toBe(titleSortIndex);
+      expect(actualNameSortOrder).toBe(nameSortOrder);
+      expect(actualNameSortIndex).toBe(nameSortIndex);
+    });
+  });
+
+  (
+    [
       ['none', SORT_ASCENDING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
       ['single', SORT_ASCENDING_MENUITEM_INDEX, [undefined, undefined], ['asc', undefined]],
       ['single', SORT_DESCENDING_MENUITEM_INDEX, [undefined, undefined], ['desc', undefined]],
-      ['single', CLEAR_SORTING_MENUITEM_INDEX, ['asc', undefined], [undefined, undefined]],
+      ['single', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
+      ['multiple', SORT_ASCENDING_MENUITEM_INDEX, ['asc', 0], ['asc', 1]],
+      ['multiple', SORT_DESCENDING_MENUITEM_INDEX, ['asc', 0], ['desc', 1]],
+      ['multiple', CLEAR_SORTING_MENUITEM_INDEX, ['asc', 0], [undefined, undefined]],
+    ] as [string, number, [string | undefined, number | undefined], [string | undefined, number | undefined]][]
+  ).forEach(([mode, menuItemIndex, [titleSortOrder, titleSortIndex], [nameSortOrder, nameSortIndex]]) => {
+    test(`Change sorting of neighbour sorted item in ${mode} mode with ${menuItemIndex} context menu item`, async ({ page }) => {
+      await createWidget(page, 'dxCardView', {
+        dataSource: data,
+        sorting: { mode },
+        columns: [{ dataField: 'title' }, { dataField: 'name' }],
+      });
+
+      const titleHeader = page.locator('.dx-cardview-headers .dx-cardview-header-item').first();
+      const nameHeader = page.locator('.dx-cardview-headers .dx-cardview-header-item').nth(1);
+      await titleHeader.click();
+      await nameHeader.click({ modifiers: ['Shift'] });
+      await nameHeader.click({ button: 'right' });
+      await page.locator('.dx-context-menu .dx-menu-item').nth(menuItemIndex as number).click();
+
+      const actualTitleSortOrder = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('title', 'sortOrder'));
+      const actualTitleSortIndex = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('title', 'sortIndex'));
+      const actualNameSortOrder = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('name', 'sortOrder'));
+      const actualNameSortIndex = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('name', 'sortIndex'));
+
+      expect(actualTitleSortOrder).toBe(titleSortOrder);
+      expect(actualTitleSortIndex).toBe(titleSortIndex);
+      expect(actualNameSortOrder).toBe(nameSortOrder);
+      expect(actualNameSortIndex).toBe(nameSortIndex);
+
+      await page.locator('body').click();
+      await expect(page.locator('.dx-context-menu')).not.toBeVisible();
+    });
+  });
+
+  (
+    [
+      ['none', SORT_ASCENDING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
+      ['single', SORT_ASCENDING_MENUITEM_INDEX, [undefined, undefined], ['asc', undefined]],
+      ['single', SORT_DESCENDING_MENUITEM_INDEX, [undefined, undefined], ['desc', undefined]],
+      ['single', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
       ['multiple', SORT_ASCENDING_MENUITEM_INDEX, ['asc', 0], ['asc', 1]],
       ['multiple', SORT_DESCENDING_MENUITEM_INDEX, ['asc', 0], ['desc', 1]],
       ['multiple', CLEAR_SORTING_MENUITEM_INDEX, ['asc', 0], [undefined, undefined]],

@@ -114,6 +114,69 @@ test.describe('KeyboardNavigation.Header', () => {
     expect(lastCardText).toContain('0');
   });
 
+  test('Should clear sorting by ctrl+Enter', async ({ page }) => {
+    await page.evaluate(() => {
+      const el = document.createElement('button');
+      el.id = 'focusable-start';
+      document.body.insertBefore(el, document.getElementById('container'));
+    });
+
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ id: 1 }, { id: 0 }, { id: 3 }, { id: 2 }],
+      columns: ['id'],
+      keyExpr: 'id',
+      height: 700,
+    });
+
+    await page.locator('#focusable-start').focus();
+    await page.keyboard.press('Tab');
+    const headerItem = page.locator('.dx-cardview-headers .dx-cardview-header-item').first();
+    await expect(headerItem).toBeFocused();
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(100);
+
+    const sortOrder = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('id', 'sortOrder'));
+    expect(sortOrder).toBe('asc');
+
+    await page.keyboard.press('Control+Enter');
+    await page.waitForTimeout(100);
+
+    const sortOrderAfter = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('id', 'sortOrder'));
+    expect(sortOrderAfter).toBeUndefined();
+  });
+
+  test('Should enable multi field sorting by shift+Enter', async ({ page }) => {
+    await page.evaluate(() => {
+      const el = document.createElement('button');
+      el.id = 'focusable-start';
+      document.body.insertBefore(el, document.getElementById('container'));
+    });
+
+    await createWidget(page, 'dxCardView', {
+      dataSource: [{ id: 1, A: 1 }, { id: 0, A: 1 }, { id: 3, A: 0 }, { id: 2, A: 0 }],
+      columns: ['id', 'A'],
+      keyExpr: 'id',
+      sorting: { mode: 'multiple' },
+      height: 700,
+    });
+
+    await page.locator('#focusable-start').focus();
+    await page.keyboard.press('Tab');
+    const firstHeaderItem = page.locator('.dx-cardview-headers .dx-cardview-header-item').first();
+    await expect(firstHeaderItem).toBeFocused();
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('Shift+Enter');
+    await page.keyboard.press('ArrowLeft');
+    await page.keyboard.press('Shift+Enter');
+    await page.waitForTimeout(100);
+
+    const idSortIndex = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('id', 'sortIndex'));
+    const aSortIndex = await page.evaluate(() => ($('#container') as any).dxCardView('instance').columnOption('A', 'sortIndex'));
+
+    expect(typeof idSortIndex).toBe('number');
+    expect(typeof aSortIndex).toBe('number');
+  });
+
   test('Should open header filter by alt+ArrowDown', async ({ page }) => {
     await page.evaluate(() => {
       const el = document.createElement('button');
