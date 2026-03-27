@@ -1,6 +1,6 @@
 {
   "name": "devextreme-nx-infra-plugin",
-  "version": "25.2.5",
+  "version": "25.2.6",
   "type": "commonjs",
   "private": true,
   "executors": "./dist/executors.json",
