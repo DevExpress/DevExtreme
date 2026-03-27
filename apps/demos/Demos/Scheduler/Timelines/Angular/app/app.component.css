@@ -3,3 +3,16 @@
 ::ng-deep .dx-scheduler-timeline-work-week .dx-scheduler-cell-sizes-horizontal {
     width: 100px;
 }
+
+.options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
+}
+
+.option {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
