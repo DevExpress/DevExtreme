@@ -12,6 +12,5 @@ export const isCollectorViewModel = (appointmentViewModel: AppointmentViewModelP
   appointmentViewModel is AppointmentCollectorViewModel => 'isCompact' in appointmentViewModel;
 
 export const isGridAppointmentViewModel = (appointmentViewModel: AppointmentViewModelPlain):
-  appointmentViewModel is AppointmentItemViewModel => (
-  !isAgendaAppointmentViewModel(appointmentViewModel) && !isCollectorViewModel(appointmentViewModel)
-);
+  appointmentViewModel is AppointmentItemViewModel =>
+  !isAgendaAppointmentViewModel(appointmentViewModel) && !isCollectorViewModel(appointmentViewModel);

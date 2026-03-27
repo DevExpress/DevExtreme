@@ -18,14 +18,13 @@ import { DateFormatType, getDateTextFromTargetAppointment } from '../utils/get_d
 
 export interface BaseAppointmentViewProperties
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  extends DOMComponentProperties<BaseAppointmentView<any>>
-{
+  extends DOMComponentProperties<BaseAppointmentView<any>> {
   appointmentData: SafeAppointment;
   targetedAppointmentData: TargetedAppointment;
   appointmentTemplate: TemplateBase;
 
   onAppointmentRendered: (e: {
-    element: DxElement,
+    element: DxElement;
     appointmentData: SafeAppointment;
     targetedAppointmentData: TargetedAppointment;
   }) => void;

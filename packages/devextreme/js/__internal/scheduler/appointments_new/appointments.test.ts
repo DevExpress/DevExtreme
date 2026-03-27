@@ -27,7 +27,7 @@ const mockAppointmentDataSource = (): AppointmentDataSource => ({
 } as unknown as AppointmentDataSource);
 
 const getProperties = (options: {
-  resources?: ResourceConfig[]
+  resources?: ResourceConfig[];
 } = {}): AppointmentsProperties => ({
   getAppointmentDataSource: mockAppointmentDataSource,
   getResourceManager: () => getResourceManagerMock(options.resources ?? []),

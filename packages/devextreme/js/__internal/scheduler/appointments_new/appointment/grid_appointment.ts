@@ -16,7 +16,7 @@ export interface GridAppointmentViewProperties extends BaseAppointmentViewProper
   };
   modifiers: {
     empty: boolean;
-  }
+  };
 }
 
 export class GridAppointmentView extends BaseAppointmentView<GridAppointmentViewProperties> {
