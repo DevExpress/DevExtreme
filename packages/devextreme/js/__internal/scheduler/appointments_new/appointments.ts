@@ -20,9 +20,9 @@ import type {
   AppointmentViewModelPlain,
   BaseAppointmentViewModel,
 } from '../view_model/types';
-import { AgendaAppointment } from './appointment/agenda_appointment';
-import type { BaseAppointmentProperties } from './appointment/base_appointment';
-import { GridAppointment } from './appointment/grid_appointment';
+import { AgendaAppointmentView } from './appointment/agenda_appointment';
+import type { BaseAppointmentViewProperties } from './appointment/base_appointment';
+import { GridAppointmentView } from './appointment/grid_appointment';
 import { AppointmentCollector } from './appointment_collector';
 import { APPOINTMENTS_CONTAINER_CLASS } from './const';
 import { getTargetedAppointment } from './utils/get_targeted_appointment';
@@ -39,14 +39,14 @@ export interface AppointmentsProperties extends DOMComponentProperties<Appointme
   appointmentTemplate: SchedulerProperties['appointmentTemplate'];
   appointmentCollectorTemplate: SchedulerProperties['appointmentCollectorTemplate'];
 
-  onAppointmentRendered: BaseAppointmentProperties['onAppointmentRendered'];
+  onAppointmentRendered: BaseAppointmentViewProperties['onAppointmentRendered'];
 
   getAppointmentDataSource: () => AppointmentDataSource;
   getResourceManager: () => ResourceManager;
   getDataAccessor: () => AppointmentDataAccessor;
 }
 
-type AppointmentComponent = GridAppointment | AgendaAppointment | AppointmentCollector;
+type AppointmentComponent = GridAppointmentView | AgendaAppointmentView | AppointmentCollector;
 
 export class Appointments extends DOMComponent<Appointments, AppointmentsProperties> {
   private appointmentBySortIndex: Record<number, AppointmentComponent> = {};
@@ -232,7 +232,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       });
     }
 
-    const baseConfig: BaseAppointmentProperties = {
+    const baseConfig: BaseAppointmentViewProperties = {
       appointmentTemplate: this._getTemplateByOption('appointmentTemplate'),
       appointmentData: appointmentViewModel.itemData,
       targetedAppointmentData,
@@ -244,7 +244,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     if (isGridAppointmentViewModel(appointmentViewModel)) {
       return this._createComponent(
         $element,
-        GridAppointment,
+        GridAppointmentView,
         {
           ...baseConfig,
           geometry: {
@@ -262,7 +262,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
     return this._createComponent(
       $element,
-      AgendaAppointment,
+      AgendaAppointmentView,
       {
         ...baseConfig,
         modifiers: {

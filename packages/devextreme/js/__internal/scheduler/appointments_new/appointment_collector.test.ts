@@ -10,7 +10,7 @@ import type { AppointmentCollectorProperties } from './appointment_collector';
 import { AppointmentCollector } from './appointment_collector';
 import { APPOINTMENT_COLLECTOR_CLASSES } from './const';
 
-const getAppointmentCollectorProperties = (
+const getProperties = (
   appointmentData: SafeAppointment,
 ): AppointmentCollectorProperties => {
   const targetedAppointmentData: TargetedAppointment = {
@@ -70,7 +70,7 @@ describe('AppointmentCollector', () => {
   describe('Classes', () => {
     it('should have correct container class', () => {
       const instance = createAppointmentCollector(
-        getAppointmentCollectorProperties(defaultAppointmentData),
+        getProperties(defaultAppointmentData),
       );
 
       expect(instance.$element().hasClass('dx-scheduler-appointment-collector')).toBe(true);
@@ -79,7 +79,7 @@ describe('AppointmentCollector', () => {
 
     it('should have correct content class', () => {
       const instance = createAppointmentCollector(
-        getAppointmentCollectorProperties(defaultAppointmentData),
+        getProperties(defaultAppointmentData),
       );
       const $buttonContent = instance.$element().find('.dx-button-content');
 
@@ -90,7 +90,7 @@ describe('AppointmentCollector', () => {
       true, false,
     ])('should have correct compact class for isCompact = %o', (isCompact) => {
       const instance = createAppointmentCollector({
-        ...getAppointmentCollectorProperties(defaultAppointmentData),
+        ...getProperties(defaultAppointmentData),
         isCompact,
       });
 
@@ -100,25 +100,25 @@ describe('AppointmentCollector', () => {
 
   describe('Aria', () => {
     it('should have correct aria-roledescription when appointment is in the same date', () => {
-      const instance = createAppointmentCollector({
-        ...getAppointmentCollectorProperties({
+      const instance = createAppointmentCollector(
+        getProperties({
           text: 'test',
           startDate: new Date(2024, 0, 1, 9, 0),
           endDate: new Date(2024, 0, 1, 10, 0),
         }),
-      });
+      );
 
       expect(instance.$element().attr('aria-roledescription')).toBe('January 1, 2024');
     });
 
     it('should have correct aria-roledescription when appointment is in different dates', () => {
-      const instance = createAppointmentCollector({
-        ...getAppointmentCollectorProperties({
+      const instance = createAppointmentCollector(
+        getProperties({
           text: 'test',
           startDate: new Date(2024, 0, 1, 9, 0),
           endDate: new Date(2024, 0, 2, 10, 0),
         }),
-      });
+      );
 
       expect(instance.$element().attr('aria-roledescription')).toBe('January 1, 2024 - January 2, 2024');
     });
@@ -127,7 +127,7 @@ describe('AppointmentCollector', () => {
   describe('Resize', () => {
     it('should have correct top and left on init', () => {
       const instance = createAppointmentCollector({
-        ...getAppointmentCollectorProperties(defaultAppointmentData),
+        ...getProperties(defaultAppointmentData),
         geometry: {
           top: 100,
           left: 200,
@@ -144,7 +144,7 @@ describe('AppointmentCollector', () => {
 
     it('should have correct top and left after geometry is updated and resize is called', () => {
       const instance = createAppointmentCollector({
-        ...getAppointmentCollectorProperties(defaultAppointmentData),
+        ...getProperties(defaultAppointmentData),
         geometry: {
           top: 100,
           left: 200,
@@ -172,7 +172,7 @@ describe('AppointmentCollector', () => {
       { isCompact: false, expectedText: '1 more' },
     ])('should have correct text for appointmentsCount = 1 and isCompact = %o', ({ isCompact, expectedText }) => {
       const instance = createAppointmentCollector({
-        ...getAppointmentCollectorProperties(defaultAppointmentData),
+        ...getProperties(defaultAppointmentData),
         appointmentsCount: 1,
         isCompact,
       });

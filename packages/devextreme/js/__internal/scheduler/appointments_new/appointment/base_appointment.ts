@@ -16,9 +16,9 @@ import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/
 import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
 import { DateFormatType, getDateTextFromTargetAppointment } from '../utils/get_date_text';
 
-export interface BaseAppointmentProperties
+export interface BaseAppointmentViewProperties
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  extends DOMComponentProperties<BaseAppointment<any>>
+  extends DOMComponentProperties<BaseAppointmentView<any>>
 {
   appointmentData: SafeAppointment;
   targetedAppointmentData: TargetedAppointment;
@@ -34,9 +34,9 @@ export interface BaseAppointmentProperties
   getResourceColor: () => Promise<string | undefined>;
 }
 
-export class BaseAppointment<
-  TProperties extends BaseAppointmentProperties = BaseAppointmentProperties,
-> extends DOMComponent<BaseAppointment<TProperties>, TProperties> {
+export class BaseAppointmentView<
+  TProperties extends BaseAppointmentViewProperties = BaseAppointmentViewProperties,
+> extends DOMComponent<BaseAppointmentView<TProperties>, TProperties> {
   protected get targetedAppointmentData(): TargetedAppointment {
     return this.option().targetedAppointmentData;
   }
@@ -145,4 +145,4 @@ export class BaseAppointment<
 
 // TODO<Appointments>: rename to dxSchedulerAppointment when old impl is removed
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-registerComponent('dxSchedulerNewAppointment', BaseAppointment as any);
+registerComponent('dxSchedulerNewAppointment', BaseAppointmentView as any);

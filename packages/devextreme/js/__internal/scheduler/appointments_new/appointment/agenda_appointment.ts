@@ -6,10 +6,10 @@ import type { AppointmentResource } from '@ts/scheduler/utils/resource_manager/a
 import {
   AGENDA_APPOINTMENT_CLASSES, ALL_DAY_TEXT, APPOINTMENT_CLASSES, RECURRING_LABEL,
 } from '../const';
-import type { BaseAppointmentProperties } from './base_appointment';
-import { BaseAppointment } from './base_appointment';
+import type { BaseAppointmentViewProperties } from './base_appointment';
+import { BaseAppointmentView } from './base_appointment';
 
-export interface AgendaAppointmentProperties extends BaseAppointmentProperties {
+export interface AgendaAppointmentViewProperties extends BaseAppointmentViewProperties {
   modifiers: {
     isLastInGroup: boolean;
   };
@@ -24,7 +24,7 @@ export interface AgendaAppointmentProperties extends BaseAppointmentProperties {
   ) => Promise<AppointmentResource[]>;
 }
 
-export class AgendaAppointment extends BaseAppointment<AgendaAppointmentProperties> {
+export class AgendaAppointmentView extends BaseAppointmentView<AgendaAppointmentViewProperties> {
   protected override applyElementClasses(): void {
     super.applyElementClasses();
 

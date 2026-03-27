@@ -7,12 +7,12 @@ import type { SafeAppointment } from '@ts/scheduler/types';
 import fx from '../../../common/core/animation/fx';
 import { getBaseAppointmentProperties } from '../__mock__/appointment_properties';
 import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
-import type { GridAppointmentProperties } from './grid_appointment';
-import { GridAppointment } from './grid_appointment';
+import type { GridAppointmentViewProperties } from './grid_appointment';
+import { GridAppointmentView } from './grid_appointment';
 
-const getGridAppointmentProperties = (
+const getProperties = (
   appointmentData: SafeAppointment,
-): GridAppointmentProperties => {
+): GridAppointmentViewProperties => {
   const baseProperties = getBaseAppointmentProperties(appointmentData);
 
   return {
@@ -27,12 +27,12 @@ const getGridAppointmentProperties = (
 };
 
 const createGridAppointment = async (
-  properties: GridAppointmentProperties,
-): Promise<GridAppointment> => {
+  properties: GridAppointmentViewProperties,
+): Promise<GridAppointmentView> => {
   const $element = $('.root');
 
   // @ts-expect-error
-  const instance = new GridAppointment($element, properties);
+  const instance = new GridAppointmentView($element, properties);
 
   // Await for resources
   await new Promise(process.nextTick);
@@ -69,7 +69,7 @@ describe('GridAppointment', () => {
   describe('Classes', () => {
     it('should have container class', async () => {
       const instance = await createGridAppointment(
-        getGridAppointmentProperties(defaultAppointmentData),
+        getProperties(defaultAppointmentData),
       );
 
       expect(instance.$element().hasClass(APPOINTMENT_CLASSES.CONTAINER)).toBe(true);
@@ -79,7 +79,7 @@ describe('GridAppointment', () => {
       true, false,
     ])('should have correct empty class for modifiers.empty = %o', async (empty) => {
       const instance = await createGridAppointment({
-        ...getGridAppointmentProperties(defaultAppointmentData),
+        ...getProperties(defaultAppointmentData),
         modifiers: { empty },
       });
 
@@ -94,7 +94,7 @@ describe('GridAppointment', () => {
       { text: '', expected: '(No subject)' },
     ])('should have correct title text for appointment text = %o', async ({ text, expected }) => {
       const instance = await createGridAppointment(
-        getGridAppointmentProperties({
+        getProperties({
           ...defaultAppointmentData,
           text,
         }),
@@ -109,7 +109,7 @@ describe('GridAppointment', () => {
   describe('Date text', () => {
     it('should have correct date text', async () => {
       const instance = await createGridAppointment(
-        getGridAppointmentProperties({
+        getProperties({
           ...defaultAppointmentData,
           startDate: new Date(2024, 0, 1, 9, 0),
           endDate: new Date(2024, 0, 1, 10, 0),
@@ -125,7 +125,7 @@ describe('GridAppointment', () => {
   describe('Geometry', () => {
     it('should apply geometry on init', async () => {
       const instance = await createGridAppointment({
-        ...getGridAppointmentProperties(defaultAppointmentData),
+        ...getProperties(defaultAppointmentData),
         geometry: {
           top: 10, left: 15, width: 100, height: 50,
         },
@@ -141,7 +141,7 @@ describe('GridAppointment', () => {
 
     it('should apply new geometry when resize() is called', async () => {
       const instance = await createGridAppointment({
-        ...getGridAppointmentProperties(defaultAppointmentData),
+        ...getProperties(defaultAppointmentData),
         geometry: {
           top: 10, left: 15, width: 100, height: 50,
         },
@@ -170,7 +170,7 @@ describe('GridAppointment', () => {
       true, false,
     ])('should have correct recurrence icon visibility for isRecurring = %o', async (isRecurring) => {
       const instance = await createGridAppointment(
-        getGridAppointmentProperties({
+        getProperties({
           ...defaultAppointmentData,
           recurrenceRule: isRecurring ? 'FREQ=DAILY' : undefined,
         }),
@@ -187,7 +187,7 @@ describe('GridAppointment', () => {
       true, false,
     ])('should have correct all day text visibility for allDay = %o', async (allDay) => {
       const instance = await createGridAppointment(
-        getGridAppointmentProperties({
+        getProperties({
           ...defaultAppointmentData,
           allDay,
         }),
@@ -202,7 +202,7 @@ describe('GridAppointment', () => {
   describe('Resources', () => {
     it('should apply resource color', async () => {
       const instance = await createGridAppointment({
-        ...getGridAppointmentProperties(defaultAppointmentData),
+        ...getProperties(defaultAppointmentData),
         getResourceColor: () => Promise.resolve('red'),
       });
 
@@ -211,7 +211,7 @@ describe('GridAppointment', () => {
 
     it('should not have background-color css when no resource', async () => {
       const instance = await createGridAppointment({
-        ...getGridAppointmentProperties(defaultAppointmentData),
+        ...getProperties(defaultAppointmentData),
         getResourceColor: () => Promise.resolve(undefined),
       });
 

@@ -8,13 +8,13 @@ import type { AppointmentResource } from '@ts/scheduler/utils/resource_manager/a
 import fx from '../../../common/core/animation/fx';
 import { getBaseAppointmentProperties } from '../__mock__/appointment_properties';
 import { AGENDA_APPOINTMENT_CLASSES, APPOINTMENT_CLASSES } from '../const';
-import type { AgendaAppointmentProperties } from './agenda_appointment';
-import { AgendaAppointment } from './agenda_appointment';
+import type { AgendaAppointmentViewProperties } from './agenda_appointment';
+import { AgendaAppointmentView } from './agenda_appointment';
 
-const getAgendaAppointmentProperties = (
+const getProperties = (
   appointmentData: SafeAppointment,
   targetedAppointmentData?: TargetedAppointment,
-): AgendaAppointmentProperties => {
+): AgendaAppointmentViewProperties => {
   const baseProperties = getBaseAppointmentProperties(
     appointmentData,
     targetedAppointmentData,
@@ -34,12 +34,12 @@ const getAgendaAppointmentProperties = (
 };
 
 const createAgendaAppointment = async (
-  properties: AgendaAppointmentProperties,
-): Promise<AgendaAppointment> => {
+  properties: AgendaAppointmentViewProperties,
+): Promise<AgendaAppointmentView> => {
   const $element = $('.root');
 
   // @ts-expect-error
-  const instance = new AgendaAppointment($element, properties);
+  const instance = new AgendaAppointmentView($element, properties);
 
   // Await for resources
   await new Promise(process.nextTick);
@@ -77,7 +77,7 @@ describe('AgendaAppointment', () => {
       true, false,
     ])('should have correct class for modifiers.lastInGroup = %o', async (isLastInGroup) => {
       const instance = await createAgendaAppointment({
-        ...getAgendaAppointmentProperties(defaultAppointmentData),
+        ...getProperties(defaultAppointmentData),
         modifiers: { isLastInGroup },
       });
 
@@ -94,7 +94,7 @@ describe('AgendaAppointment', () => {
       { text: '', expected: '(No subject)' },
     ])('should have correct title text for appointment text = %o', async ({ text, expected }) => {
       const instance = await createAgendaAppointment(
-        getAgendaAppointmentProperties({
+        getProperties({
           ...defaultAppointmentData, text,
         }),
       );
@@ -107,7 +107,7 @@ describe('AgendaAppointment', () => {
   describe('Date text', () => {
     it('should have correct date text', async () => {
       const instance = await createAgendaAppointment(
-        getAgendaAppointmentProperties({
+        getProperties({
           ...defaultAppointmentData,
           startDate: new Date(2024, 0, 1, 9, 0),
           endDate: new Date(2024, 0, 1, 10, 0),
@@ -129,7 +129,7 @@ describe('AgendaAppointment', () => {
         : defaultAppointmentData;
 
       const instance = await createAgendaAppointment(
-        getAgendaAppointmentProperties(appointmentData),
+        getProperties(appointmentData),
       );
 
       const $icon = instance.$element().find(`.${APPOINTMENT_CLASSES.RECURRENCE_ICON}`);
@@ -145,7 +145,7 @@ describe('AgendaAppointment', () => {
       const appointmentData = { ...defaultAppointmentData, allDay: isAllDay };
 
       const instance = await createAgendaAppointment(
-        getAgendaAppointmentProperties(appointmentData),
+        getProperties(appointmentData),
       );
 
       const $allDayText = instance.$element().find(`.${APPOINTMENT_CLASSES.ALL_DAY_TEXT}`);
@@ -159,7 +159,7 @@ describe('AgendaAppointment', () => {
       const resourceColor = 'rgb(255, 0, 0)';
 
       const instance = await createAgendaAppointment({
-        ...getAgendaAppointmentProperties(defaultAppointmentData),
+        ...getProperties(defaultAppointmentData),
         getResourceColor: () => Promise.resolve(resourceColor),
       });
 
@@ -170,7 +170,7 @@ describe('AgendaAppointment', () => {
 
     it('should render resource list', async () => {
       const instance = await createAgendaAppointment({
-        ...getAgendaAppointmentProperties(defaultAppointmentData),
+        ...getProperties(defaultAppointmentData),
         getResourcesValues: () => {
           const resourceValues: AppointmentResource[] = [
             { label: 'roomId', values: ['Room 1'] },
@@ -190,7 +190,7 @@ describe('AgendaAppointment', () => {
 
     it('should not render resource list if there are no resources', async () => {
       const instance = await createAgendaAppointment({
-        ...getAgendaAppointmentProperties(defaultAppointmentData),
+        ...getProperties(defaultAppointmentData),
         getResourcesValues: () => Promise.resolve([]),
       });
 
@@ -202,15 +202,15 @@ describe('AgendaAppointment', () => {
 
   describe('Geometry', () => {
     it('should have correct height and width', async () => {
-      const instance = await createAgendaAppointment(
-        getAgendaAppointmentProperties({
+      const instance = await createAgendaAppointment({
+        ...getProperties({
           ...defaultAppointmentData,
-          geometry: {
-            height: 60,
-            width: '80%',
-          },
         }),
-      );
+        geometry: {
+          height: 60,
+          width: '80%',
+        },
+      });
 
       expect(instance.$element().css('height')).toBe('60px');
       expect(instance.$element().css('width')).toBe('80%');

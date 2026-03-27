@@ -26,7 +26,7 @@ const mockAppointmentDataSource = (): AppointmentDataSource => ({
   getUpdatedAppointmentKeys: () => [],
 } as unknown as AppointmentDataSource);
 
-const getAppointmentsProperties = (options: {
+const getProperties = (options: {
   resources?: ResourceConfig[]
 } = {}): AppointmentsProperties => ({
   getAppointmentDataSource: mockAppointmentDataSource,
@@ -75,7 +75,7 @@ describe('Appointments', () => {
 
   describe('Classes', () => {
     it('should have correct container class', () => {
-      const instance = createAppointments(getAppointmentsProperties());
+      const instance = createAppointments(getProperties());
 
       expect(instance.$element().hasClass(APPOINTMENTS_CONTAINER_CLASS)).toBe(true);
     });
@@ -83,7 +83,7 @@ describe('Appointments', () => {
 
   describe('Rendering', () => {
     it('should render view model with grid appointments', () => {
-      const instance = createAppointments(getAppointmentsProperties());
+      const instance = createAppointments(getProperties());
       instance.option('viewModel', [
         mockGridViewModel(defaultAppointmentData, { sortedIndex: 0 }),
       ]);
@@ -93,7 +93,7 @@ describe('Appointments', () => {
 
     it('should render view model with agenda appointments', () => {
       const instance = createAppointments({
-        ...getAppointmentsProperties(),
+        ...getProperties(),
         currentView: 'agenda',
       });
       instance.option('viewModel', [
@@ -104,7 +104,7 @@ describe('Appointments', () => {
     });
 
     it('should render view model with appointment collectors', () => {
-      const instance = createAppointments(getAppointmentsProperties());
+      const instance = createAppointments(getProperties());
       instance.option('viewModel', [
         mockAppointmentCollectorViewModel(defaultAppointmentData, { sortedIndex: 0 }),
       ]);
@@ -116,7 +116,7 @@ describe('Appointments', () => {
       const data1 = { ...defaultAppointmentData };
       const data2 = { ...defaultAppointmentData, text: 'Appointment 2' };
 
-      const instance = createAppointments(getAppointmentsProperties());
+      const instance = createAppointments(getProperties());
       instance.option('viewModel', [
         mockGridViewModel(data1, { sortedIndex: 0 }),
         mockGridViewModel(data2, { sortedIndex: 1 }),
@@ -142,7 +142,7 @@ describe('Appointments', () => {
       const $allDayContainer = $('.allday-container');
 
       const instance = createAppointments({
-        ...getAppointmentsProperties(),
+        ...getProperties(),
         $allDayContainer,
       });
       instance.option('viewModel', [
@@ -157,7 +157,7 @@ describe('Appointments', () => {
       const $allDayContainer = $('.allday-container');
 
       const instance = createAppointments({
-        ...getAppointmentsProperties(),
+        ...getProperties(),
         $allDayContainer,
         currentView: 'agenda',
       });
@@ -177,7 +177,7 @@ describe('Appointments', () => {
       const item1 = mockGridViewModel(data1, { sortedIndex: 0 });
       const item2 = mockGridViewModel(data2, { sortedIndex: 1 });
 
-      const instance = createAppointments(getAppointmentsProperties());
+      const instance = createAppointments(getProperties());
       instance.option('viewModel', [item1, item2]);
 
       const appointmentsBefore = instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).toArray();
@@ -201,7 +201,7 @@ describe('Appointments', () => {
       const item2 = mockGridViewModel(data2, { sortedIndex: 1 });
       const item3 = mockGridViewModel(data3, { sortedIndex: 2 });
 
-      const instance = createAppointments(getAppointmentsProperties());
+      const instance = createAppointments(getProperties());
       instance.option('viewModel', [item1, item2, item3]);
 
       const appointmentsBefore = instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).toArray();
@@ -221,7 +221,7 @@ describe('Appointments', () => {
       const item1 = mockGridViewModel(data1, { sortedIndex: 0 });
       const item2 = mockGridViewModel(data2, { sortedIndex: 1 });
 
-      const instance = createAppointments(getAppointmentsProperties());
+      const instance = createAppointments(getProperties());
       instance.option('viewModel', [item1, item2]);
 
       const appointmentsBefore = instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).toArray();
@@ -244,7 +244,7 @@ describe('Appointments', () => {
       const item1 = mockGridViewModel(data1, { sortedIndex: 1 });
       const item2 = mockGridViewModel(data2, { sortedIndex: 2 });
 
-      const instance = createAppointments(getAppointmentsProperties());
+      const instance = createAppointments(getProperties());
       instance.option('viewModel', [item0, item1, item2]);
 
       const appointmentsBefore = instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).toArray();
@@ -267,7 +267,7 @@ describe('Appointments', () => {
         sortedIndex: 0, top: 10, left: 10, height: 50, width: 100,
       });
 
-      const instance = createAppointments(getAppointmentsProperties());
+      const instance = createAppointments(getProperties());
       instance.option('viewModel', [item]);
 
       const elementBefore = instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).get(0);
@@ -288,7 +288,7 @@ describe('Appointments', () => {
   describe('Resources', () => {
     it('should apply resource color', async () => {
       const instance = createAppointments({
-        ...getAppointmentsProperties({
+        ...getProperties({
           resources: [{
             fieldExpr: 'roomId',
             dataSource: [{ text: 'Room 1', id: 1, color: 'red' }],
@@ -310,7 +310,7 @@ describe('Appointments', () => {
     it('should be called with correct arguments when grid appointment is rendered', () => {
       const onAppointmentRendered = jest.fn();
       const instance = createAppointments({
-        ...getAppointmentsProperties(),
+        ...getProperties(),
         onAppointmentRendered,
       });
       instance.option('viewModel', [
@@ -331,7 +331,7 @@ describe('Appointments', () => {
     it('should be called with correct arguments when agenda appointment is rendered', () => {
       const onAppointmentRendered = jest.fn();
       const instance = createAppointments({
-        ...getAppointmentsProperties(),
+        ...getProperties(),
         onAppointmentRendered,
       });
       instance.option('viewModel', [
@@ -352,7 +352,7 @@ describe('Appointments', () => {
     it('should not be called when appointment collector is rendered', () => {
       const onAppointmentRendered = jest.fn();
       const instance = createAppointments({
-        ...getAppointmentsProperties(),
+        ...getProperties(),
         onAppointmentRendered,
       });
       instance.option('viewModel', [
@@ -365,7 +365,7 @@ describe('Appointments', () => {
     it('should be called several times when several appointments are rendered', () => {
       const onAppointmentRendered = jest.fn();
       const instance = createAppointments({
-        ...getAppointmentsProperties(),
+        ...getProperties(),
         onAppointmentRendered,
       });
       instance.option('viewModel', [

@@ -4,10 +4,10 @@ import $ from '@js/core/renderer';
 import {
   ALL_DAY_TEXT, APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES, RECURRING_LABEL,
 } from '../const';
-import type { BaseAppointmentProperties } from './base_appointment';
-import { BaseAppointment } from './base_appointment';
+import type { BaseAppointmentViewProperties } from './base_appointment';
+import { BaseAppointmentView } from './base_appointment';
 
-export interface GridAppointmentProperties extends BaseAppointmentProperties {
+export interface GridAppointmentViewProperties extends BaseAppointmentViewProperties {
   geometry: {
     height: number;
     width: number;
@@ -19,7 +19,7 @@ export interface GridAppointmentProperties extends BaseAppointmentProperties {
   }
 }
 
-export class GridAppointment extends BaseAppointment<GridAppointmentProperties> {
+export class GridAppointmentView extends BaseAppointmentView<GridAppointmentViewProperties> {
   override _initMarkup(): void {
     super._initMarkup();
 
