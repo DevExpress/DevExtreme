@@ -935,4 +935,664 @@ test.describe('Keyboard Navigation - common', () => {
     );
     expect(focusedColIndexAfterUp).toBe(0);
   });
+
+  test('Next cell should be focused immediately on a single Enter key press if showEditorAlways is enabled in cell mode (T1196539)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { name: 'Alex', phone: '555555', room: 1 },
+        { name: 'Dan', phone: '553355', room: 2 },
+        { name: 'Joe', phone: '335533', room: 3 },
+      ],
+      columns: [{
+        dataField: 'name',
+        showEditorAlways: true,
+      }, 'phone', 'room'],
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+        selectTextOnEditStart: true,
+      },
+      keyboardNavigation: {
+        enterKeyAction: 'startEdit',
+        enterKeyDirection: 'column',
+      },
+      repaintChangesOnly: true,
+    });
+
+    const dataGrid = new DataGrid(page);
+    const editor00 = dataGrid.getDataCell(0, 0).element.locator('.dx-texteditor-input');
+    await editor00.click();
+    await editor00.fill('test');
+    await page.keyboard.press('Enter');
+
+    await page.waitForFunction(() => {
+      const rows = document.querySelectorAll('.dx-datagrid-rowsview .dx-data-row');
+      return rows.length >= 2 && rows[1].querySelector('td')?.classList.contains('dx-focused');
+    });
+
+    const isFocusedRow1 = await dataGrid.getDataCell(1, 0).element.evaluate(
+      (el) => el.classList.contains('dx-focused'),
+    );
+    expect(isFocusedRow1).toBe(true);
+
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(300);
+    await page.keyboard.press('Enter');
+
+    await page.waitForFunction(() => {
+      const rows = document.querySelectorAll('.dx-datagrid-rowsview .dx-data-row');
+      return rows.length >= 3 && rows[2].querySelector('td')?.classList.contains('dx-focused');
+    });
+
+    const isFocusedRow2 = await dataGrid.getDataCell(2, 0).element.evaluate(
+      (el) => el.classList.contains('dx-focused'),
+    );
+    expect(isFocusedRow2).toBe(true);
+  });
+
+  test('TextArea should be focused on editing start', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 0, name: 'Alex' },
+        { id: 1, name: 'Bob' },
+      ],
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+      },
+      columns: [
+        {
+          dataField: 'name',
+          editCellTemplate: (cell: any) => $(cell).append($('<textarea class="text-area-1" />')),
+        },
+        { dataField: 'phone' },
+        { dataField: 'room' },
+      ],
+    });
+
+    const editLink = page.locator('.dx-data-row').nth(1).locator('.dx-link-edit').first();
+    await editLink.click();
+
+    const dataGrid = new DataGrid(page);
+    const isEditCell = await dataGrid.getDataCell(1, 0).element.evaluate(
+      (el) => el.classList.contains('dx-editor-cell'),
+    );
+    expect(isEditCell).toBe(true);
+
+    const textArea = page.locator('.text-area-1').first();
+    await expect(textArea).toBeFocused();
+  });
+
+  test('Batch mode - Cells in a new row should be updated on Shift+Tab (T898356)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [],
+      editing: {
+        mode: 'batch',
+        allowAdding: true,
+      },
+      columns: ['a', 'b'],
+    });
+
+    const dataGrid = new DataGrid(page);
+    const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
+    await addRowButton.click();
+
+    const cell01 = dataGrid.getDataCell(0, 1);
+    await cell01.element.click();
+
+    const editor01 = cell01.element.locator('.dx-texteditor-input');
+    await editor01.fill('2');
+    await page.keyboard.press('Shift+Tab');
+
+    const isFocused01After = await cell01.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused01After).toBe(false);
+
+    const cellValue01 = await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').cellValue(0, 1));
+    expect(cellValue01).toBe('2');
+
+    const cell00 = dataGrid.getDataCell(0, 0);
+    const isFocused00 = await cell00.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused00).toBe(true);
+
+    const editor00 = cell00.element.locator('.dx-texteditor-input');
+    await editor00.fill('1');
+    await page.keyboard.press('Shift+Tab');
+
+    const isFocused00After = await cell00.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused00After).toBe(false);
+
+    const cellValue00 = await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').cellValue(0, 0));
+    expect(cellValue00).toBe('1');
+  });
+
+  test('Cell mode - Cells in a new row should be updated on Shift+Tab (T898356)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [],
+      editing: {
+        mode: 'cell',
+        allowAdding: true,
+      },
+      columns: ['a', 'b'],
+    });
+
+    const dataGrid = new DataGrid(page);
+    const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
+    await addRowButton.click();
+
+    const cell01 = dataGrid.getDataCell(0, 1);
+    await cell01.element.click();
+
+    const editor01 = cell01.element.locator('.dx-texteditor-input');
+    await editor01.fill('2');
+    await page.keyboard.press('Shift+Tab');
+
+    const isFocused01After = await cell01.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused01After).toBe(false);
+
+    const cellValue01 = await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').cellValue(0, 1));
+    expect(cellValue01).toBe('2');
+
+    const cell00 = dataGrid.getDataCell(0, 0);
+    const isFocused00 = await cell00.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused00).toBe(true);
+
+    const editor00 = cell00.element.locator('.dx-texteditor-input');
+    await editor00.fill('1');
+    await page.keyboard.press('Shift+Tab');
+
+    const isFocused00After = await cell00.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused00After).toBe(false);
+
+    const cellValue00 = await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').cellValue(0, 0));
+    expect(cellValue00).toBe('1');
+  });
+
+  test('Batch mode - Cells in a modified row should be updated on Shift+Tab (T898356)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ a: '1', b: '2' }],
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+      },
+      columns: ['a', 'b'],
+    });
+
+    const dataGrid = new DataGrid(page);
+    const cell01 = dataGrid.getDataCell(0, 1);
+    await cell01.element.click();
+
+    const editor01 = cell01.element.locator('.dx-texteditor-input');
+    await editor01.fill('22');
+    await page.keyboard.press('Shift+Tab');
+
+    const isFocused01After = await cell01.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused01After).toBe(false);
+
+    const cellValue01 = await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').cellValue(0, 1));
+    expect(cellValue01).toBe('22');
+
+    const cell00 = dataGrid.getDataCell(0, 0);
+    const isFocused00 = await cell00.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused00).toBe(true);
+
+    const editor00 = cell00.element.locator('.dx-texteditor-input');
+    await editor00.fill('11');
+    await page.keyboard.press('Shift+Tab');
+
+    const isFocused00After = await cell00.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused00After).toBe(false);
+
+    const cellValue00 = await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').cellValue(0, 0));
+    expect(cellValue00).toBe('11');
+  });
+
+  test('Cell mode - Cells in a modified row should be updated on Shift+Tab (T898356)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ a: '1', b: '2' }],
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+      },
+      columns: ['a', 'b'],
+    });
+
+    await page.evaluate(() => {
+      const btn = document.createElement('button');
+      btn.id = 'focusable-before';
+      btn.textContent = 'Before';
+      const container = document.getElementById('container');
+      container?.parentNode?.insertBefore(btn, container);
+    });
+
+    const dataGrid = new DataGrid(page);
+    const cell01 = dataGrid.getDataCell(0, 1);
+    await cell01.element.click();
+
+    const editor01 = cell01.element.locator('.dx-texteditor-input');
+    await editor01.fill('22');
+    await page.keyboard.press('Shift+Tab');
+
+    const isFocused01After = await cell01.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused01After).toBe(false);
+
+    const cellValue01 = await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').cellValue(0, 1));
+    expect(cellValue01).toBe('22');
+
+    const cell00 = dataGrid.getDataCell(0, 0);
+    const isFocused00 = await cell00.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused00).toBe(true);
+
+    const editor00 = cell00.element.locator('.dx-texteditor-input');
+    await editor00.fill('11');
+    await page.keyboard.press('Shift+Tab');
+
+    const isFocused00After = await cell00.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused00After).toBe(false);
+
+    const cellValue00 = await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').cellValue(0, 0));
+    expect(cellValue00).toBe('11');
+
+    await page.evaluate(() => {
+      document.getElementById('focusable-before')?.remove();
+    });
+  });
+
+  test('Tab key on the focused group row should be handled by default behavior (T833621)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      width: 400,
+      dataSource: [
+        { id: 0, c0: 'Test00 resize', c1: 'Test10' },
+        { id: 1, c0: 'Test01 resize', c1: 'Test11' },
+        { id: 1, c0: 'Test01 resize', c1: 'Test12' },
+        { id: 1, c0: 'Test01 resize', c1: 'Test10' },
+        { id: 1, c0: 'Test01 resize', c1: 'Test11' },
+        { id: 1, c0: 'Test01 resize', c1: 'Test12' },
+        { id: 1, c0: 'Test01 resize', c1: 'Test10' },
+      ],
+      columns: [
+        'id',
+        'c0',
+        {
+          dataField: 'c1',
+          groupIndex: 0,
+          showWhenGrouped: true,
+        },
+      ],
+      paging: {
+        pageSize: 2,
+      },
+      grouping: {
+        autoExpandAll: false,
+      },
+    });
+
+    const groupRow = page.locator('.dx-group-row').nth(1);
+    await groupRow.click();
+
+    const hasHiddenFocusState = await groupRow.evaluate(
+      (el) => el.classList.contains('dx-cell-focus-disabled'),
+    );
+    expect(hasHiddenFocusState).toBe(true);
+
+    await page.keyboard.press('Tab');
+
+    const pagerPage0 = page.locator('.dx-page').nth(0);
+    const isPagerFocused = await pagerPage0.evaluate((el) => document.activeElement === el);
+    expect(isPagerFocused).toBe(true);
+
+    await page.keyboard.press('Shift+Tab');
+
+    const isGroupRowFocused = await groupRow.evaluate((el) => document.activeElement === el);
+    expect(isGroupRowFocused).toBe(true);
+  });
+
+  test('DataGrid - Scroll bars should not appear when updating edge cell focus overlay position (T812494)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      height: 150,
+      width: 200,
+      columnAutoWidth: true,
+      dataSource: [
+        { c0: 'c0_0', c1: 'c1_0' },
+        { c0: 'c0_1', c1: 'c1_1' },
+      ],
+      scrolling: {
+        useNative: true,
+      },
+      columns: [
+        'c0',
+        { dataField: 'c1', width: 50 },
+      ],
+    });
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.getDataCell(0, 0).element.click();
+
+    const isFocused00 = await dataGrid.getDataCell(0, 0).element.evaluate(
+      (el) => document.activeElement === el,
+    );
+    expect(isFocused00).toBe(true);
+
+    await page.keyboard.press('Tab');
+
+    const isFocused01 = await dataGrid.getDataCell(0, 1).element.evaluate(
+      (el) => el.classList.contains('dx-focused') || document.activeElement === el,
+    );
+    expect(isFocused01).toBe(true);
+
+    await page.keyboard.press('Tab');
+
+    const isFocused10 = await dataGrid.getDataCell(1, 0).element.evaluate(
+      (el) => el.classList.contains('dx-focused') || document.activeElement === el,
+    );
+    expect(isFocused10).toBe(true);
+
+    const scrollbarWidth = await page.evaluate(() => {
+      const container = document.querySelector('.dx-datagrid-rowsview .dx-scrollable-container') as HTMLElement | null;
+      return container ? container.offsetWidth - container.clientWidth : 0;
+    });
+    expect(scrollbarWidth).toBe(0);
+  });
+
+  test('Moving by Tab key if scrolling.columnRenderingMode: virtual, editing.mode: cell', async ({ page }) => {
+    const generateData = (rowCount: number, columnCount: number): Record<string, unknown>[] => {
+      const items: Record<string, unknown>[] = [];
+      for (let i = 0; i < rowCount; i += 1) {
+        const item: Record<string, unknown> = {};
+        for (let j = 0; j < columnCount; j += 1) {
+          item[`field${j}`] = `${i}-${j}`;
+        }
+        items.push(item);
+      }
+      return items;
+    };
+
+    await createWidget(page, 'dxDataGrid', {
+      width: 300,
+      columnWidth: 70,
+      dataSource: generateData(2, 10),
+      scrolling: {
+        columnRenderingMode: 'virtual',
+        useNative: false,
+      },
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+      },
+      paging: {
+        enabled: false,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.getDataCell(0, 0).element.click();
+
+    for (let columnIndex = 1; columnIndex < 4; columnIndex += 1) {
+      await page.keyboard.press('Tab');
+      const cellEl = dataGrid.getDataCell(0, columnIndex).element;
+      await cellEl.waitFor({ state: 'visible' });
+      const isFocused = await cellEl.evaluate(
+        (el) => el.classList.contains('dx-focused'),
+      );
+      expect(isFocused).toBe(true);
+    }
+
+    for (let columnIndex = 2; columnIndex >= 1; columnIndex -= 1) {
+      await page.keyboard.press('Shift+Tab');
+      await page.waitForFunction((expected) => {
+        const focused = document.querySelector('.dx-datagrid-rowsview .dx-focused');
+        if (!focused) return false;
+        const cells = Array.from(document.querySelectorAll('.dx-datagrid-rowsview .dx-data-row:first-child td'));
+        return cells.indexOf(focused) === expected;
+      }, columnIndex);
+      const isFocused = await page.evaluate((colIdx) => {
+        const cells = Array.from(document.querySelectorAll('.dx-datagrid-rowsview .dx-data-row:first-child td'));
+        const focused = document.querySelector('.dx-datagrid-rowsview .dx-focused');
+        return focused ? cells.indexOf(focused) === colIdx : false;
+      }, columnIndex);
+      expect(isFocused).toBe(true);
+    }
+  });
+
+  test('Moving by Tab key if scrolling.columnRenderingMode: virtual, editing.mode: batch', async ({ page }) => {
+    const generateData = (rowCount: number, columnCount: number): Record<string, unknown>[] => {
+      const items: Record<string, unknown>[] = [];
+      for (let i = 0; i < rowCount; i += 1) {
+        const item: Record<string, unknown> = {};
+        for (let j = 0; j < columnCount; j += 1) {
+          item[`field${j}`] = `${i}-${j}`;
+        }
+        items.push(item);
+      }
+      return items;
+    };
+
+    await createWidget(page, 'dxDataGrid', {
+      width: 300,
+      columnWidth: 70,
+      dataSource: generateData(2, 10),
+      scrolling: {
+        columnRenderingMode: 'virtual',
+        useNative: false,
+      },
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+      },
+      paging: {
+        enabled: false,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.getDataCell(0, 0).element.click();
+
+    for (let columnIndex = 1; columnIndex < 4; columnIndex += 1) {
+      await page.keyboard.press('Tab');
+      const cellEl = dataGrid.getDataCell(0, columnIndex).element;
+      await cellEl.waitFor({ state: 'visible' });
+      const isFocused = await cellEl.evaluate(
+        (el) => el.classList.contains('dx-focused'),
+      );
+      expect(isFocused).toBe(true);
+    }
+
+    for (let columnIndex = 2; columnIndex >= 0; columnIndex -= 1) {
+      await page.keyboard.press('Shift+Tab');
+      await page.evaluate((expected) => new Promise<void>((resolve, reject) => {
+        const instance = ($('#container') as any).dxDataGrid('instance');
+        let attempts = 0;
+        const check = () => {
+          if (instance.option('focusedColumnIndex') === expected) {
+            resolve();
+          } else if (attempts++ > 20) {
+            reject(new Error(`focusedColumnIndex never reached ${expected}`));
+          } else {
+            setTimeout(check, 50);
+          }
+        };
+        check();
+      }), columnIndex);
+      const focusedColIndex = await page.evaluate(
+        () => ($('#container') as any).dxDataGrid('instance').option('focusedColumnIndex'),
+      );
+      expect(focusedColIndex).toBe(columnIndex);
+    }
+  });
+
+  test('DataGrid - An exception should not throw after pressing the space key in an empty grid with virtual scrolling and row selection enabled', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [],
+      keyExpr: 'Test',
+      columns: ['Test'],
+      showBorders: true,
+      scrolling: {
+        mode: 'virtual',
+      },
+      selection: {
+        mode: 'single',
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    const headerCell = dataGrid.getHeaders().getHeaderCell(0, 0);
+    await headerCell.click();
+    await page.keyboard.press('Tab');
+
+    let threwError = false;
+    page.once('pageerror', () => { threwError = true; });
+
+    await page.keyboard.press('Space');
+    await page.keyboard.press('Tab');
+    await page.waitForTimeout(100);
+
+    expect(threwError).toBe(false);
+  });
+
+  test('Window should not be scrolled after clicking on freespace row (T1104035)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ id: 1 }, { id: 2 }],
+      keyExpr: 'id',
+      height: 1500,
+    });
+
+    const scrollBefore = await page.evaluate(() => window.pageYOffset);
+    expect(scrollBefore).toBe(0);
+
+    await page.evaluate(() => {
+      ($('.dx-freespace-row td') as any).trigger('click');
+    });
+
+    await page.waitForTimeout(100);
+
+    const scrollAfter = await page.evaluate(() => window.pageYOffset);
+    expect(scrollAfter).toBe(0);
+  });
+
+  test('Select views by Ctrl+Down and Ctrl+Up keys', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      width: 300,
+      dataSource: [
+        { name: 'Alex', c0: 'c0_0' },
+        { name: 'Ben', c0: 'c0_1' },
+        { name: 'Dan', c0: 'c0_2' },
+        { name: 'John', c0: 'c0_3' },
+      ],
+      keyExpr: 'name',
+      editing: {
+        allowUpdating: true,
+        allowDeleting: true,
+        selectTextOnEditStart: true,
+        useIcons: true,
+      },
+      headerFilter: { visible: true },
+      filterPanel: { visible: true },
+      filterRow: { visible: true },
+      pager: {
+        allowedPageSizes: [1, 2],
+        showPageSizeSelector: true,
+        showNavigationButtons: true,
+      },
+      paging: {
+        pageSize: 2,
+      },
+      focusedRowEnabled: true,
+    });
+
+    await page.evaluate(() => {
+      const btn = document.createElement('button');
+      btn.id = 'focusable-start';
+      btn.textContent = 'Focus Start';
+      const container = document.getElementById('container');
+      container?.parentNode?.insertBefore(btn, container);
+    });
+
+    const headers = page.locator('.dx-datagrid-headers');
+    const filterRowEl = headers.locator('.dx-datagrid-filter-row');
+
+    await page.locator('#focusable-start').click();
+    await page.keyboard.press('Tab');
+
+    const isHeadersFocused = await headers.evaluate((el) => el.contains(document.activeElement));
+    expect(isHeadersFocused).toBe(true);
+
+    await page.keyboard.press('Control+ArrowDown');
+
+    const filterInputFocused = await filterRowEl.evaluate((el) => el.contains(document.activeElement));
+    expect(filterInputFocused).toBe(true);
+
+    await page.keyboard.press('Control+ArrowDown');
+
+    const rowsViewFocused = await page.locator('.dx-datagrid-rowsview').evaluate(
+      (el) => el.contains(document.activeElement) || document.activeElement === el,
+    );
+    expect(rowsViewFocused).toBe(true);
+
+    await page.keyboard.press('Control+ArrowUp');
+
+    const filterInputFocusedAfterUp = await filterRowEl.evaluate((el) => el.contains(document.activeElement));
+    expect(filterInputFocusedAfterUp).toBe(true);
+
+    await page.keyboard.press('Control+ArrowUp');
+
+    const isHeadersFocusedAfterUp = await headers.evaluate((el) => el.contains(document.activeElement));
+    expect(isHeadersFocusedAfterUp).toBe(true);
+
+    await page.evaluate(() => {
+      document.getElementById('focusable-start')?.remove();
+    });
+  });
+
+  test('Keyboard navigation behavior should be changed after changing the keyboardNavigation.enabled option', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { field0: '0-0', field1: '0-1', field2: '0-2' },
+        { field0: '1-0', field1: '1-1', field2: '1-2' },
+      ],
+      columns: ['field0', 'field1', 'field2'],
+    });
+
+    const dataGrid = new DataGrid(page);
+    const cell00 = dataGrid.getDataCell(0, 0);
+    const cell01 = dataGrid.getDataCell(0, 1);
+
+    await cell00.element.click();
+    await page.keyboard.press('Tab');
+
+    await cell01.element.waitFor({ state: 'visible' });
+    await page.waitForFunction(() => {
+      const cells = document.querySelectorAll('.dx-datagrid-rowsview .dx-data-row:first-child td');
+      return cells.length >= 2 && cells[1].classList.contains('dx-focused');
+    });
+    const isFocused01 = await cell01.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused01).toBe(true);
+
+    await page.evaluate(() => {
+      ($('#container') as any).dxDataGrid('instance').option('keyboardNavigation.enabled', false);
+    });
+
+    await cell00.element.click();
+    await page.keyboard.press('Tab');
+    await page.waitForTimeout(100);
+
+    const isFocused01AfterDisable = await cell01.element.evaluate(
+      (el) => el.classList.contains('dx-focused'),
+    );
+    expect(isFocused01AfterDisable).toBe(false);
+
+    await page.evaluate(() => {
+      ($('#container') as any).dxDataGrid('instance').option('keyboardNavigation.enabled', true);
+    });
+
+    await cell00.element.click();
+    await page.keyboard.press('Tab');
+
+    await page.waitForFunction(() => {
+      const cells = document.querySelectorAll('.dx-datagrid-rowsview .dx-data-row:first-child td');
+      return cells.length >= 2 && cells[1].classList.contains('dx-focused');
+    });
+    const isFocused01AfterEnable = await cell01.element.evaluate(
+      (el) => el.classList.contains('dx-focused'),
+    );
+    expect(isFocused01AfterEnable).toBe(true);
+  });
 });
