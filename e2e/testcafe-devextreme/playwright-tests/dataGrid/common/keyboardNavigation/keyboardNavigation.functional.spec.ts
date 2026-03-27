@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, DataGrid } from '../../../../playwright-helpers';
+import { createWidget, DataGrid, addFocusableElementBefore } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -2018,5 +2018,535 @@ test.describe('Keyboard Navigation - common', () => {
     await page.keyboard.press('Tab');
     const cancelButton = dataGrid.getFixedDataRow(0).getCommandCell(1).getButton(1);
     await expect(cancelButton).toBeFocused();
+  });
+
+  test('The expand cell should not lose focus on expanding a master row (T892203)', async ({ page }) => {
+
+    await createWidget(page, 'dxDataGrid', {
+      showBorders: true,
+      keyExpr: 'id',
+      dataSource: [{ id: 1 }, { id: 2 }],
+      masterDetail: {
+        enabled: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+
+    await addFocusableElementBefore(page, '#container');
+
+    const headerCell01 = dataGrid.getHeaders().getHeaderCell(0, 1);
+    const cell00 = dataGrid.getDataRow(0).element.locator('td').first();
+    const cell01 = dataGrid.getDataCell(0, 1);
+    const cell10 = dataGrid.getDataRow(1).element.locator('td').first();
+    const cell11 = dataGrid.getDataCell(1, 1);
+
+    const isCellFocused = async (locator: ReturnType<typeof dataGrid.getDataCell>) => locator.element.evaluate(
+      (el) => el.classList.contains('dx-focused'),
+    );
+
+    await page.locator('#focusable-start').click();
+    await page.keyboard.press('Tab');
+    await expect(headerCell01).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(cell00).toBeFocused();
+
+    await page.keyboard.press('Enter');
+    await expect(cell00).toBeFocused();
+
+    const isExpanded = await dataGrid.getDataRow(0).element.evaluate((el) => el.getAttribute('aria-expanded') === 'true');
+    expect(isExpanded).toBe(true);
+
+    await page.keyboard.press('Tab');
+    expect(await isCellFocused(cell01)).toBe(true);
+
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await expect(cell10).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    expect(await isCellFocused(cell11)).toBe(true);
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(cell10).toBeFocused();
+
+    await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('ArrowUp');
+    await expect(cell00).toBeFocused();
+
+    await page.keyboard.press('Enter');
+    await expect(cell00).toBeFocused();
+
+    const isCollapsed = await dataGrid.getDataRow(0).element.evaluate((el) => el.getAttribute('aria-expanded') !== 'true');
+    expect(isCollapsed).toBe(true);
+  });
+
+  test('The row edit mode - Tab navigation through interactive elements in an editable cell when editCellTemplate is set', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', () => ({
+      width: 800,
+      dataSource: [
+        {
+          id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+        },
+      ],
+      keyExpr: 'id',
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+      },
+      columns: [
+        'field1',
+        {
+          dataField: 'field2',
+          editCellTemplate: (cellElement: any) => {
+            $('<input type="button" value="My button" />')
+              .addClass('my-button')
+              .appendTo(cellElement);
+            $('<input type="text"/>')
+              .addClass('my-editor')
+              .appendTo(cellElement);
+          },
+        },
+        'field3',
+      ],
+    }));
+
+    const dataGrid = new DataGrid(page);
+
+    await dataGrid.apiEditRow(0);
+
+    const dataCell0 = dataGrid.getDataCell(0, 0);
+    await dataCell0.element.click();
+
+    const isEditCell0 = await dataCell0.element.evaluate((el) => el.classList.contains('dx-editor-cell'));
+    expect(isEditCell0).toBe(true);
+    const isFocused0 = await dataCell0.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused0).toBe(true);
+
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#container .my-button')).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#container .my-editor')).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    const dataCell2 = dataGrid.getDataCell(0, 2);
+    const isEditCell2 = await dataCell2.element.evaluate((el) => el.classList.contains('dx-editor-cell'));
+    expect(isEditCell2).toBe(true);
+    const isFocused2 = await dataCell2.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused2).toBe(true);
+  });
+
+  test('The row edit mode - Shift + Tab navigation through interactive elements in an editable cell when editCellTemplate is set', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', () => ({
+      width: 800,
+      dataSource: [
+        {
+          id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+        },
+      ],
+      keyExpr: 'id',
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+      },
+      columns: [
+        'field1',
+        {
+          dataField: 'field2',
+          editCellTemplate: (cellElement: any) => {
+            $('<input type="button" value="My button" />')
+              .addClass('my-button')
+              .appendTo(cellElement);
+            $('<input type="text"/>')
+              .addClass('my-editor')
+              .appendTo(cellElement);
+          },
+        },
+        'field3',
+      ],
+    }));
+
+    const dataGrid = new DataGrid(page);
+
+    await dataGrid.apiEditRow(0);
+
+    const dataCell2 = dataGrid.getDataCell(0, 2);
+    await dataCell2.element.click();
+
+    const isEditCell2 = await dataCell2.element.evaluate((el) => el.classList.contains('dx-editor-cell'));
+    expect(isEditCell2).toBe(true);
+    const isFocused2 = await dataCell2.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused2).toBe(true);
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(page.locator('#container .my-editor')).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(page.locator('#container .my-button')).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    const dataCell0 = dataGrid.getDataCell(0, 0);
+    const isEditCell0 = await dataCell0.element.evaluate((el) => el.classList.contains('dx-editor-cell'));
+    expect(isEditCell0).toBe(true);
+    const isFocused0 = await dataCell0.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused0).toBe(true);
+  });
+
+  test('The batch edit mode - Tab navigation through interactive elements in an editable cell when editCellTemplate is set', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', () => ({
+      width: 800,
+      dataSource: [
+        {
+          id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+        },
+      ],
+      keyExpr: 'id',
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+      },
+      columns: [
+        'field1',
+        {
+          dataField: 'field2',
+          editCellTemplate: (cellElement: any) => {
+            $('<input type="button" value="My button" />')
+              .addClass('my-button')
+              .appendTo(cellElement);
+            $('<input type="text"/>')
+              .addClass('my-editor')
+              .appendTo(cellElement);
+          },
+        },
+        'field3',
+      ],
+    }));
+
+    const dataGrid = new DataGrid(page);
+    const dataCell0 = dataGrid.getDataCell(0, 0);
+
+    await dataCell0.element.click();
+
+    const isEditCell0 = await dataCell0.element.evaluate((el) => el.classList.contains('dx-editor-cell'));
+    expect(isEditCell0).toBe(true);
+    const isFocused0 = await dataCell0.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused0).toBe(true);
+
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#container .my-button')).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#container .my-editor')).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    const dataCell2 = dataGrid.getDataCell(0, 2);
+    const isEditCell2 = await dataCell2.element.evaluate((el) => el.classList.contains('dx-editor-cell'));
+    expect(isEditCell2).toBe(true);
+    const isFocused2 = await dataCell2.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused2).toBe(true);
+  });
+
+  test('The batch edit mode - Shift + Tab navigation through interactive elements in an editable cell when editCellTemplate is set', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', () => ({
+      width: 800,
+      dataSource: [
+        {
+          id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+        },
+      ],
+      keyExpr: 'id',
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+      },
+      columns: [
+        'field1',
+        {
+          dataField: 'field2',
+          editCellTemplate: (cellElement: any) => {
+            $('<input type="button" value="My button" />')
+              .addClass('my-button')
+              .appendTo(cellElement);
+            $('<input type="text"/>')
+              .addClass('my-editor')
+              .appendTo(cellElement);
+          },
+        },
+        'field3',
+      ],
+    }));
+
+    const dataGrid = new DataGrid(page);
+    const dataCell2 = dataGrid.getDataCell(0, 2);
+
+    await dataCell2.element.click();
+
+    const isEditCell2 = await dataCell2.element.evaluate((el) => el.classList.contains('dx-editor-cell'));
+    expect(isEditCell2).toBe(true);
+    const isFocused2 = await dataCell2.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused2).toBe(true);
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(page.locator('#container .my-button')).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    const dataCell0 = dataGrid.getDataCell(0, 0);
+    const isEditCell0 = await dataCell0.element.evaluate((el) => el.classList.contains('dx-editor-cell'));
+    expect(isEditCell0).toBe(true);
+    const isFocused0 = await dataCell0.element.evaluate((el) => el.classList.contains('dx-focused'));
+    expect(isFocused0).toBe(true);
+  });
+
+  test('DataGrid - Cell focus works incorrectly if the command column has a disabled native button element (T1179207)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', () => ({
+      dataSource: [
+        { field_0: 'val_0_0', field_1: 'val_0_1' },
+        { field_0: 'val_1_0', field_1: 'val_1_1' },
+      ],
+      showBorders: true,
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+        allowDeleting: true,
+      },
+      columns: ['field_0', 'field_1', {
+        type: 'buttons',
+        buttons: [{
+          template() {
+            return $('<button>').text('Edit');
+          },
+        }, {
+          template() {
+            return $('<button>').attr({ disabled: true }).text('Delete');
+          },
+        }],
+      }],
+    }));
+
+    await addFocusableElementBefore(page, '#container');
+    await page.locator('#focusable-start').click();
+
+    for (let i = 0; i < 7; i++) {
+      await page.keyboard.press('Tab');
+    }
+
+    const focusedTag = await page.evaluate(() => document.activeElement?.tagName.toLowerCase());
+    expect(focusedTag).toBe('td');
+
+    const focusedAriaColindex = await page.evaluate(() => document.activeElement?.getAttribute('aria-colindex'));
+    expect(focusedAriaColindex).toBe('1');
+  });
+
+  test('DataGrid - The onKeyDown event should be called once for group panel', async ({ page }) => {
+    await page.evaluate(() => {
+      (window as any).onKeyDownCallCount = 0;
+    });
+
+    await createWidget(page, 'dxDataGrid', () => {
+      const items: Record<string, string>[] = [];
+      for (let i = 0; i < 5; i++) {
+        const item: Record<string, string> = {};
+        for (let j = 0; j < 5; j++) item[`field_${j}`] = `val_${i}_${j}`;
+        items.push(item);
+      }
+      return {
+        dataSource: items,
+        showBorders: true,
+        onKeyDown() {
+          (window as any).onKeyDownCallCount += 1;
+        },
+        groupPanel: {
+          visible: true,
+        },
+        columns: [
+          { dataField: 'field_0', groupIndex: 0 },
+          { dataField: 'field_1', groupIndex: 1 },
+          'field_2',
+          'field_3',
+          'field_4',
+        ],
+      };
+    });
+
+    const dataGrid = new DataGrid(page);
+    const firstGroupedColumn = dataGrid.getGroupPanel().locator('.dx-group-panel-item').first();
+
+    await firstGroupedColumn.click();
+    await page.keyboard.press('Tab');
+
+    const callCount = await page.evaluate(() => (window as any).onKeyDownCallCount);
+    expect(callCount).toBe(1);
+
+    await page.evaluate(() => {
+      delete (window as any).onKeyDownCallCount;
+    });
+  });
+
+  test('DataGrid - The onKeyDown event should be called once for headers', async ({ page }) => {
+    await page.evaluate(() => {
+      (window as any).onKeyDownCallCount = 0;
+    });
+
+    await createWidget(page, 'dxDataGrid', () => {
+      const items: Record<string, string>[] = [];
+      for (let i = 0; i < 5; i++) {
+        const item: Record<string, string> = {};
+        for (let j = 0; j < 5; j++) item[`field_${j}`] = `val_${i}_${j}`;
+        items.push(item);
+      }
+      return {
+        dataSource: items,
+        showBorders: true,
+        onKeyDown() {
+          (window as any).onKeyDownCallCount += 1;
+        },
+      };
+    });
+
+    const dataGrid = new DataGrid(page);
+    const firstHeader = dataGrid.getHeaders().getHeaderRow(0).locator('td').first();
+
+    await firstHeader.click();
+    await page.keyboard.press('Tab');
+
+    const callCount = await page.evaluate(() => (window as any).onKeyDownCallCount);
+    expect(callCount).toBe(1);
+
+    await page.evaluate(() => {
+      delete (window as any).onKeyDownCallCount;
+    });
+  });
+
+  test('Multiple DataGrids - Ctrl+Up/Down from filter row should focus data row in the same grid', async ({ page }) => {
+    const getData = (rowCount: number, colCount: number): Record<string, string>[] => {
+      const items: Record<string, string>[] = [];
+      for (let i = 0; i < rowCount; i++) {
+        const item: Record<string, string> = {};
+        for (let j = 0; j < colCount; j++) item[`field_${j}`] = `val_${i}_${j}`;
+        items.push(item);
+      }
+      return items;
+    };
+
+    const getDataGridProps = () => ({
+      dataSource: getData(5, 2),
+      columns: ['field_0', 'field_1'],
+      filterRow: { visible: true },
+    });
+
+    await createWidget(page, 'dxDataGrid', getDataGridProps());
+    await createWidget(page, 'dxDataGrid', getDataGridProps(), '#otherContainer');
+
+    const firstGrid = new DataGrid(page, '#container');
+    const secondGrid = new DataGrid(page, '#otherContainer');
+
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+    await page.waitForFunction(() => ($('#otherContainer') as any).dxDataGrid('instance').isReady());
+
+    const secondGridDataCell = secondGrid.getDataCell(0, 0);
+    const secondGridFilterInput = secondGrid.getFilterCell(0).locator('.dx-texteditor-input');
+    const firstGridDataCell = firstGrid.getDataCell(0, 0);
+    const firstGridFilterInput = firstGrid.getFilterCell(0).locator('.dx-texteditor-input');
+
+    await secondGridDataCell.element.click();
+    await page.keyboard.press('Control+ArrowUp');
+
+    await expect(secondGridFilterInput).toBeFocused();
+
+    const firstGridFilterFocused = await firstGridFilterInput.evaluate((el) => document.activeElement === el);
+    expect(firstGridFilterFocused).toBe(false);
+
+    await page.keyboard.press('Control+ArrowDown');
+    await expect(secondGridDataCell.element).toBeFocused();
+
+    const firstGridDataFocused = await firstGridDataCell.element.evaluate((el) => document.activeElement === el);
+    expect(firstGridDataFocused).toBe(false);
+  });
+
+  test('All rows should be focused on arrow-up/down when virtual scrolling enabled with group summary (T1014612)', async ({ page }) => {
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 1, name: 'test1' },
+        { id: 2, name: 'test2' },
+      ],
+      keyExpr: 'id',
+      grouping: {
+        autoExpandAll: true,
+      },
+      scrolling: {
+        mode: 'virtual',
+      },
+      summary: {
+        groupItems: [{
+          column: 'id',
+          summaryType: 'count',
+          showInGroupFooter: true,
+        }],
+      },
+      columns: ['id', {
+        dataField: 'name',
+        groupIndex: 0,
+      }],
+    });
+
+    const dataGrid = new DataGrid(page);
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    await addFocusableElementBefore(page, '#container');
+
+    await page.locator('#focusable-start').click();
+    await page.keyboard.press('Tab');
+
+    await expect(dataGrid.getHeaders().getHeaderRow(0).locator('td').nth(1)).toBeFocused();
+
+    await page.keyboard.press('Tab');
+
+    const groupRow0 = dataGrid.getGroupRow(0);
+    const isGroupRow0Focused = await groupRow0.element.evaluate((el) => document.activeElement === el);
+    expect(isGroupRow0Focused).toBe(true);
+
+    await page.keyboard.press('ArrowDown');
+
+    const dataCell11Focused = await dataGrid.getDataCell(1, 1).element.evaluate((el) => document.activeElement === el);
+    expect(dataCell11Focused).toBe(true);
+
+    await page.keyboard.press('ArrowDown');
+
+    const groupFooterFocused = await dataGrid.getGroupFooterRow().evaluate((el) => document.activeElement === el);
+    expect(groupFooterFocused).toBe(true);
+
+    await page.keyboard.press('ArrowDown');
+
+    const groupRow1 = dataGrid.getGroupRow(1);
+    const isGroupRow1Focused = await groupRow1.element.evaluate((el) => document.activeElement === el);
+    expect(isGroupRow1Focused).toBe(true);
+
+    await page.keyboard.press('ArrowDown');
+
+    const dataCell41Focused = await dataGrid.getDataCell(4, 1).element.evaluate((el) => document.activeElement === el);
+    expect(dataCell41Focused).toBe(true);
+
+    await page.keyboard.press('ArrowUp');
+
+    const groupRow1FocusedAfterUp = await groupRow1.element.evaluate((el) => document.activeElement === el);
+    expect(groupRow1FocusedAfterUp).toBe(true);
+
+    await page.keyboard.press('ArrowUp');
+
+    const groupFooterFocusedAfterUp = await dataGrid.getGroupFooterRow().evaluate((el) => document.activeElement === el);
+    expect(groupFooterFocusedAfterUp).toBe(true);
+
+    await page.keyboard.press('ArrowUp');
+
+    const dataCell11FocusedAfterUp = await dataGrid.getDataCell(1, 1).element.evaluate((el) => document.activeElement === el);
+    expect(dataCell11FocusedAfterUp).toBe(true);
+
+    await page.keyboard.press('ArrowUp');
+
+    const groupRow0FocusedAfterUp = await groupRow0.element.evaluate((el) => document.activeElement === el);
+    expect(groupRow0FocusedAfterUp).toBe(true);
   });
 });
