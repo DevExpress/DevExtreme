@@ -64,7 +64,7 @@ function isPredefinedButtonName(
 
 export type TextEditorButtonInfo = PublicTextEditorButton & {
   name: string;
-  Ctor: typeof CustomButton;
+  Ctor: typeof TextEditorButton;
 };
 
 export default class TextEditorButtonCollection<

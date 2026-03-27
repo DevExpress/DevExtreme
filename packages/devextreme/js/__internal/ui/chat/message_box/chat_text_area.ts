@@ -584,7 +584,7 @@ class ChatTextArea extends TextArea<Properties> {
     return maxHeight;
   }
 
-  _keyPressHandler(e: InputEvent): void {
+  _keyPressHandler(e: { originalEvent: InputEvent & KeyboardEvent }): void {
     super._keyPressHandler(e);
 
     this._updateButtonsState();
