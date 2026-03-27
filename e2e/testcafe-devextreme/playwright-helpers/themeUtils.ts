@@ -41,8 +41,8 @@ async function takePageScreenshot(
   screenshotOptions?: { maxDiffPixelRatio?: number },
 ): Promise<void> {
   const viewport = page.viewportSize() ?? { width: 1200, height: 800 };
-  const htmlOffsetWidth = await page.evaluate(() => document.documentElement.offsetWidth);
-  const width = Math.min(htmlOffsetWidth, viewport.width);
+  const contentWidth = await page.evaluate(() => document.documentElement.clientWidth);
+  const width = Math.min(contentWidth, viewport.width);
   const clip = { x: 0, y: 0, width, height: viewport.height };
   await expect(page).toHaveScreenshot([name], { maxDiffPixelRatio: 0.20, clip, ...screenshotOptions });
 }
@@ -68,9 +68,6 @@ async function takeElementScreenshot(
 }
 
 async function simulateTestCafeScrollbar(page: Page): Promise<boolean> {
-  const viewport = page.viewportSize();
-  if (viewport && viewport.width !== 1200) return false;
-
   return page.evaluate(() => {
     if (document.documentElement.style.paddingRight) return false;
 

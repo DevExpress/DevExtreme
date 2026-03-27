@@ -123,14 +123,12 @@ export default defineConfig({
       name: 'chromium',
       use: {
         browserName: 'chromium',
-        ...(process.env.CI ? { channel: 'chrome' } : {}),
       },
     },
     {
       name: 'chromium-1185',
       use: {
         browserName: 'chromium',
-        ...(process.env.CI ? { channel: 'chrome' } : {}),
         viewport: { width: 1185, height: 800 },
       },
     },
