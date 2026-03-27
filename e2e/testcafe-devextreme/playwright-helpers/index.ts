@@ -44,6 +44,7 @@ export {
   DataGrid,
   DataGridHeaders,
   DataGridDataRow,
+  DataGridCommandCell,
   DataGridEditForm,
   DataGridGroupRow,
   DataGridAdaptiveDetailRow,

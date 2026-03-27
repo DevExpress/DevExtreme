@@ -95,6 +95,22 @@ export class DataGridHeaders {
   }
 }
 
+export class DataGridCommandCell {
+  readonly element: Locator;
+
+  constructor(row: Locator, columnIndex: number) {
+    this.element = row.locator('td').nth(columnIndex);
+  }
+
+  getButton(buttonIndex: number): Locator {
+    return this.element.locator('.dx-link').nth(buttonIndex);
+  }
+
+  getSelectCheckBox(): Locator {
+    return this.element.locator('.dx-checkbox-container');
+  }
+}
+
 export class DataGridDataRow {
   readonly element: Locator;
 
@@ -104,6 +120,10 @@ export class DataGridDataRow {
 
   getDataCell(columnIndex: number): LocatorWithElement {
     return locatorWithElement(this.element.locator('td').nth(columnIndex));
+  }
+
+  getCommandCell(columnIndex: number): DataGridCommandCell {
+    return new DataGridCommandCell(this.element, columnIndex);
   }
 }
 
@@ -138,6 +158,10 @@ export class DataGridAdaptiveDetailRow {
 
   constructor(container: Locator, index: number) {
     this.element = container.locator(`.${CLASS.adaptiveDetailRow}`).nth(index);
+  }
+
+  getAdaptiveCell(cellIndex: number): LocatorWithElement {
+    return locatorWithElement(this.element.locator('.dx-field-item-content').nth(cellIndex));
   }
 }
 
@@ -260,7 +284,7 @@ export class DataGrid {
     );
   }
 
-  getFixedDataCell(rowIndex: number, columnIndex: number): Locator {
+  getFixedDataCell(rowIndex: number, columnIndex: number): LocatorWithElement {
     return this.getFixedDataRow(rowIndex).getDataCell(columnIndex);
   }
 
