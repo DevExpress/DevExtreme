@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../playwright-helpers';
+import { createWidget, TreeList, ExpandableCell } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -60,19 +60,26 @@ test.describe('Row dragging', () => {
       },
     });
 
-    const treeList = page.locator('#container');
+    const treeList = new TreeList(page);
     const dataRow = treeList.getDataRow(0);
     const expandButton = new ExpandableCell(dataRow.getDataCell(0)).getExpandButton();
-    const freeSpaceRow = treeList.getFreeSpaceRow();
-    await page.dragToElement(freeSpaceRow, dataRow.element)
-      .click(expandButton)
-      .expect(treeList.getDataRow(1).element.exists)
-      .ok();
+    const freeSpaceRow = page.locator('#container .dx-freespace-row');
+
+    await freeSpaceRow.dragTo(dataRow.element);
+    await expandButton.click();
+    await expect(treeList.getDataRow(1).element).toBeVisible();
 
     });
 
   [undefined, 200].forEach((height) => {
-    test.skip(`TreeList - The W1025 warning occurs when dragging a row (height: ${height ?? 'not set'}). (T1280519)`, async ({ page }) => {
+    test(`TreeList - The W1025 warning occurs when dragging a row (height: ${height ?? 'not set'}). (T1280519)`, async ({ page }) => {
+    const warnings: string[] = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'warning') {
+        warnings.push(msg.text());
+      }
+    });
+
     await createWidget(page, 'dxDataGrid', {
       height,
       scrolling: {
@@ -84,16 +91,19 @@ test.describe('Row dragging', () => {
       },
     });
 
-      const treeList = page.locator('#container');
+      const firstRow = page.locator('#container .dx-data-row').first();
+      const firstRowBox = await firstRow.boundingBox();
 
-      await treeList.isReady();
-
-      await treeList.moveRow(0, 10, 10, true);
+      if (firstRowBox) {
+        await page.mouse.move(firstRowBox.x + 10, firstRowBox.y + firstRowBox.height / 2);
+        await page.mouse.down();
+        await page.mouse.move(firstRowBox.x + 20, firstRowBox.y + firstRowBox.height / 2 + 10, { steps: 5 });
+        await page.mouse.up();
+      }
 
       await page.waitForTimeout(100);
 
-      const consoleMessages = await getBrowserConsoleMessages();
-      const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
+      const warningExists = warnings.some((message) => message.startsWith('W1025'));
 
       expect(warningExists).toBe(height === undefined);
 

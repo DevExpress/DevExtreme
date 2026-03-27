@@ -15,7 +15,7 @@ test.describe('Columns', () => {
   });
 
   // T1054312
-  test.skip('CheckBox position with double rows columns', async ({ page }) => {
+  test('CheckBox position with double rows columns', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     dataSource: [{
       ID: 1,
@@ -34,14 +34,14 @@ test.describe('Columns', () => {
     ],
   });
 
-    const treeList = page.locator('#container');
+    const headers = page.locator('#container .dx-treelist-headers');
 
-    await testScreenshot(page, 'T1054312', { element: treeList.getHeaders().element });
+    await testScreenshot(page, 'T1054312', { element: headers });
 
     });
 
   // T1053931
-  test.skip('Correct display border to last column', async ({ page }) => {
+  test('Correct display border to last column', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     dataSource: [
       {
@@ -85,9 +85,9 @@ test.describe('Columns', () => {
     height: 300,
   });
 
-    const treeList = page.locator('#container');
+    const headers = page.locator('#container .dx-treelist-headers');
 
-    await testScreenshot(page, 'T1053931', { element: treeList.getHeaders().element });
+    await testScreenshot(page, 'T1053931', { element: headers });
 
     });
 });

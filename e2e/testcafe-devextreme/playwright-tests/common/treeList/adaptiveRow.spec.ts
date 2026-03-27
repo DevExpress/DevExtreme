@@ -14,7 +14,7 @@ test.describe('Adaptive Row', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Should be shown and hidden when the window is resized', async ({ page }) => {
+  test('Should be shown and hidden when the window is resized', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     dataSource: [{
       ID: 1,
@@ -53,19 +53,19 @@ test.describe('Adaptive Row', () => {
     ],
   });
 
-    const treeList = page.locator('#container');
-    await treeList.isReady();
+    const adaptiveButton = page.locator('#container .dx-command-adaptive .dx-datagrid-adaptive-more');
+    await expect(adaptiveButton).toBeVisible();
+    await adaptiveButton.click();
 
-    const adaptiveButton = treeList.getAdaptiveButton();
-    expect(adaptiveButton.exists).toBeTruthy();
-    await click(adaptiveButton);
+    const adaptiveRow = page.locator('#container .dx-adaptive-detail-row');
+    await expect(adaptiveRow).toBeVisible();
 
-    await expect(treeList.getAdaptiveRow(0).element.exists).ok();
+    await page.setViewportSize({ width: 1200, height: 400 });
+    await page.waitForTimeout(500);
 
-    await resizeWindow(1200, 400);
-
-    await expect(treeList.isAdaptiveColumnHidden()).ok();
-    await expect(treeList.getAdaptiveRow(0).element.exists).notOk();
+    const adaptiveColumn = page.locator('#container .dx-command-adaptive');
+    await expect(adaptiveColumn).toBeHidden();
+    await expect(adaptiveRow).toBeHidden();
 
     });
 });

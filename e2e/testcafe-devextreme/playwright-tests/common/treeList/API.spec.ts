@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, TreeList } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -30,7 +30,7 @@ test.describe('Public methods', () => {
 
   [true, false].forEach((renderAsync) => {
     [true, false].forEach((useNativeScrolling) => {
-      test.skip(`The renderAsync=${renderAsync} and scrolling.useNative=${useNativeScrolling}: The navigateToRow method should work correctly when there are asynchronous cell templates and virtual scrolling is enabled (T1275775)`, async ({ page }) => {
+      test(`The renderAsync=${renderAsync} and scrolling.useNative=${useNativeScrolling}: The navigateToRow method should work correctly when there are asynchronous cell templates and virtual scrolling is enabled (T1275775)`, async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
         dataSource: getItems(),
         height: 500,
@@ -62,18 +62,14 @@ test.describe('Public methods', () => {
         },
       });
 
-        // arrange
-        const treeList = page.locator('#container');
+        const treeList = new TreeList(page);
 
-        await page.expect(treeList.getDataCell(0, 0).element.textContent)
-          .contains('item_');
+        await expect(treeList.getDataCell(0, 0)).toContainText('item_');
 
-        // act
-        await treeList.apiNavigateToRow('item_80_50');
+        await page.evaluate(() => ($('#container') as any).dxTreeList('instance').navigateToRow('item_80_50'));
+        await page.waitForTimeout(500);
 
-        // assert
-        await page.expect(treeList.getDataCell(131, 0).element.textContent)
-          .contains('item_');
+        await expect(treeList.getDataCell(131, 0)).toContainText('item_');
 
         await testScreenshot(page, `T1275775-navigateToRow-with-async-cell-templates_(renderAsync=${renderAsync}_useNativeScrolling=${useNativeScrolling}).png`, { element: treeList.element });
 

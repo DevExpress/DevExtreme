@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
+import { createWidget, TreeList } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
 
-test.describe.skip('Tests', () => {
+test.describe('Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
@@ -51,11 +51,12 @@ test.describe.skip('Tests', () => {
     },
   });
 
-    const treeList = page.locator('#container');
+    const treeList = new TreeList(page);
     const dataRow = treeList.getDataRow(3);
+    const checkbox = dataRow.element.locator('.dx-select-checkbox');
 
-    await page.click(dataRow.getSelectCheckBox(), { offsetX: 0, offsetY: 0 })
-      .expect(dataRow.isSelected).ok();
+    await checkbox.click({ position: { x: 0, y: 0 } });
+    await expect(dataRow.element).toHaveClass(/dx-selection/);
 
     });
 });

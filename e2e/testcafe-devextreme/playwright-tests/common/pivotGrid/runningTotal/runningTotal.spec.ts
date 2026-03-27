@@ -105,13 +105,13 @@ test.describe('PivotGrid: running total', () => {
     },
   });
 
-    const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
+    const container = page.locator(PIVOT_GRID_SELECTOR);
 
-    await testScreenshot(page, 'running-total_seamless-data.png', { element: pivotGrid.element });
+    await testScreenshot(page, 'running-total_seamless-data.png', { element: container });
 
     });
 
-  test.skip('Should correctly sum cells values with runningTotal with partial data (T1144885)', async ({ page }) => {
+  test('Should correctly sum cells values with runningTotal with partial data (T1144885)', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
     dataSource: {
       fields: [
@@ -140,14 +140,14 @@ test.describe('PivotGrid: running total', () => {
     },
   });
 
-    const pivotGrid = new PivotGrid(PIVOT_GRID_SELECTOR);
+    const container = page.locator(PIVOT_GRID_SELECTOR);
 
-    await testScreenshot(page, 'running-total_partial-data_render-0.png', { element: pivotGrid.element });
+    await testScreenshot(page, 'running-total_partial-data_render-0.png', { element: container });
 
-    const rowToCollapse = pivotGrid.getRowsArea().getCell(3);
-    await click(rowToCollapse);
+    const rowToCollapse = page.locator(`${PIVOT_GRID_SELECTOR} .dx-pivotgrid-vertical-headers td`).nth(3);
+    await rowToCollapse.click();
 
-    await testScreenshot(page, 'running-total_partial-data_render-1.png', { element: pivotGrid.element });
+    await testScreenshot(page, 'running-total_partial-data_render-1.png', { element: container });
 
     });
 });

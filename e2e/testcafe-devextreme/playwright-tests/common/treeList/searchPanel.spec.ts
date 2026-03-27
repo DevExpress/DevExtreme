@@ -14,7 +14,7 @@ test.describe('SearchPanel', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Items are shown in the original order after search is applied - T1274434 - 1', async ({ page }) => {
+  test('Items are shown in the original order after search is applied - T1274434 - 1', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     showBorders: true,
     showRowLines: true,
@@ -30,24 +30,19 @@ test.describe('SearchPanel', () => {
     ],
   });
 
-    const treeList = page.locator('#container');
-    await treeList.apiSearchByText('test');
+    await page.evaluate(() => ($('#container') as any).dxTreeList('instance').searchByText('test'));
+    await page.waitForTimeout(300);
 
-    await page.expect((await treeList.apiGetVisibleRows()).length)
-      .eql(3);
+    const rows = page.locator('#container .dx-data-row');
+    await expect(rows).toHaveCount(3);
 
-    await page.expect(treeList.apiGetCellValue(0, 0))
-      .eql('parent1');
-
-    await page.expect(treeList.apiGetCellValue(1, 0))
-      .eql('test2');
-
-    await page.expect(treeList.apiGetCellValue(2, 0))
-      .eql('test1');
+    await expect(rows.nth(0).locator('td').nth(0)).toContainText('parent1');
+    await expect(rows.nth(1).locator('td').nth(0)).toContainText('test2');
+    await expect(rows.nth(2).locator('td').nth(0)).toContainText('test1');
 
     });
 
-  test.skip('Items are shown in the original order after search is applied - T1274434 - 2', async ({ page }) => {
+  test('Items are shown in the original order after search is applied - T1274434 - 2', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     showBorders: true,
     showRowLines: true,
@@ -64,20 +59,15 @@ test.describe('SearchPanel', () => {
     ],
   });
 
-    const treeList = page.locator('#container');
-    await treeList.apiSearchByText('test');
+    await page.evaluate(() => ($('#container') as any).dxTreeList('instance').searchByText('test'));
+    await page.waitForTimeout(300);
 
-    await page.expect((await treeList.apiGetVisibleRows()).length)
-      .eql(3);
+    const rows = page.locator('#container .dx-data-row');
+    await expect(rows).toHaveCount(3);
 
-    await page.expect(treeList.apiGetCellValue(0, 0))
-      .eql('parent1');
-
-    await page.expect(treeList.apiGetCellValue(1, 0))
-      .eql('test2');
-
-    await page.expect(treeList.apiGetCellValue(2, 0))
-      .eql('test1');
+    await expect(rows.nth(0).locator('td').nth(0)).toContainText('parent1');
+    await expect(rows.nth(1).locator('td').nth(0)).toContainText('test2');
+    await expect(rows.nth(2).locator('td').nth(0)).toContainText('test1');
 
     });
 });

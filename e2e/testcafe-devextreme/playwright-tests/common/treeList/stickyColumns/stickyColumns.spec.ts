@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, TreeList } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
 
-test.describe.skip('Sticky columns - Drag and Drop', () => {
+test.describe('Sticky columns - Drag and Drop', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
@@ -20,7 +20,7 @@ test.describe.skip('Sticky columns - Drag and Drop', () => {
 
     await createWidget(page, 'dxTreeList', {
       dataSource: new Array(20).fill(null).map((_, index) => {
-        const item = {
+        const item: Record<string, unknown> = {
           id: index + 1,
           parentId: index % 5,
         };
@@ -49,14 +49,10 @@ test.describe.skip('Sticky columns - Drag and Drop', () => {
       },
     });
 
-    const treeList = new TreeList(TREE_LIST_SELECTOR);
-    const headerCell = treeList.getHeaders().getHeaderRow(0).getHeaderCell(13);
+    const treeList = new TreeList(page, TREE_LIST_SELECTOR);
+    const headerCell = treeList.getHeaderCell(0, 13);
 
-    await expect(treeList.isReady()).ok();
-
-    await hover(headerCell.element);
-
-    await expect(headerCell.isHovered()).ok();
+    await headerCell.hover();
 
     await testScreenshot(page, 'treelist_header_hover_with_fixed_columns.png', { element: treeList.element });
 
@@ -66,7 +62,7 @@ test.describe.skip('Sticky columns - Drag and Drop', () => {
 
     await createWidget(page, 'dxTreeList', {
       dataSource: new Array(20).fill(null).map((_, index) => {
-        const item = {
+        const item: Record<string, unknown> = {
           id: index + 1,
           parentId: index % 5,
         };
@@ -96,14 +92,10 @@ test.describe.skip('Sticky columns - Drag and Drop', () => {
       },
     });
 
-    const treeList = new TreeList(TREE_LIST_SELECTOR);
+    const treeList = new TreeList(page, TREE_LIST_SELECTOR);
     const dataRow = treeList.getDataRow(1);
 
-    await expect(treeList.isReady()).ok();
-
-    await hover(dataRow.element);
-
-    expect(dataRow.isHovered).toBeTruthy();
+    await dataRow.element.hover();
 
     await testScreenshot(page, 'treelist_row_hover_with_fixed_columns.png', { element: treeList.element });
 

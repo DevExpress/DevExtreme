@@ -28,7 +28,7 @@ test.describe('TreeList - Markup', () => {
     Task_Parent_ID: 2,
   }];
 
-  test.skip('TreeList - Expand/collapse buttons are too close to column borders if the first column is a boolean column (T1223168)', async ({ page }) => {
+  test('TreeList - Expand/collapse buttons are too close to column borders if the first column is a boolean column (T1223168)', async ({ page }) => {
 
     await createWidget(page, 'dxTreeList', {
       dataSource: tasksT1223168,
@@ -49,12 +49,12 @@ test.describe('TreeList - Markup', () => {
 
     const treeList = page.locator('#container');
 
-    await testScreenshot(page, 'T1223168-expandable', { element: treeList.element });
+    await testScreenshot(page, 'T1223168-expandable', { element: treeList });
 
     });
 
   // T1221037
-  test.skip('TreeList screenshot when the first cell has a template', async ({ page }) => {
+  test('TreeList screenshot when the first cell has a template', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     dataSource: [{
       ID: 1,
@@ -145,13 +145,12 @@ test.describe('TreeList - Markup', () => {
 
     const treeList = page.locator('#container');
 
-    await expect(treeList.isReady()).ok();
-    await testScreenshot(page, 'T1221037-cell-with-template', { element: treeList.element });
+    await testScreenshot(page, 'T1221037-cell-with-template', { element: treeList });
 
     });
 
   // T1291705
-  test.skip('The shading should alternate correctly after expanding the node when repaintChangesOnly is enabled', async ({ page }) => {
+  test('The shading should alternate correctly after expanding the node when repaintChangesOnly is enabled', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     dataSource: [
       { id: 1, parentId: 0, text: 'item 1' },
@@ -169,14 +168,14 @@ test.describe('TreeList - Markup', () => {
 
     const treeList = page.locator('#container');
 
-    await treeList.apiExpandRow(4);
-    await treeList.apiExpandRow(2);
+    await page.evaluate(() => ($('#container') as any).dxTreeList('instance').expandRow(4));
+    await page.evaluate(() => ($('#container') as any).dxTreeList('instance').expandRow(2));
 
-    await testScreenshot(page, 'T1291705-row-alternation-after-expanding-node-when-repaintChangesOnly=true', { element: treeList.element });
+    await testScreenshot(page, 'T1291705-row-alternation-after-expanding-node-when-repaintChangesOnly=true', { element: treeList });
 
     });
 
-  test.skip('The shading should alternate correctly after expanding the node when repaintChangesOnly and old fixed columns are enabled', async ({ page }) => {
+  test('The shading should alternate correctly after expanding the node when repaintChangesOnly and old fixed columns are enabled', async ({ page }) => {
     await createWidget(page, 'dxTreeList', {
     dataSource: [
       { id: 1, parentId: 0, text: 'item 1' },
@@ -198,10 +197,10 @@ test.describe('TreeList - Markup', () => {
 
     const treeList = page.locator('#container');
 
-    await treeList.apiExpandRow(4);
-    await treeList.apiExpandRow(2);
+    await page.evaluate(() => ($('#container') as any).dxTreeList('instance').expandRow(4));
+    await page.evaluate(() => ($('#container') as any).dxTreeList('instance').expandRow(2));
 
-    await testScreenshot(page, 'T1291705-row-alternation-after-expanding-node-when-there-is-fixed-column-and-repaintChangesOnly=true', { element: treeList.element });
+    await testScreenshot(page, 'T1291705-row-alternation-after-expanding-node-when-there-is-fixed-column-and-repaintChangesOnly=true', { element: treeList });
 
     });
 

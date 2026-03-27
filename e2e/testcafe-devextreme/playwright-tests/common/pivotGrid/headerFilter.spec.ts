@@ -23,7 +23,7 @@ test.describe('pivotGrid_headerFilter', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Header filter popup', async ({ page }) => {
+  test('Header filter popup', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
       allowSorting: true,
       allowFiltering: true,
@@ -59,7 +59,7 @@ test.describe('pivotGrid_headerFilter', () => {
     await testScreenshot(page, 'headerFilter - before scroll.png');
   });
 
-  test.skip('[T1284200] Should handle dxList "selectAll" when has unselected items on the second page', async ({ page }) => {
+  test('[T1284200] Should handle dxList "selectAll" when has unselected items on the second page', async ({ page }) => {
     const largeData = Array.from({ length: 100 }, (_, i) => ({
       region: `Region ${i}`,
       date: '2015/01/01',

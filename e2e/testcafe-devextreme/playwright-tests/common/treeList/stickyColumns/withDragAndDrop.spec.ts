@@ -1,10 +1,22 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, TreeList } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
 
-test.describe.skip('Sticky columns - Drag and Drop', () => {
+const getData = (rowCount: number, colCount: number): Record<string, string>[] => {
+  const items: Record<string, string>[] = [];
+  for (let i = 0; i < rowCount; i += 1) {
+    const item: Record<string, string> = {};
+    for (let j = 0; j < colCount; j += 1) {
+      item[`field_${j}`] = `val_${i}_${j}`;
+    }
+    items.push(item);
+  }
+  return items;
+};
+
+test.describe('Sticky columns - Drag and Drop', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
@@ -41,12 +53,9 @@ test.describe.skip('Sticky columns - Drag and Drop', () => {
     },
   });
 
-    // arrange, act
-    const treeList = new TreeList(DATA_GRID_SELECTOR);
+    const treeList = new TreeList(page, DATA_GRID_SELECTOR);
 
     await testScreenshot(page, 'treelist_sticky_columns_with_drag_and_drop_before_interaction.png', { element: treeList.element });
-
-    // assert
 
     });
 });

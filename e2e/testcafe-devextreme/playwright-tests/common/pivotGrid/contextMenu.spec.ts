@@ -17,7 +17,7 @@ test.describe('PivotGrid_contextMenu', () => {
   const CONTEXT_MENU_CLASS = 'dx-context-menu';
   const FIELD_CHOOSER_AREA_FIELDS_CLASS = 'dx-area-fields';
 
-  test.skip('ContextMenu width should be adjusted to the width of the item text (T1106236)', async ({ page }) => {
+  test('ContextMenu width should be adjusted to the width of the item text (T1106236)', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
     width: 1000,
     allowSortingBySummary: true,
@@ -95,7 +95,7 @@ test.describe('PivotGrid_contextMenu', () => {
     },
   });
 
-    await rightClick(page.locator(`.${FIELD_CHOOSER_AREA_FIELDS_CLASS}`).nth(1));
+    await page.locator(`.${FIELD_CHOOSER_AREA_FIELDS_CLASS}`).nth(1).click({ button: 'right' });
 
     await page.locator(`.${CONTEXT_MENU_CLASS}`).hover();
 

@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
+import { createWidget, TreeList } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
 
-test.describe.skip('Tests', () => {
+test.describe('Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
@@ -15,7 +15,7 @@ test.describe.skip('Tests', () => {
   });
 
   const TREE_LIST_SELECTOR = '#container';
-  const createTreeList = async () => createWidget(page, 'dxTreeList', {
+  const createTreeList = async (page) => createWidget(page, 'dxTreeList', {
     dataSource: [
       {
         id: 1,
@@ -63,80 +63,75 @@ test.describe.skip('Tests', () => {
   });
 
   test('Custom buttons cell should be focused before custom buttons on tab navigation', async ({ page }) => {
-    await createTreeList();
+    await createTreeList(page);
 
-    const treeList = new TreeList(TREE_LIST_SELECTOR);
+    const treeList = new TreeList(page, TREE_LIST_SELECTOR);
     const expectedFocusedCell = treeList.getDataCell(0, 0);
-    const cellToStartNavigation = treeList.getHeaders().getHeaderRow(0).getHeaderCell(3);
+    const cellToStartNavigation = treeList.getHeaderCell(0, 3);
 
-    await cellToStartNavigation.click()
-      .pressKey('tab')
-      .expect(expectedFocusedCell.isFocused)
-      .ok();
+    await cellToStartNavigation.click();
+    await page.keyboard.press('Tab');
+    await expect(expectedFocusedCell).toBeFocused();
 
     });
 
   test('Custom buttons cell should be focused after custom buttons on shift+tab reverse navigation', async ({ page }) => {
-    await createTreeList();
+    await createTreeList(page);
 
-    const treeList = new TreeList(TREE_LIST_SELECTOR);
+    const treeList = new TreeList(page, TREE_LIST_SELECTOR);
     const expectedFocusedCell = treeList.getDataCell(0, 0);
     const cellToStartNavigation = treeList.getDataCell(0, 1);
 
-    await cellToStartNavigation.click()
-      .pressKey('shift+tab')
-      .pressKey('shift+tab')
-      .pressKey('shift+tab')
-      .expect(expectedFocusedCell.isFocused)
-      .ok();
+    await cellToStartNavigation.click();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Shift+Tab');
+    await expect(expectedFocusedCell).toBeFocused();
 
     });
 
   test('First custom button inside custom buttons cell should be focused on tab navigation', async ({ page }) => {
-    await createTreeList();
+    await createTreeList(page);
 
-    const treeList = new TreeList(TREE_LIST_SELECTOR);
+    const treeList = new TreeList(page, TREE_LIST_SELECTOR);
     const customButtonsCell = treeList.getDataCell(0, 0);
-    const expectedFocusedButton = customButtonsCell.getIconByTitle('button_1');
-    const cellToStartNavigation = treeList.getHeaders().getHeaderRow(0).getHeaderCell(3);
+    const expectedFocusedButton = customButtonsCell.locator('[title="button_1"]');
+    const cellToStartNavigation = treeList.getHeaderCell(0, 3);
 
-    await cellToStartNavigation.click()
-      .pressKey('tab')
-      .pressKey('tab')
-      .expect(expectedFocusedButton.focused)
-      .ok();
+    await cellToStartNavigation.click();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await expect(expectedFocusedButton).toBeFocused();
 
     });
 
   test('Last custom button inside custom buttons cell should be focused on shift+tab reverse navigation', async ({ page }) => {
-    await createTreeList();
+    await createTreeList(page);
 
-    const treeList = new TreeList(TREE_LIST_SELECTOR);
+    const treeList = new TreeList(page, TREE_LIST_SELECTOR);
     const customButtonsCell = treeList.getDataCell(0, 0);
-    const expectedFocusedButton = customButtonsCell.getIconByTitle('button_2');
+    const expectedFocusedButton = customButtonsCell.locator('[title="button_2"]');
     const cellToStartNavigation = treeList.getDataCell(0, 1);
 
-    await cellToStartNavigation.click()
-      .pressKey('shift+tab')
-      .expect(expectedFocusedButton.focused)
-      .ok();
+    await cellToStartNavigation.click();
+    await page.keyboard.press('Shift+Tab');
+    await expect(expectedFocusedButton).toBeFocused();
 
     });
 
   test('Custom button inside custom buttons cell should be clickable by pressing enter key', async ({ page }) => {
-    await createTreeList();
+    await createTreeList(page);
 
-    const treeList = new TreeList(TREE_LIST_SELECTOR);
+    const treeList = new TreeList(page, TREE_LIST_SELECTOR);
     const customButtonsCell = treeList.getDataCell(0, 0);
-    const expectedFocusedButton = customButtonsCell.getIconByTitle('button_1');
-    const cellToStartNavigation = treeList.getHeaders().getHeaderRow(0).getHeaderCell(3);
+    const expectedFocusedButton = customButtonsCell.locator('[title="button_1"]');
+    const cellToStartNavigation = treeList.getHeaderCell(0, 3);
 
-    await cellToStartNavigation.click()
-      .pressKey('tab')
-      .pressKey('tab')
-      .pressKey('enter')
-      .expect(expectedFocusedButton.withAttribute('has-been-clicked').exists)
-      .ok();
+    await cellToStartNavigation.click();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+    await expect(expectedFocusedButton).toHaveAttribute('has-been-clicked', 'true');
 
     });
 });

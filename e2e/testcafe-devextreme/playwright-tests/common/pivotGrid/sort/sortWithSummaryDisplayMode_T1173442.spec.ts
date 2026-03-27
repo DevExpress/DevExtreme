@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, PivotGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -14,7 +14,7 @@ test.describe('pivotGrid_sort', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Should apply sort changes to the markup if the "summaryDisplayMode" is set', async ({ page }) => {
+  test('Should apply sort changes to the markup if the "summaryDisplayMode" is set', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
     allowSortingBySummary: true,
     allowSorting: true,
@@ -103,18 +103,19 @@ test.describe('pivotGrid_sort', () => {
     },
   });
 
-    const pivotGrid = page.locator('#container');
+    const pivotGrid = new PivotGrid(page);
+    const containerLocator = page.locator('#container');
 
     await testScreenshot(page,
       'T1173442_before_sort_with_summary_display_mode.png',
-      { element: pivotGrid.element },
+      { element: containerLocator },
     );
 
-    await click(pivotGrid.getColumnHeaderArea().getField());
-    await click(pivotGrid.getRowHeaderArea().getField());
+    await pivotGrid.getColumnHeaderArea().element.locator('td').first().click();
+    await pivotGrid.getRowHeaderArea().element.locator('td').first().click();
     await testScreenshot(page,
       'T1173442_after_sort_with_summary_display_mode.png',
-      { element: pivotGrid.element },
+      { element: containerLocator },
     );
 
     });

@@ -14,7 +14,7 @@ test.describe('Virtual Scrolling', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('The vertical scroll bar of the container\'s parent should not be displayed when the grid has no height, virtual scrolling and state storing are enabled', async ({ page }) => {
+  test('The vertical scroll bar of the container\'s parent should not be displayed when the grid has no height, virtual scrolling and state storing are enabled', async ({ page }) => {
     const data = Array.from({ length: 100 }, (_, i) => ({
       id: i + 1,
       parentId: i === 0 ? 0 : 1,

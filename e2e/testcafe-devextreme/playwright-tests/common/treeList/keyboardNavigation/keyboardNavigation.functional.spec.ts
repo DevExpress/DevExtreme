@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
+import { createWidget, TreeList } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
 
-test.describe.skip('Keyboard Navigation - common', () => {
+test.describe('Keyboard Navigation - common', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
@@ -48,14 +48,14 @@ test.describe.skip('Keyboard Navigation - common', () => {
       },
     }, '#otherContainer');
 
-    const treeList = page.locator('#container');
-    const focusButton = page.locator('#otherContainer');
+    const treeList = new TreeList(page);
+    const focusButton = page.locator('#otherContainer .dx-button');
     const expectedFocusedCell = treeList.getDataCell(0, 2);
 
-    await focusButton.click()
-      .pressKey('tab tab')
-      .expect(expectedFocusedCell.isFocused)
-      .ok();
+    await focusButton.click();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await expect(expectedFocusedCell).toBeFocused();
 
     });
 
@@ -102,14 +102,13 @@ test.describe.skip('Keyboard Navigation - common', () => {
       },
     }, '#otherContainer');
 
-    const treeList = page.locator('#container');
-    const focusButton = page.locator('#otherContainer');
+    const treeList = new TreeList(page);
+    const focusButton = page.locator('#otherContainer .dx-button');
     const expectedFocusedCell = treeList.getDataCell(0, 2);
 
-    await focusButton.click()
-      .pressKey('tab')
-      .expect(expectedFocusedCell.isFocused)
-      .ok();
+    await focusButton.click();
+    await page.keyboard.press('Tab');
+    await expect(expectedFocusedCell).toBeFocused();
 
     });
 
@@ -139,14 +138,15 @@ test.describe.skip('Keyboard Navigation - common', () => {
       ],
     });
 
-    const treeList = page.locator('#container');
-    const target = treeList.getDataRow(0).getDataCell(0);
+    const treeList = new TreeList(page);
+    const target = treeList.getDataCell(0, 0);
 
-    await page.click(treeList.getDataRow(0).getDataCell(0).element.child(0))
-      .click(treeList.getContainer(), { offsetX: 100, offsetY: 600 })
-      .pressKey('tab tab tab')
-      .expect(target.element.focused)
-      .ok();
+    await target.locator('> *').first().click();
+    await page.locator('#container').click({ position: { x: 100, y: 600 } });
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await expect(target).toBeFocused();
 
     });
 });

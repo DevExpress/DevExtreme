@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../playwright-helpers';
+import { createWidget, TreeList } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -12,10 +12,6 @@ test.describe('Focused row', () => {
       (window as any).DevExpress.ui.themes.ready(resolve);
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
-  });
-
-  const clearLocalStorage = async () => page.evaluate(() => {
-    (window as any).localStorage.removeItem('mystate');
   });
 
   const getItems = (): Record<string, unknown>[] => {
@@ -51,42 +47,43 @@ test.describe('Focused row', () => {
     focusedRowKey: 90,
   });
 
-  test.skip('Focused row should be shown after reloading the page (T1058983)', async ({ page }) => {
+  test('Focused row should be shown after reloading the page (T1058983)', async ({ page }) => {
 
-    await clearLocalStorage();
+    await page.evaluate(() => {
+      (window as any).localStorage.removeItem('mystate');
+    });
     await createWidget(page, 'dxTreeList', getTreeListConfig());
 
-    const treeList = page.locator('#container');
-
     await page.waitForTimeout(1000);
-    let scrollTopPosition = await treeList.getScrollTop();
 
-    // assert
-    await page.expect(treeList.isFocusedRowInViewport())
-      .ok();
+    const focusedRow = page.locator('#container .dx-row-focused');
+    await expect(focusedRow).toBeVisible();
 
-    // act
-    await treeList.scrollTo(t, { top: 0 });
-    scrollTopPosition = await treeList.getScrollTop();
+    await page.evaluate(() => ($('#container') as any).dxTreeList('instance').getScrollable().scrollTo({ top: 0 }));
+    await page.waitForTimeout(300);
 
-    // assert
-    expect(scrollTopPosition).toBe(0);
+    const scrollTop = await page.evaluate(() => ($('#container') as any).dxTreeList('instance').getScrollable().scrollTop());
+    expect(scrollTop).toBe(0);
 
-    await page.eval(() => location.reload());
+    await page.evaluate(() => location.reload());
+    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+    await page.evaluate((theme) => new Promise<void>((resolve) => {
+      (window as any).DevExpress.ui.themes.ready(resolve);
+      (window as any).DevExpress.ui.themes.current(theme);
+    }), process.env.THEME || 'fluent.blue.light');
     await createWidget(page, 'dxTreeList', getTreeListConfig());
     await page.waitForTimeout(1000);
 
-    scrollTopPosition = await treeList.getScrollTop();
-
-    // assert
-    await page.expect(treeList.isFocusedRowInViewport())
-      .ok();
+    const focusedRowAfterReload = page.locator('#container .dx-row-focused');
+    await expect(focusedRowAfterReload).toBeVisible();
 
     });
 
-  test.skip('TreeList - Unable to focus a node when deleting the previous node in certain scenarios (T1178893)', async ({ page }) => {
+  test('TreeList - Unable to focus a node when deleting the previous node in certain scenarios (T1178893)', async ({ page }) => {
 
-    await clearLocalStorage();
+    await page.evaluate(() => {
+      (window as any).localStorage.removeItem('mystate');
+    });
     const config = getTreeListConfig();
     config.editing = {
       mode: 'row',
@@ -98,22 +95,29 @@ test.describe('Focused row', () => {
 
     await createWidget(page, 'dxTreeList', config);
 
-    const treeList = page.locator('#container');
+    const treeList = new TreeList(page);
+    const focusedRow = page.locator('#container .dx-row-focused');
 
-    await page.expect(treeList.getFocusedRow().getAttribute('aria-rowindex'))
-      .eql('3')
+    await expect(focusedRow).toHaveAttribute('aria-rowindex', '3');
 
-      .click(treeList.getDataRow(2).getCommandCell(2).getButton(2))
-      .click(treeList.getConfirmDeletionButton())
-      .expect(treeList.getFocusedRow().getAttribute('aria-rowindex'))
-      .eql('3')
+    const deleteButton0 = treeList.getDataRow(2).element.locator('.dx-link-delete').first();
+    await deleteButton0.click();
 
-      .click(treeList.getDataRow(2).getCommandCell(2).getButton(2))
-      .click(treeList.getConfirmDeletionButton())
-      .expect(treeList.getFocusedRow().getAttribute('aria-rowindex'))
-      .eql('3')
-      .expect(treeList.getDataRow(2).getDataCell(0).element.textContent)
-      .eql('5');
+    const confirmButton0 = page.locator('.dx-dialog-button:has-text("Yes")');
+    await confirmButton0.click();
+    await page.waitForTimeout(300);
+
+    await expect(focusedRow).toHaveAttribute('aria-rowindex', '3');
+
+    const deleteButton1 = treeList.getDataRow(2).element.locator('.dx-link-delete').first();
+    await deleteButton1.click();
+
+    const confirmButton1 = page.locator('.dx-dialog-button:has-text("Yes")');
+    await confirmButton1.click();
+    await page.waitForTimeout(300);
+
+    await expect(focusedRow).toHaveAttribute('aria-rowindex', '3');
+    await expect(treeList.getDataCell(2, 0)).toContainText('5');
 
     });
 });

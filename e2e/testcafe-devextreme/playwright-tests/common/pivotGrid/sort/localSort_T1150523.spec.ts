@@ -70,7 +70,7 @@ test.describe('pivotGrid_sort', () => {
     expect(loadCount).toBe(0);
   });
 
-  test.skip('Should sort with DataSource reload if scrolling mode is virtual', async ({ page }) => {
+  test('Should sort with DataSource reload if scrolling mode is virtual', async ({ page }) => {
     await createWidget(page, 'dxPivotGrid', {
       allowSorting: true,
       scrolling: {

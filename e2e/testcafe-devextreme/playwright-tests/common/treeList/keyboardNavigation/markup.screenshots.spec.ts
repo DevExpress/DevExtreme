@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, TreeList } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
 
-test.describe.skip('Tests', () => {
+test.describe('Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(containerUrl);
     await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
@@ -46,16 +46,16 @@ test.describe.skip('Tests', () => {
     },
   });
 
-    const treeList = new TreeList(TREE_LIST_SELECTOR);
-    const headerCellToFocus = treeList.getHeaders().getHeaderRow(0).getHeaderCell(0);
+    const treeList = new TreeList(page, TREE_LIST_SELECTOR);
+    const headerCellToFocus = treeList.getHeaderCell(0, 0);
     const dataCellToFocus = treeList.getDataCell(0, 0);
 
-    await headerCellToFocus.click()
-      .pressKey('tab');
+    await headerCellToFocus.click();
+    await page.keyboard.press('Tab');
     await testScreenshot(page, 'tree-list_keyboard-navigation-header-cell-focused.png', { element: treeList.element });
 
-    await dataCellToFocus.click()
-      .pressKey('tab');
+    await dataCellToFocus.click();
+    await page.keyboard.press('Tab');
     await testScreenshot(page, 'tree_list_keyboard-navigation-data-cell-focused.png', { element: treeList.element });
 
     });
@@ -107,11 +107,11 @@ test.describe.skip('Tests', () => {
     },
   });
 
-    const treeList = new TreeList(TREE_LIST_SELECTOR);
-    const headerCellToFocus = treeList.getHeaders().getHeaderRow(0).getHeaderCell(3);
+    const treeList = new TreeList(page, TREE_LIST_SELECTOR);
+    const headerCellToFocus = treeList.getHeaderCell(0, 3);
 
-    await headerCellToFocus.click()
-      .pressKey('tab');
+    await headerCellToFocus.click();
+    await page.keyboard.press('Tab');
     await testScreenshot(page, 'tree-list_keyboard-navigation-custom-buttons-header-cell-focused.png', { element: treeList.element });
 
     await page.keyboard.press('Tab');
