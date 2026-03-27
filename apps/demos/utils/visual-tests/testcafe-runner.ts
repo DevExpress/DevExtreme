@@ -112,6 +112,7 @@ async function main() {
               window.getSelection()?.removeAllRanges();
             }).with({ boundTestRun: t })();
 
+            // test change
             await t.hover('html', { offsetX: 1, offsetY: 1 });
           },
         },
