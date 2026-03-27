@@ -13,4 +13,6 @@ export const isCollectorViewModel = (appointmentViewModel: AppointmentViewModelP
 
 export const isGridAppointmentViewModel = (appointmentViewModel: AppointmentViewModelPlain):
   appointmentViewModel is AppointmentItemViewModel =>
-  !isAgendaAppointmentViewModel(appointmentViewModel) && !isCollectorViewModel(appointmentViewModel);
+  // eslint-disable-next-line @stylistic/implicit-arrow-linebreak
+  !isAgendaAppointmentViewModel(appointmentViewModel)
+    && !isCollectorViewModel(appointmentViewModel);
