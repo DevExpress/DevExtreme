@@ -1,36 +1,30 @@
 import dateLocalization from '@js/common/core/localization/date';
 import dateUtils from '@js/core/utils/date';
 
+import type { TargetedAppointment, ViewType } from '../types';
+
 export enum DateFormatType {
   DATETIME = 'DATETIME',
   TIME = 'TIME',
   DATE = 'DATE',
 }
 
-export const createFormattedDateText = (options) => {
-  const {
-    startDate,
-    endDate,
-    allDay,
-    format,
-  } = options;
-
-  const formatType = format || getFormatType(startDate, endDate, allDay);
-
-  return formatDates(startDate, endDate, formatType);
-};
-
-export const getFormatType = (startDate, endDate, isAllDay, isDateAndTimeView?) => {
+export const getFormatType = (
+  startDate: Date,
+  endDate: Date,
+  isAllDay?: boolean,
+  viewType?: ViewType,
+): DateFormatType => {
   if (isAllDay) {
     return DateFormatType.DATE;
   }
-  if (isDateAndTimeView && dateUtils.sameDate(startDate, endDate)) {
+  if (viewType !== 'month' && dateUtils.sameDate(startDate, endDate)) {
     return DateFormatType.TIME;
   }
   return DateFormatType.DATETIME;
 };
 
-export const formatDates = (startDate, endDate, formatType) => {
+export const formatDates = (startDate: Date, endDate: Date, formatType: DateFormatType): string => {
   const dateFormat = 'monthandday';
   const timeFormat = 'shorttime';
   const isSameDate = startDate.getDate() === endDate.getDate();
@@ -50,6 +44,17 @@ export const formatDates = (startDate, endDate, formatType) => {
     case DateFormatType.DATE:
       return `${dateLocalization.format(startDate, dateFormat)}${isSameDate ? '' : ` - ${dateLocalization.format(endDate, dateFormat)}`}`;
     default:
-      return undefined;
+      return '';
   }
+};
+
+export const createFormattedDateText = (
+  targetedAppointmentData: TargetedAppointment,
+  format: DateFormatType,
+  viewType?: ViewType,
+): string => {
+  const { displayStartDate: startDate, displayEndDate: endDate, allDay } = targetedAppointmentData;
+  const formatType = format ?? getFormatType(startDate, endDate, allDay, viewType);
+
+  return formatDates(startDate, endDate, formatType);
 };
