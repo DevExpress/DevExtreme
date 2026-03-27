@@ -630,7 +630,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '145.0.7632.67'
+        chrome-version: '146.0.7680.164'
         runner-type: 'github-hosted'
 
     - name: Use Node.js
@@ -780,7 +780,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '145.0.7632.67'
+        chrome-version: '146.0.7680.164'
         runner-type: 'github-hosted'
 
     - name: Use Node.js
@@ -909,7 +909,7 @@ jobs:
       - name: Setup Chrome
         uses: ./.github/actions/setup-chrome
         with:
-          chrome-version: '145.0.7632.67'
+          chrome-version: '146.0.7680.164'
           runner-type: 'github-hosted'
 
       - name: Use Node.js
