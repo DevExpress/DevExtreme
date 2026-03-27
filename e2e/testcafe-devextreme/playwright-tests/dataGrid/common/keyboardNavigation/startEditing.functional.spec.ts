@@ -88,6 +88,53 @@ test.describe('Keyboard Navigation - editOnKeyPress', () => {
     expect(uniqueRowKeys).toEqual([49]);
   });
 
+  test('editing.allowUpdating callback should receive correct row on tab key on last cell with virtual scrolling (T1290811)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [...new Array(50)].map((_, i) => ({
+        id: i,
+        data: `Row ${i}`,
+      })),
+      keyExpr: 'id',
+      columns: ['id', 'data'],
+      editing: {
+        mode: 'cell',
+        allowUpdating: (e: any) => {
+          (window as any).eventRowKeys ??= [];
+          (window as any).eventRowKeys.push(e.row?.key);
+          return true;
+        },
+      },
+      scrolling: {
+        mode: 'virtual',
+      },
+      height: 300,
+    });
+
+    await page.evaluate((opts) => ($('#container') as any).dxDataGrid('instance').getScrollable().scrollBy(opts), { y: 10000 });
+
+    const lastRows = page.locator('.dx-data-row');
+    const lastRowCount = await lastRows.count();
+    const secondToLastRow = lastRows.nth(lastRowCount - 2);
+    await secondToLastRow.locator('td').nth(1).click();
+
+    const secondToLastCellEditorFocused = await secondToLastRow.locator('td').nth(1).locator('.dx-texteditor-input').evaluate(
+      (el) => document.activeElement === el,
+    );
+    expect(secondToLastCellEditorFocused).toBe(true);
+
+    await page.keyboard.press('Tab');
+
+    const lastRow = lastRows.last();
+    const lastRowFirstCellEditorFocused = await lastRow.locator('td').nth(0).locator('.dx-texteditor-input').evaluate(
+      (el) => document.activeElement === el,
+    );
+    expect(lastRowFirstCellEditorFocused).toBe(true);
+
+    const eventRowKeys = await page.evaluate(() => (window as any).eventRowKeys);
+    const uniqueRowKeys = [...new Set(eventRowKeys)];
+    expect(uniqueRowKeys).toEqual([48, 49]);
+  });
+
   test('DataGrid should not remove the minus symbol when editing started (T1201166)', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: [
