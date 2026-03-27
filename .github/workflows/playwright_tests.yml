@@ -91,10 +91,11 @@ jobs:
           { componentFolder: "editors", name: "editors (2/2)", shard: "2/2" },
           { componentFolder: "navigation", name: "navigation" },
           { componentFolder: "cardView", name: "cardView" },
-          { componentFolder: "accessibility", name: "accessibility" },
+          { componentFolder: "accessibility", name: "accessibility (1/2)", shard: "1/2" },
+          { componentFolder: "accessibility", name: "accessibility (2/2)", shard: "2/2" },
         ]
     runs-on: devextreme-shr2
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     steps:
     - name: Get sources
