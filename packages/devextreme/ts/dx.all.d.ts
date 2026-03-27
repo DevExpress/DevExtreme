@@ -25254,6 +25254,10 @@ declare module DevExpress.ui {
      */
     showTitle?: boolean;
     /**
+     * [descr:dxPopupOptions.tabFocusLoopEnabled]
+     */
+    tabFocusLoopEnabled?: boolean;
+    /**
      * [descr:dxPopupOptions.title]
      */
     title?: string;

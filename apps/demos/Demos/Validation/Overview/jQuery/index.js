@@ -200,7 +200,7 @@ $(() => {
     });
 
   $('#phone-validation').dxTextBox({
-    mask: '+1 (X00) 000-0000',
+    mask: '(X00) 000-0000',
     inputAttr: { 'aria-label': 'Phone' },
     maskRules: {
       X: /[02-9]/,
