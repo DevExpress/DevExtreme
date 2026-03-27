@@ -3,7 +3,6 @@ import dateLocalization from '@js/common/core/localization/date';
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import config from '@js/core/config';
-import type { DxElement } from '@js/core/element';
 import { getPublicElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -1052,7 +1051,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         onAppointmentRendered: (e) => {
           // @ts-expect-error 'component' property is set by action
           this.appointmentRenderedAction({
-            appointmentElement: e.element as DxElement,
+            appointmentElement: e.element,
             appointmentData: e.appointmentData,
             targetedAppointmentData: e.targetedAppointmentData,
           });

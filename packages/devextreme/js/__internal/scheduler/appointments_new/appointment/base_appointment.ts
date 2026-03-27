@@ -1,5 +1,6 @@
 import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
+import type { DxElement } from '@js/core/element';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
@@ -7,7 +8,6 @@ import { getPublicElement } from '@ts/core/m_element';
 import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { TemplateBase } from '@ts/core/templates/m_template_base';
-import type { DefaultActionArgs } from '@ts/core/widget/component';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
@@ -15,11 +15,6 @@ import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/
 
 import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
 import { DateFormatType, getDateTextFromTargetAppointment } from '../utils/get_date_text';
-
-export interface AppointmentRenderedEvent extends DefaultActionArgs<BaseAppointment> {
-  appointmentData: SafeAppointment;
-  targetedAppointmentData: TargetedAppointment;
-}
 
 export interface BaseAppointmentProperties
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,7 +24,11 @@ export interface BaseAppointmentProperties
   targetedAppointmentData: TargetedAppointment;
   appointmentTemplate: TemplateBase;
 
-  onAppointmentRendered: (e: AppointmentRenderedEvent) => void;
+  onAppointmentRendered: (e: {
+    element: DxElement,
+    appointmentData: SafeAppointment;
+    targetedAppointmentData: TargetedAppointment;
+  }) => void;
 
   getDataAccessor: () => AppointmentDataAccessor;
   getResourceColor: () => Promise<string | undefined>;
@@ -48,17 +47,11 @@ export class BaseAppointment<
 
   private defaultAppointmentTemplate!: FunctionTemplate;
 
-  private appointmentRenderedAction!: BaseAppointmentProperties['onAppointmentRendered'];
-
   override _init(): void {
     super._init();
 
     this.defaultAppointmentTemplate = new FunctionTemplate((options) => {
       this.defaultAppointmentContent($(options.container));
-    });
-
-    this.appointmentRenderedAction = this._createActionByOption('onAppointmentRendered', {
-      excludeValidators: ['disabled', 'readOnly'],
     });
   }
 
@@ -137,8 +130,8 @@ export class BaseAppointment<
     });
 
     when($renderPromise).done(() => {
-      // @ts-expect-error 'component' property is set by the action
-      this.appointmentRenderedAction({
+      this.option().onAppointmentRendered({
+        element: getPublicElement(this.$element()),
         appointmentData: this.appointmentData,
         targetedAppointmentData: this.targetedAppointmentData,
       });

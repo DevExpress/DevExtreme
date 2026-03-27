@@ -6,6 +6,7 @@ import $ from '@js/core/renderer';
 import fx from '../../../common/core/animation/fx';
 import { mockAppointmentDataAccessor } from '../__mock__/appointment_data_accessor.mock';
 import { getResourceManagerMock } from '../__mock__/resource_manager.mock';
+import type { ResourceConfig } from '../utils/loader/types';
 import type { AppointmentDataSource } from '../view_model/m_appointment_data_source';
 import {
   mockAgendaViewModel,
@@ -25,13 +26,13 @@ const mockAppointmentDataSource = (): AppointmentDataSource => ({
   getUpdatedAppointmentKeys: () => [],
 } as unknown as AppointmentDataSource);
 
-const getAppointmentsProperties = (
-  options: Partial<AppointmentsProperties> = {},
-): AppointmentsProperties => ({
+const getAppointmentsProperties = (options: {
+  resources?: ResourceConfig[]
+} = {}): AppointmentsProperties => ({
   getAppointmentDataSource: mockAppointmentDataSource,
-  getResourceManager: () => getResourceManagerMock([]),
+  getResourceManager: () => getResourceManagerMock(options.resources ?? []),
   getDataAccessor: () => mockAppointmentDataAccessor,
-  ...options,
+  currentView: 'week',
 } as AppointmentsProperties);
 
 const createAppointments = (
@@ -91,7 +92,10 @@ describe('Appointments', () => {
     });
 
     it('should render view model with agenda appointments', () => {
-      const instance = createAppointments(getAppointmentsProperties());
+      const instance = createAppointments({
+        ...getAppointmentsProperties(),
+        currentView: 'agenda',
+      });
       instance.option('viewModel', [
         mockAgendaViewModel(defaultAppointmentData, { sortedIndex: 0 }),
       ]);
@@ -135,16 +139,34 @@ describe('Appointments', () => {
     });
 
     it('should render allDay appointment to the allDay container', () => {
-      const allDayData = { ...defaultAppointmentData, allDay: true };
       const $allDayContainer = $('.allday-container');
 
-      const instance = createAppointments(getAppointmentsProperties({ $allDayContainer }));
+      const instance = createAppointments({
+        ...getAppointmentsProperties(),
+        $allDayContainer,
+      });
       instance.option('viewModel', [
-        mockGridViewModel(allDayData, { sortedIndex: 0, allDay: true }),
+        mockGridViewModel({ ...defaultAppointmentData, allDay: true }, { sortedIndex: 0 }),
       ]);
 
       expect(instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
       expect($allDayContainer.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
+    });
+
+    it('should not render allDay agenda appointment to the allDay container', () => {
+      const $allDayContainer = $('.allday-container');
+
+      const instance = createAppointments({
+        ...getAppointmentsProperties(),
+        $allDayContainer,
+        currentView: 'agenda',
+      });
+      instance.option('viewModel', [
+        mockAgendaViewModel({ ...defaultAppointmentData, allDay: true }, { sortedIndex: 0 }),
+      ]);
+
+      expect(instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
+      expect($allDayContainer.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
     });
   });
 
@@ -263,16 +285,38 @@ describe('Appointments', () => {
     });
   });
 
+  describe('Resources', () => {
+    it('should apply resource color', async () => {
+      const instance = createAppointments({
+        ...getAppointmentsProperties({
+          resources: [{
+            fieldExpr: 'roomId',
+            dataSource: [{ text: 'Room 1', id: 1, color: 'red' }],
+          }],
+        }),
+      });
+      instance.option('viewModel', [
+        mockGridViewModel({ ...defaultAppointmentData, roomId: 1 }, { sortedIndex: 0 }),
+      ]);
+
+      await new Promise(process.nextTick);
+
+      const $appointment = instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).first();
+      expect($appointment.css('backgroundColor')).toBe('red');
+    });
+  });
+
   describe('onAppointmentRendered', () => {
-    it('should be called with correct arguments when grid appointment is rendered', async () => {
+    it('should be called with correct arguments when grid appointment is rendered', () => {
       const onAppointmentRendered = jest.fn();
-      const instance = createAppointments(getAppointmentsProperties({ onAppointmentRendered }));
+      const instance = createAppointments({
+        ...getAppointmentsProperties(),
+        onAppointmentRendered,
+      });
       instance.option('viewModel', [
         mockGridViewModel(defaultAppointmentData, { sortedIndex: 0 }),
       ]);
 
-      await new Promise(process.nextTick);
-
       expect(onAppointmentRendered).toHaveBeenCalledTimes(1);
       expect(onAppointmentRendered).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -284,15 +328,16 @@ describe('Appointments', () => {
       );
     });
 
-    it('should be called with correct arguments when agenda appointment is rendered', async () => {
+    it('should be called with correct arguments when agenda appointment is rendered', () => {
       const onAppointmentRendered = jest.fn();
-      const instance = createAppointments(getAppointmentsProperties({ onAppointmentRendered }));
+      const instance = createAppointments({
+        ...getAppointmentsProperties(),
+        onAppointmentRendered,
+      });
       instance.option('viewModel', [
         mockAgendaViewModel(defaultAppointmentData, { sortedIndex: 0 }),
       ]);
 
-      await new Promise(process.nextTick);
-
       expect(onAppointmentRendered).toHaveBeenCalledTimes(1);
       expect(onAppointmentRendered).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -304,27 +349,29 @@ describe('Appointments', () => {
       );
     });
 
-    it('should not be called when appointment collector is rendered', async () => {
+    it('should not be called when appointment collector is rendered', () => {
       const onAppointmentRendered = jest.fn();
-      const instance = createAppointments(getAppointmentsProperties({ onAppointmentRendered }));
+      const instance = createAppointments({
+        ...getAppointmentsProperties(),
+        onAppointmentRendered,
+      });
       instance.option('viewModel', [
         mockAppointmentCollectorViewModel(defaultAppointmentData, { sortedIndex: 0 }),
       ]);
 
-      await new Promise(process.nextTick);
-
       expect(onAppointmentRendered).not.toHaveBeenCalled();
     });
 
-    it('should be called several times when several appointments are rendered', async () => {
+    it('should be called several times when several appointments are rendered', () => {
       const onAppointmentRendered = jest.fn();
-      const instance = createAppointments(getAppointmentsProperties({ onAppointmentRendered }));
+      const instance = createAppointments({
+        ...getAppointmentsProperties(),
+        onAppointmentRendered,
+      });
       instance.option('viewModel', [
         mockGridViewModel({ ...defaultAppointmentData, text: 'Appointment 1' }, { sortedIndex: 0 }),
         mockGridViewModel({ ...defaultAppointmentData, text: 'Appointment 2' }, { sortedIndex: 1 }),
       ]);
-
-      await new Promise(process.nextTick);
 
       expect(onAppointmentRendered).toHaveBeenCalledTimes(2);
       expect(onAppointmentRendered).toHaveBeenNthCalledWith(
