@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -37,6 +37,35 @@ test.describe('Grouping Panel', () => {
     });
 
       await testScreenshot(page, 'groupingPanel.png', { element: page.locator('.dx-toolbar') });
+  });
+
+  test('Headers should be rendered correctly after changing the grouping.autoExpandAll when there is fixed column and headerCellTemplate is given (React)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { field1: '1', field2: 'test1', field3: 'test11' },
+        { field1: '2', field2: 'test1', field3: 'test12' },
+        { field1: '3', field2: 'test2', field3: 'test13' },
+      ],
+      width: 700,
+      columns: [
+        { dataField: 'field1', headerCellTemplate: (_: any, info: any) => $('<div>').text(info.column.caption) },
+        { dataField: 'field2', groupIndex: 0 },
+        { dataField: 'field3', fixed: true },
+      ],
+      groupPanel: {
+        visible: true,
+      },
+      grouping: {
+        autoExpandAll: true,
+      },
+    });
+
+    await testScreenshot(page, 'T1155453-expanded-groups-with-fixed-content.png', { element: page.locator('#container') });
+
+    await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').collapseAll(-1));
+    await page.waitForTimeout(200);
+
+    await testScreenshot(page, 'T1155453-collapsed-groups-with-fixed-content.png', { element: page.locator('#container') });
   });
 
   test('Headers should be rendered correctly after changing the grouping.autoExpandAll when headerCellTemplate is given (React)', async ({ page }) => {
@@ -203,6 +232,68 @@ test.describe('Grouping Panel', () => {
 
     const groupIndex = await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').columnOption('a', 'groupIndex'));
     expect(groupIndex).toBe(0);
+  });
+
+  test('DataGrid should not change group column after the expandAll method, string calculateGroupValue corresponds another column (T1308536)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ id: 0, a: 0, aLabel: 'A_0', b: 'B_0', c: 'C_0' }],
+      keyExpr: 'id',
+      grouping: { autoExpandAll: false },
+      columns: [{
+        dataField: 'a',
+        groupIndex: 0,
+        calculateGroupValue: 'aLabel',
+      },
+      { dataField: 'aLabel', visible: false },
+      'b', 'c'],
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+    const firstGroupCellText = await dataGrid.getGroupRow(0).getCell(1).element.textContent();
+
+    await dataGrid.apiExpandAll();
+
+    const groupIndexA = await dataGrid.apiColumnOption('a', 'groupIndex');
+    expect(groupIndexA).toBe(0);
+
+    const groupIndexALabel = await dataGrid.apiColumnOption('aLabel', 'groupIndex');
+    expect(groupIndexALabel).toBeUndefined();
+
+    const currentGroupCellText = await dataGrid.getGroupRow(0).getCell(1).element.textContent();
+    expect(currentGroupCellText).toBe(firstGroupCellText);
+  });
+
+  test('DataGrid should not change group column after the expandAll method, string calculateGroupValue corresponds another unbound column (T1308536)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ id: 0, a: 0, aLabel: 'A_0', b: 'B_0', c: 'C_0' }],
+      keyExpr: 'id',
+      grouping: { autoExpandAll: false },
+      columns: [{
+        dataField: 'a',
+        groupIndex: 0,
+        calculateGroupValue: 'aLabel',
+      },
+      {
+        name: 'aLabel',
+        caption: 'aLabel',
+        calculateCellValue(data: any) { return data.aLabel; },
+      },
+      'b', 'c'],
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+    const firstGroupCellText = await dataGrid.getGroupRow(0).getCell(1).element.textContent();
+
+    await dataGrid.apiExpandAll();
+
+    const groupIndexA = await dataGrid.apiColumnOption('a', 'groupIndex');
+    expect(groupIndexA).toBe(0);
+
+    const groupIndexALabel = await dataGrid.apiColumnOption('aLabel', 'groupIndex');
+    expect(groupIndexALabel).toBeUndefined();
+
+    const currentGroupCellText = await dataGrid.getGroupRow(0).getCell(1).element.textContent();
+    expect(currentGroupCellText).toBe(firstGroupCellText);
   });
 
   test('Grouping and filtering should be applied correctly when they change at runtime (T1237863)', async ({ page }) => {

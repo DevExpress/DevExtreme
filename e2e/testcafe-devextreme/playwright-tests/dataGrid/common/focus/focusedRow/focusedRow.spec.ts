@@ -510,6 +510,210 @@ test.describe('Focused row', () => {
     await expect(dataGrid.getFocusedRow()).toBeHidden();
   });
 
+  test('Popup - Focused row should not be reset after editing a row (T879627)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 5, c0: 'c0_0' },
+        { id: 6, c0: 'c0_1' },
+      ],
+      keyExpr: 'id',
+      focusedRowEnabled: true,
+      focusedRowKey: 6,
+      editing: {
+        mode: 'popup',
+        allowUpdating: true,
+        popup: { animation: undefined },
+      },
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+    const dataRow0 = dataGrid.getDataRow(0);
+    const dataRow1 = dataGrid.getDataRow(1);
+    const popupEditForm = dataGrid.getPopupEditForm();
+
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    expect(await dataGrid.option('focusedRowKey')).toBe(6);
+
+    const editButton1 = dataRow1.element.locator('.dx-command-edit .dx-link-edit');
+    await editButton1.click();
+    await expect(popupEditForm.element).toBeVisible();
+    await popupEditForm.cancelButton.click();
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    expect(await dataGrid.option('focusedRowKey')).toBe(6);
+
+    await editButton1.click();
+    await expect(popupEditForm.element).toBeVisible();
+    const editor = popupEditForm.element.locator('.dx-texteditor-input').first();
+    await editor.fill('test');
+    await popupEditForm.saveButton.click();
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    expect(await dataGrid.option('focusedRowKey')).toBe(6);
+
+    const editButton0 = dataRow0.element.locator('.dx-command-edit .dx-link-edit');
+    await editButton0.click();
+    await expect(popupEditForm.element).toBeVisible();
+    expect(await dataGrid.option('focusedRowKey')).toBe(5);
+    await popupEditForm.cancelButton.click();
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    expect(await dataGrid.option('focusedRowKey')).toBe(5);
+
+    await editButton0.click();
+    await expect(popupEditForm.element).toBeVisible();
+    await editor.fill('test2');
+    await popupEditForm.saveButton.click();
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    expect(await dataGrid.option('focusedRowKey')).toBe(5);
+  });
+
+  test('Batch - Focused row should not be reset after editing a cell (T879627)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 5, c0: 'c0_0' },
+        { id: 6, c0: 'c0_1' },
+      ],
+      keyExpr: 'id',
+      focusedRowEnabled: true,
+      focusedRowKey: 6,
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+    const dataRow1 = dataGrid.getDataRow(1);
+    const dataRow0 = dataGrid.getDataRow(0);
+    const dataCell11 = dataRow1.getDataCell(1);
+    const dataCell01 = dataRow0.getDataCell(1);
+
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    expect(await dataGrid.option('focusedRowKey')).toBe(6);
+
+    await dataCell11.element.click();
+    const editor11 = dataCell11.element.locator('.dx-texteditor-input');
+    await expect(editor11).toBeVisible();
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    expect(await dataGrid.option('focusedRowKey')).toBe(6);
+
+    await page.keyboard.press('Escape');
+    await expect(editor11).toBeHidden();
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    expect(await dataGrid.option('focusedRowKey')).toBe(6);
+
+    await dataCell11.element.click();
+    await editor11.fill('test');
+    await page.keyboard.press('Enter');
+    await expect(editor11).toBeHidden();
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    expect(await dataGrid.option('focusedRowKey')).toBe(6);
+
+    const saveButton = dataGrid.getHeaderPanel().getSaveButton();
+    await saveButton.click();
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    expect(await dataGrid.option('focusedRowKey')).toBe(6);
+
+    await dataCell01.element.click();
+    const editor01 = dataCell01.element.locator('.dx-texteditor-input');
+    await expect(editor01).toBeVisible();
+    await expect(dataRow0.element).toHaveClass(/dx-row-focused/);
+    expect(await dataGrid.option('focusedRowKey')).toBe(5);
+
+    await page.keyboard.press('Escape');
+    await expect(editor01).toBeHidden();
+    await expect(dataRow0.element).toHaveClass(/dx-row-focused/);
+    expect(await dataGrid.option('focusedRowKey')).toBe(5);
+
+    await dataCell01.element.click();
+    await editor01.fill('test2');
+    await page.keyboard.press('Enter');
+    await saveButton.click();
+    await expect(dataRow0.element).toHaveClass(/dx-row-focused/);
+    expect(await dataGrid.option('focusedRowKey')).toBe(5);
+  });
+
+  test('Scrolling should not occured after deleting via push API if scrolling.mode is virtual (T930434)', async ({ page }) => {
+    await page.evaluate(() => {
+      const data: { id: number }[] = [];
+      for (let i = 0; i < 20; i += 1) {
+        data.push({ id: i + 1 });
+      }
+
+      $('<button>').text('Delete').on('click', () => {
+        const grid = ($('#container') as any).dxDataGrid('instance');
+        const focusedRowKey = grid.option('focusedRowKey');
+        grid.option('focusedRowKey', undefined);
+        grid.getDataSource().store().push([{ type: 'remove', key: focusedRowKey }]);
+      }).prependTo('body');
+
+      ($('#container') as any).dxDataGrid({
+        height: 200,
+        width: 200,
+        dataSource: {
+          store: {
+            type: 'array',
+            key: 'id',
+            data,
+          },
+          pushAggregationTimeout: 0,
+        },
+        focusedRowEnabled: true,
+        focusedRowKey: 10,
+        columns: ['id'],
+        scrolling: {
+          mode: 'virtual',
+        },
+      });
+    });
+
+    await page.waitForTimeout(300);
+
+    const dataGrid = new DataGrid(page, '#container');
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+
+    const scrollTopBefore = await dataGrid.getScrollTop();
+    expect(scrollTopBefore).toBeGreaterThan(0);
+
+    await page.locator('button').click();
+    await dataGrid.getDataCell(9, 0).element.click();
+
+    const scrollTopAfter = await dataGrid.getScrollTop();
+
+    await page.locator('button').click();
+    const scrollTopFinal = await dataGrid.getScrollTop();
+    expect(scrollTopFinal).toBe(scrollTopAfter);
+  });
+
+  test('Scroll should not change focused row if focus method is called inside onContentReady (T1047794)', async ({ page }) => {
+    const data: { ID: number; Name: string }[] = [];
+    for (let i = 0; i < 30; i += 1) {
+      data.push({ ID: i + 1, Name: `Name ${i + 1}` });
+    }
+
+    await createWidget(page, 'dxDataGrid', {
+      height: 400,
+      dataSource: data,
+      keyExpr: 'ID',
+      focusedRowEnabled: true,
+      onContentReady(e: any) {
+        e.component.focus();
+      },
+      scrolling: {
+        mode: 'virtual',
+      },
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+
+    expect(await dataGrid.option('focusedRowKey')).toBe(1);
+    await expect(dataGrid.getDataRow(0).element).toHaveClass(/dx-row-focused/);
+
+    await dataGrid.scrollTo({ y: 200 });
+    await dataGrid.scrollTo({ y: 0 });
+
+    expect(await dataGrid.option('focusedRowKey')).toBe(1);
+    await expect(dataGrid.getDataRow(0).element).toHaveClass(/dx-row-focused/);
+  });
+
   (['virtual', 'infinite'] as const).forEach((scrollingMode) => {
     test(`Row should be focused after reloading the data source (scrolling.mode is ${scrollingMode}) (T1022502)`, async ({ page }) => {
       const data: { ID: number; Name: string }[] = [];

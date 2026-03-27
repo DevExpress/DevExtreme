@@ -14,34 +14,36 @@ test.describe('Keyboard Navigation - editOnKeyPress', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Editing should start by pressing enter after scrolling content with scrolling.mode=virtual', async ({ page }) => {
-    // TODO: Playwright migration - TestCafe API remnants (locator.focused property)
+  test('Editing should start by pressing enter after scrolling content with scrolling.mode=virtual', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
-        dataSource: [...new Array(50)].map((_, i) => ({
-          data1: i * 2,
-          data2: i * 2 + 1,
-        })),
-        columns: [
-          'data1',
-          'data2',
-        ],
-        editing: {
-          allowUpdating: true,
-        },
-        scrolling: {
-          mode: 'virtual',
-        },
-        height: 300,
-      });
+      dataSource: [...new Array(50)].map((_, i) => ({
+        data1: i * 2,
+        data2: i * 2 + 1,
+      })),
+      columns: [
+        'data1',
+        'data2',
+      ],
+      editing: {
+        allowUpdating: true,
+      },
+      scrolling: {
+        mode: 'virtual',
+      },
+      height: 300,
+    });
 
-      expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+    await expect(page.locator('.dx-datagrid').first()).toBeVisible();
 
-    await page.evaluate((opts) => ($('#container') as any).dxDataGrid('instance').getScrollable().scrollBy(opts), { y: 10000 });
+    await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').getScrollable().scrollBy({ y: 10000 }));
+    await page.waitForTimeout(300);
 
-    await (page.locator('.dx-data-row').nth(49).locator('td').nth(1)).click();
-    await page.keyboard.press('enter');
+    const dataGrid = new DataGrid(page);
+    const lastDataCell = dataGrid.getDataCell(49, 1);
+    await lastDataCell.element.click();
+    await page.keyboard.press('Enter');
 
-    expect(await page.locator('.dx-data-row').nth(49).locator('td').nth(1).locator('.dx-editor-cell').focused).toBeTruthy();
+    await expect(lastDataCell.element).toHaveClass(/dx-editor-cell/);
   });
 
   test('editing.allowUpdating callback should receive correct row on tab key on first cell with virtual scrolling (T1290811)', async ({ page }) => {

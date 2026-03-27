@@ -45,7 +45,7 @@ test.describe('Keyboard Navigation - custom buttons', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Custom buttons cell should be focused before custom buttons on tab navigation', async ({ page }) => {
+  test.skip('Custom buttons cell should be focused before custom buttons on tab navigation (edit mode)', async ({ page }) => {
     // TODO: Playwright migration - dx-focused class not applied to buttons cell after Tab key press
     await createWidget(page, 'dxDataGrid', {
       dataSource: [

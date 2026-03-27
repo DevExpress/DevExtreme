@@ -1595,4 +1595,120 @@ test.describe('Keyboard Navigation - common', () => {
     );
     expect(isFocused01AfterEnable).toBe(true);
   });
+
+  test('Lookup editor should update cell value on down or up key when cell is focused by tab or shift+tab (T1036028)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{
+        id: 1, field1: 'a', field2: '1', field3: 'b',
+      }],
+      keyExpr: 'id',
+      columns: ['field1',
+        {
+          dataField: 'field2',
+          lookup: {
+            dataSource: [
+              { id: '1' },
+              { id: '2' },
+            ],
+            displayExpr: 'id',
+            valueExpr: 'id',
+          },
+        },
+        'field3'],
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+
+    const editButton = dataGrid.getDataRow(0).element.locator('.dx-command-edit .dx-link-edit');
+    await editButton.click();
+
+    await expect(dataGrid.getDataRow(0).element).toHaveClass(/dx-edit-row/);
+
+    const cell00 = dataGrid.getDataCell(0, 0);
+    await expect(cell00.element).toHaveClass(/dx-focused/);
+
+    await page.keyboard.press('Tab');
+
+    const cell01 = dataGrid.getDataCell(0, 1);
+    await expect(cell01.element).toHaveClass(/dx-focused/);
+    expect(await dataGrid.apiGetCellValue(0, 1)).toBe('1');
+
+    await page.keyboard.press('ArrowDown');
+    expect(await dataGrid.apiGetCellValue(0, 1)).toBe('2');
+
+    await page.keyboard.press('Tab');
+
+    const cell02 = dataGrid.getDataCell(0, 2);
+    await expect(cell02.element).toHaveClass(/dx-focused/);
+
+    await page.keyboard.press('Shift+Tab');
+
+    await expect(cell01.element).toHaveClass(/dx-focused/);
+    expect(await dataGrid.apiGetCellValue(0, 1)).toBe('2');
+
+    await page.keyboard.press('ArrowUp');
+    expect(await dataGrid.apiGetCellValue(0, 1)).toBe('1');
+  });
+
+  test('Checkbox value is changed properly on tab when the batch editing mode and focused row are enabled (T1059412)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      keyExpr: 'id',
+      columns: [
+        {
+          dataField: 'id',
+          allowEditing: false,
+        },
+        {
+          dataField: 'checked',
+          dataType: 'boolean',
+        },
+      ],
+      dataSource: [
+        {
+          id: 1,
+          checked: false,
+        },
+      ],
+      editing: {
+        allowAdding: true,
+        allowUpdating: true,
+        mode: 'batch',
+      },
+      focusedRowEnabled: true,
+      keyboardNavigation: {
+        editOnKeyPress: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+
+    await dataGrid.getHeaderPanel().getAddRowButton().click();
+
+    const insertedRow = dataGrid.getDataRow(0);
+    await expect(insertedRow.element).toHaveClass(/dx-row-inserted/);
+
+    const cell01 = dataGrid.getDataCell(0, 1);
+    await expect(cell01.element).toHaveClass(/dx-focused/);
+
+    await page.keyboard.press('ArrowRight');
+
+    const cell11 = dataGrid.getDataCell(1, 1);
+    await expect(cell11.element).toHaveClass(/dx-focused/);
+
+    await page.keyboard.press('Space');
+    expect(await dataGrid.apiGetCellValue(1, 1)).toBeTruthy();
+    await expect(cell11.element).toHaveClass(/dx-focused/);
+
+    await page.keyboard.press('Space');
+    expect(await dataGrid.apiGetCellValue(1, 1)).toBeFalsy();
+    await expect(cell11.element).toHaveClass(/dx-focused/);
+
+    await page.keyboard.press('Space');
+    expect(await dataGrid.apiGetCellValue(1, 1)).toBeTruthy();
+    await expect(cell11.element).toHaveClass(/dx-focused/);
+  });
 });

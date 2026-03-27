@@ -14,7 +14,7 @@ test.describe('Grouping API - calculateGroupValue runtime changes', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('One group: should expand grouped section after calculateGroupValue update', async ({ page }) => {
+  test.skip('One group: should expand grouped section after calculateGroupValue reset to null', async ({ page }) => {
     // TODO: Playwright migration - data rows do not appear after expandRow when calculateGroupValue is reset to null
     await createWidget(page, 'dxDataGrid', {
       dataSource: [

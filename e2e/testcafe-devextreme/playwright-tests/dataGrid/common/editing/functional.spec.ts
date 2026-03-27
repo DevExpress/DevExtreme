@@ -422,6 +422,254 @@ test.describe('Editing.Functional', () => {
     expect(otherContainerText).toBe('');
   });
 
+  test('Rollback changes on a click on a revert button  when startEditAction is dblclick', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ name: 'test', test: false }],
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+        startEditAction: 'dblClick',
+      },
+      columns: ['name',
+        {
+          dataField: 'test',
+          dataType: 'boolean',
+          showEditorAlways: false,
+        },
+      ],
+    });
+
+    const dataGrid = new DataGrid(page);
+    const dataRow = dataGrid.getDataRow(0);
+    const cell1 = dataRow.getDataCell(2);
+
+    await cell1.element.dblclick();
+    await expect(cell1.element).toHaveClass(/dx-editor-cell/);
+
+    const checkbox = cell1.element.locator('.dx-checkbox');
+    await checkbox.click();
+
+    const revertButton = dataGrid.getRevertButton();
+    await expect(revertButton).toBeVisible();
+
+    await revertButton.click();
+    await expect(revertButton).toBeHidden();
+    await expect(cell1.element).not.toHaveClass(/dx-editor-cell/);
+
+    const cellValue = await dataGrid.apiGetCellValue(0, 1);
+    expect(cellValue).toBeFalsy();
+  });
+
+  test('Cell - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', () => ({
+      dataSource: [{ id: 1, field: 'field' }],
+      keyExpr: 'id',
+      masterDetail: {
+        enabled: true,
+        template() {
+          return ($('<div id="detailContainer">') as any).dxDataGrid({
+            dataSource: [],
+            keyExpr: 'id',
+            focusedRowEnabled: true,
+            columns: [
+              { dataField: 'id', validationRules: [{ type: 'required' }] },
+              { dataField: 'field', validationRules: [{ type: 'required' }] },
+            ],
+            editing: { mode: 'cell', allowAdding: true, allowUpdating: true },
+          });
+        },
+      },
+    }));
+
+    const dataGrid = new DataGrid(page);
+
+    await dataGrid.getDataRow(0).getDataCell(0).click();
+    await page.waitForSelector('#detailContainer');
+
+    const detailAddButton = page.locator('#detailContainer .dx-datagrid-addrow-button');
+    await detailAddButton.click();
+
+    const detailHeaderPanel = page.locator('#detailContainer .dx-datagrid-header-panel');
+    await detailHeaderPanel.click();
+
+    const invalidMessages = page.locator('.dx-invalid-message');
+    await expect(invalidMessages).toHaveCount(1);
+
+    await page.locator('#detailContainer .dx-data-row').nth(0).locator('td').nth(1).click();
+    await expect(invalidMessages).toHaveCount(1);
+
+    await page.locator('#detailContainer .dx-data-row').nth(0).locator('td').nth(0).click();
+    await expect(invalidMessages).toHaveCount(1);
+  });
+
+  test('Batch - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', () => ({
+      dataSource: [{ id: 1, field: 'field' }],
+      keyExpr: 'id',
+      masterDetail: {
+        enabled: true,
+        template() {
+          return ($('<div id="detailContainer">') as any).dxDataGrid({
+            dataSource: [],
+            keyExpr: 'id',
+            focusedRowEnabled: true,
+            columns: [
+              { dataField: 'id', validationRules: [{ type: 'required' }] },
+              { dataField: 'field', validationRules: [{ type: 'required' }] },
+            ],
+            editing: { mode: 'batch', allowAdding: true, allowUpdating: true },
+          });
+        },
+      },
+    }));
+
+    const dataGrid = new DataGrid(page);
+
+    await dataGrid.getDataRow(0).getDataCell(0).click();
+    await page.waitForSelector('#detailContainer');
+
+    const detailAddButton = page.locator('#detailContainer .dx-datagrid-addrow-button');
+    await detailAddButton.click();
+
+    const detailSaveButton = page.locator('#detailContainer .dx-datagrid-save-button');
+    await detailSaveButton.click();
+
+    await page.locator('#detailContainer .dx-data-row').nth(0).locator('td').nth(0).click();
+
+    const invalidMessages = page.locator('.dx-invalid-message');
+    await expect(invalidMessages).toHaveCount(1);
+
+    await page.locator('#detailContainer .dx-data-row').nth(0).locator('td').nth(1).click();
+    await expect(invalidMessages).toHaveCount(1);
+
+    await page.locator('#detailContainer .dx-data-row').nth(0).locator('td').nth(0).click();
+    await expect(invalidMessages).toHaveCount(1);
+  });
+
+  test('Component sends unexpected filtering request after inserting a new row if focusedRowEnabled is true and key set on event (T1181477)', async ({ page }) => {
+    await page.evaluate(() => {
+      const dataSourceCore = [
+        { ID: 1, Name: 'Name 1' },
+        { ID: 2, Name: 'Name 2' },
+        { ID: 3, Name: 'Name 3' },
+      ];
+
+      const sampleAPI = new (window as any).DevExpress.data.ArrayStore(dataSourceCore);
+
+      const store = new (window as any).DevExpress.data.CustomStore({
+        key: 'ID',
+        load(o: any) {
+          if (o.filter) {
+            $('#otherContainer').append('Fail');
+          }
+          return Promise.all([sampleAPI.load(), sampleAPI.totalCount()]).then((res: any) => ({
+            data: res[0],
+            totalCount: res[1],
+          }));
+        },
+        insert(values: any) {
+          return sampleAPI.insert(values);
+        },
+      });
+
+      ($('#container') as any).dxDataGrid({
+        dataSource: store,
+        showBorders: true,
+        focusedRowEnabled: true,
+        autoNavigateToFocusedRow: true,
+        editing: { allowAdding: true },
+        onInitNewRow(e: any) {
+          e.promise = new Promise((resolve) => {
+            const newId = dataSourceCore.length + 1;
+            e.data.ID = newId;
+            resolve(undefined as any);
+          });
+        },
+        remoteOperations: true,
+      });
+    });
+
+    await page.waitForSelector('.dx-datagrid-rowsview');
+    await page.waitForFunction(() => !$('.dx-loadpanel-wrapper').is(':visible'));
+
+    const addRowButton = page.locator('.dx-datagrid-addrow-button');
+    await addRowButton.click();
+
+    const saveLink = page.locator('.dx-data-row').nth(0).locator('.dx-link-save');
+    await saveLink.click();
+
+    await page.waitForFunction(() => !$('.dx-loadpanel-wrapper').is(':visible'));
+
+    const otherContainerText = await page.locator('#otherContainer').textContent();
+    expect(otherContainerText).toBe('');
+  });
+
+  test('Adding rows to a second page should work correctly when initial row values are specified in the onInitNewRow method (T1274123)', async ({ page }) => {
+    await page.evaluate(() => {
+      (window as any).myData = new Array(30).fill(null).map((_: null, index: number) => ({ id: index + 1, text: `item ${index + 1}` }));
+      (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
+        key: 'id',
+        data: (window as any).myData,
+      });
+    });
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: {
+        key: 'id',
+        load(loadOptions: any) {
+          return (window as any).myStore.load(loadOptions);
+        },
+        totalCount() {
+          return (window as any).myStore.totalCount();
+        },
+        insert(values: any) {
+          if (values.id === 0) {
+            values.id = (window as any).myData.length + 1;
+          }
+          return (window as any).myStore.insert(values);
+        },
+      } as any,
+      columns: ['id', 'text'],
+      showBorders: true,
+      editing: {
+        mode: 'popup',
+        allowAdding: true,
+      },
+      onInitNewRow(e: any) {
+        e.data.id = 0;
+        e.data.text = 'test';
+      },
+      height: 300,
+    });
+
+    const dataGrid = new DataGrid(page);
+
+    await dataGrid.apiPageIndex(1);
+    await page.waitForFunction(() => !$('.dx-loadpanel-wrapper').is(':visible'));
+
+    const visibleRows1 = await dataGrid.apiGetVisibleRows();
+    expect(visibleRows1.length).toBe(10);
+
+    const cell20 = await dataGrid.getDataCell(20, 0).element.textContent();
+    expect(cell20).toBe('21');
+
+    const addAndSave = async () => {
+      await dataGrid.apiAddRow();
+      const popup = dataGrid.getPopupEditForm();
+      await expect(popup.element).toBeVisible();
+      await dataGrid.apiSaveEditData();
+      await expect(popup.element).toBeHidden();
+    };
+
+    await addAndSave();
+    await addAndSave();
+
+    const visibleRows2 = await dataGrid.apiGetVisibleRows();
+    expect(visibleRows2.length).toBe(12);
+    expect(visibleRows2[10].key).toBe(31);
+    expect(visibleRows2[11].key).toBe(32);
+  });
+
   test('Row - Redundant validation messages should not be rendered in a detail grid when focused row is enabled (T950174)', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', () => ({
       dataSource: [{ id: 1, field: 'field' }],
@@ -462,5 +710,82 @@ test.describe('Editing.Functional', () => {
 
     await page.locator('#detailContainer .dx-data-row').nth(0).locator('td').nth(1).click();
     await expect(invalidMessages).toHaveCount(1);
+  });
+
+  test('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async ({ page }) => {
+    await page.evaluate(() => {
+      (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
+        key: 'ID',
+        data: [
+          { ID: 1, Name: 'Name 1' },
+          { ID: 2, Name: 'Name 2' },
+          { ID: 3, Name: 'Name 3' },
+        ],
+      });
+    });
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: {
+        key: 'ID',
+        load(loadOptions: any) {
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              (window as any).myStore.load(loadOptions).done((data: any) => {
+                resolve(data);
+              });
+            }, 100);
+          });
+        },
+        update(key: any, values: any) {
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              (window as any).myStore.update(key, values).done(() => {
+                resolve(key);
+              });
+            }, 100);
+          });
+        },
+        totalCount(loadOptions: any) {
+          return (window as any).myStore.totalCount(loadOptions);
+        },
+      } as any,
+      keyExpr: 'ID',
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+      },
+      columns: [{
+        dataField: 'Name',
+        showEditorAlways: true,
+      }],
+    });
+
+    await page.waitForFunction(() => !$('.dx-loadpanel-wrapper').is(':visible'));
+
+    const dataGrid = new DataGrid(page);
+
+    const cell00 = dataGrid.getDataCell(0, 0);
+    await cell00.element.locator('.dx-texteditor-input').click();
+    await expect(cell00.element).toHaveClass(/dx-focused/);
+
+    await cell00.element.locator('.dx-texteditor-input').fill('Name 11');
+    await dataGrid.getDataCell(1, 0).element.locator('.dx-texteditor-input').click();
+    await page.waitForFunction(() => !$('.dx-loadpanel-wrapper').is(':visible'));
+
+    const storedName1 = await page.evaluate(() => (window as any).myStore.byKey(1).then((item: any) => item.Name));
+    expect(storedName1).toBe('Name 11');
+
+    const cell10 = dataGrid.getDataCell(1, 0);
+    await expect(cell10.element).toHaveClass(/dx-focused/);
+
+    await cell10.element.locator('.dx-texteditor-input').fill('Name 22');
+    await dataGrid.getDataCell(2, 0).element.locator('.dx-texteditor-input').click();
+    await page.waitForFunction(() => !$('.dx-loadpanel-wrapper').is(':visible'));
+
+    const storedName2 = await page.evaluate(() => (window as any).myStore.byKey(2).then((item: any) => item.Name));
+    expect(storedName2).toBe('Name 22');
+
+    const cell20 = dataGrid.getDataCell(2, 0);
+    await expect(cell20.element).toHaveClass(/dx-focused/);
   });
 });
