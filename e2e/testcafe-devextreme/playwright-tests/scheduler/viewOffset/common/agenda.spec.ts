@@ -4,22 +4,20 @@ import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
 
-test.describe('Offset: Agenda', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto(containerUrl);
-    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
-    await page.evaluate((theme) => new Promise<void>((resolve) => {
-      (window as any).DevExpress.ui.themes.ready(resolve);
-      (window as any).DevExpress.ui.themes.current(theme);
-    }), process.env.THEME || 'fluent.blue.light');
-  });
+const setupPage = async (page: any) => {
+  await page.goto(containerUrl);
+  await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+  await page.evaluate((theme: string) => new Promise<void>((resolve) => {
+    (window as any).DevExpress.ui.themes.ready(resolve);
+    (window as any).DevExpress.ui.themes.current(theme);
+  }), process.env.THEME || 'fluent.blue.light');
+};
 
-  [
-    0,
-    -240,
-    240,
-  ].forEach((offset) => {
-    test(`Agenda view should not be affected by root offset option (offset: ${offset})`, async ({ page }) => {
+test.describe('Offset: Agenda', () => {
+  test('Agenda view should not be affected by root offset option', async ({ page }) => {
+    for (const offset of [0, -240, 240]) {
+      await setupPage(page);
+
       await createWidget(page, 'dxScheduler', {
         dataSource: [
           {
@@ -46,6 +44,6 @@ test.describe('Offset: Agenda', () => {
 
       const workSpace = page.locator('.dx-scheduler-work-space');
       await testScreenshot(page, `offset_agenda-not-affected_offset-${offset}.png`, { element: workSpace });
-    });
+    }
   });
 });

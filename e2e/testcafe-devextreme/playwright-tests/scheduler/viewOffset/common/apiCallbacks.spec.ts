@@ -5,7 +5,6 @@ import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
 
-const SCHEDULER_SELECTOR = '#container';
 const REDUCE_CELLS_CSS = `
 .dx-scheduler-cell-sizes-vertical {
   height: 25px;
@@ -92,22 +91,19 @@ const clearClientData = async (page, callbacks: string[]) => {
   }, callbacks);
 };
 
-test.describe('Offset: Api callbacks', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto(containerUrl);
-    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
-    await page.evaluate((theme) => new Promise<void>((resolve) => {
-      (window as any).DevExpress.ui.themes.ready(resolve);
-      (window as any).DevExpress.ui.themes.current(theme);
-    }), process.env.THEME || 'fluent.blue.light');
-  });
+const setupPage = async (page: any) => {
+  await page.goto(containerUrl);
+  await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+  await page.evaluate((theme: string) => new Promise<void>((resolve) => {
+    (window as any).DevExpress.ui.themes.ready(resolve);
+    (window as any).DevExpress.ui.themes.current(theme);
+  }), process.env.THEME || 'fluent.blue.light');
+};
 
-  [
-    0,
-    -700,
-    700,
-  ].forEach((offset) => {
-    test(`onAppointmentRendered (offset: ${offset})`, async ({ page }) => {
+test.describe('Offset: Api callbacks', () => {
+  test('onAppointmentRendered', async ({ page }) => {
+    for (const offset of [0, -700, 700]) {
+      await setupPage(page);
       await initClientTesting(page, ['onAppointmentRendered']);
       await insertStylesheetRulesToPage(page, REDUCE_CELLS_CSS);
       await page.evaluate(({ ds, off }) => {
@@ -133,9 +129,12 @@ test.describe('Offset: Api callbacks', () => {
       expect(results[0].appointmentData).toEqual(EXPECTED.appointmentData);
 
       await clearClientData(page, ['onAppointmentRendered']);
-    });
+    }
+  });
 
-    test(`onAppointmentAdding and onAppointmentAdded (offset: ${offset})`, async ({ page }) => {
+  test('onAppointmentAdding and onAppointmentAdded', async ({ page }) => {
+    for (const offset of [0, -700, 700]) {
+      await setupPage(page);
       await initClientTesting(page, ['onAppointmentAdding', 'onAppointmentAdded']);
       await insertStylesheetRulesToPage(page, REDUCE_CELLS_CSS);
       await page.evaluate(({ ds, off }) => {
@@ -179,9 +178,12 @@ test.describe('Offset: Api callbacks', () => {
       expect(addedResults[0]).toEqual(expectedAppointmentData);
 
       await clearClientData(page, ['onAppointmentAdding', 'onAppointmentAdded']);
-    });
+    }
+  });
 
-    test(`onAppointmentClick and onAppointmentDbClick (offset: ${offset})`, async ({ page }) => {
+  test('onAppointmentClick and onAppointmentDbClick', async ({ page }) => {
+    for (const offset of [0, -700, 700]) {
+      await setupPage(page);
       await initClientTesting(page, ['onAppointmentClick', 'onAppointmentDblClick']);
       await insertStylesheetRulesToPage(page, REDUCE_CELLS_CSS);
       await page.evaluate(({ ds, off }) => {
@@ -214,9 +216,12 @@ test.describe('Offset: Api callbacks', () => {
       expect(dblClickResults[0].appointmentData).toEqual(EXPECTED.appointmentData);
 
       await clearClientData(page, ['onAppointmentClick', 'onAppointmentDblClick']);
-    });
+    }
+  });
 
-    test(`onAppointmentTooltipShowing and onAppointmentFormOpening (offset: ${offset})`, async ({ page }) => {
+  test('onAppointmentTooltipShowing and onAppointmentFormOpening', async ({ page }) => {
+    for (const offset of [0, -700, 700]) {
+      await setupPage(page);
       await initClientTesting(page, ['onAppointmentTooltipShowing', 'onAppointmentFormOpening']);
       await insertStylesheetRulesToPage(page, REDUCE_CELLS_CSS);
       await page.evaluate(({ ds, off }) => {
@@ -257,9 +262,12 @@ test.describe('Offset: Api callbacks', () => {
       expect(formResults[0]).toEqual(EXPECTED.appointmentData);
 
       await clearClientData(page, ['onAppointmentTooltipShowing', 'onAppointmentFormOpening']);
-    });
+    }
+  });
 
-    test(`onAppointmentDeleting and onAppointmentDeleted (offset: ${offset})`, async ({ page }) => {
+  test('onAppointmentDeleting and onAppointmentDeleted', async ({ page }) => {
+    for (const offset of [0, -700, 700]) {
+      await setupPage(page);
       await initClientTesting(page, ['onAppointmentDeleting', 'onAppointmentDeleted']);
       await insertStylesheetRulesToPage(page, REDUCE_CELLS_CSS);
       await page.evaluate(({ ds, off }) => {
@@ -297,9 +305,12 @@ test.describe('Offset: Api callbacks', () => {
       expect(deletedResults[0]).toEqual(EXPECTED.appointmentData);
 
       await clearClientData(page, ['onAppointmentDeleting', 'onAppointmentDeleted']);
-    });
+    }
+  });
 
-    test(`onAppointmentUpdating and onAppointmentUpdated (offset: ${offset})`, async ({ page }) => {
+  test('onAppointmentUpdating and onAppointmentUpdated', async ({ page }) => {
+    for (const offset of [0, -700, 700]) {
+      await setupPage(page);
       await initClientTesting(page, ['onAppointmentUpdating', 'onAppointmentUpdated']);
       await insertStylesheetRulesToPage(page, REDUCE_CELLS_CSS);
       await page.evaluate(({ ds, off }) => {
@@ -329,7 +340,6 @@ test.describe('Offset: Api callbacks', () => {
       const expectedNewData = getAppointmentAfterUpdate(offset);
 
       const appointment = page.locator('.dx-scheduler-appointment').filter({ hasText: APPOINTMENT_TITLE });
-      // TODO: t.drag(element, -100, 0) - drag by pixel offset
       const box = await appointment.boundingBox();
       if (box) {
         await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
@@ -346,9 +356,12 @@ test.describe('Offset: Api callbacks', () => {
       expect(updatedResults[0]).toEqual(expectedNewData);
 
       await clearClientData(page, ['onAppointmentUpdating', 'onAppointmentUpdated']);
-    });
+    }
+  });
 
-    test(`onAppointmentContextMenu (offset: ${offset})`, async ({ page }) => {
+  test('onAppointmentContextMenu', async ({ page }) => {
+    for (const offset of [0, -700, 700]) {
+      await setupPage(page);
       await initClientTesting(page, ['onAppointmentContextMenu']);
       await insertStylesheetRulesToPage(page, REDUCE_CELLS_CSS);
       await page.evaluate(({ ds, off }) => {
@@ -375,6 +388,6 @@ test.describe('Offset: Api callbacks', () => {
       expect(contextMenuResults[0].appointmentData).toEqual(EXPECTED.appointmentData);
 
       await clearClientData(page, ['onAppointmentContextMenu']);
-    });
+    }
   });
 });

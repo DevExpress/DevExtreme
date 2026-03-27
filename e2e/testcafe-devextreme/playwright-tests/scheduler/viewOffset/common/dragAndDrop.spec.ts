@@ -29,26 +29,30 @@ const getDragCoordinatesByView = (viewType: string): { x: number; y: number } =>
 const getScreenshotName = (viewType: string, offset: number, isAllDay: boolean) =>
   `offset_drag-n-drop_${isAllDay ? 'all-day' : 'usual'}-appts_${viewType}_offset-${offset}.png`;
 
-test.describe('Offset: Drag-n-drop appointments', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto(containerUrl);
-    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
-    await page.evaluate((theme) => new Promise<void>((resolve) => {
-      (window as any).DevExpress.ui.themes.ready(resolve);
-      (window as any).DevExpress.ui.themes.current(theme);
-    }), process.env.THEME || 'fluent.blue.light');
-  });
+const viewConfigs = [
+  { views: [{ type: 'week', cellDuration: 60 }], dataSource: APPOINTMENTS.week, isAllDay: false },
+  { views: [{ type: 'week', cellDuration: 60 }], dataSource: APPOINTMENTS.allDayWeek, isAllDay: true },
+  { views: [{ type: 'month' }], dataSource: APPOINTMENTS.month, isAllDay: false },
+  { views: [{ type: 'month' }], dataSource: APPOINTMENTS.allDayMonth, isAllDay: true },
+  { views: [{ type: 'timelineMonth' }], dataSource: APPOINTMENTS.timelineMonth, isAllDay: false },
+  { views: [{ type: 'timelineMonth' }], dataSource: APPOINTMENTS.allDayTimelineMonth, isAllDay: true },
+];
 
-  [
-    { views: [{ type: 'week', cellDuration: 60 }], dataSource: APPOINTMENTS.week, isAllDay: false },
-    { views: [{ type: 'week', cellDuration: 60 }], dataSource: APPOINTMENTS.allDayWeek, isAllDay: true },
-    { views: [{ type: 'month' }], dataSource: APPOINTMENTS.month, isAllDay: false },
-    { views: [{ type: 'month' }], dataSource: APPOINTMENTS.allDayMonth, isAllDay: true },
-    { views: [{ type: 'timelineMonth' }], dataSource: APPOINTMENTS.timelineMonth, isAllDay: false },
-    { views: [{ type: 'timelineMonth' }], dataSource: APPOINTMENTS.allDayTimelineMonth, isAllDay: true },
-  ].forEach(({ views, dataSource, isAllDay }) => {
-    [0, 735, -735].forEach((offset) => {
-      test(`Drag-n-drop (view: ${views[0].type}, allDay: ${isAllDay}, offset: ${offset})`, async ({ page }) => {
+const setupPage = async (page: any) => {
+  await page.goto(containerUrl);
+  await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+  await page.evaluate((theme: string) => new Promise<void>((resolve) => {
+    (window as any).DevExpress.ui.themes.ready(resolve);
+    (window as any).DevExpress.ui.themes.current(theme);
+  }), process.env.THEME || 'fluent.blue.light');
+};
+
+test.describe('Offset: Drag-n-drop appointments', () => {
+  test('Usual appointments drag-n-drop', async ({ page }) => {
+    for (const { views, dataSource, isAllDay } of viewConfigs) {
+      for (const offset of [0, 735, -735]) {
+        await setupPage(page);
+
         await insertStylesheetRulesToPage(page, REDUCE_CELLS_CSS);
         await createWidget(page, 'dxScheduler', {
           currentDate: '2023-09-07',
@@ -73,7 +77,7 @@ test.describe('Offset: Drag-n-drop appointments', () => {
 
         const workSpace = page.locator('.dx-scheduler-work-space');
         await testScreenshot(page, getScreenshotName(viewType, offset, isAllDay), { element: workSpace });
-      });
-    });
+      }
+    }
   });
 });

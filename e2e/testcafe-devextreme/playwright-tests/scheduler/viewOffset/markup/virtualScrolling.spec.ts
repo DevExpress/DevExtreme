@@ -19,27 +19,28 @@ const APPOINTMENTS = [
 const getScreenshotName = (viewType: string, offset: number, startDayHour: number, endDayHour: number) =>
   `view_markup_virtual-scrolling_${viewType}_offset-${offset}_start-${startDayHour}_end-${endDayHour}.png`;
 
-test.describe('Offset: Markup virtual scrolling', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto(containerUrl);
-    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
-    await page.evaluate((theme) => new Promise<void>((resolve) => {
-      (window as any).DevExpress.ui.themes.ready(resolve);
-      (window as any).DevExpress.ui.themes.current(theme);
-    }), process.env.THEME || 'fluent.blue.light');
-  });
+const VIEW_CONFIGS = [
+  { views: [{ type: 'week', cellDuration: 60 }], dataSource: APPOINTMENTS },
+  { views: [{ type: 'month' }], dataSource: APPOINTMENTS },
+  { views: [{ type: 'timelineMonth' }], dataSource: APPOINTMENTS },
+];
 
-  [
-    { views: [{ type: 'week', cellDuration: 60 }], dataSource: APPOINTMENTS },
-    { views: [{ type: 'month' }], dataSource: APPOINTMENTS },
-    { views: [{ type: 'timelineMonth' }], dataSource: APPOINTMENTS },
-  ].forEach(({ views, dataSource }) => {
-    [0, 735, 1440, -735, -1440].forEach((offset) => {
-      [
-        { startDayHour: 0, endDayHour: 24 },
-        { startDayHour: 9, endDayHour: 17 },
-      ].forEach(({ startDayHour, endDayHour }) => {
-        test(`Virtual scrolling render (view: ${views[0].type}, offset: ${offset}, start: ${startDayHour}, end: ${endDayHour})`, async ({ page }) => {
+const setupPage = async (page: any) => {
+  await page.goto(containerUrl);
+  await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+  await page.evaluate((theme: string) => new Promise<void>((resolve) => {
+    (window as any).DevExpress.ui.themes.ready(resolve);
+    (window as any).DevExpress.ui.themes.current(theme);
+  }), process.env.THEME || 'fluent.blue.light');
+};
+
+test.describe('Offset: Markup virtual scrolling', () => {
+  test('Virtual scrolling render', async ({ page }) => {
+    for (const { views, dataSource } of VIEW_CONFIGS) {
+      for (const offset of [0, 735, 1440, -735, -1440]) {
+        for (const { startDayHour, endDayHour } of [{ startDayHour: 0, endDayHour: 24 }, { startDayHour: 9, endDayHour: 17 }]) {
+          await setupPage(page);
+
           await insertStylesheetRulesToPage(page, REDUCE_CELLS_CSS);
           await createWidget(page, 'dxScheduler', {
             currentDate: '2023-09-07',
@@ -55,8 +56,8 @@ test.describe('Offset: Markup virtual scrolling', () => {
 
           const workSpace = page.locator('.dx-scheduler-work-space');
           await testScreenshot(page, getScreenshotName(views[0].type, offset, startDayHour, endDayHour), { element: workSpace });
-        });
-      });
-    });
+        }
+      }
+    }
   });
 });

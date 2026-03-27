@@ -95,34 +95,35 @@ const getViewWithCorrectCellDuration = (
   }
 };
 
-test.describe('Offset: Markup usual appointments', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto(containerUrl);
-    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
-    await page.evaluate((theme) => new Promise<void>((resolve) => {
-      (window as any).DevExpress.ui.themes.ready(resolve);
-      (window as any).DevExpress.ui.themes.current(theme);
-    }), process.env.THEME || 'fluent.blue.light');
-  });
+const VIEW_CONFIGS = [
+  { views: [{ type: 'day', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.day },
+  { views: [{ type: 'week', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
+  { views: [{ type: 'workWeek', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
+  { views: [{ type: 'workWeek', cellDuration: 60, firstDayOfWeek: 3 }], dataSource: APPOINTMENTS.workWeekWithFirstDay },
+  { views: [{ type: 'month', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.month },
+  { views: [{ type: 'timelineDay', cellDuration: 240, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.timelineDay },
+  { views: [{ type: 'timelineWeek', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.timelineWeek },
+  { views: [{ type: 'timelineWorkWeek', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.timelineWeek },
+  { views: [{ type: 'timelineWorkWeek', firstDayOfWeek: 3 }], dataSource: APPOINTMENTS.timelineWeekWithFirstDay },
+  { views: [{ type: 'timelineMonth', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.month },
+];
 
-  [
-    { views: [{ type: 'day', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.day },
-    { views: [{ type: 'week', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
-    { views: [{ type: 'workWeek', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
-    { views: [{ type: 'workWeek', cellDuration: 60, firstDayOfWeek: 3 }], dataSource: APPOINTMENTS.workWeekWithFirstDay },
-    { views: [{ type: 'month', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.month },
-    { views: [{ type: 'timelineDay', cellDuration: 240, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.timelineDay },
-    { views: [{ type: 'timelineWeek', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.timelineWeek },
-    { views: [{ type: 'timelineWorkWeek', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.timelineWeek },
-    { views: [{ type: 'timelineWorkWeek', firstDayOfWeek: 3 }], dataSource: APPOINTMENTS.timelineWeekWithFirstDay },
-    { views: [{ type: 'timelineMonth', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.month },
-  ].forEach(({ views, dataSource }) => {
-    [0, 735, 1440, -735, -1440].forEach((offset) => {
-      [
-        { startDayHour: 0, endDayHour: 24 },
-        { startDayHour: 9, endDayHour: 17 },
-      ].forEach(({ startDayHour, endDayHour }) => {
-        test(`Usual appointments render (view: ${views[0].type}, offset: ${offset}, start: ${startDayHour}, end: ${endDayHour}, firstDay: ${(views[0] as any).firstDayOfWeek})`, async ({ page }) => {
+const setupPage = async (page: any) => {
+  await page.goto(containerUrl);
+  await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+  await page.evaluate((theme: string) => new Promise<void>((resolve) => {
+    (window as any).DevExpress.ui.themes.ready(resolve);
+    (window as any).DevExpress.ui.themes.current(theme);
+  }), process.env.THEME || 'fluent.blue.light');
+};
+
+test.describe('Offset: Markup usual appointments', () => {
+  test('Usual appointments render', async ({ page }) => {
+    for (const { views, dataSource } of VIEW_CONFIGS) {
+      for (const offset of [0, 735, 1440, -735, -1440]) {
+        for (const { startDayHour, endDayHour } of [{ startDayHour: 0, endDayHour: 24 }, { startDayHour: 9, endDayHour: 17 }]) {
+          await setupPage(page);
+
           const view = getViewWithCorrectCellDuration(views[0], startDayHour, endDayHour);
 
           await insertStylesheetRulesToPage(page, REDUCE_CELLS_CSS);
@@ -144,8 +145,8 @@ test.describe('Offset: Markup usual appointments', () => {
             getScreenshotName(views[0].type, offset, startDayHour, endDayHour, (views[0] as any).firstDayOfWeek),
             { element: workSpace },
           );
-        });
-      });
-    });
+        }
+      }
+    }
   });
 });

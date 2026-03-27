@@ -80,26 +80,27 @@ const APPOINTMENTS: Record<string, Record<string, unknown>[]> = {
 const getScreenshotName = (viewType: string, offset: number, startDayHour: number, endDayHour: number) =>
   `view_markup_ordering-appts_${viewType}_offset-${offset}_start-${startDayHour}_end-${endDayHour}.png`;
 
-test.describe('Offset: Markup appointments ordering', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto(containerUrl);
-    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
-    await page.evaluate((theme) => new Promise<void>((resolve) => {
-      (window as any).DevExpress.ui.themes.ready(resolve);
-      (window as any).DevExpress.ui.themes.current(theme);
-    }), process.env.THEME || 'fluent.blue.light');
-  });
+const VIEW_CONFIGS = [
+  { views: [{ type: 'month' }], dataSource: APPOINTMENTS.month },
+  { views: [{ type: 'timelineMonth' }], dataSource: APPOINTMENTS.timelineMonth },
+];
 
-  [
-    { views: [{ type: 'month' }], dataSource: APPOINTMENTS.month },
-    { views: [{ type: 'timelineMonth' }], dataSource: APPOINTMENTS.timelineMonth },
-  ].forEach(({ views, dataSource }) => {
-    [0, 735, -735, 1440, -1440].forEach((offset) => {
-      [
-        { startDayHour: 0, endDayHour: 24 },
-        { startDayHour: 9, endDayHour: 17 },
-      ].forEach(({ startDayHour, endDayHour }) => {
-        test(`Appointments ordering render (view: ${views[0].type}, offset: ${offset}, start: ${startDayHour}, end: ${endDayHour})`, async ({ page }) => {
+const setupPage = async (page: any) => {
+  await page.goto(containerUrl);
+  await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+  await page.evaluate((theme: string) => new Promise<void>((resolve) => {
+    (window as any).DevExpress.ui.themes.ready(resolve);
+    (window as any).DevExpress.ui.themes.current(theme);
+  }), process.env.THEME || 'fluent.blue.light');
+};
+
+test.describe('Offset: Markup appointments ordering', () => {
+  test('Appointments ordering render', async ({ page }) => {
+    for (const { views, dataSource } of VIEW_CONFIGS) {
+      for (const offset of [0, 735, -735, 1440, -1440]) {
+        for (const { startDayHour, endDayHour } of [{ startDayHour: 0, endDayHour: 24 }, { startDayHour: 9, endDayHour: 17 }]) {
+          await setupPage(page);
+
           await insertStylesheetRulesToPage(page, REDUCE_CELLS_CSS);
           await createWidget(page, 'dxScheduler', {
             currentDate: '2023-09-07',
@@ -115,9 +116,9 @@ test.describe('Offset: Markup appointments ordering', () => {
 
           const workSpace = page.locator('.dx-scheduler-work-space');
           await testScreenshot(page, getScreenshotName(views[0].type, offset, startDayHour, endDayHour), { element: workSpace });
-        });
-      });
-    });
+        }
+      }
+    }
   });
 
   test('Appointments are ordered correctly with both recurrent and usual appointments (T1212573)', async ({ page }) => {
@@ -135,6 +136,13 @@ test.describe('Offset: Markup appointments ordering', () => {
       { text: 'Test 7', startDate: new Date('2020-11-04T15:00:00.000Z'), endDate: new Date('2020-11-04T15:30:00.000Z') },
       { text: 'Test 8', startDate: new Date('2020-11-04T18:00:00.000Z'), endDate: new Date('2020-11-04T18:30:00.000Z') },
     ];
+
+    await page.goto(containerUrl);
+    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+    await page.evaluate((theme: string) => new Promise<void>((resolve) => {
+      (window as any).DevExpress.ui.themes.ready(resolve);
+      (window as any).DevExpress.ui.themes.current(theme);
+    }), process.env.THEME || 'fluent.blue.light');
 
     await insertStylesheetRulesToPage(page, REDUCE_CELLS_CSS);
     await createWidget(page, 'dxScheduler', {

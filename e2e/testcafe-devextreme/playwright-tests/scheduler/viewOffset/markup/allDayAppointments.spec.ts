@@ -85,34 +85,35 @@ const APPOINTMENTS: Record<string, Record<string, unknown>[]> = {
 const getScreenshotName = (viewType: string, offset: number, startDayHour: number, endDayHour: number, firstDay?: number) =>
   `view_markup_all-day_${viewType}_offset-${offset}_start-${startDayHour}_end-${endDayHour}_first-day-${firstDay}.png`;
 
-test.describe('Offset: Markup all-day appointments', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto(containerUrl);
-    await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
-    await page.evaluate((theme) => new Promise<void>((resolve) => {
-      (window as any).DevExpress.ui.themes.ready(resolve);
-      (window as any).DevExpress.ui.themes.current(theme);
-    }), process.env.THEME || 'fluent.blue.light');
-  });
+const VIEW_CONFIGS = [
+  { views: [{ type: 'day', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.day },
+  { views: [{ type: 'week', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
+  { views: [{ type: 'workWeek', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
+  { views: [{ type: 'workWeek', cellDuration: 60, firstDayOfWeek: 3 }], dataSource: APPOINTMENTS.workWeekWithFirstDay },
+  { views: [{ type: 'month', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.month },
+  { views: [{ type: 'timelineDay', cellDuration: 240, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.day },
+  { views: [{ type: 'timelineWeek', cellDuration: 480, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
+  { views: [{ type: 'timelineWorkWeek', cellDuration: 480, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
+  { views: [{ type: 'timelineWorkWeek', cellDuration: 480, firstDayOfWeek: 3 }], dataSource: APPOINTMENTS.workWeekWithFirstDay },
+  { views: [{ type: 'timelineMonth', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.month },
+];
 
-  [
-    { views: [{ type: 'day', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.day },
-    { views: [{ type: 'week', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
-    { views: [{ type: 'workWeek', cellDuration: 60, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
-    { views: [{ type: 'workWeek', cellDuration: 60, firstDayOfWeek: 3 }], dataSource: APPOINTMENTS.workWeekWithFirstDay },
-    { views: [{ type: 'month', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.month },
-    { views: [{ type: 'timelineDay', cellDuration: 240, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.day },
-    { views: [{ type: 'timelineWeek', cellDuration: 480, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
-    { views: [{ type: 'timelineWorkWeek', cellDuration: 480, firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.week },
-    { views: [{ type: 'timelineWorkWeek', cellDuration: 480, firstDayOfWeek: 3 }], dataSource: APPOINTMENTS.workWeekWithFirstDay },
-    { views: [{ type: 'timelineMonth', firstDayOfWeek: 0 }], dataSource: APPOINTMENTS.month },
-  ].forEach(({ views, dataSource }) => {
-    [0, 735, 1440, -735, -1440].forEach((offset) => {
-      [
-        { startDayHour: 0, endDayHour: 24 },
-        { startDayHour: 9, endDayHour: 17 },
-      ].forEach(({ startDayHour, endDayHour }) => {
-        test(`All-day appointments render (view: ${views[0].type}, offset: ${offset}, start: ${startDayHour}, end: ${endDayHour}, firstDay: ${(views[0] as any).firstDayOfWeek})`, async ({ page }) => {
+const setupPage = async (page: any) => {
+  await page.goto(containerUrl);
+  await page.waitForFunction(() => !!(window as any).DevExpress && !!(window as any).$);
+  await page.evaluate((theme: string) => new Promise<void>((resolve) => {
+    (window as any).DevExpress.ui.themes.ready(resolve);
+    (window as any).DevExpress.ui.themes.current(theme);
+  }), process.env.THEME || 'fluent.blue.light');
+};
+
+test.describe('Offset: Markup all-day appointments', () => {
+  test('All-day appointments render', async ({ page }) => {
+    for (const { views, dataSource } of VIEW_CONFIGS) {
+      for (const offset of [0, 735, 1440, -735, -1440]) {
+        for (const { startDayHour, endDayHour } of [{ startDayHour: 0, endDayHour: 24 }, { startDayHour: 9, endDayHour: 17 }]) {
+          await setupPage(page);
+
           await insertStylesheetRulesToPage(page, REDUCE_CELLS_CSS);
           await createWidget(page, 'dxScheduler', {
             currentDate: '2023-09-07',
@@ -132,8 +133,8 @@ test.describe('Offset: Markup all-day appointments', () => {
             getScreenshotName(views[0].type, offset, startDayHour, endDayHour, (views[0] as any).firstDayOfWeek),
             { element: workSpace },
           );
-        });
-      });
-    });
+        }
+      }
+    }
   });
 });
