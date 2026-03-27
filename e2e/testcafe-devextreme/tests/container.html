@@ -22,12 +22,11 @@
         .dx-scheduler .dx-scrollable-scroll { visibility: hidden !important; }
         body:has(#tabPanel) { min-height: 500px; }
 
-        /* Simulate TestCafe headless Chrome 15px scrollbar.
-           Playwright headless Chromium has overlay scrollbar (0px width),
-           but TestCafe etalons were captured with 15px classic scrollbar.
-           padding-right on html reserves 15px, making body content 1169px
-           instead of 1184px — matching TestCafe layout. */
-        html { padding-right: 15px !important; box-sizing: border-box !important; }
+        /* Match TestCafe headless Chrome scrollbar behavior:
+           scrollbar appears only on overflow, width 15px when present */
+        ::-webkit-scrollbar { width: 15px !important; }
+        ::-webkit-scrollbar-track { background: transparent !important; }
+        ::-webkit-scrollbar-thumb { background: transparent !important; }
     </style>
 </head>
 <body class="dx-surface">
