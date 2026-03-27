@@ -818,7 +818,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
             QUnit.module('Localization', {
                 beforeEach: function() {
-                    this.defaultMessage = messageLocalization.format('dxChat-fileLimitReachedWarning', 10);
+                    this.defaultMessage = messageLocalization.format('dxChat-fileLimitReachedWarning');
                     this.customMessage = 'Custom file limit message';
                 },
                 afterEach: function() {
