@@ -130,9 +130,20 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Install Playwright browsers
-      working-directory: ./e2e/testcafe-devextreme
-      run: npx playwright install chromium
+    - name: Install system Chromium
+      run: |
+        if ! command -v chromium &>/dev/null && ! command -v chromium-browser &>/dev/null; then
+          sudo apt-get update && sudo apt-get install -y chromium || sudo apt-get install -y chromium-browser
+        fi
+        CHROMIUM_PATH=$(command -v chromium || command -v chromium-browser || echo "")
+        if [ -z "$CHROMIUM_PATH" ]; then
+          echo "Chromium not found, falling back to Playwright bundled browser"
+          cd e2e/testcafe-devextreme && npx playwright install chromium
+        else
+          echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$CHROMIUM_PATH" >> $GITHUB_ENV
+          echo "Using system Chromium at: $CHROMIUM_PATH"
+          $CHROMIUM_PATH --version
+        fi
 
     - name: Run Playwright tests
       working-directory: ./e2e/testcafe-devextreme
