@@ -2,29 +2,12 @@ import {
   afterEach, beforeEach, describe, expect, it, jest,
 } from '@jest/globals';
 import $ from '@js/core/renderer';
-import type { SafeAppointment } from '@ts/scheduler/types';
-import type { ResourceConfig } from '@ts/scheduler/utils/loader/types';
-import type { AppointmentItemViewModel } from '@ts/scheduler/view_model/types';
 
 import fx from '../../../common/core/animation/fx';
-import { getMockedBaseAppointmentProperties, mockGridViewModel } from '../__mock__/appointment_properties';
+import { getBaseAppointmentProperties } from '../__mock__/appointment_properties';
 import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
 import type { BaseAppointmentProperties } from './base_appointment';
 import { BaseAppointment } from './base_appointment';
-
-const getBaseAppointmentProperties = (options: {
-  appointmentData: SafeAppointment;
-  partialViewModel?: Partial<AppointmentItemViewModel>;
-  resources?: ResourceConfig[]
-}): BaseAppointmentProperties => {
-  const viewModel = mockGridViewModel(options.appointmentData, options.partialViewModel);
-  const result = getMockedBaseAppointmentProperties({ ...options, viewModel });
-
-  return {
-    ...result,
-    viewModel: result.viewModel,
-  };
-};
 
 const createBaseAppointment = async (
   properties: BaseAppointmentProperties,
@@ -68,9 +51,7 @@ describe('BaseAppointment', () => {
   describe('Classes', () => {
     it('should have container class', async () => {
       const instance = await createBaseAppointment(
-        getBaseAppointmentProperties({
-          appointmentData: defaultAppointmentData,
-        }),
+        getBaseAppointmentProperties(defaultAppointmentData),
       );
 
       expect(instance.$element().hasClass(APPOINTMENT_CLASSES.CONTAINER)).toBe(true);
@@ -78,13 +59,11 @@ describe('BaseAppointment', () => {
 
     it.each([
       true, false,
-    ])('should have correct class for viewModel.isRecurring = %o', async (isRecurring) => {
+    ])('should have correct class for isRecurring = %o', async (isRecurring) => {
       const instance = await createBaseAppointment(
         getBaseAppointmentProperties({
-          appointmentData: {
-            ...defaultAppointmentData,
-            recurrenceRule: isRecurring ? 'FREQ=DAILY;COUNT=5' : undefined,
-          },
+          ...defaultAppointmentData,
+          recurrenceRule: isRecurring ? 'FREQ=DAILY;COUNT=5' : undefined,
         }),
       );
 
@@ -95,10 +74,11 @@ describe('BaseAppointment', () => {
 
     it.each([
       true, false,
-    ])('should have correct class for viewModel.allDay = %o', async (allDay) => {
+    ])('should have correct class for allDay = %o', async (allDay) => {
       const instance = await createBaseAppointment(
         getBaseAppointmentProperties({
-          appointmentData: { ...defaultAppointmentData, allDay },
+          ...defaultAppointmentData,
+          allDay,
         }),
       );
 
@@ -111,9 +91,7 @@ describe('BaseAppointment', () => {
   describe('Aria', () => {
     it('should have role button', async () => {
       const instance = await createBaseAppointment(
-        getBaseAppointmentProperties({
-          appointmentData: defaultAppointmentData,
-        }),
+        getBaseAppointmentProperties(defaultAppointmentData),
       );
 
       expect(instance.$element().attr('role')).toBe('button');

@@ -1,7 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 
-import type { AppointmentItemViewModel } from '../../view_model/types';
 import {
   ALL_DAY_TEXT, APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES, RECURRING_LABEL,
 } from '../const';
@@ -9,23 +8,33 @@ import type { BaseAppointmentProperties } from './base_appointment';
 import { BaseAppointment } from './base_appointment';
 
 export interface GridAppointmentProperties extends BaseAppointmentProperties {
-  viewModel: AppointmentItemViewModel;
+  geometry: {
+    height: number;
+    width: number;
+    top: number;
+    left: number;
+  };
+  modifiers: {
+    empty: boolean;
+  }
 }
 
 export class GridAppointment extends BaseAppointment<GridAppointmentProperties> {
   override _initMarkup(): void {
     super._initMarkup();
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.applyElementColor();
+    // eslint-disable-next-line no-void
+    void this.applyElementColor();
   }
 
-  public resize(): void {
+  public override resize(): void {
+    const { geometry } = this.option();
+
     this.$element().css({
-      height: this.option().viewModel.height,
-      width: this.option().viewModel.width,
-      top: this.option().viewModel.top,
-      left: this.option().viewModel.left,
+      height: geometry.height,
+      width: geometry.width,
+      top: geometry.top,
+      left: geometry.left,
     });
   }
 
@@ -33,10 +42,10 @@ export class GridAppointment extends BaseAppointment<GridAppointmentProperties> 
     super.applyElementClasses();
 
     this.$element()
-      .toggleClass(APPOINTMENT_TYPE_CLASSES.EMPTY, this.option().viewModel.empty);
+      .toggleClass(APPOINTMENT_TYPE_CLASSES.EMPTY, this.option().modifiers.empty);
   }
 
-  protected override defaultAppointmentTemplate(
+  protected override defaultAppointmentContent(
     $container: dxElementWrapper,
   ): dxElementWrapper {
     $('<div>')
@@ -72,7 +81,7 @@ export class GridAppointment extends BaseAppointment<GridAppointmentProperties> 
   }
 
   private async applyElementColor(): Promise<void> {
-    const color = await super.getResourceColor();
+    const color = await this.option().getResourceColor();
 
     if (color) {
       this.$element().css('backgroundColor', color);

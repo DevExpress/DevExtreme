@@ -3,15 +3,23 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { domAdapter } from '@ts/core/m_dom_adapter';
+import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { OptionChanged } from '@ts/core/widget/types';
 
-import type { TargetedAppointment } from '../types';
+import type { SafeAppointment, TargetedAppointment, ViewType } from '../types';
 import type { AppointmentDataAccessor } from '../utils/data_accessor/appointment_data_accessor';
+import type { AppointmentResource } from '../utils/resource_manager/appointment_groups_utils';
 import type { ResourceManager } from '../utils/resource_manager/resource_manager';
 import type { AppointmentDataSource } from '../view_model/m_appointment_data_source';
-import type { AppointmentViewModelPlain } from '../view_model/types';
+import type {
+  AppointmentAgendaViewModel,
+  AppointmentCollectorViewModel,
+  AppointmentItemViewModel,
+  AppointmentViewModelPlain,
+  BaseAppointmentViewModel,
+} from '../view_model/types';
 import { AgendaAppointment } from './appointment/agenda_appointment';
 import type { BaseAppointmentProperties } from './appointment/base_appointment';
 import { GridAppointment } from './appointment/grid_appointment';
@@ -20,9 +28,10 @@ import { APPOINTMENTS_CONTAINER_CLASS } from './const';
 import { getTargetedAppointment } from './utils/get_targeted_appointment';
 import type { DiffItem } from './utils/get_view_model_diff';
 import { getViewModelDiff } from './utils/get_view_model_diff';
-import { isCollectorViewModel as isAppointmentCollectorViewModel, isGridAppointmentViewModel } from './utils/type_helpers';
+import { isAgendaAppointmentViewModel, isCollectorViewModel as isAppointmentCollectorViewModel, isGridAppointmentViewModel } from './utils/type_helpers';
 
 export interface AppointmentsProperties extends DOMComponentProperties<Appointments> {
+  currentView: ViewType;
   viewModel: AppointmentViewModelPlain[];
   items: AppointmentViewModelPlain[]; // TODO: legacy compatibility
   $allDayContainer: dxElementWrapper | null;
@@ -50,6 +59,15 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     return this.$element();
   }
 
+  override _init(): void {
+    super._init();
+
+    this._templateManager.addDefaultTemplates({
+      appointment: new EmptyTemplate(),
+      appointmentCollector: new EmptyTemplate(),
+    });
+  }
+
   override _initMarkup(): void {
     super._initMarkup();
 
@@ -74,7 +92,15 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         break;
       }
       case 'viewModel': {
-        const diff = this.getViewModelDiff(args.value ?? [], args.previousValue ?? []);
+        if (this.option().currentView === 'agenda') {
+          this.renderAgendaAppointments(args.value as AppointmentAgendaViewModel[]);
+          break;
+        }
+
+        const diff = this.getViewModelDiff(
+          (args.value ?? []) as AppointmentItemViewModel[] | AppointmentCollectorViewModel[],
+          args.previousValue ?? [],
+        );
         this.renderViewModelDiff(diff);
         break;
       }
@@ -96,10 +122,33 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   }
 
   private getViewModelDiff(
-    newViewModel: AppointmentViewModelPlain[],
+    newViewModel: AppointmentItemViewModel[] | AppointmentCollectorViewModel[],
     oldViewModel: AppointmentViewModelPlain[],
   ): DiffItem[] {
-    return getViewModelDiff(oldViewModel, newViewModel, this.option().getAppointmentDataSource());
+    const isPreviousAgenda = oldViewModel.length && isAgendaAppointmentViewModel(oldViewModel[0]);
+
+    const normalizedOldViewModel = isPreviousAgenda
+      ? []
+      : oldViewModel as AppointmentItemViewModel[] | AppointmentCollectorViewModel[];
+
+    return getViewModelDiff(
+      normalizedOldViewModel,
+      newViewModel,
+      this.option().getAppointmentDataSource(),
+    );
+  }
+
+  private renderAgendaAppointments(appointments: AppointmentViewModelPlain[]): void {
+    const commonFragment = domAdapter.createDocumentFragment();
+
+    this.$commonContainer.empty();
+
+    appointments.forEach((appointmentViewModel) => {
+      const appointment = this.renderAppointment(commonFragment, appointmentViewModel);
+      this.appointmentBySortIndex[appointmentViewModel.sortedIndex] = appointment;
+    });
+
+    this.$commonContainer.get(0).appendChild(commonFragment);
   }
 
   private renderViewModelDiff(viewModelDiff: DiffItem[]): void {
@@ -134,7 +183,12 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         }
         case diffItem.needToResize: {
           const appointment = this.appointmentBySortIndex[sortedIndex];
-          appointment.option('viewModel', diffItem.item);
+          appointment.option('geometry', {
+            height: diffItem.item.height,
+            width: diffItem.item.width,
+            top: diffItem.item.top,
+            left: diffItem.item.left,
+          });
           appointment.resize();
 
           newAppointmentBySortedIndex[sortedIndex] = this.appointmentBySortIndex[sortedIndex];
@@ -165,17 +219,25 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
     if (isAppointmentCollectorViewModel(appointmentViewModel)) {
       return this._createComponent($element, AppointmentCollector, {
-        viewModel: appointmentViewModel,
+        appointmentsCount: appointmentViewModel.items.length,
+        isCompact: appointmentViewModel.isCompact,
+        geometry: {
+          height: appointmentViewModel.height,
+          width: appointmentViewModel.width,
+          top: appointmentViewModel.top,
+          left: appointmentViewModel.left,
+        },
         targetedAppointmentData,
-        appointmentCollectorTemplate: this.option().appointmentCollectorTemplate,
+        appointmentCollectorTemplate: this._getTemplateByOption('appointmentCollectorTemplate'),
       });
     }
 
-    const config = {
-      appointmentTemplate: this.option().appointmentTemplate,
+    const baseConfig: BaseAppointmentProperties = {
+      appointmentTemplate: this._getTemplateByOption('appointmentTemplate'),
+      appointmentData: appointmentViewModel.itemData,
       targetedAppointmentData,
+      getResourceColor: this.getResourceColor.bind(this, appointmentViewModel),
       onAppointmentRendered: this.option().onAppointmentRendered,
-      getResourceManager: this.option().getResourceManager,
       getDataAccessor: this.option().getDataAccessor,
     };
 
@@ -184,8 +246,16 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         $element,
         GridAppointment,
         {
-          ...config,
-          viewModel: appointmentViewModel,
+          ...baseConfig,
+          geometry: {
+            height: appointmentViewModel.height,
+            width: appointmentViewModel.width,
+            top: appointmentViewModel.top,
+            left: appointmentViewModel.left,
+          },
+          modifiers: {
+            empty: appointmentViewModel.empty,
+          },
         },
       );
     }
@@ -194,8 +264,11 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       $element,
       AgendaAppointment,
       {
-        ...config,
-        viewModel: appointmentViewModel,
+        ...baseConfig,
+        modifiers: {
+          isLastInGroup: appointmentViewModel.isLastInGroup,
+        },
+        getResourcesValues: this.getResourcesValues.bind(this),
       },
     );
   }
@@ -212,6 +285,25 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       this.option().getDataAccessor(),
       this.option().getResourceManager(),
     );
+  }
+
+  private getResourceColor(
+    appointmentViewModel: BaseAppointmentViewModel,
+  ): Promise<string | undefined> {
+    const resourceManager = this.option().getResourceManager();
+
+    return resourceManager.getAppointmentColor({
+      itemData: appointmentViewModel.itemData,
+      groupIndex: appointmentViewModel.groupIndex,
+    });
+  }
+
+  private getResourcesValues(
+    appointmentData: SafeAppointment,
+  ): Promise<AppointmentResource[]> {
+    const resourceManager = this.option().getResourceManager();
+
+    return resourceManager.getAppointmentResourcesValues(appointmentData);
   }
 }
 

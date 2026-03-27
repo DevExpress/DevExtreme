@@ -3,33 +3,40 @@ import messageLocalization from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import { EmptyTemplate } from '@js/core/templates/empty_template';
 import Button from '@js/ui/button';
-import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
+import type { TemplateBase } from '@ts/core/templates/m_template_base';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { TargetedAppointment } from '@ts/scheduler/types';
-import type { AppointmentCollectorViewModel } from '@ts/scheduler/view_model/types';
 
 import { APPOINTMENT_COLLECTOR_CLASSES } from './const';
 
 export interface AppointmentCollectorProperties
   extends DOMComponentProperties<AppointmentCollector>
 {
-  viewModel: AppointmentCollectorViewModel;
+  appointmentsCount: number;
+  isCompact: boolean;
+  geometry: {
+    height: number;
+    width: number;
+    top: number;
+    left: number;
+  },
   targetedAppointmentData: TargetedAppointment;
-  appointmentCollectorTemplate: SchedulerProperties['appointmentCollectorTemplate'];
+  appointmentCollectorTemplate: TemplateBase;
 }
 
 export class AppointmentCollector
   extends DOMComponent<AppointmentCollector, AppointmentCollectorProperties> {
+  private defaultAppointmentCollectorTemplate!: FunctionTemplate;
+
   override _init(): void {
     super._init();
 
-    this._templateManager.addDefaultTemplates({
-      appointmentCollector: new FunctionTemplate((options) => {
-        this.defaultAppointmentCollectorTemplate($(options.container));
-      }),
+    this.defaultAppointmentCollectorTemplate = new FunctionTemplate((options) => {
+      this.defaultAppointmentCollectorContent($(options.container));
     });
   }
 
@@ -44,15 +51,15 @@ export class AppointmentCollector
 
   public resize(): void {
     this.$element().css({
-      top: this.option().viewModel.top,
-      left: this.option().viewModel.left,
+      top: this.option().geometry.top,
+      left: this.option().geometry.left,
     });
   }
 
   private applyElementClasses(): void {
     this.$element()
       .addClass(APPOINTMENT_COLLECTOR_CLASSES.CONTAINER)
-      .toggleClass(APPOINTMENT_COLLECTOR_CLASSES.COMPACT, this.option().viewModel.isCompact);
+      .toggleClass(APPOINTMENT_COLLECTOR_CLASSES.COMPACT, this.option().isCompact);
   }
 
   private applyElementAria(): void {
@@ -74,21 +81,23 @@ export class AppointmentCollector
   }
 
   private renderContentTemplate(): void {
-    const template = this._getTemplateByOption('appointmentCollectorTemplate');
+    const template = this.option().appointmentCollectorTemplate instanceof EmptyTemplate
+      ? this.defaultAppointmentCollectorTemplate
+      : this.option().appointmentCollectorTemplate;
+
     this._createComponent(this.$element(), Button, {
       type: 'default',
-      width: this.option().viewModel.width,
-      height: this.option().viewModel.height,
+      width: this.option().geometry.width,
+      height: this.option().geometry.height,
       template,
     });
   }
 
-  private defaultAppointmentCollectorTemplate(
+  private defaultAppointmentCollectorContent(
     $container: dxElementWrapper,
   ): dxElementWrapper {
-    const { viewModel } = this.option();
-    const count = viewModel.items.length;
-    const text = viewModel.isCompact
+    const count = this.option().appointmentsCount;
+    const text = this.option().isCompact
       ? count
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       : (messageLocalization.getFormatter('dxScheduler-moreAppointments') as any)(count);

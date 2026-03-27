@@ -1,6 +1,7 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { AppointmentAgendaViewModel } from '@ts/scheduler/view_model/types';
+import type { SafeAppointment } from '@ts/scheduler/types';
+import type { AppointmentResource } from '@ts/scheduler/utils/resource_manager/appointment_groups_utils';
 
 import {
   AGENDA_APPOINTMENT_CLASSES, ALL_DAY_TEXT, APPOINTMENT_CLASSES, RECURRING_LABEL,
@@ -9,7 +10,13 @@ import type { BaseAppointmentProperties } from './base_appointment';
 import { BaseAppointment } from './base_appointment';
 
 export interface AgendaAppointmentProperties extends BaseAppointmentProperties {
-  viewModel: AppointmentAgendaViewModel;
+  modifiers: {
+    isLastInGroup: boolean;
+  };
+
+  getResourcesValues: (
+    appointmentData: SafeAppointment,
+  ) => Promise<AppointmentResource[]>;
 }
 
 export class AgendaAppointment extends BaseAppointment<AgendaAppointmentProperties> {
@@ -17,10 +24,10 @@ export class AgendaAppointment extends BaseAppointment<AgendaAppointmentProperti
     super.applyElementClasses();
 
     this.$element()
-      .toggleClass(AGENDA_APPOINTMENT_CLASSES.LAST_IN_DATE, this.option().viewModel.isLastInGroup);
+      .toggleClass(AGENDA_APPOINTMENT_CLASSES.LAST_IN_DATE, this.option().modifiers.isLastInGroup);
   }
 
-  protected override defaultAppointmentTemplate(
+  protected override defaultAppointmentContent(
     $container: dxElementWrapper,
   ): dxElementWrapper {
     this.renderMarker($container);
@@ -39,7 +46,7 @@ export class AgendaAppointment extends BaseAppointment<AgendaAppointmentProperti
       .appendTo($leftContainer);
 
     // eslint-disable-next-line no-void
-    void super.getResourceColor().then((color) => {
+    void this.option().getResourceColor().then((color) => {
       if (color) {
         $marker.css('backgroundColor', color);
       }
@@ -83,30 +90,26 @@ export class AgendaAppointment extends BaseAppointment<AgendaAppointmentProperti
   }
 
   private renderResourceList($contentDetails: dxElementWrapper): void {
-    const resourceManager = this.option().getResourceManager();
-
     // eslint-disable-next-line no-void
-    void resourceManager
-      .getAppointmentResourcesValues(this.targetedAppointmentData)
-      .then((resources) => {
-        const container = $('<div>')
-          .addClass(AGENDA_APPOINTMENT_CLASSES.RESOURCE_LIST)
-          .appendTo($contentDetails);
+    void this.option().getResourcesValues(this.appointmentData).then((resources) => {
+      const container = $('<div>')
+        .addClass(AGENDA_APPOINTMENT_CLASSES.RESOURCE_LIST)
+        .appendTo($contentDetails);
 
-        resources.forEach((resource) => {
-          const itemContainer = $('<div>')
-            .addClass(AGENDA_APPOINTMENT_CLASSES.RESOURCE_ITEM)
-            .appendTo(container);
+      resources.forEach((resource) => {
+        const itemContainer = $('<div>')
+          .addClass(AGENDA_APPOINTMENT_CLASSES.RESOURCE_ITEM)
+          .appendTo(container);
 
-          $('<div>')
-            .text(`${resource.label}:`)
-            .appendTo(itemContainer);
+        $('<div>')
+          .text(`${resource.label}:`)
+          .appendTo(itemContainer);
 
-          $('<div>')
-            .addClass(AGENDA_APPOINTMENT_CLASSES.RESOURCE_ITEM_VALUE)
-            .text(resource.values.join(', '))
-            .appendTo(itemContainer);
-        });
+        $('<div>')
+          .addClass(AGENDA_APPOINTMENT_CLASSES.RESOURCE_ITEM_VALUE)
+          .text(resource.values.join(', '))
+          .appendTo(itemContainer);
       });
+    });
   }
 }
