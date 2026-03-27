@@ -68,6 +68,9 @@ async function takeElementScreenshot(
 }
 
 async function simulateTestCafeScrollbar(page: Page): Promise<boolean> {
+  const viewport = page.viewportSize();
+  if (viewport && viewport.width !== 1200) return false;
+
   return page.evaluate(() => {
     const hasOverflow = document.body.scrollHeight > window.innerHeight;
     if (hasOverflow && !document.documentElement.style.paddingRight) {
