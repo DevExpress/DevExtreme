@@ -24,11 +24,66 @@ test.describe('Accessibility - DataGrid status', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
+  const statusDataSource = [
+    { id: 0, label: 'A', value: 350 },
+    { id: 1, label: 'B', value: 1200 },
+    { id: 2, label: 'C', value: 750 },
+  ];
+
   test('grid status accessibility check', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: getData(10, 5),
       keyExpr: 'field_0',
       columns: ['field_0', 'field_1', 'field_2', 'field_3', 'field_4'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('general status with basic data', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: statusDataSource,
+      keyExpr: 'id',
+      columns: ['label', 'value'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('general status with header filter visible', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: statusDataSource,
+      keyExpr: 'id',
+      headerFilter: { visible: true },
+      columns: ['label', 'value'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('general status with filter row visible', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: statusDataSource,
+      keyExpr: 'id',
+      filterRow: { visible: true, applyFilter: 'onClick' },
+      columns: ['label', 'value'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('general status with search panel visible', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: statusDataSource,
+      keyExpr: 'id',
+      searchPanel: { visible: true },
+      columns: ['label', 'value'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('general status with column chooser select mode', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: statusDataSource,
+      keyExpr: 'id',
+      columnChooser: { enabled: true, mode: 'select' },
+      columns: ['label', 'value'],
     });
     await a11yCheck(page, {}, '#container');
   });

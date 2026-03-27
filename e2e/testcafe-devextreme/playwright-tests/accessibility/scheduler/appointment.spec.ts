@@ -64,6 +64,51 @@ test.describe('Accessibility - Scheduler appointment', () => {
       });
       await a11yCheck(page, {}, '#container');
     });
+
+    test(`appointment with multiple groups in ${currentView} view`, async ({ page }) => {
+      await createWidget(page, 'dxScheduler', {
+        timeZone: 'UTC',
+        dataSource: [{
+          text: 'App 1',
+          startDate: new Date(Date.UTC(2021, 1, 1, 12)),
+          endDate: new Date(Date.UTC(2021, 1, 1, 13)),
+          groupId1: 1,
+          groupId2: [1, 2],
+        }],
+        currentView,
+        currentDate: new Date(Date.UTC(2021, 1, 1)),
+        groups: ['groupId1', 'groupId2'],
+        resources: [
+          {
+            fieldExpr: 'groupId1',
+            dataSource: [{ text: 'resource11', id: 1 }],
+            label: 'Group 1',
+          },
+          {
+            fieldExpr: 'groupId2',
+            dataSource: [{ text: 'resource21', id: 1 }, { text: 'resource22', id: 2 }],
+            label: 'Group 2',
+          },
+        ],
+      });
+      await a11yCheck(page, {}, '#container');
+    });
+
+    test(`recurring appointment in ${currentView} view`, async ({ page }) => {
+      await createWidget(page, 'dxScheduler', {
+        timeZone: 'America/Los_Angeles',
+        dataSource: [{
+          text: 'Website Re-Design Plan',
+          startDate: new Date('2021-04-29T16:30:00.000Z'),
+          endDate: new Date('2021-04-29T18:30:00.000Z'),
+          recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10',
+        }],
+        currentView,
+        currentDate: new Date('2021-04-29T18:30:00.000Z'),
+        startDayHour: 9,
+      });
+      await a11yCheck(page, {}, '#container');
+    });
   });
 
   test('recurring appointment accessibility', async ({ page }) => {
@@ -92,6 +137,36 @@ test.describe('Accessibility - Scheduler appointment', () => {
       }],
       currentView: 'week',
       currentDate: new Date(2021, 2, 28),
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('multipart appointment in week view', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      timeZone: 'UTC',
+      dataSource: [{
+        text: 'App 1',
+        startDate: new Date(Date.UTC(2021, 1, 1, 12)),
+        endDate: new Date(Date.UTC(2021, 1, 3, 13)),
+      }],
+      allDayPanelMode: 'hidden',
+      currentView: 'week',
+      currentDate: new Date(Date.UTC(2021, 1, 1)),
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('multipart appointment in month view', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      timeZone: 'UTC',
+      dataSource: [{
+        text: 'App 1',
+        startDate: new Date(Date.UTC(2021, 1, 1, 12)),
+        endDate: new Date(Date.UTC(2021, 1, 17, 13)),
+      }],
+      allDayPanelMode: 'hidden',
+      currentView: 'month',
+      currentDate: new Date(Date.UTC(2021, 1, 1)),
     });
     await a11yCheck(page, {}, '#container');
   });

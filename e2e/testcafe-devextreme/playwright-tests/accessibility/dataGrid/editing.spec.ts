@@ -114,4 +114,64 @@ test.describe('Accessibility - DataGrid editing', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('embedded editors in cell edit mode', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(3, 2),
+      height: 400,
+      showBorders: true,
+      editing: { mode: 'cell', allowUpdating: true, allowAdding: true },
+      toolbar: { items: [{ name: 'addRowButton', showText: 'always' }] },
+    });
+    await page.click('.dx-datagrid-addrow-button');
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('embedded editors in batch edit mode', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(3, 2),
+      height: 400,
+      showBorders: true,
+      editing: { mode: 'batch', allowUpdating: true, allowAdding: true },
+      toolbar: { items: [{ name: 'addRowButton', showText: 'always' }] },
+    });
+    await page.click('.dx-datagrid-addrow-button');
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('embedded editors in row edit mode', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(3, 2),
+      height: 400,
+      showBorders: true,
+      editing: { mode: 'row', allowUpdating: true, allowAdding: true },
+      toolbar: { items: [{ name: 'addRowButton', showText: 'always' }] },
+    });
+    await page.click('.dx-datagrid-addrow-button');
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('embedded editors in form edit mode', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(3, 2),
+      height: 400,
+      showBorders: true,
+      editing: { mode: 'form', allowUpdating: true, allowAdding: true },
+      toolbar: { items: [{ name: 'addRowButton', showText: 'always' }] },
+    });
+    await page.click('.dx-datagrid-addrow-button');
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('embedded editors in popup edit mode', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(3, 2),
+      height: 400,
+      showBorders: true,
+      editing: { mode: 'popup', allowUpdating: true, allowAdding: true },
+      toolbar: { items: [{ name: 'addRowButton', showText: 'always' }] },
+    });
+    await page.click('.dx-datagrid-addrow-button');
+    await a11yCheck(page, {}, '#container');
+  });
 });

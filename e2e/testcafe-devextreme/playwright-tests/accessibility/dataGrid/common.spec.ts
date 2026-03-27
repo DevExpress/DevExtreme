@@ -178,4 +178,124 @@ test.describe('Accessibility - DataGrid common', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('filter row', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 5).map((item, index) => ({ ...item, index })),
+      keyExpr: 'field_0',
+      filterRow: { visible: true },
+      columns: ['field_0', 'field_1', 'field_2', 'field_3', 'field_4'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('header filter', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      headerFilter: { visible: true },
+      columns: ['field_0', 'field_1', 'field_2', 'field_3', 'field_4'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('filter panel', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      filterPanel: { visible: true },
+      columns: [
+        'field_0',
+        { dataField: 'field_1', filterValue: 'val' },
+        'field_2',
+        'field_3',
+        'field_4',
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('column chooser dragAndDrop mode', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 7),
+      keyExpr: 'field_0',
+      columnChooser: { enabled: true, mode: 'dragAndDrop' },
+      columns: [
+        { dataField: 'field_0', visible: false },
+        { dataField: 'field_1', visible: false },
+        'field_2', 'field_3', 'field_4', 'field_5', 'field_6',
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('column chooser select mode', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 7),
+      keyExpr: 'field_0',
+      columnChooser: { enabled: true, mode: 'select' },
+      columns: [
+        { dataField: 'field_0', visible: false },
+        { dataField: 'field_1', visible: false },
+        'field_2', 'field_3', 'field_4', 'field_5', 'field_6',
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('adaptability', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 10),
+      keyExpr: 'field_0',
+      columnWidth: 100,
+      width: 800,
+      columnHidingEnabled: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('export button', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      export: {
+        enabled: true,
+        formats: ['xlsx', 'pdf'],
+        allowExportSelectedData: true,
+      },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('row editing with useIcons false', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 5),
+      keyExpr: 'field_0',
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+        allowDeleting: true,
+        allowAdding: true,
+        useIcons: false,
+      },
+      columns: ['field_1', 'field_2', 'field_3', 'field_4'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('fixed columns legacy mode', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 7),
+      keyExpr: 'field_0',
+      columnFixing: { legacyMode: true } as any,
+      columns: [
+        { dataField: 'field_0', fixed: true },
+        { dataField: 'field_1', fixed: true },
+        'field_2', 'field_3', 'field_4',
+        { dataField: 'field_5', fixed: true, fixedPosition: 'right' },
+        { dataField: 'field_6', fixed: true, fixedPosition: 'right' },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

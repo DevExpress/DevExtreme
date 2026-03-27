@@ -14,15 +14,38 @@ test.describe('Accessibility - CardView cover', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
+  const coverData = [
+    {
+      ID: 1, FirstName: 'John', LastName: 'Heart', Position: 'CEO',
+    },
+    {
+      ID: 2, FirstName: 'Olivia', LastName: 'Peyton', Position: 'Sales Assistant',
+    },
+    {
+      ID: 3, FirstName: 'Robert', LastName: 'Reagan', Position: 'CMO',
+    },
+  ];
+
   test('default render', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
       width: 1000,
       height: 600,
       columns: ['FirstName', 'LastName'],
-      dataSource: [
-        { ID: 1, FirstName: 'John', LastName: 'Heart' },
-        { ID: 2, FirstName: 'Olivia', LastName: 'Peyton' },
-      ],
+      dataSource: coverData,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('with cardCover and altExpr', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      width: 1000,
+      height: 600,
+      columns: ['FirstName', 'Position'],
+      cardCover: {
+        imageExpr: () => undefined,
+        altExpr: 'FirstName',
+      },
+      dataSource: coverData,
     });
     await a11yCheck(page, {}, '#container');
   });

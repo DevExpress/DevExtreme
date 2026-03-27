@@ -18,4 +18,52 @@ test.describe('Accessibility - htmlEditor', () => {
     await createWidget(page, 'dxHtmlEditor', { value: '<p>Hello</p>', focusStateEnabled: true });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('readOnly mode', async ({ page }) => {
+    await createWidget(page, 'dxHtmlEditor', {
+      value: '<p>He<em>llo</em></p>',
+      readOnly: true,
+      focusStateEnabled: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('with toolbar', async ({ page }) => {
+    await createWidget(page, 'dxHtmlEditor', {
+      value: '<p>He<em>llo</em></p>',
+      focusStateEnabled: true,
+      toolbar: { items: ['bold', 'color'] },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('with name and placeholder', async ({ page }) => {
+    await createWidget(page, 'dxHtmlEditor', {
+      value: '<p>He<em>llo</em></p>',
+      focusStateEnabled: true,
+      name: 'name',
+      placeholder: 'placeholder',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('with fixed height and width', async ({ page }) => {
+    await createWidget(page, 'dxHtmlEditor', {
+      value: '<p>He<em>llo</em></p>',
+      focusStateEnabled: true,
+      height: 300,
+      width: 300,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('readOnly with toolbar', async ({ page }) => {
+    await createWidget(page, 'dxHtmlEditor', {
+      value: '<p>He<em>llo</em></p>',
+      readOnly: true,
+      focusStateEnabled: true,
+      toolbar: { items: ['bold', 'color'] },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

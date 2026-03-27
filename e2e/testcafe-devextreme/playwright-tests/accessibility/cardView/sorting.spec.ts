@@ -14,23 +14,82 @@ test.describe('Accessibility - CardView sorting', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
+  const sortingData = [
+    { id: 1, title: 'Mrs.', name: 'Nancy', lastName: 'Davolio' },
+    { id: 2, title: 'Dr.', name: 'Andrew', lastName: 'Fuller' },
+    { id: 3, title: 'Ms.', name: 'Janet', lastName: 'Leverling' },
+    { id: 4, title: 'Mrs.', name: 'Margaret', lastName: 'Peacock' },
+    { id: 5, title: 'Mr.', name: 'Steven', lastName: 'Buchanan' },
+  ];
+
   test('default render', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
-      dataSource: [{ A: 'A_0', B: 'B_0' }, { A: 'A_1', B: 'B_1' }],
-      columns: [{ dataField: 'A', sortOrder: 'asc' }, 'B'],
-      sorting: { mode: 'single' },
+      dataSource: sortingData,
+      height: 500,
+      columns: [
+        { dataField: 'id' },
+        { dataField: 'title', sortOrder: 'desc' },
+        { dataField: 'name' },
+        { dataField: 'lastName' },
+      ],
     });
     await a11yCheck(page, {}, '#container');
   });
 
   test('multiple sorting', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
-      dataSource: [{ A: 'A_0', B: 'B_0' }, { A: 'A_1', B: 'B_1' }],
+      dataSource: sortingData,
+      height: 500,
       columns: [
-        { dataField: 'A', sortOrder: 'asc', sortIndex: 0 },
-        { dataField: 'B', sortOrder: 'desc', sortIndex: 1 },
+        { dataField: 'id' },
+        { dataField: 'title', sortOrder: 'desc' },
+        { dataField: 'name', sortOrder: 'asc' },
+        { dataField: 'lastName' },
       ],
-      sorting: { mode: 'multiple' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('sort index API', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: sortingData,
+      height: 500,
+      columns: [
+        { dataField: 'id' },
+        { dataField: 'title', sortOrder: 'desc', sortIndex: 1 },
+        { dataField: 'name', sortOrder: 'asc', sortIndex: 0 },
+        { dataField: 'lastName' },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('showSortIndexes false', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: sortingData,
+      height: 500,
+      sorting: { showSortIndexes: false },
+      columns: [
+        { dataField: 'id' },
+        { dataField: 'title', sortOrder: 'desc', sortIndex: 1 },
+        { dataField: 'name', sortOrder: 'asc', sortIndex: 0 },
+        { dataField: 'lastName' },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('allowSorting false on column', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: sortingData,
+      height: 500,
+      sorting: { showSortIndexes: false },
+      columns: [
+        { dataField: 'id' },
+        { dataField: 'title', sortOrder: 'desc', sortIndex: 1, allowSorting: false },
+        { dataField: 'name', sortOrder: 'asc', sortIndex: 0 },
+        { dataField: 'lastName' },
+      ],
     });
     await a11yCheck(page, {}, '#container');
   });

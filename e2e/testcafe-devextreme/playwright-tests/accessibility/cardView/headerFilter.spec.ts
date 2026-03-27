@@ -14,13 +14,44 @@ test.describe('Accessibility - CardView headerFilter', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
+  const headerFilterData = [
+    { A: 'A_0', B: 'B_0', C: 'C_0' },
+    { A: 'A_1', B: 'B_1', C: 'C_1' },
+    { A: 'A_2', B: 'B_2', C: 'C_2' },
+    { A: 'A_3', B: 'B_3', C: 'C_3' },
+    { A: 'A_4', B: 'B_4', C: 'C_4' },
+  ];
+
   test('header filter accessibility check', async ({ page }) => {
     await createWidget(page, 'dxCardView', {
+      dataSource: headerFilterData,
+      columns: ['A', 'B', 'C'],
+      headerFilter: { visible: true },
+      height: 600,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('header filter with search enabled', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      dataSource: headerFilterData,
+      columns: ['A', 'B', 'C'],
+      headerFilter: { visible: true, search: { enabled: true } },
+      height: 600,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('header filter with date column (tree mode)', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
       dataSource: [
-        { A: 'A_0', B: 'B_0' },
-        { A: 'A_1', B: 'B_1' },
+        { A: '2024-01-01', B: 'B_0', C: 'C_0' },
+        { A: '2024-01-01', B: 'B_1', C: 'C_1' },
+        { A: '2025-01-01', B: 'B_2', C: 'C_2' },
+        { A: '2025-01-01', B: 'B_3', C: 'C_3' },
+        { A: '2026-01-01', B: 'B_4', C: 'C_4' },
       ],
-      columns: ['A', 'B'],
+      columns: [{ dataField: 'A', dataType: 'date' }, 'B', 'C'],
       headerFilter: { visible: true },
       height: 600,
     });

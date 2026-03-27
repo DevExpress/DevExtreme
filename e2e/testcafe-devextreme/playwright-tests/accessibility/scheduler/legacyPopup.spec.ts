@@ -22,4 +22,42 @@ test.describe('Accessibility - Scheduler legacyPopup', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('edit appointment with legacy form', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      timeZone: 'America/Los_Angeles',
+      dataSource: [{
+        text: 'Install New Router in Dev Room',
+        startDate: new Date('2021-03-29T21:30:00.000Z'),
+        endDate: new Date('2021-03-29T22:30:00.000Z'),
+        recurrenceRule: 'FREQ=DAILY',
+      }],
+      editing: { legacyForm: true },
+      recurrenceEditMode: 'series',
+      currentView: 'week',
+      currentDate: new Date(2021, 2, 28),
+    });
+    await page.dblclick('.dx-scheduler-appointment');
+    await page.waitForSelector('.dx-scheduler-appointment-popup');
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('recurrence editor repeat end accessibility', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      timeZone: 'America/Los_Angeles',
+      editing: { legacyForm: true },
+      dataSource: [{
+        text: 'Install New Router in Dev Room',
+        startDate: new Date('2021-03-29T21:30:00.000Z'),
+        endDate: new Date('2021-03-29T22:30:00.000Z'),
+        recurrenceRule: 'FREQ=DAILY;UNTIL=20250522T215959Z',
+      }],
+      recurrenceEditMode: 'series',
+      currentView: 'week',
+      currentDate: new Date('2021-03-29T21:30:00.000Z'),
+    });
+    await page.dblclick('.dx-scheduler-appointment');
+    await page.waitForSelector('.dx-scheduler-appointment-popup');
+    await a11yCheck(page, {}, '#container');
+  });
 });
