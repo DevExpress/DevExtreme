@@ -41,10 +41,10 @@ test.describe('ContextMenu', () => {
     const target = page.locator('#menuTarget');
 
     await target.click();
-    await expect(page.locator('.dx-context-menu')).toBeVisible();
+    await expect(page.locator('.dx-overlay-content.dx-context-menu')).toBeVisible();
 
     const initialOverlayOffset = await page.evaluate(() => {
-      const overlay = $('.dx-context-menu').dxContextMenu('instance')['_overlay'];
+      const overlay = ($('#contextMenu') as any).dxContextMenu('instance')['_overlay'];
       if (overlay) {
         const el = overlay.content().get(0);
         const rect = el.getBoundingClientRect();
@@ -53,7 +53,7 @@ test.describe('ContextMenu', () => {
       return null;
     });
 
-    await expect(page.locator('.dx-context-menu .dx-menu-item')).toHaveCount(1);
+    await expect(page.locator('.dx-context-menu.dx-menu-base .dx-menu-item')).toHaveCount(1);
 
     await page.waitForFunction(() => {
       const items = ($('#contextMenu') as any).dxContextMenu('instance').option('items');
@@ -63,7 +63,7 @@ test.describe('ContextMenu', () => {
     await expect(page.locator('.dx-context-menu .dx-menu-item')).toHaveCount(2);
 
     const finalOverlayOffset = await page.evaluate(() => {
-      const overlay = $('.dx-context-menu').dxContextMenu('instance')['_overlay'];
+      const overlay = ($('#contextMenu') as any).dxContextMenu('instance')['_overlay'];
       if (overlay) {
         const el = overlay.content().get(0);
         const rect = el.getBoundingClientRect();

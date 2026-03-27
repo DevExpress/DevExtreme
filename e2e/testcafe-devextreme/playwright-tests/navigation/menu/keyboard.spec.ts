@@ -89,7 +89,7 @@ test.describe('Menu_keyboard', () => {
     await page.locator('body').click();
     await menu.getItem(0).click();
 
-    const submenu = page.locator('.dx-context-menu');
+    const submenu = page.locator('.dx-overlay-content.dx-context-menu');
     await expect(submenu).toBeVisible();
 
     await page.keyboard.press('Escape');
@@ -116,7 +116,7 @@ test.describe('Menu_keyboard', () => {
     await page.locator('body').click();
     await menu.getItem(0).hover();
 
-    const submenu = page.locator('.dx-context-menu');
+    const submenu = page.locator('.dx-overlay-content.dx-context-menu');
     await expect(submenu).toBeVisible();
 
     await page.keyboard.press('Escape');

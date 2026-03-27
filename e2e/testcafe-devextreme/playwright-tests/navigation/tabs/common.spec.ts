@@ -179,13 +179,13 @@ test.describe('Tabs_common', () => {
     const thirdItem = page.locator(`.${TAB_CLASS}:nth-child(3)`);
     const fourthItem = page.locator(`.${TAB_CLASS}:nth-child(4)`);
 
-    await page.keyboard.press('ArrowRight')
-      .dispatchEvent(thirdItem, 'mousedown');
+    await page.keyboard.press('ArrowRight');
+    await thirdItem.dispatchEvent('mousedown');
     await testScreenshot(page, 'Tabs item active.png', { element: '#tabs' });
     await thirdItem.dispatchEvent('mouseup');
 
-    await page.click(thirdItem)
-      .hover(fourthItem);
+    await thirdItem.click();
+    await fourthItem.hover();
     await testScreenshot(page, 'Tabs item hovered.png', { element: '#tabs' });
 
     await page.locator('body').click();

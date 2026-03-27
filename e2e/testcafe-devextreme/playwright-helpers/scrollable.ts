@@ -135,6 +135,44 @@ export class Scrollable {
     );
   }
 
+  async hide(): Promise<void> {
+    await this.page.evaluate(
+      ({ sel }) => {
+        const el = document.querySelector(sel) as HTMLElement | null;
+        if (el) el.style.display = 'none';
+      },
+      { sel: this.selector },
+    );
+  }
+
+  async show(): Promise<void> {
+    await this.page.evaluate(
+      ({ sel }) => {
+        const el = document.querySelector(sel) as HTMLElement | null;
+        if (el) el.style.display = 'block';
+      },
+      { sel: this.selector },
+    );
+  }
+
+  async triggerHidingEvent(): Promise<void> {
+    await this.page.evaluate(
+      ({ sel }) => {
+        ($(sel) as any).dxScrollable('instance')._visibilityChanged(false);
+      },
+      { sel: this.selector },
+    );
+  }
+
+  async triggerShownEvent(): Promise<void> {
+    await this.page.evaluate(
+      ({ sel }) => {
+        ($(sel) as any).dxScrollable('instance')._visibilityChanged(true);
+      },
+      { sel: this.selector },
+    );
+  }
+
   async option(name: string, value?: unknown): Promise<unknown> {
     const sel = this.selector;
     if (arguments.length === 2) {

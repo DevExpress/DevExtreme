@@ -38,7 +38,7 @@ export class ToolbarDropDownMenuPopup {
 
   constructor(page: Page) {
     this.page = page;
-    this.element = page.locator(`.${CLASS.popupWrapper} .${CLASS.overlayContent}`);
+    this.element = page.locator(`.${CLASS.popupWrapper}`).locator(`.${CLASS.overlayContent}`).filter({ has: page.locator(`.${CLASS.popupContent}`) });
   }
 
   getContent(): Locator {

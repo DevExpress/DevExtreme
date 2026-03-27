@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot, appendElementTo } from '../../../playwright-helpers';
+import { createWidget, testScreenshot, appendElementTo, Scrollable } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -39,16 +39,13 @@ test.describe('Scrollable_visibility_integration', () => {
             }, '#scrollable');
 
 
-            const scrollable = new Scrollable('#scrollable', { direction, useNative, useSimulatedScrollbar });
+            const scrollable = new Scrollable(page, '#scrollable', { direction, useNative, useSimulatedScrollbar });
             await scrollable.scrollTo({ left: 10, top: 20 });
 
             const expectedScrollOffsetValue = { left: 10, top: 20 };
             await expect(await scrollable.scrollOffset()).eql(expectedScrollOffsetValue);
 
             await testScreenshot(page, `Scroll position before hide, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, { element: page.locator('#scrollable') });
-
-            await page.expect(compareResults.isValid())
-              .ok();
 
             await scrollable.triggerHidingEvent();
             await scrollable.hide();

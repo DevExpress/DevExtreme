@@ -102,7 +102,7 @@ test.describe('FloatingAction - default theme', () => {
     await appendElementTo(page, '#container', 'div', 'speed-dial-action');
     await appendElementTo(page, '#container', 'div', 'speed-dial-action-trash');
 
-    await setGlobalConfig();
+    await setGlobalConfig(page);
 
     await createWidget(page, 'dxSpeedDialAction', {
       label: 'Add row',
