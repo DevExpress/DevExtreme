@@ -130,19 +130,22 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Install system Chromium
+    - name: Install Chromium
       run: |
-        if ! command -v chromium &>/dev/null && ! command -v chromium-browser &>/dev/null; then
-          sudo apt-get update && sudo apt-get install -y chromium || sudo apt-get install -y chromium-browser
-        fi
-        CHROMIUM_PATH=$(command -v chromium || command -v chromium-browser || echo "")
-        if [ -z "$CHROMIUM_PATH" ]; then
-          echo "Chromium not found, falling back to Playwright bundled browser"
-          cd e2e/testcafe-devextreme && npx playwright install chromium
-        else
-          echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$CHROMIUM_PATH" >> $GITHUB_ENV
-          echo "Using system Chromium at: $CHROMIUM_PATH"
-          $CHROMIUM_PATH --version
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends \
+          chromium \
+          fonts-liberation fonts-noto-color-emoji fonts-freefont-ttf \
+          libatk-bridge2.0-0 libdrm2 libxkbcommon0 libxcomposite1 \
+          libxdamage1 libxrandr2 libgbm1 libasound2t64 \
+          libpango-1.0-0 libcairo2 libcups2 libnspr4 libnss3 \
+          2>/dev/null || {
+          echo "apt chromium not available, using Playwright bundled"
+          cd e2e/testcafe-devextreme && npx playwright install chromium --with-deps
+        }
+        CHROMIUM=$(command -v chromium 2>/dev/null || echo "")
+        if [ -n "$CHROMIUM" ] && $CHROMIUM --version 2>/dev/null; then
+          echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$CHROMIUM" >> $GITHUB_ENV
         fi
 
     - name: Run Playwright tests
