@@ -2549,4 +2549,310 @@ test.describe('Keyboard Navigation - common', () => {
     const groupRow0FocusedAfterUp = await groupRow0.element.evaluate((el) => document.activeElement === el);
     expect(groupRow0FocusedAfterUp).toBe(true);
   });
+
+  test('Select - The first command cell should be focused using Tab (T884646)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      width: 300,
+      dataSource: [
+        { name: 'Alex' },
+      ],
+      keyExpr: 'name',
+      selection: {
+        mode: 'multiple',
+        showCheckBoxesMode: 'always',
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await addFocusableElementBefore(page, '#container');
+
+    const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+    const dataRow = dataGrid.getDataRow(0);
+
+    await page.locator('#focusable-start').click();
+    await page.keyboard.press('Tab');
+
+    const headerCheckbox = headerRow.locator('td').nth(0).locator('.dx-checkbox-container');
+    await expect(headerCheckbox).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(headerRow.locator('td').nth(1)).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(dataRow.getCommandCell(0).element).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    const dataRowCheckbox = dataRow.getCommandCell(0).element.locator('.dx-checkbox-container');
+    await expect(dataRowCheckbox).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(dataRow.getDataCell(1).element).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(dataRowCheckbox).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(dataRow.getCommandCell(0).element).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(headerRow.locator('td').nth(1)).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(headerCheckbox).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(page.locator('#focusable-start')).toBeFocused();
+  });
+
+  test('Edit - The first command cell should be focused using Tab (T884646)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      width: 300,
+      dataSource: [
+        { name: 'Alex' },
+      ],
+      keyExpr: 'name',
+      editing: {
+        allowUpdating: true,
+        allowDeleting: true,
+        useIcons: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await addFocusableElementBefore(page, '#container');
+
+    const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+    const dataRow = dataGrid.getDataRow(0);
+
+    await page.locator('#focusable-start').click();
+    await page.keyboard.press('Tab');
+    await expect(headerRow.locator('td').nth(0)).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(headerRow.locator('td').nth(1)).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(dataRow.getCommandCell(0).element).toBeFocused();
+    const editButton = dataRow.getCommandCell(0).getButton(0);
+    await expect(editButton).not.toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(editButton).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(dataRow.getDataCell(1).element).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(editButton).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(dataRow.getCommandCell(0).element).toBeFocused();
+    await expect(editButton).not.toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(headerRow.locator('td').nth(1)).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(headerRow.locator('td').nth(0)).toBeFocused();
+  });
+
+  test('Detail - The first command cell should be focused using Tab (T884646)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      width: 300,
+      dataSource: [
+        { name: 'Alex' },
+      ],
+      keyExpr: 'name',
+      masterDetail: {
+        enabled: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await addFocusableElementBefore(page, '#container');
+
+    const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+    const dataRow = dataGrid.getDataRow(0);
+
+    await page.locator('#focusable-start').click();
+    await page.keyboard.press('Tab');
+    await expect(headerRow.locator('td').nth(1)).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(dataRow.getCommandCell(0).element).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(dataRow.getDataCell(1).element).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(dataRow.getCommandCell(0).element).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(headerRow.locator('td').nth(1)).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(page.locator('#focusable-start')).toBeFocused();
+  });
+
+  test('The last cell should be focused after changing the page size (T1063530)', async ({ page }) => {
+    const getItems = (): Record<string, unknown>[] => {
+      const items: Record<string, unknown>[] = [];
+      for (let i = 0; i < 5; i += 1) {
+        items.push({
+          ID: i + 1,
+          Name: `Name ${i + 1}`,
+        });
+      }
+      return items;
+    };
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getItems(),
+      keyExpr: 'ID',
+      columnWidth: 150,
+      paging: {
+        pageSize: 2,
+      },
+      pager: {
+        visible: true,
+        allowedPageSizes: [1, 2],
+        showPageSizeSelector: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await addFocusableElementBefore(page, '#container');
+
+    await page.locator('#focusable-start').click();
+    for (let i = 0; i < 3; i += 1) {
+      await page.keyboard.press('Tab');
+    }
+
+    await expect(dataGrid.getDataCell(0, 0).element).toHaveClass(/dx-focused/);
+
+    await page.keyboard.press('Tab');
+    await expect(dataGrid.getDataCell(0, 1).element).toHaveClass(/dx-focused/);
+
+    await page.keyboard.press('Tab');
+    await expect(dataGrid.getDataCell(1, 0).element).toHaveClass(/dx-focused/);
+
+    await page.keyboard.press('Tab');
+    await expect(dataGrid.getDataCell(1, 1).element).toHaveClass(/dx-focused/);
+
+    await page.keyboard.press('Tab');
+    const pageSizeButton = dataGrid.getPager().locator('.dx-page-size').nth(0);
+    await expect(pageSizeButton).toBeFocused();
+
+    await page.keyboard.press('Space');
+    const visibleRows = await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').getVisibleRows());
+    expect(visibleRows.length).toBe(1);
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(dataGrid.getDataCell(0, 1).element).toHaveClass(/dx-focused/);
+  });
+
+  test('Navigation through views using Tab, Shift+Tab', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      width: 300,
+      dataSource: [
+        { name: 'Alex', c0: 'c0_0' },
+        { name: 'Ben', c0: 'c0_1' },
+        { name: 'Dan', c0: 'c0_2' },
+        { name: 'John', c0: 'c0_3' },
+      ],
+      keyExpr: 'name',
+      editing: {
+        allowUpdating: true,
+        allowDeleting: true,
+        selectTextOnEditStart: true,
+        useIcons: true,
+      },
+      headerFilter: { visible: true },
+      filterPanel: { visible: true },
+      filterRow: { visible: true },
+      pager: {
+        allowedPageSizes: [1, 2],
+        showPageSizeSelector: true,
+        showNavigationButtons: true,
+      },
+      paging: {
+        pageSize: 2,
+      },
+      focusedRowEnabled: true,
+      selection: {
+        mode: 'multiple',
+        showCheckBoxesMode: 'always',
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await addFocusableElementBefore(page, '#container');
+
+    const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+    const filterRow = dataGrid.getFilterRow();
+
+    await page.locator('#focusable-start').click();
+    await page.keyboard.press('Tab');
+
+    const headerCheckbox = headerRow.locator('td').nth(0).locator('.dx-checkbox-container');
+    await expect(headerCheckbox).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(headerRow.locator('td').nth(1)).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    const headerCell1FilterIcon = headerRow.locator('td').nth(1).locator('.dx-column-indicators .dx-header-filter');
+    await expect(headerCell1FilterIcon).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(headerRow.locator('td').nth(2)).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    const headerCell2FilterIcon = headerRow.locator('td').nth(2).locator('.dx-column-indicators .dx-header-filter');
+    await expect(headerCell2FilterIcon).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    const filterSearchIcon1 = filterRow.locator('td').nth(1).locator('.dx-datagrid-filter-row-icon');
+    await expect(filterSearchIcon1).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    const filterInput1 = filterRow.locator('td').nth(1).locator('input');
+    await expect(filterInput1).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    const filterSearchIcon2 = filterRow.locator('td').nth(2).locator('.dx-datagrid-filter-row-icon');
+    await expect(filterSearchIcon2).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    const filterInput2 = filterRow.locator('td').nth(2).locator('input');
+    await expect(filterInput2).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    const row0Checkbox = dataGrid.getDataRow(0).getCommandCell(0).element.locator('.dx-checkbox-container');
+    await expect(row0Checkbox).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(dataGrid.getDataRow(0).getDataCell(1).element).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(dataGrid.getDataRow(0).getDataCell(2).element).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(dataGrid.getDataRow(0).getCommandCell(3).getButton(0)).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    await expect(dataGrid.getDataRow(0).getCommandCell(3).getButton(1)).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(dataGrid.getDataRow(0).getCommandCell(3).getButton(0)).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(dataGrid.getDataRow(0).getDataCell(2).element).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(dataGrid.getDataRow(0).getDataCell(1).element).toBeFocused();
+
+    await page.keyboard.press('Shift+Tab');
+    await expect(row0Checkbox).toBeFocused();
+  });
 });

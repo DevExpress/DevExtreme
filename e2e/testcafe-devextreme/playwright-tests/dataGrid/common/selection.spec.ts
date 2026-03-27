@@ -199,6 +199,61 @@ test.describe('Selection', () => {
     }
   });
 
+  test('"Select All" checkbox should not react when not visible', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [],
+      keyExpr: 'orderId',
+      selection: {
+        mode: 'multiple',
+      },
+      paging: {
+        pageSize: 10,
+      },
+      pager: {
+        visible: true,
+      },
+      filterRow: {
+        visible: true,
+      },
+      columns: [{
+        dataField: 'orderId',
+        caption: 'Order ID',
+        width: 90,
+      },
+      'city', {
+        dataField: 'country',
+        width: 180,
+      },
+      'region', {
+        dataField: 'date',
+        dataType: 'date',
+      }, {
+        dataField: 'amount',
+        format: 'currency',
+        width: 90,
+      }],
+    });
+
+    const editorCellLocator = page.locator('.dx-datagrid-headers .dx-header-row td').nth(0);
+    const selectAllCheckBoxVisible = await page.evaluate(() => {
+      const instance = ($('#container') as any).dxDataGrid('instance');
+      const $el = instance.element().find('.dx-header-row td').first();
+      const checkBoxInstance = ($el.find('.dx-checkbox') as any).dxCheckBox('instance');
+      return checkBoxInstance?.option('visible') ?? false;
+    });
+    expect(selectAllCheckBoxVisible).toBe(false);
+
+    await editorCellLocator.click();
+
+    const selectAllCheckBoxVisibleAfterClick = await page.evaluate(() => {
+      const instance = ($('#container') as any).dxDataGrid('instance');
+      const $el = instance.element().find('.dx-header-row td').first();
+      const checkBoxInstance = ($el.find('.dx-checkbox') as any).dxCheckBox('instance');
+      return checkBoxInstance?.option('visible') ?? false;
+    });
+    expect(selectAllCheckBoxVisibleAfterClick).toBe(false);
+  });
+
   test('Sensitivity option change should be correctly handled during runtime change', async ({ page }) => {
     const data = [
       { ID: 'aaa', Name: 'Name 1' },
