@@ -906,7 +906,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
       const { columnIndex: resizingColumnIndex } = this._targetPoint;
 
       if (cellIndex === resizingColumnIndex || cellIndex === resizingColumnIndex + 1) {
-        overlayInstance.hide();
+        overlayInstance.$content().hide();
       }
     }
   }
@@ -923,7 +923,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
         $cell = overlayInstance.$element().closest('td');
         // @ts-expect-error
         that._columnHeadersView._updateFilterRangeOverlay({ width: getOuterWidth($cell, true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
-        overlayInstance.show();
+        overlayInstance.$content().show();
       }
     }
 
