@@ -18,4 +18,36 @@ test.describe('Accessibility - toolbar', () => {
     await createWidget(page, 'dxToolbar', { items: [{ text: 'item1', locateInMenu: 'always' }, { text: 'item2', locateInMenu: 'always' }] });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('disabled toolbar', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [{ text: 'item1', locateInMenu: 'always' }, { text: 'item2', locateInMenu: 'always' }],
+      disabled: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('toolbar with overflow menu open', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [
+        { text: 'item1', locateInMenu: 'always' },
+        { text: 'item2', locateInMenu: 'always' },
+        { text: 'item3', locateInMenu: 'always' },
+      ],
+      width: 50,
+    });
+    await page.locator('.dx-toolbar-menu-button').click();
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('toolbar with mixed item locations', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [
+        { text: 'Before', location: 'before' },
+        { text: 'Center', location: 'center' },
+        { text: 'After', location: 'after', locateInMenu: 'always' },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

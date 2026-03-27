@@ -18,4 +18,32 @@ test.describe('Accessibility - rangeSlider', () => {
     await createWidget(page, 'dxRangeSlider', { start: 40, end: 60 });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('disabled range slider', async ({ page }) => {
+    await createWidget(page, 'dxRangeSlider', { start: 40, end: 60, disabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('read-only range slider', async ({ page }) => {
+    await createWidget(page, 'dxRangeSlider', { start: 40, end: 60, readOnly: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('range slider with tooltip always shown', async ({ page }) => {
+    await createWidget(page, 'dxRangeSlider', {
+      start: 40,
+      end: 60,
+      tooltip: { enabled: true, showMode: 'always', position: 'bottom' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('range slider with label', async ({ page }) => {
+    await createWidget(page, 'dxRangeSlider', {
+      start: 40,
+      end: 60,
+      label: { visible: true, position: 'top' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

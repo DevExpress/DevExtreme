@@ -18,4 +18,20 @@ test.describe('Accessibility - tooltip', () => {
     await createWidget(page, 'dxTooltip', { visible: true, target: '#container', width: 50, height: 25 });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('disabled tooltip', async ({ page }) => {
+    await createWidget(page, 'dxTooltip', { visible: true, target: '#container', width: 50, height: 25, disabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tooltip with custom content', async ({ page }) => {
+    await createWidget(page, 'dxTooltip', {
+      visible: true,
+      target: '#container',
+      width: 150,
+      height: 50,
+      contentTemplate: () => '<b>Tooltip content</b>',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

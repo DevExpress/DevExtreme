@@ -18,4 +18,39 @@ test.describe('Accessibility - stepper', () => {
     await createWidget(page, 'dxStepper', { dataSource: [{ icon: 'cart', label: 'Cart' }, { icon: 'gift', label: 'Promo Code' }, { icon: 'checkmarkcircle', label: 'Ordered' }], selectedIndex: 0, width: 800, height: 600 });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('stepper with last step selected', async ({ page }) => {
+    await createWidget(page, 'dxStepper', {
+      dataSource: [{ icon: 'cart', label: 'Cart' }, { icon: 'gift', label: 'Promo Code' }, { icon: 'checkmarkcircle', label: 'Ordered' }],
+      selectedIndex: 2,
+      width: 800,
+      height: 600,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('stepper with vertical orientation', async ({ page }) => {
+    await createWidget(page, 'dxStepper', {
+      dataSource: [{ icon: 'cart', label: 'Cart' }, { icon: 'gift', label: 'Promo Code' }, { icon: 'checkmarkcircle', label: 'Ordered' }],
+      selectedIndex: 0,
+      orientation: 'vertical',
+      width: 800,
+      height: 600,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('stepper with isValid and disabled items', async ({ page }) => {
+    await createWidget(page, 'dxStepper', {
+      dataSource: [
+        { icon: 'cart', label: 'Cart', isValid: true },
+        { icon: 'gift', label: 'Promo Code', isValid: false },
+        { icon: 'checkmarkcircle', label: 'Ordered', disabled: true },
+      ],
+      selectedIndex: 0,
+      width: 800,
+      height: 600,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

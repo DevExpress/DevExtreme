@@ -18,4 +18,34 @@ test.describe('Accessibility - splitter', () => {
     await createWidget(page, 'dxSplitter', { dataSource: [{ text: 'Left Pane', size: '140px' }, { text: 'Right Pane', size: '140px' }], height: 400, width: 450 });
     await a11yCheck(page, { rules: { 'scrollable-region-focusable': { enabled: false } } }, '#container');
   });
+
+  test('splitter with keyboard navigation disabled', async ({ page }) => {
+    await createWidget(page, 'dxSplitter', {
+      dataSource: [{ text: 'Left Pane', size: '140px' }, { text: 'Right Pane', size: '140px' }],
+      height: 400,
+      width: 450,
+      allowKeyboardNavigation: false,
+    });
+    await a11yCheck(page, { rules: { 'scrollable-region-focusable': { enabled: false } } }, '#container');
+  });
+
+  test('disabled splitter', async ({ page }) => {
+    await createWidget(page, 'dxSplitter', {
+      dataSource: [{ text: 'Left Pane', size: '140px' }, { text: 'Right Pane', size: '140px' }],
+      height: 400,
+      width: 450,
+      disabled: true,
+    });
+    await a11yCheck(page, { rules: { 'scrollable-region-focusable': { enabled: false } } }, '#container');
+  });
+
+  test('splitter with vertical orientation', async ({ page }) => {
+    await createWidget(page, 'dxSplitter', {
+      dataSource: [{ text: 'Top Pane' }, { text: 'Bottom Pane' }],
+      orientation: 'vertical',
+      height: 400,
+      width: 450,
+    });
+    await a11yCheck(page, { rules: { 'scrollable-region-focusable': { enabled: false } } }, '#container');
+  });
 });

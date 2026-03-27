@@ -18,4 +18,46 @@ test.describe('Accessibility - tabPanel', () => {
     await createWidget(page, 'dxTabPanel', { dataSource: [{ title: 'John Heart', text: 'John Heart' }, { title: 'Robert Reagan', text: 'Robert Reagan' }], width: 450, height: 250 });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('empty tab panel', async ({ page }) => {
+    await createWidget(page, 'dxTabPanel', { dataSource: [], width: 450, height: 250 });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tab panel with disabled item', async ({ page }) => {
+    await createWidget(page, 'dxTabPanel', {
+      dataSource: [
+        { title: 'Active', text: 'Active tab' },
+        { title: 'Disabled', text: 'Disabled tab', disabled: true },
+        { title: 'Another', text: 'Another tab' },
+      ],
+      width: 450,
+      height: 250,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tab panel disabled', async ({ page }) => {
+    await createWidget(page, 'dxTabPanel', {
+      dataSource: [{ title: 'Tab 1', text: 'Content 1' }, { title: 'Tab 2', text: 'Content 2' }],
+      width: 450,
+      height: 250,
+      disabled: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tab panel with navigation buttons', async ({ page }) => {
+    await createWidget(page, 'dxTabPanel', {
+      dataSource: [
+        { title: 'Tab 1', text: 'Content 1' },
+        { title: 'Tab 2', text: 'Content 2' },
+        { title: 'Tab 3', text: 'Content 3' },
+      ],
+      width: 200,
+      height: 250,
+      showNavButtons: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

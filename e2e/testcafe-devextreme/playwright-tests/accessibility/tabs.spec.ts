@@ -18,4 +18,37 @@ test.describe('Accessibility - tabs', () => {
     await createWidget(page, 'dxTabs', { dataSource: [{ text: 'John Heart' }, { text: 'Robert Reagan' }], width: 450, height: 250 });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('tabs with disabled item', async ({ page }) => {
+    await createWidget(page, 'dxTabs', {
+      dataSource: [
+        { text: 'Tab 1' },
+        { text: 'Tab 2', disabled: true },
+        { text: 'Tab 3' },
+      ],
+      width: 450,
+      height: 250,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tabs with navigation buttons', async ({ page }) => {
+    await createWidget(page, 'dxTabs', {
+      dataSource: [{ text: 'Tab 1' }, { text: 'Tab 2' }, { text: 'Tab 3' }, { text: 'Tab 4' }],
+      width: 200,
+      height: 250,
+      showNavButtons: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tabs with focused item', async ({ page }) => {
+    await createWidget(page, 'dxTabs', {
+      dataSource: [{ text: 'Tab 1' }, { text: 'Tab 2' }, { text: 'Tab 3' }],
+      width: 450,
+      height: 250,
+    });
+    await page.keyboard.press('Tab');
+    await a11yCheck(page, {}, '#container');
+  });
 });
