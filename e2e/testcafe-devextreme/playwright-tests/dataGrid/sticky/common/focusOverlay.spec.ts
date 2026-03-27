@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -23,6 +23,7 @@ test.describe('FixedColumns - Focus Overlay', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
+
   test('Focus overlay should be displayed correctly if sticky columns are turned on', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: getData(20, 40),
@@ -62,7 +63,7 @@ test.describe('FixedColumns - Focus Overlay', () => {
           showInGroupFooter: true,
         }],
       },
-      customizeColumns(columns) {
+      customizeColumns(columns: any[]) {
         columns[5].fixed = true;
         columns[6].fixed = true;
 
@@ -106,20 +107,24 @@ test.describe('FixedColumns - Focus Overlay', () => {
       },
     });
 
-      expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+    const dataGrid = new DataGrid(page);
+    await expect(dataGrid.getContainer()).toBeVisible();
 
-    await (page.locator('.dx-group-row').nth(0).getCell(1).element).click();
-    await page.keyboard.press('tab');
+    const groupRow = dataGrid.getGroupRow(0);
+    await groupRow.element.locator('td').nth(1).click();
+    await page.keyboard.press('Tab');
 
     await testScreenshot(page, 'datagrid_group_row_focused.png', { element: page.locator('#container') });
 
-    await (page.locator('.dx-data-row').nth(2).locator('.dx-command-edit').nth(40).getAdaptiveButton()).click();
-    await page.keyboard.press('tab');
+    const adaptiveButton = dataGrid.getAdaptiveButton(0);
+    await adaptiveButton.click();
+    await page.keyboard.press('Tab');
 
     await testScreenshot(page, 'datagrid_adaptive_item_focused.png', { element: page.locator('#container') });
 
-    await (dataGrid.getGroupFooterRow().nth(0), { offsetX: 5, offsetY: 5 }).click();
-    await page.keyboard.press('tab');
+    const groupFooterRow = dataGrid.getGroupFooterRow();
+    await groupFooterRow.nth(0).click({ position: { x: 5, y: 5 } });
+    await page.keyboard.press('Tab');
 
     await testScreenshot(page, 'datagrid_group_footer_row_focused.png', { element: page.locator('#container') });
   });

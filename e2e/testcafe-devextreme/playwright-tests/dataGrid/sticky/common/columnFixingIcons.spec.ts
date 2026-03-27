@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../../playwright-helpers';
+import { createWidget, testScreenshot, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -23,23 +23,25 @@ test.describe('Column Fixing', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
+
   // visual: generic.light
   // visual: material.blue
   // visual: fluent.blue
-
   test('Fixed columns: Check context menu items', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
-        dataSource: getData(5, 5),
-        width: '100%',
-        columnFixing: {
-          enabled: true,
-        },
-      });
+      dataSource: getData(5, 5),
+      width: '100%',
+      columnFixing: {
+        enabled: true,
+      },
+    });
 
-      expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+    const dataGrid = new DataGrid(page);
+    await expect(dataGrid.getContainer()).toBeVisible();
 
-    await t.rightClick(page.locator('.dx-header-row').nth(0).element);
-    await (dataGrid.getContextMenu().getItemByText('Set Fixed Position')).click();
+    await page.locator('.dx-header-row').nth(0).click({ button: 'right' });
+    await dataGrid.getContextMenu().getItemByText('Set Fixed Position').click();
+
     await testScreenshot(page, 'sticky_columns_context_menu.png');
   });
 });
