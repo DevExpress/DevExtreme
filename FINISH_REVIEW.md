@@ -68,11 +68,11 @@ These components have expanded forEach that need to be collapsed:
 - `scheduler/common/` — various files with expanded forEach
 - `accessibility/*.matrix.spec.ts` — matrix expansion (OK — mirrors TC testAccessibility pattern)
 
-### Screenshot Dimension Mismatches (CI vs Local)
-- TestCafe headless Chrome has 15px scrollbar, Playwright headless has 0px
-- ViewOffset uses viewport 1185 (project chromium-1185) to match TC etalons
-- Other components use viewport 1200 + `::-webkit-scrollbar` CSS
-- Some tests fail on CI but pass locally due to font rendering differences
+### Screenshot Dimension Mismatches (CI vs Local) — SOLVED
+- **Root cause:** TestCafe headless Chrome has 15px classic scrollbar, Playwright headless Chromium has 0px overlay scrollbar. This made content 15px wider in Playwright, breaking all etalon comparisons.
+- **Solution:** `html { padding-right: 15px !important; box-sizing: border-box !important; }` in `container.html`. This simulates the scrollbar space, making body content = 1200 - 16 margin - 15 padding = 1169px — matching TestCafe layout.
+- **Known workaround:** This is an intentional CSS hack to match TestCafe headless Chrome behavior. Playwright headless Chromium uses overlay scrollbar (0px) which cannot be changed via CSS. The padding-right approach reserves the same 15px space without affecting visual layout.
+- ViewOffset additionally uses viewport 1185 (project chromium-1185) for tests with etalons that depend on full-page width.
 
 ### Accessibility Matrix Tests
 TC uses `testAccessibility()` which generates N tests per option combination at runtime.
