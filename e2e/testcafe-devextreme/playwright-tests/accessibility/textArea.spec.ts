@@ -38,4 +38,20 @@ test.describe('Accessibility - textArea', () => {
     await createWidget(page, 'dxTextArea', { placeholder: 'placeholder', inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('textArea with name', async ({ page }) => {
+    await createWidget(page, 'dxTextArea', { value: 'Test text', name: 'textAreaName', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textArea with spellcheck', async ({ page }) => {
+    await createWidget(page, 'dxTextArea', { value: 'Test text', spellcheck: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textArea with long text', async ({ page }) => {
+    const longText = 'Prepare 2013 Marketing Plan: We need to double revenues in 2013 and our marketing strategy is going to be key here.';
+    await createWidget(page, 'dxTextArea', { value: longText, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

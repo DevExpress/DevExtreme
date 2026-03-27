@@ -40,4 +40,41 @@ test.describe('Accessibility - TreeList common', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('basic treeList without extras', async ({ page }) => {
+    await createWidget(page, 'dxTreeList', {
+      dataSource: getData(20),
+      keyExpr: 'id',
+      parentIdExpr: 'parentId',
+      rootValue: -1,
+      autoExpandAll: true,
+      columns: ['id', 'parentId', 'field1', 'field2'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('treeList with single selection', async ({ page }) => {
+    await createWidget(page, 'dxTreeList', {
+      dataSource: getData(20),
+      keyExpr: 'id',
+      parentIdExpr: 'parentId',
+      rootValue: -1,
+      selection: { mode: 'single' },
+      columns: ['id', 'parentId', 'field1', 'field2'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('treeList with virtual scrolling', async ({ page }) => {
+    await createWidget(page, 'dxTreeList', {
+      dataSource: getData(200),
+      keyExpr: 'id',
+      parentIdExpr: 'parentId',
+      rootValue: -1,
+      height: 400,
+      scrolling: { mode: 'virtual' },
+      columns: ['id', 'parentId', 'field1', 'field2'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

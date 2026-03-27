@@ -33,4 +33,9 @@ test.describe('Accessibility - multiView', () => {
     await createWidget(page, 'dxMultiView', { dataSource: ['Item_1', 'Item_2', 'Item_3'], height: 300, loop: false });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('multi view empty with loop enabled', async ({ page }) => {
+    await createWidget(page, 'dxMultiView', { dataSource: [], height: 300, loop: true, noDataText: 'no data text', focusStateEnabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
 });

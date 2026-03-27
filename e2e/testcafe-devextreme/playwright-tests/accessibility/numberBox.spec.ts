@@ -38,4 +38,19 @@ test.describe('Accessibility - numberBox', () => {
     await createWidget(page, 'dxNumberBox', { placeholder: 'Enter value', inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('numberBox disabled with placeholder', async ({ page }) => {
+    await createWidget(page, 'dxNumberBox', { placeholder: 'Enter value', disabled: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('numberBox readOnly with showSpinButtons', async ({ page }) => {
+    await createWidget(page, 'dxNumberBox', { value: 20.5, readOnly: true, showSpinButtons: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('numberBox disabled with showSpinButtons', async ({ page }) => {
+    await createWidget(page, 'dxNumberBox', { value: 20.5, disabled: true, showSpinButtons: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

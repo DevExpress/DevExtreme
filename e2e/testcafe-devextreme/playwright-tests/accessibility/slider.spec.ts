@@ -42,4 +42,23 @@ test.describe('Accessibility - slider', () => {
     await createWidget(page, 'dxSlider', { value: 45, min: 10, max: 90, name: 'slider' });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('slider with custom width', async ({ page }) => {
+    await createWidget(page, 'dxSlider', { value: 45, width: '50%' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('slider with custom height', async ({ page }) => {
+    await createWidget(page, 'dxSlider', { value: 45, height: 250 });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('slider disabled with tooltip', async ({ page }) => {
+    await createWidget(page, 'dxSlider', {
+      value: 45,
+      disabled: true,
+      tooltip: { enabled: true, showMode: 'always', position: 'bottom' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

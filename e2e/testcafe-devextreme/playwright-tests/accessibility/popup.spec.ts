@@ -53,4 +53,28 @@ test.describe('Accessibility - popup', () => {
     await createWidget(page, 'dxPopup', { visible: false, width: 300, height: 280 });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('popup with locateInMenu toolbar item', async ({ page }) => {
+    await createWidget(page, 'dxPopup', {
+      visible: true,
+      width: 300,
+      height: 280,
+      showTitle: true,
+      title: 'title',
+      toolbarItems: [
+        { locateInMenu: 'always', widget: 'dxButton', toolbar: 'top', options: { text: 'More info' } },
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('popup drag enabled without title', async ({ page }) => {
+    await createWidget(page, 'dxPopup', { visible: true, width: 300, height: 280, showTitle: false, dragEnabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('popup with close button and drag', async ({ page }) => {
+    await createWidget(page, 'dxPopup', { visible: true, width: 300, height: 280, showTitle: true, showCloseButton: true, dragEnabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
 });

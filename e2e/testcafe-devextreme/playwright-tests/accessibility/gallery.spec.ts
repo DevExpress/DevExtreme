@@ -38,4 +38,26 @@ test.describe('Accessibility - gallery', () => {
     await createWidget(page, 'dxGallery', { height: 300, width: 300, dataSource: [{ imageAlt: 'Image 1', imageSrc: '' }, { imageAlt: 'Image 2', imageSrc: '' }], swipeEnabled: false });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('gallery with swipe enabled and nav buttons', async ({ page }) => {
+    await createWidget(page, 'dxGallery', {
+      height: 300,
+      width: 300,
+      dataSource: [{ imageAlt: 'Image 1', imageSrc: '' }, { imageAlt: 'Image 2', imageSrc: '' }, { imageAlt: 'Image 3', imageSrc: '' }],
+      swipeEnabled: true,
+      showNavButtons: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('gallery without indicator and without nav buttons', async ({ page }) => {
+    await createWidget(page, 'dxGallery', {
+      height: 300,
+      width: 300,
+      dataSource: [{ imageAlt: 'Image 1', imageSrc: '' }, { imageAlt: 'Image 2', imageSrc: '' }],
+      showIndicator: false,
+      showNavButtons: false,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

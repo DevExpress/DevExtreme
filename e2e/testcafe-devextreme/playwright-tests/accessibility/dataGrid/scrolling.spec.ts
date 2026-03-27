@@ -56,4 +56,15 @@ test.describe('Accessibility - DataGrid scrolling', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('standard scrolling with paging', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(50, 5),
+      height: 400,
+      showBorders: true,
+      scrolling: { mode: 'standard' },
+      paging: { enabled: true, pageSize: 10 },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -18,4 +18,31 @@ test.describe('Accessibility - popover', () => {
     await createWidget(page, 'dxPopover', { visible: true, target: '#container', width: 300, height: 280 });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('popover with title', async ({ page }) => {
+    await createWidget(page, 'dxPopover', { visible: true, target: '#container', width: 300, height: 280, showTitle: true, title: 'title' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('popover with showCloseButton', async ({ page }) => {
+    await createWidget(page, 'dxPopover', { visible: true, target: '#container', width: 300, height: 280, showTitle: true, showCloseButton: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('popover without title header', async ({ page }) => {
+    await createWidget(page, 'dxPopover', { visible: true, target: '#container', width: 300, height: 280, showTitle: false });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('popover with toolbar items', async ({ page }) => {
+    await createWidget(page, 'dxPopover', {
+      visible: true,
+      target: '#container',
+      width: 300,
+      height: 280,
+      showTitle: true,
+      toolbarItems: [{ location: 'before', widget: 'dxButton', options: { icon: 'back' } }],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

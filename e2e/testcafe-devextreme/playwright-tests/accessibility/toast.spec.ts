@@ -43,4 +43,14 @@ test.describe('Accessibility - toast', () => {
     await createWidget(page, 'dxToast', { visible: true, type: 'info' });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('toast error without message', async ({ page }) => {
+    await createWidget(page, 'dxToast', { visible: true, type: 'error' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('toast success without message', async ({ page }) => {
+    await createWidget(page, 'dxToast', { visible: true, type: 'success' });
+    await a11yCheck(page, {}, '#container');
+  });
 });

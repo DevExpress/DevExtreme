@@ -53,4 +53,16 @@ test.describe('Accessibility - contextMenu', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('context menu none selectionMode shown', async ({ page }) => {
+    await createWidget(page, 'dxContextMenu', {
+      target: '#container',
+      items: [{ text: 'remove', icon: 'remove' }, { text: 'user', icon: 'user' }, { text: 'coffee', icon: 'coffee' }],
+      selectionMode: 'none',
+    });
+    await page.evaluate(() => {
+      (window as any).$('#container').dxContextMenu('show');
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -48,4 +48,23 @@ test.describe('Accessibility - splitter', () => {
     });
     await a11yCheck(page, { rules: { 'scrollable-region-focusable': { enabled: false } } }, '#container');
   });
+
+  test('splitter with custom separator size', async ({ page }) => {
+    await createWidget(page, 'dxSplitter', {
+      dataSource: [{ text: 'Left Pane', size: '140px' }, { text: 'Right Pane', size: '140px' }],
+      height: 400,
+      width: 450,
+      separatorSize: 5,
+    });
+    await a11yCheck(page, { rules: { 'scrollable-region-focusable': { enabled: false } } }, '#container');
+  });
+
+  test('splitter with auto width', async ({ page }) => {
+    await createWidget(page, 'dxSplitter', {
+      dataSource: [{ text: 'Left Pane' }, { text: 'Right Pane' }],
+      height: 400,
+      width: 'auto',
+    });
+    await a11yCheck(page, { rules: { 'scrollable-region-focusable': { enabled: false } } }, '#container');
+  });
 });

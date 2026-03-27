@@ -43,4 +43,30 @@ test.describe('Accessibility - TreeList status', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('with selection mode multiple', async ({ page }) => {
+    await createWidget(page, 'dxTreeList', {
+      dataSource: DATA_SOURCE,
+      rootValue: -1,
+      keyExpr: 'id',
+      parentIdExpr: 'parentId',
+      autoExpandAll: true,
+      selection: { mode: 'multiple' },
+      columns: ['label', 'value'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('with paging enabled', async ({ page }) => {
+    await createWidget(page, 'dxTreeList', {
+      dataSource: DATA_SOURCE,
+      rootValue: -1,
+      keyExpr: 'id',
+      parentIdExpr: 'parentId',
+      autoExpandAll: true,
+      paging: { enabled: true, pageSize: 2 },
+      columns: ['label', 'value'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

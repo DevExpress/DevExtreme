@@ -18,4 +18,19 @@ test.describe('Accessibility - speechToText', () => {
     await createWidget(page, 'dxSpeechToText', { startText: 'custom text' });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('speechToText default', async ({ page }) => {
+    await createWidget(page, 'dxSpeechToText', { startText: '' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('speechToText with stop icon', async ({ page }) => {
+    await createWidget(page, 'dxSpeechToText', { startText: 'custom text', stopIcon: 'user' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('speechToText with empty stop icon', async ({ page }) => {
+    await createWidget(page, 'dxSpeechToText', { startText: 'custom text', stopIcon: '' });
+    await a11yCheck(page, {}, '#container');
+  });
 });

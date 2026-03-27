@@ -48,4 +48,39 @@ test.describe('Accessibility - textBox', () => {
     await createWidget(page, 'dxTextBox', { value: 'value', showClearButton: true, inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('textBox mode email', async ({ page }) => {
+    await createWidget(page, 'dxTextBox', { value: 'test@test.com', mode: 'email', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textBox mode tel', async ({ page }) => {
+    await createWidget(page, 'dxTextBox', { value: '+1-555-0100', mode: 'tel', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textBox mode url', async ({ page }) => {
+    await createWidget(page, 'dxTextBox', { value: 'https://example.com', mode: 'url', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textBox with name', async ({ page }) => {
+    await createWidget(page, 'dxTextBox', { value: 'value', name: 'name', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textBox with placeholder', async ({ page }) => {
+    await createWidget(page, 'dxTextBox', { placeholder: 'placeholder', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textBox with spellcheck', async ({ page }) => {
+    await createWidget(page, 'dxTextBox', { value: 'value', spellcheck: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textBox disabled with placeholder', async ({ page }) => {
+    await createWidget(page, 'dxTextBox', { placeholder: 'placeholder', disabled: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

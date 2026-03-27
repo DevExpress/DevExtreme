@@ -43,4 +43,24 @@ test.describe('Accessibility - checkBox', () => {
     await createWidget(page, 'dxCheckBox', { value: true, text: 'text', elementAttr: { 'aria-label': 'Checked' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('checkBox disabled unchecked', async ({ page }) => {
+    await createWidget(page, 'dxCheckBox', { value: false, disabled: true, elementAttr: { 'aria-label': 'Checked' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('checkBox readOnly unchecked', async ({ page }) => {
+    await createWidget(page, 'dxCheckBox', { value: false, readOnly: true, elementAttr: { 'aria-label': 'Checked' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('checkBox with name', async ({ page }) => {
+    await createWidget(page, 'dxCheckBox', { value: true, name: 'checkboxName', enableThreeStateBehavior: true, elementAttr: { 'aria-label': 'Checked' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('checkBox indeterminate disabled', async ({ page }) => {
+    await createWidget(page, 'dxCheckBox', { value: null, enableThreeStateBehavior: true, disabled: true, elementAttr: { 'aria-label': 'Checked' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

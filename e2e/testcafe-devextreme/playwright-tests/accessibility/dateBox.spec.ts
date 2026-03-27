@@ -48,4 +48,24 @@ test.describe('Accessibility - dateBox', () => {
     await createWidget(page, 'dxDateBox', { type: 'date', value: new Date(), label: 'label', inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('dateBox opened date type', async ({ page }) => {
+    await createWidget(page, 'dxDateBox', { type: 'date', value: new Date(), opened: true, deferRendering: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dateBox opened time type', async ({ page }) => {
+    await createWidget(page, 'dxDateBox', { type: 'time', value: new Date(), opened: true, deferRendering: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dateBox with placeholder', async ({ page }) => {
+    await createWidget(page, 'dxDateBox', { type: 'date', placeholder: 'placeholder', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dateBox with showDropDownButton false', async ({ page }) => {
+    await createWidget(page, 'dxDateBox', { type: 'date', value: new Date(), showDropDownButton: false, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

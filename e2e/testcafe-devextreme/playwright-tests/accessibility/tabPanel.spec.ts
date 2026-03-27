@@ -60,4 +60,23 @@ test.describe('Accessibility - tabPanel', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('tab panel disabled without nav buttons', async ({ page }) => {
+    await createWidget(page, 'dxTabPanel', {
+      dataSource: [{ title: 'Tab 1', text: 'Content 1' }, { title: 'Tab 2', text: 'Content 2' }],
+      width: 450,
+      height: 550,
+      showNavButtons: false,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tab panel tall height', async ({ page }) => {
+    await createWidget(page, 'dxTabPanel', {
+      dataSource: [{ title: 'Tab 1', text: 'Content 1' }, { title: 'Tab 2', text: 'Content 2' }],
+      width: 450,
+      height: 550,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

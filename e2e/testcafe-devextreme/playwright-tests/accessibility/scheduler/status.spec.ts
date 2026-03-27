@@ -26,4 +26,55 @@ test.describe('Accessibility - Scheduler status', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('scheduler status day view with appointments', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      timeZone: 'America/Los_Angeles',
+      dataSource: [
+        {
+          startDate: '2025-04-30T15:00:00.000Z',
+          endDate: '2025-04-30T16:00:00.000Z',
+        },
+      ],
+      views: ['day', 'week', 'month'],
+      currentView: 'day',
+      currentDate: '2025-04-30T15:00:00.000Z',
+      showCurrentTimeIndicator: false,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('scheduler status month view with appointments', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      timeZone: 'America/Los_Angeles',
+      dataSource: [
+        {
+          startDate: '2025-04-30T15:00:00.000Z',
+          endDate: '2025-04-30T16:00:00.000Z',
+        },
+      ],
+      views: ['day', 'week', 'month'],
+      currentView: 'month',
+      currentDate: '2025-04-30T15:00:00.000Z',
+      showCurrentTimeIndicator: false,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('scheduler status agenda view', async ({ page }) => {
+    await createWidget(page, 'dxScheduler', {
+      timeZone: 'America/Los_Angeles',
+      dataSource: [
+        {
+          startDate: '2025-04-30T15:00:00.000Z',
+          endDate: '2025-04-30T16:00:00.000Z',
+        },
+      ],
+      views: ['agenda'],
+      currentView: 'agenda',
+      currentDate: '2025-04-30T15:00:00.000Z',
+      showCurrentTimeIndicator: false,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

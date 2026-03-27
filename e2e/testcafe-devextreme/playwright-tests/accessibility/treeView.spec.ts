@@ -67,4 +67,22 @@ test.describe('Accessibility - treeView', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('treeView search with checkboxes', async ({ page }) => {
+    await createWidget(page, 'dxTreeView', {
+      items: treeViewItems,
+      searchEnabled: true,
+      showCheckBoxesMode: 'normal',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('treeView empty with search', async ({ page }) => {
+    await createWidget(page, 'dxTreeView', {
+      items: [],
+      searchEnabled: true,
+      noDataText: 'no data text',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -62,4 +62,28 @@ test.describe('Accessibility - form', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('form with alignItemLabels true and showOptionalMark', async ({ page }) => {
+    await createWidget(page, 'dxForm', {
+      height: 200,
+      alignItemLabels: true,
+      showOptionalMark: true,
+      formData: { ID: 1, FirstName: 'John', LastName: 'Heart', Position: 'CEO', Active: true },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('form required and validation summary', async ({ page }) => {
+    await createWidget(page, 'dxForm', {
+      height: 200,
+      showRequiredMark: true,
+      showValidationSummary: true,
+      items: [{
+        itemType: 'simple',
+        dataField: 'Email',
+        validationRules: [{ type: 'required', message: 'Email is required' }],
+      }],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

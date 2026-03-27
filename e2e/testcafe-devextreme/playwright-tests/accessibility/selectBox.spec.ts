@@ -48,4 +48,29 @@ test.describe('Accessibility - selectBox', () => {
     await createWidget(page, 'dxSelectBox', { dataSource: ['HD Video Player', 'SuperHD Video Player'], value: 'HD Video Player', label: 'label', showClearButton: true, inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('selectBox opened with deferRendering', async ({ page }) => {
+    await createWidget(page, 'dxSelectBox', { dataSource: ['HD Video Player', 'SuperHD Video Player'], opened: true, deferRendering: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('selectBox opened without deferRendering', async ({ page }) => {
+    await createWidget(page, 'dxSelectBox', { dataSource: ['HD Video Player', 'SuperHD Video Player'], opened: false, deferRendering: false, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('selectBox with placeholder', async ({ page }) => {
+    await createWidget(page, 'dxSelectBox', { dataSource: ['HD Video Player', 'SuperHD Video Player'], placeholder: 'placeholder', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('selectBox without showDropDownButton', async ({ page }) => {
+    await createWidget(page, 'dxSelectBox', { dataSource: ['HD Video Player', 'SuperHD Video Player'], value: 'HD Video Player', showDropDownButton: false, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('selectBox with custom button', async ({ page }) => {
+    await createWidget(page, 'dxSelectBox', { dataSource: ['HD Video Player', 'SuperHD Video Player'], value: 'HD Video Player', buttons: [{ name: 'today', location: 'before', options: { text: 'Today', stylingMode: 'text' } }], inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -18,4 +18,29 @@ test.describe('Accessibility - filterBuilder', () => {
     await createWidget(page, 'dxFilterBuilder', { fields: [{ dataField: 'CompanyName', caption: 'Company Name' }, { dataField: 'City', caption: 'City' }], value: ['CompanyName', 'contains', 'Dev'] });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('filterBuilder without filter value', async ({ page }) => {
+    await createWidget(page, 'dxFilterBuilder', { fields: [{ dataField: 'CompanyName', caption: 'Company Name' }, { dataField: 'City', caption: 'City' }] });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('filterBuilder with multiple conditions', async ({ page }) => {
+    await createWidget(page, 'dxFilterBuilder', {
+      fields: [
+        { dataField: 'CompanyName', caption: 'Company Name' },
+        { dataField: 'City', caption: 'City' },
+        { dataField: 'State', caption: 'State' },
+      ],
+      value: [['CompanyName', 'contains', 'Dev'], 'and', ['City', '=', 'New York']],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('filterBuilder with number field', async ({ page }) => {
+    await createWidget(page, 'dxFilterBuilder', {
+      fields: [{ dataField: 'Age', caption: 'Age', dataType: 'number' }],
+      value: ['Age', '>', 18],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

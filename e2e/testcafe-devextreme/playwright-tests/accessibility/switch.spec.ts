@@ -18,4 +18,29 @@ test.describe('Accessibility - switch', () => {
     await createWidget(page, 'dxSwitch', { value: true });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('switch off', async ({ page }) => {
+    await createWidget(page, 'dxSwitch', { value: false });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('switch disabled on', async ({ page }) => {
+    await createWidget(page, 'dxSwitch', { value: true, disabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('switch disabled off', async ({ page }) => {
+    await createWidget(page, 'dxSwitch', { value: false, disabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('switch readOnly', async ({ page }) => {
+    await createWidget(page, 'dxSwitch', { value: true, readOnly: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('switch with name', async ({ page }) => {
+    await createWidget(page, 'dxSwitch', { value: true, name: 'switchName' });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -18,4 +18,24 @@ test.describe('Accessibility - loadPanel', () => {
     await createWidget(page, 'dxLoadPanel', { visible: true, showIndicator: true });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('loadPanel without indicator', async ({ page }) => {
+    await createWidget(page, 'dxLoadPanel', { visible: true, showIndicator: false });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('loadPanel without pane', async ({ page }) => {
+    await createWidget(page, 'dxLoadPanel', { visible: true, showPane: false });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('loadPanel with message', async ({ page }) => {
+    await createWidget(page, 'dxLoadPanel', { visible: true, message: 'Loading...' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('loadPanel without indicator and without pane', async ({ page }) => {
+    await createWidget(page, 'dxLoadPanel', { visible: true, showIndicator: false, showPane: false, message: 'message' });
+    await a11yCheck(page, {}, '#container');
+  });
 });

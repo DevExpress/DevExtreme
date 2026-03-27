@@ -35,4 +35,14 @@ test.describe('Accessibility - accordion', () => {
     await createWidget(page, 'dxAccordion', { dataSource: ['Item_1', 'Item_2', 'Item_3'], deferRendering: false });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('accordion disabled with multiple', async ({ page }) => {
+    await createWidget(page, 'dxAccordion', { dataSource: ['Item_1', 'Item_2', 'Item_3'], disabled: true, multiple: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('accordion with deferRendering false and multiple', async ({ page }) => {
+    await createWidget(page, 'dxAccordion', { dataSource: ['Item_1', 'Item_2', 'Item_3'], deferRendering: false, multiple: true, focusStateEnabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
 });

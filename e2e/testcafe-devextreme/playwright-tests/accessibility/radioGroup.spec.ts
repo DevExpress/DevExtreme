@@ -33,4 +33,14 @@ test.describe('Accessibility - radioGroup', () => {
     await createWidget(page, 'dxRadioGroup', { items: ['Item_1', 'Item_2', 'Item_3'], readOnly: true });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('radioGroup disabled horizontal', async ({ page }) => {
+    await createWidget(page, 'dxRadioGroup', { items: ['Item_1', 'Item_2', 'Item_3'], disabled: true, layout: 'horizontal' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('radioGroup readOnly horizontal', async ({ page }) => {
+    await createWidget(page, 'dxRadioGroup', { items: ['Item_1', 'Item_2', 'Item_3'], readOnly: true, layout: 'horizontal' });
+    await a11yCheck(page, {}, '#container');
+  });
 });

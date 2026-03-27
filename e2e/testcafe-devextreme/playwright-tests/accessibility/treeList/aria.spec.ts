@@ -33,4 +33,27 @@ test.describe('Accessibility - TreeList aria', () => {
     await expect(container.locator('[aria-label]').first()).toBeVisible();
     await a11yCheck(page, {}, '#container');
   });
+
+  test('aria collapsed rows', async ({ page }) => {
+    await createWidget(page, 'dxTreeList', {
+      dataSource: treeListData,
+      keyExpr: 'Task_ID',
+      parentIdExpr: 'Task_Parent_ID',
+      expandedRowKeys: [],
+      columns: ['Task_Subject', 'Task_ID'],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('aria with search panel', async ({ page }) => {
+    await createWidget(page, 'dxTreeList', {
+      dataSource: treeListData,
+      keyExpr: 'Task_ID',
+      parentIdExpr: 'Task_Parent_ID',
+      expandedRowKeys: [1],
+      columns: ['Task_Subject', 'Task_ID'],
+      searchPanel: { visible: true },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -48,4 +48,29 @@ test.describe('Accessibility - tagBox', () => {
     await createWidget(page, 'dxTagBox', { dataSource: ['HD Video Player', 'SuperHD Video Player', 'SuperPlasma 50'], value: ['HD Video Player'], opened: true, showSelectionControls: true, inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('tagBox opened without showSelectionControls', async ({ page }) => {
+    await createWidget(page, 'dxTagBox', { dataSource: ['HD Video Player', 'SuperHD Video Player', 'SuperPlasma 50'], value: ['HD Video Player'], opened: true, showSelectionControls: false, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tagBox with label', async ({ page }) => {
+    await createWidget(page, 'dxTagBox', { dataSource: ['HD Video Player', 'SuperHD Video Player', 'SuperPlasma 50'], value: ['HD Video Player'], label: 'label', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tagBox without showDropDownButton', async ({ page }) => {
+    await createWidget(page, 'dxTagBox', { dataSource: ['HD Video Player', 'SuperHD Video Player', 'SuperPlasma 50'], value: ['HD Video Player'], showDropDownButton: false, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tagBox with custom button', async ({ page }) => {
+    await createWidget(page, 'dxTagBox', { dataSource: ['HD Video Player', 'SuperHD Video Player', 'SuperPlasma 50'], value: ['HD Video Player'], buttons: [{ name: 'today', location: 'before', options: { text: 'Today', stylingMode: 'text' } }], inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tagBox with placeholder', async ({ page }) => {
+    await createWidget(page, 'dxTagBox', { dataSource: ['HD Video Player', 'SuperHD Video Player', 'SuperPlasma 50'], placeholder: 'placeholder', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

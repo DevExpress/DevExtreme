@@ -53,4 +53,34 @@ test.describe('Accessibility - stepper', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('stepper horizontal with last step selected', async ({ page }) => {
+    await createWidget(page, 'dxStepper', {
+      dataSource: [
+        { icon: 'cart', label: 'Cart' },
+        { icon: 'gift', label: 'Promo Code', optional: true },
+        { icon: 'checkmarkcircle', label: 'Ordered' },
+      ],
+      selectedIndex: 2,
+      orientation: 'horizontal',
+      width: 800,
+      height: 600,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('stepper vertical with first step selected', async ({ page }) => {
+    await createWidget(page, 'dxStepper', {
+      dataSource: [
+        { icon: 'cart', label: 'Cart' },
+        { icon: 'gift', label: 'Promo Code' },
+        { icon: 'checkmarkcircle', label: 'Ordered' },
+      ],
+      selectedIndex: 0,
+      orientation: 'vertical',
+      width: 800,
+      height: 600,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

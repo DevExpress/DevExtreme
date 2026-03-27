@@ -46,4 +46,32 @@ test.describe('Accessibility - rangeSlider', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('range slider with custom width', async ({ page }) => {
+    await createWidget(page, 'dxRangeSlider', {
+      start: 40,
+      end: 60,
+      width: '50%',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('range slider with custom height', async ({ page }) => {
+    await createWidget(page, 'dxRangeSlider', {
+      start: 40,
+      end: 60,
+      height: 250,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('range slider disabled with tooltip', async ({ page }) => {
+    await createWidget(page, 'dxRangeSlider', {
+      start: 40,
+      end: 60,
+      disabled: true,
+      tooltip: { enabled: true, showMode: 'always', position: 'bottom' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

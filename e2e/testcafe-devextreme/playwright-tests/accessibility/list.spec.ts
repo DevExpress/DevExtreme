@@ -106,4 +106,46 @@ test.describe('Accessibility - list', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('list with item deleting context mode', async ({ page }) => {
+    await createWidget(page, 'dxList', {
+      dataSource: ['Item_1', 'Item_2', 'Item_3'],
+      height: 400,
+      allowItemDeleting: true,
+      itemDeleteMode: 'context',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('list with item deleting slideButton mode', async ({ page }) => {
+    await createWidget(page, 'dxList', {
+      dataSource: ['Item_1', 'Item_2', 'Item_3'],
+      height: 400,
+      allowItemDeleting: true,
+      itemDeleteMode: 'slideButton',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('list with all selection mode', async ({ page }) => {
+    await createWidget(page, 'dxList', {
+      dataSource: ['Item_1', 'Item_2', 'Item_3'],
+      height: 400,
+      selectionMode: 'all',
+      showSelectionControls: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('grouped list with multiple selection', async ({ page }) => {
+    await createWidget(page, 'dxList', {
+      dataSource: groupedItems,
+      height: 400,
+      grouped: true,
+      collapsibleGroups: true,
+      selectionMode: 'multiple',
+      showSelectionControls: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

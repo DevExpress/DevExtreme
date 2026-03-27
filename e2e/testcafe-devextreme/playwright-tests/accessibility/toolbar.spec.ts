@@ -50,4 +50,30 @@ test.describe('Accessibility - toolbar', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('toolbar with narrow width overflow menu', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [
+        { text: 'item0', locateInMenu: 'always' },
+        { text: 'item1', locateInMenu: 'always' },
+        { text: 'item2', locateInMenu: 'always' },
+        { text: 'item3', locateInMenu: 'always' },
+        { text: 'item4', locateInMenu: 'always' },
+      ],
+      width: 50,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('disabled toolbar with narrow width', async ({ page }) => {
+    await createWidget(page, 'dxToolbar', {
+      items: [
+        { text: 'item1', locateInMenu: 'always' },
+        { text: 'item2', locateInMenu: 'always' },
+      ],
+      width: 50,
+      disabled: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

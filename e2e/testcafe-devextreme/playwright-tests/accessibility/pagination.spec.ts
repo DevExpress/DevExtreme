@@ -38,4 +38,19 @@ test.describe('Accessibility - pagination', () => {
     await createWidget(page, 'dxPagination', { itemCount: 50, displayMode: 'full', showNavigationButtons: true });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('pagination compact with info text', async ({ page }) => {
+    await createWidget(page, 'dxPagination', { itemCount: 50, displayMode: 'compact', showInfo: true, infoText: 'Total {2} items. Page {0} of {1}' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('pagination compact with page size selector', async ({ page }) => {
+    await createWidget(page, 'dxPagination', { itemCount: 50, displayMode: 'compact', showPageSizeSelector: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('pagination compact with navigation buttons', async ({ page }) => {
+    await createWidget(page, 'dxPagination', { itemCount: 50, displayMode: 'compact', showNavigationButtons: true });
+    await a11yCheck(page, {}, '#container');
+  });
 });

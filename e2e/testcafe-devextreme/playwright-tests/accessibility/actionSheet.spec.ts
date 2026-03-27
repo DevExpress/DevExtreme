@@ -40,4 +40,14 @@ test.describe('Accessibility - actionSheet', () => {
     await createWidget(page, 'dxActionSheet', { dataSource: [] });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('action sheet with cancelText', async ({ page }) => {
+    await createWidget(page, 'dxActionSheet', { dataSource: [{ text: 'Call' }, { text: 'Send message' }], showCancelButton: true, cancelText: 'Cancel' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('action sheet empty with title', async ({ page }) => {
+    await createWidget(page, 'dxActionSheet', { dataSource: [], title: 'title', showTitle: true });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -18,4 +18,34 @@ test.describe('Accessibility - buttonGroup', () => {
     await createWidget(page, 'dxButtonGroup', { items: [{ text: 'text_1' }, { text: 'text_2' }], selectionMode: 'single' });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('buttonGroup empty', async ({ page }) => {
+    await createWidget(page, 'dxButtonGroup', { items: [], selectionMode: 'single' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('buttonGroup disabled', async ({ page }) => {
+    await createWidget(page, 'dxButtonGroup', { items: [{ text: 'text_1' }, { text: 'text_2' }], disabled: true, selectionMode: 'single' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('buttonGroup multiple selection mode', async ({ page }) => {
+    await createWidget(page, 'dxButtonGroup', { items: [{ text: 'text_1' }, { text: 'text_2' }], selectionMode: 'multiple', selectedItemKeys: ['text_1'] });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('buttonGroup none selection mode', async ({ page }) => {
+    await createWidget(page, 'dxButtonGroup', { items: [{ text: 'text_1' }, { text: 'text_2' }], selectionMode: 'none' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('buttonGroup with icons', async ({ page }) => {
+    await createWidget(page, 'dxButtonGroup', { items: [{ icon: 'user' }, { icon: 'check' }], selectionMode: 'single' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('buttonGroup with disabled item', async ({ page }) => {
+    await createWidget(page, 'dxButtonGroup', { items: [{ text: 'text_1' }, { text: 'text_2', disabled: true }], selectionMode: 'single' });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -44,4 +44,14 @@ test.describe('Accessibility - menu', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('menu disabled vertical', async ({ page }) => {
+    await createWidget(page, 'dxMenu', { items: [{ text: 'remove', icon: 'remove' }, { text: 'user', icon: 'user' }], width: 400, disabled: true, orientation: 'vertical' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('menu wide horizontal', async ({ page }) => {
+    await createWidget(page, 'dxMenu', { items: [{ text: 'remove', icon: 'remove' }, { text: 'user', icon: 'user' }], width: 1024, orientation: 'horizontal' });
+    await a11yCheck(page, {}, '#container');
+  });
 });

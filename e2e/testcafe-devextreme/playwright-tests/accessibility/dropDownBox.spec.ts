@@ -44,4 +44,35 @@ test.describe('Accessibility - dropDownBox', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('dropDownBox opened with deferRendering', async ({ page }) => {
+    await createWidget(page, 'dxDropDownBox', {
+      dataSource: ['Item_1', 'Item_2', 'Item_3'],
+      value: 'Item_1',
+      opened: true,
+      deferRendering: true,
+      inputAttr: { 'aria-label': 'DropDownBox' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dropDownBox with showDropDownButton', async ({ page }) => {
+    await createWidget(page, 'dxDropDownBox', {
+      dataSource: ['Item_1', 'Item_2', 'Item_3'],
+      value: 'Item_1',
+      showDropDownButton: true,
+      inputAttr: { 'aria-label': 'DropDownBox' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dropDownBox with custom button', async ({ page }) => {
+    await createWidget(page, 'dxDropDownBox', {
+      dataSource: ['Item_1', 'Item_2', 'Item_3'],
+      value: 'Item_1',
+      inputAttr: { 'aria-label': 'DropDownBox' },
+      buttons: [{ name: 'custom', location: 'before', options: { text: 'Custom', stylingMode: 'text' } }],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

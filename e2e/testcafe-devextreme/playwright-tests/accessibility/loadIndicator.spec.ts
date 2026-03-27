@@ -18,4 +18,19 @@ test.describe('Accessibility - loadIndicator', () => {
     await createWidget(page, 'dxLoadIndicator', {});
     await a11yCheck(page, {}, '#container');
   });
+
+  test('loadIndicator with height', async ({ page }) => {
+    await createWidget(page, 'dxLoadIndicator', { height: 40 });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('loadIndicator with width', async ({ page }) => {
+    await createWidget(page, 'dxLoadIndicator', { width: 40 });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('loadIndicator with height and width', async ({ page }) => {
+    await createWidget(page, 'dxLoadIndicator', { height: 40, width: 40 });
+    await a11yCheck(page, {}, '#container');
+  });
 });

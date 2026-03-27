@@ -43,4 +43,26 @@ test.describe('Accessibility - dropDownButton', () => {
     await createWidget(page, 'dxDropDownButton', { dataSource: ['Item_1', 'Item_2'], icon: 'save', splitButton: false });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('dropDownButton opened with deferRendering', async ({ page }) => {
+    await createWidget(page, 'dxDropDownButton', {
+      dataSource: ['Item_1', 'Item_2'],
+      text: 'Download',
+      splitButton: true,
+      opened: true,
+      deferRendering: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dropDownButton splitButton disabled without arrow icon', async ({ page }) => {
+    await createWidget(page, 'dxDropDownButton', {
+      dataSource: [],
+      text: 'Download',
+      splitButton: false,
+      showArrowIcon: false,
+      disabled: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

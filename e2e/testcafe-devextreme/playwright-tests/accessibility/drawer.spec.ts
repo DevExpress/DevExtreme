@@ -49,4 +49,23 @@ test.describe('Accessibility - drawer', () => {
     await createWidget(page, 'dxDrawer', { height: 400, disabled: true });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('drawer closed with slide reveal mode', async ({ page }) => {
+    await createWidget(page, 'dxDrawer', { height: 400, opened: false, revealMode: 'slide' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('drawer disabled opened', async ({ page }) => {
+    await createWidget(page, 'dxDrawer', {
+      height: 400,
+      disabled: true,
+      opened: true,
+      revealMode: 'expand',
+      template: () => {
+        const $drawerContent = (window as any).$('<div>').width(200).css('height', '100%');
+        return $drawerContent;
+      },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

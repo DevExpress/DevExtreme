@@ -66,4 +66,21 @@ test.describe('Accessibility - htmlEditor', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('empty value with placeholder', async ({ page }) => {
+    await createWidget(page, 'dxHtmlEditor', {
+      focusStateEnabled: true,
+      placeholder: 'Type here...',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('readOnly empty with placeholder', async ({ page }) => {
+    await createWidget(page, 'dxHtmlEditor', {
+      focusStateEnabled: true,
+      readOnly: true,
+      placeholder: 'placeholder',
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

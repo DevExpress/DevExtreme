@@ -38,4 +38,14 @@ test.describe('Accessibility - fileUploader', () => {
     await createWidget(page, 'dxFileUploader', { focusStateEnabled: true, name: 'fileUploader', inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('fileUploader disabled multiple', async ({ page }) => {
+    await createWidget(page, 'dxFileUploader', { focusStateEnabled: true, disabled: true, multiple: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('fileUploader readOnly multiple with name', async ({ page }) => {
+    await createWidget(page, 'dxFileUploader', { focusStateEnabled: true, readOnly: true, multiple: true, name: 'fileUploader', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

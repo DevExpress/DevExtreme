@@ -18,4 +18,24 @@ test.describe('Accessibility - progressBar', () => {
     await createWidget(page, 'dxProgressBar', { value: 45, min: 0, max: 100, elementAttr: { 'aria-label': 'Progress Bar' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('progressBar without value', async ({ page }) => {
+    await createWidget(page, 'dxProgressBar', { min: 0, max: 100, elementAttr: { 'aria-label': 'Progress Bar' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('progressBar disabled', async ({ page }) => {
+    await createWidget(page, 'dxProgressBar', { value: 45, min: 0, max: 100, disabled: true, elementAttr: { 'aria-label': 'Progress Bar' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('progressBar without showStatus', async ({ page }) => {
+    await createWidget(page, 'dxProgressBar', { value: 45, min: 0, max: 100, showStatus: false, elementAttr: { 'aria-label': 'Progress Bar' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('progressBar disabled without value', async ({ page }) => {
+    await createWidget(page, 'dxProgressBar', { min: 0, max: 100, disabled: true, showStatus: true, elementAttr: { 'aria-label': 'Progress Bar' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

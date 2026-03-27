@@ -39,4 +39,10 @@ test.describe('Accessibility - tileView', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('tile view focused via keyboard', async ({ page }) => {
+    await createWidget(page, 'dxTileView', { items: [{ text: 'test 1' }], focusStateEnabled: true });
+    await page.keyboard.press('Tab');
+    await a11yCheck(page, {}, '#container');
+  });
 });

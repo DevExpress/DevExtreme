@@ -62,4 +62,32 @@ test.describe('Accessibility - calendar', () => {
     });
     await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
   });
+
+  test('calendar with year zoom level', async ({ page }) => {
+    await createWidget(page, 'dxCalendar', { zoomLevel: 'year' });
+    await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
+  });
+
+  test('calendar with name', async ({ page }) => {
+    await createWidget(page, 'dxCalendar', { zoomLevel: 'month', name: 'name' });
+    await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
+  });
+
+  test('calendar disabled with century zoom level', async ({ page }) => {
+    await createWidget(page, 'dxCalendar', { zoomLevel: 'century', disabled: true });
+    await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
+  });
+
+  test('calendar range selection without today button', async ({ page }) => {
+    const msInDay = 1000 * 60 * 60 * 24;
+    const now = Date.now();
+    await createWidget(page, 'dxCalendar', {
+      zoomLevel: 'month',
+      selectionMode: 'range',
+      value: [now, now + msInDay],
+      showTodayButton: false,
+      showWeekNumbers: false,
+    });
+    await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
+  });
 });

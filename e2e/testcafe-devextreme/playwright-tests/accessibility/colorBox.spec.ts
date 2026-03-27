@@ -48,4 +48,29 @@ test.describe('Accessibility - colorBox', () => {
     await createWidget(page, 'dxColorBox', { value: '#f05b41', label: 'label', inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('colorBox without deferRendering', async ({ page }) => {
+    await createWidget(page, 'dxColorBox', { value: '#f05b41', opened: false, deferRendering: false, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('colorBox without value', async ({ page }) => {
+    await createWidget(page, 'dxColorBox', { inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('colorBox with placeholder', async ({ page }) => {
+    await createWidget(page, 'dxColorBox', { placeholder: 'placeholder', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('colorBox without showDropDownButton', async ({ page }) => {
+    await createWidget(page, 'dxColorBox', { value: '#f05b41', showDropDownButton: false, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('colorBox with custom button', async ({ page }) => {
+    await createWidget(page, 'dxColorBox', { value: '#f05b41', buttons: [{ name: 'today', location: 'before', options: { text: 'Today', stylingMode: 'text' } }], inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

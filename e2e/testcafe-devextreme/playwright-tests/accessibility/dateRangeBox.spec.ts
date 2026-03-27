@@ -57,4 +57,42 @@ test.describe('Accessibility - dateRangeBox', () => {
     await createWidget(page, 'dxDateRangeBox', { showClearButton: true, showDropDownButton: true, endDateInputAttr: { 'aria-label': 'aria-label' }, startDateInputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('dateRangeBox opened without multiView', async ({ page }) => {
+    const msInDay = 1000 * 60 * 60 * 24;
+    const now = new Date();
+    await createWidget(page, 'dxDateRangeBox', {
+      value: [new Date(now.getTime() - msInDay * 3), new Date(now.getTime() + msInDay * 3)],
+      opened: true,
+      multiView: false,
+      deferRendering: true,
+      endDateInputAttr: { 'aria-label': 'aria-label' },
+      startDateInputAttr: { 'aria-label': 'aria-label' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dateRangeBox with startDatePlaceholder', async ({ page }) => {
+    const msInDay = 1000 * 60 * 60 * 24;
+    const now = new Date();
+    await createWidget(page, 'dxDateRangeBox', {
+      value: [new Date(now.getTime() - msInDay * 3), new Date(now.getTime() + msInDay * 3)],
+      startDatePlaceholder: 'Start date',
+      endDateInputAttr: { 'aria-label': 'aria-label' },
+      startDateInputAttr: { 'aria-label': 'aria-label' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dateRangeBox with custom button', async ({ page }) => {
+    const msInDay = 1000 * 60 * 60 * 24;
+    const now = new Date();
+    await createWidget(page, 'dxDateRangeBox', {
+      value: [new Date(now.getTime() - msInDay * 3), new Date(now.getTime() + msInDay * 3)],
+      buttons: [{ name: 'custom', location: 'before', options: { text: 'Custom', stylingMode: 'text' } }],
+      endDateInputAttr: { 'aria-label': 'aria-label' },
+      startDateInputAttr: { 'aria-label': 'aria-label' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -18,4 +18,9 @@ test.describe('Accessibility - validationSummary', () => {
     await createWidget(page, 'dxValidationSummary', {});
     await a11yCheck(page, {}, '#container');
   });
+
+  test('validationSummary with validationGroup', async ({ page }) => {
+    await createWidget(page, 'dxValidationSummary', { validationGroup: 'myGroup' });
+    await a11yCheck(page, {}, '#container');
+  });
 });

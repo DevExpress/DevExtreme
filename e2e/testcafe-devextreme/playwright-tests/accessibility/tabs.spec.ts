@@ -51,4 +51,14 @@ test.describe('Accessibility - tabs', () => {
     await page.keyboard.press('Tab');
     await a11yCheck(page, {}, '#container');
   });
+
+  test('tabs without navigation buttons', async ({ page }) => {
+    await createWidget(page, 'dxTabs', {
+      dataSource: [{ text: 'Tab 1' }, { text: 'Tab 2' }, { text: 'Tab 3' }],
+      width: 450,
+      height: 250,
+      showNavButtons: false,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

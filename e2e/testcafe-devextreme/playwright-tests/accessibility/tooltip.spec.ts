@@ -34,4 +34,14 @@ test.describe('Accessibility - tooltip', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('tooltip not visible', async ({ page }) => {
+    await createWidget(page, 'dxTooltip', { visible: false, target: '#container', width: 50, height: 25 });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tooltip disabled not visible', async ({ page }) => {
+    await createWidget(page, 'dxTooltip', { visible: false, target: '#container', width: 50, height: 25, disabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -53,4 +53,29 @@ test.describe('Accessibility - DataGrid templates', () => {
     });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('column header template', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 3),
+      keyExpr: 'field_0',
+      columns: [
+        { dataField: 'field_0', headerCellTemplate: (container) => { container.textContent = 'Custom Header'; } },
+        'field_1',
+        'field_2',
+      ],
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('with row alternation and borders', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: getData(10, 4),
+      keyExpr: 'field_0',
+      columns: ['field_0', 'field_1', 'field_2', 'field_3'],
+      rowAlternationEnabled: true,
+      showBorders: true,
+      columnAutoWidth: true,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });
