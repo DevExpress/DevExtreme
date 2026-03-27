@@ -64,8 +64,12 @@ test.describe('CardView - Sorting Behavior - Functional', () => {
     [
       ['none', false, false, false, [undefined, undefined]],
       ['none', true, false, false, [undefined, undefined]],
+      ['none', false, true, false, [undefined, undefined]],
+      ['none', false, false, true, [undefined, undefined]],
       ['single', false, false, false, ['desc', undefined]],
       ['single', true, false, false, ['desc', undefined]],
+      ['single', false, true, false, [undefined, undefined]],
+      ['single', false, false, true, [undefined, undefined]],
       ['multiple', false, false, false, ['desc', 0]],
       ['multiple', true, false, false, ['desc', 0]],
       ['multiple', false, true, false, [undefined, undefined]],
@@ -214,6 +218,8 @@ test.describe('CardView - Sorting Behavior - Functional', () => {
   (
     [
       ['none', SORT_ASCENDING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
+      ['none', SORT_DESCENDING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
+      ['none', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
       ['single', SORT_ASCENDING_MENUITEM_INDEX, [undefined, undefined], ['asc', undefined]],
       ['single', SORT_DESCENDING_MENUITEM_INDEX, [undefined, undefined], ['desc', undefined]],
       ['single', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
@@ -254,6 +260,8 @@ test.describe('CardView - Sorting Behavior - Functional', () => {
   (
     [
       ['none', SORT_ASCENDING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
+      ['none', SORT_DESCENDING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
+      ['none', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],
       ['single', SORT_ASCENDING_MENUITEM_INDEX, [undefined, undefined], ['asc', undefined]],
       ['single', SORT_DESCENDING_MENUITEM_INDEX, [undefined, undefined], ['desc', undefined]],
       ['single', CLEAR_SORTING_MENUITEM_INDEX, [undefined, undefined], [undefined, undefined]],

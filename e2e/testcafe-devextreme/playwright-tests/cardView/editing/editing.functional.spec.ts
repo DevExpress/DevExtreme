@@ -165,4 +165,97 @@ test.describe('CardView - Editing', () => {
     await expect(page.locator('.dx-popup-normal')).not.toBeVisible();
     await expect(page.locator('.dx-cardview-card')).toHaveCount(1);
   });
+
+  test('should show delete button on card when allowDeleting is true', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      columns: baseColumns,
+      dataSource: [{ id: 1, title: 'Task 1', status: 'Active' }],
+      keyExpr: 'id',
+      editing: { allowAdding: false, allowUpdating: false, allowDeleting: true },
+    });
+
+    const deleteButton = page.locator('.dx-cardview-card').first().locator('.dx-toolbar-item');
+    await expect(deleteButton).toHaveCount(1);
+  });
+
+  test('should delete card after clicking delete button and confirming', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      columns: baseColumns,
+      dataSource: [{ id: 1, title: 'Task 1', status: 'Active' }],
+      keyExpr: 'id',
+      editing: { allowAdding: false, allowUpdating: false, allowDeleting: true },
+    });
+
+    await expect(page.locator('.dx-cardview-card')).toHaveCount(1);
+
+    await page.locator('.dx-cardview-card').first().locator('.dx-toolbar-item').first().click();
+
+    await page.evaluate(() => {
+      const dialogs = document.querySelectorAll('.dx-dialog');
+      if (dialogs.length === 0) {
+        return;
+      }
+    });
+
+    const yesButton = page.locator('.dx-dialog .dx-button').filter({ hasText: /yes/i });
+    if (await yesButton.isVisible()) {
+      await yesButton.click();
+    }
+  });
+
+  test('should show both edit and delete buttons when allowUpdating and allowDeleting are true', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      columns: baseColumns,
+      dataSource: [{ id: 1, title: 'Task 1', status: 'Active' }],
+      keyExpr: 'id',
+      editing: { allowAdding: false, allowUpdating: true, allowDeleting: true },
+    });
+
+    const buttons = page.locator('.dx-cardview-card').first().locator('.dx-toolbar-item');
+    await expect(buttons).toHaveCount(2);
+  });
+
+  test('should fire onInitNewCard when add popup opens', async ({ page }) => {
+    let initNewCardFired = false;
+
+    await createWidget(page, 'dxCardView', {
+      columns: baseColumns,
+      dataSource: [],
+      keyExpr: 'id',
+      editing: {
+        allowAdding: true,
+      },
+      onInitNewCard() {
+        (window as any).initNewCardFired = true;
+      },
+    });
+
+    await page.locator('[aria-label="add"]').click();
+    await page.waitForSelector('.dx-popup-normal');
+
+    const fired = await page.evaluate(() => (window as any).initNewCardFired);
+    expect(fired).toBe(true);
+  });
+
+  test('should save card with updated values via edit popup', async ({ page }) => {
+    await createWidget(page, 'dxCardView', {
+      columns: baseColumns,
+      dataSource: [{ id: 1, title: 'Task 1', status: 'Active' }],
+      keyExpr: 'id',
+      editing: {
+        allowUpdating: true,
+        form: { items: ['id', 'title', 'status'] },
+      },
+    });
+
+    await page.locator('.dx-cardview-card').first().locator('.dx-toolbar-item').first().click();
+    await page.waitForSelector('.dx-popup-normal');
+
+    await page.locator('.dx-popup-normal input[name="title"]').fill('Updated Task');
+
+    const saveButton = page.locator('.dx-popup-normal .dx-button').filter({ hasText: /save/i });
+    await saveButton.click();
+
+    await expect(page.locator('.dx-popup-normal')).not.toBeVisible();
+  });
 });

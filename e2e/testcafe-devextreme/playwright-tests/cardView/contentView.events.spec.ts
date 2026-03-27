@@ -56,6 +56,11 @@ const CONFIG = {
     window.dxCardViewEventTest.onFieldValuePrepared ??= [];
     window.dxCardViewEventTest.onFieldValuePrepared.push(e);
   },
+  onCardHoverChanged(e) {
+    window.dxCardViewEventTest ??= {};
+    window.dxCardViewEventTest.onCardHoverChanged ??= [];
+    window.dxCardViewEventTest.onCardHoverChanged.push(e);
+  },
   onDisposing() {
     delete window.dxCardViewEventTest;
   },
@@ -139,5 +144,53 @@ test.describe('CardView - ContentView - events', () => {
 
     const count = await page.evaluate(() => (window as any).dxCardViewEventTest?.onFieldValuePrepared?.length);
     expect(count).toBe(15);
+  });
+
+  test('onCardHoverChanged on hover', async ({ page }) => {
+    await createWidget(page, 'dxCardView', CONFIG);
+
+    await page.locator('.dx-cardview-card').first().hover();
+
+    const count = await page.evaluate(() => (window as any).dxCardViewEventTest?.onCardHoverChanged?.length);
+    expect(count).toBeGreaterThanOrEqual(1);
+  });
+
+  test('onCardClick event has correct card info', async ({ page }) => {
+    await createWidget(page, 'dxCardView', CONFIG);
+
+    await page.locator('.dx-cardview-card').first().click();
+
+    const result = await page.evaluate(() => {
+      const event = (window as any).dxCardViewEventTest?.onCardClick?.[0];
+      if (!event) return false;
+      return event.card.index === 0 && !!event.cardElement;
+    });
+    expect(result).toBe(true);
+  });
+
+  test('onFieldCaptionClick event has correct field info', async ({ page }) => {
+    await createWidget(page, 'dxCardView', CONFIG);
+
+    await page.locator('.dx-cardview-card').first().locator('.dx-cardview-field-caption').first().click();
+
+    const result = await page.evaluate(() => {
+      const event = (window as any).dxCardViewEventTest?.onFieldCaptionClick?.[0];
+      if (!event) return false;
+      return event.field.index === 0 && event.field.card.index === 0 && !!event.fieldCaptionElement;
+    });
+    expect(result).toBe(true);
+  });
+
+  test('onFieldValueClick event has correct field info', async ({ page }) => {
+    await createWidget(page, 'dxCardView', CONFIG);
+
+    await page.locator('.dx-cardview-card').first().locator('.dx-cardview-field-value').first().click();
+
+    const result = await page.evaluate(() => {
+      const event = (window as any).dxCardViewEventTest?.onFieldValueClick?.[0];
+      if (!event) return false;
+      return event.field.index === 0 && event.field.card.index === 0 && !!event.fieldValueElement;
+    });
+    expect(result).toBe(true);
   });
 });
