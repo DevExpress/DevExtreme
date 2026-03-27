@@ -3,19 +3,19 @@ import { mockAppointmentDataAccessor } from '@ts/scheduler/__mock__/appointment_
 import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
 
-import type { BaseAppointmentProperties } from '../appointment/base_appointment';
+import type { BaseAppointmentViewProperties } from '../appointment/base_appointment';
 
 export const getBaseAppointmentProperties = (
   appointmentData: SafeAppointment,
   targetedAppointmentData?: TargetedAppointment,
-): BaseAppointmentProperties => {
+): BaseAppointmentViewProperties => {
   const normalizedTargetedAppointmentData = targetedAppointmentData ?? {
     ...appointmentData,
     displayStartDate: appointmentData.startDate as Date,
     displayEndDate: appointmentData.endDate as Date,
   };
 
-  const config: BaseAppointmentProperties = {
+  const config: BaseAppointmentViewProperties = {
     appointmentData,
     targetedAppointmentData: normalizedTargetedAppointmentData,
     appointmentTemplate: new EmptyTemplate(),

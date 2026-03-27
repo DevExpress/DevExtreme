@@ -6,16 +6,16 @@ import $ from '@js/core/renderer';
 import fx from '../../../common/core/animation/fx';
 import { getBaseAppointmentProperties } from '../__mock__/appointment_properties';
 import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
-import type { BaseAppointmentProperties } from './base_appointment';
-import { BaseAppointment } from './base_appointment';
+import type { BaseAppointmentViewProperties } from './base_appointment';
+import { BaseAppointmentView } from './base_appointment';
 
 const createBaseAppointment = async (
-  properties: BaseAppointmentProperties,
-): Promise<BaseAppointment> => {
+  properties: BaseAppointmentViewProperties,
+): Promise<BaseAppointmentView> => {
   const $element = $('.root');
 
   // @ts-expect-error
-  const instance = new BaseAppointment($element, properties);
+  const instance = new BaseAppointmentView($element, properties);
 
   // Await for resources
   await new Promise(process.nextTick);
