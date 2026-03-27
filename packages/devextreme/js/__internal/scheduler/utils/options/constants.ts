@@ -88,6 +88,7 @@ export const DEFAULT_SCHEDULER_OPTIONS: Properties = {
     mode: 'standard',
   },
   allDayPanelMode: 'all',
+  snapToCellsMode: undefined,
   toolbar: {
     disabled: false,
     multiline: false,

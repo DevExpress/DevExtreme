@@ -23,6 +23,7 @@ export const sortAppointments = (
   const {
     isMonthView,
     hasAllDayPanel,
+    snapToCellsMode,
     viewOffset,
     compareOptions: { endDayHour },
   } = optionManager.options;
@@ -40,9 +41,11 @@ export const sortAppointments = (
       sortByStartDate(innerStep1);
       sortByGroupIndex(innerStep1);
       const innerStep2 = addPosition(innerStep1, optionManager.getCells(panelName));
-      const innerStep3 = isMonthView || panelName === 'allDayPanel'
-        ? snapToCells(innerStep2, optionManager.getCells(panelName))
-        : innerStep2;
+      const innerStep3 = snapToCells(
+        innerStep2,
+        optionManager.getCells(panelName),
+        panelName === 'allDayPanel' ? 'always' : snapToCellsMode,
+      );
       const innerStep4 = addCollector(innerStep3, optionManager.getCollectorOptions(panelName));
       return innerStep4;
     });
