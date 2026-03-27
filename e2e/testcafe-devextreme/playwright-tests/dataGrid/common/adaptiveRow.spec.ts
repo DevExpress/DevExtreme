@@ -14,8 +14,9 @@ test.describe('Adaptive Row', () => {
     }), process.env.THEME || 'fluent.blue.light');
   });
 
-  test.skip('Should be shown and hidden when the window is resized', async ({ page }) => {
-    // TODO: Playwright migration - html element intercepts pointer events during click
+  test('Should be shown and hidden when the window is resized', async ({ page }) => {
+    await page.setViewportSize({ width: 400, height: 400 });
+
     await createWidget(page, 'dxDataGrid', {
       dataSource: [{
         ID: 1,
@@ -58,11 +59,12 @@ test.describe('Adaptive Row', () => {
 
     const adaptiveButton = dataGrid.getAdaptiveButton();
     await expect(adaptiveButton).toBeVisible();
-    await adaptiveButton.click();
+    await adaptiveButton.click({ force: true });
 
     await expect(dataGrid.getAdaptiveRow(0).element).toBeVisible();
 
     await page.setViewportSize({ width: 1200, height: 400 });
+    await dataGrid.apiUpdateDimensions();
 
     expect(await dataGrid.isAdaptiveColumnHidden()).toBeTruthy();
     await expect(dataGrid.getAdaptiveRow(0).element).not.toBeVisible();

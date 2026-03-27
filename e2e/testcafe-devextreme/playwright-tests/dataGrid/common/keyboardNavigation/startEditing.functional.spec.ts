@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createWidget } from '../../../../playwright-helpers';
+import { createWidget, DataGrid } from '../../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../../tests/container.html')}`;
@@ -13,6 +13,7 @@ test.describe('Keyboard Navigation - editOnKeyPress', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
+
   test.skip('Editing should start by pressing enter after scrolling content with scrolling.mode=virtual', async ({ page }) => {
     // TODO: Playwright migration - TestCafe API remnants (locator.focused property)
     await createWidget(page, 'dxDataGrid', {
@@ -41,5 +42,90 @@ test.describe('Keyboard Navigation - editOnKeyPress', () => {
     await page.keyboard.press('enter');
 
     expect(await page.locator('.dx-data-row').nth(49).locator('td').nth(1).locator('.dx-editor-cell').focused).toBeTruthy();
+  });
+
+  test('editing.allowUpdating callback should receive correct row on tab key on first cell with virtual scrolling (T1290811)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [...new Array(50)].map((_, i) => ({
+        id: i,
+        data: `Row ${i}`,
+      })),
+      keyExpr: 'id',
+      columns: ['id', 'data'],
+      editing: {
+        mode: 'cell',
+        allowUpdating: (e: any) => {
+          (window as any).eventRowKeys ??= [];
+          (window as any).eventRowKeys.push(e.row?.key);
+          return true;
+        },
+      },
+      scrolling: {
+        mode: 'virtual',
+      },
+      height: 300,
+    });
+
+    await page.evaluate((opts) => ($('#container') as any).dxDataGrid('instance').getScrollable().scrollBy(opts), { y: 10000 });
+
+    const lastRow = page.locator('.dx-data-row').last();
+    await lastRow.locator('td').nth(0).click();
+
+    const firstCellEditorFocused = await lastRow.locator('td').nth(0).locator('.dx-texteditor-input').evaluate(
+      (el) => document.activeElement === el,
+    );
+    expect(firstCellEditorFocused).toBe(true);
+
+    await page.keyboard.press('Tab');
+
+    const secondCellEditorFocused = await lastRow.locator('td').nth(1).locator('.dx-texteditor-input').evaluate(
+      (el) => document.activeElement === el,
+    );
+    expect(secondCellEditorFocused).toBe(true);
+
+    const eventRowKeys = await page.evaluate(() => (window as any).eventRowKeys);
+    const uniqueRowKeys = [...new Set(eventRowKeys)];
+    expect(uniqueRowKeys).toEqual([49]);
+  });
+
+  test('DataGrid should not remove the minus symbol when editing started (T1201166)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: undefined, text: '1' },
+        { id: 2, text: '2' },
+        { id: 3, text: '3' },
+      ],
+      columns: [{
+        dataField: 'id',
+        dataType: 'number',
+        editorOptions: {
+          format: { type: 'decimal' },
+        },
+      },
+      'text',
+      ],
+      editing: {
+        allowUpdating: true,
+        selectTextOnEditStart: true,
+        mode: 'batch',
+        startEditAction: 'dblClick',
+      },
+      keyboardNavigation: {
+        editOnKeyPress: true,
+        enterKeyAction: 'moveFocus',
+        enterKeyDirection: 'column',
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    const cell = dataGrid.getDataCell(0, 0);
+
+    await cell.element.click();
+    await page.keyboard.press('-');
+    await page.keyboard.press('1');
+    await page.keyboard.press('Enter');
+
+    const cellText = await cell.element.innerText();
+    expect(cellText.trim()).toBe('-1');
   });
 });

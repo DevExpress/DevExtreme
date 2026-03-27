@@ -58,4 +58,66 @@ test.describe('Keyboard Navigation - editOnKeyPress', () => {
       expect(hasErrors).toBe(0);
     });
   });
+
+  test('Focused cell should not flick (T1206435)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', () => {
+      const data = [
+        { value: 'data' },
+        { value: 'data' },
+      ];
+      return {
+        dataSource: new (window as any).DevExpress.data.CustomStore({
+          load() {
+            return Promise.resolve(data);
+          },
+          update() {
+            return new Promise<void>((res) => {
+              setTimeout(() => {
+                res();
+              }, 100);
+            });
+          },
+        }),
+        keyboardNavigation: {
+          enabled: true,
+          editOnKeyPress: true,
+          enterKeyAction: 'moveFocus',
+          enterKeyDirection: 'column',
+        },
+        editing: {
+          mode: 'cell',
+          allowUpdating: true,
+          allowAdding: true,
+          startEditAction: 'dblClick',
+          refreshMode: 'reshape',
+        },
+        repaintChangesOnly: true,
+      };
+    });
+
+    const dataGrid = new DataGrid(page);
+
+    await page.evaluate(() => {
+      (window as any).__focusCount = 0;
+      const secondCell = document.querySelectorAll('.dx-data-row')[1]?.querySelector('td');
+      if (secondCell) {
+        secondCell.addEventListener('focusin', () => {
+          (window as any).__focusCount += 1;
+        });
+      }
+    });
+
+    const firstCell = dataGrid.getDataCell(0, 0);
+    await firstCell.element.click();
+
+    await page.keyboard.press('m');
+    await page.keyboard.press('Enter');
+
+    const secondCell = dataGrid.getDataCell(1, 0);
+    const isFocused = await secondCell.element.evaluate((el) => document.activeElement === el || el.contains(document.activeElement));
+    expect(isFocused).toBe(true);
+
+    const focusEventCount = await page.evaluate(() => (window as any).__focusCount);
+    expect(focusEventCount).toBe(1);
+  });
 });
