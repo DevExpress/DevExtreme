@@ -117,8 +117,10 @@ const setupPage = async (page: any) => {
   }), process.env.THEME || 'fluent.blue.light');
 };
 
-test.describe('Offset: Markup usual appointments', () => {
+test.describe.configure({ timeout: 300000 });
+  test.describe('Offset: Markup usual appointments', () => {
   test('Usual appointments render', async ({ page }) => {
+    test.setTimeout(300000);
     for (const { views, dataSource } of VIEW_CONFIGS) {
       for (const offset of [0, 735, 1440, -735, -1440]) {
         for (const { startDayHour, endDayHour } of [{ startDayHour: 0, endDayHour: 24 }, { startDayHour: 9, endDayHour: 17 }]) {

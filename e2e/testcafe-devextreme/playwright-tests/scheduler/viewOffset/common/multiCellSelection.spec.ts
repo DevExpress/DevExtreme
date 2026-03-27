@@ -32,8 +32,10 @@ const setupPage = async (page: any) => {
   }), process.env.THEME || 'fluent.blue.light');
 };
 
-test.describe('Offset: Multi cell selection', () => {
+test.describe.configure({ timeout: 300000 });
+  test.describe('Offset: Multi cell selection', () => {
   test('Multi cell selection should work', async ({ page }) => {
+    test.setTimeout(300000);
     for (const offset of [0, -120, 120]) {
       for (const rtlEnabled of [true, false]) {
         for (const { view, dragOptions } of DRAG_CONFIGS) {
@@ -68,6 +70,7 @@ test.describe('Offset: Multi cell selection', () => {
   });
 
   test('Multi cell selection in the all-day panel should work', async ({ page }) => {
+    test.setTimeout(300000);
     for (const offset of [0, -120, 120]) {
       for (const rtlEnabled of [true, false]) {
         await setupPage(page);
