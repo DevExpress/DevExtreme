@@ -766,7 +766,7 @@ export const data = (Base: ModuleType<DataController>) => class VirtualScrolling
         const { rowType } = item;
         const itemCountable = isItemCountableByDataSource(item, dataSource);
 
-        const isNextGroupItem = rowType === 'group' && (prevCountable || itemCountable || (prevRowType !== 'group' && currentIndex > 0));
+        const isNextGroupItem = rowType === 'group' && (prevCountable || (prevRowType !== 'group' && currentIndex > 0));
         const isNextDataItem = rowType === 'data' && itemCountable && (prevCountable || prevRowType !== 'group');
 
         if (!item.isNewRow && isDefined(prevCountable)) {
