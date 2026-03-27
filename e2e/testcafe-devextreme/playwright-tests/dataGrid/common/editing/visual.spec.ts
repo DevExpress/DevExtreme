@@ -245,4 +245,130 @@ test.describe('Editing.Visual', () => {
       await testScreenshot(page, `T1179114-grid-edit-custom-button when-useicons-is-${useIcons}.png`, { element: page.locator('#container') });
     });
   });
+
+  test('DataGrid adaptive text should have correct paddings (T1062084)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      width: 400,
+      dataSource: [{
+        OrderNumber: 35703,
+        SaleAmount: 11800,
+        OrderDate: '2014/04/10',
+        Employee: 'Harv Mudd',
+      }],
+      keyExpr: 'OrderNumber',
+      columnHidingEnabled: true,
+      editing: {
+        allowUpdating: true,
+        mode: 'batch',
+      },
+      columns: [{
+        dataField: 'OrderNumber',
+        caption: 'Invoice Number',
+        width: 300,
+      }, {
+        dataField: 'Employee',
+      }, {
+        dataField: 'OrderDate',
+        dataType: 'date',
+      }, {
+        dataField: 'SaleAmount',
+        validationRules: [{ type: 'range', max: 100000 }],
+        format: 'currency',
+      }],
+    });
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.getAdaptiveButton(0).click();
+
+    await dataGrid.getFormItemElement(0).click();
+    await dataGrid.getFormItemEditor(0).fill('1');
+    await page.keyboard.press('Enter');
+
+    await dataGrid.getFormItemElement(2).click();
+    await dataGrid.getFormItemEditor(2).fill('0');
+    await page.keyboard.press('Enter');
+
+    await testScreenshot(page, 'grid-adaptive-item-text.png', { element: page.locator('#container') });
+  });
+
+  test('DataGrid checkboxes should have correct outline in adaptive row', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      width: 400,
+      dataSource: [{
+        OrderNumber: 35703,
+        Employee: 'Sam',
+        OrderDate: '2014/04/10',
+        Checkbox: true,
+      }],
+      keyExpr: 'OrderNumber',
+      columnHidingEnabled: true,
+      editing: {
+        allowUpdating: true,
+        mode: 'cell',
+      },
+      columns: [{
+        dataField: 'OrderNumber',
+        caption: 'Invoice Number',
+        width: 300,
+      }, {
+        dataField: 'Employee',
+      }, {
+        dataField: 'OrderDate',
+        dataType: 'date',
+      }, {
+        dataField: 'Checkbox',
+        dataType: 'boolean',
+      }],
+    });
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.getAdaptiveButton(0).click();
+    await dataGrid.getFormItemElement(2).click();
+
+    await testScreenshot(page, 'grid-adaptive-checkbox.png', { element: page.locator('#container') });
+  });
+
+  test('DataGrid inside editing popup should have synchronized columns (T1059401)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ ID: 1 }],
+      keyExpr: 'ID',
+      editing: {
+        allowUpdating: true,
+        mode: 'popup',
+        form: {
+          colCount: 1,
+          items: [{
+            template() {
+              return ($('<div>') as any).dxDataGrid({
+                showColumnLines: true,
+                dataSource: [{
+                  ID: 1,
+                  FirstName: 'John',
+                  LastName: 'Heart',
+                }],
+                height: 200,
+                editing: {
+                  allowUpdating: true,
+                  allowDeleting: true,
+                },
+              });
+            },
+          }],
+        },
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await page.mouse.click(10, 10);
+
+    await dataGrid.getDataRow(0).element.locator('.dx-link-edit').click();
+
+    const popupOverlay = page.locator('.dx-datagrid-edit-popup .dx-overlay-content');
+    await expect(popupOverlay).toBeVisible();
+
+    const popupDataGridRow = popupOverlay.locator('.dx-data-row').first();
+    await expect(popupDataGridRow).toBeVisible();
+
+    await testScreenshot(page, 'grid-popup-editing-grid.png', { element: popupOverlay });
+  });
 });

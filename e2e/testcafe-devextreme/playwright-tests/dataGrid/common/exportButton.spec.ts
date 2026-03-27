@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
-import { createWidget, testScreenshot } from '../../../playwright-helpers';
+import { test } from '@playwright/test';
+import { createWidget, testScreenshot, DataGrid } from '../../../playwright-helpers';
 import path from 'path';
 
 const containerUrl = `file://${path.resolve(__dirname, '../../../tests/container.html')}`;
@@ -13,8 +13,8 @@ test.describe('Export button', () => {
       (window as any).DevExpress.ui.themes.current(theme);
     }), process.env.THEME || 'fluent.blue.light');
   });
-  test.skip('allowExportSelectedData: false, menu: false', async ({ page }) => {
-    // TODO: Playwright migration - screenshot mismatch
+
+  test('allowExportSelectedData: false, menu: false', async ({ page }) => {
     await createWidget(page, 'dxDataGrid', {
       dataSource: [{ id: 1, value: 2 }],
       export: {
@@ -22,6 +22,117 @@ test.describe('Export button', () => {
       },
     });
 
-      await testScreenshot(page, 'grid-export-one-button.png', { element: page.locator('.dx-datagrid-header-panel') });
+    const dataGrid = new DataGrid(page);
+    await testScreenshot(page, 'grid-export-one-button.png', { element: dataGrid.getHeaderPanel().element });
+  });
+
+  test('allowExportSelectedData: false, menu: false, PDF', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ id: 1, value: 2 }],
+      export: {
+        enabled: true,
+        formats: ['pdf'],
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await testScreenshot(page, 'grid-export-one-button-pdf.png', { element: dataGrid.getHeaderPanel().element });
+  });
+
+  test('allowExportSelectedData: true, menu: false', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ id: 1, value: 2 }],
+      height: 300,
+      export: {
+        enabled: true,
+        allowExportSelectedData: true,
+        formats: ['xlsx', 'pdf', 'csv'],
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.getHeaderPanel().getExportButton().click();
+
+    await testScreenshot(page, 'grid-export-dropdown-button.png', { element: dataGrid.element });
+  });
+
+  test('allowExportSelectedData: false, menu: true', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ id: 1, value: 2 }],
+      export: {
+        enabled: true,
+      },
+      width: 30,
+    });
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.getHeaderPanel().getDropDownMenuButton().click();
+
+    await testScreenshot(page, 'grid-export-one-button-in-menu.png', { element: page.locator('html') });
+  });
+
+  test('allowExportSelectedData: true, menu: true', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ id: 1, value: 2 }],
+      export: {
+        enabled: true,
+        allowExportSelectedData: true,
+        formats: ['xlsx', 'pdf'],
+      },
+      width: 30,
+    });
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.getHeaderPanel().getDropDownMenuButton().click();
+
+    await testScreenshot(page, 'grid-export-dropdown-button-in-menu.png', { element: page.locator('html') });
+  });
+
+  test('Export is disabled when no data columns is in grid header, menu: false', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ value: 1 }],
+      groupPanel: {
+        visible: true,
+      },
+      columns: [
+        { dataField: 'value', groupIndex: 0 },
+      ],
+      export: {
+        enabled: true,
+        allowExportSelectedData: true,
+        formats: ['xlsx', 'pdf'],
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await testScreenshot(page, 'disabled-export_when-no-columns-visible.png', { element: dataGrid.element });
+  });
+
+  test('Export is disabled when no data columns is in grid header, menu: true', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ value: 1 }],
+      columns: [
+        { dataField: 'value', visible: false },
+      ],
+      columnChooser: {
+        enabled: true,
+      },
+      toolbar: {
+        items: [
+          { name: 'exportButton', locateInMenu: 'always' },
+          { name: 'columnChooserButton', locateInMenu: 'always' },
+        ],
+      },
+      export: {
+        enabled: true,
+        allowExportSelectedData: true,
+        formats: ['xlsx', 'pdf'],
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.getHeaderPanel().getDropDownMenuButton().click();
+
+    await testScreenshot(page, 'disabled-export-in-menu_when-no-columns-visible.png', { element: page.locator('html') });
   });
 });

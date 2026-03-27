@@ -189,4 +189,126 @@ test.describe('Focused row - new rows T1162227', () => {
     const rowFocusChanged = await page.evaluate(() => (window as any).rowFocusChangedResults);
     expect(rowFocusChanged).toEqual([[1], [3]]);
   });
+
+  test('It should fire correct events on page change', async ({ page }) => {
+    await page.evaluate(() => {
+      (window as any).cellFocusChangingResults = [];
+      (window as any).cellFocusChangedResults = [];
+      (window as any).rowFocusChangingResults = [];
+      (window as any).rowFocusChangedResults = [];
+    });
+
+    await createWidget(page, 'dxDataGrid', {
+      focusedRowEnabled: true,
+      editing: { mode: 'batch', allowAdding: true, allowUpdating: true },
+      paging: { pageSize: 2 },
+      ...getGridDataConfig(4),
+      onFocusedCellChanging: ({ prevRowIndex, prevColumnIndex, newRowIndex, newColumnIndex }: any) => {
+        (window as any).cellFocusChangingResults.push([[prevRowIndex, prevColumnIndex], [newRowIndex, newColumnIndex]]);
+      },
+      onFocusedCellChanged: ({ rowIndex, columnIndex }: any) => {
+        (window as any).cellFocusChangedResults.push([rowIndex, columnIndex]);
+      },
+      onFocusedRowChanging: ({ prevRowIndex, newRowIndex }: any) => {
+        (window as any).rowFocusChangingResults.push([prevRowIndex, newRowIndex]);
+      },
+      onFocusedRowChanged: ({ rowIndex }: any) => {
+        (window as any).rowFocusChangedResults.push([rowIndex]);
+      },
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+    await expect(dataGrid.getContainer()).toBeVisible();
+
+    await dataGrid.getDataCell(0, 0).click();
+    await page.waitForTimeout(100);
+
+    const page2Button = dataGrid.getPager().locator('[aria-label="Page 2"]');
+    await page2Button.click();
+    await page.waitForTimeout(100);
+
+    await dataGrid.getDataCell(2, 0).click();
+    await page.waitForTimeout(100);
+
+    const cellFocusChangingResults = await page.evaluate(() => (window as any).cellFocusChangingResults);
+    const rowFocusChangingResults = await page.evaluate(() => (window as any).rowFocusChangingResults);
+    const rowFocusChangedResults = await page.evaluate(() => (window as any).rowFocusChangedResults);
+
+    expect(cellFocusChangingResults.length).toBeGreaterThan(0);
+    expect(rowFocusChangingResults.length).toBeGreaterThan(0);
+    expect(rowFocusChangedResults.length).toBeGreaterThan(0);
+  });
+
+  test('It should fire row changed event and change page if focusedRowKey on another page', async ({ page }) => {
+    await page.evaluate(() => {
+      (window as any).rowFocusChangedResults = [];
+    });
+
+    await createWidget(page, 'dxDataGrid', {
+      focusedRowEnabled: true,
+      focusedRowKey: 3,
+      editing: { mode: 'batch', allowAdding: true, allowUpdating: true },
+      paging: { pageSize: 2 },
+      ...getGridDataConfig(4),
+      onFocusedRowChanged: ({ rowIndex }: any) => {
+        (window as any).rowFocusChangedResults.push([rowIndex]);
+      },
+    });
+
+    await page.waitForTimeout(100);
+
+    const rowFocusChanged = await page.evaluate(() => (window as any).rowFocusChangedResults);
+    expect(rowFocusChanged).toEqual([[1]]);
+
+    const dataGrid = new DataGrid(page, '#container');
+    const cellText = await dataGrid.getDataCell(3, 0).innerText();
+    expect(cellText).toBe('dataA_3');
+  });
+
+  test('After modification of newRowIndex / newCellIndex focused row and cell should be changed', async ({ page }) => {
+    await page.evaluate(() => {
+      (window as any).cellFocusChangingResults = [];
+      (window as any).cellFocusChangedResults = [];
+      (window as any).rowFocusChangingResults = [];
+      (window as any).rowFocusChangedResults = [];
+    });
+
+    await createWidget(page, 'dxDataGrid', {
+      focusedRowEnabled: true,
+      editing: { mode: 'batch', allowAdding: true, allowUpdating: true },
+      ...getGridDataConfig(4),
+      onFocusedCellChanging: (event: any) => {
+        (window as any).cellFocusChangingResults.push(
+          [[event.prevRowIndex, event.prevColumnIndex], [event.newRowIndex, event.newColumnIndex]],
+        );
+        event.newRowIndex = 3;
+        event.newColumnIndex = 1;
+      },
+      onFocusedCellChanged: ({ rowIndex, columnIndex }: any) => {
+        (window as any).cellFocusChangedResults.push([rowIndex, columnIndex]);
+      },
+      onFocusedRowChanging: ({ prevRowIndex, newRowIndex }: any) => {
+        (window as any).rowFocusChangingResults.push([prevRowIndex, newRowIndex]);
+      },
+      onFocusedRowChanged: ({ rowIndex }: any) => {
+        (window as any).rowFocusChangedResults.push([rowIndex]);
+      },
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+    await expect(dataGrid.getContainer()).toBeVisible();
+
+    await dataGrid.getDataCell(0, 0).click();
+    await page.waitForTimeout(100);
+
+    const cellFocusChangingResults = await page.evaluate(() => (window as any).cellFocusChangingResults);
+    const cellFocusChangedResults = await page.evaluate(() => (window as any).cellFocusChangedResults);
+    const rowFocusChangingResults = await page.evaluate(() => (window as any).rowFocusChangingResults);
+    const rowFocusChangedResults = await page.evaluate(() => (window as any).rowFocusChangedResults);
+
+    expect(cellFocusChangingResults).toEqual([[[-1, -1], [0, 0]]]);
+    expect(cellFocusChangedResults).toEqual([[3, 1]]);
+    expect(rowFocusChangingResults).toEqual([[-1, 3]]);
+    expect(rowFocusChangedResults).toEqual([[3]]);
+  });
 });

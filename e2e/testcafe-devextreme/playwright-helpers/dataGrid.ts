@@ -171,6 +171,10 @@ export class DataGridHeaderPanel {
   getApplyFilterButton(): Locator {
     return this.element.locator('.dx-apply-button');
   }
+
+  getExportButton(): Locator {
+    return this.element.locator('.dx-datagrid-export-button');
+  }
 }
 
 export class DataGridContextMenu {
