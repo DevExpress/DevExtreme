@@ -135,4 +135,137 @@ test.describe('Selection', () => {
     const selectedRows = await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').getSelectedRowsData());
     expect(selectedRows.length).toBe(0);
   });
+
+  test('selectAll state should be correct after unselect item if refresh(true) is called inside onSelectionChanged (T1048081)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+      ],
+      keyExpr: 'id',
+      selectedRowKeys: [1, 2],
+      paging: {
+        pageSize: 3,
+      },
+      selection: {
+        mode: 'multiple',
+      },
+      onSelectionChanged(e: any) {
+        e.component.refresh(true);
+      },
+    });
+
+    const firstRowCheckbox = page.locator('.dx-data-row').nth(0).locator('.dx-checkbox').first();
+    await firstRowCheckbox.click();
+
+    await page.waitForTimeout(300);
+
+    const selectAllValue = await page.evaluate(() => {
+      const headerCheckbox = ($('#container') as any)
+        .dxDataGrid('instance')
+        .getView('columnHeadersView')
+        .element()
+        .find('.dx-checkbox')
+        .first();
+      return headerCheckbox.dxCheckBox('option', 'value');
+    });
+
+    expect(selectAllValue).toBeUndefined();
+
+    const firstRowSelected = await page.evaluate(() => {
+      const instance = ($('#container') as any).dxDataGrid('instance');
+      const selectedKeys = instance.getSelectedRowKeys();
+      return selectedKeys.includes(1);
+    });
+    expect(firstRowSelected).toBe(false);
+  });
+
+  test('Select rows by shift should work when grid has real time updates', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: {
+        store: {
+          data: [...new Array(50)].map((_, i) => ({
+            ID: i + 1,
+            CompanyName: `company name ${i + 1}`,
+            City: `city ${i + 1}`,
+          })),
+          type: 'array',
+          key: 'ID',
+        },
+        reshapeOnPush: true,
+        pushAggregationTimeout: 0,
+      },
+      height: 600,
+      repaintChangesOnly: true,
+      selection: {
+        mode: 'multiple',
+      },
+      onSelectionChanged(e: any) {
+        e.component.getDataSource().store().push([{
+          type: 'update',
+          key: 3,
+          data: { City: 'test123' },
+        }]);
+      },
+      columnAutoWidth: true,
+      showBorders: true,
+      paging: { pageSize: 10 },
+    });
+
+    const secondRowCheckbox = page.locator('.dx-data-row').nth(1).locator('.dx-select-checkbox');
+    await secondRowCheckbox.click();
+    await page.waitForTimeout(500);
+
+    const seventhRowCheckbox = page.locator('.dx-data-row').nth(6).locator('.dx-select-checkbox');
+    await seventhRowCheckbox.click({ modifiers: ['Shift'] });
+    await page.waitForTimeout(500);
+
+    for (let i = 1; i <= 6; i += 1) {
+      const isSelected = await page.evaluate((rowIdx) => {
+        const instance = ($('#container') as any).dxDataGrid('instance');
+        return instance.isRowSelected(instance.getKeyByRowIndex(rowIdx));
+      }, i);
+      expect(isSelected).toBe(true);
+    }
+  });
+
+  test('Sensitivity option change should be correctly handled during runtime change', async ({ page }) => {
+    const data = [
+      { ID: 'aaa', Name: 'Name 1' },
+      { ID: 'AAA', Name: 'Name 2' },
+      { ID: 'BBB', Name: 'Name 3' },
+    ];
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: data,
+      keyExpr: 'ID',
+      columns: ['ID', 'Name'],
+      showBorders: true,
+      selection: {
+        mode: 'multiple',
+        deferred: true,
+        sensitivity: 'base',
+      },
+    });
+
+    await page.locator('.dx-data-row').first().locator('td').first().click();
+
+    const selectedKeysBase = await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').getSelectedRowKeys());
+    expect(selectedKeysBase.length).toBeGreaterThan(1);
+
+    await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').option('selection.sensitivity', 'case'));
+
+    await page.waitForTimeout(100);
+
+    const selectedKeysAfterChange = await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').getSelectedRowKeys());
+    expect(selectedKeysAfterChange.length).toBe(0);
+
+    await page.locator('.dx-data-row').first().locator('td').first().click();
+
+    const selectedKeysCase = await page.evaluate(() => ($('#container') as any).dxDataGrid('instance').getSelectedRowKeys());
+    expect(selectedKeysCase.length).toBe(1);
+    expect(selectedKeysCase[0]).toBe('aaa');
+  });
 });

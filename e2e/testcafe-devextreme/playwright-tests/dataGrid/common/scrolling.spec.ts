@@ -669,4 +669,225 @@ test.describe('Scrolling', () => {
       delete (window as any).myStore;
     });
   });
+
+  test('Scroll position after grouping when RTL (T388508)', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+
+    await createWidget(page, 'dxDataGrid', {
+      width: 200,
+      rtlEnabled: true,
+      columns: [
+        { dataField: 'field1', width: 100 },
+        { dataField: 'field2', width: 100 },
+        { dataField: 'field3', width: 100 },
+        { dataField: 'field4', width: 100 },
+        { dataField: 'field5', width: 100 },
+      ],
+      dataSource: [{
+        field1: '1',
+        field2: '2',
+        field3: '3',
+        field4: '4',
+      }],
+    });
+
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    const scrollLeft = await dataGrid.getScrollLeft();
+    expect(scrollLeft).toBe(300);
+
+    await dataGrid.scrollTo({ x: 100 });
+    const scrollRight = await dataGrid.getScrollRight();
+
+    await dataGrid.apiColumnOption('field1', 'groupIndex', 0);
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    const groupRows = page.locator('.dx-group-row');
+    await expect(groupRows.first()).toBeVisible();
+
+    const scrollRightAfterGrouping = await dataGrid.getScrollRight();
+    expect(Math.floor(scrollRightAfterGrouping)).toBe(Math.floor(scrollRight));
+  });
+
+  test('New virtual mode. A detail row should be rendered when the last master row is expanded', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+
+    const getItems = (): Record<string, unknown>[] => {
+      const items: Record<string, unknown>[] = [];
+      for (let i = 0; i < 100; i += 1) {
+        items.push({ ID: i + 1, Name: `Name ${i + 1}` });
+      }
+      return items;
+    };
+
+    await createWidget(page, 'dxDataGrid', {
+      height: 350,
+      dataSource: getItems(),
+      keyExpr: 'ID',
+      remoteOperations: true,
+      scrolling: {
+        mode: 'virtual',
+        rowRenderingMode: 'virtual',
+      },
+      masterDetail: { enabled: true },
+    });
+
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    const firstRowHeight = await page.evaluate(() => {
+      const instance = ($('#container') as any).dxDataGrid('instance');
+      return $(instance.element()).find('.dx-data-row').first().height() ?? 0;
+    });
+
+    const scrollTopOffset = 100 * firstRowHeight;
+    await dataGrid.scrollTo({ top: scrollTopOffset });
+    await page.waitForTimeout(300);
+
+    await page.locator('.dx-data-row[aria-rowindex="100"]').locator('.dx-command-expand').click();
+    await page.waitForTimeout(300);
+
+    const visibleRows = await dataGrid.apiGetVisibleRows();
+    const penultimateRow = visibleRows[visibleRows.length - 2];
+    const lastRow = visibleRows[visibleRows.length - 1];
+
+    expect(penultimateRow.rowType).toBe('data');
+    expect(penultimateRow.key).toBe(100);
+    expect(lastRow.rowType).toBe('detail');
+    expect(lastRow.key).toBe(100);
+  });
+
+  test('New virtual mode. An adaptive row should be rendered when the last row is expanded', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+
+    const getItems = (): Record<string, unknown>[] => {
+      const items: Record<string, unknown>[] = [];
+      for (let i = 0; i < 100; i += 1) {
+        items.push({
+          ID: i + 1,
+          Name: `Name ${i + 1}`,
+          Description: `Description ${i + 1}`,
+        });
+      }
+      return items;
+    };
+
+    await createWidget(page, 'dxDataGrid', {
+      height: 350,
+      width: 300,
+      dataSource: getItems(),
+      keyExpr: 'ID',
+      remoteOperations: true,
+      scrolling: {
+        mode: 'virtual',
+        rowRenderingMode: 'virtual',
+        useNative: false,
+      },
+      columnHidingEnabled: true,
+      customizeColumns(columns: any[]) {
+        columns[0].width = 250;
+      },
+    });
+
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    const firstRowHeight = await page.evaluate(() => {
+      const instance = ($('#container') as any).dxDataGrid('instance');
+      return $(instance.element()).find('.dx-data-row').first().height() ?? 0;
+    });
+
+    const scrollTopOffset = 100 * firstRowHeight;
+    await dataGrid.scrollTo({ top: scrollTopOffset });
+    await page.waitForTimeout(300);
+
+    await page.locator('.dx-data-row[aria-rowindex="100"]').locator('.dx-datagrid-adaptive-more').click();
+    await page.waitForTimeout(300);
+
+    const visibleRows = await dataGrid.apiGetVisibleRows();
+    const penultimateRow = visibleRows[visibleRows.length - 2];
+    const lastRow = visibleRows[visibleRows.length - 1];
+
+    expect(penultimateRow.rowType).toBe('data');
+    expect(penultimateRow.key).toBe(100);
+    expect(lastRow.rowType).toBe('detailAdaptive');
+    expect(lastRow.key).toBe(100);
+  });
+
+  test('The row alternation should display correctly when grouping and virtual scrolling are enabled (T1194796)', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: new Array(20).fill(null).map((_, index) => ({
+        groupField: index < 2 ? index : 2,
+        field: `test${index}`,
+      })),
+      height: 400,
+      paging: { pageSize: 5 },
+      columns: [{ dataField: 'groupField', groupIndex: 0 }, 'field'],
+      rowAlternationEnabled: true,
+      grouping: { autoExpandAll: true },
+      scrolling: { mode: 'virtual', useNative: false },
+    });
+
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+    expect(await dataGrid.hasScrollable()).toBe(true);
+
+    await dataGrid.scrollTo({ y: 100 });
+    await dataGrid.scrollTo({ y: 200 });
+    await dataGrid.scrollTo({ y: 300 });
+    await dataGrid.scrollTo({ y: 400 });
+
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    const visibleRows = await dataGrid.apiGetVisibleRows();
+    expect(visibleRows.length).toBeGreaterThan(0);
+
+    const dataRowCount = visibleRows.filter((r) => r.rowType === 'data').length;
+    expect(dataRowCount).toBeGreaterThan(0);
+  });
+
+  test('DataGrid - Gray boxes appear when the push method is used to remove rows in infinite scrolling mode (T1240079)', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+
+    await createWidget(page, 'dxDataGrid', () => {
+      const data = [
+        { id: 1, text: 'text 1' },
+        { id: 2, text: 'text 2' },
+      ];
+      const dataSource = {
+        reshapeOnPush: true,
+        store: new (window as any).DevExpress.data.CustomStore({
+          key: 'id',
+          loadMode: 'raw',
+          load: () => Promise.resolve(data),
+        }),
+      };
+
+      return {
+        dataSource,
+        showBorders: true,
+        scrolling: { mode: 'infinite' },
+        height: 300,
+      };
+    });
+
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    const initialRows = await dataGrid.apiGetVisibleRows();
+    expect(initialRows.length).toBe(2);
+
+    await dataGrid.apiPush([
+      { type: 'remove', key: 1 },
+      { type: 'remove', key: 2 },
+    ]);
+
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    const finalRows = await dataGrid.apiGetVisibleRows();
+    expect(finalRows.length).toBe(0);
+
+    const freeSpaceRows = page.locator('.dx-freespace-row');
+    const grayBoxes = page.locator('.dx-datagrid-rowsview .dx-row:not(.dx-freespace-row):not(.dx-virtual-row)');
+    const grayBoxCount = await grayBoxes.count();
+    expect(grayBoxCount).toBe(0);
+  });
 });

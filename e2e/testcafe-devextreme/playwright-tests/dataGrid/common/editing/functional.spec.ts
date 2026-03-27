@@ -788,4 +788,253 @@ test.describe('Editing.Functional', () => {
     const cell20 = dataGrid.getDataCell(2, 0);
     await expect(cell20.element).toHaveClass(/dx-focused/);
   });
+
+  test('Validation(Row) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=false) (T880238)', async ({ page }) => {
+    const getGridConfig = (config: any) => ({
+      errorRowEnabled: true,
+      dataSource: [{ id: 1, name: 'Alex', age: 15, lastName: 'John' }],
+      keyExpr: 'id',
+      legacyRendering: false,
+      ...config,
+    });
+
+    await createWidget(page, 'dxDataGrid', getGridConfig({
+      editing: { mode: 'row', allowUpdating: true },
+      columns: ['age', {
+        dataField: 'name',
+        validationRules: [{
+          type: 'custom',
+          validationCallback(params: any) { return params.data.age >= 10; },
+        }],
+      }],
+    }));
+
+    const dataGrid = new DataGrid(page);
+    const editButton = page.locator('.dx-data-row[aria-rowindex="1"] .dx-link-edit');
+    await editButton.click();
+
+    const cell1 = page.locator('.dx-data-row[aria-rowindex="1"] td').nth(1);
+    await expect(cell1).not.toHaveClass(/dx-datagrid-invalid/);
+
+    const editor0 = page.locator('.dx-data-row[aria-rowindex="1"] td').nth(0).locator('.dx-texteditor-input');
+    await editor0.selectText();
+    await editor0.fill('3');
+    await page.keyboard.press('Enter');
+
+    await expect(cell1).toHaveClass(/dx-datagrid-invalid/);
+
+    const saveButton = page.locator('.dx-data-row[aria-rowindex="1"] .dx-link-save');
+    await saveButton.click();
+
+    await expect(cell1).toHaveClass(/dx-datagrid-invalid/);
+
+    await editor0.selectText();
+    await editor0.fill('10');
+    await page.keyboard.press('Enter');
+
+    await expect(cell1).toHaveClass(/dx-datagrid-invalid/);
+
+    await saveButton.click();
+    await expect(cell1).toHaveClass(/dx-datagrid-invalid/);
+
+    const row = page.locator('.dx-data-row[aria-rowindex="1"]');
+    await expect(row).toHaveClass(/dx-edit-row/);
+  });
+
+  test('Validation(Row) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=true) (T880238)', async ({ page }) => {
+    const getGridConfig = (config: any) => ({
+      errorRowEnabled: true,
+      dataSource: [{ id: 1, name: 'Alex', age: 15, lastName: 'John' }],
+      keyExpr: 'id',
+      legacyRendering: false,
+      ...config,
+    });
+
+    await createWidget(page, 'dxDataGrid', getGridConfig({
+      editing: { mode: 'row', allowUpdating: true },
+      columns: ['age', {
+        dataField: 'name',
+        validationRules: [{
+          type: 'custom',
+          reevaluate: true,
+          validationCallback(params: any) { return params.data.age >= 10; },
+        }],
+      }],
+    }));
+
+    const dataGrid = new DataGrid(page);
+    const editButton = page.locator('.dx-data-row[aria-rowindex="1"] .dx-link-edit');
+    await editButton.click();
+
+    const cell1 = page.locator('.dx-data-row[aria-rowindex="1"] td').nth(1);
+    await expect(cell1).not.toHaveClass(/dx-datagrid-invalid/);
+
+    const editor0 = page.locator('.dx-data-row[aria-rowindex="1"] td').nth(0).locator('.dx-texteditor-input');
+    await editor0.selectText();
+    await editor0.fill('3');
+    await page.keyboard.press('Enter');
+
+    await expect(cell1).toHaveClass(/dx-datagrid-invalid/);
+
+    const saveButton = page.locator('.dx-data-row[aria-rowindex="1"] .dx-link-save');
+    await saveButton.click();
+
+    await expect(cell1).toHaveClass(/dx-datagrid-invalid/);
+
+    await editor0.selectText();
+    await editor0.fill('10');
+    await page.keyboard.press('Enter');
+
+    await expect(cell1).not.toHaveClass(/dx-datagrid-invalid/);
+
+    const row = page.locator('.dx-data-row[aria-rowindex="1"]');
+    await expect(row).not.toHaveClass(/dx-edit-row/);
+  });
+
+  test('Validation(Cell) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=false) (T880238)', async ({ page }) => {
+    const getGridConfig = (config: any) => ({
+      errorRowEnabled: true,
+      dataSource: [{ id: 1, name: 'Alex', age: 15, lastName: 'John' }],
+      keyExpr: 'id',
+      legacyRendering: false,
+      ...config,
+    });
+
+    await createWidget(page, 'dxDataGrid', getGridConfig({
+      editing: { mode: 'cell', allowUpdating: true },
+      columns: ['age', {
+        dataField: 'name',
+        validationRules: [{
+          type: 'custom',
+          validationCallback(params: any) { return params.data.age >= 10; },
+        }],
+      }],
+    }));
+
+    const cell0 = page.locator('.dx-data-row[aria-rowindex="1"] td').nth(0);
+    const cell1 = page.locator('.dx-data-row[aria-rowindex="1"] td').nth(1);
+
+    await cell0.click();
+    await expect(cell1).not.toHaveClass(/dx-datagrid-invalid/);
+
+    const editor0 = cell0.locator('.dx-texteditor-input');
+    await editor0.selectText();
+    await editor0.fill('3');
+    await page.keyboard.press('Enter');
+
+    await expect(cell1).toHaveClass(/dx-datagrid-invalid/);
+    await expect(cell0).toHaveClass(/dx-editor-cell/);
+
+    await editor0.selectText();
+    await editor0.fill('10');
+    await page.keyboard.press('Enter');
+
+    await expect(cell1).toHaveClass(/dx-datagrid-invalid/);
+    await expect(cell0).toHaveClass(/dx-editor-cell/);
+  });
+
+  test('Validation(Cell) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=true) (T880238)', async ({ page }) => {
+    const getGridConfig = (config: any) => ({
+      errorRowEnabled: true,
+      dataSource: [{ id: 1, name: 'Alex', age: 15, lastName: 'John' }],
+      keyExpr: 'id',
+      legacyRendering: false,
+      ...config,
+    });
+
+    await createWidget(page, 'dxDataGrid', getGridConfig({
+      editing: { mode: 'cell', allowUpdating: true },
+      columns: ['age', {
+        dataField: 'name',
+        validationRules: [{
+          type: 'custom',
+          reevaluate: true,
+          validationCallback(params: any) { return params.data.age >= 10; },
+        }],
+      }],
+    }));
+
+    const cell0 = page.locator('.dx-data-row[aria-rowindex="1"] td').nth(0);
+    const cell1 = page.locator('.dx-data-row[aria-rowindex="1"] td').nth(1);
+
+    await cell0.click();
+    await expect(cell1).not.toHaveClass(/dx-datagrid-invalid/);
+
+    const editor0 = cell0.locator('.dx-texteditor-input');
+    await editor0.selectText();
+    await editor0.fill('3');
+    await page.keyboard.press('Enter');
+
+    await expect(cell1).toHaveClass(/dx-datagrid-invalid/);
+    await expect(cell0).toHaveClass(/dx-editor-cell/);
+
+    await editor0.selectText();
+    await editor0.fill('10');
+    await page.keyboard.press('Enter');
+
+    await expect(cell1).not.toHaveClass(/dx-datagrid-invalid/);
+    await expect(cell0).not.toHaveClass(/dx-editor-cell/);
+  });
+
+  ['false', 'true'].forEach((reevaluate) => {
+    test(`Validation(Batch) - Unmodified data cell should be marked as invalid when a neighboring cell is modified (reevaluate=${reevaluate}) (T880238)`, async ({ page }) => {
+      const getGridConfig = (config: any) => ({
+        errorRowEnabled: true,
+        dataSource: [{ id: 1, name: 'Alex', age: 15, lastName: 'John' }],
+        keyExpr: 'id',
+        legacyRendering: false,
+        ...config,
+      });
+
+      const reevaluateValue = reevaluate === 'true';
+
+      await createWidget(page, 'dxDataGrid', getGridConfig({
+        editing: { mode: 'batch', allowUpdating: true },
+        columns: ['age', {
+          dataField: 'name',
+          validationRules: [{
+            type: 'custom',
+            reevaluate: reevaluateValue,
+            validationCallback(params: any) { return params.data.age >= 10; },
+          }],
+        }],
+      }));
+
+      const dataGrid = new DataGrid(page);
+      const saveButton = dataGrid.getHeaderPanel().getSaveButton();
+
+      const cell0 = page.locator('.dx-data-row[aria-rowindex="1"] td').nth(0);
+      const cell1 = page.locator('.dx-data-row[aria-rowindex="1"] td').nth(1);
+
+      await cell0.click();
+      await expect(cell1).not.toHaveClass(/dx-datagrid-invalid/);
+
+      const editor0 = cell0.locator('.dx-texteditor-input');
+      await editor0.selectText();
+      await editor0.fill('3');
+      await page.keyboard.press('Enter');
+
+      await expect(cell1).not.toHaveClass(/dx-datagrid-invalid/);
+      await expect(cell0).toHaveClass(/dx-cell-modified/);
+
+      await saveButton.click();
+
+      await expect(cell1).toHaveClass(/dx-datagrid-invalid/);
+      await expect(cell0).toHaveClass(/dx-cell-modified/);
+
+      await cell0.click();
+      await editor0.selectText();
+      await editor0.fill('10');
+      await page.keyboard.press('Enter');
+
+      await expect(cell1).not.toHaveClass(/dx-datagrid-invalid/);
+      await expect(cell0).toHaveClass(/dx-cell-modified/);
+
+      await saveButton.click();
+
+      await expect(cell1).not.toHaveClass(/dx-datagrid-invalid/);
+      await expect(cell0).not.toHaveClass(/dx-cell-modified/);
+      await expect(cell0).not.toHaveClass(/dx-editor-cell/);
+    });
+  });
 });

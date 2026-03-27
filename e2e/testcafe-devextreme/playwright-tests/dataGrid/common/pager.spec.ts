@@ -57,4 +57,74 @@ test.describe('Pager', () => {
     const selectedPage = pager.locator('.dx-page.dx-selection');
     await expect(selectedPage).toHaveText('6');
   });
+
+  test('Changing pageSize to \'all\' with rowRenderingMode=\'virtual\' should work (T1090331)', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [...new Array(100).keys()].map((i) => ({ id: i })),
+      keyExpr: 'id',
+      showBorders: true,
+      scrolling: { rowRenderingMode: 'virtual' },
+      paging: { pageSize: 10 },
+      pager: {
+        visible: true,
+        allowedPageSizes: [5, 10, 'all'],
+        showPageSizeSelector: true,
+        displayMode: 'compact',
+      },
+      height: 400,
+    });
+
+    const pageSizeOption = await dataGrid.option('paging.pageSize');
+    expect(pageSizeOption).toBe(10);
+
+    await dataGrid.scrollBy({ y: 100 });
+
+    const pager = dataGrid.getPager();
+    const pageSizeButton = pager.locator('.dx-page-size').filter({ hasText: '10' });
+    await pageSizeButton.click();
+
+    const allOption = page.locator('.dx-dropdowneditor-overlay .dx-list-item').filter({ hasText: 'All' });
+    await allOption.click();
+
+    const pageSizeAfter = await dataGrid.option('paging.pageSize');
+    expect(pageSizeAfter).toBe(0);
+  });
+
+  test('Page index should not reset when scrolling while the grid is being refreshed (T1196099)', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [...new Array(100).keys()].map((i) => ({ id: i })),
+      keyExpr: 'id',
+      showBorders: true,
+      scrolling: { mode: 'standard', rowRenderingMode: 'virtual' },
+      paging: { pageIndex: 2 },
+      pager: { visible: true, displayMode: 'compact' },
+      height: 440,
+    });
+
+    const pageIndexBefore = await dataGrid.option('paging.pageIndex');
+    expect(pageIndexBefore).toBe(2);
+
+    await dataGrid.apiRefresh();
+    await dataGrid.scrollBy({ y: 20 });
+
+    const pageIndexAfter = await dataGrid.option('paging.pageIndex');
+    expect(pageIndexAfter).toBe(2);
+  });
+
+  test('No error should occur if dataSource is not defined and pageIndex is promise chained (T1256070)', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+
+    await createWidget(page, 'dxDataGrid', {
+      onContentReady(e: any) {
+        e.component.pageIndex(1).then(() => {}, () => {});
+      },
+    });
+
+    const isReady = await dataGrid.isReady();
+    expect(isReady).toBe(true);
+  });
 });
