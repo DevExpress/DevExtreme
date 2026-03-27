@@ -1131,4 +1131,150 @@ test.describe('Scrolling', () => {
       expect(typeof visibleRows[0].key).toBe('number');
     }
   });
+
+  test('Header container should have padding-right if grid has max-height and scrollbar is shown', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+
+    await page.evaluate(() => {
+      ($('#container') as any).css('max-height', '200px');
+    });
+
+    await createWidget(page, 'dxDataGrid', {
+      width: 400,
+      showBorders: true,
+      scrolling: { useNative: true },
+      dataSource: [
+        { id: 0, field1: 'test1', field2: 'test2', field3: 'test3' },
+        { id: 1, field1: 'test1', field2: 'test2', field3: 'test3' },
+        { id: 2, field1: 'test1', field2: 'test2', field3: 'test3' },
+        { id: 3, field1: 'test1', field2: 'test2', field3: 'test3' },
+        { id: 4, field1: 'test1', field2: 'test2', field3: 'test3' },
+        { id: 5, field1: 'test1', field2: 'test2', field3: 'test3' },
+      ],
+      keyExpr: 'id',
+      columns: ['field1', 'field2', 'field3'],
+    });
+
+    await dataGrid.scrollBy({ y: 20 });
+
+    const scrollTop = await dataGrid.getScrollTop();
+    expect(scrollTop).toBe(20);
+
+    const { headerPaddingRight, scrollBarWidth } = await page.evaluate(() => {
+      const instance = ($('#container') as any).dxDataGrid('instance');
+      const headersEl = instance.getView('columnHeadersView').element()[0];
+      const scrollable = instance.getScrollable();
+      return {
+        headerPaddingRight: parseFloat(window.getComputedStyle(headersEl).paddingRight),
+        scrollBarWidth: scrollable.getScrollbarWidth ? scrollable.getScrollbarWidth(false) : 0,
+      };
+    });
+
+    expect(headerPaddingRight).toBe(scrollBarWidth);
+  });
+
+  test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+
+    await createWidget(page, 'dxDataGrid', {
+      width: 150,
+      height: 300,
+      columnMinWidth: 100,
+      dataSource: [{ id: 0, field1: 'test1', field2: 'test2', field3: 'test3' }],
+      keyExpr: 'id',
+      columns: ['field1', 'field2', 'field3'],
+      scrolling: { useNative: true },
+      masterDetail: {
+        enabled: true,
+        template(container: any) {
+          ($('<div>') as any).dxDataGrid({
+            dataSource: [
+              { id: 0, field1: 'test11', field2: 'test21', field3: 'test31' },
+              { id: 1, field1: 'test12', field2: 'test22', field3: 'test32' },
+              { id: 2, field1: 'test13', field2: 'test23', field3: 'test33' },
+              { id: 3, field1: 'test14', field2: 'test24', field3: 'test34' },
+              { id: 4, field1: 'test15', field2: 'test25', field3: 'test35' },
+            ],
+            columns: ['field1', 'field2', 'field3'],
+            columnMinWidth: 100,
+            keyExpr: 'id',
+          }).appendTo(container);
+        },
+      },
+    });
+
+    await dataGrid.getDataRow(0).element.locator('.dx-command-expand').click();
+    const isExpanded = await page.evaluate(() => {
+      const instance = ($('#container') as any).dxDataGrid('instance');
+      return instance.isRowExpanded(0);
+    });
+    expect(isExpanded).toBe(true);
+
+    await dataGrid.scrollTo({ x: 180 });
+    await dataGrid.scrollTo({ x: 210 });
+
+    await page.setViewportSize({ width: 600, height: 250 });
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    const { headerPaddingRight, scrollBarWidth } = await page.evaluate(() => {
+      const instance = ($('#container') as any).dxDataGrid('instance');
+      const headersEl = instance.getView('columnHeadersView').element()[0];
+      const scrollable = instance.getScrollable();
+      return {
+        headerPaddingRight: parseFloat(window.getComputedStyle(headersEl).paddingRight),
+        scrollBarWidth: scrollable.getScrollbarWidth ? scrollable.getScrollbarWidth(false) : 0,
+      };
+    });
+
+    expect(headerPaddingRight).toBe(scrollBarWidth);
+  });
+
+  test('The page should not be changed when hiding/showing the grid view after the data has been edited', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+
+    let testLoadCount = 0;
+
+    await createWidget(page, 'dxDataGrid', () => ({
+      height: 500,
+      dataSource: {
+        load() {
+          ((window as any).testLoadCount as number) = ((window as any).testLoadCount ?? 0) + 1;
+          return new Array(200).fill(null).map((_: any, index: number) => ({ id: index, field1: `item1 ${index}`, field2: `item2 ${index}` }));
+        },
+        key: 'id',
+      },
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+      },
+      scrolling: { mode: 'virtual' },
+    }));
+
+    await page.evaluate(() => { (window as any).testLoadCount = 0; });
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    await dataGrid.scrollTo({ y: 500 });
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    await page.evaluate(() => {
+      const instance = ($('#container') as any).dxDataGrid('instance');
+      instance.editCell(5, 1);
+      instance.cellValue(5, 1, 'test');
+    });
+
+    await page.evaluate(() => {
+      ($('#container') as any).hide();
+    });
+
+    await page.evaluate(() => {
+      ($('#container') as any).show();
+    });
+
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    const loadCount = await page.evaluate(() => (window as any).testLoadCount);
+    expect(loadCount).toBe(1);
+
+    await page.evaluate(() => { delete (window as any).testLoadCount; });
+  });
 });

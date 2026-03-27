@@ -127,4 +127,156 @@ test.describe('Pager', () => {
     const isReady = await dataGrid.isReady();
     expect(isReady).toBe(true);
   });
+
+  test('Compact pager - page navigation and page size selection work', async ({ page }) => {
+    await createDataGridWithPager(page);
+
+    const dataGrid = new DataGrid(page);
+    const pager = dataGrid.getPager();
+
+    await expect(pager).toBeVisible();
+
+    const selectedPage = pager.locator('.dx-page.dx-selection');
+    await expect(selectedPage).toHaveText('6');
+
+    const page7 = pager.locator('.dx-page').filter({ hasText: '7' });
+    await page7.click();
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    const pageIndexAfter = await dataGrid.option('paging.pageIndex');
+    expect(pageIndexAfter).toBe(6);
+
+    await pager.locator('.dx-prev-button').click();
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    const pageIndexPrev = await dataGrid.option('paging.pageIndex');
+    expect(pageIndexPrev).toBe(5);
+
+    await pager.locator('.dx-next-button').click();
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    const pageIndexNext = await dataGrid.option('paging.pageIndex');
+    expect(pageIndexNext).toBe(6);
+  });
+
+  test('Pager info text displays correct page and total count', async ({ page }) => {
+    const dataSource = Array.from({ length: 100 }, (_, i) => ({ name: 'Alex', phone: '555555', room: i }));
+    await createWidget(page, 'dxDataGrid', {
+      dataSource,
+      columns: ['name', 'phone', 'room'],
+      paging: {
+        pageSize: 10,
+        pageIndex: 0,
+      },
+      pager: {
+        showPageSizeSelector: true,
+        allowedPageSizes: [5, 10, 20],
+        showInfo: true,
+        showNavigationButtons: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    const pager = dataGrid.getPager();
+
+    const infoText = pager.locator('.dx-info');
+    await expect(infoText).toContainText('Page 1 of 10');
+    await expect(infoText).toContainText('100 items');
+  });
+
+  test('Pager should allow changing page size via selector', async ({ page }) => {
+    const dataSource = Array.from({ length: 50 }, (_, i) => ({ id: i, name: `Item ${i}` }));
+    await createWidget(page, 'dxDataGrid', {
+      dataSource,
+      keyExpr: 'id',
+      paging: { pageSize: 5 },
+      pager: {
+        visible: true,
+        allowedPageSizes: [5, 10, 25],
+        showPageSizeSelector: true,
+        showInfo: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+
+    const pageSizeBefore = await dataGrid.option('paging.pageSize');
+    expect(pageSizeBefore).toBe(5);
+
+    const pager = dataGrid.getPager();
+    const pageSize10 = pager.locator('.dx-page-size').filter({ hasText: '10' });
+    await pageSize10.click();
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+
+    const pageSizeAfter = await dataGrid.option('paging.pageSize');
+    expect(pageSizeAfter).toBe(10);
+  });
+
+  test('Pager page count updates when data source changes', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: Array.from({ length: 20 }, (_, i) => ({ id: i })),
+      keyExpr: 'id',
+      paging: { pageSize: 10 },
+      pager: {
+        visible: true,
+        showInfo: true,
+      },
+    });
+
+    const pager = dataGrid.getPager();
+    const infoText = pager.locator('.dx-info');
+    await expect(infoText).toContainText('Page 1 of 2');
+
+    await page.evaluate(() => {
+      ($('#container') as any).dxDataGrid('instance').option(
+        'dataSource',
+        Array.from({ length: 40 }, (_, i) => ({ id: i })),
+      );
+    });
+
+    await page.waitForFunction(() => ($('#container') as any).dxDataGrid('instance').isReady());
+    await expect(infoText).toContainText('Page 1 of 4');
+  });
+
+  test('Pager should hide when pager.visible is set to false', async ({ page }) => {
+    const dataGrid = new DataGrid(page);
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: Array.from({ length: 20 }, (_, i) => ({ id: i })),
+      keyExpr: 'id',
+      paging: { pageSize: 10 },
+      pager: { visible: true },
+    });
+
+    const pager = dataGrid.getPager();
+    await expect(pager).toBeVisible();
+
+    await page.evaluate(() => {
+      ($('#container') as any).dxDataGrid('instance').option('pager.visible', false);
+    });
+
+    await expect(pager).not.toBeVisible();
+  });
+
+  test('Pager first/last page navigation buttons work', async ({ page }) => {
+    const dataSource = Array.from({ length: 100 }, (_, room) => ({ name: 'Alex', phone: '555555', room }));
+    await createWidget(page, 'dxDataGrid', {
+      dataSource,
+      paging: { pageSize: 10, pageIndex: 4 },
+      pager: {
+        showNavigationButtons: true,
+        showInfo: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    const pageIndex = await dataGrid.option('paging.pageIndex');
+    expect(pageIndex).toBe(4);
+
+    const pager = dataGrid.getPager();
+    const infoText = pager.locator('.dx-info');
+    await expect(infoText).toContainText('Page 5 of 10');
+  });
 });
