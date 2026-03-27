@@ -170,7 +170,11 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       const { allDay, sortedIndex } = diffItem.item;
 
       switch (true) {
-        case diffItem.needToRemove && !isRepaintAll: {
+        case diffItem.needToRemove: {
+          if (isRepaintAll) {
+            break;
+          }
+
           this.getAppointmentElement(sortedIndex).remove();
           break;
         }

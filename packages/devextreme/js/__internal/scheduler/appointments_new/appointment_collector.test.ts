@@ -124,7 +124,7 @@ describe('AppointmentCollector', () => {
     });
   });
 
-  describe('Resize', () => {
+  describe('Geometry', () => {
     it('should have correct top and left on init', () => {
       const instance = createAppointmentCollector({
         ...getProperties(defaultAppointmentData),
@@ -163,6 +163,8 @@ describe('AppointmentCollector', () => {
 
       expect(instance.$element().css('top')).toBe('150px');
       expect(instance.$element().css('left')).toBe('250px');
+      expect(instance.$element().css('height')).toBe('30px');
+      expect(instance.$element().css('width')).toBe('40px');
     });
   });
 
