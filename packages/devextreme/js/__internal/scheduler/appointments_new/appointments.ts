@@ -268,6 +268,10 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         modifiers: {
           isLastInGroup: appointmentViewModel.isLastInGroup,
         },
+        geometry: {
+          height: appointmentViewModel.height,
+          width: appointmentViewModel.width,
+        },
         getResourcesValues: this.getResourcesValues.bind(this),
       },
     );
