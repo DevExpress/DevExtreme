@@ -1040,10 +1040,15 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._layoutManager = new AppointmentLayoutManager(this);
 
     if (this.option('_newAppointments')) {
+      // TODO<Appointments>: convert 'item' to 'appointment' for compatibility
+      const appointmentTemplateValue = this.getViewOption('appointmentTemplate') === 'item'
+        ? 'appointment'
+        : this.getViewOption('appointmentTemplate');
+
       const appointmentsConfig: Partial<AppointmentsProperties> = {
         // TODO<Appointments>: set custom templates
-        appointmentTemplate: 'appointment',
-        appointmentCollectorTemplate: 'appointmentCollector',
+        appointmentTemplate: appointmentTemplateValue,
+        appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
         onAppointmentRendered: (e) => {
           // @ts-expect-error 'component' property is set by action
           this.appointmentRenderedAction({

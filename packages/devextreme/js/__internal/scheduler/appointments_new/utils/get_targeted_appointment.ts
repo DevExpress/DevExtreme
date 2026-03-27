@@ -11,7 +11,7 @@ import type {
 
 const setTargetedAppointmentResources = (
   targetedAppointment: TargetedAppointment,
-  appointmentViewModel: AppointmentAgendaViewModel | AppointmentItemViewModel,
+  appointmentViewModel: AppointmentItemViewModel | AppointmentAgendaViewModel,
   resourceManager: ResourceManager,
 ): void => {
   const { groups, resourceById, groupsLeafs } = resourceManager;

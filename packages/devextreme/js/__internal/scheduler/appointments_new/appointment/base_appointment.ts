@@ -3,16 +3,15 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { when } from '@js/core/utils/deferred';
-import type { Properties as SchedulerProperties } from '@js/ui/scheduler';
 import { getPublicElement } from '@ts/core/m_element';
+import { EmptyTemplate } from '@ts/core/templates/m_empty_template';
 import { FunctionTemplate } from '@ts/core/templates/m_function_template';
+import type { TemplateBase } from '@ts/core/templates/m_template_base';
 import type { DefaultActionArgs } from '@ts/core/widget/component';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
 import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
 import type { AppointmentDataAccessor } from '@ts/scheduler/utils/data_accessor/appointment_data_accessor';
-import type { ResourceManager } from '@ts/scheduler/utils/resource_manager/resource_manager';
-import type { AppointmentAgendaViewModel, AppointmentItemViewModel } from '@ts/scheduler/view_model/types';
 
 import { APPOINTMENT_CLASSES, APPOINTMENT_TYPE_CLASSES } from '../const';
 import { DateFormatType, getDateTextFromTargetAppointment } from '../utils/get_date_text';
@@ -26,14 +25,14 @@ export interface BaseAppointmentProperties
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extends DOMComponentProperties<BaseAppointment<any>>
 {
-  viewModel: AppointmentItemViewModel | AppointmentAgendaViewModel;
+  appointmentData: SafeAppointment;
   targetedAppointmentData: TargetedAppointment;
-  appointmentTemplate: SchedulerProperties['appointmentTemplate'];
+  appointmentTemplate: TemplateBase;
 
   onAppointmentRendered: (e: AppointmentRenderedEvent) => void;
 
-  getResourceManager: () => ResourceManager;
   getDataAccessor: () => AppointmentDataAccessor;
+  getResourceColor: () => Promise<string | undefined>;
 }
 
 export class BaseAppointment<
@@ -44,18 +43,18 @@ export class BaseAppointment<
   }
 
   protected get appointmentData(): SafeAppointment {
-    return this.option().viewModel.itemData;
+    return this.option().appointmentData;
   }
+
+  private defaultAppointmentTemplate!: FunctionTemplate;
 
   private appointmentRenderedAction!: BaseAppointmentProperties['onAppointmentRendered'];
 
   override _init(): void {
     super._init();
 
-    this._templateManager.addDefaultTemplates({
-      appointment: new FunctionTemplate((options) => {
-        this.defaultAppointmentTemplate($(options.container));
-      }),
+    this.defaultAppointmentTemplate = new FunctionTemplate((options) => {
+      this.defaultAppointmentContent($(options.container));
     });
 
     this.appointmentRenderedAction = this._createActionByOption('onAppointmentRendered', {
@@ -86,21 +85,9 @@ export class BaseAppointment<
       .attr('role', 'button');
   }
 
-  protected async getResourceColor(): Promise<string | undefined> {
-    const { viewModel } = this.option();
-    const resourceManager = this.option().getResourceManager();
-
-    const color = await resourceManager.getAppointmentColor({
-      itemData: viewModel.itemData,
-      groupIndex: viewModel.groupIndex,
-    });
-
-    return color;
-  }
-
   protected getTitleText(): string {
     const dataAccessor = this.option().getDataAccessor();
-    const titleText = dataAccessor.get('text', this.appointmentData);
+    const titleText = dataAccessor.get('text', this.targetedAppointmentData);
 
     if (!titleText) {
       return messageLocalization.format('dxScheduler-noSubject');
@@ -120,14 +107,14 @@ export class BaseAppointment<
 
   protected isRecurring(): boolean {
     const dataAccessor = this.option().getDataAccessor();
-    const recurrenceRule = dataAccessor.get('recurrenceRule', this.appointmentData);
+    const recurrenceRule = dataAccessor.get('recurrenceRule', this.targetedAppointmentData);
 
     return Boolean(recurrenceRule);
   }
 
   protected isAllDay(): boolean {
     const dataAccessor = this.option().getDataAccessor();
-    const allDay = dataAccessor.get('allDay', this.appointmentData);
+    const allDay = dataAccessor.get('allDay', this.targetedAppointmentData);
 
     return Boolean(allDay);
   }
@@ -137,13 +124,14 @@ export class BaseAppointment<
       .addClass(APPOINTMENT_CLASSES.CONTENT)
       .appendTo(this.$element());
 
-    const template = this._getTemplateByOption('appointmentTemplate');
-    const { viewModel } = this.option();
+    const template = this.option().appointmentTemplate instanceof EmptyTemplate
+      ? this.defaultAppointmentTemplate
+      : this.option().appointmentTemplate;
 
     const $renderPromise = template.render({
       container: getPublicElement($content),
       model: {
-        appointmentData: viewModel.itemData,
+        appointmentData: this.appointmentData,
         targetedAppointmentData: this.targetedAppointmentData,
       },
     });
@@ -151,13 +139,13 @@ export class BaseAppointment<
     when($renderPromise).done(() => {
       // @ts-expect-error 'component' property is set by the action
       this.appointmentRenderedAction({
-        appointmentData: viewModel.itemData,
+        appointmentData: this.appointmentData,
         targetedAppointmentData: this.targetedAppointmentData,
       });
     });
   }
 
-  protected defaultAppointmentTemplate($container: dxElementWrapper): dxElementWrapper {
+  protected defaultAppointmentContent($container: dxElementWrapper): dxElementWrapper {
     return $container;
   }
 }
