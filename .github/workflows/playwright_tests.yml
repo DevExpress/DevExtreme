@@ -130,23 +130,9 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Install Chromium
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y --no-install-recommends \
-          chromium \
-          fonts-liberation fonts-noto-color-emoji fonts-freefont-ttf \
-          libatk-bridge2.0-0 libdrm2 libxkbcommon0 libxcomposite1 \
-          libxdamage1 libxrandr2 libgbm1 libasound2t64 \
-          libpango-1.0-0 libcairo2 libcups2 libnspr4 libnss3 \
-          2>/dev/null || {
-          echo "apt chromium not available, using Playwright bundled"
-          cd e2e/testcafe-devextreme && npx playwright install chromium --with-deps
-        }
-        CHROMIUM=$(command -v chromium 2>/dev/null || echo "")
-        if [ -n "$CHROMIUM" ] && $CHROMIUM --version 2>/dev/null; then
-          echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$CHROMIUM" >> $GITHUB_ENV
-        fi
+    - name: Install Playwright browsers
+      working-directory: ./e2e/testcafe-devextreme
+      run: npx playwright install chrome
 
     - name: Run Playwright tests
       working-directory: ./e2e/testcafe-devextreme
