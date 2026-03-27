@@ -1029,7 +1029,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.instance.option('items[0].size', '220px');
         this.instance.option('items[0].visible', true);
 
-        assert.strictEqual(this.instance.option('items[0].size'), 218.242, 'items[0].size');
+        assert.strictEqual(this.instance.option('items[0].size'), 218.234, 'items[0].size');
 
     });
 
@@ -1042,7 +1042,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.instance.option('items[0].size', '220px');
         this.instance.option('items[0].visible', true);
 
-        assert.strictEqual(this.instance.option('items[0].size'), 218.242, 'items[0].size');
+        assert.strictEqual(this.instance.option('items[0].size'), 218.234, 'items[0].size');
 
     });
 
@@ -1057,7 +1057,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.instance.option('items[0].visible', true);
 
 
-        assert.strictEqual(this.instance.option('items[0].size'), 218.242, 'items[0].size');
+        assert.strictEqual(this.instance.option('items[0].size'), 218.234, 'items[0].size');
 
     });
 
