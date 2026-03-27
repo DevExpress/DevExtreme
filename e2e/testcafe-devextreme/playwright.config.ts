@@ -111,6 +111,9 @@ export default defineConfig({
     trace: 'off',
     launchOptions: {
       args: CHROME_FLAGS,
+      ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
+        ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH }
+        : {}),
     },
     bypassCSP: true,
   },
