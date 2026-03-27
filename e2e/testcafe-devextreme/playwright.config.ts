@@ -85,7 +85,7 @@ const CHROME_FLAGS = [
   '--disable-checker-imaging',
   '--disable-image-animation-resync',
   '--use-gl=swiftshader',
-  '--disable-features=PaintHolding',
+  '--disable-features=PaintHolding,OverlayScrollbar',
   '--js-flags=--random-seed=2147483647',
   '--font-render-hinting=none',
   '--disable-font-subpixel-positioning',
