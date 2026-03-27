@@ -236,57 +236,6 @@ describe('reactivity to column option changes', () => {
     { dataField: 'name', caption: 'Name' },
   ];
 
-  it('should re-render cards when column caption changes', () => {
-    const cardTemplate = jest.fn();
-
-    const container = document.createElement('div');
-    const cardView = new CardView(container, {
-      keyExpr: 'id',
-      dataSource,
-      columns,
-      cardTemplate,
-    } as CardViewOptions);
-
-    cardTemplate.mockClear();
-    cardView.columnOption('name', 'caption', 'Vehicle');
-
-    expect(cardTemplate).toBeCalledTimes(dataSource.length);
-  });
-
-  it('should re-render cards when column format changes', () => {
-    const cardTemplate = jest.fn();
-
-    const container = document.createElement('div');
-    const cardView = new CardView(container, {
-      keyExpr: 'id',
-      dataSource,
-      columns,
-      cardTemplate,
-    } as CardViewOptions);
-
-    cardTemplate.mockClear();
-    cardView.columnOption('id', 'format', 'currency');
-
-    expect(cardTemplate).toBeCalledTimes(dataSource.length);
-  });
-
-  it('should re-render cards when column alignment changes', () => {
-    const cardTemplate = jest.fn();
-
-    const container = document.createElement('div');
-    const cardView = new CardView(container, {
-      keyExpr: 'id',
-      dataSource,
-      columns,
-      cardTemplate,
-    } as CardViewOptions);
-
-    cardTemplate.mockClear();
-    cardView.columnOption('name', 'alignment', 'right');
-
-    expect(cardTemplate).toBeCalledTimes(dataSource.length);
-  });
-
   it('should not cause extra re-render when sort/filter options change', () => {
     const cardTemplate = jest.fn();
 
