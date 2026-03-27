@@ -147,4 +147,82 @@ test.describe('CardView - HeaderPanel Sortable Visual', () => {
 
     await page.mouse.up();
   });
+
+  test('sortable indicator during dragging to first place (RTL)', async ({ page }) => {
+    await insertStylesheetRulesToPage(page, PARENT_STYLES);
+    await createWidget(page, 'dxCardView', {
+      columns: ['Field A', 'Field B', 'Field C'],
+      allowColumnReordering: true,
+      rtlEnabled: true,
+      width: 360,
+    });
+
+    const item = page.locator('.dx-cardview-headers .dx-cardview-header-item').nth(1);
+    const box = await item.boundingBox();
+    if (box) {
+      const { dragOffsetX, dragOffsetY } = await getDragCoordinates(item, true, 'left');
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(box.x + box.width / 2 + dragOffsetX, box.y + box.height / 2 + dragOffsetY, { steps: 5 });
+      await page.evaluate(() => { (document.activeElement as HTMLElement | null)?.blur(); });
+    }
+
+    await testScreenshot(page, 'sortable-indicator-first-rtl-true.png', {
+      element: page.locator(PARENT_CONTAINER),
+    });
+
+    await page.mouse.up();
+  });
+
+  test('sortable indicator during dragging to middle place (RTL)', async ({ page }) => {
+    await insertStylesheetRulesToPage(page, PARENT_STYLES);
+    await createWidget(page, 'dxCardView', {
+      columns: ['Field A', 'Field B', 'Field C'],
+      allowColumnReordering: true,
+      rtlEnabled: true,
+      width: 360,
+    });
+
+    const item = page.locator('.dx-cardview-headers .dx-cardview-header-item').nth(0);
+    const box = await item.boundingBox();
+    if (box) {
+      const { dragOffsetX, dragOffsetY } = await getDragCoordinates(item, true, 'right');
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(box.x + box.width / 2 + dragOffsetX, box.y + box.height / 2 + dragOffsetY, { steps: 5 });
+      await page.evaluate(() => { (document.activeElement as HTMLElement | null)?.blur(); });
+    }
+
+    await testScreenshot(page, 'sortable-indicator-middle-rtl-true.png', {
+      element: page.locator(PARENT_CONTAINER),
+    });
+
+    await page.mouse.up();
+  });
+
+  test('sortable indicator during dragging to last place (RTL)', async ({ page }) => {
+    await insertStylesheetRulesToPage(page, PARENT_STYLES);
+    await createWidget(page, 'dxCardView', {
+      columns: ['Field A', 'Field B', 'Field C'],
+      allowColumnReordering: true,
+      rtlEnabled: true,
+      width: 360,
+    });
+
+    const item = page.locator('.dx-cardview-headers .dx-cardview-header-item').nth(1);
+    const box = await item.boundingBox();
+    if (box) {
+      const { dragOffsetX, dragOffsetY } = await getDragCoordinates(item, true, 'right');
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(box.x + box.width / 2 + dragOffsetX, box.y + box.height / 2 + dragOffsetY, { steps: 5 });
+      await page.evaluate(() => { (document.activeElement as HTMLElement | null)?.blur(); });
+    }
+
+    await testScreenshot(page, 'sortable-indicator-last-rtl-true.png', {
+      element: page.locator(PARENT_CONTAINER),
+    });
+
+    await page.mouse.up();
+  });
 });
