@@ -9,19 +9,21 @@ import { createEvent } from 'common/core/events/utils/index';
 import { name as DOUBLE_CLICK_EVENT } from 'common/core/events/double_click';
 import { name as CLICK_EVENT } from 'common/core/events/click';
 import resizeObserverSingleton from 'core/resize_observer';
+import {
+    SPLITTER_CLASS,
+    SPLITTER_ITEM_CLASS,
+    SPLITTER_ITEM_HIDDEN_CONTENT_CLASS,
+    INVISIBLE_STATE_CLASS as STATE_INVISIBLE_CLASS
+} from '__internal/ui/splitter/splitter';
 
 import 'fluent_blue_light.css!';
 
-const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
-const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
 const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
 const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
-const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 const STATE_ACTIVE_CLASS = 'dx-state-active';
 const STATE_FOCUSED_CLASS = 'dx-state-focused';
-const SPLITTER_CLASS = 'dx-splitter';
 
 QUnit.testStart(() => {
     const markup =
@@ -853,6 +855,21 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.assertLayout(['10.0806', '89.9194']);
     });
 
+    QUnit.test('Initially collapsed first pane with size, spesified in %, should expand to user-specified size via UI', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: '20%' }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+        const $collapseButton = this.getCollapseNextButton($resizeHandle);
+
+        $collapseButton.trigger('dxclick');
+
+        this.assertLayout(['20.161', '79.838']);
+    });
+
     QUnit.test('Initially collapsed first pane with size should expand to user-specified size via UI', function(assert) {
         this.reinit({
             items: [{ collapsible: true, collapsed: true, size: 300 }, { collapsible: true }]
@@ -950,7 +967,48 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.assertLayout(['50', '50']);
     });
 
-    QUnit.test('Initially hidden pane with size should restore to user-specified size when made visible', function(assert) {
+    QUnit.test('initial collapsed pane with size should restore size from configuration even size was updated in real time', function(assert) {
+
+        this.reinit({
+            items: [ { size: '200px', collapsed: true, collapsible: true, }, { } ]
+        });
+
+        this.instance.option('items[0].size', '220px');
+        this.instance.option('items[0].collapsed', false);
+
+        assert.strictEqual(this.instance.option('items[0].size'), 220, 'items[0].size');
+
+    });
+
+    QUnit.test('initial collapsed pane without size should restore size from configuration even size was updated in real time', function(assert) {
+
+        this.reinit({
+            items: [ { collapsed: true, collapsible: true, }, { } ]
+        });
+
+        this.instance.option('items[0].size', '220px');
+        this.instance.option('items[0].collapsed', false);
+
+        assert.strictEqual(this.instance.option('items[0].size'), 220, 'items[0].size');
+
+    });
+
+    QUnit.test('Pane should restore current size, when it was collapsed, then size was change in real time, then it was expanded', function(assert) {
+
+        this.reinit({
+            items: [ { size: 200, collapsible: true, }, { } ]
+        });
+
+        this.instance.option('items[0].collapsed', true);
+        this.instance.option('items[0].size', '220px');
+        this.instance.option('items[0].collapsed', false);
+
+
+        assert.strictEqual(this.instance.option('items[0].size'), 220, 'items[0].size');
+
+    });
+
+    QUnit.test('Pane with size should restore to user-specified size when made visible', function(assert) {
         this.reinit({
             items: [{ visible: false, size: 300 }, { }]
         });
@@ -959,7 +1017,48 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
         this.instance.option('items[0].visible', true);
 
-        this.assertLayout(['30.2419', '69.7581']);
+        this.assertLayout(['30', '70']);
+    });
+
+    QUnit.test('initial invisible pane with size should restore size from configuration even size was updated in real time', function(assert) {
+
+        this.reinit({
+            items: [ { size: '200px', visible: false, collapsible: true, }, { } ]
+        });
+
+        this.instance.option('items[0].size', '220px');
+        this.instance.option('items[0].visible', true);
+
+        assert.strictEqual(this.instance.option('items[0].size'), 218.242, 'items[0].size');
+
+    });
+
+    QUnit.test('initial invisible pane without size should restore size from configuration even size was updated in real time', function(assert) {
+
+        this.reinit({
+            items: [ { visible: false, collapsible: true, }, { } ]
+        });
+
+        this.instance.option('items[0].size', '220px');
+        this.instance.option('items[0].visible', true);
+
+        assert.strictEqual(this.instance.option('items[0].size'), 218.242, 'items[0].size');
+
+    });
+
+    QUnit.test('initial visible pane with size should set new size when it was invisible, then change size, then visible', function(assert) {
+
+        this.reinit({
+            items: [ { size: 200, collapsible: true, }, { } ]
+        });
+
+        this.instance.option('items[0].visible', false);
+        this.instance.option('items[0].size', '220px');
+        this.instance.option('items[0].visible', true);
+
+
+        assert.strictEqual(this.instance.option('items[0].size'), 218.242, 'items[0].size');
+
     });
 
     [
@@ -1175,15 +1274,15 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         {
             items: [{ collapsed: true, size: '150px', collapsible: true }, { collapsible: true }, { collapsed: true, collapsible: true }, { }],
             scenarios: [
-                { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['25', '25', '0', '50'] },
-                { newCollapsedValue: false, paneIndex: 2, expectedLayout: ['25', '25', '25', '25'] },
+                { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['15.368', '34.631', '0', '50'] },
+                { newCollapsedValue: false, paneIndex: 2, expectedLayout: ['15.368', '34.631', '25', '25'] },
             ]
         },
         {
             items: [{ collapsed: false, collapsible: true }, { collapsed: true, collapsible: true }, { collapsible: true }, { collapsed: true, size: '150px', collapsible: true }],
             scenarios: [
-                { newCollapsedValue: false, paneIndex: 3, expectedLayout: ['50', '0', '25', '25'] },
-                { newCollapsedValue: false, paneIndex: 1, expectedLayout: ['50', '12.5', '12.5', '25'] },
+                { newCollapsedValue: false, paneIndex: 3, expectedLayout: ['50', '0', '34.631', '15.368'] },
+                { newCollapsedValue: false, paneIndex: 1, expectedLayout: ['50', '17.315', '17.315', '15.368'] },
             ]
         },
         {

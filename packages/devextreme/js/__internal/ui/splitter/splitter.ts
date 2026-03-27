@@ -69,13 +69,13 @@ import {
   type RenderQueueItem,
 } from './utils/types';
 
-const SPLITTER_CLASS = 'dx-splitter';
-const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
-const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
+export const SPLITTER_CLASS = 'dx-splitter';
+export const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
+export const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
+export const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
 const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
-const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 
@@ -242,7 +242,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
       this._layout = this._getDefaultLayoutBasedOnSize();
 
       this._applyStylesFromLayout(this._layout);
-      this._initPanesCacheSize();
+      this._setPanesCacheSize();
       this._updateItemSizes();
 
       this._shouldRecalculateLayout = false;
@@ -258,7 +258,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     if (this._isVisible()) {
       this._layout = this._getDefaultLayoutBasedOnSize();
       this._applyStylesFromLayout(this._layout);
-      this._initPanesCacheSize();
+      this._setPanesCacheSize();
 
       this._updateItemSizes();
     } else {
@@ -268,17 +268,17 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     this._processRenderQueue();
   }
 
-  _initPanesCacheSize(): void {
+  _setPanesCacheSize(): void {
     const { items = [] } = this.option();
 
-    items.forEach((item, index) => {
+    items.forEach((item: Item, index) => {
       const restriction = this._itemRestrictions[index];
 
       if (!isDefined(restriction?.size)) {
         return;
       }
 
-      if (item.collapsed === true && !this._panesCacheSize[index]) {
+      if (item.collapsed === true) {
         const isLastNonCollapsed = index >= findLastIndexOfNonCollapsedItem(items);
         const isLastVisible = this._isLastVisibleItem(index);
 
@@ -292,7 +292,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
         };
       }
 
-      if (item.visible === false && !this._panesCacheSizeVisible[index]) {
+      if (item.visible === false) {
         const isLastVisible = index >= findLastIndexOfVisibleItem(items);
 
         const direction = isLastVisible
@@ -708,6 +708,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
         this._layout = this._getDefaultLayoutBasedOnSize(item);
 
         this._applyStylesFromLayout(this.getLayout());
+        this._setPanesCacheSize();
         this._updateItemSizes();
         break;
       case 'maxSize':
