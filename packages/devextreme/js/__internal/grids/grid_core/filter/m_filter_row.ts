@@ -75,8 +75,6 @@ const FILTER_MODIFIED_CLASS = 'dx-filter-modified';
 
 const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
 
-const BETWEEN_OPERATION_DATA_TYPES = ['date', 'datetime', 'number'];
-
 function isOnClickApplyFilterMode(that) {
   return that.option('filterRow.applyFilter') === 'onClick';
 }
@@ -124,28 +122,20 @@ const getColumnSelectedFilterOperation = function (that, column) {
   }
 };
 
-const isValidFilterValue = function (filterValue, column) {
-  if (column && BETWEEN_OPERATION_DATA_TYPES.includes(column.dataType) && Array.isArray(filterValue)) {
-    return false;
-  }
-
-  return filterValue !== undefined;
-};
-
 const getFilterValue = function (that, columnIndex, $editorContainer) {
   const column = that._columnsController.columnOption(columnIndex);
   const filterValue = getColumnFilterValue(that, column);
   const isFilterRange = $editorContainer.closest(`.${that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`).length;
   const isRangeStart = $editorContainer.hasClass(that.addWidgetPrefix(FILTER_RANGE_START_CLASS));
+  const isBetween = getColumnSelectedFilterOperation(that, column) === 'between';
 
-  if (filterValue && Array.isArray(filterValue) && getColumnSelectedFilterOperation(that, column) === 'between') {
+  if (filterValue && Array.isArray(filterValue) && isBetween) {
     if (isRangeStart) {
       return filterValue[0];
     }
     return filterValue[1];
   }
-
-  return !isFilterRange && isValidFilterValue(filterValue, column) ? filterValue : null;
+  return !isFilterRange && filterValue !== undefined ? filterValue : null;
 };
 
 const normalizeFilterValue = function (that, filterValue, column, $editorContainer) {
