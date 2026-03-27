@@ -720,6 +720,12 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     appendTemplate.render({ content: $row, container: $table });
   }
 
+  private removeFirstCellClasses(): void {
+    const firstCellClass = this.addWidgetPrefix(CLASSES.firstCell);
+
+    this._tableElement?.find(`.${firstCellClass}`).removeClass(firstCellClass);
+  }
+
   protected toggleFirstCellClass(
     $cell: dxElementWrapper | undefined,
     isFirstValue: boolean,
@@ -736,6 +742,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected updateFirstCellClasses(): void {
     const rows = this._getRows();
+
+    this.removeFirstCellClasses();
 
     rows.forEach((row, index) => {
       const rowIndex = row.rowType === 'header' ? index : null;
