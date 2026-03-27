@@ -41,7 +41,7 @@ test.describe('ChatAlertList', () => {
       ],
     });
 
-    await testScreenshot(page, 'Chat alertlist appearance.png', { element: '#container' });
+    await testScreenshot(page, 'Alertlist with one error.png', { element: '#container' });
 
     await page.evaluate(() => {
       if ((window as any)._originalDate) {

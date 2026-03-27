@@ -86,7 +86,7 @@ test.describe('FixedColumns - Grouping', () => {
       const groupRow = dataGrid.getGroupRow(0);
       await expect(groupRow.element).toBeVisible();
 
-      await testScreenshot(page, `sticky-columns-grouping-summary-rtl-${rtlEnabled}.png`, {
+      await testScreenshot(page, `grouping-scroll-total_summary-rtl=${rtlEnabled}.png`, {
         element: '#container',
       });
     });

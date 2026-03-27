@@ -60,7 +60,7 @@ test.describe('ChatMessageList', () => {
     const chat = new Chat(page, '#chat');
     await chat.repaint();
 
-    await testScreenshot(page, 'Messagelist with scrollbar.png', { element: '#chat' });
+    await testScreenshot(page, 'Messagelist with a lot of messages.png', { element: '#chat' });
   });
 
   test('Messagelist should scrolled to the latest messages after being rendered inside an invisible element', async ({ page }) => {
@@ -84,7 +84,7 @@ test.describe('ChatMessageList', () => {
       ($('#hidden-chat') as any).dxChat('instance').repaint();
     }, { items });
 
-    await testScreenshot(page, 'Messagelist scrolled to latest after hidden render.png', { element: '#hidden-chat' });
+    await testScreenshot(page, 'Messagelist scroll position after rendering in invisible container.png', { element: '#hidden-chat' });
   });
 
   test('Messagelist with deleted items', async ({ page }) => {
@@ -209,7 +209,7 @@ test.describe('ChatMessageList', () => {
       showMessageTimestamp: false,
     });
 
-    await testScreenshot(page, 'Messagelist with showDayHeaders showUserName and showMessageTimestamp options set to false.png', { element: '#container' });
+    await testScreenshot(page, 'Messagelist with showDayHeaders, showUserName and showMessageTimestamp options set to false.png', { element: '#container' });
   });
 
   test('Message list with editing context menu', async ({ page }) => {

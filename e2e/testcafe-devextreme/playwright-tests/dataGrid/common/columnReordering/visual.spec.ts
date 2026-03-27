@@ -51,7 +51,7 @@ test.describe('Column reordering.Visual', () => {
     const groupPanel = dataGrid.getGroupPanel();
     await expect(groupPanel).toBeVisible();
 
-    await testScreenshot(page, 'column-separator-expand-columns.png', {
+    await testScreenshot(page, 'column-separator-with-expand-columns.png', {
       element: '#container',
     });
   });

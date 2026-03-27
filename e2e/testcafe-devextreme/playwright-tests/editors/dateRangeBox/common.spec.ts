@@ -121,7 +121,7 @@ test.describe('DateRangeBox render', () => {
         endDatePlaceholder: 'End placeholder',
       });
 
-      await testScreenshot(page, `DateRangeBox custom placeholders labels labelMode=${labelMode}.png`, { element: '#container' });
+      await testScreenshot(page, `Placeholder and label by default labelMode=${labelMode}.png`, { element: '#container' });
     });
   });
 });

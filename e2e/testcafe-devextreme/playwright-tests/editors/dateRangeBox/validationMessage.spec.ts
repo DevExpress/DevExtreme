@@ -36,12 +36,12 @@ test.describe('DateRangeBox validation message position', () => {
       validationError: { message: 'Error 2' },
     }, `#${id2}`);
 
-    await testScreenshot(page, 'DateRangeBox validation message before opening.png', { element: '#container' });
+    await testScreenshot(page, 'The validation message overlay position for DateRangeBox before opening.png', { element: '#container' });
 
     const drb1 = new DateRangeBox(page, `#${id1}`);
     await drb1.getStartDateBox().input.click();
     await page.waitForTimeout(300);
 
-    await testScreenshot(page, 'DateRangeBox validation message after opening.png', { element: '#container' });
+    await testScreenshot(page, 'The validation message overlay position for DateRangeBox after opening.png', { element: '#container' });
   });
 });

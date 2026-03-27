@@ -196,7 +196,7 @@ test.describe('Virtual Columns.Visual', () => {
     await dataGrid.moveHeader(0, 200, 0, true);
     await dataGrid.dropHeader(0);
 
-    await testScreenshot(page, 'grid-virtual-columns-reordering.png', { element: page.locator('#container') });
+    await testScreenshot(page, 'data-grid__virtual-columns__reoder.png', { element: page.locator('#container') });
   });
 
   test('Grouping should work with virtual columns', async ({ page }) => {
@@ -215,7 +215,7 @@ test.describe('Virtual Columns.Visual', () => {
     await expect(dataGrid.element).toBeVisible();
     await dataGrid.scrollTo({ x: 500 });
 
-    await testScreenshot(page, 'grid-virtual-columns-grouping.png', { element: page.locator('#container') });
+    await testScreenshot(page, 'data-grid__virtual-columns__grouping.png', { element: page.locator('#container') });
   });
 
   test('Column chooser should work with virtual columns', async ({ page }) => {
@@ -238,7 +238,7 @@ test.describe('Virtual Columns.Visual', () => {
     const columnChooser = page.locator('.dx-datagrid-column-chooser');
     await expect(columnChooser).toBeVisible();
 
-    await testScreenshot(page, 'grid-virtual-columns-column-chooser.png', { element: page.locator('body') });
+    await testScreenshot(page, 'data-grid__virtual-columns__column-chooser.png', { element: page.locator('body') });
   });
 
   test('Header, fixed columns and virtual scroll bar should have stable position during async render', async ({ page }) => {

@@ -64,7 +64,7 @@ test.describe('CardView - HeaderPanel Sortable Visual', () => {
       await page.mouse.down();
       await page.mouse.move(box.x + box.width / 2 + 100, box.y + box.height / 2, { steps: 5 });
 
-      await testScreenshot(page, 'cardview-sortable-indicator-during-drag.png');
+      await testScreenshot(page, 'sortable-indicator-middle-rtl-false.png');
 
       await page.mouse.up();
     }

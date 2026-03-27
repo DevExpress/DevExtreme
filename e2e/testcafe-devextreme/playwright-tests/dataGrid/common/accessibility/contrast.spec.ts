@@ -53,7 +53,7 @@ test.describe('DataGrid - contrast', () => {
     const headerFilterIcon = page.locator('.dx-header-filter').first();
     await headerFilterIcon.click();
 
-    await testScreenshot(page, 'filter-icon-focused-T1286345.png', {
+    await testScreenshot(page, 'T1286345-datagrid-menu-icon-when-focused.png', {
       element: '#container',
     });
   });

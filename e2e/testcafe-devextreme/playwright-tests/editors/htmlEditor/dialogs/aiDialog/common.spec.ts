@@ -29,7 +29,7 @@ test.describe('HtmlEditor: AIDialog', () => {
     const htmlEditor = new HtmlEditor(page);
     await openAIDialog(page, htmlEditor);
 
-    await testScreenshot(page, 'ai-dialog-initial-state-no-options.png');
+    await testScreenshot(page, 'htmleditor-ai-dialog-initial-state-with-no-options.png');
   });
 
   test('initial state with-options', async ({ page }) => {
@@ -45,7 +45,7 @@ test.describe('HtmlEditor: AIDialog', () => {
     const htmlEditor = new HtmlEditor(page);
     await openAIDialog(page, htmlEditor);
 
-    await testScreenshot(page, 'ai-dialog-initial-state-with-options.png');
+    await testScreenshot(page, 'htmleditor-ai-dialog-initial-state-with-options.png');
   });
 
   test('resize window when initial state', async ({ page }) => {
@@ -60,7 +60,7 @@ test.describe('HtmlEditor: AIDialog', () => {
 
     await page.setViewportSize({ width: 400, height: 400 });
 
-    await testScreenshot(page, 'ai-dialog-resize-window-initial-state.png');
+    await testScreenshot(page, 'htmleditor-ai-dialog-initial-state-resize-window.png');
   });
 
   test('generating state', async ({ page }) => {
@@ -73,7 +73,7 @@ test.describe('HtmlEditor: AIDialog', () => {
     const htmlEditor = new HtmlEditor(page);
     await openAIDialog(page, htmlEditor);
 
-    await testScreenshot(page, 'ai-dialog-generating-state.png');
+    await testScreenshot(page, 'htmleditor-ai-dialog-generating-state.png');
   });
 
   test('resultReady state with short-result', async ({ page }) => {
@@ -86,7 +86,7 @@ test.describe('HtmlEditor: AIDialog', () => {
     const htmlEditor = new HtmlEditor(page);
     await openAIDialog(page, htmlEditor);
 
-    await testScreenshot(page, 'ai-dialog-result-ready-short.png');
+    await testScreenshot(page, 'htmleditor-ai-dialog-result-ready-state-with-short-result.png');
   });
 
   test('resultReady state with long-result', async ({ page }) => {
@@ -99,7 +99,7 @@ test.describe('HtmlEditor: AIDialog', () => {
     const htmlEditor = new HtmlEditor(page);
     await openAIDialog(page, htmlEditor);
 
-    await testScreenshot(page, 'ai-dialog-result-ready-long.png');
+    await testScreenshot(page, 'htmleditor-ai-dialog-result-ready-state-with-long-result.png');
   });
 
   test('asking state', async ({ page }) => {
@@ -112,7 +112,7 @@ test.describe('HtmlEditor: AIDialog', () => {
     const htmlEditor = new HtmlEditor(page);
     await openAIDialog(page, htmlEditor);
 
-    await testScreenshot(page, 'ai-dialog-asking-state.png');
+    await testScreenshot(page, 'htmleditor-ai-dialog-asking-state.png');
   });
 
   test('askAI result ready state', async ({ page }) => {
@@ -125,7 +125,7 @@ test.describe('HtmlEditor: AIDialog', () => {
     const htmlEditor = new HtmlEditor(page);
     await openAIDialog(page, htmlEditor);
 
-    await testScreenshot(page, 'ai-dialog-ask-ai-result-ready.png');
+    await testScreenshot(page, 'htmleditor-ai-dialog-ask-ai-result-ready-state.png');
   });
 
   test('result ready after canceletion', async ({ page }) => {
@@ -138,7 +138,7 @@ test.describe('HtmlEditor: AIDialog', () => {
     const htmlEditor = new HtmlEditor(page);
     await openAIDialog(page, htmlEditor);
 
-    await testScreenshot(page, 'ai-dialog-result-ready-after-cancellation.png');
+    await testScreenshot(page, 'htmleditor-ai-dialog-result-ready-after-canceletion.png');
   });
 
   test('error state', async ({ page }) => {
@@ -151,7 +151,7 @@ test.describe('HtmlEditor: AIDialog', () => {
     const htmlEditor = new HtmlEditor(page);
     await openAIDialog(page, htmlEditor);
 
-    await testScreenshot(page, 'ai-dialog-error-state.png');
+    await testScreenshot(page, 'htmleditor-ai-dialog-error-state.png');
   });
 
   ['initial', 'generating', 'result-ready', 'error'].forEach((state) => {
@@ -167,7 +167,7 @@ test.describe('HtmlEditor: AIDialog', () => {
       const htmlEditor = new HtmlEditor(page);
       await openAIDialog(page, htmlEditor);
 
-      await testScreenshot(page, `ai-dialog-${state}-state-small-screen.png`);
+      await testScreenshot(page, `htmleditor-ai-dialog-${state}-state-on-small-screen.png`);
     });
   });
 });

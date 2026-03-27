@@ -37,6 +37,6 @@ test.describe('ChatConfirmationPopup', () => {
     await chat.getMessage(1).click({ button: 'right' });
     await page.waitForTimeout(300);
 
-    await testScreenshot(page, 'Chat confirmation popup context menu.png', { element: '#chat' });
+    await testScreenshot(page, 'Confirmation popup is shown.png', { element: '#chat' });
   });
 });

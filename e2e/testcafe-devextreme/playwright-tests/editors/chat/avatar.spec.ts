@@ -28,7 +28,7 @@ test.describe('ChatAvatar', () => {
       items,
     }, '#chat');
 
-    await testScreenshot(page, 'Chat avatar with image.png', { element: '#chat' });
+    await testScreenshot(page, 'Avatar with image.png', { element: '#chat' });
   });
 
   test('Chat: showAvatar set to false', async ({ page }) => {
@@ -45,6 +45,6 @@ test.describe('ChatAvatar', () => {
       showAvatar: false,
     }, '#chat');
 
-    await testScreenshot(page, 'Chat with showAvatar false.png', { element: '#chat' });
+    await testScreenshot(page, 'Avatar with showAvatar set to false.png', { element: '#chat' });
   });
 });

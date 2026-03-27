@@ -42,7 +42,7 @@ test.describe('Keyboard Navigation - Group Column Reordering', () => {
       const arrowKey = rtlEnabled ? 'ArrowLeft' : 'ArrowRight';
       await page.keyboard.press(arrowKey);
 
-      await testScreenshot(page, `group-column-reorder-rtl-${rtlEnabled}.png`, {
+      await testScreenshot(page, `reorder_group_column_to_${rtlEnabled ? 'left' : 'right'}_when_rtlEnabled_=_${rtlEnabled}.png`, {
         element: '#container',
       });
     });

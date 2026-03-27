@@ -115,7 +115,7 @@ test.describe('Toolbar_OverflowMenu', () => {
 
     await overflowMenu.click();
 
-    await testScreenshot(page, 'Toolbar custom template in menu.png');
+    await testScreenshot(page, 'Toolbar buttons as custom template in menu.png');
   });
 
   test('Toolbar button group appearance', async ({ page }) => {
@@ -140,7 +140,7 @@ test.describe('Toolbar_OverflowMenu', () => {
 
     await overflowMenu.click();
 
-    await testScreenshot(page, 'Toolbar button group in menu.png');
+    await testScreenshot(page, 'Toolbar buttonGroup in menu.png');
   });
 
   test('Toolbar button group as custom template appearance', async ({ page }) => {
@@ -166,6 +166,6 @@ test.describe('Toolbar_OverflowMenu', () => {
 
     await overflowMenu.click();
 
-    await testScreenshot(page, 'Toolbar button group template in menu.png');
+    await testScreenshot(page, 'Toolbar buttonGroup as custom template in menu.png');
   });
 });

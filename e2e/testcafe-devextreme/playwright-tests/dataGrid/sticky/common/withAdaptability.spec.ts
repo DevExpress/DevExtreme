@@ -42,7 +42,7 @@ test.describe('Sticky columns - Adaptability', () => {
       const adaptiveRow = dataGrid.getAdaptiveRow(0);
       await expect(adaptiveRow.element).toBeVisible();
 
-      await testScreenshot(page, `sticky-columns-adaptive-rtl-${rtlEnabled}.png`, {
+      await testScreenshot(page, `adaptability_sticky_columns_with_adaptive_detail_row_1_(rtlEnabled_=_${rtlEnabled}).png`, {
         element: '#container',
       });
     });
