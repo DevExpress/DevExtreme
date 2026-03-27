@@ -36,7 +36,7 @@ describe('snapToCellsMode', () => {
 
     const appH = POM.getAppointment('short').getGeometry().height;
 
-    expect(appH).toBeLessThan(DEFAULT_CELL_HEIGHT * 0.45);
+    expect(appH).toBeLessThan(DEFAULT_CELL_HEIGHT / 2);
   });
 
   it('root snapToCellsMode always overrides default on day view', async () => {
@@ -59,7 +59,7 @@ describe('snapToCellsMode', () => {
 
     const appH = POM.getAppointment('short').getGeometry().height;
 
-    expect(appH).toBeGreaterThan(DEFAULT_CELL_HEIGHT * 0.85);
+    expect(appH).toEqual(DEFAULT_CELL_HEIGHT);
   });
 
   it('views[].snapToCellsMode always overrides default on day view', async () => {
@@ -81,6 +81,6 @@ describe('snapToCellsMode', () => {
 
     const appH = POM.getAppointment('short').getGeometry().height;
 
-    expect(appH).toBeGreaterThan(DEFAULT_CELL_HEIGHT * 0.85);
+    expect(appH).toEqual(DEFAULT_CELL_HEIGHT);
   });
 });
