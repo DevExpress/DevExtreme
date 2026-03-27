@@ -18,4 +18,30 @@ test.describe('Accessibility - dropDownBox', () => {
     await createWidget(page, 'dxDropDownBox', { dataSource: ['Item_1', 'Item_2', 'Item_3'], inputAttr: { 'aria-label': 'DropDownBox' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('dropDownBox empty', async ({ page }) => {
+    await createWidget(page, 'dxDropDownBox', { dataSource: [], inputAttr: { 'aria-label': 'DropDownBox' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dropDownBox disabled', async ({ page }) => {
+    await createWidget(page, 'dxDropDownBox', { dataSource: ['Item_1', 'Item_2', 'Item_3'], disabled: true, inputAttr: { 'aria-label': 'DropDownBox' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dropDownBox readOnly', async ({ page }) => {
+    await createWidget(page, 'dxDropDownBox', { dataSource: ['Item_1', 'Item_2', 'Item_3'], readOnly: true, inputAttr: { 'aria-label': 'DropDownBox' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dropDownBox with label and showClearButton', async ({ page }) => {
+    await createWidget(page, 'dxDropDownBox', {
+      dataSource: ['Item_1', 'Item_2', 'Item_3'],
+      value: 'Item_1',
+      label: 'label',
+      showClearButton: true,
+      inputAttr: { 'aria-label': 'DropDownBox' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

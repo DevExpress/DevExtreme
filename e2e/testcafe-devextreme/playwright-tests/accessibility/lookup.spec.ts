@@ -18,4 +18,29 @@ test.describe('Accessibility - lookup', () => {
     await createWidget(page, 'dxLookup', { dataSource: ['John Heart', 'Samantha Bright'], inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('lookup empty', async ({ page }) => {
+    await createWidget(page, 'dxLookup', { dataSource: [], inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('lookup disabled', async ({ page }) => {
+    await createWidget(page, 'dxLookup', { dataSource: ['John Heart', 'Samantha Bright'], disabled: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('lookup readOnly', async ({ page }) => {
+    await createWidget(page, 'dxLookup', { dataSource: ['John Heart', 'Samantha Bright'], readOnly: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('lookup with placeholder', async ({ page }) => {
+    await createWidget(page, 'dxLookup', { dataSource: ['John Heart', 'Samantha Bright'], placeholder: 'Select person', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('lookup opened', async ({ page }) => {
+    await createWidget(page, 'dxLookup', { dataSource: ['John Heart', 'Samantha Bright'], opened: true, deferRendering: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

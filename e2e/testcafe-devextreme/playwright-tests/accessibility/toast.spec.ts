@@ -18,4 +18,29 @@ test.describe('Accessibility - toast', () => {
     await createWidget(page, 'dxToast', { visible: true, message: 'message', type: 'info' });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('toast type error', async ({ page }) => {
+    await createWidget(page, 'dxToast', { visible: true, message: 'Error occurred', type: 'error' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('toast type success', async ({ page }) => {
+    await createWidget(page, 'dxToast', { visible: true, message: 'Operation completed', type: 'success' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('toast type warning', async ({ page }) => {
+    await createWidget(page, 'dxToast', { visible: true, message: 'Warning', type: 'warning' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('toast type custom', async ({ page }) => {
+    await createWidget(page, 'dxToast', { visible: true, type: 'custom' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('toast without message', async ({ page }) => {
+    await createWidget(page, 'dxToast', { visible: true, type: 'info' });
+    await a11yCheck(page, {}, '#container');
+  });
 });

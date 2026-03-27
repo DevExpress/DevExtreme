@@ -18,4 +18,24 @@ test.describe('Accessibility - textArea', () => {
     await createWidget(page, 'dxTextArea', { value: 'Test text', inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('textArea disabled', async ({ page }) => {
+    await createWidget(page, 'dxTextArea', { value: 'Test text', disabled: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textArea readOnly', async ({ page }) => {
+    await createWidget(page, 'dxTextArea', { value: 'Test text', readOnly: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textArea with label', async ({ page }) => {
+    await createWidget(page, 'dxTextArea', { value: 'Test text', label: 'label', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('textArea with placeholder', async ({ page }) => {
+    await createWidget(page, 'dxTextArea', { placeholder: 'placeholder', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

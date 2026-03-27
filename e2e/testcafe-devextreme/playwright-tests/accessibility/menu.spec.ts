@@ -18,4 +18,30 @@ test.describe('Accessibility - menu', () => {
     await createWidget(page, 'dxMenu', { items: [{ text: 'remove', icon: 'remove' }, { text: 'user', icon: 'user' }], width: 400 });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('menu vertical orientation', async ({ page }) => {
+    await createWidget(page, 'dxMenu', { items: [{ text: 'remove', icon: 'remove' }, { text: 'user', icon: 'user' }], width: 400, orientation: 'vertical' });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('menu disabled', async ({ page }) => {
+    await createWidget(page, 'dxMenu', { items: [{ text: 'remove', icon: 'remove' }, { text: 'user', icon: 'user' }], width: 400, disabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('menu with adaptivity enabled', async ({ page }) => {
+    await createWidget(page, 'dxMenu', { items: [{ text: 'remove', icon: 'remove' }, { text: 'user', icon: 'user' }], width: 400, adaptivityEnabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('menu with nested items', async ({ page }) => {
+    await createWidget(page, 'dxMenu', {
+      items: [{
+        text: 'remove', icon: 'remove',
+        items: [{ text: 'item_1' }, { text: 'item_2' }],
+      }, { text: 'user', icon: 'user' }],
+      width: 400,
+    });
+    await a11yCheck(page, {}, '#container');
+  });
 });

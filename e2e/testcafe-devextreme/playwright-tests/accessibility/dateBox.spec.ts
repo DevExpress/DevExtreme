@@ -18,4 +18,34 @@ test.describe('Accessibility - dateBox', () => {
     await createWidget(page, 'dxDateBox', { type: 'date', inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('dateBox type time', async ({ page }) => {
+    await createWidget(page, 'dxDateBox', { type: 'time', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dateBox type datetime', async ({ page }) => {
+    await createWidget(page, 'dxDateBox', { type: 'datetime', value: new Date(), inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dateBox disabled', async ({ page }) => {
+    await createWidget(page, 'dxDateBox', { type: 'date', disabled: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dateBox readOnly', async ({ page }) => {
+    await createWidget(page, 'dxDateBox', { type: 'date', readOnly: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dateBox with showClearButton', async ({ page }) => {
+    await createWidget(page, 'dxDateBox', { type: 'date', value: new Date(), showClearButton: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('dateBox with label', async ({ page }) => {
+    await createWidget(page, 'dxDateBox', { type: 'date', value: new Date(), label: 'label', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

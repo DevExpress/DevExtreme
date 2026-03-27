@@ -18,4 +18,24 @@ test.describe('Accessibility - gallery', () => {
     await createWidget(page, 'dxGallery', { height: 300, width: 300, dataSource: [{ imageAlt: 'Image 1', imageSrc: '' }] });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('gallery without nav buttons', async ({ page }) => {
+    await createWidget(page, 'dxGallery', { height: 300, width: 300, dataSource: [{ imageAlt: 'Image 1', imageSrc: '' }, { imageAlt: 'Image 2', imageSrc: '' }], showNavButtons: false, showIndicator: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('gallery with nav buttons', async ({ page }) => {
+    await createWidget(page, 'dxGallery', { height: 300, width: 300, dataSource: [{ imageAlt: 'Image 1', imageSrc: '' }, { imageAlt: 'Image 2', imageSrc: '' }], showNavButtons: true, showIndicator: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('gallery without indicator', async ({ page }) => {
+    await createWidget(page, 'dxGallery', { height: 300, width: 300, dataSource: [{ imageAlt: 'Image 1', imageSrc: '' }, { imageAlt: 'Image 2', imageSrc: '' }], showIndicator: false });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('gallery with swipe disabled', async ({ page }) => {
+    await createWidget(page, 'dxGallery', { height: 300, width: 300, dataSource: [{ imageAlt: 'Image 1', imageSrc: '' }, { imageAlt: 'Image 2', imageSrc: '' }], swipeEnabled: false });
+    await a11yCheck(page, {}, '#container');
+  });
 });

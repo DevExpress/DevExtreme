@@ -18,4 +18,34 @@ test.describe('Accessibility - tagBox', () => {
     await createWidget(page, 'dxTagBox', { dataSource: ['HD Video Player', 'SuperHD Video Player', 'SuperPlasma 50'], inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('tagBox with value', async ({ page }) => {
+    await createWidget(page, 'dxTagBox', { dataSource: ['HD Video Player', 'SuperHD Video Player', 'SuperPlasma 50'], value: ['HD Video Player'], inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tagBox disabled', async ({ page }) => {
+    await createWidget(page, 'dxTagBox', { dataSource: ['HD Video Player', 'SuperHD Video Player', 'SuperPlasma 50'], disabled: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tagBox readOnly', async ({ page }) => {
+    await createWidget(page, 'dxTagBox', { dataSource: ['HD Video Player', 'SuperHD Video Player', 'SuperPlasma 50'], readOnly: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tagBox with search enabled', async ({ page }) => {
+    await createWidget(page, 'dxTagBox', { dataSource: ['HD Video Player', 'SuperHD Video Player', 'SuperPlasma 50'], searchEnabled: true, searchTimeout: 0, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tagBox with showClearButton', async ({ page }) => {
+    await createWidget(page, 'dxTagBox', { dataSource: ['HD Video Player', 'SuperHD Video Player', 'SuperPlasma 50'], value: ['HD Video Player'], showClearButton: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('tagBox opened with showSelectionControls', async ({ page }) => {
+    await createWidget(page, 'dxTagBox', { dataSource: ['HD Video Player', 'SuperHD Video Player', 'SuperPlasma 50'], value: ['HD Video Player'], opened: true, showSelectionControls: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

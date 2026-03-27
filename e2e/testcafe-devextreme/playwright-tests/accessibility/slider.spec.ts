@@ -18,4 +18,28 @@ test.describe('Accessibility - slider', () => {
     await createWidget(page, 'dxSlider', { value: 45 });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('slider disabled', async ({ page }) => {
+    await createWidget(page, 'dxSlider', { value: 45, disabled: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('slider readOnly', async ({ page }) => {
+    await createWidget(page, 'dxSlider', { value: 45, readOnly: true });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('slider with label and tooltip', async ({ page }) => {
+    await createWidget(page, 'dxSlider', {
+      value: 45,
+      label: { visible: true, position: 'top' },
+      tooltip: { enabled: true, showMode: 'always', position: 'bottom' },
+    });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('slider with name and min/max', async ({ page }) => {
+    await createWidget(page, 'dxSlider', { value: 45, min: 10, max: 90, name: 'slider' });
+    await a11yCheck(page, {}, '#container');
+  });
 });

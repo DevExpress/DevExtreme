@@ -18,4 +18,24 @@ test.describe('Accessibility - fileUploader', () => {
     await createWidget(page, 'dxFileUploader', { focusStateEnabled: true, inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('fileUploader disabled', async ({ page }) => {
+    await createWidget(page, 'dxFileUploader', { focusStateEnabled: true, disabled: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('fileUploader readOnly', async ({ page }) => {
+    await createWidget(page, 'dxFileUploader', { focusStateEnabled: true, readOnly: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('fileUploader multiple', async ({ page }) => {
+    await createWidget(page, 'dxFileUploader', { focusStateEnabled: true, multiple: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('fileUploader with name', async ({ page }) => {
+    await createWidget(page, 'dxFileUploader', { focusStateEnabled: true, name: 'fileUploader', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

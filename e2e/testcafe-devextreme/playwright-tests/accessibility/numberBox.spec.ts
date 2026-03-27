@@ -18,4 +18,24 @@ test.describe('Accessibility - numberBox', () => {
     await createWidget(page, 'dxNumberBox', { value: 20.5, inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('numberBox disabled', async ({ page }) => {
+    await createWidget(page, 'dxNumberBox', { value: 20.5, disabled: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('numberBox readOnly', async ({ page }) => {
+    await createWidget(page, 'dxNumberBox', { value: 20.5, readOnly: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('numberBox with showClearButton and showSpinButtons', async ({ page }) => {
+    await createWidget(page, 'dxNumberBox', { value: 20.5, showClearButton: true, showSpinButtons: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('numberBox with placeholder', async ({ page }) => {
+    await createWidget(page, 'dxNumberBox', { placeholder: 'Enter value', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

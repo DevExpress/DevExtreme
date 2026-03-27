@@ -18,4 +18,34 @@ test.describe('Accessibility - colorBox', () => {
     await createWidget(page, 'dxColorBox', { value: '#f05b41', inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('colorBox opened', async ({ page }) => {
+    await createWidget(page, 'dxColorBox', { value: '#f05b41', opened: true, deferRendering: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('colorBox with alpha channel', async ({ page }) => {
+    await createWidget(page, 'dxColorBox', { value: '#f05b41', opened: true, editAlphaChannel: true, deferRendering: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('colorBox disabled', async ({ page }) => {
+    await createWidget(page, 'dxColorBox', { value: '#f05b41', disabled: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('colorBox readOnly', async ({ page }) => {
+    await createWidget(page, 'dxColorBox', { value: '#f05b41', readOnly: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('colorBox with showClearButton', async ({ page }) => {
+    await createWidget(page, 'dxColorBox', { value: '#f05b41', showClearButton: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('colorBox with label', async ({ page }) => {
+    await createWidget(page, 'dxColorBox', { value: '#f05b41', label: 'label', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

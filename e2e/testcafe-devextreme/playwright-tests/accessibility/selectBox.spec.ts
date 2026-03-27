@@ -18,4 +18,34 @@ test.describe('Accessibility - selectBox', () => {
     await createWidget(page, 'dxSelectBox', { dataSource: ['HD Video Player', 'SuperHD Video Player'], inputAttr: { 'aria-label': 'aria-label' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('selectBox empty', async ({ page }) => {
+    await createWidget(page, 'dxSelectBox', { dataSource: [], inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('selectBox with value', async ({ page }) => {
+    await createWidget(page, 'dxSelectBox', { dataSource: ['HD Video Player', 'SuperHD Video Player'], value: 'HD Video Player', inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('selectBox disabled', async ({ page }) => {
+    await createWidget(page, 'dxSelectBox', { dataSource: ['HD Video Player', 'SuperHD Video Player'], disabled: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('selectBox readOnly', async ({ page }) => {
+    await createWidget(page, 'dxSelectBox', { dataSource: ['HD Video Player', 'SuperHD Video Player'], readOnly: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('selectBox with search enabled', async ({ page }) => {
+    await createWidget(page, 'dxSelectBox', { dataSource: ['HD Video Player', 'SuperHD Video Player'], searchEnabled: true, searchTimeout: 0, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('selectBox with label and showClearButton', async ({ page }) => {
+    await createWidget(page, 'dxSelectBox', { dataSource: ['HD Video Player', 'SuperHD Video Player'], value: 'HD Video Player', label: 'label', showClearButton: true, inputAttr: { 'aria-label': 'aria-label' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });

@@ -18,4 +18,48 @@ test.describe('Accessibility - calendar', () => {
     await createWidget(page, 'dxCalendar', { zoomLevel: 'month' });
     await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
   });
+
+  test('calendar with century zoom level', async ({ page }) => {
+    await createWidget(page, 'dxCalendar', { zoomLevel: 'century' });
+    await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
+  });
+
+  test('calendar with decade zoom level', async ({ page }) => {
+    await createWidget(page, 'dxCalendar', { zoomLevel: 'decade' });
+    await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
+  });
+
+  test('calendar disabled', async ({ page }) => {
+    await createWidget(page, 'dxCalendar', { zoomLevel: 'month', disabled: true });
+    await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
+  });
+
+  test('calendar readOnly', async ({ page }) => {
+    await createWidget(page, 'dxCalendar', { zoomLevel: 'month', readOnly: true });
+    await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
+  });
+
+  test('calendar with multiple selection mode', async ({ page }) => {
+    const msInDay = 1000 * 60 * 60 * 24;
+    const now = Date.now();
+    await createWidget(page, 'dxCalendar', {
+      zoomLevel: 'month',
+      selectionMode: 'multiple',
+      value: [now, now + msInDay],
+      showWeekNumbers: true,
+    });
+    await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
+  });
+
+  test('calendar with range selection mode and today button', async ({ page }) => {
+    const msInDay = 1000 * 60 * 60 * 24;
+    const now = Date.now();
+    await createWidget(page, 'dxCalendar', {
+      zoomLevel: 'month',
+      selectionMode: 'range',
+      value: [now, now + msInDay],
+      showTodayButton: true,
+    });
+    await a11yCheck(page, { rules: { 'empty-table-header': { enabled: false } } }, '#container');
+  });
 });

@@ -18,4 +18,29 @@ test.describe('Accessibility - checkBox', () => {
     await createWidget(page, 'dxCheckBox', { value: true, elementAttr: { 'aria-label': 'Checked' } });
     await a11yCheck(page, {}, '#container');
   });
+
+  test('checkBox unchecked', async ({ page }) => {
+    await createWidget(page, 'dxCheckBox', { value: false, elementAttr: { 'aria-label': 'Checked' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('checkBox indeterminate with three-state', async ({ page }) => {
+    await createWidget(page, 'dxCheckBox', { value: null, enableThreeStateBehavior: true, elementAttr: { 'aria-label': 'Checked' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('checkBox disabled', async ({ page }) => {
+    await createWidget(page, 'dxCheckBox', { value: true, disabled: true, elementAttr: { 'aria-label': 'Checked' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('checkBox readOnly', async ({ page }) => {
+    await createWidget(page, 'dxCheckBox', { value: true, readOnly: true, elementAttr: { 'aria-label': 'Checked' } });
+    await a11yCheck(page, {}, '#container');
+  });
+
+  test('checkBox with text', async ({ page }) => {
+    await createWidget(page, 'dxCheckBox', { value: true, text: 'text', elementAttr: { 'aria-label': 'Checked' } });
+    await a11yCheck(page, {}, '#container');
+  });
 });
