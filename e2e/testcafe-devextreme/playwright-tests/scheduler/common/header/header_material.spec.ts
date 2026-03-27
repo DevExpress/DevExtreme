@@ -44,6 +44,7 @@ test.describe('Scheduler header: material theme', () => {
   });
 
   test('The toolbar should not display if the config is empty', async ({ page }) => {
+    test.skip(!isMaterial());
     await createWidget(page, 'dxScheduler', {
       currentDate: new Date(2020, 2, 2),
       currentView: 'day',
