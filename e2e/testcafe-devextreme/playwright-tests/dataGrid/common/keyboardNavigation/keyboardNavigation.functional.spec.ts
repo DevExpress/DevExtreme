@@ -1711,4 +1711,312 @@ test.describe('Keyboard Navigation - common', () => {
     expect(await dataGrid.apiGetCellValue(1, 1)).toBeTruthy();
     await expect(cell11.element).toHaveClass(/dx-focused/);
   });
+
+  test('DataGrid - focusedRowIndex is -1 when the first data cell is focused with the keyboard (T1175896)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ field_0: 'val_0_0', field_1: 'val_0_1' }],
+      keyExpr: 'field_0',
+      showBorders: true,
+      searchPanel: {
+        visible: true,
+      },
+      onKeyDown(e: any) {
+        const eventKey = e.event?.key?.toLowerCase?.();
+        if (eventKey === 'enter') {
+          const focusedRowIndex = e.component.option('focusedRowIndex');
+          ($('#otherContainer') as any).text(focusedRowIndex);
+        }
+      },
+    });
+
+    await page.locator('.dx-datagrid-search-panel input').click();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+
+    const result = await page.locator('#otherContainer').textContent();
+    expect(result).toBe('0');
+  });
+
+  test('DataGrid - onFocusedCellChanged parameters should be correct when focusing the first cell (T1282664)', async ({ page }) => {
+    await page.evaluate(() => {
+      (window as any).focusedEventsTestData = [];
+    });
+
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [{ field_0: 'val_0_0', field_1: 'val_0_1' }],
+      keyExpr: 'field_0',
+      showBorders: true,
+      searchPanel: {
+        visible: true,
+      },
+      onFocusedCellChanged(e: any) {
+        (window as any).focusedEventsTestData.push({ name: 'onFocusedCellChanged', args: e });
+      },
+    });
+
+    await page.locator('.dx-datagrid-search-panel input').click();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+
+    const firstDataCell = page.locator('.dx-data-row[aria-rowindex="1"] td').nth(0);
+    await expect(firstDataCell).toBeFocused();
+
+    const events: any[] = await page.evaluate(() => (window as any).focusedEventsTestData);
+    expect(events.length).toBeGreaterThan(0);
+    const lastEvent = events[events.length - 1];
+    expect(lastEvent.args.columnIndex).toBe(0);
+    expect(lastEvent.args.rowIndex).toBe(0);
+    expect(lastEvent.args.row.data.field_0).toBe('val_0_0');
+  });
+
+  test('DataGrid - Cell focus in edit mode does not work correctly if a cell has a disabled editor (T1177434)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      onEditorPreparing(e: any) {
+        if (e.dataField === 'field_1') { e.editorOptions.disabled = true; }
+      },
+      dataSource: Array.from({ length: 3 }, (_, i) => ({
+        field_0: `val_${i}_0`,
+        field_1: `val_${i}_1`,
+        field_2: `val_${i}_2`,
+      })),
+      showBorders: true,
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+        allowAdding: true,
+        allowDeleting: true,
+      },
+      selection: {
+        mode: 'multiple',
+      },
+      toolbar: {
+        items: [
+          {
+            name: 'addRowButton',
+            showText: 'always',
+          },
+        ],
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+    const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
+    await addRowButton.click();
+    await page.keyboard.press('Tab');
+
+    const focusedEl = page.locator(':focus');
+    await expect(focusedEl).toHaveAttribute('aria-colindex', '3');
+  });
+
+  test('Focus second cell (via click) -> tab navigation when focusedRowEnabled is true', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        {
+          id: 0, field1: 'test1', field2: 'test2', field3: 'test3',
+        },
+        {
+          id: 1, field1: 'test4', field2: 'test5', field3: 'test6',
+        },
+      ],
+      keyExpr: 'id',
+      focusedRowEnabled: true,
+      columns: [{
+        dataField: 'field1',
+        cellTemplate() {
+          return ($('<div />') as any).dxDropDownButton({
+            text: 'Action',
+          });
+        },
+      }, 'field2', 'field3'],
+    });
+
+    const dataGrid = new DataGrid(page);
+
+    await dataGrid.getDataCell(0, 1).element.click();
+    await expect(page.locator('.dx-data-row[aria-rowindex="1"]')).toHaveClass(/dx-row-focused/);
+
+    await page.keyboard.press('Tab');
+    await expect(dataGrid.getDataCell(0, 2).element).toHaveClass(/dx-focused/);
+  });
+
+  test('Keyboard navigation should work after opening-closing master-detail', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+      ],
+      keyExpr: 'id',
+      masterDetail: {
+        enabled: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page);
+
+    await dataGrid.getDataRow(0).getCommandCell(0).element.click();
+    await dataGrid.getDataRow(0).getCommandCell(0).element.click();
+
+    await dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element.click();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+
+    await expect(dataGrid.getDataCell(0, 1).element).toHaveClass(/dx-focused/);
+
+    await page.keyboard.press('ArrowDown');
+    await expect(dataGrid.getDataCell(1, 1).element).toHaveClass(/dx-focused/);
+
+    await page.keyboard.press('ArrowDown');
+    await expect(dataGrid.getDataCell(2, 1).element).toHaveClass(/dx-focused/);
+
+    await page.keyboard.press('ArrowDown');
+    await expect(dataGrid.getDataCell(3, 1).element).toHaveClass(/dx-focused/);
+  });
+
+  test('TreeList/DataGrid - Focus indicator is not visible when the Toolbar includes a DropDownButton item (T1225005)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: Array.from({ length: 5 }, (_, i) => ({
+        field_0: `val_${i}_0`,
+        field_1: `val_${i}_1`,
+        field_2: `val_${i}_2`,
+      })),
+      toolbar: {
+        items: [
+          {
+            widget: 'dxDropDownButton',
+            location: 'before',
+            options: {
+              text: 'Clear Batch',
+              items: [
+                { text: 'Delete All Lines' },
+                { text: 'Zero All Values' },
+              ],
+            },
+          },
+        ],
+      },
+      keyExpr: 'field_0',
+      showBorders: true,
+    });
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element.click();
+    await page.keyboard.press('Tab');
+
+    await expect(dataGrid.getFocusOverlay()).toBeVisible();
+  });
+
+  test('Enter key should not trigger other function besides the function assigned on the clicked button', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', () => ({
+      dataSource: [
+        {
+          ID: 1,
+          Prefix: 'Mr.',
+          FirstName: 'John',
+        },
+      ],
+      keyExpr: 'ID',
+      columns: ['Prefix', 'FirstName'],
+      masterDetail: {
+        enabled: true,
+        template(container: any) {
+          const buttonContainer = $('<div>')
+            .addClass('button-container')
+            .appendTo(container);
+
+          $('<button>')
+            .text('Edit')
+            .attr('id', 'editButton')
+            .on('click', () => {
+              $('#otherContainer').text('first button');
+            })
+            .appendTo(buttonContainer);
+
+          $('<button>')
+            .text('Focus me and press Enter')
+            .on('click', () => {
+              $('#otherContainer').text('second button');
+            })
+            .appendTo(buttonContainer);
+        },
+      },
+    }));
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.getDataCell(0, 0).element.click();
+
+    await page.locator('#editButton').click();
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+
+    const message = await page.locator('#otherContainer').textContent();
+    expect(message).toBe('second button');
+  });
+
+  test('DataGrid - Data rows are skipped during Tab navigation if the first column is hidden via hidingPriority (T1228477)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: Array.from({ length: 3 }, (_, i) => ({
+        field_0: `val_${i}_0`,
+        field_1: `val_${i}_1`,
+        field_2: `val_${i}_2`,
+        field_3: `val_${i}_3`,
+        field_4: `val_${i}_4`,
+      })),
+      keyExpr: 'field_0',
+      columns: [{
+        dataField: 'field_0',
+        hidingPriority: 0,
+      }, {
+        dataField: 'field_1',
+        hidingPriority: 1,
+      }, 'field_2', 'field_3', 'field_4'],
+      showBorders: true,
+      width: 300,
+    });
+
+    const dataGrid = new DataGrid(page);
+    const cell02 = dataGrid.getDataCell(0, 2);
+    await expect(cell02.element).toHaveAttribute('tabindex', '0');
+  });
+
+  test('Cancel button in the last column cannot be focused via the Tab key (T1248987)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      keyExpr: 'ID',
+      dataSource: [
+        {
+          ID: 1,
+          FirstName: 'John',
+        },
+      ],
+      showBorders: true,
+      editing: {
+        allowAdding: true,
+        mode: 'row',
+        editRowKey: 1,
+      },
+      columnFixing: {
+        enabled: true,
+      },
+      columns: [
+        'FirstName',
+      ],
+    });
+
+    const dataGrid = new DataGrid(page);
+    const inputCell = dataGrid.getDataCell(0, 0).element;
+
+    await inputCell.click();
+    await page.keyboard.press('Tab');
+
+    const saveButton = dataGrid.getFixedDataRow(0).getCommandCell(1).getButton(0);
+    await expect(saveButton).toBeFocused();
+
+    await page.keyboard.press('Tab');
+    const cancelButton = dataGrid.getFixedDataRow(0).getCommandCell(1).getButton(1);
+    await expect(cancelButton).toBeFocused();
+  });
 });
