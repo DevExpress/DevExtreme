@@ -151,4 +151,142 @@ test.describe('Sticky columns - Editing', () => {
 
     await testScreenshot(page, 'edit_fixed_cell_2.png', { element: page.locator('#container') });
   });
+
+  test('The batch edit mode: Edit fixed cell with sticky position', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      width: 700,
+      height: 500,
+      dataSource: defaultDataSource,
+      columnAutoWidth: true,
+      keyExpr: 'ID',
+      columns: defaultColumns,
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+      },
+      customizeColumns(columns: any[]) {
+        columns[1].fixed = true;
+        columns[1].fixedPosition = 'left';
+        columns[3].fixed = true;
+        columns[3].fixedPosition = 'sticky';
+      },
+      scrolling: {
+        showScrollbar: 'never',
+      },
+    });
+
+    expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+
+    await page.locator('.dx-data-row').first().locator('td').nth(3).click();
+
+    await testScreenshot(page, 'edit_fixed_cell_with_sticky_position_1.png', { element: page.locator('#container') });
+
+    await page.evaluate((opts) => ($('#container') as any).dxDataGrid('instance').getScrollable().scrollTo(opts), { x: 10000 });
+
+    await testScreenshot(page, 'edit_fixed_cell_with_sticky_position_2.png', { element: page.locator('#container') });
+  });
+
+  test('The cell edit mode: Edit fixed cell with validation rule', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      width: 700,
+      height: 500,
+      dataSource: defaultDataSource,
+      columnAutoWidth: true,
+      keyExpr: 'ID',
+      columns: defaultColumns,
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+      },
+      columnWidth: 200,
+      customizeColumns(columns: any[]) {
+        columns[0].validationRules = [{ type: 'required' }];
+      },
+      scrolling: {
+        showScrollbar: 'never',
+      },
+    });
+
+    expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.apiCellValue(0, 0, '');
+    await page.locator('.dx-data-row').first().locator('td').nth(0).click();
+
+    await testScreenshot(page, 'edit_fixed_cell_with_validation_rule_1.png', { element: page.locator('#container') });
+
+    await page.evaluate((opts) => ($('#container') as any).dxDataGrid('instance').getScrollable().scrollTo(opts), { x: 10000 });
+
+    await testScreenshot(page, 'edit_fixed_cell_with_validation_rule_2.png', { element: page.locator('#container') });
+  });
+
+  test('The cell edit mode: Edit fixed cell with the sticky position and validation rule', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      width: 700,
+      height: 500,
+      dataSource: defaultDataSource,
+      columnAutoWidth: true,
+      keyExpr: 'ID',
+      columns: defaultColumns,
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+      },
+      columnWidth: 200,
+      customizeColumns(columns: any[]) {
+        columns[2].fixed = true;
+        columns[2].fixedPosition = 'sticky';
+        columns[2].validationRules = [{ type: 'required' }];
+      },
+      scrolling: {
+        showScrollbar: 'never',
+      },
+    });
+
+    expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.apiCellValue(0, 2, '');
+    await page.locator('.dx-data-row').first().locator('td').nth(2).click();
+
+    await testScreenshot(page, 'edit_fixed_cell_with_sticky_position_and_validation_rule_1.png', { element: page.locator('#container') });
+
+    await page.evaluate((opts) => ($('#container') as any).dxDataGrid('instance').getScrollable().scrollTo(opts), { x: 10000 });
+
+    await testScreenshot(page, 'edit_fixed_cell_with_sticky_position_and_validation_rule_2.png', { element: page.locator('#container') });
+  });
+
+  test('The cell edit mode: Edit cell with validation rule when there fixed columns', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      width: 700,
+      height: 500,
+      dataSource: defaultDataSource,
+      columnAutoWidth: true,
+      keyExpr: 'ID',
+      columns: defaultColumns,
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+      },
+      scrolling: {
+        showScrollbar: 'never',
+      },
+      columnWidth: 150,
+      customizeColumns(columns: any[]) {
+        columns[1].validationRules = [{ type: 'required' }];
+      },
+    });
+
+    expect(await page.locator('.dx-datagrid').first().isVisible()).toBeTruthy();
+
+    const dataGrid = new DataGrid(page);
+    await dataGrid.apiCellValue(0, 1, '');
+    await page.locator('.dx-data-row').first().locator('td').nth(1).click();
+
+    await testScreenshot(page, 'edit_cell_with_validation_rule_and_fixed_columns_1.png', { element: page.locator('#container') });
+
+    await page.evaluate((opts) => ($('#container') as any).dxDataGrid('instance').getScrollable().scrollTo(opts), { x: 200 });
+
+    await testScreenshot(page, 'edit_cell_with_validation_rule_and_fixed_columns_2.png', { element: page.locator('#container') });
+  });
 });

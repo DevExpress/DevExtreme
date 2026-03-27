@@ -47,20 +47,19 @@ test.describe('Focus - cell with showEditorAlways', () => {
     },
   });
 
-  test.skip('Should switch focus after the lookup value change [T1194403]', async ({ page }) => {
-    // TODO: Playwright migration - TestCafe API remnants (new List, item.element, lookupCell.element)
+  test('Should switch focus after the lookup value change [T1194403]', async ({ page }) => {
     await createDataGrid(page);
 
-      const editorTextCell = page.locator('.dx-data-row').nth(0).locator('td').nth(1);
-    const lookupCell = page.locator('.dx-data-row').nth(0).locator('td').nth(2).locator('.dx-editor-cell');
+    const editorTextCell = page.locator('.dx-data-row').nth(0).locator('td').nth(1);
+    const lookupEditor = page.locator('.dx-data-row').nth(0).locator('td').nth(2).locator('.dx-selectbox');
 
-    await (lookupCell.element).click();
+    await lookupEditor.click();
 
-    const list = new List(SELECTOR);
-    const item = list.getItem(2);
+    const listItem = page.locator('.dx-overlay-wrapper .dx-list-item').nth(2);
+    await listItem.click();
 
-    await (item.element).click();
-    await (editorTextCell.element).click();
+    await editorTextCell.click();
+    await page.waitForTimeout(100);
 
     await testScreenshot(page, 'focus-edit-cell_after-lookup-change.png', { element: page.locator('#container') });
   });

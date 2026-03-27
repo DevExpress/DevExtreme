@@ -181,4 +181,363 @@ test.describe('Focused row', () => {
 
     await testScreenshot(page, 'focused-row_under_group_when_data-items_have_items-property.png', { element: page.locator('#container') });
   });
+
+  test('Form - Focused row should not be reset after editing a row (T851400)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 5, c0: 'c0_0' },
+        { id: 6, c0: 'c0_1' },
+      ],
+      keyExpr: 'id',
+      focusedRowEnabled: true,
+      focusedRowKey: 6,
+      editing: {
+        mode: 'form',
+        allowUpdating: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+    const dataRow0 = dataGrid.getDataRow(0);
+    const dataRow1 = dataGrid.getDataRow(1);
+
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    const focusedKey1 = await dataGrid.option('focusedRowKey');
+    expect(focusedKey1).toBe(6);
+
+    const editButton1 = dataRow1.element.locator('.dx-command-edit .dx-link-edit');
+    await editButton1.click();
+
+    const editForm = dataGrid.getEditForm();
+    await expect(editForm.element).toBeVisible();
+    await editForm.cancelButton.click();
+
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    const focusedKeyAfterCancel = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyAfterCancel).toBe(6);
+
+    await editButton1.click();
+    await expect(editForm.element).toBeVisible();
+
+    const editor = editForm.element.locator('.dx-texteditor-input').first();
+    await editor.fill('test');
+    await editForm.saveButton.click();
+
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    const focusedKeyAfterSave = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyAfterSave).toBe(6);
+
+    const editButton0 = dataRow0.element.locator('.dx-command-edit .dx-link-edit');
+    await editButton0.click();
+    await expect(editForm.element).toBeVisible();
+
+    const focusedKeyRow0 = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyRow0).toBe(5);
+
+    await editForm.cancelButton.click();
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    const focusedKeyRow0AfterCancel = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyRow0AfterCancel).toBe(5);
+  });
+
+  test('Row - Focused row should not be reset after editing a row (T879627)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 5, c0: 'c0_0' },
+        { id: 6, c0: 'c0_1' },
+      ],
+      keyExpr: 'id',
+      focusedRowEnabled: true,
+      focusedRowKey: 6,
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+    const dataRow1 = dataGrid.getDataRow(1);
+
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+
+    const editButton1 = dataRow1.element.locator('.dx-command-edit .dx-link-edit');
+    const cancelButton1 = dataRow1.element.locator('.dx-command-edit .dx-link-cancel');
+
+    await editButton1.click();
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    const focusedKeyEditing = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyEditing).toBe(6);
+
+    await cancelButton1.click();
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    const focusedKeyAfterCancel = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyAfterCancel).toBe(6);
+  });
+
+  test('Cell - Focused row should not be reset after editing a cell (T879627)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 5, c0: 'c0_0' },
+        { id: 6, c0: 'c0_1' },
+      ],
+      keyExpr: 'id',
+      focusedRowEnabled: true,
+      focusedRowKey: 6,
+      editing: {
+        mode: 'cell',
+        allowUpdating: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+    const dataRow1 = dataGrid.getDataRow(1);
+    const dataCell11 = dataRow1.getDataCell(1);
+
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    const focusedKeyInitial = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyInitial).toBe(6);
+
+    await dataCell11.element.click();
+    const editor = dataCell11.element.locator('.dx-texteditor-input');
+    await expect(editor).toBeVisible();
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(editor).toBeHidden();
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+
+    const focusedKeyAfterEsc = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyAfterEsc).toBe(6);
+
+    await dataCell11.element.click();
+    await editor.fill('test');
+    await page.keyboard.press('Enter');
+
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+    const focusedKeyAfterSave = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyAfterSave).toBe(6);
+  });
+
+  test('Form - Focused row should not be reset after editing a row by API (T879627)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 5, c0: 'c0_0' },
+        { id: 6, c0: 'c0_1' },
+      ],
+      keyExpr: 'id',
+      focusedRowEnabled: true,
+      focusedRowKey: 6,
+      editing: {
+        mode: 'form',
+        allowUpdating: true,
+        popup: { animation: null as any },
+      },
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+    const dataRow1 = dataGrid.getDataRow(1);
+
+    const focusedKey1 = await dataGrid.option('focusedRowKey');
+    expect(focusedKey1).toBe(6);
+    await expect(dataRow1.element).toBeVisible();
+
+    await dataGrid.apiEditRow(1);
+    const focusedKeyEditing = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyEditing).toBe(6);
+
+    await dataGrid.apiCancelEditData();
+    const focusedKeyAfterCancel = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyAfterCancel).toBe(6);
+
+    await dataGrid.apiEditRow(0);
+    const focusedKeyRow0 = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyRow0).toBe(6);
+
+    await dataGrid.apiSaveEditData();
+    const focusedKeyAfterSave = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyAfterSave).toBe(6);
+  });
+
+  test('Popup - Focused row should not be reset after editing a row by API (T879627)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 5, c0: 'c0_0' },
+        { id: 6, c0: 'c0_1' },
+      ],
+      keyExpr: 'id',
+      focusedRowEnabled: true,
+      focusedRowKey: 6,
+      editing: {
+        mode: 'popup',
+        allowUpdating: true,
+        popup: { animation: null as any },
+      },
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+    const dataRow1 = dataGrid.getDataRow(1);
+
+    const focusedKey1 = await dataGrid.option('focusedRowKey');
+    expect(focusedKey1).toBe(6);
+    await expect(dataRow1.element).toBeVisible();
+
+    await dataGrid.apiEditRow(1);
+    const focusedKeyEditing = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyEditing).toBe(6);
+
+    await dataGrid.apiCancelEditData();
+    const focusedKeyAfterCancel = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyAfterCancel).toBe(6);
+
+    await dataGrid.apiEditRow(0);
+    const focusedKeyRow0 = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyRow0).toBe(6);
+
+    await dataGrid.apiSaveEditData();
+    const focusedKeyAfterSave = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyAfterSave).toBe(6);
+  });
+
+  (['Cell', 'Batch'] as const).forEach((mode) => {
+    test(`${mode} - Focused row should not be reset after editing a cell by API (T879627)`, async ({ page }) => {
+      await createWidget(page, 'dxDataGrid', {
+        dataSource: [
+          { id: 5, c0: 'c0_0' },
+          { id: 6, c0: 'c0_1' },
+        ],
+        keyExpr: 'id',
+        focusedRowEnabled: true,
+        focusedRowKey: 6,
+        editing: {
+          mode: mode.toLowerCase() as any,
+          allowUpdating: true,
+        },
+      });
+
+      const dataGrid = new DataGrid(page, '#container');
+      const dataRow1 = dataGrid.getDataRow(1);
+
+      const focusedKey1 = await dataGrid.option('focusedRowKey');
+      expect(focusedKey1).toBe(6);
+      await expect(dataRow1.element).toBeVisible();
+
+      await dataGrid.apiEditCell(1, 1);
+      const focusedKeyEditing = await dataGrid.option('focusedRowKey');
+      expect(focusedKeyEditing).toBe(6);
+
+      await dataGrid.apiCancelEditData();
+      const focusedKeyAfterCancel = await dataGrid.option('focusedRowKey');
+      expect(focusedKeyAfterCancel).toBe(6);
+
+      await dataGrid.apiEditCell(0, 1);
+      await dataGrid.apiCellValue(0, 1, 'test');
+      const focusedKeyRow0 = await dataGrid.option('focusedRowKey');
+      expect(focusedKeyRow0).toBe(6);
+
+      await dataGrid.apiSaveEditData();
+      const focusedKeyAfterSave = await dataGrid.option('focusedRowKey');
+      expect(focusedKeyAfterSave).toBe(6);
+    });
+  });
+
+  test('Row - Focused row should be reset after editing a row by API (T879627)', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 5, c0: 'c0_0' },
+        { id: 6, c0: 'c0_1' },
+      ],
+      keyExpr: 'id',
+      focusedRowEnabled: true,
+      focusedRowKey: 6,
+      editing: {
+        mode: 'row',
+        allowUpdating: true,
+      },
+    });
+
+    const dataGrid = new DataGrid(page, '#container');
+    const dataRow1 = dataGrid.getDataRow(1);
+
+    const focusedKey1 = await dataGrid.option('focusedRowKey');
+    expect(focusedKey1).toBe(6);
+    await expect(dataRow1.element).toBeVisible();
+
+    await dataGrid.apiEditRow(1);
+    const focusedKeyEditing = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyEditing).toBe(6);
+
+    await dataGrid.apiCancelEditData();
+    const focusedKeyAfterCancel = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyAfterCancel).toBe(6);
+
+    await dataGrid.apiEditRow(0);
+    const focusedKeyRow0 = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyRow0).toBe(5);
+
+    await dataGrid.apiSaveEditData();
+    const focusedKeyAfterSave = await dataGrid.option('focusedRowKey');
+    expect(focusedKeyAfterSave).toBe(5);
+  });
+
+  test('Scrolling should work if scrolling.mode and rowRenderingMode are virtual row is focused (T907192)', async ({ page }) => {
+    await page.evaluate(() => {
+      const data: Record<string, unknown>[] = [];
+      for (let i = 0; i < 100; i += 1) {
+        data.push({ id: i + 1 });
+      }
+      ($('#container') as any).dxDataGrid({
+        height: 200,
+        width: 200,
+        keyExpr: 'id',
+        dataSource: data,
+        focusedRowEnabled: true,
+        focusedRowKey: 1,
+        columns: ['id'],
+        scrolling: {
+          mode: 'virtual',
+          rowRenderingMode: 'virtual',
+          showScrollbar: 'always',
+        },
+      });
+    });
+
+    await page.waitForTimeout(300);
+
+    const dataGrid = new DataGrid(page, '#container');
+    await expect(dataGrid.getFocusedRow()).toBeVisible();
+
+    await page.locator('#container').click({ position: { x: 195, y: 180 } });
+    await expect(dataGrid.getFocusedRow()).toBeHidden();
+  });
+
+  (['virtual', 'infinite'] as const).forEach((scrollingMode) => {
+    test(`Row should be focused after reloading the data source (scrolling.mode is ${scrollingMode}) (T1022502)`, async ({ page }) => {
+      const data: { ID: number; Name: string }[] = [];
+      for (let i = 0; i < 30; i += 1) {
+        data.push({ ID: i + 1, Name: `Name ${i + 1}` });
+      }
+
+      await createWidget(page, 'dxDataGrid', {
+        height: 2000,
+        dataSource: data,
+        keyExpr: 'ID',
+        focusedRowEnabled: true,
+        focusedRowIndex: 20,
+        scrolling: {
+          mode: scrollingMode as any,
+          useNative: false,
+        },
+      });
+
+      const dataGrid = new DataGrid(page, '#container');
+
+      await expect(dataGrid.dataRows).toHaveCount(30);
+      await expect(dataGrid.getDataRow(20).element).toHaveClass(/dx-row-focused/);
+
+      await dataGrid.apiRefresh();
+
+      await expect(dataGrid.dataRows).toHaveCount(30);
+      await expect(dataGrid.getDataRow(20).element).toHaveClass(/dx-row-focused/);
+    });
+  });
 });

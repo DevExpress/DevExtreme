@@ -147,4 +147,80 @@ test.describe('Grouping API - calculateGroupValue runtime changes', () => {
     const sortOrder = await dataGrid.apiColumnOption('A', 'sortOrder');
     expect(sortOrder).toBe('asc');
   });
+
+  test('One group: should expand grouped section after calculateGroupValue update', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 0, A: 'A_0', group: 'A' },
+        { id: 1, A: 'A_1', group: 'A' },
+        { id: 2, A: 'A_2', group: 'B' },
+        { id: 3, A: 'A_3', group: 'B' },
+      ],
+      keyExpr: 'id',
+      columns: [
+        { dataField: 'group', groupIndex: 0 },
+        'A',
+      ],
+      grouping: { autoExpandAll: false },
+    });
+
+    const dataGrid = new DataGrid(page);
+
+    const groupRows = dataGrid.getGroupRowSelector();
+    await expect(groupRows).toHaveCount(2);
+
+    await dataGrid.apiColumnOption('group', 'calculateGroupValue', () => 'ALL');
+    await page.waitForTimeout(200);
+
+    await expect(groupRows).toHaveCount(1);
+    await expect(dataGrid.dataRows).toHaveCount(0);
+
+    const groupRow0 = dataGrid.getGroupRow(0);
+    const isExpanded0 = await groupRow0.isExpanded();
+    expect(isExpanded0).toBe(false);
+
+    await groupRow0.element.locator('.dx-datagrid-group-opened, .dx-datagrid-group-closed').click();
+    await page.waitForTimeout(100);
+
+    await expect(dataGrid.dataRows).toHaveCount(4);
+  });
+
+  test('Should not reset multiple sorting parameters after calculateGroupValue update [T1298901]', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      dataSource: [
+        { id: 0, A: 0, B: 'B_0' },
+        { id: 1, A: 1, B: 'B_1' },
+        { id: 2, A: 2, B: 'B_2' },
+        { id: 3, A: 3, B: 'B_3' },
+      ],
+      keyExpr: 'id',
+      columns: [
+        { dataField: 'A', sortOrder: 'desc', sortIndex: 1 },
+        { dataField: 'B', sortOrder: 'asc', sortIndex: 0 },
+      ],
+      sorting: { mode: 'multiple' },
+    });
+
+    const dataGrid = new DataGrid(page);
+
+    const sortOrderABefore = await dataGrid.apiColumnOption('A', 'sortOrder');
+    expect(sortOrderABefore).toBe('desc');
+    const sortIndexABefore = await dataGrid.apiColumnOption('A', 'sortIndex');
+    expect(sortIndexABefore).toBe(1);
+    const sortOrderBBefore = await dataGrid.apiColumnOption('B', 'sortOrder');
+    expect(sortOrderBBefore).toBe('asc');
+    const sortIndexBBefore = await dataGrid.apiColumnOption('B', 'sortIndex');
+    expect(sortIndexBBefore).toBe(0);
+
+    await dataGrid.apiColumnOption('A', 'calculateGroupValue', () => 'ALL');
+
+    const sortOrderAAfter = await dataGrid.apiColumnOption('A', 'sortOrder');
+    expect(sortOrderAAfter).toBe('desc');
+    const sortIndexAAfter = await dataGrid.apiColumnOption('A', 'sortIndex');
+    expect(sortIndexAAfter).toBe(1);
+    const sortOrderBAfter = await dataGrid.apiColumnOption('B', 'sortOrder');
+    expect(sortOrderBAfter).toBe('asc');
+    const sortIndexBAfter = await dataGrid.apiColumnOption('B', 'sortIndex');
+    expect(sortIndexBAfter).toBe(0);
+  });
 });

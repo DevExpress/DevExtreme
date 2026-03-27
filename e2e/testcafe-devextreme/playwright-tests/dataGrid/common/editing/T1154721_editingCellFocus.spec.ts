@@ -57,4 +57,48 @@ test.describe('Editing - cell focus', () => {
     expect(firstCellValue).toBe('A AAA');
     expect(secondCellValue).toBe('C CCC');
   });
+
+  test('Should allow focus next editor in the same column after save changes with repaintChangesOnly and refreshMode repaint', async ({ page }) => {
+    await createWidget(page, 'dxDataGrid', {
+      keyExpr: 'id',
+      dataSource: [{
+        id: 0,
+        data: 'X',
+      }, {
+        id: 1,
+        data: 'Y',
+      }, {
+        id: 2,
+        data: 'Z',
+      }],
+      editing: {
+        allowUpdating: true,
+        refreshMode: 'repaint',
+        mode: 'cell',
+      },
+      columns: [{
+        dataField: 'data',
+        showEditorAlways: true,
+      }],
+      repaintChangesOnly: true,
+    });
+
+    const dataGrid = new DataGrid(page);
+
+    const firstEditor = dataGrid.getDataCell(0, 0).element.locator('.dx-texteditor-input');
+    const lastEditor = dataGrid.getDataCell(2, 0).element.locator('.dx-texteditor-input');
+    const middleCell = dataGrid.getDataCell(1, 0).element;
+
+    await firstEditor.click();
+    await firstEditor.pressSequentially(' XX');
+    await lastEditor.click();
+    await lastEditor.pressSequentially(' ZZ');
+    await middleCell.click();
+
+    const firstValue = await firstEditor.inputValue();
+    const lastValue = await lastEditor.inputValue();
+
+    expect(firstValue).toBe('X XX');
+    expect(lastValue).toBe('Z ZZ');
+  });
 });
