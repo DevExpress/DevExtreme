@@ -70,6 +70,7 @@ import type {
   AppointmentTooltipItem,
   SafeAppointment,
   ScrollToGroupValuesOrOptions, ScrollToOptions, TargetedAppointment,
+  ViewType,
 } from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
@@ -318,9 +319,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
         if (this.option('_newAppointments')) {
           this._appointments.option({
+            currentView: value,
             viewModel: [],
-            allowDrag: this.allowDragging(),
-            allowResize: this.allowResizing(),
             // TODO<Appointments>: update appointmentTemplate and appointmentCollectorTemplate
           });
         } else {
@@ -1045,6 +1045,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         : this.getViewOption('appointmentTemplate');
 
       const appointmentsConfig: Partial<AppointmentsProperties> = {
+        currentView: this.option('currentView') as ViewType,
         // TODO<Appointments>: set custom templates
         appointmentTemplate: appointmentTemplateValue,
         appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),

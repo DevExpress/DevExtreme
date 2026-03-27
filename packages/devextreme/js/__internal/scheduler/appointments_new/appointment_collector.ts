@@ -32,6 +32,8 @@ export class AppointmentCollector
   extends DOMComponent<AppointmentCollector, AppointmentCollectorProperties> {
   private defaultAppointmentCollectorTemplate!: FunctionTemplate;
 
+  private buttonInstance?: Button;
+
   override _init(): void {
     super._init();
 
@@ -53,6 +55,11 @@ export class AppointmentCollector
     this.$element().css({
       top: this.option().geometry.top,
       left: this.option().geometry.left,
+    });
+
+    this.buttonInstance?.option({
+      width: this.option().geometry.width,
+      height: this.option().geometry.height,
     });
   }
 
@@ -85,7 +92,7 @@ export class AppointmentCollector
       ? this.defaultAppointmentCollectorTemplate
       : this.option().appointmentCollectorTemplate;
 
-    this._createComponent(this.$element(), Button, {
+    this.buttonInstance = this._createComponent(this.$element(), Button, {
       type: 'default',
       width: this.option().geometry.width,
       height: this.option().geometry.height,
