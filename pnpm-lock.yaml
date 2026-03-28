@@ -187,7 +187,7 @@ overrides:
   minimatch@<3.1.5: 3.1.5
   minimatch@>=9.0.0 < 9.0.7: 9.0.9
   minimatch@>=10.0.0 < 10.2.4: 10.2.4
-  serialize-javascript@<=7.0.2: 7.0.4
+  serialize-javascript@<=7.0.2: 7.0.5
   flatted@<3.4.0: ^3.4.0
   undici@<7.24.0: ^7.24.0
   socket.io-parser@>=4.0.0 <4.2.6: ^4.2.6
@@ -16444,8 +16444,8 @@ packages:
     resolution: {integrity: sha512-1gnZf7DFcoIcajTjTwjwuDjzuz4PPcY2StKPlsGAQ1+YH20IRVrBaXSWmdjowTJ6u8Rc01PoYOGHXfP1mYcZNQ==}
     engines: {node: '>= 18'}
 
-  serialize-javascript@7.0.4:
-    resolution: {integrity: sha512-DuGdB+Po43Q5Jxwpzt1lhyFSYKryqoNjQSA9M92tyw0lyHIOur+XCalOUe0KTJpyqzT8+fQ5A0Jf7vCx/NKmIg==}
+  serialize-javascript@7.0.5:
+    resolution: {integrity: sha512-F4LcB0UqUl1zErq+1nYEEzSHJnIwb3AF2XWB94b+afhrekOUijwooAYqFyRbjYkm2PAKBabx6oYv/xDxNi8IBw==}
     engines: {node: '>=20.0.0'}
 
   serve-index@1.9.2:
@@ -29455,7 +29455,7 @@ snapshots:
       globby: 14.1.0
       normalize-path: 3.0.0
       schema-utils: 4.3.3
-      serialize-javascript: 7.0.4
+      serialize-javascript: 7.0.5
       webpack: 5.98.0(@swc/core@1.15.3)(esbuild@0.25.4)
 
   copy-webpack-plugin@13.0.1(webpack@5.105.0(@swc/core@1.15.3)(esbuild@0.27.2)):
@@ -29463,7 +29463,7 @@ snapshots:
       glob-parent: 6.0.2
       normalize-path: 3.0.0
       schema-utils: 4.3.3
-      serialize-javascript: 7.0.4
+      serialize-javascript: 7.0.5
       tinyglobby: 0.2.15
       webpack: 5.105.0(@swc/core@1.15.3)(esbuild@0.25.0)
 
@@ -39887,7 +39887,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  serialize-javascript@7.0.4: {}
+  serialize-javascript@7.0.5: {}
 
   serve-index@1.9.2:
     dependencies:
