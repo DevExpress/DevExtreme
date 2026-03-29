@@ -171,24 +171,24 @@ test.describe('Tabs_common', () => {
     await testScreenshot(page, 'Tabs without focus.png', { element: '#tabs' });
 
     await page.keyboard.press('Tab');
-    await testScreenshot(page, 'Tabs item focused.png', { element: '#tabs' });
+    await testScreenshot(page, 'Tabs item focused.png', { element: '#tabs', keepFocus: true });
 
     await page.keyboard.press('ArrowRight');
-    await testScreenshot(page, 'Tabs disabled item focused.png', { element: '#tabs' });
+    await testScreenshot(page, 'Tabs disabled item focused.png', { element: '#tabs', keepFocus: true });
 
     const thirdItem = page.locator(`.${TAB_CLASS}:nth-child(3)`);
     const fourthItem = page.locator(`.${TAB_CLASS}:nth-child(4)`);
 
     await page.keyboard.press('ArrowRight');
     await thirdItem.dispatchEvent('mousedown');
-    await testScreenshot(page, 'Tabs item active.png', { element: '#tabs' });
+    await testScreenshot(page, 'Tabs item active.png', { element: '#tabs', keepFocus: true });
     await thirdItem.dispatchEvent('mouseup');
 
     await thirdItem.click();
     await fourthItem.hover();
     await testScreenshot(page, 'Tabs item hovered.png', { element: '#tabs' });
 
-    await page.locator('body').click();
+    await page.locator('body').click({ position: { x: 0, y: 0 } });
 
     await thirdItem.hover();
     await testScreenshot(page, 'Tabs selected item hovered.png', { element: '#tabs' });

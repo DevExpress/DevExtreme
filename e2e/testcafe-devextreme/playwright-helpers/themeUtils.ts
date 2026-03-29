@@ -98,15 +98,18 @@ async function takeScreenshotForTarget(
   element: Locator | string | null | undefined,
   name: string,
   screenshotOptions?: { maxDiffPixelRatio?: number },
+  keepFocus = false,
 ): Promise<void> {
-  await page.evaluate(() => {
-    (document.activeElement as HTMLElement)?.blur();
+  await page.evaluate((shouldKeepFocus) => {
+    if (!shouldKeepFocus) {
+      (document.activeElement as HTMLElement)?.blur();
+    }
     const licenseEls = document.querySelectorAll('dx-license');
     licenseEls.forEach((el) => {
       const btn = el.querySelector('div[style*="cursor: pointer"]') as HTMLElement | null;
       if (btn) btn.click();
     });
-  });
+  }, keepFocus);
 
   const addedPadding = await simulateTestCafeScrollbar(page);
   if (addedPadding) {
@@ -137,6 +140,7 @@ export async function testScreenshot(
     theme?: string;
     shouldTestInCompact?: boolean;
     maxDiffPixelRatio?: number;
+    keepFocus?: boolean;
   },
 ): Promise<void> {
   const {
@@ -144,6 +148,7 @@ export async function testScreenshot(
     theme,
     shouldTestInCompact = false,
     maxDiffPixelRatio,
+    keepFocus = false,
   } = options ?? {};
 
   const screenshotOptions = maxDiffPixelRatio !== undefined ? { maxDiffPixelRatio } : undefined;
@@ -152,12 +157,12 @@ export async function testScreenshot(
     await changeTheme(page, theme);
   }
 
-  await takeScreenshotForTarget(page, element, getScreenshotName(screenshotName, theme), screenshotOptions);
+  await takeScreenshotForTarget(page, element, getScreenshotName(screenshotName, theme), screenshotOptions, keepFocus);
 
   if (shouldTestInCompact) {
     const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
     await changeTheme(page, `${themeName}.compact`);
-    await takeScreenshotForTarget(page, element, getScreenshotName(screenshotName, `${themeName}.compact`), screenshotOptions);
+    await takeScreenshotForTarget(page, element, getScreenshotName(screenshotName, `${themeName}.compact`), screenshotOptions, keepFocus);
   }
 
   if (theme || shouldTestInCompact) {

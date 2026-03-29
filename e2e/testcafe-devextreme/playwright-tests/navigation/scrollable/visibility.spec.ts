@@ -41,6 +41,7 @@ test.describe('Scrollable_visibility_integration', () => {
 
             const scrollable = new Scrollable(page, '#scrollable', { direction, useNative, useSimulatedScrollbar });
             await scrollable.scrollTo({ left: 10, top: 20 });
+            await page.waitForTimeout(100);
 
             const expectedScrollOffsetValue = { left: 10, top: 20 };
             await expect(await scrollable.scrollOffset()).eql(expectedScrollOffsetValue);
@@ -52,6 +53,7 @@ test.describe('Scrollable_visibility_integration', () => {
             await scrollable.scrollTo({ left: 0, top: 0 });
             await scrollable.show();
             await scrollable.triggerShownEvent();
+            await page.waitForTimeout(100);
 
             await expect(await scrollable.scrollOffset()).eql(expectedScrollOffsetValue);
             await testScreenshot(page, `Scroll position after show, useNative=${useNative},rtl=${rtlEnabled},useSimScrollbar=${useSimulatedScrollbar}.png`, { element: page.locator('#scrollable') });

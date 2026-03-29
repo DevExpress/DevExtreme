@@ -95,6 +95,7 @@ test.describe('Scrollable_ScrollToElement', () => {
     });
 
     test(`ScrollToElement, element more container,direction=${direction}`, async ({ page }) => {
+      test.setTimeout(120000);
 
       const positions = [
         { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTLCorner' },

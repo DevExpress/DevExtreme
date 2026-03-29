@@ -58,14 +58,48 @@ test.describe('List', () => {
     });
 
     const list = new List(page);
+    const firstItemCheckBox = list.getItem(0).checkBox;
+    const secondItemCheckBox = list.getItem(1).checkBox;
+    const thirdItemCheckBox = list.getItem(2).checkBox;
+    const selectAllCheckBox = list.selectAll.checkBox;
+
     await list.focus();
 
-    await page.keyboard.press('Tab');
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('Space');
+    expect(await selectAllCheckBox.isFocused).toBe(true);
 
-    const items = list.getItems();
-    expect(await items.nth(0).evaluate((el) => el.classList.contains('dx-list-item-selected'))).toBe(true);
+    await page.keyboard.press('ArrowDown');
+    expect(await selectAllCheckBox.isFocused).toBe(false);
+    expect(await firstItemCheckBox.isFocused).toBe(true);
+
+    await page.keyboard.press('ArrowDown');
+    expect(await firstItemCheckBox.isFocused).toBe(false);
+    expect(await secondItemCheckBox.isFocused).toBe(true);
+
+    await page.keyboard.press('ArrowDown');
+    expect(await secondItemCheckBox.isFocused).toBe(false);
+    expect(await thirdItemCheckBox.isFocused).toBe(true);
+
+    await page.keyboard.press('ArrowDown');
+    expect(await thirdItemCheckBox.isFocused).toBe(false);
+    expect(await selectAllCheckBox.isFocused).toBe(true);
+
+    await page.keyboard.press('ArrowDown');
+    expect(await selectAllCheckBox.isFocused).toBe(false);
+    expect(await firstItemCheckBox.isFocused).toBe(true);
+
+    await page.keyboard.press('ArrowUp');
+    expect(await firstItemCheckBox.isFocused).toBe(false);
+
+    await page.keyboard.press('ArrowUp');
+    expect(await thirdItemCheckBox.isFocused).toBe(true);
+
+    await page.keyboard.press('ArrowUp');
+    expect(await thirdItemCheckBox.isFocused).toBe(false);
+    expect(await secondItemCheckBox.isFocused).toBe(true);
+
+    await page.keyboard.press('Tab');
+    expect(await selectAllCheckBox.isFocused).toBe(false);
+    expect(await secondItemCheckBox.isFocused).toBe(false);
   });
 
   test('Should save focused checkbox', async ({ page }) => {
@@ -76,14 +110,38 @@ test.describe('List', () => {
     });
 
     const list = new List(page);
+    const secondItemCheckBox = list.getItem(1).checkBox;
+    const selectAllCheckBox = list.selectAll.checkBox;
+
     await list.focus();
 
-    await page.keyboard.press('Tab');
-    await page.keyboard.press('ArrowDown');
-    await page.keyboard.press('Space');
+    expect(await selectAllCheckBox.isFocused).toBe(true);
 
-    const firstItem = list.getItem(0);
-    expect(await firstItem.checkBox.isChecked).toBe(true);
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    expect(await secondItemCheckBox.isFocused).toBe(true);
+    expect(await selectAllCheckBox.isFocused).toBe(false);
+
+    await page.keyboard.press('Shift+Tab');
+    expect(await secondItemCheckBox.isFocused).toBe(false);
+    expect(await selectAllCheckBox.isFocused).toBe(false);
+
+    await page.keyboard.press('Tab');
+    expect(await secondItemCheckBox.isFocused).toBe(true);
+    expect(await selectAllCheckBox.isFocused).toBe(false);
+
+    await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('ArrowUp');
+    expect(await selectAllCheckBox.isFocused).toBe(true);
+    expect(await secondItemCheckBox.isFocused).toBe(false);
+
+    await page.keyboard.press('Shift+Tab');
+    expect(await secondItemCheckBox.isFocused).toBe(false);
+    expect(await selectAllCheckBox.isFocused).toBe(false);
+
+    await page.keyboard.press('Tab');
+    expect(await selectAllCheckBox.isFocused).toBe(true);
+    expect(await secondItemCheckBox.isFocused).toBe(false);
   });
 
   test('Disabled item should be focused on tab press to match accessibility criteria', async ({ page }) => {

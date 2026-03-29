@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test';
 
 function serializeValue(value: unknown, depth = 0): string {
-  if (depth > 10) return 'undefined';
+  if (depth > 20) return 'undefined';
   if (value === undefined) return 'undefined';
   if (value === null) return 'null';
   if (typeof value === 'function') {

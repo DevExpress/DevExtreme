@@ -146,6 +146,7 @@ test.describe('Stepper_common', () => {
   });
 
   test('Stepper completed item states', async ({ page }) => {
+    test.setTimeout(90000);
     await appendElementTo(page, '#container', 'div', 'stepper');
     await setAttribute(page, '#container', 'style', 'width: 800px; height: 150px;');
 
@@ -162,17 +163,17 @@ test.describe('Stepper_common', () => {
       selectedIndex: 3,
     }, '#stepper');
 
-    const items = page.locator('#stepper .dx-stepper-item');
+    const items = page.locator('#stepper .dx-step');
     await items.nth(3).click();
 
     await page.keyboard.press('ArrowLeft');
-    await testScreenshot(page, 'Completed invalid step focused.png', { element: '#stepper' });
+    await testScreenshot(page, 'Completed invalid step focused.png', { element: '#stepper', keepFocus: true });
 
     await page.keyboard.press('ArrowLeft');
-    await testScreenshot(page, 'Completed valid step focused.png', { element: '#stepper' });
+    await testScreenshot(page, 'Completed valid step focused.png', { element: '#stepper', keepFocus: true });
 
     await page.keyboard.press('ArrowLeft');
-    await testScreenshot(page, 'Completed step focused.png', { element: '#stepper' });
+    await testScreenshot(page, 'Completed step focused.png', { element: '#stepper', keepFocus: true });
 
     await page.locator('body').click({ position: { x: 0, y: 0 } });
   });

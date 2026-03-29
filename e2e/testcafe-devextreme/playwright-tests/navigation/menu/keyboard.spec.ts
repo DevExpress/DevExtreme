@@ -32,8 +32,10 @@ test.describe('Menu_keyboard', () => {
     const menu = new Menu(page);
 
     await menu.getItem(0).click();
+    await page.locator('.dx-overlay-content.dx-context-menu').first().waitFor({ state: 'visible' });
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(300);
     await page.keyboard.press('ArrowDown');
 
     const focusedElement = menu.getItem(2);
@@ -60,8 +62,10 @@ test.describe('Menu_keyboard', () => {
 
     await page.locator('body').click();
     await menu.getItem(0).hover();
+    await page.locator('.dx-overlay-content.dx-context-menu').first().waitFor({ state: 'visible' });
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(300);
     await page.keyboard.press('ArrowDown');
 
     const focusedElement = menu.getItem(2);
