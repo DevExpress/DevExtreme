@@ -95,25 +95,9 @@ jobs:
           { componentFolder: "accessibility", name: "accessibility (2/2)", shard: "2/2" },
         ]
     runs-on: devextreme-shr2
-    container:
-      image: node:20
-      options: --shm-size=2g
     timeout-minutes: 45
 
     steps:
-    - name: Install system Chromium and dependencies
-      run: |
-        apt-get update && apt-get install -y --no-install-recommends \
-          chromium \
-          fonts-liberation fonts-noto-color-emoji fonts-freefont-ttf \
-          libatk-bridge2.0-0 libdrm2 libxkbcommon0 libxcomposite1 \
-          libxdamage1 libxrandr2 libgbm1 libasound2 \
-          libpango-1.0-0 libcairo2 libcups2 libnspr4 libnss3 \
-          libx11-xcb1 libxss1 libxtst6 p7zip-full \
-          && rm -rf /var/lib/apt/lists/*
-        echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$(command -v chromium)" >> $GITHUB_ENV
-        chromium --version
-
     - name: Get sources
       uses: actions/checkout@v4
 
@@ -131,8 +115,33 @@ jobs:
       with:
         run_install: false
 
+    - name: Get pnpm store directory
+      shell: bash
+      run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache/restore@v4
+      name: Restore pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-cache
+
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
+
+    - name: Install Playwright browsers
+      working-directory: ./e2e/testcafe-devextreme
+      run: |
+        npx playwright install chromium
+        CHROME_PATH=$(find ~/.cache/ms-playwright -name "chrome" -type f -path "*/chromium-*/chrome-linux/chrome" 2>/dev/null | head -1)
+        if [ -n "$CHROME_PATH" ]; then
+          echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$CHROME_PATH" >> $GITHUB_ENV
+          echo "Using full Chrome binary: $CHROME_PATH"
+          $CHROME_PATH --version 2>/dev/null || true
+        else
+          echo "Full Chrome binary not found, using default headless shell"
+        fi
 
     - name: Run Playwright tests
       working-directory: ./e2e/testcafe-devextreme
