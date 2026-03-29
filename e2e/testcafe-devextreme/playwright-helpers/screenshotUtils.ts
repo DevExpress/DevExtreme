@@ -6,13 +6,17 @@ export async function getLocatorScrollClip(
   return locator.evaluate((el) => {
     const r = el.getBoundingClientRect();
     const width = Math.max(el.scrollWidth, el.offsetWidth);
-    const height = Math.max(el.scrollHeight, el.offsetHeight);
+    const rawHeight = Math.max(el.scrollHeight, el.offsetHeight);
+    const vh = window.innerHeight;
+    const y = Math.max(0, Math.round(r.y));
+    const maxHeight = vh - y;
+    const height = Math.min(rawHeight, maxHeight);
     if (width === Math.round(r.width) && height === Math.round(r.height)) {
       return null;
     }
     return {
       x: Math.round(r.x),
-      y: Math.round(r.y),
+      y,
       width,
       height,
     };
