@@ -134,7 +134,7 @@ jobs:
       working-directory: ./e2e/testcafe-devextreme
       run: |
         npx playwright install chromium
-        CHROME_PATH=$(find ~/.cache/ms-playwright -name "chrome" -type f -path "*/chromium-*/chrome-linux/chrome" 2>/dev/null | head -1)
+        CHROME_PATH=$(find ~/.cache/ms-playwright -name "chrome" -type f -path "*/chromium-*/chrome-linux*/chrome" 2>/dev/null | head -1)
         if [ -n "$CHROME_PATH" ]; then
           echo "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=$CHROME_PATH" >> $GITHUB_ENV
           echo "Using full Chrome binary: $CHROME_PATH"
