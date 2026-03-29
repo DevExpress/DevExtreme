@@ -603,7 +603,7 @@
         "dxHtmlEditor-aiCommandChangeStyleDescriptive": "Opisni",
         "dxHtmlEditor-aiCommandChangeStyleConversational": "Pogovorni",
         "dxHtmlEditor-aiCommandChangeToneProfessional": "Profesionalen",
-        "dxHtmlEditor-aiCommandChangeToneCasual": "Sprosćen",
+        "dxHtmlEditor-aiCommandChangeToneCasual": "Sproščen",
         "dxHtmlEditor-aiCommandChangeToneStraightforward": "Neposreden",
         "dxHtmlEditor-aiCommandChangeToneConfident": "Samozavesten",
         "dxHtmlEditor-aiCommandChangeToneFriendly": "Prijazen",
@@ -776,7 +776,7 @@
         "dxDiagram-commandDeleteShapeImage": "Izbriši sliko",
         "dxDiagram-commandLayoutLeftToRight": "Od leve proti desni",
         "dxDiagram-commandLayoutRightToLeft": "Od desne proti levi",
-        "dxDiagram-commandLayoutTopToBottom": "Od zgoraj navsdol",
+        "dxDiagram-commandLayoutTopToBottom": "Od zgoraj navzdol",
         "dxDiagram-commandLayoutBottomToTop": "Od spodaj navzgor",
 
         "dxDiagram-unitIn": "in",
