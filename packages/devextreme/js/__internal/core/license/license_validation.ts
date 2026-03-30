@@ -178,10 +178,10 @@ function getLicenseCheckParams({
     }
 
     if (major * 10 + minor > license.payload.maxVersionAllowed) {
-      return { preview, error: 'W0020', licenseId: license.payload.licenseId };
+      return { preview, error: 'W0020' };
     }
 
-    return { preview, error: undefined, licenseId: license.payload.licenseId };
+    return { preview, error: undefined };
   } catch {
     return { preview, error: 'W0021' };
   }
@@ -202,7 +202,7 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
 
   const versionsCompatible = assertedVersionsCompatible(version);
 
-  const { internal, error, licenseId } = getLicenseCheckParams({
+  const { internal, error } = getLicenseCheckParams({
     licenseKey,
     version,
   });
@@ -218,10 +218,6 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
   const preview = isPreview(version.patch);
 
   if (error) {
-    if (licenseId) {
-      // eslint-disable-next-line no-console
-      console.warn(`DevExtreme: License ID: ${licenseId}`);
-    }
     errors.log(preview ? 'W0022' : error);
     return;
   }

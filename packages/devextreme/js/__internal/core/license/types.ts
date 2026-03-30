@@ -2,7 +2,6 @@ export interface License {
   readonly [k: string]: unknown;
   readonly customerId: string;
   readonly maxVersionAllowed: number;
-  readonly licenseId?: string;
 }
 
 export enum TokenKind {
@@ -42,5 +41,4 @@ export interface LicenseCheckParams {
   preview: boolean;
   internal?: true;
   error: LicenseVerifyResult | undefined;
-  licenseId?: string;
 }
