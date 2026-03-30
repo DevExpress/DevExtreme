@@ -83,8 +83,8 @@ catalogs:
       specifier: 2.2.25
       version: 2.2.25
     devexpress-gantt:
-      specifier: 4.1.66
-      version: 4.1.66
+      specifier: 4.1.67
+      version: 4.1.67
     devextreme-exceljs-fork:
       specifier: 4.4.7
       version: 4.4.7
@@ -424,7 +424,7 @@ importers:
         version: 2.2.25
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.66
+        version: 4.1.67
       devextreme:
         specifier: workspace:*
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -1196,7 +1196,7 @@ importers:
         version: 2.2.25
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.66
+        version: 4.1.67
       devextreme:
         specifier: workspace:~
         version: link:../../packages/devextreme/artifacts/npm/devextreme
@@ -1344,7 +1344,7 @@ importers:
         version: 2.2.25
       devexpress-gantt:
         specifier: 'catalog:'
-        version: 4.1.66
+        version: 4.1.67
       devextreme-quill:
         specifier: 'catalog:'
         version: 1.7.9
@@ -9717,8 +9717,8 @@ packages:
   devexpress-diagram@2.2.25:
     resolution: {integrity: sha512-gcj+7AyH6HEzURTbexqbIciCGNFOAbypM6Gi2OuyvtQNR04WQCYozh8C3H0kLfHBNpRm2nEyjJWpV9MWThM8hA==}
 
-  devexpress-gantt@4.1.66:
-    resolution: {integrity: sha512-4PptfJPxnhrwh8104cL6CzjMFnvYW42egKOpVfY92KJxCgAFjfkqPd5urt7pfHaEOGkfLIySayEeMgefMpREkw==}
+  devexpress-gantt@4.1.67:
+    resolution: {integrity: sha512-sO9zNsOUk4lasHaUqjbDMUgi3CGO2t5OkGPWZH1tCthzSePSYAbfgYL86F214+aB/a+GYU87vXOAWyju0rh5EA==}
 
   devextreme-aspnet-data-nojquery@5.0.0:
     resolution: {integrity: sha512-WC1JBUocjD7lxy2bMFlUTF0Z3GCUNYveucgarERJ85SO+h7czqAyYwnYCJT845Vyabfw5Ta9mOJ0y0fB/wWzwA==}
@@ -28937,7 +28937,7 @@ snapshots:
       htmlparser2: 6.1.0
       parse5: 6.0.1
       parse5-htmlparser2-tree-adapter: 6.0.1
-      tslib: 2.8.1
+      tslib: 2.6.3
 
   cheerio@1.2.0:
     dependencies:
@@ -30078,7 +30078,7 @@ snapshots:
       '@devexpress/utils': 1.4.7
       es6-object-assign: 1.1.0
 
-  devexpress-gantt@4.1.66:
+  devexpress-gantt@4.1.67:
     dependencies:
       '@devexpress/utils': 1.4.7
       tslib: 2.3.1
