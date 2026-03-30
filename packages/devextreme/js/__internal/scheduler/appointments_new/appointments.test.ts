@@ -168,6 +168,29 @@ describe('Appointments', () => {
       expect(instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
       expect($allDayContainer.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
     });
+
+    it('should clean all day container when switching from grid view to agenda view', () => {
+      const $allDayContainer = $('.allday-container');
+
+      const instance = createAppointments({
+        ...getProperties(),
+        currentView: 'week',
+        $allDayContainer,
+      });
+      instance.option('viewModel', [
+        mockGridViewModel({ ...defaultAppointmentData, allDay: true }, { sortedIndex: 0 }),
+      ]);
+
+      expect($allDayContainer.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
+
+      instance.option('currentView', 'agenda');
+      instance.option('viewModel', [
+        mockAgendaViewModel({ ...defaultAppointmentData, allDay: true }, { sortedIndex: 0 }),
+      ]);
+
+      expect($allDayContainer.find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(0);
+      expect(instance.$element().find(`.${APPOINTMENT_CLASSES.CONTAINER}`).length).toBe(1);
+    });
   });
 
   describe('Partial rendering', () => {

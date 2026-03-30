@@ -139,8 +139,11 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   }
 
   private renderAgendaAppointments(appointments: AppointmentViewModelPlain[]): void {
+    this.$allDayContainer?.empty();
+
     const commonFragment = domAdapter.createDocumentFragment();
 
+    this.appointmentBySortIndex = {};
     this.$commonContainer.empty();
 
     appointments.forEach((appointmentViewModel) => {
