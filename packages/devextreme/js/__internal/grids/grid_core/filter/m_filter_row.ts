@@ -13,6 +13,10 @@ import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import Calendar from '@ts/ui/calendar/calendar';
+import DateRangeBox from '@ts/ui/date_range_box/m_date_range_box';
+import RangeSlider from '@ts/ui/m_range_slider';
+import TagBox from '@ts/ui/m_tag_box';
 import type MenuInternal from '@ts/ui/menu/menu';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
@@ -75,6 +79,8 @@ const FILTER_MODIFIED_CLASS = 'dx-filter-modified';
 
 const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
 
+const BETWEEN_OPERATION_DATA_TYPES = ['date', 'datetime', 'number'];
+
 function isOnClickApplyFilterMode(that) {
   return that.option('filterRow.applyFilter') === 'onClick';
 }
@@ -122,6 +128,27 @@ const getColumnSelectedFilterOperation = function (that, column) {
   }
 };
 
+const hasMultiselectEditor = function ($editorContainer): boolean {
+  const editor = getEditorInstance($editorContainer);
+  return editor instanceof TagBox
+    || editor instanceof DateRangeBox
+    || editor instanceof Calendar
+    || editor instanceof RangeSlider;
+};
+
+const isValidFilterValue = function (filterValue, column, $editorContainer): boolean {
+  if (Array.isArray(filterValue)) {
+    if (hasMultiselectEditor($editorContainer)) {
+      return true;
+    }
+    if (BETWEEN_OPERATION_DATA_TYPES.includes(column?.dataType)) {
+      return false;
+    }
+  }
+
+  return filterValue !== undefined;
+};
+
 const getFilterValue = function (that, columnIndex, $editorContainer) {
   const column = that._columnsController.columnOption(columnIndex);
   const filterValue = getColumnFilterValue(that, column);
@@ -135,7 +162,12 @@ const getFilterValue = function (that, columnIndex, $editorContainer) {
     }
     return filterValue[1];
   }
-  return !isFilterRange && filterValue !== undefined ? filterValue : null;
+
+  if (isFilterRange || !isValidFilterValue(filterValue, column, $editorContainer)) {
+    return null;
+  }
+
+  return filterValue;
 };
 
 const normalizeFilterValue = function (that, filterValue, column, $editorContainer) {
