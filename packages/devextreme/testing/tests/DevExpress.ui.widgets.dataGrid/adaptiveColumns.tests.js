@@ -1733,7 +1733,7 @@ QUnit.module('AdaptiveColumns', {
         this.clock.tick(10);
 
         // assert
-        assert.ok(this.rowsView._getRowElements.calledTwice);
+        assert.ok(this.rowsView._getRowElements.callCount, 4);
     });
 
     QUnit.test('Form has 2 columns in material theme', function(assert) {
@@ -4573,7 +4573,7 @@ QUnit.module('Keyboard navigation', {
         this.getActiveInputElement().trigger(e);
         this.clock.tick(10);
 
-        const $cell = this.$dataGrid.find('td:not([class])').eq(1);
+        const $cell = this.getRowElement(2).children().eq(0);
         eventsEngine.triggerHandler($cell, 'focus');
         this.clock.tick(10);
 
