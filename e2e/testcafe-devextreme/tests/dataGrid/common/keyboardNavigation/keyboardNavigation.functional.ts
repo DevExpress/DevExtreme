@@ -6616,8 +6616,7 @@ test('Focus should be set to the grid to allow keyboard navigation when the focu
 
   // assert
   await t.expect(secondRow.isFocusedRow).ok();
-})
-.before(async () => {
+}).before(async () => {
   await ClientFunction(() => {
     $('<button>').appendTo('#otherContainer');
   })();
