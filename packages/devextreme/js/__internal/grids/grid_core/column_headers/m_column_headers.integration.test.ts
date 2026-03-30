@@ -101,6 +101,7 @@ describe('Column Headers', () => {
   describe('toggleFirstCellClass', () => {
     it('should add first-cell class to the first column', async () => {
       const { component } = await createDataGrid({
+        showColumnLines: false,
         dataSource: [{ field1: 1, field2: 2, field3: 3 }],
         columns: [
           'field1',
@@ -117,6 +118,7 @@ describe('Column Headers', () => {
 
     it('should not add first-cell class to non-first columns', async () => {
       const { component } = await createDataGrid({
+        showColumnLines: false,
         dataSource: [{ field1: 1, field2: 2, field3: 3 }],
         columns: [
           'field1',
@@ -138,6 +140,7 @@ describe('Column Headers', () => {
 
     it('should update first-cell class when first column visibility changes', async () => {
       const { component } = await createDataGrid({
+        showColumnLines: false,
         dataSource: [{ field1: 1, field2: 2, field3: 3 }],
         columns: [
           'field1',
@@ -157,6 +160,7 @@ describe('Column Headers', () => {
 
     it('should add first-cell class when band column is first', async () => {
       const { component } = await createDataGrid({
+        showColumnLines: false,
         dataSource: [{ field1: 1, field2: 2, field3: 3 }],
         columns: [
           {
@@ -176,6 +180,7 @@ describe('Column Headers', () => {
 
     it('should not add first-cell class to non-first columns when band column is first', async () => {
       const { component } = await createDataGrid({
+        showColumnLines: false,
         dataSource: [{ field1: 1, field2: 2, field3: 3 }],
         columns: [
           {
