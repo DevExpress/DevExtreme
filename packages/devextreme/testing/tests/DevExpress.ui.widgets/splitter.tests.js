@@ -2127,6 +2127,25 @@ QUnit.module('Resizing', moduleConfig, () => {
         });
     });
 
+    QUnit.test('non-resizable pane should use updated size after runtime size change and dimension change', function(assert) {
+        this.reinit({
+            width: 802,
+            height: 400,
+            dataSource: [{ size: '200px', resizable: false }, { }],
+        });
+
+        this.checkItemSizes([200, 600]);
+
+        this.instance.option('items[0].size', '400px');
+
+        this.checkItemSizes([400, 400]);
+
+        this.instance.option('width', 1002);
+
+        this.checkItemSizes([400, 600]);
+        this.assertLayout(['40', '60']);
+    });
+
 
     QUnit.test('size set should work for resizable pane (T1310428)', function(assert) {
         this.reinit({

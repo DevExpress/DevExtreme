@@ -683,13 +683,16 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     prevValue: unknown,
   ): void {
     switch (property) {
-      case 'size':
+      case 'size': {
+        type PropertyType = Item[typeof property];
+        this._initialPaneSizes[this._getIndexByItem(item)] = value as PropertyType;
         this._layout = this._getDefaultLayoutBasedOnSize(item);
         this._idealLayout = this._layout;
 
         this._applyStylesFromLayout(this.getLayout());
         this._updateItemSizes();
         break;
+      }
       case 'maxSize':
       case 'minSize':
       case 'collapsedSize':
