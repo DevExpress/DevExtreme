@@ -6,10 +6,11 @@ const path = require('path');
 
 const { getDevExpressLCXKey } = require('./dx-get-lcx');
 const { convertLCXtoLCP, getLCPInfo } = require('./dx-lcx-2-lcp');
-const { MESSAGES } = require('./messages');
+const { TEMPLATES } = require('./messages');
 
 const EXPORT_NAME = 'licenseKey';
 const TRIAL_VALUE = 'TRIAL';
+const CLI_PREFIX = '[devextreme-license]';
 
 function fail(msg) {
     process.stderr.write(msg.endsWith('\n') ? msg : msg + '\n');
@@ -153,7 +154,7 @@ function main() {
         process.exit(0);
     }
 
-    const { key: lcx, source } = getDevExpressLCXKey() || {};
+    const { key: lcx, source, currentVersion } = getDevExpressLCXKey() || {};
 
     let lcp = TRIAL_VALUE;
     let licenseId = null;
@@ -164,18 +165,33 @@ function main() {
             const { warning, licenseId: id } = getLCPInfo(lcp);
             licenseId = id;
             if(warning) {
-                process.stderr.write(`DevExpress license key (LCX) retrieved from: ${source}\n`);
                 if(licenseId) {
-                    process.stderr.write(`License ID: ${licenseId}\n`);
+                    process.stderr.write(`${CLI_PREFIX} ${TEMPLATES.licenseId(licenseId)}\n\n`);
                 }
-                process.stderr.write(`[devextreme-license] Warning: ${warning}\n`);
+                process.stderr.write(`
+                    ${CLI_PREFIX} ${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense(currentVersion)}\n\n
+                    ${TEMPLATES.keyWasFound(source.type, source.path)}\n
+                `);
+                if(warning.type !== 'trial') {
+                    process.stderr.write(`
+                        ${TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.requiredVersion)}\n\n
+                        ${CLI_PREFIX} ${TEMPLATES.warningPrefix(TEMPLATES.warningCodeByType(warning.type))} ${TEMPLATES.installationInstructions}
+                    `);  
+                }  
             }
         } catch{
-            process.stderr.write(`DevExpress license key (LCX) retrieved from: ${source}\n`);
-            process.stderr.write(`[devextreme-license] Warning: ${MESSAGES.keyNotFound}\n`);
+            process.stderr.write(`
+                ${CLI_PREFIX} ${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense(currentVersion)}\n\n
+                ${TEMPLATES.keyNotFound}\n\n
+                ${CLI_PREFIX} ${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions}
+            `);
         }
     } else {
-        process.stderr.write(`[devextreme-license] Warning: ${MESSAGES.keyNotFound}\n`);
+        process.stderr.write(`
+            ${CLI_PREFIX} ${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense(currentVersion)}\n\n
+            ${TEMPLATES.keyNotFound}\n\n
+            ${CLI_PREFIX} ${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions}
+        `);
     }
 
     if(!opts.outPath) {
