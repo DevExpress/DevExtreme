@@ -1,4 +1,4 @@
-This demo shows how to prevent appointment time conflicts in DevExtreme Scheduler. Use the **Overlapping Rule** select-box to see how conflict behavior changes for appointments across resources.
+This example demonstrates how to prevent appointment time conflicts in DevExtreme Scheduler. Use the **Overlapping Rule** select-box to see how conflict behavior changes for appointments across resources.
 <!--split-->
 
 ### Detect Conflicts
