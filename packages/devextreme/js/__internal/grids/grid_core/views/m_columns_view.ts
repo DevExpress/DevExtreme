@@ -733,30 +733,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     $cell?.toggleClass(this.addWidgetPrefix(CLASSES.firstCell), isFirstValue);
   }
 
-  protected needToUpdateFirstCellClasses(): boolean {
-    const hasHidingColumnsQueue = !!this._adaptiveColumnsController
-      ?.getHidingColumnsQueue()?.length;
-
-    return hasHidingColumnsQueue;
-  }
-
-  protected updateFirstCellClasses(): void {
-    const rows = this._getRows();
-
-    this.removeFirstCellClasses();
-
-    rows.forEach((row, index) => {
-      const rowIndex = row.rowType === 'header' ? index : null;
-      const firstColumn = this._columnsController.getFirstColumn(rowIndex);
-
-      if (firstColumn) {
-        const $cell = this._getCellElement(index, `index:${firstColumn.index}`);
-
-        this.toggleFirstCellClass($cell, true);
-      }
-    });
-  }
-
   /**
    * @extended: column_fixing, filter_row, row_dragging, virtual_columns
    */
@@ -766,10 +742,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     if (scrollLeft >= 0) {
       this._scrollLeft = 0;
       this.scrollTo({ left: scrollLeft });
-    }
-
-    if (this.needToUpdateFirstCellClasses()) {
-      this.updateFirstCellClasses();
     }
   }
 
@@ -1542,5 +1514,29 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   public renderDragCellContent($dragContainer: dxElementWrapper, column: Column): void {
     $dragContainer.text(column.caption ?? '');
+  }
+
+  public needToUpdateFirstCellClasses(): boolean {
+    const hasHidingColumnsQueue = !!this._adaptiveColumnsController
+      ?.getHidingColumnsQueue()?.length;
+
+    return hasHidingColumnsQueue;
+  }
+
+  public updateFirstCellClasses(): void {
+    const rows = this._getRows();
+
+    this.removeFirstCellClasses();
+
+    rows.forEach((row, index) => {
+      const rowIndex = row.rowType === 'header' ? index : null;
+      const firstColumn = this._columnsController.getFirstColumn(rowIndex);
+
+      if (firstColumn) {
+        const $cell = this._getCellElement(index, `index:${firstColumn.index}`);
+
+        this.toggleFirstCellClass($cell, true);
+      }
+    });
   }
 }

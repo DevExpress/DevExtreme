@@ -35,10 +35,10 @@ import gridCoreUtils from '../m_utils';
 import type { RowsView } from '../views/m_rows_view';
 import { getHideableColumns } from './utils';
 
-const COLUMN_HEADERS_VIEW = 'columnHeadersView';
-const ROWS_VIEW = 'rowsView';
-const FOOTER_VIEW = 'footerView';
-const COLUMN_VIEWS = [COLUMN_HEADERS_VIEW, ROWS_VIEW, FOOTER_VIEW];
+const COLUMN_HEADERS_VIEW = 'columnHeadersView' as const;
+const ROWS_VIEW = 'rowsView' as const;
+const FOOTER_VIEW = 'footerView' as const;
+const COLUMN_VIEWS = [COLUMN_HEADERS_VIEW, ROWS_VIEW, FOOTER_VIEW] as const;
 
 const ADAPTIVE_NAMESPACE = 'dxDataGridAdaptivity';
 const HIDDEN_COLUMNS_WIDTH = 'adaptiveHidden';
@@ -497,8 +497,6 @@ export class AdaptiveColumnsController extends modules.ViewController {
 
   public _showHiddenColumns() {
     for (let i = 0; i < COLUMN_VIEWS.length; i++) {
-      // TODO getView
-      // @ts-expect-error
       const view = this.getView(COLUMN_VIEWS[i]);
       if (view && view.isVisible() && view.element()) {
         const viewName = view.name;
@@ -546,8 +544,6 @@ export class AdaptiveColumnsController extends modules.ViewController {
   private _hideVisibleColumn({ isCommandColumn, visibleIndex }: any) {
     const that = this;
     COLUMN_VIEWS.forEach((viewName) => {
-      // TODO: getView
-      // @ts-expect-error
       const view = that.getView(viewName);
       view && that._hideVisibleColumnInView({ view, isCommandColumn, visibleIndex });
     });
@@ -1322,7 +1318,22 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
     return super._needBestFit() || !!this._adaptiveColumnsController.getHidingColumnsQueue().length;
   }
 
-  protected _correctColumnWidths(resultWidths, visibleColumns) {
+  private updateColumnViewsFirstCellClasses(
+    oldHiddenColumns: Column[],
+    hiddenColumns: Column[],
+  ): void {
+    if (oldHiddenColumns.length !== hiddenColumns.length) {
+      COLUMN_VIEWS.forEach((viewName) => {
+        const view = this.getView(viewName);
+
+        if (view?.isVisible() && view?.needToUpdateFirstCellClasses()) {
+          view.updateFirstCellClasses();
+        }
+      });
+    }
+  }
+
+  protected _correctColumnWidths(resultWidths: (number | string | undefined)[], visibleColumns: Column[]): boolean {
     const adaptiveController = this._adaptiveColumnsController;
     const oldHiddenColumns = adaptiveController.getHiddenColumns();
     const hidingColumnsQueue = adaptiveController.updateHidingQueue(this._columnsController.getColumns());
@@ -1334,6 +1345,8 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
         adaptiveController.updateForm(hiddenColumns);
       }
     }
+
+    this.updateColumnViewsFirstCellClasses(oldHiddenColumns, hiddenColumns);
 
     !hiddenColumns.length && adaptiveController.collapseAdaptiveDetailRow();
 

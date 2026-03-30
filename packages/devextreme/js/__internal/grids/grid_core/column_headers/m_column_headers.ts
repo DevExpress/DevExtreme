@@ -359,6 +359,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     const { column } = options;
     // @ts-expect-error
     const $cellElement = super._createCell.apply(this, arguments);
+    const showColumnLines = this.option('showColumnLines');
 
     if (options.rowType !== 'header') {
       return $cellElement;
@@ -366,7 +367,7 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
 
     const rowCount = this.getRowCount();
 
-    if (rowCount > 1) {
+    if (!showColumnLines && rowCount > 1) {
       this.toggleFirstCellClass(
         $cellElement,
         this._columnsController.isFirstColumn(column, options.rowIndex),
@@ -472,13 +473,6 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     const $indicatorsContainer = super._getIndicatorContainer($cell);
 
     return returnAll ? $indicatorsContainer : $indicatorsContainer.filter(`:not(.${VISIBILITY_HIDDEN_CLASS})`);
-  }
-
-  protected needToUpdateFirstCellClasses(): boolean {
-    const showColumnLines = this.option('showColumnLines');
-    const rowCount = this.getRowCount();
-
-    return (!showColumnLines && rowCount > 1) || super.needToUpdateFirstCellClasses();
   }
 
   /**

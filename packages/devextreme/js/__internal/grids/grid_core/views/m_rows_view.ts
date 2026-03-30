@@ -1187,10 +1187,6 @@ export class RowsView extends ColumnsView {
 
       deferUpdate(() => {
         this._updateScrollable();
-
-        if (this.needToUpdateFirstCellClasses()) {
-          this.updateFirstCellClasses();
-        }
       });
     });
   }
