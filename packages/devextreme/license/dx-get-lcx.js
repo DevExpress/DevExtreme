@@ -77,26 +77,52 @@ function resolveFromLicensePathEnv(licensePathValue) {
     return path.join(p, LICENSE_FILE);
 }
 
+function readDevExtremeVersion() {
+    try {
+        const pkgPath = require('path').join(__dirname, '..', 'package.json');
+        const pkg = JSON.parse(require('fs').readFileSync(pkgPath, 'utf8'));
+        const parts = String(pkg.version || '').split('.');
+        const major = parseInt(parts[0], 10);
+        const minor = parseInt(parts[1], 10);
+        if(!isNaN(major) && !isNaN(minor)) {
+            return { major, minor, code: major * 10 + minor };
+        }
+    } catch{}
+    return null;
+}
+
+function buildVersionString(devExtremeVersion){
+    const { major, minor, code: currentCode } = devExtremeVersion;
+    return `${major}.${minor}`;
+}
+
 function getDevExpressLCXKey() {
+    const devExtremeVersion = readDevExtremeVersion();
+    let currentVersion = '';
+    if(devExtremeVersion) {
+        currentVersion = buildVersionString(devExtremeVersion);
+    }
     if(hasEnvVar(LICENSE_ENV)) {
-        return { key: normalizeKey(process.env[LICENSE_ENV]), source: `env:${LICENSE_ENV}` };
+        return { key: normalizeKey(process.env[LICENSE_ENV]), source: { type: 'envVariable' }, currentVersion };
     }
 
     if(hasEnvVar(LICENSE_PATH_ENV)) {
         const licensePath = resolveFromLicensePathEnv(process.env[LICENSE_PATH_ENV]);
         const key = normalizeKey(readTextFileIfExists(licensePath));
-        return { key, source: key ? `file:${licensePath}` : `env:${LICENSE_PATH_ENV}` };
+        return { key, source: { type: 'envPath' }, currentVersion };
     }
 
     const defaultPath = getDefaultLicenseFilePath();
     const fromDefault = normalizeKey(readTextFileIfExists(defaultPath));
     if(fromDefault) {
-        return { key: fromDefault, source: `file:${defaultPath}` };
+        return { key: fromDefault, source: { type: 'file', path: defaultPath }, currentVersion };
     }
 
-    return { key: null, source: null };
+    return { key: null, source: null, currentVersion };
 }
 
 module.exports = {
     getDevExpressLCXKey,
+    readDevExtremeVersion,
+    buildVersionString
 };

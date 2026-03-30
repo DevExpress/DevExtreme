@@ -13,14 +13,48 @@ const MESSAGES = Object.freeze({
         'Please purchase a license to continue use of the following DevExpress product libraries: ' +
         'Universal, DXperience, ASP.NET and Blazor, DevExtreme Complete.',
 
-    versionIncompatible: (keyVersion, requiredVersion) =>
-        'For evaluation purposes only. Redistribution prohibited. ' +
-        `Incompatible DevExpress license key version (${keyVersion}). ` +
-        `Download and register an updated DevExpress license key (${requiredVersion}+). ` +
-        'Clear IDE/NuGet cache and rebuild your project (devexpress.com/DX1002).',
-
     resolveFailed:
         'Failed to resolve license key. Placeholder will remain.',
 });
 
-module.exports = { MESSAGES };
+const TEMPLATES = Object.freeze({
+    warningPrefix: (number) => `Warning number: DX${number}. For evaluation purposes only. Redistribution prohibited.`,
+    keyNotFound: 'No valid DevExpress license key was found on this machine.',
+    keyWasFound: (type, path) => {
+        switch(type) {
+            case 'envVariable':
+                return 'The DevExpress license key was retrieved from the "DevExpress_License" environment variable.';
+            case 'envPath':
+                return 'The DevExpress license key was retrieved from the "DevExpress_LicensePath" environment variable.';
+            case 'file':
+                return `The DevExpress license key was retrieved from file: "${path}".`;
+            default:
+                return 'The DevExpress license key was retrieved.';
+        }
+    },
+    keyVerificationFailed: (type, keyVersion, requiredVersion) => {
+        switch(type) {
+            case 'incompatibleVersion':
+                return `Incompatible DevExpress license key version (${keyVersion}). Download and register an updated DevExpress license key (${requiredVersion}+). Clear npm/IDE/NuGet cache and rebuild your project.`;
+            default:
+                return 'License key verification has failed.';
+        }
+    },
+    warningCodeByType: (type) => {
+        switch(code) {
+            case 'general':
+                return 1001;
+            case 'incompatibleVersion':
+                return 1002;
+            default:
+                return 1001;
+        }
+    }
+    purchaseLicense: (version) => 
+        `Purchase a license to continue use of DevExtreme (v${version}). Included in subscriptions: Universal, DXperience, ASP.NET and Blazor, DevExtreme Complete. To purchase a license, visit https://js.devexpress.com/Buy/`,
+    installationInstructions: 'If you own a licensed/registered version or if you are using a 30-day trial version of DevExpress product libraries on a development machine, download your personal license key and verify it with the devextreme-licensing tools. Setup instructions: https://js.devexpress.com/Documentation/Guide/Common/Licensing',
+    oldDevExtremeKey: 'The invalid/old DevExtreme key is used instead of the DevExpress license key.',
+    licenseId: (id) => `License ID: ${id}`,
+});
+
+module.exports = { MESSAGES, TEMPLATES };

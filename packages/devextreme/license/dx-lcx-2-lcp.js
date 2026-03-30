@@ -1,5 +1,5 @@
 
-
+import { readDevExtremeVersion, buildVersionString } from './dx-get-lcx';
 const { MESSAGES } = require('./messages');
 const LCX_SIGNATURE = 'LCXv1';
 const LCP_SIGNATURE = 'LCPv1';
@@ -198,46 +198,42 @@ function formatVersionCode(versionCode) {
     return `v${Math.floor(versionCode / 10)}.${versionCode % 10}`;
 }
 
-function readDevExtremeVersion() {
-    try {
-        const pkgPath = require('path').join(__dirname, '..', 'package.json');
-        const pkg = JSON.parse(require('fs').readFileSync(pkgPath, 'utf8'));
-        const parts = String(pkg.version || '').split('.');
-        const major = parseInt(parts[0], 10);
-        const minor = parseInt(parts[1], 10);
-        if(!isNaN(major) && !isNaN(minor)) {
-            return { major, minor, code: major * 10 + minor };
-        }
-    } catch{}
-    return null;
-}
-
 function getLCPInfo(lcpString) {
     const token = parseLCP(lcpString);
     let warning = null;
     let licenseId = null;
+    let currentVersion = '';
 
     if(token.kind === TokenKind.corrupted) {
-        if(token.error === 'product-kind') {
-            warning = MESSAGES.trial;
+        switch(token.error) {
+            case 'general':
+                warning = { type: 'general' };
+                break;
+            case 'deserialization':
+                warning = { type: 'corrupted' };
+                break;
+            case 'product-kind':
+                warning = { type: 'trial' };
+                break;
         }
     } else {
         // token.kind === TokenKind.verified — check version compatibility
         licenseId = token.payload.licenseId || null;
         const devExtremeVersion = readDevExtremeVersion();
         if(devExtremeVersion) {
-            const { major, minor, code: currentCode } = devExtremeVersion;
+            currentVersion = buildVersionString(devExtremeVersion);
             const { maxVersionAllowed } = token.payload;
             if(maxVersionAllowed < currentCode) {
-                warning = MESSAGES.versionIncompatible(
-                    formatVersionCode(maxVersionAllowed),
-                    `v${major}.${minor}`,
-                );
+                warning = {
+                    type:'incompatibleVersion', 
+                    keyVersion: formatVersionCode(maxVersionAllowed), 
+                    currentVersion 
+                };
             }
         }
     }
 
-    return { warning, licenseId };
+    return { warning, licenseId, currentVersion };
 }
 
 function getLCPWarning(lcpString) {
