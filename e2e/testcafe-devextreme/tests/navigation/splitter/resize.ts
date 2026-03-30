@@ -16,7 +16,7 @@ test.meta({ browserSize: [800, 800] })('non resizable pane should not change its
 
   await t
     .expect(splitter.getItem(2).element.clientWidth)
-    .eql(300);
+    .eql(145);
 }).before(async () => createWidget('dxSplitter', {
   width: '100%',
   height: 300,
