@@ -14,7 +14,11 @@ runManualTest('Scheduler', 'IndividualViewsCustomization', (test) => {
 
     await t.doubleClick(Selector('.dx-scheduler-appointment').nth(0));
 
-    await testScreenshot(t, takeScreenshot, 'scheduler_IndividualViewCustomization_appointment_popup.png');
+    await testScreenshot(t, takeScreenshot, 'scheduler_IndividualViewCustomization_appointment_popup-1.png');
+
+    await t.scrollBy('.dx-scheduler-appointment-popup .dx-popup-content-scrollable', 0, 1000);
+
+    await testScreenshot(t, takeScreenshot, 'scheduler_IndividualViewCustomization_appointment_popup-2.png');
 
     await t
       .expect(compareResults.isValid())
