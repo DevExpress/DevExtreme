@@ -19,7 +19,6 @@ import { encodeString, shiftDecodeText, verifyHash } from './utils';
 
 interface ParsedProducts {
   products: ProductInfo[];
-  licenseId?: string;
   errorToken?: ErrorToken;
 }
 
@@ -37,7 +36,6 @@ function productsFromString(encodedString: string): ParsedProducts {
 
   try {
     const splitInfo = encodedString.split(';');
-    const licenseId = splitInfo[0] || undefined;
     const productTuples = splitInfo.slice(1).filter((entry) => entry.length > 0);
     const products = productTuples.map((tuple) => {
       const parts = tuple.split(',');
@@ -51,7 +49,6 @@ function productsFromString(encodedString: string): ParsedProducts {
 
     return {
       products,
-      licenseId,
     };
   } catch (error) {
     return {
@@ -80,7 +77,6 @@ export function parseDevExpressProductKey(productsLicenseSource: string): Token 
 
     const {
       products,
-      licenseId,
       errorToken,
     } = productsFromString(
       encodeString(productsPayload, shiftDecodeText),
@@ -102,7 +98,6 @@ export function parseDevExpressProductKey(productsLicenseSource: string): Token 
         customerId: '',
         maxVersionAllowed,
         format: FORMAT,
-        licenseId,
       },
     };
   } catch (error) {
