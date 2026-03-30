@@ -10,8 +10,9 @@ applyTo: "**/localization/messages/**/*.json"
 - A new key is **added** to `en.json`
 - An existing key's value is **modified** in `en.json`
 
-If `en.json` has no additions or modifications (including cases where only keys are removed, renamed, reordered, or formatting is changed), **do not review or comment on any localization files**.
+If `en.json` has no additions or modifications (including cases where only keys are removed, reordered, or formatting is changed), **do not review or comment on any localization files**.
 
+Note: A key rename in `en.json` (implemented as removing one key and adding another) must be treated as a removal **plus** a new-key addition and therefore **does require review** under the "New key added to `en.json`" rule.
 ## Required Action When `en.json` Changes
 
 ### New key added to `en.json`
