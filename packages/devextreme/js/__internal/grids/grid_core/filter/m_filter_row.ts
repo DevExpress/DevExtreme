@@ -897,38 +897,8 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     if (this.isResizing()) {
       // @ts-expect-error
       const overlayInstance = this._columnHeadersView.getFilterRangeOverlayInstance();
-
-      if (!overlayInstance || !this._targetPoint) {
-        return;
-      }
-
-      const cellIndex = overlayInstance.$element().closest('td').index();
-      const { columnIndex: resizingColumnIndex } = this._targetPoint;
-
-      if (cellIndex === resizingColumnIndex || cellIndex === resizingColumnIndex + 1) {
-        overlayInstance.$content().hide();
-      }
+      overlayInstance?.hide();
     }
-  }
-
-  protected _endResizing() {
-    const that = this;
-    let $cell;
-
-    if (that.isResizing()) {
-      // @ts-expect-error
-      const overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
-
-      if (overlayInstance) {
-        $cell = overlayInstance.$element().closest('td');
-        // @ts-expect-error
-        that._columnHeadersView._updateFilterRangeOverlay({ width: getOuterWidth($cell, true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
-        overlayInstance.$content().show();
-      }
-    }
-
-    // @ts-expect-error
-    super._endResizing.apply(that, arguments);
   }
 };
 
