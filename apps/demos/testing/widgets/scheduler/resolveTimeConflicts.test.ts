@@ -15,7 +15,7 @@ runManualTest('Scheduler', 'ResolveTimeConflicts', (test) => {
     await t
       .doubleClick(Selector('.dx-scheduler-appointment').withText('Approve Personal'))
       .click('.dx-scheduler-form-all-day-switch .dx-switch-container')
-      .click(Selector('.dx-popup-title .dx-button').withText('Save'));
+      .click(Selector('.dx-popup-title .dx-button').withAttribute('aria-label', 'Save'));
 
     await testScreenshot(t, takeScreenshot, 'scheduler_ResolveTimeConflicts_appointment-popup_main-group_conflict-informer.png');
 
@@ -34,7 +34,7 @@ runManualTest('Scheduler', 'ResolveTimeConflicts', (test) => {
       .click('.dx-scheduler-form-all-day-switch .dx-switch-container')
       .click('.dx-scheduler-form-repeat-editor .dx-selectbox')
       .click(Selector('.dx-selectbox-popup-wrapper .dx-list-item').withText('Daily'))
-      .click(Selector('.dx-popup-title .dx-button').withText('Save'));
+      .click(Selector('.dx-popup-title .dx-button').withAttribute('aria-label', 'Save'));
 
     await testScreenshot(t, takeScreenshot, 'scheduler_ResolveTimeConflicts_appointment-popup_recurrence-group_conflict-informer.png');
 
