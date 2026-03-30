@@ -1339,6 +1339,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
         this._updateNestedSplitterOption(name, value);
         break;
       case '_renderQueue':
+      case '_ignoreSizeConstraints':
         this._invalidate();
         break;
       default:
