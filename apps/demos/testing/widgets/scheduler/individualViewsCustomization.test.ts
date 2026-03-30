@@ -9,12 +9,12 @@ fixture('Scheduler.IndividualViewsCustomization')
   });
 
 runManualTest('Scheduler', 'IndividualViewsCustomization', (test) => {
-  test('AppointmentForm', async (t) => {
+  test('AppointmentPopup', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.doubleClick(Selector('.dx-scheduler-appointment').nth(0));
 
-    await testScreenshot(t, takeScreenshot, 'scheduler_IndividualViewCustomization_appointment_form.png');
+    await testScreenshot(t, takeScreenshot, 'scheduler_IndividualViewCustomization_appointment_popup.png');
 
     await t
       .expect(compareResults.isValid())
