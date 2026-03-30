@@ -109,10 +109,10 @@ $(() => {
       },
     },
     onAppointmentAdding(e) {
-      alertConflictIfNeeded(e, e.appointmentData);
+      handleConflict(e, e.appointmentData);
     },
     onAppointmentUpdating(e) {
-      alertConflictIfNeeded(e, e.newData);
+      handleConflict(e, e.newData);
     },
   }).dxScheduler('instance');
 
@@ -121,7 +121,7 @@ $(() => {
     form?.option('elementAttr.class', show ? '' : 'hide-informer');
   }
 
-  function alertConflictIfNeeded(e, appointmentData) {
+  function handleConflict(e, appointmentData) {
     if (!detectConflict(appointmentData)) {
       setConflictError(false);
       return;

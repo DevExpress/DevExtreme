@@ -163,7 +163,7 @@ export class AppComponent {
     );
   }
 
-  private alertConflictIfNeeded(
+  private handleConflict(
     e: DxSchedulerTypes.AppointmentAddingEvent | DxSchedulerTypes.AppointmentUpdatingEvent,
     appointmentData: Appointment,
   ): void {
@@ -195,11 +195,11 @@ export class AppComponent {
   }
 
   onAppointmentAdding(e: DxSchedulerTypes.AppointmentAddingEvent): void {
-    this.alertConflictIfNeeded(e, e.appointmentData as Appointment);
+    this.handleConflict(e, e.appointmentData as Appointment);
   }
 
   onAppointmentUpdating(e: DxSchedulerTypes.AppointmentUpdatingEvent): void {
-    this.alertConflictIfNeeded(e, { ...e.oldData, ...e.newData } as Appointment);
+    this.handleConflict(e, { ...e.oldData, ...e.newData } as Appointment);
   }
 
   onOverlappingRuleChanged(e: DxSelectBoxTypes.ValueChangedEvent): void {

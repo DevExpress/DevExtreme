@@ -112,7 +112,7 @@ const App = () => {
     formRef.current?.option('elementAttr.class', show ? '' : 'hide-informer');
   }, []);
 
-  const alertConflictIfNeeded = useCallback((
+  const handleConflict = useCallback((
     e: SchedulerTypes.AppointmentAddingEvent | SchedulerTypes.AppointmentUpdatingEvent,
     appointmentData: Appointment,
   ) => {
@@ -144,12 +144,12 @@ const App = () => {
   }, [setConflictError]);
 
   const onAppointmentAdding = useCallback((e: SchedulerTypes.AppointmentAddingEvent) => {
-    alertConflictIfNeeded(e, e.appointmentData as Appointment);
-  }, [alertConflictIfNeeded]);
+    handleConflict(e, e.appointmentData as Appointment);
+  }, [handleConflict]);
 
   const onAppointmentUpdating = useCallback((e: SchedulerTypes.AppointmentUpdatingEvent) => {
-    alertConflictIfNeeded(e, { ...e.oldData, ...e.newData } as Appointment);
-  }, [alertConflictIfNeeded]);
+    handleConflict(e, { ...e.oldData, ...e.newData } as Appointment);
+  }, [handleConflict]);
 
   const popupOptions = useMemo(() => ({
     onInitialized: (e: PopupTypes.InitializedEvent) => {

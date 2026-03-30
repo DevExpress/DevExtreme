@@ -80,7 +80,7 @@ const App = () => {
     showConflictErrorRef.current = show;
     formRef.current?.option('elementAttr.class', show ? '' : 'hide-informer');
   }, []);
-  const alertConflictIfNeeded = useCallback(
+  const handleConflict = useCallback(
     (e, appointmentData) => {
       if (!detectConflict(e.component, appointmentData, overlappingRuleRef.current)) {
         setConflictError(false);
@@ -113,15 +113,15 @@ const App = () => {
   );
   const onAppointmentAdding = useCallback(
     (e) => {
-      alertConflictIfNeeded(e, e.appointmentData);
+      handleConflict(e, e.appointmentData);
     },
-    [alertConflictIfNeeded],
+    [handleConflict],
   );
   const onAppointmentUpdating = useCallback(
     (e) => {
-      alertConflictIfNeeded(e, { ...e.oldData, ...e.newData });
+      handleConflict(e, { ...e.oldData, ...e.newData });
     },
-    [alertConflictIfNeeded],
+    [handleConflict],
   );
   const popupOptions = useMemo(
     () => ({

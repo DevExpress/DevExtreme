@@ -189,7 +189,7 @@ const popupOptions = {
   },
 };
 
-const alertConflictIfNeeded = (
+const handleConflict = (
   e: DxSchedulerTypes.AppointmentAddingEvent | DxSchedulerTypes.AppointmentUpdatingEvent,
   appointmentData: Appointment,
 ) => {
@@ -221,11 +221,11 @@ const alertConflictIfNeeded = (
 };
 
 const onAppointmentAdding = (e: DxSchedulerTypes.AppointmentAddingEvent) => {
-  alertConflictIfNeeded(e, e.appointmentData as Appointment);
+  handleConflict(e, e.appointmentData as Appointment);
 };
 
 const onAppointmentUpdating = (e: DxSchedulerTypes.AppointmentUpdatingEvent) => {
-  alertConflictIfNeeded(e, { ...e.oldData, ...e.newData } as Appointment);
+  handleConflict(e, { ...e.oldData, ...e.newData } as Appointment);
 };
 
 const onFormInitialized = (e: DxFormTypes.InitializedEvent) => {
