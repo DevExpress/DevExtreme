@@ -6,11 +6,11 @@ applyTo: "**/localization/messages/**/*.json"
 
 ## When to Engage
 
-**Review is required ONLY when `en.json` has changes** — specifically:
+**Review is required ONLY when `en.json` has the following types of changes**:
 - A new key is **added** to `en.json`
 - An existing key's value is **modified** in `en.json`
 
-If `en.json` has no additions or modifications, **do not review or comment on any localization files**.
+If `en.json` has no additions or modifications (including cases where only keys are removed, renamed, reordered, or formatting is changed), **do not review or comment on any localization files**.
 
 ## Required Action When `en.json` Changes
 
