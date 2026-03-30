@@ -23,7 +23,9 @@ runManualTest('Scheduler', 'ResolveTimeConflicts', (test) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   });
+});
 
+runManualTest('Scheduler', 'ResolveTimeConflicts', (test) => {
   test('AppointmentPopup in recurrence group with conflict informer', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
