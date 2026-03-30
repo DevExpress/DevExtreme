@@ -6576,3 +6576,58 @@ test('The last cell should be focused after changing the page size (T1063530)', 
     })();
   });
 });
+
+test('Focus should be set to the grid to allow keyboard navigation when the focus method is called (T1308919)', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const firstDataCell = dataGrid.getDataCell(0, 0);
+  const firstRow = dataGrid.getDataRow(0);
+  const secondRow = dataGrid.getDataRow(1);
+  const focusButton = ClientFunction(() => {
+    $('#otherContainer button')[0]?.focus();
+  });
+
+  // assert
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await dataGrid.apiFocus(firstDataCell.element);
+
+  // assert
+  await t.expect(firstDataCell.isFocused).ok();
+  await t.expect(firstRow.isFocusedRow).ok();
+
+  // act
+  await focusButton();
+
+  // assert
+  await t.expect(firstDataCell.isFocused).notOk();
+  await t.expect(firstRow.isFocusedRow).ok();
+
+  // act
+  await t.pressKey('down');
+
+  // assert
+  await t.expect(secondRow.isFocusedRow).notOk(); // focus is still on the button
+
+  // act
+  await dataGrid.apiFocus();
+  await t.pressKey('down');
+
+  // assert
+  await t.expect(secondRow.isFocusedRow).ok();
+})
+.before(async () => {
+  await ClientFunction(() => {
+    $('<button>').appendTo('#otherContainer');
+  })();
+  await createWidget('dxDataGrid', {
+    dataSource: [{ id: 1, name: 'test1' }, { id: 2, name: 'test2' }],
+    keyExpr: 'id',
+    focusedRowEnabled: true,
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    $('#otherContainer button').remove();
+  })();
+});
