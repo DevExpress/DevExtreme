@@ -570,25 +570,25 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 
     &.dx-scheduler-appointment-recurrence {
       @container (max-height: #{$generic-scheduler-appointment-15min-height}) {
-        .dx-item-content.dx-scheduler-appointment-content {
+        .dx-scheduler-appointment-content {
           padding-right: $generic-scheduler-appointment-10min-recurrence-padding-right;
         }
       }
 
       @container (min-height: #{$generic-scheduler-appointment-15min-height}) and (max-height: #{$generic-scheduler-appointment-20min-height}) {
-        .dx-item-content.dx-scheduler-appointment-content {
+        .dx-scheduler-appointment-content {
           padding-right: $generic-scheduler-appointment-15min-recurrence-padding-right;
         }
       }
 
       @container (min-height: #{$generic-scheduler-appointment-20min-height}) and (max-height: #{$generic-scheduler-appointment-25min-height}) {
-        .dx-item-content.dx-scheduler-appointment-content {
+        .dx-scheduler-appointment-content {
           padding-right: $generic-scheduler-appointment-20min-recurrence-padding-right;
         }
       }
     }
 
-    .dx-item-content.dx-scheduler-appointment-content {
+    .dx-scheduler-appointment-content {
       @container (max-height: #{$generic-scheduler-appointment-25min-height}) {
         display: flex;
         align-items: center;
@@ -606,7 +606,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     }
 
     @container (max-height: #{$generic-scheduler-appointment-15min-height}) {
-      .dx-item-content.dx-scheduler-appointment-content {
+      .dx-scheduler-appointment-content {
         .dx-scheduler-appointment-title {
           font-size: $generic-scheduler-appointment-10min-title-font-size;
           line-height: $generic-scheduler-appointment-10min-title-line-height;
@@ -620,7 +620,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     }
 
     @container (min-height: #{$generic-scheduler-appointment-15min-height}) and (max-height: #{$generic-scheduler-appointment-20min-height}) {
-      .dx-item-content.dx-scheduler-appointment-content {
+      .dx-scheduler-appointment-content {
         .dx-scheduler-appointment-title {
           font-size: $generic-scheduler-appointment-15min-title-font-size;
           line-height: $generic-scheduler-appointment-15min-title-line-height;
@@ -635,7 +635,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 
     @if $size == "compact" {
       @container (max-height: #{$generic-scheduler-appointment-10min-height}) {
-        .dx-item-content.dx-scheduler-appointment-content {
+        .dx-scheduler-appointment-content {
           display: none;
         }
       }

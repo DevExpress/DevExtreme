@@ -28,7 +28,10 @@ import {
 import { hasWindow } from '@js/core/utils/window';
 import DataHelperMixin from '@js/data_helper';
 import { custom as customDialog } from '@js/ui/dialog';
-import type { Appointment, AppointmentTooltipShowingEvent, FirstDayOfWeek } from '@js/ui/scheduler';
+import type {
+  Appointment, AppointmentTooltipShowingEvent, FirstDayOfWeek,
+  Properties as SchedulerProperties,
+} from '@js/ui/scheduler';
 import errors from '@js/ui/widget/ui.errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
@@ -39,6 +42,8 @@ import { AppointmentForm as AppointmentLegacyForm } from './appointment_popup/m_
 import { ACTION_TO_APPOINTMENT, AppointmentPopup as AppointmentLegacyPopup } from './appointment_popup/m_legacy_popup';
 import { AppointmentPopup } from './appointment_popup/m_popup';
 import AppointmentCollection from './appointments/m_appointment_collection';
+import type { AppointmentsProperties } from './appointments_new/appointments';
+import { Appointments } from './appointments_new/appointments';
 import NotifyScheduler from './base/m_widget_notify_scheduler';
 import { SchedulerHeader } from './header/m_header';
 import type { HeaderOptions } from './header/types';
@@ -65,6 +70,7 @@ import type {
   AppointmentTooltipItem,
   SafeAppointment,
   ScrollToGroupValuesOrOptions, ScrollToOptions, TargetedAppointment,
+  ViewType,
 } from './types';
 import { AppointmentAdapter } from './utils/appointment_adapter/appointment_adapter';
 import { AppointmentDataAccessor } from './utils/data_accessor/appointment_data_accessor';
@@ -223,6 +229,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private timeZonesPromise!: Promise<TimezoneLabel[]>;
 
+  private appointmentRenderedAction!: SchedulerProperties['onAppointmentRendered'];
+
   get timeZoneCalculator() {
     if (!this._timeZoneCalculator) {
       this._timeZoneCalculator = createTimeZoneCalculator(this.option('timeZone'));
@@ -308,18 +316,30 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.updateOption('header', name, value);
         break;
       case 'currentView':
-        this._appointments.option({
-          items: [],
-          allowDrag: this.allowDragging(),
-          allowResize: this.allowResizing(),
-          itemTemplate: this.getAppointmentTemplate('appointmentTemplate'),
-        });
+
+        if (this.option('_newAppointments')) {
+          this._appointments.option({
+            currentView: value,
+            viewModel: [],
+            // TODO<Appointments>: update appointmentTemplate and appointmentCollectorTemplate
+          });
+        } else {
+          this._appointments.option({
+            items: [],
+            allowDrag: this.allowDragging(),
+            allowResize: this.allowResizing(),
+            itemTemplate: this.getAppointmentTemplate('appointmentTemplate'),
+          });
+        }
 
         this.postponeResourceLoading().done(() => {
           this.refreshWorkSpace();
           this.header?.option(this.headerConfig());
           this.setRemoteFilterIfNeeded();
-          this._appointments.option('allowAllDayResize', value !== 'day');
+
+          if (!this.option('_newAppointments')) {
+            this._appointments.option('allowAllDayResize', value !== 'day');
+          }
         });
         // NOTE:
         // Calling postponed operations (promises) here, because when we update options with
@@ -360,7 +380,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
         this._appointments.option('items', []);
         this.updateOption('workSpace', name, value);
-        this._appointments.repaint();
+        if (!this.option('_newAppointments')) {
+          // TODO<Appointments>: no need to call repaint on new appointments
+          this._appointments.repaint();
+        }
         this.setRemoteFilterIfNeeded();
 
         this.postponeDataSourceLoading();
@@ -372,7 +395,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
         this._appointments.option('items', []);
         this.updateOption('workSpace', 'viewOffset', this.normalizeViewOffsetValue(value));
-        this._appointments.repaint();
+        if (!this.option('_newAppointments')) {
+          // TODO<Appointments>: no need to call repaint on new appointments
+          this._appointments.repaint();
+        }
         this.setRemoteFilterIfNeeded();
 
         this.postponeDataSourceLoading();
@@ -388,7 +414,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.actions[name] = this._createActionByOption(name);
         break;
       case 'onAppointmentRendered':
-        this._appointments.option('onItemRendered', this.getAppointmentRenderedAction());
+        if (this.option('_newAppointments')) {
+          this.createAppointmentRenderedAction();
+        } else {
+          this._appointments.option('onItemRendered', this.getAppointmentRenderedAction());
+        }
         break;
       case 'onAppointmentClick':
         this._appointments.option('onItemClick', this._createActionByOption(name));
@@ -759,6 +789,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.resourceManager = new ResourceManager(this.option('resources'));
 
     this.notifyScheduler = new NotifyScheduler({ scheduler: this });
+
+    this.createAppointmentRenderedAction();
+  }
+
+  private createAppointmentRenderedAction() {
+    this.appointmentRenderedAction = this._createActionByOption('onAppointmentRendered');
   }
 
   createAppointmentDataSource() {
@@ -792,6 +828,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     super._initTemplates();
   }
 
+  // TODO<Appointments>: delete this method when old impl is removed
   private initAppointmentTemplate() {
     const { expr } = this._dataAccessors;
     const createGetter = (property) => compileGetter(`appointmentData.${property}`);
@@ -949,6 +986,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     };
   }
 
+  // TODO<Appointments>: delete this method when old impl is removed
   private getAppointmentRenderedAction() {
     return this._createActionByOption('onAppointmentRendered', {
       excludeValidators: ['disabled', 'readOnly'],
@@ -999,9 +1037,36 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this._layoutManager = new AppointmentLayoutManager(this);
 
-    // @ts-expect-error
-    this._appointments = this._createComponent('<div>', AppointmentCollection, this.appointmentsConfig());
-    this._appointments.option('itemTemplate', this.getAppointmentTemplate('appointmentTemplate'));
+    if (this.option('_newAppointments')) {
+      // TODO<Appointments>: convert 'item' to 'appointment' for compatibility
+      const appointmentTemplateValue = this.getViewOption('appointmentTemplate') === 'item'
+        ? 'appointment'
+        : this.getViewOption('appointmentTemplate');
+
+      const appointmentsConfig: Partial<AppointmentsProperties> = {
+        currentView: this.option('currentView') as ViewType,
+        // TODO<Appointments>: set custom templates
+        appointmentTemplate: appointmentTemplateValue,
+        appointmentCollectorTemplate: this.getViewOption('appointmentCollectorTemplate'),
+        onAppointmentRendered: (e) => {
+          // @ts-expect-error 'component' property is set by action
+          this.appointmentRenderedAction({
+            appointmentElement: e.element,
+            appointmentData: e.appointmentData,
+            targetedAppointmentData: e.targetedAppointmentData,
+          });
+        },
+        getResourceManager: () => this.resourceManager,
+        getAppointmentDataSource: () => this.appointmentDataSource,
+        getDataAccessor: () => this._dataAccessors,
+      };
+      // @ts-expect-error
+      this._appointments = this._createComponent('<div>', Appointments, appointmentsConfig);
+    } else {
+      // @ts-expect-error
+      this._appointments = this._createComponent('<div>', AppointmentCollection, this.appointmentsConfig());
+      this._appointments.option('itemTemplate', this.getAppointmentTemplate('appointmentTemplate'));
+    }
 
     this.appointmentTooltip = new (this.option('adaptivityEnabled')
       ? MobileTooltipStrategy
@@ -1169,10 +1234,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._workSpace && this.cleanWorkSpace();
 
     this.renderWorkSpace();
-    this._appointments.option({
-      fixedContainer: this._workSpace.getFixedContainer(),
-      allDayContainer: this._workSpace.getAllDayContainer(),
-    });
+    if (this.option('_newAppointments')) {
+      this._appointments.option('$allDayContainer', this._workSpace.getAllDayContainer());
+    } else {
+      this._appointments.option({
+        fixedContainer: this._workSpace.getFixedContainer(),
+        allDayContainer: this._workSpace.getAllDayContainer(),
+      });
+    }
     this.waitAsyncTemplate(() => this.workSpaceRecalculation?.resolve());
 
     this.createAppointmentDataSource();
@@ -1437,10 +1506,15 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.renderWorkSpace();
 
     if (this.readyToRenderAppointments) {
-      this._appointments.option({
-        fixedContainer: this._workSpace.getFixedContainer(),
-        allDayContainer: this._workSpace.getAllDayContainer(),
-      });
+      if (this.option('_newAppointments')) {
+        this._appointments.option('$allDayContainer', this._workSpace.getAllDayContainer());
+      } else {
+        this._appointments.option({
+          fixedContainer: this._workSpace.getFixedContainer(),
+          allDayContainer: this._workSpace.getAllDayContainer(),
+        });
+      }
+
       this.waitAsyncTemplate(() => this.workSpaceRecalculation.resolve());
     }
   }
@@ -1692,6 +1766,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     return rawResult;
   }
 
+  // TODO<Appointments>: delete this method when old impl is removed
   getTargetedAppointment(appointment: SafeAppointment, element: dxElementWrapper): TargetedAppointment {
     const settings = utils.dataAccessors.getAppointmentSettings(element)!;
     return getTargetedAppointment(

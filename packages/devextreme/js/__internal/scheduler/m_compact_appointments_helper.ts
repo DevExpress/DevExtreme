@@ -14,6 +14,7 @@ const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
 const COMPACT_APPOINTMENT_COLLECTOR_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-compact`;
 const APPOINTMENT_COLLECTOR_CONTENT_CLASS = `${APPOINTMENT_COLLECTOR_CLASS}-content`;
 
+// TODO<Appointments>: delete this file when old impl is removed
 export class CompactAppointmentsHelper {
   elements: any[] = [];
 
