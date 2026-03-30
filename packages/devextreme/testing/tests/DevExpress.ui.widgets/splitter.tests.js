@@ -936,7 +936,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.assertLayout(['50', '30.4878', '19.5122']);
     });
 
-    QUnit.test('Initially collapsed first pane with small size should expand to user-specified size in 3-pane layout (T0000)', function(assert) {
+    QUnit.test('Initially collapsed first pane with small size should expand to user-specified size in 3-pane layout', function(assert) {
         this.reinit({
             items: [
                 { text: 'pane_1', size: 50, collapsible: true, collapsed: true },
@@ -967,7 +967,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.assertLayout(['50', '50']);
     });
 
-    QUnit.test('initial collapsed pane with size should restore size from configuration even size was updated in real time', function(assert) {
+    QUnit.test('Initially collapsed pane with size should restore size from configuration even size was updated in real time', function(assert) {
 
         this.reinit({
             items: [ { size: '200px', collapsed: true, collapsible: true, }, { } ]
@@ -977,10 +977,10 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.instance.option('items[0].collapsed', false);
 
         assert.strictEqual(this.instance.option('items[0].size'), 220, 'items[0].size');
-
+        this.assertLayout(['22.1774', '77.8226']);
     });
 
-    QUnit.test('initial collapsed pane without size should restore size from configuration even size was updated in real time', function(assert) {
+    QUnit.test('Initially collapsed pane without size should restore size from configuration even size was updated in real time', function(assert) {
 
         this.reinit({
             items: [ { collapsed: true, collapsible: true, }, { } ]
@@ -990,7 +990,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.instance.option('items[0].collapsed', false);
 
         assert.strictEqual(this.instance.option('items[0].size'), 220, 'items[0].size');
-
+        this.assertLayout(['22.1774', '77.8226']);
     });
 
     QUnit.test('Pane should restore current size, when it was collapsed, then size was changed in real time, then it was expanded', function(assert) {
@@ -1005,7 +1005,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
 
         assert.strictEqual(this.instance.option('items[0].size'), 220, 'items[0].size');
-
+        this.assertLayout(['22.1774', '77.8226']);
     });
 
     QUnit.test('Pane with size should restore to user-specified size when made visible', function(assert) {
@@ -1020,7 +1020,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.assertLayout(['30', '70']);
     });
 
-    QUnit.test('initial invisible pane with size should restore size from configuration even size was updated in real time', function(assert) {
+    QUnit.test('Initially invisible pane with size should restore size from configuration even size was updated in real time', function(assert) {
 
         this.reinit({
             items: [ { size: '200px', visible: false, collapsible: true, }, { } ]
@@ -1029,11 +1029,10 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.instance.option('items[0].size', '220px');
         this.instance.option('items[0].visible', true);
 
-        assert.strictEqual(this.instance.option('items[0].size'), 218.234, 'items[0].size');
-
+        this.assertLayout(['22', '78']);
     });
 
-    QUnit.test('initial invisible pane without size should restore size from configuration even size was updated in real time', function(assert) {
+    QUnit.test('Initially invisible pane without size should restore size from configuration even size was updated in real time', function(assert) {
 
         this.reinit({
             items: [ { visible: false, collapsible: true, }, { } ]
@@ -1042,11 +1041,10 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.instance.option('items[0].size', '220px');
         this.instance.option('items[0].visible', true);
 
-        assert.strictEqual(this.instance.option('items[0].size'), 218.234, 'items[0].size');
-
+        this.assertLayout(['22', '78']);
     });
 
-    QUnit.test('initial visible pane with size should set new size when it was invisible, then change size, then visible', function(assert) {
+    QUnit.test('Initially visible pane with size should set new size when it was invisible, then change size, then visible', function(assert) {
 
         this.reinit({
             items: [ { size: 200, collapsible: true, }, { } ]
@@ -1057,8 +1055,337 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.instance.option('items[0].visible', true);
 
 
-        assert.strictEqual(this.instance.option('items[0].size'), 218.234, 'items[0].size');
+        this.assertLayout(['22', '78']);
+    });
 
+    QUnit.test('Initially collapsed middle pane with size should expand to user-specified size via UI', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true }, { collapsible: true, collapsed: true, size: 300 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['50', '0', '50']);
+
+        const $resizeHandle = this.getResizeHandles().eq(1);
+        const $collapseButton = this.getCollapseNextButton($resizeHandle);
+
+        $collapseButton.trigger('dxclick');
+
+        this.assertLayout(['50', '30.4878', '19.5122']);
+    });
+
+    QUnit.test('Initially collapsed last pane with size should expand to user-specified size via UI in 3-pane layout', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true }, { collapsible: true }, { collapsible: true, collapsed: true, size: 300 }]
+        });
+
+        this.assertLayout(['50', '50', '0']);
+
+        const $resizeHandle = this.getResizeHandles().eq(1);
+        const $collapseButton = this.getCollapsePrevButton($resizeHandle);
+
+        $collapseButton.trigger('dxclick');
+
+        this.assertLayout(['50', '19.5122', '30.4878']);
+    });
+
+    QUnit.test('Initially collapsed first pane with size should expand to user-specified size via UI in 3-pane layout', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 300 }, { collapsible: true }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '50', '50']);
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+        const $collapseButton = this.getCollapseNextButton($resizeHandle);
+
+        $collapseButton.trigger('dxclick');
+
+        this.assertLayout(['30.4878', '19.5122', '50']);
+    });
+
+    QUnit.test('Initially collapsed first pane with % size should expand to user-specified size via option', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: '20%' }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        this.instance.option('items[0].collapsed', false);
+
+        this.assertLayout(['20.161', '79.838']);
+    });
+
+    QUnit.test('Initially collapsed pane with size and collapsedSize should expand to user-specified size via UI', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 300, collapsedSize: 50 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['5.04032', '94.9597']);
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+        const $collapseButton = this.getCollapseNextButton($resizeHandle);
+
+        $collapseButton.trigger('dxclick');
+
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+
+    QUnit.test('Initially collapsed pane with size and collapsedSize should expand to user-specified size via option', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 300, collapsedSize: 50 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['5.04032', '94.9597']);
+
+        this.instance.option('items[0].collapsed', false);
+
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+
+    QUnit.test('Initially collapsed pane with size exceeding maxSize should expand to maxSize via UI', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 600, maxSize: 300 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+        const $collapseButton = this.getCollapseNextButton($resizeHandle);
+
+        $collapseButton.trigger('dxclick');
+
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+
+    QUnit.test('Initially collapsed pane with size less than minSize should expand to minSize via UI', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 100, minSize: 300 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+        const $collapseButton = this.getCollapseNextButton($resizeHandle);
+
+        $collapseButton.trigger('dxclick');
+
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+
+    QUnit.test('Initially collapsed pane with size exceeding maxSize should expand to maxSize via option', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 600, maxSize: 300 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        this.instance.option('items[0].collapsed', false);
+
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+
+    QUnit.test('Initially collapsed pane with size less than minSize should expand to minSize via option', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 100, minSize: 300 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        this.instance.option('items[0].collapsed', false);
+
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+
+    QUnit.test('Initially collapsed pane with size within minSize-maxSize range should expand to cached size via option', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 300, minSize: 100, maxSize: 500 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        this.instance.option('items[0].collapsed', false);
+
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+
+    QUnit.test('Initially collapsed pane with collapsedSize and maxSize should expand capped at maxSize via UI', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 300, collapsedSize: 50, maxSize: 200 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['5.04032', '94.9597']);
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+        const $collapseButton = this.getCollapseNextButton($resizeHandle);
+
+        $collapseButton.trigger('dxclick');
+
+        this.assertLayout(['20.1613', '79.8387']);
+    });
+
+    QUnit.test('Initially collapsed pane with collapsedSize and maxSize should expand capped at maxSize via option', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 300, collapsedSize: 50, maxSize: 200 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['5.04032', '94.9597']);
+
+        this.instance.option('items[0].collapsed', false);
+
+        this.assertLayout(['20.1613', '79.8387']);
+    });
+
+    QUnit.test('Initially collapsed pane expansion should be limited by neighbor minSize via option', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 800 }, { collapsible: true, minSize: 500 }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        this.instance.option('items[0].collapsed', false);
+
+        this.assertLayout(['49.5968', '50.4032']);
+    });
+
+    QUnit.test('Initially collapsed pane expansion should be limited by neighbor minSize via UI', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 800 }, { collapsible: true, minSize: 500 }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+        const $collapseButton = this.getCollapseNextButton($resizeHandle);
+
+        $collapseButton.trigger('dxclick');
+
+        this.assertLayout(['49.5968', '50.4032']);
+    });
+
+    QUnit.test('Round-trip: initially collapsed pane with size → expand via UI → collapse via UI → expand via UI', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 300 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+        const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+
+        $collapseNextButton.trigger('dxclick');
+
+        this.assertLayout(['30.2419', '69.7581']);
+
+        $collapsePrevButton.trigger('dxclick');
+
+        this.assertLayout(['0', '100']);
+
+        $collapseNextButton.trigger('dxclick');
+
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+
+    QUnit.test('Round-trip: initially collapsed pane with size → expand via option → collapse via option → expand via option', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 300 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        this.instance.option('items[0].collapsed', false);
+
+        this.assertLayout(['30.2419', '69.7581']);
+
+        this.instance.option('items[0].collapsed', true);
+
+        this.assertLayout(['0', '100']);
+
+        this.instance.option('items[0].collapsed', false);
+
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+
+    QUnit.test('Multiple initially collapsed panes with sizes should expand sequentially via option', function(assert) {
+        this.reinit({
+            items: [
+                { collapsible: true, collapsed: true, size: 200 },
+                { collapsible: true },
+                { collapsible: true, collapsed: true, size: 200 }
+            ]
+        });
+
+        this.assertLayout(['0', '100', '0']);
+
+        this.instance.option('items[0].collapsed', false);
+
+        this.assertLayout(['20.3252', '79.6748', '0']);
+
+        this.instance.option('items[2].collapsed', false);
+
+        this.assertLayout(['20.3252', '59.3496', '20.3252']);
+    });
+
+    QUnit.test('Initially collapsed pane with size in vertical orientation should expand to user-specified size via UI', function(assert) {
+        this.reinit({
+            width: 1000,
+            height: 1000,
+            orientation: 'vertical',
+            items: [{ collapsible: true, collapsed: true, size: 300 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+        const $collapseButton = this.getCollapseNextButton($resizeHandle);
+
+        $collapseButton.trigger('dxclick');
+
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+
+    QUnit.test('Initially collapsed pane with size in vertical orientation should expand to user-specified size via option', function(assert) {
+        this.reinit({
+            width: 1000,
+            height: 1000,
+            orientation: 'vertical',
+            items: [{ collapsible: true, collapsed: true, size: 300 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        this.instance.option('items[0].collapsed', false);
+
+        this.assertLayout(['30.2419', '69.7581']);
+    });
+
+    QUnit.test('Initially collapsed pane with size → expand via UI → resize by drag → collapse → expand should use drag size', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 300 }, { collapsible: true }]
+        });
+
+        this.assertLayout(['0', '100']);
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+        const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+
+        $collapseNextButton.trigger('dxclick');
+
+        this.assertLayout(['30.2419', '69.7581']);
+
+        const pointer = pointerMock(this.getResizeHandles()[0]);
+        pointer.start().dragStart().drag(100, 0).dragEnd();
+
+        this.assertLayout(['40.3226', '59.6774']);
+
+        $collapsePrevButton.trigger('dxclick');
+
+        this.assertLayout(['0', '100']);
+
+        $collapseNextButton.trigger('dxclick');
+
+        this.assertLayout(['40.3226', '59.6774']);
     });
 
     [
@@ -1585,6 +1912,32 @@ QUnit.module('Pane sizing', moduleConfig, () => {
             const resizeObserverTimeout = 50;
             setTimeout(() => {
                 this.assertLayout(['30.4054', '69.5946']);
+
+                done();
+            }, resizeObserverTimeout);
+        });
+    });
+
+    QUnit.test('Initially collapsed pane with size should restore cached size after splitter becomes visible via resizeHandler', function(assert) {
+        const done = assert.async();
+        $('#splitterParentContainer').css('display', 'none');
+
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, size: 300 }, { collapsible: true }]
+        }, '#splitterInContainer');
+
+        setTimeout(() => {
+            this.assertLayout(['', '']);
+
+            $('#splitterParentContainer').css('display', 'block');
+
+            const resizeObserverTimeout = 50;
+            setTimeout(() => {
+                this.assertLayout(['0', '100']);
+
+                this.instance.option('items[0].collapsed', false);
+
+                this.assertLayout(['29.5276', '70.4724']);
 
                 done();
             }, resizeObserverTimeout);
