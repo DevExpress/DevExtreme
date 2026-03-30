@@ -2673,19 +2673,38 @@ QUnit.module('Resizing', moduleConfig, () => {
             });
         });
 
-        QUnit.test(`non resizable panes shouldn't change their sizes after update splitter dimension, ${orientation} orientation`, function(assert) {
+        QUnit.test(`non resizable panes with restrictions shouldn't change their sizes after update splitter dimension, ${orientation} orientation`, function(assert) {
             this.reinit({
                 width: 1018,
                 height: 1018,
-                dataSource: [{ }, { }, { }, { resizable: false, size: '300px' }],
+                dataSource: [{ }, { }, { }, { resizable: false, minSize: '300px', maxSize: '300px' }],
                 orientation,
             });
 
             this.instance.option(orientation === 'horizontal' ? 'width' : 'height', 700);
 
-            this.checkItemSizes([159.133, 159.133, 159.133, 204.602]);
-            this.assertLayout([23.3333, 23.3333, 23.3333, 30]);
+            this.checkItemSizes([104.602, 138.695, 138.703, 300]);
+            this.assertLayout(['15.3372', '20.3372', '20.3372', '43.9883']);
         });
+    });
+
+    QUnit.test('non-resizable pane should use updated size after runtime size change and dimension change', function(assert) {
+        this.reinit({
+            width: 802,
+            height: 400,
+            dataSource: [{ size: '200px', resizable: false }, { }],
+        });
+
+        this.checkItemSizes([200, 600]);
+
+        this.instance.option('items[0].size', '400px');
+
+        this.checkItemSizes([400, 400]);
+
+        this.instance.option('width', 1002);
+
+        this.checkItemSizes([400, 600]);
+        this.assertLayout(['40', '60']);
     });
 
 
@@ -3531,6 +3550,221 @@ QUnit.module('Resizing', moduleConfig, () => {
         pointer.start().dragStart().drag(40, 0).dragEnd();
 
         this.assertLayout(['15', '10', '25', '50']);
+    });
+
+    [{
+        initialWidth: 408,
+        newWidth: 808,
+        dataSource: [{ size: '200px', maxSize: '200px' }, { }],
+        expectedLayout: ['25', '75'],
+        expectedItemSizes: [200, 600],
+    }, {
+        initialWidth: 408,
+        newWidth: 808,
+        dataSource: [{ }, { size: '200px', maxSize: '200px' }],
+        expectedLayout: ['75', '25'],
+        expectedItemSizes: [600, 200],
+    }, {
+        initialWidth: 808,
+        newWidth: 408,
+        dataSource: [{ size: '200px', minSize: '200px' }, { }],
+        expectedLayout: ['50', '50'],
+        expectedItemSizes: [200, 200],
+    }, {
+        initialWidth: 808,
+        newWidth: 408,
+        dataSource: [{ }, { size: '200px', minSize: '200px' }],
+        expectedLayout: ['50', '50'],
+        expectedItemSizes: [200, 200],
+    }, {
+        initialWidth: 416,
+        newWidth: 816,
+        dataSource: [{ size: '200px', maxSize: '200px' }, { }, { }],
+        expectedLayout: ['25', '37.5', '37.5'],
+        expectedItemSizes: [200, 300, 300],
+    }, {
+        initialWidth: 816,
+        newWidth: 416,
+        dataSource: [{ size: '200px', minSize: '200px' }, { }, { }],
+        expectedLayout: ['50', '25', '25'],
+        expectedItemSizes: [200, 100, 100],
+    }, {
+        initialWidth: 416,
+        newWidth: 816,
+        dataSource: [{ }, { size: '200px', maxSize: '200px' }, { }],
+        expectedLayout: ['37.5', '25', '37.5'],
+        expectedItemSizes: [300, 200, 300],
+    }, {
+        initialWidth: 408,
+        newWidth: 808,
+        dataSource: [{ size: '200px', minSize: '100px', maxSize: '300px' }, { }],
+        expectedLayout: ['37.5', '62.5'],
+        expectedItemSizes: [300, 500],
+    }, {
+        initialWidth: 208,
+        newWidth: 808,
+        dataSource: [{ size: '100px', maxSize: '200px' }, { }],
+        expectedLayout: ['25', '75'],
+        expectedItemSizes: [200, 600],
+    }].forEach(({ initialWidth, newWidth, dataSource, expectedLayout, expectedItemSizes }) => {
+        QUnit.test(`pane constraints should be respected after dimension change from ${initialWidth} to ${newWidth}, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
+            this.reinit({
+                width: initialWidth,
+                height: 408,
+                dataSource,
+            });
+
+            this.instance.option('width', newWidth);
+
+            this.checkItemSizes(expectedItemSizes);
+            this.assertLayout(expectedLayout);
+        });
+    });
+
+    QUnit.test('layout should be restored after shrinking and expanding back', function(assert) {
+        this.reinit({
+            width: 416,
+            height: 408,
+            dataSource: [{ }, { }, { }],
+        });
+
+        this.assertLayout(['33.3333', '33.3333', '33.3333']);
+
+        this.instance.option('width', 40);
+        this.instance.option('width', 416);
+
+        this.assertLayout(['33.3333', '33.3333', '33.3333']);
+    });
+
+    QUnit.test('layout should be restored after shrinking and expanding with minSize', function(assert) {
+        this.reinit({
+            width: 416,
+            height: 408,
+            dataSource: [{ minSize: '100px' }, { }, { }],
+        });
+
+        this.assertLayout(['33.3333', '33.3333', '33.3333']);
+
+        this.instance.option('width', 40);
+        this.instance.option('width', 416);
+
+        this.assertLayout(['33.3333', '33.3333', '33.3333']);
+    });
+
+    QUnit.test('layout should be restored after shrinking and expanding with maxSize', function(assert) {
+        this.reinit({
+            width: 816,
+            height: 408,
+            dataSource: [{ size: '200px', maxSize: '200px' }, { }, { }],
+        });
+
+        this.assertLayout(['25', '37.5', '37.5']);
+
+        this.instance.option('width', 40);
+        this.instance.option('width', 816);
+
+        this.assertLayout(['25', '37.5', '37.5']);
+    });
+
+    QUnit.test('collapsed pane should maintain collapsedSize after dimension change', function(assert) {
+        this.reinit({
+            width: 1008,
+            height: 408,
+            items: [{ collapsed: true, collapsedSize: 100, collapsible: true }, { }, { }],
+        });
+
+        this.assertLayout(['10.0806', '44.9597', '44.9597']);
+
+        this.instance.option('width', 608);
+
+        this.checkItemSizes([100, 246, 246]);
+    });
+
+    QUnit.test('collapsed pane without collapsedSize should stay at 0 after dimension change', function(assert) {
+        this.reinit({
+            width: 1008,
+            height: 408,
+            items: [{ collapsed: true, collapsible: true }, { }, { }],
+        });
+
+        this.assertLayout(['0', '50', '50']);
+
+        this.instance.option('width', 608);
+
+        this.checkItemSizes([0, 296, 296]);
+    });
+
+    QUnit.test('invisible pane should remain at 0 after dimension change', function(assert) {
+        this.reinit({
+            width: 1008,
+            height: 408,
+            dataSource: [{ visible: false }, { }, { }],
+        });
+
+        this.instance.option('width', 608);
+
+        this.checkItemSizes([0, 300, 300]);
+    });
+
+    QUnit.test('constraints should be enforced after drag resize and dimension change', function(assert) {
+        this.reinit({
+            width: 408,
+            height: 408,
+            dataSource: [{ size: '200px', maxSize: '200px' }, { }],
+        });
+
+        this.assertLayout(['50', '50']);
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(-50, 0).dragEnd();
+
+        this.instance.option('width', 808);
+
+        const firstPaneSize = this.instance.option('items')[0].size;
+        assert.strictEqual(firstPaneSize <= 200, true, 'first pane does not exceed maxSize after dimension change');
+    });
+
+    QUnit.test('non-resizable pane without explicit size should scale on dimension change', function(assert) {
+        this.reinit({
+            width: 416,
+            height: 408,
+            dataSource: [{ resizable: false }, { }, { }],
+        });
+
+        const initialSizes = this.instance.option('items').map(function(item) { return item.size; });
+
+        this.instance.option('width', 816);
+
+        const newSizes = this.instance.option('items').map(function(item) { return item.size; });
+        assert.notStrictEqual(newSizes[0], initialSizes[0], 'non-resizable pane without initial size is resized');
+    });
+
+    QUnit.test('multiple competing constraints should be respected after dimension change', function(assert) {
+        this.reinit({
+            width: 816,
+            height: 408,
+            dataSource: [{ size: '200px', minSize: '200px' }, { size: '200px', maxSize: '200px' }, { }],
+        });
+
+        this.instance.option('width', 416);
+
+        const items = this.instance.option('items');
+        assert.strictEqual(items[0].size >= 200, true, 'first pane respects minSize');
+        assert.strictEqual(items[1].size <= 200, true, 'second pane respects maxSize');
+    });
+
+    QUnit.test('constraints should be enforced on vertical dimension change', function(assert) {
+        this.reinit({
+            width: 408,
+            height: 408,
+            orientation: 'vertical',
+            dataSource: [{ size: '200px', maxSize: '200px' }, { }],
+        });
+
+        this.instance.option('height', 808);
+
+        this.assertLayout(['25', '75']);
+        this.checkItemSizes([200, 600]);
     });
 });
 
@@ -5273,5 +5507,146 @@ QUnit.module('Keyboard support', moduleConfig, () => {
 
             assert.strictEqual(onItemCollapsed.callCount, 1, 'onItemCollapsed fired');
         });
+    });
+});
+
+QUnit.module('_ignoreSizeConstraints option', moduleConfig, () => {
+    QUnit.test('should be false by default', function(assert) {
+        assert.strictEqual(this.instance.option('_ignoreSizeConstraints'), false);
+    });
+
+    QUnit.test('initial layout should be calculated correctly when _ignoreSizeConstraints is true', function(assert) {
+        this.reinit({
+            width: 408,
+            height: 408,
+            _ignoreSizeConstraints: true,
+            dataSource: [{ size: '200px' }, { }],
+        });
+
+        this.checkItemSizes([200, 200]);
+        this.assertLayout(['50', '50']);
+    });
+
+    QUnit.test('initial layout with minSize should be calculated correctly when _ignoreSizeConstraints is true', function(assert) {
+        this.reinit({
+            width: 408,
+            height: 408,
+            _ignoreSizeConstraints: true,
+            dataSource: [{ size: '40%', minSize: '30%' }, { }],
+        });
+
+        this.checkItemSizes([163.203, 236.797]);
+        this.assertLayout(['40.8', '59.2']);
+    });
+
+    QUnit.test('maxSize should not be enforced on dimension change when _ignoreSizeConstraints is true', function(assert) {
+        this.reinit({
+            width: 408,
+            height: 408,
+            _ignoreSizeConstraints: true,
+            dataSource: [{ size: '200px', maxSize: '200px' }, { }],
+        });
+
+        this.instance.option('width', 808);
+
+        this.assertLayout(['50', '50']);
+    });
+
+    QUnit.test('maxSize should be enforced on dimension change when _ignoreSizeConstraints is false (default)', function(assert) {
+        this.reinit({
+            width: 408,
+            height: 408,
+            dataSource: [{ size: '200px', maxSize: '200px' }, { }],
+        });
+
+        this.instance.option('width', 808);
+
+        this.assertLayout(['25', '75']);
+        this.checkItemSizes([200, 600]);
+    });
+
+    QUnit.test('minSize should not be enforced on dimension change when _ignoreSizeConstraints is true', function(assert) {
+        this.reinit({
+            width: 808,
+            height: 408,
+            _ignoreSizeConstraints: true,
+            dataSource: [{ size: '200px', minSize: '200px' }, { }],
+        });
+
+        this.instance.option('width', 408);
+
+        this.assertLayout(['25', '75']);
+    });
+
+    QUnit.test('minSize should be enforced on dimension change when _ignoreSizeConstraints is false (default)', function(assert) {
+        this.reinit({
+            width: 808,
+            height: 408,
+            dataSource: [{ size: '200px', minSize: '200px' }, { }],
+        });
+
+        this.instance.option('width', 408);
+
+        this.assertLayout(['50', '50']);
+        this.checkItemSizes([200, 200]);
+    });
+
+    QUnit.test('resize should still work normally when _ignoreSizeConstraints is true', function(assert) {
+        this.reinit({
+            width: 208,
+            height: 208,
+            _ignoreSizeConstraints: true,
+            dataSource: [{ }, { }],
+        });
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        this.assertLayout(['75', '25']);
+    });
+
+    QUnit.test('collapse should still work when _ignoreSizeConstraints is true', function(assert) {
+        this.reinit({
+            _ignoreSizeConstraints: true,
+            items: [{ collapsible: true }, { collapsible: true }],
+        });
+
+        const $resizeHandle = this.getResizeHandles().eq(0);
+        this.getCollapsePrevButton($resizeHandle).trigger('dxclick');
+
+        this.assertLayout(['0', '100']);
+    });
+
+    QUnit.test('three panes with constraints should not be enforced on dimension change when _ignoreSizeConstraints is true', function(assert) {
+        this.reinit({
+            width: 416,
+            height: 408,
+            _ignoreSizeConstraints: true,
+            dataSource: [{ size: '200px', maxSize: '200px' }, { }, { }],
+        });
+
+        const initialLayout = this.getPanes().toArray().map(function(item) { return item.style.flexGrow; });
+
+        this.instance.option('width', 816);
+
+        const updatedLayout = this.getPanes().toArray().map(function(item) { return item.style.flexGrow; });
+
+        assert.roughEqual(parseFloat(updatedLayout[0]), parseFloat(initialLayout[0]), 0.05, 'flexGrow[0]');
+        assert.roughEqual(parseFloat(updatedLayout[1]), parseFloat(initialLayout[1]), 0.05, 'flexGrow[1]');
+        assert.roughEqual(parseFloat(updatedLayout[2]), parseFloat(initialLayout[2]), 0.05, 'flexGrow[2]');
+    });
+
+    QUnit.test('vertical orientation should skip constraints on dimension change when _ignoreSizeConstraints is true', function(assert) {
+        this.reinit({
+            width: 408,
+            height: 808,
+            orientation: 'vertical',
+            _ignoreSizeConstraints: true,
+            dataSource: [{ size: '200px', minSize: '200px' }, { }],
+        });
+
+        this.instance.option('height', 408);
+
+        this.assertLayout(['25', '75']);
     });
 });
