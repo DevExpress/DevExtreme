@@ -209,7 +209,7 @@
         "dxDataGrid-ariaSearchInGrid": "Søk i datarutenett",
         "dxDataGrid-ariaSelectAll": "Velg alle",
         "dxDataGrid-ariaSelectRow": "Velg rad",
-        "dxDataGrid-ariaToolbar": "Datarutenett-verkt\u00f8ylinje",
+        "dxDataGrid-ariaToolbar": "Datarutenett-verktøylinje",
         "dxDataGrid-ariaEditForm": "Redigeringsskjema",
         "dxDataGrid-filterBuilderPopupTitle": "Filterbygger",
         "dxDataGrid-filterPanelCreateFilter": "Velg filter",
@@ -222,7 +222,7 @@
         "dxTreeList-ariaTreeList": "Treliste med {0} rader og {1} kolonner",
         "dxTreeList-ariaExpandableInstruction": "Trykk Ctrl + høyrepil for å utvide den aktive noden og Ctrl + venstrepil for å skjule den",
         "dxTreeList-ariaSearchInGrid": "Søk i trelisten",
-        "dxTreeList-ariaToolbar": "Treliste-verkt\u00f8ylinje",
+        "dxTreeList-ariaToolbar": "Treliste-verktøylinje",
         "dxTreeList-editingAddRowToNode": "Legg til",
 
         "dxPager-infoText": "Side {0} av {1} ({2} punkter)",

@@ -78,9 +78,8 @@ export const CHAT_TEXT_AREA_TOOLBAR = 'dx-chat-textarea-toolbar';
 const MAX_ATTACHMENTS_COUNT = 10;
 const INFORMER_DELAY = 10000;
 
-const ERRORS = {
-  // @ts-expect-error format params should be extended
-  fileLimit: messageLocalization.format('dxChat-fileLimitReachedWarning', MAX_ATTACHMENTS_COUNT),
+const ERROR_MESSAGE_NAME = {
+  fileLimit: 'dxChat-fileLimitReachedWarning',
 };
 
 export const STT_INITIAL_STATE: ButtonState = {
@@ -532,7 +531,11 @@ class ChatTextArea extends TextArea<Properties> {
   };
 
   _fileUploaderFileLimitReached(): void {
-    this._showInformer(ERRORS.fileLimit);
+    this._showInformer(messageLocalization.format(
+      ERROR_MESSAGE_NAME.fileLimit,
+      // @ts-expect-error format params should be extended
+      MAX_ATTACHMENTS_COUNT,
+    ));
     this._updateInputHeight();
   }
 

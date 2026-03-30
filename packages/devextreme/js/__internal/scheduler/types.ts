@@ -13,11 +13,9 @@ export type RenderStrategyName = 'horizontal' | 'horizontalMonth' | 'horizontalM
 export type FilterItemType = Record<string, string | number> | string | number;
 export type HeaderCellTextFormat = string | ((date: Date) => string);
 
-export interface SafeAppointment extends Appointment {
-  startDate: Date | string;
-  endDate: Date | string;
-}
-export interface TargetedAppointment extends SafeAppointment {
+export interface SafeAppointment extends Appointment {}
+
+export interface TargetedAppointment extends Appointment {
   displayStartDate: Date;
   displayEndDate: Date;
 }
