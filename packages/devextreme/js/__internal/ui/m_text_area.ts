@@ -160,11 +160,11 @@ class TextArea<
   _getHeightDifference($input: dxElementWrapper): number {
     const verticalElementOffset = getVerticalOffsets(this.$element().get(0), false);
     const verticalEditorContainerOffset = getVerticalOffsets(
-      this._$textEditorContainer.get(0),
+      this._$textEditorContainer?.get(0),
       false,
     );
     const verticalInputContainerOffsets = getVerticalOffsets(
-      this._$textEditorInputContainer.get(0),
+      this._$textEditorInputContainer?.get(0),
       true,
     );
     const inputMargin = getElementBoxParams('height', getWindow().getComputedStyle($input.get(0))).margin;

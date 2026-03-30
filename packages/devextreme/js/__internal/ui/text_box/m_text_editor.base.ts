@@ -103,9 +103,9 @@ class TextEditorBase<
 > extends Editor<TProperties> {
   _showValidMark?: boolean;
 
-  _$textEditorContainer!: dxElementWrapper;
+  _$textEditorContainer?: dxElementWrapper | null;
 
-  _$textEditorInputContainer!: dxElementWrapper;
+  _$textEditorInputContainer?: dxElementWrapper | null;
 
   _pendingIndicator?: LoadIndicator | null;
 
@@ -172,8 +172,8 @@ class TextEditorBase<
       labelMode: 'static',
       labelMark: '',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      displayValueFormatter(value: string | any[]): string | any[] {
-        // @ts-expect-error Comparison of boolean and any[]
+      displayValueFormatter(value: string | any[]): string {
+        // @ts-expect-error Comparison of boolean and any[], any is not string
         return isDefined(value) && value !== false ? value : '';
       },
     };
@@ -263,7 +263,6 @@ class TextEditorBase<
 
     super._initMarkup();
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._renderValue();
     this._renderLabel();
   }
@@ -286,19 +285,27 @@ class TextEditorBase<
     this._$textEditorInputContainer = $('<div>')
       .addClass(TEXTEDITOR_INPUT_CONTAINER_CLASS)
       .appendTo(this._$textEditorContainer);
+
     this._$textEditorInputContainer.append(this._createInput());
   }
 
-  _getInputContainer(): dxElementWrapper {
+  _getInputContainer(): dxElementWrapper | null | undefined {
     return this._$textEditorInputContainer;
   }
 
   _renderPendingIndicator(): void {
     this.$element().addClass(TEXTEDITOR_VALIDATION_PENDING_CLASS);
+
     const $inputContainer = this._getInputContainer();
+
+    if (!$inputContainer) {
+      return;
+    }
+
     const $indicatorElement = $('<div>')
       .addClass(TEXTEDITOR_PENDING_INDICATOR_CLASS)
       .appendTo($inputContainer);
+
     this._pendingIndicator = this._createComponent($indicatorElement, LoadIndicator, {});
   }
 
@@ -340,7 +347,7 @@ class TextEditorBase<
     this._toggleValidMark();
   }
 
-  _getButtonsContainer(): dxElementWrapper {
+  _getButtonsContainer(): dxElementWrapper | null | undefined {
     return this._$textEditorContainer;
   }
 
@@ -348,6 +355,10 @@ class TextEditorBase<
     const { buttons } = this.option();
 
     const $buttonsContainer = this._getButtonsContainer();
+
+    if (!$buttonsContainer) {
+      return;
+    }
 
     this._$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(
       buttons,
@@ -375,10 +386,7 @@ class TextEditorBase<
 
     this._$beforeButtonsContainer = null;
     this._$afterButtonsContainer = null;
-    // TODO
-    // @ts-expect-error _$textEditorContainer can be null and undefined
     this._$textEditorContainer = null;
-    // @ts-expect-error _$textEditorInputContainer can be null and undefined
     this._$textEditorInputContainer = null;
     this._$placeholder = null;
   }
@@ -457,10 +465,13 @@ class TextEditorBase<
     });
   }
 
-  _renderValue(): Promise<unknown> {
-    const renderInputPromise = this._renderInputValue();
+  _renderValue(): DeferredObj<unknown> {
+    const renderInputDeferred = this._renderInputValue();
 
-    return renderInputPromise.promise();
+    // @ts-expect-error DeferredObj typification
+    const renderInputPromise = renderInputDeferred.promise() as DeferredObj<unknown>;
+
+    return renderInputPromise;
   }
 
   _renderInputValue(value?: TProperties['value']): DeferredObj<unknown> {
@@ -696,7 +707,7 @@ class TextEditorBase<
     return this._$placeholder ?? $();
   }
 
-  _clearValueHandler(e: ValueChangedEvent & { stopPropagation: () => void }): void {
+  _clearValueHandler(e: ValueChangedEvent & DxEvent): void {
     const $input = this._input();
 
     e.stopPropagation();
@@ -772,7 +783,7 @@ class TextEditorBase<
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _getValueChangeEventOptionName(): keyof TextEditorBaseProperties {
+  _getValueChangeEventOptionName(): keyof TProperties {
     return 'valueChangeEvent';
   }
 
@@ -781,7 +792,7 @@ class TextEditorBase<
     const { [valueChangeEventOptionName]: actionName } = this.option();
 
     const keyPressEvent = addNamespace(this._renderValueEventName(), `${this.NAME}TextChange`);
-    const valueChangeEvent = addNamespace(actionName, `${this.NAME}ValueChange`);
+    const valueChangeEvent = addNamespace(actionName as string, `${this.NAME}ValueChange`);
     const keyDownEvent = addNamespace('keydown', `${this.NAME}TextChange`);
 
     const $input = this._input();
@@ -821,14 +832,14 @@ class TextEditorBase<
     return element === this._input().get(0);
   }
 
-  _preventNestedFocusEvent(event: DxEvent & {
-    relatedTarget: Element | dxElementWrapper;
-  }): boolean {
+  _preventNestedFocusEvent(event: DxEvent): boolean {
     if (event.isDefaultPrevented()) {
       return true;
     }
 
-    let shouldPrevent = this._isNestedTarget(event.relatedTarget);
+    let shouldPrevent = this._isNestedTarget(
+      (event as DxEvent & { relatedTarget: Element | dxElementWrapper }).relatedTarget,
+    );
 
     if (event.type === 'focusin') {
       shouldPrevent = shouldPrevent
@@ -862,9 +873,7 @@ class TextEditorBase<
     super._focusInHandler(event);
   }
 
-  _focusOutHandler(event: DxEvent & {
-    relatedTarget: Element | dxElementWrapper;
-  }): void {
+  _focusOutHandler(event: DxEvent): void {
     this._preventNestedFocusEvent(event);
 
     super._focusOutHandler(event);
@@ -923,7 +932,7 @@ class TextEditorBase<
 
   _updateValue(): void {
     this._options.silent('text', null);
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
     this._renderValue();
   }
 
@@ -1093,9 +1102,10 @@ class TextEditorBase<
     }
 
     const defaultOptions = this._getDefaultOptions();
+
     if (this.option('value') === defaultOptions.value) {
       this._options.silent('text', '');
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
       this._renderValue();
     } else {
       this.option('value', defaultOptions.value);
@@ -1104,7 +1114,7 @@ class TextEditorBase<
 
   _resetInputText(): void {
     this._options.silent('text', this._initialValue);
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
     this._renderValue();
   }
 
@@ -1147,10 +1157,13 @@ class TextEditorBase<
     eventHandler?: any | undefined,
   ): this {
     const result = super.on(eventName, eventHandler);
-    const event = eventName.charAt(0).toUpperCase() + eventName.substr(1);
 
-    if (EVENTS_LIST.includes(event)) {
-      this._refreshEvents();
+    if (typeof eventName === 'string') {
+      const event = eventName.charAt(0).toUpperCase() + eventName.substr(1);
+
+      if (EVENTS_LIST.includes(event)) {
+        this._refreshEvents();
+      }
     }
 
     return result;

@@ -12,6 +12,7 @@ import { extend } from '@js/core/utils/extend';
 import { inputType } from '@js/core/utils/support';
 import { isDate as isDateType, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
+import type { DxEvent } from '@js/events';
 import type {
   DateLike,
   DatePickerType,
@@ -463,7 +464,7 @@ class DateBox extends DropDownEditor<DateBoxBaseProperties> {
     }
   }
 
-  _clearValueHandler(e: ValueChangedEvent & { stopPropagation: () => void }): void {
+  _clearValueHandler(e: ValueChangedEvent & DxEvent): void {
     this.option('text', '');
     super._clearValueHandler(e);
   }
