@@ -229,6 +229,7 @@ class Popover<
   }
 
   _detachEvent(target: PopoverTarget, name: string, event?: unknown) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     let eventName: string = event || this._getEventName(`${name}Event`);
 
     if (!eventName) {
@@ -385,6 +386,7 @@ class Popover<
     const isHorizontal = this._isHorizontalSide() && isFlippedByHorizontal;
     const isInside = this._isPopoverInside();
 
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const condition = isVertical || isHorizontal || isInside;
     const positionSide = this._positionController._positionSide;
 
