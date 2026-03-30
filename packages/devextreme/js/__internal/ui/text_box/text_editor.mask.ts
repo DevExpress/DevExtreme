@@ -6,6 +6,7 @@ import {
 import messageLocalization from '@js/common/core/localization/message';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isEmpty } from '@js/core/utils/string';
 import { isDefined } from '@js/core/utils/type';
@@ -367,7 +368,6 @@ class TextEditorMask<
       end: currentCaret?.end ?? 0,
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._renderValue();
     this._caret(finalCaret);
   }
@@ -400,7 +400,7 @@ class TextEditorMask<
     }
   }
 
-  _renderValue(): Promise<unknown> {
+  _renderValue(): DeferredObj<unknown> {
     if (this._maskRulesChain) {
       this._showMaskPlaceholder();
 
@@ -701,7 +701,6 @@ class TextEditorMask<
       editor: this,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this._renderValue();
   }
 
@@ -729,7 +728,7 @@ class TextEditorMask<
         break;
       case 'showMaskMode':
         this.option({ text: '' });
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
         this._renderValue();
         break;
       default:

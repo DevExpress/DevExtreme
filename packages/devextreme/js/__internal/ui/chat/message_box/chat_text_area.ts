@@ -432,6 +432,10 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _renderFileUploader(): void {
+    if (!this._$textEditorContainer) {
+      return;
+    }
+
     this._$fileUploader = $('<div>')
       .addClass(CHAT_TEXT_AREA_ATTACHMENTS)
       .insertBefore(this._$textEditorContainer);
