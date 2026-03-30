@@ -4573,7 +4573,7 @@ QUnit.module('Keyboard navigation', {
         this.getActiveInputElement().trigger(e);
         this.clock.tick(10);
 
-        const $cell = this.getRowElement(2).children().eq(0);
+        const $cell = $(this.getRowElement(2)).children().eq(0);
         eventsEngine.triggerHandler($cell, 'focus');
         this.clock.tick(10);
 
