@@ -4,8 +4,8 @@ import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 
-import { formatDates, getFormatType } from './appointments/m_text_utils';
 import { getDeltaTime } from './appointments/resizing/get_delta_time';
+import { getDateFormatType, getDateText } from './appointments_new/utils/get_date_text';
 import { VERTICAL_VIEW_TYPES } from './constants';
 import type Scheduler from './m_scheduler';
 import { utils } from './m_utils';
@@ -117,24 +117,26 @@ const subscribes = {
     this.hideAppointmentTooltip();
   },
 
+  // TODO<Appointments>: delete this method when old impl is removed
   createFormattedDateText(
     appointment: AppointmentTooltipItem['appointment'],
-    targetedAppointmentRaw: AppointmentTooltipItem['targetedAppointment'],
+    targetedAppointmentRaw: TargetedAppointment,
     format?: string,
   ) {
     const targetedAppointment = {
       ...appointment,
       ...targetedAppointmentRaw,
     } as TargetedAppointment;
+
     const adapter = new AppointmentAdapter(targetedAppointment, this._dataAccessors);
     // pull out time zone converting from appointment adapter for knockout (T947938)
     const startDate = targetedAppointment.displayStartDate || this.timeZoneCalculator.createDate(adapter.startDate, 'toGrid');
     const endDate = targetedAppointment.displayEndDate || this.timeZoneCalculator.createDate(adapter.endDate, 'toGrid');
-    const formatType = format ?? getFormatType(startDate, endDate, adapter.allDay, this.currentView.type !== 'month');
+    const formatType = format ?? getDateFormatType(startDate, endDate, adapter.allDay, this.currentView.type);
 
     return {
       text: adapter.text || messageLocalization.format('dxScheduler-noSubject'),
-      formatDate: formatDates(startDate, endDate, formatType),
+      formatDate: getDateText(startDate, endDate, formatType as any),
     };
   },
 
@@ -220,10 +222,12 @@ const subscribes = {
     return updatedEndDate;
   },
 
+  // TODO<Appointments>: delete this method when old impl is removed
   renderCompactAppointments(options: CompactAppointmentOptions): dxElementWrapper {
     return this._compactAppointmentsHelper.render(options);
   },
 
+  // TODO<Appointments>: delete this method when old impl is removed
   clearCompactAppointments() {
     this._compactAppointmentsHelper.clear();
   },
@@ -232,6 +236,7 @@ const subscribes = {
     return this._workSpace._getGroupCount();
   },
 
+  // TODO<Appointments>: delete this method when old impl is removed
   mapAppointmentFields(config) {
     const { itemData, itemElement, targetedAppointment } = config;
     const targetedData = targetedAppointment || this.getTargetedAppointment(itemData, itemElement);
@@ -271,6 +276,7 @@ const subscribes = {
     return this.forceMaxAppointmentPerCell();
   },
 
+  // TODO<Appointments>: delete this method when old impl is removed
   getTargetedAppointmentData(appointment, element) {
     return this.getTargetedAppointment(appointment, element);
   },
