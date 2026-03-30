@@ -1516,13 +1516,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     $dragContainer.text(column.caption ?? '');
   }
 
-  public needToUpdateFirstCellClasses(): boolean {
-    const hasHidingColumnsQueue = !!this._adaptiveColumnsController
-      ?.getHidingColumnsQueue()?.length;
-
-    return hasHidingColumnsQueue;
-  }
-
   public updateFirstCellClasses(): void {
     const rows = this._getRows();
 

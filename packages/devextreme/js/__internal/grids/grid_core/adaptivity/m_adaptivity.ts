@@ -1326,7 +1326,7 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
       COLUMN_VIEWS.forEach((viewName) => {
         const view = this.getView(viewName);
 
-        if (view?.isVisible() && view?.needToUpdateFirstCellClasses()) {
+        if (view?.isVisible()) {
           view.updateFirstCellClasses();
         }
       });
