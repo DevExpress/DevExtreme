@@ -59,6 +59,9 @@ describe('Summary', () => {
 
       await flushAsync();
 
+      const beforeScrollCell = component.getDataCell(1, 3);
+      expect(beforeScrollCell.getText()).toBe('1');
+
       const scrollContainer = component.getScrollableContainer();
       scrollContainer.scrollLeft = 5000;
       scrollContainer.dispatchEvent(new Event('scroll'));
@@ -66,8 +69,8 @@ describe('Summary', () => {
 
       expect(scrollContainer.scrollLeft).toBe(5000);
 
-      const firstDataCell = component.getDataCell(0, 0);
-      expect(firstDataCell.getText()).not.toBe('0');
+      const afterScrollCell = component.getDataCell(1, 3);
+      expect(afterScrollCell.getText()).toBe('48');
 
       const groupCells = component.getGroupRow(0).getCells();
       const colSpan = Number(groupCells[1].getAttribute('colSpan')) || 1;
