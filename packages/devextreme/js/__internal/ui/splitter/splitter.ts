@@ -1245,7 +1245,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
         const fallback = findLastVisibleExpandedItemIndex(items);
 
         if (fallback !== -1) {
-          pixels[fallback] += remaining;
+          pixels[fallback] = Math.max(0, pixels[fallback] + remaining);
         }
         break;
       }
