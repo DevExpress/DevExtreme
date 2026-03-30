@@ -1214,15 +1214,16 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
       if (!item || item.visible === false || item.collapsed === true
         || (item.resizable === false && isDefined(this._initialPaneSizes[index]))) {
-        // skip
-      } else {
-        const minPx = tryConvertToNumber(item.minSize, elementSize) ?? 0;
-        const maxPx = tryConvertToNumber(item.maxSize, elementSize);
-        const clampedPx = this._getClampedPixelSize(pixels[index] + direction, minPx, maxPx);
+        // eslint-disable-next-line no-continue
+        continue;
+      }
 
-        if (compareNumbersWithPrecision(clampedPx, pixels[index]) !== 0) {
-          indices.push(index);
-        }
+      const minPx = tryConvertToNumber(item.minSize, elementSize) ?? 0;
+      const maxPx = tryConvertToNumber(item.maxSize, elementSize);
+      const clampedPx = this._getClampedPixelSize(pixels[index] + direction, minPx, maxPx);
+
+      if (compareNumbersWithPrecision(clampedPx, pixels[index]) !== 0) {
+        indices.push(index);
       }
     }
 
