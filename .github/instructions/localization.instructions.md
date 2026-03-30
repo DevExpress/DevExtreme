@@ -44,9 +44,6 @@ For every key that is **modified** in `en.json`, provide updated translations fo
 - ❌ NEVER provide language-specific style recommendations unrelated to a changed key
 - ❌ NEVER comment on language consistency for keys that were not changed in `en.json`
 
-## The ONLY Acceptable Comments (outside of `en.json` changes):
-
-✅ Critical JSON syntax errors that would break the build (missing commas, unclosed brackets)
 
 ## Examples
 
