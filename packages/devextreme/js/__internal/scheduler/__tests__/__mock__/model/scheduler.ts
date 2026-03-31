@@ -6,6 +6,7 @@ import { POPUP_DIALOG_CLASS } from '../../../m_scheduler';
 import type { AppointmentModel } from './appointment';
 import { createAppointmentModel } from './appointment';
 import { PopupModel } from './popup';
+import { TooltipModel } from './tooltip';
 
 const getTexts = (
   cells: ArrayLike<Element>,
@@ -23,6 +24,10 @@ export class SchedulerModel {
 
   get popup(): PopupModel {
     return this.getPopup();
+  }
+
+  get tooltip(): TooltipModel {
+    return new TooltipModel();
   }
 
   get toolbar(): ToolbarModel {
@@ -53,6 +58,17 @@ export class SchedulerModel {
     const allButtons = this.queries.queryAllByRole('button') as HTMLElement[];
     const collectors = allButtons.filter((btn) => btn.classList.contains('dx-scheduler-appointment-collector'));
     return getTexts(collectors);
+  }
+
+  getCollectorButton(index = 0): HTMLElement {
+    const allButtons = this.queries.queryAllByRole('button') as HTMLElement[];
+    const collectors = allButtons.filter((btn) => btn.classList.contains('dx-scheduler-appointment-collector'));
+
+    if (collectors.length === 0) {
+      throw new Error('Collector button not found');
+    }
+
+    return collectors[index];
   }
 
   getDateTableContent(): string[] {
