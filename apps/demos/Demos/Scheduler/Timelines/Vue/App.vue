@@ -60,7 +60,6 @@ const currentDate = new Date(2021, 1, 2);
 const dataSource = data;
 
 type SnapToCellsMode = 'auto' | 'always' | 'never';
-
 const snapToCellsModeItems: { value: SnapToCellsMode; text: string }[] = [
   { value: 'auto', text: 'Auto' },
   { value: 'always', text: 'Always' },
@@ -68,12 +67,12 @@ const snapToCellsModeItems: { value: SnapToCellsMode; text: string }[] = [
 ];
 
 const snapToCellsMode = ref<SnapToCellsMode>('always');
-const schedulerInstance = ref<any>(null);
+const schedulerInstance = ref<any | null>(null);
 const pendingScrollLeft = ref<number | undefined>(undefined);
 
 const getWorkSpaceScrollable = () => schedulerInstance.value?.getWorkSpaceScrollable?.();
 
-function onSchedulerInitialized(e: { component: any }) {
+function onSchedulerInitialized(e: DxSchedulerTypes.InitializedEvent) {
   schedulerInstance.value = e.component;
 }
 
