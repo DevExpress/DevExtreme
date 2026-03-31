@@ -340,7 +340,35 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const document = domAdapter.getDocument();
 
     this._documentClickHandler = this._documentClickHandler || this.createAction((e) => {
-      this._resetFocusBasedOnTarget(e.event);
+      const $target = $(e.event.target);
+
+      const tableSelector = `.${this.addWidgetPrefix(TABLE_CLASS)}`;
+      const rowsViewSelector = `.${this.addWidgetPrefix(ROWS_VIEW_CLASS)}`;
+      const editorOverlaySelector = `.${DROPDOWN_EDITOR_OVERLAY_CLASS}`;
+
+      // if click was on the datagrid table, but the target element is no more presented in the DOM
+      const needKeepFocus = !!$target.closest(tableSelector).length && !isElementInDom($target);
+
+      if (needKeepFocus) {
+        e.event.preventDefault();
+        return;
+      }
+
+      const isRowsViewClick = this._isEventInCurrentGrid(e.event) && !!$target.closest(rowsViewSelector).length;
+      const isEditorOverlayClick = !!$target.closest(editorOverlaySelector).length;
+      const isColumnResizing = !!this._columnResizerController?.isResizing();
+
+      if (!isRowsViewClick && !isEditorOverlayClick && !isColumnResizing) {
+        const isClickOutsideFocusedView = this._focusedView
+          ? $target.closest(this._focusedView.element()).length === 0
+          : true;
+
+        if (isClickOutsideFocusedView) {
+          this._resetFocusedCell(true);
+        }
+
+        this._resetFocusedView();
+      }
     });
 
     eventsEngine.off(
@@ -1641,15 +1669,11 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           .removeAttr('tabindex');
       }
 
-      eventsEngine.one($focusElement, 'blur', (event) => {
-        const { relatedTarget } = event;
-
-        if (relatedTarget) {
+      eventsEngine.one($focusElement, 'blur', (e) => {
+        if (e.relatedTarget) {
           $focusElement
             .removeClass(CELL_FOCUS_DISABLED_CLASS)
             .removeClass(FOCUSED_CLASS);
-
-          this._resetFocusBasedOnTarget(event, relatedTarget);
         }
       });
       if (!skipFocusEvent) {
@@ -1813,37 +1837,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     }
 
     isUpArrow && that._updateFocus();
-  }
-
-  private _resetFocusBasedOnTarget(event, target?) {
-    const $target = $(target ?? event.target);
-
-    const tableSelector = `.${this.addWidgetPrefix(TABLE_CLASS)}`;
-    const editorOverlaySelector = `.${DROPDOWN_EDITOR_OVERLAY_CLASS}`;
-
-    // if the target was on the datagrid table, but is no more presented in the DOM
-    const needKeepFocus = !!$target.closest(tableSelector).length && !isElementInDom($target);
-
-    if (needKeepFocus) {
-      event.preventDefault();
-      return;
-    }
-
-    const isTargetInGrid = gridCoreUtils.isElementInCurrentGrid(this, $target);
-    const isTargetInEditorOverlay = !!$target.closest(editorOverlaySelector).length;
-    const isColumnResizing = !!this._columnResizerController?.isResizing();
-
-    if (!isTargetInGrid && !isTargetInEditorOverlay && !isColumnResizing) {
-      const isTargetOutsideFocusedView = this._focusedView
-        ? $target.closest(this._focusedView.element()).length === 0
-        : true;
-
-      if (isTargetOutsideFocusedView) {
-        this._resetFocusedCell(true);
-      }
-
-      this._resetFocusedView();
-    }
   }
 
   // #endregion Focusing
