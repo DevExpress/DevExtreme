@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-webpack5';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import Scheduler, {
   Resource,
@@ -24,6 +24,8 @@ type Story = StoryObj;
 export const Timelines: Story = {
   render: () => {
     const [snapToCellsMode, setSnapToCellsMode] = useState<SnapToCellsMode>('always');
+    const schedulerInstanceRef = useRef<any>(null);
+    const pendingScrollLeftRef = useRef<number | undefined>(undefined);
 
     return (
       <>
@@ -40,6 +42,19 @@ export const Timelines: Story = {
           startDayHour={8}
           endDayHour={20}
           snapToCellsMode={snapToCellsMode}
+          onInitialized={(e) => {
+            schedulerInstanceRef.current = e.component;
+          }}
+          onContentReady={() => {
+            const pendingScrollLeft = pendingScrollLeftRef.current;
+
+            if (pendingScrollLeft === undefined) {
+              return;
+            }
+
+            schedulerInstanceRef.current?.getWorkSpaceScrollable()?.scrollTo({ x: pendingScrollLeft });
+            pendingScrollLeftRef.current = undefined;
+          }}
         >
           <Resource
             fieldExpr="ownerId"
@@ -70,6 +85,7 @@ export const Timelines: Story = {
               displayExpr="text"
               value={snapToCellsMode}
               onValueChanged={(e) => {
+                pendingScrollLeftRef.current = schedulerInstanceRef.current?.getWorkSpaceScrollable()?.scrollLeft() ?? 0;
                 setSnapToCellsMode(e.value);
               }}
             />
