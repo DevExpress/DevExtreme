@@ -1830,7 +1830,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       return;
     }
 
-    const isTargetInRowsView = this._isEventInCurrentGrid(event) && !!$target.closest(rowsViewSelector).length;
+    const isTargetInRowsView = gridCoreUtils.isElementInCurrentGrid(this, $target) && !!$target.closest(rowsViewSelector).length;
     const isTargetInEditorOverlay = !!$target.closest(editorOverlaySelector).length;
     const isColumnResizing = !!this._columnResizerController?.isResizing();
 
