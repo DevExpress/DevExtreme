@@ -161,7 +161,7 @@ export class ColumnsController extends modules.Controller {
     };
   }
 
-  public init(isApplyingUserState?): void {
+  public init(isApplyingUserState?: boolean): void {
     this._dataController = this.getController('data');
     this._focusController = this.getController('focus');
     this._stateStoringController = this.getController('stateStoring');

@@ -1300,8 +1300,8 @@ const columns = (
 ) => class AdaptivityColumnsExtender extends Base {
   private _adaptiveColumnsController!: AdaptiveColumnsController;
 
-  public init(): void {
-    super.init();
+  public init(isApplyingUserState?: boolean): void {
+    super.init(isApplyingUserState);
     this._adaptiveColumnsController = this.getController('adaptiveColumns');
   }
 
