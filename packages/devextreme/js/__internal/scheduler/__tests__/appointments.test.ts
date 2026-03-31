@@ -189,72 +189,137 @@ describe('Appointments', () => {
       },
     ];
 
-    it('should focus first appointment on Home', async () => {
-      const { POM, keydown } = await createScheduler({
-        dataSource,
-        currentView: 'day',
-        currentDate: new Date(2015, 1, 9),
+    describe('Home and End hotkeys', () => {
+      it('should focus first appointment on Home', async () => {
+        const { POM, keydown } = await createScheduler({
+          dataSource,
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9),
+        });
+
+        const appointments = POM.getAppointments();
+        const firstAppointment = appointments[0];
+        const lastAppointment = appointments[2];
+
+        lastAppointment.element.focus();
+        keydown(lastAppointment.element, 'Home');
+
+        expect(firstAppointment.isFocused()).toBe(true);
+        expect(lastAppointment.isFocused()).toBe(false);
       });
 
-      const appointments = POM.getAppointments();
-      const firstAppointment = appointments[0];
-      const lastAppointment = appointments[2];
+      it('should focus last appointment on End', async () => {
+        const { POM, keydown } = await createScheduler({
+          dataSource,
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9),
+        });
 
-      lastAppointment.element.focus();
-      keydown(lastAppointment.element, 'Home');
+        const appointments = POM.getAppointments();
+        const firstAppointment = appointments[0];
+        const lastAppointment = appointments[2];
 
-      expect(firstAppointment.isFocused()).toBe(true);
-      expect(lastAppointment.isFocused()).toBe(false);
+        firstAppointment.element.focus();
+        keydown(firstAppointment.element, 'End');
+
+        expect(firstAppointment.isFocused()).toBe(false);
+        expect(lastAppointment.isFocused()).toBe(true);
+      });
+
+      it('should not change focus when Home is pressed on the first appointment', async () => {
+        const { POM, keydown } = await createScheduler({
+          dataSource,
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9),
+        });
+
+        const appointments = POM.getAppointments();
+        const firstAppointment = appointments[0];
+
+        firstAppointment.element.focus();
+        keydown(firstAppointment.element, 'Home');
+
+        expect(firstAppointment.isFocused()).toBe(true);
+      });
+
+      it('should not change focus when End is pressed on the last appointment', async () => {
+        const { POM, keydown } = await createScheduler({
+          dataSource,
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9),
+        });
+
+        const appointments = POM.getAppointments();
+        const lastAppointment = appointments[2];
+
+        lastAppointment.element.focus();
+        keydown(lastAppointment.element, 'End');
+
+        expect(lastAppointment.isFocused()).toBe(true);
+      });
     });
 
-    it('should focus last appointment on End', async () => {
-      const { POM, keydown } = await createScheduler({
-        dataSource,
-        currentView: 'day',
-        currentDate: new Date(2015, 1, 9),
+    describe('Delete hotkey', () => {
+      it('should delete single occurrence on Delete and clicking \'Delete appointment\'', async () => {
+        const { POM, keydown } = await createScheduler({
+          dataSource: [{
+            text: 'Recurring Appointment',
+            startDate: new Date(2015, 1, 9, 8),
+            endDate: new Date(2015, 1, 9, 9),
+            recurrenceRule: 'FREQ=DAILY',
+          }],
+          currentView: 'week',
+          currentDate: new Date(2015, 1, 9),
+        });
+
+        const initialCount = POM.getAppointments().length;
+        const appointment = POM.getAppointments()[2];
+
+        appointment.element.focus();
+        keydown(appointment.element, 'Delete');
+
+        POM.popup.deleteAppointmentButton.click();
+
+        expect(POM.getAppointments().length).toBe(initialCount - 1);
       });
 
-      const appointments = POM.getAppointments();
-      const firstAppointment = appointments[0];
-      const lastAppointment = appointments[2];
+      it('should delete all occurrences on delete and clicking \'Delete series\'', async () => {
+        const { POM, keydown } = await createScheduler({
+          dataSource: [{
+            text: 'Recurring Appointment',
+            startDate: new Date(2015, 1, 9, 8),
+            endDate: new Date(2015, 1, 9, 9),
+            recurrenceRule: 'FREQ=DAILY',
+          }],
+          currentView: 'week',
+          currentDate: new Date(2015, 1, 9),
+        });
 
-      firstAppointment.element.focus();
-      keydown(firstAppointment.element, 'End');
+        const appointment = POM.getAppointments()[2];
 
-      expect(firstAppointment.isFocused()).toBe(false);
-      expect(lastAppointment.isFocused()).toBe(true);
-    });
+        appointment.element.focus();
+        keydown(appointment.element, 'Delete');
 
-    it('should not change focus when Home is pressed on the first appointment', async () => {
-      const { POM, keydown } = await createScheduler({
-        dataSource,
-        currentView: 'day',
-        currentDate: new Date(2015, 1, 9),
+        POM.popup.deleteSeriesButton.click();
+
+        expect(POM.getAppointments().length).toBe(0);
       });
 
-      const appointments = POM.getAppointments();
-      const firstAppointment = appointments[0];
+      it('should delete appointment on Delete', async () => {
+        const { POM, keydown } = await createScheduler({
+          dataSource,
+          currentView: 'day',
+          currentDate: new Date(2015, 1, 9),
+        });
 
-      firstAppointment.element.focus();
-      keydown(firstAppointment.element, 'Home');
+        const initialCount = POM.getAppointments().length;
+        const appointment = POM.getAppointments()[0];
 
-      expect(firstAppointment.isFocused()).toBe(true);
-    });
+        appointment.element.focus();
+        keydown(appointment.element, 'Delete');
 
-    it('should not change focus when End is pressed on the last appointment', async () => {
-      const { POM, keydown } = await createScheduler({
-        dataSource,
-        currentView: 'day',
-        currentDate: new Date(2015, 1, 9),
+        expect(POM.getAppointments().length).toBe(initialCount - 1);
       });
-
-      const appointments = POM.getAppointments();
-      const lastAppointment = appointments[2];
-
-      lastAppointment.element.focus();
-      keydown(lastAppointment.element, 'End');
-
-      expect(lastAppointment.isFocused()).toBe(true);
     });
   });
 });
