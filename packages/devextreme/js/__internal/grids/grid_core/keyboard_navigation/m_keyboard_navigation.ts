@@ -221,7 +221,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       event.relatedTarget
       && isLink
       && !isRelatedTargetInRowsView
-      && this._isElementInCurrentGrid(event.target)
+      && this._isEventInCurrentGrid(event)
     ) {
       let $focusedCell = this._getFocusedCell();
 
@@ -354,7 +354,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
         return;
       }
 
-      const isRowsViewClick = this._isElementInCurrentGrid(e.event.target) && !!$target.closest(rowsViewSelector).length;
+      const isRowsViewClick = this._isEventInCurrentGrid(e.event) && !!$target.closest(rowsViewSelector).length;
       const isEditorOverlayClick = !!$target.closest(editorOverlaySelector).length;
       const isColumnResizing = !!this._columnResizerController?.isResizing();
 
@@ -1444,7 +1444,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       .length;
     const isExpandCommandCell = $target.hasClass(COMMAND_EXPAND_CLASS);
 
-    if (!this._isElementInCurrentGrid(event.target)) {
+    if (!this._isEventInCurrentGrid(event)) {
       return;
     }
 
@@ -1662,7 +1662,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       if ($focusViewElement) {
         $focusViewElement
           .find('.dx-row[tabindex], .dx-row > td[tabindex]')
-          .filter((i, node) => this._isElementInCurrentGrid(node))
+          .filter((i, node) => gridCoreUtils.isElementInCurrentGrid(this, $(node)))
           .not($focusElement)
           .removeClass(CELL_FOCUS_DISABLED_CLASS)
           .removeClass(FOCUSED_CLASS)
@@ -1674,11 +1674,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
           $focusElement
             .removeClass(CELL_FOCUS_DISABLED_CLASS)
             .removeClass(FOCUSED_CLASS);
-
-          if (!this._isElementInCurrentGrid(e.relatedTarget)) {
-            this._resetFocusedCell(true);
-            this._resetFocusedView();
-          }
         }
       });
       if (!skipFocusEvent) {
@@ -2512,8 +2507,8 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   // #endregion Events
-  private _isElementInCurrentGrid(element: dxElementWrapper): boolean {
-    return gridCoreUtils.isElementInCurrentGrid(this, $(element));
+  private _isEventInCurrentGrid(event) {
+    return gridCoreUtils.isElementInCurrentGrid(this, $(event.target));
   }
 
   private _isRowEditMode() {
