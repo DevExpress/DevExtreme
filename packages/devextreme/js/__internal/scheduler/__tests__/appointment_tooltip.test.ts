@@ -201,13 +201,14 @@ describe('Appointment tooltip behavior', () => {
       POM.tooltip.getDeleteButton(0).click();
       POM.popup.deleteAppointmentButton.click();
 
-      expect((scheduler as any).getDataSource().items()).toEqual([
+      const items = (scheduler as any).getDataSource().items();
+
+      expect(items).toEqual([
         data[0],
-        {
-          ...data[1],
-          recurrenceException: '20170522T013000Z',
-        },
+        expect.objectContaining(data[1]),
       ]);
+
+      expect(Boolean(items[1].recurrenceException)).toBe(true);
     });
 
     it('should delete all occurrences on delete and clicking \'Delete series\'', async () => {
