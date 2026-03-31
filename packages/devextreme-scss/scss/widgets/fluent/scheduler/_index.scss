@@ -870,12 +870,20 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-appointment:not(.dx-scheduler-appointment-has-resource-color) {
+  container-type: size;
+
   .dx-scheduler-appointment-strip {
     display: block;
     position: absolute;
     width: 6px;
     height: 100%;
     background-color: $base-accent;
+  }
+
+  @container (max-width: 8px) {
+    .dx-scheduler-appointment-strip {
+      display: none;
+    }
   }
 }
 
