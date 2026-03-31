@@ -58,7 +58,7 @@ const App = () => {
       </Scheduler>
       <div className="options">
         <div className="option">
-          <span>Snap To Cells Mode:</span>
+          <span>Snap to Cells Mode:</span>
           <SelectBox
             items={snapToCellsModeItems}
             valueExpr="value"

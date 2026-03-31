@@ -31,7 +31,7 @@
   </DxScheduler>
   <div class="options">
     <div class="option">
-      <span>Snap To Cells Mode:</span>
+      <span>Snap to Cells Mode:</span>
       <DxSelectBox
         :items="snapToCellsModeItems"
         value-expr="value"
