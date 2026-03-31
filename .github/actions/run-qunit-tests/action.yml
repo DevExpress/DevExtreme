@@ -39,6 +39,16 @@ runs:
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE"
         echo "MATRIX_ENVS_NAME_SAFE=$MATRIX_ENVS_NAME_SAFE" >> $GITHUB_ENV
 
+    # - name: Setup Chrome
+    #   uses: ./.github/actions/setup-chrome-headless-shell
+    #   with:
+    #     chrome-version: '146.0.7680.177'
+
+    # - name: Use Node.js
+    #   uses: actions/setup-node@v4
+    #   with:
+    #     node-version: '20'
+
     - name: Download artifacts
       uses: actions/download-artifact@v8
       with:
