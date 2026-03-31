@@ -1819,7 +1819,6 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const $target = $(target ?? event.target);
 
     const tableSelector = `.${this.addWidgetPrefix(TABLE_CLASS)}`;
-    const rowsViewSelector = `.${this.addWidgetPrefix(ROWS_VIEW_CLASS)}`;
     const editorOverlaySelector = `.${DROPDOWN_EDITOR_OVERLAY_CLASS}`;
 
     // if the target was on the datagrid table, but is no more presented in the DOM
@@ -1830,16 +1829,16 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       return;
     }
 
-    const isTargetInRowsView = gridCoreUtils.isElementInCurrentGrid(this, $target) && !!$target.closest(rowsViewSelector).length;
+    const isTargetInGrid = gridCoreUtils.isElementInCurrentGrid(this, $target);
     const isTargetInEditorOverlay = !!$target.closest(editorOverlaySelector).length;
     const isColumnResizing = !!this._columnResizerController?.isResizing();
 
-    if (!isTargetInRowsView && !isTargetInEditorOverlay && !isColumnResizing) {
-      const isClickOutsideFocusedView = this._focusedView
+    if (!isTargetInGrid && !isTargetInEditorOverlay && !isColumnResizing) {
+      const isTargetOutsideFocusedView = this._focusedView
         ? $target.closest(this._focusedView.element()).length === 0
         : true;
 
-      if (isClickOutsideFocusedView) {
+      if (isTargetOutsideFocusedView) {
         this._resetFocusedCell(true);
       }
 
