@@ -32,7 +32,6 @@ import {
 
 @Component({
     selector: 'dxo-page-size',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

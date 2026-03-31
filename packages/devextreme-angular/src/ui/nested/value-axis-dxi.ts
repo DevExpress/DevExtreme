@@ -36,7 +36,6 @@ import {
 
 @Component({
     selector: 'dxi-value-axis',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

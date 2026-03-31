@@ -55,7 +55,6 @@ import {
  */
 @Component({
     selector: 'dx-gallery',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

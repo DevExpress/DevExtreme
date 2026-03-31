@@ -40,7 +40,6 @@ import {
 
 @Component({
     selector: 'dxi-item',
-    standalone: true,
     template: '<ng-content></ng-content>',
     styles: [':host { display: block; }'],
     imports: [ DxIntegrationModule ],

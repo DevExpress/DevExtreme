@@ -28,7 +28,6 @@ import {
 
 @Component({
     selector: 'dxi-file-manager-context-menu-item',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -35,7 +35,6 @@ import {
 
 @Component({
     selector: 'dxo-tree-list-form',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -36,7 +36,6 @@ import {
 
 @Component({
     selector: 'dxo-scheduler-tab-panel-options',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -33,7 +33,6 @@ import {
 
 @Component({
     selector: 'dxo-polar-chart-argument-axis',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

@@ -75,7 +75,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-filter-builder',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

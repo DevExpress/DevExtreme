@@ -57,7 +57,6 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
  */
 @Component({
     selector: 'dx-recurrence-editor',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

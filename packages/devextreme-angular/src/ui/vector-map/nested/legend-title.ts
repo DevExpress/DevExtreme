@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-vector-map-legend-title',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

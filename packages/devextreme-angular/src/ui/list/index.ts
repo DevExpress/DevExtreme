@@ -72,7 +72,6 @@ import {
  */
 @Component({
     selector: 'dx-list',
-    standalone: true,
     template: '',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

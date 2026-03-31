@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_center } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-center',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

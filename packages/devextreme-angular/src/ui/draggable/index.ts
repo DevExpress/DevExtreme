@@ -43,7 +43,6 @@ import { DxoDraggableCursorOffsetModule } from 'devextreme-angular/ui/draggable/
  */
 @Component({
     selector: 'dx-draggable',
-    standalone: true,
     template: '<ng-content></ng-content>',
     host: { ngSkipHydration: 'true' },
     imports: [ DxIntegrationModule ],

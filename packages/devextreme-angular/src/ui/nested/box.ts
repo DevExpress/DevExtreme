@@ -33,7 +33,6 @@ import {
 
 @Component({
     selector: 'dxo-box',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

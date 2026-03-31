@@ -26,7 +26,6 @@ import { NestedOption } from 'devextreme-angular/core';
 
 @Component({
     selector: 'dxo-filter-builder-lookup',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

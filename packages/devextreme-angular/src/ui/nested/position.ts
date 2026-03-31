@@ -24,7 +24,6 @@ import { DxoPositionConfig } from './base/position-config';
 
 @Component({
     selector: 'dxo-position',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],

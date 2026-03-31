@@ -23,7 +23,6 @@ import { PROPERTY_TOKEN_rows } from 'devextreme-angular/core/tokens';
 
 @Component({
     selector: 'dxi-responsive-box-row',
-    standalone: true,
     template: '',
     styles: [''],
     imports: [ DxIntegrationModule ],
