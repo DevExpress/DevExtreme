@@ -317,6 +317,10 @@ class ColorBox extends DropDownEditor<ColorBoxProperties> {
     this.$element().wrapInner($('<div>').addClass(COLOR_BOX_INPUT_CONTAINER_CLASS));
     this._$colorBoxInputContainer = this.$element().children().eq(0);
 
+    if (!this._$textEditorInputContainer) {
+      return;
+    }
+
     this._$colorResultPreview = $('<div>')
       .addClass(COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS)
       .appendTo(this._$textEditorInputContainer);
