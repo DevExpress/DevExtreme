@@ -81,7 +81,6 @@ QUnit.test('ReadOnly option should be passed to the details appointment view', a
     await this.createInstance({
         editing: {
             allowUpdating: false,
-            legacyForm: true
         }
     });
 
@@ -110,7 +109,6 @@ QUnit.test('Details appointment view should be readOnly if editing.allowUpdating
     await this.createInstance({
         editing: {
             allowUpdating: false,
-            legacyForm: true
         }
     });
 
@@ -143,7 +141,6 @@ QUnit.test('Details appointment view shouldn\'t be readOnly when adding new appo
         editing: {
             allowUpdating: false,
             allowAdding: true,
-            legacyForm: true
         }
     });
 
@@ -163,7 +160,6 @@ QUnit.test('Details appointment form should be readOnly after adding new appoint
         currentDate: new Date(2015, 5, 14),
         editing: {
             allowUpdating: false,
-            legacyForm: true
         },
         dataSource: []
     });
@@ -189,7 +185,6 @@ QUnit.test('Details form of new appointment shouldn\'t be readOnly after try to 
         currentDate: new Date(2015, 5, 14),
         editing: {
             allowUpdating: false,
-            legacyForm: true
         },
         dataSource: [first]
     });

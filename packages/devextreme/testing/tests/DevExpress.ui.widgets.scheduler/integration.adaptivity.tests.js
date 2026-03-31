@@ -158,7 +158,7 @@ if(isDesktopEnvironment()) {
         }
     }, () => {
         test('Items has layout with one column when the form\'s width < 600px', async function(assert) {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             setWindowWidth(500);
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
@@ -167,7 +167,7 @@ if(isDesktopEnvironment()) {
         });
 
         test('Items with recurrence editor has layout with one column when the form\'s width < 600px', async function(assert) {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             setWindowWidth(500);
             scheduler.option('dataSource', [{
                 startDate: new Date(2015, 1, 1),
@@ -182,7 +182,7 @@ if(isDesktopEnvironment()) {
         });
 
         test('Items has layout with non-one column when the form\'s width > 600px', async function(assert) {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             setWindowWidth(700);
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
@@ -191,7 +191,7 @@ if(isDesktopEnvironment()) {
         });
 
         test('Items with recurrence editor has layout with non-one column when the form\'s width > 600px', async function(assert) {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             setWindowWidth(700);
             scheduler.option('dataSource', [{
                 startDate: new Date(2015, 1, 1),
@@ -206,7 +206,7 @@ if(isDesktopEnvironment()) {
         });
 
         test('Items has layout with one column when the form\'s width < 600px on window resizing', async function(assert) {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             setWindowWidth(700);
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
@@ -218,7 +218,7 @@ if(isDesktopEnvironment()) {
         });
 
         test('Items has layout with non-one column when the form\'s width > 600px on window resizing', async function(assert) {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             setWindowWidth(500);
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
@@ -244,7 +244,7 @@ if(!isDesktopEnvironment()) {
         }
     }, () => {
         test('Items has layout with one column', async function(assert) {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
@@ -267,7 +267,7 @@ if(isDesktopEnvironment()) {
         test('The fullscreen mode is enabled of popup when window\'s width < 1000px', async function(assert) {
             setWindowWidth(900);
 
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
@@ -279,7 +279,7 @@ if(isDesktopEnvironment()) {
         test('The fullscreen mode is disabled of popup when window\'s width > 1000px', async function(assert) {
             setWindowWidth(1001);
 
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
@@ -291,7 +291,7 @@ if(isDesktopEnvironment()) {
         test('The fullscreen mode is disabled of popup when window\'s width > 1000px, with recurrence editor', async function(assert) {
             setWindowWidth(1001);
 
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.option('dataSource', [{
                 startDate: new Date(2015, 1, 1),
                 endDate: new Date(2015, 1, 2),
@@ -310,7 +310,7 @@ if(isDesktopEnvironment()) {
         test('The fullscreen mode is enabled of popup when the window\'s width < 1000px by resizing the window', async function(assert) {
             setWindowWidth(1001);
 
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
@@ -325,7 +325,7 @@ if(isDesktopEnvironment()) {
         test('The fullscreen mode is disabled of popup when the window\'s width > 1000px by resizing the window', async function(assert) {
             setWindowWidth(799);
 
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
@@ -353,7 +353,7 @@ if(!isDesktopEnvironment()) {
         test('The fullscreen mode is enabled of popup when window\'s width < 500px', async function(assert) {
             setWindowWidth(499);
 
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
@@ -365,7 +365,7 @@ if(!isDesktopEnvironment()) {
         test('The fullscreen mode is disabled of popup when window\'s width > 500px', async function(assert) {
             setWindowWidth(501);
 
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
@@ -377,7 +377,7 @@ if(!isDesktopEnvironment()) {
         test('The fullscreen mode is disabled of popup when window\'s width > 500px, with recurrence editor', async function(assert) {
             setWindowWidth(501);
 
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.option('dataSource', [{
                 startDate: new Date(2015, 1, 1),
                 endDate: new Date(2015, 1, 2),
@@ -403,7 +403,7 @@ module('Appointment popup buttons', moduleConfig, () => {
     test('Buttons location of the top toolbar for the iOs device', async function(assert) {
         this.realDeviceMock = sinon.stub(devices, 'current').returns({ platform: 'ios' });
         try {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
@@ -418,7 +418,7 @@ module('Appointment popup buttons', moduleConfig, () => {
     test('Buttons location of the top toolbar for the desktop', async function(assert) {
         this.realDeviceMock = sinon.stub(devices, 'current').returns({ platform: 'generic' });
         try {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
@@ -432,7 +432,7 @@ module('Appointment popup buttons', moduleConfig, () => {
     test('Buttons location of the top toolbar for the android device', async function(assert) {
         this.realDeviceMock = sinon.stub(devices, 'current').returns({ platform: 'android' });
         try {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 

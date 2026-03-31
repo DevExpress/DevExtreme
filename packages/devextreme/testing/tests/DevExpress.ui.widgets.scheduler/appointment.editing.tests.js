@@ -102,7 +102,7 @@ module('Integration: Appointment editing', {
                     views: ['month'],
                     startDateExpr: 'start',
                     endDateExpr: 'end',
-                    editing: { legacyForm: true },
+
                 });
 
                 scheduler.appointments.dblclick(0);
@@ -214,7 +214,7 @@ module('Integration: Appointment editing', {
                 const scheduler = await this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: data,
-                    editing: { legacyForm: true }
+
                 });
                 const addAppointment = scheduler.instance.addAppointment;
                 const spy = sinon.spy(() => new Deferred());
@@ -315,7 +315,7 @@ module('Integration: Appointment editing', {
                 const scheduler = await this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: data,
-                    editing: { legacyForm: true }
+
                 });
 
                 const updateAppointment = scheduler.instance.updateAppointment;

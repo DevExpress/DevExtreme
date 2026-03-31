@@ -64,7 +64,6 @@ module('Integration: collector', baseConfig, () => {
                 assert.equal(startDate.getDate(), 16, 'Recurrence appointment date should be display equal targetedAppointmentData date in form');
             },
             editing: {
-                legacyForm: true
             },
             maxAppointmentsPerCell: 2
         });

@@ -625,7 +625,6 @@ QUnit.module('Events', {
             currentView: 'month',
             onAppointmentFormOpening: stub,
             editing: {
-                legacyForm: true
             },
         });
 

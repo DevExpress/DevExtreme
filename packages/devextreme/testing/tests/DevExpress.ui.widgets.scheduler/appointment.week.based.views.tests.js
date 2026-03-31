@@ -260,7 +260,7 @@ module('Integration: Appointment Day, Week views', {
                         store: [task]
                     }),
                     currentDate: new Date(2015, 3, 23),
-                    editing: { legacyForm: true }
+
                 });
 
                 scheduler.instance.showAppointmentPopup(task);
@@ -829,7 +829,7 @@ module('Integration: Appointment Day, Week views', {
                     startDateExpr: 'start',
                     endDateExpr: 'end',
                     allDayExpr: 'AllDay',
-                    editing: { legacyForm: true }
+
                 });
                 scheduler.instance.showAppointmentPopup(tasks[0]);
                 scheduler.instance.hideAppointmentPopup();
@@ -903,7 +903,7 @@ module('Integration: Appointment Day, Week views', {
                     views: ['week'],
                     startDateExpr: 'StartDate',
                     endDateExpr: 'EndDate',
-                    editing: { legacyForm: true },
+
                     onAppointmentFormOpening: function(data) {
                         const form = data.form;
                         let startDate = data.appointmentData.StartDate;

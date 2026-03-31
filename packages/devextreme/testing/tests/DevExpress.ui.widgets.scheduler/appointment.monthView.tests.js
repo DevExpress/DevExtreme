@@ -7,7 +7,6 @@ import Color from 'color';
 import { DataSource } from 'common/data/data_source/data_source';
 import { CustomStore } from 'common/data/custom_store';
 import browser from 'core/utils/browser';
-import { APPOINTMENT_FORM_GROUP_NAMES } from '__internal/scheduler/appointment_popup/m_legacy_form';
 import {
     initTestMarkup,
     createWrapper,
@@ -401,7 +400,6 @@ module('Integration: Appointments in Month view', {
                     startDateExpr: 'start',
                     endDateExpr: 'end',
                     editing: {
-                        legacyForm: true,
                     }
                 });
 
@@ -443,7 +441,6 @@ module('Integration: Appointments in Month view', {
                     startDateExpr: 'start',
                     endDateExpr: 'end',
                     editing: {
-                        legacyForm: true,
                     }
                 });
 
@@ -469,7 +466,7 @@ module('Integration: Appointments in Month view', {
 
                 form = scheduler.instance.getAppointmentDetailsForm();
 
-                assert.equal(form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence).visible, false, 'Recurrence editor is hidden. Popup is correct');
+                assert.equal(form.itemOption('recurrenceGroup').visible, false, 'Recurrence editor is hidden. Popup is correct');
             });
 
             test('Long term appoinment inflict index shift in other appointments (T737780)', async function(assert) {

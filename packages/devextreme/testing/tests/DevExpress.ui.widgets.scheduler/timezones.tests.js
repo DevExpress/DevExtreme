@@ -203,7 +203,7 @@ module('Common', moduleConfig, () => {
 
             cases.forEach(config => {
                 test(`Appointment should have correct size, position and popup content if ${config.caseName}`, async function(assert) {
-                    const schedulerOptions = { ...config, editing: { legacyForm: true } };
+                    const schedulerOptions = { ...config, };
 
                     if(config.stubClientTimeZone) {
                         const tzOffsetStub = sinon.stub(timeZoneUtils, 'getClientTimezoneOffset').returns(-10800000);
@@ -311,7 +311,6 @@ module('Common', moduleConfig, () => {
                             allowTimeZoneEditing: true,
                             allowAdding: true,
                             allowUpdating: true,
-                            legacyForm: true,
                         },
                         height: 600,
                         appointmentDragging: {
@@ -1782,7 +1781,7 @@ module('Appointment popup', moduleConfig, () => {
 
         cases.forEach((testCase, index) => {
             test('StartDate and endDate should be valid', async function(assert) {
-                const scheduler = await createScheduler({ timeZone: timeZones.NewYork, editing: { legacyForm: true } }); // -4 offset
+                const scheduler = await createScheduler({ timeZone: timeZones.NewYork, }); // -4 offset
 
                 scheduler.appointments.dblclick(index);
 
@@ -1810,7 +1809,7 @@ module('Appointment popup', moduleConfig, () => {
 
         cases.forEach((testCase, index) => {
             test('StartDate and endDate should be valid', async function(assert) {
-                const scheduler = await createScheduler({ editing: { legacyForm: true } });
+                const scheduler = await createScheduler({ });
 
                 scheduler.appointments.dblclick(index);
 
@@ -1842,7 +1841,6 @@ module('Appointment popup', moduleConfig, () => {
                         store: [appointment]
                     }),
                     editing: {
-                        legacyForm: true,
                     },
                     currentDate: new Date(2015, 3, 23),
                     startDateExpr: 'Start',
@@ -1861,7 +1859,7 @@ module('Appointment popup', moduleConfig, () => {
             });
     });
 
-    test('Appointment startDate and endDate should be correct in the details view for new appointment, if custom timeZone was set, legacyForm',
+    test('Appointment startDate and endDate should be correct in the details view for new appointment, if custom timeZone was set',
         async function(assert) {
             const scheduler = await createWrapper({
                 dataSource: new DataSource({
@@ -1871,7 +1869,7 @@ module('Appointment popup', moduleConfig, () => {
                 startDateExpr: 'Start',
                 endDateExpr: 'End',
                 timeZone: 'Asia/Calcutta',
-                editing: { legacyForm: true }
+
             });
 
             pointerMock(scheduler.getElement().find(CLASSES.dateTableCell).eq(22)).start().click().click();
