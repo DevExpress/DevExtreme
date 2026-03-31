@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import Scheduler, {
   Resource,
@@ -23,6 +23,10 @@ const snapToCellsModeItems: { value: SnapToCellsMode; text: string }[] = [
 
 const App = () => {
   const [snapToCellsMode, setSnapToCellsMode] = useState<SnapToCellsMode>('always');
+  const schedulerInstanceRef = useRef<any>(null);
+  const pendingScrollLeftRef = useRef<number | undefined>(undefined);
+
+  const getWorkSpaceScrollable = () => schedulerInstanceRef.current?.getWorkSpaceScrollable?.();
 
   return (
     <>
@@ -39,6 +43,19 @@ const App = () => {
         startDayHour={8}
         endDayHour={20}
         snapToCellsMode={snapToCellsMode}
+        onInitialized={(e) => {
+          schedulerInstanceRef.current = e.component;
+        }}
+        onContentReady={() => {
+          const pendingScrollLeft = pendingScrollLeftRef.current;
+
+          if (pendingScrollLeft === undefined) {
+            return;
+          }
+
+          getWorkSpaceScrollable()?.scrollTo?.({ x: pendingScrollLeft });
+          pendingScrollLeftRef.current = undefined;
+        }}
       >
         <Resource
           fieldExpr="ownerId"
@@ -65,6 +82,7 @@ const App = () => {
             displayExpr="text"
             value={snapToCellsMode}
             onValueChanged={(e: SelectBoxTypes.ValueChangedEvent) => {
+              pendingScrollLeftRef.current = getWorkSpaceScrollable()?.scrollLeft?.() ?? 0;
               setSnapToCellsMode(e.value);
             }}
           />

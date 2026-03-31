@@ -12,6 +12,8 @@
     :first-day-of-week="0"
     :snap-to-cells-mode="snapToCellsMode"
     current-view="timelineMonth"
+    @initialized="onSchedulerInitialized"
+    @content-ready="onSchedulerContentReady"
   >
     <DxResource
       :allow-multiple="true"
@@ -66,8 +68,26 @@ const snapToCellsModeItems: { value: SnapToCellsMode; text: string }[] = [
 ];
 
 const snapToCellsMode = ref<SnapToCellsMode>('always');
+const schedulerInstance = ref<any>(null);
+const pendingScrollLeft = ref<number | undefined>(undefined);
+
+const getWorkSpaceScrollable = () => schedulerInstance.value?.getWorkSpaceScrollable?.();
+
+function onSchedulerInitialized(e: { component: any }) {
+  schedulerInstance.value = e.component;
+}
+
+function onSchedulerContentReady() {
+  if (pendingScrollLeft.value === undefined) {
+    return;
+  }
+
+  getWorkSpaceScrollable()?.scrollTo?.({ x: pendingScrollLeft.value });
+  pendingScrollLeft.value = undefined;
+}
 
 function onSnapToCellsModeChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
+  pendingScrollLeft.value = getWorkSpaceScrollable()?.scrollLeft?.() ?? 0;
   snapToCellsMode.value = e.value as SnapToCellsMode;
 }
 </script>

@@ -1,4 +1,6 @@
 $(() => {
+  let pendingScrollLeft;
+
   const scheduler = $('#scheduler').dxScheduler({
     timeZone: 'America/Los_Angeles',
     dataSource: data,
@@ -26,6 +28,14 @@ $(() => {
       icon: 'tags',
     }],
     height: 580,
+    onContentReady() {
+      if (pendingScrollLeft === undefined) {
+        return;
+      }
+
+      this.getWorkSpaceScrollable()?.scrollTo?.({ x: pendingScrollLeft });
+      pendingScrollLeft = undefined;
+    },
   }).dxScheduler('instance');
 
   $('#snap-to-cells-mode').dxSelectBox({
@@ -38,6 +48,7 @@ $(() => {
     displayExpr: 'text',
     value: scheduler.option('snapToCellsMode'),
     onValueChanged(e) {
+      pendingScrollLeft = scheduler.getWorkSpaceScrollable()?.scrollLeft?.() ?? 0;
       scheduler.option('snapToCellsMode', e.value);
     },
   });
