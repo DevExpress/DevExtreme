@@ -27,7 +27,6 @@ const testInterceptorFn: HttpInterceptorFn = () => {
 };
 
 @Component({
-  standalone: true,
   selector: 'test-app',
   imports: [DxHttpModule],
   template: '---',
