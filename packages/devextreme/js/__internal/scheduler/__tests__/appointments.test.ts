@@ -114,7 +114,7 @@ describe('Appointments', () => {
       });
 
       it('should delete all occurrences on delete and clicking \'Delete series\'', async () => {
-        const { POM, keydown, scheduler } = await createScheduler({
+        const { POM, keydown } = await createScheduler({
           dataSource: [{
             text: 'Recurring Appointment',
             startDate: new Date(2015, 1, 9, 8),
@@ -125,9 +125,9 @@ describe('Appointments', () => {
           currentView: 'week',
           currentDate: new Date(2015, 1, 9),
         });
-        
+
         const appointment = POM.getAppointments()[0];
-        
+
         appointment.element.focus();
         keydown(appointment.element, 'Delete');
 

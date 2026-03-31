@@ -1655,7 +1655,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   private showRecurrenceChangeConfirm(isDeleted) {
-    console.log('ABOBAOBAOB showRecurrenceChangeConfirm');
     const title = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteTitle' : 'dxScheduler-confirmRecurrenceEditTitle');
     const message = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteMessage' : 'dxScheduler-confirmRecurrenceEditMessage');
     const seriesText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteSeries' : 'dxScheduler-confirmRecurrenceEditSeries');
