@@ -13,10 +13,6 @@ import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import Calendar from '@ts/ui/calendar/calendar';
-import DateRangeBox from '@ts/ui/date_range_box/m_date_range_box';
-import RangeSlider from '@ts/ui/m_range_slider';
-import TagBox from '@ts/ui/m_tag_box';
 import type MenuInternal from '@ts/ui/menu/menu';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
@@ -80,6 +76,7 @@ const FILTER_MODIFIED_CLASS = 'dx-filter-modified';
 const EDITORS_INPUT_SELECTOR = 'input:not([type=\'hidden\'])';
 
 const BETWEEN_OPERATION_DATA_TYPES = ['date', 'datetime', 'number'];
+const MULTISELECT_EDITOR_NAMES = ['dxTagBox', 'dxDateRangeBox', 'dxCalendar', 'dxRangeSlider'];
 
 function isOnClickApplyFilterMode(that) {
   return that.option('filterRow.applyFilter') === 'onClick';
@@ -130,10 +127,8 @@ const getColumnSelectedFilterOperation = function (that, column) {
 
 const hasMultiselectEditor = function ($editorContainer): boolean {
   const editor = getEditorInstance($editorContainer);
-  return editor instanceof TagBox
-    || editor instanceof DateRangeBox
-    || editor instanceof Calendar
-    || editor instanceof RangeSlider;
+  // @ts-expect-error
+  return !editor || MULTISELECT_EDITOR_NAMES.includes(editor.NAME);
 };
 
 const isValidFilterValue = function (filterValue, column, $editorContainer): boolean {
