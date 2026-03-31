@@ -14,7 +14,7 @@ const CLASS = {
   stickyLeft: 'dx-datagrid-sticky-column-left',
   stickyRight: 'dx-datagrid-sticky-column-right',
   aiHeaderButton: 'dx-command-ai-header-button',
-  firstHeader: 'dx-datagrid-first-cell',
+  firstCell: 'dx-datagrid-first-cell',
 };
 
 const getStickyClassNames = (position: StickyPosition | undefined): string[] => {
@@ -39,7 +39,7 @@ export default class HeaderCell {
 
   isHidden: Promise<boolean>;
 
-  isFirstHeader: Promise<boolean>;
+  isFirstCell: Promise<boolean>;
 
   isSticky(position?: StickyPosition | undefined): Promise<boolean> {
     return ClientFunction((element, stickyClassNames) => {
@@ -59,7 +59,7 @@ export default class HeaderCell {
     this.element = headerRow.find(`td[aria-colindex='${index + 1}']`);
     this.isFocused = this.element.focused;
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
-    this.isFirstHeader = this.element.hasClass(CLASS.firstHeader);
+    this.isFirstCell = this.element.hasClass(CLASS.firstCell);
   }
 
   getFilterIcon(): Selector {

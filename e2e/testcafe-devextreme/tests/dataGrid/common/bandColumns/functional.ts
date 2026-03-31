@@ -104,25 +104,25 @@ test('The first header class should update correctly when the first data column 
 
   await t
     .expect(dataGrid.isReady()).ok()
-    .expect(firstHeaderRow.getHeaderCell(0).isFirstHeader) // Band 1
+    .expect(firstHeaderRow.getHeaderCell(0).isFirstCell) // Band 1
     .ok()
-    .expect(firstHeaderRow.getHeaderCell(2).isFirstHeader) // field3
+    .expect(firstHeaderRow.getHeaderCell(2).isFirstCell) // field3
     .notOk()
-    .expect(secondHeaderRow.getHeaderCell(0).isFirstHeader) // field1
+    .expect(secondHeaderRow.getHeaderCell(0).isFirstCell) // field1
     .ok()
-    .expect(secondHeaderRow.getHeaderCell(1).isFirstHeader) // field2
+    .expect(secondHeaderRow.getHeaderCell(1).isFirstCell) // field2
     .notOk();
 
   await dataGrid.apiOption('width', 275);
 
   await t
-    .expect(firstHeaderRow.getHeaderCell(0).isFirstHeader) // Band 1
+    .expect(firstHeaderRow.getHeaderCell(0).isFirstCell) // Band 1
     .ok()
-    .expect(firstHeaderRow.getHeaderCell(2).isFirstHeader) // field3
+    .expect(firstHeaderRow.getHeaderCell(2).isFirstCell) // field3
     .notOk()
-    .expect(secondHeaderRow.getHeaderCell(0).isFirstHeader) // field1
+    .expect(secondHeaderRow.getHeaderCell(0).isFirstCell) // field1
     .notOk()
-    .expect(secondHeaderRow.getHeaderCell(1).isFirstHeader) // field2
+    .expect(secondHeaderRow.getHeaderCell(1).isFirstCell) // field2
     .ok();
 }).before(async () => {
   await createWidget('dxDataGrid', {
@@ -171,25 +171,25 @@ test('The first header class should update correctly when the first nested data 
 
   await t
     .expect(dataGrid.isReady()).ok()
-    .expect(firstHeaderRow.getHeaderCell(0).isFirstHeader) // field 1
+    .expect(firstHeaderRow.getHeaderCell(0).isFirstCell) // field 1
     .ok()
-    .expect(firstHeaderRow.getHeaderCell(1).isFirstHeader) // Band 1
+    .expect(firstHeaderRow.getHeaderCell(1).isFirstCell) // Band 1
     .notOk()
-    .expect(secondHeaderRow.getHeaderCell(0).isFirstHeader) // field2
+    .expect(secondHeaderRow.getHeaderCell(0).isFirstCell) // field2
     .notOk()
-    .expect(secondHeaderRow.getHeaderCell(1).isFirstHeader) // field3
+    .expect(secondHeaderRow.getHeaderCell(1).isFirstCell) // field3
     .notOk();
 
   await dataGrid.apiOption('width', 275);
 
   await t
-    .expect(firstHeaderRow.getHeaderCell(0).isFirstHeader) // field 1
+    .expect(firstHeaderRow.getHeaderCell(0).isFirstCell) // field 1
     .notOk()
-    .expect(firstHeaderRow.getHeaderCell(1).isFirstHeader) // Band 1
+    .expect(firstHeaderRow.getHeaderCell(1).isFirstCell) // Band 1
     .ok()
-    .expect(secondHeaderRow.getHeaderCell(0).isFirstHeader) // field2
+    .expect(secondHeaderRow.getHeaderCell(0).isFirstCell) // field2
     .ok()
-    .expect(secondHeaderRow.getHeaderCell(1).isFirstHeader) // field3
+    .expect(secondHeaderRow.getHeaderCell(1).isFirstCell) // field3
     .notOk();
 }).before(async () => {
   await createWidget('dxDataGrid', {

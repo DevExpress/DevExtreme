@@ -109,12 +109,12 @@ export async function checkSummaryCellBorders(
   expectedRows: RowBorderExpectation[],
 ): Promise<void> {
   // eslint-disable-next-line no-restricted-syntax
-  for (const { rowIndex, cells } of expectedRows) {
+  for (const { cells } of expectedRows) {
     const summaryRow = dataGrid.getFooterRow();
 
     // eslint-disable-next-line no-restricted-syntax
     for (const { columnIndex, name, expected: [leftWidth, rightWidth] } of cells) {
-      const element = summaryRow.child('td');
+      const element = summaryRow.child('td').nth(columnIndex);
 
       const borderLeft = await element.getStyleProperty('border-left-width');
       const borderRight = await element.getStyleProperty('border-right-width');
@@ -122,11 +122,11 @@ export async function checkSummaryCellBorders(
       await t
         .expect(parseInt(borderLeft, 10)).eql(
           leftWidth,
-          `Summary cells: "${name}" (row: ${rowIndex}, col: ${columnIndex}): border-left-width`,
+          `Summary cells: "${name}" (col: ${columnIndex}): border-left-width`,
         )
         .expect(parseInt(borderRight, 10)).eql(
           rightWidth,
-          `Summary cells: "${name}" (row: ${rowIndex}, col: ${columnIndex}): border-right-width`,
+          `Summary cells: "${name}" (col: ${columnIndex}): border-right-width`,
         );
     }
   }
