@@ -1,5 +1,6 @@
 const SELECTORS = {
   editorCell: 'dx-editor-cell',
+  editorContainer: 'dx-editor-container',
   widget: 'dx-widget',
 };
 
@@ -11,7 +12,7 @@ export class FilterCellModel {
   }
 
   public getEditor<T>(EditorModel: new (element: HTMLElement) => T): T {
-    const editorElement = this.root?.querySelector(`.${SELECTORS.widget}`) as HTMLElement;
+    const editorElement = this.root?.querySelector(`.${SELECTORS.editorContainer} .${SELECTORS.widget}`) as HTMLElement;
     return new EditorModel(editorElement);
   }
 }
