@@ -307,7 +307,11 @@ describe('Appointments', () => {
 
       it('should delete appointment on Delete', async () => {
         const { POM, keydown } = await createScheduler({
-          dataSource,
+          dataSource: [{
+            text: 'Recurring Appointment',
+            startDate: new Date(2015, 1, 9, 8),
+            endDate: new Date(2015, 1, 9, 9),
+          }],
           currentView: 'day',
           currentDate: new Date(2015, 1, 9),
         });
