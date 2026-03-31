@@ -77,6 +77,7 @@ type RequiredOptions = 'views'
   | 'adaptivityEnabled'
   | 'scrolling'
   | 'allDayPanelMode'
+  | 'snapToCellsMode'
   | 'toolbar';
 export type DateOption = 'currentDate' | 'min' | 'max';
 export type SafeSchedulerOptions = SchedulerInternalOptions

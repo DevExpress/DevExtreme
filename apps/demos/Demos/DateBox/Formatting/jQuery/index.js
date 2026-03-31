@@ -1,8 +1,8 @@
 $(() => {
-  const date = new Date(2018, 9, 16, 15, 8, 12);
+  const date = new Date(2025, 9, 16, 15, 8, 12);
 
   $('#default').dxDateBox({
-    placeholder: '12/31/2018, 2:52 PM',
+    placeholder: '12/31/2025, 2:52 PM',
     type: 'datetime',
     showClearButton: true,
     useMaskBehavior: true,
@@ -10,7 +10,7 @@ $(() => {
   });
 
   $('#constant').dxDateBox({
-    placeholder: '10/16/2018',
+    placeholder: '10/16/2025',
     showClearButton: true,
     useMaskBehavior: true,
     displayFormat: 'shortdate',
@@ -20,7 +20,7 @@ $(() => {
   });
 
   $('#pattern').dxDateBox({
-    placeholder: 'Tuesday, 16 of Oct, 2018 14:52',
+    placeholder: 'Thursday, 16 of Oct, 2025 14:52',
     showClearButton: true,
     useMaskBehavior: true,
     displayFormat: 'EEEE, d of MMM, yyyy HH:mm',
@@ -30,7 +30,7 @@ $(() => {
   });
 
   $('#escape').dxDateBox({
-    placeholder: 'Year: 2018',
+    placeholder: 'Year: 2025',
     showClearButton: true,
     useMaskBehavior: true,
     displayFormat: "'Year': yyyy",

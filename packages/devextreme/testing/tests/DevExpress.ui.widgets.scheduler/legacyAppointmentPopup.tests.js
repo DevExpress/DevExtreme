@@ -446,7 +446,7 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
 
         const deferred = scheduler.appointmentPopup.saveAppointmentData();
 
-        assert.notOk(scheduler.appointmentPopup.getInstance()._tryLockSaveChanges(), 'Save changes already locked');
+        assert.notOk(scheduler.appointmentPopup.getInstance().tryLockSaveChanges(), 'Save changes already locked');
 
         assert.ok(scheduler.appointmentPopup.hasLoadPanel(), 'has load panel');
 

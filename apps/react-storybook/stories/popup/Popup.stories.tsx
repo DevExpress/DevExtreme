@@ -95,3 +95,54 @@ export const EscapeFromEditors: Story = {
     name: 'Popup - Escape handling',
     render: EscapeFromEditorsExample,
 };
+
+const TabFocusLoopExample: Story['render'] = ({
+    tabFocusLoopEnabled,
+}) => {
+    const [visible, setVisible] = useState(false);
+
+    const show = useCallback(() => setVisible(true), []);
+    const hide = useCallback(() => setVisible(false), []);
+
+    return (
+        <div style={{ padding: 24 }}>
+            <p style={{ marginBottom: 16, color: '#555' }}>
+                Toggle <strong>tabFocusLoopEnabled</strong> in the Controls panel.
+                When enabled, pressing Tab cycles focus only within the popup.
+                When disabled, Tab can move focus outside the popup.
+            </p>
+            <Button text="Open Popup" type="default" onClick={show} />
+
+            <Popup
+                visible={visible}
+                onHiding={hide}
+                title="Tab Focus Loop Demo"
+                width={420}
+                height="auto"
+                shading={false}
+                showCloseButton
+                tabFocusLoopEnabled={tabFocusLoopEnabled}
+            >
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '8px 0' }}>
+                    <TextBox label="First Field" />
+                    <TextBox label="Second Field" />
+                    <TextBox label="Third Field" />
+                </div>
+            </Popup>
+        </div>
+    );
+};
+
+export const TabFocusLoop: Story = {
+    name: 'Popup - tabFocusLoopEnabled',
+    args: {
+        tabFocusLoopEnabled: true,
+    },
+    argTypes: {
+        tabFocusLoopEnabled: {
+            control: 'boolean',
+            description: 'Specifies whether focus loops within the popup when pressing Tab',
+        },
+    },
+    render: TabFocusLoopExample,
+};

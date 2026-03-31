@@ -200,10 +200,6 @@ export class RecurrenceForm {
     return {
       name: GROUP_NAMES.recurrenceStartDateGroup,
       itemType: 'group',
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2,
-      },
       cssClass: CLASSES.groupWithIcon,
       items: [
         {
@@ -240,10 +236,6 @@ export class RecurrenceForm {
       itemType: 'group',
       name: GROUP_NAMES.recurrenceRuleGroup,
       cssClass: `${CLASSES.recurrenceSettingsGroup} ${CLASSES.groupWithIcon}`,
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2,
-      },
       items: [
         {
           name: ICON_NAMES.recurrenceRuleIcon,
@@ -444,10 +436,6 @@ export class RecurrenceForm {
     return {
       name: GROUP_NAMES.recurrenceEndGroup,
       itemType: 'group',
-      colCount: 2,
-      colCountByScreen: {
-        xs: 2,
-      },
       cssClass: `${CLASSES.groupWithIcon} ${CLASSES.recurrenceEndGroup}`,
       items: [
         {
