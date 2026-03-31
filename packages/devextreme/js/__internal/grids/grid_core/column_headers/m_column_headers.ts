@@ -364,9 +364,9 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
       return $cellElement;
     }
 
-    const rowCount = this.getRowCount();
+    const isBandColumnsUsed = this._columnsController.isBandColumnsUsed();
 
-    if (rowCount > 1) {
+    if (isBandColumnsUsed) {
       this.toggleFirstCellClass(
         $cellElement,
         this._columnsController.isFirstColumn(column, options.rowIndex),

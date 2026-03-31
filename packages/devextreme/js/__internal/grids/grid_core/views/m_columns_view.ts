@@ -1516,6 +1516,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     $dragContainer.text(column.caption ?? '');
   }
 
+  // NOTE: We cannot use modern CSS selectors (e.g. nth-child(index of <selector>))
+  // to style the first cell because our current SCSS toolchain does not support them.
+  // Instead, we manually toggle a CSS class on the first cell.
   public updateFirstCellClasses(): void {
     const rows = this._getRows();
 
