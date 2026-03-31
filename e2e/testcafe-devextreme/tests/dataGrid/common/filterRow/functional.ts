@@ -305,3 +305,49 @@ test('Lookup filter should not change to (All) after searching twice in another 
     }
   },
 }));
+
+test('DataGrid – `between` filter dropdown should be closed when columns are resized (T1303927)', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const filterCell = dataGrid.getFilterCell(0);
+
+  // assert
+  await t.expect(dataGrid.isReady()).ok();
+
+  // act
+  await t.click(filterCell.element);
+
+  // assert
+  await t.expect(dataGrid.getFilterRangeOverlay().exists).ok('Filter range overlay is shown');
+
+  // act
+  await dataGrid.resizeHeader(1, 50);
+
+  // assert
+  await t.expect(dataGrid.getFilterRangeOverlay().exists).notOk('Filter range overlay is closed');
+
+  // act
+  await t.click(filterCell.element);
+
+  // assert
+  await t.expect(dataGrid.getFilterRangeOverlay().exists).ok('Filter range overlay is shown');
+
+  // act
+  await dataGrid.resizeHeader(2, 50);
+
+  // assert
+  await t.expect(dataGrid.getFilterRangeOverlay().exists).notOk('Filter range overlay is closed');
+}).before(async () => createWidget('dxDataGrid', {
+  allowColumnResizing: true,
+  filterRow: { visible: true },
+  showBorders: true,
+  columns: [{
+    dataField: 'field1',
+    dataType: 'number',
+    selectedFilterOperation: 'between',
+  }, {
+    dataField: 'field2',
+  }, {
+    dataField: 'field3',
+  }],
+}));

@@ -90,7 +90,7 @@
       "minimatch@<3.1.5": "3.1.5",
       "minimatch@>=9.0.0 < 9.0.7": "9.0.9",
       "minimatch@>=10.0.0 < 10.2.4": "10.2.4",
-      "serialize-javascript@<=7.0.2": "7.0.4",
+      "serialize-javascript@<=7.0.2": "7.0.5",
       "flatted@<3.4.0": "^3.4.0",
       "undici@<7.24.0": "^7.24.0",
       "socket.io-parser@>=4.0.0 <4.2.6": "^4.2.6"

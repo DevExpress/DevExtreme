@@ -62,7 +62,6 @@ export default class ClearButton extends TextEditorButton {
   }
 
   // TODO: get rid of it
-
   _legacyRender($editor: dxElementWrapper, isVisible: boolean): void {
     $editor.toggleClass(TEXTEDITOR_SHOW_CLEAR_BUTTON_CLASS, isVisible);
   }
