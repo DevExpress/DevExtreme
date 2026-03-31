@@ -11239,6 +11239,14 @@ declare module DevExpress.ui {
       > &
         DevExpress.ui.Editor.ValueChangedInfo;
     /**
+     * [descr:_ui_chat_MainButtonClickEvent]
+     */
+    export type MainButtonClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxChat,
+        DevExpress.events.InteractionEvent
+      >;
+    /**
      * [descr:_ui_chat_MessageDeletedEvent]
      */
     export type MessageDeletedEvent =
@@ -11442,6 +11450,10 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.inputFieldText]
      */
     inputFieldText?: DevExpress.ui.dxTextArea.Properties['value'];
+    /**
+     * [descr:dxChatOptions.mainButton]
+     */
+    mainButton?: DevExpress.ui.dxChat.MainButton;
     /**
      * [descr:dxChatOptions.messageTemplate]
      */
@@ -34133,6 +34145,27 @@ declare module DevExpress.ui.dxChat {
      * [descr:ImageMessage.alt]
      */
     alt?: string;
+  };
+  /**
+   * [descr:MainButton]
+   */
+  export type MainButton = {
+    /**
+     * [descr:MainButton.icon]
+     */
+    icon?: string;
+    /**
+     * [descr:MainButton.hint]
+     */
+    hint?: string;
+    /**
+     * [descr:MainButton.action]
+     */
+    action: 'default' | 'custom';
+    /**
+     * [descr:MainButton.onClick]
+     */
+    onClick: (e: MainButtonClickEvent) => void;
   };
   /**
    * [descr:Message]

@@ -13,6 +13,8 @@ export {
   MessageUpdatedEvent,
   AttachmentDownloadClickEvent,
   InputFieldTextChangedEvent,
+  MainButtonClickEvent,
+  MainButton,
   User,
   Alert,
   Attachment,

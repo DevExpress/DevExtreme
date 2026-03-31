@@ -174,6 +174,43 @@ export type AttachmentDownloadClickEvent = EventInfo<dxChat> & {
 export type InputFieldTextChangedEvent = NativeEventInfo<dxChat, InteractionEvent | Event> & ValueChangedInfo;
 
 /**
+ * @docid _ui_chat_MainButtonClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
+export type MainButtonClickEvent = NativeEventInfo<dxChat, InteractionEvent>;
+
+/**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
+ * @public
+ */
+export type MainButton = {
+    /**
+     * @docid
+     * @public
+     */
+    icon?: string;
+    /**
+     * @docid
+     * @public
+     */
+    hint?: string;
+    /**
+     * @docid
+     * @public
+     */
+    action: 'default' | 'custom';
+    /**
+     * @docid
+     * @type_function_param1 e:{ui/chat:MainButtonClickEvent}
+     * @public
+     */
+    onClick: ((e: MainButtonClickEvent) => void);
+};
+
+/**
  * @docid
  * @namespace DevExpress.ui.dxChat
  * @public
@@ -446,6 +483,11 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     inputFieldText?: TextAreaProperties['value'];
+    /**
+     * @docid
+     * @public
+     */
+    mainButton?: MainButton;
     /**
      * @docid
      * @default null
