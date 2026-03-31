@@ -2006,6 +2006,14 @@ export class ColumnsController extends modules.Controller {
 
     return visibleColumns.find((column: Column) => this.isFirstColumn(column, rowIndex));
   }
+
+  /**
+   * @extended: m_adaptivity
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public isAdaptiveHiddenColumn(column: Column): boolean {
+    return false;
+  }
 }
 
 export const columnsControllerModule: Module = {

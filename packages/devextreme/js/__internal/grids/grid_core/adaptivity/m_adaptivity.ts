@@ -321,17 +321,13 @@ export class AdaptiveColumnsController extends modules.ViewController {
     return isString(width) && width.endsWith('%');
   }
 
-  private _isColumnHidden(column) {
-    return this._hiddenColumns.filter((hiddenColumn) => hiddenColumn.index === column.index).length > 0;
-  }
-
   private _getAverageColumnsWidth(containerWidth, columns, columnsCanFit) {
     const that = this;
     let fixedColumnsWidth = 0;
     let columnsWithoutFixedWidthCount = 0;
 
     columns.forEach((column) => {
-      if (!that._isColumnHidden(column)) {
+      if (!that.isColumnHidden(column)) {
         const { width } = column;
         if (isDefined(width) && !isNaN(parseFloat(width))) {
           fixedColumnsWidth += that._isPercentWidth(width) ? that._calculatePercentWidth({
@@ -851,6 +847,11 @@ export class AdaptiveColumnsController extends modules.ViewController {
       this.setAria('label', messageLocalization.format(labelName), $adaptiveCommand);
     }
   }
+
+  public isColumnHidden(column: Column): boolean {
+    return this._hiddenColumns
+      .filter((hiddenColumn) => hiddenColumn.index === column.index).length > 0;
+  }
 }
 
 const keyboardNavigation = (
@@ -1297,6 +1298,13 @@ const editorFactory = (
 const columns = (
   Base: ModuleType<ColumnsController>,
 ) => class AdaptivityColumnsExtender extends Base {
+  private _adaptiveColumnsController!: AdaptiveColumnsController;
+
+  public init(): void {
+    super.init();
+    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+  }
+
   protected _isColumnVisible(column) {
     return super._isColumnVisible(column) && !column.adaptiveHidden;
   }
@@ -1304,6 +1312,11 @@ const columns = (
   public getVisibleDataColumnsByBandColumn(bandColumnIndex: number) {
     return super.getVisibleDataColumnsByBandColumn(bandColumnIndex)
       .filter((column) => column.visibleWidth !== HIDDEN_COLUMNS_WIDTH);
+  }
+
+  public isAdaptiveHiddenColumn(column: Column): boolean {
+    return super.isAdaptiveHiddenColumn(column)
+      || this._adaptiveColumnsController.isColumnHidden(column);
   }
 };
 
@@ -1313,24 +1326,32 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
     clearTimeout(this._updateScrollableTimeoutID);
   }
 
+  private isHiddenColumnsChanged(
+    oldHiddenColumns: Column[],
+    hiddenColumns: Column[],
+  ): boolean {
+    if (oldHiddenColumns.length !== hiddenColumns.length) {
+      return true;
+    }
+
+    const oldIndices = new Set(oldHiddenColumns.map((col) => col.index));
+
+    return hiddenColumns.some((col) => !oldIndices.has(col.index));
+  }
+
+  private updateColumnViewsFirstCellClasses(): void {
+    COLUMN_VIEWS.forEach((viewName) => {
+      const view = this.getView(viewName);
+
+      if (view?.isVisible()) {
+        view.updateFirstCellClasses();
+      }
+    });
+  }
+
   protected _needBestFit() {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return super._needBestFit() || !!this._adaptiveColumnsController.getHidingColumnsQueue().length;
-  }
-
-  private updateColumnViewsFirstCellClasses(
-    oldHiddenColumns: Column[],
-    hiddenColumns: Column[],
-  ): void {
-    if (oldHiddenColumns.length !== hiddenColumns.length) {
-      COLUMN_VIEWS.forEach((viewName) => {
-        const view = this.getView(viewName);
-
-        if (view?.isVisible()) {
-          view.updateFirstCellClasses();
-        }
-      });
-    }
   }
 
   protected _correctColumnWidths(resultWidths: (number | string | undefined)[], visibleColumns: Column[]): boolean {
@@ -1340,15 +1361,19 @@ const resizing = (Base: ModuleType<ResizingController>) => class AdaptivityResiz
 
     adaptiveController.hideRedundantColumns(resultWidths, visibleColumns, hidingColumnsQueue);
     const hiddenColumns = adaptiveController.getHiddenColumns();
-    if (adaptiveController.hasAdaptiveDetailRowExpanded()) {
-      if (oldHiddenColumns.length !== hiddenColumns.length) {
-        adaptiveController.updateForm(hiddenColumns);
-      }
+    const isHiddenColumnsChanged = this.isHiddenColumnsChanged(oldHiddenColumns, hiddenColumns);
+
+    if (isHiddenColumnsChanged && adaptiveController.hasAdaptiveDetailRowExpanded()) {
+      adaptiveController.updateForm(hiddenColumns);
     }
 
-    this.updateColumnViewsFirstCellClasses(oldHiddenColumns, hiddenColumns);
+    if (isHiddenColumnsChanged) {
+      this.updateColumnViewsFirstCellClasses();
+    }
 
-    !hiddenColumns.length && adaptiveController.collapseAdaptiveDetailRow();
+    if (!hiddenColumns.length) {
+      adaptiveController.collapseAdaptiveDetailRow();
+    }
 
     return super._correctColumnWidths.apply(this, arguments as any);
   }
