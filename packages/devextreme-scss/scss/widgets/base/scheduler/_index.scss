@@ -99,8 +99,6 @@ $scheduler-time-indicator-shadow-color: rgba(255, 255, 255, 0.1);
 $scheduler-time-indicator-shadow: 0 1px 0 0 $scheduler-time-indicator-shadow-color;
 $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1px 0 0;
 
-$scheduler-appointment-form-label-padding: 20px;
-
 @use "./appointment" with (
   $scheduler-transparent-top-border: $scheduler-transparent-top-border,
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,
