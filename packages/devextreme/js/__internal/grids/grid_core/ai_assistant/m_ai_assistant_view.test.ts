@@ -33,21 +33,47 @@ const createComponentMock = jest.fn((
   options: any,
 ): any => new Widget(el, options));
 
-const createAIAssistantView = (): {
+const createAIAssistantView = ({
+  initialVisible = true,
+  render = true,
+}: {
+  initialVisible?: boolean;
+  render?: boolean;
+} = {}): {
   $container: dxElementWrapper;
   aiAssistantView: AIAssistantView;
+  optionMock: jest.Mock<(name: string) => boolean | undefined>;
+  setVisible: (value: boolean) => void;
 } => {
   const $container = $('<div>').appendTo(document.body);
+  let isVisible = initialVisible;
+  const optionMock = jest.fn((name: string): boolean | undefined => {
+    if (name === 'aiAssistant.visible') {
+      return isVisible;
+    }
+
+    return undefined;
+  });
   const mockComponent = {
     element: (): any => $container.get(0),
     _createComponent: createComponentMock,
     _controllers: {},
+    option: optionMock,
   };
 
   const aiAssistantView = new AIAssistantView(mockComponent);
-  aiAssistantView.render($container);
+  if (render) {
+    aiAssistantView.render($container);
+  }
 
-  return { $container, aiAssistantView };
+  return {
+    $container,
+    aiAssistantView,
+    optionMock,
+    setVisible: (value: boolean) => {
+      isVisible = value;
+    },
+  };
 };
 
 const beforeTest = (): void => {
@@ -65,6 +91,20 @@ const afterTest = (): void => {
 describe('AIAssistantView', () => {
   beforeEach(beforeTest);
   afterEach(afterTest);
+
+  describe('isVisible', () => {
+    it('should return aiAssistant.visible option value', () => {
+      const { aiAssistantView, optionMock, setVisible } = createAIAssistantView({ render: false });
+
+      expect(aiAssistantView.isVisible()).toBe(true);
+
+      setVisible(false);
+
+      expect(aiAssistantView.isVisible()).toBe(false);
+      expect(optionMock).toHaveBeenNthCalledWith(1, 'aiAssistant.visible');
+      expect(optionMock).toHaveBeenNthCalledWith(2, 'aiAssistant.visible');
+    });
+  });
 
   describe('initialization', () => {
     it('should create AIChat instance on first render', () => {
@@ -90,6 +130,23 @@ describe('AIAssistantView', () => {
       aiAssistantView.render($container);
 
       expect(AIChat).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not create AIChat instance when view is hidden', () => {
+      const { aiAssistantView } = createAIAssistantView({ initialVisible: false });
+
+      expect(AIChat).not.toHaveBeenCalled();
+      expect(aiAssistantView.element().hasClass('dx-hidden')).toBe(true);
+    });
+
+    it('should create AIChat instance when view becomes visible', () => {
+      const { $container, aiAssistantView, setVisible } = createAIAssistantView({ initialVisible: false });
+
+      setVisible(true);
+      aiAssistantView.render($container);
+
+      expect(AIChat).toHaveBeenCalledTimes(1);
+      expect(aiAssistantView.element().hasClass('dx-hidden')).toBe(false);
     });
   });
 
@@ -121,13 +178,7 @@ describe('AIAssistantView', () => {
 
   describe('show when not initialized', () => {
     it('should return resolved false promise when aiChatInstance is not created', () => {
-      const mockComponent = {
-        element: (): any => $('<div>').get(0),
-        _createComponent: createComponentMock,
-        _controllers: {},
-      };
-
-      const aiAssistantView = new AIAssistantView(mockComponent);
+      const { aiAssistantView } = createAIAssistantView({ render: false });
 
       return expect(aiAssistantView.show()).resolves.toBe(false);
     });
@@ -135,13 +186,7 @@ describe('AIAssistantView', () => {
 
   describe('hide when not initialized', () => {
     it('should return resolved false promise when aiChatInstance is not created', () => {
-      const mockComponent = {
-        element: (): any => $('<div>').get(0),
-        _createComponent: createComponentMock,
-        _controllers: {},
-      };
-
-      const aiAssistantView = new AIAssistantView(mockComponent);
+      const { aiAssistantView } = createAIAssistantView({ render: false });
 
       return expect(aiAssistantView.hide()).resolves.toBe(false);
     });

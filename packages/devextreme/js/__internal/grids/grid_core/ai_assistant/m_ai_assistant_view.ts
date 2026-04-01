@@ -20,6 +20,10 @@ export class AIAssistantView extends View {
     }
   }
 
+  public isVisible(): boolean {
+    return this.option('aiAssistant.visible');
+  }
+
   public show(): Promise<boolean> {
     return this.aiChatInstance?.show() ?? Promise.resolve(false);
   }
