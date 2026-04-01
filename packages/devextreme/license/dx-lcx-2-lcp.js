@@ -1,5 +1,4 @@
 
-import { readDevExtremeVersion, buildVersionString } from './dx-get-lcx';
 const { MESSAGES } = require('./messages');
 const LCX_SIGNATURE = 'LCXv1';
 const LCP_SIGNATURE = 'LCPv1';
@@ -132,6 +131,25 @@ const TokenKind = Object.freeze({
 const GENERAL_ERROR = { kind: TokenKind.corrupted, error: 'general' };
 const DESERIALIZATION_ERROR = { kind: TokenKind.corrupted, error: 'deserialization' };
 const PRODUCT_KIND_ERROR = { kind: TokenKind.corrupted, error: 'product-kind' };
+
+function readDevExtremeVersion() {
+    try {
+        const pkgPath = require('path').join(__dirname, '..', 'package.json');
+        const pkg = JSON.parse(require('fs').readFileSync(pkgPath, 'utf8'));
+        const parts = String(pkg.version || '').split('.');
+        const major = parseInt(parts[0], 10);
+        const minor = parseInt(parts[1], 10);
+        if(!isNaN(major) && !isNaN(minor)) {
+            return { major, minor, code: major * 10 + minor };
+        }
+    } catch{}
+    return null;
+}
+
+function buildVersionString(devExtremeVersion){
+    const { major, minor, code: currentCode } = devExtremeVersion;
+    return `${major}.${minor}`;
+}
 
 function productsFromString(encodedString) {
     if(!encodedString) {
