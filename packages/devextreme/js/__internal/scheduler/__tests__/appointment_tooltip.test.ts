@@ -93,7 +93,7 @@ describe('Appointment tooltip behavior', () => {
       ];
 
       const { POM, scheduler } = await createScheduler({
-        dataSource: data,
+        dataSource: [...data],
         views: [{ type: 'month', maxAppointmentsPerCell: 1 }],
         currentView: 'month',
         currentDate: new Date(2017, 4, 22),
@@ -208,7 +208,7 @@ describe('Appointment tooltip behavior', () => {
         expect.objectContaining(data[1]),
       ]);
 
-      expect(Boolean(items[1].recurrenceException)).toBe(true);
+      expect(items[1].recurrenceException).toContain('20170522');
     });
 
     it('should delete all occurrences on delete and clicking \'Delete series\'', async () => {
