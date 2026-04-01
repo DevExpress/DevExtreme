@@ -211,13 +211,13 @@ QUnit.module('Grid view', {
     QUnit.test('Check search panel aria attribute', function(assert) {
         // arrange
         const testElement = $('#container');
-        const gridView = this.createGridView(this.defaultOptions);
-
-        gridView.render(testElement, $.extend(this.options, {
+        const gridView = this.createGridView(this.defaultOptions, {
             searchPanel: {
                 visible: true
             }
-        }));
+        });
+
+        gridView.render(testElement);
 
         // assert
         assert.equal(testElement.find('.dx-datagrid-search-panel :not(.dx-texteditor-input)').attr('aria-label'), undefined, 'aria-label attribute not presents for non \'input\' elements');
@@ -818,6 +818,8 @@ QUnit.module('Grid view', {
         const headersContainer = gridView.getView('columnHeadersView').element();
         const headersTable = gridView.getView('columnHeadersView')._tableElement;
         const scrollerWidth = gridView.getView('rowsView').getScrollbarWidth();
+
+        debugger;
 
         if(device.ios || device.mac || device.android || (device.deviceType !== 'desktop')) {
             assert.strictEqual(scrollerWidth, 0);

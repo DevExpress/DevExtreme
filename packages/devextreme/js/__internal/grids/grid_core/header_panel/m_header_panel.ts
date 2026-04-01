@@ -8,7 +8,7 @@ import Toolbar from '@js/ui/toolbar';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import type { DefaultToolbarItem, ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
-import { isDefaultToolbarItem, normalizeToolbarItems } from '@ts/grids/new/grid_core/toolbar/utils';
+import { normalizeToolbarItems } from '@ts/grids/new/grid_core/toolbar/utils';
 
 import type { ModuleType } from '../m_types';
 import { ColumnsView } from '../views/m_columns_view';
@@ -44,7 +44,7 @@ export class HeaderPanel extends ColumnsView {
   public addToolbarItem(name: string, item: ToolbarItem): void {
     this._registeredToolbarItems[name] = item;
 
-    if (this._toolbar) {
+    if (this._$element) {
       this._invalidate();
     }
   }
@@ -54,7 +54,7 @@ export class HeaderPanel extends ColumnsView {
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this._registeredToolbarItems[name];
 
-      if (this._toolbar) {
+      if (this._$element) {
         this._invalidate();
       }
     }
@@ -92,14 +92,10 @@ export class HeaderPanel extends ColumnsView {
         visible: userToolbarOptions?.visible,
         disabled: userToolbarOptions?.disabled,
         onItemRendered(e) {
-          const { itemData } = e;
+          const itemRenderedCallback = e.itemData?.onItemRendered;
 
-          if (itemData && isDefaultToolbarItem(itemData)) {
-            const itemRenderedCallback = itemData.onItemRendered;
-
-            if (itemRenderedCallback) {
-              itemRenderedCallback(e);
-            }
+          if (itemRenderedCallback) {
+            itemRenderedCallback(e);
           }
         },
       },
