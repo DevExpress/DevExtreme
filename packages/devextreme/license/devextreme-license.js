@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { getDevExpressLCXKey } = require('./dx-get-lcx');
-const { convertLCXtoLCP, getLCPInfo } = require('./dx-lcx-2-lcp');
+const { tryConvertLCXtoLCP, getLCPInfo } = require('./dx-lcx-2-lcp');
 const { TEMPLATES } = require('./messages');
 
 const EXPORT_NAME = 'licenseKey';
@@ -160,7 +160,7 @@ function main() {
     let licenseId = null;
 
     if(lcx) {
-        lcp = convertLCXtoLCP(lcx);
+        lcp = tryConvertLCXtoLCP(lcx);
         const { warning, licenseId: id } = getLCPInfo(lcp);
         licenseId = id;
         if(warning) {

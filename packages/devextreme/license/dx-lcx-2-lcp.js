@@ -241,7 +241,7 @@ function getLCPInfo(lcpString) {
         if(devExtremeVersion) {
             currentVersion = buildVersionString(devExtremeVersion);
             const { maxVersionAllowed } = token.payload;
-            if(maxVersionAllowed < currentCode) {
+            if(maxVersionAllowed < devExtremeVersion.code) {
                 warning = {
                     type:'incompatibleVersion', 
                     keyVersion: formatVersionCode(maxVersionAllowed), 
