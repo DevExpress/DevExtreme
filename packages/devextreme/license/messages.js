@@ -41,7 +41,7 @@ const TEMPLATES = Object.freeze({
         }
     },
     warningCodeByType: (type) => {
-        switch(code) {
+        switch(type) {
             case 'general':
                 return 1001;
             case 'incompatibleVersion':
