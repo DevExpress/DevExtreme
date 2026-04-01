@@ -6,6 +6,6 @@ export const DEFAULT_POPUP_OPTIONS = {
 
 export const CLASSES = {
   aiChat: 'dx-ai-chat',
-  aiDialog: 'dx-ai-dialog',
+  aiDialog: 'dx-aidialog',
   aiChatContent: 'dx-ai-chat__content',
 };

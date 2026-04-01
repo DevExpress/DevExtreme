@@ -131,7 +131,6 @@ class DataGrid extends GridCoreWidget<Properties> {
     gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(that);
 
     // @ts-expect-error
-
     gridCore.processModules(that, gridCore as any);
 
     gridCore.callModuleItemsMethod(that, 'init');

@@ -5,7 +5,7 @@ import { View } from '../m_modules';
 export class AIAssistantView extends View {
   private aiChatInstance!: AIChat;
 
-  private getAIPromptEditorConfig(): AIChatOptions {
+  private getAIChatConfig(): AIChatOptions {
     return {
       container: this.element(),
       createComponent: this._createComponent.bind(this),
@@ -13,7 +13,7 @@ export class AIAssistantView extends View {
   }
 
   protected _renderCore(): void {
-    const config = this.getAIPromptEditorConfig();
+    const config = this.getAIChatConfig();
 
     if (!this.aiChatInstance) {
       this.aiChatInstance = new AIChat(config);
