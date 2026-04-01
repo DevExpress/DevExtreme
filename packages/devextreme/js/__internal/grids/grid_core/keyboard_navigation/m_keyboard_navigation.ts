@@ -1227,8 +1227,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
   private _ctrlFKeyHandler(eventArgs) {
     if (this.option('searchPanel.visible')) {
-      // @ts-expect-error
-      const searchTextEditor = this._headerPanel.getSearchTextEditor();
+      const searchTextEditor = this.getController('searchPanel').getSearchTextEditor();
       if (searchTextEditor) {
         searchTextEditor.focus();
         eventArgs.originalEvent.preventDefault();

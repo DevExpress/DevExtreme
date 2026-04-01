@@ -7,7 +7,8 @@ import type { Properties as ToolbarProperties } from '@js/ui/toolbar';
 import Toolbar from '@js/ui/toolbar';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
-import { normalizeToolbarItems } from '@ts/grids/new/grid_core/toolbar/utils';
+import type { DefaultToolbarItem, ToolbarItem } from '@ts/grids/new/grid_core/toolbar/types';
+import { isDefaultToolbarItem, normalizeToolbarItems } from '@ts/grids/new/grid_core/toolbar/utils';
 
 import type { ModuleType } from '../m_types';
 import { ColumnsView } from '../views/m_columns_view';
@@ -25,22 +26,50 @@ export class HeaderPanel extends ColumnsView {
 
   private _toolbarOptions?: ToolbarProperties;
 
+  private _registeredToolbarItems: Record<string, ToolbarItem> = {};
+
   protected _editingController!: EditingController;
 
   protected _headerFilterController!: HeaderFilterController;
 
-  public init() {
+  public init(): void {
     super.init();
+
     this._editingController = this.getController('editing');
     this._headerFilterController = this.getController('headerFilter');
+
     this.createAction('onToolbarPreparing', { excludeValidators: ['disabled', 'readOnly'] });
   }
 
+  public addToolbarItem(name: string, item: ToolbarItem): void {
+    this._registeredToolbarItems[name] = item;
+
+    if (this._toolbar) {
+      this._invalidate();
+    }
+  }
+
+  public removeToolbarItem(name: string): void {
+    if (this._registeredToolbarItems[name]) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this._registeredToolbarItems[name];
+
+      if (this._toolbar) {
+        this._invalidate();
+      }
+    }
+  }
+
   /**
-   * @extended: column_chooser, editing, filter_row, search
+   * @extended: column_chooser, editing, filter_row
    */
-  protected _getToolbarItems(): any[] {
-    return [];
+  protected _getToolbarItems(): ToolbarItem[] {
+    return Object.values(this._registeredToolbarItems);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  private _sortToolbarItems(items: ToolbarItem[]): ToolbarItem[] {
+    return [...items].sort((a, b) => (a.sortIndex ?? 0) - (b.sortIndex ?? 0));
   }
 
   private _getButtonContainer() {
@@ -53,19 +82,24 @@ export class HeaderPanel extends ColumnsView {
     return this.addWidgetPrefix(TOOLBAR_BUTTON_CLASS) + secondClass;
   }
 
-  private _getToolbarOptions() {
-    const userToolbarOptions: any = this.option('toolbar');
+  private _getToolbarOptions(): ToolbarProperties<DefaultToolbarItem | ToolbarItem> {
+    const { toolbar: userToolbarOptions } = this.option();
+    const sortedToolbarItems: ToolbarItem[] = this._sortToolbarItems(this._getToolbarItems());
 
-    const options = {
+    const options: { toolbarOptions: ToolbarProperties<DefaultToolbarItem | ToolbarItem> } = {
       toolbarOptions: {
-        items: this._getToolbarItems(),
+        items: sortedToolbarItems,
         visible: userToolbarOptions?.visible,
         disabled: userToolbarOptions?.disabled,
         onItemRendered(e) {
-          const itemRenderedCallback = e.itemData.onItemRendered;
+          const { itemData } = e;
 
-          if (itemRenderedCallback) {
-            itemRenderedCallback(e);
+          if (itemData && isDefaultToolbarItem(itemData)) {
+            const itemRenderedCallback = itemData.onItemRendered;
+
+            if (itemRenderedCallback) {
+              itemRenderedCallback(e);
+            }
           }
         },
       },
@@ -73,7 +107,7 @@ export class HeaderPanel extends ColumnsView {
 
     const userItems = userToolbarOptions?.items;
     options.toolbarOptions.items = normalizeToolbarItems(
-      options.toolbarOptions.items,
+      sortedToolbarItems as DefaultToolbarItem[],
       userItems,
       DEFAULT_TOOLBAR_ITEM_NAMES,
     );
@@ -179,7 +213,7 @@ export class HeaderPanel extends ColumnsView {
         } else if (parts.length === 3) {
           // `toolbar.items[i]` case
           const normalizedItem = normalizeToolbarItems(
-            this._getToolbarItems(),
+            this._getToolbarItems() as DefaultToolbarItem[],
             [args.value],
             DEFAULT_TOOLBAR_ITEM_NAMES,
           )[0];
