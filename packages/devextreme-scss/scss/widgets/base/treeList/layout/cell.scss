@@ -85,19 +85,18 @@ $treelist-focused-border-color: null !default;
   border-left: none;
 }
 
-// (0,7,1)
-.dx-treelist .dx-treelist-sticky-columns .dx-treelist-content .dx-treelist-table .dx-row.dx-column-lines > td.dx-treelist-first-header {
+// (0,6,1)
+.dx-treelist:not(.dx-rtl) > .dx-gridbase-container .dx-treelist-table .dx-row > td.dx-treelist-first-cell {
   border-left: none;
 }
 
-// RTL
-
-// (0,4,1)
-.dx-rtl.dx-treelist .dx-column-lines > td:first-child {
-  border-right: none;
-  border-left: $treelist-border;
+// (0,7,1)
+.dx-treelist:not(.dx-rtl) > .dx-gridbase-container .dx-treelist-table .dx-row > td.dx-treelist-first-cell.dx-treelist-sticky-column-border-left {
+  border-left: 2px solid;
   border-left-color: $treelist-border-color;
 }
+
+// RTL
 
 // (0,4,1)
 .dx-rtl.dx-treelist .dx-column-lines > td:last-child {
@@ -109,6 +108,13 @@ $treelist-focused-border-color: null !default;
   border-left: none;
   border-right: $treelist-border;
   border-right-color: $treelist-border-color;
+}
+
+// (0,5,1)
+.dx-rtl.dx-treelist .dx-column-lines > td:first-child:not(.dx-datagrid-hidden-column) {
+  border-right: none;
+  border-left: $treelist-border;
+  border-left-color: $treelist-border-color;
 }
 
 // (0,5,1)
@@ -126,6 +132,7 @@ $treelist-focused-border-color: null !default;
 // (0,5,1)
 .dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-column-lines > td:first-child {
   border-right: none;
+  border-left: none;
 }
 
 // (0,5,1)
@@ -153,24 +160,24 @@ $treelist-focused-border-color: null !default;
   border-left: none;
 }
 
+// (0,6,1)
+.dx-rtl > .dx-gridbase-container .dx-treelist-content .dx-treelist-table .dx-row > td.dx-treelist-first-cell {
+  border-right: none;
+}
+
 // (0,7,0)
 .dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-treelist-content .dx-treelist-table .dx-row .dx-treelist-column-no-border {
   border-right: none;
 }
 
-// (0,8,0)
-.dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-treelist-content .dx-treelist-table .dx-row .dx-treelist-column-no-border.dx-treelist-sticky-column-border-left {
+// (0,7,1)
+.dx-rtl > .dx-gridbase-container .dx-treelist-content .dx-treelist-table .dx-row > td.dx-treelist-first-cell.dx-treelist-sticky-column-border-left {
   border-left: 2px solid;
   border-left-color: $treelist-border-color;
 }
 
-// (0,8,1)
-.dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-treelist-content .dx-treelist-table .dx-row.dx-column-lines > td.dx-treelist-first-header {
-  border-right: none;
-}
-
-// (0,9,1)
-.dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-treelist-content .dx-treelist-table .dx-row.dx-column-lines > td.dx-treelist-first-header.dx-treelist-sticky-column-border-left {
+// (0,8,0)
+.dx-rtl.dx-treelist .dx-treelist-sticky-columns .dx-treelist-content .dx-treelist-table .dx-row .dx-treelist-column-no-border.dx-treelist-sticky-column-border-left {
   border-left: 2px solid;
   border-left-color: $treelist-border-color;
 }
