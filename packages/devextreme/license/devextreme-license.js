@@ -160,31 +160,23 @@ function main() {
     let licenseId = null;
 
     if(lcx) {
-        try {
-            lcp = convertLCXtoLCP(lcx);
-            const { warning, licenseId: id } = getLCPInfo(lcp);
-            licenseId = id;
-            if(warning) {
-                if(licenseId) {
-                    process.stderr.write(`${CLI_PREFIX} ${TEMPLATES.licenseId(licenseId)}\n\n`);
-                }
-                process.stderr.write(`
-                    ${CLI_PREFIX} ${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense(currentVersion)}\n\n
-                    ${TEMPLATES.keyWasFound(source.type, source.path)}\n
-                `);
-                if(warning.type !== 'trial') {
-                    process.stderr.write(`
-                        ${TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.requiredVersion)}\n\n
-                        ${CLI_PREFIX} ${TEMPLATES.warningPrefix(TEMPLATES.warningCodeByType(warning.type))} ${TEMPLATES.installationInstructions}
-                    `);  
-                }  
+        lcp = convertLCXtoLCP(lcx);
+        const { warning, licenseId: id } = getLCPInfo(lcp);
+        licenseId = id;
+        if(warning) {
+            if(licenseId) {
+                process.stderr.write(`${CLI_PREFIX} ${TEMPLATES.licenseId(licenseId)}\n\n`);
             }
-        } catch{
             process.stderr.write(`
                 ${CLI_PREFIX} ${TEMPLATES.warningPrefix(1000)} ${TEMPLATES.purchaseLicense(currentVersion)}\n\n
-                ${TEMPLATES.keyNotFound}\n\n
-                ${CLI_PREFIX} ${TEMPLATES.warningPrefix(1001)} ${TEMPLATES.installationInstructions}
+                ${TEMPLATES.keyWasFound(source.type, source.path)}\n
             `);
+            if(warning.type !== 'trial') {
+                process.stderr.write(`
+                    ${TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.requiredVersion)}\n\n
+                    ${CLI_PREFIX} ${TEMPLATES.warningPrefix(TEMPLATES.warningCodeByType(warning.type))} ${TEMPLATES.installationInstructions}
+                `);  
+            }  
         }
     } else {
         process.stderr.write(`
