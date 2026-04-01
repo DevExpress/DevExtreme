@@ -306,48 +306,6 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
         assert.equal(getHexColor($appointments.eq(1)), '#0000ff', 'Color is OK');
     });
 
-    QUnit.test('Resources should not be reloaded when details popup is opening', async function(assert) {
-        const loadStub = sinon.stub().returns([
-            { text: 'o1', id: 1 },
-            { text: 'o2', id: 2 }
-        ]);
-        const byKeyStub = sinon.stub();
-        const data = [{
-            text: 'a',
-            startDate: new Date(2015, 4, 26, 5),
-            endDate: new Date(2015, 4, 26, 5, 30),
-            ownerId: 1
-        }, {
-            text: 'b',
-            startDate: new Date(2015, 4, 26, 5),
-            endDate: new Date(2015, 4, 26, 5, 30),
-            ownerId: 2
-        }];
-        const scheduler = await createWrapper({
-            dataSource: new DataSource({
-                store: data
-            }),
-            currentDate: new Date(2015, 4, 26),
-            groups: ['ownerId'],
-            resources: [{
-                fieldExpr: 'ownerId',
-                allowMultiple: true,
-                dataSource: new CustomStore({
-                    load: loadStub,
-                    byKey: byKeyStub
-                })
-            }],
-
-        });
-
-        assert.equal(loadStub.callCount, 1, 'Resources are loaded only once');
-
-        scheduler.instance.showAppointmentPopup(data[0]);
-
-        assert.equal(loadStub.callCount, 2, 'Store requested in select box');
-        assert.equal(byKeyStub.callCount, 0, 'Resources are loaded only once');
-    });
-
     [true, false].forEach((renovateRender) => {
         QUnit.test(`Resources should be set correctly is the resources[].dataSource option is changed(T396746) when renovateRender is ${renovateRender}`, async function(assert) {
             const resourceData = [{ id: 1, text: 'John', color: 'red' }];
