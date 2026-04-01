@@ -38,6 +38,7 @@ import type { ColumnsController } from '../columns_controller/m_columns_controll
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import { CLASSES } from './const';
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
 const SCROLLABLE_SIMULATED_CLASS = 'scrollable-simulated';
@@ -54,7 +55,6 @@ const DETAIL_ROW_CLASS = 'dx-master-detail-row';
 const FILTER_ROW_CLASS = 'filter-row';
 const ERROR_ROW_CLASS = 'dx-error-row';
 const CELL_UPDATED_ANIMATION_CLASS = 'cell-updated-animation';
-const GROUP_ROW_CONTAINER = 'group-row-container';
 
 const HIDDEN_COLUMNS_WIDTH = '0.0001px';
 
@@ -720,6 +720,19 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     appendTemplate.render({ content: $row, container: $table });
   }
 
+  private removeFirstCellClasses(): void {
+    const firstCellClass = this.addWidgetPrefix(CLASSES.firstCell);
+
+    this._tableElement?.find(`.${firstCellClass}`).removeClass(firstCellClass);
+  }
+
+  protected toggleFirstCellClass(
+    $cell: dxElementWrapper | undefined,
+    isFirstValue: boolean,
+  ): void {
+    $cell?.toggleClass(this.addWidgetPrefix(CLASSES.firstCell), isFirstValue);
+  }
+
   /**
    * @extended: column_fixing, filter_row, row_dragging, virtual_columns
    */
@@ -1340,7 +1353,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    * @extended: adaptivity
    */
   public _getCellElement(rowIndex, columnIdentifier): dxElementWrapper | undefined {
-    const $cells = this.getCellElements(rowIndex);
+    const $cells = this.getCellElements(rowIndex) ?? $();
     const columnVisibleIndex = this._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
 
     if (!$cells?.length || columnVisibleIndex < 0) {
@@ -1393,9 +1406,13 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   /**
-   * @extended: editing_form_based
+   * @extended: editing_form_based, column_headers
    */
-  protected _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
+  protected _getVisibleColumnIndex(
+    $cells: dxElementWrapper,
+    rowIndex: number,
+    columnIdentifier: string | number,
+  ): number {
     if (isString(columnIdentifier)) {
       const columnIndex = this._columnsController.columnOption(columnIdentifier, 'index');
       return this._columnsController.getVisibleIndex(columnIndex);
@@ -1493,5 +1510,25 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   public isDisposed() {
     return this.component?._disposed;
+  }
+
+  // NOTE: We cannot use modern CSS selectors (e.g. nth-child(index of <selector>))
+  // to style the first cell because our current SCSS toolchain does not support them.
+  // Instead, we manually toggle a CSS class on the first cell.
+  public updateFirstCellClasses(): void {
+    const rows = this._getRows();
+
+    this.removeFirstCellClasses();
+
+    rows.forEach((row, index) => {
+      const rowIndex = row.rowType === 'header' ? index : null;
+      const firstColumn = this._columnsController.getFirstColumn(rowIndex);
+
+      if (firstColumn) {
+        const $cell = this._getCellElement(index, `index:${firstColumn.index}`);
+
+        this.toggleFirstCellClass($cell, true);
+      }
+    });
   }
 }
