@@ -354,6 +354,9 @@ export type EmptyViewTemplateData = {
     };
 };
 
+/** @public */
+export type MainActionButtonBehavior = 'default' | 'custom';
+
 /**
  * @docid
  * @namespace DevExpress.ui.dxChat
@@ -370,7 +373,7 @@ export type MainActionButtonProperties = {
      * @public
      * @default 'default'
      */
-    behavior?: 'default' | 'custom';
+    behavior?: MainActionButtonBehavior;
     /**
      * @docid
      * @type_function_param1 e:{ui/chat:MainActionButtonClickEvent}
