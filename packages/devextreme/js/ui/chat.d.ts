@@ -52,6 +52,14 @@ export type InitializedEvent = InitializedEventInfo<dxChat>;
 export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
 
 /**
+ * @docid _ui_chat_MainActionButtonClickEvent
+ * @public
+ * @type object
+ * @inherits NativeEventInfo
+ */
+export type MainActionButtonClickEvent = NativeEventInfo<dxChat, InteractionEvent>;
+
+/**
  * @docid _ui_chat_MessageEnteredEvent
  * @public
  * @type object
@@ -347,6 +355,31 @@ export type EmptyViewTemplateData = {
 };
 
 /**
+ * @docid
+ * @namespace DevExpress.ui.dxChat
+ * @public
+ */
+export type MainActionButtonProperties = {
+    /**
+     * @docid
+     * @public
+     */
+    icon?: string;
+    /**
+     * @docid
+     * @public
+     * @default 'default'
+     */
+    behavior?: 'default' | 'custom';
+    /**
+     * @docid
+     * @type_function_param1 e:{ui/chat:MainActionButtonClickEvent}
+     * @public
+     */
+    onClick: ((e: MainActionButtonClickEvent) => void);
+};
+
+/**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
@@ -446,6 +479,12 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     inputFieldText?: TextAreaProperties['value'];
+    /**
+     * @docid
+     * @type MainActionButtonProperties
+     * @public
+     */
+    mainActionButtonOptions?: MainActionButtonProperties;
     /**
      * @docid
      * @default null
