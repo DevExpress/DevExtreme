@@ -186,7 +186,7 @@ export type MainButtonClickEvent = NativeEventInfo<dxChat, InteractionEvent>;
  * @namespace DevExpress.ui.dxChat
  * @public
  */
-export type MainButton = {
+export type MainButtonOptions = {
     /**
      * @docid
      * @public
@@ -195,13 +195,9 @@ export type MainButton = {
     /**
      * @docid
      * @public
+     * @default 'default'
      */
-    hint?: string;
-    /**
-     * @docid
-     * @public
-     */
-    action: 'default' | 'custom';
+    behavior?: 'default' | 'custom';
     /**
      * @docid
      * @type_function_param1 e:{ui/chat:MainButtonClickEvent}
@@ -487,7 +483,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @docid
      * @public
      */
-    mainButton?: MainButton;
+    mainButtonOptions?: MainButtonOptions;
     /**
      * @docid
      * @default null

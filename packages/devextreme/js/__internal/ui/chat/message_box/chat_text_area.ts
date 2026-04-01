@@ -14,7 +14,7 @@ import type {
   InitializedEvent,
 } from '@js/ui/button';
 import type Button from '@js/ui/button';
-import type { Attachment } from '@js/ui/chat';
+import type { Attachment, MainButtonOptions } from '@js/ui/chat';
 import type {
   UploadedEvent,
   UploadStartedEvent,
@@ -60,6 +60,8 @@ export type Properties = TextAreaProperties & {
 
   speechToTextOptions?: SpeechToTextProperties;
 
+  mainButtonOptions?: MainButtonOptions;
+
   onSend?: (e: SendEvent) => void;
 };
 
@@ -99,6 +101,12 @@ export const SEND_BUTTON_INITIAL_STATE: ButtonState = {
 };
 
 export const SEND_BUTTON_READY_TO_SEND_STATE: ButtonState = {
+  stylingMode: 'contained',
+  type: 'default',
+  disabled: false,
+};
+
+export const MAIN_BUTTON_CUSTOM_ACTIVE_STATE: ButtonState = {
   stylingMode: 'contained',
   type: 'default',
   disabled: false,
@@ -378,6 +386,7 @@ class ChatTextArea extends TextArea<Properties> {
       activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
+      mainButtonOptions,
     } = this.option();
 
     const configuration = {
@@ -387,13 +396,15 @@ class ChatTextArea extends TextArea<Properties> {
         activeStateEnabled,
         focusStateEnabled,
         hoverStateEnabled,
-        icon: 'arrowright',
+        icon: mainButtonOptions?.icon ?? 'arrowright',
         ...SEND_BUTTON_INITIAL_STATE,
         elementAttr: {
           'aria-label': messageLocalization.format('dxChat-sendButtonAriaLabel'),
         },
         onClick: (e: ClickEvent): void => {
           this._processSendButtonActivation(e);
+          // @ts-expect-error
+          mainButtonOptions?.onClick?.(e);
         },
         onInitialized: (e: InitializedEvent): void => {
           this._sendButton = e.component;
@@ -552,6 +563,11 @@ class ChatTextArea extends TextArea<Properties> {
   _updateButtonsState(): void {
     const { speechToTextEnabled } = this.option();
 
+    if (this._isCustomBehavior()) {
+      this._sendButton?.option(MAIN_BUTTON_CUSTOM_ACTIVE_STATE);
+      return;
+    }
+
     if (this._isSpeechToTextListening === true && speechToTextEnabled) {
       this._speechToTextButton?.option(STT_LISTENING_STATE);
       this._sendButton?.option(SEND_BUTTON_INITIAL_STATE);
@@ -594,7 +610,18 @@ class ChatTextArea extends TextArea<Properties> {
     this._updateButtonsState();
   }
 
+  _isCustomBehavior(): boolean {
+    const { mainButtonOptions } = this.option();
+
+    return mainButtonOptions?.behavior === 'custom';
+  }
+
   _processSendButtonActivation(e: Partial<SendEvent>): void {
+    if (this._isCustomBehavior()) {
+      this._updateButtonsState();
+      return;
+    }
+
     this._sendAction?.(e);
     this.clear();
     this.resetFileUploader();
@@ -638,6 +665,11 @@ class ChatTextArea extends TextArea<Properties> {
 
       case 'speechToTextOptions':
         this._speechToTextButton?.option(this._getSpeechToTextButtonOptions());
+        break;
+
+      case 'mainButtonOptions':
+        this._toolbar?.option({ items: this._getToolbarItems() });
+        this._updateButtonsState();
         break;
 
       default:

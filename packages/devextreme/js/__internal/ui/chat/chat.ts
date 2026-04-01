@@ -471,6 +471,7 @@ class Chat extends Widget<ChatProperties> {
       inputFieldText,
       speechToTextEnabled,
       speechToTextOptions,
+      mainButtonOptions,
     } = this.option();
 
     const $messageBox = $('<div>');
@@ -485,6 +486,7 @@ class Chat extends Widget<ChatProperties> {
       text: inputFieldText,
       speechToTextEnabled,
       speechToTextOptions,
+      mainButtonOptions,
       onMessageEntered: (e) => {
         this._messageEnteredHandler(e);
       },
@@ -742,6 +744,9 @@ class Chat extends Widget<ChatProperties> {
         this._messageList.option(name, this._getEmptyViewTemplate());
         break;
       case 'reloadOnChange':
+        break;
+      case 'mainButtonOptions':
+        this._messageBox.option(name, value);
         break;
       default:
         super._optionChanged(args);
