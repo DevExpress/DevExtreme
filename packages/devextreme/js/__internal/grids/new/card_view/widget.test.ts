@@ -224,3 +224,37 @@ describe('absence of multiple re-render', () => {
     });
   });
 });
+
+describe('reactivity to column option changes', () => {
+  const dataSource = [
+    { id: 1, name: 'Audi' },
+    { id: 2, name: 'BMW' },
+  ];
+
+  const columns = [
+    { dataField: 'id', caption: 'ID' },
+    { dataField: 'name', caption: 'Name' },
+  ];
+
+  it('should not cause extra re-render when sort/filter options change', () => {
+    const cardTemplate = jest.fn();
+
+    const container = document.createElement('div');
+    const cardView = new CardView(container, {
+      keyExpr: 'id',
+      dataSource,
+      columns,
+      cardTemplate,
+      sorting: {
+        mode: 'single',
+      },
+    } as CardViewOptions);
+
+    cardTemplate.mockClear();
+    cardView.columnOption('name', 'sortOrder', 'asc');
+
+    // Should be called dataSource.length times (once per card for data update),
+    // not dataSource.length * 2 (which would indicate extra re-render).
+    expect(cardTemplate).toBeCalledTimes(dataSource.length);
+  });
+});

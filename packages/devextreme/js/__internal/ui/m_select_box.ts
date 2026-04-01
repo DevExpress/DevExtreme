@@ -716,7 +716,7 @@ class SelectBox<
     return super._isFocused() && $(activeElement).closest(this._input()).length > 0;
   }
 
-  _getValueChangeEventOptionName(): string {
+  _getValueChangeEventOptionName(): keyof TProperties {
     return 'customItemCreateEvent';
   }
 
