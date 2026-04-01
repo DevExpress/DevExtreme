@@ -43,6 +43,7 @@ gridCore.registerModulesOrder([
   'columnHeaders',
   'filterRow',
   'headerPanel',
+  'aiAssistant',
   'headerFilter',
   'sorting',
   'search',
@@ -130,7 +131,7 @@ class DataGrid extends GridCoreWidget<Properties> {
     gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(that);
 
     // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+
     gridCore.processModules(that, gridCore as any);
 
     gridCore.callModuleItemsMethod(that, 'init');
