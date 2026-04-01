@@ -160,7 +160,7 @@ function main() {
     let licenseId = null;
 
     if(lcx) {
-        lcp = tryConvertLCXtoLCP(lcx);
+        lcp = tryConvertLCXtoLCP(lcx) || TRIAL_VALUE;
         const { warning, licenseId: id } = getLCPInfo(lcp);
         licenseId = id;
         if(warning) {
@@ -173,7 +173,7 @@ function main() {
             `);
             if(warning.type !== 'trial') {
                 process.stderr.write(`
-                    ${TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.requiredVersion)}\n\n
+                    ${TEMPLATES.keyVerificationFailed(warning.type, warning.keyVersion, warning.currentVersion)}\n\n
                     ${CLI_PREFIX} ${TEMPLATES.warningPrefix(TEMPLATES.warningCodeByType(warning.type))} ${TEMPLATES.installationInstructions}
                 `);  
             }  
