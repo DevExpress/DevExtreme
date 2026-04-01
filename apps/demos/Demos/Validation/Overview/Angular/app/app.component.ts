@@ -14,9 +14,9 @@ import {
   DxValidationSummaryModule,
 } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
-import { DxButtonTypes } from 'devextreme-angular/ui/button';
-import { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
-import { ValidationCallbackData } from 'devextreme-angular/common';
+import type { DxButtonTypes } from 'devextreme-angular/ui/button';
+import type { DxTextBoxTypes } from 'devextreme-angular/ui/text-box';
+import type { ValidationCallbackData } from 'devextreme-angular/common';
 import { Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {

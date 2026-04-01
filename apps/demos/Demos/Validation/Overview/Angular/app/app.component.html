@@ -14,11 +14,10 @@
               type="email"
               message="Email is invalid"
             ></dxi-validator-validation-rule>
-            <dxi-validator-validation-rule
-              type="async"
+            <dxi-validator-async-rule
               message="Email is already registered"
               [validationCallback]="asyncValidation"
-            ></dxi-validator-validation-rule>
+            ></dxi-validator-async-rule>
           </dx-validator>
         </dx-text-box>
       </div>
