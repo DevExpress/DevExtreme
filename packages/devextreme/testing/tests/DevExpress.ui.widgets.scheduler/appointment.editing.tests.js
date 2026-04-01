@@ -191,7 +191,7 @@ module('Integration: Appointment editing', {
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
                     assert.ok(spy.calledOnce, 'Add method is called');
-                    assert.deepEqual(spy.getCall(0).args[0], newItem, 'New item is correct');
+                    assert.deepEqual(spy.getCall(0).args[0], { ...newItem, allDay: false, recurrenceRule: '' }, 'New item is correct');
                 } finally {
                     scheduler.instance.addAppointment = addAppointment;
                 }
@@ -296,7 +296,7 @@ module('Integration: Appointment editing', {
 
                     assert.ok(spy.calledOnce, 'Update method is called');
                     assert.deepEqual(spy.getCall(0).args[0], updatedItem, 'Target item is correct');
-                    assert.deepEqual(spy.getCall(0).args[1], updatedItem, 'New data is correct');
+                    assert.deepEqual(spy.getCall(0).args[1], { ...updatedItem, allDay: false, recurrenceRule: '' }, 'New data is correct');
                 } finally {
                     scheduler.instance.updateAppointment = updateAppointment;
                 }

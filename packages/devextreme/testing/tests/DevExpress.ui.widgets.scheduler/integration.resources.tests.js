@@ -344,8 +344,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
 
         scheduler.instance.showAppointmentPopup(data[0]);
 
-        // TODO: replace with 2 after edit form refactor
-        assert.equal(loadStub.callCount, 3, 'Store requested in select box');
+        assert.equal(loadStub.callCount, 2, 'Store requested in select box');
         assert.equal(byKeyStub.callCount, 0, 'Resources are loaded only once');
     });
 

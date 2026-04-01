@@ -601,7 +601,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
         this.appointmentForm = {
             getFormInstance: () => this.appointmentPopup.getPopup().find('.dx-form').dxForm('instance'),
             getEditor: name => this.appointmentForm.getFormInstance().getEditor(name),
-            setSubject: (value, fieldName = 'text') => this.appointmentForm.getEditor(fieldName).option('value', value),
+            setSubject: (value, fieldName = 'subjectEditor') => this.appointmentForm.getEditor(fieldName).option('value', value),
             setStartDate: (value) => this.appointmentForm.getEditor('startDateEditor').option('value', value),
             setEndDate: (value) => this.appointmentForm.getEditor('endDateEditor').option('value', value),
 

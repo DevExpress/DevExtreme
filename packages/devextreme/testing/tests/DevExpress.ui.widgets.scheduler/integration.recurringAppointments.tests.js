@@ -676,6 +676,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 text: 'Task 2',
                 startDate: new Date(2015, 1, 11, 3),
                 endDate: new Date(2015, 1, 11, 4),
+                allDay: false,
+                recurrenceRule: '',
             };
 
             const scheduler = await this.createInstance({
@@ -693,11 +695,11 @@ supportedScrollingModes.forEach(scrollingMode => {
 
             const $title = $('.dx-textbox').eq(0);
             const title = $title.dxTextBox('instance');
-            const $startDate = $('.dx-datebox').eq(0);
-            const startDate = $startDate.dxDateBox('instance');
+            const $startTime = $('.dx-datebox').eq(1);
+            const startTime = $startTime.dxDateBox('instance');
 
             title.option('value', 'Task 2');
-            startDate.option('value', new Date(2015, 1, 11, 3, 0));
+            startTime.option('value', new Date(2015, 1, 11, 3, 0));
             $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
             await clock.tickAsync(300);
             clock.restore();
@@ -717,6 +719,8 @@ supportedScrollingModes.forEach(scrollingMode => {
                 customData: { texts: ['123', '456'] },
                 startDate: new Date(2015, 1, 11, 3),
                 endDate: new Date(2015, 1, 11, 4),
+                allDay: false,
+                recurrenceRule: '',
             };
 
             const scheduler = await this.createInstance({
@@ -743,11 +747,11 @@ supportedScrollingModes.forEach(scrollingMode => {
 
             const $title = $('.dx-textbox').eq(0);
             const title = $title.dxTextBox('instance');
-            const $startDate = $('.dx-datebox').eq(0);
-            const startDate = $startDate.dxDateBox('instance');
+            const $startTime = $('.dx-datebox').eq(1);
+            const startTime = $startTime.dxDateBox('instance');
 
             title.option('value', 'Task 2');
-            startDate.option('value', new Date(2015, 1, 11, 3, 0));
+            startTime.option('value', new Date(2015, 1, 11, 3, 0));
             $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
             await clock.tickAsync(300);
             clock.restore();
@@ -874,7 +878,9 @@ supportedScrollingModes.forEach(scrollingMode => {
             const updatedItem = {
                 text: 'Task 2',
                 startDate: new Date(2015, 1, 11, 3),
-                endDate: new Date(2015, 1, 11, 4)
+                endDate: new Date(2015, 1, 11, 4),
+                allDay: false,
+                recurrenceRule: '',
             };
 
             const scheduler = await this.createInstance({
@@ -892,11 +898,11 @@ supportedScrollingModes.forEach(scrollingMode => {
 
             const $title = $('.dx-textbox').eq(0);
             const title = $title.dxTextBox('instance');
-            const $startDate = $('.dx-datebox').eq(0);
-            const startDate = $startDate.dxDateBox('instance');
+            const $startTime = $('.dx-datebox').eq(1);
+            const startTime = $startTime.dxDateBox('instance');
 
             title.option('value', 'Task 2');
-            startDate.option('value', new Date(2015, 1, 11, 3, 0));
+            startTime.option('value', new Date(2015, 1, 11, 3, 0));
             $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
             await clock.tickAsync(300);
             clock.restore();
@@ -1344,11 +1350,11 @@ supportedScrollingModes.forEach(scrollingMode => {
 
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
 
-            const $startDate = $('.dx-datebox').eq(0);
-            const startDate = $startDate.dxDateBox('instance');
+            const $startTime = $('.dx-datebox').eq(1);
+            const startTime = $startTime.dxDateBox('instance');
             const expectedStartDate = new Date(2018, 4, 23, 9, 0);
 
-            startDate.option('value', expectedStartDate);
+            startTime.option('value', expectedStartDate);
             $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
             await clock.tickAsync(300);
             clock.restore();
