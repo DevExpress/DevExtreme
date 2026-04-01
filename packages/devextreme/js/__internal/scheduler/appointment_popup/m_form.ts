@@ -1,3 +1,9 @@
+import '../m_recurrence_editor';
+import '@js/ui/text_area';
+import '@js/ui/tag_box';
+import '@js/ui/switch';
+import '@js/ui/select_box';
+
 import type { TextEditorButton } from '@js/common';
 import messageLocalization from '@js/common/core/localization/message';
 import { DataSource } from '@js/common/data';
