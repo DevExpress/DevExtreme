@@ -188,7 +188,7 @@ module('Integration: Appointment editing', {
                 try {
                     scheduler.instance.showAppointmentPopup(newItem, true);
 
-                    $('.dx-scheduler-legacy-appointment-popup .dx-popup-done').trigger('dxclick');
+                    $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
                     assert.ok(spy.calledOnce, 'Add method is called');
                     assert.deepEqual(spy.getCall(0).args[0], newItem, 'New item is correct');
@@ -290,7 +290,7 @@ module('Integration: Appointment editing', {
                 try {
                     scheduler.instance.showAppointmentPopup(updatedItem);
 
-                    $('.dx-scheduler-legacy-appointment-popup .dx-popup-done').trigger('dxclick');
+                    $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
                     hide();
 
