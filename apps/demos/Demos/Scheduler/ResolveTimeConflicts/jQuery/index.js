@@ -198,8 +198,8 @@ $(() => {
 
   $('#overlapping-rule').dxSelectBox({
     items: [
-      { value: 'sameResource', text: 'Allow across resources' },
-      { value: 'allResources', text: 'Disallow all overlaps' },
+      { value: 'sameResource', text: 'Different Resources' },
+      { value: 'allResources', text: 'Never' },
     ],
     valueExpr: 'value',
     displayExpr: 'text',

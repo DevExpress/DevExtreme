@@ -72,7 +72,7 @@
 
   <div class="options">
     <div class="option">
-      <span>Overlapping Rule</span>
+      <span>Allow Overlapping Appointments</span>
       <DxSelectBox
         :items="overlappingRuleItems"
         value-expr="value"
@@ -114,8 +114,8 @@ const views: DxSchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
 const formElementAttr = { class: 'hide-informer', id: 'form' };
 
 const overlappingRuleItems = [
-  { value: 'sameResource', text: 'Allow across resources' },
-  { value: 'allResources', text: 'Disallow all overlaps' },
+  { value: 'sameResource', text: 'Different Resources' },
+  { value: 'allResources', text: 'Never' },
 ];
 
 function getNextDay(date: Date): Date {

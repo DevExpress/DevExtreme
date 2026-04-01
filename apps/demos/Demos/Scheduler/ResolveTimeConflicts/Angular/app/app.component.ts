@@ -45,8 +45,8 @@ export class AppComponent {
   assignees: Assignee[] = assignees;
 
   overlappingRuleItems = [
-    { value: 'sameResource', text: 'Allow across resources' },
-    { value: 'allResources', text: 'Disallow all overlaps' },
+    { value: 'sameResource', text: 'Different Resources' },
+    { value: 'allResources', text: 'Never' },
   ];
 
   assigneeIdEditorOptions = {

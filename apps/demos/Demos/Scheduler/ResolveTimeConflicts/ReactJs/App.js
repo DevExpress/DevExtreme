@@ -10,8 +10,8 @@ import { data, assignees } from './data.js';
 const currentDate = new Date(2026, 1, 10);
 const views = ['day', 'week', 'workWeek', 'month'];
 const overlappingRuleItems = [
-  { value: 'sameResource', text: 'Allow across resources' },
-  { value: 'allResources', text: 'Disallow all overlaps' },
+  { value: 'sameResource', text: 'Different Resources' },
+  { value: 'allResources', text: 'Never' },
 ];
 function getNextDay(date) {
   const next = new Date(date);
@@ -238,7 +238,7 @@ const App = () => {
 
       <div className="options">
         <div className="option">
-          <span>Overlapping Rule</span>
+          <span>Allow Overlapping Appointments</span>
           <SelectBox
             items={overlappingRuleItems}
             valueExpr="value"
