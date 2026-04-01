@@ -1688,8 +1688,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             scheduler.appointments.dblclick(2);
             scheduler.appointmentForm.clickFormDialogButton(1);
 
-            const formStartDate = scheduler.appointmentForm.getEditor('startDate');
-            const formEndDate = scheduler.appointmentForm.getEditor('endDate');
+            const formStartDate = scheduler.appointmentForm.getEditor('startDateEditor');
+            const formEndDate = scheduler.appointmentForm.getEditor('endDateEditor');
 
             assert.deepEqual(formStartDate.option('value'), new Date(2019, 2, 30, 2, 2), 'Appointment third occurrence sets right startDate in appointmentForm');
             assert.deepEqual(formEndDate.option('value'), new Date(2019, 2, 30, 3, 2), 'Appointment third occurrence sets right endDate in appointmentForm');
@@ -1716,8 +1716,8 @@ supportedScrollingModes.forEach(scrollingMode => {
             scheduler.appointments.dblclick(2);
             scheduler.appointmentForm.clickFormDialogButton(1);
 
-            const formStartDate = scheduler.appointmentForm.getEditor('startDate');
-            const formEndDate = scheduler.appointmentForm.getEditor('endDate');
+            const formStartDate = scheduler.appointmentForm.getEditor('startDateEditor');
+            const formEndDate = scheduler.appointmentForm.getEditor('endDateEditor');
 
             assert.deepEqual(formStartDate.option('value'), new Date(2019, 2, 30, 4, 0), 'Appointment third occurrence sets right startDate in appointmentForm');
             assert.deepEqual(formEndDate.option('value'), new Date(2019, 2, 30, 5, 0), 'Appointment third occurrence sets right endDate in appointmentForm');

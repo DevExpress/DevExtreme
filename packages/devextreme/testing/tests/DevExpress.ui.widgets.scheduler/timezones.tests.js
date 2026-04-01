@@ -195,8 +195,8 @@ module('Common', moduleConfig, () => {
                             onAdd: e => {
                                 e.component.showAppointmentPopup(e.itemData, true);
 
-                                const startDate = scheduler.appointmentForm.getEditor('startDate').option('value');
-                                const endDate = scheduler.appointmentForm.getEditor('endDate').option('value');
+                                const startDate = scheduler.appointmentForm.getEditor('startDateEditor').option('value');
+                                const endDate = scheduler.appointmentForm.getEditor('endDateEditor').option('value');
 
                                 assert.equal(startDate.valueOf(), expectedStartDate.valueOf(), 'start date should be equal with date from grid - 5/22/2017 2:00 AM');
                                 assert.equal(endDate.valueOf(), expectedEndDate.valueOf(), 'start date should be equal with date from grid - 5/22/2017 2:30 AM');
@@ -1663,8 +1663,8 @@ module('Appointment popup', moduleConfig, () => {
                 scheduler.appointments.dblclick(index);
 
                 const text = scheduler.appointments.getTitleText(index);
-                const startDate = scheduler.appointmentForm.getEditor('startDate').option('value');
-                const endDate = scheduler.appointmentForm.getEditor('endDate').option('value');
+                const startDate = scheduler.appointmentForm.getEditor('startDateEditor').option('value');
+                const endDate = scheduler.appointmentForm.getEditor('endDateEditor').option('value');
 
                 assert.equal(startDate.valueOf(), testCase.startDate, `StartDate of '${text}' should be valid`);
                 assert.equal(endDate.valueOf(), testCase.endDate, `EndDate of '${text}' should be valid`);
@@ -1691,8 +1691,8 @@ module('Appointment popup', moduleConfig, () => {
                 scheduler.appointments.dblclick(index);
 
                 const text = scheduler.appointments.getTitleText(index);
-                const startDate = scheduler.appointmentForm.getEditor('startDate').option('value');
-                const endDate = scheduler.appointmentForm.getEditor('endDate').option('value');
+                const startDate = scheduler.appointmentForm.getEditor('startDateEditor').option('value');
+                const endDate = scheduler.appointmentForm.getEditor('endDateEditor').option('value');
 
                 assert.equal(startDate.valueOf(), testCase.startDate, `StartDate of '${text}' should be valid`);
                 assert.equal(endDate.valueOf(), testCase.endDate, `EndDate of '${text}' should be valid`);
