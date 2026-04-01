@@ -728,6 +728,7 @@ class TextEditorMask<
         break;
       case 'showMaskMode':
         this.option({ text: '' });
+
         this._renderValue();
         break;
       default:
