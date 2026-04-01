@@ -1096,7 +1096,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private createAppointmentPopupForm() {
     if (this.appointmentForm) {
-      this.appointmentForm.form?.dispose();
+      this.appointmentForm.dispose();
     }
     this.appointmentForm = this.createAppointmentForm();
 
@@ -1897,7 +1897,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   /// #DEBUG
   getAppointmentDetailsForm() {
-    return this.appointmentForm.form;
+    return this.appointmentForm.dxForm;
   }
   /// #ENDDEBUG
 
