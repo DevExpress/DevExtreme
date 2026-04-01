@@ -14,6 +14,7 @@ import {
 } from './const';
 import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
 import { isProductOnlyLicense, parseDevExpressProductKey } from './lcp_key_validation/lcp_key_validator';
+import { logLicenseWarning } from './license_warnings';
 import { pad } from './pkcs1';
 import { compareSignatures } from './rsa_bigint';
 import { sha1 } from './sha1';
@@ -156,17 +157,21 @@ function getLicenseCheckParams({
     const { major, minor } = preview ? getPreviousMajorVersion(version) : version;
 
     if (!licenseKey) {
-      return { preview, error: 'W0019' };
+      return { preview, error: 'W0019', warningType: 'no-key' };
     }
 
     if (hasLicensePrefix(licenseKey, 'LCX')) {
-      return { preview, error: 'W0024' };
+      return { preview, error: 'W0021', warningType: 'lcx-used' };
     }
 
+    const isProductKey = isProductOnlyLicense(licenseKey);
     const license = parseLicenseKey(licenseKey);
 
     if (license.kind === TokenKind.corrupted) {
-      return { preview, error: 'W0021' };
+      if (license.error === 'product-kind') {
+        return { preview, error: 'W0021', warningType: 'no-devextreme-license' };
+      }
+      return { preview, error: 'W0021', warningType: 'invalid-key' };
     }
 
     if (license.kind === TokenKind.internal) {
@@ -174,16 +179,25 @@ function getLicenseCheckParams({
     }
 
     if (!(major && minor)) {
-      return { preview, error: 'W0021' };
+      return { preview, error: 'W0021', warningType: 'invalid-key' };
+    }
+
+    if (!isProductKey) {
+      return { preview, error: 'W0021', warningType: 'old-devextreme-key' };
     }
 
     if (major * 10 + minor > license.payload.maxVersionAllowed) {
-      return { preview, error: 'W0020' };
+      return {
+        preview,
+        error: 'W0020',
+        warningType: 'version-mismatch',
+        maxVersionAllowed: license.payload.maxVersionAllowed,
+      };
     }
 
     return { preview, error: undefined };
   } catch {
-    return { preview, error: 'W0021' };
+    return { preview, error: 'W0021', warningType: 'invalid-key' };
   }
 }
 
@@ -193,16 +207,13 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
   }
   validationPerformed = true;
 
-  if (isUnsupportedKeyFormat(licenseKey)) {
-    displayTrialPanel();
-    return;
-  }
-
   const version = parseVersion(versionStr);
 
   const versionsCompatible = assertedVersionsCompatible(version);
 
-  const { internal, error } = getLicenseCheckParams({
+  const {
+    internal, error, warningType, maxVersionAllowed,
+  } = getLicenseCheckParams({
     licenseKey,
     version,
   });
@@ -218,7 +229,19 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
   const preview = isPreview(version.patch);
 
   if (error) {
-    errors.log(preview ? 'W0022' : error);
+    if (preview) {
+      errors.log('W0022');
+    } else if (warningType) {
+      const versionInfo = warningType === 'version-mismatch' && maxVersionAllowed !== undefined
+        ? {
+          keyVersion: `${Math.floor(maxVersionAllowed / 10)}.${maxVersionAllowed % 10}`,
+          requiredVersion: `${version.major}.${version.minor}`,
+        }
+        : undefined;
+      logLicenseWarning(warningType, versionStr, versionInfo);
+    } else {
+      errors.log(error);
+    }
     return;
   }
 

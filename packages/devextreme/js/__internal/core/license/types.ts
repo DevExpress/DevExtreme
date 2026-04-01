@@ -37,8 +37,17 @@ export const PAYLOAD_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'pa
 export const VERSION_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'version' };
 export const PRODUCT_KIND_ERROR: ErrorToken = { kind: TokenKind.corrupted, error: 'product-kind' };
 
+export type LicenseWarningType = 'no-key'
+  | 'invalid-key'
+  | 'lcx-used'
+  | 'old-devextreme-key'
+  | 'version-mismatch'
+  | 'no-devextreme-license';
+
 export interface LicenseCheckParams {
   preview: boolean;
   internal?: true;
   error: LicenseVerifyResult | undefined;
+  warningType?: LicenseWarningType;
+  maxVersionAllowed?: number;
 }
