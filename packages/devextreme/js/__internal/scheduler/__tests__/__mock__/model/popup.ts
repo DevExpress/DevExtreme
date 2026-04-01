@@ -10,6 +10,14 @@ export class PopupModel {
     this.queries = within(element);
   }
 
+  get deleteSeriesButton(): HTMLElement {
+    return this.queries.getByRole('button', { name: 'Delete series' }) as HTMLElement;
+  }
+
+  get deleteAppointmentButton(): HTMLElement {
+    return this.queries.getByRole('button', { name: 'Delete appointment' }) as HTMLElement;
+  }
+
   getLabelIdByText = (labelText: string): string => {
     const labels = Array.from(this.element.querySelectorAll('label'));
 
