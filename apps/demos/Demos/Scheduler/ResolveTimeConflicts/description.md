@@ -1,26 +1,26 @@
-This example demonstrates how to prevent appointment time conflicts in DevExtreme Scheduler. Use the **Overlapping Rule** select-box to see how conflict behavior changes for appointments across resources.
+This example prevents appointment time conflicts in DevExtreme Scheduler. Use the **Allow Overlapping Appointments** select-box to select a time conflict resolution mode.
 <!--split-->
 
 ### Detect Conflicts
 
-Handle the [onAppointmentAdding](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentAdding) and [onAppointmentUpdating](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentUpdating) events to intercept new and updated appointments. Set `e.cancel = true` to block the operation if a conflict is found.
+Handle the [onAppointmentAdding](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentAdding) and [onAppointmentUpdating](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#onAppointmentUpdating) events to check if a new or updated appointment creates a time conflict. Set `e.cancel = true` to block the operation if necessary.
 
-To detect conflicts, call [getOccurrences](/Documentation/ApiReference/UI_Components/dxScheduler/Methods/#getOccurrences) to expand both the new and existing appointments into individual occurrences within the target range (required for [recurring appointments](/Documentation/Guide/UI_Components/Scheduler/Appointments/Appointment_Types/#Recurring_Appointments)), then compare them for time overlaps.
+Call [getOccurrences](/Documentation/ApiReference/UI_Components/dxScheduler/Methods/#getOccurrences) to expand [recurring appointments](/Documentation/Guide/UI_Components/Scheduler/Appointments/Appointment_Types/#Recurring_Appointments) into individual occurrences within the target range. Check for overlapping time ranges.
 
-### Overlapping Rules
+### Conflict Detection Modes
 
 The demo supports two modes:
 
-- **Allow across resources**: only appointments assigned to the *same* resource (assignee) block each other.
-- **Disallow all overlaps**: any time overlap is blocked, regardless of resource assignment.
+- **Different resources**: appointments assigned to different resources (assignees) can overlap.
+- **Never**: overlapping appointments are not allowed, regardless of resource assignment.
 
-To implement resource-aware checks, compare the `assigneeId` field values across new and existing appointments.
+To implement resource-aware checks, access appointments and compare their `assigneeId` field values.
 
 ### Display Errors
 
 When a conflict is detected, the demo displays the error in the following ways:
 
-- If an appointment edit form is open, an inline validation message appears.
-- Otherwise, a dialog opens.
+- A message box. 
+- An inline validation message (if an appointment edit form is active). 
 
-To display inline validation, add a custom form item with `customizeItem` inside [editing.form](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/editing/form/) and attach custom `validationRules` to the time editors.
+To display inline validation, use the `customizeItem` function to add a custom form item inside [editing.form](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/editing/form/) and attach custom `validationRules` to time editors.
