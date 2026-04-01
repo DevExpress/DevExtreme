@@ -102,19 +102,18 @@ $datagrid-focused-border-color: null !default;
   border-left: none;
 }
 
-// (0,7,1)
-.dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-content .dx-datagrid-table .dx-row.dx-column-lines > td.dx-datagrid-first-header {
+// (0,6,1)
+.dx-widget:not(.dx-rtl) > .dx-gridbase-container .dx-datagrid-table .dx-row > td.dx-datagrid-first-cell {
   border-left: none;
 }
 
-// RTL
-
-// (0,4,1)
-.dx-rtl .dx-datagrid .dx-column-lines > td:first-child {
-  border-right: none;
-  border-left: $datagrid-border;
+// (0,7,1)
+.dx-widget:not(.dx-rtl) > .dx-gridbase-container .dx-datagrid-table .dx-row > td.dx-datagrid-first-cell.dx-datagrid-sticky-column-border-left {
+  border-left: 2px solid;
   border-left-color: $datagrid-border-color;
 }
+
+// RTL
 
 // (0,4,1)
 .dx-rtl .dx-datagrid .dx-column-lines > td:last-child {
@@ -124,6 +123,13 @@ $datagrid-focused-border-color: null !default;
 // (0,4,1)
 .dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-column-lines > td {
   border-left: none;
+}
+
+// (0,5,1)
+.dx-rtl .dx-datagrid .dx-column-lines > td:first-child:not(.dx-datagrid-hidden-column) {
+  border-right: none;
+  border-left: $datagrid-border;
+  border-left-color: $datagrid-border-color;
 }
 
 // (0,5,1)
@@ -165,6 +171,7 @@ $datagrid-focused-border-color: null !default;
 // (0,6,1)
 .dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-column-lines:not(.dx-datagrid-group-footer) > td:first-child {
   border-right: none;
+  border-left: none;
 }
 
 // (0,6,1)
@@ -192,24 +199,24 @@ $datagrid-focused-border-color: null !default;
   border-left-color: $datagrid-border-color;
 }
 
+// (0,6,1)
+.dx-rtl > .dx-gridbase-container .dx-datagrid-content .dx-datagrid-table .dx-row > td.dx-datagrid-first-cell {
+  border-right: none;
+}
+
 // (0,7,0)
 .dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-content .dx-datagrid-table .dx-row .dx-datagrid-column-no-border {
   border-right: none;
 }
 
-// (0,8,0)
-.dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-content .dx-datagrid-table .dx-row .dx-datagrid-column-no-border.dx-datagrid-sticky-column-border-left {
+// (0,7,1)
+.dx-rtl > .dx-gridbase-container .dx-datagrid-content .dx-datagrid-table .dx-row > td.dx-datagrid-first-cell.dx-datagrid-sticky-column-border-left {
   border-left: 2px solid;
   border-left-color: $datagrid-border-color;
 }
 
-// (0,8,1)
-.dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-content .dx-datagrid-table .dx-row.dx-column-lines > td.dx-datagrid-first-header {
-  border-right: none;
-}
-
-// (0,9,1)
-.dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-content .dx-datagrid-table .dx-row.dx-column-lines > td.dx-datagrid-first-header.dx-datagrid-sticky-column-border-left {
+// (0,8,0)
+.dx-rtl .dx-datagrid .dx-datagrid-sticky-columns .dx-datagrid-content .dx-datagrid-table .dx-row .dx-datagrid-column-no-border.dx-datagrid-sticky-column-border-left {
   border-left: 2px solid;
   border-left-color: $datagrid-border-color;
 }
