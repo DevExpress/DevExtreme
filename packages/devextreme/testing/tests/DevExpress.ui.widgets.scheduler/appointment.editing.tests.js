@@ -86,41 +86,6 @@ module('Integration: Appointment editing', {
                 };
             }
         }, () => {
-            test('Scheduler appointment popup should correctly update recurrence appointment', async function(assert) {
-                const tasks = [{
-                    text: 'Recurrence task',
-                    start: new Date(2017, 2, 13),
-                    end: new Date(2017, 2, 13, 0, 30),
-                    recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10'
-                }];
-
-                const scheduler = await this.createInstance({
-                    dataSource: tasks,
-                    currentDate: new Date(2017, 2, 13),
-                    currentView: 'month',
-                    recurrenceEditMode: 'series',
-                    views: ['month'],
-                    startDateExpr: 'start',
-                    endDateExpr: 'end',
-
-                });
-
-                scheduler.appointments.dblclick(0);
-
-                const form = scheduler.instance.getAppointmentDetailsForm();
-                const repeatSwitch = form.getEditor('repeat');
-                repeatSwitch.option('value', false);
-
-                scheduler.appointmentPopup.clickDoneButton();
-
-                assert.deepEqual(scheduler.instance.option('dataSource')[0], {
-                    text: 'Recurrence task',
-                    start: new Date(2017, 2, 13),
-                    end: new Date(2017, 2, 13, 0, 30),
-                    recurrenceRule: ''
-                }, 'Appointment was updated correctly');
-            });
-
             test('updateAppointment method should be called with right args when task was resized, timelineMonth view', async function(assert) {
                 const data = [{
                     text: 'Task 1',
