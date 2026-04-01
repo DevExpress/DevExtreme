@@ -294,9 +294,11 @@ describe('license check', () => {
   const TOKEN_UNSUPPORTED_VERSION = 'ewogICJmb3JtYXQiOiAyLAogICJjdXN0b21lcklkIjogImIxMTQwYjQ2LWZkZTEtNDFiZC1hMjgwLTRkYjlmOGU3ZDliZCIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjMxCn0=.tTBymZMROsYyMiP6ldXFqGurbzqjhSQIu/pjyEUJA3v/57VgToomYl7FVzBj1asgHpadvysyTUiX3nFvPxbp166L3+LB3Jybw9ueMnwePu5vQOO0krqKLBqRq+TqHKn7k76uYRbkCIo5UajNfzetHhlkin3dJf3x2K/fcwbPW5A=';
 
   let trialPanelSpy = jest.spyOn(trialPanel, 'renderTrialPanel');
+  let consoleWarnSpy = jest.spyOn(console, 'warn');
 
   beforeEach(() => {
     jest.spyOn(errors, 'log').mockImplementation(() => {});
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     trialPanelSpy = jest.spyOn(trialPanel, 'renderTrialPanel');
     setLicenseCheckSkipCondition(false);
   });
@@ -309,10 +311,10 @@ describe('license check', () => {
     { token: '', version: '1.0.3' },
     { token: null, version: '1.0.4' },
     { token: undefined, version: '1.0.50' },
-  ])('W0019 error should be logged if license is empty', ({ token, version }) => {
+  ])('Warning should be logged with no-key message if license is empty', ({ token, version }) => {
     validateLicense(token as string, version);
-    expect(errors.log).toHaveBeenCalledTimes(1);
-    expect(errors.log).toHaveBeenCalledWith('W0019');
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('No valid DevExpress license key was found'));
   });
 
   test.each([
@@ -357,9 +359,10 @@ describe('license check', () => {
     { token: TOKEN_23_1, version: '12.3.4' },
     { token: TOKEN_23_2, version: '23.1.5' },
     { token: TOKEN_23_2, version: '23.2.6' },
-  ])('No messages should be logged if license is valid', ({ token, version }) => {
+  ])('Old format license should trigger old-key warning', ({ token, version }) => {
     validateLicense(token, version);
-    expect(errors.log).not.toHaveBeenCalled();
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('invalid/old DevExtreme key'));
   });
 
   test.each([
@@ -367,9 +370,9 @@ describe('license check', () => {
     { token: TOKEN_23_1, version: '12.3.4' },
     { token: TOKEN_23_2, version: '23.1.5' },
     { token: TOKEN_23_2, version: '23.2.6' },
-  ])('Trial panel should not be displayed if license is valid', ({ token, version }) => {
+  ])('Trial panel should be displayed for old format license keys', ({ token, version }) => {
     validateLicense(token, version);
-    expect(trialPanelSpy).not.toHaveBeenCalled();
+    expect(trialPanelSpy).toHaveBeenCalledTimes(1);
   });
 
   test('Trial panel "Buy Now" link must use the jQuery link if no config has been set', () => {
@@ -399,15 +402,16 @@ describe('license check', () => {
     setLicenseCheckSkipCondition();
     validateLicense('', '1.0');
     expect(errors.log).not.toHaveBeenCalled();
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
   });
 
   test.each([
     { token: TOKEN_23_1, version: '23.2.3' },
     { token: TOKEN_23_2, version: '42.4.5' },
-  ])('W0020 error should be logged if license is outdated', ({ token, version }) => {
+  ])('Old format license should trigger old-key warning when outdated', ({ token, version }) => {
     validateLicense(token, version);
-    expect(errors.log).toHaveBeenCalledTimes(1);
-    expect(errors.log).toHaveBeenCalledWith('W0020');
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('invalid/old DevExtreme key'));
   });
 
   test.each([
@@ -425,9 +429,9 @@ describe('license check', () => {
     { token: TOKEN_23_1, version: '23.2.3-alpha' },
     { token: TOKEN_23_2, version: '24.1.0' },
     { token: TOKEN_23_2, version: '24.1.abc' },
-  ])('Trial panel should not be displayed in previews if the license is for the previous RTM', ({ token, version }) => {
+  ])('Trial panel should be displayed in previews for old format license keys', ({ token, version }) => {
     validateLicense(token, version);
-    expect(trialPanelSpy).not.toHaveBeenCalled();
+    expect(trialPanelSpy).toHaveBeenCalledTimes(1);
   });
 
   test.each([
@@ -440,9 +444,10 @@ describe('license check', () => {
     { token: TOKEN_UNSUPPORTED_VERSION, version: '1.2.3' },
     { token: 'str@nge in.put', version: '1.2.3' },
     { token: '3.2.1', version: '1.2.3' },
-  ])('W0021 error should be logged if license is corrupted/invalid [%#]', ({ token, version }) => {
+  ])('License verification warning should be logged if license is corrupted/invalid [%#]', ({ token, version }) => {
     validateLicense(token, version);
-    expect(errors.log).toHaveBeenCalledWith('W0021');
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('License key verification has failed'));
   });
 
   test.each([
@@ -514,9 +519,11 @@ describe('internal license check', () => {
 
 describe('DevExpress license check', () => {
   let trialPanelSpy = jest.spyOn(trialPanel, 'renderTrialPanel');
+  let consoleWarnSpy = jest.spyOn(console, 'warn');
 
   beforeEach(() => {
     jest.spyOn(errors, 'log').mockImplementation(() => {});
+    consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     trialPanelSpy = jest.spyOn(trialPanel, 'renderTrialPanel');
     setLicenseCheckSkipCondition(false);
   });
@@ -528,14 +535,16 @@ describe('DevExpress license check', () => {
   test('DevExpress License Key copied from Download Manager (incorrect)', () => {
     const token = 'LCXv1therestofthekey';
     validateLicense(token, '25.1.3');
-    expect(errors.log).toHaveBeenCalled();
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('.NET license key (LCX)'));
     expect(trialPanelSpy).toHaveBeenCalled();
   });
 
   test('DevExpress License Key generated from LCX key (incorrect)', () => {
     const token = 'LCPtherestofthekey';
     validateLicense(token, '25.1.3');
-    expect(errors.log).toHaveBeenCalled();
+    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('License key verification has failed'));
     expect(trialPanelSpy).toHaveBeenCalled();
   });
 });
