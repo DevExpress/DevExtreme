@@ -1087,7 +1087,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     // @ts-expect-error
     if (this.isDataSourceLoaded() || this._isDataSourceLoading()) {
       this.initMarkupCore();
-      this._dataSourceChangedHandler(this._dataSource.items());
+      this.dataSourceChangedHandler(this._dataSource.items());
       this._fireContentReadyAction();
     } else {
       const groups = this.getViewOption('groups');
