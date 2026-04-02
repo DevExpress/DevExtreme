@@ -119,6 +119,7 @@ const schedulerLegacyMembers = [
     '_renderGrid',
     '_renderOverlay',
     '_renderToolbar',
+    '_shader',
     '_showCalendar',
     '_sidebarScrollable',
     '_textCache',
