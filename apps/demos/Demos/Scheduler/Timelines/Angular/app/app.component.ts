@@ -36,9 +36,7 @@ export class AppComponent {
   currentDate: Date = new Date(2021, 1, 2);
 
   snapToCellsMode: 'auto' | 'always' | 'never' = 'always';
-
   private schedulerInstance: any;
-
   private pendingScrollLeft: number | undefined;
 
   snapToCellsModeItems = [
