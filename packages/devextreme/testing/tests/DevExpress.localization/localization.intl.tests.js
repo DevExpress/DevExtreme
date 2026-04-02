@@ -775,63 +775,31 @@ QUnit.module('Intl localization', {
 });
 
 QUnit.module('Global formatting config (spec, intl)', () => {
-    QUnit.test('dateTimeFormatPresets overrides explicit shortDate preset', function(assert) {
+    QUnit.test('global dateFormat supports formatter function values', function(assert) {
         const originalConfig = config();
 
         try {
             config({
                 ...originalConfig,
-                dateTimeFormatPresets: {
-                    shortDate: 'dd/MM/yyyy',
-                },
+                dateFormat: (date) => `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
             });
 
-            assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2), 'shortDate'), '02/01/2020');
+            assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2), config().dateFormat), '2-1-2020');
         } finally {
             config(originalConfig);
         }
     });
 
-    QUnit.test('dateTimeFormatPresets resolves locale map by exact locale and default fallback', function(assert) {
-        const originalConfig = config();
-        const oldLocale = locale();
-
-        try {
-            config({
-                ...originalConfig,
-                dateTimeFormatPresets: {
-                    shortDate: {
-                        default: 'dd/MM/yyyy',
-                        'de-DE': 'dd.MM.yyyy',
-                    },
-                },
-            });
-
-            locale('de-DE');
-            assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2), 'shortDate'), '02.01.2020', 'exact locale');
-
-            locale('fr-FR');
-            assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2), 'shortDate'), '02/01/2020', 'default fallback');
-        } finally {
-            locale(oldLocale);
-            config(originalConfig);
-        }
-    });
-
-    QUnit.test('dateTimeFormatPresets supports formatter function values', function(assert) {
+    QUnit.test('global dateTimeFormat supports formatter function values', function(assert) {
         const originalConfig = config();
 
         try {
             config({
                 ...originalConfig,
-                dateTimeFormatPresets: {
-                    shortDate: {
-                        default: (date) => `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
-                    },
-                },
+                dateTimeFormat: (date) => `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`,
             });
 
-            assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2), 'shortDate'), '2-1-2020');
+            assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2, 14, 5), config().dateTimeFormat), '2/1/2020 14:5');
         } finally {
             config(originalConfig);
         }

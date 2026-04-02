@@ -72,37 +72,34 @@ module('Global formatting config (spec): Scheduler tooltip', {
         assert.strictEqual(scheduler.tooltip.getDateText(), 'T11 - T12');
     });
 
-    test('implicit Scheduler tooltip time format uses dateTimeFormatPresets.shortTime when global timeFormat is not set', async function(assert) {
-        config({
-            ...this.originalConfig,
-            dateTimeFormatPresets: {
-                shortTime: (date) => `P${date.getHours()}`,
-            },
-        });
-
+    test('implicit Scheduler tooltip uses built-in format when global timeFormat is not set', async function(assert) {
         const scheduler = await createScheduler();
         const clock = sinon.useFakeTimers();
         await scheduler.appointments.click(0, clock);
         clock.restore();
 
-        assert.strictEqual(scheduler.tooltip.getDateText(), 'P11 - P12');
+        assert.strictEqual(scheduler.tooltip.getDateText(), '11:00 AM - 12:00 PM');
     });
 
-    test('global timeFormat has priority over dateTimeFormatPresets.shortTime for implicit Scheduler tooltip format', async function(assert) {
+    test('implicit Scheduler tooltip date/time use global dateFormat and timeFormat', async function(assert) {
         config({
             ...this.originalConfig,
-            timeFormat: (date) => `G${date.getHours()}`,
-            dateTimeFormatPresets: {
-                shortTime: (date) => `P${date.getHours()}`,
-            },
+            dateFormat: (date) => `D${date.getDate()}`,
+            timeFormat: (date) => `T${date.getHours()}`,
         });
 
-        const scheduler = await createScheduler();
+        const scheduler = await createScheduler({
+            dataSource: [{
+                text: 'Task 1',
+                startDate: new Date(2015, 1, 9, 23, 0),
+                endDate: new Date(2015, 1, 10, 1, 0),
+            }],
+        });
         const clock = sinon.useFakeTimers();
         await scheduler.appointments.click(0, clock);
         clock.restore();
 
-        assert.strictEqual(scheduler.tooltip.getDateText(), 'G11 - G12');
+        assert.strictEqual(scheduler.tooltip.getDateText(), 'D9, T23 - D10, T1');
     });
 });
 
