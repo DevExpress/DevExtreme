@@ -183,7 +183,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   appointmentDataSource!: AppointmentDataSource;
 
-  dataSource: any;
+  // TODO: inherited from Widget base class, cannot rename
+  _dataSource: any;
 
   // TODO: used externally in m_subscribes.ts, prepare_appointments.ts, get_filter_options.ts
   _dataAccessors!: AppointmentDataAccessor;
@@ -210,7 +211,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private readonly updatingAppointments: Set<Appointment> = new Set();
 
-  private dataSourceLoadedCallback: any;
+  private _dataSourceLoadedCallback: any;
 
   private subscribes: any;
 
@@ -296,7 +297,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._initDataSource();
 
         this.postponeResourceLoading().done(() => {
-          this.appointmentDataSource.setDataSource(this.dataSource);
+          this.appointmentDataSource.setDataSource(this._dataSource);
           this.setRemoteFilterIfNeeded();
           this.updateOption('workSpace', 'showAllDayPanel', this.option('showAllDayPanel'));
         });
@@ -620,7 +621,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   private setRemoteFilterIfNeeded(): void {
-    const { dataSource } = this;
+    const dataSource = this._dataSource;
     const remoteFiltering = this.option('remoteFiltering');
 
     if (!this._workSpace || !remoteFiltering || !dataSource) {
@@ -650,8 +651,8 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     // @ts-expect-error
     const result = new Deferred();
 
-    if (this.dataSource) {
-      this.dataSource.load().done(() => {
+    if (this._dataSource) {
+      this._dataSource.load().done(() => {
         hideLoading();
 
         this._fireContentReadyAction(result);
@@ -660,7 +661,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         result.reject();
       });
 
-      this.dataSource.isLoading() && showLoading({
+      this._dataSource.isLoading() && showLoading({
         container: this.$element(),
         position: {
           of: this.$element(),
@@ -791,7 +792,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this.asyncTemplatesTimers = [];
 
-    this.dataSourceLoadedCallback = Callbacks();
+    this._dataSourceLoadedCallback = Callbacks();
 
     this.subscribes = subscribes;
 
@@ -808,7 +809,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   createAppointmentDataSource() {
     this.appointmentDataSource?.destroy();
-    this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
+    this.appointmentDataSource = new AppointmentDataSource(this._dataSource);
   }
 
   updateAppointmentDataSource() {
@@ -820,7 +821,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   private customizeDataSourceLoadOptions() {
-    this.dataSource?.on('customizeStoreLoadOptions', ({ storeLoadOptions }) => {
+    this._dataSource?.on('customizeStoreLoadOptions', ({ storeLoadOptions }) => {
       storeLoadOptions.startDate = this.getStartViewDate();
       storeLoadOptions.endDate = this.getEndViewDate();
     });
@@ -1087,7 +1088,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     // @ts-expect-error
     if (this.isDataSourceLoaded() || this._isDataSourceLoading()) {
       this.initMarkupCore();
-      this.dataSourceChangedHandler(this.dataSource.items());
+      this._dataSourceChangedHandler(this._dataSource.items());
       this._fireContentReadyAction();
     } else {
       const groups = this.getViewOption('groups');
@@ -1261,7 +1262,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   private isDataSourceLoaded() {
-    return this.dataSource?.isLoaded();
+    return this._dataSource?.isLoaded();
   }
 
   _render() {
