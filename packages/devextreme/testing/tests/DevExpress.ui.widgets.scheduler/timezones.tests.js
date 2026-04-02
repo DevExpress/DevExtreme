@@ -299,7 +299,7 @@ module('API', moduleConfig, () => {
 
             assert.ok(updateAppointment.calledOnce, 'Update method is called');
             assert.deepEqual(updateAppointment.getCall(0).args[0], updatedItem, 'Target item is correct');
-            assert.deepEqual(updateAppointment.getCall(0).args[1], updatedItem, 'New data is correct');
+            assert.deepEqual(updateAppointment.getCall(0).args[1], { ...updatedItem, allDay: false, recurrenceRule: '' }, 'New data is correct');
         } finally {
             updateAppointment.restore();
         }
@@ -1726,7 +1726,7 @@ module('Appointment popup', moduleConfig, () => {
 
             assert.ok(updateAppointment.calledOnce, 'Update method is called');
             assert.deepEqual(updateAppointment.getCall(0).args[0], updatedItem, 'Target item is correct');
-            assert.deepEqual(updateAppointment.getCall(0).args[1], updatedItem, 'New data is correct');
+            assert.deepEqual(updateAppointment.getCall(0).args[1], { ...updatedItem, allDay: false, recurrenceRule: '' }, 'New data is correct');
         } finally {
             updateAppointment.restore();
         }
