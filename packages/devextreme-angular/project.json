@@ -173,7 +173,8 @@
       "options": {
         "commands": [
           "pnpm --workspace-root nx clean:src-ui devextreme-angular",
-          "pnpm --workspace-root nx generate-components devextreme-angular"
+          "pnpm --workspace-root nx generate-components devextreme-angular",
+          "git diff -- packages/devextreme-angular/src/index.ts || true"
         ],
         "parallel": false
       },
