@@ -1,7 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { Component, enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { DxSchedulerModule, DxSelectBoxModule } from 'devextreme-angular';
-import type { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
 import type { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import {
   Priority, Resource, Appointment, Service,
@@ -36,12 +35,12 @@ export class AppComponent {
 
   currentDate: Date = new Date(2021, 1, 2);
 
-  snapToCellsMode: DxSchedulerTypes.SnapToCellsMode = 'always';
+  snapToCellsMode: 'auto' | 'always' | 'never' = 'always';
 
   snapToCellsModeItems = [
-    { value: 'auto', text: 'Auto' },
-    { value: 'always', text: 'Always' },
-    { value: 'never', text: 'Never' },
+    { value: 'auto' as const, text: 'Auto' },
+    { value: 'always' as const, text: 'Always' },
+    { value: 'never' as const, text: 'Never' },
   ];
 
   constructor(service: Service) {

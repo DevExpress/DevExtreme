@@ -3,6 +3,14 @@ import Scheduler, { Resource } from 'devextreme-react/scheduler';
 import SelectBox from 'devextreme-react/select-box';
 import { data, resourcesData, priorityData } from './data.js';
 
+const currentDate = new Date(2021, 1, 2);
+const views = ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
+const groups = ['priority'];
+const snapToCellsModeItems = [
+  { value: 'auto', text: 'Auto' },
+  { value: 'always', text: 'Always' },
+  { value: 'never', text: 'Never' },
+];
 const App = () => {
   const [snapToCellsMode, setSnapToCellsMode] = useState('always');
   return (
@@ -10,11 +18,11 @@ const App = () => {
       <Scheduler
         timeZone="America/Los_Angeles"
         dataSource={data}
-        views={['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth']}
+        views={views}
         defaultCurrentView="timelineMonth"
-        defaultCurrentDate={new Date(2021, 1, 2)}
+        defaultCurrentDate={currentDate}
         height={580}
-        groups={['priority']}
+        groups={groups}
         cellDuration={60}
         firstDayOfWeek={0}
         startDayHour={8}
@@ -41,11 +49,7 @@ const App = () => {
         <div className="option">
           <span>Snap to Cells Mode:</span>
           <SelectBox
-            items={[
-              { value: 'auto', text: 'Auto' },
-              { value: 'always', text: 'Always' },
-              { value: 'never', text: 'Never' },
-            ]}
+            items={snapToCellsModeItems}
             valueExpr="value"
             displayExpr="text"
             value={snapToCellsMode}
