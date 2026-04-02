@@ -986,3 +986,56 @@ export const ControlledMode: Story = {
         );
     }
 }
+
+export const SendButtonOptions: Story = {
+    args: {
+        action: 'send',
+        icon: 'arrowright',
+        enableOnClick: false,
+    },
+    argTypes: {
+        action: {
+            control: 'select',
+            options: ['send', 'custom'],
+        },
+        icon: {
+            control: 'text',
+        },
+        enableOnClick: {
+            name: 'Enable onClick handler',
+            control: 'boolean',
+        },
+    },
+    render: ({ action, icon, enableOnClick }) => {
+        const [messages, setMessages] = useState<ChatTypes.Message[]>([...initialMessages]);
+        const [lastClick, setLastClick] = useState<string>('—');
+
+        const onMessageEntered = useCallback(({ message }: ChatTypes.MessageEnteredEvent) => {
+            setMessages((prev) => [...prev, message]);
+        }, []);
+
+        const sendButtonOptions = useMemo<ChatTypes.SendButtonProperties>(() => ({
+            action,
+            icon,
+            ...(enableOnClick && {
+                onClick: () => setLastClick(new Date().toLocaleTimeString()),
+            }),
+        }), [action, icon, enableOnClick]);
+
+        return (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+                <div>
+                    Last onClick fired at: <strong>{lastClick}</strong>
+                </div>
+                <Chat
+                    width={400}
+                    height={500}
+                    items={messages}
+                    user={secondAuthor}
+                    onMessageEntered={onMessageEntered}
+                    sendButtonOptions={sendButtonOptions}
+                />
+            </div>
+        );
+    },
+};

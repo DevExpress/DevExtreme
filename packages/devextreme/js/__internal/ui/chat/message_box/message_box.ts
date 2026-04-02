@@ -326,7 +326,7 @@ class MessageBox extends DOMComponent<MessageBox, Properties> {
         break;
 
       case 'sendButtonOptions':
-        this._textArea.option(name, value);
+        this._textArea.option(fullName, value);
         break;
 
       default:

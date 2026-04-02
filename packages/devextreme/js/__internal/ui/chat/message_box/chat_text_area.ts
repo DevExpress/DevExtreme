@@ -576,11 +576,6 @@ class ChatTextArea extends TextArea<Properties> {
   _updateButtonsState(): void {
     const { speechToTextEnabled } = this.option();
 
-    if (this._isCustomBehavior()) {
-      this._sendButton?.option(SEND_BUTTON_CUSTOM_ACTIVE_STATE);
-      return;
-    }
-
     if (this._isSpeechToTextListening === true && speechToTextEnabled) {
       this._speechToTextButton?.option(STT_LISTENING_STATE);
       this._sendButton?.option(SEND_BUTTON_INITIAL_STATE);
@@ -592,6 +587,11 @@ class ChatTextArea extends TextArea<Properties> {
       this._speechToTextButton?.option(STT_INITIAL_STATE);
       this._sendButton?.option(SEND_BUTTON_READY_TO_SEND_STATE);
 
+      return;
+    }
+
+    if (this._isCustomBehavior()) {
+      this._sendButton?.option(SEND_BUTTON_CUSTOM_ACTIVE_STATE);
       return;
     }
 
