@@ -34,22 +34,22 @@ const createComponentMock = jest.fn((
 ): any => new Widget(el, options));
 
 const createAIAssistantView = ({
-  initialVisible = true,
+  initialEnabled = true,
   render = true,
 }: {
-  initialVisible?: boolean;
+  initialEnabled?: boolean;
   render?: boolean;
 } = {}): {
   $container: dxElementWrapper;
   aiAssistantView: AIAssistantView;
   optionMock: jest.Mock<(name: string) => boolean | undefined>;
-  setVisible: (value: boolean) => void;
+  setEnabled: (value: boolean) => void;
 } => {
   const $container = $('<div>').appendTo(document.body);
-  let isVisible = initialVisible;
+  let isEnabled = initialEnabled;
   const optionMock = jest.fn((name: string): boolean | undefined => {
-    if (name === 'aiAssistant.visible') {
-      return isVisible;
+    if (name === 'aiAssistant.enabled') {
+      return isEnabled;
     }
 
     return undefined;
@@ -70,8 +70,8 @@ const createAIAssistantView = ({
     $container,
     aiAssistantView,
     optionMock,
-    setVisible: (value: boolean) => {
-      isVisible = value;
+    setEnabled: (value: boolean): void => {
+      isEnabled = value;
     },
   };
 };
@@ -93,16 +93,16 @@ describe('AIAssistantView', () => {
   afterEach(afterTest);
 
   describe('isVisible', () => {
-    it('should return aiAssistant.visible option value', () => {
-      const { aiAssistantView, optionMock, setVisible } = createAIAssistantView({ render: false });
+    it('should return aiAssistant.enabled option value', () => {
+      const { aiAssistantView, optionMock, setEnabled } = createAIAssistantView({ render: false });
 
       expect(aiAssistantView.isVisible()).toBe(true);
 
-      setVisible(false);
+      setEnabled(false);
 
       expect(aiAssistantView.isVisible()).toBe(false);
-      expect(optionMock).toHaveBeenNthCalledWith(1, 'aiAssistant.visible');
-      expect(optionMock).toHaveBeenNthCalledWith(2, 'aiAssistant.visible');
+      expect(optionMock).toHaveBeenNthCalledWith(1, 'aiAssistant.enabled');
+      expect(optionMock).toHaveBeenNthCalledWith(2, 'aiAssistant.enabled');
     });
   });
 
@@ -132,17 +132,19 @@ describe('AIAssistantView', () => {
       expect(AIChat).toHaveBeenCalledTimes(1);
     });
 
-    it('should not create AIChat instance when view is hidden', () => {
-      const { aiAssistantView } = createAIAssistantView({ initialVisible: false });
+    it('should not create AIChat instance when aiAssistant is disabled', () => {
+      const { aiAssistantView } = createAIAssistantView({ initialEnabled: false });
 
       expect(AIChat).not.toHaveBeenCalled();
       expect(aiAssistantView.element().hasClass('dx-hidden')).toBe(true);
     });
 
-    it('should create AIChat instance when view becomes visible', () => {
-      const { $container, aiAssistantView, setVisible } = createAIAssistantView({ initialVisible: false });
+    it('should create AIChat instance when aiAssistant becomes enabled', () => {
+      const { $container, aiAssistantView, setEnabled } = createAIAssistantView({
+        initialEnabled: false,
+      });
 
-      setVisible(true);
+      setEnabled(true);
       aiAssistantView.render($container);
 
       expect(AIChat).toHaveBeenCalledTimes(1);
