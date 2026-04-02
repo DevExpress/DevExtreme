@@ -49,12 +49,12 @@ export class ViewDataGenerator {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _calculateStartViewDate(options: any): Date {
+  protected calculateStartViewDate(options: any): Date {
     return new Date();
   }
 
   public getStartViewDate(options): Date {
-    return this._calculateStartViewDate(options);
+    return this.calculateStartViewDate(options);
   }
 
   // entry point
@@ -74,7 +74,7 @@ export class ViewDataGenerator {
       hoursInterval,
     } = options;
 
-    this._setVisibilityDates(options);
+    this.setVisibilityDates(options);
     this.setHiddenInterval(startDayHour, endDayHour, hoursInterval);
 
     const groupsList = getAllGroupValues(getResourceManager().groupsLeafs);
@@ -741,12 +741,12 @@ export class ViewDataGenerator {
     return hoursInterval * toMs('hour');
   }
 
-  public _getIntervalDuration(intervalCount) {
+  public getIntervalDuration(intervalCount) {
     return toMs('day') * intervalCount;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _setVisibilityDates(options: any) {}
+  protected setVisibilityDates(options: any) {}
 
   public getCellCountInDay(startDayHour, endDayHour, hoursInterval) {
     const result = calculateDayDuration(startDayHour, endDayHour) / hoursInterval;

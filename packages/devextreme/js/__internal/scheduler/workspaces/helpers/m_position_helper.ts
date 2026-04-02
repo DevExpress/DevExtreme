@@ -231,7 +231,7 @@ class GroupStrategyBase {
     return maxVerticalPosition - getCellHeight(this.DOMMetaData) * rowCount;
   }
 
-  _getAllDayHeight(showAllDayPanel) {
+  protected getAllDayHeight(showAllDayPanel) {
     return getAllDayHeight(showAllDayPanel, true, this.DOMMetaData);
   }
 
@@ -250,7 +250,7 @@ class GroupStrategyBase {
 
     // Should decrease allDayPanel amount due to the dual calculation corrections.
     if (isGroupedAllDayPanel) {
-      result -= (groupIndex + 1) * this._getAllDayHeight(showAllDayPanel);
+      result -= (groupIndex + 1) * this.getAllDayHeight(showAllDayPanel);
     }
 
     return result;
@@ -282,7 +282,7 @@ class GroupStrategyHorizontal extends GroupStrategyBase {
     return 0;
   }
 
-  _getAllDayHeight(showAllDayPanel) {
+  protected getAllDayHeight(showAllDayPanel) {
     return getAllDayHeight(showAllDayPanel, false, this.DOMMetaData);
   }
 }
