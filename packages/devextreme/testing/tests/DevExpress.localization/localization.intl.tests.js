@@ -775,48 +775,71 @@ QUnit.module('Intl localization', {
 });
 
 QUnit.module('Global formatting config (spec, intl)', () => {
+    const saveGlobalFormats = () => {
+        const globalConfig = config();
+
+        return {
+            dateFormat: globalConfig.dateFormat,
+            timeFormat: globalConfig.timeFormat,
+            dateTimeFormat: globalConfig.dateTimeFormat,
+            numberFormat: globalConfig.numberFormat,
+        };
+    };
+    const restoreGlobalFormats = (saved) => {
+        const globalConfig = config();
+
+        Object.keys(saved).forEach((key) => {
+            const value = saved[key];
+            if(value === undefined) {
+                delete globalConfig[key];
+            } else {
+                globalConfig[key] = value;
+            }
+        });
+    };
+
     QUnit.test('global dateFormat supports formatter function values', function(assert) {
-        const originalConfig = config();
+        const saved = saveGlobalFormats();
 
         try {
             config({
-                ...originalConfig,
+                ...config(),
                 dateFormat: (date) => `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
             });
 
             assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2), config().dateFormat), '2-1-2020');
         } finally {
-            config(originalConfig);
+            restoreGlobalFormats(saved);
         }
     });
 
     QUnit.test('global dateTimeFormat supports formatter function values', function(assert) {
-        const originalConfig = config();
+        const saved = saveGlobalFormats();
 
         try {
             config({
-                ...originalConfig,
+                ...config(),
                 dateTimeFormat: (date) => `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`,
             });
 
             assert.strictEqual(dateLocalization.format(new Date(2020, 0, 2, 14, 5), config().dateTimeFormat), '2/1/2020 14:5');
         } finally {
-            config(originalConfig);
+            restoreGlobalFormats(saved);
         }
     });
 
     QUnit.test('global numberFormat supports formatter function values', function(assert) {
-        const originalConfig = config();
+        const saved = saveGlobalFormats();
 
         try {
             config({
-                ...originalConfig,
+                ...config(),
                 numberFormat: (value) => `#${value.toFixed(2)}`,
             });
 
             assert.strictEqual(numberLocalization.format(12.3), '#12.30');
         } finally {
-            config(originalConfig);
+            restoreGlobalFormats(saved);
         }
     });
 });

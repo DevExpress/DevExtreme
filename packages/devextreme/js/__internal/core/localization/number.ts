@@ -6,6 +6,7 @@ import currencyLocalization from '@ts/core/localization/currency';
 import intlNumberLocalization from '@ts/core/localization/intl/number';
 import { getFormatter } from '@ts/core/localization/ldml/number';
 import { toFixed } from '@ts/core/localization/utils';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import { escapeRegExp } from '@ts/core/utils/m_common';
 import { injector as dependencyInjector } from '@ts/core/utils/m_dependency_injector';
 import { each } from '@ts/core/utils/m_iterator';
@@ -319,6 +320,12 @@ const numberLocalization = dependencyInjector({
 
     if (typeof format === 'number') {
       return value;
+    }
+
+    const globalNumberFormat = getGlobalFormatByDataType('number');
+
+    if (!format && globalNumberFormat) {
+      format = globalNumberFormat as LocalizationFormat;
     }
 
     // @ts-expect-error
