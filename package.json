@@ -13,7 +13,7 @@
     "react-storybook:start": "nx start devextreme-react-storybook",
     "tools": "dx-tools",
     "vue:regenerate": "nx regenerate devextreme-vue",
-    "regenerate-all": "nx run-many -t regenerate",
+    "regenerate-all": "nx run-many -t regenerate && git diff -- packages/devextreme-angular/src/index.ts",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
     "all:set-timestamp-version": "ts-node tools/scripts/set-timestamp-version.ts",
