@@ -3373,3 +3373,58 @@ QUnit.module('validation', {
         assert.strictEqual(this.$dateBox.hasClass(SHOW_INVALID_BADGE_CLASS), false, 'validation icon is be hidden');
     });
 });
+
+QUnit.module('Global formatting config (spec)', {
+    beforeEach: function() {
+        this.originalConfig = config();
+    },
+    afterEach: function() {
+        config(this.originalConfig);
+    },
+}, () => {
+    QUnit.test('implicit date displayFormat uses global dateFormat', function(assert) {
+        config({
+            ...this.originalConfig,
+            dateFormat: 'dd/MM/yyyy',
+        });
+
+        const instance = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: new Date(2020, 0, 2),
+            pickerType: 'calendar',
+        }).dxDateBox('instance');
+
+        assert.strictEqual(instance.option('text'), '02/01/2020');
+    });
+
+    QUnit.test('implicit datetime displayFormat uses global dateTimeFormat', function(assert) {
+        config({
+            ...this.originalConfig,
+            dateTimeFormat: 'dd/MM/yyyy, HH:mm',
+        });
+
+        const instance = $('#dateBox').dxDateBox({
+            type: 'datetime',
+            value: new Date(2020, 0, 2, 14, 5),
+            pickerType: 'calendar',
+        }).dxDateBox('instance');
+
+        assert.strictEqual(instance.option('text'), '02/01/2020, 14:05');
+    });
+
+    QUnit.test('explicit displayFormat keeps priority over global dateFormat', function(assert) {
+        config({
+            ...this.originalConfig,
+            dateFormat: 'dd/MM/yyyy',
+        });
+
+        const instance = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: new Date(2020, 0, 2),
+            displayFormat: 'shortDate',
+            pickerType: 'calendar',
+        }).dxDateBox('instance');
+
+        assert.strictEqual(instance.option('text'), '1/2/2020');
+    });
+});

@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import dateSerialization from 'core/utils/date_serialization';
+import config from 'core/config';
 import Tooltip from 'ui/tooltip';
 import { hide } from '__internal/ui/tooltip/m_tooltip';
 import resizeCallbacks from 'core/utils/resize_callbacks';
@@ -34,6 +35,76 @@ const moduleConfig = {
         hide();
     }
 };
+
+module('Global formatting config (spec): Scheduler tooltip', {
+    beforeEach() {
+        fx.off = true;
+        this.originalConfig = config();
+    },
+    afterEach() {
+        fx.off = false;
+        hide();
+        config(this.originalConfig);
+    }
+}, () => {
+    const createScheduler = (options) => createWrapper($.extend({
+        currentView: 'day',
+        currentDate: new Date(2015, 1, 9),
+        height: 600,
+        dataSource: [{
+            text: 'Task 1',
+            startDate: new Date(2015, 1, 9, 11, 0),
+            endDate: new Date(2015, 1, 9, 12, 0),
+        }],
+    }, options));
+
+    test('implicit Scheduler tooltip time format uses global timeFormat', async function(assert) {
+        config({
+            ...this.originalConfig,
+            timeFormat: (date) => `T${date.getHours()}`,
+        });
+
+        const scheduler = await createScheduler();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
+
+        assert.strictEqual(scheduler.tooltip.getDateText(), 'T11 - T12');
+    });
+
+    test('implicit Scheduler tooltip time format uses dateTimeFormatPresets.shortTime when global timeFormat is not set', async function(assert) {
+        config({
+            ...this.originalConfig,
+            dateTimeFormatPresets: {
+                shortTime: (date) => `P${date.getHours()}`,
+            },
+        });
+
+        const scheduler = await createScheduler();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
+
+        assert.strictEqual(scheduler.tooltip.getDateText(), 'P11 - P12');
+    });
+
+    test('global timeFormat has priority over dateTimeFormatPresets.shortTime for implicit Scheduler tooltip format', async function(assert) {
+        config({
+            ...this.originalConfig,
+            timeFormat: (date) => `G${date.getHours()}`,
+            dateTimeFormatPresets: {
+                shortTime: (date) => `P${date.getHours()}`,
+            },
+        });
+
+        const scheduler = await createScheduler();
+        const clock = sinon.useFakeTimers();
+        await scheduler.appointments.click(0, clock);
+        clock.restore();
+
+        assert.strictEqual(scheduler.tooltip.getDateText(), 'G11 - G12');
+    });
+});
 
 module('Integration: Appointment tooltip', moduleConfig, () => {
     const createScheduler = (options) => createWrapper($.extend(options, { height: 600 }));
