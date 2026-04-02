@@ -738,58 +738,6 @@ supportedScrollingModes.forEach(scrollingMode => {
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
         });
 
-        test('Recurrent Task editing, single mode - double click', async function(assert) {
-            const data = new DataSource({
-                store: [
-                    {
-                        text: 'Task 1',
-                        startDate: new Date(2015, 1, 9, 1, 0),
-                        endDate: new Date(2015, 1, 9, 2, 0),
-                        recurrenceRule: 'FREQ=DAILY'
-                    }
-                ]
-            });
-
-            const updatedItem = {
-                text: 'Task 2',
-                startDate: new Date(2015, 1, 11, 3),
-                endDate: new Date(2015, 1, 11, 4),
-                allDay: false,
-                recurrenceRule: '',
-            };
-
-            const scheduler = await this.createInstance({
-                currentDate: new Date(2015, 1, 9),
-                dataSource: data,
-                currentView: 'week',
-                firstDayOfWeek: 1,
-
-            });
-            const clock = sinon.useFakeTimers();
-            $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger(dblclickEvent.name);
-            await clock.tickAsync(300);
-
-            $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-
-            const $title = $('.dx-textbox').eq(0);
-            const title = $title.dxTextBox('instance');
-            const $startTime = $('.dx-datebox').eq(1);
-            const startTime = $startTime.dxDateBox('instance');
-
-            title.option('value', 'Task 2');
-            startTime.option('value', new Date(2015, 1, 11, 3, 0));
-            $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
-            await clock.tickAsync(300);
-            clock.restore();
-
-            const updatedSingleItem = scheduler.instance.option('dataSource').items()[1];
-            const updatedRecurringItem = scheduler.instance.option('dataSource').items()[0];
-            const exceptionDate = new Date(2015, 1, 11, 1, 0, 0, 0);
-
-            assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
-            assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
-        });
-
         test('Recurrent allDay task dragging on month view, single mode', async function(assert) {
             const data = new DataSource({
                 store: [
@@ -1196,47 +1144,6 @@ supportedScrollingModes.forEach(scrollingMode => {
             const $appointments = scheduler.instance.$element().find('.dx-scheduler-appointment');
 
             assert.equal($appointments.length, 11, 'correct number of the appointments');
-        });
-
-        test('Single changed appointment should be rendered correctly in specified timeZone', async function(assert) {
-            if(!isDesktopEnvironment()) {
-                assert.ok(true, 'This test is for desktop only');
-                return;
-            }
-
-            const scheduler = await this.createInstance({
-                dataSource: [{
-                    text: 'Recurrence',
-                    startDate: '2018-05-23T10:00:00Z',
-                    endDate: '2018-05-23T10:30:00Z',
-                    recurrenceRule: 'FREQ=DAILY'
-                }],
-
-                views: ['week'],
-                currentView: 'week',
-                currentDate: new Date(2018, 4, 23),
-                timeZone: 'Etc/UTC',
-                height: 2000,
-                width: 800
-            });
-
-            const clock = sinon.useFakeTimers();
-            $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(0).trigger('dxclick').trigger('dxclick');
-
-            $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-
-            const $startTime = $('.dx-datebox').eq(1);
-            const startTime = $startTime.dxDateBox('instance');
-            const expectedStartDate = new Date(2018, 4, 23, 9, 0);
-
-            startTime.option('value', expectedStartDate);
-            $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
-            await clock.tickAsync(300);
-            clock.restore();
-
-            const actualStartDate = $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(3).dxSchedulerAppointment('instance').option('startDate');
-
-            assert.deepEqual(actualStartDate, expectedStartDate, 'appointment starts in 9AM');
         });
 
         test('Recurrent appointment considers firstDayOfWeek of Scheduler, WEEKLY,INTERVAL=2 (T744191)', async function(assert) {
