@@ -432,6 +432,10 @@ class ChatTextArea extends TextArea<Properties> {
   }
 
   _renderFileUploader(): void {
+    if (!this._$textEditorContainer) {
+      return;
+    }
+
     this._$fileUploader = $('<div>')
       .addClass(CHAT_TEXT_AREA_ATTACHMENTS)
       .insertBefore(this._$textEditorContainer);
@@ -584,7 +588,7 @@ class ChatTextArea extends TextArea<Properties> {
     return maxHeight;
   }
 
-  _keyPressHandler(e: InputEvent): void {
+  _keyPressHandler(e: { originalEvent: InputEvent & KeyboardEvent }): void {
     super._keyPressHandler(e);
 
     this._updateButtonsState();

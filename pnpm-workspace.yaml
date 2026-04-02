@@ -12,7 +12,7 @@ catalog:
   inferno-create-element: ^8.2.3
   inferno-server: ^8.2.3
   devexpress-diagram: 2.2.25
-  devexpress-gantt: 4.1.66
+  devexpress-gantt: 4.1.67
   devextreme-exceljs-fork: 4.4.7
   devextreme-quill: 1.7.9
   eslint: 9.39.4
@@ -38,22 +38,22 @@ catalog:
 
 catalogs:
   angular:
-    "@angular-devkit/build-angular": ~19.2.19
-    "@angular-devkit/architect": ~0.1902.19
-    "@angular-devkit/schematics": ~19.2.19
-    "@angular/cli": ~19.2.19
-    "@angular/common": ~19.2.19
-    "@angular/compiler": ~19.2.19
-    "@angular/compiler-cli": ~19.2.19
-    "@angular/core": ~19.2.19
-    "@angular/forms": ~19.2.19
-    "@angular/platform-browser": ~19.2.19
-    "@angular/platform-browser-dynamic": ~19.2.19
-    "@angular/platform-server": ~19.2.19
-    "@angular/router": ~19.2.19
-    "ng-packagr": ~19.2.2
-    "typescript": 5.5.4
-    "zone.js": 0.15.1
+    "@angular-devkit/build-angular": ~20.3.0
+    "@angular-devkit/architect": ~0.2003.15
+    "@angular-devkit/schematics": ~20.3.0
+    "@angular/cli": ~20.3.0
+    "@angular/common": ~20.3.0
+    "@angular/compiler": ~20.3.0
+    "@angular/compiler-cli": ~20.3.0
+    "@angular/core": ~20.3.0
+    "@angular/forms": ~20.3.0
+    "@angular/platform-browser": ~20.3.0
+    "@angular/platform-browser-dynamic": ~20.3.0
+    "@angular/platform-server": ~20.3.0
+    "@angular/router": ~20.3.0
+    "ng-packagr": ~20.3.0
+    "typescript": ~5.8.0
+    "zone.js": ~0.15.1
   eslint8:
     eslint: 9.39.4
     eslint-config-airbnb-typescript: 17.1.0

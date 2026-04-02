@@ -53,10 +53,12 @@ import {
   findIndexOfNextVisibleItem,
   findLastIndexOfNonCollapsedItem,
   findLastIndexOfVisibleItem,
+  findLastVisibleExpandedItemIndex,
   getElementSize,
   getNextLayout,
   isElementVisible,
   setFlexProp,
+  tryConvertToNumber,
 } from './utils/layout';
 import { getDefaultLayout } from './utils/layout_default';
 import { compareNumbersWithPrecision } from './utils/number_comparison';
@@ -69,13 +71,13 @@ import {
   type RenderQueueItem,
 } from './utils/types';
 
-const SPLITTER_CLASS = 'dx-splitter';
-const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
-const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
+export const SPLITTER_CLASS = 'dx-splitter';
+export const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
+export const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
+export const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
 const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
-const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 
@@ -106,6 +108,7 @@ export interface Properties<
     keyof PublicProperties<TItem, TKey>
   > {
   _renderQueue?: RenderQueueItem[];
+  _ignoreSizeConstraints?: boolean;
 }
 
 interface PaneCache {
@@ -118,9 +121,11 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   private _renderQueue: RenderQueueItem[] = [];
 
-  private _panesCacheSize: (PaneCache | undefined)[] = [];
+  // @ts-expect-error ts-error
+  private _panesCacheSize: (PaneCache | undefined)[];
 
-  private _panesCacheSizeVisible: (PaneCache | undefined)[] = [];
+  // @ts-expect-error ts-error
+  private _panesCacheSizeVisible: (PaneCache | undefined)[];
 
   private _savedCollapsingEvent?: DxEvent<InteractionEvent>;
 
@@ -128,11 +133,15 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
   private _layout?: number[];
 
+  private _idealLayout?: number[];
+
   private _currentLayout?: number[];
 
   private _activeResizeHandleIndex?: number;
 
   private _collapseDirection?: CollapseExpandDirection;
+
+  private _initialPaneSizes: (string | number | undefined)[] = [];
 
   private _itemRestrictions: PaneRestrictions[] = [];
 
@@ -159,6 +168,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
         role: 'group',
       },
       _renderQueue: undefined,
+      _ignoreSizeConstraints: false,
     };
   }
 
@@ -201,10 +211,10 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
     this._toggleOrientationClass();
 
-    super._initMarkup();
-
     this._panesCacheSize = [];
     this._panesCacheSizeVisible = [];
+
+    super._initMarkup();
 
     this._attachResizeObserverSubscription();
   }
@@ -236,13 +246,24 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   }
 
   _resizeHandler(): void {
-    if (this._shouldRecalculateLayout && this._isAttached() && this._isVisible()) {
+    if (!this._isAttached() || !this._isVisible()) {
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _ignoreSizeConstraints } = this.option();
+
+    if (this._shouldRecalculateLayout) {
       this._layout = this._getDefaultLayoutBasedOnSize();
+      this._idealLayout = this._layout;
 
       this._applyStylesFromLayout(this._layout);
+      this._setPanesCacheSize();
       this._updateItemSizes();
 
       this._shouldRecalculateLayout = false;
+    } else if (!_ignoreSizeConstraints) {
+      this._dimensionChanged();
     }
   }
 
@@ -252,9 +273,13 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
 
+    this._initialPaneSizes = items.map((item: Item): string | number | undefined => item.size);
+
     if (this._isVisible()) {
       this._layout = this._getDefaultLayoutBasedOnSize();
+      this._idealLayout = this._layout;
       this._applyStylesFromLayout(this._layout);
+      this._setPanesCacheSize();
 
       this._updateItemSizes();
     } else {
@@ -262,6 +287,45 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     }
 
     this._processRenderQueue();
+  }
+
+  _setPanesCacheSize(): void {
+    const { items = [] } = this.option();
+
+    items.forEach((item: Item, index) => {
+      const restriction = this._itemRestrictions[index];
+
+      if (!isDefined(restriction?.size)) {
+        return;
+      }
+
+      if (item.collapsed === true) {
+        const isLastNonCollapsed = index >= findLastIndexOfNonCollapsedItem(items);
+        const isLastVisible = this._isLastVisibleItem(index);
+
+        const direction = isLastVisible || isLastNonCollapsed
+          ? CollapseExpandDirection.Previous
+          : CollapseExpandDirection.Next;
+
+        this._panesCacheSize[index] = {
+          size: restriction.size,
+          direction,
+        };
+      }
+
+      if (item.visible === false) {
+        const isLastVisible = index >= findLastIndexOfVisibleItem(items);
+
+        const direction = isLastVisible
+          ? CollapseExpandDirection.Previous
+          : CollapseExpandDirection.Next;
+
+        this._panesCacheSizeVisible[index] = {
+          size: restriction.size,
+          direction,
+        };
+      }
+    });
   }
 
   _processRenderQueue(): void {
@@ -537,6 +601,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
 
         this._applyStylesFromLayout(newLayout);
         this._layout = newLayout;
+        this._idealLayout = newLayout;
       },
       onResizeEnd: (e: ResizeEndEvent): void => {
         const { element, event } = e;
@@ -661,16 +726,22 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     prevValue: unknown,
   ): void {
     switch (property) {
-      case 'size':
+      case 'size': {
+        type PropertyType = Item[typeof property];
+        this._initialPaneSizes[this._getIndexByItem(item)] = value as PropertyType;
         this._layout = this._getDefaultLayoutBasedOnSize(item);
+        this._idealLayout = this._layout;
 
         this._applyStylesFromLayout(this.getLayout());
+        this._setPanesCacheSize();
         this._updateItemSizes();
         break;
+      }
       case 'maxSize':
       case 'minSize':
       case 'collapsedSize':
         this._layout = this._getDefaultLayoutBasedOnSize();
+        this._idealLayout = this._layout;
 
         this._applyStylesFromLayout(this.getLayout());
         this._updateItemSizes();
@@ -757,6 +828,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
     }
 
     this._layout = newLayout;
+    this._idealLayout = this._layout;
 
     this._applyStylesFromLayout(this.getLayout());
     this._updateItemSizes();
@@ -1105,9 +1177,180 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
   }
 
   _dimensionChanged(): void {
-    this._updateItemSizes();
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _ignoreSizeConstraints } = this.option();
 
-    this._layout = this._getDefaultLayoutBasedOnSize();
+    if (_ignoreSizeConstraints) {
+      this._updateItemSizes();
+
+      this._layout = this._getDefaultLayoutBasedOnSize();
+      return;
+    }
+
+    const idealLayout = this._idealLayout;
+
+    if (!idealLayout || idealLayout.length === 0) {
+      return;
+    }
+
+    const { orientation, items = [] } = this.option();
+    const elementSize = getElementSize(this.$element(), orientation);
+    const handlesSize = this._getResizeHandlesSize();
+    const availableSize = Math.max(0, elementSize - handlesSize);
+
+    if (availableSize <= 0) {
+      this._layout = idealLayout.map((): number => 0);
+      this._applyStylesFromLayout(this._layout);
+      this._updateItemSizes();
+      return;
+    }
+
+    const idealPixels = idealLayout.map((ratio: number): number => (ratio / 100) * availableSize);
+
+    let remaining = 0;
+    const newPixels = idealPixels.map((px: number, index: number): number => {
+      const item = items[index];
+
+      if (!item || item.visible === false) {
+        remaining += px;
+        return 0;
+      }
+
+      if (item.collapsed === true) {
+        const collapsedPx = tryConvertToNumber(item.collapsedSize, elementSize) ?? 0;
+        remaining += px - collapsedPx;
+        return collapsedPx;
+      }
+
+      if (item.resizable === false) {
+        const originalSize = this._initialPaneSizes[index];
+
+        if (isDefined(originalSize)) {
+          const fixedPx = tryConvertToNumber(originalSize, elementSize) ?? px;
+          remaining += px - fixedPx;
+          return fixedPx;
+        }
+      }
+
+      const minPx = tryConvertToNumber(item.minSize, elementSize) ?? 0;
+      const maxPx = tryConvertToNumber(item.maxSize, elementSize);
+      const clampedPx = this._getClampedPixelSize(px, minPx, maxPx);
+
+      remaining += px - clampedPx;
+      return clampedPx;
+    });
+
+    this._distributeRemainingPixels(newPixels, remaining);
+
+    this._layout = newPixels.map((px: number): number => (px / availableSize) * 100);
+    this._applyStylesFromLayout(this._layout);
+    this._updateItemSizes();
+  }
+
+  _getEligiblePaneIndices(
+    pixels: number[],
+    remaining: number,
+  ): number[] {
+    const { items = [], orientation } = this.option();
+    const elementSize = getElementSize(this.$element(), orientation);
+    const indices: number[] = [];
+    const direction = remaining > 0 ? 1 : -1;
+
+    for (let index = 0; index < pixels.length; index += 1) {
+      const item = items[index];
+
+      if (!item || item.visible === false || item.collapsed === true
+        || (item.resizable === false && isDefined(this._initialPaneSizes[index]))) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      const minPx = tryConvertToNumber(item.minSize, elementSize) ?? 0;
+      const maxPx = tryConvertToNumber(item.maxSize, elementSize);
+      const clampedPx = this._getClampedPixelSize(pixels[index] + direction, minPx, maxPx);
+
+      if (compareNumbersWithPrecision(clampedPx, pixels[index]) !== 0) {
+        indices.push(index);
+      }
+    }
+
+    return indices;
+  }
+
+  _distributeRemainingPixels(
+    pixels: number[],
+    initialRemaining: number,
+  ): void {
+    const { items = [] } = this.option();
+
+    let remaining = initialRemaining;
+
+    while (compareNumbersWithPrecision(remaining, 0) !== 0) {
+      const eligiblePaneIndices = this._getEligiblePaneIndices(pixels, remaining);
+
+      if (eligiblePaneIndices.length === 0) {
+        const fallback = findLastVisibleExpandedItemIndex(items);
+
+        if (fallback !== -1) {
+          pixels[fallback] = Math.max(0, pixels[fallback] + remaining);
+        }
+        break;
+      }
+
+      const share = remaining / eligiblePaneIndices.length;
+      const result = this._applyPixelShare(pixels, eligiblePaneIndices, share);
+
+      remaining -= result.applied;
+
+      if (!result.distributed) {
+        break;
+      }
+    }
+  }
+
+  _applyPixelShare(
+    pixels: number[],
+    eligiblePaneIndices: number[],
+    share: number,
+  ): { applied: number; distributed: boolean } {
+    const { items = [], orientation } = this.option();
+    const elementSize = getElementSize(this.$element(), orientation);
+    let applied = 0;
+    let distributed = false;
+
+    eligiblePaneIndices.forEach((index: number): void => {
+      const item = items[index];
+      const prev = pixels[index];
+      const next = prev + share;
+
+      const minPx = tryConvertToNumber(item?.minSize, elementSize) ?? 0;
+      const maxPx = tryConvertToNumber(item?.maxSize, elementSize);
+      const clampedPx = this._getClampedPixelSize(next, minPx, maxPx);
+
+      const delta = clampedPx - prev;
+
+      if (compareNumbersWithPrecision(delta, 0) !== 0) {
+        pixels[index] = clampedPx;
+        applied += delta;
+        distributed = true;
+      }
+    });
+
+    return { applied, distributed };
+  }
+
+  _getClampedPixelSize(
+    size: number,
+    minPx: number,
+    maxPx: number | undefined,
+  ): number {
+    let result = Math.max(size, minPx);
+
+    if (isDefined(maxPx)) {
+      result = Math.min(result, maxPx);
+    }
+
+    return result;
   }
 
   _optionChanged(args: OptionChanged<Properties>): void {
@@ -1143,6 +1386,7 @@ class Splitter extends CollectionWidgetLiveUpdate<Properties> {
         this._updateNestedSplitterOption(name, value);
         break;
       case '_renderQueue':
+      case '_ignoreSizeConstraints':
         this._invalidate();
         break;
       default:
