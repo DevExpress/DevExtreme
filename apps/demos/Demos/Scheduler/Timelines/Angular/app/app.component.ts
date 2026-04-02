@@ -36,8 +36,6 @@ export class AppComponent {
   currentDate: Date = new Date(2021, 1, 2);
 
   snapToCellsMode: 'auto' | 'always' | 'never' = 'always';
-  private schedulerInstance: any;
-  private pendingScrollLeft: number | undefined;
 
   snapToCellsModeItems = [
     { value: 'auto' as const, text: 'Auto' },
@@ -52,21 +50,7 @@ export class AppComponent {
   }
 
   onSnapToCellsModeChanged(e: DxSelectBoxTypes.ValueChangedEvent): void {
-    this.pendingScrollLeft = this.schedulerInstance?.getWorkSpaceScrollable?.()?.scrollLeft?.() ?? 0;
     this.snapToCellsMode = e.value;
-  }
-
-  onSchedulerInitialized(e: { component: any }): void {
-    this.schedulerInstance = e.component;
-  }
-
-  onSchedulerContentReady(): void {
-    if (this.pendingScrollLeft === undefined) {
-      return;
-    }
-
-    this.schedulerInstance?.getWorkSpaceScrollable?.()?.scrollTo?.({ x: this.pendingScrollLeft });
-    this.pendingScrollLeft = undefined;
   }
 }
 
