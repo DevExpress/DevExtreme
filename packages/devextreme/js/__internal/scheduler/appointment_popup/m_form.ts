@@ -1,4 +1,3 @@
-import '../m_recurrence_editor';
 import '@js/ui/text_area';
 import '@js/ui/tag_box';
 import '@js/ui/switch';
