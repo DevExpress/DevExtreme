@@ -83,18 +83,10 @@ const schedulerLegacyMembers = [
 
     // m_scheduler.ts
     '_appointments',
-    '_compactAppointmentsHelper',
-    '_createEventArgs',
     '_dataAccessors',
-    '_dataSource',
-    '_dataSourceChangedHandler',
-    '_dataSourceOptions',
     '_getDragBehavior',
     '_isAppointmentBeingUpdated',
-    '_isScrollOptionsObject',
-    '_layoutManager',
     '_options',
-    '_timeZoneCalculator',
     '_workSpace',
 
     // appointments/m_appointment_collection.ts
