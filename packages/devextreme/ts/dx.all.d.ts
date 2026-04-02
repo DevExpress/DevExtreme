@@ -11333,6 +11333,15 @@ declare module DevExpress.ui {
       DevExpress.common.core.events.EventInfo<dxChat> &
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxChatOptions;
+    export type SendButtonBehavior = 'send' | 'custom';
+    /**
+     * [descr:_ui_chat_SendButtonClickEvent]
+     */
+    export type SendButtonClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxChat,
+        DevExpress.events.InteractionEvent
+      >;
     /**
      * [descr:_ui_chat_TypingEndEvent]
      */
@@ -11442,6 +11451,10 @@ declare module DevExpress.ui {
      * [descr:dxChatOptions.inputFieldText]
      */
     inputFieldText?: DevExpress.ui.dxTextArea.Properties['value'];
+    /**
+     * [descr:dxChatOptions.sendButtonOptions]
+     */
+    sendButtonOptions?: DevExpress.ui.dxChat.SendButtonProperties;
     /**
      * [descr:dxChatOptions.messageTemplate]
      */
@@ -34165,6 +34178,23 @@ declare module DevExpress.ui.dxChat {
     isDeleted?: boolean;
 
     [key: string]: any;
+  };
+  /**
+   * [descr:SendButtonProperties]
+   */
+  export type SendButtonProperties = {
+    /**
+     * [descr:SendButtonProperties.icon]
+     */
+    icon?: string;
+    /**
+     * [descr:SendButtonProperties.behavior]
+     */
+    behavior?: SendButtonBehavior;
+    /**
+     * [descr:SendButtonProperties.onClick]
+     */
+    onClick: (e: SendButtonClickEvent) => void;
   };
   /**
    * [descr:TextMessage]
