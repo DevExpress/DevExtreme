@@ -11333,6 +11333,15 @@ declare module DevExpress.ui {
       DevExpress.common.core.events.EventInfo<dxChat> &
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxChatOptions;
+    export type SendButtonAction = 'send' | 'custom';
+    /**
+     * [descr:_ui_chat_SendButtonClickEvent]
+     */
+    export type SendButtonClickEvent =
+      DevExpress.common.core.events.NativeEventInfo<
+        dxButton,
+        DevExpress.events.InteractionEvent
+      >;
     /**
      * [descr:_ui_chat_TypingEndEvent]
      */
@@ -11367,45 +11376,34 @@ declare module DevExpress.ui {
      */
     activeStateEnabled?: boolean;
     /**
-     * [descr:dxChatOptions.fileUploaderOptions]
+     * [descr:dxChatOptions.alerts]
      */
-    fileUploaderOptions?: Omit<
-      DevExpress.ui.dxFileUploader.Properties,
-      'dialogTrigger' | 'showFileList' | 'uploadMode' | 'value'
-    >;
+    alerts?: Array<DevExpress.ui.dxChat.Alert>;
     /**
-     * [descr:dxChatOptions.focusStateEnabled]
+     * [descr:dxChatOptions.dataSource]
      */
-    focusStateEnabled?: boolean;
+    dataSource?: DevExpress.data.DataSourceLike<DevExpress.ui.dxChat.Message> | null;
     /**
-     * [descr:dxChatOptions.hoverStateEnabled]
+     * [descr:dxChatOptions.dayHeaderFormat]
      */
-    hoverStateEnabled?: boolean;
-    /**
-     * [descr:dxChatOptions.user]
-     */
-    user?: DevExpress.ui.dxChat.User;
-    /**
-     * [descr:dxChatOptions.items]
-     */
-    items?: Array<DevExpress.ui.dxChat.Message>;
+    dayHeaderFormat?: DevExpress.common.core.localization.Format;
     /**
      * [descr:dxChatOptions.editing]
      */
     editing?: {
       /**
-       * [descr:dxChatOptions.editing.allowUpdating]
+       * [descr:dxChatOptions.editing.allowDeleting]
        */
-      allowUpdating?:
+      allowDeleting?:
         | boolean
         | ((options: {
             component?: dxChat;
             message?: DevExpress.ui.dxChat.Message;
           }) => boolean);
       /**
-       * [descr:dxChatOptions.editing.allowDeleting]
+       * [descr:dxChatOptions.editing.allowUpdating]
        */
-      allowDeleting?:
+      allowUpdating?:
         | boolean
         | ((options: {
             component?: dxChat;
@@ -11423,25 +11421,28 @@ declare module DevExpress.ui {
           itemElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
-     * [descr:dxChatOptions.dataSource]
+     * [descr:dxChatOptions.fileUploaderOptions]
      */
-    dataSource?: DevExpress.data.DataSourceLike<DevExpress.ui.dxChat.Message> | null;
+    fileUploaderOptions?: Omit<
+      DevExpress.ui.dxFileUploader.Properties,
+      'dialogTrigger' | 'showFileList' | 'uploadMode' | 'value'
+    >;
     /**
-     * [descr:dxChatOptions.dayHeaderFormat]
+     * [descr:dxChatOptions.focusStateEnabled]
      */
-    dayHeaderFormat?: DevExpress.common.core.localization.Format;
+    focusStateEnabled?: boolean;
     /**
-     * [descr:dxChatOptions.reloadOnChange]
+     * [descr:dxChatOptions.hoverStateEnabled]
      */
-    reloadOnChange?: boolean;
-    /**
-     * [descr:dxChatOptions.alerts]
-     */
-    alerts?: Array<DevExpress.ui.dxChat.Alert>;
+    hoverStateEnabled?: boolean;
     /**
      * [descr:dxChatOptions.inputFieldText]
      */
     inputFieldText?: DevExpress.ui.dxTextArea.Properties['value'];
+    /**
+     * [descr:dxChatOptions.items]
+     */
+    items?: Array<DevExpress.ui.dxChat.Message>;
     /**
      * [descr:dxChatOptions.messageTemplate]
      */
@@ -11457,25 +11458,29 @@ declare module DevExpress.ui {
      */
     messageTimestampFormat?: DevExpress.common.core.localization.Format;
     /**
-     * [descr:dxChatOptions.typingUsers]
+     * [descr:dxChatOptions.reloadOnChange]
      */
-    typingUsers?: Array<DevExpress.ui.dxChat.User>;
+    reloadOnChange?: boolean;
     /**
-     * [descr:dxChatOptions.showDayHeaders]
+     * [descr:dxChatOptions.sendButtonOptions]
      */
-    showDayHeaders?: boolean;
-    /**
-     * [descr:dxChatOptions.showUserName]
-     */
-    showUserName?: boolean;
+    sendButtonOptions?: DevExpress.ui.dxChat.SendButtonProperties;
     /**
      * [descr:dxChatOptions.showAvatar]
      */
     showAvatar?: boolean;
     /**
+     * [descr:dxChatOptions.showDayHeaders]
+     */
+    showDayHeaders?: boolean;
+    /**
      * [descr:dxChatOptions.showMessageTimestamp]
      */
     showMessageTimestamp?: boolean;
+    /**
+     * [descr:dxChatOptions.showUserName]
+     */
+    showUserName?: boolean;
     /**
      * [descr:dxChatOptions.speechToTextEnabled]
      */
@@ -11487,6 +11492,14 @@ declare module DevExpress.ui {
       DevExpress.ui.dxSpeechToText.Properties,
       'stylingMode' | 'type'
     >;
+    /**
+     * [descr:dxChatOptions.typingUsers]
+     */
+    typingUsers?: Array<DevExpress.ui.dxChat.User>;
+    /**
+     * [descr:dxChatOptions.user]
+     */
+    user?: DevExpress.ui.dxChat.User;
     /**
      * [descr:dxChatOptions.onAttachmentDownloadClick]
      */
@@ -11500,22 +11513,10 @@ declare module DevExpress.ui {
       | ((e: DevExpress.ui.dxChat.InputFieldTextChangedEvent) => void)
       | undefined;
     /**
-     * [descr:dxChatOptions.onMessageEntered]
+     * [descr:dxChatOptions.onMessageDeleted]
      */
-    onMessageEntered?:
-      | ((e: DevExpress.ui.dxChat.MessageEnteredEvent) => void)
-      | undefined;
-    /**
-     * [descr:dxChatOptions.onTypingStart]
-     */
-    onTypingStart?:
-      | ((e: DevExpress.ui.dxChat.TypingStartEvent) => void)
-      | undefined;
-    /**
-     * [descr:dxChatOptions.onTypingEnd]
-     */
-    onTypingEnd?:
-      | ((e: DevExpress.ui.dxChat.TypingEndEvent) => void)
+    onMessageDeleted?:
+      | ((e: DevExpress.ui.dxChat.MessageDeletedEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageDeleting]
@@ -11524,10 +11525,10 @@ declare module DevExpress.ui {
       | ((e: DevExpress.ui.dxChat.MessageDeletingEvent) => void)
       | undefined;
     /**
-     * [descr:dxChatOptions.onMessageDeleted]
+     * [descr:dxChatOptions.onMessageEditCanceled]
      */
-    onMessageDeleted?:
-      | ((e: DevExpress.ui.dxChat.MessageDeletedEvent) => void)
+    onMessageEditCanceled?:
+      | ((e: DevExpress.ui.dxChat.MessageEditCanceledEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageEditingStart]
@@ -11536,10 +11537,16 @@ declare module DevExpress.ui {
       | ((e: DevExpress.ui.dxChat.MessageEditingStartEvent) => void)
       | undefined;
     /**
-     * [descr:dxChatOptions.onMessageEditCanceled]
+     * [descr:dxChatOptions.onMessageEntered]
      */
-    onMessageEditCanceled?:
-      | ((e: DevExpress.ui.dxChat.MessageEditCanceledEvent) => void)
+    onMessageEntered?:
+      | ((e: DevExpress.ui.dxChat.MessageEnteredEvent) => void)
+      | undefined;
+    /**
+     * [descr:dxChatOptions.onMessageUpdated]
+     */
+    onMessageUpdated?:
+      | ((e: DevExpress.ui.dxChat.MessageUpdatedEvent) => void)
       | undefined;
     /**
      * [descr:dxChatOptions.onMessageUpdating]
@@ -11548,10 +11555,16 @@ declare module DevExpress.ui {
       | ((e: DevExpress.ui.dxChat.MessageUpdatingEvent) => void)
       | undefined;
     /**
-     * [descr:dxChatOptions.onMessageUpdated]
+     * [descr:dxChatOptions.onTypingEnd]
      */
-    onMessageUpdated?:
-      | ((e: DevExpress.ui.dxChat.MessageUpdatedEvent) => void)
+    onTypingEnd?:
+      | ((e: DevExpress.ui.dxChat.TypingEndEvent) => void)
+      | undefined;
+    /**
+     * [descr:dxChatOptions.onTypingStart]
+     */
+    onTypingStart?:
+      | ((e: DevExpress.ui.dxChat.TypingStartEvent) => void)
       | undefined;
   }
   /**
@@ -34165,6 +34178,23 @@ declare module DevExpress.ui.dxChat {
     isDeleted?: boolean;
 
     [key: string]: any;
+  };
+  /**
+   * [descr:SendButtonProperties]
+   */
+  export type SendButtonProperties = {
+    /**
+     * [descr:SendButtonProperties.action]
+     */
+    action?: SendButtonAction;
+    /**
+     * [descr:SendButtonProperties.icon]
+     */
+    icon?: string;
+    /**
+     * [descr:SendButtonProperties.onClick]
+     */
+    onClick?: (e: SendButtonClickEvent) => void;
   };
   /**
    * [descr:TextMessage]
