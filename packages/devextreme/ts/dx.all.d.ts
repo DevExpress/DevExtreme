@@ -34194,7 +34194,7 @@ declare module DevExpress.ui.dxChat {
     /**
      * [descr:SendButtonProperties.onClick]
      */
-    onClick: (e: SendButtonClickEvent) => void;
+    onClick?: (e: SendButtonClickEvent) => void;
   };
   /**
    * [descr:TextMessage]

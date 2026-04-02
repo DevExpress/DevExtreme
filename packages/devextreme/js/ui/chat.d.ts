@@ -381,7 +381,7 @@ export type SendButtonProperties = {
      * @type_function_param1 e:{ui/chat:SendButtonClickEvent}
      * @public
      */
-    onClick: ((e: SendButtonClickEvent) => void);
+    onClick?: ((e: SendButtonClickEvent) => void);
 };
 
 /**
