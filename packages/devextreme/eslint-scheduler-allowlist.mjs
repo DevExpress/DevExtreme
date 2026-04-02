@@ -30,6 +30,9 @@ const schedulerWidgetOverrides = [
     '_renderFocusTarget',
     '_supportedKeys',
     '_toggleVisibility',
+    '_createAction',
+    '_dataSource',
+    '_dataSourceLoadedCallback',
 ];
 
 const schedulerCollectionWidgetOverrides = [
@@ -75,7 +78,6 @@ const schedulerLegacyMembers = [
     '_$headerPanel',
     '_$headerPanelContainer',
     '_$thead',
-    '_createAction',
     '_dateTableScrollable',
     '_groupedStrategy',
     '_shader',
@@ -84,8 +86,6 @@ const schedulerLegacyMembers = [
     // m_scheduler.ts
     '_appointments',
     '_dataAccessors',
-    '_dataSource',
-    '_dataSourceLoadedCallback',
     '_getDragBehavior',
     '_isAppointmentBeingUpdated',
     '_options',

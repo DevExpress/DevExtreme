@@ -183,7 +183,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   appointmentDataSource!: AppointmentDataSource;
 
-  // TODO: inherited from Widget base class, cannot rename
   _dataSource: any;
 
   // TODO: used externally in m_subscribes.ts, prepare_appointments.ts, get_filter_options.ts
