@@ -556,8 +556,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 getSubject: () => {
                     const textBox = this.appointmentPopup.form.getSubjectTextBox();
                     return textBox.option('value');
-                },
-                isRecurrenceEditorVisible: () => $('.dx-recurrence-editor-container').is(':visible')
+                }
             },
 
             dialog: {
