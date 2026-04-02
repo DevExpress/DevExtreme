@@ -20,7 +20,7 @@ To implement resource-aware checks, access appointments and compare their `assig
 
 When a conflict is detected, the demo displays the error in the following ways:
 
-- A message box. 
-- An inline validation message (if an appointment edit form is active). 
+- A message box.
+- An inline validation message (if an appointment edit form is active).
 
-To display inline validation, use the `customizeItem` function to add a custom form item inside [editing.form](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/editing/form/) and attach custom `validationRules` to time editors.
+To display inline validation, configure a custom form item inside [editing.form](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/editing/form/) and use the `customizeItem` function to attach custom `validationRules` to the time editors.
