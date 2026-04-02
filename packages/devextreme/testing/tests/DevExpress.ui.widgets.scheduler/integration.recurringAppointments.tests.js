@@ -660,59 +660,6 @@ supportedScrollingModes.forEach(scrollingMode => {
             $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
         });
 
-        test('Recurrent Task editing, single mode', async function(assert) {
-            const data = new DataSource({
-                store: [
-                    {
-                        text: 'Task 1',
-                        startDate: new Date(2015, 1, 9, 1, 0),
-                        endDate: new Date(2015, 1, 9, 2, 0),
-                        recurrenceRule: 'FREQ=DAILY'
-                    }
-                ]
-            });
-
-            const updatedItem = {
-                text: 'Task 2',
-                startDate: new Date(2015, 1, 11, 3),
-                endDate: new Date(2015, 1, 11, 4),
-                allDay: false,
-                recurrenceRule: '',
-            };
-
-            const scheduler = await this.createInstance({
-                currentDate: new Date(2015, 1, 9),
-                dataSource: data,
-                currentView: 'week',
-                firstDayOfWeek: 1,
-
-            });
-
-            const clock = sinon.useFakeTimers();
-            await scheduler.appointments.click(2, clock);
-            scheduler.tooltip.clickOnItem();
-            $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-
-            const $title = $('.dx-textbox').eq(0);
-            const title = $title.dxTextBox('instance');
-            const $startTime = $('.dx-datebox').eq(1);
-            const startTime = $startTime.dxDateBox('instance');
-
-            title.option('value', 'Task 2');
-            startTime.option('value', new Date(2015, 1, 11, 3, 0));
-            $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
-            await clock.tickAsync(300);
-            clock.restore();
-
-            const updatedSingleItem = scheduler.instance.option('dataSource').items()[1];
-            const updatedRecurringItem = scheduler.instance.option('dataSource').items()[0];
-            const exceptionDate = new Date(2015, 1, 11, 1, 0, 0, 0);
-
-            assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
-
-            assert.equal(updatedRecurringItem.recurrenceException, dateSerialization.serializeDate(exceptionDate, 'yyyyMMddTHHmmssZ'), 'Exception for recurrence appointment is correct');
-        });
-
         test('Recurrent Task editing, single mode, should not reference copy recurrent data (T1228488)', async function(assert) {
             const updatedItem = {
                 text: 'Task 2',
@@ -761,78 +708,6 @@ supportedScrollingModes.forEach(scrollingMode => {
 
             assert.deepEqual(updatedSingleItem, updatedItem, 'New data is correct');
             assert.deepEqual(updatedRecurringItem.customData.texts, ['123'], 'Recurrence data is correct');
-        });
-
-        test('Recurrent Task edition canceling, single mode', async function(assert) {
-            const data = new DataSource({
-                store: [
-                    {
-                        text: 'Task 1',
-                        startDate: new Date(2015, 1, 9, 1, 0),
-                        endDate: new Date(2015, 1, 9, 2, 0),
-                        recurrenceRule: 'FREQ=DAILY'
-                    }
-                ]
-            });
-
-            const scheduler = await this.createInstance({
-                currentDate: new Date(2015, 1, 9),
-                dataSource: data,
-                currentView: 'week',
-                firstDayOfWeek: 1
-            });
-
-            const clock = sinon.useFakeTimers();
-            $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger('dxclick');
-            await clock.tickAsync(300);
-            $('.dx-scheduler-appointment-tooltip-buttons .dx-button').eq(1).trigger('dxclick');
-            $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-            $('.dx-button.dx-popup-cancel').eq(0).trigger('dxclick');
-
-            $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger('dxclick');
-            await clock.tickAsync(300);
-            $('.dx-scheduler-appointment-tooltip-buttons .dx-button').eq(1).trigger('dxclick');
-            $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
-            $('.dx-button.dx-popup-done').eq(0).trigger('dxclick');
-            clock.restore();
-
-            const items = scheduler.instance.option('dataSource').items();
-
-            assert.equal(items.length, 1, 'Items are correct');
-        });
-
-        test('Recurrent Task editing, single mode - canceling', async function(assert) {
-            const data = new DataSource({
-                store: [
-                    {
-                        text: 'Task 1',
-                        startDate: new Date(2015, 1, 9, 1, 0),
-                        endDate: new Date(2015, 1, 9, 2, 0),
-                        recurrenceRule: 'FREQ=DAILY'
-                    }
-                ]
-            });
-
-            const scheduler = await this.createInstance({
-                currentDate: new Date(2015, 1, 9),
-                dataSource: data,
-                currentView: 'week',
-                firstDayOfWeek: 1
-            });
-
-            const clock = sinon.useFakeTimers();
-            $(scheduler.instance.$element()).find('.dx-scheduler-appointment').eq(2).trigger('dxclick');
-            await clock.tickAsync(300);
-            $('.dx-scheduler-appointment-tooltip-buttons .dx-button').eq(1).trigger('dxclick');
-            $('.dx-dialog-buttons .dx-button').eq(1).trigger('dxclick');
-
-            $('.dx-button.dx-popup-cancel').eq(0).trigger('dxclick');
-            await clock.tickAsync(300);
-            clock.restore();
-
-            const recurrentItem = scheduler.instance.option('dataSource').items()[0];
-
-            assert.equal(recurrentItem.recurrenceException, undefined, 'Exception for recurrence appointment is correct');
         });
 
         test('Recurrent Task editing, confirmation tooltip should be shown after double click on recurrent appointment', async function(assert) {

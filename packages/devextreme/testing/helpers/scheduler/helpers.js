@@ -605,7 +605,6 @@ export class SchedulerTestWrapper extends ElementWrapper {
             setStartDate: (value) => this.appointmentForm.getEditor('startDateEditor').option('value', value),
             setEndDate: (value) => this.appointmentForm.getEditor('endDateEditor').option('value', value),
 
-            hasFormSingleColumn: () => $('.dx-responsivebox').first().hasClass('dx-responsivebox-screen-xs'),
             getRecurrentAppointmentFormDialogButtons: () => $('.dx-dialog-buttons .dx-button'),
             clickFormDialogButton: (index = 0) => this.appointmentForm.getRecurrentAppointmentFormDialogButtons().eq(index).trigger('dxclick'),
             getPendingEditorsCount: () => $(this.appointmentForm.getFormInstance().element()).find('.dx-validation-pending').length,
