@@ -21,10 +21,12 @@ export default meta;
 
 type Story = StoryObj;
 
+const currentDate = new Date(2021, 1, 2);
+
 export const Timelines: Story = {
   render: () => {
     const [snapToCellsMode, setSnapToCellsMode] = useState<SnapToCellsMode>('always');
-
+    
     return (
       <>
         <Scheduler
@@ -32,7 +34,7 @@ export const Timelines: Story = {
           dataSource={data}
           views={['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth']}
           defaultCurrentView="timelineMonth"
-          defaultCurrentDate={new Date(2021, 1, 2)}
+          defaultCurrentDate={currentDate}
           height={580}
           groups={['priority']}
           cellDuration={60}
