@@ -63,7 +63,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     return toMs('day');
   }
 
-  _calculateStartViewDate(options) {
+  calculateStartViewDate(options) {
     return monthUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,
@@ -73,7 +73,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     );
   }
 
-  _setVisibilityDates(options) {
+  setVisibilityDates(options) {
     const {
       intervalCount,
       startDate,

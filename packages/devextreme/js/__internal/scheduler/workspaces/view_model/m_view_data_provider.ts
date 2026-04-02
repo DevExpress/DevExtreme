@@ -453,7 +453,7 @@ export default class ViewDataProvider {
   }
 
   getIntervalDuration(intervalCount: number): number {
-    return this.viewDataGenerator._getIntervalDuration(intervalCount);
+    return this.viewDataGenerator.getIntervalDuration(intervalCount);
   }
 
   getLastCellEndDate(): Date {

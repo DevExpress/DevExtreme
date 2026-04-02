@@ -8,12 +8,12 @@ export class ViewDataGeneratorWorkWeek extends ViewDataGeneratorWeek {
     return isDataOnWeekend(date);
   }
 
-  _calculateStartViewDate(options) {
+  calculateStartViewDate(options) {
     return workWeekUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,
       options.startDate,
-      this._getIntervalDuration(options.intervalCount),
+      this.getIntervalDuration(options.intervalCount),
       this.getFirstDayOfWeek(options.firstDayOfWeek),
     );
   }

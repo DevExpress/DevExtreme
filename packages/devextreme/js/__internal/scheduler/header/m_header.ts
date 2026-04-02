@@ -255,7 +255,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     return getNextIntervalDate(options, direction);
   }
 
-  private _getDisplayedDate(): Date {
+  private getDisplayedDate(): Date {
     const { startViewDate, currentView } = this.option();
     const isMonth = currentView.type === 'month';
 
@@ -267,7 +267,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
     let date = currentDate;
 
     if (startViewDate) {
-      date = this._getDisplayedDate();
+      date = this.getDisplayedDate();
     }
 
     date = dateUtils.trimTime(date);

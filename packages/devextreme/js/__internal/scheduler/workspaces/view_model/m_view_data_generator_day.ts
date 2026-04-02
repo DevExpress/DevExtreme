@@ -2,12 +2,12 @@ import { dayUtils } from '../../r1/utils/index';
 import { ViewDataGenerator } from './m_view_data_generator';
 
 export class ViewDataGeneratorDay extends ViewDataGenerator {
-  _calculateStartViewDate(options) {
+  calculateStartViewDate(options) {
     return dayUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,
       options.startDate,
-      this._getIntervalDuration(options.intervalCount),
+      this.getIntervalDuration(options.intervalCount),
     );
   }
 }
