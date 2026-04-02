@@ -49,10 +49,9 @@ Ng.makeMetadata({
     removeMembers(/\/grids:ColumnBase.ai/),
     removeMembers(/\/calendar:dxCalendarOptions.todayButtonText/),
     removeMembers(/\/card_view:/),
-    removeMembers(/\/chat:SendButton/),
     removeMembers(/\/chat:TextMessage.attachments/),
     removeMembers(
-      /\/chat:dxChatOptions\.(fileUploaderOptions|inputFieldText|sendButtonOptions|onAttachmentDownloadClick|speechToTextOptions)/,
+      /\/chat:dxChatOptions\.(fileUploaderOptions|inputFieldText|sendButtonOptions|speechToTextOptions|onAttachmentDownloadClick)/,
     ),
     removeMembers(/\/form:dxFormOptions\.(aiIntegration|onSmartPasting|onSmartPasted|smartPaste)/),
     removeMembers(/\/form:dxFormSimpleItem\.aiOptions/),

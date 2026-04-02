@@ -399,6 +399,50 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     activeStateEnabled?: boolean;
     /**
      * @docid
+     * @default []
+     * @public
+     */
+    alerts?: Array<Alert>;
+    /**
+     * @docid
+     * @type string | Array<Message> | Store | DataSource | DataSourceOptions | null
+     * @default null
+     * @public
+     */
+    dataSource?: DataSourceLike<Message> | null;
+    /**
+     * @docid
+     * @default 'shortdate'
+     * @public
+     */
+    dayHeaderFormat?: Format;
+    /**
+     * @docid
+     * @public
+     */
+    editing?: {
+      /**
+       * @docid
+       * @default false
+       * @public
+       */
+      allowDeleting?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
+      /**
+       * @docid
+       * @default false
+       * @public
+       */
+      allowUpdating?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
+    };
+    /**
+     * @docid
+     * @default null
+     * @type_function_return string|Element|jQuery
+     * @public
+     */
+    emptyViewTemplate?: template | null | ((data: EmptyViewTemplateData, itemElement: DxElement) => string | UserDefinedElement);
+    /**
+     * @docid
      * @type dxFileUploaderOptions
      * @public
      */
@@ -417,68 +461,6 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     hoverStateEnabled?: boolean;
     /**
      * @docid
-     * @default { id: new Guid().toString() }
-     * @public
-     */
-    user?: User;
-    /**
-     * @docid
-     * @fires dxChatOptions.onOptionChanged
-     * @public
-     */
-    items?: Array<Message>;
-    /**
-     * @docid
-     * @public
-     */
-    editing?: {
-      /**
-       * @docid
-       * @default false
-       * @public
-       */
-      allowUpdating?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
-      /**
-       * @docid
-       * @default false
-       * @public
-       */
-      allowDeleting?: boolean | ((options: { component?: dxChat; message?: Message }) => boolean);
-    };
-    /**
-     * @docid
-     * @default null
-     * @type_function_return string|Element|jQuery
-     * @public
-     */
-    emptyViewTemplate?: template | null | ((data: EmptyViewTemplateData, itemElement: DxElement) => string | UserDefinedElement);
-    /**
-     * @docid
-     * @type string | Array<Message> | Store | DataSource | DataSourceOptions | null
-     * @default null
-     * @public
-     */
-    dataSource?: DataSourceLike<Message> | null;
-    /**
-     * @docid
-     * @default 'shortdate'
-     * @public
-     */
-    dayHeaderFormat?: Format;
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    reloadOnChange?: boolean;
-    /**
-     * @docid
-     * @default []
-     * @public
-     */
-    alerts?: Array<Alert>;
-    /**
-     * @docid
      * @default ""
      * @type string|undefined
      * @public
@@ -486,10 +468,10 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     inputFieldText?: TextAreaProperties['value'];
     /**
      * @docid
-     * @type SendButtonProperties
+     * @fires dxChatOptions.onOptionChanged
      * @public
      */
-    sendButtonOptions?: SendButtonProperties;
+    items?: Array<Message>;
     /**
      * @docid
      * @default null
@@ -505,22 +487,15 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     messageTimestampFormat?: Format;
     /**
      * @docid
-     * @default []
-     * @public
-     */
-    typingUsers?: Array<User>;
-    /**
-     * @docid
      * @default true
      * @public
      */
-    showDayHeaders?: boolean;
+    reloadOnChange?: boolean;
     /**
      * @docid
-     * @default true
      * @public
      */
-    showUserName?: boolean;
+    sendButtonOptions?: SendButtonProperties;
     /**
      * @docid
      * @default true
@@ -532,7 +507,19 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @default true
      * @public
      */
+    showDayHeaders?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
     showMessageTimestamp?: boolean;
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    showUserName?: boolean;
     /**
      * @docid
      * @default false
@@ -545,6 +532,18 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      * @public
      */
     speechToTextOptions?: Omit<SpeechToTextProperties, 'stylingMode' | 'type'>;
+    /**
+     * @docid
+     * @default []
+     * @public
+     */
+    typingUsers?: Array<User>;
+    /**
+     * @docid
+     * @default { id: new Guid().toString() }
+     * @public
+     */
+    user?: User;
     /**
      * @docid
      * @default undefined
@@ -564,27 +563,11 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
      * @default undefined
-     * @type_function_param1 e:{ui/chat:MessageEnteredEvent}
+     * @type_function_param1 e:{ui/chat:MessageDeletedEvent}
      * @action
      * @public
      */
-    onMessageEntered?: ((e: MessageEnteredEvent) => void) | undefined;
-    /**
-     * @docid
-     * @default undefined
-     * @type_function_param1 e:{ui/chat:TypingStartEvent}
-     * @action
-     * @public
-     */
-    onTypingStart?: ((e: TypingStartEvent) => void) | undefined;
-    /**
-     * @docid
-     * @default undefined
-     * @type_function_param1 e:{ui/chat:TypingEndEvent}
-     * @action
-     * @public
-     */
-    onTypingEnd?: ((e: TypingEndEvent) => void) | undefined;
+    onMessageDeleted?: ((e: MessageDeletedEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -596,11 +579,11 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
      * @default undefined
-     * @type_function_param1 e:{ui/chat:MessageDeletedEvent}
+     * @type_function_param1 e:{ui/chat:MessageEditCanceledEvent}
      * @action
      * @public
      */
-    onMessageDeleted?: ((e: MessageDeletedEvent) => void) | undefined;
+    onMessageEditCanceled?: ((e: MessageEditCanceledEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -612,11 +595,19 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
      * @default undefined
-     * @type_function_param1 e:{ui/chat:MessageEditCanceledEvent}
+     * @type_function_param1 e:{ui/chat:MessageEnteredEvent}
      * @action
      * @public
      */
-    onMessageEditCanceled?: ((e: MessageEditCanceledEvent) => void) | undefined;
+    onMessageEntered?: ((e: MessageEnteredEvent) => void) | undefined;
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:{ui/chat:MessageUpdatedEvent}
+     * @action
+     * @public
+     */
+    onMessageUpdated?: ((e: MessageUpdatedEvent) => void) | undefined;
     /**
      * @docid
      * @default undefined
@@ -628,11 +619,19 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
      * @default undefined
-     * @type_function_param1 e:{ui/chat:MessageUpdatedEvent}
+     * @type_function_param1 e:{ui/chat:TypingEndEvent}
      * @action
      * @public
      */
-    onMessageUpdated?: ((e: MessageUpdatedEvent) => void) | undefined;
+    onTypingEnd?: ((e: TypingEndEvent) => void) | undefined;
+    /**
+     * @docid
+     * @default undefined
+     * @type_function_param1 e:{ui/chat:TypingStartEvent}
+     * @action
+     * @public
+     */
+    onTypingStart?: ((e: TypingStartEvent) => void) | undefined;
 }
 
 /**
