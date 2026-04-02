@@ -11,7 +11,7 @@ Call [getOccurrences](/Documentation/ApiReference/UI_Components/dxScheduler/Meth
 
 The demo supports two modes:
 
-- **Different resources**: appointments assigned to different resources (assignees) can overlap.
+- **Different Resources**: appointments assigned to different resources (assignees) can overlap.
 - **Never**: overlapping appointments are not allowed, regardless of resource assignment.
 
 To implement resource-aware checks, access appointments and compare their `assigneeId` field values.
