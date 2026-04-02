@@ -1,5 +1,5 @@
 import config from '@js/core/config';
-import { locale as getCurrentLocale } from '@js/common/core/localization/core';
+import coreLocalization from '@js/common/core/localization/core';
 import parentLocales from '@ts/core/localization/cldr-data/parent_locales';
 import getParentLocale from '@ts/core/localization/parentLocale';
 import { isFunction, isPlainObject, isString } from '@js/core/utils/type';
@@ -7,7 +7,7 @@ import { isFunction, isPlainObject, isString } from '@js/core/utils/type';
 const hasOwn = Object.prototype.hasOwnProperty;
 
 const resolveByLocaleMap = (localeMap) => {
-    let currentLocale = getCurrentLocale();
+    let currentLocale = coreLocalization.locale();
 
     while(currentLocale) {
         if(hasOwn.call(localeMap, currentLocale) && localeMap[currentLocale] !== undefined) {
