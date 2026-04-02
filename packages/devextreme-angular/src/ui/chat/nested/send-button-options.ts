@@ -14,7 +14,7 @@ import {
 
 
 
-import type { SendButtonBehavior, SendButtonClickEvent } from 'devextreme/ui/chat';
+import type { SendButtonAction, SendButtonClickEvent } from 'devextreme/ui/chat';
 
 import {
     DxIntegrationModule,
@@ -33,11 +33,11 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoChatSendButtonOptionsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get behavior(): SendButtonBehavior {
-        return this._getOption('behavior');
+    get action(): SendButtonAction {
+        return this._getOption('action');
     }
-    set behavior(value: SendButtonBehavior) {
-        this._setOption('behavior', value);
+    set action(value: SendButtonAction) {
+        this._setOption('action', value);
     }
 
     @Input()

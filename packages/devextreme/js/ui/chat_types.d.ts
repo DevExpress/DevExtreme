@@ -22,7 +22,7 @@ export {
   Message,
   MessageTemplateData,
   EmptyViewTemplateData,
-  SendButtonBehavior,
+  SendButtonAction,
   SendButtonProperties,
   dxChatOptions,
   Properties,

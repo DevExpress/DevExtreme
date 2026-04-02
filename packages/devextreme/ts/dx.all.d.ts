@@ -11333,7 +11333,7 @@ declare module DevExpress.ui {
       DevExpress.common.core.events.EventInfo<dxChat> &
         DevExpress.common.core.events.ChangedOptionInfo;
     export type Properties = dxChatOptions;
-    export type SendButtonBehavior = 'send' | 'custom';
+    export type SendButtonAction = 'send' | 'custom';
     /**
      * [descr:_ui_chat_SendButtonClickEvent]
      */
@@ -34184,13 +34184,13 @@ declare module DevExpress.ui.dxChat {
    */
   export type SendButtonProperties = {
     /**
+     * [descr:SendButtonProperties.action]
+     */
+    action?: SendButtonAction;
+    /**
      * [descr:SendButtonProperties.icon]
      */
     icon?: string;
-    /**
-     * [descr:SendButtonProperties.behavior]
-     */
-    behavior?: SendButtonBehavior;
     /**
      * [descr:SendButtonProperties.onClick]
      */

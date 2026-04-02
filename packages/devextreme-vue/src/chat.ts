@@ -25,7 +25,7 @@ import {
  SendButtonProperties,
  User,
  Attachment,
- SendButtonBehavior,
+ SendButtonAction,
  SendButtonClickEvent,
 } from "devextreme/ui/chat";
 import {
@@ -597,12 +597,12 @@ const DxSendButtonOptionsConfig = {
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:behavior": null,
+    "update:action": null,
     "update:icon": null,
     "update:onClick": null,
   },
   props: {
-    behavior: String as PropType<SendButtonBehavior>,
+    action: String as PropType<SendButtonAction>,
     icon: String,
     onClick: Function as PropType<((e: SendButtonClickEvent) => void)>
   }
