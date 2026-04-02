@@ -74,6 +74,14 @@ export async function generateAngularComponents(
   });
   logger.verbose('✓ Module facades generated');
 
+  logger.verbose('🔗 Generating common reexports...');
+  AngularCommonReexportsGenerator.generate({
+    outputPath: path.dirname(componentsDir),
+    metadata: metaData,
+    templatingOptions: config.templatingOptions,
+  });
+  logger.verbose('✓ Common reexports generated');
+
   logger.verbose('📋 Generating index facades...');
   const facadeGenerator = new AngularFacadeGenerator();
   facadeGenerator.generate({
@@ -83,15 +91,8 @@ export async function generateAngularComponents(
       },
     },
     commonImports: ['./common', './common/grids', './common/charts'],
+    commonReexports: metaData?.commonReexports,
     templatingOptions: config.templatingOptions,
   });
   logger.verbose('✓ Index facades generated');
-
-  logger.verbose('🔗 Generating common reexports...');
-  AngularCommonReexportsGenerator.generate({
-    outputPath: path.dirname(componentsDir),
-    metadata: metaData,
-    templatingOptions: config.templatingOptions,
-  });
-  logger.verbose('✓ Common reexports generated');
 }

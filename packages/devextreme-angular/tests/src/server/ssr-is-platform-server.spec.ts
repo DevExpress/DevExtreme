@@ -50,12 +50,12 @@ describe('Universal', () => {
         template: '<dx-data-grid></dx-data-grid>',
       },
     });
-    const platformID = TestBed.get(PLATFORM_ID);
+    const platformID = TestBed.inject(PLATFORM_ID);
     if (isPlatformServer(platformID)) {
       const fixture = TestBed.createComponent(TestContainerComponent);
       fixture.detectChanges();
 
-      const transferState: TransferState = TestBed.get(TransferState);
+      const transferState: TransferState = TestBed.inject(TransferState);
 
       expect(transferState.hasKey(getServerStateKey())).toBe(true);
       expect(transferState.get(getServerStateKey(), null as any)).toEqual(true);
@@ -70,7 +70,7 @@ describe('Universal', () => {
     });
 
     const fixture = TestBed.createComponent(TestContainerComponent);
-    const transferState: TransferState = TestBed.get(TransferState);
+    const transferState: TransferState = TestBed.inject(TransferState);
 
     transferState.set(getServerStateKey(), true as any);
 

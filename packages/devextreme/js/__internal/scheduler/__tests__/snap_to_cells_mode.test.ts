@@ -62,6 +62,35 @@ describe('snapToCellsMode', () => {
     expect(appH).toEqual(DEFAULT_CELL_HEIGHT);
   });
 
+  it('changing snapToCellsMode at runtime regenerates appointment view model', async () => {
+    const { POM, scheduler } = await createScheduler({
+      width: 800,
+      height: 600,
+      views: ['day'],
+      currentView: 'day',
+      currentDate: new Date(2026, 2, 15),
+      cellDuration: 30,
+      startDayHour: 9,
+      endDayHour: 18,
+      dataSource: [{
+        text: 'short',
+        startDate: new Date(2026, 2, 15, 10, 0),
+        endDate: new Date(2026, 2, 15, 10, 10),
+      }],
+    });
+
+    let appH = POM.getAppointment('short').getGeometry().height;
+
+    expect(appH).toBeLessThan(DEFAULT_CELL_HEIGHT / 2);
+
+    scheduler.option('snapToCellsMode', 'always');
+    await new Promise(process.nextTick);
+
+    appH = POM.getAppointment('short').getGeometry().height;
+
+    expect(appH).toEqual(DEFAULT_CELL_HEIGHT);
+  });
+
   it('views[].snapToCellsMode always overrides default on day view', async () => {
     const { POM } = await createScheduler({
       width: 800,
