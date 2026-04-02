@@ -1079,6 +1079,28 @@ QUnit.module('dxPivotGrid', {
 
     });
 
+    QUnit.test('T1317109: FieldChooserBase internal _dataSource matches PivotGrid on dataSource change', function(assert) {
+        const pivotGrid = createPivotGrid({
+            dataSource: {
+                rows: [],
+                columns: [],
+                values: []
+            }
+        });
+
+        pivotGrid.option('dataSource', this.testOptions.dataSource);
+        this.clock.tick(500);
+
+        const fieldChooserBase = $('#pivotGrid').dxPivotGridFieldChooserBase('instance');
+        const pivotDataSource = pivotGrid.getDataSource();
+
+        assert.strictEqual(
+            fieldChooserBase._dataSource,
+            pivotDataSource,
+            'FieldChooserBase._dataSource must equal getDataSource() after dataSource change'
+        );
+    });
+
     QUnit.test('not show field chooser popup on description area click when fieldChooser disabled', function(assert) {
         createPivotGrid({
             fieldChooser: {
