@@ -26,6 +26,90 @@ const compat = new FlatCompat({
     allConfig: js.configs.all
 });
 
+const schedulerDOMComponentOverrides = [
+    '_createActionByOption',
+    '_defaultOptionsRules',
+    '_dimensionChanged',
+    '_dispose',
+    '_disposed',
+    '_getDefaultOptions',
+    '_init',
+    '_initTemplates',
+    '_optionChanged',
+    '_setOptionsByReference',
+    '_useTemplates',
+    '_visibilityChanged',
+];
+
+const schedulerWidgetOverrides = [
+    '_activeStateUnit',
+    '_clean',
+    '_cleanFocusState',
+    '_eventBindingTarget',
+    '_fireContentReadyAction',
+    '_focusInHandler',
+    '_focusOutHandler',
+    '_focusTarget',
+    '_initMarkup',
+    '_keyboardHandler',
+    '_render',
+    '_renderContent',
+    '_renderFocusState',
+    '_renderFocusTarget',
+    '_supportedKeys',
+    '_toggleVisibility',
+];
+
+const schedulerCollectionWidgetOverrides = [
+    '_cleanItemContainer',
+    '_clearDropDownItemsElements',
+    '_createItemByTemplate',
+    '_executeItemRenderAction',
+    '_filteredItems',
+    '_findItemElementByItem',
+    '_focusedItemIndexBeforeRender',
+    '_getItemContent',
+    '_itemClass',
+    '_itemClickHandler',
+    '_itemContainer',
+    '_moveFocus',
+    '_postprocessRenderItem',
+    '_processItemClick',
+    '_refreshActiveDescendant',
+    '_renderDirection',
+    '_renderItem',
+    '_sortedItems',
+];
+
+const schedulerR1Overrides = [
+    '_propsInfo',
+    '_value',
+    '_viewComponent',
+];
+
+const schedulerWorkspaceOverrides = [
+    '_calculateStartViewDate',
+    '_getAllDayHeight',
+    '_getCellCount',
+    '_getDateRange',
+    '_getDisplayedDate',
+    '_getGroupCount',
+    '_getIntervalDuration',
+    '_isHorizontalGroupedWorkSpace',
+    '_setVisibilityDates',
+    '_updateStateVirtualItems',
+];
+
+const schedulerMemberAllowlist = [
+    ...schedulerDOMComponentOverrides,
+    ...schedulerWidgetOverrides,
+    ...schedulerCollectionWidgetOverrides,
+    ...schedulerR1Overrides,
+    ...schedulerWorkspaceOverrides,
+];
+const schedulerMemberAllowlistRegex =
+    `^(_|__esModule|${schedulerMemberAllowlist.join('|')})$`;
+
 export default [
     {
         ignores: [
@@ -556,7 +640,35 @@ export default [
                     selector: ['variable', 'function', 'parameter'],
                     format: null,
                     leadingUnderscore: 'forbid',
-                    // allow only a single underscore identifier `_` to bypass this rule
+                    filter: {
+                        regex: '^_$',
+                        match: false,
+                    },
+                },
+                {
+                    selector: 'memberLike',
+                    format: null,
+                    leadingUnderscore: 'forbid',
+                    filter: {
+                        regex: schedulerMemberAllowlistRegex,
+                        match: false,
+                    },
+                },
+            ],
+            'devextreme-custom/no-deferred': 'error',
+            'devextreme-custom/prefer-switch-true': ['error', { minBranches: 3 }],
+        },
+    },
+    // Temporarily allow underscore members in appointments/ (pending refactoring)
+    {
+        files: ['js/__internal/scheduler/appointments/**/*.ts?(x)'],
+        rules: {
+            '@typescript-eslint/naming-convention': [
+                'error',
+                {
+                    selector: ['variable', 'function', 'parameter'],
+                    format: null,
+                    leadingUnderscore: 'forbid',
                     filter: {
                         regex: '^_$',
                         match: false,
@@ -568,8 +680,6 @@ export default [
                     leadingUnderscore: 'allow',
                 },
             ],
-            'devextreme-custom/no-deferred': 'error',
-            'devextreme-custom/prefer-switch-true': ['error', { minBranches: 3 }],
         },
     },
     // Allow Deferred in m_* scheduler files only
