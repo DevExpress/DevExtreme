@@ -11339,7 +11339,7 @@ declare module DevExpress.ui {
      */
     export type SendButtonClickEvent =
       DevExpress.common.core.events.NativeEventInfo<
-        dxChat,
+        dxButton,
         DevExpress.events.InteractionEvent
       >;
     /**

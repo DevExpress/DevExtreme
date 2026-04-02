@@ -356,7 +356,7 @@ export type EmptyViewTemplateData = {
 };
 
 /** @public */
-export type SendButtonBehavior = 'send' | 'custom';
+export type SendButtonAction = 'send' | 'custom';
 
 /**
  * @docid
@@ -367,15 +367,15 @@ export type SendButtonProperties = {
     /**
      * @docid
      * @public
-     * @default 'arrowright'
+     * @default 'send'
      */
-    icon?: string;
+    action?: SendButtonAction;
     /**
      * @docid
      * @public
-     * @default 'send'
+     * @default 'arrowright'
      */
-    behavior?: SendButtonBehavior;
+    icon?: string;
     /**
      * @docid
      * @type_function_param1 e:{ui/chat:SendButtonClickEvent}
