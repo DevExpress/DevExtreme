@@ -88,16 +88,9 @@ const schedulerR1Overrides = [
 ];
 
 const schedulerWorkspaceOverrides = [
-    '_calculateStartViewDate',
-    '_getAllDayHeight',
     '_getCellCount',
-    '_getDateRange',
-    '_getDisplayedDate',
     '_getGroupCount',
-    '_getIntervalDuration',
     '_isHorizontalGroupedWorkSpace',
-    '_setVisibilityDates',
-    '_updateStateVirtualItems',
 ];
 
 const schedulerLegacyMembers = [
