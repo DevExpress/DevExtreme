@@ -22,6 +22,7 @@ const SELECTORS = {
   headerRowClass: 'dx-header-row',
   dataRowClass: 'dx-data-row',
   groupRowClass: 'dx-group-row',
+  scrollableContainer: 'dx-scrollable-container',
   aiDialog: 'dx-aidialog',
   aiPromptEditor: 'dx-ai-prompt-editor',
   toast: 'dx-toast',
@@ -103,6 +104,10 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
 
   public getGroupRow(rowIndex: number): GroupRowModel {
     return new GroupRowModel(this.getGroupRows()[rowIndex]);
+  }
+
+  public getScrollableContainer(): HTMLElement {
+    return this.root.querySelector(`.${SELECTORS.scrollableContainer}`) as HTMLElement;
   }
 
   public getHeaderByText(text: string): dxElementWrapper {
