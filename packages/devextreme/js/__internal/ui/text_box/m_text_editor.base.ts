@@ -2,6 +2,7 @@ import type { EditorStyle, LabelMode } from '@js/common';
 import eventsEngine from '@js/common/core/events/core/events_engine';
 import pointerEvents from '@js/common/core/events/pointer';
 import { addNamespace, normalizeKeyName } from '@js/common/core/events/utils/index';
+import type { DeepPartial } from '@js/core';
 import config from '@js/core/config';
 import devices from '@js/core/devices';
 import domAdapter from '@js/core/dom_adapter';
@@ -32,6 +33,21 @@ import { TextEditorLabel } from './text_editor.label';
 import type { TextEditorButtonInfo } from './texteditor_button_collection/index';
 import TextEditorButtonCollection from './texteditor_button_collection/index';
 
+export interface TextEditorBaseProperties extends dxTextEditorOptions<TextEditorBase> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  displayValueFormatter?: ((value: string | any[]) => string);
+
+  labelMode?: LabelMode;
+
+  labelMark?: string;
+
+  showValidationMark?: boolean;
+
+  mode?: string;
+
+  displayValue?: string;
+}
+
 export const TEXTEDITOR_CLASS = 'dx-texteditor';
 export const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 export const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
@@ -47,8 +63,14 @@ const TEXTEDITOR_VALIDATION_PENDING_CLASS = 'dx-validation-pending';
 const TEXTEDITOR_VALID_CLASS = 'dx-valid';
 
 const EVENTS_LIST = [
-  'KeyDown', 'KeyPress', 'KeyUp',
-  'Change', 'Cut', 'Copy', 'Paste', 'Input',
+  'KeyDown',
+  'KeyPress',
+  'KeyUp',
+  'Change',
+  'Cut',
+  'Copy',
+  'Paste',
+  'Input',
 ];
 
 const CONTROL_KEYS = [
@@ -70,34 +92,20 @@ const CONTROL_KEYS = [
 
 let TextEditorLabelCreator = TextEditorLabel;
 
-function checkButtonsOptionType(buttons): void {
+const checkButtonsOptionType = (buttons: TextEditorBaseProperties['buttons']): void => {
   if (isDefined(buttons) && !Array.isArray(buttons)) {
     throw errors.Error('E1053');
   }
-}
-
-export interface TextEditorBaseProperties extends dxTextEditorOptions<TextEditorBase> {
-  displayValueFormatter?: ((value: string | any[]) => string);
-
-  labelMode?: LabelMode;
-
-  labelMark?: string;
-
-  showValidationMark?: boolean;
-
-  mode?: string;
-
-  displayValue?: string;
-}
+};
 
 class TextEditorBase<
   TProperties extends TextEditorBaseProperties = TextEditorBaseProperties,
 > extends Editor<TProperties> {
   _showValidMark?: boolean;
 
-  _$textEditorContainer!: dxElementWrapper;
+  _$textEditorContainer?: dxElementWrapper | null;
 
-  _$textEditorInputContainer!: dxElementWrapper;
+  _$textEditorInputContainer?: dxElementWrapper | null;
 
   _pendingIndicator?: LoadIndicator | null;
 
@@ -119,8 +127,11 @@ class TextEditorBase<
     if (options) {
       checkButtonsOptionType(options.buttons);
     }
-    // @ts-expect-error
-    this._buttonCollection = new TextEditorButtonCollection(this, this._getDefaultButtons());
+
+    this._buttonCollection = new TextEditorButtonCollection(
+      this as unknown as TextEditorBase,
+      this._getDefaultButtons(),
+    );
 
     this._$beforeButtonsContainer = null;
     this._$afterButtonsContainer = null;
@@ -154,22 +165,23 @@ class TextEditorBase<
       hoverStateEnabled: true,
       focusStateEnabled: true,
       text: undefined,
-      displayValueFormatter(value): string {
-        // @ts-expect-error ts-error
-        return isDefined(value) && value !== false ? value : '';
-      },
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       stylingMode: config().editorStylingMode || 'outlined',
       showValidationMark: true,
       label: '',
       labelMode: 'static',
       labelMark: '',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      displayValueFormatter(value: string | any[]): string {
+        // @ts-expect-error Comparison of boolean and any[], any is not string
+        return isDefined(value) && value !== false ? value : '';
+      },
     };
   }
 
   _defaultOptionsRules(): DefaultOptionsRule<TProperties>[] {
-    // @ts-expect-error
-    return super._defaultOptionsRules().concat([
+    const rules = [
+      ...super._defaultOptionsRules(),
       {
         device(): boolean {
           const themeName = current();
@@ -179,7 +191,7 @@ class TextEditorBase<
           labelMode: 'floating',
           // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
           stylingMode: config().editorStylingMode || 'filled',
-        },
+        } as DeepPartial<TProperties>,
       },
       {
         device(): boolean {
@@ -188,15 +200,21 @@ class TextEditorBase<
         },
         options: {
           labelMode: 'outside',
-        },
+        } as DeepPartial<TProperties>,
       },
-    ]);
+    ];
+
+    return rules;
   }
 
   // eslint-disable-next-line class-methods-use-this
   _getDefaultButtons(): TextEditorButtonInfo[] {
-    // @ts-expect-error ts-error
-    return [{ name: 'clear', Ctor: ClearButton }];
+    return [
+      {
+        name: 'clear',
+        Ctor: ClearButton,
+      },
+    ];
   }
 
   _isClearButtonVisible(): boolean {
@@ -267,19 +285,27 @@ class TextEditorBase<
     this._$textEditorInputContainer = $('<div>')
       .addClass(TEXTEDITOR_INPUT_CONTAINER_CLASS)
       .appendTo(this._$textEditorContainer);
+
     this._$textEditorInputContainer.append(this._createInput());
   }
 
-  _getInputContainer(): dxElementWrapper {
+  _getInputContainer(): dxElementWrapper | null | undefined {
     return this._$textEditorInputContainer;
   }
 
   _renderPendingIndicator(): void {
     this.$element().addClass(TEXTEDITOR_VALIDATION_PENDING_CLASS);
+
     const $inputContainer = this._getInputContainer();
+
+    if (!$inputContainer) {
+      return;
+    }
+
     const $indicatorElement = $('<div>')
       .addClass(TEXTEDITOR_PENDING_INDICATOR_CLASS)
       .appendTo($inputContainer);
+
     this._pendingIndicator = this._createComponent($indicatorElement, LoadIndicator, {});
   }
 
@@ -296,31 +322,32 @@ class TextEditorBase<
   _renderValidationState(): void {
     super._renderValidationState();
 
-    // @ts-expect-error ts-error
-    const isPending = this.option('validationStatus') === 'pending';
+    const { validationStatus, showValidationMark } = this.option();
+
+    const isPending = validationStatus === 'pending';
 
     if (isPending) {
       if (!this._pendingIndicator) {
         this._renderPendingIndicator();
       }
+
       this._showValidMark = false;
     } else {
-      // @ts-expect-error ts-error
-      if (this.option('validationStatus') === 'invalid') {
+      if (validationStatus === 'invalid') {
         this._showValidMark = false;
       }
-      // @ts-expect-error ts-error
-      if (!this._showValidMark && this.option('showValidationMark') === true) {
-        // @ts-expect-error ts-error
-        this._showValidMark = this.option('validationStatus') === 'valid' && !!this._pendingIndicator;
+
+      if (!this._showValidMark && showValidationMark === true) {
+        this._showValidMark = validationStatus === 'valid' && !!this._pendingIndicator;
       }
+
       this._disposePendingIndicator();
     }
 
     this._toggleValidMark();
   }
 
-  _getButtonsContainer(): dxElementWrapper {
+  _getButtonsContainer(): dxElementWrapper | null | undefined {
     return this._$textEditorContainer;
   }
 
@@ -328,10 +355,16 @@ class TextEditorBase<
     const { buttons } = this.option();
 
     const $buttonsContainer = this._getButtonsContainer();
+
+    if (!$buttonsContainer) {
+      return;
+    }
+
     this._$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(
       buttons,
       $buttonsContainer,
     );
+
     this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(
       buttons,
       $buttonsContainer,
@@ -353,9 +386,7 @@ class TextEditorBase<
 
     this._$beforeButtonsContainer = null;
     this._$afterButtonsContainer = null;
-    // @ts-expect-error _$textEditorContainer can be null and undefined
     this._$textEditorContainer = null;
-    // @ts-expect-error _$textEditorInputContainer can be null and undefined
     this._$textEditorInputContainer = null;
     this._$placeholder = null;
   }
@@ -379,8 +410,8 @@ class TextEditorBase<
   ): void {
     const inputAttributes = extend(this._getDefaultAttributes(), customAttributes);
 
-    // @ts-expect-error ts-error
-    $input.attr(inputAttributes).addClass(TEXTEDITOR_INPUT_CLASS);
+    $input.attr(inputAttributes);
+    $input.addClass(TEXTEDITOR_INPUT_CLASS);
 
     this._setInputMinHeight($input);
   }
@@ -392,7 +423,7 @@ class TextEditorBase<
   _getPlaceholderAttr(): string | null {
     const {
       ios,
-      // @ts-expect-error ts-error
+      // @ts-expect-error Property 'mac' does not exist on type 'Device'
       mac,
     } = devices.real();
     const { placeholder } = this.option();
@@ -435,29 +466,40 @@ class TextEditorBase<
   }
 
   _renderValue(): DeferredObj<unknown> {
-    const renderInputPromise = this._renderInputValue();
-    // @ts-expect-error ts-error
-    return renderInputPromise.promise();
+    const renderInputDeferred = this._renderInputValue();
+
+    // @ts-expect-error DeferredObj typification
+    const renderInputPromise = renderInputDeferred.promise() as DeferredObj<unknown>;
+
+    return renderInputPromise;
   }
 
-  _renderInputValue(value?): DeferredObj<unknown> {
-    value = value ?? this.option('value');
+  _renderInputValue(value?: TProperties['value']): DeferredObj<unknown> {
+    const {
+      value: optionValue,
+      text,
+      displayValue,
+      displayValueFormatter,
+    } = this.option();
 
-    const { text, displayValue, displayValueFormatter } = this.option();
+    const finalValue = value ?? optionValue;
 
     let textValue = text;
-    if (displayValue !== undefined && value !== null) {
+
+    if (displayValue !== undefined && finalValue !== null) {
       textValue = displayValueFormatter?.(displayValue);
     } else if (!isDefined(textValue)) {
-      textValue = displayValueFormatter?.(value);
+      textValue = displayValueFormatter?.(finalValue);
     }
 
-    this.option('text', textValue);
+    this.option({ text: textValue });
 
-    // fallback to empty string is required to support WebKit native date picker in some basic scenarios
-    // can not be covered by QUnit
     // @ts-expect-error @ts-error
-    if (this._input().val() !== (isDefined(textValue) ? textValue : '')) {
+    const inputElementValue = this._input().val() as string | undefined;
+
+    // fallback to empty string is required to support WebKit native date picker in some basic
+    // scenarios can not be covered by QUnit
+    if (inputElementValue !== (isDefined(textValue) ? textValue : '')) {
       this._renderDisplayText(textValue);
     } else {
       this._toggleEmptinessEventHandler();
@@ -473,23 +515,23 @@ class TextEditorBase<
 
   _isValueValid(): boolean {
     if (this._input().length) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error Property 'validity' does not exist on type 'Element'
       const { validity } = this._input().get(0);
 
       if (validity) {
-        return validity.valid;
+        return Boolean(validity.valid);
       }
     }
 
     return true;
   }
 
-  _toggleEmptiness(isEmpty): void {
+  _toggleEmptiness(isEmpty: boolean): void {
     this.$element().toggleClass(TEXTEDITOR_EMPTY_INPUT_CLASS, isEmpty);
     this._togglePlaceholder(isEmpty);
   }
 
-  _togglePlaceholder(isEmpty): void {
+  _togglePlaceholder(isEmpty: boolean): void {
     this.$element()
       .find(`.${TEXTEDITOR_PLACEHOLDER_CLASS}`)
       .eq(0)
@@ -511,8 +553,8 @@ class TextEditorBase<
 
   _toggleTabIndex(): void {
     const $input = this._input();
-    const disabled = this.option('disabled');
-    const focusStateEnabled = this.option('focusStateEnabled');
+
+    const { disabled, focusStateEnabled } = this.option();
 
     if (disabled || !focusStateEnabled) {
       $input.attr('tabIndex', -1);
@@ -534,8 +576,8 @@ class TextEditorBase<
 
   _toggleSpellcheckState(): void {
     const { spellcheck } = this.option();
-    // @ts-expect-error ts-error
-    this._input().prop('spellcheck', spellcheck);
+
+    this._input().prop('spellcheck', Boolean(spellcheck));
   }
 
   _unobserveLabelContainerResize(): void {
@@ -636,26 +678,26 @@ class TextEditorBase<
     }
 
     const $input = this._input();
+    // There should be no destructuring, because of knockout limitations
     const placeholder = this.option('placeholder');
+
     const placeholderAttributes = {
       id: placeholder ? `dx-${new Guid()}` : undefined,
       'data-dx_placeholder': placeholder,
     };
 
-    const $placeholder = this._$placeholder = $('<div>')
-      // @ts-expect-error ts-error
-      .attr(placeholderAttributes);
-
-    $placeholder.insertAfter($input);
-    $placeholder.addClass(TEXTEDITOR_PLACEHOLDER_CLASS);
+    // @ts-expect-error attr typification
+    this._$placeholder = $('<div>').attr(placeholderAttributes);
+    this._$placeholder.insertAfter($input);
+    this._$placeholder.addClass(TEXTEDITOR_PLACEHOLDER_CLASS);
   }
 
   _attachPlaceholderEvents(): void {
-    // @ts-expect-error ts-error
+    // @ts-expect-error second argument
     const startEvent = addNamespace(pointerEvents.up, this.NAME);
 
     eventsEngine.on(this._$placeholder, startEvent, () => {
-      // @ts-expect-error ts-error
+      // @ts-expect-error eventsEngine typification
       eventsEngine.trigger(this._input(), 'focus');
     });
     this._toggleEmptinessEventHandler();
@@ -665,18 +707,20 @@ class TextEditorBase<
     return this._$placeholder ?? $();
   }
 
-  _clearValueHandler(e): void {
+  _clearValueHandler(e: ValueChangedEvent & DxEvent): void {
     const $input = this._input();
+
     e.stopPropagation();
 
     this._saveValueChangeEvent(e);
     this._clearValue();
 
     if (!this._isFocused()) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error eventsEngine typification
       eventsEngine.trigger($input, 'focus');
     }
-    // @ts-expect-error ts-error
+
+    // @ts-expect-error eventsEngine typification
     eventsEngine.trigger($input, 'input');
   }
 
@@ -687,12 +731,16 @@ class TextEditorBase<
   _renderEvents(): void {
     const $input = this._input();
 
-    each(EVENTS_LIST, (_, event) => {
-      // @ts-expect-error
-      if (this.hasActionSubscription(`on${event}`)) {
-        // @ts-expect-error
-        const action = this._createActionByOption(`on${event}`, { excludeValidators: ['readOnly'] });
-        // @ts-expect-error ts-error
+    EVENTS_LIST.forEach((event: string) => {
+      const actionName = `on${event}`;
+      const hasActionSubscription = this.hasActionSubscription(actionName as keyof TProperties);
+
+      if (hasActionSubscription) {
+        const action = this._createActionByOption(actionName as keyof TProperties, {
+          excludeValidators: ['readOnly'],
+        });
+
+        // @ts-expect-error eventsEngine typification
         eventsEngine.on($input, addNamespace(event.toLowerCase(), this.NAME), (e) => {
           if (this._disposed) {
             return;
@@ -707,8 +755,8 @@ class TextEditorBase<
   _refreshEvents(): void {
     const $input = this._input();
 
-    each(EVENTS_LIST, (_, event) => {
-      // @ts-expect-error ts-error
+    EVENTS_LIST.forEach((event: string) => {
+      // @ts-expect-error second argument && eventsEngine typification
       eventsEngine.off($input, addNamespace(event.toLowerCase(), this.NAME));
     });
 
@@ -716,33 +764,37 @@ class TextEditorBase<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _keyPressHandler(e?): void {
+  _keyPressHandler(e?: { originalEvent: InputEvent & KeyboardEvent }): void {
     this.option('text', this._input().val());
   }
 
-  _keyDownHandler(e): void {
+  _keyDownHandler(e: KeyboardEvent): void {
     const $input = this._input();
     const isCtrlEnter = e.ctrlKey && normalizeKeyName(e) === 'enter';
+
     const { value } = this.option();
 
     const isNewValue = $input.val() !== value;
 
     if (isCtrlEnter && isNewValue) {
-      // @ts-expect-error ts-error
+      // @ts-expect-error eventsEngine typification
       eventsEngine.trigger($input, 'change');
     }
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _getValueChangeEventOptionName(): string {
+  _getValueChangeEventOptionName(): keyof TProperties {
     return 'valueChangeEvent';
   }
 
   _renderValueChangeEvent(): void {
+    const valueChangeEventOptionName = this._getValueChangeEventOptionName();
+    const { [valueChangeEventOptionName]: actionName } = this.option();
+
     const keyPressEvent = addNamespace(this._renderValueEventName(), `${this.NAME}TextChange`);
-    // @ts-expect-error ts-error
-    const valueChangeEvent = addNamespace(this.option(this._getValueChangeEventOptionName()), `${this.NAME}ValueChange`);
+    const valueChangeEvent = addNamespace(actionName as string, `${this.NAME}ValueChange`);
     const keyDownEvent = addNamespace('keydown', `${this.NAME}TextChange`);
+
     const $input = this._input();
 
     eventsEngine.on($input, keyPressEvent, this._keyPressHandler.bind(this));
@@ -772,9 +824,8 @@ class TextEditorBase<
     return this._input();
   }
 
-  // @ts-expect-error ts-error
-  _focusEventTarget() {
-    return this.element();
+  _focusEventTarget(): dxElementWrapper {
+    return this.$element();
   }
 
   _isInput(element: Element): boolean {
@@ -785,8 +836,10 @@ class TextEditorBase<
     if (event.isDefaultPrevented()) {
       return true;
     }
-    // @ts-expect-error ts-error
-    let shouldPrevent = this._isNestedTarget(event.relatedTarget);
+
+    let shouldPrevent = this._isNestedTarget(
+      (event as DxEvent & { relatedTarget: Element | dxElementWrapper; }).relatedTarget,
+    );
 
     if (event.type === 'focusin') {
       shouldPrevent = shouldPrevent
@@ -812,7 +865,9 @@ class TextEditorBase<
     return this.$element();
   }
 
-  _focusInHandler(event: DxEvent): void {
+  _focusInHandler(event: DxEvent & {
+    relatedTarget: Element | dxElementWrapper;
+  }): void {
     this._preventNestedFocusEvent(event);
 
     super._focusInHandler(event);
@@ -839,8 +894,9 @@ class TextEditorBase<
   }
 
   _toggleEmptinessEventHandler(): void {
-    const text = this._input().val();
-    // @ts-expect-error ts-error
+    // @ts-expect-error dxElementWrapper.val() typification
+    const text = this._input().val() as string;
+
     const isEmpty = (text === '' || text === null) && this._isValueValid();
 
     this._toggleEmptiness(isEmpty);
@@ -864,7 +920,7 @@ class TextEditorBase<
     eventsEngine.on(this._input(), 'keyup.onEnterKey.dxTextEditor', this._enterKeyHandlerUp.bind(this));
   }
 
-  _enterKeyHandlerUp(e): void {
+  _enterKeyHandlerUp(e: DxEvent<KeyboardEvent>): void {
     if (this._disposed) {
       return;
     }
@@ -876,6 +932,7 @@ class TextEditorBase<
 
   _updateValue(): void {
     this._options.silent('text', null);
+
     this._renderValue();
   }
 
@@ -889,8 +946,11 @@ class TextEditorBase<
   }
 
   _hasActiveElement(): boolean {
-    // @ts-expect-error ts-error
-    return this._input().is(domAdapter.getActiveElement(this._input()[0]));
+    const input = this._input()[0];
+    const activeElement = domAdapter.getActiveElement(input);
+
+    // @ts-expect-error dxElementWrapper
+    return this._input().is(activeElement);
   }
 
   _optionChanged(args: OptionChanged<TProperties>): void {
@@ -970,10 +1030,12 @@ class TextEditorBase<
         break;
       case 'buttons': {
         if (fullName === name) {
-          checkButtonsOptionType(value);
+          checkButtonsOptionType(value as TProperties['buttons']);
         }
+
         this._cleanButtonContainers();
         this._renderButtonContainers();
+
         const { stylingMode } = this.option();
 
         this._updateButtonsStyling(stylingMode);
@@ -983,6 +1045,7 @@ class TextEditorBase<
       }
       case 'visible': {
         super._optionChanged(args);
+
         if (value && this.option('buttons')) {
           this._cleanButtonContainers();
           this._renderButtonContainers();
@@ -990,6 +1053,7 @@ class TextEditorBase<
 
           this._updateButtonsStyling(stylingMode);
         }
+
         break;
       }
       case 'displayValueFormatter':
@@ -1003,21 +1067,21 @@ class TextEditorBase<
   }
 
   _renderInputType(): void {
+    const { mode } = this.option();
+
     // B218621, B231875
-    this._setInputType(this.option('mode'));
+    this._setInputType(mode);
   }
 
-  _setInputType(type): void {
+  _setInputType(type: string | undefined): void {
     const input = this._input();
-
-    if (type === 'search') {
-      type = 'text';
-    }
+    const defaultType = 'text';
+    const typeValue = type === 'search' ? defaultType : type;
 
     try {
-      input.prop('type', type);
+      input.prop('type', typeValue ?? defaultType);
     } catch (e) {
-      input.prop('type', 'text');
+      input.prop('type', defaultType);
     }
   }
 
@@ -1038,8 +1102,10 @@ class TextEditorBase<
     }
 
     const defaultOptions = this._getDefaultOptions();
+
     if (this.option('value') === defaultOptions.value) {
       this._options.silent('text', '');
+
       this._renderValue();
     } else {
       this.option('value', defaultOptions.value);
@@ -1048,6 +1114,7 @@ class TextEditorBase<
 
   _resetInputText(): void {
     this._options.silent('text', this._initialValue);
+
     this._renderValue();
   }
 
@@ -1083,13 +1150,22 @@ class TextEditorBase<
     }
   }
 
-  on(eventName: string | { [key: string]: any }, eventHandler?: any): this {
+  on(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    eventName: string | { [key: string]: any },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    eventHandler?: any | undefined,
+  ): this {
     const result = super.on(eventName, eventHandler);
-    const event = eventName.charAt(0).toUpperCase() + eventName.substr(1);
 
-    if (EVENTS_LIST.includes(event)) {
-      this._refreshEvents();
+    if (typeof eventName === 'string') {
+      const event = eventName.charAt(0).toUpperCase() + eventName.substr(1);
+
+      if (EVENTS_LIST.includes(event)) {
+        this._refreshEvents();
+      }
     }
+
     return result;
   }
 }
