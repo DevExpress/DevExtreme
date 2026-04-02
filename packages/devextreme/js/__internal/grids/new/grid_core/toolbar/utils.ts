@@ -4,7 +4,7 @@ import type { Item as BaseToolbarItem } from '@js/ui/toolbar';
 
 import { DEFAULT_TOOLBAR_ITEMS } from './const';
 import type {
-  DefaultToolbarItem, DefaultToolbarItemName, DefaultToolbarItemsCollection, ToolbarItems,
+  DefaultToolbarItem, DefaultToolbarItemsCollection, ToolbarItems,
 } from './types';
 
 export function isVisible(
@@ -77,7 +77,3 @@ export function normalizeToolbarItems(
     ) => normalizeToolbarItem(item, defaultButtonsMap, defaultItemNames),
   );
 }
-
-export const isDefaultToolbarItem = (
-  toolbarItem: ToolbarItem,
-): toolbarItem is DefaultToolbarItem => 'name' in toolbarItem && DEFAULT_TOOLBAR_ITEMS.includes(toolbarItem.name as DefaultToolbarItemName);

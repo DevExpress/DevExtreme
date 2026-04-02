@@ -26,7 +26,7 @@ export class HeaderPanel extends ColumnsView {
 
   private _toolbarOptions?: ToolbarProperties;
 
-  private _registeredToolbarItems: Record<string, ToolbarItem> = {};
+  private readonly _registeredToolbarItems = new Map<string, ToolbarItem>();
 
   protected _editingController!: EditingController;
 
@@ -42,7 +42,7 @@ export class HeaderPanel extends ColumnsView {
   }
 
   public addToolbarItem(name: string, item: ToolbarItem): void {
-    this._registeredToolbarItems[name] = item;
+    this._registeredToolbarItems.set(name, item);
 
     if (this._$element) {
       this._invalidate();
@@ -50,9 +50,8 @@ export class HeaderPanel extends ColumnsView {
   }
 
   public removeToolbarItem(name: string): void {
-    if (this._registeredToolbarItems[name]) {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-      delete this._registeredToolbarItems[name];
+    if (this._registeredToolbarItems.has(name)) {
+      this._registeredToolbarItems.delete(name);
 
       if (this._$element) {
         this._invalidate();
@@ -64,7 +63,7 @@ export class HeaderPanel extends ColumnsView {
    * @extended: column_chooser, editing, filter_row
    */
   protected _getToolbarItems(): ToolbarItem[] {
-    return Object.values(this._registeredToolbarItems);
+    return Array.from(this._registeredToolbarItems.values());
   }
 
   // eslint-disable-next-line class-methods-use-this

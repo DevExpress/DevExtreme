@@ -7,13 +7,11 @@ export type DefaultToolbarItemName = typeof DEFAULT_TOOLBAR_ITEMS[number];
 export interface ToolbarItem extends BaseToolbarItem {
   name?: DefaultToolbarItemName | string;
   sortIndex?: number;
-  onItemRendered?: (e: ItemRenderedEvent) => void,
+  onItemRendered?: (e: ItemRenderedEvent) => void;
 }
 
 export type DefaultToolbarItem = ToolbarItem & {
   name: DefaultToolbarItemName,
-  sortIndex?: number,
-  onItemRendered?: (e: ItemRenderedEvent) => void,
 };
 
 export type ToolbarItems = (ToolbarItem | DefaultToolbarItemName)[];
