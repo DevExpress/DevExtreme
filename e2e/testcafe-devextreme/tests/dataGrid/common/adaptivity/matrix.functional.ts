@@ -27,7 +27,7 @@ const configs = [{
 
 // Check vertical borders of data cells
 configs.forEach((
-  { showColumnLines, rtlEnabled }: { showColumnLines: boolean; rtlEnabled: boolean; },
+  { showColumnLines, rtlEnabled }: { showColumnLines: boolean; rtlEnabled: boolean },
 ): void => {
   test(`Headers and Filter cells should have correct borders when there is the first hidden header (showColumnLines: ${showColumnLines}, rtl: ${rtlEnabled})`, async (t) => {
     const dataGrid = new DataGrid(GRID_CONTAINER);

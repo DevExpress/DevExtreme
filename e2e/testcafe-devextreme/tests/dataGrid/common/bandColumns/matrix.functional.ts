@@ -25,7 +25,7 @@ const configs = [{
 
 // Check vertical borders of band header cells
 configs.forEach((
-  { showColumnLines, rtlEnabled }: { showColumnLines: boolean; rtlEnabled: boolean; },
+  { showColumnLines, rtlEnabled }: { showColumnLines: boolean; rtlEnabled: boolean },
 ): void => {
   // Header layout:
   // Row 0: | Band Column 1 (cols 0–2)    | Band Column 2 (cols 3–5)    |
