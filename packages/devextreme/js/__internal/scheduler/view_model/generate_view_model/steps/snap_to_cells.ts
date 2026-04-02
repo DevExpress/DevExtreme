@@ -17,12 +17,10 @@ export const snapToCells = <T extends ListEntity & Position>(
     const cellDuration = startCell.max - startCell.min;
     const appointmentDuration = entity.endDateUTC - entity.startDateUTC;
     const isLessThanTwoCells = cellDuration > 0 && appointmentDuration / cellDuration < 2;
+    const shouldSnap = mode === 'always' || isLessThanTwoCells;
 
-    const snapStart = mode === 'always' || isLessThanTwoCells;
-    const snapEnd = mode === 'always' || isLessThanTwoCells;
-
-    const startDateUTC = snapStart ? startCell.min : entity.startDateUTC;
-    const endDateUTC = snapEnd ? endCell.max : entity.endDateUTC;
+    const startDateUTC = shouldSnap ? startCell.min : entity.startDateUTC;
+    const endDateUTC = shouldSnap ? endCell.max : entity.endDateUTC;
 
     return {
       ...entity,
