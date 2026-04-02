@@ -1894,12 +1894,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._fireContentReadyAction();
   }
 
-  /// #DEBUG
-  getAppointmentDetailsForm() {
-    return this.appointmentForm.dxForm;
-  }
-  /// #ENDDEBUG
-
   getAppointmentsInstance() {
     return this._appointments;
   }
