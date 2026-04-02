@@ -52,12 +52,12 @@ export type InitializedEvent = InitializedEventInfo<dxChat>;
 export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
 
 /**
- * @docid _ui_chat_MainActionButtonClickEvent
+ * @docid _ui_chat_SendButtonClickEvent
  * @public
  * @type object
  * @inherits NativeEventInfo
  */
-export type MainActionButtonClickEvent = NativeEventInfo<dxChat, InteractionEvent>;
+export type SendButtonClickEvent = NativeEventInfo<dxChat, InteractionEvent>;
 
 /**
  * @docid _ui_chat_MessageEnteredEvent
@@ -355,31 +355,32 @@ export type EmptyViewTemplateData = {
 };
 
 /** @public */
-export type MainActionButtonBehavior = 'default' | 'custom';
+export type SendButtonBehavior = 'send' | 'custom';
 
 /**
  * @docid
  * @namespace DevExpress.ui.dxChat
  * @public
  */
-export type MainActionButtonProperties = {
+export type SendButtonProperties = {
     /**
      * @docid
      * @public
+     * @default 'arrowright'
      */
     icon?: string;
     /**
      * @docid
      * @public
-     * @default 'default'
+     * @default 'send'
      */
-    behavior?: MainActionButtonBehavior;
+    type?: SendButtonBehavior;
     /**
      * @docid
-     * @type_function_param1 e:{ui/chat:MainActionButtonClickEvent}
+     * @type_function_param1 e:{ui/chat:SendButtonClickEvent}
      * @public
      */
-    onClick: ((e: MainActionButtonClickEvent) => void);
+    onClick: ((e: SendButtonClickEvent) => void);
 };
 
 /**
@@ -484,10 +485,10 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
     inputFieldText?: TextAreaProperties['value'];
     /**
      * @docid
-     * @type MainActionButtonProperties
+     * @type SendButtonProperties
      * @public
      */
-    mainActionButtonOptions?: MainActionButtonProperties;
+    sendButtonOptions?: SendButtonProperties;
     /**
      * @docid
      * @default null
