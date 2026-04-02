@@ -33,6 +33,7 @@ const schedulerWidgetOverrides = [
     '_createAction',
     '_dataSource',
     '_dataSourceLoadedCallback',
+    '_options',
 ];
 
 const schedulerCollectionWidgetOverrides = [
@@ -88,7 +89,6 @@ const schedulerLegacyMembers = [
     '_dataAccessors',
     '_getDragBehavior',
     '_isAppointmentBeingUpdated',
-    '_options',
     '_workSpace',
 
     // appointments/m_appointment_collection.ts
