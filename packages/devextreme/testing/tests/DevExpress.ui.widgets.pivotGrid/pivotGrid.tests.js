@@ -1089,7 +1089,7 @@ QUnit.module('dxPivotGrid', {
 
         assert.strictEqual(groupFilter.call($pivotGrid.find('.dx-area-fields').get(0)), true, 'field panel group is available for drag&drop');
 
-        $pivotGrid.find('.dx-sort').first().trigger('dxclick');
+        $pivotGrid.find('.dx-area-description-cell .dx-area-field').first().trigger('dxclick');
         this.clock.tick(500);
 
         assert.equal(pivotGrid.getDataSource().state().fields[0].sortOrder, 'desc', 'sorting changes current dataSource state');
