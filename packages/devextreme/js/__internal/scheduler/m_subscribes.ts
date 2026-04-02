@@ -224,12 +224,12 @@ const subscribes = {
 
   // TODO<Appointments>: delete this method when old impl is removed
   renderCompactAppointments(options: CompactAppointmentOptions): dxElementWrapper {
-    return this._compactAppointmentsHelper.render(options);
+    return this.compactAppointmentsHelper.render(options);
   },
 
   // TODO<Appointments>: delete this method when old impl is removed
   clearCompactAppointments() {
-    this._compactAppointmentsHelper.clear();
+    this.compactAppointmentsHelper.clear();
   },
 
   getGroupCount() {
@@ -253,7 +253,7 @@ const subscribes = {
   },
 
   getLayoutManager() {
-    return this._layoutManager;
+    return this.layoutManager;
   },
 
   getAgendaVerticalStepHeight() {

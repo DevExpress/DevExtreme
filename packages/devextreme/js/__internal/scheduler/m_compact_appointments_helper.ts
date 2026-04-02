@@ -66,7 +66,7 @@ export class CompactAppointmentsHelper {
 
   private clickEvent(onAppointmentClick) {
     return (e) => {
-      const clickEventArgs = this.instance._createEventArgs(e);
+      const clickEventArgs = this.instance.createEventArgs(e);
       onAppointmentClick(clickEventArgs);
     };
   }
