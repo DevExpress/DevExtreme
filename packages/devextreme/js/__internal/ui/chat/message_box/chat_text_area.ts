@@ -682,7 +682,7 @@ class ChatTextArea extends TextArea<Properties> {
         break;
 
       case 'sendButtonOptions':
-        this._handleSendButtonOptionsChange(args);
+        this._handleSendButtonOptionsChange();
         break;
 
       default:
@@ -706,7 +706,9 @@ class ChatTextArea extends TextArea<Properties> {
     this._fileUploader?.option(options);
   }
 
-  _handleSendButtonOptionsChange({ value }: OptionChanged<Properties>): void {
+  _handleSendButtonOptionsChange(): void {
+    const { sendButtonOptions } = this.option();
+
     this._createSendButtonClickAction();
 
     this._sendButton?.option({
@@ -714,7 +716,7 @@ class ChatTextArea extends TextArea<Properties> {
         this._processSendButtonActivation(e);
         this._sendButtonClickAction?.(e);
       },
-      icon: value?.icon ?? SEND_BUTTON_DEFAULT_ICON,
+      icon: sendButtonOptions?.icon ?? SEND_BUTTON_DEFAULT_ICON,
     });
 
     this._updateButtonsState();

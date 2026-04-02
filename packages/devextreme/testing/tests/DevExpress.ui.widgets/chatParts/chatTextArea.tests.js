@@ -1392,7 +1392,7 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
             QUnit.test('send button icon should reset to default when sendButtonOptions icon is removed', function(assert) {
                 this.reinit({ sendButtonOptions: { icon: 'stopfilled' } });
 
-                this.instance.option('sendButtonOptions', {});
+                this.instance.option('sendButtonOptions', { icon: null });
 
                 assert.strictEqual(this.sendButton.option('icon'), 'arrowright', 'icon is reset to default');
             });
