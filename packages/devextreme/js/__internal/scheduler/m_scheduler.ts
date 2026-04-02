@@ -1638,8 +1638,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
             return this.addAppointment(newAppointment);
           },
           title: messageLocalization.format('dxScheduler-editPopupTitle'),
-          readOnly: false,
-          isToolbarVisible: true,
+          readOnly: Boolean(appointment.source) && appointment.disabled,
         };
       this.appointmentPopup.show(singleRawAppointment, popupConfig);
       this.editAppointmentData = rawAppointment;
@@ -2023,7 +2022,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
             onDone: (appointment) => this.addAppointment(appointment),
             title: messageLocalization.format('dxScheduler-newPopupTitle'),
             readOnly: false,
-            isToolbarVisible: true,
           };
         this.appointmentPopup.show(rawAppointment, popupConfig);
       }
@@ -2043,7 +2041,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
             onDone: (appointment) => this.updateAppointment(rawAppointment, appointment),
             title: messageLocalization.format('dxScheduler-editPopupTitle'),
             readOnly,
-            isToolbarVisible: this.editing.allowUpdating,
           };
         this.appointmentPopup.show(rawAppointment, popupConfig);
       }, false, true);

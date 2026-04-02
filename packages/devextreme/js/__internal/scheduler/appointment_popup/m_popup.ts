@@ -28,7 +28,6 @@ export interface AppointmentPopupConfig {
   onDone: (appointment: Record<string, unknown>) => PromiseLike<unknown>;
   title: string;
   readOnly: boolean;
-  isToolbarVisible?: boolean;
 }
 
 export class AppointmentPopup {

@@ -65,6 +65,8 @@ interface CreateAppointmentPopupOptions {
   onDone?: jest.Mock;
   title?: string;
   readOnly?: boolean;
+  addAppointment?: jest.Mock;
+  updateAppointment?: jest.Mock;
 }
 
 interface CreateAppointmentPopupResult {
