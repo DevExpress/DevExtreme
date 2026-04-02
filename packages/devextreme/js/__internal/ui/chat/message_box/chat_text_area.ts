@@ -591,6 +591,7 @@ class ChatTextArea extends TextArea<Properties> {
     }
 
     if (this._isCustomBehavior()) {
+      this._speechToTextButton?.option(STT_INITIAL_STATE);
       this._sendButton?.option(SEND_BUTTON_CUSTOM_ACTIVE_STATE);
       return;
     }
@@ -705,13 +706,7 @@ class ChatTextArea extends TextArea<Properties> {
     this._fileUploader?.option(options);
   }
 
-  _handleSendButtonOptionsChange(args: OptionChanged<Properties>): void {
-    const { fullName, value } = args;
-
-    if (fullName !== 'sendButtonOptions') {
-      return;
-    }
-
+  _handleSendButtonOptionsChange({ value }: OptionChanged<Properties>): void {
     this._createSendButtonClickAction();
 
     this._sendButton?.option({
