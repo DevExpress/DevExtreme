@@ -8,7 +8,7 @@ import dxChat, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, NestedComponentMeta } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, Attachment as ChatAttachment, User as ChatUser } from "devextreme/ui/chat";
+import type { Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, TypingEndEvent, TypingStartEvent, Attachment as ChatAttachment, User as ChatUser, SendButtonAction, SendButtonClickEvent } from "devextreme/ui/chat";
 import type { DisposingEvent as FileUploaderDisposingEvent, InitializedEvent as FileUploaderInitializedEvent, BeforeSendEvent, ContentReadyEvent, DropZoneEnterEvent, DropZoneLeaveEvent, FilesUploadedEvent, OptionChangedEvent, ProgressEvent, UploadAbortedEvent, UploadedEvent, UploadErrorEvent, UploadStartedEvent, ValueChangedEvent, UploadHttpMethod, FileUploadMode } from "devextreme/ui/file_uploader";
 import type { DisposingEvent as SpeechToTextDisposingEvent, InitializedEvent as SpeechToTextInitializedEvent, ContentReadyEvent as SpeechToTextContentReadyEvent, OptionChangedEvent as SpeechToTextOptionChangedEvent, CustomSpeechRecognizer as SpeechToTextCustomSpeechRecognizer, EndEvent, ErrorEvent, ResultEvent, StartClickEvent, StopClickEvent, SpeechRecognitionConfig as SpeechToTextSpeechRecognitionConfig } from "devextreme/ui/speech_to_text";
 import type { Format, ValidationStatus, ButtonStyle, ButtonType } from "devextreme/common";
@@ -74,6 +74,7 @@ const Chat = memo(
         fileUploaderOptions: { optionName: "fileUploaderOptions", isCollectionItem: false },
         item: { optionName: "items", isCollectionItem: true },
         messageTimestampFormat: { optionName: "messageTimestampFormat", isCollectionItem: false },
+        sendButtonOptions: { optionName: "sendButtonOptions", isCollectionItem: false },
         speechToTextOptions: { optionName: "speechToTextOptions", isCollectionItem: false },
         typingUser: { optionName: "typingUsers", isCollectionItem: true },
         user: { optionName: "user", isCollectionItem: false }
@@ -373,6 +374,26 @@ const MessageTimestampFormat = Object.assign<typeof _componentMessageTimestampFo
 });
 
 // owners:
+// Chat
+type ISendButtonOptionsProps = React.PropsWithChildren<{
+  action?: SendButtonAction;
+  icon?: string;
+  onClick?: ((e: SendButtonClickEvent) => void);
+}>
+const _componentSendButtonOptions = (props: ISendButtonOptionsProps) => {
+  return React.createElement(NestedOption<ISendButtonOptionsProps>, {
+    ...props,
+    elementDescriptor: {
+      OptionName: "sendButtonOptions",
+    },
+  });
+};
+
+const SendButtonOptions = Object.assign<typeof _componentSendButtonOptions, NestedComponentMeta>(_componentSendButtonOptions, {
+  componentType: "option",
+});
+
+// owners:
 // SpeechToTextOptions
 type ISpeechRecognitionConfigProps = React.PropsWithChildren<{
   continuous?: boolean;
@@ -510,6 +531,8 @@ export {
   IItemProps,
   MessageTimestampFormat,
   IMessageTimestampFormatProps,
+  SendButtonOptions,
+  ISendButtonOptionsProps,
   SpeechRecognitionConfig,
   ISpeechRecognitionConfigProps,
   SpeechToTextOptions,
