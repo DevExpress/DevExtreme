@@ -97,7 +97,8 @@
       "serialize-javascript@<=7.0.2": "7.0.5",
       "flatted@<3.4.0": "^3.4.0",
       "undici@<7.24.0": "^7.24.0",
-      "socket.io-parser@>=4.0.0 <4.2.6": "^4.2.6"
+      "socket.io-parser@>=4.0.0 <4.2.6": "^4.2.6",
+      "lodash@<4.18.1": "4.18.1"
     }
   },
   "packageManager": "pnpm@9.15.9"
