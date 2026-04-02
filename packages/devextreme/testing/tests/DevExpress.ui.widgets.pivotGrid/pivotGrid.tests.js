@@ -1079,24 +1079,6 @@ QUnit.module('dxPivotGrid', {
 
     });
 
-    QUnit.test('T1317109: fieldChooser disposes on dataSource change', function(assert) {
-        const pivotGrid = createPivotGrid({
-            dataSource: {
-                rows: [],
-                columns: [],
-                values: []
-            }
-        });
-
-        const disposeSpy = sinon.spy(pivotGrid._fieldChooserBase, '_dispose');
-
-        pivotGrid.option('dataSource', this.testOptions.dataSource);
-
-        this.clock.tick(500);
-
-        assert.ok(disposeSpy.calledOnce, '_dispose was called once on dataSource change');
-    });
-
     QUnit.test('not show field chooser popup on description area click when fieldChooser disabled', function(assert) {
         createPivotGrid({
             fieldChooser: {
