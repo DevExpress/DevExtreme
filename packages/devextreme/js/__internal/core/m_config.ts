@@ -19,6 +19,11 @@ const config = {
   useLegacyVisibleIndex: false,
   versionAssertions: [],
   copyStylesToShadowDom: true,
+  dateFormat: undefined,
+  timeFormat: undefined,
+  dateTimeFormat: undefined,
+  numberFormat: undefined,
+  dateTimeFormatPresets: undefined,
 
   floatingActionButtonConfig: {
     icon: 'add',

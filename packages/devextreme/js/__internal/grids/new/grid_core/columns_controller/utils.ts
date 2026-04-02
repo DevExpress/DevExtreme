@@ -5,6 +5,7 @@ import {
   isDefined,
   isString, type,
 } from '@js/core/utils/type';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import { getTreeNodeByPath, setTreeNodeByPath } from '@ts/grids/new/grid_core/utils/tree/index';
 import type { ComponentType } from 'inferno';
 
@@ -229,8 +230,12 @@ export const getColumnFormat = (
     return column.format;
   }
 
-  if (column.dataType === 'date' || column.dataType === 'datetime') {
-    return 'shortDate';
+  if (column.dataType === 'date') {
+    return (getGlobalFormatByDataType('date') as Format | undefined) || 'shortDate';
+  }
+
+  if (column.dataType === 'datetime') {
+    return (getGlobalFormatByDataType('datetime') as Format | undefined) || 'shortDateShortTime';
   }
 
   return undefined;

@@ -19,6 +19,7 @@ import { getWindow } from '@js/core/utils/window';
 import formatHelper from '@js/format_helper';
 import LoadPanel from '@js/ui/load_panel';
 import sharedFiltering from '@js/ui/shared/filtering';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 import { isNumeric } from '@ts/core/utils/m_type';
 import type { Column } from '@ts/grids/grid_core/columns_controller/types';
 import type { ColumnPoint } from '@ts/grids/grid_core/m_types';
@@ -389,9 +390,9 @@ export default {
   getFormatByDataType(dataType) {
     switch (dataType) {
       case 'date':
-        return 'shortDate';
+        return getGlobalFormatByDataType('date') || 'shortDate';
       case 'datetime':
-        return 'shortDateShortTime';
+        return getGlobalFormatByDataType('datetime') || 'shortDateShortTime';
       default:
         return undefined;
     }
