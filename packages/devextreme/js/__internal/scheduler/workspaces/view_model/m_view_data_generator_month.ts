@@ -51,7 +51,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
   }
 
-  _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
+  calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
     return monthUtils.calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
   }
 

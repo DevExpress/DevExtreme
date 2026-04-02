@@ -79,7 +79,6 @@ const schedulerLegacyMembers = [
     '_addEvent',
     '_appointmentTooltipOffset',
     '_appointments',
-    '_calculateCellIndex',
     '_callEvent',
     '_compactAppointmentsHelper',
     '_createAction',
