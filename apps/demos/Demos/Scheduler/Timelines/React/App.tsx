@@ -13,16 +13,14 @@ const currentDate = new Date(2021, 1, 2);
 const views: SchedulerTypes.ViewType[] = ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 const groups = ['priority'];
 
-type SnapToCellsMode = 'auto' | 'always' | 'never';
-
-const snapToCellsModeItems: { value: SnapToCellsMode; text: string }[] = [
+const snapToCellsModeItems: { value: SchedulerTypes.SnapToCellsMode; text: string }[] = [
   { value: 'auto', text: 'Auto' },
   { value: 'always', text: 'Always' },
   { value: 'never', text: 'Never' },
 ];
 
 const App = () => {
-  const [snapToCellsMode, setSnapToCellsMode] = useState<SnapToCellsMode>('always');
+  const [snapToCellsMode, setSnapToCellsMode] = useState<SchedulerTypes.SnapToCellsMode>('always');
 
   return (
     <>

@@ -57,18 +57,16 @@ const groups = ['priority'];
 const currentDate = new Date(2021, 1, 2);
 const dataSource = data;
 
-type SnapToCellsMode = 'auto' | 'always' | 'never';
-
-const snapToCellsModeItems: { value: SnapToCellsMode; text: string }[] = [
+const snapToCellsModeItems: { value: DxSchedulerTypes.SnapToCellsMode; text: string }[] = [
   { value: 'auto', text: 'Auto' },
   { value: 'always', text: 'Always' },
   { value: 'never', text: 'Never' },
 ];
 
-const snapToCellsMode = ref<SnapToCellsMode>('always');
+const snapToCellsMode = ref<DxSchedulerTypes.SnapToCellsMode>('always');
 
 function onSnapToCellsModeChanged(e: DxSelectBoxTypes.ValueChangedEvent) {
-  snapToCellsMode.value = e.value as SnapToCellsMode;
+  snapToCellsMode.value = e.value;
 }
 </script>
 
