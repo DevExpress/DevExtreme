@@ -1,8 +1,10 @@
-export * from 'devextreme-angular/core';
-export * from './ui/all';
 import './common';
 import './common/grids';
 import './common/charts';
+
+export * from 'devextreme-angular/core';
+export * from './ui/all';
+
 export { DxAccordionComponent, DxAccordionModule } from 'devextreme-angular/ui/accordion';
 export { DxActionSheetComponent, DxActionSheetModule } from 'devextreme-angular/ui/action-sheet';
 export { DxAutocompleteComponent, DxAutocompleteModule } from 'devextreme-angular/ui/autocomplete';
