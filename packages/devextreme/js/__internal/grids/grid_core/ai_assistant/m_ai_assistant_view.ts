@@ -21,7 +21,7 @@ export class AIAssistantView extends View {
   }
 
   public isVisible(): boolean {
-    return this.option('aiAssistant.visible');
+    return this.option('aiAssistant.enabled');
   }
 
   public show(): Promise<boolean> {
