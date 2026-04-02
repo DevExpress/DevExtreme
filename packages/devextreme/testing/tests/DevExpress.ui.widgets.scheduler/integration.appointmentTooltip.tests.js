@@ -39,12 +39,26 @@ const moduleConfig = {
 module('Global formatting config (spec): Scheduler tooltip', {
     beforeEach() {
         fx.off = true;
-        this.originalConfig = config();
+        const globalConfig = config();
+        this.savedGlobalFormats = {
+            dateFormat: globalConfig.dateFormat,
+            timeFormat: globalConfig.timeFormat,
+            dateTimeFormat: globalConfig.dateTimeFormat,
+            numberFormat: globalConfig.numberFormat,
+        };
     },
     afterEach() {
         fx.off = false;
         hide();
-        config(this.originalConfig);
+        const globalConfig = config();
+        Object.keys(this.savedGlobalFormats).forEach((key) => {
+            const value = this.savedGlobalFormats[key];
+            if(value === undefined) {
+                delete globalConfig[key];
+            } else {
+                globalConfig[key] = value;
+            }
+        });
     }
 }, () => {
     const createScheduler = (options) => createWrapper($.extend({
@@ -60,7 +74,7 @@ module('Global formatting config (spec): Scheduler tooltip', {
 
     test('implicit Scheduler tooltip time format uses global timeFormat', async function(assert) {
         config({
-            ...this.originalConfig,
+            ...config(),
             timeFormat: (date) => `T${date.getHours()}`,
         });
 
@@ -83,7 +97,7 @@ module('Global formatting config (spec): Scheduler tooltip', {
 
     test('implicit Scheduler tooltip date/time use global dateFormat and timeFormat', async function(assert) {
         config({
-            ...this.originalConfig,
+            ...config(),
             dateFormat: (date) => `D${date.getDate()}`,
             timeFormat: (date) => `T${date.getHours()}`,
         });
