@@ -66,10 +66,7 @@ const schedulerWorkspaceOverrides = [
 ];
 
 const schedulerLegacyMembers = [
-    '_$allDayIndicator',
     '_$allDayPanel',
-    '_$bottomShader',
-    '_$container',
     '_$dateTable',
     '_$dateTableScrollableContent',
     '_$flexContainer',
@@ -78,9 +75,7 @@ const schedulerLegacyMembers = [
     '_$headerPanelContainer',
     '_$mainGroup',
     '_$recurrenceGroup',
-    '_$shader',
     '_$thead',
-    '_$topShader',
     '_addEvent',
     '_appointmentTooltipOffset',
     '_appointments',
@@ -124,7 +119,6 @@ const schedulerLegacyMembers = [
     '_renderGrid',
     '_renderOverlay',
     '_renderToolbar',
-    '_shader',
     '_showCalendar',
     '_sidebarScrollable',
     '_textCache',
