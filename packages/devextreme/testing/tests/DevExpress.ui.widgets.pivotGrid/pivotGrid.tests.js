@@ -1061,6 +1061,45 @@ QUnit.module('dxPivotGrid', {
         assert.ok(disposeSpy.calledOnce, '_dispose was called once on dataSource change');
     });
 
+    QUnit.test('Field panel operations should work after dataSource reassignment', function(assert) {
+        const pivotGrid = createPivotGrid({
+            allowSorting: true,
+            allowFiltering: true,
+            fieldPanel: {
+                visible: true
+            },
+            dataSource: null
+        });
+
+        pivotGrid.option('dataSource', new PivotGridDataSource({
+            fields: [
+                { dataField: 'region', area: 'row' },
+                { dataField: 'date', dataType: 'date', area: 'column' },
+                { dataField: 'sales', dataType: 'number', summaryType: 'sum', area: 'data' }
+            ],
+            store: [
+                { region: 'North America', date: '2013/01/06', sales: 1740 },
+                { region: 'South America', date: '2013/01/13', sales: 850 }
+            ]
+        }));
+        this.clock.tick(500);
+
+        const $pivotGrid = $('#pivotGrid');
+        const groupFilter = $pivotGrid.dxSortableOld('option', 'groupFilter');
+
+        assert.strictEqual(groupFilter.call($pivotGrid.find('.dx-area-fields').get(0)), true, 'field panel group is available for drag&drop');
+
+        $pivotGrid.find('.dx-sort').first().trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.equal(pivotGrid.getDataSource().state().fields[0].sortOrder, 'desc', 'sorting changes current dataSource state');
+
+        $pivotGrid.find('.dx-header-filter').first().trigger('dxclick');
+        this.clock.tick(500);
+
+        assert.ok($('.dx-header-filter-menu').find('.dx-list-item').length > 0, 'header filter has items');
+    });
+
     QUnit.test('not show field chooser popup on description area click when fieldChooser disabled', function(assert) {
         createPivotGrid({
             fieldChooser: {
@@ -7677,4 +7716,3 @@ QUnit.module('Data area', () => {
         });
     });
 });
-

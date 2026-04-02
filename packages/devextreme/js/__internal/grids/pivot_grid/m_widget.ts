@@ -4,11 +4,13 @@ import { addNamespace } from '@js/common/core/events/utils/index';
 import localizationMessage from '@js/common/core/localization/message';
 import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
+import { data as elementData, removeData } from '@js/core/element_data';
 import $ from '@js/core/renderer';
 import { deferRender, deferUpdate, noop } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
+import { name as publicComponentName } from '@js/core/utils/public_component';
 import {
   getHeight, getOuterHeight,
   getWidth, setHeight,
@@ -394,6 +396,31 @@ class PivotGrid extends Widget {
     this._actions[eventName](eventArg);
   }
 
+  _disposeFieldChooserBase() {
+    const that = this;
+    const fieldChooserBase = that._fieldChooserBase;
+
+    if (!fieldChooserBase) {
+      return;
+    }
+
+    fieldChooserBase._dispose();
+
+    const element = that.$element().get(0);
+    const componentName = publicComponentName(FieldChooserBase);
+    const componentNames = elementData(element, 'dxComponents');
+
+    if (Array.isArray(componentNames)) {
+      const componentNameIndex = componentNames.lastIndexOf(componentName);
+      if (componentNameIndex > -1) {
+        componentNames.splice(componentNameIndex, 1);
+      }
+    }
+    removeData(element, componentName);
+
+    that._fieldChooserBase = undefined;
+  }
+
   _optionChanged(args) {
     const that = this;
 
@@ -410,9 +437,7 @@ class PivotGrid extends Widget {
       case 'allowSortingBySummary':
       case 'scrolling':
       case 'stateStoring':
-        if (that._fieldChooserBase) {
-          that._fieldChooserBase._dispose();
-        }
+        that._disposeFieldChooserBase();
         that._initDataController();
         that.getFieldChooserPopup().hide();
         that._renderFieldChooser();
@@ -1272,9 +1297,7 @@ class PivotGrid extends Widget {
     const that = this;
     clearTimeout(that._hideLoadingTimeoutID);
 
-    if (that._fieldChooserBase) {
-      that._fieldChooserBase._dispose();
-    }
+    that._disposeFieldChooserBase();
 
     if (that._dataController) {
       that._dataController.dispose();
