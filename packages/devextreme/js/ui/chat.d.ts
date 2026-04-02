@@ -16,6 +16,7 @@ import { Properties as SpeechToTextProperties } from './speech_to_text';
 import { Properties as TextAreaProperties } from './text_area';
 import { ValueChangedInfo } from './editor/editor';
 import Widget, { WidgetOptions } from './widget/ui.widget';
+import dxButton from './button';
 import {
     EventInfo,
     NativeEventInfo,
@@ -57,7 +58,7 @@ export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
  * @type object
  * @inherits NativeEventInfo
  */
-export type SendButtonClickEvent = NativeEventInfo<dxChat, InteractionEvent>;
+export type SendButtonClickEvent = NativeEventInfo<dxButton, InteractionEvent>;
 
 /**
  * @docid _ui_chat_MessageEnteredEvent
