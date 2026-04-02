@@ -19,6 +19,7 @@ const SELECTORS = {
   headerRowClass: 'dx-header-row',
   dataRowClass: 'dx-data-row',
   groupRowClass: 'dx-group-row',
+  scrollableContainer: 'dx-scrollable-container',
   loadPanel: 'dx-loadpanel',
   editForm: 'edit-form',
   headerCellIndicators: 'dx-column-indicators',
@@ -80,6 +81,10 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
       this.getDataCells(rowIndex)[columnIndex],
       this.addWidgetPrefix.bind(this),
     );
+  }
+
+  public getScrollableContainer(): HTMLElement {
+    return this.root.querySelector(`.${SELECTORS.scrollableContainer}`) as HTMLElement;
   }
 
   public getRevertButton(): HTMLElement {
