@@ -35,9 +35,9 @@ import gridCoreUtils from '../m_utils';
 import type { RowsView } from '../views/m_rows_view';
 import { getHideableColumns } from './utils';
 
-const COLUMN_HEADERS_VIEW = 'columnHeadersView' as const;
-const ROWS_VIEW = 'rowsView' as const;
-const FOOTER_VIEW = 'footerView' as const;
+const COLUMN_HEADERS_VIEW = 'columnHeadersView';
+const ROWS_VIEW = 'rowsView';
+const FOOTER_VIEW = 'footerView';
 const COLUMN_VIEWS = [COLUMN_HEADERS_VIEW, ROWS_VIEW, FOOTER_VIEW] as const;
 
 const ADAPTIVE_NAMESPACE = 'dxDataGridAdaptivity';
