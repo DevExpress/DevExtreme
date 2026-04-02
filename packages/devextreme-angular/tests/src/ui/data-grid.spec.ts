@@ -591,7 +591,7 @@ describe('DxDataGrid slow tests', () => {
 
     fixture.detectChanges();
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 500; i++) {
       document.body.click();
       fixture.detectChanges();
     }
@@ -600,7 +600,7 @@ describe('DxDataGrid slow tests', () => {
 
     const memoryBefore = await (performance as any).measureUserAgentSpecificMemory();
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 500; i++) {
       document.body.click();
       fixture.detectChanges();
     }
@@ -610,6 +610,6 @@ describe('DxDataGrid slow tests', () => {
     const memoryAfter = await (performance as any).measureUserAgentSpecificMemory();
     const memoryDiff = Math.round((memoryAfter.bytes - memoryBefore.bytes) / 1024);
 
-    expect(memoryDiff).toBeLessThan(40);
+    expect(memoryDiff).toBeLessThan(100);
   });
 });

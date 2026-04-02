@@ -22,7 +22,7 @@ import {
 } from '@angular/core';
 
 
-import type { default as dxChat, Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, InputFieldTextChangedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, User } from 'devextreme/ui/chat';
+import type { default as dxChat, Alert, Message, AttachmentDownloadClickEvent, DisposingEvent, InitializedEvent, InputFieldTextChangedEvent, MessageDeletedEvent, MessageDeletingEvent, MessageEditCanceledEvent, MessageEditingStartEvent, MessageEnteredEvent, MessageUpdatedEvent, MessageUpdatingEvent, OptionChangedEvent, TypingEndEvent, TypingStartEvent, SendButtonProperties, User } from 'devextreme/ui/chat';
 import type { default as DataSource, DataSourceOptions } from 'devextreme/data/data_source';
 import type { Store } from 'devextreme/data/store';
 import type { Format } from 'devextreme/common/core/localization';
@@ -61,6 +61,7 @@ import { DxoChatEditingModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatFileUploaderOptionsModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatItemModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatMessageTimestampFormatModule } from 'devextreme-angular/ui/chat/nested';
+import { DxoChatSendButtonOptionsModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatSpeechRecognitionConfigModule } from 'devextreme-angular/ui/chat/nested';
 import { DxoChatSpeechToTextOptionsModule } from 'devextreme-angular/ui/chat/nested';
 import { DxiChatTypingUserModule } from 'devextreme-angular/ui/chat/nested';
@@ -365,6 +366,16 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     }
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
+    }
+
+
+    
+    @Input()
+    get sendButtonOptions(): SendButtonProperties {
+        return this._getOption('sendButtonOptions');
+    }
+    set sendButtonOptions(value: SendButtonProperties) {
+        this._setOption('sendButtonOptions', value);
     }
 
 
@@ -751,6 +762,13 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() sendButtonOptionsChange: EventEmitter<SendButtonProperties>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() showAvatarChange: EventEmitter<boolean>;
 
     /**
@@ -863,6 +881,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
             { emit: 'messageTimestampFormatChange' },
             { emit: 'reloadOnChangeChange' },
             { emit: 'rtlEnabledChange' },
+            { emit: 'sendButtonOptionsChange' },
             { emit: 'showAvatarChange' },
             { emit: 'showDayHeadersChange' },
             { emit: 'showMessageTimestampChange' },
@@ -943,6 +962,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxoChatFileUploaderOptionsModule,
     DxiChatItemModule,
     DxoChatMessageTimestampFormatModule,
+    DxoChatSendButtonOptionsModule,
     DxoChatSpeechRecognitionConfigModule,
     DxoChatSpeechToTextOptionsModule,
     DxiChatTypingUserModule,
@@ -969,6 +989,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
     DxoChatFileUploaderOptionsModule,
     DxiChatItemModule,
     DxoChatMessageTimestampFormatModule,
+    DxoChatSendButtonOptionsModule,
     DxoChatSpeechRecognitionConfigModule,
     DxoChatSpeechToTextOptionsModule,
     DxiChatTypingUserModule,

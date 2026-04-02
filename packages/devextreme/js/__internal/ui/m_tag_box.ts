@@ -217,9 +217,12 @@ class TagBox<
     return this._getValue().length === 0;
   }
 
-  _updateTagsContainer($element): void {
-    this._$tagsContainer = $element
-      .addClass(TAGBOX_TAG_CONTAINER_CLASS);
+  _updateTagsContainer($element: dxElementWrapper | null | undefined): void {
+    if (!$element) {
+      return;
+    }
+
+    this._$tagsContainer = $element.addClass(TAGBOX_TAG_CONTAINER_CLASS);
   }
 
   // eslint-disable-next-line class-methods-use-this

@@ -72,7 +72,7 @@
 
   <div class="options">
     <div class="option">
-      <span>Overlapping Rule</span>
+      <span>Allow Overlapping Appointments</span>
       <DxSelectBox
         :items="overlappingRuleItems"
         value-expr="value"
@@ -114,8 +114,8 @@ const views: DxSchedulerTypes.ViewType[] = ['day', 'week', 'workWeek', 'month'];
 const formElementAttr = { class: 'hide-informer', id: 'form' };
 
 const overlappingRuleItems = [
-  { value: 'sameResource', text: 'Allow across resources' },
-  { value: 'allResources', text: 'Disallow all overlaps' },
+  { value: 'sameResource', text: 'Different Resources' },
+  { value: 'allResources', text: 'Never' },
 ];
 
 function getNextDay(date: Date): Date {
@@ -189,7 +189,7 @@ const popupOptions = {
   },
 };
 
-const alertConflictIfNeeded = (
+const handleConflict = (
   e: DxSchedulerTypes.AppointmentAddingEvent | DxSchedulerTypes.AppointmentUpdatingEvent,
   appointmentData: Appointment,
 ) => {
@@ -221,11 +221,11 @@ const alertConflictIfNeeded = (
 };
 
 const onAppointmentAdding = (e: DxSchedulerTypes.AppointmentAddingEvent) => {
-  alertConflictIfNeeded(e, e.appointmentData as Appointment);
+  handleConflict(e, e.appointmentData as Appointment);
 };
 
 const onAppointmentUpdating = (e: DxSchedulerTypes.AppointmentUpdatingEvent) => {
-  alertConflictIfNeeded(e, { ...e.oldData, ...e.newData } as Appointment);
+  handleConflict(e, { ...e.oldData, ...e.newData } as Appointment);
 };
 
 const onFormInitialized = (e: DxFormTypes.InitializedEvent) => {
@@ -325,16 +325,6 @@ const onOverlappingRuleChanged = (e: DxSelectBoxTypes.ValueChangedEvent) => {
 .dx-scheduler-form-main-group .dx-item:last-child .dx-item:last-child,
 .dx-scheduler-form-main-group .dx-item:last-child .dx-item:last-child .dx-field-item-content {
   overflow: visible;
-}
-
-#form .dx-scheduler-form-main-group,
-#form .dx-scheduler-form-recurrence-group {
-  padding-top: 0;
-}
-
-#form:not(.hide-informer) .dx-scheduler-form-recurrence-group.dx-scheduler-form-recurrence-group-hidden,
-#form:not(.hide-informer) .dx-scheduler-form-main-group.dx-scheduler-form-main-group-hidden {
-  top: 44px;
 }
 
 </style>

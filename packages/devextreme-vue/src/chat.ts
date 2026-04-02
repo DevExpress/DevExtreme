@@ -22,8 +22,11 @@ import {
  OptionChangedEvent,
  TypingEndEvent,
  TypingStartEvent,
+ SendButtonProperties,
  User,
  Attachment,
+ SendButtonAction,
+ SendButtonClickEvent,
 } from "devextreme/ui/chat";
 import {
  DataSourceOptions,
@@ -110,6 +113,7 @@ type AccessibleOptions = Pick<Properties,
   "onTypingStart" |
   "reloadOnChange" |
   "rtlEnabled" |
+  "sendButtonOptions" |
   "showAvatar" |
   "showDayHeaders" |
   "showMessageTimestamp" |
@@ -162,6 +166,7 @@ const componentConfig = {
     onTypingStart: Function as PropType<((e: TypingStartEvent) => void)>,
     reloadOnChange: Boolean,
     rtlEnabled: Boolean,
+    sendButtonOptions: Object as PropType<SendButtonProperties | Record<string, any>>,
     showAvatar: Boolean,
     showDayHeaders: Boolean,
     showMessageTimestamp: Boolean,
@@ -210,6 +215,7 @@ const componentConfig = {
     "update:onTypingStart": null,
     "update:reloadOnChange": null,
     "update:rtlEnabled": null,
+    "update:sendButtonOptions": null,
     "update:showAvatar": null,
     "update:showDayHeaders": null,
     "update:showMessageTimestamp": null,
@@ -236,6 +242,7 @@ const componentConfig = {
       fileUploaderOptions: { isCollectionItem: false, optionName: "fileUploaderOptions" },
       item: { isCollectionItem: true, optionName: "items" },
       messageTimestampFormat: { isCollectionItem: false, optionName: "messageTimestampFormat" },
+      sendButtonOptions: { isCollectionItem: false, optionName: "sendButtonOptions" },
       speechToTextOptions: { isCollectionItem: false, optionName: "speechToTextOptions" },
       typingUser: { isCollectionItem: true, optionName: "typingUsers" },
       user: { isCollectionItem: false, optionName: "user" }
@@ -586,6 +593,27 @@ const DxMessageTimestampFormat = defineComponent(DxMessageTimestampFormatConfig)
 
 (DxMessageTimestampFormat as any).$_optionName = "messageTimestampFormat";
 
+const DxSendButtonOptionsConfig = {
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:action": null,
+    "update:icon": null,
+    "update:onClick": null,
+  },
+  props: {
+    action: String as PropType<SendButtonAction>,
+    icon: String,
+    onClick: Function as PropType<((e: SendButtonClickEvent) => void)>
+  }
+};
+
+prepareConfigurationComponentConfig(DxSendButtonOptionsConfig);
+
+const DxSendButtonOptions = defineComponent(DxSendButtonOptionsConfig);
+
+(DxSendButtonOptions as any).$_optionName = "sendButtonOptions";
+
 const DxSpeechRecognitionConfigConfig = {
   emits: {
     "update:isActive": null,
@@ -747,6 +775,7 @@ export {
   DxFileUploaderOptions,
   DxItem,
   DxMessageTimestampFormat,
+  DxSendButtonOptions,
   DxSpeechRecognitionConfig,
   DxSpeechToTextOptions,
   DxTypingUser,
