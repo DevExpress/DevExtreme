@@ -374,7 +374,7 @@ export type SendButtonProperties = {
      * @public
      * @default 'send'
      */
-    type?: SendButtonBehavior;
+    behavior?: SendButtonBehavior;
     /**
      * @docid
      * @type_function_param1 e:{ui/chat:SendButtonClickEvent}
