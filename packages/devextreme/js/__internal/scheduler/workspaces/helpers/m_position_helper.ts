@@ -201,7 +201,7 @@ class GroupStrategyBase {
   }
 
   getVerticalMax(options) {
-    let maxAllowedPosition = this._getMaxAllowedVerticalPosition({
+    let maxAllowedPosition = this.getMaxAllowedVerticalPosition({
       ...options,
       viewDataProvider: this.viewDataProvider,
       rtlEnabled: this.rtlEnabled,
@@ -219,7 +219,7 @@ class GroupStrategyBase {
     isGroupedAllDayPanel,
   }) {
     const rowCount = this.viewDataProvider.getRowCountInGroup(groupIndex);
-    const maxVerticalPosition = this._getMaxAllowedVerticalPosition({
+    const maxVerticalPosition = this.getMaxAllowedVerticalPosition({
       groupIndex,
       viewDataProvider: this.viewDataProvider,
       showAllDayPanel,
@@ -235,7 +235,7 @@ class GroupStrategyBase {
     return getAllDayHeight(showAllDayPanel, true, this.DOMMetaData);
   }
 
-  _getMaxAllowedVerticalPosition({
+  getMaxAllowedVerticalPosition({
     groupIndex,
     showAllDayPanel,
     isGroupedAllDayPanel,
@@ -272,7 +272,7 @@ class GroupStrategyHorizontal extends GroupStrategyBase {
       ? groupIndex
       : 0;
 
-    return this._getMaxAllowedVerticalPosition({
+    return this.getMaxAllowedVerticalPosition({
       ...options,
       groupIndex: correctedGroupIndex,
     });

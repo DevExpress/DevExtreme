@@ -150,9 +150,9 @@ export class AppointmentForm {
 
   private _popup!: any;
 
-  private _$mainGroup?: dxElementWrapper;
+  private $mainGroup?: dxElementWrapper;
 
-  private _$recurrenceGroup?: dxElementWrapper;
+  private $recurrenceGroup?: dxElementWrapper;
 
   get dxForm(): dxForm {
     return this._dxForm as dxForm;
@@ -312,8 +312,8 @@ export class AppointmentForm {
       },
       onContentReady: (e): void => {
         const $formElement = e.component.$element();
-        this._$mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
-        this._$recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+        this.$mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
+        this.$recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
 
         this.alignIconsWithEditors();
 
@@ -883,16 +883,16 @@ export class AppointmentForm {
       this.dxPopup.option('height', configuredHeight);
     }
 
-    if (this._$mainGroup) {
-      this._$mainGroup.removeClass(CLASSES.mainHidden);
-      this._$mainGroup.removeAttr('inert');
+    if (this.$mainGroup) {
+      this.$mainGroup.removeClass(CLASSES.mainHidden);
+      this.$mainGroup.removeAttr('inert');
 
-      this.focusFirstFocusableInGroup(this._$mainGroup);
+      this.focusFirstFocusableInGroup(this.$mainGroup);
     }
 
-    if (this._$recurrenceGroup) {
-      this._$recurrenceGroup.addClass(CLASSES.recurrenceHidden);
-      this._$recurrenceGroup.attr('inert', true);
+    if (this.$recurrenceGroup) {
+      this.$recurrenceGroup.addClass(CLASSES.recurrenceHidden);
+      this.$recurrenceGroup.attr('inert', true);
     }
 
     this._popup.updateToolbarForMainGroup();
@@ -913,16 +913,16 @@ export class AppointmentForm {
       this.dxPopup.option('height', overlayHeight);
     }
 
-    if (this._$mainGroup) {
-      this._$mainGroup.addClass(CLASSES.mainHidden);
-      this._$mainGroup.attr('inert', true);
+    if (this.$mainGroup) {
+      this.$mainGroup.addClass(CLASSES.mainHidden);
+      this.$mainGroup.attr('inert', true);
     }
 
-    if (this._$recurrenceGroup) {
-      this._$recurrenceGroup.removeClass(CLASSES.recurrenceHidden);
-      this._$recurrenceGroup.removeAttr('inert');
+    if (this.$recurrenceGroup) {
+      this.$recurrenceGroup.removeClass(CLASSES.recurrenceHidden);
+      this.$recurrenceGroup.removeAttr('inert');
 
-      this.focusFirstFocusableInGroup(this._$recurrenceGroup);
+      this.focusFirstFocusableInGroup(this.$recurrenceGroup);
     }
 
     this._popup.updateToolbarForRecurrenceGroup();
@@ -1046,12 +1046,12 @@ export class AppointmentForm {
   }
 
   private updateAnimationOffset(): void {
-    if (!this._$mainGroup) {
+    if (!this.$mainGroup) {
       return;
     }
 
     const formElement = this.dxForm.$element()[0];
-    const mainGroupElement = this._$mainGroup[0];
+    const mainGroupElement = this.$mainGroup[0];
     const formRect = formElement.getBoundingClientRect();
     const groupRect = mainGroupElement.getBoundingClientRect();
     const topOffset = groupRect.top - formRect.top;
