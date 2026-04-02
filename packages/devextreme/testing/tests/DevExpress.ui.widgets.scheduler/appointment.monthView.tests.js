@@ -97,6 +97,49 @@ module('Integration: Appointments in Month view', {
         fx.off = false;
     }
 }, () => {
+    module('Scrolling mode standard', () => {
+        test('Appointments should be rendered correctly when resourses store is asynchronous', async function(assert) {
+            const appointments = [
+                { startDate: new Date(2015, 2, 4), text: 'a', endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+                { startDate: new Date(2015, 2, 4), text: 'b', endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
+            ];
+
+            const scheduler = await createInstanceBase({
+                currentDate: new Date(2015, 2, 4),
+                views: ['month'],
+                dataSource: appointments,
+                width: 840,
+                height: 600,
+                currentView: 'month',
+                firstDayOfWeek: 1,
+                groups: ['roomId'],
+                resources: [
+                    {
+                        field: 'roomId',
+                        allowMultiple: true,
+                        dataSource: new DataSource({
+                            store: new CustomStore({
+                                load: function() {
+                                    const d = $.Deferred();
+                                    setTimeout(function() {
+                                        d.resolve([
+                                            { id: 1, text: 'Room 1', color: '#ff0000' },
+                                            { id: 2, text: 'Room 2', color: '#0000ff' }
+                                        ]);
+                                    }, 300);
+
+                                    return d.promise();
+                                }
+                            })
+                        })
+                    }
+                ]
+            });
+
+            assert.deepEqual(scheduler.instance.$element().find('.' + APPOINTMENT_CLASS).length, 2, 'Appointments are rendered');
+        });
+    });
+
     supportedScrollingModes.forEach(scrollingMode => {
         module(`Scrolling mode ${scrollingMode}`, () => {
             const createInstance = async(options) => {

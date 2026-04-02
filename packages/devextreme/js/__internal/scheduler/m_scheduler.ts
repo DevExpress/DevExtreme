@@ -1612,7 +1612,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (isPopupEditing) {
       this.appointmentPopup.show(singleRawAppointment, {
-        isToolbarVisible: true,
         action: ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
         excludeInfo: {
           sourceAppointment: rawAppointment,
@@ -1993,7 +1992,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     if (isCreateAppointment) {
       delete this.editAppointmentData; // TODO
       this.editing.allowAdding && this.appointmentPopup.show(rawAppointment, {
-        isToolbarVisible: true,
         action: ACTION_TO_APPOINTMENT.CREATE,
       });
     } else {
@@ -2003,7 +2001,6 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this.editAppointmentData = rawAppointment; // TODO
 
         this.appointmentPopup.show(rawAppointment, {
-          isToolbarVisible: this.editing.allowUpdating,
           action: ACTION_TO_APPOINTMENT.UPDATE,
         });
       }, false, true);
