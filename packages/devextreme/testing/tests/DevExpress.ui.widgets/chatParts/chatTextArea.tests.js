@@ -11,6 +11,7 @@ import ChatTextArea, {
     STT_LISTENING_STATE,
     SEND_BUTTON_INITIAL_STATE,
     SEND_BUTTON_READY_TO_SEND_STATE,
+    SEND_BUTTON_CUSTOM_ACTIVE_STATE,
 } from '__internal/ui/chat/message_box/chat_text_area';
 import Button from 'ui/button';
 import FileUploader, { FILEUPLOADER_CLASS, FILEUPLOADER_CANCEL_BUTTON_CLASS } from '__internal/ui/file_uploader/file_uploader';
@@ -1355,6 +1356,180 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
                 speechToTextInstance.option('onEnd')({});
 
                 this.compareButtonState(assert, STT_INITIAL_STATE);
+            });
+        });
+    });
+
+    QUnit.module('sendButtonOptions', {
+        beforeEach: function() {
+            this.compareButtonState = (assert, expectedState) => {
+                const { stylingMode, type, disabled } = this.sendButton.option();
+                assert.deepEqual({ stylingMode, type, disabled }, expectedState, 'send button has correct state');
+            };
+        }
+    }, () => {
+        QUnit.module('icon', () => {
+            QUnit.test('send button should have default icon when sendButtonOptions is not set', function(assert) {
+                this.reinit({});
+
+                assert.strictEqual(this.sendButton.option('icon'), 'arrowright', 'default icon is arrowright');
+            });
+
+            QUnit.test('send button should use icon from sendButtonOptions when specified', function(assert) {
+                this.reinit({
+                    sendButtonOptions: { icon: 'stopfilled' },
+                });
+
+                assert.strictEqual(this.sendButton.option('icon'), 'stopfilled', 'icon is set from sendButtonOptions');
+            });
+
+            QUnit.test('send button icon should update at runtime', function(assert) {
+                this.instance.option('sendButtonOptions', { icon: 'stopfilled' });
+
+                assert.strictEqual(this.sendButton.option('icon'), 'stopfilled', 'icon is updated at runtime');
+            });
+
+            QUnit.test('send button icon should reset to default when sendButtonOptions icon is removed', function(assert) {
+                this.reinit({ sendButtonOptions: { icon: 'stopfilled' } });
+
+                this.instance.option('sendButtonOptions', {});
+
+                assert.strictEqual(this.sendButton.option('icon'), 'arrowright', 'icon is reset to default');
+            });
+        });
+
+        QUnit.module('action: custom', () => {
+            QUnit.test('send button should be enabled when action is custom regardless of input content', function(assert) {
+                this.reinit({
+                    sendButtonOptions: { action: 'custom' },
+                });
+
+                this.compareButtonState(assert, SEND_BUTTON_CUSTOM_ACTIVE_STATE);
+            });
+
+            QUnit.test('clicking send button in custom mode should not clear the textarea', function(assert) {
+                this.reinit({
+                    sendButtonOptions: { action: 'custom' },
+                });
+
+                this.typeText('some text').clickSendButton();
+
+                assert.strictEqual(this.$input.val(), 'some text', 'textarea is not cleared');
+            });
+
+            QUnit.test('clicking send button in custom mode should not fire onSend', function(assert) {
+                const onSendStub = sinon.stub();
+
+                this.reinit({
+                    onSend: onSendStub,
+                    sendButtonOptions: { action: 'custom' },
+                });
+
+                this.typeText('some text').clickSendButton();
+
+                assert.strictEqual(onSendStub.callCount, 0, 'onSend is not fired in custom mode');
+            });
+
+            QUnit.test('send button should switch to SEND_BUTTON_CUSTOM_ACTIVE_STATE when action changes to custom at runtime', function(assert) {
+                this.instance.option('sendButtonOptions', { action: 'custom' });
+
+                this.compareButtonState(assert, SEND_BUTTON_CUSTOM_ACTIVE_STATE);
+            });
+
+            QUnit.test('send button should revert to initial state when action switches back from custom with no input', function(assert) {
+                this.reinit({
+                    sendButtonOptions: { action: 'custom' },
+                });
+
+                this.instance.option('sendButtonOptions', { action: 'send' });
+
+                this.compareButtonState(assert, SEND_BUTTON_INITIAL_STATE);
+            });
+
+            QUnit.test('send button should revert to ready state when action switches back from custom and input has text', function(assert) {
+                this.reinit({
+                    sendButtonOptions: { action: 'custom' },
+                });
+
+                this.typeText('some text');
+                this.instance.option('sendButtonOptions', { action: 'send' });
+
+                this.compareButtonState(assert, SEND_BUTTON_READY_TO_SEND_STATE);
+            });
+        });
+
+        QUnit.module('onClick', () => {
+            QUnit.test('onClick handler should be called when send button is clicked in custom mode', function(assert) {
+                const onClickStub = sinon.stub();
+
+                this.reinit({
+                    sendButtonOptions: { action: 'custom', onClick: onClickStub },
+                });
+
+                this.clickSendButton();
+
+                assert.strictEqual(onClickStub.callCount, 1, 'onClick is called once');
+            });
+
+            QUnit.test('onClick handler should not be called in default mode when input is empty', function(assert) {
+                const onClickStub = sinon.stub();
+
+                this.reinit({
+                    sendButtonOptions: { action: 'send', onClick: onClickStub },
+                });
+
+                this.clickSendButton();
+
+                assert.strictEqual(onClickStub.callCount, 0, 'onClick is not called when button is disabled');
+            });
+
+            QUnit.test('onClick handler should be called in default mode when input has text', function(assert) {
+                const onClickStub = sinon.stub();
+
+                this.reinit({
+                    sendButtonOptions: { action: 'send', onClick: onClickStub },
+                });
+
+                this.typeText('hello').clickSendButton();
+
+                assert.strictEqual(onClickStub.callCount, 1, 'onClick is called once with text');
+            });
+
+            QUnit.test('onClick handler should update when sendButtonOptions changes at runtime', function(assert) {
+                const firstHandler = sinon.stub();
+                const secondHandler = sinon.stub();
+
+                this.reinit({
+                    sendButtonOptions: { action: 'custom', onClick: firstHandler },
+                });
+
+                this.clickSendButton();
+
+                this.instance.option('sendButtonOptions', { action: 'custom', onClick: secondHandler });
+
+                this.clickSendButton();
+
+                assert.strictEqual(firstHandler.callCount, 1, 'first handler called once');
+                assert.strictEqual(secondHandler.callCount, 1, 'second handler called once after update');
+            });
+
+            QUnit.test('onClick handler should receive click event as argument', function(assert) {
+                assert.expect(3);
+
+                this.reinit({
+                    sendButtonOptions: {
+                        action: 'custom',
+                        onClick: (e) => {
+                            const { component, element } = e;
+
+                            assert.strictEqual(component, this.instance, 'e.component is ChatTextArea instance');
+                            assert.strictEqual(isRenderer(element), !!config().useJQuery, 'e.element uses correct renderer');
+                            assert.strictEqual($(element).is(this.$element), true, 'e.element matches widget root');
+                        },
+                    },
+                });
+
+                this.clickSendButton();
             });
         });
     });

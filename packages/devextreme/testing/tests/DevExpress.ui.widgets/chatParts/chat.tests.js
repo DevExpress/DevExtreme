@@ -2503,6 +2503,63 @@ QUnit.module('Chat', () => {
                 assert.strictEqual(onInputFieldTextChanged.callCount, 1, 'called once after runtime update');
             });
         });
+
+        QUnit.module('sendButtonOptions.onClick', moduleConfig, () => {
+            QUnit.test('onClick should be called when send button is clicked in custom mode', function(assert) {
+                const onClick = sinon.spy();
+
+                this.reinit({
+                    sendButtonOptions: { action: 'custom', onClick },
+                });
+
+                this.$sendButton.trigger('dxclick');
+
+                assert.strictEqual(onClick.callCount, 1, 'onClick called once');
+            });
+
+            QUnit.test('onClick should receive correct arguments', function(assert) {
+                assert.expect(3);
+
+                this.reinit({
+                    sendButtonOptions: {
+                        action: 'custom',
+                        onClick: (e) => {
+                            const { component, element } = e;
+
+                            assert.strictEqual(component, this.instance, 'e.component is Chat instance');
+                            assert.strictEqual(isRenderer(element), !!config().useJQuery, 'e.element uses correct renderer');
+                            assert.strictEqual($(element).is(this.$element), true, 'e.element matches widget root');
+                        },
+                    },
+                });
+
+                this.$sendButton.trigger('dxclick');
+            });
+
+            QUnit.test('onClick should be possible to change at runtime', function(assert) {
+                const onClick = sinon.spy();
+
+                this.reinit({});
+
+                this.instance.option('sendButtonOptions', { action: 'custom', onClick });
+
+                this.$sendButton.trigger('dxclick');
+
+                assert.strictEqual(onClick.callCount, 1, 'onClick called once after runtime update');
+            });
+
+            QUnit.test('onClick should not be called when button is disabled in default mode', function(assert) {
+                const onClick = sinon.spy();
+
+                this.reinit({
+                    sendButtonOptions: { action: 'send', onClick },
+                });
+
+                this.$sendButton.trigger('dxclick');
+
+                assert.strictEqual(onClick.callCount, 0, 'onClick not called when button is disabled');
+            });
+        });
     });
 
     QUnit.module('renderMessage', moduleConfig, () => {
