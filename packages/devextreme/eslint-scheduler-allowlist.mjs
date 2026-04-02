@@ -66,6 +66,7 @@ const schedulerWorkspaceOverrides = [
 ];
 
 const schedulerLegacyMembers = [
+    // m_work_space.ts
     '_$allDayPanel',
     '_$dateTable',
     '_$dateTableScrollableContent',
@@ -74,33 +75,47 @@ const schedulerLegacyMembers = [
     '_$headerPanel',
     '_$headerPanelContainer',
     '_$thead',
-    '_appointmentTooltipOffset',
+    '_createAction',
+    '_dateTableScrollable',
+    '_groupedStrategy',
+    '_shader',
+    '_sidebarScrollable',
+
+    // m_scheduler.ts
     '_appointments',
     '_compactAppointmentsHelper',
-    '_createAction',
     '_createEventArgs',
     '_dataAccessors',
     '_dataSource',
     '_dataSourceChangedHandler',
     '_dataSourceOptions',
-    '_dateTableScrollable',
-    '_draggingMode',
     '_getDragBehavior',
-    '_groupedStrategy',
-    '_ignorePreventScrollEventsDeprecation',
     '_isAppointmentBeingUpdated',
     '_isScrollOptionsObject',
     '_layoutManager',
     '_options',
-    '_popup',
-    '_renderAppointmentTemplate',
-    '_renderGrid',
-    '_shader',
-    '_sidebarScrollable',
     '_timeZoneCalculator',
-    '_useShortDateFormat',
     '_workSpace',
+
+    // appointments/m_appointment_collection.ts
+    '_renderAppointmentTemplate',
+
+    // workspaces/m_virtual_scrolling.ts
+    '_renderGrid',
+
+    // appointment_popup/m_popup.ts
+    '_popup',
+
+    // header/m_header.ts
+    '_useShortDateFormat',
+
+    // header/m_view_switcher.ts
     '_wrapperClassExternal',
+
+    // constants
+    '_appointmentTooltipOffset',
+    '_draggingMode',
+    '_ignorePreventScrollEventsDeprecation',
 ];
 
 const schedulerMemberAllowlist = [
