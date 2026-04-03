@@ -41,8 +41,8 @@ export class HeaderPanel extends ColumnsView {
     this.createAction('onToolbarPreparing', { excludeValidators: ['disabled', 'readOnly'] });
   }
 
-  public addToolbarItem(name: string, item: ToolbarItem): void {
-    this._registeredToolbarItems.set(name, item);
+  public setToolbarItem(name: string, item: ToolbarItem): void {
+    this._registeredToolbarItems.set(name, { ...item, name });
 
     if (this._$element) {
       this._invalidate();

@@ -18,8 +18,8 @@ describe('HeaderPanel', () => {
   });
   afterEach(afterTest);
 
-  describe('addToolbarItem', () => {
-    it('should add a toolbar item and make header panel visible', async () => {
+  describe('setToolbarItem', () => {
+    it('should set a toolbar item and make header panel visible', async () => {
       const { instance } = await createDataGrid({
         dataSource: [{ id: 1 }],
       });
@@ -27,7 +27,7 @@ describe('HeaderPanel', () => {
 
       expect(headerPanel.isVisible()).toBe(false);
 
-      headerPanel.addToolbarItem('customButton', {
+      headerPanel.setToolbarItem('customButton', {
         widget: 'dxButton',
         options: { text: 'Custom' },
         location: 'after',
@@ -41,20 +41,20 @@ describe('HeaderPanel', () => {
       expect($toolbar.length).toBe(1);
     });
 
-    it('should replace an existing item when adding with the same name', async () => {
+    it('should replace an existing item when setting with the same name', async () => {
       const { instance } = await createDataGrid({
         dataSource: [{ id: 1 }],
       });
       const headerPanel = getHeaderPanel(instance);
 
-      headerPanel.addToolbarItem('myItem', {
+      headerPanel.setToolbarItem('myItem', {
         text: 'First',
         location: 'before',
         name: 'myItem',
         sortIndex: 10,
       });
 
-      headerPanel.addToolbarItem('myItem', {
+      headerPanel.setToolbarItem('myItem', {
         text: 'Replaced',
         location: 'after',
         name: 'myItem',
@@ -67,7 +67,7 @@ describe('HeaderPanel', () => {
       expect(items[0].text).toBe('Replaced');
     });
 
-    it('should call _invalidate when adding item after first render', async () => {
+    it('should call _invalidate when setting item after first render', async () => {
       const { instance } = await createDataGrid({
         dataSource: [{ id: 1 }],
         searchPanel: { visible: true },
@@ -76,7 +76,7 @@ describe('HeaderPanel', () => {
       const headerPanel = getHeaderPanel(instance);
       const invalidateSpy = jest.spyOn(headerPanel, '_invalidate');
 
-      headerPanel.addToolbarItem('customButton', {
+      headerPanel.setToolbarItem('customButton', {
         text: 'Custom',
         location: 'after',
         name: 'customButton',
@@ -85,7 +85,7 @@ describe('HeaderPanel', () => {
       expect(invalidateSpy).toHaveBeenCalled();
     });
 
-    it('should not call _invalidate when adding item before first render', async () => {
+    it('should not call _invalidate when setting item before first render', async () => {
       const { instance } = await createDataGrid({
         dataSource: [{ id: 1 }],
       });
@@ -96,7 +96,7 @@ describe('HeaderPanel', () => {
 
       const invalidateSpy = jest.spyOn(headerPanel, '_invalidate');
 
-      headerPanel.addToolbarItem('test', {
+      headerPanel.setToolbarItem('test', {
         text: 'Test',
         name: 'test',
       });
@@ -108,14 +108,14 @@ describe('HeaderPanel', () => {
   });
 
   describe('removeToolbarItem', () => {
-    it('should remove a previously added item', async () => {
+    it('should remove a previously set item', async () => {
       const { instance } = await createDataGrid({
         dataSource: [{ id: 1 }],
       });
 
       const headerPanel = getHeaderPanel(instance);
 
-      headerPanel.addToolbarItem('toRemove', {
+      headerPanel.setToolbarItem('toRemove', {
         text: 'Remove me',
         location: 'after',
         name: 'toRemove',
@@ -150,7 +150,7 @@ describe('HeaderPanel', () => {
 
       const headerPanel = getHeaderPanel(instance);
 
-      headerPanel.addToolbarItem('temp', {
+      headerPanel.setToolbarItem('temp', {
         text: 'Temp',
         name: 'temp',
       });
@@ -172,13 +172,13 @@ describe('HeaderPanel', () => {
 
       const headerPanel = getHeaderPanel(instance);
 
-      headerPanel.addToolbarItem('c', {
+      headerPanel.setToolbarItem('c', {
         text: 'C', name: 'c', sortIndex: 30, location: 'after',
       });
-      headerPanel.addToolbarItem('a', {
+      headerPanel.setToolbarItem('a', {
         text: 'A', name: 'a', sortIndex: 10, location: 'after',
       });
-      headerPanel.addToolbarItem('b', {
+      headerPanel.setToolbarItem('b', {
         text: 'B', name: 'b', sortIndex: 20, location: 'after',
       });
 
@@ -196,10 +196,10 @@ describe('HeaderPanel', () => {
 
       const headerPanel = getHeaderPanel(instance);
 
-      headerPanel.addToolbarItem('withIndex', {
+      headerPanel.setToolbarItem('withIndex', {
         text: 'With', name: 'withIndex', sortIndex: 10, location: 'after',
       });
-      headerPanel.addToolbarItem('noIndex', {
+      headerPanel.setToolbarItem('noIndex', {
         text: 'No', name: 'noIndex', location: 'before',
       });
 
@@ -217,10 +217,10 @@ describe('HeaderPanel', () => {
 
       const headerPanel = getHeaderPanel(instance);
 
-      headerPanel.addToolbarItem('b', {
+      headerPanel.setToolbarItem('b', {
         text: 'B', name: 'b', sortIndex: 20, location: 'after',
       });
-      headerPanel.addToolbarItem('a', {
+      headerPanel.setToolbarItem('a', {
         text: 'A', name: 'a', sortIndex: 10, location: 'after',
       });
 
@@ -235,17 +235,17 @@ describe('HeaderPanel', () => {
   });
 
   describe('_getToolbarItems', () => {
-    it('should return items added via addToolbarItem', async () => {
+    it('should return items set via setToolbarItem', async () => {
       const { instance } = await createDataGrid({
         dataSource: [{ id: 1 }],
       });
 
       const headerPanel = getHeaderPanel(instance);
 
-      headerPanel.addToolbarItem('item1', {
+      headerPanel.setToolbarItem('item1', {
         text: 'Item 1', name: 'item1', location: 'before',
       });
-      headerPanel.addToolbarItem('item2', {
+      headerPanel.setToolbarItem('item2', {
         text: 'Item 2', name: 'item2', location: 'after',
       });
 
@@ -268,8 +268,8 @@ describe('HeaderPanel', () => {
     });
   });
 
-  describe('items from extensions and addToolbarItem combined', () => {
-    it('should include items from both extensions and addToolbarItem', async () => {
+  describe('items from extensions and setToolbarItem combined', () => {
+    it('should include items from both extensions and setToolbarItem', async () => {
       const { instance } = await createDataGrid({
         dataSource: [{ id: 1 }],
         columnChooser: { enabled: true },
@@ -277,7 +277,7 @@ describe('HeaderPanel', () => {
 
       const headerPanel = getHeaderPanel(instance);
 
-      headerPanel.addToolbarItem('customItem', {
+      headerPanel.setToolbarItem('customItem', {
         text: 'Custom',
         name: 'customItem',
         location: 'after',
@@ -300,7 +300,7 @@ describe('HeaderPanel', () => {
 
       const headerPanel = getHeaderPanel(instance);
 
-      headerPanel.addToolbarItem('middleItem', {
+      headerPanel.setToolbarItem('middleItem', {
         text: 'Middle',
         name: 'middleItem',
         location: 'after',
@@ -332,7 +332,7 @@ describe('HeaderPanel', () => {
 
       const headerPanel = getHeaderPanel(instance);
 
-      headerPanel.addToolbarItem('toRemove', {
+      headerPanel.setToolbarItem('toRemove', {
         text: 'Remove',
         name: 'toRemove',
         location: 'after',
