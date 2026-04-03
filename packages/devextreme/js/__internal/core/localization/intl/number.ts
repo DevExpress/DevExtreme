@@ -3,6 +3,7 @@ import accountingFormats from '@ts/core/localization/cldr-data/accounting_format
 import localizationCoreUtils from '@ts/core/localization/core';
 import type { FormatConfig as BaseFormatConfig, LocalizationFormat } from '@ts/core/localization/number';
 import openXmlCurrencyFormat from '@ts/core/localization/open_xml_currency_format';
+import { getGlobalFormatByDataType } from '@ts/core/m_global_format_config';
 
 interface CurrencySymbolInfo {
   position: 'before' | 'after';
@@ -104,6 +105,13 @@ export default {
   ): string {
     if (typeof value !== 'number') {
       return value;
+    }
+
+    const globalNumberFormat = getGlobalFormatByDataType('number');
+
+    if (!format && globalNumberFormat) {
+      // eslint-disable-next-line no-param-reassign
+      format = globalNumberFormat as LocalizationFormat;
     }
 
     // eslint-disable-next-line no-param-reassign
