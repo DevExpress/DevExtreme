@@ -2205,6 +2205,51 @@ QUnit.module('datebox w/ time list', {
         assert.deepEqual(this.dateBox.option('value'), new Date(2020, 4, 13, 1, 30), 'date is correct');
     });
 
+    QUnit.test('time selection should use updated date after external value change while popup is closed (T1325614)', function(assert) {
+        this.dateBox.option({
+            type: 'time',
+            pickerType: 'list',
+            value: new Date(1995, 11, 25, 12, 0),
+            opened: true
+        });
+
+        const $list = $(this.dateBox.content()).find(LIST_ITEM_SELECTOR);
+
+        $($list.eq(3)).trigger('dxclick');
+
+        this.dateBox.option('value', new Date(1995, 11, 12, 12, 0));
+        this.dateBox.open();
+
+        const $updatedList = $(this.dateBox.content()).find(LIST_ITEM_SELECTOR);
+
+        $($updatedList.eq(5)).trigger('dxclick');
+
+        const result = this.dateBox.option('value');
+
+        assert.strictEqual(result.getDate(), 12, 'date part is preserved after time selection');
+        assert.strictEqual(result.getMonth(), 11, 'month part is preserved after time selection');
+        assert.strictEqual(result.getFullYear(), 1995, 'year part is preserved after time selection');
+    });
+
+    QUnit.test('list items should be refreshed after value is changed while popup is closed (T1325614)', function(assert) {
+        this.dateBox.option({
+            type: 'time',
+            pickerType: 'list',
+            value: new Date(2020, 4, 13, 10, 0),
+            opened: true
+        });
+
+        this.dateBox.option('opened', false);
+        this.dateBox.option('value', new Date(2020, 8, 20, 10, 0));
+        this.dateBox.option('opened', true);
+
+        const itemData = this.dateBox._strategy._widgetItems[0];
+
+        assert.strictEqual(itemData.getFullYear(), 2020, 'item year is updated');
+        assert.strictEqual(itemData.getMonth(), 8, 'item month is updated');
+        assert.strictEqual(itemData.getDate(), 20, 'item day is updated');
+    });
+
     QUnit.test('the date should be in range after the selection', function(assert) {
         this.dateBox.option({
             type: 'time',
@@ -2498,12 +2543,13 @@ QUnit.module('datebox w/ time list', {
             dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssx',
         });
         const $input = $(this.dateBox.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const $items = $(this.dateBox.content()).find(LIST_ITEM_SELECTOR);
+        let $items = $(this.dateBox.content()).find(LIST_ITEM_SELECTOR);
 
         $items.eq(1).trigger('dxclick');
         assert.strictEqual($input.val(), $items.eq(1).text(), 'time is applied');
 
         this.dateBox.open();
+        $items = $(this.dateBox.content()).find(LIST_ITEM_SELECTOR);
         $items.eq(3).trigger('dxclick');
         assert.strictEqual($input.val(), $items.eq(3).text(), 'new time is applied');
     });
