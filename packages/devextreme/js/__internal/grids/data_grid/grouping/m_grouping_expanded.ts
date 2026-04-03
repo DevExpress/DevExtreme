@@ -122,9 +122,9 @@ const pathEquals = function (path1, path2) {
   return true;
 };
 
-const isGroupItem = (item: DataItem): item is GroupItemData => (
-  'key' in item && (item as GroupItemData).items !== undefined
-);
+const isGroupItem = (
+  item: DataItem,
+): item is GroupItemData => 'key' in item && (item as GroupItemData).items !== undefined;
 
 /**
  * Recalculates flat-data offsets for all known groups after an expand/collapse operation.
