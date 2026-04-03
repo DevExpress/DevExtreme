@@ -1633,7 +1633,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           },
         }
         : {
-          onDone: (newAppointment) => {
+          onSave: (newAppointment) => {
             this.updateAppointment(rawAppointment, appointment.source);
             return this.addAppointment(newAppointment);
           },
@@ -2019,7 +2019,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         const popupConfig = this.editing.legacyForm
           ? { isToolbarVisible: true, action: ACTION_TO_APPOINTMENT.CREATE }
           : {
-            onDone: (appointment) => this.addAppointment(appointment),
+            onSave: (appointment) => this.addAppointment(appointment),
             title: messageLocalization.format('dxScheduler-newPopupTitle'),
             readOnly: false,
           };
@@ -2038,7 +2038,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         const popupConfig = this.editing.legacyForm
           ? { isToolbarVisible: this.editing.allowUpdating, action: ACTION_TO_APPOINTMENT.UPDATE }
           : {
-            onDone: (appointment) => this.updateAppointment(rawAppointment, appointment),
+            onSave: (appointment) => this.updateAppointment(rawAppointment, appointment),
             title: messageLocalization.format('dxScheduler-editPopupTitle'),
             readOnly,
           };

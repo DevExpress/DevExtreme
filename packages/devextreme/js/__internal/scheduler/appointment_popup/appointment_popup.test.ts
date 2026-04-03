@@ -44,7 +44,7 @@ describe('Isolated AppointmentPopup environment', () => {
     expect(POM.cancelButton).toBeTruthy();
   });
 
-  it('should call onDone callback on Save click', async () => {
+  it('should call onSave callback on Save click', async () => {
     const { POM, callbacks } = await createAppointmentPopup({
       appointmentData: {
         text: 'New Appointment',
@@ -55,8 +55,8 @@ describe('Isolated AppointmentPopup environment', () => {
 
     POM.saveButton.click();
 
-    expect(callbacks.onDone).toHaveBeenCalledTimes(1);
-    expect(callbacks.onDone).toHaveBeenCalledWith(
+    expect(callbacks.onSave).toHaveBeenCalledTimes(1);
+    expect(callbacks.onSave).toHaveBeenCalledWith(
       expect.objectContaining({
         text: 'New Appointment',
         startDate: new Date(2021, 3, 26, 9, 30),
@@ -114,14 +114,14 @@ describe('Isolated AppointmentPopup environment', () => {
     expect(popup.visible).toBe(false);
   });
 
-  it('should support composite onDone for exclude-from-series scenario', async () => {
+  it('should support composite onSave for exclude-from-series scenario', async () => {
     const updateAppointment = jest.fn();
     const addAppointment = jest.fn(() => Promise.resolve());
 
     const sourceAppointment = { text: 'Series', recurrenceRule: 'FREQ=DAILY' };
     const updatedAppointment = { text: 'Series', recurrenceException: '20210426' };
 
-    const onDone = jest.fn((newAppointment) => {
+    const onSave = jest.fn((newAppointment) => {
       updateAppointment(sourceAppointment, updatedAppointment);
       return addAppointment(newAppointment);
     });
@@ -133,12 +133,12 @@ describe('Isolated AppointmentPopup environment', () => {
         endDate: new Date(2021, 3, 26, 11, 0),
       },
       title: 'Edit Appointment',
-      onDone,
+      onSave,
     });
 
     POM.saveButton.click();
 
-    expect(onDone).toHaveBeenCalledTimes(1);
+    expect(onSave).toHaveBeenCalledTimes(1);
     expect(updateAppointment).toHaveBeenCalledWith(sourceAppointment, updatedAppointment);
     expect(addAppointment).toHaveBeenCalledWith(
       expect.objectContaining({ text: 'Single occurrence' }),

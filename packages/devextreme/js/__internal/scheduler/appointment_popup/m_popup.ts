@@ -25,7 +25,7 @@ const POPUP_FULL_SCREEN_MODE_WINDOW_WIDTH_THRESHOLD = 485;
 const DAY_IN_MS = dateUtils.dateToMilliseconds('day');
 
 export interface AppointmentPopupConfig {
-  onDone: (appointment: Record<string, unknown>) => PromiseLike<unknown>;
+  onSave: (appointment: Record<string, unknown>) => PromiseLike<unknown>;
   title: string;
   readOnly: boolean;
 }
@@ -42,7 +42,7 @@ export class AppointmentPopup {
   state: any;
 
   private config: AppointmentPopupConfig = {
-    onDone: () => Promise.resolve(),
+    onSave: () => Promise.resolve(),
     title: '',
     readOnly: false,
   };
@@ -176,10 +176,6 @@ export class AppointmentPopup {
     });
   }
 
-  private isReadOnly(): boolean {
-    return this.config.readOnly;
-  }
-
   private createAppointmentAdapter(rawAppointment): AppointmentAdapter {
     return new AppointmentAdapter(
       rawAppointment,
@@ -195,7 +191,7 @@ export class AppointmentPopup {
 
     const formData = this.createFormData(appointmentAdapter);
 
-    this.form.readOnly = this.isReadOnly();
+    this.form.readOnly = this.config.readOnly;
     this.form.formData = formData;
 
     this.form.showMainGroup();
@@ -281,7 +277,7 @@ export class AppointmentPopup {
 
       const appointment = clonedAdapter.source;
 
-      when(this.config.onDone(appointment)).done(deferred.resolve);
+      when(this.config.onSave(appointment)).done(deferred.resolve);
 
       deferred.done(() => {
         hideLoading();

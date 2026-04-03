@@ -62,7 +62,7 @@ interface CreateAppointmentPopupOptions {
   firstDayOfWeek?: number;
   startDayHour?: number;
   onAppointmentFormOpening?: (...args: unknown[]) => void;
-  onDone?: jest.Mock;
+  onSave?: jest.Mock;
   title?: string;
   readOnly?: boolean;
   addAppointment?: jest.Mock;
@@ -79,7 +79,7 @@ interface CreateAppointmentPopupResult {
     updateAppointment: jest.Mock;
     focus: jest.Mock;
     updateScrollPosition: jest.Mock;
-    onDone: jest.Mock;
+    onSave: jest.Mock;
   };
   dispose: () => void;
 }
@@ -114,7 +114,7 @@ export const createAppointmentPopup = async (
     ?? jest.fn(resolvedDeferred);
   const focus = jest.fn();
   const updateScrollPosition = jest.fn();
-  const onDone = options.onDone ?? jest.fn(resolvedDeferred);
+  const onSave = options.onSave ?? jest.fn(resolvedDeferred);
 
   const formSchedulerProxy = {
     getResourceById: (): Record<string, unknown> => resourceManager.resourceById,
@@ -167,7 +167,7 @@ export const createAppointmentPopup = async (
   const title = options.title ?? 'New Appointment';
   const readOnly = options.readOnly ?? false;
 
-  popup.show(appointmentData, { onDone, title, readOnly });
+  popup.show(appointmentData, { onSave, title, readOnly });
   await new Promise(process.nextTick);
 
   const selector = `.dx-overlay-wrapper.${APPOINTMENT_POPUP_CLASS}`;
@@ -200,7 +200,7 @@ export const createAppointmentPopup = async (
       updateAppointment,
       focus,
       updateScrollPosition,
-      onDone,
+      onSave,
     },
     dispose,
   };
