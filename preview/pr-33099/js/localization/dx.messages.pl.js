@@ -1,7 +1,7 @@
 /*!
 * DevExtreme (dx.messages.pl.js)
 * Version: 26.1.0
-* Build date: Thu Apr 02 2026
+* Build date: Fri Apr 03 2026
 *
 * Copyright (c) 2012 - 2026 Developer Express Inc. ALL RIGHTS RESERVED
 * Read about DevExtreme licensing here: https://js.devexpress.com/Licensing/
