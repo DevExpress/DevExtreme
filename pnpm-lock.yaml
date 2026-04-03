@@ -1969,6 +1969,9 @@ importers:
         version: 0.15.1
     publishDirectory: npm/dist
 
+  packages/devextreme-dist:
+    publishDirectory: ../devextreme/artifacts/npm/devextreme-dist
+
   packages/devextreme-metadata:
     devDependencies:
       '@types/node':
@@ -2267,8 +2270,6 @@ importers:
         specifier: 4.2.5
         version: 4.2.5(vue@3.2.47)
     publishDirectory: npm
-
-  packages/devextreme/artifacts/npm/devextreme-dist: {}
 
   packages/eslint-migration-utils:
     devDependencies:

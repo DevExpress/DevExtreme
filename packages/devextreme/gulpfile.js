@@ -22,7 +22,6 @@ gulp.task('clean', function(callback) {
         '!artifacts/npm/devextreme',
         '!artifacts/npm/devextreme/*.json',
         '!artifacts/npm/devextreme-dist',
-        '!artifacts/npm/devextreme-dist/*.json',
     ]);
     cache.clearAll();
     callback();
