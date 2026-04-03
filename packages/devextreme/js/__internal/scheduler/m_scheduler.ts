@@ -1628,14 +1628,24 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
 
     if (isPopupEditing) {
-      this.appointmentPopup.show(singleRawAppointment, {
-        isToolbarVisible: true, // TODO: remove when legacyForm is deleted
-        action: ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
-        excludeInfo: {
-          sourceAppointment: rawAppointment,
-          updatedAppointment: appointment.source,
-        },
-      });
+      const popupConfig = this.editing.legacyForm
+        ? {
+          isToolbarVisible: true,
+          action: ACTION_TO_APPOINTMENT.EXCLUDE_FROM_SERIES,
+          excludeInfo: {
+            sourceAppointment: rawAppointment,
+            updatedAppointment: appointment.source,
+          },
+        }
+        : {
+          onSave: (newAppointment) => {
+            this.updateAppointment(rawAppointment, appointment.source);
+            return this.addAppointment(newAppointment);
+          },
+          title: messageLocalization.format('dxScheduler-editPopupTitle'),
+          readOnly: Boolean(appointment.source) && appointment.disabled,
+        };
+      this.appointmentPopup.show(singleRawAppointment, popupConfig);
       this.editAppointmentData = rawAppointment;
     } else {
       this.updateAppointmentCore(rawAppointment, appointment.source, () => {
@@ -2010,20 +2020,34 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (isCreateAppointment) {
       delete this.editAppointmentData; // TODO
-      this.editing.allowAdding && this.appointmentPopup.show(rawAppointment, {
-        isToolbarVisible: true, // TODO: remove when legacyForm is deleted
-        action: ACTION_TO_APPOINTMENT.CREATE,
-      });
+      if (this.editing.allowAdding) {
+        const popupConfig = this.editing.legacyForm
+          ? { isToolbarVisible: true, action: ACTION_TO_APPOINTMENT.CREATE }
+          : {
+            onSave: (appointment) => this.addAppointment(appointment),
+            title: messageLocalization.format('dxScheduler-newPopupTitle'),
+            readOnly: false,
+          };
+        this.appointmentPopup.show(rawAppointment, popupConfig);
+      }
     } else {
       const startDate = this._dataAccessors.get('startDate', newRawTargetedAppointment || rawAppointment);
 
       this.checkRecurringAppointment(rawAppointment, newTargetedAppointment, startDate, () => {
         this.editAppointmentData = rawAppointment; // TODO
 
-        this.appointmentPopup.show(rawAppointment, {
-          isToolbarVisible: this.editing.allowUpdating, // TODO: remove when legacyForm is deleted
-          action: ACTION_TO_APPOINTMENT.UPDATE,
-        });
+        const adapter = new AppointmentAdapter(rawAppointment, this._dataAccessors);
+        const isDisabled = Boolean(adapter.source) && adapter.disabled;
+        const readOnly = isDisabled || !this.editing.allowUpdating;
+
+        const popupConfig = this.editing.legacyForm
+          ? { isToolbarVisible: this.editing.allowUpdating, action: ACTION_TO_APPOINTMENT.UPDATE }
+          : {
+            onSave: (appointment) => this.updateAppointment(rawAppointment, appointment),
+            title: messageLocalization.format('dxScheduler-editPopupTitle'),
+            readOnly,
+          };
+        this.appointmentPopup.show(rawAppointment, popupConfig);
       }, false, true);
     }
   }
