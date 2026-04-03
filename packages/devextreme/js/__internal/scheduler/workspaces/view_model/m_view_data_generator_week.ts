@@ -4,7 +4,7 @@ import { ViewDataGenerator } from './m_view_data_generator';
 export class ViewDataGeneratorWeek extends ViewDataGenerator {
   readonly daysInInterval: number = 7;
 
-  getIntervalDuration(intervalCount) {
+  _getIntervalDuration(intervalCount) {
     return weekUtils.getIntervalDuration(intervalCount);
   }
 
@@ -13,7 +13,7 @@ export class ViewDataGeneratorWeek extends ViewDataGenerator {
       options.currentDate,
       options.startDayHour,
       options.startDate,
-      this.getIntervalDuration(options.intervalCount),
+      this._getIntervalDuration(options.intervalCount),
       this.getFirstDayOfWeek(options.firstDayOfWeek),
     );
   }

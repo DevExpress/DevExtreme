@@ -7,7 +7,7 @@ export class ViewDataGeneratorDay extends ViewDataGenerator {
       options.currentDate,
       options.startDayHour,
       options.startDate,
-      this.getIntervalDuration(options.intervalCount),
+      this._getIntervalDuration(options.intervalCount),
     );
   }
 }

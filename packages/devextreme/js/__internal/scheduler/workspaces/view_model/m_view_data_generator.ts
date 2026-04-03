@@ -741,7 +741,8 @@ export class ViewDataGenerator {
     return hoursInterval * toMs('hour');
   }
 
-  public getIntervalDuration(intervalCount) {
+  // TODO: used externally in m_view_data_provider.ts
+  public _getIntervalDuration(intervalCount) {
     return toMs('day') * intervalCount;
   }
 

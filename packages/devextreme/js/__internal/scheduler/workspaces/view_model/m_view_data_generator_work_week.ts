@@ -13,7 +13,7 @@ export class ViewDataGeneratorWorkWeek extends ViewDataGeneratorWeek {
       options.currentDate,
       options.startDayHour,
       options.startDate,
-      this.getIntervalDuration(options.intervalCount),
+      this._getIntervalDuration(options.intervalCount),
       this.getFirstDayOfWeek(options.firstDayOfWeek),
     );
   }
