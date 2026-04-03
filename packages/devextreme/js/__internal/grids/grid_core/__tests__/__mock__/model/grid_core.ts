@@ -19,6 +19,7 @@ const SELECTORS = {
   headerRowClass: 'dx-header-row',
   dataRowClass: 'dx-data-row',
   groupRowClass: 'dx-group-row',
+  scrollableContainer: 'dx-scrollable-container',
   loadPanel: 'dx-loadpanel',
   editForm: 'edit-form',
   headerCellIndicators: 'dx-column-indicators',
@@ -39,12 +40,19 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
     return this.getWidgetName();
   }
 
-  public getHeaderCells(): NodeListOf<HTMLElement> {
-    return this.root.querySelectorAll(`.${SELECTORS.headerRowClass} > td`);
+  public getHeaderRows(): NodeListOf<HTMLElement> {
+    return this.root.querySelectorAll(`.${SELECTORS.headerRowClass}`);
   }
 
-  public getHeaderCell(columnIndex: number): HeaderCellModel {
-    return new HeaderCellModel(this.getHeaderCells()[columnIndex], this.addWidgetPrefix.bind(this));
+  public getHeaderCells(rowIndex = 0): NodeListOf<HTMLElement> {
+    return this.getHeaderRows()[rowIndex].querySelectorAll('td');
+  }
+
+  public getHeaderCell(columnIndex: number, rowIndex = 0): HeaderCellModel {
+    return new HeaderCellModel(
+      this.getHeaderCells(rowIndex)[columnIndex],
+      this.addWidgetPrefix.bind(this),
+    );
   }
 
   public getCellElement(rowIndex: number, columnIndex: number): HTMLElement {
@@ -80,6 +88,10 @@ export abstract class GridCoreModel<TInstance = GridBase | CardView> {
       this.getDataCells(rowIndex)[columnIndex],
       this.addWidgetPrefix.bind(this),
     );
+  }
+
+  public getScrollableContainer(): HTMLElement {
+    return this.root.querySelector(`.${SELECTORS.scrollableContainer}`) as HTMLElement;
   }
 
   public getRevertButton(): HTMLElement {

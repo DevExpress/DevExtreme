@@ -1,9 +1,9 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
+import { createWidget } from '../../../../helpers/createWidget';
 
-fixture.disablePageReloads`Adaptive Row`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Adaptivity.Functional`
+  .page(url(__dirname, '../../../container.html'));
 
 test.meta({ browserSize: [400, 400] })('Should be shown and hidden when the window is resized', async (t) => {
   const dataGrid = new DataGrid('#container');

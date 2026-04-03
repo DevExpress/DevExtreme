@@ -936,8 +936,12 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
     }
   }
 
-  private _hasAlignByColumnSummaryItems(columnIndex, options) {
-    return !isDefined(options.columns[columnIndex].groupIndex) && options.row.summaryCells[columnIndex].length;
+  private _hasAlignByColumnSummaryItems(columnIndex, options): boolean {
+    const column = options.columns[columnIndex];
+    const isGrouped = isDefined(column.groupIndex);
+    const isVirtual = column.command === 'virtual';
+    const hasSummaryCells = !!options.row.summaryCells[columnIndex].length;
+    return !isGrouped && (isVirtual || hasSummaryCells);
   }
 
   private _getAlignByColumnCellCount(groupCellColSpan, options) {
@@ -945,7 +949,10 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
 
     for (let i = 1; i < groupCellColSpan; i++) {
       const columnIndex = options.row.summaryCells.length - i;
-      alignByColumnCellCount = this._hasAlignByColumnSummaryItems(columnIndex, options) ? i : alignByColumnCellCount;
+      const hasAlignBySummary = this._hasAlignByColumnSummaryItems(columnIndex, options);
+      if (hasAlignBySummary) {
+        alignByColumnCellCount = i;
+      }
     }
 
     return alignByColumnCellCount;

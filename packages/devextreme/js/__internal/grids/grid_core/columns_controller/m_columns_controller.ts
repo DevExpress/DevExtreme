@@ -136,7 +136,7 @@ export class ColumnsController extends modules.Controller {
 
   public _isWarnedAboutUnsupportedProperties?: boolean;
 
-  public init(isApplyingUserState?): void {
+  public init(isApplyingUserState?: boolean): void {
     this._dataController = this.getController('data');
     this._focusController = this.getController('focus');
     this._stateStoringController = this.getController('stateStoring');
@@ -1957,6 +1957,20 @@ export class ColumnsController extends modules.Controller {
 
   public getColumnOptionNameByFullName(fullName: string): string {
     return fullName.replace(COLUMN_OPTION_REGEXP, '');
+  }
+
+  public getFirstColumn(rowIndex: number | null): Column | undefined {
+    const visibleColumns = this.getVisibleColumns(rowIndex);
+
+    return visibleColumns.find((column: Column) => this.isFirstColumn(column, rowIndex));
+  }
+
+  /**
+   * @extended: m_adaptivity
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public isAdaptiveHiddenColumn(column: Column): boolean {
+    return false;
   }
 }
 

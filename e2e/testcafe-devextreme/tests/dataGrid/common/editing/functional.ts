@@ -63,6 +63,8 @@ test('DataGrid - The "Cannot read properties of undefined error" occurs when usi
   const dataGrid = new DataGrid('#container');
   const resolveOnSavingDeferred = ClientFunction(() => (window as any).deferred.resolve());
 
+  await t.expect(dataGrid.isReady()).ok();
+
   await t
     .click(dataGrid.getDataCell(0, 0).element)
     .typeText(dataGrid.getDataCell(0, 0).element, 'new_value')

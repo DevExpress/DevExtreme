@@ -6,7 +6,7 @@ import $ from '@js/core/renderer';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getHeight } from '@js/core/utils/size';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isString } from '@js/core/utils/type';
 import { ColumnContextMenuMixin } from '@ts/grids/grid_core/context_menu/m_column_context_menu_mixin';
 import type { HeaderFilterController } from '@ts/grids/grid_core/header_filter/m_header_filter';
 import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
@@ -345,7 +345,22 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     // @ts-expect-error
     const $cellElement = super._createCell.apply(this, arguments);
 
-    column.rowspan > 1 && options.rowType === 'header' && $cellElement.attr('rowSpan', column.rowspan);
+    if (options.rowType !== 'header') {
+      return $cellElement;
+    }
+
+    const isBandColumnsUsed = this._columnsController.isBandColumnsUsed();
+
+    if (isBandColumnsUsed) {
+      this.toggleFirstCellClass(
+        $cellElement,
+        this._columnsController.isFirstColumn(column, options.rowIndex),
+      );
+    }
+
+    if (column.rowspan > 1) {
+      $cellElement.attr('rowSpan', column.rowspan);
+    }
 
     return $cellElement;
   }
@@ -565,6 +580,20 @@ export class ColumnHeadersView extends ColumnContextMenuMixin(ColumnsView) {
     const $columnElements = this.getColumnElements();
 
     return $columnElements ? $columnElements.length : 0;
+  }
+
+  protected _getVisibleColumnIndex(
+    $cells: dxElementWrapper,
+    rowIndex: number,
+    columnIdentifier: string | number,
+  ): number {
+    if (isString(columnIdentifier)) {
+      const columnIndex = this._columnsController.columnOption(columnIdentifier, 'index');
+
+      return this._columnsController.getVisibleIndex(columnIndex, rowIndex);
+    }
+
+    return super._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
   }
 
   /**
