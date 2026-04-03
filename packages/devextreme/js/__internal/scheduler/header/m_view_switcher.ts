@@ -104,6 +104,7 @@ export const getDropDownViewSwitcher = (
       },
       dropDownOptions: {
         width: 'max-content',
+        // TODO: legacy naming, used internally
         _wrapperClassExternal: ClASS.dropDownButtonContent,
       },
     },

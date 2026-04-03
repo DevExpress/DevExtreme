@@ -173,16 +173,19 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private a11yStatus!: dxElementWrapper;
 
+  // TODO: used externally in m_appointment_drag_behavior.ts, m_subscribes.ts, workspaces/m_work_space.ts
   _workSpace: any;
 
   private header?: SchedulerHeader;
 
+  // TODO: used externally in m_appointment_drag_behavior.ts, m_subscribes.ts, workspaces/m_work_space.ts
   _appointments: any;
 
   appointmentDataSource!: AppointmentDataSource;
 
   _dataSource: any;
 
+  // TODO: used externally in m_subscribes.ts, view_model/preparation/prepare_appointments.ts, view_model/filtration/utils/get_filter_options/get_filter_options.ts
   _dataAccessors!: AppointmentDataAccessor;
 
   resourceManager!: ResourceManager;
@@ -201,6 +204,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private appointmentPopup: any;
 
+  // TODO: used externally in m_subscribes.ts
   _compactAppointmentsHelper!: CompactAppointmentsHelper;
 
   private asyncTemplatesTimers!: any[];
@@ -215,6 +219,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private recurrenceDialog: any;
 
+  // TODO: used externally in m_subscribes.ts
   _layoutManager!: AppointmentLayoutManager;
 
   private appointmentForm: any;
@@ -2256,10 +2261,12 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
+  // TODO: used externally in m_appointment_drag_behavior.ts
   _getDragBehavior() {
     return this._workSpace.dragBehavior;
   }
 
+  // TODO: used externally in m_appointment_drag_behavior.ts
   _isAppointmentBeingUpdated(appointmentData: Appointment): boolean {
     return this.updatingAppointments.has(appointmentData);
   }

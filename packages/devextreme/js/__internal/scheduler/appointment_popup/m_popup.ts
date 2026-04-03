@@ -35,6 +35,7 @@ export class AppointmentPopup {
 
   form: AppointmentForm;
 
+  // TODO: backing field for popup getter, cannot rename due to name conflict
   private _popup?: dxPopup;
 
   private customPopupOptions?: PopupProperties;

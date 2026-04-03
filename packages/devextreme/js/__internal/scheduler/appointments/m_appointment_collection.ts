@@ -431,6 +431,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
     this._preventSingleAppointmentClick = false;
   }
 
+  // TODO: used externally in m_scheduler.ts
   _renderAppointmentTemplate($container, appointment, model) {
     const config = {
       isAllDay: appointment.allDay,

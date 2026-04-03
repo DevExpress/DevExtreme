@@ -108,7 +108,9 @@ export const DEFAULT_SCHEDULER_INTERNAL_OPTIONS: SchedulerInternalOptions = {
     ...DEFAULT_SCHEDULER_OPTIONS.editing,
     popup: {},
   },
+  // TODO: legacy option property name
   _draggingMode: 'outlook',
+  // TODO: legacy option property name
   _appointmentTooltipOffset: { x: 0, y: 0 },
   appointmentPopupTemplate: 'appointmentPopup',
   disabledExpr: 'disabled',

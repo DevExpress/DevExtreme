@@ -71,6 +71,7 @@ export class SchedulerHeader extends Widget<HeaderOptions> {
 
   public _getDefaultOptions(): HeaderOptions {
     return extend(super._getDefaultOptions(), {
+      // TODO: passed via scheduler options as _useShortDateFormat
       _useShortDateFormat: !devices.real().generic || devices.isSimulator(),
     }) as HeaderOptions;
   }
