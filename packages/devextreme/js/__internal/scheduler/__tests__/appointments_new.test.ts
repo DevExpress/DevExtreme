@@ -28,7 +28,7 @@ describe('New Appointments', () => {
 
   describe('Templates', () => {
     describe('AppointmentTemplate', () => {
-      it('should call template function with correct paramteters', async () => {
+      it('should call template function with correct parameters', async () => {
         const appointmentTemplate = jest.fn();
 
         const appointmentData1 = {
@@ -176,10 +176,6 @@ describe('New Appointments', () => {
 
         const $appointment = $(POM.getAppointments()[0].element);
         expect($appointment.text()).toBe('Appointment 1 Async');
-      });
-
-      it('should call onAppointmentRendered action after appointment is rendered', async () => {
-
       });
     });
 
