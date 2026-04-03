@@ -393,6 +393,12 @@ export type SendButtonProperties = {
 export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
+     * @default ''
+     * @public
+     */
+    ariaLabel: string;
+    /**
+     * @docid
      * @default true
      * @public
      */
