@@ -1357,6 +1357,28 @@ QUnit.module('ChatTextArea', moduleConfig, () => {
 
                 this.compareButtonState(assert, STT_INITIAL_STATE);
             });
+
+            QUnit.test('speech to text button should have correct style options in custom mode', function(assert) {
+                this.reinit({
+                    speechToTextEnabled: true,
+                    sendButtonOptions: { action: 'custom' },
+                });
+
+                this.compareButtonState(assert, STT_INITIAL_STATE);
+            });
+
+            QUnit.test('speech to text button should return to initial state when switching to custom mode during listening', function(assert) {
+                this.reinit({ speechToTextEnabled: true });
+                const $speechToText = this.$element.find(`.${SPEECH_TO_TEXT_CLASS}`);
+                const speechToTextInstance = SpeechToText.getInstance($speechToText);
+
+                speechToTextInstance.option('onStartClick')({});
+                speechToTextInstance.option('onStopClick')({});
+
+                this.instance.option('sendButtonOptions', { action: 'custom' });
+
+                this.compareButtonState(assert, STT_INITIAL_STATE);
+            });
         });
     });
 
