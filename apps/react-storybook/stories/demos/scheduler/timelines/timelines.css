@@ -1,0 +1,24 @@
+.dx-scheduler-timeline.dx-scheduler-timeline-day .dx-scheduler-cell-sizes-horizontal,
+.dx-scheduler-timeline.dx-scheduler-timeline-week .dx-scheduler-cell-sizes-horizontal,
+.dx-scheduler-timeline.dx-scheduler-timeline-work-week .dx-scheduler-cell-sizes-horizontal {
+    width: 100px;
+    min-width: 100px;
+}
+
+.dx-scheduler-timeline-month .dx-scheduler-cell-sizes-horizontal {
+    width: 200px;
+    min-width: 200px;
+}
+
+.options {
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
+}
+
+.option {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
