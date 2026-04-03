@@ -146,8 +146,8 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     this.appointmentBySortIndex = {};
     this.$commonContainer.empty();
 
-    appointments.forEach((appointmentViewModel) => {
-      const appointment = this.renderAppointment(commonFragment, appointmentViewModel);
+    appointments.forEach((appointmentViewModel, index) => {
+      const appointment = this.renderAppointment(commonFragment, appointmentViewModel, index);
       this.appointmentBySortIndex[appointmentViewModel.sortedIndex] = appointment;
     });
 
@@ -169,7 +169,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
       this.$commonContainer.empty();
     }
 
-    viewModelDiff.forEach((diffItem) => {
+    viewModelDiff.forEach((diffItem, index) => {
       const { allDay, sortedIndex } = diffItem.item;
 
       switch (true) {
@@ -183,7 +183,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
         }
         case diffItem.needToAdd: {
           const fragment = allDay ? allDayFragment : commonFragment;
-          const appointment = this.renderAppointment(fragment, diffItem.item);
+          const appointment = this.renderAppointment(fragment, diffItem.item, index);
 
           newAppointmentBySortedIndex[sortedIndex] = appointment;
           break;
@@ -217,6 +217,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
   private renderAppointment(
     fragment: DocumentFragment,
     appointmentViewModel: AppointmentViewModelPlain,
+    index: number,
   ): AppointmentComponent {
     const $element = $('<div>');
 
@@ -226,7 +227,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
 
     if (isAppointmentCollectorViewModel(appointmentViewModel)) {
       return this._createComponent($element, AppointmentCollector, {
-        appointmentsCount: appointmentViewModel.items.length,
+        appointmentsData: appointmentViewModel.items.map((item) => item.itemData),
         isCompact: appointmentViewModel.isCompact,
         geometry: {
           height: appointmentViewModel.height,
@@ -240,6 +241,7 @@ export class Appointments extends DOMComponent<Appointments, AppointmentsPropert
     }
 
     const baseConfig: BaseAppointmentViewProperties = {
+      index,
       appointmentTemplate: this._getTemplateByOption('appointmentTemplate'),
       appointmentData: appointmentViewModel.itemData,
       targetedAppointmentData,
