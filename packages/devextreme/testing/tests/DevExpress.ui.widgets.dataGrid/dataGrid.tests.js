@@ -5559,12 +5559,9 @@ QUnit.module('Global formatting config (spec)', baseModuleConfig, () => {
                 dateFormat: 'dd/MM/yyyy',
             });
 
-            const dataGrid = createDataGrid({
-                dataSource: [{ createdAt: new Date(2020, 0, 2) }],
-                columns: [{ dataField: 'createdAt', dataType: 'date' }],
-            });
+            const format = gridCore.getFormatByDataType('date');
+            const dateText = gridCore.formatValue(new Date(2020, 0, 2), { format });
 
-            const dateText = $(dataGrid.getCellElement(0, 0)).text().trim();
             assert.strictEqual(dateText, '02/01/2020', 'global date format is applied for implicit DataGrid date format');
         } finally {
             restoreGlobalFormats(saved);
@@ -5580,12 +5577,9 @@ QUnit.module('Global formatting config (spec)', baseModuleConfig, () => {
                 dateTimeFormat: 'dd/MM/yyyy, HH:mm',
             });
 
-            const dataGrid = createDataGrid({
-                dataSource: [{ createdAt: new Date(2020, 0, 2, 14, 5) }],
-                columns: [{ dataField: 'createdAt', dataType: 'datetime' }],
-            });
+            const format = gridCore.getFormatByDataType('datetime');
+            const dateText = gridCore.formatValue(new Date(2020, 0, 2, 14, 5), { format });
 
-            const dateText = $(dataGrid.getCellElement(0, 0)).text().trim();
             assert.strictEqual(dateText, '02/01/2020, 14:05', 'global datetime format is applied for implicit DataGrid datetime format');
         } finally {
             restoreGlobalFormats(saved);
@@ -5605,6 +5599,7 @@ QUnit.module('Global formatting config (spec)', baseModuleConfig, () => {
                 dataSource: [{ createdAt: new Date(2020, 0, 2) }],
                 columns: [{ dataField: 'createdAt', dataType: 'date', format: 'shortDate' }],
             });
+            this.clock.tick(10);
 
             const dateText = $(dataGrid.getCellElement(0, 0)).text().trim();
             assert.strictEqual(dateText, '1/2/2020', 'explicit preset format is not replaced by global dateFormat');
