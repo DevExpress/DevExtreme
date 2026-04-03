@@ -150,18 +150,18 @@ export class AppointmentForm {
 
   private readonly resourceManager!: ResourceManager;
 
-  private _dxForm?: dxForm;
+  private dxFormInstance?: dxForm;
 
-  private _recurrenceForm!: RecurrenceForm;
+  private recurrenceForm!: RecurrenceForm;
 
   private _popup!: any;
 
-  private _$mainGroup?: dxElementWrapper;
+  private $mainGroup?: dxElementWrapper;
 
-  private _$recurrenceGroup?: dxElementWrapper;
+  private $recurrenceGroup?: dxElementWrapper;
 
   get dxForm(): dxForm {
-    return this._dxForm as dxForm;
+    return this.dxFormInstance as dxForm;
   }
 
   private get dxPopup(): Popup {
@@ -174,7 +174,7 @@ export class AppointmentForm {
 
   set readOnly(value: boolean) {
     this.dxForm.option('readOnly', value);
-    this._recurrenceForm.setReadOnly(value);
+    this.recurrenceForm.setReadOnly(value);
   }
 
   get formData(): Record<string, any> {
@@ -216,10 +216,10 @@ export class AppointmentForm {
   }
 
   dispose(): void {
-    this._dxForm?.dispose();
-    this._dxForm = undefined;
-    if (this._recurrenceForm) {
-      this._recurrenceForm.dxForm = undefined;
+    this.dxFormInstance?.dispose();
+    this.dxFormInstance = undefined;
+    if (this.recurrenceForm) {
+      this.recurrenceForm.dxForm = undefined;
     }
   }
 
@@ -228,8 +228,8 @@ export class AppointmentForm {
 
     const mainGroup = this.createMainFormGroup();
 
-    this._recurrenceForm = new RecurrenceForm(this.scheduler);
-    const recurrenceGroup = this._recurrenceForm.createRecurrenceFormGroup();
+    this.recurrenceForm = new RecurrenceForm(this.scheduler);
+    const recurrenceGroup = this.recurrenceForm.createRecurrenceFormGroup();
 
     const items = [mainGroup, recurrenceGroup];
 
@@ -296,7 +296,7 @@ export class AppointmentForm {
         }
 
         if (isRecurrenceRuleChanged || startDateExpr === dataField) {
-          this._recurrenceForm.updateRecurrenceFormValues(
+          this.recurrenceForm.updateRecurrenceFormValues(
             this.recurrenceRuleRaw,
             this.startDate,
           );
@@ -311,15 +311,15 @@ export class AppointmentForm {
         }
       },
       onInitialized: (e): void => {
-        this._dxForm = e.component;
-        this._recurrenceForm.dxForm = this.dxForm;
+        this.dxFormInstance = e.component;
+        this.recurrenceForm.dxForm = this.dxForm;
 
         onInitialized?.call(this, e);
       },
       onContentReady: (e): void => {
         const $formElement = e.component.$element();
-        this._$mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
-        this._$recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
+        this.$mainGroup = $formElement.find(`.${CLASSES.mainGroup}`);
+        this.$recurrenceGroup = $formElement.find(`.${CLASSES.recurrenceGroup}`);
 
         this.alignIconsWithEditors();
 
@@ -686,7 +686,7 @@ export class AppointmentForm {
               if (e.value === repeatNeverValue) {
                 this.dxForm.updateData(recurrenceRuleExpr, '');
               } else {
-                const currentRecurrenceRule = this._recurrenceForm.recurrenceRule.toString() ?? '';
+                const currentRecurrenceRule = this.recurrenceForm.recurrenceRule.toString() ?? '';
                 const recurrenceRule = new RecurrenceRule(currentRecurrenceRule, this.startDate);
                 recurrenceRule.frequency = e.value;
                 this.dxForm.updateData(recurrenceRuleExpr, recurrenceRule.toString());
@@ -889,16 +889,16 @@ export class AppointmentForm {
       this.dxPopup.option('height', configuredHeight);
     }
 
-    if (this._$mainGroup) {
-      this._$mainGroup.removeClass(CLASSES.mainHidden);
-      this._$mainGroup.removeAttr('inert');
+    if (this.$mainGroup) {
+      this.$mainGroup.removeClass(CLASSES.mainHidden);
+      this.$mainGroup.removeAttr('inert');
 
-      this.focusFirstFocusableInGroup(this._$mainGroup);
+      this.focusFirstFocusableInGroup(this.$mainGroup);
     }
 
-    if (this._$recurrenceGroup) {
-      this._$recurrenceGroup.addClass(CLASSES.recurrenceHidden);
-      this._$recurrenceGroup.attr('inert', true);
+    if (this.$recurrenceGroup) {
+      this.$recurrenceGroup.addClass(CLASSES.recurrenceHidden);
+      this.$recurrenceGroup.attr('inert', true);
     }
 
     this._popup.updateToolbarForMainGroup();
@@ -919,23 +919,23 @@ export class AppointmentForm {
       this.dxPopup.option('height', overlayHeight);
     }
 
-    if (this._$mainGroup) {
-      this._$mainGroup.addClass(CLASSES.mainHidden);
-      this._$mainGroup.attr('inert', true);
+    if (this.$mainGroup) {
+      this.$mainGroup.addClass(CLASSES.mainHidden);
+      this.$mainGroup.attr('inert', true);
     }
 
-    if (this._$recurrenceGroup) {
-      this._$recurrenceGroup.removeClass(CLASSES.recurrenceHidden);
-      this._$recurrenceGroup.removeAttr('inert');
+    if (this.$recurrenceGroup) {
+      this.$recurrenceGroup.removeClass(CLASSES.recurrenceHidden);
+      this.$recurrenceGroup.removeAttr('inert');
 
-      this.focusFirstFocusableInGroup(this._$recurrenceGroup);
+      this.focusFirstFocusableInGroup(this.$recurrenceGroup);
     }
 
     this._popup.updateToolbarForRecurrenceGroup();
   }
 
   saveRecurrenceValue(): void {
-    const { recurrenceRule } = this._recurrenceForm;
+    const { recurrenceRule } = this.recurrenceForm;
     const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
 
     const recurrenceRuleSerialized = recurrenceRule.toString() ?? '';
@@ -1052,12 +1052,12 @@ export class AppointmentForm {
   }
 
   private updateAnimationOffset(): void {
-    if (!this._$mainGroup) {
+    if (!this.$mainGroup) {
       return;
     }
 
     const formElement = this.dxForm.$element()[0];
-    const mainGroupElement = this._$mainGroup[0];
+    const mainGroupElement = this.$mainGroup[0];
     const formRect = formElement.getBoundingClientRect();
     const groupRect = mainGroupElement.getBoundingClientRect();
     const topOffset = groupRect.top - formRect.top;
