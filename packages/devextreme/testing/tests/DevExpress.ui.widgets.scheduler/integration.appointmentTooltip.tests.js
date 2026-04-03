@@ -98,8 +98,8 @@ module('Global formatting config (spec): Scheduler tooltip', {
     test('implicit Scheduler tooltip date/time use global dateFormat and timeFormat', async function(assert) {
         config({
             ...config(),
-            dateFormat: (date) => `D${date.getDate()}`,
-            timeFormat: (date) => `T${date.getHours()}`,
+            dateFormat: (date) => `Date${date.getDate()}`,
+            timeFormat: (date) => `Time${date.getHours()}`,
         });
 
         const scheduler = await createScheduler({
@@ -113,7 +113,7 @@ module('Global formatting config (spec): Scheduler tooltip', {
         await scheduler.appointments.click(0, clock);
         clock.restore();
 
-        assert.strictEqual(scheduler.tooltip.getDateText(), 'D9, T23 - D10, T1');
+        assert.strictEqual(scheduler.tooltip.getDateText(), 'Date9 Time23 - Date10 Time1');
     });
 });
 
