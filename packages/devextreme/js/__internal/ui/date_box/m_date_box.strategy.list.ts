@@ -72,10 +72,12 @@ class ListStrategy extends DateBoxStrategy {
 
     if (selectedIndex === -1) {
       const { value } = this.dateBox.option();
+
       return value as Date;
     }
 
     const itemData = this._widgetItems[selectedIndex];
+
     return this._getDateByItemData(itemData);
   }
 
@@ -103,12 +105,12 @@ class ListStrategy extends DateBoxStrategy {
   _getWidgetOptions(): Record<string, unknown> {
     return {
       itemTemplate: this._timeListItemTemplate.bind(this),
-      onItemClick: this._listItemClickHandler.bind(this),
+      selectionMode: 'single',
       tabIndex: -1,
+      onItemClick: this._listItemClickHandler.bind(this),
       onFocusedItemChanged: (
         e: DxEvent & { actionValue: string },
       ) => this._refreshActiveDescendant(e),
-      selectionMode: 'single',
     };
   }
 
@@ -128,9 +130,10 @@ class ListStrategy extends DateBoxStrategy {
     }
 
     this._widget.option('focusedElement', null);
-
     this._setSelectedItemsByValue();
+
     const { templatesRenderAsynchronously } = this.getWidget().option();
+
     if (templatesRenderAsynchronously) {
       // eslint-disable-next-line no-restricted-globals
       this._asyncScrollTimeout = setTimeout(this._scrollToSelectedItem.bind(this));
@@ -141,7 +144,12 @@ class ListStrategy extends DateBoxStrategy {
 
   dispose(): void {
     super.dispose();
+
     clearTimeout(this._asyncScrollTimeout);
+  }
+
+  renderValue(): void {
+    this._updateValue();
   }
 
   _updateValue(): void {
@@ -151,8 +159,12 @@ class ListStrategy extends DateBoxStrategy {
 
     this._refreshItems();
 
-    this._setSelectedItemsByValue();
-    this._scrollToSelectedItem();
+    const { opened } = this.dateBox.option();
+
+    if (opened) {
+      this._setSelectedItemsByValue();
+      this._scrollToSelectedItem();
+    }
   }
 
   _setSelectedItemsByValue(): void {
@@ -192,10 +204,13 @@ class ListStrategy extends DateBoxStrategy {
 
   _getTimeListItems(): Date[] {
     let min = this.dateBox.getDateOption('min') ?? this._getBoundaryDate('min');
+
     const max = this.dateBox.getDateOption('max') ?? this._getBoundaryDate('max');
     const value = this.dateBox.getDateOption('value') ?? null;
+
     // @ts-expect-error ts-error
     let delta = max - min;
+
     const { interval = 30 } = this.dateBox.option();
     const minutes = min.getMinutes() % interval;
 
@@ -206,6 +221,7 @@ class ListStrategy extends DateBoxStrategy {
     if (delta > dateUtils.ONE_DAY) {
       delta = dateUtils.ONE_DAY;
     }
+
     // @ts-expect-error ts-error
     if (value - min < dateUtils.ONE_DAY) {
       return this._getRangeItems(min, new Date(min), delta);
@@ -237,7 +253,11 @@ class ListStrategy extends DateBoxStrategy {
 
   _getBoundaryDate(boundary: 'min' | 'max'): Date {
     const boundaryValue = BOUNDARY_VALUES[boundary];
-    const currentValue = new Date(ensureDefined(this.dateBox.getDateOption('value'), new Date(0)));
+    const dateBoxDate = this.dateBox.getDateOption('value');
+    const newDate = new Date(0);
+    const definedValue = ensureDefined(dateBoxDate, newDate);
+
+    const currentValue = new Date(definedValue);
 
     return new Date(
       currentValue.getFullYear(),
@@ -267,6 +287,7 @@ class ListStrategy extends DateBoxStrategy {
 
   _getDateByItemData(itemData: Date): Date {
     let { value: date } = this.dateBox.option();
+
     const hours = itemData.getHours();
     const minutes = itemData.getMinutes();
     const seconds = itemData.getSeconds();
@@ -276,6 +297,7 @@ class ListStrategy extends DateBoxStrategy {
 
     if (date) {
       const { dateSerializationFormat } = this.dateBox.option();
+
       if (dateSerializationFormat) {
         date = dateSerialization.deserializeDate(date) as Date;
       } else {
@@ -301,10 +323,13 @@ class ListStrategy extends DateBoxStrategy {
 
   _updatePopupHeight(): void {
     const dropDownOptionsHeight = getSizeValue(this.dateBox.option('dropDownOptions.height'));
+
     if (dropDownOptionsHeight === undefined || dropDownOptionsHeight === 'auto') {
       this.dateBox._setPopupOption('height', 'auto');
+
       const popupHeight = getOuterHeight(this.getWidget().$element());
       const maxHeight = getHeight(window) * 0.45;
+
       this.dateBox._setPopupOption('height', Math.min(popupHeight, maxHeight));
     }
   }
