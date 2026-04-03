@@ -5527,12 +5527,35 @@ QUnit.module('Formatting', baseModuleConfig, () => {
 });
 
 QUnit.module('Global formatting config (spec)', baseModuleConfig, () => {
+    const saveGlobalFormats = () => {
+        const globalConfig = config();
+
+        return {
+            dateFormat: globalConfig.dateFormat,
+            timeFormat: globalConfig.timeFormat,
+            dateTimeFormat: globalConfig.dateTimeFormat,
+            numberFormat: globalConfig.numberFormat,
+        };
+    };
+    const restoreGlobalFormats = (saved) => {
+        const globalConfig = config();
+
+        Object.keys(saved).forEach((key) => {
+            const value = saved[key];
+            if(value === undefined) {
+                delete globalConfig[key];
+            } else {
+                globalConfig[key] = value;
+            }
+        });
+    };
+
     QUnit.test('implicit date format uses global dateFormat', function(assert) {
-        const originalConfig = config();
+        const saved = saveGlobalFormats();
 
         try {
             config({
-                ...originalConfig,
+                ...config(),
                 dateFormat: 'dd/MM/yyyy',
             });
 
@@ -5544,16 +5567,16 @@ QUnit.module('Global formatting config (spec)', baseModuleConfig, () => {
             const dateText = $(dataGrid.getCellElement(0, 0)).text().trim();
             assert.strictEqual(dateText, '02/01/2020', 'global date format is applied for implicit DataGrid date format');
         } finally {
-            config(originalConfig);
+            restoreGlobalFormats(saved);
         }
     });
 
     QUnit.test('implicit datetime format uses global dateTimeFormat', function(assert) {
-        const originalConfig = config();
+        const saved = saveGlobalFormats();
 
         try {
             config({
-                ...originalConfig,
+                ...config(),
                 dateTimeFormat: 'dd/MM/yyyy, HH:mm',
             });
 
@@ -5565,16 +5588,16 @@ QUnit.module('Global formatting config (spec)', baseModuleConfig, () => {
             const dateText = $(dataGrid.getCellElement(0, 0)).text().trim();
             assert.strictEqual(dateText, '02/01/2020, 14:05', 'global datetime format is applied for implicit DataGrid datetime format');
         } finally {
-            config(originalConfig);
+            restoreGlobalFormats(saved);
         }
     });
 
     QUnit.test('explicit column.format keeps priority over global format', function(assert) {
-        const originalConfig = config();
+        const saved = saveGlobalFormats();
 
         try {
             config({
-                ...originalConfig,
+                ...config(),
                 dateFormat: 'dd/MM/yyyy',
             });
 
@@ -5586,7 +5609,7 @@ QUnit.module('Global formatting config (spec)', baseModuleConfig, () => {
             const dateText = $(dataGrid.getCellElement(0, 0)).text().trim();
             assert.strictEqual(dateText, '1/2/2020', 'explicit preset format is not replaced by global dateFormat');
         } finally {
-            config(originalConfig);
+            restoreGlobalFormats(saved);
         }
     });
 });

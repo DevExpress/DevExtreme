@@ -50,14 +50,9 @@ export const getDateText = (startDate: Date, endDate: Date, formatType: DateForm
 
   switch (formatType) {
     case DateFormatType.DATETIME:
-      return [
-        formatTooltipDatePart(startDate),
-        ' ',
-        formatTooltipTimePart(startDate),
-        ' - ',
-        isSameDate ? '' : `${formatTooltipDatePart(endDate)} `,
-        formatTooltipTimePart(endDate),
-      ].join('');
+      return isSameDate
+        ? `${formatTooltipDatePart(startDate)} ${formatTooltipTimePart(startDate)} - ${formatTooltipTimePart(endDate)}`
+        : `${formatTooltipDatePart(startDate)} ${formatTooltipTimePart(startDate)} - ${formatTooltipDatePart(endDate)} ${formatTooltipTimePart(endDate)}`;
     case DateFormatType.TIME:
       return `${formatTooltipTimePart(startDate)} - ${formatTooltipTimePart(endDate)}`;
     case DateFormatType.DATE:
