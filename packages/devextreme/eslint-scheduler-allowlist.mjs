@@ -116,6 +116,10 @@ const schedulerLegacyMembers = [
     // utils/options/constants.ts, utils/options/types.ts
     '_appointmentTooltipOffset',
     '_draggingMode',
+
+    // 25_2 only: object literal properties
+    '_loopFocus',
+    '_swipeEnabled',
 ];
 
 const schedulerMemberAllowlist = [
