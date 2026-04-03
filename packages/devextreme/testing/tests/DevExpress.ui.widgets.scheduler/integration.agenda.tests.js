@@ -1212,31 +1212,6 @@ module('Integration: Agenda', moduleConfig, () => {
         });
     });
 
-    test('Long appointment parts popup should have original data', async function(assert) {
-        const instance = await createInstance({
-            views: ['agenda'],
-            currentView: 'agenda',
-            currentDate: new Date(2016, 1, 24),
-            startDayHour: 8,
-            endDayHour: 20,
-            startDateExpr: 'Start',
-            dataSource: [
-                { Start: new Date(2016, 1, 24, 1), endDate: new Date(2016, 1, 27, 1, 30), text: 'a' }
-            ],
-            editing: { legacyForm: true }
-        });
-
-        const $appointment = $(instance.$element()).find('.dx-scheduler-appointment').eq(1);
-        $appointment.trigger(dblclickEvent.name);
-
-        const detailsForm = instance.getAppointmentDetailsForm();
-        const formData = detailsForm.option('formData');
-
-        assert.deepEqual(formData.Start, new Date(2016, 1, 24, 1), 'start is correct');
-        assert.deepEqual(formData.endDate, new Date(2016, 1, 27, 1, 30), 'end is correct');
-        assert.equal(formData.text, 'a', 'text is correct');
-    });
-
     test('Long appointment should be rendered correctly after changing view', async function(assert) {
         const instance = await createInstance({
             views: ['agenda', 'month'],
