@@ -112,13 +112,13 @@ export class RecurrenceForm {
 
   private readonly scheduler: any;
 
-  private dxFormInstance?: dxForm;
+  private _dxForm?: dxForm;
 
   private readonly weekDayItems: { text: string; key: string }[] = [];
 
-  private weekDayButtons: Record<string, dxButton> = {};
+  private _weekDayButtons: Record<string, dxButton> = {};
 
-  private readOnly = false;
+  private _readOnly = false;
 
   constructor(scheduler: Scheduler) {
     this.scheduler = scheduler;
@@ -171,15 +171,15 @@ export class RecurrenceForm {
   }
 
   get dxForm(): dxForm {
-    return this.dxFormInstance as dxForm;
+    return this._dxForm as dxForm;
   }
 
   set dxForm(value: dxForm | undefined) {
-    this.dxFormInstance = value;
+    this._dxForm = value;
   }
 
   setReadOnly(value: boolean): void {
-    this.readOnly = value;
+    this._readOnly = value;
   }
 
   createRecurrenceFormGroup(): GroupItem {
@@ -354,10 +354,10 @@ export class RecurrenceForm {
         this.weekDayItems.forEach((item) => {
           const buttonContainer = $('<div>').appendTo($container);
 
-          this.weekDayButtons[item.key]?.dispose();
-          this.weekDayButtons[item.key] = this.scheduler.createComponent(buttonContainer, Button, {
+          this._weekDayButtons[item.key]?.dispose();
+          this._weekDayButtons[item.key] = this.scheduler.createComponent(buttonContainer, Button, {
             text: item.text,
-            disabled: this.readOnly,
+            disabled: this._readOnly,
             onContentReady: (e): void => {
               $(e.element).removeClass('dx-button-has-text');
 

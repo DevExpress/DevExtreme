@@ -167,25 +167,22 @@ const RECURRENCE_EDITING_MODE = {
 class Scheduler extends SchedulerOptionsBaseWidget {
   // NOTE: Do not initialize variables here, because `_initMarkup` function runs before constructor,
   // and initialization in constructor will erase the data
-  private timeZoneCalculatorInstance!: any;
+  private _timeZoneCalculator!: any;
 
   postponedOperations: any;
 
   private a11yStatus!: dxElementWrapper;
 
-  // TODO: used externally in m_appointment_drag_behavior.ts, generate_grid_view_model.ts
   _workSpace: any;
 
   private header?: SchedulerHeader;
 
-  // TODO: used externally in m_subscribes.ts, m_appointment_drag_behavior.ts, m_work_space.ts
   _appointments: any;
 
   appointmentDataSource!: AppointmentDataSource;
 
   _dataSource: any;
 
-  // TODO: used externally in m_subscribes.ts, prepare_appointments.ts, get_filter_options.ts
   _dataAccessors!: AppointmentDataAccessor;
 
   resourceManager!: ResourceManager;
@@ -204,13 +201,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private appointmentPopup: any;
 
-  compactAppointmentsHelper!: CompactAppointmentsHelper;
+  _compactAppointmentsHelper!: CompactAppointmentsHelper;
 
   private asyncTemplatesTimers!: any[];
 
   private readonly updatingAppointments: Set<Appointment> = new Set();
 
-  private _dataSourceLoadedCallback: any;
+  private dataSourceLoadedCallback: any;
 
   private subscribes: any;
 
@@ -218,7 +215,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private recurrenceDialog: any;
 
-  layoutManager!: AppointmentLayoutManager;
+  _layoutManager!: AppointmentLayoutManager;
 
   private appointmentForm: any;
 
@@ -235,11 +232,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   private appointmentRenderedAction!: SchedulerProperties['onAppointmentRendered'];
 
   get timeZoneCalculator() {
-    if (!this.timeZoneCalculatorInstance) {
-      this.timeZoneCalculatorInstance = createTimeZoneCalculator(this.option('timeZone'));
+    if (!this._timeZoneCalculator) {
+      this._timeZoneCalculator = createTimeZoneCalculator(this.option('timeZone'));
     }
 
-    return this.timeZoneCalculatorInstance;
+    return this._timeZoneCalculator;
   }
 
   private postponeDataSourceLoading(promise?: any) {
@@ -448,7 +445,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
           this._appointments.option('items', []);
           this.refreshWorkSpace();
           if (this.readyToRenderAppointments) {
-            this._appointments.option('items', this.layoutManager.generateViewModel());
+            this._appointments.option('items', this._layoutManager.generateViewModel());
           }
         });
         break;
@@ -457,13 +454,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
         this._appointments.option('items', []);
         if (this.readyToRenderAppointments) {
           this.updateOption('workSpace', 'hoursInterval', value / 60);
-          this._appointments.option('items', this.layoutManager.generateViewModel());
+          this._appointments.option('items', this._layoutManager.generateViewModel());
         }
         break;
       case 'snapToCellsMode':
         this._appointments.option('items', []);
         if (this.readyToRenderAppointments) {
-          this._appointments.option('items', this.layoutManager.generateViewModel());
+          this._appointments.option('items', this._layoutManager.generateViewModel());
         }
         break;
       case 'tabIndex':
@@ -616,7 +613,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   private isAllDayExpanded() {
-    return this.option('showAllDayPanel') && this.layoutManager.hasAllDayAppointments();
+    return this.option('showAllDayPanel') && this._layoutManager.hasAllDayAppointments();
   }
 
   private setRemoteFilterIfNeeded(): void {
@@ -705,14 +702,14 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     if (
       !this.isAgenda()
-      && this.layoutManager
+      && this._layoutManager
       && workspace
       && !isAgendaWorkspaceComponent(workspace)
     ) {
       if (isForce || (!isFixedHeight || !isFixedWidth)) {
         workspace.option('allDayExpanded', this.isAllDayExpanded());
         workspace._dimensionChanged();
-        const appointments = this.layoutManager.generateViewModel();
+        const appointments = this._layoutManager.generateViewModel();
 
         this._appointments.option('items', appointments);
       }
@@ -744,7 +741,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     visible && this._dimensionChanged(null, true);
   }
 
-  dataSourceOptions() {
+  _dataSourceOptions() {
     return { paginate: false };
   }
 
@@ -787,11 +784,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
     this.initActions();
 
-    this.compactAppointmentsHelper = new CompactAppointmentsHelper(this);
+    this._compactAppointmentsHelper = new CompactAppointmentsHelper(this);
 
     this.asyncTemplatesTimers = [];
 
-    this._dataSourceLoadedCallback = Callbacks();
+    this.dataSourceLoadedCallback = Callbacks();
 
     this.subscribes = subscribes;
 
@@ -812,7 +809,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   updateAppointmentDataSource() {
-    this.timeZoneCalculatorInstance = null;
+    this._timeZoneCalculator = null;
 
     if (this.getWorkSpace()) {
       this.createAppointmentDataSource();
@@ -884,10 +881,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._renderContentImpl();
   }
 
-  dataSourceChangedHandler(result?: Appointment[]) {
+  _dataSourceChangedHandler(result?: Appointment[]) {
     if (this.readyToRenderAppointments) {
       this.workSpaceRecalculation.done(() => {
-        this.layoutManager.prepareAppointments(result);
+        this._layoutManager.prepareAppointments(result);
         this.renderAppointments();
         this.updateA11yStatus();
       });
@@ -908,13 +905,13 @@ class Scheduler extends SchedulerOptionsBaseWidget {
 
   private renderAppointments() {
     const workspace = this.getWorkSpace();
-    this.layoutManager.filterAppointments();
+    this._layoutManager.filterAppointments();
 
     workspace.option('allDayExpanded', this.isAllDayExpanded());
 
     // @ts-expect-error
     const viewModel: AppointmentViewModelPlain[] = this._isVisible()
-      ? this.layoutManager.generateViewModel()
+      ? this._layoutManager.generateViewModel()
       : [];
 
     this._appointments.option('items', viewModel);
@@ -1014,7 +1011,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       this.currentView,
       dateRange[0],
       dateRange[1],
-      this.layoutManager.filteredItems.length,
+      this._layoutManager.filteredItems.length,
       indicatorTime,
     );
 
@@ -1045,7 +1042,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this.renderHeader();
     this.toggleAdaptiveClass();
 
-    this.layoutManager = new AppointmentLayoutManager(this);
+    this._layoutManager = new AppointmentLayoutManager(this);
 
     if (this.option('_newAppointments')) {
       // TODO<Appointments>: convert 'item' to 'appointment' for compatibility
@@ -1087,7 +1084,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     // @ts-expect-error
     if (this.isDataSourceLoaded() || this._isDataSourceLoading()) {
       this.initMarkupCore();
-      this.dataSourceChangedHandler(this._dataSource.items());
+      this._dataSourceChangedHandler(this._dataSource.items());
       this._fireContentReadyAction();
     } else {
       const groups = this.getViewOption('groups');
@@ -1186,11 +1183,11 @@ class Scheduler extends SchedulerOptionsBaseWidget {
       createFormattedDateText: (appointment, targetedAppointment, format) => this.fire('createFormattedDateText', appointment, targetedAppointment, format),
       getAppointmentDisabled: (appointment) => this._dataAccessors.get('disabled', appointment),
       onItemContextMenu: that._createActionByOption('onAppointmentContextMenu'),
-      createEventArgs: that.createEventArgs.bind(that),
+      createEventArgs: that._createEventArgs.bind(that),
     };
   }
 
-  createEventArgs(e) {
+  _createEventArgs(e) {
     const config = {
       itemData: e.itemData.appointment,
       itemElement: e.itemElement,
@@ -1313,7 +1310,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const config = {
       getResourceManager: () => this.resourceManager,
       getAppointmentDataSource: () => this.appointmentDataSource,
-      getSortedAppointments: () => this.layoutManager.sortedItems,
+      getSortedAppointments: () => this._layoutManager.sortedItems,
       scrollTo: this.scrollTo.bind(this),
       dataAccessors: this._dataAccessors,
       notifyScheduler: this.notifyScheduler,
@@ -1417,7 +1414,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     const result = extend({
       resources: this.option('resources'),
       getResourceManager: () => this.resourceManager,
-      getFilteredItems: () => this.layoutManager.filteredItems, // NOTE: used only in agenda
+      getFilteredItems: () => this._layoutManager.filteredItems, // NOTE: used only in agenda
 
       noDataText: this.option('noDataText') || messageLocalization.format('dxCollectionWidget-noDataText'),
       firstDayOfWeek: this.option('firstDayOfWeek'),
@@ -1922,7 +1919,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   getLayoutManager() {
-    return this.layoutManager;
+    return this._layoutManager;
   }
 
   getActions() {
@@ -2107,7 +2104,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     let allDayValue;
     let align: 'start' | 'center' = 'center';
 
-    if (this.isScrollOptionsObject(groupValuesOrOptions)) {
+    if (this._isScrollOptionsObject(groupValuesOrOptions)) {
       groupValues = groupValuesOrOptions.group;
       allDayValue = groupValuesOrOptions.allDay;
       align = groupValuesOrOptions.alignInView ?? 'center';
@@ -2123,7 +2120,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     this._workSpace.scrollTo(date, groupValues, allDayValue, true, align);
   }
 
-  private isScrollOptionsObject(options?: ScrollToGroupValuesOrOptions): options is ScrollToOptions {
+  private _isScrollOptionsObject(options?: ScrollToGroupValuesOrOptions): options is ScrollToOptions {
     return Boolean(options) && typeof options === 'object'
       && ('alignInView' in options || 'allDay' in options || 'group' in options);
   }
@@ -2237,7 +2234,7 @@ class Scheduler extends SchedulerOptionsBaseWidget {
   }
 
   getOccurrences(startDate: Date, endDate: Date, rawAppointments: Appointment[]): Occurrence[] {
-    return this.layoutManager.getOccurrences(startDate, endDate, rawAppointments);
+    return this._layoutManager.getOccurrences(startDate, endDate, rawAppointments);
   }
 
   getFirstDayOfWeek(): FirstDayOfWeek {
@@ -2259,12 +2256,10 @@ class Scheduler extends SchedulerOptionsBaseWidget {
     }
   }
 
-  // TODO: used externally in m_appointment_drag_behavior.ts
   _getDragBehavior() {
     return this._workSpace.dragBehavior;
   }
 
-  // TODO: used externally in m_appointment_drag_behavior.ts
   _isAppointmentBeingUpdated(appointmentData: Appointment): boolean {
     return this.updatingAppointments.has(appointmentData);
   }

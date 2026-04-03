@@ -41,11 +41,11 @@ const isPreviousButtonDisabled = (header: SchedulerHeader): boolean => {
   if (!dateUtilsTs.isValidDate(minOption)) return false;
 
   let min = new Date(minOption);
-  const caption = header.getCaption();
+  const caption = header._getCaption();
 
   min = trimTime(min);
 
-  const previousDate = header.getNextDate(Direction.Left, caption.endDate);
+  const previousDate = header._getNextDate(Direction.Left, caption.endDate);
   return previousDate < min;
 };
 
@@ -55,11 +55,11 @@ const isNextButtonDisabled = (header: SchedulerHeader): boolean => {
   if (!dateUtilsTs.isValidDate(maxOption)) return false;
 
   const max = new Date(maxOption);
-  const caption = header.getCaption();
+  const caption = header._getCaption();
 
   max.setHours(23, 59, 59);
 
-  const nextDate = header.getNextDate(Direction.Right, caption.startDate);
+  const nextDate = header._getNextDate(Direction.Right, caption.startDate);
   return nextDate > max;
 };
 
@@ -73,20 +73,20 @@ const getPreviousButtonOptions = (header: SchedulerHeader): DateNavigatorItem =>
       class: CLASS.previousButton,
       'aria-label': ariaMessage,
     },
-    clickHandler: () => header.updateDateByDirection(Direction.Left),
+    clickHandler: () => header._updateDateByDirection(Direction.Left),
     onContentReady: (event): void => {
       const previousButton = event.component;
       previousButton.option('disabled', isPreviousButtonDisabled(header));
 
-      header.addEvent('min', () => {
+      header._addEvent('min', () => {
         previousButton.option('disabled', isPreviousButtonDisabled(header));
       });
 
-      header.addEvent('currentDate', () => {
+      header._addEvent('currentDate', () => {
         previousButton.option('disabled', isPreviousButtonDisabled(header));
       });
 
-      header.addEvent('startViewDate', () => {
+      header._addEvent('startViewDate', () => {
         previousButton.option('disabled', isPreviousButtonDisabled(header));
       });
     },
@@ -97,27 +97,27 @@ const getCalendarButtonOptions = (header: SchedulerHeader): DateNavigatorItem =>
   key: ITEMS_NAME.calendarButton,
   text: header.captionText,
   elementAttr: { class: CLASS.calendarButton },
-  clickHandler: (event) => header.showCalendar(event),
+  clickHandler: (event) => header._showCalendar(event),
   onContentReady: (event): void => {
     const calendarButton = event.component;
 
-    header.addEvent('currentView', () => {
+    header._addEvent('currentView', () => {
       calendarButton.option('text', header.captionText);
     });
 
-    header.addEvent('currentDate', () => {
+    header._addEvent('currentDate', () => {
       calendarButton.option('text', header.captionText);
     });
 
-    header.addEvent('startViewDate', () => {
+    header._addEvent('startViewDate', () => {
       calendarButton.option('text', header.captionText);
     });
 
-    header.addEvent('views', () => {
+    header._addEvent('views', () => {
       calendarButton.option('text', header.captionText);
     });
 
-    header.addEvent('firstDayOfWeek', () => {
+    header._addEvent('firstDayOfWeek', () => {
       calendarButton.option('text', header.captionText);
     });
   },
@@ -133,21 +133,21 @@ const getNextButtonOptions = (header: SchedulerHeader): DateNavigatorItem => {
       class: CLASS.nextButton,
       'aria-label': ariaMessage,
     },
-    clickHandler: () => header.updateDateByDirection(Direction.Right),
+    clickHandler: () => header._updateDateByDirection(Direction.Right),
     onContentReady: (event): void => {
       const nextButton = event.component;
 
       nextButton.option('disabled', isNextButtonDisabled(header));
 
-      header.addEvent('min', () => {
+      header._addEvent('min', () => {
         nextButton.option('disabled', isNextButtonDisabled(header));
       });
 
-      header.addEvent('currentDate', () => {
+      header._addEvent('currentDate', () => {
         nextButton.option('disabled', isNextButtonDisabled(header));
       });
 
-      header.addEvent('startViewDate', () => {
+      header._addEvent('startViewDate', () => {
         nextButton.option('disabled', isNextButtonDisabled(header));
       });
     },
@@ -169,7 +169,7 @@ export const getTodayButtonOptions = (
     type: 'normal',
     onClick() {
       const { indicatorTime } = header.option();
-      header.updateCurrentDate(indicatorTime ?? new Date());
+      header._updateCurrentDate(indicatorTime ?? new Date());
     },
   },
 }, item) as ToolbarItem;

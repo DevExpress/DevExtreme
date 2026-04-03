@@ -30,10 +30,6 @@ const schedulerWidgetOverrides = [
     '_renderFocusTarget',
     '_supportedKeys',
     '_toggleVisibility',
-    '_createAction',
-    '_dataSource',
-    '_dataSourceLoadedCallback',
-    '_options',
 ];
 
 const schedulerCollectionWidgetOverrides = [
@@ -70,7 +66,6 @@ const schedulerWorkspaceOverrides = [
 ];
 
 const schedulerLegacyMembers = [
-    // m_work_space.ts
     '_$allDayPanel',
     '_$dateTable',
     '_$dateTableScrollableContent',
@@ -79,37 +74,60 @@ const schedulerLegacyMembers = [
     '_$headerPanel',
     '_$headerPanelContainer',
     '_$thead',
-    '_dateTableScrollable',
-    '_groupedStrategy',
-    '_shader',
-    '_sidebarScrollable',
-
-    // m_scheduler.ts
-    '_appointments',
-    '_dataAccessors',
-    '_getDragBehavior',
-    '_isAppointmentBeingUpdated',
-    '_workSpace',
-
-    // appointments/m_appointment_collection.ts
-    '_renderAppointmentTemplate',
-
-    // workspaces/m_virtual_scrolling.ts
-    '_renderGrid',
-
-    // appointment_popup/m_popup.ts
-    '_popup',
-
-    // header/m_header.ts
-    '_useShortDateFormat',
-
-    // header/m_view_switcher.ts
-    '_wrapperClassExternal',
-
-    // constants
+    '_addEvent',
     '_appointmentTooltipOffset',
+    '_appointments',
+    '_callEvent',
+    '_compactAppointmentsHelper',
+    '_createAction',
+    '_createEventArgs',
+    '_createEventMap',
+    '_createOverlayContent',
+    '_createScrollable',
+    '_createToolbarConfig',
+    '_dataAccessors',
+    '_dataSource',
+    '_dataSourceChangedHandler',
+    '_dataSourceOptions',
+    '_dateTableScrollable',
     '_draggingMode',
+    '_dxForm',
+    '_getCalendarOptionUpdater',
+    '_getCalendarOptions',
+    '_getCaption',
+    '_getCaptionOptions',
+    '_getDragBehavior',
+    '_getNextDate',
+    '_groupPanelItems',
+    '_groupedStrategy',
     '_ignorePreventScrollEventsDeprecation',
+    '_isAppointmentBeingUpdated',
+    '_isMobileLayout',
+    '_isScrollOptionsObject',
+    '_layoutManager',
+    '_options',
+    '_parseItem',
+    '_popup',
+    '_readOnly',
+    '_recurrenceForm',
+    '_renderAppointmentTemplate',
+    '_renderCalendar',
+    '_renderGrid',
+    '_renderOverlay',
+    '_renderToolbar',
+    '_shader',
+    '_showCalendar',
+    '_sidebarScrollable',
+    '_textCache',
+    '_timeZoneCalculator',
+    '_updateCalendarValueAndCurrentDate',
+    '_updateCurrentDate',
+    '_updateCurrentView',
+    '_updateDateByDirection',
+    '_useShortDateFormat',
+    '_weekDayButtons',
+    '_workSpace',
+    '_wrapperClassExternal',
 ];
 
 const schedulerMemberAllowlist = [

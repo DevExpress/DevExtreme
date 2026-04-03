@@ -6,11 +6,11 @@ import type { GroupPanelBaseProps } from './group_panel_props';
 import { GroupPanelBaseDefaultProps } from './group_panel_props';
 
 export class GroupPanelHorizontal extends BaseInfernoComponent<GroupPanelBaseProps> {
-  private groupPanelItems: GroupRenderItem[][] | null = null;
+  private _groupPanelItems: GroupRenderItem[][] | null = null;
 
   getGroupPanelItems(): GroupRenderItem[][] {
-    if (this.groupPanelItems !== null) {
-      return this.groupPanelItems;
+    if (this._groupPanelItems !== null) {
+      return this._groupPanelItems;
     }
 
     const {
@@ -38,7 +38,7 @@ export class GroupPanelHorizontal extends BaseInfernoComponent<GroupPanelBasePro
       return nextColSpans;
     }, [...new Array(groupPanelItems.length)]);
 
-    this.groupPanelItems = groupPanelItems.map((groupsRenderRow, index) => {
+    this._groupPanelItems = groupPanelItems.map((groupsRenderRow, index) => {
       const colSpan = colSpans[index];
       return groupsRenderRow.map((groupItem) => ({
         ...groupItem,
@@ -46,12 +46,12 @@ export class GroupPanelHorizontal extends BaseInfernoComponent<GroupPanelBasePro
       }));
     });
 
-    return this.groupPanelItems;
+    return this._groupPanelItems;
   }
 
   componentWillUpdate(nextProps: GroupPanelBaseProps): void {
     if (this.props.groupPanelData !== nextProps.groupPanelData) {
-      this.groupPanelItems = null;
+      this._groupPanelItems = null;
     }
   }
 

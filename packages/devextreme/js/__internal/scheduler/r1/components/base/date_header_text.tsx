@@ -11,21 +11,21 @@ const DateHeaderTextDefaultProps = {
 };
 
 export class DateHeaderText extends BaseInfernoComponent<DateHeaderTextProps> {
-  private textCache: string[] | null = null;
+  private _textCache: string[] | null = null;
 
   getTextParts(): string[] {
-    if (this.textCache !== null) {
-      return this.textCache;
+    if (this._textCache !== null) {
+      return this._textCache;
     }
 
     const { text } = this.props;
-    this.textCache = text ? text.split(' ') : [''];
-    return this.textCache;
+    this._textCache = text ? text.split(' ') : [''];
+    return this._textCache;
   }
 
   componentWillUpdate(nextProps: DateHeaderTextProps): void {
     if (this.props.text !== nextProps.text) {
-      this.textCache = null;
+      this._textCache = null;
     }
   }
 

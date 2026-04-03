@@ -144,9 +144,9 @@ export class AppointmentForm {
 
   private readonly resourceManager!: ResourceManager;
 
-  private dxFormInstance?: dxForm;
+  private _dxForm?: dxForm;
 
-  private recurrenceForm!: RecurrenceForm;
+  private _recurrenceForm!: RecurrenceForm;
 
   private _popup!: any;
 
@@ -155,7 +155,7 @@ export class AppointmentForm {
   private $recurrenceGroup?: dxElementWrapper;
 
   get dxForm(): dxForm {
-    return this.dxFormInstance as dxForm;
+    return this._dxForm as dxForm;
   }
 
   private get dxPopup(): Popup {
@@ -168,7 +168,7 @@ export class AppointmentForm {
 
   set readOnly(value: boolean) {
     this.dxForm.option('readOnly', value);
-    this.recurrenceForm.setReadOnly(value);
+    this._recurrenceForm.setReadOnly(value);
   }
 
   get formData(): Record<string, any> {
@@ -210,10 +210,10 @@ export class AppointmentForm {
   }
 
   dispose(): void {
-    this.dxFormInstance?.dispose();
-    this.dxFormInstance = undefined;
-    if (this.recurrenceForm) {
-      this.recurrenceForm.dxForm = undefined;
+    this._dxForm?.dispose();
+    this._dxForm = undefined;
+    if (this._recurrenceForm) {
+      this._recurrenceForm.dxForm = undefined;
     }
   }
 
@@ -222,8 +222,8 @@ export class AppointmentForm {
 
     const mainGroup = this.createMainFormGroup();
 
-    this.recurrenceForm = new RecurrenceForm(this.scheduler);
-    const recurrenceGroup = this.recurrenceForm.createRecurrenceFormGroup();
+    this._recurrenceForm = new RecurrenceForm(this.scheduler);
+    const recurrenceGroup = this._recurrenceForm.createRecurrenceFormGroup();
 
     const items = [mainGroup, recurrenceGroup];
 
@@ -290,7 +290,7 @@ export class AppointmentForm {
         }
 
         if (isRecurrenceRuleChanged || startDateExpr === dataField) {
-          this.recurrenceForm.updateRecurrenceFormValues(
+          this._recurrenceForm.updateRecurrenceFormValues(
             this.recurrenceRuleRaw,
             this.startDate,
           );
@@ -305,8 +305,8 @@ export class AppointmentForm {
         }
       },
       onInitialized: (e): void => {
-        this.dxFormInstance = e.component;
-        this.recurrenceForm.dxForm = this.dxForm;
+        this._dxForm = e.component;
+        this._recurrenceForm.dxForm = this.dxForm;
 
         onInitialized?.call(this, e);
       },
@@ -680,7 +680,7 @@ export class AppointmentForm {
               if (e.value === repeatNeverValue) {
                 this.dxForm.updateData(recurrenceRuleExpr, '');
               } else {
-                const currentRecurrenceRule = this.recurrenceForm.recurrenceRule.toString() ?? '';
+                const currentRecurrenceRule = this._recurrenceForm.recurrenceRule.toString() ?? '';
                 const recurrenceRule = new RecurrenceRule(currentRecurrenceRule, this.startDate);
                 recurrenceRule.frequency = e.value;
                 this.dxForm.updateData(recurrenceRuleExpr, recurrenceRule.toString());
@@ -929,7 +929,7 @@ export class AppointmentForm {
   }
 
   saveRecurrenceValue(): void {
-    const { recurrenceRule } = this.recurrenceForm;
+    const { recurrenceRule } = this._recurrenceForm;
     const { recurrenceRuleExpr } = this.scheduler.getDataAccessors().expr;
 
     const recurrenceRuleSerialized = recurrenceRule.toString() ?? '';
