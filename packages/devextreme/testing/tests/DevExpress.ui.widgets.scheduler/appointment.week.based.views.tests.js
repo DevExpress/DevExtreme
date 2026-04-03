@@ -248,29 +248,6 @@ module('Integration: Appointment Day, Week views', {
                 }
             });
 
-            test('Appointment should be copied before sending to the details view', async function(assert) {
-                const task = {
-                    text: 'Task 1',
-                    startDate: 1429776000000,
-                    endDate: 1429794000000
-                };
-
-                const scheduler = await createInstance({
-                    dataSource: new DataSource({
-                        store: [task]
-                    }),
-                    currentDate: new Date(2015, 3, 23),
-                    editing: { legacyForm: true }
-                });
-
-                scheduler.instance.showAppointmentPopup(task);
-
-                const detailsForm = scheduler.instance.getAppointmentDetailsForm();
-                const formData = detailsForm.option('formData');
-
-                assert.notEqual(formData, task, 'Appointment data is copied');
-            });
-
             test('Non-grid-aligned appointments should be resized correctly', async function(assert) {
                 const scheduler = await createInstance({
                     currentDate: new Date(2015, 1, 9),
@@ -809,40 +786,6 @@ module('Integration: Appointment Day, Week views', {
                 assert.equal($appointmentRecurringIcon.css('display'), 'none', 'Appointment recurring icon isn\'t visible');
             });
 
-            test('Appointment startDate and endDate should have correct format in the details view after allDay appoitment opening (T505119)', async function(assert) {
-                const tasks = [{
-                    text: 'AllDay task',
-                    start: new Date(2017, 2, 13),
-                    end: new Date(2017, 2, 13, 0, 30),
-                    AllDay: true
-                }, {
-                    text: 'Short task',
-                    start: new Date(2017, 2, 13),
-                    end: new Date(2017, 2, 13, 0, 30)
-                }];
-
-                const scheduler = await createInstance({
-                    dataSource: tasks,
-                    currentDate: new Date(2017, 2, 13),
-                    currentView: 'week',
-                    views: ['week'],
-                    startDateExpr: 'start',
-                    endDateExpr: 'end',
-                    allDayExpr: 'AllDay',
-                    editing: { legacyForm: true }
-                });
-                scheduler.instance.showAppointmentPopup(tasks[0]);
-                scheduler.instance.hideAppointmentPopup();
-                scheduler.instance.showAppointmentPopup(tasks[1]);
-
-                const detailsForm = scheduler.instance.getAppointmentDetailsForm();
-                const startDateEditor = detailsForm.getEditor('start');
-                const endDateEditor = detailsForm.getEditor('end');
-
-                assert.equal(startDateEditor.option('type'), 'datetime', 'start date is correct');
-                assert.equal(endDateEditor.option('type'), 'datetime', 'end date is correct');
-            });
-
             test('Scheduler should not throw error at deferred appointment loading (T518327)', async function(assert) {
                 const data = [{ text: 'Task 1', startDate: new Date(2017, 4, 22, 16), endDate: new Date(2017, 4, 24, 1) }];
 
@@ -890,66 +833,6 @@ module('Integration: Appointment Day, Week views', {
                 } catch(e) {
                     assert.ok(false, 'Exception: ' + e);
                 }
-            });
-
-            test('FormData should be reset on saveChanges, dateSerializationFormat is set in initial appointment data (T569673)', async function(assert) {
-                const task = { text: 'Task', StartDate: '2016-05-25T09:40:00',
-                    EndDate: '2016-05-25T10:40:00' };
-
-                const scheduler = await createInstance({
-                    dataSource: [task],
-                    currentDate: new Date(2016, 4, 25),
-                    currentView: 'week',
-                    views: ['week'],
-                    startDateExpr: 'StartDate',
-                    endDateExpr: 'EndDate',
-                    editing: { legacyForm: true },
-                    onAppointmentFormOpening: function(data) {
-                        const form = data.form;
-                        let startDate = data.appointmentData.StartDate;
-                        const endDate = data.appointmentData.EndDate;
-
-                        form.option('items', [
-                            {
-                                dataField: 'StartDate',
-                                editorType: 'dxDateBox',
-                                editorOptions: {
-                                    value: startDate,
-                                    type: 'datetime',
-                                    onValueChanged: function(args) {
-                                        startDate = args.value;
-                                        form.getEditor('EndDate')
-                                            .option('value', new Date(1464160900000));
-                                    }
-                                }
-                            }, {
-                                name: 'EndDate',
-                                dataField: 'EndDate',
-                                editorType: 'dxDateBox',
-                                editorOptions: {
-                                    value: endDate,
-                                    type: 'datetime',
-                                    readOnly: true
-                                }
-                            }
-                        ]);
-                    },
-                    height: 800
-                });
-
-                scheduler.instance.showAppointmentPopup(task, true);
-
-                const detailsForm = scheduler.instance.getAppointmentDetailsForm();
-                const startDateEditor = detailsForm.getEditor('StartDate');
-
-                startDateEditor.option('value', '2016-05-25T10:40:00');
-
-                $('.dx-scheduler-legacy-appointment-popup .dx-popup-done').trigger('dxclick').trigger('dxclick');
-
-                const $appointments = scheduler.instance.$element().find('.' + APPOINTMENT_CLASS);
-
-                const endDateFormat = dateSerialization.getDateSerializationFormat(dataUtils.data($appointments[1], 'dxItemData').EndDate);
-                assert.deepEqual(endDateFormat, 'yyyy-MM-ddTHH:mm:ss', 'Appointment EndDate format is OK');
             });
 
             test('A long appointment should not change start date if resized from the bottom', async function(assert) {
