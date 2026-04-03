@@ -2,6 +2,7 @@ export {
   DisposingEvent,
   InitializedEvent,
   OptionChangedEvent,
+  SendButtonClickEvent,
   MessageEnteredEvent,
   TypingStartEvent,
   TypingEndEvent,
@@ -21,6 +22,8 @@ export {
   Message,
   MessageTemplateData,
   EmptyViewTemplateData,
+  SendButtonAction,
+  SendButtonProperties,
   dxChatOptions,
   Properties,
 } from './chat';
