@@ -8,7 +8,7 @@ export class ViewDataGeneratorWorkWeek extends ViewDataGeneratorWeek {
     return isDataOnWeekend(date);
   }
 
-  calculateStartViewDate(options) {
+  protected calculateStartViewDate(options) {
     return workWeekUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,

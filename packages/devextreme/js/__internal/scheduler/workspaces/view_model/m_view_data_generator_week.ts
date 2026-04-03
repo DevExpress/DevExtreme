@@ -8,7 +8,7 @@ export class ViewDataGeneratorWeek extends ViewDataGenerator {
     return weekUtils.getIntervalDuration(intervalCount);
   }
 
-  calculateStartViewDate(options) {
+  protected calculateStartViewDate(options) {
     return weekUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,

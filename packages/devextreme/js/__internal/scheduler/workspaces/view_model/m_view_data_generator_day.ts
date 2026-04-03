@@ -2,7 +2,7 @@ import { dayUtils } from '../../r1/utils/index';
 import { ViewDataGenerator } from './m_view_data_generator';
 
 export class ViewDataGeneratorDay extends ViewDataGenerator {
-  calculateStartViewDate(options) {
+  protected calculateStartViewDate(options) {
     return dayUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,

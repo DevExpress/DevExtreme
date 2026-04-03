@@ -235,7 +235,7 @@ class GroupStrategyBase {
     return getAllDayHeight(showAllDayPanel, true, this.DOMMetaData);
   }
 
-  getMaxAllowedVerticalPosition({
+  protected getMaxAllowedVerticalPosition({
     groupIndex,
     showAllDayPanel,
     isGroupedAllDayPanel,
