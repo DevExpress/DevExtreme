@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Scheduler, { Resource } from 'devextreme-react/scheduler';
 import SelectBox from 'devextreme-react/select-box';
 import { data, resourcesData, priorityData } from './data.js';
@@ -13,6 +13,9 @@ const snapToCellsModeItems = [
 ];
 const App = () => {
   const [snapToCellsMode, setSnapToCellsMode] = useState('always');
+  const onSnapToCellsModeChanged = useCallback((e) => {
+    setSnapToCellsMode(e.value);
+  }, []);
   return (
     <>
       <Scheduler
@@ -53,9 +56,7 @@ const App = () => {
             valueExpr="value"
             displayExpr="text"
             value={snapToCellsMode}
-            onValueChanged={(e) => {
-              setSnapToCellsMode(e.value);
-            }}
+            onValueChanged={onSnapToCellsModeChanged}
           />
         </div>
       </div>

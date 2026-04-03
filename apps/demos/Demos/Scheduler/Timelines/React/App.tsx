@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import Scheduler, {
   Resource,
@@ -21,6 +21,10 @@ const snapToCellsModeItems: { value: SchedulerTypes.SnapToCellsMode; text: strin
 
 const App = () => {
   const [snapToCellsMode, setSnapToCellsMode] = useState<SchedulerTypes.SnapToCellsMode>('always');
+
+  const onSnapToCellsModeChanged = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
+    setSnapToCellsMode(e.value);
+  }, []);
 
   return (
     <>
@@ -62,9 +66,7 @@ const App = () => {
             valueExpr="value"
             displayExpr="text"
             value={snapToCellsMode}
-            onValueChanged={(e: SelectBoxTypes.ValueChangedEvent) => {
-              setSnapToCellsMode(e.value);
-            }}
+            onValueChanged={onSnapToCellsModeChanged}
           />
         </div>
       </div>
