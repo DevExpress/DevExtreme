@@ -97,8 +97,6 @@ $scheduler-time-indicator-shadow-color: rgba(255, 255, 255, 0.1);
 $scheduler-time-indicator-shadow: 0 1px 0 0 $scheduler-time-indicator-shadow-color;
 $scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1px 0 0;
 
-$scheduler-appointment-form-label-padding: 20px;
-
 @use "./appointment" with (
   $scheduler-transparent-top-border: $scheduler-transparent-top-border,
   $scheduler-appointment-base-color: $scheduler-appointment-base-color,
@@ -597,45 +595,6 @@ $scheduler-appointment-form-label-padding: 20px;
 
         .dx-button {
           border-radius: 50%;
-        }
-      }
-    }
-  }
-
-  .dx-scheduler-legacy-appointment-popup {
-    .dx-form .dx-field-item.dx-appointment-form-switch > div {
-      flex-grow: 0;
-      width: auto;
-    }
-
-    .dx-layout-manager .dx-label-h-align .dx-field-item-content {
-      .dx-switch,
-      .dx-checkbox {
-        margin: 0;
-      }
-    }
-
-    .dx-field-item-label-location-left {
-      padding-right: $scheduler-appointment-form-label-padding;
-    }
-
-    .dx-field {
-      min-height: 0;
-    }
-
-    .dx-field-label {
-      width: auto;
-    }
-
-    .dx-field-value {
-      padding-left: 0;
-      padding-right: 0;
-
-      &:not(.dx-widget) > .dx-checkbox {
-        float: left;
-
-        &.dx-rtl {
-          float: right;
         }
       }
     }

@@ -337,6 +337,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
 
         assert.equal(args[1].readOnly, false, 'show has a right readOnly arg');
 
+
         assert.notOk(scheduler.tooltip.isVisible(), 'tooltip was hidden');
     });
 
