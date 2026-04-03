@@ -16,6 +16,7 @@ export const getBaseAppointmentProperties = (
   };
 
   const config: BaseAppointmentViewProperties = {
+    index: 0,
     appointmentData,
     targetedAppointmentData: normalizedTargetedAppointmentData,
     appointmentTemplate: new EmptyTemplate(),

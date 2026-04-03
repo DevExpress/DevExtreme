@@ -19,6 +19,7 @@ import { DateFormatType, getDateTextFromTargetAppointment } from '../utils/get_d
 export interface BaseAppointmentViewProperties
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extends DOMComponentProperties<BaseAppointmentView<any>> {
+  index: number;
   appointmentData: SafeAppointment;
   targetedAppointmentData: TargetedAppointment;
   appointmentTemplate: TemplateBase;
@@ -126,6 +127,7 @@ export class BaseAppointmentView<
         appointmentData: this.appointmentData,
         targetedAppointmentData: this.targetedAppointmentData,
       },
+      index: this.option().index,
     });
 
     when($renderPromise).done(() => {

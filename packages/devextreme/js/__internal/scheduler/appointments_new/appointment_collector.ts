@@ -9,13 +9,13 @@ import { FunctionTemplate } from '@ts/core/templates/m_function_template';
 import type { TemplateBase } from '@ts/core/templates/m_template_base';
 import type { DOMComponentProperties } from '@ts/core/widget/dom_component';
 import DOMComponent from '@ts/core/widget/dom_component';
-import type { TargetedAppointment } from '@ts/scheduler/types';
+import type { SafeAppointment, TargetedAppointment } from '@ts/scheduler/types';
 
 import { APPOINTMENT_COLLECTOR_CLASSES } from './const';
 
 export interface AppointmentCollectorProperties
   extends DOMComponentProperties<AppointmentCollector> {
-  appointmentsCount: number;
+  appointmentsData: SafeAppointment[];
   isCompact: boolean;
   geometry: {
     height: number;
@@ -32,6 +32,10 @@ export class AppointmentCollector
   private defaultAppointmentCollectorTemplate!: FunctionTemplate;
 
   private buttonInstance?: Button;
+
+  private get appointmentsCount(): number {
+    return this.option().appointmentsData.length;
+  }
 
   override _init(): void {
     super._init();
@@ -95,14 +99,22 @@ export class AppointmentCollector
       type: 'default',
       width: this.option().geometry.width,
       height: this.option().geometry.height,
-      template,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      template: new FunctionTemplate((e) => template.render({
+        container: e.container,
+        model: {
+          appointmentCount: this.appointmentsCount,
+          isCompact: this.option().isCompact,
+          items: this.option().appointmentsData,
+        },
+      })),
     });
   }
 
   private defaultAppointmentCollectorContent(
     $container: dxElementWrapper,
   ): dxElementWrapper {
-    const count = this.option().appointmentsCount;
+    const count = this.appointmentsCount;
     const text = this.option().isCompact
       ? count
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
