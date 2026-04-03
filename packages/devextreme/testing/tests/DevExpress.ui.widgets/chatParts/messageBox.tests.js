@@ -1088,4 +1088,30 @@ QUnit.module('MessageBox', moduleConfig, () => {
         });
 
     });
+
+    QUnit.module('sendButtonOptions integration', () => {
+        QUnit.test('should pass sendButtonOptions to ChatTextArea on initialization', function(assert) {
+            const sendButtonOptions = { action: 'custom', icon: 'stopfilled' };
+
+            this.reinit({ sendButtonOptions });
+
+            assert.deepEqual(
+                this.textArea.option('sendButtonOptions'),
+                sendButtonOptions,
+                'sendButtonOptions is passed to ChatTextArea',
+            );
+        });
+
+        QUnit.test('should update sendButtonOptions in ChatTextArea at runtime', function(assert) {
+            const sendButtonOptions = { action: 'custom', icon: 'stopfilled' };
+
+            this.instance.option('sendButtonOptions', sendButtonOptions);
+
+            assert.deepEqual(
+                this.textArea.option('sendButtonOptions'),
+                sendButtonOptions,
+                'sendButtonOptions is updated in ChatTextArea',
+            );
+        });
+    });
 });
