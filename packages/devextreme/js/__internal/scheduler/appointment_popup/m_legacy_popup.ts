@@ -36,6 +36,7 @@ const POPUP_CONFIG = {
       },
     },
   ],
+  // TODO: legacy property
   _ignorePreventScrollEventsDeprecation: true,
 };
 
