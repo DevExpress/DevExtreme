@@ -126,6 +126,13 @@ const isGroupItem = (item: DataItem): item is GroupItemData => (
   'key' in item && (item as GroupItemData).items !== undefined
 );
 
+/**
+ * Recalculates flat-data offsets for all known groups after an expand/collapse operation.
+ * Walks the item tree recursively, updating stored offsets so that subsequent
+ * paging and rendering use correct row positions.
+ * The optional pendingGroupInfo carries offset data for a group whose expand state
+ * is about to change but hasn't been persisted yet.
+ */
 const updateGroupOffsets = (
   that: GroupingHelperCore,
   items: DataItem[] | null,
@@ -146,6 +153,7 @@ const updateGroupOffsets = (
       const isPendingGroup = pendingGroupInfo && pathEquals(pendingGroupInfo.path, path);
       const groupInfo = that.findGroupInfo(path);
 
+      // Only update offset for the first occurrence; continuation parts keep the original offset
       if (isPendingGroup && !item.isContinuation) {
         pendingGroupInfo.offset = offset;
       }
@@ -155,12 +163,15 @@ const updateGroupOffsets = (
       }
 
       if (groupInfo && !groupInfo.isExpanded) {
+        // Collapsed group: skip over all its children in the flat index
         // eslint-disable-next-line no-param-reassign
         offset += groupInfo.count;
       } else if (isPendingGroup && !pendingGroupInfo.isExpanded) {
+        // Pending collapse: the group isn't persisted yet, but we already need its count
         // eslint-disable-next-line no-param-reassign
         offset += pendingGroupInfo.count;
       } else if (item.items) {
+        // Expanded group: recurse into children to accumulate their offsets
         // eslint-disable-next-line no-param-reassign
         offset = updateGroupOffsets(that, item.items, path, offset, pendingGroupInfo);
       }
@@ -255,6 +266,7 @@ export class GroupingHelper extends GroupingHelperCore {
     let loadEndOffset: number = loadOptions.skip + loadOptions.take;
 
     this.foreachGroups((groupInfo: GroupInfoData) => {
+      // loadEndOffset should be corrected for expanding group to properly calculate group filter
       if (groupInfo.isPending && groupInfo.isExpanded && groupInfo.count) {
         loadEndOffset += groupInfo.count;
       }
