@@ -1,4 +1,5 @@
 import type { DataType, Format } from '@js/common';
+import dateLocalization from '@js/common/core/localization/date';
 import { compileGetter, getPathParts } from '@js/core/utils/data';
 import { captionize } from '@js/core/utils/inflector';
 import {
@@ -223,6 +224,24 @@ export const getValueDataType = (
     : dataType as DataType;
 };
 
+const getGlobalFormat = (
+  dataType: 'date' | 'datetime',
+): Format | undefined => {
+  const globalFormat = getGlobalFormatByDataType(dataType);
+
+  if (!globalFormat) {
+    return undefined;
+  }
+
+  if (isString(globalFormat)) {
+    return (
+      (value: Date) => dateLocalization.format(value, globalFormat) as string
+    ) as unknown as Format;
+  }
+
+  return globalFormat as Format;
+};
+
 export const getColumnFormat = (
   column: Partial<Pick<Column, 'format' | 'dataType'>>,
 ): Format | undefined => {
@@ -231,11 +250,11 @@ export const getColumnFormat = (
   }
 
   if (column.dataType === 'date') {
-    return (getGlobalFormatByDataType('date') as Format | undefined) || 'shortDate';
+    return getGlobalFormat('date') || 'shortDate';
   }
 
   if (column.dataType === 'datetime') {
-    return (getGlobalFormatByDataType('datetime') as Format | undefined) || 'shortDateShortTime';
+    return getGlobalFormat('datetime') || 'shortDateShortTime';
   }
 
   return undefined;

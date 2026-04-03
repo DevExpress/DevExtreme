@@ -1,6 +1,7 @@
 // @ts-check
 
 import eventsEngine from '@js/common/core/events/core/events_engine';
+import dateLocalization from '@js/common/core/localization/date';
 import DataSource from '@js/common/data/data_source';
 import { normalizeDataSourceOptions } from '@js/common/data/data_source/utils';
 import { normalizeSortingInfo as normalizeSortingInfoUtility } from '@js/common/data/utils';
@@ -83,6 +84,18 @@ const getIntervalSelector = function () {
 function isDateType(dataType) {
   return dataType === 'date' || dataType === 'datetime';
 }
+
+const getGlobalFormat = (dataType) => {
+  const globalFormat = getGlobalFormatByDataType(dataType);
+
+  if (!globalFormat) {
+    return undefined;
+  }
+
+  return isString(globalFormat)
+    ? (value) => dateLocalization.format(value, globalFormat)
+    : globalFormat;
+};
 
 const setEmptyText = function ($container) {
   $container.get(0).textContent = '\u00A0';
@@ -390,9 +403,9 @@ export default {
   getFormatByDataType(dataType) {
     switch (dataType) {
       case 'date':
-        return getGlobalFormatByDataType('date') || 'shortDate';
+        return getGlobalFormat('date') || 'shortDate';
       case 'datetime':
-        return getGlobalFormatByDataType('datetime') || 'shortDateShortTime';
+        return getGlobalFormat('datetime') || 'shortDateShortTime';
       default:
         return undefined;
     }
