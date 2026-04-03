@@ -235,7 +235,13 @@ const getGlobalFormat = (
 
   if (isString(globalFormat)) {
     return (
-      (value: Date) => dateLocalization.format(value, globalFormat) as string
+      (value: Date | string | number) => {
+        const dateValue = value instanceof Date ? value : new Date(value);
+
+        return isNaN(dateValue.getTime())
+          ? ''
+          : dateLocalization.format(dateValue, globalFormat) as string;
+      }
     ) as unknown as Format;
   }
 

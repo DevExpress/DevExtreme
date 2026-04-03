@@ -93,7 +93,10 @@ const getGlobalFormat = (dataType) => {
   }
 
   return isString(globalFormat)
-    ? (value) => dateLocalization.format(value, globalFormat)
+    ? (value) => {
+      const dateValue = value instanceof Date ? value : new Date(value);
+      return isNaN(dateValue.getTime()) ? '' : dateLocalization.format(dateValue, globalFormat);
+    }
     : globalFormat;
 };
 
