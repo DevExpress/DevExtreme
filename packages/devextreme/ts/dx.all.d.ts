@@ -313,14 +313,6 @@ declare global {
     dxRangeSlider(options: string): any;
     dxRangeSlider(options: string, ...params: any[]): any;
 
-    dxRecurrenceEditor(): JQuery;
-    dxRecurrenceEditor(options: 'instance'): DevExpress.ui.dxRecurrenceEditor;
-    dxRecurrenceEditor(
-      options: DevExpress.ui.dxRecurrenceEditor.Properties
-    ): JQuery;
-    dxRecurrenceEditor(options: string): any;
-    dxRecurrenceEditor(options: string, ...params: any[]): any;
-
     dxResizable(): JQuery;
     dxResizable(options: 'instance'): DevExpress.ui.dxResizable;
     dxResizable(options: DevExpress.ui.dxResizable.Properties): JQuery;
@@ -25517,54 +25509,6 @@ declare module DevExpress.ui {
      * [descr:dxRangeSliderOptions.value]
      */
     value?: Array<number>;
-  }
-  /**
-   * [descr:dxRecurrenceEditor]
-   */
-  export class dxRecurrenceEditor extends Editor<dxRecurrenceEditorOptions> {}
-  module dxRecurrenceEditor {
-    /**
-     * [descr:_ui_recurrence_editor_ContentReadyEvent]
-     */
-    export type ContentReadyEvent =
-      DevExpress.common.core.events.EventInfo<dxRecurrenceEditor>;
-    /**
-     * [descr:_ui_recurrence_editor_DisposingEvent]
-     */
-    export type DisposingEvent =
-      DevExpress.common.core.events.EventInfo<dxRecurrenceEditor>;
-    /**
-     * [descr:_ui_recurrence_editor_InitializedEvent]
-     */
-    export type InitializedEvent =
-      DevExpress.common.core.events.InitializedEventInfo<dxRecurrenceEditor>;
-    /**
-     * [descr:_ui_recurrence_editor_OptionChangedEvent]
-     */
-    export type OptionChangedEvent =
-      DevExpress.common.core.events.EventInfo<dxRecurrenceEditor> &
-        DevExpress.common.core.events.ChangedOptionInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type Properties = dxRecurrenceEditorOptions;
-    /**
-     * [descr:_ui_recurrence_editor_ValueChangedEvent]
-     */
-    export type ValueChangedEvent =
-      DevExpress.common.core.events.NativeEventInfo<dxRecurrenceEditor, Event> &
-        DevExpress.ui.Editor.ValueChangedInfo;
-  }
-  /**
-   * [descr:dxRecurrenceEditorOptions]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxRecurrenceEditorOptions
-    extends EditorOptions<dxRecurrenceEditor> {
-    /**
-     * [descr:dxRecurrenceEditorOptions.value]
-     */
-    value?: string;
   }
   /**
    * [descr:dxResizable]

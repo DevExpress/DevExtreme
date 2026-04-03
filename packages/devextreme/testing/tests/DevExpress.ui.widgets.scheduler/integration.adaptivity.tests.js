@@ -147,113 +147,6 @@ module('Mobile tooltip', moduleConfig, () => {
 });
 
 if(isDesktopEnvironment()) {
-    module('Appointment form on desktop', {
-        beforeEach() {
-            fx.off = true;
-        },
-
-        afterEach() {
-            fx.off = false;
-            resetWindowWidth();
-        }
-    }, () => {
-        test('Items has layout with one column when the form\'s width < 600px', async function(assert) {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
-            setWindowWidth(500);
-            scheduler.appointments.compact.click();
-            scheduler.tooltip.clickOnItem();
-
-            assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
-        });
-
-        test('Items with recurrence editor has layout with one column when the form\'s width < 600px', async function(assert) {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
-            setWindowWidth(500);
-            scheduler.option('dataSource', [{
-                startDate: new Date(2015, 1, 1),
-                endDate: new Date(2015, 1, 2),
-                recurrenceRule: 'FREQ=WEEKLY'
-            }]);
-            scheduler.appointments.compact.click();
-            scheduler.tooltip.clickOnItem();
-            $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
-
-            assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
-        });
-
-        test('Items has layout with non-one column when the form\'s width > 600px', async function(assert) {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
-            setWindowWidth(700);
-            scheduler.appointments.compact.click();
-            scheduler.tooltip.clickOnItem();
-
-            assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has not single column');
-        });
-
-        test('Items with recurrence editor has layout with non-one column when the form\'s width > 600px', async function(assert) {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
-            setWindowWidth(700);
-            scheduler.option('dataSource', [{
-                startDate: new Date(2015, 1, 1),
-                endDate: new Date(2015, 1, 2),
-                recurrenceRule: 'FREQ=WEEKLY'
-            }]);
-            scheduler.appointments.compact.click();
-            scheduler.tooltip.clickOnItem();
-            $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
-
-            assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has not single column');
-        });
-
-        test('Items has layout with one column when the form\'s width < 600px on window resizing', async function(assert) {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
-            setWindowWidth(700);
-            scheduler.appointments.compact.click();
-            scheduler.tooltip.clickOnItem();
-
-            setWindowWidth(500);
-            resizeCallbacks.fire();
-
-            assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
-        });
-
-        test('Items has layout with non-one column when the form\'s width > 600px on window resizing', async function(assert) {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
-            setWindowWidth(500);
-            scheduler.appointments.compact.click();
-            scheduler.tooltip.clickOnItem();
-
-            setWindowWidth(700);
-            resizeCallbacks.fire();
-
-            assert.notOk(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has not single column');
-        });
-    });
-}
-
-if(!isDesktopEnvironment()) {
-    module('Appointment form on mobile', {
-        beforeEach() {
-            fx.off = true;
-            setWindowWidth(800);
-        },
-
-        afterEach() {
-            fx.off = false;
-            resetWindowWidth();
-        }
-    }, () => {
-        test('Items has layout with one column', async function(assert) {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
-            scheduler.appointments.compact.click();
-            scheduler.tooltip.clickOnItem();
-
-            assert.ok(scheduler.appointmentForm.hasFormSingleColumn(), 'Appointment form has single column');
-        });
-    });
-}
-
-if(isDesktopEnvironment()) {
     module('Appointment popup size, desktop', {
         beforeEach() {
             fx.off = true;
@@ -264,10 +157,10 @@ if(isDesktopEnvironment()) {
             resetWindowWidth();
         }
     }, () => {
-        test('The fullscreen mode is enabled of popup when window\'s width < 1000px', async function(assert) {
-            setWindowWidth(900);
+        test('The fullscreen mode is enabled of popup when window\'s width < 485px', async function(assert) {
+            setWindowWidth(400);
 
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
@@ -276,66 +169,21 @@ if(isDesktopEnvironment()) {
             assert.equal(popup.option('maxWidth'), '100%', 'maxWidth');
         });
 
-        test('The fullscreen mode is disabled of popup when window\'s width > 1000px', async function(assert) {
-            setWindowWidth(1001);
+        test('The fullscreen mode is enabled of popup when the window\'s width < 485px by resizing the window', async function(assert) {
+            setWindowWidth(600);
 
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
 
-            assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
-            assert.equal(popup.option('maxWidth'), 485, 'maxWidth');
-        });
-
-        test('The fullscreen mode is disabled of popup when window\'s width > 1000px, with recurrence editor', async function(assert) {
-            setWindowWidth(1001);
-
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
-            scheduler.option('dataSource', [{
-                startDate: new Date(2015, 1, 1),
-                endDate: new Date(2015, 1, 2),
-                recurrenceRule: 'FREQ=WEEKLY'
-            }]);
-            await waitAsync(0);
-            scheduler.appointments.compact.click();
-            scheduler.tooltip.clickOnItem();
-            $('.dx-dialog-buttons .dx-button').eq(0).trigger('dxclick');
-            const popup = scheduler.appointmentPopup.getPopupInstance();
-
-            assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
-            assert.equal(popup.option('maxWidth'), 970, 'maxWidth');
-        });
-
-        test('The fullscreen mode is enabled of popup when the window\'s width < 1000px by resizing the window', async function(assert) {
-            setWindowWidth(1001);
-
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
-            scheduler.appointments.compact.click();
-            scheduler.tooltip.clickOnItem();
-            const popup = scheduler.appointmentPopup.getPopupInstance();
-
-            setWindowWidth(767);
+            setWindowWidth(400);
             resizeCallbacks.fire();
 
             assert.ok(popup.option('fullScreen'), 'The fullscreen mode is enabled');
             assert.equal(popup.option('maxWidth'), '100%', 'maxWidth');
         });
 
-        test('The fullscreen mode is disabled of popup when the window\'s width > 1000px by resizing the window', async function(assert) {
-            setWindowWidth(799);
-
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
-            scheduler.appointments.compact.click();
-            scheduler.tooltip.clickOnItem();
-            const popup = scheduler.appointmentPopup.getPopupInstance();
-
-            setWindowWidth(1001);
-            resizeCallbacks.fire();
-
-            assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
-            assert.equal(popup.option('maxWidth'), 485, 'maxWidth');
-        });
     });
 }
 
@@ -350,10 +198,10 @@ if(!isDesktopEnvironment()) {
             resetWindowWidth();
         }
     }, () => {
-        test('The fullscreen mode is enabled of popup when window\'s width < 500px', async function(assert) {
-            setWindowWidth(499);
+        test('The fullscreen mode is enabled of popup when window\'s width < 485px', async function(assert) {
+            setWindowWidth(400);
 
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
@@ -362,22 +210,22 @@ if(!isDesktopEnvironment()) {
             assert.equal(popup.option('maxWidth'), '100%', 'maxWidth');
         });
 
-        test('The fullscreen mode is disabled of popup when window\'s width > 500px', async function(assert) {
+        test('The fullscreen mode is disabled of popup when window\'s width > 485px', async function(assert) {
             setWindowWidth(501);
 
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
             const popup = scheduler.appointmentPopup.getPopupInstance();
 
             assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
-            assert.equal(popup.option('maxWidth'), 350, 'maxWidth');
+            assert.equal(popup.option('maxWidth'), 380, 'maxWidth');
         });
 
-        test('The fullscreen mode is disabled of popup when window\'s width > 500px, with recurrence editor', async function(assert) {
+        test('The fullscreen mode is disabled of popup when window\'s width > 485px, with recurrence editor', async function(assert) {
             setWindowWidth(501);
 
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.option('dataSource', [{
                 startDate: new Date(2015, 1, 1),
                 endDate: new Date(2015, 1, 2),
@@ -389,7 +237,7 @@ if(!isDesktopEnvironment()) {
             const popup = scheduler.appointmentPopup.getPopupInstance();
 
             assert.notOk(popup.option('fullScreen'), 'The fullscreen mode is disabled');
-            assert.equal(popup.option('maxWidth'), 350, 'maxWidth');
+            assert.equal(popup.option('maxWidth'), 380, 'maxWidth');
         });
     });
 }
@@ -403,13 +251,12 @@ module('Appointment popup buttons', moduleConfig, () => {
     test('Buttons location of the top toolbar for the iOs device', async function(assert) {
         this.realDeviceMock = sinon.stub(devices, 'current').returns({ platform: 'ios' });
         try {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
             const popup = scheduler.appointmentPopup;
-            assert.ok(popup.hasToolbarButtonsInSection(TOOLBAR_TOP_LOCATION, SECTION_BEFORE, [CANCEL_BUTTON]), 'the \'Cancel\' button is located inside the \'before\' section');
-            assert.ok(popup.hasToolbarButtonsInSection(TOOLBAR_TOP_LOCATION, SECTION_AFTER, [DONE_BUTTON]), 'the \'Done\' button is located inside the \'after\' section');
+            assert.ok(popup.hasToolbarButtonsInSection(TOOLBAR_TOP_LOCATION, SECTION_AFTER, [CANCEL_BUTTON, DONE_BUTTON]), 'the \'Cancel\' and \'Done\' buttons are located inside the \'after\' section');
         } finally {
             this.realDeviceMock.restore();
         }
@@ -418,12 +265,12 @@ module('Appointment popup buttons', moduleConfig, () => {
     test('Buttons location of the top toolbar for the desktop', async function(assert) {
         this.realDeviceMock = sinon.stub(devices, 'current').returns({ platform: 'generic' });
         try {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
             const popup = scheduler.appointmentPopup;
-            assert.ok(popup.hasToolbarButtonsInSection(TOOLBAR_BOTTOM_LOCATION, SECTION_AFTER, [DONE_BUTTON, CANCEL_BUTTON]), 'the \'Cancel\' and \'Done\' buttons are located in the \'after\' section');
+            assert.ok(popup.hasToolbarButtonsInSection(TOOLBAR_TOP_LOCATION, SECTION_AFTER, [DONE_BUTTON, CANCEL_BUTTON]), 'the \'Cancel\' and \'Done\' buttons are located in the \'after\' section');
         } finally {
             this.realDeviceMock.restore();
         }
@@ -432,12 +279,12 @@ module('Appointment popup buttons', moduleConfig, () => {
     test('Buttons location of the top toolbar for the android device', async function(assert) {
         this.realDeviceMock = sinon.stub(devices, 'current').returns({ platform: 'android' });
         try {
-            const scheduler = await createInstance({ editing: { legacyForm: true } });
+            const scheduler = await createInstance({ });
             scheduler.appointments.compact.click();
             scheduler.tooltip.clickOnItem();
 
             const popup = scheduler.appointmentPopup;
-            assert.ok(popup.hasToolbarButtonsInSection(TOOLBAR_BOTTOM_LOCATION, SECTION_AFTER, [CANCEL_BUTTON, DONE_BUTTON]), 'the \'Cancel\' and \'Done\' buttons are located in the \'after\' section');
+            assert.ok(popup.hasToolbarButtonsInSection(TOOLBAR_TOP_LOCATION, SECTION_AFTER, [CANCEL_BUTTON, DONE_BUTTON]), 'the \'Cancel\' and \'Done\' buttons are located in the \'after\' section');
         } finally {
             this.realDeviceMock.restore();
         }

@@ -431,6 +431,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
     this._preventSingleAppointmentClick = false;
   }
 
+  // TODO: used externally in m_scheduler.ts
   _renderAppointmentTemplate($container, appointment, model) {
     const config = {
       isAllDay: appointment.allDay,
@@ -759,7 +760,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
       const shiftedStartDate = dateUtilsTs.addOffsets(startDate, -viewOffset);
       const shiftedEndDate = dateUtilsTs.addOffsets(endDate, -viewOffset);
 
-      dateRange = this._getDateRange(e, shiftedStartDate, shiftedEndDate);
+      dateRange = this.getDateRange(e, shiftedStartDate, shiftedEndDate);
       dateRange.startDate = dateUtilsTs.addOffsets(dateRange.startDate, viewOffset);
       dateRange.endDate = dateUtilsTs.addOffsets(dateRange.endDate, viewOffset);
     }
@@ -858,7 +859,7 @@ class SchedulerAppointments extends CollectionWidget<any> {
     return startDate;
   }
 
-  _getDateRange(e, startDate, endDate) {
+  private getDateRange(e, startDate, endDate) {
     const itemData = (this as any)._getItemData(e.element);
     const deltaTime = this.invoke('getDeltaTime', e, this._initialSize, itemData);
     const renderingStrategyDirection = this.invoke('getRenderingStrategyDirection');

@@ -50,7 +50,6 @@ export { DxProgressBar } from "./progress-bar";
 export { DxRadioGroup } from "./radio-group";
 export { DxRangeSelector } from "./range-selector";
 export { DxRangeSlider } from "./range-slider";
-export { DxRecurrenceEditor } from "./recurrence-editor";
 export { DxResizable } from "./resizable";
 export { DxResponsiveBox } from "./responsive-box";
 export { DxSankey } from "./sankey";
