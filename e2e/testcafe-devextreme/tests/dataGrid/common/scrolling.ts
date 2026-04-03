@@ -1495,6 +1495,54 @@ test.meta({ runInTheme: Themes.genericLight })('New virtual mode. Navigation to 
   });
 });
 
+// T1284002
+test('Last group should not disappear after collapsing another subgroup with virtual scrolling, local grouping and remote operations (T1284002)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t.expect(dataGrid.isReady()).ok();
+
+  await dataGrid.apiCollapseRow(['Cell phones', 'Touch Screen Phones']);
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+  const dataRows = visibleRows.filter((r) => r.rowType === 'data');
+
+  await t.expect(dataRows.length).eql(2, 'Computers category should still show 2 data rows');
+}).before(async () => createWidget('dxDataGrid', {
+  height: 500,
+  dataSource: [
+    {
+      Id: 1, Category: 'Cell phones', Subcategory: 'Touch Screen Phones', Store: 'Europe Online Store', Date: '2024-01-10',
+    },
+    {
+      Id: 2, Category: 'Cell phones', Subcategory: 'Touch Screen Phones', Store: 'Europe Online Store', Date: '2024-02-15',
+    },
+    {
+      Id: 3, Category: 'Computers', Subcategory: 'Computers Accessories', Store: 'North America Reseller', Date: '2024-03-20',
+    },
+    {
+      Id: 4, Category: 'Computers', Subcategory: 'Computers Accessories', Store: 'North America Online Store', Date: '2024-04-25',
+    },
+  ],
+  keyExpr: 'Id',
+  remoteOperations: {
+    filtering: true,
+    sorting: true,
+    paging: true,
+  },
+  scrolling: {
+    mode: 'virtual',
+  },
+  grouping: {
+    autoExpandAll: true,
+  },
+  columns: [
+    { dataField: 'Id', dataType: 'number' },
+    { dataField: 'Category', dataType: 'string', groupIndex: 0 },
+    { dataField: 'Subcategory', dataType: 'string', groupIndex: 1 },
+    { dataField: 'Store', dataType: 'string', groupIndex: 2 },
+    { dataField: 'Date', dataType: 'date', format: 'yyyy-MM-dd' },
+  ],
+}));
+
 // T1152498
 // TODO: fix unstable tests
 // ['infinite', 'virtual'].forEach((scrollingMode) => {
