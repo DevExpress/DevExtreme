@@ -79,6 +79,33 @@ async function main() {
   const runner = tester.createRunner();
   const concurrency = (process.env.CONCURRENCY && (+process.env.CONCURRENCY)) || 1;
 
+  const getDomDebugState = ClientFunction(() => {
+    const activeElement = document.activeElement as HTMLElement | null;
+    const htmlRect = document.documentElement?.getBoundingClientRect();
+
+    return {
+      activeElementTag: activeElement?.tagName || null,
+      activeElementId: activeElement?.id || null,
+      activeElementClassName: activeElement?.className || null,
+      selectionType: window.getSelection()?.type || null,
+      selectionRangeCount: window.getSelection()?.rangeCount || 0,
+      htmlRect: htmlRect
+        ? {
+          top: htmlRect.top,
+          left: htmlRect.left,
+          width: htmlRect.width,
+          height: htmlRect.height,
+        }
+        : null,
+      viewport: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      },
+      readyState: document.readyState,
+      url: window.location.href,
+    };
+  });
+
   const reporters = ['spec-time'];
 
   if (process.env.STRATEGY === 'accessibility') {
@@ -105,14 +132,45 @@ async function main() {
         test: {
           // eslint-disable-next-line no-undef
           before: async (t: TestController) => {
-            await ClientFunction(() => {
-              if (document.activeElement && document.activeElement !== document.body) {
-                (document.activeElement as HTMLElement).blur();
-              }
-              window.getSelection()?.removeAllRanges();
-            }).with({ boundTestRun: t })();
+            try {
+              await ClientFunction(() => {
+                if (document.activeElement && document.activeElement !== document.body) {
+                  (document.activeElement as HTMLElement).blur();
+                }
+                window.getSelection()?.removeAllRanges();
+              }).with({ boundTestRun: t })();
 
-            await t.hover('html', { offsetX: 1, offsetY: 1 });
+              await t.hover('html', { offsetX: 1, offsetY: 1 });
+            } catch (error) {
+              let domState = null;
+
+              try {
+                domState = await getDomDebugState.with({ boundTestRun: t })();
+              } catch (domStateError) {
+                console.error('Failed to collect DOM debug state:', domStateError);
+              }
+
+              console.error('TestCafe before-hook failed while running blur/selection cleanup or html hover.');
+              const unsafeController = t as TestController & {
+                testRun?: {
+                  test?: {
+                    name?: string;
+                    fixture?: {
+                      name?: string;
+                    };
+                  };
+                };
+              };
+
+              console.error('Test context:', {
+                testName: unsafeController.testRun?.test?.name,
+                fixtureName: unsafeController.testRun?.test?.fixture?.name,
+              });
+              console.error('DOM state snapshot:', domState);
+              console.error('Original error:', error);
+
+              throw error;
+            }
           },
         },
       },
