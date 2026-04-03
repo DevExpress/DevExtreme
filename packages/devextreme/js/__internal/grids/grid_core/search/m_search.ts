@@ -155,7 +155,9 @@ export class SearchPanelViewController extends modules.ViewController {
         if (editor) {
           editor.option('value', args.value);
         }
-      } else {
+      }
+
+      if (args.fullName === 'searchPanel.visible') {
         this._updateSearchPanelItem();
       }
 
