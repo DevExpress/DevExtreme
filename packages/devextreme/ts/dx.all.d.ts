@@ -8771,7 +8771,7 @@ declare module DevExpress.ui {
     /**
      * [descr:CollectionWidgetOptions.keyExpr]
      */
-    keyExpr?: string | Function;
+    keyExpr?: string | (() => string);
     /**
      * [descr:CollectionWidgetOptions.noDataText]
      */
