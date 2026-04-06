@@ -61,16 +61,6 @@ $(() => {
     }, ALERT_TIMEOUT);
   }
 
-  function toggleDisabledState(disabled, event) {
-    instance.element().toggleClass(CHAT_DISABLED_CLASS, disabled);
-
-    if (disabled) {
-      event?.target.blur();
-    } else {
-      event?.target.focus();
-    }
-  }
-
   function setMainButtonToDefault() {
     instance.option({
       sendButtonOptions: {
@@ -97,7 +87,7 @@ $(() => {
     }
   }
 
-  async function processMessageSending(message, event) {
+  async function processMessageSending(message) {
     abortController = new AbortController();
     setMainButtonToStop();
 
@@ -136,12 +126,13 @@ $(() => {
 
       messages.pop();
 
-      updateMessageText(assistantId, '');
-      alertLimitReached();
+      if (e?.name !== 'AbortError' && assistantId) {
+        updateMessageText(assistantId, '');
+        alertLimitReached();
+      }
     } finally {
       abortController = null;
       setMainButtonToDefault();
-      toggleDisabledState(false, event);
     }
   }
 
