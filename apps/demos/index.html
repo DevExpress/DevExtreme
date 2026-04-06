@@ -113,10 +113,36 @@
         document.cookie = `dx-demo-theme=${theme};path=/;expires=${now.toUTCString()}`;
       };
 
+      const applyThemeToFrame = () => {
+        const frame = document.getElementById("frame");
+        try {
+          const iframeDoc = frame.contentDocument || frame.contentWindow.document;
+          const links = iframeDoc.querySelectorAll('link[rel="stylesheet"]');
+          for (const link of links) {
+            if (/\/css\/dx\..*\.css/.test(link.getAttribute("href"))) {
+              link.href = link.href.replace(/dx\.[^/]+$/, theme);
+            }
+          }
+        } catch (_) { /* cross-origin or not loaded yet */ }
+      };
+
+      const applyThemeToHost = () => {
+        const link = document.querySelector('head link[rel="stylesheet"]');
+        if (link) {
+          link.href = `node_modules/devextreme-dist/css/${theme}`;
+        }
+      };
+
       const updateDemo = () => {
         setThemeCookie();
+        applyThemeToHost();
 
-        document.getElementById("frame").src = document.getElementById("demolink").href = processLink();
+        const frame = document.getElementById("frame");
+        const demoPath = processLink();
+        document.getElementById("demolink").href = demoPath;
+
+        frame.onload = applyThemeToFrame;
+        frame.src = demoPath;
       };
 
       const processDataSourceItem = (item) => {
@@ -238,7 +264,52 @@
               location: "after",
               widget: "dxSelectBox",
               options: {
-                dataSource: "/themes",
+                dataSource: [
+                  "dx.light.css",
+                  "dx.light.compact.css",
+                  "dx.dark.css",
+                  "dx.dark.compact.css",
+                  "dx.carmine.css",
+                  "dx.carmine.compact.css",
+                  "dx.contrast.css",
+                  "dx.contrast.compact.css",
+                  "dx.darkmoon.css",
+                  "dx.darkmoon.compact.css",
+                  "dx.darkviolet.css",
+                  "dx.darkviolet.compact.css",
+                  "dx.greenmist.css",
+                  "dx.greenmist.compact.css",
+                  "dx.softblue.css",
+                  "dx.softblue.compact.css",
+                  "dx.fluent.blue.light.css",
+                  "dx.fluent.blue.light.compact.css",
+                  "dx.fluent.blue.dark.css",
+                  "dx.fluent.blue.dark.compact.css",
+                  "dx.fluent.saas.light.css",
+                  "dx.fluent.saas.light.compact.css",
+                  "dx.fluent.saas.dark.css",
+                  "dx.fluent.saas.dark.compact.css",
+                  "dx.material.blue.light.css",
+                  "dx.material.blue.light.compact.css",
+                  "dx.material.blue.dark.css",
+                  "dx.material.blue.dark.compact.css",
+                  "dx.material.lime.light.css",
+                  "dx.material.lime.light.compact.css",
+                  "dx.material.lime.dark.css",
+                  "dx.material.lime.dark.compact.css",
+                  "dx.material.orange.light.css",
+                  "dx.material.orange.light.compact.css",
+                  "dx.material.orange.dark.css",
+                  "dx.material.orange.dark.compact.css",
+                  "dx.material.purple.light.css",
+                  "dx.material.purple.light.compact.css",
+                  "dx.material.purple.dark.css",
+                  "dx.material.purple.dark.compact.css",
+                  "dx.material.teal.light.css",
+                  "dx.material.teal.light.compact.css",
+                  "dx.material.teal.dark.css",
+                  "dx.material.teal.dark.compact.css",
+                ],
                 value: theme,
                 width: 250,
                 searchEnabled: true,
