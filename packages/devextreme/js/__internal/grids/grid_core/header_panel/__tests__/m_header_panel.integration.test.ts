@@ -85,6 +85,62 @@ describe('HeaderPanel', () => {
       expect(invalidateSpy).toHaveBeenCalled();
     });
 
+    it('should not call _invalidate when updating an existing item in rendered toolbar', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ id: 1 }],
+        searchPanel: { visible: true },
+      });
+
+      const headerPanel = getHeaderPanel(instance);
+
+      headerPanel.setToolbarItem('customButton', {
+        text: 'Original',
+        location: 'after',
+        name: 'customButton',
+      });
+      jest.runAllTimers();
+      headerPanel.render();
+
+      const invalidateSpy = jest.spyOn(headerPanel, '_invalidate');
+
+      headerPanel.setToolbarItem('customButton', {
+        text: 'Updated',
+        location: 'after',
+        name: 'customButton',
+      });
+
+      expect(invalidateSpy).not.toHaveBeenCalled();
+    });
+
+    it('should update toolbar item in-place without full re-render', async () => {
+      const { instance } = await createDataGrid({
+        dataSource: [{ id: 1 }],
+        searchPanel: { visible: true },
+      });
+
+      const headerPanel = getHeaderPanel(instance);
+
+      headerPanel.setToolbarItem('customButton', {
+        text: 'Original',
+        location: 'after',
+        name: 'customButton',
+      });
+      jest.runAllTimers();
+      headerPanel.render();
+
+      const items = headerPanel._toolbar?.option('items') ?? [];
+      expect(items[0].text).toBe('Original');
+
+      headerPanel.setToolbarItem('customButton', {
+        text: 'Updated',
+        location: 'after',
+        name: 'customButton',
+      });
+
+      const updatedItems = headerPanel._toolbar?.option('items') ?? [];
+      expect(updatedItems[0].text).toBe('Updated');
+    });
+
     it('should not call _invalidate when setting item before first render', async () => {
       const { instance } = await createDataGrid({
         dataSource: [{ id: 1 }],

@@ -71,7 +71,7 @@ const dataController = (
     return gridCoreUtils.combineFilters([filter, searchFilter]);
   }
 
-  private searchByText(text): void {
+  public searchByText(text: string | undefined): void {
     this.option('searchPanel.text', text);
   }
 
@@ -136,16 +136,18 @@ const dataController = (
   }
 };
 
-export class SearchPanelViewController extends modules.ViewController {
-  private _headerPanel?: HeaderPanel;
+type SearchDataControllerExtender = InstanceType<ReturnType<typeof dataController>>;
 
-  private _dataController?: DataController;
+export class SearchPanelViewController extends modules.ViewController {
+  private headerPanel?: HeaderPanel;
+
+  private dataController?: SearchDataControllerExtender;
 
   public init(): void {
-    this._headerPanel = this.getView('headerPanel');
-    this._dataController = this.getController('data');
+    this.headerPanel = this.getView('headerPanel');
+    this.dataController = this.getController('data') as SearchDataControllerExtender;
 
-    this._syncSearchPanelItem();
+    this.syncSearchPanelItem();
   }
 
   public optionChanged(args: OptionChanged): void {
@@ -156,7 +158,7 @@ export class SearchPanelViewController extends modules.ViewController {
           editor.option('value', args.value);
         }
       } else {
-        this._syncSearchPanelItem();
+        this.syncSearchPanelItem();
       }
 
       args.handled = true;
@@ -165,79 +167,70 @@ export class SearchPanelViewController extends modules.ViewController {
     }
   }
 
-  private _syncSearchPanelItem(): void {
-    if (!this._headerPanel) {
+  private syncSearchPanelItem(): void {
+    if (!this.headerPanel) {
       return;
     }
 
-    const { searchPanel: searchPanelOptions } = this.option();
+    const searchPanelOptions = this.option('searchPanel');
 
     if (searchPanelOptions && searchPanelOptions.visible) {
-      const searchPanelToolbarItem = this._getSearchPanelToolbarItem();
+      const searchPanelToolbarItem = this.getSearchPanelToolbarItem();
 
       if (searchPanelToolbarItem) {
-        this._headerPanel.setToolbarItem(SEARCH_PANEL_ITEM_NAME, searchPanelToolbarItem);
+        this.headerPanel.setToolbarItem(SEARCH_PANEL_ITEM_NAME, searchPanelToolbarItem);
       }
     } else {
-      this._headerPanel.removeToolbarItem(SEARCH_PANEL_ITEM_NAME);
+      this.headerPanel.removeToolbarItem(SEARCH_PANEL_ITEM_NAME);
     }
   }
 
-  private _getSearchPanelToolbarItem(): ToolbarItem | null {
-    const { searchPanel: searchPanelOptions } = this.option();
+  private getSearchPanelToolbarItem(): ToolbarItem {
+    const searchPanelOptions = this.option('searchPanel');
 
-    if (this._headerPanel && searchPanelOptions && searchPanelOptions.visible) {
-      return {
-        template: (data, index, container: dxElementWrapper | Element): void => {
-          if (this._headerPanel) {
-            const $search = $('<div>')
-              .addClass(this._headerPanel.addWidgetPrefix(SEARCH_PANEL_CLASS))
-              .appendTo(container);
+    return {
+      template: (_data, _index, container: dxElementWrapper | Element): void => {
+        if (this.headerPanel) {
+          const $search = $('<div>')
+            .addClass(this.headerPanel.addWidgetPrefix(SEARCH_PANEL_CLASS))
+            .appendTo(container);
 
-            this.getController('editorFactory').createEditor($search, {
-              width: searchPanelOptions.width,
-              placeholder: searchPanelOptions.placeholder,
-              parentType: 'searchPanel',
-              value: this.option('searchPanel.text'),
-              updateValueTimeout: FILTERING_TIMEOUT,
-              setValue: (value) => {
-                // @ts-expect-error
-                this._dataController.searchByText(value);
+          this.getController('editorFactory').createEditor($search, {
+            width: searchPanelOptions?.width,
+            placeholder: searchPanelOptions?.placeholder,
+            parentType: 'searchPanel',
+            value: this.option('searchPanel.text'),
+            updateValueTimeout: FILTERING_TIMEOUT,
+            setValue: (value: string | undefined): void => {
+              this.dataController?.searchByText(value);
+            },
+            editorOptions: {
+              inputAttr: {
+                'aria-label': messageLocalization.format(`${this.component.NAME}-ariaSearchInGrid`),
               },
-              editorOptions: {
-                inputAttr: {
-                  'aria-label': messageLocalization.format(`${this.component.NAME}-ariaSearchInGrid`),
-                },
-              },
-            });
+            },
+          });
 
-            this._headerPanel.resize();
-          }
-        },
-        name: SEARCH_PANEL_ITEM_NAME,
-        location: 'after',
-        locateInMenu: 'never',
-        sortIndex: 50,
-      };
-    }
-
-    return null;
+          this.headerPanel.resize();
+        }
+      },
+      name: SEARCH_PANEL_ITEM_NAME,
+      location: 'after',
+      locateInMenu: 'never',
+      sortIndex: 50,
+    };
   }
 
   public getSearchTextEditor(): TextBox | null {
-    if (!this._headerPanel) {
+    const $element = this.headerPanel?.element();
+
+    if (!this.headerPanel || !$element) {
       return null;
     }
 
-    const $element = this._headerPanel.element();
-
-    if (!$element) {
-      return null;
-    }
-
-    const headerPanelClass = this._headerPanel.addWidgetPrefix(HEADER_PANEL_CLASS);
+    const headerPanelClass = this.headerPanel.addWidgetPrefix(HEADER_PANEL_CLASS);
     const $searchPanel = $element
-      .find(`.${this._headerPanel.addWidgetPrefix(SEARCH_PANEL_CLASS)}`)
+      .find(`.${this.headerPanel.addWidgetPrefix(SEARCH_PANEL_CLASS)}`)
       .filter((_, el: HTMLElement) => $(el).closest(`.${headerPanelClass}`).is($element));
 
     if ($searchPanel.length) {

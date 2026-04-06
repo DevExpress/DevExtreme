@@ -26,7 +26,7 @@ export class HeaderPanel extends ColumnsView {
 
   private _toolbarOptions?: ToolbarProperties;
 
-  private readonly _registeredToolbarItems = new Map<string, ToolbarItem>();
+  private readonly registeredToolbarItems = new Map<string, ToolbarItem>();
 
   protected _editingController!: EditingController;
 
@@ -42,16 +42,52 @@ export class HeaderPanel extends ColumnsView {
   }
 
   public setToolbarItem(name: string, item: ToolbarItem): void {
-    this._registeredToolbarItems.set(name, { ...item, name });
+    const isExisting = this.registeredToolbarItems.has(name);
+    this.registeredToolbarItems.set(name, { ...item, name });
 
-    if (this._$element) {
+    if (!this._$element) {
+      return;
+    }
+
+    const itemIndex = isExisting ? this.findToolbarItemIndex(name) : -1;
+
+    if (itemIndex >= 0) {
+      const normalizedItem = this.getNormalizedRegisteredItem(name);
+      this._toolbar?.option(`items[${itemIndex}]`, normalizedItem);
+    } else {
       this._invalidate();
     }
   }
 
+  private findToolbarItemIndex(name: string): number {
+    const items: ToolbarItem[] = this._toolbar?.option('items') ?? [];
+
+    return items.findIndex((i) => i.name === name);
+  }
+
+  private getNormalizedRegisteredItem(name: string): ToolbarItem | undefined {
+    const registeredItem = this.registeredToolbarItems.get(name);
+
+    const userToolbarOptions = this.option('toolbar');
+
+    const userItem = userToolbarOptions?.items?.find(
+      (ui) => (typeof ui === 'string' ? ui === name : ui?.name === name),
+    );
+
+    if (!userItem) {
+      return registeredItem;
+    }
+
+    return normalizeToolbarItems(
+      [registeredItem] as DefaultToolbarItem[],
+      [userItem],
+      DEFAULT_TOOLBAR_ITEM_NAMES,
+    )[0];
+  }
+
   public removeToolbarItem(name: string): void {
-    if (this._registeredToolbarItems.has(name)) {
-      this._registeredToolbarItems.delete(name);
+    if (this.registeredToolbarItems.has(name)) {
+      this.registeredToolbarItems.delete(name);
 
       if (this._$element) {
         this._invalidate();
@@ -63,11 +99,11 @@ export class HeaderPanel extends ColumnsView {
    * @extended: column_chooser, editing, filter_row
    */
   protected _getToolbarItems(): ToolbarItem[] {
-    return Array.from(this._registeredToolbarItems.values());
+    return Array.from(this.registeredToolbarItems.values());
   }
 
   // eslint-disable-next-line class-methods-use-this
-  private _sortToolbarItems(items: ToolbarItem[]): ToolbarItem[] {
+  private sortToolbarItems(items: ToolbarItem[]): ToolbarItem[] {
     return [...items].sort((a, b) => (a.sortIndex ?? 0) - (b.sortIndex ?? 0));
   }
 
@@ -83,7 +119,7 @@ export class HeaderPanel extends ColumnsView {
 
   private _getToolbarOptions(): ToolbarProperties<DefaultToolbarItem | ToolbarItem> {
     const { toolbar: userToolbarOptions } = this.option();
-    const sortedToolbarItems: ToolbarItem[] = this._sortToolbarItems(this._getToolbarItems());
+    const sortedToolbarItems: ToolbarItem[] = this.sortToolbarItems(this._getToolbarItems());
 
     const options: { toolbarOptions: ToolbarProperties<DefaultToolbarItem | ToolbarItem> } = {
       toolbarOptions: {
