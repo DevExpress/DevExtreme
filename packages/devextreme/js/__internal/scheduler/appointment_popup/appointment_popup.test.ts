@@ -125,6 +125,7 @@ describe('Isolated AppointmentPopup environment', () => {
 
     const onSave = jest.fn((newAppointment: Record<string, unknown>) => {
       updateAppointment(sourceAppointment, updatedAppointment);
+      // @ts-expect-error Expected 0 arguments, but got 1
       return addAppointment(newAppointment);
     });
 
