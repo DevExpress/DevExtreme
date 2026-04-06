@@ -1,0 +1,70 @@
+#treeList {
+  min-height: 560px;
+}
+
+#treeList .ai__cell {
+  background-color: var(--dx-datagrid-row-alternation-bg);
+}
+
+#treeList .name_cell > div {
+  align-items: flex-end;
+}
+
+.name__wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.name__img-wrapper {
+    width: 40px;
+    height: 40px;
+    border: var(--dx-border-width) solid var(--dx-color-border);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.name__img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+}
+
+.name__text-wrapper {
+  width: calc(100% - 48px);
+}
+
+.name__text {
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+}
+
+.status--salaried {
+  color: var(--dx-color-success);
+}
+
+.status--commission {
+  color: var(--dx-color-warning);
+}
+
+.status--terminated {
+  color: var(--dx-color-danger);
+}
+
+.indicator {
+  background-color: currentcolor;
+  margin-right: 8px;
+  border-radius: 50%;
+  height: 12px;
+  width: 12px;
+}

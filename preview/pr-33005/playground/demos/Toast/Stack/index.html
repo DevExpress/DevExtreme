@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    
+    
+    
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    
+    
+  </head>
+  <body class="dx-viewport">
+    <div class="demo-container">
+      <div class="options">
+        <div>Position</div>
+        <div id="radioGroup"></div>
+        <div id="position"></div>
+        <div class="section">
+          <div id="positionTop"></div>
+          <div id="positionBottom"></div>
+        </div>
+        <div class="section">
+          <div id="positionLeft"></div>
+          <div id="positionRight"></div>
+        </div>
+        <div>Direction</div>
+        <div id="direction"></div>
+        <div class="section">
+          <div id="create"></div>
+          <div id="hide"></div>
+        </div>
+      </div>
+    </div>
+  <script type="module">
+  import '../../../demo-init.js';
+  const srcs = ["data.js","index.js"];
+  for (const src of srcs) {
+    await new Promise((resolve) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      document.body.appendChild(s);
+    });
+  }
+</script>
+</body>
+</html>

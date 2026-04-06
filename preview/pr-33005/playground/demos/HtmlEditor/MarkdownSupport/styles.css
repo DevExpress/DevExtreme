@@ -1,0 +1,28 @@
+.dx-htmleditor-content img {
+  vertical-align: middle;
+  padding-right: 10px;
+  margin-bottom: 22px;
+}
+
+.value-title {
+  font-size: var(--dx-font-size-sm);
+  font-weight: 500;
+}
+
+.value-content {
+  margin-top: 20px;
+  overflow: auto;
+  height: 210px;
+  white-space: pre-wrap;
+  border: 1px solid var(--dx-color-border);
+  padding: 16px;
+  background-color: var(--dx-color-main-bg);
+}
+
+.options {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  box-sizing: border-box;
+  width: 100%;
+}

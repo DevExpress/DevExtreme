@@ -1,0 +1,13 @@
+.option {
+  display: flex;
+}
+
+.option > span {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.dx-scheduler {
+  margin-top: 20px;
+}

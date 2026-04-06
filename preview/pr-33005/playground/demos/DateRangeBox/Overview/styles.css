@@ -1,0 +1,16 @@
+.demo-container {
+  height: 690px;
+}
+
+.dx-field {
+  padding: 8px;
+}
+
+.selected-days-wrapper {
+  font-size: 12px;
+  color: var(--dx-color-icon);
+}
+
+.multiline-label {
+  padding-top: 0;
+}

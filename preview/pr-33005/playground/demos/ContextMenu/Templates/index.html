@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    
+    
+    
+    
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    
+  </head>
+  <body class="dx-viewport">
+    <div class="demo-container">
+      <div class="label"> Right click an image to display the context menu: </div>
+      <img id="image" alt="product" src="../../../images/products/5.png" />
+      <div id="context-menu"></div>
+    </div>
+  <script type="module">
+  import '../../../demo-init.js';
+  const srcs = ["data.js","index.js"];
+  for (const src of srcs) {
+    await new Promise((resolve) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = resolve;
+      document.body.appendChild(s);
+    });
+  }
+</script>
+</body>
+</html>

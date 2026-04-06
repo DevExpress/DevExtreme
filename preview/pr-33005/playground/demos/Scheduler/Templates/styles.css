@@ -1,0 +1,88 @@
+.dx-scheduler-work-space-week .dx-scheduler-date-table {
+  width: 3500px;
+}
+
+.dx-scheduler-timeline-day .dx-scheduler-date-table {
+  width: 3500px;
+}
+
+.dx-tooltip-wrapper .dx-overlay-content .dx-popup-content {
+  padding: 12px;
+}
+
+.movie-preview-image {
+  max-height: 80px;
+  max-width: 80px;
+  min-height: 60px;
+  min-width: 60px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.movie-preview-image img {
+  width: 100%;
+  position: relative;
+  top: -25%;
+  pointer-events: none;
+}
+
+.movie-preview {
+  display: flex;
+  gap: 8px;
+  max-height: 100%;
+  white-space: normal;
+}
+
+.movie-preview > .movie-details {
+  font-size: 12px;
+  color: #242424;
+}
+
+.movie-preview > .movie-details > .title {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.movie-info-container {
+  border-radius: 8px;
+  padding-bottom: 8px;
+}
+
+.movie-info {
+  display: flex;
+  gap: 12px;
+}
+
+.dx-theme-material .movie-info {
+  gap: 16px;
+}
+
+.movie-info .movie-preview-image {
+  border: 1px solid var(--dx-color-border);
+}
+
+.movie-info .movie-details {
+  text-align: left;
+}
+
+.movie-info .movie-details > .title {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.dx-scheduler-form-end-date-group.dx-field-item {
+  padding-bottom: 12px;
+}
+
+.long-title h3 {
+  font-weight: 200;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.dx-scheduler-appointment::before {
+  opacity: 0.26 !important;
+}
