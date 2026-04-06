@@ -1078,7 +1078,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     const $event: KeyboardEvent = eventArgs.originalEvent;
     let eventTarget = $event.target as Element;
     let elementType: NavigationElementType = this._getElementType(eventTarget);
-    let $cell: dxElementWrapper = this._getCellElementFromTarget(eventTarget);
+    let $cell: dxElementWrapper | undefined = this._getCellElementFromTarget(eventTarget);
 
     // Non-editor cells with intermediate interactive elements use native tab
     if (!isEditorCell(this, $cell) && this.isOriginalTabHandlerRequired($cell, eventArgs)) {
@@ -1097,14 +1097,13 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     ({ target: eventTarget, elementType } = this._ensureCellFocusType(eventTarget, elementType));
 
     const nextCellInfo = this._getNextCellByTabKey($event, direction, elementType);
-    $cell = nextCellInfo.$cell!;
 
-    if (!$cell) {
+    if (!nextCellInfo.$cell) {
       return false;
     }
 
     // Handle row transition — fires focusedRowChanging event
-    $cell = this._checkNewLineTransition($event, $cell)!;
+    $cell = this._checkNewLineTransition($event, nextCellInfo.$cell);
 
     if (!$cell) {
       return false;
@@ -1186,12 +1185,15 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     if (rowIndex !== this._getRowIndex($row)) {
       const cellPosition = this._getCellPosition($cell);
       const args = this._fireFocusedRowChanging($event, $row);
+
       if (args.cancel) {
         return;
       }
+
       if (args.rowIndexChanged && cellPosition) {
         this.setFocusedColumnIndex(cellPosition.columnIndex);
-        $cell = this._getFocusedCell();
+
+        return this._getFocusedCell();
       }
     }
 
@@ -2833,16 +2835,15 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
     return $element.length && $element[0].tagName === 'TD';
   }
 
-  public _getCellElementFromTarget(target) {
+  public _getCellElementFromTarget(target: Element): dxElementWrapper {
     const elementType = this._getElementType(target);
     const $targetElement = $(target);
-    let $cell;
+
     if (elementType === 'cell') {
-      $cell = $targetElement.closest(`.${ROW_CLASS} > td`);
-    } else {
-      $cell = $targetElement.children().not(`.${COMMAND_EXPAND_CLASS}`).first();
+      return $targetElement.closest(`.${ROW_CLASS} > td`);
     }
-    return $cell;
+
+    return $targetElement.children().not(`.${COMMAND_EXPAND_CLASS}`).first();
   }
 
   private _getRowsViewElement() {
