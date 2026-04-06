@@ -802,8 +802,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       return;
     }
 
-    const focusedViewElement = this._focusedView?.element();
-    $(focusedViewElement).addClass(FOCUS_STATE_CLASS);
+    $(this._focusedView?.element()).addClass(FOCUS_STATE_CLASS);
 
     const { isLastValidCell, isOriginalHandlerRequired } = this._getTabBoundaryInfo(event);
 
@@ -1106,6 +1105,7 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
 
     // Handle row transition — fires focusedRowChanging event
     $cell = this._checkNewLineTransition($event, $cell)!;
+
     if (!$cell) {
       return false;
     }
@@ -2058,13 +2058,15 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   protected _isFirstValidCell(cellPosition) {
-    let isFirstValidCell = false;
-
-    if (cellPosition.rowIndex === 0 && cellPosition.columnIndex >= 0) {
-      isFirstValidCell = isFirstValidCell || !this._hasValidCellBeforePosition(cellPosition);
+    if (cellPosition.rowIndex !== 0) {
+      return false;
     }
 
-    return isFirstValidCell;
+    if (this._isFullRowFocusType(cellPosition.rowIndex) && cellPosition.columnIndex > 0) {
+      return true;
+    }
+
+    return cellPosition.columnIndex >= 0 && !this._hasValidCellBeforePosition(cellPosition);
   }
 
   private _hasValidCellBeforePosition(cellPosition) {
@@ -2099,22 +2101,13 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
   }
 
   protected _isLastValidCell(cellPosition) {
-    const nextColumnIndex = cellPosition.columnIndex >= 0 ? cellPosition.columnIndex + 1 : 0;
     const { rowIndex } = cellPosition;
-    const checkingPosition = {
-      columnIndex: nextColumnIndex,
-      rowIndex,
-    };
-    const visibleRows = this._dataController.getVisibleRows();
-    const row = visibleRows && visibleRows[rowIndex];
-    const isLastRow = this._isLastRow(rowIndex);
 
-    if (!isLastRow) {
+    if (!this._isLastRow(rowIndex)) {
       return false;
     }
 
-    const isFullRowFocus = row?.rowType === 'group' || row?.rowType === 'groupFooter';
-    if (isFullRowFocus && cellPosition.columnIndex > 0) {
+    if (this._isFullRowFocusType(rowIndex) && cellPosition.columnIndex > 0) {
       return true;
     }
 
@@ -2122,11 +2115,21 @@ export class KeyboardNavigationController extends KeyboardNavigationControllerCo
       return true;
     }
 
+    const nextColumnIndex = cellPosition.columnIndex >= 0 ? cellPosition.columnIndex + 1 : 0;
+    const checkingPosition = { columnIndex: nextColumnIndex, rowIndex };
+
     if (this._isCellByPositionValid(checkingPosition)) {
       return false;
     }
 
     return this._isLastValidCell(checkingPosition);
+  }
+
+  private _isFullRowFocusType(rowIndex: number): boolean {
+    const visibleRows = this._dataController.getVisibleRows();
+    const row = visibleRows && visibleRows[rowIndex];
+
+    return row?.rowType === 'group' || row?.rowType === 'groupFooter';
   }
 
   // #endregion Cell_Position
